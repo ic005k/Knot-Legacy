@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>372</width>
-    <height>461</height>
+    <height>540</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,37 +15,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="0">
-     <widget class="QTableWidget" name="tableWidget">
-      <column>
-       <property name="text">
-        <string>日期</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>次数</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>备注</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QTextEdit" name="textEdit">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>200</height>
-       </size>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -82,7 +51,7 @@
       </item>
      </layout>
     </item>
-    <item row="2" column="0">
+    <item row="1" column="0">
      <widget class="QLCDNumber" name="lcdNumber">
       <property name="minimumSize">
        <size>
@@ -91,7 +60,7 @@
        </size>
       </property>
       <property name="digitCount">
-       <number>8</number>
+       <number>13</number>
       </property>
       <property name="mode">
        <enum>QLCDNumber::Dec</enum>
@@ -101,10 +70,74 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="2" column="0">
+     <widget class="QTableWidget" name="tableWidget">
+      <column>
+       <property name="text">
+        <string>日期</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>频次</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item row="3" column="0">
      <widget class="QLabel" name="lblStats">
       <property name="text">
        <string>统计</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QFrame" name="frame">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>70</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="pHLayout"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>备注：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QTextEdit" name="textEdit">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>150</height>
+       </size>
       </property>
      </widget>
     </item>

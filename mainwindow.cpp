@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   ui->statusbar->setHidden(true);
+  this->setWindowTitle("");
   int s = 90;
   ui->btnPlus->setIconSize(QSize(s, s));
   ui->btnLess->setIconSize(QSize(s, s));
@@ -50,11 +51,15 @@ MainWindow::MainWindow(QWidget* parent)
   }
 
   readData();
+
+  initChart();
+  isInit = true;
 }
 
 void MainWindow::timerUpdate() {
   QDateTime dateTime = QDateTime::currentDateTime();
-  ui->lcdNumber->display(dateTime.toString("HH:mm:ss"));
+  ui->lcdNumber->display(dateTime.toString("HH:mm:ss") + " - " +
+                         QString::number(today));
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -104,8 +109,9 @@ void MainWindow::on_btnLess_clicked() {
 
 void MainWindow::saveData() {
   QSettings Reg(iniFile, QSettings::IniFormat);
-  Reg.setValue("RowCount", ui->tableWidget->rowCount());
-  for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
+  int count = ui->tableWidget->rowCount();
+  Reg.setValue("RowCount", count);
+  for (int i = 0; i < count; i++) {
     Reg.setValue(QString::number(i + 1) + "1",
                  ui->tableWidget->item(i, 0)->text());
     Reg.setValue(QString::number(i + 1) + "2",
@@ -115,7 +121,12 @@ void MainWindow::saveData() {
   TextEditToFile(ui->textEdit, txtFile);
   qDebug() << iniFile << Reg.value("RowCount").toInt();
 
+  ui->tableWidget->setCurrentCell(count - 1, 0);
+  QString str = ui->tableWidget->item(count - 1, 1)->text();
+  today = str.toInt();
+
   init_Stats();
+  initChart();
 }
 
 void MainWindow::readData() {
@@ -137,6 +148,11 @@ void MainWindow::readData() {
 
   // ui->textEdit->setPlainText(loadText("assets:/data/readme.txt"));
   ui->textEdit->setPlainText(loadText(txtFile));
+
+  ui->tableWidget->setCurrentCell(rowCount - 1, 0);
+  QString str = ui->tableWidget->item(rowCount - 1, 1)->text();
+  today = str.toInt();
+
   init_Stats();
 }
 
@@ -190,4 +206,79 @@ void MainWindow::init_Stats() {
 
   double a = (double)tatol / 20;
   ui->lblStats->setText("统计：" + QString::number(a) + " 盒");
+}
+
+void MainWindow::initChart() {
+  if (isInit) delete chart;
+  QStringList strList;
+  for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
+    strList.append(ui->tableWidget->item(i, 1)->text());
+  }
+  for (int i = 0; i < strList.count(); i++) {
+    if (strList.count() > 1) {
+      if (strList.at(0) < strList.at(1))
+        strList.removeAt(0);
+      else
+        strList.removeAt(1);
+      i--;
+    }
+  }
+  int max = 20;
+  if (strList.count() == 1) {
+    QString str = strList.at(0);
+    qDebug() << "In table Max:" << str;
+    if (str.toInt() > 20) max = str.toInt();
+  }
+
+  //设置表头
+  chart = new Chart(this, "历史数据");
+  ui->pHLayout->addWidget(chart);
+  //设置坐标系
+  chart->setAxis("天数(近30天)", 0, 30, 30, "频次", 0, max, 5);
+  //设置离散点数据
+  QList<QPointF> pointlist = {
+      QPointF(0, 8),  QPointF(1, 2),  QPointF(3, 4), QPointF(4, 8),
+      QPointF(5, 16), QPointF(6, 16), QPointF(7, 8), QPointF(8, 4),
+      QPointF(9, 2),  QPointF(10, 1),
+  };
+
+  // pointlist.clear();
+  int count = ui->tableWidget->rowCount();
+  int start = 0;
+  if (count > 30) start = count - 30;
+  for (int i = start; i < count; i++) {
+    int x, y;
+    x = i + 1;
+    y = ui->tableWidget->item(i, 1)->text().toInt();
+    QPointF pf(x, y);
+    pointlist.append(pf);
+  }
+
+  //绘制
+  chart->buildChart(pointlist);
+}
+
+void MainWindow::drawChart() {
+  //设置离散点数据
+  QList<QPointF> pointlist = {
+      QPointF(0, 8),  QPointF(1, 2),  QPointF(3, 4), QPointF(4, 8),
+      QPointF(5, 16), QPointF(6, 16), QPointF(7, 8), QPointF(8, 4),
+      QPointF(9, 2),  QPointF(10, 1),
+  };
+
+  // pointlist.clear();
+  int count = ui->tableWidget->rowCount();
+  int start = 0;
+  if (count > 30) start = count - 30;
+  for (int i = start; i < count; i++) {
+    int x, y;
+    x = i + 1;
+    y = ui->tableWidget->item(i, 1)->text().toInt();
+    QPointF pf(x, y);
+    pointlist.append(pf);
+  }
+
+  //绘制
+  chart->close();
+  chart->buildChart(pointlist);
 }

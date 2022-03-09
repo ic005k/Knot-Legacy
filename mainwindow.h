@@ -9,6 +9,8 @@
 #include <QTextEdit>
 #include <QTimer>
 
+#include "chart.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -17,6 +19,7 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
+  Chart *chart;
 
  public:
   MainWindow(QWidget *parent = nullptr);
@@ -27,11 +30,16 @@ class MainWindow : public QMainWindow {
   void readData();
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
-public slots:
+  void initChart();
+  void drawChart();
+  bool isInit = false;
+  int today = 0;
+ public slots:
   void init_Stats();
-protected:
+
+ protected:
   void closeEvent(QCloseEvent *event);
-private slots:
+ private slots:
 
   void timerUpdate();
 
