@@ -19,6 +19,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QToolButton" name="btnPlus">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>65</width>
@@ -35,6 +41,12 @@
       </item>
       <item>
        <widget class="QToolButton" name="btnLess">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>65</width>
@@ -56,7 +68,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>100</height>
+        <height>60</height>
        </size>
       </property>
       <property name="digitCount">
@@ -96,7 +108,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>70</height>
+        <height>100</height>
        </size>
       </property>
       <property name="frameShape">
@@ -119,7 +131,7 @@
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <layout class="QHBoxLayout" name="pHLayout"/>
+        <layout class="QGridLayout" name="pLayout"/>
        </item>
       </layout>
      </widget>

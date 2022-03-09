@@ -34,6 +34,7 @@ class MainWindow : public QMainWindow {
   void drawChart();
   bool isInit = false;
   int today = 0;
+  bool isIOS = false;
  public slots:
   void init_Stats();
 

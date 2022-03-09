@@ -13,11 +13,6 @@ MainWindow::MainWindow(QWidget* parent)
   ui->setupUi(this);
   ui->statusbar->setHidden(true);
   this->setWindowTitle("");
-  int s = 90;
-  ui->btnPlus->setIconSize(QSize(s, s));
-  ui->btnLess->setIconSize(QSize(s, s));
-  ui->btnPlus->setIcon(QIcon(":/src/1.png"));
-  ui->btnLess->setIcon(QIcon(":/src/2.png"));
   tmer = new QTimer(this);
   connect(tmer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
   tmer->start(1000);
@@ -37,6 +32,7 @@ MainWindow::MainWindow(QWidget* parent)
   qDebug() << "Path:" << path;
   QString str0 = appName + ".app";
   if (path.contains(str0)) {
+    isIOS = true;
     QString str1 = QDir::homePath() + "/" + appName + "/";
     QDir dir0;
     dir0.mkpath(str1);
@@ -49,6 +45,19 @@ MainWindow::MainWindow(QWidget* parent)
     iniFile = str + appName + ".ini";
     txtFile = str + appName + ".txt";
   }
+
+  int s = 90;
+  if (isIOS) {
+    ui->btnLess->setMinimumHeight(30);
+    ui->btnPlus->setMinimumHeight(30);
+    ui->lcdNumber->setMinimumHeight(30);
+    ui->textEdit->setMaximumHeight(50);
+    s = 50;
+  }
+  ui->btnPlus->setIconSize(QSize(s, s));
+  ui->btnLess->setIconSize(QSize(s, s));
+  ui->btnPlus->setIcon(QIcon(":/src/1.png"));
+  ui->btnLess->setIcon(QIcon(":/src/2.png"));
 
   readData();
 
@@ -205,7 +214,13 @@ void MainWindow::init_Stats() {
   }
 
   double a = (double)tatol / 20;
-  ui->lblStats->setText("统计：" + QString::number(a) + " 盒");
+  int a1, b, c;
+  a1 = a;
+  b = a1 / 10;
+  c = a1 % 10;
+  ui->lblStats->setText("总计：" + QString::number(a) + " 盒 ( " +
+                        QString::number(b) + " 条 " + QString::number(c) +
+                        " 盒 ) ");
 }
 
 void MainWindow::initChart() {
@@ -232,7 +247,7 @@ void MainWindow::initChart() {
 
   //设置表头
   chart = new Chart(this, "历史数据");
-  ui->pHLayout->addWidget(chart);
+  ui->pLayout->addWidget(chart);
   //设置坐标系
   chart->setAxis("天数(近30天)", 0, 30, 30, "频次", 0, max, 5);
   //设置离散点数据
@@ -248,7 +263,7 @@ void MainWindow::initChart() {
   if (count > 30) start = count - 30;
   for (int i = start; i < count; i++) {
     int x, y;
-    x = i + 1;
+    x = i;
     y = ui->tableWidget->item(i, 1)->text().toInt();
     QPointF pf(x, y);
     pointlist.append(pf);
