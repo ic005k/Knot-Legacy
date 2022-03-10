@@ -40,7 +40,8 @@ jobs:
           # arch: ${{ matrix.qt_arch }}     
           
       - name: Install Qt5 with options
-        if: startsWith(matrix.version, '5')
+        #if: startsWith(matrix.version, '5')
+        if: ${{ matrix.qt_ver == '5.15.2' }}
         uses: ./
         with:
           modules: 'qtcharts'
