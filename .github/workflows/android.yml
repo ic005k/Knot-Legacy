@@ -5,6 +5,7 @@ on:
       - '*.pro'
       - 'src/**'
       - '.github/workflows/android.yml'
+      - '*.*'
   pull_request:
     paths:
       - '*.pro'
