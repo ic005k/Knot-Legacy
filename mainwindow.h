@@ -50,5 +50,6 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow *ui;
+  void get_Today(int rowCount);
 };
 #endif  // MAINWINDOW_H

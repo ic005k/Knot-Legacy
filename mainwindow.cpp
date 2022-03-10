@@ -130,9 +130,7 @@ void MainWindow::saveData() {
   TextEditToFile(ui->textEdit, txtFile);
   qDebug() << iniFile << Reg.value("RowCount").toInt();
 
-  ui->tableWidget->setCurrentCell(count - 1, 0);
-  QString str = ui->tableWidget->item(count - 1, 1)->text();
-  today = str.toInt();
+  get_Today(count);
 
   init_Stats();
   initChart();
@@ -158,11 +156,19 @@ void MainWindow::readData() {
   // ui->textEdit->setPlainText(loadText("assets:/data/readme.txt"));
   ui->textEdit->setPlainText(loadText(txtFile));
 
-  ui->tableWidget->setCurrentCell(rowCount - 1, 0);
-  QString str = ui->tableWidget->item(rowCount - 1, 1)->text();
-  today = str.toInt();
+  get_Today(rowCount);
 
   init_Stats();
+}
+
+void MainWindow::get_Today(int rowCount) {
+  ui->tableWidget->setCurrentCell(rowCount - 1, 0);
+  QString str = ui->tableWidget->item(rowCount - 1, 1)->text();
+  QString str1 = ui->tableWidget->item(rowCount - 1, 0)->text();
+  if (strDate == str1) {
+    today = str.toInt();
+  } else
+    today = 0;
 }
 
 QString MainWindow::loadText(QString textFile) {
@@ -256,8 +262,15 @@ void MainWindow::initChart() {
       QPointF(5, 16), QPointF(6, 16), QPointF(7, 8), QPointF(8, 4),
       QPointF(9, 2),  QPointF(10, 1),
   };
+  pointlist.clear();
+  qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+  for (int i = 0; i < 30; i++) {
+    int a = qrand() % (20);
+    QPointF pf(i, a);
+    pointlist.append(pf);
+  }
 
-  // pointlist.clear();
+  pointlist.clear();
   int count = ui->tableWidget->rowCount();
   int start = 0;
   if (count > 30) start = count - 30;
