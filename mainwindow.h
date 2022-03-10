@@ -8,6 +8,7 @@
 #include <QSettings>
 #include <QTextEdit>
 #include <QTimer>
+#include <QTreeWidgetItem>
 
 #include "chart.h"
 
@@ -31,7 +32,7 @@ class MainWindow : public QMainWindow {
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
   void initChart();
-  void drawChart();
+
   bool isInit = false;
   int today = 0;
   bool isIOS = false;
@@ -50,6 +51,6 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow *ui;
-  void get_Today(int rowCount);
+  void get_Today();
 };
 #endif  // MAINWINDOW_H

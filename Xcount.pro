@@ -40,3 +40,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     src.qrc
+
+CONFIG(debug,debug|release) {
+    DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/debug)
+} else {
+    DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
+}
