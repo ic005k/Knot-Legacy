@@ -35,6 +35,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         if: ${{ matrix.qt_ver == '5.15.2' }}
         with:
+          modules: 'qtcharts'
           version: ${{ matrix.qt_ver }}
           target: ${{ matrix.qt_target }}
           # here need not arch
@@ -44,15 +45,7 @@ jobs:
         with:
           fetch-depth: 1    
           
-      - name: Install Qt5 with options
-        #if: startsWith(matrix.version, '5')
-        if: ${{ matrix.qt_ver == '5.15.2' }}
-        uses: ./
-        with:
-          modules: 'qtcharts'
-          version: ${{ matrix.version }}
-          #tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
-                
+                      
       - name: build android
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
