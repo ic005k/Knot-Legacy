@@ -54,7 +54,7 @@ jobs:
         if: startsWith(matrix.version, '5')
         uses: ./
         with:
-          modules: 'qtchart'
+          modules: 'qtcharts'
           version: ${{ matrix.version }}
           tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
           
