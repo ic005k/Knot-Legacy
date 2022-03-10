@@ -47,7 +47,7 @@ jobs:
         with:
           modules: 'qtcharts'
           version: ${{ matrix.version }}
-          tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
+          #tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
           
       - uses: actions/checkout@v2
         with:
