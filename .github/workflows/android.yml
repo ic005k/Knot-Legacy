@@ -38,7 +38,11 @@ jobs:
           version: ${{ matrix.qt_ver }}
           target: ${{ matrix.qt_target }}
           # here need not arch
-          # arch: ${{ matrix.qt_arch }}     
+          # arch: ${{ matrix.qt_arch }} 
+          
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1    
           
       - name: Install Qt5 with options
         #if: startsWith(matrix.version, '5')
@@ -48,10 +52,7 @@ jobs:
           modules: 'qtcharts'
           version: ${{ matrix.version }}
           #tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
-          
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
+                
       - name: build android
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
