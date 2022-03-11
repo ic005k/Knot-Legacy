@@ -11,16 +11,13 @@ QString txtFile = "assets:/data/Xcount.txt";
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  loading = true;
   ui->statusbar->setHidden(true);
   this->setWindowTitle("");
   tmer = new QTimer(this);
   connect(tmer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
   tmer->start(1000);
   strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
-
-  QTreeWidget* tw = new QTreeWidget(this);
-  init_TreeWidget(tw);
-  ui->tabWidget->addTab(tw, tr("Counter") + " " + QString::number(1));
 
   QDir dir;
   QString path;
@@ -56,16 +53,27 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
 
   QSettings Reg(iniFile, QSettings::IniFormat);
-  int TabCount = Reg.value("TabCount").toInt();
+  int TabCount = Reg.value("TabCount", 0).toInt();
   for (int i = 0; i < TabCount; i++) {
-    ui->tabWidget->setTabText(
-        i, Reg.value("TabName" + QString::number(i)).toString());
+    QTreeWidget* tw = new QTreeWidget(this);
+    init_TreeWidget(tw);
+    tw->setObjectName("tab" + QString::number(i + 1));
+    ui->tabWidget->addTab(tw, Reg.value("TabName" + QString::number(i),
+                                        tr("Counter") + QString::number(i + 1))
+                                  .toString());
   }
 
-  readData(tw);
+  if (TabCount == 0) {
+    QTreeWidget* tw = new QTreeWidget(this);
+    tw->setObjectName("tab1");
+    init_TreeWidget(tw);
+    ui->tabWidget->addTab(tw, tr("Counter") + " " + QString::number(1));
+  }
 
-  initChart(tw);
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  readData(tw);
   isInit = true;
+  loading = false;
 }
 
 void MainWindow::timerUpdate() {
@@ -166,14 +174,17 @@ QObjectList MainWindow::getAllUIControls(QObject* parent) {
 void MainWindow::saveData(QTreeWidget* tw) {
   QSettings Reg(iniFile, QSettings::IniFormat);
   int count = tw->topLevelItemCount();
-  Reg.setValue("TopCount", count);
+  QString name = tw->objectName();
+  Reg.setValue(name + "TopCount", count);
   for (int i = 0; i < count; i++) {
-    Reg.setValue(QString::number(i + 1) + "1", tw->topLevelItem(i)->text(0));
-    Reg.setValue(QString::number(i + 1) + "2", tw->topLevelItem(i)->text(1));
+    Reg.setValue(name + QString::number(i + 1) + "1",
+                 tw->topLevelItem(i)->text(0));
+    Reg.setValue(name + QString::number(i + 1) + "2",
+                 tw->topLevelItem(i)->text(1));
     int childCount = tw->topLevelItem(i)->childCount();
-    Reg.setValue(QString::number(i + 1) + "childCount", childCount);
+    Reg.setValue(name + QString::number(i + 1) + "childCount", childCount);
     for (int j = 0; j < childCount; j++) {
-      Reg.setValue(QString::number(i + 1) + "child" + QString::number(j),
+      Reg.setValue(name + QString::number(i + 1) + "child" + QString::number(j),
                    tw->topLevelItem(i)->child(j)->text(0));
     }
   }
@@ -182,28 +193,31 @@ void MainWindow::saveData(QTreeWidget* tw) {
   qDebug() << iniFile << Reg.value("TopCount").toInt();
 
   get_Today(tw);
-
   init_Stats(tw);
   initChart(tw);
 }
 
 void MainWindow::readData(QTreeWidget* tw) {
+  tw->clear();
   QSettings Reg(iniFile, QSettings::IniFormat);
-  int rowCount = Reg.value("TopCount").toInt();
+  QString name = tw->objectName();
+  int rowCount = Reg.value(name + "TopCount").toInt();
   qDebug() << iniFile << rowCount;
   for (int i = 0; i < rowCount; i++) {
     QTreeWidgetItem* topItem = new QTreeWidgetItem;
-    topItem->setText(0, Reg.value(QString::number(i + 1) + "1").toString());
+    topItem->setText(0,
+                     Reg.value(name + QString::number(i + 1) + "1").toString());
     tw->addTopLevelItem(topItem);
-    int childCount = Reg.value(QString::number(i + 1) + "childCount").toInt();
+    int childCount =
+        Reg.value(name + QString::number(i + 1) + "childCount").toInt();
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     topItem->setText(1, QString::number(childCount));
 
     for (int j = 0; j < childCount; j++) {
       QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
-      item11->setText(
-          0, Reg.value(QString::number(i + 1) + "child" + QString::number(j))
-                 .toString());
+      item11->setText(0, Reg.value(name + QString::number(i + 1) + "child" +
+                                   QString::number(j))
+                             .toString());
     }
   }
 
@@ -211,8 +225,8 @@ void MainWindow::readData(QTreeWidget* tw) {
   ui->textEdit->setPlainText(loadText(txtFile));
 
   get_Today(tw);
-
   init_Stats(tw);
+  initChart(tw);
 }
 
 void MainWindow::get_Today(QTreeWidget* tw) {
@@ -383,4 +397,11 @@ void MainWindow::init_TreeWidget(QTreeWidget* tw) {
   tw->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
   tw->setAlternatingRowColors(true);
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index) {
+  if (loading) return;
+  ui->tabWidget->setCurrentIndex(index);
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  readData(tw);
 }

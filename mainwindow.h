@@ -57,7 +57,10 @@ class MainWindow : public QMainWindow {
 
   void on_actionDel_Tab_triggered();
 
+  void on_tabWidget_currentChanged(int index);
+
  private:
+  bool loading = false;
   Ui::MainWindow *ui;
   void get_Today(QTreeWidget *);
   void add_Data(QTreeWidget *);
