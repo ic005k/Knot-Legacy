@@ -7,6 +7,7 @@ CONFIG += c++11
 
 android
 {
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/src
 dataFiles.files+=src/readme.txt
 dataFiles.files+=src/Xcount.ini
 dataFiles.files+=src/Xcount.txt

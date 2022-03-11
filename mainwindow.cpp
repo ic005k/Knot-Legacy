@@ -4,7 +4,7 @@
 
 #include "ui_mainwindow.h"
 
-QString appName = "Xcount";
+QString appName = "Xcounter";
 QString iniFile = "/data/data/org.qtproject.example.Xcount/Xcount.ini";
 QString txtFile = "assets:/data/Xcount.txt";
 
