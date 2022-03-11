@@ -6,6 +6,8 @@ Chart::Chart(QWidget* parent, QString _chartname) {
   series = new QSplineSeries(this);
   qchart = new QChart;
   chartview = new QChartView(qchart);
+  qchart->setMargins(QMargins(0, 0, 0, 0));
+  qchart->setContentsMargins(0, 0, 0, 0);
   layout = new QHBoxLayout(this);
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);

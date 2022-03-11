@@ -11,13 +11,17 @@ QString txtFile = "assets:/data/Xcount.txt";
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  this->layout()->setMargin(0);
+  this->layout()->setSpacing(0);
+  this->layout()->setContentsMargins(1, 1, 1, 1);
   loading = true;
   ui->statusbar->setHidden(true);
   this->setWindowTitle("");
   tmer = new QTimer(this);
   connect(tmer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
-  tmer->start(1000);
+  // tmer->start(1000);
   strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
+  ui->lcdNumber->setHidden(true);
 
   QDir dir;
   QString path;
@@ -39,13 +43,13 @@ MainWindow::MainWindow(QWidget* parent)
     txtFile = str + appName + ".txt";
   }
 
-  int s = 90;
+  int s = 30;
   if (isIOS) {
     ui->btnLess->setMinimumHeight(30);
     ui->btnPlus->setMinimumHeight(30);
     ui->lcdNumber->setMinimumHeight(30);
     ui->textEdit->setMaximumHeight(50);
-    s = 50;
+    s = 25;
   }
   ui->btnPlus->setIconSize(QSize(s, s));
   ui->btnLess->setIconSize(QSize(s, s));
@@ -247,7 +251,10 @@ void MainWindow::readData(QTreeWidget* tw) {
 
 void MainWindow::get_Today(QTreeWidget* tw) {
   int count = tw->topLevelItemCount();
-  if (count <= 0) return;
+  if (count <= 0) {
+    today = 0;
+    return;
+  }
   QString str0 = tw->topLevelItem(count - 1)->text(0);
   QString str1 = tw->topLevelItem(count - 1)->text(1);
   if (strDate == str0) {
@@ -312,9 +319,13 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
   a1 = a;
   b = a1 / 10;
   c = a1 % 10;
-  ui->lblStats->setText("总计：" + QString::number(a) + " 盒 ( " +
-                        QString::number(b) + " 条 " + QString::number(c) +
-                        " 盒 ) ");
+  if (ui->tabWidget->currentIndex() == 0)
+    ui->lblStats->setText(tr("Total") + " : " + QString::number(a) + " " +
+                          tr("Boxes") + " ( " + QString::number(b) + " " +
+                          tr("Cartons") + " " + QString::number(c) + " " +
+                          tr("Boxes") + " ) ");
+  else
+    ui->lblStats->setText(tr("Total") + " : " + QString::number(tatol));
 }
 
 void MainWindow::initChart(QTreeWidget* tw) {
@@ -341,10 +352,15 @@ void MainWindow::initChart(QTreeWidget* tw) {
   }
 
   //设置表头
-  chart = new Chart(this, "历史数据");
+  chart = new Chart(this, tr("History Data"));
+  ui->pLayout->setMargin(0);
+  ui->pLayout->setSpacing(0);
+  ui->pLayout->setContentsMargins(0, 0, 0, 0);
   ui->pLayout->addWidget(chart);
   //设置坐标系
-  chart->setAxis("天数(近30天)", 0, 30, 30, "频次", 0, max, 5);
+  chart->setAxis(tr("Days (last 30)") + "    " + tr("Today") + ": " +
+                     QString::number(today),
+                 0, 30, 30, tr("Freq"), 0, max, 5);
   //设置离散点数据
   QList<QPointF> pointlist = {
       QPointF(0, 8),  QPointF(1, 2),  QPointF(3, 4), QPointF(4, 8),
@@ -397,9 +413,18 @@ void MainWindow::on_actionAdd_Tab_triggered() {
 }
 
 void MainWindow::on_actionDel_Tab_triggered() {
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  QString name = ui->tabWidget->currentWidget()->objectName();
+  qDebug() << name;
   int index = ui->tabWidget->currentIndex();
   if (index == 0) return;
   ui->tabWidget->removeTab(index);
+  for (int i = 0; i < Reg.allKeys().count(); i++) {
+    if (Reg.allKeys().at(i).contains(name)) {
+      Reg.remove(Reg.allKeys().at(i));
+      i--;
+    }
+  }
 }
 
 void MainWindow::init_TreeWidget(QTreeWidget* tw) {
@@ -409,6 +434,7 @@ void MainWindow::init_TreeWidget(QTreeWidget* tw) {
   tw->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
   tw->setAlternatingRowColors(true);
+  tw->setFrameShape(QFrame::NoFrame);
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index) {
@@ -423,4 +449,18 @@ void MainWindow::on_textEdit_textChanged() {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   QString name = tw->objectName();
   Reg.setValue(name + "Note", ui->textEdit->toPlainText());
+}
+
+void MainWindow::on_btnLeft_clicked() {
+  if (ui->tabWidget->currentIndex() < 0) return;
+  int index = ui->tabWidget->currentIndex();
+  if (index == 0) return;
+  ui->tabWidget->setCurrentIndex(index - 1);
+}
+
+void MainWindow::on_btnRight_clicked() {
+  if (ui->tabWidget->currentIndex() < 0) return;
+  int index = ui->tabWidget->currentIndex();
+  if (index == ui->tabWidget->tabBar()->count() - 1) return;
+  ui->tabWidget->setCurrentIndex(index + 1);
 }

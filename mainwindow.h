@@ -61,6 +61,10 @@ class MainWindow : public QMainWindow {
 
   void on_textEdit_textChanged();
 
+  void on_btnLeft_clicked();
+
+  void on_btnRight_clicked();
+
  private:
   bool loading = false;
   Ui::MainWindow *ui;
