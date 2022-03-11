@@ -4,6 +4,8 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QDir>
+#include <QHeaderView>
+#include <QInputDialog>
 #include <QMainWindow>
 #include <QSettings>
 #include <QTextEdit>
@@ -27,17 +29,17 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   QTimer *tmer;
   QString strDate;
-  void saveData();
-  void readData();
+  void saveData(QTreeWidget *);
+  void readData(QTreeWidget *);
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
-  void initChart();
+  void initChart(QTreeWidget *);
 
   bool isInit = false;
   int today = 0;
   bool isIOS = false;
  public slots:
-  void init_Stats();
+  void init_Stats(QTreeWidget *);
 
  protected:
   void closeEvent(QCloseEvent *event);
@@ -49,8 +51,19 @@ class MainWindow : public QMainWindow {
 
   void on_btnLess_clicked();
 
+  void on_actionRename_triggered();
+
+  void on_actionAdd_Tab_triggered();
+
+  void on_actionDel_Tab_triggered();
+
  private:
   Ui::MainWindow *ui;
-  void get_Today();
+  void get_Today(QTreeWidget *);
+  void add_Data(QTreeWidget *);
+  void del_Data(QTreeWidget *);
+  void init_TreeWidget(QTreeWidget *);
+  QObjectList getAllTreeWidget(QObjectList lstUIControls);
+  QObjectList getAllUIControls(QObject *parent);
 };
 #endif  // MAINWINDOW_H
