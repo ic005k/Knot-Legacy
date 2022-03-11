@@ -59,6 +59,8 @@ class MainWindow : public QMainWindow {
 
   void on_tabWidget_currentChanged(int index);
 
+  void on_textEdit_textChanged();
+
  private:
   bool loading = false;
   Ui::MainWindow *ui;
@@ -68,5 +70,6 @@ class MainWindow : public QMainWindow {
   void init_TreeWidget(QTreeWidget *);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
   QObjectList getAllUIControls(QObject *parent);
+  void saveTab();
 };
 #endif  // MAINWINDOW_H

@@ -171,6 +171,16 @@ QObjectList MainWindow::getAllUIControls(QObject* parent) {
   return lstOfChildren;
 }
 
+void MainWindow::saveTab() {
+  // Tab
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  int TabCount = ui->tabWidget->tabBar()->count();
+  Reg.setValue("TabCount", TabCount);
+  for (int i = 0; i < TabCount; i++) {
+    Reg.setValue("TabName" + QString::number(i), ui->tabWidget->tabText(i));
+  }
+}
+
 void MainWindow::saveData(QTreeWidget* tw) {
   QSettings Reg(iniFile, QSettings::IniFormat);
   int count = tw->topLevelItemCount();
@@ -187,7 +197,12 @@ void MainWindow::saveData(QTreeWidget* tw) {
       Reg.setValue(name + QString::number(i + 1) + "child" + QString::number(j),
                    tw->topLevelItem(i)->child(j)->text(0));
     }
+    // Note
+    Reg.setValue(name + "Note", ui->textEdit->toPlainText());
   }
+
+  // Tab
+  saveTab();
 
   TextEditToFile(ui->textEdit, txtFile);
   qDebug() << iniFile << Reg.value("TopCount").toInt();
@@ -222,7 +237,8 @@ void MainWindow::readData(QTreeWidget* tw) {
   }
 
   // ui->textEdit->setPlainText(loadText("assets:/data/readme.txt"));
-  ui->textEdit->setPlainText(loadText(txtFile));
+  // ui->textEdit->setPlainText(loadText(txtFile));
+  ui->textEdit->setPlainText(Reg.value(name + "Note").toString());
 
   get_Today(tw);
   init_Stats(tw);
@@ -278,14 +294,9 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 
 void MainWindow::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
-  TextEditToFile(ui->textEdit, txtFile);
+  // TextEditToFile(ui->textEdit, txtFile);
 
-  QSettings Reg(iniFile, QSettings::IniFormat);
-  int TabCount = ui->tabWidget->tabBar()->count();
-  Reg.setValue("TabCount", TabCount);
-  for (int i = 0; i < TabCount; i++) {
-    Reg.setValue("TabName" + QString::number(i), ui->tabWidget->tabText(i));
-  }
+  saveTab();
 }
 
 void MainWindow::init_Stats(QTreeWidget* tw) {
@@ -372,6 +383,7 @@ void MainWindow::on_actionRename_triggered() {
                                        ui->tabWidget->tabText(index), &ok);
   if (ok && !text.isEmpty()) {
     ui->tabWidget->setTabText(index, text);
+    saveTab();
   }
 }
 
@@ -404,4 +416,11 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   ui->tabWidget->setCurrentIndex(index);
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   readData(tw);
+}
+
+void MainWindow::on_textEdit_textChanged() {
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  QString name = tw->objectName();
+  Reg.setValue(name + "Note", ui->textEdit->toPlainText());
 }
