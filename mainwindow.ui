@@ -34,20 +34,111 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="QTextEdit" name="textEdit">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>130</height>
-       </size>
+    <item row="1" column="0">
+     <widget class="QFrame" name="frame_2">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
       </property>
-      <property name="placeholderText">
-       <string>Notes</string>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
       </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="styleSheet">
+          <string notr="true">/*QTabBar::scroller {
+                   width:0;
+                    border:0;
+                    padding: 0px;
+				   }
+
+QTabBar QToolButton::left-arrow {
+				  background-color:rgb(132, 171, 208);
+				  border-width: 0;
+				 border-image: url(:/src/left.png);
+							
+				 }
+
+QTabBar QToolButton::right-arrow {
+				  background-color:rgb(132, 171, 208);
+				  border-width: 0;
+				  border-image: url(:/src/right.png);
+				  }*/</string>
+         </property>
+         <property name="currentIndex">
+          <number>-1</number>
+         </property>
+         <property name="usesScrollButtons">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblStats">
+         <property name="text">
+          <string>Stats</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QToolButton" name="btnLeft">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>&lt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnNotes">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Notes</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnRight">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>&gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="2" column="0">
      <widget class="QFrame" name="frame">
       <property name="minimumSize">
        <size>
@@ -87,109 +178,7 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QFrame" name="frame_2">
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>1</number>
-       </property>
-       <property name="topMargin">
-        <number>1</number>
-       </property>
-       <property name="rightMargin">
-        <number>1</number>
-       </property>
-       <property name="bottomMargin">
-        <number>1</number>
-       </property>
-       <property name="verticalSpacing">
-        <number>0</number>
-       </property>
-       <item row="0" column="0" colspan="2">
-        <widget class="QTabWidget" name="tabWidget">
-         <property name="styleSheet">
-          <string notr="true">/*QTabBar::scroller {
-                   width:0;
-                    border:0;
-                    padding: 0px;
-				   }
-
-QTabBar QToolButton::left-arrow {
-				  background-color:rgb(132, 171, 208);
-				  border-width: 0;
-				 border-image: url(:/src/left.png);
-							
-				 }
-
-QTabBar QToolButton::right-arrow {
-				  background-color:rgb(132, 171, 208);
-				  border-width: 0;
-				  border-image: url(:/src/right.png);
-				  }*/</string>
-         </property>
-         <property name="currentIndex">
-          <number>-1</number>
-         </property>
-         <property name="usesScrollButtons">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QToolButton" name="btnLeft">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>&lt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QToolButton" name="btnRight">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>&gt;</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="lblStats">
-      <property name="text">
-       <string>Stats</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0">
+    <item row="3" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QToolButton" name="btnPlus">
@@ -255,6 +244,7 @@ QTabBar QToolButton::right-arrow {
     <addaction name="actionRename"/>
     <addaction name="actionAdd_Tab"/>
     <addaction name="actionDel_Tab"/>
+    <addaction name="actionNotes"/>
    </widget>
    <addaction name="menuEdit"/>
   </widget>
@@ -272,6 +262,11 @@ QTabBar QToolButton::right-arrow {
   <action name="actionDel_Tab">
    <property name="text">
     <string>Del Tab</string>
+   </property>
+  </action>
+  <action name="actionNotes">
+   <property name="text">
+    <string>Notes</string>
    </property>
   </action>
  </widget>

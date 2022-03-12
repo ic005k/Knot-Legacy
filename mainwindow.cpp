@@ -7,10 +7,13 @@
 QString appName = "Xcounter";
 QString iniFile = "/data/data/org.qtproject.example.Xcount/Xcount.ini";
 QString txtFile = "assets:/data/Xcount.txt";
-
+MainWindow* mw_one;
+bool loading = false;
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  mw_one = this;
+  mydlgNotes = new dlgNotes(this);
   this->layout()->setMargin(0);
   this->layout()->setSpacing(0);
   this->layout()->setContentsMargins(1, 1, 1, 1);
@@ -43,13 +46,12 @@ MainWindow::MainWindow(QWidget* parent)
     txtFile = str + appName + ".txt";
   }
 
-  int s = 30;
+  int s = 35;
   if (isIOS) {
     ui->btnLess->setMinimumHeight(30);
     ui->btnPlus->setMinimumHeight(30);
     ui->lcdNumber->setMinimumHeight(30);
-    ui->textEdit->setMaximumHeight(50);
-    s = 25;
+    s = 30;
   }
   ui->btnPlus->setIconSize(QSize(s, s));
   ui->btnLess->setIconSize(QSize(s, s));
@@ -59,19 +61,16 @@ MainWindow::MainWindow(QWidget* parent)
   QSettings Reg(iniFile, QSettings::IniFormat);
   int TabCount = Reg.value("TabCount", 0).toInt();
   for (int i = 0; i < TabCount; i++) {
-    QTreeWidget* tw = new QTreeWidget(this);
-    init_TreeWidget(tw);
-    tw->setObjectName("tab" + QString::number(i + 1));
-    ui->tabWidget->addTab(tw, Reg.value("TabName" + QString::number(i),
-                                        tr("Counter") + QString::number(i + 1))
-                                  .toString());
+    QString name = "tab" + QString::number(i + 1);
+    ui->tabWidget->addTab(init_TreeWidget(name),
+                          Reg.value("TabName" + QString::number(i),
+                                    tr("Counter") + QString::number(i + 1))
+                              .toString());
   }
 
   if (TabCount == 0) {
-    QTreeWidget* tw = new QTreeWidget(this);
-    tw->setObjectName("tab1");
-    init_TreeWidget(tw);
-    ui->tabWidget->addTab(tw, tr("Counter") + " " + QString::number(1));
+    ui->tabWidget->addTab(init_TreeWidget("tab1"),
+                          tr("Counter") + " " + QString::number(1));
   }
 
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
@@ -202,13 +201,13 @@ void MainWindow::saveData(QTreeWidget* tw) {
                    tw->topLevelItem(i)->child(j)->text(0));
     }
     // Note
-    Reg.setValue(name + "Note", ui->textEdit->toPlainText());
+    Reg.setValue(name + "Note", mydlgNotes->ui->textEdit->toPlainText());
   }
 
   // Tab
   saveTab();
 
-  TextEditToFile(ui->textEdit, txtFile);
+  TextEditToFile(mydlgNotes->ui->textEdit, txtFile);
   qDebug() << iniFile << Reg.value("TopCount").toInt();
 
   get_Today(tw);
@@ -242,7 +241,7 @@ void MainWindow::readData(QTreeWidget* tw) {
 
   // ui->textEdit->setPlainText(loadText("assets:/data/readme.txt"));
   // ui->textEdit->setPlainText(loadText(txtFile));
-  ui->textEdit->setPlainText(Reg.value(name + "Note").toString());
+  mydlgNotes->ui->textEdit->setPlainText(Reg.value(name + "Note").toString());
 
   get_Today(tw);
   init_Stats(tw);
@@ -405,29 +404,42 @@ void MainWindow::on_actionRename_triggered() {
 
 void MainWindow::on_actionAdd_Tab_triggered() {
   int count = ui->tabWidget->tabBar()->count();
-  QTreeWidget* tw = new QTreeWidget(this);
-  init_TreeWidget(tw);
-  ui->tabWidget->addTab(tw, tr("Counter") + " " + QString::number(count + 1));
-  tw->setObjectName("tab" + QString::number(count + 1));
-  ui->tabWidget->setCurrentIndex(count);
-}
-
-void MainWindow::on_actionDel_Tab_triggered() {
   QSettings Reg(iniFile, QSettings::IniFormat);
-  QString name = ui->tabWidget->currentWidget()->objectName();
-  qDebug() << name;
-  int index = ui->tabWidget->currentIndex();
-  if (index == 0) return;
-  ui->tabWidget->removeTab(index);
   for (int i = 0; i < Reg.allKeys().count(); i++) {
-    if (Reg.allKeys().at(i).contains(name)) {
+    if (Reg.allKeys().at(i).contains("tab" + QString::number(count + 1))) {
       Reg.remove(Reg.allKeys().at(i));
       i--;
     }
   }
+
+  ui->tabWidget->addTab(init_TreeWidget("tab" + QString::number(count + 1)),
+                        tr("Counter") + " " + QString::number(count + 1));
+  ui->tabWidget->setCurrentIndex(count);
 }
 
-void MainWindow::init_TreeWidget(QTreeWidget* tw) {
+void MainWindow::on_actionDel_Tab_triggered() {
+  // QSettings Reg(iniFile, QSettings::IniFormat);
+  // QString name = ui->tabWidget->currentWidget()->objectName();
+  // qDebug() << name;
+  int index = ui->tabWidget->currentIndex();
+  if (index == 0) return;
+
+  ui->tabWidget->removeTab(index);
+
+  for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
+    QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
+    tw->setObjectName("tab" + QString::number(i + 1));
+    qDebug() << tw;
+    saveData(tw);
+  }
+}
+
+QTreeWidget* MainWindow::init_TreeWidget(QString name) {
+  QTreeWidget* tw = new QTreeWidget(this);
+  if (name != "")
+    tw->setObjectName(name);
+  else
+    tw->setObjectName("tw" + init_Objname());
   tw->setColumnCount(2);
   tw->headerItem()->setText(0, tr("Date"));
   tw->headerItem()->setText(1, tr("Frequency"));
@@ -435,6 +447,8 @@ void MainWindow::init_TreeWidget(QTreeWidget* tw) {
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
   tw->setAlternatingRowColors(true);
   tw->setFrameShape(QFrame::NoFrame);
+  qDebug() << "tw: " << tw->objectName();
+  return tw;
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index) {
@@ -445,10 +459,11 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 }
 
 void MainWindow::on_textEdit_textChanged() {
+  if (loading) return;
   QSettings Reg(iniFile, QSettings::IniFormat);
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   QString name = tw->objectName();
-  Reg.setValue(name + "Note", ui->textEdit->toPlainText());
+  Reg.setValue(name + "Note", mydlgNotes->ui->textEdit->toPlainText());
 }
 
 void MainWindow::on_btnLeft_clicked() {
@@ -464,3 +479,31 @@ void MainWindow::on_btnRight_clicked() {
   if (index == ui->tabWidget->tabBar()->count() - 1) return;
   ui->tabWidget->setCurrentIndex(index + 1);
 }
+
+void MainWindow::on_actionNotes_triggered() {
+  mydlgNotes->close();
+  QDesktopWidget* desktopWidget = QApplication::desktop();
+  //获取设备屏幕大小
+  QRect screenRect = desktopWidget->screenGeometry();
+  double screenX = screenRect.width();
+  double screenY = screenRect.height();
+  mydlgNotes->setFixedHeight(this->height());
+  mydlgNotes->setFixedWidth(this->width());
+  mydlgNotes->setModal(true);
+  mydlgNotes->show();
+}
+
+QString MainWindow::init_Objname() {
+  QString y = QString::number(QDate::currentDate().year());
+  QString m = QString::number(QDate::currentDate().month());
+  QString d = QString::number(QDate::currentDate().day());
+  QString h = QString::number(QTime::currentTime().hour());
+  QString mm = QString::number(QTime::currentTime().minute());
+  QString s = QString::number(QTime::currentTime().second());
+  QString CurrentDateTime = y + m + d + h + mm + s;
+  qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+  int a = qrand() % (1000);
+  return CurrentDateTime + QString::number(a);
+}
+
+void MainWindow::on_btnNotes_clicked() { emit on_actionNotes_triggered(); }

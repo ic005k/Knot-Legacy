@@ -24,14 +24,17 @@ INSTALLS += dataFiles
 
 SOURCES += \
     chart.cpp \
+    dlgnotes.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     chart.h \
+    dlgnotes.h \
     mainwindow.h
 
 FORMS += \
+    dlgnotes.ui \
     mainwindow.ui
 
 # Default rules for deployment.
