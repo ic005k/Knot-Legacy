@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->setupUi(this);
   mw_one = this;
   mydlgNotes = new dlgNotes(this);
+  mydlgRename = new dlgRename(this);
   this->layout()->setMargin(0);
   this->layout()->setSpacing(0);
   this->layout()->setContentsMargins(1, 1, 1, 1);
@@ -392,14 +393,21 @@ void MainWindow::initChart(QTreeWidget* tw) {
 
 void MainWindow::on_actionRename_triggered() {
   int index = ui->tabWidget->currentIndex();
-  bool ok;
+  /*bool ok;
   QString text = QInputDialog::getText(this, tr("Rename tab name"),
                                        tr("Tab name:"), QLineEdit::Normal,
                                        ui->tabWidget->tabText(index), &ok);
   if (ok && !text.isEmpty()) {
     ui->tabWidget->setTabText(index, text);
     saveTab();
-  }
+  }*/
+  mydlgRename->setFixedHeight(this->height());
+  mydlgRename->setFixedWidth(this->width());
+  mydlgRename->setModal(true);
+  mydlgRename->ui->editName->setText(ui->tabWidget->tabText(index));
+  mydlgRename->ui->editName->setFocus();
+  mydlgRename->ui->editName->selectAll();
+  mydlgRename->show();
 }
 
 void MainWindow::on_actionAdd_Tab_triggered() {
@@ -418,11 +426,8 @@ void MainWindow::on_actionAdd_Tab_triggered() {
 }
 
 void MainWindow::on_actionDel_Tab_triggered() {
-  // QSettings Reg(iniFile, QSettings::IniFormat);
-  // QString name = ui->tabWidget->currentWidget()->objectName();
-  // qDebug() << name;
   int index = ui->tabWidget->currentIndex();
-  if (index == 0) return;
+  if (index <= 0) return;
 
   ui->tabWidget->removeTab(index);
 
@@ -447,7 +452,6 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
   tw->setAlternatingRowColors(true);
   tw->setFrameShape(QFrame::NoFrame);
-  qDebug() << "tw: " << tw->objectName();
   return tw;
 }
 
@@ -481,12 +485,6 @@ void MainWindow::on_btnRight_clicked() {
 }
 
 void MainWindow::on_actionNotes_triggered() {
-  mydlgNotes->close();
-  QDesktopWidget* desktopWidget = QApplication::desktop();
-  //获取设备屏幕大小
-  QRect screenRect = desktopWidget->screenGeometry();
-  double screenX = screenRect.width();
-  double screenY = screenRect.height();
   mydlgNotes->setFixedHeight(this->height());
   mydlgNotes->setFixedWidth(this->width());
   mydlgNotes->setModal(true);

@@ -28,8 +28,4 @@ bool dlgNotes::eventFilter(QObject* obj, QEvent* event) {
   return QWidget::eventFilter(obj, event);
 }
 
-void dlgNotes::keyReleaseEvent(QKeyEvent* event) {
-  Q_UNUSED(event)
-  event->accept();  // 不做出任何响应
-  // close();
-}
+void dlgNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }

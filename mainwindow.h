@@ -15,7 +15,9 @@
 
 #include "chart.h"
 #include "dlgnotes.h"
+#include "dlgrename.h"
 #include "ui_dlgnotes.h"
+#include "ui_dlgrename.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -30,7 +32,9 @@ class MainWindow : public QMainWindow {
  public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
+  Ui::MainWindow *ui;
   dlgNotes *mydlgNotes;
+  dlgRename *mydlgRename;
   QTimer *tmer;
   QString strDate;
   void saveData(QTreeWidget *);
@@ -42,6 +46,7 @@ class MainWindow : public QMainWindow {
   bool isInit = false;
   int today = 0;
   bool isIOS = false;
+  void saveTab();
  public slots:
   void init_Stats(QTreeWidget *);
 
@@ -72,14 +77,12 @@ class MainWindow : public QMainWindow {
   void on_btnNotes_clicked();
 
  private:
-  Ui::MainWindow *ui;
   void get_Today(QTreeWidget *);
   void add_Data(QTreeWidget *);
   void del_Data(QTreeWidget *);
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
   QObjectList getAllUIControls(QObject *parent);
-  void saveTab();
   QString init_Objname();
 };
 #endif  // MAINWINDOW_H

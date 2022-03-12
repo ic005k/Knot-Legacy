@@ -19,7 +19,7 @@ class dlgNotes : public QDialog {
   bool eventFilter(QObject *obj, QEvent *event) override;
 
  protected:
-   void keyReleaseEvent(QKeyEvent *event);
+  void keyReleaseEvent(QKeyEvent *event) override;
  private slots:
   void on_btnBack_clicked();
 
