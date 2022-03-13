@@ -35,7 +35,7 @@
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QFrame" name="frame_2">
+     <widget class="QFrame" name="frame_tab">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -43,36 +43,6 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QTabWidget" name="tabWidget">
-         <property name="styleSheet">
-          <string notr="true">/*QTabBar::scroller {
-                   width:0;
-                    border:0;
-                    padding: 0px;
-				   }
-
-QTabBar QToolButton::left-arrow {
-				  background-color:rgb(132, 171, 208);
-				  border-width: 0;
-				 border-image: url(:/src/left.png);
-							
-				 }
-
-QTabBar QToolButton::right-arrow {
-				  background-color:rgb(132, 171, 208);
-				  border-width: 0;
-				  border-image: url(:/src/right.png);
-				  }*/</string>
-         </property>
-         <property name="currentIndex">
-          <number>-1</number>
-         </property>
-         <property name="usesScrollButtons">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lblStats">
          <property name="text">
@@ -134,6 +104,36 @@ QTabBar QToolButton::right-arrow {
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="0" column="0">
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="styleSheet">
+          <string notr="true">/*QTabBar::scroller {
+                   width:0;
+                    border:0;
+                    padding: 0px;
+				   }
+
+QTabBar QToolButton::left-arrow {
+				  background-color:rgb(132, 171, 208);
+				  border-width: 0;
+				 border-image: url(:/src/left.png);
+							
+				 }
+
+QTabBar QToolButton::right-arrow {
+				  background-color:rgb(132, 171, 208);
+				  border-width: 0;
+				  border-image: url(:/src/right.png);
+				  }*/</string>
+         </property>
+         <property name="currentIndex">
+          <number>-1</number>
+         </property>
+         <property name="usesScrollButtons">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

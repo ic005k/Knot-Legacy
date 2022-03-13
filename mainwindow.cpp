@@ -13,6 +13,9 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   mw_one = this;
+  this->installEventFilter(this);
+  ui->frame_tab->setMouseTracking(true);
+  ui->tabWidget->setMouseTracking(true);
   mydlgNotes = new dlgNotes(this);
   mydlgRename = new dlgRename(this);
   this->layout()->setMargin(0);
@@ -67,15 +70,19 @@ MainWindow::MainWindow(QWidget* parent)
                           Reg.value("TabName" + QString::number(i),
                                     tr("Counter") + QString::number(i + 1))
                               .toString());
+    QString strNotes = Reg.value(name + "Notes").toString();
+    listNotes.append(strNotes);
   }
 
   if (TabCount == 0) {
     ui->tabWidget->addTab(init_TreeWidget("tab1"),
                           tr("Counter") + " " + QString::number(1));
+    listNotes.append("");
   }
 
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   readData(tw);
+
   isInit = true;
   loading = false;
 }
@@ -115,7 +122,7 @@ void MainWindow::add_Data(QTreeWidget* tw) {
     topItem->setText(1, QString::number(child));
   }
 
-  saveData(tw);
+  saveData(tw, ui->tabWidget->currentIndex());
 }
 
 void MainWindow::del_Data(QTreeWidget* tw) {
@@ -134,7 +141,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
     }
   }
 
-  saveData(tw);
+  saveData(tw, ui->tabWidget->currentIndex());
 }
 
 void MainWindow::on_btnPlus_clicked() {
@@ -185,7 +192,7 @@ void MainWindow::saveTab() {
   }
 }
 
-void MainWindow::saveData(QTreeWidget* tw) {
+void MainWindow::saveData(QTreeWidget* tw, int index) {
   QSettings Reg(iniFile, QSettings::IniFormat);
   int count = tw->topLevelItemCount();
   QString name = tw->objectName();
@@ -201,15 +208,14 @@ void MainWindow::saveData(QTreeWidget* tw) {
       Reg.setValue(name + QString::number(i + 1) + "child" + QString::number(j),
                    tw->topLevelItem(i)->child(j)->text(0));
     }
-    // Note
-    Reg.setValue(name + "Note", mydlgNotes->ui->textEdit->toPlainText());
   }
+  // Note
+  Reg.setValue(name + "Note", listNotes.at(index));
 
   // Tab
   saveTab();
 
   TextEditToFile(mydlgNotes->ui->textEdit, txtFile);
-  qDebug() << iniFile << Reg.value("TopCount").toInt();
 
   get_Today(tw);
   init_Stats(tw);
@@ -221,7 +227,6 @@ void MainWindow::readData(QTreeWidget* tw) {
   QSettings Reg(iniFile, QSettings::IniFormat);
   QString name = tw->objectName();
   int rowCount = Reg.value(name + "TopCount").toInt();
-  qDebug() << iniFile << rowCount;
   for (int i = 0; i < rowCount; i++) {
     QTreeWidgetItem* topItem = new QTreeWidgetItem;
     topItem->setText(0,
@@ -242,7 +247,11 @@ void MainWindow::readData(QTreeWidget* tw) {
 
   // ui->textEdit->setPlainText(loadText("assets:/data/readme.txt"));
   // ui->textEdit->setPlainText(loadText(txtFile));
-  mydlgNotes->ui->textEdit->setPlainText(Reg.value(name + "Note").toString());
+  int index = ui->tabWidget->currentIndex();
+  QString text = Reg.value(name + "Note").toString();
+  mydlgNotes->ui->textEdit->setPlainText(text);
+  listNotes.removeAt(index);
+  listNotes.insert(index, text);
 
   get_Today(tw);
   init_Stats(tw);
@@ -319,6 +328,7 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
   a1 = a;
   b = a1 / 10;
   c = a1 % 10;
+  ui->lblStats->clear();
   if (ui->tabWidget->currentIndex() == 0)
     ui->lblStats->setText(tr("Total") + " : " + QString::number(a) + " " +
                           tr("Boxes") + " ( " + QString::number(b) + " " +
@@ -353,6 +363,7 @@ void MainWindow::initChart(QTreeWidget* tw) {
 
   //设置表头
   chart = new Chart(this, tr("History Data"));
+  // chart->installEventFilter(this);
   ui->pLayout->setMargin(0);
   ui->pLayout->setSpacing(0);
   ui->pLayout->setContentsMargins(0, 0, 0, 0);
@@ -429,13 +440,14 @@ void MainWindow::on_actionDel_Tab_triggered() {
   int index = ui->tabWidget->currentIndex();
   if (index <= 0) return;
 
+  listNotes.removeAt(index);
   ui->tabWidget->removeTab(index);
 
   for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
     QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
     tw->setObjectName("tab" + QString::number(i + 1));
-    qDebug() << tw;
-    saveData(tw);
+    saveData(tw, i);
+    qDebug() << listNotes.at(i);
   }
 }
 
@@ -460,6 +472,8 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   ui->tabWidget->setCurrentIndex(index);
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   readData(tw);
+  // tw->installEventFilter(this);
+  tw->setMouseTracking(true);
 }
 
 void MainWindow::on_textEdit_textChanged() {
@@ -467,7 +481,11 @@ void MainWindow::on_textEdit_textChanged() {
   QSettings Reg(iniFile, QSettings::IniFormat);
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   QString name = tw->objectName();
-  Reg.setValue(name + "Note", mydlgNotes->ui->textEdit->toPlainText());
+  QString text = mydlgNotes->ui->textEdit->toPlainText();
+  Reg.setValue(name + "Note", text);
+  int index = ui->tabWidget->currentIndex();
+  listNotes.removeAt(index);
+  listNotes.insert(index, text);
 }
 
 void MainWindow::on_btnLeft_clicked() {
@@ -505,3 +523,96 @@ QString MainWindow::init_Objname() {
 }
 
 void MainWindow::on_btnNotes_clicked() { emit on_actionNotes_triggered(); }
+
+bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
+  // if (watch == ui->tabWidget->currentWidget()) {
+  int w, h;
+
+  static int press_x;  //鼠标按下时的位置
+  static int press_y;
+  static int relea_x;  //鼠标释放时的位置
+  static int relea_y;
+  int index = ui->tabWidget->currentIndex();
+  int count = ui->tabWidget->tabBar()->count();
+  w = ui->tabWidget->width();
+  h = ui->tabWidget->height();
+
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
+
+  if (event->type() == QEvent::MouseButtonPress)  //如果鼠标按下
+  {
+    press_x = event->globalX();
+    press_y = event->globalY();
+  }
+
+  if (event->type() == QEvent::MouseButtonRelease)  //如果鼠标释放
+  {
+    relea_x = event->globalX();
+    relea_y = event->globalY();
+  }
+
+  qDebug() << press_x << relea_x;
+
+  //判断滑动方向（右滑）
+
+  if ((relea_x - press_x) > 20 && event->type() == QEvent::MouseButtonRelease &&
+      qAbs(relea_y - press_y) < 50) {
+    int current_page = ui->tabWidget->currentIndex();
+    if (current_page < count - 1) {
+      // ui->lblStats->setPixmap(ui->tabWidget->currentWidget()
+      //                             ->grab());  //捕获当前界面并绘制到label上
+
+      QPropertyAnimation* animation1 =
+          // new QPropertyAnimation(ui->lblStats, "geometry");
+          new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
+      animation1->setDuration(500);  //设置动画时间为0.5秒
+      animation1->setStartValue(QRect(0, 0, w, h));
+      animation1->setEndValue(QRect(w * 2, 0, w, h));
+
+      ui->tabWidget->setCurrentIndex(current_page + 1);  //切换界面
+
+      QPropertyAnimation* animation2 =
+          new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
+      animation2->setDuration(500);
+      animation2->setStartValue(QRect(-w * 2, 0, w, h));
+      animation2->setEndValue(QRect(0, 0, w, h));
+
+      QParallelAnimationGroup* group = new QParallelAnimationGroup;  //动画容器
+      group->addAnimation(animation1);
+      group->addAnimation(animation2);
+      group->start();
+    }
+  }
+
+  //判断滑动方向（左滑）
+  if ((press_x - relea_x) > 20 && event->type() == QEvent::MouseButtonRelease &&
+      qAbs(relea_y - press_y) < 50 && index > 0) {
+    int current_page = ui->tabWidget->currentIndex();
+    if (current_page >= 0) {
+      // ui->lblStats->setPixmap(ui->tabWidget->currentWidget()->grab());
+
+      QPropertyAnimation* animation1 =
+          // new QPropertyAnimation(ui->lblStats, "geometry");
+          new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
+      animation1->setDuration(500);
+      animation1->setStartValue(QRect(0, 0, w, h));
+      animation1->setEndValue(QRect(-w, 0, w, h));
+
+      ui->tabWidget->setCurrentIndex(current_page - 1);
+
+      QPropertyAnimation* animation2 =
+          new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
+      animation2->setDuration(500);
+      animation2->setStartValue(QRect(w * 2, 0, w, h));
+      animation2->setEndValue(QRect(0, 0, w, h));
+
+      QParallelAnimationGroup* group = new QParallelAnimationGroup;
+      group->addAnimation(animation1);
+      group->addAnimation(animation2);
+      group->start();
+    }
+  }
+  //}
+
+  return QWidget::eventFilter(watch, evn);
+}

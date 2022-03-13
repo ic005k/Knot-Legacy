@@ -8,7 +8,10 @@
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QMainWindow>
+#include <QParallelAnimationGroup>
+#include <QPropertyAnimation>
 #include <QSettings>
+#include <QStringList>
 #include <QTextEdit>
 #include <QTimer>
 #include <QTreeWidgetItem>
@@ -37,7 +40,7 @@ class MainWindow : public QMainWindow {
   dlgRename *mydlgRename;
   QTimer *tmer;
   QString strDate;
-  void saveData(QTreeWidget *);
+  void saveData(QTreeWidget *, int);
   void readData(QTreeWidget *);
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
@@ -47,11 +50,13 @@ class MainWindow : public QMainWindow {
   int today = 0;
   bool isIOS = false;
   void saveTab();
+  QStringList listNotes;
  public slots:
   void init_Stats(QTreeWidget *);
 
  protected:
   void closeEvent(QCloseEvent *event);
+  bool eventFilter(QObject *watch, QEvent *evn);
  private slots:
 
   void timerUpdate();
