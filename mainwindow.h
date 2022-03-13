@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QDir>
+#include <QElapsedTimer>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QMainWindow>
@@ -51,6 +52,7 @@ class MainWindow : public QMainWindow {
   bool isIOS = false;
   void saveTab();
   QStringList listNotes;
+  bool isSlide = false;
  public slots:
   void init_Stats(QTreeWidget *);
 
@@ -82,6 +84,7 @@ class MainWindow : public QMainWindow {
   void on_btnNotes_clicked();
 
  private:
+  int x, y, w, h;
   void get_Today(QTreeWidget *);
   void add_Data(QTreeWidget *);
   void del_Data(QTreeWidget *);
