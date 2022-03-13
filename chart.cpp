@@ -61,13 +61,17 @@ void Chart::buildChart(QList<QPointF> pointlist) {
   //创建数据源
   series->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
   series->clear();
+
   for (int i = 0; i < pointlist.size(); i++)
     series->append(pointlist.at(i).x(), pointlist.at(i).y());
 
   qchart->setTitle(chartname);
+
   qchart->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
   qchart->legend()->hide();                               //隐藏图例
   qchart->addSeries(series);                              //输入数据
-  qchart->setAxisX(axisX, series);
-  qchart->setAxisY(axisY, series);
+  series->attachAxis(axisX);
+  series->attachAxis(axisY);
+  // qchart->setAxisX(axisX, series);
+  // qchart->setAxisY(axisY, series);
 }

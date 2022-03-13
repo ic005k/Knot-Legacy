@@ -7,5 +7,6 @@
         <file>src/AndroidManifest.xml</file>
         <file>src/QtFullscreenActivity.java</file>
         <file>src/icon.png</file>
+        <file>cn.qm</file>
     </qresource>
 </RCC>

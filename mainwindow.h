@@ -3,6 +3,7 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QElapsedTimer>
@@ -82,6 +83,8 @@ class MainWindow : public QMainWindow {
   void on_actionNotes_triggered();
 
   void on_btnNotes_clicked();
+
+  void on_actionAbout_triggered();
 
  private:
   int x, y, w, h;

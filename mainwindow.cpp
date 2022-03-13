@@ -12,6 +12,9 @@ bool loading = false;
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  QString ver = "1.0.00";
+  ui->actionAbout->setText(tr("About") + " (" + ver + ")");
+  chart = new Chart(this, tr("History Data"));
   mw_one = this;
   this->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
@@ -343,7 +346,7 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
 }
 
 void MainWindow::initChart(QTreeWidget* tw) {
-  if (isInit) delete chart;
+  // if (isInit) delete chart;
   QStringList strList;
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
@@ -366,7 +369,7 @@ void MainWindow::initChart(QTreeWidget* tw) {
   }
 
   //设置表头
-  chart = new Chart(this, tr("History Data"));
+  // chart = new Chart(this, tr("History Data"));
   chart->installEventFilter(this);
   ui->frame->setMouseTracking(true);
   chart->setMouseTracking(true);
@@ -441,6 +444,7 @@ void MainWindow::on_actionAdd_Tab_triggered() {
   ui->tabWidget->addTab(init_TreeWidget("tab" + QString::number(count + 1)),
                         tr("Counter") + " " + QString::number(count + 1));
   ui->tabWidget->setCurrentIndex(count);
+  emit on_actionRename_triggered();
 }
 
 void MainWindow::on_actionDel_Tab_triggered() {
@@ -645,4 +649,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   //}
 
   return QWidget::eventFilter(watch, evn);
+}
+
+void MainWindow::on_actionAbout_triggered() {
+  QUrl url(QString("https://github.com/ic005k/Xcounter#readme"));
+  QDesktopServices::openUrl(url);
 }

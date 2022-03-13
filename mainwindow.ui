@@ -245,6 +245,7 @@ QTabBar QToolButton::right-arrow {
     <addaction name="actionAdd_Tab"/>
     <addaction name="actionDel_Tab"/>
     <addaction name="actionNotes"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuEdit"/>
   </widget>
@@ -267,6 +268,11 @@ QTabBar QToolButton::right-arrow {
   <action name="actionNotes">
    <property name="text">
     <string>Notes</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

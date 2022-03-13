@@ -5,6 +5,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
+TRANSLATIONS += cn.ts
+
 android
 {
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/src
