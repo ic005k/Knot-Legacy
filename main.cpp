@@ -1,7 +1,10 @@
 #include <QApplication>
+#include <QQuickStyle>
 #include <QTranslator>
+#include <QtQml/QQmlApplicationEngine>
 
 #include "mainwindow.h"
+#include "statusbar.h"
 extern QString iniFile, txtFile;
 void loadLocal();
 bool zh_cn = false;
@@ -17,9 +20,14 @@ int main(int argc, char *argv[]) {
   }
 #endif
 #endif
-
+  // QGuiApplication a(argc, argv);
   QApplication a(argc, argv);
   loadLocal();
+
+  QQuickStyle::setStyle("Material");
+  qmlRegisterType<StatusBar>("StatusBar", 0, 1, "StatusBar");
+  QQmlApplicationEngine engine;
+  engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
   MainWindow w;
   w.show();
   return a.exec();

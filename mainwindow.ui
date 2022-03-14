@@ -237,6 +237,9 @@ QTabBar QToolButton::right-arrow {
      <height>24</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">/*QMenuBar{background-color:rgb(250,250,250);}*/</string>
+   </property>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>Edit</string>
