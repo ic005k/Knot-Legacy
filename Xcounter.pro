@@ -1,9 +1,5 @@
 QT       += core gui
 QT       += charts
-QT += qml quick quickcontrols2
-include(../Xcount/src/statusbar.pri)
-RESOURCES += \
-    statusbar.qrc
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -39,8 +35,7 @@ HEADERS += \
     chart.h \
     dlgnotes.h \
     dlgrename.h \
-    mainwindow.h \
-    statusbar.h
+    mainwindow.h
 
 FORMS += \
     dlgnotes.ui \
