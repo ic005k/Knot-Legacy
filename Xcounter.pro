@@ -55,3 +55,5 @@ CONFIG(debug,debug|release) {
 } else {
     DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
 }
+
+

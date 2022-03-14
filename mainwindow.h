@@ -7,6 +7,7 @@
 #include <QDesktopWidget>
 #include <QDir>
 #include <QElapsedTimer>
+#include <QFileDialog>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QMainWindow>
@@ -54,7 +55,8 @@ class MainWindow : public QMainWindow {
   void saveTab();
   QStringList listNotes;
   bool isSlide = false;
- public slots:
+  void init_Data();
+public slots:
   void init_Stats(QTreeWidget *);
 
  protected:
@@ -85,6 +87,10 @@ class MainWindow : public QMainWindow {
   void on_btnNotes_clicked();
 
   void on_actionAbout_triggered();
+
+  void on_actionExport_Data_triggered();
+
+  void on_actionImport_Data_triggered();
 
  private:
   int x, y, w, h;

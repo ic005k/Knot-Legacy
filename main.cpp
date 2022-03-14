@@ -6,6 +6,8 @@ extern QString iniFile, txtFile;
 void loadLocal();
 bool zh_cn = false;
 int main(int argc, char *argv[]) {
+#ifdef Q_OS_LINUX
+  qDebug() << "OS=Linux Android";
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
     qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
@@ -13,6 +15,7 @@ int main(int argc, char *argv[]) {
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
   }
+#endif
 #endif
 
   QApplication a(argc, argv);

@@ -14,6 +14,7 @@ Chart::Chart(QWidget* parent, QString _chartname) {
   layout->setMargin(0);
   axisX = new QValueAxis(this);
   axisY = new QValueAxis(this);
+
   //在ui里面添加了一个Widget并把曲线图添加进去
   layout->addWidget(chartview);
   setLayout(layout);
@@ -69,9 +70,10 @@ void Chart::buildChart(QList<QPointF> pointlist) {
 
   qchart->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
   qchart->legend()->hide();                               //隐藏图例
-  qchart->addSeries(series);                              //输入数据
+
+  qchart->addSeries(series);  //输入数据
   series->attachAxis(axisX);
   series->attachAxis(axisY);
-  // qchart->setAxisX(axisX, series);
-  // qchart->setAxisY(axisY, series);
+  //   qchart->setAxisX(axisX, series);
+  //   qchart->setAxisY(axisY, series);
 }

@@ -52,18 +52,31 @@ MainWindow::MainWindow(QWidget* parent)
     iniFile = str + appName + ".ini";
     txtFile = str + appName + ".txt";
   }
+  qDebug() << iniFile;
 
   int s = 35;
   if (isIOS) {
-    ui->btnLess->setMinimumHeight(30);
-    ui->btnPlus->setMinimumHeight(30);
-    ui->lcdNumber->setMinimumHeight(30);
-    s = 30;
+    // ui->btnLess->setMinimumHeight(30);
+    // ui->btnPlus->setMinimumHeight(30);
+    // ui->lcdNumber->setMinimumHeight(30);
+    // s = 30;
   }
   ui->btnPlus->setIconSize(QSize(s, s));
   ui->btnLess->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
+
+  init_Data();
+
+  isInit = true;
+  loading = false;
+}
+
+void MainWindow::init_Data() {
+  int count = ui->tabWidget->tabBar()->count();
+  for (int i = 0; i < count; i++) {
+    ui->tabWidget->removeTab(0);
+  }
 
   QSettings Reg(iniFile, QSettings::IniFormat);
   int TabCount = Reg.value("TabCount", 0).toInt();
@@ -85,9 +98,6 @@ MainWindow::MainWindow(QWidget* parent)
 
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   readData(tw);
-
-  isInit = true;
-  loading = false;
 }
 
 void MainWindow::timerUpdate() {
@@ -231,20 +241,24 @@ void MainWindow::readData(QTreeWidget* tw) {
   QString name = tw->objectName();
   int rowCount = Reg.value(name + "TopCount").toInt();
   for (int i = 0; i < rowCount; i++) {
-    QTreeWidgetItem* topItem = new QTreeWidgetItem;
-    topItem->setText(0,
-                     Reg.value(name + QString::number(i + 1) + "1").toString());
-    tw->addTopLevelItem(topItem);
     int childCount =
         Reg.value(name + QString::number(i + 1) + "childCount").toInt();
-    topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
-    topItem->setText(1, QString::number(childCount));
+    // 不显示子项为0的数据
+    if (childCount > 0) {
+      QTreeWidgetItem* topItem = new QTreeWidgetItem;
+      topItem->setText(
+          0, Reg.value(name + QString::number(i + 1) + "1").toString());
+      tw->addTopLevelItem(topItem);
 
-    for (int j = 0; j < childCount; j++) {
-      QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
-      item11->setText(0, Reg.value(name + QString::number(i + 1) + "child" +
-                                   QString::number(j))
-                             .toString());
+      topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
+      topItem->setText(1, QString::number(childCount));
+
+      for (int j = 0; j < childCount; j++) {
+        QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
+        item11->setText(0, Reg.value(name + QString::number(i + 1) + "child" +
+                                     QString::number(j))
+                               .toString());
+      }
     }
   }
 
@@ -346,30 +360,17 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
 }
 
 void MainWindow::initChart(QTreeWidget* tw) {
-  // if (isInit) delete chart;
-  QStringList strList;
+  QList<int> intList;
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
-    strList.append(tw->topLevelItem(i)->text(1));
+    intList.append(tw->topLevelItem(i)->text(1).toInt());
   }
-  for (int i = 0; i < strList.count(); i++) {
-    if (strList.count() > 1) {
-      if (strList.at(0) < strList.at(1))
-        strList.removeAt(0);
-      else
-        strList.removeAt(1);
-      i--;
-    }
-  }
+  int maxValue = *std::max_element(intList.begin(), intList.end());
   int max = 20;
-  if (strList.count() == 1) {
-    QString str = strList.at(0);
-    qDebug() << "In table Max:" << str;
-    if (str.toInt() > 20) max = str.toInt();
-  }
+  qDebug() << "In table Max:" << maxValue;
+  if (maxValue > 20) max = maxValue;
 
   //设置表头
-  // chart = new Chart(this, tr("History Data"));
   chart->installEventFilter(this);
   ui->frame->setMouseTracking(true);
   chart->setMouseTracking(true);
@@ -378,6 +379,7 @@ void MainWindow::initChart(QTreeWidget* tw) {
   ui->pLayout->setSpacing(0);
   ui->pLayout->setContentsMargins(0, 0, 0, 0);
   ui->pLayout->addWidget(chart);
+
   //设置坐标系
   chart->setAxis(tr("Days (last 30)") + "    " + tr("Today") + ": " +
                      QString::number(today),
@@ -479,7 +481,7 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index) {
-  if (loading) return;
+  if (ui->tabWidget->tabBar()->count() <= 0) return;
   if (isSlide) {
     return;
   }
@@ -654,4 +656,30 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 void MainWindow::on_actionAbout_triggered() {
   QUrl url(QString("https://github.com/ic005k/Xcounter#readme"));
   QDesktopServices::openUrl(url);
+}
+
+void MainWindow::on_actionExport_Data_triggered() {
+  QString fileName;
+  QFileDialog fd;
+  fileName =
+      fd.getSaveFileName(this, tr("XcounterBak"), "", tr("Data Files (*.ini)"));
+
+  if (!fileName.isNull()) {
+    QTextEdit* txtEdit = new QTextEdit;
+    txtEdit->setPlainText(loadText(iniFile));
+    TextEditToFile(txtEdit, fileName);
+    qDebug() << iniFile << fileName;
+  }
+}
+
+void MainWindow::on_actionImport_Data_triggered() {
+  QString fileName;
+  fileName = QFileDialog::getOpenFileName(this, tr("XcounterBak"), "",
+                                          tr("Data Files (*.ini)"));
+
+  if (!fileName.isNull()) {
+    if (QFile(iniFile).exists()) QFile(iniFile).remove();
+    bool ok = QFile::copy(fileName, iniFile);
+    if (ok) init_Data();
+  }
 }
