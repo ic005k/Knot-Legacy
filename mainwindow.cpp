@@ -15,12 +15,15 @@ MainWindow::MainWindow(QWidget* parent)
   QString ver = "1.0.00";
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
   chart = new Chart(this, tr("History Data"));
+  chartTimeLine = new Chart(this, tr("Time Line"));
   mw_one = this;
   this->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
   mydlgNotes = new dlgNotes(this);
   mydlgRename = new dlgRename(this);
+  mydlgSetTime = new dlgSetTime(this);
+
   this->layout()->setMargin(0);
   this->layout()->setSpacing(0);
   this->layout()->setContentsMargins(1, 1, 1, 1);
@@ -233,6 +236,7 @@ void MainWindow::saveData(QTreeWidget* tw, int index) {
   get_Today(tw);
   init_Stats(tw);
   initChart(tw);
+  initChartTimeLine(tw);
 }
 
 void MainWindow::readData(QTreeWidget* tw) {
@@ -273,6 +277,7 @@ void MainWindow::readData(QTreeWidget* tw) {
   get_Today(tw);
   init_Stats(tw);
   initChart(tw);
+  initChartTimeLine(tw);
 
   tw->installEventFilter(this);
   tw->setMouseTracking(true);
@@ -366,13 +371,12 @@ void MainWindow::initChart(QTreeWidget* tw) {
     intList.append(tw->topLevelItem(i)->text(1).toInt());
   }
   int maxValue = *std::max_element(intList.begin(), intList.end());
-  int max = 20;
+  int max = 18;
   qDebug() << "In table Max:" << maxValue;
   if (maxValue > 20) max = maxValue;
 
   //设置表头
   chart->installEventFilter(this);
-  ui->frame->setMouseTracking(true);
   chart->setMouseTracking(true);
 
   ui->pLayout->setMargin(0);
@@ -383,7 +387,7 @@ void MainWindow::initChart(QTreeWidget* tw) {
   //设置坐标系
   chart->setAxis(tr("Days (last 30)") + "    " + tr("Today") + ": " +
                      QString::number(today),
-                 0, 30, 30, tr("Freq"), 0, max, 5);
+                 0, 30, 30, tr("Freq"), 0, max + 2, 5);
   //设置离散点数据
   QList<QPointF> pointlist = {
       QPointF(0, 8),  QPointF(1, 2),  QPointF(3, 4), QPointF(4, 8),
@@ -404,7 +408,7 @@ void MainWindow::initChart(QTreeWidget* tw) {
   if (count > 30) start = count - 30;
   for (int i = start; i < count; i++) {
     int x, y;
-    x = i;
+    x = i + 1;
     y = tw->topLevelItem(i)->text(1).toInt();
     QPointF pf(x, y);
     pointlist.append(pf);
@@ -412,6 +416,47 @@ void MainWindow::initChart(QTreeWidget* tw) {
 
   //绘制
   chart->buildChart(pointlist);
+}
+
+void MainWindow::initChartTimeLine(QTreeWidget* tw) {
+  //设置表头
+  ui->glTimeLine->setMargin(0);
+  ui->glTimeLine->setSpacing(0);
+  ui->glTimeLine->setContentsMargins(0, 0, 0, 0);
+  ui->glTimeLine->addWidget(chartTimeLine);
+
+  if (!tw->currentIndex().isValid()) return;
+  //设置坐标系
+  int childCount = tw->currentItem()->childCount();
+  int y0 = 3;
+  if (childCount > y0) y0 = childCount;
+  chartTimeLine->setAxis(tr("24 hours"), 0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
+
+  //设置离散点数据
+  QList<QPointF> pointlist;
+  double x, y;
+  for (int i = 0; i < childCount; i++) {
+    QString str = tw->currentItem()->child(i)->text(0);
+    QStringList list = str.split(":");
+    int t = 0;
+    if (list.count() == 3) {
+      QString a, b, c;
+      a = list.at(0);
+      b = list.at(1);
+      c = list.at(2);
+      int a1, b1;
+      a1 = a.toInt();
+      b1 = b.toInt();
+      t = a1 * 3600 + b1 * 60 + c.toInt();
+    }
+    x = (double)t / 3600;
+    y = i + 1;
+    QPointF pf(x, y);
+    pointlist.append(pf);
+  }
+
+  //绘制
+  chartTimeLine->buildChart(pointlist);
 }
 
 void MainWindow::on_actionRename_triggered() {
@@ -477,7 +522,60 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
   tw->setAlternatingRowColors(true);
   tw->setFrameShape(QFrame::NoFrame);
+  connect(tw, &QTreeWidget::itemClicked, this, &MainWindow::on_twItemClicked);
+  connect(tw, &QTreeWidget::itemDoubleClicked, this,
+          &MainWindow::on_twItemDoubleClicked);
   return tw;
+}
+
+void MainWindow::on_twItemClicked() {
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  initChartTimeLine(tw);
+}
+
+void MainWindow::set_Time() {
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  QTreeWidgetItem* item = tw->currentItem();
+  if (item->childCount() == 0 && item->text(1) == "") {
+    QString time = mydlgSetTime->ui->timeEdit->text();
+    item->setText(0, time);
+
+    QStringList keys;
+    int childCount = item->parent()->childCount();
+    for (int i = 0; i < childCount; i++) {
+      QString txt = item->parent()->child(i)->text(0);
+      keys.append(txt);
+    }
+    std::sort(keys.begin(), keys.end(),
+              [](const QString& s1, const QString& s2) { return s1 < s2; });
+    for (int i = 0; i < childCount; i++) {
+      QTreeWidgetItem* childItem = item->parent()->child(i);
+      childItem->setText(0, keys.at(i));
+    }
+    saveData(tw, ui->tabWidget->currentIndex());
+  }
+}
+
+void MainWindow::on_twItemDoubleClicked() {
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  QTreeWidgetItem* item = tw->currentItem();
+  if (item->childCount() == 0 && item->text(1) == "") {
+    QString t = item->text(0);
+    QStringList list = t.split(":");
+    QString sh, sm, ss;
+    if (list.count() == 3) {
+      sh = list.at(0);
+      sm = list.at(1);
+      ss = list.at(2);
+    }
+    QTime time;
+    time.setHMS(sh.toInt(), sm.toInt(), ss.toInt());
+    mydlgSetTime->ui->timeEdit->setTime(time);
+    mydlgSetTime->setFixedHeight(this->height());
+    mydlgSetTime->setFixedWidth(this->width());
+    mydlgSetTime->setModal(true);
+    mydlgSetTime->show();
+  }
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index) {
@@ -489,6 +587,12 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   readData(tw);
   tw->setMouseTracking(true);
+  if (tw->topLevelItemCount() > 0) {
+    tw->setFocus();
+    QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
+    tw->setCurrentItem(topItem);
+    initChartTimeLine(tw);
+  }
 }
 
 void MainWindow::on_textEdit_textChanged() {
@@ -662,7 +766,7 @@ void MainWindow::on_actionExport_Data_triggered() {
   QString fileName;
   QFileDialog fd;
   fileName =
-      fd.getSaveFileName(this, tr("XcounterBak"), "", tr("Data Files (*.ini)"));
+      fd.getSaveFileName(this, tr("XcounterBak"), "", tr("Data Files(*.ini)"));
 
   if (!fileName.isNull()) {
     QTextEdit* txtEdit = new QTextEdit;

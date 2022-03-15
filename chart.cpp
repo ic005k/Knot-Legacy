@@ -4,6 +4,7 @@ Chart::Chart(QWidget* parent, QString _chartname) {
   setParent(parent);
   chartname = _chartname;
   series = new QSplineSeries(this);
+  m_scatterSeries = new QScatterSeries(this);  //创建散点
   qchart = new QChart;
   chartview = new QChartView(qchart);
   qchart->setMargins(QMargins(0, 0, 0, 0));
@@ -63,8 +64,15 @@ void Chart::buildChart(QList<QPointF> pointlist) {
   series->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
   series->clear();
 
-  for (int i = 0; i < pointlist.size(); i++)
+  m_scatterSeries->clear();
+  m_scatterSeries->setMarkerShape(
+      QScatterSeries::MarkerShapeCircle);  //设置散点样式
+  m_scatterSeries->setMarkerSize(10);      //设置散点大小
+
+  for (int i = 0; i < pointlist.size(); i++) {
     series->append(pointlist.at(i).x(), pointlist.at(i).y());
+    m_scatterSeries->append(pointlist.at(i).x(), pointlist.at(i).y());
+  }
 
   qchart->setTitle(chartname);
 
@@ -72,8 +80,11 @@ void Chart::buildChart(QList<QPointF> pointlist) {
   qchart->legend()->hide();                               //隐藏图例
 
   qchart->addSeries(series);  //输入数据
+  qchart->addSeries(m_scatterSeries);
   series->attachAxis(axisX);
   series->attachAxis(axisY);
+  m_scatterSeries->attachAxis(axisX);
+  m_scatterSeries->attachAxis(axisY);
   //   qchart->setAxisX(axisX, series);
   //   qchart->setAxisY(axisY, series);
 }

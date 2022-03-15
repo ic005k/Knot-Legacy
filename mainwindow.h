@@ -13,6 +13,7 @@
 #include <QMainWindow>
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
+#include <QScatterSeries>
 #include <QSettings>
 #include <QStringList>
 #include <QTextEdit>
@@ -22,8 +23,10 @@
 #include "chart.h"
 #include "dlgnotes.h"
 #include "dlgrename.h"
+#include "dlgsettime.h"
 #include "ui_dlgnotes.h"
 #include "ui_dlgrename.h"
+#include "ui_dlgsettime.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,6 +37,7 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
   Q_OBJECT
   Chart *chart;
+  Chart *chartTimeLine;
 
  public:
   MainWindow(QWidget *parent = nullptr);
@@ -41,6 +45,7 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
   dlgNotes *mydlgNotes;
   dlgRename *mydlgRename;
+  dlgSetTime *mydlgSetTime;
   QTimer *tmer;
   QString strDate;
   void saveData(QTreeWidget *, int);
@@ -56,7 +61,8 @@ class MainWindow : public QMainWindow {
   QStringList listNotes;
   bool isSlide = false;
   void init_Data();
-public slots:
+  void set_Time();
+ public slots:
   void init_Stats(QTreeWidget *);
 
  protected:
@@ -92,6 +98,10 @@ public slots:
 
   void on_actionImport_Data_triggered();
 
+  void on_twItemClicked();
+
+  void on_twItemDoubleClicked();
+
  private:
   int x, y, w, h;
   void get_Today(QTreeWidget *);
@@ -101,5 +111,6 @@ public slots:
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
   QObjectList getAllUIControls(QObject *parent);
   QString init_Objname();
+  void initChartTimeLine(QTreeWidget *tw);
 };
 #endif  // MAINWINDOW_H

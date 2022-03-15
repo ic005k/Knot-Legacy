@@ -28,6 +28,7 @@ SOURCES += \
     chart.cpp \
     dlgnotes.cpp \
     dlgrename.cpp \
+    dlgsettime.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -35,11 +36,13 @@ HEADERS += \
     chart.h \
     dlgnotes.h \
     dlgrename.h \
+    dlgsettime.h \
     mainwindow.h
 
 FORMS += \
     dlgnotes.ui \
     dlgrename.ui \
+    dlgsettime.ui \
     mainwindow.ui
 
 # Default rules for deployment.
@@ -55,5 +58,6 @@ CONFIG(debug,debug|release) {
 } else {
     DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
 }
+
 
 

@@ -4,6 +4,7 @@
 #include <QChart>
 #include <QChartView>
 #include <QHBoxLayout>
+#include <QScatterSeries>
 #include <QSplineSeries>
 #include <QValueAxis>
 
@@ -13,6 +14,7 @@ class Chart : public QWidget {
   QChart *qchart;
   QChartView *chartview;
   QSplineSeries *series;
+  QScatterSeries *m_scatterSeries;
 
   QHBoxLayout *layout;
   QValueAxis *axisX;
