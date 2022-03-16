@@ -2,9 +2,11 @@
     <qresource prefix="/">
         <file>src/1.png</file>
         <file>src/2.png</file>
-        <file>src/AndroidManifest.xml</file>
         <file>src/QtFullscreenActivity.java</file>
         <file>src/icon.png</file>
         <file>cn.qm</file>
+        <file>src/AndroidManifest.xml</file>
+        <file>src/down.png</file>
+        <file>src/up.png</file>
     </qresource>
 </RCC>

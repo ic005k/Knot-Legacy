@@ -9,6 +9,7 @@ QString iniFile = "/data/data/org.qtproject.example.Xcount/Xcount.ini";
 QString txtFile = "assets:/data/Xcount.txt";
 MainWindow* mw_one;
 bool loading = false;
+extern bool isAndroid, isIOS;
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -40,20 +41,16 @@ MainWindow::MainWindow(QWidget* parent)
   QString path;
   path = dir.currentPath();
   qDebug() << "Path:" << path;
-  QString str0 = appName + ".app";
-  if (path.contains(str0)) {
-    isIOS = true;
+  if (isIOS) {
     QString str1 = QDir::homePath() + "/" + appName + "/";
     QDir dir0;
     dir0.mkpath(str1);
     iniFile = str1 + appName + ".ini";
     txtFile = str1 + appName + ".txt";
-  } else {
-    QStringList list = path.split("/");
-    QString last = list.at(list.count() - 1);
-    QString str = path.replace(last.trimmed(), "");
-    iniFile = str + appName + ".ini";
-    txtFile = str + appName + ".txt";
+  }
+  if (isAndroid) {
+    iniFile = path + "/" + appName + ".ini";
+    txtFile = path + "/" + appName + ".txt";
   }
   qDebug() << iniFile;
 
@@ -231,7 +228,7 @@ void MainWindow::saveData(QTreeWidget* tw, int index) {
   // Tab
   saveTab();
 
-  TextEditToFile(mydlgNotes->ui->textEdit, txtFile);
+  qDebug() << "ini file:" << iniFile;
 
   get_Today(tw);
   init_Stats(tw);
@@ -525,6 +522,26 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   connect(tw, &QTreeWidget::itemClicked, this, &MainWindow::on_twItemClicked);
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
+  QScrollBar* SB = tw->verticalScrollBar();
+  SB->setStyleSheet(
+      "QScrollBar:vertical{"  //垂直滑块整体
+      "width:35px;"
+      "background:#FFFFFF;"   //背景色
+      "padding-top:20px;"     //上预留位置（放置向上箭头）
+      "padding-bottom:20px;"  //下预留位置（放置向下箭头）
+      "padding-left:3px;"     //左预留位置（美观）
+      "padding-right:3px;"    //右预留位置（美观）
+      "border-left:1px solid #d7d7d7;}"     //左分割线
+      "QScrollBar::handle:vertical{"        //滑块样式
+      "background:#dbdbdb;"                 //滑块颜色
+      "border-radius:6px;"                  //边角圆润
+      "min-height:80px;}"                   //滑块最小高度
+      "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
+      "background:#d0d0d0;}"                //滑块颜色
+      "QScrollBar::add-line:vertical{"      //向下箭头样式
+      "background:url(:/src/down1.png) center no-repeat;}"
+      "QScrollBar::sub-line:vertical{"  //向上箭头样式
+      "background:url(:/src/up1.png) center no-repeat;}");
   return tw;
 }
 

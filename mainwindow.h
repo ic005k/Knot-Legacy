@@ -14,6 +14,7 @@
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 #include <QScatterSeries>
+#include <QScrollBar>
 #include <QSettings>
 #include <QStringList>
 #include <QTextEdit>
@@ -56,7 +57,6 @@ class MainWindow : public QMainWindow {
   void on_textEdit_textChanged();
   bool isInit = false;
   int today = 0;
-  bool isIOS = false;
   void saveTab();
   QStringList listNotes;
   bool isSlide = false;
