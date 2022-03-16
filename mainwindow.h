@@ -112,5 +112,8 @@ class MainWindow : public QMainWindow {
   QObjectList getAllUIControls(QObject *parent);
   QString init_Objname();
   void initChartTimeLine(QTreeWidget *tw);
+  int get_Day(QString date);
+  QString get_Year(QString date);
+  QString get_Month(QString date);
 };
 #endif  // MAINWINDOW_H

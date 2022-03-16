@@ -380,11 +380,14 @@ void MainWindow::initChart(QTreeWidget* tw) {
   ui->pLayout->setSpacing(0);
   ui->pLayout->setContentsMargins(0, 0, 0, 0);
   ui->pLayout->addWidget(chart);
-
+  QString currentDate = QDate::currentDate().toString();
+  QString strM, strY;
+  strM = get_Month(currentDate);
+  strY = get_Year(currentDate);
   //设置坐标系
-  chart->setAxis(tr("Days (last 30)") + "    " + tr("Today") + ": " +
-                     QString::number(today),
-                 0, 30, 30, tr("Freq"), 0, max + 2, 5);
+  chart->setAxis(
+      strM + "  " + strY + "    " + tr("Today") + ": " + QString::number(today),
+      0, 31, 31, tr("Freq"), 0, max + 2, 5);
   //设置离散点数据
   QList<QPointF> pointlist = {
       QPointF(0, 8),  QPointF(1, 2),  QPointF(3, 4), QPointF(4, 8),
@@ -401,11 +404,12 @@ void MainWindow::initChart(QTreeWidget* tw) {
 
   pointlist.clear();
 
-  int start = 0;
-  if (count > 30) start = count - 30;
-  for (int i = start; i < count; i++) {
-    int x, y;
-    x = i + 1;
+  int x, y;
+  QString strDate;
+  for (int i = 0; i < count; i++) {
+    strDate = tw->topLevelItem(i)->text(0);
+    if (get_Month(strDate) == strM && get_Year(strDate) == strY)
+      x = get_Day(strDate);
     y = tw->topLevelItem(i)->text(1).toInt();
     QPointF pf(x, y);
     pointlist.append(pf);
@@ -803,4 +807,31 @@ void MainWindow::on_actionImport_Data_triggered() {
     bool ok = QFile::copy(fileName, iniFile);
     if (ok) init_Data();
   }
+}
+
+int MainWindow::get_Day(QString date) {
+  QStringList list = date.split(" ");
+  if (list.count() == 4) {
+    QString strDay = list.at(2);
+    return strDay.toInt();
+  }
+  return 0;
+}
+
+QString MainWindow::get_Month(QString date) {
+  QStringList list = date.split(" ");
+  if (list.count() == 4) {
+    QString str = list.at(1);
+    return str;
+  }
+  return "";
+}
+
+QString MainWindow::get_Year(QString date) {
+  QStringList list = date.split(" ");
+  if (list.count() == 4) {
+    QString str = list.at(3);
+    return str;
+  }
+  return "";
 }
