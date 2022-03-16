@@ -102,7 +102,11 @@ class MainWindow : public QMainWindow {
 
   void on_twItemDoubleClicked();
 
+  void on_tabWidget_tabBarClicked(int index);
+
  private:
+  int index0 = 0;
+  int index1 = 0;
   int x, y, w, h;
   void get_Today(QTreeWidget *);
   void add_Data(QTreeWidget *);
