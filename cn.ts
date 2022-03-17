@@ -9,89 +9,90 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="67"/>
+        <location filename="mainwindow.ui" line="103"/>
         <source>Stats</source>
         <translation>统计</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="88"/>
+        <location filename="mainwindow.ui" line="148"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="101"/>
-        <location filename="mainwindow.ui" line="330"/>
+        <location filename="mainwindow.ui" line="161"/>
+        <location filename="mainwindow.ui" line="354"/>
         <source>Notes</source>
         <translation>备注</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="120"/>
+        <location filename="mainwindow.ui" line="180"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="210"/>
+        <location filename="mainwindow.ui" line="234"/>
         <location filename="mainwindow.cpp" line="19"/>
         <source>Time Line</source>
         <translation>时间线</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="253"/>
+        <location filename="mainwindow.ui" line="277"/>
+        <location filename="mainwindow.cpp" line="215"/>
         <source>Add</source>
         <translation>增加一次</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="275"/>
-        <location filename="mainwindow.cpp" line="176"/>
+        <location filename="mainwindow.ui" line="299"/>
+        <location filename="mainwindow.cpp" line="174"/>
         <source>Less</source>
         <translation>减少一次</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="300"/>
+        <location filename="mainwindow.ui" line="324"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="315"/>
+        <location filename="mainwindow.ui" line="339"/>
         <source>Rename Tab Name</source>
         <translation>重命名标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="320"/>
+        <location filename="mainwindow.ui" line="344"/>
         <source>Add Tab</source>
         <translation>增加标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="325"/>
+        <location filename="mainwindow.ui" line="349"/>
         <source>Del Tab</source>
         <translation>删除标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="335"/>
+        <location filename="mainwindow.ui" line="359"/>
         <location filename="mainwindow.cpp" line="17"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="340"/>
+        <location filename="mainwindow.ui" line="364"/>
         <source>Export Data</source>
         <translation>导出数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="345"/>
+        <location filename="mainwindow.ui" line="369"/>
         <source>Import Data</source>
         <translation>导入数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="184"/>
+        <location filename="mainwindow.ui" line="208"/>
         <location filename="mainwindow.cpp" line="18"/>
         <source>History Data</source>
         <translation>历史数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="91"/>
-        <location filename="mainwindow.cpp" line="102"/>
-        <location filename="mainwindow.cpp" line="560"/>
+        <location filename="mainwindow.cpp" line="97"/>
+        <location filename="mainwindow.cpp" line="108"/>
+        <location filename="mainwindow.cpp" line="572"/>
         <source>Counter</source>
         <translation>计数器</translation>
     </message>
@@ -100,18 +101,18 @@
         <translation type="vanished">描述</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="178"/>
+        <location filename="mainwindow.cpp" line="176"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="180"/>
-        <location filename="mainwindow.cpp" line="201"/>
+        <location filename="mainwindow.cpp" line="178"/>
+        <location filename="mainwindow.cpp" line="199"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="199"/>
+        <location filename="mainwindow.cpp" line="197"/>
         <source>Only the reduction of the day&apos;s records is allowed.</source>
         <translation>只允许减少当天的记录。</translation>
     </message>
@@ -124,6 +125,7 @@
     <message>
         <location filename="mainwindow.cpp" line="408"/>
         <location filename="mainwindow.cpp" line="413"/>
+        <location filename="mainwindow.cpp" line="510"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
@@ -149,38 +151,43 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="442"/>
-        <location filename="mainwindow.cpp" line="502"/>
+        <location filename="mainwindow.cpp" line="511"/>
         <source>Freq</source>
         <translation>频次</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="502"/>
+        <location filename="mainwindow.cpp" line="510"/>
         <source>24 hours</source>
         <translation>24 小时</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="585"/>
+        <location filename="mainwindow.cpp" line="597"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="586"/>
+        <location filename="mainwindow.cpp" line="598"/>
         <source>Frequency</source>
         <translation>频次</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="893"/>
-        <location filename="mainwindow.cpp" line="905"/>
+        <location filename="mainwindow.cpp" line="683"/>
+        <source>Modify</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="913"/>
+        <location filename="mainwindow.cpp" line="925"/>
         <source>XcounterBak</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="893"/>
+        <location filename="mainwindow.cpp" line="913"/>
         <source>Data Files(*.ini)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="906"/>
+        <location filename="mainwindow.cpp" line="926"/>
         <source>Data Files (*.ini)</source>
         <translation></translation>
     </message>
@@ -224,17 +231,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="78"/>
+        <location filename="dlgsettime.ui" line="20"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="135"/>
+        <location filename="dlgsettime.ui" line="41"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="154"/>
+        <location filename="dlgsettime.ui" line="60"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -244,7 +251,12 @@
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="45"/>
+        <location filename="dlgsettime.ui" line="170"/>
+        <source>Add</source>
+        <translation type="unfinished">增加一次</translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="146"/>
         <source>HH:mm:ss</source>
         <translation></translation>
     </message>

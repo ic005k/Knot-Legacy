@@ -212,7 +212,9 @@ void MainWindow::on_btnPlus_clicked() {
   mydlgSetTime->setFixedHeight(this->height());
   mydlgSetTime->setFixedWidth(this->width());
   mydlgSetTime->setModal(true);
+  mydlgSetTime->ui->lblTitle->setText(tr("Add"));
   mydlgSetTime->ui->timeEdit->setTime(QTime::currentTime());
+  mydlgSetTime->ui->lineEdit->setText("");
   mydlgSetTime->show();
 }
 
@@ -678,6 +680,7 @@ void MainWindow::on_twItemDoubleClicked() {
     }
     QTime time;
     time.setHMS(sh.toInt(), sm.toInt(), ss.toInt());
+    mydlgSetTime->ui->lblTitle->setText(tr("Modify"));
     mydlgSetTime->ui->timeEdit->setTime(time);
     mydlgSetTime->ui->lineEdit->setText(item->text(1));
     mydlgSetTime->setFixedHeight(this->height());
