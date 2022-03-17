@@ -146,9 +146,11 @@ void MainWindow::add_Data(QTreeWidget* tw) {
 }
 
 void MainWindow::del_Data(QTreeWidget* tw) {
+  bool isNo = true;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
     if (str == strDate) {
+      isNo = false;
       QTreeWidgetItem* topItem = new QTreeWidgetItem;
       topItem = tw->topLevelItem(i);
       int child = topItem->childCount();
@@ -175,6 +177,17 @@ void MainWindow::del_Data(QTreeWidget* tw) {
     }
   }
 
+  if (isNo) {
+    QMessageBox msgBox;
+    msgBox.setText(tr("Less"));
+    msgBox.setInformativeText(
+        tr("Only the reduction of the day's records is allowed."));
+
+    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    btnOk->setFocus();
+    msgBox.exec();
+    return;
+  }
   QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
   tw->setCurrentItem(topItem);
 
@@ -183,10 +196,9 @@ void MainWindow::del_Data(QTreeWidget* tw) {
 
 void MainWindow::on_btnPlus_clicked() {
   QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-  QString str1 = QTime::currentTime().toString();
   QMessageBox msgBox;
   msgBox.setText(str);
-  msgBox.setInformativeText(tr("Add") + "\n" + str1);
+  msgBox.setInformativeText(tr("Add"));
   QPushButton* btnCancel =
       msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
   QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
