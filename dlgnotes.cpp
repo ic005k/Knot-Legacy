@@ -13,9 +13,12 @@ dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
 
 dlgNotes::~dlgNotes() { delete ui; }
 
-void dlgNotes::on_btnBack_clicked() { close(); }
+void dlgNotes::on_btnBack_clicked() {
+  mw_one->saveNotes();
+  close();
+}
 
-void dlgNotes::on_textEdit_textChanged() { mw_one->on_textEdit_textChanged(); }
+void dlgNotes::on_textEdit_textChanged() {}
 
 bool dlgNotes::eventFilter(QObject* obj, QEvent* event) {
   return QWidget::eventFilter(obj, event);

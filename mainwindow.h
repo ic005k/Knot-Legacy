@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QAbstractButton>
 #include <QDateTime>
 #include <QDebug>
 #include <QDesktopServices>
@@ -13,12 +14,14 @@
 #include <QMainWindow>
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
+#include <QPushButton>
 #include <QScatterSeries>
 #include <QScrollBar>
 #include <QSettings>
 #include <QStringList>
 #include <QTextEdit>
 #include <QTimer>
+#include <QToolTip>
 #include <QTreeWidgetItem>
 
 #include "chart.h"
@@ -54,11 +57,10 @@ class MainWindow : public QMainWindow {
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
   void initChart(QTreeWidget *);
-  void on_textEdit_textChanged();
+  void saveNotes();
   bool isInit = false;
   int today = 0;
   void saveTab();
-  QStringList listNotes;
   bool isSlide = false;
   void init_Data();
   void set_Time();
@@ -104,9 +106,9 @@ class MainWindow : public QMainWindow {
 
   void on_tabWidget_tabBarClicked(int index);
 
+  void on_tabCharts_tabBarClicked(int index);
+
  private:
-  int index0 = 0;
-  int index1 = 0;
   int x, y, w, h;
   void get_Today(QTreeWidget *);
   void add_Data(QTreeWidget *);
@@ -119,5 +121,6 @@ class MainWindow : public QMainWindow {
   int get_Day(QString date);
   QString get_Year(QString date);
   QString get_Month(QString date);
+  QTreeWidget *get_tw(int tabIndex);
 };
 #endif  // MAINWINDOW_H

@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget* parent)
   mw_one = this;
   this->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
+  ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
   mydlgNotes = new dlgNotes(this);
@@ -83,22 +84,23 @@ void MainWindow::init_Data() {
 
   QSettings Reg(iniFile, QSettings::IniFormat);
   int TabCount = Reg.value("TabCount", 0).toInt();
-  listNotes.clear();
   for (int i = 0; i < TabCount; i++) {
     QString name = "tab" + QString::number(i + 1);
     QTreeWidget* tw = init_TreeWidget(name);
     ui->tabWidget->addTab(tw, Reg.value("TabName" + QString::number(i),
                                         tr("Counter") + QString::number(i + 1))
                                   .toString());
-    QString strNotes = Reg.value(name + "Notes").toString();
-    listNotes.append(strNotes);
+    QString strNotes = Reg.value(name + "Note").toString();
+    ui->tabWidget->setTabToolTip(i, strNotes);
+    qDebug() << "strNotes" << strNotes;
+
     readData(tw);
   }
 
   if (TabCount == 0) {
     ui->tabWidget->addTab(init_TreeWidget("tab1"),
                           tr("Counter") + " " + QString::number(1));
-    listNotes.append("");
+    ui->tabWidget->setTabToolTip(0, "");
   }
 }
 
@@ -137,6 +139,9 @@ void MainWindow::add_Data(QTreeWidget* tw) {
     topItem->setText(1, QString::number(child));
   }
 
+  QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
+  tw->setCurrentItem(topItem);
+
   saveData(tw, ui->tabWidget->currentIndex());
 }
 
@@ -148,6 +153,20 @@ void MainWindow::del_Data(QTreeWidget* tw) {
       topItem = tw->topLevelItem(i);
       int child = topItem->childCount();
       if (child > 0) {
+        QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+        QString str1 = topItem->child(child - 1)->text(0);
+        QMessageBox msgBox;
+        msgBox.setText(str);
+        msgBox.setInformativeText(tr("Less") + "\n" + str1);
+        QPushButton* btnCancel =
+            msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+        QPushButton* btnOk =
+            msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+        btnOk->setFocus();
+        msgBox.exec();
+        if (msgBox.clickedButton() == btnCancel) {
+          return;
+        }
         topItem->removeChild(topItem->child(child - 1));
         topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
         topItem->setText(1, QString::number(child - 1));
@@ -156,10 +175,26 @@ void MainWindow::del_Data(QTreeWidget* tw) {
     }
   }
 
+  QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
+  tw->setCurrentItem(topItem);
+
   saveData(tw, ui->tabWidget->currentIndex());
 }
 
 void MainWindow::on_btnPlus_clicked() {
+  QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+  QString str1 = QTime::currentTime().toString();
+  QMessageBox msgBox;
+  msgBox.setText(str);
+  msgBox.setInformativeText(tr("Add") + "\n" + str1);
+  QPushButton* btnCancel =
+      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+  QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+  btnOk->setFocus();
+  msgBox.exec();
+  if (msgBox.clickedButton() == btnCancel) {
+    return;
+  }
   add_Data((QTreeWidget*)ui->tabWidget->currentWidget());
 }
 
@@ -225,8 +260,8 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
                    tw->topLevelItem(i)->child(j)->text(0));
     }
   }
-  // Note
-  Reg.setValue(name + "Note", listNotes.at(tabIndex));
+
+  Reg.setValue(name + "Note", ui->tabWidget->tabToolTip(tabIndex));
 
   // Tab
   saveTab();
@@ -265,14 +300,6 @@ void MainWindow::readData(QTreeWidget* tw) {
       }
     }
   }
-
-  // ui->textEdit->setPlainText(loadText("assets:/data/readme.txt"));
-  // ui->textEdit->setPlainText(loadText(txtFile));
-  int index = ui->tabWidget->currentIndex();
-  QString text = Reg.value(name + "Note").toString();
-  mydlgNotes->ui->textEdit->setPlainText(text);
-  listNotes.removeAt(index);
-  listNotes.insert(index, text);
 
   get_Today(tw);
   init_Stats(tw);
@@ -419,21 +446,36 @@ void MainWindow::initChart(QTreeWidget* tw) {
 }
 
 void MainWindow::initChartTimeLine(QTreeWidget* tw) {
+  //设置离散点数据
+  QList<QPointF> pointlist;
   //设置表头
   ui->glTimeLine->setMargin(0);
   ui->glTimeLine->setSpacing(0);
   ui->glTimeLine->setContentsMargins(0, 0, 0, 0);
   ui->glTimeLine->addWidget(chartTimeLine);
-
-  if (!tw->currentIndex().isValid()) return;
+  int topCount = tw->topLevelItemCount();
+  if (topCount == 0) {
+    chartTimeLine->buildChart(pointlist);
+    return;
+  }
+  if (topCount > 0) {
+    tw->setFocus();
+    if (!tw->currentIndex().isValid()) {
+      QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
+      tw->setCurrentItem(topItem);
+    }
+  }
   //设置坐标系
   int childCount = tw->currentItem()->childCount();
+  if (childCount == 0) {
+    chartTimeLine->buildChart(pointlist);
+    return;
+  }
   int y0 = 3;
   if (childCount > y0) y0 = childCount;
   chartTimeLine->setAxis(tr("24 hours"), 0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
 
-  //设置离散点数据
-  QList<QPointF> pointlist;
+  pointlist.clear();
   double x, y;
   for (int i = 0; i < childCount; i++) {
     QString str = tw->currentItem()->child(i)->text(0);
@@ -498,14 +540,12 @@ void MainWindow::on_actionDel_Tab_triggered() {
   int index = ui->tabWidget->currentIndex();
   if (index <= 0) return;
 
-  listNotes.removeAt(index);
   ui->tabWidget->removeTab(index);
 
   for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
     QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
     tw->setObjectName("tab" + QString::number(i + 1));
     saveData(tw, i);
-    qDebug() << listNotes.at(i);
   }
 }
 
@@ -605,25 +645,14 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   }
   ui->tabWidget->setCurrentIndex(index);
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
-  if (tw->topLevelItemCount() > 0) {
-    tw->setFocus();
-    QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
-    tw->setCurrentItem(topItem);
-    initChartTimeLine(tw);
-  }
-
-  QSettings Reg(iniFile, QSettings::IniFormat);
-  QString text = Reg.value(tw->objectName() + "Note").toString();
-  mydlgNotes->ui->textEdit->setPlainText(text);
-  listNotes.removeAt(index);
-  listNotes.insert(index, text);
 
   get_Today(tw);
   init_Stats(tw);
   initChart(tw);
+  initChartTimeLine(tw);
 }
 
-void MainWindow::on_textEdit_textChanged() {
+void MainWindow::saveNotes() {
   if (loading) return;
   QSettings Reg(iniFile, QSettings::IniFormat);
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
@@ -631,8 +660,7 @@ void MainWindow::on_textEdit_textChanged() {
   int index = ui->tabWidget->currentIndex();
   QString text = mydlgNotes->ui->textEdit->toPlainText();
   Reg.setValue(name + "Note", text);
-  listNotes.removeAt(index);
-  listNotes.insert(index, text);
+  ui->tabWidget->setTabToolTip(index, text);
 }
 
 void MainWindow::on_btnLeft_clicked() {
@@ -652,11 +680,8 @@ void MainWindow::on_btnRight_clicked() {
 void MainWindow::on_actionNotes_triggered() {
   mydlgNotes->setFixedHeight(this->height());
   mydlgNotes->setFixedWidth(this->width());
-  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
-  QString name = tw->objectName();
-  QSettings Reg(iniFile, QSettings::IniFormat);
-  QString text = Reg.value(name + "Note").toString();
-  mydlgNotes->ui->textEdit->setPlainText(text);
+  int index = ui->tabWidget->currentIndex();
+  mydlgNotes->ui->textEdit->setPlainText(ui->tabWidget->tabToolTip(index));
 
   mydlgNotes->setModal(true);
   mydlgNotes->show();
@@ -679,37 +704,29 @@ void MainWindow::on_btnNotes_clicked() { emit on_actionNotes_triggered(); }
 
 bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
+
+  if (evn->type() == QEvent::ToolTip) {
+    QToolTip::hideText();
+    evn->ignore();
+    return true;
+  }
+
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
   if (watch == ui->tabWidget->tabBar()) {
     if (event->type() == QEvent::MouseButtonPress) {
-      qDebug() << "Press" << index0 << index1;
     }
     if (event->type() == QEvent::MouseButtonRelease) {
-      index1 = ui->tabWidget->currentIndex();
-      qDebug() << "Rele" << index0 << index1;
       bool move = false;
       for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
         QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
         QString name = tw->objectName();
         if (name != "tab" + QString::number(i + 1)) {
-          QSettings Reg(iniFile, QSettings::IniFormat);
-          QString text0 =
-              Reg.value("tab" + QString::number(index0 + 1) + "Note")
-                  .toString();
-          QString text1 =
-              Reg.value("tab" + QString::number(index1 + 1) + "Note")
-                  .toString();
-          listNotes.removeAt(index0);
-          listNotes.insert(index0, text1);
-          listNotes.removeAt(index1);
-          listNotes.insert(index1, text0);
-
           move = true;
         }
       }
       if (move) {
-        qDebug() << "ok save" << index1;
-        index0 = index1;
+        qDebug() << "ok save";
+
         for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
           QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
           saveData(tw, i);
@@ -889,7 +906,18 @@ QString MainWindow::get_Year(QString date) {
   return "";
 }
 
-void MainWindow::on_tabWidget_tabBarClicked(int index) {
-  index0 = index;
-  index1 = index;
+void MainWindow::on_tabWidget_tabBarClicked(int index) { Q_UNUSED(index) }
+
+void MainWindow::on_tabCharts_tabBarClicked(int index) {
+  if (index == 0) {
+    initChart(get_tw(ui->tabWidget->currentIndex()));
+  }
+  if (index == 1) {
+    initChartTimeLine(get_tw(ui->tabWidget->currentIndex()));
+  }
+}
+
+QTreeWidget* MainWindow::get_tw(int tabIndex) {
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(tabIndex);
+  return tw;
 }
