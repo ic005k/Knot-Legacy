@@ -50,6 +50,7 @@ class MainWindow : public QMainWindow {
   dlgNotes *mydlgNotes;
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
+  bool isAdd = false;
   QTimer *tmer;
   QString strDate;
   void saveData(QTreeWidget *, int);
@@ -64,6 +65,9 @@ class MainWindow : public QMainWindow {
   bool isSlide = false;
   void init_Data();
   void set_Time();
+  void add_Data(QTreeWidget *, QString, QString);
+  void del_Data(QTreeWidget *);
+  QTreeWidget *get_tw(int tabIndex);
  public slots:
   void init_Stats(QTreeWidget *);
 
@@ -111,8 +115,6 @@ class MainWindow : public QMainWindow {
  private:
   int x, y, w, h;
   void get_Today(QTreeWidget *);
-  void add_Data(QTreeWidget *);
-  void del_Data(QTreeWidget *);
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
   QObjectList getAllUIControls(QObject *parent);
@@ -121,6 +123,5 @@ class MainWindow : public QMainWindow {
   int get_Day(QString date);
   QString get_Year(QString date);
   QString get_Month(QString date);
-  QTreeWidget *get_tw(int tabIndex);
 };
 #endif  // MAINWINDOW_H

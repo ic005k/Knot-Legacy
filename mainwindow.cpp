@@ -112,19 +112,23 @@ void MainWindow::timerUpdate() {
 
 MainWindow::~MainWindow() { delete ui; }
 
-void MainWindow::add_Data(QTreeWidget* tw) {
+void MainWindow::add_Data(QTreeWidget* tw, QString strTime,
+                          QString strDescription) {
   bool isYes = false;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
     if (str == strDate) {
       isYes = true;
+
       QTreeWidgetItem* topItem = new QTreeWidgetItem;
       topItem = tw->topLevelItem(i);
       QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
-      item11->setText(0, QTime::currentTime().toString());
+      item11->setText(0, strTime);
+      item11->setText(1, strDescription);
       int child = topItem->childCount();
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
       topItem->setText(1, QString::number(child));
+
       break;
     }
   }
@@ -133,7 +137,8 @@ void MainWindow::add_Data(QTreeWidget* tw) {
     topItem->setText(0, strDate);
     tw->addTopLevelItem(topItem);
     QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
-    item11->setText(0, QTime::currentTime().toString());
+    item11->setText(0, strTime);
+    item11->setText(1, strDescription);
     int child = topItem->childCount();
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     topItem->setText(1, QString::number(child));
@@ -179,7 +184,8 @@ void MainWindow::del_Data(QTreeWidget* tw) {
 
   if (isNo) {
     QMessageBox msgBox;
-    msgBox.setText(tr("Less"));
+    QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+    msgBox.setText(str);
     msgBox.setInformativeText(
         tr("Only the reduction of the day's records is allowed."));
 
@@ -195,19 +201,12 @@ void MainWindow::del_Data(QTreeWidget* tw) {
 }
 
 void MainWindow::on_btnPlus_clicked() {
-  QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-  QMessageBox msgBox;
-  msgBox.setText(str);
-  msgBox.setInformativeText(tr("Add"));
-  QPushButton* btnCancel =
-      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-  QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-  btnOk->setFocus();
-  msgBox.exec();
-  if (msgBox.clickedButton() == btnCancel) {
-    return;
-  }
-  add_Data((QTreeWidget*)ui->tabWidget->currentWidget());
+  isAdd = true;
+  mydlgSetTime->setFixedHeight(this->height());
+  mydlgSetTime->setFixedWidth(this->width());
+  mydlgSetTime->setModal(true);
+  mydlgSetTime->ui->timeEdit->setTime(QTime::currentTime());
+  mydlgSetTime->show();
 }
 
 void MainWindow::on_btnLess_clicked() {
@@ -270,6 +269,9 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
     for (int j = 0; j < childCount; j++) {
       Reg.setValue(name + QString::number(i + 1) + "child" + QString::number(j),
                    tw->topLevelItem(i)->child(j)->text(0));
+      Reg.setValue(
+          name + QString::number(i + 1) + "childOne" + QString::number(j),
+          tw->topLevelItem(i)->child(j)->text(1));
     }
   }
 
@@ -308,6 +310,9 @@ void MainWindow::readData(QTreeWidget* tw) {
         QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
         item11->setText(0, Reg.value(name + QString::number(i + 1) + "child" +
                                      QString::number(j))
+                               .toString());
+        item11->setText(1, Reg.value(name + QString::number(i + 1) +
+                                     "childOne" + QString::number(j))
                                .toString());
       }
     }
@@ -608,21 +613,26 @@ void MainWindow::on_twItemClicked() {
 void MainWindow::set_Time() {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   QTreeWidgetItem* item = tw->currentItem();
-  if (item->childCount() == 0 && item->text(1) == "") {
+  if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     QString time = mydlgSetTime->ui->timeEdit->text();
     item->setText(0, time);
+    item->setText(1, mydlgSetTime->ui->lineEdit->text().trimmed());
 
-    QStringList keys;
+    QStringList keys, list;
     int childCount = item->parent()->childCount();
     for (int i = 0; i < childCount; i++) {
       QString txt = item->parent()->child(i)->text(0);
-      keys.append(txt);
+      QString txt1 = item->parent()->child(i)->text(1);
+      keys.append(txt + "|" + txt1);
     }
     std::sort(keys.begin(), keys.end(),
               [](const QString& s1, const QString& s2) { return s1 < s2; });
     for (int i = 0; i < childCount; i++) {
       QTreeWidgetItem* childItem = item->parent()->child(i);
-      childItem->setText(0, keys.at(i));
+      QString str = keys.at(i);
+      list = str.split("|");
+      childItem->setText(0, list.at(0));
+      childItem->setText(1, list.at(1));
     }
     saveData(tw, ui->tabWidget->currentIndex());
   }
@@ -631,7 +641,7 @@ void MainWindow::set_Time() {
 void MainWindow::on_twItemDoubleClicked() {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   QTreeWidgetItem* item = tw->currentItem();
-  if (item->childCount() == 0 && item->text(1) == "") {
+  if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     QString t = item->text(0);
     QStringList list = t.split(":");
     QString sh, sm, ss;
@@ -643,9 +653,11 @@ void MainWindow::on_twItemDoubleClicked() {
     QTime time;
     time.setHMS(sh.toInt(), sm.toInt(), ss.toInt());
     mydlgSetTime->ui->timeEdit->setTime(time);
+    mydlgSetTime->ui->lineEdit->setText(item->text(1));
     mydlgSetTime->setFixedHeight(this->height());
     mydlgSetTime->setFixedWidth(this->width());
     mydlgSetTime->setModal(true);
+    isAdd = false;
     mydlgSetTime->show();
   }
 }
