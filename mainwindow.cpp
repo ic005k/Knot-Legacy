@@ -17,6 +17,10 @@ MainWindow::MainWindow(QWidget* parent)
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
   chart = new Chart(this, tr("History Data"));
   chartTimeLine = new Chart(this, tr("Time Line"));
+  ui->glTimeLine->setMargin(0);
+  ui->glTimeLine->setSpacing(0);
+  ui->glTimeLine->setContentsMargins(0, 0, 0, 0);
+  ui->glTimeLine->addWidget(chartTimeLine);
   mw_one = this;
   this->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
@@ -38,6 +42,8 @@ MainWindow::MainWindow(QWidget* parent)
   // tmer->start(1000);
   strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
   ui->lcdNumber->setHidden(true);
+  ui->frame_tab->setMaximumHeight(this->height() / 2);
+  ui->tabCharts->setCornerWidget(ui->frame_cw);
 
   QDir dir;
   QString path;
@@ -161,7 +167,8 @@ void MainWindow::del_Data(QTreeWidget* tw) {
       int child = topItem->childCount();
       if (child > 0) {
         QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-        QString str1 = topItem->child(child - 1)->text(0);
+        QString str1 = topItem->child(child - 1)->text(0) + "  " +
+                       topItem->child(child - 1)->text(1);
         QMessageBox msgBox;
         msgBox.setText(str);
         msgBox.setInformativeText(tr("Less") + "\n" + str1);
@@ -465,11 +472,6 @@ void MainWindow::initChart(QTreeWidget* tw) {
 void MainWindow::initChartTimeLine(QTreeWidget* tw) {
   //设置离散点数据
   QList<QPointF> pointlist;
-  //设置表头
-  ui->glTimeLine->setMargin(0);
-  ui->glTimeLine->setSpacing(0);
-  ui->glTimeLine->setContentsMargins(0, 0, 0, 0);
-  ui->glTimeLine->addWidget(chartTimeLine);
   int topCount = tw->topLevelItemCount();
   if (topCount == 0) {
     chartTimeLine->buildChart(pointlist);
@@ -482,20 +484,37 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw) {
       tw->setCurrentItem(topItem);
     }
   }
-  //设置坐标系
-  int childCount = tw->currentItem()->childCount();
-  if (childCount == 0) {
-    chartTimeLine->buildChart(pointlist);
-    return;
+
+  QTreeWidgetItem* item = tw->currentItem();
+  bool child = false;
+  int childCount = item->childCount();
+  if (childCount == 0 && item->parent()->childCount() > 0) {
+    child = true;
+    // chartTimeLine->buildChart(pointlist);
+    // return;
   }
+  if (child) {
+    childCount = item->parent()->childCount();
+    parentItem = item->parent();
+  } else {
+    childCount = item->childCount();
+    parentItem = item;
+  }
+
+  //设置坐标系
   int y0 = 3;
   if (childCount > y0) y0 = childCount;
-  chartTimeLine->setAxis(tr("24 hours"), 0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
+  chartTimeLine->setAxis(
+      tr("24 hours") + "  " + tr("Total") + " : " + QString::number(childCount),
+      0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
 
-  pointlist.clear();
   double x, y;
   for (int i = 0; i < childCount; i++) {
-    QString str = tw->currentItem()->child(i)->text(0);
+    QString str;
+    if (child)
+      str = item->parent()->child(i)->text(0);
+    else
+      str = item->child(i)->text(0);
     QStringList list = str.split(":");
     int t = 0;
     if (list.count() == 3) {
@@ -607,6 +626,13 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
 
 void MainWindow::on_twItemClicked() {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  QTreeWidgetItem* item = tw->currentItem();
+  QTreeWidgetItem* pItem;
+
+  if (item->childCount() > 0) pItem = item;
+  if (item->childCount() == 0 && item->parent()->childCount() > 0)
+    pItem = item->parent();
+  if (parentItem == pItem) return;
   initChartTimeLine(tw);
 }
 

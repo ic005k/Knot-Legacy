@@ -15,18 +15,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_4">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
-     <number>0</number>
-    </property>
     <item row="0" column="0">
      <widget class="QLCDNumber" name="lcdNumber">
       <property name="minimumSize">
@@ -61,6 +49,54 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">/*QTabBar::scroller {
+                   width:0;
+                    border:0;
+                    padding: 0px;
+				   }
+
+QTabBar QToolButton::left-arrow {
+				  background-color:rgb(132, 171, 208);
+				  border-width: 0;
+				 border-image: url(:/src/left.png);
+							
+				 }
+
+QTabBar QToolButton::right-arrow {
+				  background-color:rgb(132, 171, 208);
+				  border-width: 0;
+				  border-image: url(:/src/right.png);
+				  }*/</string>
+         </property>
+         <property name="currentIndex">
+          <number>-1</number>
+         </property>
+         <property name="usesScrollButtons">
+          <bool>true</bool>
+         </property>
+         <property name="movable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lblStats">
          <property name="text">
@@ -68,7 +104,31 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QFrame" name="frame_cw">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QToolButton" name="btnLeft">
@@ -123,46 +183,10 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="0">
-        <widget class="QTabWidget" name="tabWidget">
-         <property name="mouseTracking">
-          <bool>true</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">/*QTabBar::scroller {
-                   width:0;
-                    border:0;
-                    padding: 0px;
-				   }
-
-QTabBar QToolButton::left-arrow {
-				  background-color:rgb(132, 171, 208);
-				  border-width: 0;
-				 border-image: url(:/src/left.png);
-							
-				 }
-
-QTabBar QToolButton::right-arrow {
-				  background-color:rgb(132, 171, 208);
-				  border-width: 0;
-				  border-image: url(:/src/right.png);
-				  }*/</string>
-         </property>
-         <property name="currentIndex">
-          <number>-1</number>
-         </property>
-         <property name="usesScrollButtons">
-          <bool>true</bool>
-         </property>
-         <property name="movable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <widget class="QTabWidget" name="tabCharts">
       <property name="minimumSize">
        <size>
@@ -233,7 +257,7 @@ QTabBar QToolButton::right-arrow {
       </widget>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="4" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QToolButton" name="btnPlus">

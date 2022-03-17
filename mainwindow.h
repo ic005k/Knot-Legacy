@@ -50,6 +50,7 @@ class MainWindow : public QMainWindow {
   dlgNotes *mydlgNotes;
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
+  QTreeWidgetItem *parentItem;
   bool isAdd = false;
   QTimer *tmer;
   QString strDate;
