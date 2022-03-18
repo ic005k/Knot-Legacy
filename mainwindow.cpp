@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->setupUi(this);
   QString ver = "1.0.00";
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
+
   chart = new Chart(this, tr("History Data"));
   chartTimeLine = new Chart(this, tr("Time Line"));
   ui->glTimeLine->setMargin(0);
@@ -28,6 +29,9 @@ MainWindow::MainWindow(QWidget* parent)
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
   mydlgNotes = new dlgNotes(this);
+  mydlgNotes->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
+  mydlgNotes->ui->textBrowser->verticalScrollBar()->setStyleSheet(
+      vsbarStyleSmall);
   mydlgRename = new dlgRename(this);
   mydlgSetTime = new dlgSetTime(this);
 
@@ -96,7 +100,7 @@ void MainWindow::init_Data() {
     ui->tabWidget->addTab(tw, Reg.value("TabName" + QString::number(i),
                                         tr("Counter") + QString::number(i + 1))
                                   .toString());
-    QString strNotes = Reg.value(name + "Note").toString();
+    QString strNotes = Reg.value("/" + name + "/Note").toString();
     ui->tabWidget->setTabToolTip(i, strNotes);
     qDebug() << "strNotes" << strNotes;
 
@@ -108,6 +112,8 @@ void MainWindow::init_Data() {
                           tr("Counter") + " " + QString::number(1));
     ui->tabWidget->setTabToolTip(0, "");
   }
+
+  ui->tabWidget->setCurrentIndex(Reg.value("CurrentIndex").toInt());
 }
 
 void MainWindow::timerUpdate() {
@@ -152,6 +158,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime,
 
   QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
   tw->setCurrentItem(topItem);
+  sort_childItem(topItem->child(0));
 
   saveData(tw, ui->tabWidget->currentIndex());
 }
@@ -257,6 +264,8 @@ void MainWindow::saveTab() {
   QSettings Reg(iniFile, QSettings::IniFormat);
   int TabCount = ui->tabWidget->tabBar()->count();
   Reg.setValue("TabCount", TabCount);
+  int CurrentIndex = ui->tabWidget->currentIndex();
+  Reg.setValue("CurrentIndex", CurrentIndex);
   for (int i = 0; i < TabCount; i++) {
     Reg.setValue("TabName" + QString::number(i), ui->tabWidget->tabText(i));
   }
@@ -267,24 +276,29 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   int count = tw->topLevelItemCount();
   QString name = "tab" + QString::number(tabIndex + 1);
   tw->setObjectName(name);
-  Reg.setValue(name + "TopCount", count);
+  Reg.setValue("/" + name + "/TopCount", count);
   for (int i = 0; i < count; i++) {
-    Reg.setValue(name + QString::number(i + 1) + "1",
+    Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topDate",
                  tw->topLevelItem(i)->text(0));
-    Reg.setValue(name + QString::number(i + 1) + "2",
+    Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topFreq",
                  tw->topLevelItem(i)->text(1));
     int childCount = tw->topLevelItem(i)->childCount();
-    Reg.setValue(name + QString::number(i + 1) + "childCount", childCount);
+    Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childCount",
+                 childCount);
     for (int j = 0; j < childCount; j++) {
-      Reg.setValue(name + QString::number(i + 1) + "child" + QString::number(j),
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childTime" +
+                       QString::number(j),
                    tw->topLevelItem(i)->child(j)->text(0));
-      Reg.setValue(
-          name + QString::number(i + 1) + "childOne" + QString::number(j),
-          tw->topLevelItem(i)->child(j)->text(1));
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childDesc" +
+                       QString::number(j),
+                   tw->topLevelItem(i)->child(j)->text(1));
     }
   }
 
-  Reg.setValue(name + "Note", ui->tabWidget->tabToolTip(tabIndex));
+  Reg.setValue("/" + name + "/" + "Note", ui->tabWidget->tabToolTip(tabIndex));
+  int lines = Reg.allKeys().count();
+  Reg.setValue("000-TotalLines-000", lines);
+  Reg.setValue("000-FileSize-000", QFile(iniFile).size());
 
   // Tab
   saveTab();
@@ -301,15 +315,17 @@ void MainWindow::readData(QTreeWidget* tw) {
   tw->clear();
   QSettings Reg(iniFile, QSettings::IniFormat);
   QString name = tw->objectName();
-  int rowCount = Reg.value(name + "TopCount").toInt();
+  int rowCount = Reg.value("/" + name + "/TopCount").toInt();
   for (int i = 0; i < rowCount; i++) {
     int childCount =
-        Reg.value(name + QString::number(i + 1) + "childCount").toInt();
+        Reg.value("/" + name + "/" + QString::number(i + 1) + "-childCount")
+            .toInt();
     // 不显示子项为0的数据
     if (childCount > 0) {
       QTreeWidgetItem* topItem = new QTreeWidgetItem;
       topItem->setText(
-          0, Reg.value(name + QString::number(i + 1) + "1").toString());
+          0, Reg.value("/" + name + "/" + QString::number(i + 1) + "-topDate")
+                 .toString());
       tw->addTopLevelItem(topItem);
 
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -317,11 +333,11 @@ void MainWindow::readData(QTreeWidget* tw) {
 
       for (int j = 0; j < childCount; j++) {
         QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
-        item11->setText(0, Reg.value(name + QString::number(i + 1) + "child" +
-                                     QString::number(j))
+        item11->setText(0, Reg.value("/" + name + "/" + QString::number(i + 1) +
+                                     "-childTime" + QString::number(j))
                                .toString());
-        item11->setText(1, Reg.value(name + QString::number(i + 1) +
-                                     "childOne" + QString::number(j))
+        item11->setText(1, Reg.value("/" + name + "/" + QString::number(i + 1) +
+                                     "-childDesc" + QString::number(j))
                                .toString());
       }
     }
@@ -349,8 +365,7 @@ void MainWindow::get_Today(QTreeWidget* tw) {
 }
 
 QString MainWindow::loadText(QString textFile) {
-  QFileInfo fi(textFile);
-  if (fi.exists()) {
+  if (QFile(textFile).exists()) {
     QFile file(textFile);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
       qDebug() << tr("Cannot read file %1:\n%2.")
@@ -561,12 +576,13 @@ void MainWindow::on_actionRename_triggered() {
 void MainWindow::on_actionAdd_Tab_triggered() {
   int count = ui->tabWidget->tabBar()->count();
   QSettings Reg(iniFile, QSettings::IniFormat);
-  for (int i = 0; i < Reg.allKeys().count(); i++) {
+  /*for (int i = 0; i < Reg.allKeys().count(); i++) {
     if (Reg.allKeys().at(i).contains("tab" + QString::number(count + 1))) {
       Reg.remove(Reg.allKeys().at(i));
       i--;
     }
-  }
+  }*/
+  Reg.remove("/tab" + QString::number(count + 1));
 
   ui->tabWidget->addTab(init_TreeWidget("tab" + QString::number(count + 1)),
                         tr("Counter") + " " + QString::number(count + 1));
@@ -576,10 +592,34 @@ void MainWindow::on_actionAdd_Tab_triggered() {
 
 void MainWindow::on_actionDel_Tab_triggered() {
   int index = ui->tabWidget->currentIndex();
-  if (index <= 0) return;
+  if (index < 0) return;
+  if (index == 0) {
+    QMessageBox msgBox;
+    msgBox.setText(appName);
+    msgBox.setInformativeText(
+        tr("The first tab is not allowed to be deleted."));
+
+    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    btnOk->setFocus();
+    msgBox.exec();
+    return;
+  }
+  QString str1 = ui->tabWidget->tabText(index);
+  QMessageBox msgBox;
+  msgBox.setText("Xcounter");
+  msgBox.setInformativeText(tr("Whether to remove") + "  " + str1 + " ? ");
+  QPushButton* btnCancel =
+      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+  QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+  btnOk->setFocus();
+  msgBox.exec();
+  if (msgBox.clickedButton() == btnCancel) {
+    return;
+  }
 
   ui->tabWidget->removeTab(index);
 
+  QFile(iniFile).remove();
   for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
     QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
     tw->setObjectName("tab" + QString::number(i + 1));
@@ -604,25 +644,8 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
   QScrollBar* SB = tw->verticalScrollBar();
-  SB->setStyleSheet(
-      "QScrollBar:vertical{"  //垂直滑块整体
-      "width:35px;"
-      "background:#FFFFFF;"   //背景色
-      "padding-top:20px;"     //上预留位置（放置向上箭头）
-      "padding-bottom:20px;"  //下预留位置（放置向下箭头）
-      "padding-left:3px;"     //左预留位置（美观）
-      "padding-right:3px;"    //右预留位置（美观）
-      "border-left:1px solid #d7d7d7;}"     //左分割线
-      "QScrollBar::handle:vertical{"        //滑块样式
-      "background:#dbdbdb;"                 //滑块颜色
-      "border-radius:6px;"                  //边角圆润
-      "min-height:80px;}"                   //滑块最小高度
-      "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
-      "background:#d0d0d0;}"                //滑块颜色
-      "QScrollBar::add-line:vertical{"      //向下箭头样式
-      "background:url(:/src/down1.png) center no-repeat;}"
-      "QScrollBar::sub-line:vertical{"  //向上箭头样式
-      "background:url(:/src/up1.png) center no-repeat;}");
+  SB->setStyleSheet(vsbarStyle);
+  // QScroller::grabGesture(tw, QScroller::TouchGesture);
   return tw;
 }
 
@@ -646,23 +669,27 @@ void MainWindow::set_Time() {
     item->setText(0, time);
     item->setText(1, mydlgSetTime->ui->lineEdit->text().trimmed());
 
-    QStringList keys, list;
-    int childCount = item->parent()->childCount();
-    for (int i = 0; i < childCount; i++) {
-      QString txt = item->parent()->child(i)->text(0);
-      QString txt1 = item->parent()->child(i)->text(1);
-      keys.append(txt + "|" + txt1);
-    }
-    std::sort(keys.begin(), keys.end(),
-              [](const QString& s1, const QString& s2) { return s1 < s2; });
-    for (int i = 0; i < childCount; i++) {
-      QTreeWidgetItem* childItem = item->parent()->child(i);
-      QString str = keys.at(i);
-      list = str.split("|");
-      childItem->setText(0, list.at(0));
-      childItem->setText(1, list.at(1));
-    }
+    sort_childItem(item);
     saveData(tw, ui->tabWidget->currentIndex());
+  }
+}
+
+void MainWindow::sort_childItem(QTreeWidgetItem* item) {
+  QStringList keys, list;
+  int childCount = item->parent()->childCount();
+  for (int i = 0; i < childCount; i++) {
+    QString txt = item->parent()->child(i)->text(0);
+    QString txt1 = item->parent()->child(i)->text(1);
+    keys.append(txt + "|" + txt1);
+  }
+  std::sort(keys.begin(), keys.end(),
+            [](const QString& s1, const QString& s2) { return s1 < s2; });
+  for (int i = 0; i < childCount; i++) {
+    QTreeWidgetItem* childItem = item->parent()->child(i);
+    QString str = keys.at(i);
+    list = str.split("|");
+    childItem->setText(0, list.at(0));
+    childItem->setText(1, list.at(1));
   }
 }
 
@@ -712,8 +739,11 @@ void MainWindow::saveNotes() {
   QString name = tw->objectName();
   int index = ui->tabWidget->currentIndex();
   QString text = mydlgNotes->ui->textEdit->toPlainText();
-  Reg.setValue(name + "Note", text);
+  int pos = mydlgNotes->ui->textEdit->textCursor().position();
+  text = QString::number(pos) + "|" + text;
+  Reg.setValue("/" + name + "/Note", text);
   ui->tabWidget->setTabToolTip(index, text);
+  qDebug() << "pos" << pos;
 }
 
 void MainWindow::on_btnLeft_clicked() {
@@ -731,13 +761,29 @@ void MainWindow::on_btnRight_clicked() {
 }
 
 void MainWindow::on_actionNotes_triggered() {
-  mydlgNotes->setFixedHeight(this->height());
-  mydlgNotes->setFixedWidth(this->width());
-  int index = ui->tabWidget->currentIndex();
-  mydlgNotes->ui->textEdit->setPlainText(ui->tabWidget->tabToolTip(index));
+  mydlgNotes->setGeometry(0, 0, this->width(), this->height() / 2);
 
+  int index = ui->tabWidget->currentIndex();
+  mydlgNotes->ui->textEdit->clear();
+
+  mydlgNotes->ui->textBrowser->setHidden(true);
+  mydlgNotes->ui->textEdit->setHidden(false);
   mydlgNotes->setModal(true);
+  mydlgNotes->ui->lblTitle->setText(tr("Notes :"));
   mydlgNotes->show();
+
+  QString str = ui->tabWidget->tabToolTip(index);
+  QStringList list = str.split("|");
+  if (list.count() > 1) {
+    mydlgNotes->ui->textEdit->setPlainText(list.at(1));
+    QTextCursor tmpCursor = mydlgNotes->ui->textEdit->textCursor();
+    QString strPos = list.at(0);
+    qDebug() << "strPos" << strPos;
+    tmpCursor.setPosition(strPos.toInt());
+    mydlgNotes->ui->textEdit->setTextCursor(tmpCursor);
+
+  } else
+    mydlgNotes->ui->textEdit->setPlainText(str);
 }
 
 QString MainWindow::init_Objname() {
@@ -779,7 +825,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
       if (move) {
         qDebug() << "ok save";
-
+        QFile(iniFile).remove();
         for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
           QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
           saveData(tw, i);
@@ -973,4 +1019,18 @@ void MainWindow::on_tabCharts_tabBarClicked(int index) {
 QTreeWidget* MainWindow::get_tw(int tabIndex) {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(tabIndex);
   return tw;
+}
+
+void MainWindow::on_actionView_App_Data_triggered() {
+  mydlgNotes->ui->textBrowser->clear();
+  mydlgNotes->ui->textBrowser->setText(loadText(iniFile));
+  mydlgNotes->ui->textBrowser->setTextInteractionFlags(
+      Qt::NoTextInteraction);  //鼠标不可选中文本
+  mydlgNotes->ui->textBrowser->setHidden(false);
+  mydlgNotes->ui->textEdit->setHidden(true);
+
+  mydlgNotes->ui->lblTitle->setText(tr("App Data :"));
+  mydlgNotes->setGeometry(0, 0, this->width(), this->height());
+  mydlgNotes->setModal(true);
+  mydlgNotes->show();
 }

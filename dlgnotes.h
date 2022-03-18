@@ -20,7 +20,8 @@ class dlgNotes : public QDialog {
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
- private slots:
+  void resizeEvent(QResizeEvent *event);
+private slots:
   void on_btnBack_clicked();
 
   void on_textEdit_textChanged();

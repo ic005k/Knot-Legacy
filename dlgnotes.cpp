@@ -9,12 +9,17 @@ extern bool loading;
 dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  QScroller::grabGesture(ui->textEdit, QScroller::TouchGesture);
+  QScroller::grabGesture(ui->textBrowser, QScroller::TouchGesture);
+  // ui->textBrowser->verticalScrollBar()->setHidden(true);
+  // ui->textEdit->verticalScrollBar()->setHidden(true);
 }
 
 dlgNotes::~dlgNotes() { delete ui; }
 
 void dlgNotes::on_btnBack_clicked() {
-  mw_one->saveNotes();
+  if (!ui->textEdit->isHidden()) mw_one->saveNotes();
+  ui->textEdit->clear();
   close();
 }
 
@@ -32,3 +37,8 @@ bool dlgNotes::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void dlgNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
+
+void dlgNotes::resizeEvent(QResizeEvent* event) {
+  Q_UNUSED(event);
+  qDebug() << "resize" << ui->textEdit->height();
+}

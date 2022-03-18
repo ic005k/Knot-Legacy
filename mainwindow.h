@@ -17,6 +17,7 @@
 #include <QPushButton>
 #include <QScatterSeries>
 #include <QScrollBar>
+#include <QScroller>
 #include <QSettings>
 #include <QStringList>
 #include <QTextEdit>
@@ -31,7 +32,6 @@
 #include "ui_dlgnotes.h"
 #include "ui_dlgrename.h"
 #include "ui_dlgsettime.h"
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -69,6 +69,45 @@ class MainWindow : public QMainWindow {
   void add_Data(QTreeWidget *, QString, QString);
   void del_Data(QTreeWidget *);
   QTreeWidget *get_tw(int tabIndex);
+  QString vsbarStyle =
+      "QScrollBar:vertical{"  //垂直滑块整体
+      "width:35px;"
+      "background:#FFFFFF;"   //背景色
+      "padding-top:32px;"     //上预留位置（放置向上箭头）
+      "padding-bottom:32px;"  //下预留位置（放置向下箭头）
+      "padding-left:3px;"     //左预留位置（美观）
+      "padding-right:3px;"    //右预留位置（美观）
+      "border-left:1px solid #d7d7d7;}"     //左分割线
+      "QScrollBar::handle:vertical{"        //滑块样式
+      "background:#dbdbdb;"                 //滑块颜色
+      "border-radius:6px;"                  //边角圆润
+      "min-height:60px;}"                   //滑块最小高度
+      "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
+      "background:#d0d0d0;}"                //滑块颜色
+      "QScrollBar::add-line:vertical{"      //向下箭头样式
+      "background:url(:/src/down.png) center no-repeat;}"
+      "QScrollBar::sub-line:vertical{"  //向上箭头样式
+      "background:url(:/src/up.png) center no-repeat;}";
+  QString vsbarStyleSmall =
+      "QScrollBar:vertical{"  //垂直滑块整体
+      "width:10px;"
+      "background:#FFFFFF;"  //背景色
+      "padding-top:3px;"     //上预留位置（放置向上箭头）
+      "padding-bottom:3px;"  //下预留位置（放置向下箭头）
+      "padding-left:3px;"    //左预留位置（美观）
+      "padding-right:3px;"   //右预留位置（美观）
+      "border-left:1px solid #d7d7d7;}"     //左分割线
+      "QScrollBar::handle:vertical{"        //滑块样式
+      "background:#dbdbdb;"                 //滑块颜色
+      "border-radius:6px;"                  //边角圆润
+      "min-height:60px;}"                   //滑块最小高度
+      "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
+      "background:#d0d0d0;}"                //滑块颜色
+      "QScrollBar::add-line:vertical{"      //向下箭头样式
+      "background:url(:/src/down1.png) center no-repeat;}"
+      "QScrollBar::sub-line:vertical{"  //向上箭头样式
+      "background:url(:/src/up1.png) center no-repeat;}";
+  void sort_childItem(QTreeWidgetItem *);
  public slots:
   void init_Stats(QTreeWidget *);
 
@@ -112,6 +151,8 @@ class MainWindow : public QMainWindow {
   void on_tabWidget_tabBarClicked(int index);
 
   void on_tabCharts_tabBarClicked(int index);
+
+  void on_actionView_App_Data_triggered();
 
  private:
   int x, y, w, h;
