@@ -271,6 +271,30 @@ void MainWindow::saveTab() {
   }
 }
 
+QString MainWindow::getFileSize(const qint64& size, int precision) {
+  double sizeAsDouble = size;
+  static QStringList measures;
+  if (measures.isEmpty())
+    measures << QCoreApplication::translate("QInstaller", "bytes")
+             << QCoreApplication::translate("QInstaller", "KiB")
+             << QCoreApplication::translate("QInstaller", "MiB")
+             << QCoreApplication::translate("QInstaller", "GiB")
+             << QCoreApplication::translate("QInstaller", "TiB")
+             << QCoreApplication::translate("QInstaller", "PiB")
+             << QCoreApplication::translate("QInstaller", "EiB")
+             << QCoreApplication::translate("QInstaller", "ZiB")
+             << QCoreApplication::translate("QInstaller", "YiB");
+  QStringListIterator it(measures);
+  QString measure(it.next());
+  while (sizeAsDouble >= 1024.0 && it.hasNext()) {
+    measure = it.next();
+    sizeAsDouble /= 1024.0;
+  }
+  return QString::fromLatin1("%1 %2")
+      .arg(sizeAsDouble, 0, 'f', precision)
+      .arg(measure);
+}
+
 void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   QSettings Reg(iniFile, QSettings::IniFormat);
   int count = tw->topLevelItemCount();
@@ -297,8 +321,10 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
 
   Reg.setValue("/" + name + "/" + "Note", ui->tabWidget->tabToolTip(tabIndex));
   int lines = Reg.allKeys().count();
-  Reg.setValue("000-TotalLines-000", lines);
-  Reg.setValue("000-FileSize-000", QFile(iniFile).size());
+  Reg.setValue("/" + appName + "/TotalLines", lines);
+  Reg.setValue("/" + appName + "/FileSize",
+               getFileSize(QFile(iniFile).size(), 2));
+  Reg.setValue("/" + appName + "/File", iniFile);
 
   // Tab
   saveTab();
@@ -719,9 +745,21 @@ void MainWindow::on_twItemDoubleClicked() {
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index) {
-  if (ui->tabWidget->tabBar()->count() <= 0) return;
-  if (isSlide) {
+  int count = ui->tabWidget->tabBar()->count();
+  if (isSlide || loading || count <= 0) {
     return;
+  }
+  if (index == 0) {
+    ui->btnLeft->setEnabled(false);
+    ui->btnRight->setEnabled(true);
+  }
+  if (index > 0 && index < count - 1) {
+    ui->btnLeft->setEnabled(true);
+    ui->btnRight->setEnabled(true);
+  }
+  if (index == count - 1) {
+    ui->btnLeft->setEnabled(true);
+    ui->btnRight->setEnabled(false);
   }
   ui->tabWidget->setCurrentIndex(index);
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
@@ -739,11 +777,14 @@ void MainWindow::saveNotes() {
   QString name = tw->objectName();
   int index = ui->tabWidget->currentIndex();
   QString text = mydlgNotes->ui->textEdit->toPlainText();
-  int pos = mydlgNotes->ui->textEdit->textCursor().position();
-  text = QString::number(pos) + "|" + text;
+  int curPos = mydlgNotes->ui->textEdit->textCursor().position();
+  int sliderPos =
+      mydlgNotes->ui->textEdit->verticalScrollBar()->sliderPosition();
+  text =
+      QString::number(curPos) + "|" + QString::number(sliderPos) + "|" + text;
   Reg.setValue("/" + name + "/Note", text);
   ui->tabWidget->setTabToolTip(index, text);
-  qDebug() << "pos" << pos;
+  qDebug() << "curPos" << curPos << "sliderPos" << sliderPos;
 }
 
 void MainWindow::on_btnLeft_clicked() {
@@ -774,13 +815,16 @@ void MainWindow::on_actionNotes_triggered() {
 
   QString str = ui->tabWidget->tabToolTip(index);
   QStringList list = str.split("|");
-  if (list.count() > 1) {
-    mydlgNotes->ui->textEdit->setPlainText(list.at(1));
+  if (list.count() > 2) {
+    mydlgNotes->ui->textEdit->setPlainText(list.at(2));
     QTextCursor tmpCursor = mydlgNotes->ui->textEdit->textCursor();
-    QString strPos = list.at(0);
-    qDebug() << "strPos" << strPos;
-    tmpCursor.setPosition(strPos.toInt());
+    QString curPos = list.at(0);
+    tmpCursor.setPosition(curPos.toInt());
     mydlgNotes->ui->textEdit->setTextCursor(tmpCursor);
+    QString sliderPos = list.at(1);
+    mydlgNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
+        sliderPos.toInt());
+    qDebug() << "curPos" << curPos << "sliderPos" << sliderPos;
 
   } else
     mydlgNotes->ui->textEdit->setPlainText(str);

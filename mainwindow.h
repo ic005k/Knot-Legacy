@@ -108,6 +108,7 @@ class MainWindow : public QMainWindow {
       "QScrollBar::sub-line:vertical{"  //向上箭头样式
       "background:url(:/src/up1.png) center no-repeat;}";
   void sort_childItem(QTreeWidgetItem *);
+  QString getFileSize(const qint64 &size, int precision);
  public slots:
   void init_Stats(QTreeWidget *);
 
