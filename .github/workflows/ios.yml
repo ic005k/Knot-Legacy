@@ -5,11 +5,15 @@ on:
       - '*.pro'
       - 'src/**'
       - '.github/workflows/ios.yml'
+      - '*.cpp'
+      - '*.h'
   pull_request:
     paths:
       - '*.pro'
       - 'src/**'
       - '.github/workflows/ios.yml' 
+      - '*.cpp'
+      - '*.h'
 jobs:
   build:
     name: Build
