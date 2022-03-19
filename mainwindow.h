@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QAbstractButton>
+#include <QComboBox>
 #include <QDateTime>
 #include <QDebug>
 #include <QDesktopServices>
@@ -11,6 +12,7 @@
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QInputDialog>
+#include <QLineEdit>
 #include <QMainWindow>
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
@@ -51,6 +53,9 @@ class MainWindow : public QMainWindow {
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
   QTreeWidgetItem *parentItem;
+  QVector<QTreeWidgetItem *> findItemList;
+  bool isFindTextChange = false;
+  int findPos = 0;
   bool isAdd = false;
   QTimer *tmer;
   QString strDate;
@@ -113,6 +118,11 @@ class MainWindow : public QMainWindow {
   void goResultsMonth();
   QStringList get_MonthList(QString strY, QString strM);
   void initMonthChart();
+  QVector<QTreeWidgetItem *> findDisc();
+  QString setLineEditQss(QLineEdit *txt, int radius, int borderWidth,
+                         const QString &normalColor, const QString &focusColor);
+  QString setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
+                         const QString &normalColor, const QString &focusColor);
  public slots:
   void init_Stats(QTreeWidget *);
 
@@ -166,6 +176,10 @@ class MainWindow : public QMainWindow {
   void on_cboxMonth_currentTextChanged(const QString &arg1);
 
   void on_cboxDay_currentTextChanged(const QString &arg1);
+
+  void on_btnGo_clicked();
+
+  void on_editFind_textChanged(const QString &arg1);
 
  private:
   int x, y, w, h;

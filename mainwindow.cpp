@@ -83,6 +83,8 @@ MainWindow::MainWindow(QWidget* parent)
   }
   ui->cboxMonth->clear();
   ui->cboxMonth->addItems(listMonth);
+  setComboBoxQss(ui->cboxYear, 4, 1, "#C0C0C0", "#4169E1");
+  setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
 
   QDir dir;
   QString path;
@@ -503,10 +505,6 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
   QList<int> intList;
   QList<QPointF> pointlist;
   int count = listMonth.count();
-  if (count == 0) {
-    chart->buildChart(pointlist);
-    return;
-  }
   for (int i = 0; i < count; i++) {
     QString str = listMonth.at(i);
     QString strN = str.split("|").at(1);
@@ -1239,11 +1237,103 @@ void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
 }
 
 void MainWindow::on_cboxMonth_currentTextChanged(const QString& arg1) {
+  Q_UNUSED(arg1);
   goResultsMonth();
   goResults();
 }
 
 void MainWindow::on_cboxDay_currentTextChanged(const QString& arg1) {
+  Q_UNUSED(arg1);
   goResultsMonth();
   goResults();
+}
+
+void MainWindow::on_btnGo_clicked() {
+  ui->lblStats->setText("");
+  QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
+  if (isFindTextChange) findItemList = findDisc();
+  int total = findItemList.count();
+  if (total > 0) {
+    QTreeWidgetItem* item = findItemList.at(findPos);
+    tw->setCurrentItem(item);
+    ui->lblStats->setText(tr("Search Results : ") + item->parent()->text(0) +
+                          "  ( " + QString::number(findPos + 1) + " -> " +
+                          QString::number(total) + " ) ");
+    findPos++;
+    if (findPos == total) findPos = 0;
+  }
+}
+
+QVector<QTreeWidgetItem*> MainWindow::findDisc() {
+  findItemList.clear();
+  QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    int count = topItem->childCount();
+    for (int j = 0; j < count; j++) {
+      QString str = topItem->child(j)->text(1).trimmed().toLower();
+      QString strFind = ui->editFind->text().trimmed().toLower();
+      if (str.contains(strFind)) {
+        findItemList.append(topItem->child(j));
+      }
+    }
+  }
+  isFindTextChange = false;
+  findPos = 0;
+  if (findItemList.count() > 0)
+    setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
+  else
+    setLineEditQss(ui->editFind, 4, 1, "#FA0000", "##FA0000");
+  return findItemList;
+}
+
+void MainWindow::on_editFind_textChanged(const QString& arg1) {
+  Q_UNUSED(arg1);
+  setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
+  isFindTextChange = true;
+}
+
+QString MainWindow::setLineEditQss(QLineEdit* txt, int radius, int borderWidth,
+                                   const QString& normalColor,
+                                   const QString& focusColor) {
+  QStringList list;
+  list.append(QString("QLineEdit{border-style:none;padding:3px;border-radius:%"
+                      "1px;border:%2px solid %3;}")
+                  .arg(radius)
+                  .arg(borderWidth)
+                  .arg(normalColor));
+  list.append(QString("QLineEdit:focus{border:%1px solid %2;}")
+                  .arg(borderWidth)
+                  .arg(focusColor));
+
+  QString qss = list.join("");
+  txt->setStyleSheet(qss);
+  return qss;
+}
+
+QString MainWindow::setComboBoxQss(QComboBox* txt, int radius, int borderWidth,
+                                   const QString& normalColor,
+                                   const QString& focusColor) {
+  QStringList list;
+  list.append(QString("QComboBox{border-style:none;padding:3px;border-radius:%"
+                      "1px;border:%2px solid %3;}")
+                  .arg(radius)
+                  .arg(borderWidth)
+                  .arg(normalColor));
+  list.append(QString("QComboBox:focus{border:%1px solid %2;}")
+                  .arg(borderWidth)
+                  .arg(focusColor));
+  list.append(
+      QString("QComboBox::down-arrow{image:url(:/icon/"
+              "add_bottom.png);width:10px;height:10px;right:2px;}"));
+  list.append(QString(
+      "QComboBox::drop-down{subcontrol-origin:padding;subcontrol-position:top "
+      "right;width:15px;border-left-width:0px;border-left-style:solid;border-"
+      "top-right-radius:3px;border-bottom-right-radius:3px;border-left-color:#"
+      "B6B6B6;}"));
+  list.append(QString("QComboBox::drop-down:on{top:1px;}"));
+
+  QString qss = list.join("");
+  txt->setStyleSheet(qss);
+  return qss;
 }
