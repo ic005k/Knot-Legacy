@@ -58,7 +58,7 @@ class MainWindow : public QMainWindow {
   void readData(QTreeWidget *);
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
-  void initChart(QTreeWidget *);
+  void initChart(QString, QString, QStringList);
   void saveNotes();
   bool isInit = false;
   int today = 0;
@@ -109,6 +109,10 @@ class MainWindow : public QMainWindow {
       "background:url(:/src/up1.png) center no-repeat;}";
   void sort_childItem(QTreeWidgetItem *);
   QString getFileSize(const qint64 &size, int precision);
+  void goResults();
+  void goResultsMonth();
+  QStringList get_MonthList(QString strY, QString strM);
+  void initMonthChart();
  public slots:
   void init_Stats(QTreeWidget *);
 
@@ -155,6 +159,14 @@ class MainWindow : public QMainWindow {
 
   void on_actionView_App_Data_triggered();
 
+  void on_btnFind_clicked();
+
+  void on_cboxYear_currentTextChanged(const QString &arg1);
+
+  void on_cboxMonth_currentTextChanged(const QString &arg1);
+
+  void on_cboxDay_currentTextChanged(const QString &arg1);
+
  private:
   int x, y, w, h;
   void get_Today(QTreeWidget *);
@@ -162,7 +174,7 @@ class MainWindow : public QMainWindow {
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
   QObjectList getAllUIControls(QObject *parent);
   QString init_Objname();
-  void initChartTimeLine(QTreeWidget *tw);
+  void initChartTimeLine(QTreeWidget *, bool);
   int get_Day(QString date);
   QString get_Year(QString date);
   QString get_Month(QString date);

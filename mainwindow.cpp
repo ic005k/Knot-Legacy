@@ -9,11 +9,11 @@ QString iniFile = "/data/data/org.qtproject.example.Xcount/Xcount.ini";
 QString txtFile = "assets:/data/Xcount.txt";
 MainWindow* mw_one;
 bool loading = false;
-extern bool isAndroid, isIOS;
+extern bool isAndroid, isIOS, zh_cn;
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  QString ver = "1.0.00";
+  QString ver = "1.0.01";
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
 
   chart = new Chart(this, tr("History Data"));
@@ -52,6 +52,37 @@ MainWindow::MainWindow(QWidget* parent)
   ui->lcdNumber->setHidden(true);
   ui->frame_tab->setMaximumHeight(this->height() / 2);
   ui->tabCharts->setCornerWidget(ui->frame_cw);
+  ui->frame_find->setHidden(true);
+  QStringList listMonth;
+  if (zh_cn) {
+    listMonth = QStringList() << "1月"
+                              << "2月"
+                              << "3月"
+                              << "4月"
+                              << "5月"
+                              << "6月"
+                              << "7月"
+                              << "8月"
+                              << "9月"
+                              << "10月"
+                              << "11月"
+                              << "12月";
+  } else {
+    listMonth = QStringList() << "Jan"
+                              << "Feb"
+                              << "Mar"
+                              << "Apr"
+                              << "May"
+                              << "Jun"
+                              << "Jul"
+                              << "Aug"
+                              << "Sep"
+                              << "Oct"
+                              << "Nov"
+                              << "Dec";
+  }
+  ui->cboxMonth->clear();
+  ui->cboxMonth->addItems(listMonth);
 
   QDir dir;
   QString path;
@@ -83,8 +114,9 @@ MainWindow::MainWindow(QWidget* parent)
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   get_Today(tw);
   init_Stats(tw);
-  initChart(tw);
-  initChartTimeLine(tw);
+
+  initMonthChart();
+  initChartTimeLine(tw, true);
 
   isInit = true;
   loading = false;
@@ -330,7 +362,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
 
   Reg.setValue("/" + name + "/" + "Note", ui->tabWidget->tabToolTip(tabIndex));
   int lines = Reg.allKeys().count();
-  Reg.setValue("/" + appName + "/TotalLines", lines);
+  Reg.setValue("/" + appName + "/AllKeys", lines);
   Reg.setValue("/" + appName + "/FileSize",
                getFileSize(QFile(iniFile).size(), 2));
   Reg.setValue("/" + appName + "/File", iniFile);
@@ -338,8 +370,16 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   saveTab();
   get_Today(tw);
   init_Stats(tw);
-  initChart(tw);
-  initChartTimeLine(tw);
+  initMonthChart();
+  initChartTimeLine(tw, true);
+}
+
+void MainWindow::initMonthChart() {
+  QString strY, strM;
+  strY = get_Year(strDate);
+  strM = get_Month(strDate);
+  QStringList listM = get_MonthList(strY, strM);
+  initChart(strY, strM, listM);
 }
 
 void MainWindow::readData(QTreeWidget* tw) {
@@ -376,8 +416,8 @@ void MainWindow::readData(QTreeWidget* tw) {
 
   get_Today(tw);
   init_Stats(tw);
-  initChart(tw);
-  initChartTimeLine(tw);
+  initMonthChart();
+  initChartTimeLine(tw, true);
 }
 
 void MainWindow::get_Today(QTreeWidget* tw) {
@@ -459,12 +499,18 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
   ui->lblStats->setText(tr("Total") + " : " + QString::number(tatol));
 }
 
-void MainWindow::initChart(QTreeWidget* tw) {
+void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
   QList<int> intList;
-  int count = tw->topLevelItemCount();
-  if (count == 0) return;
+  QList<QPointF> pointlist;
+  int count = listMonth.count();
+  if (count == 0) {
+    chart->buildChart(pointlist);
+    return;
+  }
   for (int i = 0; i < count; i++) {
-    intList.append(tw->topLevelItem(i)->text(1).toInt());
+    QString str = listMonth.at(i);
+    QString strN = str.split("|").at(1);
+    intList.append(strN.toInt());
   }
   int maxValue = *std::max_element(intList.begin(), intList.end());
   int max = 18;
@@ -475,16 +521,12 @@ void MainWindow::initChart(QTreeWidget* tw) {
   chart->installEventFilter(this);
   chart->setMouseTracking(true);
 
-  QString currentDate = QDate::currentDate().toString();
-  QString strM, strY;
-  strM = get_Month(currentDate);
-  strY = get_Year(currentDate);
   //设置坐标系
   chart->setAxis(
       strM + "  " + strY + "    " + tr("Today") + ": " + QString::number(today),
       0, 31, 31, tr("Freq"), 0, max + 2, 5);
   //设置离散点数据
-  QList<QPointF> pointlist = {
+  pointlist = {
       QPointF(0, 8),  QPointF(1, 2),  QPointF(3, 4), QPointF(4, 8),
       QPointF(5, 16), QPointF(6, 16), QPointF(7, 8), QPointF(8, 4),
       QPointF(9, 2),  QPointF(10, 1),
@@ -500,12 +542,14 @@ void MainWindow::initChart(QTreeWidget* tw) {
   pointlist.clear();
 
   int x, y;
-  QString strDate;
+  QString strD, strN;
   for (int i = 0; i < count; i++) {
-    strDate = tw->topLevelItem(i)->text(0);
-    if (get_Month(strDate) == strM && get_Year(strDate) == strY)
-      x = get_Day(strDate);
-    y = tw->topLevelItem(i)->text(1).toInt();
+    QString str = listMonth.at(i);
+    strD = str.split("|").at(0);
+    strN = str.split("|").at(1);
+    x = strD.toInt();
+    y = strN.toInt();
+
     QPointF pf(x, y);
     pointlist.append(pf);
   }
@@ -514,11 +558,11 @@ void MainWindow::initChart(QTreeWidget* tw) {
   chart->buildChart(pointlist);
 }
 
-void MainWindow::initChartTimeLine(QTreeWidget* tw) {
+void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
   //设置离散点数据
   QList<QPointF> pointlist;
   int topCount = tw->topLevelItemCount();
-  if (topCount == 0) {
+  if (topCount == 0 || !isDay) {
     chartTimeLine->buildChart(pointlist);
     return;
   }
@@ -697,7 +741,7 @@ void MainWindow::on_twItemClicked() {
   if (item->childCount() == 0 && item->parent()->childCount() > 0)
     pItem = item->parent();
   if (parentItem == pItem) return;
-  initChartTimeLine(tw);
+  initChartTimeLine(tw, true);
 }
 
 void MainWindow::set_Time() {
@@ -766,9 +810,6 @@ void MainWindow::on_twItemDoubleClicked() {
 
 void MainWindow::on_tabWidget_currentChanged(int index) {
   int count = ui->tabWidget->tabBar()->count();
-  if (isSlide || loading || count <= 0) {
-    return;
-  }
   if (index == 0) {
     ui->btnLeft->setEnabled(false);
     ui->btnRight->setEnabled(true);
@@ -781,13 +822,18 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
     ui->btnLeft->setEnabled(true);
     ui->btnRight->setEnabled(false);
   }
+
+  if (isSlide || loading || count <= 0) {
+    return;
+  }
+
   ui->tabWidget->setCurrentIndex(index);
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
 
   get_Today(tw);
   init_Stats(tw);
-  initChart(tw);
-  initChartTimeLine(tw);
+  initMonthChart();
+  initChartTimeLine(tw, true);
 }
 
 void MainWindow::saveNotes() {
@@ -1089,10 +1135,10 @@ void MainWindow::on_tabWidget_tabBarClicked(int index) { Q_UNUSED(index) }
 
 void MainWindow::on_tabCharts_tabBarClicked(int index) {
   if (index == 0) {
-    initChart(get_tw(ui->tabWidget->currentIndex()));
+    initMonthChart();
   }
   if (index == 1) {
-    initChartTimeLine(get_tw(ui->tabWidget->currentIndex()));
+    initChartTimeLine(get_tw(ui->tabWidget->currentIndex()), true);
   }
 }
 
@@ -1113,4 +1159,91 @@ void MainWindow::on_actionView_App_Data_triggered() {
   mydlgNotes->setGeometry(0, 0, this->width(), this->height());
   mydlgNotes->setModal(true);
   mydlgNotes->show();
+}
+
+void MainWindow::on_btnFind_clicked() {
+  if (ui->frame_find->isHidden()) {
+    ui->frame_find->setHidden(false);
+    ui->btnPlus->setHidden(true);
+    ui->btnLess->setHidden(true);
+  } else {
+    ui->frame_find->setHidden(true);
+    ui->btnPlus->setHidden(false);
+    ui->btnLess->setHidden(false);
+  }
+}
+
+void MainWindow::goResults() {
+  if (loading) return;
+  QStringList listYear, listMonth, listDay;
+  bool isDay = false;
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    QString str0 = topItem->text(0);
+    QString y, m, d;
+    y = get_Year(str0);
+    m = get_Month(str0);
+    d = QString::number(get_Day(str0));
+    qDebug() << y << m << d;
+    if (y == ui->cboxYear->currentText()) {
+      if (m == ui->cboxMonth->currentText()) {
+        if (d == ui->cboxDay->currentText()) {
+          tw->setCurrentItem(topItem);
+          initChartTimeLine(tw, true);
+          isDay = true;
+          break;
+        }
+      }
+    }
+  }
+  if (!isDay) {
+    initChartTimeLine(tw, false);
+  }
+}
+
+void MainWindow::goResultsMonth() {
+  if (loading) return;
+  QStringList listMonth;
+  QString strY, strM;
+  strY = ui->cboxYear->currentText();
+  strM = ui->cboxMonth->currentText();
+  listMonth = get_MonthList(strY, strM);
+  initChart(strY, strM, listMonth);
+}
+
+QStringList MainWindow::get_MonthList(QString strY, QString strM) {
+  QStringList listMonth;
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    QString str0 = topItem->text(0);
+    QString y, m, d;
+    y = get_Year(str0);
+    m = get_Month(str0);
+    d = QString::number(get_Day(str0));
+
+    if (y == strY) {
+      if (m == strM) {
+        listMonth.append(d + "|" + topItem->text(1));  //记录天和总数
+      }
+    }
+  }
+  qDebug() << listMonth;
+  return listMonth;
+}
+
+void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
+  goResultsMonth();
+  goResults();
+}
+
+void MainWindow::on_cboxMonth_currentTextChanged(const QString& arg1) {
+  goResultsMonth();
+  goResults();
+}
+
+void MainWindow::on_cboxDay_currentTextChanged(const QString& arg1) {
+  goResultsMonth();
+  goResults();
 }

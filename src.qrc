@@ -8,5 +8,6 @@
         <file>src/AndroidManifest.xml</file>
         <file>src/down.png</file>
         <file>src/up.png</file>
+        <file>src/find.png</file>
     </qresource>
 </RCC>
