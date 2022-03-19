@@ -3,3 +3,4 @@
 * It is very simple, with a time to record the frequency of occurrence per day.
 * Data graph for the last 30 days.
 * 24-hour timeline
+* Android version >= 6.0
