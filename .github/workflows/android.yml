@@ -5,12 +5,15 @@ on:
       - '*.pro'
       - 'src/**'
       - '.github/workflows/android.yml'
-      - '*.*'
+      - '*.cpp'
+      - '*.h'
   pull_request:
     paths:
       - '*.pro'
       - 'src/**'
       - '.github/workflows/android.yml'  
+      - '*.cpp'
+      - '*.h'
 jobs:
   build:
     name: Build
