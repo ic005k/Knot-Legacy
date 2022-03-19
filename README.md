@@ -4,3 +4,7 @@
 * Data graph for the last 30 days.
 * 24-hour timeline
 * Android version >= 6.0
+
+---
+
+API:https://api.github.com/repos/ic005k/Xcounter/releases/latest
