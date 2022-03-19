@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget* parent)
       vsbarStyleSmall);
   mydlgRename = new dlgRename(this);
   mydlgSetTime = new dlgSetTime(this);
+  mydlgTodo = new dlgTodo(this);
 
   this->layout()->setMargin(0);
   this->layout()->setSpacing(0);
@@ -83,7 +84,7 @@ MainWindow::MainWindow(QWidget* parent)
   }
   ui->cboxMonth->clear();
   ui->cboxMonth->addItems(listMonth);
-  setComboBoxQss(ui->cboxYear, 4, 1, "#C0C0C0", "#4169E1");
+  // setComboBoxQss(ui->cboxYear, 4, 1, "#C0C0C0", "#4169E1");
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
 
   QDir dir;
@@ -101,7 +102,6 @@ MainWindow::MainWindow(QWidget* parent)
     iniFile = path + "/" + appName + ".ini";
     txtFile = path + "/" + appName + ".txt";
   }
-  qDebug() << iniFile;
 
   int s = 35;
   if (isIOS) {
@@ -110,6 +110,8 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnLess->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
+  ui->btnTodo->setFixedHeight(s + 10);
+  mydlgTodo->init_Items();
 
   init_Data();
 
@@ -1336,4 +1338,15 @@ QString MainWindow::setComboBoxQss(QComboBox* txt, int radius, int borderWidth,
   QString qss = list.join("");
   txt->setStyleSheet(qss);
   return qss;
+}
+
+void MainWindow::on_btnHide_clicked() { emit on_btnFind_clicked(); }
+
+void MainWindow::on_actionFind_triggered() { emit on_btnFind_clicked(); }
+
+void MainWindow::on_btnTodo_clicked() {
+  mydlgTodo->setFixedHeight(this->height());
+  mydlgTodo->setFixedWidth(this->width());
+  mydlgTodo->setModal(true);
+  mydlgTodo->show();
 }

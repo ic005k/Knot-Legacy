@@ -31,9 +31,11 @@
 #include "dlgnotes.h"
 #include "dlgrename.h"
 #include "dlgsettime.h"
+#include "dlgtodo.h"
 #include "ui_dlgnotes.h"
 #include "ui_dlgrename.h"
 #include "ui_dlgsettime.h"
+#include "ui_dlgtodo.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -52,6 +54,7 @@ class MainWindow : public QMainWindow {
   dlgNotes *mydlgNotes;
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
+  dlgTodo *mydlgTodo;
   QTreeWidgetItem *parentItem;
   QVector<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;
@@ -180,6 +183,12 @@ class MainWindow : public QMainWindow {
   void on_btnGo_clicked();
 
   void on_editFind_textChanged(const QString &arg1);
+
+  void on_btnHide_clicked();
+
+  void on_actionFind_triggered();
+
+  void on_btnTodo_clicked();
 
  private:
   int x, y, w, h;

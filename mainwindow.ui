@@ -440,6 +440,13 @@ QTabBar QToolButton::right-arrow {
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QToolButton" name="btnHide">
+           <property name="text">
+            <string>Hide</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item row="1" column="0">
@@ -660,6 +667,19 @@ QTabBar QToolButton::right-arrow {
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="btnTodo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>ToDo</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="btnLess">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -704,6 +724,7 @@ QTabBar QToolButton::right-arrow {
     <addaction name="actionAdd_Tab"/>
     <addaction name="actionDel_Tab"/>
     <addaction name="actionRename"/>
+    <addaction name="actionFind"/>
     <addaction name="actionExport_Data"/>
     <addaction name="actionNotes"/>
     <addaction name="actionImport_Data"/>
@@ -751,6 +772,11 @@ QTabBar QToolButton::right-arrow {
   <action name="actionView_App_Data">
    <property name="text">
     <string>View App Data</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>Find</string>
    </property>
   </action>
  </widget>

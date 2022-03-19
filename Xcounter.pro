@@ -29,6 +29,7 @@ SOURCES += \
     dlgnotes.cpp \
     dlgrename.cpp \
     dlgsettime.cpp \
+    dlgtodo.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -37,12 +38,14 @@ HEADERS += \
     dlgnotes.h \
     dlgrename.h \
     dlgsettime.h \
+    dlgtodo.h \
     mainwindow.h
 
 FORMS += \
     dlgnotes.ui \
     dlgrename.ui \
     dlgsettime.ui \
+    dlgtodo.ui \
     mainwindow.ui
 
 # Default rules for deployment.
