@@ -71,10 +71,10 @@ class MainWindow : public QMainWindow {
   QTreeWidget *get_tw(int tabIndex);
   QString vsbarStyle =
       "QScrollBar:vertical{"  //垂直滑块整体
-      "width:35px;"
+      "width:45px;"
       "background:#FFFFFF;"   //背景色
-      "padding-top:32px;"     //上预留位置（放置向上箭头）
-      "padding-bottom:32px;"  //下预留位置（放置向下箭头）
+      "padding-top:25px;"     //上预留位置（放置向上箭头）
+      "padding-bottom:25px;"  //下预留位置（放置向下箭头）
       "padding-left:3px;"     //左预留位置（美观）
       "padding-right:3px;"    //右预留位置（美观）
       "border-left:1px solid #d7d7d7;}"     //左分割线
@@ -85,9 +85,9 @@ class MainWindow : public QMainWindow {
       "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
       "background:#d0d0d0;}"                //滑块颜色
       "QScrollBar::add-line:vertical{"      //向下箭头样式
-      "background:url(:/src/down.png) center no-repeat;}"
+      "background:url(:/src/down.png) bottom no-repeat;}"
       "QScrollBar::sub-line:vertical{"  //向上箭头样式
-      "background:url(:/src/up.png) center no-repeat;}";
+      "background:url(:/src/up.png) top no-repeat;}";
   QString vsbarStyleSmall =
       "QScrollBar:vertical{"  //垂直滑块整体
       "width:10px;"

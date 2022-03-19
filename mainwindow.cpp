@@ -17,6 +17,10 @@ MainWindow::MainWindow(QWidget* parent)
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
 
   chart = new Chart(this, tr("History Data"));
+  ui->pLayout->setMargin(0);
+  ui->pLayout->setSpacing(0);
+  ui->pLayout->setContentsMargins(0, 0, 0, 0);
+  ui->pLayout->addWidget(chart);
   chartTimeLine = new Chart(this, tr("Time Line"));
   ui->glTimeLine->setMargin(0);
   ui->glTimeLine->setSpacing(0);
@@ -169,13 +173,12 @@ void MainWindow::del_Data(QTreeWidget* tw) {
     QString str = tw->topLevelItem(i)->text(0);
     if (str == strDate) {
       isNo = false;
-      QTreeWidgetItem* topItem = new QTreeWidgetItem;
-      topItem = tw->topLevelItem(i);
-      int child = topItem->childCount();
-      if (child > 0) {
+      QTreeWidgetItem* topItem = tw->topLevelItem(i);
+      int childCount = topItem->childCount();
+      if (childCount > 0) {
         QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-        QString str1 = topItem->child(child - 1)->text(0) + "  " +
-                       topItem->child(child - 1)->text(1);
+        QString str1 = topItem->child(childCount - 1)->text(0) + "  " +
+                       topItem->child(childCount - 1)->text(1);
         QMessageBox msgBox;
         msgBox.setText(str);
         msgBox.setInformativeText(tr("Less") + "\n" + str1);
@@ -188,9 +191,9 @@ void MainWindow::del_Data(QTreeWidget* tw) {
         if (msgBox.clickedButton() == btnCancel) {
           return;
         }
-        topItem->removeChild(topItem->child(child - 1));
+        topItem->removeChild(topItem->child(childCount - 1));
         topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
-        topItem->setText(1, QString::number(child - 1));
+        topItem->setText(1, QString::number(childCount - 1));
         break;
       }
     }
@@ -208,8 +211,14 @@ void MainWindow::del_Data(QTreeWidget* tw) {
     msgBox.exec();
     return;
   }
-  QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
-  tw->setCurrentItem(topItem);
+
+  int topCount = tw->topLevelItemCount();
+  if (topCount > 0) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
+    tw->setCurrentItem(topItem);
+
+  } else
+    return;
 
   saveData(tw, ui->tabWidget->currentIndex());
 }
@@ -326,11 +335,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
                getFileSize(QFile(iniFile).size(), 2));
   Reg.setValue("/" + appName + "/File", iniFile);
 
-  // Tab
   saveTab();
-
-  qDebug() << "ini file:" << iniFile;
-
   get_Today(tw);
   init_Stats(tw);
   initChart(tw);
@@ -445,18 +450,19 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
   b = a1 / 10;
   c = a1 % 10;
   ui->lblStats->clear();
-  if (ui->tabWidget->currentIndex() == 0)
+  /*if (ui->tabWidget->currentIndex() == 0)
     ui->lblStats->setText(tr("Total") + " : " + QString::number(a) + " " +
                           tr("Boxes") + " ( " + QString::number(b) + " " +
                           tr("Cartons") + " " + QString::number(c) + " " +
                           tr("Boxes") + " ) ");
-  else
-    ui->lblStats->setText(tr("Total") + " : " + QString::number(tatol));
+  else*/
+  ui->lblStats->setText(tr("Total") + " : " + QString::number(tatol));
 }
 
 void MainWindow::initChart(QTreeWidget* tw) {
   QList<int> intList;
   int count = tw->topLevelItemCount();
+  if (count == 0) return;
   for (int i = 0; i < count; i++) {
     intList.append(tw->topLevelItem(i)->text(1).toInt());
   }
@@ -469,10 +475,6 @@ void MainWindow::initChart(QTreeWidget* tw) {
   chart->installEventFilter(this);
   chart->setMouseTracking(true);
 
-  ui->pLayout->setMargin(0);
-  ui->pLayout->setSpacing(0);
-  ui->pLayout->setContentsMargins(0, 0, 0, 0);
-  ui->pLayout->addWidget(chart);
   QString currentDate = QDate::currentDate().toString();
   QString strM, strY;
   strM = get_Month(currentDate);
@@ -523,19 +525,18 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw) {
   if (topCount > 0) {
     tw->setFocus();
     if (!tw->currentIndex().isValid()) {
-      QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
+      QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
       tw->setCurrentItem(topItem);
     }
   }
 
   QTreeWidgetItem* item = tw->currentItem();
-  bool child = false;
-  int childCount = item->childCount();
-  if (childCount == 0 && item->parent()->childCount() > 0) {
+  bool child;
+  int childCount;
+  if (item->parent() == NULL)
+    child = false;
+  else
     child = true;
-    // chartTimeLine->buildChart(pointlist);
-    // return;
-  }
   if (child) {
     childCount = item->parent()->childCount();
     parentItem = item->parent();
@@ -558,6 +559,8 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw) {
       str = item->parent()->child(i)->text(0);
     else
       str = item->child(i)->text(0);
+    QStringList l0 = str.split(".");
+    if (l0.count() == 2) str = l0.at(1);
     QStringList list = str.split(":");
     int t = 0;
     if (list.count() == 3) {
@@ -627,8 +630,8 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
     QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
     btnOk->setFocus();
-    msgBox.exec();
-    return;
+    // msgBox.exec();
+    // return;
   }
   QString str1 = ui->tabWidget->tabText(index);
   QMessageBox msgBox;
@@ -651,6 +654,13 @@ void MainWindow::on_actionDel_Tab_triggered() {
     tw->setObjectName("tab" + QString::number(i + 1));
     saveData(tw, i);
   }
+
+  int TabCount = ui->tabWidget->tabBar()->count();
+  if (TabCount == 0) {
+    ui->tabWidget->addTab(init_TreeWidget("tab1"),
+                          tr("Counter") + " " + QString::number(1));
+    ui->tabWidget->setTabToolTip(0, "");
+  }
 }
 
 QTreeWidget* MainWindow::init_TreeWidget(QString name) {
@@ -666,6 +676,9 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
   tw->setAlternatingRowColors(true);
   tw->setFrameShape(QFrame::NoFrame);
+  tw->installEventFilter(this);
+  tw->setMouseTracking(true);
+  tw->setDragEnabled(false);
   connect(tw, &QTreeWidget::itemClicked, this, &MainWindow::on_twItemClicked);
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
@@ -705,6 +718,11 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
   int childCount = item->parent()->childCount();
   for (int i = 0; i < childCount; i++) {
     QString txt = item->parent()->child(i)->text(0);
+    QStringList list0 = txt.split(".");
+    if (list0.count() == 2) {
+      txt = list0.at(1);
+      txt = txt.trimmed();
+    }
     QString txt1 = item->parent()->child(i)->text(1);
     keys.append(txt + "|" + txt1);
   }
@@ -714,7 +732,7 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
     QTreeWidgetItem* childItem = item->parent()->child(i);
     QString str = keys.at(i);
     list = str.split("|");
-    childItem->setText(0, list.at(0));
+    childItem->setText(0, QString::number(i + 1) + ". " + list.at(0));
     childItem->setText(1, list.at(1));
   }
 }
@@ -724,6 +742,8 @@ void MainWindow::on_twItemDoubleClicked() {
   QTreeWidgetItem* item = tw->currentItem();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     QString t = item->text(0);
+    QStringList l0 = t.split(".");
+    if (l0.count() == 2) t = l0.at(1);
     QStringList list = t.split(":");
     QString sh, sm, ss;
     if (list.count() == 3) {
@@ -847,6 +867,8 @@ void MainWindow::on_btnNotes_clicked() { emit on_actionNotes_triggered(); }
 
 bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
 
   if (evn->type() == QEvent::ToolTip) {
     QToolTip::hideText();
@@ -854,7 +876,13 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     return true;
   }
 
-  QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
+  if (watch == tw) {
+    if (event->type() == QEvent::MouseButtonPress) {
+    }
+    qDebug() << "tw mousePress";
+    // tw->setCurrentItem(tw->currentItem());
+  }
+
   if (watch == ui->tabWidget->tabBar()) {
     if (event->type() == QEvent::MouseButtonPress) {
     }
@@ -878,7 +906,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
   }
 
-  if (watch != ui->tabWidget->tabBar()) {
+  if (watch != ui->tabWidget->tabBar() && watch != tw) {
     static int press_x;  //鼠标按下时的位置
     static int press_y;
     static int relea_x;  //鼠标释放时的位置
@@ -890,13 +918,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     {
       press_x = event->globalX();
       press_y = event->globalY();
-
-      QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
       x = 0;
       y = 0;
       w = tw->width();
       h = tw->height();
-
       qDebug() << "Press:" << press_x << press_y;
     }
 
@@ -904,7 +929,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     {
       relea_x = event->globalX();
       relea_y = event->globalY();
-
       qDebug() << "Release:" << relea_x << relea_y;
     }
 
@@ -1014,6 +1038,18 @@ void MainWindow::on_actionImport_Data_triggered() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("XcounterBak"), "",
                                           tr("Data Files (*.ini)"));
+
+  QString txt = loadText(fileName);
+  if (!txt.contains(appName)) {
+    QMessageBox msgBox;
+    msgBox.setText(appName);
+    msgBox.setInformativeText(tr("Invalid data file."));
+
+    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    btnOk->setFocus();
+    msgBox.exec();
+    return;
+  }
 
   if (!fileName.isNull()) {
     if (QFile(iniFile).exists()) QFile(iniFile).remove();
