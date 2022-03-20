@@ -26,6 +26,7 @@ class dlgTodo : public QDialog {
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
+  void closeEvent(QCloseEvent *event) override;
  private slots:
   void on_btnBack_clicked();
 

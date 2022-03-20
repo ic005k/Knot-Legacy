@@ -14,10 +14,7 @@ dlgTodo::~dlgTodo() { delete ui; }
 
 void dlgTodo::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
-void dlgTodo::on_btnBack_clicked() {
-  saveTodo();
-  close();
-}
+void dlgTodo::on_btnBack_clicked() { close(); }
 
 void dlgTodo::saveTodo() {
   QSettings Reg(iniFile, QSettings::IniFormat);
@@ -47,6 +44,7 @@ void dlgTodo::on_btnAdd_clicked() {
     }
   }
   add_Item(str);
+  ui->lineEdit->setText("");
 }
 
 void dlgTodo::add_Item(QString str) {
@@ -68,6 +66,7 @@ void dlgTodo::add_Item(QString str) {
     // pushButton->setFixedWidth(50);
     pushButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     pushButton->setText(tr("Done"));
+    // pushButton->setText(tr("-"));
     connect(pushButton, &QToolButton::clicked, [=]() {
       ui->listWidget->setCurrentItem(pItem);
       int row = ui->listWidget->currentRow();
@@ -99,4 +98,9 @@ void dlgTodo::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
 
 void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {
   if (editItem != NULL) ui->listWidget->closePersistentEditor(editItem);
+}
+
+void dlgTodo::closeEvent(QCloseEvent* event) {
+  Q_UNUSED(event);
+  saveTodo();
 }

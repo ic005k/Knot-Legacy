@@ -1172,10 +1172,12 @@ void MainWindow::on_btnFind_clicked() {
     ui->frame_find->setHidden(false);
     ui->btnPlus->setHidden(true);
     ui->btnLess->setHidden(true);
+    ui->btnTodo->setHidden(true);
   } else {
     ui->frame_find->setHidden(true);
     ui->btnPlus->setHidden(false);
     ui->btnLess->setHidden(false);
+    ui->btnTodo->setHidden(false);
   }
 }
 
