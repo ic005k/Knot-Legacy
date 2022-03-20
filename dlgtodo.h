@@ -20,13 +20,14 @@ class dlgTodo : public QDialog {
 
   void init_Items();
 
-  void add_Item(QString);
+  void add_Item(QString, bool);
   void saveTodo();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   void closeEvent(QCloseEvent *event) override;
+  bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:
   void on_btnBack_clicked();
 
@@ -37,6 +38,8 @@ class dlgTodo : public QDialog {
   void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
   void on_listWidget_currentRowChanged(int currentRow);
+
+  void on_btnModi_clicked();
 
  private:
   QListWidgetItem *editItem;

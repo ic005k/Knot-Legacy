@@ -9,5 +9,7 @@
         <file>src/down.png</file>
         <file>src/up.png</file>
         <file>src/find.png</file>
+        <file>src/done.png</file>
+        <file>src/modi.png</file>
     </qresource>
 </RCC>

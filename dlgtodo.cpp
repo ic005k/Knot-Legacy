@@ -3,9 +3,10 @@
 #include "mainwindow.h"
 #include "ui_dlgtodo.h"
 extern QString iniFile;
-
+extern bool loading;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
+
   QScroller::grabGesture(ui->listWidget, QScroller::TouchGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
 }
@@ -21,7 +22,11 @@ void dlgTodo::saveTodo() {
   int count = ui->listWidget->count();
   Reg.setValue("/Todo/Count", count);
   for (int i = 0; i < count; i++) {
-    QString str = ui->listWidget->item(i)->text();
+    QListWidgetItem* item = ui->listWidget->item(i);
+    QWidget* w = ui->listWidget->itemWidget(item);
+    // (QToolButton(0x92815320), QHBoxLayout(0x92811710), QLabel(0x928156e0))
+    QLabel* lbl = (QLabel*)w->children().at(2);
+    QString str = lbl->text();
     Reg.setValue("/Todo/Item" + QString::number(i), str);
   }
 }
@@ -31,7 +36,7 @@ void dlgTodo::init_Items() {
   int count = Reg.value("/Todo/Count").toInt();
   for (int i = 0; i < count; i++) {
     QString str = Reg.value("/Todo/Item" + QString::number(i)).toString();
-    add_Item(str);
+    add_Item(str, false);
   }
 }
 
@@ -43,40 +48,51 @@ void dlgTodo::on_btnAdd_clicked() {
       return;
     }
   }
-  add_Item(str);
+  add_Item(str, true);
   ui->lineEdit->setText("");
 }
 
-void dlgTodo::add_Item(QString str) {
+void dlgTodo::add_Item(QString str, bool insert) {
   if (str != "") {
     int count = ui->listWidget->count();
     QListWidgetItem* pItem = new QListWidgetItem;
     // pItem->setSizeHint(QSize(this->width() - 15, 45));
-    pItem->setText(str);
     // pItem->setCheckState(Qt::Unchecked);
-    ui->listWidget->addItem(pItem);
+    pItem->setText("");
+    if (insert)
+      ui->listWidget->insertItem(0, pItem);
+    else
+      ui->listWidget->addItem(pItem);
 
     QWidget* w = new QWidget;
-
+    w->installEventFilter(this);
     QHBoxLayout* layout = new QHBoxLayout;
     layout->setMargin(0);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     QToolButton* pushButton = new QToolButton(w);
-    // pushButton->setFixedWidth(50);
-    pushButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    pushButton->setText(tr("Done"));
-    // pushButton->setText(tr("-"));
+    pushButton->setIconSize(QSize(22, 22));
+    pushButton->setIcon(QIcon(":/src/done.png"));
     connect(pushButton, &QToolButton::clicked, [=]() {
       ui->listWidget->setCurrentItem(pItem);
       int row = ui->listWidget->currentRow();
       ui->listWidget->takeItem(row);
     });
-    // QCheckBox* checkBox = new QCheckBox(w);
-    //  layout->addWidget(checkBox);
+
     QWidget* spacer = new QWidget(this);
+    // connect(spacer, &QListWidget::itemDoubleClicked,
+    //         [=]() { qDebug() << pItem->text(); });
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    layout->addWidget(spacer);
+    spacer->setMouseTracking(true);
+    spacer->installEventFilter(this);
+
+    QLabel* label = new QLabel;
+    //让label自适应text大小
+    label->adjustSize();
+    //设置label换行
+    label->setWordWrap(true);
+    label->setText(str);
+    layout->addWidget(label);
     layout->addWidget(pushButton);
     w->setLayout(layout);
 
@@ -88,12 +104,18 @@ void dlgTodo::add_Item(QString str) {
 
 void dlgTodo::on_listWidget_itemClicked(QListWidgetItem* item) {
   Q_UNUSED(item);
+  QWidget* w = ui->listWidget->itemWidget(item);
+  // (QToolButton(0x92815320), QHBoxLayout(0x92811710), QLabel(0x928156e0))
+  QLabel* lbl = (QLabel*)w->children().at(2);
+  QString str = lbl->text();
+  ui->lineEdit->setText(str);
 }
 
 void dlgTodo::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
   Q_UNUSED(item);
   // ui->listWidget->openPersistentEditor(item);
   // editItem = item;
+  qDebug() << "testing";
 }
 
 void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {
@@ -103,4 +125,28 @@ void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {
 void dlgTodo::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   saveTodo();
+}
+
+bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
+  if (loading) return QWidget::eventFilter(watch, evn);
+
+  // if (watch == spacer) {
+  // if (evn->type() == QEvent::MouseButtonDblClick) {
+  // return true;
+  //}
+  // return false;
+  //}
+  return QWidget::eventFilter(watch, evn);
+}
+
+void dlgTodo::on_btnModi_clicked() {
+  if (ui->listWidget->count() <= 0) return;
+  QListWidgetItem* item = ui->listWidget->currentItem();
+  // ui->listWidget->openPersistentEditor(item);
+  // editItem = item;
+  QWidget* w = ui->listWidget->itemWidget(item);
+  // (QToolButton(0x92815320), QHBoxLayout(0x92811710), QLabel(0x928156e0))
+  QLabel* lbl = (QLabel*)w->children().at(2);
+  lbl->setText(ui->lineEdit->text().trimmed());
+  ui->lineEdit->setText("");
 }
