@@ -747,6 +747,20 @@ void MainWindow::on_twItemClicked() {
   if (item->childCount() > 0) pItem = item;
   if (item->childCount() == 0 && item->parent()->childCount() > 0)
     pItem = item->parent();
+  if (item->parent() != NULL) {
+    QString str = item->text(1);
+    QString str1;
+    if (str.split("|").count() == 2) {
+      str1 = str.split("|").at(1);
+      str1 = str1.trimmed();
+      if (str1.length() > 0)
+        ui->lblStats->setText(str1);
+      else
+        init_Stats(tw);
+    } else
+      ui->lblStats->setText(str);
+  } else
+    init_Stats(tw);
   if (parentItem == pItem) return;
   initChartTimeLine(tw, true);
 }
@@ -785,11 +799,14 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
     QString str = keys.at(i);
     list = str.split("|");
     if (list.count() == 3) {
-      childItem->setText(0, QString::number(i + 1) + ". " + list.at(0));
-      childItem->setText(1, list.at(1) + " | " + list.at(2));
+      childItem->setText(0,
+                         QString::number(i + 1) + ". " + list.at(0).trimmed());
+      childItem->setText(1,
+                         list.at(1).trimmed() + " | " + list.at(2).trimmed());
     } else {
-      childItem->setText(0, QString::number(i + 1) + ". " + list.at(0));
-      childItem->setText(1, list.at(1));
+      childItem->setText(0,
+                         QString::number(i + 1) + ". " + list.at(0).trimmed());
+      childItem->setText(1, list.at(1).trimmed());
     }
   }
 }
@@ -814,8 +831,11 @@ void MainWindow::on_twItemDoubleClicked() {
     mydlgSetTime->ui->timeEdit->setTime(time);
     QStringList l1 = item->text(1).split("|");
     if (l1.count() == 2) {
-      mydlgSetTime->ui->editAmount->setText(l1.at(0));
-      mydlgSetTime->ui->editDesc->setText(l1.at(1));
+      mydlgSetTime->ui->editAmount->setText(l1.at(0).trimmed());
+      mydlgSetTime->ui->editDesc->setText(l1.at(1).trimmed());
+    } else {
+      mydlgSetTime->ui->editAmount->setText("");
+      mydlgSetTime->ui->editDesc->setText(item->text(1).trimmed());
     }
 
     mydlgSetTime->setFixedHeight(this->height());

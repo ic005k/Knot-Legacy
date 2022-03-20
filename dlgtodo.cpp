@@ -58,7 +58,6 @@ void dlgTodo::on_btnAdd_clicked() {
 void dlgTodo::add_Item(QString str, bool insert) {
   if (str == "") return;
 
-  int count = ui->listWidget->count();
   QListWidgetItem* pItem = new QListWidgetItem;
   // pItem->setSizeHint(QSize(this->width() - 15, 45));
   // pItem->setCheckState(Qt::Unchecked);
@@ -74,7 +73,7 @@ void dlgTodo::add_Item(QString str, bool insert) {
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
   QToolButton* btn = new QToolButton(this);
-  btn->setIconSize(QSize(25, 25));
+  btn->setIconSize(QSize(30, 30));
   btn->setIcon(QIcon(":/src/done.png"));
   connect(btn, &QToolButton::clicked, [=]() {
     ui->listWidget->setCurrentItem(pItem);
@@ -90,6 +89,7 @@ void dlgTodo::add_Item(QString str, bool insert) {
   // spacer->installEventFilter(this);
 
   QLabel* label = new QLabel(this);
+  label->installEventFilter(this);
   //让label自适应text大小
   label->adjustSize();
   //设置label换行
@@ -134,16 +134,18 @@ bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
 
   // if (watch == spacer) {
-  // if (evn->type() == QEvent::MouseButtonDblClick) {
-  // return true;
-  //}
+  if (evn->type() == QEvent::MouseButtonDblClick) {
+    qDebug() << "mouse dbclick";
+    // return true;
+  }
   // return false;
   //}
   return QWidget::eventFilter(watch, evn);
 }
 
 void dlgTodo::on_btnModi_clicked() {
-  if (ui->listWidget->count() <= 0) return;
+  if (ui->listWidget->count() <= 0 || ui->lineEdit->text().trimmed() == "")
+    return;
   QListWidgetItem* item = ui->listWidget->currentItem();
   // ui->listWidget->openPersistentEditor(item);
   // editItem = item;
