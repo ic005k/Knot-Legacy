@@ -15,16 +15,92 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
-    <widget class="QListWidget" name="listWidget"/>
+    <widget class="QListWidget" name="listWidget">
+     <property name="styleSheet">
+      <string notr="true">QListWidget::indicator{
+		width:25;
+		height:25;
+		right: 5px;
+}
+
+QListView {
+    outline: none;
+}
+
+#listWidget::item {
+    background-color: #ffffff;
+    color: #000000;
+    border: transparent;
+    border-bottom: 1px solid #dbdbdb;
+    padding: 8px;
+}
+
+#listWidget::item:hover {
+    background-color: #f5f5f5;
+}
+
+#listWidget::item:selected {
+    border-left: 5px solid #777777;
+	
+}
+
+/*下面是另一个控件的暗黑风格*/
+#listWidget2::item {
+    background-color: #393d49;
+    color: #ffffff;
+    border: transparent;
+    padding: 8px;
+}
+
+#listWidget2::item:hover {
+    background-color: #4e5465;
+}
+
+#listWidget2::item:selected {
+    border-left: 5px solid #009688;
+	
+}
+
+</string>
+     </property>
+     <property name="autoScroll">
+      <bool>false</bool>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="spacing">
+      <number>2</number>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0">
+    <widget class="QToolButton" name="btnBack">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>55</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Back</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLineEdit" name="lineEdit">
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>50</height>
+         <height>45</height>
         </size>
        </property>
       </widget>
@@ -33,8 +109,8 @@
       <widget class="QToolButton" name="btnAdd">
        <property name="minimumSize">
         <size>
-         <width>50</width>
-         <height>50</height>
+         <width>45</width>
+         <height>45</height>
         </size>
        </property>
        <property name="text">
@@ -53,25 +129,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="0" column="0">
-    <widget class="QToolButton" name="btnBack">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>55</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Back</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

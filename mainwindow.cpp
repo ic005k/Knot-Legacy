@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgRename = new dlgRename(this);
   mydlgSetTime = new dlgSetTime(this);
   mydlgTodo = new dlgTodo(this);
+  mydlgTodo->setStyleSheet(vsbarStyleSmall);
 
   this->layout()->setMargin(0);
   this->layout()->setSpacing(0);
@@ -110,8 +111,12 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnLess->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
-  ui->btnTodo->setFixedHeight(s + 10);
+  ui->btnTodo->setFixedHeight(s + 6);
   mydlgTodo->init_Items();
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  ui->cboxYear->setCurrentText(Reg.value("/YMD/Y").toString());
+  ui->cboxMonth->setCurrentText(Reg.value("/YMD/M").toString());
+  ui->cboxDay->setCurrentText(Reg.value("/YMD/D").toString());
 
   init_Data();
 
@@ -372,6 +377,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   Reg.setValue("/" + appName + "/File", iniFile);
 
   saveTab();
+  mydlgTodo->saveTodo();
   get_Today(tw);
   init_Stats(tw);
   initMonthChart();
@@ -1236,18 +1242,24 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
 void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
   goResultsMonth();
   goResults();
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  Reg.setValue("/YMD/Y", ui->cboxYear->currentText());
 }
 
 void MainWindow::on_cboxMonth_currentTextChanged(const QString& arg1) {
   Q_UNUSED(arg1);
   goResultsMonth();
   goResults();
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  Reg.setValue("/YMD/M", ui->cboxMonth->currentText());
 }
 
 void MainWindow::on_cboxDay_currentTextChanged(const QString& arg1) {
   Q_UNUSED(arg1);
   goResultsMonth();
   goResults();
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  Reg.setValue("/YMD/D", ui->cboxDay->currentText());
 }
 
 void MainWindow::on_btnGo_clicked() {

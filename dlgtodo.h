@@ -1,6 +1,7 @@
 #ifndef DLGTODO_H
 #define DLGTODO_H
 
+#include <QCheckBox>
 #include <QDialog>
 #include <QKeyEvent>
 #include <QListWidgetItem>
@@ -19,6 +20,9 @@ class dlgTodo : public QDialog {
 
   void init_Items();
 
+  void add_Item(QString);
+  void saveTodo();
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
@@ -29,7 +33,12 @@ class dlgTodo : public QDialog {
 
   void on_listWidget_itemClicked(QListWidgetItem *item);
 
+  void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+
+  void on_listWidget_currentRowChanged(int currentRow);
+
  private:
+  QListWidgetItem *editItem;
 };
 
 #endif  // DLGTODO_H
