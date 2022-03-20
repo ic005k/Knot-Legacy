@@ -5,6 +5,7 @@
 * 24-hour timeline
 * Android version >= 6.0
 * User interface language: English and Simplified Chinese.
+* To-do list.
 
 ---
 
