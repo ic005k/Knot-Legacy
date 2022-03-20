@@ -74,7 +74,7 @@ class MainWindow : public QMainWindow {
   bool isSlide = false;
   void init_Data();
   void set_Time();
-  void add_Data(QTreeWidget *, QString, QString);
+  void add_Data(QTreeWidget *, QString, QString, QString);
   void del_Data(QTreeWidget *);
   QTreeWidget *get_tw(int tabIndex);
   QString vsbarStyle =

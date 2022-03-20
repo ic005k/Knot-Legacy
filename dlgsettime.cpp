@@ -23,7 +23,8 @@ void dlgSetTime::on_btnOk_clicked() {
     mw_one->set_Time();
   } else {
     mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
-                     ui->timeEdit->text(), ui->lineEdit->text().trimmed());
+                     ui->timeEdit->text(), ui->editAmount->text().trimmed(),
+                     ui->editDesc->text().trimmed());
   }
   close();
 }
@@ -58,7 +59,8 @@ void dlgSetTime::on_btnDel_clicked() {
 
 void dlgSetTime::set_Amount(QString Number) {
   QString str = ui->editAmount->text().trimmed();
-  if (str.split(".").count() == 2) {
+  if (str == "0.00") ui->editAmount->setText("");
+  if (str.split(".").count() == 2 && str != "0.00") {
     QString str0 = str.split(".").at(1);
     if (str0.length() == 2) return;
   }

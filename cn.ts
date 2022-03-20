@@ -320,8 +320,8 @@
     <message>
         <location filename="mainwindow.cpp" line="146"/>
         <location filename="mainwindow.cpp" line="157"/>
-        <location filename="mainwindow.cpp" line="667"/>
-        <location filename="mainwindow.cpp" line="711"/>
+        <location filename="mainwindow.cpp" line="668"/>
+        <location filename="mainwindow.cpp" line="712"/>
         <source>Counter</source>
         <translation>计数器</translation>
     </message>
@@ -331,16 +331,16 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="227"/>
-        <location filename="mainwindow.cpp" line="691"/>
+        <location filename="mainwindow.cpp" line="692"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="229"/>
         <location filename="mainwindow.cpp" line="250"/>
-        <location filename="mainwindow.cpp" line="681"/>
-        <location filename="mainwindow.cpp" line="692"/>
-        <location filename="mainwindow.cpp" line="1100"/>
+        <location filename="mainwindow.cpp" line="682"/>
+        <location filename="mainwindow.cpp" line="693"/>
+        <location filename="mainwindow.cpp" line="1112"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -350,14 +350,14 @@
         <translation>只允许减少当天的记录。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="452"/>
+        <location filename="mainwindow.cpp" line="453"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="509"/>
-        <location filename="mainwindow.cpp" line="602"/>
+        <location filename="mainwindow.cpp" line="510"/>
+        <location filename="mainwindow.cpp" line="603"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
@@ -374,79 +374,79 @@
         <translation type="vanished">天数（近30天）</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="532"/>
+        <location filename="mainwindow.cpp" line="533"/>
         <source>Today</source>
         <translation>今天</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="533"/>
-        <location filename="mainwindow.cpp" line="603"/>
+        <location filename="mainwindow.cpp" line="534"/>
+        <location filename="mainwindow.cpp" line="604"/>
         <source>Freq</source>
         <translation>频次</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="602"/>
+        <location filename="mainwindow.cpp" line="603"/>
         <source>24 hours</source>
         <translation>24 小时</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="679"/>
+        <location filename="mainwindow.cpp" line="680"/>
         <source>The first tab is not allowed to be deleted.</source>
         <translation>第一个标签页不允许删除。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="689"/>
+        <location filename="mainwindow.cpp" line="690"/>
         <source>Whether to remove</source>
         <translation>是否删除</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="723"/>
+        <location filename="mainwindow.cpp" line="724"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="724"/>
+        <location filename="mainwindow.cpp" line="725"/>
         <source>Frequency</source>
         <translation>频次</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="806"/>
+        <location filename="mainwindow.cpp" line="813"/>
         <source>Modify</source>
         <translation>修改</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="885"/>
+        <location filename="mainwindow.cpp" line="897"/>
         <source>Notes :</source>
         <translation>备注：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1079"/>
         <location filename="mainwindow.cpp" line="1091"/>
+        <location filename="mainwindow.cpp" line="1103"/>
         <source>XcounterBak</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1079"/>
+        <location filename="mainwindow.cpp" line="1091"/>
         <source>Data Files(*.ini)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1092"/>
+        <location filename="mainwindow.cpp" line="1104"/>
         <source>Data Files (*.ini)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1098"/>
+        <location filename="mainwindow.cpp" line="1110"/>
         <source>Invalid data file.</source>
         <translation>无效的数据文件。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1164"/>
+        <location filename="mainwindow.cpp" line="1176"/>
         <source>App Data :</source>
         <translation>App数据：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1273"/>
+        <location filename="mainwindow.cpp" line="1287"/>
         <source>Search Results : </source>
         <translation>搜索结果：</translation>
     </message>
@@ -454,47 +454,47 @@
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="mainwindow.cpp" line="328"/>
+        <location filename="mainwindow.cpp" line="329"/>
         <source>bytes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="329"/>
+        <location filename="mainwindow.cpp" line="330"/>
         <source>KiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="330"/>
+        <location filename="mainwindow.cpp" line="331"/>
         <source>MiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="331"/>
+        <location filename="mainwindow.cpp" line="332"/>
         <source>GiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="332"/>
+        <location filename="mainwindow.cpp" line="333"/>
         <source>TiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="333"/>
+        <location filename="mainwindow.cpp" line="334"/>
         <source>PiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="334"/>
+        <location filename="mainwindow.cpp" line="335"/>
         <source>EiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="335"/>
+        <location filename="mainwindow.cpp" line="336"/>
         <source>ZiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="336"/>
+        <location filename="mainwindow.cpp" line="337"/>
         <source>YiB</source>
         <translation></translation>
     </message>
@@ -549,34 +549,99 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="131"/>
+        <location filename="dlgsettime.ui" line="37"/>
+        <source>7</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="50"/>
+        <source>8</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="63"/>
+        <source>9</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="80"/>
+        <source>4</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="93"/>
+        <source>5</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="106"/>
+        <source>6</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="123"/>
+        <source>1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="136"/>
+        <source>2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="149"/>
+        <source>3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="172"/>
+        <source>0</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="185"/>
+        <source>.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="198"/>
+        <source>&lt;-</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="212"/>
         <source>Description :</source>
         <oldsource>Description</oldsource>
         <translation>描述：</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="103"/>
+        <location filename="dlgsettime.ui" line="253"/>
+        <source>Amount : </source>
+        <translation>金额：</translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="341"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="122"/>
+        <location filename="dlgsettime.ui" line="360"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="82"/>
+        <location filename="dlgsettime.ui" line="288"/>
         <source>Time :</source>
         <oldsource>Time</oldsource>
         <translation>时间：</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="75"/>
+        <location filename="dlgsettime.ui" line="231"/>
         <source>Add</source>
         <translation>增加一次</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="45"/>
+        <location filename="dlgsettime.ui" line="320"/>
         <source>HH:mm:ss</source>
         <translation></translation>
     </message>
@@ -589,19 +654,23 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="92"/>
+        <location filename="dlgtodo.ui" line="61"/>
+        <source>...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgtodo.ui" line="155"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="117"/>
+        <location filename="dlgtodo.ui" line="38"/>
         <source>+</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="70"/>
         <source>Done</source>
-        <translation>完成</translation>
+        <translation type="vanished">完成</translation>
     </message>
 </context>
 </TS>

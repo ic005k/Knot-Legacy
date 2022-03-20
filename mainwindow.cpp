@@ -112,12 +112,12 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
   ui->btnTodo->setFixedHeight(s + 6);
-  mydlgTodo->init_Items();
   QSettings Reg(iniFile, QSettings::IniFormat);
   ui->cboxYear->setCurrentText(Reg.value("/YMD/Y").toString());
   ui->cboxMonth->setCurrentText(Reg.value("/YMD/M").toString());
   ui->cboxDay->setCurrentText(Reg.value("/YMD/D").toString());
 
+  mydlgTodo->init_Items();
   init_Data();
 
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
@@ -169,8 +169,8 @@ void MainWindow::timerUpdate() {
 
 MainWindow::~MainWindow() { delete ui; }
 
-void MainWindow::add_Data(QTreeWidget* tw, QString strTime,
-                          QString strDescription) {
+void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
+                          QString strDesc) {
   bool isYes = false;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
@@ -181,7 +181,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime,
       topItem = tw->topLevelItem(i);
       QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
       item11->setText(0, strTime);
-      item11->setText(1, strDescription);
+      item11->setText(1, strAmount + " | " + strDesc);
       int child = topItem->childCount();
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
       topItem->setText(1, QString::number(child));
@@ -195,7 +195,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime,
     tw->addTopLevelItem(topItem);
     QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
     item11->setText(0, strTime);
-    item11->setText(1, strDescription);
+    item11->setText(1, strAmount + " | " + strDesc);
     int child = topItem->childCount();
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     topItem->setText(1, QString::number(child));
@@ -271,7 +271,8 @@ void MainWindow::on_btnPlus_clicked() {
   mydlgSetTime->setModal(true);
   mydlgSetTime->ui->lblTitle->setText(tr("Add"));
   mydlgSetTime->ui->timeEdit->setTime(QTime::currentTime());
-  mydlgSetTime->ui->lineEdit->setText("");
+  mydlgSetTime->ui->editDesc->setText("");
+  mydlgSetTime->ui->editAmount->setText("");
   mydlgSetTime->show();
 }
 
@@ -756,7 +757,8 @@ void MainWindow::set_Time() {
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     QString time = mydlgSetTime->ui->timeEdit->text();
     item->setText(0, time);
-    item->setText(1, mydlgSetTime->ui->lineEdit->text().trimmed());
+    item->setText(1, mydlgSetTime->ui->editAmount->text().trimmed() + " | " +
+                         mydlgSetTime->ui->editDesc->text().trimmed());
 
     sort_childItem(item);
     saveData(tw, ui->tabWidget->currentIndex());
@@ -782,8 +784,13 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
     QTreeWidgetItem* childItem = item->parent()->child(i);
     QString str = keys.at(i);
     list = str.split("|");
-    childItem->setText(0, QString::number(i + 1) + ". " + list.at(0));
-    childItem->setText(1, list.at(1));
+    if (list.count() == 3) {
+      childItem->setText(0, QString::number(i + 1) + ". " + list.at(0));
+      childItem->setText(1, list.at(1) + " | " + list.at(2));
+    } else {
+      childItem->setText(0, QString::number(i + 1) + ". " + list.at(0));
+      childItem->setText(1, list.at(1));
+    }
   }
 }
 
@@ -805,7 +812,12 @@ void MainWindow::on_twItemDoubleClicked() {
     time.setHMS(sh.toInt(), sm.toInt(), ss.toInt());
     mydlgSetTime->ui->lblTitle->setText(tr("Modify"));
     mydlgSetTime->ui->timeEdit->setTime(time);
-    mydlgSetTime->ui->lineEdit->setText(item->text(1));
+    QStringList l1 = item->text(1).split("|");
+    if (l1.count() == 2) {
+      mydlgSetTime->ui->editAmount->setText(l1.at(0));
+      mydlgSetTime->ui->editDesc->setText(l1.at(1));
+    }
+
     mydlgSetTime->setFixedHeight(this->height());
     mydlgSetTime->setFixedWidth(this->width());
     mydlgSetTime->setModal(true);
@@ -1362,5 +1374,6 @@ void MainWindow::on_btnTodo_clicked() {
   mydlgTodo->setFixedHeight(this->height());
   mydlgTodo->setFixedWidth(this->width());
   mydlgTodo->setModal(true);
+
   mydlgTodo->show();
 }

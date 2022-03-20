@@ -24,8 +24,7 @@ void dlgTodo::saveTodo() {
   for (int i = 0; i < count; i++) {
     QListWidgetItem* item = ui->listWidget->item(i);
     QWidget* w = ui->listWidget->itemWidget(item);
-    // (QToolButton(0x92815320), QHBoxLayout(0x92811710), QLabel(0x928156e0))
-    QLabel* lbl = (QLabel*)w->children().at(2);
+    QLabel* lbl = (QLabel*)w->children().at(1);
     QString str = lbl->text();
     Reg.setValue("/Todo/Item" + QString::number(i), str);
   }
@@ -43,7 +42,11 @@ void dlgTodo::init_Items() {
 void dlgTodo::on_btnAdd_clicked() {
   QString str = ui->lineEdit->text().trimmed();
   for (int i = 0; i < ui->listWidget->count(); i++) {
-    if (ui->listWidget->item(i)->text() == str) {
+    QListWidgetItem* item = ui->listWidget->item(i);
+    QWidget* w = ui->listWidget->itemWidget(item);
+    // (QHBoxLayout(0x915ca030), QLabel(0x90885060), QToolButton(0x8fdf4200))
+    QLabel* lbl = (QLabel*)w->children().at(1);
+    if (lbl->text() == str) {
       ui->listWidget->setCurrentRow(i);
       return;
     }
@@ -53,60 +56,60 @@ void dlgTodo::on_btnAdd_clicked() {
 }
 
 void dlgTodo::add_Item(QString str, bool insert) {
-  if (str != "") {
-    int count = ui->listWidget->count();
-    QListWidgetItem* pItem = new QListWidgetItem;
-    // pItem->setSizeHint(QSize(this->width() - 15, 45));
-    // pItem->setCheckState(Qt::Unchecked);
-    pItem->setText("");
-    if (insert)
-      ui->listWidget->insertItem(0, pItem);
-    else
-      ui->listWidget->addItem(pItem);
+  if (str == "") return;
 
-    QWidget* w = new QWidget;
-    w->installEventFilter(this);
-    QHBoxLayout* layout = new QHBoxLayout;
-    layout->setMargin(0);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    QToolButton* pushButton = new QToolButton(w);
-    pushButton->setIconSize(QSize(22, 22));
-    pushButton->setIcon(QIcon(":/src/done.png"));
-    connect(pushButton, &QToolButton::clicked, [=]() {
-      ui->listWidget->setCurrentItem(pItem);
-      int row = ui->listWidget->currentRow();
-      ui->listWidget->takeItem(row);
-    });
+  int count = ui->listWidget->count();
+  QListWidgetItem* pItem = new QListWidgetItem;
+  // pItem->setSizeHint(QSize(this->width() - 15, 45));
+  // pItem->setCheckState(Qt::Unchecked);
+  pItem->setText("");
+  if (insert)
+    ui->listWidget->insertItem(0, pItem);
+  else
+    ui->listWidget->addItem(pItem);
 
-    QWidget* spacer = new QWidget(this);
-    // connect(spacer, &QListWidget::itemDoubleClicked,
-    //         [=]() { qDebug() << pItem->text(); });
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    spacer->setMouseTracking(true);
-    spacer->installEventFilter(this);
+  QWidget* w = new QWidget;
+  QHBoxLayout* layout = new QHBoxLayout;
+  layout->setMargin(0);
+  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setSpacing(0);
+  QToolButton* btn = new QToolButton(this);
+  btn->setIconSize(QSize(25, 25));
+  btn->setIcon(QIcon(":/src/done.png"));
+  connect(btn, &QToolButton::clicked, [=]() {
+    ui->listWidget->setCurrentItem(pItem);
+    int row = ui->listWidget->currentRow();
+    ui->listWidget->takeItem(row);
+  });
 
-    QLabel* label = new QLabel;
-    //让label自适应text大小
-    label->adjustSize();
-    //设置label换行
-    label->setWordWrap(true);
-    label->setText(str);
-    layout->addWidget(label);
-    layout->addWidget(pushButton);
-    w->setLayout(layout);
+  // QWidget* spacer = new QWidget(this);
+  //  connect(spacer, &QListWidget::itemDoubleClicked,
+  //          [=]() { qDebug() << pItem->text(); });
+  // spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  // spacer->setMouseTracking(true);
+  // spacer->installEventFilter(this);
 
-    ui->listWidget->setItemWidget(pItem, w);
+  QLabel* label = new QLabel(this);
+  //让label自适应text大小
+  label->adjustSize();
+  //设置label换行
+  label->setWordWrap(true);
+  label->setText(str);
+  layout->addWidget(label);
+  layout->addWidget(btn);
+  w->setLayout(layout);
 
-    ui->listWidget->setCurrentRow(count);
-  }
+  ui->listWidget->setItemWidget(pItem, w);
+  // ui->listWidget->setCurrentRow(count);
 }
 
 void dlgTodo::on_listWidget_itemClicked(QListWidgetItem* item) {
   Q_UNUSED(item);
   QWidget* w = ui->listWidget->itemWidget(item);
-  // (QToolButton(0x92815320), QHBoxLayout(0x92811710), QLabel(0x928156e0))
-  QLabel* lbl = (QLabel*)w->children().at(2);
+  qDebug() << w->children();
+  // (QHBoxLayout(0x915ca030), QLabel(0x90885060), QToolButton(0x8fdf4200))
+
+  QLabel* lbl = (QLabel*)w->children().at(1);
   QString str = lbl->text();
   ui->lineEdit->setText(str);
 }
@@ -119,7 +122,7 @@ void dlgTodo::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
 }
 
 void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {
-  if (editItem != NULL) ui->listWidget->closePersistentEditor(editItem);
+  // if (editItem != NULL) ui->listWidget->closePersistentEditor(editItem);
 }
 
 void dlgTodo::closeEvent(QCloseEvent* event) {
@@ -145,8 +148,8 @@ void dlgTodo::on_btnModi_clicked() {
   // ui->listWidget->openPersistentEditor(item);
   // editItem = item;
   QWidget* w = ui->listWidget->itemWidget(item);
-  // (QToolButton(0x92815320), QHBoxLayout(0x92811710), QLabel(0x928156e0))
-  QLabel* lbl = (QLabel*)w->children().at(2);
+  // (QHBoxLayout(0x915ca030), QLabel(0x90885060), QToolButton(0x8fdf4200))
+  QLabel* lbl = (QLabel*)w->children().at(1);
   lbl->setText(ui->lineEdit->text().trimmed());
   ui->lineEdit->setText("");
 }
