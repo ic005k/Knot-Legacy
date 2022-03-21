@@ -9,10 +9,9 @@ extern bool loading;
 dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
   this->installEventFilter(this);
+
   QScroller::grabGesture(ui->textEdit, QScroller::TouchGesture);
   QScroller::grabGesture(ui->textBrowser, QScroller::TouchGesture);
-  // ui->textBrowser->verticalScrollBar()->setHidden(true);
-  // ui->textEdit->verticalScrollBar()->setHidden(true);
 }
 
 dlgNotes::~dlgNotes() { delete ui; }

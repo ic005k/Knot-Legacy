@@ -7,6 +7,7 @@ extern bool loading;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
 
+  ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::TouchGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
 }
@@ -73,12 +74,15 @@ void dlgTodo::add_Item(QString str, bool insert) {
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
   QToolButton* btn = new QToolButton(this);
+  btn->setStyleSheet("border:none");
   btn->setIconSize(QSize(30, 30));
   btn->setIcon(QIcon(":/src/done.png"));
   connect(btn, &QToolButton::clicked, [=]() {
     ui->listWidget->setCurrentItem(pItem);
     int row = ui->listWidget->currentRow();
     ui->listWidget->takeItem(row);
+    int index = ui->listWidget->currentRow();
+    add_ItemSn(index);
   });
 
   // QWidget* spacer = new QWidget(this);
@@ -100,7 +104,23 @@ void dlgTodo::add_Item(QString str, bool insert) {
   w->setLayout(layout);
 
   ui->listWidget->setItemWidget(pItem, w);
-  // ui->listWidget->setCurrentRow(count);
+
+  add_ItemSn(0);
+}
+
+void dlgTodo::add_ItemSn(int index) {
+  for (int i = 0; i < ui->listWidget->count(); i++) {
+    QListWidgetItem* item = ui->listWidget->item(i);
+    QWidget* w = ui->listWidget->itemWidget(item);
+    QLabel* lbl = (QLabel*)w->children().at(1);
+    QString txt = lbl->text();
+    QStringList list0 = txt.split(".");
+    if (list0.count() == 2) {
+      txt = list0.at(1);
+    }
+    lbl->setText(QString::number(i + 1) + ". " + txt.trimmed());
+  }
+  ui->listWidget->setCurrentRow(index);
 }
 
 void dlgTodo::on_listWidget_itemClicked(QListWidgetItem* item) {

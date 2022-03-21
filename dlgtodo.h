@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <QKeyEvent>
 #include <QListWidgetItem>
+#include <QToolButton>
 
 namespace Ui {
 class dlgTodo;
@@ -43,6 +44,7 @@ class dlgTodo : public QDialog {
 
  private:
   QListWidgetItem *editItem;
+  void add_ItemSn(int index);
 };
 
 #endif  // DLGTODO_H
