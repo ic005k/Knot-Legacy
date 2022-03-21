@@ -132,7 +132,8 @@ class MainWindow : public QMainWindow {
 
  protected:
   void closeEvent(QCloseEvent *event);
-  bool eventFilter(QObject *watch, QEvent *evn);
+   bool eventFilter(QObject *watch, QEvent *evn);
+   void paintEvent(QPaintEvent *event);
  private slots:
 
   void timerUpdate();

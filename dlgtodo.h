@@ -25,6 +25,11 @@ class dlgTodo : public QDialog {
 
   void add_Item(QString, bool);
   void saveTodo();
+  QString styleDark =
+      "#listWidget::item {background-color: #393d49;color: #ffffff;border: "
+      "transparent;padding: 8px; height: 65;}"
+      "#listWidget::item:hover {background-color: #4e5465;}"
+      "#listWidget::item:selected {border-left: 5px solid #009688;}";
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -53,5 +58,4 @@ class dlgTodo : public QDialog {
   QTextEdit *editModi;
   bool isModi = false;
 };
-
 #endif  // DLGTODO_H

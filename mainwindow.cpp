@@ -10,7 +10,7 @@ QString txtFile = "assets:/data/Xcount.txt";
 MainWindow* mw_one;
 bool loading = false;
 extern bool isAndroid, isIOS, zh_cn;
-int fontSize;
+int fontSize, red;
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -42,6 +42,15 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgSetTime = new dlgSetTime(this);
   mydlgTodo = new dlgTodo(this);
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
+  // 获取背景色
+  QPalette pal = this->palette();
+  QBrush brush = pal.window();
+  red = brush.color().red();
+  if (red < 55)
+    mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
+  else
+    mydlgTodo->ui->listWidget->setStyleSheet(
+        mydlgTodo->ui->listWidget->styleSheet());
 
   this->layout()->setMargin(0);
   this->layout()->setSpacing(0);
@@ -1526,4 +1535,21 @@ void MainWindow::on_rbAmount_clicked() {
   initMonthChart();
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   initChartTimeLine(tw, true);
+}
+
+void MainWindow::paintEvent(QPaintEvent* event) {
+  Q_UNUSED(event);
+
+  //获取背景色
+  QPalette pal = ui->btnFind->palette();
+  QBrush brush = pal.window();
+  int c_red = brush.color().red();
+  if (c_red != red) {
+    red = c_red;
+    if (red < 55)
+      mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
+    else
+      mydlgTodo->ui->listWidget->setStyleSheet(
+          mydlgTodo->ui->listWidget->styleSheet());
+  }
 }
