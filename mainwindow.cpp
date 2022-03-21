@@ -114,8 +114,8 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
-  ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
-  // ui->btnTodo->setFixedHeight(s + 6);
+  // ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
+  ui->btnTodo->setFixedHeight(s + 6);
   QSettings Reg(iniFile, QSettings::IniFormat);
   ui->cboxYear->setCurrentText(Reg.value("/YMD/Y").toString());
   ui->cboxMonth->setCurrentText(Reg.value("/YMD/M").toString());
