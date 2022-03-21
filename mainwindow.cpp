@@ -552,6 +552,10 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
   QList<double> doubleList;
   QList<QPointF> pointlist;
   int count = listMonth.count();
+  if (count == 0) {
+    chart->buildChart(pointlist);
+    return;
+  }
   for (int i = 0; i < count; i++) {
     QString str = listMonth.at(i);
     QString strN = str.split("|").at(1);
@@ -639,7 +643,11 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
   //设置离散点数据
   QList<QPointF> pointlist;
   int topCount = tw->topLevelItemCount();
-  if (topCount == 0 || !isDay) {
+  if (topCount == 0) {
+    chartTimeLine->buildChart(pointlist);
+    return;
+  }
+  if (!isDay) {
     chartTimeLine->buildChart(pointlist);
     return;
   }
