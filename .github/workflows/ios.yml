@@ -56,7 +56,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           #name:  ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }} # .zip
-          name:  ${{ env.targetName }}_${{ env.VERSION }}
+          name:  ${{ env.targetName }}-${{ env.VERSION }}
           path: bin/release/${{ env.targetName }}.app
           
           
@@ -69,7 +69,7 @@ jobs:
           file: bin/release/${{ env.targetName }}.dmg
           
           #asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.dmg
-          asset_name: ${{ env.targetName }}_${{ env.VERSION }}.dmg
+          asset_name: ${{ env.targetName }}-${{ env.VERSION }}.dmg
           
           tag: ${{ github.ref }}
           overwrite: true    
