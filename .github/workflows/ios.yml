@@ -57,7 +57,7 @@ jobs:
         with:
           #name:  ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }} # .zip
           name:  ${{ env.targetName }}_${{ env.VERSION }}.zip
-          path: bin/release/${{ env.targetName }}.zip
+          path: bin/release/${{ env.targetName }}.app
           
           
       # tag 上传Release
