@@ -46,11 +46,13 @@ MainWindow::MainWindow(QWidget* parent)
   QPalette pal = this->palette();
   QBrush brush = pal.window();
   red = brush.color().red();
-  if (red < 55)
+  if (red < 55) {
     mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
-  else
+
+  } else {
     mydlgTodo->ui->listWidget->setStyleSheet(
         mydlgTodo->ui->listWidget->styleSheet());
+  }
 
   this->layout()->setMargin(0);
   this->layout()->setSpacing(0);
@@ -594,7 +596,7 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
     //设置坐标系
     chart->setAxis(strM + "  " + strY + "    " + tr("Today") + ": " +
                        QString::number(today),
-                   0, 31, 31, tr("Freq"), 0, max + 2, 5);
+                   1, 31, 31, tr("Freq"), 0, max + 2, 5);
   }
   if (ui->rbAmount->isChecked()) {
     max = 98.00;
@@ -602,7 +604,7 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
     //设置坐标系
     chart->setAxis(strM + "  " + strY + "    " + tr("Today") + ": " +
                        QString::number(today),
-                   0, 31, 31, tr("Amount"), 0, max + 20, 5);
+                   1, 31, 31, tr("Amount"), 0, max + 20, 5);
   }
 
   //设置离散点数据
@@ -1551,5 +1553,17 @@ void MainWindow::paintEvent(QPaintEvent* event) {
     else
       mydlgTodo->ui->listWidget->setStyleSheet(
           mydlgTodo->ui->listWidget->styleSheet());
+  }
+}
+
+void MainWindow::on_btnZoom_clicked() {
+  if (ui->btnZoom->text() == tr("Zoom")) {
+    ui->frame_tab->setHidden(true);
+    ui->btnZoom->setText(tr("Normal"));
+  } else {
+    if (ui->btnZoom->text() == tr("Normal")) {
+      ui->frame_tab->setHidden(false);
+      ui->btnZoom->setText(tr("Zoom"));
+    }
   }
 }

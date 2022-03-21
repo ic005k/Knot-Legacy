@@ -62,7 +62,7 @@ void dlgSetTime::set_Amount(QString Number) {
   if (str == "0.00") ui->editAmount->setText("");
   if (str.split(".").count() == 2 && str != "0.00") {
     QString str0 = str.split(".").at(1);
-    if (str0.length() == 2) return;
+    if (str0.length() == 3) return;
   }
   ui->editAmount->setText(str + Number);
 }

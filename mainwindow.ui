@@ -707,6 +707,13 @@ QTabBar QToolButton::right-arrow {
         </property>
        </spacer>
       </item>
+      <item>
+       <widget class="QToolButton" name="btnZoom">
+        <property name="text">
+         <string>Zoom</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="6" column="0">

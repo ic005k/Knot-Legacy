@@ -132,8 +132,8 @@ class MainWindow : public QMainWindow {
 
  protected:
   void closeEvent(QCloseEvent *event);
-   bool eventFilter(QObject *watch, QEvent *evn);
-   void paintEvent(QPaintEvent *event);
+  bool eventFilter(QObject *watch, QEvent *evn);
+  void paintEvent(QPaintEvent *event);
  private slots:
 
   void timerUpdate();
@@ -195,6 +195,8 @@ class MainWindow : public QMainWindow {
   void on_rbFreq_clicked();
 
   void on_rbAmount_clicked();
+
+  void on_btnZoom_clicked();
 
  private:
   int x, y, w, h;
