@@ -17,6 +17,7 @@
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 #include <QPushButton>
+#include <QRandomGenerator>
 #include <QScatterSeries>
 #include <QScrollBar>
 #include <QScroller>
@@ -189,6 +190,10 @@ class MainWindow : public QMainWindow {
   void on_actionFind_triggered();
 
   void on_btnTodo_clicked();
+
+  void on_rbFreq_clicked();
+
+  void on_rbAmount_clicked();
 
  private:
   int x, y, w, h;

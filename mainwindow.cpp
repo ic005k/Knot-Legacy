@@ -548,13 +548,25 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
 }
 
 void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
+  // listMonth Format:1.Day  2.Freq + $Amount
   QList<double> doubleList;
   QList<QPointF> pointlist;
   int count = listMonth.count();
   for (int i = 0; i < count; i++) {
     QString str = listMonth.at(i);
     QString strN = str.split("|").at(1);
-    doubleList.append(strN.toDouble());
+    if (strN.contains("$")) {
+      QStringList list = strN.split("$");
+      if (list.count() == 2) {
+        if (ui->rbFreq->isChecked()) {
+          doubleList.append(list.at(0).toInt());
+        }
+        if (ui->rbAmount->isChecked()) {
+          doubleList.append(list.at(1).toDouble());
+        }
+      }
+    } else
+      doubleList.append(strN.toDouble());
   }
   double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
   qDebug() << "In table Max:" << maxValue;
@@ -573,7 +585,7 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
     //设置坐标系
     chart->setAxis(strM + "  " + strY + "    " + tr("Today") + ": " +
                        QString::number(today),
-                   0, 31, 31, tr("Amount"), 0, max + 2, 5);
+                   0, 31, 31, tr("Amount"), 0, max + 20, 5);
   }
 
   //设置离散点数据
@@ -583,9 +595,10 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
       QPointF(9, 2),  QPointF(10, 1),
   };
   pointlist.clear();
-  qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+
+  QRandomGenerator rg(QTime(0, 0, 0).secsTo(QTime::currentTime()));
   for (int i = 0; i < 30; i++) {
-    int a = qrand() % (20);
+    int a = rg() % (20);
     QPointF pf(i, a);
     pointlist.append(pf);
   }
@@ -593,17 +606,20 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
   pointlist.clear();
 
   double x, y;
-  QString strD, strN, strAmount;
+  QString strD, strN;
   for (int i = 0; i < count; i++) {
     QString str = listMonth.at(i);
     QStringList list = str.split("|");
     strD = list.at(0);
-    strN = list.at(1);
     x = strD.toInt();
+
+    strN = list.at(1);
     if (strN.contains("$")) {
       QStringList list1 = strN.split("$");
-      if (ui->rbFreq->isChecked()) y = list1.at(0).toInt();
-      if (ui->rbAmount->isChecked()) y = list.at(1).toDouble();
+      if (list1.count() == 2) {
+        if (ui->rbFreq->isChecked()) y = list1.at(0).toInt();
+        if (ui->rbAmount->isChecked()) y = list1.at(1).toDouble();
+      }
     } else {
       if (ui->rbFreq->isChecked()) y = strN.toInt();
       if (ui->rbAmount->isChecked()) {
@@ -651,19 +667,41 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
   }
 
   //设置坐标系
-  int y0 = 3;
-  if (childCount > y0) y0 = childCount;
-  chartTimeLine->setAxis(
-      tr("24 hours") + "  " + tr("Total") + " : " + QString::number(childCount),
-      0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
+  if (ui->rbFreq->isChecked()) {
+    int y0 = 3;
+    if (childCount > y0) y0 = childCount;
+    chartTimeLine->setAxis(tr("24 hours") + "  " + tr("Total") + " : " +
+                               QString::number(childCount),
+                           0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
+  }
+  QList<double> dList;
+  if (ui->rbAmount->isChecked()) {
+    double y0 = 100;
+    for (int i = 0; i < parentItem->childCount(); i++) {
+      QStringList list = parentItem->child(i)->text(1).split("|");
+      if (list.count() == 2) {
+        y0 = list.at(0).toDouble();
+        dList.append(y0);
+      } else
+        dList.append(0);
+    }
+    y0 = *std::max_element(dList.begin(), dList.end());
+
+    chartTimeLine->setAxis(tr("24 hours") + "  " + tr("Total") + " : " +
+                               QString::number(childCount),
+                           0, 24, 1, tr("Amount"), 0, y0 + 10, 1);
+  }
 
   double x, y;
   for (int i = 0; i < childCount; i++) {
-    QString str;
-    if (child)
+    QString str, str1;
+    if (child) {
       str = item->parent()->child(i)->text(0);
-    else
+      str1 = item->parent()->child(i)->text(1);
+    } else {
       str = item->child(i)->text(0);
+      str1 = item->child(i)->text(1);
+    }
     QStringList l0 = str.split(".");
     if (l0.count() == 2) str = l0.at(1);
     QStringList list = str.split(":");
@@ -679,7 +717,10 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
       t = a1 * 3600 + b1 * 60 + c.toInt();
     }
     x = (double)t / 3600;
-    y = i + 1;
+    if (ui->rbFreq->isChecked()) y = i + 1;
+    if (ui->rbAmount->isChecked()) {
+      y = dList.at(i);
+    }
     QPointF pf(x, y);
     pointlist.append(pf);
   }
@@ -827,6 +868,16 @@ void MainWindow::set_Time() {
     item->setText(0, time);
     item->setText(1, mydlgSetTime->ui->editAmount->text().trimmed() + " | " +
                          mydlgSetTime->ui->editDesc->text().trimmed());
+    // Amount
+    int child = item->parent()->childCount();
+    double amount = 0;
+    for (int m = 0; m < child; m++) {
+      QStringList list = item->parent()->child(m)->text(1).split("|");
+      QString str = list.at(0);
+      amount = amount + str.toDouble();
+    }
+    item->parent()->setText(
+        1, QString::number(child) + "    $" + QString::number(amount));
 
     sort_childItem(item);
     saveData(tw, ui->tabWidget->currentIndex());
@@ -996,8 +1047,8 @@ QString MainWindow::init_Objname() {
   QString mm = QString::number(QTime::currentTime().minute());
   QString s = QString::number(QTime::currentTime().second());
   QString CurrentDateTime = y + m + d + h + mm + s;
-  qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-  int a = qrand() % (1000);
+  QRandomGenerator rg(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+  int a = rg() % (1000);
   return CurrentDateTime + QString::number(a);
 }
 
@@ -1328,6 +1379,7 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
 }
 
 void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
+  Q_UNUSED(arg1);
   goResultsMonth();
   goResults();
   QSettings Reg(iniFile, QSettings::IniFormat);
@@ -1440,9 +1492,9 @@ QString MainWindow::setComboBoxQss(QComboBox* txt, int radius, int borderWidth,
   return qss;
 }
 
-void MainWindow::on_btnHide_clicked() { emit on_btnFind_clicked(); }
+void MainWindow::on_btnHide_clicked() { on_btnFind_clicked(); }
 
-void MainWindow::on_actionFind_triggered() { emit on_btnFind_clicked(); }
+void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 
 void MainWindow::on_btnTodo_clicked() {
   mydlgTodo->setFixedHeight(this->height());
@@ -1451,3 +1503,7 @@ void MainWindow::on_btnTodo_clicked() {
 
   mydlgTodo->show();
 }
+
+void MainWindow::on_rbFreq_clicked() { initMonthChart(); }
+
+void MainWindow::on_rbAmount_clicked() { initMonthChart(); }
