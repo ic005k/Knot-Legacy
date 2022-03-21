@@ -4,6 +4,7 @@
 #include "ui_dlgtodo.h"
 extern QString iniFile;
 extern bool loading;
+extern int fontSize;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
 
@@ -55,13 +56,11 @@ void dlgTodo::on_btnAdd_clicked() {
   }
   add_Item(str, true);
   ui->lineEdit->setText("");
+  ui->listWidget->verticalScrollBar()->setSliderPosition(0);
 }
 
 void dlgTodo::add_Item(QString str, bool insert) {
   if (str == "") return;
-  QFont font;
-  int point = ui->lineEdit->font().pointSize();
-  font.setPointSize(point);
   QListWidgetItem* pItem = new QListWidgetItem;
   // pItem->setSizeHint(QSize(this->width() - 15, 45));
   // pItem->setCheckState(Qt::Unchecked);
@@ -88,14 +87,9 @@ void dlgTodo::add_Item(QString str, bool insert) {
     add_ItemSn(index);
   });
 
-  // QWidget* spacer = new QWidget(this);
-  //  connect(spacer, &QListWidget::itemDoubleClicked,
-  //          [=]() { qDebug() << pItem->text(); });
-  // spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  // spacer->setMouseTracking(true);
-  // spacer->installEventFilter(this);
-
   QLabel* label = new QLabel(this);
+  QFont font;
+  font.setPixelSize(fontSize);
   label->setFont(font);
   label->installEventFilter(this);
   //让label自适应text大小
@@ -156,6 +150,7 @@ void dlgTodo::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
 }
 
 void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {
+  Q_UNUSED(currentRow);
   // if (editItem != NULL) ui->listWidget->closePersistentEditor(editItem);
 }
 

@@ -11,5 +11,6 @@
         <file>src/find.png</file>
         <file>src/done.png</file>
         <file>src/modi.png</file>
+        <file>src/todo.png</file>
     </qresource>
 </RCC>

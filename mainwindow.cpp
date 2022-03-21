@@ -10,11 +10,13 @@ QString txtFile = "assets:/data/Xcount.txt";
 MainWindow* mw_one;
 bool loading = false;
 extern bool isAndroid, isIOS, zh_cn;
+int fontSize;
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   QString ver = "1.0.01";
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
+  fontSize = this->font().pixelSize();
 
   chart = new Chart(this, tr("History Data"));
   ui->pLayout->setMargin(0);
@@ -109,9 +111,11 @@ MainWindow::MainWindow(QWidget* parent)
   }
   ui->btnPlus->setIconSize(QSize(s, s));
   ui->btnLess->setIconSize(QSize(s, s));
+  ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
-  ui->btnTodo->setFixedHeight(s + 6);
+  ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
+  // ui->btnTodo->setFixedHeight(s + 6);
   QSettings Reg(iniFile, QSettings::IniFormat);
   ui->cboxYear->setCurrentText(Reg.value("/YMD/Y").toString());
   ui->cboxMonth->setCurrentText(Reg.value("/YMD/M").toString());
@@ -1512,6 +1516,14 @@ void MainWindow::on_btnTodo_clicked() {
   mydlgTodo->show();
 }
 
-void MainWindow::on_rbFreq_clicked() { initMonthChart(); }
+void MainWindow::on_rbFreq_clicked() {
+  initMonthChart();
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  initChartTimeLine(tw, true);
+}
 
-void MainWindow::on_rbAmount_clicked() { initMonthChart(); }
+void MainWindow::on_rbAmount_clicked() {
+  initMonthChart();
+  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  initChartTimeLine(tw, true);
+}
