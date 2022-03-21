@@ -51,14 +51,14 @@ jobs:
           # 拷贝依赖
           #cp -f Info.plist bin/release/${targetName}.app/Contents/Info.plist
           
-          macdeployqt bin/release/${targetName}.app -qmldir=. -verbose=1 -dmg
+          #macdeployqt bin/release/${targetName}.app -qmldir=. -verbose=1 -dmg
           
       # 上传artifacts          
       - uses: actions/upload-artifact@v2
         with:
           #name:  ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }} # .zip
-          name:  ${{ env.targetName }}_${{ env.VERSION }}
-          path: bin/release/${{ env.targetName }}.dmg
+          name:  ${{ env.targetName }}_${{ env.VERSION }}.zip
+          path: bin/release/${{ env.targetName }}.zip
           
           
       # tag 上传Release
