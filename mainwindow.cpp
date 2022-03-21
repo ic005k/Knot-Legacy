@@ -184,7 +184,16 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       item11->setText(1, strAmount + " | " + strDesc);
       int child = topItem->childCount();
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
-      topItem->setText(1, QString::number(child));
+
+      // Amount
+      double amount = 0;
+      for (int m = 0; m < child; m++) {
+        QStringList list = topItem->child(m)->text(1).split("|");
+        QString str = list.at(0);
+        amount = amount + str.toDouble();
+      }
+      topItem->setText(
+          1, QString::number(child) + "    $" + QString::number(amount));
 
       break;
     }
@@ -198,12 +207,21 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
     item11->setText(1, strAmount + " | " + strDesc);
     int child = topItem->childCount();
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
-    topItem->setText(1, QString::number(child));
+    // Amount
+    double amount = 0;
+    for (int m = 0; m < child; m++) {
+      QStringList list = topItem->child(m)->text(1).split("|");
+      QString str = list.at(0);
+      amount = amount + str.toDouble();
+    }
+    topItem->setText(
+        1, QString::number(child) + "    $" + QString::number(amount));
   }
 
   QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
   tw->setCurrentItem(topItem);
   sort_childItem(topItem->child(0));
+  tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
 
   saveData(tw, ui->tabWidget->currentIndex());
 }
@@ -234,7 +252,16 @@ void MainWindow::del_Data(QTreeWidget* tw) {
         }
         topItem->removeChild(topItem->child(childCount - 1));
         topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
-        topItem->setText(1, QString::number(childCount - 1));
+
+        // Amount
+        double amount = 0;
+        for (int m = 0; m < topItem->childCount(); m++) {
+          QStringList list = topItem->child(m)->text(1).split("|");
+          QString str = list.at(0);
+          amount = amount + str.toDouble();
+        }
+        topItem->setText(1, QString::number(childCount - 1) + "    $" +
+                                QString::number(amount));
         break;
       }
     }
@@ -411,7 +438,9 @@ void MainWindow::readData(QTreeWidget* tw) {
       tw->addTopLevelItem(topItem);
 
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
-      topItem->setText(1, QString::number(childCount));
+      topItem->setText(
+          1, Reg.value("/" + name + "/" + QString::number(i + 1) + "-topFreq")
+                 .toString());
 
       for (int j = 0; j < childCount; j++) {
         QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
@@ -490,9 +519,16 @@ void MainWindow::closeEvent(QCloseEvent* event) {
 void MainWindow::init_Stats(QTreeWidget* tw) {
   int count = tw->topLevelItemCount();
   int tatol = 0;
+  double amount = 0;
   for (int i = 0; i < count; i++) {
-    int n = tw->topLevelItem(i)->text(1).toInt();
-    tatol = tatol + n;
+    QStringList list = tw->topLevelItem(i)->text(1).split("$");
+    if (list.count() == 2) {
+      tatol = tatol + list.at(0).toInt();
+      amount = amount + list.at(1).toDouble();
+    } else {
+      int n = tw->topLevelItem(i)->text(1).toInt();
+      tatol = tatol + n;
+    }
   }
 
   double a = (double)tatol / 20;
@@ -507,31 +543,39 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
                           tr("Cartons") + " " + QString::number(c) + " " +
                           tr("Boxes") + " ) ");
   else*/
-  ui->lblStats->setText(tr("Total") + " : " + QString::number(tatol));
+  ui->lblStats->setText(tr("Total") + " : " + QString::number(tatol) + "    $" +
+                        QString::number(amount));
 }
 
 void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
-  QList<int> intList;
+  QList<double> doubleList;
   QList<QPointF> pointlist;
   int count = listMonth.count();
   for (int i = 0; i < count; i++) {
     QString str = listMonth.at(i);
     QString strN = str.split("|").at(1);
-    intList.append(strN.toInt());
+    doubleList.append(strN.toDouble());
   }
-  int maxValue = *std::max_element(intList.begin(), intList.end());
-  int max = 18;
+  double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
   qDebug() << "In table Max:" << maxValue;
-  if (maxValue > 20) max = maxValue;
+  double max;
+  if (ui->rbFreq->isChecked()) {
+    max = 18;
+    if (maxValue > 20) max = maxValue;
+    //设置坐标系
+    chart->setAxis(strM + "  " + strY + "    " + tr("Today") + ": " +
+                       QString::number(today),
+                   0, 31, 31, tr("Freq"), 0, max + 2, 5);
+  }
+  if (ui->rbAmount->isChecked()) {
+    max = 98.00;
+    if (maxValue > max) max = maxValue;
+    //设置坐标系
+    chart->setAxis(strM + "  " + strY + "    " + tr("Today") + ": " +
+                       QString::number(today),
+                   0, 31, 31, tr("Amount"), 0, max + 2, 5);
+  }
 
-  //设置表头
-  chart->installEventFilter(this);
-  chart->setMouseTracking(true);
-
-  //设置坐标系
-  chart->setAxis(
-      strM + "  " + strY + "    " + tr("Today") + ": " + QString::number(today),
-      0, 31, 31, tr("Freq"), 0, max + 2, 5);
   //设置离散点数据
   pointlist = {
       QPointF(0, 8),  QPointF(1, 2),  QPointF(3, 4), QPointF(4, 8),
@@ -548,14 +592,24 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
 
   pointlist.clear();
 
-  int x, y;
-  QString strD, strN;
+  double x, y;
+  QString strD, strN, strAmount;
   for (int i = 0; i < count; i++) {
     QString str = listMonth.at(i);
-    strD = str.split("|").at(0);
-    strN = str.split("|").at(1);
+    QStringList list = str.split("|");
+    strD = list.at(0);
+    strN = list.at(1);
     x = strD.toInt();
-    y = strN.toInt();
+    if (strN.contains("$")) {
+      QStringList list1 = strN.split("$");
+      if (ui->rbFreq->isChecked()) y = list1.at(0).toInt();
+      if (ui->rbAmount->isChecked()) y = list.at(1).toDouble();
+    } else {
+      if (ui->rbFreq->isChecked()) y = strN.toInt();
+      if (ui->rbAmount->isChecked()) {
+        y = 0;
+      }
+    }
 
     QPointF pf(x, y);
     pointlist.append(pf);

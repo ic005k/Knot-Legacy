@@ -4,7 +4,9 @@
 #include <QCheckBox>
 #include <QDialog>
 #include <QKeyEvent>
+#include <QLabel>
 #include <QListWidgetItem>
+#include <QTextEdit>
 #include <QToolButton>
 
 namespace Ui {
@@ -42,9 +44,14 @@ class dlgTodo : public QDialog {
 
   void on_btnModi_clicked();
 
+  void on_btnModify_clicked();
+
  private:
   QListWidgetItem *editItem;
   void add_ItemSn(int index);
+  QLabel *lblModi;
+  QTextEdit *editModi;
+  bool isModi = false;
 };
 
 #endif  // DLGTODO_H

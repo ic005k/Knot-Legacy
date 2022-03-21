@@ -10,6 +10,7 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::TouchGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
+  ui->btnModi->setHidden(true);
 }
 
 dlgTodo::~dlgTodo() { delete ui; }
@@ -58,7 +59,9 @@ void dlgTodo::on_btnAdd_clicked() {
 
 void dlgTodo::add_Item(QString str, bool insert) {
   if (str == "") return;
-
+  QFont font;
+  int point = ui->lineEdit->font().pointSize();
+  font.setPointSize(point);
   QListWidgetItem* pItem = new QListWidgetItem;
   // pItem->setSizeHint(QSize(this->width() - 15, 45));
   // pItem->setCheckState(Qt::Unchecked);
@@ -93,13 +96,23 @@ void dlgTodo::add_Item(QString str, bool insert) {
   // spacer->installEventFilter(this);
 
   QLabel* label = new QLabel(this);
+  label->setFont(font);
   label->installEventFilter(this);
   //让label自适应text大小
   label->adjustSize();
   //设置label换行
   label->setWordWrap(true);
   label->setText(str);
+
+  QTextEdit* edit = new QTextEdit(this);
+  QScroller::grabGesture(edit, QScroller::TouchGesture);
+  edit->setPlainText(str);
+  edit->setHidden(true);
+  connect(edit, &QTextEdit::textChanged,
+          [=]() { label->setText(edit->toPlainText().trimmed()); });
+
   layout->addWidget(label);
+  layout->addWidget(edit);
   layout->addWidget(btn);
   w->setLayout(layout);
 
@@ -124,14 +137,15 @@ void dlgTodo::add_ItemSn(int index) {
 }
 
 void dlgTodo::on_listWidget_itemClicked(QListWidgetItem* item) {
-  Q_UNUSED(item);
   QWidget* w = ui->listWidget->itemWidget(item);
   qDebug() << w->children();
-  // (QHBoxLayout(0x915ca030), QLabel(0x90885060), QToolButton(0x8fdf4200))
 
-  QLabel* lbl = (QLabel*)w->children().at(1);
-  QString str = lbl->text();
-  ui->lineEdit->setText(str);
+  if (isModi) {
+    lblModi->setHidden(false);
+    editModi->setHidden(true);
+    ui->btnModify->setText(tr("Modify"));
+    isModi = false;
+  }
 }
 
 void dlgTodo::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
@@ -174,4 +188,25 @@ void dlgTodo::on_btnModi_clicked() {
   QLabel* lbl = (QLabel*)w->children().at(1);
   lbl->setText(ui->lineEdit->text().trimmed());
   ui->lineEdit->setText("");
+}
+
+void dlgTodo::on_btnModify_clicked() {
+  if (ui->btnModify->text() == tr("Modify")) {
+    QListWidgetItem* item = ui->listWidget->currentItem();
+    QWidget* w = ui->listWidget->itemWidget(item);
+    QLabel* lbl = (QLabel*)w->children().at(1);
+    QTextEdit* edit = (QTextEdit*)w->children().at(2);
+    edit->setPlainText(lbl->text());
+    lbl->setHidden(true);
+    edit->setHidden(false);
+    lblModi = lbl;
+    editModi = edit;
+    ui->btnModify->setText(tr("Finish Editing"));
+    isModi = true;
+  } else if (ui->btnModify->text() == tr("Finish Editing")) {
+    lblModi->setHidden(false);
+    editModi->setHidden(true);
+    ui->btnModify->setText(tr("Modify"));
+    isModi = false;
+  }
 }
