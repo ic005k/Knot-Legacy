@@ -124,7 +124,7 @@ void dlgSetTime::saveCustomDesc() {
   for (int i = 0; i < count; i++) {
     list.append(mw_one->mydlgList->ui->listWidget->item(i)->text().trimmed());
   }
-  // list = QSet<QString>(list.begin(), list.end()).values();
+  // list = QSet<QString>(list.begin(), list.end()).values(); //IOS无法编译通过
   removeDuplicates(&list);
   for (int i = 0; i < list.count(); i++) {
     QString str = list.at(i);
@@ -145,7 +145,8 @@ int dlgSetTime::removeDuplicates(QStringList* that) {
     if (setSize == seen.size())  // unchanged size => was already seen
       continue;
     ++setSize;
-    // if (j != i) that->swapItemsAt(i, j);  //将不重复项与重复项交换
+    // //将不重复项与重复项交换（新，IOS无法编译通过）
+    // if (j != i) that->swapItemsAt(i, j);
     if (j != i) that->swap(i, j);
     ++j;
   }

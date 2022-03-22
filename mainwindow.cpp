@@ -1245,6 +1245,17 @@ void MainWindow::on_actionImport_Data_triggered() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("XcounterBak"), "",
                                           tr("Data Files (*.ini)"));
+  QMessageBox msgBox;
+  msgBox.setText(appName);
+  msgBox.setInformativeText(tr("Import this data?") + "\n" + fileName);
+  QPushButton* btnCancel =
+      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+  QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+  btnOk->setFocus();
+  msgBox.exec();
+  if (msgBox.clickedButton() == btnCancel) {
+    return;
+  }
 
   QString txt = loadText(fileName);
   if (!txt.contains(appName)) {
