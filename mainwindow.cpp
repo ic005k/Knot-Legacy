@@ -855,17 +855,11 @@ void MainWindow::on_twItemClicked() {
   if (item->childCount() == 0 && item->parent()->childCount() > 0)
     pItem = item->parent();
   if (item->parent() != NULL) {
-    QString str = item->text(1);
-    QString str1;
-    if (str.split("|").count() == 2) {
-      str1 = str.split("|").at(1);
-      str1 = str1.trimmed();
-      if (str1.length() > 0)
-        ui->lblStats->setText(str1);
-      else
-        init_Stats(tw);
-    } else
+    QString str = item->text(2);
+    if (str.length() > 0)
       ui->lblStats->setText(str);
+    else
+      init_Stats(tw);
   } else
     init_Stats(tw);
   if (parentItem == pItem) return;
