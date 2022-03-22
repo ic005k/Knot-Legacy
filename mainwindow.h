@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <qmath.h>
+
 #include <QAbstractButton>
 #include <QComboBox>
 #include <QDateTime>
@@ -199,6 +201,8 @@ class MainWindow : public QMainWindow {
   void on_btnZoom_clicked();
 
  private:
+  int spaceCount = 18;
+  int spaceCount0 = 6;  //最前面的空格
   int x, y, w, h;
   void get_Today(QTreeWidget *);
   QTreeWidget *init_TreeWidget(QString);

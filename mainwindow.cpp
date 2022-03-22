@@ -196,19 +196,20 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       topItem = tw->topLevelItem(i);
       QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
       item11->setText(0, strTime);
-      item11->setText(1, strAmount + " | " + strDesc);
+      item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 3));
+      item11->setText(2, strDesc);
       int child = topItem->childCount();
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
 
       // Amount
       double amount = 0;
       for (int m = 0; m < child; m++) {
-        QStringList list = topItem->child(m)->text(1).split("|");
-        QString str = list.at(0);
+        QString str = topItem->child(m)->text(1);
         amount = amount + str.toDouble();
       }
-      topItem->setText(
-          1, QString::number(child) + "    $" + QString::number(amount));
+      QString strAmount = QString("%1").arg(amount, 0, 'f', 3);
+      topItem->setText(1, QString::number(child));
+      topItem->setText(2, strAmount);
 
       break;
     }
@@ -219,18 +220,19 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
     tw->addTopLevelItem(topItem);
     QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
     item11->setText(0, strTime);
-    item11->setText(1, strAmount + " | " + strDesc);
+    item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 3));
+    item11->setText(2, strDesc);
     int child = topItem->childCount();
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
-    // Amount
+    //  Amount
     double amount = 0;
     for (int m = 0; m < child; m++) {
-      QStringList list = topItem->child(m)->text(1).split("|");
-      QString str = list.at(0);
+      QString str = topItem->child(m)->text(1);
       amount = amount + str.toDouble();
     }
-    topItem->setText(
-        1, QString::number(child) + "    $" + QString::number(amount));
+    QString strAmount = QString("%1").arg(amount, 0, 'f', 3);
+    topItem->setText(1, QString::number(child));
+    topItem->setText(2, strAmount);
   }
 
   QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
@@ -270,13 +272,13 @@ void MainWindow::del_Data(QTreeWidget* tw) {
 
         // Amount
         double amount = 0;
-        for (int m = 0; m < topItem->childCount(); m++) {
-          QStringList list = topItem->child(m)->text(1).split("|");
-          QString str = list.at(0);
+        for (int m = 0; m < childCount - 1; m++) {
+          QString str = topItem->child(m)->text(1);
           amount = amount + str.toDouble();
         }
-        topItem->setText(1, QString::number(childCount - 1) + "    $" +
-                                QString::number(amount));
+        QString strAmount = QString("%1").arg(amount, 0, 'f', 3);
+        topItem->setText(1, QString::number(childCount - 1));
+        topItem->setText(2, strAmount);
         break;
       }
     }
@@ -399,6 +401,8 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
                  tw->topLevelItem(i)->text(0));
     Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topFreq",
                  tw->topLevelItem(i)->text(1));
+    Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topAmount",
+                 tw->topLevelItem(i)->text(2));
     int childCount = tw->topLevelItem(i)->childCount();
     Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childCount",
                  childCount);
@@ -406,9 +410,12 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
       Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childTime" +
                        QString::number(j),
                    tw->topLevelItem(i)->child(j)->text(0));
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childDesc" +
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childAmount" +
                        QString::number(j),
                    tw->topLevelItem(i)->child(j)->text(1));
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childDesc" +
+                       QString::number(j),
+                   tw->topLevelItem(i)->child(j)->text(2));
     }
   }
 
@@ -456,6 +463,9 @@ void MainWindow::readData(QTreeWidget* tw) {
       topItem->setText(
           1, Reg.value("/" + name + "/" + QString::number(i + 1) + "-topFreq")
                  .toString());
+      topItem->setText(
+          2, Reg.value("/" + name + "/" + QString::number(i + 1) + "-topAmount")
+                 .toString());
 
       for (int j = 0; j < childCount; j++) {
         QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
@@ -463,6 +473,9 @@ void MainWindow::readData(QTreeWidget* tw) {
                                      "-childTime" + QString::number(j))
                                .toString());
         item11->setText(1, Reg.value("/" + name + "/" + QString::number(i + 1) +
+                                     "-childAmount" + QString::number(j))
+                               .toString());
+        item11->setText(2, Reg.value("/" + name + "/" + QString::number(i + 1) +
                                      "-childDesc" + QString::number(j))
                                .toString());
       }
@@ -536,14 +549,10 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
   int tatol = 0;
   double amount = 0;
   for (int i = 0; i < count; i++) {
-    QStringList list = tw->topLevelItem(i)->text(1).split("$");
-    if (list.count() == 2) {
-      tatol = tatol + list.at(0).toInt();
-      amount = amount + list.at(1).toDouble();
-    } else {
-      int n = tw->topLevelItem(i)->text(1).toInt();
-      tatol = tatol + n;
-    }
+    QString str1 = tw->topLevelItem(i)->text(1);
+    QString str2 = tw->topLevelItem(i)->text(2);
+    tatol = tatol + str1.toInt();
+    amount = amount + str2.toDouble();
   }
 
   double a = (double)tatol / 20;
@@ -563,8 +572,8 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
 }
 
 void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
-  // listMonth Format:1.Day  2.Freq + $Amount
-  QList<double> doubleList;
+  // listMonth Format:1.Day  2.Freq or Amount
+  QVector<double> doubleList;
   QList<QPointF> pointlist;
   int count = listMonth.count();
   if (count == 0) {
@@ -573,19 +582,14 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
   }
   for (int i = 0; i < count; i++) {
     QString str = listMonth.at(i);
-    QString strN = str.split("|").at(1);
-    if (strN.contains("$")) {
-      QStringList list = strN.split("$");
-      if (list.count() == 2) {
-        if (ui->rbFreq->isChecked()) {
-          doubleList.append(list.at(0).toInt());
-        }
-        if (ui->rbAmount->isChecked()) {
-          doubleList.append(list.at(1).toDouble());
-        }
-      }
-    } else
-      doubleList.append(strN.toDouble());
+    QStringList list = str.split("|");
+
+    if (ui->rbFreq->isChecked()) {
+      doubleList.append(list.at(1).toInt());
+    }
+    if (ui->rbAmount->isChecked()) {
+      doubleList.append(list.at(1).toDouble());
+    }
   }
   double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
   qDebug() << "In table Max:" << maxValue;
@@ -625,27 +629,13 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
   pointlist.clear();
 
   double x, y;
-  QString strD, strN;
+  QString strD;
   for (int i = 0; i < count; i++) {
     QString str = listMonth.at(i);
     QStringList list = str.split("|");
     strD = list.at(0);
     x = strD.toInt();
-
-    strN = list.at(1);
-    if (strN.contains("$")) {
-      QStringList list1 = strN.split("$");
-      if (list1.count() == 2) {
-        if (ui->rbFreq->isChecked()) y = list1.at(0).toInt();
-        if (ui->rbAmount->isChecked()) y = list1.at(1).toDouble();
-      }
-    } else {
-      if (ui->rbFreq->isChecked()) y = strN.toInt();
-      if (ui->rbAmount->isChecked()) {
-        y = 0;
-      }
-    }
-
+    y = doubleList.at(i);
     QPointF pf(x, y);
     pointlist.append(pf);
   }
@@ -697,16 +687,13 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
                                QString::number(childCount),
                            0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
   }
-  QList<double> dList;
+  QVector<double> dList;
   if (ui->rbAmount->isChecked()) {
     double y0 = 100;
     for (int i = 0; i < parentItem->childCount(); i++) {
-      QStringList list = parentItem->child(i)->text(1).split("|");
-      if (list.count() == 2) {
-        y0 = list.at(0).toDouble();
-        dList.append(y0);
-      } else
-        dList.append(0);
+      QString str = parentItem->child(i)->text(1);
+      y0 = str.toDouble();
+      dList.append(y0);
     }
     y0 = *std::max_element(dList.begin(), dList.end());
 
@@ -838,9 +825,10 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
     tw->setObjectName(name);
   else
     tw->setObjectName("tw" + init_Objname());
-  tw->setColumnCount(2);
-  tw->headerItem()->setText(0, tr("Date"));
-  tw->headerItem()->setText(1, tr("Frequency"));
+  tw->setColumnCount(3);
+  tw->headerItem()->setText(0, "  " + tr("Date") + "  ");
+  tw->headerItem()->setText(1, "  " + tr("Frequency") + "  ");
+  tw->headerItem()->setText(2, tr("Amount"));
   tw->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
   tw->setAlternatingRowColors(true);
@@ -860,6 +848,7 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
 void MainWindow::on_twItemClicked() {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   QTreeWidgetItem* item = tw->currentItem();
+  if (item->parent() == NULL && item->childCount() == 0) return;
   QTreeWidgetItem* pItem;
 
   if (item->childCount() > 0) pItem = item;
@@ -889,18 +878,20 @@ void MainWindow::set_Time() {
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     QString time = mydlgSetTime->ui->timeEdit->text();
     item->setText(0, time);
-    item->setText(1, mydlgSetTime->ui->editAmount->text().trimmed() + " | " +
-                         mydlgSetTime->ui->editDesc->text().trimmed());
+    QString sa = mydlgSetTime->ui->editAmount->text().trimmed();
+    item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 3));
+    item->setText(2, mydlgSetTime->ui->editDesc->text().trimmed());
     // Amount
     int child = item->parent()->childCount();
     double amount = 0;
     for (int m = 0; m < child; m++) {
-      QStringList list = item->parent()->child(m)->text(1).split("|");
-      QString str = list.at(0);
+      QString str = item->parent()->child(m)->text(1);
       amount = amount + str.toDouble();
     }
-    item->parent()->setText(
-        1, QString::number(child) + "    $" + QString::number(amount));
+    QString strAmount = QString("%1").arg(amount, 0, 'f', 3);
+    item->parent()->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
+    item->parent()->setText(1, QString::number(child));
+    item->parent()->setText(2, strAmount);
 
     sort_childItem(item);
     saveData(tw, ui->tabWidget->currentIndex());
@@ -918,23 +909,21 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
       txt = txt.trimmed();
     }
     QString txt1 = item->parent()->child(i)->text(1);
-    keys.append(txt + "|" + txt1);
+    QString txt2 = item->parent()->child(i)->text(2);
+    keys.append(txt + "|" + txt1 + "|" + txt2);
   }
   std::sort(keys.begin(), keys.end(),
             [](const QString& s1, const QString& s2) { return s1 < s2; });
   for (int i = 0; i < childCount; i++) {
     QTreeWidgetItem* childItem = item->parent()->child(i);
     QString str = keys.at(i);
+    list.clear();
     list = str.split("|");
     if (list.count() == 3) {
       childItem->setText(0,
                          QString::number(i + 1) + ". " + list.at(0).trimmed());
-      childItem->setText(1,
-                         list.at(1).trimmed() + " | " + list.at(2).trimmed());
-    } else {
-      childItem->setText(0,
-                         QString::number(i + 1) + ". " + list.at(0).trimmed());
       childItem->setText(1, list.at(1).trimmed());
+      childItem->setText(2, list.at(2).trimmed());
     }
   }
 }
@@ -957,14 +946,9 @@ void MainWindow::on_twItemDoubleClicked() {
     time.setHMS(sh.toInt(), sm.toInt(), ss.toInt());
     mydlgSetTime->ui->lblTitle->setText(tr("Modify"));
     mydlgSetTime->ui->timeEdit->setTime(time);
-    QStringList l1 = item->text(1).split("|");
-    if (l1.count() == 2) {
-      mydlgSetTime->ui->editAmount->setText(l1.at(0).trimmed());
-      mydlgSetTime->ui->editDesc->setText(l1.at(1).trimmed());
-    } else {
-      mydlgSetTime->ui->editAmount->setText("");
-      mydlgSetTime->ui->editDesc->setText(item->text(1).trimmed());
-    }
+
+    mydlgSetTime->ui->editAmount->setText(item->text(1));
+    mydlgSetTime->ui->editDesc->setText(item->text(2));
 
     mydlgSetTime->setFixedHeight(this->height());
     mydlgSetTime->setFixedWidth(this->width());
@@ -1393,7 +1377,10 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
 
     if (y == strY) {
       if (m == strM) {
-        listMonth.append(d + "|" + topItem->text(1));  //记录天和总数
+        if (ui->rbFreq->isChecked())
+          listMonth.append(d + "|" + topItem->text(1));  //记录天和总数
+        if (ui->rbAmount->isChecked())
+          listMonth.append(d + "|" + topItem->text(2));
       }
     }
   }
