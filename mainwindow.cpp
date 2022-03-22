@@ -1567,6 +1567,7 @@ void MainWindow::on_btnZoom_clicked() {
 }
 
 void MainWindow::on_btnMax_clicked() {
+  if (ui->btnZoom->text() != tr("Zoom")) return;
   if (ui->btnMax->text() == tr("Max")) {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(true);

@@ -124,10 +124,30 @@ void dlgSetTime::saveCustomDesc() {
   for (int i = 0; i < count; i++) {
     list.append(mw_one->mydlgList->ui->listWidget->item(i)->text().trimmed());
   }
-  list = QSet<QString>(list.begin(), list.end()).values();
+  // list = QSet<QString>(list.begin(), list.end()).values();
+  removeDuplicates(&list);
   for (int i = 0; i < list.count(); i++) {
     QString str = list.at(i);
     if (str.length() > 0)
       Reg.setValue("/CustomDesc/Item" + QString::number(i), str);
   }
+}
+
+int dlgSetTime::removeDuplicates(QStringList* that) {
+  int n = that->size();
+  int j = 0;
+  QSet<QString> seen;
+  seen.reserve(n);
+  int setSize = 0;
+  for (int i = 0; i < n; ++i) {
+    const QString& s = that->at(i);
+    seen.insert(s);
+    if (setSize == seen.size())  // unchanged size => was already seen
+      continue;
+    ++setSize;
+    if (j != i) that->swapItemsAt(i, j);  //将不重复项与重复项交换
+    ++j;
+  }
+  if (n != j) that->erase(that->begin() + j, that->end());
+  return n - j;
 }
