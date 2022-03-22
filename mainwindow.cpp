@@ -192,13 +192,13 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
                           QString strDesc) {
   bool isYes = false;
+  strDate = QDate::currentDate().toString();
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
     if (str == strDate) {
       isYes = true;
 
-      QTreeWidgetItem* topItem = new QTreeWidgetItem;
-      topItem = tw->topLevelItem(i);
+      QTreeWidgetItem* topItem = tw->topLevelItem(i);
       QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
       item11->setText(0, strTime);
       item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
