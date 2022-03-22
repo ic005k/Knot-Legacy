@@ -6,10 +6,16 @@
 #include "ui_dlgsettime.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
+extern QString iniFile;
 
 dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
   ui->setupUi(this);
+
+  // ui->btnCustom->setCursor(Qt::ArrowCursor);
+  // QWidgetAction* action = new QWidgetAction(ui->editDesc);
+  // action->setDefaultWidget(ui->btnCustom);
+  //  ui->editDesc->addAction(action, QLineEdit::TrailingPosition);
 }
 
 dlgSetTime::~dlgSetTime() { delete ui; }
@@ -26,6 +32,19 @@ void dlgSetTime::on_btnOk_clicked() {
                      ui->timeEdit->text(), ui->editAmount->text().trimmed(),
                      ui->editDesc->text().trimmed());
   }
+
+  QString str = ui->editDesc->text().trimmed();
+  int count = mw_one->mydlgList->ui->listWidget->count();
+  for (int i = 0; i < count; i++) {
+    QString str1 = mw_one->mydlgList->ui->listWidget->item(i)->text().trimmed();
+    if (str == str1) {
+      // mw_one->mydlgList->ui->listWidget->takeItem(i);
+      //  i--;
+    }
+  }
+  if (str.length() > 0) mw_one->mydlgList->ui->listWidget->insertItem(0, str);
+  saveCustomDesc();
+
   close();
 }
 
@@ -65,4 +84,33 @@ void dlgSetTime::set_Amount(QString Number) {
     if (str0.length() == 3) return;
   }
   ui->editAmount->setText(str + Number);
+}
+
+void dlgSetTime::on_btnCustom_clicked() {
+  if (mw_one->mydlgList->isHidden()) {
+    mw_one->mydlgList->setModal(true);
+    int h = mw_one->height() / 2;
+    mw_one->mydlgList->setGeometry(ui->editDesc->x(),
+                                   ui->editDesc->y() + ui->editDesc->height(),
+                                   ui->editDesc->width(), h);
+    mw_one->mydlgList->show();
+  } else {
+    mw_one->mydlgList->close();
+  }
+}
+
+void dlgSetTime::saveCustomDesc() {
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  int count = mw_one->mydlgList->ui->listWidget->count();
+  Reg.setValue("/CustomDesc/Count", count);
+  QStringList list;
+  for (int i = 0; i < count; i++) {
+    list.append(mw_one->mydlgList->ui->listWidget->item(i)->text().trimmed());
+  }
+  list = QSet<QString>(list.begin(), list.end()).values();
+  for (int i = 0; i < list.count(); i++) {
+    QString str = list.at(i);
+    if (str.length() > 0)
+      Reg.setValue("/CustomDesc/Item" + QString::number(i), str);
+  }
 }

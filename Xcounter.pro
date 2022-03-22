@@ -27,6 +27,7 @@ INSTALLS += dataFiles
 
 SOURCES += \
     chart.cpp \
+    dlglist.cpp \
     dlgnotes.cpp \
     dlgrename.cpp \
     dlgsettime.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
 
 HEADERS += \
     chart.h \
+    dlglist.h \
     dlgnotes.h \
     dlgrename.h \
     dlgsettime.h \
@@ -43,6 +45,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    dlglist.ui \
     dlgnotes.ui \
     dlgrename.ui \
     dlgsettime.ui \

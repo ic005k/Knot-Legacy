@@ -2,6 +2,7 @@
 #define DLGSETTIME_H
 
 #include <QDialog>
+#include <QWidgetAction>
 
 namespace Ui {
 class dlgSetTime;
@@ -14,6 +15,7 @@ class dlgSetTime : public QDialog {
   explicit dlgSetTime(QWidget *parent = nullptr);
   ~dlgSetTime();
   Ui::dlgSetTime *ui;
+  void saveCustomDesc();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event);
@@ -35,7 +37,9 @@ class dlgSetTime : public QDialog {
   void on_btnDot_clicked();
   void on_btnDel_clicked();
 
-private:
+  void on_btnCustom_clicked();
+
+ private:
   void set_Amount(QString Number);
 };
 

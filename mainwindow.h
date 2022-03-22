@@ -31,10 +31,12 @@
 #include <QTreeWidgetItem>
 
 #include "chart.h"
+#include "dlglist.h"
 #include "dlgnotes.h"
 #include "dlgrename.h"
 #include "dlgsettime.h"
 #include "dlgtodo.h"
+#include "ui_dlglist.h"
 #include "ui_dlgnotes.h"
 #include "ui_dlgrename.h"
 #include "ui_dlgsettime.h"
@@ -58,6 +60,7 @@ class MainWindow : public QMainWindow {
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
   dlgTodo *mydlgTodo;
+  dlgList *mydlgList;
   QTreeWidgetItem *parentItem;
   QVector<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;

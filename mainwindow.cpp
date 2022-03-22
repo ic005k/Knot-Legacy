@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgSetTime = new dlgSetTime(this);
   mydlgTodo = new dlgTodo(this);
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
+  mydlgList = new dlgList(this);
   // 获取背景色
   QPalette pal = this->palette();
   QBrush brush = pal.window();
@@ -309,6 +310,13 @@ void MainWindow::del_Data(QTreeWidget* tw) {
 }
 
 void MainWindow::on_btnPlus_clicked() {
+  mw_one->mydlgList->ui->listWidget->clear();
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  int descCount = Reg.value("/CustomDesc/Count").toInt();
+  for (int i = 0; i < descCount; i++) {
+    mw_one->mydlgList->ui->listWidget->addItem(
+        Reg.value("/CustomDesc/Item" + QString::number(i)).toString());
+  }
   isAdd = true;
   mydlgSetTime->setFixedHeight(this->height());
   mydlgSetTime->setFixedWidth(this->width());
@@ -428,6 +436,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
 
   saveTab();
   mydlgTodo->saveTodo();
+  mydlgSetTime->saveCustomDesc();
   get_Today(tw);
   init_Stats(tw);
   initMonthChart();
