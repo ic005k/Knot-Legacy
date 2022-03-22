@@ -4,6 +4,7 @@
 #include "ui_dlglist.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
+extern int fontSize, red;
 dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
 }

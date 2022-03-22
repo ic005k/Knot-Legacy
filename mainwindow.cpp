@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgTodo = new dlgTodo(this);
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
   mydlgList = new dlgList(this);
+  mydlgList->ui->listWidget->setFont(this->font());
   // 获取背景色
   QPalette pal = this->palette();
   QBrush brush = pal.window();
@@ -923,8 +924,12 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
     list.clear();
     list = str.split("|");
     if (list.count() == 3) {
-      childItem->setText(0,
-                         QString::number(i + 1) + ". " + list.at(0).trimmed());
+      int number = i + 1;
+      QString strChildCount = QString::number(childCount);
+      QString strNum;
+      strNum = QString("%1").arg(number, strChildCount.length(), 10,
+                                 QLatin1Char('0'));
+      childItem->setText(0, strNum + ". " + list.at(0).trimmed());
       childItem->setText(1, list.at(1).trimmed());
       childItem->setText(2, list.at(2).trimmed());
     }
