@@ -2,6 +2,7 @@
 #define DLGSETTIME_H
 
 #include <QDialog>
+#include <QFont>
 #include <QWidgetAction>
 
 namespace Ui {

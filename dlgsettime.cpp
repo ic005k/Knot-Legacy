@@ -11,6 +11,23 @@ extern QString iniFile;
 dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
   ui->setupUi(this);
+  QFont font;
+  font.setPixelSize(30);
+  font.setBold(true);
+  ui->editAmount->setFont(font);
+  ui->btn0->setFont(font);
+  ui->btn1->setFont(font);
+  ui->btn2->setFont(font);
+  ui->btn3->setFont(font);
+  ui->btn4->setFont(font);
+  ui->btn5->setFont(font);
+  ui->btn6->setFont(font);
+  ui->btn7->setFont(font);
+  ui->btn8->setFont(font);
+  ui->btn9->setFont(font);
+  ui->btn0->setFont(font);
+  ui->btnDot->setFont(font);
+  ui->btnDel->setFont(font);
 
   // ui->btnCustom->setCursor(Qt::ArrowCursor);
   // QWidgetAction* action = new QWidgetAction(ui->editDesc);
