@@ -203,6 +203,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnZoom_clicked();
 
+  void on_btnMax_clicked();
+
  private:
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格

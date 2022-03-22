@@ -13,6 +13,7 @@ dlgList::~dlgList() { delete ui; }
 void dlgList::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
 void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
+  ui->listWidget->setCurrentItem(item);
   mw_one->mydlgSetTime->ui->editDesc->setText(item->text());
   close();
 }

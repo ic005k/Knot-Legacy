@@ -98,7 +98,7 @@ void dlgSetTime::set_Amount(QString Number) {
   if (str == "0.00") ui->editAmount->setText("");
   if (str.split(".").count() == 2 && str != "0.00") {
     QString str0 = str.split(".").at(1);
-    if (str0.length() == 3) return;
+    if (str0.length() == 2) return;
   }
   ui->editAmount->setText(str + Number);
 }
@@ -107,9 +107,9 @@ void dlgSetTime::on_btnCustom_clicked() {
   if (mw_one->mydlgList->isHidden()) {
     mw_one->mydlgList->setModal(true);
     int h = mw_one->height() / 2;
-    mw_one->mydlgList->setGeometry(ui->editDesc->x(),
-                                   ui->editDesc->y() + ui->editDesc->height(),
-                                   ui->editDesc->width(), h);
+    int y = ui->lblDesc->y() + ui->lblDesc->height() - h;
+    mw_one->mydlgList->setGeometry(ui->editDesc->x(), y, ui->editDesc->width(),
+                                   h);
     mw_one->mydlgList->show();
   } else {
     mw_one->mydlgList->close();

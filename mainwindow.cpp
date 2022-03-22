@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
   mydlgList = new dlgList(this);
   mydlgList->ui->listWidget->setFont(this->font());
+  ui->lblStats->adjustSize();
+  ui->lblStats->setWordWrap(true);
   // 获取背景色
   QPalette pal = this->palette();
   QBrush brush = pal.window();
@@ -66,8 +68,8 @@ MainWindow::MainWindow(QWidget* parent)
   connect(tmer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
   // tmer->start(1000);
   strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
+  ui->frame_tab->setMaximumHeight(this->height() / 2 - 30);
   ui->lcdNumber->setHidden(true);
-  ui->frame_tab->setMaximumHeight(this->height() / 2);
   ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->frame_find->setHidden(true);
   QStringList listMonth;
@@ -129,6 +131,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
   // ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
   ui->btnTodo->setFixedHeight(s + 6);
+  ui->btnMax->setFixedHeight(s + 6);
   QSettings Reg(iniFile, QSettings::IniFormat);
   ui->cboxYear->setCurrentText(Reg.value("/YMD/Y").toString());
   ui->cboxMonth->setCurrentText(Reg.value("/YMD/M").toString());
@@ -1560,5 +1563,17 @@ void MainWindow::on_btnZoom_clicked() {
       ui->frame_tab->setHidden(false);
       ui->btnZoom->setText(tr("Zoom"));
     }
+  }
+}
+
+void MainWindow::on_btnMax_clicked() {
+  if (ui->btnMax->text() == tr("Max")) {
+    ui->frame_tab->setMaximumHeight(this->height());
+    ui->frame_charts->setHidden(true);
+    ui->btnMax->setText(tr("Min"));
+  } else if (ui->btnMax->text() == tr("Min")) {
+    ui->frame_tab->setMaximumHeight(this->height() / 2 - 30);
+    ui->frame_charts->setHidden(false);
+    ui->btnMax->setText(tr("Max"));
   }
 }
