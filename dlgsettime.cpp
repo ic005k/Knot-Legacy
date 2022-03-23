@@ -118,7 +118,7 @@ void dlgSetTime::on_btnCustom_clicked() {
     int y = ui->lblDesc->y() + ui->lblDesc->height() - h;
     mw_one->mydlgList->setGeometry(ui->editDesc->x(), y, ui->editDesc->width(),
                                    h);
-
+    mw_one->mydlgList->ui->listWidget->setFont(ui->lblTime->font());
     mw_one->mydlgList->show();
     mw_one->mydlgList->ui->listWidget->setFocus();
     if (mw_one->mydlgList->ui->listWidget->count() > 0)

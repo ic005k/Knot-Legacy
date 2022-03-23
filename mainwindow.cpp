@@ -43,7 +43,6 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgTodo = new dlgTodo(this);
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
   mydlgList = new dlgList(this);
-  mydlgList->ui->listWidget->setFont(this->font());
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
   // 获取背景色
