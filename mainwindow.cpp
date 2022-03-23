@@ -198,9 +198,10 @@ void MainWindow::init_TabNavigate() {
   }
   for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
     QToolButton* btn = new QToolButton(this);
+    btn->setFixedWidth(25);
     listNBtn.append(btn);
     QFont font;
-    font.setPixelSize(12);
+    font.setPixelSize(13);
     btn->setFont(font);
     btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     connect(btn, &QToolButton::clicked, [=]() {
@@ -625,8 +626,9 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
                           tr("Cartons") + " " + QString::number(c) + " " +
                           tr("Boxes") + " ) ");
   else*/
+  QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
   ui->lblStats->setText(tr("Total") + " : " + QString::number(tatol) + "    $" +
-                        QString::number(amount));
+                        strAmount);
 }
 
 void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
@@ -891,6 +893,7 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   tw->installEventFilter(this);
   tw->setMouseTracking(true);
   tw->setDragEnabled(false);
+  // tw->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   connect(tw, &QTreeWidget::itemClicked, this, &MainWindow::on_twItemClicked);
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
