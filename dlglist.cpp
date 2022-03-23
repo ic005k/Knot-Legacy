@@ -23,8 +23,10 @@ void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
 }
 
 void dlgList::on_btnClear_clicked() {
-  ui->listWidget->clear();
-  close();
+  // ui->listWidget->clear();
+  int row = ui->listWidget->currentRow();
+  if (row >= 0) ui->listWidget->takeItem(row);
+  mw_one->mydlgSetTime->saveCustomDesc();
 }
 
 void dlgList::on_btnBack_clicked() { close(); }

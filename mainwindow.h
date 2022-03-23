@@ -206,7 +206,14 @@ class MainWindow : public QMainWindow {
 
   void on_btnMax_clicked();
 
+  void on_btnYear_clicked();
+
+  void on_btnMonth_clicked();
+
+  void on_btnDay_clicked();
+
  private:
+  QStringList listMonth;
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格
   int x, y, w, h;
@@ -219,5 +226,9 @@ class MainWindow : public QMainWindow {
   int get_Day(QString date);
   QString get_Year(QString date);
   QString get_Month(QString date);
+  QList<QToolButton *> listNBtn;
+  void init_TabNavigate();
+  void init_NavigateBtnColor();
+  QString ver;
 };
 #endif  // MAINWINDOW_H

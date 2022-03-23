@@ -14,7 +14,7 @@ QRegularExpression regxNumber("^-?\[0-9.]*$");
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  QString ver = "1.0.01";
+  ver = "1.0.01";
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
   fontSize = this->font().pixelSize();
 
@@ -67,11 +67,11 @@ MainWindow::MainWindow(QWidget* parent)
   connect(tmer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
   // tmer->start(1000);
   strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
-  ui->frame_tab->setMaximumHeight(this->height() / 2 - 30);
+
   ui->lcdNumber->setHidden(true);
   ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->frame_find->setHidden(true);
-  QStringList listMonth;
+
   if (zh_cn) {
     listMonth = QStringList() << "1月"
                               << "2月"
@@ -99,8 +99,7 @@ MainWindow::MainWindow(QWidget* parent)
                               << "Nov"
                               << "Dec";
   }
-  ui->cboxMonth->clear();
-  ui->cboxMonth->addItems(listMonth);
+
   // setComboBoxQss(ui->cboxYear, 4, 1, "#C0C0C0", "#4169E1");
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
 
@@ -131,10 +130,11 @@ MainWindow::MainWindow(QWidget* parent)
   // ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
   ui->btnTodo->setFixedHeight(s + 6);
   ui->btnMax->setFixedHeight(s + 6);
+  ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
   QSettings Reg(iniFile, QSettings::IniFormat);
-  ui->cboxYear->setCurrentText(Reg.value("/YMD/Y").toString());
-  ui->cboxMonth->setCurrentText(Reg.value("/YMD/M").toString());
-  ui->cboxDay->setCurrentText(Reg.value("/YMD/D").toString());
+  ui->btnYear->setText(Reg.value("/YMD/Y", 2022).toString());
+  ui->btnMonth->setText(Reg.value("/YMD/M", tr("Month")).toString());
+  ui->btnDay->setText(Reg.value("/YMD/D", 1).toString());
   // Custom Desc
   mw_one->mydlgList->ui->listWidget->clear();
   int descCount = Reg.value("/CustomDesc/Count").toInt();
@@ -152,7 +152,7 @@ MainWindow::MainWindow(QWidget* parent)
 
   initMonthChart();
   initChartTimeLine(tw, true);
-
+  init_NavigateBtnColor();
   isInit = true;
   loading = false;
 }
@@ -185,6 +185,51 @@ void MainWindow::init_Data() {
   }
 
   ui->tabWidget->setCurrentIndex(Reg.value("CurrentIndex").toInt());
+
+  init_TabNavigate();
+}
+
+void MainWindow::init_TabNavigate() {
+  if (listNBtn.count() > 0) {
+    for (int i = 0; i < listNBtn.count(); i++) {
+      delete listNBtn.at(i);
+    }
+    listNBtn.clear();
+  }
+  for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
+    QToolButton* btn = new QToolButton(this);
+    listNBtn.append(btn);
+    QFont font;
+    font.setPixelSize(12);
+    btn->setFont(font);
+    btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    connect(btn, &QToolButton::clicked, [=]() {
+      ui->tabWidget->setCurrentIndex(btn->text().toInt() - 1);
+      init_NavigateBtnColor();
+    });
+    QString str = ui->tabWidget->tabBar()->tabText(i);
+    QString str1;
+    for (int j = 0; j < str.length(); j++) {
+      str1 = str1 + str.mid(j, 1) + "\n";
+    }
+    qDebug() << str1;
+    btn->setText(QString::number(i + 1));
+    btn->setToolTip(str);
+    ui->vl->addWidget(btn);
+  }
+}
+
+void MainWindow::init_NavigateBtnColor() {
+  QPalette p1, p2;
+  p1.setColor(QPalette::Button, Qt::red);
+  p1.setColor(QPalette::Button, Qt::gray);
+
+  for (int n = 0; n < listNBtn.count(); n++) {
+    if (n == ui->tabWidget->currentIndex())
+      listNBtn.at(n)->setPalette(p1);
+    else
+      listNBtn.at(n)->setPalette(p2);
+  }
 }
 
 void MainWindow::timerUpdate() {
@@ -433,10 +478,10 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
 
   Reg.setValue("/" + name + "/" + "Note", ui->tabWidget->tabToolTip(tabIndex));
   int lines = Reg.allKeys().count();
-  Reg.setValue("/" + appName + "/AllKeys", lines);
-  Reg.setValue("/" + appName + "/FileSize",
+  Reg.setValue("/" + ver + "-" + appName + "/AllKeys", lines);
+  Reg.setValue("/" + ver + "-" + appName + "/FileSize",
                getFileSize(QFile(iniFile).size(), 2));
-  Reg.setValue("/" + appName + "/File", iniFile);
+  Reg.setValue("/" + ver + "-" + appName + "/File", iniFile);
 
   saveTab();
   mydlgTodo->saveTodo();
@@ -774,18 +819,13 @@ void MainWindow::on_actionRename_triggered() {
 void MainWindow::on_actionAdd_Tab_triggered() {
   int count = ui->tabWidget->tabBar()->count();
   QSettings Reg(iniFile, QSettings::IniFormat);
-  /*for (int i = 0; i < Reg.allKeys().count(); i++) {
-    if (Reg.allKeys().at(i).contains("tab" + QString::number(count + 1))) {
-      Reg.remove(Reg.allKeys().at(i));
-      i--;
-    }
-  }*/
   Reg.remove("/tab" + QString::number(count + 1));
 
   ui->tabWidget->addTab(init_TreeWidget("tab" + QString::number(count + 1)),
                         tr("Counter") + " " + QString::number(count + 1));
   ui->tabWidget->setCurrentIndex(count);
-  emit on_actionRename_triggered();
+  init_TabNavigate();
+  on_actionRename_triggered();
 }
 
 void MainWindow::on_actionDel_Tab_triggered() {
@@ -830,6 +870,8 @@ void MainWindow::on_actionDel_Tab_triggered() {
                           tr("Counter") + " " + QString::number(1));
     ui->tabWidget->setTabToolTip(0, "");
   }
+
+  init_TabNavigate();
 }
 
 QTreeWidget* MainWindow::init_TreeWidget(QString name) {
@@ -995,6 +1037,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   init_Stats(tw);
   initMonthChart();
   initChartTimeLine(tw, true);
+  init_NavigateBtnColor();
 }
 
 void MainWindow::saveNotes() {
@@ -1086,8 +1129,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   if (watch == tw) {
     if (event->type() == QEvent::MouseButtonPress) {
     }
-    qDebug() << "tw mousePress";
-    // tw->setCurrentItem(tw->currentItem());
+    // qDebug() << "tw mousePress";
   }
 
   if (watch == ui->tabWidget->tabBar()) {
@@ -1175,7 +1217,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
           QCoreApplication::processEvents();
         }
         readData((QTreeWidget*)ui->tabWidget->currentWidget());
-
+        init_NavigateBtnColor();
         isSlide = false;
       }
     }
@@ -1214,6 +1256,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
           QCoreApplication::processEvents();
         }
         readData((QTreeWidget*)ui->tabWidget->currentWidget());
+        init_NavigateBtnColor();
         isSlide = false;
       }
     }
@@ -1339,11 +1382,13 @@ void MainWindow::on_btnFind_clicked() {
     ui->btnPlus->setHidden(true);
     ui->btnLess->setHidden(true);
     ui->btnTodo->setHidden(true);
+    ui->btnMax->setHidden(true);
   } else {
     ui->frame_find->setHidden(true);
     ui->btnPlus->setHidden(false);
     ui->btnLess->setHidden(false);
     ui->btnTodo->setHidden(false);
+    ui->btnMax->setHidden(false);
   }
 }
 
@@ -1360,9 +1405,9 @@ void MainWindow::goResults() {
     m = get_Month(str0);
     d = QString::number(get_Day(str0));
     qDebug() << y << m << d;
-    if (y == ui->cboxYear->currentText()) {
-      if (m == ui->cboxMonth->currentText()) {
-        if (d == ui->cboxDay->currentText()) {
+    if (y == ui->btnYear->text()) {
+      if (m == ui->btnMonth->text()) {
+        if (d == ui->btnDay->text()) {
           tw->setCurrentItem(topItem);
           initChartTimeLine(tw, true);
           isDay = true;
@@ -1380,8 +1425,8 @@ void MainWindow::goResultsMonth() {
   if (loading) return;
   QStringList listMonth;
   QString strY, strM;
-  strY = ui->cboxYear->currentText();
-  strM = ui->cboxMonth->currentText();
+  strY = ui->btnYear->text();
+  strM = ui->btnMonth->text();
   listMonth = get_MonthList(strY, strM);
   initChart(strY, strM, listMonth);
 }
@@ -1415,7 +1460,7 @@ void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
   goResultsMonth();
   goResults();
   QSettings Reg(iniFile, QSettings::IniFormat);
-  Reg.setValue("/YMD/Y", ui->cboxYear->currentText());
+  Reg.setValue("/YMD/Y", ui->btnYear->text());
 }
 
 void MainWindow::on_cboxMonth_currentTextChanged(const QString& arg1) {
@@ -1423,7 +1468,7 @@ void MainWindow::on_cboxMonth_currentTextChanged(const QString& arg1) {
   goResultsMonth();
   goResults();
   QSettings Reg(iniFile, QSettings::IniFormat);
-  Reg.setValue("/YMD/M", ui->cboxMonth->currentText());
+  Reg.setValue("/YMD/M", ui->btnMonth->text());
 }
 
 void MainWindow::on_cboxDay_currentTextChanged(const QString& arg1) {
@@ -1431,7 +1476,7 @@ void MainWindow::on_cboxDay_currentTextChanged(const QString& arg1) {
   goResultsMonth();
   goResults();
   QSettings Reg(iniFile, QSettings::IniFormat);
-  Reg.setValue("/YMD/D", ui->cboxDay->currentText());
+  Reg.setValue("/YMD/D", ui->btnDay->text());
 }
 
 void MainWindow::on_btnGo_clicked() {
@@ -1584,8 +1629,130 @@ void MainWindow::on_btnMax_clicked() {
     ui->frame_charts->setHidden(true);
     ui->btnMax->setText(tr("Min"));
   } else if (ui->btnMax->text() == tr("Min")) {
-    ui->frame_tab->setMaximumHeight(this->height() / 2 - 30);
+    ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
     ui->frame_charts->setHidden(false);
     ui->btnMax->setText(tr("Max"));
+  }
+}
+
+void MainWindow::on_btnYear_clicked() {
+  int w = ui->btnYear->width();
+  QListWidget* list = new QListWidget(this);
+  QFont font;
+  font.setPixelSize(fontSize);
+  list->setFont(font);
+  int year = 2022;
+  QStringList strList;
+  for (int i = 0; i < 10; i++) {
+    strList.append(QString::number(year + i));
+  }
+
+  for (int i = 0; i < strList.count(); i++) {
+    QListWidgetItem* item = new QListWidgetItem;
+    item->setSizeHint(QSize(w, 30));  // item->sizeHint().width()
+    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    item->setText(strList.at(i));
+    list->addItem(item);
+  }
+  connect(list, &QListWidget::itemClicked, [=]() {
+    ui->btnYear->setText(list->currentItem()->text());
+    list->close();
+    on_cboxYear_currentTextChanged("");
+  });
+
+  int h = 30 * list->count() + 2;
+  int y = ui->frame_find->y() - h / 2;
+
+  list->setGeometry(ui->frame_find->x(), y, w + 15, h);
+
+  list->show();
+
+  QString str = ui->btnYear->text();
+  for (int i = 0; i < list->count(); i++) {
+    if (str == list->item(i)->text()) {
+      list->setCurrentRow(i);
+      break;
+    }
+  }
+}
+
+void MainWindow::on_btnMonth_clicked() {
+  int w = ui->btnYear->width();
+  QListWidget* list = new QListWidget(this);
+  QFont font;
+  font.setPixelSize(fontSize);
+  list->setFont(font);
+
+  QStringList strList = listMonth;
+
+  for (int i = 0; i < strList.count(); i++) {
+    QListWidgetItem* item = new QListWidgetItem;
+    item->setSizeHint(QSize(w, 30));  // item->sizeHint().width()
+    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    item->setText(strList.at(i));
+    list->addItem(item);
+  }
+  connect(list, &QListWidget::itemClicked, [=]() {
+    ui->btnMonth->setText(list->currentItem()->text());
+    list->close();
+    on_cboxMonth_currentTextChanged("");
+  });
+
+  int h = 30 * list->count() + 2;
+  int y = ui->frame_find->y() - h / 2;
+
+  list->setGeometry(ui->btnMonth->x() + ui->frame_find->x(), y, w + 5, h);
+
+  list->show();
+
+  QString str = ui->btnMonth->text();
+  for (int i = 0; i < list->count(); i++) {
+    if (str == list->item(i)->text()) {
+      list->setCurrentRow(i);
+      break;
+    }
+  }
+}
+
+void MainWindow::on_btnDay_clicked() {
+  int w = ui->btnDay->width();
+  QListWidget* list = new QListWidget(this);
+  QFont font;
+  font.setPixelSize(fontSize);
+  list->setFont(font);
+  int day = 1;
+  QStringList strList;
+  for (int i = 0; i < 31; i++) {
+    strList.append(QString::number(day + i));
+  }
+
+  for (int i = 0; i < strList.count(); i++) {
+    QListWidgetItem* item = new QListWidgetItem;
+    item->setSizeHint(QSize(w - 20, 30));  // item->sizeHint().width()
+    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    item->setText(strList.at(i));
+    list->addItem(item);
+  }
+
+  connect(list, &QListWidget::itemClicked, [=]() {
+    ui->btnDay->setText(list->currentItem()->text());
+    list->close();
+    on_cboxDay_currentTextChanged("");
+  });
+
+  int h = 13 * 30;
+  int y = ui->frame_find->y() - h / 2;
+  int x = ui->btnDay->x() + ui->frame_find->x();
+  list->setGeometry(x, y, w + 15, h);
+  list->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  list->show();
+
+  QString str = ui->btnDay->text();
+  for (int i = 0; i < list->count(); i++) {
+    if (str == list->item(i)->text()) {
+      list->setCurrentRow(i);
+      break;
+    }
   }
 }
