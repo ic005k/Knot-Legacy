@@ -56,6 +56,7 @@ class MainWindow : public QMainWindow {
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   Ui::MainWindow *ui;
+  QString bakFile;
   dlgNotes *mydlgNotes;
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;

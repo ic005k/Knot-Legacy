@@ -7,6 +7,7 @@
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern QString iniFile;
+extern QRegularExpression regxNumber;
 
 dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
@@ -29,6 +30,11 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->btnDot->setFont(font);
   ui->btnDel->setFont(font);
 
+  QValidator* validator =
+      new QRegularExpressionValidator(regxNumber, ui->editAmount);
+  ui->editAmount->setValidator(validator);
+  ui->editAmount->setPlaceholderText(tr("Number"));
+
   // ui->btnCustom->setCursor(Qt::ArrowCursor);
   // QWidgetAction* action = new QWidgetAction(ui->editDesc);
   // action->setDefaultWidget(ui->btnCustom);
@@ -50,13 +56,14 @@ void dlgSetTime::on_btnOk_clicked() {
                      ui->editDesc->text().trimmed());
   }
 
+  // Save Desc Text
   QString str = ui->editDesc->text().trimmed();
   int count = mw_one->mydlgList->ui->listWidget->count();
   for (int i = 0; i < count; i++) {
     QString str1 = mw_one->mydlgList->ui->listWidget->item(i)->text().trimmed();
     if (str == str1) {
-      // mw_one->mydlgList->ui->listWidget->takeItem(i);
-      //  i--;
+      mw_one->mydlgList->ui->listWidget->takeItem(i);
+      break;
     }
   }
   if (str.length() > 0) mw_one->mydlgList->ui->listWidget->insertItem(0, str);
@@ -106,13 +113,16 @@ void dlgSetTime::set_Amount(QString Number) {
 void dlgSetTime::on_btnCustom_clicked() {
   if (mw_one->mydlgList->isHidden()) {
     mw_one->mydlgList->setModal(true);
-    int h = mw_one->height() / 2;
+
+    int h = mw_one->height() * 2 / 3;
     int y = ui->lblDesc->y() + ui->lblDesc->height() - h;
     mw_one->mydlgList->setGeometry(ui->editDesc->x(), y, ui->editDesc->width(),
                                    h);
+
     mw_one->mydlgList->show();
-  } else {
-    mw_one->mydlgList->close();
+    mw_one->mydlgList->ui->listWidget->setFocus();
+    if (mw_one->mydlgList->ui->listWidget->count() > 0)
+      mw_one->mydlgList->ui->listWidget->setCurrentRow(0);
   }
 }
 

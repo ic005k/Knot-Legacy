@@ -6,11 +6,11 @@
 
 QString appName = "Xcounter";
 QString iniFile = "/data/data/org.qtproject.example.Xcount/Xcount.ini";
-QString txtFile = "assets:/data/Xcount.txt";
 MainWindow* mw_one;
 bool loading = false;
 extern bool isAndroid, isIOS, zh_cn;
 int fontSize, red;
+QRegularExpression regxNumber("^-?\[0-9.]*$");
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -114,11 +114,11 @@ MainWindow::MainWindow(QWidget* parent)
     QDir dir0;
     dir0.mkpath(str1);
     iniFile = str1 + appName + ".ini";
-    txtFile = str1 + appName + ".txt";
+    bakFile = str1 + appName + ".bak";
   }
   if (isAndroid) {
     iniFile = path + "/" + appName + ".ini";
-    txtFile = path + "/" + appName + ".txt";
+    bakFile = path + "/" + appName + ".bak";
   }
 
   int s = 35;
@@ -136,6 +136,13 @@ MainWindow::MainWindow(QWidget* parent)
   ui->cboxYear->setCurrentText(Reg.value("/YMD/Y").toString());
   ui->cboxMonth->setCurrentText(Reg.value("/YMD/M").toString());
   ui->cboxDay->setCurrentText(Reg.value("/YMD/D").toString());
+  // Custom Desc
+  mw_one->mydlgList->ui->listWidget->clear();
+  int descCount = Reg.value("/CustomDesc/Count").toInt();
+  for (int i = 0; i < descCount; i++) {
+    mw_one->mydlgList->ui->listWidget->addItem(
+        Reg.value("/CustomDesc/Item" + QString::number(i)).toString());
+  }
 
   mydlgTodo->init_Items();
   init_Data();
@@ -250,6 +257,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
 
 void MainWindow::del_Data(QTreeWidget* tw) {
   bool isNo = true;
+  strDate = QDate::currentDate().toString();
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
     if (str == strDate) {
@@ -314,13 +322,6 @@ void MainWindow::del_Data(QTreeWidget* tw) {
 }
 
 void MainWindow::on_btnPlus_clicked() {
-  mw_one->mydlgList->ui->listWidget->clear();
-  QSettings Reg(iniFile, QSettings::IniFormat);
-  int descCount = Reg.value("/CustomDesc/Count").toInt();
-  for (int i = 0; i < descCount; i++) {
-    mw_one->mydlgList->ui->listWidget->addItem(
-        Reg.value("/CustomDesc/Item" + QString::number(i)).toString());
-  }
   isAdd = true;
   mydlgSetTime->setFixedHeight(this->height());
   mydlgSetTime->setFixedWidth(this->width());
@@ -537,6 +538,7 @@ QString MainWindow::loadText(QString textFile) {
 
 void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
   QFile* file;
+  QString txtFile;
   file = new QFile;
   file->setFileName(fileName);
   file->setPermissions(txtFile, QFile::WriteOwner | QFile::ReadOwner);
@@ -552,7 +554,6 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 
 void MainWindow::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
-  // TextEditToFile(ui->textEdit, txtFile);
 
   saveTab();
 }
