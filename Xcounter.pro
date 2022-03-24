@@ -30,6 +30,7 @@ SOURCES += \
     dlglist.cpp \
     dlgnotes.cpp \
     dlgrename.cpp \
+    dlgreport.cpp \
     dlgsettime.cpp \
     dlgtodo.cpp \
     main.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     dlglist.h \
     dlgnotes.h \
     dlgrename.h \
+    dlgreport.h \
     dlgsettime.h \
     dlgtodo.h \
     mainwindow.h
@@ -48,6 +50,7 @@ FORMS += \
     dlglist.ui \
     dlgnotes.ui \
     dlgrename.ui \
+    dlgreport.ui \
     dlgsettime.ui \
     dlgtodo.ui \
     mainwindow.ui

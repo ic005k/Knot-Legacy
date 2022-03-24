@@ -604,6 +604,7 @@ QTabBar QToolButton::right-arrow {
     <addaction name="actionDel_Tab"/>
     <addaction name="actionRename"/>
     <addaction name="actionFind"/>
+    <addaction name="actionReport"/>
     <addaction name="actionExport_Data"/>
     <addaction name="actionNotes"/>
     <addaction name="actionImport_Data"/>
@@ -656,6 +657,11 @@ QTabBar QToolButton::right-arrow {
   <action name="actionFind">
    <property name="text">
     <string>Find</string>
+   </property>
+  </action>
+  <action name="actionReport">
+   <property name="text">
+    <string>Report</string>
    </property>
   </action>
  </widget>

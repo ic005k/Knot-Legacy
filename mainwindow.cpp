@@ -14,7 +14,7 @@ QRegularExpression regxNumber("^-?\[0-9.]*$");
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  ver = "1.0.01";
+  ver = "1.0.02";
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
   fontSize = this->font().pixelSize();
 
@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgTodo = new dlgTodo(this);
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
   mydlgList = new dlgList(this);
+  mydlgReport = new dlgReport(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
   // 获取背景色
@@ -1000,7 +1001,11 @@ void MainWindow::on_twItemDoubleClicked() {
     mydlgSetTime->ui->lblTitle->setText(tr("Modify"));
     mydlgSetTime->ui->timeEdit->setTime(time);
 
-    mydlgSetTime->ui->editAmount->setText(item->text(1));
+    QString str = item->text(1);
+    if (str == "0.00")
+      mydlgSetTime->ui->editAmount->setText("");
+    else
+      mydlgSetTime->ui->editAmount->setText(str);
     mydlgSetTime->ui->editDesc->setText(item->text(2));
 
     mydlgSetTime->setFixedHeight(this->height());
@@ -1753,4 +1758,26 @@ void MainWindow::on_btnDay_clicked() {
       break;
     }
   }
+}
+
+void MainWindow::on_actionReport_triggered() {
+  QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    mydlgReport->ui->tableReport->setRowCount(tw->topLevelItemCount());
+
+    QTableWidgetItem* tableItem =
+        new QTableWidgetItem(tw->topLevelItem(i)->text(0));
+    mydlgReport->ui->tableReport->setItem(i, 0, tableItem);
+    tableItem = new QTableWidgetItem(tw->topLevelItem(i)->text(1));
+    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mydlgReport->ui->tableReport->setItem(i, 1, tableItem);
+    tableItem = new QTableWidgetItem(tw->topLevelItem(i)->text(2));
+    mydlgReport->ui->tableReport->setItem(i, 2, tableItem);
+  }
+  mydlgReport->ui->lblTitle->setText(
+      ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
+  mydlgReport->setFixedHeight(this->height());
+  mydlgReport->setFixedWidth(this->width());
+  mydlgReport->setModal(true);
+  mydlgReport->show();
 }

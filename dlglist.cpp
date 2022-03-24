@@ -13,6 +13,7 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
 }
 
 dlgList::~dlgList() { delete ui; }
+
 void dlgList::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
 void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {

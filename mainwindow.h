@@ -34,11 +34,13 @@
 #include "dlglist.h"
 #include "dlgnotes.h"
 #include "dlgrename.h"
+#include "dlgreport.h"
 #include "dlgsettime.h"
 #include "dlgtodo.h"
 #include "ui_dlglist.h"
 #include "ui_dlgnotes.h"
 #include "ui_dlgrename.h"
+#include "ui_dlgreport.h"
 #include "ui_dlgsettime.h"
 #include "ui_dlgtodo.h"
 QT_BEGIN_NAMESPACE
@@ -56,13 +58,17 @@ class MainWindow : public QMainWindow {
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   Ui::MainWindow *ui;
-
+  int get_Day(QString date);
+  QString get_Year(QString date);
+  QString get_Month(QString date);
+  QStringList listMonth;
   QString bakFile;
   dlgNotes *mydlgNotes;
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
   dlgTodo *mydlgTodo;
   dlgList *mydlgList;
+  dlgReport *mydlgReport;
   QTreeWidgetItem *parentItem;
   QVector<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;
@@ -213,8 +219,9 @@ class MainWindow : public QMainWindow {
 
   void on_btnDay_clicked();
 
+  void on_actionReport_triggered();
+
  private:
-  QStringList listMonth;
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格
   int x, y, w, h;
@@ -224,9 +231,6 @@ class MainWindow : public QMainWindow {
   QObjectList getAllUIControls(QObject *parent);
   QString init_Objname();
   void initChartTimeLine(QTreeWidget *, bool);
-  int get_Day(QString date);
-  QString get_Year(QString date);
-  QString get_Month(QString date);
   QList<QToolButton *> listNBtn;
   void init_TabNavigate();
   void init_NavigateBtnColor();
