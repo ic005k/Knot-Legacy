@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QScroller>
+#include <QTableWidgetItem>
 
 namespace Ui {
 class dlgReport;
@@ -27,8 +28,11 @@ class dlgReport : public QDialog {
 
   void on_btnMonth_clicked();
 
+  void on_tableReport_itemClicked(QTableWidgetItem *item);
+
+  void on_tableReport_cellClicked(int row, int column);
+
  private:
-  QString tableStyle = "QTableWidget::item {height: 25;}";
 };
 
 #endif  // DLGREPORT_H

@@ -264,10 +264,27 @@ QTabBar QToolButton::right-arrow {
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
+          <widget class="QToolButton" name="btnReport">
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Report</string>
+           </property>
+           <property name="icon">
+            <iconset resource="src.qrc">
+             <normaloff>:/src/report.png</normaloff>:/src/report.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QToolButton" name="btnFind">
            <property name="minimumSize">
             <size>
-             <width>0</width>
+             <width>28</width>
              <height>28</height>
             </size>
            </property>

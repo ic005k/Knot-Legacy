@@ -119,6 +119,9 @@ MainWindow::MainWindow(QWidget* parent)
     bakFile = path + "/" + appName + ".bak";
   }
 
+  int iz = 22;
+  ui->btnFind->setIconSize(QSize(iz, iz));
+  ui->btnReport->setIconSize(QSize(iz, iz));
   int s = 35;
   if (isIOS) {
   }
@@ -1771,25 +1774,49 @@ void MainWindow::on_btnDay_clicked() {
 
 void MainWindow::on_actionReport_triggered() {
   QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
+  double freq, amount;
+  freq = 0;
+  amount = 0;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     mydlgReport->ui->tableReport->setRowCount(tw->topLevelItemCount());
 
-    mydlgReport->ui->tableReport->setColumnWidth(
-        0, mydlgReport->ui->tableReport->columnWidth(0));
-    mydlgReport->ui->tableReport->setRowHeight(i, 25);
+    // mydlgReport->ui->tableReport->setColumnWidth(
+    //     0, mydlgReport->ui->tableReport->columnWidth(0));
+    // mydlgReport->ui->tableReport->setRowHeight(i, 25);
     QTableWidgetItem* tableItem =
         new QTableWidgetItem(tw->topLevelItem(i)->text(0));
     mydlgReport->ui->tableReport->setItem(i, 0, tableItem);
-    tableItem = new QTableWidgetItem(tw->topLevelItem(i)->text(1));
+
+    QString txt1 = tw->topLevelItem(i)->text(1);
+    freq = freq + txt1.toDouble();
+    tableItem = new QTableWidgetItem(txt1);
     tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     mydlgReport->ui->tableReport->setItem(i, 1, tableItem);
-    tableItem = new QTableWidgetItem(tw->topLevelItem(i)->text(2));
+
+    QString txt2 = tw->topLevelItem(i)->text(2);
+    amount = amount + txt2.toDouble();
+    tableItem = new QTableWidgetItem(txt2);
     mydlgReport->ui->tableReport->setItem(i, 2, tableItem);
   }
+
+  int count = mydlgReport->ui->tableReport->rowCount();
+  mydlgReport->ui->tableReport->setRowCount(count + 1);
+  QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
+  mydlgReport->ui->tableReport->setItem(count, 0, tableItem);
+
+  tableItem = new QTableWidgetItem(QString::number(freq));
+  tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  mydlgReport->ui->tableReport->setItem(count, 1, tableItem);
+
+  tableItem = new QTableWidgetItem(QString::number(amount));
+  mydlgReport->ui->tableReport->setItem(count, 2, tableItem);
   mydlgReport->ui->lblTitle->setText(
       ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
+  mydlgReport->ui->tableDetails->setRowCount(0);
   mydlgReport->setFixedHeight(this->height());
   mydlgReport->setFixedWidth(this->width());
   mydlgReport->setModal(true);
   mydlgReport->show();
 }
+
+void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }

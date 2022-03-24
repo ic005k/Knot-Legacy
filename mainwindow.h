@@ -221,6 +221,8 @@ class MainWindow : public QMainWindow {
 
   void on_actionReport_triggered();
 
+  void on_btnReport_clicked();
+
  private:
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格

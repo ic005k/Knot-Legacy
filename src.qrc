@@ -12,5 +12,6 @@
         <file>src/done.png</file>
         <file>src/modi.png</file>
         <file>src/todo.png</file>
+        <file>src/report.png</file>
     </qresource>
 </RCC>
