@@ -52,6 +52,8 @@ void dlgReport::on_btnYear_clicked() {
       QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
       if (strYear == ui->btnYear->text()) {
         ui->tableReport->setRowCount(ui->tableReport->rowCount() + 1);
+        ui->tableReport->setColumnWidth(0, ui->tableReport->columnWidth(0));
+        ui->tableReport->setRowHeight(i, 25);
         QTableWidgetItem* tableItem =
             new QTableWidgetItem(tw->topLevelItem(i)->text(0));
         ui->tableReport->setItem(i, 0, tableItem);
@@ -107,6 +109,8 @@ void dlgReport::on_btnMonth_clicked() {
       QString strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0));
       if (strYear == ui->btnYear->text() && strMonth == ui->btnMonth->text()) {
         ui->tableReport->setRowCount(ui->tableReport->rowCount() + 1);
+        ui->tableReport->setColumnWidth(0, ui->tableReport->columnWidth(0));
+        ui->tableReport->setRowHeight(i, 25);
         QTableWidgetItem* tableItem =
             new QTableWidgetItem(tw->topLevelItem(i)->text(0));
         ui->tableReport->setItem(i, 0, tableItem);

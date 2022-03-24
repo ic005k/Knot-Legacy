@@ -1774,6 +1774,9 @@ void MainWindow::on_actionReport_triggered() {
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     mydlgReport->ui->tableReport->setRowCount(tw->topLevelItemCount());
 
+    mydlgReport->ui->tableReport->setColumnWidth(
+        0, mydlgReport->ui->tableReport->columnWidth(0));
+    mydlgReport->ui->tableReport->setRowHeight(i, 25);
     QTableWidgetItem* tableItem =
         new QTableWidgetItem(tw->topLevelItem(i)->text(0));
     mydlgReport->ui->tableReport->setItem(i, 0, tableItem);
