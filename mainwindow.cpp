@@ -5,7 +5,7 @@
 #include "ui_mainwindow.h"
 
 QString appName = "Xcounter";
-QString iniFile = "/data/data/org.qtproject.example.Xcount/Xcount.ini";
+QString iniFile;
 MainWindow* mw_one;
 bool loading = false;
 extern bool isAndroid, isIOS, zh_cn;
@@ -68,7 +68,6 @@ MainWindow::MainWindow(QWidget* parent)
   // tmer->start(1000);
   strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
 
-  ui->lcdNumber->setHidden(true);
   ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->frame_find->setHidden(true);
 
@@ -233,11 +232,7 @@ void MainWindow::init_NavigateBtnColor() {
   }
 }
 
-void MainWindow::timerUpdate() {
-  QDateTime dateTime = QDateTime::currentDateTime();
-  ui->lcdNumber->display(dateTime.toString("HH:mm:ss") + " - " +
-                         QString::number(today));
-}
+void MainWindow::timerUpdate() {}
 
 MainWindow::~MainWindow() { delete ui; }
 
@@ -884,22 +879,24 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
     tw->setObjectName("tw" + init_Objname());
   tw->setColumnCount(3);
   tw->headerItem()->setText(0, "  " + tr("Date") + "  ");
-  tw->headerItem()->setText(1, "  " + tr("Frequency") + "  ");
+  tw->headerItem()->setText(1, "  " + tr("Freq") + "  ");
   tw->headerItem()->setText(2, tr("Amount"));
   tw->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
   tw->setAlternatingRowColors(true);
-  tw->setFrameShape(QFrame::NoFrame);
+  tw->setFrameShape(QTreeWidget::NoFrame);
   tw->installEventFilter(this);
-  tw->setMouseTracking(true);
-  tw->setDragEnabled(false);
-  // tw->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   connect(tw, &QTreeWidget::itemClicked, this, &MainWindow::on_twItemClicked);
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
+  connect(tw, &QTreeWidget::itemPressed, [=]() {});
   QScrollBar* SB = tw->verticalScrollBar();
-  SB->setStyleSheet(vsbarStyle);
+  SB->setStyleSheet(vsbarStyleSmall);
+  tw->setStyleSheet(treeStyle);
+  tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
+  //这个不太好用，建议观察
   // QScroller::grabGesture(tw, QScroller::TouchGesture);
+  QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
   return tw;
 }
 
@@ -1130,9 +1127,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (watch == tw) {
-    if (event->type() == QEvent::MouseButtonPress) {
-    }
-    // qDebug() << "tw mousePress";
   }
 
   if (watch == ui->tabWidget->tabBar()) {
@@ -1166,8 +1160,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     int index = ui->tabWidget->currentIndex();
     int count = ui->tabWidget->tabBar()->count();
 
-    if (event->type() == QEvent::MouseButtonPress)  //如果鼠标按下
-    {
+    if (event->type() == QEvent::MouseButtonPress) {
       press_x = event->globalX();
       press_y = event->globalY();
       x = 0;
@@ -1177,8 +1170,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       qDebug() << "Press:" << press_x << press_y;
     }
 
-    if (event->type() == QEvent::MouseButtonRelease)  //如果鼠标释放
-    {
+    if (event->type() == QEvent::MouseButtonRelease) {
       relea_x = event->globalX();
       relea_y = event->globalY();
       qDebug() << "Release:" << relea_x << relea_y;
@@ -1720,6 +1712,9 @@ void MainWindow::on_btnMonth_clicked() {
 void MainWindow::on_btnDay_clicked() {
   int w = ui->btnDay->width();
   QListWidget* list = new QListWidget(this);
+  list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
+  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   QFont font;
   font.setPixelSize(fontSize);
   list->setFont(font);

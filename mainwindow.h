@@ -56,6 +56,7 @@ class MainWindow : public QMainWindow {
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   Ui::MainWindow *ui;
+
   QString bakFile;
   dlgNotes *mydlgNotes;
   dlgRename *mydlgRename;
@@ -86,7 +87,7 @@ class MainWindow : public QMainWindow {
   QTreeWidget *get_tw(int tabIndex);
   QString vsbarStyle =
       "QScrollBar:vertical{"  //垂直滑块整体
-      "width:45px;"
+      "width:30px;"
       "background:#FFFFFF;"   //背景色
       "padding-top:25px;"     //上预留位置（放置向上箭头）
       "padding-bottom:25px;"  //下预留位置（放置向下箭头）
@@ -230,5 +231,10 @@ class MainWindow : public QMainWindow {
   void init_TabNavigate();
   void init_NavigateBtnColor();
   QString ver;
+  QString treeStyle = "QTreeWidget::item {height: 25;}";
+  //"QTreeWidget::item {background-color: #ffffff;color: #000000;border: "
+  //"transparent;border-bottom: 1px solid #dbdbdb; padding: 2px;height: 20;}"
+  //"QTreeWidget::item:hover {background-color: #f5f5f5;}"
+  //"QTreeWidget::item:selected {border-left: 0px solid #777777;}"
 };
 #endif  // MAINWINDOW_H

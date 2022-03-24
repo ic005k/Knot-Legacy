@@ -9,7 +9,7 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
 
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  QScroller::grabGesture(ui->listWidget, QScroller::TouchGesture);
+  QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
   ui->btnModi->setHidden(true);
 }
@@ -144,9 +144,7 @@ void dlgTodo::on_listWidget_itemClicked(QListWidgetItem* item) {
 
 void dlgTodo::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
   Q_UNUSED(item);
-  // ui->listWidget->openPersistentEditor(item);
-  // editItem = item;
-  qDebug() << "testing";
+  on_btnModify_clicked();
 }
 
 void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {

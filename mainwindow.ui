@@ -18,25 +18,6 @@
     <item row="0" column="0" rowspan="6">
      <layout class="QVBoxLayout" name="vl"/>
     </item>
-    <item row="0" column="1">
-     <widget class="QLCDNumber" name="lcdNumber">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="digitCount">
-       <number>13</number>
-      </property>
-      <property name="mode">
-       <enum>QLCDNumber::Dec</enum>
-      </property>
-      <property name="value" stdset="0">
-       <double>0.000000000000000</double>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="1">
      <widget class="QFrame" name="frame_tab">
       <property name="minimumSize">

@@ -10,8 +10,8 @@ dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
   this->installEventFilter(this);
 
-  QScroller::grabGesture(ui->textEdit, QScroller::TouchGesture);
-  QScroller::grabGesture(ui->textBrowser, QScroller::TouchGesture);
+  QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
+  QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
 }
 
 dlgNotes::~dlgNotes() { delete ui; }
