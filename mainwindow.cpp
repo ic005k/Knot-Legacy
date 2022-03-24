@@ -249,7 +249,10 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       QTreeWidgetItem* topItem = tw->topLevelItem(i);
       QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
       item11->setText(0, strTime);
-      item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
+      if (strAmount == "")
+        item11->setText(1, "");
+      else
+        item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
       item11->setText(2, strDesc);
       int child = topItem->childCount();
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -273,7 +276,10 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
     tw->addTopLevelItem(topItem);
     QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
     item11->setText(0, strTime);
-    item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
+    if (strAmount == "")
+      item11->setText(1, "");
+    else
+      item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
     item11->setText(2, strDesc);
     int child = topItem->childCount();
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -929,7 +935,10 @@ void MainWindow::set_Time() {
     QString time = mydlgSetTime->ui->timeEdit->text();
     item->setText(0, time);
     QString sa = mydlgSetTime->ui->editAmount->text().trimmed();
-    item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 2));
+    if (sa == "")
+      item->setText(1, "");
+    else
+      item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 2));
     item->setText(2, mydlgSetTime->ui->editDesc->text().trimmed());
     // Amount
     int child = item->parent()->childCount();

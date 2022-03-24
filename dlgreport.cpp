@@ -7,6 +7,7 @@ extern int fontSize;
 extern MainWindow* mw_one;
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
+  ui->tableReport->setStyleSheet(tableStyle);
   for (int y = 0; y < ui->tableReport->columnCount(); y++) {
     ui->tableReport->horizontalHeader()->setSectionResizeMode(
         y, QHeaderView::ResizeToContents);

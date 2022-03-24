@@ -28,6 +28,7 @@ class dlgReport : public QDialog {
   void on_btnMonth_clicked();
 
  private:
+  QString tableStyle = "QTableWidget::item {height: 25;}";
 };
 
 #endif  // DLGREPORT_H
