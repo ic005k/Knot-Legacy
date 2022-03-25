@@ -16,10 +16,11 @@ class dlgSetTime : public QDialog {
   explicit dlgSetTime(QWidget *parent = nullptr);
   ~dlgSetTime();
   Ui::dlgSetTime *ui;
-  void saveCustomDesc();
+  static void saveCustomDesc();
 
-  int removeDuplicates(QStringList *that);
-protected:
+  static int removeDuplicates(QStringList *that);
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event);
  private slots:
   void on_btnBack_clicked();

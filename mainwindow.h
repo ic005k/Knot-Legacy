@@ -62,6 +62,7 @@ class MainWindow : public QMainWindow {
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   Ui::MainWindow *ui;
+
   SearchThread *mySearchThread;
   bool isTesting = false;
   int get_Day(QString date);
@@ -82,15 +83,15 @@ class MainWindow : public QMainWindow {
   bool isAdd = false;
   QTimer *tmer;
   QString strDate;
-  void saveData(QTreeWidget *, int);
+  static void saveData(QTreeWidget *, int);
   void readData(QTreeWidget *);
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
   void initChart(QString, QString, QStringList);
-  void saveNotes();
+  static void saveNotes();
   bool isInit = false;
   int today = 0;
-  void saveTab();
+  static void saveTab();
   bool isSlide = false;
   void init_Data();
   void set_Time();
@@ -136,7 +137,7 @@ class MainWindow : public QMainWindow {
       "QScrollBar::sub-line:vertical{"  //向上箭头样式
       "background:url(:/src/up1.png) center no-repeat;}";
   void sort_childItem(QTreeWidgetItem *);
-  QString getFileSize(const qint64 &size, int precision);
+  static QString getFileSize(const qint64 &size, int precision);
   void goResults();
   void goResultsMonth();
   QStringList get_MonthList(QString strY, QString strM);
@@ -245,7 +246,7 @@ class MainWindow : public QMainWindow {
   QList<QToolButton *> listNBtn;
   void init_TabNavigate();
   void init_NavigateBtnColor();
-  QString ver;
+
   QString treeStyle = "QTreeWidget::item {height: 25;}";
   //"QTreeWidget::item {background-color: #ffffff;color: #000000;border: "
   //"transparent;border-bottom: 1px solid #dbdbdb; padding: 2px;height: 20;}"

@@ -2,12 +2,15 @@
 
 #include "mainwindow.h"
 #include "ui_dlgtodo.h"
+QListWidget* mylist;
 extern QString iniFile;
 extern bool loading;
 extern int fontSize;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
 
+  mylist = new QListWidget;
+  mylist = ui->listWidget;
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
@@ -22,11 +25,11 @@ void dlgTodo::on_btnBack_clicked() { close(); }
 
 void dlgTodo::saveTodo() {
   QSettings Reg(iniFile, QSettings::IniFormat);
-  int count = ui->listWidget->count();
+  int count = mylist->count();
   Reg.setValue("/Todo/Count", count);
   for (int i = 0; i < count; i++) {
-    QListWidgetItem* item = ui->listWidget->item(i);
-    QWidget* w = ui->listWidget->itemWidget(item);
+    QListWidgetItem* item = mylist->item(i);
+    QWidget* w = mylist->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(1);
     QString str = lbl->text();
     Reg.setValue("/Todo/Item" + QString::number(i), str);

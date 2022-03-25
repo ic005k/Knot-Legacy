@@ -1,10 +1,13 @@
 #include "dlgnotes.h"
 
-#include <mainwindow.h>
-
+#include "mainwindow.h"
 #include "ui_dlgnotes.h"
+#include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern bool loading;
+extern QString noteText;
+extern int curPos;
+extern int sliderPos;
 
 dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
@@ -18,7 +21,10 @@ dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
 dlgNotes::~dlgNotes() { delete ui; }
 
 void dlgNotes::on_btnBack_clicked() {
-  if (!ui->textEdit->isHidden()) mw_one->saveNotes();
+  noteText = ui->textEdit->toPlainText();
+  curPos = ui->textEdit->textCursor().position();
+  sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
+  if (!ui->textEdit->isHidden()) MainWindow::saveNotes();
   ui->textEdit->clear();
   close();
 }

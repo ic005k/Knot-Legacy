@@ -5,8 +5,12 @@
 #include "ui_mainwindow.h"
 
 QString appName = "Xcounter";
-QString iniFile;
+QString iniFile, ver;
+QString noteText;
+int curPos;
+int sliderPos;
 MainWindow* mw_one;
+QTabWidget* tabData;
 bool loading = false;
 extern bool isAndroid, isIOS, zh_cn;
 int fontSize, red;
@@ -16,8 +20,18 @@ void SearchThread::run() {
   MainWindow::saveFile();
   emit isDone();
 }
-void MainWindow::dealDone() {}
-void MainWindow::saveFile() {}
+void MainWindow::dealDone() {
+  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  get_Today(tw);
+  init_Stats(tw);
+  initMonthChart();
+  initChartTimeLine(tw, true);
+}
+void MainWindow::saveFile() {
+  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  int index = tabData->currentIndex();
+  saveData(tw, index);
+}
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -25,6 +39,8 @@ MainWindow::MainWindow(QWidget* parent)
   ver = "1.0.02";
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
   fontSize = this->font().pixelSize();
+  tabData = new QTabWidget;
+  tabData = ui->tabWidget;
 
   chart = new Chart(this, tr("History Data"));
   ui->pLayout->setMargin(0);
@@ -338,7 +354,8 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
     tw->setCurrentItem(topItem);
     sort_childItem(topItem->child(0));
     tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
-    saveData(tw, ui->tabWidget->currentIndex());
+    // saveData(tw, ui->tabWidget->currentIndex());
+    mySearchThread->start();
   }
 }
 
@@ -457,12 +474,12 @@ QObjectList MainWindow::getAllUIControls(QObject* parent) {
 void MainWindow::saveTab() {
   // Tab
   QSettings Reg(iniFile, QSettings::IniFormat);
-  int TabCount = ui->tabWidget->tabBar()->count();
+  int TabCount = tabData->tabBar()->count();
   Reg.setValue("TabCount", TabCount);
-  int CurrentIndex = ui->tabWidget->currentIndex();
+  int CurrentIndex = tabData->currentIndex();
   Reg.setValue("CurrentIndex", CurrentIndex);
   for (int i = 0; i < TabCount; i++) {
-    Reg.setValue("TabName" + QString::number(i), ui->tabWidget->tabText(i));
+    Reg.setValue("TabName" + QString::number(i), tabData->tabText(i));
   }
 }
 
@@ -519,7 +536,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
     }
   }
 
-  Reg.setValue("/" + name + "/" + "Note", ui->tabWidget->tabToolTip(tabIndex));
+  Reg.setValue("/" + name + "/" + "Note", tabData->tabToolTip(tabIndex));
   int lines = Reg.allKeys().count();
   Reg.setValue("/" + ver + "-" + appName + "/AllKeys", lines);
   Reg.setValue("/" + ver + "-" + appName + "/FileSize",
@@ -527,13 +544,8 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   Reg.setValue("/" + ver + "-" + appName + "/File", iniFile);
 
   saveTab();
-  mydlgTodo->saveTodo();
-  mydlgSetTime->saveCustomDesc();
-
-  get_Today(tw);
-  init_Stats(tw);
-  initMonthChart();
-  initChartTimeLine(tw, true);
+  dlgTodo::saveTodo();
+  dlgSetTime::saveCustomDesc();
 }
 
 void MainWindow::initMonthChart() {
@@ -1107,18 +1119,14 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 void MainWindow::saveNotes() {
   if (loading) return;
   QSettings Reg(iniFile, QSettings::IniFormat);
-  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   QString name = tw->objectName();
-  int index = ui->tabWidget->currentIndex();
-  QString text = mydlgNotes->ui->textEdit->toPlainText();
-  int curPos = mydlgNotes->ui->textEdit->textCursor().position();
-  int sliderPos =
-      mydlgNotes->ui->textEdit->verticalScrollBar()->sliderPosition();
-  text =
-      QString::number(curPos) + "|" + QString::number(sliderPos) + "|" + text;
+  int index = tabData->currentIndex();
+
+  QString text = QString::number(curPos) + "|" + QString::number(sliderPos) +
+                 "|" + noteText;
   Reg.setValue("/" + name + "/Note", text);
-  ui->tabWidget->setTabToolTip(index, text);
-  qDebug() << "curPos" << curPos << "sliderPos" << sliderPos;
+  tabData->setTabToolTip(index, text);
 }
 
 void MainWindow::on_btnLeft_clicked() {
