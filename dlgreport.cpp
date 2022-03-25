@@ -274,6 +274,9 @@ void dlgReport::on_tableReport_cellClicked(int row, int column) {
         ui->tableDetails->item(m, 0)->setFlags(Qt::NoItemFlags);
         ui->tableDetails->item(m, 1)->setFlags(Qt::NoItemFlags);
         ui->tableDetails->item(m, 2)->setFlags(Qt::NoItemFlags);
+
+        //数量特别大的时候，影响性能
+        // ui->tableDetails->scrollToBottom();
       }
       break;
     }

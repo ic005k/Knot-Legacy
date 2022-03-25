@@ -12,12 +12,13 @@ int sliderPos;
 MainWindow* mw_one;
 QTabWidget* tabData;
 bool loading = false;
+bool SaveAll = false;
 extern bool isAndroid, isIOS, zh_cn;
 int fontSize, red;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 SearchThread::SearchThread(QObject* parent) : QThread{parent} {}
 void SearchThread::run() {
-  MainWindow::saveFile();
+  MainWindow::saveFile(SaveAll);
   emit isDone();
 }
 void MainWindow::dealDone() {
@@ -27,10 +28,21 @@ void MainWindow::dealDone() {
   initMonthChart();
   initChartTimeLine(tw, true);
 }
-void MainWindow::saveFile() {
-  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
-  int index = tabData->currentIndex();
-  saveData(tw, index);
+void MainWindow::saveFile(bool all) {
+  if (!all) {
+    QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+    int index = tabData->currentIndex();
+    saveData(tw, index);
+  }
+
+  if (all) {
+    QFile(iniFile).remove();
+    for (int i = 0; i < tabData->tabBar()->count(); i++) {
+      QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
+      tw->setObjectName("tab" + QString::number(i + 1));
+      saveData(tw, i);
+    }
+  }
 }
 
 MainWindow::MainWindow(QWidget* parent)
@@ -274,12 +286,10 @@ MainWindow::~MainWindow() {
 void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
                           QString strDesc) {
   bool isYes = false;
-  // QSettings Reg(iniFile, QSettings::IniFormat);
-  // QString name = "tab" + QString::number(ui->tabWidget->currentIndex() + 1);
-  //  tw->setObjectName(name);
+
   strDate = QDate::currentDate().toString();
   if (isTesting) {
-    strDate = strDate.replace("3", "2");
+    strDate = strDate.replace("3", "3");
   }
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
@@ -355,6 +365,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
     sort_childItem(topItem->child(0));
     tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
     // saveData(tw, ui->tabWidget->currentIndex());
+    SaveAll = false;
     mySearchThread->start();
   }
 }
@@ -422,7 +433,8 @@ void MainWindow::del_Data(QTreeWidget* tw) {
   } else
     return;
 
-  saveData(tw, ui->tabWidget->currentIndex());
+  SaveAll = false;
+  mySearchThread->start();
 }
 
 void MainWindow::on_btnPlus_clicked() {
@@ -655,7 +667,8 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 void MainWindow::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
 
-  saveTab();
+  SaveAll = false;
+  mySearchThread->start();
 }
 
 void MainWindow::init_Stats(QTreeWidget* tw) {
@@ -917,12 +930,9 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
   ui->tabWidget->removeTab(index);
 
-  QFile(iniFile).remove();
-  for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
-    QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
-    tw->setObjectName("tab" + QString::number(i + 1));
-    saveData(tw, i);
-  }
+  // Save all
+  SaveAll = true;
+  mySearchThread->start();
 
   int TabCount = ui->tabWidget->tabBar()->count();
   if (TabCount == 0) {
@@ -1112,7 +1122,6 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   init_NavigateBtnColor();
 
   initMonthChart();
-
   initChartTimeLine(tw, true);
 }
 
@@ -1215,11 +1224,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
       if (move) {
         qDebug() << "ok save";
-        QFile(iniFile).remove();
-        for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
-          QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
-          saveData(tw, i);
-        }
+        SaveAll = true;
+        mySearchThread->start();
       }
     }
   }
@@ -1431,7 +1437,14 @@ QTreeWidget* MainWindow::get_tw(int tabIndex) {
 
 void MainWindow::on_actionView_App_Data_triggered() {
   mydlgNotes->ui->textBrowser->clear();
-  mydlgNotes->ui->textBrowser->setText(loadText(iniFile));
+  QSettings Reg(iniFile, QSettings::IniFormat);
+  QString keys = Reg.value("/" + ver + "-" + appName + "/AllKeys").toString();
+  QString fs = Reg.value("/" + ver + "-" + appName + "/FileSize").toString();
+  QString inif = Reg.value("/" + ver + "-" + appName + "/File").toString();
+  mydlgNotes->ui->textBrowser->append("AllKeys : " + keys);
+  mydlgNotes->ui->textBrowser->append("FileSize : " + fs);
+  mydlgNotes->ui->textBrowser->append("File : " + inif);
+
   mydlgNotes->ui->textBrowser->setHidden(false);
   mydlgNotes->ui->textEdit->setHidden(true);
 
