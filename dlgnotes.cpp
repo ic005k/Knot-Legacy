@@ -9,7 +9,8 @@ extern bool loading;
 dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
   this->installEventFilter(this);
-
+  //鼠标不可选中文本
+  ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
 }

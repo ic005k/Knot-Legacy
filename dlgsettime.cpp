@@ -52,7 +52,7 @@ void dlgSetTime::on_btnOk_clicked() {
     mw_one->set_Time();
   } else {
     if (mw_one->isTesting) {
-      for (int i = 0; i < 100; i++)
+      for (int i = 0; i < 500; i++)
         mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                          ui->timeEdit->text(), ui->editAmount->text().trimmed(),
                          ui->editDesc->text().trimmed());

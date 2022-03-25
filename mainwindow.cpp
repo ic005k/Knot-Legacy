@@ -243,7 +243,13 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
                           QString strDesc) {
   bool isYes = false;
+  // QSettings Reg(iniFile, QSettings::IniFormat);
+  // QString name = "tab" + QString::number(ui->tabWidget->currentIndex() + 1);
+  //  tw->setObjectName(name);
   strDate = QDate::currentDate().toString();
+  if (isTesting) {
+    strDate = strDate.replace("3", "2");
+  }
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
     if (str == strDate) {
@@ -257,23 +263,36 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       else
         item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
       item11->setText(2, strDesc);
-      int child = topItem->childCount();
+
+      int childCount = topItem->childCount();
+      /*Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childCount",
+                   childCount);
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childTime" +
+                       QString::number(childCount - 1),
+                   item11->text(0));
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childAmount" +
+                       QString::number(childCount - 1),
+                   item11->text(1));
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childDesc" +
+                       QString::number(childCount - 1),
+                   item11->text(2));*/
+
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
 
       // Amount
       double amount = 0;
-      for (int m = 0; m < child; m++) {
+      for (int m = 0; m < childCount; m++) {
         QString str = topItem->child(m)->text(1);
         amount = amount + str.toDouble();
       }
       QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-      topItem->setText(1, QString::number(child));
+      topItem->setText(1, QString::number(childCount));
       topItem->setText(2, strAmount);
 
       break;
     }
   }
-  if (isTesting) isYes = false;
+  // if (isTesting) isYes = false;
   if (!isYes) {
     QTreeWidgetItem* topItem = new QTreeWidgetItem;
     topItem->setText(0, strDate);
@@ -299,11 +318,11 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
   }
 
   if (!isTesting) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
+    int topCount = tw->topLevelItemCount();
+    QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
     tw->setCurrentItem(topItem);
     sort_childItem(topItem->child(0));
     tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
-
     saveData(tw, ui->tabWidget->currentIndex());
   }
 }
@@ -550,10 +569,10 @@ void MainWindow::readData(QTreeWidget* tw) {
     }
   }
 
-  get_Today(tw);
-  init_Stats(tw);
-  initMonthChart();
-  initChartTimeLine(tw, true);
+  // get_Today(tw);
+  // init_Stats(tw);
+  //  initMonthChart();
+  //  initChartTimeLine(tw, true);
 }
 
 void MainWindow::get_Today(QTreeWidget* tw) {
@@ -756,6 +775,7 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
                                QString::number(childCount),
                            0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
   }
+
   QVector<double> dList;
   if (ui->rbAmount->isChecked()) {
     double y0 = 100;
@@ -801,11 +821,13 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
       y = dList.at(i);
     }
     QPointF pf(x, y);
+
     pointlist.append(pf);
   }
 
   //绘制
-  chartTimeLine->buildChart(pointlist);
+  if (childCount <= 5000)  //太大导致绘制效率太低，没必要再绘制了
+    chartTimeLine->buildChart(pointlist);
 }
 
 void MainWindow::on_actionRename_triggered() {
@@ -900,6 +922,7 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   tw->setAlternatingRowColors(true);
   tw->setFrameShape(QTreeWidget::NoFrame);
   tw->installEventFilter(this);
+  tw->setUniformRowHeights(true);  //加快展开速度
   connect(tw, &QTreeWidget::itemClicked, this, &MainWindow::on_twItemClicked);
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
@@ -967,6 +990,7 @@ void MainWindow::set_Time() {
 void MainWindow::sort_childItem(QTreeWidgetItem* item) {
   QStringList keys, list;
   int childCount = item->parent()->childCount();
+
   for (int i = 0; i < childCount; i++) {
     QString txt = item->parent()->child(i)->text(0);
     QStringList list0 = txt.split(".");
@@ -978,8 +1002,10 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
     QString txt2 = item->parent()->child(i)->text(2);
     keys.append(txt + "|" + txt1 + "|" + txt2);
   }
+
   std::sort(keys.begin(), keys.end(),
             [](const QString& s1, const QString& s2) { return s1 < s2; });
+
   for (int i = 0; i < childCount; i++) {
     QTreeWidgetItem* childItem = item->parent()->child(i);
     QString str = keys.at(i);
@@ -1056,9 +1082,11 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 
   get_Today(tw);
   init_Stats(tw);
-  initMonthChart();
-  initChartTimeLine(tw, true);
   init_NavigateBtnColor();
+
+  initMonthChart();
+
+  initChartTimeLine(tw, true);
 }
 
 void MainWindow::saveNotes() {
@@ -1381,8 +1409,6 @@ QTreeWidget* MainWindow::get_tw(int tabIndex) {
 void MainWindow::on_actionView_App_Data_triggered() {
   mydlgNotes->ui->textBrowser->clear();
   mydlgNotes->ui->textBrowser->setText(loadText(iniFile));
-  mydlgNotes->ui->textBrowser->setTextInteractionFlags(
-      Qt::NoTextInteraction);  //鼠标不可选中文本
   mydlgNotes->ui->textBrowser->setHidden(false);
   mydlgNotes->ui->textEdit->setHidden(true);
 
@@ -1787,10 +1813,9 @@ void MainWindow::on_actionReport_triggered() {
     int count = mydlgReport->ui->tableReport->rowCount();
     mydlgReport->ui->tableReport->setRowCount(count + 1);
 
-    //效率太低
-    // mydlgReport->ui->tableReport->setColumnWidth(
-    //     0, mydlgReport->ui->tableReport->columnWidth(0));
-    // mydlgReport->ui->tableReport->setRowHeight(i, 30);
+    mydlgReport->ui->tableReport->setColumnWidth(0, 10);
+    mydlgReport->ui->tableReport->setRowHeight(i, 30);
+
     QTableWidgetItem* tableItem =
         new QTableWidgetItem(tw->topLevelItem(i)->text(0));
     mydlgReport->ui->tableReport->setItem(i, 0, tableItem);
@@ -1824,8 +1849,8 @@ void MainWindow::on_actionReport_triggered() {
     QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
     tableItem = new QTableWidgetItem(strAmount);
     mydlgReport->ui->tableReport->setItem(count, 2, tableItem);
-    mydlgReport->ui->tableReport->setColumnWidth(
-        0, mydlgReport->ui->tableReport->columnWidth(0));
+
+    mydlgReport->ui->tableReport->setColumnWidth(0, 10);
     mydlgReport->ui->tableReport->setRowHeight(count, 30);
 
     mydlgReport->ui->tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);

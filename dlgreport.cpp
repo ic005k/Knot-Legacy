@@ -16,6 +16,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
     ui->tableDetails->horizontalHeader()->setSectionResizeMode(
         y, QHeaderView::ResizeToContents);
   }
+
   ui->tableReport->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->tableReport->setSelectionBehavior(QAbstractItemView::SelectRows);
   ui->tableReport->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -86,6 +87,9 @@ void dlgReport::on_btnYear_clicked() {
         tableItem = new QTableWidgetItem(strAmount);
         ui->tableReport->setItem(j, 2, tableItem);
 
+        ui->tableReport->setColumnWidth(0, 10);
+        ui->tableReport->setRowHeight(j, 30);
+
         ui->tableReport->item(j, 0)->setFlags(Qt::NoItemFlags);
         ui->tableReport->item(j, 1)->setFlags(Qt::NoItemFlags);
         ui->tableReport->item(j, 2)->setFlags(Qt::NoItemFlags);
@@ -106,6 +110,9 @@ void dlgReport::on_btnYear_clicked() {
 
       tableItem = new QTableWidgetItem(QString::number(amount));
       ui->tableReport->setItem(count, 2, tableItem);
+
+      ui->tableReport->setColumnWidth(0, 10);
+      ui->tableReport->setRowHeight(count, 30);
 
       ui->tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);
       ui->tableReport->item(count, 1)->setFlags(Qt::NoItemFlags);
@@ -179,6 +186,9 @@ void dlgReport::on_btnMonth_clicked() {
         tableItem = new QTableWidgetItem(strAmount);
         ui->tableReport->setItem(j, 2, tableItem);
 
+        ui->tableReport->setColumnWidth(0, 10);
+        ui->tableReport->setRowHeight(j, 30);
+
         ui->tableReport->item(j, 0)->setFlags(Qt::NoItemFlags);
         ui->tableReport->item(j, 1)->setFlags(Qt::NoItemFlags);
         ui->tableReport->item(j, 2)->setFlags(Qt::NoItemFlags);
@@ -199,6 +209,9 @@ void dlgReport::on_btnMonth_clicked() {
 
       tableItem = new QTableWidgetItem(QString::number(amount));
       ui->tableReport->setItem(count, 2, tableItem);
+
+      ui->tableReport->setColumnWidth(0, 10);
+      ui->tableReport->setRowHeight(count, 30);
 
       ui->tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);
       ui->tableReport->item(count, 1)->setFlags(Qt::NoItemFlags);
@@ -231,8 +244,10 @@ void dlgReport::on_tableReport_itemClicked(QTableWidgetItem* item) {
 void dlgReport::on_tableReport_cellClicked(int row, int column) {
   Q_UNUSED(column);
   markColor(row);
+  ui->tableDetails->setRowCount(0);
   QString str = ui->tableReport->item(row, 0)->text();
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  QString name = tw->objectName();
 
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
@@ -240,6 +255,9 @@ void dlgReport::on_tableReport_cellClicked(int row, int column) {
       int childCount = topItem->childCount();
       ui->tableDetails->setRowCount(childCount);
       for (int m = 0; m < childCount; m++) {
+        ui->tableDetails->setColumnWidth(0, 10);
+        ui->tableDetails->setRowHeight(m, 30);
+
         QTableWidgetItem* tableItem;
         QString str = topItem->child(m)->text(0);
         QStringList list = str.split(".");
@@ -264,16 +282,17 @@ void dlgReport::on_tableReport_cellClicked(int row, int column) {
 
 void dlgReport::markColor(int row) {
   QIcon icon;
-  icon.addFile(":/src/sel.png", QSize(10, 10));
+  int size = 5;
+  icon.addFile(":/src/sel.png", QSize(size, size));
   QIcon icon1;
-  icon1.addFile(":/src/nosel.png", QSize(10, 10));
+  icon1.addFile(":/src/nosel.png", QSize(size, size));
   QTableWidgetItem* id1;
 
   for (int i = 0; i < ui->tableReport->rowCount(); i++) {
     if (i == row)
-      id1 = new QTableWidgetItem(icon, QString::number(i + 1));
+      id1 = new QTableWidgetItem(icon, QString::number(i + 1) + "  ");
     else
-      id1 = new QTableWidgetItem(icon1, QString::number(i + 1));
+      id1 = new QTableWidgetItem(icon1, QString::number(i + 1) + "  ");
     ui->tableReport->setVerticalHeaderItem(i, id1);
   }
 }

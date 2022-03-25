@@ -58,7 +58,7 @@ class MainWindow : public QMainWindow {
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   Ui::MainWindow *ui;
-  bool isTesting = true;
+  bool isTesting = false;
   int get_Day(QString date);
   QString get_Year(QString date);
   QString get_Month(QString date);
