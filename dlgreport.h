@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QScroller>
+#include <QStandardItemModel>
 #include <QTableWidgetItem>
 
 namespace Ui {
@@ -19,6 +20,10 @@ class dlgReport : public QDialog {
   ~dlgReport();
   Ui::dlgReport *ui;
 
+  void markColor(int row);
+ public slots:
+  void on_tableReport_cellClicked(int row, int column);
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
  private slots:
@@ -29,8 +34,6 @@ class dlgReport : public QDialog {
   void on_btnMonth_clicked();
 
   void on_tableReport_itemClicked(QTableWidgetItem *item);
-
-  void on_tableReport_cellClicked(int row, int column);
 
  private:
 };

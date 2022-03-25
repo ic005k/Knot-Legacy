@@ -13,5 +13,7 @@
         <file>src/modi.png</file>
         <file>src/todo.png</file>
         <file>src/report.png</file>
+        <file>src/sel.png</file>
+        <file>src/nosel.png</file>
     </qresource>
 </RCC>

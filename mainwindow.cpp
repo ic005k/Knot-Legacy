@@ -273,6 +273,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       break;
     }
   }
+  if (isTesting) isYes = false;
   if (!isYes) {
     QTreeWidgetItem* topItem = new QTreeWidgetItem;
     topItem->setText(0, strDate);
@@ -297,12 +298,14 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
     topItem->setText(2, strAmount);
   }
 
-  QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
-  tw->setCurrentItem(topItem);
-  sort_childItem(topItem->child(0));
-  tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
+  if (!isTesting) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(tw->topLevelItemCount() - 1);
+    tw->setCurrentItem(topItem);
+    sort_childItem(topItem->child(0));
+    tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
 
-  saveData(tw, ui->tabWidget->currentIndex());
+    saveData(tw, ui->tabWidget->currentIndex());
+  }
 }
 
 void MainWindow::del_Data(QTreeWidget* tw) {
@@ -492,6 +495,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   saveTab();
   mydlgTodo->saveTodo();
   mydlgSetTime->saveCustomDesc();
+
   get_Today(tw);
   init_Stats(tw);
   initMonthChart();
@@ -1774,15 +1778,19 @@ void MainWindow::on_btnDay_clicked() {
 
 void MainWindow::on_actionReport_triggered() {
   QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
+  if (isTesting) saveData(tw, ui->tabWidget->currentIndex());  //测试专用
   double freq, amount;
   freq = 0;
   amount = 0;
+  mydlgReport->ui->tableReport->setRowCount(0);
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    mydlgReport->ui->tableReport->setRowCount(tw->topLevelItemCount());
+    int count = mydlgReport->ui->tableReport->rowCount();
+    mydlgReport->ui->tableReport->setRowCount(count + 1);
 
+    //效率太低
     // mydlgReport->ui->tableReport->setColumnWidth(
     //     0, mydlgReport->ui->tableReport->columnWidth(0));
-    // mydlgReport->ui->tableReport->setRowHeight(i, 25);
+    // mydlgReport->ui->tableReport->setRowHeight(i, 30);
     QTableWidgetItem* tableItem =
         new QTableWidgetItem(tw->topLevelItem(i)->text(0));
     mydlgReport->ui->tableReport->setItem(i, 0, tableItem);
@@ -1797,19 +1805,37 @@ void MainWindow::on_actionReport_triggered() {
     amount = amount + txt2.toDouble();
     tableItem = new QTableWidgetItem(txt2);
     mydlgReport->ui->tableReport->setItem(i, 2, tableItem);
+
+    mydlgReport->ui->tableReport->item(i, 0)->setFlags(Qt::NoItemFlags);
+    mydlgReport->ui->tableReport->item(i, 1)->setFlags(Qt::NoItemFlags);
+    mydlgReport->ui->tableReport->item(i, 2)->setFlags(Qt::NoItemFlags);
   }
 
   int count = mydlgReport->ui->tableReport->rowCount();
-  mydlgReport->ui->tableReport->setRowCount(count + 1);
-  QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
-  mydlgReport->ui->tableReport->setItem(count, 0, tableItem);
+  if (count > 0) {
+    mydlgReport->ui->tableReport->setRowCount(count + 1);
+    QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
+    mydlgReport->ui->tableReport->setItem(count, 0, tableItem);
 
-  tableItem = new QTableWidgetItem(QString::number(freq));
-  tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  mydlgReport->ui->tableReport->setItem(count, 1, tableItem);
+    tableItem = new QTableWidgetItem(QString::number(freq));
+    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mydlgReport->ui->tableReport->setItem(count, 1, tableItem);
 
-  tableItem = new QTableWidgetItem(QString::number(amount));
-  mydlgReport->ui->tableReport->setItem(count, 2, tableItem);
+    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
+    tableItem = new QTableWidgetItem(strAmount);
+    mydlgReport->ui->tableReport->setItem(count, 2, tableItem);
+    mydlgReport->ui->tableReport->setColumnWidth(
+        0, mydlgReport->ui->tableReport->columnWidth(0));
+    mydlgReport->ui->tableReport->setRowHeight(count, 30);
+
+    mydlgReport->ui->tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);
+    mydlgReport->ui->tableReport->item(count, 1)->setFlags(Qt::NoItemFlags);
+    mydlgReport->ui->tableReport->item(count, 2)->setFlags(Qt::NoItemFlags);
+
+    mydlgReport->on_tableReport_cellClicked(count, 0);
+    mydlgReport->ui->tableReport->scrollToBottom();
+  }
+
   mydlgReport->ui->lblTitle->setText(
       ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
   mydlgReport->ui->tableDetails->setRowCount(0);

@@ -51,9 +51,15 @@ void dlgSetTime::on_btnOk_clicked() {
   if (!mw_one->isAdd) {
     mw_one->set_Time();
   } else {
-    mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
-                     ui->timeEdit->text(), ui->editAmount->text().trimmed(),
-                     ui->editDesc->text().trimmed());
+    if (mw_one->isTesting) {
+      for (int i = 0; i < 100; i++)
+        mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
+                         ui->timeEdit->text(), ui->editAmount->text().trimmed(),
+                         ui->editDesc->text().trimmed());
+    } else
+      mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
+                       ui->timeEdit->text(), ui->editAmount->text().trimmed(),
+                       ui->editDesc->text().trimmed());
   }
 
   // Save Desc Text
