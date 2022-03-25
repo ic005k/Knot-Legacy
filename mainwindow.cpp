@@ -11,6 +11,14 @@ bool loading = false;
 extern bool isAndroid, isIOS, zh_cn;
 int fontSize, red;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
+SearchThread::SearchThread(QObject* parent) : QThread{parent} {}
+void SearchThread::run() {
+  MainWindow::saveFile();
+  emit isDone();
+}
+void MainWindow::dealDone() {}
+void MainWindow::saveFile() {}
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -66,7 +74,10 @@ MainWindow::MainWindow(QWidget* parent)
   this->setWindowTitle("");
   tmer = new QTimer(this);
   connect(tmer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
-  // tmer->start(1000);
+
+  mySearchThread = new SearchThread();
+  connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::dealDone);
+
   strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
 
   ui->tabCharts->setCornerWidget(ui->frame_cw);
@@ -238,7 +249,11 @@ void MainWindow::init_NavigateBtnColor() {
 
 void MainWindow::timerUpdate() {}
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+  delete ui;
+  mySearchThread->quit();
+  mySearchThread->wait();
+}
 
 void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
                           QString strDesc) {

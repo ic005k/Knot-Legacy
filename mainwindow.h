@@ -26,6 +26,7 @@
 #include <QSettings>
 #include <QStringList>
 #include <QTextEdit>
+#include <QThread>
 #include <QTimer>
 #include <QToolTip>
 #include <QTreeWidgetItem>
@@ -43,6 +44,9 @@
 #include "ui_dlgreport.h"
 #include "ui_dlgsettime.h"
 #include "ui_dlgtodo.h"
+
+class SearchThread;
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -58,6 +62,7 @@ class MainWindow : public QMainWindow {
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   Ui::MainWindow *ui;
+  SearchThread *mySearchThread;
   bool isTesting = false;
   int get_Day(QString date);
   QString get_Year(QString date);
@@ -141,6 +146,7 @@ class MainWindow : public QMainWindow {
                          const QString &normalColor, const QString &focusColor);
   QString setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
                          const QString &normalColor, const QString &focusColor);
+  static void saveFile();
  public slots:
   void init_Stats(QTreeWidget *);
 
@@ -224,6 +230,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnReport_clicked();
 
+  void dealDone();
+
  private:
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格
@@ -244,4 +252,20 @@ class MainWindow : public QMainWindow {
   //"QTreeWidget::item:hover {background-color: #f5f5f5;}"
   //"QTreeWidget::item:selected {border-left: 0px solid #777777;}"
 };
+
+class SearchThread : public QThread {
+  Q_OBJECT
+ public:
+  explicit SearchThread(QObject *parent = nullptr);
+
+ protected:
+  void run();
+ signals:
+  void isDone();  //处理完成信号
+
+ signals:
+
+ public slots:
+};
+
 #endif  // MAINWINDOW_H
