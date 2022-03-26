@@ -6,11 +6,13 @@
 
 QSplineSeries* series;
 QScatterSeries* m_scatterSeries;
+QSplineSeries* series2;
+QScatterSeries* m_scatterSeries2;
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
 Chart* chartTimeLine;
-QChart* chartMonth;
+QChart *chartMonth, *chartDay;
 QString appName = "Xcounter";
 QString iniFile, ver, strDate, noteText;
 int curPos, sliderPos, today, fontSize, red;
@@ -87,23 +89,43 @@ MainWindow::MainWindow(QWidget* parent)
   QChartView* chartview = new QChartView(chartMonth);
   ui->pLayout->addWidget(chartview);
   chartview->setRenderHint(QPainter::Antialiasing);  //防止图形走样
-  chartMonth->setTitle("Line chart");
+  // chartMonth->setTitle("Line chart");
   chartMonth->legend()->hide();
   chartMonth->setMargins(QMargins(0, 0, 0, 0));
   chartMonth->setContentsMargins(0, 0, 0, 0);
   chartMonth->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
+
+  chartDay = new QChart();
+  QChartView* chartview1 = new QChartView(chartDay);
+  ui->glTimeLine->addWidget(chartview1);
+  chartview1->setRenderHint(QPainter::Antialiasing);  //防止图形走样
+  // chartDay->setTitle("Line chart");
+  chartDay->legend()->hide();
+  chartDay->setMargins(QMargins(0, 0, 0, 0));
+  chartDay->setContentsMargins(0, 0, 0, 0);
+  chartDay->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
+
   series = new QSplineSeries(chartMonth);
   series->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
   m_scatterSeries = new QScatterSeries(chartMonth);  //创建散点
   m_scatterSeries->setMarkerShape(
       QScatterSeries::MarkerShapeCircle);  //设置散点样式
   m_scatterSeries->setMarkerSize(10);      //设置散点大小
+  chartMonth->addSeries(series);
+  chartMonth->addSeries(m_scatterSeries);
 
-  chartTimeLine = new Chart(this, tr("Time Line"));
-  ui->glTimeLine->setMargin(0);
-  ui->glTimeLine->setSpacing(0);
-  ui->glTimeLine->setContentsMargins(0, 0, 0, 0);
-  ui->glTimeLine->addWidget(chartTimeLine);
+  series2 = new QSplineSeries(chartDay);
+  series2->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
+  m_scatterSeries2 = new QScatterSeries(chartDay);  //创建散点
+  m_scatterSeries2->setMarkerShape(
+      QScatterSeries::MarkerShapeCircle);  //设置散点样式
+  m_scatterSeries2->setMarkerSize(10);     //设置散点大小
+  chartDay->addSeries(series2);
+  chartDay->addSeries(m_scatterSeries2);
+
+  // ui->glTimeLine->setMargin(0);
+  // ui->glTimeLine->setSpacing(0);
+  // ui->glTimeLine->setContentsMargins(0, 0, 0, 0);
 
   this->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
@@ -777,8 +799,6 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
       m_scatterSeries->append(x, y);
     }
   }
-  chartMonth->addSeries(series);
-  chartMonth->addSeries(m_scatterSeries);
 
   double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
   qDebug() << "In table Max:" << maxValue;
@@ -842,17 +862,20 @@ void MainWindow::drawMonth() {
 }
 
 void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
+  // return;
   if (loading) return;
-  chartTimeLine->series->clear();
-  chartTimeLine->m_scatterSeries->clear();
-  QList<QPointF> pointlist;
+  series2->clear();
+  m_scatterSeries2->clear();
+
   int topCount = tw->topLevelItemCount();
   if (topCount == 0) {
-    chartTimeLine->buildChart();
+    chartDay->addSeries(series2);
+    chartDay->addSeries(m_scatterSeries2);
     return;
   }
   if (!isDay) {
-    chartTimeLine->buildChart();
+    chartDay->addSeries(series2);
+    chartDay->addSeries(m_scatterSeries2);
     return;
   }
   if (topCount > 0) {
@@ -879,12 +902,17 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
   }
 
   //设置坐标系
+  int y0 = 0;
   if (isrbFreq) {
-    int y0 = 3;
+    y0 = 3;
     if (childCount > y0) y0 = childCount;
-    chartTimeLine->setAxis(tr("24 hours") + "  " + tr("Total") + " : " +
-                               QString::number(childCount),
-                           0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
+    // chartTimeLine->setAxis(tr("24 hours") + "  " + tr("Total") + " : " +
+    //                            QString::number(childCount),
+    //                        0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
+
+    chartDay->createDefaultAxes();
+    chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
+    chartDay->axes(Qt::Vertical).first()->setRange(0, y0 + 2);
   }
 
   QVector<double> dList;
@@ -897,22 +925,14 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
     }
     y0 = *std::max_element(dList.begin(), dList.end());
 
-    chartTimeLine->setAxis(tr("24 hours") + "  " + tr("Total") + " : " +
-                               QString::number(childCount),
-                           0, 24, 1, tr("Amount"), 0, y0 + 10, 1);
-  }
+    // chartTimeLine->setAxis(tr("24 hours") + "  " + tr("Total") + " : " +
+    //                            QString::number(childCount),
+    //                        0, 24, 1, tr("Amount"), 0, y0 + 10, 1);
 
-  /*QRandomGenerator rg(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-  for (int i = 0; i < 30; i++) {
-    int a = rg() % (20);
-    QPointF pf(i, a);
-    pointlist.append(pf);
-
-    series->append(pf.x(), pf.y());
-    m_scatterSeries->append(pf.x(), pf.y());
+    chartDay->createDefaultAxes();
+    chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
+    chartDay->axes(Qt::Vertical).first()->setRange(0, y0 + 10);
   }
-  chartTimeLine->buildChart(pointlist);
-  return;*/
 
   double x, y;
   for (int i = 0; i < childCount; i++) {
@@ -944,17 +964,13 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
     else {
       y = dList.at(i);
     }
-    QPointF pf(x, y);
 
-    pointlist.append(pf);
-
-    chartTimeLine->series->append(x, y);
-    chartTimeLine->m_scatterSeries->append(x, y);
+    series2->append(x, y);
+    m_scatterSeries2->append(x, y);
   }
 
-  //绘制
-  if (childCount <= 1000)  //太大导致绘制效率太低，没必要再绘制了
-    chartTimeLine->buildChart();
+  // chartDay->addSeries(series2);
+  // chartDay->addSeries(m_scatterSeries2);
 }
 
 void MainWindow::on_actionRename_triggered() {
