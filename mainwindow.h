@@ -46,6 +46,7 @@
 #include "ui_dlgtodo.h"
 
 class SearchThread;
+class ReadThread;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -55,19 +56,20 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
-  Chart *chart;
-  Chart *chartTimeLine;
 
  public:
+  bool isTesting = false;
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  static void get_Today(QTreeWidget *);
   SearchThread *mySearchThread;
-  bool isTesting = false;
-  int get_Day(QString date);
-  QString get_Year(QString date);
-  QString get_Month(QString date);
+  ReadThread *myReadThread;
+
+  static int get_Day(QString date);
+  static QString get_Year(QString date);
+  static QString get_Month(QString date);
   QStringList listMonth;
   QString bakFile;
   dlgNotes *mydlgNotes;
@@ -76,24 +78,25 @@ class MainWindow : public QMainWindow {
   dlgTodo *mydlgTodo;
   dlgList *mydlgList;
   dlgReport *mydlgReport;
-  QTreeWidgetItem *parentItem;
+
   QVector<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;
   int findPos = 0;
   bool isAdd = false;
   QTimer *tmer;
-  QString strDate;
+
   static void saveData(QTreeWidget *, int);
   void readData(QTreeWidget *);
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
-  void initChart(QString, QString, QStringList);
+  static void initChart(QString, QString, QStringList);
+  static void initChartTimeLine(QTreeWidget *, bool);
   static void saveNotes();
   bool isInit = false;
-  int today = 0;
+
   static void saveTab();
   bool isSlide = false;
-  void init_Data();
+  void init_TabData();
   void set_Time();
   void add_Data(QTreeWidget *, QString, QString, QString);
   void del_Data(QTreeWidget *);
@@ -140,15 +143,16 @@ class MainWindow : public QMainWindow {
   static QString getFileSize(const qint64 &size, int precision);
   void goResults();
   void goResultsMonth();
-  QStringList get_MonthList(QString strY, QString strM);
-  void initMonthChart();
+  static QStringList get_MonthList(QString strY, QString strM);
+  static void drawMonthChart();
   QVector<QTreeWidgetItem *> findDisc();
   QString setLineEditQss(QLineEdit *txt, int radius, int borderWidth,
                          const QString &normalColor, const QString &focusColor);
   QString setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
                          const QString &normalColor, const QString &focusColor);
   static void saveFile(bool all);
- public slots:
+  void drawMonth();
+public slots:
   void init_Stats(QTreeWidget *);
 
  protected:
@@ -233,16 +237,18 @@ class MainWindow : public QMainWindow {
 
   void dealDone();
 
+  void readDone();
+
  private:
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格
   int x, y, w, h;
-  void get_Today(QTreeWidget *);
+
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
   QObjectList getAllUIControls(QObject *parent);
   QString init_Objname();
-  void initChartTimeLine(QTreeWidget *, bool);
+
   QList<QToolButton *> listNBtn;
   void init_TabNavigate();
   void init_NavigateBtnColor();
@@ -258,6 +264,21 @@ class SearchThread : public QThread {
   Q_OBJECT
  public:
   explicit SearchThread(QObject *parent = nullptr);
+
+ protected:
+  void run();
+ signals:
+  void isDone();  //处理完成信号
+
+ signals:
+
+ public slots:
+};
+
+class ReadThread : public QThread {
+  Q_OBJECT
+ public:
+  explicit ReadThread(QObject *parent = nullptr);
 
  protected:
   void run();

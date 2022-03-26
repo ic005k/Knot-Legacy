@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
+    <width>397</width>
     <height>629</height>
    </rect>
   </property>
@@ -396,7 +396,7 @@ QTabBar QToolButton::right-arrow {
          </property>
          <widget class="QWidget" name="tab1">
           <attribute name="title">
-           <string>Data</string>
+           <string>Month</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_3">
            <property name="leftMargin">
@@ -422,7 +422,7 @@ QTabBar QToolButton::right-arrow {
          </widget>
          <widget class="QWidget" name="tab2">
           <attribute name="title">
-           <string>Time</string>
+           <string>Day</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_2">
            <property name="leftMargin">
@@ -606,7 +606,7 @@ QTabBar QToolButton::right-arrow {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>480</width>
+     <width>397</width>
      <height>24</height>
     </rect>
    </property>

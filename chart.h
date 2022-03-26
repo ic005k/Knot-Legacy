@@ -13,8 +13,6 @@ class Chart : public QWidget {
   Q_OBJECT
   QChart *qchart;
   QChartView *chartview;
-  QSplineSeries *series;
-  QScatterSeries *m_scatterSeries;
 
   QHBoxLayout *layout;
   QValueAxis *axisX;
@@ -32,10 +30,14 @@ class Chart : public QWidget {
   int ytickc;
 
  public:
+  QSplineSeries *series;
+  QScatterSeries *m_scatterSeries;
   Chart(QWidget *parent = 0, QString _chartname = "曲线图");
   ~Chart() {}
   void setAxis(QString _xname, qreal _xmin, qreal _xmax, int _xtickc,
                QString _yname, qreal _ymin, qreal _ymax, int _ytickc);
-  void buildChart(QList<QPointF> pointlist);
+  void buildChart();
+  void setXY(int maxX, double maxY);
+  void addSeries();
 };
 #endif  // CHART_H
