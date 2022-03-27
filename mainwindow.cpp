@@ -4,6 +4,7 @@
 
 #include "ui_mainwindow.h"
 
+QVector<double> doubleList;
 QSplineSeries* series;
 QScatterSeries* m_scatterSeries;
 QSplineSeries* series2;
@@ -15,7 +16,7 @@ Chart* chartTimeLine;
 QChart *chartMonth, *chartDay;
 QString appName = "Xcounter";
 QString iniFile, ver, strDate, noteText;
-int curPos, sliderPos, today, fontSize, red;
+int curPos, sliderPos, today, fontSize, red, yMaxMonth, yMaxDay;
 MainWindow* mw_one;
 QTabWidget *tabData, *tabChart;
 bool loading, SaveAll, isReadEnd;
@@ -35,6 +36,16 @@ void ReadThread::run() {
   emit isDone();
 }
 void MainWindow::readDone() {
+  if (tabChart->currentIndex() == 0) {
+    chartMonth->createDefaultAxes();
+    chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
+    chartMonth->axes(Qt::Vertical).first()->setRange(0, yMaxMonth);
+  }
+  if (tabChart->currentIndex() == 1) {
+    chartDay->createDefaultAxes();
+    chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
+    chartDay->axes(Qt::Vertical).first()->setRange(0, yMaxDay + 2);
+  }
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   init_Stats(tw);
   init_NavigateBtnColor();
@@ -379,20 +390,15 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
         item11->setText(1, "");
       else
         item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
+
+      // QLabel* lblDesc = new QLabel(this);
+      // lblDesc->setText(strDesc);
+      // lblDesc->adjustSize();
+      // lblDesc->setWordWrap(true);
+      // tw->setItemWidget(item11, 2, lblDesc);
       item11->setText(2, strDesc);
 
       int childCount = topItem->childCount();
-      /*Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childCount",
-                   childCount);
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childTime" +
-                       QString::number(childCount - 1),
-                   item11->text(0));
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childAmount" +
-                       QString::number(childCount - 1),
-                   item11->text(1));
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childDesc" +
-                       QString::number(childCount - 1),
-                   item11->text(2));*/
 
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
 
@@ -404,7 +410,10 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       }
       QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
       topItem->setText(1, QString::number(childCount));
-      topItem->setText(2, strAmount);
+      if (strAmount == "0.00")
+        topItem->setText(2, "");
+      else
+        topItem->setText(2, strAmount);
 
       break;
     }
@@ -431,7 +440,10 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
     }
     QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
     topItem->setText(1, QString::number(child));
-    topItem->setText(2, strAmount);
+    if (strAmount == "0.00")
+      topItem->setText(2, "");
+    else
+      topItem->setText(2, strAmount);
   }
 
   if (!isTesting) {
@@ -642,6 +654,13 @@ void MainWindow::drawMonthChart() {
   strY = get_Year(strDate);
   strM = get_Month(strDate);
   QStringList listM = get_MonthList(strY, strM);
+
+  // double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
+  // yMaxMonth = maxValue;
+  // chartMonth->createDefaultAxes();
+  // chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
+  // chartMonth->axes(Qt::Vertical).first()->setRange(0, yMaxMonth);
+
   initChart(strY, strM, listM);
 }
 
@@ -774,10 +793,10 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
 void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
   if (loading) return;
   // listMonth Format:1.Day  2.Freq or Amount
-  QVector<double> doubleList;
-  double x, y;
-  series->clear();
-  m_scatterSeries->clear();
+  // QVector<double> doubleList;
+  // double x, y;
+  // series->clear();
+  // m_scatterSeries->clear();
 
   /*QRandomGenerator rg(QTime(0, 0, 0).secsTo(QTime::currentTime()));
   for (int i = 0; i < 30; i++) {
@@ -791,11 +810,10 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
 
   int count = listMonth.count();
   if (count == 0) {
-    chartMonth->addSeries(series);
-    chartMonth->addSeries(m_scatterSeries);
     return;
   }
-  for (int i = 0; i < count; i++) {
+
+  /*for (int i = 0; i < count; i++) {
     QString str = listMonth.at(i);
     QStringList list = str.split("|");
 
@@ -812,7 +830,7 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
       series->append(x, y);
       m_scatterSeries->append(x, y);
     }
-  }
+  }*/
 
   double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
   qDebug() << "In table Max:" << maxValue;
@@ -834,9 +852,10 @@ void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
     //                1, 31, 31, tr("Amount"), 0, max + 20, 5);
   }
 
-  chartMonth->createDefaultAxes();
-  chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
-  chartMonth->axes(Qt::Vertical).first()->setRange(0, max);
+  yMaxMonth = max;
+  // chartMonth->createDefaultAxes();
+  // chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
+  // chartMonth->axes(Qt::Vertical).first()->setRange(0, max);
 }
 
 void MainWindow::drawMonth() {
@@ -876,7 +895,6 @@ void MainWindow::drawMonth() {
 }
 
 void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
-  // return;
   if (loading) return;
   series2->clear();
   m_scatterSeries2->clear();
@@ -892,8 +910,8 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
     chartDay->addSeries(m_scatterSeries2);
     return;
   }
+
   if (topCount > 0) {
-    tw->setFocus();
     if (!tw->currentIndex().isValid()) {
       QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
       tw->setCurrentItem(topItem);
@@ -920,13 +938,8 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
   if (isrbFreq) {
     y0 = 3;
     if (childCount > y0) y0 = childCount;
-    // chartTimeLine->setAxis(tr("24 hours") + "  " + tr("Total") + " : " +
-    //                            QString::number(childCount),
-    //                        0, 24, 1, tr("Freq"), 0, y0 + 2, 1);
 
-    chartDay->createDefaultAxes();
-    chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
-    chartDay->axes(Qt::Vertical).first()->setRange(0, y0 + 2);
+    yMaxDay = y0;
   }
 
   QVector<double> dList;
@@ -939,13 +952,7 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
     }
     y0 = *std::max_element(dList.begin(), dList.end());
 
-    // chartTimeLine->setAxis(tr("24 hours") + "  " + tr("Total") + " : " +
-    //                            QString::number(childCount),
-    //                        0, 24, 1, tr("Amount"), 0, y0 + 10, 1);
-
-    chartDay->createDefaultAxes();
-    chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
-    chartDay->axes(Qt::Vertical).first()->setRange(0, y0 + 10);
+    yMaxDay = y0;
   }
 
   double x, y;
@@ -982,9 +989,6 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
     series2->append(x, y);
     m_scatterSeries2->append(x, y);
   }
-
-  // chartDay->addSeries(series2);
-  // chartDay->addSeries(m_scatterSeries2);
 }
 
 void MainWindow::on_actionRename_triggered() {
@@ -1081,11 +1085,12 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
   connect(tw, &QTreeWidget::itemPressed, [=]() {});
+  // tw->setUniformRowHeights(false); //对速度可能有影响，数据量大时
   QScrollBar* SB = tw->verticalScrollBar();
   SB->setStyleSheet(vsbarStyleSmall);
   tw->setStyleSheet(treeStyle);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
-  //这个不太好用，建议观察
+  //这个不太好用，备研
   // QScroller::grabGesture(tw, QScroller::TouchGesture);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
   return tw;
@@ -1109,7 +1114,10 @@ void MainWindow::on_twItemClicked() {
   } else
     init_Stats(tw);
   if (parentItem == pItem) return;
-  initChartTimeLine(tw, true);
+  // initChartTimeLine(tw, true);
+  if (tabChart->currentIndex() == 1) {
+    if (isReadEnd) myReadThread->start();
+  }
 }
 
 void MainWindow::set_Time() {
@@ -1134,7 +1142,10 @@ void MainWindow::set_Time() {
     QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
     item->parent()->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     item->parent()->setText(1, QString::number(child));
-    item->parent()->setText(2, strAmount);
+    if (strAmount == "0.00")
+      item->parent()->setText(2, "");
+    else
+      item->parent()->setText(2, strAmount);
 
     sort_childItem(item);
     saveData(tw, ui->tabWidget->currentIndex());
@@ -1231,8 +1242,8 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
     return;
   }
 
-  // if (isReadEnd) myReadThread->start();
-  // return;
+  if (isReadEnd) myReadThread->start();
+  return;
   tabData->setCurrentIndex(index);
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
 
@@ -1538,18 +1549,6 @@ QString MainWindow::get_Year(QString date) {
   return "";
 }
 
-void MainWindow::on_tabWidget_tabBarClicked(int index) { Q_UNUSED(index) }
-
-void MainWindow::on_tabCharts_tabBarClicked(int index) {
-  if (index == 0) {
-    drawMonthChart();
-  }
-  if (index == 1) {
-    initChartTimeLine(get_tw(ui->tabWidget->currentIndex()), true);
-  }
-  // myReadThread->start();
-}
-
 QTreeWidget* MainWindow::get_tw(int tabIndex) {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(tabIndex);
   return tw;
@@ -1634,6 +1633,10 @@ void MainWindow::goResultsMonth() {
 
 QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   // 格式：天 ｜ 总数（或金额）
+  doubleList.clear();
+  series->clear();
+  m_scatterSeries->clear();
+
   QStringList listMonth;
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
@@ -1646,10 +1649,21 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
 
     if (y == strY) {
       if (m == strM) {
-        if (isrbFreq)
+        if (isrbFreq) {
           listMonth.append(d + "|" + topItem->text(1));  //记录天和总数
-        else
+
+          int y0 = topItem->text(1).toInt();
+          doubleList.append(y0);
+          series->append(d.toInt(), y0);
+          m_scatterSeries->append(d.toInt(), y0);
+        } else {
           listMonth.append(d + "|" + topItem->text(2));
+
+          double y0 = topItem->text(2).toDouble();
+          doubleList.append(y0);
+          series->append(d.toInt(), y0);
+          m_scatterSeries->append(d.toInt(), y0);
+        }
       }
     }
   }
@@ -2040,4 +2054,8 @@ void MainWindow::on_actionPreferences_triggered() {
   mydlgPre->setFixedWidth(this->width());
   mydlgPre->setModal(true);
   mydlgPre->show();
+}
+
+void MainWindow::on_tabCharts_currentChanged(int index) {
+  if (isReadEnd) myReadThread->start();
 }

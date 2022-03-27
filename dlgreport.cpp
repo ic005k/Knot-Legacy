@@ -30,6 +30,8 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->tableDetails->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->tableDetails, QScroller::LeftMouseButtonGesture);
   ui->tableDetails->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  connect(ui->tableDetails, SIGNAL(itemChanged(QTableWidgetItem*)),
+          ui->tableDetails, SLOT(resizeRowsToContents()));
 }
 
 dlgReport::~dlgReport() { delete ui; }

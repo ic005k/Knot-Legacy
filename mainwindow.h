@@ -60,7 +60,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
-  bool isTesting = false;
+  bool isTesting = true;
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   Ui::MainWindow *ui;
@@ -196,10 +196,6 @@ class MainWindow : public QMainWindow {
 
   void on_twItemDoubleClicked();
 
-  void on_tabWidget_tabBarClicked(int index);
-
-  void on_tabCharts_tabBarClicked(int index);
-
   void on_actionView_App_Data_triggered();
 
   void on_btnFind_clicked();
@@ -243,6 +239,8 @@ class MainWindow : public QMainWindow {
   void readDone();
 
   void on_actionPreferences_triggered();
+
+  void on_tabCharts_currentChanged(int index);
 
  private:
   int spaceCount = 18;
