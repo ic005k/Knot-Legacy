@@ -60,7 +60,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
-  bool isTesting = true;
+  bool isTesting = false;
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   Ui::MainWindow *ui;
@@ -155,8 +155,10 @@ class MainWindow : public QMainWindow {
                          const QString &normalColor, const QString &focusColor);
   static void saveFile(bool all);
   void drawMonth();
- public slots:
-  void init_Stats(QTreeWidget *);
+  static void init_Stats(QTreeWidget *);
+
+  void startSave(bool all);
+public slots:
 
  protected:
   void closeEvent(QCloseEvent *event);

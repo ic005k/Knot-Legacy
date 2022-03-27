@@ -9,6 +9,7 @@ extern QString iniFile;
 static bool is_rb0;
 static bool is_rb1;
 static bool is_rb2;
+extern bool isBreak;
 
 dlgPreferences::dlgPreferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgPreferences) {
@@ -25,6 +26,7 @@ void dlgPreferences::on_btnBack_clicked() {
 }
 
 void dlgPreferences::saveFontSize() {
+  if (isBreak) return;
   QSettings Reg(iniFile, QSettings::IniFormat);
   Reg.setValue("/FontSize/rb0", is_rb0);
   Reg.setValue("/FontSize/rb1", is_rb1);

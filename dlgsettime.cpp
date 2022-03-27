@@ -8,6 +8,7 @@
 extern MainWindow* mw_one;
 extern QString iniFile;
 extern QRegularExpression regxNumber;
+extern bool isBreak;
 
 dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
@@ -72,8 +73,8 @@ void dlgSetTime::on_btnOk_clicked() {
       break;
     }
   }
+
   if (str.length() > 0) mw_one->mydlgList->ui->listWidget->insertItem(0, str);
-  saveCustomDesc();
 
   close();
 }
@@ -138,11 +139,13 @@ void dlgSetTime::saveCustomDesc() {
   Reg.setValue("/CustomDesc/Count", count);
   QStringList list;
   for (int i = 0; i < count; i++) {
+    if (isBreak) break;
     list.append(mw_one->mydlgList->ui->listWidget->item(i)->text().trimmed());
   }
   // list = QSet<QString>(list.begin(), list.end()).values(); //IOS无法编译通过
   removeDuplicates(&list);
   for (int i = 0; i < list.count(); i++) {
+    if (isBreak) break;
     QString str = list.at(i);
     if (str.length() > 0)
       Reg.setValue("/CustomDesc/Item" + QString::number(i), str);

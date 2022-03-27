@@ -2,9 +2,11 @@
 
 #include "mainwindow.h"
 #include "ui_dlgtodo.h"
+
 QListWidget* mylist;
+extern MainWindow* mw_one;
 extern QString iniFile;
-extern bool loading;
+extern bool loading, isBreak;
 extern int fontSize;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
@@ -28,6 +30,7 @@ void dlgTodo::saveTodo() {
   int count = mylist->count();
   Reg.setValue("/Todo/Count", count);
   for (int i = 0; i < count; i++) {
+    if (isBreak) break;
     QListWidgetItem* item = mylist->item(i);
     QWidget* w = mylist->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(2);
@@ -159,7 +162,8 @@ void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {
 
 void dlgTodo::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
-  saveTodo();
+
+  mw_one->startSave(false);
 }
 
 bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
