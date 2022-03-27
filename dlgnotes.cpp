@@ -24,7 +24,7 @@ void dlgNotes::on_btnBack_clicked() {
   noteText = ui->textEdit->toPlainText();
   curPos = ui->textEdit->textCursor().position();
   sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
-  if (!ui->textEdit->isHidden()) MainWindow::saveNotes();
+  if (!ui->textEdit->isHidden()) mw_one->startSave("notes");
   ui->textEdit->clear();
   close();
 }

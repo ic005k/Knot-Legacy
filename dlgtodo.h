@@ -47,9 +47,11 @@ class dlgTodo : public QDialog {
 
   void on_listWidget_currentRowChanged(int currentRow);
 
-  void on_btnModi_clicked();
-
   void on_btnModify_clicked();
+
+  void on_btnHigh_clicked();
+
+  void on_btnLow_clicked();
 
  private:
   QListWidgetItem *editItem;

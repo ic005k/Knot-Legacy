@@ -153,12 +153,12 @@ class MainWindow : public QMainWindow {
                          const QString &normalColor, const QString &focusColor);
   QString setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
                          const QString &normalColor, const QString &focusColor);
-  static void saveFile(bool all);
+  static void saveFile(QString);
   void drawMonth();
   static void init_Stats(QTreeWidget *);
 
-  void startSave(bool all);
-public slots:
+  void startSave(QString);
+ public slots:
 
  protected:
   void closeEvent(QCloseEvent *event);

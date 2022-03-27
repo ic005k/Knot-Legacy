@@ -16,7 +16,6 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
-  ui->btnModi->setHidden(true);
 }
 
 dlgTodo::~dlgTodo() { delete ui; }
@@ -163,7 +162,7 @@ void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {
 void dlgTodo::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
 
-  mw_one->startSave(false);
+  mw_one->startSave("todo");
 }
 
 bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
@@ -177,19 +176,6 @@ bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
   // return false;
   //}
   return QWidget::eventFilter(watch, evn);
-}
-
-void dlgTodo::on_btnModi_clicked() {
-  if (ui->listWidget->count() <= 0 || ui->lineEdit->text().trimmed() == "")
-    return;
-  QListWidgetItem* item = ui->listWidget->currentItem();
-  // ui->listWidget->openPersistentEditor(item);
-  // editItem = item;
-  QWidget* w = ui->listWidget->itemWidget(item);
-  // (QHBoxLayout(0x915ca030), QLabel(0x90885060), QToolButton(0x8fdf4200))
-  QLabel* lbl = (QLabel*)w->children().at(1);
-  lbl->setText(ui->lineEdit->text().trimmed());
-  ui->lineEdit->setText("");
 }
 
 void dlgTodo::on_btnModify_clicked() {
@@ -211,4 +197,35 @@ void dlgTodo::on_btnModify_clicked() {
     ui->btnModify->setText(tr("Modify"));
     isModi = false;
   }
+}
+
+void dlgTodo::on_btnHigh_clicked() {
+  int row = ui->listWidget->currentRow();
+  QListWidgetItem* item = ui->listWidget->currentItem();
+  QWidget* w = ui->listWidget->itemWidget(item);
+  QLabel* lbl = (QLabel*)w->children().at(2);
+  ui->listWidget->takeItem(row);
+  QString str = lbl->text();
+  add_Item(str, true);
+  QListWidgetItem* item1 = ui->listWidget->currentItem();
+  QWidget* w1 = ui->listWidget->itemWidget(item1);
+  QLabel* lbl1 = (QLabel*)w1->children().at(2);
+  lbl1->setStyleSheet("background-color: rgb(250, 0, 0);color:white");
+  ui->listWidget->scrollToTop();
+}
+
+void dlgTodo::on_btnLow_clicked() {
+  int row = ui->listWidget->currentRow();
+  QListWidgetItem* item = ui->listWidget->currentItem();
+  QWidget* w = ui->listWidget->itemWidget(item);
+  QLabel* lbl = (QLabel*)w->children().at(2);
+  ui->listWidget->takeItem(row);
+  QString str = lbl->text();
+  add_Item(str, false);
+  ui->listWidget->setCurrentRow(ui->listWidget->count() - 1);
+  // QListWidgetItem* item1 = ui->listWidget->currentItem();
+  // QWidget* w1 = ui->listWidget->itemWidget(item1);
+  // QLabel* lbl1 = (QLabel*)w1->children().at(2);
+  // lbl1->setStyleSheet("background-color: rgb(255, 255, 255);color:black");
+  ui->listWidget->scrollToBottom();
 }

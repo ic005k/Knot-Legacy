@@ -15,11 +15,11 @@ bool isrbFreq = true;
 Chart* chartTimeLine;
 QChart *chartMonth, *chartDay;
 QString appName = "Xcounter";
-QString iniFile, ver, strDate, noteText, strStats;
+QString iniFile, ver, strDate, noteText, strStats, SaveType;
 int curPos, sliderPos, today, fontSize, red, yMaxMonth, yMaxDay;
 MainWindow* mw_one;
 QTabWidget *tabData, *tabChart;
-bool loading, SaveAll, isReadEnd;
+bool loading, isReadEnd;
 bool isSaveEnd = true;
 bool isBreak = false;
 extern bool isAndroid, isIOS, zh_cn;
@@ -62,7 +62,7 @@ void MainWindow::readDone() {
 SearchThread::SearchThread(QObject* parent) : QThread{parent} {}
 void SearchThread::run() {
   isSaveEnd = false;
-  MainWindow::saveFile(SaveAll);
+  MainWindow::saveFile(SaveType);
   emit isDone();
 }
 void MainWindow::dealDone() {
@@ -70,17 +70,19 @@ void MainWindow::dealDone() {
     isSaveEnd = true;
     return;
   }
-  if (isReadEnd) myReadThread->start();
+  if (SaveType == "tab" || SaveType == "alltab") {
+    if (isReadEnd) myReadThread->start();
+  }
   isSaveEnd = true;
 }
-void MainWindow::saveFile(bool all) {
-  if (!all) {
+void MainWindow::saveFile(QString SaveType) {
+  if (SaveType == "tab") {
     QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
     int index = tabData->currentIndex();
     saveData(tw, index);
   }
 
-  if (all) {
+  if (SaveType == "alltab") {
     QFile(iniFile).remove();
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
       if (isBreak) break;
@@ -88,6 +90,18 @@ void MainWindow::saveFile(bool all) {
       tw->setObjectName("tab" + QString::number(i + 1));
       saveData(tw, i);
     }
+  }
+
+  if (SaveType == "todo") {
+    dlgTodo::saveTodo();
+  }
+
+  if (SaveType == "font") {
+    dlgPreferences::saveFontSize();
+  }
+
+  if (SaveType == "notes") {
+    saveNotes();
   }
 }
 
@@ -143,10 +157,6 @@ MainWindow::MainWindow(QWidget* parent)
   m_scatterSeries2->setMarkerSize(10);     //设置散点大小
   chartDay->addSeries(series2);
   chartDay->addSeries(m_scatterSeries2);
-
-  // ui->glTimeLine->setMargin(0);
-  // ui->glTimeLine->setSpacing(0);
-  // ui->glTimeLine->setContentsMargins(0, 0, 0, 0);
 
   this->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
@@ -278,8 +288,14 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgPre->ui->rb0->setChecked(Reg.value("/FontSize/rb0", 1).toBool());
   mydlgPre->ui->rb1->setChecked(Reg.value("/FontSize/rb1", 0).toBool());
   mydlgPre->ui->rb2->setChecked(Reg.value("/FontSize/rb2", 0).toBool());
-  if (mydlgPre->ui->rb1->isChecked()) fontSize = fontSize + 4;
-  if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 8;
+  if (mydlgPre->ui->rb1->isChecked()) fontSize = fontSize + 3;
+  if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 6;
+  QFont userFont;
+  userFont.setPointSize(fontSize);
+  this->setFont(userFont);
+  mydlgReport->ui->tableReport->setFont(userFont);
+  mydlgReport->ui->tableDetails->setFont(userFont);
+  mydlgNotes->ui->textEdit->setFont(userFont);
 
   loading = false;
   init_TabData();
@@ -380,8 +396,7 @@ MainWindow::~MainWindow() {
   mySearchThread->wait();
 }
 
-void MainWindow::startSave(bool all) {
-  qDebug() << isSaveEnd;
+void MainWindow::startSave(QString str_type) {
   if (!isSaveEnd) {
     isBreak = true;
     mySearchThread->quit();
@@ -392,10 +407,9 @@ void MainWindow::startSave(bool all) {
   }
   if (isSaveEnd) {
     isBreak = false;
-    SaveAll = all;
+    SaveType = str_type;
     mySearchThread->start();
   }
-  qDebug() << isSaveEnd;
 }
 
 void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
@@ -481,7 +495,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
     sort_childItem(topItem->child(0));
     tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
 
-    startSave(false);
+    startSave("tab");
   }
 }
 
@@ -548,8 +562,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
   } else
     return;
 
-  SaveAll = false;
-  mySearchThread->start();
+  startSave("tab");
 }
 
 void MainWindow::on_btnPlus_clicked() {
@@ -674,9 +687,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   Reg.setValue("/" + ver + "-" + appName + "/File", iniFile);
 
   saveTab();
-  dlgTodo::saveTodo();
   dlgSetTime::saveCustomDesc();
-  dlgPreferences::saveFontSize();
 }
 
 void MainWindow::drawMonthChart() {
@@ -1032,7 +1043,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
   ui->tabWidget->removeTab(index);
 
   // Save all
-  startSave(true);
+  startSave("alltab");
 
   int TabCount = ui->tabWidget->tabBar()->count();
   if (TabCount == 0) {
@@ -1050,6 +1061,10 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
     tw->setObjectName(name);
   else
     tw->setObjectName("tw" + init_Objname());
+
+  QFont font;
+  font.setPointSize(fontSize);
+  tw->setFont(font);
   tw->setColumnCount(3);
   tw->headerItem()->setText(0, "  " + tr("Date") + "  ");
   tw->headerItem()->setText(1, "  " + tr("Freq") + "  ");
@@ -1128,7 +1143,7 @@ void MainWindow::set_Time() {
 
     sort_childItem(item);
 
-    startSave(false);
+    startSave("tab");
   }
 }
 
@@ -1335,7 +1350,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
       if (move) {
         qDebug() << "ok save";
-        startSave(true);
+        startSave("alltab");
       }
     }
   }
@@ -1963,8 +1978,7 @@ void MainWindow::on_actionReport_triggered() {
   QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
   //测试专用
   if (isTesting) {
-    SaveAll = false;
-    mySearchThread->start();
+    startSave("tab");
   }
   double freq, amount;
   freq = 0;
