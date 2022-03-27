@@ -42,7 +42,7 @@ void dlgReport::on_btnYear_clicked() {
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
   QFont font;
-  font.setPixelSize(fontSize);
+  font.setPointSize(fontSize);
   list->setFont(font);
   int year = 2022;
   QStringList strList;
@@ -142,7 +142,7 @@ void dlgReport::on_btnMonth_clicked() {
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
   QFont font;
-  font.setPixelSize(fontSize);
+  font.setPointSize(fontSize);
   list->setFont(font);
 
   QStringList strList = mw_one->listMonth;

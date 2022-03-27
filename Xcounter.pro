@@ -26,9 +26,9 @@ INSTALLS += dataFiles
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    chart.cpp \
     dlglist.cpp \
     dlgnotes.cpp \
+    dlgpreferences.cpp \
     dlgrename.cpp \
     dlgreport.cpp \
     dlgsettime.cpp \
@@ -37,9 +37,9 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
-    chart.h \
     dlglist.h \
     dlgnotes.h \
+    dlgpreferences.h \
     dlgrename.h \
     dlgreport.h \
     dlgsettime.h \
@@ -49,6 +49,7 @@ HEADERS += \
 FORMS += \
     dlglist.ui \
     dlgnotes.ui \
+    dlgpreferences.ui \
     dlgrename.ui \
     dlgreport.ui \
     dlgsettime.ui \

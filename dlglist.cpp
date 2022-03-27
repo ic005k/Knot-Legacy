@@ -8,7 +8,7 @@ extern int fontSize, red;
 dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   QFont font;
-  font.setPixelSize(fontSize);
+  font.setPointSize(fontSize);
   ui->listWidget->setFont(font);
 }
 

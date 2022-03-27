@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgPreferences</class>
+ <widget class="QDialog" name="dlgPreferences">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>401</width>
+    <height>309</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="gboxFont">
+     <property name="title">
+      <string>Font Size</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="rb0">
+        <property name="styleSheet">
+         <string notr="true">QRadioButton::indicator {
+    width: 25px;
+    height: 25px;
+    /*image: url(:/src/sel.png);*/
+    
+    position: relative;
+    left: 0px;
+    right: 3px;
+    top: 2px;
+    bottom:4px;
+}
+
+QRadioButton::indicator:unchecked {
+    image: url(:/src/nosel.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/src/sel.png);
+}
+
+
+</string>
+        </property>
+        <property name="text">
+         <string>Standard</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="rb1">
+        <property name="styleSheet">
+         <string notr="true">QRadioButton::indicator {
+    width: 25px;
+    height: 25px;
+    /*image: url(:/src/sel.png);*/
+    
+    position: relative;
+    left: 0px;
+    right: 3px;
+    top: 2px;
+    bottom:4px;
+}
+
+QRadioButton::indicator:unchecked {
+    image: url(:/src/nosel.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/src/sel.png);
+}
+
+
+</string>
+        </property>
+        <property name="text">
+         <string>Medium</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="rb2">
+        <property name="styleSheet">
+         <string notr="true">QRadioButton::indicator {
+    width: 25px;
+    height: 25px;
+    /*image: url(:/src/sel.png);*/
+    
+    position: relative;
+    left: 0px;
+    right: 3px;
+    top: 2px;
+    bottom:4px;
+}
+
+QRadioButton::indicator:unchecked {
+    image: url(:/src/nosel.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/src/sel.png);
+}
+
+
+</string>
+        </property>
+        <property name="text">
+         <string>Large</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QToolButton" name="btnBack">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Back</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

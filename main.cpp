@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 
 extern QString iniFile, txtFile;
+extern int fontSize;
 void loadLocal();
 bool zh_cn = false;
 bool isAndroid, isIOS;

@@ -472,6 +472,30 @@ QTabBar QToolButton::right-arrow {
          </item>
          <item>
           <widget class="QRadioButton" name="rbFreq">
+           <property name="styleSheet">
+            <string notr="true">QRadioButton::indicator {
+    width: 25px;
+    height: 25px;
+    /*image: url(:/src/sel.png);*/
+    
+    position: relative;
+    left: 0px;
+    right: 3px;
+    top: 2px;
+    bottom:4px;
+}
+
+QRadioButton::indicator:unchecked {
+    image: url(:/src/nosel.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/src/sel.png);
+}
+
+
+</string>
+           </property>
            <property name="text">
             <string>Freq</string>
            </property>
@@ -495,6 +519,30 @@ QTabBar QToolButton::right-arrow {
          </item>
          <item>
           <widget class="QRadioButton" name="rbAmount">
+           <property name="styleSheet">
+            <string notr="true">QRadioButton::indicator {
+    width: 25px;
+    height: 25px;
+    /*image: url(:/src/sel.png);*/
+    
+    position: relative;
+    left: 0px;
+    right: 3px;
+    top: 2px;
+    bottom:4px;
+}
+
+QRadioButton::indicator:unchecked {
+    image: url(:/src/nosel.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/src/sel.png);
+}
+
+
+</string>
+           </property>
            <property name="text">
             <string>Amount</string>
            </property>
@@ -623,8 +671,9 @@ QTabBar QToolButton::right-arrow {
     <addaction name="actionFind"/>
     <addaction name="actionReport"/>
     <addaction name="actionExport_Data"/>
-    <addaction name="actionNotes"/>
     <addaction name="actionImport_Data"/>
+    <addaction name="actionNotes"/>
+    <addaction name="actionPreferences"/>
     <addaction name="actionView_App_Data"/>
     <addaction name="actionAbout"/>
    </widget>
@@ -679,6 +728,11 @@ QTabBar QToolButton::right-arrow {
   <action name="actionReport">
    <property name="text">
     <string>Report</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
    </property>
   </action>
  </widget>

@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget* parent)
   mw_one = this;
   ver = "1.0.02";
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
-  fontSize = 15;
+
   isReadEnd = true;
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
@@ -142,6 +142,7 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
   mydlgList = new dlgList(this);
   mydlgReport = new dlgReport(this);
+  mydlgPre = new dlgPreferences(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
   // 获取背景色
@@ -239,6 +240,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnYear->setText(Reg.value("/YMD/Y", 2022).toString());
   ui->btnMonth->setText(Reg.value("/YMD/M", tr("Month")).toString());
   ui->btnDay->setText(Reg.value("/YMD/D", 1).toString());
+
   // Custom Desc
   mw_one->mydlgList->ui->listWidget->clear();
   int descCount = Reg.value("/CustomDesc/Count").toInt();
@@ -246,6 +248,17 @@ MainWindow::MainWindow(QWidget* parent)
     mw_one->mydlgList->ui->listWidget->addItem(
         Reg.value("/CustomDesc/Item" + QString::number(i)).toString());
   }
+
+  // Font Size
+  QFont font(this->font());
+  QFontInfo fInfo(font);
+  fontSize = fInfo.pointSize();
+  qDebug() << "fontSize:" << fontSize;
+  mydlgPre->ui->rb0->setChecked(Reg.value("/FontSize/rb0", 1).toBool());
+  mydlgPre->ui->rb1->setChecked(Reg.value("/FontSize/rb1", 0).toBool());
+  mydlgPre->ui->rb2->setChecked(Reg.value("/FontSize/rb2", 0).toBool());
+  if (mydlgPre->ui->rb1->isChecked()) fontSize = fontSize + 4;
+  if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 8;
 
   loading = false;
   init_TabData();
@@ -306,7 +319,7 @@ void MainWindow::init_TabNavigate() {
     btn->setFixedWidth(25);
     listNBtn.append(btn);
     QFont font;
-    font.setPixelSize(13);
+    font.setPointSize(13);
     btn->setFont(font);
     btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     connect(btn, &QToolButton::clicked, [=]() {
@@ -621,6 +634,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   saveTab();
   dlgTodo::saveTodo();
   dlgSetTime::saveCustomDesc();
+  dlgPreferences::saveFontSize();
 }
 
 void MainWindow::drawMonthChart() {
@@ -1547,9 +1561,12 @@ void MainWindow::on_actionView_App_Data_triggered() {
   QString keys = Reg.value("/" + ver + "-" + appName + "/AllKeys").toString();
   QString fs = Reg.value("/" + ver + "-" + appName + "/FileSize").toString();
   QString inif = Reg.value("/" + ver + "-" + appName + "/File").toString();
-  mydlgNotes->ui->textBrowser->append("AllKeys : " + keys);
-  mydlgNotes->ui->textBrowser->append("FileSize : " + fs);
-  mydlgNotes->ui->textBrowser->append("File : " + inif);
+  if (keys.toInt() > 10000) {
+    mydlgNotes->ui->textBrowser->append("AllKeys : " + keys);
+    mydlgNotes->ui->textBrowser->append("FileSize : " + fs);
+    mydlgNotes->ui->textBrowser->append("File : " + inif);
+  } else
+    mydlgNotes->ui->textBrowser->setPlainText(loadText(iniFile));
 
   mydlgNotes->ui->textBrowser->setHidden(false);
   mydlgNotes->ui->textEdit->setHidden(true);
@@ -1827,7 +1844,7 @@ void MainWindow::on_btnYear_clicked() {
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
   QFont font;
-  font.setPixelSize(fontSize);
+  font.setPointSize(fontSize);
   list->setFont(font);
   int year = 2022;
   QStringList strList;
@@ -1868,7 +1885,7 @@ void MainWindow::on_btnMonth_clicked() {
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
   QFont font;
-  font.setPixelSize(fontSize);
+  font.setPointSize(fontSize);
   list->setFont(font);
 
   QStringList strList = listMonth;
@@ -1909,7 +1926,7 @@ void MainWindow::on_btnDay_clicked() {
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   QFont font;
-  font.setPixelSize(fontSize);
+  font.setPointSize(fontSize);
   list->setFont(font);
   int day = 1;
   QStringList strList;
@@ -2017,3 +2034,10 @@ void MainWindow::on_actionReport_triggered() {
 }
 
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
+
+void MainWindow::on_actionPreferences_triggered() {
+  mydlgPre->setFixedHeight(this->height());
+  mydlgPre->setFixedWidth(this->width());
+  mydlgPre->setModal(true);
+  mydlgPre->show();
+}

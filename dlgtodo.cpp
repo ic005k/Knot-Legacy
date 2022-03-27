@@ -30,7 +30,7 @@ void dlgTodo::saveTodo() {
   for (int i = 0; i < count; i++) {
     QListWidgetItem* item = mylist->item(i);
     QWidget* w = mylist->itemWidget(item);
-    QLabel* lbl = (QLabel*)w->children().at(1);
+    QLabel* lbl = (QLabel*)w->children().at(2);
     QString str = lbl->text();
     Reg.setValue("/Todo/Item" + QString::number(i), str);
   }
@@ -90,24 +90,30 @@ void dlgTodo::add_Item(QString str, bool insert) {
     add_ItemSn(index);
   });
 
-  QLabel* label = new QLabel(this);
   QFont font;
-  font.setPixelSize(fontSize);
+  font.setPointSize(fontSize);
+  QLabel* lblSn = new QLabel(this);
+  lblSn->setFont(font);
+  lblSn->setFixedWidth(fontSize * 1.5);
+
+  QLabel* label = new QLabel(this);
   label->setFont(font);
   label->installEventFilter(this);
   //让label自适应text大小
   label->adjustSize();
   //设置label换行
   label->setWordWrap(true);
+
   label->setText(str);
 
   QTextEdit* edit = new QTextEdit(this);
-  QScroller::grabGesture(edit, QScroller::TouchGesture);
+  QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
   edit->setPlainText(str);
   edit->setHidden(true);
   connect(edit, &QTextEdit::textChanged,
           [=]() { label->setText(edit->toPlainText().trimmed()); });
 
+  layout->addWidget(lblSn);
   layout->addWidget(label);
   layout->addWidget(edit);
   layout->addWidget(btn);
@@ -123,12 +129,8 @@ void dlgTodo::add_ItemSn(int index) {
     QListWidgetItem* item = ui->listWidget->item(i);
     QWidget* w = ui->listWidget->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(1);
-    QString txt = lbl->text();
-    QStringList list0 = txt.split(".");
-    if (list0.count() == 2) {
-      txt = list0.at(1);
-    }
-    lbl->setText(QString::number(i + 1) + ". " + txt.trimmed());
+
+    lbl->setText(QString::number(i + 1) + ". ");
   }
   ui->listWidget->setCurrentRow(index);
 }
@@ -190,8 +192,8 @@ void dlgTodo::on_btnModify_clicked() {
   if (ui->btnModify->text() == tr("Modify")) {
     QListWidgetItem* item = ui->listWidget->currentItem();
     QWidget* w = ui->listWidget->itemWidget(item);
-    QLabel* lbl = (QLabel*)w->children().at(1);
-    QTextEdit* edit = (QTextEdit*)w->children().at(2);
+    QLabel* lbl = (QLabel*)w->children().at(2);
+    QTextEdit* edit = (QTextEdit*)w->children().at(3);
     edit->setPlainText(lbl->text());
     lbl->setHidden(true);
     edit->setHidden(false);

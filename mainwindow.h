@@ -34,12 +34,14 @@
 #include "chart.h"
 #include "dlglist.h"
 #include "dlgnotes.h"
+#include "dlgpreferences.h"
 #include "dlgrename.h"
 #include "dlgreport.h"
 #include "dlgsettime.h"
 #include "dlgtodo.h"
 #include "ui_dlglist.h"
 #include "ui_dlgnotes.h"
+#include "ui_dlgpreferences.h"
 #include "ui_dlgrename.h"
 #include "ui_dlgreport.h"
 #include "ui_dlgsettime.h"
@@ -78,6 +80,7 @@ class MainWindow : public QMainWindow {
   dlgTodo *mydlgTodo;
   dlgList *mydlgList;
   dlgReport *mydlgReport;
+  dlgPreferences *mydlgPre;
 
   QVector<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;
@@ -152,7 +155,7 @@ class MainWindow : public QMainWindow {
                          const QString &normalColor, const QString &focusColor);
   static void saveFile(bool all);
   void drawMonth();
-public slots:
+ public slots:
   void init_Stats(QTreeWidget *);
 
  protected:
@@ -238,6 +241,8 @@ public slots:
   void dealDone();
 
   void readDone();
+
+  void on_actionPreferences_triggered();
 
  private:
   int spaceCount = 18;
