@@ -1,20 +1,14 @@
 #include "mainwindow.h"
 
-#include <QMessageBox>
-
 #include "ui_mainwindow.h"
 
 QList<QPointF> PointList;
 QVector<double> doubleList;
-QSplineSeries* series;
-QScatterSeries* m_scatterSeries;
-QSplineSeries* series2;
-QScatterSeries* m_scatterSeries2;
+
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
-Chart* chartTimeLine;
-QChart *chartMonth, *chartDay;
+
 QString appName = "Xcounter";
 QString iniFile, ver, strDate, noteText, strStats, SaveType, strY, strM;
 int curPos, sliderPos, today, fontSize, red, yMaxMonth, yMaxDay;
@@ -80,15 +74,24 @@ void MainWindow::saveFile(QString SaveType) {
     QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
     int index = tabData->currentIndex();
     saveData(tw, index);
+    saveTab();
+    dlgSetTime::saveCustomDesc();
   }
 
   if (SaveType == "alltab") {
-    QFile(iniFile).remove();
-    for (int i = 0; i < tabData->tabBar()->count(); i++) {
-      if (isBreak) break;
-      QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
-      tw->setObjectName("tab" + QString::number(i + 1));
-      saveData(tw, i);
+    bool ok = QFile(iniFile).remove();
+    if (ok) {
+      for (int i = 0; i < tabData->tabBar()->count(); i++) {
+        if (isBreak) break;
+        QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
+        tw->setObjectName("tab" + QString::number(i + 1));
+        saveData(tw, i);
+      }
+
+      saveTab();
+      dlgSetTime::saveCustomDesc();
+      dlgTodo::saveTodo();
+      dlgPreferences::saveFontSize();
     }
   }
 
@@ -362,10 +365,10 @@ void MainWindow::init_TabNavigate() {
   }
   for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
     QToolButton* btn = new QToolButton(this);
-    btn->setFixedWidth(25);
+    btn->setFixedWidth(30);
     listNBtn.append(btn);
     QFont font;
-    font.setPointSize(13);
+    font.setPointSize(15);
     btn->setFont(font);
     btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     connect(btn, &QToolButton::clicked, [=]() {
@@ -706,14 +709,12 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
 
   if (isBreak) return;
   Reg.setValue("/" + name + "/" + "Note", tabData->tabToolTip(tabIndex));
+
   int lines = Reg.allKeys().count();
   Reg.setValue("/" + ver + "-" + appName + "/AllKeys", lines);
   Reg.setValue("/" + ver + "-" + appName + "/FileSize",
                getFileSize(QFile(iniFile).size(), 2));
   Reg.setValue("/" + ver + "-" + appName + "/File", iniFile);
-
-  saveTab();
-  dlgSetTime::saveCustomDesc();
 }
 
 void MainWindow::drawMonthChart() {
@@ -953,6 +954,8 @@ void MainWindow::initChart(QString strY, QString strM) {
     return;
   }
 
+  series->clear();
+  m_scatterSeries->clear();
   for (int i = 0; i < count; i++) {
     series->append(PointList.at(i));
     m_scatterSeries->append(PointList.at(i));
@@ -1665,8 +1668,6 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   // 格式：天 ｜ 总数（或金额）
   PointList.clear();
   doubleList.clear();
-  series->clear();
-  m_scatterSeries->clear();
 
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   for (int i = 0; i < tw->topLevelItemCount(); i++) {

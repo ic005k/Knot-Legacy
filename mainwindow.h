@@ -4,6 +4,8 @@
 #include <qmath.h>
 
 #include <QAbstractButton>
+#include <QChart>
+#include <QChartView>
 #include <QComboBox>
 #include <QDateTime>
 #include <QDebug>
@@ -12,10 +14,12 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include <QFileDialog>
+#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QLineEdit>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 #include <QPushButton>
@@ -24,14 +28,15 @@
 #include <QScrollBar>
 #include <QScroller>
 #include <QSettings>
+#include <QSplineSeries>
 #include <QStringList>
 #include <QTextEdit>
 #include <QThread>
 #include <QTimer>
 #include <QToolTip>
 #include <QTreeWidgetItem>
+#include <QValueAxis>
 
-#include "chart.h"
 #include "dlglist.h"
 #include "dlgnotes.h"
 #include "dlgpreferences.h"
@@ -49,7 +54,7 @@
 
 class SearchThread;
 class ReadThread;
-
+QT_CHARTS_USE_NAMESPACE
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -65,6 +70,12 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QChart *chartMonth;
+  QChart *chartDay;
+  QSplineSeries *series;
+  QScatterSeries *m_scatterSeries;
+  QSplineSeries *series2;
+  QScatterSeries *m_scatterSeries2;
   static void get_Today(QTreeWidget *);
   SearchThread *mySearchThread;
   ReadThread *myReadThread;
@@ -92,8 +103,8 @@ class MainWindow : public QMainWindow {
   void readData(QTreeWidget *);
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
-  static void initChart(QString, QString);
-  static void initChartTimeLine();
+  void initChart(QString, QString);
+  void initChartTimeLine();
   static void saveNotes();
   bool isInit = false;
 
