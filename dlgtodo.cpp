@@ -3,6 +3,8 @@
 #include "mainwindow.h"
 #include "ui_dlgtodo.h"
 
+int highCount;
+QString orgLblStyle;
 QListWidget* mylist;
 extern MainWindow* mw_one;
 extern QString iniFile;
@@ -25,6 +27,7 @@ void dlgTodo::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 void dlgTodo::on_btnBack_clicked() { close(); }
 
 void dlgTodo::saveTodo() {
+  highCount = 0;
   QSettings Reg(iniFile, QSettings::IniFormat);
   int count = mylist->count();
   Reg.setValue("/Todo/Count", count);
@@ -35,7 +38,11 @@ void dlgTodo::saveTodo() {
     QLabel* lbl = (QLabel*)w->children().at(2);
     QString str = lbl->text();
     Reg.setValue("/Todo/Item" + QString::number(i), str);
+
+    if (orgLblStyle != lbl->styleSheet()) highCount++;
   }
+
+  Reg.setValue("/Todo/HighCount", highCount);
 }
 
 void dlgTodo::init_Items() {
@@ -44,6 +51,14 @@ void dlgTodo::init_Items() {
   for (int i = 0; i < count; i++) {
     QString str = Reg.value("/Todo/Item" + QString::number(i)).toString();
     add_Item(str, false);
+  }
+
+  highCount = Reg.value("/Todo/HighCount").toInt();
+  for (int i = 0; i < highCount; i++) {
+    QListWidgetItem* item = ui->listWidget->item(i);
+    QWidget* w = ui->listWidget->itemWidget(item);
+    QLabel* lbl = (QLabel*)w->children().at(2);
+    lbl->setStyleSheet("background-color: rgb(250, 0, 0);color:white");
   }
 }
 
@@ -105,8 +120,8 @@ void dlgTodo::add_Item(QString str, bool insert) {
   label->adjustSize();
   //设置label换行
   label->setWordWrap(true);
-
   label->setText(str);
+  orgLblStyle = label->styleSheet();
 
   QTextEdit* edit = new QTextEdit(this);
   QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
@@ -223,9 +238,5 @@ void dlgTodo::on_btnLow_clicked() {
   QString str = lbl->text();
   add_Item(str, false);
   ui->listWidget->setCurrentRow(ui->listWidget->count() - 1);
-  // QListWidgetItem* item1 = ui->listWidget->currentItem();
-  // QWidget* w1 = ui->listWidget->itemWidget(item1);
-  // QLabel* lbl1 = (QLabel*)w1->children().at(2);
-  // lbl1->setStyleSheet("background-color: rgb(255, 255, 255);color:black");
   ui->listWidget->scrollToBottom();
 }
