@@ -3,7 +3,7 @@
 #include "mainwindow.h"
 #include "ui_dlgtodo.h"
 
-QString highLblStyle = "background-color: rgb(255,192,203);color:black";
+QString highLblStyle = "background-color: rgb(255 ,192 ,203);color:black";
 int highCount;
 QString orgLblStyle;
 QListWidget* mylist;
@@ -40,7 +40,7 @@ void dlgTodo::saveTodo() {
     QString str = lbl->text();
     Reg.setValue("/Todo/Item" + QString::number(i), str);
 
-    QLabel* lblSn = (QLabel*)w->children().at(1);
+    QLabel* lblSn = (QLabel*)w->children().at(2);
     if (orgLblStyle != lblSn->styleSheet()) highCount++;
   }
 
@@ -59,7 +59,7 @@ void dlgTodo::init_Items() {
   for (int i = 0; i < highCount; i++) {
     QListWidgetItem* item = ui->listWidget->item(i);
     QWidget* w = ui->listWidget->itemWidget(item);
-    QLabel* lbl = (QLabel*)w->children().at(1);
+    QLabel* lbl = (QLabel*)w->children().at(2);
     lbl->setStyleSheet(highLblStyle);
   }
 }
@@ -226,7 +226,7 @@ void dlgTodo::on_btnHigh_clicked() {
   add_Item(str, true);
   QListWidgetItem* item1 = ui->listWidget->currentItem();
   QWidget* w1 = ui->listWidget->itemWidget(item1);
-  QLabel* lbl1 = (QLabel*)w1->children().at(1);
+  QLabel* lbl1 = (QLabel*)w1->children().at(2);
   lbl1->setStyleSheet(highLblStyle);
   ui->listWidget->scrollToTop();
 }

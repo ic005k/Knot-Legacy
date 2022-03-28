@@ -92,8 +92,8 @@ class MainWindow : public QMainWindow {
   void readData(QTreeWidget *);
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
-  static void initChart(QString, QString, QStringList);
-  static void initChartTimeLine(QTreeWidget *, bool);
+  static void initChart(QString, QString);
+  static void initChartTimeLine();
   static void saveNotes();
   bool isInit = false;
 
@@ -159,7 +159,8 @@ class MainWindow : public QMainWindow {
 
   void startSave(QString);
   void startRead();
-public slots:
+  static void drawDayChart();
+ public slots:
 
  protected:
   void closeEvent(QCloseEvent *event);
