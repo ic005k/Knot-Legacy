@@ -15,7 +15,7 @@ bool isrbFreq = true;
 Chart* chartTimeLine;
 QChart *chartMonth, *chartDay;
 QString appName = "Xcounter";
-QString iniFile, ver, strDate, noteText, strStats, SaveType;
+QString iniFile, ver, strDate, noteText, strStats, SaveType, strY, strM;
 int curPos, sliderPos, today, fontSize, red, yMaxMonth, yMaxDay;
 MainWindow* mw_one;
 QTabWidget *tabData, *tabChart;
@@ -32,14 +32,18 @@ void ReadThread::run() {
     return;
   }
   isReadEnd = false;
+  MainWindow::ReadFile();
+  emit isDone();
+}
+
+void MainWindow::ReadFile() {
   int index = tabData->currentIndex();
   QTreeWidget* tw = (QTreeWidget*)tabData->widget(index);
   qDebug() << "currentTW: " << tw;
-  if (tabChart->currentIndex() == 0) MainWindow::drawMonthChart();
-  if (tabChart->currentIndex() == 1) MainWindow::initChartTimeLine(tw, true);
-  MainWindow::get_Today(tw);
-  MainWindow::init_Stats(tw);
-  emit isDone();
+  if (tabChart->currentIndex() == 0) drawMonthChart();
+  if (tabChart->currentIndex() == 1) initChartTimeLine(tw, true);
+  get_Today(tw);
+  init_Stats(tw);
 }
 
 void MainWindow::readDone() {
@@ -120,43 +124,7 @@ MainWindow::MainWindow(QWidget* parent)
   gl1 = new QGridLayout(this);
   gl1 = ui->pLayout;
 
-  chartMonth = new QChart();
-  QChartView* chartview = new QChartView(chartMonth);
-  ui->pLayout->addWidget(chartview);
-  chartview->setRenderHint(QPainter::Antialiasing);  //防止图形走样
-  // chartMonth->setTitle("Line chart");
-  chartMonth->legend()->hide();
-  chartMonth->setMargins(QMargins(0, 0, 0, 0));
-  chartMonth->setContentsMargins(0, 0, 0, 0);
-  chartMonth->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
-
-  chartDay = new QChart();
-  QChartView* chartview1 = new QChartView(chartDay);
-  ui->glTimeLine->addWidget(chartview1);
-  chartview1->setRenderHint(QPainter::Antialiasing);  //防止图形走样
-  // chartDay->setTitle("Line chart");
-  chartDay->legend()->hide();
-  chartDay->setMargins(QMargins(0, 0, 0, 0));
-  chartDay->setContentsMargins(0, 0, 0, 0);
-  chartDay->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
-
-  series = new QSplineSeries(chartMonth);
-  series->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
-  m_scatterSeries = new QScatterSeries(chartMonth);  //创建散点
-  m_scatterSeries->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);  //设置散点样式
-  m_scatterSeries->setMarkerSize(10);      //设置散点大小
-  chartMonth->addSeries(series);
-  chartMonth->addSeries(m_scatterSeries);
-
-  series2 = new QSplineSeries(chartDay);
-  series2->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
-  m_scatterSeries2 = new QScatterSeries(chartDay);  //创建散点
-  m_scatterSeries2->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);  //设置散点样式
-  m_scatterSeries2->setMarkerSize(10);     //设置散点大小
-  chartDay->addSeries(series2);
-  chartDay->addSeries(m_scatterSeries2);
+  init_ChartWidget();
 
   this->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
@@ -313,6 +281,46 @@ MainWindow::MainWindow(QWidget* parent)
   // drawMonth();
 }
 
+void MainWindow::init_ChartWidget() {
+  chartMonth = new QChart();
+  QChartView* chartview = new QChartView(chartMonth);
+  ui->pLayout->addWidget(chartview);
+  chartview->setRenderHint(QPainter::Antialiasing);  //防止图形走样
+  // chartMonth->setTitle("Line chart");
+  chartMonth->legend()->hide();
+  chartMonth->setMargins(QMargins(0, 0, 0, 0));
+  chartMonth->setContentsMargins(0, 0, 0, 0);
+  chartMonth->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
+
+  chartDay = new QChart();
+  QChartView* chartview1 = new QChartView(chartDay);
+  ui->glTimeLine->addWidget(chartview1);
+  chartview1->setRenderHint(QPainter::Antialiasing);  //防止图形走样
+  // chartDay->setTitle("Line chart");
+  chartDay->legend()->hide();
+  chartDay->setMargins(QMargins(0, 0, 0, 0));
+  chartDay->setContentsMargins(0, 0, 0, 0);
+  chartDay->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
+
+  series = new QSplineSeries(chartMonth);
+  series->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
+  m_scatterSeries = new QScatterSeries(chartMonth);  //创建散点
+  m_scatterSeries->setMarkerShape(
+      QScatterSeries::MarkerShapeCircle);  //设置散点样式
+  m_scatterSeries->setMarkerSize(10);      //设置散点大小
+  chartMonth->addSeries(series);
+  chartMonth->addSeries(m_scatterSeries);
+
+  series2 = new QSplineSeries(chartDay);
+  series2->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
+  m_scatterSeries2 = new QScatterSeries(chartDay);  //创建散点
+  m_scatterSeries2->setMarkerShape(
+      QScatterSeries::MarkerShapeCircle);  //设置散点样式
+  m_scatterSeries2->setMarkerSize(10);     //设置散点大小
+  chartDay->addSeries(series2);
+  chartDay->addSeries(m_scatterSeries2);
+}
+
 void MainWindow::init_TabData() {
   int count = ui->tabWidget->tabBar()->count();
   for (int i = 0; i < count; i++) {
@@ -409,6 +417,23 @@ void MainWindow::startSave(QString str_type) {
     isBreak = false;
     SaveType = str_type;
     mySearchThread->start();
+  }
+}
+
+void MainWindow::startRead() {
+  if (!isSaveEnd) return;
+
+  if (!isReadEnd) {
+    isBreak = true;
+    myReadThread->quit();
+    myReadThread->wait();
+
+    while (!isReadEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+  }
+  if (isReadEnd) {
+    isBreak = false;
+    myReadThread->start();
   }
 }
 
@@ -827,6 +852,7 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
 
 void MainWindow::initChart(QString strY, QString strM, QStringList listMonth) {
   if (loading) return;
+  tabChart->setTabText(0, strM);
   // listMonth Format:1.Day  2.Freq or Amount
 
   /*QRandomGenerator rg(QTime(0, 0, 0).secsTo(QTime::currentTime()));
@@ -929,6 +955,9 @@ void MainWindow::initChartTimeLine(QTreeWidget* tw, bool isDay) {
     childCount = item->childCount();
     parentItem = item;
   }
+
+  int day = get_Day(parentItem->text(0));
+  tabChart->setTabText(1, QString::number(day) + " " + tr("Day"));
 
   QVector<double> dList;
   double x, y;
@@ -1103,12 +1132,14 @@ void MainWindow::on_twItemClicked() {
     QString str = item->text(2);
     if (str.length() > 0)
       ui->lblStats->setText(str);
-    else
+    else {
       init_Stats(tw);
+      ui->lblStats->setText(strStats);
+    }
   } else
     init_Stats(tw);
   if (parentItem == pItem) return;
-  // initChartTimeLine(tw, true);
+
   if (tabChart->currentIndex() == 1) {
     if (isReadEnd) myReadThread->start();
   }
@@ -1237,19 +1268,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
     return;
   }
 
-  if (isReadEnd) myReadThread->start();
-  return;
-  tabData->setCurrentIndex(index);
-  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
-
-  qDebug() << "currentTW: " << tw;
-  MainWindow::get_Today(tw);
-
-  if (tabChart->currentIndex() == 0) MainWindow::drawMonthChart();
-  if (tabChart->currentIndex() == 1) MainWindow::initChartTimeLine(tw, true);
-
-  init_Stats(tw);
-  init_NavigateBtnColor();
+  startRead();
 }
 
 void MainWindow::saveNotes() {
@@ -2055,5 +2074,21 @@ void MainWindow::on_actionPreferences_triggered() {
 }
 
 void MainWindow::on_tabCharts_currentChanged(int index) {
-  if (isReadEnd) myReadThread->start();
+  if (index == 0) startRead();
+  if (index == 1) {
+    QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+    int topCount = tw->topLevelItemCount();
+    if (topCount == 0) {
+      startRead();
+      return;
+    }
+
+    if (topCount > 0) {
+      if (!tw->currentIndex().isValid()) {
+        QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
+        tw->setCurrentItem(topItem);
+      }
+    }
+    on_twItemClicked();
+  }
 }

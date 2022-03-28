@@ -68,7 +68,7 @@ class MainWindow : public QMainWindow {
   static void get_Today(QTreeWidget *);
   SearchThread *mySearchThread;
   ReadThread *myReadThread;
-
+  static void ReadFile();
   static int get_Day(QString date);
   static QString get_Year(QString date);
   static QString get_Month(QString date);
@@ -139,9 +139,9 @@ class MainWindow : public QMainWindow {
       "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
       "background:#d0d0d0;}"                //滑块颜色
       "QScrollBar::add-line:vertical{"      //向下箭头样式
-      "background:url(:/src/down1.png) center no-repeat;}"
+      "background:url() center no-repeat;}"
       "QScrollBar::sub-line:vertical{"  //向上箭头样式
-      "background:url(:/src/up1.png) center no-repeat;}";
+      "background:url() center no-repeat;}";
   void sort_childItem(QTreeWidgetItem *);
   static QString getFileSize(const qint64 &size, int precision);
   void goResults();
@@ -158,7 +158,8 @@ class MainWindow : public QMainWindow {
   static void init_Stats(QTreeWidget *);
 
   void startSave(QString);
- public slots:
+  void startRead();
+public slots:
 
  protected:
   void closeEvent(QCloseEvent *event);
@@ -263,6 +264,7 @@ class MainWindow : public QMainWindow {
   //"transparent;border-bottom: 1px solid #dbdbdb; padding: 2px;height: 20;}"
   //"QTreeWidget::item:hover {background-color: #f5f5f5;}"
   //"QTreeWidget::item:selected {border-left: 0px solid #777777;}"
+  void init_ChartWidget();
 };
 
 class SearchThread : public QThread {
