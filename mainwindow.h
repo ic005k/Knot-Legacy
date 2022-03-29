@@ -264,7 +264,6 @@ class MainWindow : public QMainWindow {
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
   QObjectList getAllUIControls(QObject *parent);
-  QString init_Objname();
 
   QList<QToolButton *> listNBtn;
   void init_TabNavigate();

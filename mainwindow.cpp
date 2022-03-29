@@ -1071,10 +1071,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
 QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   QTreeWidget* tw = new QTreeWidget(this);
-  if (name != "")
-    tw->setObjectName(name);
-  else
-    tw->setObjectName("tw" + init_Objname());
+  tw->setObjectName(name);
 
   QFont font;
   font.setPointSize(fontSize);
@@ -1321,20 +1318,7 @@ void MainWindow::on_actionNotes_triggered() {
     mydlgNotes->ui->textEdit->setPlainText(str);
 }
 
-QString MainWindow::init_Objname() {
-  QString y = QString::number(QDate::currentDate().year());
-  QString m = QString::number(QDate::currentDate().month());
-  QString d = QString::number(QDate::currentDate().day());
-  QString h = QString::number(QTime::currentTime().hour());
-  QString mm = QString::number(QTime::currentTime().minute());
-  QString s = QString::number(QTime::currentTime().second());
-  QString CurrentDateTime = y + m + d + h + mm + s;
-  QRandomGenerator rg(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-  int a = rg() % (1000);
-  return CurrentDateTime + QString::number(a);
-}
-
-void MainWindow::on_btnNotes_clicked() { emit on_actionNotes_triggered(); }
+void MainWindow::on_btnNotes_clicked() { on_actionNotes_triggered(); }
 
 bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
