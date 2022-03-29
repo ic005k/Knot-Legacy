@@ -5,7 +5,7 @@
 #include "ui_mainwindow.h"
 extern int fontSize;
 extern MainWindow* mw_one;
-extern QString iniFile;
+extern QString iniFile, btnYText, btnMText, btnDText;
 QString btnYearText, btnMonthText;
 
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
@@ -48,6 +48,7 @@ void dlgReport::on_btnBack_clicked() {
 }
 
 void dlgReport::on_btnYear_clicked() {
+  ui->lblDetails->setText(tr("Details"));
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
   QFont font;
@@ -217,6 +218,7 @@ void dlgReport::sel_Month() {
 }
 
 void dlgReport::on_btnMonth_clicked() {
+  ui->lblDetails->setText(tr("Details"));
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
   QFont font;
@@ -256,21 +258,18 @@ void dlgReport::on_btnMonth_clicked() {
   }
 }
 
-void dlgReport::on_tableReport_itemClicked(QTableWidgetItem* item) {
-  Q_UNUSED(item);
-}
-
 void dlgReport::on_tableReport_cellClicked(int row, int column) {
   Q_UNUSED(column);
+  ui->lblDetails->setText(tr("Details"));
   markColor(row);
   ui->tableDetails->setRowCount(0);
   QString str = ui->tableReport->item(row, 0)->text();
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
-  QString name = tw->objectName();
 
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
     if (str == topItem->text(0)) {
+      ui->lblDetails->setText(tr("Details") + " : " + str);
       int childCount = topItem->childCount();
       ui->tableDetails->setRowCount(childCount);
       for (int m = 0; m < childCount; m++) {
@@ -323,4 +322,7 @@ void dlgReport::saveYMD() {
   QSettings Reg(iniFile, QSettings::IniFormat);
   Reg.setValue("/YMD/btnYearText", btnYearText);
   Reg.setValue("/YMD/btnMonthText", btnMonthText);
+  Reg.setValue("/YMD/btnYText", btnYText);
+  Reg.setValue("/YMD/btnMText", btnMText);
+  Reg.setValue("/YMD/btnDText", btnDText);
 }

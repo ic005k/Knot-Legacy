@@ -35,8 +35,6 @@ class dlgReport : public QDialog {
  private slots:
   void on_btnBack_clicked();
 
-  void on_tableReport_itemClicked(QTableWidgetItem *item);
-
  private:
 };
 

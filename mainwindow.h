@@ -156,8 +156,7 @@ class MainWindow : public QMainWindow {
       "background:url() center no-repeat;}";
   void sort_childItem(QTreeWidgetItem *);
   static QString getFileSize(const qint64 &size, int precision);
-  void goResults();
-  void goResultsMonth();
+
   static QStringList get_MonthList(QString strY, QString strM);
   static void drawMonthChart();
   QVector<QTreeWidgetItem *> findDisc();
@@ -170,7 +169,7 @@ class MainWindow : public QMainWindow {
   static void init_Stats(QTreeWidget *);
 
   void startSave(QString);
-  void startRead();
+  void startRead(QString);
   static void drawDayChart();
   static void readDataInThread(int ExceptIndex);
  public slots:
@@ -218,10 +217,6 @@ class MainWindow : public QMainWindow {
   void on_btnFind_clicked();
 
   void on_cboxYear_currentTextChanged(const QString &arg1);
-
-  void on_cboxMonth_currentTextChanged(const QString &arg1);
-
-  void on_cboxDay_currentTextChanged(const QString &arg1);
 
   void on_btnGo_clicked();
 

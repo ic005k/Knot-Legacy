@@ -10,9 +10,10 @@ QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
 
 QString appName = "Xcounter";
-QString iniFile, ver, strDate, noteText, strStats, SaveType, strY, strM;
-int curPos, sliderPos, today, fontSize, red, yMaxMonth, yMaxDay,
-    currentTabIndex;
+QString iniFile, ver, strDate, readDate, noteText, strStats, SaveType, strY,
+    strM, btnYText, btnMText, btnDText;
+int curPos, sliderPos, today, fontSize, red, currentTabIndex;
+double yMaxMonth, yMaxDay;
 MainWindow* mw_one;
 QTabWidget *tabData, *tabChart;
 bool loading, isReadEnd, isReadTWEnd;
@@ -52,7 +53,10 @@ void ReadThread::run() {
 void MainWindow::ReadFile() {
   int index = tabData->currentIndex();
   QTreeWidget* tw = (QTreeWidget*)tabData->widget(index);
-  qDebug() << "currentTW: " << tw;
+
+  strY = get_Year(readDate);
+  strM = get_Month(readDate);
+
   if (tabChart->currentIndex() == 0) drawMonthChart();
   if (tabChart->currentIndex() == 1) drawDayChart();
   get_Today(tw);
@@ -85,7 +89,7 @@ void MainWindow::dealDone() {
   }
   isSaveEnd = true;
 
-  startRead();
+  startRead(strDate);
 }
 void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
@@ -232,11 +236,6 @@ MainWindow::MainWindow(QWidget* parent)
   }
 
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
-  ui->btnYear->setHidden(true);
-  ui->btnMonth->setHidden(true);
-  ui->btnDay->setHidden(true);
-  ui->lblYear->setHidden(true);
-  ui->lblDay->setHidden(true);
 
   int iz = 22;
   ui->btnFind->setIconSize(QSize(iz, iz));
@@ -254,9 +253,12 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnMax->setFixedHeight(s + 6);
   ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
   QSettings Reg(iniFile, QSettings::IniFormat);
-  ui->btnYear->setText(Reg.value("/YMD/Y", 2022).toString());
-  ui->btnMonth->setText(Reg.value("/YMD/M", tr("Month")).toString());
-  ui->btnDay->setText(Reg.value("/YMD/D", 1).toString());
+  btnYText = Reg.value("/YMD/btnYText", 2022).toString();
+  ui->btnYear->setText(btnYText);
+  btnMText = Reg.value("/YMD/btnMText", tr("Month")).toString();
+  ui->btnMonth->setText(btnMText);
+  btnDText = Reg.value("/YMD/btnDText", 1).toString();
+  ui->btnDay->setText(btnDText);
   btnYearText = Reg.value("/YMD/btnYearText", "2022").toString();
   mydlgReport->ui->btnYear->setText(btnYearText);
   btnMonthText = Reg.value("/YMD/btnMonthText", tr("Month")).toString();
@@ -275,7 +277,7 @@ MainWindow::MainWindow(QWidget* parent)
   loading = false;
 
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
-  startRead();
+  startRead(strDate);
   mydlgTodo->init_Items();
 
   get_Today(tw);
@@ -437,7 +439,7 @@ void MainWindow::init_TabNavigate() {
 void MainWindow::init_NavigateBtnColor() {
   QPalette p1, p2;
   p1.setColor(QPalette::Button, Qt::red);
-  p1.setColor(QPalette::Button, Qt::gray);
+  p2.setColor(QPalette::Button, Qt::gray);
 
   for (int n = 0; n < listNBtn.count(); n++) {
     if (n == ui->tabWidget->currentIndex())
@@ -477,9 +479,9 @@ void MainWindow::startSave(QString str_type) {
   }
 }
 
-void MainWindow::startRead() {
+void MainWindow::startRead(QString Date) {
   if (!isSaveEnd || loading) return;
-
+  readDate = Date;
   if (!isReadEnd) {
     isBreak = true;
     myReadThread->quit();
@@ -771,8 +773,6 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
 }
 
 void MainWindow::drawMonthChart() {
-  strY = get_Year(strDate);
-  strM = get_Month(strDate);
   QStringList listM = get_MonthList(strY, strM);
   qDebug() << "Month List Count: " << listM.count();
 }
@@ -861,7 +861,7 @@ void MainWindow::drawDayChart() {
     if (childCount > 10)
       yMaxDay = childCount;
     else
-      yMaxDay = 8;
+      yMaxDay = 10;
   } else {
     yMaxDay = *std::max_element(dList.begin(), dList.end());
   }
@@ -906,6 +906,8 @@ void MainWindow::readData(QTreeWidget* tw) {
       }
     }
   }
+  tw->setCurrentItem(tw->topLevelItem(rowCount - 1));
+  tw->setFocus();
 }
 
 void MainWindow::get_Today(QTreeWidget* tw) {
@@ -1047,7 +1049,7 @@ void MainWindow::initChartDay() {
   }
 
   chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
-  chartDay->axes(Qt::Vertical).first()->setRange(0, yMaxDay + 2);
+  chartDay->axes(Qt::Vertical).first()->setRange(0, yMaxDay);
 }
 
 void MainWindow::on_actionRename_triggered() {
@@ -1180,7 +1182,7 @@ void MainWindow::on_twItemClicked() {
     return;
   }
 
-  if (tabChart->currentIndex() == 1) startRead();
+  if (tabChart->currentIndex() == 1) startRead(strDate);
 }
 
 void MainWindow::set_Time() {
@@ -1314,7 +1316,10 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
     return;
   }
 
-  startRead();
+  QTreeWidget* tw = (QTreeWidget*)tabData->widget(index);
+  tw->setFocus();
+
+  startRead(strDate);
 }
 
 void MainWindow::saveNotes() {
@@ -1467,7 +1472,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         while (t.elapsed() < 600) {
           QCoreApplication::processEvents();
         }
-        startRead();
+        startRead(strDate);
         init_NavigateBtnColor();
         isSlide = false;
       }
@@ -1506,7 +1511,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         while (t.elapsed() < 600) {
           QCoreApplication::processEvents();
         }
-        startRead();
+        startRead(strDate);
         init_NavigateBtnColor();
         isSlide = false;
       }
@@ -1642,45 +1647,9 @@ void MainWindow::on_btnFind_clicked() {
     ui->btnLess->setHidden(false);
     ui->btnTodo->setHidden(false);
     ui->btnMax->setHidden(false);
-  }
-}
 
-void MainWindow::goResults() {
-  if (loading) return;
-  QStringList listYear, listMonth, listDay;
-  bool isDay = false;
-  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
-    QString str0 = topItem->text(0);
-    QString y, m, d;
-    y = get_Year(str0);
-    m = get_Month(str0);
-    d = QString::number(get_Day(str0));
-    qDebug() << y << m << d;
-    if (y == ui->btnYear->text()) {
-      if (m == ui->btnMonth->text()) {
-        if (d == ui->btnDay->text()) {
-          tw->setCurrentItem(topItem);
-          startRead();
-          isDay = true;
-          break;
-        }
-      }
-    }
+    startSave("ymd");
   }
-  if (!isDay) {
-    startRead();
-  }
-}
-
-void MainWindow::goResultsMonth() {
-  if (loading) return;
-  QStringList listMonth;
-  strY = ui->btnYear->text();
-  strM = ui->btnMonth->text();
-  listMonth = get_MonthList(strY, strM);
-  startRead();
 }
 
 QStringList MainWindow::get_MonthList(QString strY, QString strM) {
@@ -1726,26 +1695,31 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
 
 void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
   Q_UNUSED(arg1);
-  goResultsMonth();
-  goResults();
-  QSettings Reg(iniFile, QSettings::IniFormat);
-  Reg.setValue("/YMD/Y", ui->btnYear->text());
-}
-
-void MainWindow::on_cboxMonth_currentTextChanged(const QString& arg1) {
-  Q_UNUSED(arg1);
-  goResultsMonth();
-  goResults();
-  QSettings Reg(iniFile, QSettings::IniFormat);
-  Reg.setValue("/YMD/M", ui->btnMonth->text());
-}
-
-void MainWindow::on_cboxDay_currentTextChanged(const QString& arg1) {
-  Q_UNUSED(arg1);
-  goResultsMonth();
-  goResults();
-  QSettings Reg(iniFile, QSettings::IniFormat);
-  Reg.setValue("/YMD/D", ui->btnDay->text());
+  series->clear();
+  m_scatterSeries->clear();
+  series2->clear();
+  m_scatterSeries2->clear();
+  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  int count = tw->topLevelItemCount();
+  for (int i = 0; i < count; i++) {
+    QString str = tw->topLevelItem(i)->text(0);
+    if (get_Year(str) == ui->btnYear->text()) {
+      if (get_Month(str) == ui->btnMonth->text()) {
+        if (tabChart->currentIndex() == 0) {
+          startRead(str);
+          break;
+        }
+        if (tabChart->currentIndex() == 1) {
+          if (get_Day(str) == ui->btnDay->text().toInt()) {
+            tw->setCurrentItem(tw->topLevelItem(i));
+            tw->setFocus();
+            on_twItemClicked();
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 
 void MainWindow::on_btnGo_clicked() {
@@ -1852,12 +1826,12 @@ void MainWindow::on_btnTodo_clicked() {
 
 void MainWindow::on_rbFreq_clicked() {
   isrbFreq = true;
-  startRead();
+  startRead(strDate);
 }
 
 void MainWindow::on_rbAmount_clicked() {
   isrbFreq = false;
-  startRead();
+  startRead(strDate);
 }
 
 void MainWindow::paintEvent(QPaintEvent* event) {
@@ -1930,6 +1904,7 @@ void MainWindow::on_btnYear_clicked() {
   }
   connect(list, &QListWidget::itemClicked, [=]() {
     ui->btnYear->setText(list->currentItem()->text());
+    btnYText = ui->btnYear->text();
     list->close();
     on_cboxYear_currentTextChanged("");
   });
@@ -1968,8 +1943,9 @@ void MainWindow::on_btnMonth_clicked() {
   }
   connect(list, &QListWidget::itemClicked, [=]() {
     ui->btnMonth->setText(list->currentItem()->text());
+    btnMText = ui->btnMonth->text();
     list->close();
-    on_cboxMonth_currentTextChanged("");
+    on_cboxYear_currentTextChanged("");
   });
 
   int h = 30 * list->count() + 2;
@@ -2013,8 +1989,9 @@ void MainWindow::on_btnDay_clicked() {
 
   connect(list, &QListWidget::itemClicked, [=]() {
     ui->btnDay->setText(list->currentItem()->text());
+    btnDText = ui->btnDay->text();
     list->close();
-    on_cboxDay_currentTextChanged("");
+    on_cboxYear_currentTextChanged("");
   });
 
   int h = 13 * 30;
@@ -2129,14 +2106,15 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
   }
 
   if (index == 0) {
-    startRead();
+    startRead(strDate);
   }
 
   if (index == 1) {
     QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
     int topCount = tw->topLevelItemCount();
     if (topCount == 0) {
-      startRead();  //刷新一次数据
+      series2->clear();
+      m_scatterSeries2->clear();
       return;
     }
 
