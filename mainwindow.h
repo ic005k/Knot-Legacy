@@ -54,6 +54,7 @@
 
 class SearchThread;
 class ReadThread;
+class ReadTWThread;
 QT_CHARTS_USE_NAMESPACE
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -79,6 +80,7 @@ class MainWindow : public QMainWindow {
   static void get_Today(QTreeWidget *);
   SearchThread *mySearchThread;
   ReadThread *myReadThread;
+  ReadTWThread *myReadTWThread;
   static void ReadFile();
   static int get_Day(QString date);
   static QString get_Year(QString date);
@@ -99,7 +101,7 @@ class MainWindow : public QMainWindow {
   QTimer *tmer;
 
   static void saveData(QTreeWidget *, int);
-  void readData(QTreeWidget *);
+  static void readData(QTreeWidget *);
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
   void initChartMonth(QString, QString);
@@ -170,6 +172,7 @@ class MainWindow : public QMainWindow {
   void startSave(QString);
   void startRead();
   static void drawDayChart();
+  static void readDataInThread(int ExceptIndex);
  public slots:
 
  protected:
@@ -256,6 +259,8 @@ class MainWindow : public QMainWindow {
 
   void on_tabCharts_currentChanged(int index);
 
+  void readTWDone();
+
  private:
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格
@@ -301,7 +306,22 @@ class ReadThread : public QThread {
  protected:
   void run();
  signals:
-  void isDone();  //处理完成信号
+  void isDone();
+
+ signals:
+
+ public slots:
+};
+
+class ReadTWThread : public QThread {
+  Q_OBJECT
+ public:
+  explicit ReadTWThread(QObject *parent = nullptr);
+
+ protected:
+  void run();
+ signals:
+  void isDone();
 
  signals:
 

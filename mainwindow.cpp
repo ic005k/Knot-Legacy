@@ -11,14 +11,31 @@ bool isrbFreq = true;
 
 QString appName = "Xcounter";
 QString iniFile, ver, strDate, noteText, strStats, SaveType, strY, strM;
-int curPos, sliderPos, today, fontSize, red, yMaxMonth, yMaxDay;
+int curPos, sliderPos, today, fontSize, red, yMaxMonth, yMaxDay,
+    currentTabIndex;
 MainWindow* mw_one;
 QTabWidget *tabData, *tabChart;
-bool loading, isReadEnd;
+bool loading, isReadEnd, isReadTWEnd;
 bool isSaveEnd = true;
 bool isBreak = false;
 extern bool isAndroid, isIOS, zh_cn;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
+
+ReadTWThread::ReadTWThread(QObject* parent) : QThread{parent} {}
+void ReadTWThread::run() {
+  isReadTWEnd = false;
+  MainWindow::readDataInThread(currentTabIndex);
+  emit isDone();
+}
+void MainWindow::readTWDone() {
+  ui->btnPlus->setEnabled(true);
+  ui->btnLess->setEnabled(true);
+  ui->actionImport_Data->setEnabled(true);
+  ui->actionExport_Data->setEnabled(true);
+  ui->actionDel_Tab->setEnabled(true);
+  ui->actionAdd_Tab->setEnabled(true);
+  isReadTWEnd = true;
+}
 
 ReadThread::ReadThread(QObject* parent) : QThread{parent} {}
 void ReadThread::run() {
@@ -166,6 +183,9 @@ MainWindow::MainWindow(QWidget* parent)
   tmer = new QTimer(this);
   connect(tmer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
 
+  myReadTWThread = new ReadTWThread();
+  connect(myReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
+
   myReadThread = new ReadThread();
   connect(myReadThread, &ReadThread::isDone, this, &MainWindow::readDone);
 
@@ -205,7 +225,6 @@ MainWindow::MainWindow(QWidget* parent)
                               << "Dec";
   }
 
-  // setComboBoxQss(ui->cboxYear, 4, 1, "#C0C0C0", "#4169E1");
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
   ui->btnYear->setHidden(true);
   ui->btnMonth->setHidden(true);
@@ -242,9 +261,9 @@ MainWindow::MainWindow(QWidget* parent)
   }
 
   init_Font();
-
-  loading = false;
   init_TabData();
+  loading = false;
+
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   startRead();
   mydlgTodo->init_Items();
@@ -342,8 +361,6 @@ void MainWindow::init_TabData() {
                                   .toString());
     QString strNotes = Reg.value("/" + name + "/Note").toString();
     ui->tabWidget->setTabToolTip(i, strNotes);
-
-    readData(tw);
   }
 
   if (TabCount == 0) {
@@ -352,9 +369,28 @@ void MainWindow::init_TabData() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
-  ui->tabWidget->setCurrentIndex(Reg.value("CurrentIndex").toInt());
-
+  currentTabIndex = Reg.value("CurrentIndex").toInt();
+  ui->tabWidget->setCurrentIndex(currentTabIndex);
+  QTreeWidget* twCur = (QTreeWidget*)tabData->currentWidget();
+  readData(twCur);
+  ui->btnPlus->setEnabled(false);
+  ui->btnLess->setEnabled(false);
+  ui->actionImport_Data->setEnabled(false);
+  ui->actionExport_Data->setEnabled(false);
+  ui->actionDel_Tab->setEnabled(false);
+  ui->actionAdd_Tab->setEnabled(false);
+  myReadTWThread->start();
   init_TabNavigate();
+}
+
+void MainWindow::readDataInThread(int ExceptIndex) {
+  int count = tabData->tabBar()->count();
+  for (int i = 0; i < count; i++) {
+    if (i != ExceptIndex) {
+      QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
+      readData(tw);
+    }
+  }
 }
 
 void MainWindow::init_TabNavigate() {
@@ -426,7 +462,7 @@ void MainWindow::startSave(QString str_type) {
 }
 
 void MainWindow::startRead() {
-  if (!isSaveEnd) return;
+  if (!isSaveEnd || loading) return;
 
   if (!isReadEnd) {
     isBreak = true;
@@ -448,7 +484,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
 
   strDate = QDate::currentDate().toString();
   if (isTesting) {
-    strDate = strDate.replace("3", "3");
+    // strDate = strDate.replace("3", "3");
   }
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
@@ -1335,6 +1371,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (watch == ui->tabWidget->tabBar()) {
+    if (!isReadTWEnd) return QWidget::eventFilter(watch, evn);
     if (event->type() == QEvent::MouseButtonPress) {
     }
     if (event->type() == QEvent::MouseButtonRelease) {
@@ -1467,6 +1504,7 @@ void MainWindow::on_actionAbout_triggered() {
 }
 
 void MainWindow::on_actionExport_Data_triggered() {
+  if (!isSaveEnd) return;
   QString fileName;
   QFileDialog fd;
   fileName =
@@ -1480,37 +1518,42 @@ void MainWindow::on_actionExport_Data_triggered() {
 }
 
 void MainWindow::on_actionImport_Data_triggered() {
+  if (!isSaveEnd) return;
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("XcounterBak"), "",
                                           tr("Data Files (*.ini)"));
-  QMessageBox msgBox;
-  msgBox.setText(appName);
-  msgBox.setInformativeText(tr("Import this data?") + "\n" + fileName);
-  QPushButton* btnCancel =
-      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-  QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-  btnOk->setFocus();
-  msgBox.exec();
-  if (msgBox.clickedButton() == btnCancel) {
-    return;
-  }
-
-  QString txt = loadText(fileName);
-  if (!txt.contains(appName)) {
+  if (!fileName.isNull()) {
     QMessageBox msgBox;
     msgBox.setText(appName);
-    msgBox.setInformativeText(tr("Invalid data file."));
-
+    msgBox.setInformativeText(tr("Import this data?") + "\n" + fileName);
+    QPushButton* btnCancel =
+        msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
     QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
     btnOk->setFocus();
     msgBox.exec();
-    return;
-  }
+    if (msgBox.clickedButton() == btnCancel) {
+      return;
+    }
 
-  if (!fileName.isNull()) {
+    QString txt = loadText(fileName);
+    if (!txt.contains(appName)) {
+      QMessageBox msgBox;
+      msgBox.setText(appName);
+      msgBox.setInformativeText(tr("Invalid data file."));
+
+      QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+      btnOk->setFocus();
+      msgBox.exec();
+      return;
+    }
+
     if (QFile(iniFile).exists()) QFile(iniFile).remove();
     bool ok = QFile::copy(fileName, iniFile);
-    if (ok) init_TabData();
+    if (ok) {
+      loading = true;
+      init_TabData();
+      loading = false;
+    }
   }
 }
 
