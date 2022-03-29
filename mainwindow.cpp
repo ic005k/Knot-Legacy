@@ -438,8 +438,10 @@ void MainWindow::init_TabNavigate() {
 
 void MainWindow::init_NavigateBtnColor() {
   QPalette p1, p2;
-  p1.setColor(QPalette::Button, Qt::red);
-  p2.setColor(QPalette::Button, Qt::gray);
+  QColor color;
+  color.setRgb(100, 149, 237, 255);
+  p1.setColor(QPalette::Button, color);
+  p2.setColor(QPalette::Button, Qt::lightGray);
 
   for (int n = 0; n < listNBtn.count(); n++) {
     if (n == ui->tabWidget->currentIndex())
