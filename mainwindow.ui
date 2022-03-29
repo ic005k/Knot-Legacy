@@ -105,11 +105,11 @@ QTabBar QToolButton::right-arrow {
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>60</height>
+        <height>0</height>
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
@@ -143,24 +143,11 @@ QTabBar QToolButton::right-arrow {
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="lblYear">
            <property name="text">
             <string>Year</string>
            </property>
           </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
          <item>
           <widget class="QToolButton" name="btnMonth">
@@ -176,19 +163,6 @@ QTabBar QToolButton::right-arrow {
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <widget class="QToolButton" name="btnDay">
            <property name="minimumSize">
             <size>
@@ -202,16 +176,9 @@ QTabBar QToolButton::right-arrow {
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="lblDay">
            <property name="text">
             <string>Day</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="btnHide">
-           <property name="text">
-            <string>Hide</string>
            </property>
           </widget>
          </item>
@@ -220,10 +187,23 @@ QTabBar QToolButton::right-arrow {
        <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLineEdit" name="editFind"/>
+          <widget class="QLineEdit" name="editFind">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="btnGo">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -232,6 +212,19 @@ QTabBar QToolButton::right-arrow {
            </property>
            <property name="text">
             <string>Go</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnHide">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Hide</string>
            </property>
           </widget>
          </item>
@@ -356,7 +349,7 @@ QTabBar QToolButton::right-arrow {
     <item row="4" column="1">
      <widget class="QFrame" name="frame_charts">
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
@@ -450,13 +443,6 @@ QTabBar QToolButton::right-arrow {
        </item>
        <item row="1" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Chart Categories : </string>
-           </property>
-          </widget>
-         </item>
          <item>
           <spacer name="horizontalSpacer_3">
            <property name="orientation">

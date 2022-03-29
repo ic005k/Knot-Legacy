@@ -43,10 +43,10 @@ void MainWindow::ReadFile() {
 
 void MainWindow::readDone() {
   if (tabChart->currentIndex() == 0) {
-    initChart(strY, strM);
+    initChartMonth(strY, strM);
   }
   if (tabChart->currentIndex() == 1) {
-    initChartTimeLine();
+    initChartDay();
   }
 
   ui->lblStats->setText(strStats);
@@ -57,7 +57,7 @@ void MainWindow::readDone() {
 SearchThread::SearchThread(QObject* parent) : QThread{parent} {}
 void SearchThread::run() {
   isSaveEnd = false;
-  MainWindow::saveFile(SaveType);
+  MainWindow::SaveFile(SaveType);
   emit isDone();
 }
 void MainWindow::dealDone() {
@@ -69,7 +69,7 @@ void MainWindow::dealDone() {
 
   startRead();
 }
-void MainWindow::saveFile(QString SaveType) {
+void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
     QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
     int index = tabData->currentIndex();
@@ -143,16 +143,21 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgPre = new dlgPreferences(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
+
   // 获取背景色
   QPalette pal = this->palette();
   QBrush brush = pal.window();
   red = brush.color().red();
   if (red < 55) {
     mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
+    chartMonth->setTheme(QChart::ChartThemeDark);
+    chartDay->setTheme(QChart::ChartThemeDark);
 
   } else {
     mydlgTodo->ui->listWidget->setStyleSheet(
         mydlgTodo->ui->listWidget->styleSheet());
+    chartMonth->setTheme(QChart::ChartThemeLight);
+    chartDay->setTheme(QChart::ChartThemeLight);
   }
 
   loading = true;
@@ -202,22 +207,11 @@ MainWindow::MainWindow(QWidget* parent)
 
   // setComboBoxQss(ui->cboxYear, 4, 1, "#C0C0C0", "#4169E1");
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
-
-  QDir dir;
-  QString path;
-  path = dir.currentPath();
-  qDebug() << "Path:" << path;
-  if (isIOS) {
-    QString str1 = QDir::homePath() + "/" + appName + "/";
-    QDir dir0;
-    dir0.mkpath(str1);
-    iniFile = str1 + appName + ".ini";
-    bakFile = str1 + appName + ".bak";
-  }
-  if (isAndroid) {
-    iniFile = path + "/" + appName + ".ini";
-    bakFile = path + "/" + appName + ".bak";
-  }
+  ui->btnYear->setHidden(true);
+  ui->btnMonth->setHidden(true);
+  ui->btnDay->setHidden(true);
+  ui->lblYear->setHidden(true);
+  ui->lblDay->setHidden(true);
 
   int iz = 22;
   ui->btnFind->setIconSize(QSize(iz, iz));
@@ -247,7 +241,24 @@ MainWindow::MainWindow(QWidget* parent)
         Reg.value("/CustomDesc/Item" + QString::number(i)).toString());
   }
 
+  init_Font();
+
+  loading = false;
+  init_TabData();
+  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  startRead();
+  mydlgTodo->init_Items();
+
+  get_Today(tw);
+  init_Stats(tw);
+  init_NavigateBtnColor();
+
+  isInit = true;
+}
+
+void MainWindow::init_Font() {
   // Font Size
+  QSettings Reg(iniFile, QSettings::IniFormat);
   QFont font(this->font());
   QFontInfo fInfo(font);
   fontSize = fInfo.pointSize();
@@ -263,22 +274,12 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgReport->ui->tableReport->setFont(userFont);
   mydlgReport->ui->tableDetails->setFont(userFont);
   mydlgNotes->ui->textEdit->setFont(userFont);
+  tabData->setFont(userFont);
+  tabChart->setFont(userFont);
   userFont.setBold(true);
   ui->lblStats->setFont(userFont);
-
-  loading = false;
-  init_TabData();
-  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
-  startRead();
-  mydlgTodo->init_Items();
-
-  get_Today(tw);
-  init_Stats(tw);
-  init_NavigateBtnColor();
-
-  isInit = true;
-
-  // drawMonth();
+  mydlgReport->ui->tableReport->horizontalHeader()->setFont(userFont);
+  mydlgReport->ui->tableDetails->horizontalHeader()->setFont(userFont);
 }
 
 void MainWindow::init_ChartWidget() {
@@ -760,7 +761,8 @@ void MainWindow::drawDayChart() {
     day = get_Day(item->text(0));
   }
 
-  tabChart->setTabText(1, QString::number(day) + " " + tr("Day"));
+  QString strDay = QString("%1").arg(day, 2, 10, QLatin1Char('0'));
+  tabChart->setTabText(1, strDay);
 
   QVector<double> dList;
   double x, y;
@@ -804,10 +806,10 @@ void MainWindow::drawDayChart() {
   }
 
   if (isrbFreq) {
-    if (childCount > 20)
+    if (childCount > 10)
       yMaxDay = childCount;
     else
-      yMaxDay = 18;
+      yMaxDay = 8;
   } else {
     yMaxDay = *std::max_element(dList.begin(), dList.end());
   }
@@ -934,10 +936,10 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
   strStats = tr("Total") + " : " + QString::number(tatol) + "    $" + strAmount;
 }
 
-void MainWindow::initChart(QString strY, QString strM) {
+void MainWindow::initChartMonth(QString strY, QString strM) {
   if (loading) return;
   tabChart->setTabText(0, strM);
-  // listMonth Format:1.Day  2.Freq or Amount
+  strY = "";
 
   /*QRandomGenerator rg(QTime(0, 0, 0).secsTo(QTime::currentTime()));
   for (int i = 0; i < 30; i++) {
@@ -965,12 +967,12 @@ void MainWindow::initChart(QString strY, QString strM) {
   qDebug() << "In table Max:" << maxValue;
   double max;
   if (isrbFreq) {
-    max = 18;
-    if (maxValue > 20) max = maxValue + 2;
+    max = 10;
+    if (maxValue >= max) max = maxValue + 2;
 
   } else {
-    max = 80.00;
-    if (maxValue > max) max = maxValue + 20;
+    max = 50.00;
+    if (maxValue >= max) max = maxValue + 20;
   }
 
   yMaxMonth = max;
@@ -978,43 +980,7 @@ void MainWindow::initChart(QString strY, QString strM) {
   chartMonth->axes(Qt::Vertical).first()->setRange(0, yMaxMonth + 2);
 }
 
-void MainWindow::drawMonth() {
-  QChart* chart = new QChart();
-  chart->setTitle("Line chart");
-  chart->legend()->hide();
-  chart->setMargins(QMargins(0, 0, 0, 0));
-  chart->setContentsMargins(0, 0, 0, 0);
-  chart->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
-  QSplineSeries* series;
-  QScatterSeries* m_scatterSeries;
-  series = new QSplineSeries(chart);
-  series->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
-  m_scatterSeries = new QScatterSeries(chart);  //创建散点
-  m_scatterSeries->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);  //设置散点样式
-  m_scatterSeries->setMarkerSize(10);      //设置散点大小
-  QChartView* chartview = new QChartView(chart);
-  chartview->setRenderHint(QPainter::Antialiasing);  //防止图形走样
-  ui->pLayout->addWidget(chartview);
-
-  QRandomGenerator rg(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-  for (int i = 0; i < 30; i++) {
-    int a = rg() % (20);
-    QPointF pf(i, a);
-
-    series->append(pf.x(), pf.y());
-    m_scatterSeries->append(pf.x(), pf.y());
-
-    chart->addSeries(series);
-    chart->addSeries(m_scatterSeries);
-  }
-
-  chart->createDefaultAxes();
-  chart->axes(Qt::Horizontal).first()->setRange(0, 31);
-  chart->axes(Qt::Vertical).first()->setRange(0, 20);
-}
-
-void MainWindow::initChartTimeLine() {
+void MainWindow::initChartDay() {
   if (loading) return;
   series2->clear();
   m_scatterSeries2->clear();
@@ -1113,6 +1079,8 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   QFont font;
   font.setPointSize(fontSize);
   tw->setFont(font);
+  font.setBold(true);
+  tw->header()->setFont(font);
   tw->setColumnCount(3);
   tw->headerItem()->setText(0, "  " + tr("Date") + "  ");
   tw->headerItem()->setText(1, "  " + tr("Freq") + "  ");
@@ -1270,6 +1238,14 @@ void MainWindow::on_twItemDoubleClicked() {
 
 void MainWindow::on_tabWidget_currentChanged(int index) {
   int count = ui->tabWidget->tabBar()->count();
+  if (index >= 0) {
+    for (int i = 0; i < count; i++) {
+      if (i == index)
+        tabData->tabBar()->setTabTextColor(i, Qt::blue);
+      else
+        tabData->tabBar()->setTabTextColor(i, Qt::black);
+    }
+  }
   if (index == 0) {
     ui->btnLeft->setEnabled(false);
     ui->btnRight->setEnabled(true);
@@ -1848,11 +1824,18 @@ void MainWindow::paintEvent(QPaintEvent* event) {
   int c_red = brush.color().red();
   if (c_red != red) {
     red = c_red;
-    if (red < 55)
+    if (red < 55) {
       mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
-    else
+      chartMonth->setTheme(QChart::ChartThemeDark);
+      chartDay->setTheme(QChart::ChartThemeDark);
+    }
+
+    else {
       mydlgTodo->ui->listWidget->setStyleSheet(
           mydlgTodo->ui->listWidget->styleSheet());
+      chartMonth->setTheme(QChart::ChartThemeLight);
+      chartDay->setTheme(QChart::ChartThemeLight);
+    }
   }
 }
 
@@ -2087,6 +2070,16 @@ void MainWindow::on_actionPreferences_triggered() {
 }
 
 void MainWindow::on_tabCharts_currentChanged(int index) {
+  int count = tabChart->tabBar()->count();
+  if (index >= 0) {
+    for (int i = 0; i < count; i++) {
+      if (i == index)
+        tabChart->tabBar()->setTabTextColor(i, Qt::blue);
+      else
+        tabChart->tabBar()->setTabTextColor(i, Qt::black);
+    }
+  }
+
   if (index == 0) {
     startRead();
   }

@@ -84,7 +84,6 @@ class MainWindow : public QMainWindow {
   static QString get_Year(QString date);
   static QString get_Month(QString date);
   QStringList listMonth;
-  QString bakFile;
   dlgNotes *mydlgNotes;
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
@@ -103,8 +102,8 @@ class MainWindow : public QMainWindow {
   void readData(QTreeWidget *);
   QString loadText(QString textFile);
   void TextEditToFile(QTextEdit *txtEdit, QString fileName);
-  void initChart(QString, QString);
-  void initChartTimeLine();
+  void initChartMonth(QString, QString);
+  void initChartDay();
   static void saveNotes();
   bool isInit = false;
 
@@ -164,8 +163,8 @@ class MainWindow : public QMainWindow {
                          const QString &normalColor, const QString &focusColor);
   QString setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
                          const QString &normalColor, const QString &focusColor);
-  static void saveFile(QString);
-  void drawMonth();
+  static void SaveFile(QString);
+
   static void init_Stats(QTreeWidget *);
 
   void startSave(QString);
@@ -277,6 +276,7 @@ class MainWindow : public QMainWindow {
   //"QTreeWidget::item:hover {background-color: #f5f5f5;}"
   //"QTreeWidget::item:selected {border-left: 0px solid #777777;}"
   void init_ChartWidget();
+  void init_Font();
 };
 
 class SearchThread : public QThread {
