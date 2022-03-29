@@ -19,6 +19,7 @@ bool loading, isReadEnd, isReadTWEnd;
 bool isSaveEnd = true;
 bool isBreak = false;
 extern bool isAndroid, isIOS, zh_cn;
+extern QString btnYearText, btnMonthText;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 ReadTWThread::ReadTWThread(QObject* parent) : QThread{parent} {}
@@ -109,6 +110,7 @@ void MainWindow::SaveFile(QString SaveType) {
       dlgSetTime::saveCustomDesc();
       dlgTodo::saveTodo();
       dlgPreferences::saveFontSize();
+      dlgReport::saveYMD();
     }
   }
 
@@ -122,6 +124,10 @@ void MainWindow::SaveFile(QString SaveType) {
 
   if (SaveType == "notes") {
     saveNotes();
+  }
+
+  if (SaveType == "ymd") {
+    dlgReport::saveYMD();
   }
 }
 
@@ -251,6 +257,10 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnYear->setText(Reg.value("/YMD/Y", 2022).toString());
   ui->btnMonth->setText(Reg.value("/YMD/M", tr("Month")).toString());
   ui->btnDay->setText(Reg.value("/YMD/D", 1).toString());
+  btnYearText = Reg.value("/YMD/btnYearText", "2022").toString();
+  mydlgReport->ui->btnYear->setText(btnYearText);
+  btnMonthText = Reg.value("/YMD/btnMonthText", tr("Month")).toString();
+  mydlgReport->ui->btnMonth->setText(btnMonthText);
 
   // Custom Desc
   mw_one->mydlgList->ui->listWidget->clear();
@@ -443,6 +453,12 @@ MainWindow::~MainWindow() {
   delete ui;
   mySearchThread->quit();
   mySearchThread->wait();
+
+  myReadThread->quit();
+  myReadThread->wait();
+
+  myReadTWThread->quit();
+  myReadTWThread->wait();
 }
 
 void MainWindow::startSave(QString str_type) {
@@ -1004,16 +1020,18 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   double max;
   if (isrbFreq) {
     max = 10;
-    if (maxValue >= max) max = maxValue + 2;
+    if (maxValue >= max) {
+      max = maxValue;
+    }
 
   } else {
     max = 50.00;
-    if (maxValue >= max) max = maxValue + 20;
+    if (maxValue >= max) max = maxValue;
   }
 
   yMaxMonth = max;
   chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
-  chartMonth->axes(Qt::Vertical).first()->setRange(0, yMaxMonth + 2);
+  chartMonth->axes(Qt::Vertical).first()->setRange(0, yMaxMonth);
 }
 
 void MainWindow::initChartDay() {
@@ -2085,6 +2103,9 @@ void MainWindow::on_actionReport_triggered() {
   mydlgReport->setFixedWidth(this->width());
   mydlgReport->setModal(true);
   mydlgReport->show();
+
+  mydlgReport->sel_Year();
+  mydlgReport->sel_Month();
 }
 
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }

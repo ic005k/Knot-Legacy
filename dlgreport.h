@@ -21,17 +21,19 @@ class dlgReport : public QDialog {
   Ui::dlgReport *ui;
 
   void markColor(int row);
+  void sel_Year();
+  void sel_Month();
+  static void saveYMD();
  public slots:
   void on_tableReport_cellClicked(int row, int column);
+  void on_btnYear_clicked();
+
+  void on_btnMonth_clicked();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
  private slots:
   void on_btnBack_clicked();
-
-  void on_btnYear_clicked();
-
-  void on_btnMonth_clicked();
 
   void on_tableReport_itemClicked(QTableWidgetItem *item);
 
