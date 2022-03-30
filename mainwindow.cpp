@@ -30,6 +30,10 @@ void ReadTWThread::run() {
   emit isDone();
 }
 void MainWindow::readTWDone() {
+  for (int i = 0; i < tabData->tabBar()->count(); i++) {
+    QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
+    tw->setCurrentItem(tw->topLevelItem(tw->topLevelItemCount() - 1));
+  }
   ui->btnPlus->setEnabled(true);
   ui->btnLess->setEnabled(true);
   ui->actionImport_Data->setEnabled(true);
@@ -88,7 +92,7 @@ void MainWindow::dealDone() {
     return;
   }
   isSaveEnd = true;
-
+  qDebug() << "SaveEnd: " << isSaveEnd << iniFile;
   startRead(strDate);
 }
 void MainWindow::SaveFile(QString SaveType) {
@@ -860,10 +864,10 @@ void MainWindow::drawDayChart() {
   }
 
   if (isrbFreq) {
-    if (childCount > 10)
+    if (childCount > 5)
       yMaxDay = childCount;
     else
-      yMaxDay = 10;
+      yMaxDay = 5;
   } else {
     yMaxDay = *std::max_element(dList.begin(), dList.end());
   }
@@ -908,8 +912,6 @@ void MainWindow::readData(QTreeWidget* tw) {
       }
     }
   }
-  tw->setCurrentItem(tw->topLevelItem(rowCount - 1));
-  tw->setFocus();
 }
 
 void MainWindow::get_Today(QTreeWidget* tw) {
@@ -1023,7 +1025,7 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   qDebug() << "In table Max:" << maxValue;
   double max;
   if (isrbFreq) {
-    max = 10;
+    max = 5;
     if (maxValue >= max) {
       max = maxValue;
     }
@@ -1573,12 +1575,12 @@ void MainWindow::on_actionImport_Data_triggered() {
     }
 
     if (QFile(iniFile).exists()) QFile(iniFile).remove();
-    bool ok = QFile::copy(fileName, iniFile);
-    if (ok) {
-      loading = true;
-      init_TabData();
-      loading = false;
-    }
+    QTextEdit* txtEdit = new QTextEdit;
+    txtEdit->setPlainText(txt);
+    TextEditToFile(txtEdit, iniFile);
+    loading = true;
+    init_TabData();
+    loading = false;
   }
 }
 

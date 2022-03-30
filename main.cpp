@@ -44,6 +44,7 @@ int main(int argc, char *argv[]) {
   if (isAndroid) {
     iniFile = path + "/" + appName + ".ini";
   }
+  qDebug() << "iniFile: " << iniFile;
 
   loadLocal();
 
