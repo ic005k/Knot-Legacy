@@ -42,6 +42,8 @@ void MainWindow::readTWDone() {
   ui->actionAdd_Tab->setEnabled(true);
   ui->actionView_App_Data->setEnabled(true);
   isReadTWEnd = true;
+  // ui->progBar->setHidden(true);
+  ui->progBar->setMaximum(100);
 }
 
 ReadThread::ReadThread(QObject* parent) : QThread{parent} {}
@@ -94,6 +96,8 @@ void MainWindow::dealDone() {
   }
   isSaveEnd = true;
   isImport = false;
+  // ui->progBar->setHidden(true);
+  ui->progBar->setMaximum(100);
 
   if (SaveType == "tab" || SaveType == "alltab") startRead(strDate);
 }
@@ -213,6 +217,19 @@ MainWindow::MainWindow(QWidget* parent)
 
   ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->frame_find->setHidden(true);
+  // ui->progBar->setHidden(true);
+  ui->progBar->setStyleSheet(
+      "QProgressBar{border:0px solid #FFFFFF;"
+      "height:30;"
+      "background:rgba(25,255,25,0);"
+      "text-align:right;"
+      "color:rgb(255,255,255);"
+      "border-radius:0px;}"
+
+      "QProgressBar:chunk{"
+      "border-radius:0px;"
+      "background-color:rgba(25,25,255,250);"
+      "}");
 
   if (zh_cn) {
     listMonth = QStringList() << "1月"
@@ -356,6 +373,9 @@ void MainWindow::init_ChartWidget() {
 }
 
 void MainWindow::init_TabData() {
+  ui->progBar->setHidden(false);
+  ui->progBar->setMaximum(0);
+
   int count = ui->tabWidget->tabBar()->count();
   for (int i = 0; i < count; i++) {
     ui->tabWidget->removeTab(0);
@@ -491,6 +511,10 @@ void MainWindow::startSave(QString str_type) {
   if (isSaveEnd) {
     isBreak = false;
     SaveType = str_type;
+
+    ui->progBar->setHidden(false);
+    ui->progBar->setMaximum(0);
+
     mySearchThread->start();
   }
 }
@@ -1515,12 +1539,16 @@ void MainWindow::on_actionAbout_triggered() {
 
 void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
+
   QString fileName;
   QFileDialog fd;
   fileName =
       fd.getSaveFileName(this, tr("XcounterBak"), "", tr("Data Files(*.ini)"));
 
   if (!fileName.isNull()) {
+    ui->progBar->setHidden(false);
+    ui->progBar->setMaximum(0);
+
     QTextEdit* edit = new QTextEdit;
     edit->append("[" + appName + "]");
     edit->append("Ver: " + ver);
@@ -1536,6 +1564,9 @@ void MainWindow::on_actionExport_Data_triggered() {
     }
 
     TextEditToFile(edit, fileName);
+
+    // ui->progBar->setHidden(true);
+    ui->progBar->setMaximum(100);
 
     if (QFile(fileName).exists()) {
       QMessageBox msgBox;
