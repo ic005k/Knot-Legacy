@@ -93,6 +93,7 @@ void MainWindow::dealDone() {
     return;
   }
   isSaveEnd = true;
+  isImport = false;
 
   if (SaveType == "tab" || SaveType == "alltab") startRead(strDate);
 }
@@ -107,23 +108,21 @@ void MainWindow::SaveFile(QString SaveType) {
   }
 
   if (SaveType == "alltab") {
-    bool ok = QFile(iniFile).remove();
-    if (ok) {
-      for (int i = 0; i < tabData->tabBar()->count(); i++) {
-        if (isBreak) break;
-        QString ini_file = iniDir + "tab" + QString::number(i + 1) + ".ini";
-        if (QFile(ini_file).exists()) QFile(ini_file).remove();
+    for (int i = 0; i < tabData->tabBar()->count(); i++) {
+      if (isBreak) break;
+      QString name = "tab" + QString::number(i + 1);
+      QString ini_file = iniDir + name + ".ini";
+      if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
-        QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
-        tw->setObjectName("tab" + QString::number(i + 1));
-        saveData(tw, i);
-        saveNotes(i);
-      }
-
-      saveTab();
-      dlgSetTime::saveCustomDesc();
-      dlgTodo::saveTodo();
+      QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
+      tw->setObjectName(name);
+      saveData(tw, i);
+      saveNotes(i);
     }
+
+    saveTab();
+    dlgSetTime::saveCustomDesc();
+    dlgTodo::saveTodo();
   }
 
   if (SaveType == "todo") {
@@ -750,10 +749,10 @@ QString MainWindow::getFileSize(const qint64& size, int precision) {
 }
 
 void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
-  QString ini_file = iniDir + "tab" + QString::number(tabIndex + 1) + ".ini";
+  QString name = "tab" + QString::number(tabIndex + 1);
+  QString ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
   int count = tw->topLevelItemCount();
-  QString name = "tab" + QString::number(tabIndex + 1);
   tw->setObjectName(name);
   Reg.setValue("/" + name + "/TopCount", count);
   for (int i = 0; i < count; i++) {
@@ -1099,17 +1098,7 @@ void MainWindow::on_actionAdd_Tab_triggered() {
 void MainWindow::on_actionDel_Tab_triggered() {
   int index = ui->tabWidget->currentIndex();
   if (index < 0) return;
-  if (index == 0) {
-    QMessageBox msgBox;
-    msgBox.setText(appName);
-    msgBox.setInformativeText(
-        tr("The first tab is not allowed to be deleted."));
 
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    // msgBox.exec();
-    // return;
-  }
   QString str1 = ui->tabWidget->tabText(index);
   QMessageBox msgBox;
   msgBox.setText("Xcounter");
@@ -1125,15 +1114,15 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
   ui->tabWidget->removeTab(index);
 
-  // Save all
-  startSave("alltab");
-
   int TabCount = ui->tabWidget->tabBar()->count();
   if (TabCount == 0) {
     ui->tabWidget->addTab(init_TreeWidget("tab1"),
                           tr("Counter") + " " + QString::number(1));
     ui->tabWidget->setTabToolTip(0, "");
   }
+
+  // Save all
+  startSave("alltab");
 
   init_TabNavigate();
 }
@@ -1546,7 +1535,6 @@ void MainWindow::on_actionExport_Data_triggered() {
       if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
     }
 
-    if (isAndroid) fileName = fileName + ".ini";
     TextEditToFile(edit, fileName);
 
     if (QFile(fileName).exists()) {
@@ -1598,7 +1586,6 @@ void MainWindow::on_actionImport_Data_triggered() {
     loading = true;
     init_TabData();
     loading = false;
-    isImport = false;
 
     while (!isReadTWEnd)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
