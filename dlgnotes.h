@@ -15,7 +15,8 @@ class dlgNotes : public QDialog {
   ~dlgNotes();
   Ui::dlgNotes *ui;
 
- public slots:
+  void init_Notes();
+public slots:
   bool eventFilter(QObject *obj, QEvent *event) override;
 
  protected:

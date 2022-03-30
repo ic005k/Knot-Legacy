@@ -40,6 +40,7 @@ void MainWindow::readTWDone() {
   ui->actionExport_Data->setEnabled(true);
   ui->actionDel_Tab->setEnabled(true);
   ui->actionAdd_Tab->setEnabled(true);
+  ui->actionView_App_Data->setEnabled(true);
   isReadTWEnd = true;
 }
 
@@ -92,8 +93,8 @@ void MainWindow::dealDone() {
     return;
   }
   isSaveEnd = true;
-  qDebug() << "SaveEnd: " << isSaveEnd << iniFile;
-  startRead(strDate);
+
+  if (SaveType == "tab" || SaveType == "alltab") startRead(strDate);
 }
 void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
@@ -110,6 +111,9 @@ void MainWindow::SaveFile(QString SaveType) {
     if (ok) {
       for (int i = 0; i < tabData->tabBar()->count(); i++) {
         if (isBreak) break;
+        QString ini_file = iniDir + "tab" + QString::number(i + 1) + ".ini";
+        if (QFile(ini_file).exists()) QFile(ini_file).remove();
+
         QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
         tw->setObjectName("tab" + QString::number(i + 1));
         saveData(tw, i);
@@ -401,6 +405,7 @@ void MainWindow::init_TabData() {
   ui->actionExport_Data->setEnabled(false);
   ui->actionDel_Tab->setEnabled(false);
   ui->actionAdd_Tab->setEnabled(false);
+  ui->actionView_App_Data->setEnabled(false);
   myReadTWThread->start();
   init_TabNavigate();
 }
@@ -745,8 +750,8 @@ QString MainWindow::getFileSize(const qint64& size, int precision) {
 }
 
 void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
-  QSettings Reg(iniDir + "tab" + QString::number(tabIndex + 1) + ".ini",
-                QSettings::IniFormat);
+  QString ini_file = iniDir + "tab" + QString::number(tabIndex + 1) + ".ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
   int count = tw->topLevelItemCount();
   QString name = "tab" + QString::number(tabIndex + 1);
   tw->setObjectName(name);
@@ -1081,8 +1086,8 @@ void MainWindow::on_actionRename_triggered() {
 
 void MainWindow::on_actionAdd_Tab_triggered() {
   int count = ui->tabWidget->tabBar()->count();
-  QSettings Reg(iniFile, QSettings::IniFormat);
-  Reg.remove("/tab" + QString::number(count + 1));
+  QString ini_file = iniDir + "tab" + QString::number(count + 1) + ".ini";
+  if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
   ui->tabWidget->addTab(init_TreeWidget("tab" + QString::number(count + 1)),
                         tr("Counter") + " " + QString::number(count + 1));
@@ -1326,6 +1331,10 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 
   QTreeWidget* tw = (QTreeWidget*)tabData->widget(index);
   tw->setFocus();
+  if (!loading) {
+    QSettings Reg(iniDir + "tab.ini", QSettings::IniFormat);
+    Reg.setValue("CurrentIndex", index);
+  }
 
   startRead(strDate);
 }
@@ -1363,21 +1372,7 @@ void MainWindow::on_actionNotes_triggered() {
   mydlgNotes->setModal(true);
   mydlgNotes->ui->lblTitle->setText(tr("Notes :"));
   mydlgNotes->show();
-
-  QString str = ui->tabWidget->tabToolTip(index);
-  QStringList list = str.split("|");
-  if (list.count() > 2) {
-    mydlgNotes->ui->textEdit->setPlainText(list.at(2));
-    QTextCursor tmpCursor = mydlgNotes->ui->textEdit->textCursor();
-    QString curPos = list.at(0);
-    tmpCursor.setPosition(curPos.toInt());
-    mydlgNotes->ui->textEdit->setTextCursor(tmpCursor);
-    QString sliderPos = list.at(1);
-    mydlgNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
-        sliderPos.toInt());
-
-  } else
-    mydlgNotes->ui->textEdit->setPlainText(str);
+  mydlgNotes->init_Notes();
 }
 
 void MainWindow::on_btnNotes_clicked() { on_actionNotes_triggered(); }
@@ -1551,7 +1546,17 @@ void MainWindow::on_actionExport_Data_triggered() {
       if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
     }
 
+    if (isAndroid) fileName = fileName + ".ini";
     TextEditToFile(edit, fileName);
+
+    if (QFile(fileName).exists()) {
+      QMessageBox msgBox;
+      msgBox.setText(appName);
+      msgBox.setInformativeText(tr("The data was exported successfully."));
+      QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+      btnOk->setFocus();
+      msgBox.exec();
+    }
   }
 }
 
@@ -1593,10 +1598,11 @@ void MainWindow::on_actionImport_Data_triggered() {
     loading = true;
     init_TabData();
     loading = false;
+    isImport = false;
 
     while (!isReadTWEnd)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    isImport = false;
+
     startSave("alltab");
   }
 }
@@ -1634,19 +1640,36 @@ QTreeWidget* MainWindow::get_tw(int tabIndex) {
 }
 
 void MainWindow::on_actionView_App_Data_triggered() {
+  mydlgNotes->init_Notes();
+
+  QTextEdit* edit = new QTextEdit;
+  edit->append("[" + appName + "]");
+  edit->append("Ver: " + ver);
+  edit->append(loadText(iniDir + "tab.ini"));
+  edit->append(loadText(iniDir + "font.ini"));
+  edit->append(loadText(iniDir + "desc.ini"));
+  edit->append(loadText(iniDir + "todo.ini"));
+  edit->append(loadText(iniDir + "ymd.ini"));
+  edit->append(loadText(iniDir + "notes.ini"));
+  for (int i = 0; i < tabData->tabBar()->count(); i++) {
+    QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
+    if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
+  }
+  TextEditToFile(edit, iniFile);
+
   mydlgNotes->ui->textBrowser->clear();
   QSettings Reg(iniFile, QSettings::IniFormat);
   int keys = Reg.allKeys().count();
-  if (keys > 10000) {
-    mydlgNotes->ui->textBrowser->append("[" + appName + "]");
-    mydlgNotes->ui->textBrowser->append("Ver: " + ver);
-    mydlgNotes->ui->textBrowser->append("All Keys: " + QString::number(keys));
-    mydlgNotes->ui->textBrowser->append("File Size: " +
-                                        getFileSize(QFile(iniFile).size(), 2));
-    mydlgNotes->ui->textBrowser->append("File: " + iniFile);
+  // if (keys > 10000) {
+  mydlgNotes->ui->textBrowser->append("[" + appName + "]");
+  mydlgNotes->ui->textBrowser->append("Ver: " + ver);
+  mydlgNotes->ui->textBrowser->append("All Keys: " + QString::number(keys));
+  mydlgNotes->ui->textBrowser->append("File Size: " +
+                                      getFileSize(QFile(iniFile).size(), 2));
+  mydlgNotes->ui->textBrowser->append("File: " + iniFile);
 
-  } else
-    mydlgNotes->ui->textBrowser->setPlainText(loadText(iniFile));
+  //} else
+  //  mydlgNotes->ui->textBrowser->setPlainText(loadText(iniFile));
 
   mydlgNotes->ui->textBrowser->setHidden(false);
   mydlgNotes->ui->textEdit->setHidden(true);
@@ -1670,8 +1693,6 @@ void MainWindow::on_btnFind_clicked() {
     ui->btnLess->setHidden(false);
     ui->btnTodo->setHidden(false);
     ui->btnMax->setHidden(false);
-
-    startSave("ymd");
   }
 }
 
@@ -1718,6 +1739,7 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
 
 void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
   Q_UNUSED(arg1);
+  startSave("ymd");
   series->clear();
   m_scatterSeries->clear();
   series2->clear();
@@ -1928,6 +1950,7 @@ void MainWindow::on_btnYear_clicked() {
   connect(list, &QListWidget::itemClicked, [=]() {
     ui->btnYear->setText(list->currentItem()->text());
     btnYText = ui->btnYear->text();
+
     list->close();
     on_cboxYear_currentTextChanged("");
   });

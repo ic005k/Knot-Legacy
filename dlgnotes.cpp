@@ -52,3 +52,20 @@ void dlgNotes::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);
   qDebug() << "resize" << ui->textEdit->height();
 }
+
+void dlgNotes::init_Notes() {
+  int index = mw_one->ui->tabWidget->currentIndex();
+  QString str = mw_one->ui->tabWidget->tabToolTip(index);
+  QStringList list = str.split("|");
+  if (list.count() > 2) {
+    ui->textEdit->setPlainText(list.at(2));
+    QTextCursor tmpCursor = ui->textEdit->textCursor();
+    QString curPos = list.at(0);
+    tmpCursor.setPosition(curPos.toInt());
+    ui->textEdit->setTextCursor(tmpCursor);
+    QString sliderPos = list.at(1);
+    ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos.toInt());
+
+  } else
+    ui->textEdit->setPlainText(str);
+}
