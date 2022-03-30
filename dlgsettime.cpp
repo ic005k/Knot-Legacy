@@ -6,7 +6,7 @@
 #include "ui_dlgsettime.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
-extern QString iniFile;
+extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
 extern bool isBreak;
 
@@ -134,7 +134,7 @@ void dlgSetTime::on_btnCustom_clicked() {
 }
 
 void dlgSetTime::saveCustomDesc() {
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QSettings Reg(iniDir + "desc.ini", QSettings::IniFormat);
   int count = mw_one->mydlgList->ui->listWidget->count();
   Reg.setValue("/CustomDesc/Count", count);
   QStringList list;

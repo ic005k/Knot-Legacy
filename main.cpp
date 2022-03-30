@@ -3,7 +3,7 @@
 
 #include "mainwindow.h"
 
-extern QString iniFile, txtFile, appName;
+extern QString iniFile, txtFile, appName, iniDir;
 extern int fontSize;
 void loadLocal();
 bool zh_cn = false;
@@ -39,10 +39,12 @@ int main(int argc, char *argv[]) {
     QString str1 = QDir::homePath() + "/" + appName + "/";
     QDir dir0;
     dir0.mkpath(str1);
-    iniFile = str1 + appName + ".ini";
+    iniDir = str1;
+    iniFile = iniDir + appName + ".ini";
   }
   if (isAndroid) {
-    iniFile = path + "/" + appName + ".ini";
+    iniDir = path + "/";
+    iniFile = iniDir + appName + ".ini";
   }
   qDebug() << "iniFile: " << iniFile;
 

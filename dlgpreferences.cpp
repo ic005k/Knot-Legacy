@@ -5,7 +5,7 @@
 #include "mainwindow.h"
 #include "ui_dlgpreferences.h"
 #include "ui_mainwindow.h"
-extern QString iniFile;
+extern QString iniFile, iniDir;
 extern MainWindow* mw_one;
 static bool is_rb0;
 static bool is_rb1;
@@ -28,7 +28,7 @@ void dlgPreferences::on_btnBack_clicked() {
 
 void dlgPreferences::saveFontSize() {
   if (isBreak) return;
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QSettings Reg(iniDir + "font.ini", QSettings::IniFormat);
   Reg.setValue("/FontSize/rb0", is_rb0);
   Reg.setValue("/FontSize/rb1", is_rb1);
   Reg.setValue("/FontSize/rb2", is_rb2);

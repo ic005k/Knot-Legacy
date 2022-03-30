@@ -8,7 +8,7 @@ int highCount;
 QString orgLblStyle;
 QListWidget* mylist;
 extern MainWindow* mw_one;
-extern QString iniFile;
+extern QString iniFile, iniDir;
 extern bool loading, isBreak;
 extern int fontSize;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
@@ -29,7 +29,7 @@ void dlgTodo::on_btnBack_clicked() { close(); }
 
 void dlgTodo::saveTodo() {
   highCount = 0;
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
   int count = mylist->count();
   Reg.setValue("/Todo/Count", count);
   for (int i = 0; i < count; i++) {

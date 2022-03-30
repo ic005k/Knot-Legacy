@@ -5,7 +5,7 @@
 #include "ui_mainwindow.h"
 extern int fontSize;
 extern MainWindow* mw_one;
-extern QString iniFile, btnYText, btnMText, btnDText;
+extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
 QString btnYearText, btnMonthText;
 
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
@@ -319,7 +319,7 @@ void dlgReport::markColor(int row) {
 }
 
 void dlgReport::saveYMD() {
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
   Reg.setValue("/YMD/btnYearText", btnYearText);
   Reg.setValue("/YMD/btnMonthText", btnMonthText);
   Reg.setValue("/YMD/btnYText", btnYText);

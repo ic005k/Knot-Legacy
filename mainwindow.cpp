@@ -10,8 +10,8 @@ QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
 
 QString appName = "Xcounter";
-QString iniFile, ver, strDate, readDate, noteText, strStats, SaveType, strY,
-    strM, btnYText, btnMText, btnDText;
+QString iniFile, iniDir, ver, strDate, readDate, noteText, strStats, SaveType,
+    strY, strM, btnYText, btnMText, btnDText;
 int curPos, sliderPos, today, fontSize, red, currentTabIndex;
 double yMaxMonth, yMaxDay;
 MainWindow* mw_one;
@@ -137,6 +137,19 @@ void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "ymd") {
     dlgReport::saveYMD();
   }
+
+  QTextEdit* edit = new QTextEdit;
+
+  edit->append(loadText(iniDir + "tab.ini"));
+  edit->append(loadText(iniDir + "font.ini"));
+  edit->append(loadText(iniDir + "desc.ini"));
+  edit->append(loadText(iniDir + "todo.ini"));
+  edit->append(loadText(iniDir + "ymd.ini"));
+  for (int i = 0; i < tabData->tabBar()->count(); i++) {
+    QString tabIniFile = iniDir + "tab" + QString::number(i) + ".ini";
+    if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
+  }
+  TextEditToFile(edit, iniFile);
 }
 
 MainWindow::MainWindow(QWidget* parent)
@@ -703,7 +716,7 @@ QObjectList MainWindow::getAllUIControls(QObject* parent) {
 
 void MainWindow::saveTab() {
   // Tab
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QSettings Reg(iniDir + "tab.ini", QSettings::IniFormat);
   int TabCount = tabData->tabBar()->count();
   Reg.setValue("TabCount", TabCount);
   int CurrentIndex = tabData->currentIndex();
@@ -739,7 +752,8 @@ QString MainWindow::getFileSize(const qint64& size, int precision) {
 }
 
 void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QSettings Reg(iniDir + "tab" + QString::number(tabIndex) + ".ini",
+                QSettings::IniFormat);
   int count = tw->topLevelItemCount();
   QString name = "tab" + QString::number(tabIndex + 1);
   tw->setObjectName(name);
@@ -770,12 +784,6 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
 
   if (isBreak) return;
   Reg.setValue("/" + name + "/" + "Note", tabData->tabToolTip(tabIndex));
-
-  int lines = Reg.allKeys().count();
-  Reg.setValue("/" + ver + "-" + appName + "/AllKeys", lines);
-  Reg.setValue("/" + ver + "-" + appName + "/FileSize",
-               getFileSize(QFile(iniFile).size(), 2));
-  Reg.setValue("/" + ver + "-" + appName + "/File", iniFile);
 }
 
 void MainWindow::drawMonthChart() {
@@ -1328,7 +1336,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 
 void MainWindow::saveNotes() {
   if (loading) return;
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QSettings Reg(iniDir + "notes.ini", QSettings::IniFormat);
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   QString name = tw->objectName();
   int index = tabData->currentIndex();
@@ -1581,6 +1589,10 @@ void MainWindow::on_actionImport_Data_triggered() {
     loading = true;
     init_TabData();
     loading = false;
+
+    while (!isReadTWEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    startSave("alltab");
   }
 }
 
@@ -1619,13 +1631,15 @@ QTreeWidget* MainWindow::get_tw(int tabIndex) {
 void MainWindow::on_actionView_App_Data_triggered() {
   mydlgNotes->ui->textBrowser->clear();
   QSettings Reg(iniFile, QSettings::IniFormat);
-  QString keys = Reg.value("/" + ver + "-" + appName + "/AllKeys").toString();
-  QString fs = Reg.value("/" + ver + "-" + appName + "/FileSize").toString();
-  QString inif = Reg.value("/" + ver + "-" + appName + "/File").toString();
-  if (keys.toInt() > 10000) {
-    mydlgNotes->ui->textBrowser->append("AllKeys : " + keys);
-    mydlgNotes->ui->textBrowser->append("FileSize : " + fs);
-    mydlgNotes->ui->textBrowser->append("File : " + inif);
+  int keys = Reg.allKeys().count();
+  if (keys > 10000) {
+    mydlgNotes->ui->textBrowser->append("[" + appName + "]");
+    mydlgNotes->ui->textBrowser->append("Ver: " + ver);
+    mydlgNotes->ui->textBrowser->append("All Keys: " + QString::number(keys));
+    mydlgNotes->ui->textBrowser->append("File Size: " +
+                                        getFileSize(QFile(iniFile).size(), 2));
+    mydlgNotes->ui->textBrowser->append("File: " + iniFile);
+
   } else
     mydlgNotes->ui->textBrowser->setPlainText(loadText(iniFile));
 
