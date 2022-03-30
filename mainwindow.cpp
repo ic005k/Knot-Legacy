@@ -42,7 +42,7 @@ void MainWindow::readTWDone() {
   ui->actionAdd_Tab->setEnabled(true);
   ui->actionView_App_Data->setEnabled(true);
   isReadTWEnd = true;
-  // ui->progBar->setHidden(true);
+
   ui->progBar->setMaximum(100);
 }
 
@@ -96,7 +96,7 @@ void MainWindow::dealDone() {
   }
   isSaveEnd = true;
   isImport = false;
-  // ui->progBar->setHidden(true);
+
   ui->progBar->setMaximum(100);
 
   if (SaveType == "tab" || SaveType == "alltab") startRead(strDate);
@@ -217,7 +217,7 @@ MainWindow::MainWindow(QWidget* parent)
 
   ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->frame_find->setHidden(true);
-  // ui->progBar->setHidden(true);
+
   ui->progBar->setStyleSheet(
       "QProgressBar{border:0px solid #FFFFFF;"
       "height:30;"
@@ -1565,7 +1565,6 @@ void MainWindow::on_actionExport_Data_triggered() {
 
     TextEditToFile(edit, fileName);
 
-    // ui->progBar->setHidden(true);
     ui->progBar->setMaximum(100);
 
     if (QFile(fileName).exists()) {
