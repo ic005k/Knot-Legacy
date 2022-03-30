@@ -8,7 +8,7 @@ QVector<double> doubleList;
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
-
+bool isImport;
 QString appName = "Xcounter";
 QString iniFile, iniDir, ver, strDate, readDate, noteText, strStats, SaveType,
     strY, strM, btnYText, btnMText, btnDText;
@@ -137,19 +137,6 @@ void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "ymd") {
     dlgReport::saveYMD();
   }
-
-  QTextEdit* edit = new QTextEdit;
-
-  edit->append(loadText(iniDir + "tab.ini"));
-  edit->append(loadText(iniDir + "font.ini"));
-  edit->append(loadText(iniDir + "desc.ini"));
-  edit->append(loadText(iniDir + "todo.ini"));
-  edit->append(loadText(iniDir + "ymd.ini"));
-  for (int i = 0; i < tabData->tabBar()->count(); i++) {
-    QString tabIniFile = iniDir + "tab" + QString::number(i) + ".ini";
-    if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
-  }
-  TextEditToFile(edit, iniFile);
 }
 
 MainWindow::MainWindow(QWidget* parent)
@@ -379,16 +366,26 @@ void MainWindow::init_TabData() {
   for (int i = 0; i < count; i++) {
     ui->tabWidget->removeTab(0);
   }
-
-  QSettings Reg(iniFile, QSettings::IniFormat);
-  int TabCount = Reg.value("TabCount", 0).toInt();
+  QString ini_file, ini_file1;
+  if (isImport)
+    ini_file = iniFile;
+  else
+    ini_file = iniDir + "tab.ini";
+  QSettings RegTab(ini_file, QSettings::IniFormat);
+  if (isImport)
+    ini_file1 = iniFile;
+  else
+    ini_file1 = iniDir + "notes.ini";
+  QSettings RegNotes(ini_file1, QSettings::IniFormat);
+  int TabCount = RegTab.value("TabCount", 0).toInt();
   for (int i = 0; i < TabCount; i++) {
     QString name = "tab" + QString::number(i + 1);
     QTreeWidget* tw = init_TreeWidget(name);
-    ui->tabWidget->addTab(tw, Reg.value("TabName" + QString::number(i),
-                                        tr("Counter") + QString::number(i + 1))
+    ui->tabWidget->addTab(tw, RegTab
+                                  .value("TabName" + QString::number(i),
+                                         tr("Counter") + QString::number(i + 1))
                                   .toString());
-    QString strNotes = Reg.value("/" + name + "/Note").toString();
+    QString strNotes = RegNotes.value("/" + name + "/Note").toString();
     ui->tabWidget->setTabToolTip(i, strNotes);
   }
 
@@ -398,7 +395,7 @@ void MainWindow::init_TabData() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
-  currentTabIndex = Reg.value("CurrentIndex").toInt();
+  currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
   QTreeWidget* twCur = (QTreeWidget*)tabData->currentWidget();
   readData(twCur);
@@ -752,7 +749,7 @@ QString MainWindow::getFileSize(const qint64& size, int precision) {
 }
 
 void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
-  QSettings Reg(iniDir + "tab" + QString::number(tabIndex) + ".ini",
+  QSettings Reg(iniDir + "tab" + QString::number(tabIndex + 1) + ".ini",
                 QSettings::IniFormat);
   int count = tw->topLevelItemCount();
   QString name = "tab" + QString::number(tabIndex + 1);
@@ -883,8 +880,13 @@ void MainWindow::drawDayChart() {
 
 void MainWindow::readData(QTreeWidget* tw) {
   tw->clear();
-  QSettings Reg(iniFile, QSettings::IniFormat);
   QString name = tw->objectName();
+  QString ini_file;
+  if (isImport)
+    ini_file = iniFile;
+  else
+    ini_file = iniDir + name + ".ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
   int rowCount = Reg.value("/" + name + "/TopCount").toInt();
   for (int i = 0; i < rowCount; i++) {
     int childCount =
@@ -1546,9 +1548,20 @@ void MainWindow::on_actionExport_Data_triggered() {
       fd.getSaveFileName(this, tr("XcounterBak"), "", tr("Data Files(*.ini)"));
 
   if (!fileName.isNull()) {
-    QTextEdit* txtEdit = new QTextEdit;
-    txtEdit->setPlainText(loadText(iniFile));
-    TextEditToFile(txtEdit, fileName);
+    QTextEdit* edit = new QTextEdit;
+    edit->append("[" + appName + "]");
+    edit->append("Ver: " + ver);
+    edit->append(loadText(iniDir + "tab.ini"));
+    edit->append(loadText(iniDir + "font.ini"));
+    edit->append(loadText(iniDir + "desc.ini"));
+    edit->append(loadText(iniDir + "todo.ini"));
+    edit->append(loadText(iniDir + "ymd.ini"));
+    for (int i = 0; i < tabData->tabBar()->count(); i++) {
+      QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
+      if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
+    }
+
+    TextEditToFile(edit, fileName);
   }
 }
 
@@ -1586,12 +1599,14 @@ void MainWindow::on_actionImport_Data_triggered() {
     QTextEdit* txtEdit = new QTextEdit;
     txtEdit->setPlainText(txt);
     TextEditToFile(txtEdit, iniFile);
+    isImport = true;
     loading = true;
     init_TabData();
     loading = false;
 
     while (!isReadTWEnd)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    isImport = false;
     startSave("alltab");
   }
 }
