@@ -9,7 +9,7 @@ QString orgLblStyle;
 QListWidget* mylist;
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
-extern bool loading, isBreak;
+extern bool loading, isBreak, isImport;
 extern int fontSize;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
@@ -48,7 +48,13 @@ void dlgTodo::saveTodo() {
 }
 
 void dlgTodo::init_Items() {
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  ui->listWidget->clear();
+  QString ini_file;
+  if (isImport)
+    ini_file = iniFile;
+  else
+    ini_file = iniDir + "todo.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
   int count = Reg.value("/Todo/Count").toInt();
   for (int i = 0; i < count; i++) {
     QString str = Reg.value("/Todo/Item" + QString::number(i)).toString();
@@ -196,6 +202,9 @@ bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void dlgTodo::on_btnModify_clicked() {
+  int row = ui->listWidget->currentRow();
+  if (row < 0) return;
+
   if (ui->btnModify->text() == tr("Modify")) {
     QListWidgetItem* item = ui->listWidget->currentItem();
     QWidget* w = ui->listWidget->itemWidget(item);
@@ -218,6 +227,7 @@ void dlgTodo::on_btnModify_clicked() {
 
 void dlgTodo::on_btnHigh_clicked() {
   int row = ui->listWidget->currentRow();
+  if (row < 0) return;
   QListWidgetItem* item = ui->listWidget->currentItem();
   QWidget* w = ui->listWidget->itemWidget(item);
   QLabel* lbl = (QLabel*)w->children().at(2);
@@ -233,6 +243,7 @@ void dlgTodo::on_btnHigh_clicked() {
 
 void dlgTodo::on_btnLow_clicked() {
   int row = ui->listWidget->currentRow();
+  if (row < 0) return;
   QListWidgetItem* item = ui->listWidget->currentItem();
   QWidget* w = ui->listWidget->itemWidget(item);
   QLabel* lbl = (QLabel*)w->children().at(2);

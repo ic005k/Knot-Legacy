@@ -100,6 +100,7 @@ void MainWindow::SaveFile(QString SaveType) {
     QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
     int index = tabData->currentIndex();
     saveData(tw, index);
+    saveNotes(index);
     saveTab();
     dlgSetTime::saveCustomDesc();
   }
@@ -112,13 +113,12 @@ void MainWindow::SaveFile(QString SaveType) {
         QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
         tw->setObjectName("tab" + QString::number(i + 1));
         saveData(tw, i);
+        saveNotes(i);
       }
 
       saveTab();
       dlgSetTime::saveCustomDesc();
       dlgTodo::saveTodo();
-      dlgPreferences::saveFontSize();
-      dlgReport::saveYMD();
     }
   }
 
@@ -131,7 +131,7 @@ void MainWindow::SaveFile(QString SaveType) {
   }
 
   if (SaveType == "notes") {
-    saveNotes();
+    saveNotes(tabData->currentIndex());
   }
 
   if (SaveType == "ymd") {
@@ -256,7 +256,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnTodo->setFixedHeight(s + 6);
   ui->btnMax->setFixedHeight(s + 6);
   ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
   btnYText = Reg.value("/YMD/btnYText", 2022).toString();
   ui->btnYear->setText(btnYText);
   btnMText = Reg.value("/YMD/btnMText", tr("Month")).toString();
@@ -268,21 +268,12 @@ MainWindow::MainWindow(QWidget* parent)
   btnMonthText = Reg.value("/YMD/btnMonthText", tr("Month")).toString();
   mydlgReport->ui->btnMonth->setText(btnMonthText);
 
-  // Custom Desc
-  mw_one->mydlgList->ui->listWidget->clear();
-  int descCount = Reg.value("/CustomDesc/Count").toInt();
-  for (int i = 0; i < descCount; i++) {
-    mw_one->mydlgList->ui->listWidget->addItem(
-        Reg.value("/CustomDesc/Item" + QString::number(i)).toString());
-  }
-
   init_Font();
   init_TabData();
   loading = false;
 
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   startRead(strDate);
-  mydlgTodo->init_Items();
 
   get_Today(tw);
   init_Stats(tw);
@@ -293,7 +284,7 @@ MainWindow::MainWindow(QWidget* parent)
 
 void MainWindow::init_Font() {
   // Font Size
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QSettings Reg(iniDir + "font.ini", QSettings::IniFormat);
   QFont font(this->font());
   QFontInfo fInfo(font);
   fontSize = fInfo.pointSize();
@@ -372,12 +363,14 @@ void MainWindow::init_TabData() {
   else
     ini_file = iniDir + "tab.ini";
   QSettings RegTab(ini_file, QSettings::IniFormat);
+
   if (isImport)
     ini_file1 = iniFile;
   else
     ini_file1 = iniDir + "notes.ini";
   QSettings RegNotes(ini_file1, QSettings::IniFormat);
   int TabCount = RegTab.value("TabCount", 0).toInt();
+
   for (int i = 0; i < TabCount; i++) {
     QString name = "tab" + QString::number(i + 1);
     QTreeWidget* tw = init_TreeWidget(name);
@@ -394,6 +387,9 @@ void MainWindow::init_TabData() {
                           tr("Counter") + " " + QString::number(1));
     ui->tabWidget->setTabToolTip(0, "");
   }
+
+  mydlgTodo->init_Items();
+  mydlgSetTime->init_Desc();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
@@ -767,6 +763,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
     Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childCount",
                  childCount);
     for (int j = 0; j < childCount; j++) {
+      if (isBreak) return;
       Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childTime" +
                        QString::number(j),
                    tw->topLevelItem(i)->child(j)->text(0));
@@ -778,9 +775,6 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
                    tw->topLevelItem(i)->child(j)->text(2));
     }
   }
-
-  if (isBreak) return;
-  Reg.setValue("/" + name + "/" + "Note", tabData->tabToolTip(tabIndex));
 }
 
 void MainWindow::drawMonthChart() {
@@ -1336,17 +1330,12 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   startRead(strDate);
 }
 
-void MainWindow::saveNotes() {
+void MainWindow::saveNotes(int tabIndex) {
   if (loading) return;
   QSettings Reg(iniDir + "notes.ini", QSettings::IniFormat);
-  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  QTreeWidget* tw = (QTreeWidget*)tabData->widget(tabIndex);
   QString name = tw->objectName();
-  int index = tabData->currentIndex();
-
-  QString text = QString::number(curPos) + "|" + QString::number(sliderPos) +
-                 "|" + noteText;
-  Reg.setValue("/" + name + "/Note", text);
-  tabData->setTabToolTip(index, text);
+  Reg.setValue("/" + name + "/Note", tabData->tabToolTip(tabIndex));
 }
 
 void MainWindow::on_btnLeft_clicked() {
@@ -1556,6 +1545,7 @@ void MainWindow::on_actionExport_Data_triggered() {
     edit->append(loadText(iniDir + "desc.ini"));
     edit->append(loadText(iniDir + "todo.ini"));
     edit->append(loadText(iniDir + "ymd.ini"));
+    edit->append(loadText(iniDir + "notes.ini"));
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
       QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
       if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));

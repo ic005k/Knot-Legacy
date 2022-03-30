@@ -8,7 +8,7 @@
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
-extern bool isBreak;
+extern bool isBreak, isImport;
 
 dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
@@ -171,4 +171,21 @@ int dlgSetTime::removeDuplicates(QStringList* that) {
   }
   if (n != j) that->erase(that->begin() + j, that->end());
   return n - j;
+}
+
+void dlgSetTime::init_Desc() {
+  // Custom Desc
+  QString ini_file;
+  if (isImport)
+    ini_file = iniFile;
+  else
+    ini_file = iniDir + "desc.ini";
+  QSettings RegDesc(ini_file, QSettings::IniFormat);
+
+  mw_one->mydlgList->ui->listWidget->clear();
+  int descCount = RegDesc.value("/CustomDesc/Count").toInt();
+  for (int i = 0; i < descCount; i++) {
+    mw_one->mydlgList->ui->listWidget->addItem(
+        RegDesc.value("/CustomDesc/Item" + QString::number(i)).toString());
+  }
 }

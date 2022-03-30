@@ -106,7 +106,7 @@ class MainWindow : public QMainWindow {
   static void TextEditToFile(QTextEdit *txtEdit, QString fileName);
   void initChartMonth(QString, QString);
   void initChartDay();
-  static void saveNotes();
+  static void saveNotes(int);
   bool isInit = false;
 
   static void saveTab();

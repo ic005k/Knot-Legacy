@@ -24,6 +24,10 @@ void dlgNotes::on_btnBack_clicked() {
   noteText = ui->textEdit->toPlainText();
   curPos = ui->textEdit->textCursor().position();
   sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
+  QString text = QString::number(curPos) + "|" + QString::number(sliderPos) +
+                 "|" + noteText;
+  mw_one->ui->tabWidget->setTabToolTip(mw_one->ui->tabWidget->currentIndex(),
+                                       text);
   if (!ui->textEdit->isHidden()) mw_one->startSave("notes");
   ui->textEdit->clear();
   close();
