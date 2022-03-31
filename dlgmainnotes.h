@@ -33,6 +33,8 @@ class dlgMainNotes : public QDialog {
 
   void on_btnCloseText_clicked();
 
+  void on_btnLastBrowse_clicked();
+
  private:
 };
 

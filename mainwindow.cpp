@@ -324,6 +324,9 @@ void MainWindow::init_Font() {
   mydlgNotes->ui->textEdit->setFont(userFont);
   tabData->setFont(userFont);
   tabChart->setFont(userFont);
+  mydlgMainNotes->ui->textBrowser->setFont(userFont);
+  mydlgMainNotes->ui->textEdit->setFont(userFont);
+
   userFont.setBold(true);
   ui->lblStats->setFont(userFont);
   mydlgReport->ui->tableReport->horizontalHeader()->setFont(userFont);
@@ -1567,6 +1570,8 @@ void MainWindow::on_actionExport_Data_triggered() {
     edit->append(loadText(iniDir + "todo.ini"));
     edit->append(loadText(iniDir + "ymd.ini"));
     edit->append(loadText(iniDir + "notes.ini"));
+    edit->append(loadText(iniDir + "mainnotes.ini"));
+
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
       QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
       if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
@@ -1630,6 +1635,7 @@ void MainWindow::on_actionImport_Data_triggered() {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     startSave("alltab");
+    mydlgMainNotes->saveMainNotes();
   }
 }
 
@@ -2201,8 +2207,10 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
 }
 
 void MainWindow::on_btnMainNotes_clicked() {
-  mydlgMainNotes->setFixedHeight(this->height());
-  mydlgMainNotes->setFixedWidth(this->width());
+  // mydlgMainNotes->setFixedHeight(this->height());
+  // mydlgMainNotes->setFixedWidth(this->width());
+  mydlgMainNotes->move(0, 0);
+  mydlgMainNotes->resize(this->width(), this->height());
 
   mydlgMainNotes->setModal(true);
   mydlgMainNotes->show();

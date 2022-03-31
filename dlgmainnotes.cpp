@@ -5,7 +5,8 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
-extern QString iniDir;
+extern QString iniFile, iniDir;
+extern bool isImport;
 
 dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
@@ -68,8 +69,15 @@ void dlgMainNotes::saveMainNotes() {
 }
 
 void dlgMainNotes::init_MainNotes() {
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  QString ini_file;
+  if (isImport)
+    ini_file = iniFile;
+  else
+    ini_file = iniDir + "mainnotes.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+
   isOpenText = Reg.value("/MainNotes/isOpenText").toBool();
+
   if (!isOpenText) {
     ui->textEdit->setPlainText(Reg.value("/MainNotes/Text").toString());
     sliderPos = Reg.value("/MainNotes/SlidePos").toLongLong();
@@ -87,6 +95,8 @@ void dlgMainNotes::init_MainNotes() {
     ui->textBrowser->setPlainText(Reg.value("/MainNotes/OpenText").toString());
     sliderPos = Reg.value("/MainNotes/OpenSlidePos").toLongLong();
     curPos = Reg.value("/MainNotes/OpenCurPos").toLongLong();
+
+    ui->textBrowser->verticalScrollBar()->setSliderPosition(sliderPos);
 
     ui->textBrowser->setHidden(false);
     ui->textEdit->setHidden(true);
@@ -107,7 +117,16 @@ void dlgMainNotes::on_btnOpenText_clicked() {
 }
 
 void dlgMainNotes::on_btnCloseText_clicked() {
+  saveMainNotes();
   isOpenText = false;
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setValue("/MainNotes/isOpenText", isOpenText);
+  init_MainNotes();
+}
+
+void dlgMainNotes::on_btnLastBrowse_clicked() {
+  saveMainNotes();
+  isOpenText = true;
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setValue("/MainNotes/isOpenText", isOpenText);
   init_MainNotes();

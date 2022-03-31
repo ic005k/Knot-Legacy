@@ -114,8 +114,7 @@ void dlgReport::sel_Year() {
 
       QString txt2 = tw->topLevelItem(i)->text(2);
       amount = freq + txt2.toDouble();
-      QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-      tableItem = new QTableWidgetItem(strAmount);
+      tableItem = new QTableWidgetItem(txt2);
       ui->tableReport->setItem(j, 2, tableItem);
 
       ui->tableReport->setColumnWidth(0, 10);
@@ -139,7 +138,8 @@ void dlgReport::sel_Year() {
     tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ui->tableReport->setItem(count, 1, tableItem);
 
-    tableItem = new QTableWidgetItem(QString::number(amount));
+    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
+    tableItem = new QTableWidgetItem(strAmount);
     ui->tableReport->setItem(count, 2, tableItem);
 
     ui->tableReport->setColumnWidth(0, 10);
@@ -178,8 +178,7 @@ void dlgReport::sel_Month() {
 
       QString txt2 = tw->topLevelItem(i)->text(2);
       amount = amount + txt2.toDouble();
-      QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-      tableItem = new QTableWidgetItem(strAmount);
+      tableItem = new QTableWidgetItem(txt2);
       ui->tableReport->setItem(j, 2, tableItem);
 
       ui->tableReport->setColumnWidth(0, 10);
@@ -203,7 +202,8 @@ void dlgReport::sel_Month() {
     tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ui->tableReport->setItem(count, 1, tableItem);
 
-    tableItem = new QTableWidgetItem(QString::number(amount));
+    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
+    tableItem = new QTableWidgetItem(strAmount);
     ui->tableReport->setItem(count, 2, tableItem);
 
     ui->tableReport->setColumnWidth(0, 10);

@@ -15,5 +15,9 @@
         <file>src/report.png</file>
         <file>src/sel.png</file>
         <file>src/nosel.png</file>
+        <file>src/back.png</file>
+        <file>src/closetxt.png</file>
+        <file>src/lasttxt.png</file>
+        <file>src/opentxt.png</file>
     </qresource>
 </RCC>
