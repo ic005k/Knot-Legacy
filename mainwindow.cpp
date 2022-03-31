@@ -179,6 +179,7 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgList = new dlgList(this);
   mydlgReport = new dlgReport(this);
   mydlgPre = new dlgPreferences(this);
+  mydlgMainNotes = new dlgMainNotes(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
 
@@ -273,8 +274,9 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
   // ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
-  ui->btnTodo->setFixedHeight(s + 6);
-  ui->btnMax->setFixedHeight(s + 6);
+  ui->btnTodo->setFixedHeight(s + 7);
+  ui->btnMax->setFixedHeight(s + 7);
+  ui->btnMainNotes->setFixedHeight(s + 7);
   ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
   QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
   btnYText = Reg.value("/YMD/btnYText", 2022).toString();
@@ -413,6 +415,7 @@ void MainWindow::init_TabData() {
 
   mydlgTodo->init_Items();
   mydlgSetTime->init_Desc();
+  mydlgMainNotes->init_MainNotes();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
@@ -1155,6 +1158,8 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   QTreeWidget* tw = new QTreeWidget(this);
   tw->setObjectName(name);
 
+  QString style = "QTreeWidget::item:selected{background:  #567dbc);}";
+  tw->setStyleSheet(style);
   QFont font;
   font.setPointSize(fontSize);
   tw->setFont(font);
@@ -1312,6 +1317,11 @@ void MainWindow::on_twItemDoubleClicked() {
     mydlgSetTime->setModal(true);
     isAdd = false;
     mydlgSetTime->show();
+  }
+
+  if (item == tw->topLevelItem(tw->topLevelItemCount() - 1)) {
+    if (item->childCount() > 0) {
+    }
   }
 }
 
@@ -2189,4 +2199,12 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
     }
     on_twItemClicked();
   }
+}
+
+void MainWindow::on_btnMainNotes_clicked() {
+  mydlgMainNotes->setFixedHeight(this->height());
+  mydlgMainNotes->setFixedWidth(this->width());
+
+  mydlgMainNotes->setModal(true);
+  mydlgMainNotes->show();
 }

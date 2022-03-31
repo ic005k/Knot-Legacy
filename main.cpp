@@ -46,7 +46,6 @@ int main(int argc, char *argv[]) {
     iniDir = path + "/";
     iniFile = iniDir + appName + ".ini";
   }
-  qDebug() << "iniFile: " << iniFile;
 
   loadLocal();
 

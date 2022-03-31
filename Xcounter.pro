@@ -27,6 +27,7 @@ INSTALLS += dataFiles
 
 SOURCES += \
     dlglist.cpp \
+    dlgmainnotes.cpp \
     dlgnotes.cpp \
     dlgpreferences.cpp \
     dlgrename.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
 
 HEADERS += \
     dlglist.h \
+    dlgmainnotes.h \
     dlgnotes.h \
     dlgpreferences.h \
     dlgrename.h \
@@ -48,6 +50,7 @@ HEADERS += \
 
 FORMS += \
     dlglist.ui \
+    dlgmainnotes.ui \
     dlgnotes.ui \
     dlgpreferences.ui \
     dlgrename.ui \

@@ -38,6 +38,7 @@
 #include <QValueAxis>
 
 #include "dlglist.h"
+#include "dlgmainnotes.h"
 #include "dlgnotes.h"
 #include "dlgpreferences.h"
 #include "dlgrename.h"
@@ -45,6 +46,7 @@
 #include "dlgsettime.h"
 #include "dlgtodo.h"
 #include "ui_dlglist.h"
+#include "ui_dlgmainnotes.h"
 #include "ui_dlgnotes.h"
 #include "ui_dlgpreferences.h"
 #include "ui_dlgrename.h"
@@ -93,6 +95,7 @@ class MainWindow : public QMainWindow {
   dlgList *mydlgList;
   dlgReport *mydlgReport;
   dlgPreferences *mydlgPre;
+  dlgMainNotes *mydlgMainNotes;
 
   QVector<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;
@@ -255,6 +258,8 @@ class MainWindow : public QMainWindow {
   void on_tabCharts_currentChanged(int index);
 
   void readTWDone();
+
+  void on_btnMainNotes_clicked();
 
  private:
   int spaceCount = 18;
