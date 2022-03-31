@@ -18,8 +18,9 @@ class dlgMainNotes : public QDialog {
   void saveMainNotes();
 
   void init_MainNotes();
-  int curPos;
-  int sliderPos;
+  qlonglong curPos;
+  qlonglong sliderPos;
+  bool isOpenText = false;
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -33,7 +34,6 @@ class dlgMainNotes : public QDialog {
   void on_btnCloseText_clicked();
 
  private:
-  bool isOpenText = false;
 };
 
 #endif  // DLGMAINNOTES_H

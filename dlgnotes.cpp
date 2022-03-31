@@ -63,8 +63,8 @@ void dlgNotes::init_Notes() {
     QString curPos = list.at(0);
     tmpCursor.setPosition(curPos.toInt());
     ui->textEdit->setTextCursor(tmpCursor);
-    QString sliderPos = list.at(1);
-    ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos.toInt());
+    sliderPos = list.at(1).toInt();
+    ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
 
   } else
     ui->textEdit->setPlainText(str);

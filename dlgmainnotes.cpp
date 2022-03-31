@@ -15,6 +15,11 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
+
+  QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
+  ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
+  ui->textBrowser->setHidden(true);
 }
 
 dlgMainNotes::~dlgMainNotes() { delete ui; }
@@ -23,7 +28,7 @@ void dlgMainNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
 void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);
-  qDebug() << "resize" << ui->textEdit->height() << this->height();
+  qDebug() << "Resize: " << ui->textEdit->height() << this->height();
 }
 
 void dlgMainNotes::on_btnBack_clicked() {
@@ -33,12 +38,10 @@ void dlgMainNotes::on_btnBack_clicked() {
 
 bool dlgMainNotes::eventFilter(QObject* obj, QEvent* event) {
   if (obj == ui->textEdit) {
-    if (event->type() == QInputMethodEvent::ShowToParent) {
-      // this->setFixedHeight(mw_one->height() / 2);
+    if (event->type() == QInputMethodEvent::Enter) {
       qDebug() << "Show";
     }
-    if (event->type() == QInputMethodEvent::HideToParent) {
-      // this->setFixedHeight(mw_one->height());
+    if (event->type() == QInputMethodEvent::Close) {
       qDebug() << "Close";
     }
   }
@@ -56,9 +59,9 @@ void dlgMainNotes::saveMainNotes() {
     Reg.setValue("/MainNotes/CurPos", curPos);
     Reg.setValue("/MainNotes/SlidePos", sliderPos);
   } else {
-    Reg.setValue("/MainNotes/OpenText", ui->textEdit->toPlainText());
-    curPos = ui->textEdit->textCursor().position();
-    sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
+    Reg.setValue("/MainNotes/OpenText", ui->textBrowser->toPlainText());
+    curPos = ui->textBrowser->textCursor().position();
+    sliderPos = ui->textBrowser->verticalScrollBar()->sliderPosition();
     Reg.setValue("/MainNotes/OpenCurPos", curPos);
     Reg.setValue("/MainNotes/OpenSlidePos", sliderPos);
   }
@@ -69,26 +72,24 @@ void dlgMainNotes::init_MainNotes() {
   isOpenText = Reg.value("/MainNotes/isOpenText").toBool();
   if (!isOpenText) {
     ui->textEdit->setPlainText(Reg.value("/MainNotes/Text").toString());
-    sliderPos = Reg.value("/MainNotes/SlidePos").toInt();
-    curPos = Reg.value("/MainNotes/CurPos").toInt();
+    sliderPos = Reg.value("/MainNotes/SlidePos").toLongLong();
+    curPos = Reg.value("/MainNotes/CurPos").toLongLong();
+
+    QTextCursor tmpCursor = ui->textEdit->textCursor();
+    tmpCursor.setPosition(curPos);
+    ui->textEdit->setTextCursor(tmpCursor);
+    ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
+
+    ui->textBrowser->setHidden(true);
+    ui->textEdit->setHidden(false);
 
   } else {
-    ui->textEdit->setPlainText(Reg.value("/MainNotes/OpenText").toString());
-    sliderPos = Reg.value("/MainNotes/OpenSlidePos").toInt();
-    curPos = Reg.value("/MainNotes/OpenCurPos").toInt();
-  }
+    ui->textBrowser->setPlainText(Reg.value("/MainNotes/OpenText").toString());
+    sliderPos = Reg.value("/MainNotes/OpenSlidePos").toLongLong();
+    curPos = Reg.value("/MainNotes/OpenCurPos").toLongLong();
 
-  QTextCursor tmpCursor = ui->textEdit->textCursor();
-  tmpCursor.setPosition(curPos);
-  ui->textEdit->setTextCursor(tmpCursor);
-  ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
-
-  if (!isOpenText) {
-    ui->textEdit->setReadOnly(false);
-    ui->textEdit->setTextInteractionFlags(Qt::TextEditorInteraction);
-  } else {
-    ui->textEdit->setReadOnly(true);
-    ui->textEdit->setTextInteractionFlags(Qt::NoTextInteraction);
+    ui->textBrowser->setHidden(false);
+    ui->textEdit->setHidden(true);
   }
 }
 
@@ -97,10 +98,11 @@ void dlgMainNotes::on_btnOpenText_clicked() {
   fileName = QFileDialog::getOpenFileName(this, tr("Xcounter"), "",
                                           tr("Txt Files (*.*)"));
   if (!fileName.isNull()) {
-    ui->textEdit->setPlainText(mw_one->loadText(fileName));
+    ui->textBrowser->setPlainText(mw_one->loadText(fileName));
     isOpenText = true;
-    ui->textEdit->setReadOnly(true);
-    ui->textEdit->setTextInteractionFlags(Qt::NoTextInteraction);
+
+    ui->textBrowser->setHidden(false);
+    ui->textEdit->setHidden(true);
   }
 }
 

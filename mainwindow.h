@@ -97,7 +97,7 @@ class MainWindow : public QMainWindow {
   dlgPreferences *mydlgPre;
   dlgMainNotes *mydlgMainNotes;
 
-  QVector<QTreeWidgetItem *> findItemList;
+  QList<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;
   int findPos = 0;
   bool isAdd = false;
@@ -162,7 +162,7 @@ class MainWindow : public QMainWindow {
 
   static QStringList get_MonthList(QString strY, QString strM);
   static void drawMonthChart();
-  QVector<QTreeWidgetItem *> findDisc();
+  QList<QTreeWidgetItem *> findDisc();
   QString setLineEditQss(QLineEdit *txt, int radius, int borderWidth,
                          const QString &normalColor, const QString &focusColor);
   QString setComboBoxQss(QComboBox *txt, int radius, int borderWidth,

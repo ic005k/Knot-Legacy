@@ -3,7 +3,7 @@
 #include "ui_mainwindow.h"
 
 QList<QPointF> PointList;
-QVector<double> doubleList;
+QList<double> doubleList;
 
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
@@ -413,9 +413,9 @@ void MainWindow::init_TabData() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
+  mydlgMainNotes->init_MainNotes();
   mydlgTodo->init_Items();
   mydlgSetTime->init_Desc();
-  mydlgMainNotes->init_MainNotes();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
@@ -852,7 +852,7 @@ void MainWindow::drawDayChart() {
   QString strDay = QString("%1").arg(day, 2, 10, QLatin1Char('0'));
   tabChart->setTabText(1, strDay);
 
-  QVector<double> dList;
+  QList<double> dList;
   double x, y;
   QString str, str1;
   int step = 1;
@@ -1158,8 +1158,8 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   QTreeWidget* tw = new QTreeWidget(this);
   tw->setObjectName(name);
 
-  QString style = "QTreeWidget::item:selected{background:  #567dbc);}";
-  tw->setStyleSheet(style);
+  // QString style = "QTreeWidget::item:selected{background:  #567dbc);}";
+  // tw->setStyleSheet(style);
   QFont font;
   font.setPointSize(fontSize);
   tw->setFont(font);
@@ -1387,7 +1387,6 @@ void MainWindow::on_btnRight_clicked() {
 void MainWindow::on_actionNotes_triggered() {
   mydlgNotes->setGeometry(0, 0, this->width(), this->height() / 2);
 
-  int index = ui->tabWidget->currentIndex();
   mydlgNotes->ui->textEdit->clear();
 
   mydlgNotes->ui->textBrowser->setHidden(true);
@@ -1810,7 +1809,7 @@ void MainWindow::on_btnGo_clicked() {
   }
 }
 
-QVector<QTreeWidgetItem*> MainWindow::findDisc() {
+QList<QTreeWidgetItem*> MainWindow::findDisc() {
   findItemList.clear();
   QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
@@ -2207,4 +2206,11 @@ void MainWindow::on_btnMainNotes_clicked() {
 
   mydlgMainNotes->setModal(true);
   mydlgMainNotes->show();
+
+  if (mydlgMainNotes->isOpenText)
+    mydlgMainNotes->ui->textBrowser->verticalScrollBar()->setSliderPosition(
+        mydlgMainNotes->sliderPos);
+  else
+    mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
+        mydlgMainNotes->sliderPos);
 }
