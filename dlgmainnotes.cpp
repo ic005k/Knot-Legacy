@@ -33,7 +33,10 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
 }
 
 void dlgMainNotes::on_btnBack_clicked() {
-  saveMainNotes();
+  if (ui->textEdit->isHidden()) isOpenText = true;
+  if (ui->textBrowser->isHidden()) isOpenText = false;
+
+  saveMainNotes(isOpenText);
   close();
 }
 
@@ -50,33 +53,38 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* event) {
   return QWidget::eventFilter(obj, event);
 }
 
-void dlgMainNotes::saveMainNotes() {
+void dlgMainNotes::saveMainNotes(bool isOpenText) {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setValue("/MainNotes/isOpenText", isOpenText);
-  if (!isOpenText) {
+
+  // Notes
+  if (!ui->textEdit->isHidden()) {
     Reg.setValue("/MainNotes/Text", ui->textEdit->toPlainText());
     curPos = ui->textEdit->textCursor().position();
     sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
     Reg.setValue("/MainNotes/CurPos", curPos);
     Reg.setValue("/MainNotes/SlidePos", sliderPos);
-  } else {
-    Reg.setValue("/MainNotes/OpenText", ui->textBrowser->toPlainText());
+  }
+
+  // Browse Text
+  if (!ui->textBrowser->isHidden()) {
+    Reg.setValue("/MainNotes/FileName", fileName);
     curPos = ui->textBrowser->textCursor().position();
     sliderPos = ui->textBrowser->verticalScrollBar()->sliderPosition();
-    Reg.setValue("/MainNotes/OpenCurPos", curPos);
-    Reg.setValue("/MainNotes/OpenSlidePos", sliderPos);
+    Reg.setValue("/MainNotes/" + fileName + "-OpenCurPos", curPos);
+    Reg.setValue("/MainNotes/" + fileName + "-OpenSlidePos", sliderPos);
   }
+
+  ui->lblInfo->setText(tr("Position") + " : " + QString::number(sliderPos));
 }
 
-void dlgMainNotes::init_MainNotes() {
+void dlgMainNotes::init_MainNotes(bool isOpenText) {
   QString ini_file;
   if (isImport)
     ini_file = iniFile;
   else
     ini_file = iniDir + "mainnotes.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
-
-  isOpenText = Reg.value("/MainNotes/isOpenText").toBool();
 
   if (!isOpenText) {
     ui->textEdit->setPlainText(Reg.value("/MainNotes/Text").toString());
@@ -92,23 +100,31 @@ void dlgMainNotes::init_MainNotes() {
     ui->textEdit->setHidden(false);
 
   } else {
-    ui->textBrowser->setPlainText(Reg.value("/MainNotes/OpenText").toString());
-    sliderPos = Reg.value("/MainNotes/OpenSlidePos").toLongLong();
-    curPos = Reg.value("/MainNotes/OpenCurPos").toLongLong();
+    fileName = Reg.value("/MainNotes/FileName").toString();
+    ui->textBrowser->setPlainText(mw_one->loadText(fileName));
+    sliderPos =
+        Reg.value("/MainNotes/" + fileName + "-OpenSlidePos").toLongLong();
+    curPos = Reg.value("/MainNotes/" + fileName + "-OpenCurPos").toLongLong();
 
+    QTime dieTime = QTime::currentTime().addMSecs(100);
+    while (QTime::currentTime() < dieTime) {
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
     ui->textBrowser->verticalScrollBar()->setSliderPosition(sliderPos);
 
     ui->textBrowser->setHidden(false);
     ui->textEdit->setHidden(true);
   }
+
+  ui->lblInfo->setText(tr("Position") + " : " + QString::number(sliderPos));
 }
 
 void dlgMainNotes::on_btnOpenText_clicked() {
-  QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("Xcounter"), "",
                                           tr("Txt Files (*.*)"));
   if (!fileName.isNull()) {
-    ui->textBrowser->setPlainText(mw_one->loadText(fileName));
+    QString txt = mw_one->loadText(fileName);
+    ui->textBrowser->setPlainText(txt);
     isOpenText = true;
 
     ui->textBrowser->setHidden(false);
@@ -117,17 +133,19 @@ void dlgMainNotes::on_btnOpenText_clicked() {
 }
 
 void dlgMainNotes::on_btnCloseText_clicked() {
-  saveMainNotes();
-  isOpenText = false;
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  Reg.setValue("/MainNotes/isOpenText", isOpenText);
-  init_MainNotes();
+  saveMainNotes(true);
+
+  init_MainNotes(false);
 }
 
 void dlgMainNotes::on_btnLastBrowse_clicked() {
-  saveMainNotes();
-  isOpenText = true;
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  Reg.setValue("/MainNotes/isOpenText", isOpenText);
-  init_MainNotes();
+  saveMainNotes(false);
+
+  init_MainNotes(true);
+}
+
+void dlgMainNotes::on_textBrowser_cursorPositionChanged() {
+  sliderPos = ui->textBrowser->verticalScrollBar()->sliderPosition();
+
+  ui->lblInfo->setText(tr("Position") + " : " + QString::number(sliderPos));
 }

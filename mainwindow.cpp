@@ -416,7 +416,13 @@ void MainWindow::init_TabData() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
-  mydlgMainNotes->init_MainNotes();
+  if (isImport)
+    mydlgMainNotes->init_MainNotes(false);
+  else {
+    QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+    bool isOpenText = Reg.value("/MainNotes/isOpenText").toBool();
+    mydlgMainNotes->init_MainNotes(isOpenText);
+  }
   mydlgTodo->init_Items();
   mydlgSetTime->init_Desc();
 
@@ -1635,7 +1641,7 @@ void MainWindow::on_actionImport_Data_triggered() {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     startSave("alltab");
-    mydlgMainNotes->saveMainNotes();
+    mydlgMainNotes->saveMainNotes(false);
   }
 }
 
@@ -2207,18 +2213,16 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
 }
 
 void MainWindow::on_btnMainNotes_clicked() {
-  // mydlgMainNotes->setFixedHeight(this->height());
-  // mydlgMainNotes->setFixedWidth(this->width());
   mydlgMainNotes->move(0, 0);
   mydlgMainNotes->resize(this->width(), this->height());
 
   mydlgMainNotes->setModal(true);
   mydlgMainNotes->show();
 
-  if (mydlgMainNotes->isOpenText)
+  if (!mydlgMainNotes->ui->textBrowser->isHidden())
     mydlgMainNotes->ui->textBrowser->verticalScrollBar()->setSliderPosition(
         mydlgMainNotes->sliderPos);
-  else
+  if (!mydlgMainNotes->ui->textEdit->isHidden())
     mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
         mydlgMainNotes->sliderPos);
 }

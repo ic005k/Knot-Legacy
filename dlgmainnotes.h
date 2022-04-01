@@ -15,9 +15,9 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
-  void saveMainNotes();
-
-  void init_MainNotes();
+  void saveMainNotes(bool);
+  QString fileName;
+  void init_MainNotes(bool);
   qlonglong curPos;
   qlonglong sliderPos;
   bool isOpenText = false;
@@ -34,6 +34,8 @@ class dlgMainNotes : public QDialog {
   void on_btnCloseText_clicked();
 
   void on_btnLastBrowse_clicked();
+
+  void on_textBrowser_cursorPositionChanged();
 
  private:
 };
