@@ -73,7 +73,7 @@ jobs:
           #name:  ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }} # .zip
           name:  ${{ env.targetName }}-${{ env.VERSION }}.apk
           #path: bin/release/${{ env.targetName }}
-          path: /home/runner/work/Xcounter/Xcounter/build-Xcounter-Android_Qt_5_15_2_Clang_Multi_Abi-Release/android-build/build/outputs/apk/debug/
+          path: /home/runner/work/Xcounter/build-Xcounter-Android_Qt_5_15_2_Clang_Multi_Abi-Release/android-build/build/outputs/apk/debug/
           
           
       # tag 上传Release
