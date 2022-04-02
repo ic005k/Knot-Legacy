@@ -278,6 +278,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnTodo->setFixedHeight(s + 7);
   ui->btnMax->setFixedHeight(s + 7);
   ui->btnMainNotes->setFixedHeight(s + 7);
+  ui->btnMainNotes->setHidden(true);
   ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
   QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
   btnYText = Reg.value("/YMD/btnYText", 2022).toString();
