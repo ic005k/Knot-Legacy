@@ -11,7 +11,8 @@ bool isrbFreq = true;
 bool isImport;
 QString appName = "Xcounter";
 QString iniFile, iniDir, ver, strDate, readDate, noteText, strStats, SaveType,
-    strY, strM, btnYText, btnMText, btnDText;
+    strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth;
+
 int curPos, sliderPos, today, fontSize, red, currentTabIndex;
 double yMaxMonth, yMaxDay;
 MainWindow* mw_one;
@@ -533,6 +534,7 @@ void MainWindow::startSave(QString str_type) {
 
 void MainWindow::startRead(QString Date) {
   if (!isSaveEnd || loading) return;
+
   readDate = Date;
   if (!isReadEnd) {
     isBreak = true;
@@ -542,6 +544,7 @@ void MainWindow::startRead(QString Date) {
     while (!isReadEnd)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
   }
+
   if (isReadEnd) {
     isBreak = false;
     myReadThread->start();
@@ -819,6 +822,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
 
 void MainWindow::drawMonthChart() {
   QStringList listM = get_MonthList(strY, strM);
+  CurrentYearMonth = strY + strM;
   qDebug() << "Month List Count: " << listM.count();
 }
 
@@ -1193,8 +1197,6 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   SB->setStyleSheet(vsbarStyleSmall);
   tw->setStyleSheet(treeStyle);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
-  //这个不太好用，备研
-  // QScroller::grabGesture(tw, QScroller::TouchGesture);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
   return tw;
 }
@@ -1205,7 +1207,15 @@ void MainWindow::on_twItemClicked() {
   if (item->parent() == NULL && item->childCount() == 0) return;
   QTreeWidgetItem* pItem;
 
-  if (item->childCount() > 0) pItem = item;
+  if (item->childCount() > 0) {
+    pItem = item;
+    if (tabChart->currentIndex() == 0) {
+      QString str = item->text(0);
+      QString strYearMonth = get_Year(str) + get_Month(str);
+      if (strYearMonth == CurrentYearMonth) return;
+      startRead(str);
+    }
+  }
   if (item->childCount() == 0 && item->parent()->childCount() > 0)
     pItem = item->parent();
   if (item->parent() != NULL) {
@@ -1725,12 +1735,14 @@ void MainWindow::on_btnFind_clicked() {
     ui->btnLess->setHidden(true);
     ui->btnTodo->setHidden(true);
     ui->btnMax->setHidden(true);
+    ui->btnMainNotes->setHidden(true);
   } else {
     ui->frame_find->setHidden(true);
     ui->btnPlus->setHidden(false);
     ui->btnLess->setHidden(false);
     ui->btnTodo->setHidden(false);
     ui->btnMax->setHidden(false);
+    ui->btnMainNotes->setHidden(false);
   }
 }
 
@@ -1777,7 +1789,7 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
 
 void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
   Q_UNUSED(arg1);
-  startSave("ymd");
+
   series->clear();
   m_scatterSeries->clear();
   series2->clear();
@@ -1796,13 +1808,17 @@ void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
           if (get_Day(str) == ui->btnDay->text().toInt()) {
             tw->setCurrentItem(tw->topLevelItem(i));
             tw->setFocus();
+
+            parentItem = NULL;
             on_twItemClicked();
+
             break;
           }
         }
       }
     }
   }
+  startSave("ymd");
 }
 
 void MainWindow::on_btnGo_clicked() {
