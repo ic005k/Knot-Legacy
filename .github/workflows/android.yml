@@ -68,12 +68,12 @@ jobs:
           # macdeployqt bin/release/${targetName}.app -qmldir=. -verbose=1 -dmg
           
       # 上传artifacts          
-      - uses: actions/upload-artifact@v2
-        with:
+      #- uses: actions/upload-artifact@v2
+      #  with:
           #name:  ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }} # .zip
-          name:  ${{ env.targetName }}-${{ env.VERSION }}.apk
+          #name:  ${{ env.targetName }}-${{ env.VERSION }}.apk
           #path: bin/release/${{ env.targetName }}
-          path: /home/runner/work/Xcounter/android-build/build/outputs/apk/debug/android-build-debug.apk
+          #path: /home/runner/work/Xcounter/android-build/build/outputs/apk/debug/android-build-debug.apk
           
           
       # tag 上传Release
