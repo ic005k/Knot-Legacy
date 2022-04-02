@@ -61,8 +61,8 @@ jobs:
           make
           
      # 打包
-      - name: package
-        run: |
+     # - name: package
+     #   run: |
           # 拷贝依赖
           # cp -f Info.plist bin/release/${targetName}.app/Contents/Info.plist
           # macdeployqt bin/release/${targetName}.app -qmldir=. -verbose=1 -dmg
@@ -73,7 +73,7 @@ jobs:
           #name:  ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }} # .zip
           name:  ${{ env.targetName }}-${{ env.VERSION }}.apk
           #path: bin/release/${{ env.targetName }}
-          path: /home/runner/work/Xcounter/build-Xcounter-Android_Qt_5_15_2_Clang_Multi_Abi-Release/android-build/build/outputs/apk/debug/android-build-debug.apk
+          path: /home/runner/work/Xcounter/android-build/build/outputs/apk/debug/android-build-debug.apk
           
           
       # tag 上传Release
