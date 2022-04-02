@@ -851,19 +851,22 @@ void MainWindow::drawDayChart() {
   else
     child = true;
 
+  QString month;
   int day;
   if (child) {
     childCount = item->parent()->childCount();
     parentItem = item->parent();
     day = get_Day(item->parent()->text(0));
+    month = get_Month(item->parent()->text(0));
   } else {
     childCount = item->childCount();
     parentItem = item;
     day = get_Day(item->text(0));
+    month = get_Month(item->text(0));
   }
 
-  QString strDay = QString("%1").arg(day, 2, 10, QLatin1Char('0'));
-  tabChart->setTabText(1, strDay);
+  QString strMonthDay = month + QString("%1").arg(day, 2, 10, QLatin1Char('0'));
+  tabChart->setTabText(1, strMonthDay);
 
   QList<double> dList;
   double x, y;
@@ -1225,6 +1228,13 @@ void MainWindow::on_twItemClicked() {
     else {
       init_Stats(tw);
       ui->lblStats->setText(strStats);
+    }
+
+    if (tabChart->currentIndex() == 0) {
+      QString str = item->parent()->text(0);
+      QString strYearMonth = get_Year(str) + get_Month(str);
+      if (strYearMonth == CurrentYearMonth) return;
+      startRead(str);
     }
   } else
     init_Stats(tw);

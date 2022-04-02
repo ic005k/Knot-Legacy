@@ -48,7 +48,6 @@ int main(int argc, char *argv[]) {
   }
 
   loadLocal();
-
   MainWindow w;
   w.show();
   return a.exec();
