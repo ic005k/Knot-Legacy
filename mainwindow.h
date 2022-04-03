@@ -4,6 +4,7 @@
 #include <qmath.h>
 
 #include <QAbstractButton>
+#include <QAccelerometerReading>
 #include <QChart>
 #include <QChartView>
 #include <QComboBox>
@@ -44,7 +45,9 @@
 #include "dlgrename.h"
 #include "dlgreport.h"
 #include "dlgsettime.h"
+#include "dlgsteps.h"
 #include "dlgtodo.h"
+#include "specialaccelerometerpedometer.h"
 #include "ui_dlglist.h"
 #include "ui_dlgmainnotes.h"
 #include "ui_dlgnotes.h"
@@ -52,11 +55,12 @@
 #include "ui_dlgrename.h"
 #include "ui_dlgreport.h"
 #include "ui_dlgsettime.h"
+#include "ui_dlgsteps.h"
 #include "ui_dlgtodo.h"
-
 class SearchThread;
 class ReadThread;
 class ReadTWThread;
+
 QT_CHARTS_USE_NAMESPACE
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -73,6 +77,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  SpecialAccelerometerPedometer *accel_pedometer;
   QChart *chartMonth;
   QChart *chartDay;
   QSplineSeries *series;
@@ -96,6 +101,7 @@ class MainWindow : public QMainWindow {
   dlgReport *mydlgReport;
   dlgPreferences *mydlgPre;
   dlgMainNotes *mydlgMainNotes;
+  dlgSteps *mydlgSteps;
 
   QList<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;
@@ -176,6 +182,8 @@ class MainWindow : public QMainWindow {
   static void drawDayChart();
   static void readDataInThread(int ExceptIndex);
  public slots:
+
+  void newDatas();
 
  protected:
   void closeEvent(QCloseEvent *event);
@@ -261,7 +269,10 @@ class MainWindow : public QMainWindow {
 
   void on_btnMainNotes_clicked();
 
+  void updateSteps();
+
  private:
+  int CurrentSteps = 0;
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格
   int x, y, w, h;

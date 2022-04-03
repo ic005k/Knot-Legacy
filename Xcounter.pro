@@ -1,5 +1,8 @@
 QT       += core gui
-QT       += charts
+QT       += charts sensors
+
+#QT += qml quick
+#QT += quickwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,12 +15,12 @@ android
 {
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/src
 dataFiles.files+=src/readme.txt
-dataFiles.files+=src/Xcount.ini
-dataFiles.files+=src/Xcount.txt
-dataFiles.files+=src/pic.png
+#dataFiles.files+=src/Xcount.ini
+#dataFiles.files+=src/Xcount.txt
+#dataFiles.files+=src/pic.png
 dataFiles.files+=src/1.png
 dataFiles.files+=src/2.png
-dataFiles.path = /assets/data
+#dataFiles.path = /assets/data
 INSTALLS += dataFiles
 }
 
@@ -33,9 +36,11 @@ SOURCES += \
     dlgrename.cpp \
     dlgreport.cpp \
     dlgsettime.cpp \
+    dlgsteps.cpp \
     dlgtodo.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    specialaccelerometerpedometer.cpp
 
 HEADERS += \
     dlglist.h \
@@ -45,8 +50,10 @@ HEADERS += \
     dlgrename.h \
     dlgreport.h \
     dlgsettime.h \
+    dlgsteps.h \
     dlgtodo.h \
-    mainwindow.h
+    mainwindow.h \
+    specialaccelerometerpedometer.h
 
 FORMS += \
     dlglist.ui \
@@ -56,6 +63,7 @@ FORMS += \
     dlgrename.ui \
     dlgreport.ui \
     dlgsettime.ui \
+    dlgsteps.ui \
     dlgtodo.ui \
     mainwindow.ui
 
@@ -72,6 +80,9 @@ CONFIG(debug,debug|release) {
 } else {
     DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
 }
+
+DISTFILES +=
+
 
 
 

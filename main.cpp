@@ -2,6 +2,7 @@
 #include <QTranslator>
 
 #include "mainwindow.h"
+#include "specialaccelerometerpedometer.h"
 
 extern QString iniFile, txtFile, appName, iniDir;
 extern int fontSize;
@@ -48,8 +49,10 @@ int main(int argc, char *argv[]) {
   }
 
   loadLocal();
+
   MainWindow w;
   w.show();
+
   return a.exec();
 }
 

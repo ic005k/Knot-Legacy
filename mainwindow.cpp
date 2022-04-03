@@ -5,13 +5,14 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
+QString ver = "1.0.03";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
 bool isImport;
 QString appName = "Xcounter";
-QString iniFile, iniDir, ver, strDate, readDate, noteText, strStats, SaveType,
-    strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth;
+QString iniFile, iniDir, strDate, readDate, noteText, strStats, SaveType, strY,
+    strM, btnYText, btnMText, btnDText, CurrentYearMonth;
 
 int curPos, sliderPos, today, fontSize, red, currentTabIndex;
 double yMaxMonth, yMaxDay;
@@ -151,7 +152,7 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   mw_one = this;
-  ver = "1.0.02";
+
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
 
   isReadEnd = true;
@@ -181,6 +182,20 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgReport = new dlgReport(this);
   mydlgPre = new dlgPreferences(this);
   mydlgMainNotes = new dlgMainNotes(this);
+  mydlgSteps = new dlgSteps(this);
+  accel_pedometer = new SpecialAccelerometerPedometer(this);
+  connect(accel_pedometer, SIGNAL(readingChanged()), this, SLOT(newDatas()));
+  connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
+          SLOT(updateSteps()));
+  accel_pedometer->setTangentLineIntercept(
+      mydlgSteps->ui->editTangentLineIntercept->text().toFloat());
+  accel_pedometer->setTangentLineSlope(
+      mydlgSteps->ui->editTangentLineSlope->text().toFloat());
+  accel_pedometer->setDataRate(100);
+  accel_pedometer->setAccelerationMode(QAccelerometer::Combined);
+  accel_pedometer->setActive(true);
+  accel_pedometer->start();
+
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
 
@@ -278,7 +293,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnTodo->setFixedHeight(s + 7);
   ui->btnMax->setFixedHeight(s + 7);
   ui->btnMainNotes->setFixedHeight(s + 7);
-  ui->btnMainNotes->setHidden(true);
+  // ui->btnMainNotes->setHidden(true);
   ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
   QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
   btnYText = Reg.value("/YMD/btnYText", 2022).toString();
@@ -304,6 +319,31 @@ MainWindow::MainWindow(QWidget* parent)
   init_NavigateBtnColor();
 
   isInit = true;
+}
+
+void MainWindow::newDatas() {
+  qreal ax, ay, az;
+
+  ax = accel_pedometer->reading()->x();
+  ay = accel_pedometer->reading()->y();
+  az = accel_pedometer->reading()->z();
+  mydlgSteps->ui->lblX->setText("X : " + QString::number(ax));
+  mydlgSteps->ui->lblY->setText("Y : " + QString::number(ay));
+  mydlgSteps->ui->lblZ->setText("Z : " + QString::number(az));
+
+  accel_pedometer->runStepCountAlgorithm();
+}
+
+void MainWindow::updateSteps() {
+  int steps = accel_pedometer->stepCount();
+  QTime time;
+  int s = time.currentTime().second();
+
+  // if (steps > 0 && s % 2 == 0) {
+  CurrentSteps = steps;
+  //}
+  mydlgSteps->ui->lblSteps->setText(tr("Steps") + " : " +
+                                    QString::number(CurrentSteps));
 }
 
 void MainWindow::init_Font() {
@@ -2240,6 +2280,13 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
 }
 
 void MainWindow::on_btnMainNotes_clicked() {
+  mydlgSteps->setFixedHeight(this->height());
+  mydlgSteps->setFixedWidth(this->width());
+  mydlgSteps->setModal(true);
+  mydlgSteps->show();
+
+  return;
+
   mydlgMainNotes->move(0, 0);
   mydlgMainNotes->resize(this->width(), this->height());
 
