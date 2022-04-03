@@ -666,7 +666,7 @@ QRadioButton::indicator:checked {
       <item>
        <widget class="QToolButton" name="btnMainNotes">
         <property name="text">
-         <string>Notes</string>
+         <string>Steps</string>
         </property>
        </widget>
       </item>

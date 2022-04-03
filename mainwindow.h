@@ -77,6 +77,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  qlonglong CurrentSteps = 0;
   SpecialAccelerometerPedometer *accel_pedometer;
   QChart *chartMonth;
   QChart *chartDay;
@@ -272,7 +273,6 @@ class MainWindow : public QMainWindow {
   void updateSteps();
 
  private:
-  int CurrentSteps = 0;
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格
   int x, y, w, h;

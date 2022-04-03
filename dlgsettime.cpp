@@ -35,11 +35,6 @@ dlgSetTime::dlgSetTime(QWidget* parent)
       new QRegularExpressionValidator(regxNumber, ui->editAmount);
   ui->editAmount->setValidator(validator);
   ui->editAmount->setPlaceholderText(tr("Number"));
-
-  // ui->btnCustom->setCursor(Qt::ArrowCursor);
-  // QWidgetAction* action = new QWidgetAction(ui->editDesc);
-  // action->setDefaultWidget(ui->btnCustom);
-  //  ui->editDesc->addAction(action, QLineEdit::TrailingPosition);
 }
 
 dlgSetTime::~dlgSetTime() { delete ui; }

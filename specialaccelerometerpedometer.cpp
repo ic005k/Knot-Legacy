@@ -158,7 +158,7 @@ void SpecialAccelerometerPedometer::runStepCountAlgorithm() {
     // th = a*(1/(i-k)) + B
     // th = threshold difference acceleration
     //(1/(i-k)) = frequency of steps, i = current sample number, k = max accel
-    //sample number a = constant from slope of tangent line of th vs (1/(i-k))
+    // sample number a = constant from slope of tangent line of th vs (1/(i-k))
     // B = constant from intercept of tangent line of th vs (1/(i-k))
     threshold_difference =
         (tangent_line_slope_th_freq / (cSampleNum - maxSampleNum)) +

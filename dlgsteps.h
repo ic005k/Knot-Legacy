@@ -3,6 +3,7 @@
 
 #include <QAccelerometer>
 #include <QDialog>
+#include <QRegularExpressionValidator>
 
 namespace Ui {
 class dlgSteps;
@@ -15,6 +16,9 @@ class dlgSteps : public QDialog {
   explicit dlgSteps(QWidget *parent = nullptr);
   ~dlgSteps();
   Ui::dlgSteps *ui;
+
+  void saveSteps();
+  void init_Steps();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;

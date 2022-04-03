@@ -5,20 +5,26 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
+extern QRegularExpression regxNumber;
+extern QString iniDir;
 
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
-  QFont font;
-  font.setPointSize(25);
-  ui->lblSteps->setFont(font);
-  ui->lblSteps->adjustSize();
+
+  QValidator* validator =
+      new QRegularExpressionValidator(regxNumber, ui->editTangentLineIntercept);
+  ui->editTangentLineIntercept->setValidator(validator);
+  ui->editTangentLineSlope->setValidator(validator);
 }
 
 dlgSteps::~dlgSteps() { delete ui; }
 
 void dlgSteps::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
-void dlgSteps::on_btnBack_clicked() { close(); }
+void dlgSteps::on_btnBack_clicked() {
+  saveSteps();
+  close();
+}
 
 void dlgSteps::on_btnPause_clicked() {
   if (ui->btnPause->text() == tr("Pause")) {
@@ -32,5 +38,21 @@ void dlgSteps::on_btnPause_clicked() {
 
 void dlgSteps::on_btnReset_clicked() {
   mw_one->accel_pedometer->resetStepCount();
-  ui->lblSteps->setText(tr("Steps") + " : 0");
+  mw_one->CurrentSteps = 0;
+  ui->lcdNumber->display("0");
+}
+
+void dlgSteps::saveSteps() {
+  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+  Reg.setValue("/Steps/Intercept", ui->editTangentLineIntercept->text());
+  Reg.setValue("/Steps/Slope", ui->editTangentLineSlope->text());
+  Reg.setValue("/Steps/Text", ui->textEdit->toPlainText());
+}
+
+void dlgSteps::init_Steps() {
+  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+  ui->editTangentLineIntercept->setText(
+      Reg.value("/Steps/Intercept", 10).toString());
+  ui->editTangentLineSlope->setText(Reg.value("/Steps/Slope", 25).toString());
+  ui->textEdit->setPlainText(Reg.value("/Steps/Text").toString());
 }

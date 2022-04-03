@@ -187,6 +187,7 @@ MainWindow::MainWindow(QWidget* parent)
   connect(accel_pedometer, SIGNAL(readingChanged()), this, SLOT(newDatas()));
   connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
           SLOT(updateSteps()));
+  mydlgSteps->init_Steps();
   accel_pedometer->setTangentLineIntercept(
       mydlgSteps->ui->editTangentLineIntercept->text().toFloat());
   accel_pedometer->setTangentLineSlope(
@@ -335,15 +336,9 @@ void MainWindow::newDatas() {
 }
 
 void MainWindow::updateSteps() {
-  int steps = accel_pedometer->stepCount();
-  QTime time;
-  int s = time.currentTime().second();
-
-  // if (steps > 0 && s % 2 == 0) {
-  CurrentSteps = steps;
-  //}
-  mydlgSteps->ui->lblSteps->setText(tr("Steps") + " : " +
-                                    QString::number(CurrentSteps));
+  // CurrentSteps = accel_pedometer->stepCount();
+  CurrentSteps++;
+  mydlgSteps->ui->lcdNumber->display(QString::number(CurrentSteps));
 }
 
 void MainWindow::init_Font() {
