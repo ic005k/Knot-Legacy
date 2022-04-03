@@ -1,4 +1,4 @@
-# Xcount - Powerful counter
+# Xcounter - Powerful counter
 
 * Android version >= 6.0
 * To-do list.
