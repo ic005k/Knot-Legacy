@@ -25,6 +25,8 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
         y, QHeaderView::ResizeToContents);
   }
 
+  ui->tableWidget->setAlternatingRowColors(true);
+  ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
   ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
   ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -115,6 +117,7 @@ void dlgSteps::addRecord(QString date, qlonglong steps) {
       ui->tableWidget->setItem(i, 0, item);
 
       item = new QTableWidgetItem(QString::number(steps));
+      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       ui->tableWidget->setItem(i, 1, item);
 
       ui->tableWidget->item(i, 0)->setFlags(Qt::NoItemFlags);
@@ -130,6 +133,7 @@ void dlgSteps::addRecord(QString date, qlonglong steps) {
     ui->tableWidget->setItem(count, 0, item);
 
     item = new QTableWidgetItem(QString::number(steps));
+    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ui->tableWidget->setItem(count, 1, item);
 
     ui->tableWidget->item(count, 0)->setFlags(Qt::NoItemFlags);
@@ -151,10 +155,11 @@ void dlgSteps::setTableSteps(qlonglong steps) {
   }
   if (count > 0) {
     QString strDate = ui->tableWidget->item(count - 1, 0)->text();
-    if (strDate == QDate::currentDate().toString())
-      ui->tableWidget->setItem(count - 1, 1,
-                               new QTableWidgetItem(QString::number(steps)));
-    else
+    if (strDate == QDate::currentDate().toString()) {
+      QTableWidgetItem* item = new QTableWidgetItem(QString::number(steps));
+      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      ui->tableWidget->setItem(count - 1, 1, item);
+    } else
       addRecord(QDate::currentDate().toString(), steps);
   }
 }

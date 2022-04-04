@@ -32,3 +32,9 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
 }
+
+void dlgPreferences::on_rb0_clicked() { isFontChange = true; }
+
+void dlgPreferences::on_rb1_clicked() { isFontChange = true; }
+
+void dlgPreferences::on_rb2_clicked() { isFontChange = true; }

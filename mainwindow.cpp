@@ -1066,7 +1066,9 @@ void MainWindow::closeEvent(QCloseEvent* event) {
   // QAndroidJniObject::callStaticMethod<void>("com/mmJavaActivity", "mini",
   //                                           "()V");
   mydlgSteps->saveSteps();
-  if (!mydlgPre->ui->chkClose->isChecked()) event->ignore();
+  if (!mydlgPre->isFontChange) {
+    if (!mydlgPre->ui->chkClose->isChecked()) event->ignore();
+  }
 }
 
 void MainWindow::init_Stats(QTreeWidget* tw) {
