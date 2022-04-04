@@ -1129,7 +1129,6 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
       QStringList list1 = str.split(".");
       if (list1.count() == 2) {
         QStringList list = list1.at(1).split(":");
-
         int t = 0;
         if (list.count() == 3) {
           QString a, b, c;
@@ -1840,7 +1839,7 @@ void MainWindow::on_btnFind_clicked() {
 QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   QStringList listMonth;
   if (loading) return listMonth;
-  // 格式：天 ｜ 总数（或金额）
+  // 格式：记录第一个子项的时间
   PointList.clear();
   doubleList.clear();
 
