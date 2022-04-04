@@ -5,6 +5,9 @@
 
 #include <QAbstractButton>
 #include <QAccelerometerReading>
+#ifdef Q_OS_ANDROID
+#include <QAndroidJniObject>
+#endif
 #include <QChart>
 #include <QChartView>
 #include <QComboBox>
@@ -190,6 +193,7 @@ class MainWindow : public QMainWindow {
   void closeEvent(QCloseEvent *event);
   bool eventFilter(QObject *watch, QEvent *evn);
   void paintEvent(QPaintEvent *event);
+  void changeEvent(QEvent *event);
  private slots:
 
   void timerUpdate();

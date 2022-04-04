@@ -13,7 +13,8 @@ TRANSLATIONS += cn.ts
 
 android
 {
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/src
+QT += androidextras
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 dataFiles.files+=src/readme.txt
 #dataFiles.files+=src/Xcount.ini
 #dataFiles.files+=src/Xcount.txt
@@ -81,7 +82,23 @@ CONFIG(debug,debug|release) {
     DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
 }
 
-DISTFILES +=
+DISTFILES += \
+    android/AndroidManifest.xml \
+    android/build.gradle \
+    android/gradle.properties \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew \
+    android/gradlew.bat \
+    android/res/values/libs.xml \
+    android/src/com/mmJavaActivity.java \
+    src/AndroidManifest.xml \
+    src/build.gradle \
+    src/com/android/activity/mmJavaActivity.java \
+    src/gradle.properties \
+    src/gradle/wrapper/gradle-wrapper.jar \
+    src/gradle/wrapper/gradle-wrapper.properties \
+    src/res/values/libs.xml
 
 
 

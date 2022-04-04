@@ -13,6 +13,7 @@ bool isImport;
 QString appName = "Xcounter";
 QString iniFile, iniDir, strDate, readDate, noteText, strStats, SaveType, strY,
     strM, btnYText, btnMText, btnDText, CurrentYearMonth;
+QStringList listM;
 
 int curPos, sliderPos, today, fontSize, red, currentTabIndex;
 double yMaxMonth, yMaxDay;
@@ -368,6 +369,9 @@ void MainWindow::init_Font() {
   ui->lblStats->setFont(userFont);
   mydlgReport->ui->tableReport->horizontalHeader()->setFont(userFont);
   mydlgReport->ui->tableDetails->horizontalHeader()->setFont(userFont);
+
+  mydlgPre->ui->chkClose->setChecked(
+      Reg.value("/FontSize/Close", false).toBool());
 }
 
 void MainWindow::init_ChartWidget() {
@@ -857,7 +861,8 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
 }
 
 void MainWindow::drawMonthChart() {
-  QStringList listM = get_MonthList(strY, strM);
+  listM.clear();
+  listM = get_MonthList(strY, strM);
   CurrentYearMonth = strY + strM;
   qDebug() << "Month List Count: " << listM.count();
 }
@@ -1051,7 +1056,12 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
     qDebug() << "Write failure!" << fileName;
 }
 
-void MainWindow::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
+void MainWindow::closeEvent(QCloseEvent* event) {
+  // QAndroidJniObject::callStaticMethod<void>("com/mmJavaActivity", "mini",
+  //                                           "()V");
+
+  if (!mydlgPre->ui->chkClose->isChecked()) event->ignore();
+}
 
 void MainWindow::init_Stats(QTreeWidget* tw) {
   int count = tw->topLevelItemCount();
@@ -1103,9 +1113,28 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
 
   series->clear();
   m_scatterSeries->clear();
+  bool isOne = true;
   for (int i = 0; i < count; i++) {
     series->append(PointList.at(i));
     m_scatterSeries->append(PointList.at(i));
+    if (PointList.at(i).y() != 1) isOne = false;
+  }
+
+  if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
+    series->clear();
+    m_scatterSeries->clear();
+    for (int i = 0; i < count; i++) {
+      QString str = listM.at(i);
+      QStringList list = str.split(":");
+      double y0;
+      if (list.count() == 3) {
+        double t = list.at(0).toDouble() * 3600 + list.at(1).toDouble() * 60 +
+                   list.at(2).toDouble();
+        y0 = t / 3600;
+      }
+      series->append(PointList.at(i).x(), y0);
+      m_scatterSeries->append(PointList.at(i).x(), y0);
+    }
   }
 
   double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
@@ -1125,6 +1154,11 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   yMaxMonth = max;
   chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
   chartMonth->axes(Qt::Vertical).first()->setRange(0, yMaxMonth);
+
+  if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
+    chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
+    chartMonth->axes(Qt::Vertical).first()->setRange(0, 24);
+  }
 }
 
 void MainWindow::initChartDay() {
@@ -1812,15 +1846,15 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
     if (y == strY) {
       if (m == strM) {
         if (isrbFreq) {
-          listMonth.append(d + "|" + topItem->text(1));  //记录天和总数
+          if (topItem->childCount() > 0)
+            listMonth.append(
+                topItem->child(0)->text(0));  //记录第一个子项的时间
 
           double y0 = topItem->text(1).toDouble();
           doubleList.append(y0);
 
           PointList.append(QPointF(x0, y0));
         } else {
-          listMonth.append(d + "|" + topItem->text(2));
-
           double y0 = topItem->text(2).toDouble();
           doubleList.append(y0);
 
@@ -2294,4 +2328,12 @@ void MainWindow::on_btnMainNotes_clicked() {
   if (!mydlgMainNotes->ui->textEdit->isHidden())
     mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
         mydlgMainNotes->sliderPos);
+}
+
+void MainWindow::changeEvent(QEvent* event) {
+  if (event->type() == QEvent::WindowStateChange) {
+    if (windowState() & Qt::WindowMinimized) {
+      hide();
+    }
+  }
 }

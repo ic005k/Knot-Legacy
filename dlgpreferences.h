@@ -29,6 +29,8 @@ class dlgPreferences : public QDialog {
 
   void on_rb2_clicked(bool checked);
 
+  void on_chkClose_clicked(bool checked);
+
  private:
 };
 

@@ -30,6 +30,10 @@ class dlgSteps : public QDialog {
 
   void on_btnReset_clicked();
 
+  void on_editTangentLineIntercept_textChanged(const QString &arg1);
+
+  void on_editTangentLineSlope_textChanged(const QString &arg1);
+
  private:
 };
 

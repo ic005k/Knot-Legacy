@@ -15,6 +15,9 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
       new QRegularExpressionValidator(regxNumber, ui->editTangentLineIntercept);
   ui->editTangentLineIntercept->setValidator(validator);
   ui->editTangentLineSlope->setValidator(validator);
+
+  ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
 }
 
 dlgSteps::~dlgSteps() { delete ui; }
@@ -55,4 +58,12 @@ void dlgSteps::init_Steps() {
       Reg.value("/Steps/Intercept", 10).toString());
   ui->editTangentLineSlope->setText(Reg.value("/Steps/Slope", 25).toString());
   ui->textEdit->setPlainText(Reg.value("/Steps/Text").toString());
+}
+
+void dlgSteps::on_editTangentLineIntercept_textChanged(const QString& arg1) {
+  mw_one->accel_pedometer->setTangentLineIntercept(arg1.toFloat());
+}
+
+void dlgSteps::on_editTangentLineSlope_textChanged(const QString& arg1) {
+  mw_one->accel_pedometer->setTangentLineSlope(arg1.toFloat());
 }
