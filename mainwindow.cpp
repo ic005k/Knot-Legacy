@@ -191,6 +191,7 @@ MainWindow::MainWindow(QWidget* parent)
       mydlgSteps->ui->editTangentLineSlope->text().toFloat());
   accel_pedometer->setDataRate(100);
   accel_pedometer->setAccelerationMode(QAccelerometer::Combined);
+  // accel_pedometer->setAccelerationMode(QAccelerometer::User);
   accel_pedometer->setActive(true);
   accel_pedometer->start();
 
@@ -336,6 +337,11 @@ void MainWindow::updateSteps() {
   // CurrentSteps = accel_pedometer->stepCount();
   CurrentSteps++;
   mydlgSteps->ui->lcdNumber->display(QString::number(CurrentSteps));
+  ui->btnMainNotes->setText(QString::number(CurrentSteps));
+
+  CurTableCount = mydlgSteps->getCurrentSteps();
+  CurTableCount++;
+  mydlgSteps->addRecord(QDate::currentDate().toString(), CurTableCount);
 }
 
 void MainWindow::init_Options() {
@@ -349,10 +355,9 @@ void MainWindow::init_Options() {
   mydlgPre->ui->rb1->setChecked(Reg.value("/Options/rb1", 0).toBool());
   mydlgPre->ui->rb2->setChecked(Reg.value("/Options/rb2", 0).toBool());
   if (mydlgPre->ui->rb1->isChecked()) fontSize = fontSize + 3;
-  if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 6;
+  if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 5;
   QFont userFont;
   userFont.setPointSize(fontSize);
-  this->setFont(userFont);
   mydlgReport->ui->tableReport->setFont(userFont);
   mydlgReport->ui->tableDetails->setFont(userFont);
   mydlgNotes->ui->textEdit->setFont(userFont);
@@ -360,11 +365,14 @@ void MainWindow::init_Options() {
   tabChart->setFont(userFont);
   mydlgMainNotes->ui->textBrowser->setFont(userFont);
   mydlgMainNotes->ui->textEdit->setFont(userFont);
+  mydlgSteps->ui->tableWidget->setFont(userFont);
 
   userFont.setBold(true);
   ui->lblStats->setFont(userFont);
   mydlgReport->ui->tableReport->horizontalHeader()->setFont(userFont);
   mydlgReport->ui->tableDetails->horizontalHeader()->setFont(userFont);
+  mydlgSteps->ui->tableWidget->horizontalHeader()->setFont(userFont);
+  ui->btnMainNotes->setFont(userFont);
 
   mydlgPre->ui->chkClose->setChecked(
       Reg.value("/Options/Close", false).toBool());
@@ -1057,7 +1065,7 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 void MainWindow::closeEvent(QCloseEvent* event) {
   // QAndroidJniObject::callStaticMethod<void>("com/mmJavaActivity", "mini",
   //                                           "()V");
-
+  mydlgSteps->saveSteps();
   if (!mydlgPre->ui->chkClose->isChecked()) event->ignore();
 }
 
@@ -2325,6 +2333,7 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
 void MainWindow::on_btnMainNotes_clicked() {
   mydlgSteps->setFixedHeight(this->height());
   mydlgSteps->setFixedWidth(this->width());
+  mydlgSteps->ui->tableWidget->scrollToBottom();
   mydlgSteps->setModal(true);
   mydlgSteps->show();
 

@@ -20,6 +20,10 @@ class dlgSteps : public QDialog {
   void saveSteps();
   void init_Steps();
 
+  void addRecord(QString, qlonglong);
+
+  qlonglong getCurrentSteps();
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 

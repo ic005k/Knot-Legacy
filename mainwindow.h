@@ -81,6 +81,7 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
 
   qlonglong CurrentSteps = 0;
+  qlonglong CurTableCount = 0;
   SpecialAccelerometerPedometer *accel_pedometer;
   QChart *chartMonth;
   QChart *chartDay;
