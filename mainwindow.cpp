@@ -1124,13 +1124,24 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
     series->clear();
     m_scatterSeries->clear();
     for (int i = 0; i < count; i++) {
-      QString str = listM.at(i);
-      QStringList list = str.split(":");
       double y0;
-      if (list.count() == 3) {
-        double t = list.at(0).toDouble() * 3600 + list.at(1).toDouble() * 60 +
-                   list.at(2).toDouble();
-        y0 = t / 3600;
+      QString str = listM.at(i);
+      QStringList list1 = str.split(".");
+      if (list1.count() == 2) {
+        QStringList list = list1.at(1).split(":");
+
+        int t = 0;
+        if (list.count() == 3) {
+          QString a, b, c;
+          a = list.at(0);
+          b = list.at(1);
+          c = list.at(2);
+          int a1, b1;
+          a1 = a.toInt();
+          b1 = b.toInt();
+          t = a1 * 3600 + b1 * 60 + c.toInt();
+        }
+        y0 = (double)t / 3600;
       }
       series->append(PointList.at(i).x(), y0);
       m_scatterSeries->append(PointList.at(i).x(), y0);
