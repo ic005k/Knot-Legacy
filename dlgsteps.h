@@ -24,7 +24,8 @@ class dlgSteps : public QDialog {
 
   qlonglong getCurrentSteps();
 
- protected:
+  void setTableSteps(qlonglong steps);
+protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
  private slots:

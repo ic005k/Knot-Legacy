@@ -337,11 +337,11 @@ void MainWindow::updateSteps() {
   // CurrentSteps = accel_pedometer->stepCount();
   CurrentSteps++;
   mydlgSteps->ui->lcdNumber->display(QString::number(CurrentSteps));
-  ui->btnMainNotes->setText(QString::number(CurrentSteps));
 
   CurTableCount = mydlgSteps->getCurrentSteps();
   CurTableCount++;
-  mydlgSteps->addRecord(QDate::currentDate().toString(), CurTableCount);
+  mydlgSteps->setTableSteps(CurTableCount);
+  ui->btnMainNotes->setText(QString::number(CurTableCount));
 }
 
 void MainWindow::init_Options() {

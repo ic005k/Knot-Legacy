@@ -143,3 +143,18 @@ qlonglong dlgSteps::getCurrentSteps() {
 
   return ui->tableWidget->item(count - 1, 1)->text().toLongLong();
 }
+
+void dlgSteps::setTableSteps(qlonglong steps) {
+  int count = ui->tableWidget->rowCount();
+  if (count == 0) {
+    addRecord(QDate::currentDate().toString(), steps);
+  }
+  if (count > 0) {
+    QString strDate = ui->tableWidget->item(count - 1, 0)->text();
+    if (strDate == QDate::currentDate().toString())
+      ui->tableWidget->setItem(count - 1, 1,
+                               new QTableWidgetItem(QString::number(steps)));
+    else
+      addRecord(QDate::currentDate().toString(), steps);
+  }
+}
