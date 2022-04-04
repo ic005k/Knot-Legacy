@@ -136,10 +136,6 @@ void MainWindow::SaveFile(QString SaveType) {
     dlgTodo::saveTodo();
   }
 
-  if (SaveType == "font") {
-    dlgPreferences::saveFontSize();
-  }
-
   if (SaveType == "notes") {
     saveNotes(tabData->currentIndex());
   }
@@ -309,7 +305,7 @@ MainWindow::MainWindow(QWidget* parent)
   btnMonthText = Reg.value("/YMD/btnMonthText", tr("Month")).toString();
   mydlgReport->ui->btnMonth->setText(btnMonthText);
 
-  init_Font();
+  init_Options();
   init_TabData();
   loading = false;
 
@@ -342,16 +338,16 @@ void MainWindow::updateSteps() {
   mydlgSteps->ui->lcdNumber->display(QString::number(CurrentSteps));
 }
 
-void MainWindow::init_Font() {
+void MainWindow::init_Options() {
   // Font Size
-  QSettings Reg(iniDir + "font.ini", QSettings::IniFormat);
+  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   QFont font(this->font());
   QFontInfo fInfo(font);
   fontSize = fInfo.pointSize();
   qDebug() << "fontSize:" << fontSize;
-  mydlgPre->ui->rb0->setChecked(Reg.value("/FontSize/rb0", 1).toBool());
-  mydlgPre->ui->rb1->setChecked(Reg.value("/FontSize/rb1", 0).toBool());
-  mydlgPre->ui->rb2->setChecked(Reg.value("/FontSize/rb2", 0).toBool());
+  mydlgPre->ui->rb0->setChecked(Reg.value("/Options/rb0", 1).toBool());
+  mydlgPre->ui->rb1->setChecked(Reg.value("/Options/rb1", 0).toBool());
+  mydlgPre->ui->rb2->setChecked(Reg.value("/Options/rb2", 0).toBool());
   if (mydlgPre->ui->rb1->isChecked()) fontSize = fontSize + 3;
   if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 6;
   QFont userFont;
@@ -371,7 +367,9 @@ void MainWindow::init_Font() {
   mydlgReport->ui->tableDetails->horizontalHeader()->setFont(userFont);
 
   mydlgPre->ui->chkClose->setChecked(
-      Reg.value("/FontSize/Close", false).toBool());
+      Reg.value("/Options/Close", false).toBool());
+  mydlgPre->ui->chkAutoTime->setChecked(
+      Reg.value("/Options/AutoTimeY", true).toBool());
 }
 
 void MainWindow::init_ChartWidget() {
@@ -1468,6 +1466,8 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
     Reg.setValue("CurrentIndex", index);
   }
 
+  series->clear();
+  m_scatterSeries->clear();
   startRead(strDate);
 }
 
@@ -1601,6 +1601,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         while (t.elapsed() < 600) {
           QCoreApplication::processEvents();
         }
+        series->clear();
+        m_scatterSeries->clear();
         startRead(strDate);
         init_NavigateBtnColor();
         isSlide = false;
@@ -1640,6 +1642,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         while (t.elapsed() < 600) {
           QCoreApplication::processEvents();
         }
+        series->clear();
+        m_scatterSeries->clear();
         startRead(strDate);
         init_NavigateBtnColor();
         isSlide = false;

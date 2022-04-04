@@ -15,21 +15,13 @@ class dlgPreferences : public QDialog {
   ~dlgPreferences();
   Ui::dlgPreferences *ui;
 
-  static void saveFontSize();
+  void saveOptions();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
  private slots:
   void on_btnBack_clicked();
-
-  void on_rb0_clicked(bool checked);
-
-  void on_rb1_clicked(bool checked);
-
-  void on_rb2_clicked(bool checked);
-
-  void on_chkClose_clicked(bool checked);
 
  private:
 };

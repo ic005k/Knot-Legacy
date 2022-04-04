@@ -295,7 +295,7 @@ class MainWindow : public QMainWindow {
   //"QTreeWidget::item:hover {background-color: #f5f5f5;}"
   //"QTreeWidget::item:selected {border-left: 0px solid #777777;}"
   void init_ChartWidget();
-  void init_Font();
+  void init_Options();
 };
 
 class SearchThread : public QThread {
