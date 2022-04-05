@@ -13,6 +13,7 @@ extern bool loading, isBreak, isImport;
 extern int fontSize;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
+  this->installEventFilter(this);
 
   mylist = new QListWidget;
   mylist = ui->listWidget;
@@ -23,7 +24,10 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
 
 dlgTodo::~dlgTodo() { delete ui; }
 
-void dlgTodo::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
+void dlgTodo::keyReleaseEvent(QKeyEvent* event) {
+  Q_UNUSED(event);
+  // event->accept();
+}
 
 void dlgTodo::on_btnBack_clicked() { close(); }
 
@@ -191,13 +195,15 @@ void dlgTodo::closeEvent(QCloseEvent* event) {
 bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
 
-  // if (watch == spacer) {
-  if (evn->type() == QEvent::MouseButtonDblClick) {
-    qDebug() << "mouse dbclick";
-    // return true;
+  if (evn->type() == QEvent::KeyPress) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      on_btnBack_clicked();
+      qDebug() << "back";
+      return true;
+    }
   }
-  // return false;
-  //}
+
   return QWidget::eventFilter(watch, evn);
 }
 

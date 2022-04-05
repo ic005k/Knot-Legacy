@@ -1126,8 +1126,6 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
-  // QAndroidJniObject::callStaticMethod<void>("com/mmJavaActivity", "mini",
-  //                                           "()V");
   mydlgSteps->saveSteps();
   if (!mydlgPre->isFontChange) {
     if (!mydlgPre->ui->chkClose->isChecked()) event->ignore();
@@ -1767,6 +1765,24 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         init_NavigateBtnColor();
         isSlide = false;
       }
+    }
+  }
+
+  if (evn->type() == QEvent::KeyPress) {
+    return QWidget::eventFilter(watch, evn);
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      if (mydlgPre->ui->chkClose->isChecked()) {
+        close();
+      }
+
+      else {
+        // QAndroidJniObject::callStaticMethod<int>("com/mmJavaActivity",
+        // "mini",
+        //                                          "()I");
+      }
+      qDebug() << "back";
+      return true;
     }
   }
 
