@@ -330,6 +330,16 @@ void MainWindow::newDatas() {
   mydlgSteps->ui->lblY->setText("Y : " + QString::number(ay));
   mydlgSteps->ui->lblZ->setText("Z : " + QString::number(az));
 
+  if (qAbs(ax) < 0.15 && qAbs(ay) < 0.15 && qAbs(az) > 9.5) {
+    mydlgSteps->ui->lblX->setStyleSheet(mydlgSteps->lblStyleLight);
+    mydlgSteps->ui->lblY->setStyleSheet(mydlgSteps->lblStyleLight);
+    mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleLight);
+  } else {
+    mydlgSteps->ui->lblX->setStyleSheet(mydlgSteps->lblStyleNormal);
+    mydlgSteps->ui->lblY->setStyleSheet(mydlgSteps->lblStyleNormal);
+    mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleNormal);
+  }
+
   accel_pedometer->runStepCountAlgorithm();
 }
 

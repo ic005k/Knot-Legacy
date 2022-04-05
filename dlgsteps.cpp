@@ -11,6 +11,7 @@ extern QString iniDir;
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
 
+  lblStyleNormal = ui->lblX->styleSheet();
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editTangentLineIntercept);
   ui->editTangentLineIntercept->setValidator(validator);
@@ -151,7 +152,7 @@ qlonglong dlgSteps::getCurrentSteps() {
 void dlgSteps::setTableSteps(qlonglong steps) {
   int count = ui->tableWidget->rowCount();
   if (count == 0) {
-    addRecord(QDate::currentDate().toString(), steps);
+    addRecord(QDate::currentDate().toString(), 0);
   }
   if (count > 0) {
     QString strDate = ui->tableWidget->item(count - 1, 0)->text();
@@ -160,6 +161,6 @@ void dlgSteps::setTableSteps(qlonglong steps) {
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       ui->tableWidget->setItem(count - 1, 1, item);
     } else
-      addRecord(QDate::currentDate().toString(), steps);
+      addRecord(QDate::currentDate().toString(), 0);
   }
 }
