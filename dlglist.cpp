@@ -7,6 +7,7 @@ extern MainWindow* mw_one;
 extern int fontSize, red;
 dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
+  this->installEventFilter(this);
   QFont font;
   font.setPointSize(fontSize);
   ui->listWidget->setFont(font);
@@ -14,7 +15,19 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
 
 dlgList::~dlgList() { delete ui; }
 
-void dlgList::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
+void dlgList::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
+
+bool dlgList::eventFilter(QObject* watch, QEvent* evn) {
+  if (evn->type() == QEvent::KeyPress) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      on_btnBack_clicked();
+      return true;
+    }
+  }
+
+  return QWidget::eventFilter(watch, evn);
+}
 
 void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
   Q_UNUSED(item);

@@ -10,6 +10,7 @@ extern QString iniDir;
 
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
+  this->installEventFilter(this);
 
   lblStyleNormal = ui->lblX->styleSheet();
   QValidator* validator =
@@ -38,7 +39,19 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
 
 dlgSteps::~dlgSteps() { delete ui; }
 
-void dlgSteps::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
+void dlgSteps::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
+
+bool dlgSteps::eventFilter(QObject* watch, QEvent* evn) {
+  if (evn->type() == QEvent::KeyPress) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      on_btnBack_clicked();
+      return true;
+    }
+  }
+
+  return QWidget::eventFilter(watch, evn);
+}
 
 void dlgSteps::on_btnBack_clicked() {
   saveSteps();

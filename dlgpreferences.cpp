@@ -12,11 +12,24 @@ extern bool isBreak;
 dlgPreferences::dlgPreferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgPreferences) {
   ui->setupUi(this);
+  this->installEventFilter(this);
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }
 
-void dlgPreferences::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
+void dlgPreferences::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
+
+bool dlgPreferences::eventFilter(QObject* watch, QEvent* evn) {
+  if (evn->type() == QEvent::KeyPress) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      on_btnBack_clicked();
+      return true;
+    }
+  }
+
+  return QWidget::eventFilter(watch, evn);
+}
 
 void dlgPreferences::on_btnBack_clicked() {
   saveOptions();

@@ -10,6 +10,7 @@ QString btnYearText, btnMonthText;
 
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
+  this->installEventFilter(this);
 
   for (int y = 0; y < ui->tableReport->columnCount(); y++) {
     ui->tableReport->horizontalHeader()->setSectionResizeMode(
@@ -40,7 +41,19 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
 
 dlgReport::~dlgReport() { delete ui; }
 
-void dlgReport::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
+void dlgReport::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
+
+bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
+  if (evn->type() == QEvent::KeyPress) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      on_btnBack_clicked();
+      return true;
+    }
+  }
+
+  return QWidget::eventFilter(watch, evn);
+}
 
 void dlgReport::on_btnBack_clicked() {
   mw_one->startSave("ymd");

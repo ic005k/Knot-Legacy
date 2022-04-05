@@ -18,7 +18,8 @@ class dlgList : public QDialog {
 
  protected:
   void keyReleaseEvent(QKeyEvent *event);
- private slots:
+  bool eventFilter(QObject *watch, QEvent *evn);
+private slots:
   void on_listWidget_itemClicked(QListWidgetItem *item);
 
   void on_btnClear_clicked();

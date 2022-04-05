@@ -32,7 +32,8 @@ class dlgReport : public QDialog {
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
- private slots:
+  bool eventFilter(QObject *watch, QEvent *evn);
+private slots:
   void on_btnBack_clicked();
 
  private:

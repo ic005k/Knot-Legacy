@@ -30,6 +30,7 @@ class dlgSteps : public QDialog {
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
+   bool eventFilter(QObject *watch, QEvent *evn);
  private slots:
   void on_btnBack_clicked();
 
