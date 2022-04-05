@@ -365,6 +365,10 @@ QTabBar QToolButton::right-arrow {
            <property name="text">
             <string>Remarks</string>
            </property>
+           <property name="icon">
+            <iconset resource="src.qrc">
+             <normaloff>:/src/remarks.png</normaloff>:/src/remarks.png</iconset>
+           </property>
           </widget>
          </item>
          <item>

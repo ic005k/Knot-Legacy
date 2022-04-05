@@ -277,9 +277,12 @@ MainWindow::MainWindow(QWidget* parent)
 
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
 
-  int iz = 22;
+  int iz = 25;
   ui->btnFind->setIconSize(QSize(iz, iz));
   ui->btnReport->setIconSize(QSize(iz, iz));
+  ui->btnNotes->setIconSize(QSize(iz, iz));
+  ui->btnLeft->hide();
+  ui->btnRight->hide();
   int s = 35;
   if (isIOS) {
   }
@@ -1582,6 +1585,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 
   series->clear();
   m_scatterSeries->clear();
+  barSeries->clear();
   startRead(strDate);
 }
 
