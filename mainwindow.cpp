@@ -402,15 +402,19 @@ void MainWindow::init_ChartWidget() {
   //设置曲线动画模式
   chartMonth->setAnimationOptions(QChart::SeriesAnimations);
 
+  barSeries = new QBarSeries();
+  // barSeries->setBarWidth(1);
   series = new QSplineSeries();
   series->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
   m_scatterSeries = new QScatterSeries();  //创建散点
   m_scatterSeries->setMarkerShape(
       QScatterSeries::MarkerShapeCircle);  //设置散点样式
   m_scatterSeries->setMarkerSize(10);      //设置散点大小
+  chartMonth->addSeries(barSeries);
   chartMonth->addSeries(series);
   chartMonth->addSeries(m_scatterSeries);
 
+  // Day
   chartDay = new QChart();
   QChartView* chartview1 = new QChartView(chartDay);
   ui->glTimeLine->addWidget(chartview1);
@@ -430,7 +434,17 @@ void MainWindow::init_ChartWidget() {
   chartDay->addSeries(series2);
   chartDay->addSeries(m_scatterSeries2);
 
-  chartMonth->createDefaultAxes();
+  // chartMonth->createDefaultAxes();
+  axisX = new QBarCategoryAxis();
+  // axisX->append(categories);
+  chartMonth->addAxis(axisX, Qt::AlignBottom);
+  barSeries->attachAxis(axisX);
+
+  axisY = new QValueAxis();
+  // axisY->setRange(0, yMaxMonth);
+  chartMonth->addAxis(axisY, Qt::AlignLeft);
+  barSeries->attachAxis(axisY);
+
   chartDay->createDefaultAxes();
 }
 
@@ -967,10 +981,11 @@ void MainWindow::drawDayChart() {
   }
 
   if (isrbFreq) {
-    if (childCount > 5)
+    int a = 20;
+    if (childCount > a)
       yMaxDay = childCount;
     else
-      yMaxDay = 5;
+      yMaxDay = a;
   } else {
     yMaxDay = *std::max_element(dList.begin(), dList.end());
   }
@@ -1129,18 +1144,24 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
     return;
   }
 
+  barSeries->clear();
   series->clear();
   m_scatterSeries->clear();
   bool isOne = true;
+
+  QBarSet* setY = new QBarSet("Y");
+  QStringList categories;
+
   for (int i = 0; i < count; i++) {
-    series->append(PointList.at(i));
-    m_scatterSeries->append(PointList.at(i));
+    // series->append(PointList.at(i));
+    // m_scatterSeries->append(PointList.at(i));
     if (PointList.at(i).y() != 1) isOne = false;
   }
 
   if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
     series->clear();
     m_scatterSeries->clear();
+    QList<QPointF> tempPointList;
     for (int i = 0; i < count; i++) {
       double y0;
       QString str = listM.at(i);
@@ -1160,16 +1181,20 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
         }
         y0 = (double)t / 3600;
       }
-      series->append(PointList.at(i).x(), y0);
-      m_scatterSeries->append(PointList.at(i).x(), y0);
+      // series->append(PointList.at(i).x(), y0);
+      // m_scatterSeries->append(PointList.at(i).x(), y0);
+
+      tempPointList.append(QPointF(PointList.at(i).x(), y0));
     }
+    PointList.clear();
+    PointList = tempPointList;
   }
 
   double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
   qDebug() << "In table Max:" << maxValue;
   double max;
   if (isrbFreq) {
-    max = 5;
+    max = 20;
     if (maxValue >= max) {
       max = maxValue;
     }
@@ -1180,12 +1205,41 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   }
 
   yMaxMonth = max;
-  chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
-  chartMonth->axes(Qt::Vertical).first()->setRange(0, yMaxMonth);
+  // chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
+  // chartMonth->axes(Qt::Vertical).first()->setRange(0, yMaxMonth);
+
+  QList<double> dList, tempDList;
+  for (int i = 0; i < PointList.count(); i++) {
+    tempDList.append(PointList.at(i).y());
+    categories.append(QString::number(PointList.at(i).x()));
+  }
+  for (int i = 0; i < 31; i++) {
+    dList.append(0);
+  }
+  for (int i = 0; i < categories.count(); i++) {
+    for (int n = 0; n < 31; n++) {
+      if (categories.at(i) == QString::number(n + 1)) {
+        dList.removeAt(n);
+        dList.insert(n, PointList.at(i).y());
+      }
+    }
+  }
+
+  for (int i = 0; i < 31; i++) setY->append(dList.at(i));
+  categories.clear();
+  for (int i = 0; i < 31; i++) categories.append(QString::number(i + 1));
+  qDebug() << setY;
+  qDebug() << dList;
+  qDebug() << categories;
+  barSeries->append(setY);
+  axisX->append(categories);
+  axisY->setRange(0, yMaxMonth);
 
   if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
-    chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
-    chartMonth->axes(Qt::Vertical).first()->setRange(0, 24);
+    // chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
+    // chartMonth->axes(Qt::Vertical).first()->setRange(0, 24);
+
+    axisY->setRange(0, 24);
   }
 }
 
@@ -1595,7 +1649,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       if (current_page < count - 1) {
         isSlide = true;
         // ui->lblStats->setPixmap(ui->tabWidget->currentWidget()
-        //                             ->grab());  //捕获当前界面并绘制到label上
+        //                             ->grab());
+        //                             //捕获当前界面并绘制到label上
         QPropertyAnimation* animation1 =
             // new QPropertyAnimation(ui->lblStats, "geometry");
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
@@ -2014,9 +2069,11 @@ QString MainWindow::setComboBoxQss(QComboBox* txt, int radius, int borderWidth,
       QString("QComboBox::down-arrow{image:url(:/icon/"
               "add_bottom.png);width:10px;height:10px;right:2px;}"));
   list.append(QString(
-      "QComboBox::drop-down{subcontrol-origin:padding;subcontrol-position:top "
+      "QComboBox::drop-down{subcontrol-origin:padding;subcontrol-position:"
+      "top "
       "right;width:15px;border-left-width:0px;border-left-style:solid;border-"
-      "top-right-radius:3px;border-bottom-right-radius:3px;border-left-color:#"
+      "top-right-radius:3px;border-bottom-right-radius:3px;border-left-color:"
+      "#"
       "B6B6B6;}"));
   list.append(QString("QComboBox::drop-down:on{top:1px;}"));
 

@@ -8,6 +8,9 @@
 #ifdef Q_OS_ANDROID
 #include <QAndroidJniObject>
 #endif
+#include <QBarCategoryAxis>
+#include <QBarSeries>
+#include <QBarSet>
 #include <QChart>
 #include <QChartView>
 #include <QComboBox>
@@ -80,11 +83,14 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QBarCategoryAxis *axisX;
+  QValueAxis *axisY;
   qlonglong CurrentSteps = 0;
   qlonglong CurTableCount = 0;
   SpecialAccelerometerPedometer *accel_pedometer;
   QChart *chartMonth;
   QChart *chartDay;
+  QBarSeries *barSeries;
   QSplineSeries *series;
   QScatterSeries *m_scatterSeries;
   QSplineSeries *series2;

@@ -735,7 +735,7 @@ QRadioButton::indicator:checked {
   </action>
   <action name="actionNotes">
    <property name="text">
-    <string>Notes</string>
+    <string>Remarks</string>
    </property>
   </action>
   <action name="actionAbout">

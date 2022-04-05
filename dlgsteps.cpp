@@ -86,8 +86,8 @@ void dlgSteps::saveSteps() {
 void dlgSteps::init_Steps() {
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
   ui->editTangentLineIntercept->setText(
-      Reg.value("/Steps/Intercept", 10).toString());
-  ui->editTangentLineSlope->setText(Reg.value("/Steps/Slope", 25).toString());
+      Reg.value("/Steps/Intercept", 9.5).toString());
+  ui->editTangentLineSlope->setText(Reg.value("/Steps/Slope", 9.5).toString());
   ui->textEdit->setPlainText(Reg.value("/Steps/Text").toString());
 
   int count = Reg.value("/Steps/Count").toInt();
