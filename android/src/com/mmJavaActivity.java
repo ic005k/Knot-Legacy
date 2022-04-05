@@ -14,10 +14,13 @@ public class mmJavaActivity  extends org.qtproject.qt5.android.bindings.QtActivi
          m_instance = this;
      }
 
-    public static void mini()
-    {
-       m_instance.moveTaskToBack(true);
-    }
+    public  static int  mini()
+     {
+         m_instance.moveTaskToBack(true);
+
+         return 1;
+     }
+
 
 
 }
