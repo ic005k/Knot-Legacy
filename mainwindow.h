@@ -83,6 +83,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QLabel *m_valueLabel;
   QBarCategoryAxis *axisX;
   QValueAxis *axisY;
   QValueAxis *axisX2;
@@ -97,6 +98,7 @@ class MainWindow : public QMainWindow {
   QScatterSeries *m_scatterSeries;
   QSplineSeries *series2;
   QScatterSeries *m_scatterSeries2;
+  QScatterSeries *m_scatterSeries2_1;
   static void get_Today(QTreeWidget *);
   SearchThread *mySearchThread;
   ReadThread *myReadThread;
@@ -285,6 +287,8 @@ class MainWindow : public QMainWindow {
   void on_btnMainNotes_clicked();
 
   void updateSteps();
+
+  void slotPointHoverd(const QPointF &point, bool state);
 
  private:
   int spaceCount = 18;

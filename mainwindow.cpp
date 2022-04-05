@@ -394,22 +394,19 @@ void MainWindow::init_ChartWidget() {
   chartMonth = new QChart();
   QChartView* chartview = new QChartView(chartMonth);
   ui->pLayout->addWidget(chartview);
-  chartview->setRenderHint(QPainter::Antialiasing);  //防止图形走样
+  chartview->setRenderHint(QPainter::Antialiasing);
   // chartMonth->setTitle("Line chart");
   chartMonth->legend()->hide();
   chartMonth->setMargins(QMargins(0, 0, 0, 0));
   chartMonth->setContentsMargins(0, 0, 0, 0);
-  //设置曲线动画模式
   chartMonth->setAnimationOptions(QChart::SeriesAnimations);
 
   barSeries = new QBarSeries();
-  // barSeries->setBarWidth(1);
   series = new QSplineSeries();
   series->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
-  m_scatterSeries = new QScatterSeries();  //创建散点
-  m_scatterSeries->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);  //设置散点样式
-  m_scatterSeries->setMarkerSize(10);      //设置散点大小
+  m_scatterSeries = new QScatterSeries();
+  m_scatterSeries->setMarkerShape(QScatterSeries::MarkerShapeCircle);
+  m_scatterSeries->setMarkerSize(10);
   chartMonth->addSeries(barSeries);
   chartMonth->addSeries(series);
   chartMonth->addSeries(m_scatterSeries);
@@ -418,21 +415,39 @@ void MainWindow::init_ChartWidget() {
   chartDay = new QChart();
   QChartView* chartview1 = new QChartView(chartDay);
   ui->glTimeLine->addWidget(chartview1);
-  chartview1->setRenderHint(QPainter::Antialiasing);  //防止图形走样
-  // chartDay->setTitle("Line chart");
+  chartview1->setRenderHint(QPainter::Antialiasing);
   chartDay->legend()->hide();
   chartDay->setMargins(QMargins(0, 0, 0, 0));
   chartDay->setContentsMargins(0, 0, 0, 0);
-  chartDay->setAnimationOptions(QChart::SeriesAnimations);  //设置曲线动画模式
+  chartDay->setAnimationOptions(QChart::SeriesAnimations);
 
   series2 = new QSplineSeries(chartDay);
   series2->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
-  m_scatterSeries2 = new QScatterSeries(chartDay);  //创建散点
+  m_scatterSeries2 = new QScatterSeries();
+  m_scatterSeries2_1 = new QScatterSeries();
+
+  //散点图(用于边框)
   m_scatterSeries2->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);  //设置散点样式
-  m_scatterSeries2->setMarkerSize(8);      //设置散点大小
+      QScatterSeries::MarkerShapeCircle);                    //圆形的点
+  m_scatterSeries2->setBorderColor(QColor(21, 100, 255));    //边框颜色
+  m_scatterSeries2->setBrush(QBrush(QColor(21, 100, 255)));  //背景颜色
+  m_scatterSeries2->setMarkerSize(12);                       //点大小
+
+  //散点图(用于中心)
+  m_scatterSeries2_1->setMarkerShape(
+      QScatterSeries::MarkerShapeCircle);           //圆形的点
+  m_scatterSeries2_1->setBorderColor(Qt::white);    //边框颜色
+  m_scatterSeries2_1->setBrush(QBrush(Qt::white));  //背景颜色
+  m_scatterSeries2_1->setMarkerSize(6);             //点大小
+  connect(m_scatterSeries2_1, &QScatterSeries::hovered, this,
+          &MainWindow::slotPointHoverd);  //用于鼠标移动到点上显示数值
+  m_valueLabel = new QLabel(this);
+  m_valueLabel->adjustSize();
+  m_valueLabel->setHidden(true);
+
   chartDay->addSeries(series2);
   chartDay->addSeries(m_scatterSeries2);
+  chartDay->addSeries(m_scatterSeries2_1);
 
   // chartMonth->createDefaultAxes();
   axisX = new QBarCategoryAxis();
@@ -451,6 +466,21 @@ void MainWindow::init_ChartWidget() {
   series2->attachAxis(axisY2);
   m_scatterSeries2->attachAxis(axisX2);
   m_scatterSeries2->attachAxis(axisY2);
+  m_scatterSeries2_1->attachAxis(axisX2);
+  m_scatterSeries2_1->attachAxis(axisY2);
+}
+
+void MainWindow::slotPointHoverd(const QPointF& point, bool state) {
+  if (state) {
+    m_valueLabel->setText(QString::asprintf("%1.0f", point.y()));
+
+    QPoint curPos = mapFromGlobal(QCursor::pos());
+    m_valueLabel->move(curPos.x() - m_valueLabel->width() / 2,
+                       curPos.y() - m_valueLabel->height() * 1.5);  //移动数值
+
+    m_valueLabel->show();
+  } else
+    m_valueLabel->hide();
 }
 
 void MainWindow::init_TabData() {
@@ -1252,12 +1282,14 @@ void MainWindow::initChartDay() {
   if (loading) return;
   series2->clear();
   m_scatterSeries2->clear();
+  m_scatterSeries2_1->clear();
 
   int count = PointList.count();
   if (count == 0) return;
   for (int i = 0; i < count; i++) {
     series2->append(PointList.at(i));
     m_scatterSeries2->append(PointList.at(i));
+    m_scatterSeries2_1->append(PointList.at(i));
   }
 
   // chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
