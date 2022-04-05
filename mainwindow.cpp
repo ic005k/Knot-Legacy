@@ -430,22 +430,27 @@ void MainWindow::init_ChartWidget() {
   m_scatterSeries2 = new QScatterSeries(chartDay);  //创建散点
   m_scatterSeries2->setMarkerShape(
       QScatterSeries::MarkerShapeCircle);  //设置散点样式
-  m_scatterSeries2->setMarkerSize(10);     //设置散点大小
+  m_scatterSeries2->setMarkerSize(8);      //设置散点大小
   chartDay->addSeries(series2);
   chartDay->addSeries(m_scatterSeries2);
 
   // chartMonth->createDefaultAxes();
   axisX = new QBarCategoryAxis();
-  // axisX->append(categories);
   chartMonth->addAxis(axisX, Qt::AlignBottom);
   barSeries->attachAxis(axisX);
-
   axisY = new QValueAxis();
-  // axisY->setRange(0, yMaxMonth);
   chartMonth->addAxis(axisY, Qt::AlignLeft);
   barSeries->attachAxis(axisY);
 
-  chartDay->createDefaultAxes();
+  // chartDay->createDefaultAxes();
+  axisX2 = new QValueAxis();
+  chartDay->addAxis(axisX2, Qt::AlignBottom);
+  axisY2 = new QValueAxis();
+  chartDay->addAxis(axisY2, Qt::AlignLeft);
+  series2->attachAxis(axisX2);
+  series2->attachAxis(axisY2);
+  m_scatterSeries2->attachAxis(axisX2);
+  m_scatterSeries2->attachAxis(axisY2);
 }
 
 void MainWindow::init_TabData() {
@@ -1255,8 +1260,11 @@ void MainWindow::initChartDay() {
     m_scatterSeries2->append(PointList.at(i));
   }
 
-  chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
-  chartDay->axes(Qt::Vertical).first()->setRange(0, yMaxDay);
+  // chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
+  // chartDay->axes(Qt::Vertical).first()->setRange(0, yMaxDay);
+
+  axisX2->setRange(0, 24);
+  axisY2->setRange(0, yMaxDay);
 }
 
 void MainWindow::on_actionRename_triggered() {

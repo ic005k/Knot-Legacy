@@ -85,6 +85,8 @@ class MainWindow : public QMainWindow {
 
   QBarCategoryAxis *axisX;
   QValueAxis *axisY;
+  QValueAxis *axisX2;
+  QValueAxis *axisY2;
   qlonglong CurrentSteps = 0;
   qlonglong CurTableCount = 0;
   SpecialAccelerometerPedometer *accel_pedometer;
