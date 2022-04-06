@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>442</height>
+    <height>486</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,6 +94,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QToolButton" name="btnDefaultIntercept">
+       <property name="text">
+        <string>Default</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="2" column="0">
@@ -134,6 +141,13 @@
       <widget class="QLineEdit" name="editTangentLineSlope">
        <property name="text">
         <string>25</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnDefaultSlope">
+       <property name="text">
+        <string>Default</string>
        </property>
       </widget>
      </item>

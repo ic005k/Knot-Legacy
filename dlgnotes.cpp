@@ -35,18 +35,19 @@ void dlgNotes::on_btnBack_clicked() {
 
 void dlgNotes::on_textEdit_textChanged() {}
 
-bool dlgNotes::eventFilter(QObject* obj, QEvent* event) {
-  return QWidget::eventFilter(obj, event);
-  if (event->type() == QEvent::ActivationChange) {
-    if (QApplication::activeWindow() != this) {
-      this->close();
+bool dlgNotes::eventFilter(QObject* obj, QEvent* evn) {
+  if (evn->type() == QEvent::KeyPress) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      on_btnBack_clicked();
+      return true;
     }
   }
 
-  return QWidget::eventFilter(obj, event);
+  return QWidget::eventFilter(obj, evn);
 }
 
-void dlgNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
+void dlgNotes::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
 void dlgNotes::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);

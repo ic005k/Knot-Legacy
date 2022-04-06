@@ -177,3 +177,11 @@ void dlgSteps::setTableSteps(qlonglong steps) {
       addRecord(QDate::currentDate().toString(), 1);
   }
 }
+
+void dlgSteps::on_btnDefaultIntercept_clicked() {
+  ui->editTangentLineIntercept->setText("9.5");
+}
+
+void dlgSteps::on_btnDefaultSlope_clicked() {
+  ui->editTangentLineSlope->setText("9.5");
+}

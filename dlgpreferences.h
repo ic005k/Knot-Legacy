@@ -21,7 +21,7 @@ class dlgPreferences : public QDialog {
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
-   bool eventFilter(QObject *watch, QEvent *evn);
+  bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:
   void on_btnBack_clicked();
 

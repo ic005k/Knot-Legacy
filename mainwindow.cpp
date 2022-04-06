@@ -291,7 +291,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
-  // ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
+  ui->btnTodo->setIcon(QIcon(":/src/done.png"));
   ui->btnTodo->setFixedHeight(s + 7);
   ui->btnMax->setFixedHeight(s + 7);
   ui->btnMainNotes->setFixedHeight(s + 7);
@@ -354,7 +354,12 @@ void MainWindow::updateSteps() {
   CurTableCount = mydlgSteps->getCurrentSteps();
   CurTableCount++;
   mydlgSteps->setTableSteps(CurTableCount);
-  ui->btnMainNotes->setText(QString::number(CurTableCount));
+
+  if (QString::number(CurTableCount).length() <= 4) {
+    QString strNum = QString("%1").arg(CurTableCount, 4, 10, QLatin1Char('0'));
+    ui->btnMainNotes->setText(strNum);
+  } else
+    ui->btnMainNotes->setText(QString::number(CurTableCount));
 }
 
 void MainWindow::init_Options() {
@@ -1127,8 +1132,18 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 
 void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
-  if (!mydlgPre->isFontChange) {
-    if (!mydlgPre->ui->chkClose->isChecked()) event->ignore();
+  if (mydlgPre->ui->chkClose->isChecked()) {
+    event->accept();
+  } else {
+    if (mydlgPre->isFontChange) {
+      event->accept();
+      return;
+    }
+
+    // QAndroidJniObject::callStaticMethod<int>("com/mmJavaActivity", "mini",
+    //                                          "()I");
+
+    event->ignore();
   }
 }
 
@@ -1164,16 +1179,6 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   if (loading) return;
   tabChart->setTabText(0, strM);
   strY = "";
-
-  /*QRandomGenerator rg(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-  for (int i = 0; i < 30; i++) {
-    int a = rg() % (20);
-    QPointF pf(i, a);
-    pointlist.append(pf);
-
-    chart->series->append(pf.x(), pf.y());
-    chart->m_scatterSeries->append(pf.x(), pf.y());
-  }*/
 
   int count = PointList.count();
   if (count == 0) {
@@ -1659,9 +1664,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (watch != ui->tabWidget->tabBar() && watch != tw) {
-    static int press_x;  //鼠标按下时的位置
+    static int press_x;
     static int press_y;
-    static int relea_x;  //鼠标释放时的位置
+    static int relea_x;
     static int relea_y;
     int index = ui->tabWidget->currentIndex();
     int count = ui->tabWidget->tabBar()->count();
@@ -1772,17 +1777,21 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     return QWidget::eventFilter(watch, evn);
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
+      mydlgSteps->saveSteps();
       if (mydlgPre->ui->chkClose->isChecked()) {
         close();
-      }
+      } else {
+        if (!mydlgPre->isFontChange) {
+          close();
+          return true;
+        }
 
-      else {
-        // QAndroidJniObject::callStaticMethod<int>("com/mmJavaActivity",
-        // "mini",
-        //                                          "()I");
+        QAndroidJniObject::callStaticMethod<int>("com/mmJavaActivity", "mini",
+                                                 "()I");
+
+        qDebug() << "back";
+        return true;
       }
-      qDebug() << "back";
-      return true;
     }
   }
 
@@ -2484,8 +2493,8 @@ void MainWindow::on_btnMainNotes_clicked() {
 
 void MainWindow::changeEvent(QEvent* event) {
   if (event->type() == QEvent::WindowStateChange) {
-    if (windowState() & Qt::WindowMinimized) {
-      hide();
-    }
+    // if (windowState() & Qt::WindowMinimized) {
+    //   hide();
+    // }
   }
 }

@@ -33,7 +33,6 @@ class dlgTodo : public QDialog {
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
-
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:

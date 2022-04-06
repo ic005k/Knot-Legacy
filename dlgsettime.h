@@ -21,8 +21,9 @@ class dlgSetTime : public QDialog {
   static int removeDuplicates(QStringList *that);
 
   void init_Desc();
-protected:
-  void keyReleaseEvent(QKeyEvent *event);
+
+ protected:
+  void keyReleaseEvent(QKeyEvent *event) override;
  private slots:
   void on_btnBack_clicked();
 

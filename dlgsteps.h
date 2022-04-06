@@ -30,7 +30,7 @@ class dlgSteps : public QDialog {
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
-   bool eventFilter(QObject *watch, QEvent *evn);
+  bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:
   void on_btnBack_clicked();
 
@@ -41,6 +41,10 @@ class dlgSteps : public QDialog {
   void on_editTangentLineIntercept_textChanged(const QString &arg1);
 
   void on_editTangentLineSlope_textChanged(const QString &arg1);
+
+  void on_btnDefaultIntercept_clicked();
+
+  void on_btnDefaultSlope_clicked();
 
  private:
 };

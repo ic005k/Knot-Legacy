@@ -7,6 +7,7 @@
 #include <QAccelerometerReading>
 #ifdef Q_OS_ANDROID
 #include <QAndroidJniObject>
+#include <QtAndroid>
 #endif
 #include <QBarCategoryAxis>
 #include <QBarSeries>
@@ -202,10 +203,11 @@ class MainWindow : public QMainWindow {
   void newDatas();
 
  protected:
-  void closeEvent(QCloseEvent *event);
-  bool eventFilter(QObject *watch, QEvent *evn);
-  void paintEvent(QPaintEvent *event);
-  void changeEvent(QEvent *event);
+  void closeEvent(QCloseEvent *event) override;
+  bool eventFilter(QObject *watch, QEvent *evn) override;
+  void paintEvent(QPaintEvent *event) override;
+  void changeEvent(QEvent *event) override;
+
  private slots:
 
   void timerUpdate();

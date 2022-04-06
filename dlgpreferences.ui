@@ -130,8 +130,8 @@ QRadioButton::indicator:checked {
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
-    width:25px;
-    height:25px;
+    width:22px;
+    height:22px;
 }</string>
         </property>
         <property name="text">
@@ -144,8 +144,8 @@ QRadioButton::indicator:checked {
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
-    width:25px;
-    height:25px;
+    width:22px;
+    height:22px;
 }</string>
         </property>
         <property name="text">
