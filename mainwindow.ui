@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>397</width>
+    <width>403</width>
     <height>634</height>
    </rect>
   </property>
@@ -584,6 +584,50 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
          <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbSteps">
+           <property name="styleSheet">
+            <string notr="true">QRadioButton::indicator {
+    width: 25px;
+    height: 25px;
+    /*image: url(:/src/sel.png);*/
+    
+    position: relative;
+    left: 0px;
+    right: 3px;
+    top: 2px;
+    bottom:4px;
+}
+
+QRadioButton::indicator:unchecked {
+    image: url(:/src/nosel.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/src/sel.png);
+}
+
+
+</string>
+           </property>
+           <property name="text">
+            <string>Steps</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="horizontalSpacer_4">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -696,7 +740,7 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>397</width>
+     <width>403</width>
      <height>24</height>
     </rect>
    </property>

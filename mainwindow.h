@@ -292,6 +292,8 @@ class MainWindow : public QMainWindow {
 
   void slotPointHoverd(const QPointF &point, bool state);
 
+  void on_rbSteps_clicked();
+
  private:
   int spaceCount = 18;
   int spaceCount0 = 6;  //最前面的空格

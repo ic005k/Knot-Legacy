@@ -99,8 +99,9 @@ void dlgSteps::saveSteps() {
 void dlgSteps::init_Steps() {
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
   ui->editTangentLineIntercept->setText(
-      Reg.value("/Steps/Intercept", 9.5).toString());
-  ui->editTangentLineSlope->setText(Reg.value("/Steps/Slope", 9.5).toString());
+      Reg.value("/Steps/Intercept", dleInter).toString());
+  ui->editTangentLineSlope->setText(
+      Reg.value("/Steps/Slope", dleSlope).toString());
   ui->textEdit->setPlainText(Reg.value("/Steps/Text").toString());
 
   int count = Reg.value("/Steps/Count").toInt();
@@ -179,9 +180,9 @@ void dlgSteps::setTableSteps(qlonglong steps) {
 }
 
 void dlgSteps::on_btnDefaultIntercept_clicked() {
-  ui->editTangentLineIntercept->setText("9.5");
+  ui->editTangentLineIntercept->setText(QString::number(dleInter));
 }
 
 void dlgSteps::on_btnDefaultSlope_clicked() {
-  ui->editTangentLineSlope->setText("9.5");
+  ui->editTangentLineSlope->setText(QString::number(dleSlope));
 }

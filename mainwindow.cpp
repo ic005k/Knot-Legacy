@@ -2164,11 +2164,13 @@ void MainWindow::on_btnTodo_clicked() {
 }
 
 void MainWindow::on_rbFreq_clicked() {
+  tabChart->setTabEnabled(1, true);
   isrbFreq = true;
   startRead(strDate);
 }
 
 void MainWindow::on_rbAmount_clicked() {
+  tabChart->setTabEnabled(1, true);
   isrbFreq = false;
   startRead(strDate);
 }
@@ -2493,8 +2495,26 @@ void MainWindow::on_btnMainNotes_clicked() {
 
 void MainWindow::changeEvent(QEvent* event) {
   if (event->type() == QEvent::WindowStateChange) {
-    // if (windowState() & Qt::WindowMinimized) {
-    //   hide();
-    // }
   }
+}
+
+void MainWindow::on_rbSteps_clicked() {
+  tabChart->setCurrentIndex(0);
+  tabChart->setTabEnabled(1, false);
+  QTableWidget* t = mydlgSteps->ui->tableWidget;
+  PointList.clear();
+  doubleList.clear();
+  int count = t->rowCount();
+  QString sm = get_Month(QDate::currentDate().toString());
+  for (int i = 0; i < count; i++) {
+    QString strD = t->item(i, 0)->text();
+    if (sm == get_Month(strD)) {
+      int day = get_Day(strD);
+      int steps = t->item(i, 1)->text().toInt();
+      PointList.append(QPointF(day, steps));
+      doubleList.append(steps);
+    }
+  }
+
+  initChartMonth("", sm);
 }
