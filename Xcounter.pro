@@ -44,6 +44,7 @@ SOURCES += \
     specialaccelerometerpedometer.cpp
 
 HEADERS += \
+    count_steps.h \
     dlglist.h \
     dlgmainnotes.h \
     dlgnotes.h \

@@ -198,8 +198,10 @@ class MainWindow : public QMainWindow {
   void startRead(QString);
   static void drawDayChart();
   static void readDataInThread(int ExceptIndex);
- public slots:
+  void getSteps();
 
+ public slots:
+  void updateSteps();
   void newDatas();
 
  protected:
@@ -287,8 +289,6 @@ class MainWindow : public QMainWindow {
   void readTWDone();
 
   void on_btnMainNotes_clicked();
-
-  void updateSteps();
 
   void slotPointHoverd(const QPointF &point, bool state);
 
