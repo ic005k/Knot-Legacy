@@ -48,6 +48,10 @@ class dlgSteps : public QDialog {
 
   void on_btnDefaultSlope_clicked();
 
+  void on_rbAlg1_clicked();
+
+  void on_rbAlg2_clicked();
+
  private:
 };
 

@@ -31,7 +31,7 @@ extern QString btnYearText, btnMonthText;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 QList<float> rlistX, rlistY, rlistZ;
-bool stepChanged = false;
+bool isCountEnd = true;
 
 // number of lags to calculate for autocorrelation. 50 lags @20Hz
 // corresponds to a step rate of 0.4Hz...its probably not physically
@@ -242,8 +242,8 @@ MainWindow::MainWindow(QWidget* parent)
   accel_pedometer->setTangentLineSlope(
       mydlgSteps->ui->editTangentLineSlope->text().toFloat());
   accel_pedometer->setDataRate(100);
-  // accel_pedometer->setAccelerationMode(QAccelerometer::Combined);
-  // accel_pedometer->setAccelerationMode(QAccelerometer::User);
+  accel_pedometer->setAccelerationMode(QAccelerometer::Combined);
+  //  accel_pedometer->setAccelerationMode(QAccelerometer::User);
   accel_pedometer->setActive(true);
   accel_pedometer->start();
 
@@ -396,17 +396,19 @@ void MainWindow::newDatas() {
     mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleNormal);
   }
 
-  accel_pedometer->runStepCountAlgorithm();
+  if (mydlgSteps->ui->rbAlg1->isChecked())
+    accel_pedometer->runStepCountAlgorithm();
 
-  /*rlistX.append(ax);
-  rlistY.append(ay);
-  rlistZ.append(az);
-  if (rlistX.count() == 80) {
-    getSteps();
-    rlistX.clear();
-    rlistY.clear();
-    rlistZ.clear();
-  }*/
+  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+    if (!isCountEnd) return;
+    rlistX.append(ax);
+    rlistY.append(ay);
+    rlistZ.append(az);
+    if (rlistX.count() == 80) {
+      isCountEnd = false;
+      getSteps();
+    }
+  }
 }
 
 void MainWindow::updateSteps() {
@@ -674,12 +676,7 @@ void MainWindow::init_NavigateBtnColor() {
   }
 }
 
-void MainWindow::timerUpdate() {
-  if (stepChanged) {
-    stepChanged = false;
-    updateSteps();
-  }
-}
+void MainWindow::timerUpdate() {}
 
 MainWindow::~MainWindow() {
   delete ui;
@@ -2820,8 +2817,12 @@ uint8_t count_steps(int8_t* data) {
   } else {
     // not a valid autocorrelation peak
     num_steps = 0;
-    stepChanged = false;
   }
+
+  rlistX.clear();
+  rlistY.clear();
+  rlistZ.clear();
+  isCountEnd = true;
 
   // printf("num steps: %i\n", num_steps);
   return num_steps;
