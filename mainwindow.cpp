@@ -344,7 +344,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
-  ui->btnTodo->setIcon(QIcon(":/src/done.png"));
+  ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
   ui->btnTodo->setFixedHeight(s + 7);
   ui->btnMax->setFixedHeight(s + 7);
   ui->btnMainNotes->setFixedHeight(s + 7);
@@ -2863,8 +2863,8 @@ void MainWindow::getSteps() {
 
     acc[i0] = (int8_t)temp;
 
-    mydlgSteps->ui->lblSteps->setText(QString::number(acc[i0]) + "   " +
-                                      QString::number(n[2]));
+    // mydlgSteps->ui->lblSteps->setText(QString::number(acc[i0]) + "   " +
+    //                                   QString::number(n[2]));
 
     i0 = i0 + 1;
 

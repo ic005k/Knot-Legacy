@@ -215,6 +215,12 @@ bool SpecialAccelerometerPedometer::isThisSampleValid() {
   // get the current forward acceleration accelerometer
   qreal thisForwardAccel = SpecialAccelerometerPedometer::reading()->z();
 
+  qreal ax, ay;
+  ax = SpecialAccelerometerPedometer::reading()->x();
+  ay = SpecialAccelerometerPedometer::reading()->y();
+  if (qAbs(ax) > 8) thisForwardAccel = ax;
+  if (qAbs(ay) > 8) thisForwardAccel = ay;
+
   // get current sample
   qint16 cSample = SpecialAccelerometerPedometer::getCurrentSampleNumber();
 
