@@ -18,5 +18,6 @@
         <file>src/lasttxt.png</file>
         <file>src/opentxt.png</file>
         <file>src/remarks.png</file>
+        <file>src/zoom.png</file>
     </qresource>
 </RCC>

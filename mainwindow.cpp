@@ -361,13 +361,14 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnPlus->setIconSize(QSize(s, s));
   ui->btnLess->setIconSize(QSize(s, s));
   ui->btnTodo->setIconSize(QSize(s, s));
+  ui->btnMax->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
   ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
+  ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
   ui->btnTodo->setFixedHeight(s + 7);
-  ui->btnMax->setFixedHeight(s + 7);
   ui->btnMainNotes->setFixedHeight(s + 7);
-  // ui->btnMainNotes->setHidden(true);
+  ui->btnZoom->hide();
   ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
   QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
   btnYText = Reg.value("/YMD/btnYText", 2022).toString();
@@ -422,14 +423,17 @@ void MainWindow::newDatas() {
       mydlgSteps->ui->lblY->setStyleSheet(mydlgSteps->lblStyleNormal);
       mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleNormal);
     }
-
-    mydlgSteps->ui->lblX->show();
-    mydlgSteps->ui->lblY->show();
-    mydlgSteps->ui->lblZ->show();
+    if (mydlgSteps->ui->lblX->isHidden()) {
+      mydlgSteps->ui->lblX->show();
+      mydlgSteps->ui->lblY->show();
+      mydlgSteps->ui->lblZ->show();
+    }
   } else {
-    mydlgSteps->ui->lblX->hide();
-    mydlgSteps->ui->lblY->hide();
-    mydlgSteps->ui->lblZ->hide();
+    if (!mydlgSteps->ui->lblX->isHidden()) {
+      mydlgSteps->ui->lblX->hide();
+      mydlgSteps->ui->lblY->hide();
+      mydlgSteps->ui->lblZ->hide();
+    }
   }
 
   if (mydlgSteps->ui->rbAlg1->isChecked())
@@ -523,7 +527,8 @@ void MainWindow::init_Options() {
 
 void MainWindow::init_ChartWidget() {
   chartMonth = new QChart();
-  QChartView* chartview = new QChartView(chartMonth);
+  chartview = new QChartView(chartMonth);
+  chartview->installEventFilter(this);
   ui->pLayout->addWidget(chartview);
   chartview->setRenderHint(QPainter::Antialiasing);
   // chartMonth->setTitle("Line chart");
@@ -544,7 +549,8 @@ void MainWindow::init_ChartWidget() {
 
   // Day
   chartDay = new QChart();
-  QChartView* chartview1 = new QChartView(chartDay);
+  chartview1 = new QChartView(chartDay);
+  chartview1->installEventFilter(this);
   ui->glTimeLine->addWidget(chartview1);
   chartview1->setRenderHint(QPainter::Antialiasing);
   chartDay->legend()->hide();
@@ -1766,6 +1772,12 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (watch == tw) {
+  }
+
+  if (watch == chartview || watch == chartview1) {
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      on_btnZoom_clicked();
+    }
   }
 
   if (watch == ui->tabWidget->tabBar()) {

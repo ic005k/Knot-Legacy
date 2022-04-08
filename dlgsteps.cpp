@@ -12,7 +12,15 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
   this->installEventFilter(this);
 
+  QFont font1;
+  font1.setPointSize(15);
+  ui->lblX->setFont(font1);
+  ui->lblY->setFont(font1);
+  ui->lblZ->setFont(font1);
+  ui->lblSteps->setFont(font1);
+
   lblStyleNormal = ui->lblX->styleSheet();
+
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editTangentLineIntercept);
   ui->editTangentLineIntercept->setValidator(validator);

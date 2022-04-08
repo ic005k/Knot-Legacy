@@ -85,6 +85,8 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QChartView *chartview;
+  QChartView *chartview1;
   QLabel *m_valueLabel;
   QBarCategoryAxis *axisX;
   QValueAxis *axisY;
@@ -205,7 +207,7 @@ class MainWindow : public QMainWindow {
   void Sleep(int msec);
   void getSteps2();
   QString secondsToTime(ulong ulSeconds);
-public slots:
+ public slots:
   void updateSteps();
   void newDatas();
 
