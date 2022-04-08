@@ -245,6 +245,9 @@ MainWindow::MainWindow(QWidget* parent)
   mydlgPre = new dlgPreferences(this);
   mydlgMainNotes = new dlgMainNotes(this);
   mydlgSteps = new dlgSteps(this);
+
+  init_Options();
+
   accel_pedometer = new SpecialAccelerometerPedometer(this);
   connect(accel_pedometer, SIGNAL(readingChanged()), this, SLOT(newDatas()));
   connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
@@ -255,7 +258,6 @@ MainWindow::MainWindow(QWidget* parent)
   accel_pedometer->setTangentLineSlope(
       mydlgSteps->ui->editTangentLineSlope->text().toFloat());
   accel_pedometer->setDataRate(100);
-  // accel_pedometer->setAccelerationMode(QAccelerometer::Combined);
   accel_pedometer->setAccelerationMode(QAccelerometer::User);
   accel_pedometer->setActive(true);
   accel_pedometer->start();
@@ -379,7 +381,6 @@ MainWindow::MainWindow(QWidget* parent)
   btnMonthText = Reg.value("/YMD/btnMonthText", tr("Month")).toString();
   mydlgReport->ui->btnMonth->setText(btnMonthText);
 
-  init_Options();
   init_TabData();
   loading = false;
 
@@ -404,21 +405,31 @@ void MainWindow::newDatas() {
   gy = gyroscope->reading()->y();
   gz = gyroscope->reading()->z();
 
-  mydlgSteps->ui->lblX->setText("AX:" + QString::number(ax) + "\n" +
-                                "GX:" + QString::number(gx));
-  mydlgSteps->ui->lblY->setText("AY:" + QString::number(ay) + "\n" +
-                                "GY:" + QString::number(gy));
-  mydlgSteps->ui->lblZ->setText("AZ:" + QString::number(az) + "\n" +
-                                "GZ:" + QString::number(gz));
+  if (mydlgPre->ui->chkShowSV->isChecked()) {
+    mydlgSteps->ui->lblX->setText("AX:" + QString::number(ax) + "\n" +
+                                  "GX:" + QString::number(gx));
+    mydlgSteps->ui->lblY->setText("AY:" + QString::number(ay) + "\n" +
+                                  "GY:" + QString::number(gy));
+    mydlgSteps->ui->lblZ->setText("AZ:" + QString::number(az) + "\n" +
+                                  "GZ:" + QString::number(gz));
 
-  if (qAbs(ax) < 0.15 && qAbs(ay) < 0.15 && qAbs(az) > 9.5) {
-    mydlgSteps->ui->lblX->setStyleSheet(mydlgSteps->lblStyleLight);
-    mydlgSteps->ui->lblY->setStyleSheet(mydlgSteps->lblStyleLight);
-    mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleLight);
+    if (qAbs(ax) < 0.15 && qAbs(ay) < 0.15 && qAbs(az) > 9.5) {
+      mydlgSteps->ui->lblX->setStyleSheet(mydlgSteps->lblStyleLight);
+      mydlgSteps->ui->lblY->setStyleSheet(mydlgSteps->lblStyleLight);
+      mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleLight);
+    } else {
+      mydlgSteps->ui->lblX->setStyleSheet(mydlgSteps->lblStyleNormal);
+      mydlgSteps->ui->lblY->setStyleSheet(mydlgSteps->lblStyleNormal);
+      mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleNormal);
+    }
+
+    mydlgSteps->ui->lblX->show();
+    mydlgSteps->ui->lblY->show();
+    mydlgSteps->ui->lblZ->show();
   } else {
-    mydlgSteps->ui->lblX->setStyleSheet(mydlgSteps->lblStyleNormal);
-    mydlgSteps->ui->lblY->setStyleSheet(mydlgSteps->lblStyleNormal);
-    mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleNormal);
+    mydlgSteps->ui->lblX->hide();
+    mydlgSteps->ui->lblY->hide();
+    mydlgSteps->ui->lblZ->hide();
   }
 
   if (mydlgSteps->ui->rbAlg1->isChecked())
@@ -504,6 +515,10 @@ void MainWindow::init_Options() {
       Reg.value("/Options/Close", false).toBool());
   mydlgPre->ui->chkAutoTime->setChecked(
       Reg.value("/Options/AutoTimeY", true).toBool());
+  mydlgPre->ui->chkShowSV->setChecked(
+      Reg.value("/Options/ShowSV", false).toBool());
+  mydlgPre->ui->rbSM1->setChecked(Reg.value("/Options/SM1", false).toBool());
+  mydlgPre->ui->rbSM2->setChecked(Reg.value("/Options/SM2", true).toBool());
 }
 
 void MainWindow::init_ChartWidget() {
@@ -3340,8 +3355,7 @@ void MainWindow::getSteps2() {
       num_steps_run, num_steps_hop);
   printf("Done.\n");
 
-  QString str0 =
-      tr("Total Motion Duration") + " : " + mw_one->secondsToTime(timestamp);
+  QString str0 = tr("Duration") + " : " + mw_one->secondsToTime(timestamp);
   QString str1 = tr("Calculated Frequency") + " : " +
                  QString::number(step_algo_output.step_count);
   QString str2 = tr("Walk") + " : " + QString::number(num_steps_walk);

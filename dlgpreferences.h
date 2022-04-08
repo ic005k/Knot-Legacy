@@ -31,6 +31,10 @@ class dlgPreferences : public QDialog {
 
   void on_rb2_clicked();
 
+  void on_rbSM1_clicked();
+
+  void on_rbSM2_clicked();
+
  private:
 };
 

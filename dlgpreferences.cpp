@@ -13,6 +13,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgPreferences) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  ui->gBoxSensor->hide();
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }
@@ -44,6 +45,9 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/rb2", ui->rb2->isChecked());
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
+  Reg.setValue("/Options/SM1", ui->rbSM1->isChecked());
+  Reg.setValue("/Options/SM2", ui->rbSM2->isChecked());
+  Reg.setValue("/Options/ShowSV", ui->chkShowSV->isChecked());
 }
 
 void dlgPreferences::on_rb0_clicked() { isFontChange = true; }
@@ -51,3 +55,11 @@ void dlgPreferences::on_rb0_clicked() { isFontChange = true; }
 void dlgPreferences::on_rb1_clicked() { isFontChange = true; }
 
 void dlgPreferences::on_rb2_clicked() { isFontChange = true; }
+
+void dlgPreferences::on_rbSM1_clicked() {
+  mw_one->accel_pedometer->setAccelerationMode(QAccelerometer::Combined);
+}
+
+void dlgPreferences::on_rbSM2_clicked() {
+  mw_one->accel_pedometer->setAccelerationMode(QAccelerometer::User);
+}

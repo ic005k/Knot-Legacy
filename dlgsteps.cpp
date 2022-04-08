@@ -201,6 +201,9 @@ void dlgSteps::on_btnDefaultSlope_clicked() {
   ui->editTangentLineSlope->setText(QString::number(dleSlope));
 }
 
-void dlgSteps::on_rbAlg1_clicked() { ui->frameWay1->show(); }
+void dlgSteps::on_rbAlg1_clicked() {
+  ui->frameWay1->show();
+  ui->lblSteps->setText("");
+}
 
 void dlgSteps::on_rbAlg2_clicked() { ui->frameWay1->hide(); }
