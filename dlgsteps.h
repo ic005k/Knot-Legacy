@@ -17,8 +17,9 @@ class dlgSteps : public QDialog {
   ~dlgSteps();
   Ui::dlgSteps *ui;
 
-  double dleInter = 2;
-  double dleSlope = 900;
+  int toDayInitSteps = 0;
+  double dleInter = 9.55;
+  double dleSlope = 9.55;
   void saveSteps();
   void init_Steps();
   QString lblStyleLight = "background-color: rgb(25, 239, 21);color:black";

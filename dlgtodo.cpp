@@ -97,6 +97,7 @@ void dlgTodo::add_Item(QString str, bool insert) {
   // pItem->setSizeHint(QSize(this->width() - 15, 45));
   // pItem->setCheckState(Qt::Unchecked);
   pItem->setText("");
+
   if (insert)
     ui->listWidget->insertItem(0, pItem);
   else

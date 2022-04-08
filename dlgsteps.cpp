@@ -118,6 +118,14 @@ void dlgSteps::init_Steps() {
         Reg.value("/Steps/Table-" + QString::number(i) + "-1").toLongLong();
     addRecord(str0, str1);
   }
+
+  for (int i = 0; i < count; i++) {
+    if (QDate::currentDate().toString() ==
+        ui->tableWidget->item(i, 0)->text()) {
+      toDayInitSteps = ui->tableWidget->item(i, 1)->text().toInt();
+      break;
+    }
+  }
 }
 
 void dlgSteps::on_editTangentLineIntercept_textChanged(const QString& arg1) {

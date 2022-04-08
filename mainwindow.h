@@ -22,6 +22,7 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include <QFileDialog>
+#include <QGyroscope>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QInputDialog>
@@ -92,6 +93,7 @@ class MainWindow : public QMainWindow {
   qlonglong CurrentSteps = 0;
   qlonglong CurTableCount = 0;
   SpecialAccelerometerPedometer *accel_pedometer;
+  QGyroscope *gyroscope;
   QChart *chartMonth;
   QChart *chartDay;
   QBarSeries *barSeries;
@@ -200,7 +202,10 @@ class MainWindow : public QMainWindow {
   static void readDataInThread(int ExceptIndex);
   void getSteps();
 
- public slots:
+  void Sleep(int msec);
+  void getSteps2();
+  QString secondsToTime(ulong ulSeconds);
+public slots:
   void updateSteps();
   void newDatas();
 
