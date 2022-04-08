@@ -53,6 +53,8 @@ class dlgSteps : public QDialog {
 
   void on_rbAlg2_clicked();
 
+  void on_rbAlg3_clicked();
+
  private:
 };
 

@@ -447,8 +447,9 @@ void MainWindow::newDatas() {
     glistY.append(gy);
     glistZ.append(gz);
     if (rlistX.count() == 120) getSteps2();
-    return;
+  }
 
+  if (mydlgSteps->ui->rbAlg3->isChecked()) {
     if (!isCountEnd) return;
 
     rlistX.append(ax);
@@ -463,7 +464,8 @@ void MainWindow::newDatas() {
 
 void MainWindow::updateSteps() {
   // CurrentSteps = accel_pedometer->stepCount();
-  if (mydlgSteps->ui->rbAlg1->isChecked()) {
+  if (mydlgSteps->ui->rbAlg1->isChecked() ||
+      mydlgSteps->ui->rbAlg3->isChecked()) {
     CurrentSteps++;
     CurTableCount = mydlgSteps->getCurrentSteps();
     CurTableCount++;
@@ -2960,6 +2962,9 @@ void MainWindow::getSteps() {
     }
     num_steps += count_steps(data);
   }
+
+  mydlgSteps->ui->lblSteps->setText(tr("Current Steps") + " : " +
+                                    QString::number(num_steps));
 }
 
 void MainWindow::Sleep(int msec) {

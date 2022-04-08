@@ -7,6 +7,7 @@
 extern MainWindow* mw_one;
 extern QRegularExpression regxNumber;
 extern QString iniDir;
+extern QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
@@ -90,6 +91,7 @@ void dlgSteps::saveSteps() {
   Reg.setValue("/Steps/Text", ui->textEdit->toPlainText());
   Reg.setValue("/Steps/Alg1", ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Alg2", ui->rbAlg2->isChecked());
+  Reg.setValue("/Steps/Alg3", ui->rbAlg3->isChecked());
 
   int i = 0;
   int count = ui->tableWidget->rowCount();
@@ -115,8 +117,10 @@ void dlgSteps::init_Steps() {
   ui->textEdit->setPlainText(Reg.value("/Steps/Text").toString());
   ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
   ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
+  ui->rbAlg3->setChecked(Reg.value("Steps/Alg3", false).toBool());
   if (ui->rbAlg1->isChecked()) on_rbAlg1_clicked();
   if (ui->rbAlg2->isChecked()) on_rbAlg2_clicked();
+  if (ui->rbAlg3->isChecked()) on_rbAlg3_clicked();
 
   int count = Reg.value("/Steps/Count").toInt();
   for (int i = 0; i < count; i++) {
@@ -212,6 +216,31 @@ void dlgSteps::on_btnDefaultSlope_clicked() {
 void dlgSteps::on_rbAlg1_clicked() {
   ui->frameWay1->show();
   ui->lblSteps->setText("");
+  rlistX.clear();
+  rlistY.clear();
+  rlistZ.clear();
+  glistX.clear();
+  glistY.clear();
+  glistZ.clear();
 }
 
-void dlgSteps::on_rbAlg2_clicked() { ui->frameWay1->hide(); }
+void dlgSteps::on_rbAlg2_clicked() {
+  ui->frameWay1->hide();
+  rlistX.clear();
+  rlistY.clear();
+  rlistZ.clear();
+  glistX.clear();
+  glistY.clear();
+  glistZ.clear();
+}
+
+void dlgSteps::on_rbAlg3_clicked() {
+  ui->frameWay1->hide();
+  ui->lblSteps->setText("");
+  rlistX.clear();
+  rlistY.clear();
+  rlistZ.clear();
+  glistX.clear();
+  glistY.clear();
+  glistZ.clear();
+}
