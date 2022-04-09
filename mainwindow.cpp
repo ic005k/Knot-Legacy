@@ -75,18 +75,20 @@ void ReadThread::run() {
     return;
   }
   isReadEnd = false;
-  MainWindow::ReadFile();
+  MainWindow::ReadChartData();
   emit isDone();
 }
 
-void MainWindow::ReadFile() {
+void MainWindow::ReadChartData() {
   int index = tabData->currentIndex();
   QTreeWidget* tw = (QTreeWidget*)tabData->widget(index);
 
   strY = get_Year(readDate);
   strM = get_Month(readDate);
 
-  if (tabChart->currentIndex() == 0) drawMonthChart();
+  if (tabChart->currentIndex() == 0) {
+    drawMonthChart();
+  }
   if (tabChart->currentIndex() == 1) drawDayChart();
   get_Today(tw);
   init_Stats(tw);
@@ -421,12 +423,6 @@ void MainWindow::updateSteps() {
   }
 
   if (mydlgSteps->ui->rbAlg3->isChecked()) {
-    // CurrentSteps = num_steps;
-    // CurTableCount = mydlgSteps->toDayInitSteps + CurrentSteps;
-
-    CurrentSteps++;
-    CurTableCount = mydlgSteps->getCurrentSteps();
-    CurTableCount++;
   }
 
   mydlgSteps->ui->lcdNumber->display(QString::number(CurrentSteps));
@@ -745,6 +741,7 @@ void MainWindow::startRead(QString Date) {
   if (isReadEnd) {
     isBreak = false;
     myReadThread->start();
+    if (ui->rbSteps->isChecked()) ui->rbFreq->click();
   }
 }
 
@@ -1708,7 +1705,8 @@ void MainWindow::on_actionNotes_triggered() {
   mydlgNotes->ui->textBrowser->setHidden(true);
   mydlgNotes->ui->textEdit->setHidden(false);
   mydlgNotes->setModal(true);
-  mydlgNotes->ui->lblTitle->setText(tr("Notes :"));
+  mydlgNotes->ui->lblTitle->setText(tr("Notes") + " : " +
+                                    tabData->tabText(tabData->currentIndex()));
   mydlgNotes->show();
   mydlgNotes->init_Notes();
 }
@@ -2123,6 +2121,7 @@ void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
 
   series->clear();
   m_scatterSeries->clear();
+  barSeries->clear();
   series2->clear();
   m_scatterSeries2->clear();
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();

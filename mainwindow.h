@@ -109,7 +109,7 @@ class MainWindow : public QMainWindow {
   SearchThread *mySearchThread;
   ReadThread *myReadThread;
   ReadTWThread *myReadTWThread;
-  static void ReadFile();
+  static void ReadChartData();
   static int get_Day(QString date);
   static QString get_Year(QString date);
   static QString get_Month(QString date);
