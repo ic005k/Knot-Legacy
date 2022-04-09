@@ -44,7 +44,6 @@ static float AccBuff[NUM_DIM + 1][SAMP_BUFF_LEN];
 static unsigned int num_steps_walk, num_steps_run, num_steps_hop;
 
 QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
-bool isCountEnd = true;
 
 // number of lags to calculate for autocorrelation. 50 lags @20Hz
 // corresponds to a step rate of 0.4Hz...its probably not physically
@@ -450,22 +449,20 @@ void MainWindow::newDatas() {
   }
 
   if (mydlgSteps->ui->rbAlg3->isChecked()) {
-    if (!isCountEnd) return;
+    a3list.append((int8_t)roundf(ax * scale_factor));
+    a3list.append((int8_t)roundf(ay * scale_factor));
+    a3list.append((int8_t)roundf(az * scale_factor));
 
-    rlistX.append(ax);
-    rlistY.append(ay);
-    rlistZ.append(az);
-    if (rlistX.count() == 80) {
-      isCountEnd = false;
-      getSteps();
+    if (a3list.count() == 240) {
+      getSteps3();
+      a3list.clear();
     }
   }
 }
 
 void MainWindow::updateSteps() {
   // CurrentSteps = accel_pedometer->stepCount();
-  if (mydlgSteps->ui->rbAlg1->isChecked() ||
-      mydlgSteps->ui->rbAlg3->isChecked()) {
+  if (mydlgSteps->ui->rbAlg1->isChecked()) {
     CurrentSteps++;
     CurTableCount = mydlgSteps->getCurrentSteps();
     CurTableCount++;
@@ -474,6 +471,15 @@ void MainWindow::updateSteps() {
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
     CurrentSteps = num_steps_walk + num_steps_run + num_steps_hop;
     CurTableCount = mydlgSteps->toDayInitSteps + CurrentSteps;
+  }
+
+  if (mydlgSteps->ui->rbAlg3->isChecked()) {
+    // CurrentSteps = num_steps;
+    // CurTableCount = mydlgSteps->toDayInitSteps + CurrentSteps;
+
+    CurrentSteps++;
+    CurTableCount = mydlgSteps->getCurrentSteps();
+    CurTableCount++;
   }
 
   mydlgSteps->ui->lcdNumber->display(QString::number(CurrentSteps));
@@ -2885,7 +2891,7 @@ uint8_t count_steps(int8_t* data) {
     num_steps = (SAMPLING_RATE * WINDOW_LENGTH) / peak_ind;
 
     mw_one->updateSteps();
-    // stepChanged = true;
+
   } else {
     // not a valid autocorrelation peak
     num_steps = 0;
@@ -2894,77 +2900,23 @@ uint8_t count_steps(int8_t* data) {
   rlistX.clear();
   rlistY.clear();
   rlistZ.clear();
-  isCountEnd = true;
 
   // printf("num steps: %i\n", num_steps);
   return num_steps;
 }
 
-void MainWindow::getSteps() {
+void MainWindow::getSteps3() {
 #define NUM_SAMPLES_IN_CSV_FILE 80
 
   // hold the data from the CSV file in a fifo-like data structure where the
   // accelerometer data looks like [x1,y1,z1,x2,y2,z2...x400,y400,z400]
   int8_t acc[NUM_SAMPLES_IN_CSV_FILE * 3] = {0};
 
-  // load the CSV data. read the first line (header) separately
-  // FILE* f = fopen("/Users/hz/QtProjects/CountStepsTest/peddata.csv", "r");
-  // char s[6] = {0};
-
-  // fscanf(f, "%s,%s,%s,%s,%s", &s[0], &s[1], &s[2], &s[3], &s[4]);
-
   uint16_t i = 0;
-  float n[3] = {0};
-  float temp = 0;
 
-  // scaling factor to convert the decimal data to int8 integers. calculated in
-  // matlab by taking the absolute value of all the data and then calculating
-  // the max of that data. then divide that by 127 to get the scaling factor
-  float scale_factor = 55.3293;
+  for (; i < 240; i++) acc[i] = a3list.at(i);
 
-  uint16_t i0 = 0;
-  //  read a line at a time
-  //  while (fscanf(f, "%f,%f,%f", &n[0], &n[1], &n[2]) > 0)
-
-  for (; i < NUM_SAMPLES_IN_CSV_FILE; i++) {
-    n[0] = rlistX.at(i);
-    n[1] = rlistY.at(i);
-    n[2] = rlistZ.at(i);
-
-    i0 = i0 + 1;
-    temp = roundf(n[0] * scale_factor);
-    acc[i0] = (int8_t)temp;
-
-    // mydlgSteps->ui->lblSteps->setText(QString::number(acc[i0]) + "   " +
-    //                                   QString::number(n[1]));
-
-    i0 = i0 + 1;
-    temp = roundf(n[1] * scale_factor);
-    acc[i0] = (int8_t)temp;
-
-    i0 = i0 + 1;
-    temp = roundf(n[2] * scale_factor);
-    acc[i0] = (int8_t)temp;
-  }
-
-  //  pass data to step counting algorithm, 4 seconds at a time (which is the
-  //  WINDOW_LENGTH). put the data into a temporary buffer each loop
-  qint8 data[NUM_TUPLES * 3] = {0};
-  uint8_t num_segments =
-      NUM_SAMPLES_IN_CSV_FILE / (SAMPLING_RATE * WINDOW_LENGTH);
-  uint16_t j = 0;
-  uint8_t num_steps = 0;
-
-  for (i = 0; i < num_segments; i++) {
-    for (j = SAMPLING_RATE * WINDOW_LENGTH * i * 3;
-         j < SAMPLING_RATE * WINDOW_LENGTH * (i + 1) * 3; j++) {
-      data[j - SAMPLING_RATE * WINDOW_LENGTH * i * 3] = acc[j];
-    }
-    num_steps += count_steps(data);
-  }
-
-  mydlgSteps->ui->lblSteps->setText(tr("Current Steps") + " : " +
-                                    QString::number(num_steps));
+  num_steps += count_steps(acc);
 }
 
 void MainWindow::Sleep(int msec) {
