@@ -85,6 +85,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QVector<int8_t> a3list;
   QChartView *chartview;
   QChartView *chartview1;
   QLabel *m_valueLabel;
@@ -202,7 +203,6 @@ class MainWindow : public QMainWindow {
   void startRead(QString);
   static void drawDayChart();
   static void readDataInThread(int ExceptIndex);
-  void getSteps();
 
   void Sleep(int msec);
   void getSteps2();

@@ -54,6 +54,8 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void dlgMainNotes::saveMainNotes(bool isOpenText) {
+  return;
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setValue("/MainNotes/isOpenText", isOpenText);
 
@@ -79,6 +81,8 @@ void dlgMainNotes::saveMainNotes(bool isOpenText) {
 }
 
 void dlgMainNotes::init_MainNotes(bool isOpenText) {
+  return;
+
   QString ini_file;
   if (isImport)
     ini_file = iniFile;

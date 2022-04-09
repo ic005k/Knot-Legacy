@@ -12,6 +12,8 @@ extern QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  ui->btnLogs->hide();
+  ui->rbAlg3->hide();
 
   QFont font1;
   font1.setPointSize(15);
@@ -243,4 +245,13 @@ void dlgSteps::on_rbAlg3_clicked() {
   glistX.clear();
   glistY.clear();
   glistZ.clear();
+}
+
+void dlgSteps::on_btnLogs_clicked() {
+  mw_one->mydlgMainNotes->setFixedHeight(mw_one->height());
+  mw_one->mydlgMainNotes->setFixedWidth(mw_one->width());
+  mw_one->mydlgMainNotes->ui->textBrowser->show();
+  mw_one->mydlgMainNotes->ui->textEdit->hide();
+  mw_one->mydlgMainNotes->setModal(true);
+  mw_one->mydlgMainNotes->show();
 }

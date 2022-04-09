@@ -2,24 +2,6 @@
 #define count_steps_h
 #include "stdint.h"
 
-// 20 hz sampling rate
-#define SAMPLING_RATE 20
-
-// 80 sets of accelerometer readings (so in other words, 80*3 = 240 samples)
-#define NUM_TUPLES 80
-
-// window length in seconds
-#define WINDOW_LENGTH NUM_TUPLES / SAMPLING_RATE
-
-uint8_t num_steps = 0;
-
-// scaling factor to convert the decimal data to int8 integers. calculated in
-// matlab by taking the absolute value of all the data and then calculating
-// the max of that data. then divide that by 127 to get the scaling factor
-float scale_factor = 55.3293;
-
-uint8_t count_steps(int8_t *data);
-
 //--------------------------------------------------------------------------------
 
 #define EPSILON (1E-6)
