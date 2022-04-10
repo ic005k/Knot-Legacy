@@ -359,7 +359,7 @@ void MainWindow::newDatas() {
   az = accel_pedometer->reading()->z();
 
   countOne++;
-  if (countOne == 50) {
+  if (countOne == 2) {
     aoldZ = az;
     countOne = 0;
   }
