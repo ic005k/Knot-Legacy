@@ -451,6 +451,7 @@ void MainWindow::updateSteps() {
 
   mydlgSteps->setTableSteps(CurTableCount);
 
+  if (CurrentSteps == 0) return;
   if (QString::number(CurTableCount).length() <= 4) {
     QString strNum = QString("%1").arg(CurTableCount, 4, 10, QLatin1Char('0'));
     ui->btnMainNotes->setText(strNum);
