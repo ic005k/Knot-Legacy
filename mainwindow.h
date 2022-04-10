@@ -85,6 +85,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  ulong timeCount = 0;
   QVector<int8_t> a3list;
   QChartView *chartview;
   QChartView *chartview1;
@@ -306,6 +307,8 @@ class MainWindow : public QMainWindow {
   int spaceCount0 = 6;  //最前面的空格
   int x, y, w, h;
 
+  qreal aoldX, aoldY, aoldZ;
+  int countOne = 0;
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
   QObjectList getAllUIControls(QObject *parent);

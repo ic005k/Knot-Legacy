@@ -358,6 +358,16 @@ void MainWindow::newDatas() {
   ay = accel_pedometer->reading()->y();
   az = accel_pedometer->reading()->z();
 
+  countOne++;
+  if (countOne == 50) {
+    aoldZ = az;
+    countOne = 0;
+  }
+
+  if (qAbs(qAbs(az) - qAbs(aoldZ)) < 0.5) {
+    return;
+  }
+
   gx = gyroscope->reading()->x();
   gy = gyroscope->reading()->y();
   gz = gyroscope->reading()->z();
@@ -392,8 +402,11 @@ void MainWindow::newDatas() {
     }
   }
 
-  if (mydlgSteps->ui->rbAlg1->isChecked())
+  if (mydlgSteps->ui->rbAlg1->isChecked()) {
     accel_pedometer->runStepCountAlgorithm();
+    mydlgSteps->ui->lblSteps->setText(tr("Duration") + " : " +
+                                      secondsToTime(timeCount++ / 150));
+  }
 
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
     rlistX.append(ax);
@@ -471,7 +484,7 @@ void MainWindow::init_Options() {
   mydlgPre->ui->chkAutoTime->setChecked(
       Reg.value("/Options/AutoTimeY", true).toBool());
   mydlgPre->ui->chkShowSV->setChecked(
-      Reg.value("/Options/ShowSV", false).toBool());
+      Reg.value("/Options/ShowSV", true).toBool());
   mydlgPre->ui->rbSM1->setChecked(Reg.value("/Options/SM1", false).toBool());
   mydlgPre->ui->rbSM2->setChecked(Reg.value("/Options/SM2", true).toBool());
 }
