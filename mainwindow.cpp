@@ -41,7 +41,7 @@ static algo_out_t step_algo_output;
 static float AccBuff[NUM_DIM + 1][SAMP_BUFF_LEN];
 
 /* Number of steps during Walk, Run, and Hop motions */
-static unsigned int num_steps_walk, num_steps_run, num_steps_hop;
+unsigned int num_steps_walk, num_steps_run, num_steps_hop;
 
 QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 
@@ -358,19 +358,46 @@ void MainWindow::newDatas() {
   ay = accel_pedometer->reading()->y();
   az = accel_pedometer->reading()->z();
 
+  gx = gyroscope->reading()->x();
+  gy = gyroscope->reading()->y();
+  gz = gyroscope->reading()->z();
+
   countOne++;
-  if (countOne == 2) {
-    aoldZ = az;
-    countOne = 0;
+  if (mydlgSteps->ui->rbAlg1->isChecked()) {
+    if (countOne >= 2) {
+      aoldZ = az;
+      countOne = 0;
+    }
+  }
+  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+    if (countOne >= 150) {
+      aoldZ = az;
+      countOne = 0;
+    }
   }
 
   if (qAbs(qAbs(az) - qAbs(aoldZ)) < 0.5) {
     return;
   }
 
-  gx = gyroscope->reading()->x();
-  gy = gyroscope->reading()->y();
-  gz = gyroscope->reading()->z();
+  if (mydlgSteps->ui->rbAlg1->isChecked()) {
+    accel_pedometer->runStepCountAlgorithm();
+    mydlgSteps->ui->lblSteps->setText(tr("Duration") + " : " +
+                                      secondsToTime(timeCount++ / 150));
+  }
+
+  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+    rlistX.append(ax);
+    rlistY.append(ay);
+    rlistZ.append(az);
+    glistX.append(gx);
+    glistY.append(gy);
+    glistZ.append(gz);
+    if (rlistX.count() == 120) getSteps2();
+  }
+
+  if (mydlgSteps->ui->rbAlg3->isChecked()) {
+  }
 
   if (mydlgPre->ui->chkShowSV->isChecked()) {
     mydlgSteps->ui->lblX->setText("AX:" + QString::number(ax) + "\n" +
@@ -401,25 +428,6 @@ void MainWindow::newDatas() {
       mydlgSteps->ui->lblZ->hide();
     }
   }
-
-  if (mydlgSteps->ui->rbAlg1->isChecked()) {
-    accel_pedometer->runStepCountAlgorithm();
-    mydlgSteps->ui->lblSteps->setText(tr("Duration") + " : " +
-                                      secondsToTime(timeCount++ / 150));
-  }
-
-  if (mydlgSteps->ui->rbAlg2->isChecked()) {
-    rlistX.append(ax);
-    rlistY.append(ay);
-    rlistZ.append(az);
-    glistX.append(gx);
-    glistY.append(gy);
-    glistZ.append(gz);
-    if (rlistX.count() == 120) getSteps2();
-  }
-
-  if (mydlgSteps->ui->rbAlg3->isChecked()) {
-  }
 }
 
 void MainWindow::updateSteps() {
@@ -428,6 +436,7 @@ void MainWindow::updateSteps() {
     CurrentSteps++;
     CurTableCount = mydlgSteps->getCurrentSteps();
     CurTableCount++;
+    mydlgSteps->toDayInitSteps++;
   }
 
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
@@ -2887,9 +2896,9 @@ static unsigned int step_algo_preproc(float timestamp, float arx, float ary,
 void MainWindow::getSteps2() {
 #define MAX_CHAR_PER_LINE (120)
 
-  FILE *fpin, *fpout;
-  unsigned int rec_id = 0, sen_id = 0;
-  char date[12] = {0}, time[12] = {0};
+  // FILE *fpin, *fpout;
+  // unsigned int rec_id = 0, sen_id = 0;
+  // char date[12] = {0}, time[12] = {0};
   float arx = 0.0f, ary = 0.0f, arz = 0.0f; /* m/s^2 */
   float grx = 0.0f, gry = 0.0f, grz = 0.0f; /* rad/s */
   // float timestamp = 0.0f;                   /* sec */
@@ -2968,10 +2977,10 @@ void MainWindow::getSteps2() {
   //(NULL != fgets(line_buff, MAX_CHAR_PER_LINE, fpin))) {
   // skip_lines--;
   //}
-  if (skip_lines > 0) {
-    // printf("Cannot read first two lines of input file: %s\n", argv[2]);
-    // exit(1);
-  }
+  // if (skip_lines > 0) {
+  // printf("Cannot read first two lines of input file: %s\n", argv[2]);
+  // exit(1);
+  //}
 
   // fprintf(fpout,
   //         "RECORD, TYPE, DATE, TIME, arx, ary, arz, grx, gry, grz, "

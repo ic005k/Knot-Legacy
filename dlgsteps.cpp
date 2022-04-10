@@ -8,6 +8,7 @@ extern MainWindow* mw_one;
 extern QRegularExpression regxNumber;
 extern QString iniDir;
 extern QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
+extern unsigned int num_steps_walk, num_steps_run, num_steps_hop;
 
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
@@ -81,9 +82,13 @@ void dlgSteps::on_btnPause_clicked() {
 
 void dlgSteps::on_btnReset_clicked() {
   mw_one->accel_pedometer->resetStepCount();
+  num_steps_walk = 0;
+  num_steps_run = 0;
+  num_steps_hop = 0;
   mw_one->CurrentSteps = 0;
   ui->lcdNumber->display("0");
   mw_one->ui->btnMainNotes->setText(tr("Steps"));
+  toDayInitSteps = getCurrentSteps();
 }
 
 void dlgSteps::saveSteps() {
