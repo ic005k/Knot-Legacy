@@ -92,7 +92,8 @@ DISTFILES += \
     android/gradlew \
     android/gradlew.bat \
     android/res/values/libs.xml \
-    android/src/com/mmJavaActivity.java \
+    android/src/com/MyActivity.java \
+    android/src/com/MyService.java \
     src/AndroidManifest.xml \
     src/build.gradle \
     src/com/android/activity/mmJavaActivity.java \
