@@ -246,7 +246,7 @@ MainWindow::MainWindow(QWidget* parent)
   this->setWindowTitle("");
   tmer = new QTimer(this);
   connect(tmer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
-  // tmer->start(1000);
+  tmer->start(1000);
 
   myReadTWThread = new ReadTWThread();
   connect(myReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
@@ -714,7 +714,10 @@ void MainWindow::init_NavigateBtnColor() {
   }
 }
 
-void MainWindow::timerUpdate() {}
+void MainWindow::timerUpdate() {
+  mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
+                                           secondsToTime(timeTest++));
+}
 
 MainWindow::~MainWindow() {
   delete ui;
@@ -1245,8 +1248,8 @@ void MainWindow::closeEvent(QCloseEvent* event) {
       return;
     }
 
-    // QAndroidJniObject::callStaticMethod<int>("com/mmJavaActivity", "mini",
-    //                                          "()I");
+    QAndroidJniObject jo = QAndroidJniObject::fromString("MiniWin");
+    jo.callStaticMethod<int>("com/MyActivity", "mini", "()I");
 
     event->ignore();
   }
