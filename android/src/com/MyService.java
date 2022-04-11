@@ -26,4 +26,21 @@ public class MyService extends Service {
         super.onCreate();
         Log.i(TAG, "Service on create");//服务被创建
     }
+
+    //服务在每次启动的时候调用的方法 如果某些行为在服务已启动的时候就执行，可以把处理逻辑写在这个方法里面
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Log.d("MyService","onStartCommand()-------");
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    //服务销毁的时候调用的方法 可以回收部分不再使用的资源
+    @Override
+    public void onDestroy() {
+        Log.d("MyService","onDestroy()-------");
+        super.onDestroy();
+
+    }
 }
