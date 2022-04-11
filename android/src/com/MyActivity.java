@@ -34,7 +34,7 @@ public class MyActivity extends QtActivity {
     private static MyActivity m_instance ;
 
 
-    private SensorManager mSensorManager;
+    private  SensorManager mSensorManager;
 
     public  MyActivity()
     {
@@ -108,20 +108,21 @@ public class MyActivity extends QtActivity {
       // 释放设备电源锁
       private void releaseWakeLock_1() {
           if (null != wakeLock && wakeLock.isHeld()) {
-              //Log.i(TAG, "call releaseWakeLock");
+              Log.i(TAG, "call releaseWakeLock");
               wakeLock.release();
               wakeLock = null;
           }
       }
 
 //-----------------------------------------------------------------------
-    //private static final String TAG = "AccleratePersist";
+
     private WakeLock mWakeLock;
     private PersistService mySerivece;
     private static final int DELAY = SensorManager.SENSOR_DELAY_NORMAL;
-    public void acquireWakeLock() {
+
+    public  void acquireWakeLock() {
     //final PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-    releaseWakeLock();
+
 
    mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
    mySerivece = new PersistService();
@@ -138,7 +139,7 @@ public class MyActivity extends QtActivity {
                   DELAY);
 }
 
-public void releaseWakeLock() {
+public  void releaseWakeLock() {
 
     if (mWakeLock != null && mWakeLock.isHeld()) {
         mSensorManager.unregisterListener(mySerivece);
@@ -176,9 +177,6 @@ public void releaseWakeLock() {
         Intent bindIntent = new Intent(MyActivity.this, MyService.class);
         bindService(bindIntent, mCon, Context.BIND_AUTO_CREATE);
         startService(new Intent(bindIntent));
-
-
-
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
@@ -213,14 +211,13 @@ public void releaseWakeLock() {
     Log.i(TAG, "onDestroy...");
     releaseWakeLock();
     super.onDestroy();
-
-
     }
 //---------------------------------------------------------------------------
     private static boolean STOP = false;// 开始暂停按钮
     private StringBuilder builder = new StringBuilder();
     private TextView accView;// 显示加速度值
     private long lastTimestamp = 0;
+
     class PersistService extends Service implements SensorEventListener {
 
         private float[] accValue = new float[3];
@@ -252,9 +249,11 @@ public void releaseWakeLock() {
         }
 
         public void onSensorChanged(SensorEvent sensorEvent) {
+
             if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 Log.i(TAG, "PersistService.TYPE_ACCELEROMETER.");
-                accValue = sensorEvent.values;
+                /*accValue = sensorEvent.values;
+
                 for (int i = 0; i < 3; i++) {
                     builder.append((int) accValue[i]);
                     builder.append(",");
@@ -262,7 +261,8 @@ public void releaseWakeLock() {
                 builder.append((sensorEvent.timestamp - lastTimestamp) / 1000000);// 采样时间差
                 builder.append("\n");
                 //accView.setText(builder.toString());
-                lastTimestamp = sensorEvent.timestamp;
+                //Log.i(TAG, builder.toString());*/
+               lastTimestamp = sensorEvent.timestamp;
             }
 
         }
@@ -273,6 +273,9 @@ public void releaseWakeLock() {
         }
 
     }
+//--------------------------------------------------------------------------------
+
+
 }
 
 

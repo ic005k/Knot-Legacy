@@ -9,10 +9,16 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import android.app.Notification;
+import android.content.Intent;
+import android.app.PendingIntent;
+import android.R.mipmap;
+import android.graphics.BitmapFactory;
+
+
 public class MyService extends Service {
 
     private static final String TAG = "MyService";
-    //File imagepath;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -25,6 +31,7 @@ public class MyService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Service on create");//服务被创建
+
     }
 
     //服务在每次启动的时候调用的方法 如果某些行为在服务已启动的时候就执行，可以把处理逻辑写在这个方法里面
