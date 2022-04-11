@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import android.os.Build;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -17,14 +18,16 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.graphics.Color;
-import android.graphics.BitmapFactory;
 import android.app.NotificationChannel;
 import android.support.v4.app.NotificationCompat;
+import android.annotation.TargetApi;
 
 
 public class MyService extends Service {
 
     private static final String TAG = "MyService";
+    private static final String ID="channel_1";
+    private static final String NAME="前台服务";
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -38,6 +41,10 @@ public class MyService extends Service {
         super.onCreate();
         Log.i(TAG, "Service on create");//服务被创建
 
+        if(Build.VERSION.SDK_INT>=26){
+                    setForeground();
+        }else{
+
         Intent notificationIntent = new Intent(this, MyActivity.class);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
@@ -45,12 +52,14 @@ public class MyService extends Service {
 
         Notification notification = new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.icon)
-                        .setContentTitle("My Awesome App")
-                        .setContentText("Doing some work...")
+                        .setLargeIcon(BitmapFactory.decodeResource (getResources (),R.drawable.icon))
+                        .setContentTitle("Xcounter")
+                        .setContentText("Running...")
                         .setContentIntent(pendingIntent).build();
 
         startForeground(1337, notification);
 
+       }
     }
 
     //服务在每次启动的时候调用的方法 如果某些行为在服务已启动的时候就执行，可以把处理逻辑写在这个方法里面
@@ -69,4 +78,19 @@ public class MyService extends Service {
         super.onDestroy();
 
     }
+
+    @TargetApi (26)
+    private void setForeground(){
+       Context context;
+       NotificationManager manager=(NotificationManager)getSystemService (NOTIFICATION_SERVICE);
+       NotificationChannel channel=new NotificationChannel (ID,NAME,NotificationManager.IMPORTANCE_HIGH);
+       manager.createNotificationChannel (channel);
+       Notification notification=new Notification.Builder (this,ID)
+               .setContentTitle ("Powerful Counter")
+               .setContentText ("Running...")
+               .setSmallIcon(R.drawable.icon)//设置状态栏展示的通知样式
+               .setLargeIcon(BitmapFactory.decodeResource (getResources (),R.drawable.icon))//设置通知中的图标样式
+               .build ();
+       startForeground (1,notification);
+   }
 }

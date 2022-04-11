@@ -174,9 +174,16 @@ public  void releaseWakeLock() {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         //服务
-        Intent bindIntent = new Intent(MyActivity.this, MyService.class);
-        bindService(bindIntent, mCon, Context.BIND_AUTO_CREATE);
-        startService(new Intent(bindIntent));
+        //Intent bindIntent = new Intent(MyActivity.this, MyService.class);
+        //bindService(bindIntent, mCon, Context.BIND_AUTO_CREATE);
+        //startService(new Intent(bindIntent));
+
+        Intent start=new Intent (this,MyService.class);
+        if(Build.VERSION.SDK_INT>=26){
+            startForegroundService (start);
+        }else{
+            startService (start);
+        }
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
