@@ -94,6 +94,8 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/src/com/MyActivity.java \
     android/src/com/MyService.java \
+    android/src/com/x/MyActivity.java \
+    android/src/com/x/MyService.java \
     src/AndroidManifest.xml \
     src/build.gradle \
     src/com/android/activity/mmJavaActivity.java \

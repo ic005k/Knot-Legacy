@@ -1249,7 +1249,7 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     }
 
     QAndroidJniObject jo = QAndroidJniObject::fromString("MiniWin");
-    jo.callStaticMethod<int>("com/MyActivity", "mini", "()I");
+    jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
 
     event->ignore();
   }
