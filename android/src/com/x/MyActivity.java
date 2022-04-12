@@ -1,12 +1,14 @@
 package com.x;
 
 import org.qtproject.qt5.android.bindings.QtActivity;
+
 import android.os.Bundle;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+
 import com.x.MyService;
 
 import android.app.PendingIntent;
@@ -31,18 +33,16 @@ import android.widget.TextView;
 
 public class MyActivity extends QtActivity {
 
-    private static MyActivity m_instance ;
+    private static MyActivity m_instance;
 
 
-    private  SensorManager mSensorManager;
+    private SensorManager mSensorManager;
 
-    public  MyActivity()
-    {
+    public MyActivity() {
         m_instance = this;
     }
 
-   public static  int  mini()
-    {
+    public static int mini() {
         System.out.println("+++++++++++++++++++++++");
 
         m_instance.moveTaskToBack(true);
@@ -50,7 +50,7 @@ public class MyActivity extends QtActivity {
         return 1;
     }
 
-//------------------------------------------------------------------------
+    //------------------------------------------------------------------------
     private final static String TAG = "QtFullscreen";
     private static Context context;
 
@@ -60,8 +60,7 @@ public class MyActivity extends QtActivity {
     }
 
     //全透状态栏
-    private void setStatusBarFullTransparent()
-    {
+    private void setStatusBarFullTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明状态栏
             // 状态栏字体设置为深色，SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 为SDK23增加
@@ -74,45 +73,64 @@ public class MyActivity extends QtActivity {
         }
     }
 
-        // 非全透,带颜色的状态栏,需要指定颜色
-        private void setStatusBarColor(String color){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        // 需要安卓版本大于5.0以上
-                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                        getWindow().setStatusBarColor(Color.parseColor(color));
+    // 非全透,带颜色的状态栏,需要指定颜色
+    private void setStatusBarColor(String color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // 需要安卓版本大于5.0以上
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(Color.parseColor(color));
         }
-     }
+    }
 
-//----------------------------------------------------------------------
-    WakeLock wakeLock=null;
-         private void acquireWakeLock_1() {
-          if (null == wakeLock) {
+    //----------------------------------------------------------------------
+    public void initSensor() {
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mySerivece = new PersistService();
+        //PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        //mWakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);// CPU保存运行
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);// 屏幕熄掉后依然运行
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mySerivece.mReceiver, filter);
 
-              mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-              mySerivece = new PersistService();
+        //mWakeLock.acquire();// 屏幕熄后，CPU继续运行
+        mSensorManager.registerListener(
+                mySerivece,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                DELAY);
+    }
 
-              PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-              wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK
-                      | PowerManager.ON_AFTER_RELEASE, getClass()
-                      .getCanonicalName());
-              IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);// 屏幕熄掉后依然运行
-              filter.addAction(Intent.ACTION_SCREEN_OFF);
-              registerReceiver(mySerivece.mReceiver, filter);
+    //----------------------------------------------------------------------
+    WakeLock wakeLock = null;
 
-              if (null != wakeLock) {
-                  Log.i(TAG, "call acquireWakeLock");
-                  wakeLock.acquire();
-              }
-          }
-      }
-      // 释放设备电源锁
-      private void releaseWakeLock_1() {
-          if (null != wakeLock && wakeLock.isHeld()) {
-              Log.i(TAG, "call releaseWakeLock");
-              wakeLock.release();
-              wakeLock = null;
-          }
-      }
+    private void acquireWakeLock_1() {
+        if (null == wakeLock) {
+
+            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            mySerivece = new PersistService();
+
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK
+                    | PowerManager.ON_AFTER_RELEASE, getClass()
+                    .getCanonicalName());
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);// 屏幕熄掉后依然运行
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            registerReceiver(mySerivece.mReceiver, filter);
+
+            if (null != wakeLock) {
+                Log.i(TAG, "call acquireWakeLock");
+                wakeLock.acquire();
+            }
+        }
+    }
+
+    // 释放设备电源锁
+    private void releaseWakeLock_1() {
+        if (null != wakeLock && wakeLock.isHeld()) {
+            Log.i(TAG, "call releaseWakeLock");
+            wakeLock.release();
+            wakeLock = null;
+        }
+    }
 
 //-----------------------------------------------------------------------
 
@@ -120,34 +138,31 @@ public class MyActivity extends QtActivity {
     private PersistService mySerivece;
     private static final int DELAY = SensorManager.SENSOR_DELAY_NORMAL;
 
-    public  void acquireWakeLock() {
-    //final PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+    public void acquireWakeLock() {
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mySerivece = new PersistService();
+        PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);// CPU保存运行
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);// 屏幕熄掉后依然运行
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mySerivece.mReceiver, filter);
 
-
-   mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-   mySerivece = new PersistService();
-   PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-   mWakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);// CPU保存运行
-   IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);// 屏幕熄掉后依然运行
-   filter.addAction(Intent.ACTION_SCREEN_OFF);
-   registerReceiver(mySerivece.mReceiver, filter);
-
-   mWakeLock.acquire();// 屏幕熄后，CPU继续运行
-   mSensorManager.registerListener(
-                  mySerivece,
-                  mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                  DELAY);
-}
-
-public  void releaseWakeLock() {
-
-    if (mWakeLock != null && mWakeLock.isHeld()) {
-        mSensorManager.unregisterListener(mySerivece);
-        mWakeLock.release();
-        mWakeLock = null;
-        Log.i(TAG, "call releaseWakeLock");
+        mWakeLock.acquire();// 屏幕熄后，CPU继续运行
+        mSensorManager.registerListener(
+                mySerivece,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                DELAY);
     }
-}
+
+    public void releaseWakeLock() {
+
+        if (mWakeLock != null && mWakeLock.isHeld()) {
+            mSensorManager.unregisterListener(mySerivece);
+            mWakeLock.release();
+            mWakeLock = null;
+            Log.i(TAG, "call releaseWakeLock");
+        }
+    }
 
 //-----------------------------------------------------------------------
 
@@ -156,14 +171,15 @@ public  void releaseWakeLock() {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //电源锁
+        //唤醒锁
         //acquireWakeLock();
+        //initSensor();
 
         //状态栏
         // 获取程序句柄
         context = getApplicationContext();
-       // 设置状态栏颜色,需要安卓版本大于5.0
-       // this.setStatusBarColor("#FF4040"); //红
+        // 设置状态栏颜色,需要安卓版本大于5.0
+        // this.setStatusBarColor("#FF4040"); //红
         this.setStatusBarColor("#DDDDDD");  //灰
         // 设置状态栏全透明
         // this.setStatusBarFullTransparent();
@@ -171,15 +187,15 @@ public  void releaseWakeLock() {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         //服务
-        Intent bindIntent = new Intent (MyActivity.this , MyService.class);
-        if(Build.VERSION.SDK_INT>=26){
-            startForegroundService (bindIntent);
+        Intent bindIntent = new Intent(MyActivity.this, MyService.class);
+        if (Build.VERSION.SDK_INT >= 26) {
+            startForegroundService(bindIntent);
 
-
-        }else{
+        } else {
             bindService(bindIntent, mCon, Context.BIND_AUTO_CREATE);
-            startService (new Intent(bindIntent));
+            startService(new Intent(bindIntent));
         }
+
         MyService.notify(getApplicationContext(), "Hello");
 
     }
@@ -202,22 +218,22 @@ public  void releaseWakeLock() {
         System.out.println("Pause...");
         super.onPause();
 
-        }
+    }
 
     @Override
     public void onStop() {
         System.out.println("Stop...");
         super.onStop();
-
-        }
+    }
 
     @Override
     protected void onDestroy() {
-    Log.i(TAG, "onDestroy...");
-    releaseWakeLock();
-    super.onDestroy();
+        Log.i(TAG, "onDestroy...");
+        releaseWakeLock();
+        super.onDestroy();
     }
-//---------------------------------------------------------------------------
+
+    //---------------------------------------------------------------------------
     private static boolean STOP = false;// 开始暂停按钮
     private StringBuilder builder = new StringBuilder();
     private TextView accView;// 显示加速度值
@@ -253,34 +269,65 @@ public  void releaseWakeLock() {
             Log.i(TAG, "PersistService.onAccuracyChanged().");
         }
 
+        int count = 0;
+        double ax, ay, az;
+
         public void onSensorChanged(SensorEvent sensorEvent) {
 
             if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                //Log.i(TAG, "PersistService.TYPE_ACCELEROMETER.");
-                /*accValue = sensorEvent.values;
+                /*Log.i(TAG, "PersistService.TYPE_ACCELEROMETER.");
+                accValue = sensorEvent.values;
+                ax=accValue[0];
+                ay=accValue[1];
+                az=accValue[2];
+                count++;
+                if(count>=5000)
+                {
+                    count = 0;
+                    if(ax==0&&ay==0&&az==0)
+                    {
+                        regSensor();
+                    }
 
-                for (int i = 0; i < 3; i++) {
+                }*/
+
+                /*for (int i = 0; i < 3; i++) {
                     builder.append((int) accValue[i]);
                     builder.append(",");
+
                 }
                 builder.append((sensorEvent.timestamp - lastTimestamp) / 1000000);// 采样时间差
                 builder.append("\n");
                 //accView.setText(builder.toString());
-                //Log.i(TAG, builder.toString());*/
-               lastTimestamp = sensorEvent.timestamp;
+                Log.i(TAG, builder.toString());*/
+
+                lastTimestamp = sensorEvent.timestamp;
             }
 
         }
+
         @Override
         public IBinder onBind(Intent intent) {
-            // TODO Auto-generated method stub
+            // Auto-generated method stub
             return null;
+        }
+
+        public void regSensor() {
+            if (mSensorManager != null) {//取消监听后重写监听，以保持后台运行
+                mSensorManager.unregisterListener(PersistService.this);
+                mSensorManager
+                        .registerListener(
+                                PersistService.this,
+                                mSensorManager
+                                        .getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                                SensorManager.SENSOR_DELAY_NORMAL);
+
+                Log.i(TAG, "PersistService.RegisterListener");
+            }
         }
 
     }
 //--------------------------------------------------------------------------------
-
-
 
 
 }
