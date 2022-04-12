@@ -31,7 +31,7 @@ public class MyService extends Service {
 
     @Override
     public IBinder onBind(Intent arg0) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         Log.i(TAG, "Service on bind");//服务被绑定
         return null;
     }
@@ -93,4 +93,43 @@ public class MyService extends Service {
                .build ();
        startForeground (1,notification);
    }
+
+    //----------------------------------------------
+    private static NotificationManager m_notificationManager;
+    private static Notification.Builder m_builder;
+
+    public static void notify(Context context, String message) {
+    try {
+        m_notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            //int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_LOW; //这个低频道不包含任何声音，达到静音的效果
+            NotificationChannel notificationChannel = new NotificationChannel("XCounter", "XCounter Notifier", importance);
+            //notificationChannel.setSound(null, null);//设置频道静音
+            m_notificationManager.createNotificationChannel(notificationChannel);
+
+            m_builder = new Notification.Builder(context, notificationChannel.getId());
+            //m_builder.setOnlyAlertOnce(true);
+        } else {
+            m_builder = new Notification.Builder(context);
+        }
+
+        m_builder.setContentTitle("Pedometer")
+                 .setContentText(message)
+                 .setSmallIcon(R.drawable.icon)
+                 .setColor(Color.GREEN)
+                 .setAutoCancel(true);
+                //.setDefaults(Notification.DEFAULT_LIGHTS)
+                //.setSmallIcon(R.drawable.icon)
+                //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
+
+        m_notificationManager.notify(0, m_builder.build());
+
+
+      //startForeground(1,m_builder.build());
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+  }
 }

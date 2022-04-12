@@ -157,44 +157,42 @@ public  void releaseWakeLock() {
         super.onCreate(savedInstanceState);
 
         //电源锁
-        acquireWakeLock();
+        //acquireWakeLock();
 
         //状态栏
         // 获取程序句柄
         context = getApplicationContext();
-
        // 设置状态栏颜色,需要安卓版本大于5.0
        // this.setStatusBarColor("#FF4040"); //红
         this.setStatusBarColor("#DDDDDD");  //灰
-
         // 设置状态栏全透明
         // this.setStatusBarFullTransparent();
-
         //状态栏文字自适应
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         //服务
-        //Intent bindIntent = new Intent(MyActivity.this, MyService.class);
-        //bindService(bindIntent, mCon, Context.BIND_AUTO_CREATE);
-        //startService(new Intent(bindIntent));
-
-        Intent start=new Intent (this,MyService.class);
+        Intent bindIntent = new Intent (MyActivity.this , MyService.class);
         if(Build.VERSION.SDK_INT>=26){
-            startForegroundService (start);
+            startForegroundService (bindIntent);
+
+
         }else{
-            startService (start);
+            bindService(bindIntent, mCon, Context.BIND_AUTO_CREATE);
+            startService (new Intent(bindIntent));
         }
+        MyService.notify(getApplicationContext(), "Hello");
+
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-            // TODO Auto-generated method stub
+            // Auto-generated method stub
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            // TODO Auto-generated method stub
+            // Auto-generated method stub
 
         }
     };
@@ -281,6 +279,8 @@ public  void releaseWakeLock() {
 
     }
 //--------------------------------------------------------------------------------
+
+
 
 
 }
