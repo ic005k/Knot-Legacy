@@ -21,6 +21,10 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
   ui->textBrowser->setHidden(true);
+
+  ui->btnOpenText->hide();
+  ui->btnCloseText->hide();
+  ui->btnLastBrowse->hide();
 }
 
 dlgMainNotes::~dlgMainNotes() { delete ui; }
@@ -76,8 +80,6 @@ void dlgMainNotes::saveMainNotes(bool isOpenText) {
     Reg.setValue("/MainNotes/" + fileName + "-OpenCurPos", curPos);
     Reg.setValue("/MainNotes/" + fileName + "-OpenSlidePos", sliderPos);
   }
-
-  ui->lblInfo->setText(tr("Position") + " : " + QString::number(sliderPos));
 }
 
 void dlgMainNotes::init_MainNotes(bool isOpenText) {
@@ -119,8 +121,6 @@ void dlgMainNotes::init_MainNotes(bool isOpenText) {
     ui->textBrowser->setHidden(false);
     ui->textEdit->setHidden(true);
   }
-
-  ui->lblInfo->setText(tr("Position") + " : " + QString::number(sliderPos));
 }
 
 void dlgMainNotes::on_btnOpenText_clicked() {
@@ -150,6 +150,4 @@ void dlgMainNotes::on_btnLastBrowse_clicked() {
 
 void dlgMainNotes::on_textBrowser_cursorPositionChanged() {
   sliderPos = ui->textBrowser->verticalScrollBar()->sliderPosition();
-
-  ui->lblInfo->setText(tr("Position") + " : " + QString::number(sliderPos));
 }

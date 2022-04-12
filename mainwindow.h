@@ -85,6 +85,8 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  int testCount1 = 0;
+  int testCount = 0;
   ulong timeTest = 0;
   ulong timeCount = 0;
   QVector<int8_t> a3list;

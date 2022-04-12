@@ -358,9 +358,26 @@ void MainWindow::newDatas() {
   ay = accel_pedometer->reading()->y();
   az = accel_pedometer->reading()->z();
 
-  gx = gyroscope->reading()->x();
-  gy = gyroscope->reading()->y();
-  gz = gyroscope->reading()->z();
+  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+    gx = gyroscope->reading()->x();
+    gy = gyroscope->reading()->y();
+    gz = gyroscope->reading()->z();
+  }
+
+  testCount1++;
+  if (testCount1 >= 6000) {
+    testCount1 = 0;
+    testCount++;
+    QString s0, s1, s2;
+    s1 = "ax:" + QString::number(ax) + "  " + "ay:" + QString::number(ay) +
+         "  " + "az:" + QString::number(az);
+    s2 = "gx:" + QString::number(gx) + "  " + "gy:" + QString::number(gy) +
+         "  " + "gz:" + QString::number(gz);
+    s0 = QTime::currentTime().toString();
+    mydlgMainNotes->ui->textBrowser->append(s0 + " : " + s1 + "  " + s2);
+    mydlgMainNotes->ui->textBrowser->append("");
+    if (testCount >= 720) mydlgMainNotes->ui->textBrowser->clear();
+  }
 
   countOne++;
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
@@ -457,6 +474,14 @@ void MainWindow::updateSteps() {
     ui->btnMainNotes->setText(strNum);
   } else
     ui->btnMainNotes->setText(QString::number(CurTableCount));
+
+  QString strNotify =
+      tr("Today's steps") + " : " + QString::number(CurTableCount);
+  QAndroidJniObject javaNotification = QAndroidJniObject::fromString(strNotify);
+  QAndroidJniObject::callStaticMethod<void>(
+      "com/x/MyService", "notify",
+      "(Landroid/content/Context;Ljava/lang/String;)V",
+      QtAndroid::androidContext().object(), javaNotification.object<jstring>());
 }
 
 void MainWindow::init_Options() {
