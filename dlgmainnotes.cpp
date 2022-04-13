@@ -17,14 +17,22 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
 
+  vScrollBar = new SmoothScrollBar();
+  vScrollBar->setOrientation(Qt::Orientation::Vertical);  //将滚动条设置为纵向
+  ui->textBrowser->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
-  ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  vScrollBar->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
   ui->textBrowser->setHidden(true);
 
-  ui->btnOpenText->hide();
+  // ui->btnOpenText->hide();
   ui->btnCloseText->hide();
   ui->btnLastBrowse->hide();
+}
+
+void dlgMainNotes::wheelEvent(QWheelEvent* e) {
+  //当捕获到事件后，调用相对滚动的槽函数
+  vScrollBar->scroll(e->angleDelta().y());
 }
 
 dlgMainNotes::~dlgMainNotes() { delete ui; }

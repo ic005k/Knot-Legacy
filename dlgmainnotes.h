@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QPlainTextEdit>
+
+#include "smoothscrollbar.h"
 namespace Ui {
 class dlgMainNotes;
 }
@@ -38,6 +40,8 @@ class dlgMainNotes : public QDialog {
   void on_textBrowser_cursorPositionChanged();
 
  private:
+  SmoothScrollBar *vScrollBar;
+  void wheelEvent(QWheelEvent *e);  //捕获鼠标滚轮事件
 };
 
 #endif  // DLGMAINNOTES_H

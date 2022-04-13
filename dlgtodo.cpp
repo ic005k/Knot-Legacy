@@ -1,6 +1,7 @@
 #include "dlgtodo.h"
 
 #include "mainwindow.h"
+#include "smoothscrollbar.h"
 #include "ui_dlgtodo.h"
 
 QString highLblStyle = "background-color: rgb(255, 239, 219);color:black";
@@ -17,6 +18,7 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
 
   mylist = new QListWidget;
   mylist = ui->listWidget;
+
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);

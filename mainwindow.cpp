@@ -261,6 +261,7 @@ MainWindow::MainWindow(QWidget* parent)
 
   ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->frame_find->setHidden(true);
+  ui->frameYear->hide();
 
   ui->progBar->setStyleSheet(
       "QProgressBar{border:0px solid #FFFFFF;"
@@ -375,8 +376,9 @@ void MainWindow::newDatas() {
       s2 = "gx:" + QString::number(gx) + "  " + "gy:" + QString::number(gy) +
            "  " + "gz:" + QString::number(gz);
       s0 = QTime::currentTime().toString();
-      mydlgMainNotes->ui->textBrowser->append(s0 + " : " + s1 + "  " + s2);
-      mydlgMainNotes->ui->textBrowser->append("");
+      mydlgMainNotes->ui->textBrowser->append(s0 + " : " + s1 + "  " + s2 +
+                                              "\n");
+
       if (testCount >= 720) mydlgMainNotes->ui->textBrowser->clear();
     }
   }
@@ -477,6 +479,7 @@ void MainWindow::updateSteps() {
   }  // else
      // ui->btnMainNotes->setText(QString::number(CurTableCount));
 
+#ifdef Q_OS_ANDROID
   QString strNotify =
       tr("Today's steps") + " : " + QString::number(CurTableCount);
   QAndroidJniObject javaNotification = QAndroidJniObject::fromString(strNotify);
@@ -484,6 +487,7 @@ void MainWindow::updateSteps() {
       "com/x/MyService", "notify",
       "(Landroid/content/Context;Ljava/lang/String;)V",
       QtAndroid::androidContext().object(), javaNotification.object<jstring>());
+#endif
 }
 
 void MainWindow::init_Options() {
@@ -1276,8 +1280,10 @@ void MainWindow::closeEvent(QCloseEvent* event) {
       return;
     }
 
+#ifdef Q_OS_ANDROID
     QAndroidJniObject jo = QAndroidJniObject::fromString("MiniWin");
     jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
+#endif
 
     event->ignore();
   }
@@ -2114,6 +2120,7 @@ void MainWindow::on_actionView_App_Data_triggered() {
 void MainWindow::on_btnFind_clicked() {
   if (ui->frame_find->isHidden()) {
     ui->frame_find->setHidden(false);
+    ui->frameYear->show();
     ui->btnPlus->setHidden(true);
     ui->btnLess->setHidden(true);
     ui->btnTodo->setHidden(true);
@@ -2121,6 +2128,7 @@ void MainWindow::on_btnFind_clicked() {
     ui->btnMainNotes->setHidden(true);
   } else {
     ui->frame_find->setHidden(true);
+    ui->frameYear->hide();
     ui->btnPlus->setHidden(false);
     ui->btnLess->setHidden(false);
     ui->btnTodo->setHidden(false);
@@ -2362,10 +2370,14 @@ void MainWindow::on_btnMax_clicked() {
   if (ui->btnMax->text() == tr("Max")) {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(true);
+    ui->frame_find->show();
+    ui->frameYear->hide();
     ui->btnMax->setText(tr("Min"));
   } else if (ui->btnMax->text() == tr("Min")) {
     ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
     ui->frame_charts->setHidden(false);
+    ui->frame_find->hide();
+    ui->frameYear->hide();
     ui->btnMax->setText(tr("Max"));
   }
 }

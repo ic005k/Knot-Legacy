@@ -306,8 +306,6 @@ class MainWindow : public QMainWindow {
   void on_rbSteps_clicked();
 
  private:
-  int spaceCount = 18;
-  int spaceCount0 = 6;  //最前面的空格
   int x, y, w, h;
 
   qreal aoldX, aoldY, aoldZ;
@@ -320,7 +318,7 @@ class MainWindow : public QMainWindow {
   void init_TabNavigate();
   void init_NavigateBtnColor();
 
-  QString treeStyle = "QTreeWidget::item {height: 25;}";
+  QString treeStyle = "QTreeWidget::item {height: 28;}";
   //"QTreeWidget::item {background-color: #ffffff;color: #000000;border: "
   //"transparent;border-bottom: 1px solid #dbdbdb; padding: 2px;height: 20;}"
   //"QTreeWidget::item:hover {background-color: #f5f5f5;}"

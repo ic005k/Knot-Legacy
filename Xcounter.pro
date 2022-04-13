@@ -11,9 +11,13 @@ CONFIG += c++11
 ICON = src/icon.icns
 TRANSLATIONS += cn.ts
 
+unix:!macx:{
+    QT += androidextras
+}
+
 android
 {
-QT += androidextras
+
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 dataFiles.files+=src/readme.txt
 #dataFiles.files+=src/Xcount.ini
@@ -41,6 +45,7 @@ SOURCES += \
     dlgtodo.cpp \
     main.cpp \
     mainwindow.cpp \
+    smoothscrollbar.cpp \
     specialaccelerometerpedometer.cpp
 
 HEADERS += \
@@ -55,6 +60,7 @@ HEADERS += \
     dlgsteps.h \
     dlgtodo.h \
     mainwindow.h \
+    smoothscrollbar.h \
     specialaccelerometerpedometer.h
 
 FORMS += \
