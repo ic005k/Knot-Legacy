@@ -202,6 +202,20 @@ QRadioButton::indicator:checked {
       <string>Additional Options</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="chkShowSV">
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
+    /* 选择框尺寸 */
+    width:22px;
+    height:22px;
+}</string>
+        </property>
+        <property name="text">
+         <string>Display of sensor values</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="chkAutoTime">
         <property name="styleSheet">
@@ -233,8 +247,8 @@ QRadioButton::indicator:checked {
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="chkShowSV">
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="chkLogs">
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
@@ -243,7 +257,7 @@ QRadioButton::indicator:checked {
 }</string>
         </property>
         <property name="text">
-         <string>Display of sensor values</string>
+         <string>Logs</string>
         </property>
        </widget>
       </item>

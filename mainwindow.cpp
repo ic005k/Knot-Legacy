@@ -364,19 +364,21 @@ void MainWindow::newDatas() {
     gz = gyroscope->reading()->z();
   }
 
-  testCount1++;
-  if (testCount1 >= 6000) {
-    testCount1 = 0;
-    testCount++;
-    QString s0, s1, s2;
-    s1 = "ax:" + QString::number(ax) + "  " + "ay:" + QString::number(ay) +
-         "  " + "az:" + QString::number(az);
-    s2 = "gx:" + QString::number(gx) + "  " + "gy:" + QString::number(gy) +
-         "  " + "gz:" + QString::number(gz);
-    s0 = QTime::currentTime().toString();
-    mydlgMainNotes->ui->textBrowser->append(s0 + " : " + s1 + "  " + s2);
-    mydlgMainNotes->ui->textBrowser->append("");
-    if (testCount >= 720) mydlgMainNotes->ui->textBrowser->clear();
+  if (mydlgPre->ui->chkLogs->isChecked()) {
+    testCount1++;
+    if (testCount1 >= 8000) {
+      testCount1 = 0;
+      testCount++;
+      QString s0, s1, s2;
+      s1 = "ax:" + QString::number(ax) + "  " + "ay:" + QString::number(ay) +
+           "  " + "az:" + QString::number(az);
+      s2 = "gx:" + QString::number(gx) + "  " + "gy:" + QString::number(gy) +
+           "  " + "gz:" + QString::number(gz);
+      s0 = QTime::currentTime().toString();
+      mydlgMainNotes->ui->textBrowser->append(s0 + " : " + s1 + "  " + s2);
+      mydlgMainNotes->ui->textBrowser->append("");
+      if (testCount >= 720) mydlgMainNotes->ui->textBrowser->clear();
+    }
   }
 
   countOne++;
@@ -520,6 +522,11 @@ void MainWindow::init_Options() {
       Reg.value("/Options/AutoTimeY", true).toBool());
   mydlgPre->ui->chkShowSV->setChecked(
       Reg.value("/Options/ShowSV", true).toBool());
+  mydlgPre->ui->chkLogs->setChecked(Reg.value("/Options/Logs", false).toBool());
+  if (mydlgPre->ui->chkLogs->isChecked())
+    mydlgSteps->ui->btnLogs->show();
+  else
+    mydlgSteps->ui->btnLogs->hide();
   mydlgPre->ui->rbSM1->setChecked(Reg.value("/Options/SM1", false).toBool());
   mydlgPre->ui->rbSM2->setChecked(Reg.value("/Options/SM2", true).toBool());
 }

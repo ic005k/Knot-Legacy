@@ -13,7 +13,6 @@ extern unsigned int num_steps_walk, num_steps_run, num_steps_hop;
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
   this->installEventFilter(this);
-  ui->btnLogs->hide();
   ui->rbAlg3->hide();
 
   QFont font1;

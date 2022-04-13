@@ -48,6 +48,7 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/SM1", ui->rbSM1->isChecked());
   Reg.setValue("/Options/SM2", ui->rbSM2->isChecked());
   Reg.setValue("/Options/ShowSV", ui->chkShowSV->isChecked());
+  Reg.setValue("/Options/Logs", ui->chkLogs->isChecked());
 }
 
 void dlgPreferences::on_rb0_clicked() { isFontChange = true; }
@@ -62,4 +63,11 @@ void dlgPreferences::on_rbSM1_clicked() {
 
 void dlgPreferences::on_rbSM2_clicked() {
   mw_one->accel_pedometer->setAccelerationMode(QAccelerometer::User);
+}
+
+void dlgPreferences::on_chkLogs_clicked(bool checked) {
+  if (checked) {
+    mw_one->mydlgSteps->ui->btnLogs->show();
+  } else
+    mw_one->mydlgSteps->ui->btnLogs->hide();
 }

@@ -35,6 +35,8 @@ class dlgPreferences : public QDialog {
 
   void on_rbSM2_clicked();
 
+  void on_chkLogs_clicked(bool checked);
+
  private:
 };
 

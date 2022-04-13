@@ -44,19 +44,6 @@ void dlgMainNotes::on_btnBack_clicked() {
   close();
 }
 
-bool dlgMainNotes::eventFilter(QObject* obj, QEvent* event) {
-  if (obj == ui->textEdit) {
-    if (event->type() == QInputMethodEvent::Enter) {
-      qDebug() << "Show";
-    }
-    if (event->type() == QInputMethodEvent::Close) {
-      qDebug() << "Close";
-    }
-  }
-
-  return QWidget::eventFilter(obj, event);
-}
-
 void dlgMainNotes::saveMainNotes(bool isOpenText) {
   return;
 
@@ -150,4 +137,16 @@ void dlgMainNotes::on_btnLastBrowse_clicked() {
 
 void dlgMainNotes::on_textBrowser_cursorPositionChanged() {
   sliderPos = ui->textBrowser->verticalScrollBar()->sliderPosition();
+}
+
+bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
+  if (evn->type() == QEvent::KeyPress) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      on_btnBack_clicked();
+      return true;
+    }
+  }
+
+  return QWidget::eventFilter(obj, evn);
 }
