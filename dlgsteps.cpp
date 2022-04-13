@@ -14,6 +14,7 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
   this->installEventFilter(this);
   ui->rbAlg3->hide();
+  ui->lblSingle->adjustSize();
 
   QFont font1;
   font1.setPointSize(15);
@@ -28,10 +29,6 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
       new QRegularExpressionValidator(regxNumber, ui->editTangentLineIntercept);
   ui->editTangentLineIntercept->setValidator(validator);
   ui->editTangentLineSlope->setValidator(validator);
-
-  ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
-  ui->textEdit->setHidden(true);
 
   for (int y = 0; y < ui->tableWidget->columnCount(); y++) {
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(
@@ -85,7 +82,7 @@ void dlgSteps::on_btnReset_clicked() {
   num_steps_run = 0;
   num_steps_hop = 0;
   mw_one->CurrentSteps = 0;
-  ui->lcdNumber->display("0");
+  ui->lblSingle->setText("0");
   mw_one->ui->btnMainNotes->setText(tr("Steps"));
   toDayInitSteps = getCurrentSteps();
 }
@@ -94,7 +91,6 @@ void dlgSteps::saveSteps() {
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
   Reg.setValue("/Steps/Intercept", ui->editTangentLineIntercept->text());
   Reg.setValue("/Steps/Slope", ui->editTangentLineSlope->text());
-  Reg.setValue("/Steps/Text", ui->textEdit->toPlainText());
   Reg.setValue("/Steps/Alg1", ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Alg2", ui->rbAlg2->isChecked());
   Reg.setValue("/Steps/Alg3", ui->rbAlg3->isChecked());
@@ -120,7 +116,6 @@ void dlgSteps::init_Steps() {
       Reg.value("/Steps/Intercept", dleInter).toString());
   ui->editTangentLineSlope->setText(
       Reg.value("/Steps/Slope", dleSlope).toString());
-  ui->textEdit->setPlainText(Reg.value("/Steps/Text").toString());
   ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
   ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
   ui->rbAlg3->setChecked(Reg.value("Steps/Alg3", false).toBool());

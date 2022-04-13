@@ -318,12 +318,12 @@ MainWindow::MainWindow(QWidget* parent)
   ui->btnLess->setIconSize(QSize(s, s));
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnMax->setIconSize(QSize(s, s));
+  ui->btnMainNotes->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
   ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
   ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
-  ui->btnTodo->setFixedHeight(s + 7);
-  ui->btnMainNotes->setFixedHeight(s + 7);
+  ui->btnMainNotes->setIcon(QIcon(":/src/step.png"));
   ui->btnZoom->hide();
   ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
   QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
@@ -466,16 +466,16 @@ void MainWindow::updateSteps() {
   if (mydlgSteps->ui->rbAlg3->isChecked()) {
   }
 
-  mydlgSteps->ui->lcdNumber->display(QString::number(CurrentSteps));
-
+  mydlgSteps->ui->lcdNumber->display(QString::number(CurTableCount));
+  mydlgSteps->ui->lblSingle->setText(QString::number(CurrentSteps));
   mydlgSteps->setTableSteps(CurTableCount);
 
   if (CurrentSteps == 0) return;
   if (QString::number(CurTableCount).length() <= 4) {
-    QString strNum = QString("%1").arg(CurTableCount, 4, 10, QLatin1Char('0'));
-    ui->btnMainNotes->setText(strNum);
-  } else
-    ui->btnMainNotes->setText(QString::number(CurTableCount));
+    // QString strNum = QString("%1").arg(CurTableCount, 4, 10,
+    // QLatin1Char('0')); ui->btnMainNotes->setText(strNum);
+  }  // else
+     // ui->btnMainNotes->setText(QString::number(CurTableCount));
 
   QString strNotify =
       tr("Today's steps") + " : " + QString::number(CurTableCount);
@@ -824,11 +824,6 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       else
         item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
 
-      // QLabel* lblDesc = new QLabel(this);
-      // lblDesc->setText(strDesc);
-      // lblDesc->adjustSize();
-      // lblDesc->setWordWrap(true);
-      // tw->setItemWidget(item11, 2, lblDesc);
       item11->setText(2, strDesc);
 
       int childCount = topItem->childCount();
@@ -963,7 +958,8 @@ void MainWindow::on_btnPlus_clicked() {
   mydlgSetTime->setModal(true);
   mydlgSetTime->ui->lblTitle->setText(
       tr("Add") + "  : " + tabData->tabText(tabData->currentIndex()));
-  mydlgSetTime->ui->timeEdit->setTime(QTime::currentTime());
+  mydlgSetTime->ui->dialH->setValue(QTime::currentTime().hour());
+  mydlgSetTime->ui->dialM->setValue(QTime::currentTime().minute());
   mydlgSetTime->ui->editDesc->setText("");
   mydlgSetTime->ui->editAmount->setText("");
   mydlgSetTime->show();
@@ -1587,8 +1583,7 @@ void MainWindow::set_Time() {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   QTreeWidgetItem* item = tw->currentItem();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
-    QString time = mydlgSetTime->ui->timeEdit->text();
-    item->setText(0, time);
+    item->setText(0, mydlgSetTime->ui->lblTime->text());
     QString sa = mydlgSetTime->ui->editAmount->text().trimmed();
     if (sa == "")
       item->setText(1, "");
@@ -1670,8 +1665,9 @@ void MainWindow::on_twItemDoubleClicked() {
     QTime time;
     time.setHMS(sh.toInt(), sm.toInt(), ss.toInt());
     mydlgSetTime->ui->lblTitle->setText(
-        tr("Modify") + +"  : " + tabData->tabText(tabData->currentIndex()));
-    mydlgSetTime->ui->timeEdit->setTime(time);
+        tr("Modify") + "  : " + tabData->tabText(tabData->currentIndex()));
+    mydlgSetTime->ui->dialH->setValue(sh.toInt());
+    mydlgSetTime->ui->dialM->setValue(sm.toInt());
 
     QString str = item->text(1);
     if (str == "0.00")

@@ -22,6 +22,8 @@ class dlgSetTime : public QDialog {
 
   void init_Desc();
 
+  void getTime(int h, int m);
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
  private slots:
@@ -43,6 +45,10 @@ class dlgSetTime : public QDialog {
   void on_btnDel_clicked();
 
   void on_btnCustom_clicked();
+
+  void on_dialH_valueChanged(int value);
+
+  void on_dialM_valueChanged(int value);
 
  private:
   void set_Amount(QString Number);

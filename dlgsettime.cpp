@@ -14,7 +14,6 @@ dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
   ui->setupUi(this);
   QFont font;
-  font.setPixelSize(30);
   font.setBold(true);
   ui->editAmount->setFont(font);
   ui->btn0->setFont(font);
@@ -50,11 +49,11 @@ void dlgSetTime::on_btnOk_clicked() {
     if (mw_one->isTesting) {
       for (int i = 0; i < 500; i++)
         mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
-                         ui->timeEdit->text(), ui->editAmount->text().trimmed(),
+                         ui->lblTime->text(), ui->editAmount->text().trimmed(),
                          ui->editDesc->text().trimmed());
     } else
       mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
-                       ui->timeEdit->text(), ui->editAmount->text().trimmed(),
+                       ui->lblTime->text(), ui->editAmount->text().trimmed(),
                        ui->editDesc->text().trimmed());
   }
 
@@ -183,4 +182,25 @@ void dlgSetTime::init_Desc() {
     mw_one->mydlgList->ui->listWidget->addItem(
         RegDesc.value("/CustomDesc/Item" + QString::number(i)).toString());
   }
+}
+
+void dlgSetTime::on_dialH_valueChanged(int value) {
+  getTime(value, ui->dialM->value());
+}
+
+void dlgSetTime::getTime(int h, int m) {
+  QString strh, strm;
+  if (h < 10)
+    strh = "0" + QString::number(h);
+  else
+    strh = QString::number(h);
+  if (m < 10)
+    strm = "0" + QString::number(m);
+  else
+    strm = QString::number(m);
+  ui->lblTime->setText(strh + ":" + strm + ":00");
+}
+
+void dlgSetTime::on_dialM_valueChanged(int value) {
+  getTime(ui->dialH->value(), value);
 }

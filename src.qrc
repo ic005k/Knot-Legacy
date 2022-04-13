@@ -19,5 +19,6 @@
         <file>src/opentxt.png</file>
         <file>src/remarks.png</file>
         <file>src/zoom.png</file>
+        <file>src/step.png</file>
     </qresource>
 </RCC>
