@@ -25,7 +25,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
   ui->textBrowser->setHidden(true);
 
-  // ui->btnOpenText->hide();
+  ui->btnOpenText->hide();
   ui->btnCloseText->hide();
   ui->btnLastBrowse->hide();
 }
