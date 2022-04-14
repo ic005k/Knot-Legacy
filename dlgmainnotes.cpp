@@ -19,9 +19,9 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
   vScrollBar = new SmoothScrollBar();
   vScrollBar->setOrientation(Qt::Orientation::Vertical);  //将滚动条设置为纵向
-  ui->textBrowser->setVerticalScrollBar(vScrollBar);
+  // ui->textBrowser->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
-  vScrollBar->setStyleSheet(mw_one->vsbarStyleSmall);
+  ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
   ui->textBrowser->setHidden(true);
 

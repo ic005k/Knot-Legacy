@@ -89,7 +89,9 @@ void MainWindow::ReadChartData() {
   if (tabChart->currentIndex() == 0) {
     drawMonthChart();
   }
-  if (tabChart->currentIndex() == 1) drawDayChart();
+  if (tabChart->currentIndex() == 1) {
+    drawDayChart();
+  }
   get_Today(tw);
   init_Stats(tw);
 }
@@ -244,9 +246,11 @@ MainWindow::MainWindow(QWidget* parent)
   loading = true;
   ui->statusbar->setHidden(true);
   this->setWindowTitle("");
-  tmer = new QTimer(this);
-  connect(tmer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
-  tmer->start(1000);
+  timer = new QTimer(this);
+  connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
+  timer->start(1000);
+  timerStep = new QTimer(this);
+  connect(timerStep, SIGNAL(timeout()), this, SLOT(timerUpdateStep()));
 
   myReadTWThread = new ReadTWThread();
   connect(myReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
@@ -353,17 +357,8 @@ MainWindow::MainWindow(QWidget* parent)
 }
 
 void MainWindow::newDatas() {
-  qreal ax, ay, az, gx, gy, gz;
-
-  ax = accel_pedometer->reading()->x();
-  ay = accel_pedometer->reading()->y();
+  ax = ay = az = gx = gy = gz = 0;
   az = accel_pedometer->reading()->z();
-
-  if (mydlgSteps->ui->rbAlg2->isChecked()) {
-    gx = gyroscope->reading()->x();
-    gy = gyroscope->reading()->y();
-    gz = gyroscope->reading()->z();
-  }
 
   if (mydlgPre->ui->chkLogs->isChecked()) {
     testCount1++;
@@ -375,11 +370,14 @@ void MainWindow::newDatas() {
            "  " + "az:" + QString::number(az);
       s2 = "gx:" + QString::number(gx) + "  " + "gy:" + QString::number(gy) +
            "  " + "gz:" + QString::number(gz);
-      s0 = QTime::currentTime().toString();
+      s0 = QString::number(testCount) + " . " + QTime::currentTime().toString();
       mydlgMainNotes->ui->textBrowser->append(s0 + " : " + s1 + "  " + s2 +
                                               "\n");
 
-      if (testCount >= 720) mydlgMainNotes->ui->textBrowser->clear();
+      if (testCount >= 720) {
+        mydlgMainNotes->ui->textBrowser->clear();
+        testCount = 0;
+      }
     }
   }
 
@@ -401,10 +399,18 @@ void MainWindow::newDatas() {
     return;
   }
 
+  ax = accel_pedometer->reading()->x();
+  ay = accel_pedometer->reading()->y();
+
+  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+    gx = gyroscope->reading()->x();
+    gy = gyroscope->reading()->y();
+    gz = gyroscope->reading()->z();
+  }
+
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
+    timerStep->start(1000);
     accel_pedometer->runStepCountAlgorithm();
-    mydlgSteps->ui->lblSteps->setText(tr("Duration") + " : " +
-                                      secondsToTime(timeCount++ / 150));
   }
 
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
@@ -428,15 +434,6 @@ void MainWindow::newDatas() {
     mydlgSteps->ui->lblZ->setText("AZ:" + QString::number(az) + "\n" +
                                   "GZ:" + QString::number(gz));
 
-    if (qAbs(ax) < 0.15 && qAbs(ay) < 0.15 && qAbs(az) > 9.5) {
-      mydlgSteps->ui->lblX->setStyleSheet(mydlgSteps->lblStyleLight);
-      mydlgSteps->ui->lblY->setStyleSheet(mydlgSteps->lblStyleLight);
-      mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleLight);
-    } else {
-      mydlgSteps->ui->lblX->setStyleSheet(mydlgSteps->lblStyleNormal);
-      mydlgSteps->ui->lblY->setStyleSheet(mydlgSteps->lblStyleNormal);
-      mydlgSteps->ui->lblZ->setStyleSheet(mydlgSteps->lblStyleNormal);
-    }
     if (mydlgSteps->ui->lblX->isHidden()) {
       mydlgSteps->ui->lblX->show();
       mydlgSteps->ui->lblY->show();
@@ -480,8 +477,13 @@ void MainWindow::updateSteps() {
      // ui->btnMainNotes->setText(QString::number(CurTableCount));
 
 #ifdef Q_OS_ANDROID
-  QString strNotify =
-      tr("Today's steps") + " : " + QString::number(CurTableCount);
+  double sl = mydlgSteps->ui->editStepLength->text().toDouble();
+  double d0 = sl / 100;
+  double x = CurTableCount * d0;
+  double gl = x / 1000;
+  QString strNotify = tr("Today's steps") + " : " +
+                      QString::number(CurTableCount) + "  ( " +
+                      QString::number(gl) + " " + tr("km") + " )";
   QAndroidJniObject javaNotification = QAndroidJniObject::fromString(strNotify);
   QAndroidJniObject::callStaticMethod<void>(
       "com/x/MyService", "notify",
@@ -1077,7 +1079,7 @@ void MainWindow::drawMonthChart() {
   listM.clear();
   listM = get_MonthList(strY, strM);
   CurrentYearMonth = strY + strM;
-  qDebug() << "Month List Count: " << listM.count();
+  // qDebug() << "Month List Count: " << listM.count();
 }
 
 void MainWindow::drawDayChart() {
@@ -3120,4 +3122,11 @@ QString MainWindow::secondsToTime(ulong totalTime) {
   min = min.length() == 1 ? QString("0%1").arg(min) : min;
   sec = sec.length() == 1 ? QString("0%1").arg(sec) : sec;
   return hou + ":" + min + ":" + sec;
+}
+
+void MainWindow::timerUpdateStep() {
+  timeCount++;
+  mydlgSteps->ui->lblSteps->setText(tr("Duration") + " : " +
+                                    secondsToTime(timeCount));
+  timerStep->stop();
 }

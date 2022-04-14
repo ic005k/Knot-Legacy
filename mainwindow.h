@@ -85,6 +85,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  qreal ax, ay, az, gx, gy, gz;
   int testCount1 = 0;
   int testCount = 0;
   ulong timeTest = 0;
@@ -133,7 +134,8 @@ class MainWindow : public QMainWindow {
   bool isFindTextChange = false;
   int findPos = 0;
   bool isAdd = false;
-  QTimer *tmer;
+  QTimer *timer;
+  QTimer *timerStep;
 
   static void saveData(QTreeWidget *, int);
   static void readData(QTreeWidget *);
@@ -304,6 +306,8 @@ class MainWindow : public QMainWindow {
   void slotPointHoverd(const QPointF &point, bool state);
 
   void on_rbSteps_clicked();
+
+  void timerUpdateStep();
 
  private:
   int x, y, w, h;

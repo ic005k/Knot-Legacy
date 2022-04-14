@@ -29,6 +29,7 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
       new QRegularExpressionValidator(regxNumber, ui->editTangentLineIntercept);
   ui->editTangentLineIntercept->setValidator(validator);
   ui->editTangentLineSlope->setValidator(validator);
+  ui->editStepLength->setValidator(validator);
 
   for (int y = 0; y < ui->tableWidget->columnCount(); y++) {
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(
@@ -89,8 +90,10 @@ void dlgSteps::on_btnReset_clicked() {
 
 void dlgSteps::saveSteps() {
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
-  Reg.setValue("/Steps/Intercept", ui->editTangentLineIntercept->text());
-  Reg.setValue("/Steps/Slope", ui->editTangentLineSlope->text());
+  Reg.setValue("/Steps/Intercept",
+               ui->editTangentLineIntercept->text().trimmed());
+  Reg.setValue("/Steps/Slope", ui->editTangentLineSlope->text().trimmed());
+  Reg.setValue("/Steps/Length", ui->editStepLength->text().trimmed());
   Reg.setValue("/Steps/Alg1", ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Alg2", ui->rbAlg2->isChecked());
   Reg.setValue("/Steps/Alg3", ui->rbAlg3->isChecked());
@@ -116,6 +119,7 @@ void dlgSteps::init_Steps() {
       Reg.value("/Steps/Intercept", dleInter).toString());
   ui->editTangentLineSlope->setText(
       Reg.value("/Steps/Slope", dleSlope).toString());
+  ui->editStepLength->setText(Reg.value("/Steps/Length", "35").toString());
   ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
   ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
   ui->rbAlg3->setChecked(Reg.value("Steps/Alg3", false).toBool());
