@@ -3130,3 +3130,12 @@ void MainWindow::timerUpdateStep() {
                                     secondsToTime(timeCount));
   timerStep->stop();
 }
+
+void MainWindow::on_actionMemos_triggered() {
+  mydlgMainNotes->setFixedHeight(this->height());
+  mydlgMainNotes->setFixedWidth(this->width());
+  mydlgMainNotes->setModal(true);
+  mydlgMainNotes->ui->textBrowser->hide();
+  mydlgMainNotes->ui->textEdit->show();
+  mydlgMainNotes->show();
+}

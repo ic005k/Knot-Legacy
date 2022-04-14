@@ -49,7 +49,7 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="171"/>
-        <location filename="mainwindow.ui" line="854"/>
+        <location filename="mainwindow.ui" line="855"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
@@ -60,7 +60,7 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="207"/>
-        <location filename="mainwindow.ui" line="829"/>
+        <location filename="mainwindow.ui" line="830"/>
         <source>Remarks</source>
         <translation>备注</translation>
     </message>
@@ -75,7 +75,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="864"/>
+        <location filename="mainwindow.ui" line="815"/>
+        <source>Rename Tab</source>
+        <translation>重命名标签页</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="865"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
@@ -140,44 +145,48 @@
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="814"/>
         <source>Rename Tab Name</source>
-        <translation>重命名标签页</translation>
+        <translation type="vanished">重命名标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="819"/>
+        <location filename="mainwindow.ui" line="820"/>
         <source>Add Tab</source>
         <translation>增加标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="824"/>
+        <location filename="mainwindow.ui" line="825"/>
         <source>Del Tab</source>
         <translation>删除标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="834"/>
+        <location filename="mainwindow.ui" line="835"/>
         <location filename="mainwindow.cpp" line="176"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="839"/>
+        <location filename="mainwindow.ui" line="840"/>
         <source>Export Data</source>
         <translation>导出数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="844"/>
+        <location filename="mainwindow.ui" line="845"/>
         <source>Import Data</source>
         <translation>导入数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="849"/>
+        <location filename="mainwindow.ui" line="850"/>
         <source>View App Data</source>
         <translation>查看App数据</translation>
     </message>
     <message>
+        <location filename="mainwindow.ui" line="870"/>
+        <source>Memos</source>
+        <translation>备忘录</translation>
+    </message>
+    <message>
         <location filename="mainwindow.ui" line="154"/>
-        <location filename="mainwindow.ui" line="859"/>
+        <location filename="mainwindow.ui" line="860"/>
         <source>Report</source>
         <translation>报表</translation>
     </message>
@@ -498,12 +507,12 @@
         <translation type="vanished">位置</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="122"/>
+        <location filename="dlgmainnotes.cpp" line="118"/>
         <source>Xcounter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="123"/>
+        <location filename="dlgmainnotes.cpp" line="119"/>
         <source>Txt Files (*.*)</source>
         <translation></translation>
     </message>

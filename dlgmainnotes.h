@@ -41,7 +41,7 @@ class dlgMainNotes : public QDialog {
 
  private:
   SmoothScrollBar *vScrollBar;
-  void wheelEvent(QWheelEvent *e);  //捕获鼠标滚轮事件
+  void wheelEvent(QWheelEvent *e) override;  //捕获鼠标滚轮事件
 };
 
 #endif  // DLGMAINNOTES_H

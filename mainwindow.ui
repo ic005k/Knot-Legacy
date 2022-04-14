@@ -799,10 +799,11 @@ QRadioButton::indicator:checked {
     <addaction name="actionRename"/>
     <addaction name="actionFind"/>
     <addaction name="actionReport"/>
+    <addaction name="actionNotes"/>
     <addaction name="actionExport_Data"/>
     <addaction name="actionImport_Data"/>
-    <addaction name="actionNotes"/>
     <addaction name="actionPreferences"/>
+    <addaction name="actionMemos"/>
     <addaction name="actionView_App_Data"/>
     <addaction name="actionAbout"/>
    </widget>
@@ -811,7 +812,7 @@ QRadioButton::indicator:checked {
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionRename">
    <property name="text">
-    <string>Rename Tab Name</string>
+    <string>Rename Tab</string>
    </property>
   </action>
   <action name="actionAdd_Tab">
@@ -862,6 +863,11 @@ QRadioButton::indicator:checked {
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionMemos">
+   <property name="text">
+    <string>Memos</string>
    </property>
   </action>
  </widget>

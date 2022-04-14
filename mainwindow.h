@@ -309,6 +309,8 @@ class MainWindow : public QMainWindow {
 
   void timerUpdateStep();
 
+  void on_actionMemos_triggered();
+
  private:
   int x, y, w, h;
 
