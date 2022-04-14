@@ -4,8 +4,6 @@
 * To-do list.
 * Pedometer
 
-...
-
 ### Credits
 
 [Pedometer](https://github.com/vikasy/Pedometer)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
