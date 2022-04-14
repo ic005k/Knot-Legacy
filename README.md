@@ -2,6 +2,8 @@
 
 * Android version >= 6.0
 * To-do list.
+* Pedometer
+...
 
 ### Credits
 
