@@ -38,6 +38,7 @@
 #include <QScroller>
 #include <QSettings>
 #include <QSplineSeries>
+#include <QSplitter>
 #include <QStringList>
 #include <QTextEdit>
 #include <QThread>
@@ -330,6 +331,8 @@ class MainWindow : public QMainWindow {
   //"QTreeWidget::item:hover {background-color: #f5f5f5;}"
   //"QTreeWidget::item:selected {border-left: 0px solid #777777;}"
   void init_ChartWidget();
+  void init_Sensors();
+  void init_UIWidget();
 };
 
 class SearchThread : public QThread {

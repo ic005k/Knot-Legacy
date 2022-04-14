@@ -15,6 +15,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->setupUi(this);
   QFont font;
   font.setBold(true);
+  ui->lblTime->setFont(font);
   ui->editAmount->setFont(font);
   ui->btn0->setFont(font);
   ui->btn1->setFont(font);

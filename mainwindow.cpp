@@ -9,7 +9,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.03";
+QString ver = "1.0.04";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -172,9 +172,8 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   mw_one = this;
-
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
-
+  strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
   isReadEnd = true;
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
@@ -184,171 +183,16 @@ MainWindow::MainWindow(QWidget* parent)
   gl1 = ui->pLayout;
 
   init_ChartWidget();
-
-  this->installEventFilter(this);
-  ui->tabWidget->tabBar()->installEventFilter(this);
-  ui->tabWidget->installEventFilter(this);
-  ui->frame_tab->setMouseTracking(true);
-  ui->tabWidget->setMouseTracking(true);
-  mydlgNotes = new dlgNotes(this);
-  mydlgNotes->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
-  mydlgNotes->ui->textBrowser->verticalScrollBar()->setStyleSheet(
-      vsbarStyleSmall);
-  mydlgRename = new dlgRename(this);
-  mydlgSetTime = new dlgSetTime(this);
-  mydlgTodo = new dlgTodo(this);
-  mydlgTodo->setStyleSheet(vsbarStyleSmall);
-  mydlgList = new dlgList(this);
-  mydlgReport = new dlgReport(this);
-  mydlgPre = new dlgPreferences(this);
-  mydlgMainNotes = new dlgMainNotes(this);
-  mydlgSteps = new dlgSteps(this);
-
+  init_UIWidget();
   init_Options();
-
-  accel_pedometer = new SpecialAccelerometerPedometer(this);
-  connect(accel_pedometer, SIGNAL(readingChanged()), this, SLOT(newDatas()));
-  connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
-          SLOT(updateSteps()));
-  mydlgSteps->init_Steps();
-  accel_pedometer->setTangentLineIntercept(
-      mydlgSteps->ui->editTangentLineIntercept->text().toFloat());
-  accel_pedometer->setTangentLineSlope(
-      mydlgSteps->ui->editTangentLineSlope->text().toFloat());
-  accel_pedometer->setDataRate(100);
-  accel_pedometer->setAccelerationMode(QAccelerometer::User);
-  accel_pedometer->setActive(true);
-  accel_pedometer->start();
-
-  gyroscope = new QGyroscope(this);
-  gyroscope->setActive(true);
-  gyroscope->start();
-
-  ui->lblStats->adjustSize();
-  ui->lblStats->setWordWrap(true);
-
-  // 获取背景色
-  QPalette pal = this->palette();
-  QBrush brush = pal.window();
-  red = brush.color().red();
-  if (red < 55) {
-    mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
-    chartMonth->setTheme(QChart::ChartThemeDark);
-    chartDay->setTheme(QChart::ChartThemeDark);
-
-  } else {
-    mydlgTodo->ui->listWidget->setStyleSheet(
-        mydlgTodo->ui->listWidget->styleSheet());
-    chartMonth->setTheme(QChart::ChartThemeLight);
-    chartDay->setTheme(QChart::ChartThemeLight);
-  }
+  init_Sensors();
 
   loading = true;
-  ui->statusbar->setHidden(true);
-  this->setWindowTitle("");
-  timer = new QTimer(this);
-  connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
-  timer->start(1000);
-  timerStep = new QTimer(this);
-  connect(timerStep, SIGNAL(timeout()), this, SLOT(timerUpdateStep()));
-
-  myReadTWThread = new ReadTWThread();
-  connect(myReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
-
-  myReadThread = new ReadThread();
-  connect(myReadThread, &ReadThread::isDone, this, &MainWindow::readDone);
-
-  mySearchThread = new SearchThread();
-  connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::dealDone);
-
-  strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
-
-  ui->tabCharts->setCornerWidget(ui->frame_cw);
-  ui->frame_find->setHidden(true);
-  ui->frameYear->hide();
-
-  ui->progBar->setStyleSheet(
-      "QProgressBar{border:0px solid #FFFFFF;"
-      "height:30;"
-      "background:rgba(25,255,25,0);"
-      "text-align:right;"
-      "color:rgb(255,255,255);"
-      "border-radius:0px;}"
-
-      "QProgressBar:chunk{"
-      "border-radius:0px;"
-      "background-color:rgba(25,25,255,250);"
-      "}");
-
-  if (zh_cn) {
-    listMonth = QStringList() << "1月"
-                              << "2月"
-                              << "3月"
-                              << "4月"
-                              << "5月"
-                              << "6月"
-                              << "7月"
-                              << "8月"
-                              << "9月"
-                              << "10月"
-                              << "11月"
-                              << "12月";
-  } else {
-    listMonth = QStringList() << "Jan"
-                              << "Feb"
-                              << "Mar"
-                              << "Apr"
-                              << "May"
-                              << "Jun"
-                              << "Jul"
-                              << "Aug"
-                              << "Sep"
-                              << "Oct"
-                              << "Nov"
-                              << "Dec";
-  }
-
-  setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
-
-  int iz = 25;
-  ui->btnFind->setIconSize(QSize(iz, iz));
-  ui->btnReport->setIconSize(QSize(iz, iz));
-  ui->btnNotes->setIconSize(QSize(iz, iz));
-  ui->btnLeft->hide();
-  ui->btnRight->hide();
-  int s = 35;
-  if (isIOS) {
-  }
-  ui->btnPlus->setIconSize(QSize(s, s));
-  ui->btnLess->setIconSize(QSize(s, s));
-  ui->btnTodo->setIconSize(QSize(s, s));
-  ui->btnMax->setIconSize(QSize(s, s));
-  ui->btnMainNotes->setIconSize(QSize(s, s));
-  ui->btnPlus->setIcon(QIcon(":/src/1.png"));
-  ui->btnLess->setIcon(QIcon(":/src/2.png"));
-  ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
-  ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
-  ui->btnMainNotes->setIcon(QIcon(":/src/step.png"));
-  ui->btnZoom->hide();
-  ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
-  QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
-  btnYText = Reg.value("/YMD/btnYText", 2022).toString();
-  ui->btnYear->setText(btnYText);
-  btnMText = Reg.value("/YMD/btnMText", tr("Month")).toString();
-  ui->btnMonth->setText(btnMText);
-  btnDText = Reg.value("/YMD/btnDText", 1).toString();
-  ui->btnDay->setText(btnDText);
-  btnYearText = Reg.value("/YMD/btnYearText", "2022").toString();
-  mydlgReport->ui->btnYear->setText(btnYearText);
-  btnMonthText = Reg.value("/YMD/btnMonthText", tr("Month")).toString();
-  mydlgReport->ui->btnMonth->setText(btnMonthText);
-
   init_TabData();
   loading = false;
 
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   startRead(strDate);
-
   get_Today(tw);
   init_Stats(tw);
   init_NavigateBtnColor();
@@ -535,9 +379,51 @@ void MainWindow::init_Options() {
     mydlgSteps->ui->btnLogs->hide();
   mydlgPre->ui->rbSM1->setChecked(Reg.value("/Options/SM1", false).toBool());
   mydlgPre->ui->rbSM2->setChecked(Reg.value("/Options/SM2", true).toBool());
+
+  // MainUI Find YMD
+  if (zh_cn) {
+    listMonth = QStringList() << "1月"
+                              << "2月"
+                              << "3月"
+                              << "4月"
+                              << "5月"
+                              << "6月"
+                              << "7月"
+                              << "8月"
+                              << "9月"
+                              << "10月"
+                              << "11月"
+                              << "12月";
+  } else {
+    listMonth = QStringList() << "Jan"
+                              << "Feb"
+                              << "Mar"
+                              << "Apr"
+                              << "May"
+                              << "Jun"
+                              << "Jul"
+                              << "Aug"
+                              << "Sep"
+                              << "Oct"
+                              << "Nov"
+                              << "Dec";
+  }
+  QSettings Reg2(iniDir + "ymd.ini", QSettings::IniFormat);
+  btnYText = Reg2.value("/YMD/btnYText", 2022).toString();
+  ui->btnYear->setText(btnYText);
+  btnMText = Reg2.value("/YMD/btnMText", tr("Month")).toString();
+  ui->btnMonth->setText(btnMText);
+  btnDText = Reg2.value("/YMD/btnDText", 1).toString();
+  ui->btnDay->setText(btnDText);
+  btnYearText = Reg2.value("/YMD/btnYearText", "2022").toString();
+  mydlgReport->ui->btnYear->setText(btnYearText);
+  btnMonthText = Reg2.value("/YMD/btnMonthText", tr("Month")).toString();
+  mydlgReport->ui->btnMonth->setText(btnMonthText);
 }
 
 void MainWindow::init_ChartWidget() {
+  ui->tabCharts->setCornerWidget(ui->frame_cw);
+
   chartMonth = new QChart();
   chartview = new QChartView(chartMonth);
   chartview->installEventFilter(this);
@@ -715,7 +601,7 @@ void MainWindow::init_TabNavigate() {
   }
   for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
     QToolButton* btn = new QToolButton(this);
-    btn->setFixedWidth(30);
+    btn->setFixedWidth(35);
     listNBtn.append(btn);
     QFont font;
     font.setPointSize(15);
@@ -2376,7 +2262,7 @@ void MainWindow::on_btnMax_clicked() {
     ui->frameYear->hide();
     ui->btnMax->setText(tr("Min"));
   } else if (ui->btnMax->text() == tr("Min")) {
-    ui->frame_tab->setMaximumHeight(this->height() / 2 - ui->btnTodo->height());
+    ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(false);
     ui->frame_find->hide();
     ui->frameYear->hide();
@@ -2414,7 +2300,7 @@ void MainWindow::on_btnYear_clicked() {
   int h = 30 * list->count() + 2;
   int y = ui->frame_find->y() - h / 2;
 
-  list->setGeometry(ui->frame_find->x(), y, w + 15, h);
+  list->setGeometry(ui->frameYear->x() + 30, y, w + 15, h);
 
   list->show();
 
@@ -2453,7 +2339,7 @@ void MainWindow::on_btnMonth_clicked() {
   int h = 30 * list->count() + 2;
   int y = ui->frame_find->y() - h / 2;
 
-  list->setGeometry(ui->btnMonth->x() + ui->frame_find->x(), y, w + 5, h);
+  list->setGeometry(ui->btnMonth->x() + ui->frameYear->x() + 35, y, w + 5, h);
 
   list->show();
 
@@ -2498,7 +2384,7 @@ void MainWindow::on_btnDay_clicked() {
 
   int h = 13 * 30;
   int y = ui->frame_find->y() - h / 2;
-  int x = ui->btnDay->x() + ui->frame_find->x();
+  int x = ui->btnDay->x() + ui->frameYear->x() + 30;
   list->setGeometry(x, y, w + 15, h);
   list->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -3138,4 +3024,121 @@ void MainWindow::on_actionMemos_triggered() {
   mydlgMainNotes->ui->textBrowser->hide();
   mydlgMainNotes->ui->textEdit->show();
   mydlgMainNotes->show();
+}
+
+void MainWindow::init_Sensors() {
+  accel_pedometer = new SpecialAccelerometerPedometer(this);
+  connect(accel_pedometer, SIGNAL(readingChanged()), this, SLOT(newDatas()));
+  connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
+          SLOT(updateSteps()));
+  mydlgSteps->init_Steps();
+  accel_pedometer->setTangentLineIntercept(
+      mydlgSteps->ui->editTangentLineIntercept->text().toFloat());
+  accel_pedometer->setTangentLineSlope(
+      mydlgSteps->ui->editTangentLineSlope->text().toFloat());
+  accel_pedometer->setDataRate(100);
+  accel_pedometer->setAccelerationMode(QAccelerometer::User);
+  accel_pedometer->setActive(true);
+  accel_pedometer->start();
+
+  gyroscope = new QGyroscope(this);
+  gyroscope->setActive(true);
+  gyroscope->start();
+}
+
+void MainWindow::init_UIWidget() {
+  this->installEventFilter(this);
+  ui->tabWidget->tabBar()->installEventFilter(this);
+  ui->tabWidget->installEventFilter(this);
+  ui->frame_tab->setMouseTracking(true);
+  ui->tabWidget->setMouseTracking(true);
+  ui->progBar->setMaximumHeight(1);
+  mydlgNotes = new dlgNotes(this);
+  mydlgNotes->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
+  mydlgNotes->ui->textBrowser->verticalScrollBar()->setStyleSheet(
+      vsbarStyleSmall);
+  mydlgRename = new dlgRename(this);
+  mydlgSetTime = new dlgSetTime(this);
+  mydlgTodo = new dlgTodo(this);
+  mydlgTodo->setStyleSheet(vsbarStyleSmall);
+  mydlgList = new dlgList(this);
+  mydlgReport = new dlgReport(this);
+  mydlgPre = new dlgPreferences(this);
+  mydlgMainNotes = new dlgMainNotes(this);
+  mydlgSteps = new dlgSteps(this);
+
+  ui->lblStats->adjustSize();
+  ui->lblStats->setWordWrap(true);
+
+  // 获取背景色
+  QPalette pal = this->palette();
+  QBrush brush = pal.window();
+  red = brush.color().red();
+  if (red < 55) {
+    mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
+    chartMonth->setTheme(QChart::ChartThemeDark);
+    chartDay->setTheme(QChart::ChartThemeDark);
+
+  } else {
+    mydlgTodo->ui->listWidget->setStyleSheet(
+        mydlgTodo->ui->listWidget->styleSheet());
+    chartMonth->setTheme(QChart::ChartThemeLight);
+    chartDay->setTheme(QChart::ChartThemeLight);
+  }
+
+  ui->statusbar->setHidden(true);
+  timer = new QTimer(this);
+  connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
+  timer->start(1000);
+  timerStep = new QTimer(this);
+  connect(timerStep, SIGNAL(timeout()), this, SLOT(timerUpdateStep()));
+
+  myReadTWThread = new ReadTWThread();
+  connect(myReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
+
+  myReadThread = new ReadThread();
+  connect(myReadThread, &ReadThread::isDone, this, &MainWindow::readDone);
+
+  mySearchThread = new SearchThread();
+  connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::dealDone);
+
+  ui->frame_find->setHidden(true);
+  ui->frameYear->hide();
+
+  ui->progBar->setStyleSheet(
+      "QProgressBar{border:0px solid #FFFFFF;"
+      "height:30;"
+      "background:rgba(25,255,25,0);"
+      "text-align:right;"
+      "color:rgb(255,255,255);"
+      "border-radius:0px;}"
+
+      "QProgressBar:chunk{"
+      "border-radius:0px;"
+      "background-color:rgba(25,25,255,250);"
+      "}");
+
+  setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
+
+  int iz = 25;
+  ui->btnFind->setIconSize(QSize(iz, iz));
+  ui->btnReport->setIconSize(QSize(iz, iz));
+  ui->btnNotes->setIconSize(QSize(iz, iz));
+  ui->btnLeft->hide();
+  ui->btnRight->hide();
+  int s = 35;
+  if (isIOS) {
+  }
+  ui->btnPlus->setIconSize(QSize(s, s));
+  ui->btnLess->setIconSize(QSize(s, s));
+  ui->btnTodo->setIconSize(QSize(s, s));
+  ui->btnMax->setIconSize(QSize(s, s));
+  ui->btnMainNotes->setIconSize(QSize(s, s));
+  ui->btnPlus->setIcon(QIcon(":/src/1.png"));
+  ui->btnLess->setIcon(QIcon(":/src/2.png"));
+  ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
+  ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
+  ui->btnMainNotes->setIcon(QIcon(":/src/step.png"));
+  ui->btnZoom->hide();
+  ui->frame_tab->setMaximumHeight(this->height());
 }
