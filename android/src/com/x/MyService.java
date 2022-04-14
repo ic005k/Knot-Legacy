@@ -24,7 +24,7 @@ public class MyService extends Service {
 
     private static final String TAG = "MyService";
     private static final String ID = "channel_1";
-    private static final String NAME = "前台服务";
+    private static final String NAME = "F_SERVICE";
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -80,13 +80,13 @@ public class MyService extends Service {
     private void setForeground() {
         Context context;
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel(ID, NAME, NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel channel = new NotificationChannel(ID, NAME, NotificationManager.IMPORTANCE_LOW);
         manager.createNotificationChannel(channel);
         Notification notification = new Notification.Builder(this, ID)
                 .setContentTitle("Powerful Counter")
                 .setContentText("Running...")
-                .setSmallIcon(R.drawable.icon)//设置状态栏展示的通知样式
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))//设置通知中的图标样式
+                .setSmallIcon(R.drawable.icon)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
                 .build();
         startForeground(1, notification);
     }

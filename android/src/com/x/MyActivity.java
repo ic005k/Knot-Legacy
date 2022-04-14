@@ -196,7 +196,7 @@ public class MyActivity extends QtActivity {
             startService(new Intent(bindIntent));
         }
 
-        MyService.notify(getApplicationContext(), "Hello");
+        MyService.notify(getApplicationContext(), "Hello!");
 
     }
 
