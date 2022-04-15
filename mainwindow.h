@@ -316,6 +316,7 @@ class MainWindow : public QMainWindow {
   void on_btnMenu_clicked();
 
  private:
+  int frameChartHeight = 220;
   int x, y, w, h;
   QMenu *mainMenu;
   qreal aoldX, aoldY, aoldZ;

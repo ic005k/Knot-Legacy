@@ -2017,6 +2017,8 @@ void MainWindow::on_btnFind_clicked() {
     ui->btnTodo->setHidden(true);
     ui->btnMax->setHidden(true);
     ui->btnMainNotes->setHidden(true);
+    ui->frame_charts->setMaximumHeight(frameChartHeight +
+                                       ui->frameYear->height());
   } else {
     ui->frame_find->setHidden(true);
     ui->frameYear->hide();
@@ -2025,6 +2027,7 @@ void MainWindow::on_btnFind_clicked() {
     ui->btnTodo->setHidden(false);
     ui->btnMax->setHidden(false);
     ui->btnMainNotes->setHidden(false);
+    ui->frame_charts->setMaximumHeight(frameChartHeight);
   }
 }
 
@@ -3056,6 +3059,7 @@ void MainWindow::init_UIWidget() {
   ui->frame_charts->layout()->setMargin(0);
   ui->frame_charts->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frame_charts->layout()->setSpacing(0);
+  ui->frame_charts->setMaximumHeight(frameChartHeight);
 
   this->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
@@ -3195,6 +3199,7 @@ void MainWindow::on_btnSelTab_clicked() {
 
 void MainWindow::init_Menu() {
   ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
+  ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
   ui->lblIcon->setText("");
   ui->lblIcon->setFixedHeight(22);
@@ -3278,6 +3283,6 @@ void MainWindow::on_btnZoom_clicked() {
     ui->frame_charts->setMaximumHeight(this->height());
   } else {
     ui->frame_tab->show();
-    ui->frame_charts->setMaximumHeight(220);
+    ui->frame_charts->setMaximumHeight(frameChartHeight);
   }
 }
