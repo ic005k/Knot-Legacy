@@ -21,5 +21,6 @@
         <file>src/zoom.png</file>
         <file>src/step.png</file>
         <file>src/tab.png</file>
+        <file>src/menu.png</file>
     </qresource>
 </RCC>

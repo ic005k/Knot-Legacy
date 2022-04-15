@@ -28,6 +28,7 @@
 #include <QInputDialog>
 #include <QLineEdit>
 #include <QMainWindow>
+#include <QMenu>
 #include <QMessageBox>
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
@@ -314,9 +315,11 @@ class MainWindow : public QMainWindow {
 
   void on_btnSelTab_clicked();
 
+  void on_btnMenu_clicked();
+
  private:
   int x, y, w, h;
-
+  QMenu *mainMenu;
   qreal aoldX, aoldY, aoldZ;
   int countOne = 0;
   QTreeWidget *init_TreeWidget(QString);
@@ -335,6 +338,7 @@ class MainWindow : public QMainWindow {
   void init_ChartWidget();
   void init_Sensors();
   void init_UIWidget();
+  void init_Menu();
 };
 
 class SearchThread : public QThread {

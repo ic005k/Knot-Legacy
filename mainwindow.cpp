@@ -182,6 +182,7 @@ MainWindow::MainWindow(QWidget* parent)
   gl1 = new QGridLayout(this);
   gl1 = ui->pLayout;
 
+  init_Menu();
   init_ChartWidget();
   init_UIWidget();
   init_Options();
@@ -3055,6 +3056,10 @@ void MainWindow::init_Sensors() {
 }
 
 void MainWindow::init_UIWidget() {
+  ui->centralwidget->layout()->setMargin(1);
+  ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 1);
+  ui->centralwidget->layout()->setSpacing(1);
+
   this->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
   ui->tabWidget->installEventFilter(this);
@@ -3192,4 +3197,83 @@ void MainWindow::on_btnSelTab_clicked() {
   list->setCurrentRow(tabData->currentIndex());
   list->show();
   list->setFocus();
+}
+
+void MainWindow::init_Menu() {
+  ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
+  ui->btnMenu->setStyleSheet("border:none");
+  ui->lblIcon->setText("");
+  ui->lblIcon->setFixedHeight(26);
+  ui->lblIcon->setFixedWidth(26);
+  ui->lblIcon->setStyleSheet(
+      "QLabel{"
+      "border-image:url(:/src/icon.png) 4 4 4 4 stretch stretch;"
+      "}");
+  mainMenu = new QMenu(this);
+  QAction* actAddTab = new QAction(tr("Add Tab"));
+  QAction* actDelTab = new QAction(tr("Del Tab"));
+  QAction* actRenameTab = new QAction(tr("Rename Tab"));
+  QAction* actFind = new QAction(tr("Find"));
+  QAction* actReport = new QAction(tr("Report"));
+  QAction* actRemarks = new QAction(tr("Remarks"));
+  QAction* actExportData = new QAction(tr("Export Data"));
+  QAction* actImportData = new QAction(tr("Import Data"));
+  QAction* actPreferences = new QAction(tr("Preferences"));
+  QAction* actMemos = new QAction(tr("Memos"));
+  QAction* actViewAppData = new QAction(tr("View App Data"));
+  QAction* actAbout = new QAction(tr("About"));
+
+  mainMenu->addAction(actAddTab);
+  mainMenu->addAction(actDelTab);
+  mainMenu->addAction(actRenameTab);
+  mainMenu->addSeparator();
+
+  mainMenu->addAction(actFind);
+  mainMenu->addAction(actReport);
+  mainMenu->addAction(actRemarks);
+  mainMenu->addSeparator();
+
+  mainMenu->addAction(actExportData);
+  mainMenu->addAction(actImportData);
+  mainMenu->addSeparator();
+
+  mainMenu->addAction(actPreferences);
+  mainMenu->addSeparator();
+
+  mainMenu->addAction(actMemos);
+  mainMenu->addSeparator();
+  mainMenu->addAction(actViewAppData);
+  mainMenu->addAction(actAbout);
+
+  connect(actAddTab, &QAction::triggered, this,
+          &MainWindow::on_actionAdd_Tab_triggered);
+  connect(actDelTab, &QAction::triggered, this,
+          &MainWindow::on_actionDel_Tab_triggered);
+  connect(actRenameTab, &QAction::triggered, this,
+          &MainWindow::on_actionRename_triggered);
+  connect(actFind, &QAction::triggered, this,
+          &MainWindow::on_actionFind_triggered);
+  connect(actReport, &QAction::triggered, this,
+          &MainWindow::on_actionReport_triggered);
+  connect(actRemarks, &QAction::triggered, this,
+          &MainWindow::on_actionNotes_triggered);
+  connect(actExportData, &QAction::triggered, this,
+          &MainWindow::on_actionExport_Data_triggered);
+  connect(actImportData, &QAction::triggered, this,
+          &MainWindow::on_actionImport_Data_triggered);
+  connect(actPreferences, &QAction::triggered, this,
+          &MainWindow::on_actionPreferences_triggered);
+  connect(actMemos, &QAction::triggered, this,
+          &MainWindow::on_actionMemos_triggered);
+  connect(actViewAppData, &QAction::triggered, this,
+          &MainWindow::on_actionView_App_Data_triggered);
+  connect(actAbout, &QAction::triggered, this,
+          &MainWindow::on_actionAbout_triggered);
+}
+
+void MainWindow::on_btnMenu_clicked() {
+  int x = ui->btnMenu->x();
+  int y = ui->frameMenu->y() + ui->frameMenu->height();
+  QPoint pos(x, y);
+  mainMenu->exec(pos);
 }
