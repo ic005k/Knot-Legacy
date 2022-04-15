@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_9">
+   <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
      <layout class="QVBoxLayout" name="vl"/>
     </item>
@@ -23,13 +23,13 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>35</height>
+        <height>28</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>35</height>
+        <height>28</height>
        </size>
       </property>
       <property name="frameShape">
@@ -80,10 +80,16 @@
        </item>
        <item>
         <widget class="QToolButton" name="btnMenu">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
-           <height>28</height>
+           <width>40</width>
+           <height>0</height>
           </size>
          </property>
          <property name="text">
@@ -308,6 +314,102 @@ QTabBar QToolButton::right-arrow {
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
+          <widget class="QRadioButton" name="rbFreq">
+           <property name="styleSheet">
+            <string notr="true">QRadioButton::indicator {
+    width: 25px;
+    height: 25px;
+    /*image: url(:/src/sel.png);*/
+    
+    position: relative;
+    left: 0px;
+    right: 3px;
+    top: 2px;
+    bottom:4px;
+}
+
+QRadioButton::indicator:unchecked {
+    image: url(:/src/nosel.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/src/sel.png);
+}
+
+
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbAmount">
+           <property name="styleSheet">
+            <string notr="true">QRadioButton::indicator {
+    width: 25px;
+    height: 25px;
+    /*image: url(:/src/sel.png);*/
+    
+    position: relative;
+    left: 0px;
+    right: 3px;
+    top: 2px;
+    bottom:4px;
+}
+
+QRadioButton::indicator:unchecked {
+    image: url(:/src/nosel.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/src/sel.png);
+}
+
+
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbSteps">
+           <property name="styleSheet">
+            <string notr="true">QRadioButton::indicator {
+    width: 25px;
+    height: 25px;
+    /*image: url(:/src/sel.png);*/
+    
+    position: relative;
+    left: 0px;
+    right: 3px;
+    top: 2px;
+    bottom:4px;
+}
+
+QRadioButton::indicator:unchecked {
+    image: url(:/src/nosel.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/src/sel.png);
+}
+
+
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QToolButton" name="btnSelTab">
            <property name="minimumSize">
             <size>
@@ -359,25 +461,6 @@ QTabBar QToolButton::right-arrow {
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="btnLeft">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>28</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>&lt;</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QToolButton" name="btnNotes">
            <property name="minimumSize">
             <size>
@@ -394,25 +477,6 @@ QTabBar QToolButton::right-arrow {
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QToolButton" name="btnRight">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>28</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>&gt;</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
       </layout>
@@ -420,28 +484,19 @@ QTabBar QToolButton::right-arrow {
     </item>
     <item row="5" column="1">
      <widget class="QFrame" name="frame_charts">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>220</height>
+       </size>
+      </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout_4">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>4</number>
-       </property>
-       <property name="verticalSpacing">
-        <number>1</number>
-       </property>
+      <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
         <widget class="QFrame" name="frameYear">
          <property name="frameShape">
@@ -573,20 +628,8 @@ QTabBar QToolButton::right-arrow {
           <attribute name="title">
            <string>Month</string>
           </attribute>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
             <layout class="QGridLayout" name="pLayout">
              <property name="spacing">
               <number>0</number>
@@ -599,20 +642,8 @@ QTabBar QToolButton::right-arrow {
           <attribute name="title">
            <string>Day</string>
           </attribute>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
             <layout class="QGridLayout" name="glTimeLine">
              <property name="spacing">
               <number>0</number>
@@ -622,175 +653,6 @@ QTabBar QToolButton::right-arrow {
           </layout>
          </widget>
         </widget>
-       </item>
-       <item row="2" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="rbFreq">
-           <property name="styleSheet">
-            <string notr="true">QRadioButton::indicator {
-    width: 25px;
-    height: 25px;
-    /*image: url(:/src/sel.png);*/
-    
-    position: relative;
-    left: 0px;
-    right: 3px;
-    top: 2px;
-    bottom:4px;
-}
-
-QRadioButton::indicator:unchecked {
-    image: url(:/src/nosel.png);
-}
-
-QRadioButton::indicator:checked {
-    image: url(:/src/sel.png);
-}
-
-
-</string>
-           </property>
-           <property name="text">
-            <string>Freq</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="rbAmount">
-           <property name="styleSheet">
-            <string notr="true">QRadioButton::indicator {
-    width: 25px;
-    height: 25px;
-    /*image: url(:/src/sel.png);*/
-    
-    position: relative;
-    left: 0px;
-    right: 3px;
-    top: 2px;
-    bottom:4px;
-}
-
-QRadioButton::indicator:unchecked {
-    image: url(:/src/nosel.png);
-}
-
-QRadioButton::indicator:checked {
-    image: url(:/src/sel.png);
-}
-
-
-</string>
-           </property>
-           <property name="text">
-            <string>Amount</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="rbSteps">
-           <property name="styleSheet">
-            <string notr="true">QRadioButton::indicator {
-    width: 25px;
-    height: 25px;
-    /*image: url(:/src/sel.png);*/
-    
-    position: relative;
-    left: 0px;
-    right: 3px;
-    top: 2px;
-    bottom:4px;
-}
-
-QRadioButton::indicator:unchecked {
-    image: url(:/src/nosel.png);
-}
-
-QRadioButton::indicator:checked {
-    image: url(:/src/sel.png);
-}
-
-
-</string>
-           </property>
-           <property name="text">
-            <string>Steps</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QToolButton" name="btnZoom">
-           <property name="text">
-            <string>Zoom</string>
-           </property>
-           <property name="icon">
-            <iconset resource="src.qrc">
-             <normaloff>:/src/zoom.png</normaloff>:/src/zoom.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>16</width>
-             <height>16</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>

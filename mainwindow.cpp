@@ -344,6 +344,16 @@ void MainWindow::init_Options() {
   QFontInfo fInfo(font);
   fontSize = fInfo.pointSize();
   qDebug() << "fontSize:" << fontSize;
+
+  QFont font1;
+  font1.setPointSize(fontSize - 1);
+  chartMonth->setTitleFont(font1);
+  chartDay->setTitleFont(font1);
+  axisX->setLabelsFont(font1);
+  axisY->setLabelsFont(font1);
+  axisX2->setLabelsFont(font1);
+  axisY2->setLabelsFont(font1);
+
   mydlgPre->ui->rb0->setChecked(Reg.value("/Options/rb0", 1).toBool());
   mydlgPre->ui->rb1->setChecked(Reg.value("/Options/rb1", 0).toBool());
   mydlgPre->ui->rb2->setChecked(Reg.value("/Options/rb2", 0).toBool());
@@ -430,7 +440,6 @@ void MainWindow::init_ChartWidget() {
   chartview->installEventFilter(this);
   ui->pLayout->addWidget(chartview);
   chartview->setRenderHint(QPainter::Antialiasing);
-  // chartMonth->setTitle("Line chart");
   chartMonth->legend()->hide();
   chartMonth->setMargins(QMargins(0, 0, 0, 0));
   chartMonth->setContentsMargins(0, 0, 0, 0);
@@ -504,6 +513,9 @@ void MainWindow::init_ChartWidget() {
   m_scatterSeries2->attachAxis(axisY2);
   m_scatterSeries2_1->attachAxis(axisX2);
   m_scatterSeries2_1->attachAxis(axisY2);
+
+  chartMonth->setTitle(tr("Freq"));
+  chartDay->setTitle(tr("Freq"));
 }
 
 void MainWindow::slotPointHoverd(const QPointF& point, bool state) {
@@ -1596,18 +1608,6 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
         tabData->tabBar()->setTabTextColor(i, Qt::black);
     }
   }
-  if (index == 0) {
-    ui->btnLeft->setEnabled(false);
-    ui->btnRight->setEnabled(true);
-  }
-  if (index > 0 && index < count - 1) {
-    ui->btnLeft->setEnabled(true);
-    ui->btnRight->setEnabled(true);
-  }
-  if (index == count - 1) {
-    ui->btnLeft->setEnabled(true);
-    ui->btnRight->setEnabled(false);
-  }
 
   if (isSlide || loading || count <= 0) {
     return;
@@ -2212,12 +2212,16 @@ void MainWindow::on_rbFreq_clicked() {
   tabChart->setTabEnabled(1, true);
   isrbFreq = true;
   startRead(strDate);
+  chartMonth->setTitle(tr("Freq"));
+  chartDay->setTitle(tr("Freq"));
 }
 
 void MainWindow::on_rbAmount_clicked() {
   tabChart->setTabEnabled(1, true);
   isrbFreq = false;
   startRead(strDate);
+  chartMonth->setTitle(tr("Amount"));
+  chartDay->setTitle(tr("Amount"));
 }
 
 void MainWindow::paintEvent(QPaintEvent* event) {
@@ -2244,20 +2248,8 @@ void MainWindow::paintEvent(QPaintEvent* event) {
   }
 }
 
-void MainWindow::on_btnZoom_clicked() {
-  if (ui->btnZoom->text() == tr("Zoom")) {
-    ui->frame_tab->setHidden(true);
-    ui->btnZoom->setText(tr("Normal"));
-  } else {
-    if (ui->btnZoom->text() == tr("Normal")) {
-      ui->frame_tab->setHidden(false);
-      ui->btnZoom->setText(tr("Zoom"));
-    }
-  }
-}
-
 void MainWindow::on_btnMax_clicked() {
-  if (ui->btnZoom->text() != tr("Zoom")) return;
+  if (ui->frame_tab->isHidden()) return;
   if (ui->btnMax->text() == tr("Max")) {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(true);
@@ -2572,6 +2564,7 @@ void MainWindow::on_rbSteps_clicked() {
   }
 
   initChartMonth("", sm);
+  chartMonth->setTitle(tr("Steps"));
 }
 
 void MainWindow::Sleep(int msec) {
@@ -3059,6 +3052,10 @@ void MainWindow::init_UIWidget() {
   ui->centralwidget->layout()->setMargin(1);
   ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 1);
   ui->centralwidget->layout()->setSpacing(1);
+  ui->frame_charts->setContentsMargins(0, 0, 0, 0);
+  ui->frame_charts->layout()->setMargin(0);
+  ui->frame_charts->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->frame_charts->layout()->setSpacing(0);
 
   this->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
@@ -3139,8 +3136,6 @@ void MainWindow::init_UIWidget() {
   ui->btnNotes->setIconSize(QSize(iz, iz));
   ui->btnSelTab->setIconSize(QSize(iz, iz));
 
-  ui->btnLeft->hide();
-  ui->btnRight->hide();
   int s = 35;
   if (isIOS) {
   }
@@ -3154,7 +3149,6 @@ void MainWindow::init_UIWidget() {
   ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
   ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
   ui->btnMainNotes->setIcon(QIcon(":/src/step.png"));
-  ui->btnZoom->hide();
   ui->frame_tab->setMaximumHeight(this->height());
   // ui->frame_charts->setMaximumHeight(this->height() / 3);
 }
@@ -3203,8 +3197,8 @@ void MainWindow::init_Menu() {
   ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
   ui->btnMenu->setStyleSheet("border:none");
   ui->lblIcon->setText("");
-  ui->lblIcon->setFixedHeight(26);
-  ui->lblIcon->setFixedWidth(26);
+  ui->lblIcon->setFixedHeight(22);
+  ui->lblIcon->setFixedWidth(22);
   ui->lblIcon->setStyleSheet(
       "QLabel{"
       "border-image:url(:/src/icon.png) 4 4 4 4 stretch stretch;"
@@ -3276,4 +3270,14 @@ void MainWindow::on_btnMenu_clicked() {
   int y = ui->frameMenu->y() + ui->frameMenu->height();
   QPoint pos(x, y);
   mainMenu->exec(pos);
+}
+
+void MainWindow::on_btnZoom_clicked() {
+  if (!ui->frame_tab->isHidden()) {
+    ui->frame_tab->hide();
+    ui->frame_charts->setMaximumHeight(this->height());
+  } else {
+    ui->frame_tab->show();
+    ui->frame_charts->setMaximumHeight(220);
+  }
 }

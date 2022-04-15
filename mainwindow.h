@@ -279,8 +279,6 @@ class MainWindow : public QMainWindow {
 
   void on_rbAmount_clicked();
 
-  void on_btnZoom_clicked();
-
   void on_btnMax_clicked();
 
   void on_btnYear_clicked();
@@ -339,6 +337,7 @@ class MainWindow : public QMainWindow {
   void init_Sensors();
   void init_UIWidget();
   void init_Menu();
+  void on_btnZoom_clicked();
 };
 
 class SearchThread : public QThread {
