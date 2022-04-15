@@ -20,5 +20,6 @@
         <file>src/remarks.png</file>
         <file>src/zoom.png</file>
         <file>src/step.png</file>
+        <file>src/tab.png</file>
     </qresource>
 </RCC>

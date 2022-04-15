@@ -593,6 +593,8 @@ void MainWindow::readDataInThread(int ExceptIndex) {
 }
 
 void MainWindow::init_TabNavigate() {
+  return;
+
   if (listNBtn.count() > 0) {
     for (int i = 0; i < listNBtn.count(); i++) {
       delete listNBtn.at(i);
@@ -2273,6 +2275,8 @@ void MainWindow::on_btnMax_clicked() {
 void MainWindow::on_btnYear_clicked() {
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
+  list->setStyleSheet(
+      "QListWidget{background: rgb(244,237,241);border-radius:15px;}");
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
@@ -2300,7 +2304,7 @@ void MainWindow::on_btnYear_clicked() {
   int h = 30 * list->count() + 2;
   int y = ui->frame_find->y() - h / 2;
 
-  list->setGeometry(ui->frameYear->x() + 30, y, w + 15, h);
+  list->setGeometry(ui->frameYear->x(), y, w + 15, h);
 
   list->show();
 
@@ -2316,6 +2320,8 @@ void MainWindow::on_btnYear_clicked() {
 void MainWindow::on_btnMonth_clicked() {
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
+  list->setStyleSheet(
+      "QListWidget{background: rgb(244,237,241);border-radius:15px;}");
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
@@ -2339,7 +2345,7 @@ void MainWindow::on_btnMonth_clicked() {
   int h = 30 * list->count() + 2;
   int y = ui->frame_find->y() - h / 2;
 
-  list->setGeometry(ui->btnMonth->x() + ui->frameYear->x() + 35, y, w + 5, h);
+  list->setGeometry(ui->btnMonth->x() + ui->frameYear->x() + 5, y, w + 5, h);
 
   list->show();
 
@@ -2355,6 +2361,8 @@ void MainWindow::on_btnMonth_clicked() {
 void MainWindow::on_btnDay_clicked() {
   int w = ui->btnDay->width();
   QListWidget* list = new QListWidget(this);
+  list->setStyleSheet(
+      "QListWidget{background: rgb(244,237,241);border-radius:15px;}");
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
@@ -2384,7 +2392,7 @@ void MainWindow::on_btnDay_clicked() {
 
   int h = 13 * 30;
   int y = ui->frame_find->y() - h / 2;
-  int x = ui->btnDay->x() + ui->frameYear->x() + 30;
+  int x = ui->btnDay->x() + ui->frameYear->x();
   list->setGeometry(x, y, w + 15, h);
   list->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -3124,6 +3132,8 @@ void MainWindow::init_UIWidget() {
   ui->btnFind->setIconSize(QSize(iz, iz));
   ui->btnReport->setIconSize(QSize(iz, iz));
   ui->btnNotes->setIconSize(QSize(iz, iz));
+  ui->btnSelTab->setIconSize(QSize(iz, iz));
+
   ui->btnLeft->hide();
   ui->btnRight->hide();
   int s = 35;
@@ -3141,4 +3151,45 @@ void MainWindow::init_UIWidget() {
   ui->btnMainNotes->setIcon(QIcon(":/src/step.png"));
   ui->btnZoom->hide();
   ui->frame_tab->setMaximumHeight(this->height());
+  // ui->frame_charts->setMaximumHeight(this->height() / 3);
+}
+
+void MainWindow::on_btnSelTab_clicked() {
+  QListWidget* list = new QListWidget(this);
+  list->setStyleSheet(
+      "QListWidget{background: "
+      "rgb(244,237,241);border-radius:15px;}");
+  list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
+  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
+  QFont font;
+  font.setPointSize(fontSize);
+  list->setFont(font);
+
+  int count = tabData->tabBar()->count();
+  for (int i = 0; i < count; i++) {
+    QListWidgetItem* item = new QListWidgetItem;
+    item->setSizeHint(QSize(130, 30));  // item->sizeHint().width()
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    item->setText(" " + QString::number(i + 1) + " . " + tabData->tabText(i));
+    list->addItem(item);
+  }
+  connect(list, &QListWidget::itemClicked, [=]() {
+    tabData->setCurrentIndex(list->currentRow());
+    list->close();
+  });
+
+  int h = 0;
+  if (count <= 15)
+    h = count * 30;
+  else
+    h = 15 * 30;
+
+  int w = 220;
+  int y = (this->height() - h) / 2;
+  int x = (this->width() - w) / 2 + 3;
+  list->setGeometry(x, y, w, h);
+  list->setCurrentRow(tabData->currentIndex());
+  list->show();
+  list->setFocus();
 }

@@ -312,6 +312,8 @@ class MainWindow : public QMainWindow {
 
   void on_actionMemos_triggered();
 
+  void on_btnSelTab_clicked();
+
  private:
   int x, y, w, h;
 
