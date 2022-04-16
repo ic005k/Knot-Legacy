@@ -179,8 +179,6 @@ MainWindow::MainWindow(QWidget* parent)
   tabData = ui->tabWidget;
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
-  gl1 = new QGridLayout(this);
-  gl1 = ui->pLayout;
 
   init_Menu();
   init_ChartWidget();
@@ -435,11 +433,17 @@ void MainWindow::init_Options() {
 
 void MainWindow::init_ChartWidget() {
   ui->tabCharts->setCornerWidget(ui->frame_cw);
+  ui->glMonth->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->glMonth->layout()->setMargin(0);
+  ui->glMonth->layout()->setSpacing(0);
+  ui->glDay->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->glDay->layout()->setMargin(0);
+  ui->glDay->layout()->setSpacing(0);
 
   chartMonth = new QChart();
   chartview = new QChartView(chartMonth);
   chartview->installEventFilter(this);
-  ui->pLayout->addWidget(chartview);
+  ui->glMonth->addWidget(chartview);
   chartview->setRenderHint(QPainter::Antialiasing);
   chartMonth->legend()->hide();
   chartMonth->setMargins(QMargins(0, 0, 0, 0));
@@ -460,7 +464,7 @@ void MainWindow::init_ChartWidget() {
   chartDay = new QChart();
   chartview1 = new QChartView(chartDay);
   chartview1->installEventFilter(this);
-  ui->glTimeLine->addWidget(chartview1);
+  ui->glDay->addWidget(chartview1);
   chartview1->setRenderHint(QPainter::Antialiasing);
   chartDay->legend()->hide();
   chartDay->setMargins(QMargins(0, 0, 0, 0));
