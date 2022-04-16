@@ -8,9 +8,10 @@ extern int fontSize, red;
 dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   this->installEventFilter(this);
-  QFont font;
-  font.setPointSize(fontSize);
-  ui->listWidget->setFont(font);
+  ui->listWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  // ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  // QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
+  ui->listWidget->horizontalScrollBar()->setHidden(true);
 }
 
 dlgList::~dlgList() { delete ui; }

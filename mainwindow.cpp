@@ -376,6 +376,7 @@ void MainWindow::init_Options() {
   mydlgReport->ui->tableDetails->horizontalHeader()->setFont(userFont);
   mydlgSteps->ui->tableWidget->horizontalHeader()->setFont(userFont);
   ui->btnMainNotes->setFont(userFont);
+  mydlgList->ui->listWidget->setFont(userFont);
 
   mydlgPre->ui->chkClose->setChecked(
       Reg.value("/Options/Close", false).toBool());
@@ -2010,24 +2011,17 @@ void MainWindow::on_actionView_App_Data_triggered() {
 
 void MainWindow::on_btnFind_clicked() {
   if (ui->frame_find->isHidden()) {
-    ui->frame_find->setHidden(false);
+    ui->frame_find->show();
     ui->frameYear->show();
-    ui->btnPlus->setHidden(true);
-    ui->btnLess->setHidden(true);
-    ui->btnTodo->setHidden(true);
-    ui->btnMax->setHidden(true);
-    ui->btnMainNotes->setHidden(true);
-    ui->frame_charts->setMaximumHeight(frameChartHeight +
-                                       ui->frameYear->height());
+    ui->frameBtn->hide();
+    // ui->frame_charts->setMaximumHeight(frameChartHeight +
+    //                                    ui->frameYear->height());
+
   } else {
-    ui->frame_find->setHidden(true);
+    // ui->frame_charts->setMaximumHeight(frameChartHeight);
+    ui->frame_find->hide();
     ui->frameYear->hide();
-    ui->btnPlus->setHidden(false);
-    ui->btnLess->setHidden(false);
-    ui->btnTodo->setHidden(false);
-    ui->btnMax->setHidden(false);
-    ui->btnMainNotes->setHidden(false);
-    ui->frame_charts->setMaximumHeight(frameChartHeight);
+    ui->frameBtn->show();
   }
 }
 
@@ -3066,7 +3060,7 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
-  ui->progBar->setMaximumHeight(1);
+  ui->progBar->setMaximumHeight(2);
   mydlgNotes = new dlgNotes(this);
   mydlgNotes->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   mydlgNotes->ui->textBrowser->verticalScrollBar()->setStyleSheet(

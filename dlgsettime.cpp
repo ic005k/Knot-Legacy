@@ -14,6 +14,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
   ui->setupUi(this);
   QFont font;
+  font.setPointSize(24);
   font.setBold(true);
   ui->lblTime->setFont(font);
   ui->editAmount->setFont(font);
@@ -113,18 +114,16 @@ void dlgSetTime::set_Amount(QString Number) {
 }
 
 void dlgSetTime::on_btnCustom_clicked() {
-  if (mw_one->mydlgList->isHidden()) {
-    mw_one->mydlgList->setModal(true);
+  dlgList* dlg = mw_one->mydlgList;
+  if (dlg->isHidden()) {
+    dlg->setModal(true);
 
     int h = mw_one->height() * 2 / 3;
-    int y = ui->lblDesc->y() + ui->lblDesc->height() - h;
-    mw_one->mydlgList->setGeometry(ui->editDesc->x(), y, ui->editDesc->width(),
-                                   h);
-
-    mw_one->mydlgList->show();
-    mw_one->mydlgList->ui->listWidget->setFocus();
-    if (mw_one->mydlgList->ui->listWidget->count() > 0)
-      mw_one->mydlgList->ui->listWidget->setCurrentRow(0);
+    int y = ui->frame->y() + ui->frame->height() - h;
+    dlg->setGeometry(ui->frame->x(), y, ui->frame->width(), h);
+    dlg->show();
+    dlg->ui->listWidget->setFocus();
+    if (dlg->ui->listWidget->count() > 0) dlg->ui->listWidget->setCurrentRow(0);
   }
 }
 
@@ -180,8 +179,12 @@ void dlgSetTime::init_Desc() {
   mw_one->mydlgList->ui->listWidget->clear();
   int descCount = RegDesc.value("/CustomDesc/Count").toInt();
   for (int i = 0; i < descCount; i++) {
-    mw_one->mydlgList->ui->listWidget->addItem(
-        RegDesc.value("/CustomDesc/Item" + QString::number(i)).toString());
+    QString str =
+        RegDesc.value("/CustomDesc/Item" + QString::number(i)).toString();
+    QListWidgetItem* item = new QListWidgetItem(str);
+    item->setSizeHint(
+        QSize(mw_one->mydlgList->ui->listWidget->width() - 10, 35));
+    mw_one->mydlgList->ui->listWidget->addItem(item);
   }
 }
 
