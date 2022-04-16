@@ -1,7 +1,9 @@
 #ifndef DLGMAINNOTES_H
 #define DLGMAINNOTES_H
 
+#include <QApplication>
 #include <QDialog>
+#include <QInputMethod>
 #include <QPlainTextEdit>
 
 #include "smoothscrollbar.h"
@@ -39,7 +41,14 @@ class dlgMainNotes : public QDialog {
 
   void on_textBrowser_cursorPositionChanged();
 
+  void on_btnStartEdit_clicked();
+
+  void on_KVChanged();
+
  private:
+  int newHeight = 0;
+  bool one = false;
+  QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   SmoothScrollBar *vScrollBar;
   void wheelEvent(QWheelEvent *e) override;  //捕获鼠标滚轮事件
 };

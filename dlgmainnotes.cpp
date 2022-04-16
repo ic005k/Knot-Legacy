@@ -12,6 +12,9 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
   ui->setupUi(this);
 
+  connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
+          &dlgMainNotes::on_KVChanged);
+
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->textEdit->installEventFilter(this);
@@ -28,6 +31,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnOpenText->hide();
   ui->btnCloseText->hide();
   ui->btnLastBrowse->hide();
+  ui->btnStartEdit->hide();
 }
 
 void dlgMainNotes::wheelEvent(QWheelEvent* e) {
@@ -41,7 +45,13 @@ void dlgMainNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
 void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);
-  qDebug() << "Resize: " << ui->textEdit->height() << this->height();
+  if (this->height() == mw_one->height()) return;
+  if (!one) {
+    one = true;
+    newHeight = this->height();
+  }
+  qDebug() << pAndroidKeyboard->keyboardRectangle().height() << newHeight
+           << this->height();
 }
 
 void dlgMainNotes::on_btnBack_clicked() {
@@ -153,4 +163,29 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
   }
 
   return QWidget::eventFilter(obj, evn);
+}
+
+void dlgMainNotes::on_btnStartEdit_clicked() {
+  if (ui->btnStartEdit->text() == tr("Start")) {
+    this->setFixedHeight(mw_one->height() / 2);
+    ui->btnStartEdit->setText(tr("End"));
+    ui->textEdit->setReadOnly(false);
+    ui->textEdit->setTextInteractionFlags(Qt::TextEditable);
+    pAndroidKeyboard->show();
+    qDebug() << pAndroidKeyboard->keyboardRectangle().height();
+  } else {
+    this->setFixedHeight(mw_one->height());
+    ui->btnStartEdit->setText(tr("Start"));
+    ui->textEdit->setReadOnly(true);
+    ui->textEdit->setTextInteractionFlags(Qt::NoTextInteraction);
+    pAndroidKeyboard->hide();
+  }
+}
+
+void dlgMainNotes::on_KVChanged() {
+  if (pAndroidKeyboard->isVisible()) {
+    this->setFixedHeight(mw_one->height() * 2 / 3 + 10);
+  } else {
+    this->setFixedHeight(mw_one->height());
+  }
 }
