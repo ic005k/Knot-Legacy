@@ -180,7 +180,7 @@ public class MyActivity extends QtActivity {
         context = getApplicationContext();
         // 设置状态栏颜色,需要安卓版本大于5.0
         // this.setStatusBarColor("#FF4040"); //红
-        this.setStatusBarColor("#DDDDDD");  //灰
+        this.setStatusBarColor("#F3F3F3");  //灰
         // 设置状态栏全透明
         // this.setStatusBarFullTransparent();
         //状态栏文字自适应
