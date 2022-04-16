@@ -70,7 +70,12 @@ void dlgSetTime::on_btnOk_clicked() {
     }
   }
 
-  if (str.length() > 0) mw_one->mydlgList->ui->listWidget->insertItem(0, str);
+  if (str.length() > 0) {
+    QListWidgetItem* item = new QListWidgetItem(str);
+    item->setSizeHint(
+        QSize(mw_one->mydlgList->ui->listWidget->width() - 10, 35));
+    mw_one->mydlgList->ui->listWidget->insertItem(0, item);
+  }
 
   close();
 }
