@@ -30,6 +30,10 @@ extern bool isAndroid, isIOS, zh_cn;
 extern QString btnYearText, btnMonthText;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
+void RegJni();
+static void JavaNotify_2();
+static void JavaNotify_1();
+
 /* Low pass filter for smoothening sensor input data */
 static filter_t lp_filter_x, lp_filter_y, lp_filter_z;
 static filter_t ll_filter_x, ll_filter_y, ll_filter_z;
@@ -171,6 +175,7 @@ void MainWindow::SaveFile(QString SaveType) {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  loading = true;
   mw_one = this;
   ui->actionAbout->setText(tr("About") + " (" + ver + ")");
   strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
@@ -179,14 +184,12 @@ MainWindow::MainWindow(QWidget* parent)
   tabData = ui->tabWidget;
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
-
   init_Menu();
   init_ChartWidget();
   init_UIWidget();
+
   init_Options();
   init_Sensors();
-
-  loading = true;
   init_TabData();
   loading = false;
 
@@ -202,6 +205,9 @@ MainWindow::MainWindow(QWidget* parent)
 void MainWindow::newDatas() {
   ax = ay = az = gx = gy = gz = 0;
   az = accel_pedometer->reading()->z();
+
+  mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
+                                           secondsToTime(timeTest++));
 
   if (mydlgPre->ui->chkLogs->isChecked()) {
     testCount1++;
@@ -232,9 +238,10 @@ void MainWindow::newDatas() {
     }
   }
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
-    if (countOne >= 150) {
+    if (countOne >= 3000) {
       aoldZ = az;
       countOne = 0;
+      qDebug() << countOne;
     }
   }
 
@@ -584,6 +591,7 @@ void MainWindow::init_TabData() {
   }
   mydlgTodo->init_Items();
   mydlgSetTime->init_Desc();
+  mydlgSteps->init_Steps();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
@@ -659,8 +667,10 @@ void MainWindow::init_NavigateBtnColor() {
 }
 
 void MainWindow::timerUpdate() {
-  mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
-                                           secondsToTime(timeTest++));
+  // mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : "
+  // +
+  //                                          secondsToTime(timeTest++));
+  newDatas();
 }
 
 MainWindow::~MainWindow() {
@@ -1181,9 +1191,17 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
   if (mydlgPre->ui->chkClose->isChecked()) {
+#ifdef Q_OS_ANDROID
+    QAndroidJniObject jo = QAndroidJniObject::fromString("StopWin");
+    jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
+#endif
     event->accept();
   } else {
     if (mydlgPre->isFontChange) {
+#ifdef Q_OS_ANDROID
+      QAndroidJniObject jo = QAndroidJniObject::fromString("StopWin");
+      jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
+#endif
       event->accept();
       return;
     }
@@ -1209,18 +1227,6 @@ void MainWindow::init_Stats(QTreeWidget* tw) {
     amount = amount + str2.toDouble();
   }
 
-  double a = (double)tatol / 20;
-  int a1, b, c;
-  a1 = a;
-  b = a1 / 10;
-  c = a1 % 10;
-
-  /*if (ui->tabWidget->currentIndex() == 0)
-    ui->lblStats->setText(tr("Total") + " : " + QString::number(a) + " " +
-                          tr("Boxes") + " ( " + QString::number(b) + " " +
-                          tr("Cartons") + " " + QString::number(c) + " " +
-                          tr("Boxes") + " ) ");
-  else*/
   QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
   strStats = tr("Total") + " : " + QString::number(tatol) + "    $" + strAmount;
 }
@@ -1846,7 +1852,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void MainWindow::on_actionAbout_triggered() {
-  QUrl url(QString("https://github.com/ic005k/Xcounter#readme"));
+  QUrl url(QString("https://github.com/ic005k/Xcounter/releases/latest"));
   QDesktopServices::openUrl(url);
 }
 
@@ -1872,6 +1878,7 @@ void MainWindow::on_actionExport_Data_triggered() {
     edit->append(loadText(iniDir + "ymd.ini"));
     edit->append(loadText(iniDir + "notes.ini"));
     edit->append(loadText(iniDir + "mainnotes.ini"));
+    edit->append(loadText(iniDir + "steps.ini"));
 
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
       QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
@@ -3031,7 +3038,7 @@ void MainWindow::on_actionMemos_triggered() {
 
 void MainWindow::init_Sensors() {
   accel_pedometer = new SpecialAccelerometerPedometer(this);
-  connect(accel_pedometer, SIGNAL(readingChanged()), this, SLOT(newDatas()));
+  // connect(accel_pedometer, SIGNAL(readingChanged()), this, SLOT(newDatas()));
   connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
           SLOT(updateSteps()));
   mydlgSteps->init_Steps();
@@ -3041,12 +3048,23 @@ void MainWindow::init_Sensors() {
       mydlgSteps->ui->editTangentLineSlope->text().toFloat());
   accel_pedometer->setDataRate(100);
   accel_pedometer->setAccelerationMode(QAccelerometer::User);
+  accel_pedometer->setAlwaysOn(true);
   accel_pedometer->setActive(true);
   accel_pedometer->start();
 
   gyroscope = new QGyroscope(this);
   gyroscope->setActive(true);
   gyroscope->start();
+
+  if (mydlgSteps->ui->rbAlg1->isChecked()) sRate = 100;
+  if (mydlgSteps->ui->rbAlg2->isChecked()) sRate = 20;
+
+    // timer->start(sRate);
+
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject jo = QAndroidJniObject::fromString("StartWin");
+  jo.callStaticMethod<int>("com.x/MyService", "startTimer", "()I");
+#endif
 }
 
 void MainWindow::init_UIWidget() {
@@ -3078,9 +3096,13 @@ void MainWindow::init_UIWidget() {
   mydlgPre = new dlgPreferences(this);
   mydlgMainNotes = new dlgMainNotes(this);
   mydlgSteps = new dlgSteps(this);
-
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
+
+  timer = new QTimer(this);
+  connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
+  timerStep = new QTimer(this);
+  connect(timerStep, SIGNAL(timeout()), this, SLOT(timerUpdateStep()));
 
   // 获取背景色
   QPalette pal = this->palette();
@@ -3099,11 +3121,6 @@ void MainWindow::init_UIWidget() {
   }
 
   ui->statusbar->setHidden(true);
-  timer = new QTimer(this);
-  connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
-  timer->start(1000);
-  timerStep = new QTimer(this);
-  connect(timerStep, SIGNAL(timeout()), this, SLOT(timerUpdateStep()));
 
   myReadTWThread = new ReadTWThread();
   connect(myReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
@@ -3218,7 +3235,7 @@ void MainWindow::init_Menu() {
   QAction* actPreferences = new QAction(tr("Preferences"));
   QAction* actMemos = new QAction(tr("Memos"));
   QAction* actViewAppData = new QAction(tr("View App Data"));
-  QAction* actAbout = new QAction(tr("About"));
+  QAction* actAbout = new QAction(tr("Check for New Releases"));
 
   mainMenu->addAction(actAddTab);
   mainMenu->addAction(actDelTab);
@@ -3283,4 +3300,34 @@ void MainWindow::on_btnZoom_clicked() {
     ui->frame_tab->show();
     ui->frame_charts->setMaximumHeight(frameChartHeight);
   }
+}
+
+static void JavaNotify_1() {
+  mw_one->newDatas();
+  qDebug() << "C++ JavaNotify_1";
+}
+static void JavaNotify_2() { qDebug() << "C++ JavaNotify_2"; }
+static const JNINativeMethod gMethods[] = {
+    {"CallJavaNotify_1", "()V", (void*)JavaNotify_1},
+    {"CallJavaNotify_2", "()V", (void*)JavaNotify_2}};
+void RegJni() {
+  QtAndroid::runOnAndroidThreadSync([=]() {
+    QAndroidJniEnvironment Environment;
+    const char* mClassName = "com/x/MyService";
+    jclass j_class;
+    j_class = Environment->FindClass(mClassName);
+    if (j_class == nullptr) {
+      qDebug() << "erro clazz";
+      return;
+    }
+    jint mj = Environment->RegisterNatives(
+        j_class, gMethods, sizeof(gMethods) / sizeof(gMethods[0]));
+    if (mj != JNI_OK) {
+      qDebug() << "register native method failed!";
+      return;
+    } else {
+      qDebug() << "RegisterNatives success!";
+    }
+  });
+  qDebug() << "++++++++++++++++++++++++";
 }

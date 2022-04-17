@@ -6,6 +6,7 @@
 #include <QAbstractButton>
 #include <QAccelerometerReading>
 #ifdef Q_OS_ANDROID
+#include <QAndroidJniEnvironment>
 #include <QAndroidJniObject>
 #include <QtAndroid>
 #endif
@@ -87,6 +88,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  int sRate = 0;
   qreal ax, ay, az, gx, gy, gz;
   int testCount1 = 0;
   int testCount = 0;

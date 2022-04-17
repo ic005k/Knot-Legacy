@@ -6,11 +6,15 @@
 
 extern QString iniFile, txtFile, appName, iniDir;
 extern int fontSize;
+extern void RegJni();
 void loadLocal();
 bool zh_cn = false;
 bool isAndroid, isIOS;
 int main(int argc, char *argv[]) {
 #ifdef Q_OS_ANDROID
+  RegJni();
+  //禁用文本选择
+  // qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
   qDebug() << "OS=Linux Android";
   isAndroid = true;
   isIOS = false;

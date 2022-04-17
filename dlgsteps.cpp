@@ -6,9 +6,11 @@
 
 extern MainWindow* mw_one;
 extern QRegularExpression regxNumber;
-extern QString iniDir;
 extern QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 extern unsigned int num_steps_walk, num_steps_run, num_steps_hop;
+extern bool loading;
+extern bool isImport;
+extern QString iniFile, iniDir;
 
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
@@ -75,7 +77,7 @@ void dlgSteps::on_btnPause_clicked() {
   } else if (ui->btnPause->text() == tr("Start")) {
     ui->btnPause->setText(tr("Pause"));
     mw_one->accel_pedometer->start();
-    mw_one->timer->start(1000);
+    mw_one->timer->start(mw_one->sRate);
   }
 }
 
@@ -116,7 +118,13 @@ void dlgSteps::saveSteps() {
 }
 
 void dlgSteps::init_Steps() {
-  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+  QString ini_file;
+  if (isImport)
+    ini_file = iniFile;
+  else
+    ini_file = iniDir + "steps.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+
   ui->editTangentLineIntercept->setText(
       Reg.value("/Steps/Intercept", dleInter).toString());
   ui->editTangentLineSlope->setText(
@@ -229,6 +237,11 @@ void dlgSteps::on_rbAlg1_clicked() {
   glistX.clear();
   glistY.clear();
   glistZ.clear();
+  mw_one->sRate = 100;
+  if (!loading) {
+    mw_one->timer->stop();
+    mw_one->timer->start(mw_one->sRate);
+  }
 }
 
 void dlgSteps::on_rbAlg2_clicked() {
@@ -239,6 +252,11 @@ void dlgSteps::on_rbAlg2_clicked() {
   glistX.clear();
   glistY.clear();
   glistZ.clear();
+  mw_one->sRate = 20;
+  if (!loading) {
+    mw_one->timer->stop();
+    mw_one->timer->start(mw_one->sRate);
+  }
 }
 
 void dlgSteps::on_rbAlg3_clicked() {
