@@ -175,18 +175,12 @@ void MainWindow::SaveFile(QString SaveType) {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  qRegisterMetaType<QVector<int>>("QVector<int>");
   loading = true;
-  mw_one = this;
-  ui->actionAbout->setText(tr("About") + " (" + ver + ")");
-  strDate = QDate::currentDate().toString();  //"yyyy-MM-dd");
-  isReadEnd = true;
-  tabData = new QTabWidget;
-  tabData = ui->tabWidget;
-  tabChart = new QTabWidget;
-  tabChart = ui->tabCharts;
-  init_Menu();
-  init_ChartWidget();
   init_UIWidget();
+  init_ChartWidget();
+
+  init_Menu();
 
   init_Options();
   init_Sensors();
@@ -206,8 +200,13 @@ void MainWindow::newDatas() {
   ax = ay = az = gx = gy = gz = 0;
   az = accel_pedometer->reading()->z();
 
+  smallCount++;
+  if (smallCount == 50) {
+    timeTest++;
+    smallCount = 0;
+  }
   mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
-                                           secondsToTime(timeTest++));
+                                           secondsToTime(timeTest));
 
   if (mydlgPre->ui->chkLogs->isChecked()) {
     testCount1++;
@@ -528,6 +527,22 @@ void MainWindow::init_ChartWidget() {
 
   chartMonth->setTitle(tr("Freq"));
   chartDay->setTitle(tr("Freq"));
+
+  // 获取背景色
+  QPalette pal = this->palette();
+  QBrush brush = pal.window();
+  red = brush.color().red();
+  if (red < 55) {
+    mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
+    chartMonth->setTheme(QChart::ChartThemeDark);
+    chartDay->setTheme(QChart::ChartThemeDark);
+
+  } else {
+    mydlgTodo->ui->listWidget->setStyleSheet(
+        mydlgTodo->ui->listWidget->styleSheet());
+    chartMonth->setTheme(QChart::ChartThemeLight);
+    chartDay->setTheme(QChart::ChartThemeLight);
+  }
 }
 
 void MainWindow::slotPointHoverd(const QPointF& point, bool state) {
@@ -1643,20 +1658,6 @@ void MainWindow::saveNotes(int tabIndex) {
   QTreeWidget* tw = (QTreeWidget*)tabData->widget(tabIndex);
   QString name = tw->objectName();
   Reg.setValue("/" + name + "/Note", tabData->tabToolTip(tabIndex));
-}
-
-void MainWindow::on_btnLeft_clicked() {
-  if (ui->tabWidget->currentIndex() < 0) return;
-  int index = ui->tabWidget->currentIndex();
-  if (index == 0) return;
-  ui->tabWidget->setCurrentIndex(index - 1);
-}
-
-void MainWindow::on_btnRight_clicked() {
-  if (ui->tabWidget->currentIndex() < 0) return;
-  int index = ui->tabWidget->currentIndex();
-  if (index == ui->tabWidget->tabBar()->count() - 1) return;
-  ui->tabWidget->setCurrentIndex(index + 1);
 }
 
 void MainWindow::on_actionNotes_triggered() {
@@ -3068,6 +3069,15 @@ void MainWindow::init_Sensors() {
 }
 
 void MainWindow::init_UIWidget() {
+  mw_one = this;
+  ui->actionAbout->setText(tr("About") + " (" + ver + ")");
+  strDate = QDate::currentDate().toString();
+  isReadEnd = true;
+  tabData = new QTabWidget;
+  tabData = ui->tabWidget;
+  tabChart = new QTabWidget;
+  tabChart = ui->tabCharts;
+
   ui->centralwidget->layout()->setMargin(1);
   ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 1);
   ui->centralwidget->layout()->setSpacing(1);
@@ -3103,22 +3113,6 @@ void MainWindow::init_UIWidget() {
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
   timerStep = new QTimer(this);
   connect(timerStep, SIGNAL(timeout()), this, SLOT(timerUpdateStep()));
-
-  // 获取背景色
-  QPalette pal = this->palette();
-  QBrush brush = pal.window();
-  red = brush.color().red();
-  if (red < 55) {
-    mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
-    chartMonth->setTheme(QChart::ChartThemeDark);
-    chartDay->setTheme(QChart::ChartThemeDark);
-
-  } else {
-    mydlgTodo->ui->listWidget->setStyleSheet(
-        mydlgTodo->ui->listWidget->styleSheet());
-    chartMonth->setTheme(QChart::ChartThemeLight);
-    chartDay->setTheme(QChart::ChartThemeLight);
-  }
 
   ui->statusbar->setHidden(true);
 
@@ -3302,6 +3296,7 @@ void MainWindow::on_btnZoom_clicked() {
   }
 }
 
+#ifdef Q_OS_ANDROID
 static void JavaNotify_1() {
   mw_one->newDatas();
   qDebug() << "C++ JavaNotify_1";
@@ -3331,3 +3326,4 @@ void RegJni() {
   });
   qDebug() << "++++++++++++++++++++++++";
 }
+#endif

@@ -72,6 +72,8 @@ class SearchThread;
 class ReadThread;
 class ReadTWThread;
 
+#include <QMetaType>
+
 QT_CHARTS_USE_NAMESPACE
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -92,9 +94,9 @@ class MainWindow : public QMainWindow {
   qreal ax, ay, az, gx, gy, gz;
   int testCount1 = 0;
   int testCount = 0;
+  int smallCount = 0;
   ulong timeTest = 0;
   ulong timeCount = 0;
-  QVector<int8_t> a3list;
   QChartView *chartview;
   QChartView *chartview1;
   QLabel *m_valueLabel;
@@ -243,10 +245,6 @@ class MainWindow : public QMainWindow {
 
   void on_tabWidget_currentChanged(int index);
 
-  void on_btnLeft_clicked();
-
-  void on_btnRight_clicked();
-
   void on_actionNotes_triggered();
 
   void on_btnNotes_clicked();
@@ -264,8 +262,6 @@ class MainWindow : public QMainWindow {
   void on_actionView_App_Data_triggered();
 
   void on_btnFind_clicked();
-
-  void on_cboxYear_currentTextChanged(const QString &arg1);
 
   void on_btnGo_clicked();
 
@@ -341,6 +337,7 @@ class MainWindow : public QMainWindow {
   void init_UIWidget();
   void init_Menu();
   void on_btnZoom_clicked();
+  void on_cboxYear_currentTextChanged(const QString &arg1);
 };
 
 class SearchThread : public QThread {

@@ -240,7 +240,7 @@ void dlgSteps::on_rbAlg1_clicked() {
   mw_one->sRate = 100;
   if (!loading) {
     mw_one->timer->stop();
-    mw_one->timer->start(mw_one->sRate);
+    // mw_one->timer->start(mw_one->sRate);
   }
 }
 
@@ -255,7 +255,7 @@ void dlgSteps::on_rbAlg2_clicked() {
   mw_one->sRate = 20;
   if (!loading) {
     mw_one->timer->stop();
-    mw_one->timer->start(mw_one->sRate);
+    // mw_one->timer->start(mw_one->sRate);
   }
 }
 

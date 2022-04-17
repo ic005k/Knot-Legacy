@@ -264,7 +264,7 @@ QRadioButton::indicator:checked {
 </string>
            </property>
            <property name="text">
-            <string>  </string>
+            <string>F</string>
            </property>
            <property name="checked">
             <bool>true</bool>
@@ -298,7 +298,7 @@ QRadioButton::indicator:checked {
 </string>
            </property>
            <property name="text">
-            <string>  </string>
+            <string>A</string>
            </property>
           </widget>
          </item>
@@ -329,7 +329,7 @@ QRadioButton::indicator:checked {
 </string>
            </property>
            <property name="text">
-            <string>  </string>
+            <string>S</string>
            </property>
           </widget>
          </item>
@@ -610,8 +610,14 @@ QRadioButton::indicator:checked {
 	color:rgb(255,255,255);
 }</string>
          </property>
+         <property name="tabShape">
+          <enum>QTabWidget::Rounded</enum>
+         </property>
          <property name="currentIndex">
           <number>0</number>
+         </property>
+         <property name="usesScrollButtons">
+          <bool>true</bool>
          </property>
          <property name="documentMode">
           <bool>true</bool>
