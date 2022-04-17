@@ -3210,6 +3210,8 @@ void MainWindow::init_Menu() {
   ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
+  ui->btnReport->setStyleSheet("border:none");
+  ui->btnNotes->setStyleSheet("border:none");
   ui->lblIcon->setText("");
   ui->lblIcon->setFixedHeight(22);
   ui->lblIcon->setFixedWidth(22);
