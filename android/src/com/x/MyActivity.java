@@ -34,16 +34,17 @@ import android.widget.TextView;
 public class MyActivity extends QtActivity {
 
     private static MyActivity m_instance;
-
-
     private SensorManager mSensorManager;
+
+    public native void CallJavaNotify_1();
+    public native void CallJavaNotify_2();
 
     public MyActivity() {
         m_instance = this;
     }
 
     public static int mini() {
-        System.out.println("+++++++++++++++++++++++");
+        System.out.println("Mini+++++++++++++++++++++++");
 
         m_instance.moveTaskToBack(true);
 
@@ -172,7 +173,7 @@ public class MyActivity extends QtActivity {
         super.onCreate(savedInstanceState);
 
         //唤醒锁
-        //acquireWakeLock();
+        acquireWakeLock();
         //initSensor();
 
         //状态栏
@@ -197,7 +198,6 @@ public class MyActivity extends QtActivity {
         }
 
         MyService.notify(getApplicationContext(), "Hello!");
-
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
@@ -216,6 +216,7 @@ public class MyActivity extends QtActivity {
     @Override
     public void onPause() {
         System.out.println("Pause...");
+
         super.onPause();
 
     }
@@ -230,6 +231,7 @@ public class MyActivity extends QtActivity {
     protected void onDestroy() {
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
+
         super.onDestroy();
     }
 

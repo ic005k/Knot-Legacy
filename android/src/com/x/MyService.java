@@ -19,12 +19,45 @@ import android.app.NotificationChannel;
 import android.support.v4.app.NotificationCompat;
 import android.annotation.TargetApi;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class MyService extends Service {
 
     private static final String TAG = "MyService";
     private static final String ID = "channel_1";
     private static final String NAME = "F_SERVICE";
+
+    public native static void CallJavaNotify_1();
+
+    public native static void CallJavaNotify_2();
+
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    public static Timer timer;
+
+    public static int startTimer() {
+        System.out.println("startTimer+++++++++++++++++++++++");
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Timer:" + format.format(new Date()));
+                CallJavaNotify_1();
+            }
+        }, 0, 20);
+
+        return 1;
+    }
+
+    public static int stopTimer() {
+        timer.cancel();
+        System.out.println("stopTimer+++++++++++++++++++++++");
+        return 1;
+    }
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -64,6 +97,8 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         Log.d("MyService", "onStartCommand()-------");
+
+        //CallJavaNotify_1();
 
         return super.onStartCommand(intent, flags, startId);
     }
