@@ -198,37 +198,6 @@ QRadioButton::indicator:checked {
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QRadioButton" name="rbAlg3">
-        <property name="styleSheet">
-         <string notr="true">QRadioButton::indicator {
-    width: 25px;
-    height: 25px;
-    /*image: url(:/src/sel.png);*/
-    
-    position: relative;
-    left: 0px;
-    right: 3px;
-    top: 2px;
-    bottom:4px;
-}
-
-QRadioButton::indicator:unchecked {
-    image: url(:/src/nosel.png);
-}
-
-QRadioButton::indicator:checked {
-    image: url(:/src/sel.png);
-}
-
-
-</string>
-        </property>
-        <property name="text">
-         <string>Way 3</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>

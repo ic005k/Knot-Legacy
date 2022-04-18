@@ -34,6 +34,12 @@ class dlgSteps : public QDialog {
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;
+
+ public slots:
+  void on_rbAlg1_clicked();
+
+  void on_rbAlg2_clicked();
+
  private slots:
   void on_btnBack_clicked();
 
@@ -48,12 +54,6 @@ class dlgSteps : public QDialog {
   void on_btnDefaultIntercept_clicked();
 
   void on_btnDefaultSlope_clicked();
-
-  void on_rbAlg1_clicked();
-
-  void on_rbAlg2_clicked();
-
-  void on_rbAlg3_clicked();
 
   void on_btnLogs_clicked();
 

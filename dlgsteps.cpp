@@ -15,7 +15,7 @@ extern QString iniFile, iniDir;
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
   this->installEventFilter(this);
-  ui->rbAlg3->hide();
+
   ui->lblSingle->adjustSize();
 
   QFont font1;
@@ -100,7 +100,6 @@ void dlgSteps::saveSteps() {
   Reg.setValue("/Steps/Length", ui->editStepLength->text().trimmed());
   Reg.setValue("/Steps/Alg1", ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Alg2", ui->rbAlg2->isChecked());
-  Reg.setValue("/Steps/Alg3", ui->rbAlg3->isChecked());
 
   int i = 0;
   int count = ui->tableWidget->rowCount();
@@ -132,10 +131,6 @@ void dlgSteps::init_Steps() {
   ui->editStepLength->setText(Reg.value("/Steps/Length", "35").toString());
   ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
   ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
-  ui->rbAlg3->setChecked(Reg.value("Steps/Alg3", false).toBool());
-  if (ui->rbAlg1->isChecked()) on_rbAlg1_clicked();
-  if (ui->rbAlg2->isChecked()) on_rbAlg2_clicked();
-  if (ui->rbAlg3->isChecked()) on_rbAlg3_clicked();
 
   int count = Reg.value("/Steps/Count").toInt();
   for (int i = 0; i < count; i++) {
@@ -229,6 +224,7 @@ void dlgSteps::on_btnDefaultSlope_clicked() {
 }
 
 void dlgSteps::on_rbAlg1_clicked() {
+  if (loading) return;
   ui->frameWay1->show();
   ui->lblSteps->setText("");
   rlistX.clear();
@@ -237,14 +233,15 @@ void dlgSteps::on_rbAlg1_clicked() {
   glistX.clear();
   glistY.clear();
   glistZ.clear();
-  mw_one->sRate = 100;
-  if (!loading) {
-    mw_one->timer->stop();
-    // mw_one->timer->start(mw_one->sRate);
-  }
+
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep1Win");
+  jo.callStaticMethod<int>("com.x/MyService", "setSleep1", "()I");
+#endif
 }
 
 void dlgSteps::on_rbAlg2_clicked() {
+  if (loading) return;
   ui->frameWay1->hide();
   rlistX.clear();
   rlistY.clear();
@@ -252,22 +249,11 @@ void dlgSteps::on_rbAlg2_clicked() {
   glistX.clear();
   glistY.clear();
   glistZ.clear();
-  mw_one->sRate = 20;
-  if (!loading) {
-    mw_one->timer->stop();
-    // mw_one->timer->start(mw_one->sRate);
-  }
-}
 
-void dlgSteps::on_rbAlg3_clicked() {
-  ui->frameWay1->hide();
-  ui->lblSteps->setText("");
-  rlistX.clear();
-  rlistY.clear();
-  rlistZ.clear();
-  glistX.clear();
-  glistY.clear();
-  glistZ.clear();
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep2Win");
+  jo.callStaticMethod<int>("com.x/MyService", "setSleep2", "()I");
+#endif
 }
 
 void dlgSteps::on_btnLogs_clicked() {

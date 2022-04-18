@@ -109,7 +109,7 @@ void MainWindow::readDone() {
   }
 
   ui->lblStats->setText(strStats);
-  init_NavigateBtnColor();
+
   isReadEnd = true;
 }
 
@@ -179,9 +179,7 @@ MainWindow::MainWindow(QWidget* parent)
   loading = true;
   init_UIWidget();
   init_ChartWidget();
-
   init_Menu();
-
   init_Options();
   init_Sensors();
   init_TabData();
@@ -191,9 +189,10 @@ MainWindow::MainWindow(QWidget* parent)
   startRead(strDate);
   get_Today(tw);
   init_Stats(tw);
-  init_NavigateBtnColor();
-
   isInit = true;
+
+  if (mydlgSteps->ui->rbAlg1->isChecked()) mydlgSteps->on_rbAlg1_clicked();
+  if (mydlgSteps->ui->rbAlg2->isChecked()) mydlgSteps->on_rbAlg2_clicked();
 }
 
 void MainWindow::newDatas() {
@@ -201,9 +200,17 @@ void MainWindow::newDatas() {
   az = accel_pedometer->reading()->z();
 
   smallCount++;
-  if (smallCount == 50) {
-    timeTest++;
-    smallCount = 0;
+  if (mydlgSteps->ui->rbAlg1->isChecked()) {
+    if (smallCount >= 20) {
+      timeTest++;
+      smallCount = 0;
+    }
+  }
+  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+    if (smallCount >= 100) {
+      timeTest++;
+      smallCount = 0;
+    }
   }
   mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
                                            secondsToTime(timeTest));
@@ -237,7 +244,7 @@ void MainWindow::newDatas() {
     }
   }
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
-    if (countOne >= 3000) {
+    if (countOne >= 300) {
       aoldZ = az;
       countOne = 0;
       qDebug() << countOne;
@@ -258,8 +265,11 @@ void MainWindow::newDatas() {
   }
 
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
-    timerStep->start(1000);
+    // timerStep->start(1000);
     accel_pedometer->runStepCountAlgorithm();
+    timeCount++;
+    mydlgSteps->ui->lblSteps->setText(tr("Number of Operations") + " : " +
+                                      QString::number(timeCount));
   }
 
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
@@ -270,9 +280,6 @@ void MainWindow::newDatas() {
     glistY.append(gy);
     glistZ.append(gz);
     if (rlistX.count() == 120) getSteps2();
-  }
-
-  if (mydlgSteps->ui->rbAlg3->isChecked()) {
   }
 
   if (mydlgPre->ui->chkShowSV->isChecked()) {
@@ -311,19 +318,11 @@ void MainWindow::updateSteps() {
     CurTableCount = mydlgSteps->toDayInitSteps + CurrentSteps;
   }
 
-  if (mydlgSteps->ui->rbAlg3->isChecked()) {
-  }
-
   mydlgSteps->ui->lcdNumber->display(QString::number(CurTableCount));
   mydlgSteps->ui->lblSingle->setText(QString::number(CurrentSteps));
   mydlgSteps->setTableSteps(CurTableCount);
 
   if (CurrentSteps == 0) return;
-  if (QString::number(CurTableCount).length() <= 4) {
-    // QString strNum = QString("%1").arg(CurTableCount, 4, 10,
-    // QLatin1Char('0')); ui->btnMainNotes->setText(strNum);
-  }  // else
-     // ui->btnMainNotes->setText(QString::number(CurTableCount));
 
 #ifdef Q_OS_ANDROID
   double sl = mydlgSteps->ui->editStepLength->text().toDouble();
@@ -620,7 +619,6 @@ void MainWindow::init_TabData() {
   ui->actionAdd_Tab->setEnabled(false);
   ui->actionView_App_Data->setEnabled(false);
   myReadTWThread->start();
-  init_TabNavigate();
 }
 
 void MainWindow::readDataInThread(int ExceptIndex) {
@@ -633,58 +631,9 @@ void MainWindow::readDataInThread(int ExceptIndex) {
   }
 }
 
-void MainWindow::init_TabNavigate() {
-  return;
-
-  if (listNBtn.count() > 0) {
-    for (int i = 0; i < listNBtn.count(); i++) {
-      delete listNBtn.at(i);
-    }
-    listNBtn.clear();
-  }
-  for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
-    QToolButton* btn = new QToolButton(this);
-    btn->setFixedWidth(35);
-    listNBtn.append(btn);
-    QFont font;
-    font.setPointSize(15);
-    btn->setFont(font);
-    btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    connect(btn, &QToolButton::clicked, [=]() {
-      ui->tabWidget->setCurrentIndex(btn->text().toInt() - 1);
-      init_NavigateBtnColor();
-    });
-    QString str = ui->tabWidget->tabBar()->tabText(i);
-    QString str1;
-    for (int j = 0; j < str.length(); j++) {
-      str1 = str1 + str.mid(j, 1) + "\n";
-    }
-
-    btn->setText(QString::number(i + 1));
-    btn->setToolTip(str);
-    ui->vl->addWidget(btn);
-  }
-}
-
-void MainWindow::init_NavigateBtnColor() {
-  QPalette p1, p2;
-  QColor color;
-  color.setRgb(100, 149, 237, 255);
-  p1.setColor(QPalette::Button, color);
-  p2.setColor(QPalette::Button, Qt::lightGray);
-
-  for (int n = 0; n < listNBtn.count(); n++) {
-    if (n == ui->tabWidget->currentIndex())
-      listNBtn.at(n)->setPalette(p1);
-    else
-      listNBtn.at(n)->setPalette(p2);
-  }
-}
-
 void MainWindow::timerUpdate() {
-  // mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : "
-  // +
-  //                                          secondsToTime(timeTest++));
+  mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
+                                           secondsToTime(timeTest++));
   newDatas();
 }
 
@@ -1218,7 +1167,6 @@ void MainWindow::closeEvent(QCloseEvent* event) {
       jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
 #endif
       event->accept();
-      return;
     }
 
 #ifdef Q_OS_ANDROID
@@ -1403,7 +1351,7 @@ void MainWindow::on_actionAdd_Tab_triggered() {
   ui->tabWidget->addTab(init_TreeWidget("tab" + QString::number(count + 1)),
                         tr("Counter") + " " + QString::number(count + 1));
   ui->tabWidget->setCurrentIndex(count);
-  init_TabNavigate();
+
   on_actionRename_triggered();
 }
 
@@ -1435,8 +1383,6 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
   // Save all
   startSave("alltab");
-
-  init_TabNavigate();
 }
 
 QTreeWidget* MainWindow::init_TreeWidget(QString name) {
@@ -1779,7 +1725,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         series->clear();
         m_scatterSeries->clear();
         startRead(strDate);
-        init_NavigateBtnColor();
+
         isSlide = false;
       }
     }
@@ -1820,7 +1766,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         series->clear();
         m_scatterSeries->clear();
         startRead(strDate);
-        init_NavigateBtnColor();
+
         isSlide = false;
       }
     }
@@ -3042,7 +2988,7 @@ void MainWindow::init_Sensors() {
   // connect(accel_pedometer, SIGNAL(readingChanged()), this, SLOT(newDatas()));
   connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
           SLOT(updateSteps()));
-  mydlgSteps->init_Steps();
+
   accel_pedometer->setTangentLineIntercept(
       mydlgSteps->ui->editTangentLineIntercept->text().toFloat());
   accel_pedometer->setTangentLineSlope(
@@ -3056,16 +3002,6 @@ void MainWindow::init_Sensors() {
   gyroscope = new QGyroscope(this);
   gyroscope->setActive(true);
   gyroscope->start();
-
-  if (mydlgSteps->ui->rbAlg1->isChecked()) sRate = 100;
-  if (mydlgSteps->ui->rbAlg2->isChecked()) sRate = 20;
-
-    // timer->start(sRate);
-
-#ifdef Q_OS_ANDROID
-  QAndroidJniObject jo = QAndroidJniObject::fromString("StartWin");
-  jo.callStaticMethod<int>("com.x/MyService", "startTimer", "()I");
-#endif
 }
 
 void MainWindow::init_UIWidget() {
@@ -3163,7 +3099,6 @@ void MainWindow::init_UIWidget() {
   ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
   ui->btnMainNotes->setIcon(QIcon(":/src/step.png"));
   ui->frame_tab->setMaximumHeight(this->height());
-  // ui->frame_charts->setMaximumHeight(this->height() / 3);
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -3176,6 +3111,7 @@ void MainWindow::on_btnSelTab_clicked() {
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   QFont font;
   font.setPointSize(fontSize);
+  font.setBold(true);
   list->setFont(font);
 
   int count = tabData->tabBar()->count();

@@ -324,8 +324,6 @@ class MainWindow : public QMainWindow {
   QObjectList getAllUIControls(QObject *parent);
 
   QList<QToolButton *> listNBtn;
-  void init_TabNavigate();
-  void init_NavigateBtnColor();
 
   QString treeStyle = "QTreeWidget::item {height: 28;}";
   //"QTreeWidget::item {background-color: #ffffff;color: #000000;border: "
