@@ -329,9 +329,8 @@ void MainWindow::updateSteps() {
   double d0 = sl / 100;
   double x = CurTableCount * d0;
   double gl = x / 1000;
-  QString strNotify = tr("Today's steps") + " : " +
-                      QString::number(CurTableCount) + "  ( " +
-                      QString::number(gl) + " " + tr("km") + " )";
+  QString strNotify = tr("Today") + " : " + QString::number(CurTableCount) +
+                      "  ( " + QString::number(gl) + " " + tr("km") + " )";
   QAndroidJniObject javaNotification = QAndroidJniObject::fromString(strNotify);
   QAndroidJniObject::callStaticMethod<void>(
       "com/x/MyService", "notify",
