@@ -216,9 +216,7 @@ public class MyActivity extends QtActivity {
     @Override
     public void onPause() {
         System.out.println("Pause...");
-
         super.onPause();
-
     }
 
     @Override
@@ -231,7 +229,6 @@ public class MyActivity extends QtActivity {
     protected void onDestroy() {
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
-
         super.onDestroy();
     }
 
@@ -305,7 +302,6 @@ public class MyActivity extends QtActivity {
 
                 lastTimestamp = sensorEvent.timestamp;
             }
-
         }
 
         @Override

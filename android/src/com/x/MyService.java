@@ -35,8 +35,10 @@ public class MyService extends Service {
 
     public native static void CallJavaNotify_2();
 
+
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     public static Timer timer;
+    public static int sleep = 0;
 
     public static int startTimer() {
         System.out.println("startTimer+++++++++++++++++++++++");
@@ -45,17 +47,36 @@ public class MyService extends Service {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Timer:" + format.format(new Date()));
+                System.out.println("Timer:" + format.format(new Date()) + "  sleep : " + sleep);
                 CallJavaNotify_1();
             }
-        }, 0, 20);
+        }, 0, sleep);
 
         return 1;
     }
 
     public static int stopTimer() {
-        timer.cancel();
-        System.out.println("stopTimer+++++++++++++++++++++++");
+        if(timer!=null) {
+            timer.cancel();
+            timer.purge();
+            System.out.println("stopTimer+++++++++++++++++++++++");
+        }
+        return 1;
+    }
+
+    public static int setSleep1() {
+        sleep = 50;
+        stopTimer();
+        startTimer();
+        System.out.println("setSleep1+++++++++++++++++++++++");
+        return 1;
+    }
+
+    public static int setSleep2() {
+        sleep = 10;
+        stopTimer();
+        startTimer();
+        System.out.println("setSleep2+++++++++++++++++++++++");
         return 1;
     }
 
@@ -71,25 +92,6 @@ public class MyService extends Service {
         super.onCreate();
         Log.i(TAG, "Service on create");//服务被创建
 
-        if (Build.VERSION.SDK_INT >= 26) {
-            setForeground();
-        } else {
-
-            Intent notificationIntent = new Intent(this, MyActivity.class);
-
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                    notificationIntent, 0);
-
-            Notification notification = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.icon)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
-                    .setContentTitle("Xcounter")
-                    .setContentText("Running...")
-                    .setContentIntent(pendingIntent).build();
-
-            startForeground(1337, notification);
-
-        }
     }
 
     //服务在每次启动的时候调用的方法 如果某些行为在服务已启动的时候就执行，可以把处理逻辑写在这个方法里面
@@ -98,7 +100,20 @@ public class MyService extends Service {
 
         Log.d("MyService", "onStartCommand()-------");
 
-        //CallJavaNotify_1();
+        if (Build.VERSION.SDK_INT >= 26) {
+            setForeground();
+        } else {
+            Intent notificationIntent = new Intent(this, MyActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                    notificationIntent, 0);
+            Notification notification = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.icon)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
+                    .setContentTitle("Xcounter")
+                    .setContentText("Running...")
+                    .setContentIntent(pendingIntent).build();
+            startForeground(1337, notification);
+        }
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -123,7 +138,7 @@ public class MyService extends Service {
                 .setSmallIcon(R.drawable.icon)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
                 .build();
-        startForeground(1, notification);
+        startForeground(1337, notification);
     }
 
     //----------------------------------------------
