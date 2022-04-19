@@ -274,20 +274,29 @@ void MainWindow::updateRunTime() {
     if (smallCount >= 20) {
       timeTest++;
       smallCount = 0;
-      if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00") {
-        if (mydlgSteps->ui->btnPause->text() == tr("Pause"))
-          mydlgSteps->ui->btnPause->click();
-      }
+      pausePedometer();
     }
   }
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
     if (smallCount >= 100) {
       timeTest++;
       smallCount = 0;
+      pausePedometer();
     }
   }
   mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
                                            secondsToTime(timeTest));
+}
+
+void MainWindow::pausePedometer() {
+  if (QTime::currentTime().toString("hh-mm-ss") == "22-00-00") {
+    if (mydlgSteps->ui->btnPause->text() == tr("Pause"))
+      mydlgSteps->ui->btnPause->click();
+  }
+  if (QTime::currentTime().toString("hh-mm-ss") == "07-00-00") {
+    if (mydlgSteps->ui->btnPause->text() == tr("Start"))
+      mydlgSteps->ui->btnPause->click();
+  }
 }
 
 void MainWindow::writeLogs() {
@@ -3242,6 +3251,10 @@ void MainWindow::stopJavaTimer() {
   QAndroidJniObject jo = QAndroidJniObject::fromString("StopWin");
   jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
 #endif
+  accel_pedometer->stop();
+  accel_pedometer->setActive(false);
+  gyroscope->stop();
+  gyroscope->setActive(false);
 }
 
 #ifdef Q_OS_ANDROID

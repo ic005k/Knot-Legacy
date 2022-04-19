@@ -220,7 +220,8 @@ class MainWindow : public QMainWindow {
   void getSteps2();
   QString secondsToTime(ulong ulSeconds);
   void stopJavaTimer();
- public slots:
+  void pausePedometer();
+public slots:
   void updateSteps();
   void newDatas();
 
