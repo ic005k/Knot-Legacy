@@ -274,6 +274,8 @@ void MainWindow::updateRunTime() {
     if (smallCount >= 20) {
       timeTest++;
       smallCount = 0;
+      if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00")
+        mydlgSteps->ui->btnPause->click();
     }
   }
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
@@ -3081,6 +3083,7 @@ void MainWindow::init_UIWidget() {
   ui->btnReport->setIconSize(QSize(iz, iz));
   ui->btnNotes->setIconSize(QSize(iz, iz));
   ui->btnSelTab->setIconSize(QSize(iz, iz));
+  ui->btnPause->setIconSize(QSize(iz, iz));
 
   int s = 35;
   if (isIOS) {
@@ -3145,6 +3148,7 @@ void MainWindow::init_Menu() {
   ui->btnMenu->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
   ui->btnNotes->setStyleSheet("border:none");
+  ui->btnPause->setStyleSheet("border:none");
   ui->lblIcon->setText("");
   ui->lblIcon->setFixedHeight(22);
   ui->lblIcon->setFixedWidth(22);
@@ -3269,3 +3273,5 @@ void RegJni() {
   qDebug() << "++++++++++++++++++++++++";
 }
 #endif
+
+void MainWindow::on_btnPause_clicked() { mydlgSteps->ui->btnPause->click(); }

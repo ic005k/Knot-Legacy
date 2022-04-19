@@ -22,5 +22,7 @@
         <file>src/step.png</file>
         <file>src/tab.png</file>
         <file>src/menu.png</file>
+        <file>src/pause.png</file>
+        <file>src/run.png</file>
     </qresource>
 </RCC>

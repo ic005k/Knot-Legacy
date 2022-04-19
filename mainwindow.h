@@ -220,7 +220,7 @@ class MainWindow : public QMainWindow {
   void getSteps2();
   QString secondsToTime(ulong ulSeconds);
   void stopJavaTimer();
-public slots:
+ public slots:
   void updateSteps();
   void newDatas();
 
@@ -313,6 +313,8 @@ public slots:
   void on_btnSelTab_clicked();
 
   void on_btnMenu_clicked();
+
+  void on_btnPause_clicked();
 
  private:
   int frameChartHeight = 220;

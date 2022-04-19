@@ -30,7 +30,9 @@ class dlgSteps : public QDialog {
 
   void setTableSteps(qlonglong steps);
 
- protected:
+  void releaseWakeLock();
+  void acquireWakeLock();
+protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;

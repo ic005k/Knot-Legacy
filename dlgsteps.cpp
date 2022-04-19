@@ -80,6 +80,10 @@ void dlgSteps::on_btnPause_clicked() {
     mw_one->gyroscope->stop();
     mw_one->gyroscope->setActive(false);
 
+    mw_one->ui->btnPause->setIcon(QIcon(":/src/pause.png"));
+
+    releaseWakeLock();
+
   } else if (ui->btnPause->text() == tr("Start")) {
     ui->btnPause->setText(tr("Pause"));
     ui->rbAlg1->setEnabled(true);
@@ -89,8 +93,12 @@ void dlgSteps::on_btnPause_clicked() {
     mw_one->gyroscope->start();
     mw_one->gyroscope->setActive(true);
 
+    acquireWakeLock();
+
     if (ui->rbAlg1->isChecked()) on_rbAlg1_clicked();
     if (ui->rbAlg2->isChecked()) on_rbAlg2_clicked();
+
+    mw_one->ui->btnPause->setIcon(QIcon(":/src/run.png"));
   }
 }
 
@@ -277,4 +285,18 @@ void dlgSteps::on_btnLogs_clicked() {
   mw_one->mydlgMainNotes->ui->textEdit->hide();
   mw_one->mydlgMainNotes->setModal(true);
   mw_one->mydlgMainNotes->show();
+}
+
+void dlgSteps::releaseWakeLock() {
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject jo = QAndroidJniObject::fromString("releaseWakeLock");
+  jo.callStaticMethod<void>("com.x/MyActivity", "releaseWakeLock", "()V");
+#endif
+}
+
+void dlgSteps::acquireWakeLock() {
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  m_activity.callMethod<void>("acquireWakeLock");
+#endif
 }

@@ -494,6 +494,29 @@ QRadioButton::indicator:checked {
         </spacer>
        </item>
        <item>
+        <widget class="QToolButton" name="btnPause">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>28</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="src.qrc">
+           <normaloff>:/src/run.png</normaloff>:/src/run.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="btnReport">
          <property name="minimumSize">
           <size>
