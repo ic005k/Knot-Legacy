@@ -19,6 +19,7 @@ import android.app.NotificationChannel;
 import android.support.v4.app.NotificationCompat;
 import android.annotation.TargetApi;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -36,7 +37,8 @@ public class MyService extends Service {
     public native static void CallJavaNotify_2();
 
 
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    //private static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
     public static Timer timer;
     public static int sleep = 0;
 
@@ -47,8 +49,9 @@ public class MyService extends Service {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Timer:" + format.format(new Date()) + "  sleep : " + sleep);
+                //System.out.println("Timer:" + format.format(new Date()) + "  sleep : " + sleep);
                 CallJavaNotify_1();
+
             }
         }, 0, sleep);
 
@@ -56,7 +59,7 @@ public class MyService extends Service {
     }
 
     public static int stopTimer() {
-        if(timer!=null) {
+        if (timer != null) {
             timer.cancel();
             timer.purge();
             System.out.println("stopTimer+++++++++++++++++++++++");
