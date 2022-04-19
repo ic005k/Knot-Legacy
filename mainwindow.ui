@@ -520,7 +520,7 @@ QRadioButton::indicator:checked {
         <widget class="QToolButton" name="btnReport">
          <property name="minimumSize">
           <size>
-           <width>45</width>
+           <width>42</width>
            <height>28</height>
           </size>
          </property>
@@ -537,7 +537,7 @@ QRadioButton::indicator:checked {
         <widget class="QToolButton" name="btnNotes">
          <property name="minimumSize">
           <size>
-           <width>45</width>
+           <width>42</width>
            <height>28</height>
           </size>
          </property>
@@ -554,7 +554,7 @@ QRadioButton::indicator:checked {
         <widget class="QToolButton" name="btnFind">
          <property name="minimumSize">
           <size>
-           <width>45</width>
+           <width>42</width>
            <height>28</height>
           </size>
          </property>

@@ -274,8 +274,10 @@ void MainWindow::updateRunTime() {
     if (smallCount >= 20) {
       timeTest++;
       smallCount = 0;
-      if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00")
-        mydlgSteps->ui->btnPause->click();
+      if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00") {
+        if (mydlgSteps->ui->btnPause->text() == tr("Pause"))
+          mydlgSteps->ui->btnPause->click();
+      }
     }
   }
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
