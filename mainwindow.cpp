@@ -199,6 +199,7 @@ void MainWindow::newDatas() {
   ax = ay = az = gx = gy = gz = 0;
   az = accel_pedometer->reading()->z();
 
+  updateRunTime();
   writeLogs();
 
   countOne++;
@@ -219,9 +220,6 @@ void MainWindow::newDatas() {
     return;
   }
 
-  ax = accel_pedometer->reading()->x();
-  ay = accel_pedometer->reading()->y();
-
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
     accel_pedometer->runStepCountAlgorithm();
     timeCount++;
@@ -230,6 +228,8 @@ void MainWindow::newDatas() {
   }
 
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
+    ax = accel_pedometer->reading()->x();
+    ay = accel_pedometer->reading()->y();
     gx = gyroscope->reading()->x();
     gy = gyroscope->reading()->y();
     gz = gyroscope->reading()->z();
@@ -386,16 +386,17 @@ void MainWindow::init_Options() {
   mydlgList->ui->listWidget->setFont(userFont);
 
   mydlgPre->ui->chkClose->setChecked(
-      Reg.value("/Options/Close", false).toBool());
+      Reg.value("/Options/Close", true).toBool());
   mydlgPre->ui->chkAutoTime->setChecked(
       Reg.value("/Options/AutoTimeY", true).toBool());
   mydlgPre->ui->chkShowSV->setChecked(
-      Reg.value("/Options/ShowSV", true).toBool());
+      Reg.value("/Options/ShowSV", false).toBool());
   mydlgPre->ui->chkLogs->setChecked(Reg.value("/Options/Logs", false).toBool());
   if (mydlgPre->ui->chkLogs->isChecked())
     mydlgSteps->ui->btnLogs->show();
   else
     mydlgSteps->ui->btnLogs->hide();
+
   mydlgPre->ui->rbSM1->setChecked(Reg.value("/Options/SM1", false).toBool());
   mydlgPre->ui->rbSM2->setChecked(Reg.value("/Options/SM2", true).toBool());
 
@@ -600,13 +601,7 @@ void MainWindow::init_TabData() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
-  if (isImport)
-    mydlgMainNotes->init_MainNotes(false);
-  else {
-    QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-    bool isOpenText = Reg.value("/MainNotes/isOpenText").toBool();
-    mydlgMainNotes->init_MainNotes(isOpenText);
-  }
+  mydlgMainNotes->init_MainNotes();
   mydlgTodo->init_Items();
   mydlgSetTime->init_Desc();
   mydlgSteps->init_Steps();
@@ -1898,7 +1893,7 @@ void MainWindow::on_actionImport_Data_triggered() {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     startSave("alltab");
-    mydlgMainNotes->saveMainNotes(false);
+    mydlgMainNotes->saveMainNotes();
   }
 }
 
@@ -3055,7 +3050,6 @@ void MainWindow::init_UIWidget() {
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
-  timer->start(1000);
   timerStep = new QTimer(this);
   connect(timerStep, SIGNAL(timeout()), this, SLOT(timerUpdateStep()));
 

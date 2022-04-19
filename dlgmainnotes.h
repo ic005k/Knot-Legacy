@@ -19,12 +19,11 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
-  void saveMainNotes(bool);
+  void saveMainNotes();
   QString fileName;
-  void init_MainNotes(bool);
+  void init_MainNotes();
   qlonglong curPos;
   qlonglong sliderPos;
-  bool isOpenText = false;
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
