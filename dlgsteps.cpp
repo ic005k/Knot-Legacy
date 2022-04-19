@@ -72,11 +72,25 @@ void dlgSteps::on_btnBack_clicked() {
 void dlgSteps::on_btnPause_clicked() {
   if (ui->btnPause->text() == tr("Pause")) {
     ui->btnPause->setText(tr("Start"));
+    ui->rbAlg1->setEnabled(false);
+    ui->rbAlg2->setEnabled(false);
+    mw_one->stopJavaTimer();
     mw_one->accel_pedometer->stop();
+    mw_one->accel_pedometer->setActive(false);
+    mw_one->gyroscope->stop();
+    mw_one->gyroscope->setActive(false);
 
   } else if (ui->btnPause->text() == tr("Start")) {
     ui->btnPause->setText(tr("Pause"));
+    ui->rbAlg1->setEnabled(true);
+    ui->rbAlg2->setEnabled(true);
     mw_one->accel_pedometer->start();
+    mw_one->accel_pedometer->setActive(true);
+    mw_one->gyroscope->start();
+    mw_one->gyroscope->setActive(true);
+
+    if (ui->rbAlg1->isChecked()) on_rbAlg1_clicked();
+    if (ui->rbAlg2->isChecked()) on_rbAlg2_clicked();
   }
 }
 
@@ -132,6 +146,7 @@ void dlgSteps::init_Steps() {
   ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
 
   int count = Reg.value("/Steps/Count").toInt();
+  ui->tableWidget->setRowCount(0);
   for (int i = 0; i < count; i++) {
     QString str0 =
         Reg.value("/Steps/Table-" + QString::number(i) + "-0").toString();

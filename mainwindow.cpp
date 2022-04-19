@@ -1157,17 +1157,11 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
   if (mydlgPre->ui->chkClose->isChecked()) {
-#ifdef Q_OS_ANDROID
-    QAndroidJniObject jo = QAndroidJniObject::fromString("StopWin");
-    jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
-#endif
+    stopJavaTimer();
     event->accept();
   } else {
     if (mydlgPre->isFontChange) {
-#ifdef Q_OS_ANDROID
-      QAndroidJniObject jo = QAndroidJniObject::fromString("StopWin");
-      jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
-#endif
+      stopJavaTimer();
       event->accept();
       return;
     }
@@ -3235,6 +3229,13 @@ void MainWindow::on_btnZoom_clicked() {
     ui->frame_tab->show();
     ui->frame_charts->setMaximumHeight(frameChartHeight);
   }
+}
+
+void MainWindow::stopJavaTimer() {
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject jo = QAndroidJniObject::fromString("StopWin");
+  jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
+#endif
 }
 
 #ifdef Q_OS_ANDROID

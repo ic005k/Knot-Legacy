@@ -219,7 +219,8 @@ class MainWindow : public QMainWindow {
   void Sleep(int msec);
   void getSteps2();
   QString secondsToTime(ulong ulSeconds);
- public slots:
+  void stopJavaTimer();
+public slots:
   void updateSteps();
   void newDatas();
 
