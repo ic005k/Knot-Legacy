@@ -197,7 +197,7 @@ public class MyActivity extends QtActivity {
             startService(new Intent(bindIntent));
         }
 
-        MyService.notify(getApplicationContext(), "Hello!");
+        //MyService.notify(getApplicationContext(), "Hello!");
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
