@@ -199,42 +199,7 @@ void MainWindow::newDatas() {
   ax = ay = az = gx = gy = gz = 0;
   az = accel_pedometer->reading()->z();
 
-  smallCount++;
-  if (mydlgSteps->ui->rbAlg1->isChecked()) {
-    if (smallCount >= 20) {
-      timeTest++;
-      smallCount = 0;
-    }
-  }
-  if (mydlgSteps->ui->rbAlg2->isChecked()) {
-    if (smallCount >= 100) {
-      timeTest++;
-      smallCount = 0;
-    }
-  }
-  mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
-                                           secondsToTime(timeTest));
-
-  if (mydlgPre->ui->chkLogs->isChecked()) {
-    testCount1++;
-    if (testCount1 >= 8000) {
-      testCount1 = 0;
-      testCount++;
-      QString s0, s1, s2;
-      s1 = "ax:" + QString::number(ax) + "  " + "ay:" + QString::number(ay) +
-           "  " + "az:" + QString::number(az);
-      s2 = "gx:" + QString::number(gx) + "  " + "gy:" + QString::number(gy) +
-           "  " + "gz:" + QString::number(gz);
-      s0 = QString::number(testCount) + " . " + QTime::currentTime().toString();
-      mydlgMainNotes->ui->textBrowser->append(s0 + " : " + s1 + "  " + s2 +
-                                              "\n");
-
-      if (testCount >= 720) {
-        mydlgMainNotes->ui->textBrowser->clear();
-        testCount = 0;
-      }
-    }
-  }
+  writeLogs();
 
   countOne++;
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
@@ -247,7 +212,6 @@ void MainWindow::newDatas() {
     if (countOne >= 300) {
       aoldZ = az;
       countOne = 0;
-      qDebug() << countOne;
     }
   }
 
@@ -258,14 +222,7 @@ void MainWindow::newDatas() {
   ax = accel_pedometer->reading()->x();
   ay = accel_pedometer->reading()->y();
 
-  if (mydlgSteps->ui->rbAlg2->isChecked()) {
-    gx = gyroscope->reading()->x();
-    gy = gyroscope->reading()->y();
-    gz = gyroscope->reading()->z();
-  }
-
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
-    // timerStep->start(1000);
     accel_pedometer->runStepCountAlgorithm();
     timeCount++;
     mydlgSteps->ui->lblSteps->setText(tr("Number of Operations") + " : " +
@@ -273,6 +230,9 @@ void MainWindow::newDatas() {
   }
 
   if (mydlgSteps->ui->rbAlg2->isChecked()) {
+    gx = gyroscope->reading()->x();
+    gy = gyroscope->reading()->y();
+    gz = gyroscope->reading()->z();
     rlistX.append(ax);
     rlistY.append(ay);
     rlistZ.append(az);
@@ -282,6 +242,10 @@ void MainWindow::newDatas() {
     if (rlistX.count() == 120) getSteps2();
   }
 
+  showSensorValues();
+}
+
+void MainWindow::showSensorValues() {
   if (mydlgPre->ui->chkShowSV->isChecked()) {
     mydlgSteps->ui->lblX->setText("AX:" + QString::number(ax) + "\n" +
                                   "GX:" + QString::number(gx));
@@ -300,6 +264,47 @@ void MainWindow::newDatas() {
       mydlgSteps->ui->lblX->hide();
       mydlgSteps->ui->lblY->hide();
       mydlgSteps->ui->lblZ->hide();
+    }
+  }
+}
+
+void MainWindow::updateRunTime() {
+  smallCount++;
+  if (mydlgSteps->ui->rbAlg1->isChecked()) {
+    if (smallCount >= 20) {
+      timeTest++;
+      smallCount = 0;
+    }
+  }
+  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+    if (smallCount >= 100) {
+      timeTest++;
+      smallCount = 0;
+    }
+  }
+  mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
+                                           secondsToTime(timeTest));
+}
+
+void MainWindow::writeLogs() {
+  if (mydlgPre->ui->chkLogs->isChecked()) {
+    testCount1++;
+    if (testCount1 >= 8000) {
+      testCount1 = 0;
+      testCount++;
+      QString s0, s1, s2;
+      s1 = "ax:" + QString::number(ax) + "  " + "ay:" + QString::number(ay) +
+           "  " + "az:" + QString::number(az);
+      s2 = "gx:" + QString::number(gx) + "  " + "gy:" + QString::number(gy) +
+           "  " + "gz:" + QString::number(gz);
+      s0 = QString::number(testCount) + " . " + QTime::currentTime().toString();
+      mydlgMainNotes->ui->textBrowser->append(s0 + " : " + s1 + "  " + s2 +
+                                              "\n");
+
+      if (testCount >= 720) {
+        mydlgMainNotes->ui->textBrowser->clear();
+        testCount = 0;
+      }
     }
   }
 }
@@ -633,7 +638,10 @@ void MainWindow::readDataInThread(int ExceptIndex) {
 void MainWindow::timerUpdate() {
   mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
                                            secondsToTime(timeTest++));
-  newDatas();
+  if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00") {
+    mydlgPre->isFontChange = true;
+    this->close();
+  }
 }
 
 MainWindow::~MainWindow() {
@@ -1166,6 +1174,7 @@ void MainWindow::closeEvent(QCloseEvent* event) {
       jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
 #endif
       event->accept();
+      return;
     }
 
 #ifdef Q_OS_ANDROID
@@ -3046,6 +3055,7 @@ void MainWindow::init_UIWidget() {
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
+  timer->start(1000);
   timerStep = new QTimer(this);
   connect(timerStep, SIGNAL(timeout()), this, SLOT(timerUpdateStep()));
 
@@ -3236,7 +3246,7 @@ void MainWindow::on_btnZoom_clicked() {
 #ifdef Q_OS_ANDROID
 static void JavaNotify_1() {
   mw_one->newDatas();
-  qDebug() << "C++ JavaNotify_1";
+  // qDebug() << "C++ JavaNotify_1";
 }
 static void JavaNotify_2() { qDebug() << "C++ JavaNotify_2"; }
 static const JNINativeMethod gMethods[] = {

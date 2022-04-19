@@ -73,11 +73,10 @@ void dlgSteps::on_btnPause_clicked() {
   if (ui->btnPause->text() == tr("Pause")) {
     ui->btnPause->setText(tr("Start"));
     mw_one->accel_pedometer->stop();
-    // mw_one->timer->stop();
+
   } else if (ui->btnPause->text() == tr("Start")) {
     ui->btnPause->setText(tr("Pause"));
     mw_one->accel_pedometer->start();
-    // mw_one->timer->start(mw_one->sRate);
   }
 }
 

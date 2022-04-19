@@ -336,6 +336,10 @@ class MainWindow : public QMainWindow {
   void init_Menu();
   void on_btnZoom_clicked();
   void on_cboxYear_currentTextChanged(const QString &arg1);
+
+  void writeLogs();
+  void updateRunTime();
+  void showSensorValues();
 };
 
 class SearchThread : public QThread {
