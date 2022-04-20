@@ -14,7 +14,7 @@ QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
 bool isImport;
-QString appName = "Xcounter";
+QString appName = "Knot";
 QString iniFile, iniDir, strDate, readDate, noteText, strStats, SaveType, strY,
     strM, btnYText, btnMText, btnDText, CurrentYearMonth;
 QStringList listM;
@@ -602,7 +602,7 @@ void MainWindow::init_TabData() {
     QTreeWidget* tw = init_TreeWidget(name);
     ui->tabWidget->addTab(tw, RegTab
                                   .value("TabName" + QString::number(i),
-                                         tr("Counter") + QString::number(i + 1))
+                                         tr("Tab") + QString::number(i + 1))
                                   .toString());
     QString strNotes = RegNotes.value("/" + name + "/Note").toString();
     ui->tabWidget->setTabToolTip(i, strNotes);
@@ -610,7 +610,7 @@ void MainWindow::init_TabData() {
 
   if (TabCount == 0) {
     ui->tabWidget->addTab(init_TreeWidget("tab1"),
-                          tr("Counter") + " " + QString::number(1));
+                          tr("Tab") + " " + QString::number(1));
     ui->tabWidget->setTabToolTip(0, "");
   }
 
@@ -821,6 +821,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
           amount = amount + str.toDouble();
         }
         QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
+        if (strAmount == "0.00") strAmount = "";
         topItem->setText(1, QString::number(childCount - 1));
         topItem->setText(2, strAmount);
         break;
@@ -1359,7 +1360,7 @@ void MainWindow::on_actionAdd_Tab_triggered() {
   if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
   ui->tabWidget->addTab(init_TreeWidget("tab" + QString::number(count + 1)),
-                        tr("Counter") + " " + QString::number(count + 1));
+                        tr("Tab") + " " + QString::number(count + 1));
   ui->tabWidget->setCurrentIndex(count);
 
   on_actionRename_triggered();
@@ -1371,7 +1372,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
   QString str1 = ui->tabWidget->tabText(index);
   QMessageBox msgBox;
-  msgBox.setText("Xcounter");
+  msgBox.setText("Knot");
   msgBox.setInformativeText(tr("Whether to remove") + "  " + str1 + " ? ");
   QPushButton* btnCancel =
       msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
@@ -1387,7 +1388,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
   int TabCount = ui->tabWidget->tabBar()->count();
   if (TabCount == 0) {
     ui->tabWidget->addTab(init_TreeWidget("tab1"),
-                          tr("Counter") + " " + QString::number(1));
+                          tr("Tab") + " " + QString::number(1));
     ui->tabWidget->setTabToolTip(0, "");
   }
 
@@ -1809,7 +1810,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void MainWindow::on_actionAbout_triggered() {
-  QUrl url(QString("https://github.com/ic005k/Xcounter/releases/latest"));
+  QUrl url(QString("https://github.com/ic005k/Knot/releases/latest"));
   QDesktopServices::openUrl(url);
 }
 
@@ -1819,7 +1820,7 @@ void MainWindow::on_actionExport_Data_triggered() {
   QString fileName;
   QFileDialog fd;
   fileName =
-      fd.getSaveFileName(this, tr("XcounterBak"), "", tr("Data Files(*.ini)"));
+      fd.getSaveFileName(this, tr("KnotBak"), "", tr("Data Files(*.ini)"));
 
   if (!fileName.isNull()) {
     ui->progBar->setHidden(false);
@@ -1860,7 +1861,7 @@ void MainWindow::on_actionExport_Data_triggered() {
 void MainWindow::on_actionImport_Data_triggered() {
   if (!isSaveEnd) return;
   QString fileName;
-  fileName = QFileDialog::getOpenFileName(this, tr("XcounterBak"), "",
+  fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
                                           tr("Data Files (*.ini)"));
   if (!fileName.isNull()) {
     QMessageBox msgBox;
@@ -1876,7 +1877,7 @@ void MainWindow::on_actionImport_Data_triggered() {
     }
 
     QString txt = loadText(fileName);
-    if (!txt.contains(appName)) {
+    if (!txt.contains(appName) || !txt.contains("Xcounter")) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("Invalid data file."));

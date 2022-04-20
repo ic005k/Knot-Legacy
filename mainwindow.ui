@@ -476,7 +476,7 @@ QRadioButton::indicator:checked {
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Xcounter</string>
+          <string>Knot</string>
          </property>
         </widget>
        </item>
