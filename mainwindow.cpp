@@ -1877,7 +1877,7 @@ void MainWindow::on_actionImport_Data_triggered() {
     }
 
     QString txt = loadText(fileName);
-    if (!txt.contains(appName) || !txt.contains("Xcounter")) {
+    if (!txt.contains(appName) && !txt.contains("Xcounter")) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("Invalid data file."));
