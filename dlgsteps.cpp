@@ -8,8 +8,7 @@ extern MainWindow* mw_one;
 extern QRegularExpression regxNumber;
 extern QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 extern unsigned int num_steps_walk, num_steps_run, num_steps_hop;
-extern bool loading;
-extern bool isImport;
+extern bool loading, isImport;
 extern QString iniFile, iniDir;
 
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
