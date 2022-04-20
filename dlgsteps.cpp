@@ -88,10 +88,6 @@ void dlgSteps::on_btnPause_clicked() {
     ui->btnPause->setText(tr("Pause"));
     ui->rbAlg1->setEnabled(true);
     ui->rbAlg2->setEnabled(true);
-    mw_one->accel_pedometer->start();
-    mw_one->accel_pedometer->setActive(true);
-    mw_one->gyroscope->start();
-    mw_one->gyroscope->setActive(true);
 
     acquireWakeLock();
 
@@ -100,6 +96,7 @@ void dlgSteps::on_btnPause_clicked() {
 
     mw_one->ui->btnPause->setIcon(QIcon(":/src/run.png"));
   }
+  ui->tableWidget->setFocus();
 }
 
 void dlgSteps::on_btnReset_clicked() {
@@ -256,6 +253,11 @@ void dlgSteps::on_rbAlg1_clicked() {
   glistY.clear();
   glistZ.clear();
 
+  mw_one->accel_pedometer->start();
+  mw_one->accel_pedometer->setActive(true);
+  mw_one->gyroscope->stop();
+  mw_one->gyroscope->setActive(false);
+
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep1Win");
   jo.callStaticMethod<int>("com.x/MyService", "setSleep1", "()I");
@@ -271,6 +273,11 @@ void dlgSteps::on_rbAlg2_clicked() {
   glistX.clear();
   glistY.clear();
   glistZ.clear();
+
+  mw_one->accel_pedometer->start();
+  mw_one->accel_pedometer->setActive(true);
+  mw_one->gyroscope->start();
+  mw_one->gyroscope->setActive(true);
 
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep2Win");

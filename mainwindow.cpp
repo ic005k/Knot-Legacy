@@ -3006,12 +3006,8 @@ void MainWindow::init_Sensors() {
   accel_pedometer->setDataRate(100);
   accel_pedometer->setAccelerationMode(QAccelerometer::User);
   accel_pedometer->setAlwaysOn(true);
-  accel_pedometer->setActive(true);
-  accel_pedometer->start();
 
   gyroscope = new QGyroscope(this);
-  gyroscope->setActive(true);
-  gyroscope->start();
 }
 
 void MainWindow::init_UIWidget() {
