@@ -71,22 +71,17 @@ void dlgSteps::on_btnBack_clicked() {
 void dlgSteps::on_btnPause_clicked() {
   if (ui->btnPause->text() == tr("Pause")) {
     ui->btnPause->setText(tr("Start"));
-    ui->rbAlg1->setEnabled(false);
-    ui->rbAlg2->setEnabled(false);
     mw_one->stopJavaTimer();
     mw_one->accel_pedometer->stop();
     mw_one->accel_pedometer->setActive(false);
     mw_one->gyroscope->stop();
     mw_one->gyroscope->setActive(false);
-
     mw_one->ui->btnPause->setIcon(QIcon(":/src/pause.png"));
 
     releaseWakeLock();
 
   } else if (ui->btnPause->text() == tr("Start")) {
     ui->btnPause->setText(tr("Pause"));
-    ui->rbAlg1->setEnabled(true);
-    ui->rbAlg2->setEnabled(true);
 
     acquireWakeLock();
 
@@ -242,7 +237,7 @@ void dlgSteps::on_btnDefaultSlope_clicked() {
 }
 
 void dlgSteps::on_rbAlg1_clicked() {
-  if (loading) return;
+  if (ui->btnPause->text() == tr("Start")) return;
   ui->frameWay1->show();
   ui->lblSteps->setText("");
   rlistX.clear();
@@ -264,7 +259,7 @@ void dlgSteps::on_rbAlg1_clicked() {
 }
 
 void dlgSteps::on_rbAlg2_clicked() {
-  if (loading) return;
+  if (ui->btnPause->text() == tr("Start")) return;
   ui->frameWay1->hide();
   rlistX.clear();
   rlistY.clear();
