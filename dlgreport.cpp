@@ -184,6 +184,11 @@ void dlgReport::sel_Year() {
 }
 
 void dlgReport::sel_Month() {
+  if (ui->btnMonth->text() == tr("Year-Round")) {
+    sel_Year();
+    return;
+  }
+
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   ui->tableReport->setRowCount(0);
   ui->tableDetails->setRowCount(0);
@@ -268,6 +273,12 @@ void dlgReport::on_btnMonth_clicked() {
     item->setText(strList.at(i));
     list->addItem(item);
   }
+  QListWidgetItem* item = new QListWidgetItem;
+  item->setSizeHint(QSize(w - 10, 30));
+  item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  item->setText(tr("Year-Round"));
+  list->addItem(item);
+
   connect(list, &QListWidget::itemClicked, [=]() {
     ui->btnMonth->setText(list->currentItem()->text());
     btnMonthText = ui->btnMonth->text();
@@ -380,7 +391,10 @@ void dlgReport::on_btnCategory_clicked() {
 
   QStringList listType;
   listType.append(tr("None"));
-  list->addItem(tr("None"));
+  QListWidgetItem* pItem = new QListWidgetItem();
+  pItem->setSizeHint(QSize(ui->btnCategory->width() - 4, 30));
+  pItem->setText(tr("None"));
+  list->addItem(pItem);
 
   for (int i = 0; i < count - 1; i++) {
     on_tableReport_cellClicked(i, 0);
@@ -390,7 +404,10 @@ void dlgReport::on_btnCategory_clicked() {
       if (str != "") {
         if (!listType.removeOne(str)) {
           listType.append(str);
-          list->addItem(str);
+          QListWidgetItem* pItem = new QListWidgetItem();
+          pItem->setSizeHint(QSize(ui->btnCategory->width() - 4, 30));
+          pItem->setText(str);
+          list->addItem(pItem);
         } else
           listType.append(str);
       }
