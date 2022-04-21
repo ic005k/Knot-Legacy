@@ -36,6 +36,8 @@ class dlgReport : public QDialog {
  private slots:
   void on_btnBack_clicked();
 
+  void on_btnCategory_clicked();
+
  private:
 };
 

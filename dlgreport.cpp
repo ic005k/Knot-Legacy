@@ -11,6 +11,7 @@ QString btnYearText, btnMonthText;
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  ui->tableCategory->hide();
 
   for (int y = 0; y < ui->tableReport->columnCount(); y++) {
     ui->tableReport->horizontalHeader()->setSectionResizeMode(
@@ -18,6 +19,10 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   }
   for (int y = 0; y < ui->tableDetails->columnCount(); y++) {
     ui->tableDetails->horizontalHeader()->setSectionResizeMode(
+        y, QHeaderView::ResizeToContents);
+  }
+  for (int y = 0; y < ui->tableCategory->columnCount(); y++) {
+    ui->tableCategory->horizontalHeader()->setSectionResizeMode(
         y, QHeaderView::ResizeToContents);
   }
 
@@ -37,6 +42,14 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   //自动换行，数据量大时，效率非常低，不推荐
   // connect(ui->tableDetails, SIGNAL(itemChanged(QTableWidgetItem*)),
   //         ui->tableDetails, SLOT(resizeRowsToContents()));
+
+  ui->tableCategory->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  ui->tableCategory->setSelectionBehavior(QAbstractItemView::SelectRows);
+  ui->tableCategory->setSelectionMode(QAbstractItemView::SingleSelection);
+  ui->tableCategory->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
+  QScroller::grabGesture(ui->tableCategory, QScroller::LeftMouseButtonGesture);
+  ui->tableCategory->verticalScrollBar()->setStyleSheet(
+      mw_one->vsbarStyleSmall);
 }
 
 dlgReport::~dlgReport() { delete ui; }
@@ -164,6 +177,10 @@ void dlgReport::sel_Year() {
 
     on_tableReport_cellClicked(0, 0);
   }
+
+  ui->btnCategory->setText(tr("Category"));
+  ui->tableCategory->hide();
+  ui->tableDetails->show();
 }
 
 void dlgReport::sel_Month() {
@@ -228,6 +245,10 @@ void dlgReport::sel_Month() {
 
     on_tableReport_cellClicked(0, 0);
   }
+
+  ui->btnCategory->setText(tr("Category"));
+  ui->tableCategory->hide();
+  ui->tableDetails->show();
 }
 
 void dlgReport::on_btnMonth_clicked() {
@@ -338,4 +359,86 @@ void dlgReport::saveYMD() {
   Reg.setValue("/YMD/btnYText", btnYText);
   Reg.setValue("/YMD/btnMText", btnMText);
   Reg.setValue("/YMD/btnDText", btnDText);
+}
+
+void dlgReport::on_btnCategory_clicked() {
+  int count = ui->tableReport->rowCount();
+  if (count == 0) {
+    ui->btnCategory->setText(tr("Category"));
+    return;
+  }
+  QListWidget* list = new QListWidget(this);
+  QFont font;
+  font.setPointSize(fontSize);
+  list->setFont(font);
+
+  QStringList listType;
+  listType.append(tr("None"));
+  list->addItem(tr("None"));
+
+  for (int i = 0; i < count - 1; i++) {
+    on_tableReport_cellClicked(i, 0);
+    for (int j = 0; j < ui->tableDetails->rowCount(); j++) {
+      QString str = ui->tableDetails->item(j, 2)->text().trimmed();
+      qDebug() << str;
+      if (str != "") {
+        if (!listType.removeOne(str)) {
+          listType.append(str);
+          list->addItem(str);
+        } else
+          listType.append(str);
+      }
+    }
+  }
+  int h = this->height() / 2;
+  list->setGeometry(ui->btnCategory->x(), ui->btnCategory->y() - h / 2,
+                    ui->btnCategory->width(), h);
+  list->show();
+
+  connect(list, &QListWidget::itemClicked, [=]() {
+    ui->btnCategory->setText(list->currentItem()->text());
+    if (list->currentRow() == 0) {
+      ui->tableCategory->hide();
+      ui->tableDetails->show();
+      list->close();
+      return;
+    }
+
+    ui->tableCategory->setRowCount(0);
+    double abc = 0;
+    for (int i = 0; i < ui->tableReport->rowCount(); i++) {
+      on_tableReport_cellClicked(i, 0);
+
+      for (int j = 0; j < ui->tableDetails->rowCount(); j++) {
+        if (ui->tableDetails->item(j, 2)->text() == ui->btnCategory->text()) {
+          int count = ui->tableCategory->rowCount();
+          ui->tableCategory->setRowCount(count + 1);
+          ui->tableCategory->setItem(
+              count, 0,
+              new QTableWidgetItem(ui->tableReport->item(i, 0)->text()));
+          ui->tableCategory->setItem(
+              count, 1,
+              new QTableWidgetItem(ui->tableDetails->item(j, 0)->text()));
+          ui->tableCategory->setItem(
+              count, 2,
+              new QTableWidgetItem(ui->tableDetails->item(j, 1)->text()));
+          abc = abc + ui->tableDetails->item(j, 1)->text().toDouble();
+
+          ui->tableCategory->item(count, 0)->setFlags(Qt::NoItemFlags);
+          ui->tableCategory->item(count, 1)->setFlags(Qt::NoItemFlags);
+          ui->tableCategory->item(count, 2)->setFlags(Qt::NoItemFlags);
+        }
+      }
+    }
+    int t = ui->tableCategory->rowCount();
+    ui->tableCategory->setRowCount(t + 1);
+    ui->tableCategory->setItem(t, 0, new QTableWidgetItem(tr("Total")));
+    QString strAmount = QString("%1").arg(abc, 0, 'f', 2);
+    ui->tableCategory->setItem(t, 2, new QTableWidgetItem(strAmount));
+    ui->tableCategory->item(t, 0)->setFlags(Qt::NoItemFlags);
+    ui->tableCategory->item(t, 2)->setFlags(Qt::NoItemFlags);
+    ui->tableDetails->hide();
+    ui->tableCategory->show();
+    list->close();
+  });
 }
