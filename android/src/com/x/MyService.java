@@ -112,7 +112,7 @@ public class MyService extends Service {
             Notification notification = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.icon)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
-                    .setContentTitle("Xcounter")
+                    .setContentTitle("Knot")
                     .setContentText("Running...")
                     .setContentIntent(pendingIntent).build();
             startForeground(1337, notification);
@@ -155,7 +155,7 @@ public class MyService extends Service {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 //int importance = NotificationManager.IMPORTANCE_DEFAULT;
                 int importance = NotificationManager.IMPORTANCE_LOW; //这个低频道不包含任何声音，达到静音的效果
-                NotificationChannel notificationChannel = new NotificationChannel("XCounter", "XCounter Notifier", importance);
+                NotificationChannel notificationChannel = new NotificationChannel("Knot", "Knot Notifier", importance);
                 //notificationChannel.setSound(null, null);//设置频道静音
                 m_notificationManager.createNotificationChannel(notificationChannel);
 
