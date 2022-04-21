@@ -139,7 +139,7 @@ void dlgReport::sel_Year() {
       ui->tableReport->setItem(j, 1, tableItem);
 
       QString txt2 = tw->topLevelItem(i)->text(2);
-      amount = freq + txt2.toDouble();
+      amount = amount + txt2.toDouble();
       tableItem = new QTableWidgetItem(txt2);
       ui->tableReport->setItem(j, 2, tableItem);
 
