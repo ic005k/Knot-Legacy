@@ -395,7 +395,7 @@ void MainWindow::init_Options() {
   mydlgList->ui->listWidget->setFont(userFont);
 
   mydlgPre->ui->chkClose->setChecked(
-      Reg.value("/Options/Close", true).toBool());
+      Reg.value("/Options/Close", false).toBool());
   mydlgPre->ui->chkAutoTime->setChecked(
       Reg.value("/Options/AutoTimeY", true).toBool());
   mydlgPre->ui->chkShowSV->setChecked(
