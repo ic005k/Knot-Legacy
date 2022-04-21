@@ -379,6 +379,7 @@ void MainWindow::init_Options() {
   userFont.setPointSize(fontSize);
   mydlgReport->ui->tableReport->setFont(userFont);
   mydlgReport->ui->tableDetails->setFont(userFont);
+  mydlgReport->ui->tableCategory->setFont(userFont);
   mydlgNotes->ui->textEdit->setFont(userFont);
   tabData->setFont(userFont);
   tabChart->setFont(userFont);

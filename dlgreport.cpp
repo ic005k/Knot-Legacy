@@ -368,6 +368,12 @@ void dlgReport::on_btnCategory_clicked() {
     return;
   }
   QListWidget* list = new QListWidget(this);
+  list->setStyleSheet(
+      "QListWidget{background: "
+      "rgb(244,237,241);border-radius:15px;}");
+  list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
@@ -433,9 +439,13 @@ void dlgReport::on_btnCategory_clicked() {
     int t = ui->tableCategory->rowCount();
     ui->tableCategory->setRowCount(t + 1);
     ui->tableCategory->setItem(t, 0, new QTableWidgetItem(tr("Total")));
+    QTableWidgetItem* item = new QTableWidgetItem(QString::number(t));
+    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    ui->tableCategory->setItem(t, 1, item);
     QString strAmount = QString("%1").arg(abc, 0, 'f', 2);
     ui->tableCategory->setItem(t, 2, new QTableWidgetItem(strAmount));
     ui->tableCategory->item(t, 0)->setFlags(Qt::NoItemFlags);
+    ui->tableCategory->item(t, 1)->setFlags(Qt::NoItemFlags);
     ui->tableCategory->item(t, 2)->setFlags(Qt::NoItemFlags);
     ui->tableDetails->hide();
     ui->tableCategory->show();
