@@ -129,6 +129,12 @@ void dlgSteps::saveSteps() {
 }
 
 void dlgSteps::init_Steps() {
+  bool isRun = false;
+  if (ui->btnPause->text() == tr("Pause")) {
+    ui->btnPause->click();
+    isRun = true;
+  }
+
   QString ini_file;
   if (isImport)
     ini_file = iniFile;
@@ -160,6 +166,10 @@ void dlgSteps::init_Steps() {
       toDayInitSteps = ui->tableWidget->item(i, 1)->text().toInt();
       break;
     }
+  }
+
+  if (isRun) {
+    if (ui->btnPause->text() == tr("Start")) ui->btnPause->click();
   }
 }
 

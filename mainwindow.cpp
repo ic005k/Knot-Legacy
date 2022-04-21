@@ -293,10 +293,6 @@ void MainWindow::pausePedometer() {
     if (mydlgSteps->ui->btnPause->text() == tr("Pause"))
       mydlgSteps->ui->btnPause->click();
   }
-  if (QTime::currentTime().toString("hh-mm-ss") == "07-00-00") {
-    if (mydlgSteps->ui->btnPause->text() == tr("Start"))
-      mydlgSteps->ui->btnPause->click();
-  }
 }
 
 void MainWindow::writeLogs() {
