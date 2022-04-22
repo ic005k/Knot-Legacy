@@ -3111,7 +3111,6 @@ void MainWindow::on_btnSelTab_clicked() {
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   QFont font;
   font.setPointSize(fontSize);
-  font.setBold(true);
   list->setFont(font);
 
   int count = tabData->tabBar()->count();
