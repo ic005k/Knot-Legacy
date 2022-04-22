@@ -2231,8 +2231,7 @@ void MainWindow::on_btnMax_clicked() {
 void MainWindow::on_btnYear_clicked() {
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
-  list->setStyleSheet(
-      "QListWidget{background: rgb(244,237,241);border-radius:15px;}");
+  list->setStyleSheet(listStyle);
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
@@ -2257,7 +2256,7 @@ void MainWindow::on_btnYear_clicked() {
     on_cboxYear_currentTextChanged("");
   });
 
-  int h = 30 * list->count() + 2;
+  int h = 30 * list->count() + 4;
   int y = ui->frame_find->y() - h / 2;
 
   list->setGeometry(ui->frameYear->x(), y, w + 15, h);
@@ -2276,8 +2275,7 @@ void MainWindow::on_btnYear_clicked() {
 void MainWindow::on_btnMonth_clicked() {
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
-  list->setStyleSheet(
-      "QListWidget{background: rgb(244,237,241);border-radius:15px;}");
+  list->setStyleSheet(listStyle);
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
@@ -2298,7 +2296,7 @@ void MainWindow::on_btnMonth_clicked() {
     on_cboxYear_currentTextChanged("");
   });
 
-  int h = 30 * list->count() + 2;
+  int h = 30 * list->count() + 4;
   int y = ui->frame_find->y() - h / 2;
 
   list->setGeometry(ui->btnMonth->x() + ui->frameYear->x() + 5, y, w + 5, h);
@@ -2317,8 +2315,7 @@ void MainWindow::on_btnMonth_clicked() {
 void MainWindow::on_btnDay_clicked() {
   int w = ui->btnDay->width();
   QListWidget* list = new QListWidget(this);
-  list->setStyleSheet(
-      "QListWidget{background: rgb(244,237,241);border-radius:15px;}");
+  list->setStyleSheet(listStyle);
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
@@ -3108,9 +3105,7 @@ void MainWindow::init_UIWidget() {
 
 void MainWindow::on_btnSelTab_clicked() {
   QListWidget* list = new QListWidget(this);
-  list->setStyleSheet(
-      "QListWidget{background: "
-      "rgb(244,237,241);border-radius:15px;}");
+  list->setStyleSheet(listStyle);
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
@@ -3134,9 +3129,9 @@ void MainWindow::on_btnSelTab_clicked() {
 
   int h = 0;
   if (count <= 15)
-    h = count * 30;
+    h = count * 30 + 4;
   else
-    h = 15 * 30;
+    h = 15 * 30 + 4;
 
   int w = 220;
   int y = (this->height() - h) / 2;

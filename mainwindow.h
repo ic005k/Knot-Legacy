@@ -90,6 +90,9 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QString listStyle =
+      "QListWidget{background: "
+      "rgb(244,237,241);border-radius:0px;border:2px solid gray;}";
   int sRate = 0;
   qreal ax, ay, az, gx, gy, gz;
   int testCount1 = 0;
@@ -221,7 +224,7 @@ class MainWindow : public QMainWindow {
   QString secondsToTime(ulong ulSeconds);
   void stopJavaTimer();
   void pausePedometer();
-public slots:
+ public slots:
   void updateSteps();
   void newDatas();
 

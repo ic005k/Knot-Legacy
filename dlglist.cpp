@@ -12,6 +12,7 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   // ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   // QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
+  ui->listWidget->setStyleSheet(mw_one->listStyle);
 }
 
 dlgList::~dlgList() { delete ui; }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 7.0.0, 2022-04-20T21:58:53. -->
+<!-- Written by QtCreator 7.0.0, 2022-04-22T07:19:19. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -280,7 +280,7 @@
     <valuelist type="QVariantList" key="AndroidDeviceAbis">
      <value type="QString">x86</value>
     </valuelist>
-    <value type="QString" key="AndroidDeviceSerialNumber">emulator-5554</value>
+    <value type="QString" key="AndroidDeviceSerialNumber"></value>
     <value type="int" key="AndroidVersion.ApiLevel">26</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.0">
@@ -467,7 +467,6 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/hz/QtProjects/Xconuter/Xcounter-src/bin/debug/Knot.app/Contents/MacOS</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

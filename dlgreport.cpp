@@ -77,6 +77,7 @@ void dlgReport::on_btnYear_clicked() {
   ui->lblDetails->setText(tr("Details"));
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
+  list->setStyleSheet(mw_one->listStyle);
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
@@ -100,7 +101,7 @@ void dlgReport::on_btnYear_clicked() {
     sel_Year();
   });
 
-  int h = 30 * list->count() + 2;
+  int h = 30 * list->count() + 4;
   int y = ui->btnYear->y();
 
   list->setGeometry(ui->btnYear->x(), y, w, h);
@@ -260,6 +261,7 @@ void dlgReport::on_btnMonth_clicked() {
   ui->lblDetails->setText(tr("Details"));
   int w = ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
+  list->setStyleSheet(mw_one->listStyle);
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
@@ -287,7 +289,7 @@ void dlgReport::on_btnMonth_clicked() {
     sel_Month();
   });
 
-  int h = 30 * list->count() + 2;
+  int h = 30 * list->count() + 4;
   int y = ui->btnMonth->y();
 
   list->setGeometry(ui->btnMonth->x(), y, w, h);
@@ -379,11 +381,10 @@ void dlgReport::on_btnCategory_clicked() {
     return;
   }
   QListWidget* list = new QListWidget(this);
-  list->setStyleSheet(
-      "QListWidget{background: "
-      "rgb(244,237,241);border-radius:15px;}");
+  list->setStyleSheet(mw_one->listStyle);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  list->horizontalScrollBar()->hide();
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   QFont font;
   font.setPointSize(fontSize);
@@ -393,6 +394,7 @@ void dlgReport::on_btnCategory_clicked() {
   listType.append(tr("None"));
   QListWidgetItem* pItem = new QListWidgetItem();
   pItem->setSizeHint(QSize(ui->btnCategory->width() - 4, 30));
+  pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
   pItem->setText(tr("None"));
   list->addItem(pItem);
 
@@ -400,12 +402,12 @@ void dlgReport::on_btnCategory_clicked() {
     on_tableReport_cellClicked(i, 0);
     for (int j = 0; j < ui->tableDetails->rowCount(); j++) {
       QString str = ui->tableDetails->item(j, 2)->text().trimmed();
-      qDebug() << str;
       if (str != "") {
         if (!listType.removeOne(str)) {
           listType.append(str);
           QListWidgetItem* pItem = new QListWidgetItem();
           pItem->setSizeHint(QSize(ui->btnCategory->width() - 4, 30));
+          pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
           pItem->setText(str);
           list->addItem(pItem);
         } else
@@ -414,9 +416,10 @@ void dlgReport::on_btnCategory_clicked() {
     }
   }
   int h = this->height() / 2;
+  if (list->count() * 30 < h) h = list->count() * 30 + 4;
   list->setGeometry(ui->btnCategory->x(), ui->btnCategory->y() - h / 2,
                     ui->btnCategory->width(), h);
-  list->show();
+  if (list->count() > 1) list->show();
 
   connect(list, &QListWidget::itemClicked, [=]() {
     ui->btnCategory->setText(list->currentItem()->text());
