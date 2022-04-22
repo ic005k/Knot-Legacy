@@ -36,6 +36,31 @@
       </widget>
      </item>
      <item>
+      <widget class="QToolButton" name="btnAdd">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Add</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>38</width>
+         <height>38</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="btnLow">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -58,29 +83,6 @@
    </item>
    <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QToolButton" name="btnAdd">
-       <property name="minimumSize">
-        <size>
-         <width>45</width>
-         <height>45</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>+</string>
-       </property>
-       <property name="icon">
-        <iconset resource="src.qrc">
-         <normaloff>:/src/1.png</normaloff>:/src/1.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>38</width>
-         <height>38</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item>
       <widget class="QLineEdit" name="lineEdit">
        <property name="minimumSize">
@@ -202,8 +204,6 @@ QListView {
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="src.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
