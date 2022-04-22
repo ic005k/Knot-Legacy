@@ -248,7 +248,7 @@ void dlgSteps::on_btnDefaultSlope_clicked() {
 
 void dlgSteps::on_rbAlg1_clicked() {
   if (ui->btnPause->text() == tr("Start")) return;
-  ui->frameWay1->show();
+  if (mw_one->mydlgPre->ui->chkDebug->isChecked()) ui->frameWay1->show();
   ui->lblSteps->setText("");
   rlistX.clear();
   rlistY.clear();

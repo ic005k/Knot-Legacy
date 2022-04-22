@@ -277,7 +277,7 @@ QRadioButton::indicator:checked {
    <item row="7" column="0">
     <widget class="QLabel" name="lblTotalRunTime">
      <property name="text">
-      <string>TextLabel</string>
+      <string>RunTime</string>
      </property>
     </widget>
    </item>

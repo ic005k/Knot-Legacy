@@ -246,7 +246,7 @@ void MainWindow::newDatas() {
 }
 
 void MainWindow::showSensorValues() {
-  if (mydlgPre->ui->chkShowSV->isChecked()) {
+  if (mydlgPre->ui->chkDebug->isChecked()) {
     mydlgSteps->ui->lblX->setText("AX:" + QString::number(ax) + "\n" +
                                   "GX:" + QString::number(gx));
     mydlgSteps->ui->lblY->setText("AY:" + QString::number(ay) + "\n" +
@@ -269,9 +269,10 @@ void MainWindow::showSensorValues() {
 }
 
 void MainWindow::updateRunTime() {
+  if (!mydlgPre->ui->chkDebug->isChecked()) return;
   smallCount++;
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
-    if (smallCount >= 20) {
+    if (smallCount >= 10) {
       timeTest++;
       smallCount = 0;
       pausePedometer();
@@ -296,7 +297,7 @@ void MainWindow::pausePedometer() {
 }
 
 void MainWindow::writeLogs() {
-  if (mydlgPre->ui->chkLogs->isChecked()) {
+  if (mydlgPre->ui->chkDebug->isChecked()) {
     testCount1++;
     if (testCount1 >= 8000) {
       testCount1 = 0;
@@ -399,13 +400,10 @@ void MainWindow::init_Options() {
       Reg.value("/Options/Close", false).toBool());
   mydlgPre->ui->chkAutoTime->setChecked(
       Reg.value("/Options/AutoTimeY", true).toBool());
-  mydlgPre->ui->chkShowSV->setChecked(
-      Reg.value("/Options/ShowSV", false).toBool());
-  mydlgPre->ui->chkLogs->setChecked(Reg.value("/Options/Logs", false).toBool());
-  if (mydlgPre->ui->chkLogs->isChecked())
-    mydlgSteps->ui->btnLogs->show();
-  else
-    mydlgSteps->ui->btnLogs->hide();
+
+  bool debugmode = Reg.value("/Options/Debug", false).toBool();
+  mydlgPre->ui->chkDebug->setChecked(debugmode);
+  mydlgPre->on_chkDebug_clicked();
 
   mydlgPre->ui->rbSM1->setChecked(Reg.value("/Options/SM1", false).toBool());
   mydlgPre->ui->rbSM2->setChecked(Reg.value("/Options/SM2", true).toBool());

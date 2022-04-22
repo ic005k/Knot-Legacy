@@ -48,8 +48,7 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/SM1", ui->rbSM1->isChecked());
   Reg.setValue("/Options/SM2", ui->rbSM2->isChecked());
-  Reg.setValue("/Options/ShowSV", ui->chkShowSV->isChecked());
-  Reg.setValue("/Options/Logs", ui->chkLogs->isChecked());
+  Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
 }
 
 void dlgPreferences::on_rb0_clicked() { isFontChange = true; }
@@ -66,9 +65,23 @@ void dlgPreferences::on_rbSM2_clicked() {
   mw_one->accel_pedometer->setAccelerationMode(QAccelerometer::User);
 }
 
-void dlgPreferences::on_chkLogs_clicked(bool checked) {
-  if (checked) {
+void dlgPreferences::on_chkDebug_clicked() {
+  if (ui->chkDebug->isChecked()) {
     mw_one->mydlgSteps->ui->btnLogs->show();
-  } else
+    mw_one->mydlgSteps->ui->lblX->show();
+    mw_one->mydlgSteps->ui->lblY->show();
+    mw_one->mydlgSteps->ui->lblZ->show();
+    mw_one->mydlgSteps->ui->lblTotalRunTime->show();
+    if (mw_one->mydlgSteps->ui->rbAlg1->isChecked())
+      mw_one->mydlgSteps->ui->frameWay1->show();
+    if (mw_one->mydlgSteps->ui->rbAlg2->isChecked())
+      mw_one->mydlgSteps->ui->frameWay1->hide();
+  } else if (!ui->chkDebug->isChecked()) {
     mw_one->mydlgSteps->ui->btnLogs->hide();
+    mw_one->mydlgSteps->ui->lblX->hide();
+    mw_one->mydlgSteps->ui->lblY->hide();
+    mw_one->mydlgSteps->ui->lblZ->hide();
+    mw_one->mydlgSteps->ui->frameWay1->hide();
+    mw_one->mydlgSteps->ui->lblTotalRunTime->hide();
+  }
 }
