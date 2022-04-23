@@ -34,9 +34,10 @@ import android.widget.TextView;
 public class MyActivity extends QtActivity {
 
     private static MyActivity m_instance;
-    private SensorManager mSensorManager;
+    private static SensorManager mSensorManager;
 
     public native void CallJavaNotify_1();
+
     public native void CallJavaNotify_2();
 
     public MyActivity() {
@@ -45,9 +46,7 @@ public class MyActivity extends QtActivity {
 
     public static int mini() {
         System.out.println("Mini+++++++++++++++++++++++");
-
         m_instance.moveTaskToBack(true);
-
         return 1;
     }
 
@@ -135,8 +134,8 @@ public class MyActivity extends QtActivity {
 
 //-----------------------------------------------------------------------
 
-    private WakeLock mWakeLock;
-    private PersistService mySerivece;
+    private static WakeLock mWakeLock;
+    private static PersistService mySerivece;
     private static final int DELAY = SensorManager.SENSOR_DELAY_NORMAL;
 
     public void acquireWakeLock() {
@@ -153,9 +152,11 @@ public class MyActivity extends QtActivity {
                 mySerivece,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 DELAY);
+
+        Log.i(TAG, "call acquireWakeLock");
     }
 
-    public void releaseWakeLock() {
+    public static void releaseWakeLock() {
 
         if (mWakeLock != null && mWakeLock.isHeld()) {
             mSensorManager.unregisterListener(mySerivece);
@@ -163,18 +164,19 @@ public class MyActivity extends QtActivity {
             mWakeLock = null;
             Log.i(TAG, "call releaseWakeLock");
         }
+
     }
 
-//-----------------------------------------------------------------------
 
+//-----------------------------------------------------------------------
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //唤醒锁
-        acquireWakeLock();
-        //initSensor();
+        //acquireWakeLock();
+        initSensor();
 
         //状态栏
         // 获取程序句柄
