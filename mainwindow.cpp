@@ -272,7 +272,7 @@ void MainWindow::updateRunTime() {
   if (!mydlgPre->ui->chkDebug->isChecked()) return;
   smallCount++;
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
-    if (smallCount >= 10) {
+    if (smallCount >= 5) {
       timeTest++;
       smallCount = 0;
       pausePedometer();

@@ -18,8 +18,8 @@ class dlgSteps : public QDialog {
   Ui::dlgSteps *ui;
 
   int toDayInitSteps = 0;
-  double dleInter = 9.5;
-  double dleSlope = 9.5;
+  double dleInter = 5;
+  double dleSlope = 5;
   void saveSteps();
   void init_Steps();
   QString lblStyleLight = "background-color: rgb(25, 239, 21);color:black";
@@ -32,7 +32,8 @@ class dlgSteps : public QDialog {
 
   void releaseWakeLock();
   void acquireWakeLock();
-protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;

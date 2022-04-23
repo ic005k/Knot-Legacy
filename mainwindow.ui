@@ -275,6 +275,12 @@
     </item>
     <item row="3" column="0">
      <widget class="QFrame" name="frame_cw">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -292,7 +298,7 @@
         <number>0</number>
        </property>
        <property name="bottomMargin">
-        <number>0</number>
+        <number>2</number>
        </property>
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -301,7 +307,7 @@
            <property name="minimumSize">
             <size>
              <width>55</width>
-             <height>28</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
