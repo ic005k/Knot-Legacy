@@ -269,7 +269,6 @@ void MainWindow::showSensorValues() {
 }
 
 void MainWindow::updateRunTime() {
-  if (!mydlgPre->ui->chkDebug->isChecked()) return;
   smallCount++;
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
     if (smallCount >= 5) {

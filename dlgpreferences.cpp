@@ -71,7 +71,7 @@ void dlgPreferences::on_chkDebug_clicked() {
     mw_one->mydlgSteps->ui->lblX->show();
     mw_one->mydlgSteps->ui->lblY->show();
     mw_one->mydlgSteps->ui->lblZ->show();
-    mw_one->mydlgSteps->ui->lblTotalRunTime->show();
+
     if (mw_one->mydlgSteps->ui->rbAlg1->isChecked())
       mw_one->mydlgSteps->ui->frameWay1->show();
     if (mw_one->mydlgSteps->ui->rbAlg2->isChecked())
@@ -82,6 +82,5 @@ void dlgPreferences::on_chkDebug_clicked() {
     mw_one->mydlgSteps->ui->lblY->hide();
     mw_one->mydlgSteps->ui->lblZ->hide();
     mw_one->mydlgSteps->ui->frameWay1->hide();
-    mw_one->mydlgSteps->ui->lblTotalRunTime->hide();
   }
 }
