@@ -134,7 +134,7 @@ public class MyActivity extends QtActivity {
 
 //-----------------------------------------------------------------------
 
-    private static WakeLock mWakeLock;
+    private static WakeLock mWakeLock = null;
     private static PersistService mySerivece;
     private static final int DELAY = SensorManager.SENSOR_DELAY_NORMAL;
 
@@ -176,7 +176,7 @@ public class MyActivity extends QtActivity {
 
         //唤醒锁
         //acquireWakeLock();
-        initSensor();
+        //initSensor();
 
         //状态栏
         // 获取程序句柄

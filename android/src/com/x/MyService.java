@@ -68,7 +68,7 @@ public class MyService extends Service {
     }
 
     public static int setSleep1() {
-        sleep = 50;
+        sleep = 200;
         stopTimer();
         startTimer();
         System.out.println("setSleep1+++++++++++++++++++++++");
