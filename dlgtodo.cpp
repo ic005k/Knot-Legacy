@@ -115,6 +115,12 @@ void dlgTodo::add_Item(QString str, bool insert) {
   btn->setIconSize(QSize(30, 30));
   btn->setIcon(QIcon(":/src/done.png"));
   connect(btn, &QToolButton::clicked, [=]() {
+    btn->setIcon(QIcon(":/src/done1.png"));
+
+    QTime dieTime = QTime::currentTime().addMSecs(1000);
+    while (QTime::currentTime() < dieTime)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
     ui->listWidget->setCurrentItem(pItem);
     int row = ui->listWidget->currentRow();
     ui->listWidget->takeItem(row);

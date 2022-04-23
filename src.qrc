@@ -24,5 +24,6 @@
         <file>src/menu.png</file>
         <file>src/pause.png</file>
         <file>src/run.png</file>
+        <file>src/done1.png</file>
     </qresource>
 </RCC>
