@@ -3146,6 +3146,7 @@ void MainWindow::init_Menu() {
   ui->btnReport->setStyleSheet("border:none");
   ui->btnNotes->setStyleSheet("border:none");
   ui->btnPause->setStyleSheet("border:none");
+  ui->btnSelTab->setStyleSheet("border:none");
   ui->lblIcon->setText("");
   ui->lblIcon->setFixedHeight(22);
   ui->lblIcon->setFixedWidth(22);
