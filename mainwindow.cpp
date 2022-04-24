@@ -3025,9 +3025,9 @@ QString MainWindow::secondsToTime(ulong totalTime) {
   return hou + ":" + min + ":" + sec;
 }
 
-void MainWindow::timerUpdateStep() {
-  timer3 = timer3 + 1;
-  mydlgSteps->ui->lblTotalRunTime->setText(secondsToTime(timer3 * 5));
+void MainWindow::updateHardSensorSteps() {
+  timeTest = timeTest + 1;
+  mydlgSteps->ui->lblTotalRunTime->setText(secondsToTime(timeTest * 5));
 
   if (strDate != QDate::currentDate().toString()) initTodayInitSteps();
   float steps = 0;
@@ -3123,7 +3123,7 @@ void MainWindow::init_UIWidget() {
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
   timerStep = new QTimer(this);
-  connect(timerStep, SIGNAL(timeout()), this, SLOT(timerUpdateStep()));
+  connect(timerStep, SIGNAL(timeout()), this, SLOT(updateHardSensorSteps()));
 
   ui->statusbar->setHidden(true);
 
@@ -3326,7 +3326,7 @@ static void JavaNotify_1() {
   // qDebug() << "C++ JavaNotify_1";
 }
 static void JavaNotify_2() {
-  mw_one->timerUpdateStep();
+  mw_one->updateHardSensorSteps();
   // qDebug() << "C++ JavaNotify_2";
 }
 static const JNINativeMethod gMethods[] = {

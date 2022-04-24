@@ -234,6 +234,7 @@ void dlgSteps::setTableSteps(qlonglong steps) {
       QTableWidgetItem* item = new QTableWidgetItem(QString::number(steps));
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       ui->tableWidget->setItem(count - 1, 1, item);
+      ui->tableWidget->item(count - 1, 1)->setFlags(Qt::NoItemFlags);
     } else
       addRecord(QDate::currentDate().toString(), 1);
   }

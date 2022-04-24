@@ -112,7 +112,6 @@ class MainWindow : public QMainWindow {
   QValueAxis *axisX2;
   QValueAxis *axisY2;
   float CurrentSteps = 0;
-  int timer3 = 0;
   qlonglong CurTableCount = 0;
   SpecialAccelerometerPedometer *accel_pedometer;
   QGyroscope *gyroscope;
@@ -235,7 +234,7 @@ class MainWindow : public QMainWindow {
  public slots:
   void updateSteps();
   void newDatas();
-  void timerUpdateStep();
+  void updateHardSensorSteps();
 
  protected:
   void closeEvent(QCloseEvent *event) override;
