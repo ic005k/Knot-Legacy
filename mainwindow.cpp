@@ -206,7 +206,7 @@ MainWindow::MainWindow(QWidget* parent)
     mydlgSteps->ui->gboxAlg->hide();
     mydlgSteps->ui->lblSteps->hide();
     mydlgSteps->ui->btnPause->hide();
-    mydlgSteps->ui->lblTotalRunTime->hide();
+    // mydlgSteps->ui->lblTotalRunTime->hide();
     mydlgPre->ui->chkDebug->setChecked(false);
     mydlgPre->on_chkDebug_clicked();
     mydlgPre->ui->chkDebug->setEnabled(false);
@@ -214,7 +214,10 @@ MainWindow::MainWindow(QWidget* parent)
 
     initTodayInitSteps();
     resetSteps = tc;
-    timerStep->start(5000);
+    // timerStep->start(5000);
+
+    QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep3Win");
+    jo.callStaticMethod<int>("com.x/MyService", "setSleep3", "()I");
   }
 #endif
 }
@@ -3023,6 +3026,9 @@ QString MainWindow::secondsToTime(ulong totalTime) {
 }
 
 void MainWindow::timerUpdateStep() {
+  timer3 = timer3 + 1;
+  mydlgSteps->ui->lblTotalRunTime->setText(secondsToTime(timer3 * 5));
+
   if (strDate != QDate::currentDate().toString()) initTodayInitSteps();
   float steps = 0;
 #ifdef Q_OS_ANDROID
@@ -3319,7 +3325,10 @@ static void JavaNotify_1() {
   mw_one->newDatas();
   // qDebug() << "C++ JavaNotify_1";
 }
-static void JavaNotify_2() { qDebug() << "C++ JavaNotify_2"; }
+static void JavaNotify_2() {
+  mw_one->timerUpdateStep();
+  // qDebug() << "C++ JavaNotify_2";
+}
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_1", "()V", (void*)JavaNotify_1},
     {"CallJavaNotify_2", "()V", (void*)JavaNotify_2}};

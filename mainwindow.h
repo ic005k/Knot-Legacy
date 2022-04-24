@@ -92,7 +92,7 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
 
   int isHardStepSensor = -1;
-  int initTodaySteps, resetSteps;
+  float initTodaySteps, resetSteps;
   float tc, oldtc;
   QString listStyle =
       "QListWidget{background: "
@@ -111,7 +111,8 @@ class MainWindow : public QMainWindow {
   QValueAxis *axisY;
   QValueAxis *axisX2;
   QValueAxis *axisY2;
-  qlonglong CurrentSteps = 0;
+  float CurrentSteps = 0;
+  int timer3 = 0;
   qlonglong CurTableCount = 0;
   SpecialAccelerometerPedometer *accel_pedometer;
   QGyroscope *gyroscope;
@@ -230,9 +231,11 @@ class MainWindow : public QMainWindow {
   void pausePedometer();
   void sendMsg(int);
   void initTodayInitSteps();
+
  public slots:
   void updateSteps();
   void newDatas();
+  void timerUpdateStep();
 
  protected:
   void closeEvent(QCloseEvent *event) override;
@@ -315,8 +318,6 @@ class MainWindow : public QMainWindow {
   void slotPointHoverd(const QPointF &point, bool state);
 
   void on_rbSteps_clicked();
-
-  void timerUpdateStep();
 
   void on_actionMemos_triggered();
 
