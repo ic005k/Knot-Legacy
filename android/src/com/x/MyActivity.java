@@ -35,6 +35,8 @@ public class MyActivity extends QtActivity {
 
     private static MyActivity m_instance;
     private static SensorManager mSensorManager;
+    public  static int isStepCounter = -1;
+    public  static float stepCounts;
 
     public native void CallJavaNotify_1();
 
@@ -88,15 +90,82 @@ public class MyActivity extends QtActivity {
         mySerivece = new PersistService();
         //PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         //mWakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);// CPU保存运行
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);// 屏幕熄掉后依然运行
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mySerivece.mReceiver, filter);
+        //IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);// 屏幕熄掉后依然运行
+        //filter.addAction(Intent.ACTION_SCREEN_OFF);
+        //registerReceiver(mySerivece.mReceiver, filter);
 
         //mWakeLock.acquire();// 屏幕熄后，CPU继续运行
-        mSensorManager.registerListener(
+        /*mSensorManager.registerListener(
                 mySerivece,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                DELAY);
+                DELAY);*/
+        Sensor countSensor =mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if(countSensor!=null) {
+            mSensorManager.registerListener(
+                    mySerivece,
+                    countSensor,
+                    DELAY);
+            isStepCounter=1;
+        }
+        else
+            isStepCounter=0;
+    }
+
+    public void initStepSensor() {
+        SensorManager  mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor countSensor =mySensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if(countSensor!=null) {
+            mySensorManager.registerListener(new SensorEventListener() {
+                @Override
+                public void onSensorChanged(SensorEvent event) {
+                    float[] values = event.values;
+                    //tv_all.setText(Float.toString(values[0]));
+                    stepCounts=values[0];
+                }
+
+                @Override
+                public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                }
+            }, countSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            isStepCounter = 1;
+        }
+        else
+            isStepCounter = 0;
+
+    }
+
+    public static int getHardStepCounter()
+    {
+        return isStepCounter;
+    }
+
+    public static float getSteps()
+    {
+        return stepCounts;
+    }
+
+    /**
+     * 判断该设备是否支持计歩
+     *
+     * @param context
+     * @return
+     */
+    //@TargetApi(Build.VERSION_CODES.KITKAT)
+    public  int isSupportStepCountSensor(Context context) {
+
+        SensorManager sensorManager = (SensorManager) context
+                .getSystemService(context.SENSOR_SERVICE);
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        //Sensor detectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        //return countSensor != null || detectorSensor != null;
+        if(countSensor != null)
+        {
+            initSensor();
+            return 1;
+        }
+        else
+            return 0;
     }
 
     //----------------------------------------------------------------------
@@ -176,7 +245,7 @@ public class MyActivity extends QtActivity {
 
         //唤醒锁
         //acquireWakeLock();
-        //initSensor();
+        initStepSensor();
 
         //状态栏
         // 获取程序句柄
@@ -275,7 +344,7 @@ public class MyActivity extends QtActivity {
 
         public void onSensorChanged(SensorEvent sensorEvent) {
 
-            if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            //if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 /*Log.i(TAG, "PersistService.TYPE_ACCELEROMETER.");
                 accValue = sensorEvent.values;
                 ax=accValue[0];
@@ -302,8 +371,12 @@ public class MyActivity extends QtActivity {
                 //accView.setText(builder.toString());
                 Log.i(TAG, builder.toString());*/
 
-                lastTimestamp = sensorEvent.timestamp;
-            }
+                //lastTimestamp = sensorEvent.timestamp;
+            //}
+
+            float[] values = sensorEvent.values;
+            //tv_all.setText(Float.toString(values[0]));
+            stepCounts = values[0];
         }
 
         @Override
@@ -328,6 +401,7 @@ public class MyActivity extends QtActivity {
 
     }
 //--------------------------------------------------------------------------------
+
 
 
 }
