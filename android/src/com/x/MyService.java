@@ -5,6 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
 import android.os.Build;
@@ -50,11 +54,15 @@ public class MyService extends Service {
             @Override
             public void run() {
                 //System.out.println("Timer:" + format.format(new Date()) + "  sleep : " + sleep);
-                CallJavaNotify_1();
+                if (MyActivity.isStepCounter == 0) {
+                    CallJavaNotify_1();
+                }
+                if (MyActivity.isStepCounter == 1) {
+                    CallJavaNotify_2();
+                }
 
             }
         }, 0, sleep);
-
         return 1;
     }
 
@@ -80,6 +88,14 @@ public class MyService extends Service {
         stopTimer();
         startTimer();
         System.out.println("setSleep2+++++++++++++++++++++++");
+        return 1;
+    }
+
+    public static int setSleep3() {
+        sleep = 5000;
+        stopTimer();
+        startTimer();
+        System.out.println("setSleep3+++++++++++++++++++++++");
         return 1;
     }
 

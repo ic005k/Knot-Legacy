@@ -111,9 +111,11 @@ public class MyActivity extends QtActivity {
             isStepCounter=0;
     }
 
+    private SensorManager  mySensorManager;
+    private Sensor countSensor;
     public void initStepSensor() {
-        SensorManager  mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Sensor countSensor =mySensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+         mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+         countSensor =mySensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if(countSensor!=null) {
             mySensorManager.registerListener(new SensorEventListener() {
                 @Override
@@ -143,29 +145,6 @@ public class MyActivity extends QtActivity {
     public static float getSteps()
     {
         return stepCounts;
-    }
-
-    /**
-     * 判断该设备是否支持计歩
-     *
-     * @param context
-     * @return
-     */
-    //@TargetApi(Build.VERSION_CODES.KITKAT)
-    public  int isSupportStepCountSensor(Context context) {
-
-        SensorManager sensorManager = (SensorManager) context
-                .getSystemService(context.SENSOR_SERVICE);
-        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        //Sensor detectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        //return countSensor != null || detectorSensor != null;
-        if(countSensor != null)
-        {
-            initSensor();
-            return 1;
-        }
-        else
-            return 0;
     }
 
     //----------------------------------------------------------------------
