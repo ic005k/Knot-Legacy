@@ -92,7 +92,8 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
 
   int isHardStepSensor = -1;
-  int initTodaySteps, resetSteps, tc;
+  int initTodaySteps, resetSteps;
+  float tc, oldtc;
   QString listStyle =
       "QListWidget{background: "
       "rgb(244,237,241);border-radius:0px;border:2px solid gray;}";
@@ -229,7 +230,7 @@ class MainWindow : public QMainWindow {
   void pausePedometer();
   void sendMsg(int);
   void initTodayInitSteps();
-public slots:
+ public slots:
   void updateSteps();
   void newDatas();
 

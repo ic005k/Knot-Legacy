@@ -213,27 +213,35 @@ MainWindow::MainWindow(QWidget* parent)
     ui->btnPause->setEnabled(false);
 
     initTodayInitSteps();
-
-    timerStep->start(2000);
+    resetSteps = tc;
+    timerStep->start(5000);
   }
 #endif
 }
 
 void MainWindow::initTodayInitSteps() {
+  int a, b;
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("getSteps");
-  initTodaySteps =
-      jo.callStaticMethod<float>("com.x/MyActivity", "getSteps", "()F");
+  a = jo.callStaticMethod<float>("com.x/MyActivity", "getSteps", "()F");
 #endif
-  resetSteps = initTodaySteps;
+  tc = a;
 
   QSettings Reg(iniDir + "initsteps.ini", QSettings::IniFormat);
   QString str = QDate::currentDate().toString();
 
-  if (!Reg.allKeys().contains(str))
-    Reg.setValue(str, initTodaySteps);
-  else
-    initTodaySteps = Reg.value(str).toInt();
+  if (!Reg.allKeys().contains(str)) {
+    Reg.setValue(str, a);
+    initTodaySteps = a;
+  } else {
+    b = Reg.value(str).toInt();
+    if (a < b)
+      initTodaySteps = 0;
+    else
+      initTodaySteps = b;
+  }
+
+  resetSteps = initTodaySteps;
   // mydlgSteps->ui->lblStepLength->setText(QString::number(initTodaySteps));
 }
 
@@ -3016,7 +3024,7 @@ QString MainWindow::secondsToTime(ulong totalTime) {
 
 void MainWindow::timerUpdateStep() {
   if (strDate != QDate::currentDate().toString()) initTodayInitSteps();
-  int steps = 0;
+  float steps = 0;
 #ifdef Q_OS_ANDROID
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
   m_activity.callMethod<void>("initStepSensor");
@@ -3030,7 +3038,13 @@ void MainWindow::timerUpdateStep() {
   mydlgSteps->ui->lcdNumber->display(QString::number(steps));
   mydlgSteps->ui->lblSingle->setText(QString::number(CurrentSteps));
   mydlgSteps->setTableSteps(steps);
-  sendMsg(steps);
+
+  smallCount++;
+  if (smallCount >= 10) {
+    oldtc = tc;
+    smallCount = 0;
+  }
+  if (oldtc != tc) sendMsg(steps);
 }
 
 void MainWindow::on_actionMemos_triggered() {
