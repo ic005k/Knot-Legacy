@@ -38,6 +38,7 @@
 #include <QScatterSeries>
 #include <QScrollBar>
 #include <QScroller>
+#include <QSensorManager>
 #include <QSettings>
 #include <QSplineSeries>
 #include <QSplitter>
@@ -90,6 +91,8 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  int isHardStepSensor = -1;
+  int initTodaySteps, resetSteps, tc;
   QString listStyle =
       "QListWidget{background: "
       "rgb(244,237,241);border-radius:0px;border:2px solid gray;}";
@@ -224,7 +227,9 @@ class MainWindow : public QMainWindow {
   QString secondsToTime(ulong ulSeconds);
   void stopJavaTimer();
   void pausePedometer();
- public slots:
+  void sendMsg(int);
+  void initTodayInitSteps();
+public slots:
   void updateSteps();
   void newDatas();
 

@@ -128,7 +128,7 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="gboxAlg">
      <property name="title">
       <string>Algorithms</string>
      </property>
@@ -230,7 +230,7 @@ QRadioButton::indicator:checked {
    <item row="6" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="lblStepLength">
        <property name="text">
         <string>Step Length</string>
        </property>
