@@ -106,20 +106,27 @@ void dlgTodo::add_Item(QString str, bool insert) {
     ui->listWidget->addItem(pItem);
 
   QWidget* w = new QWidget;
+  w->setContentsMargins(0, 0, 0, 0);
+
   QHBoxLayout* layout = new QHBoxLayout;
   layout->setMargin(0);
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
   QToolButton* btn = new QToolButton(this);
   btn->setStyleSheet("border:none");
-  btn->setIconSize(QSize(30, 30));
+  // QPixmap pixmap = QPixmap(":/src/done.png");
+  // btn->setIcon(pixmap);
+  // btn->setIconSize(QSize(20, 20));
+  // QPainter p(btn);
+  // p.setRenderHint(QPainter::Antialiasing);
+
+  btn->setIconSize(QSize(25, 25));
   btn->setIcon(QIcon(":/src/done.png"));
+
   connect(btn, &QToolButton::clicked, [=]() {
     btn->setIcon(QIcon(":/src/done1.png"));
 
-    QTime dieTime = QTime::currentTime().addMSecs(1000);
-    while (QTime::currentTime() < dieTime)
-      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    mw_one->Sleep(1000);
 
     ui->listWidget->setCurrentItem(pItem);
     int row = ui->listWidget->currentRow();
