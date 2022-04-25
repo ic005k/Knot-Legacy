@@ -210,9 +210,8 @@ MainWindow::MainWindow(QWidget* parent)
     // mydlgSteps->ui->lblTotalRunTime->hide();
     mydlgPre->ui->chkDebug->setChecked(false);
     mydlgPre->on_chkDebug_clicked();
-    mydlgPre->ui->chkDebug->setEnabled(false);
-    ui->btnPause->setEnabled(false);
-
+    mydlgPre->ui->chkDebug->hide();
+    ui->btnPause->hide();
     initTodayInitSteps();
     resetSteps = tc;
     // timerStep->start(5000);
@@ -3018,7 +3017,7 @@ void MainWindow::updateHardSensorSteps() {
                                            QString::number(timeTest));
 
   if (strDate != QDate::currentDate().toString()) initTodayInitSteps();
-  float steps = 0;
+  qlonglong steps = 0;
 #ifdef Q_OS_ANDROID
 
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
@@ -3029,18 +3028,11 @@ void MainWindow::updateHardSensorSteps() {
 #endif
   steps = tc - initTodaySteps;
 
-  if (steps <= 0) return;
+  if (steps < 0) return;
   CurrentSteps = tc - resetSteps;
   mydlgSteps->ui->lcdNumber->display(QString::number(steps));
   mydlgSteps->ui->lblSingle->setText(QString::number(CurrentSteps));
   mydlgSteps->setTableSteps(steps);
-
-  /*smallCount++;
-  if (smallCount >= 10) {
-    oldtc = tc;
-    smallCount = 0;
-  }
-  if (oldtc != tc)*/
 
   sendMsg(steps);
 }
@@ -3318,10 +3310,6 @@ static void JavaNotify_1() {
   // qDebug() << "C++ JavaNotify_1";
 }
 static void JavaNotify_2() {
-  mw_one->updateHardSensorSteps();
-  mw_one->Sleep(1000);
-  mw_one->updateHardSensorSteps();
-  mw_one->Sleep(1000);
   mw_one->updateHardSensorSteps();
 
   // qDebug() << "C++ JavaNotify_2";

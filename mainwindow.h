@@ -92,8 +92,7 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
 
   int isHardStepSensor = -1;
-  float initTodaySteps, resetSteps;
-  float tc, oldtc;
+  qlonglong initTodaySteps, resetSteps, tc;
   QString listStyle =
       "QListWidget{background: "
       "rgb(244,237,241);border-radius:0px;border:2px solid gray;}";
@@ -111,7 +110,7 @@ class MainWindow : public QMainWindow {
   QValueAxis *axisY;
   QValueAxis *axisX2;
   QValueAxis *axisY2;
-  float CurrentSteps = 0;
+  qlonglong CurrentSteps = 0;
   qlonglong CurTableCount = 0;
   SpecialAccelerometerPedometer *accel_pedometer;
   QGyroscope *gyroscope;
