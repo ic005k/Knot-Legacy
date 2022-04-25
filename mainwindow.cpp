@@ -31,6 +31,7 @@ extern QString btnYearText, btnMonthText;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 void RegJni();
+void RegJniMyActivity();
 static void JavaNotify_2();
 static void JavaNotify_1();
 
@@ -216,8 +217,8 @@ MainWindow::MainWindow(QWidget* parent)
     resetSteps = tc;
     // timerStep->start(5000);
 
-    QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep3Win");
-    jo.callStaticMethod<int>("com.x/MyService", "setSleep3", "()I");
+    // QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep3Win");
+    // jo.callStaticMethod<int>("com.x/MyService", "setSleep3", "()I");
   }
 #endif
 }
@@ -448,7 +449,7 @@ void MainWindow::init_Options() {
   mydlgReport->ui->tableReport->horizontalHeader()->setFont(userFont);
   mydlgReport->ui->tableDetails->horizontalHeader()->setFont(userFont);
   mydlgSteps->ui->tableWidget->horizontalHeader()->setFont(userFont);
-  ui->btnMainNotes->setFont(userFont);
+  ui->btnSteps->setFont(userFont);
   mydlgList->ui->listWidget->setFont(userFont);
 
   mydlgPre->ui->chkClose->setChecked(
@@ -2530,27 +2531,13 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
   }
 }
 
-void MainWindow::on_btnMainNotes_clicked() {
+void MainWindow::on_btnSteps_clicked() {
+  if (isHardStepSensor == 1) updateHardSensorSteps();
   mydlgSteps->setFixedHeight(this->height());
   mydlgSteps->setFixedWidth(this->width());
   mydlgSteps->ui->tableWidget->scrollToBottom();
   mydlgSteps->setModal(true);
   mydlgSteps->show();
-
-  return;
-
-  mydlgMainNotes->move(0, 0);
-  mydlgMainNotes->resize(this->width(), this->height());
-
-  mydlgMainNotes->setModal(true);
-  mydlgMainNotes->show();
-
-  if (!mydlgMainNotes->ui->textBrowser->isHidden())
-    mydlgMainNotes->ui->textBrowser->verticalScrollBar()->setSliderPosition(
-        mydlgMainNotes->sliderPos);
-  if (!mydlgMainNotes->ui->textEdit->isHidden())
-    mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
-        mydlgMainNotes->sliderPos);
 }
 
 void MainWindow::changeEvent(QEvent* event) {
@@ -3032,6 +3019,7 @@ void MainWindow::updateHardSensorSteps() {
   if (strDate != QDate::currentDate().toString()) initTodayInitSteps();
   float steps = 0;
 #ifdef Q_OS_ANDROID
+
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
   m_activity.callMethod<void>("initStepSensor");
 
@@ -3039,18 +3027,21 @@ void MainWindow::updateHardSensorSteps() {
   tc = jo.callStaticMethod<float>("com.x/MyActivity", "getSteps", "()F");
 #endif
   steps = tc - initTodaySteps;
+
   if (steps <= 0) return;
   CurrentSteps = tc - resetSteps;
   mydlgSteps->ui->lcdNumber->display(QString::number(steps));
   mydlgSteps->ui->lblSingle->setText(QString::number(CurrentSteps));
   mydlgSteps->setTableSteps(steps);
 
-  smallCount++;
+  /*smallCount++;
   if (smallCount >= 10) {
     oldtc = tc;
     smallCount = 0;
   }
-  if (oldtc != tc) sendMsg(steps);
+  if (oldtc != tc)*/
+
+  sendMsg(steps);
 }
 
 void MainWindow::on_actionMemos_triggered() {
@@ -3168,12 +3159,12 @@ void MainWindow::init_UIWidget() {
   ui->btnLess->setIconSize(QSize(s, s));
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnMax->setIconSize(QSize(s, s));
-  ui->btnMainNotes->setIconSize(QSize(s, s));
+  ui->btnSteps->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
   ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
   ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
-  ui->btnMainNotes->setIcon(QIcon(":/src/step.png"));
+  ui->btnSteps->setIcon(QIcon(":/src/step.png"));
   ui->frame_tab->setMaximumHeight(this->height());
 }
 
@@ -3327,15 +3318,39 @@ static void JavaNotify_1() {
 }
 static void JavaNotify_2() {
   mw_one->updateHardSensorSteps();
+
   // qDebug() << "C++ JavaNotify_2";
 }
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_1", "()V", (void*)JavaNotify_1},
     {"CallJavaNotify_2", "()V", (void*)JavaNotify_2}};
+
 void RegJni() {
   QtAndroid::runOnAndroidThreadSync([=]() {
     QAndroidJniEnvironment Environment;
     const char* mClassName = "com/x/MyService";
+    jclass j_class;
+    j_class = Environment->FindClass(mClassName);
+    if (j_class == nullptr) {
+      qDebug() << "erro clazz";
+      return;
+    }
+    jint mj = Environment->RegisterNatives(
+        j_class, gMethods, sizeof(gMethods) / sizeof(gMethods[0]));
+    if (mj != JNI_OK) {
+      qDebug() << "register native method failed!";
+      return;
+    } else {
+      qDebug() << "RegisterNatives success!";
+    }
+  });
+  qDebug() << "++++++++++++++++++++++++";
+}
+
+void RegJniMyActivity() {
+  QtAndroid::runOnAndroidThreadSync([=]() {
+    QAndroidJniEnvironment Environment;
+    const char* mClassName = "com/x/MyActivity";
     jclass j_class;
     j_class = Environment->FindClass(mClassName);
     if (j_class == nullptr) {

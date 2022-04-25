@@ -100,7 +100,7 @@ void dlgSteps::on_btnReset_clicked() {
   num_steps_hop = 0;
   mw_one->CurrentSteps = 0;
   ui->lblSingle->setText("0");
-  mw_one->ui->btnMainNotes->setText(tr("Steps"));
+  mw_one->ui->btnSteps->setText(tr("Steps"));
   toDayInitSteps = getCurrentSteps();
   if (mw_one->isHardStepSensor == 1) mw_one->resetSteps = mw_one->tc;
 }

@@ -439,9 +439,12 @@ void dlgReport::on_btnCategory_clicked() {
         if (ui->tableDetails->item(j, 2)->text() == ui->btnCategory->text()) {
           int count = ui->tableCategory->rowCount();
           ui->tableCategory->setRowCount(count + 1);
-          ui->tableCategory->setItem(
-              count, 0,
-              new QTableWidgetItem(ui->tableReport->item(i, 0)->text()));
+          QString str0 = ui->tableReport->item(i, 0)->text();
+          QStringList list0 = str0.split(" ");
+          if (list0.count() == 4) {
+            str0 = list0.at(0) + " " + list0.at(1) + " " + list0.at(2);
+          }
+          ui->tableCategory->setItem(count, 0, new QTableWidgetItem(str0));
           ui->tableCategory->setItem(
               count, 1,
               new QTableWidgetItem(ui->tableDetails->item(j, 0)->text()));

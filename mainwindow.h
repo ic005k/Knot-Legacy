@@ -312,7 +312,7 @@ class MainWindow : public QMainWindow {
 
   void readTWDone();
 
-  void on_btnMainNotes_clicked();
+  void on_btnSteps_clicked();
 
   void slotPointHoverd(const QPointF &point, bool state);
 
