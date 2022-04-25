@@ -31,12 +31,18 @@ import android.hardware.SensorEvent;
 import android.os.PersistableBundle;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MyActivity extends QtActivity {
 
     private static MyActivity m_instance;
     private static SensorManager mSensorManager;
-    public  static int isStepCounter = -1;
-    public  static float stepCounts;
+    public static int isStepCounter = -1;
+    public static float stepCounts;
+    private static WakeLock mWakeLock = null;
+    private static PersistService mySerivece;
+    private static final int DELAY = SensorManager.SENSOR_DELAY_NORMAL;
 
     public native void CallJavaNotify_1();
 
@@ -99,93 +105,94 @@ public class MyActivity extends QtActivity {
                 mySerivece,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 DELAY);*/
-        Sensor countSensor =mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if(countSensor!=null) {
+        Sensor countSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if (countSensor != null) {
             mSensorManager.registerListener(
                     mySerivece,
                     countSensor,
                     DELAY);
-            isStepCounter=1;
-        }
-        else
-            isStepCounter=0;
+            isStepCounter = 1;
+        } else
+            isStepCounter = 0;
     }
 
-    private SensorManager  mySensorManager;
+    private SensorManager mySensorManager;
     private Sensor countSensor;
+
     public void initStepSensor() {
-         mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-         countSensor =mySensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if(countSensor!=null) {
-            mySensorManager.registerListener(new SensorEventListener() {
+
+        if (countSensor != null) {
+            /*mySensorManager.registerListener(new SensorEventListener() {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
-                    float[] values = event.values;
-                    //tv_all.setText(Float.toString(values[0]));
-                    stepCounts=values[0];
+                    if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+                        //float[] values = event.values;
+
+                        stepCounts =(long)event.values[0];
+                    }
+
                 }
 
                 @Override
                 public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
                 }
-            }, countSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }, countSensor, SensorManager.SENSOR_DELAY_FASTEST);*/
+
+            if(mySerivece!=null)
+            {
+                mySensorManager.unregisterListener(mySerivece);
+                mySerivece = new PersistService();
+            }
+
+            mySensorManager.registerListener(mySerivece,
+                    mySensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
             isStepCounter = 1;
-        }
-        else
+        } else
             isStepCounter = 0;
 
     }
 
-    public static int getHardStepCounter()
-    {
+    public static int getHardStepCounter() {
         return isStepCounter;
     }
 
-    public static float getSteps()
-    {
+    public static float getSteps() {
         return stepCounts;
     }
 
-    //----------------------------------------------------------------------
-    WakeLock wakeLock = null;
+    // 屏幕唤醒相关
+    private ScreenStatusReceiver mScreenStatusReceiver;
 
-    private void acquireWakeLock_1() {
-        if (null == wakeLock) {
+    private void registSreenStatusReceiver() {
+        mScreenStatusReceiver = new ScreenStatusReceiver();
+        IntentFilter screenStatusIF = new IntentFilter();
+        screenStatusIF.addAction(Intent.ACTION_SCREEN_ON);
+        screenStatusIF.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mScreenStatusReceiver, screenStatusIF);
+    }
 
-            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            mySerivece = new PersistService();
+    class ScreenStatusReceiver extends BroadcastReceiver {
+        String SCREEN_ON = "android.intent.action.SCREEN_ON";
+        String SCREEN_OFF = "android.intent.action.SCREEN_OFF";
 
-            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK
-                    | PowerManager.ON_AFTER_RELEASE, getClass()
-                    .getCanonicalName());
-            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);// 屏幕熄掉后依然运行
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            registerReceiver(mySerivece.mReceiver, filter);
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (SCREEN_ON.equals(intent.getAction())) {
+                if (isStepCounter == 1) {
 
-            if (null != wakeLock) {
-                Log.i(TAG, "call acquireWakeLock");
-                wakeLock.acquire();
+                    CallJavaNotify_2();
+                }
+                Log.w("ppp", "ppp-屏幕亮了");
+
+            } else if (SCREEN_OFF.equals(intent.getAction())) {
+
             }
         }
     }
 
-    // 释放设备电源锁
-    private void releaseWakeLock_1() {
-        if (null != wakeLock && wakeLock.isHeld()) {
-            Log.i(TAG, "call releaseWakeLock");
-            wakeLock.release();
-            wakeLock = null;
-        }
-    }
-
-//-----------------------------------------------------------------------
-
-    private static WakeLock mWakeLock = null;
-    private static PersistService mySerivece;
-    private static final int DELAY = SensorManager.SENSOR_DELAY_NORMAL;
-
+    //----------------------------------------------------------------------
     public void acquireWakeLock() {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mySerivece = new PersistService();
@@ -215,7 +222,6 @@ public class MyActivity extends QtActivity {
 
     }
 
-
 //-----------------------------------------------------------------------
 
     @Override
@@ -224,11 +230,15 @@ public class MyActivity extends QtActivity {
 
         //唤醒锁
         //acquireWakeLock();
+        mySerivece = new PersistService();
+        mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        countSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         initStepSensor();
 
+        registSreenStatusReceiver();
+
         //状态栏
-        // 获取程序句柄
-        context = getApplicationContext();
+        context = getApplicationContext();  // 获取程序句柄
         // 设置状态栏颜色,需要安卓版本大于5.0
         // this.setStatusBarColor("#FF4040"); //红
         this.setStatusBarColor("#F3F3F3");  //灰
@@ -267,6 +277,7 @@ public class MyActivity extends QtActivity {
     public void onPause() {
         System.out.println("Pause...");
         super.onPause();
+
     }
 
     @Override
@@ -279,6 +290,7 @@ public class MyActivity extends QtActivity {
     protected void onDestroy() {
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
+        unregisterReceiver(mScreenStatusReceiver);
         super.onDestroy();
     }
 
@@ -350,12 +362,13 @@ public class MyActivity extends QtActivity {
                 //accView.setText(builder.toString());
                 Log.i(TAG, builder.toString());*/
 
-                //lastTimestamp = sensorEvent.timestamp;
+            //lastTimestamp = sensorEvent.timestamp;
             //}
-
-            float[] values = sensorEvent.values;
-            //tv_all.setText(Float.toString(values[0]));
-            stepCounts = values[0];
+            // 做个判断传感器类型很重要，这可以过滤掉杂音（比如可能来自其它传感器的值）
+            if (sensorEvent.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+                //float[] values = sensorEvent.values;
+                stepCounts = (long)sensorEvent.values[0];
+            }
         }
 
         @Override
@@ -380,7 +393,6 @@ public class MyActivity extends QtActivity {
 
     }
 //--------------------------------------------------------------------------------
-
 
 
 }

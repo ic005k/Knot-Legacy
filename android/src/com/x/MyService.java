@@ -37,7 +37,6 @@ public class MyService extends Service {
     private static final String NAME = "F_SERVICE";
 
     public native static void CallJavaNotify_1();
-
     public native static void CallJavaNotify_2();
 
 
@@ -53,18 +52,17 @@ public class MyService extends Service {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                //System.out.println("Timer:" + format.format(new Date()) + "  sleep : " + sleep);
-                if (MyActivity.isStepCounter == 0) {
+                if (MyActivity.isStepCounter == 0)
                     CallJavaNotify_1();
-                }
-                if (MyActivity.isStepCounter == 1) {
+                if (MyActivity.isStepCounter == 1)
                     CallJavaNotify_2();
-                }
+
 
             }
         }, 0, sleep);
         return 1;
     }
+
 
     public static int stopTimer() {
         if (timer != null) {
@@ -98,6 +96,7 @@ public class MyService extends Service {
         System.out.println("setSleep3+++++++++++++++++++++++");
         return 1;
     }
+
 
     @Override
     public IBinder onBind(Intent arg0) {
