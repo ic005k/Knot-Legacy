@@ -3014,7 +3014,8 @@ QString MainWindow::secondsToTime(ulong totalTime) {
 
 void MainWindow::updateHardSensorSteps() {
   timeTest = timeTest + 1;
-  mydlgSteps->ui->lblTotalRunTime->setText(secondsToTime(timeTest * 5));
+  mydlgSteps->ui->lblTotalRunTime->setText(tr("Number of Operations") + " : " +
+                                           QString::number(timeTest));
 
   if (strDate != QDate::currentDate().toString()) initTodayInitSteps();
   float steps = 0;
@@ -3317,6 +3318,10 @@ static void JavaNotify_1() {
   // qDebug() << "C++ JavaNotify_1";
 }
 static void JavaNotify_2() {
+  mw_one->updateHardSensorSteps();
+  mw_one->Sleep(1000);
+  mw_one->updateHardSensorSteps();
+  mw_one->Sleep(1000);
   mw_one->updateHardSensorSteps();
 
   // qDebug() << "C++ JavaNotify_2";
