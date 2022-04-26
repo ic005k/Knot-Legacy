@@ -139,10 +139,8 @@ public class MyActivity extends QtActivity {
                 }
             }, countSensor, SensorManager.SENSOR_DELAY_FASTEST);*/
 
-            if(mySerivece!=null)
-            {
+            if (mySerivece != null) {
                 mySensorManager.unregisterListener(mySerivece);
-                mySerivece = new PersistService();
             }
 
             mySensorManager.registerListener(mySerivece,
@@ -184,10 +182,16 @@ public class MyActivity extends QtActivity {
 
                     CallJavaNotify_2();
                 }
-                Log.w("ppp", "ppp-屏幕亮了");
+                Log.w("Knot", "屏幕亮了");
 
             } else if (SCREEN_OFF.equals(intent.getAction())) {
+                if (isStepCounter == 1) {
+                    if (mySerivece != null) {
+                        mySensorManager.unregisterListener(mySerivece);
 
+                    }
+                }
+                Log.w("Knot", "屏幕熄了");
             }
         }
     }
@@ -367,7 +371,7 @@ public class MyActivity extends QtActivity {
             // 做个判断传感器类型很重要，这可以过滤掉杂音（比如可能来自其它传感器的值）
             if (sensorEvent.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
                 //float[] values = sensorEvent.values;
-                stepCounts = (long)sensorEvent.values[0];
+                stepCounts = (long) sensorEvent.values[0];
             }
         }
 
