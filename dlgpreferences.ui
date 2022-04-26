@@ -292,7 +292,7 @@ QRadioButton::indicator:checked {
 }</string>
         </property>
         <property name="text">
-         <string>Automatically uses time as the Y-axis</string>
+         <string>Auto uses time as the Y-axis</string>
         </property>
         <property name="checked">
          <bool>true</bool>

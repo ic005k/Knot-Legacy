@@ -1860,7 +1860,12 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void MainWindow::on_actionAbout_triggered() {
-  QUrl url(QString("https://github.com/ic005k/Knot/releases/latest"));
+  QString str;
+  if (zh_cn)
+    str = "https://gitee.com/ic005k/knot/releases";
+  else
+    str = "https://github.com/ic005k/Knot/releases/latest";
+  QUrl url(str);
   QDesktopServices::openUrl(url);
 }
 

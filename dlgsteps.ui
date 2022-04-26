@@ -246,7 +246,7 @@ QRadioButton::indicator:checked {
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>cm        Current Steps : </string>
+        <string>cm        Current : </string>
        </property>
       </widget>
      </item>
