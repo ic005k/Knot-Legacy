@@ -9,7 +9,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.05";
+QString ver = "1.0.06";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -244,7 +244,6 @@ void MainWindow::initTodayInitSteps() {
       initTodaySteps = b;
   }
 
-  resetSteps = initTodaySteps;
   // mydlgSteps->ui->lblStepLength->setText(QString::number(initTodaySteps));
 }
 
@@ -3021,7 +3020,11 @@ void MainWindow::updateHardSensorSteps() {
   mydlgSteps->ui->lblTotalRunTime->setText(tr("Number of Operations") + " : " +
                                            QString::number(timeTest));
 
-  if (strDate != QDate::currentDate().toString()) initTodayInitSteps();
+  if (strDate != QDate::currentDate().toString()) {
+    initTodayInitSteps();
+    strDate = QDate::currentDate().toString();
+  }
+
   qlonglong steps = 0;
 #ifdef Q_OS_ANDROID
 
@@ -3079,7 +3082,7 @@ void MainWindow::init_UIWidget() {
   tabChart = ui->tabCharts;
 
   ui->centralwidget->layout()->setMargin(1);
-  ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 1);
+  ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 2);
   ui->centralwidget->layout()->setSpacing(1);
   ui->frame_charts->setContentsMargins(0, 0, 0, 0);
   ui->frame_charts->layout()->setMargin(0);
@@ -3164,6 +3167,12 @@ void MainWindow::init_UIWidget() {
   ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
   ui->btnSteps->setIcon(QIcon(":/src/step.png"));
   ui->frame_tab->setMaximumHeight(this->height());
+
+  ui->btnPlus->setStyleSheet("border:none");
+  ui->btnLess->setStyleSheet("border:none");
+  ui->btnTodo->setStyleSheet("border:none");
+  ui->btnSteps->setStyleSheet("border:none");
+  ui->btnMax->setStyleSheet("border:none");
 }
 
 void MainWindow::on_btnSelTab_clicked() {
