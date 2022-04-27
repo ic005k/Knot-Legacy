@@ -1,4 +1,4 @@
-# Knot - Powerful counter
+# Knot - A simple tool for counting, bookkeeping, keeping track of steps, etc.
 
 * Android version >= 6.0
 * To-do list.
