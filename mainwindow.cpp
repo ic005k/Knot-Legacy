@@ -2483,13 +2483,14 @@ void MainWindow::on_actionReport_triggered() {
   mydlgReport->ui->lblTitle->setText(
       ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
   mydlgReport->ui->tableDetails->setRowCount(0);
+
+  mydlgReport->sel_Year();
+  mydlgReport->sel_Month();
+
   mydlgReport->setFixedHeight(this->height());
   mydlgReport->setFixedWidth(this->width());
   mydlgReport->setModal(true);
   mydlgReport->show();
-
-  mydlgReport->sel_Year();
-  mydlgReport->sel_Month();
 }
 
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
