@@ -207,7 +207,7 @@ MainWindow::MainWindow(QWidget* parent)
     mydlgSteps->ui->gboxAlg->hide();
     mydlgSteps->ui->lblSteps->hide();
     mydlgSteps->ui->btnPause->hide();
-    // mydlgSteps->ui->lblTotalRunTime->hide();
+    mydlgSteps->ui->lblTotalRunTime->hide();
     mydlgPre->ui->chkDebug->setChecked(false);
     mydlgPre->on_chkDebug_clicked();
     mydlgPre->ui->chkDebug->hide();
@@ -2540,6 +2540,7 @@ void MainWindow::on_btnSteps_clicked() {
   mydlgSteps->setFixedHeight(this->height());
   mydlgSteps->setFixedWidth(this->width());
   mydlgSteps->ui->tableWidget->scrollToBottom();
+  mydlgSteps->ui->tableWidget->setFocus();
   mydlgSteps->setModal(true);
   mydlgSteps->show();
 }
@@ -3083,7 +3084,7 @@ void MainWindow::init_UIWidget() {
   tabChart = ui->tabCharts;
 
   ui->centralwidget->layout()->setMargin(1);
-  ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 2);
+  ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 7);
   ui->centralwidget->layout()->setSpacing(1);
   ui->frame_charts->setContentsMargins(0, 0, 0, 0);
   ui->frame_charts->layout()->setMargin(0);
@@ -3154,7 +3155,7 @@ void MainWindow::init_UIWidget() {
   ui->btnSelTab->setIconSize(QSize(iz, iz));
   ui->btnPause->setIconSize(QSize(iz, iz));
 
-  int s = 35;
+  int s = 30;
   if (isIOS) {
   }
   ui->btnPlus->setIconSize(QSize(s, s));
