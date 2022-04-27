@@ -3,6 +3,8 @@
 * Android version >= 6.0
 * To-do list.
 * Pedometer
+* Statistical charts.
+* Statistical reports.
 
 ### Credits
 
