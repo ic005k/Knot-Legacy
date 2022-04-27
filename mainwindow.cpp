@@ -223,7 +223,7 @@ MainWindow::MainWindow(QWidget* parent)
 }
 
 void MainWindow::initTodayInitSteps() {
-  int a, b;
+  qlonglong a, b;
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("getSteps");
   a = jo.callStaticMethod<float>("com.x/MyActivity", "getSteps", "()F");
@@ -237,10 +237,11 @@ void MainWindow::initTodayInitSteps() {
     Reg.setValue(str, a);
     initTodaySteps = a;
   } else {
-    b = Reg.value(str).toInt();
-    if (a < b)
-      initTodaySteps = 0;
-    else
+    b = Reg.value(str).toLongLong();
+    if (a < b) {
+      initTodaySteps = 0 - Reg.value("TodaySteps", 0).toLongLong();
+      Reg.setValue(str, initTodaySteps);
+    } else
       initTodaySteps = b;
   }
 

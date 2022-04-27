@@ -127,6 +127,9 @@ void dlgSteps::saveSteps() {
     Reg.setValue("/Steps/Table-" + QString::number(i) + "-1",
                  ui->tableWidget->item(i, 1)->text());
   }
+
+  QSettings Reg1(iniDir + "initsteps.ini", QSettings::IniFormat);
+  Reg1.setValue("TodaySteps", getCurrentSteps());
 }
 
 void dlgSteps::init_Steps() {
@@ -220,7 +223,10 @@ qlonglong dlgSteps::getCurrentSteps() {
   int count = ui->tableWidget->rowCount();
   if (count == 0) return 0;
 
-  return ui->tableWidget->item(count - 1, 1)->text().toLongLong();
+  QString str = ui->tableWidget->item(count - 1, 0)->text();
+  if (str == QDate::currentDate().toString())
+    return ui->tableWidget->item(count - 1, 1)->text().toLongLong();
+  return 0;
 }
 
 void dlgSteps::setTableSteps(qlonglong steps) {
