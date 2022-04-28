@@ -91,61 +91,20 @@ public class MyActivity extends QtActivity {
     }
 
     //----------------------------------------------------------------------
-    public void initSensor() {
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mySerivece = new PersistService();
-        //PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        //mWakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);// CPU保存运行
-        //IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);// 屏幕熄掉后依然运行
-        //filter.addAction(Intent.ACTION_SCREEN_OFF);
-        //registerReceiver(mySerivece.mReceiver, filter);
 
-        //mWakeLock.acquire();// 屏幕熄后，CPU继续运行
-        /*mSensorManager.registerListener(
-                mySerivece,
-                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                DELAY);*/
-        Sensor countSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if (countSensor != null) {
-            mSensorManager.registerListener(
-                    mySerivece,
-                    countSensor,
-                    DELAY);
-            isStepCounter = 1;
-        } else
-            isStepCounter = 0;
-    }
-
-    private SensorManager mySensorManager;
     private Sensor countSensor;
 
     public void initStepSensor() {
-
         if (countSensor != null) {
-            /*mySensorManager.registerListener(new SensorEventListener() {
-                @Override
-                public void onSensorChanged(SensorEvent event) {
-                    if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-                        //float[] values = event.values;
-
-                        stepCounts =(long)event.values[0];
-                    }
-
-                }
-
-                @Override
-                public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-                }
-            }, countSensor, SensorManager.SENSOR_DELAY_FASTEST);*/
-
-            if (mySerivece != null) {
-                mySensorManager.unregisterListener(mySerivece);
+            if (mSensorManager != null) {
+                mSensorManager.unregisterListener(mySerivece);
+                mSensorManager
+                        .registerListener(
+                                mySerivece,
+                                mSensorManager
+                                        .getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+                                SensorManager.SENSOR_DELAY_NORMAL);
             }
-
-            mySensorManager.registerListener(mySerivece,
-                    mySensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-                    SensorManager.SENSOR_DELAY_NORMAL);
             isStepCounter = 1;
         } else
             isStepCounter = 0;
@@ -187,7 +146,7 @@ public class MyActivity extends QtActivity {
             } else if (SCREEN_OFF.equals(intent.getAction())) {
                 if (isStepCounter == 1) {
                     if (mySerivece != null) {
-                        mySensorManager.unregisterListener(mySerivece);
+                        mSensorManager.unregisterListener(mySerivece);
 
                     }
                 }
@@ -227,7 +186,6 @@ public class MyActivity extends QtActivity {
     }
 
 //-----------------------------------------------------------------------
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -235,8 +193,8 @@ public class MyActivity extends QtActivity {
         //唤醒锁
         //acquireWakeLock();
         mySerivece = new PersistService();
-        mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        countSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        countSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         initStepSensor();
 
         registSreenStatusReceiver();
@@ -299,75 +257,27 @@ public class MyActivity extends QtActivity {
     }
 
     //---------------------------------------------------------------------------
-    private static boolean STOP = false;// 开始暂停按钮
-    private StringBuilder builder = new StringBuilder();
-    private TextView accView;// 显示加速度值
-    private long lastTimestamp = 0;
-
     class PersistService extends Service implements SensorEventListener {
-
-        private float[] accValue = new float[3];
-
         public BroadcastReceiver mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
-                if (!STOP
-                        && !intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                    return;
-                }
                 if (mSensorManager != null) {//取消监听后重写监听，以保持后台运行
                     mSensorManager.unregisterListener(PersistService.this);
                     mSensorManager
                             .registerListener(
                                     PersistService.this,
                                     mSensorManager
-                                            .getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                                            .getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
                                     SensorManager.SENSOR_DELAY_NORMAL);
                 }
-
             }
-
         };
-
+        @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
             Log.i(TAG, "PersistService.onAccuracyChanged().");
         }
-
-        int count = 0;
-        double ax, ay, az;
-
+        @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-
-            //if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                /*Log.i(TAG, "PersistService.TYPE_ACCELEROMETER.");
-                accValue = sensorEvent.values;
-                ax=accValue[0];
-                ay=accValue[1];
-                az=accValue[2];
-                count++;
-                if(count>=5000)
-                {
-                    count = 0;
-                    if(ax==0&&ay==0&&az==0)
-                    {
-                        regSensor();
-                    }
-
-                }*/
-
-                /*for (int i = 0; i < 3; i++) {
-                    builder.append((int) accValue[i]);
-                    builder.append(",");
-
-                }
-                builder.append((sensorEvent.timestamp - lastTimestamp) / 1000000);// 采样时间差
-                builder.append("\n");
-                //accView.setText(builder.toString());
-                Log.i(TAG, builder.toString());*/
-
-            //lastTimestamp = sensorEvent.timestamp;
-            //}
             // 做个判断传感器类型很重要，这可以过滤掉杂音（比如可能来自其它传感器的值）
             if (sensorEvent.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
                 //float[] values = sensorEvent.values;
@@ -381,22 +291,9 @@ public class MyActivity extends QtActivity {
             return null;
         }
 
-        public void regSensor() {
-            if (mSensorManager != null) {//取消监听后重写监听，以保持后台运行
-                mSensorManager.unregisterListener(PersistService.this);
-                mSensorManager
-                        .registerListener(
-                                PersistService.this,
-                                mSensorManager
-                                        .getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                                SensorManager.SENSOR_DELAY_NORMAL);
-
-                Log.i(TAG, "PersistService.RegisterListener");
-            }
-        }
-
     }
-//--------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------
 
 
 }
