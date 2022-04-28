@@ -3057,6 +3057,7 @@ void MainWindow::updateHardSensorSteps() {
 }
 
 void MainWindow::on_actionMemos_triggered() {
+  mydlgMainNotes->move(0, 0);
   mydlgMainNotes->setFixedHeight(this->height());
   mydlgMainNotes->setFixedWidth(this->width());
   mydlgMainNotes->setModal(true);
