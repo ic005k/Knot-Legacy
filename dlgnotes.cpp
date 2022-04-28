@@ -4,7 +4,7 @@
 #include "ui_dlgnotes.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
-extern bool loading;
+extern bool loading, zh_cn;
 extern QString noteText;
 extern int curPos;
 extern int sliderPos;
@@ -12,10 +12,22 @@ extern int sliderPos;
 dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  ui->textBrowser->setOpenExternalLinks(true);
   //鼠标不可选中文本
-  ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
+  // ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
+
+  ui->lblAbout->adjustSize();
+  ui->lblAbout->setWordWrap(true);
+  ui->lblLogo->adjustSize();
+  ui->lblLogo->setText("");
+  ui->lblLogo->setFixedHeight(85);
+  ui->lblLogo->setFixedWidth(85);
+  ui->lblLogo->setStyleSheet(
+      "QLabel{"
+      "border-image:url(:/src/icon.png) 4 4 4 4 stretch stretch;"
+      "}");
 }
 
 dlgNotes::~dlgNotes() { delete ui; }
@@ -69,4 +81,21 @@ void dlgNotes::init_Notes() {
 
   } else
     ui->textEdit->setPlainText(str);
+}
+
+void dlgNotes::on_btnDL_clicked() {
+  QString str;
+  if (zh_cn)
+    str = "https://gitee.com/ic005k/knot/releases";
+  else
+    str = "https://github.com/ic005k/Knot/releases/latest";
+  QUrl url(str);
+  QDesktopServices::openUrl(url);
+}
+
+void dlgNotes::on_btnHomePage_clicked() {
+  QString str;
+  str = "https://github.com/ic005k/Knot/";
+  QUrl url(str);
+  QDesktopServices::openUrl(url);
 }

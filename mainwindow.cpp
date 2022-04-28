@@ -1672,6 +1672,7 @@ void MainWindow::on_actionNotes_triggered() {
 
   mydlgNotes->ui->textEdit->clear();
 
+  mydlgNotes->ui->frameAbout->hide();
   mydlgNotes->ui->textBrowser->setHidden(true);
   mydlgNotes->ui->textEdit->setHidden(false);
   mydlgNotes->setModal(true);
@@ -2004,6 +2005,8 @@ void MainWindow::on_actionView_App_Data_triggered() {
   edit->append(loadText(iniDir + "todo.ini"));
   edit->append(loadText(iniDir + "ymd.ini"));
   edit->append(loadText(iniDir + "notes.ini"));
+  edit->append(loadText(iniDir + "mainnotes.ini"));
+  edit->append(loadText(iniDir + "steps.ini"));
   for (int i = 0; i < tabData->tabBar()->count(); i++) {
     QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
     if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
@@ -2022,11 +2025,12 @@ void MainWindow::on_actionView_App_Data_triggered() {
   mydlgNotes->ui->textBrowser->append("File: " + iniFile);
 
   mydlgNotes->ui->textBrowser->append("");
-
-  mydlgNotes->ui->textBrowser->setHidden(false);
+  mydlgNotes->ui->textBrowser->setHidden(true);
   mydlgNotes->ui->textEdit->setHidden(true);
 
-  mydlgNotes->ui->lblTitle->setText(tr("App Data :"));
+  mydlgNotes->ui->lblTitle->setText("");
+  mydlgNotes->ui->lblAbout->setText(mydlgNotes->ui->textBrowser->toPlainText());
+  mydlgNotes->ui->frameAbout->show();
   mydlgNotes->setGeometry(0, 0, this->width(), this->height());
   mydlgNotes->setModal(true);
   mydlgNotes->show();
@@ -3075,7 +3079,7 @@ void MainWindow::init_Sensors() {
 
 void MainWindow::init_UIWidget() {
   mw_one = this;
-  ui->actionAbout->setText(tr("About") + " (" + ver + ")");
+
   strDate = QDate::currentDate().toString();
   isReadEnd = true;
   tabData = new QTabWidget;
@@ -3230,6 +3234,7 @@ void MainWindow::init_Menu() {
       "QLabel{"
       "border-image:url(:/src/icon.png) 4 4 4 4 stretch stretch;"
       "}");
+
   mainMenu = new QMenu(this);
   QAction* actAddTab = new QAction(tr("Add Tab"));
   QAction* actDelTab = new QAction(tr("Del Tab"));
@@ -3241,8 +3246,9 @@ void MainWindow::init_Menu() {
   QAction* actImportData = new QAction(tr("Import Data"));
   QAction* actPreferences = new QAction(tr("Preferences"));
   QAction* actMemos = new QAction(tr("Memos"));
-  QAction* actViewAppData = new QAction(tr("View App Data"));
+  QAction* actViewAppData = new QAction(tr("About") + " (" + ver + ")");
   QAction* actAbout = new QAction(tr("Check for New Releases"));
+  actAbout->setVisible(false);
 
   mainMenu->addAction(actAddTab);
   mainMenu->addAction(actDelTab);

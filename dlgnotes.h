@@ -27,6 +27,10 @@ class dlgNotes : public QDialog {
 
   void on_textEdit_textChanged();
 
+  void on_btnDL_clicked();
+
+  void on_btnHomePage_clicked();
+
  private:
 };
 
