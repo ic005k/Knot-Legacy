@@ -1958,6 +1958,10 @@ void MainWindow::on_actionImport_Data_triggered() {
 
     startSave("alltab");
     mydlgMainNotes->saveMainNotes();
+    QSettings RegTotalIni(iniFile, QSettings::IniFormat);
+    QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+    Reg.setValue("/MainNotes/UserKey",
+                 RegTotalIni.value("/MainNotes/UserKey").toString());
   }
 }
 
@@ -3057,7 +3061,64 @@ void MainWindow::on_actionMemos_triggered() {
   mydlgMainNotes->setModal(true);
   mydlgMainNotes->ui->textBrowser->hide();
   mydlgMainNotes->ui->textEdit->show();
-  mydlgMainNotes->show();
+  mydlgMainNotes->ui->btnSetKey->show();
+  mydlgMainNotes->ui->frameSetKey->hide();
+
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  QString strPw = Reg.value("/MainNotes/UserKey").toString();
+  QByteArray baPw = strPw.toUtf8();
+  for (int i = 0; i < baPw.size(); i++) {
+    baPw[i] = baPw[i] - 66;  //解密User的密码
+  }
+  strPw = baPw;
+  if (strPw.trimmed() != "") {
+    bool ok;
+    QInputDialog* idlg = new QInputDialog(this);
+    QString style =
+        "QDialog{background: "
+        "rgb(244,237,241);border-radius:0px;border:2px solid gray;}";
+    idlg->setStyleSheet(style);
+    idlg->setOkButtonText(tr("Ok"));
+    idlg->setCancelButtonText(tr("Cancel"));
+    idlg->setWindowTitle(tr("Please enter your password : "));
+    idlg->setTextValue("");
+    idlg->setLabelText(tr("Password : "));
+    QLineEdit::EchoMode echoMode = QLineEdit::Password;
+    idlg->setTextEchoMode(echoMode);
+    QString text;
+
+    if (QDialog::Accepted == idlg->exec()) {
+      ok = true;
+      text = idlg->textValue();
+    } else
+      ok = false;
+
+    if (ok && !text.isEmpty()) {
+      if (text.trimmed() == strPw) {
+        QString file = iniDir + "mainnotes.txt";
+        TextEditToFile(mydlgMainNotes->ui->textEdit, file);
+        if (QFile(file).exists()) {
+          mydlgMainNotes->decode(file);
+          mydlgMainNotes->ui->textEdit->setPlainText(
+              mydlgMainNotes->Deciphering(file));
+          QFile::remove(file);
+        }
+
+        mydlgMainNotes->show();
+
+      } else {
+        QMessageBox msgBox;
+        msgBox.setText("Knot");
+        msgBox.setInformativeText(tr("The entered password does not match."));
+        QPushButton* btnOk =
+            msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+        btnOk->setFocus();
+        msgBox.exec();
+      }
+    }
+
+  } else
+    mydlgMainNotes->show();
 }
 
 void MainWindow::init_Sensors() {

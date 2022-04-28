@@ -14,7 +14,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->setupUi(this);
   this->installEventFilter(this);
   ui->gBoxSensor->hide();
-  ui->frameAutoPause->hide();
+  ui->chkEM->hide();
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }

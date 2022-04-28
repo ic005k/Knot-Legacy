@@ -86,14 +86,14 @@
     <message>
         <location filename="mainwindow.ui" line="581"/>
         <location filename="mainwindow.ui" line="866"/>
-        <location filename="mainwindow.cpp" line="3242"/>
+        <location filename="mainwindow.cpp" line="3274"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="564"/>
         <location filename="mainwindow.ui" line="841"/>
-        <location filename="mainwindow.cpp" line="3244"/>
+        <location filename="mainwindow.cpp" line="3276"/>
         <source>Remarks</source>
         <translation>备注</translation>
     </message>
@@ -104,13 +104,13 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="826"/>
-        <location filename="mainwindow.cpp" line="3241"/>
+        <location filename="mainwindow.cpp" line="3273"/>
         <source>Rename Tab</source>
         <translation>重命名标签页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="876"/>
-        <location filename="mainwindow.cpp" line="3247"/>
+        <location filename="mainwindow.cpp" line="3279"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
@@ -176,31 +176,31 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="831"/>
-        <location filename="mainwindow.cpp" line="3239"/>
+        <location filename="mainwindow.cpp" line="3271"/>
         <source>Add Tab</source>
         <translation>增加标签页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="836"/>
-        <location filename="mainwindow.cpp" line="3240"/>
+        <location filename="mainwindow.cpp" line="3272"/>
         <source>Del Tab</source>
         <translation>删除标签页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="846"/>
-        <location filename="mainwindow.cpp" line="3249"/>
+        <location filename="mainwindow.cpp" line="3281"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="851"/>
-        <location filename="mainwindow.cpp" line="3245"/>
+        <location filename="mainwindow.cpp" line="3277"/>
         <source>Export Data</source>
         <translation>导出数据</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="856"/>
-        <location filename="mainwindow.cpp" line="3246"/>
+        <location filename="mainwindow.cpp" line="3278"/>
         <source>Import Data</source>
         <translation>导入数据</translation>
     </message>
@@ -211,14 +211,14 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="881"/>
-        <location filename="mainwindow.cpp" line="3248"/>
+        <location filename="mainwindow.cpp" line="3280"/>
         <source>Memos</source>
         <translation>备忘录</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="547"/>
         <location filename="mainwindow.ui" line="871"/>
-        <location filename="mainwindow.cpp" line="3243"/>
+        <location filename="mainwindow.cpp" line="3275"/>
         <source>Report</source>
         <translation>报表</translation>
     </message>
@@ -238,6 +238,7 @@
         <location filename="mainwindow.cpp" line="856"/>
         <location filename="mainwindow.cpp" line="1428"/>
         <location filename="mainwindow.cpp" line="1927"/>
+        <location filename="mainwindow.cpp" line="3074"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -248,6 +249,8 @@
         <location filename="mainwindow.cpp" line="1910"/>
         <location filename="mainwindow.cpp" line="1928"/>
         <location filename="mainwindow.cpp" line="1941"/>
+        <location filename="mainwindow.cpp" line="3073"/>
+        <location filename="mainwindow.cpp" line="3086"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -410,7 +413,22 @@
         <translation>搜索结果：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3250"/>
+        <location filename="mainwindow.cpp" line="3076"/>
+        <source>Please enter your password : </source>
+        <translation>请输入密码：</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="3077"/>
+        <source>Password : </source>
+        <translation>密码：</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="3084"/>
+        <source>The entered password does not match.</source>
+        <translation>输入的密码不匹配</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="3282"/>
         <source>Check for New Releases</source>
         <translation>检查新版本</translation>
     </message>
@@ -548,10 +566,17 @@
     </message>
     <message>
         <location filename="dlgmainnotes.ui" line="78"/>
-        <location filename="dlgmainnotes.cpp" line="125"/>
-        <location filename="dlgmainnotes.cpp" line="134"/>
+        <source>Set Key</source>
+        <translation>设置密码</translation>
+    </message>
+    <message>
+        <location filename="dlgmainnotes.ui" line="188"/>
+        <source>OK</source>
+        <translation>确定</translation>
+    </message>
+    <message>
         <source>Start</source>
-        <translation>启动</translation>
+        <translation type="vanished">启动</translation>
     </message>
     <message>
         <location filename="dlgmainnotes.ui" line="136"/>
@@ -570,19 +595,30 @@
         <translation type="vanished">位置</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="93"/>
+        <location filename="dlgmainnotes.cpp" line="96"/>
         <source>Xcounter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="94"/>
+        <location filename="dlgmainnotes.cpp" line="97"/>
         <source>Txt Files (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="127"/>
-        <source>End</source>
-        <translation></translation>
+        <location filename="dlgmainnotes.cpp" line="149"/>
+        <source>The password is set successfully.</source>
+        <translation>密码设置成功</translation>
+    </message>
+    <message>
+        <location filename="dlgmainnotes.cpp" line="150"/>
+        <location filename="dlgmainnotes.cpp" line="168"/>
+        <source>Ok</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="dlgmainnotes.cpp" line="167"/>
+        <source>The entered password does not match.</source>
+        <translation>输入的密码不匹配</translation>
     </message>
 </context>
 <context>
@@ -593,27 +629,27 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgnotes.ui" line="55"/>
+        <location filename="dlgnotes.ui" line="114"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="dlgnotes.ui" line="92"/>
+        <location filename="dlgnotes.ui" line="82"/>
         <source>Logo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgnotes.ui" line="125"/>
+        <location filename="dlgnotes.ui" line="132"/>
         <source>Download URL</source>
         <translation>下载地址</translation>
     </message>
     <message>
-        <location filename="dlgnotes.ui" line="138"/>
+        <location filename="dlgnotes.ui" line="145"/>
         <source>Knot Project</source>
         <translation>Knot项目主页</translation>
     </message>
     <message>
-        <location filename="dlgnotes.ui" line="175"/>
+        <location filename="dlgnotes.ui" line="182"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
@@ -675,12 +711,12 @@
         <translation type="vanished">关闭动作</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="312"/>
+        <location filename="dlgpreferences.ui" line="215"/>
         <source>Normal Close</source>
         <translation>正常关闭</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="295"/>
+        <location filename="dlgpreferences.ui" line="229"/>
         <source>Auto uses time as the Y-axis</source>
         <oldsource>Automatically uses time as the Y-axis</oldsource>
         <translation>自动使用时间作为Y坐标轴</translation>
@@ -694,42 +730,25 @@
         <translation type="vanished">日志</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="236"/>
         <source>Auto Pause Pedometer</source>
-        <translation>自动暂停计步器</translation>
+        <translation type="vanished">自动暂停计步器</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="248"/>
-        <source>From</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="dlgpreferences.ui" line="255"/>
-        <source>22</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="dlgpreferences.ui" line="262"/>
-        <source>o&apos;clock                    to</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="dlgpreferences.ui" line="269"/>
-        <source>07</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="dlgpreferences.ui" line="276"/>
         <source>o&apos;clock</source>
-        <translation>点钟</translation>
+        <translation type="vanished">点钟</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="326"/>
+        <location filename="dlgpreferences.ui" line="246"/>
         <source>Debug Mode</source>
         <translation>调试模式</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="348"/>
+        <location filename="dlgpreferences.ui" line="260"/>
+        <source>Encrypted Memos</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgpreferences.ui" line="285"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>

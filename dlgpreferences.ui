@@ -202,84 +202,18 @@ QRadioButton::indicator:checked {
       <string>Additional Options</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="3" column="0">
-       <widget class="QFrame" name="frameAutoPause">
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="chkAutoPause">
-           <property name="styleSheet">
-            <string notr="true">QCheckBox::indicator {
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="chkClose">
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
     width:22px;
     height:22px;
 }</string>
-           </property>
-           <property name="text">
-            <string>Auto Pause Pedometer</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>From</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEdit">
-             <property name="text">
-              <string>22</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>o'clock                    to</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEdit_2">
-             <property name="text">
-              <string>07</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>o'clock</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        </property>
+        <property name="text">
+         <string>Normal Close</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
@@ -299,20 +233,6 @@ QRadioButton::indicator:checked {
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="chkClose">
-        <property name="styleSheet">
-         <string notr="true">QCheckBox::indicator {
-    /* 选择框尺寸 */
-    width:22px;
-    height:22px;
-}</string>
-        </property>
-        <property name="text">
-         <string>Normal Close</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QCheckBox" name="chkDebug">
         <property name="styleSheet">
@@ -324,6 +244,23 @@ QRadioButton::indicator:checked {
         </property>
         <property name="text">
          <string>Debug Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="chkEM">
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
+    /* 选择框尺寸 */
+    width:22px;
+    height:22px;
+}</string>
+        </property>
+        <property name="text">
+         <string>Encrypted Memos</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

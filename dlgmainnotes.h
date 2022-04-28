@@ -2,6 +2,8 @@
 #define DLGMAINNOTES_H
 
 #include <QApplication>
+#include <QChar>
+#include <QCharRef>
 #include <QDialog>
 #include <QInputMethod>
 #include <QPlainTextEdit>
@@ -25,6 +27,12 @@ class dlgMainNotes : public QDialog {
   qlonglong curPos;
   qlonglong sliderPos;
 
+  void decode(QString filename);
+  void encode(QString filename);
+
+  void encryption(const QString &fileName);
+  QString Deciphering(const QString &fileName);
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
@@ -40,9 +48,11 @@ class dlgMainNotes : public QDialog {
 
   void on_textBrowser_cursorPositionChanged();
 
-  void on_btnStartEdit_clicked();
-
   void on_KVChanged();
+
+  void on_btnSetKey_clicked();
+
+  void on_btnOK_clicked();
 
  private:
   int newHeight = 0;
