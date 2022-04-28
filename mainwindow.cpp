@@ -2013,7 +2013,7 @@ void MainWindow::on_actionView_App_Data_triggered() {
   mydlgNotes->ui->textBrowser->clear();
   QSettings Reg(iniFile, QSettings::IniFormat);
   int keys = Reg.allKeys().count();
-  // if (keys > 10000) {
+
   mydlgNotes->ui->textBrowser->append("[" + appName + "]");
   mydlgNotes->ui->textBrowser->append("Ver: " + ver);
   mydlgNotes->ui->textBrowser->append("All Keys: " + QString::number(keys));
@@ -2021,8 +2021,7 @@ void MainWindow::on_actionView_App_Data_triggered() {
                                       getFileSize(QFile(iniFile).size(), 2));
   mydlgNotes->ui->textBrowser->append("File: " + iniFile);
 
-  //} else
-  //  mydlgNotes->ui->textBrowser->setPlainText(loadText(iniFile));
+  mydlgNotes->ui->textBrowser->append("");
 
   mydlgNotes->ui->textBrowser->setHidden(false);
   mydlgNotes->ui->textEdit->setHidden(true);
