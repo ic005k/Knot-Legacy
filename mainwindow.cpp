@@ -1957,6 +1957,7 @@ void MainWindow::on_actionImport_Data_triggered() {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     startSave("alltab");
+    QFile::remove(iniDir + "mainnotes.ini");
     mydlgMainNotes->saveMainNotes();
     QSettings RegTotalIni(iniFile, QSettings::IniFormat);
     QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
@@ -3065,13 +3066,19 @@ void MainWindow::on_actionMemos_triggered() {
   mydlgMainNotes->ui->frameSetKey->hide();
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  QString strPw = Reg.value("/MainNotes/UserKey").toString();
-  QByteArray baPw = strPw.toUtf8();
-  for (int i = 0; i < baPw.size(); i++) {
-    baPw[i] = baPw[i] - 66;  //解密User的密码
+  bool yes = false;
+  for (int i = 0; i < Reg.allKeys().count(); i++) {
+    QString str = Reg.allKeys().at(i);
+    if (str == "MainNotes/UserKey") yes = true;
   }
-  strPw = baPw;
-  if (strPw.trimmed() != "") {
+  QString strPw = Reg.value("/MainNotes/UserKey").toString();
+  if (yes && strPw != "") {
+    QByteArray baPw = strPw.toUtf8();
+    for (int i = 0; i < baPw.size(); i++) {
+      baPw[i] = baPw[i] - 66;  //解密User的密码
+    }
+    strPw = baPw;
+
     bool ok;
     QInputDialog* idlg = new QInputDialog(this);
     QString style =

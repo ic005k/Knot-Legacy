@@ -66,7 +66,17 @@ void dlgMainNotes::saveMainNotes() {
   if (!ui->textEdit->isHidden()) {
     QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
     QString file = iniDir + "mainnotes.txt";
-    if (!isImport) {
+    bool yes = false;
+    QString key;
+    for (int i = 0; i < Reg.allKeys().count(); i++) {
+      QString str = Reg.allKeys().at(i);
+      if (str == "MainNotes/UserKey") {
+        yes = true;
+        key = Reg.value("/MainNotes/UserKey").toString();
+      }
+    }
+
+    if (!isImport && yes && key != "") {
       mw_one->TextEditToFile(ui->textEdit, file);
       encryption(file);
       encode(file);
@@ -149,10 +159,29 @@ void dlgMainNotes::on_btnSetKey_clicked() {
 }
 
 void dlgMainNotes::on_btnOK_clicked() {
-  if (ui->edit1->text().trimmed() == "" && ui->edit2->text().trimmed() == "")
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  if (ui->edit1->text().trimmed() == "" && ui->edit2->text().trimmed() == "") {
+    Reg.remove("/MainNotes/UserKey");
+    ui->frameSetKey->hide();
+    QMessageBox msgBox;
+    msgBox.setText("Knot");
+    msgBox.setInformativeText(tr("The password is removed."));
+    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    btnOk->setFocus();
+    msgBox.exec();
+
     return;
+  }
 
   if (ui->edit1->text().trimmed() == ui->edit2->text().trimmed()) {
+    QString strPw = ui->edit1->text().trimmed();
+    QByteArray baPw = strPw.toUtf8();
+    for (int i = 0; i < baPw.size(); i++) {
+      baPw[i] = baPw[i] + 66;  //加密User的密码
+    }
+    strPw = baPw;
+    Reg.setValue("/MainNotes/UserKey", strPw);
+
     QMessageBox msgBox;
     msgBox.setText("Knot");
     msgBox.setInformativeText(tr("The password is set successfully."));
@@ -160,15 +189,6 @@ void dlgMainNotes::on_btnOK_clicked() {
     btnOk->setFocus();
     msgBox.exec();
     ui->frameSetKey->hide();
-
-    QString strPw = ui->edit1->text().trimmed();
-    QByteArray baPw = strPw.toUtf8();
-    for (int i = 0; i < baPw.size(); i++) {
-      baPw[i] = baPw[i] + 66;  //加密User的密码
-    }
-    strPw = baPw;
-    QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-    Reg.setValue("/MainNotes/UserKey", strPw);
 
   } else {
     QMessageBox msgBox;
