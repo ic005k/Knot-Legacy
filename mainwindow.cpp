@@ -3107,6 +3107,7 @@ void MainWindow::on_actionMemos_triggered() {
     if (ok && !text.isEmpty()) {
       if (text.trimmed() == strPw) {
         decMemos(file);
+        mydlgMainNotes->setCursorPosition();
         mydlgMainNotes->show();
 
       } else {
@@ -3122,6 +3123,7 @@ void MainWindow::on_actionMemos_triggered() {
 
   } else {
     decMemos(file);
+    mydlgMainNotes->setCursorPosition();
     mydlgMainNotes->show();
   }
 }

@@ -65,6 +65,10 @@ void dlgMainNotes::on_btnBack_clicked() {
 void dlgMainNotes::saveMainNotes() {
   if (!ui->textEdit->isHidden()) {
     QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+    curPos = ui->textEdit->textCursor().position();
+    sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
+    Reg.setValue("/MainNotes/CurPos", curPos);
+    Reg.setValue("/MainNotes/SlidePos", sliderPos);
 
     QString file = iniDir + "mainnotes.txt";
     mw_one->TextEditToFile(ui->textEdit, file);
@@ -73,10 +77,6 @@ void dlgMainNotes::saveMainNotes() {
     ui->textEdit->setPlainText(mw_one->loadText(file));
 
     Reg.setValue("/MainNotes/Text", ui->textEdit->toPlainText());
-    curPos = ui->textEdit->textCursor().position();
-    sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
-    Reg.setValue("/MainNotes/CurPos", curPos);
-    Reg.setValue("/MainNotes/SlidePos", sliderPos);
 
     QFile::remove(file);
   }
@@ -89,8 +89,13 @@ void dlgMainNotes::init_MainNotes() {
   else
     ini_file = iniDir + "mainnotes.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
-
   ui->textEdit->setPlainText(Reg.value("/MainNotes/Text").toString());
+}
+
+void dlgMainNotes::setCursorPosition() {
+  QString ini_file = iniDir + "mainnotes.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+
   sliderPos = Reg.value("/MainNotes/SlidePos").toLongLong();
   curPos = Reg.value("/MainNotes/CurPos").toLongLong();
 

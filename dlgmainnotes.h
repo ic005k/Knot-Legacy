@@ -33,7 +33,8 @@ class dlgMainNotes : public QDialog {
   void encryption(const QString &fileName);
   QString Deciphering(const QString &fileName);
 
- protected:
+  void setCursorPosition();
+protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
