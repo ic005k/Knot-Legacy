@@ -750,7 +750,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
   }
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
-    if (str == strDate) {
+    if (getYMD(str) == getYMD(strDate)) {
       isYes = true;
 
       QTreeWidgetItem* topItem = tw->topLevelItem(i);
@@ -827,7 +827,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
-    if (str == strDate) {
+    if (getYMD(str) == getYMD(strDate)) {
       isNo = false;
       QTreeWidgetItem* topItem = tw->topLevelItem(i);
       int childCount = topItem->childCount();
@@ -1871,6 +1871,30 @@ void MainWindow::on_actionExport_Data_triggered() {
   fileName =
       fd.getSaveFileName(this, tr("KnotBak"), "", tr("Data Files(*.ini)"));
 
+  bakData(fileName);
+
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setValue("/MainNotes/FileName", fileName);
+}
+
+void MainWindow::on_actionOneClickBakData() {
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  QString fileName = Reg.value("/MainNotes/FileName").toString();
+  if (QFile(fileName).exists()) {
+    bakData(fileName);
+  } else {
+    QMessageBox msgBox;
+    msgBox.setText(appName);
+    msgBox.setInformativeText(
+        tr("The previous file does not exist, please export the data first to "
+           "generate a default file name."));
+    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    btnOk->setFocus();
+    msgBox.exec();
+  }
+}
+
+void MainWindow::bakData(QString fileName) {
   if (!fileName.isNull()) {
     ui->progBar->setHidden(false);
     ui->progBar->setMaximum(0);
@@ -1899,7 +1923,8 @@ void MainWindow::on_actionExport_Data_triggered() {
     if (QFile(fileName).exists()) {
       QMessageBox msgBox;
       msgBox.setText(appName);
-      msgBox.setInformativeText(tr("The data was exported successfully."));
+      msgBox.setInformativeText(tr("The data was exported successfully.") +
+                                +"\n\n" + fileName);
       QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
       btnOk->setFocus();
       msgBox.exec();
@@ -1961,6 +1986,8 @@ void MainWindow::on_actionImport_Data_triggered() {
                  RegTotalIni.value("/MainNotes/CurPos").toLongLong());
     Reg.setValue("/MainNotes/SlidePos",
                  RegTotalIni.value("/MainNotes/SlidePos").toLongLong());
+    Reg.setValue("/MainNotes/FileName",
+                 RegTotalIni.value("/MainNotes/FileName").toString());
   }
 }
 
@@ -3322,6 +3349,7 @@ void MainWindow::init_Menu() {
   QAction* actViewAppData = new QAction(tr("About") + " (" + ver + ")");
   QAction* actAbout = new QAction(tr("Check for New Releases"));
   actAbout->setVisible(false);
+  QAction* actBakData = new QAction(tr("One Click Data Backup"));
 
   mainMenu->addAction(actAddTab);
   mainMenu->addAction(actDelTab);
@@ -3335,6 +3363,7 @@ void MainWindow::init_Menu() {
 
   mainMenu->addAction(actExportData);
   mainMenu->addAction(actImportData);
+  mainMenu->addAction(actBakData);
   mainMenu->addSeparator();
 
   mainMenu->addAction(actPreferences);
@@ -3359,6 +3388,8 @@ void MainWindow::init_Menu() {
           &MainWindow::on_actionNotes_triggered);
   connect(actExportData, &QAction::triggered, this,
           &MainWindow::on_actionExport_Data_triggered);
+  connect(actBakData, &QAction::triggered, this,
+          &MainWindow::on_actionOneClickBakData);
   connect(actImportData, &QAction::triggered, this,
           &MainWindow::on_actionImport_Data_triggered);
   connect(actPreferences, &QAction::triggered, this,
@@ -3459,3 +3490,12 @@ void RegJniMyActivity() {
 #endif
 
 void MainWindow::on_btnPause_clicked() { mydlgSteps->ui->btnPause->click(); }
+
+QString MainWindow::getYMD(QString date) {
+  QStringList list = date.split(" ");
+  QString str;
+  if (list.count() == 4) {
+    str = list.at(1) + list.at(2) + list.at(3);
+  }
+  return str;
+}

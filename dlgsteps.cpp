@@ -186,11 +186,21 @@ void dlgSteps::on_editTangentLineSlope_textChanged(const QString& arg1) {
 }
 
 void dlgSteps::addRecord(QString date, qlonglong steps) {
+  QString str0;
+  QString strD0 = date;
+  int m = strD0.split(" ").at(1).toInt();
+  if (m == 0) {
+    str0 =
+        QDate::fromString(strD0, "ddd MMM d yyyy").toString("ddd MM dd yyyy");
+  } else
+    str0 = strD0;
+  date = str0;
+
   bool isYes = false;
   int count = ui->tableWidget->rowCount();
   for (int i = 0; i < count; i++) {
     QString str = ui->tableWidget->item(i, 0)->text();
-    if (str == date) {
+    if (mw_one->getYMD(str) == mw_one->getYMD(date)) {
       QTableWidgetItem* item = new QTableWidgetItem(date);
       ui->tableWidget->setItem(i, 0, item);
 
