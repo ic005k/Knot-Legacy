@@ -165,7 +165,7 @@ void dlgSteps::init_Steps() {
   }
 
   for (int i = 0; i < count; i++) {
-    if (QDate::currentDate().toString() ==
+    if (QDate::currentDate().toString("ddd MM dd yyyy") ==
         ui->tableWidget->item(i, 0)->text()) {
       toDayInitSteps = ui->tableWidget->item(i, 1)->text().toInt();
       break;
@@ -224,7 +224,7 @@ qlonglong dlgSteps::getCurrentSteps() {
   if (count == 0) return 0;
 
   QString str = ui->tableWidget->item(count - 1, 0)->text();
-  if (str == QDate::currentDate().toString())
+  if (str == QDate::currentDate().toString("ddd MM dd yyyy"))
     return ui->tableWidget->item(count - 1, 1)->text().toLongLong();
   return 0;
 }
@@ -232,17 +232,17 @@ qlonglong dlgSteps::getCurrentSteps() {
 void dlgSteps::setTableSteps(qlonglong steps) {
   int count = ui->tableWidget->rowCount();
   if (count == 0) {
-    addRecord(QDate::currentDate().toString(), 1);
+    addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1);
   }
   if (count > 0) {
     QString strDate = ui->tableWidget->item(count - 1, 0)->text();
-    if (strDate == QDate::currentDate().toString()) {
+    if (strDate == QDate::currentDate().toString("ddd MM dd yyyy")) {
       QTableWidgetItem* item = new QTableWidgetItem(QString::number(steps));
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       ui->tableWidget->setItem(count - 1, 1, item);
       ui->tableWidget->item(count - 1, 1)->setFlags(Qt::NoItemFlags);
     } else
-      addRecord(QDate::currentDate().toString(), 1);
+      addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1);
   }
 }
 

@@ -92,10 +92,10 @@ void dlgTodo::on_btnAdd_clicked() {
       return;
     }
   }
-  add_Item(
-      str,
-      QDate::currentDate().toString() + "  " + QTime::currentTime().toString(),
-      true);
+  add_Item(str,
+           QDate::currentDate().toString("ddd MM dd yyyy") + "  " +
+               QTime::currentTime().toString(),
+           true);
   ui->lineEdit->setText("");
   ui->listWidget->verticalScrollBar()->setSliderPosition(0);
 }

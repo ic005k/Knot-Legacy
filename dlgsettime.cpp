@@ -45,6 +45,7 @@ void dlgSetTime::on_btnBack_clicked() { close(); }
 void dlgSetTime::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
 void dlgSetTime::on_btnOk_clicked() {
+  getTime(ui->dialH->value(), ui->dialM->value());
   if (!mw_one->isAdd) {
     mw_one->set_Time();
   } else {
@@ -198,7 +199,7 @@ void dlgSetTime::on_dialH_valueChanged(int value) {
 }
 
 void dlgSetTime::getTime(int h, int m) {
-  QString strh, strm;
+  QString strh, strm, strs;
   if (h < 10)
     strh = "0" + QString::number(h);
   else
@@ -207,7 +208,12 @@ void dlgSetTime::getTime(int h, int m) {
     strm = "0" + QString::number(m);
   else
     strm = QString::number(m);
-  ui->lblTime->setText(strh + ":" + strm + ":00");
+  int s = QTime::currentTime().second();
+  if (s < 10)
+    strs = "0" + QString::number(s);
+  else
+    strs = QString::number(s);
+  ui->lblTime->setText(strh + ":" + strm + ":" + strs);
 }
 
 void dlgSetTime::on_dialM_valueChanged(int value) {

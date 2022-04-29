@@ -231,7 +231,7 @@ void MainWindow::initTodayInitSteps() {
   tc = a;
 
   QSettings Reg(iniDir + "initsteps.ini", QSettings::IniFormat);
-  QString str = QDate::currentDate().toString();
+  QString str = QDate::currentDate().toString("ddd MM dd yyyy");
 
   if (!Reg.allKeys().contains(str)) {
     Reg.setValue(str, a);
@@ -464,33 +464,19 @@ void MainWindow::init_Options() {
   mydlgPre->ui->rbSM2->setChecked(Reg.value("/Options/SM2", true).toBool());
 
   // MainUI Find YMD
-  if (zh_cn) {
-    listMonth = QStringList() << "1月"
-                              << "2月"
-                              << "3月"
-                              << "4月"
-                              << "5月"
-                              << "6月"
-                              << "7月"
-                              << "8月"
-                              << "9月"
-                              << "10月"
-                              << "11月"
-                              << "12月";
-  } else {
-    listMonth = QStringList() << "Jan"
-                              << "Feb"
-                              << "Mar"
-                              << "Apr"
-                              << "May"
-                              << "Jun"
-                              << "Jul"
-                              << "Aug"
-                              << "Sep"
-                              << "Oct"
-                              << "Nov"
-                              << "Dec";
-  }
+  listMonth = QStringList() << "01"
+                            << "02"
+                            << "03"
+                            << "04"
+                            << "05"
+                            << "06"
+                            << "07"
+                            << "08"
+                            << "09"
+                            << "10"
+                            << "11"
+                            << "12";
+
   QSettings Reg2(iniDir + "ymd.ini", QSettings::IniFormat);
   btnYText = Reg2.value("/YMD/btnYText", 2022).toString();
   ui->btnYear->setText(btnYText);
@@ -758,7 +744,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
                           QString strDesc) {
   bool isYes = false;
 
-  strDate = QDate::currentDate().toString();
+  strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   if (isTesting) {
     // strDate = strDate.replace("3", "3");
   }
@@ -838,7 +824,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
 
 void MainWindow::del_Data(QTreeWidget* tw) {
   bool isNo = true;
-  strDate = QDate::currentDate().toString();
+  strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
     if (str == strDate) {
@@ -1139,9 +1125,16 @@ void MainWindow::readData(QTreeWidget* tw) {
     // 不显示子项为0的数据
     if (childCount > 0) {
       QTreeWidgetItem* topItem = new QTreeWidgetItem;
-      topItem->setText(
-          0, Reg.value("/" + name + "/" + QString::number(i + 1) + "-topDate")
-                 .toString());
+      QString strD0 =
+          Reg.value("/" + name + "/" + QString::number(i + 1) + "-topDate")
+              .toString();
+      int m = strD0.split(" ").at(1).toInt();
+      if (m == 0) {
+        QString strD1 = QDate::fromString(strD0, "ddd MMM d yyyy")
+                            .toString("ddd MM dd yyyy");
+        topItem->setText(0, strD1);
+      } else
+        topItem->setText(0, strD0);
       tw->addTopLevelItem(topItem);
 
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -2393,10 +2386,12 @@ void MainWindow::on_btnDay_clicked() {
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
-  int day = 1;
   QStringList strList;
   for (int i = 0; i < 31; i++) {
-    strList.append(QString::number(day + i));
+    if (i <= 8)
+      strList.append("0" + QString::number(i + 1));
+    else
+      strList.append(QString::number(i + 1));
   }
 
   for (int i = 0; i < strList.count(); i++) {
@@ -2571,7 +2566,7 @@ void MainWindow::on_rbSteps_clicked() {
   PointList.clear();
   doubleList.clear();
   int count = t->rowCount();
-  QString sm = get_Month(QDate::currentDate().toString());
+  QString sm = get_Month(QDate::currentDate().toString("ddd MM dd yyyy"));
   for (int i = 0; i < count; i++) {
     QString strD = t->item(i, 0)->text();
     if (sm == get_Month(strD)) {
@@ -3036,9 +3031,9 @@ void MainWindow::updateHardSensorSteps() {
   mydlgSteps->ui->lblTotalRunTime->setText(tr("Number of Operations") + " : " +
                                            QString::number(timeTest));
 
-  if (strDate != QDate::currentDate().toString()) {
+  if (strDate != QDate::currentDate().toString("ddd MM dd yyyy")) {
     initTodayInitSteps();
-    strDate = QDate::currentDate().toString();
+    strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   }
 
   qlonglong steps = 0;
@@ -3158,7 +3153,7 @@ void MainWindow::init_Sensors() {
 void MainWindow::init_UIWidget() {
   mw_one = this;
 
-  strDate = QDate::currentDate().toString();
+  strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   isReadEnd = true;
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
