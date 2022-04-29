@@ -3053,6 +3053,7 @@ void MainWindow::updateHardSensorSteps() {
   steps = tc - initTodaySteps;
 
   if (steps < 0) return;
+  if (steps > 100000000) return;
   CurrentSteps = tc - resetSteps;
   mydlgSteps->ui->lcdNumber->display(QString::number(steps));
   mydlgSteps->ui->lblSingle->setText(QString::number(CurrentSteps));
