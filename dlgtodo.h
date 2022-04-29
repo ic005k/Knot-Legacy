@@ -23,7 +23,7 @@ class dlgTodo : public QDialog {
 
   void init_Items();
 
-  void add_Item(QString, bool);
+  void add_Item(QString, QString, bool);
   static void saveTodo();
   QString styleDark =
       "#listWidget::item {background-color: #393d49;color: #ffffff;border: "

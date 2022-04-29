@@ -117,7 +117,7 @@ QListView {
     border: transparent;
     border-bottom: 1px solid #dbdbdb;
     padding: 8px;
-	height: 65;
+	height: 85;
 }
 
 #listWidget::item:hover {

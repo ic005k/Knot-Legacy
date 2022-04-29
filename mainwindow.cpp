@@ -1958,11 +1958,16 @@ void MainWindow::on_actionImport_Data_triggered() {
 
     startSave("alltab");
     QFile::remove(iniDir + "mainnotes.ini");
-    mydlgMainNotes->saveMainNotes();
     QSettings RegTotalIni(iniFile, QSettings::IniFormat);
     QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
     Reg.setValue("/MainNotes/UserKey",
                  RegTotalIni.value("/MainNotes/UserKey").toString());
+    Reg.setValue("/MainNotes/Text",
+                 RegTotalIni.value("/MainNotes/Text").toString());
+    Reg.setValue("/MainNotes/CurPos",
+                 RegTotalIni.value("/MainNotes/CurPos").toLongLong());
+    Reg.setValue("/MainNotes/SlidePos",
+                 RegTotalIni.value("/MainNotes/SlidePos").toLongLong());
   }
 }
 
@@ -3067,13 +3072,10 @@ void MainWindow::on_actionMemos_triggered() {
   mydlgMainNotes->ui->frameSetKey->hide();
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  bool yes = false;
-  for (int i = 0; i < Reg.allKeys().count(); i++) {
-    QString str = Reg.allKeys().at(i);
-    if (str == "MainNotes/UserKey") yes = true;
-  }
+  QString file = iniDir + "mainnotes.txt";
+
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
-  if (yes && strPw != "") {
+  if (strPw != "") {
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
       baPw[i] = baPw[i] - 66;  //解密User的密码
@@ -3103,15 +3105,7 @@ void MainWindow::on_actionMemos_triggered() {
 
     if (ok && !text.isEmpty()) {
       if (text.trimmed() == strPw) {
-        QString file = iniDir + "mainnotes.txt";
-        TextEditToFile(mydlgMainNotes->ui->textEdit, file);
-        if (QFile(file).exists()) {
-          mydlgMainNotes->decode(file);
-          mydlgMainNotes->ui->textEdit->setPlainText(
-              mydlgMainNotes->Deciphering(file));
-          QFile::remove(file);
-        }
-
+        decMemos(file);
         mydlgMainNotes->show();
 
       } else {
@@ -3125,8 +3119,20 @@ void MainWindow::on_actionMemos_triggered() {
       }
     }
 
-  } else
+  } else {
+    decMemos(file);
     mydlgMainNotes->show();
+  }
+}
+
+void MainWindow::decMemos(QString file) {
+  TextEditToFile(mydlgMainNotes->ui->textEdit, file);
+  if (QFile(file).exists()) {
+    mydlgMainNotes->decode(file);
+    mydlgMainNotes->ui->textEdit->setPlainText(
+        mydlgMainNotes->Deciphering(file));
+    QFile::remove(file);
+  }
 }
 
 void MainWindow::init_Sensors() {

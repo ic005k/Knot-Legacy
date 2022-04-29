@@ -65,23 +65,12 @@ void dlgMainNotes::on_btnBack_clicked() {
 void dlgMainNotes::saveMainNotes() {
   if (!ui->textEdit->isHidden()) {
     QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-    QString file = iniDir + "mainnotes.txt";
-    bool yes = false;
-    QString key;
-    for (int i = 0; i < Reg.allKeys().count(); i++) {
-      QString str = Reg.allKeys().at(i);
-      if (str == "MainNotes/UserKey") {
-        yes = true;
-        key = Reg.value("/MainNotes/UserKey").toString();
-      }
-    }
 
-    if (!isImport && yes && key != "") {
-      mw_one->TextEditToFile(ui->textEdit, file);
-      encryption(file);
-      encode(file);
-      ui->textEdit->setPlainText(mw_one->loadText(file));
-    }
+    QString file = iniDir + "mainnotes.txt";
+    mw_one->TextEditToFile(ui->textEdit, file);
+    encryption(file);
+    encode(file);
+    ui->textEdit->setPlainText(mw_one->loadText(file));
 
     Reg.setValue("/MainNotes/Text", ui->textEdit->toPlainText());
     curPos = ui->textEdit->textCursor().position();

@@ -352,6 +352,7 @@ class MainWindow : public QMainWindow {
   void writeLogs();
   void updateRunTime();
   void showSensorValues();
+  void decMemos(QString file);
 };
 
 class SearchThread : public QThread {
