@@ -25,5 +25,9 @@
         <file>src/pause.png</file>
         <file>src/run.png</file>
         <file>src/done1.png</file>
+        <file>src/add.png</file>
+        <file>src/edit.png</file>
+        <file>src/high.png</file>
+        <file>src/low.png</file>
     </qresource>
 </RCC>

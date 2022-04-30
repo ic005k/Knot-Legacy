@@ -172,7 +172,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   QVBoxLayout* vbox = new QVBoxLayout();
   QLabel* lblTime = new QLabel(this);
   QFont f;
-  f.setPointSize(12);
+  f.setPointSize(13);
   lblTime->setFont(f);
   lblTime->setText(time);
   vbox->addWidget(lblTime);
