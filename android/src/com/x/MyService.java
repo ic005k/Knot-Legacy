@@ -50,8 +50,8 @@ public class MyService extends Service {
     public static int sleep = 0;
 
     public static int startTimerAlarm() {
+        stopTimerAlarm();
         System.out.println("startTimerAlarm+++++++++++++++++++++++");
-
         timerAlarm = new Timer();
         timerAlarm.schedule(new TimerTask() {
             @Override
@@ -251,7 +251,7 @@ public class MyService extends Service {
             //.setSmallIcon(R.drawable.icon)
             //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
 
-            m_notificationManagerAlarm.notify(0, m_builderAlarm.build());
+            m_notificationManagerAlarm.notify(10, m_builderAlarm.build());
 
 
             //startForeground(1,m_builder.build());
