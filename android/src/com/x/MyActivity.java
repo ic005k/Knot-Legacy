@@ -45,8 +45,8 @@ public class MyActivity extends QtActivity {
     private static final int DELAY = SensorManager.SENSOR_DELAY_NORMAL;
 
     public native void CallJavaNotify_1();
-
     public native void CallJavaNotify_2();
+    public native void CallJavaNotify_3();
 
     public MyActivity() {
         m_instance = this;

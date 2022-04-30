@@ -37,13 +37,39 @@ public class MyService extends Service {
     private static final String NAME = "F_SERVICE";
 
     public native static void CallJavaNotify_1();
+
     public native static void CallJavaNotify_2();
+
+    public native static void CallJavaNotify_3();
 
 
     //private static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
     public static Timer timer;
+    public static Timer timerAlarm;
     public static int sleep = 0;
+
+    public static int startTimerAlarm() {
+        System.out.println("startTimerAlarm+++++++++++++++++++++++");
+
+        timerAlarm = new Timer();
+        timerAlarm.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                CallJavaNotify_3();
+            }
+        }, 0, 60000);
+        return 1;
+    }
+
+    public static int stopTimerAlarm() {
+        if (timerAlarm != null) {
+            timerAlarm.cancel();
+            timerAlarm.purge();
+            System.out.println("stopTimerAlarm+++++++++++++++++++++++");
+        }
+        return 1;
+    }
 
     public static int startTimer() {
         System.out.println("startTimer+++++++++++++++++++++++");
@@ -190,6 +216,42 @@ public class MyService extends Service {
             //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
 
             m_notificationManager.notify(0, m_builder.build());
+
+
+            //startForeground(1,m_builder.build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //----------------------------------------------
+    private static NotificationManager m_notificationManagerAlarm;
+    private static Notification.Builder m_builderAlarm;
+    public static void notifyAlarm(Context context, String message) {
+        try {
+            m_notificationManagerAlarm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                NotificationChannel notificationChannel = new NotificationChannel("Knot Alarm", "Knot Notifier Alarm", importance);
+                m_notificationManagerAlarm.createNotificationChannel(notificationChannel);
+
+                m_builderAlarm = new Notification.Builder(context, notificationChannel.getId());
+                //m_builder.setOnlyAlertOnce(true);
+            } else {
+                m_builderAlarm = new Notification.Builder(context);
+            }
+
+            m_builderAlarm.setContentTitle("Todo")
+                    .setContentText(message)
+                    .setSmallIcon(R.drawable.icon)
+                    .setColor(Color.GREEN)
+                    .setDefaults(Notification.DEFAULT_LIGHTS)
+                    .setAutoCancel(true);
+            //.setSmallIcon(R.drawable.icon)
+            //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
+
+            m_notificationManagerAlarm.notify(0, m_builderAlarm.build());
 
 
             //startForeground(1,m_builder.build());
