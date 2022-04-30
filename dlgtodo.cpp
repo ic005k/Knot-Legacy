@@ -85,6 +85,7 @@ void dlgTodo::saveTodo() {
 
 void dlgTodo::init_Items() {
   ui->listWidget->clear();
+  ui->listRecycle->clear();
   QString ini_file;
   if (isImport)
     ini_file = iniFile;
