@@ -45,7 +45,6 @@ void dlgSetTime::on_btnBack_clicked() { close(); }
 void dlgSetTime::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
 void dlgSetTime::on_btnOk_clicked() {
-  getTime(ui->dialH->value(), ui->dialM->value());
   if (!mw_one->isAdd) {
     mw_one->set_Time();
   } else {

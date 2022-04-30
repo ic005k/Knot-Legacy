@@ -32,8 +32,9 @@ QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 void RegJni();
 void RegJniMyActivity();
-static void JavaNotify_2();
 static void JavaNotify_1();
+static void JavaNotify_2();
+static void JavaNotify_3();
 
 /* Low pass filter for smoothening sensor input data */
 static filter_t lp_filter_x, lp_filter_y, lp_filter_z;
@@ -898,6 +899,8 @@ void MainWindow::on_btnPlus_clicked() {
       tr("Add") + "  : " + tabData->tabText(tabData->currentIndex()));
   mydlgSetTime->ui->dialH->setValue(QTime::currentTime().hour());
   mydlgSetTime->ui->dialM->setValue(QTime::currentTime().minute());
+  mydlgSetTime->getTime(mydlgSetTime->ui->dialH->value(),
+                        mydlgSetTime->ui->dialM->value());
   mydlgSetTime->ui->editDesc->setText("");
   mydlgSetTime->ui->editAmount->setText("");
   mydlgSetTime->show();
@@ -1518,7 +1521,7 @@ void MainWindow::set_Time() {
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   QTreeWidgetItem* item = tw->currentItem();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
-    item->setText(0, mydlgSetTime->ui->lblTime->text());
+    item->setText(0, mydlgSetTime->ui->lblTime->text().trimmed());
     QString sa = mydlgSetTime->ui->editAmount->text().trimmed();
     if (sa == "")
       item->setText(1, "");
@@ -1547,7 +1550,7 @@ void MainWindow::set_Time() {
 }
 
 void MainWindow::sort_childItem(QTreeWidgetItem* item) {
-  QStringList keys, list;
+  QStringList keys, list, keyTime, keysNew;
   int childCount = item->parent()->childCount();
 
   for (int i = 0; i < childCount; i++) {
@@ -1560,14 +1563,27 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
     QString txt1 = item->parent()->child(i)->text(1);
     QString txt2 = item->parent()->child(i)->text(2);
     keys.append(txt + "|" + txt1 + "|" + txt2);
+    keyTime.append(txt);
   }
 
-  std::sort(keys.begin(), keys.end(),
+  std::sort(keyTime.begin(), keyTime.end(),
             [](const QString& s1, const QString& s2) { return s1 < s2; });
 
+  for (int i = 0; i < keyTime.count(); i++) {
+    QString time = keyTime.at(i);
+    for (int n = 0; n < keys.count(); n++) {
+      QString str1 = keys.at(n);
+      QStringList l0 = str1.split("|");
+      if (time == l0.at(0)) {
+        keysNew.append(str1);
+        break;
+      }
+    }
+  }
+  qDebug() << keysNew;
   for (int i = 0; i < childCount; i++) {
     QTreeWidgetItem* childItem = item->parent()->child(i);
-    QString str = keys.at(i);
+    QString str = keysNew.at(i);
     list.clear();
     list = str.split("|");
     if (list.count() == 3) {
@@ -1597,12 +1613,11 @@ void MainWindow::on_twItemDoubleClicked() {
       sm = list.at(1);
       ss = list.at(2);
     }
-    QTime time;
-    time.setHMS(sh.toInt(), sm.toInt(), ss.toInt());
     mydlgSetTime->ui->lblTitle->setText(
         tr("Modify") + "  : " + tabData->tabText(tabData->currentIndex()));
     mydlgSetTime->ui->dialH->setValue(sh.toInt());
     mydlgSetTime->ui->dialM->setValue(sm.toInt());
+    mydlgSetTime->ui->lblTime->setText(t.trimmed());
 
     QString str = item->text(1);
     if (str == "0.00")
@@ -3440,9 +3455,15 @@ static void JavaNotify_2() {
 
   // qDebug() << "C++ JavaNotify_2";
 }
+static void JavaNotify_3() {
+  mw_one->mydlgTodo->on_Alarm();
+
+  qDebug() << "C++ JavaNotify_3";
+}
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_1", "()V", (void*)JavaNotify_1},
-    {"CallJavaNotify_2", "()V", (void*)JavaNotify_2}};
+    {"CallJavaNotify_2", "()V", (void*)JavaNotify_2},
+    {"CallJavaNotify_3", "()V", (void*)JavaNotify_3}};
 
 void RegJni() {
   QtAndroid::runOnAndroidThreadSync([=]() {

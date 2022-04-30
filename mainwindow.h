@@ -232,7 +232,8 @@ class MainWindow : public QMainWindow {
 
   QString getYMD(QString date);
   void bakData(QString fileName);
-public slots:
+
+ public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
@@ -328,7 +329,8 @@ public slots:
   void on_btnPause_clicked();
 
   void on_actionOneClickBakData();
-private:
+
+ private:
   int frameChartHeight = 220;
   int x, y, w, h;
   QMenu *mainMenu;

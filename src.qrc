@@ -29,5 +29,6 @@
         <file>src/edit.png</file>
         <file>src/high.png</file>
         <file>src/low.png</file>
+        <file>src/time.png</file>
     </qresource>
 </RCC>

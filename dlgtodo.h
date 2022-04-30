@@ -31,7 +31,14 @@ class dlgTodo : public QDialog {
       "#listWidget::item:hover {background-color: #4e5465;}"
       "#listWidget::item:selected {border-left: 5px solid #009688;}";
 
- protected:
+  QLabel *getTimeLabel(int);
+  void on_Alarm();
+  QLabel *getMainLabel(int);
+  void startTimerAlarm();
+  void stopTimerAlarm();
+
+  void sendMsgAlarm(QString text);
+protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -51,6 +58,12 @@ class dlgTodo : public QDialog {
   void on_btnHigh_clicked();
 
   void on_btnLow_clicked();
+
+  void on_btnOK_clicked();
+
+  void on_btnSetTime_clicked();
+
+  void on_btnCancel_clicked();
 
  private:
   QListWidgetItem *editItem;

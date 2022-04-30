@@ -15,7 +15,7 @@ extern int fontSize;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
   this->installEventFilter(this);
-
+  ui->frameSetTime->hide();
   mylist = new QListWidget;
   mylist = ui->listWidget;
 
@@ -301,4 +301,101 @@ void dlgTodo::on_btnLow_clicked() {
   add_Item(str, lblTime->text(), false);
   ui->listWidget->setCurrentRow(ui->listWidget->count() - 1);
   ui->listWidget->scrollToBottom();
+}
+
+QLabel* dlgTodo::getTimeLabel(int index) {
+  QListWidgetItem* item = ui->listWidget->item(index);
+  QWidget* w = ui->listWidget->itemWidget(item);
+  QLabel* lbl = (QLabel*)w->children().at(2)->children().at(1);
+  return lbl;
+}
+
+QLabel* dlgTodo::getMainLabel(int index) {
+  QListWidgetItem* item = ui->listWidget->item(index);
+  QWidget* w = ui->listWidget->itemWidget(item);
+  QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
+  return lbl;
+}
+
+void dlgTodo::on_btnOK_clicked() {
+  QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
+  lbl->setText(tr("Alarm") + "  " + ui->dateTimeEdit->text());
+  ui->frameSetTime->hide();
+  startTimerAlarm();
+}
+
+void dlgTodo::on_btnSetTime_clicked() {
+  ui->dateTimeEdit->setDate(QDate::currentDate());
+  ui->dateTimeEdit->setTime(QTime::currentTime());
+  if (ui->frameSetTime->isHidden())
+    ui->frameSetTime->show();
+  else
+    ui->frameSetTime->hide();
+}
+
+void dlgTodo::on_btnCancel_clicked() {
+  QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
+  QString str = lbl->text().trimmed();
+  if (str.contains(tr("Alarm"))) str = str.replace(tr("Alarm"), "");
+  lbl->setText(str.trimmed());
+  ui->frameSetTime->hide();
+}
+
+void dlgTodo::on_Alarm() {
+  int count = 0;
+  for (int i = 0; i < ui->listWidget->count(); i++) {
+    QLabel* lbl = getTimeLabel(i);
+    QString str = lbl->text().trimmed();
+    if (str.contains(tr("Alarm"))) {
+      count++;
+      str = str.replace(tr("Alarm"), "").trimmed();
+      QStringList list = str.split(" ");
+      if (list.count() == 2) {
+        QString date = list.at(0);
+        QString time = list.at(1);
+        if (QDate::currentDate().toString("yyyy-M-d") == date) {
+          if (QTime::currentTime().toString("HH:mm") == time) {
+            lbl->setText(str);
+
+            QString text = getMainLabel(i)->text().trimmed();
+            sendMsgAlarm(text);
+            QMessageBox msgBox;
+            msgBox.setText(tr("Todo"));
+            msgBox.setInformativeText(text);
+            QPushButton* btnOk =
+                msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+            btnOk->setFocus();
+            msgBox.exec();
+            break;
+          }
+        }
+      }
+    }
+  }
+  if (count == 0) stopTimerAlarm();
+}
+
+void dlgTodo::startTimerAlarm() {
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject jo = QAndroidJniObject::fromString("startTimerAlarm");
+  jo.callStaticMethod<int>("com.x/MyService", "startTimerAlarm", "()I");
+#endif
+}
+
+void dlgTodo::stopTimerAlarm() {
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject jo = QAndroidJniObject::fromString("stopTimerAlarm");
+  jo.callStaticMethod<int>("com.x/MyService", "stopTimerAlarm", "()I");
+#endif
+}
+
+void dlgTodo::sendMsgAlarm(QString text) {
+#ifdef Q_OS_ANDROID
+  QString strNotify = tr("Todo") + " : " + text;
+  QAndroidJniObject javaNotification = QAndroidJniObject::fromString(strNotify);
+  QAndroidJniObject::callStaticMethod<void>(
+      "com/x/MyService", "notifyAlarm",
+      "(Landroid/content/Context;Ljava/lang/String;)V",
+      QtAndroid::androidContext().object(), javaNotification.object<jstring>());
+#endif
 }
