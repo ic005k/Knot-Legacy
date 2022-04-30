@@ -171,10 +171,13 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   hbox->addWidget(edit);
   QVBoxLayout* vbox = new QVBoxLayout();
   QLabel* lblTime = new QLabel(this);
+  lblTime->setFixedHeight(15);
   QFont f;
   f.setPointSize(13);
   lblTime->setFont(f);
   lblTime->setText(time);
+  if (time.contains(tr("Alarm")))
+    lblTime->setStyleSheet("QLabel{background:red;color:white}");
   vbox->addWidget(lblTime);
   vbox->addLayout(hbox);
   frame->setLayout(vbox);
@@ -320,13 +323,28 @@ QLabel* dlgTodo::getMainLabel(int index) {
 void dlgTodo::on_btnOK_clicked() {
   QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
   lbl->setText(tr("Alarm") + "  " + ui->dateTimeEdit->text());
+  lbl->setStyleSheet("QLabel{background:red;color:white}");
   ui->frameSetTime->hide();
   startTimerAlarm();
 }
 
 void dlgTodo::on_btnSetTime_clicked() {
-  ui->dateTimeEdit->setDate(QDate::currentDate());
-  ui->dateTimeEdit->setTime(QTime::currentTime());
+  QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
+  if (lbl->text().trimmed().contains(tr("Alarm"))) {
+    QString str = lbl->text().trimmed();
+    str = str.replace(tr("Alarm"), "").trimmed();
+    QStringList list = str.split(" ");
+    QDate date;
+    QTime time;
+    date = QDate::fromString(list.at(0), "yyyy-M-d");
+    time = QTime::fromString(list.at(1), "HH:mm");
+    ui->dateTimeEdit->setDate(date);
+    ui->dateTimeEdit->setTime(time);
+
+  } else {
+    ui->dateTimeEdit->setDate(QDate::currentDate());
+    ui->dateTimeEdit->setTime(QTime::currentTime());
+  }
   if (ui->frameSetTime->isHidden())
     ui->frameSetTime->show();
   else
@@ -338,6 +356,7 @@ void dlgTodo::on_btnCancel_clicked() {
   QString str = lbl->text().trimmed();
   if (str.contains(tr("Alarm"))) str = str.replace(tr("Alarm"), "");
   lbl->setText(str.trimmed());
+  lbl->setStyleSheet(getMainLabel(ui->listWidget->currentRow())->styleSheet());
   ui->frameSetTime->hide();
 }
 
@@ -354,11 +373,12 @@ void dlgTodo::on_Alarm() {
         QString date = list.at(0);
         QString time = list.at(1);
         if (QDate::currentDate().toString("yyyy-M-d") == date) {
-          if (QTime::currentTime().toString("HH:mm") == time) {
+          if (QTime::currentTime().toString("HH:mm") >= time) {
             lbl->setText(str);
 
             QString text = getMainLabel(i)->text().trimmed();
             sendMsgAlarm(text);
+            lbl->setStyleSheet(getMainLabel(i)->styleSheet());
             QMessageBox msgBox;
             msgBox.setText(tr("Todo"));
             msgBox.setInformativeText(text);
