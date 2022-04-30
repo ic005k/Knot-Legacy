@@ -7,7 +7,7 @@
 QString highLblStyle = "background-color: rgb(255, 239, 219);color:black";
 int highCount;
 QString orgLblStyle;
-QListWidget* mylist;
+QListWidget *mylist, *listRecycle;
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
 extern bool loading, isBreak, isImport;
@@ -16,12 +16,32 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
   this->installEventFilter(this);
   ui->frameSetTime->hide();
+  ui->frameRecycle->hide();
+  ui->listRecycle->hide();
+  ui->lblRecycle->hide();
+
   mylist = new QListWidget;
   mylist = ui->listWidget;
+  listRecycle = new QListWidget;
+  listRecycle = ui->listRecycle;
+  ui->listRecycle->setStyleSheet("text-decoration: line-through;");
 
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
+
+  ui->listRecycle->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(ui->listRecycle, QScroller::LeftMouseButtonGesture);
+  ui->listRecycle->horizontalScrollBar()->setHidden(true);
+  ui->listRecycle->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+
+  ui->btnAdd->setStyleSheet("border:none");
+  ui->btnBack->setStyleSheet("border:none");
+  ui->btnHigh->setStyleSheet("border:none");
+  ui->btnLow->setStyleSheet("border:none");
+  ui->btnModify->setStyleSheet("border:none");
+  ui->btnSetTime->setStyleSheet("border:none");
+  ui->btnRecycle->setStyleSheet("border:none");
 }
 
 dlgTodo::~dlgTodo() { delete ui; }
@@ -53,6 +73,13 @@ void dlgTodo::saveTodo() {
     if (orgLblStyle != lblSn->styleSheet()) highCount++;
   }
 
+  int count1 = listRecycle->count();
+  Reg.setValue("/Todo/Count1", count1);
+  for (int i = 0; i < count1; i++) {
+    QString str = listRecycle->item(i)->text().trimmed();
+    Reg.setValue("/Todo/ItemRecycle" + QString::number(i), str);
+  }
+
   Reg.setValue("/Todo/HighCount", highCount);
 }
 
@@ -71,6 +98,13 @@ void dlgTodo::init_Items() {
     add_Item(str, strTime, false);
   }
 
+  int count1 = Reg.value("/Todo/Count1").toInt();
+  for (int i = 0; i < count1; i++) {
+    QString str =
+        Reg.value("/Todo/ItemRecycle" + QString::number(i)).toString();
+    ui->listRecycle->addItem(str);
+  }
+
   highCount = Reg.value("/Todo/HighCount").toInt();
   for (int i = 0; i < highCount; i++) {
     QListWidgetItem* item = ui->listWidget->item(i);
@@ -78,6 +112,8 @@ void dlgTodo::init_Items() {
     QLabel* lbl = (QLabel*)w->children().at(2);
     lbl->setStyleSheet(highLblStyle);
   }
+
+  startTimerAlarm();
 }
 
 void dlgTodo::on_btnAdd_clicked() {
@@ -133,10 +169,12 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   connect(btn, &QToolButton::clicked, [=]() {
     btn->setIcon(QIcon(":/src/done1.png"));
 
-    mw_one->Sleep(1000);
+    mw_one->Sleep(800);
 
     ui->listWidget->setCurrentItem(pItem);
     int row = ui->listWidget->currentRow();
+    QString str = getMainLabel(row)->text().trimmed();
+    ui->listRecycle->addItem(str);
     ui->listWidget->takeItem(row);
     int index = ui->listWidget->currentRow();
     add_ItemSn(index);
@@ -418,4 +456,39 @@ void dlgTodo::sendMsgAlarm(QString text) {
       "(Landroid/content/Context;Ljava/lang/String;)V",
       QtAndroid::androidContext().object(), javaNotification.object<jstring>());
 #endif
+}
+
+void dlgTodo::on_btnRecycle_clicked() {
+  ui->lblRecycle->show();
+  ui->listRecycle->show();
+  ui->listWidget->hide();
+  ui->frameRecycle->show();
+  ui->frameToolBar->hide();
+  ui->lineEdit->hide();
+  ui->frameSetTime->hide();
+  if (ui->listRecycle->count() > 0) {
+    ui->listRecycle->setFocus();
+    ui->listRecycle->setCurrentRow(0);
+  }
+}
+
+void dlgTodo::on_btnReturn_clicked() {
+  ui->lblRecycle->hide();
+  ui->listRecycle->hide();
+  ui->listWidget->show();
+  ui->frameRecycle->hide();
+  ui->frameToolBar->show();
+  ui->lineEdit->show();
+}
+
+void dlgTodo::on_btnClear_clicked() { ui->listRecycle->clear(); }
+
+void dlgTodo::on_btnRestore_clicked() {
+  if (ui->listRecycle->count() == 0) return;
+  QString str = ui->listRecycle->currentItem()->text();
+  add_Item(str,
+           QDate::currentDate().toString("ddd MM dd yyyy") + "  " +
+               QTime::currentTime().toString(),
+           false);
+  ui->listRecycle->takeItem(ui->listRecycle->currentRow());
 }

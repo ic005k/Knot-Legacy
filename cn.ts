@@ -1163,55 +1163,80 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="63"/>
+        <location filename="dlgtodo.ui" line="84"/>
         <source>High Priority</source>
         <translation>高优先级</translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="92"/>
+        <location filename="dlgtodo.ui" line="113"/>
         <source>Add</source>
         <translation>增加</translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="121"/>
+        <location filename="dlgtodo.ui" line="142"/>
         <source>Low Priority</source>
         <translation>低优先级</translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="179"/>
+        <location filename="dlgtodo.ui" line="200"/>
         <source>...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="242"/>
+        <location filename="dlgtodo.ui" line="229"/>
+        <source>Recycle</source>
+        <translation>回收箱</translation>
+    </message>
+    <message>
+        <location filename="dlgtodo.ui" line="298"/>
         <source>yyyy-M-d HH:mm</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="280"/>
+        <location filename="dlgtodo.ui" line="336"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="305"/>
+        <location filename="dlgtodo.ui" line="361"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="323"/>
+        <location filename="dlgtodo.ui" line="379"/>
         <source>Enter the to-do list text</source>
         <translation>输入待办事项文本</translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="34"/>
+        <location filename="dlgtodo.ui" line="483"/>
+        <source>Return</source>
+        <translation>返回</translation>
+    </message>
+    <message>
+        <location filename="dlgtodo.ui" line="502"/>
+        <source>Clear</source>
+        <translation>清除</translation>
+    </message>
+    <message>
+        <location filename="dlgtodo.ui" line="521"/>
+        <source>Restore</source>
+        <translation>恢复</translation>
+    </message>
+    <message>
+        <location filename="dlgtodo.ui" line="531"/>
+        <source>Todo Recycle Box : </source>
+        <translation>待办事项回收箱：</translation>
+    </message>
+    <message>
+        <location filename="dlgtodo.ui" line="55"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="dlgtodo.ui" line="150"/>
-        <location filename="dlgtodo.cpp" line="215"/>
+        <location filename="dlgtodo.ui" line="171"/>
         <location filename="dlgtodo.cpp" line="255"/>
-        <location filename="dlgtodo.cpp" line="270"/>
+        <location filename="dlgtodo.cpp" line="295"/>
+        <location filename="dlgtodo.cpp" line="310"/>
         <source>Modify</source>
         <translation>修改</translation>
     </message>
@@ -1220,26 +1245,30 @@
         <translation type="vanished">完成</translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="265"/>
-        <location filename="dlgtodo.cpp" line="267"/>
+        <location filename="dlgtodo.cpp" line="305"/>
+        <location filename="dlgtodo.cpp" line="307"/>
         <source>Finish Editing</source>
         <translation>完成编辑</translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="322"/>
-        <location filename="dlgtodo.cpp" line="339"/>
-        <location filename="dlgtodo.cpp" line="349"/>
-        <location filename="dlgtodo.cpp" line="350"/>
+        <location filename="dlgtodo.cpp" line="216"/>
+        <location filename="dlgtodo.cpp" line="362"/>
+        <location filename="dlgtodo.cpp" line="370"/>
+        <location filename="dlgtodo.cpp" line="372"/>
+        <location filename="dlgtodo.cpp" line="394"/>
+        <location filename="dlgtodo.cpp" line="405"/>
+        <location filename="dlgtodo.cpp" line="407"/>
         <source>Alarm</source>
         <translation>定时提醒</translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="360"/>
+        <location filename="dlgtodo.cpp" line="420"/>
+        <location filename="dlgtodo.cpp" line="451"/>
         <source>Todo</source>
         <translation>待办事项</translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="363"/>
+        <location filename="dlgtodo.cpp" line="423"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>

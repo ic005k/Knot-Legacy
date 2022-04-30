@@ -30,5 +30,6 @@
         <file>src/high.png</file>
         <file>src/low.png</file>
         <file>src/time.png</file>
+        <file>src/recycle.png</file>
     </qresource>
 </RCC>

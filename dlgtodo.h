@@ -38,7 +38,8 @@ class dlgTodo : public QDialog {
   void stopTimerAlarm();
 
   void sendMsgAlarm(QString text);
-protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -64,6 +65,14 @@ protected:
   void on_btnSetTime_clicked();
 
   void on_btnCancel_clicked();
+
+  void on_btnRecycle_clicked();
+
+  void on_btnReturn_clicked();
+
+  void on_btnClear_clicked();
+
+  void on_btnRestore_clicked();
 
  private:
   QListWidgetItem *editItem;
