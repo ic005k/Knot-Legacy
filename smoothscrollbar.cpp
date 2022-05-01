@@ -5,8 +5,9 @@ SmoothScrollBar::SmoothScrollBar(QWidget *parent) : QScrollBar(parent) {
   m_scrollAni = new QPropertyAnimation;
   m_scrollAni->setTargetObject(this);
   m_scrollAni->setPropertyName("value");
-  m_scrollAni->setEasingCurve(
-      QEasingCurve::InOutQuint);  //设置动画曲线，在Qt文档中有详细的介绍
+  // m_scrollAni->setEasingCurve(
+  //     QEasingCurve::InOutQuint);  //设置动画曲线，在Qt文档中有详细的介绍
+  m_scrollAni->setEasingCurve(QEasingCurve::Linear);
   m_scrollAni->setDuration(800);  //设置动画时间，数值越小播放越快
   m_targetValue_v = value();      //将m_targetValue_v初始化
 }

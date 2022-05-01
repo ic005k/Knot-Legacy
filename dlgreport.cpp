@@ -32,6 +32,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->tableReport->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->tableReport, QScroller::LeftMouseButtonGesture);
   ui->tableReport->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  mw_one->setSCrollPro(ui->tableReport);
 
   ui->tableDetails->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->tableDetails->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -39,6 +40,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->tableDetails->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->tableDetails, QScroller::LeftMouseButtonGesture);
   ui->tableDetails->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  mw_one->setSCrollPro(ui->tableDetails);
   //自动换行，数据量大时，效率非常低，不推荐
   // connect(ui->tableDetails, SIGNAL(itemChanged(QTableWidgetItem*)),
   //         ui->tableDetails, SLOT(resizeRowsToContents()));
@@ -50,6 +52,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   QScroller::grabGesture(ui->tableCategory, QScroller::LeftMouseButtonGesture);
   ui->tableCategory->verticalScrollBar()->setStyleSheet(
       mw_one->vsbarStyleSmall);
+  mw_one->setSCrollPro(ui->tableCategory);
 }
 
 dlgReport::~dlgReport() { delete ui; }

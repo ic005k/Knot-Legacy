@@ -11,22 +11,27 @@ extern bool isImport;
 dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
   ui->setupUi(this);
+  ui->textEdit->installEventFilter(this);
+  this->installEventFilter(this);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
 
-  QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
-  ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  ui->textEdit->installEventFilter(this);
-  this->installEventFilter(this);
-
   vScrollBar = new SmoothScrollBar();
   vScrollBar->setOrientation(Qt::Orientation::Vertical);  //将滚动条设置为纵向
+
+  // ui->textEdit->setVerticalScrollBar(vScrollBar);
+  QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
+  ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+
   // ui->textBrowser->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
   ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
   ui->textBrowser->setHidden(true);
+
+  mw_one->setSCrollPro(ui->textBrowser);
+  mw_one->setSCrollPro(ui->textEdit);
 
   ui->btnOpenText->hide();
   ui->btnCloseText->hide();

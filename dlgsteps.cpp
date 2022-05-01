@@ -45,6 +45,8 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->tableWidget->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->tableWidget, QScroller::LeftMouseButtonGesture);
   ui->tableWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+
+  mw_one->setSCrollPro(ui->tableWidget);
 }
 
 dlgSteps::~dlgSteps() { delete ui; }

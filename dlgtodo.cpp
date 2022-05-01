@@ -36,6 +36,16 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->listRecycle->horizontalScrollBar()->setHidden(true);
   ui->listRecycle->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
 
+  /*QScrollerProperties sp;
+  sp.setScrollMetric(QScrollerProperties::DragStartDistance, 0.00001);
+  sp.setScrollMetric(QScrollerProperties::ScrollingCurve, QEasingCurve::Linear);
+  QScroller* qs = QScroller::scroller(ui->listWidget);
+  QScroller* qs1 = QScroller::scroller(ui->listRecycle);
+  qs->setScrollerProperties(sp);
+  qs1->setScrollerProperties(sp);*/
+  mw_one->setSCrollPro(ui->listWidget);
+  mw_one->setSCrollPro(ui->listRecycle);
+
   ui->btnAdd->setStyleSheet("border:none");
   ui->btnBack->setStyleSheet("border:none");
   ui->btnHigh->setStyleSheet("border:none");

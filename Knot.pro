@@ -38,6 +38,7 @@ SOURCES += \
     dlgmainnotes.cpp \
     dlgnotes.cpp \
     dlgpreferences.cpp \
+    dlgreader.cpp \
     dlgrename.cpp \
     dlgreport.cpp \
     dlgsettime.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     dlgmainnotes.h \
     dlgnotes.h \
     dlgpreferences.h \
+    dlgreader.h \
     dlgrename.h \
     dlgreport.h \
     dlgsettime.h \
@@ -68,6 +70,7 @@ FORMS += \
     dlgmainnotes.ui \
     dlgnotes.ui \
     dlgpreferences.ui \
+    dlgreader.ui \
     dlgrename.ui \
     dlgreport.ui \
     dlgsettime.ui \

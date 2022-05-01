@@ -656,6 +656,7 @@ void MainWindow::init_TabData() {
   mydlgTodo->init_Items();
   mydlgSetTime->init_Desc();
   mydlgSteps->init_Steps();
+  mydlgReader->initReader();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
@@ -1474,6 +1475,7 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   tw->setStyleSheet(treeStyle);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
+  setSCrollPro(tw);
   return tw;
 }
 
@@ -3218,6 +3220,7 @@ void MainWindow::init_UIWidget() {
   mydlgSteps = new dlgSteps(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
+  mydlgReader = new dlgReader(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -3283,7 +3286,6 @@ void MainWindow::init_UIWidget() {
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnMax->setStyleSheet("border:none");
   ui->btnOneNotes->setStyleSheet("border:none");
-  ui->btnOneNotes->hide();
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -3511,4 +3513,22 @@ QString MainWindow::getYMD(QString date) {
   return str;
 }
 
-void MainWindow::on_btnOneNotes_clicked() {}
+void MainWindow::on_btnOneNotes_clicked() {
+  mydlgReader->setFixedHeight(this->height());
+  mydlgReader->setFixedWidth(this->width());
+  mydlgReader->setModal(true);
+  mydlgReader->show();
+  if (!mydlgReader->one) {
+    mydlgReader->one = true;
+    mydlgReader->ui->textBrowser->verticalScrollBar()->setSliderPosition(
+        mydlgReader->vpos);
+  }
+}
+
+void MainWindow::setSCrollPro(QObject* obj) {
+  QScrollerProperties sp;
+  sp.setScrollMetric(QScrollerProperties::DragStartDistance, 0.001);
+  sp.setScrollMetric(QScrollerProperties::ScrollingCurve, QEasingCurve::Linear);
+  QScroller* qs = QScroller::scroller(obj);
+  qs->setScrollerProperties(sp);
+}

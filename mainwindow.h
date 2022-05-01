@@ -54,6 +54,7 @@
 #include "dlgmainnotes.h"
 #include "dlgnotes.h"
 #include "dlgpreferences.h"
+#include "dlgreader.h"
 #include "dlgrename.h"
 #include "dlgreport.h"
 #include "dlgsettime.h"
@@ -64,11 +65,13 @@
 #include "ui_dlgmainnotes.h"
 #include "ui_dlgnotes.h"
 #include "ui_dlgpreferences.h"
+#include "ui_dlgreader.h"
 #include "ui_dlgrename.h"
 #include "ui_dlgreport.h"
 #include "ui_dlgsettime.h"
 #include "ui_dlgsteps.h"
 #include "ui_dlgtodo.h"
+
 class SearchThread;
 class ReadThread;
 class ReadTWThread;
@@ -141,6 +144,7 @@ class MainWindow : public QMainWindow {
   dlgPreferences *mydlgPre;
   dlgMainNotes *mydlgMainNotes;
   dlgSteps *mydlgSteps;
+  dlgReader *mydlgReader;
 
   QList<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;
@@ -232,6 +236,7 @@ class MainWindow : public QMainWindow {
 
   QString getYMD(QString date);
   void bakData(QString fileName, bool msgbox);
+  void setSCrollPro(QObject *obj);
  public slots:
   void updateSteps();
   void newDatas();
