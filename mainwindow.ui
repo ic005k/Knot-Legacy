@@ -177,6 +177,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QToolButton" name="btnOneNotes">
+           <property name="text">
+            <string>One Ontes</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QToolButton" name="btnMax">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

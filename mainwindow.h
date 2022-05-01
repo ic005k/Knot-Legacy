@@ -231,8 +231,7 @@ class MainWindow : public QMainWindow {
   void initTodayInitSteps();
 
   QString getYMD(QString date);
-  void bakData(QString fileName);
-
+  void bakData(QString fileName, bool msgbox);
  public slots:
   void updateSteps();
   void newDatas();
@@ -329,6 +328,8 @@ class MainWindow : public QMainWindow {
   void on_btnPause_clicked();
 
   void on_actionOneClickBakData();
+
+  void on_btnOneNotes_clicked();
 
  private:
   int frameChartHeight = 220;

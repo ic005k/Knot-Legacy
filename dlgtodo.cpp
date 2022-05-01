@@ -171,7 +171,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   connect(btn, &QToolButton::clicked, [=]() {
     btn->setIcon(QIcon(":/src/done1.png"));
 
-    mw_one->Sleep(600);
+    mw_one->Sleep(500);
 
     ui->listWidget->setCurrentItem(pItem);
     int row = ui->listWidget->currentRow();
@@ -216,8 +216,11 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   f.setPointSize(13);
   lblTime->setFont(f);
   lblTime->setText(time);
-  if (time.contains(tr("Alarm")))
+  if (time.contains(tr("Alarm"))) {
     lblTime->setStyleSheet("QLabel{background:red;color:white}");
+    f.setBold(true);
+    lblTime->setFont(f);
+  }
   vbox->addWidget(lblTime);
   vbox->addLayout(hbox);
   frame->setLayout(vbox);
@@ -367,6 +370,10 @@ void dlgTodo::on_btnOK_clicked() {
   QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
   lbl->setText(tr("Alarm") + "  " + ui->dateTimeEdit->text());
   lbl->setStyleSheet("QLabel{background:red;color:white}");
+  QFont f = lbl->font();
+  f.setBold(true);
+  lbl->setFont(f);
+
   ui->frameSetTime->hide();
   startTimerAlarm();
 }

@@ -9,7 +9,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.06";
+QString ver = "1.0.07";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -1887,7 +1887,7 @@ void MainWindow::on_actionExport_Data_triggered() {
   fileName =
       fd.getSaveFileName(this, tr("KnotBak"), "", tr("Data Files(*.ini)"));
 
-  bakData(fileName);
+  bakData(fileName, true);
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setValue("/MainNotes/FileName", fileName);
@@ -1897,7 +1897,7 @@ void MainWindow::on_actionOneClickBakData() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   QString fileName = Reg.value("/MainNotes/FileName").toString();
   if (QFile(fileName).exists()) {
-    bakData(fileName);
+    bakData(fileName, true);
   } else {
     QMessageBox msgBox;
     msgBox.setText(appName);
@@ -1910,7 +1910,7 @@ void MainWindow::on_actionOneClickBakData() {
   }
 }
 
-void MainWindow::bakData(QString fileName) {
+void MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
     ui->progBar->setHidden(false);
     ui->progBar->setMaximum(0);
@@ -1936,7 +1936,7 @@ void MainWindow::bakData(QString fileName) {
 
     ui->progBar->setMaximum(100);
 
-    if (QFile(fileName).exists()) {
+    if (QFile(fileName).exists() && msgbox) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("The data was exported successfully.") +
@@ -2042,22 +2042,7 @@ QTreeWidget* MainWindow::get_tw(int tabIndex) {
 void MainWindow::on_actionView_App_Data_triggered() {
   mydlgNotes->init_Notes();
 
-  QTextEdit* edit = new QTextEdit;
-  edit->append("[" + appName + "]");
-  edit->append("Ver: " + ver);
-  edit->append(loadText(iniDir + "tab.ini"));
-  edit->append(loadText(iniDir + "font.ini"));
-  edit->append(loadText(iniDir + "desc.ini"));
-  edit->append(loadText(iniDir + "todo.ini"));
-  edit->append(loadText(iniDir + "ymd.ini"));
-  edit->append(loadText(iniDir + "notes.ini"));
-  edit->append(loadText(iniDir + "mainnotes.ini"));
-  edit->append(loadText(iniDir + "steps.ini"));
-  for (int i = 0; i < tabData->tabBar()->count(); i++) {
-    QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
-    if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
-  }
-  TextEditToFile(edit, iniFile);
+  bakData(iniFile, false);
 
   mydlgNotes->ui->textBrowser->clear();
   QSettings Reg(iniFile, QSettings::IniFormat);
@@ -3283,11 +3268,13 @@ void MainWindow::init_UIWidget() {
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnMax->setIconSize(QSize(s, s));
   ui->btnSteps->setIconSize(QSize(s, s));
+  ui->btnOneNotes->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
   ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
   ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
   ui->btnSteps->setIcon(QIcon(":/src/step.png"));
+  ui->btnOneNotes->setIcon(QIcon(":/src/one.png"));
   ui->frame_tab->setMaximumHeight(this->height());
 
   ui->btnPlus->setStyleSheet("border:none");
@@ -3295,6 +3282,8 @@ void MainWindow::init_UIWidget() {
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnMax->setStyleSheet("border:none");
+  ui->btnOneNotes->setStyleSheet("border:none");
+  ui->btnOneNotes->hide();
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -3521,3 +3510,5 @@ QString MainWindow::getYMD(QString date) {
   }
   return str;
 }
+
+void MainWindow::on_btnOneNotes_clicked() {}
