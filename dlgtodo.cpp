@@ -418,7 +418,7 @@ void dlgTodo::on_Alarm() {
         if (QDate::currentDate().toString("yyyy-M-d") == date) {
           if (QTime::currentTime().toString("HH:mm") >= time) {
             lbl->setText(str);
-
+            saveTodo();
             QString text = getMainLabel(i)->text().trimmed();
             sendMsgAlarm(text);
             lbl->setStyleSheet(getMainLabel(i)->styleSheet());
