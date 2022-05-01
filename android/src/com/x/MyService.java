@@ -177,7 +177,7 @@ public class MyService extends Service {
         NotificationChannel channel = new NotificationChannel(ID, NAME, NotificationManager.IMPORTANCE_LOW);
         manager.createNotificationChannel(channel);
         Notification notification = new Notification.Builder(this, ID)
-                .setContentTitle("Powerful Counter")
+                .setContentTitle("Status")
                 .setContentText("Running...")
                 .setSmallIcon(R.drawable.icon)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
