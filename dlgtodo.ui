@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>341</width>
+    <width>366</width>
     <height>460</height>
    </rect>
   </property>
@@ -48,7 +48,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>30</height>
+            <height>0</height>
            </size>
           </property>
           <property name="text">
@@ -60,8 +60,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>25</width>
+            <height>25</height>
            </size>
           </property>
          </widget>
@@ -77,7 +77,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>30</height>
+            <height>0</height>
            </size>
           </property>
           <property name="text">
@@ -89,8 +89,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>25</width>
+            <height>25</height>
            </size>
           </property>
          </widget>
@@ -106,7 +106,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>30</height>
+            <height>0</height>
            </size>
           </property>
           <property name="text">
@@ -118,8 +118,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>25</width>
+            <height>25</height>
            </size>
           </property>
          </widget>
@@ -135,7 +135,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>30</height>
+            <height>0</height>
            </size>
           </property>
           <property name="text">
@@ -147,8 +147,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>25</width>
+            <height>25</height>
            </size>
           </property>
          </widget>
@@ -164,7 +164,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>30</height>
+            <height>0</height>
            </size>
           </property>
           <property name="text">
@@ -176,8 +176,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>25</width>
+            <height>25</height>
            </size>
           </property>
          </widget>
@@ -193,7 +193,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>30</height>
+            <height>0</height>
            </size>
           </property>
           <property name="text">
@@ -205,8 +205,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>25</width>
+            <height>25</height>
            </size>
           </property>
          </widget>
@@ -222,7 +222,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>30</height>
+            <height>0</height>
            </size>
           </property>
           <property name="text">
@@ -234,8 +234,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>25</width>
+            <height>25</height>
            </size>
           </property>
          </widget>
@@ -246,7 +246,41 @@
     </widget>
    </item>
    <item row="5" column="0">
-    <widget class="QListWidget" name="listRecycle"/>
+    <widget class="QListWidget" name="listRecycle">
+     <property name="styleSheet">
+      <string notr="true">QListWidget::indicator{
+		width:25;
+		height:25;
+		right: 5px;
+}
+
+QListView {
+    outline: none;
+	text-decoration: line-through;
+}
+
+#listRecycle::item {
+    background-color: #ffffff;
+    color: #000000;
+    border: transparent;
+    border-bottom: 1px solid #dbdbdb;
+    padding: 8px;
+	height: 85;
+	
+}
+
+#listRecycle::item:hover {
+    background-color: #f5f5f5;
+}
+
+#listRecycle::item:selected {
+    border-left: 5px solid #777777;
+	
+}
+
+</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
     <widget class="QFrame" name="frameSetTime">
