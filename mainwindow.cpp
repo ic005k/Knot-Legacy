@@ -443,6 +443,7 @@ void MainWindow::init_Options() {
   mydlgMainNotes->ui->textBrowser->setFont(userFont);
   mydlgMainNotes->ui->textEdit->setFont(userFont);
   mydlgSteps->ui->tableWidget->setFont(userFont);
+  mydlgTodo->ui->listRecycle->setFont(userFont);
 
   userFont.setBold(true);
   ui->lblStats->setFont(userFont);

@@ -503,3 +503,10 @@ void dlgTodo::on_btnRestore_clicked() {
            false);
   ui->listRecycle->takeItem(ui->listRecycle->currentRow());
 }
+
+void dlgTodo::on_btnDel_clicked() {
+  if (ui->listRecycle->currentIndex().isValid()) {
+    int row = ui->listRecycle->currentRow();
+    ui->listRecycle->takeItem(row);
+  }
+}

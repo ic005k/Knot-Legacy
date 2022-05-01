@@ -74,6 +74,8 @@ class dlgTodo : public QDialog {
 
   void on_btnRestore_clicked();
 
+  void on_btnDel_clicked();
+
  private:
   QListWidgetItem *editItem;
   void add_ItemSn(int index);
