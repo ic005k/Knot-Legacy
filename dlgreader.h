@@ -17,18 +17,19 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
-  QTextBrowser *myedit;
+  QPlainTextEdit *myedit;
   void saveReader();
   void initReader();
   QString fileName;
   void openFile(QString fileName);
   qulonglong vpos;
-
+  int iPage;
   void drawB();
 
-  QString getTextEditLineText(QTextBrowser *txtEdit, int i);
+  QString getTextEditLineText(QPlainTextEdit *txtEdit, int i);
  public slots:
   void getPages();
+  void on_btnPageNext_clicked();
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
@@ -50,10 +51,7 @@ class dlgReader : public QDialog {
 
   void on_btnPageUp_clicked();
 
-  void on_btnPageNext_clicked();
-
  private:
-  int iPage;
 };
 
 #endif  // DLGREADER_H

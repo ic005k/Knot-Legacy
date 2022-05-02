@@ -3522,15 +3522,10 @@ void MainWindow::on_btnOneNotes_clicked() {
 
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   qulonglong vpos = Reg.value("/Reader/SliderPos").toULongLong();
-  if (mydlgReader->ui->textBrowser->verticalScrollBar()->value() != vpos) {
-    mydlgReader->ui->progressBar->show();
-    mydlgReader->ui->progressBar->setMaximum(0);
-    mw_one->Sleep(7000);
-
-    mydlgReader->ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
-    mydlgReader->ui->progressBar->setMaximum(100);
-    mydlgReader->ui->progressBar->hide();
-  }
+  int iPage = Reg.value("/Reader/iPage").toInt();
+  mydlgReader->iPage = iPage - 15;
+  mydlgReader->on_btnPageNext_clicked();
+  mydlgReader->ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
 }
 
 void MainWindow::setSCrollPro(QObject* obj) {

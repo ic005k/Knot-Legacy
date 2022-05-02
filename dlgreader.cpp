@@ -16,11 +16,11 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   this->setContentsMargins(0, 0, 0, 0);
   this->layout()->setContentsMargins(0, 0, 0, 0);
   this->layout()->setMargin(0);
-  myedit = new QTextBrowser;
+  myedit = new QPlainTextEdit;
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
   ui->textBrowser->verticalScrollBar()->setStyleSheet("width:0px;");
   // ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  // ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
+  ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
   mw_one->setSCrollPro(ui->textBrowser);
   ui->textBrowser->verticalScrollBar()->setVisible(false);
   ui->textBrowser->setStyleSheet(
@@ -67,6 +67,8 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->btnOpen->setStyleSheet("border:none");
   ui->btnPage->setStyleSheet("border:none");
   ui->btnBack->setStyleSheet("border:none");
+  ui->btnPageNext->setStyleSheet("border:none");
+  ui->btnPageUp->setStyleSheet("border:none");
 }
 
 dlgReader::~dlgReader() { delete ui; }
@@ -118,21 +120,25 @@ void dlgReader::openFile(QString fileName) {
       ui->textBrowser->setTextCursor(textcursor);
     }*/
 
-    QString qsShow =
-        "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
-        txt + "</p>";
     // ui->textBrowser->setHtml(qsShow);
     ui->textBrowser->clear();
-    myedit->setHtml(qsShow);
-    qDebug() << "myedit" << myedit->verticalScrollBar()->maximum();
+    myedit->setPlainText(txt);
+    QString txt1;
     for (int i = 0; i < 15; i++) {
       iPage++;
-      ui->textBrowser->append(getTextEditLineText(myedit, i));
+      txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
     }
+
+    QString qsShow =
+        "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
+        txt1 + "</p>";
+    ui->textBrowser->setHtml(qsShow);
+
+    ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
   }
 }
 
-QString dlgReader::getTextEditLineText(QTextBrowser* txtEdit, int i) {
+QString dlgReader::getTextEditLineText(QPlainTextEdit* txtEdit, int i) {
   QTextBlock block = txtEdit->document()->findBlockByNumber(i);
   txtEdit->setTextCursor(QTextCursor(block));
   QString lineText = txtEdit->document()->findBlockByNumber(i).text().trimmed();
@@ -145,6 +151,7 @@ void dlgReader::saveReader() {
   Reg.setValue("/Reader/SliderPos", vpos);
   Reg.setValue("/Reader/FileName", fileName);
   Reg.setValue("/Reader/FontSize", ui->textBrowser->font().pointSize());
+  Reg.setValue("/Reader/iPage", iPage);
 }
 
 void dlgReader::initReader() {
@@ -226,19 +233,35 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
 }
 
 void dlgReader::on_btnPageUp_clicked() {
+  QString txt1;
   ui->textBrowser->clear();
   int count = iPage - 15;
   for (int i = count - 15; i < count; i++) {
     iPage--;
-    ui->textBrowser->append(getTextEditLineText(myedit, i));
+    txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
   }
+
+  QString qsShow =
+      "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
+      txt1 + "</p>";
+  ui->textBrowser->setHtml(qsShow);
+
+  ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 }
 
 void dlgReader::on_btnPageNext_clicked() {
+  QString txt1;
   ui->textBrowser->clear();
   int count = iPage + 15;
   for (int i = iPage; i < count; i++) {
     iPage++;
-    ui->textBrowser->append(getTextEditLineText(myedit, i));
+    txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
   }
+
+  QString qsShow =
+      "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
+      txt1 + "</p>";
+  ui->textBrowser->setHtml(qsShow);
+
+  ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 }
