@@ -3263,7 +3263,7 @@ void MainWindow::init_UIWidget() {
   ui->btnSelTab->setIconSize(QSize(iz, iz));
   ui->btnPause->setIconSize(QSize(iz, iz));
 
-  int s = 30;
+  int s = 28;
   if (isIOS) {
   }
   ui->btnPlus->setIconSize(QSize(s, s));

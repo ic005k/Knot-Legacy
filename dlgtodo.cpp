@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "smoothscrollbar.h"
 #include "ui_dlgtodo.h"
+#include "ui_mainwindow.h"
 
 QString highLblStyle = "background-color: rgb(255, 239, 219);color:black";
 int highCount;
@@ -452,7 +453,12 @@ void dlgTodo::on_Alarm() {
       }
     }
   }
-  if (count == 0) stopTimerAlarm();
+  if (count == 0) {
+    stopTimerAlarm();
+    mw_one->ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
+  } else {
+    mw_one->ui->btnTodo->setIcon(QIcon(":/src/todo1.png"));
+  }
 }
 
 void dlgTodo::startTimerAlarm() {

@@ -32,5 +32,6 @@
         <file>src/time.png</file>
         <file>src/recycle.png</file>
         <file>src/one.png</file>
+        <file>src/todo1.png</file>
     </qresource>
 </RCC>
