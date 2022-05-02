@@ -13,11 +13,36 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QTextBrowser" name="textBrowser"/>
-   </item>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item row="2" column="0">
+    <widget class="QProgressBar" name="progressBar">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>6</height>
+      </size>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QToolButton" name="btnBack">
@@ -35,6 +60,16 @@
        </property>
        <property name="text">
         <string>Back</string>
+       </property>
+       <property name="icon">
+        <iconset resource="src.qrc">
+         <normaloff>:/src/back.png</normaloff>:/src/back.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -55,6 +90,16 @@
        <property name="text">
         <string>Open</string>
        </property>
+       <property name="icon">
+        <iconset resource="src.qrc">
+         <normaloff>:/src/open.png</normaloff>:/src/open.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item>
@@ -73,6 +118,16 @@
        </property>
        <property name="text">
         <string>A+</string>
+       </property>
+       <property name="icon">
+        <iconset resource="src.qrc">
+         <normaloff>:/src/a1.png</normaloff>:/src/a1.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -93,6 +148,86 @@
        <property name="text">
         <string>A-</string>
        </property>
+       <property name="icon">
+        <iconset resource="src.qrc">
+         <normaloff>:/src/a2.png</normaloff>:/src/a2.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnPage">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>0 / 0</string>
+       </property>
+       <property name="icon">
+        <iconset resource="src.qrc">
+         <normaloff>:/src/page.png</normaloff>:/src/page.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnPageUp">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&lt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnPageNext">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&gt;</string>
+       </property>
       </widget>
      </item>
     </layout>
@@ -104,8 +239,105 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QTextBrowser" name="textBrowser"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QSlider" name="hSlider">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">/*QSlider::groove:horizontal
+ {
+ 	background-color: rgba(50, 54, 63);
+	height: 25px;
+ 	border-radius: 5px;
+	left: 6px; right: 6px;
+}*/
+
+/*QSlider::groove:horizontal
+ {
+ 	
+	height: 25px;
+ 	
+	
+}
+
+QSlider::handle:horizontal 
+{
+
+width:30;
+
+margin: -3px -4px -3px -4px;
+}
+QSlider::handle:horizontal:hover
+{
+
+width:24;
+
+margin: -3px -4px -3px -4px;
+}
+ 
+ 
+/*QSlider::handle:horizontal 
+{
+border-image:url(&quot;:/src/sel.png&quot;);
+width:24;
+
+margin: -3px -4px -3px -4px;
+}
+QSlider::handle:horizontal:hover
+{
+border-image:url(&quot;:/src/sel.png&quot;);
+width:24;
+
+margin: -3px -4px -3px -4px;
+}*/
+ 
+
+/*QSlider::sub-page:horizontal{
+background:  rgba(71, 140, 182);
+}*/
+
+</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="src.qrc"/>
+ </resources>
  <connections/>
 </ui>

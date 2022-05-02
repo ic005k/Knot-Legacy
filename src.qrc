@@ -33,5 +33,13 @@
         <file>src/recycle.png</file>
         <file>src/one.png</file>
         <file>src/todo1.png</file>
+        <file>src/b.png</file>
+        <file>src/qslider.png</file>
+        <file>src/qslider_bg.png</file>
+        <file>src/qslider_btn.png</file>
+        <file>src/a1.png</file>
+        <file>src/a2.png</file>
+        <file>src/open.png</file>
+        <file>src/page.png</file>
     </qresource>
 </RCC>

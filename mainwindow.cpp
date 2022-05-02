@@ -3516,12 +3516,20 @@ QString MainWindow::getYMD(QString date) {
 void MainWindow::on_btnOneNotes_clicked() {
   mydlgReader->setFixedHeight(this->height());
   mydlgReader->setFixedWidth(this->width());
+  mydlgReader->close();
   mydlgReader->setModal(true);
   mydlgReader->show();
-  if (!mydlgReader->one) {
-    mydlgReader->one = true;
-    mydlgReader->ui->textBrowser->verticalScrollBar()->setSliderPosition(
-        mydlgReader->vpos);
+
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  qulonglong vpos = Reg.value("/Reader/SliderPos").toULongLong();
+  if (mydlgReader->ui->textBrowser->verticalScrollBar()->value() != vpos) {
+    mydlgReader->ui->progressBar->show();
+    mydlgReader->ui->progressBar->setMaximum(0);
+    mw_one->Sleep(7000);
+
+    mydlgReader->ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
+    mydlgReader->ui->progressBar->setMaximum(100);
+    mydlgReader->ui->progressBar->hide();
   }
 }
 
