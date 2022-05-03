@@ -29,7 +29,8 @@ class dlgReader : public QDialog {
   void drawB();
 
   QString getTextEditLineText(QPlainTextEdit *txtEdit, int i);
- public slots:
+  void getLines();
+public slots:
   void getPages();
   void on_btnPageNext_clicked();
 

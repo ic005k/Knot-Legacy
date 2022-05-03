@@ -71,6 +71,11 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->btnPageNext->setStyleSheet("border:none");
   ui->btnPageUp->setStyleSheet("border:none");
   ui->btnLines->setStyleSheet("border:none");
+  QFont f;
+  f.setPointSize(11);
+  f.setBold(true);
+  ui->btnPage->setFont(f);
+  ui->btnLines->setFont(f);
 }
 
 dlgReader::~dlgReader() { delete ui; }
@@ -193,6 +198,7 @@ void dlgReader::on_btnOpen_clicked() {
 
 void dlgReader::openFile(QString fileName) {
   if (QFile(fileName).exists()) {
+    iPage = 0;
     QString txt = mw_one->loadText(fileName);
     // ui->textBrowser->setPlainText(txt);
     QFileInfo fi(fileName);
@@ -302,6 +308,7 @@ void dlgReader::on_textBrowser_textChanged() {
 
 void dlgReader::getPages() {
   if (isPages) {
+    ui->hSlider->setTickInterval(1);
     int baseh = ui->textBrowser->height();
     qulonglong th = ui->textBrowser->verticalScrollBar()->maximum();
     int page = th / baseh;
@@ -312,9 +319,26 @@ void dlgReader::getPages() {
     ui->hSlider->setMinimum(1);
     // qDebug() << "th:" << th << "cpos:" << cpos;
   }
+}
+
+void dlgReader::getLines() {
   if (isLines) {
-    ui->btnLines->setText(QString::number(iPage / 15) + " / " +
+    ui->hSlider->setTickInterval(1);
+    ui->hSlider->setMaximum(totallines / 15);
+    ui->btnLines->setText(QString::number(ui->hSlider->value()) + " / " +
                           QString::number(totallines / 15));
+    iPage = ui->hSlider->value() * 15;
+    int count = iPage + 15;
+    QString txt1;
+    for (int i = iPage; i < count; i++) {
+      txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
+    }
+
+    QString qsShow =
+        "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
+        txt1 + "</p>";
+    ui->textBrowser->setHtml(qsShow);
+    ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
   }
 }
 
@@ -330,8 +354,13 @@ void dlgReader::on_btnPage_clicked() {
 }
 
 void dlgReader::on_hSlider_sliderMoved(int position) {
-  ui->textBrowser->verticalScrollBar()->setSliderPosition(
-      position * ui->textBrowser->height());
+  if (isPages) {
+    ui->textBrowser->verticalScrollBar()->setSliderPosition(
+        position * ui->textBrowser->height());
+  }
+  if (isLines) {
+    getLines();
+  }
 }
 
 void dlgReader::on_btnPageUp_clicked() {
@@ -349,8 +378,13 @@ void dlgReader::on_btnPageUp_clicked() {
       "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
       txt1 + "</p>";
   ui->textBrowser->setHtml(qsShow);
-
   ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
+
+  ui->hSlider->setMaximum(totallines / 15);
+  ui->btnLines->setText(QString::number(iPage / 15) + " / " +
+                        QString::number(totallines / 15));
+
+  getPages();
 }
 
 void dlgReader::on_btnPageNext_clicked() {
@@ -370,15 +404,25 @@ void dlgReader::on_btnPageNext_clicked() {
   ui->textBrowser->setHtml(qsShow);
 
   ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
+
+  ui->hSlider->setMaximum(totallines / 15);
+  ui->btnLines->setText(QString::number(iPage / 15) + " / " +
+                        QString::number(totallines / 15));
+
+  getPages();
 }
 
 void dlgReader::on_btnLines_clicked() {
-  isLines = true;
-  isPages = false;
-  ui->hSlider->setMaximum(totallines);
-  ui->hSlider->setTickInterval(15);
-  if (ui->frame->isHidden())
+  ui->hSlider->setMaximum(totallines / 15);
+  ui->hSlider->setTickInterval(1);
+  ui->hSlider->setValue(iPage / 15);
+  if (ui->frame->isHidden()) {
+    isLines = true;
+    isPages = false;
     ui->frame->show();
-  else
+  } else {
+    isLines = false;
+    isPages = true;
     ui->frame->hide();
+  }
 }
