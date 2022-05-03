@@ -30,7 +30,7 @@ class dlgReader : public QDialog {
 
   QString getTextEditLineText(QPlainTextEdit *txtEdit, int i);
   void getLines();
-public slots:
+ public slots:
   void getPages();
   void on_btnPageNext_clicked();
 
@@ -60,6 +60,7 @@ public slots:
   int x, y, w, h;
   bool isLines = false;
   bool isPages = true;
+  int sPos;
 };
 
 #endif  // DLGREADER_H
