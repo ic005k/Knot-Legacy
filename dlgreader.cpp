@@ -117,7 +117,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
     if ((relea_x - press_x) > 30 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
-      if (iPage - 15 <= 0) return QWidget::eventFilter(obj, evn);
+      if (iPage - baseLines <= 0) return QWidget::eventFilter(obj, evn);
       ui->lblTitle->setPixmap(ui->textBrowser->grab());
       //捕获当前界面并绘制到label上
       QPropertyAnimation* animation1 =
@@ -150,7 +150,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
     if ((press_x - relea_x) > 30 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
-      if (iPage + 15 > totallines) return QWidget::eventFilter(obj, evn);
+      if (iPage + baseLines > totallines) return QWidget::eventFilter(obj, evn);
       ui->lblTitle->setPixmap(ui->textBrowser->grab());
 
       QPropertyAnimation* animation1 =
@@ -229,7 +229,7 @@ void dlgReader::openFile(QString fileName) {
     isLines = false;
 
     /*QString txt1;
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < baseLines; i++) {
       iPage++;
       txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
     }
@@ -331,17 +331,17 @@ void dlgReader::getLines() {
   if (isLines) {
     ui->hSlider->setTickInterval(1);
     ui->hSlider->setMinimum(0);
-    ui->hSlider->setMaximum(totallines / 15);
+    ui->hSlider->setMaximum(totallines / baseLines);
     ui->hSlider->setValue(sPos);
     ui->btnLines->setText(QString::number(ui->hSlider->value() + 1) + " / " +
-                          QString::number(totallines / 15 + 1));
-    iPage = ui->hSlider->value() * 15;
+                          QString::number(totallines / baseLines + 1));
+    iPage = ui->hSlider->value() * baseLines;
     qDebug() << "iPage" << iPage << ui->hSlider->value();
-    int count = iPage + 15;
+    int count = iPage + baseLines;
     QString txt1;
     for (int i = iPage; i < count; i++) {
       iPage++;
-      txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
+      txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
     }
 
     QString qsShow =
@@ -377,14 +377,14 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
 }
 
 void dlgReader::on_btnPageUp_clicked() {
-  int count = iPage - 15;
+  int count = iPage - baseLines;
   if (count <= 0) return;
   QString txt1;
   ui->textBrowser->clear();
 
-  for (int i = count - 15; i < count; i++) {
+  for (int i = count - baseLines; i < count; i++) {
     iPage--;
-    txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
+    txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
   }
 
   QString qsShow =
@@ -393,22 +393,22 @@ void dlgReader::on_btnPageUp_clicked() {
   ui->textBrowser->setHtml(qsShow);
   ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
-  ui->hSlider->setMaximum(totallines / 15);
-  ui->btnLines->setText(QString::number(iPage / 15) + " / " +
-                        QString::number(totallines / 15));
+  ui->hSlider->setMaximum(totallines / baseLines);
+  ui->btnLines->setText(QString::number(iPage / baseLines) + " / " +
+                        QString::number(totallines / baseLines));
 
   getPages();
 }
 
 void dlgReader::on_btnPageNext_clicked() {
-  int count = iPage + 15;
+  int count = iPage + baseLines;
   if (count > totallines) return;
   QString txt1;
   ui->textBrowser->clear();
 
   for (int i = iPage; i < count; i++) {
     iPage++;
-    txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
+    txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
   }
 
   QString qsShow =
@@ -418,17 +418,17 @@ void dlgReader::on_btnPageNext_clicked() {
 
   ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
-  ui->hSlider->setMaximum(totallines / 15);
-  ui->btnLines->setText(QString::number(iPage / 15) + " / " +
-                        QString::number(totallines / 15));
+  ui->hSlider->setMaximum(totallines / baseLines);
+  ui->btnLines->setText(QString::number(iPage / baseLines) + " / " +
+                        QString::number(totallines / baseLines));
 
   getPages();
 }
 
 void dlgReader::on_btnLines_clicked() {
-  ui->hSlider->setMaximum(totallines / 15);
+  ui->hSlider->setMaximum(totallines / baseLines);
   ui->hSlider->setTickInterval(1);
-  ui->hSlider->setValue(iPage / 15);
+  ui->hSlider->setValue(iPage / baseLines);
   if (ui->frame->isHidden()) {
     isLines = true;
     isPages = false;

@@ -61,6 +61,8 @@ class dlgReader : public QDialog {
   bool isLines = false;
   bool isPages = true;
   int sPos;
+  QString strSpace = "      ";
+  int baseLines = 15;
 };
 
 #endif  // DLGREADER_H
