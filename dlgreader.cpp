@@ -13,6 +13,7 @@ extern int fontSize;
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  ui->textBrowser->installEventFilter(this);
   this->setContentsMargins(0, 0, 0, 0);
   this->layout()->setContentsMargins(0, 0, 0, 0);
   this->layout()->setMargin(0);
@@ -69,6 +70,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->btnBack->setStyleSheet("border:none");
   ui->btnPageNext->setStyleSheet("border:none");
   ui->btnPageUp->setStyleSheet("border:none");
+  ui->btnLines->setStyleSheet("border:none");
 }
 
 dlgReader::~dlgReader() { delete ui; }
@@ -79,6 +81,97 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnBack_clicked();
       return true;
+    }
+  }
+
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
+  if (obj == ui->textBrowser) {
+    static int press_x;
+    static int press_y;
+    static int relea_x;
+    static int relea_y;
+
+    if (event->type() == QEvent::MouseButtonPress) {
+      press_x = event->globalX();
+      press_y = event->globalY();
+      x = 0;
+      y = 0;
+      w = ui->textBrowser->width();
+      h = ui->textBrowser->height();
+      qDebug() << "Press:" << press_x << press_y;
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      relea_x = event->globalX();
+      relea_y = event->globalY();
+      qDebug() << "Release:" << relea_x << relea_y;
+    }
+
+    //判断滑动方向（右滑）
+
+    if ((relea_x - press_x) > 30 &&
+        event->type() == QEvent::MouseButtonRelease &&
+        qAbs(relea_y - press_y) < 50) {
+      if (iPage - 15 <= 0) return QWidget::eventFilter(obj, evn);
+      ui->lblTitle->setPixmap(ui->textBrowser->grab());
+      //捕获当前界面并绘制到label上
+      QPropertyAnimation* animation1 =
+          new QPropertyAnimation(ui->lblTitle, "geometry");
+      // new QPropertyAnimation(ui->textBrowser, "geometry");
+      animation1->setDuration(500);  //设置动画时间为0.5秒
+      animation1->setStartValue(QRect(x, y, w, h));
+      animation1->setEndValue(QRect(w * 2, y, w, h));
+
+      on_btnPageUp_clicked();
+
+      QPropertyAnimation* animation2 =
+          new QPropertyAnimation(ui->textBrowser, "geometry");
+      animation2->setDuration(500);
+      animation2->setStartValue(QRect(-w * 2, y, w, h));
+      animation2->setEndValue(QRect(x, y, w, h));
+
+      QParallelAnimationGroup* group = new QParallelAnimationGroup;  //动画容器
+      group->addAnimation(animation1);
+      group->addAnimation(animation2);
+      group->start();
+      QElapsedTimer t;
+      t.start();
+      while (t.elapsed() < 600) {
+        QCoreApplication::processEvents();
+      }
+    }
+
+    //判断滑动方向（左滑）
+    if ((press_x - relea_x) > 30 &&
+        event->type() == QEvent::MouseButtonRelease &&
+        qAbs(relea_y - press_y) < 50) {
+      if (iPage + 15 > totallines) return QWidget::eventFilter(obj, evn);
+      ui->lblTitle->setPixmap(ui->textBrowser->grab());
+
+      QPropertyAnimation* animation1 =
+          new QPropertyAnimation(ui->lblTitle, "geometry");
+      // new QPropertyAnimation(ui->textBrowser, "geometry");
+      animation1->setDuration(500);
+      animation1->setStartValue(QRect(x, y, w, h));
+      animation1->setEndValue(QRect(-w, y, w, h));
+
+      on_btnPageNext_clicked();
+
+      QPropertyAnimation* animation2 =
+          new QPropertyAnimation(ui->textBrowser, "geometry");
+      animation2->setDuration(500);
+      animation2->setStartValue(QRect(w * 2, y, w, h));
+      animation2->setEndValue(QRect(x, y, w, h));
+
+      QParallelAnimationGroup* group = new QParallelAnimationGroup;
+      group->addAnimation(animation1);
+      group->addAnimation(animation2);
+      group->start();
+      QElapsedTimer t;
+      t.start();
+      while (t.elapsed() < 600) {
+        QCoreApplication::processEvents();
+      }
     }
   }
 
@@ -123,6 +216,7 @@ void dlgReader::openFile(QString fileName) {
     // ui->textBrowser->setHtml(qsShow);
     ui->textBrowser->clear();
     myedit->setPlainText(txt);
+    totallines = myedit->document()->lineCount();
     QString txt1;
     for (int i = 0; i < 15; i++) {
       iPage++;
@@ -207,18 +301,26 @@ void dlgReader::on_textBrowser_textChanged() {
 }
 
 void dlgReader::getPages() {
-  int baseh = ui->textBrowser->height();
-  qulonglong th = ui->textBrowser->verticalScrollBar()->maximum();
-  int page = th / baseh;
-  qulonglong cpos = ui->textBrowser->verticalScrollBar()->sliderPosition();
-  int cp = cpos / baseh;
-  ui->btnPage->setText(QString::number(cp) + " / " + QString::number(page));
-  ui->hSlider->setMaximum(page);
-  ui->hSlider->setMinimum(1);
-  // qDebug() << "th:" << th << "cpos:" << cpos;
+  if (isPages) {
+    int baseh = ui->textBrowser->height();
+    qulonglong th = ui->textBrowser->verticalScrollBar()->maximum();
+    int page = th / baseh;
+    qulonglong cpos = ui->textBrowser->verticalScrollBar()->sliderPosition();
+    int cp = cpos / baseh;
+    ui->btnPage->setText(QString::number(cp) + " / " + QString::number(page));
+    ui->hSlider->setMaximum(page);
+    ui->hSlider->setMinimum(1);
+    // qDebug() << "th:" << th << "cpos:" << cpos;
+  }
+  if (isLines) {
+    ui->btnLines->setText(QString::number(iPage / 15) + " / " +
+                          QString::number(totallines / 15));
+  }
 }
 
 void dlgReader::on_btnPage_clicked() {
+  isPages = true;
+  isLines = false;
   if (ui->frame->isHidden()) {
     ui->hSlider->setValue(ui->textBrowser->verticalScrollBar()->value() /
                           ui->textBrowser->height());
@@ -233,9 +335,11 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
 }
 
 void dlgReader::on_btnPageUp_clicked() {
+  int count = iPage - 15;
+  if (count <= 0) return;
   QString txt1;
   ui->textBrowser->clear();
-  int count = iPage - 15;
+
   for (int i = count - 15; i < count; i++) {
     iPage--;
     txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
@@ -250,9 +354,11 @@ void dlgReader::on_btnPageUp_clicked() {
 }
 
 void dlgReader::on_btnPageNext_clicked() {
+  int count = iPage + 15;
+  if (count > totallines) return;
   QString txt1;
   ui->textBrowser->clear();
-  int count = iPage + 15;
+
   for (int i = iPage; i < count; i++) {
     iPage++;
     txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
@@ -264,4 +370,15 @@ void dlgReader::on_btnPageNext_clicked() {
   ui->textBrowser->setHtml(qsShow);
 
   ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
+}
+
+void dlgReader::on_btnLines_clicked() {
+  isLines = true;
+  isPages = false;
+  ui->hSlider->setMaximum(totallines);
+  ui->hSlider->setTickInterval(15);
+  if (ui->frame->isHidden())
+    ui->frame->show();
+  else
+    ui->frame->hide();
 }

@@ -209,6 +209,16 @@
        <property name="text">
         <string>&lt;</string>
        </property>
+       <property name="icon">
+        <iconset resource="src.qrc">
+         <normaloff>:/src/up.png</normaloff>:/src/up.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item>
@@ -227,6 +237,48 @@
        </property>
        <property name="text">
         <string>&gt;</string>
+       </property>
+       <property name="icon">
+        <iconset resource="src.qrc">
+         <normaloff>:/src/down.png</normaloff>:/src/down.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnLines">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>0 / 0</string>
+       </property>
+       <property name="icon">
+        <iconset resource="src.qrc">
+         <normaloff>:/src/lines.png</normaloff>:/src/lines.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextOnly</enum>
        </property>
       </widget>
      </item>

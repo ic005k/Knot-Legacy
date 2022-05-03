@@ -2,6 +2,7 @@
 #define DLGREADER_H
 
 #include <QDialog>
+#include <QEvent>
 #include <QPlainTextEdit>
 #include <QTextBlock>
 #include <QTextBrowser>
@@ -17,6 +18,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  int totallines;
   QPlainTextEdit *myedit;
   void saveReader();
   void initReader();
@@ -51,7 +53,12 @@ class dlgReader : public QDialog {
 
   void on_btnPageUp_clicked();
 
+  void on_btnLines_clicked();
+
  private:
+  int x, y, w, h;
+  bool isLines = false;
+  bool isPages = true;
 };
 
 #endif  // DLGREADER_H
