@@ -18,6 +18,9 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  bool isOpen = false;
+  int baseLines = 15;
+  QStringList readTextList;
   int totallines;
   QPlainTextEdit *myedit;
   void saveReader();
@@ -30,6 +33,7 @@ class dlgReader : public QDialog {
 
   QString getTextEditLineText(QPlainTextEdit *txtEdit, int i);
   void getLines();
+  QStringList readText(QString textFile);
  public slots:
   void getPages();
   void on_btnPageNext_clicked();
@@ -61,8 +65,7 @@ class dlgReader : public QDialog {
   bool isLines = false;
   bool isPages = true;
   int sPos;
-  QString strSpace = "      ";
-  int baseLines = 15;
+  QString strSpace = "";
 };
 
 #endif  // DLGREADER_H

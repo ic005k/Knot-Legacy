@@ -1195,6 +1195,7 @@ QString MainWindow::loadText(QString textFile) {
       QString text = in.readAll();
       return text;
     }
+    file.close();
   }
 
   return "";
@@ -3520,12 +3521,14 @@ void MainWindow::on_btnOneNotes_clicked() {
   mydlgReader->setModal(true);
   mydlgReader->show();
 
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
-  qulonglong vpos = Reg.value("/Reader/SliderPos").toULongLong();
-  int iPage = Reg.value("/Reader/iPage").toInt();
-  mydlgReader->iPage = iPage - 15;
-  mydlgReader->on_btnPageNext_clicked();
-  mydlgReader->ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
+  if (mydlgReader->isOpen) {
+    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    qulonglong vpos = Reg.value("/Reader/SliderPos").toULongLong();
+    int iPage = Reg.value("/Reader/iPage").toInt();
+    mydlgReader->iPage = iPage - mydlgReader->baseLines;
+    mydlgReader->on_btnPageNext_clicked();
+    mydlgReader->ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
+  }
 }
 
 void MainWindow::setSCrollPro(QObject* obj) {

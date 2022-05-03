@@ -197,50 +197,27 @@ void dlgReader::on_btnOpen_clicked() {
 }
 
 void dlgReader::openFile(QString fileName) {
+  isOpen = false;
   if (QFile(fileName).exists()) {
+    ui->textBrowser->clear();
     iPage = 0;
+    sPos = 0;
     ui->hSlider->setValue(0);
-    QString txt = mw_one->loadText(fileName);
-    // ui->textBrowser->setPlainText(txt);
+    ui->frame->hide();
+
+    readTextList.clear();
+    readTextList = readText(fileName);
+    totallines = readTextList.count();
     QFileInfo fi(fileName);
     ui->lblTitle->setText(fi.baseName());
     ui->lblTitle->hide();
 
-    // QFont font = ui->textBrowser->font();
-    // font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
-    // ui->textBrowser->setFont(font);
-
-    /*QTextDocument* doc = ui->textBrowser->document();
-    QTextCursor textcursor = ui->textBrowser->textCursor();
-    for (QTextBlock it = doc->begin(); it != doc->end(); it = it.next()) {
-      QTextBlockFormat tbf = it.blockFormat();
-      tbf.setLineHeight(5, QTextBlockFormat::LineDistanceHeight);
-      textcursor.setPosition(it.position());
-      textcursor.setBlockFormat(tbf);
-      ui->textBrowser->setTextCursor(textcursor);
-    }*/
-
-    // ui->textBrowser->setHtml(qsShow);
-    ui->textBrowser->clear();
-    myedit->setPlainText(txt);
-    totallines = myedit->document()->lineCount();
     isLines = true;
     getLines();
     isLines = false;
 
-    /*QString txt1;
-    for (int i = 0; i < baseLines; i++) {
-      iPage++;
-      txt1 = txt1 + getTextEditLineText(myedit, i) + "\n";
-    }
-
-    QString qsShow =
-        "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
-        txt1 + "</p>";
-    ui->textBrowser->setHtml(qsShow);
-    ui->textBrowser->verticalScrollBar()->setSliderPosition(0);*/
-
     getPages();
+    isOpen = true;
   }
 }
 
@@ -331,17 +308,19 @@ void dlgReader::getLines() {
   if (isLines) {
     ui->hSlider->setTickInterval(1);
     ui->hSlider->setMinimum(0);
-    ui->hSlider->setMaximum(totallines / baseLines);
+    ui->hSlider->setMaximum(totallines / baseLines - 1);
     ui->hSlider->setValue(sPos);
     ui->btnLines->setText(QString::number(ui->hSlider->value() + 1) + " / " +
-                          QString::number(totallines / baseLines + 1));
+                          QString::number(totallines / baseLines));
     iPage = ui->hSlider->value() * baseLines;
     qDebug() << "iPage" << iPage << ui->hSlider->value();
+
     int count = iPage + baseLines;
     QString txt1;
     for (int i = iPage; i < count; i++) {
       iPage++;
-      txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
+      // txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
+      txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
     }
 
     QString qsShow =
@@ -371,6 +350,8 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
         position * ui->textBrowser->height());
   }
   if (isLines) {
+    int max = totallines / baseLines;
+    if (position >= max) position = max;
     sPos = position;
     getLines();
   }
@@ -384,7 +365,8 @@ void dlgReader::on_btnPageUp_clicked() {
 
   for (int i = count - baseLines; i < count; i++) {
     iPage--;
-    txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
+    // txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
+    txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
   }
 
   QString qsShow =
@@ -408,7 +390,8 @@ void dlgReader::on_btnPageNext_clicked() {
 
   for (int i = iPage; i < count; i++) {
     iPage++;
-    txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
+    // txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
+    txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
   }
 
   QString qsShow =
@@ -426,7 +409,7 @@ void dlgReader::on_btnPageNext_clicked() {
 }
 
 void dlgReader::on_btnLines_clicked() {
-  ui->hSlider->setMaximum(totallines / baseLines);
+  ui->hSlider->setMaximum(totallines / baseLines - 1);
   ui->hSlider->setTickInterval(1);
   ui->hSlider->setValue(iPage / baseLines);
   if (ui->frame->isHidden()) {
@@ -438,4 +421,25 @@ void dlgReader::on_btnLines_clicked() {
     isPages = true;
     ui->frame->hide();
   }
+}
+
+QStringList dlgReader::readText(QString textFile) {
+  QStringList list;
+  if (QFile(textFile).exists()) {
+    QFile file(textFile);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+      qDebug() << tr("Cannot read file %1:\n%2.")
+                      .arg(QDir::toNativeSeparators(textFile),
+                           file.errorString());
+
+    } else {
+      QTextStream in(&file);
+      in.setCodec("UTF-8");
+      QString text = in.readAll();
+      list = text.split("\n");
+    }
+    file.close();
+  }
+
+  return list;
 }
