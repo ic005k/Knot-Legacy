@@ -3517,7 +3517,6 @@ QString MainWindow::getYMD(QString date) {
 void MainWindow::on_btnOneNotes_clicked() {
   mydlgReader->setFixedHeight(this->height());
   mydlgReader->setFixedWidth(this->width());
-  mydlgReader->close();
   mydlgReader->setModal(true);
   mydlgReader->show();
 

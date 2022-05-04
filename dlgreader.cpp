@@ -237,8 +237,6 @@ void dlgReader::initReader() {
   fileName = Reg.value("/Reader/FileName").toString();
   openFile(fileName);
   vpos = Reg.value("/Reader/SliderPos").toULongLong();
-  this->setFixedHeight(mw_one->height());
-  this->setFixedWidth(mw_one->width());
 }
 
 void dlgReader::on_btnFontPlus_clicked() {
@@ -436,4 +434,9 @@ QStringList dlgReader::readText(QString textFile) {
   }
 
   return list;
+}
+
+void dlgReader::closeEvent(QCloseEvent* event) {
+  Q_UNUSED(event);
+  saveReader();
 }

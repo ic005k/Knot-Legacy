@@ -41,6 +41,7 @@ class dlgReader : public QDialog {
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
   void keyReleaseEvent(QKeyEvent *event) override;
+  void closeEvent(QCloseEvent *event) override;
  private slots:
   void on_btnBack_clicked();
 
