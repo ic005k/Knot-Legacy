@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>330</width>
+    <width>384</width>
     <height>334</height>
    </rect>
   </property>
@@ -161,6 +161,9 @@ background:  rgba(71, 140, 182);
          <height>25</height>
         </size>
        </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonIconOnly</enum>
+       </property>
       </widget>
      </item>
      <item>
@@ -189,6 +192,9 @@ background:  rgba(71, 140, 182);
          <width>25</width>
          <height>25</height>
         </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextOnly</enum>
        </property>
       </widget>
      </item>
@@ -219,6 +225,9 @@ background:  rgba(71, 140, 182);
          <height>25</height>
         </size>
        </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextOnly</enum>
+       </property>
       </widget>
      </item>
      <item>
@@ -248,6 +257,9 @@ background:  rgba(71, 140, 182);
          <height>25</height>
         </size>
        </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextOnly</enum>
+       </property>
       </widget>
      </item>
      <item>
@@ -273,12 +285,12 @@ background:  rgba(71, 140, 182);
        </property>
        <property name="iconSize">
         <size>
-         <width>16</width>
-         <height>16</height>
+         <width>25</width>
+         <height>12</height>
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
+        <enum>Qt::ToolButtonTextOnly</enum>
        </property>
       </widget>
      </item>
@@ -309,6 +321,9 @@ background:  rgba(71, 140, 182);
          <height>25</height>
         </size>
        </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextOnly</enum>
+       </property>
       </widget>
      </item>
      <item>
@@ -338,6 +353,9 @@ background:  rgba(71, 140, 182);
          <height>25</height>
         </size>
        </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextOnly</enum>
+       </property>
       </widget>
      </item>
      <item>
@@ -364,11 +382,11 @@ background:  rgba(71, 140, 182);
        <property name="iconSize">
         <size>
          <width>25</width>
-         <height>16</height>
+         <height>12</height>
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
+        <enum>Qt::ToolButtonTextOnly</enum>
        </property>
       </widget>
      </item>

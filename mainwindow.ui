@@ -120,6 +120,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QToolButton" name="btnOneNotes">
+           <property name="text">
+            <string>One Ontes</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QToolButton" name="btnSteps">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -173,13 +180,6 @@
            </property>
            <property name="toolButtonStyle">
             <enum>Qt::ToolButtonIconOnly</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="btnOneNotes">
-           <property name="text">
-            <string>One Ontes</string>
            </property>
           </widget>
          </item>

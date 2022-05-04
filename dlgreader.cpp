@@ -26,10 +26,14 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->textBrowser->verticalScrollBar()->setVisible(false);
   ui->textBrowser->setStyleSheet(
       "background-image: url(:/src/b.png);border-width:0;border-style:outset;");
+  this->setStyleSheet(
+      "background-image: url(:/src/b.png);border-width:0;border-style:outset;");
 
   connect(ui->textBrowser->verticalScrollBar(), &QScrollBar::valueChanged, this,
           &dlgReader::getPages);
 
+  ui->lblTitle->hide();
+  ui->btnBack->hide();
   ui->frame->hide();
   ui->progressBar->hide();
   ui->progressBar->setMaximumHeight(4);
@@ -112,8 +116,8 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       qDebug() << "Release:" << relea_x << relea_y;
     }
 
+    int abc = 500;
     //判断滑动方向（右滑）
-
     if ((relea_x - press_x) > 30 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
@@ -123,15 +127,15 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       QPropertyAnimation* animation1 =
           new QPropertyAnimation(ui->lblTitle, "geometry");
       // new QPropertyAnimation(ui->textBrowser, "geometry");
-      animation1->setDuration(500);  //设置动画时间为0.5秒
+      animation1->setDuration(abc);
       animation1->setStartValue(QRect(x, y, w, h));
-      animation1->setEndValue(QRect(w * 2, y, w, h));
+      animation1->setEndValue(QRect(w * 1, y, w, h));
 
       on_btnPageUp_clicked();
 
       QPropertyAnimation* animation2 =
           new QPropertyAnimation(ui->textBrowser, "geometry");
-      animation2->setDuration(500);
+      animation2->setDuration(abc);
       animation2->setStartValue(QRect(-w * 2, y, w, h));
       animation2->setEndValue(QRect(x, y, w, h));
 
@@ -139,11 +143,6 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       group->addAnimation(animation1);
       group->addAnimation(animation2);
       group->start();
-      QElapsedTimer t;
-      t.start();
-      while (t.elapsed() < 600) {
-        QCoreApplication::processEvents();
-      }
     }
 
     //判断滑动方向（左滑）
@@ -156,7 +155,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       QPropertyAnimation* animation1 =
           new QPropertyAnimation(ui->lblTitle, "geometry");
       // new QPropertyAnimation(ui->textBrowser, "geometry");
-      animation1->setDuration(500);
+      animation1->setDuration(abc);
       animation1->setStartValue(QRect(x, y, w, h));
       animation1->setEndValue(QRect(-w, y, w, h));
 
@@ -164,7 +163,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
 
       QPropertyAnimation* animation2 =
           new QPropertyAnimation(ui->textBrowser, "geometry");
-      animation2->setDuration(500);
+      animation2->setDuration(abc);
       animation2->setStartValue(QRect(w * 2, y, w, h));
       animation2->setEndValue(QRect(x, y, w, h));
 
@@ -172,11 +171,6 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       group->addAnimation(animation1);
       group->addAnimation(animation2);
       group->start();
-      QElapsedTimer t;
-      t.start();
-      while (t.elapsed() < 600) {
-        QCoreApplication::processEvents();
-      }
     }
   }
 
@@ -208,9 +202,6 @@ void dlgReader::openFile(QString fileName) {
     readTextList.clear();
     readTextList = readText(fileName);
     totallines = readTextList.count();
-    QFileInfo fi(fileName);
-    ui->lblTitle->setText(fi.baseName());
-    ui->lblTitle->hide();
 
     isLines = true;
     getLines();
@@ -310,7 +301,8 @@ void dlgReader::getLines() {
     ui->hSlider->setMinimum(0);
     ui->hSlider->setMaximum(totallines / baseLines - 1);
     ui->hSlider->setValue(sPos);
-    ui->btnLines->setText(QString::number(ui->hSlider->value() + 1) + " / " +
+    ui->btnLines->setText(tr("Pages") + "\n" +
+                          QString::number(ui->hSlider->value() + 1) + " / " +
                           QString::number(totallines / baseLines));
     iPage = ui->hSlider->value() * baseLines;
     qDebug() << "iPage" << iPage << ui->hSlider->value();
@@ -376,7 +368,8 @@ void dlgReader::on_btnPageUp_clicked() {
   ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
   ui->hSlider->setMaximum(totallines / baseLines);
-  ui->btnLines->setText(QString::number(iPage / baseLines) + " / " +
+  ui->btnLines->setText(tr("Pages") + "\n" +
+                        QString::number(iPage / baseLines) + " / " +
                         QString::number(totallines / baseLines));
 
   getPages();
@@ -402,7 +395,8 @@ void dlgReader::on_btnPageNext_clicked() {
   ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
   ui->hSlider->setMaximum(totallines / baseLines);
-  ui->btnLines->setText(QString::number(iPage / baseLines) + " / " +
+  ui->btnLines->setText(tr("Pages") + "\n" +
+                        QString::number(iPage / baseLines) + " / " +
                         QString::number(totallines / baseLines));
 
   getPages();
