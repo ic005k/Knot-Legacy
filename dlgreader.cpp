@@ -17,7 +17,8 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   this->setContentsMargins(0, 0, 0, 0);
   this->layout()->setContentsMargins(0, 0, 0, 0);
   this->layout()->setMargin(0);
-  myedit = new QPlainTextEdit;
+  SmoothScrollBar* vScrollBar = new SmoothScrollBar();
+  ui->textBrowser->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
   ui->textBrowser->verticalScrollBar()->setStyleSheet("width:0px;");
   // ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
@@ -107,13 +108,13 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       y = 0;
       w = ui->textBrowser->width();
       h = ui->textBrowser->height();
-      qDebug() << "Press:" << press_x << press_y;
+      // qDebug() << "Press:" << press_x << press_y;
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
       relea_x = event->globalX();
       relea_y = event->globalY();
-      qDebug() << "Release:" << relea_x << relea_y;
+      // qDebug() << "Release:" << relea_x << relea_y;
     }
 
     int abc = 500;
@@ -179,12 +180,10 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
 
 void dlgReader::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
-void dlgReader::on_btnBack_clicked() {
-  saveReader();
-  close();
-}
+void dlgReader::on_btnBack_clicked() { close(); }
 
 void dlgReader::on_btnOpen_clicked() {
+  if (!isHidden()) saveReader();
   fileName =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
   openFile(fileName);
@@ -209,6 +208,7 @@ void dlgReader::openFile(QString fileName) {
 
     getPages();
     isOpen = true;
+    if (!isHidden()) goPostion();
   }
 }
 
@@ -222,10 +222,10 @@ QString dlgReader::getTextEditLineText(QPlainTextEdit* txtEdit, int i) {
 void dlgReader::saveReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   vpos = ui->textBrowser->verticalScrollBar()->sliderPosition();
-  Reg.setValue("/Reader/SliderPos", vpos);
   Reg.setValue("/Reader/FileName", fileName);
+  Reg.setValue("/Reader/vpos" + fileName, vpos);
+  Reg.setValue("/Reader/iPage" + fileName, iPage);
   Reg.setValue("/Reader/FontSize", ui->textBrowser->font().pointSize());
-  Reg.setValue("/Reader/iPage", iPage);
 }
 
 void dlgReader::initReader() {
@@ -236,7 +236,6 @@ void dlgReader::initReader() {
   ui->textBrowser->setFont(font);
   fileName = Reg.value("/Reader/FileName").toString();
   openFile(fileName);
-  vpos = Reg.value("/Reader/SliderPos").toULongLong();
 }
 
 void dlgReader::on_btnFontPlus_clicked() {
@@ -439,4 +438,20 @@ QStringList dlgReader::readText(QString textFile) {
 void dlgReader::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   saveReader();
+}
+
+void dlgReader::paintEvent(QPaintEvent* event) { Q_UNUSED(event); }
+
+void dlgReader::goPostion() {
+  if (isOpen) {
+    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    vpos = Reg.value("/Reader/vpos" + fileName).toULongLong();
+    iPage = Reg.value("/Reader/iPage" + fileName).toULongLong();
+    iPage = iPage - baseLines;
+    if (iPage >= 0) {
+      on_btnPageNext_clicked();
+      ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
+    } else
+      iPage = 0;
+  }
 }

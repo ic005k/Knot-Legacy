@@ -6,6 +6,8 @@
 #include <QPlainTextEdit>
 #include <QTextBlock>
 #include <QTextBrowser>
+
+#include "smoothscrollbar.h"
 namespace Ui {
 class dlgReader;
 }
@@ -22,7 +24,6 @@ class dlgReader : public QDialog {
   int baseLines = 15;
   QStringList readTextList;
   int totallines;
-  QPlainTextEdit *myedit;
   void saveReader();
   void initReader();
   QString fileName;
@@ -34,7 +35,8 @@ class dlgReader : public QDialog {
   QString getTextEditLineText(QPlainTextEdit *txtEdit, int i);
   void getLines();
   QStringList readText(QString textFile);
- public slots:
+  void goPostion();
+public slots:
   void getPages();
   void on_btnPageNext_clicked();
 
@@ -42,6 +44,7 @@ class dlgReader : public QDialog {
   bool eventFilter(QObject *obj, QEvent *evn) override;
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
+  void paintEvent(QPaintEvent *event) override;
  private slots:
   void on_btnBack_clicked();
 
