@@ -117,12 +117,13 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       // qDebug() << "Release:" << relea_x << relea_y;
     }
 
-    int abc = 500;
+    int abc = 300;
     //判断滑动方向（右滑）
     if ((relea_x - press_x) > 30 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
       if (iPage - baseLines <= 0) return QWidget::eventFilter(obj, evn);
+
       ui->lblTitle->setPixmap(ui->textBrowser->grab());
       //捕获当前界面并绘制到label上
       QPropertyAnimation* animation1 =
@@ -133,14 +134,14 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       animation1->setEndValue(QRect(w * 1, y, w, h));
 
       on_btnPageUp_clicked();
-
       QPropertyAnimation* animation2 =
           new QPropertyAnimation(ui->textBrowser, "geometry");
       animation2->setDuration(abc);
-      animation2->setStartValue(QRect(-w * 2, y, w, h));
+      animation2->setStartValue(QRect(-w * 1, y, w, h));
       animation2->setEndValue(QRect(x, y, w, h));
 
       QParallelAnimationGroup* group = new QParallelAnimationGroup;  //动画容器
+
       group->addAnimation(animation1);
       group->addAnimation(animation2);
       group->start();
@@ -165,7 +166,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       QPropertyAnimation* animation2 =
           new QPropertyAnimation(ui->textBrowser, "geometry");
       animation2->setDuration(abc);
-      animation2->setStartValue(QRect(w * 2, y, w, h));
+      animation2->setStartValue(QRect(w * 1, y, w, h));
       animation2->setEndValue(QRect(x, y, w, h));
 
       QParallelAnimationGroup* group = new QParallelAnimationGroup;

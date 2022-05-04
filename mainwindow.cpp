@@ -1319,7 +1319,6 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   }
 
   double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
-  qDebug() << "In table Max:" << maxValue;
   double max;
   if (isrbFreq) {
     max = 20;
@@ -1356,9 +1355,6 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   for (int i = 0; i < 31; i++) setY->append(dList.at(i));
   categories.clear();
   for (int i = 0; i < 31; i++) categories.append(QString::number(i + 1));
-  qDebug() << setY;
-  qDebug() << dList;
-  qDebug() << categories;
   barSeries->append(setY);
   axisX->append(categories);
   axisY->setRange(0, yMaxMonth);
@@ -1592,7 +1588,7 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
       }
     }
   }
-  qDebug() << keysNew;
+
   for (int i = 0; i < childCount; i++) {
     QTreeWidgetItem* childItem = item->parent()->child(i);
     QString str = keysNew.at(i);
@@ -1761,17 +1757,16 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       y = 0;
       w = tw->width();
       h = tw->height();
-      qDebug() << "Press:" << press_x << press_y;
+      // qDebug() << "Press:" << press_x << press_y;
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
       relea_x = event->globalX();
       relea_y = event->globalY();
-      qDebug() << "Release:" << relea_x << relea_y;
+      // qDebug() << "Release:" << relea_x << relea_y;
     }
 
     //判断滑动方向（右滑）
-
     if ((relea_x - press_x) > 20 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
@@ -1869,11 +1864,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
           return true;
         }
 
-        // QAndroidJniObject::callStaticMethod<int>("com/mmJavaActivity",
-        // "mini",
-        //                                          "()I");
-
-        qDebug() << "back";
         return true;
       }
     }
@@ -3484,7 +3474,7 @@ static void JavaNotify_2() {
 static void JavaNotify_3() {
   mw_one->mydlgTodo->on_Alarm();
 
-  qDebug() << "C++ JavaNotify_3";
+  // qDebug() << "C++ JavaNotify_3";
 }
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_1", "()V", (void*)JavaNotify_1},

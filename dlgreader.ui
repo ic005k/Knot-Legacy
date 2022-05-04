@@ -194,7 +194,7 @@ background:  rgba(71, 140, 182);
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+        <enum>Qt::ToolButtonIconOnly</enum>
        </property>
       </widget>
      </item>
@@ -226,7 +226,7 @@ background:  rgba(71, 140, 182);
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+        <enum>Qt::ToolButtonIconOnly</enum>
        </property>
       </widget>
      </item>
@@ -258,7 +258,7 @@ background:  rgba(71, 140, 182);
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+        <enum>Qt::ToolButtonIconOnly</enum>
        </property>
       </widget>
      </item>
@@ -322,7 +322,7 @@ background:  rgba(71, 140, 182);
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+        <enum>Qt::ToolButtonIconOnly</enum>
        </property>
       </widget>
      </item>
@@ -354,7 +354,7 @@ background:  rgba(71, 140, 182);
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+        <enum>Qt::ToolButtonIconOnly</enum>
        </property>
       </widget>
      </item>
