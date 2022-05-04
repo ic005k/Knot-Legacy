@@ -177,6 +177,13 @@ void MainWindow::SaveFile(QString SaveType) {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+
+  QDesktopWidget* desktop = QApplication::desktop();
+  QRect screen = desktop->screenGeometry();
+  int screenWidth = screen.width();
+  int screenHeight = screen.height();
+  this->setGeometry(0, 0, screenWidth, screenHeight);
+
   qRegisterMetaType<QVector<int>>("QVector<int>");
   loading = true;
   init_UIWidget();
