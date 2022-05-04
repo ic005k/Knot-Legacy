@@ -221,6 +221,7 @@ QString dlgReader::getTextEditLineText(QPlainTextEdit* txtEdit, int i) {
 
 void dlgReader::saveReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   vpos = ui->textBrowser->verticalScrollBar()->sliderPosition();
   Reg.setValue("/Reader/FileName", fileName);
   Reg.setValue("/Reader/vpos" + fileName, vpos);
@@ -230,6 +231,7 @@ void dlgReader::saveReader() {
 
 void dlgReader::initReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   QFont font;
   font.setPointSize(Reg.value("/Reader/FontSize", fontSize).toInt());
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
@@ -445,6 +447,7 @@ void dlgReader::paintEvent(QPaintEvent* event) { Q_UNUSED(event); }
 void dlgReader::goPostion() {
   if (isOpen) {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    Reg.setIniCodec("utf-8");
     vpos = Reg.value("/Reader/vpos" + fileName).toULongLong();
     iPage = Reg.value("/Reader/iPage" + fileName).toULongLong();
     iPage = iPage - baseLines;

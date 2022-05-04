@@ -232,6 +232,7 @@ void MainWindow::initTodayInitSteps() {
   tc = a;
 
   QSettings Reg(iniDir + "initsteps.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   QString str = QDate::currentDate().toString("ddd MM dd yyyy");
 
   if (!Reg.allKeys().contains(str)) {
@@ -413,6 +414,7 @@ void MainWindow::sendMsg(int CurTableCount) {
 void MainWindow::init_Options() {
   // Font Size
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   QFont font(this->font());
   QFontInfo fInfo(font);
   fontSize = fInfo.pointSize();
@@ -480,6 +482,7 @@ void MainWindow::init_Options() {
                             << "12";
 
   QSettings Reg2(iniDir + "ymd.ini", QSettings::IniFormat);
+  Reg2.setIniCodec("utf-8");
   btnYText = Reg2.value("/YMD/btnYText", 2022).toString();
   ui->btnYear->setText(btnYText);
   btnMText = Reg2.value("/YMD/btnMText", tr("Month")).toString();
@@ -627,12 +630,14 @@ void MainWindow::init_TabData() {
   else
     ini_file = iniDir + "tab.ini";
   QSettings RegTab(ini_file, QSettings::IniFormat);
+  RegTab.setIniCodec("utf-8");
 
   if (isImport)
     ini_file1 = iniFile;
   else
     ini_file1 = iniDir + "notes.ini";
   QSettings RegNotes(ini_file1, QSettings::IniFormat);
+  RegNotes.setIniCodec("utf-8");
   int TabCount = RegTab.value("TabCount", 0).toInt();
 
   for (int i = 0; i < TabCount; i++) {
@@ -945,6 +950,7 @@ QObjectList MainWindow::getAllUIControls(QObject* parent) {
 void MainWindow::saveTab() {
   // Tab
   QSettings Reg(iniDir + "tab.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   int TabCount = tabData->tabBar()->count();
   Reg.setValue("TabCount", TabCount);
   int CurrentIndex = tabData->currentIndex();
@@ -983,6 +989,7 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   QString name = "tab" + QString::number(tabIndex + 1);
   QString ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   int count = tw->topLevelItemCount();
   tw->setObjectName(name);
   Reg.setValue("/" + name + "/TopCount", count);
@@ -1122,6 +1129,7 @@ void MainWindow::readData(QTreeWidget* tw) {
   else
     ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   int rowCount = Reg.value("/" + name + "/TopCount").toInt();
   for (int i = 0; i < rowCount; i++) {
     int childCount =
@@ -1662,6 +1670,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   tw->setFocus();
   if (!loading) {
     QSettings Reg(iniDir + "tab.ini", QSettings::IniFormat);
+    Reg.setIniCodec("utf-8");
     Reg.setValue("CurrentIndex", index);
   }
 
@@ -1674,6 +1683,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 void MainWindow::saveNotes(int tabIndex) {
   if (loading) return;
   QSettings Reg(iniDir + "notes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   QTreeWidget* tw = (QTreeWidget*)tabData->widget(tabIndex);
   QString name = tw->objectName();
   Reg.setValue("/" + name + "/Note", tabData->tabToolTip(tabIndex));
@@ -1893,11 +1903,13 @@ void MainWindow::on_actionExport_Data_triggered() {
   bakData(fileName, true);
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   Reg.setValue("/MainNotes/FileName", fileName);
 }
 
 void MainWindow::on_actionOneClickBakData() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   QString fileName = Reg.value("/MainNotes/FileName").toString();
   if (QFile(fileName).exists()) {
     bakData(fileName, true);
@@ -1929,6 +1941,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
     edit->append(loadText(iniDir + "notes.ini"));
     edit->append(loadText(iniDir + "mainnotes.ini"));
     edit->append(loadText(iniDir + "steps.ini"));
+    edit->append(loadText(iniDir + "reader.ini"));
 
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
       QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
@@ -1996,7 +2009,9 @@ void MainWindow::on_actionImport_Data_triggered() {
     startSave("alltab");
     QFile::remove(iniDir + "mainnotes.ini");
     QSettings RegTotalIni(iniFile, QSettings::IniFormat);
+    RegTotalIni.setIniCodec("utf-8");
     QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+    Reg.setIniCodec("utf-8");
     Reg.setValue("/MainNotes/UserKey",
                  RegTotalIni.value("/MainNotes/UserKey").toString());
     Reg.setValue("/MainNotes/Text",
@@ -2007,6 +2022,22 @@ void MainWindow::on_actionImport_Data_triggered() {
                  RegTotalIni.value("/MainNotes/SlidePos").toLongLong());
     Reg.setValue("/MainNotes/FileName",
                  RegTotalIni.value("/MainNotes/FileName").toString());
+
+    // TextReader
+    QString strReader = iniDir + "reader.ini";
+    QFile::remove(strReader);
+    QSettings Reg1(strReader, QSettings::IniFormat);
+    Reg1.setIniCodec("utf-8");
+    RegTotalIni.beginGroup("Reader");
+    QStringList list = RegTotalIni.allKeys();
+    // qDebug() << "Reader--allKeys : " << list << endl;
+    foreach (QString key, list) {
+      QString value = RegTotalIni.value(key).toString();
+      // qDebug() << key << " = " << value << endl;
+      Reg1.setValue("/Reader/" + key, value);
+    }
+    RegTotalIni.endGroup();
+    mydlgReader->initReader();
   }
 }
 
@@ -2049,6 +2080,7 @@ void MainWindow::on_actionView_App_Data_triggered() {
 
   mydlgNotes->ui->textBrowser->clear();
   QSettings Reg(iniFile, QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   int keys = Reg.allKeys().count();
 
   mydlgNotes->ui->textBrowser->append("[" + appName + "]");
@@ -3099,6 +3131,7 @@ void MainWindow::on_actionMemos_triggered() {
   mydlgMainNotes->ui->frameSetKey->hide();
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   QString file = iniDir + "mainnotes.txt";
 
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
