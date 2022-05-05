@@ -182,7 +182,7 @@ MainWindow::MainWindow(QWidget* parent)
   QRect screen = desktop->screenGeometry();
   int screenWidth = screen.width();
   int screenHeight = screen.height();
-  this->setGeometry(0, 0, screenWidth, screenHeight);
+  // this->setGeometry(0, 0, screenWidth, screenHeight);
 
   qRegisterMetaType<QVector<int>>("QVector<int>");
   loading = true;

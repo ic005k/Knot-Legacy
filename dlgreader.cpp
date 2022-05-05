@@ -17,14 +17,14 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   this->setContentsMargins(0, 0, 0, 0);
   this->layout()->setContentsMargins(0, 0, 0, 0);
   this->layout()->setMargin(0);
-  SmoothScrollBar* vScrollBar = new SmoothScrollBar();
-  ui->textBrowser->setVerticalScrollBar(vScrollBar);
+
+  // SmoothScrollBar* vScrollBar = new SmoothScrollBar();
+  // ui->textBrowser->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
-  ui->textBrowser->verticalScrollBar()->setStyleSheet("width:0px;");
-  // ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
   mw_one->setSCrollPro(ui->textBrowser);
-  ui->textBrowser->verticalScrollBar()->setVisible(false);
+  ui->textBrowser->verticalScrollBar()->setStyleSheet("width:0px;");
+  ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
+
   ui->textBrowser->setStyleSheet(
       "background-image: url(:/src/b.png);border-width:0;border-style:outset;");
   this->setStyleSheet(
@@ -134,6 +134,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       animation1->setEndValue(QRect(w * 1, y, w, h));
 
       on_btnPageUp_clicked();
+
       QPropertyAnimation* animation2 =
           new QPropertyAnimation(ui->textBrowser, "geometry");
       animation2->setDuration(abc);
@@ -141,7 +142,6 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       animation2->setEndValue(QRect(x, y, w, h));
 
       QParallelAnimationGroup* group = new QParallelAnimationGroup;  //动画容器
-
       group->addAnimation(animation1);
       group->addAnimation(animation2);
       group->start();
@@ -273,12 +273,7 @@ void dlgReader::drawB() {
   p->drawImage(re, img);
 }
 
-void dlgReader::on_textBrowser_textChanged() {
-  // QTextBlockFormat bf = ui->textBrowser->textCursor().blockFormat();
-  // bf.setLineHeight(20, QTextBlockFormat::LineDistanceHeight);
-  // ui->textBrowser->textCursor().setBlockFormat(bf);
-  //设置文字行间距
-}
+void dlgReader::on_textBrowser_textChanged() {}
 
 void dlgReader::getPages() {
   if (isPages) {

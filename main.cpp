@@ -20,6 +20,14 @@ int main(int argc, char *argv[]) {
   qDebug() << "OS=Linux Android";
   isAndroid = true;
   isIOS = false;
+#endif
+
+#ifdef Q_OS_UNIX
+  isAndroid = false;
+  isIOS = true;
+  qDebug() << "OS=UNIX IOS";
+#endif
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
     qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
@@ -27,13 +35,6 @@ int main(int argc, char *argv[]) {
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
   }
-#endif
-#endif
-
-#ifdef Q_OS_UNIX
-  isAndroid = false;
-  isIOS = true;
-  qDebug() << "OS=UNIX IOS";
 #endif
 
   QApplication a(argc, argv);

@@ -7,23 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>384</width>
-    <height>334</height>
+    <height>372</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="lblTitle">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QTextBrowser" name="textBrowser"/>
-   </item>
    <item row="2" column="0">
     <widget class="QProgressBar" name="progressBar">
      <property name="maximumSize">
@@ -40,96 +30,14 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+   <item row="1" column="0">
+    <widget class="QTextBrowser" name="textBrowser"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lblTitle">
+     <property name="text">
+      <string>Title</string>
      </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QSlider" name="hSlider">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>22</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">/*QSlider::groove:horizontal
- {
- 	background-color: rgba(50, 54, 63);
-	height: 25px;
- 	border-radius: 5px;
-	left: 6px; right: 6px;
-}*/
-
-/*QSlider::groove:horizontal
- {
- 	
-	height: 25px;
- 	
-	
-}
-
-QSlider::handle:horizontal 
-{
-
-width:30;
-
-margin: -3px -4px -3px -4px;
-}
-QSlider::handle:horizontal:hover
-{
-
-width:24;
-
-margin: -3px -4px -3px -4px;
-}
- 
- 
-/*QSlider::handle:horizontal 
-{
-border-image:url(&quot;:/src/sel.png&quot;);
-width:24;
-
-margin: -3px -4px -3px -4px;
-}
-QSlider::handle:horizontal:hover
-{
-border-image:url(&quot;:/src/sel.png&quot;);
-width:24;
-
-margin: -3px -4px -3px -4px;
-}*/
- 
-
-/*QSlider::sub-page:horizontal{
-background:  rgba(71, 140, 182);
-}*/
-
-</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
    <item row="4" column="0">
@@ -391,6 +299,98 @@ background:  rgba(71, 140, 182);
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="3" column="0">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QSlider" name="hSlider">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">/*QSlider::groove:horizontal
+ {
+ 	background-color: rgba(50, 54, 63);
+	height: 25px;
+ 	border-radius: 5px;
+	left: 6px; right: 6px;
+}*/
+
+/*QSlider::groove:horizontal
+ {
+ 	
+	height: 25px;
+ 	
+	
+}
+
+QSlider::handle:horizontal 
+{
+
+width:30;
+
+margin: -3px -4px -3px -4px;
+}
+QSlider::handle:horizontal:hover
+{
+
+width:24;
+
+margin: -3px -4px -3px -4px;
+}
+ 
+ 
+/*QSlider::handle:horizontal 
+{
+border-image:url(&quot;:/src/sel.png&quot;);
+width:24;
+
+margin: -3px -4px -3px -4px;
+}
+QSlider::handle:horizontal:hover
+{
+border-image:url(&quot;:/src/sel.png&quot;);
+width:24;
+
+margin: -3px -4px -3px -4px;
+}*/
+ 
+
+/*QSlider::sub-page:horizontal{
+background:  rgba(71, 140, 182);
+}*/
+
+</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
