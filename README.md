@@ -1,6 +1,8 @@
 # Knot - A simple tool for counting, bookkeeping, keeping track of steps, etc.
 
 * Android version >= 6.0
+* Bookkeeping
+* Counters
 * To-do list
 * Pedometer
 * Statistical charts
@@ -9,7 +11,6 @@
 * Memo
 * Data export and import
 
-...
 
 ### Credits
 
