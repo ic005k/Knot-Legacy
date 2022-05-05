@@ -5,6 +5,7 @@
 * Pedometer.
 * Statistical charts.
 * Statistical reports.
+* Browse txt file.
 
 ### Credits
 
