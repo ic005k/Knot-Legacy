@@ -4,9 +4,12 @@
 #include <QDialog>
 #include <QEvent>
 #include <QPlainTextEdit>
+#include <QQmlEngine>
+#include <QQuickView>
 #include <QTextBlock>
 #include <QTextBrowser>
 
+#include "file.h"
 #include "smoothscrollbar.h"
 namespace Ui {
 class dlgReader;

@@ -6,12 +6,17 @@
 #include "ui_dlgreader.h"
 
 extern MainWindow* mw_one;
-extern QString iniFile, iniDir;
+extern QString iniFile, iniDir, strPage;
 extern bool isImport;
 extern int fontSize;
 
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
+  ui->textBrowser->hide();
+
+  qmlRegisterType<File>("MyModel", 1, 0, "File");
+  ui->quickWidget->installEventFilter(this);
+
   this->installEventFilter(this);
   ui->textBrowser->installEventFilter(this);
   this->setContentsMargins(0, 0, 0, 0);
@@ -95,7 +100,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
   }
 
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
-  if (obj == ui->textBrowser) {
+  if (obj == ui->quickWidget) {
     static int press_x;
     static int press_y;
     static int relea_x;
@@ -106,8 +111,8 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       press_y = event->globalY();
       x = 0;
       y = 0;
-      w = ui->textBrowser->width();
-      h = ui->textBrowser->height();
+      w = ui->quickWidget->width();
+      h = ui->quickWidget->height();
       // qDebug() << "Press:" << press_x << press_y;
     }
 
@@ -136,7 +141,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       on_btnPageUp_clicked();
 
       QPropertyAnimation* animation2 =
-          new QPropertyAnimation(ui->textBrowser, "geometry");
+          new QPropertyAnimation(ui->quickWidget, "geometry");
       animation2->setDuration(abc);
       animation2->setStartValue(QRect(-w * 1, y, w, h));
       animation2->setEndValue(QRect(x, y, w, h));
@@ -164,7 +169,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       on_btnPageNext_clicked();
 
       QPropertyAnimation* animation2 =
-          new QPropertyAnimation(ui->textBrowser, "geometry");
+          new QPropertyAnimation(ui->quickWidget, "geometry");
       animation2->setDuration(abc);
       animation2->setStartValue(QRect(w * 1, y, w, h));
       animation2->setEndValue(QRect(x, y, w, h));
@@ -315,6 +320,9 @@ void dlgReader::getLines() {
         txt1 + "</p>";
     ui->textBrowser->setHtml(qsShow);
     ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
+
+    strPage = txt1;
+    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
   }
 }
 
@@ -368,6 +376,9 @@ void dlgReader::on_btnPageUp_clicked() {
                         QString::number(totallines / baseLines));
 
   getPages();
+
+  strPage = txt1;
+  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 }
 
 void dlgReader::on_btnPageNext_clicked() {
@@ -385,9 +396,9 @@ void dlgReader::on_btnPageNext_clicked() {
   QString qsShow =
       "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
       txt1 + "</p>";
-  ui->textBrowser->setHtml(qsShow);
+  // ui->textBrowser->setHtml(qsShow);
 
-  ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
+  // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
   ui->hSlider->setMaximum(totallines / baseLines);
   ui->btnLines->setText(tr("Pages") + "\n" +
@@ -395,6 +406,9 @@ void dlgReader::on_btnPageNext_clicked() {
                         QString::number(totallines / baseLines));
 
   getPages();
+
+  strPage = txt1;
+  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 }
 
 void dlgReader::on_btnLines_clicked() {
@@ -449,7 +463,7 @@ void dlgReader::goPostion() {
     iPage = iPage - baseLines;
     if (iPage >= 0) {
       on_btnPageNext_clicked();
-      ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
+      // ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
     } else
       iPage = 0;
   }

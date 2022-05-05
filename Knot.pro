@@ -1,5 +1,6 @@
 QT       += core gui
 QT       += charts sensors
+QT       += qml quick quickwidgets
 
 #QT += qml quick
 #QT += quickwidgets
@@ -44,6 +45,7 @@ SOURCES += \
     dlgsettime.cpp \
     dlgsteps.cpp \
     dlgtodo.cpp \
+    file.cpp \
     main.cpp \
     mainwindow.cpp \
     smoothscrollbar.cpp \
@@ -61,6 +63,7 @@ HEADERS += \
     dlgsettime.h \
     dlgsteps.h \
     dlgtodo.h \
+    file.h \
     mainwindow.h \
     smoothscrollbar.h \
     specialaccelerometerpedometer.h
@@ -84,6 +87,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    qrc.qrc \
     src.qrc
 
 CONFIG(debug,debug|release) {
