@@ -1892,7 +1892,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       // qDebug() << "Release:" << relea_x << relea_y;
     }
 
-    int abc = 300;
+    int abc = 200;
     //判断滑动方向（右滑）
     if ((relea_x - press_x) > 30 &&
         event->type() == QEvent::MouseButtonRelease &&
@@ -1901,10 +1901,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         return QWidget::eventFilter(watch, evn);
 
       ui->lblTitle->setPixmap(ui->quickWidget->grab());
-      //捕获当前界面并绘制到label上
       QPropertyAnimation* animation1 =
           new QPropertyAnimation(ui->lblTitle, "geometry");
-      // new QPropertyAnimation(ui->textBrowser, "geometry");
+
       animation1->setDuration(abc);
       animation1->setStartValue(QRect(x, y, w, h));
       animation1->setEndValue(QRect(w * 1, y, w, h));
@@ -1933,7 +1932,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
       QPropertyAnimation* animation1 =
           new QPropertyAnimation(ui->lblTitle, "geometry");
-      // new QPropertyAnimation(ui->textBrowser, "geometry");
+
       animation1->setDuration(abc);
       animation1->setStartValue(QRect(x, y, w, h));
       animation1->setEndValue(QRect(-w, y, w, h));
@@ -3648,6 +3647,7 @@ void MainWindow::setSCrollPro(QObject* obj) {
 void MainWindow::on_btnBack_clicked() {
   ui->frameQML->hide();
   ui->frameMain->show();
+  mydlgReader->saveReader();
 }
 
 void MainWindow::on_btnOpen_clicked() { mydlgReader->on_btnOpen_clicked(); }
