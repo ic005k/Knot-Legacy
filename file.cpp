@@ -34,11 +34,13 @@ void File::setText(const QString &text) {
 
 void File::readFile() {
   QFile file(m_source);
-  if (!file.open(QIODevice::ReadOnly)) {
-    m_text = "";
-    qDebug() << "Error:" << m_source << "open failed!";
-  } else
-    m_text = file.readAll();
+  if (file.exists()) {
+    if (!file.open(QIODevice::ReadOnly)) {
+      m_text = "";
+      qDebug() << "Error:" << m_source << "open failed!";
+    } else
+      m_text = file.readAll();
+  }
   m_text = strPage;
 
   emit textChanged();

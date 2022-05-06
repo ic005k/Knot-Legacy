@@ -24,6 +24,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  qreal textHeight;
   bool isOpen = false;
   int baseLines = 15;
   QStringList readTextList;

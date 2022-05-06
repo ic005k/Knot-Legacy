@@ -3632,8 +3632,15 @@ void MainWindow::on_btnOneNotes_clicked() {
     isOne = true;
   }
   qDebug() << "isOne" << isOne;
-  ui->frameQML->show();
+
   ui->frameMain->hide();
+
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+  textPos = Reg.value("/Reader/vpos" + mydlgReader->fileName).toReal();
+  ui->quickWidget->rootContext()->setContextProperty("textPos", textPos);
+
+  ui->frameQML->show();
 }
 
 void MainWindow::setSCrollPro(QObject* obj) {

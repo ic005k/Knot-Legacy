@@ -233,24 +233,29 @@ void dlgReader::saveReader() {
   Reg.setIniCodec("utf-8");
   vpos = ui->textBrowser->verticalScrollBar()->sliderPosition();
   Reg.setValue("/Reader/FileName", fileName);
+  mw_one->textPos = mw_one->ui->quickWidget->rootContext()
+                        ->contextProperty("textPos")
+                        .toReal();
   Reg.setValue("/Reader/vpos" + fileName, mw_one->textPos);
   Reg.setValue("/Reader/iPage" + fileName, iPage);
   Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
 
-  qDebug() << "textPos"
-           << mw_one->ui->quickWidget->rootContext()->contextProperty(
-                  "textPos");
+  textHeight = mw_one->ui->quickWidget->rootContext()
+                   ->contextProperty("textHeight")
+                   .toReal();
+
+  qDebug() << "textPos" << mw_one->textPos << textHeight;
   ;
 }
 
 void dlgReader::initReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  mw_one->textPos = Reg.value("/Reader/vpos" + fileName).toInt();
+  mw_one->textPos = Reg.value("/Reader/vpos" + fileName).toReal();
   mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos",
                                                              mw_one->textPos);
   QFont font;
-  int fsize = Reg.value("/Reader/FontSize", fontSize).toInt();
+  int fsize = Reg.value("/Reader/FontSize", 18).toInt();
   mw_one->textFontSize = fsize;
   int FontSize = fsize;
   mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize",

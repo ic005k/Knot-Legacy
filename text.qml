@@ -5,12 +5,11 @@ import QtQuick.Layouts 1.12
 import MyModel 1.0
 //import qmlText 1.0
 
-
-
 Item {
     visible: true
     width: 400
     height: 800
+
 
     File {
         id: file
@@ -29,11 +28,9 @@ Item {
             flickableDirection: Flickable.VerticalFlick
             anchors.fill: parent
 
-
-
             TextArea.flickable: TextArea {
                 id: textArea
-                anchors.fill: parent
+                //anchors.fill: parent //QML TextArea: Possible anchor loop detected on fill.
                 font.pixelSize: FontSize
                 textFormat: Qt.PlainText
 
@@ -41,11 +38,9 @@ Item {
                 //onTextChanged: file.text = text
                 Component.onCompleted: text = file.text
 
-               // background: "qrc:/b.png"
                 wrapMode: TextArea.Wrap
                 readOnly: true
                 color: "#000000"
-                background: rocket
 
 
                 /*text: "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
@@ -59,16 +54,15 @@ Item {
                 //policy: ScrollBar.AlwaysOn
                 position: textPos
 
+
             }
 
             property int rowHeight: textArea.font.pointSize+20
             property int marginsTop: 10
             property int marginsLeft: 4
             property int lineCountWidth: 40
+            property real textHeight: textArea.contentHeight
+
         }
-
-
-
-
 
 }
