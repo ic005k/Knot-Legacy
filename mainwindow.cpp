@@ -27,7 +27,7 @@ bool loading, isReadEnd, isReadTWEnd;
 bool isSaveEnd = true;
 bool isBreak = false;
 extern bool isAndroid, isIOS, zh_cn;
-extern QString btnYearText, btnMonthText;
+extern QString btnYearText, btnMonthText, strPage;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 void RegJni();
@@ -177,6 +177,8 @@ void MainWindow::SaveFile(QString SaveType) {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  ui->frameQML->hide();
+  ui->quickWidget->installEventFilter(this);
 
   QDesktopWidget* desktop = QApplication::desktop();
   QRect screen = desktop->screenGeometry();
@@ -1859,20 +1861,95 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (evn->type() == QEvent::KeyPress) {
-    return QWidget::eventFilter(watch, evn);
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      mydlgSteps->saveSteps();
-      if (mydlgPre->ui->chkClose->isChecked()) {
-        close();
-      } else {
-        if (!mydlgPre->isFontChange) {
-          close();
-          return true;
-        }
-
+      if (!ui->frameQML->isHidden()) {
+        on_btnBack_clicked();
         return true;
       }
+    }
+  }
+
+  if (watch == ui->quickWidget) {
+    static int press_x;
+    static int press_y;
+    static int relea_x;
+    static int relea_y;
+
+    if (event->type() == QEvent::MouseButtonPress) {
+      press_x = event->globalX();
+      press_y = event->globalY();
+      x = 0;
+      y = 0;
+      w = ui->quickWidget->width();
+      h = ui->quickWidget->height();
+      // qDebug() << "Press:" << press_x << press_y;
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      relea_x = event->globalX();
+      relea_y = event->globalY();
+      // qDebug() << "Release:" << relea_x << relea_y;
+    }
+
+    int abc = 300;
+    //判断滑动方向（右滑）
+    if ((relea_x - press_x) > 30 &&
+        event->type() == QEvent::MouseButtonRelease &&
+        qAbs(relea_y - press_y) < 50) {
+      if (mydlgReader->iPage - mydlgReader->baseLines <= 0)
+        return QWidget::eventFilter(watch, evn);
+
+      ui->lblTitle->setPixmap(ui->quickWidget->grab());
+      //捕获当前界面并绘制到label上
+      QPropertyAnimation* animation1 =
+          new QPropertyAnimation(ui->lblTitle, "geometry");
+      // new QPropertyAnimation(ui->textBrowser, "geometry");
+      animation1->setDuration(abc);
+      animation1->setStartValue(QRect(x, y, w, h));
+      animation1->setEndValue(QRect(w * 1, y, w, h));
+
+      on_btnPageUp_clicked();
+
+      QPropertyAnimation* animation2 =
+          new QPropertyAnimation(ui->quickWidget, "geometry");
+      animation2->setDuration(abc);
+      animation2->setStartValue(QRect(-w * 1, y, w, h));
+      animation2->setEndValue(QRect(x, y, w, h));
+
+      QParallelAnimationGroup* group = new QParallelAnimationGroup;  //动画容器
+      group->addAnimation(animation1);
+      group->addAnimation(animation2);
+      group->start();
+    }
+
+    //判断滑动方向（左滑）
+    if ((press_x - relea_x) > 30 &&
+        event->type() == QEvent::MouseButtonRelease &&
+        qAbs(relea_y - press_y) < 50) {
+      if (mydlgReader->iPage + mydlgReader->baseLines > mydlgReader->totallines)
+        return QWidget::eventFilter(watch, evn);
+      ui->lblTitle->setPixmap(ui->quickWidget->grab());
+
+      QPropertyAnimation* animation1 =
+          new QPropertyAnimation(ui->lblTitle, "geometry");
+      // new QPropertyAnimation(ui->textBrowser, "geometry");
+      animation1->setDuration(abc);
+      animation1->setStartValue(QRect(x, y, w, h));
+      animation1->setEndValue(QRect(-w, y, w, h));
+
+      on_btnPageNext_clicked();
+
+      QPropertyAnimation* animation2 =
+          new QPropertyAnimation(ui->quickWidget, "geometry");
+      animation2->setDuration(abc);
+      animation2->setStartValue(QRect(w * 1, y, w, h));
+      animation2->setEndValue(QRect(x, y, w, h));
+
+      QParallelAnimationGroup* group = new QParallelAnimationGroup;
+      group->addAnimation(animation1);
+      group->addAnimation(animation2);
+      group->start();
     }
   }
 
@@ -3221,6 +3298,7 @@ void MainWindow::init_UIWidget() {
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
 
+  this->layout()->setMargin(0);
   ui->centralwidget->layout()->setMargin(1);
   ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 7);
   ui->centralwidget->layout()->setSpacing(1);
@@ -3548,9 +3626,15 @@ void MainWindow::on_btnOneNotes_clicked() {
   mydlgReader->setFixedHeight(this->height());
   mydlgReader->setFixedWidth(this->width());
   mydlgReader->setModal(true);
-  mydlgReader->show();
+  // mydlgReader->show();
 
-  mydlgReader->goPostion();
+  if (!isOne) {
+    mydlgReader->goPostion();
+    isOne = true;
+  }
+  qDebug() << "isOne" << isOne;
+  ui->frameQML->show();
+  ui->frameMain->hide();
 }
 
 void MainWindow::setSCrollPro(QObject* obj) {
@@ -3560,3 +3644,22 @@ void MainWindow::setSCrollPro(QObject* obj) {
   QScroller* qs = QScroller::scroller(obj);
   qs->setScrollerProperties(sp);
 }
+
+void MainWindow::on_btnBack_clicked() {
+  ui->frameQML->hide();
+  ui->frameMain->show();
+}
+
+void MainWindow::on_btnOpen_clicked() { mydlgReader->on_btnOpen_clicked(); }
+
+void MainWindow::on_btnPageUp_clicked() { mydlgReader->on_btnPageUp_clicked(); }
+
+void MainWindow::on_btnPageNext_clicked() {
+  mydlgReader->on_btnPageNext_clicked();
+}
+
+void MainWindow::on_btnPage_clicked() { mydlgReader->on_btnPage_clicked(); }
+
+void MainWindow::on_btnLines_clicked() { mydlgReader->on_btnLines_clicked(); }
+
+void MainWindow::on_hSlider_sliderReleased() {}

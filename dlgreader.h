@@ -6,6 +6,7 @@
 #include <QPlainTextEdit>
 #include <QQmlEngine>
 #include <QQuickView>
+#include <QQuickWidget>
 #include <QTextBlock>
 #include <QTextBrowser>
 
@@ -39,9 +40,14 @@ class dlgReader : public QDialog {
   void getLines();
   QStringList readText(QString textFile);
   void goPostion();
+  void setQML(QString);
  public slots:
   void getPages();
   void on_btnPageNext_clicked();
+  void on_btnPageUp_clicked();
+  void on_btnOpen_clicked();
+  void on_btnPage_clicked();
+  void on_btnLines_clicked();
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
@@ -51,21 +57,13 @@ class dlgReader : public QDialog {
  private slots:
   void on_btnBack_clicked();
 
-  void on_btnOpen_clicked();
-
   void on_btnFontPlus_clicked();
 
   void on_btnFontLess_clicked();
 
   void on_textBrowser_textChanged();
 
-  void on_btnPage_clicked();
-
   void on_hSlider_sliderMoved(int position);
-
-  void on_btnPageUp_clicked();
-
-  void on_btnLines_clicked();
 
  private:
   int x, y, w, h;

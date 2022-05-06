@@ -336,7 +336,22 @@ class MainWindow : public QMainWindow {
 
   void on_btnOneNotes_clicked();
 
+  void on_btnBack_clicked();
+
+  void on_btnOpen_clicked();
+
+  void on_btnPageUp_clicked();
+
+  void on_btnPageNext_clicked();
+
+  void on_btnPage_clicked();
+
+  void on_btnLines_clicked();
+
+  void on_hSlider_sliderReleased();
+
  private:
+  bool isOne = false;
   int frameChartHeight = 220;
   int x, y, w, h;
   QMenu *mainMenu;

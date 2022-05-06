@@ -4,6 +4,7 @@
 
 #include "mainwindow.h"
 #include "ui_dlgreader.h"
+#include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, strPage;
@@ -15,7 +16,6 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->textBrowser->hide();
 
   qmlRegisterType<File>("MyModel", 1, 0, "File");
-  ui->quickWidget->installEventFilter(this);
 
   this->installEventFilter(this);
   ui->textBrowser->installEventFilter(this);
@@ -38,9 +38,8 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   connect(ui->textBrowser->verticalScrollBar(), &QScrollBar::valueChanged, this,
           &dlgReader::getPages);
 
-  ui->lblTitle->hide();
-  ui->btnBack->hide();
-  ui->frame->hide();
+  mw_one->ui->lblTitle->hide();
+  mw_one->ui->frameFun->hide();
   ui->progressBar->hide();
   ui->progressBar->setMaximumHeight(4);
   ui->progressBar->setStyleSheet(
@@ -73,19 +72,20 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
                                     border-image:url(:/src/qslider_btn.png);} \
                                     QSlider::sub-page:horizontal{border-image: url(:/src/qslider.png);}");
 
-  ui->btnFontLess->setStyleSheet("border:none");
-  ui->btnFontPlus->setStyleSheet("border:none");
-  ui->btnOpen->setStyleSheet("border:none");
-  ui->btnPage->setStyleSheet("border:none");
-  ui->btnBack->setStyleSheet("border:none");
-  ui->btnPageNext->setStyleSheet("border:none");
-  ui->btnPageUp->setStyleSheet("border:none");
-  ui->btnLines->setStyleSheet("border:none");
+  mw_one->ui->hSlider->setStyleSheet(ui->hSlider->styleSheet());
+  mw_one->ui->btnFontLess->setStyleSheet("border:none");
+  mw_one->ui->btnFontPlus->setStyleSheet("border:none");
+  mw_one->ui->btnOpen->setStyleSheet("border:none");
+  mw_one->ui->btnPage->setStyleSheet("border:none");
+  mw_one->ui->btnBack->setStyleSheet("border:none");
+  mw_one->ui->btnPageNext->setStyleSheet("border:none");
+  mw_one->ui->btnPageUp->setStyleSheet("border:none");
+  mw_one->ui->btnLines->setStyleSheet("border:none");
   QFont f;
   f.setPointSize(11);
   f.setBold(true);
-  ui->btnPage->setFont(f);
-  ui->btnLines->setFont(f);
+  mw_one->ui->btnPage->setFont(f);
+  mw_one->ui->btnLines->setFont(f);
 }
 
 dlgReader::~dlgReader() { delete ui; }
@@ -100,7 +100,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
   }
 
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
-  if (obj == ui->quickWidget) {
+  if (obj == ui->textBrowser) {
     static int press_x;
     static int press_y;
     static int relea_x;
@@ -111,8 +111,8 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       press_y = event->globalY();
       x = 0;
       y = 0;
-      w = ui->quickWidget->width();
-      h = ui->quickWidget->height();
+      w = ui->textBrowser->width();
+      h = ui->textBrowser->height();
       // qDebug() << "Press:" << press_x << press_y;
     }
 
@@ -141,7 +141,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       on_btnPageUp_clicked();
 
       QPropertyAnimation* animation2 =
-          new QPropertyAnimation(ui->quickWidget, "geometry");
+          new QPropertyAnimation(ui->textBrowser, "geometry");
       animation2->setDuration(abc);
       animation2->setStartValue(QRect(-w * 1, y, w, h));
       animation2->setEndValue(QRect(x, y, w, h));
@@ -169,7 +169,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
       on_btnPageNext_clicked();
 
       QPropertyAnimation* animation2 =
-          new QPropertyAnimation(ui->quickWidget, "geometry");
+          new QPropertyAnimation(ui->textBrowser, "geometry");
       animation2->setDuration(abc);
       animation2->setStartValue(QRect(w * 1, y, w, h));
       animation2->setEndValue(QRect(x, y, w, h));
@@ -186,7 +186,10 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
 
 void dlgReader::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
-void dlgReader::on_btnBack_clicked() { close(); }
+void dlgReader::on_btnBack_clicked() {
+  close();
+  saveReader();
+}
 
 void dlgReader::on_btnOpen_clicked() {
   if (!isHidden()) saveReader();
@@ -202,7 +205,7 @@ void dlgReader::openFile(QString fileName) {
     iPage = 0;
     sPos = 0;
     ui->hSlider->setValue(0);
-    ui->frame->hide();
+    ui->frameFun->hide();
 
     readTextList.clear();
     readTextList = readText(fileName);
@@ -318,25 +321,31 @@ void dlgReader::getLines() {
     QString qsShow =
         "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
         txt1 + "</p>";
-    ui->textBrowser->setHtml(qsShow);
-    ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
+    // ui->textBrowser->setHtml(qsShow);
+    // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
-    strPage = txt1;
-    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
+    setQML(txt1);
   }
+}
+
+void dlgReader::setQML(QString txt1) {
+  strPage = txt1;
+
+  mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 }
 
 void dlgReader::on_btnPage_clicked() {
   isPages = true;
   isLines = false;
-  if (ui->frame->isHidden()) {
-    int h0 = ui->textBrowser->height();
-    ui->hSlider->setValue(ui->textBrowser->verticalScrollBar()->value() / h0);
-    ui->hSlider->setMaximum(ui->textBrowser->verticalScrollBar()->maximum() /
-                            h0);
-    ui->frame->show();
+  if (mw_one->ui->frameFun->isHidden()) {
+    int h0 = mw_one->ui->quickWidget->height();
+    // mw_one->ui->hSlider->setValue(
+    //     mw_one->ui->quickWidget->verticalScrollBar()->value() / h0);
+    // mw_one->ui->hSlider->setMaximum(
+    //     mw_one->ui->quickWidget->verticalScrollBar()->maximum() / h0);
+    mw_one->ui->frameFun->show();
   } else
-    ui->frame->hide();
+    mw_one->ui->frameFun->hide();
 }
 
 void dlgReader::on_hSlider_sliderMoved(int position) {
@@ -367,18 +376,17 @@ void dlgReader::on_btnPageUp_clicked() {
   QString qsShow =
       "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
       txt1 + "</p>";
-  ui->textBrowser->setHtml(qsShow);
-  ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
+  // ui->textBrowser->setHtml(qsShow);
+  // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
-  ui->hSlider->setMaximum(totallines / baseLines);
-  ui->btnLines->setText(tr("Pages") + "\n" +
-                        QString::number(iPage / baseLines) + " / " +
-                        QString::number(totallines / baseLines));
+  mw_one->ui->hSlider->setMaximum(totallines / baseLines);
+  mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
+                                QString::number(iPage / baseLines) + " / " +
+                                QString::number(totallines / baseLines));
 
   getPages();
 
-  strPage = txt1;
-  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
+  setQML(txt1);
 }
 
 void dlgReader::on_btnPageNext_clicked() {
@@ -400,29 +408,28 @@ void dlgReader::on_btnPageNext_clicked() {
 
   // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
-  ui->hSlider->setMaximum(totallines / baseLines);
-  ui->btnLines->setText(tr("Pages") + "\n" +
-                        QString::number(iPage / baseLines) + " / " +
-                        QString::number(totallines / baseLines));
+  mw_one->ui->hSlider->setMaximum(totallines / baseLines);
+  mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
+                                QString::number(iPage / baseLines) + " / " +
+                                QString::number(totallines / baseLines));
 
   getPages();
 
-  strPage = txt1;
-  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
+  setQML(txt1);
 }
 
 void dlgReader::on_btnLines_clicked() {
-  ui->hSlider->setMaximum(totallines / baseLines - 1);
-  ui->hSlider->setTickInterval(1);
-  ui->hSlider->setValue(iPage / baseLines);
-  if (ui->frame->isHidden()) {
+  mw_one->ui->hSlider->setMaximum(totallines / baseLines - 1);
+  mw_one->ui->hSlider->setTickInterval(1);
+  mw_one->ui->hSlider->setValue(iPage / baseLines);
+  if (mw_one->ui->frameFun->isHidden()) {
     isLines = true;
     isPages = false;
-    ui->frame->show();
+    mw_one->ui->frameFun->show();
   } else {
     isLines = false;
     isPages = true;
-    ui->frame->hide();
+    mw_one->ui->frameFun->hide();
   }
 }
 
@@ -463,7 +470,7 @@ void dlgReader::goPostion() {
     iPage = iPage - baseLines;
     if (iPage >= 0) {
       on_btnPageNext_clicked();
-      // ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
+      ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
     } else
       iPage = 0;
   }

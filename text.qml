@@ -10,7 +10,7 @@ import MyModel 1.0
 Item {
     visible: true
     width: 400
-    height: 400
+    height: 800
 
     File {
         id: file
@@ -34,7 +34,7 @@ Item {
             TextArea.flickable: TextArea {
                 id: textArea
                 anchors.fill: parent
-                font.pixelSize: 18
+                font.pixelSize: 20
                 textFormat: Qt.PlainText
 
 
