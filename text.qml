@@ -34,7 +34,7 @@ Item {
             TextArea.flickable: TextArea {
                 id: textArea
                 anchors.fill: parent
-                font.pixelSize: 20
+                font.pixelSize: FontSize
                 textFormat: Qt.PlainText
 
 
@@ -57,6 +57,8 @@ Item {
                 width: 6
                 active: true
                 //policy: ScrollBar.AlwaysOn
+                position: textPos
+
             }
 
             property int rowHeight: textArea.font.pointSize+20

@@ -34,6 +34,8 @@
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 #include <QPushButton>
+#include <QQmlContext>
+#include <QQuickWidget>
 #include <QRandomGenerator>
 #include <QScatterSeries>
 #include <QScrollBar>
@@ -94,6 +96,8 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  int textFontSize;
+  int textPos;
   int isHardStepSensor = -1;
   qlonglong initTodaySteps, resetSteps, tc;
   QString listStyle =
@@ -349,6 +353,10 @@ class MainWindow : public QMainWindow {
   void on_btnLines_clicked();
 
   void on_hSlider_sliderReleased();
+
+  void on_btnFontPlus_clicked();
+
+  void on_btnFontLess_clicked();
 
  private:
   bool isOne = false;

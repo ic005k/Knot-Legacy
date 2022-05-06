@@ -233,16 +233,29 @@ void dlgReader::saveReader() {
   Reg.setIniCodec("utf-8");
   vpos = ui->textBrowser->verticalScrollBar()->sliderPosition();
   Reg.setValue("/Reader/FileName", fileName);
-  Reg.setValue("/Reader/vpos" + fileName, vpos);
+  Reg.setValue("/Reader/vpos" + fileName, mw_one->textPos);
   Reg.setValue("/Reader/iPage" + fileName, iPage);
-  Reg.setValue("/Reader/FontSize", ui->textBrowser->font().pointSize());
+  Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
+
+  qDebug() << "textPos"
+           << mw_one->ui->quickWidget->rootContext()->contextProperty(
+                  "textPos");
+  ;
 }
 
 void dlgReader::initReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
+  mw_one->textPos = Reg.value("/Reader/vpos" + fileName).toInt();
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos",
+                                                             mw_one->textPos);
   QFont font;
-  font.setPointSize(Reg.value("/Reader/FontSize", fontSize).toInt());
+  int fsize = Reg.value("/Reader/FontSize", fontSize).toInt();
+  mw_one->textFontSize = fsize;
+  int FontSize = fsize;
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize",
+                                                             FontSize);
+  font.setPointSize(fsize);
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
   ui->textBrowser->setFont(font);
   fileName = Reg.value("/Reader/FileName").toString();
