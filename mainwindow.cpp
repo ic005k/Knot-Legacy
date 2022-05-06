@@ -3669,7 +3669,9 @@ void MainWindow::on_btnPage_clicked() { mydlgReader->on_btnPage_clicked(); }
 
 void MainWindow::on_btnLines_clicked() { mydlgReader->on_btnLines_clicked(); }
 
-void MainWindow::on_hSlider_sliderReleased() {}
+void MainWindow::on_hSlider_sliderReleased() {
+  mydlgReader->on_hSlider_sliderMoved(ui->hSlider->value());
+}
 
 void MainWindow::on_btnFontPlus_clicked() {
   textFontSize++;
@@ -3681,4 +3683,10 @@ void MainWindow::on_btnFontLess_clicked() {
   textFontSize--;
   int FontSize = textFontSize;
   ui->quickWidget->rootContext()->setContextProperty("FontSize", FontSize);
+}
+
+void MainWindow::on_hSlider_sliderMoved(int position) {
+  ui->btnLines->setText(
+      tr("Pages") + "\n" + QString::number(position + 1) + " / " +
+      QString::number(mydlgReader->totallines / mydlgReader->baseLines));
 }

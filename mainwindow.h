@@ -358,6 +358,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnFontLess_clicked();
 
+  void on_hSlider_sliderMoved(int position);
+
  private:
   bool isOne = false;
   int frameChartHeight = 220;

@@ -26,7 +26,7 @@ class dlgReader : public QDialog {
 
   qreal textHeight;
   bool isOpen = false;
-  int baseLines = 15;
+  int baseLines = 13;
   QStringList readTextList;
   int totallines;
   void saveReader();
@@ -49,6 +49,7 @@ class dlgReader : public QDialog {
   void on_btnOpen_clicked();
   void on_btnPage_clicked();
   void on_btnLines_clicked();
+  void on_hSlider_sliderMoved(int position);
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
@@ -63,8 +64,6 @@ class dlgReader : public QDialog {
   void on_btnFontLess_clicked();
 
   void on_textBrowser_textChanged();
-
-  void on_hSlider_sliderMoved(int position);
 
  private:
   int x, y, w, h;

@@ -192,7 +192,7 @@ void dlgReader::on_btnBack_clicked() {
 }
 
 void dlgReader::on_btnOpen_clicked() {
-  if (!isHidden()) saveReader();
+  if (!mw_one->ui->frameQML->isHidden()) saveReader();
   fileName =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
   openFile(fileName);
@@ -217,7 +217,7 @@ void dlgReader::openFile(QString fileName) {
 
     getPages();
     isOpen = true;
-    if (!isHidden()) goPostion();
+    if (!mw_one->ui->frameQML->isHidden()) goPostion();
   }
 }
 
@@ -245,24 +245,20 @@ void dlgReader::saveReader() {
                    .toReal();
 
   qDebug() << "textPos" << mw_one->textPos << textHeight;
-  ;
 }
 
 void dlgReader::initReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  mw_one->textPos = Reg.value("/Reader/vpos" + fileName).toReal();
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos",
-                                                             mw_one->textPos);
+
   QFont font;
   int fsize = Reg.value("/Reader/FontSize", 18).toInt();
   mw_one->textFontSize = fsize;
-  int FontSize = fsize;
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize",
-                                                             FontSize);
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize", fsize);
   font.setPointSize(fsize);
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
   ui->textBrowser->setFont(font);
+
   fileName = Reg.value("/Reader/FileName").toString();
   openFile(fileName);
 }
@@ -318,15 +314,15 @@ void dlgReader::getPages() {
 
 void dlgReader::getLines() {
   if (isLines) {
-    ui->hSlider->setTickInterval(1);
-    ui->hSlider->setMinimum(0);
-    ui->hSlider->setMaximum(totallines / baseLines - 1);
-    ui->hSlider->setValue(sPos);
-    ui->btnLines->setText(tr("Pages") + "\n" +
-                          QString::number(ui->hSlider->value() + 1) + " / " +
-                          QString::number(totallines / baseLines));
-    iPage = ui->hSlider->value() * baseLines;
-    qDebug() << "iPage" << iPage << ui->hSlider->value();
+    mw_one->ui->hSlider->setTickInterval(1);
+    mw_one->ui->hSlider->setMinimum(0);
+    mw_one->ui->hSlider->setMaximum(totallines / baseLines - 1);
+    mw_one->ui->hSlider->setValue(sPos);
+    mw_one->ui->btnLines->setText(
+        tr("Pages") + "\n" + QString::number(mw_one->ui->hSlider->value() + 1) +
+        " / " + QString::number(totallines / baseLines));
+    iPage = mw_one->ui->hSlider->value() * baseLines;
+    qDebug() << "iPage" << iPage << mw_one->ui->hSlider->value();
 
     int count = iPage + baseLines;
     QString txt1;
@@ -483,12 +479,15 @@ void dlgReader::goPostion() {
   if (isOpen) {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
     Reg.setIniCodec("utf-8");
-    vpos = Reg.value("/Reader/vpos" + fileName).toULongLong();
+    mw_one->textPos = Reg.value("/Reader/vpos" + fileName).toReal();
     iPage = Reg.value("/Reader/iPage" + fileName).toULongLong();
     iPage = iPage - baseLines;
     if (iPage >= 0) {
+      mw_one->ui->quickWidget->rootContext()->setContextProperty(
+          "textPos", mw_one->textPos);
       on_btnPageNext_clicked();
-      ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
+      // ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
+
     } else
       iPage = 0;
   }
