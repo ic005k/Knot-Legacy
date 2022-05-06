@@ -182,12 +182,15 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   connect(btn, &QToolButton::clicked, [=]() {
     btn->setIcon(QIcon(":/src/done1.png"));
 
-    mw_one->Sleep(500);
+    mw_one->Sleep(350);
 
     ui->listWidget->setCurrentItem(pItem);
     int row = ui->listWidget->currentRow();
     QString str = getMainLabel(row)->text().trimmed();
-    ui->listRecycle->addItem(str);
+    QListWidgetItem* item = new QListWidgetItem;
+    item->setSizeHint(QSize(ui->listWidget->width() - 20, 80));
+    item->setText(str);
+    ui->listRecycle->addItem(item);
     ui->listWidget->takeItem(row);
     int index = ui->listWidget->currentRow();
     add_ItemSn(index);

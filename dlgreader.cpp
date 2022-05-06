@@ -14,6 +14,7 @@ extern int fontSize;
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
   ui->textBrowser->hide();
+  mw_one->ui->btnPage->hide();
 
   qmlRegisterType<File>("MyModel", 1, 0, "File");
 
@@ -334,7 +335,7 @@ void dlgReader::getLines() {
     }
 
     QString qsShow =
-        "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
+        "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
         txt1 + "</p>";
     // ui->textBrowser->setHtml(qsShow);
     // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
@@ -390,7 +391,7 @@ void dlgReader::on_btnPageUp_clicked() {
   }
 
   QString qsShow =
-      "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
+      "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
       txt1 + "</p>";
   // ui->textBrowser->setHtml(qsShow);
   // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
@@ -418,7 +419,7 @@ void dlgReader::on_btnPageNext_clicked() {
   }
 
   QString qsShow =
-      "<p style='line-height:28px; width:100% ; white-space: pre-wrap; '>" +
+      "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
       txt1 + "</p>";
   // ui->textBrowser->setHtml(qsShow);
 

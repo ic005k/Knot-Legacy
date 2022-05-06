@@ -11,6 +11,7 @@ extern int sliderPos;
 
 dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
+  ui->btnHomePage->hide();
   this->installEventFilter(this);
   ui->textBrowser->setOpenExternalLinks(true);
   //鼠标不可选中文本
