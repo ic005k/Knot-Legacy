@@ -42,5 +42,6 @@
         <file>src/open.png</file>
         <file>src/page.png</file>
         <file>src/lines.png</file>
+        <file>src/test.txt</file>
     </qresource>
 </RCC>

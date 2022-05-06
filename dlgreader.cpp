@@ -8,7 +8,7 @@
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, strPage;
-extern bool isImport;
+extern bool isImport, zh_cn;
 extern int fontSize;
 
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
@@ -260,6 +260,7 @@ void dlgReader::initReader() {
   ui->textBrowser->setFont(font);
 
   fileName = Reg.value("/Reader/FileName").toString();
+  if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
   openFile(fileName);
 }
 
@@ -338,11 +339,12 @@ void dlgReader::getLines() {
     // ui->textBrowser->setHtml(qsShow);
     // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
-    setQML(txt1);
+    setQML(qsShow);
   }
 }
 
 void dlgReader::setQML(QString txt1) {
+  // strPage = "<body style=\"line-height:137.5% ;\">" + txt1;
   strPage = txt1;
 
   mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
@@ -400,7 +402,7 @@ void dlgReader::on_btnPageUp_clicked() {
 
   getPages();
 
-  setQML(txt1);
+  setQML(qsShow);
 }
 
 void dlgReader::on_btnPageNext_clicked() {
@@ -429,7 +431,7 @@ void dlgReader::on_btnPageNext_clicked() {
 
   getPages();
 
-  setQML(txt1);
+  setQML(qsShow);
 }
 
 void dlgReader::on_btnLines_clicked() {
