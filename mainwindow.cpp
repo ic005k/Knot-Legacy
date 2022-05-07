@@ -3381,13 +3381,13 @@ void MainWindow::init_UIWidget() {
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnMax->setIconSize(QSize(s, s));
   ui->btnSteps->setIconSize(QSize(s, s));
-  ui->btnOneNotes->setIconSize(QSize(s, s));
+  ui->btnReader->setIconSize(QSize(s, s));
   ui->btnPlus->setIcon(QIcon(":/src/1.png"));
   ui->btnLess->setIcon(QIcon(":/src/2.png"));
   ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
   ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
   ui->btnSteps->setIcon(QIcon(":/src/step.png"));
-  ui->btnOneNotes->setIcon(QIcon(":/src/one.png"));
+  ui->btnReader->setIcon(QIcon(":/src/one.png"));
   ui->frame_tab->setMaximumHeight(this->height());
 
   ui->btnPlus->setStyleSheet("border:none");
@@ -3395,7 +3395,7 @@ void MainWindow::init_UIWidget() {
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnMax->setStyleSheet("border:none");
-  ui->btnOneNotes->setStyleSheet("border:none");
+  ui->btnReader->setStyleSheet("border:none");
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -3623,25 +3623,13 @@ QString MainWindow::getYMD(QString date) {
   return str;
 }
 
-void MainWindow::on_btnOneNotes_clicked() {
-  mydlgReader->setFixedHeight(this->height());
-  mydlgReader->setFixedWidth(this->width());
-  mydlgReader->setModal(true);
-  // mydlgReader->show();
-
+void MainWindow::on_btnReader_clicked() {
   if (!isOne) {
+    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
     mydlgReader->goPostion();
     isOne = true;
   }
-  qDebug() << "isOne" << isOne;
-
   ui->frameMain->hide();
-
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
-  Reg.setIniCodec("utf-8");
-  textPos = Reg.value("/Reader/vpos" + mydlgReader->fileName).toReal();
-  ui->quickWidget->rootContext()->setContextProperty("textPos", textPos);
-
   ui->frameQML->show();
 }
 

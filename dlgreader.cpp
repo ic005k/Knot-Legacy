@@ -330,7 +330,6 @@ void dlgReader::getLines() {
     QString txt1;
     for (int i = iPage; i < count; i++) {
       iPage++;
-      // txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
       txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
     }
 
@@ -348,7 +347,9 @@ void dlgReader::setQML(QString txt1) {
   // strPage = "<body style=\"line-height:137.5% ;\">" + txt1;
   strPage = txt1;
 
-  mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
+  // mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("strText",
+                                                             strPage);
 }
 
 void dlgReader::on_btnPage_clicked() {
@@ -422,7 +423,6 @@ void dlgReader::on_btnPageNext_clicked() {
       "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
       txt1 + "</p>";
   // ui->textBrowser->setHtml(qsShow);
-
   // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
   mw_one->ui->hSlider->setMaximum(totallines / baseLines);
@@ -431,7 +431,6 @@ void dlgReader::on_btnPageNext_clicked() {
                                 QString::number(totallines / baseLines));
 
   getPages();
-
   setQML(qsShow);
 }
 
@@ -486,10 +485,9 @@ void dlgReader::goPostion() {
     iPage = Reg.value("/Reader/iPage" + fileName).toULongLong();
     iPage = iPage - baseLines;
     if (iPage >= 0) {
+      on_btnPageNext_clicked();
       mw_one->ui->quickWidget->rootContext()->setContextProperty(
           "textPos", mw_one->textPos);
-      on_btnPageNext_clicked();
-      // ui->textBrowser->verticalScrollBar()->setSliderPosition(vpos);
 
     } else
       iPage = 0;

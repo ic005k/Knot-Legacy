@@ -36,18 +36,16 @@ Item {
             textFormat: Qt.AutoText
 
             //onTextChanged: file.text = text
-            Component.onCompleted: text = file.text
-
+            //Component.onCompleted: text = file.text
             wrapMode: TextArea.Wrap
             readOnly: true
             color: "#000000"
+
+            text: strText
         }
 
         ScrollBar.vertical: ScrollBar {
-
             //width: 6
-            //active: true
-            //policy: ScrollBar.AlwaysOn
             //position: textPos
             id: control
             size: 0.3
@@ -55,6 +53,7 @@ Item {
             active: true
             orientation: Qt.Vertical
             anchors.right: parent.right
+            policy: ScrollBar.AsNeeded
 
             contentItem: Rectangle {
                 implicitWidth: 4

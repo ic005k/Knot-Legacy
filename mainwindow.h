@@ -338,7 +338,7 @@ class MainWindow : public QMainWindow {
 
   void on_actionOneClickBakData();
 
-  void on_btnOneNotes_clicked();
+  void on_btnReader_clicked();
 
   void on_btnBack_clicked();
 
