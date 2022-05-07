@@ -1885,18 +1885,16 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       y = 0;
       w = ui->quickWidget->width();
       h = ui->quickWidget->height();
-      // qDebug() << "Press:" << press_x << press_y;
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
       relea_x = event->globalX();
       relea_y = event->globalY();
-      // qDebug() << "Release:" << relea_x << relea_y;
     }
 
-    int abc = 200;
+    int abc = 500;
     //判断滑动方向（右滑）
-    if ((relea_x - press_x) > 30 &&
+    if ((relea_x - press_x) > 50 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
       if (mydlgReader->iPage - mydlgReader->baseLines <= 0)
@@ -1918,20 +1916,21 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       animation2->setStartValue(QRect(-w * 1, y, w, h));
       animation2->setEndValue(QRect(x, y, w, h));
 
-      QParallelAnimationGroup* group = new QParallelAnimationGroup;  //动画容器
+      QParallelAnimationGroup* group = new QParallelAnimationGroup;
       group->addAnimation(animation1);
       group->addAnimation(animation2);
       group->start();
+      ui->lblTitle->show();
     }
 
     //判断滑动方向（左滑）
-    if ((press_x - relea_x) > 30 &&
+    if ((press_x - relea_x) > 50 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
       if (mydlgReader->iPage + mydlgReader->baseLines > mydlgReader->totallines)
         return QWidget::eventFilter(watch, evn);
-      ui->lblTitle->setPixmap(ui->quickWidget->grab());
 
+      ui->lblTitle->setPixmap(ui->quickWidget->grab());
       QPropertyAnimation* animation1 =
           new QPropertyAnimation(ui->lblTitle, "geometry");
 
@@ -1951,6 +1950,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->addAnimation(animation1);
       group->addAnimation(animation2);
       group->start();
+      ui->lblTitle->show();
     }
   }
 
