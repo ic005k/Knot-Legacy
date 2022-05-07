@@ -383,6 +383,7 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
 }
 
 void dlgReader::on_btnPageUp_clicked() {
+  mw_one->ui->lblTitle->hide();
   int count = iPage - baseLines;
   if (count <= 0) return;
   QString txt1;
@@ -411,6 +412,7 @@ void dlgReader::on_btnPageUp_clicked() {
 }
 
 void dlgReader::on_btnPageNext_clicked() {
+  mw_one->ui->lblTitle->hide();
   int count = iPage + baseLines;
   if (count > totallines) return;
   QString txt1;

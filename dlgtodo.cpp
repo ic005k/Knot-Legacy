@@ -393,6 +393,8 @@ void dlgTodo::on_btnOK_clicked() {
 }
 
 void dlgTodo::on_btnSetTime_clicked() {
+  if (!ui->listWidget->currentIndex().isValid()) return;
+
   QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
   if (lbl->text().trimmed().contains(tr("Alarm"))) {
     QString str = lbl->text().trimmed();
