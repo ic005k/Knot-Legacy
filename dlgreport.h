@@ -4,6 +4,9 @@
 #include <QDialog>
 #include <QKeyEvent>
 #include <QListWidget>
+#include <QPainter>
+#include <QPrintPreviewDialog>
+#include <QPrinter>
 #include <QScroller>
 #include <QStandardItemModel>
 #include <QTableWidgetItem>
@@ -38,7 +41,13 @@ class dlgReport : public QDialog {
 
   void on_btnCategory_clicked();
 
+  void on_btnPrint_clicked();
+
+  void plotPic(QPrinter *);
+
  private:
+  QPrintPreviewDialog *preview;
+  QPrinter *printer;
 };
 
 #endif  // DLGREPORT_H

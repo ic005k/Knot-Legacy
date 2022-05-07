@@ -1,6 +1,7 @@
-QT       += core gui
-QT       += charts sensors
-QT       += qml quick quickwidgets
+QT += core gui
+QT += charts sensors
+QT += qml quick quickwidgets
+QT += printsupport
 
 #QT += qml quick
 #QT += quickwidgets
