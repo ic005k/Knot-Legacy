@@ -45,6 +45,7 @@ Item {
         }
 
         ScrollBar.vertical: ScrollBar {
+
             //width: 6
             //position: textPos
             id: control
@@ -60,6 +61,8 @@ Item {
                 implicitHeight: 76
                 radius: width / 2
                 color: control.pressed ? "#81e889" : "#c2f4c6"
+                opacity: (control.policy === ScrollBar.AlwaysOn
+                          || control.size < 1.0) ? 1.0 : 0.0
             }
 
             Component.onCompleted: {

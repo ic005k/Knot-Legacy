@@ -161,7 +161,7 @@ background:  rgba(71, 140, 182);
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
@@ -193,7 +193,7 @@ background:  rgba(71, 140, 182);
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
@@ -225,7 +225,7 @@ background:  rgba(71, 140, 182);
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
@@ -257,7 +257,7 @@ background:  rgba(71, 140, 182);
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
@@ -289,7 +289,7 @@ background:  rgba(71, 140, 182);
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
@@ -321,7 +321,7 @@ background:  rgba(71, 140, 182);
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
@@ -353,7 +353,7 @@ background:  rgba(71, 140, 182);
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
@@ -385,7 +385,7 @@ background:  rgba(71, 140, 182);
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">

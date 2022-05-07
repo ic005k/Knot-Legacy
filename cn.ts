@@ -9,6 +9,11 @@
         <translation></translation>
     </message>
     <message>
+        <location filename="mainwindow.ui" line="1146"/>
+        <source>Reader</source>
+        <translation></translation>
+    </message>
+    <message>
         <location filename="mainwindow.ui" line="1229"/>
         <location filename="mainwindow.cpp" line="2418"/>
         <location filename="mainwindow.cpp" line="2429"/>
@@ -34,11 +39,6 @@
         <location filename="mainwindow.ui" line="504"/>
         <location filename="mainwindow.ui" line="739"/>
         <source>...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="1146"/>
-        <source>One Ontes</source>
         <translation></translation>
     </message>
     <message>
@@ -461,7 +461,7 @@
         <translation>一键数据备份</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3692"/>
+        <location filename="mainwindow.cpp" line="3682"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
@@ -890,14 +890,14 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="324"/>
-        <location filename="dlgreader.cpp" line="400"/>
-        <location filename="dlgreader.cpp" line="429"/>
+        <location filename="dlgreader.cpp" line="326"/>
+        <location filename="dlgreader.cpp" line="405"/>
+        <location filename="dlgreader.cpp" line="434"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="458"/>
+        <location filename="dlgreader.cpp" line="464"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation></translation>
@@ -956,9 +956,9 @@
     </message>
     <message>
         <location filename="dlgreport.ui" line="256"/>
-        <location filename="dlgreport.cpp" line="185"/>
-        <location filename="dlgreport.cpp" line="258"/>
-        <location filename="dlgreport.cpp" line="383"/>
+        <location filename="dlgreport.cpp" line="192"/>
+        <location filename="dlgreport.cpp" line="265"/>
+        <location filename="dlgreport.cpp" line="390"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
@@ -975,10 +975,10 @@
     </message>
     <message>
         <location filename="dlgreport.ui" line="212"/>
-        <location filename="dlgreport.cpp" line="80"/>
-        <location filename="dlgreport.cpp" line="264"/>
-        <location filename="dlgreport.cpp" line="313"/>
-        <location filename="dlgreport.cpp" line="322"/>
+        <location filename="dlgreport.cpp" line="87"/>
+        <location filename="dlgreport.cpp" line="271"/>
+        <location filename="dlgreport.cpp" line="320"/>
+        <location filename="dlgreport.cpp" line="329"/>
         <source>Details</source>
         <translation>详细</translation>
     </message>
@@ -1006,36 +1006,36 @@
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="dlgreport.cpp" line="164"/>
-        <location filename="dlgreport.cpp" line="237"/>
-        <location filename="dlgreport.cpp" line="467"/>
+        <location filename="dlgreport.cpp" line="171"/>
+        <location filename="dlgreport.cpp" line="244"/>
+        <location filename="dlgreport.cpp" line="474"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
     <message>
-        <location filename="dlgreport.cpp" line="191"/>
-        <location filename="dlgreport.cpp" line="284"/>
+        <location filename="dlgreport.cpp" line="198"/>
+        <location filename="dlgreport.cpp" line="291"/>
         <source>Year-Round</source>
         <translation>全年</translation>
     </message>
     <message>
-        <location filename="dlgreport.cpp" line="397"/>
-        <location filename="dlgreport.cpp" line="401"/>
+        <location filename="dlgreport.cpp" line="404"/>
+        <location filename="dlgreport.cpp" line="408"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="dlgreport.cpp" line="493"/>
+        <location filename="dlgreport.cpp" line="497"/>
         <source>Please select the printing method</source>
         <translation>请选择打印方式</translation>
     </message>
     <message>
-        <location filename="dlgreport.cpp" line="494"/>
+        <location filename="dlgreport.cpp" line="498"/>
         <source>Output to document</source>
         <translation>输出到文档</translation>
     </message>
     <message>
-        <location filename="dlgreport.cpp" line="495"/>
+        <location filename="dlgreport.cpp" line="499"/>
         <source>Output to printer</source>
         <translation>输出到打印机</translation>
     </message>
@@ -1113,6 +1113,11 @@
         <translation></translation>
     </message>
     <message>
+        <location filename="dlgsettime.ui" line="408"/>
+        <source>Category</source>
+        <translation>分类</translation>
+    </message>
+    <message>
         <source>Description :</source>
         <oldsource>Description</oldsource>
         <translation type="vanished">描述：</translation>
@@ -1123,9 +1128,8 @@
         <translation>金额：</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="408"/>
         <source>Description</source>
-        <translation>描述</translation>
+        <translation type="vanished">描述</translation>
     </message>
     <message>
         <location filename="dlgsettime.ui" line="456"/>
@@ -1402,22 +1406,22 @@
     <message>
         <location filename="dlgtodo.cpp" line="233"/>
         <location filename="dlgtodo.cpp" line="385"/>
-        <location filename="dlgtodo.cpp" line="397"/>
         <location filename="dlgtodo.cpp" line="399"/>
-        <location filename="dlgtodo.cpp" line="421"/>
-        <location filename="dlgtodo.cpp" line="432"/>
+        <location filename="dlgtodo.cpp" line="401"/>
+        <location filename="dlgtodo.cpp" line="423"/>
         <location filename="dlgtodo.cpp" line="434"/>
+        <location filename="dlgtodo.cpp" line="436"/>
         <source>Alarm</source>
         <translation>定时提醒</translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="447"/>
-        <location filename="dlgtodo.cpp" line="489"/>
+        <location filename="dlgtodo.cpp" line="449"/>
+        <location filename="dlgtodo.cpp" line="491"/>
         <source>Todo</source>
         <translation>待办事项</translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="450"/>
+        <location filename="dlgtodo.cpp" line="452"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
