@@ -202,6 +202,8 @@ void dlgReader::on_btnOpen_clicked() {
 void dlgReader::openFile(QString fileName) {
   isOpen = false;
   if (QFile(fileName).exists()) {
+    mw_one->ui->lblTitle->hide();
+
     ui->textBrowser->clear();
     iPage = 0;
     sPos = 0;
@@ -367,6 +369,7 @@ void dlgReader::on_btnPage_clicked() {
 }
 
 void dlgReader::on_hSlider_sliderMoved(int position) {
+  mw_one->ui->lblTitle->hide();
   if (isPages) {
     ui->textBrowser->verticalScrollBar()->setSliderPosition(
         position * ui->textBrowser->height());
@@ -435,6 +438,7 @@ void dlgReader::on_btnPageNext_clicked() {
 }
 
 void dlgReader::on_btnLines_clicked() {
+  mw_one->ui->lblTitle->hide();
   mw_one->ui->hSlider->setMaximum(totallines / baseLines - 1);
   mw_one->ui->hSlider->setTickInterval(1);
   mw_one->ui->hSlider->setValue(iPage / baseLines);
@@ -442,6 +446,7 @@ void dlgReader::on_btnLines_clicked() {
     isLines = true;
     isPages = false;
     mw_one->ui->frameFun->show();
+
   } else {
     isLines = false;
     isPages = true;

@@ -96,6 +96,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  int mwh;
   int textFontSize;
   qreal textPos;
   int isHardStepSensor = -1;

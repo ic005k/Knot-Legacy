@@ -3628,6 +3628,8 @@ void MainWindow::on_btnReader_clicked() {
     ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
     mydlgReader->goPostion();
     isOne = true;
+    mwh = this->height();
+    setFixedHeight(mwh);
   }
   ui->frameMain->hide();
   ui->frameQML->show();
