@@ -63,7 +63,7 @@ void dlgList::on_btnChange_clicked() {
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
   idlg->setWindowTitle(tr("Please enter a new name : "));
-  idlg->setTextValue("");
+  idlg->setTextValue(str);
   idlg->setLabelText(tr("New Name : "));
   QLineEdit::EchoMode echoMode = QLineEdit::Normal;
   idlg->setTextEchoMode(echoMode);
