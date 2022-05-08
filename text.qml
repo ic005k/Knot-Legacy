@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.12
 import MyModel 1.0
 
 Item {
+    id: textitem
     visible: true
     width: 400
     height: 800
@@ -45,9 +46,6 @@ Item {
         }
 
         ScrollBar.vertical: ScrollBar {
-
-            //width: 6
-            //position: textPos
             id: control
             size: 0.3
             position: 0.2
@@ -57,6 +55,7 @@ Item {
             policy: ScrollBar.AsNeeded
 
             contentItem: Rectangle {
+                id: slider
                 implicitWidth: 4
                 implicitHeight: 76
                 radius: width / 2
@@ -64,19 +63,13 @@ Item {
                 opacity: (control.policy === ScrollBar.AlwaysOn
                           || control.size < 1.0) ? 1.0 : 0.0
             }
-
-            Component.onCompleted: {
-                console.log(textArea.lineCount)
-                console.log(textArea.height)
-                console.log(control.position)
-                console.log(textArea.y)
-            }
         }
 
-        property int rowHeight: textArea.font.pointSize + 20
-        property int marginsTop: 10
-        property int marginsLeft: 4
-        property int lineCountWidth: 40
-        property real textHeight: textArea.contentHeight
+        Component.onCompleted: {
+            console.log(textArea.lineCount)
+            console.log(textArea.height)
+            console.log(control.position)
+            console.log(contentY)
+        }
     }
 }

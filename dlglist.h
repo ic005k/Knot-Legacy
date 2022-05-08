@@ -26,6 +26,8 @@ class dlgList : public QDialog {
 
   void on_btnBack_clicked();
 
+  void on_btnChange_clicked();
+
  private:
 };
 

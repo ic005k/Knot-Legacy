@@ -5,6 +5,7 @@
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern int fontSize, red;
+extern QTabWidget *tabData, *tabChart;
 dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   this->installEventFilter(this);
@@ -49,3 +50,50 @@ void dlgList::on_btnClear_clicked() {
 }
 
 void dlgList::on_btnBack_clicked() { close(); }
+
+void dlgList::on_btnChange_clicked() {
+  if (ui->listWidget->count() == 0) return;
+  QString str = ui->listWidget->currentItem()->text().trimmed();
+  bool ok;
+  QInputDialog* idlg = new QInputDialog(this);
+  QString style =
+      "QDialog{background: "
+      "rgb(244,237,241);border-radius:0px;border:2px solid gray;}";
+  idlg->setStyleSheet(style);
+  idlg->setOkButtonText(tr("Ok"));
+  idlg->setCancelButtonText(tr("Cancel"));
+  idlg->setWindowTitle(tr("Please enter a new name : "));
+  idlg->setTextValue("");
+  idlg->setLabelText(tr("New Name : "));
+  QLineEdit::EchoMode echoMode = QLineEdit::Normal;
+  idlg->setTextEchoMode(echoMode);
+  QString text;
+
+  if (QDialog::Accepted == idlg->exec()) {
+    ok = true;
+    text = idlg->textValue().trimmed();
+  } else
+    ok = false;
+
+  if (ok && !text.isEmpty() && text != str) {
+    int index = ui->listWidget->currentRow();
+    ui->listWidget->takeItem(index);
+    QListWidgetItem* item = new QListWidgetItem(text);
+    item->setSizeHint(QSize(ui->listWidget->width() - 10, 35));
+    ui->listWidget->insertItem(index, item);
+    ui->listWidget->setCurrentRow(index);
+    mw_one->mydlgSetTime->saveCustomDesc();
+
+    for (int i = 0; i < tabData->tabBar()->count(); i++) {
+      QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
+      for (int m = 0; m < tw->topLevelItemCount(); m++) {
+        QTreeWidgetItem* topItem = tw->topLevelItem(m);
+        for (int n = 0; n < topItem->childCount(); n++) {
+          if (str == topItem->child(n)->text(2)) {
+            topItem->child(n)->setText(2, text);
+          }
+        }
+      }
+    }
+  }
+}
