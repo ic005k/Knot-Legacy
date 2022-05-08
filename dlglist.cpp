@@ -95,5 +95,6 @@ void dlgList::on_btnChange_clicked() {
         }
       }
     }
+    mw_one->startSave("alltab");
   }
 }

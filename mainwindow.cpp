@@ -135,8 +135,8 @@ void MainWindow::dealDone() {
 }
 void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
-    QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
     int index = tabData->currentIndex();
+    QTreeWidget* tw = (QTreeWidget*)tabData->widget(index);
     saveData(tw, index);
     saveNotes(index);
     saveTab();
@@ -2275,6 +2275,7 @@ void MainWindow::on_btnGo_clicked() {
   if (isFindTextChange) findItemList = findDisc();
   int total = findItemList.count();
   if (total > 0) {
+    tw->setFocus();
     QTreeWidgetItem* item = findItemList.at(findPos);
     tw->setCurrentItem(item);
     ui->lblStats->setText(tr("Search Results : ") + item->parent()->text(0) +

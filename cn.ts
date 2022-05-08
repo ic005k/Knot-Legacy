@@ -600,12 +600,37 @@
     </message>
     <message>
         <location filename="dlglist.ui" line="44"/>
+        <source>Change</source>
+        <translation>更改</translation>
+    </message>
+    <message>
+        <location filename="dlglist.ui" line="57"/>
         <source>Del</source>
         <translation>删除</translation>
     </message>
     <message>
         <source>Clear History</source>
         <translation type="vanished">清除历史</translation>
+    </message>
+    <message>
+        <location filename="dlglist.cpp" line="63"/>
+        <source>Ok</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="dlglist.cpp" line="64"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="dlglist.cpp" line="65"/>
+        <source>Please enter a new name : </source>
+        <translation>请输入一个新名称</translation>
+    </message>
+    <message>
+        <location filename="dlglist.cpp" line="67"/>
+        <source>New Name : </source>
+        <translation>新名称</translation>
     </message>
 </context>
 <context>
