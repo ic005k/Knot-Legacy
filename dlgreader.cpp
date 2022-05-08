@@ -234,25 +234,22 @@ QString dlgReader::getTextEditLineText(QPlainTextEdit* txtEdit, int i) {
 void dlgReader::saveReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  vpos = ui->textBrowser->verticalScrollBar()->sliderPosition();
+
   Reg.setValue("/Reader/FileName", fileName);
-  mw_one->textPos = mw_one->ui->quickWidget->rootContext()
-                        ->contextProperty("textPos")
-                        .toReal();
-  Reg.setValue("/Reader/vpos" + fileName, mw_one->textPos);
+  textPos =
+      mw_one->ui->quickWidget->rootContext()->contextProperty("cy").toReal();
+  Reg.setValue("/Reader/vpos" + fileName, textPos);
   Reg.setValue("/Reader/iPage" + fileName, iPage);
   Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
 
-  textHeight = mw_one->ui->quickWidget->rootContext()
-                   ->contextProperty("textHeight")
-                   .toReal();
-
-  qDebug() << "textPos" << mw_one->textPos << textHeight;
+  qDebug() << "textPos" << textPos;
 }
 
 void dlgReader::initReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
+
+  textPos = Reg.value("/Reader/vpos" + fileName).toReal();
 
   QFont font;
   int fsize = Reg.value("/Reader/FontSize", 18).toInt();
@@ -488,13 +485,11 @@ void dlgReader::goPostion() {
   if (isOpen) {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
     Reg.setIniCodec("utf-8");
-    mw_one->textPos = Reg.value("/Reader/vpos" + fileName).toReal();
+
     iPage = Reg.value("/Reader/iPage" + fileName).toULongLong();
     iPage = iPage - baseLines;
     if (iPage >= 0) {
       on_btnPageNext_clicked();
-      mw_one->ui->quickWidget->rootContext()->setContextProperty(
-          "textPos", mw_one->textPos);
 
     } else
       iPage = 0;

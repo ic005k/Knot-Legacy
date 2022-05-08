@@ -9,6 +9,7 @@ Item {
     visible: true
     width: 400
     height: 800
+    property real cy
 
     File {
         id: file
@@ -26,6 +27,21 @@ Item {
         id: flickable
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
+
+        states: State {
+            name: "autoscroll"
+            PropertyChanges {
+                target: flickable
+                contentY: textPos
+            }
+        }
+
+        onMovementEnded: {
+
+            state = "autoscroll"
+            cy = contentY
+            console.log(cy)
+        }
 
         TextArea.flickable: TextArea {
             id: textArea
@@ -69,7 +85,6 @@ Item {
             console.log(textArea.lineCount)
             console.log(textArea.height)
             console.log(control.position)
-            console.log(contentY)
         }
     }
 }

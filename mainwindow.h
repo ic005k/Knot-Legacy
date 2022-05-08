@@ -98,7 +98,7 @@ class MainWindow : public QMainWindow {
 
   int mwh;
   int textFontSize;
-  qreal textPos;
+
   int isHardStepSensor = -1;
   qlonglong initTodaySteps, resetSteps, tc;
   QString listStyle =
