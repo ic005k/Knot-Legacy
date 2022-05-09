@@ -3312,7 +3312,7 @@ void MainWindow::init_UIWidget() {
 
   this->layout()->setMargin(0);
   ui->centralwidget->layout()->setMargin(1);
-  ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 7);
+  ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 2);
   ui->centralwidget->layout()->setSpacing(1);
   ui->frame_charts->setContentsMargins(0, 0, 0, 0);
   ui->frame_charts->layout()->setMargin(0);
@@ -3688,14 +3688,13 @@ void MainWindow::on_hSlider_sliderReleased() {
 
 void MainWindow::on_btnFontPlus_clicked() {
   textFontSize++;
-  int FontSize = textFontSize;
-  ui->quickWidget->rootContext()->setContextProperty("FontSize", FontSize);
+  ui->quickWidget->rootContext()->setContextProperty("FontSize", textFontSize);
 }
 
 void MainWindow::on_btnFontLess_clicked() {
+  if (textFontSize <= 8) return;
   textFontSize--;
-  int FontSize = textFontSize;
-  ui->quickWidget->rootContext()->setContextProperty("FontSize", FontSize);
+  ui->quickWidget->rootContext()->setContextProperty("FontSize", textFontSize);
 }
 
 void MainWindow::on_hSlider_sliderMoved(int position) {

@@ -193,15 +193,16 @@ void dlgReader::on_btnBack_clicked() {
 }
 
 void dlgReader::on_btnOpen_clicked() {
-  if (!mw_one->ui->frameQML->isHidden()) saveReader();
-  fileName =
+  QString openfile =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
-  openFile(fileName);
+  openFile(openfile);
 }
 
-void dlgReader::openFile(QString fileName) {
+void dlgReader::openFile(QString file) {
   isOpen = false;
-  if (QFile(fileName).exists()) {
+  if (QFile(file).exists()) {
+    if (!mw_one->ui->frameQML->isHidden()) saveReader();
+    fileName = file;
     mw_one->ui->lblTitle->hide();
 
     iPage = 0;
@@ -374,6 +375,7 @@ void dlgReader::on_btnPageUp_clicked() {
   mw_one->ui->lblTitle->hide();
   int count = iPage - baseLines;
   if (count <= 0) return;
+  textPos = 0;
   QString txt1;
   ui->textBrowser->clear();
 
@@ -403,12 +405,11 @@ void dlgReader::on_btnPageNext_clicked() {
   mw_one->ui->lblTitle->hide();
   int count = iPage + baseLines;
   if (count > totallines) return;
+  textPos = 0;
   QString txt1;
-  ui->textBrowser->clear();
 
   for (int i = iPage; i < count; i++) {
     iPage++;
-    // txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
     txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
   }
 
