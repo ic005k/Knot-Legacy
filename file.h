@@ -8,9 +8,11 @@ class File : public QObject {
  public:
   File();
   QString m_text;
+  qreal m_textPos;
 
   Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
   Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
+  Q_PROPERTY(qreal textPos READ textPos WRITE setTextPos NOTIFY textPosChanged)
 
   QString source() const;
   void setSource(const QString &source);
@@ -18,10 +20,14 @@ class File : public QObject {
   QString text() const;
   void setText(const QString &text);
 
+  qreal textPos();
+  void setTextPos(qreal &textPos);
+
   void setStr(QString);
  signals:
   void sourceChanged();
   void textChanged();
+  void textPosChanged();
 
  public slots:
   void readFile();

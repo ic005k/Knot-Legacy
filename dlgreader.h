@@ -43,7 +43,8 @@ class dlgReader : public QDialog {
   QStringList readText(QString textFile);
   void goPostion();
   void setQML(QString);
- public slots:
+  void setVPos();
+public slots:
   void getPages();
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

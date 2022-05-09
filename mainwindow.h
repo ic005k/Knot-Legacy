@@ -62,6 +62,7 @@
 #include "dlgsettime.h"
 #include "dlgsteps.h"
 #include "dlgtodo.h"
+#include "file.h"
 #include "specialaccelerometerpedometer.h"
 #include "ui_dlglist.h"
 #include "ui_dlgmainnotes.h"
@@ -150,6 +151,7 @@ class MainWindow : public QMainWindow {
   dlgMainNotes *mydlgMainNotes;
   dlgSteps *mydlgSteps;
   dlgReader *mydlgReader;
+  File *myfile;
 
   QList<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;

@@ -2,7 +2,10 @@
 
 #include <QDebug>
 #include <QFile>
+
+#include "mainwindow.h"
 QString strPage;
+extern MainWindow *mw_one;
 File::File() { connect(this, SIGNAL(sourceChanged()), this, SLOT(readFile())); }
 
 void File::setSource(const QString &source) {
@@ -49,3 +52,11 @@ void File::readFile() {
 void File::setStr(QString str) { m_text = str; }
 
 QString File::text() const { return m_text; }
+
+qreal File::textPos() {
+  mw_one->mydlgReader->textPos = m_textPos;
+  qDebug() << "m_textPos" << m_textPos;
+  return m_textPos;
+}
+
+void File::setTextPos(qreal &textPos) { m_textPos = textPos; }

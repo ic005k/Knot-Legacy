@@ -3316,6 +3316,8 @@ void MainWindow::init_UIWidget() {
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
   ui->progBar->setMaximumHeight(2);
+
+  myfile = new File();
   mydlgNotes = new dlgNotes(this);
   mydlgNotes->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   mydlgNotes->ui->textBrowser->verticalScrollBar()->setStyleSheet(
@@ -3626,12 +3628,9 @@ QString MainWindow::getYMD(QString date) {
 
 void MainWindow::on_btnReader_clicked() {
   if (!isOne) {
-    qDebug() << "textPos=" << mydlgReader->textPos;
-    if (mydlgReader->textPos > 10)
-      ui->quickWidget->rootContext()->setContextProperty("textPos",
-                                                         mydlgReader->textPos);
     ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
     mydlgReader->goPostion();
+    mydlgReader->setVPos();
 
     isOne = true;
     mwh = this->height();

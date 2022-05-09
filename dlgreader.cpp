@@ -220,7 +220,10 @@ void dlgReader::openFile(QString fileName) {
 
     getPages();
     isOpen = true;
-    if (!mw_one->ui->frameQML->isHidden()) goPostion();
+    if (!mw_one->ui->frameQML->isHidden()) {
+      goPostion();
+      setVPos();
+    }
   }
 }
 
@@ -236,8 +239,8 @@ void dlgReader::saveReader() {
   Reg.setIniCodec("utf-8");
 
   Reg.setValue("/Reader/FileName", fileName);
-  textPos =
-      mw_one->ui->quickWidget->rootContext()->contextProperty("cy").toReal();
+  // textPos =
+  //     mw_one->ui->quickWidget->rootContext()->contextProperty("cy").toReal();
   Reg.setValue("/Reader/vpos" + fileName, textPos);
   Reg.setValue("/Reader/iPage" + fileName, iPage);
   Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
@@ -248,8 +251,6 @@ void dlgReader::saveReader() {
 void dlgReader::initReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-
-  textPos = Reg.value("/Reader/vpos" + fileName).toReal();
 
   QFont font;
   int fsize = Reg.value("/Reader/FontSize", 18).toInt();
@@ -494,4 +495,13 @@ void dlgReader::goPostion() {
     } else
       iPage = 0;
   }
+}
+
+void dlgReader::setVPos() {
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+  qreal vpos = Reg.value("/Reader/vpos" + fileName).toReal();
+  qDebug() << "vpos=" << vpos;
+  if (vpos > 10)
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", vpos);
 }

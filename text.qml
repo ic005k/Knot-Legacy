@@ -9,7 +9,6 @@ Item {
     visible: true
     width: 400
     height: 800
-    property real cy
 
     File {
         id: file
@@ -39,8 +38,8 @@ Item {
         onMovementEnded: {
 
             state = "autoscroll"
-            cy = contentY
-            console.log(cy)
+            file.textPos = contentY
+            console.log(file.textPos)
         }
 
         TextArea.flickable: TextArea {
