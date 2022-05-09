@@ -27,6 +27,7 @@ Item {
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
 
+
         states: State {
             name: "autoscroll"
             PropertyChanges {
@@ -36,7 +37,6 @@ Item {
         }
 
         onMovementEnded: {
-
             state = "autoscroll"
             file.textPos = contentY
             console.log(file.textPos)

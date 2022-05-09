@@ -204,7 +204,6 @@ void dlgReader::openFile(QString fileName) {
   if (QFile(fileName).exists()) {
     mw_one->ui->lblTitle->hide();
 
-    ui->textBrowser->clear();
     iPage = 0;
     sPos = 0;
     ui->hSlider->setValue(0);
@@ -214,11 +213,6 @@ void dlgReader::openFile(QString fileName) {
     readTextList = readText(fileName);
     totallines = readTextList.count();
 
-    isLines = true;
-    getLines();
-    isLines = false;
-
-    getPages();
     isOpen = true;
     if (!mw_one->ui->frameQML->isHidden()) {
       goPostion();
@@ -239,9 +233,8 @@ void dlgReader::saveReader() {
   Reg.setIniCodec("utf-8");
 
   Reg.setValue("/Reader/FileName", fileName);
-  // textPos =
-  //     mw_one->ui->quickWidget->rootContext()->contextProperty("cy").toReal();
   Reg.setValue("/Reader/vpos" + fileName, textPos);
+  iPage = iPage - baseLines;
   Reg.setValue("/Reader/iPage" + fileName, iPage);
   Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
 
@@ -257,8 +250,7 @@ void dlgReader::initReader() {
   mw_one->textFontSize = fsize;
   mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize", fsize);
   font.setPointSize(fsize);
-  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
-  ui->textBrowser->setFont(font);
+  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
 
   fileName = Reg.value("/Reader/FileName").toString();
   if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
@@ -336,8 +328,6 @@ void dlgReader::getLines() {
     QString qsShow =
         "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
         txt1 + "</p>";
-    // ui->textBrowser->setHtml(qsShow);
-    // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
     setQML(qsShow);
   }
@@ -425,15 +415,12 @@ void dlgReader::on_btnPageNext_clicked() {
   QString qsShow =
       "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
       txt1 + "</p>";
-  // ui->textBrowser->setHtml(qsShow);
-  // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
   mw_one->ui->hSlider->setMaximum(totallines / baseLines);
   mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
                                 QString::number(iPage / baseLines) + " / " +
                                 QString::number(totallines / baseLines));
 
-  getPages();
   setQML(qsShow);
 }
 
@@ -488,7 +475,7 @@ void dlgReader::goPostion() {
     Reg.setIniCodec("utf-8");
 
     iPage = Reg.value("/Reader/iPage" + fileName).toULongLong();
-    iPage = iPage - baseLines;
+
     if (iPage >= 0) {
       on_btnPageNext_clicked();
 

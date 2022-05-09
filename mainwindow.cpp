@@ -1753,7 +1753,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
   }
 
-  if (watch != ui->tabWidget->tabBar() && watch != tw) {
+  if (watch != ui->tabWidget->tabBar() && watch != tw &&
+      watch != ui->quickWidget) {
     static int press_x;
     static int press_y;
     static int relea_x;

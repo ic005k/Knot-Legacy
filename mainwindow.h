@@ -99,7 +99,7 @@ class MainWindow : public QMainWindow {
 
   int mwh;
   int textFontSize;
-
+  bool isOne = false;
   int isHardStepSensor = -1;
   qlonglong initTodaySteps, resetSteps, tc;
   QString listStyle =
@@ -364,7 +364,6 @@ class MainWindow : public QMainWindow {
   void on_hSlider_sliderMoved(int position);
 
  private:
-  bool isOne = false;
   int frameChartHeight = 220;
   int x, y, w, h;
   QMenu *mainMenu;
