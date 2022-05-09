@@ -3301,6 +3301,15 @@ void MainWindow::init_UIWidget() {
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
 
+  ui->frameQML->layout()->setMargin(0);
+  ui->frameQML->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->frameQML->setContentsMargins(0, 0, 0, 0);
+  ui->frameQML->layout()->setSpacing(1);
+  ui->frameMain->layout()->setMargin(0);
+  ui->frameMain->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->frameMain->setContentsMargins(0, 0, 0, 0);
+  ui->frameMain->layout()->setSpacing(1);
+
   this->layout()->setMargin(0);
   ui->centralwidget->layout()->setMargin(1);
   ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 7);
@@ -3311,12 +3320,18 @@ void MainWindow::init_UIWidget() {
   ui->frame_charts->layout()->setSpacing(0);
   ui->frame_charts->setMaximumHeight(frameChartHeight);
 
+  ui->frame_tab->layout()->setMargin(0);
+  ui->frame_tab->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->frame_tab->setContentsMargins(0, 0, 0, 0);
+  ui->frame_tab->layout()->setSpacing(1);
+
   this->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
   ui->progBar->setMaximumHeight(2);
+  ui->progBar->hide();
 
   myfile = new File();
   mydlgNotes = new dlgNotes(this);

@@ -15,6 +15,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_4">
+    <property name="verticalSpacing">
+     <number>-1</number>
+    </property>
     <item row="0" column="0">
      <widget class="QFrame" name="frameQML">
       <property name="frameShape">
@@ -431,6 +434,9 @@ background:  rgba(71, 140, 182);
        </property>
        <property name="bottomMargin">
         <number>0</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>-1</number>
        </property>
        <item row="0" column="0">
         <widget class="QFrame" name="frameMenu">
