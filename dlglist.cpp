@@ -81,7 +81,19 @@ void dlgList::on_btnChange_clicked() {
     QListWidgetItem* item = new QListWidgetItem(text);
     item->setSizeHint(QSize(ui->listWidget->width() - 10, 35));
     ui->listWidget->insertItem(index, item);
-    ui->listWidget->setCurrentRow(index);
+
+    QStringList list;
+    for (int i = 0; i < ui->listWidget->count(); i++) {
+      list.append(ui->listWidget->item(i)->text().trimmed());
+    }
+    mw_one->mydlgSetTime->removeDuplicates(&list);
+    ui->listWidget->clear();
+    for (int i = 0; i < list.count(); i++) {
+      QListWidgetItem* item = new QListWidgetItem(list.at(i));
+      item->setSizeHint(QSize(ui->listWidget->width() - 10, 35));
+      ui->listWidget->addItem(item);
+    }
+    if (index >= 0) ui->listWidget->setCurrentRow(index);
     mw_one->mydlgSetTime->saveCustomDesc();
 
     for (int i = 0; i < tabData->tabBar()->count(); i++) {

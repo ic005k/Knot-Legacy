@@ -135,7 +135,7 @@ void dlgSetTime::on_btnCustom_clicked() {
 void dlgSetTime::saveCustomDesc() {
   QSettings Reg(iniDir + "desc.ini", QSettings::IniFormat);
   int count = mw_one->mydlgList->ui->listWidget->count();
-  Reg.setValue("/CustomDesc/Count", count);
+
   QStringList list;
   for (int i = 0; i < count; i++) {
     if (isBreak) break;
@@ -149,6 +149,7 @@ void dlgSetTime::saveCustomDesc() {
     if (str.length() > 0)
       Reg.setValue("/CustomDesc/Item" + QString::number(i), str);
   }
+  Reg.setValue("/CustomDesc/Count", list.count());
 }
 
 int dlgSetTime::removeDuplicates(QStringList* that) {
