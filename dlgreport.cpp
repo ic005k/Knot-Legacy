@@ -16,6 +16,11 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   preview = new QPrintPreviewDialog(printer, this);
   ui->btnPrint->hide();
 
+  QFont font = ui->lblTotal->font();
+  font.setBold(true);
+  ui->lblTotal->setFont(font);
+  ui->lblDetails->setFont(font);
+
   for (int y = 0; y < ui->tableReport->columnCount(); y++) {
     ui->tableReport->horizontalHeader()->setSectionResizeMode(
         y, QHeaderView::ResizeToContents);
@@ -165,6 +170,8 @@ void dlgReport::sel_Year() {
     }
   }
 
+  ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " +
+                        tr("Amount") + " 0");
   int count = ui->tableReport->rowCount();
   if (count > 0) {
     ui->tableReport->setRowCount(count + 1);
@@ -178,6 +185,10 @@ void dlgReport::sel_Year() {
     QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
     tableItem = new QTableWidgetItem(strAmount);
     ui->tableReport->setItem(count, 2, tableItem);
+
+    ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
+                          QString::number(freq) + "    " + tr("Amount") + " " +
+                          strAmount);
 
     ui->tableReport->setColumnWidth(0, 10);
     ui->tableReport->setRowHeight(count, 30);
@@ -238,6 +249,8 @@ void dlgReport::sel_Month() {
     }
   }
 
+  ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " +
+                        tr("Amount") + " 0");
   int count = ui->tableReport->rowCount();
   if (count > 0) {
     ui->tableReport->setRowCount(count + 1);
@@ -251,6 +264,10 @@ void dlgReport::sel_Month() {
     QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
     tableItem = new QTableWidgetItem(strAmount);
     ui->tableReport->setItem(count, 2, tableItem);
+
+    ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
+                          QString::number(freq) + "    " + tr("Amount") + " " +
+                          strAmount);
 
     ui->tableReport->setColumnWidth(0, 10);
     ui->tableReport->setRowHeight(count, 30);
@@ -317,7 +334,13 @@ void dlgReport::on_btnMonth_clicked() {
 
 void dlgReport::on_tableReport_cellClicked(int row, int column) {
   Q_UNUSED(column);
-  ui->lblDetails->setText(tr("Details"));
+  bool isSetDetailsText = true;
+  if (ui->btnCategory->text() != tr("None") &&
+      ui->btnCategory->text() != tr("Category")) {
+    isSetDetailsText = false;
+  }
+
+  if (isSetDetailsText) ui->lblDetails->setText(tr("Details"));
   markColor(row);
   ui->tableDetails->setRowCount(0);
   QString str = ui->tableReport->item(row, 0)->text();
@@ -326,7 +349,8 @@ void dlgReport::on_tableReport_cellClicked(int row, int column) {
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
     if (str == topItem->text(0)) {
-      ui->lblDetails->setText(tr("Details") + " : " + str);
+      if (isSetDetailsText)
+        ui->lblDetails->setText(tr("Details") + " : " + str);
       int childCount = topItem->childCount();
       ui->tableDetails->setRowCount(childCount);
       for (int m = 0; m < childCount; m++) {
@@ -434,6 +458,7 @@ void dlgReport::on_btnCategory_clicked() {
   connect(list, &QListWidget::itemClicked, [=]() {
     ui->btnCategory->setText(list->currentItem()->text());
     if (list->currentRow() == 0) {
+      ui->lblDetails->setText(tr("Details"));
       ui->tableCategory->hide();
       ui->tableDetails->show();
       list->close();
@@ -477,6 +502,11 @@ void dlgReport::on_btnCategory_clicked() {
     ui->tableCategory->setItem(t, 1, item);
     QString strAmount = QString("%1").arg(abc, 0, 'f', 2);
     ui->tableCategory->setItem(t, 2, new QTableWidgetItem(strAmount));
+
+    ui->lblDetails->setText(tr("Total") + " : " + tr("Freq") + " " +
+                            QString::number(t) + "    " + tr("Amount") + " " +
+                            strAmount);
+
     ui->tableCategory->item(t, 0)->setFlags(Qt::NoItemFlags);
     ui->tableCategory->item(t, 1)->setFlags(Qt::NoItemFlags);
     ui->tableCategory->item(t, 2)->setFlags(Qt::NoItemFlags);

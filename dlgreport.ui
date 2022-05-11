@@ -14,14 +14,7 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="lblTitle">
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QToolButton" name="btnBack">
@@ -44,26 +37,7 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="0">
-    <widget class="QTableWidget" name="tableCategory">
-     <column>
-      <property name="text">
-       <string>Date</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Time</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Amount</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <widget class="QTableWidget" name="tableReport">
      <property name="styleSheet">
       <string notr="true">QHeaderView                    // QTableWidget 标题头整个区域
@@ -163,6 +137,38 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
      </column>
     </widget>
    </item>
+   <item row="6" column="0">
+    <widget class="QTableWidget" name="tableDetails">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Amount</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Descriptions</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lblTitle">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -206,21 +212,20 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="lblDetails">
      <property name="text">
       <string>Details</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QTableWidget" name="tableDetails">
-     <property name="alternatingRowColors">
-      <bool>true</bool>
-     </property>
-     <attribute name="horizontalHeaderStretchLastSection">
-      <bool>false</bool>
-     </attribute>
+   <item row="7" column="0">
+    <widget class="QTableWidget" name="tableCategory">
+     <column>
+      <property name="text">
+       <string>Date</string>
+      </property>
+     </column>
      <column>
       <property name="text">
        <string>Time</string>
@@ -231,14 +236,9 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
        <string>Amount</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>Descriptions</string>
-      </property>
-     </column>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QToolButton" name="btnCategory">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -254,6 +254,13 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
      </property>
      <property name="text">
       <string>Category</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lblTotal">
+     <property name="text">
+      <string>Total</string>
      </property>
     </widget>
    </item>
