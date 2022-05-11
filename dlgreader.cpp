@@ -215,10 +215,10 @@ void dlgReader::openFile(QString file) {
     totallines = readTextList.count();
 
     isOpen = true;
-    if (!mw_one->ui->frameQML->isHidden()) {
-      goPostion();
-      setVPos();
-    }
+    // if (!mw_one->ui->frameQML->isHidden()) {
+    goPostion();
+    setVPos();
+    //}
   }
 }
 
@@ -235,8 +235,8 @@ void dlgReader::saveReader() {
 
   Reg.setValue("/Reader/FileName", fileName);
   Reg.setValue("/Reader/vpos" + fileName, textPos);
-  iPage = iPage - baseLines;
-  Reg.setValue("/Reader/iPage" + fileName, iPage);
+  int page = iPage;
+  Reg.setValue("/Reader/iPage" + fileName, page - baseLines);
   Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
 
   qDebug() << "textPos" << textPos;
@@ -255,6 +255,8 @@ void dlgReader::initReader() {
 
   fileName = Reg.value("/Reader/FileName").toString();
   if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
+
+  mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
   openFile(fileName);
 }
 
@@ -373,6 +375,7 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
 
 void dlgReader::on_btnPageUp_clicked() {
   mw_one->ui->lblTitle->hide();
+
   int count = iPage - baseLines;
   if (count <= 0) return;
   textPos = 0;
@@ -403,6 +406,7 @@ void dlgReader::on_btnPageUp_clicked() {
 
 void dlgReader::on_btnPageNext_clicked() {
   mw_one->ui->lblTitle->hide();
+
   int count = iPage + baseLines;
   if (count > totallines) return;
   textPos = 0;
