@@ -71,10 +71,10 @@ Item {
 
             contentItem: Rectangle {
                 id: slider
-                implicitWidth: 4
+                implicitWidth: 2
                 implicitHeight: 76
                 radius: width / 2
-                color: control.pressed ? "#81e889" : "#c2f4c6"
+                color: control.pressed ? "#e7e7e7" : "#858585"
                 opacity: (control.policy === ScrollBar.AlwaysOn
                           || control.size < 1.0) ? 1.0 : 0.0
             }

@@ -3644,10 +3644,6 @@ QString MainWindow::getYMD(QString date) {
 
 void MainWindow::on_btnReader_clicked() {
   if (!isOne) {
-    // ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
-    // mydlgReader->goPostion();
-    // mydlgReader->setVPos();
-
     isOne = true;
     mwh = this->height();
     setFixedHeight(mwh);

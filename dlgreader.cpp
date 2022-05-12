@@ -384,23 +384,19 @@ void dlgReader::on_btnPageUp_clicked() {
 
   for (int i = count - baseLines; i < count; i++) {
     iPage--;
-    // txt1 = txt1 + getTextEditLineText(myedit, i) + "\n" + strSpace;
     txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
   }
 
   QString qsShow =
       "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
       txt1 + "</p>";
-  // ui->textBrowser->setHtml(qsShow);
-  // ui->textBrowser->verticalScrollBar()->setSliderPosition(0);
 
   mw_one->ui->hSlider->setMaximum(totallines / baseLines);
   mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
                                 QString::number(iPage / baseLines) + " / " +
                                 QString::number(totallines / baseLines));
 
-  getPages();
-
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
   setQML(qsShow);
 }
 
@@ -426,6 +422,7 @@ void dlgReader::on_btnPageNext_clicked() {
                                 QString::number(iPage / baseLines) + " / " +
                                 QString::number(totallines / baseLines));
 
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
   setQML(qsShow);
 }
 
