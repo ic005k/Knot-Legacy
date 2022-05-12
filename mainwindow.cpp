@@ -3382,6 +3382,8 @@ void MainWindow::init_UIWidget() {
       "border-radius:0px;"
       "background-color:rgba(25,25,255,250);"
       "}");
+  ui->progReader->setStyleSheet(ui->progBar->styleSheet());
+  ui->progReader->setFixedHeight(2);
 
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
 
@@ -3698,4 +3700,6 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
   ui->btnLines->setText(
       tr("Pages") + "\n" + QString::number(position + 1) + " / " +
       QString::number(mydlgReader->totallines / mydlgReader->baseLines));
+  ui->progReader->setMaximum(mydlgReader->totallines / mydlgReader->baseLines);
+  ui->progReader->setValue(position + 1);
 }

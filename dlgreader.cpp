@@ -395,6 +395,8 @@ void dlgReader::on_btnPageUp_clicked() {
   mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
                                 QString::number(iPage / baseLines) + " / " +
                                 QString::number(totallines / baseLines));
+  mw_one->ui->progReader->setMaximum(totallines / baseLines);
+  mw_one->ui->progReader->setValue(iPage / baseLines);
 
   mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
   setQML(qsShow);
@@ -421,6 +423,8 @@ void dlgReader::on_btnPageNext_clicked() {
   mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
                                 QString::number(iPage / baseLines) + " / " +
                                 QString::number(totallines / baseLines));
+  mw_one->ui->progReader->setMaximum(totallines / baseLines);
+  mw_one->ui->progReader->setValue(iPage / baseLines);
 
   mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
   setQML(qsShow);

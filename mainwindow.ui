@@ -18,7 +18,7 @@
     <property name="verticalSpacing">
      <number>-1</number>
     </property>
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QFrame" name="frameQML">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -37,7 +37,7 @@
         <number>0</number>
        </property>
        <property name="bottomMargin">
-        <number>0</number>
+        <number>12</number>
        </property>
        <item>
         <widget class="QLabel" name="lblTitle">
@@ -411,10 +411,20 @@ background:  rgba(71, 140, 182);
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QProgressBar" name="progReader">
+         <property name="value">
+          <number>24</number>
+         </property>
+         <property name="textVisible">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="4" column="0">
      <widget class="QFrame" name="frameMain">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
