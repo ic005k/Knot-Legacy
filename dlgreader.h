@@ -25,6 +25,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  QString fontname;
   qreal textPos;
   qreal textHeight;
   bool isOpen = false;
@@ -46,7 +47,7 @@ class dlgReader : public QDialog {
   void setQML(QString);
   void setVPos();
   QFont get_Font();
-public slots:
+ public slots:
   void getPages();
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

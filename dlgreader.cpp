@@ -252,8 +252,9 @@ void dlgReader::initReader() {
   font.setPointSize(fsize);
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
 
-  mw_one->ui->quickWidget->rootContext()->setContextProperty(
-      "FontName", Reg.value("/Reader/FontName").toString());
+  fontname = Reg.value("/Reader/FontName", mw_one->font().family()).toString();
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
+                                                             fontname);
 
   fileName = Reg.value("/Reader/FileName").toString();
   if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
@@ -350,12 +351,57 @@ void dlgReader::setQML(QString txt1) {
 }
 
 void dlgReader::on_btnPage_clicked() {
+  QStringList listFonts;
+  QFontDatabase fontDatebase;
+  foreach (QString family, fontDatebase.families()) {
+    listFonts.append(family);
+  }
+
+  QListWidget* list = new QListWidget(mw_one);
+  list->setStyleSheet(mw_one->listStyle);
+  list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
+  QFont font0;
+  font0.setPointSize(fontSize);
+  list->setFont(font0);
+
+  for (int i = 0; i < listFonts.count(); i++) {
+    QListWidgetItem* item = new QListWidgetItem;
+    item->setSizeHint(QSize(130, 30));  // item->sizeHint().width()
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    item->setText(listFonts.at(i));
+    list->addItem(item);
+  }
+
+  connect(list, &QListWidget::itemClicked, [=]() {
+    fontname = list->currentItem()->text();
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
+                                                               fontname);
+    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    Reg.setIniCodec("utf-8");
+    Reg.setValue("/Reader/FontName", fontname);
+    list->close();
+  });
+
+  list->setGeometry(0, 0, mw_one->width(), mw_one->height());
+  if (list->count() > 0) {
+    list->setCurrentRow(0);
+    for (int i = 0; i < list->count(); i++) {
+      if (list->item(i)->text() == fontname) {
+        list->setCurrentRow(i);
+        break;
+      }
+    }
+  }
+  list->show();
+  list->setFocus();
+
+  return;
   bool ok;
   QFontDialog fd;
   QFont font = get_Font();
-
   font = fd.getFont(&ok, font);
-
   if (ok) {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
     Reg.setIniCodec("utf-8");
