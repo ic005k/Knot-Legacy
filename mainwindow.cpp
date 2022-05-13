@@ -1867,7 +1867,17 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameQML->isHidden()) {
-        on_btnBack_clicked();
+        if (!listSelFont->isHidden()) {
+          listSelFont->close();
+          return true;
+        } else {
+          on_btnBack_clicked();
+          return true;
+        }
+      }
+
+      if (!listSelTab->isHidden()) {
+        listSelTab->close();
         return true;
       }
     }
@@ -3293,6 +3303,8 @@ void MainWindow::init_Sensors() {
 
 void MainWindow::init_UIWidget() {
   mw_one = this;
+  listSelFont = new QListWidget();
+  listSelTab = new QListWidget();
 
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   isReadEnd = true;
@@ -3421,6 +3433,7 @@ void MainWindow::init_UIWidget() {
 
 void MainWindow::on_btnSelTab_clicked() {
   QListWidget* list = new QListWidget(this);
+  listSelTab = list;
   list->setStyleSheet(listStyle);
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);

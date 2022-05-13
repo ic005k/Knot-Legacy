@@ -42,7 +42,10 @@ dlgSetTime::~dlgSetTime() { delete ui; }
 
 void dlgSetTime::on_btnBack_clicked() { close(); }
 
-void dlgSetTime::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
+void dlgSetTime::keyReleaseEvent(QKeyEvent* event) {
+  Q_UNUSED(event);
+  // event->accept();
+}
 
 void dlgSetTime::on_btnOk_clicked() {
   if (!mw_one->isAdd) {
@@ -218,4 +221,22 @@ void dlgSetTime::getTime(int h, int m) {
 
 void dlgSetTime::on_dialM_valueChanged(int value) {
   getTime(ui->dialH->value(), value);
+}
+
+bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
+  if (evn->type() == QEvent::KeyPress) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      if (!this->isHidden()) {
+        on_btnBack_clicked();
+        return true;
+      }
+      if (!mw_one->mydlgList->isHidden()) {
+        mw_one->mydlgList->close();
+        return true;
+      }
+    }
+  }
+
+  return QWidget::eventFilter(watch, evn);
 }

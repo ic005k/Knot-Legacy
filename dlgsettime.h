@@ -2,6 +2,7 @@
 #define DLGSETTIME_H
 
 #include <QDialog>
+#include <QListWidget>
 #include <QSet>
 #include <QWidgetAction>
 
@@ -26,6 +27,7 @@ class dlgSetTime : public QDialog {
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
+  bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:
   void on_btnBack_clicked();
 
