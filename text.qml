@@ -74,7 +74,7 @@ Item {
                 implicitWidth: 2
                 implicitHeight: 76
                 radius: width / 2
-                color: control.pressed ? "#e7e7e7" : "#858585"
+                color: control.pressed ? "#e7e7e7" : "#1296db"
                 opacity: (control.policy === ScrollBar.AlwaysOn
                           || control.size < 1.0) ? 1.0 : 0.0
             }

@@ -27,7 +27,7 @@ class dlgReader : public QDialog {
   qreal textPos;
   qreal textHeight;
   bool isOpen = false;
-  int baseLines = 13;
+  int baseLines = 20;
   QStringList readTextList;
   int totallines;
   void saveReader();
@@ -44,7 +44,7 @@ class dlgReader : public QDialog {
   void goPostion();
   void setQML(QString);
   void setVPos();
-public slots:
+ public slots:
   void getPages();
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

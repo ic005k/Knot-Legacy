@@ -325,7 +325,9 @@ void dlgReader::getLines() {
     QString txt1;
     for (int i = iPage; i < count; i++) {
       iPage++;
-      txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
+      QString str = readTextList.at(i);
+      if (str.trimmed() != "")
+        txt1 = txt1 + readTextList.at(i).trimmed() + "\n" + strSpace;
     }
 
     QString qsShow =
@@ -384,7 +386,8 @@ void dlgReader::on_btnPageUp_clicked() {
 
   for (int i = count - baseLines; i < count; i++) {
     iPage--;
-    txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
+    QString str = readTextList.at(i);
+    if (str.trimmed() != "") txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
   }
 
   QString qsShow =
@@ -412,7 +415,8 @@ void dlgReader::on_btnPageNext_clicked() {
 
   for (int i = iPage; i < count; i++) {
     iPage++;
-    txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
+    QString str = readTextList.at(i);
+    if (str.trimmed() != "") txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
   }
 
   QString qsShow =
