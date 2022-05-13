@@ -43,5 +43,6 @@
         <file>src/page.png</file>
         <file>src/lines.png</file>
         <file>src/test.txt</file>
+        <file>src/font.png</file>
     </qresource>
 </RCC>

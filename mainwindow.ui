@@ -296,20 +296,20 @@ background:  rgba(71, 140, 182);
             </size>
            </property>
            <property name="text">
-            <string>0 / 0</string>
+            <string>Font</string>
            </property>
            <property name="icon">
             <iconset resource="src.qrc">
-             <normaloff>:/src/page.png</normaloff>:/src/page.png</iconset>
+             <normaloff>:/src/font.png</normaloff>:/src/font.png</iconset>
            </property>
            <property name="iconSize">
             <size>
              <width>25</width>
-             <height>12</height>
+             <height>25</height>
             </size>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonTextOnly</enum>
+            <enum>Qt::ToolButtonIconOnly</enum>
            </property>
           </widget>
          </item>

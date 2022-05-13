@@ -46,6 +46,7 @@ Item {
             id: textArea
             //anchors.fill: parent //QML TextArea: Possible anchor loop detected on fill.
             font.pixelSize: FontSize
+            font.family: FontName
             font.letterSpacing: 2
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting

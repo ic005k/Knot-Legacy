@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QEvent>
+#include <QFontDialog>
 #include <QPlainTextEdit>
 #include <QQmlEngine>
 #include <QQuickView>
@@ -44,7 +45,8 @@ class dlgReader : public QDialog {
   void goPostion();
   void setQML(QString);
   void setVPos();
- public slots:
+  QFont get_Font();
+public slots:
   void getPages();
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

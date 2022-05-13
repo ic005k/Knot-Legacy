@@ -14,7 +14,6 @@ extern int fontSize;
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
   ui->textBrowser->hide();
-  mw_one->ui->btnPage->hide();
 
   qmlRegisterType<File>("MyModel", 1, 0, "File");
 
@@ -253,6 +252,9 @@ void dlgReader::initReader() {
   font.setPointSize(fsize);
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
 
+  mw_one->ui->quickWidget->rootContext()->setContextProperty(
+      "FontName", Reg.value("/Reader/FontName").toString());
+
   fileName = Reg.value("/Reader/FileName").toString();
   if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
 
@@ -348,17 +350,34 @@ void dlgReader::setQML(QString txt1) {
 }
 
 void dlgReader::on_btnPage_clicked() {
-  isPages = true;
-  isLines = false;
-  if (mw_one->ui->frameFun->isHidden()) {
-    int h0 = mw_one->ui->quickWidget->height();
-    // mw_one->ui->hSlider->setValue(
-    //     mw_one->ui->quickWidget->verticalScrollBar()->value() / h0);
-    // mw_one->ui->hSlider->setMaximum(
-    //     mw_one->ui->quickWidget->verticalScrollBar()->maximum() / h0);
-    mw_one->ui->frameFun->show();
-  } else
-    mw_one->ui->frameFun->hide();
+  bool ok;
+  QFontDialog fd;
+  QFont font = get_Font();
+
+  font = fd.getFont(&ok, font);
+
+  if (ok) {
+    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    Reg.setIniCodec("utf-8");
+    Reg.setValue("/Reader/FontName", font.family());
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
+                                                               font.family());
+  }
+}
+
+QFont dlgReader::get_Font() {
+  QFont font;
+
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+  font.setFamily(Reg.value("/Reader/FontName", "Menlo").toString());
+
+  font.setPixelSize(Reg.value("/Reader/FontSize", 12).toInt());
+  font.setBold(Reg.value("/Reader/FontBold").toBool());
+  font.setItalic(Reg.value("/Reader/FontItalic").toBool());
+  font.setUnderline(Reg.value("/Reader/FontUnderline").toBool());
+
+  return font;
 }
 
 void dlgReader::on_hSlider_sliderMoved(int position) {
