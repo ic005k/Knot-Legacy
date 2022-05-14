@@ -13,6 +13,7 @@ extern bool isBreak, isImport;
 dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
   ui->setupUi(this);
+  this->installEventFilter(this);
   QFont font;
   font.setPointSize(24);
   font.setBold(true);
@@ -227,12 +228,11 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!this->isHidden()) {
-        on_btnBack_clicked();
-        return true;
-      }
       if (!mw_one->mydlgList->isHidden()) {
         mw_one->mydlgList->close();
+        return true;
+      } else {
+        on_btnBack_clicked();
         return true;
       }
     }
