@@ -7,8 +7,8 @@ import MyModel 1.0
 Item {
     id: textitem
     visible: true
-    width: 400
-    height: 800
+    width: myW
+    height: myH
 
     File {
         id: file

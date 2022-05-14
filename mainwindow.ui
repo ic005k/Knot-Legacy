@@ -176,8 +176,8 @@ background:  rgba(71, 140, 182);
            </property>
            <property name="iconSize">
             <size>
-             <width>25</width>
-             <height>25</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolButtonStyle">
@@ -208,8 +208,8 @@ background:  rgba(71, 140, 182);
            </property>
            <property name="iconSize">
             <size>
-             <width>25</width>
-             <height>25</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolButtonStyle">
@@ -240,8 +240,8 @@ background:  rgba(71, 140, 182);
            </property>
            <property name="iconSize">
             <size>
-             <width>25</width>
-             <height>25</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolButtonStyle">
@@ -272,8 +272,8 @@ background:  rgba(71, 140, 182);
            </property>
            <property name="iconSize">
             <size>
-             <width>25</width>
-             <height>25</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolButtonStyle">
@@ -296,7 +296,7 @@ background:  rgba(71, 140, 182);
             </size>
            </property>
            <property name="text">
-            <string>Font</string>
+            <string>T</string>
            </property>
            <property name="icon">
             <iconset resource="src.qrc">
@@ -304,8 +304,8 @@ background:  rgba(71, 140, 182);
            </property>
            <property name="iconSize">
             <size>
-             <width>25</width>
-             <height>25</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolButtonStyle">
@@ -336,8 +336,8 @@ background:  rgba(71, 140, 182);
            </property>
            <property name="iconSize">
             <size>
-             <width>25</width>
-             <height>25</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolButtonStyle">
@@ -368,8 +368,8 @@ background:  rgba(71, 140, 182);
            </property>
            <property name="iconSize">
             <size>
-             <width>25</width>
-             <height>25</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolButtonStyle">
@@ -400,8 +400,8 @@ background:  rgba(71, 140, 182);
            </property>
            <property name="iconSize">
             <size>
-             <width>25</width>
-             <height>12</height>
+             <width>18</width>
+             <height>18</height>
             </size>
            </property>
            <property name="toolButtonStyle">

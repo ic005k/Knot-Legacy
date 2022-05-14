@@ -84,7 +84,6 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   QFont f;
   f.setPointSize(11);
   f.setBold(true);
-  mw_one->ui->btnPage->setFont(f);
   mw_one->ui->btnLines->setFont(f);
 }
 
@@ -363,6 +362,7 @@ void dlgReader::on_btnPage_clicked() {
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(list);
   QFont font0;
   font0.setPointSize(fontSize);
   list->setFont(font0);

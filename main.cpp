@@ -38,6 +38,11 @@ int main(int argc, char *argv[]) {
 #endif
 
   QApplication a(argc, argv);
+  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+  int fontSize = Reg.value("/Options/FontSize", 15).toInt();
+  QFont font("Droid Sans Mono", fontSize);
+  a.setFont(font);
 
   QDir dir;
   QString path;

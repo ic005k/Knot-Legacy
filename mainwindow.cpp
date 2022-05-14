@@ -187,6 +187,10 @@ MainWindow::MainWindow(QWidget* parent)
   if (!isAndroid)
     this->setGeometry((screenWidth - this->width()) / 2, 0, this->width(),
                       screenHeight);
+  else {
+    ui->quickWidget->rootContext()->setContextProperty("myW", screenWidth);
+    ui->quickWidget->rootContext()->setContextProperty("myH", screenHeight);
+  }
 
   qRegisterMetaType<QVector<int>>("QVector<int>");
   loading = true;
