@@ -184,10 +184,12 @@ MainWindow::MainWindow(QWidget* parent)
   QRect screen = desktop->screenGeometry();
   int screenWidth = screen.width();
   int screenHeight = screen.height();
-  if (!isAndroid)
+  if (!isAndroid) {
     this->setGeometry((screenWidth - this->width()) / 2, 0, this->width(),
                       screenHeight);
-  else {
+    ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
+    ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
+  } else {
     ui->quickWidget->rootContext()->setContextProperty("myW", screenWidth);
     ui->quickWidget->rootContext()->setContextProperty("myH", screenHeight);
   }
@@ -1907,7 +1909,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       relea_y = event->globalY();
     }
 
-    int abc = 500;
+    int abc = 300;
     //判断滑动方向（右滑）
     if ((relea_x - press_x) > 50 &&
         event->type() == QEvent::MouseButtonRelease &&
@@ -3509,23 +3511,19 @@ void MainWindow::init_Menu() {
   mainMenu->addAction(actAddTab);
   mainMenu->addAction(actDelTab);
   mainMenu->addAction(actRenameTab);
-  mainMenu->addSeparator();
 
   mainMenu->addAction(actFind);
   mainMenu->addAction(actReport);
   mainMenu->addAction(actRemarks);
-  mainMenu->addSeparator();
 
   mainMenu->addAction(actExportData);
   mainMenu->addAction(actImportData);
   mainMenu->addAction(actBakData);
-  mainMenu->addSeparator();
 
   mainMenu->addAction(actPreferences);
-  mainMenu->addSeparator();
 
   mainMenu->addAction(actMemos);
-  mainMenu->addSeparator();
+
   mainMenu->addAction(actViewAppData);
   mainMenu->addAction(actAbout);
 
@@ -3555,10 +3553,20 @@ void MainWindow::init_Menu() {
           &MainWindow::on_actionView_App_Data_triggered);
   connect(actAbout, &QAction::triggered, this,
           &MainWindow::on_actionAbout_triggered);
+
+  QString qss =
+      "QMenu {"
+      "border: 1px solid rgb(172, 172, 172);"
+      "border-radius: 3px; }"
+      "QMenu::item {"
+      "border-bottom: 1px solid rgb(172, 172, 172);"
+      "padding:5px 10px;"
+      "margin:0px 0px; }";
+  mainMenu->setStyleSheet(qss);
 }
 
 void MainWindow::on_btnMenu_clicked() {
-  int x = ui->btnMenu->x();
+  int x = mw_one->x + (this->width() - mainMenu->width()) - 2;
   int y = ui->frameMenu->y() + ui->frameMenu->height();
   QPoint pos(x, y);
   mainMenu->exec(pos);

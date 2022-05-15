@@ -213,10 +213,8 @@ void dlgReader::openFile(QString file) {
     totallines = readTextList.count();
 
     isOpen = true;
-    // if (!mw_one->ui->frameQML->isHidden()) {
     goPostion();
     setVPos();
-    //}
   }
 }
 
@@ -258,8 +256,8 @@ void dlgReader::initReader() {
   fileName = Reg.value("/Reader/FileName").toString();
   if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
 
-  mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
   openFile(fileName);
+  mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 }
 
 void dlgReader::on_btnFontPlus_clicked() {
@@ -550,7 +548,7 @@ void dlgReader::goPostion() {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
     Reg.setIniCodec("utf-8");
 
-    iPage = Reg.value("/Reader/iPage" + fileName).toULongLong();
+    iPage = Reg.value("/Reader/iPage" + fileName, 0).toULongLong();
 
     if (iPage >= 0) {
       on_btnPageNext_clicked();
@@ -563,7 +561,7 @@ void dlgReader::goPostion() {
 void dlgReader::setVPos() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  qreal vpos = Reg.value("/Reader/vpos" + fileName).toReal();
+  qreal vpos = Reg.value("/Reader/vpos" + fileName, 0).toReal();
   qDebug() << "vpos=" << vpos;
   if (vpos > 10)
     mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", vpos);
