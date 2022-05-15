@@ -3560,8 +3560,10 @@ void MainWindow::init_Menu() {
       "border-radius: 3px; }"
       "QMenu::item {"
       "border-bottom: 1px solid rgb(172, 172, 172);"
-      "padding:5px 10px;"
-      "margin:0px 0px; }";
+      "padding:10px 10px;"
+      "margin:0px 0px; }"
+      "QMenu::item:selected {"
+      "background-color: rgb(62, 186, 231); }";
   mainMenu->setStyleSheet(qss);
 }
 
