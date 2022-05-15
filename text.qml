@@ -17,7 +17,13 @@ Item {
 
     Image {
         id: rocket
-        fillMode: Image.TileHorizontally | Image.TileVertically
+        width: myW
+        height: 2000
+        //fillMode: Image.TileHorizontally
+        fillMode: Image.Tile
+        horizontalAlignment: Image.AlignLeft
+        verticalAlignment: Image.AlignTop
+
         smooth: true
         source: "/src/b.png"
     }
@@ -26,7 +32,6 @@ Item {
         id: flickable
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
-
 
         states: State {
             name: "autoscroll"
