@@ -1159,7 +1159,10 @@ QRadioButton::indicator:checked {
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Reader</string>
+               <string>Txt Reader</string>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextUnderIcon</enum>
               </property>
              </widget>
             </item>
@@ -1174,6 +1177,9 @@ QRadioButton::indicator:checked {
               <property name="text">
                <string>ToDo</string>
               </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextUnderIcon</enum>
+              </property>
              </widget>
             </item>
             <item>
@@ -1186,6 +1192,9 @@ QRadioButton::indicator:checked {
               </property>
               <property name="text">
                <string>Steps</string>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextUnderIcon</enum>
               </property>
              </widget>
             </item>
@@ -1207,7 +1216,7 @@ QRadioButton::indicator:checked {
                <string>Less</string>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonTextUnderIcon</enum>
               </property>
              </widget>
             </item>
@@ -1229,7 +1238,7 @@ QRadioButton::indicator:checked {
                <string>Add</string>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonTextUnderIcon</enum>
               </property>
              </widget>
             </item>
@@ -1243,6 +1252,9 @@ QRadioButton::indicator:checked {
               </property>
               <property name="text">
                <string>Max</string>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextUnderIcon</enum>
               </property>
              </widget>
             </item>

@@ -190,7 +190,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
     QListWidgetItem* item = new QListWidgetItem;
     item->setSizeHint(QSize(ui->listWidget->width() - 16, 80));
     item->setText(str);
-    ui->listRecycle->addItem(item);
+    ui->listRecycle->insertItem(0, item);
     ui->listWidget->takeItem(row);
     int index = ui->listWidget->currentRow();
     add_ItemSn(index);

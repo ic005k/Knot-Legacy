@@ -449,6 +449,7 @@ void MainWindow::init_Options() {
   mydlgPre->ui->rb0->setChecked(Reg.value("/Options/rb0", 1).toBool());
   mydlgPre->ui->rb1->setChecked(Reg.value("/Options/rb1", 0).toBool());
   mydlgPre->ui->rb2->setChecked(Reg.value("/Options/rb2", 0).toBool());
+
   if (mydlgPre->ui->rb1->isChecked()) fontSize = fontSize + 3;
   if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 5;
   QFont userFont;
@@ -469,7 +470,6 @@ void MainWindow::init_Options() {
   mydlgReport->ui->tableReport->horizontalHeader()->setFont(userFont);
   mydlgReport->ui->tableDetails->horizontalHeader()->setFont(userFont);
   mydlgSteps->ui->tableWidget->horizontalHeader()->setFont(userFont);
-  ui->btnSteps->setFont(userFont);
   mydlgList->ui->listWidget->setFont(userFont);
 
   mydlgPre->ui->chkClose->setChecked(
@@ -3435,6 +3435,15 @@ void MainWindow::init_UIWidget() {
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnMax->setStyleSheet("border:none");
   ui->btnReader->setStyleSheet("border:none");
+
+  QFont f = this->font();
+  f.setPointSize(11);
+  ui->btnPlus->setFont(f);
+  ui->btnLess->setFont(f);
+  ui->btnTodo->setFont(f);
+  ui->btnSteps->setFont(f);
+  ui->btnMax->setFont(f);
+  ui->btnReader->setFont(f);
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -3568,7 +3577,7 @@ void MainWindow::init_Menu() {
 }
 
 void MainWindow::on_btnMenu_clicked() {
-  int x = mw_one->x + (this->width() - mainMenu->width()) - 2;
+  int x = mw_one->x + (this->width() - mainMenu->width()) - 4;
   int y = ui->frameMenu->y() + ui->frameMenu->height();
   QPoint pos(x, y);
   mainMenu->exec(pos);
