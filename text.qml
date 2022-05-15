@@ -17,7 +17,7 @@ Item {
 
     Image {
         id: rocket
-        fillMode: Image.TileHorizontally
+        fillMode: Image.TileHorizontally | Image.TileVertically
         smooth: true
         source: "/src/b.png"
     }
