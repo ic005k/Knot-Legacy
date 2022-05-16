@@ -7,7 +7,7 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
-extern QString iniFile, iniDir, strPage;
+extern QString iniFile, iniDir;
 extern bool isImport, zh_cn;
 extern int fontSize;
 
@@ -340,11 +340,9 @@ void dlgReader::getLines() {
 
 void dlgReader::setQML(QString txt1) {
   // strPage = "<body style=\"line-height:137.5% ;\">" + txt1;
-  strPage = txt1;
 
   // mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("strText",
-                                                             strPage);
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", txt1);
 }
 
 void dlgReader::on_btnPage_clicked() {

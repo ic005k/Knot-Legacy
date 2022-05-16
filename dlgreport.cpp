@@ -20,6 +20,9 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   font.setBold(true);
   ui->lblTotal->setFont(font);
   ui->lblDetails->setFont(font);
+  ui->lblTotal->setStyleSheet("background-color: rgb(25, 0, 250);color:white");
+  ui->lblDetails->setStyleSheet(
+      "background-color: rgb(250, 0, 25);color:white");
 
   for (int y = 0; y < ui->tableReport->columnCount(); y++) {
     ui->tableReport->horizontalHeader()->setSectionResizeMode(
@@ -467,6 +470,9 @@ void dlgReport::on_btnCategory_clicked() {
 
     ui->tableCategory->setRowCount(0);
     double abc = 0;
+    double total = ui->tableReport->item(ui->tableReport->rowCount() - 1, 2)
+                       ->text()
+                       .toDouble();
     for (int i = 0; i < ui->tableReport->rowCount(); i++) {
       on_tableReport_cellClicked(i, 0);
 
@@ -503,9 +509,12 @@ void dlgReport::on_btnCategory_clicked() {
     QString strAmount = QString("%1").arg(abc, 0, 'f', 2);
     ui->tableCategory->setItem(t, 2, new QTableWidgetItem(strAmount));
 
+    double bai = (abc / total) * 100;
+    QString strBai = QString::number(bai, 'f', 2);
     ui->lblDetails->setText(tr("Total") + " : " + tr("Freq") + " " +
                             QString::number(t) + "    " + tr("Amount") + " " +
-                            strAmount);
+                            strAmount + "    " + strBai + "%");
+    qDebug() << abc / total;
 
     ui->tableCategory->item(t, 0)->setFlags(Qt::NoItemFlags);
     ui->tableCategory->item(t, 1)->setFlags(Qt::NoItemFlags);

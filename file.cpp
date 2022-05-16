@@ -4,7 +4,7 @@
 #include <QFile>
 
 #include "mainwindow.h"
-QString strPage;
+
 extern MainWindow *mw_one;
 File::File() { connect(this, SIGNAL(sourceChanged()), this, SLOT(readFile())); }
 
@@ -44,7 +44,6 @@ void File::readFile() {
     } else
       m_text = file.readAll();
   }
-  m_text = strPage;
 
   emit textChanged();
 }
