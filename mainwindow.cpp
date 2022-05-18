@@ -597,8 +597,8 @@ void MainWindow::init_ChartWidget() {
   QFont font1;
   font1.setPointSize(13);
   font1.setBold(true);
-  chartMonth->setTitleFont(font1);
-  chartDay->setTitleFont(font1);
+  // chartMonth->setTitleFont(font1);
+  // chartDay->setTitleFont(font1);
   axisX->setLabelsFont(font1);
   axisY->setLabelsFont(font1);
   axisX2->setLabelsFont(font1);
