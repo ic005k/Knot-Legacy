@@ -116,6 +116,9 @@ void dlgSteps::saveSteps() {
   Reg.setValue("/Steps/Alg1", ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Alg2", ui->rbAlg2->isChecked());
 
+  if (ui->tableWidget->rowCount() > 31) {
+    ui->tableWidget->removeRow(0);
+  }
   int count = ui->tableWidget->rowCount();
   Reg.setValue("/Steps/Count", count);
   for (int i = 0; i < count; i++) {
@@ -238,9 +241,7 @@ qlonglong dlgSteps::getCurrentSteps() {
 
 void dlgSteps::setTableSteps(qlonglong steps) {
   int count = ui->tableWidget->rowCount();
-  if (count > 31) {
-    ui->tableWidget->removeRow(0);
-  }
+
   if (count == 0) {
     addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1);
   }
