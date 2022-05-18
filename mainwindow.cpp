@@ -437,15 +437,6 @@ void MainWindow::init_Options() {
   fontSize = fInfo.pointSize();
   qDebug() << "fontSize:" << fontSize;
 
-  QFont font1;
-  font1.setPointSize(fontSize - 1);
-  chartMonth->setTitleFont(font1);
-  chartDay->setTitleFont(font1);
-  axisX->setLabelsFont(font1);
-  axisY->setLabelsFont(font1);
-  axisX2->setLabelsFont(font1);
-  axisY2->setLabelsFont(font1);
-
   mydlgPre->ui->rb0->setChecked(Reg.value("/Options/rb0", 1).toBool());
   mydlgPre->ui->rb1->setChecked(Reg.value("/Options/rb1", 0).toBool());
   mydlgPre->ui->rb2->setChecked(Reg.value("/Options/rb2", 0).toBool());
@@ -602,6 +593,16 @@ void MainWindow::init_ChartWidget() {
 
   chartMonth->setTitle(tr("Freq"));
   chartDay->setTitle(tr("Freq"));
+
+  QFont font1;
+  font1.setPointSize(13);
+  font1.setBold(true);
+  chartMonth->setTitleFont(font1);
+  chartDay->setTitleFont(font1);
+  axisX->setLabelsFont(font1);
+  axisY->setLabelsFont(font1);
+  axisX2->setLabelsFont(font1);
+  axisY2->setLabelsFont(font1);
 
   // 获取背景色
   QPalette pal = this->palette();

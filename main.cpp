@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
   Reg.setIniCodec("utf-8");
   int fontSize = Reg.value("/Options/FontSize", 15).toInt();
   QFont font("Droid Sans", fontSize);
-  a.setFont(font);
+  // a.setFont(font);
 
   QDir dir;
   QString path;
