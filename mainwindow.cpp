@@ -2670,7 +2670,9 @@ void MainWindow::on_actionPreferences_triggered() {
 }
 
 void MainWindow::on_tabCharts_currentChanged(int index) {
-  int count = tabChart->tabBar()->count();
+  if (ui->rbSteps->isChecked()) return;
+
+  /*int count = tabChart->tabBar()->count();
   if (index >= 0) {
     for (int i = 0; i < count; i++) {
       if (i == index)
@@ -2678,7 +2680,7 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
       else
         tabChart->tabBar()->setTabTextColor(i, Qt::black);
     }
-  }
+  }*/
 
   if (index == 0) {
     startRead(strDate);
@@ -2719,12 +2721,16 @@ void MainWindow::changeEvent(QEvent* event) {
 }
 
 void MainWindow::on_rbSteps_clicked() {
+  QTableWidget* t = mydlgSteps->ui->tableWidget;
+  int count = t->rowCount();
+  if (count <= 0) return;
+
   tabChart->setCurrentIndex(0);
   tabChart->setTabEnabled(1, false);
-  QTableWidget* t = mydlgSteps->ui->tableWidget;
+
   PointList.clear();
   doubleList.clear();
-  int count = t->rowCount();
+
   QString sm = get_Month(QDate::currentDate().toString("ddd MM dd yyyy"));
   for (int i = 0; i < count; i++) {
     QString strD = t->item(i, 0)->text();
@@ -3447,6 +3453,8 @@ void MainWindow::init_UIWidget() {
   ui->btnSteps->setFont(f);
   ui->btnMax->setFont(f);
   ui->btnReader->setFont(f);
+
+  tabChart->setCurrentIndex(0);
 }
 
 void MainWindow::on_btnSelTab_clicked() {
