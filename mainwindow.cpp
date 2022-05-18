@@ -1402,6 +1402,9 @@ void MainWindow::initChartDay() {
   // chartDay->axes(Qt::Vertical).first()->setRange(0, yMaxDay);
 
   axisX2->setRange(0, 24);
+  axisX2->setTickType(QValueAxis::TicksFixed);
+  axisX2->setTickCount(7);
+
   axisY2->setRange(0, yMaxDay);
 }
 
