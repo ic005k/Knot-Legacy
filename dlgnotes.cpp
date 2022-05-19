@@ -86,10 +86,10 @@ void dlgNotes::init_Notes() {
 
 void dlgNotes::on_btnDL_clicked() {
   QString str;
-  if (zh_cn)
-    str = "https://gitee.com/ic005k/Knot/releases";
-  else
-    str = "https://github.com/ic005k/Knot/releases/latest";
+  // if (zh_cn)
+  //   str = "https://gitee.com/ic005k/Knot/releases";
+  // else
+  str = "https://github.com/ic005k/Knot/releases/latest";
   QUrl url(str);
   QDesktopServices::openUrl(url);
 }
