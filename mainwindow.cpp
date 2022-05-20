@@ -1911,6 +1911,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     if (event->type() == QEvent::MouseButtonRelease) {
       relea_x = event->globalX();
       relea_y = event->globalY();
+      ui->lblTitle->hide();
+    }
+
+    if (event->type() == QEvent::MouseMove) {
     }
 
     int abc = 300;
