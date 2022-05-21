@@ -197,6 +197,7 @@ void dlgSteps::addRecord(QString date, qlonglong steps) {
   date = str0;
 
   bool isYes = false;
+
   int count = ui->tableWidget->rowCount();
   for (int i = 0; i < count; i++) {
     QString str = ui->tableWidget->item(i, 0)->text();

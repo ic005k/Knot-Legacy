@@ -5,6 +5,7 @@
 #include <QEvent>
 #include <QFontDialog>
 #include <QPlainTextEdit>
+#include <QProcess>
 #include <QQmlEngine>
 #include <QQuickView>
 #include <QQuickWidget>
@@ -25,6 +26,8 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  bool isEpub = false;
+  QStringList htmlFiles;
   QString fontname;
   qreal textPos;
   qreal textHeight;
@@ -71,6 +74,7 @@ class dlgReader : public QDialog {
   void on_textBrowser_textChanged();
 
  private:
+  int htmlIndex = 0;
   int x, y, w, h;
   bool isLines = false;
   bool isPages = true;
