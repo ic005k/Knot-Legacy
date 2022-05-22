@@ -15,10 +15,11 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->setupUi(this);
   this->installEventFilter(this);
   QFont font;
-  font.setPointSize(24);
+  font.setPointSize(23);
   font.setBold(true);
   ui->lblTime->setFont(font);
   ui->editAmount->setFont(font);
+  ui->editDesc->setFont(font);
   ui->btn0->setFont(font);
   ui->btn1->setFont(font);
   ui->btn2->setFont(font);
