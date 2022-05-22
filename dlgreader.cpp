@@ -193,7 +193,7 @@ void dlgReader::on_btnBack_clicked() {
 void dlgReader::on_btnOpen_clicked() {
   QString openfile =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
-  qDebug() << openfile << openfile.mid(openfile.length() - 4, 4);
+
   if (openfile.mid(openfile.length() - 4, 4) == "epub") {
     // isEpub = true;
     // if (isEpub) {

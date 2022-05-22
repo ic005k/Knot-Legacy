@@ -442,7 +442,7 @@ selection-background-color: lightblue;
 }</string>
        </property>
        <property name="placeholderText">
-        <string>Category</string>
+        <string/>
        </property>
       </widget>
      </item>

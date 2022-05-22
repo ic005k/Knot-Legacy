@@ -37,7 +37,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editAmount);
   ui->editAmount->setValidator(validator);
-  ui->editAmount->setPlaceholderText(tr("Number"));
+  // ui->editAmount->setPlaceholderText(tr("Number"));
 }
 
 dlgSetTime::~dlgSetTime() { delete ui; }
