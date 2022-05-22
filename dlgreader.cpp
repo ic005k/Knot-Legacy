@@ -195,8 +195,6 @@ void dlgReader::on_btnOpen_clicked() {
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
 
   if (openfile.mid(openfile.length() - 4, 4) == "epub") {
-    // isEpub = true;
-    // if (isEpub) {
     isEpub = true;
     QString dirpath = iniDir + "temp/";
     QProcess* pro = new QProcess;

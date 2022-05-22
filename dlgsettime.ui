@@ -16,6 +16,17 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="lblTitle">
+     <property name="styleSheet">
+      <string notr="true">QLabel
+{
+border: 0px solid gray;
+border-radius: 0px;
+padding: 0 8px;
+background: red;
+color:white;
+selection-background-color: lightblue;
+}</string>
+     </property>
      <property name="text">
       <string>Add</string>
      </property>
