@@ -513,9 +513,14 @@ void dlgReport::on_btnCategory_clicked() {
 
     double bai = (abc / total) * 100;
     QString strBai = QString::number(bai, 'f', 2);
-    ui->lblDetails->setText(tr("Total") + " : " + tr("Freq") + " " +
-                            QString::number(t) + "    " + tr("Amount") + " " +
-                            strAmount + "    " + strBai + "%");
+    if (total > 0)
+      ui->lblDetails->setText(tr("Total") + " : " + tr("Freq") + " " +
+                              QString::number(t) + "    " + tr("Amount") + " " +
+                              strAmount + "    " + strBai + "%");
+    else
+      ui->lblDetails->setText(tr("Total") + " : " + tr("Freq") + " " +
+                              QString::number(t) + "    " + tr("Amount") + " " +
+                              strAmount);
     qDebug() << abc / total;
 
     ui->tableCategory->item(t, 0)->setFlags(Qt::NoItemFlags);
