@@ -3468,6 +3468,7 @@ void MainWindow::init_UIWidget() {
       mydlgSetTime->ui->lblTitle->styleSheet());
   mydlgReport->ui->lblDetails->setStyleSheet(
       mydlgSetTime->ui->lblTitle->styleSheet());
+  ui->lblStats->setStyleSheet(mydlgSetTime->ui->lblTitle->styleSheet());
 }
 
 void MainWindow::on_btnSelTab_clicked() {
