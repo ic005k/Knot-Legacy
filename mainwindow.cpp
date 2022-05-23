@@ -2191,6 +2191,8 @@ void MainWindow::on_actionView_App_Data_triggered() {
   mydlgNotes->ui->textBrowser->append("File: " + iniFile);
 
   mydlgNotes->ui->textBrowser->append("");
+  mydlgNotes->ui->textBrowser->append("Login Time: " + loginTime);
+  mydlgNotes->ui->textBrowser->append("");
   mydlgNotes->ui->textBrowser->setHidden(true);
   mydlgNotes->ui->textEdit->setHidden(true);
 
@@ -3325,6 +3327,7 @@ void MainWindow::init_UIWidget() {
   mw_one = this;
   listSelFont = new QListWidget();
   listSelTab = new QListWidget();
+  loginTime = QDateTime::currentDateTime().toString();
 
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   isReadEnd = true;

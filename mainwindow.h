@@ -97,6 +97,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QString loginTime;
   QListWidget *listSelTab, *listSelFont;
   int mwh;
   int textFontSize;
