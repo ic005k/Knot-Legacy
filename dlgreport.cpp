@@ -64,6 +64,8 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->tableCategory->verticalScrollBar()->setStyleSheet(
       mw_one->vsbarStyleSmall);
   mw_one->setSCrollPro(ui->tableCategory);
+  ui->lblDetails->setWordWrap(true);
+  ui->lblDetails->adjustSize();
 }
 
 dlgReport::~dlgReport() { delete ui; }

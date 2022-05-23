@@ -3463,6 +3463,11 @@ void MainWindow::init_UIWidget() {
   ui->btnReader->setFont(f);
 
   tabChart->setCurrentIndex(0);
+
+  mydlgReport->ui->lblTotal->setStyleSheet(
+      mydlgSetTime->ui->lblTitle->styleSheet());
+  mydlgReport->ui->lblDetails->setStyleSheet(
+      mydlgSetTime->ui->lblTitle->styleSheet());
 }
 
 void MainWindow::on_btnSelTab_clicked() {
