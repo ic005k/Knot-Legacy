@@ -3464,11 +3464,11 @@ void MainWindow::init_UIWidget() {
 
   tabChart->setCurrentIndex(0);
 
-  mydlgReport->ui->lblTotal->setStyleSheet(
-      mydlgSetTime->ui->lblTitle->styleSheet());
-  mydlgReport->ui->lblDetails->setStyleSheet(
-      mydlgSetTime->ui->lblTitle->styleSheet());
-  ui->lblStats->setStyleSheet(mydlgSetTime->ui->lblTitle->styleSheet());
+  QString lblStyle = mydlgSetTime->ui->lblTitle->styleSheet();
+  mydlgReport->ui->lblTotal->setStyleSheet(lblStyle);
+  mydlgReport->ui->lblDetails->setStyleSheet(lblStyle);
+  mydlgReport->ui->lblTitle->setStyleSheet(lblStyle);
+  ui->lblStats->setStyleSheet(lblStyle);
 }
 
 void MainWindow::on_btnSelTab_clicked() {
