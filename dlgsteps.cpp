@@ -267,7 +267,8 @@ void dlgSteps::setTableSteps(qlonglong steps) {
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       ui->tableWidget->setItem(count - 1, 1, item);
 
-      double km = ui->editStepLength->text().trimmed().toDouble() / 100 / 1000;
+      double km =
+          ui->editStepLength->text().trimmed().toDouble() * steps / 100 / 1000;
       item = new QTableWidgetItem(QString::number(km));
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       ui->tableWidget->setItem(count - 1, 2, item);
