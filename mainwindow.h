@@ -393,6 +393,7 @@ class MainWindow : public QMainWindow {
   void updateRunTime();
   void showSensorValues();
   void decMemos(QString file);
+  void initHardStepSensor();
 };
 
 class SearchThread : public QThread {

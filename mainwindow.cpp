@@ -210,6 +210,10 @@ MainWindow::MainWindow(QWidget* parent)
   init_Stats(tw);
   isInit = true;
 
+  initHardStepSensor();
+}
+
+void MainWindow::initHardStepSensor() {
 #ifdef Q_OS_ANDROID
 
   QAndroidJniObject jo = QAndroidJniObject::fromString("CheckSensorWin");
