@@ -126,6 +126,8 @@ void dlgSteps::saveSteps() {
                  ui->tableWidget->item(i, 0)->text());
     Reg.setValue("/Steps/Table-" + QString::number(i) + "-1",
                  ui->tableWidget->item(i, 1)->text());
+    Reg.setValue("/Steps/Table-" + QString::number(i) + "-2",
+                 ui->tableWidget->item(i, 2)->text());
   }
 
   QSettings Reg1(iniDir + "initsteps.ini", QSettings::IniFormat);
@@ -161,7 +163,9 @@ void dlgSteps::init_Steps() {
         Reg.value("/Steps/Table-" + QString::number(i) + "-0").toString();
     qlonglong str1 =
         Reg.value("/Steps/Table-" + QString::number(i) + "-1").toLongLong();
-    addRecord(str0, str1);
+    QString str2 =
+        Reg.value("/Steps/Table-" + QString::number(i) + "-2").toString();
+    addRecord(str0, str1, str2);
   }
 
   for (int i = 0; i < count; i++) {
@@ -185,7 +189,7 @@ void dlgSteps::on_editTangentLineSlope_textChanged(const QString& arg1) {
   mw_one->accel_pedometer->setTangentLineSlope(arg1.toFloat());
 }
 
-void dlgSteps::addRecord(QString date, qlonglong steps) {
+void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
   QString str0;
   QString strD0 = date;
   int m = strD0.split(" ").at(1).toInt();
@@ -209,8 +213,13 @@ void dlgSteps::addRecord(QString date, qlonglong steps) {
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       ui->tableWidget->setItem(i, 1, item);
 
+      item = new QTableWidgetItem(km);
+      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      ui->tableWidget->setItem(i, 2, item);
+
       ui->tableWidget->item(i, 0)->setFlags(Qt::NoItemFlags);
       ui->tableWidget->item(i, 1)->setFlags(Qt::NoItemFlags);
+      ui->tableWidget->item(i, 2)->setFlags(Qt::NoItemFlags);
       isYes = true;
       break;
     }
@@ -225,8 +234,13 @@ void dlgSteps::addRecord(QString date, qlonglong steps) {
     item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ui->tableWidget->setItem(count, 1, item);
 
+    item = new QTableWidgetItem(km);
+    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    ui->tableWidget->setItem(count, 2, item);
+
     ui->tableWidget->item(count, 0)->setFlags(Qt::NoItemFlags);
     ui->tableWidget->item(count, 1)->setFlags(Qt::NoItemFlags);
+    ui->tableWidget->item(count, 2)->setFlags(Qt::NoItemFlags);
   }
 }
 
@@ -244,7 +258,7 @@ void dlgSteps::setTableSteps(qlonglong steps) {
   int count = ui->tableWidget->rowCount();
 
   if (count == 0) {
-    addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1);
+    addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
   }
   if (count > 0) {
     QString strDate = ui->tableWidget->item(count - 1, 0)->text();
@@ -252,9 +266,16 @@ void dlgSteps::setTableSteps(qlonglong steps) {
       QTableWidgetItem* item = new QTableWidgetItem(QString::number(steps));
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       ui->tableWidget->setItem(count - 1, 1, item);
+
+      double km = ui->editStepLength->text().trimmed().toDouble() / 100 / 1000;
+      item = new QTableWidgetItem(QString::number(km));
+      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      ui->tableWidget->setItem(count - 1, 2, item);
+
       ui->tableWidget->item(count - 1, 1)->setFlags(Qt::NoItemFlags);
+      ui->tableWidget->item(count - 1, 2)->setFlags(Qt::NoItemFlags);
     } else
-      addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1);
+      addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
   }
 }
 

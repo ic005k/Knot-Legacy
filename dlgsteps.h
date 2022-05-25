@@ -24,7 +24,7 @@ class dlgSteps : public QDialog {
   void init_Steps();
   QString lblStyleLight = "background-color: rgb(25, 239, 21);color:black";
   QString lblStyleNormal;
-  void addRecord(QString, qlonglong);
+  void addRecord(QString, qlonglong, QString);
 
   qlonglong getCurrentSteps();
 
