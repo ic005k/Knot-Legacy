@@ -211,6 +211,7 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
 
       item = new QTableWidgetItem(QString::number(steps));
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      item->setBackground(QBrush(QColor(255, 255, 240)));
       ui->tableWidget->setItem(i, 1, item);
 
       item = new QTableWidgetItem(km);
@@ -232,6 +233,7 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
 
     item = new QTableWidgetItem(QString::number(steps));
     item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    item->setBackground(QBrush(QColor(255, 255, 240)));
     ui->tableWidget->setItem(count, 1, item);
 
     item = new QTableWidgetItem(km);
@@ -265,11 +267,13 @@ void dlgSteps::setTableSteps(qlonglong steps) {
     if (strDate == QDate::currentDate().toString("ddd MM dd yyyy")) {
       QTableWidgetItem* item = new QTableWidgetItem(QString::number(steps));
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      item->setBackground(QBrush(QColor(255, 255, 240)));
       ui->tableWidget->setItem(count - 1, 1, item);
 
       double km =
           ui->editStepLength->text().trimmed().toDouble() * steps / 100 / 1000;
-      item = new QTableWidgetItem(QString::number(km));
+      QString strKM = QString("%1").arg(km, 0, 'f', 2);
+      item = new QTableWidgetItem(strKM);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       ui->tableWidget->setItem(count - 1, 2, item);
 
