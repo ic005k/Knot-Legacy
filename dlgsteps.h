@@ -61,7 +61,8 @@ class dlgSteps : public QDialog {
   void on_btnLogs_clicked();
 
  private:
-  QBrush brush = QBrush(QColor(255, 228, 225));
+  QBrush brush1 = QBrush(QColor(255, 228, 225));
+  QBrush brush2 = QBrush(QColor(193, 255, 193));
 };
 
 #endif  // DLGSTEPS_H

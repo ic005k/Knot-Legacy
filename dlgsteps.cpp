@@ -216,11 +216,12 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
 
       item = new QTableWidgetItem(QString::number(steps));
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      item->setBackground(brush);
+      item->setBackground(brush1);
       ui->tableWidget->setItem(i, 1, item);
 
       item = new QTableWidgetItem(km);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      item->setBackground(brush2);
       ui->tableWidget->setItem(i, 2, item);
 
       ui->tableWidget->item(i, 0)->setFlags(Qt::NoItemFlags);
@@ -238,11 +239,12 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
 
     item = new QTableWidgetItem(QString::number(steps));
     item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    item->setBackground(brush);
+    item->setBackground(brush1);
     ui->tableWidget->setItem(count, 1, item);
 
     item = new QTableWidgetItem(km);
     item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    item->setBackground(brush2);
     ui->tableWidget->setItem(count, 2, item);
 
     ui->tableWidget->item(count, 0)->setFlags(Qt::NoItemFlags);
@@ -272,7 +274,7 @@ void dlgSteps::setTableSteps(qlonglong steps) {
     if (strDate == QDate::currentDate().toString("ddd MM dd yyyy")) {
       QTableWidgetItem* item = new QTableWidgetItem(QString::number(steps));
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      item->setBackground(brush);
+      item->setBackground(brush1);
       ui->tableWidget->setItem(count - 1, 1, item);
 
       double km =
@@ -280,6 +282,7 @@ void dlgSteps::setTableSteps(qlonglong steps) {
       QString strKM = QString("%1").arg(km, 0, 'f', 2);
       item = new QTableWidgetItem(strKM);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      item->setBackground(brush2);
       ui->tableWidget->setItem(count - 1, 2, item);
 
       ui->tableWidget->item(count - 1, 1)->setFlags(Qt::NoItemFlags);
