@@ -62,7 +62,7 @@ class dlgSteps : public QDialog {
 
  private:
   QBrush brush1 = QBrush(QColor(255, 228, 225));
-  QBrush brush2 = QBrush(QColor(193, 255, 193));
+  QBrush brush2 = QBrush(QColor(245, 222, 179));
 };
 
 #endif  // DLGSTEPS_H
