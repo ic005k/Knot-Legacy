@@ -36,6 +36,20 @@ import java.util.TimerTask;
 
 import android.content.ContentUris;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.zip.ZipInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedInputStream;
+import java.util.zip.ZipEntry;
+
 public class MyActivity extends QtActivity {
 
     private static MyActivity m_instance;
@@ -55,6 +69,9 @@ public class MyActivity extends QtActivity {
     public MyActivity() {
         m_instance = this;
     }
+
+
+
 
     public static int mini() {
         System.out.println("Mini+++++++++++++++++++++++");
@@ -189,6 +206,42 @@ public class MyActivity extends QtActivity {
 
     }
 
+    public static void Unzip(String zipFile, String targetDir) {
+        int BUFFER = 4096; //这里缓冲区我们使用4KB，
+        String strEntry; //保存每个zip的条目名称
+        try {
+            BufferedOutputStream dest = null; //缓冲输出流
+            FileInputStream fis = new FileInputStream(zipFile);
+            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
+            ZipEntry entry; //每个zip条目的实例
+            while ((entry = zis.getNextEntry()) != null) {
+                try {
+                    int count;
+                    byte data[] = new byte[BUFFER];
+                    strEntry = entry.getName();
+                    File entryFile = new File(targetDir + strEntry);
+                    File entryDir = new File(entryFile.getParent());
+                    if (!entryDir.exists()) {
+                        entryDir.mkdirs();
+                    }
+                    FileOutputStream fos = new FileOutputStream(entryFile);
+                    dest = new BufferedOutputStream(fos, BUFFER);
+                    while ((count = zis.read(data, 0, BUFFER)) != -1) {
+
+                        dest.write(data, 0, count);
+                    }
+                    dest.flush();
+                    dest.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            zis.close();
+        } catch (Exception cwj) {
+            cwj.printStackTrace();
+        }
+    }
+
     //-----------------------------------------------------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -300,6 +353,8 @@ public class MyActivity extends QtActivity {
     }
 
     //--------------------------------------------------------------------------------
+
+
 
 }
 
