@@ -194,9 +194,25 @@ void dlgReader::on_btnOpen_clicked() {
   QString openfile =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
 
+  if (QFile(openfile).exists()) {
+    readTextList.clear();
+    readTextList = readText(openfile);
+
+  } else
+    return;
+
+  isEpub = false;
+  openFile(openfile);
+  return;
+
+  if (readTextList.count() <= 0) return;
+  QString strHead = readTextList.at(0);
+
   if (openfile.mid(openfile.length() - 4, 4) == "epub") {
+    // if (strHead.trimmed().mid(0, 2) == "PK") {
     isEpub = true;
     QString dirpath = iniDir + "temp/";
+    deleteDirfile(dirpath);
     QProcess* pro = new QProcess;
     pro->execute("unzip", QStringList() << "-o" << openfile << "-d" << dirpath);
     pro->waitForFinished();
@@ -206,13 +222,43 @@ void dlgReader::on_btnOpen_clicked() {
     nameFilters << "*.html";
     QStringList filesTemp =
         dir.entryList(nameFilters, QDir::Files | QDir::Readable, QDir::Name);
-    htmlFiles.clear();
-    for (int j = 0; j < filesTemp.count(); j++) {
-      if (filesTemp.at(j).mid(0, 1) != ".") htmlFiles.append(filesTemp.at(j));
+    if (filesTemp.count() > 2) {
+      htmlFiles.clear();
+      for (int j = 0; j < filesTemp.count(); j++) {
+        if (filesTemp.at(j).mid(0, 1) != ".") htmlFiles.append(filesTemp.at(j));
+      }
+    } else {
+      dirpath = dirpath + "OPS/";
+      QDir dir(dirpath);
+      QStringList nameFilters;
+      nameFilters << "*.html";
+      filesTemp =
+          dir.entryList(nameFilters, QDir::Files | QDir::Readable, QDir::Name);
+      if (filesTemp.count() > 2) {
+        htmlFiles.clear();
+        for (int j = 0; j < filesTemp.count(); j++) {
+          if (filesTemp.at(j).mid(0, 1) != ".")
+            htmlFiles.append(filesTemp.at(j));
+        }
+      } else {
+        dirpath = iniDir + "temp/text/";
+        QDir dir(dirpath);
+        QStringList nameFilters;
+        nameFilters << "*.html";
+        filesTemp = dir.entryList(nameFilters, QDir::Files | QDir::Readable,
+                                  QDir::Name);
+        if (filesTemp.count() > 2) {
+          htmlFiles.clear();
+          for (int j = 0; j < filesTemp.count(); j++) {
+            if (filesTemp.at(j).mid(0, 1) != ".")
+              htmlFiles.append(filesTemp.at(j));
+          }
+        }
+      }
     }
     qDebug() << htmlFiles;
     QString str = mw_one->loadText(dirpath + htmlFiles.at(0));
-    qDebug() << str;
+
     setQML(str);
 
   } else {
@@ -233,8 +279,6 @@ void dlgReader::openFile(QString file) {
     ui->hSlider->setValue(0);
     ui->frameFun->hide();
 
-    readTextList.clear();
-    readTextList = readText(fileName);
     totallines = readTextList.count();
 
     isOpen = true;
@@ -281,6 +325,8 @@ void dlgReader::initReader() {
   fileName = Reg.value("/Reader/FileName").toString();
   if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
 
+  readTextList.clear();
+  readTextList = readText(fileName);
   openFile(fileName);
   mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 }
@@ -595,4 +641,37 @@ void dlgReader::setVPos() {
   qDebug() << "vpos=" << vpos;
   if (vpos > 10)
     mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", vpos);
+}
+
+int dlgReader::deleteDirfile(QString dirName) {
+  QDir directory(dirName);
+  if (!directory.exists()) {
+    return true;
+  }
+
+  QString srcPath = QDir::toNativeSeparators(dirName);
+  if (!srcPath.endsWith(QDir::separator())) srcPath += QDir::separator();
+
+  QStringList fileNames = directory.entryList(
+      QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
+  bool error = false;
+  for (QStringList::size_type i = 0; i != fileNames.size(); ++i) {
+    QString filePath = srcPath + fileNames.at(i);
+    QFileInfo fileInfo(filePath);
+    if (fileInfo.isFile() || fileInfo.isSymLink()) {
+      QFile::setPermissions(filePath, QFile::WriteOwner);
+      if (!QFile::remove(filePath)) {
+        error = true;
+      }
+    } else if (fileInfo.isDir()) {
+      if (!deleteDirfile(filePath)) {
+        error = true;
+      }
+    }
+  }
+
+  if (!directory.rmdir(QDir::toNativeSeparators(directory.path()))) {
+    error = true;
+  }
+  return !error;
 }

@@ -50,7 +50,8 @@ class dlgReader : public QDialog {
   void setQML(QString);
   void setVPos();
   QFont get_Font();
- public slots:
+  int deleteDirfile(QString dirName);
+public slots:
   void getPages();
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
