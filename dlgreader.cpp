@@ -8,7 +8,7 @@
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
-extern bool isImport, zh_cn;
+extern bool isImport, zh_cn, isAndroid;
 extern int fontSize;
 
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
@@ -201,63 +201,96 @@ void dlgReader::on_btnOpen_clicked() {
   } else
     return;
 
-  isEpub = false;
-  openFile(openfile);
-  return;
+  // isEpub = false;
+  // openFile(openfile);
+  // return;
 
   if (readTextList.count() <= 0) return;
   QString strHead = readTextList.at(0);
 
-  if (openfile.mid(openfile.length() - 4, 4) == "epub") {
-    // if (strHead.trimmed().mid(0, 2) == "PK") {
+  // if (openfile.mid(openfile.length() - 4, 4) == "epub") {
+  if (strHead.trimmed().mid(0, 2) == "PK") {
     isEpub = true;
     QString dirpath = iniDir + "temp/";
     deleteDirfile(dirpath);
-    QProcess* pro = new QProcess;
-    pro->execute("unzip", QStringList() << "-o" << openfile << "-d" << dirpath);
-    pro->waitForFinished();
 
-    QDir dir(dirpath);
-    QStringList nameFilters;
-    nameFilters << "*.html";
-    QStringList filesTemp =
-        dir.entryList(nameFilters, QDir::Files | QDir::Readable, QDir::Name);
-    if (filesTemp.count() > 2) {
-      htmlFiles.clear();
-      for (int j = 0; j < filesTemp.count(); j++) {
-        if (filesTemp.at(j).mid(0, 1) != ".") htmlFiles.append(filesTemp.at(j));
-      }
-    } else {
-      dirpath = dirpath + "OPS/";
-      QDir dir(dirpath);
-      QStringList nameFilters;
-      nameFilters << "*.html";
-      filesTemp =
-          dir.entryList(nameFilters, QDir::Files | QDir::Readable, QDir::Name);
-      if (filesTemp.count() > 2) {
-        htmlFiles.clear();
-        for (int j = 0; j < filesTemp.count(); j++) {
-          if (filesTemp.at(j).mid(0, 1) != ".")
-            htmlFiles.append(filesTemp.at(j));
-        }
-      } else {
-        dirpath = iniDir + "temp/text/";
-        QDir dir(dirpath);
-        QStringList nameFilters;
-        nameFilters << "*.html";
-        filesTemp = dir.entryList(nameFilters, QDir::Files | QDir::Readable,
-                                  QDir::Name);
-        if (filesTemp.count() > 2) {
-          htmlFiles.clear();
-          for (int j = 0; j < filesTemp.count(); j++) {
-            if (filesTemp.at(j).mid(0, 1) != ".")
-              htmlFiles.append(filesTemp.at(j));
+    QString temp = iniDir + "temp.zip";
+    QFile::remove(temp);
+    QFile::copy(openfile, temp);
+
+    QMessageBox box;
+    box.setText(temp);
+    box.exec();
+
+    // if (!isAndroid) {
+    QProcess* pro = new QProcess;
+    pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
+    pro->waitForFinished();
+    //}
+
+    /*#ifdef Q_OS_ANDROID
+         QString temp = iniDir + "temp.zip";
+         QFile::remove(temp);
+         QFile::copy(openfile, temp);
+
+        QAndroidJniObject javaZipFile = QAndroidJniObject::fromString(openfile);
+        QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(dirpath);
+        QAndroidJniObject m_activity = QAndroidJniObject::fromString(
+            "Unzip");  // QtAndroid::androidActivity();
+        m_activity.callStaticMethod<void>(
+            "com.x/MyActivity", "Unzip",
+    "(Ljava/lang/String;Ljava/lang/String;)V", javaZipFile.object<jstring>(),
+    javaZipDir.object<jstring>()); #endif*/
+
+    qDebug() << openfile << dirpath;
+
+    QString strFullPath;
+    QString str0 = dirpath + "META-INF/container.xml";
+    if (!QFile(str0).exists()) return;
+
+    QStringList conList = readText(str0);
+    for (int i = 0; i < conList.count(); i++) {
+      QString str = conList.at(i);
+      if (str.contains("full-path")) {
+        QStringList list1 = str.split(" ");
+        if (list1.count() > 0) {
+          for (int j = 0; j < list1.count(); j++) {
+            QString str1 = list1.at(j);
+            if (str1.contains("full-path")) {
+              QStringList list2 = str1.split("\"");
+              if (list2.count() > 0) {
+                strFullPath = list2.at(1);
+              }
+            }
           }
         }
       }
     }
-    qDebug() << htmlFiles;
-    QString str = mw_one->loadText(dirpath + htmlFiles.at(0));
+
+    QString strOpfFile = dirpath + strFullPath;
+    QFileInfo fi(strOpfFile);
+    QString strOpfPath = fi.path() + "/";
+    QStringList opfList = readText(strOpfFile);
+    htmlFiles.clear();
+    if (opfList.count() > 0) {
+      for (int i = 0; i < opfList.count(); i++) {
+        QString str0 = opfList.at(i);
+        if (str0.contains("href=")) {
+          QStringList list1 = str0.split(" ");
+          for (int j = 0; j < list1.count(); j++) {
+            QString str2 = list1.at(j);
+            if (str2.contains("href=")) {
+              QString str3 = str2.replace("href=", "");
+              str3 = str3.replace("\"", "");
+              if (str3.contains("html")) htmlFiles.append(strOpfPath + str3);
+            }
+          }
+        }
+      }
+    }
+
+    qDebug() << strFullPath << htmlFiles;
+    QString str = mw_one->loadText(htmlFiles.at(0));
 
     setQML(str);
 
@@ -511,30 +544,39 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
 void dlgReader::on_btnPageUp_clicked() {
   mw_one->ui->lblTitle->hide();
 
-  int count = iPage - baseLines;
-  if (count <= 0) return;
-  textPos = 0;
-  QString txt1;
-  ui->textBrowser->clear();
+  QString qsShow;
+  if (!isEpub) {
+    int count = iPage - baseLines;
+    if (count <= 0) return;
+    textPos = 0;
+    QString txt1;
+    ui->textBrowser->clear();
 
-  for (int i = count - baseLines; i < count; i++) {
-    iPage--;
-    QString str = readTextList.at(i);
-    if (str.trimmed() != "") txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
+    for (int i = count - baseLines; i < count; i++) {
+      iPage--;
+      QString str = readTextList.at(i);
+      if (str.trimmed() != "")
+        txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
+    }
+
+    qsShow =
+        "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
+        txt1 + "</p>";
+
+    mw_one->ui->hSlider->setMaximum(totallines / baseLines);
+    mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
+                                  QString::number(iPage / baseLines) + " / " +
+                                  QString::number(totallines / baseLines));
+    mw_one->ui->progReader->setMaximum(totallines / baseLines);
+    mw_one->ui->progReader->setValue(iPage / baseLines);
+
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
+
+  } else {
+    htmlIndex--;
+    if (htmlIndex == -1) htmlIndex = 0;
+    qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
   }
-
-  QString qsShow =
-      "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
-      txt1 + "</p>";
-
-  mw_one->ui->hSlider->setMaximum(totallines / baseLines);
-  mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
-                                QString::number(iPage / baseLines) + " / " +
-                                QString::number(totallines / baseLines));
-  mw_one->ui->progReader->setMaximum(totallines / baseLines);
-  mw_one->ui->progReader->setValue(iPage / baseLines);
-
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
   setQML(qsShow);
 }
 
@@ -569,7 +611,7 @@ void dlgReader::on_btnPageNext_clicked() {
   } else {
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
-    qsShow = mw_one->loadText(iniDir + "temp/" + htmlFiles.at(htmlIndex));
+    qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
   }
   setQML(qsShow);
 }
