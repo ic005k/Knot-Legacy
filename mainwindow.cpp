@@ -3762,9 +3762,17 @@ void MainWindow::on_btnFontLess_clicked() {
 }
 
 void MainWindow::on_hSlider_sliderMoved(int position) {
-  ui->btnLines->setText(
-      tr("Pages") + "\n" + QString::number(position + 1) + " / " +
-      QString::number(mydlgReader->totallines / mydlgReader->baseLines));
-  ui->progReader->setMaximum(mydlgReader->totallines / mydlgReader->baseLines);
+  if (!mydlgReader->isEpub) {
+    ui->btnLines->setText(
+        tr("Pages") + "\n" + QString::number(position + 1) + " / " +
+        QString::number(mydlgReader->totallines / mydlgReader->baseLines));
+    ui->progReader->setMaximum(mydlgReader->totallines /
+                               mydlgReader->baseLines);
+  } else {
+    ui->btnLines->setText(tr("Pages") + "\n" + QString::number(position + 1) +
+                          " / " +
+                          QString::number(mydlgReader->htmlFiles.count()));
+    ui->progReader->setMaximum(mydlgReader->htmlFiles.count());
+  }
   ui->progReader->setValue(position + 1);
 }
