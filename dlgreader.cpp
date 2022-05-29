@@ -216,15 +216,18 @@ void dlgReader::openFile(QString openfile) {
 
     // if (openfile.mid(openfile.length() - 4, 4) == "epub") {
     if (strHead.trimmed().mid(0, 2) == "PK") {
-      isEpub = true;
-      QString dirpath = iniDir + "temp/";
-      deleteDirfile(dirpath);
+      QString dirpath, dirpathbak;
+      // dirpath = "/storage/emulated/0/epubtemp/";
+      dirpath = iniDir + "temp/";
+      dirpathbak = iniDir + "tempbak/";
+
       QDir dir;
+      dir.rename(dirpath, dirpathbak);
       dir.mkdir(dirpath);
 
       // QFile::copy(":/src/unzip", iniDir + "unzip");
 
-      QString temp = iniDir + "temp.epub";
+      QString temp = iniDir + "temp.zip";
       QFile::remove(temp);
       if (!QFile::copy(openfile, temp)) {
         QMessageBox box;
@@ -232,9 +235,17 @@ void dlgReader::openFile(QString openfile) {
         box.exec();
       } else {
         QMessageBox box;
+        QProcess* pro = new QProcess;
+
+        pro->start(iniDir + "unzip", QStringList()
+                                         << "-o" << temp << "-d" << dirpath);
+        QString str = pro->readAll();
+        pro->waitForFinished(5000);
+
         box.setText(temp + "\n" + mw_one->getFileSize(QFile(temp).size(), 2) +
                     "\n" +
-                    mw_one->getFileSize(QFile(iniDir + "unzip").size(), 2));
+                    mw_one->getFileSize(QFile(iniDir + "unzip").size(), 2) +
+                    "\n" + str);
         // box.exec();
       }
 
@@ -260,9 +271,15 @@ void dlgReader::openFile(QString openfile) {
       QString strFullPath;
       QString str0 = dirpath + "META-INF/container.xml";
       if (!QFile(str0).exists()) {
-        isEpub = false;
+        deleteDirfile(dirpath);
+        QDir dir;
+        dir.rename(dirpathbak, dirpath);
+
         qDebug() << "====== isEpub == false ======";
         return;
+      } else {
+        deleteDirfile(dirpathbak);
+        isEpub = true;
       }
 
       QStringList conList = readText(str0);
