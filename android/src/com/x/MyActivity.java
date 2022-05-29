@@ -40,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,6 +50,14 @@ import java.util.zip.ZipInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedInputStream;
 import java.util.zip.ZipEntry;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
 
 public class MyActivity extends QtActivity {
 
@@ -69,8 +78,6 @@ public class MyActivity extends QtActivity {
     public MyActivity() {
         m_instance = this;
     }
-
-
 
 
     public static int mini() {
@@ -206,7 +213,23 @@ public class MyActivity extends QtActivity {
 
     }
 
+    //--------------------------------------------------------------------------------------------------
     public static void Unzip(String zipFile, String targetDir) {
+        Log.i(TAG, zipFile);
+        Log.i(TAG, targetDir);
+        try {
+            unzip(zipFile, targetDir);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public static void Unzip1(String zipFile, String targetDir) {
+        Log.i(TAG, zipFile);
+        Log.i(TAG, targetDir);
+
         int BUFFER = 4096; //这里缓冲区我们使用4KB，
         String strEntry; //保存每个zip的条目名称
         try {
@@ -237,9 +260,108 @@ public class MyActivity extends QtActivity {
                 }
             }
             zis.close();
+            Log.i(TAG, "unzip end...");
         } catch (Exception cwj) {
             cwj.printStackTrace();
         }
+    }
+
+    public static void Unzip2(String zipPath, String tempFileName) {
+
+        try {
+
+            Log.e("whh0927", "开始解压的文件：" + zipPath + "," + "解压的目标路径：" + tempFileName);
+
+            // 创建解压目标目录
+
+            File file = new File(tempFileName);
+
+            // 如果目标目录不存在，则创建
+
+            if (!file.exists()) {
+
+                file.mkdirs();
+
+            }
+
+            // 打开压缩文件
+
+            InputStream inputStream = new FileInputStream(zipPath);
+
+            ZipInputStream zipInputStream = new ZipInputStream(inputStream);
+
+            // 读取一个进入点
+
+            ZipEntry zipEntry = zipInputStream.getNextEntry();
+
+            // 使用1Mbuffer
+
+            byte[] buffer = new byte[1024 * 1024];
+
+            // 解压时字节计数
+
+            int count = 0;
+
+            // 如果进入点为空说明已经遍历完所有压缩包中文件和目录
+
+            while (zipEntry != null) {
+
+                // Log.e("whh0927", "解压文件 入口 1： " + zipEntry);
+
+                if (!zipEntry.isDirectory()) { //如果是一个文件
+
+                    // 如果是文件
+
+                    String fileName = zipEntry.getName();
+
+                    // Log.e("whh0927", "解压文件 原来 文件的位置： " + fileName);
+
+                    fileName = fileName.substring(fileName.lastIndexOf("/") + 1); //截取文件的名字 去掉原文件夹名字
+
+                    // Log.e("whh0927", "解压文件 的名字： " + fileName);
+
+                    file = new File(tempFileName + File.separator + fileName); //放到新的解压的文件路径
+
+                    file.createNewFile();
+
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+                    while ((count = zipInputStream.read(buffer)) > 0) {
+
+                        fileOutputStream.write(buffer, 0, count);
+
+                    }
+
+                    fileOutputStream.close();
+
+                }
+
+                // 定位到下一个文件入口
+
+                zipEntry = zipInputStream.getNextEntry();
+
+                // Log.e("whh0927", "解压文件 入口 2： " + zipEntry);
+
+            }
+
+            zipInputStream.close();
+
+            //FileUtils.deleteFile(new File(zipPath)); //删除原文件
+
+            //return true;
+            Log.i(TAG, "解压成功...");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            Log.e("whh0927", "unzipFile Exception" + e.toString());
+
+            //return false;
+            Log.i(TAG, "解压失败...");
+
+        }
+
     }
 
     //-----------------------------------------------------------------------
@@ -354,6 +476,137 @@ public class MyActivity extends QtActivity {
 
     //--------------------------------------------------------------------------------
 
+        private static final List<ZipEntry> entries = new ArrayList<ZipEntry>();
+
+
+
+        public static void unZipDirectory(String zipFileDirectory, String outputDirectory) throws ZipException, IOException {
+            File file = new File(zipFileDirectory);
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].getName().endsWith(".zip")) {
+                    unzip(zipFileDirectory + File.separator + files[i].getName(),
+                            outputDirectory);
+                }
+            }
+        }
+
+        public static void unzip(String string, String outputDirectory)
+                throws ZipException, IOException {
+            ZipFile zipFile = new ZipFile(string);
+            Enumeration<ZipEntry> enu = (Enumeration<ZipEntry>) zipFile.entries();
+            while (enu.hasMoreElements()) {
+                ZipEntry entry = (ZipEntry) enu.nextElement();
+                if (entry.isDirectory()) {
+                    String fileName = entry.getName().substring(0,
+                            entry.getName().length() - 1);
+                    String directoryPath = outputDirectory + File.separator
+                            + fileName;
+                    File directory = new File(directoryPath);
+                    directory.mkdir();
+                }
+                entries.add(entry);
+            }
+            unzip(zipFile, entries, outputDirectory);
+        }
+
+        private static void unzip(ZipFile zipFile, List<ZipEntry> entries2,
+                           String outputDirectory) throws IOException {
+            // TODO Auto-generated method stub
+            Iterator<ZipEntry> it = entries.iterator();
+            while (it.hasNext()) {
+                ZipEntry zipEntry = (ZipEntry) it.next();
+               // MultiThreadEntry mte = new MultiThreadEntry(zipFile, zipEntry,
+               //         outputDirectory);
+
+               // Thread thread = new Thread(mte);
+               // thread.start();
+                bis = new BufferedInputStream(zipFile.getInputStream(zipEntry));
+                try {
+                    unzipFiles(zipEntry, outputDirectory);
+                    Log.i(TAG, zipEntry.getName());
+                    Log.i(TAG, outputDirectory);
+                } catch (IOException e) {
+                    try {
+                        bis.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                } finally {
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+    public static final int BUFFER_SIZE = 4096;
+    private static BufferedInputStream bis;
+    public static void unzipFiles(ZipEntry zipEntry, String outputDirectory)
+            throws IOException {
+
+        byte[] data = new byte[BUFFER_SIZE];
+        String entryName = zipEntry.getName();
+        entryName = new String(entryName.getBytes("GBK"));
+        FileOutputStream fos = new FileOutputStream(outputDirectory
+                + File.separator + entryName);
+        if (zipEntry.isDirectory()) {
+
+        } else {
+            BufferedOutputStream bos = new BufferedOutputStream(fos,
+                    BUFFER_SIZE);
+            int count = 0;
+            while ((count = bis.read(data, 0, BUFFER_SIZE)) != -1) {
+                bos.write(data, 0, count);
+            }
+            bos.flush();
+            bos.close();
+        }
+    }
+
+        //读取压缩文件中的内容名称
+        public static List<String> readZipFile(String file) throws Exception {
+            List<String> list = new ArrayList<String>();
+            InputStream in = new BufferedInputStream(new FileInputStream(file));
+            ZipInputStream zin = new ZipInputStream(in);
+            ZipEntry ze;
+            while ((ze = zin.getNextEntry()) != null) {
+                if (ze.isDirectory()) {
+                } else {
+                    String zeName = new String(ze.getName().getBytes("iso-8859-1"), "utf-8");
+                    list.add(zeName);
+                }
+            }
+            zin.closeEntry();
+            return list;
+        }
+
+        public static void readZipFile2(String file) throws Exception {
+            ZipFile zf = new ZipFile(file);
+            InputStream in = new BufferedInputStream(new FileInputStream(file));
+            ZipInputStream zin = new ZipInputStream(in);
+            ZipEntry ze;
+            while ((ze = zin.getNextEntry()) != null) {
+                if (ze.isDirectory()) {
+                } else {
+                    String zeName = new String(ze.getName().getBytes("iso-8859-1"), "utf-8");
+                    System.out.println("获取文件名称：" + zeName);
+                    long size = ze.getSize();
+                    if (size > 0) {
+                        BufferedReader br = new BufferedReader(
+                                new InputStreamReader(zf.getInputStream(ze)));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            //                        System.out.println(line);
+                        }
+                        br.close();
+                    }
+                }
+            }
+            zin.closeEntry();
+        }
 
 
 }
