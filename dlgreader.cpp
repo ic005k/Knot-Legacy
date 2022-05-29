@@ -201,7 +201,6 @@ void dlgReader::openFile(QString openfile) {
   isOpen = false;
   if (QFile(openfile).exists()) {
     if (!mw_one->ui->frameQML->isHidden()) saveReader();
-    fileName = openfile;
     mw_one->ui->lblTitle->hide();
 
     if (QFile(openfile).exists()) {
@@ -223,7 +222,6 @@ void dlgReader::openFile(QString openfile) {
 
       QDir dir;
       dir.rename(dirpath, dirpathbak);
-      dir.mkdir(dirpath);
 
       // QFile::copy(":/src/unzip", iniDir + "unzip");
 
@@ -324,8 +322,6 @@ void dlgReader::openFile(QString openfile) {
       }
 
       qDebug() << strFullPath << htmlFiles;
-      // QString str = mw_one->loadText(htmlFiles.at(0));
-      //  setQML(str);
 
     } else {
       isEpub = false;
@@ -339,6 +335,7 @@ void dlgReader::openFile(QString openfile) {
       totallines = readTextList.count();
     }
 
+    fileName = openfile;
     ui->frameFun->hide();
     isOpen = true;
     goPostion();
@@ -584,8 +581,8 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
 
 void dlgReader::on_btnPageUp_clicked() {
   mw_one->ui->lblTitle->hide();
-
   QString qsShow;
+
   if (!isEpub) {
     int count = iPage - baseLines;
     if (count <= 0) return;
@@ -613,7 +610,7 @@ void dlgReader::on_btnPageUp_clicked() {
 
   } else {
     htmlIndex--;
-    if (htmlIndex == -1) htmlIndex = 0;
+    if (htmlIndex < 0) htmlIndex = 0;
     qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
 
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());

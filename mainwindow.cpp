@@ -1910,12 +1910,16 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       y = 0;
       w = ui->quickWidget->width();
       h = ui->quickWidget->height();
+
+      // qDebug() << "Press:" << press_x << press_y;
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
       relea_x = event->globalX();
       relea_y = event->globalY();
       ui->lblTitle->hide();
+
+      // qDebug() << "Release:" << relea_x << relea_y;
     }
 
     if (event->type() == QEvent::MouseMove) {
@@ -1926,8 +1930,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     if ((relea_x - press_x) > 50 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
-      if (mydlgReader->iPage - mydlgReader->baseLines <= 0)
-        return QWidget::eventFilter(watch, evn);
+      // if (mydlgReader->iPage - mydlgReader->baseLines <= 0)
+      //   return QWidget::eventFilter(watch, evn);
 
       ui->lblTitle->setPixmap(ui->quickWidget->grab());
       QPropertyAnimation* animation1 =
@@ -1956,8 +1960,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     if ((press_x - relea_x) > 50 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
-      if (mydlgReader->iPage + mydlgReader->baseLines > mydlgReader->totallines)
-        return QWidget::eventFilter(watch, evn);
+      // if (mydlgReader->iPage + mydlgReader->baseLines >
+      // mydlgReader->totallines)
+      //   return QWidget::eventFilter(watch, evn);
 
       ui->lblTitle->setPixmap(ui->quickWidget->grab());
       QPropertyAnimation* animation1 =
@@ -3483,13 +3488,13 @@ void MainWindow::on_btnSelTab_clicked() {
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   QFont font;
-  font.setPointSize(fontSize);
+  font.setPointSize(fontSize + 2);
   list->setFont(font);
 
   int count = tabData->tabBar()->count();
   for (int i = 0; i < count; i++) {
     QListWidgetItem* item = new QListWidgetItem;
-    item->setSizeHint(QSize(130, 30));  // item->sizeHint().width()
+    item->setSizeHint(QSize(135, 35));  // item->sizeHint().width()
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     item->setText(" " + QString::number(i + 1) + " . " + tabData->tabText(i));
     list->addItem(item);
@@ -3501,9 +3506,9 @@ void MainWindow::on_btnSelTab_clicked() {
 
   int h = 0;
   if (count <= 15)
-    h = count * 30 + 4;
+    h = count * 35 + 4;
   else
-    h = 15 * 30 + 4;
+    h = 15 * 35 + 4;
 
   int w = 220;
   int y = (this->height() - h) / 2;
