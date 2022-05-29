@@ -8,7 +8,7 @@
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
-extern bool isImport, zh_cn, isAndroid;
+extern bool isImport, zh_cn, isAndroid, isIOS;
 extern int fontSize;
 
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
@@ -213,40 +213,51 @@ void dlgReader::on_btnOpen_clicked() {
     isEpub = true;
     QString dirpath = iniDir + "temp/";
     deleteDirfile(dirpath);
+    QDir dir;
+    dir.mkdir(dirpath);
 
-    QString temp = iniDir + "temp.zip";
+    QFile::copy(":/src/unzip", iniDir + "unzip");
+
+    QString temp = iniDir + "temp.epub";
     QFile::remove(temp);
-    QFile::copy(openfile, temp);
+    if (!QFile::copy(openfile, temp)) {
+      QMessageBox box;
+      box.setText(openfile + "\n!=\n" + temp);
+      box.exec();
+    } else {
+      QMessageBox box;
+      box.setText(temp + "\n" + mw_one->getFileSize(QFile(temp).size(), 2) +
+                  "\n" +
+                  mw_one->getFileSize(QFile(iniDir + "unzip").size(), 2));
+      // box.exec();
+    }
 
-    QMessageBox box;
-    box.setText(temp);
-    box.exec();
-
-    // if (!isAndroid) {
+#ifdef Q_OS_MAC
     QProcess* pro = new QProcess;
     pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
     pro->waitForFinished();
-    //}
+#endif
 
-    /*#ifdef Q_OS_ANDROID
-         QString temp = iniDir + "temp.zip";
-         QFile::remove(temp);
-         QFile::copy(openfile, temp);
+#ifdef Q_OS_ANDROID
+    QAndroidJniObject javaZipFile = QAndroidJniObject::fromString(temp);
+    QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(dirpath);
+    QAndroidJniObject m_activity = QAndroidJniObject::fromString("Unzip");
+    m_activity.callStaticMethod<void>(
+        "com.x/MyActivity", "Unzip", "(Ljava/lang/String;Ljava/lang/String;)V",
+        javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
 
-        QAndroidJniObject javaZipFile = QAndroidJniObject::fromString(openfile);
-        QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(dirpath);
-        QAndroidJniObject m_activity = QAndroidJniObject::fromString(
-            "Unzip");  // QtAndroid::androidActivity();
-        m_activity.callStaticMethod<void>(
-            "com.x/MyActivity", "Unzip",
-    "(Ljava/lang/String;Ljava/lang/String;)V", javaZipFile.object<jstring>(),
-    javaZipDir.object<jstring>()); #endif*/
+#endif
 
+    // mw_one->Sleep(5000);
     qDebug() << openfile << dirpath;
 
     QString strFullPath;
     QString str0 = dirpath + "META-INF/container.xml";
-    if (!QFile(str0).exists()) return;
+    if (!QFile(str0).exists()) {
+      isEpub = false;
+      qDebug() << "====== isEpub == false ======";
+      return;
+    }
 
     QStringList conList = readText(str0);
     for (int i = 0; i < conList.count(); i++) {
