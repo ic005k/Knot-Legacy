@@ -2,7 +2,8 @@ import QtQuick 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
-import MyModel 1.0
+import MyModel1 1.0
+import MyModel2 1.0
 
 Item {
     id: textitem
@@ -13,6 +14,31 @@ Item {
     File {
         id: file
         source: "" //"/Users/hz/Documents/1.txt"
+    }
+
+    function loadHtml(msg) {
+
+        document.load("file://" + msg)
+    }
+
+    DocumentHandler {
+        id: document
+        objectName: "dochandler"
+        document: textArea.textDocument
+        cursorPosition: textArea.cursorPosition
+        selectionStart: textArea.selectionStart
+        selectionEnd: textArea.selectionEnd
+
+        // textColor: TODO
+        //Component.onCompleted: document.load("qrc:/texteditor.html")
+        //Component.onCompleted: document.load("file://" + htmlFile)
+        onLoaded: {
+            textArea.text = text
+        }
+        onError: {
+            errorDialog.text = message
+            errorDialog.visible = true
+        }
     }
 
     Image {
@@ -61,9 +87,12 @@ Item {
             //Component.onCompleted: text = file.text
             wrapMode: TextArea.Wrap
             readOnly: true
+            //persistentSelection: true
             color: "#000000"
 
             text: strText
+
+            onLinkActivated: Qt.openUrlExternally(link)
         }
 
         ScrollBar.vertical: ScrollBar {

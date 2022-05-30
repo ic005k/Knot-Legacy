@@ -22,12 +22,13 @@ android
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 dataFiles.files+=src/readme.txt
+#dataFiles.files+=src/unzip
 #dataFiles.files+=src/Xcount.ini
 #dataFiles.files+=src/Xcount.txt
 #dataFiles.files+=src/pic.png
 dataFiles.files+=src/1.png
 dataFiles.files+=src/2.png
-#dataFiles.path = /assets/data
+dataFiles.path = /assets/data
 INSTALLS += dataFiles
 }
 
@@ -46,6 +47,7 @@ SOURCES += \
     dlgsettime.cpp \
     dlgsteps.cpp \
     dlgtodo.cpp \
+    documenthandler.cpp \
     file.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -64,6 +66,7 @@ HEADERS += \
     dlgsettime.h \
     dlgsteps.h \
     dlgtodo.h \
+    documenthandler.h \
     file.h \
     mainwindow.h \
     smoothscrollbar.h \

@@ -12,6 +12,7 @@
 #include <QTextBlock>
 #include <QTextBrowser>
 
+#include "documenthandler.h"
 #include "file.h"
 #include "smoothscrollbar.h"
 namespace Ui {
@@ -26,6 +27,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  DocumentHandler *myDocHandler;
   bool isEpub = false;
   QStringList htmlFiles;
   QString fontname;
@@ -51,6 +53,7 @@ class dlgReader : public QDialog {
   void setVPos();
   QFont get_Font();
   int deleteDirfile(QString dirName);
+  void setQMLHtml();
 public slots:
   void getPages();
   void on_btnPageNext_clicked();

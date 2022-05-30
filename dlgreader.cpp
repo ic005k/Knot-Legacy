@@ -15,7 +15,9 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
   ui->textBrowser->hide();
 
-  qmlRegisterType<File>("MyModel", 1, 0, "File");
+  myDocHandler = new DocumentHandler(this);
+  qmlRegisterType<File>("MyModel1", 1, 0, "File");
+  qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
 
   this->installEventFilter(this);
   ui->textBrowser->installEventFilter(this);
@@ -200,6 +202,9 @@ void dlgReader::on_btnOpen_clicked() {
 void dlgReader::openFile(QString openfile) {
   isOpen = false;
   if (QFile(openfile).exists()) {
+    mw_one->ui->frameFun->hide();
+    mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
+
     if (!mw_one->ui->frameQML->isHidden()) saveReader();
     mw_one->ui->lblTitle->hide();
 
@@ -383,7 +388,6 @@ void dlgReader::initReader() {
   if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
 
   openFile(fileName);
-  mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 }
 
 void dlgReader::on_btnFontPlus_clicked() {
@@ -464,15 +468,15 @@ void dlgReader::getLines() {
       qsShow =
           "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
           txt1 + "</p>";
+      setQML(qsShow);
 
     } else {
       mw_one->ui->hSlider->setMaximum(htmlFiles.count());
       htmlIndex = sPos - 1;
       if (htmlIndex < 0) htmlIndex = 0;
-      qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
+      // qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
+      setQMLHtml();
     }
-
-    setQML(qsShow);
   }
 }
 
@@ -601,6 +605,8 @@ void dlgReader::on_btnPageUp_clicked() {
         "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
         txt1 + "</p>";
 
+    setQML(qsShow);
+
     mw_one->ui->hSlider->setMaximum(totallines / baseLines);
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
                                   QString::number(iPage / baseLines) + " / " +
@@ -611,7 +617,8 @@ void dlgReader::on_btnPageUp_clicked() {
   } else {
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
-    qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
+    // qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
+    setQMLHtml();
 
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
@@ -621,7 +628,6 @@ void dlgReader::on_btnPageUp_clicked() {
     mw_one->ui->progReader->setValue(htmlIndex);
   }
   mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
-  setQML(qsShow);
 }
 
 void dlgReader::on_btnPageNext_clicked() {
@@ -643,6 +649,7 @@ void dlgReader::on_btnPageNext_clicked() {
     qsShow =
         "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
         txt1 + "</p>";
+    setQML(qsShow);
 
     mw_one->ui->hSlider->setMaximum(totallines / baseLines);
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
@@ -654,7 +661,9 @@ void dlgReader::on_btnPageNext_clicked() {
   } else {
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
-    qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
+    // qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
+
+    setQMLHtml();
 
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
@@ -662,9 +671,17 @@ void dlgReader::on_btnPageNext_clicked() {
                                   QString::number(htmlFiles.count()));
     mw_one->ui->progReader->setMaximum(htmlFiles.count());
     mw_one->ui->progReader->setValue(htmlIndex);
+
+    // mw_one->ui->quickWidget->rootContext()->setContextProperty(
+    //     "htmlFile", htmlFiles.at(htmlIndex));
   }
   mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
-  setQML(qsShow);
+}
+
+void dlgReader::setQMLHtml() {
+  QVariant msg = htmlFiles.at(htmlIndex);
+  QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 }
 
 void dlgReader::on_btnLines_clicked() {
