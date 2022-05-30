@@ -573,8 +573,8 @@ public class MyActivity extends QtActivity {
 
     //----------------------------------------------------------------------------------------------
     /*
-    This method can parse out the real local file path from a file URI.
-    */
+This method can parse out the real local file path from a file URI.
+*/
     private String getUriRealPath(Context ctx, Uri uri) {
         String ret = "";
 
