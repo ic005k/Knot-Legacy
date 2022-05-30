@@ -54,6 +54,7 @@ class dlgReader : public QDialog {
   QFont get_Font();
   int deleteDirfile(QString dirName);
   void setQMLHtml();
+  void setFontSize(int textFontSize);
 public slots:
   void getPages();
   void on_btnPageNext_clicked();

@@ -3716,13 +3716,17 @@ QString MainWindow::getYMD(QString date) {
 
 void MainWindow::on_btnReader_clicked() {
   if (!isOne) {
-    isOne = true;
     mwh = this->height();
     setFixedHeight(mwh);
   }
 
   ui->frameMain->hide();
   ui->frameQML->show();
+
+  if (!isOne) {
+    isOne = true;
+    mydlgReader->setVPos();
+  }
 }
 
 void MainWindow::setSCrollPro(QObject* obj) {
@@ -3757,13 +3761,13 @@ void MainWindow::on_hSlider_sliderReleased() {
 
 void MainWindow::on_btnFontPlus_clicked() {
   textFontSize++;
-  ui->quickWidget->rootContext()->setContextProperty("FontSize", textFontSize);
+  mydlgReader->setFontSize(textFontSize);
 }
 
 void MainWindow::on_btnFontLess_clicked() {
   if (textFontSize <= 8) return;
   textFontSize--;
-  ui->quickWidget->rootContext()->setContextProperty("FontSize", textFontSize);
+  mydlgReader->setFontSize(textFontSize);
 }
 
 void MainWindow::on_hSlider_sliderMoved(int position) {

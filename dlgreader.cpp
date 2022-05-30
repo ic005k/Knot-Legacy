@@ -202,11 +202,11 @@ void dlgReader::on_btnOpen_clicked() {
 void dlgReader::openFile(QString openfile) {
   isOpen = false;
   if (QFile(openfile).exists()) {
+    mw_one->ui->lblTitle->hide();
     mw_one->ui->frameFun->hide();
     mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 
     if (!mw_one->ui->frameQML->isHidden()) saveReader();
-    mw_one->ui->lblTitle->hide();
 
     if (QFile(openfile).exists()) {
       readTextList.clear();
@@ -360,11 +360,13 @@ void dlgReader::saveReader() {
   Reg.setIniCodec("utf-8");
 
   Reg.setValue("/Reader/FileName", fileName);
-  Reg.setValue("/Reader/vpos" + fileName, textPos);
-  int page = iPage;
-  Reg.setValue("/Reader/iPage" + fileName, page - baseLines);
+  Reg.setValue("/Reader/FontName", fontname);
   Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
-  Reg.setValue("/Reader/htmlIndex" + fileName, htmlIndex);
+  Reg.setValue("/Reader/vpos" + fileName, textPos);
+  if (!isEpub) {
+    Reg.setValue("/Reader/iPage" + fileName, iPage - baseLines);
+  } else
+    Reg.setValue("/Reader/htmlIndex" + fileName, htmlIndex);
 
   qDebug() << "textPos" << textPos << "htmlIndex=" << htmlIndex;
 }
@@ -515,12 +517,12 @@ void dlgReader::on_btnPage_clicked() {
 
   connect(list, &QListWidget::itemClicked, [=]() {
     fontname = list->currentItem()->text();
+    saveReader();
     mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
                                                                fontname);
-    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
-    Reg.setIniCodec("utf-8");
-    Reg.setValue("/Reader/FontName", fontname);
+
     list->close();
+    setVPos();
   });
 
   list->setGeometry(0, 0, mw_one->width(), mw_one->height());
@@ -673,7 +675,7 @@ void dlgReader::on_btnPageNext_clicked() {
     mw_one->ui->progReader->setValue(htmlIndex);
 
     // mw_one->ui->quickWidget->rootContext()->setContextProperty(
-    //     "htmlFile", htmlFiles.at(htmlIndex));
+    //     "baseUrl", htmlFiles.at(htmlIndex));
   }
   mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
 }
@@ -757,10 +759,16 @@ void dlgReader::goPostion() {
 void dlgReader::setVPos() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  qreal vpos = Reg.value("/Reader/vpos" + fileName, 0).toReal();
-  qDebug() << "vpos=" << vpos;
-  if (vpos > 10)
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", vpos);
+  textPos = Reg.value("/Reader/vpos" + fileName, 0).toReal();
+
+  if (textPos > 10) {
+    // mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos",
+    // textPos);
+
+    QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+    QMetaObject::invokeMethod((QObject*)root, "setVPos",
+                              Q_ARG(QVariant, textPos));
+  }
 }
 
 int dlgReader::deleteDirfile(QString dirName) {
@@ -794,4 +802,11 @@ int dlgReader::deleteDirfile(QString dirName) {
     error = true;
   }
   return !error;
+}
+
+void dlgReader::setFontSize(int textFontSize) {
+  saveReader();
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize",
+                                                             textFontSize);
+  setVPos();
 }

@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+//import QtWebView 1.0
 import MyModel1 1.0
 import MyModel2 1.0
 
@@ -19,6 +20,11 @@ Item {
     function loadHtml(msg) {
 
         document.load("file://" + msg)
+    }
+
+    function setVPos(vpos) {
+        flickable.contentY = vpos
+        console.log(vpos)
     }
 
     DocumentHandler {
@@ -59,11 +65,18 @@ Item {
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
 
+
+        /*WebView {
+            id: mywebview
+            width: textArea.width
+            height: textArea.height
+            url: "file://" + baseUrl
+        }*/
         states: State {
             name: "autoscroll"
             PropertyChanges {
                 target: flickable
-                contentY: textPos
+                //contentY: textPos
             }
         }
 
@@ -91,7 +104,7 @@ Item {
             color: "#000000"
 
             text: strText
-
+            visible: true
             onLinkActivated: Qt.openUrlExternally(link)
         }
 

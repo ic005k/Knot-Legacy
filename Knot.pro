@@ -1,6 +1,6 @@
 QT += core gui
 QT += charts sensors
-QT += qml quick quickwidgets
+QT += qml quick quickwidgets webview
 QT += printsupport
 
 #QT += qml quick
@@ -19,7 +19,6 @@ unix:!macx:{
 
 android
 {
-
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 dataFiles.files+=src/readme.txt
 #dataFiles.files+=src/unzip
