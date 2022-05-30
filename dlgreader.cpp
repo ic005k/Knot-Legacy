@@ -37,9 +37,6 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   this->setStyleSheet(
       "background-image: url(:/src/b.png);border-width:0;border-style:outset;");
 
-  connect(ui->textBrowser->verticalScrollBar(), &QScrollBar::valueChanged, this,
-          &dlgReader::getPages);
-
   mw_one->ui->lblTitle->hide();
   mw_one->ui->frameFun->hide();
   ui->progressBar->hide();
@@ -204,6 +201,7 @@ void dlgReader::openFile(QString openfile) {
   if (QFile(openfile).exists()) {
     mw_one->ui->lblTitle->hide();
     mw_one->ui->frameFun->hide();
+    mw_one->ui->lblBookName->setText("");
     mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 
     if (!mw_one->ui->frameQML->isHidden()) saveReader();
@@ -283,6 +281,7 @@ void dlgReader::openFile(QString openfile) {
       } else {
         deleteDirfile(dirpathbak);
         isEpub = true;
+        mw_one->ui->lblBookName->show();
       }
 
       QStringList conList = readText(str0);
@@ -319,9 +318,17 @@ void dlgReader::openFile(QString openfile) {
               if (str2.contains("href=")) {
                 QString str3 = str2.replace("href=", "");
                 str3 = str3.replace("\"", "");
-                if (str3.contains("html")) htmlFiles.append(strOpfPath + str3);
+                if (str3.contains("htm")) htmlFiles.append(strOpfPath + str3);
               }
             }
+          }
+
+          // title
+          if (str0.contains("<dc:title>")) {
+            QString str = str0;
+            str = str.replace("<dc:title>", "");
+            str = str.replace("</dc:title>", "");
+            mw_one->ui->lblBookName->setText(str.trimmed());
           }
         }
       }
@@ -330,6 +337,7 @@ void dlgReader::openFile(QString openfile) {
 
     } else {
       isEpub = false;
+      mw_one->ui->lblBookName->hide();
     }
 
     if (!isEpub) {
@@ -341,6 +349,16 @@ void dlgReader::openFile(QString openfile) {
     }
 
     fileName = openfile;
+#ifdef Q_OS_MAC
+    QFileInfo fi(openfile);
+    // mw_one->ui->lblBookName->setText(fi.baseName());
+    mw_one->ui->lblBookName->show();
+#endif
+
+#ifdef Q_OS_ANDROID
+
+#endif
+
     ui->frameFun->hide();
     isOpen = true;
     goPostion();
@@ -426,21 +444,6 @@ void dlgReader::drawB() {
 
 void dlgReader::on_textBrowser_textChanged() {}
 
-void dlgReader::getPages() {
-  if (isPages) {
-    ui->hSlider->setTickInterval(1);
-    int baseh = ui->textBrowser->height();
-    qulonglong th = ui->textBrowser->verticalScrollBar()->maximum();
-    int page = th / baseh;
-    qulonglong cpos = ui->textBrowser->verticalScrollBar()->sliderPosition();
-    int cp = cpos / baseh;
-    ui->btnPage->setText(QString::number(cp) + " / " + QString::number(page));
-    ui->hSlider->setMaximum(page);
-    ui->hSlider->setMinimum(0);
-    // qDebug() << "th:" << th << "cpos:" << cpos;
-  }
-}
-
 void dlgReader::getLines() {
   if (isLines) {
     QString qsShow;
@@ -489,7 +492,7 @@ void dlgReader::setQML(QString txt1) {
   mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", txt1);
 }
 
-void dlgReader::on_btnPage_clicked() {
+void dlgReader::on_btnFont_clicked() {
   QStringList listFonts;
   QFontDatabase fontDatebase;
   foreach (QString family, fontDatebase.families()) {
@@ -569,10 +572,7 @@ QFont dlgReader::get_Font() {
 
 void dlgReader::on_hSlider_sliderMoved(int position) {
   mw_one->ui->lblTitle->hide();
-  if (isPages) {
-    ui->textBrowser->verticalScrollBar()->setSliderPosition(
-        position * ui->textBrowser->height());
-  }
+
   if (isLines) {
     int max;
     if (!isEpub)
@@ -624,12 +624,12 @@ void dlgReader::on_btnPageUp_clicked() {
 
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
-                                  QString::number(htmlIndex) + " / " +
+                                  QString::number(htmlIndex + 1) + " / " +
                                   QString::number(htmlFiles.count()));
     mw_one->ui->progReader->setMaximum(htmlFiles.count());
-    mw_one->ui->progReader->setValue(htmlIndex);
+    mw_one->ui->progReader->setValue(htmlIndex + 1);
   }
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
+  // mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
 }
 
 void dlgReader::on_btnPageNext_clicked() {
@@ -669,15 +669,15 @@ void dlgReader::on_btnPageNext_clicked() {
 
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
-                                  QString::number(htmlIndex) + " / " +
+                                  QString::number(htmlIndex + 1) + " / " +
                                   QString::number(htmlFiles.count()));
     mw_one->ui->progReader->setMaximum(htmlFiles.count());
-    mw_one->ui->progReader->setValue(htmlIndex);
+    mw_one->ui->progReader->setValue(htmlIndex + 1);
 
     // mw_one->ui->quickWidget->rootContext()->setContextProperty(
     //     "baseUrl", htmlFiles.at(htmlIndex));
   }
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
+  // mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
 }
 
 void dlgReader::setQMLHtml() {
@@ -690,20 +690,23 @@ void dlgReader::on_btnLines_clicked() {
   mw_one->ui->lblTitle->hide();
   mw_one->ui->hSlider->setTickInterval(1);
   if (!isEpub) {
+    mw_one->ui->hSlider->setMinimum(0);
     mw_one->ui->hSlider->setMaximum(totallines / baseLines - 1);
     mw_one->ui->hSlider->setValue(iPage / baseLines);
   } else {
+    mw_one->ui->hSlider->setMinimum(1);
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
-    mw_one->ui->hSlider->setValue(htmlIndex);
+    mw_one->ui->hSlider->setValue(htmlIndex + 1);
   }
+
   if (mw_one->ui->frameFun->isHidden()) {
     isLines = true;
-    isPages = false;
+
     mw_one->ui->frameFun->show();
 
   } else {
     isLines = false;
-    isPages = true;
+
     mw_one->ui->frameFun->hide();
   }
 }
@@ -743,10 +746,10 @@ void dlgReader::goPostion() {
 
     iPage = Reg.value("/Reader/iPage" + fileName, 0).toULongLong();
     htmlIndex = Reg.value("/Reader/htmlIndex" + fileName, 0).toInt() - 1;
-    if (htmlIndex < 0) htmlIndex = 0;
+    if (htmlIndex <= 0) htmlIndex = -1;
     qDebug() << "htmlIndex=" << htmlIndex;
 
-    if (iPage >= 0 || htmlIndex >= 0) {
+    if (iPage >= 0 || htmlIndex >= -1) {
       on_btnPageNext_clicked();
 
     } else {
