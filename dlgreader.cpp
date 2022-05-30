@@ -202,6 +202,7 @@ void dlgReader::openFile(QString openfile) {
     mw_one->ui->lblTitle->hide();
     mw_one->ui->frameFun->hide();
     mw_one->ui->lblBookName->setText("");
+    mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 
     if (!mw_one->ui->frameQML->isHidden()) saveReader();
@@ -351,7 +352,7 @@ void dlgReader::openFile(QString openfile) {
     fileName = openfile;
 #ifdef Q_OS_MAC
     QFileInfo fi(openfile);
-    // mw_one->ui->lblBookName->setText(fi.baseName());
+    mw_one->ui->lblBookName->setText(fi.baseName());
     mw_one->ui->lblBookName->show();
 #endif
 
