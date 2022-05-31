@@ -276,11 +276,9 @@ void dlgReader::openFile(QString openfile) {
         deleteDirfile(dirpath);
         QDir dir;
         dir.rename(dirpathbak, dirpath);
-
         qDebug() << "====== isEpub == false ======";
         return;
       } else {
-        deleteDirfile(dirpathbak);
         isEpub = true;
         mw_one->ui->lblBookName->show();
       }
@@ -309,19 +307,27 @@ void dlgReader::openFile(QString openfile) {
       QString strOpfPath = fi.path() + "/";
       QStringList opfList = readText(strOpfFile);
       htmlFiles.clear();
+      QString strTitle;
       if (opfList.count() > 0) {
         for (int i = 0; i < opfList.count(); i++) {
           QString str0 = opfList.at(i);
-          if (str0.contains("href=")) {
-            QStringList list1 = str0.split(" ");
-            for (int j = 0; j < list1.count(); j++) {
-              QString str2 = list1.at(j);
-              if (str2.contains("href=")) {
-                QString str3 = str2.replace("href=", "");
-                str3 = str3.replace("\"", "");
-                if (str3.contains("htm")) htmlFiles.append(strOpfPath + str3);
+          str0 = str0.trimmed();
+          if (str0.contains("href=") && str0.mid(0, 5) == "<item") {
+            QString str1 = str0;
+            QString str2, str3;
+            str1.replace("href=", "|");
+            str1 = str1.trimmed();
+            for (int m = 0; m < str1.length(); m++) {
+              if (str1.mid(m, 1) == "|") {
+                str2 = str1.mid(m + 1, str1.length() - m);
+                break;
               }
             }
+            QStringList list = str2.split("\"");
+            if (list.count() > 0) str3 = list.at(1);
+
+            if (str3.contains("htm")) htmlFiles.append(strOpfPath + str3);
+            // qDebug() << str1 << str2 << str3;
           }
 
           // title
@@ -329,23 +335,29 @@ void dlgReader::openFile(QString openfile) {
             QString str = str0;
             str = str.replace("<dc:title>", "");
             str = str.replace("</dc:title>", "");
-            mw_one->ui->lblBookName->setText(str.trimmed());
+            strTitle = str.trimmed();
           }
         }
       }
 
       qDebug() << strFullPath << htmlFiles;
+      if (htmlFiles.count() == 0) {
+        deleteDirfile(dirpath);
+        QDir dir;
+        dir.rename(dirpathbak, dirpath);
+        qDebug() << "====== htmlFiles Count== 0 ======";
+        return;
+      } else {
+        deleteDirfile(dirpathbak);
+        mw_one->ui->lblBookName->setText(strTitle);
+      }
 
     } else {
       isEpub = false;
       mw_one->ui->lblBookName->hide();
-    }
-
-    if (!isEpub) {
       iPage = 0;
       sPos = 0;
       ui->hSlider->setValue(0);
-
       totallines = readTextList.count();
     }
 
