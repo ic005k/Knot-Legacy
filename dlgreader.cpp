@@ -704,7 +704,21 @@ void dlgReader::on_btnPageNext_clicked() {
 }
 
 void dlgReader::setQMLHtml() {
-  QVariant msg = htmlFiles.at(htmlIndex);
+  QString hf = htmlFiles.at(htmlIndex);
+  QString hf1 = iniDir + "mytemp.html";
+  QVariant msg;
+  /*if (zh_cn) {
+    QString str = mw_one->loadText(hf);
+    str = str.replace(
+        "<p",
+        "<p style='line-height:32px; width:100% ; white-space: pre-wrap;");
+    QTextEdit* edit = new QTextEdit;
+    edit->setPlainText(str);
+    mw_one->TextEditToFile(edit, hf1);
+    msg = hf1;
+  }*/
+  msg = htmlFiles.at(htmlIndex);
+
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 }
