@@ -642,8 +642,10 @@ void dlgReader::on_btnPageUp_clicked() {
   } else {
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
-    // qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
+
     setQMLHtml();
+    // mw_one->ui->quickWidget->rootContext()->setContextProperty(
+    //     "baseUrl", htmlFiles.at(htmlIndex));
 
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
@@ -652,7 +654,6 @@ void dlgReader::on_btnPageUp_clicked() {
     mw_one->ui->progReader->setMaximum(htmlFiles.count());
     mw_one->ui->progReader->setValue(htmlIndex + 1);
   }
-  // mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
 }
 
 void dlgReader::on_btnPageNext_clicked() {
@@ -686,9 +687,12 @@ void dlgReader::on_btnPageNext_clicked() {
   } else {
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
-    // qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
 
     setQMLHtml();
+    //  mw_one->ui->quickWidget->rootContext()->setContextProperty(
+    //      "baseUrl", htmlFiles.at(htmlIndex));
+    // qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
+    // setQML(qsShow);
 
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
@@ -696,11 +700,7 @@ void dlgReader::on_btnPageNext_clicked() {
                                   QString::number(htmlFiles.count()));
     mw_one->ui->progReader->setMaximum(htmlFiles.count());
     mw_one->ui->progReader->setValue(htmlIndex + 1);
-
-    // mw_one->ui->quickWidget->rootContext()->setContextProperty(
-    //     "baseUrl", htmlFiles.at(htmlIndex));
   }
-  // mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos", 0);
 }
 
 void dlgReader::setQMLHtml() {

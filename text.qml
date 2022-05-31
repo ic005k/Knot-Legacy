@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
-//import QtWebView 1.0
+import QtWebView 1.0
 import MyModel1 1.0
 import MyModel2 1.0
 
@@ -65,13 +65,13 @@ Item {
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
 
-
-        /*WebView {
+        WebView {
             id: mywebview
-            width: textArea.width
-            height: textArea.height
+            anchors.fill: parent
             url: "file://" + baseUrl
-        }*/
+            visible: false
+        }
+
         states: State {
             name: "autoscroll"
             PropertyChanges {
