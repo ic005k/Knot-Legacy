@@ -100,11 +100,20 @@ Item {
             //Component.onCompleted: text = file.text
             wrapMode: TextArea.Wrap
             readOnly: true
-            //persistentSelection: true
+            persistentSelection: true
+            //selectByMouse: true
+            smooth: true
+
             color: "#000000"
 
             text: strText
             visible: true
+
+            leftPadding: 2
+            rightPadding: 2
+            topPadding: 2
+            bottomPadding: 2
+
             onLinkActivated: Qt.openUrlExternally(link)
         }
 

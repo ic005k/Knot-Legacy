@@ -308,7 +308,18 @@ void dlgReader::openFile(QString openfile) {
       QStringList opfList = readText(strOpfFile);
       htmlFiles.clear();
       QString strTitle;
-      if (opfList.count() > 0) {
+      if (opfList.count() < 5) {
+        QString str;
+        for (int j = 0; j < opfList.count(); j++) str = str + opfList.at(j);
+        str = str.replace(">", ">|");
+        qDebug() << ">|  " << str;
+        QStringList list = str.split("|");
+        opfList.clear();
+        for (int j = 0; j < list.count(); j++) {
+          opfList.append(list.at(j));
+        }
+      }
+      if (opfList.count() > 1) {
         for (int i = 0; i < opfList.count(); i++) {
           QString str0 = opfList.at(i);
           str0 = str0.trimmed();
@@ -327,7 +338,6 @@ void dlgReader::openFile(QString openfile) {
             if (list.count() > 0) str3 = list.at(1);
 
             if (str3.contains("htm")) htmlFiles.append(strOpfPath + str3);
-            // qDebug() << str1 << str2 << str3;
           }
 
           // title
