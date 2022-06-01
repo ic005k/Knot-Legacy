@@ -705,19 +705,28 @@ void dlgReader::on_btnPageNext_clicked() {
 
 void dlgReader::setQMLHtml() {
   QString hf = htmlFiles.at(htmlIndex);
-  QString hf1 = iniDir + "mytemp.html";
   QVariant msg;
+
   /*if (zh_cn) {
-    QString str = mw_one->loadText(hf);
-    str = str.replace(
-        "<p",
-        "<p style='line-height:32px; width:100% ; white-space: pre-wrap;");
     QTextEdit* edit = new QTextEdit;
-    edit->setPlainText(str);
-    mw_one->TextEditToFile(edit, hf1);
-    msg = hf1;
+    QStringList list = readText(hf);
+    for (int i = 0; i < list.count(); i++) {
+      QString str = list.at(i);
+      str = str.trimmed();
+      if (str.mid(0, 2) == "<p" && !str.contains("&nbsp;")) {
+        for (int j = 0; j < str.length(); j++) {
+          if (str.mid(j, 1) == ">") {
+            str.insert(j + 1, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+          }
+        }
+      }
+      edit->append(str);
+    }
+
+    mw_one->TextEditToFile(edit, hf);
+
   }*/
-  msg = htmlFiles.at(htmlIndex);
+  msg = hf;
 
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
