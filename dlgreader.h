@@ -45,7 +45,7 @@ class dlgReader : public QDialog {
   int iPage;
   void drawB();
 
-  QString getTextEditLineText(QPlainTextEdit *txtEdit, int i);
+  QString getTextEditLineText(QTextEdit *txtEdit, int i);
   void getLines();
   QStringList readText(QString textFile);
   void goPostion();
@@ -55,12 +55,13 @@ class dlgReader : public QDialog {
   int deleteDirfile(QString dirName);
   void setQMLHtml();
   void setFontSize(int textFontSize);
+  void TextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
 public slots:
-  void getPages();
+
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
   void on_btnOpen_clicked();
-  void on_btnPage_clicked();
+  void on_btnFont_clicked();
   void on_btnLines_clicked();
   void on_hSlider_sliderMoved(int position);
 
@@ -82,9 +83,9 @@ public slots:
   int htmlIndex = 0;
   int x, y, w, h;
   bool isLines = false;
-  bool isPages = true;
   int sPos;
   QString strSpace = "";
+  QString strOpfPath;
 };
 
 #endif  // DLGREADER_H

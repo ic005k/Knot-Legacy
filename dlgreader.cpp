@@ -304,7 +304,7 @@ void dlgReader::openFile(QString openfile) {
 
       QString strOpfFile = dirpath + strFullPath;
       QFileInfo fi(strOpfFile);
-      QString strOpfPath = fi.path() + "/";
+      strOpfPath = fi.path() + "/";
       QStringList opfList = readText(strOpfFile);
       htmlFiles.clear();
       QString strTitle;
@@ -359,7 +359,38 @@ void dlgReader::openFile(QString openfile) {
         return;
       } else {
         deleteDirfile(dirpathbak);
+        deleteDirfile(dirpath + "/OEBPS/Styles");
         mw_one->ui->lblBookName->setText(strTitle);
+
+        QString imgdir = strOpfPath + "Images";
+        QDir dir0(imgdir);
+        if (!dir0.exists()) imgdir = strOpfPath + "images";
+
+        QDir* dir = new QDir(imgdir);
+        QStringList filter;
+        filter << "*.png"
+               << "*.jpg"
+               << "*.bmp"
+               << "*.svg";
+        dir->setNameFilters(filter);
+        QList<QFileInfo>* fileInfo =
+            new QList<QFileInfo>(dir->entryInfoList(filter));
+        for (int i = 0; i < fileInfo->size(); i++) {
+          if (fileInfo->at(i).exists()) {
+            QString file = fileInfo->at(i).filePath();
+            qDebug() << file;
+            QImage img(file);
+            double w, h, new_w, new_h;
+            w = img.width();
+            h = img.height();
+            double r = (double)w / h;
+            new_w = this->width() - 20;
+            new_h = new_w / r;
+            QPixmap pix;
+            pix = QPixmap::fromImage(img.scaled(new_w, new_h));
+            pix.save(file);
+          }
+        }
       }
 
     } else {
@@ -389,10 +420,11 @@ void dlgReader::openFile(QString openfile) {
   }
 }
 
-QString dlgReader::getTextEditLineText(QPlainTextEdit* txtEdit, int i) {
+QString dlgReader::getTextEditLineText(QTextEdit* txtEdit, int i) {
   QTextBlock block = txtEdit->document()->findBlockByNumber(i);
   txtEdit->setTextCursor(QTextCursor(block));
-  QString lineText = txtEdit->document()->findBlockByNumber(i).text().trimmed();
+  QString lineText =
+      txtEdit->document()->findBlockByNumber(i).text();  //.trimmed();
   return lineText;
 }
 
@@ -707,25 +739,30 @@ void dlgReader::setQMLHtml() {
   QString hf = htmlFiles.at(htmlIndex);
   QVariant msg;
 
-  /*if (zh_cn) {
+  if (zh_cn) {
+    QString space = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     QTextEdit* edit = new QTextEdit;
-    QStringList list = readText(hf);
-    for (int i = 0; i < list.count(); i++) {
-      QString str = list.at(i);
+    edit->setPlainText(mw_one->loadText(hf));
+    QPlainTextEdit* edit1 = new QPlainTextEdit;
+
+    for (int i = 0; i < edit->document()->lineCount(); i++) {
+      QString str = getTextEditLineText(edit, i);
       str = str.trimmed();
-      if (str.mid(0, 2) == "<p" && !str.contains("&nbsp;")) {
+      if (!str.contains(space) && !str.contains("Title") &&
+          !str.contains("<img") && str.mid(0, 2) == "<p") {
         for (int j = 0; j < str.length(); j++) {
           if (str.mid(j, 1) == ">") {
-            str.insert(j + 1, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+            str = str.insert(j + 1, space);
+            break;
           }
         }
       }
-      edit->append(str);
+
+      edit1->appendPlainText(str);
     }
 
-    mw_one->TextEditToFile(edit, hf);
-
-  }*/
+    TextEditToFile(edit1, hf);
+  }
   msg = hf;
 
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
@@ -858,4 +895,20 @@ void dlgReader::setFontSize(int textFontSize) {
   mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize",
                                                              textFontSize);
   setVPos();
+}
+
+void dlgReader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
+  QFile* file;
+  QString txtFile;
+  file = new QFile;
+  file->setFileName(fileName);
+  file->setPermissions(txtFile, QFile::WriteOwner | QFile::ReadOwner);
+  bool ok = file->open(QIODevice::WriteOnly | QIODevice::Text);
+  if (ok) {
+    QTextStream out(file);
+    out << txtEdit->toPlainText();
+    file->close();
+    delete file;
+  } else
+    qDebug() << "Write failure!" << fileName;
 }

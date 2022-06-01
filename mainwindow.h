@@ -246,6 +246,7 @@ class MainWindow : public QMainWindow {
   QString getYMD(QString date);
   void bakData(QString fileName, bool msgbox);
   void setSCrollPro(QObject *obj);
+
  public slots:
   void updateSteps();
   void newDatas();

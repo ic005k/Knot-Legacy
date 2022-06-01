@@ -3751,7 +3751,7 @@ void MainWindow::on_btnPageNext_clicked() {
   mydlgReader->on_btnPageNext_clicked();
 }
 
-void MainWindow::on_btnPage_clicked() { mydlgReader->on_btnPage_clicked(); }
+void MainWindow::on_btnPage_clicked() { mydlgReader->on_btnFont_clicked(); }
 
 void MainWindow::on_btnLines_clicked() { mydlgReader->on_btnLines_clicked(); }
 
@@ -3775,13 +3775,17 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
     ui->btnLines->setText(
         tr("Pages") + "\n" + QString::number(position + 1) + " / " +
         QString::number(mydlgReader->totallines / mydlgReader->baseLines));
+    ui->progReader->setMinimum(0);
     ui->progReader->setMaximum(mydlgReader->totallines /
                                mydlgReader->baseLines);
+    ui->progReader->setValue(position + 1);
   } else {
-    ui->btnLines->setText(tr("Pages") + "\n" + QString::number(position + 1) +
+    ui->btnLines->setText(tr("Pages") + "\n" + QString::number(position) +
                           " / " +
                           QString::number(mydlgReader->htmlFiles.count()));
+    ui->progReader->setMinimum(1);
     ui->progReader->setMaximum(mydlgReader->htmlFiles.count());
+    if (position == 0) position = 1;
+    ui->progReader->setValue(position);
   }
-  ui->progReader->setValue(position + 1);
 }
