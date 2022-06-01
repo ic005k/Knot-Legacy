@@ -248,7 +248,6 @@ void dlgReader::openFile(QString openfile) {
                     "\n" +
                     mw_one->getFileSize(QFile(iniDir + "unzip").size(), 2) +
                     "\n" + str);
-        // box.exec();
       }
 
 #ifdef Q_OS_MAC
@@ -365,6 +364,8 @@ void dlgReader::openFile(QString openfile) {
         QString imgdir = strOpfPath + "Images";
         QDir dir0(imgdir);
         if (!dir0.exists()) imgdir = strOpfPath + "images";
+        QDir dir1(imgdir);
+        if (!dir1.exists()) imgdir = strOpfPath;
 
         QDir* dir = new QDir(imgdir);
         QStringList filter;
@@ -386,14 +387,13 @@ void dlgReader::openFile(QString openfile) {
             h = img.height();
             qDebug() << file << w << mw_one->width();
             double r = (double)w / h;
-            if (w > mw_one->width() - 20)
+            if (w > mw_one->width() - 20) {
               new_w = mw_one->width() - 20;
-            else
-              new_w = w;
-            new_h = new_w / r;
-            QPixmap pix;
-            pix = QPixmap::fromImage(img.scaled(new_w, new_h));
-            pix.save(file);
+              new_h = new_w / r;
+              QPixmap pix;
+              pix = QPixmap::fromImage(img.scaled(new_w, new_h));
+              pix.save(file);
+            }
           }
         }
       }
@@ -860,6 +860,9 @@ void dlgReader::setVPos() {
     QMetaObject::invokeMethod((QObject*)root, "setVPos",
                               Q_ARG(QVariant, textPos));
   }
+
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("htmlPath",
+                                                             strOpfPath);
 }
 
 int dlgReader::deleteDirfile(QString dirName) {
