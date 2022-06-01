@@ -370,6 +370,7 @@ void dlgReader::openFile(QString openfile) {
         QStringList filter;
         filter << "*.png"
                << "*.jpg"
+               << "*.jpeg"
                << "*.bmp"
                << "*.svg";
         dir->setNameFilters(filter);
@@ -378,13 +379,17 @@ void dlgReader::openFile(QString openfile) {
         for (int i = 0; i < fileInfo->size(); i++) {
           if (fileInfo->at(i).exists()) {
             QString file = fileInfo->at(i).filePath();
-            qDebug() << file;
+
             QImage img(file);
             double w, h, new_w, new_h;
             w = img.width();
             h = img.height();
+            qDebug() << file << w << mw_one->width();
             double r = (double)w / h;
-            new_w = this->width() - 20;
+            if (w > mw_one->width() - 20)
+              new_w = mw_one->width() - 20;
+            else
+              new_w = w;
             new_h = new_w / r;
             QPixmap pix;
             pix = QPixmap::fromImage(img.scaled(new_w, new_h));
