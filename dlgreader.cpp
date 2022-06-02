@@ -336,7 +336,17 @@ void dlgReader::openFile(QString openfile) {
             QStringList list = str2.split("\"");
             if (list.count() > 0) str3 = list.at(1);
 
-            if (str3.contains("htm")) htmlFiles.append(strOpfPath + str3);
+            if (str3.contains("htm")) {
+              QString qfile = strOpfPath + str3;
+              QFileInfo fi(qfile);
+              qDebug() << fi.filePath() << fi.size() << fi.baseName()
+                       << fi.suffix();
+              if (fi.size() < 100000)
+                htmlFiles.append(strOpfPath + str3);
+              else {
+                SplitFile(qfile);
+              }
+            }
           }
 
           // title
@@ -939,4 +949,91 @@ void dlgReader::showInfo() {
     mw_one->ui->progReader->setMaximum(htmlFiles.count());
     mw_one->ui->progReader->setValue(htmlIndex + 1);
   }
+}
+
+void dlgReader::SplitFile(QString qfile) {
+  QTextEdit* edit1 = new QTextEdit;
+  QPlainTextEdit* editHead = new QPlainTextEdit;
+  QPlainTextEdit* edit3 = new QPlainTextEdit;
+  QFileInfo fi(qfile);
+
+  edit1->setPlainText(mw_one->loadText(qfile));
+  int count = edit1->document()->lineCount();
+  for (int i = 0; i < count; i++) {
+    QString str = getTextEditLineText(edit1, i);
+    editHead->appendPlainText(str);
+    if (str.trimmed() == "</head>") break;
+  }
+
+  int countHead = editHead->document()->lineCount();
+  int countBody = count - countHead;
+  int split = countBody / 4;
+  int breakLine;
+  // 1
+  for (int i = 0; i < count; i++) {
+    QString str = getTextEditLineText(edit1, i);
+    edit3->appendPlainText(str);
+    if (i == countHead + split) {
+      edit3->appendPlainText("</body>");
+      edit3->appendPlainText("</html>");
+      breakLine = i;
+      break;
+    }
+  }
+
+  QString file1 = fi.path() + "/" + fi.baseName() + "." + fi.suffix();
+  TextEditToFile(edit3, file1);
+
+  // 2
+  edit3->clear();
+  edit3->setPlainText(editHead->toPlainText());
+  edit3->appendPlainText("<body>");
+  for (int i = breakLine + 1; i < count; i++) {
+    QString str = getTextEditLineText(edit1, i);
+    edit3->appendPlainText(str);
+    if (i == countHead + split * 2) {
+      edit3->appendPlainText("</body>");
+      edit3->appendPlainText("</html>");
+      breakLine = i;
+      break;
+    }
+  }
+
+  QString file2 = fi.path() + "/" + fi.baseName() + "_1" + "." + fi.suffix();
+  TextEditToFile(edit3, file2);
+
+  // 3
+  edit3->clear();
+  edit3->setPlainText(editHead->toPlainText());
+  edit3->appendPlainText("<body>");
+  for (int i = breakLine + 1; i < count; i++) {
+    QString str = getTextEditLineText(edit1, i);
+    edit3->appendPlainText(str);
+    if (i == countHead + split * 3) {
+      edit3->appendPlainText("</body>");
+      edit3->appendPlainText("</html>");
+      breakLine = i;
+      break;
+    }
+  }
+
+  QString file3 = fi.path() + "/" + fi.baseName() + "_2" + "." + fi.suffix();
+  TextEditToFile(edit3, file3);
+
+  // 4
+  edit3->clear();
+  edit3->setPlainText(editHead->toPlainText());
+  edit3->appendPlainText("<body>");
+  for (int i = breakLine + 1; i < count; i++) {
+    QString str = getTextEditLineText(edit1, i);
+    edit3->appendPlainText(str);
+  }
+
+  QString file4 = fi.path() + "/" + fi.baseName() + "_3" + "." + fi.suffix();
+  TextEditToFile(edit3, file4);
+
+  htmlFiles.append(file1);
+  htmlFiles.append(file2);
+  htmlFiles.append(file3);
+  htmlFiles.append(file4);
 }

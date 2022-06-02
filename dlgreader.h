@@ -89,6 +89,7 @@ public slots:
   int sPos;
   QString strSpace = "";
   QString strOpfPath;
+  void SplitFile(QString qfile);
 };
 
 #endif  // DLGREADER_H
