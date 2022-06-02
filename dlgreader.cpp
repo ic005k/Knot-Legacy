@@ -669,35 +669,21 @@ void dlgReader::on_btnPageUp_clicked() {
 
     setQML(qsShow);
 
-    mw_one->ui->hSlider->setMaximum(totallines / baseLines);
-    mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
-                                  QString::number(iPage / baseLines) + " / " +
-                                  QString::number(totallines / baseLines));
-    mw_one->ui->progReader->setMaximum(totallines / baseLines);
-    mw_one->ui->progReader->setValue(iPage / baseLines);
-
   } else {
     savePageVPos();
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
 
     setQMLHtml();
-    // mw_one->ui->quickWidget->rootContext()->setContextProperty(
-    //     "baseUrl", htmlFiles.at(htmlIndex));
 
     setPageVPos();
-
-    mw_one->ui->hSlider->setMaximum(htmlFiles.count());
-    mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
-                                  QString::number(htmlIndex + 1) + " / " +
-                                  QString::number(htmlFiles.count()));
-    mw_one->ui->progReader->setMaximum(htmlFiles.count());
-    mw_one->ui->progReader->setValue(htmlIndex + 1);
   }
+  showInfo();
 }
 
 void dlgReader::on_btnPageNext_clicked() {
   mw_one->ui->lblTitle->hide();
+
   QString qsShow;
   if (!isEpub) {
     int count = iPage + baseLines;
@@ -717,13 +703,6 @@ void dlgReader::on_btnPageNext_clicked() {
         txt1 + "</p>";
     setQML(qsShow);
 
-    mw_one->ui->hSlider->setMaximum(totallines / baseLines);
-    mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
-                                  QString::number(iPage / baseLines) + " / " +
-                                  QString::number(totallines / baseLines));
-    mw_one->ui->progReader->setMaximum(totallines / baseLines);
-    mw_one->ui->progReader->setValue(iPage / baseLines);
-
   } else {
     savePageVPos();
     htmlIndex++;
@@ -736,14 +715,8 @@ void dlgReader::on_btnPageNext_clicked() {
     // setQML(qsShow);
 
     setPageVPos();
-
-    mw_one->ui->hSlider->setMaximum(htmlFiles.count());
-    mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
-                                  QString::number(htmlIndex + 1) + " / " +
-                                  QString::number(htmlFiles.count()));
-    mw_one->ui->progReader->setMaximum(htmlFiles.count());
-    mw_one->ui->progReader->setValue(htmlIndex + 1);
   }
+  showInfo();
 }
 
 void dlgReader::setQMLHtml() {
@@ -782,16 +755,8 @@ void dlgReader::setQMLHtml() {
 
 void dlgReader::on_btnLines_clicked() {
   mw_one->ui->lblTitle->hide();
-  mw_one->ui->hSlider->setTickInterval(1);
-  if (!isEpub) {
-    mw_one->ui->hSlider->setMinimum(0);
-    mw_one->ui->hSlider->setMaximum(totallines / baseLines - 1);
-    mw_one->ui->hSlider->setValue(iPage / baseLines);
-  } else {
-    mw_one->ui->hSlider->setMinimum(1);
-    mw_one->ui->hSlider->setMaximum(htmlFiles.count());
-    mw_one->ui->hSlider->setValue(htmlIndex + 1);
-  }
+
+  showInfo();
 
   if (mw_one->ui->frameFun->isHidden()) {
     isLines = true;
@@ -931,7 +896,9 @@ void dlgReader::savePageVPos() {
   if (isEpub) {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
     Reg.setIniCodec("utf-8");
-    Reg.setValue("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex), textPos);
+    if (htmlIndex >= 0)
+      Reg.setValue("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex),
+                   textPos);
   }
 }
 
@@ -939,10 +906,37 @@ void dlgReader::setPageVPos() {
   if (isEpub) {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
     Reg.setIniCodec("utf-8");
-    textPos = Reg.value("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex), 0)
-                  .toReal();
-    QQuickItem* root = mw_one->ui->quickWidget->rootObject();
-    QMetaObject::invokeMethod((QObject*)root, "setVPos",
-                              Q_ARG(QVariant, textPos));
+    if (htmlIndex >= 0)
+      textPos =
+          Reg.value("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex), 0)
+              .toReal();
+    if (textPos > 10) {
+      QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+      QMetaObject::invokeMethod((QObject*)root, "setVPos",
+                                Q_ARG(QVariant, textPos));
+    }
+  }
+}
+
+void dlgReader::showInfo() {
+  mw_one->ui->hSlider->setTickInterval(1);
+  if (!isEpub) {
+    mw_one->ui->hSlider->setMinimum(0);
+    mw_one->ui->hSlider->setValue(iPage / baseLines);
+    mw_one->ui->hSlider->setMaximum(totallines / baseLines);
+    mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
+                                  QString::number(iPage / baseLines) + " / " +
+                                  QString::number(totallines / baseLines));
+    mw_one->ui->progReader->setMaximum(totallines / baseLines);
+    mw_one->ui->progReader->setValue(iPage / baseLines);
+  } else {
+    mw_one->ui->hSlider->setMinimum(1);
+    mw_one->ui->hSlider->setValue(htmlIndex);
+    mw_one->ui->hSlider->setMaximum(htmlFiles.count());
+    mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
+                                  QString::number(htmlIndex + 1) + " / " +
+                                  QString::number(htmlFiles.count()));
+    mw_one->ui->progReader->setMaximum(htmlFiles.count());
+    mw_one->ui->progReader->setValue(htmlIndex + 1);
   }
 }

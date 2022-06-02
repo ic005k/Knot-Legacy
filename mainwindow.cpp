@@ -1929,8 +1929,13 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     if ((relea_x - press_x) > 50 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
-      // if (mydlgReader->iPage - mydlgReader->baseLines <= 0)
-      //   return QWidget::eventFilter(watch, evn);
+      if (!mydlgReader->isEpub) {
+        if (mydlgReader->iPage - mydlgReader->baseLines <= 0)
+          return QWidget::eventFilter(watch, evn);
+      } else {
+        if (mydlgReader->htmlIndex <= 0)
+          return QWidget::eventFilter(watch, evn);
+      }
 
       ui->lblTitle->setPixmap(ui->quickWidget->grab());
       QPropertyAnimation* animation1 =
@@ -1954,7 +1959,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->start();
 
       ui->lblTitle->show();
-      mw_one->Sleep(350);
+      mw_one->Sleep(abc + 100);
       mydlgReader->setPageVPos();
     }
 
@@ -1962,9 +1967,14 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     if ((press_x - relea_x) > 50 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
-      // if (mydlgReader->iPage + mydlgReader->baseLines >
-      // mydlgReader->totallines)
-      //   return QWidget::eventFilter(watch, evn);
+      if (!mydlgReader->isEpub) {
+        if (mydlgReader->iPage + mydlgReader->baseLines >
+            mydlgReader->totallines)
+          return QWidget::eventFilter(watch, evn);
+      } else {
+        if (mydlgReader->htmlIndex + 1 >= mydlgReader->htmlFiles.count())
+          return QWidget::eventFilter(watch, evn);
+      }
 
       ui->lblTitle->setPixmap(ui->quickWidget->grab());
       QPropertyAnimation* animation1 =

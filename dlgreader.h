@@ -27,6 +27,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  int htmlIndex = 0;
   DocumentHandler *myDocHandler;
   bool isEpub = false;
   QStringList htmlFiles;
@@ -58,6 +59,7 @@ class dlgReader : public QDialog {
   void TextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
   void savePageVPos();
   void setPageVPos();
+  void showInfo();
 public slots:
 
   void on_btnPageNext_clicked();
@@ -82,7 +84,6 @@ public slots:
   void on_textBrowser_textChanged();
 
  private:
-  int htmlIndex = 0;
   int x, y, w, h;
   bool isLines = false;
   int sPos;
