@@ -677,12 +677,15 @@ void dlgReader::on_btnPageUp_clicked() {
     mw_one->ui->progReader->setValue(iPage / baseLines);
 
   } else {
+    savePageVPos();
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
 
     setQMLHtml();
     // mw_one->ui->quickWidget->rootContext()->setContextProperty(
     //     "baseUrl", htmlFiles.at(htmlIndex));
+
+    setPageVPos();
 
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
@@ -722,6 +725,7 @@ void dlgReader::on_btnPageNext_clicked() {
     mw_one->ui->progReader->setValue(iPage / baseLines);
 
   } else {
+    savePageVPos();
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
 
@@ -730,6 +734,8 @@ void dlgReader::on_btnPageNext_clicked() {
     //      "baseUrl", htmlFiles.at(htmlIndex));
     // qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
     // setQML(qsShow);
+
+    setPageVPos();
 
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
@@ -919,4 +925,24 @@ void dlgReader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
     delete file;
   } else
     qDebug() << "Write failure!" << fileName;
+}
+
+void dlgReader::savePageVPos() {
+  if (isEpub) {
+    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    Reg.setIniCodec("utf-8");
+    Reg.setValue("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex), textPos);
+  }
+}
+
+void dlgReader::setPageVPos() {
+  if (isEpub) {
+    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    Reg.setIniCodec("utf-8");
+    textPos = Reg.value("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex), 0)
+                  .toReal();
+    QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+    QMetaObject::invokeMethod((QObject*)root, "setVPos",
+                              Q_ARG(QVariant, textPos));
+  }
 }

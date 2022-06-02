@@ -56,6 +56,8 @@ class dlgReader : public QDialog {
   void setQMLHtml();
   void setFontSize(int textFontSize);
   void TextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
+  void savePageVPos();
+  void setPageVPos();
 public slots:
 
   void on_btnPageNext_clicked();

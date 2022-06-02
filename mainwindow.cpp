@@ -1817,8 +1817,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         animation2->setStartValue(QRect(-w * 2, y, w, h));
         animation2->setEndValue(QRect(x, y, w, h));
 
-        QParallelAnimationGroup* group =
-            new QParallelAnimationGroup;  //动画容器
+        QParallelAnimationGroup* group = new QParallelAnimationGroup;
         group->addAnimation(animation1);
         group->addAnimation(animation2);
         group->start();
@@ -1953,7 +1952,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->addAnimation(animation1);
       group->addAnimation(animation2);
       group->start();
+
       ui->lblTitle->show();
+      mw_one->Sleep(350);
+      mydlgReader->setPageVPos();
     }
 
     //判断滑动方向（左滑）
