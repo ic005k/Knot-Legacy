@@ -967,73 +967,69 @@ void dlgReader::SplitFile(QString qfile) {
 
   int countHead = editHead->document()->lineCount();
   int countBody = count - countHead;
-  int split = countBody / 4;
+  int n;
+  if (fi.size() > 100000 && fi.size() < 200000) n = 5;
+  if (fi.size() > 200000 && fi.size() < 400000) n = 10;
+  if (fi.size() > 400000 && fi.size() < 600000) n = 20;
+  if (fi.size() > 600000) n = 35;
+
+  int split = countBody / n;
   int breakLine;
-  // 1
-  for (int i = 0; i < count; i++) {
-    QString str = getTextEditLineText(edit1, i);
-    edit3->appendPlainText(str);
-    if (i == countHead + split) {
-      edit3->appendPlainText("</body>");
-      edit3->appendPlainText("</html>");
-      breakLine = i;
-      break;
+  for (int x = 1; x < n + 1; x++) {
+    if (x == 1) {
+      // 1
+      for (int i = 0; i < count; i++) {
+        QString str = getTextEditLineText(edit1, i);
+        edit3->appendPlainText(str);
+        if (i == countHead + split) {
+          edit3->appendPlainText("</body>");
+          edit3->appendPlainText("</html>");
+          breakLine = i;
+          break;
+        }
+      }
+
+      QString file1 = fi.path() + "/" + fi.baseName() + "." + fi.suffix();
+      TextEditToFile(edit3, file1);
+      htmlFiles.append(file1);
+    }
+
+    // 2...n-1
+    if (x > 1 && x < n) {
+      edit3->clear();
+      edit3->setPlainText(editHead->toPlainText());
+      edit3->appendPlainText("<body>");
+      for (int i = breakLine + 1; i < count; i++) {
+        QString str = getTextEditLineText(edit1, i);
+        edit3->appendPlainText(str);
+        if (i == countHead + split * x) {
+          edit3->appendPlainText("</body>");
+          edit3->appendPlainText("</html>");
+          breakLine = i;
+          break;
+        }
+      }
+
+      QString file2 = fi.path() + "/" + fi.baseName() + "_" +
+                      QString::number(x - 1) + "." + fi.suffix();
+      TextEditToFile(edit3, file2);
+      htmlFiles.append(file2);
+    }
+
+    if (x == n) {
+      // n
+      edit3->clear();
+      edit3->setPlainText(editHead->toPlainText());
+      edit3->appendPlainText("<body>");
+      for (int i = breakLine + 1; i < count; i++) {
+        QString str = getTextEditLineText(edit1, i);
+        edit3->appendPlainText(str);
+      }
+
+      QString filen = fi.path() + "/" + fi.baseName() + "_" +
+                      QString::number(x - 1) + "." + fi.suffix();
+      TextEditToFile(edit3, filen);
+      htmlFiles.append(filen);
     }
   }
-
-  QString file1 = fi.path() + "/" + fi.baseName() + "." + fi.suffix();
-  TextEditToFile(edit3, file1);
-
-  // 2
-  edit3->clear();
-  edit3->setPlainText(editHead->toPlainText());
-  edit3->appendPlainText("<body>");
-  for (int i = breakLine + 1; i < count; i++) {
-    QString str = getTextEditLineText(edit1, i);
-    edit3->appendPlainText(str);
-    if (i == countHead + split * 2) {
-      edit3->appendPlainText("</body>");
-      edit3->appendPlainText("</html>");
-      breakLine = i;
-      break;
-    }
-  }
-
-  QString file2 = fi.path() + "/" + fi.baseName() + "_1" + "." + fi.suffix();
-  TextEditToFile(edit3, file2);
-
-  // 3
-  edit3->clear();
-  edit3->setPlainText(editHead->toPlainText());
-  edit3->appendPlainText("<body>");
-  for (int i = breakLine + 1; i < count; i++) {
-    QString str = getTextEditLineText(edit1, i);
-    edit3->appendPlainText(str);
-    if (i == countHead + split * 3) {
-      edit3->appendPlainText("</body>");
-      edit3->appendPlainText("</html>");
-      breakLine = i;
-      break;
-    }
-  }
-
-  QString file3 = fi.path() + "/" + fi.baseName() + "_2" + "." + fi.suffix();
-  TextEditToFile(edit3, file3);
-
-  // 4
-  edit3->clear();
-  edit3->setPlainText(editHead->toPlainText());
-  edit3->appendPlainText("<body>");
-  for (int i = breakLine + 1; i < count; i++) {
-    QString str = getTextEditLineText(edit1, i);
-    edit3->appendPlainText(str);
-  }
-
-  QString file4 = fi.path() + "/" + fi.baseName() + "_3" + "." + fi.suffix();
-  TextEditToFile(edit3, file4);
-
-  htmlFiles.append(file1);
-  htmlFiles.append(file2);
-  htmlFiles.append(file3);
-  htmlFiles.append(file4);
 }
