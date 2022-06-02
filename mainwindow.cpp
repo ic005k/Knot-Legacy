@@ -3658,6 +3658,8 @@ static void JavaNotify_1() {
 static void JavaNotify_2() {
   mw_one->updateHardSensorSteps();
 
+  if (!mw_one->ui->frameQML->isHidden()) mw_one->mydlgReader->saveReader();
+
   // qDebug() << "C++ JavaNotify_2";
 }
 static void JavaNotify_3() {
