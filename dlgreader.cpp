@@ -341,7 +341,7 @@ void dlgReader::openFile(QString openfile) {
               QFileInfo fi(qfile);
               qDebug() << fi.filePath() << fi.size() << fi.baseName()
                        << fi.suffix();
-              if (fi.size() < 100000)
+              if (fi.size() <= 20000)
                 htmlFiles.append(strOpfPath + str3);
               else {
                 SplitFile(qfile);
@@ -968,10 +968,13 @@ void dlgReader::SplitFile(QString qfile) {
   int countHead = editHead->document()->lineCount();
   int countBody = count - countHead;
   int n;
-  if (fi.size() > 100000 && fi.size() < 200000) n = 5;
-  if (fi.size() > 200000 && fi.size() < 400000) n = 10;
-  if (fi.size() > 400000 && fi.size() < 600000) n = 20;
-  if (fi.size() > 600000) n = 35;
+  qint64 bb = fi.size();
+  if (bb > 20000 && bb < 40000)
+    n = 2;
+  else
+    n = bb / 20000;
+
+  qDebug() << "size======" << bb << n;
 
   int split = countBody / n;
   int breakLine;
