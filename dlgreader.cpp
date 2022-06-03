@@ -362,37 +362,6 @@ void dlgReader::openFile(QString openfile) {
         }
       }
       if (opfList.count() > 1) {
-        // get html path
-        QString htmlpath, suffix;
-        bool isid = false;
-        for (int i = 0; i < opfList.count(); i++) {
-          QString str0 = opfList.at(i);
-          str0 = str0.trimmed();
-          if (str0.contains("<item id=")) isid = true;
-          if (str0.contains("href=") && str0.mid(0, 5) == "<item") {
-            QString str1 = str0;
-            QString str2, str3;
-            str1.replace("href=", "|");
-            str1 = str1.trimmed();
-            for (int m = 0; m < str1.length(); m++) {
-              if (str1.mid(m, 1) == "|") {
-                str2 = str1.mid(m + 1, str1.length() - m);
-                break;
-              }
-            }
-            QStringList list = str2.split("\"");
-            if (list.count() > 0) str3 = list.at(1);
-
-            if (str3.contains("htm")) {
-              QString qfile = strOpfPath + str3;
-              htmlpath = QFileInfo(qfile).path() + "/";
-              suffix = QFileInfo(qfile).suffix();
-              qDebug() << "htmlpath" << htmlpath << suffix;
-              break;
-            }
-          }
-        }
-
         for (int i = 0; i < opfList.count(); i++) {
           QString str0 = opfList.at(i);
           str0 = str0.trimmed();
@@ -412,23 +381,19 @@ void dlgReader::openFile(QString openfile) {
             QString idref = str3;
 
             QString qfile;
-            // if (str3.contains("htm")) {
-            // QString qfile = htmlpath + str3;
-            // if (QFileInfo(qfile).suffix() == "")
-            // qfile = htmlpath + str3 + "." + suffix;
             qfile = strOpfPath + get_href(idref, opfList);
             QFileInfo fi(qfile);
-
-            if (QFileInfo(temp).size() < 15000000) {
-              if (fi.size() <= 20000)
+            if (fi.exists()) {
+              if (QFileInfo(temp).size() < 15000000) {
+                if (fi.size() <= 20000)
+                  htmlFiles.append(qfile);
+                else {
+                  SplitFile(qfile);
+                }
+              } else {
                 htmlFiles.append(qfile);
-              else {
-                SplitFile(qfile);
               }
-            } else {
-              htmlFiles.append(qfile);
             }
-            //}
           }
 
           // title
