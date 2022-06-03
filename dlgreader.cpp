@@ -378,12 +378,15 @@ void dlgReader::openFile(QString openfile) {
             if (str3.contains("htm")) {
               QString qfile = strOpfPath + str3;
               QFileInfo fi(qfile);
-              qDebug() << fi.filePath() << fi.size() << fi.baseName()
-                       << fi.suffix();
-              if (fi.size() <= 20000)
+
+              if (QFileInfo(temp).size() < 15000000) {
+                if (fi.size() <= 20000)
+                  htmlFiles.append(strOpfPath + str3);
+                else {
+                  SplitFile(qfile);
+                }
+              } else {
                 htmlFiles.append(strOpfPath + str3);
-              else {
-                SplitFile(qfile);
               }
             }
           }
