@@ -225,7 +225,8 @@ void dlgReader::startOpenFile(QString openfile) {
 
     dlgProgEBook->layout()->addWidget(progReadEbook);
     dlgProgEBook->setModal(true);
-    dlgProgEBook->show();
+    mw_one->ui->btnReader->setEnabled(false);
+    if (!mw_one->ui->frameQML->isHidden()) dlgProgEBook->show();
 
     mw_one->ui->lblTitle->hide();
     mw_one->ui->frameFun->hide();

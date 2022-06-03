@@ -3824,4 +3824,5 @@ void MainWindow::readEBookDone() {
     ui->lblBookName->setText(strTitle);
   }
   dlgProgEBook->close();
+  ui->btnReader->setEnabled(true);
 }
