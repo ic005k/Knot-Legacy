@@ -87,6 +87,7 @@ class dlgReader : public QDialog {
   QString strSpace = "";
 
   static void SplitFile(QString qfile);
+  static QString get_href(QString idref, QStringList opfList);
 };
 
 #endif  // DLGREADER_H

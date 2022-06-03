@@ -207,6 +207,10 @@ void dlgReader::on_btnOpen_clicked() {
 
 void dlgReader::startOpenFile(QString openfile) {
   if (QFile(openfile).exists()) {
+    mw_one->ui->btnReader->setEnabled(false);
+    mw_one->ui->frameFun->setEnabled(false);
+    mw_one->ui->frameReader->setEnabled(false);
+
     QProgressBar* progReadEbook = new QProgressBar(this);
     progReadEbook->setMaximum(0);
     progReadEbook->setMinimum(0);
@@ -225,7 +229,7 @@ void dlgReader::startOpenFile(QString openfile) {
 
     dlgProgEBook->layout()->addWidget(progReadEbook);
     dlgProgEBook->setModal(true);
-    mw_one->ui->btnReader->setEnabled(false);
+
     if (!mw_one->ui->frameQML->isHidden()) dlgProgEBook->show();
 
     mw_one->ui->lblTitle->hide();
@@ -358,9 +362,13 @@ void dlgReader::openFile(QString openfile) {
         }
       }
       if (opfList.count() > 1) {
+        // get html path
+        QString htmlpath, suffix;
+        bool isid = false;
         for (int i = 0; i < opfList.count(); i++) {
           QString str0 = opfList.at(i);
           str0 = str0.trimmed();
+          if (str0.contains("<item id=")) isid = true;
           if (str0.contains("href=") && str0.mid(0, 5) == "<item") {
             QString str1 = str0;
             QString str2, str3;
@@ -377,18 +385,50 @@ void dlgReader::openFile(QString openfile) {
 
             if (str3.contains("htm")) {
               QString qfile = strOpfPath + str3;
-              QFileInfo fi(qfile);
+              htmlpath = QFileInfo(qfile).path() + "/";
+              suffix = QFileInfo(qfile).suffix();
+              qDebug() << "htmlpath" << htmlpath << suffix;
+              break;
+            }
+          }
+        }
 
-              if (QFileInfo(temp).size() < 15000000) {
-                if (fi.size() <= 20000)
-                  htmlFiles.append(strOpfPath + str3);
-                else {
-                  SplitFile(qfile);
-                }
-              } else {
-                htmlFiles.append(strOpfPath + str3);
+        for (int i = 0; i < opfList.count(); i++) {
+          QString str0 = opfList.at(i);
+          str0 = str0.trimmed();
+          if (str0.contains("idref=") && str0.mid(0, 8) == "<itemref") {
+            QString str1 = str0;
+            QString str2, str3;
+            str1.replace("idref=", "|");
+            str1 = str1.trimmed();
+            for (int m = 0; m < str1.length(); m++) {
+              if (str1.mid(m, 1) == "|") {
+                str2 = str1.mid(m + 1, str1.length() - m);
+                break;
               }
             }
+            QStringList list = str2.split("\"");
+            if (list.count() > 0) str3 = list.at(1);
+            QString idref = str3;
+
+            QString qfile;
+            // if (str3.contains("htm")) {
+            // QString qfile = htmlpath + str3;
+            // if (QFileInfo(qfile).suffix() == "")
+            // qfile = htmlpath + str3 + "." + suffix;
+            qfile = strOpfPath + get_href(idref, opfList);
+            QFileInfo fi(qfile);
+
+            if (QFileInfo(temp).size() < 15000000) {
+              if (fi.size() <= 20000)
+                htmlFiles.append(qfile);
+              else {
+                SplitFile(qfile);
+              }
+            } else {
+              htmlFiles.append(qfile);
+            }
+            //}
           }
 
           // title
@@ -403,9 +443,9 @@ void dlgReader::openFile(QString openfile) {
 
       qDebug() << strFullPath << htmlFiles;
       if (htmlFiles.count() == 0) {
-        deleteDirfile(dirpath);
-        QDir dir;
-        dir.rename(dirpathbak, dirpath);
+        // deleteDirfile(dirpath);
+        // QDir dir;
+        // dir.rename(dirpathbak, dirpath);
         qDebug() << "====== htmlFiles Count== 0 ======";
         return;
       } else {
@@ -471,6 +511,36 @@ void dlgReader::openFile(QString openfile) {
 
     isOpen = true;
   }
+}
+
+QString dlgReader::get_href(QString idref, QStringList opfList) {
+  for (int i = 0; i < opfList.count(); i++) {
+    QString str0 = opfList.at(i);
+    str0 = str0.trimmed();
+
+    if (str0.contains("href=") && str0.contains(idref) &&
+        str0.mid(0, 5) == "<item") {
+      QString str1 = str0;
+      QString str2, str3;
+      str1.replace("href=", "|");
+      str1 = str1.trimmed();
+      for (int m = 0; m < str1.length(); m++) {
+        if (str1.mid(m, 1) == "|") {
+          str2 = str1.mid(m + 1, str1.length() - m);
+          break;
+        }
+      }
+      QStringList list = str2.split("\"");
+      if (list.count() > 0) str3 = list.at(1);
+
+      if (str3.contains("htm")) {
+        qDebug() << "href" << str3;
+        return str3;
+        break;
+      }
+    }
+  }
+  return "";
 }
 
 QString dlgReader::getTextEditLineText(QTextEdit* txtEdit, int i) {

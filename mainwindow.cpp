@@ -3825,4 +3825,6 @@ void MainWindow::readEBookDone() {
   }
   dlgProgEBook->close();
   ui->btnReader->setEnabled(true);
+  ui->frameFun->setEnabled(true);
+  ui->frameReader->setEnabled(true);
 }
