@@ -78,6 +78,7 @@
 class SearchThread;
 class ReadThread;
 class ReadTWThread;
+class ReadEBookThread;
 
 #include <QMetaType>
 
@@ -137,6 +138,7 @@ class MainWindow : public QMainWindow {
   SearchThread *mySearchThread;
   ReadThread *myReadThread;
   ReadTWThread *myReadTWThread;
+  ReadEBookThread *myReadEBookThread;
   static void ReadChartData();
   static int get_Day(QString date);
   static QString get_Year(QString date);
@@ -252,7 +254,8 @@ class MainWindow : public QMainWindow {
   void newDatas();
   void updateHardSensorSteps();
 
- protected:
+  void readEBookDone();
+protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;
@@ -431,6 +434,21 @@ class ReadTWThread : public QThread {
   Q_OBJECT
  public:
   explicit ReadTWThread(QObject *parent = nullptr);
+
+ protected:
+  void run();
+ signals:
+  void isDone();
+
+ signals:
+
+ public slots:
+};
+
+class ReadEBookThread : public QThread {
+  Q_OBJECT
+ public:
+  explicit ReadEBookThread(QObject *parent = nullptr);
 
  protected:
   void run();

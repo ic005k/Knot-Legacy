@@ -27,40 +27,36 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
-  int htmlIndex = 0;
   DocumentHandler *myDocHandler;
-  bool isEpub = false;
-  QStringList htmlFiles;
+
   QString fontname;
   qreal textPos;
   qreal textHeight;
-  bool isOpen = false;
-  int baseLines = 20;
-  QStringList readTextList;
-  int totallines;
+
   void saveReader();
   void initReader();
-  QString fileName;
-  void openFile(QString fileName);
+
+  static void openFile(QString fileName);
   qulonglong vpos;
-  int iPage;
+
   void drawB();
 
-  QString getTextEditLineText(QTextEdit *txtEdit, int i);
+  static QString getTextEditLineText(QTextEdit *txtEdit, int i);
   void getLines();
-  QStringList readText(QString textFile);
+  static QStringList readText(QString textFile);
   void goPostion();
   void setQML(QString);
   void setVPos();
   QFont get_Font();
-  int deleteDirfile(QString dirName);
+  static int deleteDirfile(QString dirName);
   void setQMLHtml();
   void setFontSize(int textFontSize);
-  void TextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
+  static void TextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
   void savePageVPos();
   void setPageVPos();
   void showInfo();
-public slots:
+  void startOpenFile(QString openfile);
+ public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
@@ -86,10 +82,10 @@ public slots:
  private:
   int x, y, w, h;
   bool isLines = false;
-  int sPos;
+
   QString strSpace = "";
-  QString strOpfPath;
-  void SplitFile(QString qfile);
+
+  static void SplitFile(QString qfile);
 };
 
 #endif  // DLGREADER_H

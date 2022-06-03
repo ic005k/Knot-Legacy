@@ -11,6 +11,14 @@ extern QString iniFile, iniDir;
 extern bool isImport, zh_cn, isAndroid, isIOS;
 extern int fontSize;
 
+bool isOpen = false;
+bool isEpub = false;
+QStringList readTextList, htmlFiles;
+QString strOpfPath, fileName, ebookFile;
+int iPage, sPos, totallines;
+int baseLines = 20;
+int htmlIndex = 0;
+
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
   ui->textBrowser->hide();
@@ -193,27 +201,30 @@ void dlgReader::on_btnOpen_clicked() {
   QString openfile =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
 
-  openFile(openfile);
+  startOpenFile(openfile);
 }
 
-void dlgReader::openFile(QString openfile) {
-  isOpen = false;
+void dlgReader::startOpenFile(QString openfile) {
   if (QFile(openfile).exists()) {
     mw_one->ui->lblTitle->hide();
     mw_one->ui->frameFun->hide();
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
-
     if (!mw_one->ui->frameQML->isHidden()) saveReader();
+    ebookFile = openfile;
+    mw_one->myReadEBookThread->start();
+    // openFile(openfile);
 
-    if (QFile(openfile).exists()) {
-      readTextList.clear();
-      readTextList = readText(openfile);
+  } else
+    return;
+}
 
-    } else
-      return;
-
+void dlgReader::openFile(QString openfile) {
+  isOpen = false;
+  if (QFile(openfile).exists()) {
+    readTextList.clear();
+    readTextList = readText(openfile);
     if (readTextList.count() <= 0) return;
     QString strHead = readTextList.at(0);
 
@@ -413,7 +424,7 @@ void dlgReader::openFile(QString openfile) {
       mw_one->ui->lblBookName->hide();
       iPage = 0;
       sPos = 0;
-      ui->hSlider->setValue(0);
+
       totallines = readTextList.count();
     }
 
@@ -428,10 +439,7 @@ void dlgReader::openFile(QString openfile) {
 
 #endif
 
-    ui->frameFun->hide();
     isOpen = true;
-    goPostion();
-    setVPos();
   }
 }
 
@@ -477,7 +485,7 @@ void dlgReader::initReader() {
   fileName = Reg.value("/Reader/FileName").toString();
   if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
 
-  openFile(fileName);
+  startOpenFile(fileName);
 }
 
 void dlgReader::on_btnFontPlus_clicked() {

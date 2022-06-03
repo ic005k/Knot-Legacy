@@ -26,8 +26,10 @@ QTabWidget *tabData, *tabChart;
 bool loading, isReadEnd, isReadTWEnd;
 bool isSaveEnd = true;
 bool isBreak = false;
-extern bool isAndroid, isIOS, zh_cn;
-extern QString btnYearText, btnMonthText, strPage;
+extern bool isAndroid, isIOS, zh_cn, isEpub;
+extern QString btnYearText, btnMonthText, strPage, ebookFile;
+extern int iPage, sPos, totallines, baseLines, htmlIndex;
+extern QStringList readTextList, htmlFiles;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 void RegJni();
@@ -50,6 +52,12 @@ static float AccBuff[NUM_DIM + 1][SAMP_BUFF_LEN];
 unsigned int num_steps_walk, num_steps_run, num_steps_hop;
 
 QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
+
+ReadEBookThread::ReadEBookThread(QObject* parent) : QThread{parent} {}
+void ReadEBookThread::run() {
+  mw_one->mydlgReader->openFile(ebookFile);
+  emit isDone();
+}
 
 ReadTWThread::ReadTWThread(QObject* parent) : QThread{parent} {}
 void ReadTWThread::run() {
@@ -728,6 +736,9 @@ MainWindow::~MainWindow() {
 
   myReadTWThread->quit();
   myReadTWThread->wait();
+
+  myReadEBookThread->quit();
+  myReadEBookThread->wait();
 }
 
 void MainWindow::startSave(QString str_type) {
@@ -1929,12 +1940,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     if ((relea_x - press_x) > 50 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
-      if (!mydlgReader->isEpub) {
-        if (mydlgReader->iPage - mydlgReader->baseLines <= 0)
-          return QWidget::eventFilter(watch, evn);
+      if (!isEpub) {
+        if (iPage - baseLines <= 0) return QWidget::eventFilter(watch, evn);
       } else {
-        if (mydlgReader->htmlIndex <= 0)
-          return QWidget::eventFilter(watch, evn);
+        if (htmlIndex <= 0) return QWidget::eventFilter(watch, evn);
       }
 
       ui->lblTitle->setPixmap(ui->quickWidget->grab());
@@ -1967,12 +1976,11 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     if ((press_x - relea_x) > 50 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 50) {
-      if (!mydlgReader->isEpub) {
-        if (mydlgReader->iPage + mydlgReader->baseLines >
-            mydlgReader->totallines)
+      if (!isEpub) {
+        if (iPage + baseLines > totallines)
           return QWidget::eventFilter(watch, evn);
       } else {
-        if (mydlgReader->htmlIndex + 1 >= mydlgReader->htmlFiles.count())
+        if (htmlIndex + 1 >= htmlFiles.count())
           return QWidget::eventFilter(watch, evn);
       }
 
@@ -3414,6 +3422,10 @@ void MainWindow::init_UIWidget() {
 
   ui->statusbar->setHidden(true);
 
+  myReadEBookThread = new ReadEBookThread();
+  connect(myReadEBookThread, &ReadEBookThread::isDone, this,
+          &MainWindow::readEBookDone);
+
   myReadTWThread = new ReadTWThread();
   connect(myReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
 
@@ -3785,21 +3797,23 @@ void MainWindow::on_btnFontLess_clicked() {
 }
 
 void MainWindow::on_hSlider_sliderMoved(int position) {
-  if (!mydlgReader->isEpub) {
-    ui->btnLines->setText(
-        tr("Pages") + "\n" + QString::number(position + 1) + " / " +
-        QString::number(mydlgReader->totallines / mydlgReader->baseLines));
+  if (!isEpub) {
+    ui->btnLines->setText(tr("Pages") + "\n" + QString::number(position + 1) +
+                          " / " + QString::number(totallines / baseLines));
     ui->progReader->setMinimum(0);
-    ui->progReader->setMaximum(mydlgReader->totallines /
-                               mydlgReader->baseLines);
+    ui->progReader->setMaximum(totallines / baseLines);
     ui->progReader->setValue(position + 1);
   } else {
     ui->btnLines->setText(tr("Pages") + "\n" + QString::number(position) +
-                          " / " +
-                          QString::number(mydlgReader->htmlFiles.count()));
+                          " / " + QString::number(htmlFiles.count()));
     ui->progReader->setMinimum(1);
-    ui->progReader->setMaximum(mydlgReader->htmlFiles.count());
+    ui->progReader->setMaximum(htmlFiles.count());
     if (position == 0) position = 1;
     ui->progReader->setValue(position);
   }
+}
+
+void MainWindow::readEBookDone() {
+  mydlgReader->goPostion();
+  mydlgReader->setVPos();
 }
