@@ -14,7 +14,7 @@ extern int fontSize;
 bool isOpen = false;
 bool isEpub = false;
 QStringList readTextList, htmlFiles;
-QString strOpfPath, fileName, ebookFile;
+QString strOpfPath, fileName, ebookFile, strTitle;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
@@ -232,10 +232,16 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->lblBookName->hide();
-    mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
     if (!mw_one->ui->frameQML->isHidden()) saveReader();
 
+    mw_one->ui->quickWidget->rootContext()->setContextProperty(
+        "strText", tr("Reading in progress..."));
+    mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
+
+    mw_one->myReadTWThread->quit();
+    mw_one->myReadTWThread->wait();
     ebookFile = openfile;
+
     mw_one->myReadEBookThread->start();
     // openFile(openfile);
 
@@ -312,7 +318,6 @@ void dlgReader::openFile(QString openfile) {
         return;
       } else {
         isEpub = true;
-        mw_one->ui->lblBookName->show();
       }
 
       QStringList conList = readText(str0);
@@ -339,7 +344,7 @@ void dlgReader::openFile(QString openfile) {
       strOpfPath = fi.path() + "/";
       QStringList opfList = readText(strOpfFile);
       htmlFiles.clear();
-      QString strTitle;
+
       if (opfList.count() < 5) {
         QString str;
         for (int j = 0; j < opfList.count(); j++) str = str + opfList.at(j);
@@ -402,7 +407,6 @@ void dlgReader::openFile(QString openfile) {
       } else {
         deleteDirfile(dirpathbak);
         deleteDirfile(dirpath + "/OEBPS/Styles");
-        mw_one->ui->lblBookName->setText(strTitle);
 
         QString imgdir = strOpfPath + "Images";
         QDir dir0(imgdir);
@@ -443,7 +447,6 @@ void dlgReader::openFile(QString openfile) {
 
     } else {
       isEpub = false;
-
       iPage = 0;
       sPos = 0;
 
@@ -451,10 +454,11 @@ void dlgReader::openFile(QString openfile) {
     }
 
     fileName = openfile;
+
 #ifdef Q_OS_MAC
-    QFileInfo fi(openfile);
-    mw_one->ui->lblBookName->setText(fi.baseName());
-    mw_one->ui->lblBookName->show();
+    // QFileInfo fi(openfile);
+    // mw_one->ui->lblBookName->setText(fi.baseName());
+    // mw_one->ui->lblBookName->show();
 #endif
 
 #ifdef Q_OS_ANDROID

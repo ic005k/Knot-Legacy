@@ -29,7 +29,7 @@ bool isBreak = false;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 extern bool isAndroid, isIOS, zh_cn, isEpub;
-extern QString btnYearText, btnMonthText, strPage, ebookFile;
+extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle;
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
 extern QStringList readTextList, htmlFiles;
 extern QDialog* dlgProgEBook;
@@ -3816,7 +3816,12 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 }
 
 void MainWindow::readEBookDone() {
+  qDebug() << "Read EBook End... ...";
   mydlgReader->goPostion();
   mydlgReader->setVPos();
+  if (isEpub) {
+    ui->lblBookName->show();
+    ui->lblBookName->setText(strTitle);
+  }
   dlgProgEBook->close();
 }
