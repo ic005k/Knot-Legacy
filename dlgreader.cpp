@@ -18,6 +18,7 @@ QString strOpfPath, fileName, ebookFile;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
+QDialog* dlgProgEBook;
 
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
@@ -206,12 +207,34 @@ void dlgReader::on_btnOpen_clicked() {
 
 void dlgReader::startOpenFile(QString openfile) {
   if (QFile(openfile).exists()) {
+    QProgressBar* progReadEbook = new QProgressBar(this);
+    progReadEbook->setMaximum(0);
+    progReadEbook->setMinimum(0);
+
+    dlgProgEBook = new QDialog(this);
+    dlgProgEBook->setFixedHeight(50);
+    dlgProgEBook->setFixedWidth(mw_one->width());
+    QVBoxLayout* vbox = new QVBoxLayout;
+    vbox->setContentsMargins(1, 1, 1, 1);
+    vbox->setSpacing(0);
+    vbox->setMargin(0);
+    dlgProgEBook->setLayout(vbox);
+    dlgProgEBook->setGeometry(0,
+                              (mw_one->height() - dlgProgEBook->height()) / 2,
+                              dlgProgEBook->width(), dlgProgEBook->height());
+
+    dlgProgEBook->layout()->addWidget(progReadEbook);
+    dlgProgEBook->setModal(true);
+    dlgProgEBook->show();
+
     mw_one->ui->lblTitle->hide();
     mw_one->ui->frameFun->hide();
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
+    mw_one->ui->lblBookName->hide();
     mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
     if (!mw_one->ui->frameQML->isHidden()) saveReader();
+
     ebookFile = openfile;
     mw_one->myReadEBookThread->start();
     // openFile(openfile);
@@ -228,7 +251,6 @@ void dlgReader::openFile(QString openfile) {
     if (readTextList.count() <= 0) return;
     QString strHead = readTextList.at(0);
 
-    // if (openfile.mid(openfile.length() - 4, 4) == "epub") {
     if (strHead.trimmed().mid(0, 2) == "PK") {
       QString dirpath, dirpathbak;
       // dirpath = "/storage/emulated/0/epubtemp/";
@@ -421,7 +443,7 @@ void dlgReader::openFile(QString openfile) {
 
     } else {
       isEpub = false;
-      mw_one->ui->lblBookName->hide();
+
       iPage = 0;
       sPos = 0;
 

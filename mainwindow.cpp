@@ -26,11 +26,13 @@ QTabWidget *tabData, *tabChart;
 bool loading, isReadEnd, isReadTWEnd;
 bool isSaveEnd = true;
 bool isBreak = false;
+QRegularExpression regxNumber("^-?\[0-9.]*$");
+
 extern bool isAndroid, isIOS, zh_cn, isEpub;
 extern QString btnYearText, btnMonthText, strPage, ebookFile;
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
 extern QStringList readTextList, htmlFiles;
-QRegularExpression regxNumber("^-?\[0-9.]*$");
+extern QDialog* dlgProgEBook;
 
 void RegJni();
 void RegJniMyActivity();
@@ -3816,4 +3818,5 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 void MainWindow::readEBookDone() {
   mydlgReader->goPostion();
   mydlgReader->setVPos();
+  dlgProgEBook->close();
 }

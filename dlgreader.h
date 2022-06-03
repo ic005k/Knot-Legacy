@@ -11,6 +11,7 @@
 #include <QQuickWidget>
 #include <QTextBlock>
 #include <QTextBrowser>
+#include <QVBoxLayout>
 
 #include "documenthandler.h"
 #include "file.h"
