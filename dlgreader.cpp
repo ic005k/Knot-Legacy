@@ -386,7 +386,8 @@ void dlgReader::openFile(QString openfile) {
             QString str = str0;
             str = str.replace("<dc:title>", "");
             str = str.replace("</dc:title>", "");
-            strTitle = str.trimmed();
+            strTitle = str.trimmed() + "    " +
+                       mw_one->getFileSize(QFile(temp).size(), 2);
           }
         }
       }
