@@ -271,27 +271,12 @@ void dlgReader::openFile(QString openfile) {
       QDir dir;
       dir.rename(dirpath, dirpathbak);
 
-      // QFile::copy(":/src/unzip", iniDir + "unzip");
-
       QString temp = iniDir + "temp.zip";
       QFile::remove(temp);
       if (!QFile::copy(openfile, temp)) {
         QMessageBox box;
         box.setText(openfile + "\n!=\n" + temp);
         box.exec();
-      } else {
-        QMessageBox box;
-        QProcess* pro = new QProcess;
-
-        pro->start(iniDir + "unzip", QStringList()
-                                         << "-o" << temp << "-d" << dirpath);
-        QString str = pro->readAll();
-        pro->waitForFinished(5000);
-
-        box.setText(temp + "\n" + mw_one->getFileSize(QFile(temp).size(), 2) +
-                    "\n" +
-                    mw_one->getFileSize(QFile(iniDir + "unzip").size(), 2) +
-                    "\n" + str);
       }
 
 #ifdef Q_OS_MAC
@@ -408,50 +393,11 @@ void dlgReader::openFile(QString openfile) {
 
       qDebug() << strFullPath << htmlFiles;
       if (htmlFiles.count() == 0) {
-        // deleteDirfile(dirpath);
-        // QDir dir;
-        // dir.rename(dirpathbak, dirpath);
         qDebug() << "====== htmlFiles Count== 0 ======";
         return;
       } else {
         deleteDirfile(dirpathbak);
-        deleteDirfile(dirpath + "/OEBPS/Styles");
-
-        QString imgdir = strOpfPath + "Images";
-        QDir dir0(imgdir);
-        if (!dir0.exists()) imgdir = strOpfPath + "images";
-        QDir dir1(imgdir);
-        if (!dir1.exists()) imgdir = strOpfPath;
-
-        QDir* dir = new QDir(imgdir);
-        QStringList filter;
-        filter << "*.png"
-               << "*.jpg"
-               << "*.jpeg"
-               << "*.bmp"
-               << "*.svg";
-        dir->setNameFilters(filter);
-        QList<QFileInfo>* fileInfo =
-            new QList<QFileInfo>(dir->entryInfoList(filter));
-        for (int i = 0; i < fileInfo->size(); i++) {
-          if (fileInfo->at(i).exists()) {
-            QString file = fileInfo->at(i).filePath();
-
-            QImage img(file);
-            double w, h, new_w, new_h;
-            w = img.width();
-            h = img.height();
-            qDebug() << file << w << mw_one->width();
-            double r = (double)w / h;
-            if (w > mw_one->width() - 20) {
-              new_w = mw_one->width() - 20;
-              new_h = new_w / r;
-              QPixmap pix;
-              pix = QPixmap::fromImage(img.scaled(new_w, new_h));
-              pix.save(file);
-            }
-          }
-        }
+        proceImg();
       }
 
     } else {
@@ -1106,6 +1052,43 @@ void dlgReader::SplitFile(QString qfile) {
                       QString::number(x - 1) + "." + fi.suffix();
       TextEditToFile(edit3, filen);
       htmlFiles.append(filen);
+    }
+  }
+}
+
+void dlgReader::proceImg() {
+  QString imgdir = strOpfPath + "Images";
+  QDir dir0(imgdir);
+  if (!dir0.exists()) imgdir = strOpfPath + "images";
+  QDir dir1(imgdir);
+  if (!dir1.exists()) imgdir = strOpfPath;
+
+  QDir* dir = new QDir(imgdir);
+  QStringList filter;
+  filter << "*.png"
+         << "*.jpg"
+         << "*.jpeg"
+         << "*.bmp"
+         << "*.svg";
+  dir->setNameFilters(filter);
+  QList<QFileInfo>* fileInfo = new QList<QFileInfo>(dir->entryInfoList(filter));
+  for (int i = 0; i < fileInfo->size(); i++) {
+    if (fileInfo->at(i).exists()) {
+      QString file = fileInfo->at(i).filePath();
+
+      QImage img(file);
+      double w, h, new_w, new_h;
+      w = img.width();
+      h = img.height();
+      qDebug() << file << w << mw_one->width();
+      double r = (double)w / h;
+      if (w > mw_one->width() - 20) {
+        new_w = mw_one->width() - 20;
+        new_h = new_w / r;
+        QPixmap pix;
+        pix = QPixmap::fromImage(img.scaled(new_w, new_h));
+        pix.save(file);
+      }
     }
   }
 }

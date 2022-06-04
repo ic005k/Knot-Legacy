@@ -88,6 +88,7 @@ class dlgReader : public QDialog {
 
   static void SplitFile(QString qfile);
   static QString get_href(QString idref, QStringList opfList);
+  static void proceImg();
 };
 
 #endif  // DLGREADER_H
