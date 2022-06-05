@@ -206,6 +206,7 @@ void dlgReader::on_btnOpen_clicked() {
 }
 
 void dlgReader::startOpenFile(QString openfile) {
+  mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
   if (QFile(openfile).exists()) {
     strTitle = "";
     mw_one->ui->btnReader->setEnabled(false);
@@ -242,7 +243,6 @@ void dlgReader::startOpenFile(QString openfile) {
 
     mw_one->ui->quickWidget->rootContext()->setContextProperty(
         "strText", tr("Reading in progress..."));
-    mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
 
     mw_one->myReadTWThread->quit();
     mw_one->myReadTWThread->wait();
