@@ -382,6 +382,7 @@ void dlgReader::openFile(QString openfile) {
           }
 
           // title
+          strTitle = "";
           if (str0.contains("<dc:title>")) {
             QString str = str0;
             str = str.replace("<dc:title>", "");
