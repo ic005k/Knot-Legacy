@@ -756,9 +756,9 @@ void dlgReader::setQMLHtml() {
   QVariant msg;
 
   if (zh_cn) {
-    QString space;
-    // space = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    space = " style='line-height:32px; width:100% ; text-indent:40px; ' ";
+    QString space0, space;
+    space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    space = " style='line-height:33px; width:100% ; text-indent:40px; ' ";
     QTextEdit* edit = new QTextEdit;
     edit->setPlainText(mw_one->loadText(hf));
     QPlainTextEdit* edit1 = new QPlainTextEdit;
@@ -766,14 +766,15 @@ void dlgReader::setQMLHtml() {
     for (int i = 0; i < edit->document()->lineCount(); i++) {
       QString str = getTextEditLineText(edit, i);
       str = str.trimmed();
-      if (!str.contains(space) && !str.contains("Title") &&
+      if (!str.contains(space0) && !str.contains("Title") &&
           !str.contains("<img") && str.mid(0, 2) == "<p") {
         /*for (int j = 0; j < str.length(); j++) {
           if (str.mid(j, 1) == ">") {
-            str = str.insert(j + 1, space);
+            str = str.insert(j + 1, space0);
             break;
           }
         }*/
+
         str.insert(2, space);
       }
 
