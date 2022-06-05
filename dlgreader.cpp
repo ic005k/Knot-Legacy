@@ -207,6 +207,7 @@ void dlgReader::on_btnOpen_clicked() {
 
 void dlgReader::startOpenFile(QString openfile) {
   if (QFile(openfile).exists()) {
+    strTitle = "";
     mw_one->ui->btnReader->setEnabled(false);
     mw_one->ui->frameFun->setEnabled(false);
     mw_one->ui->frameReader->setEnabled(false);
@@ -382,7 +383,6 @@ void dlgReader::openFile(QString openfile) {
           }
 
           // title
-          strTitle = "";
           if (str0.contains("<dc:title>")) {
             QString str = str0;
             str = str.replace("<dc:title>", "");
