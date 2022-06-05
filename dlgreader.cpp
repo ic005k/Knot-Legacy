@@ -399,6 +399,7 @@ void dlgReader::openFile(QString openfile) {
         return;
       } else {
         deleteDirfile(dirpathbak);
+        // deleteDirfile(strOpfPath + "Styles");
         proceImg();
       }
 
@@ -755,7 +756,9 @@ void dlgReader::setQMLHtml() {
   QVariant msg;
 
   if (zh_cn) {
-    QString space = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    QString space;
+    // space = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    space = " style='line-height:32px; width:100% ; text-indent:40px; ' ";
     QTextEdit* edit = new QTextEdit;
     edit->setPlainText(mw_one->loadText(hf));
     QPlainTextEdit* edit1 = new QPlainTextEdit;
@@ -765,12 +768,13 @@ void dlgReader::setQMLHtml() {
       str = str.trimmed();
       if (!str.contains(space) && !str.contains("Title") &&
           !str.contains("<img") && str.mid(0, 2) == "<p") {
-        for (int j = 0; j < str.length(); j++) {
+        /*for (int j = 0; j < str.length(); j++) {
           if (str.mid(j, 1) == ">") {
             str = str.insert(j + 1, space);
             break;
           }
-        }
+        }*/
+        str.insert(2, space);
       }
 
       edit1->appendPlainText(str);
