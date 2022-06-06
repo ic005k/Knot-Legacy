@@ -2087,7 +2087,8 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("The data was exported successfully.") +
-                                +"\n\n" + fileName);
+                                +"\n\n" +
+                                mw_one->mydlgReader->getUriRealPath(fileName));
       QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
       btnOk->setFocus();
       msgBox.exec();
@@ -2103,7 +2104,8 @@ void MainWindow::on_actionImport_Data_triggered() {
   if (!fileName.isNull()) {
     QMessageBox msgBox;
     msgBox.setText(appName);
-    msgBox.setInformativeText(tr("Import this data?") + "\n" + fileName);
+    msgBox.setInformativeText(tr("Import this data?") + "\n" +
+                              mw_one->mydlgReader->getUriRealPath(fileName));
     QPushButton* btnCancel =
         msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
     QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);

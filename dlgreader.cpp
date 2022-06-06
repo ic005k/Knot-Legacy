@@ -1112,9 +1112,13 @@ QString dlgReader::getUriRealPath(QString uripath) {
   QString realpath;
   QAndroidJniObject javaUriPath = QAndroidJniObject::fromString(uripath);
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
-  m_activity.callMethod<void>("getUriPath", "(Ljava/lang/String;)V",
-                              javaUriPath.object<jstring>());
+  QAndroidJniObject s = m_activity.callObjectMethod(
+      "getUriPath", "(Ljava/lang/String;)Ljava/lang/String;",
+      javaUriPath.object<jstring>());
+  realpath = s.toString();
   qDebug() << "RealPath" << realpath;
   return realpath;
 #endif
+
+  return uripath;
 }
