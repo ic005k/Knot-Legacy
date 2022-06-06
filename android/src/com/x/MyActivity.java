@@ -67,6 +67,8 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import java.net.URLDecoder;
+
 public class MyActivity extends QtActivity {
 
     private static MyActivity m_instance;
@@ -576,11 +578,20 @@ public class MyActivity extends QtActivity {
     /*
 This method can parse out the real local file path from a file URI.
 */
-    public  void getUriPath(String uripath)
-    {
-        Uri u = Uri.parse(uripath); // "content://media/internal/audio/media/81"
-        String abc= getUriRealPath(context,u);
-        Log.i(TAG, "RealPath  " + abc);
+    public  String getUriPath(String uripath) {
+        //Uri u = Uri.parse(uripath); // "content://media/internal/audio/media/81"
+        //String abc= getUriRealPath(context,u);
+
+        String URL = uripath;
+        String str = URLDecoder.decode(URL);
+        //System.out.println(字符串);
+
+        //String str1 = getUriRealPath(getContext(),Uri.parse(str));
+
+        Log.i(TAG, "UriString  " + uripath);
+        Log.i(TAG, "RealPath  " + str);
+        return  str;
+
     }
 
     private String getUriRealPath(Context ctx, Uri uri) {
