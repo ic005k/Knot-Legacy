@@ -260,6 +260,8 @@ void dlgReader::startOpenFile(QString openfile) {
 void dlgReader::openFile(QString openfile) {
   isOpen = false;
   if (QFile(openfile).exists()) {
+    // getUriRealPath(openfile);
+
     readTextList.clear();
     readTextList = readText(openfile);
     if (readTextList.count() <= 0) return;
@@ -1103,4 +1105,16 @@ void dlgReader::proceImg() {
       }
     }
   }
+}
+
+QString dlgReader::getUriRealPath(QString uripath) {
+#ifdef Q_OS_ANDROID
+  QString realpath;
+  QAndroidJniObject javaUriPath = QAndroidJniObject::fromString(uripath);
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  m_activity.callMethod<void>("getUriPath", "(Ljava/lang/String;)V",
+                              javaUriPath.object<jstring>());
+  qDebug() << "RealPath" << realpath;
+  return realpath;
+#endif
 }

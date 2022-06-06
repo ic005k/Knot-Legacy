@@ -57,6 +57,7 @@ class dlgReader : public QDialog {
   void setPageVPos();
   void showInfo();
   void startOpenFile(QString openfile);
+  static QString getUriRealPath(QString uripath);
  public slots:
 
   void on_btnPageNext_clicked();
