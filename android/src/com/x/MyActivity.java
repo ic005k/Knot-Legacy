@@ -91,6 +91,7 @@ public class MyActivity extends QtActivity {
     public static int mini() {
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
+
         return 1;
     }
 
@@ -575,6 +576,13 @@ public class MyActivity extends QtActivity {
     /*
 This method can parse out the real local file path from a file URI.
 */
+    public  void getUriPath(String uripath)
+    {
+        Uri u = Uri.parse(uripath); // "content://media/internal/audio/media/81"
+        String abc= getUriRealPath(context,u);
+        Log.i(TAG, "RealPath  " + abc);
+    }
+
     private String getUriRealPath(Context ctx, Uri uri) {
         String ret = "";
 
