@@ -202,6 +202,8 @@ void dlgReader::on_btnOpen_clicked() {
   QString openfile =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
 
+  if (!QFileInfo(openfile).exists()) return;
+
   startOpenFile(openfile);
 }
 
@@ -766,6 +768,7 @@ void dlgReader::setQMLHtml() {
     for (int i = 0; i < edit->document()->lineCount(); i++) {
       QString str = getTextEditLineText(edit, i);
       str = str.trimmed();
+      // str = str.replace(".css", "");
       if (!str.contains(space) && !str.contains("Title") &&
           !str.contains("<img") && str.mid(0, 2) == "<p") {
         /*for (int j = 0; j < str.length(); j++) {
