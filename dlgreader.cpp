@@ -766,7 +766,7 @@ void dlgReader::setQMLHtml() {
     for (int i = 0; i < edit->document()->lineCount(); i++) {
       QString str = getTextEditLineText(edit, i);
       str = str.trimmed();
-      if (!str.contains(space0) && !str.contains("Title") &&
+      if (!str.contains(space) && !str.contains("Title") &&
           !str.contains("<img") && str.mid(0, 2) == "<p") {
         /*for (int j = 0; j < str.length(); j++) {
           if (str.mid(j, 1) == ">") {
