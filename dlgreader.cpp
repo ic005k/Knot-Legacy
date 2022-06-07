@@ -260,8 +260,6 @@ void dlgReader::startOpenFile(QString openfile) {
 void dlgReader::openFile(QString openfile) {
   isOpen = false;
   if (QFile(openfile).exists()) {
-    // getUriRealPath(openfile);
-
     readTextList.clear();
     readTextList = readText(openfile);
     if (readTextList.count() <= 0) return;
@@ -413,15 +411,17 @@ void dlgReader::openFile(QString openfile) {
       sPos = 0;
 
       totallines = readTextList.count();
+
+#ifdef Q_OS_ANDROID
+      QString name, name1;
+      name = getUriRealPath(openfile);
+      QStringList lista = name.split("/");
+      name1 = lista.at(lista.count() - 1);
+      strTitle = name1;
+#endif
     }
 
     fileName = openfile;
-
-#ifdef Q_OS_MAC
-    // QFileInfo fi(openfile);
-    // mw_one->ui->lblBookName->setText(fi.baseName());
-    // mw_one->ui->lblBookName->show();
-#endif
 
 #ifdef Q_OS_ANDROID
 
