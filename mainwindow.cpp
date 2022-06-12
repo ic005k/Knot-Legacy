@@ -1027,31 +1027,39 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   QSettings Reg(ini_file, QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   int count = tw->topLevelItemCount();
+  int abc = count;
   tw->setObjectName(name);
-  Reg.setValue("/" + name + "/TopCount", count);
+
   for (int i = 0; i < count; i++) {
     if (isBreak) break;
-    Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topDate",
-                 tw->topLevelItem(i)->text(0));
-    Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topFreq",
-                 tw->topLevelItem(i)->text(1));
-    Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topAmount",
-                 tw->topLevelItem(i)->text(2));
     int childCount = tw->topLevelItem(i)->childCount();
-    Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childCount",
-                 childCount);
-    for (int j = 0; j < childCount; j++) {
-      if (isBreak) return;
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childTime" +
-                       QString::number(j),
-                   tw->topLevelItem(i)->child(j)->text(0));
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childAmount" +
-                       QString::number(j),
-                   tw->topLevelItem(i)->child(j)->text(1));
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childDesc" +
-                       QString::number(j),
-                   tw->topLevelItem(i)->child(j)->text(2));
-    }
+
+    if (childCount > 0) {
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topDate",
+                   tw->topLevelItem(i)->text(0));
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topFreq",
+                   tw->topLevelItem(i)->text(1));
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topAmount",
+                   tw->topLevelItem(i)->text(2));
+
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childCount",
+                   childCount);
+      for (int j = 0; j < childCount; j++) {
+        if (isBreak) return;
+        Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childTime" +
+                         QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(0));
+        Reg.setValue("/" + name + "/" + QString::number(i + 1) +
+                         "-childAmount" + QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(1));
+        Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childDesc" +
+                         QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(2));
+      }
+    } else
+      abc = abc - 1;
+
+    Reg.setValue("/" + name + "/TopCount", abc);
   }
 }
 
