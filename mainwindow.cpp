@@ -906,6 +906,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
         topItem->setText(2, strAmount);
         break;
       }
+      tw->takeTopLevelItem(tw->topLevelItemCount() - 1);
     }
   }
 
