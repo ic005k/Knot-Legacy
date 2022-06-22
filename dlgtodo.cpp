@@ -5,7 +5,7 @@
 #include "ui_dlgtodo.h"
 #include "ui_mainwindow.h"
 
-QString highLblStyle = "background-color: rgb(255,192,203);color:black";
+QString highLblStyle = "background-color: rgb(255,182,193);color:black";
 int highCount;
 QString orgLblStyle;
 QListWidget *mylist, *listRecycle;
@@ -82,7 +82,10 @@ void dlgTodo::saveTodo() {
     Reg.setValue("/Todo/Time" + QString::number(i), strTime);
 
     QLabel* lblSn = (QLabel*)w->children().at(2);
-    if (orgLblStyle != lblSn->styleSheet()) highCount++;
+    if (orgLblStyle != lblSn->styleSheet()) {
+      highCount++;
+      Reg.setValue("/Todo/HighLightSn" + QString::number(highCount), i);
+    }
   }
 
   int count1 = listRecycle->count();
@@ -120,7 +123,8 @@ void dlgTodo::init_Items() {
 
   highCount = Reg.value("/Todo/HighCount").toInt();
   for (int i = 0; i < highCount; i++) {
-    QListWidgetItem* item = ui->listWidget->item(i);
+    int index = Reg.value("/Todo/HighLightSn" + QString::number(i + 1)).toInt();
+    QListWidgetItem* item = ui->listWidget->item(index);
     QWidget* w = ui->listWidget->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(2);
     lbl->setStyleSheet(highLblStyle);
