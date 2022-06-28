@@ -5,7 +5,8 @@
 #include "ui_dlgtodo.h"
 #include "ui_mainwindow.h"
 
-QString highLblStyle = "background-color: rgb(255,182,193);color:black";
+QString highLblStyle = "color:rgb(212,35,122)";
+// "background-color: rgb(255,255,255);color:rgb(212,35,122)";
 int highCount;
 QString orgLblStyle;
 QListWidget *mylist, *listRecycle;
