@@ -315,7 +315,7 @@ background:  rgba(71, 140, 182);
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="btnPage">
+             <widget class="QToolButton" name="btnFont">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>

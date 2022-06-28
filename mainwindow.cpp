@@ -450,7 +450,7 @@ void MainWindow::init_Options() {
   QFont font(this->font());
   QFontInfo fInfo(font);
   fontSize = fInfo.pointSize();
-  qDebug() << "fontSize:" << fontSize;
+  qDebug() << "fontSize:" << fontSize << fInfo.family();
 
   mydlgPre->ui->rb0->setChecked(Reg.value("/Options/rb0", 1).toBool());
   mydlgPre->ui->rb1->setChecked(Reg.value("/Options/rb1", 0).toBool());
@@ -460,6 +460,7 @@ void MainWindow::init_Options() {
   if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 4;
   QFont userFont;
   userFont.setPointSize(fontSize);
+  userFont.setFamily(fInfo.family());
   mydlgReport->ui->tableReport->setFont(userFont);
   mydlgReport->ui->tableDetails->setFont(userFont);
   mydlgReport->ui->tableCategory->setFont(userFont);
@@ -3791,7 +3792,7 @@ void MainWindow::on_btnPageNext_clicked() {
   mydlgReader->on_btnPageNext_clicked();
 }
 
-void MainWindow::on_btnPage_clicked() { mydlgReader->on_btnFont_clicked(); }
+void MainWindow::on_btnFont_clicked() { mydlgReader->on_btnFont_clicked(); }
 
 void MainWindow::on_btnLines_clicked() { mydlgReader->on_btnLines_clicked(); }
 

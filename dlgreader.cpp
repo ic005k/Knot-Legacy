@@ -84,7 +84,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->btnFontLess->setStyleSheet("border:none");
   mw_one->ui->btnFontPlus->setStyleSheet("border:none");
   mw_one->ui->btnOpen->setStyleSheet("border:none");
-  mw_one->ui->btnPage->setStyleSheet("border:none");
+  mw_one->ui->btnFont->setStyleSheet("border:none");
   mw_one->ui->btnBack->setStyleSheet("border:none");
   mw_one->ui->btnPageNext->setStyleSheet("border:none");
   mw_one->ui->btnPageUp->setStyleSheet("border:none");

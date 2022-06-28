@@ -255,7 +255,8 @@ class MainWindow : public QMainWindow {
   void updateHardSensorSteps();
 
   void readEBookDone();
-protected:
+
+ protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;
@@ -357,7 +358,7 @@ protected:
 
   void on_btnPageNext_clicked();
 
-  void on_btnPage_clicked();
+  void on_btnFont_clicked();
 
   void on_btnLines_clicked();
 
