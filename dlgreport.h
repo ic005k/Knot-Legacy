@@ -27,7 +27,8 @@ class dlgReport : public QDialog {
   void sel_Year();
   void sel_Month();
   static void saveYMD();
- public slots:
+  void setTableNoItemFlags(QTableWidget *t, int row);
+public slots:
   void on_tableReport_cellClicked(int row, int column);
   void on_btnYear_clicked();
 
@@ -48,6 +49,7 @@ class dlgReport : public QDialog {
  private:
   QPrintPreviewDialog *preview;
   QPrinter *printer;
+  QBrush brush1 = QBrush(QColor(253, 185, 176));
 };
 
 #endif  // DLGREPORT_H

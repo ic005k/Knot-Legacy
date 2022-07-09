@@ -2668,9 +2668,7 @@ void MainWindow::on_actionReport_triggered() {
     tableItem = new QTableWidgetItem(txt2);
     mydlgReport->ui->tableReport->setItem(i, 2, tableItem);
 
-    mydlgReport->ui->tableReport->item(i, 0)->setFlags(Qt::NoItemFlags);
-    mydlgReport->ui->tableReport->item(i, 1)->setFlags(Qt::NoItemFlags);
-    mydlgReport->ui->tableReport->item(i, 2)->setFlags(Qt::NoItemFlags);
+    mydlgReport->setTableNoItemFlags(mydlgReport->ui->tableReport, i);
   }
 
   int count = mydlgReport->ui->tableReport->rowCount();
@@ -2690,9 +2688,7 @@ void MainWindow::on_actionReport_triggered() {
     mydlgReport->ui->tableReport->setColumnWidth(0, 10);
     mydlgReport->ui->tableReport->setRowHeight(count, 30);
 
-    mydlgReport->ui->tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);
-    mydlgReport->ui->tableReport->item(count, 1)->setFlags(Qt::NoItemFlags);
-    mydlgReport->ui->tableReport->item(count, 2)->setFlags(Qt::NoItemFlags);
+    mydlgReport->setTableNoItemFlags(mydlgReport->ui->tableReport, count);
 
     mydlgReport->on_tableReport_cellClicked(count, 0);
     mydlgReport->ui->tableReport->scrollToBottom();

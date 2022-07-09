@@ -224,9 +224,8 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
       item->setBackground(brush2);
       ui->tableWidget->setItem(i, 2, item);
 
-      ui->tableWidget->item(i, 0)->setFlags(Qt::NoItemFlags);
-      ui->tableWidget->item(i, 1)->setFlags(Qt::NoItemFlags);
-      ui->tableWidget->item(i, 2)->setFlags(Qt::NoItemFlags);
+      mw_one->mydlgReport->setTableNoItemFlags(ui->tableWidget, i);
+
       isYes = true;
       break;
     }
@@ -247,9 +246,7 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
     item->setBackground(brush2);
     ui->tableWidget->setItem(count, 2, item);
 
-    ui->tableWidget->item(count, 0)->setFlags(Qt::NoItemFlags);
-    ui->tableWidget->item(count, 1)->setFlags(Qt::NoItemFlags);
-    ui->tableWidget->item(count, 2)->setFlags(Qt::NoItemFlags);
+    mw_one->mydlgReport->setTableNoItemFlags(ui->tableWidget, count);
   }
 }
 

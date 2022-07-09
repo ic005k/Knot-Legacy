@@ -40,6 +40,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->tableReport->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->tableReport->setSelectionBehavior(QAbstractItemView::SelectRows);
   ui->tableReport->setSelectionMode(QAbstractItemView::SingleSelection);
+  ui->tableReport->setSelectionBehavior(QAbstractItemView::SelectRows);
   ui->tableReport->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->tableReport, QScroller::LeftMouseButtonGesture);
   ui->tableReport->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
@@ -167,9 +168,7 @@ void dlgReport::sel_Year() {
       ui->tableReport->setColumnWidth(0, 10);
       ui->tableReport->setRowHeight(j, 30);
 
-      ui->tableReport->item(j, 0)->setFlags(Qt::NoItemFlags);
-      ui->tableReport->item(j, 1)->setFlags(Qt::NoItemFlags);
-      ui->tableReport->item(j, 2)->setFlags(Qt::NoItemFlags);
+      setTableNoItemFlags(ui->tableReport, j);
 
       j++;
     }
@@ -198,9 +197,7 @@ void dlgReport::sel_Year() {
     ui->tableReport->setColumnWidth(0, 10);
     ui->tableReport->setRowHeight(count, 30);
 
-    ui->tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);
-    ui->tableReport->item(count, 1)->setFlags(Qt::NoItemFlags);
-    ui->tableReport->item(count, 2)->setFlags(Qt::NoItemFlags);
+    setTableNoItemFlags(ui->tableReport, count);
 
     on_tableReport_cellClicked(0, 0);
   }
@@ -389,17 +386,20 @@ void dlgReport::on_tableReport_cellClicked(int row, int column) {
 
 void dlgReport::markColor(int row) {
   QIcon icon;
-  int size = 5;
+  int size = 10;
   icon.addFile(":/src/sel.png", QSize(size, size));
   QIcon icon1;
   icon1.addFile(":/src/nosel.png", QSize(size, size));
   QTableWidgetItem* id1;
 
   for (int i = 0; i < ui->tableReport->rowCount(); i++) {
-    if (i == row)
+    if (i == row) {
       id1 = new QTableWidgetItem(icon, QString::number(i + 1) + "  ");
-    else
+      id1->setBackground(brush1);
+
+    } else {
       id1 = new QTableWidgetItem(icon1, QString::number(i + 1) + "  ");
+    }
     ui->tableReport->setVerticalHeaderItem(i, id1);
   }
 }
@@ -496,9 +496,7 @@ void dlgReport::on_btnCategory_clicked() {
               new QTableWidgetItem(ui->tableDetails->item(j, 1)->text()));
           abc = abc + ui->tableDetails->item(j, 1)->text().toDouble();
 
-          ui->tableCategory->item(count, 0)->setFlags(Qt::NoItemFlags);
-          ui->tableCategory->item(count, 1)->setFlags(Qt::NoItemFlags);
-          ui->tableCategory->item(count, 2)->setFlags(Qt::NoItemFlags);
+          setTableNoItemFlags(ui->tableDetails, count);
         }
       }
     }
@@ -523,13 +521,18 @@ void dlgReport::on_btnCategory_clicked() {
                               strAmount);
     qDebug() << abc / total;
 
-    ui->tableCategory->item(t, 0)->setFlags(Qt::NoItemFlags);
-    ui->tableCategory->item(t, 1)->setFlags(Qt::NoItemFlags);
-    ui->tableCategory->item(t, 2)->setFlags(Qt::NoItemFlags);
+    setTableNoItemFlags(ui->tableDetails, t);
+
     ui->tableDetails->hide();
     ui->tableCategory->show();
     list->close();
   });
+}
+
+void dlgReport::setTableNoItemFlags(QTableWidget* t, int row) {
+  for (int i = 0; i < t->columnCount(); i++) {
+    t->item(row, i)->setFlags(Qt::NoItemFlags);
+  }
 }
 
 void dlgReport::on_btnPrint_clicked() {
