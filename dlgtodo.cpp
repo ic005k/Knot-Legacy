@@ -6,6 +6,8 @@
 #include "ui_mainwindow.h"
 
 QString highLblStyle = "color:rgb(212,35,122)";
+// "color:rgb(212,35,122)";
+// "background-color: rgb(254,234,112);color:rgb(39,36,17)";
 // "background-color: rgb(255,255,255);color:rgb(212,35,122)";
 int highCount;
 QString orgLblStyle;

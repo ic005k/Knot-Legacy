@@ -496,7 +496,9 @@ void dlgReport::on_btnCategory_clicked() {
               new QTableWidgetItem(ui->tableDetails->item(j, 1)->text()));
           abc = abc + ui->tableDetails->item(j, 1)->text().toDouble();
 
-          setTableNoItemFlags(ui->tableDetails, count);
+          ui->tableCategory->item(count, 0)->setFlags(Qt::NoItemFlags);
+          ui->tableCategory->item(count, 1)->setFlags(Qt::NoItemFlags);
+          ui->tableCategory->item(count, 2)->setFlags(Qt::NoItemFlags);
         }
       }
     }
@@ -521,7 +523,9 @@ void dlgReport::on_btnCategory_clicked() {
                               strAmount);
     qDebug() << abc / total;
 
-    setTableNoItemFlags(ui->tableDetails, t);
+    ui->tableCategory->item(t, 0)->setFlags(Qt::NoItemFlags);
+    ui->tableCategory->item(t, 1)->setFlags(Qt::NoItemFlags);
+    ui->tableCategory->item(t, 2)->setFlags(Qt::NoItemFlags);
 
     ui->tableDetails->hide();
     ui->tableCategory->show();
@@ -530,9 +534,8 @@ void dlgReport::on_btnCategory_clicked() {
 }
 
 void dlgReport::setTableNoItemFlags(QTableWidget* t, int row) {
-  t = new QTableWidget();
-  for (int i = 0; i < t->columnCount(); i++) {
-    t->item(row, i)->setFlags(Qt::NoItemFlags);
+  for (int z = 0; z < t->columnCount(); z++) {
+    t->item(row, z)->setFlags(Qt::NoItemFlags);
   }
 }
 
