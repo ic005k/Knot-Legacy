@@ -530,6 +530,7 @@ void dlgReport::on_btnCategory_clicked() {
 }
 
 void dlgReport::setTableNoItemFlags(QTableWidget* t, int row) {
+  t = new QTableWidget();
   for (int i = 0; i < t->columnCount(); i++) {
     t->item(row, i)->setFlags(Qt::NoItemFlags);
   }
