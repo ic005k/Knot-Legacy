@@ -58,6 +58,7 @@ class dlgReader : public QDialog {
   void showInfo();
   void startOpenFile(QString openfile);
   static QString getUriRealPath(QString uripath);
+  static QString getNCX(QString path);
  public slots:
 
   void on_btnPageNext_clicked();

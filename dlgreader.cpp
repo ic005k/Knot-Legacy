@@ -350,49 +350,83 @@ void dlgReader::openFile(QString openfile) {
         }
       }
       if (opfList.count() > 1) {
-        for (int i = 0; i < opfList.count(); i++) {
-          QString str0 = opfList.at(i);
-          str0 = str0.trimmed();
-          if (str0.contains("idref=") && str0.mid(0, 8) == "<itemref") {
-            QString str1 = str0;
-            QString str2, str3;
-            str1.replace("idref=", "|");
-            str1 = str1.trimmed();
-            for (int m = 0; m < str1.length(); m++) {
-              if (str1.mid(m, 1) == "|") {
-                str2 = str1.mid(m + 1, str1.length() - m);
-                break;
-              }
-            }
-            QStringList list = str2.split("\"");
-            if (list.count() > 0) str3 = list.at(1);
-            QString idref = str3;
+        bool isNCX = false;
+        QString ncxFile = getNCX(strOpfPath);
+        qDebug() << "ncx file: " << ncxFile;
+        if (QFileInfo(ncxFile).exists()) isNCX = true;
+        if (isNCX) {
+          QStringList ncxList = readText(ncxFile);
 
-            QString qfile;
-            qfile = strOpfPath + get_href(idref, opfList);
-            QFileInfo fi(qfile);
-            if (fi.exists()) {
-              if (QFileInfo(temp).size() < 15000000) {
-                if (fi.size() <= 20000)
+          for (int i = 0; i < ncxList.count(); i++) {
+            QString str0 = ncxList.at(i);
+            str0 = str0.trimmed();
+            if (str0.contains("content src")) {
+              QString str1 = str0;
+              str1 = str1.replace("<content src=\"", "");
+              str1 = str1.replace("\"/>", "");
+              QString qfile;
+              qfile = strOpfPath + str1;
+              qDebug() << qfile;
+              QFileInfo fi(qfile);
+              if (fi.exists()) {
+                if (QFileInfo(temp).size() < 15000000) {
+                  if (fi.size() <= 20000)
+                    htmlFiles.append(qfile);
+                  else {
+                    SplitFile(qfile);
+                  }
+                } else {
                   htmlFiles.append(qfile);
-                else {
-                  SplitFile(qfile);
                 }
-              } else {
-                htmlFiles.append(qfile);
               }
             }
           }
 
-          // title
-          if (str0.contains("<dc:title>")) {
-            QString str = str0;
-            str = str.replace("<dc:title>", "");
-            str = str.replace("</dc:title>", "");
-            strTitle = str.trimmed() + "    " +
-                       mw_one->getFileSize(QFile(temp).size(), 2);
+        } else {
+          for (int i = 0; i < opfList.count(); i++) {
+            QString str0 = opfList.at(i);
+            str0 = str0.trimmed();
+            if (str0.contains("idref=") && str0.mid(0, 8) == "<itemref") {
+              QString str1 = str0;
+              QString str2, str3;
+              str1.replace("idref=", "|");
+              str1 = str1.trimmed();
+              for (int m = 0; m < str1.length(); m++) {
+                if (str1.mid(m, 1) == "|") {
+                  str2 = str1.mid(m + 1, str1.length() - m);
+                  break;
+                }
+              }
+              QStringList list = str2.split("\"");
+              if (list.count() > 0) str3 = list.at(1);
+              QString idref = str3;
+
+              QString qfile;
+              qfile = strOpfPath + get_href(idref, opfList);
+              QFileInfo fi(qfile);
+              if (fi.exists()) {
+                if (QFileInfo(temp).size() < 15000000) {
+                  if (fi.size() <= 20000)
+                    htmlFiles.append(qfile);
+                  else {
+                    SplitFile(qfile);
+                  }
+                } else {
+                  htmlFiles.append(qfile);
+                }
+              }
+            }
+
+            // title
+            if (str0.contains("<dc:title>")) {
+              QString str = str0;
+              str = str.replace("<dc:title>", "");
+              str = str.replace("</dc:title>", "");
+              strTitle = str.trimmed() + "    " +
+                         mw_one->getFileSize(QFile(temp).size(), 2);
+            }
           }
-        }
+        }  // end isNCX = false;
       }
 
       qDebug() << strFullPath << htmlFiles;
@@ -1068,6 +1102,21 @@ void dlgReader::SplitFile(QString qfile) {
       htmlFiles.append(filen);
     }
   }
+}
+
+QString dlgReader::getNCX(QString path) {
+  QDir* dir = new QDir(path);
+  QStringList filter;
+  filter << "*.ncx";
+  dir->setNameFilters(filter);
+  QList<QFileInfo>* fileInfo = new QList<QFileInfo>(dir->entryInfoList(filter));
+  for (int i = 0; i < fileInfo->size(); i++) {
+    if (fileInfo->at(i).exists()) {
+      QString file = fileInfo->at(i).filePath();
+      return file;
+    }
+  }
+  return "";
 }
 
 void dlgReader::proceImg() {
