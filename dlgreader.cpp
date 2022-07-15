@@ -441,7 +441,7 @@ void dlgReader::openFile(QString openfile) {
               QString qfile;
               qfile = strOpfPath + get_href(idref, opfList);
               QFileInfo fi(qfile);
-              if (fi.exists()) {
+              if (fi.exists() && !htmlFiles.contains(qfile)) {
                 if (QFileInfo(temp).size() < 15000000) {
                   if (fi.size() <= 20000)
                     htmlFiles.append(qfile);
