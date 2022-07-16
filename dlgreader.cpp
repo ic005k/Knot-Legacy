@@ -1257,6 +1257,9 @@ void dlgReader::getReadList() {
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(list);
+  QFont font0;
+  font0.setPointSize(fontSize);
+  list->setFont(font0);
 
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);
