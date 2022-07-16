@@ -2,6 +2,7 @@ QT += core gui
 QT += charts sensors
 QT += qml quick quickwidgets webview
 QT += printsupport
+QT += xml
 
 #QT += qml quick
 #QT += quickwidgets

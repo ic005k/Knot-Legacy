@@ -2,6 +2,9 @@
 #define DLGREADER_H
 
 #include <QDialog>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNamedNodeMap>
 #include <QEvent>
 #include <QFontDialog>
 #include <QPlainTextEdit>
@@ -12,6 +15,7 @@
 #include <QTextBlock>
 #include <QTextBrowser>
 #include <QVBoxLayout>
+#include <QXmlStreamReader>
 
 #include "documenthandler.h"
 #include "file.h"
@@ -59,6 +63,7 @@ class dlgReader : public QDialog {
   void startOpenFile(QString openfile);
   static QString getUriRealPath(QString uripath);
   static QString getNCX(QString path);
+
  public slots:
 
   void on_btnPageNext_clicked();
