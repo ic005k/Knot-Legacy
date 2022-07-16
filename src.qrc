@@ -44,5 +44,6 @@
         <file>src/lines.png</file>
         <file>src/test.txt</file>
         <file>src/font.png</file>
+        <file>src/ReadList.png</file>
     </qresource>
 </RCC>

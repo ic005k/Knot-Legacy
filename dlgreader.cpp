@@ -89,6 +89,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->btnPageNext->setStyleSheet("border:none");
   mw_one->ui->btnPageUp->setStyleSheet("border:none");
   mw_one->ui->btnLines->setStyleSheet("border:none");
+  mw_one->ui->btnReadList->setStyleSheet("border:none");
   QFont f;
   f.setPointSize(11);
   f.setBold(true);
@@ -499,7 +500,8 @@ void dlgReader::openFile(QString openfile) {
 #endif
 
     isOpen = true;
-  }
+
+  }  // end file exists
 }
 
 QString dlgReader::get_href(QString idref, QStringList opfList) {
@@ -554,6 +556,12 @@ void dlgReader::saveReader() {
     Reg.setValue("/Reader/htmlIndex" + fileName, htmlIndex);
 
   qDebug() << "textPos" << textPos << "htmlIndex=" << htmlIndex;
+
+  // book list
+  Reg.setValue("/Reader/BookCount", bookList.count());
+  for (int i = 0; i < bookList.count(); i++) {
+    Reg.setValue("/Reader/BookSn" + QString::number(i), bookList.at(i));
+  }
 }
 
 void dlgReader::initReader() {
@@ -575,6 +583,14 @@ void dlgReader::initReader() {
   if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
 
   startOpenFile(fileName);
+
+  // book list
+  int count = Reg.value("/Reader/BookCount", 0).toInt();
+  bookList.clear();
+  for (int i = 0; i < count; i++) {
+    bookList.append(
+        Reg.value("/Reader/BookSn" + QString::number(i)).toString());
+  }
 }
 
 void dlgReader::on_btnFontPlus_clicked() {
@@ -1230,4 +1246,46 @@ QString dlgReader::getUriRealPath(QString uripath) {
 #endif
 
   return uripath;
+}
+
+void dlgReader::getReadList() {
+  if (strTitle == "") return;
+
+  QListWidget* list = new QListWidget(mw_one);
+  list->setStyleSheet(mw_one->listStyle);
+  list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(list);
+
+  for (int i = 0; i < bookList.count(); i++) {
+    QString str = bookList.at(i);
+    QStringList listBooks = str.split("|");
+    QListWidgetItem* item = new QListWidgetItem;
+    item->setSizeHint(QSize(130, 30));  // item->sizeHint().width()
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    item->setText(listBooks.at(0));
+    list->addItem(item);
+  }
+
+  connect(list, &QListWidget::itemClicked, [=]() {
+    int index = list->currentRow();
+    QString str = bookList.at(index);
+    QStringList listBooks = str.split("|");
+    startOpenFile(listBooks.at(1));
+    list->close();
+  });
+
+  list->setGeometry(0, 0, mw_one->width(), mw_one->height());
+  if (list->count() > 0) {
+    list->setCurrentRow(0);
+    for (int i = 0; i < list->count(); i++) {
+      if (list->item(i)->text() == strTitle) {
+        list->setCurrentRow(i);
+        break;
+      }
+    }
+  }
+  list->show();
+  list->setFocus();
 }

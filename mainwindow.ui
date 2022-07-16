@@ -442,6 +442,29 @@ background:  rgba(71, 140, 182);
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QToolButton" name="btnReadList">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="src.qrc">
+                <normaloff>:/src/ReadList.png</normaloff>:/src/ReadList.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>25</width>
+                <height>25</height>
+               </size>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>

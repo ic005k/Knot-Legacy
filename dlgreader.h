@@ -34,7 +34,7 @@ class dlgReader : public QDialog {
   Ui::dlgReader *ui;
 
   DocumentHandler *myDocHandler;
-
+  QStringList bookList;
   QString fontname;
   qreal textPos;
   qreal textHeight;
@@ -66,6 +66,7 @@ class dlgReader : public QDialog {
   static QString getNCX(QString path);
 
   static QString GetCorrectUnicode(const QByteArray &text);
+  void getReadList();
  public slots:
 
   void on_btnPageNext_clicked();

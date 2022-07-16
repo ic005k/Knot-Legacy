@@ -370,6 +370,8 @@ class MainWindow : public QMainWindow {
 
   void on_hSlider_sliderMoved(int position);
 
+  void on_btnReadList_clicked();
+
  private:
   int frameChartHeight = 220;
   int x, y, w, h;

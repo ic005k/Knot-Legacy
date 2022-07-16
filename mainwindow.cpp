@@ -9,7 +9,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.10";
+QString ver = "1.0.11";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -3828,8 +3828,6 @@ void MainWindow::readEBookDone() {
   qDebug() << "Read EBook End... ...";
   mydlgReader->goPostion();
   mydlgReader->setVPos();
-  ui->lblBookName->show();
-  ui->lblBookName->setText(strTitle);
 
   dlgProgEBook->close();
   ui->btnReader->setEnabled(true);
@@ -3838,7 +3836,21 @@ void MainWindow::readEBookDone() {
 
 #ifdef Q_OS_MAC
   QFileInfo fi(fileName);
-  mw_one->ui->lblBookName->setText(fi.baseName());
-  mw_one->ui->lblBookName->show();
+  strTitle = fi.baseName();
 #endif
+
+  ui->lblBookName->show();
+  ui->lblBookName->setText(strTitle);
+
+  bool isNot = false;
+  for (int i = 0; i < mydlgReader->bookList.count(); i++) {
+    QString str = mydlgReader->bookList.at(i);
+    if (str.contains(fileName)) {
+      isNot = true;
+      break;
+    }
+  }
+  if (!isNot) mydlgReader->bookList.append(strTitle + "|" + fileName);
 }
+
+void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }
