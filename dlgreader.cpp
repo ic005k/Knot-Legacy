@@ -893,12 +893,17 @@ QStringList dlgReader::readText(QString textFile) {
                            file.errorString());
 
     } else {
-      QTextStream in(&file);
+      QString text;
+      QByteArray buff = file.readAll();
+      text = GetCorrectUnicode(buff);
+
+      /*QTextStream in(&file);
       if (!zh_cn)
         in.setCodec("UTF-8");
       else
         in.setCodec("GBK");
-      QString text = in.readAll();
+      text = in.readAll();*/
+
       text.replace("/><", "/>\n<");
       list = text.split("\n");
     }
@@ -906,6 +911,19 @@ QStringList dlgReader::readText(QString textFile) {
   }
 
   return list;
+}
+
+QString dlgReader::GetCorrectUnicode(const QByteArray& text) {
+  QTextCodec::ConverterState state;
+  QTextCodec* codec = QTextCodec::codecForName("UTF-8");
+  QString strtext = codec->toUnicode(text.constData(), text.size(), &state);
+  if (state.invalidChars > 0) {
+    strtext = QTextCodec::codecForName("GBK")->toUnicode(text);
+  } else {
+    strtext = text;
+  }
+
+  return strtext;
 }
 
 void dlgReader::closeEvent(QCloseEvent* event) {

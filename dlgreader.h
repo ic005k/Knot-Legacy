@@ -14,6 +14,7 @@
 #include <QQuickWidget>
 #include <QTextBlock>
 #include <QTextBrowser>
+#include <QTextCodec>
 #include <QVBoxLayout>
 #include <QXmlStreamReader>
 
@@ -64,6 +65,7 @@ class dlgReader : public QDialog {
   static QString getUriRealPath(QString uripath);
   static QString getNCX(QString path);
 
+  static QString GetCorrectUnicode(const QByteArray &text);
  public slots:
 
   void on_btnPageNext_clicked();
