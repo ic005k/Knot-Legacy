@@ -801,6 +801,7 @@ void dlgReader::on_btnPageNext_clicked() {
     for (int i = iPage; i < count; i++) {
       iPage++;
       QString str = readTextList.at(i);
+
       if (str.trimmed() != "")
         txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
     }
@@ -893,7 +894,10 @@ QStringList dlgReader::readText(QString textFile) {
 
     } else {
       QTextStream in(&file);
-      in.setCodec("UTF-8");
+      if (!zh_cn)
+        in.setCodec("UTF-8");
+      else
+        in.setCodec("GBK");
       QString text = in.readAll();
       text.replace("/><", "/>\n<");
       list = text.split("\n");
