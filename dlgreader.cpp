@@ -1272,7 +1272,8 @@ void dlgReader::getReadList() {
     int index = list->currentRow();
     QString str = bookList.at(index);
     QStringList listBooks = str.split("|");
-    startOpenFile(listBooks.at(1));
+    QString bookfile = listBooks.at(1);
+    if (bookfile != fileName) startOpenFile(bookfile);
     list->close();
   });
 
