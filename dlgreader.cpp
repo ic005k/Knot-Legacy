@@ -1303,7 +1303,7 @@ void dlgReader::getReadList() {
     for (int i = 0; i < list->count(); i++) {
       QString str = bookList.at(i);
       QStringList listBooks = str.split("|");
-      if (listBooks.at(0) == strTitle) {
+      if (listBooks.at(1) == fileName) {
         list->setCurrentRow(i);
         break;
       }
