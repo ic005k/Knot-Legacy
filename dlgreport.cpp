@@ -432,7 +432,7 @@ void dlgReport::on_btnCategory_clicked() {
   QStringList listType;
   listType.append(tr("None"));
   QListWidgetItem* pItem = new QListWidgetItem();
-  pItem->setSizeHint(QSize(ui->btnCategory->width() - 4, 30));
+  pItem->setSizeHint(QSize(ui->btnCategory->width() - 20, 30));
   pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
   pItem->setText(tr("None"));
   list->addItem(pItem);
@@ -445,7 +445,7 @@ void dlgReport::on_btnCategory_clicked() {
         if (!listType.removeOne(str)) {
           listType.append(str);
           QListWidgetItem* pItem = new QListWidgetItem();
-          pItem->setSizeHint(QSize(ui->btnCategory->width() - 4, 30));
+          pItem->setSizeHint(QSize(ui->btnCategory->width() - 20, 30));
           pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
           pItem->setText(str);
           list->addItem(pItem);
