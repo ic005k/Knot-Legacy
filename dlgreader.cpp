@@ -1252,6 +1252,7 @@ void dlgReader::getReadList() {
   if (strTitle == "") return;
 
   QListWidget* list = new QListWidget(mw_one);
+  mw_one->listReadList = list;
   list->setStyleSheet(mw_one->listStyle);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);

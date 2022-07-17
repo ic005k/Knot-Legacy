@@ -99,7 +99,7 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
 
   QString loginTime;
-  QListWidget *listSelTab, *listSelFont;
+  QListWidget *listSelTab, *listSelFont, *listReadList;
   int mwh;
   int textFontSize;
   bool isOne = false;
