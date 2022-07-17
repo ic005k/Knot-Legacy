@@ -1268,7 +1268,7 @@ void dlgReader::getReadList() {
     QListWidgetItem* item = new QListWidgetItem;
     item->setSizeHint(QSize(130, 30));  // item->sizeHint().width()
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    item->setText(listBooks.at(0));
+    item->setText(QString::number(i + 1) + " .  " + listBooks.at(0));
     list->addItem(item);
   }
 
@@ -1282,15 +1282,18 @@ void dlgReader::getReadList() {
   });
 
   list->setGeometry(0, 0, mw_one->width(), mw_one->height());
+
   if (list->count() > 0) {
-    list->setCurrentRow(0);
     for (int i = 0; i < list->count(); i++) {
-      if (list->item(i)->text() == strTitle) {
+      QString str = bookList.at(i);
+      QStringList listBooks = str.split("|");
+      if (listBooks.at(0) == strTitle) {
         list->setCurrentRow(i);
         break;
       }
     }
   }
+
   list->show();
   list->setFocus();
 }
