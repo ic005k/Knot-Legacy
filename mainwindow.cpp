@@ -1916,9 +1916,11 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         }
       }
 
-      if (!listSelTab->isHidden()) {
-        listSelTab->close();
-        return true;
+      if (!ui->frameMain->isHidden()) {
+        if (!listSelTab->isHidden()) {
+          listSelTab->close();
+          return true;
+        }
       }
     }
   }
@@ -3370,6 +3372,7 @@ void MainWindow::init_UIWidget() {
   mw_one = this;
   listSelFont = new QListWidget();
   listSelTab = new QListWidget();
+  listReadList = new QListWidget();
   loginTime = QDateTime::currentDateTime().toString();
 
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
