@@ -1907,12 +1907,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         if (!listSelFont->isHidden()) {
           listSelFont->close();
           return true;
-        } else {
-          on_btnBack_clicked();
-          return true;
-        }
-
-        if (!listReadList->isHidden()) {
+        } else if (!listReadList->isHidden()) {
           listReadList->close();
           return true;
         } else {
