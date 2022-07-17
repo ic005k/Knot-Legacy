@@ -67,7 +67,8 @@ class dlgReader : public QDialog {
 
   static QString GetCorrectUnicode(const QByteArray &text);
   void getReadList();
- public slots:
+  void getBookList();
+public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

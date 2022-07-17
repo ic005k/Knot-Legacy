@@ -584,12 +584,19 @@ void dlgReader::initReader() {
 
   startOpenFile(fileName);
 
+  getBookList();
+}
+
+void dlgReader::getBookList() {
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   // book list
   int count = Reg.value("/Reader/BookCount", 0).toInt();
   bookList.clear();
   for (int i = 0; i < count; i++) {
-    bookList.append(
-        Reg.value("/Reader/BookSn" + QString::number(i)).toString());
+    QString str = Reg.value("/Reader/BookSn" + QString::number(i)).toString();
+    QStringList list = str.split("|");
+    if (QFileInfo(list.at(1)).exists()) bookList.append(str);
   }
 }
 
@@ -1249,7 +1256,16 @@ QString dlgReader::getUriRealPath(QString uripath) {
 }
 
 void dlgReader::getReadList() {
-  if (strTitle == "") return;
+  for (int i = 0; i < bookList.count(); i++) {
+    QString str = bookList.at(i);
+    QStringList list = str.split("|");
+    if (!QFileInfo(list.at(1)).exists()) {
+      bookList.removeAt(i);
+      i--;
+    }
+  }
+
+  if (bookList.count() == 0) return;
 
   QListWidget* list = new QListWidget(mw_one);
   mw_one->listReadList = list;
