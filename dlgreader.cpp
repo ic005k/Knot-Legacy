@@ -352,10 +352,10 @@ void dlgReader::openFile(QString openfile) {
       }
       if (opfList.count() > 1) {
         bool isNCX = false;
-        QString ncxFile = getNCX(strOpfPath);
+        QString ncxFile;  // = getNCX_File(strOpfPath);
         qDebug() << "ncx file: " << ncxFile;
         if (QFileInfo(ncxFile).exists()) isNCX = true;
-        isNCX = false;
+
         if (isNCX) {
           // get reference
           for (int i = 0; i < opfList.count(); i++) {
@@ -477,7 +477,7 @@ void dlgReader::openFile(QString openfile) {
         proceImg();
       }
 
-    } else {
+    } else {  // txt file
       isEpub = false;
       iPage = 0;
       sPos = 0;
@@ -1187,7 +1187,7 @@ void dlgReader::SplitFile(QString qfile) {
   }
 }
 
-QString dlgReader::getNCX(QString path) {
+QString dlgReader::getNCX_File(QString path) {
   QDir* dir = new QDir(path);
   QStringList filter;
   filter << "*.ncx";

@@ -63,12 +63,12 @@ class dlgReader : public QDialog {
   void showInfo();
   void startOpenFile(QString openfile);
   static QString getUriRealPath(QString uripath);
-  static QString getNCX(QString path);
+  static QString getNCX_File(QString path);
 
   static QString GetCorrectUnicode(const QByteArray &text);
   void getReadList();
   void getBookList();
-public slots:
+ public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
