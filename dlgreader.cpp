@@ -850,6 +850,14 @@ void dlgReader::on_btnPageNext_clicked() {
   showInfo();
 }
 
+void dlgReader::setEpubPagePosition(int index) {
+  savePageVPos();
+  htmlIndex = index;
+  setQMLHtml();
+  setPageVPos();
+  showInfo();
+}
+
 void dlgReader::setQMLHtml() {
   QString hf = htmlFiles.at(htmlIndex);
   QVariant msg;

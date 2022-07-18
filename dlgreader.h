@@ -68,7 +68,8 @@ class dlgReader : public QDialog {
   static QString GetCorrectUnicode(const QByteArray &text);
   void getReadList();
   void getBookList();
- public slots:
+  void setEpubPagePosition(int index);
+public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

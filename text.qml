@@ -109,13 +109,14 @@ Item {
             text: strText
             visible: true
 
-            //leftPadding: 2
-            //rightPadding: 2
+            //leftPadding: 10
+            //rightPadding: 10
             //topPadding: 0
             //bottomPadding: 0
             onLinkActivated: {
                 //Qt.openUrlExternally(link)
                 document.load("file://" + htmlPath + link)
+                document.setReadPosition(htmlPath +link);
                 console.log(htmlPath + link)
             }
         }

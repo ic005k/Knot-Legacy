@@ -66,6 +66,7 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;
+extern QStringList readTextList, htmlFiles;
 
 DocumentHandler::DocumentHandler(QObject *parent)
     : QObject(parent),
@@ -232,6 +233,15 @@ QString DocumentHandler::fileType() const {
 }
 
 QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
+
+void DocumentHandler::setReadPosition(QString htmlFile) {
+  for (int i = 0; i < htmlFiles.count(); i++) {
+    if (htmlFiles.at(i) == htmlFile) {
+      mw_one->mydlgReader->setEpubPagePosition(i);
+      break;
+    }
+  }
+}
 
 void DocumentHandler::load(const QUrl &fileUrl) {
   if (fileUrl == m_fileUrl) return;
