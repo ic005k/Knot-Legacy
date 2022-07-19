@@ -90,6 +90,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->btnPageUp->setStyleSheet("border:none");
   mw_one->ui->btnLines->setStyleSheet("border:none");
   mw_one->ui->btnReadList->setStyleSheet("border:none");
+  mw_one->ui->btnBackDir->setStyleSheet("border:none");
   QFont f;
   f.setPointSize(11);
   f.setBold(true);
@@ -1321,3 +1322,5 @@ void dlgReader::getReadList() {
   list->show();
   list->setFocus();
 }
+
+void dlgReader::backDir() { setEpubPagePosition(mainDirIndex); }

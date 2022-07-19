@@ -372,6 +372,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnReadList_clicked();
 
+  void on_btnBackDir_clicked();
+
  private:
   int frameChartHeight = 220;
   int x, y, w, h;

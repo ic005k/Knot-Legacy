@@ -33,6 +33,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  int mainDirIndex;
   DocumentHandler *myDocHandler;
   QStringList bookList;
   QString fontname;
@@ -69,7 +70,8 @@ class dlgReader : public QDialog {
   void getReadList();
   void getBookList();
   void setEpubPagePosition(int index);
-public slots:
+  void backDir();
+ public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

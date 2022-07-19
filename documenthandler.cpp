@@ -67,6 +67,7 @@
 
 extern MainWindow *mw_one;
 extern QStringList readTextList, htmlFiles;
+extern int htmlIndex;
 
 DocumentHandler::DocumentHandler(QObject *parent)
     : QObject(parent),
@@ -348,4 +349,10 @@ bool DocumentHandler::modified() const {
 
 void DocumentHandler::setModified(bool m) {
   if (m_document) m_document->textDocument()->setModified(m);
+}
+
+void DocumentHandler::setBackDir() {
+  mw_one->mydlgReader->mainDirIndex = htmlIndex;
+  mw_one->ui->btnBackDir->setEnabled(true);
+  mw_one->repaint();
 }

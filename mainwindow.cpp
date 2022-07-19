@@ -3839,6 +3839,8 @@ void MainWindow::readEBookDone() {
   ui->btnReader->setEnabled(true);
   ui->frameFun->setEnabled(true);
   ui->frameReader->setEnabled(true);
+  ui->btnBackDir->setEnabled(false);
+  this->repaint();
 
 #ifdef Q_OS_MAC
   QFileInfo fi(fileName);
@@ -3860,3 +3862,5 @@ void MainWindow::readEBookDone() {
 }
 
 void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }
+
+void MainWindow::on_btnBackDir_clicked() { mydlgReader->backDir(); }

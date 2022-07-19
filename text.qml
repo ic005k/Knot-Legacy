@@ -115,8 +115,9 @@ Item {
             //bottomPadding: 0
             onLinkActivated: {
                 //Qt.openUrlExternally(link)
+                document.setBackDir()
                 document.load("file://" + htmlPath + link)
-                document.setReadPosition(htmlPath +link);
+                document.setReadPosition(htmlPath + link)
                 console.log(htmlPath + link)
             }
         }
