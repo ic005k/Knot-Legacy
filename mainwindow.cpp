@@ -3409,8 +3409,6 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
-  ui->progBar->setMaximumHeight(2);
-  ui->progBar->hide();
 
   myfile = new File();
   mydlgNotes = new dlgNotes(this);
@@ -3453,6 +3451,8 @@ void MainWindow::init_UIWidget() {
   ui->frame_find->setHidden(true);
   ui->frameYear->hide();
 
+  ui->progBar->setMaximumHeight(3);
+  ui->progBar->hide();
   ui->progBar->setStyleSheet(
       "QProgressBar{border:0px solid #FFFFFF;"
       "height:30;"
@@ -3466,7 +3466,7 @@ void MainWindow::init_UIWidget() {
       "background-color:rgba(25,25,255,250);"
       "}");
   ui->progReader->setStyleSheet(ui->progBar->styleSheet());
-  ui->progReader->setFixedHeight(2);
+  ui->progReader->setFixedHeight(3);
 
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
 

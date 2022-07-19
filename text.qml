@@ -133,7 +133,7 @@ Item {
 
             contentItem: Rectangle {
                 id: slider
-                implicitWidth: 2
+                implicitWidth: 5
                 implicitHeight: 76
                 radius: width / 2
                 color: control.pressed ? "#e7e7e7" : "#1296db"
