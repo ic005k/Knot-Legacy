@@ -892,6 +892,7 @@ void dlgReader::setQMLHtml() {
 
     TextEditToFile(edit1, hf);
   }
+
   msg = hf;
 
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
@@ -1323,4 +1324,15 @@ void dlgReader::getReadList() {
   list->setFocus();
 }
 
-void dlgReader::backDir() { setEpubPagePosition(mainDirIndex); }
+void dlgReader::backDir() {
+  setEpubPagePosition(mainDirIndex);
+  qDebug() << "mainDirIndex: " << mainDirIndex;
+  if (mainDirIndex == 0) {
+    on_btnPageNext_clicked();
+    on_btnPageUp_clicked();
+
+  } else {
+    on_btnPageUp_clicked();
+    on_btnPageNext_clicked();
+  }
+}

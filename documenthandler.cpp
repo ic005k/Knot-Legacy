@@ -355,4 +355,5 @@ void DocumentHandler::setBackDir() {
   mw_one->mydlgReader->mainDirIndex = htmlIndex;
   mw_one->ui->btnBackDir->setEnabled(true);
   mw_one->repaint();
+  qDebug() << "mainDirIndex: " << mw_one->mydlgReader->mainDirIndex;
 }

@@ -1986,8 +1986,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->start();
 
       ui->lblTitle->show();
-      // mw_one->Sleep(abc + 100);
-      // mydlgReader->setPageVPos();
     }
 
     //判断滑动方向（左滑）
