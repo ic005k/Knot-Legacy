@@ -565,6 +565,9 @@ void dlgReader::saveReader() {
   for (int i = 0; i < bookList.count(); i++) {
     Reg.setValue("/Reader/BookSn" + QString::number(i), bookList.at(i));
   }
+
+  // dir
+  Reg.setValue("/Reader/" + fileName + "MainDirIndex", mainDirIndex);
 }
 
 void dlgReader::initReader() {
