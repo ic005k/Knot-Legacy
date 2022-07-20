@@ -46,5 +46,6 @@
         <file>src/font.png</file>
         <file>src/ReadList.png</file>
         <file>src/dir.png</file>
+        <file>src/main.css</file>
     </qresource>
 </RCC>

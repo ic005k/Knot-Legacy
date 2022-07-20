@@ -475,6 +475,8 @@ void dlgReader::openFile(QString openfile) {
       } else {
         deleteDirfile(dirpathbak);
         // deleteDirfile(strOpfPath + "Styles");
+        QFile(strOpfPath + "main.css").remove();
+        QFile::copy(":/src/main.css", strOpfPath + "main.css");
         proceImg();
       }
 
@@ -874,20 +876,21 @@ void dlgReader::setQMLHtml() {
     for (int i = 0; i < edit->document()->lineCount(); i++) {
       QString str = getTextEditLineText(edit, i);
       str = str.trimmed();
-      str = str.replace(".css", "");
       if (!str.contains(space) && !str.contains("Title") &&
           !str.contains("<img") && str.mid(0, 2) == "<p") {
-        /*for (int j = 0; j < str.length(); j++) {
-          if (str.mid(j, 1) == ">") {
-            str = str.insert(j + 1, space0);
-            break;
-          }
-        }*/
-
         str.insert(2, space);
       }
-
-      edit1->appendPlainText(str);
+      if (!str.contains("link") && !str.contains("stylesheet") &&
+          !str.contains("</head>")) {
+        edit1->appendPlainText(str);
+      }
+      if (str.contains("</head>")) {
+        QString css =
+            "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
+            "/>";
+        edit1->appendPlainText(css);
+        edit1->appendPlainText("</head>");
+      }
     }
 
     TextEditToFile(edit1, hf);
