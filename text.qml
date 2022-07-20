@@ -116,7 +116,7 @@ Item {
             onLinkActivated: {
                 //Qt.openUrlExternally(link)
                 document.setBackDir()
-                document.load("file://" + htmlPath + link)
+                //document.load("file://" + htmlPath + link)
                 document.setReadPosition(htmlPath + link)
                 console.log(htmlPath + link)
             }

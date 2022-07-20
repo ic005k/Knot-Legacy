@@ -33,7 +33,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
-  int mainDirIndex;
+  int mainDirIndex = -1;
   DocumentHandler *myDocHandler;
   QStringList bookList;
   QString fontname;
