@@ -306,9 +306,6 @@ void dlgReader::openFile(QString openfile) {
       QString strFullPath;
       QString str0 = dirpath + "META-INF/container.xml";
       if (!QFile(str0).exists()) {
-        // deleteDirfile(dirpath);
-        // QDir dir;
-        // dir.rename(dirpathbak, dirpath);
         qDebug() << "====== isEpub == false ======";
         return;
       } else {
@@ -873,7 +870,9 @@ void dlgReader::setQMLHtml() {
     space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     space = " style='line-height:33px; width:100% ; text-indent:40px; ' ";
     QTextEdit* edit = new QTextEdit;
-    edit->setPlainText(mw_one->loadText(hf));
+    QString strHtml = mw_one->loadText(hf);
+    strHtml = strHtml.replace("</p><p", "</p>\n<p");
+    edit->setPlainText(strHtml);
     QPlainTextEdit* edit1 = new QPlainTextEdit;
 
     for (int i = 0; i < edit->document()->lineCount(); i++) {
@@ -1122,6 +1121,7 @@ void dlgReader::SplitFile(QString qfile) {
   QFileInfo fi(qfile);
 
   QString text = mw_one->loadText(qfile);
+  text = text.replace("><", ">\n<");
   text = text.replace("</head>", "</head>\n");
   edit1->setPlainText(text);
   int count = edit1->document()->lineCount();

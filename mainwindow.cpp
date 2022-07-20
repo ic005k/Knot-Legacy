@@ -3848,15 +3848,14 @@ void MainWindow::readEBookDone() {
   ui->lblBookName->show();
   ui->lblBookName->setText(strTitle);
 
-  bool isNot = false;
   for (int i = 0; i < mydlgReader->bookList.count(); i++) {
     QString str = mydlgReader->bookList.at(i);
     if (str.contains(fileName)) {
-      isNot = true;
+      mydlgReader->bookList.removeAt(i);
       break;
     }
   }
-  if (!isNot) mydlgReader->bookList.append(strTitle + "|" + fileName);
+  mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
 }
 
 void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }
