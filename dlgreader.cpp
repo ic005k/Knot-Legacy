@@ -870,8 +870,10 @@ void dlgReader::setQMLHtml() {
     QString space0, space;
     space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     space = " style='line-height:33px; width:100% ; text-indent:40px; ' ";
+
     QTextEdit* edit = new QTextEdit;
     QString strHtml = mw_one->loadText(hf);
+
     strHtml = strHtml.replace("</p><p", "</p>\n<p");
     edit->setPlainText(strHtml);
     QPlainTextEdit* edit1 = new QPlainTextEdit;
