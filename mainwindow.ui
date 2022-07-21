@@ -1241,7 +1241,7 @@ QRadioButton::indicator:checked {
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Txt Reader</string>
+               <string>Reader</string>
               </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>
