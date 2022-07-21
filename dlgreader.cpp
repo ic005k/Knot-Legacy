@@ -791,6 +791,7 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
 void dlgReader::on_btnPageUp_clicked() {
   mw_one->ui->lblTitle->hide();
 
+  savePageVPos();
   if (!isEpub) {
     int count = iPage - baseLines;
     if (count <= 0) return;
@@ -808,20 +809,19 @@ void dlgReader::on_btnPageUp_clicked() {
     setQML(txt1);
 
   } else {
-    savePageVPos();
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
 
     setQMLHtml();
-
-    setPageVPos();
   }
+  setPageVPos();
   showInfo();
 }
 
 void dlgReader::on_btnPageNext_clicked() {
   mw_one->ui->lblTitle->hide();
 
+  savePageVPos();
   if (!isEpub) {
     int count = iPage + baseLines;
     if (count > totallines) return;
@@ -839,18 +839,12 @@ void dlgReader::on_btnPageNext_clicked() {
     setQML(txt1);
 
   } else {
-    savePageVPos();
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
 
     setQMLHtml();
-    //  mw_one->ui->quickWidget->rootContext()->setContextProperty(
-    //      "baseUrl", htmlFiles.at(htmlIndex));
-    // qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
-    // setQML(qsShow);
-
-    setPageVPos();
   }
+  setPageVPos();
   showInfo();
 }
 
@@ -1069,28 +1063,35 @@ void dlgReader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
 }
 
 void dlgReader::savePageVPos() {
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   if (isEpub) {
-    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
-    Reg.setIniCodec("utf-8");
     if (htmlIndex >= 0)
       Reg.setValue("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex),
                    textPos);
+  } else {
+    Reg.setValue("/Reader/vpos" + fileName + QString::number(iPage), textPos);
   }
 }
 
 void dlgReader::setPageVPos() {
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   if (isEpub) {
-    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
-    Reg.setIniCodec("utf-8");
     if (htmlIndex >= 0)
       textPos =
           Reg.value("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex), 0)
               .toReal();
-    if (textPos > 10) {
-      QQuickItem* root = mw_one->ui->quickWidget->rootObject();
-      QMetaObject::invokeMethod((QObject*)root, "setVPos",
-                                Q_ARG(QVariant, textPos));
-    }
+
+  } else {
+    textPos = Reg.value("/Reader/vpos" + fileName + QString::number(iPage), 0)
+                  .toReal();
+  }
+
+  if (textPos > 10) {
+    QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+    QMetaObject::invokeMethod((QObject*)root, "setVPos",
+                              Q_ARG(QVariant, textPos));
   }
 }
 
