@@ -680,12 +680,18 @@ void dlgReader::getLines() {
 void dlgReader::setQML(QString txt1) {
   // white-space: pre-wrap;
   // text-indent:40px;
+  QStringList list = txt1.split("\n");
   QString str1 = "<html>\n<body>\n";
   QString str2 = "</body>\n</html>";
-  QString qsShow =
-      str1 +
-      "<p style='line-height:33px; width:100% ; white-space: pre-wrap; '>" +
-      txt1 + "</p>" + str2;
+  QString qsShow;
+
+  for (int i = 0; i < list.count(); i++) {
+    qsShow = qsShow +
+             "<p style='line-height:33px; width:100% ; text-indent:40px; '>" +
+             list.at(i) + "</p>";
+  }
+  qsShow = str1 + qsShow + str2;
+
   mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", qsShow);
 }
 
