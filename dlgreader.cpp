@@ -672,17 +672,21 @@ void dlgReader::getLines() {
       mw_one->ui->hSlider->setMaximum(htmlFiles.count());
       htmlIndex = sPos - 1;
       if (htmlIndex < 0) htmlIndex = 0;
-      // qsShow = mw_one->loadText(htmlFiles.at(htmlIndex));
       setQMLHtml();
     }
   }
 }
 
 void dlgReader::setQML(QString txt1) {
-  // strPage = "<body style=\"line-height:137.5% ;\">" + txt1;
-
-  // mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", txt1);
+  // white-space: pre-wrap;
+  // text-indent:40px;
+  QString str1 = "<html>\n<body>\n";
+  QString str2 = "</body>\n</html>";
+  QString qsShow =
+      str1 +
+      "<p style='line-height:33px; width:100% ; white-space: pre-wrap; '>" +
+      txt1 + "</p>" + str2;
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", qsShow);
 }
 
 void dlgReader::on_btnFont_clicked() {
@@ -780,7 +784,6 @@ void dlgReader::on_hSlider_sliderMoved(int position) {
 
 void dlgReader::on_btnPageUp_clicked() {
   mw_one->ui->lblTitle->hide();
-  QString qsShow;
 
   if (!isEpub) {
     int count = iPage - baseLines;
@@ -796,11 +799,7 @@ void dlgReader::on_btnPageUp_clicked() {
         txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
     }
 
-    qsShow =
-        "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
-        txt1 + "</p>";
-
-    setQML(qsShow);
+    setQML(txt1);
 
   } else {
     savePageVPos();
@@ -817,7 +816,6 @@ void dlgReader::on_btnPageUp_clicked() {
 void dlgReader::on_btnPageNext_clicked() {
   mw_one->ui->lblTitle->hide();
 
-  QString qsShow;
   if (!isEpub) {
     int count = iPage + baseLines;
     if (count > totallines) return;
@@ -832,10 +830,7 @@ void dlgReader::on_btnPageNext_clicked() {
         txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
     }
 
-    qsShow =
-        "<p style='line-height:32px; width:100% ; white-space: pre-wrap; '>" +
-        txt1 + "</p>";
-    setQML(qsShow);
+    setQML(txt1);
 
   } else {
     savePageVPos();
