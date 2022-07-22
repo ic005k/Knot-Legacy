@@ -348,24 +348,28 @@ void dlgReader::openFile(QString openfile) {
           opfList.append(list.at(j));
         }
       }
+
       if (opfList.count() > 1) {
         for (int i = 0; i < opfList.count(); i++) {
           QString str0 = opfList.at(i);
           str0 = str0.trimmed();
-          QString idref = get_idref(str0);
 
-          QString qfile;
-          qfile = strOpfPath + get_href(idref, opfList);
-          QFileInfo fi(qfile);
-          if (fi.exists() && !htmlFiles.contains(qfile)) {
-            if (QFileInfo(temp).size() < 15000000) {
-              if (fi.size() <= 20000)
+          if (str0.contains("idref=") && str0.mid(0, 8) == "<itemref") {
+            QString idref = get_idref(str0);
+
+            QString qfile;
+            qfile = strOpfPath + get_href(idref, opfList);
+            QFileInfo fi(qfile);
+            if (fi.exists() && !htmlFiles.contains(qfile)) {
+              if (QFileInfo(temp).size() < 15000000) {
+                if (fi.size() <= 20000)
+                  htmlFiles.append(qfile);
+                else {
+                  SplitFile(qfile);
+                }
+              } else {
                 htmlFiles.append(qfile);
-              else {
-                SplitFile(qfile);
               }
-            } else {
-              htmlFiles.append(qfile);
             }
           }
 
@@ -419,16 +423,16 @@ void dlgReader::openFile(QString openfile) {
 }
 
 QString dlgReader::get_idref(QString str0) {
-  QString idref, str1, str2;
+  QString idref;
   str0 = str0.trimmed();
   if (str0.contains("idref=") && str0.mid(0, 8) == "<itemref") {
-    str1 = str0;
+    QString str1 = str0;
 
     str1 = str1.replace("<", "");
     str1 = str1.replace("/>", "");
     QStringList list = str1.split(" ");
     for (int i = 0; i < list.count(); i++) {
-      str2 = list.at(i);
+      QString str2 = list.at(i);
       if (str2.contains("idref=")) {
         str2 = str2.replace("idref=", "");
         str2 = str2.replace("\"", "");
