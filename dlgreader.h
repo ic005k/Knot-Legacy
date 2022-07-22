@@ -71,6 +71,7 @@ class dlgReader : public QDialog {
   void getBookList();
   void setEpubPagePosition(int index);
   void backDir();
+  static QString get_idref(QString str0);
  public slots:
 
   void on_btnPageNext_clicked();
