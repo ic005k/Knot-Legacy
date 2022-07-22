@@ -337,18 +337,6 @@ void dlgReader::openFile(QString openfile) {
       QStringList opfList = readText(strOpfFile);
       htmlFiles.clear();
 
-      if (opfList.count() < 5) {
-        QString str;
-        for (int j = 0; j < opfList.count(); j++) str = str + opfList.at(j);
-        str = str.replace(">", ">|");
-        qDebug() << ">|  " << str;
-        QStringList list = str.split("|");
-        opfList.clear();
-        for (int j = 0; j < list.count(); j++) {
-          opfList.append(list.at(j));
-        }
-      }
-
       if (opfList.count() > 1) {
         for (int i = 0; i < opfList.count(); i++) {
           QString str0 = opfList.at(i);
@@ -874,13 +862,6 @@ QStringList dlgReader::readText(QString textFile) {
       QString text;
       QByteArray buff = file.readAll();
       text = GetCorrectUnicode(buff);
-
-      /*QTextStream in(&file);
-      if (!zh_cn)
-        in.setCodec("UTF-8");
-      else
-        in.setCodec("GBK");
-      text = in.readAll();*/
 
       text.replace("/><", "/>\n<");
       list = text.split("\n");
