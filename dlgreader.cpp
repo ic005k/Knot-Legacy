@@ -350,9 +350,9 @@ void dlgReader::openFile(QString openfile) {
             QFileInfo fi(qfile);
             if (fi.exists() && !htmlFiles.contains(qfile)) {
               if (QFileInfo(temp).size() < 15000000) {
-                if (fi.size() <= 20000)
+                if (fi.size() <= 20000) {
                   htmlFiles.append(qfile);
-                else {
+                } else {
                   SplitFile(qfile);
                 }
               } else {
@@ -741,17 +741,23 @@ void dlgReader::on_btnPageNext_clicked() {
 
   savePageVPos();
   if (!isEpub) {
-    int count = iPage + baseLines;
-    if (count > totallines) return;
-    textPos = 0;
     QString txt1;
+    if (totallines > baseLines) {
+      int count = iPage + baseLines;
+      if (count > totallines) return;
+      textPos = 0;
 
-    for (int i = iPage; i < count; i++) {
-      iPage++;
-      QString str = readTextList.at(i);
+      for (int i = iPage; i < count; i++) {
+        iPage++;
+        QString str = readTextList.at(i);
 
-      if (str.trimmed() != "")
-        txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
+        if (str.trimmed() != "") txt1 = txt1 + str + "\n" + strSpace;
+      }
+    } else {
+      for (int i = 0; i < totallines; i++) {
+        QString str = readTextList.at(i);
+        if (str.trimmed() != "") txt1 = txt1 + str + "\n" + strSpace;
+      }
     }
 
     setQML(txt1);
@@ -837,7 +843,7 @@ void dlgReader::on_btnLines_clicked() {
 }
 
 QStringList dlgReader::readText(QString textFile) {
-  QStringList list;
+  QStringList list, list1;
   if (QFile(textFile).exists()) {
     QFile file(textFile);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -850,13 +856,17 @@ QStringList dlgReader::readText(QString textFile) {
       QByteArray buff = file.readAll();
       text = GetCorrectUnicode(buff);
 
-      text.replace("/><", "/>\n<");
+      text.replace("/>", "/>\n");
       list = text.split("\n");
+      for (int i = 0; i < list.count(); i++) {
+        QString str = list.at(i);
+        if (str.trimmed() != "") list1.append(str);
+      }
     }
     file.close();
   }
 
-  return list;
+  return list1;
 }
 
 QString dlgReader::GetCorrectUnicode(const QByteArray& text) {
@@ -1008,15 +1018,22 @@ void dlgReader::setPageVPos() {
 
 void dlgReader::showInfo() {
   mw_one->ui->hSlider->setTickInterval(1);
+
   if (!isEpub) {
-    mw_one->ui->hSlider->setMinimum(0);
-    mw_one->ui->hSlider->setValue(iPage / baseLines);
-    mw_one->ui->hSlider->setMaximum(totallines / baseLines);
-    mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
-                                  QString::number(iPage / baseLines) + " / " +
-                                  QString::number(totallines / baseLines));
-    mw_one->ui->progReader->setMaximum(totallines / baseLines);
-    mw_one->ui->progReader->setValue(iPage / baseLines);
+    if (totallines > baseLines) {
+      mw_one->ui->hSlider->setMinimum(0);
+      mw_one->ui->hSlider->setValue(iPage / baseLines);
+      mw_one->ui->hSlider->setMaximum(totallines / baseLines);
+      mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
+                                    QString::number(iPage / baseLines) + " / " +
+                                    QString::number(totallines / baseLines));
+      mw_one->ui->progReader->setMaximum(totallines / baseLines);
+      mw_one->ui->progReader->setValue(iPage / baseLines);
+    } else {
+      mw_one->ui->progReader->setMaximum(100);
+      mw_one->ui->progReader->setValue(0);
+    }
+
   } else {
     mw_one->ui->hSlider->setMinimum(1);
     mw_one->ui->hSlider->setValue(htmlIndex);
