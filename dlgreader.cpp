@@ -362,13 +362,13 @@ void dlgReader::openFile(QString openfile) {
           }
 
           // title
-          if (str0.contains("<dc:title>")) {
+          /*if (str0.contains("<dc:title>")) {
             QString str = str0;
             str = str.replace("<dc:title>", "");
             str = str.replace("</dc:title>", "");
             strTitle = str.trimmed() + "    " +
                        mw_one->getFileSize(QFile(temp).size(), 2);
-          }
+          }*/
         }
       }
 
@@ -389,21 +389,17 @@ void dlgReader::openFile(QString openfile) {
       sPos = 0;
 
       totallines = readTextList.count();
-
-#ifdef Q_OS_ANDROID
-      QString name, name1;
-      name = getUriRealPath(openfile);
-      QStringList lista = name.split("/");
-      name1 = lista.at(lista.count() - 1);
-      strTitle = name1;
-#endif
     }
 
-    fileName = openfile;
-
 #ifdef Q_OS_ANDROID
-
+    QString name, name1;
+    name = getUriRealPath(openfile);
+    QStringList lista = name.split("/");
+    name1 = lista.at(lista.count() - 1);
+    strTitle = name1 + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
 #endif
+
+    fileName = openfile;
 
     isOpen = true;
 
@@ -1221,6 +1217,7 @@ void dlgReader::getReadList() {
   QFont font0;
   font0.setPointSize(fontSize);
   list->setFont(font0);
+  list->setWordWrap(true);
 
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);
