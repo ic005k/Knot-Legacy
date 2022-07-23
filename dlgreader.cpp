@@ -360,15 +360,6 @@ void dlgReader::openFile(QString openfile) {
               }
             }
           }
-
-          // title
-          /*if (str0.contains("<dc:title>")) {
-            QString str = str0;
-            str = str.replace("<dc:title>", "");
-            str = str.replace("</dc:title>", "");
-            strTitle = str.trimmed() + "    " +
-                       mw_one->getFileSize(QFile(temp).size(), 2);
-          }*/
         }
       }
 
