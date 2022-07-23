@@ -782,47 +782,50 @@ void dlgReader::setEpubPagePosition(int index) {
 
 void dlgReader::setQMLHtml() {
   QString hf = htmlFiles.at(htmlIndex);
-  QVariant msg;
+  QVariant msg, strhtml;
 
-  if (zh_cn) {
-    QString space0, space;
-    space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    space = " style='line-height:33px; width:100% ; text-indent:40px; ' ";
+  QTextEdit* edit = new QTextEdit;
+  QString strHtml = mw_one->loadText(hf);
+  strHtml = strHtml.replace("</p>", "</p>\n");
+  strHtml = strHtml.replace("/>", "/>\n");
 
-    QTextEdit* edit = new QTextEdit;
-    QString strHtml = mw_one->loadText(hf);
+  QString space0, space;
+  space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+  space = " style='line-height:33px; width:100% ; text-indent:40px; ' ";
 
-    strHtml = strHtml.replace("</p><p", "</p>\n<p");
-    edit->setPlainText(strHtml);
-    QPlainTextEdit* edit1 = new QPlainTextEdit;
+  edit->setPlainText(strHtml);
+  QPlainTextEdit* edit1 = new QPlainTextEdit;
 
-    for (int i = 0; i < edit->document()->lineCount(); i++) {
-      QString str = getTextEditLineText(edit, i);
-      str = str.trimmed();
-      if (!str.contains(space) && !str.contains("Title") &&
-          !str.contains("<img") && str.mid(0, 2) == "<p") {
-        str.insert(2, space);
-      }
-      if (!str.contains("link") && !str.contains("stylesheet") &&
-          !str.contains("</head>")) {
-        edit1->appendPlainText(str);
-      }
-      if (str.contains("</head>")) {
-        QString css =
-            "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
-            "/>";
-        edit1->appendPlainText(css);
-        edit1->appendPlainText("</head>");
-      }
+  for (int i = 0; i < edit->document()->lineCount(); i++) {
+    QString str = getTextEditLineText(edit, i);
+    str = str.trimmed();
+    if (!str.contains(space) && !str.contains("Title") &&
+        !str.contains("<img") && str.mid(0, 2) == "<p") {
+      str.insert(2, space);
     }
-
-    TextEditToFile(edit1, hf);
+    if (!str.contains("link") && !str.contains("stylesheet") &&
+        !str.contains("</head>")) {
+      edit1->appendPlainText(str);
+    }
+    if (str.contains("</head>")) {
+      QString css =
+          "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
+          "/>";
+      edit1->appendPlainText(css);
+      edit1->appendPlainText("</head>");
+    }
   }
 
+  // TextEditToFile(edit1, hf);
+  strHtml = edit1->toPlainText();
+  strHtml = strHtml.replace("../", "file://" + strOpfPath);
+
   msg = hf;
+  strhtml = strHtml;
 
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
+  QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
+                            Q_ARG(QVariant, strhtml));
 }
 
 void dlgReader::on_btnLines_clicked() {

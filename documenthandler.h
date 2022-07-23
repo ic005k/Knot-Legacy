@@ -140,6 +140,7 @@ class DocumentHandler : public QObject {
 
  public Q_SLOTS:
   void load(const QUrl &fileUrl);
+  void loadBuffer(QString str);
   void saveAs(const QUrl &fileUrl);
   void setReadPosition(QString htmlFile);
   void setBackDir();

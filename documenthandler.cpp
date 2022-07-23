@@ -244,18 +244,18 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
   }
 }
 
+void DocumentHandler::loadBuffer(QString str) {
+  QByteArray data = str.toUtf8();
+  QTextCodec *codec = QTextCodec::codecForName("utf-8");
+  emit loaded(codec->toUnicode(data), Qt::AutoText);
+  reset();
+
+  emit fileUrlChanged();
+}
+
 void DocumentHandler::load(const QUrl &fileUrl) {
   if (fileUrl == m_fileUrl) return;
 
-  // QQmlEngine *engine = qmlEngine(this);
-  // QQmlEngine *engine = mw_one->ui->quickWidget->engine();
-  // if (!engine) {
-  //  qWarning() << "load() called before DocumentHandler has QQmlEngine";
-  //  return;
-  //}
-
-  // const QUrl path =
-  // QQmlFileSelector::get(engine)->selector()->select(fileUrl);
   const QUrl path = fileUrl;
   const QString fileName = QQmlFile::urlToLocalFileOrQrc(path);
 

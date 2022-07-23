@@ -22,6 +22,11 @@ Item {
         document.load("file://" + msg)
     }
 
+    function loadHtmlBuffer(strhtml) {
+
+        document.loadBuffer(strhtml)
+    }
+
     function setVPos(vpos) {
         flickable.contentY = vpos
         console.log(vpos)
