@@ -30,7 +30,7 @@ QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 extern bool isAndroid, isIOS, zh_cn, isEpub;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
-    fileName;
+    fileName, strOpfPath;
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
 extern QStringList readTextList, htmlFiles;
 extern QDialog* dlgProgEBook;
@@ -3766,7 +3766,7 @@ void MainWindow::on_btnReader_clicked() {
 
   if (!isOne) {
     isOne = true;
-    mydlgReader->setVPos();
+    mydlgReader->setPageVPos();
   }
 }
 
@@ -3782,6 +3782,7 @@ void MainWindow::on_btnBack_clicked() {
   ui->frameQML->hide();
   ui->frameMain->show();
   mydlgReader->saveReader();
+  mydlgReader->savePageVPos();
 }
 
 void MainWindow::on_btnOpen_clicked() { mydlgReader->on_btnOpen_clicked(); }
@@ -3831,7 +3832,6 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 void MainWindow::readEBookDone() {
   qDebug() << "Read EBook End... ...";
   mydlgReader->goPostion();
-  mydlgReader->setVPos();
 
   dlgProgEBook->close();
   ui->btnReader->setEnabled(true);
@@ -3856,6 +3856,8 @@ void MainWindow::readEBookDone() {
     }
   }
   mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
+
+  ui->quickWidget->rootContext()->setContextProperty("htmlPath", strOpfPath);
 }
 
 void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }

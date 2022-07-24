@@ -198,6 +198,7 @@ void dlgReader::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 void dlgReader::on_btnBack_clicked() {
   close();
   saveReader();
+  savePageVPos();
 }
 
 void dlgReader::on_btnOpen_clicked() {
@@ -467,7 +468,8 @@ void dlgReader::saveReader() {
   } else
     Reg.setValue("/Reader/htmlIndex" + fileName, htmlIndex);
 
-  qDebug() << "textPos" << textPos << "htmlIndex=" << htmlIndex;
+  qDebug() << "textPos" << textPos << "htmlIndex=" << htmlIndex << "iPage"
+           << iPage;
 
   // book list
   Reg.setValue("/Reader/BookCount", bookList.count());
@@ -637,11 +639,12 @@ void dlgReader::on_btnFont_clicked() {
   connect(list, &QListWidget::itemClicked, [=]() {
     fontname = list->currentItem()->text();
     saveReader();
+    savePageVPos();
     mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
                                                                fontname);
 
     list->close();
-    setVPos();
+    setPageVPos();
   });
 
   list->setGeometry(0, 0, mw_one->width(), mw_one->height());
@@ -885,6 +888,7 @@ QString dlgReader::GetCorrectUnicode(const QByteArray& text) {
 void dlgReader::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   saveReader();
+  savePageVPos();
 }
 
 void dlgReader::paintEvent(QPaintEvent* event) { Q_UNUSED(event); }
@@ -907,24 +911,6 @@ void dlgReader::goPostion() {
       htmlIndex = 0;
     }
   }
-}
-
-void dlgReader::setVPos() {
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
-  Reg.setIniCodec("utf-8");
-  textPos = Reg.value("/Reader/vpos" + fileName, 0).toReal();
-
-  if (textPos > 10) {
-    // mw_one->ui->quickWidget->rootContext()->setContextProperty("textPos",
-    // textPos);
-
-    QQuickItem* root = mw_one->ui->quickWidget->rootObject();
-    QMetaObject::invokeMethod((QObject*)root, "setVPos",
-                              Q_ARG(QVariant, textPos));
-  }
-
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("htmlPath",
-                                                             strOpfPath);
 }
 
 int dlgReader::deleteDirfile(QString dirName) {
@@ -962,9 +948,10 @@ int dlgReader::deleteDirfile(QString dirName) {
 
 void dlgReader::setFontSize(int textFontSize) {
   saveReader();
+  savePageVPos();
   mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize",
                                                              textFontSize);
-  setVPos();
+  setPageVPos();
 }
 
 void dlgReader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {

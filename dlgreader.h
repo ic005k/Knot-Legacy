@@ -53,7 +53,6 @@ class dlgReader : public QDialog {
   static QStringList readText(QString textFile);
   void goPostion();
   void setQML(QString);
-  void setVPos();
   QFont get_Font();
   static int deleteDirfile(QString dirName);
   void setQMLHtml();
