@@ -269,7 +269,6 @@ void dlgReader::openFile(QString openfile) {
 
     if (strHead.trimmed().mid(0, 2) == "PK") {
       QString dirpath, dirpathbak;
-      // dirpath = "/storage/emulated/0/epubtemp/";
       dirpath = iniDir + "temp/";
       dirpathbak = iniDir + "tempbak/";
 
@@ -844,6 +843,7 @@ void dlgReader::on_btnLines_clicked() {
 
 QStringList dlgReader::readText(QString textFile) {
   QStringList list, list1;
+
   if (QFile(textFile).exists()) {
     QFile file(textFile);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -1231,7 +1231,7 @@ void dlgReader::getReadList() {
     QString str = bookList.at(i);
     QStringList listBooks = str.split("|");
     QListWidgetItem* item = new QListWidgetItem;
-    item->setSizeHint(QSize(130, 30));  // item->sizeHint().width()
+    item->setSizeHint(QSize(130, fontSize * 4));  // item->sizeHint().width()
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     item->setText(QString::number(i + 1) + " .  " + listBooks.at(0));
     list->addItem(item);
