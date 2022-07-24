@@ -244,7 +244,10 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->lblBookName->hide();
-    if (!mw_one->ui->frameQML->isHidden()) saveReader();
+    if (!mw_one->ui->frameQML->isHidden()) {
+      saveReader();
+      savePageVPos();
+    }
 
     mw_one->ui->quickWidget->rootContext()->setContextProperty(
         "strText", tr("Reading in progress..."));
@@ -254,7 +257,6 @@ void dlgReader::startOpenFile(QString openfile) {
     ebookFile = openfile;
 
     mw_one->myReadEBookThread->start();
-    // openFile(openfile);
 
   } else
     return;
@@ -611,9 +613,6 @@ void dlgReader::setQML(QString txt1) {
 }
 
 void dlgReader::on_btnFont_clicked() {
-  saveReader();
-  savePageVPos();
-
   QStringList listFonts;
   QFontDatabase fontDatebase;
   foreach (QString family, fontDatebase.families()) {
@@ -640,6 +639,9 @@ void dlgReader::on_btnFont_clicked() {
   }
 
   connect(list, &QListWidget::itemClicked, [=]() {
+    saveReader();
+    savePageVPos();
+
     fontname = list->currentItem()->text();
     mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
                                                                fontname);
