@@ -611,6 +611,9 @@ void dlgReader::setQML(QString txt1) {
 }
 
 void dlgReader::on_btnFont_clicked() {
+  saveReader();
+  savePageVPos();
+
   QStringList listFonts;
   QFontDatabase fontDatebase;
   foreach (QString family, fontDatebase.families()) {
@@ -638,8 +641,6 @@ void dlgReader::on_btnFont_clicked() {
 
   connect(list, &QListWidget::itemClicked, [=]() {
     fontname = list->currentItem()->text();
-    saveReader();
-    savePageVPos();
     mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
                                                                fontname);
 
