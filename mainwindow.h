@@ -180,6 +180,14 @@ class MainWindow : public QMainWindow {
   void add_Data(QTreeWidget *, QString, QString, QString);
   void del_Data(QTreeWidget *);
   QTreeWidget *get_tw(int tabIndex);
+  QString listWidgetStyle =
+      "QListWidget::indicator{width:25;height:25;right: 5px;}"
+      "QListView {outline: none;}"
+      "#listWidget::item {background-color: #ffffff;color: #000000;border: "
+      "transparent;border-bottom: 1px solid #dbdbdb;padding: 8px;height: 85;}"
+      "#listWidget::item:hover {background-color: #f5f5f5;}"
+      "#listWidget::item:selected {border-left: 5px solid #777777;}";
+
   QString vsbarStyle =
       "QScrollBar:vertical{"  //垂直滑块整体
       "width:30px;"

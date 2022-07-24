@@ -1217,7 +1217,7 @@ void dlgReader::getReadList() {
 
   QListWidget* list = new QListWidget(mw_one);
   mw_one->listReadList = list;
-  list->setStyleSheet(mw_one->listStyle);
+  list->setStyleSheet(mw_one->listWidgetStyle);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
