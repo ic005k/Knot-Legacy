@@ -22,27 +22,16 @@ QDialog* dlgProgEBook;
 
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
-  ui->textBrowser->hide();
 
   myDocHandler = new DocumentHandler(this);
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
 
   this->installEventFilter(this);
-  ui->textBrowser->installEventFilter(this);
+
   this->setContentsMargins(0, 0, 0, 0);
   this->layout()->setContentsMargins(0, 0, 0, 0);
   this->layout()->setMargin(0);
-
-  // SmoothScrollBar* vScrollBar = new SmoothScrollBar();
-  // ui->textBrowser->setVerticalScrollBar(vScrollBar);
-  QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(ui->textBrowser);
-  ui->textBrowser->verticalScrollBar()->setStyleSheet("width:0px;");
-  ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
-
-  ui->textBrowser->setStyleSheet(
-      "background-image: url(:/src/b.png);border-width:0;border-style:outset;");
   this->setStyleSheet(
       "background-image: url(:/src/b.png);border-width:0;border-style:outset;");
 
@@ -105,88 +94,6 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnBack_clicked();
       return true;
-    }
-  }
-
-  QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
-  if (obj == ui->textBrowser) {
-    static int press_x;
-    static int press_y;
-    static int relea_x;
-    static int relea_y;
-
-    if (event->type() == QEvent::MouseButtonPress) {
-      press_x = event->globalX();
-      press_y = event->globalY();
-      x = 0;
-      y = 0;
-      w = ui->textBrowser->width();
-      h = ui->textBrowser->height();
-      // qDebug() << "Press:" << press_x << press_y;
-    }
-
-    if (event->type() == QEvent::MouseButtonRelease) {
-      relea_x = event->globalX();
-      relea_y = event->globalY();
-      // qDebug() << "Release:" << relea_x << relea_y;
-    }
-
-    int abc = 300;
-    //判断滑动方向（右滑）
-    if ((relea_x - press_x) > 30 &&
-        event->type() == QEvent::MouseButtonRelease &&
-        qAbs(relea_y - press_y) < 50) {
-      if (iPage - baseLines <= 0) return QWidget::eventFilter(obj, evn);
-
-      ui->lblTitle->setPixmap(ui->textBrowser->grab());
-      //捕获当前界面并绘制到label上
-      QPropertyAnimation* animation1 =
-          new QPropertyAnimation(ui->lblTitle, "geometry");
-      // new QPropertyAnimation(ui->textBrowser, "geometry");
-      animation1->setDuration(abc);
-      animation1->setStartValue(QRect(x, y, w, h));
-      animation1->setEndValue(QRect(w * 1, y, w, h));
-
-      on_btnPageUp_clicked();
-
-      QPropertyAnimation* animation2 =
-          new QPropertyAnimation(ui->textBrowser, "geometry");
-      animation2->setDuration(abc);
-      animation2->setStartValue(QRect(-w * 1, y, w, h));
-      animation2->setEndValue(QRect(x, y, w, h));
-
-      QParallelAnimationGroup* group = new QParallelAnimationGroup;  //动画容器
-      group->addAnimation(animation1);
-      group->addAnimation(animation2);
-      group->start();
-    }
-
-    //判断滑动方向（左滑）
-    if ((press_x - relea_x) > 30 &&
-        event->type() == QEvent::MouseButtonRelease &&
-        qAbs(relea_y - press_y) < 50) {
-      if (iPage + baseLines > totallines) return QWidget::eventFilter(obj, evn);
-      ui->lblTitle->setPixmap(ui->textBrowser->grab());
-
-      QPropertyAnimation* animation1 =
-          new QPropertyAnimation(ui->lblTitle, "geometry");
-      // new QPropertyAnimation(ui->textBrowser, "geometry");
-      animation1->setDuration(abc);
-      animation1->setStartValue(QRect(x, y, w, h));
-      animation1->setEndValue(QRect(-w, y, w, h));
-
-      on_btnPageNext_clicked();
-
-      QPropertyAnimation* animation2 =
-          new QPropertyAnimation(ui->textBrowser, "geometry");
-      animation2->setDuration(abc);
-      animation2->setStartValue(QRect(w * 1, y, w, h));
-      animation2->setEndValue(QRect(x, y, w, h));
-
-      QParallelAnimationGroup* group = new QParallelAnimationGroup;
-      group->addAnimation(animation1);
-      group->addAnimation(animation2);
-      group->start();
     }
   }
 
@@ -519,37 +426,9 @@ void dlgReader::getBookList() {
   }
 }
 
-void dlgReader::on_btnFontPlus_clicked() {
-  QFont font;
-  int size = ui->textBrowser->font().pointSize();
-  size = size + 1;
-  font.setPointSize(size);
-  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
-  ui->textBrowser->setFont(font);
-  saveReader();
-}
+void dlgReader::on_btnFontPlus_clicked() {}
 
-void dlgReader::on_btnFontLess_clicked() {
-  QFont font;
-  int size = ui->textBrowser->font().pointSize();
-  size = size - 1;
-  font.setPointSize(size);
-  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
-  ui->textBrowser->setFont(font);
-  saveReader();
-}
-
-void dlgReader::drawB() {
-  ui->textBrowser->setStyleSheet(
-      "background:transparent;border-width:0;border-style:outset;");
-  ui->textBrowser->setAutoFillBackground(true);
-  QPainter* p = new QPainter(this);
-  QImage img(":/src/b.png");
-  QRect re(
-      QPoint(ui->textBrowser->geometry().x(), ui->textBrowser->geometry().y()),
-      ui->textBrowser->size());
-  p->drawImage(re, img);
-}
+void dlgReader::on_btnFontLess_clicked() {}
 
 void dlgReader::on_textBrowser_textChanged() {}
 
@@ -716,7 +595,6 @@ void dlgReader::on_btnPageUp_clicked() {
     if (count <= 0) return;
     textPos = 0;
     QString txt1;
-    ui->textBrowser->clear();
 
     for (int i = count - baseLines; i < count; i++) {
       iPage--;

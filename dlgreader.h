@@ -46,8 +46,6 @@ class dlgReader : public QDialog {
   static void openFile(QString fileName);
   qulonglong vpos;
 
-  void drawB();
-
   static QString getTextEditLineText(QTextEdit *txtEdit, int i);
   void getLines();
   static QStringList readText(QString textFile);
