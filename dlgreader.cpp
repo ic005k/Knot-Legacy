@@ -138,9 +138,9 @@ void dlgReader::startOpenFile(QString openfile) {
     vbox->setSpacing(0);
     vbox->setMargin(0);
     dlgProgEBook->setLayout(vbox);
-    dlgProgEBook->setGeometry(0,
-                              (mw_one->height() - dlgProgEBook->height()) / 2,
-                              dlgProgEBook->width(), dlgProgEBook->height());
+    dlgProgEBook->setGeometry(
+        0, (mw_one->height() - dlgProgEBook->height()) / 2 + 100,
+        dlgProgEBook->width(), dlgProgEBook->height());
 
     dlgProgEBook->layout()->addWidget(progReadEbook);
     dlgProgEBook->setModal(true);
@@ -494,7 +494,7 @@ void dlgReader::setQML(QString txt1) {
 
   for (int i = 0; i < list.count(); i++) {
     qsShow = qsShow +
-             "<p style='line-height:33px; width:100% ; text-indent:40px; '>" +
+             "<p style='line-height:35px; width:100% ; text-indent:40px; '>" +
              list.at(i) + "</p>";
   }
   qsShow = str1 + qsShow + str2;
@@ -680,9 +680,9 @@ void dlgReader::setQMLHtml() {
   strHtml = strHtml.replace("</p>", "</p>\n");
   strHtml = strHtml.replace("/>", "/>\n");
 
-  QString space0, space;
+  QString space0, mystyle;
   space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-  space = " style='line-height:33px; width:100% ; text-indent:40px; ' ";
+  mystyle = " style='line-height:35px; width:100% ; text-indent:40px; ' ";
 
   edit->setPlainText(strHtml);
   QPlainTextEdit* edit1 = new QPlainTextEdit;
@@ -690,13 +690,13 @@ void dlgReader::setQMLHtml() {
   for (int i = 0; i < edit->document()->lineCount(); i++) {
     QString str = getTextEditLineText(edit, i);
     str = str.trimmed();
-    if (!str.contains(space) && !str.contains("Title") &&
+    if (!str.contains(mystyle) && !str.contains("Title") &&
         !str.contains("<img") && str.mid(0, 2) == "<p") {
-      str.insert(2, space);
+      str.insert(2, mystyle);
     }
     if (!str.contains("link") && !str.contains("stylesheet") &&
         !str.contains("</head>")) {
-      edit1->appendPlainText(str);
+      if (str.trimmed() != "") edit1->appendPlainText(str);
     }
     if (str.contains("</head>")) {
       QString css =
