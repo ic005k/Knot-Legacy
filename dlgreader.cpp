@@ -121,6 +121,7 @@ void dlgReader::startOpenFile(QString openfile) {
   mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
   if (QFile(openfile).exists()) {
     strTitle = "";
+    mw_one->ui->progReader->setValue(0);
     mw_one->ui->btnReader->setEnabled(false);
     mw_one->ui->frameFun->setEnabled(false);
     mw_one->ui->frameReader->setEnabled(false);
@@ -156,8 +157,26 @@ void dlgReader::startOpenFile(QString openfile) {
       savePageVPos();
     }
 
+    QString strfilepath;
+#ifdef Q_OS_ANDROID
+    QString name, name1;
+    name = getUriRealPath(openfile);
+    QStringList lista = name.split("/");
+    name1 = lista.at(lista.count() - 1);
+    strTitle = name1 + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+    strfilepath =
+        name + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+#endif
+
+#ifdef Q_OS_MAC
+    QFileInfo fi(openfile);
+    strTitle = fi.baseName();
+    strfilepath =
+        openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+#endif
+
     mw_one->ui->quickWidget->rootContext()->setContextProperty(
-        "strText", tr("Reading in progress..."));
+        "strText", tr("Reading in progress...") + "\n\n" + strfilepath);
 
     mw_one->myReadTWThread->quit();
     mw_one->myReadTWThread->wait();
@@ -290,14 +309,6 @@ void dlgReader::openFile(QString openfile) {
 
       totallines = readTextList.count();
     }
-
-#ifdef Q_OS_ANDROID
-    QString name, name1;
-    name = getUriRealPath(openfile);
-    QStringList lista = name.split("/");
-    name1 = lista.at(lista.count() - 1);
-    strTitle = name1 + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-#endif
 
     fileName = openfile;
 
@@ -728,7 +739,7 @@ void dlgReader::on_btnLines_clicked() {
 QStringList dlgReader::readText(QString textFile) {
   QStringList list, list1;
 
-  if (QFile(textFile).exists()) {
+  if (QFileInfo(textFile).exists()) {
     QFile file(textFile);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
       qDebug() << tr("Cannot read file %1:\n%2.")

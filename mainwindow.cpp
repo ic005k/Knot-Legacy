@@ -3451,7 +3451,7 @@ void MainWindow::init_UIWidget() {
   ui->frame_find->setHidden(true);
   ui->frameYear->hide();
 
-  ui->progBar->setMaximumHeight(3);
+  ui->progBar->setMaximumHeight(4);
   ui->progBar->hide();
   ui->progBar->setStyleSheet(
       "QProgressBar{border:0px solid #FFFFFF;"
@@ -3463,10 +3463,10 @@ void MainWindow::init_UIWidget() {
 
       "QProgressBar:chunk{"
       "border-radius:0px;"
-      "background-color:rgba(25,25,255,250);"
+      "background-color:rgba(18,150,219,255);"
       "}");
   ui->progReader->setStyleSheet(ui->progBar->styleSheet());
-  ui->progReader->setFixedHeight(3);
+  ui->progReader->setFixedHeight(4);
 
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
 
@@ -3839,11 +3839,6 @@ void MainWindow::readEBookDone() {
   ui->frameReader->setEnabled(true);
   ui->btnBackDir->setEnabled(false);
   this->repaint();
-
-#ifdef Q_OS_MAC
-  QFileInfo fi(fileName);
-  strTitle = fi.baseName();
-#endif
 
   ui->lblBookName->show();
   ui->lblBookName->setText(strTitle);
