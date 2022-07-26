@@ -680,6 +680,8 @@ void dlgReader::setQMLHtml() {
   strHtml = strHtml.replace("</p>", "</p>\n");
   strHtml = strHtml.replace("/>", "/>\n");
   strHtml = strHtml.replace(".css", "");
+  strhtml = strHtml.replace("<span", "<p");
+  strhtml = strHtml.replace("/span>", "/p>");
 
   QString space0, mystyle;
   space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -705,8 +707,9 @@ void dlgReader::setQMLHtml() {
           "/>";
       edit1->appendPlainText(css);
       edit1->appendPlainText("</head>");
-    } else
+    } else {
       edit1->appendPlainText(str);
+    }
   }
 
   // TextEditToFile(edit1, hf);
