@@ -5,14 +5,14 @@ body {
 	margin-bottom: 0%;
 	margin-left: 1%;
 	margin-right: 1%;
-	line-height:130%;
+	line-height:35px;
 	text-align: justify;
 }
 
 div {
 	margin:0px;
 	padding:0px;
-	line-height:130%;
+	line-height:35px;
 	text-align: justify;
 	
 }
@@ -20,7 +20,7 @@ div {
 p {
 	text-align: justify;
 	text-indent: 40px;
-	line-height:130%;
+	line-height:35px;
 
 }
 
@@ -71,14 +71,14 @@ h2 {
 }
 
 h3 {
-	background-color:#000;
+	background-color:blue;
 	padding-top:23%;
 	padding-bottom:1em;
 	padding-left:0.35em;	
 	padding-right:0.2em;
 	margin-bottom:5%;
     font-size: 1.1em;
-    color:red;
+    color:white;
 	text-shadow:-1px -1px 1px #fff;
 	
 	width:5em;
