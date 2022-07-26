@@ -679,6 +679,7 @@ void dlgReader::setQMLHtml() {
   QString strHtml = mw_one->loadText(hf);
   strHtml = strHtml.replace("</p>", "</p>\n");
   strHtml = strHtml.replace("/>", "/>\n");
+  strHtml = strHtml.replace(".css", "");
 
   QString space0, mystyle;
   space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -692,11 +693,11 @@ void dlgReader::setQMLHtml() {
     str = str.trimmed();
     if (!str.contains(mystyle) && !str.contains("Title") &&
         !str.contains("<img") && str.mid(0, 2) == "<p") {
-      str.insert(2, mystyle);
+      // str.insert(2, mystyle);
     }
     if (!str.contains("link") && !str.contains("stylesheet") &&
         !str.contains("</head>")) {
-      if (str.trimmed() != "") edit1->appendPlainText(str);
+      // if (str.trimmed() != "") edit1->appendPlainText(str);
     }
     if (str.contains("</head>")) {
       QString css =
@@ -704,7 +705,8 @@ void dlgReader::setQMLHtml() {
           "/>";
       edit1->appendPlainText(css);
       edit1->appendPlainText("</head>");
-    }
+    } else
+      edit1->appendPlainText(str);
   }
 
   // TextEditToFile(edit1, hf);
