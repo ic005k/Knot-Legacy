@@ -677,11 +677,12 @@ void dlgReader::setQMLHtml() {
 
   QTextEdit* edit = new QTextEdit;
   QString strHtml = mw_one->loadText(hf);
-  strHtml = strHtml.replace("</p>", "</p>\n");
-  strHtml = strHtml.replace("/>", "/>\n");
+  // strHtml = strHtml.replace("</p>", "</p>\n");
+  // strHtml = strHtml.replace("/>", "/>\n");
   strHtml = strHtml.replace(".css", "");
   strhtml = strHtml.replace("<span", "<p");
   strhtml = strHtml.replace("/span>", "/p>");
+  strHtml = strHtml.replace("><", ">\n<");
 
   QString space0, mystyle;
   space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -712,16 +713,16 @@ void dlgReader::setQMLHtml() {
     }
   }
 
-  // TextEditToFile(edit1, hf);
   strHtml = edit1->toPlainText();
   strHtml = strHtml.replace("../", "file://" + strOpfPath);
+  edit1->setPlainText(strHtml);
+  TextEditToFile(edit1, hf);
 
   msg = hf;
   strhtml = strHtml;
 
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
-                            Q_ARG(QVariant, strhtml));
+  QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 }
 
 void dlgReader::on_btnLines_clicked() {
