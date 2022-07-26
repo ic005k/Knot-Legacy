@@ -677,8 +677,8 @@ void dlgReader::setQMLHtml() {
 
   QTextEdit* edit = new QTextEdit;
   QString strHtml = mw_one->loadText(hf);
-  // strHtml = strHtml.replace("</p>", "</p>\n");
-  // strHtml = strHtml.replace("/>", "/>\n");
+  strHtml = strHtml.replace("</p>", "</p>\n");
+  strHtml = strHtml.replace("/>", "/>\n");
   strHtml = strHtml.replace(".css", "");
   strhtml = strHtml.replace("<span", "<p");
   strhtml = strHtml.replace("/span>", "/p>");
@@ -1059,10 +1059,10 @@ void dlgReader::proceImg() {
       double w, h, new_w, new_h;
       w = img.width();
       h = img.height();
-      qDebug() << file << w << mw_one->width();
+      // qDebug() << file << w << mw_one->width();
       double r = (double)w / h;
-      if (w > mw_one->width() - 20) {
-        new_w = mw_one->width() - 20;
+      if (w > mw_one->width() - 104) {
+        new_w = mw_one->width() - 104;
         new_h = new_w / r;
         QPixmap pix;
         pix = QPixmap::fromImage(img.scaled(new_w, new_h));

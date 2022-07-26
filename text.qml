@@ -55,7 +55,7 @@ Item {
     Image {
         id: rocket
         width: myW
-        height: 2000
+        height: 4000
         //fillMode: Image.TileHorizontally
         fillMode: Image.Tile
         horizontalAlignment: Image.AlignLeft
