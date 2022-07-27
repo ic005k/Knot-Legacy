@@ -628,7 +628,6 @@ void MainWindow::init_ChartWidget() {
     mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
     chartMonth->setTheme(QChart::ChartThemeDark);
     chartDay->setTheme(QChart::ChartThemeDark);
-
   } else {
     mydlgTodo->ui->listWidget->setStyleSheet(
         mydlgTodo->ui->listWidget->styleSheet());
@@ -2471,6 +2470,7 @@ void MainWindow::paintEvent(QPaintEvent* event) {
   QPalette pal = ui->btnFind->palette();
   QBrush brush = pal.window();
   int c_red = brush.color().red();
+
   if (c_red != red) {
     red = c_red;
     if (red < 55) {

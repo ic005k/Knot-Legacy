@@ -121,6 +121,8 @@ void dlgReader::startOpenFile(QString openfile) {
   mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
   if (QFile(openfile).exists()) {
     strTitle = "";
+    mw_one->ui->btnLines->setText(tr("Pages") + "\n" + QString::number(0) +
+                                  " / " + QString::number(0));
     mw_one->ui->progReader->setValue(0);
     mw_one->ui->btnReader->setEnabled(false);
     mw_one->ui->frameFun->setEnabled(false);
@@ -707,17 +709,26 @@ void dlgReader::setQMLHtml() {
       QString css =
           "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
           "/>";
+      css.replace("../", "file://" + strOpfPath);
       edit1->appendPlainText(css);
       edit1->appendPlainText("</head>");
     } else {
-      edit1->appendPlainText(str);
+      if (str.trimmed() != "") {
+        if (str.contains("<image") && str.contains("xlink:href=")) {
+          str.replace("xlink:href=", "src=");
+          str.replace("<image", "<img");
+          str.replace("height", "height1");
+          str.replace("width", "width1");
+        }
+        edit1->appendPlainText(str);
+      }
     }
   }
 
+  TextEditToFile(edit1, hf);
   strHtml = edit1->toPlainText();
   strHtml = strHtml.replace("../", "file://" + strOpfPath);
-  edit1->setPlainText(strHtml);
-  TextEditToFile(edit1, hf);
+  // edit1->setPlainText(strHtml);
 
   msg = hf;
   strhtml = strHtml;
@@ -728,17 +739,13 @@ void dlgReader::setQMLHtml() {
 
 void dlgReader::on_btnLines_clicked() {
   mw_one->ui->lblTitle->hide();
-
   showInfo();
-
   if (mw_one->ui->frameFun->isHidden()) {
     isLines = true;
-
     mw_one->ui->frameFun->show();
 
   } else {
     isLines = false;
-
     mw_one->ui->frameFun->hide();
   }
 }
