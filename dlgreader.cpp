@@ -1120,9 +1120,9 @@ void dlgReader::getReadList() {
     QStringList listBooks = str.split("|");
     QString bookName = listBooks.at(0);
     QListWidgetItem* item;
-    if (bookName.contains(".txt")) {
+    if (bookName.toLower().contains(".txt")) {
       item = new QListWidgetItem(QIcon(":/src/txt.png"), "txt");
-    } else if (bookName.contains(".epub")) {
+    } else if (bookName.toLower().contains(".epub")) {
       item = new QListWidgetItem(QIcon(":/src/epub.png"), "epub");
     } else
       item = new QListWidgetItem(QIcon(":/src/none.png"), "none");
