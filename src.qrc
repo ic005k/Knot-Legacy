@@ -47,5 +47,8 @@
         <file>src/ReadList.png</file>
         <file>src/dir.png</file>
         <file>src/main.css</file>
+        <file>src/epub.png</file>
+        <file>src/txt.png</file>
+        <file>src/none.png</file>
     </qresource>
 </RCC>

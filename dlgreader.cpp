@@ -170,7 +170,7 @@ void dlgReader::startOpenFile(QString openfile) {
 
 #ifdef Q_OS_MAC
     QFileInfo fi(openfile);
-    strTitle = fi.baseName();
+    strTitle = fi.fileName();
     strfilepath =
         openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
 #endif
@@ -190,6 +190,7 @@ void dlgReader::startOpenFile(QString openfile) {
 
 void dlgReader::openFile(QString openfile) {
   isOpen = false;
+
   if (QFile(openfile).exists()) {
     readTextList.clear();
     readTextList = readText(openfile);
@@ -1111,14 +1112,23 @@ void dlgReader::getReadList() {
   font0.setPointSize(fontSize);
   list->setFont(font0);
   list->setWordWrap(true);
+  int size = fontSize * 2.5;
+  list->setIconSize(QSize(size, size));
 
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);
     QStringList listBooks = str.split("|");
-    QListWidgetItem* item = new QListWidgetItem;
+    QString bookName = listBooks.at(0);
+    QListWidgetItem* item;
+    if (bookName.contains(".txt")) {
+      item = new QListWidgetItem(QIcon(":/src/txt.png"), "txt");
+    } else if (bookName.contains(".epub")) {
+      item = new QListWidgetItem(QIcon(":/src/epub.png"), "epub");
+    } else
+      item = new QListWidgetItem(QIcon(":/src/none.png"), "none");
     item->setSizeHint(QSize(130, fontSize * 4));  // item->sizeHint().width()
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    item->setText(QString::number(i + 1) + " .  " + listBooks.at(0));
+    item->setText(QString::number(i + 1) + " .  " + bookName);
     list->addItem(item);
   }
 
