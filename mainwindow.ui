@@ -46,7 +46,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>65</width>
+             <width>55</width>
              <height>16777215</height>
             </size>
            </property>
@@ -76,7 +76,7 @@
 QSlider::groove:vertical
 {
 	background: #cbcbcb; 
-	width: 20px; 
+	width: 15px; 
 	border-radius: 1px; 
 	padding-left:-1px; 
 	padding-right:-1px; 
@@ -92,7 +92,7 @@ QSlider::sub-page:vertical
 QSlider::add-page:vertical
 {
 	background-color: #cbcbcb;
-	width: 25px; 
+	width: 20px; 
 	border-radius: 2px; 
 }
 
@@ -100,7 +100,7 @@ QSlider::handle:vertical
 { 
 	border-image: url(&quot;:/src/qslider_btn.png&quot;);				
 	margin: -4px -8px -4px -8px; 
-	height: 35px; 
+	height: 30px; 
 }
 
 

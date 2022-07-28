@@ -444,7 +444,6 @@ void MainWindow::sendMsg(int CurTableCount) {
 }
 
 void MainWindow::init_Options() {
-  // Font Size
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   QFont font(this->font());

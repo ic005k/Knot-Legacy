@@ -38,11 +38,6 @@ int main(int argc, char *argv[]) {
 #endif
 
   QApplication a(argc, argv);
-  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
-  Reg.setIniCodec("utf-8");
-  int fontSize = Reg.value("/Options/FontSize", 15).toInt();
-  QFont font("Droid Sans", fontSize);
-  // a.setFont(font);
 
   QDir dir;
   QString path;
@@ -58,6 +53,30 @@ int main(int argc, char *argv[]) {
   if (isAndroid) {
     iniDir = path + "/";
     iniFile = iniDir + appName + ".ini";
+  }
+
+  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+  int fontSize = Reg.value("/Options/FontSize", 15).toInt();
+
+  QString fontName;
+  int loadedFontID =
+      QFontDatabase::addApplicationFont(":/src/CangErJinKai01-9128-W02-3.otf");
+  QStringList loadedFontFamilies =
+      QFontDatabase::applicationFontFamilies(loadedFontID);
+  if (!loadedFontFamilies.empty()) {
+    fontName = loadedFontFamilies.at(0);
+    QFont font(fontName, fontSize);
+    // a.setFont(font);
+  }
+
+  QSettings Reg2(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg2.setIniCodec("utf-8");
+  fontName = Reg2.value("/Reader/FontName", "").toString();
+  qDebug() << "fontName" << fontName << fontSize << iniDir;
+  if (fontName != "") {
+    QFont font(fontName, fontSize);
+    a.setFont(font);
   }
 
   loadLocal();
