@@ -368,7 +368,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnFont_clicked();
 
-  void on_btnLines_clicked();
+  void on_btnPages_clicked();
 
   void on_hSlider_sliderReleased();
 

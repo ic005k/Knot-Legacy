@@ -45,13 +45,13 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->btnBack->setStyleSheet("border:none");
   mw_one->ui->btnPageNext->setStyleSheet("border:none");
   mw_one->ui->btnPageUp->setStyleSheet("border:none");
-  mw_one->ui->btnLines->setStyleSheet("border:none");
+  mw_one->ui->btnPages->setStyleSheet("border:none");
   mw_one->ui->btnReadList->setStyleSheet("border:none");
   mw_one->ui->btnBackDir->setStyleSheet("border:none");
   QFont f;
   f.setPointSize(11);
   f.setBold(true);
-  mw_one->ui->btnLines->setFont(f);
+  mw_one->ui->btnPages->setFont(f);
 }
 
 dlgReader::~dlgReader() { delete ui; }
@@ -89,7 +89,7 @@ void dlgReader::startOpenFile(QString openfile) {
   mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
   if (QFile(openfile).exists()) {
     strTitle = "";
-    mw_one->ui->btnLines->setText(tr("Pages") + "\n" + QString::number(0) +
+    mw_one->ui->btnPages->setText(tr("Pages") + "\n" + QString::number(0) +
                                   " / " + QString::number(0));
     mw_one->ui->progReader->setValue(0);
     mw_one->ui->btnReader->setEnabled(false);
@@ -415,43 +415,40 @@ void dlgReader::on_btnFontLess_clicked() {}
 void dlgReader::on_textBrowser_textChanged() {}
 
 void dlgReader::getLines() {
-  if (isLines) {
-    QString qsShow;
+  QString qsShow;
 
-    mw_one->ui->hSlider->setTickInterval(1);
-    mw_one->ui->hSlider->setMinimum(0);
-    mw_one->ui->hSlider->setValue(sPos);
+  mw_one->ui->hSlider->setTickInterval(1);
+  mw_one->ui->hSlider->setMinimum(0);
+  mw_one->ui->hSlider->setValue(sPos);
 
-    if (!isEpub) {
-      mw_one->ui->hSlider->setMaximum(totallines / baseLines - 1);
-      mw_one->ui->btnLines->setText(
-          tr("Pages") + "\n" +
-          QString::number(mw_one->ui->hSlider->value() + 1) + " / " +
-          QString::number(totallines / baseLines));
-      iPage = mw_one->ui->hSlider->value() * baseLines;
-      qDebug() << "iPage" << iPage << mw_one->ui->hSlider->value();
+  if (!isEpub) {
+    mw_one->ui->hSlider->setMaximum(totallines / baseLines - 1);
+    mw_one->ui->btnPages->setText(
+        tr("Pages") + "\n" + QString::number(mw_one->ui->hSlider->value() + 1) +
+        " / " + QString::number(totallines / baseLines));
+    iPage = mw_one->ui->hSlider->value() * baseLines;
+    qDebug() << "iPage" << iPage << mw_one->ui->hSlider->value();
 
-      int count = iPage + baseLines;
-      QString txt1;
-      for (int i = iPage; i < count; i++) {
-        iPage++;
-        QString str = readTextList.at(i);
-        if (str.trimmed() != "")
-          txt1 = txt1 + readTextList.at(i).trimmed() + "\n" + strSpace;
-      }
-
-      qsShow =
-          "<p style='line-height:32px; width:100% ; white-space: pre-wrap; "
-          "'>" +
-          txt1 + "</p>";
-      setQML(qsShow);
-
-    } else {
-      mw_one->ui->hSlider->setMaximum(htmlFiles.count());
-      htmlIndex = sPos - 1;
-      if (htmlIndex < 0) htmlIndex = 0;
-      setQMLHtml();
+    int count = iPage + baseLines;
+    QString txt1;
+    for (int i = iPage; i < count; i++) {
+      iPage++;
+      QString str = readTextList.at(i);
+      if (str.trimmed() != "")
+        txt1 = txt1 + readTextList.at(i).trimmed() + "\n" + strSpace;
     }
+
+    qsShow =
+        "<p style='line-height:32px; width:100% ; white-space: pre-wrap; "
+        "'>" +
+        txt1 + "</p>";
+    setQML(qsShow);
+
+  } else {
+    mw_one->ui->hSlider->setMaximum(htmlFiles.count());
+    htmlIndex = sPos - 1;
+    if (htmlIndex < 0) htmlIndex = 0;
+    setQMLHtml();
   }
 }
 
@@ -553,19 +550,18 @@ QFont dlgReader::get_Font() {
   return font;
 }
 
-void dlgReader::on_hSlider_sliderMoved(int position) {
+void dlgReader::on_hSlider_sliderReleased(int position) {
   mw_one->ui->lblTitle->hide();
 
-  if (isLines) {
-    int max;
-    if (!isEpub)
-      max = totallines / baseLines;
-    else
-      max = htmlFiles.count();
-    if (position >= max) position = max;
-    sPos = position;
-    getLines();
-  }
+  int max;
+  if (!isEpub)
+    max = totallines / baseLines;
+  else
+    max = htmlFiles.count();
+  if (position >= max) position = max;
+  sPos = position;
+  getLines();
+  setPageVPos();
 }
 
 void dlgReader::on_btnPageUp_clicked() {
@@ -705,17 +701,20 @@ void dlgReader::setQMLHtml() {
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 }
 
-void dlgReader::on_btnLines_clicked() {
+void dlgReader::on_btnPages_clicked() {
   mw_one->ui->lblTitle->hide();
-  showInfo();
+
   if (mw_one->ui->frameFun->isHidden()) {
-    isLines = true;
     mw_one->ui->frameFun->show();
 
-  } else {
-    isLines = false;
+  } else if (!mw_one->ui->frameFun->isHidden()) {
     mw_one->ui->frameFun->hide();
   }
+
+  showInfo();
+
+  mw_one->Sleep(1);
+  setVPos(textPos);
 }
 
 QStringList dlgReader::readText(QString textFile) {
@@ -877,6 +876,11 @@ void dlgReader::setPageVPos() {
   }
 }
 
+void dlgReader::setVPos(qreal pos) {
+  QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
+}
+
 void dlgReader::showInfo() {
   mw_one->ui->hSlider->setTickInterval(1);
 
@@ -885,7 +889,7 @@ void dlgReader::showInfo() {
       mw_one->ui->hSlider->setMinimum(0);
       mw_one->ui->hSlider->setValue(iPage / baseLines);
       mw_one->ui->hSlider->setMaximum(totallines / baseLines);
-      mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
+      mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
                                     QString::number(iPage / baseLines) + " / " +
                                     QString::number(totallines / baseLines));
       mw_one->ui->progReader->setMaximum(totallines / baseLines);
@@ -899,7 +903,7 @@ void dlgReader::showInfo() {
     mw_one->ui->hSlider->setMinimum(1);
     mw_one->ui->hSlider->setValue(htmlIndex);
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
-    mw_one->ui->btnLines->setText(tr("Pages") + "\n" +
+    mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
                                   QString::number(htmlIndex + 1) + " / " +
                                   QString::number(htmlFiles.count()));
     mw_one->ui->progReader->setMaximum(htmlFiles.count());

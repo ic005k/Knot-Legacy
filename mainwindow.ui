@@ -367,7 +367,7 @@ QSlider::handle:vertical
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="btnLines">
+             <widget class="QToolButton" name="btnPages">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>

@@ -69,14 +69,15 @@ class dlgReader : public QDialog {
   void setEpubPagePosition(int index);
   void backDir();
   static QString get_idref(QString str0);
- public slots:
+  void setVPos(qreal pos);
+  public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
   void on_btnOpen_clicked();
   void on_btnFont_clicked();
-  void on_btnLines_clicked();
-  void on_hSlider_sliderMoved(int position);
+  void on_btnPages_clicked();
+  void on_hSlider_sliderReleased(int position);
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
@@ -94,7 +95,6 @@ class dlgReader : public QDialog {
 
  private:
   int x, y, w, h;
-  bool isLines = false;
 
   QString strSpace = "";
 

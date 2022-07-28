@@ -1932,6 +1932,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
     if (event->type() == QEvent::MouseButtonPress) {
       ui->frameFun->hide();
+      Sleep(1);
+      mydlgReader->setVPos(mydlgReader->textPos);
       press_x = event->globalX();
       press_y = event->globalY();
       x = 0;
@@ -1986,7 +1988,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->start();
 
       ui->lblTitle->show();
-      ui->frameFun->hide();
     }
 
     //判断滑动方向（左滑）
@@ -2022,7 +2023,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->addAnimation(animation2);
       group->start();
       ui->lblTitle->show();
-      ui->frameFun->hide();
     }
   }
 
@@ -3798,10 +3798,10 @@ void MainWindow::on_btnPageNext_clicked() {
 
 void MainWindow::on_btnFont_clicked() { mydlgReader->on_btnFont_clicked(); }
 
-void MainWindow::on_btnLines_clicked() { mydlgReader->on_btnLines_clicked(); }
+void MainWindow::on_btnPages_clicked() { mydlgReader->on_btnPages_clicked(); }
 
 void MainWindow::on_hSlider_sliderReleased() {
-  mydlgReader->on_hSlider_sliderMoved(ui->hSlider->value());
+  mydlgReader->on_hSlider_sliderReleased(ui->hSlider->value());
 }
 
 void MainWindow::on_btnFontPlus_clicked() {
@@ -3817,13 +3817,13 @@ void MainWindow::on_btnFontLess_clicked() {
 
 void MainWindow::on_hSlider_sliderMoved(int position) {
   if (!isEpub) {
-    ui->btnLines->setText(tr("Pages") + "\n" + QString::number(position + 1) +
+    ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position + 1) +
                           " / " + QString::number(totallines / baseLines));
     ui->progReader->setMinimum(0);
     ui->progReader->setMaximum(totallines / baseLines);
     ui->progReader->setValue(position + 1);
   } else {
-    ui->btnLines->setText(tr("Pages") + "\n" + QString::number(position) +
+    ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position) +
                           " / " + QString::number(htmlFiles.count()));
     ui->progReader->setMinimum(1);
     ui->progReader->setMaximum(htmlFiles.count());
