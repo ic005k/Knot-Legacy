@@ -37,39 +37,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
 
   mw_one->ui->lblTitle->hide();
   mw_one->ui->frameFun->hide();
-  ui->progressBar->hide();
-  ui->progressBar->setMaximumHeight(4);
-  ui->progressBar->setStyleSheet(
-      "QProgressBar{border:0px solid #FFFFFF;"
-      "height:30;"
-      "background:rgba(25,255,25,0);"
-      "text-align:right;"
-      "color:rgb(255,255,255);"
-      "border-radius:0px;}"
 
-      "QProgressBar:chunk{"
-      "border-radius:0px;"
-      "background-color:rgba(25,25,255,250);"
-      "}");
-  ui->hSlider->setStyleSheet(
-      "QSlider::groove:horizontal{ \
-                                    height: 15px; \
-                                    left: 5px; \
-                                    right: 5px; \
-                                    border-image: url(:/src/qslider_bg.png);\
-                                    } \
-                                    QSlider::handle:vertical{ \
-                                    border-radius: 1px; \
-                                    width:  25px; \
-                                    height: 35px; \
-                                    margin-top: -5px; \
-                                    margin-left: -0px; \
-                                    margin-bottom: -5px; \
-                                    margin-right: -0px; \
-                                    border-image:url(:/src/qslider_btn.png);} \
-                                    QSlider::sub-page:horizontal{border-image: url(:/src/qslider.png);}");
-
-  mw_one->ui->hSlider->setStyleSheet(ui->hSlider->styleSheet());
   mw_one->ui->btnFontLess->setStyleSheet("border:none");
   mw_one->ui->btnFontPlus->setStyleSheet("border:none");
   mw_one->ui->btnOpen->setStyleSheet("border:none");

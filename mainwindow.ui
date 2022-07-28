@@ -72,57 +72,37 @@
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">/*QSlider::groove:horizontal
- {
- 	background-color: rgba(50, 54, 63);
-	height: 25px;
- 	border-radius: 5px;
-	left: 6px; right: 6px;
-}*/
-
-/*QSlider::groove:horizontal
- {
- 	
-	height: 25px;
- 	
-	
+               <string notr="true">
+QSlider::groove:vertical
+{
+	background: #cbcbcb; 
+	width: 20px; 
+	border-radius: 1px; 
+	padding-left:-1px; 
+	padding-right:-1px; 
+	padding-top:-1px; 
+	padding-bottom:-1px; 
 }
 
-QSlider::handle:horizontal 
+QSlider::sub-page:vertical 
 {
-
-width:30;
-
-margin: -3px -4px -3px -4px;
+	background: rgb(180,150,219); 
+	border-radius: 2px; 
 }
-QSlider::handle:horizontal:hover
+QSlider::add-page:vertical
 {
-
-width:24;
-
-margin: -3px -4px -3px -4px;
+	background-color: #cbcbcb;
+	width: 25px; 
+	border-radius: 2px; 
 }
- 
- 
-/*QSlider::handle:horizontal 
-{
-border-image:url(&quot;:/src/sel.png&quot;);
-width:24;
 
-margin: -3px -4px -3px -4px;
+QSlider::handle:vertical
+{ 
+	border-image: url(&quot;:/src/qslider_btn.png&quot;);				
+	margin: -4px -8px -4px -8px; 
+	height: 35px; 
 }
-QSlider::handle:horizontal:hover
-{
-border-image:url(&quot;:/src/sel.png&quot;);
-width:24;
 
-margin: -3px -4px -3px -4px;
-}*/
- 
-
-/*QSlider::sub-page:horizontal{
-background:  rgba(71, 140, 182);
-}*/
 
 </string>
               </property>
