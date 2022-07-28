@@ -53,12 +53,12 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
       "}");
   ui->hSlider->setStyleSheet(
       "QSlider::groove:horizontal{ \
-                                    height: 12px; \
+                                    height: 15px; \
                                     left: 5px; \
                                     right: 5px; \
                                     border-image: url(:/src/qslider_bg.png);\
                                     } \
-                                    QSlider::handle:horizontal{ \
+                                    QSlider::handle:vertical{ \
                                     border-radius: 1px; \
                                     width:  25px; \
                                     height: 35px; \

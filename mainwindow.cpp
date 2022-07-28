@@ -1931,6 +1931,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     static int relea_y;
 
     if (event->type() == QEvent::MouseButtonPress) {
+      ui->frameFun->hide();
       press_x = event->globalX();
       press_y = event->globalY();
       x = 0;
@@ -1985,6 +1986,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->start();
 
       ui->lblTitle->show();
+      ui->frameFun->hide();
     }
 
     //判断滑动方向（左滑）
@@ -2020,6 +2022,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->addAnimation(animation2);
       group->start();
       ui->lblTitle->show();
+      ui->frameFun->hide();
     }
   }
 
