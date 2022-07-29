@@ -456,7 +456,7 @@ void MainWindow::init_Options() {
   mydlgPre->ui->rb2->setChecked(Reg.value("/Options/rb2", 0).toBool());
 
   if (mydlgPre->ui->rb1->isChecked()) fontSize = fontSize + 2;
-  if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 4;
+  if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 3;
   QFont userFont;
   userFont.setPointSize(fontSize);
   userFont.setFamily(fInfo.family());

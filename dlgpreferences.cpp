@@ -45,9 +45,9 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/rb1", ui->rb1->isChecked());
   Reg.setValue("/Options/rb2", ui->rb2->isChecked());
 
-  if (ui->rb0->isChecked()) Reg.setValue("/Options/FontSize", 15);
+  if (ui->rb0->isChecked()) Reg.setValue("/Options/FontSize", 16);
   if (ui->rb1->isChecked()) Reg.setValue("/Options/FontSize", 18);
-  if (ui->rb2->isChecked()) Reg.setValue("/Options/FontSize", 21);
+  if (ui->rb2->isChecked()) Reg.setValue("/Options/FontSize", 20);
 
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
