@@ -8,6 +8,7 @@
 extern QString iniFile, iniDir;
 extern MainWindow* mw_one;
 extern bool isBreak;
+extern int fontSize;
 
 dlgPreferences::dlgPreferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgPreferences) {
@@ -15,6 +16,9 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   this->installEventFilter(this);
   ui->gBoxSensor->hide();
   ui->chkEM->hide();
+  ui->sliderFontSize->setValue(fontSize);
+  ui->lblFontDemo->setText(tr("Font Size") + " : " + QString::number(fontSize));
+  isFontChange = false;
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }
@@ -41,26 +45,13 @@ void dlgPreferences::on_btnBack_clicked() {
 void dlgPreferences::saveOptions() {
   if (isBreak) return;
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
-  Reg.setValue("/Options/rb0", ui->rb0->isChecked());
-  Reg.setValue("/Options/rb1", ui->rb1->isChecked());
-  Reg.setValue("/Options/rb2", ui->rb2->isChecked());
-
-  if (ui->rb0->isChecked()) Reg.setValue("/Options/FontSize", 16);
-  if (ui->rb1->isChecked()) Reg.setValue("/Options/FontSize", 18);
-  if (ui->rb2->isChecked()) Reg.setValue("/Options/FontSize", 20);
-
+  Reg.setValue("/Options/FontSize", ui->sliderFontSize->value());
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/SM1", ui->rbSM1->isChecked());
   Reg.setValue("/Options/SM2", ui->rbSM2->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
 }
-
-void dlgPreferences::on_rb0_clicked() { isFontChange = true; }
-
-void dlgPreferences::on_rb1_clicked() { isFontChange = true; }
-
-void dlgPreferences::on_rb2_clicked() { isFontChange = true; }
 
 void dlgPreferences::on_rbSM1_clicked() {
   mw_one->accel_pedometer->setAccelerationMode(QAccelerometer::Combined);
@@ -88,4 +79,12 @@ void dlgPreferences::on_chkDebug_clicked() {
     mw_one->mydlgSteps->ui->lblZ->hide();
     mw_one->mydlgSteps->ui->frameWay1->hide();
   }
+}
+
+void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
+  QFont font;
+  font.setPointSize(position);
+  ui->lblFontDemo->setText(tr("Font Size") + " : " + QString::number(position));
+  ui->lblFontDemo->setFont(font);
+  isFontChange = true;
 }

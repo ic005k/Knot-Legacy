@@ -28,15 +28,11 @@ class dlgPreferences : public QDialog {
  private slots:
   void on_btnBack_clicked();
 
-  void on_rb0_clicked();
-
-  void on_rb1_clicked();
-
-  void on_rb2_clicked();
-
   void on_rbSM1_clicked();
 
   void on_rbSM2_clicked();
+
+  void on_sliderFontSize_sliderMoved(int position);
 
  private:
 };

@@ -197,7 +197,7 @@ MainWindow::MainWindow(QWidget* parent)
   int screenHeight = screen.height();
   if (!isAndroid) {
     this->setGeometry((screenWidth - this->width()) / 2, 0, this->width(),
-                      screenHeight);
+                      screenHeight - 60);
     ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
     ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
   } else {
@@ -448,29 +448,9 @@ void MainWindow::init_Options() {
   Reg.setIniCodec("utf-8");
   QFont font(this->font());
   QFontInfo fInfo(font);
-  fontSize = fInfo.pointSize();
   qDebug() << "fontSize:" << fontSize << fInfo.family();
 
-  mydlgPre->ui->rb0->setChecked(Reg.value("/Options/rb0", 1).toBool());
-  mydlgPre->ui->rb1->setChecked(Reg.value("/Options/rb1", 0).toBool());
-  mydlgPre->ui->rb2->setChecked(Reg.value("/Options/rb2", 0).toBool());
-
-  if (mydlgPre->ui->rb1->isChecked()) fontSize = fontSize + 2;
-  if (mydlgPre->ui->rb2->isChecked()) fontSize = fontSize + 3;
-  QFont userFont;
-  userFont.setPointSize(fontSize);
-  userFont.setFamily(fInfo.family());
-  mydlgReport->ui->tableReport->setFont(userFont);
-  mydlgReport->ui->tableDetails->setFont(userFont);
-  mydlgReport->ui->tableCategory->setFont(userFont);
-  mydlgNotes->ui->textEdit->setFont(userFont);
-  tabData->setFont(userFont);
-  tabChart->setFont(userFont);
-  mydlgMainNotes->ui->textBrowser->setFont(userFont);
-  mydlgMainNotes->ui->textEdit->setFont(userFont);
-  mydlgSteps->ui->tableWidget->setFont(userFont);
-  mydlgTodo->ui->listRecycle->setFont(userFont);
-
+  QFont userFont = font;
   userFont.setBold(true);
   ui->lblStats->setFont(userFont);
   mydlgReport->ui->tableReport->horizontalHeader()->setFont(userFont);
