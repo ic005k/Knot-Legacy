@@ -89,3 +89,5 @@ void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
   ui->lblFontDemo->setFont(font);
   isFontChange = true;
 }
+
+void dlgPreferences::on_chkReaderFont_clicked() { isFontChange = true; }
