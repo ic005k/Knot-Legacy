@@ -140,14 +140,16 @@ void dlgReader::startOpenFile(QString openfile) {
 
 #ifdef Q_OS_MAC
     QFileInfo fi(openfile);
-    strTitle = fi.fileName();
+    strTitle =
+        fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
     strfilepath =
         openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
 #endif
 
 #ifdef Q_OS_WIN
     QFileInfo fi(openfile);
-    strTitle = fi.fileName();
+    strTitle =
+        fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
     strfilepath =
         openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
 #endif
