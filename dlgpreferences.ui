@@ -29,6 +29,12 @@
       </item>
       <item row="1" column="0">
        <widget class="QSlider" name="sliderFontSize">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
         <property name="styleSheet">
          <string notr="true">QSlider::groove:horizontal 
 { 
@@ -39,14 +45,6 @@
 	right: 5px; 
 }  
 
-QSlider::handle:horizontal
-{
-	border: 0px ;
-	border-image: url(:/src/qslider_btn.png);			
-	width: 20px; 
-	margin: -15px -8px -15px -8px; 
-}
-
 QSlider::add-page:horizontal
 {
 	background-color: gray;
@@ -56,7 +54,15 @@ QSlider::sub-page:horizontal
 {
 	background-color: #1AFA29;
 }
-</string>
+
+QSlider::handle:horizontal
+{
+	border: 0px ;
+	border-image: url(:/src/qslider_btn.png);			
+	width: 20px; 
+	margin: -10px -5px -10px -5px; 
+	
+}</string>
         </property>
         <property name="minimum">
          <number>13</number>
