@@ -236,10 +236,23 @@ QString DocumentHandler::fileType() const {
 QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
 
 void DocumentHandler::setReadPosition(QString htmlFile) {
-  for (int i = 0; i < htmlFiles.count(); i++) {
-    if (htmlFiles.at(i) == htmlFile) {
-      mw_one->mydlgReader->setEpubPagePosition(i);
-      break;
+  if (htmlFile.contains("http://")) {
+    QUrl url = htmlFile;
+    QDesktopServices::openUrl(url);
+  } else {
+    for (int i = 0; i < htmlFiles.count(); i++) {
+      QString str = htmlFiles.at(i);
+      QString str1 = htmlFile;
+      QStringList list = htmlFile.split("#");
+      if (list.count() == 2) str1 = list.at(0);
+      QStringList list2 = str1.split("/");
+      if (list2.count() > 0) {
+        str1 = list2.at(list2.count() - 1);
+      }
+      if (str.contains(str1)) {
+        mw_one->mydlgReader->setEpubPagePosition(i);
+        break;
+      }
     }
   }
 }

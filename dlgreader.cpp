@@ -655,10 +655,12 @@ void dlgReader::setQMLHtml() {
   QString strHtml = mw_one->loadText(hf);
   strHtml = strHtml.replace("</p>", "</p>\n");
   strHtml = strHtml.replace("/>", "/>\n");
-  strHtml = strHtml.replace(".css", "");
   strhtml = strHtml.replace("<span", "<p");
   strhtml = strHtml.replace("/span>", "/p>");
   strHtml = strHtml.replace("><", ">\n<");
+
+  strHtml = strHtml.replace(".css", "");
+  strHtml = strHtml.replace("font-family:", "font0-family:");
 
   QString space0, mystyle;
   space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
