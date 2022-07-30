@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 
   QString fontName;
   int loadedFontID =
-      QFontDatabase::addApplicationFont(":/src/CangErJinKai01-9128-W02-3.otf");
+      QFontDatabase::addApplicationFont(":/res/CangErJinKai01-9128-W02-3.otf");
   QStringList loadedFontFamilies =
       QFontDatabase::applicationFontFamilies(loadedFontID);
   if (!loadedFontFamilies.empty()) {

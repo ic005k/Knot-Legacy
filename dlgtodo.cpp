@@ -177,19 +177,19 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   layout->setSpacing(0);
   QToolButton* btn = new QToolButton(this);
   btn->setStyleSheet("border:none");
-  // QPixmap pixmap = QPixmap(":/src/done.png");
+  // QPixmap pixmap = QPixmap(":/res/done.png");
   // btn->setIcon(pixmap);
   // btn->setIconSize(QSize(20, 20));
   // QPainter p(btn);
   // p.setRenderHint(QPainter::Antialiasing);
 
   btn->setIconSize(QSize(25, 25));
-  btn->setIcon(QIcon(":/src/done.png"));
+  btn->setIcon(QIcon(":/res/done.png"));
 
   connect(btn, &QToolButton::clicked, [=]() {
-    btn->setIcon(QIcon(":/src/done1.png"));
+    btn->setIcon(QIcon(":/res/done1.png"));
 
-    mw_one->Sleep(350);
+    mw_one->Sleep(400);
 
     ui->listWidget->setCurrentItem(pItem);
     int row = ui->listWidget->currentRow();
@@ -467,9 +467,9 @@ void dlgTodo::on_Alarm() {
   }
   if (count == 0) {
     stopTimerAlarm();
-    mw_one->ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
+    mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
   } else {
-    mw_one->ui->btnTodo->setIcon(QIcon(":/src/todo1.png"));
+    mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo1.png"));
   }
 }
 

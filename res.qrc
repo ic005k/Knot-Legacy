@@ -1,0 +1,56 @@
+<RCC>
+    <qresource prefix="/">
+        
+        <file>cn.qm</file>
+        
+        
+        <file>res/1.png</file>
+        <file>res/2.png</file>
+        <file>res/a1.png</file>
+        <file>res/a2.png</file>
+        <file>res/add.png</file>
+        <file>res/b.png</file>
+        <file>res/back.png</file>
+        <file>res/dir.png</file>
+        <file>res/done.png</file>
+        <file>res/done1.png</file>
+        <file>res/down.png</file>
+        <file>res/edit.png</file>
+        <file>res/epub.png</file>
+        <file>res/find.png</file>
+        <file>res/font.png</file>
+        <file>res/high.png</file>
+        <file>res/icon.icns</file>
+        <file>res/icon.png</file>
+        <file>res/lasttxt.png</file>
+        <file>res/low.png</file>
+        <file>res/main.css</file>
+        <file>res/menu.png</file>
+        <file>res/modi.png</file>
+        <file>res/none.png</file>
+        <file>res/nosel.png</file>
+        <file>res/one.png</file>
+        <file>res/open.png</file>
+        <file>res/pause.png</file>
+        <file>res/pic.png</file>
+        <file>res/qslider.png</file>
+        <file>res/qslider_bg.png</file>
+        <file>res/qslider_btn.png</file>
+        <file>res/ReadList.png</file>
+        <file>res/readme.txt</file>
+        <file>res/recycle.png</file>
+        <file>res/remarks.png</file>
+        <file>res/report.png</file>
+        <file>res/run.png</file>
+        <file>res/sel.png</file>
+        <file>res/step.png</file>
+        <file>res/tab.png</file>
+        <file>res/test.txt</file>
+        <file>res/time.png</file>
+        <file>res/todo.png</file>
+        <file>res/todo1.png</file>
+        <file>res/txt.png</file>
+        <file>res/up.png</file>
+        <file>res/zoom.png</file>
+    </qresource>
+</RCC>

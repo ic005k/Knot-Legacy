@@ -98,7 +98,7 @@ QSlider::add-page:vertical
 
 QSlider::handle:vertical
 { 
-	border-image: url(&quot;:/src/qslider_btn.png&quot;);				
+	border-image: url(&quot;:/res/qslider_btn.png&quot;);				
 	margin: -4px -8px -4px -8px; 
 	height: 25px; 
 }
@@ -135,8 +135,8 @@ QSlider::handle:vertical
                <string>A+</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
-                <normaloff>:/src/a1.png</normaloff>:/src/a1.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/a1.png</normaloff>:/res/a1.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -167,8 +167,8 @@ QSlider::handle:vertical
                <string>A-</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
-                <normaloff>:/src/a2.png</normaloff>:/src/a2.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/a2.png</normaloff>:/res/a2.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -199,8 +199,8 @@ QSlider::handle:vertical
                <string>T</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
-                <normaloff>:/src/font.png</normaloff>:/src/font.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/font.png</normaloff>:/res/font.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -309,8 +309,8 @@ QSlider::handle:vertical
                <string>Back</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
-                <normaloff>:/src/back.png</normaloff>:/src/back.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/back.png</normaloff>:/res/back.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -341,8 +341,8 @@ QSlider::handle:vertical
                <string>Open</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
-                <normaloff>:/src/open.png</normaloff>:/src/open.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/open.png</normaloff>:/res/open.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -367,8 +367,8 @@ QSlider::handle:vertical
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
-                <normaloff>:/src/ReadList.png</normaloff>:/src/ReadList.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/ReadList.png</normaloff>:/res/ReadList.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -396,7 +396,7 @@ QSlider::handle:vertical
                <string>0 / 0</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
+               <iconset>
                 <normaloff>:/src/lines.png</normaloff>:/src/lines.png</iconset>
               </property>
               <property name="iconSize">
@@ -428,8 +428,8 @@ QSlider::handle:vertical
                <string>&lt;</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
-                <normaloff>:/src/up.png</normaloff>:/src/up.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/up.png</normaloff>:/res/up.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -460,8 +460,8 @@ QSlider::handle:vertical
                <string>&gt;</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
-                <normaloff>:/src/down.png</normaloff>:/src/down.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/down.png</normaloff>:/res/down.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -486,8 +486,8 @@ QSlider::handle:vertical
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
-                <normaloff>:/src/dir.png</normaloff>:/src/dir.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/dir.png</normaloff>:/res/dir.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -601,8 +601,8 @@ QSlider::handle:vertical
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="src.qrc">
-              <normaloff>:/src/run.png</normaloff>:/src/run.png</iconset>
+             <iconset resource="res.qrc">
+              <normaloff>:/res/run.png</normaloff>:/res/run.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -637,8 +637,8 @@ QSlider::handle:vertical
              <string>Report</string>
             </property>
             <property name="icon">
-             <iconset resource="src.qrc">
-              <normaloff>:/src/report.png</normaloff>:/src/report.png</iconset>
+             <iconset resource="res.qrc">
+              <normaloff>:/res/report.png</normaloff>:/res/report.png</iconset>
             </property>
            </widget>
           </item>
@@ -654,8 +654,8 @@ QSlider::handle:vertical
              <string>Remarks</string>
             </property>
             <property name="icon">
-             <iconset resource="src.qrc">
-              <normaloff>:/src/remarks.png</normaloff>:/src/remarks.png</iconset>
+             <iconset resource="res.qrc">
+              <normaloff>:/res/remarks.png</normaloff>:/res/remarks.png</iconset>
             </property>
            </widget>
           </item>
@@ -671,8 +671,8 @@ QSlider::handle:vertical
              <string>Find</string>
             </property>
             <property name="icon">
-             <iconset resource="src.qrc">
-              <normaloff>:/src/find.png</normaloff>:/src/find.png</iconset>
+             <iconset resource="res.qrc">
+              <normaloff>:/res/find.png</normaloff>:/res/find.png</iconset>
             </property>
            </widget>
           </item>
@@ -694,8 +694,8 @@ QSlider::handle:vertical
              <string>Menu</string>
             </property>
             <property name="icon">
-             <iconset resource="src.qrc">
-              <normaloff>:/src/menu.png</normaloff>:/src/menu.png</iconset>
+             <iconset resource="res.qrc">
+              <normaloff>:/res/menu.png</normaloff>:/res/menu.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -836,7 +836,7 @@ QSlider::handle:vertical
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="src.qrc">
+               <iconset>
                 <normaloff>:/src/tab.png</normaloff>:/src/tab.png</iconset>
               </property>
              </widget>
@@ -857,11 +857,11 @@ QSlider::handle:vertical
 }
 
 QRadioButton::indicator:unchecked {
-    image: url(:/src/nosel.png);
+    image: url(:/res/nosel.png);
 }
 
 QRadioButton::indicator:checked {
-    image: url(:/src/sel.png);
+    image: url(:/res/sel.png);
 }
 
 
@@ -891,11 +891,11 @@ QRadioButton::indicator:checked {
 }
 
 QRadioButton::indicator:unchecked {
-    image: url(:/src/nosel.png);
+    image: url(:/res/nosel.png);
 }
 
 QRadioButton::indicator:checked {
-    image: url(:/src/sel.png);
+    image: url(:/res/sel.png);
 }
 
 
@@ -922,11 +922,11 @@ QRadioButton::indicator:checked {
 }
 
 QRadioButton::indicator:unchecked {
-    image: url(:/src/nosel.png);
+    image: url(:/res/nosel.png);
 }
 
 QRadioButton::indicator:checked {
-    image: url(:/src/sel.png);
+    image: url(:/res/sel.png);
 }
 
 
@@ -1432,7 +1432,7 @@ QRadioButton::indicator:checked {
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="src.qrc"/>
+  <include location="res.qrc"/>
  </resources>
  <connections/>
 </ui>

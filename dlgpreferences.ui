@@ -58,7 +58,7 @@ QSlider::sub-page:horizontal
 QSlider::handle:horizontal
 {
 	border: 0px ;
-	border-image: url(:/src/qslider_btn.png);			
+	border-image: url(:/res/qslider_btn.png);			
 	width: 20px; 
 	margin: -10px -5px -10px -5px; 
 	

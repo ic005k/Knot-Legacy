@@ -55,8 +55,8 @@
            <string>Back</string>
           </property>
           <property name="icon">
-           <iconset resource="src.qrc">
-            <normaloff>:/src/back.png</normaloff>:/src/back.png</iconset>
+           <iconset resource="res.qrc">
+            <normaloff>:/res/back.png</normaloff>:/res/back.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -84,8 +84,8 @@
            <string>High Priority</string>
           </property>
           <property name="icon">
-           <iconset resource="src.qrc">
-            <normaloff>:/src/high.png</normaloff>:/src/high.png</iconset>
+           <iconset resource="res.qrc">
+            <normaloff>:/res/high.png</normaloff>:/res/high.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -113,8 +113,8 @@
            <string>Add</string>
           </property>
           <property name="icon">
-           <iconset resource="src.qrc">
-            <normaloff>:/src/add.png</normaloff>:/src/add.png</iconset>
+           <iconset resource="res.qrc">
+            <normaloff>:/res/add.png</normaloff>:/res/add.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -142,8 +142,8 @@
            <string>Low Priority</string>
           </property>
           <property name="icon">
-           <iconset resource="src.qrc">
-            <normaloff>:/src/low.png</normaloff>:/src/low.png</iconset>
+           <iconset resource="res.qrc">
+            <normaloff>:/res/low.png</normaloff>:/res/low.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -171,8 +171,8 @@
            <string>Modify</string>
           </property>
           <property name="icon">
-           <iconset resource="src.qrc">
-            <normaloff>:/src/edit.png</normaloff>:/src/edit.png</iconset>
+           <iconset resource="res.qrc">
+            <normaloff>:/res/edit.png</normaloff>:/res/edit.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -200,8 +200,8 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="src.qrc">
-            <normaloff>:/src/time.png</normaloff>:/src/time.png</iconset>
+           <iconset resource="res.qrc">
+            <normaloff>:/res/time.png</normaloff>:/res/time.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -229,8 +229,8 @@
            <string>Recycle</string>
           </property>
           <property name="icon">
-           <iconset resource="src.qrc">
-            <normaloff>:/src/recycle.png</normaloff>:/src/recycle.png</iconset>
+           <iconset resource="res.qrc">
+            <normaloff>:/res/recycle.png</normaloff>:/res/recycle.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -594,7 +594,7 @@ QListView {
   </layout>
  </widget>
  <resources>
-  <include location="src.qrc"/>
+  <include location="res.qrc"/>
  </resources>
  <connections/>
 </ui>

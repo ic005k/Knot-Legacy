@@ -62,7 +62,7 @@ Item {
         verticalAlignment: Image.AlignTop
 
         smooth: true
-        source: "/src/b.png"
+        source: "/res/b.png"
     }
 
     Flickable {

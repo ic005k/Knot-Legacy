@@ -33,7 +33,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   this->layout()->setContentsMargins(0, 0, 0, 0);
   this->layout()->setMargin(0);
   this->setStyleSheet(
-      "background-image: url(:/src/b.png);border-width:0;border-style:outset;");
+      "background-image: url(:/res/b.png);border-width:0;border-style:outset;");
 
   mw_one->ui->lblTitle->hide();
   mw_one->ui->frameFun->hide();
@@ -278,7 +278,7 @@ void dlgReader::openFile(QString openfile) {
       } else {
         deleteDirfile(dirpathbak);
         QFile(strOpfPath + "main.css").remove();
-        QFile::copy(":/src/main.css", strOpfPath + "main.css");
+        QFile::copy(":/res/main.css", strOpfPath + "main.css");
         proceImg();
       }
 
@@ -397,7 +397,7 @@ void dlgReader::initReader() {
                                                              fontname);
 
   fileName = Reg.value("/Reader/FileName").toString();
-  if (fileName == "" && zh_cn) fileName = ":/src/test.txt";
+  if (fileName == "" && zh_cn) fileName = ":/res/test.txt";
 
   startOpenFile(fileName);
 
@@ -690,7 +690,7 @@ void dlgReader::setQMLHtml() {
     } else {
       if (str.trimmed() != "") {
         if (str.contains("<image") && str.contains("xlink:href=")) {
-          str.replace("xlink:href=", "src=");
+          str.replace("xlink:href=", "res=");
           str.replace("<image", "<img");
           str.replace("height", "height1");
           str.replace("width", "width1");
@@ -1110,11 +1110,11 @@ void dlgReader::getReadList() {
     QString bookName = listBooks.at(0);
     QListWidgetItem* item;
     if (bookName.toLower().contains(".txt")) {
-      item = new QListWidgetItem(QIcon(":/src/txt.png"), "txt");
+      item = new QListWidgetItem(QIcon(":/res/txt.png"), "txt");
     } else if (bookName.toLower().contains(".epub")) {
-      item = new QListWidgetItem(QIcon(":/src/epub.png"), "epub");
+      item = new QListWidgetItem(QIcon(":/res/epub.png"), "epub");
     } else
-      item = new QListWidgetItem(QIcon(":/src/none.png"), "none");
+      item = new QListWidgetItem(QIcon(":/res/none.png"), "none");
     item->setSizeHint(QSize(130, fm.height() * 4));  // item->sizeHint().width()
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     item->setText(QString::number(i + 1) + " .  " + bookName);

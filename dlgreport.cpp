@@ -392,9 +392,9 @@ void dlgReport::on_tableReport_cellClicked(int row, int column) {
 void dlgReport::markColor(int row) {
   QIcon icon;
   int size = 10;
-  icon.addFile(":/src/sel.png", QSize(size, size));
+  icon.addFile(":/res/sel.png", QSize(size, size));
   QIcon icon1;
-  icon1.addFile(":/src/nosel.png", QSize(size, size));
+  icon1.addFile(":/res/nosel.png", QSize(size, size));
   QTableWidgetItem* id1;
 
   for (int i = 0; i < ui->tableReport->rowCount(); i++) {

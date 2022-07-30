@@ -81,7 +81,7 @@ void dlgSteps::on_btnPause_clicked() {
     mw_one->accel_pedometer->setActive(false);
     mw_one->gyroscope->stop();
     mw_one->gyroscope->setActive(false);
-    mw_one->ui->btnPause->setIcon(QIcon(":/src/pause.png"));
+    mw_one->ui->btnPause->setIcon(QIcon(":/res/pause.png"));
 
     releaseWakeLock();
 
@@ -93,7 +93,7 @@ void dlgSteps::on_btnPause_clicked() {
     if (ui->rbAlg1->isChecked()) on_rbAlg1_clicked();
     if (ui->rbAlg2->isChecked()) on_rbAlg2_clicked();
 
-    mw_one->ui->btnPause->setIcon(QIcon(":/src/run.png"));
+    mw_one->ui->btnPause->setIcon(QIcon(":/res/run.png"));
   }
   ui->tableWidget->setFocus();
 }

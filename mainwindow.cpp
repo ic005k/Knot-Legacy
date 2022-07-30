@@ -9,7 +9,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.12";
+QString ver = "1.0.13";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -3462,12 +3462,12 @@ void MainWindow::init_UIWidget() {
   ui->btnMax->setIconSize(QSize(s, s));
   ui->btnSteps->setIconSize(QSize(s, s));
   ui->btnReader->setIconSize(QSize(s, s));
-  ui->btnPlus->setIcon(QIcon(":/src/1.png"));
-  ui->btnLess->setIcon(QIcon(":/src/2.png"));
-  ui->btnTodo->setIcon(QIcon(":/src/todo.png"));
-  ui->btnMax->setIcon(QIcon(":/src/zoom.png"));
-  ui->btnSteps->setIcon(QIcon(":/src/step.png"));
-  ui->btnReader->setIcon(QIcon(":/src/one.png"));
+  ui->btnPlus->setIcon(QIcon(":/res/1.png"));
+  ui->btnLess->setIcon(QIcon(":/res/2.png"));
+  ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
+  ui->btnMax->setIcon(QIcon(":/res/zoom.png"));
+  ui->btnSteps->setIcon(QIcon(":/res/step.png"));
+  ui->btnReader->setIcon(QIcon(":/res/one.png"));
   ui->frame_tab->setMaximumHeight(this->height());
 
   ui->btnPlus->setStyleSheet("border:none");
@@ -3547,7 +3547,7 @@ void MainWindow::init_Menu() {
   ui->lblIcon->setFixedWidth(22);
   ui->lblIcon->setStyleSheet(
       "QLabel{"
-      "border-image:url(:/src/icon.png) 4 4 4 4 stretch stretch;"
+      "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
       "}");
 
   mainMenu = new QMenu(this);

@@ -1,17 +1,14 @@
 QT += core gui
 QT += charts sensors
-QT += qml quick quickwidgets webview
+QT += qml quick quickwidgets
 QT += printsupport
 QT += xml
-
-#QT += qml quick
-#QT += quickwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
-ICON = src/icon.icns
+ICON = res/icon.icns
 TRANSLATIONS += cn.ts
 
 unix:!macx:{
@@ -92,7 +89,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     qrc.qrc \
-    src.qrc
+    res.qrc
 
 CONFIG(debug,debug|release) {
     DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/debug)
