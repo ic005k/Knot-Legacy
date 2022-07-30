@@ -145,6 +145,13 @@ void dlgReader::startOpenFile(QString openfile) {
         openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
 #endif
 
+#ifdef Q_OS_WIN
+    QFileInfo fi(openfile);
+    strTitle = fi.fileName();
+    strfilepath =
+        openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+#endif
+
     mw_one->ui->quickWidget->rootContext()->setContextProperty(
         "strText", tr("Reading in progress...") + "\n\n" + strfilepath);
 
@@ -248,15 +255,15 @@ void dlgReader::openFile(QString openfile) {
             qfile = strOpfPath + get_href(idref, opfList);
             QFileInfo fi(qfile);
             if (fi.exists() && !htmlFiles.contains(qfile)) {
-              if (QFileInfo(temp).size() < 15000000) {
-                if (fi.size() <= 20000) {
-                  htmlFiles.append(qfile);
-                } else {
-                  SplitFile(qfile);
-                }
-              } else {
+              // if (QFileInfo(temp).size() < 55000000) {
+              if (fi.size() <= 20000) {
                 htmlFiles.append(qfile);
+              } else {
+                SplitFile(qfile);
               }
+              //} else {
+              //  htmlFiles.append(qfile);
+              //}
             }
           }
         }
@@ -1087,12 +1094,11 @@ void dlgReader::getReadList() {
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(list);
-  QFont font0;
-  font0.setPointSize(fontSize);
-  list->setFont(font0);
-  list->setWordWrap(true);
-  int size = fontSize * 2.5;
+  QFont font0 = this->font();
+  QFontMetrics fm(font0);
+  int size = fm.height() * 2;
   list->setIconSize(QSize(size, size));
+  list->setWordWrap(true);
 
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);
@@ -1105,7 +1111,7 @@ void dlgReader::getReadList() {
       item = new QListWidgetItem(QIcon(":/src/epub.png"), "epub");
     } else
       item = new QListWidgetItem(QIcon(":/src/none.png"), "none");
-    item->setSizeHint(QSize(130, fontSize * 4));  // item->sizeHint().width()
+    item->setSizeHint(QSize(130, fm.height() * 4));  // item->sizeHint().width()
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     item->setText(QString::number(i + 1) + " .  " + bookName);
     list->addItem(item);
