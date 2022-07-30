@@ -17,17 +17,17 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="gboxFont">
      <property name="title">
-      <string>Font Size</string>
+      <string>Font</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QLabel" name="lblFontDemo">
         <property name="text">
-         <string>Hello Knot</string>
+         <string>Font Size</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QSlider" name="sliderFontSize">
         <property name="minimumSize">
          <size>
@@ -81,6 +81,23 @@ QSlider::handle:horizontal
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="chkReaderFont">
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
+    /* 选择框尺寸 */
+    width:22px;
+    height:22px;
+}</string>
+        </property>
+        <property name="text">
+         <string>Use reader font to override UI font</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

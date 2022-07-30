@@ -46,6 +46,7 @@ void dlgPreferences::saveOptions() {
   if (isBreak) return;
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   Reg.setValue("/Options/FontSize", ui->sliderFontSize->value());
+  Reg.setValue("/Options/ReaderFont", ui->chkReaderFont->isChecked());
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/SM1", ui->rbSM1->isChecked());

@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   fontSize = Reg.value("/Options/FontSize", 16).toInt();
+  bool isReaderFont = Reg.value("/Options/ReaderFont", 1).toBool();
 
   QString fontName;
   int loadedFontID =
@@ -74,10 +75,12 @@ int main(int argc, char *argv[]) {
   Reg2.setIniCodec("utf-8");
   fontName = Reg2.value("/Reader/FontName", "").toString();
   qDebug() << "fontName" << fontName << fontSize << iniDir;
-  if (fontName != "") {
-    QFont font(fontName, fontSize);
-    a.setFont(font);
+  QFont font;
+  if (isReaderFont) {
+    font.setFamily(fontName);
   }
+  font.setPointSize(fontSize);
+  a.setFont(font);
 
   loadLocal();
 

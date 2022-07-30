@@ -450,6 +450,8 @@ void MainWindow::init_Options() {
   QFontInfo fInfo(font);
   qDebug() << "fontSize:" << fontSize << fInfo.family();
 
+  mydlgPre->ui->chkReaderFont->setChecked(
+      Reg.value("/Options/ReaderFont", true).toBool());
   mydlgPre->ui->chkClose->setChecked(
       Reg.value("/Options/Close", false).toBool());
   mydlgPre->ui->chkAutoTime->setChecked(
