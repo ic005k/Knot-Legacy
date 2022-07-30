@@ -23,6 +23,8 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->lblTotal->setStyleSheet("background-color: rgb(25, 0, 250);color:white");
   ui->lblDetails->setStyleSheet(
       "background-color: rgb(250, 0, 25);color:white");
+  ui->lblDetails->setWordWrap(true);
+  ui->lblDetails->adjustSize();
 
   for (int y = 0; y < ui->tableReport->columnCount(); y++) {
     ui->tableReport->horizontalHeader()->setSectionResizeMode(
@@ -65,8 +67,11 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->tableCategory->verticalScrollBar()->setStyleSheet(
       mw_one->vsbarStyleSmall);
   mw_one->setSCrollPro(ui->tableCategory);
-  ui->lblDetails->setWordWrap(true);
-  ui->lblDetails->adjustSize();
+
+  font = ui->tableReport->horizontalHeader()->font();
+  font.setBold(true);
+  ui->tableReport->horizontalHeader()->setFont(font);
+  ui->tableDetails->horizontalHeader()->setFont(font);
 }
 
 dlgReport::~dlgReport() { delete ui; }

@@ -45,8 +45,11 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->tableWidget->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->tableWidget, QScroller::LeftMouseButtonGesture);
   ui->tableWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-
   mw_one->setSCrollPro(ui->tableWidget);
+
+  QFont font = ui->tableWidget->horizontalHeader()->font();
+  font.setBold(true);
+  ui->tableWidget->horizontalHeader()->setFont(font);
 }
 
 dlgSteps::~dlgSteps() { delete ui; }
@@ -116,7 +119,7 @@ void dlgSteps::saveSteps() {
   Reg.setValue("/Steps/Alg1", ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Alg2", ui->rbAlg2->isChecked());
 
-  if (ui->tableWidget->rowCount() > 31) {
+  if (ui->tableWidget->rowCount() > 45) {
     ui->tableWidget->removeRow(0);
   }
   int count = ui->tableWidget->rowCount();

@@ -46,7 +46,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>55</width>
+             <width>50</width>
              <height>16777215</height>
             </size>
            </property>
@@ -76,7 +76,7 @@
 QSlider::groove:vertical
 {
 	background: #cbcbcb; 
-	width: 15px; 
+	width: 10px; 
 	border-radius: 1px; 
 	padding-left:-1px; 
 	padding-right:-1px; 
@@ -92,7 +92,7 @@ QSlider::sub-page:vertical
 QSlider::add-page:vertical
 {
 	background-color: #cbcbcb;
-	width: 20px; 
+	width: 10px; 
 	border-radius: 2px; 
 }
 
@@ -100,7 +100,7 @@ QSlider::handle:vertical
 { 
 	border-image: url(&quot;:/src/qslider_btn.png&quot;);				
 	margin: -4px -8px -4px -8px; 
-	height: 30px; 
+	height: 25px; 
 }
 
 
@@ -233,6 +233,18 @@ QSlider::handle:vertical
        </item>
        <item>
         <widget class="QFrame" name="frameReader">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>100</height>
+          </size>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -515,7 +527,7 @@ QSlider::handle:vertical
         <number>0</number>
        </property>
        <property name="verticalSpacing">
-        <number>-1</number>
+        <number>9</number>
        </property>
        <item row="0" column="0">
         <widget class="QFrame" name="frameMenu">

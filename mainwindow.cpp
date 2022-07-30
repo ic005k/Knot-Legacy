@@ -450,14 +450,6 @@ void MainWindow::init_Options() {
   QFontInfo fInfo(font);
   qDebug() << "fontSize:" << fontSize << fInfo.family();
 
-  QFont userFont = font;
-  userFont.setBold(true);
-  ui->lblStats->setFont(userFont);
-  mydlgReport->ui->tableReport->horizontalHeader()->setFont(userFont);
-  mydlgReport->ui->tableDetails->horizontalHeader()->setFont(userFont);
-  mydlgSteps->ui->tableWidget->horizontalHeader()->setFont(userFont);
-  mydlgList->ui->listWidget->setFont(userFont);
-
   mydlgPre->ui->chkClose->setChecked(
       Reg.value("/Options/Close", false).toBool());
   mydlgPre->ui->chkAutoTime->setChecked(
