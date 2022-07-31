@@ -15,19 +15,15 @@ unix:!macx:{
     QT += androidextras
 }
 
-android
-{
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-dataFiles.files+=src/readme.txt
-#dataFiles.files+=src/unzip
-#dataFiles.files+=src/Xcount.ini
-#dataFiles.files+=src/Xcount.txt
-#dataFiles.files+=src/pic.png
-dataFiles.files+=src/1.png
-dataFiles.files+=src/2.png
-dataFiles.path = /assets/data
-INSTALLS += dataFiles
-}
+#android
+#{
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+#dataFiles.files+=src/readme.txt
+#dataFiles.files+=src/1.png
+#dataFiles.files+=src/2.png
+#dataFiles.path = /assets/data
+#INSTALLS += dataFiles
+#}
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -88,7 +84,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    qrc.qrc \
+    qml.qrc \
     res.qrc
 
 CONFIG(debug,debug|release) {
@@ -100,23 +96,20 @@ CONFIG(debug,debug|release) {
 DISTFILES += \
     android/AndroidManifest.xml \
     android/build.gradle \
+    android/build.gradle \
+    android/gradle.properties \
     android/gradle.properties \
     android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.properties \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
+    android/gradlew \
     android/gradlew.bat \
-    android/res/values/libs.xml \
-    android/src/com/MyActivity.java \
-    android/src/com/MyService.java \
-    android/src/com/x/MyActivity.java \
-    android/src/com/x/MyService.java \
-    src/AndroidManifest.xml \
-    src/build.gradle \
-    src/com/android/activity/mmJavaActivity.java \
-    src/gradle.properties \
-    src/gradle/wrapper/gradle-wrapper.jar \
-    src/gradle/wrapper/gradle-wrapper.properties \
-    src/res/values/libs.xml
+    android/gradlew.bat \
+    android/res/values/libs.xml
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 
 

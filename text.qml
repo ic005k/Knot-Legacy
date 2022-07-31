@@ -41,7 +41,7 @@ Item {
         selectionEnd: textArea.selectionEnd
 
         // textColor: TODO
-        //Component.onCompleted: document.load("qrc:/texteditor.html")
+        //Component.onCompleted: document.load("qml:/texteditor.html")
         //Component.onCompleted: document.load("file://" + htmlFile)
         onLoaded: {
             textArea.text = text

@@ -1,9 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        
         <file>cn.qm</file>
-        
-        
         <file>res/1.png</file>
         <file>res/2.png</file>
         <file>res/a1.png</file>
@@ -37,7 +34,6 @@
         <file>res/qslider_bg.png</file>
         <file>res/qslider_btn.png</file>
         <file>res/ReadList.png</file>
-        <file>res/readme.txt</file>
         <file>res/recycle.png</file>
         <file>res/remarks.png</file>
         <file>res/report.png</file>
