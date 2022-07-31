@@ -84,7 +84,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    qml.qrc \
+    qrc.qrc \
     res.qrc
 
 CONFIG(debug,debug|release) {

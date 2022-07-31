@@ -86,7 +86,7 @@ void dlgReader::on_btnOpen_clicked() {
 }
 
 void dlgReader::startOpenFile(QString openfile) {
-  mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qml:/text.qml")));
+  mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/text.qml")));
   if (QFile(openfile).exists()) {
     strTitle = "";
     mw_one->ui->btnPages->setText(tr("Pages") + "\n" + QString::number(0) +
