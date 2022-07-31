@@ -836,8 +836,8 @@ QSlider::handle:vertical
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
-                <normaloff>:/src/tab.png</normaloff>:/src/tab.png</iconset>
+               <iconset resource="res.qrc">
+                <normaloff>:/res/tab.png</normaloff>:/res/tab.png</iconset>
               </property>
              </widget>
             </item>
