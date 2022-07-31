@@ -79,7 +79,7 @@ void dlgSetTime::on_btnOk_clicked() {
   if (str.length() > 0) {
     QListWidgetItem* item = new QListWidgetItem(str);
     item->setSizeHint(
-        QSize(mw_one->mydlgList->ui->listWidget->width() - 10, 35));
+        QSize(mw_one->mydlgList->ui->listWidget->width() - 20, 35));
     mw_one->mydlgList->ui->listWidget->insertItem(0, item);
   }
 
@@ -195,7 +195,7 @@ void dlgSetTime::init_Desc() {
         RegDesc.value("/CustomDesc/Item" + QString::number(i)).toString();
     QListWidgetItem* item = new QListWidgetItem(str);
     item->setSizeHint(
-        QSize(mw_one->mydlgList->ui->listWidget->width() - 10, 35));
+        QSize(mw_one->mydlgList->ui->listWidget->width() - 20, 35));
     mw_one->mydlgList->ui->listWidget->addItem(item);
   }
 }

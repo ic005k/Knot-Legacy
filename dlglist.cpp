@@ -10,8 +10,8 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   this->installEventFilter(this);
   ui->listWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  // ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  // QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
+  ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
   ui->listWidget->setStyleSheet(mw_one->listStyle);
 }
@@ -34,6 +34,15 @@ bool dlgList::eventFilter(QObject* watch, QEvent* evn) {
 
 void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
   Q_UNUSED(item);
+}
+
+void dlgList::on_btnClear_clicked() {
+  int row = ui->listWidget->currentRow();
+  if (row >= 0) ui->listWidget->takeItem(row);
+  mw_one->mydlgSetTime->saveCustomDesc();
+}
+
+void dlgList::on_btnBack_clicked() {
   int row = ui->listWidget->currentRow();
   if (row >= 0) {
     mw_one->mydlgSetTime->ui->editDesc->setText(
@@ -41,15 +50,6 @@ void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
   }
   close();
 }
-
-void dlgList::on_btnClear_clicked() {
-  // ui->listWidget->clear();
-  int row = ui->listWidget->currentRow();
-  if (row >= 0) ui->listWidget->takeItem(row);
-  mw_one->mydlgSetTime->saveCustomDesc();
-}
-
-void dlgList::on_btnBack_clicked() { close(); }
 
 void dlgList::on_btnChange_clicked() {
   if (ui->listWidget->count() == 0) return;
@@ -79,7 +79,7 @@ void dlgList::on_btnChange_clicked() {
     int index = ui->listWidget->currentRow();
     ui->listWidget->takeItem(index);
     QListWidgetItem* item = new QListWidgetItem(text);
-    item->setSizeHint(QSize(ui->listWidget->width() - 10, 35));
+    item->setSizeHint(QSize(ui->listWidget->width() - 20, 35));
     ui->listWidget->insertItem(index, item);
 
     QStringList list;
@@ -90,7 +90,7 @@ void dlgList::on_btnChange_clicked() {
     ui->listWidget->clear();
     for (int i = 0; i < list.count(); i++) {
       QListWidgetItem* item = new QListWidgetItem(list.at(i));
-      item->setSizeHint(QSize(ui->listWidget->width() - 10, 35));
+      item->setSizeHint(QSize(ui->listWidget->width() - 20, 35));
       ui->listWidget->addItem(item);
     }
     if (index >= 0) ui->listWidget->setCurrentRow(index);

@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Back</string>
+        <string>Ok</string>
        </property>
       </widget>
      </item>
