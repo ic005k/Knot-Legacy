@@ -22,12 +22,12 @@ jobs:
       matrix:
         include:
           - qt_ver: 5.15.2
-            qt_arch: android_x86_64
+            qt_arch: android_x86
             os: ubuntu-20.04
             qt_target: android
             
           - qt_ver: 5.15.2
-            qt_arch: android_armv8
+            qt_arch: android_arm64_v8a
             os: ubuntu-20.04
             qt_target: android    
             
