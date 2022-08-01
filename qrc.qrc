@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>text.qml</file>
+        <file>reader.qml</file>
         <file>texteditor.html</file>
     </qresource>
 </RCC>
