@@ -15,15 +15,15 @@ unix:!macx:{
     QT += androidextras
 }
 
-#android
-#{
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+android
+{
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 #dataFiles.files+=src/readme.txt
 #dataFiles.files+=src/1.png
 #dataFiles.files+=src/2.png
-#dataFiles.path = /assets/data
-#INSTALLS += dataFiles
-#}
+dataFiles.path = /assets/data
+INSTALLS += dataFiles
+}
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

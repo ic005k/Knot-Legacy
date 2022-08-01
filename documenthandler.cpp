@@ -236,7 +236,7 @@ QString DocumentHandler::fileType() const {
 QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
 
 void DocumentHandler::setReadPosition(QString htmlFile) {
-  if (htmlFile.contains("http://")) {
+  if (htmlFile.contains("http")) {
     QUrl url = htmlFile;
     QDesktopServices::openUrl(url);
   } else {
