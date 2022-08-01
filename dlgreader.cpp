@@ -45,7 +45,9 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->btnBack->setStyleSheet("border:none");
   mw_one->ui->btnPageNext->setStyleSheet("border:none");
   mw_one->ui->btnPageUp->setStyleSheet("border:none");
-  mw_one->ui->btnPages->setStyleSheet("border:none");
+  mw_one->ui->btnPages->setStyleSheet(
+      "border:none;"
+      "font-weight: bold;");
   mw_one->ui->btnReadList->setStyleSheet("border:none");
   mw_one->ui->btnBackDir->setStyleSheet("border:none");
   QFont f = this->font();
@@ -713,6 +715,8 @@ void dlgReader::setQMLHtml() {
 }
 
 void dlgReader::on_btnPages_clicked() {
+  if (!QFile(fileName).exists()) return;
+
   mw_one->ui->lblTitle->hide();
 
   if (mw_one->ui->frameFun->isHidden()) {
@@ -1148,6 +1152,8 @@ void dlgReader::getReadList() {
 }
 
 void dlgReader::backDir() {
+  if (!QFile(fileName).exists()) return;
+
   setEpubPagePosition(mainDirIndex);
   qDebug() << "mainDirIndex: " << mainDirIndex;
   if (mainDirIndex == 0) {
