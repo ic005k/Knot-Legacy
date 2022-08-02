@@ -138,10 +138,7 @@ void MainWindow::dealDone() {
     return;
   }
 
-  if (!isImport) {
-    QString redoFile = iniDir + LatestTime;
-    bakData(redoFile, false);
-  }
+  addRedo();
 
   isSaveEnd = true;
   isImport = false;
@@ -3705,6 +3702,13 @@ void MainWindow::addUndo(QString log) {
     Reg.setValue("/TimeLines/Count", count);
     for (int i = 0; i < count; i++)
       Reg.setValue("/TimeLines/Files" + QString::number(i), timeLines.at(i));
+  }
+}
+
+void MainWindow::addRedo() {
+  if (!isImport) {
+    QString redoFile = iniDir + LatestTime;
+    bakData(redoFile, false);
   }
 }
 

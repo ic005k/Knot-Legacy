@@ -24,6 +24,7 @@ void dlgRename::on_btnOk_clicked() {
     int index = mw_one->ui->tabWidget->currentIndex();
     mw_one->ui->tabWidget->setTabText(index, ui->editName->text().trimmed());
     mw_one->saveTab();
+    mw_one->addRedo();
     close();
   }
 }
