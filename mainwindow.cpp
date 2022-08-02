@@ -137,6 +137,12 @@ void MainWindow::dealDone() {
     isSaveEnd = true;
     return;
   }
+
+  if (!isImport) {
+    QString redoFile = iniDir + "redoFile";
+    bakData(redoFile, true);
+  }
+
   isSaveEnd = true;
   isImport = false;
 
@@ -727,6 +733,11 @@ void MainWindow::startSave(QString str_type) {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
   }
   if (isSaveEnd) {
+    if (!isImport) {
+      QString undoFile = iniDir + "undoFile";
+      bakData(undoFile, true);
+    }
+
     isBreak = false;
     SaveType = str_type;
 
@@ -1438,6 +1449,8 @@ void MainWindow::on_actionAdd_Tab_triggered() {
   ui->tabWidget->setCurrentIndex(count);
 
   on_actionRename_triggered();
+
+  startSave("alltab");
 }
 
 void MainWindow::on_actionDel_Tab_triggered() {
@@ -2090,18 +2103,24 @@ void MainWindow::on_actionImport_Data_triggered() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
                                           tr("Data Files (*.ini)"));
+  importBakData(fileName, true);
+}
+
+void MainWindow::importBakData(QString fileName, bool msg) {
   if (!fileName.isNull()) {
-    QMessageBox msgBox;
-    msgBox.setText(appName);
-    msgBox.setInformativeText(tr("Import this data?") + "\n" +
-                              mw_one->mydlgReader->getUriRealPath(fileName));
-    QPushButton* btnCancel =
-        msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    msgBox.exec();
-    if (msgBox.clickedButton() == btnCancel) {
-      return;
+    if (msg) {
+      QMessageBox msgBox;
+      msgBox.setText(appName);
+      msgBox.setInformativeText(tr("Import this data?") + "\n" +
+                                mw_one->mydlgReader->getUriRealPath(fileName));
+      QPushButton* btnCancel =
+          msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+      QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+      btnOk->setFocus();
+      msgBox.exec();
+      if (msgBox.clickedButton() == btnCancel) {
+        return;
+      }
     }
 
     QString txt = loadText(fileName);
@@ -3567,10 +3586,15 @@ void MainWindow::init_Menu() {
   QAction* actAbout = new QAction(tr("Check for New Releases"));
   actAbout->setVisible(false);
   QAction* actBakData = new QAction(tr("One Click Data Backup"));
+  QAction* actUndo = new QAction(tr("Undo"));
+  QAction* actRedo = new QAction(tr("Redo"));
 
   mainMenu->addAction(actAddTab);
   mainMenu->addAction(actDelTab);
   mainMenu->addAction(actRenameTab);
+
+  mainMenu->addAction(actUndo);
+  mainMenu->addAction(actRedo);
 
   mainMenu->addAction(actFind);
   mainMenu->addAction(actReport);
@@ -3593,6 +3617,10 @@ void MainWindow::init_Menu() {
           &MainWindow::on_actionDel_Tab_triggered);
   connect(actRenameTab, &QAction::triggered, this,
           &MainWindow::on_actionRename_triggered);
+
+  connect(actUndo, &QAction::triggered, this, &MainWindow::undo);
+  connect(actRedo, &QAction::triggered, this, &MainWindow::redo);
+
   connect(actFind, &QAction::triggered, this,
           &MainWindow::on_actionFind_triggered);
   connect(actReport, &QAction::triggered, this,
@@ -3626,6 +3654,10 @@ void MainWindow::init_Menu() {
       "background-color: rgb(62, 186, 231); }";
   mainMenu->setStyleSheet(qss);
 }
+
+void MainWindow::undo() { importBakData(iniDir + "undoFile", true); }
+
+void MainWindow::redo() { importBakData(iniDir + "redoFile", true); }
 
 void MainWindow::on_btnMenu_clicked() {
   int x = mw_one->x + (this->width() - mainMenu->width()) - 4;

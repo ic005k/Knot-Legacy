@@ -257,6 +257,7 @@ class MainWindow : public QMainWindow {
   void bakData(QString fileName, bool msgbox);
   void setSCrollPro(QObject *obj);
 
+  void importBakData(QString fileName, bool msg);
  public slots:
   void updateSteps();
   void newDatas();
@@ -383,6 +384,9 @@ class MainWindow : public QMainWindow {
   void on_btnBackDir_clicked();
 
   void on_btnOneClickBak_clicked();
+
+  void undo();
+  void redo();
 
  private:
   int frameChartHeight = 220;
