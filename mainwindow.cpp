@@ -3451,6 +3451,7 @@ void MainWindow::init_UIWidget() {
   ui->btnReport->setIconSize(QSize(iz, iz));
   ui->btnNotes->setIconSize(QSize(iz, iz));
   ui->btnSelTab->setIconSize(QSize(iz, iz));
+  ui->btnOneClickBak->setIconSize(QSize(iz, iz));
   ui->btnPause->setIconSize(QSize(iz, iz));
 
   int s = 28;
@@ -3539,6 +3540,7 @@ void MainWindow::init_Menu() {
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
+  ui->btnOneClickBak->setStyleSheet("border:none");
   ui->btnNotes->setStyleSheet("border:none");
   ui->btnPause->setStyleSheet("border:none");
   ui->btnSelTab->setStyleSheet("border:none");
@@ -3834,3 +3836,5 @@ void MainWindow::readEBookDone() {
 void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }
 
 void MainWindow::on_btnBackDir_clicked() { mydlgReader->backDir(); }
+
+void MainWindow::on_btnOneClickBak_clicked() { on_actionOneClickBakData(); }

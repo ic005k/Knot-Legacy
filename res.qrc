@@ -47,5 +47,6 @@
         <file>res/txt.png</file>
         <file>res/up.png</file>
         <file>res/zoom.png</file>
+        <file>res/onebak.png</file>
     </qresource>
 </RCC>

@@ -399,7 +399,7 @@ void dlgReader::initReader() {
                                                              fontname);
 
   fileName = Reg.value("/Reader/FileName").toString();
-  if (fileName == "" && zh_cn) fileName = ":/res/test.txt";
+  if (!QFile(fileName).exists() && zh_cn) fileName = ":/res/test.txt";
 
   startOpenFile(fileName);
 
