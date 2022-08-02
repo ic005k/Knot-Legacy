@@ -3696,6 +3696,7 @@ void MainWindow::addUndo(QString log) {
     if (count > 30) {
       count = 30;
       QFile(timeLines.at(count)).remove();
+      timeLines.removeAt(count);
     }
     QSettings Reg(iniDir + "timemachine.ini", QSettings::IniFormat);
     Reg.setIniCodec("utf-8");
