@@ -48,5 +48,6 @@
         <file>res/up.png</file>
         <file>res/zoom.png</file>
         <file>res/onebak.png</file>
+        <file>res/timemachine.png</file>
     </qresource>
 </RCC>

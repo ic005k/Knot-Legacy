@@ -18,6 +18,8 @@ void dlgRename::on_btnCancel_clicked() { close(); }
 
 void dlgRename::on_btnOk_clicked() {
   if (ui->editName->text().trimmed() != "") {
+    mw_one->addUndo(tr("Rename Tab"));
+
     int index = mw_one->ui->tabWidget->currentIndex();
     mw_one->ui->tabWidget->setTabText(index, ui->editName->text().trimmed());
     mw_one->saveTab();

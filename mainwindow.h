@@ -98,8 +98,10 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QString LatestTime = tr("Latest Time");
+  QStringList timeLines;
   QString loginTime;
-  QListWidget *listSelTab, *listSelFont, *listReadList;
+  QListWidget *listSelTab, *listSelFont, *listReadList, *listTimeMachine;
   int mwh;
   int textFontSize;
   bool isOne = false;
@@ -257,9 +259,9 @@ class MainWindow : public QMainWindow {
   void bakData(QString fileName, bool msgbox);
   void setSCrollPro(QObject *obj);
 
-  void importBakData(QString fileName, bool msg);
-  void addUndo();
-  public slots:
+  void importBakData(QString fileName, bool msg, bool book);
+  void addUndo(QString log);
+ public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
@@ -388,6 +390,8 @@ class MainWindow : public QMainWindow {
 
   void undo();
   void redo();
+
+  void timeMachine();
 
  private:
   int frameChartHeight = 220;

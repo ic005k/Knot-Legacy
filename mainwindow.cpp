@@ -139,7 +139,7 @@ void MainWindow::dealDone() {
   }
 
   if (!isImport) {
-    QString redoFile = iniDir + "redoFile";
+    QString redoFile = iniDir + LatestTime;
     bakData(redoFile, true);
   }
 
@@ -496,6 +496,14 @@ void MainWindow::init_Options() {
   mydlgReport->ui->btnYear->setText(btnYearText);
   btnMonthText = Reg2.value("/YMD/btnMonthText", tr("Month")).toString();
   mydlgReport->ui->btnMonth->setText(btnMonthText);
+
+  // time machine
+  QSettings RegTime(iniDir + "timemachine.ini", QSettings::IniFormat);
+  RegTime.setIniCodec("utf-8");
+  int countTime = RegTime.value("/TimeLines/Count", 0).toInt();
+  for (int i = 0; i < countTime; i++)
+    timeLines.append(
+        RegTime.value("/TimeLines/Files" + QString::number(i)).toString());
 }
 
 void MainWindow::init_ChartWidget() {
@@ -870,6 +878,9 @@ void MainWindow::del_Data(QTreeWidget* tw) {
         if (msgBox.clickedButton() == btnCancel) {
           return;
         }
+
+        addUndo(tr("Del Item"));
+
         topItem->removeChild(topItem->child(childCount - 1));
         topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
 
@@ -1465,7 +1476,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
     return;
   }
 
-  addUndo();
+  addUndo(tr("Del Tab"));
 
   ui->tabWidget->removeTab(index);
 
@@ -1903,6 +1914,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
           listSelTab->close();
           return true;
         }
+      } else if (!listTimeMachine->isHidden()) {
+        listSelTab->close();
+        return true;
       }
     }
   }
@@ -2100,10 +2114,10 @@ void MainWindow::on_actionImport_Data_triggered() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
                                           tr("Data Files (*.ini)"));
-  importBakData(fileName, true);
+  importBakData(fileName, true, true);
 }
 
-void MainWindow::importBakData(QString fileName, bool msg) {
+void MainWindow::importBakData(QString fileName, bool msg, bool book) {
   if (!fileName.isNull()) {
     if (msg) {
       QMessageBox msgBox;
@@ -2121,7 +2135,7 @@ void MainWindow::importBakData(QString fileName, bool msg) {
     }
 
     QString txt = loadText(fileName);
-    if (!txt.contains(appName) && !txt.contains("Xcounter")) {
+    if (!txt.contains(appName)) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("Invalid data file."));
@@ -2175,7 +2189,7 @@ void MainWindow::importBakData(QString fileName, bool msg) {
       Reg1.setValue("/Reader/" + key, value);
     }
     RegTotalIni.endGroup();
-    mydlgReader->initReader();
+    if (book) mydlgReader->initReader();
   }
 }
 
@@ -3363,6 +3377,7 @@ void MainWindow::init_UIWidget() {
   listSelFont = new QListWidget();
   listSelTab = new QListWidget();
   listReadList = new QListWidget();
+  listTimeMachine = new QListWidget();
   loginTime = QDateTime::currentDateTime().toString();
 
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
@@ -3583,8 +3598,13 @@ void MainWindow::init_Menu() {
   QAction* actAbout = new QAction(tr("Check for New Releases"));
   actAbout->setVisible(false);
   QAction* actBakData = new QAction(tr("One Click Data Backup"));
+
   QAction* actUndo = new QAction(tr("Undo"));
   QAction* actRedo = new QAction(tr("Redo"));
+  actUndo->setVisible(false);
+  actRedo->setVisible(false);
+
+  QAction* actTimeMachine = new QAction(tr("Time Machine"));
 
   mainMenu->addAction(actAddTab);
   mainMenu->addAction(actDelTab);
@@ -3592,6 +3612,8 @@ void MainWindow::init_Menu() {
 
   mainMenu->addAction(actUndo);
   mainMenu->addAction(actRedo);
+
+  mainMenu->addAction(actTimeMachine);
 
   mainMenu->addAction(actFind);
   mainMenu->addAction(actReport);
@@ -3617,6 +3639,8 @@ void MainWindow::init_Menu() {
 
   connect(actUndo, &QAction::triggered, this, &MainWindow::undo);
   connect(actRedo, &QAction::triggered, this, &MainWindow::redo);
+
+  connect(actTimeMachine, &QAction::triggered, this, &MainWindow::timeMachine);
 
   connect(actFind, &QAction::triggered, this,
           &MainWindow::on_actionFind_triggered);
@@ -3652,15 +3676,79 @@ void MainWindow::init_Menu() {
   mainMenu->setStyleSheet(qss);
 }
 
-void MainWindow::undo() { importBakData(iniDir + "undoFile", true); }
+void MainWindow::undo() { importBakData(iniDir + "undoFile", true, false); }
 
-void MainWindow::redo() { importBakData(iniDir + "redoFile", true); }
+void MainWindow::redo() { importBakData(iniDir + "redoFile", true, false); }
 
-void MainWindow::addUndo() {
+void MainWindow::addUndo(QString log) {
   if (!isImport) {
-    QString undoFile = iniDir + "undoFile";
+    QString undoFile = iniDir + QDateTime::currentDateTime().toString();
     bakData(undoFile, true);
+
+    for (int i = 0; i < timeLines.count(); i++) {
+      QString str = timeLines.at(i);
+      if (str.contains(LatestTime)) {
+        timeLines.removeAt(i);
+        break;
+      }
+    }
+
+    timeLines.insert(0, undoFile + " | " + log);
+    timeLines.insert(0, iniDir + LatestTime);
+    int count = timeLines.count();
+    if (count > 30) {
+      count = 30;
+      QFile(timeLines.at(count)).remove();
+    }
+    QSettings Reg(iniDir + "timemachine.ini", QSettings::IniFormat);
+    Reg.setIniCodec("utf-8");
+    Reg.setValue("/TimeLines/Count", count);
+    for (int i = 0; i < count; i++)
+      Reg.setValue("/TimeLines/Files" + QString::number(i), timeLines.at(i));
   }
+}
+
+void MainWindow::timeMachine() {
+  QListWidget* list = new QListWidget(mw_one);
+  mw_one->listTimeMachine = list;
+  list->setStyleSheet(mw_one->listWidgetStyle);
+  list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(list);
+  QFont font0 = this->font();
+  QFontMetrics fm(font0);
+  int size = fm.height() * 2;
+  list->setIconSize(QSize(size, size));
+  list->setWordWrap(true);
+
+  for (int i = 0; i < timeLines.count(); i++) {
+    QString str = timeLines.at(i);
+    QListWidgetItem* item;
+    item = new QListWidgetItem(QIcon(":/res/timemachine.png"),
+                               QFileInfo(str).baseName());
+    item->setSizeHint(QSize(130, fm.height() * 3));
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    list->addItem(item);
+  }
+
+  connect(list, &QListWidget::itemClicked, [=]() {
+    QString str = list->currentItem()->text();
+    QStringList list0 = str.split("|");
+    if (list0.count() == 2) str = list0.at(0);
+    QString file = iniDir + str.trimmed();
+    importBakData(file, true, false);
+    list->close();
+  });
+
+  list->setGeometry(0, 0, mw_one->width(), mw_one->height());
+
+  if (list->count() > 0) {
+    list->setCurrentRow(0);
+  }
+
+  list->show();
+  list->setFocus();
 }
 
 void MainWindow::on_btnMenu_clicked() {
