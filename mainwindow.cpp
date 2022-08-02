@@ -879,7 +879,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
           return;
         }
 
-        addUndo(tr("Del Item"));
+        addUndo(tr("Del Item") + " ( " + getTabText() + " ) ");
 
         topItem->removeChild(topItem->child(childCount - 1));
         topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -1476,7 +1476,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
     return;
   }
 
-  addUndo(tr("Del Tab"));
+  addUndo(tr("Del Tab") + " ( " + getTabText() + " ) ");
 
   ui->tabWidget->removeTab(index);
 
@@ -1914,7 +1914,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
           listSelTab->close();
           return true;
         } else if (!listTimeMachine->isHidden()) {
-          listSelTab->close();
+          listTimeMachine->close();
           return true;
         }
       }
@@ -3693,7 +3693,7 @@ void MainWindow::addUndo(QString log) {
       }
     }
 
-    timeLines.insert(0, undoFile + " | " + log);
+    timeLines.insert(0, undoFile + "\n" + log);
     timeLines.insert(0, iniDir + LatestTime);
     int count = timeLines.count();
     if (count > 30) {
@@ -3734,7 +3734,7 @@ void MainWindow::timeMachine() {
 
   connect(list, &QListWidget::itemClicked, [=]() {
     QString str = list->currentItem()->text();
-    QStringList list0 = str.split("|");
+    QStringList list0 = str.split("\n");
     if (list0.count() == 2) str = list0.at(0);
     QString file = iniDir + str.trimmed();
     importBakData(file, true, false);
@@ -3962,3 +3962,7 @@ void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }
 void MainWindow::on_btnBackDir_clicked() { mydlgReader->backDir(); }
 
 void MainWindow::on_btnOneClickBak_clicked() { on_actionOneClickBakData(); }
+
+QString MainWindow::getTabText() {
+  return tabData->tabText(tabData->currentIndex());
+}

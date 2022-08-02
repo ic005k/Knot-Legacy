@@ -261,7 +261,8 @@ class MainWindow : public QMainWindow {
 
   void importBakData(QString fileName, bool msg, bool book);
   void addUndo(QString log);
- public slots:
+  QString getTabText();
+  public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();

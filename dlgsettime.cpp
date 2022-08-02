@@ -6,6 +6,7 @@
 #include "ui_dlgsettime.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
+extern QTabWidget* tabData;
 extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
 extern bool isBreak, isImport;
@@ -52,7 +53,8 @@ void dlgSetTime::keyReleaseEvent(QKeyEvent* event) {
 
 void dlgSetTime::on_btnOk_clicked() {
   if (!mw_one->isAdd) {
-    mw_one->addUndo(tr("Modify Item"));
+    mw_one->addUndo(tr("Modify Item") + " ( " + mw_one->getTabText() + " ) ");
+
     mw_one->set_Time();
   } else {
     if (mw_one->isTesting) {
@@ -61,7 +63,8 @@ void dlgSetTime::on_btnOk_clicked() {
                          ui->lblTime->text(), ui->editAmount->text().trimmed(),
                          ui->editDesc->text().trimmed());
     } else
-      mw_one->addUndo(tr("Add Item"));
+      mw_one->addUndo(tr("Add Item") + " ( " + mw_one->getTabText() + " ) ");
+
     mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                      ui->lblTime->text(), ui->editAmount->text().trimmed(),
                      ui->editDesc->text().trimmed());
