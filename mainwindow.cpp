@@ -140,7 +140,7 @@ void MainWindow::dealDone() {
 
   if (!isImport) {
     QString redoFile = iniDir + LatestTime;
-    bakData(redoFile, true);
+    bakData(redoFile, false);
   }
 
   isSaveEnd = true;
@@ -1913,10 +1913,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         if (!listSelTab->isHidden()) {
           listSelTab->close();
           return true;
+        } else if (!listTimeMachine->isHidden()) {
+          listSelTab->close();
+          return true;
         }
-      } else if (!listTimeMachine->isHidden()) {
-        listSelTab->close();
-        return true;
       }
     }
   }
@@ -3683,7 +3683,7 @@ void MainWindow::redo() { importBakData(iniDir + "redoFile", true, false); }
 void MainWindow::addUndo(QString log) {
   if (!isImport) {
     QString undoFile = iniDir + QDateTime::currentDateTime().toString();
-    bakData(undoFile, true);
+    bakData(undoFile, false);
 
     for (int i = 0; i < timeLines.count(); i++) {
       QString str = timeLines.at(i);
