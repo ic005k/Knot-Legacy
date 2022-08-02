@@ -733,11 +733,6 @@ void MainWindow::startSave(QString str_type) {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
   }
   if (isSaveEnd) {
-    if (!isImport) {
-      QString undoFile = iniDir + "undoFile";
-      bakData(undoFile, true);
-    }
-
     isBreak = false;
     SaveType = str_type;
 
@@ -1469,6 +1464,8 @@ void MainWindow::on_actionDel_Tab_triggered() {
   if (msgBox.clickedButton() == btnCancel) {
     return;
   }
+
+  addUndo();
 
   ui->tabWidget->removeTab(index);
 
@@ -3658,6 +3655,13 @@ void MainWindow::init_Menu() {
 void MainWindow::undo() { importBakData(iniDir + "undoFile", true); }
 
 void MainWindow::redo() { importBakData(iniDir + "redoFile", true); }
+
+void MainWindow::addUndo() {
+  if (!isImport) {
+    QString undoFile = iniDir + "undoFile";
+    bakData(undoFile, true);
+  }
+}
 
 void MainWindow::on_btnMenu_clicked() {
   int x = mw_one->x + (this->width() - mainMenu->width()) - 4;

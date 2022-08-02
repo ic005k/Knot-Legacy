@@ -258,7 +258,8 @@ class MainWindow : public QMainWindow {
   void setSCrollPro(QObject *obj);
 
   void importBakData(QString fileName, bool msg);
- public slots:
+  void addUndo();
+  public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
