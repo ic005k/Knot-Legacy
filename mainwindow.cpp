@@ -212,7 +212,7 @@ MainWindow::MainWindow(QWidget* parent)
   loading = true;
   init_UIWidget();
   init_ChartWidget();
-  init_Menu();
+  // init_Menu();
   init_Options();
   init_Sensors();
   init_TabData();
@@ -1950,10 +1950,11 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
 
     int abc = 300;
+    int length = 55;
     //判断滑动方向（右滑）
-    if ((relea_x - press_x) > 50 &&
+    if ((relea_x - press_x) > length &&
         event->type() == QEvent::MouseButtonRelease &&
-        qAbs(relea_y - press_y) < 50) {
+        qAbs(relea_y - press_y) < length) {
       if (!isEpub) {
         if (iPage - baseLines <= 0) return QWidget::eventFilter(watch, evn);
       } else {
@@ -1985,9 +1986,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
 
     //判断滑动方向（左滑）
-    if ((press_x - relea_x) > 50 &&
+    if ((press_x - relea_x) > length &&
         event->type() == QEvent::MouseButtonRelease &&
-        qAbs(relea_y - press_y) < 50) {
+        qAbs(relea_y - press_y) < length) {
       if (!isEpub) {
         if (iPage + baseLines > totallines)
           return QWidget::eventFilter(watch, evn);
@@ -3522,6 +3523,22 @@ void MainWindow::init_UIWidget() {
   mydlgReport->ui->lblDetails->setStyleSheet(lblStyle);
   mydlgReport->ui->lblTitle->setStyleSheet(lblStyle);
   ui->lblStats->setStyleSheet(lblStyle);
+
+  ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
+  ui->btnFind->setStyleSheet("border:none");
+  ui->btnMenu->setStyleSheet("border:none");
+  ui->btnReport->setStyleSheet("border:none");
+  ui->btnOneClickBak->setStyleSheet("border:none");
+  ui->btnNotes->setStyleSheet("border:none");
+  ui->btnPause->setStyleSheet("border:none");
+  ui->btnSelTab->setStyleSheet("border:none");
+  ui->lblIcon->setText("");
+  ui->lblIcon->setFixedHeight(22);
+  ui->lblIcon->setFixedWidth(22);
+  ui->lblIcon->setStyleSheet(
+      "QLabel{"
+      "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
+      "}");
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -3563,24 +3580,7 @@ void MainWindow::on_btnSelTab_clicked() {
   list->setFocus();
 }
 
-void MainWindow::init_Menu() {
-  ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
-  ui->btnFind->setStyleSheet("border:none");
-  ui->btnMenu->setStyleSheet("border:none");
-  ui->btnReport->setStyleSheet("border:none");
-  ui->btnOneClickBak->setStyleSheet("border:none");
-  ui->btnNotes->setStyleSheet("border:none");
-  ui->btnPause->setStyleSheet("border:none");
-  ui->btnSelTab->setStyleSheet("border:none");
-  ui->lblIcon->setText("");
-  ui->lblIcon->setFixedHeight(22);
-  ui->lblIcon->setFixedWidth(22);
-  ui->lblIcon->setStyleSheet(
-      "QLabel{"
-      "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
-      "}");
-
-  mainMenu = new QMenu(this);
+void MainWindow::init_Menu(QMenu* mainMenu) {
   QAction* actAddTab = new QAction(tr("Add Tab"));
   QAction* actDelTab = new QAction(tr("Del Tab"));
   QAction* actRenameTab = new QAction(tr("Rename Tab"));
@@ -3607,30 +3607,6 @@ void MainWindow::init_Menu() {
   actRedo->setVisible(false);
 
   QAction* actTimeMachine = new QAction(tr("Time Machine"));
-
-  mainMenu->addAction(actAddTab);
-  mainMenu->addAction(actDelTab);
-  mainMenu->addAction(actRenameTab);
-
-  mainMenu->addAction(actUndo);
-  mainMenu->addAction(actRedo);
-
-  mainMenu->addAction(actTimeMachine);
-
-  mainMenu->addAction(actFind);
-  mainMenu->addAction(actReport);
-  mainMenu->addAction(actRemarks);
-
-  mainMenu->addAction(actExportData);
-  mainMenu->addAction(actImportData);
-  mainMenu->addAction(actBakData);
-
-  mainMenu->addAction(actPreferences);
-
-  mainMenu->addAction(actMemos);
-
-  mainMenu->addAction(actViewAppData);
-  mainMenu->addAction(actAbout);
 
   connect(actAddTab, &QAction::triggered, this,
           &MainWindow::on_actionAdd_Tab_triggered);
@@ -3675,6 +3651,30 @@ void MainWindow::init_Menu() {
       "margin:0px 0px; }"
       "QMenu::item:selected {"
       "background-color: rgb(62, 186, 231); }";
+
+  mainMenu->addAction(actAddTab);
+  mainMenu->addAction(actDelTab);
+  mainMenu->addAction(actRenameTab);
+
+  mainMenu->addAction(actUndo);
+  mainMenu->addAction(actRedo);
+
+  mainMenu->addAction(actTimeMachine);
+
+  mainMenu->addAction(actFind);
+  mainMenu->addAction(actReport);
+  mainMenu->addAction(actRemarks);
+
+  mainMenu->addAction(actExportData);
+  mainMenu->addAction(actImportData);
+  mainMenu->addAction(actBakData);
+
+  mainMenu->addAction(actPreferences);
+
+  mainMenu->addAction(actMemos);
+
+  mainMenu->addAction(actViewAppData);
+  mainMenu->addAction(actAbout);
   mainMenu->setStyleSheet(qss);
 }
 
@@ -3762,6 +3762,8 @@ void MainWindow::timeMachine() {
 }
 
 void MainWindow::on_btnMenu_clicked() {
+  QMenu* mainMenu = new QMenu(this);
+  init_Menu(mainMenu);
   int x = mw_one->x + (this->width() - mainMenu->width()) - 4;
   int y = ui->frameMenu->y() + ui->frameMenu->height();
   QPoint pos(x, y);

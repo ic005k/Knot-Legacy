@@ -263,7 +263,7 @@ class MainWindow : public QMainWindow {
   void addUndo(QString log);
   QString getTabText();
   void addRedo();
-  public slots:
+ public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
@@ -415,7 +415,7 @@ class MainWindow : public QMainWindow {
   void init_ChartWidget();
   void init_Sensors();
   void init_UIWidget();
-  void init_Menu();
+  void init_Menu(QMenu *);
   void on_btnZoom_clicked();
   void on_cboxYear_currentTextChanged(const QString &arg1);
 
