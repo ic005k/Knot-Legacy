@@ -212,7 +212,6 @@ MainWindow::MainWindow(QWidget* parent)
   loading = true;
   init_UIWidget();
   init_ChartWidget();
-  // init_Menu();
   init_Options();
   init_Sensors();
   init_TabData();
@@ -3764,7 +3763,7 @@ void MainWindow::timeMachine() {
 void MainWindow::on_btnMenu_clicked() {
   QMenu* mainMenu = new QMenu(this);
   init_Menu(mainMenu);
-  int x = mw_one->x + (this->width() - mainMenu->width()) - 4;
+  int x = mw_one->x + (this->width() - mainMenu->width()) - 5;
   int y = ui->frameMenu->y() + ui->frameMenu->height();
   QPoint pos(x, y);
   mainMenu->exec(pos);

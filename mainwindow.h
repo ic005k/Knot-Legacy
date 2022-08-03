@@ -398,20 +398,17 @@ class MainWindow : public QMainWindow {
  private:
   int frameChartHeight = 220;
   int x, y, w, h;
-  QMenu *mainMenu;
   qreal aoldX, aoldY, aoldZ;
   int countOne = 0;
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
   QObjectList getAllUIControls(QObject *parent);
 
-  QList<QToolButton *> listNBtn;
-
   QString treeStyle = "QTreeWidget::item {height: 28;}";
-  //"QTreeWidget::item {background-color: #ffffff;color: #000000;border: "
-  //"transparent;border-bottom: 1px solid #dbdbdb; padding: 2px;height: 20;}"
-  //"QTreeWidget::item:hover {background-color: #f5f5f5;}"
-  //"QTreeWidget::item:selected {border-left: 0px solid #777777;}"
+  /*"QTreeWidget::item {background-color: #ffffff;color: #000000;border: "
+  "transparent;border-bottom: 1px solid #dbdbdb; padding: 2px;height: 20;}"
+  "QTreeWidget::item:hover {background-color: #f5f5f5;}"
+  "QTreeWidget::item:selected {border-left: 0px solid #777777;}";*/
   void init_ChartWidget();
   void init_Sensors();
   void init_UIWidget();
