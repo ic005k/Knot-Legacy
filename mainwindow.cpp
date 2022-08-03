@@ -3584,9 +3584,14 @@ void MainWindow::init_Menu() {
   QAction* actAddTab = new QAction(tr("Add Tab"));
   QAction* actDelTab = new QAction(tr("Del Tab"));
   QAction* actRenameTab = new QAction(tr("Rename Tab"));
+
   QAction* actFind = new QAction(tr("Find"));
+  actFind->setVisible(false);
   QAction* actReport = new QAction(tr("Report"));
+  actReport->setVisible(false);
   QAction* actRemarks = new QAction(tr("Remarks"));
+  actRemarks->setVisible(false);
+
   QAction* actExportData = new QAction(tr("Export Data"));
   QAction* actImportData = new QAction(tr("Import Data"));
   QAction* actPreferences = new QAction(tr("Preferences"));
