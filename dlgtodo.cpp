@@ -159,8 +159,6 @@ void dlgTodo::on_btnAdd_clicked() {
 void dlgTodo::add_Item(QString str, QString time, bool insert) {
   if (str == "") return;
   QListWidgetItem* pItem = new QListWidgetItem;
-  // pItem->setSizeHint(QSize(this->width() - 15, 45));
-  // pItem->setCheckState(Qt::Unchecked);
   pItem->setText("");
 
   if (insert)
@@ -177,11 +175,6 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   layout->setSpacing(0);
   QToolButton* btn = new QToolButton(this);
   btn->setStyleSheet("border:none");
-  // QPixmap pixmap = QPixmap(":/res/done.png");
-  // btn->setIcon(pixmap);
-  // btn->setIconSize(QSize(20, 20));
-  // QPainter p(btn);
-  // p.setRenderHint(QPainter::Antialiasing);
 
   btn->setIconSize(QSize(25, 25));
   btn->setIcon(QIcon(":/res/done.png"));
@@ -196,7 +189,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
     QString str = getMainLabel(row)->text().trimmed();
     QListWidgetItem* item = new QListWidgetItem;
     item->setSizeHint(QSize(ui->listWidget->width() - 16, 80));
-    item->setText(str);
+    item->setText(QDateTime::currentDateTime().toString() + "\n" + str);
     ui->listRecycle->insertItem(0, item);
     ui->listWidget->takeItem(row);
     int index = ui->listWidget->currentRow();
@@ -212,9 +205,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   QLabel* label = new QLabel(this);
   label->setFont(font);
   label->installEventFilter(this);
-  //让label自适应text大小
   label->adjustSize();
-  //设置label换行
   label->setWordWrap(true);
   label->setText(str);
   orgLblStyle = label->styleSheet();
@@ -252,9 +243,6 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   layout->addWidget(frame);
   layout->addWidget(btn);
   w->setLayout(layout);
-
-  // qDebug() << w->children();
-  // qDebug() << w->children().at(2)->children().at(2);  // lblText
 
   ui->listWidget->setItemWidget(pItem, w);
 
@@ -531,8 +519,12 @@ void dlgTodo::on_btnClear_clicked() { ui->listRecycle->clear(); }
 
 void dlgTodo::on_btnRestore_clicked() {
   if (ui->listRecycle->count() == 0) return;
-  QString str = ui->listRecycle->currentItem()->text();
-  add_Item(str,
+  QString str1 = ui->listRecycle->currentItem()->text();
+  QStringList list0 = str1.split("\n");
+  if (list0.count() > 0) str1 = str1.replace(list0.at(0) + "\n", "");
+
+  qDebug() << str1;
+  add_Item(str1.trimmed(),
            QDate::currentDate().toString("ddd MM dd yyyy") + "  " +
                QTime::currentTime().toString(),
            false);
