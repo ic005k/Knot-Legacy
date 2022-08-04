@@ -2111,6 +2111,8 @@ void MainWindow::on_actionImport_Data_triggered() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
                                           tr("Data Files (*.ini)"));
+
+  if (QFileInfo(fileName).exists()) addUndo(tr("Import Data"));
   importBakData(fileName, true, true);
 }
 
@@ -3480,6 +3482,7 @@ void MainWindow::init_UIWidget() {
   ui->btnNotes->setIconSize(QSize(iz, iz));
   ui->btnSelTab->setIconSize(QSize(iz, iz));
   ui->btnOneClickBak->setIconSize(QSize(iz, iz));
+  ui->btnOneClickBak->hide();
   ui->btnPause->setIconSize(QSize(iz, iz));
 
   int s = 28;
