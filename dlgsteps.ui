@@ -154,11 +154,11 @@
 }
 
 QRadioButton::indicator:unchecked {
-    image: url(:/src/nosel.png);
+    image: url(:/res/nosel.png);
 }
 
 QRadioButton::indicator:checked {
-    image: url(:/src/sel.png);
+    image: url(:/res/sel.png);
 }
 
 
@@ -188,11 +188,11 @@ QRadioButton::indicator:checked {
 }
 
 QRadioButton::indicator:unchecked {
-    image: url(:/src/nosel.png);
+    image: url(:/res/nosel.png);
 }
 
 QRadioButton::indicator:checked {
-    image: url(:/src/sel.png);
+    image: url(:/res/sel.png);
 }
 
 
