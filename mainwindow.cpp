@@ -1949,7 +1949,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
 
     int abc = 300;
-    int length = 55;
+    int length = 75;
     //判断滑动方向（右滑）
     if ((relea_x - press_x) > length &&
         event->type() == QEvent::MouseButtonRelease &&
