@@ -1,4 +1,4 @@
-# Knot - A simple tool for counting, bookkeeping, keeping track of steps, etc.
+# Knot
 
 * Android version >= 6.0
 * Bookkeeping
