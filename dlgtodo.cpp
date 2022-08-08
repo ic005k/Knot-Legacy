@@ -446,7 +446,7 @@ void dlgTodo::on_Alarm() {
         total_cur_m = cur_h * 60 + cur_m;
 
         if (QDate::currentDate().toString("yyyy-M-d") == date) {
-          if (total_cur_m >= total_m + 5) {
+          if (total_cur_m >= total_m - 5) {
             // if (QTime::currentTime().toString("HH:mm") >= time) {
             lbl->setText(str);
             saveTodo();
