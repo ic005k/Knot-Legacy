@@ -58,7 +58,7 @@ public class MyService extends Service {
             public void run() {
                 CallJavaNotify_3();
             }
-        }, 0, 60000);
+        }, 0, 300000);
         return 1;
     }
 
