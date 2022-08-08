@@ -433,8 +433,21 @@ void dlgTodo::on_Alarm() {
       if (list.count() == 2) {
         QString date = list.at(0);
         QString time = list.at(1);
+
+        int total_m, total_cur_m, h1, m1, cur_h, cur_m;
+
+        QStringList list_m = time.split(":");
+        h1 = list_m.at(0).toInt();
+        m1 = list_m.at(1).toInt();
+        total_m = h1 * 60 + m1;
+
+        cur_h = QTime::currentTime().hour();
+        cur_m = QTime::currentTime().minute();
+        total_cur_m = cur_h * 60 + cur_m;
+
         if (QDate::currentDate().toString("yyyy-M-d") == date) {
-          if (QTime::currentTime().toString("HH:mm") >= time) {
+          if (total_cur_m >= total_m + 5) {
+            // if (QTime::currentTime().toString("HH:mm") >= time) {
             lbl->setText(str);
             saveTodo();
             QString text = getMainLabel(i)->text().trimmed();
@@ -523,7 +536,6 @@ void dlgTodo::on_btnRestore_clicked() {
   QStringList list0 = str1.split("\n");
   if (list0.count() > 0) str1 = str1.replace(list0.at(0) + "\n", "");
 
-  qDebug() << str1;
   add_Item(str1.trimmed(),
            QDate::currentDate().toString("ddd MM dd yyyy") + "  " +
                QTime::currentTime().toString(),
