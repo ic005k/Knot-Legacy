@@ -8,6 +8,7 @@ extern MainWindow* mw_one;
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
+  this->installEventFilter(this);
   initDlg();
   // this->show();
 }
@@ -24,6 +25,18 @@ void msgDialog::initDlg() {
                     (mw_one->height() - this->height()) / 2, this->width(),
                     this->height());
   this->setModal(true);
+}
+
+bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
+  if (evn->type() == QEvent::KeyPress) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    if (keyEvent->key() == Qt::Key_Back) {
+      on_btnOK_clicked();
+      return true;
+    }
+  }
+
+  return QWidget::eventFilter(obj, evn);
 }
 
 void msgDialog::on_btnOK_clicked() { close(); }

@@ -16,6 +16,9 @@ class msgDialog : public QDialog {
   Ui::msgDialog *ui;
 
   void initDlg();
+
+ protected:
+  bool eventFilter(QObject *obj, QEvent *evn) override;
  private slots:
   void on_btnOK_clicked();
 
