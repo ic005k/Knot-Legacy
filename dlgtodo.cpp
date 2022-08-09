@@ -466,7 +466,7 @@ void dlgTodo::on_Alarm() {
 
             mw_one->mymsgDialog->initDlg();
             mw_one->mymsgDialog->ui->lblText->setText(tr("Todo") + " : \n\n" +
-                                                      text);
+                                                      str + "\n\n" + text);
             mw_one->mymsgDialog->show();
 
             break;

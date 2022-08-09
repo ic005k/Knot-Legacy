@@ -8,8 +8,10 @@ extern MainWindow* mw_one;
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
+  this->layout()->setMargin(0);
   this->installEventFilter(this);
   initDlg();
+
   // this->show();
 }
 
@@ -25,6 +27,7 @@ void msgDialog::initDlg() {
                     (mw_one->height() - this->height()) / 2, this->width(),
                     this->height());
   this->setModal(true);
+  ui->lblTime->setText(QDateTime::currentDateTime().toString());
 }
 
 bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
