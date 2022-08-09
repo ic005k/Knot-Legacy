@@ -270,10 +270,13 @@ public class MyService extends Service {
                     .setContentText(message)
                     .setSmallIcon(R.drawable.icon)
                     .setColor(Color.GREEN)
-                    .setDefaults(Notification.DEFAULT_LIGHTS)
                     .setAutoCancel(true);
+            //.setDefaults(Notification.DEFAULT_LIGHTS)
             //.setSmallIcon(R.drawable.icon)
             //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
+            int defaults = Notification.DEFAULT_LIGHTS;
+            m_builderAlarm.setDefaults(defaults);
+            m_builderAlarm.setPriority(Notification.PRIORITY_HIGH); //自动弹出通知
 
             m_notificationManagerAlarm.notify(10, m_builderAlarm.build());
 
