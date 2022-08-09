@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.ContentResolver;
+import android.os.Looper;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.database.Cursor;
@@ -16,6 +17,8 @@ import android.content.UriMatcher;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.IBinder;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.x.MyService;
 
@@ -83,10 +86,40 @@ public class MyActivity extends QtActivity {
 
     public native void CallJavaNotify_2();
 
-    public native void CallJavaNotify_3();
+    public native static void CallJavaNotify_3();
+
+    public static Handler handler;
 
     public MyActivity() {
         m_instance = this;
+    }
+
+    public static Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+
+            handler.postDelayed(this, 60 * 1000);
+            CallJavaNotify_3();
+
+        }
+    };
+
+    public static int startTimerAlarm() {
+        stopTimerAlarm();
+        handler = new Handler(Looper.getMainLooper());
+        //handler.postDelayed(task,5000);//延迟调用
+        handler.post(runnable);//立即调用
+        System.out.println("startTimerAlarm+++++++++++++++++++++++");
+        return 1;
+    }
+
+    public static int stopTimerAlarm() {
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
+        }
+
+        System.out.println("stopTimerAlarm+++++++++++++++++++++++");
+        return 1;
     }
 
 
@@ -365,6 +398,7 @@ public class MyActivity extends QtActivity {
             startService(new Intent(bindIntent));
         }
 
+
         //MyService.notify(getApplicationContext(), "Hello!");
     }
 
@@ -578,14 +612,14 @@ public class MyActivity extends QtActivity {
     /*
 This method can parse out the real local file path from a file URI.
 */
-    public  String getUriPath(String uripath) {
+    public String getUriPath(String uripath) {
         //Uri u = Uri.parse(uripath); // "content://media/internal/audio/media/81"
         //String abc= getUriRealPath(context,u);
 
         String URL = uripath;
         String str = "None";
         //if (Build.VERSION.SDK_INT >= 26) {
-           str  = URLDecoder.decode(URL);
+        str = URLDecoder.decode(URL);
         //}
         //System.out.println(字符串);
 
@@ -593,7 +627,7 @@ This method can parse out the real local file path from a file URI.
 
         Log.i(TAG, "UriString  " + uripath);
         Log.i(TAG, "RealPath  " + str);
-        return  str;
+        return str;
 
     }
 

@@ -12,6 +12,8 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -47,27 +49,48 @@ public class MyService extends Service {
     private static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
     public static Timer timer;
     public static Timer timerAlarm;
+    public static Handler handler;
     public static int sleep = 0;
+
+    public static Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            handler.postDelayed(this, 60 * 1000);
+            CallJavaNotify_3();
+        }
+    };
 
     public static int startTimerAlarm() {
         stopTimerAlarm();
-        System.out.println("startTimerAlarm+++++++++++++++++++++++");
-        timerAlarm = new Timer();
+
+        /*timerAlarm = new Timer();
         timerAlarm.schedule(new TimerTask() {
             @Override
             public void run() {
                 CallJavaNotify_3();
             }
-        }, 0, 300000);
+        }, 0, 300000);*/
+
+        //handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
+        handler.post(runnable);//立即调用
+        System.out.println("startTimerAlarm+++++++++++++++++++++++");
         return 1;
     }
 
     public static int stopTimerAlarm() {
-        if (timerAlarm != null) {
+        /*if (timerAlarm != null) {
             timerAlarm.cancel();
             timerAlarm.purge();
-            System.out.println("stopTimerAlarm+++++++++++++++++++++++");
+
+        }*/
+
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
+
         }
+
+        System.out.println("stopTimerAlarm+++++++++++++++++++++++");
         return 1;
     }
 
@@ -227,6 +250,7 @@ public class MyService extends Service {
     //----------------------------------------------
     private static NotificationManager m_notificationManagerAlarm;
     private static Notification.Builder m_builderAlarm;
+
     public static void notifyAlarm(Context context, String message) {
         try {
             m_notificationManagerAlarm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
