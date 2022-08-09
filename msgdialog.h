@@ -15,6 +15,7 @@ class msgDialog : public QDialog {
   ~msgDialog();
   Ui::msgDialog *ui;
 
+  void initDlg();
  private slots:
   void on_btnOK_clicked();
 

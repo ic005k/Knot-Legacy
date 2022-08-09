@@ -464,6 +464,7 @@ void dlgTodo::on_Alarm() {
             btnOk->setFocus();
             // msgBox.exec();
 
+            mw_one->mymsgDialog->initDlg();
             mw_one->mymsgDialog->ui->lblText->setText(tr("Todo") + " : \n\n" +
                                                       text);
             mw_one->mymsgDialog->show();

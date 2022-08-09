@@ -8,6 +8,13 @@ extern MainWindow* mw_one;
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
+  initDlg();
+  // this->show();
+}
+
+msgDialog::~msgDialog() { delete ui; }
+
+void msgDialog::initDlg() {
   ui->lblText->setWordWrap(true);
   ui->lblText->adjustSize();
 
@@ -17,9 +24,6 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
                     (mw_one->height() - this->height()) / 2, this->width(),
                     this->height());
   this->setModal(true);
-  // this->show();
 }
-
-msgDialog::~msgDialog() { delete ui; }
 
 void msgDialog::on_btnOK_clicked() { close(); }
