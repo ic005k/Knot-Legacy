@@ -434,20 +434,22 @@ void dlgTodo::on_Alarm() {
         QString date = list.at(0);
         QString time = list.at(1);
 
-        int total_m, total_cur_m, h1, m1, cur_h, cur_m;
-
-        QStringList list_m = time.split(":");
-        h1 = list_m.at(0).toInt();
-        m1 = list_m.at(1).toInt();
-        total_m = h1 * 60 + m1;
-
-        cur_h = QTime::currentTime().hour();
-        cur_m = QTime::currentTime().minute();
-        total_cur_m = cur_h * 60 + cur_m;
-
         if (QDate::currentDate().toString("yyyy-M-d") == date) {
-          if (total_cur_m >= total_m - 5) {
+          int total_m, total_cur_m, h1, m1, cur_h, cur_m;
+
+          QStringList list_m = time.split(":");
+          h1 = list_m.at(0).toInt();
+          m1 = list_m.at(1).toInt();
+          total_m = h1 * 60 + m1;
+
+          cur_h = QTime::currentTime().hour();
+          cur_m = QTime::currentTime().minute();
+          total_cur_m = cur_h * 60 + cur_m;
+
+          if (total_cur_m >= total_m - 1) {
             // if (QTime::currentTime().toString("HH:mm") >= time) {
+            // stopTimerAlarm();
+
             lbl->setText(str);
             saveTodo();
             QString text = getMainLabel(i)->text().trimmed();
@@ -459,7 +461,9 @@ void dlgTodo::on_Alarm() {
             QPushButton* btnOk =
                 msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
             btnOk->setFocus();
-            msgBox.exec();
+            // msgBox.exec();
+
+            // startTimerAlarm();
             break;
           }
         }
@@ -475,13 +479,14 @@ void dlgTodo::on_Alarm() {
 }
 
 void dlgTodo::startTimerAlarm() {
-  if (mw_one->isHardStepSensor == 1) {
+  /*if (mw_one->isHardStepSensor == 1) {
     mw_one->mydlgSteps->releaseWakeLock();
     mw_one->mydlgSteps->acquireWakeLock();
-  }
+  }*/
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("startTimerAlarm");
   jo.callStaticMethod<int>("com.x/MyService", "startTimerAlarm", "()I");
+  // jo.callStaticMethod<int>("com.x/MyActivity", "startTimerAlarm", "()I");
 #endif
 }
 
@@ -489,9 +494,10 @@ void dlgTodo::stopTimerAlarm() {
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("stopTimerAlarm");
   jo.callStaticMethod<int>("com.x/MyService", "stopTimerAlarm", "()I");
+  // jo.callStaticMethod<int>("com.x/MyActivity", "stopTimerAlarm", "()I");
 #endif
 
-  if (mw_one->isHardStepSensor == 1) mw_one->mydlgSteps->releaseWakeLock();
+  // if (mw_one->isHardStepSensor == 1) mw_one->mydlgSteps->releaseWakeLock();
 }
 
 void dlgTodo::sendMsgAlarm(QString text) {
