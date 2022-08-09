@@ -229,7 +229,8 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   lblTime->setFont(f);
   lblTime->setText(time);
   if (time.contains(tr("Alarm"))) {
-    lblTime->setStyleSheet("QLabel{background:red;color:white}");
+    // lblTime->setStyleSheet("QLabel{background:red;color:white}");
+    lblTime->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
     f.setBold(true);
     lblTime->setFont(f);
   }
@@ -378,7 +379,8 @@ QLabel* dlgTodo::getMainLabel(int index) {
 void dlgTodo::on_btnOK_clicked() {
   QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
   lbl->setText(tr("Alarm") + "  " + ui->dateTimeEdit->text());
-  lbl->setStyleSheet("QLabel{background:red;color:white}");
+  // lbl->setStyleSheet("QLabel{background:blue;color:white}");
+  lbl->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
   QFont f = lbl->font();
   f.setBold(true);
   lbl->setFont(f);
