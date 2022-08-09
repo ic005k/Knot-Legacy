@@ -44,6 +44,7 @@ SOURCES += \
     file.cpp \
     main.cpp \
     mainwindow.cpp \
+    msgdialog.cpp \
     smoothscrollbar.cpp \
     specialaccelerometerpedometer.cpp
 
@@ -62,6 +63,7 @@ HEADERS += \
     documenthandler.h \
     file.h \
     mainwindow.h \
+    msgdialog.h \
     smoothscrollbar.h \
     specialaccelerometerpedometer.h
 
@@ -76,7 +78,8 @@ FORMS += \
     dlgsettime.ui \
     dlgsteps.ui \
     dlgtodo.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    msgdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

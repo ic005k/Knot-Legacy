@@ -9,7 +9,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.13";
+QString ver = "1.0.14";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -1724,7 +1724,8 @@ void MainWindow::saveNotes(int tabIndex) {
 }
 
 void MainWindow::on_actionNotes_triggered() {
-  mydlgNotes->setGeometry(0, 0, this->width(), this->height() / 2);
+  mydlgNotes->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                          this->width(), this->height() / 2);
 
   mydlgNotes->ui->textEdit->clear();
 
@@ -3278,7 +3279,7 @@ void MainWindow::updateHardSensorSteps() {
 }
 
 void MainWindow::on_actionMemos_triggered() {
-  mydlgMainNotes->move(0, 0);
+  mydlgMainNotes->move(mw_one->geometry().x(), 0);
   mydlgMainNotes->setFixedHeight(this->height());
   mydlgMainNotes->setFixedWidth(this->width());
   mydlgMainNotes->setModal(true);
@@ -3433,6 +3434,7 @@ void MainWindow::init_UIWidget() {
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
   mydlgReader = new dlgReader(this);
+  mymsgDialog = new msgDialog(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -3766,7 +3768,8 @@ void MainWindow::timeMachine() {
 void MainWindow::on_btnMenu_clicked() {
   QMenu* mainMenu = new QMenu(this);
   init_Menu(mainMenu);
-  int x = mw_one->x + (this->width() - mainMenu->width()) - 5;
+  int x = mw_one->geometry().x() +
+          (mw_one->geometry().width() - mainMenu->width()) - 5;
   int y = ui->frameMenu->y() + ui->frameMenu->height();
   QPoint pos(x, y);
   mainMenu->exec(pos);

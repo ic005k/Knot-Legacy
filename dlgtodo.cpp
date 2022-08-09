@@ -223,14 +223,14 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   hbox->addWidget(edit);
   QVBoxLayout* vbox = new QVBoxLayout();
   QLabel* lblTime = new QLabel(this);
-  lblTime->setFixedHeight(15);
+  lblTime->setFixedHeight(17);
   QFont f;
   f.setPointSize(13);
   lblTime->setFont(f);
   lblTime->setText(time);
   if (time.contains(tr("Alarm"))) {
-    // lblTime->setStyleSheet("QLabel{background:red;color:white}");
-    lblTime->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
+    lblTime->setStyleSheet("QLabel{background:blue;color:white}");
+    // lblTime->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
     f.setBold(true);
     lblTime->setFont(f);
   }
@@ -379,8 +379,8 @@ QLabel* dlgTodo::getMainLabel(int index) {
 void dlgTodo::on_btnOK_clicked() {
   QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
   lbl->setText(tr("Alarm") + "  " + ui->dateTimeEdit->text());
-  // lbl->setStyleSheet("QLabel{background:blue;color:white}");
-  lbl->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
+  lbl->setStyleSheet("QLabel{background:blue;color:white}");
+  // lbl->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
   QFont f = lbl->font();
   f.setBold(true);
   lbl->setFont(f);
@@ -450,7 +450,6 @@ void dlgTodo::on_Alarm() {
 
           if (total_cur_m >= total_m - 1) {
             // if (QTime::currentTime().toString("HH:mm") >= time) {
-            // stopTimerAlarm();
 
             lbl->setText(str);
             saveTodo();
@@ -465,7 +464,10 @@ void dlgTodo::on_Alarm() {
             btnOk->setFocus();
             // msgBox.exec();
 
-            // startTimerAlarm();
+            mw_one->mymsgDialog->ui->lblText->setText(tr("Todo") + " : \n\n" +
+                                                      text);
+            mw_one->mymsgDialog->show();
+
             break;
           }
         }

@@ -63,6 +63,7 @@
 #include "dlgsteps.h"
 #include "dlgtodo.h"
 #include "file.h"
+#include "msgdialog.h"
 #include "specialaccelerometerpedometer.h"
 #include "ui_dlglist.h"
 #include "ui_dlgmainnotes.h"
@@ -74,6 +75,7 @@
 #include "ui_dlgsettime.h"
 #include "ui_dlgsteps.h"
 #include "ui_dlgtodo.h"
+#include "ui_msgdialog.h"
 
 class SearchThread;
 class ReadThread;
@@ -157,6 +159,7 @@ class MainWindow : public QMainWindow {
   dlgMainNotes *mydlgMainNotes;
   dlgSteps *mydlgSteps;
   dlgReader *mydlgReader;
+  msgDialog *mymsgDialog;
   File *myfile;
 
   QList<QTreeWidgetItem *> findItemList;
