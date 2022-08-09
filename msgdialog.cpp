@@ -21,13 +21,19 @@ void msgDialog::initDlg() {
   ui->lblText->setWordWrap(true);
   ui->lblText->adjustSize();
 
-  this->setFixedHeight(240);
+  this->setFixedHeight(300);
   this->setFixedWidth(mw_one->width());
   this->setGeometry(mw_one->geometry().x(),
                     (mw_one->height() - this->height()) / 2, this->width(),
                     this->height());
   this->setModal(true);
   ui->lblTime->setText(QDateTime::currentDateTime().toString());
+
+  QFont font(mw_one->font());
+  int size = font.pointSize();
+  font.setPointSize(size * 1.1);
+  font.setBold(true);
+  ui->lblText->setFont(font);
 }
 
 bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
