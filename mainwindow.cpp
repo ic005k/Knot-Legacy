@@ -1755,6 +1755,16 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   if (watch == tw) {
   }
 
+  if (watch == ui->lblInfo || watch == ui->frameTip) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      QMouseEvent* mouseenevt = static_cast<QMouseEvent*>(event);
+      if (mouseenevt->button() == Qt::LeftButton) {
+        ui->frameTip->hide();
+        return true;
+      }
+    }
+  }
+
   if (watch == chartview || watch == chartview1) {
     if (event->type() == QEvent::MouseButtonDblClick) {
       on_btnZoom_clicked();
@@ -3416,6 +3426,14 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
+  ui->lblInfo->installEventFilter(this);
+  ui->lblInfo->setWordWrap(true);
+  ui->lblInfo->adjustSize();
+  ui->lblInfo->setStyleSheet("color:white;");
+  ui->frameTip->installEventFilter(this);
+  ui->frameTip->setAutoFillBackground(true);
+  ui->frameTip->setPalette(QPalette(QColor(239, 91, 152)));
+  ui->frameTip->hide();
 
   myfile = new File();
   mydlgNotes = new dlgNotes(this);

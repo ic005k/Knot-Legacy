@@ -469,10 +469,18 @@ void dlgTodo::on_Alarm() {
             btnOk->setFocus();
             // msgBox.exec();
 
-            msgDlg->initDlg();
-            msgDlg->ui->lblText->setText(tr("Todo") + " : " + str + "\n\n" +
-                                         text);
-            msgDlg->show();
+            // msgDlg = new msgDialog(mw_one);
+            // msgDlg->initDlg();
+            // msgDlg->ui->lblText->setText(tr("Todo") + " : " + str + "\n\n" +
+            //                              text);
+            // msgDlg->show();
+
+            mw_one->ui->lblInfo->setText(
+                tr("Todo") + " : " + str + "\n\n" + text + "\n\n" +
+                QDateTime::currentDateTime().toString());
+            if (mw_one->mydlgTodo->isHidden()) {
+              // mw_one->ui->frameTip->show();
+            }
 
             break;
           }
