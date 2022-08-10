@@ -16,6 +16,9 @@ extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
 extern bool loading, isBreak, isImport;
 extern int fontSize;
+
+msgDialog* msgDlg;
+
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
   this->installEventFilter(this);
@@ -57,6 +60,8 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->btnModify->setStyleSheet("border:none");
   ui->btnSetTime->setStyleSheet("border:none");
   ui->btnRecycle->setStyleSheet("border:none");
+
+  msgDlg = new msgDialog(mw_one);
 }
 
 dlgTodo::~dlgTodo() { delete ui; }
@@ -464,10 +469,10 @@ void dlgTodo::on_Alarm() {
             btnOk->setFocus();
             // msgBox.exec();
 
-            mw_one->mymsgDialog->initDlg();
-            mw_one->mymsgDialog->ui->lblText->setText(tr("Todo") + " : " + str +
-                                                      "\n\n" + text);
-            mw_one->mymsgDialog->show();
+            msgDlg->initDlg();
+            msgDlg->ui->lblText->setText(tr("Todo") + " : " + str + "\n\n" +
+                                         text);
+            msgDlg->show();
 
             break;
           }

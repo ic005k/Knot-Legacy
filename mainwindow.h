@@ -159,7 +159,7 @@ class MainWindow : public QMainWindow {
   dlgMainNotes *mydlgMainNotes;
   dlgSteps *mydlgSteps;
   dlgReader *mydlgReader;
-  msgDialog *mymsgDialog;
+
   File *myfile;
 
   QList<QTreeWidgetItem *> findItemList;
