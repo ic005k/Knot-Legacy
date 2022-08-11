@@ -138,7 +138,7 @@ void dlgTodo::init_Items() {
     lbl->setStyleSheet(highLblStyle);
   }
 
-  startTimerAlarm();
+  startTimerAlarm("test");
 }
 
 void dlgTodo::on_btnAdd_clicked() {
@@ -391,7 +391,10 @@ void dlgTodo::on_btnOK_clicked() {
   lbl->setFont(f);
 
   ui->frameSetTime->hide();
-  startTimerAlarm();
+
+  QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
+  QString str = ui->dateTimeEdit->text() + "|" + lblMain->text();
+  startTimerAlarm(str);
 }
 
 void dlgTodo::on_btnSetTime_clicked() {
@@ -496,27 +499,26 @@ void dlgTodo::on_Alarm() {
   }
 }
 
-void dlgTodo::startTimerAlarm() {
+void dlgTodo::startTimerAlarm(QString text) {
   /*if (mw_one->isHardStepSensor == 1) {
     mw_one->mydlgSteps->releaseWakeLock();
     mw_one->mydlgSteps->acquireWakeLock();
   }*/
 #ifdef Q_OS_ANDROID
-  QAndroidJniObject jo = QAndroidJniObject::fromString("startTimerAlarm");
-  jo.callStaticMethod<int>("com.x/MyService", "startTimerAlarm", "()I");
+  QAndroidJniObject jo = QAndroidJniObject::fromString(text);
+  // jo.callStaticMethod<int>("com.x/MyService", "startTimerAlarm", "()I");
 
-  // jo.callStaticMethod<int>("com.x/MyActivity", "startAlarm", "()I");
-
+  jo.callStaticMethod<int>("com.x/MyActivity", "startAlarm",
+                           "(Ljava/lang/String;)I", jo.object<jstring>());
 #endif
 }
 
 void dlgTodo::stopTimerAlarm() {
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("stopTimerAlarm");
-  jo.callStaticMethod<int>("com.x/MyService", "stopTimerAlarm", "()I");
+  // jo.callStaticMethod<int>("com.x/MyService", "stopTimerAlarm", "()I");
 
-  // jo.callStaticMethod<int>("com.x/MyActivity", "stopAlarm", "()I");
-
+  jo.callStaticMethod<int>("com.x/MyActivity", "stopAlarm", "()I");
 #endif
 
   // if (mw_one->isHardStepSensor == 1) mw_one->mydlgSteps->releaseWakeLock();

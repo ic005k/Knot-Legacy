@@ -34,7 +34,7 @@ class dlgTodo : public QDialog {
   QLabel *getTimeLabel(int);
   void on_Alarm();
   QLabel *getMainLabel(int);
-  void startTimerAlarm();
+  void startTimerAlarm(QString text);
   void stopTimerAlarm();
 
   void sendMsgAlarm(QString text);
