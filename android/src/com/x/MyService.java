@@ -33,7 +33,6 @@ import java.util.TimerTask;
 
 
 public class MyService extends Service {
-
     private static final String TAG = "MyService";
     private static final String ID = "channel_1";
     private static final String NAME = "F_SERVICE";
@@ -43,7 +42,6 @@ public class MyService extends Service {
     public native static void CallJavaNotify_2();
 
     public native static void CallJavaNotify_3();
-
 
     //private static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
@@ -240,7 +238,6 @@ public class MyService extends Service {
 
             m_notificationManager.notify(0, m_builder.build());
 
-
             //startForeground(1,m_builder.build());
         } catch (Exception e) {
             e.printStackTrace();
@@ -279,7 +276,6 @@ public class MyService extends Service {
             m_builderAlarm.setPriority(Notification.PRIORITY_HIGH); //自动弹出通知
 
             m_notificationManagerAlarm.notify(10, m_builderAlarm.build());
-
 
             //startForeground(1,m_builder.build());
         } catch (Exception e) {

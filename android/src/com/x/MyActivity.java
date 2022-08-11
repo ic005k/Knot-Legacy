@@ -2,6 +2,10 @@ package com.x;
 
 import org.qtproject.qt5.android.bindings.QtActivity;
 
+import android.app.Activity;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.ComponentName;
 import android.content.Context;
@@ -72,6 +76,16 @@ import java.util.zip.ZipInputStream;
 
 import java.net.URLDecoder;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.widget.Toast;
+
+import java.util.Calendar;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
+
 public class MyActivity extends QtActivity {
 
     private static MyActivity m_instance;
@@ -82,47 +96,101 @@ public class MyActivity extends QtActivity {
     private static PersistService mySerivece;
     private static final int DELAY = SensorManager.SENSOR_DELAY_NORMAL;
 
+    private static AlarmManager alarmManager;
+    private static PendingIntent pi;
+
     public native void CallJavaNotify_1();
 
     public native void CallJavaNotify_2();
 
     public native static void CallJavaNotify_3();
 
-    public static Handler handler;
-
     public MyActivity() {
         m_instance = this;
     }
 
-    public static Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
+    //------------------------------------------------------------------------
+    public static int startAlarm(String str) {
+        stopAlarm();
 
-            handler.postDelayed(this, 60 * 1000);
-            CallJavaNotify_3();
+        int hourOfDay = 20;
+        int minute = 21;
+        int y, m, d;
+        y = 2022;
+        m = 8;
+        d = 11;
 
-        }
-    };
+        // 特殊转义字符，必须加"\\"（“.”和“|”都是转义字符）
+        String[] array = str.split("\\|");
+        for (int i = 0; i < array.length; i++)
+            System.out.println(array[i]);
 
-    public static int startTimerAlarm() {
-        stopTimerAlarm();
-        handler = new Handler(Looper.getMainLooper());
-        //handler.postDelayed(task,5000);//延迟调用
-        handler.post(runnable);//立即调用
-        System.out.println("startTimerAlarm+++++++++++++++++++++++");
+        String strTime = array[0];
+        String strText = array[1];
+
+        System.out.println(strTime + "  " + strText);
+
+        String[] arrayDT = strTime.split(" ");
+        String strD = arrayDT[0];
+        String strT = arrayDT[1];
+
+        System.out.println(strD + "  " + strT);
+
+        String[] arrayYMD = strD.split("-");
+        y = Integer.parseInt(arrayYMD[0]);
+        m = Integer.parseInt(arrayYMD[1]);
+        d = Integer.parseInt(arrayYMD[2]);
+
+        String[] arrayHM = strT.split(":");
+        hourOfDay = Integer.parseInt(arrayHM[0]);
+        minute = Integer.parseInt(arrayHM[1]);
+
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+
+        c.set(Calendar.YEAR, y);
+        c.set(Calendar.MONTH, m);
+        c.set(Calendar.DAY_OF_MONTH, d);
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
+
+        c.add(Calendar.SECOND, -15);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+        Log.e("Alarm Manager", c.getTimeInMillis() + "");
+        Log.e("Alarm Manager", str);
+        System.out.println(y);
+        System.out.println(m);
+        System.out.println(d);
+        System.out.println(hourOfDay);
+        System.out.println(minute);
+        System.out.println("startAlarm+++++++++++++++++++++++");
         return 1;
     }
 
-    public static int stopTimerAlarm() {
-        if (handler != null) {
-            handler.removeCallbacks(runnable);
+    public static int stopAlarm() {
+        if (alarmManager != null) {
+            alarmManager.cancel(pi);
+
+            System.out.println("stopAlarm+++++++++++++++++++++++");
         }
 
-        System.out.println("stopTimerAlarm+++++++++++++++++++++++");
         return 1;
     }
 
+    public void onAlarm() {
+        new AlertDialog.Builder(MyActivity.this).setTitle("闹钟").setMessage("提示内容")
+                .setPositiveButton("关闭", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //this.finish();
+                    }
+                }).show();
 
+        System.out.println("闹钟已开始+++++++++++++++++++++++");
+    }
+
+    //------------------------------------------------------------------------
     public static int mini() {
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
@@ -258,63 +326,6 @@ public class MyActivity extends QtActivity {
     }
 
     //--------------------------------------------------------------------------------------------------
-    // 备用参考，很全面，但有些文件没法解压，比如《兰亭序》等
-    public static void Unzip00(String zipFile, String targetDir) {
-        Log.i(TAG, zipFile);
-        Log.i(TAG, targetDir);
-        try {
-            unzip(zipFile, targetDir);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // 备用参考，有些文件没法解压，比如《兰亭序》等，主要是根目录很干净的时候
-    public static void Unzip999(String zipname, String path) {
-        InputStream is;
-        ZipInputStream zis;
-        try {
-            String filename;
-            is = new FileInputStream(zipname);
-            zis = new ZipInputStream(new BufferedInputStream(is));
-            ZipEntry ze;
-            byte[] buffer = new byte[1024];
-            int count;
-
-            while ((ze = zis.getNextEntry()) != null) {
-                // zapis do souboru
-                filename = ze.getName();
-
-                // Need to create directories if not exists, or
-                // it will generate an Exception...
-                if (ze.isDirectory()) {
-                    File fmd = new File(path + filename);
-                    fmd.mkdirs();
-                    continue;
-                }
-
-                FileOutputStream fout = new FileOutputStream(path + filename);
-
-                // cteni zipu a zapis
-                while ((count = zis.read(buffer)) != -1) {
-                    fout.write(buffer, 0, count);
-                }
-
-                fout.close();
-                zis.closeEntry();
-            }
-
-            zis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            //return false;
-            Log.i(TAG, "unzip 失败...");
-        }
-
-        //return true;
-        Log.i(TAG, "unzip 成功...");
-    }
-
     // 目前正在使用，经过改良，目前能解压所有的epub文件
     public static void Unzip(String zipFile, String targetDir) {
         Log.i(TAG, zipFile);
@@ -398,8 +409,12 @@ public class MyActivity extends QtActivity {
             startService(new Intent(bindIntent));
         }
 
-
         //MyService.notify(getApplicationContext(), "Hello!");
+
+        //定时闹钟
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(MyActivity.this, ClockActivity.class);
+        pi = PendingIntent.getActivity(MyActivity.this, 0, intent, 0);
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
@@ -613,17 +628,11 @@ public class MyActivity extends QtActivity {
 This method can parse out the real local file path from a file URI.
 */
     public String getUriPath(String uripath) {
-        //Uri u = Uri.parse(uripath); // "content://media/internal/audio/media/81"
-        //String abc= getUriRealPath(context,u);
-
         String URL = uripath;
         String str = "None";
         //if (Build.VERSION.SDK_INT >= 26) {
         str = URLDecoder.decode(URL);
         //}
-        //System.out.println(字符串);
-
-        //String str1 = getUriRealPath(getContext(),Uri.parse(str));
 
         Log.i(TAG, "UriString  " + uripath);
         Log.i(TAG, "RealPath  " + str);
