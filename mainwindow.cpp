@@ -2689,6 +2689,26 @@ void MainWindow::genReport() {
 
     setTableNoItemFlags(tableReport, i);
   }
+
+  int count = tableReport->rowCount();
+  if (count > 0) {
+    tableReport->setRowCount(count + 1);
+    QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
+    tableReport->setItem(count, 0, tableItem);
+
+    tableItem = new QTableWidgetItem(QString::number(freq));
+    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    tableReport->setItem(count, 1, tableItem);
+
+    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
+    tableItem = new QTableWidgetItem(strAmount);
+    tableReport->setItem(count, 2, tableItem);
+
+    tableReport->setColumnWidth(0, 10);
+    tableReport->setRowHeight(count, 30);
+
+    setTableNoItemFlags(tableReport, count);
+  }
 }
 
 void MainWindow::on_actionReport_triggered() {
@@ -3971,30 +3991,6 @@ void MainWindow::readEBookDone() {
   }
 
   if (isReport) {
-    double freq, amount;
-    int count = tableReport->rowCount();
-    if (count > 0) {
-      tableReport->setRowCount(count + 1);
-      QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
-      tableReport->setItem(count, 0, tableItem);
-
-      tableItem = new QTableWidgetItem(QString::number(freq));
-      tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      tableReport->setItem(count, 1, tableItem);
-
-      QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-      tableItem = new QTableWidgetItem(strAmount);
-      tableReport->setItem(count, 2, tableItem);
-
-      tableReport->setColumnWidth(0, 10);
-      tableReport->setRowHeight(count, 30);
-
-      setTableNoItemFlags(tableReport, count);
-
-      mydlgReport->on_tableReport_cellClicked(count, 0);
-      tableReport->scrollToBottom();
-    }
-
     mydlgReport->ui->lblTitle->setText(
         ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
     mydlgReport->ui->tableDetails->setRowCount(0);
@@ -4006,6 +4002,12 @@ void MainWindow::readEBookDone() {
     mydlgReport->setFixedWidth(this->width());
     mydlgReport->setModal(true);
     mydlgReport->show();
+
+    int count = tableReport->rowCount();
+    if (count > 1) {
+      mydlgReport->on_tableReport_cellClicked(count - 2, 0);
+      tableReport->scrollToBottom();
+    }
 
     isReport = false;
   }
