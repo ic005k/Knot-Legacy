@@ -39,6 +39,9 @@ class dlgTodo : public QDialog {
 
   void sendMsgAlarm(QString text);
 
+  qlonglong getSecond(QString strDateTime);
+ public slots:
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;

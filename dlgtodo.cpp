@@ -392,9 +392,41 @@ void dlgTodo::on_btnOK_clicked() {
 
   ui->frameSetTime->hide();
 
+  QString strDateTime = ui->dateTimeEdit->text();
   QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
-  QString str = ui->dateTimeEdit->text() + "|" + lblMain->text();
+  QString str = strDateTime + "|" + lblMain->text() + "|" +
+                QString::number(getSecond(strDateTime));
+  qDebug() << "TS: " << getSecond(strDateTime);
   startTimerAlarm(str);
+}
+
+qlonglong dlgTodo::getSecond(QString strDateTime) {
+  // 2022-8-22 18:18
+  int y = QDateTime::currentDateTime().date().year();
+  int m = QDateTime::currentDateTime().date().month();
+  int d = QDateTime::currentDateTime().date().day();
+  int h = QDateTime::currentDateTime().time().hour();
+  int mm = QDateTime::currentDateTime().time().minute();
+  int s = QDateTime::currentDateTime().time().second();
+
+  QStringList list = strDateTime.split(" ");
+  QString strDate = list.at(0);
+  QString strTime = list.at(1);
+
+  QStringList listD = strDate.split("-");
+  int y1 = listD.at(0).toInt();
+  int m1 = listD.at(1).toInt();
+  int d1 = listD.at(2).toInt();
+
+  QStringList listT = strTime.split(":");
+  int h1 = listT.at(0).toInt();
+  int mm1 = listT.at(1).toInt();
+
+  qlonglong totalS = (y1 - y) * 365 * 24 * 60 * 60 +
+                     (m1 - m) * 30 * 24 * 60 * 60 + (d1 - d) * 24 * 60 * 60 +
+                     (h1 - h) * 60 * 60 + (mm1 - mm) * 60 - s;
+
+  return totalS;
 }
 
 void dlgTodo::on_btnSetTime_clicked() {
@@ -510,6 +542,11 @@ void dlgTodo::startTimerAlarm(QString text) {
 
   jo.callStaticMethod<int>("com.x/MyActivity", "startAlarm",
                            "(Ljava/lang/String;)I", jo.object<jstring>());
+
+  QAndroidJniObject jo2 =
+      QAndroidJniObject::fromString(text + "|" + tr("Close"));
+  jo2.callStaticMethod<int>("com.x/ClockActivity", "setInfoText",
+                            "(Ljava/lang/String;)I", jo2.object<jstring>());
 #endif
 }
 
