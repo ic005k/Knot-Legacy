@@ -13,7 +13,7 @@ QString ver = "1.0.14";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
-bool isImport;
+bool isImport, isEBook, isReport;
 QString appName = "Knot";
 QString iniFile, iniDir, strDate, readDate, noteText, strStats, SaveType, strY,
     strM, btnYText, btnMText, btnDText, CurrentYearMonth;
@@ -26,6 +26,7 @@ QTabWidget *tabData, *tabChart;
 bool loading, isReadEnd, isReadTWEnd;
 bool isSaveEnd = true;
 bool isBreak = false;
+
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 extern bool isAndroid, isIOS, zh_cn, isEpub;
@@ -34,6 +35,8 @@ extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
 extern QStringList readTextList, htmlFiles;
 extern QDialog* dlgProgEBook;
+extern QTableWidget* tableReport;
+extern void setTableNoItemFlags(QTableWidget* t, int row);
 
 void RegJni();
 void RegJniMyActivity();
@@ -58,7 +61,8 @@ QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 
 ReadEBookThread::ReadEBookThread(QObject* parent) : QThread{parent} {}
 void ReadEBookThread::run() {
-  mw_one->mydlgReader->openFile(ebookFile);
+  if (isEBook) mw_one->mydlgReader->openFile(ebookFile);
+  if (isReport) mw_one->genReport();
   emit isDone();
 }
 
@@ -2231,7 +2235,7 @@ QString MainWindow::get_Year(QString date) {
 }
 
 QTreeWidget* MainWindow::get_tw(int tabIndex) {
-  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(tabIndex);
+  QTreeWidget* tw = (QTreeWidget*)tabData->widget(tabIndex);
   return tw;
 }
 
@@ -2655,75 +2659,48 @@ void MainWindow::on_btnDay_clicked() {
   }
 }
 
-void MainWindow::on_actionReport_triggered() {
-  QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
-  //测试专用
-  if (isTesting) {
-    startSave("tab");
-  }
+void MainWindow::genReport() {
+  QTreeWidget* tw = get_tw(tabData->currentIndex());
   double freq, amount;
   freq = 0;
   amount = 0;
-  mydlgReport->ui->tableReport->setRowCount(0);
+  tableReport->setRowCount(0);
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    int count = mydlgReport->ui->tableReport->rowCount();
-    mydlgReport->ui->tableReport->setRowCount(count + 1);
+    int count = tableReport->rowCount();
+    tableReport->setRowCount(count + 1);
 
-    mydlgReport->ui->tableReport->setColumnWidth(0, 10);
-    mydlgReport->ui->tableReport->setRowHeight(i, 30);
+    tableReport->setColumnWidth(0, 10);
+    tableReport->setRowHeight(i, 30);
 
     QTableWidgetItem* tableItem =
         new QTableWidgetItem(tw->topLevelItem(i)->text(0));
-    mydlgReport->ui->tableReport->setItem(i, 0, tableItem);
+    tableReport->setItem(i, 0, tableItem);
 
     QString txt1 = tw->topLevelItem(i)->text(1);
     freq = freq + txt1.toDouble();
     tableItem = new QTableWidgetItem(txt1);
     tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    mydlgReport->ui->tableReport->setItem(i, 1, tableItem);
+    tableReport->setItem(i, 1, tableItem);
 
     QString txt2 = tw->topLevelItem(i)->text(2);
     amount = amount + txt2.toDouble();
     tableItem = new QTableWidgetItem(txt2);
-    mydlgReport->ui->tableReport->setItem(i, 2, tableItem);
+    tableReport->setItem(i, 2, tableItem);
 
-    mydlgReport->setTableNoItemFlags(mydlgReport->ui->tableReport, i);
+    setTableNoItemFlags(tableReport, i);
   }
+}
 
-  int count = mydlgReport->ui->tableReport->rowCount();
-  if (count > 0) {
-    mydlgReport->ui->tableReport->setRowCount(count + 1);
-    QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
-    mydlgReport->ui->tableReport->setItem(count, 0, tableItem);
+void MainWindow::on_actionReport_triggered() {
+  if (isEBook) return;
 
-    tableItem = new QTableWidgetItem(QString::number(freq));
-    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    mydlgReport->ui->tableReport->setItem(count, 1, tableItem);
+  dlgProgEBook = mydlgReader->getProgBar();
+  dlgProgEBook->show();
 
-    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-    tableItem = new QTableWidgetItem(strAmount);
-    mydlgReport->ui->tableReport->setItem(count, 2, tableItem);
-
-    mydlgReport->ui->tableReport->setColumnWidth(0, 10);
-    mydlgReport->ui->tableReport->setRowHeight(count, 30);
-
-    mydlgReport->setTableNoItemFlags(mydlgReport->ui->tableReport, count);
-
-    mydlgReport->on_tableReport_cellClicked(count, 0);
-    mydlgReport->ui->tableReport->scrollToBottom();
-  }
-
-  mydlgReport->ui->lblTitle->setText(
-      ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
-  mydlgReport->ui->tableDetails->setRowCount(0);
-
-  mydlgReport->sel_Year();
-  mydlgReport->sel_Month();
-
-  mydlgReport->setFixedHeight(this->height());
-  mydlgReport->setFixedWidth(this->width());
-  mydlgReport->setModal(true);
-  mydlgReport->show();
+  isReport = true;
+  myReadTWThread->quit();
+  myReadTWThread->wait();
+  myReadEBookThread->start();
 }
 
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
@@ -3966,29 +3943,74 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 }
 
 void MainWindow::readEBookDone() {
-  qDebug() << "Read EBook End... ...";
-  mydlgReader->goPostion();
+  if (isEBook) {
+    qDebug() << "Read EBook End... ...";
+    mydlgReader->goPostion();
+
+    ui->btnReader->setEnabled(true);
+    ui->frameFun->setEnabled(true);
+    ui->frameReader->setEnabled(true);
+    ui->btnBackDir->setEnabled(false);
+    this->repaint();
+
+    ui->lblBookName->show();
+    ui->lblBookName->setText(strTitle);
+
+    for (int i = 0; i < mydlgReader->bookList.count(); i++) {
+      QString str = mydlgReader->bookList.at(i);
+      if (str.contains(fileName)) {
+        mydlgReader->bookList.removeAt(i);
+        break;
+      }
+    }
+    mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
+
+    ui->quickWidget->rootContext()->setContextProperty("htmlPath", strOpfPath);
+
+    isEBook = false;
+  }
+
+  if (isReport) {
+    double freq, amount;
+    int count = tableReport->rowCount();
+    if (count > 0) {
+      tableReport->setRowCount(count + 1);
+      QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
+      tableReport->setItem(count, 0, tableItem);
+
+      tableItem = new QTableWidgetItem(QString::number(freq));
+      tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      tableReport->setItem(count, 1, tableItem);
+
+      QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
+      tableItem = new QTableWidgetItem(strAmount);
+      tableReport->setItem(count, 2, tableItem);
+
+      tableReport->setColumnWidth(0, 10);
+      tableReport->setRowHeight(count, 30);
+
+      setTableNoItemFlags(tableReport, count);
+
+      mydlgReport->on_tableReport_cellClicked(count, 0);
+      tableReport->scrollToBottom();
+    }
+
+    mydlgReport->ui->lblTitle->setText(
+        ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
+    mydlgReport->ui->tableDetails->setRowCount(0);
+
+    mydlgReport->sel_Year();
+    mydlgReport->sel_Month();
+
+    mydlgReport->setFixedHeight(this->height());
+    mydlgReport->setFixedWidth(this->width());
+    mydlgReport->setModal(true);
+    mydlgReport->show();
+
+    isReport = false;
+  }
 
   dlgProgEBook->close();
-  ui->btnReader->setEnabled(true);
-  ui->frameFun->setEnabled(true);
-  ui->frameReader->setEnabled(true);
-  ui->btnBackDir->setEnabled(false);
-  this->repaint();
-
-  ui->lblBookName->show();
-  ui->lblBookName->setText(strTitle);
-
-  for (int i = 0; i < mydlgReader->bookList.count(); i++) {
-    QString str = mydlgReader->bookList.at(i);
-    if (str.contains(fileName)) {
-      mydlgReader->bookList.removeAt(i);
-      break;
-    }
-  }
-  mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
-
-  ui->quickWidget->rootContext()->setContextProperty("htmlPath", strOpfPath);
 }
 
 void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }

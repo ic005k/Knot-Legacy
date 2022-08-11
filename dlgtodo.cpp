@@ -504,7 +504,9 @@ void dlgTodo::startTimerAlarm() {
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("startTimerAlarm");
   jo.callStaticMethod<int>("com.x/MyService", "startTimerAlarm", "()I");
-  // jo.callStaticMethod<int>("com.x/MyActivity", "startTimerAlarm", "()I");
+
+  // jo.callStaticMethod<int>("com.x/MyActivity", "startAlarm", "()I");
+
 #endif
 }
 
@@ -512,7 +514,9 @@ void dlgTodo::stopTimerAlarm() {
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("stopTimerAlarm");
   jo.callStaticMethod<int>("com.x/MyService", "stopTimerAlarm", "()I");
-  // jo.callStaticMethod<int>("com.x/MyActivity", "stopTimerAlarm", "()I");
+
+  // jo.callStaticMethod<int>("com.x/MyActivity", "stopAlarm", "()I");
+
 #endif
 
   // if (mw_one->isHardStepSensor == 1) mw_one->mydlgSteps->releaseWakeLock();

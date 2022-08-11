@@ -10,6 +10,7 @@ extern QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 extern unsigned int num_steps_walk, num_steps_run, num_steps_hop;
 extern bool loading, isImport;
 extern QString iniFile, iniDir;
+extern void setTableNoItemFlags(QTableWidget* t, int row);
 
 dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
@@ -227,7 +228,7 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
       item->setBackground(brush2);
       ui->tableWidget->setItem(i, 2, item);
 
-      mw_one->mydlgReport->setTableNoItemFlags(ui->tableWidget, i);
+      setTableNoItemFlags(ui->tableWidget, i);
 
       isYes = true;
       break;
@@ -249,7 +250,7 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
     item->setBackground(brush2);
     ui->tableWidget->setItem(count, 2, item);
 
-    mw_one->mydlgReport->setTableNoItemFlags(ui->tableWidget, count);
+    setTableNoItemFlags(ui->tableWidget, count);
   }
 }
 

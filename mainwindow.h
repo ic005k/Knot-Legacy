@@ -184,7 +184,7 @@ class MainWindow : public QMainWindow {
   void set_Time();
   void add_Data(QTreeWidget *, QString, QString, QString);
   void del_Data(QTreeWidget *);
-  QTreeWidget *get_tw(int tabIndex);
+  static QTreeWidget *get_tw(int tabIndex);
   QString listWidgetStyle =
       "QListWidget::indicator{width:25;height:25;right: 5px;}"
       "QListView {outline: none;}"
@@ -266,6 +266,7 @@ class MainWindow : public QMainWindow {
   void addUndo(QString log);
   QString getTabText();
   void addRedo();
+  static void genReport();
  public slots:
   void updateSteps();
   void newDatas();

@@ -8,7 +8,7 @@
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
-extern bool isImport, zh_cn, isAndroid, isIOS;
+extern bool isImport, zh_cn, isAndroid, isIOS, isEBook, isReport;
 extern int fontSize;
 
 bool isOpen = false;
@@ -87,7 +87,36 @@ void dlgReader::on_btnOpen_clicked() {
   startOpenFile(openfile);
 }
 
+QDialog* dlgReader::getProgBar() {
+  QDialog* dlgProgEBook;
+  QProgressBar* progReadEbook = new QProgressBar(this);
+  progReadEbook->setMaximum(0);
+  progReadEbook->setMinimum(0);
+
+  dlgProgEBook = new QDialog(this);
+  dlgProgEBook->setFixedHeight(50);
+  dlgProgEBook->setFixedWidth(mw_one->width());
+  QVBoxLayout* vbox = new QVBoxLayout;
+  vbox->setContentsMargins(1, 1, 1, 1);
+  vbox->setSpacing(0);
+  vbox->setMargin(0);
+  dlgProgEBook->setLayout(vbox);
+  dlgProgEBook->setGeometry(
+      mw_one->geometry().x(),
+      (mw_one->height() - dlgProgEBook->height()) / 2 + 100,
+      dlgProgEBook->width(), dlgProgEBook->height());
+
+  dlgProgEBook->layout()->addWidget(progReadEbook);
+  dlgProgEBook->setModal(true);
+
+  return dlgProgEBook;
+}
+
 void dlgReader::startOpenFile(QString openfile) {
+  if (isReport) return;
+
+  isEBook = true;
+
   mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/reader.qml")));
   if (QFile(openfile).exists()) {
     strTitle = "";
@@ -98,25 +127,7 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->ui->frameFun->setEnabled(false);
     mw_one->ui->frameReader->setEnabled(false);
 
-    QProgressBar* progReadEbook = new QProgressBar(this);
-    progReadEbook->setMaximum(0);
-    progReadEbook->setMinimum(0);
-
-    dlgProgEBook = new QDialog(this);
-    dlgProgEBook->setFixedHeight(50);
-    dlgProgEBook->setFixedWidth(mw_one->width());
-    QVBoxLayout* vbox = new QVBoxLayout;
-    vbox->setContentsMargins(1, 1, 1, 1);
-    vbox->setSpacing(0);
-    vbox->setMargin(0);
-    dlgProgEBook->setLayout(vbox);
-    dlgProgEBook->setGeometry(
-        0, (mw_one->height() - dlgProgEBook->height()) / 2 + 100,
-        dlgProgEBook->width(), dlgProgEBook->height());
-
-    dlgProgEBook->layout()->addWidget(progReadEbook);
-    dlgProgEBook->setModal(true);
-
+    dlgProgEBook = getProgBar();
     if (!mw_one->ui->frameQML->isHidden()) dlgProgEBook->show();
 
     mw_one->ui->lblTitle->hide();

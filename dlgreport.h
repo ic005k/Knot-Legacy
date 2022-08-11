@@ -27,8 +27,8 @@ class dlgReport : public QDialog {
   void sel_Year();
   void sel_Month();
   static void saveYMD();
-  void setTableNoItemFlags(QTableWidget *t, int row);
-public slots:
+
+ public slots:
   void on_tableReport_cellClicked(int row, int column);
   void on_btnYear_clicked();
 

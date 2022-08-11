@@ -3,14 +3,18 @@
 #include "mainwindow.h"
 #include "ui_dlgreport.h"
 #include "ui_mainwindow.h"
+
 extern int fontSize;
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
 QString btnYearText, btnMonthText;
+QTableWidget* tableReport;
+void setTableNoItemFlags(QTableWidget* t, int row);
 
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  tableReport = ui->tableReport;
   ui->tableCategory->hide();
   printer = new QPrinter(QPrinter::HighResolution);
   preview = new QPrintPreviewDialog(printer, this);
@@ -538,7 +542,7 @@ void dlgReport::on_btnCategory_clicked() {
   });
 }
 
-void dlgReport::setTableNoItemFlags(QTableWidget* t, int row) {
+void setTableNoItemFlags(QTableWidget* t, int row) {
   for (int z = 0; z < t->columnCount(); z++) {
     t->item(row, z)->setFlags(Qt::NoItemFlags);
   }

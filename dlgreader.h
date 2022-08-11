@@ -70,6 +70,7 @@ class dlgReader : public QDialog {
   void backDir();
   static QString get_idref(QString str0);
   void setVPos(qreal pos);
+  QDialog *getProgBar();
   public slots:
 
   void on_btnPageNext_clicked();
