@@ -37,7 +37,7 @@ import android.media.AudioManager;
 public class ClockActivity extends Activity {
 
     private MediaPlayer mediaPlayer;
-    private static String strInfo = "Todo|......";
+    private static String strInfo = "Todo|There are currently timed tasks pending.|0|Close";
     private AudioManager mAudioManager;
 
     private static Context context;
@@ -52,19 +52,16 @@ public class ClockActivity extends Activity {
         return 1;
     }
 
-    private void setStatusBarColor(String color) {
-        // 需要安卓版本大于5.0以上
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(Color.parseColor(color));
-        }
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
+
+        //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = new Date(System.currentTimeMillis());
+        String strCurDT0 = formatter.format(date);
+        String strCurDT = " ( " + strCurDT0 + " ) ";
 
         //this.setStatusBarColor("#F3F3F3");  //灰
 
@@ -76,7 +73,6 @@ public class ClockActivity extends Activity {
         double vol =  maxVol*0.75;
         setMediaVolume((int)Math.round(vol));
         System.out.println("maxVol:  " + maxVol + "    setvol:  " + vol);
-
         try {
             mediaPlayer.setDataSource("/data/data/com.x/files/msg.mp3");
             mediaPlayer.prepare();
@@ -90,7 +86,21 @@ public class ClockActivity extends Activity {
             try {
                 InternalConfigure internalConfigure = new InternalConfigure(this);
                 internalConfigure.readFrom(filename);
-                strInfo = internalConfigure.getIniKey("msg");
+                String strCount = internalConfigure.getIniKey("count");
+                int count = Integer.parseInt(strCount);
+                for (int i=0;i<count;i++)
+                {
+                    String str = internalConfigure.getIniKey("msg" + String.valueOf(i+1));
+                    String[] arr1 = str.split("\\|");
+                    String str1 = arr1[0];
+                    if(str1 == strCurDT0)
+                    {
+                        strInfo = str;
+                        break;
+                    }
+
+                    System.out.println("Read Ini: " + str);
+                }
 
                 //strInfo = readText(filename);
             } catch (Exception e) {
@@ -105,10 +115,6 @@ public class ClockActivity extends Activity {
         String str1 = array[0];
         String str2 = array[1];
         String str3 = array[3];
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        Date date = new Date(System.currentTimeMillis());
-        String strCurDT = " ( " + formatter.format(date) + " ) ";
 
         new AlertDialog.Builder(ClockActivity.this).setTitle(str1).setMessage(str2 + "\n\n\n" + strCurDT)
                 .setPositiveButton(str3, new DialogInterface.OnClickListener() {
@@ -239,6 +245,14 @@ public class ClockActivity extends Activity {
                 volume,
                 AudioManager.FLAG_PLAY_SOUND
                         | AudioManager.FLAG_SHOW_UI);
+    }
+
+    private void setStatusBarColor(String color) {
+        // 需要安卓版本大于5.0以上
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(Color.parseColor(color));
+        }
     }
 
 }

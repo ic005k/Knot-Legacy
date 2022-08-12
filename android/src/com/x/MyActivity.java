@@ -85,6 +85,8 @@ import java.util.Calendar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
+import java.util.Random;
+
 
 public class MyActivity extends QtActivity {
 
@@ -98,7 +100,7 @@ public class MyActivity extends QtActivity {
 
     private static AlarmManager alarmManager;
     private static PendingIntent pi;
-    public  static String strAlarmInfo;
+    public static String strAlarmInfo;
 
     public native void CallJavaNotify_1();
 
@@ -112,10 +114,11 @@ public class MyActivity extends QtActivity {
 
     //------------------------------------------------------------------------
     public static int startAlarm(String str) {
-        stopAlarm();
+        Intent intent = new Intent(context, ClockActivity.class);
+        Random r = new Random();
+        pi = PendingIntent.getActivity(context, r.nextInt(), intent, 0);
 
-        int y, m, d,hourOfDay,minute;
-
+        int y, m, d, hourOfDay, minute;
 
         // 特殊转义字符，必须加"\\"（“.”和“|”都是转义字符）
         String[] array = str.split("\\|");
@@ -167,24 +170,14 @@ public class MyActivity extends QtActivity {
 
     public static int stopAlarm() {
         if (alarmManager != null) {
-            alarmManager.cancel(pi);
+
+            if (pi != null)
+                alarmManager.cancel(pi);
 
             System.out.println("stopAlarm+++++++++++++++++++++++");
         }
 
         return 1;
-    }
-
-    public void onAlarm() {
-        new AlertDialog.Builder(MyActivity.this).setTitle("闹钟").setMessage("提示内容")
-                .setPositiveButton("关闭", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //this.finish();
-                    }
-                }).show();
-
-        System.out.println("闹钟已开始+++++++++++++++++++++++");
     }
 
     //------------------------------------------------------------------------
@@ -198,6 +191,7 @@ public class MyActivity extends QtActivity {
     //------------------------------------------------------------------------
     private final static String TAG = "QtFullscreen";
     private static Context context;
+
     //全局获取Context
     public static Context getContext() {
         return context;
@@ -409,8 +403,8 @@ public class MyActivity extends QtActivity {
 
         //定时闹钟
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(MyActivity.this, ClockActivity.class);
-        pi = PendingIntent.getActivity(MyActivity.this, 0, intent, 0);
+        //Intent intent = new Intent(MyActivity.this, ClockActivity.class);
+        //pi = PendingIntent.getActivity(MyActivity.this, 0, intent, 0);
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
