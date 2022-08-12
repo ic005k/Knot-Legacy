@@ -98,6 +98,7 @@ public class MyActivity extends QtActivity {
 
     private static AlarmManager alarmManager;
     private static PendingIntent pi;
+    public  static String strAlarmInfo;
 
     public native void CallJavaNotify_1();
 
@@ -113,12 +114,8 @@ public class MyActivity extends QtActivity {
     public static int startAlarm(String str) {
         stopAlarm();
 
-        int hourOfDay = 20;
-        int minute = 21;
-        int y, m, d;
-        y = 2022;
-        m = 8;
-        d = 11;
+        int y, m, d,hourOfDay,minute;
+
 
         // 特殊转义字符，必须加"\\"（“.”和“|”都是转义字符）
         String[] array = str.split("\\|");
@@ -127,14 +124,11 @@ public class MyActivity extends QtActivity {
 
         String strTime = array[0];
         String strText = array[1];
-
-        System.out.println(strTime + "  " + strText);
+        String strTotalS = array[2];
 
         String[] arrayDT = strTime.split(" ");
         String strD = arrayDT[0];
         String strT = arrayDT[1];
-
-        System.out.println(strD + "  " + strT);
 
         String[] arrayYMD = strD.split("-");
         y = Integer.parseInt(arrayYMD[0]);
@@ -148,15 +142,17 @@ public class MyActivity extends QtActivity {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
 
-        c.set(Calendar.YEAR, y);
+        /*c.set(Calendar.YEAR, y);
         c.set(Calendar.MONTH, m);
         c.set(Calendar.DAY_OF_MONTH, d);
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.MINUTE, minute);*/
 
-        c.add(Calendar.SECOND, -15);
+        int ts = Integer.parseInt(strTotalS);
+        c.add(Calendar.SECOND, ts);
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+
         Log.e("Alarm Manager", c.getTimeInMillis() + "");
         Log.e("Alarm Manager", str);
         System.out.println(y);
@@ -164,6 +160,7 @@ public class MyActivity extends QtActivity {
         System.out.println(d);
         System.out.println(hourOfDay);
         System.out.println(minute);
+        System.out.println(ts);
         System.out.println("startAlarm+++++++++++++++++++++++");
         return 1;
     }

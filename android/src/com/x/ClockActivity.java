@@ -19,9 +19,27 @@ import android.view.WindowManager;
 //import android.support.v7.app.AppCompatActivity;
 //import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.io.IOException;
+import java.io.File;
+
 public class ClockActivity extends Activity {
 
     private MediaPlayer mediaPlayer;
+    private static String strInfo ="Todo|......";
+
+    public static int setInfoText(String str) {
+        strInfo = str;
+        System.out.println("InfoText" + strInfo);
+        return 1;
+    }
 
     private void setStatusBarColor(String color) {
         // 需要安卓版本大于5.0以上
@@ -31,17 +49,37 @@ public class ClockActivity extends Activity {
         }
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //this.setStatusBarColor("#F3F3F3");  //灰
-
         //mediaPlayer = mediaPlayer.create(this, R.raw.audio);
         //mediaPlayer.start();
 
-        new AlertDialog.Builder(ClockActivity.this).setTitle("Todo").setMessage("提示内容")
-                .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+        String filename = "/data/data/com.x/files/msg.ini";
+        if(fileIsExists(filename)) {
+            try {
+                InternalConfigure internalConfigure = new InternalConfigure(this);
+                internalConfigure.readFrom(filename);
+                strInfo = internalConfigure.getIniKey("msg");
+
+                //strInfo = readText(filename);
+            } catch (Exception e) {
+                System.err.println("Error : reading msg.ini");
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Info Text: " + strInfo);
+
+        String[] array = strInfo.split("\\|");
+        String str1 = array[0];
+        String str2 = array[1];
+        String str3 = "Close";//array[3];
+        new AlertDialog.Builder(ClockActivity.this).setTitle(str1).setMessage(str2)
+                .setPositiveButton(str3, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //mediaPlayer.stop();
@@ -50,6 +88,106 @@ public class ClockActivity extends Activity {
                 }).show();
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
+    }
+
+    public class InternalConfigure {
+        private final Context context;
+        private Properties properties;
+
+        public InternalConfigure(Context context) {
+            super();
+            this.context = context;
+        }
+
+        /**
+         * 保存文件filename为文件名，filecontent为存入的文件内容
+         * 例:configureActivity.saveFiletoSD("text.ini","");
+         */
+        public void saveFile(String filename, Properties properties) throws Exception {
+            //设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
+            FileOutputStream fileOutputStream;// = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            File file = new File(filename);
+            fileOutputStream = new FileOutputStream(file);
+            //通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
+            for (String key : properties.stringPropertyNames()) {
+                String s = key + " = " + properties.getProperty(key) + "\n";
+                System.out.println(s);
+                fileOutputStream.write(s.getBytes());
+            }
+            fileOutputStream.close();
+        }
+
+        /**
+         * 读取文件
+         */
+        public void readFrom(String filename) throws Exception {
+            properties = new Properties();
+
+            FileInputStream fileInputStream;// = context.openFileInput(filename);
+
+            File file = new File(filename);
+            fileInputStream = new FileInputStream(file);
+
+            InputStreamReader reader = new InputStreamReader(fileInputStream,"UTF-8");
+            BufferedReader br = new BufferedReader(reader);
+            //String line;
+            //while ((line = br.readLine()) != null) {
+            //    System.out.println(line);
+            //}
+
+            properties.load(br);
+
+            br.close();
+            reader.close();
+            fileInputStream.close();
+        }
+
+        /**
+         * 返回指定key对应的value
+         */
+        public String getIniKey(String key) {
+            if (properties.containsKey(key) == false) {
+                return null;
+            }
+            return String.valueOf(properties.get(key));
+        }
+    }
+
+    //fileName 为文件名称 返回true为存在
+    public boolean fileIsExists(String fileName) {
+        try {
+            File f=new File(fileName);
+            if(f.exists()) {
+                Log.i("测试", "文件存在：" + fileName);
+                return true;
+            }else{
+                Log.i("测试", "没有这个文件: " + fileName);
+                return false;
+            }
+        } catch (Exception e) {
+            Log.i("测试", "出现异常！");
+             e.printStackTrace();
+            return false;
+        }
+    }
+
+    public String readText(String filename) throws Exception {
+        FileInputStream fileInputStream;
+        File file = new File(filename);
+        fileInputStream = new FileInputStream(file);
+
+        InputStreamReader reader = new InputStreamReader(fileInputStream,"UTF-8");
+        BufferedReader br = new BufferedReader(reader);
+        String line = br.readLine();
+        //while ((line = br.readLine()) != null) {
+        //    System.out.println(line);
+        //}
+
+        br.close();
+        reader.close();
+        fileInputStream.close();
+
+        return line;
     }
 
 }
