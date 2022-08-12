@@ -198,7 +198,6 @@ public class MyActivity extends QtActivity {
     //------------------------------------------------------------------------
     private final static String TAG = "QtFullscreen";
     private static Context context;
-
     //全局获取Context
     public static Context getContext() {
         return context;

@@ -273,8 +273,7 @@ public class MyService extends Service {
             //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
             int defaults = Notification.DEFAULT_LIGHTS;
             m_builderAlarm.setDefaults(defaults);
-            m_builderAlarm.setPriority(Notification.PRIORITY_HIGH); //自动弹出通知
-
+            
             m_notificationManagerAlarm.notify(10, m_builderAlarm.build());
 
             //startForeground(1,m_builder.build());
