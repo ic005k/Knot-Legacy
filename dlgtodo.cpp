@@ -541,24 +541,8 @@ void dlgTodo::startTimerAlarm(QString text) {
   jo.callStaticMethod<int>("com.x/MyActivity", "startAlarm",
                            "(Ljava/lang/String;)I", jo.object<jstring>());
 
-  // QAndroidJniObject jo2 =
-  //     QAndroidJniObject::fromString(text + "|" + tr("Close"));
-  jo.callStaticMethod<int>("com.x/ClockActivity", "setInfoText",
-                           "(Ljava/lang/String;)I", jo.object<jstring>());
-
-  QString ini_file;
-  ini_file = "/data/data/com.x/files/msg.ini";
-  QSettings Reg(ini_file, QSettings::IniFormat);
-  Reg.setIniCodec("utf-8");
-  Reg.setValue("msg", text + "|" + tr("Close"));
-  // if (QFile(ini_file).exists()) QFile(ini_file).remove();
-  // QTextEdit* edit = new QTextEdit();
-  // edit->setPlainText(text + "|" + tr("Close"));
-  // mw_one->TextEditToFile(edit, ini_file);
-  if (!QFileInfo(ini_file).exists())
-    qDebug() << "ini no exists";
-  else
-    qDebug() << "ini ok";
+  // jo.callStaticMethod<int>("com.x/ClockActivity", "setInfoText",
+  //                          "(Ljava/lang/String;)I", jo.object<jstring>());
 
 #endif
 }
@@ -635,6 +619,12 @@ void dlgTodo::refreshAlarm() {
   int count = 0;
   QString str;
   QLabel* lbl;
+
+  QString ini_file;
+  ini_file = "/data/data/com.x/files/msg.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+
   for (int i = 0; i < ui->listWidget->count(); i++) {
     lbl = getTimeLabel(i);
     str = lbl->text().trimmed();
@@ -644,10 +634,11 @@ void dlgTodo::refreshAlarm() {
       qlonglong totals = getSecond(str);
       if (totals > 0) {
         QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
-        QString str1 =
-            str + "|" + lblMain->text() + "|" + QString::number(totals);
+        QString str1 = str + "|" + lblMain->text() + "|" +
+                       QString::number(totals) + "|" + tr("Close");
 
         startTimerAlarm(str1);
+        Reg.setValue("msg" + QString::number(count), str1);
       } else {
         lbl->setText(str);
         lbl->setStyleSheet(getMainLabel(i)->styleSheet());
@@ -661,4 +652,10 @@ void dlgTodo::refreshAlarm() {
   } else {
     mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo1.png"));
   }
+
+  Reg.setValue("count", count);
+  if (!QFileInfo(ini_file).exists())
+    qDebug() << "ini no exists";
+  else
+    qDebug() << "ini ok";
 }

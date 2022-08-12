@@ -3820,6 +3820,7 @@ static void JavaNotify_2() {
   mw_one->updateHardSensorSteps();
 
   if (!mw_one->ui->frameQML->isHidden()) mw_one->mydlgReader->saveReader();
+  mw_one->mydlgTodo->refreshAlarm();
 
   // qDebug() << "C++ JavaNotify_2";
 }
