@@ -141,7 +141,7 @@ void dlgTodo::init_Items() {
     lbl->setStyleSheet(highLblStyle);
   }
 
-  startTimerAlarm("test");
+  refreshAlarm();
 }
 
 void dlgTodo::on_btnAdd_clicked() {
@@ -295,6 +295,7 @@ void dlgTodo::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
 
   mw_one->startSave("todo");
+  refreshAlarm();
 }
 
 bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
@@ -392,15 +393,8 @@ void dlgTodo::on_btnOK_clicked() {
   QFont f = lbl->font();
   f.setBold(true);
   lbl->setFont(f);
-
   ui->frameSetTime->hide();
-
-  QString strDateTime = ui->dateTimeEdit->text();
-  QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
-  QString str = strDateTime + "|" + lblMain->text() + "|" +
-                QString::number(getSecond(strDateTime));
-  qDebug() << "TS: " << getSecond(strDateTime);
-  startTimerAlarm(str);
+  refreshAlarm();
 }
 
 qlonglong dlgTodo::getSecond(QString strDateTime) {
@@ -464,6 +458,7 @@ void dlgTodo::on_btnCancel_clicked() {
   lbl->setText(str.trimmed());
   lbl->setStyleSheet(getMainLabel(ui->listWidget->currentRow())->styleSheet());
   ui->frameSetTime->hide();
+  refreshAlarm();
 }
 
 void dlgTodo::on_Alarm() {
@@ -632,5 +627,38 @@ void dlgTodo::on_btnDel_clicked() {
   if (ui->listRecycle->currentIndex().isValid()) {
     int row = ui->listRecycle->currentRow();
     ui->listRecycle->takeItem(row);
+  }
+}
+
+void dlgTodo::refreshAlarm() {
+  stopTimerAlarm();
+  int count = 0;
+  QString str;
+  QLabel* lbl;
+  for (int i = 0; i < ui->listWidget->count(); i++) {
+    lbl = getTimeLabel(i);
+    str = lbl->text().trimmed();
+    if (str.contains(tr("Alarm"))) {
+      count++;
+      str = str.replace(tr("Alarm"), "").trimmed();
+      qlonglong totals = getSecond(str);
+      if (totals > 0) {
+        QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
+        QString str1 =
+            str + "|" + lblMain->text() + "|" + QString::number(totals);
+
+        startTimerAlarm(str1);
+      } else {
+        lbl->setText(str);
+        lbl->setStyleSheet(getMainLabel(i)->styleSheet());
+      }
+    }
+  }
+
+  if (count == 0) {
+    stopTimerAlarm();
+    mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
+  } else {
+    mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo1.png"));
   }
 }

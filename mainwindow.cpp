@@ -2465,6 +2465,7 @@ void MainWindow::on_btnTodo_clicked() {
   mydlgTodo->setModal(true);
 
   mydlgTodo->show();
+  mydlgTodo->refreshAlarm();
 }
 
 void MainWindow::on_rbFreq_clicked() {
