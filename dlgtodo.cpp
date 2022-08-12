@@ -543,10 +543,25 @@ void dlgTodo::startTimerAlarm(QString text) {
   jo.callStaticMethod<int>("com.x/MyActivity", "startAlarm",
                            "(Ljava/lang/String;)I", jo.object<jstring>());
 
-  QAndroidJniObject jo2 =
-      QAndroidJniObject::fromString(text + "|" + tr("Close"));
-  jo2.callStaticMethod<int>("com.x/ClockActivity", "setInfoText",
-                            "(Ljava/lang/String;)I", jo2.object<jstring>());
+  // QAndroidJniObject jo2 =
+  //     QAndroidJniObject::fromString(text + "|" + tr("Close"));
+  jo.callStaticMethod<int>("com.x/ClockActivity", "setInfoText",
+                           "(Ljava/lang/String;)I", jo.object<jstring>());
+
+  QString ini_file;
+  ini_file = "/data/data/com.x/files/msg.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+  Reg.setValue("msg", text + "|" + tr("Close"));
+  // if (QFile(ini_file).exists()) QFile(ini_file).remove();
+  // QTextEdit* edit = new QTextEdit();
+  // edit->setPlainText(text + "|" + tr("Close"));
+  // mw_one->TextEditToFile(edit, ini_file);
+  if (!QFileInfo(ini_file).exists())
+    qDebug() << "ini no exists";
+  else
+    qDebug() << "ini ok";
+
 #endif
 }
 
