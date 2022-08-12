@@ -49,5 +49,6 @@
         <file>res/zoom.png</file>
         <file>res/onebak.png</file>
         <file>res/timemachine.png</file>
+        <file>res/msg.mp3</file>
     </qresource>
 </RCC>

@@ -27,6 +27,9 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->listRecycle->hide();
   ui->lblRecycle->hide();
 
+  QString strTar = "/data/data/com.x/files/msg.mp3";
+  QFile::copy(":/res/msg.mp3", strTar);
+
   mylist = new QListWidget;
   mylist = ui->listWidget;
   listRecycle = new QListWidget;
