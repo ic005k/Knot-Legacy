@@ -625,23 +625,38 @@ void dlgTodo::refreshAlarm() {
   QSettings Reg(ini_file, QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
 
+  QStringList listAlarm, listTotalS;
   for (int i = 0; i < ui->listWidget->count(); i++) {
     lbl = getTimeLabel(i);
     str = lbl->text().trimmed();
     if (str.contains(tr("Alarm"))) {
-      count++;
       str = str.replace(tr("Alarm"), "").trimmed();
       qlonglong totals = getSecond(str);
+
       if (totals > 0) {
+        count++;
         QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
         QString str1 = str + "|" + lblMain->text() + "|" +
                        QString::number(totals) + "|" + tr("Close");
 
-        startTimerAlarm(str1);
-        Reg.setValue("msg" + QString::number(count), str1);
+        listAlarm.append(str1);
+        listTotalS.append(QString::number(totals));
+
       } else {
         lbl->setText(str);
         lbl->setStyleSheet(getMainLabel(i)->styleSheet());
+      }
+    }
+  }
+
+  if (count > 0) {
+    QString minValue = *std::min_element(listTotalS.begin(), listTotalS.end());
+    for (int i = 0; i < listTotalS.count(); i++) {
+      if (minValue == listTotalS.at(i)) {
+        QString str1 = listAlarm.at(i);
+        startTimerAlarm(str1);
+        Reg.setValue("msg", str1);
+        break;
       }
     }
   }
