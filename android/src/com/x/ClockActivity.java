@@ -39,6 +39,7 @@ import android.media.AudioManager;
 public class ClockActivity extends Activity {
 
     private MediaPlayer mediaPlayer;
+    private int curVol;
     private static String strInfo = "Todo|There are currently timed tasks pending.|0|Close";
     private static String strEnInfo = "Todo|There are currently timed tasks pending.|0|Close";
     private AudioManager mAudioManager;
@@ -64,7 +65,7 @@ public class ClockActivity extends Activity {
         context = getApplicationContext();
 
         //去除title(App Name)
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         //去掉Activity上面的状态栏(Show Time...)
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.setStatusBarColor("#F3F3F3");  //灰
@@ -79,7 +80,7 @@ public class ClockActivity extends Activity {
         MediaPlayer mediaPlayer = new MediaPlayer();
 
         mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
-        int curVol = getMediaVolume();
+        curVol = getMediaVolume();
         int maxVol = getMediaMaxVolume();
         double vol = maxVol * 0.75;
         setMediaVolume((int) Math.round(vol));
@@ -141,6 +142,13 @@ public class ClockActivity extends Activity {
             CallJavaNotify_2();
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
+    }
+
+    @Override
+    protected void onDestroy() {
+        System.out.println("onDestroy...");
+        setMediaVolume(curVol);
+        super.onDestroy();
     }
 
     public class InternalConfigure {
