@@ -41,10 +41,13 @@ public class ClockActivity extends Activity {
     private AudioManager mAudioManager;
 
     private static Context context;
-
     public static Context getContext() {
         return context;
     }
+
+    public native static void CallJavaNotify_1();
+    public native static void CallJavaNotify_2();
+    public native static void CallJavaNotify_3();
 
     public static int setInfoText(String str) {
         strInfo = str;
@@ -58,7 +61,7 @@ public class ClockActivity extends Activity {
         context = getApplicationContext();
 
         //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         String strCurDT0 = formatter.format(date);
         String strCurDT = " ( " + strCurDT0 + " ) ";
@@ -82,7 +85,7 @@ public class ClockActivity extends Activity {
         }
 
         String filename = "/data/data/com.x/files/msg.ini";
-        if (fileIsExists(filename)) {
+        if (!fileIsExists(filename)) {
             try {
                 InternalConfigure internalConfigure = new InternalConfigure(this);
                 internalConfigure.readFrom(filename);
@@ -93,13 +96,15 @@ public class ClockActivity extends Activity {
                     String str = internalConfigure.getIniKey("msg" + String.valueOf(i+1));
                     String[] arr1 = str.split("\\|");
                     String str1 = arr1[0];
-                    if(str1 == strCurDT0)
+                    //if(str1 == strCurDT0)
+                    if(str.contains(strCurDT0))
                     {
                         strInfo = str;
                         break;
                     }
 
                     System.out.println("Read Ini: " + str);
+                    System.out.println(str1 + "    " + strCurDT0);
                 }
 
                 //strInfo = readText(filename);
@@ -125,6 +130,8 @@ public class ClockActivity extends Activity {
                         ClockActivity.this.finish();
                     }
                 }).show();
+
+        //CallJavaNotify_2();
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
     }

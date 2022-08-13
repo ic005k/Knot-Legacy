@@ -100,7 +100,9 @@ public class MyActivity extends QtActivity {
 
     private static AlarmManager alarmManager;
     private static PendingIntent pi;
+    private  static Intent intent;
     public static String strAlarmInfo;
+    public static int alarmCount;
 
     public native void CallJavaNotify_1();
 
@@ -114,9 +116,10 @@ public class MyActivity extends QtActivity {
 
     //------------------------------------------------------------------------
     public static int startAlarm(String str) {
-        Intent intent = new Intent(context, ClockActivity.class);
-        Random r = new Random();
-        pi = PendingIntent.getActivity(context, r.nextInt(), intent, 0);
+        //Intent intent = new Intent(context, ClockActivity.class);
+        //Random r = new Random();
+        //int id = alarmCount++;//r.nextInt();
+        //PendingIntent pi = PendingIntent.getActivity(context, id, intent, 0);
 
         int y, m, d, hourOfDay, minute;
 
@@ -170,12 +173,13 @@ public class MyActivity extends QtActivity {
 
     public static int stopAlarm() {
         if (alarmManager != null) {
-
-            if (pi != null)
+            if(pi!=null) {
                 alarmManager.cancel(pi);
+            }
 
-            System.out.println("stopAlarm+++++++++++++++++++++++");
+            System.out.println("stopAlarm+++++++++++++++++++++++" + alarmCount);
         }
+        alarmCount = 0;
 
         return 1;
     }
@@ -402,9 +406,10 @@ public class MyActivity extends QtActivity {
         //MyService.notify(getApplicationContext(), "Hello!");
 
         //定时闹钟
+        alarmCount = 0;
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        //Intent intent = new Intent(MyActivity.this, ClockActivity.class);
-        //pi = PendingIntent.getActivity(MyActivity.this, 0, intent, 0);
+        intent = new Intent(MyActivity.this, ClockActivity.class);
+        pi = PendingIntent.getActivity(MyActivity.this, 0, intent, 0);
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
