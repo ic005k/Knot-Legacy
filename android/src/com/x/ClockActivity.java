@@ -14,7 +14,9 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.appwidget.AppWidgetProvider;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.Window;
 
 //import android.support.v7.app.AppCompatActivity;
 //import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +40,7 @@ public class ClockActivity extends Activity {
 
     private MediaPlayer mediaPlayer;
     private static String strInfo = "Todo|There are currently timed tasks pending.|0|Close";
+    private static String strEnInfo = "Todo|There are currently timed tasks pending.|0|Close";
     private AudioManager mAudioManager;
 
     private static Context context;
@@ -60,21 +63,26 @@ public class ClockActivity extends Activity {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
 
+        //去除title(App Name)
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //去掉Activity上面的状态栏(Show Time...)
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.setStatusBarColor("#F3F3F3");  //灰
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         String strCurDT0 = formatter.format(date);
         String strCurDT = " ( " + strCurDT0 + " ) ";
 
-        //this.setStatusBarColor("#F3F3F3");  //灰
-
         MediaPlayer mediaPlayer = new MediaPlayer();
 
         mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
         int curVol = getMediaVolume();
         int maxVol = getMediaMaxVolume();
-        double vol =  maxVol*0.75;
-        setMediaVolume((int)Math.round(vol));
+        double vol = maxVol * 0.75;
+        setMediaVolume((int) Math.round(vol));
         System.out.println("maxVol:  " + maxVol + "    setvol:  " + vol);
         try {
             mediaPlayer.setDataSource("/data/data/com.x/files/msg.mp3");
@@ -91,14 +99,12 @@ public class ClockActivity extends Activity {
                 internalConfigure.readFrom(filename);
                 String strCount = internalConfigure.getIniKey("count");
                 int count = Integer.parseInt(strCount);
-                for (int i=0;i<count;i++)
-                {
-                    String str = internalConfigure.getIniKey("msg" + String.valueOf(i+1));
+                for (int i = 0; i < count; i++) {
+                    String str = internalConfigure.getIniKey("msg" + String.valueOf(i + 1));
                     String[] arr1 = str.split("\\|");
                     String str1 = arr1[0];
                     //if(str1 == strCurDT0)
-                    if(str.contains(strCurDT0))
-                    {
+                    if (str.contains(strCurDT0)) {
                         strInfo = str;
                         break;
                     }
@@ -131,7 +137,8 @@ public class ClockActivity extends Activity {
                     }
                 }).show();
 
-        //CallJavaNotify_2();
+        if(strEnInfo != strInfo)
+            CallJavaNotify_2();
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
     }
