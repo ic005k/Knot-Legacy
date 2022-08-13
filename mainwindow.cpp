@@ -38,8 +38,7 @@ extern QDialog* dlgProgEBook;
 extern QTableWidget* tableReport;
 extern void setTableNoItemFlags(QTableWidget* t, int row);
 
-void RegJni();
-void RegJniMyActivity();
+void RegJni(const char* myClassName);
 static void JavaNotify_1();
 static void JavaNotify_2();
 static void JavaNotify_3();
@@ -3822,7 +3821,7 @@ static void JavaNotify_2() {
   if (!mw_one->ui->frameQML->isHidden()) mw_one->mydlgReader->saveReader();
   mw_one->mydlgTodo->refreshAlarm();
 
-  // qDebug() << "C++ JavaNotify_2";
+  qDebug() << "C++ JavaNotify_2";
 }
 static void JavaNotify_3() {
   mw_one->mydlgTodo->on_Alarm();
@@ -3834,10 +3833,10 @@ static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_2", "()V", (void*)JavaNotify_2},
     {"CallJavaNotify_3", "()V", (void*)JavaNotify_3}};
 
-void RegJni() {
+void RegJni(const char* myClassName) {
   QtAndroid::runOnAndroidThreadSync([=]() {
     QAndroidJniEnvironment Environment;
-    const char* mClassName = "com/x/MyService";
+    const char* mClassName = myClassName;  //"com/x/MyService";
     jclass j_class;
     j_class = Environment->FindClass(mClassName);
     if (j_class == nullptr) {
@@ -3856,27 +3855,6 @@ void RegJni() {
   qDebug() << "++++++++++++++++++++++++";
 }
 
-void RegJniMyActivity() {
-  QtAndroid::runOnAndroidThreadSync([=]() {
-    QAndroidJniEnvironment Environment;
-    const char* mClassName = "com/x/MyActivity";
-    jclass j_class;
-    j_class = Environment->FindClass(mClassName);
-    if (j_class == nullptr) {
-      qDebug() << "erro clazz";
-      return;
-    }
-    jint mj = Environment->RegisterNatives(
-        j_class, gMethods, sizeof(gMethods) / sizeof(gMethods[0]));
-    if (mj != JNI_OK) {
-      qDebug() << "register native method failed!";
-      return;
-    } else {
-      qDebug() << "RegisterNatives success!";
-    }
-  });
-  qDebug() << "++++++++++++++++++++++++";
-}
 #endif
 
 void MainWindow::on_btnPause_clicked() { mydlgSteps->ui->btnPause->click(); }

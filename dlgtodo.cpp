@@ -541,8 +541,8 @@ void dlgTodo::startTimerAlarm(QString text) {
   jo.callStaticMethod<int>("com.x/MyActivity", "startAlarm",
                            "(Ljava/lang/String;)I", jo.object<jstring>());
 
-  // jo.callStaticMethod<int>("com.x/ClockActivity", "setInfoText",
-  //                          "(Ljava/lang/String;)I", jo.object<jstring>());
+  jo.callStaticMethod<int>("com.x/ClockActivity", "setInfoText",
+                           "(Ljava/lang/String;)I", jo.object<jstring>());
 
 #endif
 }
@@ -647,7 +647,6 @@ void dlgTodo::refreshAlarm() {
   }
 
   if (count == 0) {
-    stopTimerAlarm();
     mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
   } else {
     mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo1.png"));

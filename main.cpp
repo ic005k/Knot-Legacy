@@ -6,17 +6,18 @@
 
 extern QString iniFile, txtFile, appName, iniDir;
 extern int fontSize;
-extern void RegJni();
-extern void RegJniMyActivity();
+extern void RegJni(const char* myClassName);
 void loadLocal();
 bool zh_cn = false;
 bool isAndroid, isIOS;
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
 #ifdef Q_OS_ANDROID
-  RegJni();
-  RegJniMyActivity();
+  RegJni("com/x/MyService");
+  RegJni("com/x/MyActivity");
+  RegJni("com/x/ClockActivity");
+
   //禁用文本选择
-  // qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
+  //  qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
   qDebug() << "OS=Linux Android";
   isAndroid = true;
   isIOS = false;
