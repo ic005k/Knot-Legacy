@@ -625,7 +625,8 @@ void dlgTodo::refreshAlarm() {
   QSettings Reg(ini_file, QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
 
-  QStringList listAlarm, listTotalS;
+  QStringList listAlarm;
+  QList<qlonglong> listTotalS;
   for (int i = 0; i < ui->listWidget->count(); i++) {
     lbl = getTimeLabel(i);
     str = lbl->text().trimmed();
@@ -635,12 +636,12 @@ void dlgTodo::refreshAlarm() {
 
       if (totals > 0) {
         count++;
-        QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
+        QLabel* lblMain = getMainLabel(i);
         QString str1 = str + "|" + lblMain->text() + "|" +
                        QString::number(totals) + "|" + tr("Close");
 
         listAlarm.append(str1);
-        listTotalS.append(QString::number(totals));
+        listTotalS.append(totals);
 
       } else {
         lbl->setText(str);
@@ -649,13 +650,16 @@ void dlgTodo::refreshAlarm() {
     }
   }
 
+  qlonglong minValue = 0;
   if (count > 0) {
-    QString minValue = *std::min_element(listTotalS.begin(), listTotalS.end());
+    minValue = *std::min_element(listTotalS.begin(), listTotalS.end());
     for (int i = 0; i < listTotalS.count(); i++) {
       if (minValue == listTotalS.at(i)) {
         QString str1 = listAlarm.at(i);
         startTimerAlarm(str1);
         Reg.setValue("msg", str1);
+
+        qDebug() << "Min Time: " << listTotalS << minValue << str1;
         break;
       }
     }
