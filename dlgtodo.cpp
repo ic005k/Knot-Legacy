@@ -202,6 +202,8 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
     ui->listWidget->takeItem(row);
     int index = ui->listWidget->currentRow();
     add_ItemSn(index);
+
+    refreshAlarm();
   });
 
   QFont font;
