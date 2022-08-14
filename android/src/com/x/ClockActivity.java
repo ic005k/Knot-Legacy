@@ -82,8 +82,6 @@ public class ClockActivity extends Activity {
         String strCurDT0 = formatter.format(date);
         String strCurDT = " ( " + strCurDT0 + " ) ";
 
-        MediaPlayer mediaPlayer = new MediaPlayer();
-
         mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
         curVol = getMediaVolume();
         int maxVol = getMediaMaxVolume();
@@ -96,21 +94,21 @@ public class ClockActivity extends Activity {
             e.printStackTrace();
         }
         System.out.println("Mute: " + strMute);
-        double vol;
-        if (strMute.equals("true"))
-            vol = maxVol * 0.00;
-        else
+        double vol = 0;
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        if (strMute.equals("false")) {
             vol = maxVol * 0.75;
+            setMediaVolume((int) Math.round(vol));
 
-        setMediaVolume((int) Math.round(vol));
-        System.out.println("maxVol:  " + maxVol + "    setvol:  " + vol);
-        try {
-            mediaPlayer.setDataSource("/data/data/com.x/files/msg.mp3");
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                mediaPlayer.setDataSource("/data/data/com.x/files/msg.mp3");
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        System.out.println("maxVol:  " + maxVol + "    setvol:  " + vol);
 
         if (!fileIsExists(filename)) {
             try {
@@ -150,13 +148,15 @@ public class ClockActivity extends Activity {
                 .setPositiveButton(str3, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mediaPlayer.stop();
-                        //setMediaVolume(curVol);
+                        if (strMute.equals("false")) {
+                            mediaPlayer.stop();
+                        }
+
                         ClockActivity.this.finish();
                     }
                 }).show();
 
-        if (strEnInfo != strInfo)
+        if (!strEnInfo.equals(strInfo))
             CallJavaNotify_2();
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
@@ -165,7 +165,9 @@ public class ClockActivity extends Activity {
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
-        setMediaVolume(curVol);
+        if (strMute.equals("false")) {
+            setMediaVolume(curVol);
+        }
         super.onDestroy();
     }
 
