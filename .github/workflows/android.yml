@@ -3,14 +3,16 @@ on:
   push:
     paths:
       - '*.pro'
-      - 'src/**'
+      - 'res/**'
+      - 'android/**'
       - '.github/workflows/android.yml'
       - '*.cpp'
       - '*.h'
   pull_request:
     paths:
       - '*.pro'
-      - 'src/**'
+      - 'res/**'
+      - 'android/**'
       - '.github/workflows/android.yml'  
       - '*.cpp'
       - '*.h'
