@@ -165,6 +165,9 @@ public class ClockActivity extends Activity {
         if (strMute.equals("false")) {
             setMediaVolume(curVol);
         }
+        if (!isRefreshAlarm) {
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
         super.onDestroy();
     }
 
