@@ -100,7 +100,7 @@ public class MyActivity extends QtActivity {
 
     private static AlarmManager alarmManager;
     private static PendingIntent pi;
-    private  static Intent intent;
+    private static Intent intent;
     public static String strAlarmInfo;
     public static int alarmCount;
 
@@ -157,8 +157,11 @@ public class MyActivity extends QtActivity {
         int ts = Integer.parseInt(strTotalS);
         c.add(Calendar.SECOND, ts);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
-
+        // OS >= Android6.0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+        } else
+            alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
         Log.e("Alarm Manager", c.getTimeInMillis() + "");
         Log.e("Alarm Manager", str);
         System.out.println(y);
@@ -173,7 +176,7 @@ public class MyActivity extends QtActivity {
 
     public static int stopAlarm() {
         if (alarmManager != null) {
-            if(pi!=null) {
+            if (pi != null) {
                 alarmManager.cancel(pi);
             }
 
