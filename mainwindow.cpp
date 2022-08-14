@@ -461,6 +461,7 @@ void MainWindow::init_Options() {
       Reg.value("/Options/Close", false).toBool());
   mydlgPre->ui->chkAutoTime->setChecked(
       Reg.value("/Options/AutoTimeY", true).toBool());
+  mydlgPre->ui->chkMute->setChecked(Reg.value("/Options/Mute", false).toBool());
 
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   mydlgPre->ui->chkDebug->setChecked(debugmode);

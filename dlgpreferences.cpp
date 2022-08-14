@@ -19,6 +19,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->sliderFontSize->setValue(fontSize);
   ui->lblFontDemo->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
+  ui->chkMute->setStyleSheet(ui->chkClose->styleSheet());
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }
@@ -52,6 +53,7 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/SM1", ui->rbSM1->isChecked());
   Reg.setValue("/Options/SM2", ui->rbSM2->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
+  Reg.setValue("/Options/Mute", ui->chkMute->isChecked());
 }
 
 void dlgPreferences::on_rbSM1_clicked() {
