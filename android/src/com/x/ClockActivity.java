@@ -42,15 +42,19 @@ public class ClockActivity extends Activity {
     private int curVol;
     private static String strInfo = "Todo|There are currently timed tasks pending.|0|Close";
     private static String strEnInfo = "Todo|There are currently timed tasks pending.|0|Close";
+    private String strMute = "false";
     private AudioManager mAudioManager;
 
     private static Context context;
+
     public static Context getContext() {
         return context;
     }
 
     public native static void CallJavaNotify_1();
+
     public native static void CallJavaNotify_2();
+
     public native static void CallJavaNotify_3();
 
     public static int setInfoText(String str) {
@@ -63,6 +67,7 @@ public class ClockActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
+        String filename = "/data/data/com.x/files/msg.ini";
 
         //去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -82,7 +87,21 @@ public class ClockActivity extends Activity {
         mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
         curVol = getMediaVolume();
         int maxVol = getMediaMaxVolume();
-        double vol = maxVol * 0.75;
+        try {
+            InternalConfigure internalConfigure = new InternalConfigure(this);
+            internalConfigure.readFrom(filename);
+            strMute = internalConfigure.getIniKey("mute");
+        } catch (Exception e) {
+            System.err.println("Error : reading msg.ini");
+            e.printStackTrace();
+        }
+        System.out.println("Mute: " + strMute);
+        double vol;
+        if (strMute.equals("true"))
+            vol = maxVol * 0.00;
+        else
+            vol = maxVol * 0.75;
+
         setMediaVolume((int) Math.round(vol));
         System.out.println("maxVol:  " + maxVol + "    setvol:  " + vol);
         try {
@@ -93,7 +112,6 @@ public class ClockActivity extends Activity {
             e.printStackTrace();
         }
 
-        String filename = "/data/data/com.x/files/msg.ini";
         if (!fileIsExists(filename)) {
             try {
                 InternalConfigure internalConfigure = new InternalConfigure(this);
@@ -138,7 +156,7 @@ public class ClockActivity extends Activity {
                     }
                 }).show();
 
-        if(strEnInfo != strInfo)
+        if (strEnInfo != strInfo)
             CallJavaNotify_2();
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");

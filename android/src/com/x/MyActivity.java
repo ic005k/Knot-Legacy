@@ -157,11 +157,9 @@ public class MyActivity extends QtActivity {
         int ts = Integer.parseInt(strTotalS);
         c.add(Calendar.SECOND, ts);
 
-        // OS >= Android6.0
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
-        } else
-            alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+
         Log.e("Alarm Manager", c.getTimeInMillis() + "");
         Log.e("Alarm Manager", str);
         System.out.println(y);
