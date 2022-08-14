@@ -36,6 +36,8 @@ class dlgPreferences : public QDialog {
 
   void on_chkReaderFont_clicked();
 
+  void on_chkMute_clicked();
+
  private:
 };
 
