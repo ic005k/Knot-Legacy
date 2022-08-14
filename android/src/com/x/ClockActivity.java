@@ -133,7 +133,7 @@ public class ClockActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mediaPlayer.stop();
-                        setMediaVolume(curVol);
+                        //setMediaVolume(curVol);
                         ClockActivity.this.finish();
                     }
                 }).show();
