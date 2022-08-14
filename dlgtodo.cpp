@@ -399,31 +399,13 @@ void dlgTodo::on_btnOK_clicked() {
 
 qlonglong dlgTodo::getSecond(QString strDateTime) {
   // 2022-8-22 18:18
-  int y = QDateTime::currentDateTime().date().year();
-  int m = QDateTime::currentDateTime().date().month();
-  int d = QDateTime::currentDateTime().date().day();
-  int h = QDateTime::currentDateTime().time().hour();
-  int mm = QDateTime::currentDateTime().time().minute();
-  int s = QDateTime::currentDateTime().time().second();
-
-  QStringList list = strDateTime.split(" ");
-  QString strDate = list.at(0);
-  QString strTime = list.at(1);
-
-  QStringList listD = strDate.split("-");
-  int y1 = listD.at(0).toInt();
-  int m1 = listD.at(1).toInt();
-  int d1 = listD.at(2).toInt();
-
-  QStringList listT = strTime.split(":");
-  int h1 = listT.at(0).toInt();
-  int mm1 = listT.at(1).toInt();
-
-  qlonglong totalS = (y1 - y) * 365 * 24 * 60 * 60 +
-                     (m1 - m) * 30 * 24 * 60 * 60 + (d1 - d) * 24 * 60 * 60 +
-                     (h1 - h) * 60 * 60 + (mm1 - mm) * 60 - s;
-
-  return totalS;
+  strDateTime = strDateTime + ":00";
+  QString strCur = QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss");
+  QDateTime timeCur = QDateTime::fromString(strCur, "yyyy-M-d HH:mm:ss");
+  QDateTime timeAlarm = QDateTime::fromString(strDateTime, "yyyy-M-d HH:mm:ss");
+  qlonglong seconds = timeCur.secsTo(timeAlarm);
+  // qDebug() << strCur << strDateTime << seconds << timeCur << timeAlarm;
+  return seconds;
 }
 
 void dlgTodo::on_btnSetTime_clicked() {
