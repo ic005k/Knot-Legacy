@@ -43,6 +43,7 @@ public class ClockActivity extends Activity {
     private static String strInfo = "Todo|There are currently timed tasks pending.|0|Close";
     private static String strEnInfo = "Todo|There are currently timed tasks pending.|0|Close";
     private String strMute = "false";
+    private boolean isRefreshAlarm = true;
     private AudioManager mAudioManager;
 
     private static Context context;
@@ -68,6 +69,13 @@ public class ClockActivity extends Activity {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         String filename = "/data/data/com.x/files/msg.ini";
+        InternalConfigure internalConfigure = new InternalConfigure(this);
+        try {
+            internalConfigure.readFrom(filename);
+        } catch (Exception e) {
+            System.err.println("Error : reading msg.ini");
+            e.printStackTrace();
+        }
 
         //去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -85,14 +93,7 @@ public class ClockActivity extends Activity {
         mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
         curVol = getMediaVolume();
         int maxVol = getMediaMaxVolume();
-        try {
-            InternalConfigure internalConfigure = new InternalConfigure(this);
-            internalConfigure.readFrom(filename);
-            strMute = internalConfigure.getIniKey("mute");
-        } catch (Exception e) {
-            System.err.println("Error : reading msg.ini");
-            e.printStackTrace();
-        }
+        strMute = internalConfigure.getIniKey("mute");
         System.out.println("Mute: " + strMute);
         double vol = 0;
         MediaPlayer mediaPlayer = new MediaPlayer();
@@ -111,30 +112,26 @@ public class ClockActivity extends Activity {
         System.out.println("maxVol:  " + maxVol + "    setvol:  " + vol);
 
         if (!fileIsExists(filename)) {
-            try {
-                InternalConfigure internalConfigure = new InternalConfigure(this);
-                internalConfigure.readFrom(filename);
-                String strCount = internalConfigure.getIniKey("count");
-                int count = Integer.parseInt(strCount);
-                for (int i = 0; i < count; i++) {
-                    String str = internalConfigure.getIniKey("msg" + String.valueOf(i + 1));
-                    String[] arr1 = str.split("\\|");
-                    String str1 = arr1[0];
-                    //if(str1 == strCurDT0)
-                    if (str.contains(strCurDT0)) {
-                        strInfo = str;
-                        break;
-                    }
-
-                    System.out.println("Read Ini: " + str);
-                    System.out.println(str1 + "    " + strCurDT0);
+            String strCount = internalConfigure.getIniKey("count");
+            int count = Integer.parseInt(strCount);
+            for (int i = 0; i < count; i++) {
+                String str = internalConfigure.getIniKey("msg" + String.valueOf(i + 1));
+                String[] arr1 = str.split("\\|");
+                String str1 = arr1[0];
+                if (str.contains(strCurDT0)) {
+                    strInfo = str;
+                    break;
                 }
 
-                //strInfo = readText(filename);
-            } catch (Exception e) {
-                System.err.println("Error : reading msg.ini");
-                e.printStackTrace();
+                System.out.println("Read Ini: " + str);
+                System.out.println(str1 + "    " + strCurDT0);
             }
+        }
+
+        if (strEnInfo.equals(strInfo)) {
+            isRefreshAlarm = false;
+            strInfo = internalConfigure.getIniKey("msg");
+
         }
 
         System.out.println("Info Text: " + strInfo);
@@ -156,7 +153,7 @@ public class ClockActivity extends Activity {
                     }
                 }).show();
 
-        if (!strEnInfo.equals(strInfo))
+        if (isRefreshAlarm)
             CallJavaNotify_2();
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
