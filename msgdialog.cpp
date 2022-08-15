@@ -16,8 +16,9 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->frameDate->hide();
   ui->frameTime->hide();
   btnNorStyle = ui->btnCancelDT->styleSheet();
+  ui->dateTimeEdit->setReadOnly(true);
 
-  this->show();
+  // this->show();
 }
 
 msgDialog::~msgDialog() { delete ui; }
@@ -190,5 +191,11 @@ void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
   }
 
   strDT = y + "-" + m + "-" + d + " " + h + ":" + mm;
-  qDebug() << strDT;
+  ui->dateTimeEdit->setDateTime(QDateTime::fromString(strDT, "yyyy-M-d HH:mm"));
 }
+
+void msgDialog::on_btnCancelDT_clicked() {
+  mw_one->mydlgTodo->on_btnCancel_clicked();
+}
+
+void msgDialog::on_btnSetDT_clicked() { mw_one->mydlgTodo->on_btnOK_clicked(); }

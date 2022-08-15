@@ -160,6 +160,7 @@ class MainWindow : public QMainWindow {
   dlgMainNotes *mydlgMainNotes;
   dlgSteps *mydlgSteps;
   dlgReader *mydlgReader;
+  msgDialog *mymsgDlg;
 
   File *myfile;
 
@@ -269,7 +270,7 @@ class MainWindow : public QMainWindow {
   void addRedo();
   static void genReport();
   QObjectList getAllToolButton(QObjectList lstUIControls);
-  public slots:
+ public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();

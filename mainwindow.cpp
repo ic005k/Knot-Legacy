@@ -3460,6 +3460,7 @@ void MainWindow::init_UIWidget() {
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
   mydlgReader = new dlgReader(this);
+  mymsgDlg = new msgDialog(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));

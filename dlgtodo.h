@@ -22,7 +22,7 @@ class dlgTodo : public QDialog {
   ~dlgTodo();
 
   void init_Items();
-
+  QString alarmStyle = "QLabel{background:rgb(66,114,255);color:white}";
   void add_Item(QString, QString, bool);
   static void saveTodo();
   QString styleDark =
@@ -41,7 +41,9 @@ class dlgTodo : public QDialog {
 
   qlonglong getSecond(QString strDateTime);
   void refreshAlarm();
-  public slots:
+ public slots:
+  void on_btnOK_clicked();
+  void on_btnCancel_clicked();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -64,11 +66,7 @@ class dlgTodo : public QDialog {
 
   void on_btnLow_clicked();
 
-  void on_btnOK_clicked();
-
   void on_btnSetTime_clicked();
-
-  void on_btnCancel_clicked();
 
   void on_btnRecycle_clicked();
 

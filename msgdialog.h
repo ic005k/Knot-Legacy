@@ -39,6 +39,10 @@ class msgDialog : public QDialog {
 
   void on_btnYear_clicked();
 
+  void on_btnCancelDT_clicked();
+
+  void on_btnSetDT_clicked();
+
  private:
   void onBtnClick(QToolButton *btn, QString flag);
   QString y, m, d, h, mm;

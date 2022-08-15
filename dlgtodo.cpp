@@ -239,7 +239,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   lblTime->setFont(f);
   lblTime->setText(time);
   if (time.contains(tr("Alarm"))) {
-    lblTime->setStyleSheet("QLabel{background:blue;color:white}");
+    lblTime->setStyleSheet(alarmStyle);
     // lblTime->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
     f.setBold(true);
     lblTime->setFont(f);
@@ -389,13 +389,14 @@ QLabel* dlgTodo::getMainLabel(int index) {
 
 void dlgTodo::on_btnOK_clicked() {
   QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
-  lbl->setText(tr("Alarm") + "  " + ui->dateTimeEdit->text());
-  lbl->setStyleSheet("QLabel{background:blue;color:white}");
+  lbl->setText(tr("Alarm") + "  " + mw_one->mymsgDlg->ui->dateTimeEdit->text());
+  lbl->setStyleSheet(alarmStyle);
   // lbl->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
   QFont f = lbl->font();
   f.setBold(true);
   lbl->setFont(f);
   ui->frameSetTime->hide();
+  mw_one->mymsgDlg->close();
   refreshAlarm();
 }
 
@@ -422,17 +423,16 @@ void dlgTodo::on_btnSetTime_clicked() {
     QTime time;
     date = QDate::fromString(list.at(0), "yyyy-M-d");
     time = QTime::fromString(list.at(1), "HH:mm");
-    ui->dateTimeEdit->setDate(date);
-    ui->dateTimeEdit->setTime(time);
+    mw_one->mymsgDlg->ui->dateTimeEdit->setDate(date);
+    mw_one->mymsgDlg->ui->dateTimeEdit->setTime(time);
 
   } else {
-    ui->dateTimeEdit->setDate(QDate::currentDate());
-    ui->dateTimeEdit->setTime(QTime::currentTime());
+    mw_one->mymsgDlg->ui->dateTimeEdit->setDate(QDate::currentDate());
+    mw_one->mymsgDlg->ui->dateTimeEdit->setTime(QTime::currentTime());
   }
-  if (ui->frameSetTime->isHidden())
-    ui->frameSetTime->show();
-  else
-    ui->frameSetTime->hide();
+
+  mw_one->mymsgDlg->initDlg();
+  mw_one->mymsgDlg->show();
 }
 
 void dlgTodo::on_btnCancel_clicked() {
@@ -442,6 +442,7 @@ void dlgTodo::on_btnCancel_clicked() {
   lbl->setText(str.trimmed());
   lbl->setStyleSheet(getMainLabel(ui->listWidget->currentRow())->styleSheet());
   ui->frameSetTime->hide();
+  mw_one->mymsgDlg->close();
   refreshAlarm();
 }
 
