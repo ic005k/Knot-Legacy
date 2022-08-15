@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Alarm</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QFrame" name="frameFun">
      <property name="maximumSize">
@@ -119,7 +119,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Cancel Alarm</string>
+         <string>Cancel</string>
         </property>
        </widget>
       </item>
@@ -144,7 +144,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Set Alarm</string>
+         <string>Set</string>
         </property>
        </widget>
       </item>

@@ -47,6 +47,7 @@ void msgDialog::initDlg() {
                     mw_one->width(), mw_one->height());
   this->setModal(true);
   on_btnHour_clicked();
+  ui->btnOK->setFocus();
 }
 
 bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
@@ -134,27 +135,27 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameSel));
   for (int i = 0; i < lstOfChildren.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren.at(i);
-    if (flag == "Year") {
+    if (flag == tr("Year")) {
       if (w->text() == y) {
         w->setStyleSheet(btnSelStyle);
       }
     }
-    if (flag == "Month") {
+    if (flag == tr("Month")) {
       if (w->text() == m) {
         w->setStyleSheet(btnSelStyle);
       }
     }
-    if (flag == "Day") {
+    if (flag == tr("Day")) {
       if (w->text() == d) {
         w->setStyleSheet(btnSelStyle);
       }
     }
-    if (flag == "Hour") {
+    if (flag == tr("Hour")) {
       if (w->text() == h) {
         w->setStyleSheet(btnSelStyle);
       }
     }
-    if (flag == "Minute") {
+    if (flag == tr("Minute")) {
       if (w->text() == mm) {
         w->setStyleSheet(btnSelStyle);
       }
@@ -174,19 +175,19 @@ void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
   QString title = btn->text();
 
   QString strDT;
-  if (flag == "Year") {
+  if (flag == tr("Year")) {
     y = title;
   }
-  if (flag == "Month") {
+  if (flag == tr("Month")) {
     m = title;
   }
-  if (flag == "Day") {
+  if (flag == tr("Day")) {
     d = title;
   }
-  if (flag == "Hour") {
+  if (flag == tr("Hour")) {
     h = title;
   }
-  if (flag == "Minute") {
+  if (flag == tr("Minute")) {
     mm = title;
   }
 
