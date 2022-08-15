@@ -45,7 +45,8 @@ class msgDialog : public QDialog {
 
  private:
   void onBtnClick(QToolButton *btn, QString flag);
-  QString y, m, d, h, mm;
+     QString y, m, d, h, mm;
+     void setBtnTitle();
 };
 
 #endif  // MSGDIALOG_H

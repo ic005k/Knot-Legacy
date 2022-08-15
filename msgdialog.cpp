@@ -46,11 +46,21 @@ void msgDialog::initDlg() {
   h = list2.at(0);
   mm = list2.at(1);
 
+  setBtnTitle();
+
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
   this->setModal(true);
   on_btnHour_clicked();
   ui->btnSetDT->setFocus();
+}
+
+void msgDialog::setBtnTitle() {
+  ui->btnYear->setText(y + "\n" + tr("Year"));
+  ui->btnMonth->setText(m + "\n" + tr("Month"));
+  ui->btnDay->setText(d + "\n" + tr("Day"));
+  ui->btnHour->setText(h + "\n" + tr("Hour"));
+  ui->btnMinute->setText(mm + "\n" + tr("Minute"));
 }
 
 bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
@@ -92,7 +102,8 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
   for (int i = 0; i < lstOfChildren0.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
     w->setStyleSheet(btnNorStyle);
-    if (w->text() == flag) w->setStyleSheet(btnSelStyle);
+    QStringList list = w->text().split("\n");
+    if (list.at(1) == flag) w->setStyleSheet(btnSelStyle);
   }
 
   qDeleteAll(ui->frameSel->findChildren<QObject*>());
@@ -111,7 +122,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
       btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
       btn->setObjectName("btn" + QString::number(count));
       QString str = QString::number(count + start);
-      if (flag == "Hour" || flag == "Minute") {
+      if (flag == tr("Hour") || flag == tr("Minute")) {
         if (str.length() == 1) str = "0" + str;
       }
       btn->setText(str);
@@ -196,6 +207,7 @@ void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
 
   strDT = y + "-" + m + "-" + d + " " + h + ":" + mm;
   ui->dateTimeEdit->setDateTime(QDateTime::fromString(strDT, "yyyy-M-d HH:mm"));
+  setBtnTitle();
 }
 
 void msgDialog::on_btnCancelDT_clicked() {
