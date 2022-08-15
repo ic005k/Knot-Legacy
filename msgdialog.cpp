@@ -16,7 +16,7 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   initDlg();
   ui->frameDate->hide();
   ui->frameTime->hide();
-  ui->btnOK->hide();
+  ui->dateTimeEdit->hide();
   ui->lblTodoText->setWordWrap(true);
   ui->lblTodoText->adjustSize();
   btnNorStyle = ui->btnCancelDT->styleSheet();
