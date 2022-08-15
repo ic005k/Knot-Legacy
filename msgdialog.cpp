@@ -15,6 +15,9 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   initDlg();
   ui->frameDate->hide();
   ui->frameTime->hide();
+  ui->btnOK->hide();
+  ui->lblTodoText->setWordWrap(true);
+  ui->lblTodoText->adjustSize();
   btnNorStyle = ui->btnCancelDT->styleSheet();
   ui->dateTimeEdit->setReadOnly(true);
 
@@ -47,7 +50,7 @@ void msgDialog::initDlg() {
                     mw_one->width(), mw_one->height());
   this->setModal(true);
   on_btnHour_clicked();
-  ui->btnOK->setFocus();
+  ui->btnSetDT->setFocus();
 }
 
 bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
@@ -81,7 +84,7 @@ void msgDialog::on_btnDay_clicked() { addBtn(1, 31, 5, tr("Day")); }
 
 void msgDialog::on_btnMonth_clicked() { addBtn(1, 12, 3, tr("Month")); }
 
-void msgDialog::on_btnYear_clicked() { addBtn(2022, 15, 5, tr("Year")); }
+void msgDialog::on_btnYear_clicked() { addBtn(2022, 15, 3, tr("Year")); }
 
 void msgDialog::addBtn(int start, int total, int col, QString flag) {
   QObjectList lstOfChildren0 =

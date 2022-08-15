@@ -414,6 +414,7 @@ qlonglong dlgTodo::getSecond(QString strDateTime) {
 void dlgTodo::on_btnSetTime_clicked() {
   if (!ui->listWidget->currentIndex().isValid()) return;
 
+  QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
   QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
   if (lbl->text().trimmed().contains(tr("Alarm"))) {
     QString str = lbl->text().trimmed();
@@ -432,6 +433,8 @@ void dlgTodo::on_btnSetTime_clicked() {
   }
 
   mw_one->mymsgDlg->initDlg();
+  mw_one->mymsgDlg->ui->lblTodoText->setText(tr("Todo") + " : " +
+                                             lblMain->text());
   mw_one->mymsgDlg->show();
 }
 

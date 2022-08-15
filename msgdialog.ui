@@ -15,6 +15,19 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
+    <widget class="QLabel" name="lblTodoText">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>TodoText</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QFrame" name="frameFun">
      <property name="maximumSize">
       <size>
@@ -119,7 +132,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Cancel</string>
+         <string>Del</string>
         </property>
        </widget>
       </item>
