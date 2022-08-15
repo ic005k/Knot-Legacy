@@ -66,6 +66,20 @@
         <property name="accelerated">
          <bool>false</bool>
         </property>
+        <property name="date">
+         <date>
+          <year>2022</year>
+          <month>8</month>
+          <day>15</day>
+         </date>
+        </property>
+        <property name="time">
+         <time>
+          <hour>9</hour>
+          <minute>8</minute>
+          <second>0</second>
+         </time>
+        </property>
         <property name="displayFormat">
          <string>yyyy-M-d HH:mm</string>
         </property>

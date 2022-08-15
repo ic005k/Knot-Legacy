@@ -100,6 +100,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QObjectList getAllUIControls(QObject *parent);
   QString LatestTime = tr("Latest Time");
   QStringList timeLines;
   QString loginTime;
@@ -267,7 +268,8 @@ class MainWindow : public QMainWindow {
   QString getTabText();
   void addRedo();
   static void genReport();
- public slots:
+  QObjectList getAllToolButton(QObjectList lstUIControls);
+  public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
@@ -406,7 +408,6 @@ class MainWindow : public QMainWindow {
   int countOne = 0;
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
-  QObjectList getAllUIControls(QObject *parent);
 
   QString treeStyle = "QTreeWidget::item {height: 28;}";
   /*"QTreeWidget::item {background-color: #ffffff;color: #000000;border: "

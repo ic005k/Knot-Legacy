@@ -1,6 +1,7 @@
 #include "msgdialog.h"
 
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include "ui_msgdialog.h"
 
 extern MainWindow* mw_one;
@@ -14,10 +15,7 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   initDlg();
   ui->frameDate->hide();
   ui->frameTime->hide();
-  // gl = new QGridLayout(this);
-  // gl->setMargin(10);
-  // gl->setSpacing(10);
-  // ui->frameSel->setLayout(gl);
+  btnNorStyle = ui->btnCancelDT->styleSheet();
 
   this->show();
 }
@@ -31,9 +29,23 @@ void msgDialog::initDlg() {
   ui->hsMonth->setStyleSheet(hsStyle);
   ui->hsDay->setStyleSheet(hsStyle);
 
+  QString str = ui->dateTimeEdit->text();
+  QStringList list = str.split(" ");
+  QString strDate = list.at(0);
+  QString strTime = list.at(1);
+  QStringList list1, list2;
+  list1 = strDate.split("-");
+  y = list1.at(0);
+  m = list1.at(1);
+  d = list1.at(2);
+  list2 = strTime.split(":");
+  h = list2.at(0);
+  mm = list2.at(1);
+
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
   this->setModal(true);
+  on_btnHour_clicked();
 }
 
 bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
@@ -59,17 +71,25 @@ void msgDialog::on_hsHour_valueChanged(int value) {
   ui->dateTimeEdit->setTime(QTime::fromString(strTime, "HH:mm"));
 }
 
-void msgDialog::on_btnHour_clicked() { addBtn(0, 24, 5, "Hour"); }
+void msgDialog::on_btnHour_clicked() { addBtn(0, 24, 5, tr("Hour")); }
 
-void msgDialog::on_btnMinute_clicked() { addBtn(0, 60, 6, "Minute"); }
+void msgDialog::on_btnMinute_clicked() { addBtn(0, 60, 6, tr("Minute")); }
 
-void msgDialog::on_btnDay_clicked() { addBtn(1, 31, 5, "Day"); }
+void msgDialog::on_btnDay_clicked() { addBtn(1, 31, 5, tr("Day")); }
 
-void msgDialog::on_btnMonth_clicked() { addBtn(1, 12, 3, "Month"); }
+void msgDialog::on_btnMonth_clicked() { addBtn(1, 12, 3, tr("Month")); }
 
-void msgDialog::on_btnYear_clicked() { addBtn(2022, 15, 5, "Year"); }
+void msgDialog::on_btnYear_clicked() { addBtn(2022, 15, 5, tr("Year")); }
 
 void msgDialog::addBtn(int start, int total, int col, QString flag) {
+  QObjectList lstOfChildren0 =
+      mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
+  for (int i = 0; i < lstOfChildren0.count(); i++) {
+    QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
+    w->setStyleSheet(btnNorStyle);
+    if (w->text() == flag) w->setStyleSheet(btnSelStyle);
+  }
+
   qDeleteAll(ui->frameSel->findChildren<QObject*>());
 
   int row = 0;
@@ -85,7 +105,11 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
       QToolButton* btn = new QToolButton(ui->frameSel);
       btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
       btn->setObjectName("btn" + QString::number(count));
-      btn->setText(QString::number(count + start));
+      QString str = QString::number(count + start);
+      if (flag == "Hour" || flag == "Minute") {
+        if (str.length() == 1) str = "0" + str;
+      }
+      btn->setText(str);
 
       connect(btn, &QToolButton::clicked, [=]() { onBtnClick(btn, flag); });
 
@@ -104,9 +128,48 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
     connect(btn, &QToolButton::clicked, [=]() { onBtnClick(btn, flag); });
     gl->addWidget(btn, row + 1, i, 1, 1);
   }
+
+  QObjectList lstOfChildren =
+      mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameSel));
+  for (int i = 0; i < lstOfChildren.count(); i++) {
+    QToolButton* w = (QToolButton*)lstOfChildren.at(i);
+    if (flag == "Year") {
+      if (w->text() == y) {
+        w->setStyleSheet(btnSelStyle);
+      }
+    }
+    if (flag == "Month") {
+      if (w->text() == m) {
+        w->setStyleSheet(btnSelStyle);
+      }
+    }
+    if (flag == "Day") {
+      if (w->text() == d) {
+        w->setStyleSheet(btnSelStyle);
+      }
+    }
+    if (flag == "Hour") {
+      if (w->text() == h) {
+        w->setStyleSheet(btnSelStyle);
+      }
+    }
+    if (flag == "Minute") {
+      if (w->text() == mm) {
+        w->setStyleSheet(btnSelStyle);
+      }
+    }
+  }
 }
 
 void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
+  QObjectList lstOfChildren =
+      mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameSel));
+  for (int i = 0; i < lstOfChildren.count(); i++) {
+    QToolButton* w = (QToolButton*)lstOfChildren.at(i);
+    w->setStyleSheet(btnNorStyle);
+  }
+  btn->setStyleSheet(btnSelStyle);
+
   QString title = btn->text();
 
   QString strDT;

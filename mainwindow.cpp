@@ -954,6 +954,16 @@ QObjectList MainWindow::getAllTreeWidget(QObjectList lstUIControls) {
   return lst;
 }
 
+QObjectList MainWindow::getAllToolButton(QObjectList lstUIControls) {
+  QObjectList lst;
+  foreach (QObject* obj, lstUIControls) {
+    if (obj->metaObject()->className() == QStringLiteral("QToolButton")) {
+      lst.append(obj);
+    }
+  }
+  return lst;
+}
+
 QObjectList MainWindow::getAllUIControls(QObject* parent) {
   QObjectList lstOfChildren, lstTemp;
   if (parent) {

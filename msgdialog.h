@@ -3,8 +3,8 @@
 
 #include <QDialog>
 #include <QHBoxLayout>
+#include <QObjectList>
 #include <QToolButton>
-
 namespace Ui {
 class msgDialog;
 }
@@ -18,7 +18,8 @@ class msgDialog : public QDialog {
   Ui::msgDialog *ui;
 
   void initDlg();
-
+  QString btnSelStyle = "QToolButton {background-color: blue;color: white;}";
+  QString btnNorStyle;
   void addBtn(int start, int total, int col, QString flag);
 
  protected:
