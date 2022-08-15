@@ -12,6 +12,7 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
 
   this->layout()->setMargin(0);
   this->installEventFilter(this);
+  this->layout()->setMargin(5);
   initDlg();
   ui->frameDate->hide();
   ui->frameTime->hide();
@@ -20,6 +21,15 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->lblTodoText->adjustSize();
   btnNorStyle = ui->btnCancelDT->styleSheet();
   ui->dateTimeEdit->setReadOnly(true);
+  ui->lblTodoText->setStyleSheet(
+      mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
+  QFont font = this->font();
+  font.setBold(true);
+  ui->btnYear->setFont(font);
+  ui->btnMonth->setFont(font);
+  ui->btnDay->setFont(font);
+  ui->btnHour->setFont(font);
+  ui->btnMinute->setFont(font);
 
   // this->show();
 }
@@ -94,7 +104,9 @@ void msgDialog::on_btnDay_clicked() { addBtn(1, 31, 5, tr("Day")); }
 
 void msgDialog::on_btnMonth_clicked() { addBtn(1, 12, 3, tr("Month")); }
 
-void msgDialog::on_btnYear_clicked() { addBtn(2022, 15, 3, tr("Year")); }
+void msgDialog::on_btnYear_clicked() {
+  addBtn(QDate::currentDate().year(), 15, 3, tr("Year"));
+}
 
 void msgDialog::addBtn(int start, int total, int col, QString flag) {
   QObjectList lstOfChildren0 =
@@ -119,7 +131,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
   for (int i = 0; i < total; i++) {
     for (int j = 0; j < col; j++) {
       QToolButton* btn = new QToolButton(ui->frameSel);
-      btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+      btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
       btn->setObjectName("btn" + QString::number(count));
       QString str = QString::number(count + start);
       if (flag == tr("Hour") || flag == tr("Minute")) {
@@ -138,7 +150,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
 
   for (int i = 0; i < total; i++) {
     QToolButton* btn = new QToolButton(ui->frameSel);
-    btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     btn->setObjectName("btn" + QString::number(count + i));
     btn->setText(QString::number(count + i + start));
     connect(btn, &QToolButton::clicked, [=]() { onBtnClick(btn, flag); });
