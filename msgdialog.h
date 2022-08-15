@@ -1,10 +1,12 @@
 #ifndef MSGDIALOG_H
 #define MSGDIALOG_H
 
+#include <QDial>
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QObjectList>
 #include <QToolButton>
+
 namespace Ui {
 class msgDialog;
 }
@@ -45,8 +47,10 @@ class msgDialog : public QDialog {
 
  private:
   void onBtnClick(QToolButton *btn, QString flag);
-     QString y, m, d, h, mm;
-     void setBtnTitle();
+  QString y, m, d, h, mm;
+  void setBtnTitle();
+  void onDial(QDial *btn, QString flag);
+  void addDial(int min, int max, QString flag);
 };
 
 #endif  // MSGDIALOG_H

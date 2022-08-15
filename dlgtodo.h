@@ -23,6 +23,8 @@ class dlgTodo : public QDialog {
 
   void init_Items();
   QString alarmStyle = "QLabel{background:rgb(66,114,255);color:white}";
+  QString alarmStyleToday = "QLabel{background:rgb(255,11,25);color:white}";
+  QString alarmStyleTomorrow = "QLabel{background:rgb(245,245,25);color:black}";
   void add_Item(QString, QString, bool);
   static void saveTodo();
   QString styleDark =

@@ -61,11 +61,15 @@ void msgDialog::initDlg() {
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
   this->setModal(true);
-  on_btnHour_clicked();
+  on_btnYear_clicked();
   ui->btnSetDT->setFocus();
 }
 
 void msgDialog::setBtnTitle() {
+  QString strDT;
+  strDT = y + "-" + m + "-" + d + " " + h + ":" + mm;
+  ui->dateTimeEdit->setDateTime(QDateTime::fromString(strDT, "yyyy-M-d HH:mm"));
+
   ui->btnYear->setText(y + "\n" + tr("Year"));
   ui->btnMonth->setText(m + "\n" + tr("Month"));
   ui->btnDay->setText(d + "\n" + tr("Day"));
@@ -96,9 +100,15 @@ void msgDialog::on_hsHour_valueChanged(int value) {
   ui->dateTimeEdit->setTime(QTime::fromString(strTime, "HH:mm"));
 }
 
-void msgDialog::on_btnHour_clicked() { addBtn(0, 24, 5, tr("Hour")); }
+void msgDialog::on_btnHour_clicked() {
+  // addBtn(0, 24, 5, tr("Hour"));
+  addDial(0, 23, tr("Hour"));
+}
 
-void msgDialog::on_btnMinute_clicked() { addBtn(0, 60, 6, tr("Minute")); }
+void msgDialog::on_btnMinute_clicked() {
+  // addBtn(0, 60, 6, tr("Minute"));
+  addDial(0, 59, tr("Minute"));
+}
 
 void msgDialog::on_btnDay_clicked() { addBtn(1, 31, 5, tr("Day")); }
 
@@ -200,7 +210,6 @@ void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
 
   QString title = btn->text();
 
-  QString strDT;
   if (flag == tr("Year")) {
     y = title;
   }
@@ -217,8 +226,6 @@ void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
     mm = title;
   }
 
-  strDT = y + "-" + m + "-" + d + " " + h + ":" + mm;
-  ui->dateTimeEdit->setDateTime(QDateTime::fromString(strDT, "yyyy-M-d HH:mm"));
   setBtnTitle();
 }
 
@@ -227,3 +234,58 @@ void msgDialog::on_btnCancelDT_clicked() {
 }
 
 void msgDialog::on_btnSetDT_clicked() { mw_one->mydlgTodo->on_btnOK_clicked(); }
+
+void msgDialog::addDial(int min, int max, QString flag) {
+  QObjectList lstOfChildren0 =
+      mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
+  for (int i = 0; i < lstOfChildren0.count(); i++) {
+    QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
+    w->setStyleSheet(btnNorStyle);
+    QStringList list = w->text().split("\n");
+    if (list.at(1) == flag) w->setStyleSheet(btnSelStyle);
+  }
+
+  qDeleteAll(ui->frameSel->findChildren<QObject*>());
+
+  QGridLayout* gl = new QGridLayout(this);
+  gl->setMargin(5);
+  gl->setSpacing(5);
+  ui->frameSel->setLayout(gl);
+
+  QDial* btn = new QDial(ui->frameSel);
+  btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+  btn->setObjectName("btn");
+  btn->setMinimum(min);
+  btn->setMaximum(max);
+  btn->setNotchTarget(1.00);
+  btn->setWrapping(false);
+  btn->setNotchesVisible(true);
+  btn->setPageStep(5);
+  if (flag == tr("Hour")) btn->setPageStep(2);
+
+  connect(btn, &QDial::sliderMoved, [=]() { onDial(btn, flag); });
+
+  gl->addWidget(btn, 0, 0, 1, 1);
+
+  if (flag == tr("Minute")) {
+    btn->setSliderPosition(mm.toInt());
+  }
+  if (flag == tr("Hour")) {
+    btn->setSliderPosition(h.toInt());
+  }
+}
+
+void msgDialog::onDial(QDial* btn, QString flag) {
+  if (flag == tr("Hour")) {
+    h = QString::number(btn->sliderPosition());
+    if (h.length() == 1) h = "0" + h;
+    // if (h == "24") h == "00";
+  }
+
+  if (flag == tr("Minute")) {
+    mm = QString::number(btn->sliderPosition());
+    if (mm.length() == 1) mm = "0" + mm;
+    // if (mm == "60") mm = "59";
+  }
+  setBtnTitle();
+}

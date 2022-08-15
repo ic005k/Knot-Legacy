@@ -631,6 +631,13 @@ void dlgTodo::refreshAlarm() {
         listAlarm.append(str1);
         listTotalS.append(totals);
 
+        QString strDate = str.split(" ").at(0);
+        QString strDay = strDate.split("-").at(2);
+        if (strDay.toInt() == QDate::currentDate().day())
+          lbl->setStyleSheet(alarmStyleToday);
+        if (strDay.toInt() - 1 == QDate::currentDate().day())
+          lbl->setStyleSheet(alarmStyleTomorrow);
+
       } else {
         lbl->setText(str);
         lbl->setStyleSheet(getMainLabel(i)->styleSheet());
