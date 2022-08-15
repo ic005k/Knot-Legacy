@@ -101,8 +101,8 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
   int count = 0;
 
   QGridLayout* gl = new QGridLayout(this);
-  gl->setMargin(10);
-  gl->setSpacing(10);
+  gl->setMargin(5);
+  gl->setSpacing(5);
   ui->frameSel->setLayout(gl);
 
   for (int i = 0; i < total; i++) {
