@@ -22,9 +22,15 @@ class dlgTodo : public QDialog {
   ~dlgTodo();
 
   void init_Items();
-  QString alarmStyle = "QLabel{background:rgb(66,114,255);color:white}";
-  QString alarmStyleToday = "QLabel{background:rgb(255,11,25);color:white}";
-  QString alarmStyleTomorrow = "QLabel{background:rgb(245,245,25);color:black}";
+  QString alarmStyle =
+      "QLabel{background:rgb(112,128,105);color:rgb(255,255,255);border:2px;"
+      "border-radius:4px;padding:2px 4px;}";
+  QString alarmStyleToday =
+      "QLabel{background:rgb(255,11,25);color:white;border:2px;"
+      "border-radius:4px;padding:2px 4px;}";
+  QString alarmStyleTomorrow =
+      "QLabel{background:rgb(245,245,25);color:black;border:2px;"
+      "border-radius:4px;padding:2px 4px;}";
   void add_Item(QString, QString, bool);
   static void saveTodo();
   QString styleDark =

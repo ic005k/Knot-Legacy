@@ -631,12 +631,18 @@ void dlgTodo::refreshAlarm() {
         listAlarm.append(str1);
         listTotalS.append(totals);
 
+        // set time marks
         QString strDate = str.split(" ").at(0);
+        QString strYear = strDate.split("-").at(0);
+        QString strMonth = strDate.split("-").at(1);
         QString strDay = strDate.split("-").at(2);
-        if (strDay.toInt() == QDate::currentDate().day())
+        if (strDate == QDate::currentDate().toString("yyyy-M-d"))
           lbl->setStyleSheet(alarmStyleToday);
-        if (strDay.toInt() - 1 == QDate::currentDate().day())
-          lbl->setStyleSheet(alarmStyleTomorrow);
+        if (strYear.toInt() == QDate::currentDate().year() &&
+            strMonth.toInt() == QDate::currentDate().month()) {
+          if (strDay.toInt() - 1 == QDate::currentDate().day())
+            lbl->setStyleSheet(alarmStyleTomorrow);
+        }
 
       } else {
         lbl->setText(str);
