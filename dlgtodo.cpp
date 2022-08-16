@@ -233,7 +233,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   hbox->addWidget(edit);
   QVBoxLayout* vbox = new QVBoxLayout();
   QLabel* lblTime = new QLabel(this);
-  lblTime->setFixedHeight(17);
+  // lblTime->setFixedHeight(17);
   QFont f;
   int fsize = fontSize * 0.9;
   if (fsize < 13) fsize = 13;
