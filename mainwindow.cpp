@@ -2785,6 +2785,7 @@ void MainWindow::on_btnSteps_clicked() {
   mydlgSteps->setFixedWidth(this->width());
   mydlgSteps->ui->tableWidget->scrollToBottom();
   mydlgSteps->ui->tableWidget->setFocus();
+  mydlgSteps->setMaxMark();
   mydlgSteps->setModal(true);
   mydlgSteps->show();
 }

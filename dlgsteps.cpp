@@ -368,3 +368,21 @@ void dlgSteps::acquireWakeLock() {
   m_activity.callMethod<void>("acquireWakeLock");
 #endif
 }
+
+void dlgSteps::setMaxMark() {
+  if (ui->tableWidget->rowCount() > 1) {
+    QList<int> list;
+
+    for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
+      list.append(ui->tableWidget->item(i, 1)->text().toInt());
+    }
+
+    int maxValue = *std::max_element(list.begin(), list.end());
+    for (int i = 0; i < list.count(); i++) {
+      if (maxValue == list.at(i)) {
+        ui->tableWidget->item(i, 0)->setBackground(brushMax);
+        break;
+      }
+    }
+  }
+}

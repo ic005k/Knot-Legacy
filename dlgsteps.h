@@ -33,6 +33,8 @@ class dlgSteps : public QDialog {
   void releaseWakeLock();
   void acquireWakeLock();
 
+  void setMaxMark();
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
@@ -63,6 +65,7 @@ class dlgSteps : public QDialog {
  private:
   QBrush brush1 = QBrush(QColor(255, 228, 225));
   QBrush brush2 = QBrush(QColor(245, 222, 179));
+  QBrush brushMax = QBrush(QColor(245, 222, 79));
 };
 
 #endif  // DLGSTEPS_H
