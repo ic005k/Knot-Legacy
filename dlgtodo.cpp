@@ -235,9 +235,12 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   QLabel* lblTime = new QLabel(this);
   lblTime->setFixedHeight(17);
   QFont f;
-  f.setPointSize(13);
+  int fsize = fontSize * 0.9;
+  if (fsize < 13) fsize = 13;
+  f.setPointSize(fsize);
   lblTime->setFont(f);
   lblTime->setText(time);
+  lblTime->setStyleSheet("QLabel{color:rgb(80,80,80);}");
   if (time.contains(tr("Alarm"))) {
     lblTime->setStyleSheet(alarmStyle);
     // lblTime->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
