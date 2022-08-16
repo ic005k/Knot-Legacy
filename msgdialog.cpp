@@ -263,7 +263,7 @@ void msgDialog::addDial(int min, int max, QString flag) {
   btn->setPageStep(5);
   if (flag == tr("Hour")) btn->setPageStep(2);
 
-  connect(btn, &QDial::sliderMoved, [=]() { onDial(btn, flag); });
+  connect(btn, &QDial::valueChanged, [=]() { onDial(btn, flag); });
 
   gl->addWidget(btn, 0, 0, 1, 1);
 
@@ -279,13 +279,11 @@ void msgDialog::onDial(QDial* btn, QString flag) {
   if (flag == tr("Hour")) {
     h = QString::number(btn->sliderPosition());
     if (h.length() == 1) h = "0" + h;
-    // if (h == "24") h == "00";
   }
 
   if (flag == tr("Minute")) {
     mm = QString::number(btn->sliderPosition());
     if (mm.length() == 1) mm = "0" + mm;
-    // if (mm == "60") mm = "59";
   }
   setBtnTitle();
 }
