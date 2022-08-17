@@ -197,7 +197,8 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
     QString str = getMainLabel(row)->text().trimmed();
     QListWidgetItem* item = new QListWidgetItem;
     item->setSizeHint(QSize(ui->listWidget->width() - 16, 80));
-    item->setText(QDateTime::currentDateTime().toString() + "\n" + str);
+    item->setText(QDateTime::currentDateTime().toString() + "  " + tr("Done") +
+                  "\n" + str);
     ui->listRecycle->insertItem(0, item);
     ui->listWidget->takeItem(row);
     int index = ui->listWidget->currentRow();

@@ -256,12 +256,12 @@
 
 QListView {
     outline: none;
-	text-decoration: line-through;
+	/*text-decoration: line-through;*/
 }
 
 #listRecycle::item {
     background-color: #ffffff;
-    color: #000000;
+    color: gray;
     border: transparent;
     border-bottom: 1px solid #dbdbdb;
     padding: 8px;
