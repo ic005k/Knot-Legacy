@@ -207,8 +207,11 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
     refreshAlarm();
   });
 
-  QFont font;
+  QFont font = this->font();
   font.setPointSize(fontSize);
+  QFontMetrics fm(font);
+  int fontHeight = fm.height();
+
   QLabel* lblSn = new QLabel(this);
   lblSn->setFont(font);
   lblSn->setFixedWidth(fontSize * 1.5);
@@ -223,10 +226,17 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
 
   QTextEdit* edit = new QTextEdit(this);
   QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(edit);
   edit->setPlainText(str);
   edit->setHidden(true);
-  connect(edit, &QTextEdit::textChanged,
-          [=]() { label->setText(edit->toPlainText().trimmed()); });
+  connect(edit, &QTextEdit::textChanged, [=]() {
+    label->setText(edit->toPlainText().trimmed());
+    QTextDocument* doc = edit->document();
+    doc->adjustSize();
+    int mainHeight = doc->size().rheight() * 1.06;
+    int itemHeight = fontHeight * 2 + mainHeight;
+    pItem->setSizeHint(QSize(ui->listWidget->width() - 20, itemHeight));
+  });
 
   QFrame* frame = new QFrame(this);
   QHBoxLayout* hbox = new QHBoxLayout();
@@ -260,6 +270,13 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   w->setLayout(layout);
 
   ui->listWidget->setItemWidget(pItem, w);
+
+  QTextDocument* doc = edit->document();
+  doc->adjustSize();
+  int mainHeight = doc->size().rheight() * 1.06;
+  int itemHeight = fontHeight * 2 + mainHeight;
+  pItem->setSizeHint(QSize(ui->listWidget->width() - 20, itemHeight));
+  qDebug() << fontHeight << label->height() << itemHeight;
 
   add_ItemSn(0);
 }
