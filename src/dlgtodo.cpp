@@ -17,8 +17,6 @@ extern QString iniFile, iniDir;
 extern bool loading, isBreak, isImport;
 extern int fontSize;
 
-msgDialog* msgDlg;
-
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
   this->installEventFilter(this);
@@ -26,6 +24,7 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->frameRecycle->hide();
   ui->listRecycle->hide();
   ui->lblRecycle->hide();
+  ui->lineEdit->hide();
 
   QString strTar = "/data/data/com.x/files/msg.mp3";
   QFile::copy(":/res/msg.mp3", strTar);
@@ -64,7 +63,7 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->btnSetTime->setStyleSheet("border:none");
   ui->btnRecycle->setStyleSheet("border:none");
 
-  msgDlg = new msgDialog(mw_one);
+  ui->textEdit->setFixedHeight(getEditTextHeight(ui->textEdit) + 2);
 }
 
 dlgTodo::~dlgTodo() { delete ui; }
@@ -145,7 +144,7 @@ void dlgTodo::init_Items() {
 }
 
 void dlgTodo::on_btnAdd_clicked() {
-  QString str = ui->lineEdit->text().trimmed();
+  QString str = ui->textEdit->toPlainText().trimmed();
   for (int i = 0; i < ui->listWidget->count(); i++) {
     QListWidgetItem* item = ui->listWidget->item(i);
     QWidget* w = ui->listWidget->itemWidget(item);
@@ -160,7 +159,7 @@ void dlgTodo::on_btnAdd_clicked() {
            QDate::currentDate().toString("ddd MM dd yyyy") + "  " +
                QTime::currentTime().toString(),
            true);
-  ui->lineEdit->setText("");
+  ui->textEdit->setText("");
   ui->listWidget->verticalScrollBar()->setSliderPosition(0);
 }
 
@@ -705,4 +704,9 @@ void dlgTodo::refreshAlarm() {
     qDebug() << "ini no exists";
   else
     qDebug() << "ini ok";
+}
+
+void dlgTodo::on_textEdit_textChanged() {
+  int h = getEditTextHeight(ui->textEdit) + 2;
+  ui->textEdit->setFixedHeight(h);
 }
