@@ -514,19 +514,6 @@ QListView {
      <property name="spacing">
       <number>2</number>
      </property>
-     <item>
-      <widget class="QLineEdit" name="lineEdit">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>45</height>
-        </size>
-       </property>
-       <property name="placeholderText">
-        <string>Enter the to-do list text</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item row="4" column="0">

@@ -24,7 +24,6 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->frameRecycle->hide();
   ui->listRecycle->hide();
   ui->lblRecycle->hide();
-  ui->lineEdit->hide();
 
   QString strTar = "/data/data/com.x/files/msg.mp3";
   QFile::copy(":/res/msg.mp3", strTar);
@@ -78,6 +77,7 @@ void dlgTodo::on_btnBack_clicked() { close(); }
 void dlgTodo::saveTodo() {
   highCount = 0;
   QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   int count = mylist->count();
   Reg.setValue("/Todo/Count", count);
   for (int i = 0; i < count; i++) {
@@ -117,6 +117,7 @@ void dlgTodo::init_Items() {
   else
     ini_file = iniDir + "todo.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   int count = Reg.value("/Todo/Count").toInt();
   for (int i = 0; i < count; i++) {
     QString str = Reg.value("/Todo/Item" + QString::number(i)).toString();
@@ -146,10 +147,7 @@ void dlgTodo::init_Items() {
 void dlgTodo::on_btnAdd_clicked() {
   QString str = ui->textEdit->toPlainText().trimmed();
   for (int i = 0; i < ui->listWidget->count(); i++) {
-    QListWidgetItem* item = ui->listWidget->item(i);
-    QWidget* w = ui->listWidget->itemWidget(item);
-    // (QHBoxLayout(0x915ca030), QLabel(0x90885060), QToolButton(0x8fdf4200))
-    QLabel* lbl = (QLabel*)w->children().at(1);
+    QLabel* lbl = getMainLabel(i);
     if (lbl->text() == str) {
       ui->listWidget->setCurrentRow(i);
       return;
@@ -226,12 +224,15 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   QTextEdit* edit = new QTextEdit(this);
   QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(edit);
+  edit->setWordWrapMode(QTextOption::WordWrap);
   edit->setHidden(true);
   connect(edit, &QTextEdit::textChanged, [=]() {
-    label->setText(edit->toPlainText().trimmed());
+    if (isModi) {
+      label->setText(edit->toPlainText().trimmed());
 
-    int itemHeight = fontHeight * 2 + getEditTextHeight(edit);
-    pItem->setSizeHint(QSize(ui->listWidget->width() - 20, itemHeight));
+      int itemHeight = fontHeight * 2 + getEditTextHeight(edit);
+      pItem->setSizeHint(QSize(ui->listWidget->width() - 20, itemHeight));
+    }
   });
 
   QFrame* frame = new QFrame(this);
@@ -586,7 +587,6 @@ void dlgTodo::on_btnRecycle_clicked() {
   ui->listWidget->hide();
   ui->frameRecycle->show();
   ui->frameToolBar->hide();
-  ui->lineEdit->hide();
   ui->frameSetTime->hide();
   if (ui->listRecycle->count() > 0) {
     ui->listRecycle->setFocus();
@@ -600,7 +600,6 @@ void dlgTodo::on_btnReturn_clicked() {
   ui->listWidget->show();
   ui->frameRecycle->hide();
   ui->frameToolBar->show();
-  ui->lineEdit->show();
 }
 
 void dlgTodo::on_btnClear_clicked() { ui->listRecycle->clear(); }
