@@ -185,6 +185,12 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   btn->setIcon(QIcon(":/res/done.png"));
 
   connect(btn, &QToolButton::clicked, [=]() {
+    if (isModi) {
+      lblModi->setHidden(false);
+      editModi->setHidden(true);
+      ui->btnModify->setText(tr("Modify"));
+      isModi = false;
+    }
     btn->setIcon(QIcon(":/res/done1.png"));
 
     mw_one->Sleep(400);
