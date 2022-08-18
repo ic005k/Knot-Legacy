@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>cn.qm</file>
         <file>res/1.png</file>
         <file>res/2.png</file>
         <file>res/a1.png</file>
@@ -50,5 +49,6 @@
         <file>res/onebak.png</file>
         <file>res/timemachine.png</file>
         <file>res/msg.mp3</file>
+        <file>src/cn.qm</file>
     </qresource>
 </RCC>
