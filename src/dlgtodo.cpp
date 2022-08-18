@@ -227,14 +227,11 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   QTextEdit* edit = new QTextEdit(this);
   QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(edit);
-  edit->setPlainText(str);
   edit->setHidden(true);
   connect(edit, &QTextEdit::textChanged, [=]() {
     label->setText(edit->toPlainText().trimmed());
-    QTextDocument* doc = edit->document();
-    doc->adjustSize();
-    int mainHeight = doc->size().rheight() * 1.06;
-    int itemHeight = fontHeight * 2 + mainHeight;
+
+    int itemHeight = fontHeight * 2 + getEditTextHeight(edit);
     pItem->setSizeHint(QSize(ui->listWidget->width() - 20, itemHeight));
   });
 
@@ -244,7 +241,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   hbox->addWidget(edit);
   QVBoxLayout* vbox = new QVBoxLayout();
   QLabel* lblTime = new QLabel(this);
-  // lblTime->setFixedHeight(17);
+  lblTime->setFixedHeight(fontHeight);
   QFont f;
   int fsize = fontSize * 0.9;
   if (fsize < 13) fsize = 13;
@@ -271,10 +268,9 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
 
   ui->listWidget->setItemWidget(pItem, w);
 
-  QTextDocument* doc = edit->document();
-  doc->adjustSize();
-  int mainHeight = doc->size().rheight() * 1.06;
-  int itemHeight = fontHeight * 2 + mainHeight;
+  edit->clear();
+  edit->setPlainText(str);
+  int itemHeight = fontHeight * 2 + getEditTextHeight(edit);
   pItem->setSizeHint(QSize(ui->listWidget->width() - 20, itemHeight));
   qDebug() << fontHeight << label->height() << itemHeight;
 
@@ -290,6 +286,13 @@ void dlgTodo::add_ItemSn(int index) {
     lbl->setText(QString::number(i + 1) + ". ");
   }
   ui->listWidget->setCurrentRow(index);
+}
+
+int dlgTodo::getEditTextHeight(QTextEdit* edit) {
+  QTextDocument* doc = edit->document();
+  doc->adjustSize();
+  int mainHeight = doc->size().rheight() * 1.06;
+  return mainHeight;
 }
 
 void dlgTodo::on_listWidget_itemClicked(QListWidgetItem* item) {
@@ -348,11 +351,11 @@ void dlgTodo::on_btnModify_clicked() {
     QWidget* w = ui->listWidget->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
     QTextEdit* edit = (QTextEdit*)w->children().at(2)->children().at(3);
+    lblModi = lbl;
+    editModi = edit;
     edit->setPlainText(lbl->text());
     lbl->setHidden(true);
     edit->setHidden(false);
-    lblModi = lbl;
-    editModi = edit;
     ui->btnModify->setText(tr("Finish Editing"));
     isModi = true;
   } else if (ui->btnModify->text() == tr("Finish Editing")) {
