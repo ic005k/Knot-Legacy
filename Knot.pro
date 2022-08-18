@@ -30,56 +30,58 @@ INSTALLS += dataFiles
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    dlglist.cpp \
-    dlgmainnotes.cpp \
-    dlgnotes.cpp \
-    dlgpreferences.cpp \
-    dlgreader.cpp \
-    dlgrename.cpp \
-    dlgreport.cpp \
-    dlgsettime.cpp \
-    dlgsteps.cpp \
-    dlgtodo.cpp \
-    documenthandler.cpp \
-    file.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    msgdialog.cpp \
-    smoothscrollbar.cpp \
-    specialaccelerometerpedometer.cpp
+    src/chart.cpp \
+    src/dlglist.cpp \
+    src/dlgmainnotes.cpp \
+    src/dlgnotes.cpp \
+    src/dlgpreferences.cpp \
+    src/dlgreader.cpp \
+    src/dlgrename.cpp \
+    src/dlgreport.cpp \
+    src/dlgsettime.cpp \
+    src/dlgsteps.cpp \
+    src/dlgtodo.cpp \
+    src/documenthandler.cpp \
+    src/file.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/msgdialog.cpp \
+    src/smoothscrollbar.cpp \
+    src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
-    count_steps.h \
-    dlglist.h \
-    dlgmainnotes.h \
-    dlgnotes.h \
-    dlgpreferences.h \
-    dlgreader.h \
-    dlgrename.h \
-    dlgreport.h \
-    dlgsettime.h \
-    dlgsteps.h \
-    dlgtodo.h \
-    documenthandler.h \
-    file.h \
-    mainwindow.h \
-    msgdialog.h \
-    smoothscrollbar.h \
-    specialaccelerometerpedometer.h
+    src/chart.h \
+    src/count_steps.h \
+    src/dlglist.h \
+    src/dlgmainnotes.h \
+    src/dlgnotes.h \
+    src/dlgpreferences.h \
+    src/dlgreader.h \
+    src/dlgrename.h \
+    src/dlgreport.h \
+    src/dlgsteps.h \
+    src/dlgsettime.h \
+    src/dlgtodo.h \
+    src/documenthandler.h \
+    src/file.h \
+    src/mainwindow.h \
+    src/msgdialog.h \
+    src/smoothscrollbar.h \
+    src/specialaccelerometerpedometer.h
 
 FORMS += \
-    dlglist.ui \
-    dlgmainnotes.ui \
-    dlgnotes.ui \
-    dlgpreferences.ui \
-    dlgreader.ui \
-    dlgrename.ui \
-    dlgreport.ui \
-    dlgsettime.ui \
-    dlgsteps.ui \
-    dlgtodo.ui \
-    mainwindow.ui \
-    msgdialog.ui
+    src/dlglist.ui \
+    src/dlgmainnotes.ui \
+    src/dlgnotes.ui \
+    src/dlgpreferences.ui \
+    src/dlgreader.ui \
+    src/dlgrename.ui \
+    src/dlgreport.ui \
+    src/dlgsettime.ui \
+    src/dlgsteps.ui \
+    src/dlgtodo.ui \
+    src/mainwindow.ui \
+    src/msgdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -110,7 +112,9 @@ DISTFILES += \
     android/gradlew \
     android/gradlew.bat \
     android/gradlew.bat \
-    android/res/values/libs.xml
+    android/res/values/libs.xml \
+    src/cn.qm \
+    src/cn.ts
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
