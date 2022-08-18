@@ -50,7 +50,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Return</string>
+         <string>Back</string>
         </property>
        </widget>
       </item>

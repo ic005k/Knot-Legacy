@@ -594,6 +594,7 @@ void dlgTodo::on_btnRecycle_clicked() {
   ui->frameRecycle->show();
   ui->frameToolBar->hide();
   ui->frameSetTime->hide();
+  ui->textEdit->hide();
   if (ui->listRecycle->count() > 0) {
     ui->listRecycle->setFocus();
     ui->listRecycle->setCurrentRow(0);
@@ -606,6 +607,7 @@ void dlgTodo::on_btnReturn_clicked() {
   ui->listWidget->show();
   ui->frameRecycle->hide();
   ui->frameToolBar->show();
+  ui->textEdit->show();
 }
 
 void dlgTodo::on_btnClear_clicked() { ui->listRecycle->clear(); }
