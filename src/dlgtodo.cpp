@@ -446,8 +446,8 @@ void dlgTodo::on_btnSetTime_clicked() {
 
   QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
   QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
-  if (lbl->text().trimmed().contains(tr("Alarm"))) {
-    QString str = lbl->text().trimmed();
+  QString str = lbl->text().trimmed();
+  if (str.contains(tr("Alarm")) || str.mid(0, 2) == "20") {
     str = str.replace(tr("Alarm"), "").trimmed();
     QStringList list = str.split(" ");
     QDate date;
@@ -457,7 +457,9 @@ void dlgTodo::on_btnSetTime_clicked() {
     mw_one->mymsgDlg->ui->dateTimeEdit->setDate(date);
     mw_one->mymsgDlg->ui->dateTimeEdit->setTime(time);
 
-  } else {
+  }
+
+  else {
     mw_one->mymsgDlg->ui->dateTimeEdit->setDate(QDate::currentDate());
     mw_one->mymsgDlg->ui->dateTimeEdit->setTime(QTime::currentTime());
   }
