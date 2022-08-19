@@ -640,6 +640,7 @@ void dlgTodo::on_btnDel_clicked() {
 void dlgTodo::refreshAlarm() {
   stopTimerAlarm();
   int count = 0;
+  bool isToday = false;
   QString str;
   QLabel* lbl;
 
@@ -671,13 +672,14 @@ void dlgTodo::refreshAlarm() {
         QString strYear = strDate.split("-").at(0);
         QString strMonth = strDate.split("-").at(1);
         QString strDay = strDate.split("-").at(2);
-        if (strDate == QDate::currentDate().toString("yyyy-M-d"))
+        if (strDate == QDate::currentDate().toString("yyyy-M-d")) {
           lbl->setStyleSheet(alarmStyleToday);
-        if (strYear.toInt() == QDate::currentDate().year() &&
-            strMonth.toInt() == QDate::currentDate().month()) {
-          if (strDay.toInt() - 1 == QDate::currentDate().day())
-            lbl->setStyleSheet(alarmStyleTomorrow);
+          isToday = true;
         }
+
+        QDateTime ctime = QDateTime::currentDateTime();
+        QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
+        if (strTmo == strDate) lbl->setStyleSheet(alarmStyleTomorrow);
 
       } else {
         lbl->setText(str);
@@ -701,7 +703,7 @@ void dlgTodo::refreshAlarm() {
     }
   }
 
-  if (count == 0) {
+  if (!isToday) {
     mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
   } else {
     mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo1.png"));
