@@ -6,16 +6,16 @@ on:
       - 'res/**'
       - 'android/**'
       - '.github/workflows/android.yml'
-      - '*.cpp'
-      - '*.h'
+      - 'src/*.cpp'
+      - 'src/*.h'
   pull_request:
     paths:
       - '*.pro'
       - 'res/**'
       - 'android/**'
       - '.github/workflows/android.yml'  
-      - '*.cpp'
-      - '*.h'
+      - 'src/*.cpp'
+      - 'src/*.h'
 jobs:
   build:
     name: Build
