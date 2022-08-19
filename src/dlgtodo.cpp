@@ -387,6 +387,8 @@ void dlgTodo::on_btnHigh_clicked() {
   QFrame* frame = (QFrame*)w1->children().at(2);
   frame->setStyleSheet(highLblStyle);
   ui->listWidget->scrollToTop();
+
+  refreshAlarm();
 }
 
 void dlgTodo::on_btnLow_clicked() {
@@ -401,6 +403,8 @@ void dlgTodo::on_btnLow_clicked() {
   add_Item(str, lblTime->text(), false);
   ui->listWidget->setCurrentRow(ui->listWidget->count() - 1);
   ui->listWidget->scrollToBottom();
+
+  refreshAlarm();
 }
 
 QLabel* dlgTodo::getTimeLabel(int index) {
