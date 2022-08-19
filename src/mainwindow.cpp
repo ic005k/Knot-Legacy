@@ -20,6 +20,7 @@ QString iniFile, iniDir, strDate, readDate, noteText, strStats, SaveType, strY,
 QStringList listM;
 
 int curPos, sliderPos, today, fontSize, red, currentTabIndex;
+int chartMax = 5;
 double yMaxMonth, yMaxDay;
 MainWindow* mw_one;
 QTabWidget *tabData, *tabChart;
@@ -1155,7 +1156,7 @@ void MainWindow::drawDayChart() {
   }
 
   if (isrbFreq) {
-    int a = 20;
+    int a = chartMax;
     if (childCount > a)
       yMaxDay = childCount;
     else
@@ -1366,7 +1367,7 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   double maxValue = *std::max_element(doubleList.begin(), doubleList.end());
   double max;
   if (isrbFreq) {
-    max = 20;
+    max = chartMax;
     if (maxValue >= max) {
       max = maxValue;
     }
@@ -1403,6 +1404,7 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   barSeries->append(setY);
   axisX->append(categories);
   axisY->setRange(0, yMaxMonth);
+  axisY->setTickCount(yMaxMonth);
 
   if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
     // chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
@@ -1434,6 +1436,7 @@ void MainWindow::initChartDay() {
   axisX2->setTickCount(7);
 
   axisY2->setRange(0, yMaxDay);
+  axisY2->setTickCount(yMaxDay);
 }
 
 void MainWindow::on_actionRename_triggered() {
