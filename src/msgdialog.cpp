@@ -328,8 +328,8 @@ void msgDialog::on_btnToday_clicked() {
   m = QString::number(QDate::currentDate().month());
   d = QString::number(day);
 
-  on_btnDay_clicked();
   setBtnTitle();
+  on_btnDay_clicked();
 }
 
 void msgDialog::on_btnTomorrow_clicked() {
@@ -339,8 +339,8 @@ void msgDialog::on_btnTomorrow_clicked() {
   m = str.split("-").at(1);
   d = str.split("-").at(2);
 
-  on_btnDay_clicked();
   setBtnTitle();
+  on_btnDay_clicked();
 }
 
 void msgDialog::on_btnNextWeek_clicked() {
@@ -354,6 +354,6 @@ void msgDialog::on_btnNextWeek_clicked() {
   m = str.split("-").at(1);
   d = str.split("-").at(2);
 
-  on_btnDay_clicked();
   setBtnTitle();
+  on_btnDay_clicked();
 }
