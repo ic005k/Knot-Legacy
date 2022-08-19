@@ -276,190 +276,70 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frameTime">
+    <widget class="QFrame" name="frameBtnFun">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>35</height>
+      </size>
+     </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>2</number>
+      </property>
+      <property name="topMargin">
+       <number>2</number>
+      </property>
+      <property name="rightMargin">
+       <number>2</number>
+      </property>
+      <property name="bottomMargin">
+       <number>2</number>
+      </property>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="minimumSize">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Hour</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="hsHour">
-          <property name="maximum">
-           <number>23</number>
-          </property>
-          <property name="pageStep">
-           <number>1</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QToolButton" name="btnToday">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Today</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="label_3">
-          <property name="minimumSize">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Minute</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="hsMinute">
-          <property name="maximum">
-           <number>59</number>
-          </property>
-          <property name="pageStep">
-           <number>1</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QFrame" name="frameDate">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <item>
-         <widget class="QLabel" name="label_5">
-          <property name="minimumSize">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Year</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="hsYear">
-          <property name="minimum">
-           <number>2022</number>
-          </property>
-          <property name="maximum">
-           <number>2032</number>
-          </property>
-          <property name="pageStep">
-           <number>1</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="invertedAppearance">
-           <bool>false</bool>
-          </property>
-          <property name="invertedControls">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QToolButton" name="btnTomorrow">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Tomorrow</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="minimumSize">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Month</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="hsMonth">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>12</number>
-          </property>
-          <property name="pageStep">
-           <number>1</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="minimumSize">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Day</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="hsDay">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>31</number>
-          </property>
-          <property name="pageStep">
-           <number>1</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QToolButton" name="btnNextWeek">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Next Week</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

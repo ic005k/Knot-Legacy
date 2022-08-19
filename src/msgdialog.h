@@ -22,14 +22,13 @@ class msgDialog : public QDialog {
   void initDlg();
   QString btnSelStyle = "QToolButton {background-color: blue;color: white;}";
   QString btnNorStyle;
-  void addBtn(int start, int total, int col, QString flag);
+
+  void addBtn(int start, int total, int col, QString flag, bool week);
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
  private slots:
   void on_btnOK_clicked();
-
-  void on_hsHour_valueChanged(int value);
 
   void on_btnMinute_clicked();
 
@@ -44,6 +43,12 @@ class msgDialog : public QDialog {
   void on_btnCancelDT_clicked();
 
   void on_btnSetDT_clicked();
+
+  void on_btnToday_clicked();
+
+  void on_btnTomorrow_clicked();
+
+  void on_btnNextWeek_clicked();
 
  private:
   void onBtnClick(QToolButton *btn, QString flag);

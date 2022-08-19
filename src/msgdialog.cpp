@@ -14,11 +14,10 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   this->installEventFilter(this);
   this->layout()->setMargin(5);
   initDlg();
-  ui->frameDate->hide();
-  ui->frameTime->hide();
+
   ui->dateTimeEdit->hide();
-  ui->lblTodoText->setWordWrap(true);
-  ui->lblTodoText->adjustSize();
+  // ui->lblTodoText->setWordWrap(true);
+  // ui->lblTodoText->adjustSize();
   btnNorStyle = ui->btnCancelDT->styleSheet();
   ui->dateTimeEdit->setReadOnly(true);
   ui->lblTodoText->setStyleSheet(
@@ -37,12 +36,6 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
 msgDialog::~msgDialog() { delete ui; }
 
 void msgDialog::initDlg() {
-  ui->hsHour->setStyleSheet(hsStyle);
-  ui->hsMinute->setStyleSheet(hsStyle);
-  ui->hsYear->setStyleSheet(hsStyle);
-  ui->hsMonth->setStyleSheet(hsStyle);
-  ui->hsDay->setStyleSheet(hsStyle);
-
   QString str = ui->dateTimeEdit->text();
   QStringList list = str.split(" ");
   QString strDate = list.at(0);
@@ -91,13 +84,26 @@ bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
 
 void msgDialog::on_btnOK_clicked() { close(); }
 
-void msgDialog::on_hsHour_valueChanged(int value) {
-  QString strH;
+void msgDialog::on_btnYear_clicked() {
+  addBtn(QDate::currentDate().year(), 15, 3, tr("Year"), false);
+}
 
-  QString strTime = QString("%1").arg(ui->hsHour->value(), 2, 10, QChar('0')) +
-                    ":" +
-                    QString("%1").arg(ui->hsMinute->value(), 2, 10, QChar('0'));
-  ui->dateTimeEdit->setTime(QTime::fromString(strTime, "HH:mm"));
+void msgDialog::on_btnMonth_clicked() { addBtn(1, 12, 3, tr("Month"), false); }
+
+void msgDialog::on_btnDay_clicked() {
+  int maxDay = 0;
+  QString sy = ui->btnYear->text().split("\n").at(0);
+  QString sm = ui->btnMonth->text().split("\n").at(0);
+  for (int i = 0; i < 50; i++) {
+    QString strDate = sy + "-" + sm + "-" + QString::number(i + 1);
+    QDate date = QDate::fromString(strDate, "yyyy-M-d");
+    if (date.dayOfWeek() == 0) {
+      maxDay = i;
+      break;
+    }
+  }
+
+  addBtn(1, maxDay, 6, tr("Day"), true);
 }
 
 void msgDialog::on_btnHour_clicked() {
@@ -110,15 +116,7 @@ void msgDialog::on_btnMinute_clicked() {
   addDial(0, 59, tr("Minute"));
 }
 
-void msgDialog::on_btnDay_clicked() { addBtn(1, 31, 5, tr("Day")); }
-
-void msgDialog::on_btnMonth_clicked() { addBtn(1, 12, 3, tr("Month")); }
-
-void msgDialog::on_btnYear_clicked() {
-  addBtn(QDate::currentDate().year(), 15, 3, tr("Year"));
-}
-
-void msgDialog::addBtn(int start, int total, int col, QString flag) {
+void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
   QObjectList lstOfChildren0 =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
   for (int i = 0; i < lstOfChildren0.count(); i++) {
@@ -147,6 +145,24 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
       if (flag == tr("Hour") || flag == tr("Minute")) {
         if (str.length() == 1) str = "0" + str;
       }
+
+      if (week) {
+        QString strWeek;
+        QString sy = ui->btnYear->text().split("\n").at(0);
+        QString sm = ui->btnMonth->text().split("\n").at(0);
+        QString strDate = sy + "-" + sm + "-" + str;
+        QDate date = QDate::fromString(strDate, "yyyy-M-d");
+        int we = date.dayOfWeek();
+        if (we == 1) strWeek = tr("Mon");
+        if (we == 2) strWeek = tr("Tue");
+        if (we == 3) strWeek = tr("Wed");
+        if (we == 4) strWeek = tr("Thur");
+        if (we == 5) strWeek = tr("Fri");
+        if (we == 6) strWeek = tr("Sat");
+        if (we == 7) strWeek = tr("Sun");
+
+        str = str + "\n" + strWeek;
+      }
       btn->setText(str);
 
       connect(btn, &QToolButton::clicked, [=]() { onBtnClick(btn, flag); });
@@ -162,7 +178,25 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
     QToolButton* btn = new QToolButton(ui->frameSel);
     btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     btn->setObjectName("btn" + QString::number(count + i));
-    btn->setText(QString::number(count + i + start));
+    QString str = QString::number(count + i + start);
+    if (week) {
+      QString strWeek;
+      QString sy = ui->btnYear->text().split("\n").at(0);
+      QString sm = ui->btnMonth->text().split("\n").at(0);
+      QString strDate = sy + "-" + sm + "-" + str;
+      QDate date = QDate::fromString(strDate, "yyyy-M-d");
+      int we = date.dayOfWeek();
+      if (we == 1) strWeek = tr("Mon");
+      if (we == 2) strWeek = tr("Tue");
+      if (we == 3) strWeek = tr("Wed");
+      if (we == 4) strWeek = tr("Thur");
+      if (we == 5) strWeek = tr("Fri");
+      if (we == 6) strWeek = tr("Sat");
+      if (we == 7) strWeek = tr("Sun");
+
+      str = str + "\n" + strWeek;
+    }
+    btn->setText(str);
     connect(btn, &QToolButton::clicked, [=]() { onBtnClick(btn, flag); });
     gl->addWidget(btn, row + 1, i, 1, 1);
   }
@@ -182,7 +216,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag) {
       }
     }
     if (flag == tr("Day")) {
-      if (w->text() == d) {
+      if (w->text().split("\n").at(0) == d) {
         w->setStyleSheet(btnSelStyle);
       }
     }
@@ -217,7 +251,7 @@ void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
     m = title;
   }
   if (flag == tr("Day")) {
-    d = title;
+    d = title.split("\n").at(0);
   }
   if (flag == tr("Hour")) {
     h = title;
@@ -285,5 +319,41 @@ void msgDialog::onDial(QDial* btn, QString flag) {
     mm = QString::number(btn->sliderPosition());
     if (mm.length() == 1) mm = "0" + mm;
   }
+  setBtnTitle();
+}
+
+void msgDialog::on_btnToday_clicked() {
+  int day = QDate::currentDate().day();
+  y = QString::number(QDate::currentDate().year());
+  m = QString::number(QDate::currentDate().month());
+  d = QString::number(day);
+
+  on_btnDay_clicked();
+  setBtnTitle();
+}
+
+void msgDialog::on_btnTomorrow_clicked() {
+  QDateTime time = QDateTime::currentDateTime();
+  QString str = time.addDays(+1).toString("yyyy-M-d");
+  y = str.split("-").at(0);
+  m = str.split("-").at(1);
+  d = str.split("-").at(2);
+
+  on_btnDay_clicked();
+  setBtnTitle();
+}
+
+void msgDialog::on_btnNextWeek_clicked() {
+  int week = QDate::currentDate().dayOfWeek();
+  int x = 8 - week;
+
+  QDateTime time = QDateTime::currentDateTime();
+  QString str = time.addDays(+x).toString("yyyy-M-d");
+
+  y = str.split("-").at(0);
+  m = str.split("-").at(1);
+  d = str.split("-").at(2);
+
+  on_btnDay_clicked();
   setBtnTitle();
 }

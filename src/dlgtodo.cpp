@@ -465,8 +465,10 @@ void dlgTodo::on_btnSetTime_clicked() {
   }
 
   mw_one->mymsgDlg->initDlg();
-  mw_one->mymsgDlg->ui->lblTodoText->setText(tr("Todo") + " : " +
-                                             lblMain->text());
+  QString txt = tr("Todo") + " : " + lblMain->text();
+  QFontMetrics fm(this->font());
+  QString qsLine = fm.elidedText(txt, Qt::ElideRight, this->width() - 10);
+  mw_one->mymsgDlg->ui->lblTodoText->setText(qsLine);
   mw_one->mymsgDlg->show();
 }
 
