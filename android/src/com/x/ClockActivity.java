@@ -91,9 +91,9 @@ public class ClockActivity extends Activity implements View.OnClickListener {
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         if (zh_cn)
-            btn_cancel.setText("确定");
+            btn_cancel.setText("关闭");
         else
-            btn_cancel.setText("OK");
+            btn_cancel.setText("Close");
         btn_cancel.setOnClickListener(this);
 
     }
@@ -103,7 +103,7 @@ public class ClockActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_cancel:
                 ClockActivity.this.finish();
-                //btn_cancel.setVisibility(View.GONE);
+                btn_cancel.setVisibility(View.GONE);
                 break;
         }
     }
