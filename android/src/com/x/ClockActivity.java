@@ -102,9 +102,6 @@ public class ClockActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_cancel:
-                if (strMute.equals("false")) {
-                    //mediaPlayer.stop();
-                }
                 ClockActivity.this.finish();
                 //btn_cancel.setVisibility(View.GONE);
                 break;
@@ -145,7 +142,7 @@ public class ClockActivity extends Activity implements View.OnClickListener {
         strMute = internalConfigure.getIniKey("mute");
         System.out.println("Mute: " + strMute);
         double vol = 0;
-        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer = new MediaPlayer();
         if (strMute.equals("false")) {
             vol = maxVol * 0.75;
             setMediaVolume((int) Math.round(vol));
@@ -221,6 +218,9 @@ public class ClockActivity extends Activity implements View.OnClickListener {
     protected void onDestroy() {
 
         System.out.println("onDestroy...");
+        if (strMute.equals("false")) {
+            mediaPlayer.stop();
+        }
         if (strMute.equals("false")) {
             setMediaVolume(curVol);
         }
