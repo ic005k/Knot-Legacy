@@ -394,7 +394,10 @@ public class MyActivity extends QtActivity {
         //状态栏文字自适应
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-        //服务
+        // 获取系统语言
+        MyService.isZh(this);
+
+        // 服务
         Intent bindIntent = new Intent(MyActivity.this, MyService.class);
         if (Build.VERSION.SDK_INT >= 26) {
             startForegroundService(bindIntent);

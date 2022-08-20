@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Locale;
 
 
 public class MyService extends Service {
@@ -49,6 +50,35 @@ public class MyService extends Service {
     public static Timer timerAlarm;
     public static Handler handler;
     public static int sleep = 0;
+    public static String strRun;
+    public static String strStatus;
+    public static String strPedometer;
+    public static String strTodo;
+    public static boolean zh_cn;
+
+    public static boolean isZh(Context context) {
+        Locale locale = context.getResources().getConfiguration().locale;
+        String language = locale.getLanguage();
+        if (language.endsWith("zh"))
+            zh_cn = true;
+        else
+            zh_cn = false;
+
+        if (zh_cn) {
+            strRun = "运行中...";
+            strStatus = "状态";
+            strTodo = "待办事项";
+            strPedometer = "计步器";
+
+        } else {
+            strRun = "Running...";
+            strStatus = "Status";
+            strTodo = "Todo";
+            strPedometer = "Pedometer";
+        }
+
+        return zh_cn;
+    }
 
     public static Runnable runnable = new Runnable() {
         @Override
@@ -171,12 +201,14 @@ public class MyService extends Service {
             Intent notificationIntent = new Intent(this, MyActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                     notificationIntent, 0);
+
             Notification notification = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.icon)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
                     .setContentTitle("Knot")
-                    .setContentText("Running...")
+                    .setContentText(strRun)
                     .setContentIntent(pendingIntent).build();
+
             startForeground(1337, notification);
         }
 
@@ -198,8 +230,8 @@ public class MyService extends Service {
         NotificationChannel channel = new NotificationChannel(ID, NAME, NotificationManager.IMPORTANCE_LOW);
         manager.createNotificationChannel(channel);
         Notification notification = new Notification.Builder(this, ID)
-                .setContentTitle("Status")
-                .setContentText("Running...")
+                .setContentTitle(strStatus)
+                .setContentText(strRun)
                 .setSmallIcon(R.drawable.icon)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon))
                 .build();
@@ -227,7 +259,7 @@ public class MyService extends Service {
                 m_builder = new Notification.Builder(context);
             }
 
-            m_builder.setContentTitle("Pedometer")
+            m_builder.setContentTitle(strPedometer)
                     .setContentText(message)
                     .setSmallIcon(R.drawable.icon)
                     .setColor(Color.GREEN)
@@ -263,7 +295,7 @@ public class MyService extends Service {
                 m_builderAlarm = new Notification.Builder(context);
             }
 
-            m_builderAlarm.setContentTitle("Todo")
+            m_builderAlarm.setContentTitle(strTodo)
                     .setContentText(message)
                     .setSmallIcon(R.drawable.icon)
                     .setColor(Color.GREEN)
@@ -273,7 +305,7 @@ public class MyService extends Service {
             //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
             int defaults = Notification.DEFAULT_LIGHTS;
             m_builderAlarm.setDefaults(defaults);
-            
+
             m_notificationManagerAlarm.notify(10, m_builderAlarm.build());
 
             //startForeground(1,m_builder.build());
