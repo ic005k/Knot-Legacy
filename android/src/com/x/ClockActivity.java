@@ -15,6 +15,8 @@ import android.content.Context;
 import android.appwidget.AppWidgetProvider;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.view.WindowManager;
 import android.view.Window;
 
@@ -27,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.io.IOException;
@@ -35,8 +38,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.media.AudioManager;
+import android.widget.TextView;
 
-public class ClockActivity extends Activity {
+import java.util.Locale;
+
+public class ClockActivity extends Activity implements View.OnClickListener {
 
     private MediaPlayer mediaPlayer;
     private int curVol;
@@ -45,6 +51,10 @@ public class ClockActivity extends Activity {
     private String strMute = "false";
     private boolean isRefreshAlarm = true;
     private AudioManager mAudioManager;
+
+    private Button btn_cancel;
+    private TextView text_info;
+    private static boolean zh_cn;
 
     private static Context context;
 
@@ -58,16 +68,55 @@ public class ClockActivity extends Activity {
 
     public native static void CallJavaNotify_3();
 
+    public static boolean isZh(Context context) {
+        Locale locale = context.getResources().getConfiguration().locale;
+        String language = locale.getLanguage();
+        if (language.endsWith("zh"))
+            zh_cn = true;
+        else
+            zh_cn = false;
+
+        return zh_cn;
+    }
+
     public static int setInfoText(String str) {
         strInfo = str;
         System.out.println("InfoText" + strInfo);
         return 1;
     }
 
+    private void bindViews(String str) {
+        text_info = (TextView) findViewById(R.id.text_info);
+        text_info.setText(str);
+
+        btn_cancel = (Button) findViewById(R.id.btn_cancel);
+        if (zh_cn)
+            btn_cancel.setText("确定");
+        else
+            btn_cancel.setText("OK");
+        btn_cancel.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_cancel:
+                if (strMute.equals("false")) {
+                    //mediaPlayer.stop();
+                }
+                ClockActivity.this.finish();
+                //btn_cancel.setVisibility(View.GONE);
+                break;
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         context = getApplicationContext();
+        isZh(context);
         String filename = "/data/data/com.x/files/msg.ini";
         InternalConfigure internalConfigure = new InternalConfigure(this);
         try {
@@ -140,8 +189,13 @@ public class ClockActivity extends Activity {
         String str1 = array[0];
         String str2 = array[1];
         String str3 = array[3];
+        String strTodo;
+        if (zh_cn)
+            strTodo = "待办事项：";
+        else
+            strTodo = "Todo: ";
 
-        new AlertDialog.Builder(ClockActivity.this).setTitle(str1).setMessage(str2 + "\n\n\n" + strCurDT)
+        /*new AlertDialog.Builder(ClockActivity.this).setTitle(str1).setMessage(str2 + "\n\n\n" + strCurDT)
                 .setPositiveButton(str3, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -151,7 +205,11 @@ public class ClockActivity extends Activity {
 
                         ClockActivity.this.finish();
                     }
-                }).show();
+                }).show();*/
+
+
+        setContentView(R.layout.activity_main);
+        bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT);
 
         if (isRefreshAlarm)
             CallJavaNotify_2();
@@ -161,6 +219,7 @@ public class ClockActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+
         System.out.println("onDestroy...");
         if (strMute.equals("false")) {
             setMediaVolume(curVol);
