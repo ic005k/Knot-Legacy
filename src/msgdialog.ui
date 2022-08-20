@@ -266,16 +266,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frameSel">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QFrame" name="frameBtnFun">
      <property name="maximumSize">
       <size>
@@ -342,6 +332,16 @@
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frameSel">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
     </widget>
    </item>
   </layout>
