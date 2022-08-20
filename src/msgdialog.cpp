@@ -10,9 +10,9 @@ QString hsStyle;
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
-  this->layout()->setMargin(0);
+  this->layout()->setMargin(1);
+  this->layout()->setSpacing(1);
   this->installEventFilter(this);
-  this->layout()->setMargin(5);
   initDlg();
 
   ui->dateTimeEdit->hide();
