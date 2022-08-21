@@ -447,6 +447,7 @@ public class MyActivity extends QtActivity {
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
         unregisterReceiver(mScreenStatusReceiver);
+        android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
     }
 
