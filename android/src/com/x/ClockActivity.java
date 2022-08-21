@@ -25,6 +25,7 @@ import android.view.Window;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -48,12 +49,13 @@ import android.app.Application;
 public class ClockActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
     private MediaPlayer mediaPlayer;
-    private int curVol;
+    private static int curVol;
     private static String strInfo = "Todo|There are currently timed tasks pending.|0|Close";
     private static String strEnInfo = "Todo|There are currently timed tasks pending.|0|Close";
     private String strMute = "false";
     private boolean isRefreshAlarm = true;
     private AudioManager mAudioManager;
+    private InternalConfigure internalConfigure;
 
     private Button btn_cancel;
     private TextView text_info;
@@ -118,10 +120,13 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         isZh(context);
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
+        mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
+        curVol = getMediaVolume();
 
         String filename = "/data/data/com.x/files/msg.ini";
-        InternalConfigure internalConfigure = new InternalConfigure(this);
+        internalConfigure = new InternalConfigure(this);
         try {
+
             internalConfigure.readFrom(filename);
         } catch (Exception e) {
             System.err.println("Error : reading msg.ini");
@@ -141,8 +146,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         String strCurDT0 = formatter.format(date);
         String strCurDT = " ( " + strCurDT0 + " ) ";
 
-        mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
-        curVol = getMediaVolume();
         int maxVol = getMediaMaxVolume();
         strMute = internalConfigure.getIniKey("mute");
         System.out.println("Mute: " + strMute);
@@ -393,12 +396,12 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
                     /**
                      *要执行的操作
                      */
-                    if (MyActivity.isScreenOff == false && isRefreshAlarm) {
-                        if (activity instanceof ClockActivity) {
-
+                    if (activity instanceof ClockActivity) {
+                        if (MyActivity.isScreenOff == false && isRefreshAlarm) {
                             //在这里处理后台的操作
                             System.out.println("onActivityStopped...");
-                            if (strMute.equals("false")) {
+
+                            /*if (strMute.equals("false")) {
                                 mediaPlayer.stop();
                             }
                             if (strMute.equals("false")) {
@@ -407,7 +410,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
                             ClockActivity.this.finish();
                             if (!isRefreshAlarm) {
                                 android.os.Process.killProcess(android.os.Process.myPid());
-                            }
+                            }*/
                         }
 
                     }

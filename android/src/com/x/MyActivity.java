@@ -103,7 +103,7 @@ public class MyActivity extends QtActivity {
     private static Intent intent;
     public static String strAlarmInfo;
     public static int alarmCount;
-    public static boolean isScreenOff=false;
+    public static boolean isScreenOff = false;
 
     public native void CallJavaNotify_1();
 
@@ -193,7 +193,7 @@ public class MyActivity extends QtActivity {
 
         return 1;
     }
-
+  
     //------------------------------------------------------------------------
     private final static String TAG = "QtFullscreen";
     private static Context context;
