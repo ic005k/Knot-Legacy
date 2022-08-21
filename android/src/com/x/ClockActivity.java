@@ -36,13 +36,15 @@ import java.io.IOException;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import android.os.Handler;
 import android.media.AudioManager;
 import android.widget.TextView;
 
 import java.util.Locale;
 
-public class ClockActivity extends Activity implements View.OnClickListener {
+import android.app.Application;
+
+public class ClockActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
     private MediaPlayer mediaPlayer;
     private int curVol;
@@ -111,9 +113,11 @@ public class ClockActivity extends Activity implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         context = getApplicationContext();
         isZh(context);
+        Application application = this.getApplication();
+        application.registerActivityLifecycleCallbacks(this);
+
         String filename = "/data/data/com.x/files/msg.ini";
         InternalConfigure internalConfigure = new InternalConfigure(this);
         try {
@@ -224,6 +228,7 @@ public class ClockActivity extends Activity implements View.OnClickListener {
         if (strMute.equals("false")) {
             setMediaVolume(curVol);
         }
+        ClockActivity.this.finish();
         if (!isRefreshAlarm) {
             android.os.Process.killProcess(android.os.Process.myPid());
         }
@@ -355,5 +360,69 @@ public class ClockActivity extends Activity implements View.OnClickListener {
             getWindow().setStatusBarColor(Color.parseColor(color));
         }
     }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+        //比如我的应用主页面是ActMain ActMain进入后台就认定应用进入后台
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                /**
+                 *要执行的操作
+                 */
+                if (activity instanceof ClockActivity) {
+                    if (MyActivity.isScreenOff == false) {
+                        //在这里处理后台的操作
+                        System.out.println("onActivityStopped...");
+                        if (strMute.equals("false")) {
+                            mediaPlayer.stop();
+                        }
+                        if (strMute.equals("false")) {
+                            setMediaVolume(curVol);
+                        }
+                        ClockActivity.this.finish();
+                        if (!isRefreshAlarm) {
+                            android.os.Process.killProcess(android.os.Process.myPid());
+                        }
+                    }
+
+                }
+
+            }
+        }, 3000);//3秒后执行Runnable中的run方法Handler handler = new Handler();
+
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+
+    }
+
 
 }

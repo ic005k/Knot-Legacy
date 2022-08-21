@@ -103,6 +103,7 @@ public class MyActivity extends QtActivity {
     private static Intent intent;
     public static String strAlarmInfo;
     public static int alarmCount;
+    public static boolean isScreenOff=false;
 
     public native void CallJavaNotify_1();
 
@@ -276,6 +277,7 @@ public class MyActivity extends QtActivity {
 
                     CallJavaNotify_2();
                 }
+                isScreenOff = false;
                 Log.w("Knot", "屏幕亮了");
 
             } else if (SCREEN_OFF.equals(intent.getAction())) {
@@ -285,6 +287,7 @@ public class MyActivity extends QtActivity {
 
                     }
                 }
+                isScreenOff = true;
                 Log.w("Knot", "屏幕熄了");
             }
         }
