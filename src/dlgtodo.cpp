@@ -701,7 +701,8 @@ void dlgTodo::refreshAlarm() {
         startTimerAlarm(str1);
         Reg.setValue("msg", str1);
 
-        qDebug() << "Min Time: " << listTotalS << minValue << str1;
+        qDebug() << "Min Time: " << listTotalS << minValue << str1
+                 << "curVol: ";
         break;
       }
     }
