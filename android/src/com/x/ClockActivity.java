@@ -228,6 +228,20 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         if (isRefreshAlarm)
             CallJavaNotify_2();
 
+        MyService.notifyAlarm(context , str2);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(!mediaPlayer.isPlaying() && strMute.equals("false"))
+                {
+                    setMediaVolume(curVol);
+                    curVol = -1;
+                }
+            }
+        }, 10000);//3秒后执行Runnable中的run方法Handler handler = new Handler();
+
         System.out.println("闹钟已开始+++++++++++++++++++++++");
     }
 
@@ -250,7 +264,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         if (strMute.equals("false")) {
             mediaPlayer.stop();
         }
-        if (strMute.equals("false")) {
+        if (strMute.equals("false") && curVol!=-1) {
             setMediaVolume(curVol);
         }
         ClockActivity.this.finish();
