@@ -310,11 +310,17 @@ public class MyService extends Service {
             //int defaults = Notification.DEFAULT_LIGHTS;
             //m_builderAlarm.setDefaults(defaults);
 
-            m_notificationManagerAlarm.notify(10, m_builderAlarm.build());
+            m_notificationManagerAlarm.notify(strTodo,10, m_builderAlarm.build());
 
             //startForeground(1,m_builder.build());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void clearNotify()
+    {
+        m_notificationManagerAlarm.cancel(strTodo, 10);
+        System.out.println("MyService Clear Notiry...");
     }
 }

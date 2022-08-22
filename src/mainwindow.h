@@ -100,6 +100,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  bool initMain = false;
   QObjectList getAllUIControls(QObject *parent);
   QString LatestTime = tr("Latest Time");
   QStringList timeLines;
@@ -274,7 +275,7 @@ class MainWindow : public QMainWindow {
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
-
+  void on_btnTodo_clicked();
   void readEBookDone();
 
  protected:
@@ -324,8 +325,6 @@ class MainWindow : public QMainWindow {
   void on_btnHide_clicked();
 
   void on_actionFind_triggered();
-
-  void on_btnTodo_clicked();
 
   void on_rbFreq_clicked();
 

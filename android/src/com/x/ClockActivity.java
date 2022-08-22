@@ -272,6 +272,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
             android.os.Process.killProcess(android.os.Process.myPid());
         }
         unregisterReceiver(mHomeKeyEvent);
+        MyService.clearNotify();
         super.onDestroy();
         System.out.println("ClockActivity onDestroy...");
     }

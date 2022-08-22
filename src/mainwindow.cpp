@@ -195,6 +195,7 @@ void MainWindow::SaveFile(QString SaveType) {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  initMain = true;
   ui->frameQML->hide();
   ui->quickWidget->installEventFilter(this);
 
@@ -228,6 +229,8 @@ MainWindow::MainWindow(QWidget* parent)
   isInit = true;
 
   initHardStepSensor();
+
+  initMain = false;
 }
 
 void MainWindow::initHardStepSensor() {
@@ -3835,7 +3838,9 @@ static void JavaNotify_2() {
   mw_one->updateHardSensorSteps();
 
   if (!mw_one->ui->frameQML->isHidden()) mw_one->mydlgReader->saveReader();
+
   mw_one->mydlgTodo->refreshAlarm();
+  // if (!mw_one->initMain) mw_one->on_btnTodo_clicked();
 
   qDebug() << "C++ JavaNotify_2";
 }
