@@ -1,7 +1,13 @@
 package com.x;
 
 import org.qtproject.qt5.android.bindings.QtActivity;
+import org.qtproject.qt5.android.bindings.QtApplication;
 
+import android.content.IntentFilter;
+import android.content.Intent;
+import android.content.BroadcastReceiver;
+import android.app.PendingIntent;
+import android.text.TextUtils;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.DialogInterface;
@@ -62,6 +68,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     private static boolean zh_cn;
 
     private static Context context;
+    private static ClockActivity m_instance;
 
     public static Context getContext() {
         return context;
@@ -118,6 +125,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         isZh(context);
+        m_instance = this;
+        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
         mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
@@ -223,9 +232,21 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     }
 
     @Override
-    protected void onDestroy() {
+    public void onPause() {
+        System.out.println("ClockActivity onPause...");
+        super.onPause();
 
-        System.out.println("onDestroy...");
+    }
+
+    @Override
+    public void onStop() {
+        System.out.println("ClockActivity onStop...");
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {
         if (strMute.equals("false")) {
             mediaPlayer.stop();
         }
@@ -236,7 +257,14 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         if (!isRefreshAlarm) {
             android.os.Process.killProcess(android.os.Process.myPid());
         }
+        unregisterReceiver(mHomeKeyEvent);
         super.onDestroy();
+        System.out.println("ClockActivity onDestroy...");
+    }
+
+    public static void close() {
+        if (m_instance != null)
+            m_instance.finish();
     }
 
     public class InternalConfigure {
@@ -388,20 +416,17 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     @Override
     public void onActivityStopped(Activity activity) {
         //比如我的应用主页面是ActMain ActMain进入后台就认定应用进入后台
-        if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
+        /*if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    /**
-                     *要执行的操作
-                     */
-                    if (activity instanceof ClockActivity) {
+                        // 要执行的操作
+                        if (activity instanceof ClockActivity) {
                         if (MyActivity.isScreenOff == false && isRefreshAlarm) {
                             //在这里处理后台的操作
-                            System.out.println("onActivityStopped...");
 
-                            /*if (strMute.equals("false")) {
+                            if (strMute.equals("false")) {
                                 mediaPlayer.stop();
                             }
                             if (strMute.equals("false")) {
@@ -410,7 +435,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
                             ClockActivity.this.finish();
                             if (!isRefreshAlarm) {
                                 android.os.Process.killProcess(android.os.Process.myPid());
-                            }*/
+                            }
                         }
 
                     }
@@ -418,7 +443,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
                 }
             }, 3000);//3秒后执行Runnable中的run方法Handler handler = new Handler();
 
-        }
+        }*/
+        System.out.println("ClockActivity onActivityStopped...");
 
     }
 
@@ -431,6 +457,27 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public void onActivityDestroyed(Activity activity) {
 
     }
+
+    private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
+        String SYSTEM_REASON = "reason";
+        String SYSTEM_HOME_KEY = "homekey";
+        String SYSTEM_HOME_KEY_LONG = "recentapps";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_REASON);
+                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
+                    // 表示按了home键,程序直接进入到后台
+                    close();
+                    System.out.println("ClockActivity HOME键被按下...");
+                } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
+                    // 表示长按home键,显示最近使用的程序
+                    System.out.println("ClockActivity 长按HOME键...");
+                }
+            }
+        }
+    };
 
 
 }

@@ -1,10 +1,14 @@
 package com.x;
 
 import org.qtproject.qt5.android.bindings.QtActivity;
+import org.qtproject.qt5.android.bindings.QtApplication;
+
+import android.app.Application;
 
 import android.app.Activity;
 
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.ComponentName;
@@ -88,7 +92,7 @@ import android.content.DialogInterface;
 import java.util.Random;
 
 
-public class MyActivity extends QtActivity {
+public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
     private static MyActivity m_instance;
     private static SensorManager mSensorManager;
@@ -193,7 +197,7 @@ public class MyActivity extends QtActivity {
 
         return 1;
     }
-  
+
     //------------------------------------------------------------------------
     private final static String TAG = "QtFullscreen";
     private static Context context;
@@ -397,6 +401,9 @@ public class MyActivity extends QtActivity {
         //状态栏文字自适应
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
+        Application application = this.getApplication();
+        application.registerActivityLifecycleCallbacks(this);
+
         // 获取系统语言
         MyService.isZh(this);
 
@@ -434,15 +441,16 @@ public class MyActivity extends QtActivity {
 
     @Override
     public void onPause() {
-        System.out.println("Pause...");
+        System.out.println("onPause...");
         super.onPause();
 
     }
 
     @Override
     public void onStop() {
-        System.out.println("Stop...");
+        System.out.println("onStop...");
         super.onStop();
+        QtApplication.invokeDelegate();
     }
 
     @Override
@@ -452,6 +460,44 @@ public class MyActivity extends QtActivity {
         unregisterReceiver(mScreenStatusReceiver);
         android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
+        QtApplication.invokeDelegate();
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+        //转至后台
+        System.out.println("MyActivity onActivityStopped...");
+
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+
     }
 
     //---------------------------------------------------------------------------
@@ -633,9 +679,14 @@ This method can parse out the real local file path from a file URI.
     public String getUriPath(String uripath) {
         String URL = uripath;
         String str = "None";
-        //if (Build.VERSION.SDK_INT >= 26) {
-        str = URLDecoder.decode(URL);
-        //}
+        try {
+            //if (Build.VERSION.SDK_INT >= 26) {
+            str = URLDecoder.decode(URL, "UTF-8");
+            //}
+        } catch (Exception e) {
+            System.err.println("Error : URLDecoder.decode");
+            e.printStackTrace();
+        }
 
         Log.i(TAG, "UriString  " + uripath);
         Log.i(TAG, "RealPath  " + str);
