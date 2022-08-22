@@ -201,20 +201,6 @@ QRadioButton::indicator:checked {
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="chkDebug">
-        <property name="styleSheet">
-         <string notr="true">QCheckBox::indicator {
-    /* 选择框尺寸 */
-    width:22px;
-    height:22px;
-}</string>
-        </property>
-        <property name="text">
-         <string>Debug Mode</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="chkAutoTime">
         <property name="styleSheet">
@@ -233,7 +219,17 @@ QRadioButton::indicator:checked {
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QCheckBox" name="chkEM">
+       <widget class="QCheckBox" name="chkMute">
+        <property name="text">
+         <string>Todo Alert Mute</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="chkDebug">
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
@@ -242,17 +238,7 @@ QRadioButton::indicator:checked {
 }</string>
         </property>
         <property name="text">
-         <string>Encrypted Memos</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QCheckBox" name="chkMute">
-        <property name="text">
-         <string>Todo Alert Mute</string>
+         <string>Debug Mode</string>
         </property>
        </widget>
       </item>

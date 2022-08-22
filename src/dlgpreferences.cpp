@@ -15,11 +15,11 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->setupUi(this);
   this->installEventFilter(this);
   ui->gBoxSensor->hide();
-  ui->chkEM->hide();
   ui->sliderFontSize->setValue(fontSize);
   ui->lblFontDemo->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
   ui->chkMute->setStyleSheet(ui->chkClose->styleSheet());
+  ui->chkMute->hide();
   hsStyle = ui->sliderFontSize->styleSheet();
 }
 
