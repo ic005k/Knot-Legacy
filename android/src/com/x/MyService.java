@@ -300,17 +300,10 @@ public class MyService extends Service {
                     .setSmallIcon(R.drawable.alarm)
                     .setColor(Color.GREEN)
                     .setAutoCancel(true)
-                    .setDefaults(NotificationCompat.DEFAULT_ALL);
-                    //.setLights(Color.RED,1000,1000);
+                    .setDefaults(Notification.DEFAULT_ALL);
 
-            //.setDefaults(Notification.DEFAULT_LIGHTS)
-            //.setSmallIcon(R.drawable.icon)
-            //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
-
-            //int defaults = Notification.DEFAULT_LIGHTS;
-            //m_builderAlarm.setDefaults(defaults);
-
-            m_notificationManagerAlarm.notify(strTodo,10, m_builderAlarm.build());
+            Notification notification = m_builderAlarm.build();
+            m_notificationManagerAlarm.notify(strTodo, 10, notification);
 
             //startForeground(1,m_builder.build());
         } catch (Exception e) {
@@ -318,8 +311,7 @@ public class MyService extends Service {
         }
     }
 
-    public static void clearNotify()
-    {
+    public static void clearNotify() {
         m_notificationManagerAlarm.cancel(strTodo, 10);
         System.out.println("MyService Clear Notiry...");
     }
