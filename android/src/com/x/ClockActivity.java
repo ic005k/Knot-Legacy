@@ -124,6 +124,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
+        //this.getWindow().setWindowAnimations(R.style.WindowAnim);
         isZh(context);
         m_instance = this;
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
@@ -228,14 +229,13 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         if (isRefreshAlarm)
             CallJavaNotify_2();
 
-        MyService.notifyAlarm(context , str2);
+        MyService.notifyAlarm(context, str2);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(!mediaPlayer.isPlaying() && strMute.equals("false"))
-                {
+                if (!mediaPlayer.isPlaying() && strMute.equals("false")) {
                     setMediaVolume(curVol);
                     curVol = -1;
                 }
@@ -255,16 +255,18 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     @Override
     public void onStop() {
         System.out.println("ClockActivity onStop...");
+
         super.onStop();
 
     }
 
     @Override
     protected void onDestroy() {
+
         if (strMute.equals("false")) {
             mediaPlayer.stop();
         }
-        if (strMute.equals("false") && curVol!=-1) {
+        if (strMute.equals("false") && curVol != -1) {
             setMediaVolume(curVol);
         }
         ClockActivity.this.finish();
@@ -477,6 +479,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         String SYSTEM_REASON = "reason";
         String SYSTEM_HOME_KEY = "homekey";
         String SYSTEM_HOME_KEY_LONG = "recentapps";
+
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
