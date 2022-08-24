@@ -1439,7 +1439,7 @@ void MainWindow::initChartDay() {
   axisX2->setTickType(QValueAxis::TicksFixed);
   axisX2->setTickCount(7);
 
-  axisY2->setRange(0, yMaxDay);
+  axisY2->setRange(0, yMaxDay + 1);
   axisY2->setTickCount(yMaxDay);
 }
 
@@ -2752,16 +2752,6 @@ void MainWindow::on_actionPreferences_triggered() {
 
 void MainWindow::on_tabCharts_currentChanged(int index) {
   if (ui->rbSteps->isChecked()) return;
-
-  /*int count = tabChart->tabBar()->count();
-  if (index >= 0) {
-    for (int i = 0; i < count; i++) {
-      if (i == index)
-        tabChart->tabBar()->setTabTextColor(i, Qt::blue);
-      else
-        tabChart->tabBar()->setTabTextColor(i, Qt::black);
-    }
-  }*/
 
   if (index == 0) {
     startRead(strDate);
