@@ -80,6 +80,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
     public native static void CallJavaNotify_3();
 
+    public native static void CallJavaNotify_4();
+
     public static boolean isZh(Context context) {
         Locale locale = context.getResources().getConfiguration().locale;
         String language = locale.getLanguage();
@@ -272,6 +274,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         ClockActivity.this.finish();
         if (!isRefreshAlarm) {
             android.os.Process.killProcess(android.os.Process.myPid());
+        } else {
+            CallJavaNotify_4(); //mw_one repaint
         }
         unregisterReceiver(mHomeKeyEvent);
         MyService.clearNotify();

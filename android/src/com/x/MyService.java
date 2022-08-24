@@ -43,6 +43,7 @@ public class MyService extends Service {
     public native static void CallJavaNotify_2();
 
     public native static void CallJavaNotify_3();
+    public native static void CallJavaNotify_4();
 
     //private static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
@@ -303,6 +304,7 @@ public class MyService extends Service {
                     .setDefaults(Notification.DEFAULT_ALL);
 
             Notification notification = m_builderAlarm.build();
+
             m_notificationManagerAlarm.notify(strTodo, 10, notification);
 
             //startForeground(1,m_builder.build());

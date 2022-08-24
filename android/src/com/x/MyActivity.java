@@ -109,11 +109,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public static int alarmCount;
     public static boolean isScreenOff = false;
 
-    public native void CallJavaNotify_1();
+    public native static void CallJavaNotify_1();
 
-    public native void CallJavaNotify_2();
+    public native static void CallJavaNotify_2();
 
     public native static void CallJavaNotify_3();
+
+    public native static void CallJavaNotify_4();
 
     public MyActivity() {
         m_instance = this;
