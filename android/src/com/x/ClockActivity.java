@@ -271,14 +271,17 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         if (strMute.equals("false") && curVol != -1) {
             setMediaVolume(curVol);
         }
+
+        unregisterReceiver(mHomeKeyEvent);
+        MyService.clearNotify();
+
         ClockActivity.this.finish();
         if (!isRefreshAlarm) {
             android.os.Process.killProcess(android.os.Process.myPid());
         } else {
             CallJavaNotify_4(); //mw_one repaint
         }
-        unregisterReceiver(mHomeKeyEvent);
-        MyService.clearNotify();
+
         super.onDestroy();
         System.out.println("ClockActivity onDestroy...");
     }
