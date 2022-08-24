@@ -43,6 +43,7 @@ void RegJni(const char* myClassName);
 static void JavaNotify_1();
 static void JavaNotify_2();
 static void JavaNotify_3();
+static void JavaNotify_4();
 
 /* Low pass filter for smoothening sensor input data */
 static filter_t lp_filter_x, lp_filter_y, lp_filter_z;
@@ -3849,10 +3850,18 @@ static void JavaNotify_3() {
 
   // qDebug() << "C++ JavaNotify_3";
 }
+
+static void JavaNotify_4() {
+  mw_one->repaintApp();
+
+  qDebug() << "C++ JavaNotify_4";
+}
+
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_1", "()V", (void*)JavaNotify_1},
     {"CallJavaNotify_2", "()V", (void*)JavaNotify_2},
-    {"CallJavaNotify_3", "()V", (void*)JavaNotify_3}};
+    {"CallJavaNotify_3", "()V", (void*)JavaNotify_3},
+    {"CallJavaNotify_4", "()V", (void*)JavaNotify_4}};
 
 void RegJni(const char* myClassName) {
   QtAndroid::runOnAndroidThreadSync([=]() {
@@ -4024,4 +4033,10 @@ void MainWindow::on_btnOneClickBak_clicked() { on_actionOneClickBakData(); }
 
 QString MainWindow::getTabText() {
   return tabData->tabText(tabData->currentIndex());
+}
+
+void MainWindow::repaintApp() {
+  if (!ui->frameMain->isHidden()) {
+    qApp->processEvents();
+  }
 }

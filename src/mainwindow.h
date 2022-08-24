@@ -271,7 +271,8 @@ class MainWindow : public QMainWindow {
   void addRedo();
   static void genReport();
   QObjectList getAllToolButton(QObjectList lstUIControls);
- public slots:
+  void repaintApp();
+  public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
