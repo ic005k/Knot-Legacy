@@ -11,7 +11,7 @@ extern int sliderPos;
 
 dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
-  ui->btnHomePage->hide();
+
   this->installEventFilter(this);
   ui->textBrowser->setOpenExternalLinks(true);
   //鼠标不可选中文本
@@ -89,7 +89,9 @@ void dlgNotes::on_btnDL_clicked() {
   // if (zh_cn)
   //   str = "https://gitee.com/ic005k/Knot/releases";
   // else
-  str = "https://github.com/ic005k/Knot/releases/latest";
+  str =
+      "https://github.com/ic005k/Knot/releases/download/2022/"
+      "android-build-release-signed.apk";
   QUrl url(str);
   QDesktopServices::openUrl(url);
 }
@@ -97,6 +99,14 @@ void dlgNotes::on_btnDL_clicked() {
 void dlgNotes::on_btnHomePage_clicked() {
   QString str;
   str = "https://github.com/ic005k/Knot/";
+  QUrl url(str);
+  QDesktopServices::openUrl(url);
+}
+
+void dlgNotes::on_btnMirrorDL_clicked() {
+  QString str =
+      "https://ghproxy.com/https://github.com/ic005k/Knot/releases/download/"
+      "2022/android-build-release-signed.apk";
   QUrl url(str);
   QDesktopServices::openUrl(url);
 }

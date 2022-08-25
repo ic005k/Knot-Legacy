@@ -31,6 +31,8 @@ class dlgNotes : public QDialog {
 
   void on_btnHomePage_clicked();
 
+  void on_btnMirrorDL_clicked();
+
  private:
 };
 

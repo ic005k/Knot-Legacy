@@ -172,7 +172,7 @@ QSlider::handle:vertical
                <string>A+</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/a1.png</normaloff>:/res/a1.png</iconset>
               </property>
               <property name="iconSize">
@@ -204,7 +204,7 @@ QSlider::handle:vertical
                <string>A-</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/a2.png</normaloff>:/res/a2.png</iconset>
               </property>
               <property name="iconSize">
@@ -236,7 +236,7 @@ QSlider::handle:vertical
                <string>T</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/font.png</normaloff>:/res/font.png</iconset>
               </property>
               <property name="iconSize">
@@ -346,7 +346,7 @@ QSlider::handle:vertical
                <string>Back</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/back.png</normaloff>:/res/back.png</iconset>
               </property>
               <property name="iconSize">
@@ -378,7 +378,7 @@ QSlider::handle:vertical
                <string>Open</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/open.png</normaloff>:/res/open.png</iconset>
               </property>
               <property name="iconSize">
@@ -404,7 +404,7 @@ QSlider::handle:vertical
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/ReadList.png</normaloff>:/res/ReadList.png</iconset>
               </property>
               <property name="iconSize">
@@ -465,7 +465,7 @@ QSlider::handle:vertical
                <string>&lt;</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/up.png</normaloff>:/res/up.png</iconset>
               </property>
               <property name="iconSize">
@@ -497,7 +497,7 @@ QSlider::handle:vertical
                <string>&gt;</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/down.png</normaloff>:/res/down.png</iconset>
               </property>
               <property name="iconSize">
@@ -523,7 +523,7 @@ QSlider::handle:vertical
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/dir.png</normaloff>:/res/dir.png</iconset>
               </property>
               <property name="iconSize">
@@ -638,7 +638,7 @@ QSlider::handle:vertical
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="res.qrc">
+             <iconset resource="../res.qrc">
               <normaloff>:/res/run.png</normaloff>:/res/run.png</iconset>
             </property>
             <property name="iconSize">
@@ -674,7 +674,7 @@ QSlider::handle:vertical
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="res.qrc">
+             <iconset resource="../res.qrc">
               <normaloff>:/res/onebak.png</normaloff>:/res/onebak.png</iconset>
             </property>
            </widget>
@@ -691,7 +691,7 @@ QSlider::handle:vertical
              <string>Report</string>
             </property>
             <property name="icon">
-             <iconset resource="res.qrc">
+             <iconset resource="../res.qrc">
               <normaloff>:/res/report.png</normaloff>:/res/report.png</iconset>
             </property>
            </widget>
@@ -708,7 +708,7 @@ QSlider::handle:vertical
              <string>Remarks</string>
             </property>
             <property name="icon">
-             <iconset resource="res.qrc">
+             <iconset resource="../res.qrc">
               <normaloff>:/res/remarks.png</normaloff>:/res/remarks.png</iconset>
             </property>
            </widget>
@@ -725,7 +725,7 @@ QSlider::handle:vertical
              <string>Find</string>
             </property>
             <property name="icon">
-             <iconset resource="res.qrc">
+             <iconset resource="../res.qrc">
               <normaloff>:/res/find.png</normaloff>:/res/find.png</iconset>
             </property>
            </widget>
@@ -748,7 +748,7 @@ QSlider::handle:vertical
              <string>Menu</string>
             </property>
             <property name="icon">
-             <iconset resource="res.qrc">
+             <iconset resource="../res.qrc">
               <normaloff>:/res/menu.png</normaloff>:/res/menu.png</iconset>
             </property>
             <property name="iconSize">
@@ -890,7 +890,7 @@ QSlider::handle:vertical
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="res.qrc">
+               <iconset resource="../res.qrc">
                 <normaloff>:/res/tab.png</normaloff>:/res/tab.png</iconset>
               </property>
              </widget>
@@ -1486,7 +1486,7 @@ QRadioButton::indicator:checked {
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="res.qrc"/>
+  <include location="../res.qrc"/>
  </resources>
  <connections/>
 </ui>
