@@ -1331,8 +1331,6 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   QStringList categories;
 
   for (int i = 0; i < count; i++) {
-    // series->append(PointList.at(i));
-    // m_scatterSeries->append(PointList.at(i));
     if (PointList.at(i).y() != 1) isOne = false;
   }
 
@@ -1359,8 +1357,6 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
         }
         y0 = (double)t / 3600;
       }
-      // series->append(PointList.at(i).x(), y0);
-      // m_scatterSeries->append(PointList.at(i).x(), y0);
 
       tempPointList.append(QPointF(PointList.at(i).x(), y0));
     }
@@ -1382,8 +1378,6 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   }
 
   yMaxMonth = max;
-  // chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
-  // chartMonth->axes(Qt::Vertical).first()->setRange(0, yMaxMonth);
 
   QList<double> dList, tempDList;
   for (int i = 0; i < PointList.count(); i++) {
@@ -1408,12 +1402,8 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   barSeries->append(setY);
   axisX->append(categories);
   axisY->setRange(0, yMaxMonth);
-  axisY->setTickCount(yMaxMonth);
 
   if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
-    // chartMonth->axes(Qt::Horizontal).first()->setRange(0, 31);
-    // chartMonth->axes(Qt::Vertical).first()->setRange(0, 24);
-
     axisY->setRange(0, 24);
   }
 }
@@ -1432,15 +1422,11 @@ void MainWindow::initChartDay() {
     m_scatterSeries2_1->append(PointList.at(i));
   }
 
-  // chartDay->axes(Qt::Horizontal).first()->setRange(0, 24);
-  // chartDay->axes(Qt::Vertical).first()->setRange(0, yMaxDay);
-
   axisX2->setRange(0, 24);
   axisX2->setTickType(QValueAxis::TicksFixed);
   axisX2->setTickCount(7);
 
   axisY2->setRange(0, yMaxDay + 1);
-  axisY2->setTickCount(yMaxDay);
 }
 
 void MainWindow::on_actionRename_triggered() {
@@ -3807,9 +3793,13 @@ void MainWindow::on_btnMenu_clicked() {
 
 void MainWindow::on_btnZoom_clicked() {
   if (!ui->frame_tab->isHidden()) {
+    axisY->setTickCount(10);
+    axisY2->setTickCount(10);
     ui->frame_tab->hide();
     ui->frame_charts->setMaximumHeight(this->height());
   } else {
+    axisY->setTickCount(4);
+    axisY2->setTickCount(4);
     ui->frame_tab->show();
     ui->frame_charts->setMaximumHeight(frameChartHeight);
   }
