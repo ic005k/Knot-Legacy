@@ -609,8 +609,10 @@ void MainWindow::init_ChartWidget() {
   // chartDay->setTitleFont(font1);
   axisX->setLabelsFont(font1);
   axisY->setLabelsFont(font1);
+  axisY->setTickCount(4);
   axisX2->setLabelsFont(font1);
   axisY2->setLabelsFont(font1);
+  axisY2->setTickCount(4);
 
   // 获取背景色
   QPalette pal = this->palette();
