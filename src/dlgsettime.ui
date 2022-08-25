@@ -161,6 +161,9 @@ selection-background-color: lightblue;
        <property name="text">
         <string/>
        </property>
+       <property name="clearButtonEnabled">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
     </layout>
@@ -464,6 +467,9 @@ selection-background-color: lightblue;
        </property>
        <property name="placeholderText">
         <string/>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

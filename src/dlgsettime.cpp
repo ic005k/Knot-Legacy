@@ -40,6 +40,18 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->editAmount->setValidator(validator);
   // ui->editAmount->setPlaceholderText(tr("Number"));
   ui->editDesc->setStyleSheet(ui->editAmount->styleSheet());
+
+  auto clearaction1 = new QAction;
+  clearaction1->setIcon(QIcon(":/res/clear.png"));
+  ui->editAmount->addAction(clearaction1, QLineEdit::TrailingPosition);
+  connect(clearaction1, &QAction::triggered,
+          [=]() { ui->editAmount->setText(""); });
+
+  auto clearaction2 = new QAction;
+  clearaction2->setIcon(QIcon(":/res/clear.png"));
+  ui->editDesc->addAction(clearaction2, QLineEdit::TrailingPosition);
+  connect(clearaction2, &QAction::triggered,
+          [=]() { ui->editDesc->setText(""); });
 }
 
 dlgSetTime::~dlgSetTime() { delete ui; }

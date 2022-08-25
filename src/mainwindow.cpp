@@ -3567,6 +3567,12 @@ void MainWindow::init_UIWidget() {
       "QLabel{"
       "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
       "}");
+
+  auto clearaction1 = new QAction;
+  clearaction1->setIcon(QIcon(":/res/clear.png"));
+  ui->editFind->addAction(clearaction1, QLineEdit::TrailingPosition);
+  connect(clearaction1, &QAction::triggered,
+          [=]() { ui->editFind->setText(""); });
 }
 
 void MainWindow::on_btnSelTab_clicked() {
