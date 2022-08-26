@@ -254,3 +254,16 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
 void dlgSetTime::on_btnClearAmount_clicked() { ui->editAmount->clear(); }
 
 void dlgSetTime::on_btnClearDesc_clicked() { ui->editDesc->clear(); }
+
+void dlgSetTime::on_editAmount_textChanged(const QString& arg1) {
+  int count = 0;
+  for (int i = 0; i < arg1.count(); i++) {
+    if (arg1.mid(i, 1) == ".") count++;
+    if (count == 2) {
+      QString str0 = arg1;
+      QString str = str0.mid(0, str0.length() - 1);
+      ui->editAmount->setText(str);
+      break;
+    }
+  }
+}
