@@ -9,7 +9,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++11
 
 ICON = res/icon.icns
-TRANSLATIONS += cn.ts
+TRANSLATIONS += src/cn.ts
 
 unix:!macx:{
     QT += androidextras

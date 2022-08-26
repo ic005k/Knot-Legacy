@@ -50,5 +50,6 @@
         <file>res/timemachine.png</file>
         <file>res/msg.mp3</file>
         <file>src/cn.qm</file>
+        <file>res/clear.png</file>
     </qresource>
 </RCC>
