@@ -41,17 +41,8 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   // ui->editAmount->setPlaceholderText(tr("Number"));
   ui->editDesc->setStyleSheet(ui->editAmount->styleSheet());
 
-  auto clearaction1 = new QAction;
-  clearaction1->setIcon(QIcon(":/res/clear.png"));
-  ui->editAmount->addAction(clearaction1, QLineEdit::TrailingPosition);
-  connect(clearaction1, &QAction::triggered,
-          [=]() { ui->editAmount->setText(""); });
-
-  auto clearaction2 = new QAction;
-  clearaction2->setIcon(QIcon(":/res/clear.png"));
-  ui->editDesc->addAction(clearaction2, QLineEdit::TrailingPosition);
-  connect(clearaction2, &QAction::triggered,
-          [=]() { ui->editDesc->setText(""); });
+  ui->btnClearAmount->setStyleSheet("border:none");
+  ui->btnClearDesc->setStyleSheet("border:none");
 }
 
 dlgSetTime::~dlgSetTime() { delete ui; }
@@ -259,3 +250,7 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
 
   return QWidget::eventFilter(watch, evn);
 }
+
+void dlgSetTime::on_btnClearAmount_clicked() { ui->editAmount->clear(); }
+
+void dlgSetTime::on_btnClearDesc_clicked() { ui->editDesc->clear(); }

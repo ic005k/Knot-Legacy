@@ -272,7 +272,7 @@ class MainWindow : public QMainWindow {
   static void genReport();
   QObjectList getAllToolButton(QObjectList lstUIControls);
   void repaintApp();
-  public slots:
+ public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();

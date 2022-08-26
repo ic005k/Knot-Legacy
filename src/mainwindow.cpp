@@ -674,6 +674,7 @@ void MainWindow::init_TabData() {
                                   .value("TabName" + QString::number(i),
                                          tr("Tab") + QString::number(i + 1))
                                   .toString());
+
     QString strNotes = RegNotes.value("/" + name + "/Note").toString();
     ui->tabWidget->setTabToolTip(i, strNotes);
   }
@@ -681,6 +682,7 @@ void MainWindow::init_TabData() {
   if (TabCount == 0) {
     ui->tabWidget->addTab(init_TreeWidget("tab1"),
                           tr("Tab") + " " + QString::number(1));
+
     ui->tabWidget->setTabToolTip(0, "");
   }
 
@@ -3420,6 +3422,7 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
+
   ui->lblInfo->installEventFilter(this);
   ui->lblInfo->setWordWrap(true);
   ui->lblInfo->adjustSize();
@@ -3722,7 +3725,9 @@ void MainWindow::addUndo(QString log) {
     int count = timeLines.count();
     if (count > 30) {
       count = 30;
-      QFile(timeLines.at(count)).remove();
+      QString str = timeLines.at(count);
+      QString oldFile = str.split("\n").at(0);
+      if (QFile().remove(oldFile)) qDebug() << oldFile << "del...";
       timeLines.removeAt(count);
     }
     QSettings Reg(iniDir + "timemachine.ini", QSettings::IniFormat);
