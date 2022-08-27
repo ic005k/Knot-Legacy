@@ -68,6 +68,7 @@
 extern MainWindow *mw_one;
 extern QStringList readTextList, htmlFiles;
 extern int htmlIndex;
+extern QString strOpfPath;
 
 DocumentHandler::DocumentHandler(QObject *parent)
     : QObject(parent),
@@ -236,10 +237,11 @@ QString DocumentHandler::fileType() const {
 QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
 
 void DocumentHandler::setReadPosition(QString htmlFile) {
+  qDebug() << "file : " << htmlFile;
   if (htmlFile.contains("http")) {
     QUrl url = htmlFile;
     QDesktopServices::openUrl(url);
-  } else {
+  } else if (htmlFile.contains(".html")) {
     for (int i = 0; i < htmlFiles.count(); i++) {
       QString str = htmlFiles.at(i);
       QString str1 = htmlFile;
@@ -254,6 +256,32 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
         break;
       }
     }
+  } else {
+    // open picture
+    QString str = htmlFile;
+    str = str.replace("../", "");
+    QString picfile = strOpfPath + str;
+    qDebug() << "Pic File1 : " << picfile;
+    QFileInfo fi(picfile);
+    QString strBase = fi.fileName();
+    picfile = fi.path() + "/org-" + strBase;
+    qDebug() << "Pic File2 : " << picfile;
+    mw_one->mydlgLoadPic->setGeometry(mw_one->geometry().x(),
+                                      mw_one->geometry().y(), mw_one->width(),
+                                      mw_one->height());
+    mw_one->mydlgLoadPic->setModal(true);
+
+    QPixmap pixmap(picfile);
+    int sx, sy;
+    // sx = mw_one->mydlgLoadPic->ui->lblPic->width();
+    // sy = mw_one->mydlgLoadPic->ui->lblPic->height();
+    sx = mw_one->mydlgLoadPic->ui->framePic->width();
+    sy = mw_one->mydlgLoadPic->ui->framePic->height();
+    pixmap =
+        pixmap.scaled(sx, sy, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    mw_one->mydlgLoadPic->ui->lblPic->setPixmap(pixmap);
+
+    if (QFile(picfile).exists()) mw_one->mydlgLoadPic->show();
   }
 }
 

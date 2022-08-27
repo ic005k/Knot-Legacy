@@ -708,6 +708,15 @@ void dlgReader::setQMLHtml() {
           str.replace("height", "height1");
           str.replace("width", "width1");
         }
+
+        if (str.mid(0, 4) == "<img") {
+          QString str1 = str;
+          QStringList list = str1.split(" ");
+          QString strSrc = list.at(1);
+          strSrc = strSrc.replace("src=", "");
+          str = "<a href=" + strSrc + ">" + str + "</a>";
+        }
+
         edit1->appendPlainText(str);
       }
     }
@@ -1060,7 +1069,8 @@ void dlgReader::proceImg() {
   for (int i = 0; i < fileInfo->size(); i++) {
     if (fileInfo->at(i).exists()) {
       QString file = fileInfo->at(i).filePath();
-
+      QFileInfo fi(file);
+      QFile::copy(file, fi.path() + "/org-" + fi.fileName());
       QImage img(file);
       double w, h, new_w, new_h;
       w = img.width();

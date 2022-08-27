@@ -53,6 +53,7 @@
 #include <QValueAxis>
 
 #include "src/dlglist.h"
+#include "src/dlgloadpic.h"
 #include "src/dlgmainnotes.h"
 #include "src/dlgnotes.h"
 #include "src/dlgpreferences.h"
@@ -66,6 +67,7 @@
 #include "src/msgdialog.h"
 #include "src/specialaccelerometerpedometer.h"
 #include "ui_dlglist.h"
+#include "ui_dlgloadpic.h"
 #include "ui_dlgmainnotes.h"
 #include "ui_dlgnotes.h"
 #include "ui_dlgpreferences.h"
@@ -162,6 +164,7 @@ class MainWindow : public QMainWindow {
   dlgSteps *mydlgSteps;
   dlgReader *mydlgReader;
   msgDialog *mymsgDlg;
+  dlgLoadPic *mydlgLoadPic;
 
   File *myfile;
 
