@@ -16,7 +16,8 @@ class dlgLoadPic : public QDialog {
   ~dlgLoadPic();
   Ui::dlgLoadPic *ui;
 
- protected:
+  void initMain();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  private slots:

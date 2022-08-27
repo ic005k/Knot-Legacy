@@ -270,18 +270,18 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
                                       mw_one->geometry().y(), mw_one->width(),
                                       mw_one->height());
     mw_one->mydlgLoadPic->setModal(true);
+    if (QFile(picfile).exists()) {
+      mw_one->mydlgLoadPic->show();
 
-    QPixmap pixmap(picfile);
-    int sx, sy;
-    // sx = mw_one->mydlgLoadPic->ui->lblPic->width();
-    // sy = mw_one->mydlgLoadPic->ui->lblPic->height();
-    sx = mw_one->mydlgLoadPic->ui->framePic->width();
-    sy = mw_one->mydlgLoadPic->ui->framePic->height();
-    pixmap =
-        pixmap.scaled(sx, sy, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    mw_one->mydlgLoadPic->ui->lblPic->setPixmap(pixmap);
+      QPixmap pixmap(picfile);
+      int sx, sy;
 
-    if (QFile(picfile).exists()) mw_one->mydlgLoadPic->show();
+      sx = mw_one->mydlgLoadPic->ui->framePic->width() - 2;
+      sy = mw_one->mydlgLoadPic->ui->framePic->height() - 2;
+      pixmap =
+          pixmap.scaled(sx, sy, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+      mw_one->mydlgLoadPic->ui->lblPic->setPixmap(pixmap);
+    }
   }
 }
 

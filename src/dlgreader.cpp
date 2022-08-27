@@ -672,6 +672,8 @@ void dlgReader::setQMLHtml() {
   strhtml = strHtml.replace("/span>", "/p>");
   strHtml = strHtml.replace("><", ">\n<");
 
+  strHtml = strHtml.replace("<img", "\n<img");
+
   strHtml = strHtml.replace(".css", "");
   strHtml = strHtml.replace("font-family:", "font0-family:");
 
@@ -693,6 +695,7 @@ void dlgReader::setQMLHtml() {
         !str.contains("</head>")) {
       // if (str.trimmed() != "") edit1->appendPlainText(str);
     }
+
     if (str.contains("</head>")) {
       QString css =
           "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
@@ -712,7 +715,14 @@ void dlgReader::setQMLHtml() {
         if (str.mid(0, 4) == "<img") {
           QString str1 = str;
           QStringList list = str1.split(" ");
-          QString strSrc = list.at(1);
+          QString strSrc;
+          for (int k = 0; k < list.count(); k++) {
+            QString s1 = list.at(k);
+            if (s1.contains("src=")) {
+              strSrc = s1;
+              break;
+            }
+          }
           strSrc = strSrc.replace("src=", "");
           str = "<a href=" + strSrc + ">" + str + "</a>";
         }
@@ -1054,8 +1064,11 @@ void dlgReader::proceImg() {
   QString imgdir = strOpfPath + "Images";
   QDir dir0(imgdir);
   if (!dir0.exists()) imgdir = strOpfPath + "images";
+  QDir dir2(imgdir);
+  if (!dir2.exists()) imgdir = strOpfPath + "graphics";
   QDir dir1(imgdir);
   if (!dir1.exists()) imgdir = strOpfPath;
+  qDebug() << "Image Dir : " << imgdir;
 
   QDir* dir = new QDir(imgdir);
   QStringList filter;
@@ -1082,6 +1095,8 @@ void dlgReader::proceImg() {
         new_h = new_w / r;
         QPixmap pix;
         pix = QPixmap::fromImage(img.scaled(new_w, new_h));
+        pix = pix.scaled(new_w, new_h, Qt::KeepAspectRatio,
+                         Qt::SmoothTransformation);
         pix.save(file);
       }
     }
