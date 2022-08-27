@@ -19,7 +19,8 @@ class dlgLoadPic : public QDialog {
   void initMain();
 
   void loadPic(QString picfile, int k);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  private slots:
@@ -28,6 +29,8 @@ class dlgLoadPic : public QDialog {
   void on_btnZoom_clicked();
 
   void on_btnReduce_clicked();
+
+  void on_hsZoom_valueChanged(int value);
 
  private:
   int k = 0;

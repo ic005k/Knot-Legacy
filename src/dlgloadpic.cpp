@@ -9,6 +9,10 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgLoadPic) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  ui->lblPic->installEventFilter(this);
+  ui->btnReduce->hide();
+  ui->btnZoom->hide();
+  ui->hsZoom->setMaximum(500);
 
   this->layout()->setMargin(1);
   ui->scrollArea->setContentsMargins(1, 1, 1, 1);
@@ -38,7 +42,59 @@ bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
+      on_btnBack_clicked();
       return true;
+    }
+  }
+
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);
+  if (watch == ui->lblPic) {
+    static int press_x;
+    static int press_y;
+    static int relea_x;
+    static int relea_y;
+
+    if (event->type() == QEvent::MouseButtonPress) {
+      press_x = event->globalX();
+      press_y = event->globalY();
+
+      // qDebug() << "Press:" << press_x << press_y;
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      relea_x = event->globalX();
+      relea_y = event->globalY();
+      // qDebug() << "Release:" << relea_x << relea_y;
+    }
+
+    if (event->type() == QEvent::MouseMove) {
+      relea_x = event->globalX();
+      relea_y = event->globalY();
+      // qDebug() << "Release:" << relea_x << relea_y;
+    }
+
+    //判断滑动方向（右滑）
+    if ((relea_x - press_x) > 0 && event->type() == QEvent::MouseMove) {
+      ui->scrollArea->horizontalScrollBar()->setSliderPosition(
+          ui->scrollArea->horizontalScrollBar()->sliderPosition() - 1);
+    }
+
+    //判断滑动方向（左滑）
+    if ((relea_x - press_x) < 0 && event->type() == QEvent::MouseMove) {
+      ui->scrollArea->horizontalScrollBar()->setSliderPosition(
+          ui->scrollArea->horizontalScrollBar()->sliderPosition() + 1);
+    }
+
+    //判断滑动方向（上滑）
+    if (event->type() == QEvent::MouseMove && (relea_y - press_y) < 0) {
+      ui->scrollArea->verticalScrollBar()->setSliderPosition(
+          ui->scrollArea->verticalScrollBar()->sliderPosition() + 1);
+    }
+
+    //判断滑动方向（下滑）
+    if (event->type() == QEvent::MouseMove && (relea_y - press_y) > 0) {
+      ui->scrollArea->verticalScrollBar()->setSliderPosition(
+          ui->scrollArea->verticalScrollBar()->sliderPosition() - 1);
     }
   }
 
@@ -48,6 +104,7 @@ bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
 void dlgLoadPic::on_btnBack_clicked() {
   close();
   k = 0;
+  ui->hsZoom->setValue(0);
 }
 
 void dlgLoadPic::on_btnZoom_clicked() {
@@ -69,3 +126,5 @@ void dlgLoadPic::loadPic(QString picfile, int k) {
   pixmap = pixmap.scaled(sx, sy, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   ui->lblPic->setPixmap(pixmap);
 }
+
+void dlgLoadPic::on_hsZoom_valueChanged(int value) { loadPic(picfile, value); }
