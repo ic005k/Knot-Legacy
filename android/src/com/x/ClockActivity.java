@@ -275,7 +275,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         unregisterReceiver(mHomeKeyEvent);
         MyService.clearNotify();
 
-        ClockActivity.this.finish();
         if (!isRefreshAlarm) {
             android.os.Process.killProcess(android.os.Process.myPid());
         } else {
