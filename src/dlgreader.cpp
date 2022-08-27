@@ -652,6 +652,15 @@ void dlgReader::on_btnPageNext_clicked() {
   showInfo();
 }
 
+void dlgReader::refreshEpubPage() {
+  if (isEpub) {
+    savePageVPos();
+    setQMLHtml();
+    setPageVPos();
+    showInfo();
+  }
+}
+
 void dlgReader::setEpubPagePosition(int index) {
   savePageVPos();
   htmlIndex = index;

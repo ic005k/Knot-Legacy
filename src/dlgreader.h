@@ -71,7 +71,8 @@ class dlgReader : public QDialog {
   static QString get_idref(QString str0);
   void setVPos(qreal pos);
   QDialog *getProgBar();
- public slots:
+  void refreshEpubPage();
+  public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
