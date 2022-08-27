@@ -16,6 +16,24 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QScrollArea" name="scrollArea">
+     <property name="styleSheet">
+      <string notr="true">
+QScrollBar:vertical {
+border: none;
+background: #f5f5f7;
+width: 30px;
+margin: 0px 0 0px 0;
+}
+
+QScrollBar:horizontal {
+border: none;
+background: #f5f5f7;
+height: 30px;
+margin: 0px 0 0px 0;
+}
+
+</string>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>

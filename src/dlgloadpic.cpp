@@ -45,7 +45,10 @@ bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgLoadPic::on_btnBack_clicked() { close(); }
+void dlgLoadPic::on_btnBack_clicked() {
+  close();
+  k = 0;
+}
 
 void dlgLoadPic::on_btnZoom_clicked() {
   k = k + 10;
