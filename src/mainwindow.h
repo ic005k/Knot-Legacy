@@ -164,7 +164,6 @@ class MainWindow : public QMainWindow {
   dlgSteps *mydlgSteps;
   dlgReader *mydlgReader;
   msgDialog *mymsgDlg;
-  dlgLoadPic *mydlgLoadPic;
 
   File *myfile;
 

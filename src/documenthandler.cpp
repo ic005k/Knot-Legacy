@@ -62,7 +62,9 @@
 #include <QTextCodec>
 #include <QTextDocument>
 
-#include "mainwindow.h"
+#include "src/dlgloadpic.h"
+#include "src/mainwindow.h"
+#include "ui_dlgloadpic.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;
@@ -267,14 +269,12 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     QString strBase = fi.fileName();
     picfile = fi.path() + "/org-" + strBase;
     qDebug() << "Pic File2 : " << picfile;
-    mw_one->mydlgLoadPic->setGeometry(mw_one->geometry().x(),
-                                      mw_one->geometry().y(), mw_one->width(),
-                                      mw_one->height());
-    mw_one->mydlgLoadPic->setModal(true);
-    if (QFile(picfile).exists()) {
-      mw_one->mydlgLoadPic->show();
 
-      mw_one->mydlgLoadPic->loadPic(picfile, 0);
+    if (QFile(picfile).exists()) {
+      dlgLoadPic *dlp = new dlgLoadPic(mw_one);
+      dlp->initMain();
+      dlp->show();
+      dlp->loadPic(picfile, 0);
     }
   }
 }

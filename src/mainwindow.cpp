@@ -3450,7 +3450,6 @@ void MainWindow::init_UIWidget() {
   ui->lblStats->setWordWrap(true);
   mydlgReader = new dlgReader(this);
   mymsgDlg = new msgDialog(this);
-  mydlgLoadPic = new dlgLoadPic(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));

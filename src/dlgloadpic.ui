@@ -20,12 +20,12 @@
       <string notr="true">
 QScrollBar:vertical {
 border: none;
-background: #F0F8FF;
+background: Gainsboro;
 width: 30px;
 margin: 0px 0 0px 0;
 }
 QScrollBar::handle:vertical {
-background: Gainsboro;
+background: #1E90FF;
 min-height: 20px;
 border-radius: 2px;
 border: none;
@@ -33,12 +33,12 @@ border: none;
 
 QScrollBar:horizontal {
 border: none;
-background: #F0F8FF;
+background: Gainsboro;
 height: 30px;
 margin: 0px 0 0px 0;
 }
 QScrollBar::handle:horizontal {
-background: Gainsboro;
+background: #1E90FF;
 min-width: 20px;
 border-radius: 2px;
 border: none;
