@@ -20,16 +20,28 @@
       <string notr="true">
 QScrollBar:vertical {
 border: none;
-background: #f5f5f7;
+background: #F0F8FF;
 width: 30px;
 margin: 0px 0 0px 0;
+}
+QScrollBar::handle:vertical {
+background: Gainsboro;
+min-height: 20px;
+border-radius: 2px;
+border: none;
 }
 
 QScrollBar:horizontal {
 border: none;
-background: #f5f5f7;
+background: #F0F8FF;
 height: 30px;
 margin: 0px 0 0px 0;
+}
+QScrollBar::handle:horizontal {
+background: Gainsboro;
+min-width: 20px;
+border-radius: 2px;
+border: none;
 }
 
 </string>
