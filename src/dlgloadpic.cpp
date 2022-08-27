@@ -3,25 +3,26 @@
 #include "src/mainwindow.h"
 #include "ui_dlgloadpic.h"
 extern MainWindow* mw_one;
+extern QString picfile;
 
 dlgLoadPic::dlgLoadPic(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgLoadPic) {
   ui->setupUi(this);
   this->installEventFilter(this);
 
-  ui->btnZoom->hide();
-  ui->btnReduce->hide();
   this->layout()->setMargin(1);
+  ui->scrollArea->setContentsMargins(1, 1, 1, 1);
 
   initMain();
 
   QPixmap pixmap(":/res/icon.png");
   int sx, sy;
-  sx = ui->framePic->width();
-  sy = ui->framePic->height();
+  sx = ui->scrollArea->width();
+  sy = ui->scrollArea->height();
   pixmap = pixmap.scaled(sx, sy, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   ui->lblPic->setPixmap(pixmap);
 
+  setModal(true);
   show();
   close();
 }
@@ -45,3 +46,23 @@ bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void dlgLoadPic::on_btnBack_clicked() { close(); }
+
+void dlgLoadPic::on_btnZoom_clicked() {
+  k = k + 10;
+  loadPic(picfile, k);
+}
+
+void dlgLoadPic::on_btnReduce_clicked() {
+  k = k - 10;
+  loadPic(picfile, k);
+}
+
+void dlgLoadPic::loadPic(QString picfile, int k) {
+  QPixmap pixmap(picfile);
+  int sx, sy;
+  sx = ui->scrollArea->width() + k -
+       ui->scrollArea->verticalScrollBar()->width() - 12;
+  sy = ui->scrollArea->height() + k;
+  pixmap = pixmap.scaled(sx, sy, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+  ui->lblPic->setPixmap(pixmap);
+}

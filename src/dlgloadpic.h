@@ -17,13 +17,20 @@ class dlgLoadPic : public QDialog {
   Ui::dlgLoadPic *ui;
 
   void initMain();
+
+  void loadPic(QString picfile, int k);
   protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  private slots:
   void on_btnBack_clicked();
 
+  void on_btnZoom_clicked();
+
+  void on_btnReduce_clicked();
+
  private:
+  int k = 0;
 };
 
 #endif  // DLGLOADPIC_H

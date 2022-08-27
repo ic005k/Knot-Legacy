@@ -69,6 +69,7 @@ extern MainWindow *mw_one;
 extern QStringList readTextList, htmlFiles;
 extern int htmlIndex;
 extern QString strOpfPath;
+QString picfile;
 
 DocumentHandler::DocumentHandler(QObject *parent)
     : QObject(parent),
@@ -260,7 +261,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     // open picture
     QString str = htmlFile;
     str = str.replace("../", "");
-    QString picfile = strOpfPath + str;
+    picfile = strOpfPath + str;
     qDebug() << "Pic File1 : " << picfile;
     QFileInfo fi(picfile);
     QString strBase = fi.fileName();
@@ -273,14 +274,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     if (QFile(picfile).exists()) {
       mw_one->mydlgLoadPic->show();
 
-      QPixmap pixmap(picfile);
-      int sx, sy;
-
-      sx = mw_one->mydlgLoadPic->ui->framePic->width() - 2;
-      sy = mw_one->mydlgLoadPic->ui->framePic->height() - 2;
-      pixmap =
-          pixmap.scaled(sx, sy, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-      mw_one->mydlgLoadPic->ui->lblPic->setPixmap(pixmap);
+      mw_one->mydlgLoadPic->loadPic(picfile, 0);
     }
   }
 }
