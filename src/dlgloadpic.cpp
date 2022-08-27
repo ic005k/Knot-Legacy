@@ -105,7 +105,8 @@ void dlgLoadPic::on_btnBack_clicked() {
   close();
   k = 0;
   ui->hsZoom->setValue(0);
-  mw_one->mydlgReader->refreshEpubPage();
+  mw_one->mydlgReader->on_btnPageUp_clicked();
+  mw_one->mydlgReader->on_btnPageNext_clicked();
 }
 
 void dlgLoadPic::on_btnZoom_clicked() {
