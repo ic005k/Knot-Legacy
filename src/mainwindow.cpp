@@ -1940,6 +1940,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (watch == ui->quickWidget) {
+    if (isSelText) return QWidget::eventFilter(watch, evn);
+
     static int press_x;
     static int press_y;
     static int relea_x;
@@ -3564,8 +3566,6 @@ void MainWindow::init_UIWidget() {
   ui->editFind->addAction(clearaction1, QLineEdit::TrailingPosition);
   connect(clearaction1, &QAction::triggered,
           [=]() { ui->editFind->setText(""); });
-
-  ui->quickWidget->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4033,5 +4033,36 @@ QString MainWindow::getTabText() {
 void MainWindow::repaintApp() {
   if (!ui->frameMain->isHidden()) {
     qApp->processEvents();
+  }
+}
+
+bool MainWindow::showMsgBox(QString title, QString info) {
+  QMessageBox msgBox;
+  msgBox.setText(title);
+  msgBox.setInformativeText(info);
+  QPushButton* btnCancel =
+      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+  QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+  btnOk->setFocus();
+  msgBox.exec();
+  if (msgBox.clickedButton() == btnCancel) {
+    return false;
+  }
+  return true;
+}
+
+void MainWindow::on_btnSelText_clicked() {
+  if (!isSelText) {
+    ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
+    isSelText = true;
+    ui->quickWidget->rootContext()->setContextProperty("isSelText", isSelText);
+
+  } else {
+    ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));
+    isSelText = false;
+    ui->quickWidget->rootContext()->setContextProperty("isSelText", isSelText);
+
+    on_btnPageUp_clicked();
+    on_btnPageNext_clicked();
   }
 }

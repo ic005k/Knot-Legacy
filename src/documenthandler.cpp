@@ -243,7 +243,11 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
   qDebug() << "file : " << htmlFile;
   if (htmlFile.contains("http")) {
     QUrl url = htmlFile;
-    QDesktopServices::openUrl(url);
+    bool ok = mw_one->showMsgBox(tr("Reader"),
+                                 tr("Open this URL?") + "\n" + htmlFile);
+    if (ok) QDesktopServices::openUrl(url);
+    mw_one->on_btnPageUp_clicked();
+    mw_one->on_btnPageNext_clicked();
   } else if (htmlFile.contains(".html") || htmlFile.contains(".xhtml")) {
     for (int i = 0; i < htmlFiles.count(); i++) {
       QString str = htmlFiles.at(i);

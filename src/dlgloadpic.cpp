@@ -73,7 +73,7 @@ bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
       // qDebug() << "Release:" << relea_x << relea_y;
     }
 
-    int mx = qAbs(relea_x - press_x) / 4;
+    int mx = qAbs(relea_x - press_x) / 10;
     //判断滑动方向（右滑）
     if ((relea_x - press_x) > 0 && event->type() == QEvent::MouseMove) {
       ui->scrollArea->horizontalScrollBar()->setSliderPosition(
@@ -86,7 +86,7 @@ bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
           ui->scrollArea->horizontalScrollBar()->sliderPosition() + mx);
     }
 
-    int my = qAbs(relea_y - press_y) / 4;
+    int my = qAbs(relea_y - press_y) / 10;
     //判断滑动方向（上滑）
     if (event->type() == QEvent::MouseMove && (relea_y - press_y) < 0) {
       ui->scrollArea->verticalScrollBar()->setSliderPosition(

@@ -50,6 +50,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
       "font-weight: bold;");
   mw_one->ui->btnReadList->setStyleSheet("border:none");
   mw_one->ui->btnBackDir->setStyleSheet("border:none");
+  mw_one->ui->btnSelText->setStyleSheet("border:none");
   QFont f = this->font();
   f.setPointSize(11);
   f.setBold(true);
@@ -118,6 +119,8 @@ void dlgReader::startOpenFile(QString openfile) {
   isEBook = true;
 
   mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/reader.qml")));
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("isSelText",
+                                                             mw_one->isSelText);
   if (QFile(openfile).exists()) {
     strTitle = "";
     mw_one->ui->btnPages->setText(tr("Pages") + "\n" + QString::number(0) +
@@ -584,6 +587,7 @@ void dlgReader::on_hSlider_sliderReleased(int position) {
 }
 
 void dlgReader::on_btnPageUp_clicked() {
+  if (mw_one->isSelText) return;
   mw_one->ui->lblTitle->hide();
 
   savePageVPos();
@@ -614,6 +618,7 @@ void dlgReader::on_btnPageUp_clicked() {
 }
 
 void dlgReader::on_btnPageNext_clicked() {
+  if (mw_one->isSelText) return;
   mw_one->ui->lblTitle->hide();
 
   savePageVPos();
@@ -694,14 +699,6 @@ void dlgReader::setQMLHtml() {
   for (int i = 0; i < edit->document()->lineCount(); i++) {
     QString str = getTextEditLineText(edit, i);
     str = str.trimmed();
-    if (!str.contains(mystyle) && !str.contains("Title") &&
-        !str.contains("<img") && str.mid(0, 2) == "<p") {
-      // str.insert(2, mystyle);
-    }
-    if (!str.contains("link") && !str.contains("stylesheet") &&
-        !str.contains("</head>")) {
-      // if (str.trimmed() != "") edit1->appendPlainText(str);
-    }
 
     if (str.contains("</head>")) {
       QString css =
@@ -731,7 +728,9 @@ void dlgReader::setQMLHtml() {
             }
           }
           strSrc = strSrc.replace("src=", "");
+          strSrc = strSrc.replace("/>", "");
           str = "<a href=" + strSrc + ">" + str + "</a>";
+          qDebug() << "strSrc=" << strSrc << str;
 
           str = str.replace("width=", "width1=");
           str = str.replace("height=", "height1=");
@@ -747,7 +746,6 @@ void dlgReader::setQMLHtml() {
   TextEditToFile(edit1, hf);
   strHtml = edit1->toPlainText();
   strHtml = strHtml.replace("../", "file://" + strOpfPath);
-  // edit1->setPlainText(strHtml);
 
   msg = hf;
   strhtml = strHtml;

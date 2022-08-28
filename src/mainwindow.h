@@ -102,6 +102,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  bool isSelText = false;
   bool initMain = false;
   QObjectList getAllUIControls(QObject *parent);
   QString LatestTime = tr("Latest Time");
@@ -274,12 +275,15 @@ class MainWindow : public QMainWindow {
   static void genReport();
   QObjectList getAllToolButton(QObjectList lstUIControls);
   void repaintApp();
+  bool showMsgBox(QString title, QString info);
  public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
   void on_btnTodo_clicked();
   void readEBookDone();
+  void on_btnPageUp_clicked();
+  void on_btnPageNext_clicked();
 
  protected:
   void closeEvent(QCloseEvent *event) override;
@@ -377,10 +381,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnOpen_clicked();
 
-  void on_btnPageUp_clicked();
-
-  void on_btnPageNext_clicked();
-
   void on_btnFont_clicked();
 
   void on_btnPages_clicked();
@@ -403,6 +403,8 @@ class MainWindow : public QMainWindow {
   void redo();
 
   void timeMachine();
+
+  void on_btnSelText_clicked();
 
  private:
   int frameChartHeight = 220;

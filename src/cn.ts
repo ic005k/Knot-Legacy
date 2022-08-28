@@ -4,7 +4,17 @@
 <context>
     <name>DocumentHandler</name>
     <message>
-        <location filename="documenthandler.cpp" line="336"/>
+        <location filename="documenthandler.cpp" line="246"/>
+        <source>Reader</source>
+        <translation>阅读器</translation>
+    </message>
+    <message>
+        <location filename="documenthandler.cpp" line="247"/>
+        <source>Open this URL?</source>
+        <translation>打开这个网址？</translation>
+    </message>
+    <message>
+        <location filename="documenthandler.cpp" line="335"/>
         <source>Cannot save: </source>
         <translation></translation>
     </message>
@@ -157,14 +167,14 @@
     <message>
         <location filename="mainwindow.ui" line="725"/>
         <location filename="mainwindow.ui" line="1574"/>
-        <location filename="mainwindow.cpp" line="3614"/>
+        <location filename="mainwindow.cpp" line="3615"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="708"/>
         <location filename="mainwindow.ui" line="1549"/>
-        <location filename="mainwindow.cpp" line="3618"/>
+        <location filename="mainwindow.cpp" line="3619"/>
         <source>Remarks</source>
         <translation>备注</translation>
     </message>
@@ -175,13 +185,13 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="1534"/>
-        <location filename="mainwindow.cpp" line="3612"/>
+        <location filename="mainwindow.cpp" line="3613"/>
         <source>Rename Tab</source>
         <translation>重命名标签页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1584"/>
-        <location filename="mainwindow.cpp" line="3623"/>
+        <location filename="mainwindow.cpp" line="3624"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
@@ -255,33 +265,33 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="1539"/>
-        <location filename="mainwindow.cpp" line="3610"/>
+        <location filename="mainwindow.cpp" line="3611"/>
         <source>Add Tab</source>
         <translation>增加标签页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1544"/>
         <location filename="mainwindow.cpp" line="1486"/>
-        <location filename="mainwindow.cpp" line="3611"/>
+        <location filename="mainwindow.cpp" line="3612"/>
         <source>Del Tab</source>
         <translation>删除标签页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1554"/>
-        <location filename="mainwindow.cpp" line="3625"/>
+        <location filename="mainwindow.cpp" line="3626"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1559"/>
-        <location filename="mainwindow.cpp" line="3621"/>
+        <location filename="mainwindow.cpp" line="3622"/>
         <source>Export Data</source>
         <translation>导出数据</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1564"/>
         <location filename="mainwindow.cpp" line="2137"/>
-        <location filename="mainwindow.cpp" line="3622"/>
+        <location filename="mainwindow.cpp" line="3623"/>
         <source>Import Data</source>
         <translation>导入数据</translation>
     </message>
@@ -292,14 +302,14 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="1589"/>
-        <location filename="mainwindow.cpp" line="3624"/>
+        <location filename="mainwindow.cpp" line="3625"/>
         <source>Memos</source>
         <translation>备忘录</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="691"/>
         <location filename="mainwindow.ui" line="1579"/>
-        <location filename="mainwindow.cpp" line="3616"/>
+        <location filename="mainwindow.cpp" line="3617"/>
         <source>Report</source>
         <translation>报表</translation>
     </message>
@@ -320,6 +330,7 @@
         <location filename="mainwindow.cpp" line="1478"/>
         <location filename="mainwindow.cpp" line="2149"/>
         <location filename="mainwindow.cpp" line="3316"/>
+        <location filename="mainwindow.cpp" line="4044"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -333,6 +344,7 @@
         <location filename="mainwindow.cpp" line="2164"/>
         <location filename="mainwindow.cpp" line="3315"/>
         <location filename="mainwindow.cpp" line="3341"/>
+        <location filename="mainwindow.cpp" line="4045"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -496,28 +508,28 @@
         <translation>无效的数据文件。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3628"/>
+        <location filename="mainwindow.cpp" line="3629"/>
         <source>One Click Data Backup</source>
         <translation>一键数据备份</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3630"/>
+        <location filename="mainwindow.cpp" line="3631"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3631"/>
+        <location filename="mainwindow.cpp" line="3632"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3635"/>
+        <location filename="mainwindow.cpp" line="3636"/>
         <source>Time Machine</source>
         <translation>时光机</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3954"/>
-        <location filename="mainwindow.cpp" line="3960"/>
+        <location filename="mainwindow.cpp" line="3955"/>
+        <location filename="mainwindow.cpp" line="3961"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
@@ -546,7 +558,7 @@
         <translation>输入的密码不匹配</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3626"/>
+        <location filename="mainwindow.cpp" line="3627"/>
         <source>Check for New Releases</source>
         <translation>检查新版本</translation>
     </message>
@@ -702,22 +714,22 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgloadpic.ui" line="20"/>
+        <location filename="dlgloadpic.ui" line="77"/>
         <source>Picture</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgloadpic.ui" line="69"/>
+        <location filename="dlgloadpic.ui" line="130"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="dlgloadpic.ui" line="88"/>
+        <location filename="dlgloadpic.ui" line="149"/>
         <source>Zoom</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="dlgloadpic.ui" line="107"/>
+        <location filename="dlgloadpic.ui" line="168"/>
         <source>Reduce</source>
         <translation>缩小</translation>
     </message>
@@ -999,14 +1011,14 @@
     </message>
     <message>
         <location filename="dlgreader.cpp" line="123"/>
-        <location filename="dlgreader.cpp" line="449"/>
-        <location filename="dlgreader.cpp" line="927"/>
-        <location filename="dlgreader.cpp" line="941"/>
+        <location filename="dlgreader.cpp" line="446"/>
+        <location filename="dlgreader.cpp" line="944"/>
+        <location filename="dlgreader.cpp" line="958"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="761"/>
+        <location filename="dlgreader.cpp" line="778"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation></translation>
