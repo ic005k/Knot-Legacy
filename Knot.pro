@@ -32,6 +32,7 @@ INSTALLS += dataFiles
 SOURCES += \
     src/chart.cpp \
     src/dlglist.cpp \
+    src/dlgloadpic.cpp \
     src/dlgmainnotes.cpp \
     src/dlgnotes.cpp \
     src/dlgpreferences.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     src/chart.h \
     src/count_steps.h \
     src/dlglist.h \
+    src/dlgloadpic.h \
     src/dlgmainnotes.h \
     src/dlgnotes.h \
     src/dlgpreferences.h \
@@ -71,6 +73,7 @@ HEADERS += \
 
 FORMS += \
     src/dlglist.ui \
+    src/dlgloadpic.ui \
     src/dlgmainnotes.ui \
     src/dlgnotes.ui \
     src/dlgpreferences.ui \

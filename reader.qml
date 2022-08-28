@@ -70,13 +70,13 @@ Item {
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
 
+
         /*WebView {
             id: mywebview
             anchors.fill: parent
             url: "file://" + baseUrl
             visible: false
         }*/
-
         states: State {
             name: "autoscroll"
             PropertyChanges {
@@ -106,7 +106,7 @@ Item {
             wrapMode: TextArea.Wrap
             readOnly: true
             persistentSelection: true
-            //selectByMouse: true
+            selectByMouse: isSelText
             smooth: true
 
             color: "#000000"
@@ -120,12 +120,12 @@ Item {
             //bottomPadding: 0
             onLinkActivated: {
                 //Qt.openUrlExternally(link)
-                document.setBackDir()
+                document.setBackDir(link)
                 //document.load("file://" + htmlPath + link)
-                document.setReadPosition( link)
+                document.setReadPosition(link)
                 console.log(htmlPath + link)
-                console.log(htmlPath )
-                console.log( link)
+                console.log(htmlPath)
+                console.log(link)
             }
         }
 
