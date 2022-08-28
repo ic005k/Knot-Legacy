@@ -270,15 +270,11 @@ void dlgReader::openFile(QString openfile) {
             qfile = strOpfPath + get_href(idref, opfList);
             QFileInfo fi(qfile);
             if (fi.exists() && !htmlFiles.contains(qfile)) {
-              // if (QFileInfo(temp).size() < 55000000) {
               if (fi.size() <= 20000) {
                 htmlFiles.append(qfile);
               } else {
                 SplitFile(qfile);
               }
-              //} else {
-              //  htmlFiles.append(qfile);
-              //}
             }
           }
         }
@@ -339,7 +335,7 @@ QString dlgReader::get_href(QString idref, QStringList opfList) {
     QString str0 = opfList.at(i);
     str0 = str0.trimmed();
     if (str0.contains("href=") && str0.contains(idref) &&
-        str0.mid(0, 5) == "<item") {
+        str0.mid(0, 5) == "<item" && str0.contains("html")) {
       QString str1 = str0;
       QStringList list = str1.split(" ");
       for (int i = 0; i < list.count(); i++) {
@@ -348,7 +344,8 @@ QString dlgReader::get_href(QString idref, QStringList opfList) {
           str = str.replace("href=", "");
           str = str.replace("\"", "");
           str = str.trimmed();
-          // qDebug() << "href" << idref << str;
+          qDebug() << "href"
+                   << "idref: " << idref << str;
           return str;
           break;
         }
@@ -685,6 +682,7 @@ void dlgReader::setQMLHtml() {
 
   strHtml = strHtml.replace(".css", "");
   strHtml = strHtml.replace("font-family:", "font0-family:");
+  strhtml = strHtml.replace("font-size:", "font0-size:");
 
   QString space0, mystyle;
   space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -734,9 +732,14 @@ void dlgReader::setQMLHtml() {
           }
           strSrc = strSrc.replace("src=", "");
           str = "<a href=" + strSrc + ">" + str + "</a>";
+
+          str = str.replace("width=", "width1=");
+          str = str.replace("height=", "height1=");
         }
 
-        edit1->appendPlainText(str);
+        if (!str.contains("stylesheet") && !str.contains("<style") &&
+            !str.contains("/style>"))
+          edit1->appendPlainText(str);
       }
     }
   }
@@ -751,6 +754,8 @@ void dlgReader::setQMLHtml() {
 
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
+
+  qDebug() << "Html File : " << msg;
 }
 
 void dlgReader::on_btnPages_clicked() {

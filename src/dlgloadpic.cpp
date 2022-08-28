@@ -73,28 +73,30 @@ bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
       // qDebug() << "Release:" << relea_x << relea_y;
     }
 
+    int mx = qAbs(relea_x - press_x) / 4;
     //判断滑动方向（右滑）
     if ((relea_x - press_x) > 0 && event->type() == QEvent::MouseMove) {
       ui->scrollArea->horizontalScrollBar()->setSliderPosition(
-          ui->scrollArea->horizontalScrollBar()->sliderPosition() - 1);
+          ui->scrollArea->horizontalScrollBar()->sliderPosition() - mx);
     }
 
     //判断滑动方向（左滑）
     if ((relea_x - press_x) < 0 && event->type() == QEvent::MouseMove) {
       ui->scrollArea->horizontalScrollBar()->setSliderPosition(
-          ui->scrollArea->horizontalScrollBar()->sliderPosition() + 1);
+          ui->scrollArea->horizontalScrollBar()->sliderPosition() + mx);
     }
 
+    int my = qAbs(relea_y - press_y) / 4;
     //判断滑动方向（上滑）
     if (event->type() == QEvent::MouseMove && (relea_y - press_y) < 0) {
       ui->scrollArea->verticalScrollBar()->setSliderPosition(
-          ui->scrollArea->verticalScrollBar()->sliderPosition() + 1);
+          ui->scrollArea->verticalScrollBar()->sliderPosition() + my);
     }
 
     //判断滑动方向（下滑）
     if (event->type() == QEvent::MouseMove && (relea_y - press_y) > 0) {
       ui->scrollArea->verticalScrollBar()->setSliderPosition(
-          ui->scrollArea->verticalScrollBar()->sliderPosition() - 1);
+          ui->scrollArea->verticalScrollBar()->sliderPosition() - my);
     }
   }
 

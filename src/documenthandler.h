@@ -143,7 +143,7 @@ class DocumentHandler : public QObject {
   void loadBuffer(QString str);
   void saveAs(const QUrl &fileUrl);
   void setReadPosition(QString htmlFile);
-  void setBackDir();
+  void setBackDir(QString link);
 
  Q_SIGNALS:
   void documentChanged();

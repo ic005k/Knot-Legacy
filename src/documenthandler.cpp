@@ -244,7 +244,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
   if (htmlFile.contains("http")) {
     QUrl url = htmlFile;
     QDesktopServices::openUrl(url);
-  } else if (htmlFile.contains(".html")) {
+  } else if (htmlFile.contains(".html") || htmlFile.contains(".xhtml")) {
     for (int i = 0; i < htmlFiles.count(); i++) {
       QString str = htmlFiles.at(i);
       QString str1 = htmlFile;
@@ -275,6 +275,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
       dlp->initMain();
       dlp->show();
       dlp->loadPic(picfile, 0);
+      dlp->ui->hsZoom->setValue(200);
     }
   }
 }
@@ -386,9 +387,11 @@ void DocumentHandler::setModified(bool m) {
   if (m_document) m_document->textDocument()->setModified(m);
 }
 
-void DocumentHandler::setBackDir() {
-  mw_one->mydlgReader->mainDirIndex = htmlIndex;
-  mw_one->ui->btnBackDir->setEnabled(true);
-  mw_one->repaint();
-  qDebug() << "mainDirIndex: " << mw_one->mydlgReader->mainDirIndex;
+void DocumentHandler::setBackDir(QString link) {
+  if (link.contains(".html") || link.contains(".xhtml")) {
+    mw_one->mydlgReader->mainDirIndex = htmlIndex;
+    mw_one->ui->btnBackDir->setEnabled(true);
+    mw_one->repaint();
+    qDebug() << "mainDirIndex: " << mw_one->mydlgReader->mainDirIndex;
+  }
 }
