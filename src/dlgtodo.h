@@ -50,7 +50,9 @@ class dlgTodo : public QDialog {
   qlonglong getSecond(QString strDateTime);
   void refreshAlarm();
   int getEditTextHeight(QTextEdit *edit);
- public slots:
+  QLabel *getTimeLabel(QListWidgetItem *item);
+  QLabel *getMainLabel(QListWidgetItem *item);
+  public slots:
   void on_btnOK_clicked();
   void on_btnCancel_clicked();
 

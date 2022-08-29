@@ -421,6 +421,18 @@ QLabel* dlgTodo::getMainLabel(int index) {
   return lbl;
 }
 
+QLabel* dlgTodo::getTimeLabel(QListWidgetItem* item) {
+  QWidget* w = ui->listWidget->itemWidget(item);
+  QLabel* lbl = (QLabel*)w->children().at(2)->children().at(1);
+  return lbl;
+}
+
+QLabel* dlgTodo::getMainLabel(QListWidgetItem* item) {
+  QWidget* w = ui->listWidget->itemWidget(item);
+  QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
+  return lbl;
+}
+
 void dlgTodo::on_btnOK_clicked() {
   QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
   lbl->setText(tr("Alarm") + "  " + mw_one->mymsgDlg->ui->dateTimeEdit->text());
@@ -655,6 +667,7 @@ void dlgTodo::refreshAlarm() {
 
   QStringList listAlarm;
   QList<qlonglong> listTotalS;
+  QList<QListWidgetItem*> listAlarmItems;
   for (int i = 0; i < ui->listWidget->count(); i++) {
     lbl = getTimeLabel(i);
     str = lbl->text().trimmed();
@@ -670,12 +683,13 @@ void dlgTodo::refreshAlarm() {
 
         listAlarm.append(str1);
         listTotalS.append(totals);
+        listAlarmItems.append(ui->listWidget->item(i));
 
         // set time marks
         QString strDate = str.split(" ").at(0);
-        QString strYear = strDate.split("-").at(0);
-        QString strMonth = strDate.split("-").at(1);
-        QString strDay = strDate.split("-").at(2);
+        // QString strYear = strDate.split("-").at(0);
+        // QString strMonth = strDate.split("-").at(1);
+        // QString strDay = strDate.split("-").at(2);
         if (strDate == QDate::currentDate().toString("yyyy-M-d")) {
           lbl->setStyleSheet(alarmStyleToday);
           isToday = true;
@@ -703,6 +717,42 @@ void dlgTodo::refreshAlarm() {
 
         qDebug() << "Min Time: " << listTotalS << minValue << str1
                  << "curVol: ";
+        QListWidgetItem* item = listAlarmItems.at(i);
+        QLabel* lblTime = getTimeLabel(item);
+        bool isTop = false;
+        if (lblTime->text().contains(
+                QDate::currentDate().toString("yyyy-M-d"))) {
+          for (int m = 0; m < ui->listWidget->count(); m++) {
+            if (item == ui->listWidget->item(m)) {
+              if (m != 0) {
+                isTop = true;
+                break;
+              }
+            }
+          }
+          if (isTop) {
+            add_Item(getMainLabel(item)->text(), lblTime->text(), true);
+            getTimeLabel(ui->listWidget->item(0))
+                ->setStyleSheet(alarmStyleToday);
+
+            for (int m = 0; m < ui->listWidget->count(); m++) {
+              if (item == ui->listWidget->item(m)) {
+                if (m != 0) {
+                  ui->listWidget->takeItem(m);
+                  break;
+                }
+              }
+            }
+
+            for (int m = 0; m < ui->listWidget->count(); m++) {
+              add_ItemSn(m);
+            }
+
+            ui->listWidget->setCurrentRow(0);
+            ui->listWidget->verticalScrollBar()->setSliderPosition(0);
+          }
+        }
+
         break;
       }
     }
@@ -719,7 +769,7 @@ void dlgTodo::refreshAlarm() {
   if (mw_one->mydlgPre->ui->chkMute->isChecked()) strMute = "true";
   Reg.setValue("mute", strMute);
 
-  if (!QFileInfo(ini_file).exists())
+  if (!QFile(ini_file).exists())
     qDebug() << "ini no exists";
   else
     qDebug() << "ini ok";
