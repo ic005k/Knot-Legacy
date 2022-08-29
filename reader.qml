@@ -1,7 +1,7 @@
-import QtQuick 2.0
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 import QtQuick.Window 2.0
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.3
 //import QtWebView 1.0
 import MyModel1 1.0
 import MyModel2 1.0
@@ -39,8 +39,8 @@ Item {
         cursorPosition: textArea.cursorPosition
         selectionStart: textArea.selectionStart
         selectionEnd: textArea.selectionEnd
+        //textColor: "#FF0000"
 
-        // textColor: TODO
         //Component.onCompleted: document.load("qml:/texteditor.html")
         //Component.onCompleted: document.load("file://" + htmlFile)
         onLoaded: {
@@ -93,7 +93,7 @@ Item {
 
         TextArea.flickable: TextArea {
             id: textArea
-            //anchors.fill: parent //QML TextArea: Possible anchor loop detected on fill.
+
             font.pixelSize: FontSize
             font.family: FontName
             font.letterSpacing: 2
@@ -105,7 +105,8 @@ Item {
             //Component.onCompleted: text = file.text
             wrapMode: TextArea.Wrap
             readOnly: true
-            persistentSelection: true
+            focus: true
+            persistentSelection: isSelText
             selectByMouse: isSelText
             smooth: true
 
@@ -114,10 +115,12 @@ Item {
             text: strText
             visible: true
 
-            //leftPadding: 10
-            //rightPadding: 10
-            //topPadding: 0
-            //bottomPadding: 0
+            MouseArea {
+                acceptedButtons: Qt.RightButton
+                anchors.fill: parent
+                onClicked: contextMenu.open()
+            }
+
             onLinkActivated: {
                 //Qt.openUrlExternally(link)
                 document.setBackDir(link)
@@ -153,6 +156,28 @@ Item {
             console.log(textArea.lineCount)
             console.log(textArea.height)
             console.log(control.position)
+        }
+    }
+
+    Menu {
+        id: contextMenu
+
+        MenuItem {
+            text: qsTr("Copy")
+            enabled: textArea.selectedText
+            onTriggered: textArea.copy()
+        }
+
+
+        /*MenuItem {
+            text: qsTr("Cut")
+            enabled: textArea.selectedText
+            onTriggered: textArea.cut()
+        }*/
+        MenuItem {
+            text: qsTr("Paste")
+            enabled: textArea.canPaste
+            onTriggered: textArea.paste()
         }
     }
 }

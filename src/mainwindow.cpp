@@ -1743,6 +1743,7 @@ void MainWindow::on_actionNotes_triggered() {
   mydlgNotes->ui->frameAbout->hide();
   mydlgNotes->ui->textEdit->setHidden(false);
   mydlgNotes->setModal(true);
+  mydlgNotes->ui->lblTitle->show();
   mydlgNotes->ui->lblTitle->setText(tr("Notes") + " : " +
                                     tabData->tabText(tabData->currentIndex()));
   mydlgNotes->show();
@@ -2269,7 +2270,7 @@ void MainWindow::on_actionView_App_Data_triggered() {
   textBrowser->setHidden(true);
   mydlgNotes->ui->textEdit->setHidden(true);
 
-  mydlgNotes->ui->lblTitle->setText("");
+  mydlgNotes->ui->lblTitle->hide();
   mydlgNotes->ui->lblAbout->setText(textBrowser->toPlainText());
   mydlgNotes->ui->frameAbout->show();
   mydlgNotes->setGeometry(0, 0, this->width(), this->height());

@@ -16,6 +16,24 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="lblTitle">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel
+{
+border: 0px solid gray;
+border-radius: 0px;
+padding: 0 8px;
+/*background: red;*/
+ background-color:qlineargradient(spread:pad,x1:1,y1:0,x2:0,y2:0,stop:0 #FFAEB9,stop:1 #87CEFF);  
+color:black;
+selection-background-color: lightblue;
+}</string>
+     </property>
      <property name="text">
       <string>TextLabel</string>
      </property>
