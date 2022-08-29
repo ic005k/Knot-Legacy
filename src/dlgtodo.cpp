@@ -11,7 +11,7 @@ QString highLblStyle = "color:rgb(212,35,122)";
 // "background-color: rgb(255,255,255);color:rgb(212,35,122)";
 int highCount;
 QString orgLblStyle;
-QListWidget *mylist, *listRecycle;
+QListWidget *listTodo, *listRecycle;
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
 extern bool loading, isBreak, isImport;
@@ -28,16 +28,16 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   QString strTar = "/data/data/com.x/files/msg.mp3";
   QFile::copy(":/res/msg.mp3", strTar);
 
-  mylist = new QListWidget;
-  mylist = ui->listWidget;
+  listTodo = new QListWidget;
+  listTodo = ui->listWidget;
   listRecycle = new QListWidget;
   listRecycle = ui->listRecycle;
   // ui->listRecycle->setStyleSheet("text-decoration: line-through;");
   ui->listRecycle->setWordWrap(true);
 
-  ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
-  ui->listWidget->horizontalScrollBar()->setHidden(true);
+  listTodo->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(listTodo, QScroller::LeftMouseButtonGesture);
+  listTodo->horizontalScrollBar()->setHidden(true);
 
   ui->listRecycle->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listRecycle, QScroller::LeftMouseButtonGesture);
@@ -47,11 +47,11 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   /*QScrollerProperties sp;
   sp.setScrollMetric(QScrollerProperties::DragStartDistance, 0.00001);
   sp.setScrollMetric(QScrollerProperties::ScrollingCurve, QEasingCurve::Linear);
-  QScroller* qs = QScroller::scroller(ui->listWidget);
+  QScroller* qs = QScroller::scroller(listTodo);
   QScroller* qs1 = QScroller::scroller(ui->listRecycle);
   qs->setScrollerProperties(sp);
   qs1->setScrollerProperties(sp);*/
-  mw_one->setSCrollPro(ui->listWidget);
+  mw_one->setSCrollPro(listTodo);
   mw_one->setSCrollPro(ui->listRecycle);
 
   ui->btnAdd->setStyleSheet("border:none");
@@ -78,12 +78,12 @@ void dlgTodo::saveTodo() {
   highCount = 0;
   QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  int count = mylist->count();
+  int count = listTodo->count();
   Reg.setValue("/Todo/Count", count);
   for (int i = 0; i < count; i++) {
     if (isBreak) break;
-    QListWidgetItem* item = mylist->item(i);
-    QWidget* w = mylist->itemWidget(item);
+    QListWidgetItem* item = listTodo->item(i);
+    QWidget* w = listTodo->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
     QString str = lbl->text();
     QLabel* lblTime = (QLabel*)w->children().at(2)->children().at(1);
@@ -109,7 +109,7 @@ void dlgTodo::saveTodo() {
 }
 
 void dlgTodo::init_Items() {
-  ui->listWidget->clear();
+  listTodo->clear();
   ui->listRecycle->clear();
   QString ini_file;
   if (isImport)
@@ -135,8 +135,8 @@ void dlgTodo::init_Items() {
   highCount = Reg.value("/Todo/HighCount").toInt();
   for (int i = 0; i < highCount; i++) {
     int index = Reg.value("/Todo/HighLightSn" + QString::number(i + 1)).toInt();
-    QListWidgetItem* item = ui->listWidget->item(index);
-    QWidget* w = ui->listWidget->itemWidget(item);
+    QListWidgetItem* item = listTodo->item(index);
+    QWidget* w = listTodo->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(2);
     lbl->setStyleSheet(highLblStyle);
   }
@@ -146,10 +146,10 @@ void dlgTodo::init_Items() {
 
 void dlgTodo::on_btnAdd_clicked() {
   QString str = ui->textEdit->toPlainText().trimmed();
-  for (int i = 0; i < ui->listWidget->count(); i++) {
+  for (int i = 0; i < listTodo->count(); i++) {
     QLabel* lbl = getMainLabel(i);
     if (lbl->text() == str) {
-      ui->listWidget->setCurrentRow(i);
+      listTodo->setCurrentRow(i);
       return;
     }
   }
@@ -158,7 +158,7 @@ void dlgTodo::on_btnAdd_clicked() {
                QTime::currentTime().toString(),
            true);
   ui->textEdit->setText("");
-  ui->listWidget->verticalScrollBar()->setSliderPosition(0);
+  listTodo->verticalScrollBar()->setSliderPosition(0);
 }
 
 void dlgTodo::add_Item(QString str, QString time, bool insert) {
@@ -167,9 +167,9 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   pItem->setText("");
 
   if (insert)
-    ui->listWidget->insertItem(0, pItem);
+    listTodo->insertItem(0, pItem);
   else
-    ui->listWidget->addItem(pItem);
+    listTodo->addItem(pItem);
 
   QWidget* w = new QWidget;
   w->setContentsMargins(0, 0, 0, 0);
@@ -195,16 +195,16 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
 
     mw_one->Sleep(400);
 
-    ui->listWidget->setCurrentItem(pItem);
-    int row = ui->listWidget->currentRow();
+    listTodo->setCurrentItem(pItem);
+    int row = listTodo->currentRow();
     QString str = getMainLabel(row)->text().trimmed();
     QListWidgetItem* item = new QListWidgetItem;
-    item->setSizeHint(QSize(ui->listWidget->width() - 16, 80));
+    item->setSizeHint(QSize(listTodo->width() - 16, 80));
     item->setText(QDateTime::currentDateTime().toString() + "  " + tr("Done") +
                   "\n" + str);
     ui->listRecycle->insertItem(0, item);
-    ui->listWidget->takeItem(row);
-    int index = ui->listWidget->currentRow();
+    listTodo->takeItem(row);
+    int index = listTodo->currentRow();
     add_ItemSn(index);
 
     refreshAlarm();
@@ -237,7 +237,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
       label->setText(edit->toPlainText().trimmed());
 
       int itemHeight = fontHeight * 2 + getEditTextHeight(edit);
-      pItem->setSizeHint(QSize(ui->listWidget->width() - 20, itemHeight));
+      pItem->setSizeHint(QSize(listTodo->width() - 20, itemHeight));
     }
   });
 
@@ -272,26 +272,26 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   layout->addWidget(btn);
   w->setLayout(layout);
 
-  ui->listWidget->setItemWidget(pItem, w);
+  listTodo->setItemWidget(pItem, w);
 
   edit->clear();
   edit->setPlainText(str);
   int itemHeight = fontHeight * 2 + getEditTextHeight(edit);
-  pItem->setSizeHint(QSize(ui->listWidget->width() - 20, itemHeight));
+  pItem->setSizeHint(QSize(listTodo->width() - 20, itemHeight));
   qDebug() << fontHeight << label->height() << itemHeight;
 
   add_ItemSn(0);
 }
 
 void dlgTodo::add_ItemSn(int index) {
-  for (int i = 0; i < ui->listWidget->count(); i++) {
-    QListWidgetItem* item = ui->listWidget->item(i);
-    QWidget* w = ui->listWidget->itemWidget(item);
+  for (int i = 0; i < listTodo->count(); i++) {
+    QListWidgetItem* item = listTodo->item(i);
+    QWidget* w = listTodo->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(1);
 
     lbl->setText(QString::number(i + 1) + ". ");
   }
-  ui->listWidget->setCurrentRow(index);
+  listTodo->setCurrentRow(index);
 }
 
 int dlgTodo::getEditTextHeight(QTextEdit* edit) {
@@ -302,7 +302,7 @@ int dlgTodo::getEditTextHeight(QTextEdit* edit) {
 }
 
 void dlgTodo::on_listWidget_itemClicked(QListWidgetItem* item) {
-  QWidget* w = ui->listWidget->itemWidget(item);
+  QWidget* w = listTodo->itemWidget(item);
   qDebug() << w->children();
 
   if (isModi) {
@@ -320,7 +320,7 @@ void dlgTodo::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
 
 void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {
   Q_UNUSED(currentRow);
-  // if (editItem != NULL) ui->listWidget->closePersistentEditor(editItem);
+  // if (editItem != NULL) listTodo->closePersistentEditor(editItem);
 }
 
 void dlgTodo::closeEvent(QCloseEvent* event) {
@@ -349,12 +349,12 @@ bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void dlgTodo::on_btnModify_clicked() {
-  int row = ui->listWidget->currentRow();
+  int row = listTodo->currentRow();
   if (row < 0) return;
 
   if (ui->btnModify->text() == tr("Modify")) {
-    QListWidgetItem* item = ui->listWidget->currentItem();
-    QWidget* w = ui->listWidget->itemWidget(item);
+    QListWidgetItem* item = listTodo->currentItem();
+    QWidget* w = listTodo->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
     QTextEdit* edit = (QTextEdit*)w->children().at(2)->children().at(3);
     lblModi = lbl;
@@ -373,68 +373,70 @@ void dlgTodo::on_btnModify_clicked() {
 }
 
 void dlgTodo::on_btnHigh_clicked() {
-  int row = ui->listWidget->currentRow();
+  int row = listTodo->currentRow();
   if (row < 0) return;
-  QListWidgetItem* item = ui->listWidget->currentItem();
-  QWidget* w = ui->listWidget->itemWidget(item);
+  QListWidgetItem* item = listTodo->currentItem();
+  QWidget* w = listTodo->itemWidget(item);
   QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
-  ui->listWidget->takeItem(row);
+  listTodo->takeItem(row);
   QString str = lbl->text();
   QLabel* lblTime = (QLabel*)w->children().at(2)->children().at(1);
   add_Item(str, lblTime->text(), true);
-  QListWidgetItem* item1 = ui->listWidget->currentItem();
-  QWidget* w1 = ui->listWidget->itemWidget(item1);
+  QListWidgetItem* item1 = listTodo->currentItem();
+  QWidget* w1 = listTodo->itemWidget(item1);
   QFrame* frame = (QFrame*)w1->children().at(2);
   frame->setStyleSheet(highLblStyle);
-  ui->listWidget->scrollToTop();
+  listTodo->scrollToTop();
 
   refreshAlarm();
+  setAlartTop(minAlartItem);
 }
 
 void dlgTodo::on_btnLow_clicked() {
-  int row = ui->listWidget->currentRow();
+  int row = listTodo->currentRow();
   if (row < 0) return;
-  QListWidgetItem* item = ui->listWidget->currentItem();
-  QWidget* w = ui->listWidget->itemWidget(item);
+  QListWidgetItem* item = listTodo->currentItem();
+  QWidget* w = listTodo->itemWidget(item);
   QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
-  ui->listWidget->takeItem(row);
+  listTodo->takeItem(row);
   QString str = lbl->text();
   QLabel* lblTime = (QLabel*)w->children().at(2)->children().at(1);
   add_Item(str, lblTime->text(), false);
-  ui->listWidget->setCurrentRow(ui->listWidget->count() - 1);
-  ui->listWidget->scrollToBottom();
+  listTodo->setCurrentRow(listTodo->count() - 1);
+  listTodo->scrollToBottom();
 
   refreshAlarm();
+  setAlartTop(minAlartItem);
 }
 
 QLabel* dlgTodo::getTimeLabel(int index) {
-  QListWidgetItem* item = ui->listWidget->item(index);
-  QWidget* w = ui->listWidget->itemWidget(item);
+  QListWidgetItem* item = listTodo->item(index);
+  QWidget* w = listTodo->itemWidget(item);
   QLabel* lbl = (QLabel*)w->children().at(2)->children().at(1);
   return lbl;
 }
 
 QLabel* dlgTodo::getMainLabel(int index) {
-  QListWidgetItem* item = ui->listWidget->item(index);
-  QWidget* w = ui->listWidget->itemWidget(item);
+  QListWidgetItem* item = listTodo->item(index);
+  QWidget* w = listTodo->itemWidget(item);
   QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
   return lbl;
 }
 
 QLabel* dlgTodo::getTimeLabel(QListWidgetItem* item) {
-  QWidget* w = ui->listWidget->itemWidget(item);
+  QWidget* w = listTodo->itemWidget(item);
   QLabel* lbl = (QLabel*)w->children().at(2)->children().at(1);
   return lbl;
 }
 
 QLabel* dlgTodo::getMainLabel(QListWidgetItem* item) {
-  QWidget* w = ui->listWidget->itemWidget(item);
+  QWidget* w = listTodo->itemWidget(item);
   QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
   return lbl;
 }
 
 void dlgTodo::on_btnOK_clicked() {
-  QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
+  QLabel* lbl = getTimeLabel(listTodo->currentRow());
   lbl->setText(tr("Alarm") + "  " + mw_one->mymsgDlg->ui->dateTimeEdit->text());
   lbl->setStyleSheet(alarmStyle);
   // lbl->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
@@ -444,6 +446,7 @@ void dlgTodo::on_btnOK_clicked() {
   ui->frameSetTime->hide();
   mw_one->mymsgDlg->close();
   refreshAlarm();
+  setAlartTop(minAlartItem);
 }
 
 qlonglong dlgTodo::getSecond(QString strDateTime) {
@@ -458,10 +461,10 @@ qlonglong dlgTodo::getSecond(QString strDateTime) {
 }
 
 void dlgTodo::on_btnSetTime_clicked() {
-  if (!ui->listWidget->currentIndex().isValid()) return;
+  if (!listTodo->currentIndex().isValid()) return;
 
-  QLabel* lblMain = getMainLabel(ui->listWidget->currentRow());
-  QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
+  QLabel* lblMain = getMainLabel(listTodo->currentRow());
+  QLabel* lbl = getTimeLabel(listTodo->currentRow());
   QString str = lbl->text().trimmed();
   if (str.contains(tr("Alarm")) || str.mid(0, 2) == "20") {
     str = str.replace(tr("Alarm"), "").trimmed();
@@ -490,19 +493,20 @@ void dlgTodo::on_btnSetTime_clicked() {
 }
 
 void dlgTodo::on_btnCancel_clicked() {
-  QLabel* lbl = getTimeLabel(ui->listWidget->currentRow());
+  QLabel* lbl = getTimeLabel(listTodo->currentRow());
   QString str = lbl->text().trimmed();
   if (str.contains(tr("Alarm"))) str = str.replace(tr("Alarm"), "");
   lbl->setText(str.trimmed());
-  lbl->setStyleSheet(getMainLabel(ui->listWidget->currentRow())->styleSheet());
+  lbl->setStyleSheet(getMainLabel(listTodo->currentRow())->styleSheet());
   ui->frameSetTime->hide();
   mw_one->mymsgDlg->close();
   refreshAlarm();
+  setAlartTop(minAlartItem);
 }
 
 void dlgTodo::on_Alarm() {
   int count = 0;
-  for (int i = 0; i < ui->listWidget->count(); i++) {
+  for (int i = 0; i < listTodo->count(); i++) {
     QLabel* lbl = getTimeLabel(i);
     QString str = lbl->text().trimmed();
     if (str.contains(tr("Alarm"))) {
@@ -611,7 +615,7 @@ void dlgTodo::sendMsgAlarm(QString text) {
 void dlgTodo::on_btnRecycle_clicked() {
   ui->lblRecycle->show();
   ui->listRecycle->show();
-  ui->listWidget->hide();
+  listTodo->hide();
   ui->frameRecycle->show();
   ui->frameToolBar->hide();
   ui->frameSetTime->hide();
@@ -625,7 +629,7 @@ void dlgTodo::on_btnRecycle_clicked() {
 void dlgTodo::on_btnReturn_clicked() {
   ui->lblRecycle->hide();
   ui->listRecycle->hide();
-  ui->listWidget->show();
+  listTodo->show();
   ui->frameRecycle->hide();
   ui->frameToolBar->show();
   ui->textEdit->show();
@@ -668,7 +672,7 @@ void dlgTodo::refreshAlarm() {
   QStringList listAlarm;
   QList<qlonglong> listTotalS;
   QList<QListWidgetItem*> listAlarmItems;
-  for (int i = 0; i < ui->listWidget->count(); i++) {
+  for (int i = 0; i < listTodo->count(); i++) {
     lbl = getTimeLabel(i);
     str = lbl->text().trimmed();
     if (str.contains(tr("Alarm"))) {
@@ -683,7 +687,7 @@ void dlgTodo::refreshAlarm() {
 
         listAlarm.append(str1);
         listTotalS.append(totals);
-        listAlarmItems.append(ui->listWidget->item(i));
+        listAlarmItems.append(listTodo->item(i));
 
         // set time marks
         QString strDate = str.split(" ").at(0);
@@ -704,8 +708,8 @@ void dlgTodo::refreshAlarm() {
   }
 
   qlonglong minValue = 0;
+  minAlartItem = NULL;
   if (count > 0) {
-    QListWidgetItem* item = new QListWidgetItem();
     minValue = *std::min_element(listTotalS.begin(), listTotalS.end());
     for (int i = 0; i < listTotalS.count(); i++) {
       if (minValue == listTotalS.at(i)) {
@@ -715,13 +719,11 @@ void dlgTodo::refreshAlarm() {
 
         qDebug() << "Min Time: " << listTotalS << minValue << str1
                  << "curVol: ";
-        item = listAlarmItems.at(i);
+        minAlartItem = listAlarmItems.at(i);
 
         break;
       }
     }
-
-    setAlartTop(item);
   }
 
   if (!isToday) {
@@ -742,11 +744,13 @@ void dlgTodo::refreshAlarm() {
 }
 
 void dlgTodo::setAlartTop(QListWidgetItem* item) {
+  if (item == NULL) return;
+
   QLabel* lblTime = getTimeLabel(item);
   bool isTop = false;
   if (lblTime->text().contains(QDate::currentDate().toString("yyyy-M-d"))) {
-    for (int m = 0; m < ui->listWidget->count(); m++) {
-      if (item == ui->listWidget->item(m)) {
+    for (int m = 0; m < listTodo->count(); m++) {
+      if (item == listTodo->item(m)) {
         if (m != 0) {
           isTop = true;
           break;
@@ -755,23 +759,23 @@ void dlgTodo::setAlartTop(QListWidgetItem* item) {
     }
     if (isTop) {
       add_Item(getMainLabel(item)->text(), lblTime->text(), true);
-      getTimeLabel(ui->listWidget->item(0))->setStyleSheet(alarmStyleToday);
+      getTimeLabel(listTodo->item(0))->setStyleSheet(alarmStyleToday);
 
-      for (int m = 0; m < ui->listWidget->count(); m++) {
-        if (item == ui->listWidget->item(m)) {
+      for (int m = 0; m < listTodo->count(); m++) {
+        if (item == listTodo->item(m)) {
           if (m != 0) {
-            ui->listWidget->takeItem(m);
+            listTodo->takeItem(m);
             break;
           }
         }
       }
 
-      for (int m = 0; m < ui->listWidget->count(); m++) {
+      for (int m = 0; m < listTodo->count(); m++) {
         add_ItemSn(m);
       }
 
-      ui->listWidget->setCurrentRow(0);
-      ui->listWidget->verticalScrollBar()->setSliderPosition(0);
+      listTodo->setCurrentRow(0);
+      listTodo->verticalScrollBar()->setSliderPosition(0);
     }
   }
 }

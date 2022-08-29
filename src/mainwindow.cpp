@@ -2474,6 +2474,7 @@ void MainWindow::on_btnTodo_clicked() {
 
   mydlgTodo->show();
   mydlgTodo->refreshAlarm();
+  mydlgTodo->setAlartTop(mydlgTodo->minAlartItem);
 }
 
 void MainWindow::on_rbFreq_clicked() {

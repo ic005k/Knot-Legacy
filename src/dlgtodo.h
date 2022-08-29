@@ -21,6 +21,8 @@ class dlgTodo : public QDialog {
   Ui::dlgTodo *ui;
   ~dlgTodo();
 
+  void setAlartTop(QListWidgetItem *item);
+  QListWidgetItem *minAlartItem;
   void init_Items();
   QString alarmStyle =
       "QLabel{background:rgb(112,128,105);color:rgb(255,255,255);border:2px;"
@@ -52,7 +54,7 @@ class dlgTodo : public QDialog {
   int getEditTextHeight(QTextEdit *edit);
   QLabel *getTimeLabel(QListWidgetItem *item);
   QLabel *getMainLabel(QListWidgetItem *item);
-  public slots:
+ public slots:
   void on_btnOK_clicked();
   void on_btnCancel_clicked();
 
@@ -97,6 +99,5 @@ class dlgTodo : public QDialog {
   QLabel *lblModi;
   QTextEdit *editModi;
   bool isModi = false;
-  void setAlartTop(QListWidgetItem *item);
 };
 #endif  // DLGTODO_H
