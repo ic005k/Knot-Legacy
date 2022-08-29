@@ -689,6 +689,9 @@ void dlgReader::setQMLHtml() {
   strHtml = strHtml.replace("font-family:", "font0-family:");
   strhtml = strHtml.replace("font-size:", "font0-size:");
 
+  strhtml = strHtml.replace("class=\"center\"", "class=\"center0\"");
+  strhtml = strHtml.replace("class=\"left\"", "class=\"left0\"");
+
   QString space0, mystyle;
   space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
   mystyle = " style='line-height:35px; width:100% ; text-indent:40px; ' ";
