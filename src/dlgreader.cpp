@@ -91,6 +91,18 @@ void dlgReader::on_btnOpen_clicked() {
 QDialog* dlgReader::getProgBar() {
   QDialog* dlgProgEBook;
   QProgressBar* progReadEbook = new QProgressBar(this);
+  progReadEbook->setStyleSheet(
+      "QProgressBar{border:0px solid #FFFFFF;"
+      "height:30;"
+      "background:rgba(25,255,25,0);"
+      "text-align:right;"
+      "color:rgb(255,255,255);"
+      "border-radius:0px;}"
+
+      "QProgressBar:chunk{"
+      "border-radius:0px;"
+      "background-color:rgba(18,150,219,255);"
+      "}");
   progReadEbook->setMaximum(0);
   progReadEbook->setMinimum(0);
 
@@ -338,8 +350,8 @@ QString dlgReader::get_href(QString idref, QStringList opfList) {
     QString str0 = opfList.at(i);
     str0 = str0.trimmed();
     if (str0.contains("href=") && str0.contains(idref) &&
-        str0.mid(0, 5) == "<item" && str0.contains("html")) {
-      QString str1 = str0;
+        str0.mid(0, 5) == "<item" && str0.contains("htm")) {
+      /*QString str1 = str0;
       QStringList list = str1.split(" ");
       for (int i = 0; i < list.count(); i++) {
         QString str = list.at(i);
@@ -348,9 +360,22 @@ QString dlgReader::get_href(QString idref, QStringList opfList) {
           str = str.replace("\"", "");
           str = str.trimmed();
           qDebug() << "href"
-                   << "idref: " << idref << str;
+                   << "idref = " << idref << str;
           return str;
           break;
+        }
+      }*/
+      QString str1;
+      for (int j = 0; j < str0.length(); j++) {
+        if (str0.mid(j, 6) == "href=\"") {
+          for (int m = j + 6; m < str0.length(); m++) {
+            if (str0.mid(m, 1) == "\"") {
+              str1 = str0.mid(j + 6, m - j - 6);
+              qDebug() << "href=" << str1;
+              return str1;
+              break;
+            }
+          }
         }
       }
       break;
@@ -679,8 +704,10 @@ void dlgReader::setQMLHtml() {
   QString strHtml = mw_one->loadText(hf);
   strHtml = strHtml.replace("</p>", "</p>\n");
   strHtml = strHtml.replace("/>", "/>\n");
-  strhtml = strHtml.replace("<span", "<p");
-  strhtml = strHtml.replace("/span>", "/p>");
+
+  // strhtml = strHtml.replace("<span", "<p");
+  // strhtml = strHtml.replace("/span>", "/p>");
+
   strHtml = strHtml.replace("><", ">\n<");
 
   strHtml = strHtml.replace("<img", "\n<img");
