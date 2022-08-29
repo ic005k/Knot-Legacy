@@ -1741,7 +1741,6 @@ void MainWindow::on_actionNotes_triggered() {
   mydlgNotes->ui->textEdit->clear();
 
   mydlgNotes->ui->frameAbout->hide();
-  mydlgNotes->ui->textBrowser->setHidden(true);
   mydlgNotes->ui->textEdit->setHidden(false);
   mydlgNotes->setModal(true);
   mydlgNotes->ui->lblTitle->setText(tr("Notes") + " : " +
@@ -2253,26 +2252,25 @@ void MainWindow::on_actionView_App_Data_triggered() {
 
   bakData(iniFile, false);
 
-  mydlgNotes->ui->textBrowser->clear();
   QSettings Reg(iniFile, QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   int keys = Reg.allKeys().count();
 
-  mydlgNotes->ui->textBrowser->append("[" + appName + "]");
-  mydlgNotes->ui->textBrowser->append("Ver: " + ver);
-  mydlgNotes->ui->textBrowser->append("All Keys: " + QString::number(keys));
-  mydlgNotes->ui->textBrowser->append("File Size: " +
-                                      getFileSize(QFile(iniFile).size(), 2));
-  mydlgNotes->ui->textBrowser->append("File: " + iniFile);
+  QTextBrowser* textBrowser = new QTextBrowser;
+  textBrowser->append("[" + appName + "]");
+  textBrowser->append("Ver: " + ver);
+  textBrowser->append("All Keys: " + QString::number(keys));
+  textBrowser->append("File Size: " + getFileSize(QFile(iniFile).size(), 2));
+  textBrowser->append("File: " + iniFile);
 
-  mydlgNotes->ui->textBrowser->append("");
-  mydlgNotes->ui->textBrowser->append("Login Time: " + loginTime);
-  mydlgNotes->ui->textBrowser->append("");
-  mydlgNotes->ui->textBrowser->setHidden(true);
+  textBrowser->append("");
+  textBrowser->append("Login Time: " + loginTime);
+  textBrowser->append("");
+  textBrowser->setHidden(true);
   mydlgNotes->ui->textEdit->setHidden(true);
 
   mydlgNotes->ui->lblTitle->setText("");
-  mydlgNotes->ui->lblAbout->setText(mydlgNotes->ui->textBrowser->toPlainText());
+  mydlgNotes->ui->lblAbout->setText(textBrowser->toPlainText());
   mydlgNotes->ui->frameAbout->show();
   mydlgNotes->setGeometry(0, 0, this->width(), this->height());
   mydlgNotes->setModal(true);
@@ -3437,8 +3435,7 @@ void MainWindow::init_UIWidget() {
   myfile = new File();
   mydlgNotes = new dlgNotes(this);
   mydlgNotes->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
-  mydlgNotes->ui->textBrowser->verticalScrollBar()->setStyleSheet(
-      vsbarStyleSmall);
+
   mydlgRename = new dlgRename(this);
   mydlgSetTime = new dlgSetTime(this);
   mydlgTodo = new dlgTodo(this);
@@ -3621,12 +3618,12 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 
   QAction* actExportData = new QAction(tr("Export Data"));
   QAction* actImportData = new QAction(tr("Import Data"));
+  QAction* actBakData = new QAction(tr("One Click Data Backup"));
   QAction* actPreferences = new QAction(tr("Preferences"));
   QAction* actMemos = new QAction(tr("Memos"));
   QAction* actViewAppData = new QAction(tr("About") + " (" + ver + ")");
   QAction* actAbout = new QAction(tr("Check for New Releases"));
   actAbout->setVisible(false);
-  QAction* actBakData = new QAction(tr("One Click Data Backup"));
 
   QAction* actUndo = new QAction(tr("Undo"));
   QAction* actRedo = new QAction(tr("Redo"));
@@ -3794,7 +3791,7 @@ void MainWindow::on_btnMenu_clicked() {
   QMenu* mainMenu = new QMenu(this);
   init_Menu(mainMenu);
   int x = mw_one->geometry().x() +
-          (mw_one->geometry().width() - mainMenu->width()) - 5;
+          (mw_one->geometry().width() - mainMenu->width()) - 10;
   int y = ui->frameMenu->y() + ui->frameMenu->height();
   QPoint pos(x, y);
   mainMenu->exec(pos);

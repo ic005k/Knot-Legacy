@@ -13,11 +13,9 @@ dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
 
   this->installEventFilter(this);
-  ui->textBrowser->setOpenExternalLinks(true);
-  //鼠标不可选中文本
-  // ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
+
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
-  QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(ui->textEdit);
 
   ui->lblAbout->adjustSize();
   ui->lblAbout->setWordWrap(true);
@@ -86,9 +84,6 @@ void dlgNotes::init_Notes() {
 
 void dlgNotes::on_btnDL_clicked() {
   QString str;
-  // if (zh_cn)
-  //   str = "https://gitee.com/ic005k/Knot/releases";
-  // else
   str =
       "https://github.com/ic005k/Knot/releases/download/2022/"
       "android-build-release-signed.apk";
