@@ -687,9 +687,6 @@ void dlgTodo::refreshAlarm() {
 
         // set time marks
         QString strDate = str.split(" ").at(0);
-        // QString strYear = strDate.split("-").at(0);
-        // QString strMonth = strDate.split("-").at(1);
-        // QString strDay = strDate.split("-").at(2);
         if (strDate == QDate::currentDate().toString("yyyy-M-d")) {
           lbl->setStyleSheet(alarmStyleToday);
           isToday = true;
@@ -708,6 +705,7 @@ void dlgTodo::refreshAlarm() {
 
   qlonglong minValue = 0;
   if (count > 0) {
+    QListWidgetItem* item = new QListWidgetItem();
     minValue = *std::min_element(listTotalS.begin(), listTotalS.end());
     for (int i = 0; i < listTotalS.count(); i++) {
       if (minValue == listTotalS.at(i)) {
@@ -717,45 +715,13 @@ void dlgTodo::refreshAlarm() {
 
         qDebug() << "Min Time: " << listTotalS << minValue << str1
                  << "curVol: ";
-        QListWidgetItem* item = listAlarmItems.at(i);
-        QLabel* lblTime = getTimeLabel(item);
-        bool isTop = false;
-        if (lblTime->text().contains(
-                QDate::currentDate().toString("yyyy-M-d"))) {
-          for (int m = 0; m < ui->listWidget->count(); m++) {
-            if (item == ui->listWidget->item(m)) {
-              if (m != 0) {
-                isTop = true;
-                break;
-              }
-            }
-          }
-          if (isTop) {
-            add_Item(getMainLabel(item)->text(), lblTime->text(), true);
-            getTimeLabel(ui->listWidget->item(0))
-                ->setStyleSheet(alarmStyleToday);
-
-            for (int m = 0; m < ui->listWidget->count(); m++) {
-              if (item == ui->listWidget->item(m)) {
-                if (m != 0) {
-                  ui->listWidget->takeItem(m);
-                  break;
-                }
-              }
-            }
-
-            for (int m = 0; m < ui->listWidget->count(); m++) {
-              add_ItemSn(m);
-            }
-
-            ui->listWidget->setCurrentRow(0);
-            ui->listWidget->verticalScrollBar()->setSliderPosition(0);
-          }
-        }
+        item = listAlarmItems.at(i);
 
         break;
       }
     }
+
+    setAlartTop(item);
   }
 
   if (!isToday) {
@@ -773,6 +739,41 @@ void dlgTodo::refreshAlarm() {
     qDebug() << "ini no exists";
   else
     qDebug() << "ini ok";
+}
+
+void dlgTodo::setAlartTop(QListWidgetItem* item) {
+  QLabel* lblTime = getTimeLabel(item);
+  bool isTop = false;
+  if (lblTime->text().contains(QDate::currentDate().toString("yyyy-M-d"))) {
+    for (int m = 0; m < ui->listWidget->count(); m++) {
+      if (item == ui->listWidget->item(m)) {
+        if (m != 0) {
+          isTop = true;
+          break;
+        }
+      }
+    }
+    if (isTop) {
+      add_Item(getMainLabel(item)->text(), lblTime->text(), true);
+      getTimeLabel(ui->listWidget->item(0))->setStyleSheet(alarmStyleToday);
+
+      for (int m = 0; m < ui->listWidget->count(); m++) {
+        if (item == ui->listWidget->item(m)) {
+          if (m != 0) {
+            ui->listWidget->takeItem(m);
+            break;
+          }
+        }
+      }
+
+      for (int m = 0; m < ui->listWidget->count(); m++) {
+        add_ItemSn(m);
+      }
+
+      ui->listWidget->setCurrentRow(0);
+      ui->listWidget->verticalScrollBar()->setSliderPosition(0);
+    }
+  }
 }
 
 void dlgTodo::on_textEdit_textChanged() {

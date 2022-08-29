@@ -97,5 +97,6 @@ class dlgTodo : public QDialog {
   QLabel *lblModi;
   QTextEdit *editModi;
   bool isModi = false;
+  void setAlartTop(QListWidgetItem *item);
 };
 #endif  // DLGTODO_H
