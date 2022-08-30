@@ -110,7 +110,7 @@ Item {
             selectByMouse: isSelText
             smooth: true
 
-            color: "#000000"
+            color: "#664E30"
 
             text: strText
             visible: true
