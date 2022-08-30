@@ -93,7 +93,7 @@ QDialog* dlgReader::getProgBar() {
   QProgressBar* progReadEbook = new QProgressBar(this);
   progReadEbook->setStyleSheet(
       "QProgressBar{border:0px solid #FFFFFF;"
-      "height:30;"
+      "height:25;"
       "background:rgba(25,255,25,0);"
       "text-align:right;"
       "color:rgb(255,255,255);"
@@ -107,18 +107,22 @@ QDialog* dlgReader::getProgBar() {
   progReadEbook->setMinimum(0);
 
   dlgProgEBook = new QDialog(this);
-  dlgProgEBook->setFixedHeight(50);
+  dlgProgEBook->setFixedHeight(80);
   dlgProgEBook->setFixedWidth(mw_one->width());
   QVBoxLayout* vbox = new QVBoxLayout;
-  vbox->setContentsMargins(1, 1, 1, 1);
-  vbox->setSpacing(0);
-  vbox->setMargin(0);
+  vbox->setSpacing(1);
+  vbox->setMargin(1);
+  vbox->setContentsMargins(1, 1, 1, 12);
   dlgProgEBook->setLayout(vbox);
   dlgProgEBook->setGeometry(
       mw_one->geometry().x(),
       (mw_one->height() - dlgProgEBook->height()) / 2 + 100,
       dlgProgEBook->width(), dlgProgEBook->height());
 
+  QLabel* lbl = new QLabel(dlgProgEBook);
+  lbl->setText(tr("Reading, please wait..."));
+  lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  dlgProgEBook->layout()->addWidget(lbl);
   dlgProgEBook->layout()->addWidget(progReadEbook);
   dlgProgEBook->setModal(true);
 
@@ -183,7 +187,7 @@ void dlgReader::startOpenFile(QString openfile) {
 #endif
 
     mw_one->ui->quickWidget->rootContext()->setContextProperty(
-        "strText", tr("Reading in progress...") + "\n\n" + strfilepath);
+        "strText", tr("Book Info : ") + "\n" + strfilepath);
 
     mw_one->myReadTWThread->quit();
     mw_one->myReadTWThread->wait();
@@ -740,7 +744,7 @@ void dlgReader::setQMLHtml() {
     } else {
       if (str.trimmed() != "") {
         if (str.contains("<image") && str.contains("xlink:href=")) {
-          str.replace("xlink:href=", "res=");
+          str.replace("xlink:href=", "src=");
           str.replace("<image", "<img");
           str.replace("height", "height1");
           str.replace("width", "width1");
@@ -1132,11 +1136,13 @@ void dlgReader::proceImg() {
       h = img.height();
       // qDebug() << file << w << mw_one->width();
       double r = (double)w / h;
-      if (w > mw_one->width() - 104) {
+      if (w > mw_one->width() - 104 || file.contains("cover")) {
         new_w = mw_one->width() - 104;
+        if (file.contains("cover")) new_w = mw_one->width() - 25;
         new_h = new_w / r;
         QPixmap pix;
-        pix = QPixmap::fromImage(img.scaled(new_w, new_h));
+        // pix = QPixmap::fromImage(img.scaled(new_w, new_h));
+        pix = QPixmap::fromImage(img);
         pix = pix.scaled(new_w, new_h, Qt::KeepAspectRatio,
                          Qt::SmoothTransformation);
         pix.save(file);
