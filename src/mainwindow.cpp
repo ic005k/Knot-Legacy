@@ -1987,17 +1987,17 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
       isTurnThePage = true;
 
-      ui->lblTitle->setPixmap(ui->quickWidget->grab());
+      /*ui->lblTitle->setPixmap(ui->quickWidget->grab());
       QPropertyAnimation* animation1 =
           new QPropertyAnimation(ui->lblTitle, "geometry");
 
       animation1->setDuration(abc);
       animation1->setStartValue(QRect(x, y, w, h));
-      animation1->setEndValue(QRect(w * 1, y, w, h));
+      animation1->setEndValue(QRect(w * 1, y, w, h));*/
 
       on_btnPageUp_clicked();
 
-      QPropertyAnimation* animation2 =
+      /*QPropertyAnimation* animation2 =
           new QPropertyAnimation(ui->quickWidget, "geometry");
       animation2->setDuration(abc);
       animation2->setStartValue(QRect(-w * 0, y, w, h));
@@ -2007,8 +2007,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->addAnimation(animation1);
       group->addAnimation(animation2);
       group->start();
-
-      ui->lblTitle->show();
+      ui->lblTitle->show();*/
     }
 
     //判断滑动方向（左滑）
@@ -2024,17 +2023,17 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
       isTurnThePage = true;
 
-      ui->lblTitle->setPixmap(ui->quickWidget->grab());
+      /*ui->lblTitle->setPixmap(ui->quickWidget->grab());
       QPropertyAnimation* animation1 =
           new QPropertyAnimation(ui->lblTitle, "geometry");
 
       animation1->setDuration(abc);
       animation1->setStartValue(QRect(x, y, w, h));
-      animation1->setEndValue(QRect(-w, y, w, h));
+      animation1->setEndValue(QRect(-w, y, w, h));*/
 
       on_btnPageNext_clicked();
 
-      QPropertyAnimation* animation2 =
+      /*QPropertyAnimation* animation2 =
           new QPropertyAnimation(ui->quickWidget, "geometry");
       animation2->setDuration(abc);
       animation2->setStartValue(QRect(w * 1, y, w, h));
@@ -2044,7 +2043,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       group->addAnimation(animation1);
       group->addAnimation(animation2);
       group->start();
-      ui->lblTitle->show();
+      ui->lblTitle->show();*/
     }
   }
 

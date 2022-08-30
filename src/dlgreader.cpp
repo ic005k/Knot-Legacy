@@ -137,6 +137,10 @@ void dlgReader::startOpenFile(QString openfile) {
   mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/reader.qml")));
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isSelText",
                                                              mw_one->isSelText);
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", true);
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("aniW",
+                                                             mw_one->width());
+
   if (QFile(openfile).exists()) {
     strTitle = "";
     mw_one->ui->btnPages->setText(tr("Pages") + "\n" + QString::number(0) +
@@ -504,6 +508,8 @@ void dlgReader::getLines() {
 }
 
 void dlgReader::setQML(QString txt1) {
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
+
   // white-space: pre-wrap;
   // text-indent:40px;
   QStringList list = txt1.split("\n");
@@ -519,6 +525,14 @@ void dlgReader::setQML(QString txt1) {
   qsShow = str1 + qsShow + str2;
 
   mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", qsShow);
+
+  if (isPageNext)
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("aniW",
+                                                               mw_one->width());
+  else
+    mw_one->ui->quickWidget->rootContext()->setContextProperty(
+        "aniW", -mw_one->width());
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", true);
 }
 
 void dlgReader::on_btnFont_clicked() {
@@ -619,6 +633,8 @@ void dlgReader::on_btnPageUp_clicked() {
   if (mw_one->isSelText) return;
   mw_one->ui->lblTitle->hide();
 
+  isPageNext = false;
+
   savePageVPos();
   if (!isEpub) {
     int count = iPage - baseLines;
@@ -649,6 +665,8 @@ void dlgReader::on_btnPageUp_clicked() {
 void dlgReader::on_btnPageNext_clicked() {
   if (mw_one->isSelText) return;
   mw_one->ui->lblTitle->hide();
+
+  isPageNext = true;
 
   savePageVPos();
   if (!isEpub) {
@@ -703,6 +721,8 @@ void dlgReader::setEpubPagePosition(int index) {
 void dlgReader::setQMLHtml() {
   QString hf = htmlFiles.at(htmlIndex);
   QVariant msg, strhtml;
+
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
 
   QTextEdit* edit = new QTextEdit;
   QString strHtml = mw_one->loadText(hf);
@@ -788,6 +808,14 @@ void dlgReader::setQMLHtml() {
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 
   qDebug() << "Html File : " << msg;
+
+  if (isPageNext)
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("aniW",
+                                                               mw_one->width());
+  else
+    mw_one->ui->quickWidget->rootContext()->setContextProperty(
+        "aniW", -mw_one->width());
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", true);
 }
 
 void dlgReader::on_btnPages_clicked() {

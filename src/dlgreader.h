@@ -33,6 +33,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  bool isPageNext = false;
   int mainDirIndex = -1;
   DocumentHandler *myDocHandler;
   QStringList bookList;

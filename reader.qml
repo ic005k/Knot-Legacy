@@ -32,6 +32,8 @@ Item {
         console.log(vpos)
     }
 
+    function startAni(ani) {}
+
     DocumentHandler {
         id: document
         objectName: "dochandler"
@@ -130,6 +132,28 @@ Item {
                 console.log(htmlPath)
                 console.log(link)
             }
+
+            PropertyAnimation on x{
+                running: isAni
+                from: aniW
+                to:0
+                duration: 200
+                loops: 1//Animation.Infinite
+            }
+
+            /*SequentialAnimation on opacity {
+                //应用于透明度上的序列动画
+                running: isAni
+                loops: 1 //Animation.Infinite //无限循环
+                NumberAnimation {
+                    from: 0
+                    to: 1
+                    duration: 1000
+                } //淡出效果
+                PauseAnimation {
+                    duration: 0
+                } //暂停400ms
+            }*/
         }
 
         ScrollBar.vertical: ScrollBar {
