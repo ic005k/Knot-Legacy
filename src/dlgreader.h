@@ -72,7 +72,8 @@ class dlgReader : public QDialog {
   void setVPos(qreal pos);
   QDialog *getProgBar();
   void refreshEpubPage();
-  public slots:
+  static QString getCoverPicFile(QString htmlFile);
+ public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

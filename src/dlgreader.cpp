@@ -1130,11 +1130,12 @@ void dlgReader::proceImg() {
       QString file = fileInfo->at(i).filePath();
       QFileInfo fi(file);
       QFile::copy(file, fi.path() + "/org-" + fi.fileName());
+
       QImage img(file);
-      double w, h, new_w, new_h;
+      double w, h;
+      int new_w, new_h;
       w = img.width();
       h = img.height();
-      // qDebug() << file << w << mw_one->width();
       double r = (double)w / h;
       if (w > mw_one->width() - 104 || file.contains("cover")) {
         new_w = mw_one->width() - 104;
@@ -1148,6 +1149,25 @@ void dlgReader::proceImg() {
         pix.save(file);
       }
     }
+  }
+
+  QString strCover = getCoverPicFile(htmlFiles.at(0));
+  qDebug() << "strCover=" << strCover << htmlFiles.at(0);
+  if (QFile(strCover).exists()) {
+    QImage img(strCover);
+    double w, h;
+    int new_w, new_h;
+    w = img.width();
+    h = img.height();
+    double r = (double)w / h;
+    new_w = mw_one->width() - 25;
+    new_h = new_w / r;
+    QPixmap pix;
+    // pix = QPixmap::fromImage(img.scaled(new_w, new_h));
+    pix = QPixmap::fromImage(img);
+    pix =
+        pix.scaled(new_w, new_h, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pix.save(strCover);
   }
 }
 
@@ -1248,4 +1268,34 @@ void dlgReader::backDir() {
     on_btnPageUp_clicked();
     on_btnPageNext_clicked();
   }
+}
+
+QString dlgReader::getCoverPicFile(QString htmlFile) {
+  QStringList list = readText(htmlFile);
+  QString str0, str1;
+  for (int i = 0; i < list.count(); i++) {
+    str0 = list.at(i);
+    str0 = str0.trimmed();
+    // qDebug() << "str0=" << str0;
+    str0 = str0.replace("<image", "<img");
+    str0 = str0.replace("xlink:href=", "src=");
+    if (str0.contains("<img") && str0.contains("src=")) {
+      for (int j = 0; j < str0.length(); j++) {
+        if (str0.mid(j, 5) == "src=\"") {
+          for (int m = j + 5; m < str0.length(); m++) {
+            if (str0.mid(m, 1) == "\"") {
+              str1 = str0.mid(j + 5, m - j - 5);
+              qDebug() << "img src=" << strOpfPath + str1;
+              str1 = str1.replace("../", "");
+              return strOpfPath + str1;
+              break;
+            }
+          }
+          break;
+        }
+      }
+      break;
+    }
+  }
+  return "";
 }
