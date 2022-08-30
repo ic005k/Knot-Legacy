@@ -267,6 +267,11 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     }
   } else {
     // open picture
+    if (htmlIndex == 0) {
+      mw_one->on_btnPageNext_clicked();
+      mw_one->on_btnPageUp_clicked();
+      return;
+    }
     QString str = htmlFile;
     str = str.replace("../", "");
     picfile = strOpfPath + str;
