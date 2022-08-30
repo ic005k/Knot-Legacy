@@ -1966,6 +1966,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       relea_y = event->globalY();
       ui->lblTitle->hide();
 
+      isTurnThePage = false;
+
       // qDebug() << "Release:" << relea_x << relea_y;
     }
 
@@ -1983,6 +1985,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       } else {
         if (htmlIndex <= 0) return QWidget::eventFilter(watch, evn);
       }
+      isTurnThePage = true;
 
       ui->lblTitle->setPixmap(ui->quickWidget->grab());
       QPropertyAnimation* animation1 =
@@ -2019,6 +2022,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         if (htmlIndex + 1 >= htmlFiles.count())
           return QWidget::eventFilter(watch, evn);
       }
+      isTurnThePage = true;
 
       ui->lblTitle->setPixmap(ui->quickWidget->grab());
       QPropertyAnimation* animation1 =

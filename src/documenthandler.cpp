@@ -240,6 +240,8 @@ QString DocumentHandler::fileType() const {
 QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
 
 void DocumentHandler::setReadPosition(QString htmlFile) {
+  if (mw_one->isTurnThePage) return;
+
   qDebug() << "file : " << htmlFile;
   if (htmlFile.contains("http")) {
     QUrl url = htmlFile;

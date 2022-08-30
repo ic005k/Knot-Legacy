@@ -102,6 +102,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  bool isTurnThePage = false;
   bool isSelText = false;
   bool initMain = false;
   QObjectList getAllUIControls(QObject *parent);
