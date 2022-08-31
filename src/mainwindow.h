@@ -102,6 +102,9 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  qreal curx = 0;
+  bool isMousePress = false;
+  bool isMouseMove = false;
   bool isTurnThePage = false;
   bool isSelText = false;
   bool initMain = false;

@@ -58,4 +58,12 @@ qreal File::textPos() {
   return m_textPos;
 }
 
+qreal File::curX() {
+  mw_one->curx = m_curX;
+  qDebug() << "m_curX" << m_curX;
+  return m_curX;
+}
+
 void File::setTextPos(qreal &textPos) { m_textPos = textPos; }
+
+void File::setcurX(qreal &curX) { m_curX = curX; }

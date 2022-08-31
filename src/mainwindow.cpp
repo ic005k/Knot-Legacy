@@ -1946,8 +1946,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     static int press_y;
     static int relea_x;
     static int relea_y;
+    int length = 75;
 
     if (event->type() == QEvent::MouseButtonPress) {
+      isMousePress = true;
       ui->frameFun->hide();
       Sleep(1);
       mydlgReader->setVPos(mydlgReader->textPos);
@@ -1965,85 +1967,118 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       relea_x = event->globalX();
       relea_y = event->globalY();
       ui->lblTitle->hide();
+      QQuickItem* root = ui->quickWidget->rootObject();
 
       isTurnThePage = false;
+      isMousePress = false;
+      isMouseMove = false;
+
+      qDebug() << "release curx=" << curx;
+      //判断滑动方向（右滑）
+      if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
+        if (!isEpub) {
+          if (iPage - baseLines <= 0) {
+            QMetaObject::invokeMethod((QObject*)root, "setX",
+                                      Q_ARG(QVariant, 0));
+            return QWidget::eventFilter(watch, evn);
+          }
+        } else {
+          if (htmlIndex <= 0) {
+            QMetaObject::invokeMethod((QObject*)root, "setX",
+                                      Q_ARG(QVariant, 0));
+            return QWidget::eventFilter(watch, evn);
+          }
+        }
+        isTurnThePage = true;
+
+        /*ui->lblTitle->setPixmap(ui->quickWidget->grab());
+    QPropertyAnimation* animation1 =
+        new QPropertyAnimation(ui->lblTitle, "geometry");
+
+        animation1->setDuration(abc);
+        animation1->setStartValue(QRect(x, y, w, h));
+        animation1->setEndValue(QRect(w * 1, y, w, h));*/
+
+        on_btnPageUp_clicked();
+
+        /*QPropertyAnimation* animation2 =
+        new QPropertyAnimation(ui->quickWidget, "geometry");
+    animation2->setDuration(abc);
+    animation2->setStartValue(QRect(-w * 0, y, w, h));
+    animation2->setEndValue(QRect(x, y, w, h));
+
+        QParallelAnimationGroup* group = new QParallelAnimationGroup;
+        group->addAnimation(animation1);
+        group->addAnimation(animation2);
+        group->start();
+        ui->lblTitle->show();*/
+      }
+
+      //判断滑动方向（左滑）
+      if ((press_x - relea_x) > length && qAbs(relea_y - press_y) < 35) {
+        if (!isEpub) {
+          if (iPage + baseLines > totallines) {
+            QMetaObject::invokeMethod((QObject*)root, "setX",
+                                      Q_ARG(QVariant, 0));
+            return QWidget::eventFilter(watch, evn);
+          }
+        } else {
+          if (htmlIndex + 1 >= htmlFiles.count()) {
+            QMetaObject::invokeMethod((QObject*)root, "setX",
+                                      Q_ARG(QVariant, 0));
+            return QWidget::eventFilter(watch, evn);
+          }
+        }
+        isTurnThePage = true;
+
+        /*ui->lblTitle->setPixmap(ui->quickWidget->grab());
+    QPropertyAnimation* animation1 =
+        new QPropertyAnimation(ui->lblTitle, "geometry");
+
+        animation1->setDuration(abc);
+        animation1->setStartValue(QRect(x, y, w, h));
+        animation1->setEndValue(QRect(-w, y, w, h));*/
+
+        on_btnPageNext_clicked();
+
+        /*QPropertyAnimation* animation2 =
+        new QPropertyAnimation(ui->quickWidget, "geometry");
+    animation2->setDuration(abc);
+    animation2->setStartValue(QRect(w * 1, y, w, h));
+    animation2->setEndValue(QRect(x, y, w, h));
+
+        QParallelAnimationGroup* group = new QParallelAnimationGroup;
+        group->addAnimation(animation1);
+        group->addAnimation(animation2);
+        group->start();
+        ui->lblTitle->show();*/
+      }
+
+      QMetaObject::invokeMethod((QObject*)root, "setX", Q_ARG(QVariant, 0));
 
       // qDebug() << "Release:" << relea_x << relea_y;
+      curx = 0;
+      qDebug() << "release2 curx=" << curx;
     }
 
     if (event->type() == QEvent::MouseMove) {
-    }
+      relea_x = event->globalX();
+      relea_y = event->globalY();
+      if (isMousePress && qAbs(relea_x - press_x) > 20 &&
+          qAbs(relea_y - press_y) < 20) {
+        isMouseMove = true;
+        /*int pos = 0;
+        if (relea_x > press_x)
+          pos = 2;
+        else
+          pos = -2;
 
-    int abc = 300;
-    int length = 75;
-    //判断滑动方向（右滑）
-    if ((relea_x - press_x) > length &&
-        event->type() == QEvent::MouseButtonRelease &&
-        qAbs(relea_y - press_y) < length) {
-      if (!isEpub) {
-        if (iPage - baseLines <= 0) return QWidget::eventFilter(watch, evn);
-      } else {
-        if (htmlIndex <= 0) return QWidget::eventFilter(watch, evn);
+        QQuickItem* root = ui->quickWidget->rootObject();
+        QMetaObject::invokeMethod((QObject*)root, "move", Q_ARG(QVariant, pos));
+        mydlgReader->setVPos(mydlgReader->textPos);
+
+        qDebug() << "curx=" << curx;*/
       }
-      isTurnThePage = true;
-
-      /*ui->lblTitle->setPixmap(ui->quickWidget->grab());
-      QPropertyAnimation* animation1 =
-          new QPropertyAnimation(ui->lblTitle, "geometry");
-
-      animation1->setDuration(abc);
-      animation1->setStartValue(QRect(x, y, w, h));
-      animation1->setEndValue(QRect(w * 1, y, w, h));*/
-
-      on_btnPageUp_clicked();
-
-      /*QPropertyAnimation* animation2 =
-          new QPropertyAnimation(ui->quickWidget, "geometry");
-      animation2->setDuration(abc);
-      animation2->setStartValue(QRect(-w * 0, y, w, h));
-      animation2->setEndValue(QRect(x, y, w, h));
-
-      QParallelAnimationGroup* group = new QParallelAnimationGroup;
-      group->addAnimation(animation1);
-      group->addAnimation(animation2);
-      group->start();
-      ui->lblTitle->show();*/
-    }
-
-    //判断滑动方向（左滑）
-    if ((press_x - relea_x) > length &&
-        event->type() == QEvent::MouseButtonRelease &&
-        qAbs(relea_y - press_y) < length) {
-      if (!isEpub) {
-        if (iPage + baseLines > totallines)
-          return QWidget::eventFilter(watch, evn);
-      } else {
-        if (htmlIndex + 1 >= htmlFiles.count())
-          return QWidget::eventFilter(watch, evn);
-      }
-      isTurnThePage = true;
-
-      /*ui->lblTitle->setPixmap(ui->quickWidget->grab());
-      QPropertyAnimation* animation1 =
-          new QPropertyAnimation(ui->lblTitle, "geometry");
-
-      animation1->setDuration(abc);
-      animation1->setStartValue(QRect(x, y, w, h));
-      animation1->setEndValue(QRect(-w, y, w, h));*/
-
-      on_btnPageNext_clicked();
-
-      /*QPropertyAnimation* animation2 =
-          new QPropertyAnimation(ui->quickWidget, "geometry");
-      animation2->setDuration(abc);
-      animation2->setStartValue(QRect(w * 1, y, w, h));
-      animation2->setEndValue(QRect(x, y, w, h));
-
-      QParallelAnimationGroup* group = new QParallelAnimationGroup;
-      group->addAnimation(animation1);
-      group->addAnimation(animation2);
-      group->start();
-      ui->lblTitle->show();*/
     }
   }
 
@@ -3165,7 +3200,8 @@ void MainWindow::getSteps2() {
   // fprintf(fpout,
   //         "RECORD, TYPE, DATE, TIME, arx, ary, arz, grx, gry, grz, "
   //         "timestamp(sec), step_count, step_type, step_type_num\n");
-  /* Process input sensor data from input file and save result in output file */
+  /* Process input sensor data from input file and save result in output file
+   */
   // while (NULL != fgets(line_buff, MAX_CHAR_PER_LINE, fpin)) {
   // sscanf(line_buff, "%d, %d, %[^,], %[^,], %f, %f, %f, %f, %f, %f\n",
   // &rec_id,
@@ -3368,7 +3404,8 @@ void MainWindow::decMemos(QString file) {
 
 void MainWindow::init_Sensors() {
   accel_pedometer = new SpecialAccelerometerPedometer(this);
-  // connect(accel_pedometer, SIGNAL(readingChanged()), this, SLOT(newDatas()));
+  // connect(accel_pedometer, SIGNAL(readingChanged()), this,
+  // SLOT(newDatas()));
   connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
           SLOT(updateSteps()));
 
@@ -3402,6 +3439,10 @@ void MainWindow::init_UIWidget() {
   ui->frameQML->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frameQML->setContentsMargins(0, 0, 0, 0);
   ui->frameQML->layout()->setSpacing(1);
+  // ui->quickWidget->setObjectName("myframe");
+  // ui->quickWidget->setStyleSheet(
+  //     "QFrame#myframe{border-image:url(:/res/b.png)}");
+
   ui->frameMain->layout()->setMargin(0);
   ui->frameMain->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frameMain->setContentsMargins(0, 0, 0, 0);
@@ -3896,6 +3937,8 @@ QString MainWindow::getYMD(QString date) {
 }
 
 void MainWindow::on_btnReader_clicked() {
+  ui->quickWidget->rootContext()->setContextProperty("myW", mw_one->width());
+  ui->quickWidget->rootContext()->setContextProperty("myH", mw_one->height());
   if (!isOne) {
     mwh = this->height();
     setFixedHeight(mwh);
