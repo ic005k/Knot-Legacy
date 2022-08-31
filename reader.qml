@@ -32,7 +32,17 @@ Item {
         console.log(vpos)
     }
 
-    function startAni(ani) {}
+    function move(x0) {
+
+        x = x + x0
+
+        file.curX = x
+        console.log(file.curX)
+    }
+
+    function setX(x0) {
+        x = 0
+    }
 
     DocumentHandler {
         id: document
@@ -57,7 +67,7 @@ Item {
     Image {
         id: rocket
         width: myW
-        height: 4000
+        height: myH * 2
         //fillMode: Image.TileHorizontally
         fillMode: Image.Tile
         horizontalAlignment: Image.AlignLeft
@@ -83,7 +93,6 @@ Item {
             name: "autoscroll"
             PropertyChanges {
                 target: flickable
-                //contentY: textPos
             }
         }
 
@@ -133,13 +142,15 @@ Item {
                 console.log(link)
             }
 
-            PropertyAnimation on x{
+            PropertyAnimation on x {
+                easing.type: Easing.Linear
                 running: isAni
                 from: aniW
-                to:0
+                to: 0
                 duration: 200
-                loops: 1//Animation.Infinite
+                loops: 1 //Animation.Infinite
             }
+
 
             /*SequentialAnimation on opacity {
                 //应用于透明度上的序列动画
