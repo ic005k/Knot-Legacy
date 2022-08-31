@@ -7,7 +7,7 @@
 * Pedometer
 * Statistical charts
 * Statistical reports
-* Reader
+* Reader(txt,epub...)
 * Memo
 * Data export and import
 
