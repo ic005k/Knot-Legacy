@@ -66,4 +66,4 @@ qreal File::curX() {
 
 void File::setTextPos(qreal &textPos) { m_textPos = textPos; }
 
-void File::setcurX(qreal &curX) { m_curX = curX; }
+void File::setCurX(qreal &curX) { m_curX = curX; }

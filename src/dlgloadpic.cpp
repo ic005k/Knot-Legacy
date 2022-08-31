@@ -2,6 +2,7 @@
 
 #include "src/mainwindow.h"
 #include "ui_dlgloadpic.h"
+#include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern QString picfile;
 
@@ -28,6 +29,7 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
 
   setModal(true);
   show();
+
   close();
 }
 

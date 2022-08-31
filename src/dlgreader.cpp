@@ -134,10 +134,6 @@ void dlgReader::startOpenFile(QString openfile) {
 
   isEBook = true;
 
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("myW",
-                                                             mw_one->width());
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("myH",
-                                                             mw_one->height());
   mw_one->ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/reader.qml")));
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isSelText",
                                                              mw_one->isSelText);

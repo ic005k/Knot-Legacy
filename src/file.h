@@ -25,7 +25,7 @@ class File : public QObject {
   qreal textPos();
   qreal curX();
   void setTextPos(qreal &textPos);
-  void setcurX(qreal &curX);
+  void setCurX(qreal &curX);
 
   void setStr(QString);
  signals:

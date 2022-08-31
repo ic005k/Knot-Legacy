@@ -207,11 +207,6 @@ MainWindow::MainWindow(QWidget* parent)
   if (!isAndroid) {
     this->setGeometry((screenWidth - this->width()) / 2, 0, this->width(),
                       screenHeight - 60);
-    ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
-    ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
-  } else {
-    ui->quickWidget->rootContext()->setContextProperty("myW", screenWidth);
-    ui->quickWidget->rootContext()->setContextProperty("myH", screenHeight);
   }
 
   qRegisterMetaType<QVector<int>>("QVector<int>");
@@ -461,7 +456,7 @@ void MainWindow::init_Options() {
   qDebug() << "fontSize:" << fontSize << fInfo.family();
 
   mydlgPre->ui->chkReaderFont->setChecked(
-      Reg.value("/Options/ReaderFont", true).toBool());
+      Reg.value("/Options/ReaderFont", false).toBool());
   mydlgPre->ui->chkClose->setChecked(
       Reg.value("/Options/Close", false).toBool());
   mydlgPre->ui->chkAutoTime->setChecked(
@@ -3937,11 +3932,11 @@ QString MainWindow::getYMD(QString date) {
 }
 
 void MainWindow::on_btnReader_clicked() {
-  ui->quickWidget->rootContext()->setContextProperty("myW", mw_one->width());
-  ui->quickWidget->rootContext()->setContextProperty("myH", mw_one->height());
   if (!isOne) {
     mwh = this->height();
     setFixedHeight(mwh);
+    ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
+    ui->quickWidget->rootContext()->setContextProperty("myH", mwh);
   }
 
   ui->frameMain->hide();

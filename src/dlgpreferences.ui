@@ -97,7 +97,7 @@ QSlider::handle:horizontal
          <string>Use reader font to override UI font</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>

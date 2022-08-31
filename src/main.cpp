@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   fontSize = Reg.value("/Options/FontSize", 16).toInt();
-  bool isReaderFont = Reg.value("/Options/ReaderFont", 1).toBool();
+  bool isReaderFont = Reg.value("/Options/ReaderFont", false).toBool();
 
   QString fontName;
   int loadedFontID =
