@@ -12,7 +12,7 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
   ui->lblPic->installEventFilter(this);
   ui->btnReduce->hide();
   ui->btnZoom->hide();
-  ui->hsZoom->setMaximum(500);
+  ui->hsZoom->setMaximum(600);
 
   this->layout()->setMargin(1);
   ui->scrollArea->setContentsMargins(1, 1, 1, 1);

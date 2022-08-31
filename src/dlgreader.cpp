@@ -996,9 +996,7 @@ void dlgReader::setPageVPos() {
   }
 
   if (textPos > 10) {
-    QQuickItem* root = mw_one->ui->quickWidget->rootObject();
-    QMetaObject::invokeMethod((QObject*)root, "setVPos",
-                              Q_ARG(QVariant, textPos));
+    setVPos(textPos);
   }
 }
 
