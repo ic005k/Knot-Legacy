@@ -21,6 +21,12 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->chkMute->setStyleSheet(ui->chkClose->styleSheet());
   ui->chkMute->hide();
   hsStyle = ui->sliderFontSize->styleSheet();
+
+  chkStyle = ui->chkAutoTime->styleSheet();
+  ui->chkClose->setStyleSheet(chkStyle);
+  ui->chkDebug->setStyleSheet(chkStyle);
+  ui->chkMute->setStyleSheet(chkStyle);
+  ui->chkReaderFont->setStyleSheet(chkStyle);
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }

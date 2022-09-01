@@ -206,9 +206,18 @@ QRadioButton::indicator:checked {
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
-    width:22px;
-    height:22px;
-}</string>
+    width:20px;
+    height:20px;
+}
+
+QCheckBox::indicator:unchecked{
+    image:url(:/res/chk0.png);
+}
+
+QCheckBox::indicator:checked{
+    image:url(:/res/chk1.png);
+}
+</string>
         </property>
         <property name="text">
          <string>Auto uses time as the Y-axis</string>
