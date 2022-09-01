@@ -53,5 +53,7 @@
         <file>res/clear.png</file>
         <file>res/choice0.png</file>
         <file>res/choice1.png</file>
+        <file>res/chk0.png</file>
+        <file>res/chk1.png</file>
     </qresource>
 </RCC>
