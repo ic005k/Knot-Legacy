@@ -128,7 +128,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         //int id = alarmCount++;//r.nextInt();
         //PendingIntent pi = PendingIntent.getActivity(context, id, intent, 0);
 
-        int y, m, d, hourOfDay, minute;
+        //int y, m, d, hourOfDay, minute;
 
         // 特殊转义字符，必须加"\\"（“.”和“|”都是转义字符）
         String[] array = str.split("\\|");
@@ -139,7 +139,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         String strText = array[1];
         String strTotalS = array[2];
 
-        String[] arrayDT = strTime.split(" ");
+        /*String[] arrayDT = strTime.split(" ");
         String strD = arrayDT[0];
         String strT = arrayDT[1];
 
@@ -150,7 +150,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         String[] arrayHM = strT.split(":");
         hourOfDay = Integer.parseInt(arrayHM[0]);
-        minute = Integer.parseInt(arrayHM[1]);
+        minute = Integer.parseInt(arrayHM[1]);*/
 
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
@@ -169,11 +169,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         Log.e("Alarm Manager", c.getTimeInMillis() + "");
         Log.e("Alarm Manager", str);
-        System.out.println(y);
-        System.out.println(m);
-        System.out.println(d);
-        System.out.println(hourOfDay);
-        System.out.println(minute);
+        //System.out.println(y);
+        //System.out.println(m);
+        //System.out.println(d);
+        //System.out.println(hourOfDay);
+        //System.out.println(minute);
         System.out.println(ts);
         System.out.println("startAlarm+++++++++++++++++++++++");
         return 1;
