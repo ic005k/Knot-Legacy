@@ -747,8 +747,19 @@ void dlgTodo::setAlartTop(QListWidgetItem* item) {
   if (item == NULL) return;
 
   QLabel* lblTime = getTimeLabel(item);
+  QString str001 = lblTime->text();
+  QStringList list001 = str001.split(" ");
+  QString str002;
+  for (int i = 0; i < list001.count(); i++) {
+    QString str = list001.at(i);
+    if (str.contains("-")) {
+      str002 = str.trimmed();
+      break;
+    }
+  }
+
   bool isTop = false;
-  if (lblTime->text().contains(QDate::currentDate().toString("yyyy-M-d"))) {
+  if (str002 == QDate::currentDate().toString("yyyy-M-d")) {
     for (int m = 0; m < listTodo->count(); m++) {
       if (item == listTodo->item(m)) {
         if (m != 0) {
