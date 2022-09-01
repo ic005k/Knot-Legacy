@@ -492,11 +492,14 @@ bool dlgTodo::isWeekValid(QString lblDateTime, QString strDate) {
 
 qlonglong dlgTodo::getSecond(QString strDateTime) {
   // 2022-8-22 18:18
+  isTomorrow = false;
+  QString strtime, sdt;
+  sdt = strDateTime;
   if (!strDateTime.contains("-")) {
     int week = QDate::currentDate().dayOfWeek();
     QStringList list = strDateTime.split(" ");
     QString str = list.at(0);
-    QString strtime;
+
     for (int i = 0; i < list.count(); i++) {
       QString st = list.at(i);
       if (st.contains(":")) {
@@ -516,7 +519,26 @@ qlonglong dlgTodo::getSecond(QString strDateTime) {
   QDateTime timeCur = QDateTime::fromString(strCur, "yyyy-M-d HH:mm:ss");
   QDateTime timeAlarm = QDateTime::fromString(strDateTime, "yyyy-M-d HH:mm:ss");
   qlonglong seconds = timeCur.secsTo(timeAlarm);
-  // qDebug() << strCur << strDateTime << seconds << timeCur << timeAlarm;
+
+  if (seconds <= 0) {
+    if (!sdt.contains("-")) {
+      QDateTime ctime = QDateTime::currentDateTime();
+      QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
+
+      if (isWeekValid(sdt.split(" ").at(0), strTmo)) {
+        strDateTime = strTmo + " " + strtime;
+        strDateTime = strDateTime + ":00";
+        QString strCur =
+            QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss");
+        QDateTime timeCur = QDateTime::fromString(strCur, "yyyy-M-d HH:mm:ss");
+        QDateTime timeAlarm =
+            QDateTime::fromString(strDateTime, "yyyy-M-d HH:mm:ss");
+        seconds = timeCur.secsTo(timeAlarm);
+        isTomorrow = true;
+      }
+    }
+  }
+
   return seconds;
 }
 
@@ -820,18 +842,20 @@ void dlgTodo::refreshAlarm() {
 
         // set time marks
         QString strDate = str.split(" ").at(0);
-        if (!str.contains("-")) {
-          strDate = QDate::currentDate().toString("yyyy-M-d");
-        }
-        if (strDate == QDate::currentDate().toString("yyyy-M-d") ||
-            isWeekValid(str, strDate)) {
-          lbl->setStyleSheet(alarmStyleToday);
-          isToday = true;
-        }
 
         QDateTime ctime = QDateTime::currentDateTime();
         QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
-        if (strTmo == strDate) lbl->setStyleSheet(alarmStyleTomorrow);
+        if (strTmo == strDate || isWeekValid(str, strTmo))
+          lbl->setStyleSheet(alarmStyleTomorrow);
+
+        if (!str.contains("-") && !isTomorrow) {
+          QString strToday = QDate::currentDate().toString("yyyy-M-d");
+          if (isWeekValid(str, strToday)) strDate = strToday;
+        }
+        if (strDate == QDate::currentDate().toString("yyyy-M-d")) {
+          lbl->setStyleSheet(alarmStyleToday);
+          isToday = true;
+        }
 
       } else {
         if (str.contains("-")) {

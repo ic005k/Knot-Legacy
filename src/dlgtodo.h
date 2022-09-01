@@ -100,5 +100,6 @@ class dlgTodo : public QDialog {
   QTextEdit *editModi;
   bool isModi = false;
   bool isWeekValid(QString lblDateTime, QString strDate);
+  bool isTomorrow = false;
 };
 #endif  // DLGTODO_H
