@@ -335,6 +335,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="chkDaily">
+     <property name="text">
+      <string>Daily (Select by week)</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QFrame" name="frameDaily">
      <property name="maximumSize">
       <size>
@@ -349,13 +356,18 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QCheckBox" name="chkDaily">
-        <property name="text">
-         <string>Daily</string>
-        </property>
-       </widget>
-      </item>
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <property name="bottomMargin">
+       <number>1</number>
+      </property>
       <item>
        <widget class="QCheckBox" name="chk1">
         <property name="text">

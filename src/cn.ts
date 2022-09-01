@@ -1733,42 +1733,46 @@
         <translation>下周</translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="355"/>
-        <source>Daily</source>
-        <translation>每天</translation>
+        <location filename="msgdialog.ui" line="340"/>
+        <source>Daily (Select by week)</source>
+        <translation>每天（按周选择）</translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="362"/>
+        <source>Daily</source>
+        <translation type="vanished">每天</translation>
+    </message>
+    <message>
+        <location filename="msgdialog.ui" line="374"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="372"/>
+        <location filename="msgdialog.ui" line="384"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="382"/>
+        <location filename="msgdialog.ui" line="394"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="392"/>
+        <location filename="msgdialog.ui" line="404"/>
         <source>4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="402"/>
+        <location filename="msgdialog.ui" line="414"/>
         <source>5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="412"/>
+        <location filename="msgdialog.ui" line="424"/>
         <source>6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="422"/>
+        <location filename="msgdialog.ui" line="434"/>
         <source>7</source>
         <translation></translation>
     </message>
