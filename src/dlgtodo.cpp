@@ -437,9 +437,34 @@ QLabel* dlgTodo::getMainLabel(QListWidgetItem* item) {
 
 void dlgTodo::on_btnOK_clicked() {
   QLabel* lbl = getTimeLabel(listTodo->currentRow());
-  lbl->setText(tr("Alarm") + "  " + mw_one->mymsgDlg->ui->dateTimeEdit->text());
+  if (!mw_one->mymsgDlg->ui->chk1->isChecked() &&
+      !mw_one->mymsgDlg->ui->chk2->isChecked() &&
+      !mw_one->mymsgDlg->ui->chk3->isChecked() &&
+      !mw_one->mymsgDlg->ui->chk4->isChecked() &&
+      !mw_one->mymsgDlg->ui->chk5->isChecked() &&
+      !mw_one->mymsgDlg->ui->chk6->isChecked() &&
+      !mw_one->mymsgDlg->ui->chk7->isChecked()) {
+    mw_one->mymsgDlg->ui->chkDaily->setChecked(false);
+  }
+
+  if (mw_one->mymsgDlg->ui->chkDaily->isChecked()) {
+    QString str;
+    if (mw_one->mymsgDlg->ui->chk1->isChecked()) str = str + "1";
+    if (mw_one->mymsgDlg->ui->chk2->isChecked()) str = str + "2";
+    if (mw_one->mymsgDlg->ui->chk3->isChecked()) str = str + "3";
+    if (mw_one->mymsgDlg->ui->chk4->isChecked()) str = str + "4";
+    if (mw_one->mymsgDlg->ui->chk5->isChecked()) str = str + "5";
+    if (mw_one->mymsgDlg->ui->chk6->isChecked()) str = str + "6";
+    if (mw_one->mymsgDlg->ui->chk7->isChecked()) str = str + "7";
+
+    lbl->setText(tr("Alarm") + "  " + str + "  " +
+                 mw_one->mymsgDlg->ui->dateTimeEdit->time().toString("HH:mm"));
+  } else {
+    lbl->setText(tr("Alarm") + "  " +
+                 mw_one->mymsgDlg->ui->dateTimeEdit->text());
+  }
+
   lbl->setStyleSheet(alarmStyle);
-  // lbl->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
   QFont f = lbl->font();
   f.setBold(true);
   lbl->setFont(f);
@@ -449,8 +474,43 @@ void dlgTodo::on_btnOK_clicked() {
   setAlartTop(minAlartItem);
 }
 
+bool dlgTodo::isWeekValid(QString lblDateTime, QString strDate) {
+  if (!lblDateTime.contains("-")) {
+    int week = QDate::fromString(strDate, "yyyy-M-d").dayOfWeek();
+
+    QStringList list = lblDateTime.split(" ");
+    QString str = list.at(0);
+
+    for (int i = 0; i < str.length(); i++) {
+      if (str.mid(i, 1) == QString::number(week)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 qlonglong dlgTodo::getSecond(QString strDateTime) {
   // 2022-8-22 18:18
+  if (!strDateTime.contains("-")) {
+    int week = QDate::currentDate().dayOfWeek();
+    QStringList list = strDateTime.split(" ");
+    QString str = list.at(0);
+    QString strtime;
+    for (int i = 0; i < list.count(); i++) {
+      QString st = list.at(i);
+      if (st.contains(":")) {
+        strtime = st;
+        break;
+      }
+    }
+    for (int i = 0; i < str.length(); i++) {
+      if (str.mid(i, 1) == QString::number(week)) {
+        strDateTime = QDate::currentDate().toString("yyyy-M-d") + " " + strtime;
+      }
+    }
+  }
+
   strDateTime = strDateTime + ":00";
   QString strCur = QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss");
   QDateTime timeCur = QDateTime::fromString(strCur, "yyyy-M-d HH:mm:ss");
@@ -466,21 +526,90 @@ void dlgTodo::on_btnSetTime_clicked() {
   QLabel* lblMain = getMainLabel(listTodo->currentRow());
   QLabel* lbl = getTimeLabel(listTodo->currentRow());
   QString str = lbl->text().trimmed();
-  if (str.contains(tr("Alarm")) || str.mid(0, 2) == "20") {
+  QDate date;
+  QTime time;
+  mw_one->mymsgDlg->ui->chk1->setChecked(false);
+  mw_one->mymsgDlg->ui->chk2->setChecked(false);
+  mw_one->mymsgDlg->ui->chk3->setChecked(false);
+  mw_one->mymsgDlg->ui->chk4->setChecked(false);
+  mw_one->mymsgDlg->ui->chk5->setChecked(false);
+  mw_one->mymsgDlg->ui->chk6->setChecked(false);
+  mw_one->mymsgDlg->ui->chk7->setChecked(false);
+  mw_one->mymsgDlg->ui->chkDaily->setChecked(false);
+
+  if (str.contains(tr("Alarm"))) {
     str = str.replace(tr("Alarm"), "").trimmed();
     QStringList list = str.split(" ");
-    QDate date;
-    QTime time;
-    date = QDate::fromString(list.at(0), "yyyy-M-d");
-    time = QTime::fromString(list.at(1), "HH:mm");
+    if (str.contains("-")) {
+      date = QDate::fromString(list.at(0), "yyyy-M-d");
+      time = QTime::fromString(list.at(1), "HH:mm");
+    } else {
+      QString s1 = list.at(0);
+      for (int i = 0; i < s1.length(); i++) {
+        QString s2 = s1.mid(i, 1);
+        if (s2 == "1") mw_one->mymsgDlg->ui->chk1->setChecked(true);
+        if (s2 == "2") mw_one->mymsgDlg->ui->chk2->setChecked(true);
+        if (s2 == "3") mw_one->mymsgDlg->ui->chk3->setChecked(true);
+        if (s2 == "4") mw_one->mymsgDlg->ui->chk4->setChecked(true);
+        if (s2 == "5") mw_one->mymsgDlg->ui->chk5->setChecked(true);
+        if (s2 == "6") mw_one->mymsgDlg->ui->chk6->setChecked(true);
+        if (s2 == "7") mw_one->mymsgDlg->ui->chk7->setChecked(true);
+      }
+      date = QDate::currentDate();
+
+      for (int i = 0; i < list.count(); i++) {
+        if (list.at(i).contains(":")) {
+          time = QTime::fromString(list.at(i), "HH:mm");
+          break;
+        }
+      }
+
+      mw_one->mymsgDlg->ui->chkDaily->setChecked(true);
+    }
+
     mw_one->mymsgDlg->ui->dateTimeEdit->setDate(date);
     mw_one->mymsgDlg->ui->dateTimeEdit->setTime(time);
 
-  }
+  } else {
+    QStringList list = str.split(" ");
+    if (str.mid(0, 2) == "20" && str.contains("-")) {
+      date = QDate::fromString(list.at(0), "yyyy-M-d");
+      time = QTime::fromString(list.at(1), "HH:mm");
+    }
 
-  else {
-    mw_one->mymsgDlg->ui->dateTimeEdit->setDate(QDate::currentDate());
-    mw_one->mymsgDlg->ui->dateTimeEdit->setTime(QTime::currentTime());
+    if (list.count() > 2) {
+      date = QDate::currentDate();
+      time = QTime::currentTime();
+    }
+
+    if ((str.mid(0, 1) == "1" || str.mid(0, 1) == "2" || str.mid(0, 1) == "3" ||
+         str.mid(0, 1) == "4" || str.mid(0, 1) == "5" || str.mid(0, 1) == "6" ||
+         str.mid(0, 1) == "7") &&
+        !str.contains("-")) {
+      QString s1 = list.at(0);
+      for (int i = 0; i < s1.length(); i++) {
+        QString s2 = s1.mid(i, 1);
+        if (s2 == "1") mw_one->mymsgDlg->ui->chk1->setChecked(true);
+        if (s2 == "2") mw_one->mymsgDlg->ui->chk2->setChecked(true);
+        if (s2 == "3") mw_one->mymsgDlg->ui->chk3->setChecked(true);
+        if (s2 == "4") mw_one->mymsgDlg->ui->chk4->setChecked(true);
+        if (s2 == "5") mw_one->mymsgDlg->ui->chk5->setChecked(true);
+        if (s2 == "6") mw_one->mymsgDlg->ui->chk6->setChecked(true);
+        if (s2 == "7") mw_one->mymsgDlg->ui->chk7->setChecked(true);
+      }
+      date = QDate::currentDate();
+      for (int i = 0; i < list.count(); i++) {
+        if (list.at(i).contains(":")) {
+          time = QTime::fromString(list.at(i), "HH:mm");
+          break;
+        }
+      }
+
+      mw_one->mymsgDlg->ui->chkDaily->setChecked(true);
+    }
+
+    mw_one->mymsgDlg->ui->dateTimeEdit->setDate(date);
+    mw_one->mymsgDlg->ui->dateTimeEdit->setTime(time);
   }
 
   mw_one->mymsgDlg->initDlg();
@@ -691,7 +820,11 @@ void dlgTodo::refreshAlarm() {
 
         // set time marks
         QString strDate = str.split(" ").at(0);
-        if (strDate == QDate::currentDate().toString("yyyy-M-d")) {
+        if (!str.contains("-")) {
+          strDate = QDate::currentDate().toString("yyyy-M-d");
+        }
+        if (strDate == QDate::currentDate().toString("yyyy-M-d") ||
+            isWeekValid(str, strDate)) {
           lbl->setStyleSheet(alarmStyleToday);
           isToday = true;
         }
@@ -701,8 +834,19 @@ void dlgTodo::refreshAlarm() {
         if (strTmo == strDate) lbl->setStyleSheet(alarmStyleTomorrow);
 
       } else {
-        lbl->setText(str);
-        lbl->setStyleSheet(getMainLabel(i)->styleSheet());
+        if (str.contains("-")) {
+          lbl->setText(str);
+          lbl->setStyleSheet(getMainLabel(i)->styleSheet());
+        }
+
+        if (!str.contains("-")) {
+          lbl->setText(tr("Alarm") + "  " + str);
+          lbl->setStyleSheet(alarmStyle);
+
+          QDateTime ctime = QDateTime::currentDateTime();
+          QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
+          if (isWeekValid(str, strTmo)) lbl->setStyleSheet(alarmStyleTomorrow);
+        }
       }
     }
   }
@@ -758,8 +902,13 @@ void dlgTodo::setAlartTop(QListWidgetItem* item) {
     }
   }
 
+  if (!str001.contains("-")) {
+    str002 = QDate::currentDate().toString("yyyy-M-d");
+  }
+
   bool isTop = false;
-  if (str002 == QDate::currentDate().toString("yyyy-M-d")) {
+  if (str002 == QDate::currentDate().toString("yyyy-M-d") ||
+      isWeekValid(list001.at(1), str002)) {
     for (int m = 0; m < listTodo->count(); m++) {
       if (item == listTodo->item(m)) {
         if (m != 0) {

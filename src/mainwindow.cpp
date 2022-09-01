@@ -3604,6 +3604,9 @@ void MainWindow::init_UIWidget() {
   ui->editFind->addAction(clearaction1, QLineEdit::TrailingPosition);
   connect(clearaction1, &QAction::triggered,
           [=]() { ui->editFind->setText(""); });
+
+  ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
+  ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
 }
 
 void MainWindow::on_btnSelTab_clicked() {

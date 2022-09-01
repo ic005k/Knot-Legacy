@@ -30,6 +30,16 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->btnHour->setFont(font);
   ui->btnMinute->setFont(font);
 
+  QString strStyleChk = "QCheckBox::indicator {width:22px;height:22px;}";
+  ui->chk1->setStyleSheet(strStyleChk);
+  ui->chk2->setStyleSheet(strStyleChk);
+  ui->chk3->setStyleSheet(strStyleChk);
+  ui->chk4->setStyleSheet(strStyleChk);
+  ui->chk5->setStyleSheet(strStyleChk);
+  ui->chk6->setStyleSheet(strStyleChk);
+  ui->chk7->setStyleSheet(strStyleChk);
+  ui->chkDaily->setStyleSheet(strStyleChk);
+
   // this->show();
 }
 
