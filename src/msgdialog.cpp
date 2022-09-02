@@ -39,6 +39,7 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->chk6->setStyleSheet(strStyleChk);
   ui->chk7->setStyleSheet(strStyleChk);
   ui->chkDaily->setStyleSheet(strStyleChk);
+  ui->frameDaily->setContentsMargins(10, 1, 10, 1);
 
   // this->show();
 }

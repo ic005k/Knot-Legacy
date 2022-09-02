@@ -206,8 +206,8 @@ QRadioButton::indicator:checked {
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
-    width:20px;
-    height:20px;
+    width:30px;
+    height:30px;
 }
 
 QCheckBox::indicator:unchecked{

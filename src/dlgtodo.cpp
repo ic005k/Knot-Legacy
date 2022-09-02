@@ -811,7 +811,7 @@ void dlgTodo::on_btnDel_clicked() {
 void dlgTodo::refreshAlarm() {
   stopTimerAlarm();
   int count = 0;
-  bool isToday = false;
+  isToday = false;
   QString str;
   QLabel* lbl;
 
@@ -842,19 +842,27 @@ void dlgTodo::refreshAlarm() {
 
         // set time marks
         QString strDate = str.split(" ").at(0);
-
+        QString strToday = QDate::currentDate().toString("yyyy-M-d");
         QDateTime ctime = QDateTime::currentDateTime();
         QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
-        if (strTmo == strDate || isWeekValid(str, strTmo))
-          lbl->setStyleSheet(alarmStyleTomorrow);
+        if (strDate.contains("-")) {
+          if (strDate == strToday) {
+            lbl->setStyleSheet(alarmStyleToday);
+            isToday = true;
+          }
 
-        if (!str.contains("-") && !isTomorrow) {
-          QString strToday = QDate::currentDate().toString("yyyy-M-d");
-          if (isWeekValid(str, strToday)) strDate = strToday;
-        }
-        if (strDate == QDate::currentDate().toString("yyyy-M-d")) {
-          lbl->setStyleSheet(alarmStyleToday);
-          isToday = true;
+          if (strTmo == strDate) {
+            lbl->setStyleSheet(alarmStyleTomorrow);
+          }
+        } else {
+          if (isWeekValid(str, strToday)) {
+            lbl->setStyleSheet(alarmStyleToday);
+            isToday = true;
+          }
+
+          if (isWeekValid(str, strTmo) && isTomorrow) {
+            lbl->setStyleSheet(alarmStyleTomorrow);
+          }
         }
 
       } else {
@@ -912,27 +920,12 @@ void dlgTodo::refreshAlarm() {
 }
 
 void dlgTodo::setAlartTop(QListWidgetItem* item) {
+  // item is min alarm
   if (item == NULL) return;
 
   QLabel* lblTime = getTimeLabel(item);
-  QString str001 = lblTime->text();
-  QStringList list001 = str001.split(" ");
-  QString str002;
-  for (int i = 0; i < list001.count(); i++) {
-    QString str = list001.at(i);
-    if (str.contains("-")) {
-      str002 = str.trimmed();
-      break;
-    }
-  }
-
-  if (!str001.contains("-")) {
-    str002 = QDate::currentDate().toString("yyyy-M-d");
-  }
-
   bool isTop = false;
-  if (str002 == QDate::currentDate().toString("yyyy-M-d") ||
-      isWeekValid(list001.at(1), str002)) {
+  if (isToday) {
     for (int m = 0; m < listTodo->count(); m++) {
       if (item == listTodo->item(m)) {
         if (m != 0) {

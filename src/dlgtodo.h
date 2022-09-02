@@ -21,6 +21,7 @@ class dlgTodo : public QDialog {
   Ui::dlgTodo *ui;
   ~dlgTodo();
 
+  bool isToday = false;
   void setAlartTop(QListWidgetItem *item);
   QListWidgetItem *minAlartItem;
   void init_Items();
