@@ -27,6 +27,23 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="chkReaderFont">
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
+    /* 选择框尺寸 */
+    width:22px;
+    height:22px;
+}</string>
+        </property>
+        <property name="text">
+         <string>Use reader font to override UI font</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0">
        <widget class="QSlider" name="sliderFontSize">
         <property name="minimumSize">
@@ -81,23 +98,6 @@ QSlider::handle:horizontal
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="chkReaderFont">
-        <property name="styleSheet">
-         <string notr="true">QCheckBox::indicator {
-    /* 选择框尺寸 */
-    width:22px;
-    height:22px;
-}</string>
-        </property>
-        <property name="text">
-         <string>Use reader font to override UI font</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -206,8 +206,8 @@ QRadioButton::indicator:checked {
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
-    width:30px;
-    height:30px;
+    width:40px;
+    height:40px;
 }
 
 QCheckBox::indicator:unchecked{

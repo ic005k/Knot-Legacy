@@ -93,7 +93,7 @@ void dlgNotes::on_btnDL_clicked() {
 
 void dlgNotes::on_btnHomePage_clicked() {
   QString str;
-  str = "https://github.com/ic005k/Knot/";
+  str = "https://github.com/ic005k/Knot/issues";
   QUrl url(str);
   QDesktopServices::openUrl(url);
 }

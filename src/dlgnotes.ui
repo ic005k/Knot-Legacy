@@ -180,7 +180,7 @@ selection-background-color: lightblue;
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Project Home</string>
+         <string>Reporting Issues</string>
         </property>
        </widget>
       </item>

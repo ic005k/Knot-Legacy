@@ -843,9 +843,13 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgnotes.ui" line="183"/>
         <source>Project Home</source>
-        <translation>项目主页</translation>
+        <translation type="vanished">项目主页</translation>
+    </message>
+    <message>
+        <location filename="dlgnotes.ui" line="183"/>
+        <source>Reporting Issues</source>
+        <translation>报告问题</translation>
     </message>
     <message>
         <location filename="dlgnotes.ui" line="198"/>
@@ -896,7 +900,7 @@
     <message>
         <location filename="dlgpreferences.ui" line="26"/>
         <location filename="dlgpreferences.cpp" line="19"/>
-        <location filename="dlgpreferences.cpp" line="91"/>
+        <location filename="dlgpreferences.cpp" line="97"/>
         <source>Font Size</source>
         <translation>字体大小</translation>
     </message>
@@ -913,7 +917,7 @@
         <translation type="vanished">大</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="97"/>
+        <location filename="dlgpreferences.ui" line="40"/>
         <source>Use reader font to override UI font</source>
         <translation>使用阅读器字体覆盖UI字体</translation>
     </message>
@@ -947,7 +951,7 @@
         <translation>正常关闭</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="214"/>
+        <location filename="dlgpreferences.ui" line="223"/>
         <source>Auto uses time as the Y-axis</source>
         <oldsource>Automatically uses time as the Y-axis</oldsource>
         <translation>自动使用时间作为Y坐标轴</translation>
@@ -969,17 +973,17 @@
         <translation type="vanished">点钟</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="241"/>
+        <location filename="dlgpreferences.ui" line="250"/>
         <source>Debug Mode</source>
         <translation>调试模式</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="224"/>
+        <location filename="dlgpreferences.ui" line="233"/>
         <source>Todo Alert Mute</source>
         <translation>待办事项提示静音</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="263"/>
+        <location filename="dlgpreferences.ui" line="272"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
@@ -1020,7 +1024,7 @@
     </message>
     <message>
         <location filename="dlgreader.cpp" line="148"/>
-        <location filename="dlgreader.cpp" line="484"/>
+        <location filename="dlgreader.cpp" line="478"/>
         <location filename="dlgreader.cpp" line="1013"/>
         <location filename="dlgreader.cpp" line="1027"/>
         <source>Pages</source>
@@ -1032,7 +1036,7 @@
         <translation>书籍信息：</translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="849"/>
+        <location filename="dlgreader.cpp" line="843"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation></translation>
@@ -1591,32 +1595,32 @@
         <location filename="dlgtodo.cpp" line="258"/>
         <location filename="dlgtodo.cpp" line="460"/>
         <location filename="dlgtodo.cpp" line="463"/>
-        <location filename="dlgtodo.cpp" line="540"/>
-        <location filename="dlgtodo.cpp" line="541"/>
-        <location filename="dlgtodo.cpp" line="627"/>
-        <location filename="dlgtodo.cpp" line="641"/>
-        <location filename="dlgtodo.cpp" line="643"/>
-        <location filename="dlgtodo.cpp" line="807"/>
-        <location filename="dlgtodo.cpp" line="808"/>
-        <location filename="dlgtodo.cpp" line="843"/>
+        <location filename="dlgtodo.cpp" line="562"/>
+        <location filename="dlgtodo.cpp" line="563"/>
+        <location filename="dlgtodo.cpp" line="649"/>
+        <location filename="dlgtodo.cpp" line="663"/>
+        <location filename="dlgtodo.cpp" line="665"/>
+        <location filename="dlgtodo.cpp" line="829"/>
+        <location filename="dlgtodo.cpp" line="830"/>
+        <location filename="dlgtodo.cpp" line="875"/>
         <source>Alarm</source>
         <translation>定时提醒</translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="616"/>
-        <location filename="dlgtodo.cpp" line="670"/>
-        <location filename="dlgtodo.cpp" line="684"/>
-        <location filename="dlgtodo.cpp" line="735"/>
+        <location filename="dlgtodo.cpp" line="638"/>
+        <location filename="dlgtodo.cpp" line="692"/>
+        <location filename="dlgtodo.cpp" line="706"/>
+        <location filename="dlgtodo.cpp" line="757"/>
         <source>Todo</source>
         <translation>待办事项</translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="673"/>
+        <location filename="dlgtodo.cpp" line="695"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="dlgtodo.cpp" line="815"/>
+        <location filename="dlgtodo.cpp" line="837"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -1667,53 +1671,53 @@
     </message>
     <message>
         <location filename="msgdialog.ui" line="209"/>
-        <location filename="msgdialog.cpp" line="76"/>
-        <location filename="msgdialog.cpp" line="98"/>
-        <location filename="msgdialog.cpp" line="218"/>
-        <location filename="msgdialog.cpp" line="257"/>
+        <location filename="msgdialog.cpp" line="77"/>
+        <location filename="msgdialog.cpp" line="99"/>
+        <location filename="msgdialog.cpp" line="219"/>
+        <location filename="msgdialog.cpp" line="258"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
         <location filename="msgdialog.ui" line="222"/>
-        <location filename="msgdialog.cpp" line="77"/>
-        <location filename="msgdialog.cpp" line="101"/>
-        <location filename="msgdialog.cpp" line="223"/>
-        <location filename="msgdialog.cpp" line="260"/>
+        <location filename="msgdialog.cpp" line="78"/>
+        <location filename="msgdialog.cpp" line="102"/>
+        <location filename="msgdialog.cpp" line="224"/>
+        <location filename="msgdialog.cpp" line="261"/>
         <source>Month</source>
         <translation>月</translation>
     </message>
     <message>
         <location filename="msgdialog.ui" line="235"/>
-        <location filename="msgdialog.cpp" line="78"/>
-        <location filename="msgdialog.cpp" line="116"/>
-        <location filename="msgdialog.cpp" line="228"/>
-        <location filename="msgdialog.cpp" line="263"/>
+        <location filename="msgdialog.cpp" line="79"/>
+        <location filename="msgdialog.cpp" line="117"/>
+        <location filename="msgdialog.cpp" line="229"/>
+        <location filename="msgdialog.cpp" line="264"/>
         <source>Day</source>
         <translation>日</translation>
     </message>
     <message>
         <location filename="msgdialog.ui" line="248"/>
-        <location filename="msgdialog.cpp" line="79"/>
-        <location filename="msgdialog.cpp" line="121"/>
-        <location filename="msgdialog.cpp" line="155"/>
-        <location filename="msgdialog.cpp" line="233"/>
-        <location filename="msgdialog.cpp" line="266"/>
-        <location filename="msgdialog.cpp" line="308"/>
-        <location filename="msgdialog.cpp" line="317"/>
-        <location filename="msgdialog.cpp" line="323"/>
+        <location filename="msgdialog.cpp" line="80"/>
+        <location filename="msgdialog.cpp" line="122"/>
+        <location filename="msgdialog.cpp" line="156"/>
+        <location filename="msgdialog.cpp" line="234"/>
+        <location filename="msgdialog.cpp" line="267"/>
+        <location filename="msgdialog.cpp" line="309"/>
+        <location filename="msgdialog.cpp" line="318"/>
+        <location filename="msgdialog.cpp" line="324"/>
         <source>Hour</source>
         <translation>时</translation>
     </message>
     <message>
         <location filename="msgdialog.ui" line="261"/>
-        <location filename="msgdialog.cpp" line="80"/>
-        <location filename="msgdialog.cpp" line="126"/>
-        <location filename="msgdialog.cpp" line="155"/>
-        <location filename="msgdialog.cpp" line="238"/>
-        <location filename="msgdialog.cpp" line="269"/>
-        <location filename="msgdialog.cpp" line="314"/>
-        <location filename="msgdialog.cpp" line="328"/>
+        <location filename="msgdialog.cpp" line="81"/>
+        <location filename="msgdialog.cpp" line="127"/>
+        <location filename="msgdialog.cpp" line="156"/>
+        <location filename="msgdialog.cpp" line="239"/>
+        <location filename="msgdialog.cpp" line="270"/>
+        <location filename="msgdialog.cpp" line="315"/>
+        <location filename="msgdialog.cpp" line="329"/>
         <source>Minute</source>
         <translation>分</translation>
     </message>
@@ -1733,7 +1737,7 @@
         <translation>下周</translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="340"/>
+        <location filename="msgdialog.ui" line="369"/>
         <source>Daily (Select by week)</source>
         <translation>每天（按周选择）</translation>
     </message>
@@ -1742,37 +1746,37 @@
         <translation type="vanished">每天</translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="374"/>
+        <location filename="msgdialog.ui" line="444"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="384"/>
+        <location filename="msgdialog.ui" line="473"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="394"/>
+        <location filename="msgdialog.ui" line="502"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="404"/>
+        <location filename="msgdialog.ui" line="531"/>
         <source>4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="414"/>
+        <location filename="msgdialog.ui" line="560"/>
         <source>5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="424"/>
+        <location filename="msgdialog.ui" line="395"/>
         <source>6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="msgdialog.ui" line="434"/>
+        <location filename="msgdialog.ui" line="424"/>
         <source>7</source>
         <translation></translation>
     </message>
@@ -1789,44 +1793,44 @@
         <translation type="vanished">确定</translation>
     </message>
     <message>
-        <location filename="msgdialog.cpp" line="166"/>
-        <location filename="msgdialog.cpp" line="199"/>
+        <location filename="msgdialog.cpp" line="167"/>
+        <location filename="msgdialog.cpp" line="200"/>
         <source>Mon</source>
         <translation>一</translation>
     </message>
     <message>
-        <location filename="msgdialog.cpp" line="167"/>
-        <location filename="msgdialog.cpp" line="200"/>
+        <location filename="msgdialog.cpp" line="168"/>
+        <location filename="msgdialog.cpp" line="201"/>
         <source>Tue</source>
         <translation>二</translation>
     </message>
     <message>
-        <location filename="msgdialog.cpp" line="168"/>
-        <location filename="msgdialog.cpp" line="201"/>
+        <location filename="msgdialog.cpp" line="169"/>
+        <location filename="msgdialog.cpp" line="202"/>
         <source>Wed</source>
         <translation>三</translation>
     </message>
     <message>
-        <location filename="msgdialog.cpp" line="169"/>
-        <location filename="msgdialog.cpp" line="202"/>
+        <location filename="msgdialog.cpp" line="170"/>
+        <location filename="msgdialog.cpp" line="203"/>
         <source>Thur</source>
         <translation>四</translation>
     </message>
     <message>
-        <location filename="msgdialog.cpp" line="170"/>
-        <location filename="msgdialog.cpp" line="203"/>
+        <location filename="msgdialog.cpp" line="171"/>
+        <location filename="msgdialog.cpp" line="204"/>
         <source>Fri</source>
         <translation>五</translation>
     </message>
     <message>
-        <location filename="msgdialog.cpp" line="171"/>
-        <location filename="msgdialog.cpp" line="204"/>
+        <location filename="msgdialog.cpp" line="172"/>
+        <location filename="msgdialog.cpp" line="205"/>
         <source>Sat</source>
         <translation>六</translation>
     </message>
     <message>
-        <location filename="msgdialog.cpp" line="172"/>
-        <location filename="msgdialog.cpp" line="205"/>
+        <location filename="msgdialog.cpp" line="173"/>
+        <location filename="msgdialog.cpp" line="206"/>
         <source>Sun</source>
         <translation>日</translation>
     </message>
@@ -1834,12 +1838,12 @@
 <context>
     <name>reader</name>
     <message>
-        <location filename="reader.qml" line="201"/>
+        <location filename="reader.qml" line="204"/>
         <source>Copy</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="reader.qml" line="213"/>
+        <location filename="reader.qml" line="216"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>

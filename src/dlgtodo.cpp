@@ -20,6 +20,8 @@ extern int fontSize;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  this->setContentsMargins(1, 5, 1, 5);
+  ui->gridLayout_2->setContentsMargins(1, 1, 1, 1);
   ui->frameSetTime->hide();
   ui->frameRecycle->hide();
   ui->listRecycle->hide();
