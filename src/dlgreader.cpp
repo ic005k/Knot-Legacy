@@ -461,15 +461,9 @@ void dlgReader::getBookList() {
   for (int i = 0; i < count; i++) {
     QString str = Reg.value("/Reader/BookSn" + QString::number(i)).toString();
     QStringList list = str.split("|");
-    if (QFileInfo(list.at(1)).exists()) bookList.append(str);
+    if (QFile(list.at(1)).exists()) bookList.append(str);
   }
 }
-
-void dlgReader::on_btnFontPlus_clicked() {}
-
-void dlgReader::on_btnFontLess_clicked() {}
-
-void dlgReader::on_textBrowser_textChanged() {}
 
 void dlgReader::getLines() {
   QString qsShow;
@@ -1000,6 +994,12 @@ void dlgReader::setPageVPos() {
 void dlgReader::setVPos(qreal pos) {
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
+}
+
+qreal dlgReader::getVPos() {
+  QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getVPos");
+  return textPos;
 }
 
 void dlgReader::showInfo() {

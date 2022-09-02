@@ -855,7 +855,7 @@ void dlgTodo::refreshAlarm() {
             lbl->setStyleSheet(alarmStyleTomorrow);
           }
         } else {
-          if (isWeekValid(str, strToday)) {
+          if (isWeekValid(str, strToday) && !isTomorrow) {
             lbl->setStyleSheet(alarmStyleToday);
             isToday = true;
           }

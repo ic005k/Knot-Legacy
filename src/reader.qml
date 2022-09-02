@@ -32,10 +32,13 @@ Item {
         console.log(vpos)
     }
 
+    function getVPos() {
+        file.textPos = contentY
+        console.log(file.textPos)
+    }
+
     function move(x0) {
-
         x = x + x0
-
         file.curX = x
         console.log(file.curX)
     }

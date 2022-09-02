@@ -74,7 +74,8 @@ class dlgReader : public QDialog {
   QDialog *getProgBar();
   void refreshEpubPage();
   static QString getCoverPicFile(QString htmlFile);
- public slots:
+  qreal getVPos();
+  public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
@@ -90,12 +91,6 @@ class dlgReader : public QDialog {
   void paintEvent(QPaintEvent *event) override;
  private slots:
   void on_btnBack_clicked();
-
-  void on_btnFontPlus_clicked();
-
-  void on_btnFontLess_clicked();
-
-  void on_textBrowser_textChanged();
 
  private:
   int x, y, w, h;
