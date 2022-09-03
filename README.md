@@ -11,6 +11,9 @@
 * Memo
 * Data export and import
 
+### For data backup and synchronization, the following tools are available.
+https://github.com/syncthing/syncthing
+
 
 ### Credits
 
