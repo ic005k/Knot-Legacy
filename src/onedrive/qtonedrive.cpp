@@ -15,6 +15,7 @@
 #include "src/mainwindow.h"
 
 extern MainWindow* mw_one;
+QtOneDriveAuthorizationDialog* dialog_ = nullptr;
 
 QString strReUri = "https://login.live.com/oauth20_desktop.srf";
 
@@ -586,7 +587,7 @@ QUrl QtOneDrive::urlSingIn() const {
   url.setUrl(strReUri);
   QUrlQuery query;
 
-  // query.addQueryItem("Content-Type", "application/json");
+  query.addQueryItem("Content-Type", "application/json");
 
   query.addQueryItem("client_id", clientID_);
 
@@ -599,8 +600,8 @@ QUrl QtOneDrive::urlSingIn() const {
   query.addQueryItem("response_type", "code");
   query.addQueryItem("redirect_uri", redirectURI_);
 
-  // query.addQueryItem("grant_type", "authorization_code");
-  // query.addQueryItem("Authorization", "Bearer access_token");
+  query.addQueryItem("grant_type", "authorization_code");
+  query.addQueryItem("Authorization", "Bearer access_token");
 
   url.setQuery(query);
   return url;

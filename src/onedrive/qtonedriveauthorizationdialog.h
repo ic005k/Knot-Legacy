@@ -16,6 +16,7 @@ class QtOneDriveAuthorizationDialog : public QDialog {
 
   static bool isExists() { return isExists_; }
   void setNeedToClose(bool close) { isNeedToClose_ = close; }
+  void sendMsg(QString strUri);
 
  private slots:
   void on_timer();

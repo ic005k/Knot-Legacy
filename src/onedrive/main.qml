@@ -54,6 +54,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.2
 import QtWebView 1.1
 
+import MyModel1 1.0
 
 //ApplicationWindow {
 Item {
@@ -63,6 +64,11 @@ Item {
                                 && Qt.platform.os !== "ios"
                                 && Qt.platform.os !== "winrt"
     visible: true
+
+    File {
+        id: file
+    }
+
     /*x: initialX
     y: initialY
     width: initialWidth
@@ -165,10 +171,21 @@ Item {
         id: webView
         anchors.fill: parent
         url: initialUrl
-        /*onLoadingChanged: {
+        onLoadingChanged: {
             if (loadRequest.errorString)
                 console.error(loadRequest.errorString);
-        }*/
+            console.log("Loading changed...")
+        }
+
+        onLoadProgressChanged: {
+            console.log(webView.loadProgress)
+            if(webView.loadProgress == 100){
+                console.log("loadProgress=100%")
+                console.log("CurrentUrl=" + webView.url)
+                file.strUri = webView.url.toString();
+                //file.loadWebEndChanged()
+            }
+        }
     }
 
     Component.onCompleted: {

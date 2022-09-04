@@ -151,7 +151,6 @@ class QTONEDRIVELIBSHARED_EXPORT QtOneDrive : public QObject {
   QSettings* properties_;
   OneDriveState state_ = Empty;
   QNetworkAccessManager* networkManager_ = nullptr;
-  QtOneDriveAuthorizationDialog* dialog_ = nullptr;
 
   QString tmp_parentFolderId_;
   QString tmp_fileId_;

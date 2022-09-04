@@ -133,7 +133,7 @@ bool TestDialog::eventFilter(QObject *obj, QEvent *evn) {
 
 void TestDialog::on_pushButton_SignIn_clicked() {
   oneDrive->signIn();
-  close();
+  hide();
 }
 
 void TestDialog::on_pushButton_SingOut_clicked() { oneDrive->signOut(); }

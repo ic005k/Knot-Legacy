@@ -26,7 +26,7 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
 
   isExists_ = true;
 
-  QQuickWidget *webView_ = new QQuickWidget(this);
+  webView_ = new QQuickWidget(this);
   QVBoxLayout *layout = new QVBoxLayout(this);
   this->setLayout(layout);
   layout->addWidget(webView_);
@@ -71,4 +71,10 @@ void QtOneDriveAuthorizationDialog::on_webView_loadFinished(bool arg1) {
     emit success(url);
   else
     emit error(url);
+}
+
+void QtOneDriveAuthorizationDialog::sendMsg(QString strUri) {
+  QUrl url(strUri);
+  emit success(url);
+  qDebug() << "emit success...";
 }

@@ -4,8 +4,12 @@
 #include <QFile>
 
 #include "mainwindow.h"
+#include "src/onedrive/qtonedrive.h"
+#include "src/onedrive/qtonedriveauthorizationdialog.h"
 
 extern MainWindow *mw_one;
+extern QtOneDriveAuthorizationDialog *dialog_;
+
 File::File() { connect(this, SIGNAL(sourceChanged()), this, SLOT(readFile())); }
 
 void File::setSource(const QString &source) {
@@ -67,3 +71,12 @@ qreal File::curX() {
 void File::setTextPos(qreal &textPos) { m_textPos = textPos; }
 
 void File::setCurX(qreal &curX) { m_curX = curX; }
+
+QString File::webEnd() { return m_strUri; }
+
+void File::setWebEnd(QString &strUri) {
+  m_strUri = strUri;
+  dialog_->sendMsg(m_strUri);
+
+  qDebug() << "web end uri = " << m_strUri;
+}
