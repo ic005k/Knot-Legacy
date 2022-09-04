@@ -1,10 +1,10 @@
-QT += core gui
+QT += core gui network
 QT += charts sensors
-QT += qml quick quickwidgets
+QT += qml quick quickwidgets webview
 QT += printsupport
 QT += xml
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets #webenginewidgets
 
 CONFIG += c++11
 
@@ -31,6 +31,7 @@ INSTALLS += dataFiles
 
 SOURCES += \
     src/chart.cpp \
+    src/dlgOneDrive.cpp \
     src/dlglist.cpp \
     src/dlgloadpic.cpp \
     src/dlgmainnotes.cpp \
@@ -47,12 +48,16 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/msgdialog.cpp \
+    src/onedrive/dlgweb.cpp \
+    src/onedrive/qtonedrive.cpp \
+    src/onedrive/qtonedriveauthorizationdialog.cpp \
     src/smoothscrollbar.cpp \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
     src/chart.h \
     src/count_steps.h \
+    src/dlgOneDrive.h \
     src/dlglist.h \
     src/dlgloadpic.h \
     src/dlgmainnotes.h \
@@ -68,10 +73,15 @@ HEADERS += \
     src/file.h \
     src/mainwindow.h \
     src/msgdialog.h \
+    src/onedrive/dlgweb.h \
+    src/onedrive/qtonedrive.h \
+    src/onedrive/qtonedriveauthorizationdialog.h \
+    src/onedrive/qtonedrivelib_global.h \
     src/smoothscrollbar.h \
     src/specialaccelerometerpedometer.h
 
 FORMS += \
+    src/dlgOneDrive.ui \
     src/dlglist.ui \
     src/dlgloadpic.ui \
     src/dlgmainnotes.ui \
@@ -84,7 +94,8 @@ FORMS += \
     src/dlgsteps.ui \
     src/dlgtodo.ui \
     src/mainwindow.ui \
-    src/msgdialog.ui
+    src/msgdialog.ui \
+    src/onedrive/dlgweb.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -117,7 +128,8 @@ DISTFILES += \
     android/gradlew.bat \
     android/res/values/libs.xml \
     src/cn.qm \
-    src/cn.ts
+    src/cn.ts \
+    src/onedrive/main.qml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

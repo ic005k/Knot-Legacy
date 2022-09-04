@@ -3490,6 +3490,7 @@ void MainWindow::init_UIWidget() {
   ui->lblStats->setWordWrap(true);
   mydlgReader = new dlgReader(this);
   mymsgDlg = new msgDialog(this);
+  mydlgOneDrive = new TestDialog(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -3666,8 +3667,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   QAction* actPreferences = new QAction(tr("Preferences"));
   QAction* actMemos = new QAction(tr("Memos"));
   QAction* actViewAppData = new QAction(tr("About") + " (" + ver + ")");
-  QAction* actAbout = new QAction(tr("Check for New Releases"));
-  actAbout->setVisible(false);
+  QAction* actOneDrive = new QAction(tr("OneDrive Backup Data"));
 
   QAction* actUndo = new QAction(tr("Undo"));
   QAction* actRedo = new QAction(tr("Redo"));
@@ -3706,8 +3706,8 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
           &MainWindow::on_actionMemos_triggered);
   connect(actViewAppData, &QAction::triggered, this,
           &MainWindow::on_actionView_App_Data_triggered);
-  connect(actAbout, &QAction::triggered, this,
-          &MainWindow::on_actionAbout_triggered);
+  connect(actOneDrive, &QAction::triggered, this,
+          &MainWindow::on_OneDriveBackupData);
 
   QString qss =
       "QMenu {"
@@ -3742,8 +3742,13 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   mainMenu->addAction(actMemos);
 
   mainMenu->addAction(actViewAppData);
-  mainMenu->addAction(actAbout);
+  mainMenu->addAction(actOneDrive);
   mainMenu->setStyleSheet(qss);
+}
+
+void MainWindow::on_OneDriveBackupData() {
+  mydlgOneDrive->init();
+  mydlgOneDrive->show();
 }
 
 void MainWindow::undo() { importBakData(iniDir + "undoFile", true, false); }

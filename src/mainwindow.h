@@ -66,6 +66,7 @@
 #include "src/file.h"
 #include "src/msgdialog.h"
 #include "src/specialaccelerometerpedometer.h"
+#include "src/dlgOneDrive.h"
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
 #include "ui_dlgmainnotes.h"
@@ -169,6 +170,7 @@ class MainWindow : public QMainWindow {
   dlgSteps *mydlgSteps;
   dlgReader *mydlgReader;
   msgDialog *mymsgDlg;
+  TestDialog *mydlgOneDrive;
 
   File *myfile;
 
@@ -288,6 +290,8 @@ class MainWindow : public QMainWindow {
   void readEBookDone();
   void on_btnPageUp_clicked();
   void on_btnPageNext_clicked();
+
+  void on_OneDriveBackupData();
 
  protected:
   void closeEvent(QCloseEvent *event) override;
