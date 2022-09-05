@@ -11,6 +11,7 @@ class File : public QObject {
   qreal m_textPos;
   qreal m_curX;
   QString m_strUri;
+  QString m_prog;
 
   Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
   Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
@@ -18,6 +19,7 @@ class File : public QObject {
   Q_PROPERTY(qreal curX READ curX WRITE setCurX NOTIFY curXChanged)
   Q_PROPERTY(
       QString webEnd READ webEnd WRITE setWebEnd NOTIFY loadWebEndChanged)
+  Q_PROPERTY(QString prog READ prog WRITE setProg NOTIFY loadWebEndChanged)
 
   QString source() const;
   void setSource(const QString &source);
@@ -32,6 +34,9 @@ class File : public QObject {
   void setWebEnd(QString &strUri);
   QString webEnd();
 
+  QString prog() const;
+  void setProg(const QString &prog);
+
   void setStr(QString);
  signals:
   void sourceChanged();
@@ -39,6 +44,7 @@ class File : public QObject {
   void textPosChanged();
   void curXChanged();
   void loadWebEndChanged();
+  void progChanged();
 
  public slots:
   void readFile();

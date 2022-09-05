@@ -13,33 +13,34 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>5</number>
-   </property>
-   <property name="topMargin">
-    <number>5</number>
-   </property>
-   <property name="rightMargin">
-    <number>5</number>
-   </property>
-   <property name="bottomMargin">
-    <number>5</number>
-   </property>
-   <property name="horizontalSpacing">
-    <number>1</number>
-   </property>
-   <property name="verticalSpacing">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
     <number>10</number>
    </property>
-   <item row="0" column="0">
+   <item>
     <widget class="QQuickWidget" name="quickWidget">
      <property name="resizeMode">
       <enum>QQuickWidget::SizeRootObjectToView</enum>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item>
+    <widget class="QProgressBar" name="progressBar">
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="textDirection">
+      <enum>QProgressBar::TopToBottom</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolButton" name="btnBack">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

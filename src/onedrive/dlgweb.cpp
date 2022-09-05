@@ -25,6 +25,8 @@ bool dlgWeb::eventFilter(QObject* obj, QEvent* evn) {
 }
 
 void dlgWeb::on_btnBack_clicked() {
+  ui->quickWidget->close();
   this->close();
+
   mw_one->refreshMainUI();
 }

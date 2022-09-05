@@ -207,4 +207,7 @@ void TestDialog::on_pushButton_storageInfo_clicked() {
   oneDrive->getStorageInfo();
 }
 
-void TestDialog::on_btnBack_clicked() { close(); }
+void TestDialog::on_btnBack_clicked() {
+  close();
+  mw_one->refreshMainUI();
+}

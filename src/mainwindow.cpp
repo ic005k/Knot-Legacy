@@ -3748,8 +3748,11 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 }
 
 void MainWindow::on_OneDriveBackupData() {
-  mydlgOneDrive->init();
-  mydlgOneDrive->show();
+  TestDialog* dlgone = new TestDialog(this);
+  dlgone->init();
+  dlgone->show();
+  // mydlgOneDrive->init();
+  // mydlgOneDrive->show();
 }
 
 void MainWindow::undo() { importBakData(iniDir + "undoFile", true, false); }
@@ -4088,6 +4091,7 @@ void MainWindow::repaintApp() {
 void MainWindow::refreshMainUI() {
   this->update();
   this->repaint();
+  qApp->processEvents();
 }
 
 bool MainWindow::showMsgBox(QString title, QString info) {

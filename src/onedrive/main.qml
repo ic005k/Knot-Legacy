@@ -179,6 +179,7 @@ Item {
 
         onLoadProgressChanged: {
             console.log(webView.loadProgress)
+            file.prog=webView.loadProgress
             if(webView.loadProgress == 100){
                 console.log("loadProgress=100%")
                 console.log("CurrentUrl=" + webView.url)

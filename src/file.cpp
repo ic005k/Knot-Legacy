@@ -80,3 +80,11 @@ void File::setWebEnd(QString &strUri) {
 
   qDebug() << "web end uri = " << m_strUri;
 }
+
+QString File::prog() const { return m_prog; }
+
+void File::setProg(const QString &prog) {
+  m_prog = prog;
+  dialog_->mydlgWeb->ui->progressBar->setValue(m_prog.toInt());
+  dialog_->mydlgWeb->repaint();
+}
