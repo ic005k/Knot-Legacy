@@ -3741,9 +3741,9 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   mainMenu->addAction(actPreferences);
 
   mainMenu->addAction(actMemos);
-
-  mainMenu->addAction(actViewAppData);
   mainMenu->addAction(actOneDrive);
+  mainMenu->addAction(actViewAppData);
+
   mainMenu->setStyleSheet(qss);
 }
 
@@ -4083,6 +4083,11 @@ void MainWindow::repaintApp() {
   if (!ui->frameMain->isHidden()) {
     qApp->processEvents();
   }
+}
+
+void MainWindow::refreshMainUI() {
+  this->update();
+  this->repaint();
 }
 
 bool MainWindow::showMsgBox(QString title, QString info) {

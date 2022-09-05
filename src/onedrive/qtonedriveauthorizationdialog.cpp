@@ -20,37 +20,30 @@ bool QtOneDriveAuthorizationDialog::isExists_ = false;
 QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
                                                              QWidget *parent)
     : QDialog(parent), url_(url) {
-  setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+  /*setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowTitle(tr("OneDrive Authorization"));
   setMinimumSize(QSize(550, 650));
-  resize(QSize(550, 650));
+  resize(QSize(550, 650));*/
 
-  isExists_ = true;
-
-  // webView_ = new QQuickWidget(this);
+  /*webView_ = new QQuickWidget(this);
   QVBoxLayout *layout = new QVBoxLayout(this);
   this->setLayout(layout);
-  // layout->addWidget(webView_);
+  layout->addWidget(webView_);
+  webView_->load(url);*/
+
+  isExists_ = true;
 
   QTimer *timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(on_timer()));
   timer->setInterval(1000);
   timer->start(1000);
 
-  // webView_->load(url);
-
   QUrl url1("https://www.qq.com/");
-  // mw_one->ui->frameMain->hide();
-  //  mw_one->ui->frameReader->hide();
-  // mw_one->ui->frameQML->show();
-  // mw_one->ui->quickWidget->setSource(
-  //     QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
-  // mw_one->ui->quickWidget->rootContext()->setContextProperty("initialUrl",
-  // url);
 
   mw_one->mydlgWeb->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                                 mw_one->width(), mw_one->height());
+  mw_one->mydlgWeb->setFixedHeight(mw_one->height());
   mw_one->mydlgWeb->setModal(true);
   mw_one->mydlgWeb->show();
   mw_one->mydlgWeb->ui->quickWidget->setSource(
@@ -71,7 +64,11 @@ QtOneDriveAuthorizationDialog::~QtOneDriveAuthorizationDialog() {
 }
 
 void QtOneDriveAuthorizationDialog::on_timer() {
-  if (isNeedToClose_) close();
+  if (isNeedToClose_) {
+    close();
+    mw_one->mydlgWeb->close();
+    mw_one->refreshMainUI();
+  }
 }
 
 void QtOneDriveAuthorizationDialog::on_webView_loadFinished(bool arg1) {

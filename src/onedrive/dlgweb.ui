@@ -26,6 +26,12 @@
    <property name="bottomMargin">
     <number>5</number>
    </property>
+   <property name="horizontalSpacing">
+    <number>1</number>
+   </property>
+   <property name="verticalSpacing">
+    <number>10</number>
+   </property>
    <item row="0" column="0">
     <widget class="QQuickWidget" name="quickWidget">
      <property name="resizeMode">

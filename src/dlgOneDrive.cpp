@@ -71,12 +71,17 @@ TestDialog::TestDialog(QWidget *parent)
 
   connect(oneDrive, &QtOneDrive::successUploadFile,
           [this](const QString filePath, const QString fileID) {
-            QTextEdit *text = new QTextEdit(0);
+            /*QTextEdit *text = new QTextEdit(0);
             text->resize(QSize(500, 400));
             text->setWindowTitle("OneDrive");
             text->setText(QString("successUploadFile:\nPATH: %1\nID: %2")
                               .arg(filePath, fileID));
-            text->show();
+            text->show();*/
+
+            QMessageBox::information(
+                this, "OneDrive",
+                QString("successUploadFile:\n\nPATH: %1\n\nID: %2")
+                    .arg(filePath, fileID));
           });
 
   connect(oneDrive, &QtOneDrive::successDownloadFile,
@@ -107,7 +112,8 @@ TestDialog::TestDialog(QWidget *parent)
 
   QTimer *timer = new QTimer(this);
   timer->setInterval(500);
-  timer->start(1000);
+  timer->start(10000);
+  ui->label_info->setWordWrapMode(QTextOption::WrapAnywhere);
   connect(timer, &QTimer::timeout, [this]() {
     ui->label_info->setText(oneDrive->debugInfo());
     this->setEnabled(!oneDrive->isBusy());
@@ -120,7 +126,6 @@ void TestDialog::init() {
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
   this->setModal(true);
-  this->show();
 }
 
 TestDialog::~TestDialog() { delete ui; }

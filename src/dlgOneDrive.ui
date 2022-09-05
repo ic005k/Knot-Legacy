@@ -252,7 +252,7 @@ in skydrive folder</string>
    <item>
     <widget class="QTextBrowser" name="label_info">
      <property name="lineWrapMode">
-      <enum>QTextEdit::NoWrap</enum>
+      <enum>QTextEdit::WidgetWidth</enum>
      </property>
      <property name="acceptRichText">
       <bool>false</bool>

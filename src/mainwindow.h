@@ -285,7 +285,8 @@ class MainWindow : public QMainWindow {
   QObjectList getAllToolButton(QObjectList lstUIControls);
   void repaintApp();
   bool showMsgBox(QString title, QString info);
- public slots:
+  void refreshMainUI();
+  public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();

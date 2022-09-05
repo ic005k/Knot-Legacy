@@ -75,7 +75,7 @@ QtOneDrive::~QtOneDrive() {
 }
 
 void QtOneDrive::signIn() {
-  INIT_AND_CHECK_BUSY(SingIn)
+  // INIT_AND_CHECK_BUSY(SingIn)
 
   dialog_ = new QtOneDriveAuthorizationDialog(urlSingIn(), 0);
 
@@ -100,7 +100,7 @@ void QtOneDrive::signIn() {
     if (state_ == SingIn && dialog_) emitError("Authorization Cancelled");
   });
 
-  dialog_->show();
+  // dialog_->show();
 }
 
 void QtOneDrive::signOut() {

@@ -1,6 +1,9 @@
 #include "dlgweb.h"
 
+#include "src/mainwindow.h"
 #include "ui_dlgweb.h"
+
+extern MainWindow* mw_one;
 
 dlgWeb::dlgWeb(QWidget* parent) : QDialog(parent), ui(new Ui::dlgWeb) {
   ui->setupUi(this);
@@ -21,4 +24,7 @@ bool dlgWeb::eventFilter(QObject* obj, QEvent* evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void dlgWeb::on_btnBack_clicked() { close(); }
+void dlgWeb::on_btnBack_clicked() {
+  this->close();
+  mw_one->refreshMainUI();
+}
