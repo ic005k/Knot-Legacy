@@ -1931,6 +1931,11 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
           return true;
         }
       }
+
+      if (!ui->frameOne->isHidden()) {
+        on_btnBack_One_clicked();
+        return true;
+      }
     }
   }
 
@@ -4149,6 +4154,7 @@ void MainWindow::on_btnBack_One_clicked() {
   if (!ui->frameOne->isHidden()) {
     if (ui->frameOneFun->isHidden()) {
       ui->frameOneFun->show();
+      mydlgOneDrive->loadLogQML();
     } else {
       ui->frameOne->hide();
       ui->frameMain->show();

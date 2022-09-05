@@ -95,6 +95,7 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="346"/>
+        <location filename="mainwindow.ui" line="1686"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
@@ -156,6 +157,26 @@
         <translation>日</translation>
     </message>
     <message>
+        <location filename="mainwindow.ui" line="1584"/>
+        <source>Sign In</source>
+        <translation>登录</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1603"/>
+        <source>Upload</source>
+        <translation>上传</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1622"/>
+        <source>Download</source>
+        <translation>下载</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1641"/>
+        <source>Sign Out</source>
+        <translation>注销</translation>
+    </message>
+    <message>
         <location filename="mainwindow.ui" line="1204"/>
         <source>Hide</source>
         <translation>隐藏</translation>
@@ -167,15 +188,15 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="748"/>
-        <location filename="mainwindow.ui" line="1597"/>
-        <location filename="mainwindow.cpp" line="3657"/>
+        <location filename="mainwindow.ui" line="1751"/>
+        <location filename="mainwindow.cpp" line="3660"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="731"/>
-        <location filename="mainwindow.ui" line="1572"/>
-        <location filename="mainwindow.cpp" line="3661"/>
+        <location filename="mainwindow.ui" line="1726"/>
+        <location filename="mainwindow.cpp" line="3664"/>
         <source>Remarks</source>
         <translation>备注</translation>
     </message>
@@ -185,14 +206,14 @@
         <translation>笔记</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1557"/>
-        <location filename="mainwindow.cpp" line="3655"/>
+        <location filename="mainwindow.ui" line="1711"/>
+        <location filename="mainwindow.cpp" line="3658"/>
         <source>Rename Tab</source>
         <translation>重命名标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1607"/>
-        <location filename="mainwindow.cpp" line="3667"/>
+        <location filename="mainwindow.ui" line="1761"/>
+        <location filename="mainwindow.cpp" line="3670"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
@@ -265,52 +286,52 @@
         <translation type="vanished">重命名标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1562"/>
-        <location filename="mainwindow.cpp" line="3653"/>
+        <location filename="mainwindow.ui" line="1716"/>
+        <location filename="mainwindow.cpp" line="3656"/>
         <source>Add Tab</source>
         <translation>增加标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1567"/>
+        <location filename="mainwindow.ui" line="1721"/>
         <location filename="mainwindow.cpp" line="1481"/>
-        <location filename="mainwindow.cpp" line="3654"/>
+        <location filename="mainwindow.cpp" line="3657"/>
         <source>Del Tab</source>
         <translation>删除标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1577"/>
-        <location filename="mainwindow.cpp" line="3669"/>
+        <location filename="mainwindow.ui" line="1731"/>
+        <location filename="mainwindow.cpp" line="3672"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1582"/>
-        <location filename="mainwindow.cpp" line="3664"/>
+        <location filename="mainwindow.ui" line="1736"/>
+        <location filename="mainwindow.cpp" line="3667"/>
         <source>Export Data</source>
         <translation>导出数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1587"/>
+        <location filename="mainwindow.ui" line="1741"/>
         <location filename="mainwindow.cpp" line="2172"/>
-        <location filename="mainwindow.cpp" line="3665"/>
+        <location filename="mainwindow.cpp" line="3668"/>
         <source>Import Data</source>
         <translation>导入数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1592"/>
+        <location filename="mainwindow.ui" line="1746"/>
         <source>View App Data</source>
         <translation>查看App数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1612"/>
-        <location filename="mainwindow.cpp" line="3668"/>
+        <location filename="mainwindow.ui" line="1766"/>
+        <location filename="mainwindow.cpp" line="3671"/>
         <source>Memos</source>
         <translation>备忘录</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="714"/>
-        <location filename="mainwindow.ui" line="1602"/>
-        <location filename="mainwindow.cpp" line="3659"/>
+        <location filename="mainwindow.ui" line="1756"/>
+        <location filename="mainwindow.cpp" line="3662"/>
         <source>Report</source>
         <translation>报表</translation>
     </message>
@@ -331,7 +352,7 @@
         <location filename="mainwindow.cpp" line="1473"/>
         <location filename="mainwindow.cpp" line="2184"/>
         <location filename="mainwindow.cpp" line="3352"/>
-        <location filename="mainwindow.cpp" line="4092"/>
+        <location filename="mainwindow.cpp" line="4106"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -345,7 +366,7 @@
         <location filename="mainwindow.cpp" line="2199"/>
         <location filename="mainwindow.cpp" line="3351"/>
         <location filename="mainwindow.cpp" line="3377"/>
-        <location filename="mainwindow.cpp" line="4093"/>
+        <location filename="mainwindow.cpp" line="4107"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -509,33 +530,33 @@
         <translation>无效的数据文件。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3666"/>
+        <location filename="mainwindow.cpp" line="3669"/>
         <source>One Click Data Backup</source>
         <translation>一键数据备份</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3670"/>
+        <location filename="mainwindow.cpp" line="3673"/>
         <source>OneDrive Backup Data</source>
         <translation>OneDrive 备份数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3672"/>
+        <location filename="mainwindow.cpp" line="3675"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3673"/>
+        <location filename="mainwindow.cpp" line="3676"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3677"/>
+        <location filename="mainwindow.cpp" line="3680"/>
         <source>Time Machine</source>
         <translation>时光机</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4003"/>
-        <location filename="mainwindow.cpp" line="4009"/>
+        <location filename="mainwindow.cpp" line="4011"/>
+        <location filename="mainwindow.cpp" line="4017"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
@@ -611,7 +632,7 @@
         <translation>跳</translation>
     </message>
     <message>
-        <location filename="mainwindow.h" line="113"/>
+        <location filename="mainwindow.h" line="115"/>
         <source>Latest Time</source>
         <translation>最新的时间</translation>
     </message>
@@ -667,9 +688,8 @@
 <context>
     <name>QtOneDriveAuthorizationDialog</name>
     <message>
-        <location filename="onedrive/qtonedriveauthorizationdialog.cpp" line="23"/>
         <source>OneDrive Authorization</source>
-        <translation>OneDrive 认证</translation>
+        <translation type="vanished">OneDrive 认证</translation>
     </message>
 </context>
 <context>
@@ -680,75 +700,75 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="34"/>
+        <location filename="dlgOneDrive.ui" line="43"/>
         <source>Sign In</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="53"/>
+        <location filename="dlgOneDrive.ui" line="62"/>
         <source>Sign Out</source>
         <translation>注销</translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="72"/>
+        <location filename="dlgOneDrive.ui" line="81"/>
         <source>Refresh Token</source>
         <translation>刷新令牌</translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="98"/>
+        <location filename="dlgOneDrive.ui" line="107"/>
         <source>Upload</source>
         <translation>上传</translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="120"/>
+        <location filename="dlgOneDrive.ui" line="129"/>
         <source>Download</source>
         <translation>下载</translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="139"/>
+        <location filename="dlgOneDrive.ui" line="148"/>
         <source>Storage Info</source>
         <translation>网盘信息</translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="165"/>
+        <location filename="dlgOneDrive.ui" line="174"/>
         <source>Get User Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="172"/>
+        <location filename="dlgOneDrive.ui" line="181"/>
         <source>Upload File 
 in skydrive folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="186"/>
+        <location filename="dlgOneDrive.ui" line="195"/>
         <source>Traverse Root Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="197"/>
+        <location filename="dlgOneDrive.ui" line="206"/>
         <source>Enter File/Folder ID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="217"/>
+        <location filename="dlgOneDrive.ui" line="226"/>
         <source>Create Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="227"/>
+        <location filename="dlgOneDrive.ui" line="236"/>
         <source>Delete File or Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="243"/>
+        <location filename="dlgOneDrive.ui" line="252"/>
         <source>Traverse this  Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.ui" line="296"/>
+        <location filename="dlgOneDrive.ui" line="335"/>
         <source>Back</source>
-        <translation type="unfinished">返回</translation>
+        <translation>返回</translation>
     </message>
 </context>
 <context>
@@ -1721,7 +1741,25 @@ in skydrive folder</source>
     <message>
         <location filename="onedrive/dlgweb.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="onedrive/dlgweb.ui" line="58"/>
+        <source>Back</source>
+        <translation>返回</translation>
+    </message>
+</context>
+<context>
+    <name>log</name>
+    <message>
+        <location filename="onedrive/log.qml" line="219"/>
+        <source>Copy</source>
+        <translation>拷贝</translation>
+    </message>
+    <message>
+        <location filename="onedrive/log.qml" line="231"/>
+        <source>Paste</source>
+        <translation>粘贴</translation>
     </message>
 </context>
 <context>
@@ -1950,14 +1988,12 @@ in skydrive folder</source>
 <context>
     <name>web</name>
     <message>
-        <location filename="onedrive/web.qml" line="219"/>
         <source>Copy</source>
-        <translation type="unfinished">拷贝</translation>
+        <translation type="obsolete">拷贝</translation>
     </message>
     <message>
-        <location filename="onedrive/web.qml" line="231"/>
         <source>Paste</source>
-        <translation type="unfinished">粘贴</translation>
+        <translation type="obsolete">粘贴</translation>
     </message>
 </context>
 </TS>

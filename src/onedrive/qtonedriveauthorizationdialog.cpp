@@ -48,13 +48,6 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
 
   QUrl url1("https://www.qq.com/");
 
-  // mydlgWeb = new dlgWeb(this);
-  // mydlgWeb->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-  //                       mw_one->width(), mw_one->height());
-  // mydlgWeb->setFixedHeight(mw_one->height());
-  // mydlgWeb->setModal(true);
-  // mydlgWeb->show();
-
   mw_one->ui->frameOneFun->hide();
   mw_one->ui->quickWidget2->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
