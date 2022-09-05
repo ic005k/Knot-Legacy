@@ -2110,12 +2110,12 @@ void MainWindow::on_actionExport_Data_triggered() {
   Reg.setValue("/MainNotes/FileName", fileName);
 }
 
-void MainWindow::on_actionOneClickBakData() {
+QString MainWindow::on_OneClickBakData(bool msg) {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   QString fileName = Reg.value("/MainNotes/FileName").toString();
   if (QFile(fileName).exists()) {
-    bakData(fileName, true);
+    bakData(fileName, msg);
   } else {
     QMessageBox msgBox;
     msgBox.setText(appName);
@@ -2126,6 +2126,8 @@ void MainWindow::on_actionOneClickBakData() {
     btnOk->setFocus();
     msgBox.exec();
   }
+
+  return fileName;
 }
 
 void MainWindow::bakData(QString fileName, bool msgbox) {
@@ -3705,7 +3707,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   connect(actExportData, &QAction::triggered, this,
           &MainWindow::on_actionExport_Data_triggered);
   connect(actBakData, &QAction::triggered, this,
-          &MainWindow::on_actionOneClickBakData);
+          &MainWindow::on_btnOneClickBak_clicked);
   connect(actImportData, &QAction::triggered, this,
           &MainWindow::on_actionImport_Data_triggered);
   connect(actPreferences, &QAction::triggered, this,
@@ -4085,7 +4087,7 @@ void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }
 
 void MainWindow::on_btnBackDir_clicked() { mydlgReader->backDir(); }
 
-void MainWindow::on_btnOneClickBak_clicked() { on_actionOneClickBakData(); }
+void MainWindow::on_btnOneClickBak_clicked() { on_OneClickBakData(true); }
 
 QString MainWindow::getTabText() {
   return tabData->tabText(tabData->currentIndex());
@@ -4160,4 +4162,12 @@ void MainWindow::on_btnBack_One_clicked() {
       ui->frameMain->show();
     }
   }
+}
+
+void MainWindow::on_btnRefreshToken_clicked() {
+  mydlgOneDrive->on_pushButton_clicked();
+}
+
+void MainWindow::on_btnStorageInfo_clicked() {
+  mydlgOneDrive->on_pushButton_storageInfo_clicked();
 }

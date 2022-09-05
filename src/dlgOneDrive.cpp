@@ -12,6 +12,7 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;
+extern QString iniFile, iniDir;
 
 TestDialog::TestDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::TestDialog) {
@@ -112,16 +113,16 @@ TestDialog::TestDialog(QWidget *parent)
           });
 
   QTimer *timer = new QTimer(this);
-  timer->setInterval(500);
+  // timer->setInterval(500);
   timer->start(10000);
   ui->label_info->setWordWrapMode(QTextOption::WrapAnywhere);
   connect(timer, &QTimer::timeout, [this]() {
     // ui->label_info->setText(oneDrive->debugInfo());
 
-    // if (!this->isHidden()) {
-    mw_one->ui->quickWidget2->rootContext()->setContextProperty(
-        "strText", oneDrive->debugInfo());
-    //}
+    if (!mw_one->ui->frameOne->isHidden()) {
+      mw_one->ui->quickWidget2->rootContext()->setContextProperty(
+          "strText", oneDrive->debugInfo());
+    }
 
     this->setEnabled(!oneDrive->isBusy());
   });
@@ -187,7 +188,9 @@ void TestDialog::on_pushButton_getFolders_clicked() {
 }
 
 void TestDialog::on_pushButton_downloadFile_clicked() {
-  QString filePath = QFileDialog::getSaveFileName(this, "Select File");
+  QString filePath;  // = QFileDialog::getSaveFileName(this, "Select File");
+  filePath = iniDir + "KontSync.ini";
+  if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
 
   oneDrive->downloadFile(filePath, ui->lineEdit_fileID->text().trimmed());
@@ -203,9 +206,11 @@ void TestDialog::on_pushButton_deleteFile_clicked() {
 }
 
 void TestDialog::on_pushButton_upload2_clicked() {
-  QFileDialog fdlg;
-  QString filePath = fdlg.getOpenFileName(this, "Select File");
+  // QFileDialog fdlg;
+  QString filePath;  // = fdlg.getOpenFileName(this, "Select File");
+  filePath = mw_one->on_OneClickBakData(false);
   if (filePath.isEmpty()) return;
+  if (!QFile(filePath).exists()) return;
 
   oneDrive->uploadFile(filePath, QFileInfo(filePath).fileName(),
                        ui->lineEdit_fileID->text().trimmed());

@@ -294,7 +294,7 @@ class MainWindow : public QMainWindow {
   void readEBookDone();
   void on_btnPageUp_clicked();
   void on_btnPageNext_clicked();
-
+  QString on_OneClickBakData(bool msg);
   void on_OneDriveBackupData();
 
  protected:
@@ -385,8 +385,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnPause_clicked();
 
-  void on_actionOneClickBakData();
-
   void on_btnReader_clicked();
 
   void on_btnBack_clicked();
@@ -427,6 +425,10 @@ class MainWindow : public QMainWindow {
   void on_btnDownload_clicked();
 
   void on_btnBack_One_clicked();
+
+  void on_btnRefreshToken_clicked();
+
+  void on_btnStorageInfo_clicked();
 
  private:
   int frameChartHeight = 220;

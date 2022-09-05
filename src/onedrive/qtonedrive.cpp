@@ -12,6 +12,11 @@
 #include <QSettings>
 
 #include "qtonedriveauthorizationdialog.h"
+#include "src/mainwindow.h"
+#include "ui_mainwindow.h"
+
+extern MainWindow* mw_one;
+extern QString iniFile, iniDir;
 
 QtOneDriveAuthorizationDialog* dialog_ = nullptr;
 
@@ -398,7 +403,12 @@ void QtOneDrive::downloadFile(const QUrl& url) {
 
       if (!checkReplyJson(reply).isEmpty()) {
         state_ = Empty;
-        emit successDownloadFile(tmp_fileId_);
+        QString file = iniDir + "KontSync.ini";
+        emit successDownloadFile(tmp_fileId_ + "\n" + file);
+
+        if (QFile(file).exists()) {
+          mw_one->importBakData(file, true, true);
+        }
       }
     }
   });
