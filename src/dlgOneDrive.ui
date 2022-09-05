@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
+    <width>465</width>
     <height>702</height>
    </rect>
   </property>
@@ -281,10 +281,24 @@ in skydrive folder</string>
     </widget>
    </item>
    <item>
-    <widget class="QQuickWidget" name="quickWidget">
-     <property name="resizeMode">
-      <enum>QQuickWidget::SizeRootObjectToView</enum>
+    <widget class="QFrame" name="frameQuick">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>200</height>
+      </size>
      </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gl"/>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -324,13 +338,6 @@ in skydrive folder</string>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QQuickWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">QtQuickWidgets/QQuickWidget</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

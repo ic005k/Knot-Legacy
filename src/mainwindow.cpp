@@ -3443,6 +3443,8 @@ void MainWindow::init_UIWidget() {
   ui->frameMain->setContentsMargins(0, 0, 0, 0);
   ui->frameMain->layout()->setSpacing(1);
 
+  ui->frameOne->hide();
+
   this->layout()->setMargin(0);
   ui->centralwidget->layout()->setMargin(1);
   ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 2);
@@ -3748,8 +3750,12 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 }
 
 void MainWindow::on_OneDriveBackupData() {
-  mydlgOneDrive->init();
-  mydlgOneDrive->show();
+  // mydlgOneDrive->init();
+  // mydlgOneDrive->show();
+  // mydlgOneDrive->loadLogQML();
+  mw_one->ui->frameMain->hide();
+  mw_one->ui->frameQML->hide();
+  mw_one->ui->frameOne->show();
   mydlgOneDrive->loadLogQML();
 }
 
@@ -4120,5 +4126,32 @@ void MainWindow::on_btnSelText_clicked() {
 
     on_btnPageUp_clicked();
     on_btnPageNext_clicked();
+  }
+}
+
+void MainWindow::on_btnSignIn_clicked() {
+  mydlgOneDrive->on_pushButton_SignIn_clicked();
+}
+
+void MainWindow::on_btnSignOut_clicked() {
+  mydlgOneDrive->on_pushButton_SingOut_clicked();
+}
+
+void MainWindow::on_btnUpload_clicked() {
+  mydlgOneDrive->on_pushButton_upload2_clicked();
+}
+
+void MainWindow::on_btnDownload_clicked() {
+  mydlgOneDrive->on_pushButton_downloadFile_clicked();
+}
+
+void MainWindow::on_btnBack_One_clicked() {
+  if (!ui->frameOne->isHidden()) {
+    if (ui->frameOneFun->isHidden()) {
+      ui->frameOneFun->show();
+    } else {
+      ui->frameOne->hide();
+      ui->frameMain->show();
+    }
   }
 }

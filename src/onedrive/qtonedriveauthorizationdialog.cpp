@@ -26,8 +26,15 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   setMinimumSize(QSize(550, 650));
   resize(QSize(550, 650));*/
 
-  /*webView_ = new QQuickWidget(this);
-  QVBoxLayout *layout = new QVBoxLayout(this);
+  /*webView_ = new QQuickWidget;
+  webView_->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                        mw_one->width(), mw_one->height() - 300);
+  webView_->setWindowFlags(Qt::WindowStaysOnTopHint);
+  webView_->show();
+  webView_->setSource(QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
+  webView_->rootContext()->setContextProperty("initialUrl", url);*/
+
+  /*QVBoxLayout *layout = new QVBoxLayout(this);
   this->setLayout(layout);
   layout->addWidget(webView_);
   webView_->load(url);*/
@@ -48,11 +55,11 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   // mydlgWeb->setModal(true);
   // mydlgWeb->show();
 
-  mw_one->mydlgOneDrive->ui->frameOne->hide();
-  mw_one->mydlgOneDrive->ui->quickWidget->setSource(
+  mw_one->ui->frameOneFun->hide();
+  mw_one->ui->quickWidget2->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
-  mw_one->mydlgOneDrive->ui->quickWidget->rootContext()->setContextProperty(
-      "initialUrl", url);
+  mw_one->ui->quickWidget2->rootContext()->setContextProperty("initialUrl",
+                                                              url);
 
   qDebug() << "web url = " << url.toString();
 
@@ -69,10 +76,8 @@ QtOneDriveAuthorizationDialog::~QtOneDriveAuthorizationDialog() {
 void QtOneDriveAuthorizationDialog::on_timer() {
   if (isNeedToClose_) {
     close();
-    // mydlgWeb->ui->quickWidget->close();
-    // mydlgWeb->close();
-    // mw_one->refreshMainUI();
-    mw_one->mydlgOneDrive->ui->frameOne->show();
+
+    mw_one->ui->frameOneFun->show();
     mw_one->mydlgOneDrive->loadLogQML();
   }
 }

@@ -286,7 +286,7 @@ class MainWindow : public QMainWindow {
   void repaintApp();
   bool showMsgBox(QString title, QString info);
   void refreshMainUI();
-  public slots:
+ public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
@@ -417,6 +417,16 @@ class MainWindow : public QMainWindow {
   void timeMachine();
 
   void on_btnSelText_clicked();
+
+  void on_btnSignIn_clicked();
+
+  void on_btnSignOut_clicked();
+
+  void on_btnUpload_clicked();
+
+  void on_btnDownload_clicked();
+
+  void on_btnBack_One_clicked();
 
  private:
   int frameChartHeight = 220;

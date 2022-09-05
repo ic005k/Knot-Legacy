@@ -18,6 +18,7 @@ TestDialog::TestDialog(QWidget *parent)
   ui->setupUi(this);
   this->installEventFilter(this);
   init();
+  initQuick();
 
   // oneDrive = new QtOneDrive("144c427c-78c7-409a-a3d1-86a53209bb17",
   //                           "kPn8Q~ydQ~IVO9bgD5yJbSL0GQMczTYWD.mbZbi2",
@@ -92,12 +93,12 @@ TestDialog::TestDialog(QWidget *parent)
 
   connect(oneDrive, &QtOneDrive::progressUploadFile,
           [this](const QString, int percent) {
-            ui->progressBar->setValue(percent);
+            mw_one->ui->progressBar->setValue(percent);
           });
 
   connect(oneDrive, &QtOneDrive::progressDownloadFile,
           [this](const QString, int percent) {
-            ui->progressBar->setValue(percent);
+            mw_one->ui->progressBar->setValue(percent);
           });
 
   connect(oneDrive, &QtOneDrive::successTraverseFolder,
@@ -117,10 +118,10 @@ TestDialog::TestDialog(QWidget *parent)
   connect(timer, &QTimer::timeout, [this]() {
     // ui->label_info->setText(oneDrive->debugInfo());
 
-    if (!this->isHidden()) {
-      ui->quickWidget->rootContext()->setContextProperty("strText",
-                                                         oneDrive->debugInfo());
-    }
+    // if (!this->isHidden()) {
+    mw_one->ui->quickWidget2->rootContext()->setContextProperty(
+        "strText", oneDrive->debugInfo());
+    //}
 
     this->setEnabled(!oneDrive->isBusy());
   });
@@ -182,7 +183,7 @@ void TestDialog::on_pushButton_getFolders_clicked() {
   if (filePath.isEmpty()) return;
 
   oneDrive->uploadFile(filePath, QFileInfo(filePath).fileName(), "");
-  ui->progressBar->setValue(0);
+  mw_one->ui->progressBar->setValue(0);
 }
 
 void TestDialog::on_pushButton_downloadFile_clicked() {
@@ -190,7 +191,7 @@ void TestDialog::on_pushButton_downloadFile_clicked() {
   if (filePath.isEmpty()) return;
 
   oneDrive->downloadFile(filePath, ui->lineEdit_fileID->text().trimmed());
-  ui->progressBar->setValue(0);
+  mw_one->ui->progressBar->setValue(0);
 }
 
 void TestDialog::on_pushButton_createFolder_clicked() {
@@ -208,7 +209,7 @@ void TestDialog::on_pushButton_upload2_clicked() {
 
   oneDrive->uploadFile(filePath, QFileInfo(filePath).fileName(),
                        ui->lineEdit_fileID->text().trimmed());
-  ui->progressBar->setValue(0);
+  mw_one->ui->progressBar->setValue(0);
 }
 
 void TestDialog::on_pushButton_storageInfo_clicked() {
@@ -220,15 +221,24 @@ void TestDialog::on_btnBack_clicked() {
     ui->frameOne->show();
 
   } else {
+    const QSize size(ui->frameQuick->width(), ui->frameQuick->height());
+    quickWidget->resize(size);
+    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     close();
-    this->update();
-    this->repaint();
-    mw_one->refreshMainUI();
   }
 }
 
 void TestDialog::loadLogQML() {
-  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
-  ui->quickWidget->rootContext()->setContextProperty("strText",
-                                                     oneDrive->debugInfo());
+  mw_one->ui->quickWidget2->setSource(
+      QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
+  mw_one->ui->quickWidget2->rootContext()->setContextProperty(
+      "strText", oneDrive->debugInfo());
+}
+
+void TestDialog::initQuick() {
+  quickWidget = new QQuickWidget(ui->frameQuick);
+  ui->gl->addWidget(quickWidget);
+  const QSize size(400, 400);
+  quickWidget->resize(size);
+  quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 }

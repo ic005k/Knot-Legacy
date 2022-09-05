@@ -7,6 +7,7 @@
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_dlgOneDrive.h"
+#include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;
 extern QtOneDriveAuthorizationDialog *dialog_;
@@ -86,6 +87,5 @@ QString File::prog() const { return m_prog; }
 
 void File::setProg(const QString &prog) {
   m_prog = prog;
-  mw_one->mydlgOneDrive->ui->progressBar->setValue(m_prog.toInt());
-  mw_one->mydlgOneDrive->repaint();
+  mw_one->ui->progressBar->setValue(m_prog.toInt());
 }

@@ -2,6 +2,7 @@
 #define DLGONEDRIVE_H
 
 #include <QDialog>
+#include <QQuickWidget>
 
 namespace Ui {
 class TestDialog;
@@ -15,15 +16,21 @@ class TestDialog : public QDialog {
   ~TestDialog();
   Ui::TestDialog *ui;
 
+  QQuickWidget *quickWidget;
   void init();
 
   void loadLogQML();
 
+  void initQuick();
+
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
- private slots:
+ public slots:
   void on_pushButton_SignIn_clicked();
   void on_pushButton_SingOut_clicked();
+  void on_pushButton_downloadFile_clicked();
+  void on_pushButton_upload2_clicked();
+
   void on_pushButton_GetUserInfo_clicked();
 
   void on_pushButton_clicked();
@@ -36,13 +43,9 @@ class TestDialog : public QDialog {
 
   void on_pushButton_getFolders_clicked();
 
-  void on_pushButton_downloadFile_clicked();
-
   void on_pushButton_createFolder_clicked();
 
   void on_pushButton_deleteFile_clicked();
-
-  void on_pushButton_upload2_clicked();
 
   void on_pushButton_storageInfo_clicked();
 
