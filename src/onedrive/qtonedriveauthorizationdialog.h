@@ -14,6 +14,7 @@ class QtOneDriveAuthorizationDialog : public QDialog {
   explicit QtOneDriveAuthorizationDialog(const QUrl &url, QWidget *parent = 0);
   ~QtOneDriveAuthorizationDialog();
 
+  QQuickWidget *webView_ = nullptr;
   static bool isExists() { return isExists_; }
   void setNeedToClose(bool close) { isNeedToClose_ = close; }
   void sendMsg(QString strUri);
@@ -30,7 +31,6 @@ class QtOneDriveAuthorizationDialog : public QDialog {
   static bool isExists_;
   bool isNeedToClose_ = false;
   QUrl url_;
-  QQuickWidget *webView_ = nullptr;
 };
 
 #endif  // ONEDRIVEAUTHORIZATIONDIALOG_H

@@ -18,6 +18,11 @@ TestDialog::TestDialog(QWidget *parent)
   ui->setupUi(this);
   this->installEventFilter(this);
   init();
+
+  // oneDrive = new QtOneDrive("144c427c-78c7-409a-a3d1-86a53209bb17",
+  //                           "kPn8Q~ydQ~IVO9bgD5yJbSL0GQMczTYWD.mbZbi2",
+  //                           "My User Name", this);
+
   oneDrive =
       new QtOneDrive("000000004012F592", "e7uiuaHcwcmuqyhaWKbqmQWN5o6enjgm",
                      "My User Name", this);
@@ -115,6 +120,7 @@ void TestDialog::init() {
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
   this->setModal(true);
+  this->show();
 }
 
 TestDialog::~TestDialog() { delete ui; }
@@ -131,10 +137,7 @@ bool TestDialog::eventFilter(QObject *obj, QEvent *evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void TestDialog::on_pushButton_SignIn_clicked() {
-  oneDrive->signIn();
-  hide();
-}
+void TestDialog::on_pushButton_SignIn_clicked() { oneDrive->signIn(); }
 
 void TestDialog::on_pushButton_SingOut_clicked() { oneDrive->signOut(); }
 

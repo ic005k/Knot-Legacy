@@ -182,7 +182,7 @@ Item {
             if(webView.loadProgress == 100){
                 console.log("loadProgress=100%")
                 console.log("CurrentUrl=" + webView.url)
-                file.strUri = webView.url.toString();
+                file.webEnd = webView.url.toString();
                 //file.loadWebEndChanged()
             }
         }

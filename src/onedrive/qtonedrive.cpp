@@ -12,12 +12,8 @@
 #include <QSettings>
 
 #include "qtonedriveauthorizationdialog.h"
-#include "src/mainwindow.h"
 
-extern MainWindow* mw_one;
 QtOneDriveAuthorizationDialog* dialog_ = nullptr;
-
-QString strReUri = "https://login.live.com/oauth20_desktop.srf";
 
 #define INIT_AND_CHECK_BUSY(state)                                      \
   Q_ASSERT_X(!isBusy(), Q_FUNC_INFO, "QtOneDrive service is busy now"); \
@@ -38,10 +34,11 @@ QString strReUri = "https://login.live.com/oauth20_desktop.srf";
   }
 
 QSet<QString> QtOneDrive::exisitInstances_;
-
+// https://login.live.com/oauth20_desktop.srf
 QtOneDrive::QtOneDrive(const QString& clientID, const QString& secret,
                        const QString& userID, QObject* parent)
-    : QtOneDrive(clientID, secret, QString(strReUri), userID, parent) {}
+    : QtOneDrive(clientID, secret, "https://login.live.com/oauth20_desktop.srf",
+                 userID, parent) {}
 
 QtOneDrive::QtOneDrive(const QString& clientID, const QString& secret,
                        const QString& redirectUri, const QString& userID,
@@ -78,16 +75,9 @@ QtOneDrive::~QtOneDrive() {
 }
 
 void QtOneDrive::signIn() {
-  // INIT_AND_CHECK_BUSY(SingIn)
+  INIT_AND_CHECK_BUSY(SingIn)
 
   dialog_ = new QtOneDriveAuthorizationDialog(urlSingIn(), 0);
-  dialog_->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                       mw_one->width(), mw_one->height());
-  dialog_->setModal(true);
-  dialog_->layout()->setMargin(1);
-  dialog_->layout()->setContentsMargins(1, 1, 1, 1);
-  dialog_->layout()->setSpacing(1);
-  dialog_->setFixedWidth(mw_one->width());
 
   connect(dialog_, &QtOneDriveAuthorizationDialog::success,
           [this](const QUrl& url) {
@@ -110,7 +100,7 @@ void QtOneDrive::signIn() {
     if (state_ == SingIn && dialog_) emitError("Authorization Cancelled");
   });
 
-  // dialog_->show();
+  dialog_->show();
 }
 
 void QtOneDrive::signOut() {
@@ -582,9 +572,10 @@ QString QtOneDrive::debugInfo() const {
 }
 
 QUrl QtOneDrive::urlSingIn() const {
-  QUrl url;
-  // url.setUrl("https://login.live.com/oauth20_authorize.srf");
-  url.setUrl(strReUri);
+  // https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+  // https://login.live.com/oauth20_authorize.srf
+  QUrl url("https://login.live.com/oauth20_authorize.srf");
+
   QUrlQuery query;
 
   query.addQueryItem("Content-Type", "application/json");
@@ -597,7 +588,9 @@ QUrl QtOneDrive::urlSingIn() const {
       "offline_access "
       "openid Contacts.ReadWrite Files.ReadWrite.All Calendars.ReadWrite");
   //"wl.signin wl.basic wl.offline_access wl.skydrive_update wl.skydrive"
+
   query.addQueryItem("response_type", "code");
+  // redirectURI_ = "http://localhost";
   query.addQueryItem("redirect_uri", redirectURI_);
 
   query.addQueryItem("grant_type", "authorization_code");
@@ -608,8 +601,7 @@ QUrl QtOneDrive::urlSingIn() const {
 }
 
 QUrl QtOneDrive::urlSignOut() const {
-  // QUrl url("https://login.live.com/oauth20_logout.srf");
-  QUrl url(strReUri);
+  QUrl url("https://login.live.com/oauth20_logout.srf");
   QUrlQuery query;
   query.addQueryItem("client_id", clientID_);
   query.addQueryItem("redirect_uri", redirectURI_);
@@ -628,8 +620,7 @@ QUrl QtOneDrive::urlStorageInfo() const {
 }
 
 QUrl QtOneDrive::urlGetToken() const {
-  // return QUrl("https://login.live.com/oauth20_token.srf");
-  return QUrl(strReUri);
+  return QUrl("https://login.live.com/oauth20_token.srf");
 }
 
 QUrl QtOneDrive::urlGetUserInfo() const {

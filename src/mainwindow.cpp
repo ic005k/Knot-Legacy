@@ -3491,6 +3491,7 @@ void MainWindow::init_UIWidget() {
   mydlgReader = new dlgReader(this);
   mymsgDlg = new msgDialog(this);
   mydlgOneDrive = new TestDialog(this);
+  mydlgWeb = new dlgWeb(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));

@@ -9,6 +9,8 @@
 #include <QtWebView>
 
 #include "src/mainwindow.h"
+#include "src/onedrive/dlgweb.h"
+#include "ui_dlgweb.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;
@@ -26,10 +28,10 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
 
   isExists_ = true;
 
-  webView_ = new QQuickWidget(this);
+  // webView_ = new QQuickWidget(this);
   QVBoxLayout *layout = new QVBoxLayout(this);
   this->setLayout(layout);
-  layout->addWidget(webView_);
+  // layout->addWidget(webView_);
 
   QTimer *timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(on_timer()));
@@ -39,21 +41,29 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   // webView_->load(url);
 
   QUrl url1("https://www.qq.com/");
-  mw_one->ui->frameMain->hide();
-  // mw_one->ui->frameReader->hide();
-  mw_one->ui->frameQML->show();
-  mw_one->ui->quickWidget->setSource(
+  // mw_one->ui->frameMain->hide();
+  //  mw_one->ui->frameReader->hide();
+  // mw_one->ui->frameQML->show();
+  // mw_one->ui->quickWidget->setSource(
+  //     QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
+  // mw_one->ui->quickWidget->rootContext()->setContextProperty("initialUrl",
+  // url);
+
+  mw_one->mydlgWeb->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                                mw_one->width(), mw_one->height());
+  mw_one->mydlgWeb->setModal(true);
+  mw_one->mydlgWeb->show();
+  mw_one->mydlgWeb->ui->quickWidget->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("initialUrl", url);
+  mw_one->mydlgWeb->ui->quickWidget->rootContext()->setContextProperty(
+      "initialUrl", url);
 
   qDebug() << "web url = " << url.toString();
 
-  // emit success(url);
-
   // QDesktopServices::openUrl(url);
 
-  connect(webView_, SIGNAL(loadFinished(bool)), this,
-          SLOT(on_webView_loadFinished(bool)));
+  // connect(webView_, SIGNAL(loadFinished(bool)), this,
+  //         SLOT(on_webView_loadFinished(bool)));
 }
 
 QtOneDriveAuthorizationDialog::~QtOneDriveAuthorizationDialog() {

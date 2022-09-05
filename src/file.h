@@ -17,7 +17,7 @@ class File : public QObject {
   Q_PROPERTY(qreal textPos READ textPos WRITE setTextPos NOTIFY textPosChanged)
   Q_PROPERTY(qreal curX READ curX WRITE setCurX NOTIFY curXChanged)
   Q_PROPERTY(
-      QString strUri READ strUri WRITE setWebEnd NOTIFY loadWebEndChanged)
+      QString webEnd READ webEnd WRITE setWebEnd NOTIFY loadWebEndChanged)
 
   QString source() const;
   void setSource(const QString &source);

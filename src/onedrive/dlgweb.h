@@ -15,6 +15,11 @@ class dlgWeb : public QDialog {
   ~dlgWeb();
   Ui::dlgWeb *ui;
 
+ protected:
+  bool eventFilter(QObject *obj, QEvent *evn) override;
+ private slots:
+  void on_btnBack_clicked();
+
  private:
 };
 

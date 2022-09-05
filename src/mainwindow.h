@@ -52,6 +52,7 @@
 #include <QTreeWidgetItem>
 #include <QValueAxis>
 
+#include "src/dlgOneDrive.h"
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
 #include "src/dlgmainnotes.h"
@@ -65,8 +66,8 @@
 #include "src/dlgtodo.h"
 #include "src/file.h"
 #include "src/msgdialog.h"
+#include "src/onedrive/dlgweb.h"
 #include "src/specialaccelerometerpedometer.h"
-#include "src/dlgOneDrive.h"
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
 #include "ui_dlgmainnotes.h"
@@ -78,6 +79,7 @@
 #include "ui_dlgsettime.h"
 #include "ui_dlgsteps.h"
 #include "ui_dlgtodo.h"
+#include "ui_dlgweb.h"
 #include "ui_msgdialog.h"
 
 class SearchThread;
@@ -171,6 +173,7 @@ class MainWindow : public QMainWindow {
   dlgReader *mydlgReader;
   msgDialog *mymsgDlg;
   TestDialog *mydlgOneDrive;
+  dlgWeb *mydlgWeb;
 
   File *myfile;
 
