@@ -9,6 +9,7 @@
 #include <QtWebView>
 
 #include "src/mainwindow.h"
+#include "ui_dlgOneDrive.h"
 #include "ui_dlgweb.h"
 #include "ui_mainwindow.h"
 
@@ -40,16 +41,18 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
 
   QUrl url1("https://www.qq.com/");
 
-  mydlgWeb = new dlgWeb(this);
-  mydlgWeb->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), mw_one->height());
-  mydlgWeb->setFixedHeight(mw_one->height());
-  mydlgWeb->setModal(true);
-  mydlgWeb->show();
-  mydlgWeb->ui->quickWidget->setSource(
+  // mydlgWeb = new dlgWeb(this);
+  // mydlgWeb->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+  //                       mw_one->width(), mw_one->height());
+  // mydlgWeb->setFixedHeight(mw_one->height());
+  // mydlgWeb->setModal(true);
+  // mydlgWeb->show();
+
+  mw_one->mydlgOneDrive->ui->frameOne->hide();
+  mw_one->mydlgOneDrive->ui->quickWidget->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
-  mydlgWeb->ui->quickWidget->rootContext()->setContextProperty("initialUrl",
-                                                               url);
+  mw_one->mydlgOneDrive->ui->quickWidget->rootContext()->setContextProperty(
+      "initialUrl", url);
 
   qDebug() << "web url = " << url.toString();
 
@@ -66,9 +69,11 @@ QtOneDriveAuthorizationDialog::~QtOneDriveAuthorizationDialog() {
 void QtOneDriveAuthorizationDialog::on_timer() {
   if (isNeedToClose_) {
     close();
-    mydlgWeb->ui->quickWidget->close();
-    mydlgWeb->close();
-    mw_one->refreshMainUI();
+    // mydlgWeb->ui->quickWidget->close();
+    // mydlgWeb->close();
+    // mw_one->refreshMainUI();
+    mw_one->mydlgOneDrive->ui->frameOne->show();
+    mw_one->mydlgOneDrive->loadLogQML();
   }
 }
 

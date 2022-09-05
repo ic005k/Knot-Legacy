@@ -115,7 +115,13 @@ TestDialog::TestDialog(QWidget *parent)
   timer->start(10000);
   ui->label_info->setWordWrapMode(QTextOption::WrapAnywhere);
   connect(timer, &QTimer::timeout, [this]() {
-    ui->label_info->setText(oneDrive->debugInfo());
+    // ui->label_info->setText(oneDrive->debugInfo());
+
+    if (!this->isHidden()) {
+      ui->quickWidget->rootContext()->setContextProperty("strText",
+                                                         oneDrive->debugInfo());
+    }
+
     this->setEnabled(!oneDrive->isBusy());
   });
 }
@@ -125,6 +131,8 @@ void TestDialog::init() {
   ui->lineEdit_fileID->setFocus();
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
+  ui->frameOne->setMaximumHeight(100);
+  ui->frameOne->layout()->setMargin(1);
   this->setModal(true);
 }
 
@@ -208,6 +216,19 @@ void TestDialog::on_pushButton_storageInfo_clicked() {
 }
 
 void TestDialog::on_btnBack_clicked() {
-  close();
-  mw_one->refreshMainUI();
+  if (ui->frameOne->isHidden()) {
+    ui->frameOne->show();
+
+  } else {
+    close();
+    this->update();
+    this->repaint();
+    mw_one->refreshMainUI();
+  }
+}
+
+void TestDialog::loadLogQML() {
+  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
+  ui->quickWidget->rootContext()->setContextProperty("strText",
+                                                     oneDrive->debugInfo());
 }

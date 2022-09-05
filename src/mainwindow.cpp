@@ -3748,11 +3748,9 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 }
 
 void MainWindow::on_OneDriveBackupData() {
-  TestDialog* dlgone = new TestDialog(this);
-  dlgone->init();
-  dlgone->show();
-  // mydlgOneDrive->init();
-  // mydlgOneDrive->show();
+  mydlgOneDrive->init();
+  mydlgOneDrive->show();
+  mydlgOneDrive->loadLogQML();
 }
 
 void MainWindow::undo() { importBakData(iniDir + "undoFile", true, false); }

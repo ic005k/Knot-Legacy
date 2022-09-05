@@ -17,6 +17,8 @@ class TestDialog : public QDialog {
 
   void init();
 
+  void loadLogQML();
+
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
  private slots:

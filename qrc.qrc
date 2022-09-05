@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file>src/reader.qml</file>
         <file>src/texteditor.html</file>
-        <file>src/onedrive/web.qml</file>
+        <file>src/onedrive/log.qml</file>
         <file>src/onedrive/main.qml</file>
     </qresource>
 </RCC>
