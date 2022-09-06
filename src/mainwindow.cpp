@@ -3501,7 +3501,7 @@ void MainWindow::init_UIWidget() {
   ui->lblStats->setWordWrap(true);
   mydlgReader = new dlgReader(this);
   mymsgDlg = new msgDialog(this);
-  mydlgOneDrive = new TestDialog(this);
+  mydlgOneDrive = new TestDialog;
   mydlgWeb = new dlgWeb(this);
 
   timer = new QTimer(this);
@@ -3765,6 +3765,8 @@ void MainWindow::on_OneDriveBackupData() {
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameQML->hide();
   mw_one->ui->frameOne->show();
+  delete mydlgOneDrive;
+  mydlgOneDrive = new TestDialog;
   mydlgOneDrive->loadLogQML();
 }
 

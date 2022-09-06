@@ -372,7 +372,7 @@
         <location filename="mainwindow.cpp" line="1473"/>
         <location filename="mainwindow.cpp" line="2191"/>
         <location filename="mainwindow.cpp" line="3359"/>
-        <location filename="mainwindow.cpp" line="4115"/>
+        <location filename="mainwindow.cpp" line="4117"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -386,7 +386,7 @@
         <location filename="mainwindow.cpp" line="2206"/>
         <location filename="mainwindow.cpp" line="3358"/>
         <location filename="mainwindow.cpp" line="3384"/>
-        <location filename="mainwindow.cpp" line="4116"/>
+        <location filename="mainwindow.cpp" line="4118"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -575,8 +575,8 @@
         <translation>时光机</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4020"/>
-        <location filename="mainwindow.cpp" line="4026"/>
+        <location filename="mainwindow.cpp" line="4022"/>
+        <location filename="mainwindow.cpp" line="4028"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
@@ -706,6 +706,14 @@
     </message>
 </context>
 <context>
+    <name>QtOneDrive</name>
+    <message>
+        <location filename="onedrive/qtonedrive.cpp" line="770"/>
+        <source>Access Denied: User is not authorized</source>
+        <translation>拒绝访问：用户未被授权</translation>
+    </message>
+</context>
+<context>
     <name>QtOneDriveAuthorizationDialog</name>
     <message>
         <source>OneDrive Authorization</source>
@@ -789,6 +797,41 @@ in skydrive folder</source>
         <location filename="dlgOneDrive.ui" line="335"/>
         <source>Back</source>
         <translation>返回</translation>
+    </message>
+    <message>
+        <location filename="dlgOneDrive.cpp" line="37"/>
+        <source>Success Sign In</source>
+        <translation>登录成功</translation>
+    </message>
+    <message>
+        <location filename="dlgOneDrive.cpp" line="41"/>
+        <source>Success Sing Out</source>
+        <translation>注销成功</translation>
+    </message>
+    <message>
+        <location filename="dlgOneDrive.cpp" line="45"/>
+        <source>Success Refresh Token</source>
+        <translation>刷新令牌成功</translation>
+    </message>
+    <message>
+        <location filename="dlgOneDrive.cpp" line="49"/>
+        <source>Success DeleteItem: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dlgOneDrive.cpp" line="64"/>
+        <source>Success Get User Info</source>
+        <translation>获取用户信息成功</translation>
+    </message>
+    <message>
+        <location filename="dlgOneDrive.cpp" line="86"/>
+        <source>Success Upload File:</source>
+        <translation>上传文件成功</translation>
+    </message>
+    <message>
+        <location filename="dlgOneDrive.cpp" line="93"/>
+        <source>Success Download File: </source>
+        <translation>下载文件成功</translation>
     </message>
 </context>
 <context>
@@ -1154,20 +1197,20 @@ in skydrive folder</source>
         <translation type="vanished">正在读取中...</translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="148"/>
-        <location filename="dlgreader.cpp" line="478"/>
-        <location filename="dlgreader.cpp" line="1013"/>
-        <location filename="dlgreader.cpp" line="1027"/>
+        <location filename="dlgreader.cpp" line="149"/>
+        <location filename="dlgreader.cpp" line="479"/>
+        <location filename="dlgreader.cpp" line="1014"/>
+        <location filename="dlgreader.cpp" line="1028"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="196"/>
+        <location filename="dlgreader.cpp" line="197"/>
         <source>Book Info : </source>
         <translation>书籍信息：</translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="843"/>
+        <location filename="dlgreader.cpp" line="844"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation></translation>
@@ -1772,12 +1815,17 @@ in skydrive folder</source>
 <context>
     <name>log</name>
     <message>
-        <location filename="onedrive/log.qml" line="219"/>
+        <location filename="onedrive/log.qml" line="189"/>
         <source>Copy</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="onedrive/log.qml" line="231"/>
+        <location filename="onedrive/log.qml" line="194"/>
+        <source>Cut</source>
+        <translation>剪切</translation>
+    </message>
+    <message>
+        <location filename="onedrive/log.qml" line="199"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>

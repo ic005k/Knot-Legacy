@@ -34,6 +34,7 @@ class QtOneDriveAuthorizationDialog : public QDialog {
   static bool isExists_;
   bool isNeedToClose_ = false;
   QUrl url_;
+  QTimer *timer;
 };
 
 #endif  // ONEDRIVEAUTHORIZATIONDIALOG_H

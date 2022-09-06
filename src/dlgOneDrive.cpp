@@ -34,19 +34,19 @@ TestDialog::TestDialog(QWidget *parent)
   });
 
   connect(oneDrive, &QtOneDrive::successSignIn, [this]() {
-    QMessageBox::information(this, "OneDrive", "successSignIn");
+    QMessageBox::information(this, "OneDrive", tr("Success Sign In"));
   });
 
   connect(oneDrive, &QtOneDrive::successSingOut, [this]() {
-    QMessageBox::information(this, "OneDrive", "successSingOut");
+    QMessageBox::information(this, "OneDrive", tr("Success Sing Out"));
   });
 
   connect(oneDrive, &QtOneDrive::successRefreshToken, [this]() {
-    QMessageBox::information(this, "OneDrive", "successRefreshToken");
+    QMessageBox::information(this, "OneDrive", tr("Success Refresh Token"));
   });
 
   connect(oneDrive, &QtOneDrive::successDeleteItem, [this](const QString id) {
-    QMessageBox::information(this, "OneDrive", "successDeleteItem: " + id);
+    QMessageBox::information(this, "OneDrive", tr("Success DeleteItem: ") + id);
   });
 
   connect(oneDrive, &QtOneDrive::successCreateFolder, [this](const QString id) {
@@ -59,9 +59,10 @@ TestDialog::TestDialog(QWidget *parent)
 
   connect(oneDrive, &QtOneDrive::successGetUserInfo,
           [this](const QJsonObject object) {
-            QMessageBox::information(this, "OneDrive",
-                                     QString("successGetUserInfo\n") +
-                                         QJsonDocument(object).toJson());
+            QMessageBox::information(
+                this, "OneDrive",
+                QString(tr("Success Get User Info") + "\n" +
+                        QJsonDocument(object).toJson()));
           });
 
   connect(oneDrive, &QtOneDrive::successGetStorageInfo,
@@ -82,15 +83,15 @@ TestDialog::TestDialog(QWidget *parent)
 
             QMessageBox::information(
                 this, "OneDrive",
-                QString("successUploadFile:\n\nPATH: %1\n\nID: %2")
+                QString(tr("Success Upload File:") + "\n\nPATH: %1\n\nID: %2")
                     .arg(filePath, fileID));
           });
 
-  connect(oneDrive, &QtOneDrive::successDownloadFile,
-          [this](const QString fileID) {
-            QMessageBox::information(this, "OneDrive",
-                                     QString("successDownloadFile: ") + fileID);
-          });
+  connect(
+      oneDrive, &QtOneDrive::successDownloadFile, [this](const QString fileID) {
+        QMessageBox::information(
+            this, "OneDrive", QString(tr("Success Download File: ")) + fileID);
+      });
 
   connect(oneDrive, &QtOneDrive::progressUploadFile,
           [this](const QString, int percent) {
@@ -113,8 +114,7 @@ TestDialog::TestDialog(QWidget *parent)
           });
 
   QTimer *timer = new QTimer(this);
-  // timer->setInterval(500);
-  timer->start(10000);
+  timer->start(15000);
   ui->label_info->setWordWrapMode(QTextOption::WrapAnywhere);
   connect(timer, &QTimer::timeout, [this]() {
     // ui->label_info->setText(oneDrive->debugInfo());
@@ -234,10 +234,10 @@ void TestDialog::on_btnBack_clicked() {
 }
 
 void TestDialog::loadLogQML() {
-  mw_one->ui->quickWidget2->setSource(
-      QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
   mw_one->ui->quickWidget2->rootContext()->setContextProperty(
       "strText", oneDrive->debugInfo());
+  mw_one->ui->quickWidget2->setSource(
+      QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
 }
 
 void TestDialog::initQuick() {

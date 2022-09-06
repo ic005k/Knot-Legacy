@@ -41,7 +41,7 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
 
   isExists_ = true;
 
-  QTimer *timer = new QTimer(this);
+  timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(on_timer()));
   timer->setInterval(1000);
   timer->start(1000);
@@ -70,7 +70,7 @@ QtOneDriveAuthorizationDialog::~QtOneDriveAuthorizationDialog() {
 void QtOneDriveAuthorizationDialog::on_timer() {
   if (isNeedToClose_) {
     close();
-
+    timer->stop();
     mw_one->ui->frameOneFun->show();
     mw_one->ui->btnRefreshWeb->hide();
     mw_one->mydlgOneDrive->loadLogQML();

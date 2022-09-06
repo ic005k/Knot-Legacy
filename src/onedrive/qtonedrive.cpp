@@ -87,7 +87,7 @@ void QtOneDrive::signIn() {
 
   connect(dialog_, &QtOneDriveAuthorizationDialog::success,
           [this](const QUrl& url) {
-            qDebug() << url;
+            qDebug() << "success url = " << url;
             QString code = QUrlQuery(url).queryItemValue("code");
             QString errorDesc =
                 QUrlQuery(url).queryItemValue("error_description");
@@ -433,7 +433,7 @@ QJsonObject QtOneDrive::checkReplyJson(QNetworkReply* reply) {
   QJsonObject json =
       QJsonDocument::fromJson(reply->readAll(), &jsonError).object();
 
-  qDebug() << QJsonDocument(json).toJson();
+  qDebug() << "QJsonDocument Error = " << QJsonDocument(json).toJson();
 
   if (!jsonError.error) {
     if (reply->error() == 0) {
@@ -775,7 +775,11 @@ void QtOneDrive::emitError(const QString& errorDesc) {
   if (state == DeleteItem) emit errorDeleteItem(errorDesc);
   if (state == CreateFolder) emit errorCreateFolder(errorDesc);
 
-  emit error(errorDesc);
+  if (errorDesc == "Access Denied: User is not authorized") {
+    QString str = tr("Access Denied: User is not authorized");
+    emit error(str);
+  } else
+    emit error(errorDesc);
 }
 
 bool QtOneDrive::isNeedRefreshToken() const {

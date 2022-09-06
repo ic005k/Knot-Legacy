@@ -12,8 +12,6 @@ import QtQuick.Controls.Styles 1.2
 Item {
     id: textitem
     visible: true
-    width: myW
-    height: myH
 
     File {
         id: file
@@ -70,38 +68,10 @@ Item {
         }
     }
 
-    Image {
-        id: rocket
-        width: myW
-        height: myH
-        //fillMode: Image.TileHorizontally
-        fillMode: Image.Tile
-        horizontalAlignment: Image.AlignLeft
-        verticalAlignment: Image.AlignTop
-
-        smooth: true
-        source: "/1res/b.png"
-    }
-
-
-
     Flickable {
         id: flickable
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
-
-
-       /* WebView {
-            id: mywebview
-            anchors.fill: parent
-            url:  baseUrl
-            visible: true
-
-            onLoadingChanged: {
-                if (loadRequest.errorString)
-                    console.error(loadRequest.errorString);
-            }
-        }*/
 
         states: State {
             name: "autoscroll"
@@ -119,8 +89,8 @@ Item {
         TextArea.flickable: TextArea {
             id: textArea
 
-            font.pixelSize: FontSize
-            font.family: FontName
+            //font.pixelSize: FontSize
+            //font.family: FontName
             font.letterSpacing: 2
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting
@@ -131,8 +101,8 @@ Item {
             wrapMode: TextArea.Wrap
             readOnly: true
             focus: true
-            persistentSelection: isSelText
-            selectByMouse: isSelText
+            persistentSelection: false
+            selectByMouse: false
             smooth: true
 
             color: "#664E30"
@@ -158,17 +128,17 @@ Item {
 
             PropertyAnimation on x {
                 easing.type: Easing.Linear
-                running: isAni
-                from: aniW
+                running: false
+                from: 300
                 to: 0
                 duration: 200
                 loops: 1 //Animation.Infinite
             }
 
 
-            /*SequentialAnimation on opacity {
+            SequentialAnimation on opacity {
                 //应用于透明度上的序列动画
-                running: isAni
+                running: false
                 loops: 1 //Animation.Infinite //无限循环
                 NumberAnimation {
                     from: 0
@@ -178,7 +148,7 @@ Item {
                 PauseAnimation {
                     duration: 0
                 } //暂停400ms
-            }*/
+            }
         }
 
         ScrollBar.vertical: ScrollBar {
@@ -208,7 +178,7 @@ Item {
             console.log(textArea.lineCount)
             console.log(textArea.height)
             console.log(control.position)
-            console.log(mywebview.url)
+
         }
     }
 
@@ -220,13 +190,11 @@ Item {
             enabled: textArea.selectedText
             onTriggered: textArea.copy()
         }
-
-
-        /*MenuItem {
+        MenuItem {
             text: qsTr("Cut")
             enabled: textArea.selectedText
             onTriggered: textArea.cut()
-        }*/
+        }
         MenuItem {
             text: qsTr("Paste")
             enabled: textArea.canPaste
