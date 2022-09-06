@@ -78,6 +78,7 @@ QString File::webEnd() { return m_strUri; }
 
 void File::setWebEnd(QString &strUri) {
   m_strUri = strUri;
+  // if (m_strUri.contains("?code="))
   dialog_->sendMsg(m_strUri);
 
   qDebug() << "web end uri = " << m_strUri;

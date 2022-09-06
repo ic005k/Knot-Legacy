@@ -39,11 +39,12 @@ QtOneDriveAuthorizationDialog* dialog_ = nullptr;
   }
 
 QSet<QString> QtOneDrive::exisitInstances_;
-// https://login.live.com/oauth20_desktop.srf
+
+QString str = "https://login.live.com/oauth20_desktop.srf";
+
 QtOneDrive::QtOneDrive(const QString& clientID, const QString& secret,
                        const QString& userID, QObject* parent)
-    : QtOneDrive(clientID, secret, "https://login.live.com/oauth20_desktop.srf",
-                 userID, parent) {}
+    : QtOneDrive(clientID, secret, str, userID, parent) {}
 
 QtOneDrive::QtOneDrive(const QString& clientID, const QString& secret,
                        const QString& redirectUri, const QString& userID,
@@ -542,6 +543,8 @@ void QtOneDrive::getTokenRequest() {
   connect(reply, &QNetworkReply::finished, [reply, this]() {
     QJsonObject json = checkReplyJson(reply);
 
+    qDebug() << "token json = " << json;
+
     if (!json.isEmpty()) {
       accessToken_ = json["access_token"].toString();
       refreshToken_ = json["refresh_token"].toString();
@@ -582,29 +585,29 @@ QString QtOneDrive::debugInfo() const {
 }
 
 QUrl QtOneDrive::urlSingIn() const {
-  // https://login.microsoftonline.com/common/oauth2/v2.0/authorize
-  // https://login.live.com/oauth20_authorize.srf
-  QUrl url("https://login.live.com/oauth20_authorize.srf");
+  QString str =
+      "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";  // new
+  // QString str = "https://login.live.com/oauth20_authorize.srf"; //old
+  QUrl url(str);
 
   QUrlQuery query;
 
-  query.addQueryItem("Content-Type", "application/json");
-
   query.addQueryItem("client_id", clientID_);
 
+  // Note:
   // https://docs.microsoft.com/zh-cn/onedrive/developer/rest-api/concepts/migrating-from-live-sdk?view=odsp-graph-online
   query.addQueryItem(
       "scope",
       "offline_access "
       "openid Contacts.ReadWrite Files.ReadWrite.All Calendars.ReadWrite");
-  //"wl.signin wl.basic wl.offline_access wl.skydrive_update wl.skydrive"
 
-  query.addQueryItem("response_type", "code");
-  // redirectURI_ = "http://localhost";
   query.addQueryItem("redirect_uri", redirectURI_);
+  query.addQueryItem("response_type", "code");
 
-  query.addQueryItem("grant_type", "authorization_code");
-  query.addQueryItem("Authorization", "Bearer access_token");
+  // new add
+  // query.addQueryItem("Content-Type", "application/json");
+  // query.addQueryItem("grant_type", "authorization_code");
+  // query.addQueryItem("Authorization", "Bearer access_token");
 
   url.setQuery(query);
   return url;
@@ -623,23 +626,25 @@ QUrl QtOneDrive::urlStorageInfo() const {
   // QUrl url("https://apis.live.net/v5.0/me/skydrive/quota");
   QUrl url("https://graph.microsoft.com/v1.0/me/drive?$select=quota");
 
-  QUrlQuery query;
-  query.addQueryItem("access_token", accessToken_);
-  // url.setQuery(query);
   return url;
 }
 
 QUrl QtOneDrive::urlGetToken() const {
-  return QUrl("https://login.live.com/oauth20_token.srf");
+  // QString str =
+  //     "https://login.microsoftonline.com/common/oauth2/v2.0/token";  // new
+  QString str = "https://login.live.com/oauth20_token.srf";  // old
+  QUrl url(str);
+
+  return url;
 }
 
 QUrl QtOneDrive::urlGetUserInfo() const {
-  // QUrl url("https://apis.live.net/v5.0/me");
-  QUrl url("https://graph.microsoft.com/v1.0/me/drive/root/delta");
+  QUrl url("https://apis.live.net/v5.0/me");
+  // QUrl url("https://graph.microsoft.com/v1.0/me/drive/root/delta");
 
   QUrlQuery query;
   query.addQueryItem("access_token", accessToken_);
-  // url.setQuery(query);
+  url.setQuery(query);
 
   return url;
 }
@@ -667,7 +672,6 @@ QUrl QtOneDrive::urlTraverseFolder(const QString& parentFolderId) const {
 
 QUrl QtOneDrive::urlUploadFile(const QString& remoteFileName,
                                const QString& folderId) const {
-  // https://apis.live.net/v5.0/me
   // QUrl url("https://apis.live.net/v5.0/me/drive/" + remoteFileName +
   //         ":/content");
 
@@ -678,12 +682,10 @@ QUrl QtOneDrive::urlUploadFile(const QString& remoteFileName,
   if (folderId != "")
     // url = QUrl(QString("https://apis.live.net/v5.0/%1/files/%2")
     //                .arg(folderId, remoteFileName));
-    url = QUrl(QString("https://api.onedrive.com/me/%1/items/%2")
-                   .arg(folderId, remoteFileName));
+    url = QUrl(
+        QString("https://graph.microsoft.com/v1.0/me/drive/root:/%1/items/%2")
+            .arg(folderId, remoteFileName));
 
-  QUrlQuery query;
-  query.addQueryItem("access_token", accessToken_);
-  // url.setQuery(query);
   qDebug() << "url=" << url.toString();
   return url;
 }
@@ -721,10 +723,10 @@ QUrlQuery QtOneDrive::postGetToken() const {
   QUrlQuery query;
   query.addQueryItem("client_id", clientID_);
   query.addQueryItem("redirect_uri", redirectURI_);
-  query.addQueryItem("client_secret", secret_);
+  // query.addQueryItem("client_secret", secret_);
   query.addQueryItem("code", authorizationCode_);
   query.addQueryItem("grant_type", "authorization_code");
-  qDebug() << query.toString();
+  qDebug() << "postGetToken = " << query.toString();
   return query;
 }
 
@@ -732,7 +734,7 @@ QUrlQuery QtOneDrive::postRefreshToken() const {
   QUrlQuery query;
   query.addQueryItem("client_id", clientID_);
   query.addQueryItem("redirect_uri", redirectURI_);
-  query.addQueryItem("client_secret", secret_);
+  // query.addQueryItem("client_secret", secret_);
   query.addQueryItem("refresh_token", refreshToken_);
   query.addQueryItem("grant_type", "refresh_token");
   return query;
