@@ -639,12 +639,12 @@ QUrl QtOneDrive::urlGetToken() const {
 }
 
 QUrl QtOneDrive::urlGetUserInfo() const {
-  QUrl url("https://apis.live.net/v5.0/me");
-  // QUrl url("https://graph.microsoft.com/v1.0/me/drive/root/delta");
+  // QUrl url("https://apis.live.net/v5.0/me");
+  QUrl url("https://graph.microsoft.com/v1.0/me/drives");
 
   QUrlQuery query;
   query.addQueryItem("access_token", accessToken_);
-  url.setQuery(query);
+  // url.setQuery(query);
 
   return url;
 }

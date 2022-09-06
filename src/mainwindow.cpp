@@ -3451,6 +3451,8 @@ void MainWindow::init_UIWidget() {
   ui->frameMain->layout()->setSpacing(1);
 
   ui->frameOne->hide();
+  ui->btnRefreshWeb->hide();
+  ui->btnStorageInfo->hide();
 
   this->layout()->setMargin(0);
   ui->centralwidget->layout()->setMargin(1);
@@ -4156,6 +4158,7 @@ void MainWindow::on_btnBack_One_clicked() {
   if (!ui->frameOne->isHidden()) {
     if (ui->frameOneFun->isHidden()) {
       ui->frameOneFun->show();
+      ui->btnRefreshWeb->hide();
       mydlgOneDrive->loadLogQML();
     } else {
       ui->frameOne->hide();
@@ -4170,4 +4173,15 @@ void MainWindow::on_btnRefreshToken_clicked() {
 
 void MainWindow::on_btnStorageInfo_clicked() {
   mydlgOneDrive->on_pushButton_storageInfo_clicked();
+}
+
+void MainWindow::on_btnRefreshWeb_clicked() {
+  ui->quickWidget2->setSource(
+      QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
+  ui->quickWidget2->rootContext()->setContextProperty("initialUrl",
+                                                      strRefreshUrl);
+}
+
+void MainWindow::on_btnUserInfo_clicked() {
+  mydlgOneDrive->on_pushButton_GetUserInfo_clicked();
 }

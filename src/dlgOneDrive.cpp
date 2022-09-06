@@ -24,12 +24,10 @@ TestDialog::TestDialog(QWidget *parent)
   oneDrive = new QtOneDrive("a7d66295-9a9f-424b-8dd1-7396c3b4573c",
                             "nk28Q~yPYNqIQbPmTZTk_OIyseXcO0OY5LudcbPQ",
                             "My User Name", this);
-  // "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 
   // oneDrive =
   //     new QtOneDrive("000000004012F592", "e7uiuaHcwcmuqyhaWKbqmQWN5o6enjgm",
   //                    "My User Name", this);
-  // "https://login.live.com/oauth20_token.srf"
 
   connect(oneDrive, &QtOneDrive::error, [this](const QString error) {
     QMessageBox::critical(this, "OneDrive Error", error);

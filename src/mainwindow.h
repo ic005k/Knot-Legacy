@@ -105,6 +105,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QString strRefreshUrl;
   qreal curx = 0;
   bool isMousePress = false;
   bool isMouseMove = false;
@@ -429,6 +430,10 @@ class MainWindow : public QMainWindow {
   void on_btnRefreshToken_clicked();
 
   void on_btnStorageInfo_clicked();
+
+  void on_btnRefreshWeb_clicked();
+
+  void on_btnUserInfo_clicked();
 
  private:
   int frameChartHeight = 220;
