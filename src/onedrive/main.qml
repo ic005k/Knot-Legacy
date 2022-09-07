@@ -48,10 +48,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.2
-import QtQuick.Controls 1.1
-import QtQuick.Layouts 1.1
-import QtQuick.Controls.Styles 1.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Controls.Styles 1.4
 import QtWebView 1.1
 
 import MyModel1 1.0
@@ -171,11 +171,12 @@ Item {
         id: webView
         anchors.fill: parent
         url: initialUrl
-        onLoadingChanged: {
+
+        /*(onLoadingChanged: {
             if (loadRequest.errorString)
                 console.error(loadRequest.errorString);
             console.log("Loading changed...")
-        }
+        }*/
 
         onLoadProgressChanged: {
             console.log(webView.loadProgress)

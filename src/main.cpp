@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QTranslator>
+#include <QtWebView/QtWebView>
 
 #include "mainwindow.h"
 #include "specialaccelerometerpedometer.h"
@@ -39,6 +40,7 @@ int main(int argc, char* argv[]) {
 #endif
 
   QApplication a(argc, argv);
+  QtWebView::initialize();
 
   QDir dir;
   QString path;

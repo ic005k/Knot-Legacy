@@ -231,7 +231,8 @@ void QtOneDrive::uploadFile(const QString& localFilePath,
         QString id = json.value("id").toString();
         if (!id.isEmpty()) {
           state_ = Empty;
-          emit successUploadFile(localFilePath, id);
+          emit successUploadFile(
+              mw_one->mydlgReader->getUriRealPath(localFilePath), id);
         } else
           emitError("Json Error 2");
       }
@@ -605,7 +606,7 @@ QUrl QtOneDrive::urlSingIn() const {
   query.addQueryItem("response_type", "code");
 
   // new add
-  // query.addQueryItem("Content-Type", "application/json");
+  query.addQueryItem("Content-Type", "application/x-www-form-urlencoded");
   // query.addQueryItem("grant_type", "authorization_code");
   // query.addQueryItem("Authorization", "Bearer access_token");
 
@@ -630,9 +631,9 @@ QUrl QtOneDrive::urlStorageInfo() const {
 }
 
 QUrl QtOneDrive::urlGetToken() const {
-  // QString str =
-  //     "https://login.microsoftonline.com/common/oauth2/v2.0/token";  // new
-  QString str = "https://login.live.com/oauth20_token.srf";  // old
+  QString str =
+      "https://login.microsoftonline.com/common/oauth2/v2.0/token";  // new
+  // QString str = "https://login.live.com/oauth20_token.srf";  // old
   QUrl url(str);
 
   return url;

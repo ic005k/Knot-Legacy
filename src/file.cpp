@@ -1,5 +1,6 @@
 #include "file.h"
 
+#include <QClipboard>
 #include <QDebug>
 #include <QFile>
 
@@ -79,7 +80,11 @@ QString File::webEnd() { return m_strUri; }
 void File::setWebEnd(QString &strUri) {
   m_strUri = strUri;
   mw_one->strRefreshUrl = m_strUri;
+
   if (m_strUri.contains("?code=")) dialog_->sendMsg(m_strUri);
+
+  QClipboard *clipboard = QApplication::clipboard();
+  clipboard->setText(m_strUri);
 
   qDebug() << "web end uri = " << m_strUri;
 }

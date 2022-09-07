@@ -46,8 +46,6 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   timer->setInterval(1000);
   timer->start(1000);
 
-  QUrl url1("https://www.qq.com/");
-
   mw_one->ui->frameOneFun->hide();
   mw_one->ui->btnRefreshWeb->show();
   mw_one->ui->quickWidget2->setSource(
