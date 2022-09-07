@@ -3328,15 +3328,14 @@ void MainWindow::updateHardSensorSteps() {
 }
 
 void MainWindow::on_actionMemos_triggered() {
-  mydlgMainNotes->move(mw_one->geometry().x(), 0);
+  /*mydlgMainNotes->move(mw_one->geometry().x(), 0);
   mydlgMainNotes->setFixedHeight(this->height());
   mydlgMainNotes->setFixedWidth(this->width());
   mydlgMainNotes->setModal(true);
   mydlgMainNotes->ui->textBrowser->hide();
-  mydlgMainNotes->ui->textEdit->show();
-  mydlgMainNotes->ui->btnSetKey->show();
-  mydlgMainNotes->ui->frameSetKey->hide();
+  mydlgMainNotes->ui->textEdit->show();*/
 
+  QString strText;
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   QString file = iniDir + "mainnotes.txt";
@@ -3367,14 +3366,16 @@ void MainWindow::on_actionMemos_triggered() {
     if (QDialog::Accepted == idlg->exec()) {
       ok = true;
       text = idlg->textValue();
-    } else
+    } else {
       ok = false;
+      return;
+    }
+
+    if (text.isEmpty()) return;
 
     if (ok && !text.isEmpty()) {
       if (text.trimmed() == strPw) {
-        decMemos(file);
-        mydlgMainNotes->setCursorPosition();
-        mydlgMainNotes->show();
+        strText = decMemos(file);
 
       } else {
         QMessageBox msgBox;
@@ -3384,24 +3385,34 @@ void MainWindow::on_actionMemos_triggered() {
             msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
         btnOk->setFocus();
         msgBox.exec();
+        return;
       }
     }
 
   } else {
-    decMemos(file);
-    mydlgMainNotes->setCursorPosition();
-    mydlgMainNotes->show();
+    strText = decMemos(file);
   }
+
+  ui->quickWidgetMemo->rootContext()->setContextProperty("strText", strText);
+  ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
+
+  ui->frameMain->hide();
+  ui->frameSetKey->hide();
+  ui->frameMeno->show();
 }
 
-void MainWindow::decMemos(QString file) {
+QString MainWindow::decMemos(QString file) {
+  QString text;
   TextEditToFile(mydlgMainNotes->ui->textEdit, file);
   if (QFile(file).exists()) {
     mydlgMainNotes->decode(file);
-    mydlgMainNotes->ui->textEdit->setPlainText(
-        mydlgMainNotes->Deciphering(file));
+    text = mydlgMainNotes->Deciphering(file);
+    mydlgMainNotes->ui->textEdit->setPlainText(text);
+
     QFile::remove(file);
   }
+
+  return text;
 }
 
 void MainWindow::init_Sensors() {
@@ -3453,6 +3464,8 @@ void MainWindow::init_UIWidget() {
   ui->frameOne->hide();
   ui->btnRefreshWeb->hide();
   ui->btnStorageInfo->hide();
+
+  ui->frameMeno->hide();
 
   this->layout()->setMargin(0);
   ui->centralwidget->layout()->setMargin(1);
@@ -4186,4 +4199,58 @@ void MainWindow::on_btnRefreshWeb_clicked() {
 
 void MainWindow::on_btnUserInfo_clicked() {
   mydlgOneDrive->on_pushButton_GetUserInfo_clicked();
+}
+
+void MainWindow::on_btnBackMemo_clicked() {
+  ui->frameMeno->hide();
+  ui->frameMain->show();
+}
+
+void MainWindow::on_btnSetKey_clicked() {
+  if (ui->frameSetKey->isHidden())
+    ui->frameSetKey->show();
+  else
+    ui->frameSetKey->hide();
+}
+
+void MainWindow::on_btnSetKeyOK_clicked() {
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  if (ui->edit1->text().trimmed() == "" && ui->edit2->text().trimmed() == "") {
+    Reg.remove("/MainNotes/UserKey");
+    ui->frameSetKey->hide();
+    QMessageBox msgBox;
+    msgBox.setText("Knot");
+    msgBox.setInformativeText(tr("The password is removed."));
+    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    btnOk->setFocus();
+    msgBox.exec();
+
+    return;
+  }
+
+  if (ui->edit1->text().trimmed() == ui->edit2->text().trimmed()) {
+    QString strPw = ui->edit1->text().trimmed();
+    QByteArray baPw = strPw.toUtf8();
+    for (int i = 0; i < baPw.size(); i++) {
+      baPw[i] = baPw[i] + 66;  //加密User的密码
+    }
+    strPw = baPw;
+    Reg.setValue("/MainNotes/UserKey", strPw);
+
+    QMessageBox msgBox;
+    msgBox.setText("Knot");
+    msgBox.setInformativeText(tr("The password is set successfully."));
+    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    btnOk->setFocus();
+    msgBox.exec();
+    ui->frameSetKey->hide();
+
+  } else {
+    QMessageBox msgBox;
+    msgBox.setText("Knot");
+    msgBox.setInformativeText(tr("The entered password does not match."));
+    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    btnOk->setFocus();
+    msgBox.exec();
+  }
 }

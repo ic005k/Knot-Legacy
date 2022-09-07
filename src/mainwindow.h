@@ -435,6 +435,12 @@ class MainWindow : public QMainWindow {
 
   void on_btnUserInfo_clicked();
 
+  void on_btnBackMemo_clicked();
+
+  void on_btnSetKey_clicked();
+
+  void on_btnSetKeyOK_clicked();
+
  private:
   int frameChartHeight = 220;
   int x, y, w, h;
@@ -458,7 +464,7 @@ class MainWindow : public QMainWindow {
   void writeLogs();
   void updateRunTime();
   void showSensorValues();
-  void decMemos(QString file);
+  QString decMemos(QString file);
   void initHardStepSensor();
 };
 
