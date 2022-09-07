@@ -2,6 +2,7 @@
 
 #include "count_steps.h"
 #include "math.h"  //using this for converting the CSV data from float to int
+#include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "stdint.h"
 #include "stdio.h"  //using this for printing debug outputs
 #include "ui_mainwindow.h"
@@ -38,6 +39,7 @@ extern QStringList readTextList, htmlFiles;
 extern QDialog* dlgProgEBook;
 extern QTableWidget* tableReport;
 extern void setTableNoItemFlags(QTableWidget* t, int row);
+extern QtOneDriveAuthorizationDialog* dialog_;
 
 void RegJni(const char* myClassName);
 static void JavaNotify_1();
@@ -3394,8 +3396,12 @@ void MainWindow::on_actionMemos_triggered() {
 
   ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
   ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
+  ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize", fontSize);
   ui->quickWidgetMemo->rootContext()->setContextProperty("strText", strText);
   ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
+  QFont f(this->font());
+  f.setPointSize(fontSize);
+  mydlgMainNotes->ui->textEdit->setFont(f);
   mydlgMainNotes->ui->textEdit->setPlainText(strText);
 
   memoHeight = ui->quickWidgetMemo->height();
@@ -3465,7 +3471,7 @@ void MainWindow::init_UIWidget() {
   ui->frameMain->layout()->setSpacing(1);
 
   ui->frameOne->hide();
-  ui->btnRefreshWeb->hide();
+  ui->frameFunWeb->hide();
   ui->btnStorageInfo->hide();
 
   ui->frameMemo->hide();
@@ -4176,7 +4182,7 @@ void MainWindow::on_btnBack_One_clicked() {
   if (!ui->frameOne->isHidden()) {
     if (ui->frameOneFun->isHidden()) {
       ui->frameOneFun->show();
-      ui->btnRefreshWeb->hide();
+      ui->frameFunWeb->hide();
       mydlgOneDrive->loadLogQML();
     } else {
       ui->frameOne->hide();
@@ -4271,4 +4277,11 @@ void MainWindow::on_btnEdit_clicked() {
 
   mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
       mydlgMainNotes->sliderPos);
+}
+
+void MainWindow::on_btnCode_clicked() {
+  QString str = ui->editCode->text().trimmed();
+  if (str != "" && str.contains("?code=")) {
+    dialog_->sendMsg(str);
+  }
 }
