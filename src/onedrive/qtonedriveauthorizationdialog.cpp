@@ -47,7 +47,7 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   timer->start(1000);
 
   mw_one->ui->frameOneFun->hide();
-  mw_one->ui->btnRefreshWeb->show();
+  mw_one->ui->frameFunWeb->show();
   mw_one->ui->quickWidget2->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
   mw_one->ui->quickWidget2->rootContext()->setContextProperty("initialUrl",
@@ -70,7 +70,7 @@ void QtOneDriveAuthorizationDialog::on_timer() {
     close();
     timer->stop();
     mw_one->ui->frameOneFun->show();
-    mw_one->ui->btnRefreshWeb->hide();
+    mw_one->ui->frameFunWeb->hide();
     mw_one->mydlgOneDrive->loadLogQML();
   }
 }

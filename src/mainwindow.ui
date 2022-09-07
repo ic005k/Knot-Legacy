@@ -1747,6 +1747,12 @@ QRadioButton::indicator:checked {
        </item>
        <item>
         <widget class="QFrame" name="frameFunWeb">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>120</height>
+          </size>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -1767,16 +1773,22 @@ QRadioButton::indicator:checked {
            <number>1</number>
           </property>
           <item>
+           <widget class="QLineEdit" name="editCode">
+            <property name="placeholderText">
+             <string>Url with authorization code</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_10">
             <item>
-             <widget class="QLineEdit" name="editCode">
-              <property name="placeholderText">
-               <string>Authorization code</string>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="QToolButton" name="btnCode">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>Get token from authorization code</string>
               </property>
