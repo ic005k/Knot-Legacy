@@ -119,7 +119,7 @@ Item {
             wrapMode: TextArea.Wrap
             readOnly: isReadOnly
             focus: true
-            persistentSelection: true
+            persistentSelection:false
             selectByMouse: isBySelect
             smooth: true
 
@@ -181,7 +181,7 @@ Item {
 
             contentItem: Rectangle {
                 id: slider
-                implicitWidth: 4
+                implicitWidth: 15
                 implicitHeight: 76
                 radius: width / 2
                 color: control.pressed ? "#e7e7e7" : "#1296db"

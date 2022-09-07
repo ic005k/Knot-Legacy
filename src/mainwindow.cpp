@@ -197,7 +197,6 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   initMain = true;
-  ui->frameReader->hide();
   ui->quickWidget->installEventFilter(this);
 
   QDesktopWidget* desktop = QApplication::desktop();
@@ -3401,6 +3400,7 @@ void MainWindow::on_actionMemos_triggered() {
   ui->frameMain->hide();
   ui->frameSetKey->hide();
   ui->frameMemo->show();
+  memoHeight = ui->quickWidgetMemo->height();
   mydlgMainNotes->setCursorPosition();
 }
 
@@ -3451,6 +3451,7 @@ void MainWindow::init_UIWidget() {
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
 
+  ui->frameReader->hide();
   ui->frameReader->layout()->setMargin(0);
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frameReader->setContentsMargins(0, 0, 0, 0);
@@ -4265,6 +4266,7 @@ void MainWindow::on_btnEdit_clicked() {
     mydlgMainNotes->saveMainNotes();
     ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", false);
     ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", true);
+    ui->quickWidgetMemo->setFixedHeight(memoHeight);
     mydlgMainNotes->setCursorPosition();
 
     ui->btnEdit->setText(tr("Done"));
@@ -4272,7 +4274,9 @@ void MainWindow::on_btnEdit_clicked() {
     mydlgMainNotes->saveMainNotes();
     ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
     ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
+    ui->quickWidgetMemo->setFixedHeight(memoHeight);
     mydlgMainNotes->setCursorPosition();
+
     ui->btnEdit->setText(tr("Edit"));
   }
 }

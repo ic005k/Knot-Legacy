@@ -444,6 +444,7 @@ class MainWindow : public QMainWindow {
   void on_btnEdit_clicked();
 
  private:
+  int memoHeight;
   int frameChartHeight = 220;
   int x, y, w, h;
   qreal aoldX, aoldY, aoldZ;
