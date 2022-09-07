@@ -13,6 +13,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->setupUi(this);
   ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
+  this->setModal(true);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
@@ -40,6 +41,12 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->edit1->setEchoMode(QLineEdit::Password);
   ui->edit2->setEchoMode(QLineEdit::Password);
   ui->frameSetKey->hide();
+  ui->btnSetKey->hide();
+}
+
+void dlgMainNotes::init() {
+  this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                    mw_one->width(), mw_one->height());
 }
 
 void dlgMainNotes::wheelEvent(QWheelEvent* e) {
@@ -68,25 +75,26 @@ void dlgMainNotes::on_btnBack_clicked() {
 }
 
 void dlgMainNotes::saveMainNotes() {
-  if (!ui->textEdit->isHidden()) {
-    QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-    Reg.setValue("/MainNotes/CurPos", curPos);
-    Reg.setValue("/MainNotes/SlidePos", sliderPos);
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 
-    QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
-    QMetaObject::invokeMethod((QObject*)root, "getText");
+  sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
+  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setVPos",
+                            Q_ARG(QVariant, sliderPos));
+  mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
+      "strText", ui->textEdit->toPlainText());
 
-    ui->textEdit->setPlainText(textMemo);
-    QString file = iniDir + "mainnotes.txt";
-    mw_one->TextEditToFile(ui->textEdit, file);
-    encryption(file);
-    encode(file);
-    ui->textEdit->setPlainText(mw_one->loadText(file));
+  Reg.setValue("/MainNotes/CurPos", curPos);
+  Reg.setValue("/MainNotes/SlidePos", sliderPos);
 
-    Reg.setValue("/MainNotes/Text", ui->textEdit->toPlainText());
+  QString file = iniDir + "mainnotes.txt";
+  mw_one->TextEditToFile(ui->textEdit, file);
+  encryption(file);
+  encode(file);
 
-    QFile::remove(file);
-  }
+  Reg.setValue("/MainNotes/Text", mw_one->loadText(file));
+
+  QFile::remove(file);
 }
 
 void dlgMainNotes::init_MainNotes() {
@@ -109,9 +117,15 @@ void dlgMainNotes::setCursorPosition() {
   QTextCursor tmpCursor = ui->textEdit->textCursor();
   tmpCursor.setPosition(curPos);
 
-  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "setVPos",
-                            Q_ARG(QVariant, sliderPos));
+  if (ui->textEdit->isHidden()) {
+    ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
+  }
+
+  if (!mw_one->ui->quickWidgetMemo->isHidden()) {
+    QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+    QMetaObject::invokeMethod((QObject*)root, "setVPos",
+                              Q_ARG(QVariant, sliderPos));
+  }
 }
 
 void dlgMainNotes::on_btnOpenText_clicked() {
@@ -130,9 +144,7 @@ void dlgMainNotes::on_btnCloseText_clicked() {}
 
 void dlgMainNotes::on_btnLastBrowse_clicked() {}
 
-void dlgMainNotes::on_textBrowser_cursorPositionChanged() {
-  sliderPos = ui->textBrowser->verticalScrollBar()->sliderPosition();
-}
+void dlgMainNotes::on_textBrowser_cursorPositionChanged() {}
 
 bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {

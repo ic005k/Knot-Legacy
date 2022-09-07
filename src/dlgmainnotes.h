@@ -36,7 +36,8 @@ class dlgMainNotes : public QDialog {
 
   void setCursorPosition();
 
- protected:
+  void init();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

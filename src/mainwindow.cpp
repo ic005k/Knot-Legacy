@@ -3327,17 +3327,10 @@ void MainWindow::updateHardSensorSteps() {
 }
 
 void MainWindow::on_actionMemos_triggered() {
-  /*mydlgMainNotes->move(mw_one->geometry().x(), 0);
-  mydlgMainNotes->setFixedHeight(this->height());
-  mydlgMainNotes->setFixedWidth(this->width());
-  mydlgMainNotes->setModal(true);
-  mydlgMainNotes->ui->textBrowser->hide();
-  mydlgMainNotes->ui->textEdit->show();*/
-
-  QString strText;
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   QString file = iniDir + "mainnotes.txt";
+  QString strDec = Reg.value("/MainNotes/Text").toString();
 
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
   if (strPw != "") {
@@ -3374,7 +3367,7 @@ void MainWindow::on_actionMemos_triggered() {
 
     if (ok && !text.isEmpty()) {
       if (text.trimmed() == strPw) {
-        strText = decMemos(file);
+        strText = decMemos(strDec, file);
 
       } else {
         QMessageBox msgBox;
@@ -3389,28 +3382,34 @@ void MainWindow::on_actionMemos_triggered() {
     }
 
   } else {
-    strText = decMemos(file);
+    strText = decMemos(strDec, file);
   }
+
+  // int newH = this->height() - ui->frameSetKey->height() -
+  //            ui->btnBackMemo->height() - 50;
+  // ui->quickWidgetMemo->setFixedHeight(newH);
+  ui->frameMain->hide();
+  ui->frameSetKey->hide();
+  ui->frameMemo->show();
 
   ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
   ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
   ui->quickWidgetMemo->rootContext()->setContextProperty("strText", strText);
   ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
+  mydlgMainNotes->ui->textEdit->setPlainText(strText);
 
-  ui->frameMain->hide();
-  ui->frameSetKey->hide();
-  ui->frameMemo->show();
   memoHeight = ui->quickWidgetMemo->height();
   mydlgMainNotes->setCursorPosition();
 }
 
-QString MainWindow::decMemos(QString file) {
+QString MainWindow::decMemos(QString strDec, QString file) {
   QString text;
-  TextEditToFile(mydlgMainNotes->ui->textEdit, file);
+  QTextEdit* edit = new QTextEdit;
+  edit->setPlainText(strDec);
+  TextEditToFile(edit, file);
   if (QFile(file).exists()) {
     mydlgMainNotes->decode(file);
     text = mydlgMainNotes->Deciphering(file);
-    mydlgMainNotes->ui->textEdit->setPlainText(text);
 
     QFile::remove(file);
   }
@@ -4208,8 +4207,9 @@ void MainWindow::on_btnUserInfo_clicked() {
 void MainWindow::on_btnBackMemo_clicked() {
   ui->frameMemo->hide();
   ui->frameMain->show();
-  mydlgMainNotes->saveMainNotes();
-  ui->btnEdit->setText(tr("Edit"));
+
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setValue("/MainNotes/SlidePos", mydlgMainNotes->sliderPos);
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -4262,21 +4262,13 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
-  if (ui->btnEdit->text() == tr("Edit")) {
-    mydlgMainNotes->saveMainNotes();
-    ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", false);
-    ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", true);
-    ui->quickWidgetMemo->setFixedHeight(memoHeight);
-    mydlgMainNotes->setCursorPosition();
+  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getText");
+  mydlgMainNotes->ui->textEdit->setPlainText(strText);
 
-    ui->btnEdit->setText(tr("Done"));
-  } else {
-    mydlgMainNotes->saveMainNotes();
-    ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
-    ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
-    ui->quickWidgetMemo->setFixedHeight(memoHeight);
-    mydlgMainNotes->setCursorPosition();
+  mydlgMainNotes->init();
+  mydlgMainNotes->show();
 
-    ui->btnEdit->setText(tr("Edit"));
-  }
+  mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
+      mydlgMainNotes->sliderPos);
 }

@@ -4,5 +4,6 @@
         <file>src/texteditor.html</file>
         <file>src/onedrive/log.qml</file>
         <file>src/onedrive/main.qml</file>
+        <file>src/memo.qml</file>
     </qresource>
 </RCC>

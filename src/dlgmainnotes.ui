@@ -37,7 +37,7 @@
         <string>Last</string>
        </property>
        <property name="icon">
-        <iconset resource="src.qrc">
+        <iconset>
          <normaloff>:/src/lasttxt.png</normaloff>:/src/lasttxt.png</iconset>
        </property>
        <property name="iconSize">
@@ -66,7 +66,7 @@
         <string>Close</string>
        </property>
        <property name="icon">
-        <iconset resource="src.qrc">
+        <iconset>
          <normaloff>:/src/closetxt.png</normaloff>:/src/closetxt.png</iconset>
        </property>
        <property name="iconSize">
@@ -99,7 +99,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Back</string>
+        <string>Done</string>
        </property>
        <property name="iconSize">
         <size>
@@ -205,8 +205,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="src.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>470</width>
-    <height>1488</height>
+    <height>1599</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1856,6 +1856,19 @@ QRadioButton::indicator:checked {
         </widget>
        </item>
        <item>
+        <widget class="QQuickWidget" name="quickWidgetMemo">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="resizeMode">
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
           <widget class="QToolButton" name="btnBackMemo">
@@ -1921,13 +1934,6 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QQuickWidget" name="quickWidgetMemo">
-         <property name="resizeMode">
-          <enum>QQuickWidget::SizeRootObjectToView</enum>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>

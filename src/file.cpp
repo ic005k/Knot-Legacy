@@ -19,7 +19,7 @@ void File::setSource(const QString &source) {
   m_source = source;
   emit sourceChanged();
 
-  mw_one->mydlgMainNotes->textMemo = m_source;
+  mw_one->strText = m_source;
 }
 
 QString File::source() const { return m_source; }

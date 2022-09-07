@@ -90,6 +90,8 @@ Item {
         id: flickable
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
+        clip: true
+        visible: true
 
         states: State {
             name: "autoscroll"
@@ -105,10 +107,11 @@ Item {
         }
 
         TextArea.flickable: TextArea {
+
             id: textArea
 
-            font.pixelSize: FontSize
-            font.family: FontName
+            //font.pixelSize: FontSize
+            //font.family: FontName
             font.letterSpacing: 2
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting
@@ -121,6 +124,7 @@ Item {
             focus: true
             persistentSelection:false
             selectByMouse: isBySelect
+            selectByKeyboard: true
             smooth: true
 
             color: "#664E30"
@@ -181,7 +185,7 @@ Item {
 
             contentItem: Rectangle {
                 id: slider
-                implicitWidth: 15
+                implicitWidth: 4
                 implicitHeight: 76
                 radius: width / 2
                 color: control.pressed ? "#e7e7e7" : "#1296db"

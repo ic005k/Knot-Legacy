@@ -34,6 +34,7 @@
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 #include <QPushButton>
+#include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWidget>
 #include <QRandomGenerator>
@@ -105,6 +106,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QString strText;
   QString strRefreshUrl;
   qreal curx = 0;
   bool isMousePress = false;
@@ -467,7 +469,7 @@ class MainWindow : public QMainWindow {
   void writeLogs();
   void updateRunTime();
   void showSensorValues();
-  QString decMemos(QString file);
+  QString decMemos(QString strDec, QString file);
   void initHardStepSensor();
 };
 
