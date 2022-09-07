@@ -197,7 +197,7 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   initMain = true;
-  ui->frameQML->hide();
+  ui->frameReader->hide();
   ui->quickWidget->installEventFilter(this);
 
   QDesktopWidget* desktop = QApplication::desktop();
@@ -1909,7 +1909,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!ui->frameQML->isHidden()) {
+      if (!ui->frameReader->isHidden()) {
         if (!listSelFont->isHidden()) {
           listSelFont->close();
           return true;
@@ -3393,12 +3393,15 @@ void MainWindow::on_actionMemos_triggered() {
     strText = decMemos(file);
   }
 
+  ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
+  ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
   ui->quickWidgetMemo->rootContext()->setContextProperty("strText", strText);
   ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
 
   ui->frameMain->hide();
   ui->frameSetKey->hide();
-  ui->frameMeno->show();
+  ui->frameMemo->show();
+  mydlgMainNotes->setCursorPosition();
 }
 
 QString MainWindow::decMemos(QString file) {
@@ -3448,10 +3451,10 @@ void MainWindow::init_UIWidget() {
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
 
-  ui->frameQML->layout()->setMargin(0);
-  ui->frameQML->layout()->setContentsMargins(0, 0, 0, 0);
-  ui->frameQML->setContentsMargins(0, 0, 0, 0);
-  ui->frameQML->layout()->setSpacing(1);
+  ui->frameReader->layout()->setMargin(0);
+  ui->frameReader->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->frameReader->setContentsMargins(0, 0, 0, 0);
+  ui->frameReader->layout()->setSpacing(1);
   // ui->quickWidget->setObjectName("myframe");
   // ui->quickWidget->setStyleSheet(
   //     "QFrame#myframe{border-image:url(:/res/b.png)}");
@@ -3465,7 +3468,7 @@ void MainWindow::init_UIWidget() {
   ui->btnRefreshWeb->hide();
   ui->btnStorageInfo->hide();
 
-  ui->frameMeno->hide();
+  ui->frameMemo->hide();
 
   this->layout()->setMargin(0);
   ui->centralwidget->layout()->setMargin(1);
@@ -3776,7 +3779,7 @@ void MainWindow::on_OneDriveBackupData() {
   // mydlgOneDrive->show();
   // mydlgOneDrive->loadLogQML();
   mw_one->ui->frameMain->hide();
-  mw_one->ui->frameQML->hide();
+  mw_one->ui->frameReader->hide();
   mw_one->ui->frameOne->show();
   delete mydlgOneDrive;
   mydlgOneDrive = new TestDialog;
@@ -3911,7 +3914,7 @@ static void JavaNotify_1() {
 static void JavaNotify_2() {
   mw_one->updateHardSensorSteps();
 
-  if (!mw_one->ui->frameQML->isHidden()) mw_one->mydlgReader->saveReader();
+  if (!mw_one->ui->frameReader->isHidden()) mw_one->mydlgReader->saveReader();
 
   mw_one->mydlgTodo->refreshAlarm();
   // if (!mw_one->initMain) mw_one->on_btnTodo_clicked();
@@ -3980,7 +3983,7 @@ void MainWindow::on_btnReader_clicked() {
   }
 
   ui->frameMain->hide();
-  ui->frameQML->show();
+  ui->frameReader->show();
 
   if (!isOne) {
     isOne = true;
@@ -3997,7 +4000,7 @@ void MainWindow::setSCrollPro(QObject* obj) {
 }
 
 void MainWindow::on_btnBack_clicked() {
-  ui->frameQML->hide();
+  ui->frameReader->hide();
   ui->frameMain->show();
   mydlgReader->saveReader();
   mydlgReader->savePageVPos();
@@ -4054,7 +4057,7 @@ void MainWindow::readEBookDone() {
 
     ui->btnReader->setEnabled(true);
     ui->frameFun->setEnabled(true);
-    ui->frameReader->setEnabled(true);
+    ui->frameReaderFun->setEnabled(true);
     ui->btnBackDir->setEnabled(false);
     this->repaint();
 
@@ -4202,8 +4205,10 @@ void MainWindow::on_btnUserInfo_clicked() {
 }
 
 void MainWindow::on_btnBackMemo_clicked() {
-  ui->frameMeno->hide();
+  ui->frameMemo->hide();
   ui->frameMain->show();
+  mydlgMainNotes->saveMainNotes();
+  ui->btnEdit->setText(tr("Edit"));
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -4252,5 +4257,22 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
     btnOk->setFocus();
     msgBox.exec();
+  }
+}
+
+void MainWindow::on_btnEdit_clicked() {
+  if (ui->btnEdit->text() == tr("Edit")) {
+    mydlgMainNotes->saveMainNotes();
+    ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", false);
+    ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", true);
+    mydlgMainNotes->setCursorPosition();
+
+    ui->btnEdit->setText(tr("Done"));
+  } else {
+    mydlgMainNotes->saveMainNotes();
+    ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
+    ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
+    mydlgMainNotes->setCursorPosition();
+    ui->btnEdit->setText(tr("Edit"));
   }
 }

@@ -53,7 +53,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="frameQML">
+     <widget class="QFrame" name="frameReader">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -269,7 +269,7 @@ QSlider::handle:vertical
         </layout>
        </item>
        <item>
-        <widget class="QFrame" name="frameReader">
+        <widget class="QFrame" name="frameReaderFun">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -1787,7 +1787,7 @@ QRadioButton::indicator:checked {
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="frameMeno">
+     <widget class="QFrame" name="frameMemo">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -1856,13 +1856,6 @@ QRadioButton::indicator:checked {
         </widget>
        </item>
        <item>
-        <widget class="QQuickWidget" name="quickWidgetMemo">
-         <property name="resizeMode">
-          <enum>QQuickWidget::SizeRootObjectToView</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
           <widget class="QToolButton" name="btnBackMemo">
@@ -1890,6 +1883,31 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
          <item>
+          <widget class="QToolButton" name="btnEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>60</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Edit</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QToolButton" name="btnSetKey">
            <property name="minimumSize">
             <size>
@@ -1903,6 +1921,13 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QQuickWidget" name="quickWidgetMemo">
+         <property name="resizeMode">
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

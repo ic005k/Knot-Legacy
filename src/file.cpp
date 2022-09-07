@@ -18,6 +18,8 @@ File::File() { connect(this, SIGNAL(sourceChanged()), this, SLOT(readFile())); }
 void File::setSource(const QString &source) {
   m_source = source;
   emit sourceChanged();
+
+  mw_one->mydlgMainNotes->textMemo = m_source;
 }
 
 QString File::source() const { return m_source; }
@@ -60,8 +62,14 @@ void File::setStr(QString str) { m_text = str; }
 QString File::text() const { return m_text; }
 
 qreal File::textPos() {
-  mw_one->mydlgReader->textPos = m_textPos;
+  if (!mw_one->ui->frameReader->isHidden())
+    mw_one->mydlgReader->textPos = m_textPos;
+
+  if (!mw_one->ui->frameMemo->isHidden())
+    mw_one->mydlgMainNotes->sliderPos = m_textPos;
+
   qDebug() << "m_textPos" << m_textPos;
+
   return m_textPos;
 }
 

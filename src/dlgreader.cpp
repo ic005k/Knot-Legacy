@@ -151,17 +151,17 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->ui->progReader->setValue(0);
     mw_one->ui->btnReader->setEnabled(false);
     mw_one->ui->frameFun->setEnabled(false);
-    mw_one->ui->frameReader->setEnabled(false);
+    mw_one->ui->frameReaderFun->setEnabled(false);
 
     dlgProgEBook = getProgBar();
-    if (!mw_one->ui->frameQML->isHidden()) dlgProgEBook->show();
+    if (!mw_one->ui->frameReader->isHidden()) dlgProgEBook->show();
 
     mw_one->ui->lblTitle->hide();
     mw_one->ui->frameFun->hide();
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->lblBookName->hide();
-    if (!mw_one->ui->frameQML->isHidden()) {
+    if (!mw_one->ui->frameReader->isHidden()) {
       saveReader();
       savePageVPos();
     }

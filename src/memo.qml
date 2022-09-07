@@ -45,6 +45,12 @@ Item {
 
     function setX(x0) {
         x = 0
+
+    }
+
+    function getText()
+    {
+        file.source = textArea.text
     }
 
     DocumentHandler {
@@ -111,16 +117,17 @@ Item {
             //onTextChanged: file.text = text
             //Component.onCompleted: text = file.text
             wrapMode: TextArea.Wrap
-            readOnly: false
+            readOnly: isReadOnly
             focus: true
             persistentSelection: true
-            selectByMouse: true
+            selectByMouse: isBySelect
             smooth: true
 
             color: "#664E30"
 
             text: strText
             visible: true
+
 
             MouseArea {
                 acceptedButtons: Qt.RightButton
@@ -155,7 +162,7 @@ Item {
                 NumberAnimation {
                     from: 0
                     to: 1
-                    duration: 1000
+                    duration: 500
                 } //淡出效果
                 PauseAnimation {
                     duration: 0

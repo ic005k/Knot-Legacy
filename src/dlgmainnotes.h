@@ -21,11 +21,12 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  QString textMemo;
   void saveMainNotes();
   QString fileName;
   void init_MainNotes();
   qlonglong curPos;
-  qlonglong sliderPos;
+  qreal sliderPos;
 
   void decode(QString filename);
   void encode(QString filename);
