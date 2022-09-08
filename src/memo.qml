@@ -112,7 +112,7 @@ Item {
 
             font.pixelSize: FontSize
             //font.family: FontName
-            font.letterSpacing: 2
+            //font.letterSpacing: 2
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting
             textFormat: Qt.AutoText

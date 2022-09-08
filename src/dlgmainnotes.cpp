@@ -78,11 +78,12 @@ void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 
   sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
+
+  mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
+      "strText", ui->textEdit->toPlainText());
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
-  mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
-      "strText", ui->textEdit->toPlainText());
 
   Reg.setValue("/MainNotes/CurPos", curPos);
   Reg.setValue("/MainNotes/SlidePos", sliderPos);

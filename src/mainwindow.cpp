@@ -3475,6 +3475,8 @@ void MainWindow::init_UIWidget() {
   ui->btnStorageInfo->hide();
 
   ui->frameMemo->hide();
+  ui->edit1->setEchoMode(QLineEdit::EchoMode::Password);
+  ui->edit2->setEchoMode(QLineEdit::EchoMode::Password);
 
   this->layout()->setMargin(0);
   ui->centralwidget->layout()->setMargin(1);
@@ -4256,6 +4258,8 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     btnOk->setFocus();
     msgBox.exec();
     ui->frameSetKey->hide();
+    ui->edit1->clear();
+    ui->edit2->clear();
 
   } else {
     QMessageBox msgBox;
