@@ -17,8 +17,9 @@ https://github.com/syncthing/syncthing
 
 ### Credits
 
-[Pedometer](https://github.com/vikasy/Pedometer)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-[android-qt-pedometer-accelerometer](https://github.com/adct-the-experimenter/android-qt-pedometer-accelerometer)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+* [Pedometer](https://github.com/vikasy/Pedometer)
+* [android-qt-pedometer-accelerometer](https://github.com/adct-the-experimenter/android-qt-pedometer-accelerometer)
+* [QtOneDrive](https://github.com/AndreyMacritskiy/QtOneDrive)
 
 ---
 
