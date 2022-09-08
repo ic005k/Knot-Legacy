@@ -1937,6 +1937,11 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         on_btnBack_One_clicked();
         return true;
       }
+
+      if (!ui->frameMemo->isHidden()) {
+        on_btnBackMemo_clicked();
+        return true;
+      }
     }
   }
 
