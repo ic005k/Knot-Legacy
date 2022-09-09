@@ -245,6 +245,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         }, 10000);//3秒后执行Runnable中的run方法Handler handler = new Handler();
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
+
+        QtApplication.invokeDelegate();
     }
 
     @Override
