@@ -3399,15 +3399,21 @@ void MainWindow::on_actionMemos_triggered() {
   ui->frameSetKey->hide();
   ui->frameMemo->show();
 
+  QString strHtml = mw_one->loadText(iniDir + "memo/memo.html");
   ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
   ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
   ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize", fontSize);
-  ui->quickWidgetMemo->rootContext()->setContextProperty("strText", strText);
+  // ui->quickWidgetMemo->rootContext()->setContextProperty("strText", strHtml);
+
   ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
+  QQuickItem* root = ui->quickWidgetMemo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+                            Q_ARG(QVariant, iniDir + "memo/memo.html"));
+
   QFont f(this->font());
   f.setPointSize(fontSize);
   mydlgMainNotes->ui->textEdit->setFont(f);
-  mydlgMainNotes->ui->textEdit->setPlainText(strText);
+  mydlgMainNotes->ui->textEdit->setHtml(strHtml);
 
   memoHeight = ui->quickWidgetMemo->height();
   mydlgMainNotes->setCursorPosition();
@@ -4277,15 +4283,20 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
-  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "getText");
-  mydlgMainNotes->ui->textEdit->setPlainText(strText);
+  QString strHtml = mw_one->loadText(iniDir + "memo/memo.html");
+  // QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+  // QMetaObject::invokeMethod((QObject*)root, "getText");
+  // mydlgMainNotes->ui->textEdit->setPlainText(strText);
+  mydlgMainNotes->ui->textEdit->setHtml(strHtml);
 
   mydlgMainNotes->init();
   mydlgMainNotes->show();
 
   mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
       mydlgMainNotes->sliderPos);
+
+  mydlgMainNotes->ui->btnUndo->setEnabled(false);
+  mydlgMainNotes->ui->btnRedo->setEnabled(false);
 }
 
 void MainWindow::on_btnCode_clicked() {

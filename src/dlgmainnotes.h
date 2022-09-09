@@ -7,6 +7,7 @@
 #include <QDialog>
 #include <QInputMethod>
 #include <QPlainTextEdit>
+#include <QTextDocumentFragment>
 
 #include "src/smoothscrollbar.h"
 namespace Ui {
@@ -37,26 +38,31 @@ class dlgMainNotes : public QDialog {
   void setCursorPosition();
 
   void init();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
  private slots:
   void on_btnBack_clicked();
 
-  void on_btnOpenText_clicked();
-
   void on_btnCloseText_clicked();
-
-  void on_btnLastBrowse_clicked();
-
-  void on_textBrowser_cursorPositionChanged();
 
   void on_KVChanged();
 
-  void on_btnSetKey_clicked();
-
   void on_btnOK_clicked();
+
+  void on_btnUndo_clicked();
+
+  void on_btnRedo_clicked();
+
+  void on_textEdit_textChanged();
+
+  void on_textEdit_redoAvailable(bool b);
+
+  void on_textEdit_undoAvailable(bool b);
+
+  void on_btnPic_clicked();
 
  private:
   int newHeight = 0;

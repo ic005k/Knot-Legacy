@@ -55,5 +55,8 @@
         <file>res/choice1.png</file>
         <file>res/chk0.png</file>
         <file>res/chk1.png</file>
+        <file>res/redo.png</file>
+        <file>res/undo.png</file>
+        <file>res/pic.png</file>
     </qresource>
 </RCC>

@@ -34,14 +34,11 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   mw_one->setSCrollPro(ui->textBrowser);
   mw_one->setSCrollPro(ui->textEdit);
 
-  ui->btnOpenText->hide();
-  ui->btnCloseText->hide();
-  ui->btnLastBrowse->hide();
-
   ui->edit1->setEchoMode(QLineEdit::Password);
   ui->edit2->setEchoMode(QLineEdit::Password);
   ui->frameSetKey->hide();
-  ui->btnSetKey->hide();
+
+  ui->textEdit->setAcceptRichText(true);
 }
 
 void dlgMainNotes::init() {
@@ -77,11 +74,28 @@ void dlgMainNotes::on_btnBack_clicked() {
 void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 
+  QFile memofile(iniDir + "memo/memo.html");
+  QString path = iniDir + "memo/";
+  QDir dir;
+  dir.mkpath(path);
+
+  if (memofile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    QTextStream stream(&memofile);
+    stream << ui->textEdit->toHtml().toUtf8();
+    memofile.close();
+  }
+
   sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
 
-  mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
-      "strText", ui->textEdit->toPlainText());
+  // mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
+  //     "strText", ui->textEdit->toPlainText());
+  mw_one->ui->quickWidgetMemo->setSource(
+      QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+                            Q_ARG(QVariant, iniDir + "memo/memo.html"));
+
+  // QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
 
@@ -96,6 +110,9 @@ void dlgMainNotes::saveMainNotes() {
   Reg.setValue("/MainNotes/Text", mw_one->loadText(file));
 
   QFile::remove(file);
+
+  ui->btnUndo->setEnabled(false);
+  ui->btnRedo->setEnabled(false);
 }
 
 void dlgMainNotes::init_MainNotes() {
@@ -129,23 +146,7 @@ void dlgMainNotes::setCursorPosition() {
   }
 }
 
-void dlgMainNotes::on_btnOpenText_clicked() {
-  fileName = QFileDialog::getOpenFileName(this, tr("Xcounter"), "",
-                                          tr("Txt Files (*.*)"));
-  if (!fileName.isNull()) {
-    QString txt = mw_one->loadText(fileName);
-    ui->textBrowser->setPlainText(txt);
-
-    ui->textBrowser->setHidden(false);
-    ui->textEdit->setHidden(true);
-  }
-}
-
 void dlgMainNotes::on_btnCloseText_clicked() {}
-
-void dlgMainNotes::on_btnLastBrowse_clicked() {}
-
-void dlgMainNotes::on_textBrowser_cursorPositionChanged() {}
 
 bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
@@ -165,13 +166,6 @@ void dlgMainNotes::on_KVChanged() {
   } else {
     this->setFixedHeight(mw_one->height());
   }
-}
-
-void dlgMainNotes::on_btnSetKey_clicked() {
-  if (ui->frameSetKey->isHidden())
-    ui->frameSetKey->show();
-  else
-    ui->frameSetKey->hide();
 }
 
 void dlgMainNotes::on_btnOK_clicked() {
@@ -296,4 +290,56 @@ QString dlgMainNotes::Deciphering(const QString& fileName) {
   return QByteArray::fromBase64(file.readAll());
 
   file.close();
+}
+
+void dlgMainNotes::on_btnUndo_clicked() { ui->textEdit->undo(); }
+
+void dlgMainNotes::on_btnRedo_clicked() { ui->textEdit->redo(); }
+
+void dlgMainNotes::on_textEdit_textChanged() {}
+
+void dlgMainNotes::on_textEdit_redoAvailable(bool b) {
+  if (b)
+    ui->btnRedo->setEnabled(true);
+  else
+    ui->btnRedo->setEnabled(false);
+}
+
+void dlgMainNotes::on_textEdit_undoAvailable(bool b) {
+  if (b)
+    ui->btnUndo->setEnabled(true);
+  else
+    ui->btnUndo->setEnabled(false);
+}
+
+void dlgMainNotes::on_btnPic_clicked() {
+  QString fileName;
+  fileName = QFileDialog::getOpenFileName(this, tr("Knot"), "",
+                                          tr("Picture Files (*.*)"));
+
+  if (QFileInfo(fileName).exists()) {
+    QString strTar = iniDir + "memo/" + QFileInfo(fileName).fileName();
+    if (QFile(strTar).exists()) QFile(strTar).remove();
+    QFile::copy(fileName, strTar);
+
+    QImage img(strTar);
+    double w, h;
+    int new_w, new_h;
+    w = img.width();
+    h = img.height();
+    double r = (double)w / h;
+    if (w > ui->textEdit->width() - 22) {
+      new_w = ui->textEdit->width() - 22;
+      new_h = new_w / r;
+      QPixmap pix;
+      pix = QPixmap::fromImage(img);
+      pix = pix.scaled(new_w, new_h, Qt::KeepAspectRatio,
+                       Qt::SmoothTransformation);
+      pix.save(strTar);
+    }
+
+    QTextDocumentFragment fragment;
+    fragment = QTextDocumentFragment::fromHtml("<img src=" + strTar + ">");
+    ui->textEdit->textCursor().insertFragment(fragment);
+  }
 }
