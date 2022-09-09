@@ -1,6 +1,6 @@
 # Knot
 
-* Android version >= 6.0
+* Android version >= 8.0
 * Bookkeeping
 * Counters
 * To-do list
