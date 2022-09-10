@@ -3392,14 +3392,16 @@ void MainWindow::on_actionMemos_triggered() {
     strText = decMemos(strDec, file);
   }
 
-  // int newH = this->height() - ui->frameSetKey->height() -
-  //            ui->btnBackMemo->height() - 50;
-  // ui->quickWidgetMemo->setFixedHeight(newH);
   ui->frameMain->hide();
   ui->frameSetKey->hide();
   ui->frameMemo->show();
 
-  QString strHtml = mw_one->loadText(iniDir + "memo/memo.html");
+  QString strHtml = loadText(iniDir + "memo/memo.html");
+  strHtml.replace(iniDir + "memo/", "file://");
+  QTextEdit* edit = new QTextEdit;
+  edit->setPlainText(strHtml);
+  TextEditToFile(edit, iniDir + "memo/memoqml.html");
+
   ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
   ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
   ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize", fontSize);

@@ -405,8 +405,11 @@ void QtOneDrive::downloadFile(const QUrl& url) {
 
       if (!checkReplyJson(reply).isEmpty()) {
         state_ = Empty;
-        QString file = iniDir + "KontSync.ini";
-        emit successDownloadFile(tmp_fileId_ + "\n" + file);
+
+        mw_one->mydlgMainNotes->unzipMemo();
+
+        QString file = iniDir + "memo/KontSync.ini";
+        emit successDownloadFile(tmp_fileId_ + "\n" + iniDir + "memo.zip");
 
         if (QFile(file).exists()) {
           mw_one->importBakData(file, true, true);

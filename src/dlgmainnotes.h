@@ -39,7 +39,10 @@ class dlgMainNotes : public QDialog {
 
   void init();
 
- protected:
+  QStringList getImgFileFromHtml(QString htmlfile);
+  void zipMemo();
+  void unzipMemo();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

@@ -1,5 +1,6 @@
 #include "dlgOneDrive.h"
 
+#include <QFile>
 #include <QFileDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -189,7 +190,7 @@ void TestDialog::on_pushButton_getFolders_clicked() {
 
 void TestDialog::on_pushButton_downloadFile_clicked() {
   QString filePath;  // = QFileDialog::getSaveFileName(this, "Select File");
-  filePath = iniDir + "KontSync.ini";
+  filePath = iniDir + "memo.zip";
   if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
 
@@ -211,6 +212,14 @@ void TestDialog::on_pushButton_upload2_clicked() {
   filePath = mw_one->on_OneClickBakData(false);
   if (filePath.isEmpty()) return;
   if (!QFile(filePath).exists()) return;
+
+  QString oldbak = iniDir + "memo/KontSync.ini";
+  QFile(oldbak).remove();
+  QFile::copy(filePath, oldbak);
+
+  mw_one->mydlgMainNotes->zipMemo();
+
+  filePath = iniDir + "memo.zip";
 
   oneDrive->uploadFile(filePath, QFileInfo(filePath).fileName(),
                        ui->lineEdit_fileID->text().trimmed());

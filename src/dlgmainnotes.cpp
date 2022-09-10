@@ -89,11 +89,18 @@ void dlgMainNotes::saveMainNotes() {
 
   // mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
   //     "strText", ui->textEdit->toPlainText());
+
+  QString strHtml = mw_one->loadText(iniDir + "memo/memo.html");
+  strHtml.replace(iniDir + "memo/", "file://" + iniDir + "memo/");
+  QTextEdit* edit = new QTextEdit;
+  edit->setPlainText(strHtml);
+  mw_one->TextEditToFile(edit, iniDir + "memo/memoqml.html");
+
   mw_one->ui->quickWidgetMemo->setSource(
       QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml",
-                            Q_ARG(QVariant, iniDir + "memo/memo.html"));
+                            Q_ARG(QVariant, iniDir + "memo/memoqml.html"));
 
   // QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
@@ -101,6 +108,13 @@ void dlgMainNotes::saveMainNotes() {
 
   Reg.setValue("/MainNotes/CurPos", curPos);
   Reg.setValue("/MainNotes/SlidePos", sliderPos);
+
+  QStringList list = getImgFileFromHtml(iniDir + "memo/memo.html");
+  int count = list.count();
+  Reg.setValue("/MainNotes/imgcount", count);
+  for (int i = 0; i < count; i++) {
+    Reg.setValue("/MainNotes/img" + QString::number(i), list.at(i));
+  }
 
   QString file = iniDir + "mainnotes.txt";
   mw_one->TextEditToFile(ui->textEdit, file);
@@ -320,9 +334,8 @@ void dlgMainNotes::on_btnPic_clicked() {
   if (QFileInfo(fileName).exists()) {
     QString strTar = iniDir + "memo/" + QFileInfo(fileName).fileName();
     if (QFile(strTar).exists()) QFile(strTar).remove();
-    QFile::copy(fileName, strTar);
 
-    QImage img(strTar);
+    QImage img(fileName);
     double w, h;
     int new_w, new_h;
     w = img.width();
@@ -342,4 +355,67 @@ void dlgMainNotes::on_btnPic_clicked() {
     fragment = QTextDocumentFragment::fromHtml("<img src=" + strTar + ">");
     ui->textEdit->textCursor().insertFragment(fragment);
   }
+}
+
+QStringList dlgMainNotes::getImgFileFromHtml(QString htmlfile) {
+  QStringList list;
+  QString strHtml = mw_one->loadText(htmlfile);
+  strHtml = strHtml.replace("><", ">\n<");
+  QTextEdit* edit = new QTextEdit;
+  edit->setPlainText(strHtml);
+  for (int i = 0; i < edit->document()->lineCount(); i++) {
+    QString str = mw_one->mydlgReader->getTextEditLineText(edit, i).trimmed();
+    if (str.contains("<img src=")) {
+      str = str.replace("<img src=", "");
+      str = str.replace("/>", "");
+      str = str.replace("\"", "");
+      str = str.trimmed();
+      qDebug() << str;
+      list.append(str);
+    }
+  }
+  return list;
+}
+
+void dlgMainNotes::zipMemo() {
+  QDir::setCurrent(iniDir);
+#ifdef Q_OS_MAC
+  QProcess* pro = new QProcess;
+  pro->execute("zip", QStringList() << "-r"
+                                    << "memo.zip"
+                                    << "memo");
+  pro->waitForFinished();
+#endif
+
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject javaZipFile = QAndroidJniObject::fromString("memo.zip");
+  QAndroidJniObject javaZipDir = QAndroidJniObject::fromString("memo");
+  QAndroidJniObject m_activity = QAndroidJniObject::fromString("zip");
+  m_activity.callStaticMethod<void>("com.x/MyActivity", "compressFileToZip",
+                                    "(Ljava/lang/String;Ljava/lang/String;)V",
+                                    javaZipDir.object<jstring>(),
+                                    javaZipFile.object<jstring>());
+
+#endif
+}
+
+void dlgMainNotes::unzipMemo() {
+  QDir::setCurrent(iniDir);
+#ifdef Q_OS_MAC
+  QProcess* pro = new QProcess;
+  pro->execute("unzip", QStringList() << "-o" << iniDir + "memo.zip"
+                                      << "-d" << iniDir);
+  pro->waitForFinished();
+#endif
+
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject javaZipFile =
+      QAndroidJniObject::fromString(iniDir + "memo.zip");
+  QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(iniDir);
+  QAndroidJniObject m_activity = QAndroidJniObject::fromString("Unzip");
+  m_activity.callStaticMethod<void>(
+      "com.x/MyActivity", "Unzip", "(Ljava/lang/String;Ljava/lang/String;)V",
+      javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
+
+#endif
 }
