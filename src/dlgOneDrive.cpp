@@ -223,6 +223,21 @@ void TestDialog::on_pushButton_upload2_clicked() {
   QFile(filePath).remove();
   mw_one->mydlgMainNotes->zipMemo();
 
+  QMessageBox msgBox;
+  msgBox.setText("OneDrive");
+  msgBox.setInformativeText(
+      tr("Uploading data?") + "\n\n" +
+      mw_one->mydlgReader->getUriRealPath(iniDir + "memo.zip") +
+      "\n\nSIZE: " + mw_one->getFileSize(QFile(iniDir + "memo.zip").size(), 2));
+  QPushButton *btnCancel =
+      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+  QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+  btnOk->setFocus();
+  msgBox.exec();
+  if (msgBox.clickedButton() == btnCancel) {
+    return;
+  }
+
   oneDrive->uploadFile(filePath, "memo.zip",
                        ui->lineEdit_fileID->text().trimmed());
   mw_one->ui->progressBar->setValue(0);
