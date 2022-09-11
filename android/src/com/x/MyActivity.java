@@ -78,6 +78,9 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import java.util.Objects;
+import java.util.zip.ZipOutputStream;
+
 import java.net.URLDecoder;
 
 import android.app.AlarmManager;
@@ -376,6 +379,54 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             Log.i(TAG, "unzip end...");
         } catch (Exception cwj) {
             cwj.printStackTrace();
+        }
+    }
+
+    /**
+     * 读取文件内容并压缩，既支持文件也支持文件夹
+     *
+     * @param filePath 文件路径
+     */
+    private static void compressFileToZip(String filePath,
+                                          String zipFilePath) {
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFilePath))) {
+            //递归的压缩文件夹和文件
+            doCompress("", filePath, zos);
+            //必须
+            zos.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void doCompress(String parentFilePath, String filePath, ZipOutputStream zos) {
+        File sourceFile = new File(filePath);
+        if (!sourceFile.exists()) {
+            return;
+        }
+        String zipEntryName = parentFilePath + "/" + sourceFile.getName();
+        if (parentFilePath.isEmpty()) {
+            zipEntryName = sourceFile.getName();
+        }
+        if (sourceFile.isDirectory()) {
+            File[] childFiles = sourceFile.listFiles();
+            if (Objects.isNull(childFiles)) {
+                return;
+            }
+            for (File childFile : childFiles) {
+                doCompress(zipEntryName, childFile.getAbsolutePath(), zos);
+            }
+        } else {
+            int len = -1;
+            byte[] buf = new byte[1024];
+            try (InputStream input = new BufferedInputStream(new FileInputStream(sourceFile))) {
+                zos.putNextEntry(new ZipEntry(zipEntryName));
+                while ((len = input.read(buf)) != -1) {
+                    zos.write(buf, 0, len);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
