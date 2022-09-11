@@ -415,8 +415,9 @@ void dlgMainNotes::zipMemo() {
 #endif
 
 #ifdef Q_OS_ANDROID
-  QAndroidJniObject javaZipFile = QAndroidJniObject::fromString("memo.zip");
-  QAndroidJniObject javaZipDir = QAndroidJniObject::fromString("memo");
+  QAndroidJniObject javaZipFile =
+      QAndroidJniObject::fromString(iniDir + "memo.zip");
+  QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(iniDir + "memo");
   QAndroidJniObject m_activity = QAndroidJniObject::fromString("zip");
   m_activity.callStaticMethod<void>("com.x/MyActivity", "compressFileToZip",
                                     "(Ljava/lang/String;Ljava/lang/String;)V",
@@ -427,6 +428,7 @@ void dlgMainNotes::zipMemo() {
 }
 
 void dlgMainNotes::unzipMemo() {
+  mw_one->mydlgReader->deleteDirfile(iniDir + "memo");
   QDir::setCurrent(iniDir);
 #ifdef Q_OS_MAC
   QProcess* pro = new QProcess;

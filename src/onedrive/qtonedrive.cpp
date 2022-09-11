@@ -232,7 +232,10 @@ void QtOneDrive::uploadFile(const QString& localFilePath,
         if (!id.isEmpty()) {
           state_ = Empty;
           emit successUploadFile(
-              mw_one->mydlgReader->getUriRealPath(localFilePath), id);
+              mw_one->mydlgReader->getUriRealPath(localFilePath) + "\n\n" +
+                  "SIZE: " +
+                  mw_one->getFileSize(QFile(localFilePath).size(), 2),
+              id);
         } else
           emitError("Json Error 2");
       }
@@ -409,7 +412,9 @@ void QtOneDrive::downloadFile(const QUrl& url) {
         mw_one->mydlgMainNotes->unzipMemo();
 
         QString file = iniDir + "memo/KontSync.ini";
-        emit successDownloadFile(tmp_fileId_ + "\n" + iniDir + "memo.zip");
+        emit successDownloadFile(
+            tmp_fileId_ + "\n" + iniDir + "memo.zip" + "\n\n" + "SIZE: " +
+            mw_one->getFileSize(QFile(iniDir + "memo.zip").size(), 2));
 
         if (QFile(file).exists()) {
           mw_one->importBakData(file, true, true);

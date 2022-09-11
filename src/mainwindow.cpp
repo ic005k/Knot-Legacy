@@ -4142,6 +4142,7 @@ void MainWindow::repaintApp() {
   if (!ui->frameMain->isHidden()) {
     // qApp->processEvents();
   }
+  mydlgTodo->hide();
   mydlgTodo->setModal(true);
   mydlgTodo->show();
 }
