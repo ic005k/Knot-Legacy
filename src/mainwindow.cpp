@@ -4141,13 +4141,22 @@ QString MainWindow::getTabText() {
 }
 
 void MainWindow::repaintApp() {
-  if (!ui->frameMain->isHidden()) {
-    // qApp->processEvents();
+  // if (!ui->frameMain->isHidden()) {
+  //    qApp->processEvents();
+  // }
+  alertWindowsCount++;
+
+  return;
+
+  if (alertWindowsCount == 1) {
+    if (mydlgTodo->isHidden()) {
+      mydlgTodo->setModal(true);
+      mydlgTodo->show();
+      alertWindowsCount = 0;
+    }
   }
-  if (mydlgTodo->isHidden()) {
-    mydlgTodo->setModal(true);
-    mydlgTodo->show();
-  }
+
+  qDebug() << "alertWindowsCount=" << alertWindowsCount;
 }
 
 void MainWindow::refreshMainUI() {

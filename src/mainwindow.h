@@ -106,6 +106,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  int alertWindowsCount = 0;
   QString strText;
   QString strRefreshUrl;
   qreal curx = 0;
