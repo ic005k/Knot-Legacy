@@ -3396,8 +3396,12 @@ void MainWindow::on_actionMemos_triggered() {
   ui->frameSetKey->hide();
   ui->frameMemo->show();
 
+  // QDir::setCurrent(iniDir + "memo/");
   QString strHtml = loadText(iniDir + "memo/memo.html");
-  strHtml.replace(iniDir + "memo/", "file://");
+  strHtml = strHtml.replace(iniDir + "memo/images/",
+                            "file://" + iniDir + "memo/images/");
+
+  strHtml = strHtml.replace("><", ">\n<");
   QTextEdit* edit = new QTextEdit;
   edit->setPlainText(strHtml);
   TextEditToFile(edit, iniDir + "memo/memoqml.html");
@@ -4136,8 +4140,10 @@ QString MainWindow::getTabText() {
 
 void MainWindow::repaintApp() {
   if (!ui->frameMain->isHidden()) {
-    qApp->processEvents();
+    // qApp->processEvents();
   }
+  mydlgTodo->setModal(true);
+  mydlgTodo->show();
 }
 
 void MainWindow::refreshMainUI() {

@@ -87,11 +87,8 @@ void dlgMainNotes::saveMainNotes() {
 
   sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
 
-  // mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
-  //     "strText", ui->textEdit->toPlainText());
-
   QString strHtml = mw_one->loadText(iniDir + "memo/memo.html");
-  strHtml.replace(iniDir + "memo/", "file://" + iniDir + "memo/");
+  strHtml = strHtml.replace(iniDir + "memo/images/", "images/");
   QTextEdit* edit = new QTextEdit;
   edit->setPlainText(strHtml);
   mw_one->TextEditToFile(edit, iniDir + "memo/memoqml.html");
@@ -100,9 +97,8 @@ void dlgMainNotes::saveMainNotes() {
       QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml",
-                            Q_ARG(QVariant, iniDir + "memo/memoqml.html"));
+                            Q_ARG(QVariant, iniDir + "memo/memo.html"));
 
-  // QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
 
@@ -332,8 +328,24 @@ void dlgMainNotes::on_btnPic_clicked() {
                                           tr("Picture Files (*.*)"));
 
   if (QFileInfo(fileName).exists()) {
-    QString strTar = iniDir + "memo/" + QFileInfo(fileName).fileName();
+    QStringList list = fileName.split(".");
+    int y, m, d, hh, mm, s;
+    y = QDate::currentDate().year();
+    m = QDate::currentDate().month();
+    d = QDate::currentDate().day();
+    hh = QTime::currentTime().hour();
+    mm = QTime::currentTime().minute();
+    s = QTime::currentTime().second();
+    QString newname = QString::number(y) + QString::number(m) +
+                      QString::number(d) + "_" + QString::number(hh) +
+                      QString::number(mm) + QString::number(s);
+
+    QString strTar =
+        iniDir + "memo/images/" + newname + "." + list.at(list.count() - 1);
     if (QFile(strTar).exists()) QFile(strTar).remove();
+
+    QDir dir;
+    dir.mkpath(iniDir + "memo/images/");
 
     QImage img(fileName);
     double w, h;
@@ -354,6 +366,21 @@ void dlgMainNotes::on_btnPic_clicked() {
     QTextDocumentFragment fragment;
     fragment = QTextDocumentFragment::fromHtml("<img src=" + strTar + ">");
     ui->textEdit->textCursor().insertFragment(fragment);
+
+    /*QUrl Uri(QString("file://%1").arg(strTar));
+    QImage image = QImageReader(strTar).read();
+
+    QTextDocument* textDocument = ui->textEdit->document();
+    textDocument->addResource(QTextDocument::ImageResource, Uri,
+                              QVariant(image));
+    QTextCursor cursor = ui->textEdit->textCursor();
+    QTextImageFormat imageFormat;
+    imageFormat.setWidth(image.width());
+    imageFormat.setHeight(image.height());
+    imageFormat.setName(Uri.toString());
+    cursor.insertImage(imageFormat);*/
+
+    qDebug() << "pic=" << strTar;
   }
 }
 

@@ -18,8 +18,8 @@ Item {
     }
 
     function loadHtml(msg) {
-
         document.load("file://" + msg)
+
     }
 
     function loadHtmlBuffer(strhtml) {

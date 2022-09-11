@@ -679,9 +679,8 @@ QUrl QtOneDrive::urlUploadFile(const QString& remoteFileName,
   // QUrl url("https://apis.live.net/v5.0/me/drive/" + remoteFileName +
   //         ":/content");
 
-  QUrl url(
-      "https://graph.microsoft.com/v1.0/me/drive/root:/KnotSync.ini:/"
-      "content");
+  QUrl url("https://graph.microsoft.com/v1.0/me/drive/root:/" + remoteFileName +
+           ":/content");
 
   if (folderId != "")
     // url = QUrl(QString("https://apis.live.net/v5.0/%1/files/%2")
@@ -699,7 +698,7 @@ QUrl QtOneDrive::urlDownloadFile(const QString& fileId) const {
   // QUrl url(QString("https://apis.live.net/v5.0/%1/content").arg(fileId));
 
   QUrl url(
-      "https://graph.microsoft.com/v1.0/me/drive/root:/KnotSync.ini:/"
+      "https://graph.microsoft.com/v1.0/me/drive/root:/memo.zip:/"
       "content");
 
   QUrlQuery query;

@@ -221,7 +221,7 @@ void TestDialog::on_pushButton_upload2_clicked() {
 
   filePath = iniDir + "memo.zip";
 
-  oneDrive->uploadFile(filePath, QFileInfo(filePath).fileName(),
+  oneDrive->uploadFile(filePath, "memo.zip",
                        ui->lineEdit_fileID->text().trimmed());
   mw_one->ui->progressBar->setValue(0);
 }
