@@ -3492,6 +3492,8 @@ void MainWindow::init_UIWidget() {
   ui->btnStorageInfo->hide();
 
   ui->frameMemo->hide();
+  ui->frameMemo->setContentsMargins(1, 1, 1, 1);
+  ui->frameMemo->layout()->setMargin(1);
   ui->edit1->setEchoMode(QLineEdit::EchoMode::Password);
   ui->edit2->setEchoMode(QLineEdit::EchoMode::Password);
 
@@ -4142,7 +4144,7 @@ void MainWindow::repaintApp() {
   if (!ui->frameMain->isHidden()) {
     // qApp->processEvents();
   }
-  if (!mydlgTodo->isHidden()) {
+  if (mydlgTodo->isHidden()) {
     mydlgTodo->setModal(true);
     mydlgTodo->show();
   }

@@ -14,6 +14,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
   this->setModal(true);
+  ui->gridLayout_2->setMargin(1);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
@@ -353,8 +354,8 @@ void dlgMainNotes::on_btnPic_clicked() {
     w = img.width();
     h = img.height();
     double r = (double)w / h;
-    if (w > ui->textEdit->width() - 22) {
-      new_w = ui->textEdit->width() - 22;
+    if (w > ui->textEdit->width() - 26) {
+      new_w = ui->textEdit->width() - 26;
       new_h = new_w / r;
       QPixmap pix;
       pix = QPixmap::fromImage(img);
