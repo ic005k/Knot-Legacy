@@ -129,7 +129,10 @@ DISTFILES += \
     android/res/values/libs.xml \
     src/cn.qm \
     src/cn.ts \
-    src/onedrive/main.qml
+    src/memo.qml \
+    src/onedrive/log.qml \
+    src/onedrive/main.qml \
+    src/reader.qml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
