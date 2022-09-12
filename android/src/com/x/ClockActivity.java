@@ -256,6 +256,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
 
         if (strMute.equals("false")) {
             mediaPlayer.stop();
@@ -273,7 +274,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
             CallJavaNotify_4(); //mw_one repaint
         }
 
-        super.onDestroy();
+
         System.out.println("ClockActivity onDestroy...");
 
     }
