@@ -3615,6 +3615,15 @@ void MainWindow::init_UIWidget() {
   ui->btnReader->setIcon(QIcon(":/res/one.png"));
   ui->frame_tab->setMaximumHeight(this->height());
 
+  ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
+  ui->btnFind->setStyleSheet("border:none");
+  ui->btnMenu->setStyleSheet("border:none");
+  ui->btnReport->setStyleSheet("border:none");
+  ui->btnOneClickBak->setStyleSheet("border:none");
+  ui->btnNotes->setStyleSheet("border:none");
+  ui->btnPause->setStyleSheet("border:none");
+  ui->btnSelTab->setStyleSheet("border:none");
+
   ui->btnPlus->setStyleSheet("border:none");
   ui->btnLess->setStyleSheet("border:none");
   ui->btnTodo->setStyleSheet("border:none");
@@ -3639,14 +3648,6 @@ void MainWindow::init_UIWidget() {
   mydlgReport->ui->lblTitle->setStyleSheet(lblStyle);
   ui->lblStats->setStyleSheet(lblStyle);
 
-  ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
-  ui->btnFind->setStyleSheet("border:none");
-  ui->btnMenu->setStyleSheet("border:none");
-  ui->btnReport->setStyleSheet("border:none");
-  ui->btnOneClickBak->setStyleSheet("border:none");
-  ui->btnNotes->setStyleSheet("border:none");
-  ui->btnPause->setStyleSheet("border:none");
-  ui->btnSelTab->setStyleSheet("border:none");
   ui->lblIcon->setText("");
   ui->lblIcon->setFixedHeight(22);
   ui->lblIcon->setFixedWidth(22);

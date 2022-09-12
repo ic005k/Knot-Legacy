@@ -88,12 +88,6 @@ void dlgMainNotes::saveMainNotes() {
 
   sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
 
-  QString strHtml = mw_one->loadText(iniDir + "memo/memo.html");
-  strHtml = strHtml.replace(iniDir + "memo/images/", "images/");
-  QTextEdit* edit = new QTextEdit;
-  edit->setPlainText(strHtml);
-  mw_one->TextEditToFile(edit, iniDir + "memo/memoqml.html");
-
   mw_one->ui->quickWidgetMemo->setSource(
       QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
