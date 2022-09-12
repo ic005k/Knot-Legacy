@@ -3396,16 +3396,6 @@ void MainWindow::on_actionMemos_triggered() {
   ui->frameSetKey->hide();
   ui->frameMemo->show();
 
-  // QDir::setCurrent(iniDir + "memo/");
-  QString strHtml = loadText(iniDir + "memo/memo.html");
-  strHtml = strHtml.replace(iniDir + "memo/images/",
-                            "file://" + iniDir + "memo/images/");
-
-  strHtml = strHtml.replace("><", ">\n<");
-  QTextEdit* edit = new QTextEdit;
-  edit->setPlainText(strHtml);
-  TextEditToFile(edit, iniDir + "memo/memoqml.html");
-
   ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
   ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
   ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize", fontSize);
@@ -3419,10 +3409,12 @@ void MainWindow::on_actionMemos_triggered() {
   QFont f(this->font());
   f.setPointSize(fontSize);
   mydlgMainNotes->ui->textEdit->setFont(f);
-  mydlgMainNotes->ui->textEdit->setHtml(strHtml);
 
   memoHeight = ui->quickWidgetMemo->height();
   mydlgMainNotes->setCursorPosition();
+
+  mydlgMainNotes->ui->btnUndo->setEnabled(false);
+  mydlgMainNotes->ui->btnRedo->setEnabled(false);
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -4306,9 +4298,6 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 
 void MainWindow::on_btnEdit_clicked() {
   QString strHtml = mw_one->loadText(iniDir + "memo/memo.html");
-  // QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
-  // QMetaObject::invokeMethod((QObject*)root, "getText");
-  // mydlgMainNotes->ui->textEdit->setPlainText(strText);
   mydlgMainNotes->ui->textEdit->setHtml(strHtml);
 
   mydlgMainNotes->init();
@@ -4316,9 +4305,6 @@ void MainWindow::on_btnEdit_clicked() {
 
   mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
       mydlgMainNotes->sliderPos);
-
-  mydlgMainNotes->ui->btnUndo->setEnabled(false);
-  mydlgMainNotes->ui->btnRedo->setEnabled(false);
 }
 
 void MainWindow::on_btnCode_clicked() {

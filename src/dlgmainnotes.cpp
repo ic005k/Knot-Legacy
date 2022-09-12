@@ -115,9 +115,6 @@ void dlgMainNotes::saveMainNotes() {
   Reg.setValue("/MainNotes/Text", mw_one->loadText(file));
 
   QFile::remove(file);
-
-  ui->btnUndo->setEnabled(false);
-  ui->btnRedo->setEnabled(false);
 }
 
 void dlgMainNotes::init_MainNotes() {
