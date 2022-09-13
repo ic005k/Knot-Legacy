@@ -2516,7 +2516,6 @@ void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 void MainWindow::on_btnTodo_clicked() {
   mydlgTodo->setFixedHeight(this->height());
   mydlgTodo->setFixedWidth(this->width());
-  mydlgTodo->setModal(true);
 
   mydlgTodo->show();
   mydlgTodo->refreshAlarm();
@@ -3933,18 +3932,18 @@ static void JavaNotify_1() {
 }
 static void JavaNotify_2() {
   mw_one->updateHardSensorSteps();
-
   if (!mw_one->ui->frameReader->isHidden()) mw_one->mydlgReader->saveReader();
 
   mw_one->mydlgTodo->refreshAlarm();
-  // if (!mw_one->initMain) mw_one->on_btnTodo_clicked();
 
   qDebug() << "C++ JavaNotify_2";
 }
 static void JavaNotify_3() {
-  mw_one->mydlgTodo->on_Alarm();
+  // mw_one->mydlgTodo->on_Alarm();
 
-  // qDebug() << "C++ JavaNotify_3";
+  mw_one->alertWindowsCount = 0;
+
+  qDebug() << "C++ JavaNotify_3";
 }
 
 static void JavaNotify_4() {
@@ -4137,19 +4136,10 @@ void MainWindow::repaintApp() {
   // if (!ui->frameMain->isHidden()) {
   //    qApp->processEvents();
   // }
-  alertWindowsCount++;
-
-  return;
-
-  if (alertWindowsCount == 1) {
-    if (mydlgTodo->isHidden()) {
-      mydlgTodo->setModal(true);
-      mydlgTodo->show();
-      alertWindowsCount = 0;
-    }
+  if (alertWindowsCount == 0) {
+    mydlgTodo->show();
   }
-
-  qDebug() << "alertWindowsCount=" << alertWindowsCount;
+  alertWindowsCount++;
 }
 
 void MainWindow::refreshMainUI() {
