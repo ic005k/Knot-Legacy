@@ -75,27 +75,29 @@ void dlgMainNotes::on_btnBack_clicked() {
 void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 
-  QFile memofile(iniDir + "memo/memo.html");
   QString path = iniDir + "memo/";
   QDir dir;
   dir.mkpath(path);
 
+  QFile memofile(iniDir + "memo/memo.md");
   if (memofile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile);
-    stream << ui->textEdit->toHtml().toUtf8();
+    // stream<<ui->textEdit->toHtml().toUtf8();
+    stream << ui->textEdit->toMarkdown(QTextDocument::MarkdownDialectGitHub);
     memofile.close();
+  }
+
+  QFile memofile1(iniDir + "memo/memo.html");
+  if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    QTextStream stream(&memofile1);
+    stream << ui->textEdit->toHtml().toUtf8();
+    // stream << ui->textEdit->toMarkdown(QTextDocument::MarkdownDialectGitHub);
+    memofile1.close();
   }
 
   sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
 
-  mw_one->ui->quickWidgetMemo->setSource(
-      QUrl(QStringLiteral("qrc:/src/memo.qml")));
-  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "loadHtml",
-                            Q_ARG(QVariant, iniDir + "memo/memo.html"));
-
-  QMetaObject::invokeMethod((QObject*)root, "setVPos",
-                            Q_ARG(QVariant, sliderPos));
+  loadMemoQML();
 
   Reg.setValue("/MainNotes/CurPos", curPos);
   Reg.setValue("/MainNotes/SlidePos", sliderPos);
@@ -439,4 +441,18 @@ void dlgMainNotes::unzipMemo() {
       javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
 
 #endif
+}
+
+void dlgMainNotes::loadMemoQML() {
+  QString file = iniDir + "memo/memo.html";
+  mw_one->ui->quickWidgetMemo->setSource(
+      QUrl(QStringLiteral("qrc:/src/memo.qml")));
+  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, file));
+
+  // mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
+  //     "strText", mw_one->loadText(file));
+
+  QMetaObject::invokeMethod((QObject*)root, "setVPos",
+                            Q_ARG(QVariant, sliderPos));
 }

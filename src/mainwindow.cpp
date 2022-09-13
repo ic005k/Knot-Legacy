@@ -3400,10 +3400,7 @@ void MainWindow::on_actionMemos_triggered() {
   ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize", fontSize);
   // ui->quickWidgetMemo->rootContext()->setContextProperty("strText", strHtml);
 
-  ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
-  QQuickItem* root = ui->quickWidgetMemo->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "loadHtml",
-                            Q_ARG(QVariant, iniDir + "memo/memo.html"));
+  mydlgMainNotes->loadMemoQML();
 
   QFont f(this->font());
   f.setPointSize(fontSize);
@@ -4287,8 +4284,8 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
-  QString strHtml = mw_one->loadText(iniDir + "memo/memo.html");
-  mydlgMainNotes->ui->textEdit->setHtml(strHtml);
+  QString str = mw_one->loadText(iniDir + "memo/memo.md");
+  mydlgMainNotes->ui->textEdit->setMarkdown(str);
 
   mydlgMainNotes->init();
   mydlgMainNotes->show();
