@@ -3949,7 +3949,7 @@ static void JavaNotify_3() {
 static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
   if (mw_one->alertWindowsCount == 0) {
-    mw_one->mydlgTodo->show();
+    mw_one->ui->btnTodo->click();
   }
 
   qDebug() << "alertWindowsCount=" << mw_one->alertWindowsCount;
