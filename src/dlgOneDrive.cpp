@@ -194,6 +194,12 @@ void TestDialog::on_pushButton_downloadFile_clicked() {
   if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
 
+  if (!mw_one->showMsgBox("OneDrive",
+                          tr("Downloading data?") + "\n\n" +
+                              tr("This operation will overwrite the local data "
+                                 "with the data on OneDrive.")))
+    return;
+
   oneDrive->downloadFile(filePath, ui->lineEdit_fileID->text().trimmed());
   mw_one->ui->progressBar->setValue(0);
 }
@@ -223,20 +229,15 @@ void TestDialog::on_pushButton_upload2_clicked() {
   QFile(filePath).remove();
   mw_one->mydlgMainNotes->zipMemo();
 
-  QMessageBox msgBox;
-  msgBox.setText("OneDrive");
-  msgBox.setInformativeText(
-      tr("Uploading data?") + "\n\n" +
-      mw_one->mydlgReader->getUriRealPath(iniDir + "memo.zip") +
-      "\n\nSIZE: " + mw_one->getFileSize(QFile(iniDir + "memo.zip").size(), 2));
-  QPushButton *btnCancel =
-      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-  QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-  btnOk->setFocus();
-  msgBox.exec();
-  if (msgBox.clickedButton() == btnCancel) {
+  if (!mw_one->showMsgBox(
+          "OneDrive",
+          tr("Uploading data?") + "\n\n" +
+              tr("This operation will overwrite the data on OneDrive.") +
+              "\n\n" +
+              mw_one->mydlgReader->getUriRealPath(iniDir + "memo.zip") +
+              "\n\nSIZE: " +
+              mw_one->getFileSize(QFile(iniDir + "memo.zip").size(), 2)))
     return;
-  }
 
   oneDrive->uploadFile(filePath, "memo.zip",
                        ui->lineEdit_fileID->text().trimmed());
