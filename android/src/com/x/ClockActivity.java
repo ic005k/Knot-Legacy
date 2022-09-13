@@ -228,8 +228,10 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         setContentView(R.layout.activity_main);
         bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT);
 
-        if (isRefreshAlarm)
+        if (isRefreshAlarm) {
             CallJavaNotify_2();
+            CallJavaNotify_3();
+        }
 
         MyService.notifyAlarm(context, str2);
 

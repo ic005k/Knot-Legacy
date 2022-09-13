@@ -84,8 +84,8 @@ public class MyService extends Service {
     public static Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            handler.postDelayed(this, 60 * 1000);
-            CallJavaNotify_3();
+            //handler.postDelayed(this, 60 * 1000);
+            //CallJavaNotify_3();
         }
     };
 
