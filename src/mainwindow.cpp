@@ -3941,14 +3941,18 @@ static void JavaNotify_2() {
 static void JavaNotify_3() {
   // mw_one->mydlgTodo->on_Alarm();
 
-  mw_one->alertWindowsCount = 0;
+  mw_one->alertWindowsCount++;
 
   qDebug() << "C++ JavaNotify_3";
 }
 
 static void JavaNotify_4() {
-  mw_one->repaintApp();
+  mw_one->alertWindowsCount--;
+  if (mw_one->alertWindowsCount == 0) {
+    mw_one->mydlgTodo->show();
+  }
 
+  qDebug() << "alertWindowsCount=" << mw_one->alertWindowsCount;
   qDebug() << "C++ JavaNotify_4";
 }
 
@@ -4136,10 +4140,6 @@ void MainWindow::repaintApp() {
   // if (!ui->frameMain->isHidden()) {
   //    qApp->processEvents();
   // }
-  if (alertWindowsCount == 0) {
-    mydlgTodo->show();
-  }
-  alertWindowsCount++;
 }
 
 void MainWindow::refreshMainUI() {
