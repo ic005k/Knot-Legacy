@@ -2542,7 +2542,7 @@ void MainWindow::on_rbAmount_clicked() {
 
 void MainWindow::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
-
+  if (floatfun) mydlgFloatFun->init();
   //获取背景色
   QPalette pal = ui->btnFind->palette();
   QBrush brush = pal.window();
@@ -3335,6 +3335,9 @@ void MainWindow::updateHardSensorSteps() {
 }
 
 void MainWindow::on_actionMemos_triggered() {
+  floatfun = false;
+  mydlgFloatFun->close();
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   QString file = iniDir + "mainnotes.txt";
@@ -3536,6 +3539,7 @@ void MainWindow::init_UIWidget() {
   mymsgDlg = new msgDialog(this);
   mydlgOneDrive = new TestDialog;
   mydlgWeb = new dlgWeb(this);
+  mydlgFloatFun = new dlgFloatFun(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -3793,9 +3797,9 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 }
 
 void MainWindow::on_OneDriveBackupData() {
-  // mydlgOneDrive->init();
-  // mydlgOneDrive->show();
-  // mydlgOneDrive->loadLogQML();
+  floatfun = false;
+  mydlgFloatFun->close();
+
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameReader->hide();
   mw_one->ui->frameOne->show();
@@ -3997,6 +4001,9 @@ QString MainWindow::getYMD(QString date) {
 }
 
 void MainWindow::on_btnReader_clicked() {
+  floatfun = false;
+  mydlgFloatFun->close();
+
   if (!isOne) {
     mwh = this->height();
     setFixedHeight(mwh);
@@ -4026,6 +4033,8 @@ void MainWindow::on_btnBack_clicked() {
   ui->frameMain->show();
   mydlgReader->saveReader();
   mydlgReader->savePageVPos();
+  floatfun = true;
+  mydlgFloatFun->show();
 }
 
 void MainWindow::on_btnOpen_clicked() { mydlgReader->on_btnOpen_clicked(); }
@@ -4203,6 +4212,8 @@ void MainWindow::on_btnBack_One_clicked() {
     } else {
       ui->frameOne->hide();
       ui->frameMain->show();
+      floatfun = true;
+      mydlgFloatFun->show();
     }
   }
 }
@@ -4232,6 +4243,9 @@ void MainWindow::on_btnBackMemo_clicked() {
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setValue("/MainNotes/SlidePos", mydlgMainNotes->sliderPos);
+
+  floatfun = true;
+  mydlgFloatFun->show();
 }
 
 void MainWindow::on_btnSetKey_clicked() {

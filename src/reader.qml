@@ -85,13 +85,6 @@ Item {
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
 
-
-        /*WebView {
-            id: mywebview
-            anchors.fill: parent
-            url: "file://" + baseUrl
-            visible: false
-        }*/
         states: State {
             name: "autoscroll"
             PropertyChanges {

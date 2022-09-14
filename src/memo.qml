@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.3
 import MyModel1 1.0
 import MyModel2 1.0
 
+
 Item {
     id: textitem
     visible: true

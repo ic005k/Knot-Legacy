@@ -58,5 +58,7 @@
         <file>res/redo.png</file>
         <file>res/undo.png</file>
         <file>res/pic.png</file>
+        <file>res/additem.png</file>
+        <file>res/delitem.png</file>
     </qresource>
 </RCC>

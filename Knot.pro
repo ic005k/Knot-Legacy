@@ -32,6 +32,7 @@ INSTALLS += dataFiles
 SOURCES += \
     src/chart.cpp \
     src/dlgOneDrive.cpp \
+    src/dlgfloatfun.cpp \
     src/dlglist.cpp \
     src/dlgloadpic.cpp \
     src/dlgmainnotes.cpp \
@@ -58,6 +59,7 @@ HEADERS += \
     src/chart.h \
     src/count_steps.h \
     src/dlgOneDrive.h \
+    src/dlgfloatfun.h \
     src/dlglist.h \
     src/dlgloadpic.h \
     src/dlgmainnotes.h \
@@ -82,6 +84,7 @@ HEADERS += \
 
 FORMS += \
     src/dlgOneDrive.ui \
+    src/dlgfloatfun.ui \
     src/dlglist.ui \
     src/dlgloadpic.ui \
     src/dlgmainnotes.ui \

@@ -54,6 +54,7 @@
 #include <QValueAxis>
 
 #include "src/dlgOneDrive.h"
+#include "src/dlgfloatfun.h"
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
 #include "src/dlgmainnotes.h"
@@ -69,6 +70,7 @@
 #include "src/msgdialog.h"
 #include "src/onedrive/dlgweb.h"
 #include "src/specialaccelerometerpedometer.h"
+#include "ui_dlgfloatfun.h"
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
 #include "ui_dlgmainnotes.h"
@@ -106,6 +108,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  bool floatfun = true;
   int alertWindowsCount = 0;
   QString strText;
   QString strRefreshUrl;
@@ -178,6 +181,7 @@ class MainWindow : public QMainWindow {
   msgDialog *mymsgDlg;
   TestDialog *mydlgOneDrive;
   dlgWeb *mydlgWeb;
+  dlgFloatFun *mydlgFloatFun;
 
   File *myfile;
 
@@ -233,15 +237,15 @@ class MainWindow : public QMainWindow {
       "background:url(:/src/up.png) top no-repeat;}";
   QString vsbarStyleSmall =
       "QScrollBar:vertical{"  //垂直滑块整体
-      "width:10px;"
+      "width:6px;"
       "background:#FFFFFF;"  //背景色
-      "padding-top:3px;"     //上预留位置（放置向上箭头）
-      "padding-bottom:3px;"  //下预留位置（放置向下箭头）
-      "padding-left:3px;"    //左预留位置（美观）
-      "padding-right:3px;"   //右预留位置（美观）
-      "border-left:1px solid #d7d7d7;}"     //左分割线
+      "padding-top:0px;"     //上预留位置（放置向上箭头）
+      "padding-bottom:0px;"  //下预留位置（放置向下箭头）
+      "padding-left:1px;"    //左预留位置（美观）
+      "padding-right:1px;"   //右预留位置（美观）
+      "border-left:0px solid #d7d7d7;}"     //左分割线
       "QScrollBar::handle:vertical{"        //滑块样式
-      "background:#dbdbdb;"                 //滑块颜色
+      "background:#1296db;"                 //滑块颜色
       "border-radius:6px;"                  //边角圆润
       "min-height:60px;}"                   //滑块最小高度
       "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
@@ -250,6 +254,7 @@ class MainWindow : public QMainWindow {
       "background:url() center no-repeat;}"
       "QScrollBar::sub-line:vertical{"  //向上箭头样式
       "background:url() center no-repeat;}";
+
   void sort_childItem(QTreeWidgetItem *);
   static QString getFileSize(const qint64 &size, int precision);
 
@@ -300,6 +305,9 @@ class MainWindow : public QMainWindow {
   void on_btnPageNext_clicked();
   QString on_OneClickBakData(bool msg);
   void on_OneDriveBackupData();
+  void on_btnPlus_clicked();
+
+  void on_btnLess_clicked();
 
  protected:
   void closeEvent(QCloseEvent *event) override;
@@ -310,10 +318,6 @@ class MainWindow : public QMainWindow {
  private slots:
 
   void timerUpdate();
-
-  void on_btnPlus_clicked();
-
-  void on_btnLess_clicked();
 
   void on_actionRename_triggered();
 
