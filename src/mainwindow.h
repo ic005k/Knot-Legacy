@@ -191,6 +191,7 @@ class MainWindow : public QMainWindow {
   bool isAdd = false;
   QTimer *timer;
   QTimer *timerStep;
+  QTimer *timerShowFloatFun;
 
   static void saveData(QTreeWidget *, int);
   static void readData(QTreeWidget *);
@@ -317,6 +318,7 @@ class MainWindow : public QMainWindow {
 
  private slots:
 
+  void on_timerShowFloatFun();
   void timerUpdate();
 
   void on_actionRename_triggered();
@@ -451,6 +453,10 @@ class MainWindow : public QMainWindow {
   void on_btnEdit_clicked();
 
   void on_btnCode_clicked();
+
+  void on_btnMemos_clicked();
+
+  void on_btnOneDriveBak_clicked();
 
  private:
   int memoHeight;

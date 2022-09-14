@@ -686,40 +686,6 @@ QSlider::handle:vertical
            </spacer>
           </item>
           <item>
-           <widget class="QToolButton" name="btnOneClickBak">
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>28</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>...</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../res.qrc">
-              <normaloff>:/res/onebak.png</normaloff>:/res/onebak.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="btnReport">
-            <property name="minimumSize">
-             <size>
-              <width>40</width>
-              <height>28</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Report</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../res.qrc">
-              <normaloff>:/res/report.png</normaloff>:/res/report.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QToolButton" name="btnNotes">
             <property name="minimumSize">
              <size>
@@ -1462,6 +1428,78 @@ QRadioButton::indicator:checked {
               </property>
               <property name="text">
                <string>Steps</string>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextUnderIcon</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnReport">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Report</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../res.qrc">
+                <normaloff>:/res/report.png</normaloff>:/res/report.png</iconset>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextUnderIcon</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnMemos">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Memos</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../res.qrc">
+                <normaloff>:/res/memos.png</normaloff>:/res/memos.png</iconset>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextUnderIcon</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnOneDriveBak">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>OneDrive</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../res.qrc">
+                <normaloff>:/res/onebak.png</normaloff>:/res/onebak.png</iconset>
               </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>

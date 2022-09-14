@@ -101,6 +101,7 @@ void dlgReport::on_btnBack_clicked() {
     return;
   }
   close();
+  mw_one->mydlgFloatFun->init();
 }
 
 void dlgReport::on_btnYear_clicked() {

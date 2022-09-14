@@ -228,6 +228,8 @@ MainWindow::MainWindow(QWidget* parent)
   initHardStepSensor();
 
   initMain = false;
+
+  timerShowFloatFun->start(2000);
 }
 
 void MainWindow::initHardStepSensor() {
@@ -719,6 +721,11 @@ void MainWindow::timerUpdate() {
     mydlgPre->isFontChange = true;
     this->close();
   }
+}
+
+void MainWindow::on_timerShowFloatFun() {
+  mydlgFloatFun->init();
+  timerShowFloatFun->stop();
 }
 
 MainWindow::~MainWindow() {
@@ -2542,7 +2549,10 @@ void MainWindow::on_rbAmount_clicked() {
 
 void MainWindow::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
-  if (floatfun) mydlgFloatFun->init();
+  if (floatfun && !initMain) {
+    floatfun = false;
+    // mydlgFloatFun->init();
+  }
   //获取背景色
   QPalette pal = ui->btnFind->palette();
   QBrush brush = pal.window();
@@ -2580,6 +2590,8 @@ void MainWindow::on_btnMax_clicked() {
     ui->frameYear->hide();
     ui->btnMax->setText(tr("Max"));
   }
+
+  mydlgFloatFun->init();
 }
 
 void MainWindow::on_btnYear_clicked() {
@@ -2780,7 +2792,10 @@ void MainWindow::on_actionReport_triggered() {
   myReadEBookThread->start();
 }
 
-void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
+void MainWindow::on_btnReport_clicked() {
+  mydlgFloatFun->close();
+  on_actionReport_triggered();
+}
 
 void MainWindow::on_actionPreferences_triggered() {
   mydlgPre->setFixedHeight(this->height());
@@ -3545,6 +3560,9 @@ void MainWindow::init_UIWidget() {
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
   timerStep = new QTimer(this);
   connect(timerStep, SIGNAL(timeout()), this, SLOT(updateHardSensorSteps()));
+  timerShowFloatFun = new QTimer(this);
+  connect(timerShowFloatFun, SIGNAL(timeout()), this,
+          SLOT(on_timerShowFloatFun()));
 
   ui->statusbar->setHidden(true);
 
@@ -3585,18 +3603,20 @@ void MainWindow::init_UIWidget() {
 
   int iz = 25;
   ui->btnFind->setIconSize(QSize(iz, iz));
-  ui->btnReport->setIconSize(QSize(iz, iz));
   ui->btnNotes->setIconSize(QSize(iz, iz));
   ui->btnSelTab->setIconSize(QSize(iz, iz));
-  ui->btnOneClickBak->setIconSize(QSize(iz, iz));
-  ui->btnOneClickBak->hide();
   ui->btnPause->setIconSize(QSize(iz, iz));
 
   int s = 28;
   if (isIOS) {
   }
+  ui->btnPlus->hide();
+  ui->btnLess->hide();
   ui->btnPlus->setIconSize(QSize(s, s));
   ui->btnLess->setIconSize(QSize(s, s));
+  ui->btnMemos->setIconSize(QSize(s, s));
+  ui->btnOneDriveBak->setIconSize(QSize(s, s));
+  ui->btnReport->setIconSize(QSize(s, s));
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnMax->setIconSize(QSize(s, s));
   ui->btnSteps->setIconSize(QSize(s, s));
@@ -3607,13 +3627,14 @@ void MainWindow::init_UIWidget() {
   ui->btnMax->setIcon(QIcon(":/res/zoom.png"));
   ui->btnSteps->setIcon(QIcon(":/res/step.png"));
   ui->btnReader->setIcon(QIcon(":/res/one.png"));
+  ui->btnMemos->setIcon(QIcon(":/res/memos.png"));
   ui->frame_tab->setMaximumHeight(this->height());
 
   ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
-  ui->btnOneClickBak->setStyleSheet("border:none");
+  ui->btnOneDriveBak->setStyleSheet("border:none");
   ui->btnNotes->setStyleSheet("border:none");
   ui->btnPause->setStyleSheet("border:none");
   ui->btnSelTab->setStyleSheet("border:none");
@@ -3624,6 +3645,7 @@ void MainWindow::init_UIWidget() {
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnMax->setStyleSheet("border:none");
   ui->btnReader->setStyleSheet("border:none");
+  ui->btnMemos->setStyleSheet("border:none");
 
   QFont f = this->font();
   f.setPointSize(11);
@@ -3633,6 +3655,9 @@ void MainWindow::init_UIWidget() {
   ui->btnSteps->setFont(f);
   ui->btnMax->setFont(f);
   ui->btnReader->setFont(f);
+  ui->btnReport->setFont(f);
+  ui->btnOneDriveBak->setFont(f);
+  ui->btnMemos->setFont(f);
 
   tabChart->setCurrentIndex(0);
 
@@ -3909,11 +3934,15 @@ void MainWindow::on_btnZoom_clicked() {
     axisY2->setTickCount(10);
     ui->frame_tab->hide();
     ui->frame_charts->setMaximumHeight(this->height());
+    floatfun = false;
+    mydlgFloatFun->close();
   } else {
     axisY->setTickCount(4);
     axisY2->setTickCount(4);
     ui->frame_tab->show();
     ui->frame_charts->setMaximumHeight(frameChartHeight);
+
+    mydlgFloatFun->init();
   }
 }
 
@@ -4033,8 +4062,8 @@ void MainWindow::on_btnBack_clicked() {
   ui->frameMain->show();
   mydlgReader->saveReader();
   mydlgReader->savePageVPos();
-  floatfun = true;
-  mydlgFloatFun->show();
+
+  mydlgFloatFun->init();
 }
 
 void MainWindow::on_btnOpen_clicked() { mydlgReader->on_btnOpen_clicked(); }
@@ -4212,8 +4241,8 @@ void MainWindow::on_btnBack_One_clicked() {
     } else {
       ui->frameOne->hide();
       ui->frameMain->show();
-      floatfun = true;
-      mydlgFloatFun->show();
+
+      mydlgFloatFun->init();
     }
   }
 }
@@ -4244,8 +4273,7 @@ void MainWindow::on_btnBackMemo_clicked() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setValue("/MainNotes/SlidePos", mydlgMainNotes->sliderPos);
 
-  floatfun = true;
-  mydlgFloatFun->show();
+  mydlgFloatFun->init();
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -4327,3 +4355,7 @@ void MainWindow::on_btnCode_clicked() {
     dialog_->sendMsg(str);
   }
 }
+
+void MainWindow::on_btnMemos_clicked() { on_actionMemos_triggered(); }
+
+void MainWindow::on_btnOneDriveBak_clicked() { on_OneDriveBackupData(); }
