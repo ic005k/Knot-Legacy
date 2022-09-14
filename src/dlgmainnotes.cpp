@@ -334,8 +334,8 @@ void dlgMainNotes::on_btnPic_clicked() {
                       QString::number(d) + "_" + QString::number(hh) +
                       QString::number(mm) + QString::number(s);
 
-    QString strTar =
-        iniDir + "memo/images/" + newname + "." + list.at(list.count() - 1);
+    QString strTar = iniDir + "memo/images/" + newname +
+                     ".png";  // + list.at(list.count() - 1);
     if (QFile(strTar).exists()) QFile(strTar).remove();
 
     QDir dir;
@@ -357,11 +357,11 @@ void dlgMainNotes::on_btnPic_clicked() {
       pix.save(strTar);
     }
 
-    QTextDocumentFragment fragment;
+    /*QTextDocumentFragment fragment;
     fragment = QTextDocumentFragment::fromHtml("<img src=" + strTar + ">");
-    ui->textEdit->textCursor().insertFragment(fragment);
+    ui->textEdit->textCursor().insertFragment(fragment);*/
 
-    /*QUrl Uri(QString("file://%1").arg(strTar));
+    QUrl Uri(QString("file://%1").arg(strTar));
     QImage image = QImageReader(strTar).read();
 
     QTextDocument* textDocument = ui->textEdit->document();
@@ -372,8 +372,11 @@ void dlgMainNotes::on_btnPic_clicked() {
     imageFormat.setWidth(image.width());
     imageFormat.setHeight(image.height());
     imageFormat.setName(Uri.toString());
-    cursor.insertImage(imageFormat);*/
+    cursor.insertImage(imageFormat);
 
+    QMessageBox box;
+    box.setText(strTar);
+    box.exec();
     qDebug() << "pic=" << strTar;
   }
 }
