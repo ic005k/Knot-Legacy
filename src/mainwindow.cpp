@@ -65,7 +65,11 @@ QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 ReadEBookThread::ReadEBookThread(QObject* parent) : QThread{parent} {}
 void ReadEBookThread::run() {
   if (isEBook) mw_one->mydlgReader->openFile(ebookFile);
-  if (isReport) mw_one->genReport();
+  if (isReport) {
+    mw_one->genReport();
+    mw_one->mydlgReport->sel_Year();
+    mw_one->mydlgReport->sel_Month();
+  }
   emit isDone();
 }
 
@@ -1286,10 +1290,12 @@ void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
   if (mydlgPre->ui->chkClose->isChecked()) {
     stopJavaTimer();
+    mydlgFloatFun->close();
     event->accept();
   } else {
     if (mydlgPre->isFontChange) {
       stopJavaTimer();
+      mydlgFloatFun->close();
       event->accept();
       return;
     }
@@ -1933,6 +1939,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       if (!ui->frameMain->isHidden()) {
         if (!listSelTab->isHidden()) {
           listSelTab->close();
+          mydlgFloatFun->init();
           return true;
         } else if (!listTimeMachine->isHidden()) {
           listTimeMachine->close();
@@ -3615,7 +3622,10 @@ void MainWindow::init_UIWidget() {
   ui->btnPlus->setIconSize(QSize(s, s));
   ui->btnLess->setIconSize(QSize(s, s));
   ui->btnMemos->setIconSize(QSize(s, s));
+
   ui->btnOneDriveBak->setIconSize(QSize(s, s));
+  ui->btnOneDriveBak->hide();
+
   ui->btnReport->setIconSize(QSize(s, s));
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnMax->setIconSize(QSize(s, s));
@@ -3686,6 +3696,8 @@ void MainWindow::init_UIWidget() {
 }
 
 void MainWindow::on_btnSelTab_clicked() {
+  mydlgFloatFun->close();
+
   QListWidget* list = new QListWidget(this);
   listSelTab = list;
   list->setStyleSheet(listStyle);
@@ -3707,6 +3719,7 @@ void MainWindow::on_btnSelTab_clicked() {
   connect(list, &QListWidget::itemClicked, [=]() {
     tabData->setCurrentIndex(list->currentRow());
     list->close();
+    mydlgFloatFun->init();
   });
 
   int h = 0;
@@ -3741,6 +3754,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   QAction* actBakData = new QAction(tr("One Click Data Backup"));
   QAction* actPreferences = new QAction(tr("Preferences"));
   QAction* actMemos = new QAction(tr("Memos"));
+  actMemos->setVisible(false);
   QAction* actViewAppData = new QAction(tr("About") + " (" + ver + ")");
   QAction* actOneDrive = new QAction(tr("OneDrive Backup Data"));
 
@@ -4142,9 +4156,6 @@ void MainWindow::readEBookDone() {
     mydlgReport->ui->lblTitle->setText(
         ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
     mydlgReport->ui->tableDetails->setRowCount(0);
-
-    mydlgReport->sel_Year();
-    mydlgReport->sel_Month();
 
     mydlgReport->setFixedHeight(this->height());
     mydlgReport->setFixedWidth(this->width());

@@ -7,14 +7,25 @@
 extern int fontSize;
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
+extern QTabWidget *tabData, *tabChart;
 QString btnYearText, btnMonthText;
-QTableWidget* tableReport;
+QTableWidget *tableReport, *tableDetails, *tableCategory;
+QLabel *lblTotal, *lblDetails;
+QToolButton *btnCategory, *btnMonth, *btnYear;
+
 void setTableNoItemFlags(QTableWidget* t, int row);
 
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
   this->installEventFilter(this);
   tableReport = ui->tableReport;
+  tableDetails = ui->tableDetails;
+  tableCategory = ui->tableCategory;
+  lblTotal = ui->lblTotal;
+  lblDetails = ui->lblDetails;
+  btnCategory = ui->btnCategory;
+  btnMonth = ui->btnMonth;
+  btnYear = ui->btnYear;
   ui->tableCategory->hide();
   printer = new QPrinter(QPrinter::HighResolution);
   preview = new QPrintPreviewDialog(printer, this);
@@ -149,151 +160,151 @@ void dlgReport::on_btnYear_clicked() {
 }
 
 void dlgReport::sel_Year() {
-  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
-  ui->tableReport->setRowCount(0);
-  ui->tableDetails->setRowCount(0);
+  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
+  tableReport->setRowCount(0);
+  tableDetails->setRowCount(0);
   int freq = 0;
   double amount = 0;
   int j = 0;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
-    if (strYear == ui->btnYear->text()) {
-      ui->tableReport->setRowCount(ui->tableReport->rowCount() + 1);
+    if (strYear == btnYear->text()) {
+      tableReport->setRowCount(tableReport->rowCount() + 1);
 
       QTableWidgetItem* tableItem =
           new QTableWidgetItem(tw->topLevelItem(i)->text(0));
-      ui->tableReport->setItem(j, 0, tableItem);
+      tableReport->setItem(j, 0, tableItem);
 
       QString txt1 = tw->topLevelItem(i)->text(1);
       freq = freq + txt1.toInt();
       tableItem = new QTableWidgetItem(txt1);
       tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      ui->tableReport->setItem(j, 1, tableItem);
+      tableReport->setItem(j, 1, tableItem);
 
       QString txt2 = tw->topLevelItem(i)->text(2);
       amount = amount + txt2.toDouble();
       tableItem = new QTableWidgetItem(txt2);
-      ui->tableReport->setItem(j, 2, tableItem);
+      tableReport->setItem(j, 2, tableItem);
 
-      ui->tableReport->setColumnWidth(0, 10);
-      ui->tableReport->setRowHeight(j, 30);
+      tableReport->setColumnWidth(0, 10);
+      tableReport->setRowHeight(j, 30);
 
-      setTableNoItemFlags(ui->tableReport, j);
+      setTableNoItemFlags(tableReport, j);
 
       j++;
     }
   }
 
-  ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " +
-                        tr("Amount") + " 0");
-  int count = ui->tableReport->rowCount();
+  lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " + tr("Amount") +
+                    " 0");
+  int count = tableReport->rowCount();
   if (count > 0) {
-    ui->tableReport->setRowCount(count + 1);
+    tableReport->setRowCount(count + 1);
     QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
-    ui->tableReport->setItem(count, 0, tableItem);
+    tableReport->setItem(count, 0, tableItem);
 
     tableItem = new QTableWidgetItem(QString::number(freq));
     tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    ui->tableReport->setItem(count, 1, tableItem);
+    tableReport->setItem(count, 1, tableItem);
 
     QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
     tableItem = new QTableWidgetItem(strAmount);
-    ui->tableReport->setItem(count, 2, tableItem);
+    tableReport->setItem(count, 2, tableItem);
 
-    ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
-                          QString::number(freq) + "    " + tr("Amount") + " " +
-                          strAmount);
+    lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
+                      QString::number(freq) + "    " + tr("Amount") + " " +
+                      strAmount);
 
-    ui->tableReport->setColumnWidth(0, 10);
-    ui->tableReport->setRowHeight(count, 30);
+    tableReport->setColumnWidth(0, 10);
+    tableReport->setRowHeight(count, 30);
 
-    setTableNoItemFlags(ui->tableReport, count);
+    setTableNoItemFlags(tableReport, count);
 
     on_tableReport_cellClicked(0, 0);
   }
 
-  ui->btnCategory->setText(tr("Category"));
-  ui->tableCategory->hide();
-  ui->tableDetails->show();
+  btnCategory->setText(tr("Category"));
+  tableCategory->hide();
+  tableDetails->show();
 }
 
 void dlgReport::sel_Month() {
-  if (ui->btnMonth->text() == tr("Year-Round")) {
+  if (btnMonth->text() == tr("Year-Round")) {
     sel_Year();
     return;
   }
 
-  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
-  ui->tableReport->setRowCount(0);
-  ui->tableDetails->setRowCount(0);
+  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
+  tableReport->setRowCount(0);
+  tableDetails->setRowCount(0);
   int freq = 0;
   double amount = 0;
   int j = 0;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
     QString strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0));
-    if (strYear == ui->btnYear->text() && strMonth == ui->btnMonth->text()) {
-      ui->tableReport->setRowCount(ui->tableReport->rowCount() + 1);
+    if (strYear == btnYear->text() && strMonth == btnMonth->text()) {
+      tableReport->setRowCount(tableReport->rowCount() + 1);
 
       QTableWidgetItem* tableItem =
           new QTableWidgetItem(tw->topLevelItem(i)->text(0));
-      ui->tableReport->setItem(j, 0, tableItem);
+      tableReport->setItem(j, 0, tableItem);
 
       QString txt1 = tw->topLevelItem(i)->text(1);
       freq = freq + txt1.toInt();
       tableItem = new QTableWidgetItem(txt1);
       tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      ui->tableReport->setItem(j, 1, tableItem);
+      tableReport->setItem(j, 1, tableItem);
 
       QString txt2 = tw->topLevelItem(i)->text(2);
       amount = amount + txt2.toDouble();
       tableItem = new QTableWidgetItem(txt2);
-      ui->tableReport->setItem(j, 2, tableItem);
+      tableReport->setItem(j, 2, tableItem);
 
-      ui->tableReport->setColumnWidth(0, 10);
-      ui->tableReport->setRowHeight(j, 30);
+      tableReport->setColumnWidth(0, 10);
+      tableReport->setRowHeight(j, 30);
 
-      ui->tableReport->item(j, 0)->setFlags(Qt::NoItemFlags);
-      ui->tableReport->item(j, 1)->setFlags(Qt::NoItemFlags);
-      ui->tableReport->item(j, 2)->setFlags(Qt::NoItemFlags);
+      tableReport->item(j, 0)->setFlags(Qt::NoItemFlags);
+      tableReport->item(j, 1)->setFlags(Qt::NoItemFlags);
+      tableReport->item(j, 2)->setFlags(Qt::NoItemFlags);
 
       j++;
     }
   }
 
-  ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " +
-                        tr("Amount") + " 0");
-  int count = ui->tableReport->rowCount();
+  lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " + tr("Amount") +
+                    " 0");
+  int count = tableReport->rowCount();
   if (count > 0) {
-    ui->tableReport->setRowCount(count + 1);
+    tableReport->setRowCount(count + 1);
     QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
-    ui->tableReport->setItem(count, 0, tableItem);
+    tableReport->setItem(count, 0, tableItem);
 
     tableItem = new QTableWidgetItem(QString::number(freq));
     tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    ui->tableReport->setItem(count, 1, tableItem);
+    tableReport->setItem(count, 1, tableItem);
 
     QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
     tableItem = new QTableWidgetItem(strAmount);
-    ui->tableReport->setItem(count, 2, tableItem);
+    tableReport->setItem(count, 2, tableItem);
 
-    ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
-                          QString::number(freq) + "    " + tr("Amount") + " " +
-                          strAmount);
+    lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
+                      QString::number(freq) + "    " + tr("Amount") + " " +
+                      strAmount);
 
-    ui->tableReport->setColumnWidth(0, 10);
-    ui->tableReport->setRowHeight(count, 30);
+    tableReport->setColumnWidth(0, 10);
+    tableReport->setRowHeight(count, 30);
 
-    ui->tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);
-    ui->tableReport->item(count, 1)->setFlags(Qt::NoItemFlags);
-    ui->tableReport->item(count, 2)->setFlags(Qt::NoItemFlags);
+    tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);
+    tableReport->item(count, 1)->setFlags(Qt::NoItemFlags);
+    tableReport->item(count, 2)->setFlags(Qt::NoItemFlags);
 
     on_tableReport_cellClicked(0, 0);
   }
 
-  ui->btnCategory->setText(tr("Category"));
-  ui->tableCategory->hide();
-  ui->tableDetails->show();
+  btnCategory->setText(tr("Category"));
+  tableCategory->hide();
+  tableDetails->show();
 }
 
 void dlgReport::on_btnMonth_clicked() {
@@ -347,27 +358,26 @@ void dlgReport::on_btnMonth_clicked() {
 void dlgReport::on_tableReport_cellClicked(int row, int column) {
   Q_UNUSED(column);
   bool isSetDetailsText = true;
-  if (ui->btnCategory->text() != tr("None") &&
-      ui->btnCategory->text() != tr("Category")) {
+  if (btnCategory->text() != tr("None") &&
+      btnCategory->text() != tr("Category")) {
     isSetDetailsText = false;
   }
 
-  if (isSetDetailsText) ui->lblDetails->setText(tr("Details"));
+  if (isSetDetailsText) lblDetails->setText(tr("Details"));
   markColor(row);
-  ui->tableDetails->setRowCount(0);
-  QString str = ui->tableReport->item(row, 0)->text();
-  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  tableDetails->setRowCount(0);
+  QString str = tableReport->item(row, 0)->text();
+  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
 
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
     if (str == topItem->text(0)) {
-      if (isSetDetailsText)
-        ui->lblDetails->setText(tr("Details") + " : " + str);
+      if (isSetDetailsText) lblDetails->setText(tr("Details") + " : " + str);
       int childCount = topItem->childCount();
-      ui->tableDetails->setRowCount(childCount);
+      tableDetails->setRowCount(childCount);
       for (int m = 0; m < childCount; m++) {
-        ui->tableDetails->setColumnWidth(0, 10);
-        ui->tableDetails->setRowHeight(m, 30);
+        tableDetails->setColumnWidth(0, 10);
+        tableDetails->setRowHeight(m, 30);
 
         QTableWidgetItem* tableItem;
         QString str = topItem->child(m)->text(0);
@@ -376,18 +386,18 @@ void dlgReport::on_tableReport_cellClicked(int row, int column) {
           tableItem = new QTableWidgetItem(list.at(1));
         else
           tableItem = new QTableWidgetItem(str);
-        ui->tableDetails->setItem(m, 0, tableItem);
+        tableDetails->setItem(m, 0, tableItem);
         tableItem = new QTableWidgetItem(topItem->child(m)->text(1));
-        ui->tableDetails->setItem(m, 1, tableItem);
+        tableDetails->setItem(m, 1, tableItem);
         tableItem = new QTableWidgetItem(topItem->child(m)->text(2));
-        ui->tableDetails->setItem(m, 2, tableItem);
+        tableDetails->setItem(m, 2, tableItem);
 
-        ui->tableDetails->item(m, 0)->setFlags(Qt::NoItemFlags);
-        ui->tableDetails->item(m, 1)->setFlags(Qt::NoItemFlags);
-        ui->tableDetails->item(m, 2)->setFlags(Qt::NoItemFlags);
+        tableDetails->item(m, 0)->setFlags(Qt::NoItemFlags);
+        tableDetails->item(m, 1)->setFlags(Qt::NoItemFlags);
+        tableDetails->item(m, 2)->setFlags(Qt::NoItemFlags);
 
         //数量特别大的时候，影响性能
-        // ui->tableDetails->scrollToBottom();
+        // tableDetails->scrollToBottom();
       }
       break;
     }
@@ -402,7 +412,8 @@ void dlgReport::markColor(int row) {
   icon1.addFile(":/res/nosel.png", QSize(size, size));
   QTableWidgetItem* id1;
 
-  for (int i = 0; i < ui->tableReport->rowCount(); i++) {
+  QBrush brush1 = QBrush(QColor(253, 185, 176));
+  for (int i = 0; i < tableReport->rowCount(); i++) {
     if (i == row) {
       id1 = new QTableWidgetItem(icon, QString::number(i + 1) + "  ");
       id1->setBackground(brush1);
@@ -410,7 +421,7 @@ void dlgReport::markColor(int row) {
     } else {
       id1 = new QTableWidgetItem(icon1, QString::number(i + 1) + "  ");
     }
-    ui->tableReport->setVerticalHeaderItem(i, id1);
+    tableReport->setVerticalHeaderItem(i, id1);
   }
 }
 

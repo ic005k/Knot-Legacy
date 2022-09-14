@@ -7,13 +7,25 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>439</height>
+    <height>463</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>1</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <property name="bottomMargin">
+    <number>1</number>
+   </property>
    <item row="8" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>

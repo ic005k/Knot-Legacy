@@ -23,13 +23,13 @@ class dlgReport : public QDialog {
   ~dlgReport();
   Ui::dlgReport *ui;
 
-  void markColor(int row);
-  void sel_Year();
-  void sel_Month();
+  static void markColor(int row);
+  static void sel_Year();
+  static void sel_Month();
   static void saveYMD();
 
  public slots:
-  void on_tableReport_cellClicked(int row, int column);
+  static void on_tableReport_cellClicked(int row, int column);
   void on_btnYear_clicked();
 
   void on_btnMonth_clicked();
@@ -49,7 +49,6 @@ class dlgReport : public QDialog {
  private:
   QPrintPreviewDialog *preview;
   QPrinter *printer;
-  QBrush brush1 = QBrush(QColor(253, 185, 176));
 };
 
 #endif  // DLGREPORT_H
