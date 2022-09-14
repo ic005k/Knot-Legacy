@@ -2243,6 +2243,8 @@ void MainWindow::importBakData(QString fileName, bool msg, bool book) {
                  RegTotalIni.value("/MainNotes/SlidePos").toLongLong());
     Reg.setValue("/MainNotes/FileName",
                  RegTotalIni.value("/MainNotes/FileName").toString());
+    Reg.setValue("/MainNotes/CurrentOSIniDir",
+                 RegTotalIni.value("/MainNotes/CurrentOSIniDir").toString());
 
     // TextReader
     QString strReader = iniDir + "reader.ini";
@@ -4284,8 +4286,19 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  QString strIniDir;
+  strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
   QString str = mw_one->loadText(iniDir + "memo/memo.md");
+  if (strIniDir != "") {
+    str.replace(strIniDir, iniDir);
+  }
   mydlgMainNotes->ui->textEdit->setMarkdown(str);
+#ifdef Q_OS_ANDROID
+#endif
+
+#ifdef Q_OS_UNIX
+#endif
 
   mydlgMainNotes->init();
   mydlgMainNotes->show();

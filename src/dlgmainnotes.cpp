@@ -101,6 +101,7 @@ void dlgMainNotes::saveMainNotes() {
 
   Reg.setValue("/MainNotes/CurPos", curPos);
   Reg.setValue("/MainNotes/SlidePos", sliderPos);
+  Reg.setValue("/MainNotes/CurrentOSIniDir", iniDir);
 
   QStringList list = getImgFileFromHtml(iniDir + "memo/memo.html");
   int count = list.count();
@@ -323,6 +324,9 @@ void dlgMainNotes::on_btnPic_clicked() {
 
   if (QFileInfo(fileName).exists()) {
     QStringList list = fileName.split(".");
+    QDir dir;
+    dir.mkpath(iniDir + "memo/images/");
+
     int y, m, d, hh, mm, s;
     y = QDate::currentDate().year();
     m = QDate::currentDate().month();
@@ -337,9 +341,6 @@ void dlgMainNotes::on_btnPic_clicked() {
     QString strTar = iniDir + "memo/images/" + newname +
                      ".png";  // + list.at(list.count() - 1);
     if (QFile(strTar).exists()) QFile(strTar).remove();
-
-    QDir dir;
-    dir.mkpath(iniDir + "memo/images/");
 
     QImage img(fileName);
     double w, h;
@@ -448,6 +449,19 @@ void dlgMainNotes::unzipMemo() {
 
 void dlgMainNotes::loadMemoQML() {
   QString file = iniDir + "memo/memo.html";
+
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  QString strIniDir;
+  strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
+  QString str = mw_one->loadText(file);
+  if (strIniDir != "") {
+    str.replace(strIniDir, iniDir);
+
+    QTextEdit* edit = new QTextEdit;
+    edit->setPlainText(str);
+    mw_one->TextEditToFile(edit, file);
+  }
+
   mw_one->ui->quickWidgetMemo->setSource(
       QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
