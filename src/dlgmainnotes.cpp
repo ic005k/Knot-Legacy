@@ -60,11 +60,32 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);
 
   if (isShow) {
-    if (this->height() != mw_one->mainHeight) newHeight = this->height();
+    if (this->height() != mw_one->mainHeight) {
+      newHeight = this->height();
+
+      minSliderMax = ui->textEdit->verticalScrollBar()->maximum();
+      minSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+
+      qDebug() << "min " << ui->textEdit->height()
+               << ui->textEdit->verticalScrollBar()->sliderPosition()
+               << ui->textEdit->verticalScrollBar()->maximum();
+    } else {
+      maxSliderMax = ui->textEdit->verticalScrollBar()->maximum();
+      maxSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+
+      qDebug() << "max " << ui->textEdit->height()
+               << ui->textEdit->verticalScrollBar()->sliderPosition()
+               << ui->textEdit->verticalScrollBar()->maximum();
+    }
 
     if (pAndroidKeyboard->isVisible()) {
       this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                         mw_one->width(), newHeight);
+      minSliderPosition = minSliderMax * maxSliderPosition / maxSliderMax;
+      ui->textEdit->verticalScrollBar()->setSliderPosition(minSliderPosition);
+    } else {
+      maxSliderPosition = maxSliderMax * minSliderPosition / minSliderMax;
+      ui->textEdit->verticalScrollBar()->setSliderPosition(maxSliderPosition);
     }
   }
 

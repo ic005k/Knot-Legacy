@@ -4369,8 +4369,13 @@ void MainWindow::on_btnEdit_clicked() {
 
   mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
       mydlgMainNotes->sliderPos);
+
   mydlgMainNotes->isShow = true;
   mainHeight = this->height();
+  mydlgMainNotes->maxSliderMax =
+      mydlgMainNotes->ui->textEdit->verticalScrollBar()->maximum();
+  mydlgMainNotes->maxSliderPosition =
+      mydlgMainNotes->ui->textEdit->verticalScrollBar()->sliderPosition();
 }
 
 void MainWindow::on_btnCode_clicked() {

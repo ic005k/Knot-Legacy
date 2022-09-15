@@ -24,6 +24,7 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  double maxSliderPosition, maxSliderMax, minSliderPosition, minSliderMax;
   bool isShow = false;
   QString textMemo;
   void saveMainNotes();
