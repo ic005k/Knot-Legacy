@@ -108,6 +108,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  int mainHeight = 0;
   bool floatfun = true;
   int alertWindowsCount = 0;
   QString strText;

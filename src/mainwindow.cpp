@@ -4369,6 +4369,8 @@ void MainWindow::on_btnEdit_clicked() {
 
   mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
       mydlgMainNotes->sliderPos);
+  mydlgMainNotes->isShow = true;
+  mainHeight = this->height();
 }
 
 void MainWindow::on_btnCode_clicked() {

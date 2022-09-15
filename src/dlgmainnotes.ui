@@ -74,7 +74,7 @@
    <item row="2" column="0">
     <widget class="QTextEdit" name="textEdit"/>
    </item>
-   <item row="0" column="0">
+   <item row="4" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QToolButton" name="btnBack">

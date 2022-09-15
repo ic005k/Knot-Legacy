@@ -24,6 +24,7 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  bool isShow = false;
   QString textMemo;
   void saveMainNotes();
   QString fileName;
@@ -46,7 +47,8 @@ class dlgMainNotes : public QDialog {
   void unzipMemo();
 
   void loadMemoQML();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

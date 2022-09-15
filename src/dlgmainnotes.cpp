@@ -58,13 +58,19 @@ void dlgMainNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
 void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);
-  if (this->height() == mw_one->height()) return;
-  if (!one) {
-    one = true;
-    newHeight = this->height();
+
+  if (isShow) {
+    if (this->height() != mw_one->mainHeight) newHeight = this->height();
+
+    if (pAndroidKeyboard->isVisible()) {
+      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                        mw_one->width(), newHeight);
+    }
   }
-  qDebug() << pAndroidKeyboard->keyboardRectangle().height() << newHeight
-           << this->height();
+
+  qDebug() << pAndroidKeyboard->keyboardRectangle().height()
+           << "this height=" << this->height();
+  qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
 }
 
 void dlgMainNotes::on_btnBack_clicked() {
@@ -166,10 +172,9 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
 }
 
 void dlgMainNotes::on_KVChanged() {
-  if (pAndroidKeyboard->isVisible()) {
-    this->setFixedHeight(mw_one->height() * 2 / 3 + 10);
-  } else {
-    this->setFixedHeight(mw_one->height());
+  if (!pAndroidKeyboard->isVisible()) {
+    this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                      mw_one->width(), mw_one->mainHeight);
   }
 }
 
@@ -318,6 +323,8 @@ void dlgMainNotes::on_textEdit_undoAvailable(bool b) {
 }
 
 void dlgMainNotes::on_btnPic_clicked() {
+  pAndroidKeyboard->hide();
+
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("Knot"), "",
                                           tr("Picture Files (*.*)"));
