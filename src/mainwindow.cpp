@@ -1289,20 +1289,22 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
   if (mydlgPre->ui->chkClose->isChecked()) {
-    // mydlgFloatFun->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool |
-    //                               Qt::WindowDoesNotAcceptFocus);
-    mydlgFloatFun->close();
-    delete mydlgFloatFun;
+    // ui->btnTodo->click();
+    // mydlgFloatFun->close();
+    // delete mydlgFloatFun;
+
+    on_actionView_App_Data_triggered();
 
     stopJavaTimer();
     event->accept();
 
   } else {
     if (mydlgPre->isFontChange) {
-      // mydlgFloatFun->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool |
-      //                               Qt::WindowDoesNotAcceptFocus);
-      mydlgFloatFun->close();
-      delete mydlgFloatFun;
+      // ui->btnTodo->click();
+      // mydlgFloatFun->close();
+      // delete mydlgFloatFun;
+
+      on_actionView_App_Data_triggered();
 
       stopJavaTimer();
       event->accept();
@@ -1948,6 +1950,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       if (!ui->frameMain->isHidden()) {
         if (!listSelTab->isHidden()) {
           listSelTab->close();
+
           mydlgFloatFun->init();
           return true;
         } else if (!listTimeMachine->isHidden()) {
@@ -2344,7 +2347,8 @@ void MainWindow::on_actionView_App_Data_triggered() {
   mydlgNotes->ui->lblTitle->hide();
   mydlgNotes->ui->lblAbout->setText(textBrowser->toPlainText());
   mydlgNotes->ui->frameAbout->show();
-  mydlgNotes->setGeometry(0, 0, this->width(), this->height());
+  mydlgNotes->setGeometry(this->geometry().x(), this->geometry().y(),
+                          this->width(), this->height());
   mydlgNotes->setModal(true);
   mydlgNotes->show();
 }
@@ -3364,7 +3368,6 @@ void MainWindow::updateHardSensorSteps() {
 }
 
 void MainWindow::on_actionMemos_triggered() {
-  floatfun = false;
   mydlgFloatFun->close();
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
@@ -3726,6 +3729,7 @@ void MainWindow::on_btnSelTab_clicked() {
   connect(list, &QListWidget::itemClicked, [=]() {
     tabData->setCurrentIndex(list->currentRow());
     list->close();
+
     mydlgFloatFun->init();
   });
 

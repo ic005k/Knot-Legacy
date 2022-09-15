@@ -13,13 +13,15 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
 
 void dlgFloatFun::init() {
   setAttribute(Qt::WA_TranslucentBackground);
-  // QPalette pal = palette();
-  // QColor color = QColor(Qt::black);
-  // pal.setColor(QPalette::Background, color);
-  // setPalette(pal);
 
   setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint |
                  Qt::WindowDoesNotAcceptFocus);
+
+  QPalette pal = palette();
+  QColor color = QColor(Qt::lightGray);
+  pal.setColor(QPalette::Background, color);
+  // setPalette(pal);
+
   this->setContentsMargins(1, 1, 1, 1);
 
   ui->btnAdd->setStyleSheet("border:none");
@@ -32,28 +34,16 @@ void dlgFloatFun::init() {
       this->width(), this->height());
 
   QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
-  m_pAnimation->setTargetObject(ui->btnAdd);
+  m_pAnimation->setTargetObject(this);
   m_pAnimation->setDuration(1500);
   QGraphicsOpacityEffect* m_pOpacity = new QGraphicsOpacityEffect();
-  ui->btnAdd->setGraphicsEffect(m_pOpacity);
+  this->setGraphicsEffect(m_pOpacity);
   m_pOpacity->setOpacity(1);
   m_pAnimation->setTargetObject(m_pOpacity);
   m_pAnimation->setPropertyName("opacity");
   m_pAnimation->setStartValue(0);
   m_pAnimation->setEndValue(1);
   // m_pAnimation->start();
-
-  QPropertyAnimation* m_pAnimation2 = new QPropertyAnimation();
-  m_pAnimation2->setTargetObject(ui->btnDel);
-  m_pAnimation2->setDuration(1500);
-  QGraphicsOpacityEffect* m_pOpacity2 = new QGraphicsOpacityEffect();
-  ui->btnDel->setGraphicsEffect(m_pOpacity2);
-  m_pOpacity2->setOpacity(1);
-  m_pAnimation2->setTargetObject(m_pOpacity2);
-  m_pAnimation2->setPropertyName("opacity");
-  m_pAnimation2->setStartValue(0);
-  m_pAnimation2->setEndValue(1);
-  // m_pAnimation2->start();
 
   this->show();
 
@@ -74,7 +64,7 @@ bool dlgFloatFun::eventFilter(QObject* watch, QEvent* evn) {
 void dlgFloatFun::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
 
-  /*QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
+  QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
   m_pAnimation->setTargetObject(this);
   m_pAnimation->setDuration(2000);
   QGraphicsOpacityEffect* m_pOpacity = new QGraphicsOpacityEffect();
@@ -84,7 +74,15 @@ void dlgFloatFun::closeEvent(QCloseEvent* event) {
   m_pAnimation->setPropertyName("opacity");
   m_pAnimation->setStartValue(1);
   m_pAnimation->setEndValue(0);
-  m_pAnimation->start();*/
+  // m_pAnimation->start();
+}
+
+void dlgFloatFun::paintEvent(QPaintEvent* event) {
+  Q_UNUSED(event);
+  QStyleOption opt;
+  opt.init(this);
+  QPainter painter(this);
+  style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 }
 
 dlgFloatFun::~dlgFloatFun() { delete ui; }

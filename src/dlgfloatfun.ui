@@ -6,38 +6,53 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>42</width>
-    <height>90</height>
+    <width>38</width>
+    <height>76</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">
+dlgFloatFun{	
+	background-color: rgb(255, 255, 255);	
+	border-radius: 10px;					
+	border-style:solid;						
+	border-width:1px;						
+	border-color:rgb(21, 21, 21);		
+}
+
+</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>8</number>
+   </property>
    <property name="leftMargin">
-    <number>1</number>
+    <number>4</number>
    </property>
    <property name="topMargin">
-    <number>1</number>
+    <number>4</number>
    </property>
    <property name="rightMargin">
-    <number>1</number>
+    <number>4</number>
    </property>
    <property name="bottomMargin">
-    <number>1</number>
+    <number>4</number>
    </property>
    <item>
     <widget class="QToolButton" name="btnDel">
      <property name="minimumSize">
       <size>
-       <width>40</width>
-       <height>40</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>40</width>
-       <height>40</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
      <property name="text">
@@ -59,14 +74,14 @@
     <widget class="QToolButton" name="btnAdd">
      <property name="minimumSize">
       <size>
-       <width>40</width>
-       <height>40</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>40</width>
-       <height>40</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
      <property name="text">
