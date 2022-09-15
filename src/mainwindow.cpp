@@ -1289,13 +1289,22 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
   if (mydlgPre->ui->chkClose->isChecked()) {
-    stopJavaTimer();
+    // mydlgFloatFun->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool |
+    //                               Qt::WindowDoesNotAcceptFocus);
     mydlgFloatFun->close();
+    delete mydlgFloatFun;
+
+    stopJavaTimer();
     event->accept();
+
   } else {
     if (mydlgPre->isFontChange) {
-      stopJavaTimer();
+      // mydlgFloatFun->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool |
+      //                               Qt::WindowDoesNotAcceptFocus);
       mydlgFloatFun->close();
+      delete mydlgFloatFun;
+
+      stopJavaTimer();
       event->accept();
       return;
     }
@@ -2788,8 +2797,9 @@ void MainWindow::genReport() {
 }
 
 void MainWindow::on_actionReport_triggered() {
-  if (isEBook) return;
+  if (isEBook || !isSaveEnd) return;
 
+  delete dlgProgEBook;
   dlgProgEBook = mydlgReader->getProgBar();
   dlgProgEBook->show();
 
@@ -2799,10 +2809,7 @@ void MainWindow::on_actionReport_triggered() {
   myReadEBookThread->start();
 }
 
-void MainWindow::on_btnReport_clicked() {
-  mydlgFloatFun->close();
-  on_actionReport_triggered();
-}
+void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
 
 void MainWindow::on_actionPreferences_triggered() {
   mydlgPre->setFixedHeight(this->height());
@@ -4157,16 +4164,16 @@ void MainWindow::readEBookDone() {
         ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
     mydlgReport->ui->tableDetails->setRowCount(0);
 
-    mydlgReport->setFixedHeight(this->height());
-    mydlgReport->setFixedWidth(this->width());
-    mydlgReport->setModal(true);
-    mydlgReport->show();
-
     int count = tableReport->rowCount();
     if (count > 1) {
       mydlgReport->on_tableReport_cellClicked(count - 2, 0);
       tableReport->scrollToBottom();
     }
+
+    mydlgReport->setFixedHeight(this->height());
+    mydlgReport->setFixedWidth(this->width());
+    mydlgReport->setModal(true);
+    mydlgReport->show();
 
     isReport = false;
   }

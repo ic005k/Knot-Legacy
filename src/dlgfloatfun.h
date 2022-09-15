@@ -2,6 +2,7 @@
 #define DLGFLOATFUN_H
 
 #include <QDialog>
+#include <QGraphicsOpacityEffect>
 
 namespace Ui {
 class dlgFloatFun;
@@ -16,6 +17,10 @@ class dlgFloatFun : public QDialog {
   Ui::dlgFloatFun *ui;
 
   void init();
+
+ protected:
+  bool eventFilter(QObject *watch, QEvent *evn) override;
+  void closeEvent(QCloseEvent *event) override;
  private slots:
   void on_btnAdd_clicked();
 
