@@ -2768,6 +2768,9 @@ void MainWindow::on_actionReport_triggered() {
   }
 
   if (isReadEBookEnd) {
+    mydlgReport->init();
+    isReportWindowsShow = true;
+
     tableReport->setRowCount(0);
     dlgProgEBook = mydlgReader->getProgBar();
     dlgProgEBook->show();
@@ -4164,11 +4167,13 @@ void MainWindow::readEBookDone() {
       tableReport->scrollToBottom();
     }
 
-    mydlgReport->setGeometry(this->geometry().x(), this->geometry().y(),
-                             this->width(), this->height());
-    mydlgReport->setModal(true);
-    mydlgReport->show();
-    isReportWindowsShow = true;
+    if (!isReportWindowsShow) {
+      mydlgReport->setGeometry(this->geometry().x(), this->geometry().y(),
+                               this->width(), this->height());
+      mydlgReport->setModal(true);
+      mydlgReport->show();
+      isReportWindowsShow = true;
+    }
 
     isReport = false;
   }

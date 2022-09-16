@@ -20,6 +20,7 @@ void setTableNoItemFlags(QTableWidget* t, int row);
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  this->setModal(true);
   tableReport = ui->tableReport;
   tableDetails = ui->tableDetails;
   tableCategory = ui->tableCategory;
@@ -89,6 +90,12 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   font.setBold(true);
   ui->tableReport->horizontalHeader()->setFont(font);
   ui->tableDetails->horizontalHeader()->setFont(font);
+}
+
+void dlgReport::init() {
+  this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                    mw_one->width(), mw_one->height());
+  show();
 }
 
 dlgReport::~dlgReport() { delete ui; }
