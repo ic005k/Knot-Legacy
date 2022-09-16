@@ -210,6 +210,13 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
       </widget>
      </item>
      <item>
+      <widget class="QToolButton" name="btnGetData">
+       <property name="text">
+        <string>Get</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="btnPrint">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

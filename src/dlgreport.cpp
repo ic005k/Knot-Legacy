@@ -8,6 +8,7 @@ extern int fontSize;
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
 extern QTabWidget *tabData, *tabChart;
+extern bool isImport, isEBook, isReport, isBreakReport, isReportWindowsShow;
 QString btnYearText, btnMonthText;
 QTableWidget *tableReport, *tableDetails, *tableCategory;
 QLabel *lblTotal, *lblDetails;
@@ -30,6 +31,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   printer = new QPrinter(QPrinter::HighResolution);
   preview = new QPrintPreviewDialog(printer, this);
   ui->btnPrint->hide();
+  ui->btnGetData->hide();
 
   QFont font = ui->lblTotal->font();
   font.setBold(true);
@@ -113,6 +115,7 @@ void dlgReport::on_btnBack_clicked() {
   }
   close();
   mw_one->mydlgFloatFun->init();
+  isReportWindowsShow = false;
 }
 
 void dlgReport::on_btnYear_clicked() {
@@ -140,7 +143,8 @@ void dlgReport::on_btnYear_clicked() {
     ui->btnYear->setText(list->currentItem()->text());
     btnYearText = ui->btnYear->text();
     list->close();
-    sel_Year();
+
+    mw_one->on_actionReport_triggered();
   });
 
   int h = 30 * list->count() + 4;
@@ -167,6 +171,11 @@ void dlgReport::sel_Year() {
   double amount = 0;
   int j = 0;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    if (isBreakReport) {
+      break;
+      return;
+    }
+
     QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
     if (strYear == btnYear->text()) {
       tableReport->setRowCount(tableReport->rowCount() + 1);
@@ -241,6 +250,11 @@ void dlgReport::sel_Month() {
   double amount = 0;
   int j = 0;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    if (isBreakReport) {
+      break;
+      return;
+    }
+
     QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
     QString strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0));
     if (strYear == btnYear->text() && strMonth == btnMonth->text()) {
@@ -336,7 +350,7 @@ void dlgReport::on_btnMonth_clicked() {
     btnMonthText = ui->btnMonth->text();
     list->close();
 
-    sel_Month();
+    mw_one->on_actionReport_triggered();
   });
 
   int h = 30 * list->count() + 4;
@@ -590,4 +604,9 @@ void dlgReport::plotPic(QPrinter* printer) {
   painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
   painter.setWindow(p_w_picpath.rect());
   painter.drawPixmap(0, 0, p_w_picpath);
+}
+
+void dlgReport::on_btnGetData_clicked() {
+  close();
+  mw_one->on_actionReport_triggered();
 }

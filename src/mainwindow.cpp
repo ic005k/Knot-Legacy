@@ -28,6 +28,8 @@ QTabWidget *tabData, *tabChart;
 bool loading, isReadEnd, isReadTWEnd;
 bool isSaveEnd = true;
 bool isBreak = false;
+bool isBreakReport = false;
+bool isReportWindowsShow = false;
 
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
@@ -65,9 +67,9 @@ QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 ReadEBookThread::ReadEBookThread(QObject* parent) : QThread{parent} {}
 void ReadEBookThread::run() {
   if (isEBook) mw_one->mydlgReader->openFile(ebookFile);
+
   if (isReport) {
-    mw_one->genReport();
-    mw_one->mydlgReport->sel_Year();
+    if (isBreakReport) return;
     mw_one->mydlgReport->sel_Month();
   }
   emit isDone();
@@ -2748,58 +2750,6 @@ void MainWindow::on_btnDay_clicked() {
   }
 }
 
-void MainWindow::genReport() {
-  QTreeWidget* tw = get_tw(tabData->currentIndex());
-  double freq, amount;
-  freq = 0;
-  amount = 0;
-  tableReport->setRowCount(0);
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    int count = tableReport->rowCount();
-    tableReport->setRowCount(count + 1);
-
-    tableReport->setColumnWidth(0, 10);
-    tableReport->setRowHeight(i, 30);
-
-    QTableWidgetItem* tableItem =
-        new QTableWidgetItem(tw->topLevelItem(i)->text(0));
-    tableReport->setItem(i, 0, tableItem);
-
-    QString txt1 = tw->topLevelItem(i)->text(1);
-    freq = freq + txt1.toDouble();
-    tableItem = new QTableWidgetItem(txt1);
-    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    tableReport->setItem(i, 1, tableItem);
-
-    QString txt2 = tw->topLevelItem(i)->text(2);
-    amount = amount + txt2.toDouble();
-    tableItem = new QTableWidgetItem(txt2);
-    tableReport->setItem(i, 2, tableItem);
-
-    setTableNoItemFlags(tableReport, i);
-  }
-
-  int count = tableReport->rowCount();
-  if (count > 0) {
-    tableReport->setRowCount(count + 1);
-    QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
-    tableReport->setItem(count, 0, tableItem);
-
-    tableItem = new QTableWidgetItem(QString::number(freq));
-    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    tableReport->setItem(count, 1, tableItem);
-
-    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-    tableItem = new QTableWidgetItem(strAmount);
-    tableReport->setItem(count, 2, tableItem);
-
-    tableReport->setColumnWidth(0, 10);
-    tableReport->setRowHeight(count, 30);
-
-    setTableNoItemFlags(tableReport, count);
-  }
-}
-
 void MainWindow::on_actionReport_triggered() {
   if (isEBook || !isSaveEnd) return;
 
@@ -2807,9 +2757,16 @@ void MainWindow::on_actionReport_triggered() {
   dlgProgEBook = mydlgReader->getProgBar();
   dlgProgEBook->show();
 
+  if (isReport) {
+    isBreakReport = true;
+    myReadTWThread->quit();
+    myReadTWThread->wait();
+  }
+
+  while (isReport) QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
+  isBreakReport = false;
   isReport = true;
-  myReadTWThread->quit();
-  myReadTWThread->wait();
   myReadEBookThread->start();
 }
 
@@ -4165,7 +4122,7 @@ void MainWindow::readEBookDone() {
 
   if (isReport) {
     mydlgReport->ui->lblTitle->setText(
-        ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
+        tabData->tabText(tabData->currentIndex()));
     mydlgReport->ui->tableDetails->setRowCount(0);
 
     int count = tableReport->rowCount();
@@ -4174,10 +4131,11 @@ void MainWindow::readEBookDone() {
       tableReport->scrollToBottom();
     }
 
-    mydlgReport->setFixedHeight(this->height());
-    mydlgReport->setFixedWidth(this->width());
+    mydlgReport->setGeometry(this->geometry().x(), this->geometry().y(),
+                             this->width(), this->height());
     mydlgReport->setModal(true);
     mydlgReport->show();
+    isReportWindowsShow = true;
 
     isReport = false;
   }

@@ -292,7 +292,7 @@ class MainWindow : public QMainWindow {
   void addUndo(QString log);
   QString getTabText();
   void addRedo();
-  static void genReport();
+
   QObjectList getAllToolButton(QObjectList lstUIControls);
   void repaintApp();
   bool showMsgBox(QString title, QString info);
@@ -308,7 +308,7 @@ class MainWindow : public QMainWindow {
   QString on_OneClickBakData(bool msg);
   void on_OneDriveBackupData();
   void on_btnPlus_clicked();
-
+  void on_actionReport_triggered();
   void on_btnLess_clicked();
 
  protected:
@@ -367,8 +367,6 @@ class MainWindow : public QMainWindow {
   void on_btnMonth_clicked();
 
   void on_btnDay_clicked();
-
-  void on_actionReport_triggered();
 
   void on_btnReport_clicked();
 
