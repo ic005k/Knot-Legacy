@@ -49,7 +49,9 @@ class dlgMainNotes : public QDialog {
 
   void loadMemoQML();
 
- protected:
+  public slots:
+  void editVSBarValueChanged();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

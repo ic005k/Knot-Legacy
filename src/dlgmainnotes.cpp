@@ -40,6 +40,8 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->frameSetKey->hide();
 
   ui->textEdit->setAcceptRichText(true);
+  connect(ui->textEdit->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
+          SLOT(editVSBarValueChanged()));
 }
 
 void dlgMainNotes::init() {
@@ -56,34 +58,40 @@ dlgMainNotes::~dlgMainNotes() { delete ui; }
 
 void dlgMainNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
+void dlgMainNotes::editVSBarValueChanged() {
+  if (pAndroidKeyboard->isVisible()) {
+    minSliderMax = ui->textEdit->verticalScrollBar()->maximum();
+    minSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+    qDebug() << "min=" << minSliderPosition << minSliderMax;
+  } else {
+    maxSliderMax = ui->textEdit->verticalScrollBar()->maximum();
+    maxSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+
+    qDebug() << "max=" << maxSliderPosition << maxSliderMax;
+  }
+}
+
 void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);
 
   if (isShow) {
     if (this->height() != mw_one->mainHeight) {
       newHeight = this->height();
-
-      minSliderMax = ui->textEdit->verticalScrollBar()->maximum();
-      minSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
-
-      qDebug() << "min " << ui->textEdit->height()
-               << ui->textEdit->verticalScrollBar()->sliderPosition()
-               << ui->textEdit->verticalScrollBar()->maximum();
-    } else {
-      maxSliderMax = ui->textEdit->verticalScrollBar()->maximum();
-      maxSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
-
-      qDebug() << "max " << ui->textEdit->height()
-               << ui->textEdit->verticalScrollBar()->sliderPosition()
-               << ui->textEdit->verticalScrollBar()->maximum();
     }
 
     if (pAndroidKeyboard->isVisible()) {
       this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                         mw_one->width(), newHeight);
+
+      minSliderMax = ui->textEdit->verticalScrollBar()->maximum();
+      minSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+
       minSliderPosition = minSliderMax * maxSliderPosition / maxSliderMax;
       ui->textEdit->verticalScrollBar()->setSliderPosition(minSliderPosition);
     } else {
+      maxSliderMax = ui->textEdit->verticalScrollBar()->maximum();
+      maxSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+
       maxSliderPosition = maxSliderMax * minSliderPosition / minSliderMax;
       ui->textEdit->verticalScrollBar()->setSliderPosition(maxSliderPosition);
     }
@@ -184,7 +192,10 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      on_btnBack_clicked();
+      if (pAndroidKeyboard->isVisible())
+        pAndroidKeyboard->hide();
+      else
+        on_btnBack_clicked();
       return true;
     }
   }
