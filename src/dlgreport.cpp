@@ -32,7 +32,6 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   printer = new QPrinter(QPrinter::HighResolution);
   preview = new QPrintPreviewDialog(printer, this);
   ui->btnPrint->hide();
-  ui->btnGetData->hide();
 
   QFont font = ui->lblTotal->font();
   font.setBold(true);
@@ -145,7 +144,7 @@ void dlgReport::on_btnYear_clicked() {
     ui->btnYear->setText(list->currentItem()->text());
     btnYearText = ui->btnYear->text();
     list->close();
-
+    listCategory.clear();
     mw_one->on_actionReport_triggered();
   });
 
@@ -352,6 +351,7 @@ void dlgReport::on_btnMonth_clicked() {
     btnMonthText = ui->btnMonth->text();
     list->close();
 
+    listCategory.clear();
     mw_one->on_actionReport_triggered();
   });
 
@@ -623,9 +623,4 @@ void dlgReport::plotPic(QPrinter* printer) {
   painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
   painter.setWindow(p_w_picpath.rect());
   painter.drawPixmap(0, 0, p_w_picpath);
-}
-
-void dlgReport::on_btnGetData_clicked() {
-  close();
-  mw_one->on_actionReport_triggered();
 }

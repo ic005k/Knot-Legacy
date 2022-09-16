@@ -46,8 +46,6 @@ class dlgReport : public QDialog {
 
   void plotPic(QPrinter *);
 
-  void on_btnGetData_clicked();
-
  private:
   QPrintPreviewDialog *preview;
   QPrinter *printer;

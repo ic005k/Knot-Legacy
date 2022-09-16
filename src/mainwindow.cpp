@@ -25,7 +25,7 @@ int chartMax = 5;
 double yMaxMonth, yMaxDay;
 MainWindow* mw_one;
 QTabWidget *tabData, *tabChart;
-bool loading, isReadEnd, isReadTWEnd;
+bool loading, isReadEnd, isReadTWEnd, isReadEBookEnd;
 bool isSaveEnd = true;
 bool isBreak = false;
 bool isBreakReport = false;
@@ -66,6 +66,8 @@ QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 
 ReadEBookThread::ReadEBookThread(QObject* parent) : QThread{parent} {}
 void ReadEBookThread::run() {
+  isReadEBookEnd = false;
+
   if (isEBook) mw_one->mydlgReader->openFile(ebookFile);
 
   if (isReport) {
@@ -148,6 +150,7 @@ void SearchThread::run() {
   MainWindow::SaveFile(SaveType);
   emit isDone();
 }
+
 void MainWindow::dealDone() {
   if (isBreak) {
     isSaveEnd = true;
@@ -2760,17 +2763,20 @@ void MainWindow::on_actionReport_triggered() {
   dlgProgEBook = mydlgReader->getProgBar();
   dlgProgEBook->show();
 
-  if (isReport) {
+  if (!isReadEBookEnd) {
     isBreakReport = true;
     myReadTWThread->quit();
     myReadTWThread->wait();
+
+    while (!isReadEBookEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
   }
 
-  while (isReport) QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-
-  isBreakReport = false;
-  isReport = true;
-  myReadEBookThread->start();
+  if (isReadEBookEnd) {
+    isBreakReport = false;
+    isReport = true;
+    myReadEBookThread->start();
+  }
 }
 
 void MainWindow::on_RunCategory() {
@@ -2780,18 +2786,20 @@ void MainWindow::on_RunCategory() {
   dlgProgEBook = mydlgReader->getProgBar();
   dlgProgEBook->show();
 
-  if (isRunCategory) {
+  if (!isReadEBookEnd) {
     isBreakReport = true;
     myReadTWThread->quit();
     myReadTWThread->wait();
+
+    while (!isReadEBookEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
   }
 
-  while (isRunCategory)
-    QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-
-  isBreakReport = false;
-  isRunCategory = true;
-  myReadEBookThread->start();
+  if (isReadEBookEnd) {
+    isBreakReport = false;
+    isRunCategory = true;
+    myReadEBookThread->start();
+  }
 }
 
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
@@ -4169,6 +4177,7 @@ void MainWindow::readEBookDone() {
   }
 
   dlgProgEBook->close();
+  isReadEBookEnd = true;
 }
 
 void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }
