@@ -30,7 +30,9 @@ class dlgReport : public QDialog {
   static void saveYMD();
 
   static void runCategory();
- public slots:
+  static void getMonthData();
+  void updateTable();
+  public slots:
   static void on_tableReport_cellClicked(int row, int column);
   void on_btnYear_clicked();
   void on_btnCategory_clicked();

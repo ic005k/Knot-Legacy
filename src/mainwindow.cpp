@@ -39,7 +39,7 @@ extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
 extern QStringList readTextList, htmlFiles;
 extern QDialog* dlgProgEBook;
-extern QTableWidget* tableReport;
+extern QTableWidget *tableReport, *tableCategory;
 extern void setTableNoItemFlags(QTableWidget* t, int row);
 extern QtOneDriveAuthorizationDialog* dialog_;
 
@@ -71,8 +71,7 @@ void ReadEBookThread::run() {
   if (isEBook) mw_one->mydlgReader->openFile(ebookFile);
 
   if (isReport) {
-    if (isBreakReport) return;
-    mw_one->mydlgReport->sel_Month();
+    mw_one->mydlgReport->getMonthData();
   }
 
   if (isRunCategory) mw_one->mydlgReport->runCategory();
@@ -2759,10 +2758,6 @@ void MainWindow::on_btnDay_clicked() {
 void MainWindow::on_actionReport_triggered() {
   if (isEBook || !isSaveEnd) return;
 
-  delete dlgProgEBook;
-  dlgProgEBook = mydlgReader->getProgBar();
-  dlgProgEBook->show();
-
   if (!isReadEBookEnd) {
     isBreakReport = true;
     myReadTWThread->quit();
@@ -2773,6 +2768,10 @@ void MainWindow::on_actionReport_triggered() {
   }
 
   if (isReadEBookEnd) {
+    tableReport->setRowCount(0);
+    dlgProgEBook = mydlgReader->getProgBar();
+    dlgProgEBook->show();
+
     isBreakReport = false;
     isReport = true;
     myReadEBookThread->start();
@@ -2782,10 +2781,6 @@ void MainWindow::on_actionReport_triggered() {
 void MainWindow::on_RunCategory() {
   if (isEBook || !isSaveEnd || isReport) return;
 
-  delete dlgProgEBook;
-  dlgProgEBook = mydlgReader->getProgBar();
-  dlgProgEBook->show();
-
   if (!isReadEBookEnd) {
     isBreakReport = true;
     myReadTWThread->quit();
@@ -2796,6 +2791,10 @@ void MainWindow::on_RunCategory() {
   }
 
   if (isReadEBookEnd) {
+    tableCategory->setRowCount(0);
+    dlgProgEBook = mydlgReader->getProgBar();
+    dlgProgEBook->show();
+
     isBreakReport = false;
     isRunCategory = true;
     myReadEBookThread->start();
@@ -4153,6 +4152,8 @@ void MainWindow::readEBookDone() {
   }
 
   if (isReport) {
+    dlgProgEBook->close();
+    mydlgReport->updateTable();
     mydlgReport->ui->lblTitle->setText(
         tabData->tabText(tabData->currentIndex()));
     mydlgReport->ui->tableDetails->setRowCount(0);

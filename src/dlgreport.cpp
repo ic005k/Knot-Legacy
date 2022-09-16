@@ -11,7 +11,7 @@ extern QTabWidget *tabData, *tabChart;
 extern bool isImport, isEBook, isReport, isBreakReport, isReportWindowsShow,
     isRunCategory;
 QString btnYearText, btnMonthText;
-QTableWidget *tableReport, *tableDetails, *tableCategory;
+QTableWidget *tableReport, *tableReport0, *tableDetails, *tableCategory;
 QLabel *lblTotal, *lblDetails;
 QToolButton *btnCategory, *btnMonth, *btnYear;
 
@@ -144,6 +144,7 @@ void dlgReport::on_btnYear_clicked() {
     ui->btnYear->setText(list->currentItem()->text());
     btnYearText = ui->btnYear->text();
     list->close();
+
     listCategory.clear();
     mw_one->on_actionReport_triggered();
   });
@@ -178,7 +179,7 @@ void dlgReport::sel_Year() {
     }
 
     QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
-    if (strYear == btnYear->text()) {
+    if (strYear == btnYearText) {
       tableReport->setRowCount(tableReport->rowCount() + 1);
 
       QTableWidgetItem* tableItem =
@@ -258,7 +259,7 @@ void dlgReport::sel_Month() {
 
     QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
     QString strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0));
-    if (strYear == btnYear->text() && strMonth == btnMonth->text()) {
+    if (strYear == btnYearText && strMonth == btnMonthText) {
       tableReport->setRowCount(tableReport->rowCount() + 1);
 
       QTableWidgetItem* tableItem =
@@ -289,6 +290,7 @@ void dlgReport::sel_Month() {
 
   lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " + tr("Amount") +
                     " 0");
+
   int count = tableReport->rowCount();
   if (count > 0) {
     tableReport->setRowCount(count + 1);
@@ -320,6 +322,140 @@ void dlgReport::sel_Month() {
   btnCategory->setText(tr("Category"));
   tableCategory->hide();
   tableDetails->show();
+}
+
+void dlgReport::updateTable() {
+  tableReport->setRowCount(0);
+  tableDetails->setRowCount(0);
+
+  int freq = 0;
+  double amount = 0;
+
+  for (int i = 0; i < tableReport0->rowCount(); i++) {
+    tableReport->setRowCount(tableReport->rowCount() + 1);
+
+    QTableWidgetItem* tableItem =
+        new QTableWidgetItem(tableReport0->item(i, 0)->text());
+    tableReport->setItem(i, 0, tableItem);
+
+    QString txt1 = tableReport0->item(i, 1)->text();
+    freq = freq + txt1.toInt();
+    tableItem = new QTableWidgetItem(txt1);
+    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    tableReport->setItem(i, 1, tableItem);
+
+    QString txt2 = tableReport0->item(i, 2)->text();
+    amount = amount + txt2.toDouble();
+    tableItem = new QTableWidgetItem(txt2);
+    tableReport->setItem(i, 2, tableItem);
+
+    tableReport->setColumnWidth(0, 10);
+    tableReport->setRowHeight(i, 30);
+
+    tableReport->item(i, 0)->setFlags(Qt::NoItemFlags);
+    tableReport->item(i, 1)->setFlags(Qt::NoItemFlags);
+    tableReport->item(i, 2)->setFlags(Qt::NoItemFlags);
+  }
+
+  lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " + tr("Amount") +
+                    " 0");
+
+  int count = tableReport->rowCount();
+  if (count > 0) {
+    tableReport->setRowCount(count + 1);
+    QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
+    tableReport->setItem(count, 0, tableItem);
+
+    tableItem = new QTableWidgetItem(QString::number(freq));
+    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    tableReport->setItem(count, 1, tableItem);
+
+    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
+    tableItem = new QTableWidgetItem(strAmount);
+    tableReport->setItem(count, 2, tableItem);
+
+    lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
+                      QString::number(freq) + "    " + tr("Amount") + " " +
+                      strAmount);
+
+    tableReport->setColumnWidth(0, 10);
+    tableReport->setRowHeight(count, 30);
+
+    tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);
+    tableReport->item(count, 1)->setFlags(Qt::NoItemFlags);
+    tableReport->item(count, 2)->setFlags(Qt::NoItemFlags);
+
+    on_tableReport_cellClicked(0, 0);
+  }
+
+  btnCategory->setText(tr("Category"));
+  tableCategory->hide();
+  tableDetails->show();
+}
+
+void dlgReport::getMonthData() {
+  tableReport0 = new QTableWidget;
+  tableReport0->setColumnCount(3);
+  tableReport0->setRowCount(0);
+  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
+  int freq = 0;
+  double amount = 0;
+  int j = 0;
+
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    if (isBreakReport) {
+      break;
+      return;
+    }
+
+    QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
+    QString strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0));
+
+    if (btnMonthText == tr("Year-Round")) {
+      if (strYear == btnYearText) {
+        tableReport0->setRowCount(tableReport0->rowCount() + 1);
+
+        QString txt0 = tw->topLevelItem(i)->text(0);
+        QTableWidgetItem* tableItem = new QTableWidgetItem;
+        tableItem->setText(txt0);
+        tableReport0->setItem(j, 0, tableItem);
+
+        QString txt1 = tw->topLevelItem(i)->text(1);
+        freq = freq + txt1.toInt();
+        tableItem = new QTableWidgetItem(txt1);
+        tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        tableReport0->setItem(j, 1, tableItem);
+
+        QString txt2 = tw->topLevelItem(i)->text(2);
+        amount = amount + txt2.toDouble();
+        tableItem = new QTableWidgetItem(txt2);
+        tableReport0->setItem(j, 2, tableItem);
+
+        j++;
+      }
+    } else {
+      if (strYear == btnYearText && strMonth == btnMonthText) {
+        tableReport0->setRowCount(tableReport0->rowCount() + 1);
+
+        QTableWidgetItem* tableItem =
+            new QTableWidgetItem(tw->topLevelItem(i)->text(0));
+        tableReport0->setItem(j, 0, tableItem);
+
+        QString txt1 = tw->topLevelItem(i)->text(1);
+        freq = freq + txt1.toInt();
+        tableItem = new QTableWidgetItem(txt1);
+        tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        tableReport0->setItem(j, 1, tableItem);
+
+        QString txt2 = tw->topLevelItem(i)->text(2);
+        amount = amount + txt2.toDouble();
+        tableItem = new QTableWidgetItem(txt2);
+        tableReport0->setItem(j, 2, tableItem);
+
+        j++;
+      }
+    }
+  }
 }
 
 void dlgReport::on_btnMonth_clicked() {
