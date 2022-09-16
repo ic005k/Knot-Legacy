@@ -14,7 +14,7 @@ QString ver = "1.0.15";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
-bool isImport, isEBook, isReport;
+bool isImport, isEBook, isReport, isRunCategory;
 QString appName = "Knot";
 QString iniFile, iniDir, strDate, readDate, noteText, strStats, SaveType, strY,
     strM, btnYText, btnMText, btnDText, CurrentYearMonth;
@@ -72,6 +72,9 @@ void ReadEBookThread::run() {
     if (isBreakReport) return;
     mw_one->mydlgReport->sel_Month();
   }
+
+  if (isRunCategory) mw_one->mydlgReport->runCategory();
+
   emit isDone();
 }
 
@@ -2770,6 +2773,27 @@ void MainWindow::on_actionReport_triggered() {
   myReadEBookThread->start();
 }
 
+void MainWindow::on_RunCategory() {
+  if (isEBook || !isSaveEnd || isReport) return;
+
+  delete dlgProgEBook;
+  dlgProgEBook = mydlgReader->getProgBar();
+  dlgProgEBook->show();
+
+  if (isRunCategory) {
+    isBreakReport = true;
+    myReadTWThread->quit();
+    myReadTWThread->wait();
+  }
+
+  while (isRunCategory)
+    QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
+  isBreakReport = false;
+  isRunCategory = true;
+  myReadEBookThread->start();
+}
+
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
 
 void MainWindow::on_actionPreferences_triggered() {
@@ -4138,6 +4162,10 @@ void MainWindow::readEBookDone() {
     isReportWindowsShow = true;
 
     isReport = false;
+  }
+
+  if (isRunCategory) {
+    isRunCategory = false;
   }
 
   dlgProgEBook->close();

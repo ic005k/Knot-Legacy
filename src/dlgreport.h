@@ -23,15 +23,17 @@ class dlgReport : public QDialog {
   ~dlgReport();
   Ui::dlgReport *ui;
 
+  QStringList listCategory;
   static void markColor(int row);
   static void sel_Year();
   static void sel_Month();
   static void saveYMD();
 
+  static void runCategory();
  public slots:
   static void on_tableReport_cellClicked(int row, int column);
   void on_btnYear_clicked();
-
+  void on_btnCategory_clicked();
   void on_btnMonth_clicked();
 
  protected:
@@ -39,8 +41,6 @@ class dlgReport : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:
   void on_btnBack_clicked();
-
-  void on_btnCategory_clicked();
 
   void on_btnPrint_clicked();
 
