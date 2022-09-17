@@ -210,7 +210,6 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   initMain = true;
-  ui->quickWidget->installEventFilter(this);
 
   QDesktopWidget* desktop = QApplication::desktop();
   QRect screen = desktop->screenGeometry();
@@ -735,6 +734,8 @@ void MainWindow::timerUpdate() {
 }
 
 void MainWindow::on_timerShowFloatFun() {
+  delete mw_one->mydlgFloatFun;
+  mydlgFloatFun = new dlgFloatFun(this);
   mydlgFloatFun->init();
   timerShowFloatFun->stop();
 }
@@ -1775,6 +1776,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  tw->viewport()->installEventFilter(this);
 
   if (evn->type() == QEvent::ToolTip) {
     QToolTip::hideText();
@@ -1782,7 +1784,24 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     return true;
   }
 
-  if (watch == tw) {
+  if (watch == tw->viewport()) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      int press_x = event->globalX();
+      int press_y = event->globalY();
+      int press_y0 = event->pos().y();
+      int newy = 0;
+      if (press_y0 <= tw->height() / 2) {
+        newy = press_y + 35;
+      }
+
+      if (press_y0 > tw->height() / 2) {
+        newy = press_y - mydlgFloatFun->height() - 35;
+      }
+
+      mydlgFloatFun->setY(newy);
+
+      qDebug() << "tw Press: " << press_x << press_y << press_y0;
+    }
   }
 
   if (watch == ui->lblInfo || watch == ui->frameTip) {
@@ -1950,6 +1969,8 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         if (!listSelTab->isHidden()) {
           listSelTab->close();
 
+          delete mw_one->mydlgFloatFun;
+          mydlgFloatFun = new dlgFloatFun(this);
           mydlgFloatFun->init();
           return true;
         } else if (!listTimeMachine->isHidden()) {
@@ -2570,7 +2591,6 @@ void MainWindow::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
   if (floatfun && !initMain) {
     floatfun = false;
-    // mydlgFloatFun->init();
   }
   //获取背景色
   QPalette pal = ui->btnFind->palette();
@@ -2610,6 +2630,8 @@ void MainWindow::on_btnMax_clicked() {
     ui->btnMax->setText(tr("Max"));
   }
 
+  delete mw_one->mydlgFloatFun;
+  mydlgFloatFun = new dlgFloatFun(this);
   mydlgFloatFun->init();
 }
 
@@ -3521,6 +3543,7 @@ void MainWindow::init_UIWidget() {
   ui->frame_tab->layout()->setSpacing(1);
 
   this->installEventFilter(this);
+  ui->quickWidget->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
@@ -3713,6 +3736,8 @@ void MainWindow::on_btnSelTab_clicked() {
     tabData->setCurrentIndex(list->currentRow());
     list->close();
 
+    delete mw_one->mydlgFloatFun;
+    mydlgFloatFun = new dlgFloatFun(this);
     mydlgFloatFun->init();
   });
 
@@ -3949,6 +3974,8 @@ void MainWindow::on_btnZoom_clicked() {
     ui->frame_tab->show();
     ui->frame_charts->setMaximumHeight(frameChartHeight);
 
+    delete mw_one->mydlgFloatFun;
+    mydlgFloatFun = new dlgFloatFun(this);
     mydlgFloatFun->init();
   }
 }
@@ -4070,6 +4097,8 @@ void MainWindow::on_btnBack_clicked() {
   mydlgReader->saveReader();
   mydlgReader->savePageVPos();
 
+  delete mw_one->mydlgFloatFun;
+  mydlgFloatFun = new dlgFloatFun(this);
   mydlgFloatFun->init();
 }
 
@@ -4256,6 +4285,8 @@ void MainWindow::on_btnBack_One_clicked() {
       ui->frameOne->hide();
       ui->frameMain->show();
 
+      delete mw_one->mydlgFloatFun;
+      mydlgFloatFun = new dlgFloatFun(this);
       mydlgFloatFun->init();
     }
   }
@@ -4287,6 +4318,8 @@ void MainWindow::on_btnBackMemo_clicked() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setValue("/MainNotes/SlidePos", mydlgMainNotes->sliderPos);
 
+  delete mw_one->mydlgFloatFun;
+  mydlgFloatFun = new dlgFloatFun(this);
   mydlgFloatFun->init();
 }
 

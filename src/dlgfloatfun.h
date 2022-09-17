@@ -18,7 +18,8 @@ class dlgFloatFun : public QDialog {
 
   void init();
 
- protected:
+  void setY(int y);
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;
   void paintEvent(QPaintEvent *event) override;

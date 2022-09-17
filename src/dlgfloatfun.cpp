@@ -12,15 +12,15 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
 }
 
 void dlgFloatFun::init() {
-  setAttribute(Qt::WA_TranslucentBackground);
+  // setAttribute(Qt::WA_TranslucentBackground);
 
   setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint |
                  Qt::WindowDoesNotAcceptFocus);
 
   QPalette pal = palette();
-  QColor color = QColor(Qt::lightGray);
+  QColor color = QColor(Qt::Key_Blue);
   pal.setColor(QPalette::Background, color);
-  // setPalette(pal);
+  setPalette(pal);
 
   this->setContentsMargins(1, 1, 1, 1);
 
@@ -35,7 +35,7 @@ void dlgFloatFun::init() {
 
   QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
   m_pAnimation->setTargetObject(this);
-  m_pAnimation->setDuration(1500);
+  m_pAnimation->setDuration(500);
   QGraphicsOpacityEffect* m_pOpacity = new QGraphicsOpacityEffect();
   this->setGraphicsEffect(m_pOpacity);
   m_pOpacity->setOpacity(1);
@@ -48,6 +48,12 @@ void dlgFloatFun::init() {
   this->show();
 
   qDebug() << "floatfun=" << this->x(), this->y();
+}
+
+void dlgFloatFun::setY(int y) {
+  this->setGeometry(
+      mw_one->geometry().x() + mw_one->width() - this->width() - 10, y,
+      this->width(), this->height());
 }
 
 bool dlgFloatFun::eventFilter(QObject* watch, QEvent* evn) {
@@ -79,6 +85,7 @@ void dlgFloatFun::closeEvent(QCloseEvent* event) {
 
 void dlgFloatFun::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
+  return;
   QStyleOption opt;
   opt.init(this);
   QPainter painter(this);
