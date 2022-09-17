@@ -298,7 +298,7 @@ class MainWindow : public QMainWindow {
   bool showMsgBox(QString title, QString info);
   void refreshMainUI();
   void on_RunCategory();
-  public slots:
+ public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();
@@ -345,7 +345,7 @@ class MainWindow : public QMainWindow {
 
   void on_twItemDoubleClicked();
 
-  void on_actionView_App_Data_triggered();
+  void on_about();
 
   void on_btnFind_clicked();
 

@@ -121,7 +121,7 @@ selection-background-color: lightblue;
           </property>
           <property name="minimumSize">
            <size>
-            <width>35</width>
+            <width>45</width>
             <height>0</height>
            </size>
           </property>

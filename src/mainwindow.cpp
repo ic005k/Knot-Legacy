@@ -1296,22 +1296,14 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
   if (mydlgPre->ui->chkClose->isChecked()) {
-    // ui->btnTodo->click();
-    // mydlgFloatFun->close();
-    // delete mydlgFloatFun;
-
-    on_actionView_App_Data_triggered();
+    on_about();
 
     stopJavaTimer();
     event->accept();
 
   } else {
     if (mydlgPre->isFontChange) {
-      // ui->btnTodo->click();
-      // mydlgFloatFun->close();
-      // delete mydlgFloatFun;
-
-      on_actionView_App_Data_triggered();
+      on_about();
 
       stopJavaTimer();
       event->accept();
@@ -2329,7 +2321,7 @@ QTreeWidget* MainWindow::get_tw(int tabIndex) {
   return tw;
 }
 
-void MainWindow::on_actionView_App_Data_triggered() {
+void MainWindow::on_about() {
   mydlgNotes->init_Notes();
 
   bakData(iniFile, false);
@@ -3757,7 +3749,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   QAction* actPreferences = new QAction(tr("Preferences"));
   QAction* actMemos = new QAction(tr("Memos"));
   actMemos->setVisible(false);
-  QAction* actViewAppData = new QAction(tr("About") + " (" + ver + ")");
+  QAction* actAbout = new QAction(tr("About") + " (" + ver + ")");
   QAction* actOneDrive = new QAction(tr("OneDrive Backup Data"));
 
   QAction* actUndo = new QAction(tr("Undo"));
@@ -3795,8 +3787,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
           &MainWindow::on_actionPreferences_triggered);
   connect(actMemos, &QAction::triggered, this,
           &MainWindow::on_actionMemos_triggered);
-  connect(actViewAppData, &QAction::triggered, this,
-          &MainWindow::on_actionView_App_Data_triggered);
+  connect(actAbout, &QAction::triggered, this, &MainWindow::on_about);
   connect(actOneDrive, &QAction::triggered, this,
           &MainWindow::on_OneDriveBackupData);
 
@@ -3832,7 +3823,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 
   mainMenu->addAction(actMemos);
   mainMenu->addAction(actOneDrive);
-  mainMenu->addAction(actViewAppData);
+  mainMenu->addAction(actAbout);
 
   mainMenu->setStyleSheet(qss);
 }

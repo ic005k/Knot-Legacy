@@ -21,8 +21,8 @@ dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->lblAbout->setWordWrap(true);
   ui->lblLogo->adjustSize();
   ui->lblLogo->setText("");
-  ui->lblLogo->setFixedHeight(85);
-  ui->lblLogo->setFixedWidth(85);
+  ui->lblLogo->setFixedHeight(120);
+  ui->lblLogo->setFixedWidth(120);
   ui->lblLogo->setStyleSheet(
       "QLabel{"
       "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
