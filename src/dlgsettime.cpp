@@ -139,7 +139,8 @@ void dlgSetTime::on_btnCustom_clicked() {
 
     int h = mw_one->height() * 2 / 3;
     int y = ui->frame->y() + ui->frame->height() - h;
-    dlg->setGeometry(ui->frame->x(), y, ui->frame->width(), h);
+    dlg->setGeometry(mw_one->geometry().x() + ui->frame->x(), y,
+                     ui->frame->width(), h);
     dlg->show();
     dlg->ui->listWidget->setFocus();
     if (dlg->ui->listWidget->count() > 0) dlg->ui->listWidget->setCurrentRow(0);

@@ -9,6 +9,12 @@ extern MainWindow* mw_one;
 dlgFloatFun::dlgFloatFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgFloatFun) {
   ui->setupUi(this);
+
+  int s = 28;
+  ui->btnAdd->setFixedHeight(s);
+  ui->btnAdd->setFixedWidth(s);
+  ui->btnDel->setFixedHeight(s);
+  ui->btnDel->setFixedWidth(s);
 }
 
 void dlgFloatFun::init() {
@@ -20,7 +26,7 @@ void dlgFloatFun::init() {
   QPalette pal = palette();
   QColor color = QColor(Qt::Key_Blue);
   pal.setColor(QPalette::Background, color);
-  setPalette(pal);
+  // setPalette(pal);
 
   this->setContentsMargins(1, 1, 1, 1);
 
@@ -28,7 +34,7 @@ void dlgFloatFun::init() {
   ui->btnDel->setStyleSheet("border:none");
 
   this->setGeometry(
-      mw_one->geometry().x() + mw_one->width() - this->width() - 10,
+      mw_one->geometry().x() + mw_one->width() - this->width() - 14,
       mw_one->geometry().y() + mw_one->ui->frameMenu->height() +
           mw_one->ui->tabWidget->height() - this->height(),
       this->width(), this->height());
@@ -86,10 +92,15 @@ void dlgFloatFun::closeEvent(QCloseEvent* event) {
 void dlgFloatFun::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
   return;
-  QStyleOption opt;
+
+  /*QStyleOption opt;
   opt.init(this);
   QPainter painter(this);
-  style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
+  style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);*/
+
+  QPainter painter(this);
+  painter.fillRect(this->rect(), QColor(0, 0, 0, 0));
+  QWidget::paintEvent(event);
 }
 
 dlgFloatFun::~dlgFloatFun() { delete ui; }

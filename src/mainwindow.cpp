@@ -239,7 +239,7 @@ MainWindow::MainWindow(QWidget* parent)
 
   initMain = false;
 
-  timerShowFloatFun->start(2000);
+  timerShowFloatFun->start(1500);
 }
 
 void MainWindow::initHardStepSensor() {

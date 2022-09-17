@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>36</width>
-    <height>74</height>
+    <width>31</width>
+    <height>64</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,14 +53,14 @@ dlgFloatFun{
     <widget class="QToolButton" name="btnDel">
      <property name="minimumSize">
       <size>
-       <width>30</width>
-       <height>30</height>
+       <width>25</width>
+       <height>25</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>30</width>
-       <height>30</height>
+       <width>25</width>
+       <height>25</height>
       </size>
      </property>
      <property name="text">
@@ -72,8 +72,8 @@ dlgFloatFun{
      </property>
      <property name="iconSize">
       <size>
-       <width>35</width>
-       <height>35</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
     </widget>
@@ -82,14 +82,14 @@ dlgFloatFun{
     <widget class="QToolButton" name="btnAdd">
      <property name="minimumSize">
       <size>
-       <width>30</width>
-       <height>30</height>
+       <width>25</width>
+       <height>25</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>30</width>
-       <height>30</height>
+       <width>25</width>
+       <height>25</height>
       </size>
      </property>
      <property name="text">
@@ -101,8 +101,8 @@ dlgFloatFun{
      </property>
      <property name="iconSize">
       <size>
-       <width>35</width>
-       <height>35</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
     </widget>

@@ -110,3 +110,8 @@ void dlgList::on_btnChange_clicked() {
     mw_one->startSave("alltab");
   }
 }
+
+void dlgList::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
+  Q_UNUSED(item);
+  on_btnBack_clicked();
+}
