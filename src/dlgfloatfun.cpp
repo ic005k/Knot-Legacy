@@ -9,14 +9,6 @@ extern MainWindow* mw_one;
 dlgFloatFun::dlgFloatFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgFloatFun) {
   ui->setupUi(this);
-
-  int s = 35;
-  this->setFixedHeight(s * 2);
-  this->setFixedWidth(s);
-
-  int iz = 35;
-  ui->btnAdd->setIconSize(QSize(iz, iz));
-  ui->btnDel->setIconSize(QSize(iz, iz));
 }
 
 void dlgFloatFun::init() {
@@ -36,7 +28,7 @@ void dlgFloatFun::init() {
   ui->btnDel->setStyleSheet("border:none");
 
   this->setGeometry(
-      mw_one->geometry().x() + mw_one->width() - this->width() - 14,
+      mw_one->geometry().x() + mw_one->width() - this->width() - 12,
       mw_one->geometry().y() + mw_one->ui->frameMenu->height() +
           mw_one->ui->tabWidget->height() - this->height(),
       this->width(), this->height());
