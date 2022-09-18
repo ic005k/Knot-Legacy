@@ -10,11 +10,13 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgFloatFun) {
   ui->setupUi(this);
 
-  int s = 28;
-  ui->btnAdd->setFixedHeight(s);
-  ui->btnAdd->setFixedWidth(s);
-  ui->btnDel->setFixedHeight(s);
-  ui->btnDel->setFixedWidth(s);
+  int s = 35;
+  this->setFixedHeight(s * 2);
+  this->setFixedWidth(s);
+
+  int iz = 35;
+  ui->btnAdd->setIconSize(QSize(iz, iz));
+  ui->btnDel->setIconSize(QSize(iz, iz));
 }
 
 void dlgFloatFun::init() {
