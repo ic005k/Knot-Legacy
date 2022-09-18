@@ -888,20 +888,11 @@ void MainWindow::del_Data(QTreeWidget* tw) {
       int childCount = topItem->childCount();
       if (childCount > 0) {
         QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-        QString str1 = topItem->child(childCount - 1)->text(0) + "  " +
-                       topItem->child(childCount - 1)->text(1);
-        QMessageBox msgBox;
-        msgBox.setText(str);
-        msgBox.setInformativeText(tr("Less") + "\n" + str1);
-        QPushButton* btnCancel =
-            msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-        QPushButton* btnOk =
-            msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-        btnOk->setFocus();
-        msgBox.exec();
-        if (msgBox.clickedButton() == btnCancel) {
-          return;
-        }
+        QString str1 = topItem->child(childCount - 1)->text(0) + "\n" +
+                       topItem->child(childCount - 1)->text(1) + "\n" +
+                       topItem->child(childCount - 1)->text(2) + "\n";
+
+        if (showMsgBox(str, tr("Less") + "\n\n" + str1) == false) return;
 
         addUndo(tr("Del Item") + " ( " + getTabText() + " ) ");
 
@@ -4243,6 +4234,11 @@ bool MainWindow::showMsgBox(QString title, QString info) {
   QMessageBox msgBox;
   msgBox.setText(title);
   msgBox.setInformativeText(info);
+
+  QPixmap pix(":/res/info.png");
+  pix.setDevicePixelRatio(8);
+  msgBox.setIconPixmap(pix);
+
   QPushButton* btnCancel =
       msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
   QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
