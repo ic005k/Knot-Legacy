@@ -60,5 +60,7 @@
         <file>res/pic.png</file>
         <file>res/additem.png</file>
         <file>res/delitem.png</file>
+        <file>res/memos.png</file>
+        <file>res/info.png</file>
     </qresource>
 </RCC>
