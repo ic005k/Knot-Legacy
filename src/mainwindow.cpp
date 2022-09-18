@@ -1975,6 +1975,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
           return true;
         } else if (!listTimeMachine->isHidden()) {
           listTimeMachine->close();
+
+          delete mydlgFloatFun;
+          mydlgFloatFun = new dlgFloatFun(this);
+          mydlgFloatFun->init();
           return true;
         }
       }
@@ -3812,9 +3816,10 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
           &MainWindow::on_actionPreferences_triggered);
   connect(actMemos, &QAction::triggered, this,
           &MainWindow::on_actionMemos_triggered);
-  connect(actAbout, &QAction::triggered, this, &MainWindow::on_about);
+
   connect(actOneDrive, &QAction::triggered, this,
           &MainWindow::on_OneDriveBackupData);
+  connect(actAbout, &QAction::triggered, this, &MainWindow::on_about);
 
   QString qss =
       "QMenu {"
@@ -3908,6 +3913,8 @@ void MainWindow::addRedo() {
 }
 
 void MainWindow::timeMachine() {
+  mydlgFloatFun->close();
+
   QListWidget* list = new QListWidget(mw_one);
   mw_one->listTimeMachine = list;
   list->setStyleSheet(mw_one->listWidgetStyle);
@@ -3938,6 +3945,10 @@ void MainWindow::timeMachine() {
     QString file = iniDir + str.trimmed();
     importBakData(file, true, false);
     list->close();
+
+    delete mydlgFloatFun;
+    mydlgFloatFun = new dlgFloatFun(this);
+    mydlgFloatFun->init();
   });
 
   list->setGeometry(0, 0, mw_one->width(), mw_one->height());
