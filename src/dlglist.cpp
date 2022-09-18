@@ -24,7 +24,7 @@ bool dlgList::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      on_btnBack_clicked();
+      close();
       return true;
     }
   }
@@ -42,12 +42,15 @@ void dlgList::on_btnClear_clicked() {
   mw_one->mydlgSetTime->saveCustomDesc();
 }
 
-void dlgList::on_btnBack_clicked() {
+void dlgList::on_btnBack_clicked() { setCategoryText(); }
+
+void dlgList::setCategoryText() {
   int row = ui->listWidget->currentRow();
   if (row >= 0) {
     mw_one->mydlgSetTime->ui->editDesc->setText(
         ui->listWidget->item(row)->text());
   }
+
   close();
 }
 
@@ -113,5 +116,5 @@ void dlgList::on_btnChange_clicked() {
 
 void dlgList::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
   Q_UNUSED(item);
-  on_btnBack_clicked();
+  setCategoryText();
 }

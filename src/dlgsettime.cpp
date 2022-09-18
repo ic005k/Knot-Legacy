@@ -38,7 +38,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editAmount);
   ui->editAmount->setValidator(validator);
-  // ui->editAmount->setPlaceholderText(tr("Number"));
+  ui->editDesc->setPlaceholderText(tr("Category"));
   ui->editDesc->setStyleSheet(ui->editAmount->styleSheet());
 
   ui->btnClearAmount->setStyleSheet("border:none");
@@ -49,10 +49,7 @@ dlgSetTime::~dlgSetTime() { delete ui; }
 
 void dlgSetTime::on_btnBack_clicked() { close(); }
 
-void dlgSetTime::keyReleaseEvent(QKeyEvent* event) {
-  Q_UNUSED(event);
-  // event->accept();
-}
+void dlgSetTime::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
 void dlgSetTime::on_btnOk_clicked() {
   if (!mw_one->isAdd) {

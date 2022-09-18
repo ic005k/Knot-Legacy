@@ -30,7 +30,8 @@ class dlgList : public QDialog {
 
   void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
- private:
+  private:
+  void setCategoryText();
 };
 
 #endif  // DLGLIST_H

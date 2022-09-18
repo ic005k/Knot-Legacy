@@ -888,9 +888,11 @@ void MainWindow::del_Data(QTreeWidget* tw) {
       int childCount = topItem->childCount();
       if (childCount > 0) {
         QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-        QString str1 = topItem->child(childCount - 1)->text(0) + "\n" +
-                       topItem->child(childCount - 1)->text(1) + "\n" +
-                       topItem->child(childCount - 1)->text(2) + "\n";
+        QString str1 =
+            tr("Time") + " : " + topItem->child(childCount - 1)->text(0) +
+            "\n" + tr("Amount") + " : " +
+            topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
+            " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
         if (showMsgBox(str, tr("Less") + "\n\n" + str1) == false) return;
 
