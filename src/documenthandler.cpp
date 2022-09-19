@@ -287,6 +287,20 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
       dlp->show();
       dlp->loadPic(picfile, 0);
       dlp->ui->hsZoom->setValue(200);
+    } else {
+      QString memoPicFile = picfile;
+      memoPicFile.replace(strOpfPath, "");
+      memoPicFile.replace("org-", "");
+      memoPicFile.replace("file://", "");
+      qDebug() << "memoPicFile : " << memoPicFile;
+
+      if (QFile(memoPicFile).exists()) {
+        dlgLoadPic *dlp = new dlgLoadPic(mw_one);
+        dlp->initMain();
+        dlp->show();
+        dlp->loadPic(memoPicFile, 0);
+        dlp->ui->hsZoom->setValue(200);
+      }
     }
   }
 }

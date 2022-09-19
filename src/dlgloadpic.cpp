@@ -124,11 +124,13 @@ void dlgLoadPic::on_btnReduce_clicked() {
 }
 
 void dlgLoadPic::loadPic(QString picfile, int k) {
-  QPixmap pixmap(picfile);
+  QImage img(picfile);
+  QPixmap pixmap;
   int sx, sy;
   sx = ui->scrollArea->width() + k -
        ui->scrollArea->verticalScrollBar()->width() - 12;
   sy = ui->scrollArea->height() + k;
+  pixmap = QPixmap::fromImage(img);
   pixmap = pixmap.scaled(sx, sy, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   ui->lblPic->setPixmap(pixmap);
 }

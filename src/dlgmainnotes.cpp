@@ -121,16 +121,48 @@ void dlgMainNotes::saveMainNotes() {
     memofile.close();
   }
 
-  QFile memofile1(iniDir + "memo/memo.html");
-
+  QString htmlFileName = iniDir + "memo/memo.html";
+  QFile memofile1(htmlFileName);
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
-
     ui->textEdit->setMarkdown(mw_one->loadText(strMD));
     ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
     stream << ui->textEdit->toHtml().toUtf8();
     memofile1.close();
   }
+  QTextEdit* edit = new QTextEdit;
+  QPlainTextEdit* edit1 = new QPlainTextEdit;
+  QString strhtml = mw_one->loadText(htmlFileName);
+  strhtml = strhtml.replace("><", ">\n<");
+  edit->setPlainText(strhtml);
+
+  for (int i = 0; i < edit->document()->lineCount(); i++) {
+    QString str = mw_one->mydlgReader->getTextEditLineText(edit, i);
+    str = str.trimmed();
+    if (str.mid(0, 4) == "<img") {
+      QString str1 = str;
+      QStringList list = str1.split(" ");
+      QString strSrc;
+      for (int k = 0; k < list.count(); k++) {
+        QString s1 = list.at(k);
+        if (s1.contains("src=")) {
+          strSrc = s1;
+          break;
+        }
+      }
+      strSrc = strSrc.replace("src=", "");
+      strSrc = strSrc.replace("/>", "");
+      str = "<a href=" + strSrc + ">" + str + "</a>";
+      qDebug() << "strSrc=" << strSrc << str;
+
+      str = str.replace("width=", "width1=");
+      str = str.replace("height=", "height1=");
+    }
+
+    edit1->appendPlainText(str);
+  }
+
+  mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
 
   sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
 
@@ -322,7 +354,6 @@ void dlgMainNotes::on_btnPic_clicked() {
                                           tr("Picture Files (*.*)"));
 
   if (QFileInfo(fileName).exists()) {
-    QStringList list = fileName.split(".");
     QDir dir;
     dir.mkpath(iniDir + "memo/images/");
 
@@ -350,12 +381,17 @@ void dlgMainNotes::on_btnPic_clicked() {
     if (w > ui->textEdit->width() - 26) {
       new_w = ui->textEdit->width() - 26;
       new_h = new_w / r;
-      QPixmap pix;
-      pix = QPixmap::fromImage(img);
-      pix = pix.scaled(new_w, new_h, Qt::KeepAspectRatio,
-                       Qt::SmoothTransformation);
-      pix.save(strTar);
+
+    } else {
+      new_w = w;
+      new_h = h;
     }
+
+    QPixmap pix;
+    pix = QPixmap::fromImage(img);
+    pix =
+        pix.scaled(new_w, new_h, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pix.save(strTar);
 
     /*QTextDocumentFragment fragment;
     fragment = QTextDocumentFragment::fromHtml("<img src=" + strTar + ">");
