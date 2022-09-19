@@ -265,7 +265,6 @@ void MainWindow::initHardStepSensor() {
     ui->btnPause->hide();
     initTodayInitSteps();
     resetSteps = tc;
-    // timerStep->start(5000);
 
     // QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep3Win");
     // jo.callStaticMethod<int>("com.x/MyService", "setSleep3", "()I");
@@ -2560,8 +2559,8 @@ void MainWindow::on_btnHide_clicked() { on_btnFind_clicked(); }
 void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 
 void MainWindow::on_btnTodo_clicked() {
-  mydlgTodo->setFixedHeight(this->height());
-  mydlgTodo->setFixedWidth(this->width());
+  mydlgTodo->setGeometry(this->geometry().x(), this->geometry().y(),
+                         this->width(), this->height());
 
   mydlgTodo->show();
   mydlgTodo->refreshAlarm();
@@ -2852,12 +2851,13 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
 
 void MainWindow::on_btnSteps_clicked() {
   if (isHardStepSensor == 1) updateHardSensorSteps();
-  mydlgSteps->setFixedHeight(this->height());
-  mydlgSteps->setFixedWidth(this->width());
+  mydlgSteps->setGeometry(this->geometry().x(), this->geometry().y(),
+                          this->width(), this->height());
   mydlgSteps->ui->tableWidget->scrollToBottom();
   mydlgSteps->ui->tableWidget->setFocus();
   mydlgSteps->setMaxMark();
   mydlgSteps->setModal(true);
+  mydlgSteps->ui->btnLogs->hide();
   mydlgSteps->show();
 }
 
