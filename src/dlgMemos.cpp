@@ -100,6 +100,7 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
 
 void dlgMainNotes::on_btnBack_clicked() {
   pAndroidKeyboard->hide();
+  mw_one->Sleep(500);
   saveMainNotes();
   close();
 }
@@ -513,6 +514,7 @@ void dlgMainNotes::loadMemoQML() {
 
 void dlgMainNotes::on_btnEditSource_clicked() {
   pAndroidKeyboard->hide();
+  mw_one->Sleep(500);
   saveMainNotes();
 
   ui->textEdit->setPlainText(mw_one->loadText(iniDir + "/memo/memo.md"));

@@ -246,14 +246,18 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
   if (htmlFile.contains("http")) {
     QUrl url = htmlFile;
     bool ok = mw_one->showMsgBox(
-        tr("Reader"), tr("Open this URL?") + "\n\n" + htmlFile + "\n");
+        tr("Reader"), tr("Open this URL?") + "\n\n" + htmlFile + "\n", htmlFile,
+        3);
     if (ok) QDesktopServices::openUrl(url);
     mw_one->clearSelectBox();
   }
 
   else if (htmlFile.contains("@")) {
+    QString str = htmlFile;
+    str.replace("mailto:", "");
     bool ok = mw_one->showMsgBox(
-        tr("Memos"), tr("Writing an email?") + "\n\n" + htmlFile + "\n");
+        tr("Memos"), tr("Writing an email?") + "\n\n" + htmlFile + "\n", str,
+        3);
     if (ok) QDesktopServices::openUrl(QUrl(htmlFile));
 
     mw_one->clearSelectBox();

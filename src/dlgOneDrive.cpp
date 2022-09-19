@@ -197,7 +197,8 @@ void TestDialog::on_pushButton_downloadFile_clicked() {
   if (!mw_one->showMsgBox("OneDrive",
                           tr("Downloading data?") + "\n\n" +
                               tr("This operation will overwrite the local data "
-                                 "with the data on OneDrive.")))
+                                 "with the data on OneDrive."),
+                          "", 2))
     return;
 
   oneDrive->downloadFile(filePath, ui->lineEdit_fileID->text().trimmed());
@@ -236,7 +237,8 @@ void TestDialog::on_pushButton_upload2_clicked() {
               "\n\n" +
               mw_one->mydlgReader->getUriRealPath(iniDir + "memo.zip") +
               "\n\nSIZE: " +
-              mw_one->getFileSize(QFile(iniDir + "memo.zip").size(), 2)))
+              mw_one->getFileSize(QFile(iniDir + "memo.zip").size(), 2),
+          "", 2))
     return;
 
   oneDrive->uploadFile(filePath, "memo.zip",

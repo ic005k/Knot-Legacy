@@ -5,6 +5,7 @@
 
 #include <QAbstractButton>
 #include <QAccelerometerReading>
+#include <QClipboard>
 #ifdef Q_OS_ANDROID
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniObject>
@@ -53,11 +54,11 @@
 #include <QTreeWidgetItem>
 #include <QValueAxis>
 
+#include "src/dlgMemos.h"
 #include "src/dlgOneDrive.h"
 #include "src/dlgfloatfun.h"
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
-#include "src/dlgMemos.h"
 #include "src/dlgnotes.h"
 #include "src/dlgpreferences.h"
 #include "src/dlgreader.h"
@@ -295,11 +296,13 @@ class MainWindow : public QMainWindow {
 
   QObjectList getAllToolButton(QObjectList lstUIControls);
   void repaintApp();
-  bool showMsgBox(QString title, QString info);
+
   void refreshMainUI();
   void on_RunCategory();
   void clearSelectBox();
-  public slots:
+  bool showMsgBox(QString title, QString info, QString copyText,
+                  int buttonCount);
+ public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();

@@ -4,7 +4,7 @@
 <context>
     <name>DocumentHandler</name>
     <message>
-        <location filename="documenthandler.cpp" line="248"/>
+        <location filename="documenthandler.cpp" line="249"/>
         <source>Reader</source>
         <translation>阅读器</translation>
     </message>
@@ -14,17 +14,17 @@
         <translation>打开这个网址？</translation>
     </message>
     <message>
-        <location filename="documenthandler.cpp" line="256"/>
+        <location filename="documenthandler.cpp" line="259"/>
         <source>Memos</source>
         <translation>备忘录</translation>
     </message>
     <message>
-        <location filename="documenthandler.cpp" line="257"/>
+        <location filename="documenthandler.cpp" line="259"/>
         <source>Writing an email?</source>
         <translation>编写邮件？</translation>
     </message>
     <message>
-        <location filename="documenthandler.cpp" line="368"/>
+        <location filename="documenthandler.cpp" line="373"/>
         <source>Cannot save: </source>
         <translation></translation>
     </message>
@@ -410,7 +410,7 @@
         <location filename="mainwindow.cpp" line="1490"/>
         <location filename="mainwindow.cpp" line="2239"/>
         <location filename="mainwindow.cpp" line="3395"/>
-        <location filename="mainwindow.cpp" line="4245"/>
+        <location filename="mainwindow.cpp" line="4247"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -423,10 +423,10 @@
         <location filename="mainwindow.cpp" line="2254"/>
         <location filename="mainwindow.cpp" line="3394"/>
         <location filename="mainwindow.cpp" line="3422"/>
-        <location filename="mainwindow.cpp" line="4246"/>
-        <location filename="mainwindow.cpp" line="4350"/>
-        <location filename="mainwindow.cpp" line="4369"/>
-        <location filename="mainwindow.cpp" line="4380"/>
+        <location filename="mainwindow.cpp" line="4248"/>
+        <location filename="mainwindow.cpp" line="4362"/>
+        <location filename="mainwindow.cpp" line="4381"/>
+        <location filename="mainwindow.cpp" line="4392"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -625,12 +625,17 @@
         <translation>页</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4349"/>
+        <location filename="mainwindow.cpp" line="4250"/>
+        <source>Copy</source>
+        <translation>拷贝</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="4361"/>
         <source>The password is removed.</source>
         <translation>密码被删除</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4368"/>
+        <location filename="mainwindow.cpp" line="4380"/>
         <source>The password is set successfully.</source>
         <translation>密码设置成功</translation>
     </message>
@@ -660,7 +665,7 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3420"/>
-        <location filename="mainwindow.cpp" line="4379"/>
+        <location filename="mainwindow.cpp" line="4391"/>
         <source>The entered password does not match.</source>
         <translation>输入的密码不匹配</translation>
     </message>
@@ -712,7 +717,7 @@
         <translation>跳</translation>
     </message>
     <message>
-        <location filename="mainwindow.h" line="123"/>
+        <location filename="mainwindow.h" line="124"/>
         <source>Latest Time</source>
         <translation>最新的时间</translation>
     </message>
@@ -904,12 +909,12 @@ in skydrive folder</source>
         <translation>此操作将使用 OneDrive 上的数据覆盖本地数据。</translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.cpp" line="234"/>
+        <location filename="dlgOneDrive.cpp" line="235"/>
         <source>Uploading data?</source>
         <translation>上传数据？</translation>
     </message>
     <message>
-        <location filename="dlgOneDrive.cpp" line="235"/>
+        <location filename="dlgOneDrive.cpp" line="236"/>
         <source>This operation will overwrite the data on OneDrive.</source>
         <translation>此操作将覆盖 OneDrive 上的数据。</translation>
     </message>
@@ -1018,32 +1023,32 @@ in skydrive folder</source>
 <context>
     <name>dlgMainNotes</name>
     <message>
-        <location filename="dlgmainnotes.ui" line="14"/>
+        <location filename="dlgMemos.ui" line="14"/>
         <source>Dialog</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="40"/>
+        <location filename="dlgMemos.ui" line="40"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="59"/>
+        <location filename="dlgMemos.ui" line="59"/>
         <source>Pic</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="88"/>
+        <location filename="dlgMemos.ui" line="88"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="111"/>
+        <location filename="dlgMemos.ui" line="111"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="140"/>
+        <location filename="dlgMemos.ui" line="140"/>
         <source>Edit Source</source>
         <translation>编辑源文件</translation>
     </message>
@@ -1095,17 +1100,17 @@ in skydrive folder</source>
         <translation type="vanished">密码设置成功</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="324"/>
+        <location filename="dlgMemos.cpp" line="323"/>
         <source>Load Ds File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="357"/>
+        <location filename="dlgMemos.cpp" line="356"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="358"/>
+        <location filename="dlgMemos.cpp" line="357"/>
         <source>Picture Files (*.*)</source>
         <translation></translation>
     </message>

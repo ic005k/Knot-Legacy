@@ -893,7 +893,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        if (showMsgBox(str, tr("Less") + "\n\n" + str1) == false) return;
+        if (showMsgBox(str, tr("Less") + "\n\n" + str1, "", 2) == false) return;
 
         addUndo(tr("Del Item") + " ( " + getTabText() + " ) ");
 
@@ -4232,8 +4232,10 @@ void MainWindow::refreshMainUI() {
   qApp->processEvents();
 }
 
-bool MainWindow::showMsgBox(QString title, QString info) {
+bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
+                            int buttonCount) {
   QMessageBox msgBox;
+  QPushButton* btnCopy;
   msgBox.setText(title);
   msgBox.setInformativeText(info);
 
@@ -4244,11 +4246,21 @@ bool MainWindow::showMsgBox(QString title, QString info) {
   QPushButton* btnCancel =
       msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
   QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+  if (buttonCount == 3)
+    btnCopy = msgBox.addButton(tr("Copy"), QMessageBox::AcceptRole);
   btnOk->setFocus();
   msgBox.exec();
   if (msgBox.clickedButton() == btnCancel) {
     return false;
   }
+  if (buttonCount == 3) {
+    if (msgBox.clickedButton() == btnCopy) {
+      QClipboard* clipboard = QApplication::clipboard();
+      clipboard->setText(copyText);
+      return false;
+    }
+  }
+
   return true;
 }
 
