@@ -33,6 +33,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  QString currentHtmlFile;
   bool isPageNext = false;
   int mainDirIndex = -1;
   DocumentHandler *myDocHandler;
@@ -75,7 +76,7 @@ class dlgReader : public QDialog {
   void refreshEpubPage();
   static QString getCoverPicFile(QString htmlFile);
   qreal getVPos();
-  public slots:
+ public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

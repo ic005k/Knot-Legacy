@@ -4422,9 +4422,18 @@ void MainWindow::on_btnMemos_clicked() { on_actionMemos_triggered(); }
 void MainWindow::on_btnOneDriveBak_clicked() { on_OneDriveBackupData(); }
 
 void MainWindow::clearSelectBox() {
+  QString tempFile = iniDir + "memo/texteditor.html";
   if (!mw_one->ui->frameReader->isHidden()) {
-    mw_one->mydlgReader->on_btnPageUp_clicked();
-    mw_one->mydlgReader->on_btnPageNext_clicked();
+    mw_one->mydlgReader->savePageVPos();
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
+    QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+    QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+                              Q_ARG(QVariant, tempFile));
+
+    QMetaObject::invokeMethod(
+        (QObject*)root, "loadHtml",
+        Q_ARG(QVariant, mw_one->mydlgReader->currentHtmlFile));
+    mw_one->mydlgReader->setPageVPos();
   }
 
   if (!mw_one->ui->frameMemo->isHidden()) {
@@ -4432,7 +4441,7 @@ void MainWindow::clearSelectBox() {
     int pos = mydlgMainNotes->sliderPos;
     QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
     QMetaObject::invokeMethod((QObject*)root, "loadHtml",
-                              Q_ARG(QVariant, iniDir + "memo/texteditor.html"));
+                              Q_ARG(QVariant, tempFile));
 
     QMetaObject::invokeMethod((QObject*)root, "loadHtml",
                               Q_ARG(QVariant, file));

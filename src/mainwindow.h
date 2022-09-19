@@ -57,7 +57,7 @@
 #include "src/dlgfloatfun.h"
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
-#include "src/dlgmainnotes.h"
+#include "src/dlgMemos.h"
 #include "src/dlgnotes.h"
 #include "src/dlgpreferences.h"
 #include "src/dlgreader.h"

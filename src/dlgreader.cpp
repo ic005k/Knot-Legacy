@@ -801,7 +801,7 @@ void dlgReader::setQMLHtml() {
 
   msg = hf;
   strhtml = strHtml;
-
+  currentHtmlFile = hf;
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 
