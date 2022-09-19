@@ -920,12 +920,12 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgfloatfun.ui" line="67"/>
+        <location filename="dlgfloatfun.ui" line="73"/>
         <source>-</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgfloatfun.ui" line="96"/>
+        <location filename="dlgfloatfun.ui" line="108"/>
         <source>+</source>
         <translation></translation>
     </message>
@@ -957,22 +957,22 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="dlglist.ui" line="31"/>
-        <location filename="dlglist.cpp" line="63"/>
+        <location filename="dlglist.cpp" line="66"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="dlglist.cpp" line="64"/>
+        <location filename="dlglist.cpp" line="67"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="dlglist.cpp" line="65"/>
+        <location filename="dlglist.cpp" line="68"/>
         <source>Please enter a new name : </source>
         <translation>请输入一个新名称</translation>
     </message>
     <message>
-        <location filename="dlglist.cpp" line="67"/>
+        <location filename="dlglist.cpp" line="70"/>
         <source>New Name : </source>
         <translation>新名称</translation>
     </message>
@@ -1013,29 +1013,33 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="94"/>
+        <location filename="dlgmainnotes.ui" line="40"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="113"/>
+        <location filename="dlgmainnotes.ui" line="59"/>
         <source>Pic</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="142"/>
+        <location filename="dlgmainnotes.ui" line="88"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="165"/>
+        <location filename="dlgmainnotes.ui" line="111"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="47"/>
+        <location filename="dlgmainnotes.ui" line="140"/>
+        <source>Edit Source</source>
+        <translation>编辑源文件</translation>
+    </message>
+    <message>
         <source>Please enter your password : </source>
-        <translation>请输入密码：</translation>
+        <translation type="vanished">请输入密码：</translation>
     </message>
     <message>
         <source>Back</source>
@@ -1051,9 +1055,8 @@ in skydrive folder</source>
         <translation type="vanished">设置密码</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.ui" line="62"/>
         <source>OK</source>
-        <translation>确定</translation>
+        <translation type="vanished">确定</translation>
     </message>
     <message>
         <source>Start</source>
@@ -1074,41 +1077,35 @@ in skydrive folder</source>
         <translation type="vanished">位置</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="220"/>
         <source>The password is removed.</source>
-        <translation>密码被删除</translation>
+        <translation type="vanished">密码被删除</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="239"/>
         <source>The password is set successfully.</source>
-        <translation>密码设置成功</translation>
+        <translation type="vanished">密码设置成功</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="328"/>
+        <location filename="dlgmainnotes.cpp" line="288"/>
         <source>Load Ds File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="361"/>
+        <location filename="dlgmainnotes.cpp" line="321"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="362"/>
+        <location filename="dlgmainnotes.cpp" line="322"/>
         <source>Picture Files (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="221"/>
-        <location filename="dlgmainnotes.cpp" line="240"/>
-        <location filename="dlgmainnotes.cpp" line="249"/>
         <source>Ok</source>
-        <translation>确定</translation>
+        <translation type="vanished">确定</translation>
     </message>
     <message>
-        <location filename="dlgmainnotes.cpp" line="248"/>
         <source>The entered password does not match.</source>
-        <translation>输入的密码不匹配</translation>
+        <translation type="vanished">输入的密码不匹配</translation>
     </message>
 </context>
 <context>
@@ -1581,6 +1578,7 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="dlgsettime.ui" line="468"/>
+        <location filename="dlgsettime.cpp" line="41"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
@@ -1623,12 +1621,12 @@ in skydrive folder</source>
         <translation type="vanished">数字</translation>
     </message>
     <message>
-        <location filename="dlgsettime.cpp" line="59"/>
+        <location filename="dlgsettime.cpp" line="56"/>
         <source>Modify Item</source>
         <translation>修改条目</translation>
     </message>
     <message>
-        <location filename="dlgsettime.cpp" line="69"/>
+        <location filename="dlgsettime.cpp" line="66"/>
         <source>Add Item</source>
         <translation>增加条目</translation>
     </message>
@@ -1954,17 +1952,17 @@ in skydrive folder</source>
 <context>
     <name>memo</name>
     <message>
-        <location filename="memo.qml" line="209"/>
+        <location filename="memo.qml" line="218"/>
         <source>Copy</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="memo.qml" line="216"/>
+        <location filename="memo.qml" line="225"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="memo.qml" line="222"/>
+        <location filename="memo.qml" line="231"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>

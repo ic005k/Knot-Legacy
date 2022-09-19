@@ -73,6 +73,12 @@ qreal File::textPos() {
   return m_textPos;
 }
 
+qreal File::textHeight() {
+  mw_one->mydlgMainNotes->textHeight = m_textHeight;
+  qDebug() << "m_textHeight" << m_textHeight;
+  return m_textHeight;
+}
+
 qreal File::curX() {
   mw_one->curx = m_curX;
   qDebug() << "m_curX" << m_curX;
@@ -80,6 +86,8 @@ qreal File::curX() {
 }
 
 void File::setTextPos(qreal &textPos) { m_textPos = textPos; }
+
+void File::setTextHeight(qreal &textHeight) { m_textHeight = textHeight; }
 
 void File::setCurX(qreal &curX) { m_curX = curX; }
 

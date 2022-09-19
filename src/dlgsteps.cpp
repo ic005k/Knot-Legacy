@@ -349,7 +349,6 @@ void dlgSteps::on_btnLogs_clicked() {
   mw_one->mydlgMainNotes->setFixedWidth(mw_one->width());
   mw_one->mydlgMainNotes->ui->textBrowser->show();
   mw_one->mydlgMainNotes->ui->textEdit->hide();
-  mw_one->mydlgMainNotes->ui->frameSetKey->hide();
   mw_one->mydlgMainNotes->setModal(true);
   mw_one->mydlgMainNotes->show();
 }

@@ -35,10 +35,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   mw_one->setSCrollPro(ui->textBrowser);
   mw_one->setSCrollPro(ui->textEdit);
 
-  ui->edit1->setEchoMode(QLineEdit::Password);
-  ui->edit2->setEchoMode(QLineEdit::Password);
-  ui->frameSetKey->hide();
-
   ui->textEdit->setAcceptRichText(true);
   connect(ui->textEdit->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
           SLOT(editVSBarValueChanged()));
@@ -114,19 +110,25 @@ void dlgMainNotes::saveMainNotes() {
   QDir dir;
   dir.mkpath(path);
 
-  QFile memofile(iniDir + "memo/memo.md");
+  QString strMD = iniDir + "memo/memo.md";
+  QFile memofile(strMD);
   if (memofile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile);
-    // stream<<ui->textEdit->toHtml().toUtf8();
-    stream << ui->textEdit->toMarkdown(QTextDocument::MarkdownDialectGitHub);
+    if (!ui->btnPic->isEnabled())
+      ui->textEdit->setMarkdown(ui->textEdit->toPlainText());
+    stream << ui->textEdit->toMarkdown(
+        QTextDocument::MarkdownDialectCommonMark);
     memofile.close();
   }
 
   QFile memofile1(iniDir + "memo/memo.html");
+
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
+
+    ui->textEdit->setMarkdown(mw_one->loadText(strMD));
+    ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
     stream << ui->textEdit->toHtml().toUtf8();
-    // stream << ui->textEdit->toMarkdown(QTextDocument::MarkdownDialectGitHub);
     memofile1.close();
   }
 
@@ -207,48 +209,6 @@ void dlgMainNotes::on_KVChanged() {
   if (!pAndroidKeyboard->isVisible()) {
     this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                       mw_one->width(), mw_one->mainHeight);
-  }
-}
-
-void dlgMainNotes::on_btnOK_clicked() {
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  if (ui->edit1->text().trimmed() == "" && ui->edit2->text().trimmed() == "") {
-    Reg.remove("/MainNotes/UserKey");
-    ui->frameSetKey->hide();
-    QMessageBox msgBox;
-    msgBox.setText("Knot");
-    msgBox.setInformativeText(tr("The password is removed."));
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    msgBox.exec();
-
-    return;
-  }
-
-  if (ui->edit1->text().trimmed() == ui->edit2->text().trimmed()) {
-    QString strPw = ui->edit1->text().trimmed();
-    QByteArray baPw = strPw.toUtf8();
-    for (int i = 0; i < baPw.size(); i++) {
-      baPw[i] = baPw[i] + 66;  //加密User的密码
-    }
-    strPw = baPw;
-    Reg.setValue("/MainNotes/UserKey", strPw);
-
-    QMessageBox msgBox;
-    msgBox.setText("Knot");
-    msgBox.setInformativeText(tr("The password is set successfully."));
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    msgBox.exec();
-    ui->frameSetKey->hide();
-
-  } else {
-    QMessageBox msgBox;
-    msgBox.setText("Knot");
-    msgBox.setInformativeText(tr("The entered password does not match."));
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    msgBox.exec();
   }
 }
 
@@ -511,4 +471,13 @@ void dlgMainNotes::loadMemoQML() {
 
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
+}
+
+void dlgMainNotes::on_btnEditSource_clicked() {
+  saveMainNotes();
+
+  ui->textEdit->setPlainText(mw_one->loadText(iniDir + "/memo/memo.md"));
+  ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
+  ui->btnPic->setEnabled(false);
+  ui->btnEditSource->setEnabled(false);
 }

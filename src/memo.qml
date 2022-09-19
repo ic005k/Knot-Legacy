@@ -34,8 +34,15 @@ Item {
     }
 
     function getVPos() {
-        file.textPos = contentY
+        file.textPos = flickable.contentY
         console.log(file.textPos)
+
+    }
+
+    function getVHeight() {
+        file.textHeight = flickable.contentHeight
+        console.log(file.textPos)
+
     }
 
     function move(x0) {
@@ -104,7 +111,9 @@ Item {
         onMovementEnded: {
             state = "autoscroll"
             file.textPos = contentY
+            file.textHeight = contentHeight
             console.log(file.textPos)
+            console.log(file.textHeight)
         }
 
         TextArea.flickable: TextArea {

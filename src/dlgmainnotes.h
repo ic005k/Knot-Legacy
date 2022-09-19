@@ -24,6 +24,7 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  qreal textHeight;
   double maxSliderPosition, maxSliderMax, minSliderPosition, minSliderMax;
   bool isShow = false;
   QString textMemo;
@@ -49,9 +50,10 @@ class dlgMainNotes : public QDialog {
 
   void loadMemoQML();
 
-  public slots:
+ public slots:
   void editVSBarValueChanged();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -61,8 +63,6 @@ class dlgMainNotes : public QDialog {
   void on_btnCloseText_clicked();
 
   void on_KVChanged();
-
-  void on_btnOK_clicked();
 
   void on_btnUndo_clicked();
 
@@ -75,6 +75,8 @@ class dlgMainNotes : public QDialog {
   void on_textEdit_undoAvailable(bool b);
 
   void on_btnPic_clicked();
+
+  void on_btnEditSource_clicked();
 
  private:
   int newHeight = 0;

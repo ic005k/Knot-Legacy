@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>41</width>
-    <height>84</height>
+    <width>36</width>
+    <height>74</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,8 +59,8 @@ dlgFloatFun{
      </property>
      <property name="minimumSize">
       <size>
-       <width>35</width>
-       <height>35</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -78,8 +78,8 @@ dlgFloatFun{
      </property>
      <property name="iconSize">
       <size>
-       <width>35</width>
-       <height>35</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
     </widget>
@@ -94,8 +94,8 @@ dlgFloatFun{
      </property>
      <property name="minimumSize">
       <size>
-       <width>35</width>
-       <height>35</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -113,8 +113,8 @@ dlgFloatFun{
      </property>
      <property name="iconSize">
       <size>
-       <width>35</width>
-       <height>35</height>
+       <width>30</width>
+       <height>30</height>
       </size>
      </property>
     </widget>

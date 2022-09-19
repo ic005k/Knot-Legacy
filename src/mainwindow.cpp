@@ -1859,9 +1859,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
 
     //判断滑动方向（右滑）
-    if ((relea_x - press_x) > 20 &&
+    if ((relea_x - press_x) > 75 &&
         event->type() == QEvent::MouseButtonRelease &&
-        qAbs(relea_y - press_y) < 50) {
+        qAbs(relea_y - press_y) < 35) {
       int current_page = ui->tabWidget->currentIndex();
       if (current_page < count - 1) {
         isSlide = true;
@@ -1901,9 +1901,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
 
     //判断滑动方向（左滑）
-    if ((press_x - relea_x) > 20 &&
+    if ((press_x - relea_x) > 75 &&
         event->type() == QEvent::MouseButtonRelease &&
-        qAbs(relea_y - press_y) < 50 && index > 0) {
+        qAbs(relea_y - press_y) < 35 && index > 0) {
       int current_page = ui->tabWidget->currentIndex();
       if (current_page >= 0) {
         isSlide = true;
@@ -4391,15 +4391,13 @@ void MainWindow::on_btnEdit_clicked() {
   if (strIniDir != "") {
     str.replace(strIniDir, iniDir);
   }
-  mydlgMainNotes->ui->textEdit->setMarkdown(str);
-#ifdef Q_OS_ANDROID
-#endif
-
-#ifdef Q_OS_UNIX
-#endif
 
   mydlgMainNotes->init();
   mydlgMainNotes->show();
+
+  mydlgMainNotes->ui->textEdit->setMarkdown(str);
+  mydlgMainNotes->ui->btnPic->setEnabled(true);
+  mydlgMainNotes->ui->btnEditSource->setEnabled(true);
 
   mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
       mydlgMainNotes->sliderPos);
