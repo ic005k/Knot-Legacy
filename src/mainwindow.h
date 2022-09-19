@@ -318,7 +318,7 @@ class MainWindow : public QMainWindow {
   void paintEvent(QPaintEvent *event) override;
   void changeEvent(QEvent *event) override;
 
- private slots:
+ public slots:
 
   void on_timerShowFloatFun();
   void timerUpdate();

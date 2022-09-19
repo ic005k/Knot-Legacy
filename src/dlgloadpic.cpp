@@ -109,8 +109,15 @@ void dlgLoadPic::on_btnBack_clicked() {
   close();
   k = 0;
   ui->hsZoom->setValue(0);
-  mw_one->mydlgReader->on_btnPageUp_clicked();
-  mw_one->mydlgReader->on_btnPageNext_clicked();
+  if (!mw_one->ui->frameReader->isHidden()) {
+    mw_one->mydlgReader->on_btnPageUp_clicked();
+    mw_one->mydlgReader->on_btnPageNext_clicked();
+  }
+
+  if (!mw_one->ui->frameMemo->isHidden()) {
+    mw_one->on_btnBackMemo_clicked();
+    mw_one->on_btnMemos_clicked();
+  }
 }
 
 void dlgLoadPic::on_btnZoom_clicked() {
@@ -124,6 +131,7 @@ void dlgLoadPic::on_btnReduce_clicked() {
 }
 
 void dlgLoadPic::loadPic(QString picfile, int k) {
+  qDebug() << "file exists=" << QFile(picfile).exists();
   QImage img(picfile);
   QPixmap pixmap;
   int sx, sy;
