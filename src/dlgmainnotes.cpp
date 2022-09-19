@@ -112,6 +112,7 @@ void dlgMainNotes::saveMainNotes() {
 
   QString strMD = iniDir + "memo/memo.md";
   QFile memofile(strMD);
+
   if (memofile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile);
     if (!ui->btnPic->isEnabled())
@@ -503,7 +504,7 @@ void dlgMainNotes::loadMemoQML() {
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, file));
 
   // mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
-  //     "strText", mw_one->loadText(file));
+  //     "initialUrl", "file://" + file);
 
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));

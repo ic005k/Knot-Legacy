@@ -298,7 +298,8 @@ class MainWindow : public QMainWindow {
   bool showMsgBox(QString title, QString info);
   void refreshMainUI();
   void on_RunCategory();
- public slots:
+  void clearSelectBox();
+  public slots:
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();

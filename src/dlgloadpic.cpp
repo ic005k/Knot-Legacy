@@ -109,15 +109,7 @@ void dlgLoadPic::on_btnBack_clicked() {
   close();
   k = 0;
   ui->hsZoom->setValue(0);
-  if (!mw_one->ui->frameReader->isHidden()) {
-    mw_one->mydlgReader->on_btnPageUp_clicked();
-    mw_one->mydlgReader->on_btnPageNext_clicked();
-  }
-
-  if (!mw_one->ui->frameMemo->isHidden()) {
-    mw_one->on_btnBackMemo_clicked();
-    mw_one->on_btnMemos_clicked();
-  }
+  mw_one->clearSelectBox();
 }
 
 void dlgLoadPic::on_btnZoom_clicked() {

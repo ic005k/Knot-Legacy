@@ -2,10 +2,9 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.0
 import QtQuick.Layouts 1.3
-//import QtWebView 1.0
+import QtWebView 1.0
 import MyModel1 1.0
 import MyModel2 1.0
-
 
 Item {
     id: textitem
@@ -20,7 +19,6 @@ Item {
 
     function loadHtml(msg) {
         document.load("file://" + msg)
-
     }
 
     function loadHtmlBuffer(strhtml) {
@@ -36,13 +34,11 @@ Item {
     function getVPos() {
         file.textPos = flickable.contentY
         console.log(file.textPos)
-
     }
 
     function getVHeight() {
         file.textHeight = flickable.contentHeight
         console.log(file.textPos)
-
     }
 
     function move(x0) {
@@ -53,11 +49,9 @@ Item {
 
     function setX(x0) {
         x = 0
-
     }
 
-    function getText()
-    {
+    function getText() {
         file.source = textArea.text
     }
 
@@ -116,10 +110,16 @@ Item {
             console.log(file.textHeight)
         }
 
+        WebView {
+            id: webView
+            visible: false
+            anchors.fill: parent
+            url: initialUrl
+        }
+
         TextArea.flickable: TextArea {
-
             id: textArea
-
+            visible: true
             font.pixelSize: FontSize
             //font.family: FontName
             //font.letterSpacing: 2
@@ -132,16 +132,15 @@ Item {
             wrapMode: TextArea.Wrap
             readOnly: isReadOnly
             focus: true
-            persistentSelection:false
+            persistentSelection: false
             selectByMouse: isBySelect
             selectByKeyboard: true
             smooth: true
 
             color: "#664E30"
+            //color: Qt.AutoColor
 
             text: strText
-            visible: true
-
 
             MouseArea {
                 acceptedButtons: Qt.RightButton
@@ -167,7 +166,6 @@ Item {
                 duration: 200
                 loops: 1 //Animation.Infinite
             }
-
 
             SequentialAnimation on opacity {
                 //应用于透明度上的序列动画
@@ -219,7 +217,6 @@ Item {
             enabled: textArea.selectedText
             onTriggered: textArea.copy()
         }
-
 
         MenuItem {
             text: qsTr("Cut")

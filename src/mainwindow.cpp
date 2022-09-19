@@ -4420,3 +4420,22 @@ void MainWindow::on_btnCode_clicked() {
 void MainWindow::on_btnMemos_clicked() { on_actionMemos_triggered(); }
 
 void MainWindow::on_btnOneDriveBak_clicked() { on_OneDriveBackupData(); }
+
+void MainWindow::clearSelectBox() {
+  if (!mw_one->ui->frameReader->isHidden()) {
+    mw_one->mydlgReader->on_btnPageUp_clicked();
+    mw_one->mydlgReader->on_btnPageNext_clicked();
+  }
+
+  if (!mw_one->ui->frameMemo->isHidden()) {
+    QString file = iniDir + "memo/memo.html";
+    int pos = mydlgMainNotes->sliderPos;
+    QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+    QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+                              Q_ARG(QVariant, iniDir + "memo/texteditor.html"));
+
+    QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+                              Q_ARG(QVariant, file));
+    QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
+  }
+}
