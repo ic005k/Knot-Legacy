@@ -211,6 +211,13 @@ QSlider::handle:horizontal
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QLabel" name="lblRatio">
+        <property name="text">
+         <string>Ratio</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

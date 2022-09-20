@@ -280,9 +280,8 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     }
   } else {
     // open picture
-    if (htmlIndex == 0) {
-      mw_one->on_btnPageNext_clicked();
-      mw_one->on_btnPageUp_clicked();
+    if (htmlIndex == 0 && !mw_one->mydlgReader->isHidden()) {
+      mw_one->clearSelectBox();
       return;
     }
     QString str = htmlFile;
@@ -300,6 +299,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
       dlp->show();
       dlp->loadPic(picfile, 0);
       dlp->ui->hsZoom->setValue(200);
+      dlp->loadPic(picfile, 200);
     } else {
       QString memoPicFile = picfile;
       memoPicFile.replace(strOpfPath, "");
@@ -315,6 +315,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
         dlp->show();
         dlp->loadPic(picfile, 0);
         dlp->ui->hsZoom->setValue(200);
+        dlp->loadPic(picfile, 200);
       }
     }
   }

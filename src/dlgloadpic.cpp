@@ -133,6 +133,19 @@ void dlgLoadPic::loadPic(QString picfile, int k) {
   pixmap = QPixmap::fromImage(img);
   pixmap = pixmap.scaled(sx, sy, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   ui->lblPic->setPixmap(pixmap);
+
+  showRatio(img.width(), pixmap.width());
 }
 
-void dlgLoadPic::on_hsZoom_valueChanged(int value) { loadPic(picfile, value); }
+void dlgLoadPic::showRatio(double w0, double w1) {
+  double r0;
+  r0 = w1 / w0 * 100;
+  QString str = QString::number(r0);
+  ui->lblRatio->setText(str.split(".").at(0) + " % ");
+}
+
+void dlgLoadPic::on_hsZoom_valueChanged(int value) { Q_UNUSED(value); }
+
+void dlgLoadPic::on_hsZoom_sliderReleased() {
+  loadPic(picfile, ui->hsZoom->value());
+}

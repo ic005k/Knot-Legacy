@@ -32,8 +32,11 @@ class dlgLoadPic : public QDialog {
 
   void on_hsZoom_valueChanged(int value);
 
+  void on_hsZoom_sliderReleased();
+
  private:
   int k = 0;
+  void showRatio(double w0, double w1);
 };
 
 #endif  // DLGLOADPIC_H
