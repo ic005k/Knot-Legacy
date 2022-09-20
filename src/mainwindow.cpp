@@ -4275,8 +4275,7 @@ void MainWindow::on_btnSelText_clicked() {
     isSelText = false;
     ui->quickWidget->rootContext()->setContextProperty("isSelText", isSelText);
 
-    on_btnPageUp_clicked();
-    on_btnPageNext_clicked();
+    clearSelectBox();
   }
 }
 
