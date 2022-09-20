@@ -29,15 +29,18 @@ class dlgReport : public QDialog {
   static void sel_Month();
   static void saveYMD();
 
-  static void runCategory();
+  static void getCategoryData();
   static void getMonthData();
   void updateTable();
   void init();
+  void updateCategoryTable();
  public slots:
   static void on_tableReport_cellClicked(int row, int column);
   void on_btnYear_clicked();
   void on_btnCategory_clicked();
   void on_btnMonth_clicked();
+
+  static void on_tableReport0_cellClicked(int row, int column);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;

@@ -74,7 +74,7 @@ void ReadEBookThread::run() {
     mw_one->mydlgReport->getMonthData();
   }
 
-  if (isRunCategory) mw_one->mydlgReport->runCategory();
+  if (isRunCategory) mw_one->mydlgReport->getCategoryData();
 
   emit isDone();
 }
@@ -4203,6 +4203,8 @@ void MainWindow::readEBookDone() {
   }
 
   if (isRunCategory) {
+    dlgProgEBook->close();
+    mydlgReport->updateCategoryTable();
     isRunCategory = false;
   }
 
