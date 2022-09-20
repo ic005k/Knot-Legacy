@@ -31,11 +31,11 @@ INSTALLS += dataFiles
 
 SOURCES += \
     src/chart.cpp \
+    src/dlgMemos.cpp \
     src/dlgOneDrive.cpp \
     src/dlgfloatfun.cpp \
     src/dlglist.cpp \
     src/dlgloadpic.cpp \
-    src/dlgmainnotes.cpp \
     src/dlgnotes.cpp \
     src/dlgpreferences.cpp \
     src/dlgreader.cpp \
@@ -58,11 +58,11 @@ SOURCES += \
 HEADERS += \
     src/chart.h \
     src/count_steps.h \
+    src/dlgMemos.h \
     src/dlgOneDrive.h \
     src/dlgfloatfun.h \
     src/dlglist.h \
     src/dlgloadpic.h \
-    src/dlgmainnotes.h \
     src/dlgnotes.h \
     src/dlgpreferences.h \
     src/dlgreader.h \
@@ -83,11 +83,11 @@ HEADERS += \
     src/specialaccelerometerpedometer.h
 
 FORMS += \
+    src/dlgMemos.ui \
     src/dlgOneDrive.ui \
     src/dlgfloatfun.ui \
     src/dlglist.ui \
     src/dlgloadpic.ui \
-    src/dlgmainnotes.ui \
     src/dlgnotes.ui \
     src/dlgpreferences.ui \
     src/dlgreader.ui \

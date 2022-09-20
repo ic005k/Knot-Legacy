@@ -62,5 +62,6 @@
         <file>res/delitem.png</file>
         <file>res/memos.png</file>
         <file>res/info.png</file>
+        <file>src/texteditor.html</file>
     </qresource>
 </RCC>
