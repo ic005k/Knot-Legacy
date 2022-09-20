@@ -11,11 +11,12 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
   ui->setupUi(this);
   this->installEventFilter(this);
   ui->lblPic->installEventFilter(this);
-  ui->btnReduce->hide();
-  ui->btnZoom->hide();
+
   ui->hsZoom->setMaximum(600);
 
   this->layout()->setMargin(1);
+  this->layout()->setContentsMargins(1, 1, 1, 1);
+  this->layout()->setSpacing(3);
   ui->scrollArea->setContentsMargins(1, 1, 1, 1);
 
   initMain();
@@ -115,11 +116,13 @@ void dlgLoadPic::on_btnBack_clicked() {
 void dlgLoadPic::on_btnZoom_clicked() {
   k = k + 10;
   loadPic(picfile, k);
+  ui->hsZoom->setValue(k);
 }
 
 void dlgLoadPic::on_btnReduce_clicked() {
   k = k - 10;
   loadPic(picfile, k);
+  ui->hsZoom->setValue(k);
 }
 
 void dlgLoadPic::loadPic(QString picfile, int k) {
@@ -141,10 +144,13 @@ void dlgLoadPic::showRatio(double w0, double w1) {
   double r0;
   r0 = w1 / w0 * 100;
   QString str = QString::number(r0);
-  ui->lblRatio->setText(str.split(".").at(0) + " % ");
+  ui->lblRatio->setText(str.split(".").at(0) + "%");
 }
 
-void dlgLoadPic::on_hsZoom_valueChanged(int value) { Q_UNUSED(value); }
+void dlgLoadPic::on_hsZoom_valueChanged(int value) {
+  Q_UNUSED(value);
+  k = value;
+}
 
 void dlgLoadPic::on_hsZoom_sliderReleased() {
   loadPic(picfile, ui->hsZoom->value());

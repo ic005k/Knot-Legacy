@@ -24,7 +24,7 @@
         <translation>编写邮件？</translation>
     </message>
     <message>
-        <location filename="documenthandler.cpp" line="373"/>
+        <location filename="documenthandler.cpp" line="374"/>
         <source>Cannot save: </source>
         <translation></translation>
     </message>
@@ -1005,19 +1005,32 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgloadpic.ui" line="130"/>
+        <location filename="dlgloadpic.ui" line="135"/>
+        <source>Ratio</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgloadpic.ui" line="183"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="dlgloadpic.ui" line="149"/>
-        <source>Zoom</source>
+        <location filename="dlgloadpic.ui" line="202"/>
+        <source>Zoom +</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="dlgloadpic.ui" line="168"/>
-        <source>Reduce</source>
+        <location filename="dlgloadpic.ui" line="221"/>
+        <source>Zoom -</source>
         <translation>缩小</translation>
+    </message>
+    <message>
+        <source>Zoom</source>
+        <translation type="vanished">放大</translation>
+    </message>
+    <message>
+        <source>Reduce</source>
+        <translation type="vanished">缩小</translation>
     </message>
 </context>
 <context>
