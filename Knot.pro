@@ -33,6 +33,7 @@ SOURCES += \
     src/chart.cpp \
     src/dlgMemos.cpp \
     src/dlgOneDrive.cpp \
+    src/dlgReaderFun.cpp \
     src/dlgfloatfun.cpp \
     src/dlglist.cpp \
     src/dlgloadpic.cpp \
@@ -60,6 +61,7 @@ HEADERS += \
     src/count_steps.h \
     src/dlgMemos.h \
     src/dlgOneDrive.h \
+    src/dlgReaderFun.h \
     src/dlgfloatfun.h \
     src/dlglist.h \
     src/dlgloadpic.h \
@@ -85,6 +87,7 @@ HEADERS += \
 FORMS += \
     src/dlgMemos.ui \
     src/dlgOneDrive.ui \
+    src/dlgReaderFun.ui \
     src/dlgfloatfun.ui \
     src/dlglist.ui \
     src/dlgloadpic.ui \
@@ -134,7 +137,7 @@ DISTFILES += \
     src/cn.ts \
     src/memo.qml \
     src/onedrive/log.qml \
-    src/onedrive/main.qml \
+    src/onedrive/web.qml \
     src/reader.qml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
