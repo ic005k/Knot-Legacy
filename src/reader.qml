@@ -1,7 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Window 2.0
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Window 2.15
+import QtQuick.Layouts 1.15
 //import QtWebView 1.0
 import MyModel1 1.0
 import MyModel2 1.0
@@ -123,9 +123,27 @@ Item {
             visible: true
 
             MouseArea {
-                acceptedButtons: Qt.RightButton
+                id: mouse_area
                 anchors.fill: parent
+                hoverEnabled: true
+                //acceptedButtons: Qt.MiddleButton
+                acceptedButtons: Qt.MiddleButton | Qt.RightButton
+
                 onClicked: contextMenu.open()
+                //onPressAndHold:  contextMenu.open()
+                onEntered: {
+
+                }
+                onExited: {
+
+                }
+                onPositionChanged: {
+
+                }
+                onMouseXChanged: {
+
+                    //console.log(textArea.selectedText);
+                }
             }
 
             onLinkActivated: {

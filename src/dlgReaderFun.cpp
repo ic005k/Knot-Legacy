@@ -10,16 +10,17 @@ extern MainWindow* mw_one;
 dlgReaderFun::dlgReaderFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgReaderFun) {
   ui->setupUi(this);
+  ui->btnFont->setStyleSheet("border:none");
+  ui->btnFontLess->setStyleSheet("border:none");
+  ui->btnFontPlus->setStyleSheet("border:none");
 }
 
 dlgReaderFun::~dlgReaderFun() { delete ui; }
 
 void dlgReaderFun::init() {
-  setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint |
-                 Qt::WindowDoesNotAcceptFocus);
-
   setGeometry(mw_one->geometry().x(), mw_one->ui->quickWidget->y(), width(),
               mw_one->ui->quickWidget->height());
+  setWindowFlags(Qt::WindowStaysOnTopHint);
   show();
 }
 

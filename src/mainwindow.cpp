@@ -4102,10 +4102,12 @@ void MainWindow::setSCrollPro(QObject* obj) {
 
 void MainWindow::on_btnBack_clicked() {
   mydlgReaderFun->close();
-  ui->frameReader->hide();
-  ui->frameMain->show();
+
   mydlgReader->saveReader();
   mydlgReader->savePageVPos();
+
+  ui->frameReader->hide();
+  ui->frameMain->show();
 
   delete mw_one->mydlgFloatFun;
   mydlgFloatFun = new dlgFloatFun(this);

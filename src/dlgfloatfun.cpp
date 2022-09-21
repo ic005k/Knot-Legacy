@@ -14,8 +14,10 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
 void dlgFloatFun::init() {
   // setAttribute(Qt::WA_TranslucentBackground);
 
-  setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint |
-                 Qt::WindowDoesNotAcceptFocus);
+  // setWindowFlags(Qt::FramelessWindowHint | Qt::Tool |
+  // Qt::WindowStaysOnTopHint |
+  //                Qt::WindowDoesNotAcceptFocus);
+  setWindowFlags(Qt::WindowStaysOnTopHint);
 
   QPalette pal = palette();
   QColor color = QColor(Qt::Key_Blue);

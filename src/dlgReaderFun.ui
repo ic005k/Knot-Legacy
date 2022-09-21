@@ -80,7 +80,7 @@
          <string notr="true">
 QSlider::groove:vertical
 {
-	background: #cbcbcb; 
+	background: #0000ff; 
 	width: 10px; 
 	border-radius: 1px; 
 	padding-left:-1px; 
@@ -91,12 +91,12 @@ QSlider::groove:vertical
 
 QSlider::sub-page:vertical 
 {
-	background: rgb(180,150,219); 
+	background: rgb(255,0,0); 
 	border-radius: 2px; 
 }
 QSlider::add-page:vertical
 {
-	background-color: #cbcbcb;
+	background-color: #0000ff;
 	width: 10px; 
 	border-radius: 2px; 
 }
@@ -110,6 +110,9 @@ QSlider::handle:vertical
 
 
 </string>
+        </property>
+        <property name="value">
+         <number>20</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
