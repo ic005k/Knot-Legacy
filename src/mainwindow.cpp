@@ -217,7 +217,7 @@ MainWindow::MainWindow(QWidget* parent)
   int screenWidth = screen.width();
   int screenHeight = screen.height();
   if (!isAndroid) {
-    this->setGeometry((screenWidth - this->width()) / 2, 0, this->width(),
+    this->setGeometry(1 * (screenWidth - this->width()) / 2, 0, this->width(),
                       screenHeight - 60);
   }
 

@@ -128,14 +128,11 @@ void dlgReport::on_btnBack_clicked() {
     preview->close();
     return;
   }
-  close();
 
   isReportWindowsShow = false;
   listCategory.clear();
 
-  delete mw_one->mydlgFloatFun;
-  mw_one->mydlgFloatFun = new dlgFloatFun(this);
-  mw_one->mydlgFloatFun->init();
+  close();
 }
 
 void dlgReport::on_btnYear_clicked() {
