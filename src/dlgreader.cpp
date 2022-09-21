@@ -469,17 +469,19 @@ void dlgReader::getBookList() {
 void dlgReader::getLines() {
   QString qsShow;
 
-  mw_one->ui->hSlider->setTickInterval(1);
-  mw_one->ui->hSlider->setMinimum(0);
-  mw_one->ui->hSlider->setValue(sPos);
+  mw_one->mydlgReaderFun->ui->hSlider->setTickInterval(1);
+  mw_one->mydlgReaderFun->ui->hSlider->setMinimum(0);
+  mw_one->mydlgReaderFun->ui->hSlider->setValue(sPos);
 
   if (!isEpub) {
-    mw_one->ui->hSlider->setMaximum(totallines / baseLines - 1);
+    mw_one->mydlgReaderFun->ui->hSlider->setMaximum(totallines / baseLines - 1);
     mw_one->ui->btnPages->setText(
-        tr("Pages") + "\n" + QString::number(mw_one->ui->hSlider->value() + 1) +
+        tr("Pages") + "\n" +
+        QString::number(mw_one->mydlgReaderFun->ui->hSlider->value() + 1) +
         " / " + QString::number(totallines / baseLines));
-    iPage = mw_one->ui->hSlider->value() * baseLines;
-    qDebug() << "iPage" << iPage << mw_one->ui->hSlider->value();
+    iPage = mw_one->mydlgReaderFun->ui->hSlider->value() * baseLines;
+    qDebug() << "iPage" << iPage
+             << mw_one->mydlgReaderFun->ui->hSlider->value();
 
     int count = iPage + baseLines;
     QString txt1;
@@ -497,7 +499,7 @@ void dlgReader::getLines() {
     setQML(qsShow);
 
   } else {
-    mw_one->ui->hSlider->setMaximum(htmlFiles.count());
+    mw_one->mydlgReaderFun->ui->hSlider->setMaximum(htmlFiles.count());
     htmlIndex = sPos - 1;
     if (htmlIndex < 0) htmlIndex = 0;
     setQMLHtml();
@@ -1004,13 +1006,13 @@ qreal dlgReader::getVPos() {
 }
 
 void dlgReader::showInfo() {
-  mw_one->ui->hSlider->setTickInterval(1);
+  mw_one->mydlgReaderFun->ui->hSlider->setTickInterval(1);
 
   if (!isEpub) {
     if (totallines > baseLines) {
-      mw_one->ui->hSlider->setMinimum(0);
-      mw_one->ui->hSlider->setValue(iPage / baseLines);
-      mw_one->ui->hSlider->setMaximum(totallines / baseLines);
+      mw_one->mydlgReaderFun->ui->hSlider->setMinimum(0);
+      mw_one->mydlgReaderFun->ui->hSlider->setValue(iPage / baseLines);
+      mw_one->mydlgReaderFun->ui->hSlider->setMaximum(totallines / baseLines);
       mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
                                     QString::number(iPage / baseLines) + " / " +
                                     QString::number(totallines / baseLines));
@@ -1022,9 +1024,9 @@ void dlgReader::showInfo() {
     }
 
   } else {
-    mw_one->ui->hSlider->setMinimum(1);
-    mw_one->ui->hSlider->setValue(htmlIndex);
-    mw_one->ui->hSlider->setMaximum(htmlFiles.count());
+    mw_one->mydlgReaderFun->ui->hSlider->setMinimum(1);
+    mw_one->mydlgReaderFun->ui->hSlider->setValue(htmlIndex);
+    mw_one->mydlgReaderFun->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
                                   QString::number(htmlIndex + 1) + " / " +
                                   QString::number(htmlFiles.count()));

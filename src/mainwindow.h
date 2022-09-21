@@ -54,6 +54,7 @@
 #include <QTreeWidgetItem>
 #include <QValueAxis>
 
+#include "dlgReaderFun.h"
 #include "src/dlgMemos.h"
 #include "src/dlgOneDrive.h"
 #include "src/dlgfloatfun.h"
@@ -71,6 +72,7 @@
 #include "src/msgdialog.h"
 #include "src/onedrive/dlgweb.h"
 #include "src/specialaccelerometerpedometer.h"
+#include "ui_dlgReaderFun.h"
 #include "ui_dlgfloatfun.h"
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
@@ -184,6 +186,7 @@ class MainWindow : public QMainWindow {
   TestDialog *mydlgOneDrive;
   dlgWeb *mydlgWeb;
   dlgFloatFun *mydlgFloatFun;
+  dlgReaderFun *mydlgReaderFun;
 
   File *myfile;
 

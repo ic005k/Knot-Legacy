@@ -3576,6 +3576,7 @@ void MainWindow::init_UIWidget() {
   mydlgOneDrive = new TestDialog;
   mydlgWeb = new dlgWeb(this);
   mydlgFloatFun = new dlgFloatFun(this);
+  mydlgReaderFun = new dlgReaderFun(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -4097,6 +4098,7 @@ void MainWindow::setSCrollPro(QObject* obj) {
 }
 
 void MainWindow::on_btnBack_clicked() {
+  mydlgReaderFun->close();
   ui->frameReader->hide();
   ui->frameMain->show();
   mydlgReader->saveReader();
@@ -4117,7 +4119,13 @@ void MainWindow::on_btnPageNext_clicked() {
 
 void MainWindow::on_btnFont_clicked() { mydlgReader->on_btnFont_clicked(); }
 
-void MainWindow::on_btnPages_clicked() { mydlgReader->on_btnPages_clicked(); }
+void MainWindow::on_btnPages_clicked() {
+  // mydlgReader->on_btnPages_clicked();
+  if (!mydlgReaderFun->isHidden()) {
+    mydlgReaderFun->close();
+  } else
+    mydlgReaderFun->init();
+}
 
 void MainWindow::on_hSlider_sliderReleased() {
   mydlgReader->on_hSlider_sliderReleased(ui->hSlider->value());
