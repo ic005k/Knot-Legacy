@@ -523,6 +523,7 @@ void dlgReader::setQML(QString txt1) {
   }
   qsShow = str1 + qsShow + str2;
 
+  currentTxt = qsShow;
   mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", qsShow);
 
   if (isPageNext)

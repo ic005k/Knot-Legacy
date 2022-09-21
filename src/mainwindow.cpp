@@ -4112,7 +4112,10 @@ void MainWindow::on_btnBack_clicked() {
   mydlgFloatFun->init();
 }
 
-void MainWindow::on_btnOpen_clicked() { mydlgReader->on_btnOpen_clicked(); }
+void MainWindow::on_btnOpen_clicked() {
+  mw_one->mydlgReaderFun->close();
+  mydlgReader->on_btnOpen_clicked();
+}
 
 void MainWindow::on_btnPageUp_clicked() { mydlgReader->on_btnPageUp_clicked(); }
 
@@ -4224,7 +4227,10 @@ void MainWindow::readEBookDone() {
   isReadEBookEnd = true;
 }
 
-void MainWindow::on_btnReadList_clicked() { mydlgReader->getReadList(); }
+void MainWindow::on_btnReadList_clicked() {
+  mydlgReaderFun->close();
+  mydlgReader->getReadList();
+}
 
 void MainWindow::on_btnBackDir_clicked() { mydlgReader->backDir(); }
 
@@ -4279,6 +4285,8 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
 }
 
 void MainWindow::on_btnSelText_clicked() {
+  mydlgReaderFun->close();
+
   if (!isSelText) {
     ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
     isSelText = true;
@@ -4454,10 +4462,15 @@ void MainWindow::clearSelectBox() {
     QQuickItem* root = mw_one->ui->quickWidget->rootObject();
     QMetaObject::invokeMethod((QObject*)root, "loadHtml",
                               Q_ARG(QVariant, tempFile));
-
-    QMetaObject::invokeMethod(
-        (QObject*)root, "loadHtml",
-        Q_ARG(QVariant, mw_one->mydlgReader->currentHtmlFile));
+    Sleep(50);
+    if (isEpub) {
+      QMetaObject::invokeMethod(
+          (QObject*)root, "loadHtml",
+          Q_ARG(QVariant, mw_one->mydlgReader->currentHtmlFile));
+    } else {
+      ui->quickWidget->rootContext()->setContextProperty(
+          "strText", mydlgReader->currentTxt);
+    }
     mw_one->mydlgReader->setPageVPos();
   }
 
