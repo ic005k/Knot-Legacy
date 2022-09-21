@@ -54,3 +54,7 @@ void dlgReaderFun::on_btnFont_clicked() {
   close();
   mw_one->mydlgReader->on_btnFont_clicked();
 }
+
+void dlgReaderFun::on_hSlider_sliderMoved(int position) {
+  mw_one->on_hSlider_sliderMoved(position);
+}

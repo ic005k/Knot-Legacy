@@ -28,6 +28,8 @@ class dlgReaderFun : public QDialog {
 
   void on_btnFont_clicked();
 
+  void on_hSlider_sliderMoved(int position);
+
  private:
 };
 

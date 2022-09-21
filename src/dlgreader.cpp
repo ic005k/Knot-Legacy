@@ -571,6 +571,7 @@ void dlgReader::on_btnFont_clicked() {
 
     list->close();
     setPageVPos();
+    mw_one->mydlgReaderFun->init();
   });
 
   list->setGeometry(0, 0, mw_one->width(), mw_one->height());
