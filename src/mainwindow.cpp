@@ -1871,7 +1871,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         QPropertyAnimation* animation1 =
             // new QPropertyAnimation(ui->lblStats, "geometry");
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
-        animation1->setDuration(500);  //设置动画时间为0.5秒
+        animation1->setDuration(350);  //设置动画时间为0.5秒
         animation1->setStartValue(QRect(x, y, w, h));
         animation1->setEndValue(QRect(w * 2, y, w, h));
 
@@ -1879,7 +1879,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
         QPropertyAnimation* animation2 =
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
-        animation2->setDuration(500);
+        animation2->setDuration(350);
         animation2->setStartValue(QRect(-w * 2, y, w, h));
         animation2->setEndValue(QRect(x, y, w, h));
 
@@ -1912,7 +1912,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         QPropertyAnimation* animation1 =
             // new QPropertyAnimation(ui->lblStats, "geometry");
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
-        animation1->setDuration(500);
+        animation1->setDuration(350);
         animation1->setStartValue(QRect(x, y, w, h));
         animation1->setEndValue(QRect(-w, y, w, h));
 
@@ -1920,7 +1920,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
         QPropertyAnimation* animation2 =
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
-        animation2->setDuration(500);
+        animation2->setDuration(350);
         animation2->setStartValue(QRect(w * 2, y, w, h));
         animation2->setEndValue(QRect(x, y, w, h));
 
@@ -1930,7 +1930,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         group->start();
         QElapsedTimer t;
         t.start();
-        while (t.elapsed() < 600) {
+        while (t.elapsed() < 500) {
           QCoreApplication::processEvents();
         }
         series->clear();
@@ -1951,6 +1951,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
           return true;
         } else if (!listReadList->isHidden()) {
           listReadList->close();
+          return true;
+        } else if (!mydlgReaderFun->isHidden()) {
+          mydlgReaderFun->close();
           return true;
         } else {
           on_btnBack_clicked();
