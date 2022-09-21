@@ -11,6 +11,7 @@ extern QTabWidget *tabData, *tabChart;
 extern bool isImport, isEBook, isReport, isBreakReport, isReportWindowsShow,
     isRunCategory;
 QString btnYearText, btnMonthText;
+QStringList listCategory;
 QTableWidget *tableReport, *tableReport0, *tableDetails, *tableDetails0,
     *tableCategory, *tableCategory0;
 QLabel *lblTotal, *lblDetails;
@@ -729,6 +730,30 @@ void dlgReport::on_btnCategory_clicked() {
 
     list->close();
   });
+}
+
+void dlgReport::getCategoryText() {
+  int count = tableReport0->rowCount();
+  if (count == 0) {
+    return;
+  }
+
+  listCategory.clear();
+  listCategory.append(tr("None"));
+
+  for (int i = 0; i < count - 1; i++) {
+    on_tableReport0_cellClicked(i, 0);
+    for (int j = 0; j < tableDetails0->rowCount(); j++) {
+      QString str = tableDetails0->item(j, 2)->text().trimmed();
+      if (str != "") {
+        if (!listCategory.removeOne(str)) {
+          listCategory.insert(1, str);
+
+        } else
+          listCategory.insert(1, str);
+      }
+    }
+  }
 }
 
 void dlgReport::getCategoryData() {

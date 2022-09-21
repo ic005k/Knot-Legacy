@@ -72,6 +72,7 @@ void ReadEBookThread::run() {
 
   if (isReport) {
     mw_one->mydlgReport->getMonthData();
+    mw_one->mydlgReport->getCategoryText();
   }
 
   if (isRunCategory) mw_one->mydlgReport->getCategoryData();

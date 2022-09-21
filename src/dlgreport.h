@@ -23,7 +23,6 @@ class dlgReport : public QDialog {
   ~dlgReport();
   Ui::dlgReport *ui;
 
-  QStringList listCategory;
   static void markColor(int row);
   static void sel_Year();
   static void sel_Month();
@@ -34,6 +33,7 @@ class dlgReport : public QDialog {
   void updateTable();
   void init();
   void updateCategoryTable();
+  static void getCategoryText();
  public slots:
   static void on_tableReport_cellClicked(int row, int column);
   void on_btnYear_clicked();
