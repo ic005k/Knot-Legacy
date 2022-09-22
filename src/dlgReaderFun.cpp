@@ -48,33 +48,13 @@ void dlgReaderFun::on_hSlider_sliderReleased() {
 
 void dlgReaderFun::on_btnFontPlus_clicked() {
   mw_one->textFontSize++;
-
-  qreal pos1 = mw_one->mydlgReader->getVPos();
-  qreal h1 = mw_one->mydlgReader->getVHeight();
-
   mw_one->mydlgReader->setFontSize(mw_one->textFontSize);
-
-  qreal h2 = mw_one->mydlgReader->getVHeight();
-  qreal pos2 = mw_one->mydlgReader->getNewVPos(pos1, h1, h2);
-  mw_one->mydlgReader->setVPos(pos2);
-  mw_one->mydlgReader->textPos = pos2;
-
-  qDebug() << "pos1=" << pos1 << "h1=" << h1 << "pos2=" << pos2 << "h2=" << h2;
 }
 
 void dlgReaderFun::on_btnFontLess_clicked() {
   if (mw_one->textFontSize <= 8) return;
   mw_one->textFontSize--;
-
-  qreal pos1 = mw_one->mydlgReader->getVPos();
-  qreal h1 = mw_one->mydlgReader->getVHeight();
-
   mw_one->mydlgReader->setFontSize(mw_one->textFontSize);
-
-  qreal h2 = mw_one->mydlgReader->getVHeight();
-  qreal pos2 = mw_one->mydlgReader->getNewVPos(pos1, h1, h2);
-  mw_one->mydlgReader->setVPos(pos2);
-  mw_one->mydlgReader->textPos = pos2;
 }
 
 void dlgReaderFun::on_btnFont_clicked() {

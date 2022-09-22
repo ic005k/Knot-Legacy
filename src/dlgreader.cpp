@@ -1008,11 +1008,18 @@ int dlgReader::deleteDirfile(QString dirName) {
 }
 
 void dlgReader::setFontSize(int textFontSize) {
-  saveReader();
-  savePageVPos();
+  qreal pos1 = getVPos();
+  qreal h1 = getVHeight();
+
   mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize",
                                                              textFontSize);
-  setPageVPos();
+
+  qreal h2 = getVHeight();
+  qreal pos2 = getNewVPos(pos1, h1, h2);
+  setVPos(pos2);
+  textPos = pos2;
+
+  qDebug() << "pos1=" << pos1 << "h1=" << h1 << "pos2=" << pos2 << "h2=" << h2;
 }
 
 void dlgReader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
