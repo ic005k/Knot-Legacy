@@ -295,7 +295,7 @@ border-radius: 4px;
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(164, 255, 141);
+         <string notr="true">color: #00C78C;
 background-color: rgb(0, 0, 0);
 
 border: 2px solid rgb(255,0,0);

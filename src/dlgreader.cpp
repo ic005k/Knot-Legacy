@@ -135,6 +135,19 @@ void dlgReader::setReaderStyle() {
                                                                "/res/b.png");
     mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
                                                                "#664E30");
+
+    mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
+        "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
+        "rgb(0,0,255);border-radius: 4px;");
+
+    mw_one->mydlgReaderFun->ui->btnStyle1->setStyleSheet(
+        "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
+        "2px solid "
+        "rgb(255,0,0);border-radius: 4px;");
+    mw_one->mydlgReaderFun->ui->btnStyle2->setStyleSheet(
+        "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
+        "solid "
+        "rgb(0,0,255);border-radius: 4px;");
   }
 
   if (readerStyle == "2") {
@@ -142,13 +155,39 @@ void dlgReader::setReaderStyle() {
                                                                "");
     mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
                                                                "#000000");
+
+    mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
+        "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
+        "rgb(0,0,255);border-radius: 4px;");
+
+    mw_one->mydlgReaderFun->ui->btnStyle1->setStyleSheet(
+        "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
+        "2px solid "
+        "rgb(0,0,255);border-radius: 4px;");
+    mw_one->mydlgReaderFun->ui->btnStyle2->setStyleSheet(
+        "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
+        "solid "
+        "rgb(255,0,0);border-radius: 4px;");
   }
 
   if (readerStyle == "3") {
     mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
                                                                "/res/b3.png");
     mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
-                                                               "#A4FF8D");
+                                                               "#00C78C");
+
+    mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
+        "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
+        "rgb(255,0,0);border-radius: 4px;");
+
+    mw_one->mydlgReaderFun->ui->btnStyle1->setStyleSheet(
+        "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
+        "2px solid "
+        "rgb(0,0,255);border-radius: 4px;");
+    mw_one->mydlgReaderFun->ui->btnStyle2->setStyleSheet(
+        "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
+        "solid "
+        "rgb(0,0,255);border-radius: 4px;");
   }
 }
 
@@ -1032,6 +1071,18 @@ qreal dlgReader::getVPos() {
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getVPos");
   return textPos;
+}
+
+qreal dlgReader::getVHeight() {
+  QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getVHeight");
+  return textHeight;
+}
+
+qreal dlgReader::getNewVPos(qreal pos1, qreal h1, qreal h2) {
+  qreal pos2;
+  pos2 = pos1 * h2 / h1;
+  return pos2;
 }
 
 void dlgReader::showInfo() {

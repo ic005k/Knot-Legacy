@@ -79,6 +79,8 @@ class dlgReader : public QDialog {
   static QString getCoverPicFile(QString htmlFile);
   qreal getVPos();
   void setReaderStyle();
+  qreal getVHeight();
+  qreal getNewVPos(qreal pos1, qreal h1, qreal h2);
  public slots:
 
   void on_btnPageNext_clicked();

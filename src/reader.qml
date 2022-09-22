@@ -37,6 +37,11 @@ Item {
         console.log(file.textPos)
     }
 
+    function getVHeight() {
+        file.textHeight = textArea.contentHeight
+        console.log(file.textHeight)
+    }
+
     function move(x0) {
         x = x + x0
         file.curX = x
@@ -95,7 +100,9 @@ Item {
         onMovementEnded: {
             state = "autoscroll"
             file.textPos = contentY
+            file.textHeight = contentHeight
             console.log(file.textPos)
+            console.log(file.textHeight)
         }
 
         TextArea.flickable: TextArea {
