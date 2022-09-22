@@ -18,6 +18,7 @@ dlgReaderFun::dlgReaderFun(QWidget* parent)
   f.setPointSize(10);
   ui->btnStyle1->setFont(f);
   ui->btnStyle2->setFont(f);
+  ui->btnStyle3->setFont(f);
 }
 
 dlgReaderFun::~dlgReaderFun() { delete ui; }
@@ -78,5 +79,13 @@ void dlgReaderFun::on_btnStyle2_clicked() {
   Reg.setIniCodec("utf-8");
   Reg.setValue("/Reader/Style", "2");
   mw_one->mydlgReader->readerStyle = "2";
+  mw_one->mydlgReader->setReaderStyle();
+}
+
+void dlgReaderFun::on_btnStyle3_clicked() {
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+  Reg.setValue("/Reader/Style", "3");
+  mw_one->mydlgReader->readerStyle = "3";
   mw_one->mydlgReader->setReaderStyle();
 }

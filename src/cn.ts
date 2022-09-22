@@ -1333,20 +1333,20 @@ in skydrive folder</source>
         <translation type="vanished">正在读取中...</translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="167"/>
-        <location filename="dlgreader.cpp" line="499"/>
-        <location filename="dlgreader.cpp" line="1038"/>
-        <location filename="dlgreader.cpp" line="1052"/>
+        <location filename="dlgreader.cpp" line="174"/>
+        <location filename="dlgreader.cpp" line="506"/>
+        <location filename="dlgreader.cpp" line="1045"/>
+        <location filename="dlgreader.cpp" line="1059"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="215"/>
+        <location filename="dlgreader.cpp" line="222"/>
         <source>Book Info : </source>
         <translation>书籍信息：</translation>
     </message>
     <message>
-        <location filename="dlgreader.cpp" line="868"/>
+        <location filename="dlgreader.cpp" line="875"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation></translation>
@@ -1383,6 +1383,11 @@ in skydrive folder</source>
         <location filename="dlgReaderFun.ui" line="273"/>
         <source>Style2</source>
         <translation>风格2</translation>
+    </message>
+    <message>
+        <location filename="dlgReaderFun.ui" line="296"/>
+        <source>Style3</source>
+        <translation>风格3</translation>
     </message>
 </context>
 <context>

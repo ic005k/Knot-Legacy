@@ -237,7 +237,10 @@ QSlider::handle:vertical
         </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(102, 78, 48);
-background-color: rgb(240, 222, 198);</string>
+background-color: rgb(240, 222, 198);
+
+border: 2px solid rgb(255,0,0);
+border-radius: 4px;</string>
         </property>
         <property name="text">
          <string>Style1</string>
@@ -267,6 +270,9 @@ background-color: rgb(240, 222, 198);</string>
         <property name="styleSheet">
          <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
+
+border: 2px solid rgb(255,0,0);
+border-radius: 4px;
 </string>
         </property>
         <property name="text">
@@ -277,6 +283,26 @@ background-color: rgb(255, 255, 255);
         </property>
         <property name="autoRaise">
          <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btnStyle3">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(164, 255, 141);
+background-color: rgb(0, 0, 0);
+
+border: 2px solid rgb(255,0,0);
+border-radius: 4px;</string>
+        </property>
+        <property name="text">
+         <string>Style3</string>
         </property>
        </widget>
       </item>

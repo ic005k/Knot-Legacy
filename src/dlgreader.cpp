@@ -143,6 +143,13 @@ void dlgReader::setReaderStyle() {
     mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
                                                                "#000000");
   }
+
+  if (readerStyle == "3") {
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
+                                                               "/res/b3.png");
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
+                                                               "#A4FF8D");
+  }
 }
 
 void dlgReader::startOpenFile(QString openfile) {

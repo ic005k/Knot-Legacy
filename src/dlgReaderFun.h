@@ -34,6 +34,8 @@ class dlgReaderFun : public QDialog {
 
   void on_btnStyle2_clicked();
 
+  void on_btnStyle3_clicked();
+
  private:
 };
 
