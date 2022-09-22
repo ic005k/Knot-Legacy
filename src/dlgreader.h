@@ -33,6 +33,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  QString readerStyle;
   QString currentTxt;
   QString currentHtmlFile;
   bool isPageNext = false;
@@ -77,6 +78,7 @@ class dlgReader : public QDialog {
   void refreshEpubPage();
   static QString getCoverPicFile(QString htmlFile);
   qreal getVPos();
+  void setReaderStyle();
  public slots:
 
   void on_btnPageNext_clicked();

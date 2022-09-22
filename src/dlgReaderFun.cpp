@@ -6,6 +6,7 @@
 
 extern int fontSize;
 extern MainWindow* mw_one;
+extern QString iniDir;
 
 dlgReaderFun::dlgReaderFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgReaderFun) {
@@ -13,6 +14,10 @@ dlgReaderFun::dlgReaderFun(QWidget* parent)
   ui->btnFont->setStyleSheet("border:none");
   ui->btnFontLess->setStyleSheet("border:none");
   ui->btnFontPlus->setStyleSheet("border:none");
+  QFont f(this->font());
+  f.setPointSize(10);
+  ui->btnStyle1->setFont(f);
+  ui->btnStyle2->setFont(f);
 }
 
 dlgReaderFun::~dlgReaderFun() { delete ui; }
@@ -58,4 +63,20 @@ void dlgReaderFun::on_btnFont_clicked() {
 
 void dlgReaderFun::on_hSlider_sliderMoved(int position) {
   mw_one->on_hSlider_sliderMoved(position);
+}
+
+void dlgReaderFun::on_btnStyle1_clicked() {
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+  Reg.setValue("/Reader/Style", "1");
+  mw_one->mydlgReader->readerStyle = "1";
+  mw_one->mydlgReader->setReaderStyle();
+}
+
+void dlgReaderFun::on_btnStyle2_clicked() {
+  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+  Reg.setValue("/Reader/Style", "2");
+  mw_one->mydlgReader->readerStyle = "2";
+  mw_one->mydlgReader->setReaderStyle();
 }

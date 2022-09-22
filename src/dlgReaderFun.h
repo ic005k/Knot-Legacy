@@ -30,6 +30,10 @@ class dlgReaderFun : public QDialog {
 
   void on_hSlider_sliderMoved(int position);
 
+  void on_btnStyle1_clicked();
+
+  void on_btnStyle2_clicked();
+
  private:
 };
 

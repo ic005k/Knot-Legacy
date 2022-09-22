@@ -129,10 +129,28 @@ QDialog* dlgReader::getProgBar() {
   return dlgProgEBook;
 }
 
+void dlgReader::setReaderStyle() {
+  if (readerStyle == "1") {
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
+                                                               "/res/b.png");
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
+                                                               "#664E30");
+  }
+
+  if (readerStyle == "2") {
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
+                                                               "");
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
+                                                               "#000000");
+  }
+}
+
 void dlgReader::startOpenFile(QString openfile) {
   if (isReport) return;
 
   isEBook = true;
+
+  setReaderStyle();
 
   mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", "");
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isSelText",
@@ -433,6 +451,8 @@ void dlgReader::saveReader() {
 void dlgReader::initReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
+
+  readerStyle = Reg.value("/Reader/Style", "1").toString();
 
   QFont font;
   int fsize = Reg.value("/Reader/FontSize", 18).toInt();

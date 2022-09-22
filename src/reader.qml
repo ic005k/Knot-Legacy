@@ -77,7 +77,7 @@ Item {
         verticalAlignment: Image.AlignTop
 
         smooth: true
-        source: "/res/b.png"
+        source: backImgFile
     }
 
     Flickable {
@@ -117,7 +117,7 @@ Item {
             selectByMouse: isSelText
             smooth: true
 
-            color: "#664E30"
+            color: myTextColor
 
             text: strText
             visible: true
