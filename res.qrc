@@ -63,5 +63,6 @@
         <file>res/memos.png</file>
         <file>res/info.png</file>
         <file>src/texteditor.html</file>
+        <file>res/b3.png</file>
     </qresource>
 </RCC>
