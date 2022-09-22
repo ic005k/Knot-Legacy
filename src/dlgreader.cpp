@@ -198,6 +198,8 @@ void dlgReader::startOpenFile(QString openfile) {
 
   setReaderStyle();
 
+  mw_one->ui->quickWidget->rootContext()->setContextProperty("isWebViewShow",
+                                                             false);
   mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", "");
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isSelText",
                                                              mw_one->isSelText);

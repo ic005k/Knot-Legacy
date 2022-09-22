@@ -33,8 +33,7 @@ void dlgReaderFun::init() {
               mw_one->ui->quickWidget->height());
   // setWindowFlags(Qt::WindowStaysOnTopHint);
 
-  setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint |
-                 Qt::WindowDoesNotAcceptFocus);
+  setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool | Qt::FramelessWindowHint);
 
   show();
 }

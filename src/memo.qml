@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.0
 import QtQuick.Layouts 1.3
-import QtWebView 1.0
 import MyModel1 1.0
 import MyModel2 1.0
 
@@ -110,13 +109,6 @@ Item {
             console.log(file.textHeight)
         }
 
-        WebView {
-            id: webView
-            visible: false
-            anchors.fill: parent
-            url: initialUrl
-        }
-
         TextArea.flickable: TextArea {
             id: textArea
             visible: true
@@ -138,8 +130,8 @@ Item {
             smooth: true
 
             color: "#664E30"
-            //color: Qt.AutoColor
 
+            //color: Qt.AutoColor
             text: strText
 
             MouseArea {

@@ -487,7 +487,6 @@ void dlgMainNotes::unzipMemo() {
 
 void dlgMainNotes::loadMemoQML() {
   QString file = iniDir + "memo/memo.html";
-
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();

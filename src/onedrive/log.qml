@@ -1,8 +1,8 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Window 2.0
-import QtQuick.Layouts 1.3
-import QtWebView 1.1
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Window 2.15
+import QtQuick.Layouts 1.15
+
 import MyModel1 1.0
 import MyModel2 1.0
 
@@ -135,7 +135,6 @@ Item {
                 loops: 1 //Animation.Infinite
             }
 
-
             SequentialAnimation on opacity {
                 //应用于透明度上的序列动画
                 running: false
@@ -171,14 +170,11 @@ Item {
             }
         }
 
-
-
         Component.onCompleted: {
 
             console.log(textArea.lineCount)
             console.log(textArea.height)
             console.log(control.position)
-
         }
     }
 

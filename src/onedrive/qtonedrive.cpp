@@ -579,17 +579,18 @@ QString QtOneDrive::debugInfo() const {
   QString info;
   QTextStream stream(&info);
 
-  stream << "State: " << state_ << "\n";
-  stream << "IsSingIn: " << isSingIn() << "\n";
-  stream << "clientID: " << clientID_ << "\n";
-  stream << "redirectURI: " << redirectURI_ << "\n";
-  stream << "secret: " << secret_ << "\n";
-  stream << "expiredTokenTime: " << expiredTokenTime_.toString() << "\n";
-  stream << "Current Time: " << QDateTime::currentDateTime().toString() << "\n";
-  stream << "authorizationCode: " << authorizationCode_ << "\n";
-  stream << "accessToken: " << accessToken_ << "\n";
-  stream << "refreshToken: " << refreshToken_ << "\n";
-  stream << "authenticationToken: " << authenticationToken_ << "\n";
+  stream << "1. State: " << state_ << "\n\n";
+  stream << "2. IsSingIn: " << isSingIn() << "\n\n";
+  stream << "3. ClientID: " << clientID_ << "\n\n";
+  stream << "4. Redirect URI: " << redirectURI_ << "\n\n";
+  stream << "5. Expired Token Time: " << expiredTokenTime_.toString() << "\n\n";
+  stream << "6. Current Time: " << QDateTime::currentDateTime().toString()
+         << "\n\n";
+  stream << "7. Authorization Code: " << authorizationCode_ << "\n\n";
+  stream << "8. Access Token: " << accessToken_ << "\n\n";
+  stream << "9. Refresh Token: " << refreshToken_ << "\n\n";
+  // stream << "10. Secret: " << secret_ << "\n\n";
+  // stream << "11. Authentication Token: " << authenticationToken_ << "\n";
   return info;
 }
 

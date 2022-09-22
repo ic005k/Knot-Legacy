@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
-//import QtWebView 1.0
+//import QtWebView 1.1
 import MyModel1 1.0
 import MyModel2 1.0
 
@@ -105,9 +105,16 @@ Item {
             console.log(file.textHeight)
         }
 
+
+        /*WebView {
+            id: webView
+            visible: isWebViewShow
+            anchors.fill: parent
+            url: initialUrl
+        }*/
         TextArea.flickable: TextArea {
             id: textArea
-
+            visible: !isWebViewShow
             font.pixelSize: FontSize
             font.family: FontName
             font.letterSpacing: 2
@@ -127,7 +134,6 @@ Item {
             color: myTextColor
 
             text: strText
-            visible: true
 
             MouseArea {
                 id: mouse_area
@@ -229,11 +235,11 @@ Item {
             text: qsTr("Cut")
             enabled: textArea.selectedText
             onTriggered: textArea.cut()
-        }*/
+        }
         MenuItem {
             text: qsTr("Paste")
             enabled: textArea.canPaste
             onTriggered: textArea.paste()
-        }
+        }*/
     }
 }

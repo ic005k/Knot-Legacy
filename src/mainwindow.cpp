@@ -3711,6 +3711,8 @@ void MainWindow::init_UIWidget() {
 
   ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
   ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
+
+  ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4294,10 +4296,21 @@ void MainWindow::on_btnSelText_clicked() {
     isSelText = true;
     ui->quickWidget->rootContext()->setContextProperty("isSelText", isSelText);
 
+    // ui->quickWidget->rootContext()->setContextProperty("isWebViewShow",
+    // true);
+    // QUrl url("file://" + mydlgReader->currentHtmlFile);
+    //  ui->quickWidget->setSource(
+    //      QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
+    // ui->quickWidget->rootContext()->setContextProperty("initialUrl", url);
+
   } else {
     ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));
     isSelText = false;
     ui->quickWidget->rootContext()->setContextProperty("isSelText", isSelText);
+
+    // ui->quickWidget->rootContext()->setContextProperty("isWebViewShow",
+    // false);
+    //  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/src/reader.qml")));
 
     clearSelectBox();
   }
