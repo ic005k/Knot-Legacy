@@ -3918,7 +3918,7 @@ void MainWindow::on_actionTimeMachine() {
   vbox->setContentsMargins(1, 1, 1, 1);
   dlg->setLayout(vbox);
   QToolButton* btnBack = new QToolButton(this);
-  btnBack->setFixedHeight(35);
+  btnBack->setFixedHeight(40);
   btnBack->setText(tr("Back"));
   btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   connect(btnBack, &QToolButton::clicked, [=]() {
