@@ -1453,8 +1453,7 @@ void MainWindow::on_actionRename_triggered() {
     ui->tabWidget->setTabText(index, text);
     saveTab();
   }*/
-  mydlgRename->setFixedHeight(this->height());
-  mydlgRename->setFixedWidth(this->width());
+  mydlgRename->setGeometry(geometry().x(), geometry().y(), width(), height());
   mydlgRename->setModal(true);
   mydlgRename->ui->editName->setText(ui->tabWidget->tabText(index));
   mydlgRename->ui->editName->setFocus();
@@ -2229,7 +2228,7 @@ void MainWindow::on_actionImport_Data_triggered() {
   importBakData(fileName, true, true);
 }
 
-void MainWindow::importBakData(QString fileName, bool msg, bool book) {
+bool MainWindow::importBakData(QString fileName, bool msg, bool book) {
   if (!fileName.isNull()) {
     if (msg) {
       QMessageBox msgBox;
@@ -2242,7 +2241,7 @@ void MainWindow::importBakData(QString fileName, bool msg, bool book) {
       btnOk->setFocus();
       msgBox.exec();
       if (msgBox.clickedButton() == btnCancel) {
-        return;
+        return false;
       }
     }
 
@@ -2255,7 +2254,7 @@ void MainWindow::importBakData(QString fileName, bool msg, bool book) {
       QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
       btnOk->setFocus();
       msgBox.exec();
-      return;
+      return false;
     }
 
     if (QFile(iniFile).exists()) QFile(iniFile).remove();
@@ -2305,6 +2304,8 @@ void MainWindow::importBakData(QString fileName, bool msg, bool book) {
     RegTotalIni.endGroup();
     if (book) mydlgReader->initReader();
   }
+
+  return true;
 }
 
 int MainWindow::get_Day(QString date) {
@@ -2818,8 +2819,7 @@ void MainWindow::on_RunCategory() {
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
 
 void MainWindow::on_actionPreferences_triggered() {
-  mydlgPre->setFixedHeight(this->height());
-  mydlgPre->setFixedWidth(this->width());
+  mydlgPre->setGeometry(geometry().x(), geometry().y(), width(), height());
   mydlgPre->setModal(true);
   mydlgPre->show();
 }
@@ -3795,7 +3795,8 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   connect(actUndo, &QAction::triggered, this, &MainWindow::undo);
   connect(actRedo, &QAction::triggered, this, &MainWindow::redo);
 
-  connect(actTimeMachine, &QAction::triggered, this, &MainWindow::timeMachine);
+  connect(actTimeMachine, &QAction::triggered, this,
+          &MainWindow::on_actionTimeMachine);
 
   connect(actFind, &QAction::triggered, this,
           &MainWindow::on_actionFind_triggered);
@@ -3909,10 +3910,25 @@ void MainWindow::addRedo() {
   }
 }
 
-void MainWindow::timeMachine() {
+void MainWindow::on_actionTimeMachine() {
   mydlgFloatFun->close();
 
-  QListWidget* list = new QListWidget(mw_one);
+  QDialog* dlg = new QDialog(this);
+  QVBoxLayout* vbox = new QVBoxLayout;
+  vbox->setContentsMargins(1, 1, 1, 1);
+  dlg->setLayout(vbox);
+  QToolButton* btnBack = new QToolButton(this);
+  btnBack->setFixedHeight(35);
+  btnBack->setText(tr("Back"));
+  btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  connect(btnBack, &QToolButton::clicked, [=]() {
+    dlg->close();
+    delete mydlgFloatFun;
+    mydlgFloatFun = new dlgFloatFun(this);
+    mydlgFloatFun->init();
+  });
+
+  QListWidget* list = new QListWidget(this);
   mw_one->listTimeMachine = list;
   list->setStyleSheet(mw_one->listWidgetStyle);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
@@ -3940,21 +3956,17 @@ void MainWindow::timeMachine() {
     QStringList list0 = str.split("\n");
     if (list0.count() == 2) str = list0.at(0);
     QString file = iniDir + str.trimmed();
-    importBakData(file, true, false);
-    list->close();
-
-    delete mydlgFloatFun;
-    mydlgFloatFun = new dlgFloatFun(this);
-    mydlgFloatFun->init();
+    if (importBakData(file, true, false)) btnBack->click();
   });
-
-  list->setGeometry(0, 0, mw_one->width(), mw_one->height());
 
   if (list->count() > 0) {
     list->setCurrentRow(0);
   }
 
-  list->show();
+  vbox->addWidget(list);
+  vbox->addWidget(btnBack);
+  dlg->setGeometry(geometry().x(), geometry().y(), width(), height());
+  dlg->show();
   list->setFocus();
 }
 

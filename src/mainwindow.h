@@ -292,7 +292,7 @@ class MainWindow : public QMainWindow {
   void bakData(QString fileName, bool msgbox);
   void setSCrollPro(QObject *obj);
 
-  void importBakData(QString fileName, bool msg, bool book);
+  bool importBakData(QString fileName, bool msg, bool book);
   void addUndo(QString log);
   QString getTabText();
   void addRedo();
@@ -428,7 +428,7 @@ class MainWindow : public QMainWindow {
   void undo();
   void redo();
 
-  void timeMachine();
+  void on_actionTimeMachine();
 
   void on_btnSelText_clicked();
 
