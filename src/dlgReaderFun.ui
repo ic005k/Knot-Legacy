@@ -154,8 +154,8 @@ QSlider::handle:vertical
         </property>
         <property name="iconSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>35</width>
+          <height>35</height>
          </size>
         </property>
         <property name="toolButtonStyle">
@@ -192,8 +192,8 @@ QSlider::handle:vertical
         </property>
         <property name="iconSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>35</width>
+          <height>35</height>
          </size>
         </property>
         <property name="toolButtonStyle">
@@ -230,8 +230,8 @@ QSlider::handle:vertical
         </property>
         <property name="iconSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>35</width>
+          <height>35</height>
          </size>
         </property>
         <property name="toolButtonStyle">
@@ -250,7 +250,7 @@ QSlider::handle:vertical
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>25</height>
+          <height>35</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -282,7 +282,7 @@ border-radius: 4px;</string>
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>25</height>
+          <height>35</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -315,7 +315,7 @@ border-radius: 4px;
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>25</height>
+          <height>35</height>
          </size>
         </property>
         <property name="styleSheet">
