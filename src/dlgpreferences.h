@@ -29,10 +29,6 @@ class dlgPreferences : public QDialog {
  private slots:
   void on_btnBack_clicked();
 
-  void on_rbSM1_clicked();
-
-  void on_rbSM2_clicked();
-
   void on_sliderFontSize_sliderMoved(int position);
 
   void on_chkReaderFont_clicked();

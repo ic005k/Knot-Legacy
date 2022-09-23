@@ -480,9 +480,6 @@ void MainWindow::init_Options() {
   mydlgPre->ui->chkDebug->setChecked(debugmode);
   mydlgPre->on_chkDebug_clicked();
 
-  mydlgPre->ui->rbSM1->setChecked(Reg.value("/Options/SM1", false).toBool());
-  mydlgPre->ui->rbSM2->setChecked(Reg.value("/Options/SM2", true).toBool());
-
   // MainUI Find YMD
   listMonth = QStringList() << "01"
                             << "02"

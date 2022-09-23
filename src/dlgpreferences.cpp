@@ -14,7 +14,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgPreferences) {
   ui->setupUi(this);
   this->installEventFilter(this);
-  ui->gBoxSensor->hide();
+
   ui->sliderFontSize->setValue(fontSize);
   ui->lblFontDemo->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
@@ -57,18 +57,8 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/ReaderFont", ui->chkReaderFont->isChecked());
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
-  Reg.setValue("/Options/SM1", ui->rbSM1->isChecked());
-  Reg.setValue("/Options/SM2", ui->rbSM2->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
   Reg.setValue("/Options/Mute", ui->chkMute->isChecked());
-}
-
-void dlgPreferences::on_rbSM1_clicked() {
-  mw_one->accel_pedometer->setAccelerationMode(QAccelerometer::Combined);
-}
-
-void dlgPreferences::on_rbSM2_clicked() {
-  mw_one->accel_pedometer->setAccelerationMode(QAccelerometer::User);
 }
 
 void dlgPreferences::on_chkDebug_clicked() {

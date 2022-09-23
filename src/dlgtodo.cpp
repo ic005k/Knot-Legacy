@@ -727,10 +727,6 @@ void dlgTodo::on_Alarm() {
 }
 
 void dlgTodo::startTimerAlarm(QString text) {
-  /*if (mw_one->isHardStepSensor == 1) {
-    mw_one->mydlgSteps->releaseWakeLock();
-    mw_one->mydlgSteps->acquireWakeLock();
-  }*/
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString(text);
   // jo.callStaticMethod<int>("com.x/MyService", "startTimerAlarm", "()I");
