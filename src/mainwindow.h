@@ -471,6 +471,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnSearch_clicked();
 
+  void on_btnCancelSel_clicked();
+
  private:
   int memoHeight;
   int frameChartHeight = 220;

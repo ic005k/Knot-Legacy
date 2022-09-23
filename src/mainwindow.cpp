@@ -4525,3 +4525,5 @@ void MainWindow::on_btnSearch_clicked() {
   // ui->quickWidget->rootContext()->setContextProperty("initialUrl", url);
   QDesktopServices::openUrl(url);
 }
+
+void MainWindow::on_btnCancelSel_clicked() { ui->btnSelText->click(); }
