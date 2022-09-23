@@ -2158,7 +2158,7 @@ void MainWindow::on_actionExport_Data_triggered() {
   Reg.setValue("/MainNotes/FileName", fileName);
 }
 
-QString MainWindow::on_OneClickBakData(bool msg) {
+QString MainWindow::on_actionOneClickBakData(bool msg) {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   QString fileName = Reg.value("/MainNotes/FileName").toString();
@@ -3771,7 +3771,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 
   QAction* actExportData = new QAction(tr("Export Data"));
   QAction* actImportData = new QAction(tr("Import Data"));
-  QAction* actBakData = new QAction(tr("One Click Data Backup"));
+  QAction* actOneClickBakData = new QAction(tr("One Click Data Backup"));
   QAction* actPreferences = new QAction(tr("Preferences"));
   QAction* actMemos = new QAction(tr("Memos"));
   actMemos->setVisible(false);
@@ -3806,7 +3806,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
           &MainWindow::on_actionNotes_triggered);
   connect(actExportData, &QAction::triggered, this,
           &MainWindow::on_actionExport_Data_triggered);
-  connect(actBakData, &QAction::triggered, this,
+  connect(actOneClickBakData, &QAction::triggered, this,
           &MainWindow::on_btnOneClickBak_clicked);
   connect(actImportData, &QAction::triggered, this,
           &MainWindow::on_actionImport_Data_triggered);
@@ -3816,7 +3816,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
           &MainWindow::on_actionMemos_triggered);
 
   connect(actOneDrive, &QAction::triggered, this,
-          &MainWindow::on_OneDriveBackupData);
+          &MainWindow::on_actionOneDriveBackupData);
   connect(actAbout, &QAction::triggered, this, &MainWindow::on_about);
 
   QString qss =
@@ -3845,7 +3845,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 
   mainMenu->addAction(actExportData);
   mainMenu->addAction(actImportData);
-  mainMenu->addAction(actBakData);
+  mainMenu->addAction(actOneClickBakData);
 
   mainMenu->addAction(actPreferences);
 
@@ -3856,7 +3856,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   mainMenu->setStyleSheet(qss);
 }
 
-void MainWindow::on_OneDriveBackupData() {
+void MainWindow::on_actionOneDriveBackupData() {
   floatfun = false;
   mydlgFloatFun->close();
 
@@ -3919,9 +3919,7 @@ void MainWindow::on_actionTimeMachine() {
   btnBack->setFixedHeight(40);
   btnBack->setText(tr("Back"));
   btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-  connect(btnBack, &QToolButton::clicked, [=]() {
-    dlg->close();
-  });
+  connect(btnBack, &QToolButton::clicked, [=]() { dlg->close(); });
 
   QListWidget* list = new QListWidget(this);
   mw_one->listTimeMachine = list;
@@ -4238,16 +4236,10 @@ void MainWindow::on_btnReadList_clicked() {
 
 void MainWindow::on_btnBackDir_clicked() { mydlgReader->backDir(); }
 
-void MainWindow::on_btnOneClickBak_clicked() { on_OneClickBakData(true); }
+void MainWindow::on_btnOneClickBak_clicked() { on_actionOneClickBakData(true); }
 
 QString MainWindow::getTabText() {
   return tabData->tabText(tabData->currentIndex());
-}
-
-void MainWindow::repaintApp() {
-  // if (!ui->frameMain->isHidden()) {
-  //    qApp->processEvents();
-  // }
 }
 
 void MainWindow::refreshMainUI() {
@@ -4458,7 +4450,7 @@ void MainWindow::on_btnCode_clicked() {
 
 void MainWindow::on_btnMemos_clicked() { on_actionMemos_triggered(); }
 
-void MainWindow::on_btnOneDriveBak_clicked() { on_OneDriveBackupData(); }
+void MainWindow::on_btnOneDriveBak_clicked() { on_actionOneDriveBackupData(); }
 
 void MainWindow::clearSelectBox() {
   QString tempFile = iniDir + "memo/texteditor.html";

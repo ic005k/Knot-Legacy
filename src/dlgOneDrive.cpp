@@ -216,7 +216,7 @@ void TestDialog::on_pushButton_deleteFile_clicked() {
 void TestDialog::on_pushButton_upload2_clicked() {
   // QFileDialog fdlg;
   QString filePath;  // = fdlg.getOpenFileName(this, "Select File");
-  filePath = mw_one->on_OneClickBakData(false);
+  filePath = mw_one->on_actionOneClickBakData(false);
   if (filePath.isEmpty()) return;
   if (!QFile(filePath).exists()) return;
 

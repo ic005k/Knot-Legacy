@@ -298,7 +298,6 @@ class MainWindow : public QMainWindow {
   void addRedo();
 
   QObjectList getAllToolButton(QObjectList lstUIControls);
-  void repaintApp();
 
   void refreshMainUI();
   void on_RunCategory();
@@ -314,8 +313,8 @@ class MainWindow : public QMainWindow {
   void readEBookDone();
   void on_btnPageUp_clicked();
   void on_btnPageNext_clicked();
-  QString on_OneClickBakData(bool msg);
-  void on_OneDriveBackupData();
+  QString on_actionOneClickBakData(bool msg);
+  void on_actionOneDriveBackupData();
   void on_btnPlus_clicked();
   void on_actionReport_triggered();
   void on_btnLess_clicked();
