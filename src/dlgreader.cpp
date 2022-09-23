@@ -36,20 +36,18 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
       "background-image: url(:/res/b.png);border-width:0;border-style:outset;");
 
   mw_one->ui->lblTitle->hide();
-  mw_one->ui->frameFun->hide();
   mw_one->ui->frameReaderFun2->hide();
   mw_one->ui->btnBackward->hide();
   mw_one->ui->btnForward->hide();
 
-  mw_one->ui->btnFontLess->setStyleSheet("border:none");
-  mw_one->ui->btnFontPlus->setStyleSheet("border:none");
   mw_one->ui->btnOpen->setStyleSheet("border:none");
-  mw_one->ui->btnFont->setStyleSheet("border:none");
   mw_one->ui->btnBack->setStyleSheet("border:none");
   mw_one->ui->btnPageNext->setStyleSheet("border:none");
   mw_one->ui->btnPageUp->setStyleSheet("border:none");
   mw_one->ui->btnPages->setStyleSheet(
-      "border:none;"
+      "color: rgb(0, 0, 0);background-color: rgb(254, 234, 112);border: "
+      "0px solid "
+      "rgb(255,0,0);border-radius: 4px;"
       "font-weight: bold;");
   mw_one->ui->btnReadList->setStyleSheet("border:none");
   mw_one->ui->btnBackDir->setStyleSheet("border:none");
@@ -177,7 +175,7 @@ void dlgReader::setReaderStyle() {
     mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
                                                                "/res/b3.png");
     mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
-                                                               "#00C78C");
+                                                               "#308014");
 
     mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
@@ -219,14 +217,12 @@ void dlgReader::startOpenFile(QString openfile) {
                                   " / " + QString::number(0));
     mw_one->ui->progReader->setValue(0);
     mw_one->ui->btnReader->setEnabled(false);
-    mw_one->ui->frameFun->setEnabled(false);
     mw_one->ui->frameReaderFun->setEnabled(false);
 
     dlgProgEBook = getProgBar();
     if (!mw_one->ui->frameReader->isHidden()) dlgProgEBook->show();
 
     mw_one->ui->lblTitle->hide();
-    mw_one->ui->frameFun->hide();
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->lblBookName->hide();
@@ -890,24 +886,6 @@ void dlgReader::setQMLHtml() {
         "aniW", -mw_one->width());
   mw_one->ui->quickWidget->rootContext()->setContextProperty("toW", 0);
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", true);
-}
-
-void dlgReader::on_btnPages_clicked() {
-  if (!QFile(fileName).exists()) return;
-
-  mw_one->ui->lblTitle->hide();
-
-  if (mw_one->ui->frameFun->isHidden()) {
-    mw_one->ui->frameFun->show();
-
-  } else if (!mw_one->ui->frameFun->isHidden()) {
-    mw_one->ui->frameFun->hide();
-  }
-
-  showInfo();
-
-  mw_one->Sleep(1);
-  setVPos(textPos);
 }
 
 QStringList dlgReader::readText(QString textFile) {

@@ -2002,7 +2002,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
     if (event->type() == QEvent::MouseButtonPress) {
       isMousePress = true;
-      ui->frameFun->hide();
+
       Sleep(1);
       mydlgReader->setVPos(mydlgReader->textPos);
       press_x = event->globalX();
@@ -3506,8 +3506,8 @@ void MainWindow::init_UIWidget() {
 
   ui->frameReader->hide();
   ui->frameReader->layout()->setMargin(0);
-  ui->frameReader->layout()->setContentsMargins(0, 0, 0, 0);
-  ui->frameReader->setContentsMargins(0, 0, 0, 0);
+  ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
+  ui->frameReader->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->layout()->setSpacing(1);
   // ui->quickWidget->setObjectName("myframe");
   // ui->quickWidget->setStyleSheet(
@@ -4130,15 +4130,10 @@ void MainWindow::on_btnPageNext_clicked() {
 void MainWindow::on_btnFont_clicked() { mydlgReader->on_btnFont_clicked(); }
 
 void MainWindow::on_btnPages_clicked() {
-  // mydlgReader->on_btnPages_clicked();
   if (!mydlgReaderFun->isHidden()) {
     mydlgReaderFun->close();
   } else
     mydlgReaderFun->init();
-}
-
-void MainWindow::on_hSlider_sliderReleased() {
-  mydlgReader->on_hSlider_sliderReleased(ui->hSlider->value());
 }
 
 void MainWindow::on_btnFontPlus_clicked() {
@@ -4175,7 +4170,7 @@ void MainWindow::readEBookDone() {
     mydlgReader->goPostion();
 
     ui->btnReader->setEnabled(true);
-    ui->frameFun->setEnabled(true);
+
     ui->frameReaderFun->setEnabled(true);
     ui->btnBackDir->setEnabled(false);
     this->repaint();

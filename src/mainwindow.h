@@ -413,8 +413,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnPages_clicked();
 
-  void on_hSlider_sliderReleased();
-
   void on_btnFontPlus_clicked();
 
   void on_btnFontLess_clicked();

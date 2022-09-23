@@ -87,7 +87,7 @@ class dlgReader : public QDialog {
   void on_btnPageUp_clicked();
   void on_btnOpen_clicked();
   void on_btnFont_clicked();
-  void on_btnPages_clicked();
+
   void on_hSlider_sliderReleased(int position);
 
  protected:

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>40</width>
+    <width>45</width>
     <height>462</height>
    </rect>
   </property>
@@ -30,13 +30,13 @@
     <widget class="QFrame" name="frameFun">
      <property name="minimumSize">
       <size>
-       <width>0</width>
+       <width>45</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>40</width>
+       <width>16777215</width>
        <height>16777215</height>
       </size>
      </property>
@@ -48,7 +48,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="spacing">
-       <number>8</number>
+       <number>5</number>
       </property>
       <property name="leftMargin">
        <number>3</number>
@@ -139,6 +139,12 @@ QSlider::handle:vertical
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="text">
          <string>A+</string>
         </property>
@@ -148,8 +154,8 @@ QSlider::handle:vertical
         </property>
         <property name="iconSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>40</width>
+          <height>40</height>
          </size>
         </property>
         <property name="toolButtonStyle">
@@ -171,6 +177,12 @@ QSlider::handle:vertical
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="text">
          <string>A-</string>
         </property>
@@ -180,8 +192,8 @@ QSlider::handle:vertical
         </property>
         <property name="iconSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>40</width>
+          <height>40</height>
          </size>
         </property>
         <property name="toolButtonStyle">
@@ -203,6 +215,12 @@ QSlider::handle:vertical
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="text">
          <string>T</string>
         </property>
@@ -212,8 +230,8 @@ QSlider::handle:vertical
         </property>
         <property name="iconSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>40</width>
+          <height>40</height>
          </size>
         </property>
         <property name="toolButtonStyle">
@@ -288,6 +306,12 @@ border-radius: 4px;
       </item>
       <item>
        <widget class="QToolButton" name="btnStyle3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
