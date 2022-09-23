@@ -175,7 +175,7 @@ void dlgReader::setReaderStyle() {
     mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
                                                                "/res/b3.png");
     mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
-                                                               "#308014");
+                                                               "#2E8B57");
 
     mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
