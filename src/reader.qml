@@ -42,6 +42,12 @@ Item {
         console.log(file.textHeight)
     }
 
+    function getSelectedText()
+    {
+        console.log("selectedText="+textArea.selectedText)
+        return textArea.selectedText
+    }
+
     function move(x0) {
         x = x + x0
         file.curX = x

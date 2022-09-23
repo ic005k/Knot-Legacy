@@ -4295,22 +4295,13 @@ void MainWindow::on_btnSelText_clicked() {
     ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
     isSelText = true;
     ui->quickWidget->rootContext()->setContextProperty("isSelText", isSelText);
-
-    // ui->quickWidget->rootContext()->setContextProperty("isWebViewShow",
-    // true);
-    // QUrl url("file://" + mydlgReader->currentHtmlFile);
-    //  ui->quickWidget->setSource(
-    //      QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
-    // ui->quickWidget->rootContext()->setContextProperty("initialUrl", url);
+    ui->frameReaderFun2->show();
 
   } else {
     ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));
     isSelText = false;
     ui->quickWidget->rootContext()->setContextProperty("isSelText", isSelText);
-
-    // ui->quickWidget->rootContext()->setContextProperty("isWebViewShow",
-    // false);
-    //  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/src/reader.qml")));
+    ui->frameReaderFun2->hide();
 
     clearSelectBox();
   }
@@ -4500,4 +4491,37 @@ void MainWindow::clearSelectBox() {
                               Q_ARG(QVariant, file));
     QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
   }
+}
+
+void MainWindow::on_btnCopy_clicked() {
+  QClipboard* clipboard = QApplication::clipboard();
+  clipboard->setText(getSelectedText());
+}
+
+QString MainWindow::getSelectedText() {
+  QString str;
+  QVariant returnedValue;
+  QQuickItem* root = ui->quickWidget->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getSelectedText",
+                            Q_RETURN_ARG(QVariant, returnedValue));
+  str = returnedValue.toString();
+  return str.trimmed();
+}
+
+void MainWindow::on_btnSearch_clicked() {
+  QString str = getSelectedText();
+  if (str == "") return;
+
+  QString strurl;
+  if (zh_cn)
+    strurl =
+        "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=" +
+        str;
+  else
+    strurl = "https://bing.com/search?q=" + str;
+
+  QUrl url(strurl);
+  // ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
+  // ui->quickWidget->rootContext()->setContextProperty("initialUrl", url);
+  QDesktopServices::openUrl(url);
 }

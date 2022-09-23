@@ -305,6 +305,7 @@ class MainWindow : public QMainWindow {
   void clearSelectBox();
   bool showMsgBox(QString title, QString info, QString copyText,
                   int buttonCount);
+  QString getSelectedText();
  public slots:
   void updateSteps();
   void newDatas();
@@ -464,6 +465,11 @@ class MainWindow : public QMainWindow {
   void on_btnMemos_clicked();
 
   void on_btnOneDriveBak_clicked();
+
+ private slots:
+  void on_btnCopy_clicked();
+
+  void on_btnSearch_clicked();
 
  private:
   int memoHeight;

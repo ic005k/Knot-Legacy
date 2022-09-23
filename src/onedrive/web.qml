@@ -57,7 +57,7 @@ import QtWebView 1.1
 import MyModel1 1.0
 
 //ApplicationWindow {
-Item {
+Item{
     id: mywebitem
 
     property bool showProgress: webView.loading
