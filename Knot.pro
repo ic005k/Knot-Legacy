@@ -113,9 +113,9 @@ RESOURCES += \
     res.qrc
 
 CONFIG(debug,debug|release) {
-    DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/debug)
+    #DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/debug)
 } else {
-    DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
+    #DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
 }
 
 DISTFILES += \
