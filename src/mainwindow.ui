@@ -1912,7 +1912,7 @@ QRadioButton::indicator:checked {
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>16777215</width>
              <height>16777215</height>
             </size>
            </property>
@@ -1923,6 +1923,12 @@ QRadioButton::indicator:checked {
          </item>
          <item>
           <widget class="QToolButton" name="btnSetKey">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
