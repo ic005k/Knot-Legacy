@@ -3911,8 +3911,6 @@ void MainWindow::addRedo() {
 }
 
 void MainWindow::on_actionTimeMachine() {
-  mydlgFloatFun->close();
-
   QDialog* dlg = new QDialog(this);
   QVBoxLayout* vbox = new QVBoxLayout;
   vbox->setContentsMargins(1, 1, 1, 1);
@@ -3923,9 +3921,6 @@ void MainWindow::on_actionTimeMachine() {
   btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   connect(btnBack, &QToolButton::clicked, [=]() {
     dlg->close();
-    delete mydlgFloatFun;
-    mydlgFloatFun = new dlgFloatFun(this);
-    mydlgFloatFun->init();
   });
 
   QListWidget* list = new QListWidget(this);
@@ -3966,6 +3961,7 @@ void MainWindow::on_actionTimeMachine() {
   vbox->addWidget(list);
   vbox->addWidget(btnBack);
   dlg->setGeometry(geometry().x(), geometry().y(), width(), height());
+  dlg->setModal(true);
   dlg->show();
   list->setFocus();
 }
