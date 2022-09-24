@@ -3453,9 +3453,9 @@ void MainWindow::on_actionMemos_triggered() {
       }
     });
 
-    edit->setFixedHeight(35);
-    btnCancel->setFixedHeight(35);
-    btnOk->setFixedHeight(35);
+    edit->setFixedHeight(45);
+    btnCancel->setFixedHeight(45);
+    btnOk->setFixedHeight(45);
     btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     vbox->addWidget(lblTitle);
