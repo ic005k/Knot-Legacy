@@ -3410,7 +3410,7 @@ void MainWindow::on_actionMemos_triggered() {
 
     QDialog* dlg = new QDialog(this);
     dlg->setModal(true);
-    dlg->setStyleSheet("QDialog{background-color: rgb(239, 91, 152);}");
+    dlg->setStyleSheet("QDialog{background-color: rgb(251, 175, 188);}");
     QVBoxLayout* vbox = new QVBoxLayout;
     vbox->setContentsMargins(25, 25, 25, 25);
     vbox->setSpacing(15);
