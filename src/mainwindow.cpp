@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.17";
+QString ver = "1.0.18";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -3412,8 +3412,8 @@ void MainWindow::on_actionMemos_triggered() {
     dlg->setModal(true);
     dlg->setStyleSheet("QDialog{background-color: rgb(251, 175, 188);}");
     QVBoxLayout* vbox = new QVBoxLayout;
-    vbox->setContentsMargins(25, 25, 25, 25);
-    vbox->setSpacing(15);
+    vbox->setContentsMargins(12, 12, 12, 12);
+    vbox->setSpacing(12);
     dlg->setLayout(vbox);
     QLabel* lblTitle = new QLabel(this);
     lblTitle->setText(tr("Please enter your password") + " : ");
@@ -3453,9 +3453,9 @@ void MainWindow::on_actionMemos_triggered() {
       }
     });
 
-    edit->setFixedHeight(45);
-    btnCancel->setFixedHeight(45);
-    btnOk->setFixedHeight(45);
+    edit->setFixedHeight(35);
+    btnCancel->setFixedHeight(35);
+    btnOk->setFixedHeight(35);
     btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     vbox->addWidget(lblTitle);
