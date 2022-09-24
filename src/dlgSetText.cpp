@@ -7,9 +7,9 @@ extern MainWindow* mw_one;
 
 dlgSetText::dlgSetText(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetText) {
-  QPalette pal = palette();
-  pal.setColor(QPalette::Background, QColor(28, 42, 255, 120));
-  setPalette(pal);
+  // QPalette pal = palette();
+  // pal.setColor(QPalette::Background, QColor(255, 0, 0, 155));
+  // setPalette(pal);
 
   ui->setupUi(this);
 }

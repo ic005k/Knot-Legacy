@@ -1815,10 +1815,16 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     if (event->type() == QEvent::MouseMove) {
       if (str.trimmed().length() > 0 && isMousePress) {
         mydlgSetText->setFixedWidth(width() * 2 / 3);
+
+        int y1;
+        if (event->globalY() - 20 - mydlgSetText->height() >= 0)
+          y1 = event->globalY() - 20 - mydlgSetText->height();
+        else
+          y1 = event->globalY() + 20;
+
         mydlgSetText->init(
-            geometry().x() + (width() - mydlgSetText->width()) / 2,
-            event->globalY() + 20, mydlgSetText->width(),
-            mydlgSetText->height());
+            geometry().x() + (width() - mydlgSetText->width()) / 2, y1,
+            mydlgSetText->width(), mydlgSetText->height());
       }
     }
 
