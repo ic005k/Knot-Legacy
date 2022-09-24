@@ -29,7 +29,7 @@ dlgReaderFun::dlgReaderFun(QWidget* parent)
 dlgReaderFun::~dlgReaderFun() { delete ui; }
 
 void dlgReaderFun::init() {
-  setGeometry(mw_one->geometry().x(), mw_one->ui->quickWidget->y(), width(),
+  setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
               mw_one->ui->quickWidget->height());
   // setWindowFlags(Qt::WindowStaysOnTopHint);
 

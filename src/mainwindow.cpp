@@ -1763,6 +1763,7 @@ void MainWindow::on_btnNotes_clicked() { on_actionNotes_triggered(); }
 
 bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
+
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
   tw->viewport()->installEventFilter(this);
@@ -1791,6 +1792,37 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
       qDebug() << "tw Press: " << press_x << press_y << press_y0;
     }
+  }
+
+  if (watch == ui->textBrowser->viewport()) {
+    QString str = ui->textBrowser->textCursor().selectedText();
+    if (event->type() == QEvent::MouseButtonPress) {
+      isMousePress = true;
+
+      if (mydlgSetText->ui->lineEdit->text() == "") {
+        mydlgSetText->close();
+      }
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      isMousePress = false;
+
+      if (mydlgSetText->ui->lineEdit->text() == "") {
+        mydlgSetText->close();
+      }
+    }
+
+    if (event->type() == QEvent::MouseMove) {
+      if (str.trimmed().length() > 0 && isMousePress) {
+        mydlgSetText->setFixedWidth(width() * 2 / 3);
+        mydlgSetText->init(
+            geometry().x() + (width() - mydlgSetText->width()) / 2,
+            event->globalY() + 20, mydlgSetText->width(),
+            mydlgSetText->height());
+      }
+    }
+
+    // return QWidget::eventFilter(watch, evn);
   }
 
   if (watch == chartview || watch == chartview1) {
@@ -2124,17 +2156,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       if (isMousePress && qAbs(relea_x - press_x) > 20 &&
           qAbs(relea_y - press_y) < 20) {
         isMouseMove = true;
-        /*int pos = 0;
-        if (relea_x > press_x)
-          pos = 2;
-        else
-          pos = -2;
-
-        QQuickItem* root = ui->quickWidget->rootObject();
-        QMetaObject::invokeMethod((QObject*)root, "move", Q_ARG(QVariant, pos));
-        mydlgReader->setVPos(mydlgReader->textPos);
-
-        qDebug() << "curx=" << curx;*/
       }
     }
   }
@@ -3596,6 +3617,7 @@ void MainWindow::init_UIWidget() {
   ui->frame_tab->layout()->setSpacing(1);
 
   this->installEventFilter(this);
+  ui->textBrowser->viewport()->installEventFilter(this);
   ui->quickWidget->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
   ui->tabWidget->installEventFilter(this);
@@ -4354,18 +4376,15 @@ void MainWindow::on_btnSelText_clicked() {
 
     ui->quickWidget->hide();
     ui->textBrowser->show();
-    // ui->frameReaderFun2->show();
+
     ui->textBrowser->verticalScrollBar()->setSliderPosition(
         mydlgReader->textPos);
-
-    mydlgSetText->init(geometry().x(), geometry().y(), width(),
-                       mydlgSetText->height());
 
   } else {
     ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));
 
     isSelText = false;
-    // ui->frameReaderFun2->hide();
+
     ui->textBrowser->hide();
     ui->quickWidget->show();
 
@@ -4588,8 +4607,6 @@ void MainWindow::on_btnSearch_clicked() {
     strurl = "https://bing.com/search?q=" + str;
 
   QUrl url(strurl);
-  // ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
-  // ui->quickWidget->rootContext()->setContextProperty("initialUrl", url);
   QDesktopServices::openUrl(url);
   on_btnCancelSel_clicked();
 }
