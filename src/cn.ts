@@ -107,7 +107,7 @@
         <location filename="mainwindow.ui" line="255"/>
         <location filename="mainwindow.ui" line="1783"/>
         <location filename="mainwindow.ui" line="1889"/>
-        <location filename="mainwindow.cpp" line="3962"/>
+        <location filename="mainwindow.cpp" line="3966"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
@@ -246,14 +246,14 @@
     <message>
         <location filename="mainwindow.ui" line="623"/>
         <location filename="mainwindow.ui" line="2006"/>
-        <location filename="mainwindow.cpp" line="3807"/>
+        <location filename="mainwindow.cpp" line="3811"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="606"/>
         <location filename="mainwindow.ui" line="1981"/>
-        <location filename="mainwindow.cpp" line="3811"/>
+        <location filename="mainwindow.cpp" line="3815"/>
         <source>Remarks</source>
         <translation>备注</translation>
     </message>
@@ -264,13 +264,13 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="1966"/>
-        <location filename="mainwindow.cpp" line="3805"/>
+        <location filename="mainwindow.cpp" line="3809"/>
         <source>Rename Tab</source>
         <translation>重命名标签页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="2016"/>
-        <location filename="mainwindow.cpp" line="3817"/>
+        <location filename="mainwindow.cpp" line="3821"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
@@ -347,33 +347,33 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="1971"/>
-        <location filename="mainwindow.cpp" line="3803"/>
+        <location filename="mainwindow.cpp" line="3807"/>
         <source>Add Tab</source>
         <translation>增加标签页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1976"/>
         <location filename="mainwindow.cpp" line="1495"/>
-        <location filename="mainwindow.cpp" line="3804"/>
+        <location filename="mainwindow.cpp" line="3808"/>
         <source>Del Tab</source>
         <translation>删除标签页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1986"/>
-        <location filename="mainwindow.cpp" line="3820"/>
+        <location filename="mainwindow.cpp" line="3824"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1991"/>
-        <location filename="mainwindow.cpp" line="3814"/>
+        <location filename="mainwindow.cpp" line="3818"/>
         <source>Export Data</source>
         <translation>导出数据</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1996"/>
         <location filename="mainwindow.cpp" line="2227"/>
-        <location filename="mainwindow.cpp" line="3815"/>
+        <location filename="mainwindow.cpp" line="3819"/>
         <source>Import Data</source>
         <translation>导入数据</translation>
     </message>
@@ -385,14 +385,14 @@
     <message>
         <location filename="mainwindow.ui" line="1381"/>
         <location filename="mainwindow.ui" line="2021"/>
-        <location filename="mainwindow.cpp" line="3818"/>
+        <location filename="mainwindow.cpp" line="3822"/>
         <source>Memos</source>
         <translation>备忘录</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1361"/>
         <location filename="mainwindow.ui" line="2011"/>
-        <location filename="mainwindow.cpp" line="3809"/>
+        <location filename="mainwindow.cpp" line="3813"/>
         <source>Report</source>
         <translation>报表</translation>
     </message>
@@ -411,8 +411,8 @@
     <message>
         <location filename="mainwindow.cpp" line="1487"/>
         <location filename="mainwindow.cpp" line="2239"/>
-        <location filename="mainwindow.cpp" line="3422"/>
-        <location filename="mainwindow.cpp" line="4305"/>
+        <location filename="mainwindow.cpp" line="3423"/>
+        <location filename="mainwindow.cpp" line="4309"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -423,12 +423,12 @@
         <location filename="mainwindow.cpp" line="2214"/>
         <location filename="mainwindow.cpp" line="2240"/>
         <location filename="mainwindow.cpp" line="2254"/>
-        <location filename="mainwindow.cpp" line="3428"/>
-        <location filename="mainwindow.cpp" line="3470"/>
-        <location filename="mainwindow.cpp" line="4306"/>
-        <location filename="mainwindow.cpp" line="4423"/>
-        <location filename="mainwindow.cpp" line="4442"/>
-        <location filename="mainwindow.cpp" line="4453"/>
+        <location filename="mainwindow.cpp" line="3429"/>
+        <location filename="mainwindow.cpp" line="3448"/>
+        <location filename="mainwindow.cpp" line="4310"/>
+        <location filename="mainwindow.cpp" line="4427"/>
+        <location filename="mainwindow.cpp" line="4446"/>
+        <location filename="mainwindow.cpp" line="4457"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -596,54 +596,54 @@
         <translation>无效的数据文件。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3418"/>
+        <location filename="mainwindow.cpp" line="3419"/>
         <source>Please enter your password</source>
         <translation>请输入密码</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3816"/>
+        <location filename="mainwindow.cpp" line="3820"/>
         <source>One Click Data Backup</source>
         <translation>一键数据备份</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3821"/>
+        <location filename="mainwindow.cpp" line="3825"/>
         <source>OneDrive Backup Data</source>
         <translation>OneDrive 备份数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3823"/>
+        <location filename="mainwindow.cpp" line="3827"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3824"/>
+        <location filename="mainwindow.cpp" line="3828"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3828"/>
+        <location filename="mainwindow.cpp" line="3832"/>
         <source>Time Machine</source>
         <translation>时光机</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4197"/>
-        <location filename="mainwindow.cpp" line="4203"/>
+        <location filename="mainwindow.cpp" line="4201"/>
+        <location filename="mainwindow.cpp" line="4207"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="134"/>
-        <location filename="mainwindow.cpp" line="4308"/>
+        <location filename="mainwindow.cpp" line="4312"/>
         <source>Copy</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4422"/>
+        <location filename="mainwindow.cpp" line="4426"/>
         <source>The password is removed.</source>
         <translation>密码被删除</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4441"/>
+        <location filename="mainwindow.cpp" line="4445"/>
         <source>The password is set successfully.</source>
         <translation>密码设置成功</translation>
     </message>
@@ -670,8 +670,8 @@
         <translation type="vanished">密码：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3468"/>
-        <location filename="mainwindow.cpp" line="4452"/>
+        <location filename="mainwindow.cpp" line="3446"/>
+        <location filename="mainwindow.cpp" line="4456"/>
         <source>The entered password does not match.</source>
         <translation>输入的密码不匹配</translation>
     </message>
@@ -1407,17 +1407,17 @@ in skydrive folder</source>
         <translation>重命名：</translation>
     </message>
     <message>
-        <location filename="dlgrename.ui" line="51"/>
+        <location filename="dlgrename.ui" line="64"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="dlgrename.ui" line="70"/>
+        <location filename="dlgrename.ui" line="83"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="dlgrename.cpp" line="22"/>
+        <location filename="dlgrename.cpp" line="23"/>
         <source>Rename Tab</source>
         <translation>重命名标签页</translation>
     </message>
@@ -1650,7 +1650,6 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="dlgsettime.ui" line="468"/>
-        <location filename="dlgsettime.cpp" line="41"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
@@ -1691,6 +1690,11 @@ in skydrive folder</source>
     <message>
         <source>Number</source>
         <translation type="vanished">数字</translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.cpp" line="41"/>
+        <source>Please enter a category</source>
+        <translation>请输入分类</translation>
     </message>
     <message>
         <location filename="dlgsettime.cpp" line="56"/>

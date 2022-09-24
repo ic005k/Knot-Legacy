@@ -38,7 +38,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editAmount);
   ui->editAmount->setValidator(validator);
-  ui->editDesc->setPlaceholderText(tr("Category"));
+  ui->editDesc->setPlaceholderText(tr("Please enter a category"));
   ui->editDesc->setStyleSheet(ui->editAmount->styleSheet());
 
   ui->btnClearAmount->setStyleSheet("border:none");
