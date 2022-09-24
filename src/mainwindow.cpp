@@ -3386,7 +3386,8 @@ void MainWindow::on_actionMemos_triggered() {
     }
     strPw = baPw;
 
-    bool ok;
+    /*bool ok;
+    QString text;
     QInputDialog* idlg = new QInputDialog(this);
     QString style =
         "QDialog{background: "
@@ -3399,7 +3400,7 @@ void MainWindow::on_actionMemos_triggered() {
     idlg->setLabelText(tr("Password : "));
     QLineEdit::EchoMode echoMode = QLineEdit::Password;
     idlg->setTextEchoMode(echoMode);
-    QString text;
+
 
     if (QDialog::Accepted == idlg->exec()) {
       ok = true;
@@ -3407,50 +3408,92 @@ void MainWindow::on_actionMemos_triggered() {
     } else {
       ok = false;
       return;
-    }
+    }*/
 
-    if (text.isEmpty()) return;
+    QDialog* dlg = new QDialog(this);
+    dlg->setModal(true);
+    QVBoxLayout* vbox = new QVBoxLayout;
+    vbox->setContentsMargins(5, 5, 5, 5);
+    dlg->setLayout(vbox);
+    QLabel* lblTitle = new QLabel(this);
+    lblTitle->setText(tr("Please enter your password") + " : ");
+    QLineEdit* edit = new QLineEdit(this);
+    edit->setEchoMode(QLineEdit::Password);
+    QToolButton* btnCancel = new QToolButton(this);
+    btnCancel->setText(tr("Cancel"));
+    connect(btnCancel, &QToolButton::clicked, [=]() {
+      dlg->close();
+      return;
+    });
+    QToolButton* btnOk = new QToolButton(this);
+    btnOk->setText(tr("Ok"));
+    connect(btnOk, &QToolButton::clicked, [=]() {
+      dlg->close();
+      bool ok = true;
+      QString text = edit->text().trimmed();
 
-    if (ok && !text.isEmpty()) {
-      if (text.trimmed() == strPw) {
-        strText = decMemos(strDec, file);
+      if (text.isEmpty()) return;
 
-      } else {
-        QMessageBox msgBox;
-        msgBox.setText("Knot");
-        msgBox.setInformativeText(tr("The entered password does not match."));
-        QPushButton* btnOk =
-            msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-        btnOk->setFocus();
-        msgBox.exec();
-        return;
+      if (ok && !text.isEmpty()) {
+        if (text.trimmed() == strPw) {
+          strText = decMemos(strDec, file);
+
+          ui->frameMain->hide();
+          ui->frameSetKey->hide();
+          ui->frameMemo->show();
+
+          ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly",
+                                                                 true);
+          ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect",
+                                                                 false);
+          ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize",
+                                                                 fontSize);
+          // ui->quickWidgetMemo->rootContext()->setContextProperty("strText",
+          // strHtml);
+
+          mydlgMainNotes->loadMemoQML();
+
+          QFont f(this->font());
+          f.setPointSize(fontSize);
+          mydlgMainNotes->ui->textEdit->setFont(f);
+
+          memoHeight = ui->quickWidgetMemo->height();
+          mydlgMainNotes->setCursorPosition();
+
+          mydlgMainNotes->ui->btnUndo->setEnabled(false);
+          mydlgMainNotes->ui->btnRedo->setEnabled(false);
+
+        } else {
+          QMessageBox msgBox;
+          msgBox.setText("Knot");
+          msgBox.setInformativeText(tr("The entered password does not match."));
+          QPushButton* btnOk =
+              msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+          btnOk->setFocus();
+          msgBox.exec();
+          return;
+        }
       }
-    }
+    });
+
+    edit->setFixedHeight(35);
+    btnCancel->setFixedHeight(35);
+    btnOk->setFixedHeight(35);
+    btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    vbox->addWidget(lblTitle);
+    vbox->addWidget(edit);
+    vbox->addWidget(btnCancel);
+    vbox->addWidget(btnOk);
+
+    dlg->setFixedWidth(width());
+    dlg->setGeometry(geometry().x(), geometry().y(), dlg->width(),
+                     dlg->height());
+    dlg->show();
 
   } else {
     strText = decMemos(strDec, file);
   }
-
-  ui->frameMain->hide();
-  ui->frameSetKey->hide();
-  ui->frameMemo->show();
-
-  ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
-  ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
-  ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize", fontSize);
-  // ui->quickWidgetMemo->rootContext()->setContextProperty("strText", strHtml);
-
-  mydlgMainNotes->loadMemoQML();
-
-  QFont f(this->font());
-  f.setPointSize(fontSize);
-  mydlgMainNotes->ui->textEdit->setFont(f);
-
-  memoHeight = ui->quickWidgetMemo->height();
-  mydlgMainNotes->setCursorPosition();
-
-  mydlgMainNotes->ui->btnUndo->setEnabled(false);
-  mydlgMainNotes->ui->btnRedo->setEnabled(false);
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
