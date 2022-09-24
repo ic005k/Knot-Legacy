@@ -57,6 +57,7 @@
 #include "dlgReaderFun.h"
 #include "src/dlgMemos.h"
 #include "src/dlgOneDrive.h"
+#include "src/dlgSetText.h"
 #include "src/dlgfloatfun.h"
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
@@ -74,6 +75,7 @@
 #include "src/specialaccelerometerpedometer.h"
 #include "ui_dlgMemos.h"
 #include "ui_dlgReaderFun.h"
+#include "ui_dlgSetText.h"
 #include "ui_dlgfloatfun.h"
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
@@ -187,6 +189,7 @@ class MainWindow : public QMainWindow {
   dlgWeb *mydlgWeb;
   dlgFloatFun *mydlgFloatFun;
   dlgReaderFun *mydlgReaderFun;
+  dlgSetText *mydlgSetText;
 
   File *myfile;
 

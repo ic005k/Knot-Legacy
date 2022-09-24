@@ -1951,6 +1951,9 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         } else if (!mydlgReaderFun->isHidden()) {
           mydlgReaderFun->close();
           return true;
+        } else if (!mydlgSetText->isHidden()) {
+          mydlgSetText->close();
+          return true;
         } else {
           on_btnBack_clicked();
           return true;
@@ -1988,13 +1991,29 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (watch == ui->quickWidget) {
-    if (isSelText) return QWidget::eventFilter(watch, evn);
-
     static int press_x;
     static int press_y;
     static int relea_x;
     static int relea_y;
     int length = 75;
+
+    if (isSelText) {
+      if (event->type() == QEvent::MouseButtonPress) {
+        isMousePress = true;
+      }
+
+      if (event->type() == QEvent::MouseButtonRelease) {
+        isMousePress = false;
+      }
+
+      if (event->type() == QEvent::MouseMove) {
+        if (isMousePress) {
+          ui->editSetText->setText(getSelectedText());
+        }
+      }
+
+      return QWidget::eventFilter(watch, evn);
+    }
 
     if (event->type() == QEvent::MouseButtonPress) {
       isMousePress = true;
@@ -3623,6 +3642,7 @@ void MainWindow::init_UIWidget() {
   mydlgWeb = new dlgWeb(this);
   mydlgFloatFun = new dlgFloatFun(this);
   mydlgReaderFun = new dlgReaderFun(this);
+  mydlgSetText = new dlgSetText(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));

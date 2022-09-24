@@ -42,9 +42,8 @@ Item {
         console.log(file.textHeight)
     }
 
-    function getSelectedText()
-    {
-        console.log("selectedText="+textArea.selectedText)
+    function getSelectedText() {
+        console.log("selectedText=" + textArea.selectedText)
         return textArea.selectedText
     }
 
@@ -111,6 +110,18 @@ Item {
             console.log(file.textHeight)
         }
 
+        MouseArea {
+            id: mouse_area
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.MiddleButton | Qt.RightButton //| Qt.LeftButton
+            //acceptedButtons: Qt.AllButtons
+            onClicked: {
+                contextMenu.open()
+            }
+            //onPressAndHold:  contextMenu.open()
+        }
+
 
         /*WebView {
             id: webView
@@ -118,6 +129,7 @@ Item {
             anchors.fill: parent
             url: initialUrl
         }*/
+
         TextArea.flickable: TextArea {
             id: textArea
             visible: !isWebViewShow
@@ -141,30 +153,6 @@ Item {
 
             text: strText
 
-            MouseArea {
-                id: mouse_area
-                anchors.fill: parent
-                hoverEnabled: true
-                //acceptedButtons: Qt.MiddleButton
-                acceptedButtons: Qt.MiddleButton | Qt.RightButton
-
-                onClicked: contextMenu.open()
-                //onPressAndHold:  contextMenu.open()
-                onEntered: {
-
-                }
-                onExited: {
-
-                }
-                onPositionChanged: {
-
-                }
-                onMouseXChanged: {
-
-                    //console.log(textArea.selectedText);
-                }
-            }
-
             onLinkActivated: {
                 //Qt.openUrlExternally(link)
                 document.setBackDir(link)
@@ -173,6 +161,11 @@ Item {
                 console.log(htmlPath + link)
                 console.log(htmlPath)
                 console.log(link)
+            }
+
+            onActiveFocusOnPressChanged: {
+
+                Qt.inputMethod.hide()
             }
 
             PropertyAnimation on x {
@@ -221,23 +214,22 @@ Item {
         }
 
         Component.onCompleted: {
-            console.log(textArea.lineCount)
-            console.log(textArea.height)
-            console.log(control.position)
+            console.log("lineCount=" + textArea.lineCount)
+            console.log("textHeight=" + textArea.height)
+            console.log("textPosition=" + control.position)
         }
     }
 
-    Menu {
-        id: contextMenu
 
+    /*Menu {
+        id: contextMenu
         MenuItem {
             text: qsTr("Copy")
             enabled: textArea.selectedText
             onTriggered: textArea.copy()
         }
 
-
-        /*MenuItem {
+        MenuItem {
             text: qsTr("Cut")
             enabled: textArea.selectedText
             onTriggered: textArea.cut()
@@ -246,6 +238,6 @@ Item {
             text: qsTr("Paste")
             enabled: textArea.canPaste
             onTriggered: textArea.paste()
-        }*/
-    }
+        }
+    }*/
 }

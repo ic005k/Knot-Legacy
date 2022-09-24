@@ -34,6 +34,7 @@ SOURCES += \
     src/dlgMemos.cpp \
     src/dlgOneDrive.cpp \
     src/dlgReaderFun.cpp \
+    src/dlgSetText.cpp \
     src/dlgfloatfun.cpp \
     src/dlglist.cpp \
     src/dlgloadpic.cpp \
@@ -62,6 +63,7 @@ HEADERS += \
     src/dlgMemos.h \
     src/dlgOneDrive.h \
     src/dlgReaderFun.h \
+    src/dlgSetText.h \
     src/dlgfloatfun.h \
     src/dlglist.h \
     src/dlgloadpic.h \
@@ -88,6 +90,7 @@ FORMS += \
     src/dlgMemos.ui \
     src/dlgOneDrive.ui \
     src/dlgReaderFun.ui \
+    src/dlgSetText.ui \
     src/dlgfloatfun.ui \
     src/dlglist.ui \
     src/dlgloadpic.ui \

@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
   RegJni("com/x/ClockActivity");
 
   //禁用文本选择
-  //  qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
+  // qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
   qDebug() << "OS=Linux Android";
   isAndroid = true;
   isIOS = false;
