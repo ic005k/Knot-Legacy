@@ -465,7 +465,7 @@ selection-background-color: lightblue;
       </size>
      </property>
      <property name="text">
-      <string>Category</string>
+      <string>Select Category</string>
      </property>
     </widget>
    </item>

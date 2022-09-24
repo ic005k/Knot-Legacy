@@ -1650,8 +1650,9 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="dlgsettime.ui" line="468"/>
-        <source>Category</source>
-        <translation>分类</translation>
+        <source>Select Category</source>
+        <oldsource>Category</oldsource>
+        <translation>选择分类</translation>
     </message>
     <message>
         <source>Description :</source>
