@@ -3371,8 +3371,6 @@ void MainWindow::updateHardSensorSteps() {
 }
 
 void MainWindow::on_actionMemos_triggered() {
-  mydlgFloatFun->close();
-
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   QString file = iniDir + "mainnotes.txt";
@@ -3438,6 +3436,8 @@ void MainWindow::on_actionMemos_triggered() {
         if (text.trimmed() == strPw) {
           strText = decMemos(strDec, file);
 
+          mydlgFloatFun->close();
+
           ui->frameMain->hide();
           ui->frameSetKey->hide();
           ui->frameMemo->show();
@@ -3448,8 +3448,6 @@ void MainWindow::on_actionMemos_triggered() {
                                                                  false);
           ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize",
                                                                  fontSize);
-          // ui->quickWidgetMemo->rootContext()->setContextProperty("strText",
-          // strHtml);
 
           mydlgMainNotes->loadMemoQML();
 
