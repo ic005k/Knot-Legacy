@@ -308,7 +308,9 @@ class MainWindow : public QMainWindow {
   bool showMsgBox(QString title, QString info, QString copyText,
                   int buttonCount);
   QString getSelectedText();
+
  public slots:
+  void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();
   void updateHardSensorSteps();

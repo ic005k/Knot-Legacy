@@ -3755,6 +3755,7 @@ void MainWindow::init_UIWidget() {
 
   ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
   ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
+  ui->quickWidget->rootContext()->setContextProperty("mw_one", mw_one);
 
   ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
 }
@@ -4333,8 +4334,6 @@ void MainWindow::on_btnSelText_clicked() {
   if (!isSelText) {
     ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
     isSelText = true;
-    // ui->quickWidget->rootContext()->setContextProperty("isSelText",
-    // isSelText);
 
     ui->textBrowser->verticalScrollBar()->setStyleSheet(
         mw_one->vsbarStyleSmall);
@@ -4359,14 +4358,11 @@ void MainWindow::on_btnSelText_clicked() {
 
   } else {
     ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));
+
     isSelText = false;
-    // ui->quickWidget->rootContext()->setContextProperty("isSelText",
-    // isSelText);
     ui->frameReaderFun2->hide();
     ui->textBrowser->hide();
     ui->quickWidget->show();
-
-    // clearSelectBox();
   }
 }
 
@@ -4579,7 +4575,7 @@ void MainWindow::on_btnSearch_clicked() {
   QString strurl;
   if (zh_cn)
     strurl =
-        "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=" +
+        "https://wap.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=" +
         str;
   else
     strurl = "https://bing.com/search?q=" + str;
@@ -4596,4 +4592,13 @@ void MainWindow::on_btnCancelSel_clicked() { ui->btnSelText->click(); }
 void MainWindow::on_textBrowser_selectionChanged() {
   ui->editSetText->setText(
       ui->textBrowser->textCursor().selectedText().trimmed());
+}
+
+void MainWindow::on_SetReaderFunVisible() {
+  if (!isTurnThePage) {
+    if (ui->frameReaderFun->isHidden())
+      ui->frameReaderFun->show();
+    else
+      ui->frameReaderFun->hide();
+  }
 }

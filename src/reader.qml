@@ -110,18 +110,6 @@ Item {
             console.log(file.textHeight)
         }
 
-        MouseArea {
-            id: mouse_area
-            anchors.fill: parent
-            hoverEnabled: true
-            acceptedButtons: Qt.MiddleButton | Qt.RightButton //| Qt.LeftButton
-            //acceptedButtons: Qt.AllButtons
-            onClicked: {
-                contextMenu.open()
-            }
-            //onPressAndHold:  contextMenu.open()
-        }
-
 
         /*WebView {
             id: webView
@@ -129,7 +117,6 @@ Item {
             anchors.fill: parent
             url: initialUrl
         }*/
-
         TextArea.flickable: TextArea {
             id: textArea
             visible: !isWebViewShow
@@ -152,6 +139,18 @@ Item {
             color: myTextColor
 
             text: strText
+
+            MouseArea {
+                id: mouse_area
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.AllButtons
+                onClicked: {
+                    //contextMenu.open()
+                }
+                onPressAndHold: mw_one.on_btnSelText_clicked()
+                onReleased: mw_one.on_SetReaderFunVisible()
+            }
 
             onLinkActivated: {
                 //Qt.openUrlExternally(link)
