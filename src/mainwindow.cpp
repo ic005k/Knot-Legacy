@@ -4553,7 +4553,8 @@ void MainWindow::clearSelectBox() {
 
 void MainWindow::on_btnCopy_clicked() {
   QClipboard* clipboard = QApplication::clipboard();
-  clipboard->setText(getSelectedText());
+  clipboard->setText(ui->editSetText->text().trimmed());
+  on_btnCancelSel_clicked();
 }
 
 QString MainWindow::getSelectedText() {
@@ -4567,7 +4568,7 @@ QString MainWindow::getSelectedText() {
 }
 
 void MainWindow::on_btnSearch_clicked() {
-  QString str = getSelectedText();
+  QString str = ui->editSetText->text().trimmed();
   if (str == "") return;
 
   QString strurl;
@@ -4582,6 +4583,7 @@ void MainWindow::on_btnSearch_clicked() {
   // ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
   // ui->quickWidget->rootContext()->setContextProperty("initialUrl", url);
   QDesktopServices::openUrl(url);
+  on_btnCancelSel_clicked();
 }
 
 void MainWindow::on_btnCancelSel_clicked() { ui->btnSelText->click(); }
