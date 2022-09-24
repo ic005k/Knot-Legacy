@@ -195,30 +195,20 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <property name="spacing">
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="leftMargin">
            <number>0</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="bottomMargin">
-           <number>0</number>
+           <number>2</number>
           </property>
-          <item>
-           <widget class="QProgressBar" name="progReader">
-            <property name="value">
-             <number>24</number>
-            </property>
-            <property name="textVisible">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QLabel" name="lblBookName">
             <property name="font">
@@ -465,6 +455,16 @@
            </layout>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QProgressBar" name="progReader">
+         <property name="value">
+          <number>24</number>
+         </property>
+         <property name="textVisible">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
       </layout>
