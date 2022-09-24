@@ -9,6 +9,7 @@ extern QTabWidget* tabData;
 
 dlgRename::dlgRename(QWidget* parent) : QDialog(parent), ui(new Ui::dlgRename) {
   ui->setupUi(this);
+  setFixedHeight(mw_one->height() / 3);
 }
 
 dlgRename::~dlgRename() { delete ui; }

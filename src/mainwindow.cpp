@@ -3959,7 +3959,7 @@ void MainWindow::addRedo() {
 void MainWindow::on_actionTimeMachine() {
   QDialog* dlg = new QDialog(this);
   QVBoxLayout* vbox = new QVBoxLayout;
-  vbox->setContentsMargins(1, 1, 1, 1);
+  vbox->setContentsMargins(3, 3, 3, 3);
   dlg->setLayout(vbox);
   QToolButton* btnBack = new QToolButton(this);
   btnBack->setFixedHeight(40);
