@@ -3436,30 +3436,7 @@ void MainWindow::on_actionMemos_triggered() {
         if (text.trimmed() == strPw) {
           strText = decMemos(strDec, file);
 
-          mydlgFloatFun->close();
-
-          ui->frameMain->hide();
-          ui->frameSetKey->hide();
-          ui->frameMemo->show();
-
-          ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly",
-                                                                 true);
-          ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect",
-                                                                 false);
-          ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize",
-                                                                 fontSize);
-
-          mydlgMainNotes->loadMemoQML();
-
-          QFont f(this->font());
-          f.setPointSize(fontSize);
-          mydlgMainNotes->ui->textEdit->setFont(f);
-
-          memoHeight = ui->quickWidgetMemo->height();
-          mydlgMainNotes->setCursorPosition();
-
-          mydlgMainNotes->ui->btnUndo->setEnabled(false);
-          mydlgMainNotes->ui->btnRedo->setEnabled(false);
+          showMemos();
 
         } else {
           QMessageBox msgBox;
@@ -3491,7 +3468,33 @@ void MainWindow::on_actionMemos_triggered() {
 
   } else {
     strText = decMemos(strDec, file);
+
+    showMemos();
   }
+}
+
+void MainWindow::showMemos() {
+  mydlgFloatFun->close();
+
+  ui->frameMain->hide();
+  ui->frameSetKey->hide();
+  ui->frameMemo->show();
+
+  ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
+  ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
+  ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize", fontSize);
+
+  mydlgMainNotes->loadMemoQML();
+
+  QFont f(this->font());
+  f.setPointSize(fontSize);
+  mydlgMainNotes->ui->textEdit->setFont(f);
+
+  memoHeight = ui->quickWidgetMemo->height();
+  mydlgMainNotes->setCursorPosition();
+
+  mydlgMainNotes->ui->btnUndo->setEnabled(false);
+  mydlgMainNotes->ui->btnRedo->setEnabled(false);
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {

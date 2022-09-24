@@ -496,6 +496,7 @@ class MainWindow : public QMainWindow {
   void showSensorValues();
   QString decMemos(QString strDec, QString file);
   void initHardStepSensor();
+  void showMemos();
 };
 
 class SearchThread : public QThread {
