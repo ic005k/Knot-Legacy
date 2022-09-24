@@ -4156,6 +4156,8 @@ void MainWindow::setSCrollPro(QObject* obj) {
 void MainWindow::on_btnBack_clicked() {
   mydlgReaderFun->close();
 
+  if (isSelText) on_btnSelText_clicked();
+
   mydlgReader->saveReader();
   mydlgReader->savePageVPos();
 
@@ -4352,17 +4354,22 @@ void MainWindow::on_btnSelText_clicked() {
 
     ui->quickWidget->hide();
     ui->textBrowser->show();
-    ui->frameReaderFun2->show();
+    // ui->frameReaderFun2->show();
     ui->textBrowser->verticalScrollBar()->setSliderPosition(
         mydlgReader->textPos);
+
+    mydlgSetText->init(geometry().x(), geometry().y(), width(),
+                       mydlgSetText->height());
 
   } else {
     ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));
 
     isSelText = false;
-    ui->frameReaderFun2->hide();
+    // ui->frameReaderFun2->hide();
     ui->textBrowser->hide();
     ui->quickWidget->show();
+
+    mydlgSetText->close();
   }
 }
 
@@ -4554,7 +4561,7 @@ void MainWindow::clearSelectBox() {
 
 void MainWindow::on_btnCopy_clicked() {
   QClipboard* clipboard = QApplication::clipboard();
-  clipboard->setText(ui->editSetText->text().trimmed());
+  clipboard->setText(mydlgSetText->ui->lineEdit->text().trimmed());
   on_btnCancelSel_clicked();
 }
 
@@ -4569,7 +4576,7 @@ QString MainWindow::getSelectedText() {
 }
 
 void MainWindow::on_btnSearch_clicked() {
-  QString str = ui->editSetText->text().trimmed();
+  QString str = mydlgSetText->ui->lineEdit->text().trimmed();
   if (str == "") return;
 
   QString strurl;
@@ -4590,15 +4597,18 @@ void MainWindow::on_btnSearch_clicked() {
 void MainWindow::on_btnCancelSel_clicked() { ui->btnSelText->click(); }
 
 void MainWindow::on_textBrowser_selectionChanged() {
-  ui->editSetText->setText(
-      ui->textBrowser->textCursor().selectedText().trimmed());
+  QString str = ui->textBrowser->textCursor().selectedText().trimmed();
+  ui->editSetText->setText(str);
+  mydlgSetText->ui->lineEdit->setText(str);
 }
 
 void MainWindow::on_SetReaderFunVisible() {
   if (!isTurnThePage) {
     if (ui->frameReaderFun->isHidden())
       ui->frameReaderFun->show();
-    else
+    else {
       ui->frameReaderFun->hide();
+      mydlgReaderFun->hide();
+    }
   }
 }

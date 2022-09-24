@@ -331,6 +331,11 @@ class MainWindow : public QMainWindow {
   void changeEvent(QEvent *event) override;
 
  public slots:
+  void on_btnCopy_clicked();
+
+  void on_btnSearch_clicked();
+
+  void on_btnCancelSel_clicked();
 
   void on_timerShowFloatFun();
   void timerUpdate();
@@ -469,11 +474,6 @@ class MainWindow : public QMainWindow {
   void on_btnOneDriveBak_clicked();
 
  private slots:
-  void on_btnCopy_clicked();
-
-  void on_btnSearch_clicked();
-
-  void on_btnCancelSel_clicked();
 
   void on_textBrowser_selectionChanged();
 

@@ -21,6 +21,13 @@ class dlgSetText : public QDialog {
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
+ private slots:
+  void on_btnBack_clicked();
+
+  void on_btnCopy_clicked();
+
+  void on_btnSearch_clicked();
+
  private:
 };
 
