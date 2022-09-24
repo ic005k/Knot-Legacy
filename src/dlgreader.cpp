@@ -39,6 +39,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->frameReaderFun2->hide();
   mw_one->ui->btnBackward->hide();
   mw_one->ui->btnForward->hide();
+  mw_one->ui->textBrowser->hide();
 
   mw_one->ui->btnOpen->setStyleSheet("border:none");
   mw_one->ui->btnBack->setStyleSheet("border:none");

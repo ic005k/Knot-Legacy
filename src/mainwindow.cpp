@@ -1793,16 +1793,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
   }
 
-  if (watch == ui->lblInfo || watch == ui->frameTip) {
-    if (event->type() == QEvent::MouseButtonPress) {
-      QMouseEvent* mouseenevt = static_cast<QMouseEvent*>(event);
-      if (mouseenevt->button() == Qt::LeftButton) {
-        ui->frameTip->hide();
-        return true;
-      }
-    }
-  }
-
   if (watch == chartview || watch == chartview1) {
     if (event->type() == QEvent::MouseButtonDblClick) {
       on_btnZoom_clicked();
@@ -3612,15 +3602,6 @@ void MainWindow::init_UIWidget() {
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
 
-  ui->lblInfo->installEventFilter(this);
-  ui->lblInfo->setWordWrap(true);
-  ui->lblInfo->adjustSize();
-  ui->lblInfo->setStyleSheet("color:white;");
-  ui->frameTip->installEventFilter(this);
-  ui->frameTip->setAutoFillBackground(true);
-  ui->frameTip->setPalette(QPalette(QColor(239, 91, 152)));
-  ui->frameTip->hide();
-
   myfile = new File();
   mydlgNotes = new dlgNotes(this);
   mydlgNotes->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
@@ -4352,16 +4333,40 @@ void MainWindow::on_btnSelText_clicked() {
   if (!isSelText) {
     ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
     isSelText = true;
-    ui->quickWidget->rootContext()->setContextProperty("isSelText", isSelText);
+    // ui->quickWidget->rootContext()->setContextProperty("isSelText",
+    // isSelText);
+
+    ui->textBrowser->verticalScrollBar()->setStyleSheet(
+        mw_one->vsbarStyleSmall);
+    ui->textBrowser->setReadOnly(true);
+    QFont font = ui->quickWidget->font();
+    font.setPixelSize(textFontSize);
+    font.setFamily(mydlgReader->fontname);
+    font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
+    ui->textBrowser->setFont(font);
+
+    if (!isEpub)
+      ui->textBrowser->setHtml(mydlgReader->currentTxt);
+    else {
+      ui->textBrowser->setHtml(loadText(mydlgReader->currentHtmlFile));
+    }
+
+    ui->quickWidget->hide();
+    ui->textBrowser->show();
     ui->frameReaderFun2->show();
+    ui->textBrowser->verticalScrollBar()->setSliderPosition(
+        mydlgReader->textPos);
 
   } else {
     ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));
     isSelText = false;
-    ui->quickWidget->rootContext()->setContextProperty("isSelText", isSelText);
+    // ui->quickWidget->rootContext()->setContextProperty("isSelText",
+    // isSelText);
     ui->frameReaderFun2->hide();
+    ui->textBrowser->hide();
+    ui->quickWidget->show();
 
-    clearSelectBox();
+    // clearSelectBox();
   }
 }
 
@@ -4587,3 +4592,8 @@ void MainWindow::on_btnSearch_clicked() {
 }
 
 void MainWindow::on_btnCancelSel_clicked() { ui->btnSelText->click(); }
+
+void MainWindow::on_textBrowser_selectionChanged() {
+  ui->editSetText->setText(
+      ui->textBrowser->textCursor().selectedText().trimmed());
+}

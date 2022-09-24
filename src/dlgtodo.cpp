@@ -705,13 +705,6 @@ void dlgTodo::on_Alarm() {
             //                              text);
             // msgDlg->show();
 
-            mw_one->ui->lblInfo->setText(
-                tr("Todo") + " : " + str + "\n\n" + text + "\n\n" +
-                QDateTime::currentDateTime().toString());
-            if (mw_one->mydlgTodo->isHidden()) {
-              // mw_one->ui->frameTip->show();
-            }
-
             break;
           }
         }
