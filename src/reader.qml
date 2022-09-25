@@ -150,6 +150,7 @@ Item {
                 }
                 onPressAndHold: mw_one.on_btnSelText_clicked()
                 onReleased: mw_one.on_SetReaderFunVisible()
+                //onMouseXChanged:console.log("cursorPos="+ textArea.cursorPosition)
             }
 
             onLinkActivated: {

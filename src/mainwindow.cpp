@@ -1818,7 +1818,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
         int y1;
         if (event->globalY() - 20 - mydlgSetText->height() >= 0)
-          y1 = event->globalY() - 20 - mydlgSetText->height();
+          y1 = event->globalY() - 25 - mydlgSetText->height();
         else
           y1 = event->globalY() + 20;
 
@@ -1828,7 +1828,13 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
     }
 
-    // return QWidget::eventFilter(watch, evn);
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      QTextCursor cursor = ui->textBrowser->textCursor();
+      cursor.setPosition(cursor.anchor());
+      ui->textBrowser->setTextCursor(cursor);
+
+      return true;
+    }
   }
 
   if (watch == chartview || watch == chartview1) {
@@ -4389,14 +4395,12 @@ void MainWindow::on_btnSelText_clicked() {
     ui->textBrowser->verticalScrollBar()->setSliderPosition(
         mydlgReader->textPos);
 
-    /*int pos = 3;
-    if (pos >= 0) {
-      QTextCursor cursor = ui->textBrowser->textCursor();
-      cursor.setPosition(pos, QTextCursor::MoveAnchor);  //移到key起始位置
-      cursor.movePosition(QTextCursor::NoMove, QTextCursor::KeepAnchor, 2);
-      cursor.select(QTextCursor::WordUnderCursor);
-      ui->textBrowser->setTextCursor(cursor);
-    }*/
+    /*int start = 10;
+    int end = start + 5;
+    QTextCursor cursor = ui->textBrowser->textCursor();
+    cursor.setPosition(start);
+    cursor.setPosition(end, QTextCursor::KeepAnchor);
+    ui->textBrowser->setTextCursor(cursor);*/
 
     mydlgSetText->setFixedWidth(width() * 2 / 3);
     mydlgSetText->init(geometry().x() + (width() - mydlgSetText->width()) / 2,
