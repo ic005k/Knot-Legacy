@@ -124,7 +124,7 @@ QSlider::handle:horizontal
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Custom Font</string>
+         <string>Custom Font (Select External Fonts)</string>
         </property>
        </widget>
       </item>
