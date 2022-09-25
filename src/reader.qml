@@ -11,7 +11,6 @@ Item {
     visible: true
     width: myW
     height: myH
-    property bool isLink: false
 
     File {
         id: file
@@ -142,7 +141,6 @@ Item {
             text: strText
 
             onLinkActivated: {
-                isLink = true
                 //Qt.openUrlExternally(link)
                 document.setBackDir(link)
                 //document.load("file://" + htmlPath + link)
@@ -150,11 +148,9 @@ Item {
                 console.log(htmlPath + link)
                 console.log(htmlPath)
                 console.log("isLink=" + link)
-                isLink = false
             }
             onReleased: {
-                if (!isLink)
-                    mw_one.on_SetReaderFunVisible()
+                mw_one.on_SetReaderFunVisible()
             }
 
             MouseArea {

@@ -2053,7 +2053,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       if (event->type() == QEvent::MouseButtonPress) {
         isMousePress = true;
         isMouseMove = false;
-        timerMousePress->start(1500);
+        if (!isMouseMove) timerMousePress->start(1300);
       }
 
       if (event->type() == QEvent::MouseButtonRelease) {
@@ -4405,6 +4405,8 @@ void MainWindow::on_btnSelText_clicked() {
     else {
       QString str = loadText(mydlgReader->currentHtmlFile);
       str.replace("..", strOpfPath);
+      QDir dir;
+      dir.setCurrent(strOpfPath);
       ui->textBrowser->setHtml(str);
     }
 
@@ -4679,5 +4681,4 @@ void MainWindow::on_SetReaderFunVisible() {
 void MainWindow::on_timerMousePress() {
   timerMousePress->stop();
   if (!isMouseMove && isMousePress) on_btnSelText_clicked();
-  qDebug() << "timer stop....." << isMouseMove;
 }
