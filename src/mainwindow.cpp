@@ -1796,29 +1796,32 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
   if (watch == ui->textBrowser->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
-      ui->textBrowser->textCursor().clearSelection();
-      mydlgSetText->close();
       isMousePress = true;
+      QString str = ui->textBrowser->textCursor().selectedText().trimmed();
+      if (str == "") mydlgSetText->close();
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
       isMousePress = false;
 
-      if (mydlgSetText->ui->lineEdit->text() == "") {
+      QString str = ui->textBrowser->textCursor().selectedText().trimmed();
+      if (str == "") {
         mydlgSetText->close();
       }
     }
 
     if (event->type() == QEvent::MouseMove) {
       if (isMousePress) {
-        if (mydlgSetText->ui->lineEdit->text() != "") {
+        QString str = ui->textBrowser->textCursor().selectedText().trimmed();
+        if (str != "") {
           mydlgSetText->setFixedWidth(width() * 2 / 3);
 
           int y1;
-          if (event->globalY() - 20 - mydlgSetText->height() >= 0)
-            y1 = event->globalY() - 30 - mydlgSetText->height();
+          int a = 30;
+          if (event->globalY() - a - mydlgSetText->height() >= 0)
+            y1 = event->globalY() - a - mydlgSetText->height();
           else
-            y1 = event->globalY() + 20;
+            y1 = event->globalY() + a;
 
           mydlgSetText->init(
               geometry().x() + (width() - mydlgSetText->width()) / 2, y1,
@@ -3633,7 +3636,10 @@ void MainWindow::init_UIWidget() {
   ui->frame_tab->layout()->setSpacing(1);
 
   this->installEventFilter(this);
+  ui->textBrowser->installEventFilter(this);
+  ui->textBrowser->setMouseTracking(true);
   ui->textBrowser->viewport()->installEventFilter(this);
+  ui->textBrowser->viewport()->setMouseTracking(true);
   ui->quickWidget->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
   ui->tabWidget->installEventFilter(this);
