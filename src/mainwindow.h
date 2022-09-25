@@ -200,6 +200,7 @@ class MainWindow : public QMainWindow {
   QTimer *timer;
   QTimer *timerStep;
   QTimer *timerShowFloatFun;
+  QTimer *timerMousePress;
 
   static void saveData(QTreeWidget *, int);
   static void readData(QTreeWidget *);
@@ -476,6 +477,8 @@ class MainWindow : public QMainWindow {
  private slots:
 
   void on_textBrowser_selectionChanged();
+
+  void on_timerMousePress();
 
  private:
   int memoHeight;

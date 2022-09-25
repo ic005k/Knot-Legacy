@@ -2049,22 +2049,21 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     static int relea_y;
     int length = 75;
 
-    if (isSelText) {
+    if (ui->textBrowser->isHidden()) {
       if (event->type() == QEvent::MouseButtonPress) {
         isMousePress = true;
+        isMouseMove = false;
+        timerMousePress->start(1500);
       }
 
       if (event->type() == QEvent::MouseButtonRelease) {
         isMousePress = false;
+        isMouseMove = false;
       }
 
       if (event->type() == QEvent::MouseMove) {
-        if (isMousePress) {
-          ui->editSetText->setText(getSelectedText());
-        }
+        isMouseMove = true;
       }
-
-      return QWidget::eventFilter(watch, evn);
     }
 
     if (event->type() == QEvent::MouseButtonPress) {
@@ -3687,6 +3686,8 @@ void MainWindow::init_UIWidget() {
   timerShowFloatFun = new QTimer(this);
   connect(timerShowFloatFun, SIGNAL(timeout()), this,
           SLOT(on_timerShowFloatFun()));
+  timerMousePress = new QTimer(this);
+  connect(timerMousePress, SIGNAL(timeout()), this, SLOT(on_timerMousePress()));
 
   ui->statusbar->setHidden(true);
 
@@ -4402,7 +4403,9 @@ void MainWindow::on_btnSelText_clicked() {
     if (!isEpub)
       ui->textBrowser->setHtml(mydlgReader->currentTxt);
     else {
-      ui->textBrowser->setHtml(loadText(mydlgReader->currentHtmlFile));
+      QString str = loadText(mydlgReader->currentHtmlFile);
+      str.replace("..", strOpfPath);
+      ui->textBrowser->setHtml(str);
     }
 
     ui->quickWidget->hide();
@@ -4671,4 +4674,10 @@ void MainWindow::on_SetReaderFunVisible() {
       mydlgReaderFun->hide();
     }
   }
+}
+
+void MainWindow::on_timerMousePress() {
+  timerMousePress->stop();
+  if (!isMouseMove && isMousePress) on_btnSelText_clicked();
+  qDebug() << "timer stop....." << isMouseMove;
 }

@@ -11,6 +11,7 @@ Item {
     visible: true
     width: myW
     height: myH
+    property bool isLink: false
 
     File {
         id: file
@@ -140,31 +141,38 @@ Item {
 
             text: strText
 
-            MouseArea {
-                id: mouse_area
-                anchors.fill: parent
-                hoverEnabled: true
-                acceptedButtons: Qt.AllButtons
-                onClicked: {
-                    //contextMenu.open()
-                }
-                onPressAndHold: mw_one.on_btnSelText_clicked()
-                onReleased: mw_one.on_SetReaderFunVisible()
-                //onMouseXChanged:console.log("cursorPos="+ textArea.cursorPosition)
-            }
-
             onLinkActivated: {
+                isLink = true
                 //Qt.openUrlExternally(link)
                 document.setBackDir(link)
                 //document.load("file://" + htmlPath + link)
                 document.setReadPosition(link)
                 console.log(htmlPath + link)
                 console.log(htmlPath)
-                console.log(link)
+                console.log("isLink=" + link)
+                isLink = false
+            }
+            onReleased: {
+                if (!isLink)
+                    mw_one.on_SetReaderFunVisible()
+            }
+
+            MouseArea {
+                id: mouse_area
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.RightButton
+                onClicked: {
+
+                    //contextMenu.open()
+                }
+                onPressAndHold: {
+
+                    //mw_one.on_btnSelText_clicked()
+                }
             }
 
             onActiveFocusOnPressChanged: {
-
                 Qt.inputMethod.hide()
             }
 

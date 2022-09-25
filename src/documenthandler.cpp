@@ -282,6 +282,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     // open picture
     if (htmlIndex == 0 && !mw_one->mydlgReader->isHidden()) {
       mw_one->clearSelectBox();
+
       return;
     }
     QString str = htmlFile;
