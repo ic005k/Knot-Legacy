@@ -3468,7 +3468,6 @@ void MainWindow::on_actionMemos_triggered() {
     }*/
 
     QDialog* dlg = new QDialog(this);
-    dlg->setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
     dlg->setModal(true);
     dlg->setStyleSheet(
         "QDialog{border-style:solid;border-width:2px;border-color:rgb(251, "
