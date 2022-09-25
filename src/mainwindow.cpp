@@ -1982,7 +1982,12 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         } else if (!mydlgSetText->isHidden()) {
           mydlgSetText->close();
           return true;
-        } else {
+        } else if (!ui->textBrowser->isHidden()) {
+          on_btnSelText_clicked();
+          return true;
+        }
+
+        else {
           on_btnBack_clicked();
           return true;
         }
@@ -4385,6 +4390,19 @@ void MainWindow::on_btnSelText_clicked() {
 
     ui->textBrowser->verticalScrollBar()->setSliderPosition(
         mydlgReader->textPos);
+
+    /*int pos = 3;
+    if (pos >= 0) {
+      QTextCursor cursor = ui->textBrowser->textCursor();
+      cursor.setPosition(pos, QTextCursor::MoveAnchor);  //移到key起始位置
+      cursor.movePosition(QTextCursor::NoMove, QTextCursor::KeepAnchor, 2);
+      cursor.select(QTextCursor::WordUnderCursor);
+      ui->textBrowser->setTextCursor(cursor);
+    }*/
+
+    mydlgSetText->init(geometry().x() + (width() - mydlgSetText->width()) / 2,
+                       geometry().y(), mydlgSetText->width(),
+                       mydlgSetText->height());
 
   } else {
     ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));

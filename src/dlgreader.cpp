@@ -40,6 +40,12 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->btnBackward->hide();
   mw_one->ui->btnForward->hide();
   mw_one->ui->textBrowser->hide();
+  QPalette pt = palette();
+  pt.setBrush(QPalette::Text, Qt::black);
+  pt.setBrush(QPalette::Base, QColor(235, 235, 235));
+  pt.setBrush(QPalette::Highlight, Qt::red);
+  pt.setBrush(QPalette::HighlightedText, Qt::white);
+  mw_one->ui->textBrowser->setPalette(pt);
 
   mw_one->ui->btnOpen->setStyleSheet("border:none");
   mw_one->ui->btnBack->setStyleSheet("border:none");
