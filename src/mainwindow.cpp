@@ -1795,13 +1795,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (watch == ui->textBrowser->viewport()) {
-    QString str = ui->textBrowser->textCursor().selectedText();
     if (event->type() == QEvent::MouseButtonPress) {
+      ui->textBrowser->textCursor().clearSelection();
+      mydlgSetText->close();
       isMousePress = true;
-
-      if (mydlgSetText->ui->lineEdit->text() == "") {
-        mydlgSetText->close();
-      }
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
@@ -1813,18 +1810,20 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
 
     if (event->type() == QEvent::MouseMove) {
-      if (str.trimmed().length() > 0 && isMousePress) {
-        mydlgSetText->setFixedWidth(width() * 2 / 3);
+      if (isMousePress) {
+        if (mydlgSetText->ui->lineEdit->text() != "") {
+          mydlgSetText->setFixedWidth(width() * 2 / 3);
 
-        int y1;
-        if (event->globalY() - 20 - mydlgSetText->height() >= 0)
-          y1 = event->globalY() - 25 - mydlgSetText->height();
-        else
-          y1 = event->globalY() + 20;
+          int y1;
+          if (event->globalY() - 20 - mydlgSetText->height() >= 0)
+            y1 = event->globalY() - 30 - mydlgSetText->height();
+          else
+            y1 = event->globalY() + 20;
 
-        mydlgSetText->init(
-            geometry().x() + (width() - mydlgSetText->width()) / 2, y1,
-            mydlgSetText->width(), mydlgSetText->height());
+          mydlgSetText->init(
+              geometry().x() + (width() - mydlgSetText->width()) / 2, y1,
+              mydlgSetText->width(), mydlgSetText->height());
+        }
       }
     }
 
