@@ -3468,11 +3468,15 @@ void MainWindow::on_actionMemos_triggered() {
     }*/
 
     QDialog* dlg = new QDialog(this);
+    dlg->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
     dlg->setModal(true);
-    dlg->setStyleSheet("QDialog{background-color: rgb(251, 175, 188);}");
+    dlg->setStyleSheet(
+        "QDialog{border-style:solid;border-width:2px;border-color:rgb(251, "
+        "51, 51);}");
     QVBoxLayout* vbox = new QVBoxLayout;
-    vbox->setContentsMargins(12, 12, 12, 12);
-    vbox->setSpacing(12);
+    int space = 8;
+    vbox->setContentsMargins(space, space, space, space);
+    vbox->setSpacing(space);
     dlg->setLayout(vbox);
     QLabel* lblTitle = new QLabel(this);
     lblTitle->setText(tr("Please enter your password") + " : ");
@@ -3522,7 +3526,7 @@ void MainWindow::on_actionMemos_triggered() {
     vbox->addWidget(btnCancel);
     vbox->addWidget(btnOk);
 
-    dlg->setFixedWidth(width());
+    dlg->setFixedWidth(this->width());
     dlg->setGeometry(geometry().x(), geometry().y(), dlg->width(),
                      dlg->height());
     dlg->show();
