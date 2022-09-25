@@ -28,6 +28,8 @@ class dlgSetText : public QDialog {
 
   void on_btnSearch_clicked();
 
+  void on_lineEdit_textChanged(const QString &arg1);
+
  private:
 };
 

@@ -40,6 +40,8 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->btnBackward->hide();
   mw_one->ui->btnForward->hide();
   mw_one->ui->textBrowser->hide();
+  mw_one->ui->textBrowser->verticalScrollBar()->setStyleSheet(
+      mw_one->vsbarStyleSmall);
   QPalette pt = palette();
   pt.setBrush(QPalette::Text, Qt::black);
   pt.setBrush(QPalette::Base, QColor(235, 235, 235));
@@ -138,6 +140,8 @@ QDialog* dlgReader::getProgBar() {
 }
 
 void dlgReader::setReaderStyle() {
+  QColor textColor, baseColor;
+
   if (readerStyle == "1") {
     mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
                                                                "/res/b.png");
@@ -156,6 +160,9 @@ void dlgReader::setReaderStyle() {
         "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
         "solid "
         "rgb(0,0,255);border-radius: 4px;");
+
+    textColor = QColor(102, 78, 48);
+    baseColor = QColor(240, 222, 198);
   }
 
   if (readerStyle == "2") {
@@ -176,6 +183,9 @@ void dlgReader::setReaderStyle() {
         "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
         "solid "
         "rgb(255,0,0);border-radius: 4px;");
+
+    textColor = QColor(0, 0, 0);
+    baseColor = QColor(255, 255, 255);
   }
 
   if (readerStyle == "3") {
@@ -196,7 +206,17 @@ void dlgReader::setReaderStyle() {
         "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
         "solid "
         "rgb(0,0,255);border-radius: 4px;");
+
+    textColor = QColor(46, 139, 87);
+    baseColor = QColor(0, 0, 0);
   }
+
+  QPalette pt = palette();
+  pt.setBrush(QPalette::Text, textColor);
+  pt.setBrush(QPalette::Base, baseColor);
+  pt.setBrush(QPalette::Highlight, Qt::red);
+  pt.setBrush(QPalette::HighlightedText, Qt::white);
+  mw_one->ui->textBrowser->setPalette(pt);
 }
 
 void dlgReader::startOpenFile(QString openfile) {

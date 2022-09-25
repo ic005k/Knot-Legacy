@@ -4370,8 +4370,6 @@ void MainWindow::on_btnSelText_clicked() {
     ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
     isSelText = true;
 
-    ui->textBrowser->verticalScrollBar()->setStyleSheet(
-        mw_one->vsbarStyleSmall);
     ui->textBrowser->setReadOnly(true);
     QFont font = ui->quickWidget->font();
     font.setPixelSize(textFontSize);
@@ -4400,6 +4398,7 @@ void MainWindow::on_btnSelText_clicked() {
       ui->textBrowser->setTextCursor(cursor);
     }*/
 
+    mydlgSetText->setFixedWidth(width() * 2 / 3);
     mydlgSetText->init(geometry().x() + (width() - mydlgSetText->width()) / 2,
                        geometry().y(), mydlgSetText->width(),
                        mydlgSetText->height());

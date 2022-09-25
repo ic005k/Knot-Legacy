@@ -7,11 +7,8 @@ extern MainWindow* mw_one;
 
 dlgSetText::dlgSetText(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetText) {
-  // QPalette pal = palette();
-  // pal.setColor(QPalette::Background, QColor(255, 0, 0, 155));
-  // setPalette(pal);
-
   ui->setupUi(this);
+  ui->lineEdit->setReadOnly(true);
 }
 
 dlgSetText::~dlgSetText() { delete ui; }
@@ -39,3 +36,5 @@ void dlgSetText::on_btnBack_clicked() { mw_one->on_btnCancelSel_clicked(); }
 void dlgSetText::on_btnCopy_clicked() { mw_one->on_btnCopy_clicked(); }
 
 void dlgSetText::on_btnSearch_clicked() { mw_one->on_btnSearch_clicked(); }
+
+void dlgSetText::on_lineEdit_textChanged(const QString& arg1) {}

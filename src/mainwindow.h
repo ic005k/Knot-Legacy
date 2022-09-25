@@ -247,7 +247,7 @@ class MainWindow : public QMainWindow {
   QString vsbarStyleSmall =
       "QScrollBar:vertical{"  //垂直滑块整体
       "width:6px;"
-      "background:#FFFFFF;"  //背景色
+      "background:rgb(255,255,255,0);"  //背景色
       "padding-top:0px;"     //上预留位置（放置向上箭头）
       "padding-bottom:0px;"  //下预留位置（放置向下箭头）
       "padding-left:1px;"    //左预留位置（美观）
