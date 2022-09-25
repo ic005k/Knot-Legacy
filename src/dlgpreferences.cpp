@@ -27,6 +27,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->chkDebug->setStyleSheet(chkStyle);
   ui->chkMute->setStyleSheet(chkStyle);
   ui->chkReaderFont->setStyleSheet(chkStyle);
+  ui->lblTip->setStyleSheet("color:red;");
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }
@@ -59,6 +60,7 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
   Reg.setValue("/Options/Mute", ui->chkMute->isChecked());
+  Reg.setValue("/Options/CustomFont", ui->lblCustomFont->text());
 }
 
 void dlgPreferences::on_chkDebug_clicked() {
@@ -92,3 +94,14 @@ void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
 void dlgPreferences::on_chkReaderFont_clicked() { isFontChange = true; }
 
 void dlgPreferences::on_chkMute_clicked() { mw_one->mydlgTodo->refreshAlarm(); }
+
+void dlgPreferences::on_btnCustomFont_clicked() {
+  QString fileName;
+  fileName = QFileDialog::getOpenFileName(this, tr("Font"), "",
+                                          tr("Font Files (*.*)"));
+
+  if (QFile(fileName).exists()) {
+    ui->lblCustomFont->setText(fileName);
+    isFontChange = true;
+  }
+}

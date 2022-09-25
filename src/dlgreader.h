@@ -40,7 +40,7 @@ class dlgReader : public QDialog {
   int mainDirIndex = -1;
   DocumentHandler *myDocHandler;
   QStringList bookList;
-  QString fontname;
+
   qreal textPos;
   qreal textHeight;
 

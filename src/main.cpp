@@ -5,7 +5,7 @@
 #include "mainwindow.h"
 #include "specialaccelerometerpedometer.h"
 
-extern QString iniFile, txtFile, appName, iniDir;
+extern QString iniFile, txtFile, appName, iniDir, fontname;
 extern int fontSize;
 extern void RegJni(const char* myClassName);
 void loadLocal();
@@ -62,16 +62,21 @@ int main(int argc, char* argv[]) {
   Reg.setIniCodec("utf-8");
   fontSize = Reg.value("/Options/FontSize", 16).toInt();
   bool isReaderFont = Reg.value("/Options/ReaderFont", false).toBool();
+  QString customFontPath = Reg.value("/Options/CustomFont").toString();
 
   QString fontName;
-  int loadedFontID =
-      QFontDatabase::addApplicationFont(":/res/CangErJinKai01-9128-W02-3.otf");
+  bool isFontOK = false;
+  int loadedFontID = QFontDatabase::addApplicationFont(
+      customFontPath);  //":/res/CangErJinKai01-9128-W02-3.otf"
   QStringList loadedFontFamilies =
       QFontDatabase::applicationFontFamilies(loadedFontID);
   if (!loadedFontFamilies.empty()) {
     fontName = loadedFontFamilies.at(0);
     QFont font(fontName, fontSize);
-    // a.setFont(font);
+    a.setFont(font);
+
+    fontname = fontName;
+    isFontOK = true;
   }
 
   QSettings Reg2(iniDir + "reader.ini", QSettings::IniFormat);
@@ -83,7 +88,10 @@ int main(int argc, char* argv[]) {
     font.setFamily(fontName);
   }
   font.setPointSize(fontSize);
-  a.setFont(font);
+  if (!isFontOK) {
+    a.setFont(font);
+    fontname = fontName;
+  }
 
   loadLocal();
 

@@ -35,7 +35,7 @@ QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 extern bool isAndroid, isIOS, zh_cn, isEpub;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
-    fileName, strOpfPath;
+    fileName, strOpfPath, fontname;
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
 extern QStringList readTextList, htmlFiles;
 extern QDialog* dlgProgEBook;
@@ -475,6 +475,12 @@ void MainWindow::init_Options() {
   mydlgPre->ui->chkAutoTime->setChecked(
       Reg.value("/Options/AutoTimeY", true).toBool());
   mydlgPre->ui->chkMute->setChecked(Reg.value("/Options/Mute", true).toBool());
+  QString strf = Reg.value("/Options/CustomFont").toString();
+  mydlgPre->ui->lblCustomFont->setText(strf);
+  if (QFile(strf).exists())
+    mydlgPre->ui->lblCustomFont->setStyleSheet("color:black;");
+  else
+    mydlgPre->ui->lblCustomFont->setStyleSheet("color:red;");
 
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   mydlgPre->ui->chkDebug->setChecked(debugmode);
@@ -4399,7 +4405,7 @@ void MainWindow::on_btnSelText_clicked() {
     ui->textBrowser->setReadOnly(true);
     QFont font = ui->quickWidget->font();
     font.setPixelSize(textFontSize);
-    font.setFamily(mydlgReader->fontname);
+    font.setFamily(fontname);
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     ui->textBrowser->setFont(font);
 

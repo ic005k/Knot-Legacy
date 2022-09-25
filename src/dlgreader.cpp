@@ -14,7 +14,7 @@ extern int fontSize;
 bool isOpen = false;
 bool isEpub = false;
 QStringList readTextList, htmlFiles;
-QString strOpfPath, fileName, ebookFile, strTitle;
+QString strOpfPath, fileName, ebookFile, strTitle, fontname;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
@@ -535,7 +535,8 @@ void dlgReader::initReader() {
   font.setPointSize(fsize);
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
 
-  fontname = Reg.value("/Reader/FontName", mw_one->font().family()).toString();
+  // fontname = Reg.value("/Reader/FontName",
+  // mw_one->font().family()).toString();
   mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
                                                              fontname);
 
