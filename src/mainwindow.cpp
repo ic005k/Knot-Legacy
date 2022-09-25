@@ -3468,7 +3468,7 @@ void MainWindow::on_actionMemos_triggered() {
     }*/
 
     QDialog* dlg = new QDialog(this);
-    dlg->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+    dlg->setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
     dlg->setModal(true);
     dlg->setStyleSheet(
         "QDialog{border-style:solid;border-width:2px;border-color:rgb(251, "
@@ -3516,9 +3516,9 @@ void MainWindow::on_actionMemos_triggered() {
       }
     });
 
-    edit->setFixedHeight(35);
-    btnCancel->setFixedHeight(35);
-    btnOk->setFixedHeight(35);
+    edit->setFixedHeight(32);
+    btnCancel->setFixedHeight(32);
+    btnOk->setFixedHeight(32);
     btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     vbox->addWidget(lblTitle);
