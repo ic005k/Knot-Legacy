@@ -1301,14 +1301,15 @@ void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
   if (mydlgPre->ui->chkClose->isChecked()) {
     mydlgFloatFun->close();
-    on_about();
+    // on_about();
 
     stopJavaTimer();
     event->accept();
 
   } else {
     if (mydlgPre->isFontChange) {
-      on_about();
+      mydlgFloatFun->close();
+      // on_about();
 
       stopJavaTimer();
       event->accept();
