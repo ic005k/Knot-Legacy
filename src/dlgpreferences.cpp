@@ -104,6 +104,9 @@ void dlgPreferences::on_btnCustomFont_clicked() {
                                           tr("Font Files (*.*)"));
 
   if (QFile(fileName).exists()) {
+#ifdef Q_OS_ANDROID
+    fileName = mw_one->mydlgReader->getUriRealPath(fileName);
+#endif
     ui->lblCustomFont->setText(fileName);
     isFontChange = true;
   }

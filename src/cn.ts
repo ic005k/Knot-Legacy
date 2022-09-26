@@ -1205,14 +1205,14 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="dlgpreferences.ui" line="20"/>
-        <location filename="dlgpreferences.cpp" line="102"/>
+        <location filename="dlgpreferences.cpp" line="103"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
         <location filename="dlgpreferences.ui" line="26"/>
         <location filename="dlgpreferences.cpp" line="19"/>
-        <location filename="dlgpreferences.cpp" line="91"/>
+        <location filename="dlgpreferences.cpp" line="92"/>
         <source>Font Size</source>
         <translation>字体大小</translation>
     </message>
@@ -1245,7 +1245,7 @@ in skydrive folder</source>
         <translation type="vanished">用户</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="170"/>
+        <location filename="dlgpreferences.ui" line="163"/>
         <source>Additional Options</source>
         <translation>附加选项</translation>
     </message>
@@ -1254,12 +1254,12 @@ in skydrive folder</source>
         <translation type="vanished">关闭动作</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="183"/>
+        <location filename="dlgpreferences.ui" line="176"/>
         <source>Normal Close</source>
         <translation>正常关闭</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="206"/>
+        <location filename="dlgpreferences.ui" line="199"/>
         <source>Auto uses time as the Y-axis</source>
         <oldsource>Automatically uses time as the Y-axis</oldsource>
         <translation>自动使用时间作为Y坐标轴</translation>
@@ -1281,29 +1281,33 @@ in skydrive folder</source>
         <translation type="vanished">点钟</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="233"/>
+        <location filename="dlgpreferences.ui" line="226"/>
         <source>Debug Mode</source>
         <translation>调试模式</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="216"/>
+        <location filename="dlgpreferences.ui" line="209"/>
         <source>Todo Alert Mute</source>
         <translation>待办事项提示静音</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="104"/>
         <source>Custom Font</source>
-        <translation>定制字体</translation>
+        <translation type="vanished">定制字体</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="126"/>
+        <location filename="dlgpreferences.ui" line="109"/>
         <source>Custom Font (Select External Fonts)</source>
         <translation>定制字体（选择外部字体）</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="133"/>
+        <location filename="dlgpreferences.ui" line="116"/>
         <source>Font Path</source>
         <translation>字体路径</translation>
+    </message>
+    <message>
+        <location filename="dlgpreferences.ui" line="133"/>
+        <source>Override UI fonts with custom fonts</source>
+        <translation>使用定制字体覆盖UI字体</translation>
     </message>
     <message>
         <location filename="dlgpreferences.ui" line="150"/>
@@ -1311,7 +1315,7 @@ in skydrive folder</source>
         <translation>使用定制字体覆盖阅读器字体</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="262"/>
+        <location filename="dlgpreferences.ui" line="236"/>
         <source>The above settings will take effect after the app is reopened.</source>
         <translation>上面的设置将在APP重新打开后生效</translation>
     </message>
@@ -1320,12 +1324,12 @@ in skydrive folder</source>
         <translation type="vanished">字体设置将在重新打开APP后生效</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="255"/>
+        <location filename="dlgpreferences.ui" line="258"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.cpp" line="103"/>
+        <location filename="dlgpreferences.cpp" line="104"/>
         <source>Font Files (*.*)</source>
         <translation>字体文件 (*.*)</translation>
     </message>
