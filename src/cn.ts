@@ -1245,7 +1245,7 @@ in skydrive folder</source>
         <translation type="vanished">用户</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="180"/>
+        <location filename="dlgpreferences.ui" line="170"/>
         <source>Additional Options</source>
         <translation>附加选项</translation>
     </message>
@@ -1254,12 +1254,12 @@ in skydrive folder</source>
         <translation type="vanished">关闭动作</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="193"/>
+        <location filename="dlgpreferences.ui" line="183"/>
         <source>Normal Close</source>
         <translation>正常关闭</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="216"/>
+        <location filename="dlgpreferences.ui" line="206"/>
         <source>Auto uses time as the Y-axis</source>
         <oldsource>Automatically uses time as the Y-axis</oldsource>
         <translation>自动使用时间作为Y坐标轴</translation>
@@ -1281,12 +1281,12 @@ in skydrive folder</source>
         <translation type="vanished">点钟</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="243"/>
+        <location filename="dlgpreferences.ui" line="233"/>
         <source>Debug Mode</source>
         <translation>调试模式</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="226"/>
+        <location filename="dlgpreferences.ui" line="216"/>
         <source>Todo Alert Mute</source>
         <translation>待办事项提示静音</translation>
     </message>
@@ -1311,12 +1311,16 @@ in skydrive folder</source>
         <translation>使用定制字体覆盖阅读器字体</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="167"/>
-        <source>The font setting takes effect after reopening the app.</source>
-        <translation>字体设置将在重新打开APP后生效</translation>
+        <location filename="dlgpreferences.ui" line="262"/>
+        <source>The above settings will take effect after the app is reopened.</source>
+        <translation>上面的设置将在APP重新打开后生效</translation>
     </message>
     <message>
-        <location filename="dlgpreferences.ui" line="265"/>
+        <source>The font setting takes effect after reopening the app.</source>
+        <translation type="vanished">字体设置将在重新打开APP后生效</translation>
+    </message>
+    <message>
+        <location filename="dlgpreferences.ui" line="255"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
