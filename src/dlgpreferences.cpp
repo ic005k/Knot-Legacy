@@ -29,6 +29,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->chkReaderFont->setStyleSheet(chkStyle);
   ui->chkCustomFont->setStyleSheet(chkStyle);
   ui->lblTip->setStyleSheet("color:red;");
+  ui->lblFontDemo->setFixedHeight(40);
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }
