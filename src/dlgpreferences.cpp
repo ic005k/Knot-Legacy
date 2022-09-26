@@ -66,7 +66,6 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
   Reg.setValue("/Options/Mute", ui->chkMute->isChecked());
-  Reg.setValue("/Options/CustomFont", ui->lblCustomFont->text());
   Reg.setValue("/Options/chkCustomFont", ui->chkCustomFont->isChecked());
 }
 
@@ -108,10 +107,14 @@ void dlgPreferences::on_btnCustomFont_clicked() {
                                           tr("Font Files (*.*)"));
 
   if (QFile(fileName).exists()) {
+    QString str = fileName;
 #ifdef Q_OS_ANDROID
-    fileName = mw_one->mydlgReader->getUriRealPath(fileName);
+    str = mw_one->mydlgReader->getUriRealPath(fileName);
 #endif
-    ui->lblCustomFont->setText(fileName);
+    ui->lblCustomFont->setText(str);
     isFontChange = true;
+
+    QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+    Reg.setValue("/Options/CustomFont", fileName);
   }
 }

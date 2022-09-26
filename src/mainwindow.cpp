@@ -475,8 +475,13 @@ void MainWindow::init_Options() {
   mydlgPre->ui->chkAutoTime->setChecked(
       Reg.value("/Options/AutoTimeY", true).toBool());
   mydlgPre->ui->chkMute->setChecked(Reg.value("/Options/Mute", true).toBool());
+
   QString strf = Reg.value("/Options/CustomFont").toString();
-  mydlgPre->ui->lblCustomFont->setText(strf);
+  QString str = strf;
+#ifdef Q_OS_ANDROID
+  str = mw_one->mydlgReader->getUriRealPath(strf);
+#endif
+  mydlgPre->ui->lblCustomFont->setText(str);
   if (QFile(strf).exists())
     mydlgPre->ui->lblCustomFont->setStyleSheet("color:black;");
   else
