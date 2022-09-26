@@ -27,6 +27,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->chkDebug->setStyleSheet(chkStyle);
   ui->chkMute->setStyleSheet(chkStyle);
   ui->chkReaderFont->setStyleSheet(chkStyle);
+  ui->chkCustomFont->setStyleSheet(chkStyle);
   ui->lblTip->setStyleSheet("color:red;");
 }
 
@@ -61,6 +62,7 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
   Reg.setValue("/Options/Mute", ui->chkMute->isChecked());
   Reg.setValue("/Options/CustomFont", ui->lblCustomFont->text());
+  Reg.setValue("/Options/chkCustomFont", ui->chkCustomFont->isChecked());
 }
 
 void dlgPreferences::on_chkDebug_clicked() {

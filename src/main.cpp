@@ -62,35 +62,38 @@ int main(int argc, char* argv[]) {
   Reg.setIniCodec("utf-8");
   fontSize = Reg.value("/Options/FontSize", 16).toInt();
   bool isReaderFont = Reg.value("/Options/ReaderFont", false).toBool();
+  bool isCustomFont = Reg.value("/Options/chkCustomFont", false).toBool();
   QString customFontPath = Reg.value("/Options/CustomFont").toString();
 
   QString fontName;
   bool isFontOK = false;
-  int loadedFontID = QFontDatabase::addApplicationFont(
-      customFontPath);  //":/res/CangErJinKai01-9128-W02-3.otf"
-  QStringList loadedFontFamilies =
-      QFontDatabase::applicationFontFamilies(loadedFontID);
-  if (!loadedFontFamilies.empty()) {
-    fontName = loadedFontFamilies.at(0);
-    QFont font(fontName, fontSize);
-    a.setFont(font);
+  qDebug() << "cus" << isCustomFont;
+  if (isCustomFont) {
+    int loadedFontID = QFontDatabase::addApplicationFont(
+        customFontPath);  //":/res/CangErJinKai01-9128-W02-3.otf"
+    QStringList loadedFontFamilies =
+        QFontDatabase::applicationFontFamilies(loadedFontID);
+    if (!loadedFontFamilies.empty()) {
+      fontName = loadedFontFamilies.at(0);
+      QFont font(fontName, fontSize);
+      a.setFont(font);
 
-    fontname = fontName;
-    isFontOK = true;
+      isFontOK = true;
+    }
   }
 
-  QSettings Reg2(iniDir + "reader.ini", QSettings::IniFormat);
-  Reg2.setIniCodec("utf-8");
-  fontName = Reg2.value("/Reader/FontName", "").toString();
-  qDebug() << "fontName" << fontName << fontSize << iniDir;
-  QFont font;
+  // QSettings Reg2(iniDir + "reader.ini", QSettings::IniFormat);
+  // Reg2.setIniCodec("utf-8");
+  // fontName = Reg2.value("/Reader/FontName", "").toString();
+
   if (isReaderFont) {
-    font.setFamily(fontName);
-  }
-  font.setPointSize(fontSize);
-  if (!isFontOK) {
-    a.setFont(font);
     fontname = fontName;
+  }
+
+  if (!isFontOK) {
+    QFont font;
+    font.setPointSize(fontSize);
+    a.setFont(font);
   }
 
   loadLocal();

@@ -481,6 +481,8 @@ void MainWindow::init_Options() {
     mydlgPre->ui->lblCustomFont->setStyleSheet("color:black;");
   else
     mydlgPre->ui->lblCustomFont->setStyleSheet("color:red;");
+  mydlgPre->ui->chkCustomFont->setChecked(
+      Reg.value("/Options/chkCustomFont", false).toBool());
 
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   mydlgPre->ui->chkDebug->setChecked(debugmode);

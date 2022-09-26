@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>401</width>
-    <height>545</height>
+    <height>623</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,30 +20,6 @@
       <string>Font</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QCheckBox" name="chkReaderFont">
-        <property name="styleSheet">
-         <string notr="true">QCheckBox::indicator {
-    /* 选择框尺寸 */
-    width:22px;
-    height:22px;
-}</string>
-        </property>
-        <property name="text">
-         <string>Use reader font to override UI font</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QLabel" name="lblFontDemo">
         <property name="text">
@@ -116,12 +92,35 @@ QSlider::handle:horizontal
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="chkCustomFont">
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
+    /* 选择框尺寸 */
+    width:22px;
+    height:22px;
+}</string>
+        </property>
+        <property name="text">
+         <string>Custom Font</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="btnCustomFont">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>35</height>
+         </size>
         </property>
         <property name="text">
          <string>Custom Font (Select External Fonts)</string>
@@ -135,6 +134,23 @@ QSlider::handle:horizontal
         </property>
         <property name="wordWrap">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkReaderFont">
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
+    /* 选择框尺寸 */
+    width:22px;
+    height:22px;
+}</string>
+        </property>
+        <property name="text">
+         <string>Override reader fonts with custom fonts</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -242,7 +258,7 @@ QCheckBox::indicator:checked{
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>55</height>
+       <height>50</height>
       </size>
      </property>
      <property name="text">
