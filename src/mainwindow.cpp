@@ -2886,7 +2886,9 @@ void MainWindow::on_RunCategory() {
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
 
 void MainWindow::on_actionPreferences_triggered() {
-  mydlgPre->setGeometry(geometry().x(), geometry().y(), width(), height());
+  mydlgPre->setFixedWidth(this->width());
+  mydlgPre->setGeometry(geometry().x(), geometry().y(), mydlgPre->width(),
+                        height());
   mydlgPre->setModal(true);
   mydlgPre->show();
 }
