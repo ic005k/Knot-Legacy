@@ -30,6 +30,10 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->chkCustomFont->setStyleSheet(chkStyle);
   ui->lblTip->setStyleSheet("color:red;");
   ui->lblFontDemo->setFixedHeight(40);
+  ui->lblCustomFont->setWordWrap(true);
+  ui->lblCustomFont->adjustSize();
+  ui->lblTip->setWordWrap(true);
+  ui->lblTip->adjustSize();
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }
