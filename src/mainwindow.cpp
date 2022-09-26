@@ -464,9 +464,6 @@ void MainWindow::sendMsg(int CurTableCount) {
 void MainWindow::init_Options() {
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  QFont font(this->font());
-  QFontInfo fInfo(font);
-  qDebug() << "fontSize:" << fontSize << fInfo.family();
 
   mydlgPre->ui->chkReaderFont->setChecked(
       Reg.value("/Options/ReaderFont", false).toBool());
@@ -477,15 +474,18 @@ void MainWindow::init_Options() {
   mydlgPre->ui->chkMute->setChecked(Reg.value("/Options/Mute", true).toBool());
 
   QString strf = Reg.value("/Options/CustomFont").toString();
+  mydlgPre->setFontDemo(strf);
   QString str = strf;
 #ifdef Q_OS_ANDROID
   str = mw_one->mydlgReader->getUriRealPath(strf);
 #endif
-  mydlgPre->ui->lblCustomFont->setText(str);
+  mydlgPre->ui->lblFontPath->setText(str);
   if (QFile(strf).exists())
-    mydlgPre->ui->lblCustomFont->setStyleSheet("color:black;");
+    mydlgPre->ui->lblFontPath->setStyleSheet(
+        "background-color: rgb(255, 255, 255);color:black;");
   else
-    mydlgPre->ui->lblCustomFont->setStyleSheet("color:red;");
+    mydlgPre->ui->lblFontPath->setStyleSheet(
+        "background-color: rgb(255, 255, 255);color:red;");
   mydlgPre->ui->chkCustomFont->setChecked(
       Reg.value("/Options/chkCustomFont", false).toBool());
 
@@ -1300,6 +1300,7 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
 void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
   if (mydlgPre->ui->chkClose->isChecked()) {
+    mydlgFloatFun->close();
     on_about();
 
     stopJavaTimer();

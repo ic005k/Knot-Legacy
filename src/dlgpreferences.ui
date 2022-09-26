@@ -21,7 +21,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="lblFontDemo">
+       <widget class="QLabel" name="lblFontSize">
         <property name="text">
          <string>Font Size</string>
         </property>
@@ -104,12 +104,12 @@ QSlider::handle:horizontal
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblCustomFont">
-        <property name="text">
-         <string>Font Path</string>
+       <widget class="QLabel" name="lblFontPath">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
         </property>
-        <property name="wordWrap">
-         <bool>true</bool>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>

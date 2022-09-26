@@ -16,7 +16,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   this->installEventFilter(this);
 
   ui->sliderFontSize->setValue(fontSize);
-  ui->lblFontDemo->setText(tr("Font Size") + " : " + QString::number(fontSize));
+  ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
   ui->chkMute->setStyleSheet(ui->chkClose->styleSheet());
   ui->chkMute->hide();
@@ -29,9 +29,9 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->chkReaderFont->setStyleSheet(chkStyle);
   ui->chkCustomFont->setStyleSheet(chkStyle);
   ui->lblTip->setStyleSheet("color:red;");
-  ui->lblFontDemo->setFixedHeight(40);
-  ui->lblCustomFont->setWordWrap(true);
-  ui->lblCustomFont->adjustSize();
+  ui->lblFontSize->setFixedHeight(40);
+  ui->lblFontPath->setWordWrap(true);
+  ui->lblFontPath->adjustSize();
   ui->lblTip->setWordWrap(true);
   ui->lblTip->adjustSize();
 }
@@ -92,8 +92,8 @@ void dlgPreferences::on_chkDebug_clicked() {
 void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
   QFont font;
   font.setPointSize(position);
-  ui->lblFontDemo->setText(tr("Font Size") + " : " + QString::number(position));
-  ui->lblFontDemo->setFont(font);
+  ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(position));
+  ui->lblFontSize->setFont(font);
   isFontChange = true;
 }
 
@@ -111,10 +111,29 @@ void dlgPreferences::on_btnCustomFont_clicked() {
 #ifdef Q_OS_ANDROID
     str = mw_one->mydlgReader->getUriRealPath(fileName);
 #endif
-    ui->lblCustomFont->setText(str);
+    ui->lblFontPath->setText(str);
     isFontChange = true;
 
     QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
     Reg.setValue("/Options/CustomFont", fileName);
+
+    setFontDemo(fileName);
   }
 }
+
+void dlgPreferences::setFontDemo(QString customFontPath) {
+  QString fontName;
+  int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
+  QStringList loadedFontFamilies =
+      QFontDatabase::applicationFontFamilies(loadedFontID);
+  if (!loadedFontFamilies.empty()) {
+    fontName = loadedFontFamilies.at(0);
+    QFont f;
+    f.setFamily(fontName);
+    f.setPointSize(22);
+
+    ui->lblFontPath->setFont(f);
+  }
+}
+
+void dlgPreferences::on_chkCustomFont_clicked() { isFontChange = true; }

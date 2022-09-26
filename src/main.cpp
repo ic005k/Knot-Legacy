@@ -65,9 +65,11 @@ int main(int argc, char* argv[]) {
   bool isCustomFont = Reg.value("/Options/chkCustomFont", false).toBool();
   QString customFontPath = Reg.value("/Options/CustomFont").toString();
 
-  QString fontName;
-  bool isFontOK = false;
+  QFont font;
+  font.setPointSize(fontSize);
+  a.setFont(font);
 
+  QString fontName;
   if (QFile(customFontPath).exists()) {
     int loadedFontID = QFontDatabase::addApplicationFont(
         customFontPath);  //":/res/CangErJinKai01-9128-W02-3.otf"
@@ -76,31 +78,19 @@ int main(int argc, char* argv[]) {
     if (!loadedFontFamilies.empty()) {
       fontName = loadedFontFamilies.at(0);
 
-      isFontOK = true;
+      if (isCustomFont) {
+        QFont font(fontName, fontSize);
+        a.setFont(font);
+      }
     }
   }
 
-  if (isFontOK) {
-    if (isCustomFont) {
-      QFont font(fontName, fontSize);
-      a.setFont(font);
-    } else {
-      QFont font;
-      font.setPointSize(fontSize);
-      a.setFont(font);
-    }
-
-    if (isReaderFont) {
-      fontname = fontName;
-    } else {
-      QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
-      Reg.setIniCodec("utf-8");
-      fontname = Reg.value("/Reader/FontName").toString();
-    }
+  if (isReaderFont) {
+    fontname = fontName;
   } else {
-    QFont font;
-    font.setPointSize(fontSize);
-    a.setFont(font);
+    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    Reg.setIniCodec("utf-8");
+    fontname = Reg.value("/Reader/FontName").toString();
   }
 
   loadLocal();
