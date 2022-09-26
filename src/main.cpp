@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
 
   QString fontName;
   bool isFontOK = false;
-  qDebug() << "cus" << isCustomFont;
+
   if (isCustomFont) {
     int loadedFontID = QFontDatabase::addApplicationFont(
         customFontPath);  //":/res/CangErJinKai01-9128-W02-3.otf"
@@ -81,10 +81,6 @@ int main(int argc, char* argv[]) {
       isFontOK = true;
     }
   }
-
-  // QSettings Reg2(iniDir + "reader.ini", QSettings::IniFormat);
-  // Reg2.setIniCodec("utf-8");
-  // fontName = Reg2.value("/Reader/FontName", "").toString();
 
   if (isReaderFont) {
     fontname = fontName;
