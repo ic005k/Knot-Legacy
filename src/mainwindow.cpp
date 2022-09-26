@@ -1301,7 +1301,6 @@ void MainWindow::closeEvent(QCloseEvent* event) {
   mydlgSteps->saveSteps();
   if (mydlgPre->ui->chkClose->isChecked()) {
     mydlgFloatFun->close();
-    // on_about();
 
     stopJavaTimer();
     event->accept();
@@ -1309,7 +1308,6 @@ void MainWindow::closeEvent(QCloseEvent* event) {
   } else {
     if (mydlgPre->isFontChange) {
       mydlgFloatFun->close();
-      // on_about();
 
       stopJavaTimer();
       event->accept();
