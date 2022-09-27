@@ -5,7 +5,7 @@
 #include "mainwindow.h"
 #include "ui_dlgpreferences.h"
 #include "ui_mainwindow.h"
-extern QString iniFile, iniDir, hsStyle;
+extern QString iniFile, iniDir, hsStyle, fontname;
 extern MainWindow* mw_one;
 extern bool isBreak;
 extern int fontSize;
@@ -32,8 +32,14 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->lblFontSize->setFixedHeight(40);
   ui->lblFontPath->setWordWrap(true);
   ui->lblFontPath->adjustSize();
+  ui->lblFontPath->setFixedHeight(100);
+  ui->lblFontPath->hide();
   ui->lblTip->setWordWrap(true);
   ui->lblTip->adjustSize();
+  ui->btnCustomFont->setFixedHeight(130);
+  ui->btnCustomFont->adjustSize();
+  ui->btnCustomFont->setStyleSheet(
+      "background-color: rgb(255, 255, 255);color:black;");
 }
 
 dlgPreferences::~dlgPreferences() { delete ui; }
@@ -106,19 +112,10 @@ void dlgPreferences::on_btnCustomFont_clicked() {
   fileName = QFileDialog::getOpenFileName(this, tr("Font"), "",
                                           tr("Font Files (*.*)"));
 
-  if (QFile(fileName).exists()) {
-    QString str = fileName;
-#ifdef Q_OS_ANDROID
-    str = mw_one->mydlgReader->getUriRealPath(fileName);
-#endif
-    ui->lblFontPath->setText(str);
-    isFontChange = true;
-
-    QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
-    Reg.setValue("/Options/CustomFont", fileName);
-
-    setFontDemo(fileName);
-  }
+  setFontDemo(fileName);
+  isFontChange = true;
+  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  Reg.setValue("/Options/CustomFont", fileName);
 }
 
 void dlgPreferences::setFontDemo(QString customFontPath) {
@@ -130,9 +127,27 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
     fontName = loadedFontFamilies.at(0);
     QFont f;
     f.setFamily(fontName);
-    f.setPointSize(22);
+    f.setPointSize(25);
 
     ui->lblFontPath->setFont(f);
+    ui->btnCustomFont->setFont(f);
+
+    QString str = customFontPath;
+#ifdef Q_OS_ANDROID
+    str = mw_one->mydlgReader->getUriRealPath(customFontPath);
+#endif
+    ui->lblFontPath->setText(str);
+
+    QStringList list = str.split("/");
+    QString str1 = list.at(list.count() - 1);
+    ui->btnCustomFont->setText(tr("Custom Font (Select External Fonts)") +
+                               "\n\n" + str1);
+
+    if (ui->chkReaderFont->isChecked()) {
+      fontname = fontName;
+      mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
+                                                                 fontname);
+    }
   }
 }
 

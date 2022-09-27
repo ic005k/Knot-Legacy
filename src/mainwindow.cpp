@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.18";
+QString ver = "1.0.19";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -475,16 +475,11 @@ void MainWindow::init_Options() {
 
   QString strf = Reg.value("/Options/CustomFont").toString();
   mydlgPre->setFontDemo(strf);
-  QString str = strf;
-#ifdef Q_OS_ANDROID
-  str = mw_one->mydlgReader->getUriRealPath(strf);
-#endif
-  mydlgPre->ui->lblFontPath->setText(str);
   if (QFile(strf).exists())
-    mydlgPre->ui->lblFontPath->setStyleSheet(
+    mydlgPre->ui->btnCustomFont->setStyleSheet(
         "background-color: rgb(255, 255, 255);color:black;");
   else
-    mydlgPre->ui->lblFontPath->setStyleSheet(
+    mydlgPre->ui->btnCustomFont->setStyleSheet(
         "background-color: rgb(255, 255, 255);color:red;");
   mydlgPre->ui->chkCustomFont->setChecked(
       Reg.value("/Options/chkCustomFont", false).toBool());
