@@ -77,7 +77,6 @@ void dlgPreferences::saveOptions() {
 
 void dlgPreferences::on_chkDebug_clicked() {
   if (ui->chkDebug->isChecked()) {
-    mw_one->mydlgSteps->ui->btnLogs->show();
     mw_one->mydlgSteps->ui->lblX->show();
     mw_one->mydlgSteps->ui->lblY->show();
     mw_one->mydlgSteps->ui->lblZ->show();
@@ -87,7 +86,6 @@ void dlgPreferences::on_chkDebug_clicked() {
     if (mw_one->mydlgSteps->ui->rbAlg2->isChecked())
       mw_one->mydlgSteps->ui->frameWay1->hide();
   } else if (!ui->chkDebug->isChecked()) {
-    mw_one->mydlgSteps->ui->btnLogs->hide();
     mw_one->mydlgSteps->ui->lblX->hide();
     mw_one->mydlgSteps->ui->lblY->hide();
     mw_one->mydlgSteps->ui->lblZ->hide();

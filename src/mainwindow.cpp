@@ -2897,7 +2897,6 @@ void MainWindow::on_btnSteps_clicked() {
   mydlgSteps->ui->tableWidget->setFocus();
   mydlgSteps->setMaxMark();
   mydlgSteps->setModal(true);
-  mydlgSteps->ui->btnLogs->hide();
   mydlgSteps->show();
 
   /*mydlgSteps->ui->qwSteps->setSource(

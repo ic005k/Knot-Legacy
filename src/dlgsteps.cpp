@@ -344,15 +344,6 @@ void dlgSteps::on_rbAlg2_clicked() {
 #endif
 }
 
-void dlgSteps::on_btnLogs_clicked() {
-  mw_one->mydlgMainNotes->setFixedHeight(mw_one->height());
-  mw_one->mydlgMainNotes->setFixedWidth(mw_one->width());
-  mw_one->mydlgMainNotes->ui->plainTextEdit->show();
-  mw_one->mydlgMainNotes->ui->textEdit->hide();
-  mw_one->mydlgMainNotes->setModal(true);
-  mw_one->mydlgMainNotes->show();
-}
-
 void dlgSteps::releaseWakeLock() {
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("releaseWakeLock");
