@@ -451,12 +451,6 @@ void MainWindow::init_Options() {
 
   QString strf = Reg.value("/Options/CustomFont").toString();
   mydlgPre->setFontDemo(strf);
-  if (QFile(strf).exists())
-    mydlgPre->ui->btnCustomFont->setStyleSheet(
-        "background-color: rgb(255, 255, 255);color:black;");
-  else
-    mydlgPre->ui->btnCustomFont->setStyleSheet(
-        "background-color: rgb(255, 255, 255);color:red;");
   mydlgPre->ui->chkCustomFont->setChecked(
       Reg.value("/Options/chkCustomFont", false).toBool());
 

@@ -151,6 +151,13 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
       mw_one->mydlgReader->setPageVPos();
     }
   }
+
+  if (QFile(customFontPath).exists())
+    ui->btnCustomFont->setStyleSheet(
+        "background-color: rgb(75, 75, 75);color:white;");
+  else
+    ui->btnCustomFont->setStyleSheet(
+        "background-color: rgb(75, 75, 75);color:red;");
 }
 
 void dlgPreferences::on_chkCustomFont_clicked() { isFontChange = true; }
