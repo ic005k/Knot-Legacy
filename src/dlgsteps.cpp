@@ -51,9 +51,6 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   QFont font = ui->tableWidget->horizontalHeader()->font();
   font.setBold(true);
   ui->tableWidget->horizontalHeader()->setFont(font);
-
-  ui->qwSteps->hide();
-  ui->qwSteps->setMinimumHeight(240);
 }
 
 dlgSteps::~dlgSteps() { delete ui; }
@@ -389,8 +386,8 @@ void dlgSteps::setMaxMark() {
 }
 
 void dlgSteps::appendDataToTable(QString str1, QString str2, QString str3) {
-  QQuickItem* root = ui->qwSteps->rootObject();
+  /*QQuickItem* root = ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
                             Q_ARG(QVariant, str1), Q_ARG(QVariant, str2),
-                            Q_ARG(QVariant, str3));
+                            Q_ARG(QVariant, str3));*/
 }
