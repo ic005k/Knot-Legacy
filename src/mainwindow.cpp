@@ -305,7 +305,6 @@ void MainWindow::newDatas() {
   az = accel_pedometer->reading()->z();
 
   updateRunTime();
-  writeLogs();
 
   countOne++;
   if (mydlgSteps->ui->rbAlg1->isChecked()) {
@@ -397,29 +396,6 @@ void MainWindow::pausePedometer() {
   if (QTime::currentTime().toString("hh-mm-ss") == "22-00-00") {
     if (mydlgSteps->ui->btnPause->text() == tr("Pause"))
       mydlgSteps->ui->btnPause->click();
-  }
-}
-
-void MainWindow::writeLogs() {
-  if (mydlgPre->ui->chkDebug->isChecked()) {
-    testCount1++;
-    if (testCount1 >= 8000) {
-      testCount1 = 0;
-      testCount++;
-      QString s0, s1, s2;
-      s1 = "ax:" + QString::number(ax) + "  " + "ay:" + QString::number(ay) +
-           "  " + "az:" + QString::number(az);
-      s2 = "gx:" + QString::number(gx) + "  " + "gy:" + QString::number(gy) +
-           "  " + "gz:" + QString::number(gz);
-      s0 = QString::number(testCount) + " . " + QTime::currentTime().toString();
-      mydlgMainNotes->ui->textBrowser->append(s0 + " : " + s1 + "  " + s2 +
-                                              "\n");
-
-      if (testCount >= 720) {
-        mydlgMainNotes->ui->textBrowser->clear();
-        testCount = 0;
-      }
-    }
   }
 }
 

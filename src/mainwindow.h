@@ -501,7 +501,6 @@ class MainWindow : public QMainWindow {
   void on_btnZoom_clicked();
   void on_cboxYear_currentTextChanged(const QString &arg1);
 
-  void writeLogs();
   void updateRunTime();
   void showSensorValues();
   QString decMemos(QString strDec, QString file);

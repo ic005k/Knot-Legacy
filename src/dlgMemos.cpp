@@ -5,8 +5,9 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
-extern QString iniFile, iniDir;
+extern QString iniFile, iniDir, fontname;
 extern bool isImport;
+extern int fontSize;
 
 dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
@@ -20,19 +21,20 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
           &dlgMainNotes::on_KVChanged);
 
   vScrollBar = new SmoothScrollBar();
-  vScrollBar->setOrientation(Qt::Orientation::Vertical);  //将滚动条设置为纵向
+  vScrollBar->setOrientation(Qt::Orientation::Vertical);
 
   // ui->textEdit->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
 
   // ui->textBrowser->setVerticalScrollBar(vScrollBar);
-  QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
-  ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  ui->textBrowser->setTextInteractionFlags(Qt::NoTextInteraction);
-  ui->textBrowser->setHidden(true);
+  QScroller::grabGesture(ui->plainTextEdit, QScroller::LeftMouseButtonGesture);
+  ui->plainTextEdit->verticalScrollBar()->setStyleSheet(
+      mw_one->vsbarStyleSmall);
+  // ui->plainTextEdit->setTextInteractionFlags(Qt::NoTextInteraction);
+  ui->plainTextEdit->setHidden(true);
 
-  mw_one->setSCrollPro(ui->textBrowser);
+  mw_one->setSCrollPro(ui->plainTextEdit);
   mw_one->setSCrollPro(ui->textEdit);
 
   ui->textEdit->setAcceptRichText(true);
@@ -103,6 +105,8 @@ void dlgMainNotes::on_btnBack_clicked() {
   mw_one->Sleep(500);
   saveMainNotes();
   close();
+  ui->plainTextEdit->hide();
+  ui->textEdit->show();
 }
 
 void dlgMainNotes::saveMainNotes() {
@@ -118,7 +122,8 @@ void dlgMainNotes::saveMainNotes() {
   if (memofile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile);
     if (!ui->btnPic->isEnabled())
-      ui->textEdit->setMarkdown(ui->textEdit->toPlainText());
+      ui->textEdit->setMarkdown(ui->plainTextEdit->toPlainText());
+
     stream << ui->textEdit->toMarkdown(
         QTextDocument::MarkdownDialectCommonMark);
     memofile.close();
@@ -133,6 +138,7 @@ void dlgMainNotes::saveMainNotes() {
     stream << ui->textEdit->toHtml().toUtf8();
     memofile1.close();
   }
+
   QTextEdit* edit = new QTextEdit;
   QPlainTextEdit* edit1 = new QPlainTextEdit;
   QString strhtml = mw_one->loadText(htmlFileName);
@@ -182,14 +188,12 @@ void dlgMainNotes::saveMainNotes() {
     Reg.setValue("/MainNotes/img" + QString::number(i), list.at(i));
   }
 
-  QString file = iniDir + "mainnotes.txt";
-  mw_one->TextEditToFile(ui->textEdit, file);
-  encryption(file);
-  encode(file);
-
-  Reg.setValue("/MainNotes/Text", mw_one->loadText(file));
-
-  QFile::remove(file);
+  // QString file = iniDir + "mainnotes.txt";
+  // mw_one->TextEditToFile(ui->textEdit, file);
+  // encryption(file);
+  // encode(file);
+  // Reg.setValue("/MainNotes/Text", mw_one->loadText(file));
+  // QFile::remove(file);
 }
 
 void dlgMainNotes::init_MainNotes() {
@@ -504,9 +508,6 @@ void dlgMainNotes::loadMemoQML() {
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, file));
 
-  // mw_one->ui->quickWidgetMemo->rootContext()->setContextProperty(
-  //     "initialUrl", "file://" + file);
-
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
 }
@@ -516,8 +517,14 @@ void dlgMainNotes::on_btnEditSource_clicked() {
   mw_one->Sleep(500);
   saveMainNotes();
 
-  ui->textEdit->setPlainText(mw_one->loadText(iniDir + "/memo/memo.md"));
-  ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
+  int vpos = ui->textEdit->verticalScrollBar()->sliderPosition();
+
+  ui->plainTextEdit->setPlainText(mw_one->loadText(iniDir + "/memo/memo.md"));
+
   ui->btnPic->setEnabled(false);
   ui->btnEditSource->setEnabled(false);
+
+  ui->textEdit->hide();
+  ui->plainTextEdit->show();
+  ui->plainTextEdit->verticalScrollBar()->setSliderPosition(vpos);
 }
