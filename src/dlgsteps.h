@@ -35,6 +35,8 @@ class dlgSteps : public QDialog {
 
   void setMaxMark();
 
+  void appendDataToTable(QString str1, QString str2, QString str3);
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 

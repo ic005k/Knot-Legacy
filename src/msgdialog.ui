@@ -339,7 +339,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>55</height>
+       <height>65</height>
       </size>
      </property>
      <property name="frameShape">

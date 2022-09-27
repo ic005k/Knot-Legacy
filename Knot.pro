@@ -141,7 +141,8 @@ DISTFILES += \
     src/memo.qml \
     src/onedrive/log.qml \
     src/onedrive/web.qml \
-    src/reader.qml
+    src/reader.qml \
+    src/steps.qml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

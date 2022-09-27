@@ -2905,6 +2905,17 @@ void MainWindow::on_btnSteps_clicked() {
   mydlgSteps->setModal(true);
   mydlgSteps->ui->btnLogs->hide();
   mydlgSteps->show();
+
+  mydlgSteps->ui->qwSteps->setSource(
+      QUrl(QStringLiteral("qrc:/src/steps.qml")));
+
+  for (int i = 0; i < mydlgSteps->ui->tableWidget->rowCount(); i++) {
+    QString str1, str2, str3;
+    str1 = mydlgSteps->ui->tableWidget->item(i, 0)->text();
+    str2 = mydlgSteps->ui->tableWidget->item(i, 1)->text();
+    str3 = mydlgSteps->ui->tableWidget->item(i, 2)->text();
+    mydlgSteps->appendDataToTable(str1, str2, str3);
+  }
 }
 
 void MainWindow::changeEvent(QEvent* event) {
