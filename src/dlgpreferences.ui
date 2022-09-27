@@ -52,7 +52,7 @@ QSlider::add-page:horizontal
 
 QSlider::sub-page:horizontal
 {
-	background-color: #1AFA29;
+	background-color: gray;
 }
 
 QSlider::handle:horizontal
