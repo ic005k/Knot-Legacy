@@ -52,7 +52,7 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   font.setBold(true);
   ui->tableWidget->horizontalHeader()->setFont(font);
 
-  ui->tableWidget->hide();
+  ui->qwSteps->hide();
   ui->qwSteps->setMinimumHeight(240);
 }
 
