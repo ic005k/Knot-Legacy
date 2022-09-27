@@ -111,6 +111,7 @@ void dlgPreferences::on_btnCustomFont_clicked() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("Font"), "",
                                           tr("Font Files (*.*)"));
+  if (fileName == "") return;
 
   setFontDemo(fileName);
   isFontChange = true;
@@ -157,7 +158,7 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
         "background-color: rgb(75, 75, 75);color:white;");
   else
     ui->btnCustomFont->setStyleSheet(
-        "background-color: rgb(75, 75, 75);color:red;");
+        "background-color: rgb(255, 255, 255);color:red;");
 }
 
 void dlgPreferences::on_chkCustomFont_clicked() { isFontChange = true; }
