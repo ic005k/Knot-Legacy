@@ -113,6 +113,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QWidget *m_widget;
   int mainHeight = 0;
   bool floatfun = true;
   int alertWindowsCount = 0;
@@ -310,6 +311,8 @@ class MainWindow : public QMainWindow {
                   int buttonCount);
   QString getSelectedText();
 
+  void showGrayWindows();
+  void closeGrayWindows();
  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();

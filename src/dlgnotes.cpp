@@ -32,6 +32,8 @@ dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
 dlgNotes::~dlgNotes() { delete ui; }
 
 void dlgNotes::on_btnBack_clicked() {
+  mw_one->closeGrayWindows();
+
   noteText = ui->textEdit->toPlainText();
   curPos = ui->textEdit->textCursor().position();
   sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();

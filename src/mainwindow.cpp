@@ -1422,6 +1422,8 @@ void MainWindow::initChartDay() {
 }
 
 void MainWindow::on_actionRename_triggered() {
+  showGrayWindows();
+
   int index = ui->tabWidget->currentIndex();
   /*bool ok;
   QString text = QInputDialog::getText(this, tr("Rename tab name"),
@@ -1722,6 +1724,8 @@ void MainWindow::saveNotes(int tabIndex) {
 }
 
 void MainWindow::on_actionNotes_triggered() {
+  showGrayWindows();
+
   mydlgNotes->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                           this->width(), this->height() / 2);
 
@@ -3427,6 +3431,8 @@ void MainWindow::on_actionMemos_triggered() {
 
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
   if (strPw != "") {
+    showGrayWindows();
+
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
       baPw[i] = baPw[i] - 66;  //解密User的密码
@@ -3460,7 +3466,7 @@ void MainWindow::on_actionMemos_triggered() {
     QDialog* dlg = new QDialog(this);
     dlg->setModal(true);
     dlg->setStyleSheet(
-        "QDialog{border-style:solid;border-width:2px;border-color:rgb(251, "
+        "QDialog{border-style:solid;border-width:0px;border-color:rgb(251, "
         "51, 51);}");
     QVBoxLayout* vbox = new QVBoxLayout;
     int space = 8;
@@ -3475,12 +3481,14 @@ void MainWindow::on_actionMemos_triggered() {
     btnCancel->setText(tr("Cancel"));
     connect(btnCancel, &QToolButton::clicked, [=]() {
       dlg->close();
+      closeGrayWindows();
       return;
     });
     QToolButton* btnOk = new QToolButton(this);
     btnOk->setText(tr("Ok"));
     connect(btnOk, &QToolButton::clicked, [=]() {
       dlg->close();
+      closeGrayWindows();
       bool ok = true;
       QString text = edit->text().trimmed();
 
@@ -3671,6 +3679,7 @@ void MainWindow::init_UIWidget() {
   mydlgFloatFun = new dlgFloatFun(this);
   mydlgReaderFun = new dlgReaderFun(this);
   mydlgSetText = new dlgSetText(this);
+  m_widget = new QWidget(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -4674,4 +4683,18 @@ void MainWindow::on_SetReaderFunVisible() {
 void MainWindow::on_timerMousePress() {
   timerMousePress->stop();
   if (!isMouseMove && isMousePress) on_btnSelText_clicked();
+}
+
+void MainWindow::showGrayWindows() {
+  mydlgFloatFun->close();
+
+  m_widget->resize(this->width(), this->height());
+  m_widget->move(0, 0);
+  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,70%);");
+  m_widget->show();
+}
+
+void MainWindow::closeGrayWindows() {
+  m_widget->close();
+  mydlgFloatFun->init();
 }

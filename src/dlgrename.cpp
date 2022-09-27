@@ -16,7 +16,10 @@ dlgRename::~dlgRename() { delete ui; }
 
 void dlgRename::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
-void dlgRename::on_btnCancel_clicked() { close(); }
+void dlgRename::on_btnCancel_clicked() {
+  close();
+  mw_one->closeGrayWindows();
+}
 
 void dlgRename::on_btnOk_clicked() {
   if (ui->editName->text().trimmed() != "") {
@@ -27,5 +30,6 @@ void dlgRename::on_btnOk_clicked() {
     mw_one->saveTab();
     mw_one->addRedo();
     close();
+    mw_one->closeGrayWindows();
   }
 }
