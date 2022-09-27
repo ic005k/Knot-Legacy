@@ -127,7 +127,7 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
     fontName = loadedFontFamilies.at(0);
     QFont f;
     f.setFamily(fontName);
-    f.setPointSize(25);
+    f.setPointSize(22);
 
     ui->lblFontPath->setFont(f);
     ui->btnCustomFont->setFont(f);
