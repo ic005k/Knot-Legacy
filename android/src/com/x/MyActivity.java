@@ -31,6 +31,7 @@ import android.os.Looper;
 import com.x.MyService;
 
 import android.app.PendingIntent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.os.Build;
 import android.graphics.Color;
@@ -477,6 +478,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         intent = new Intent(MyActivity.this, ClockActivity.class);
         pi = PendingIntent.getActivity(MyActivity.this, 0, intent, 0);
+
+        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
@@ -510,6 +513,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     protected void onDestroy() {
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
+        unregisterReceiver(mHomeKeyEvent);
         unregisterReceiver(mScreenStatusReceiver);
         android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
@@ -962,6 +966,29 @@ This method can parse out the real local file path from a file URI.
 
         return ret;
     }
+
+    private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
+        String SYSTEM_REASON = "reason";
+        String SYSTEM_HOME_KEY = "homekey";
+        String SYSTEM_HOME_KEY_LONG = "recentapps";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_REASON);
+                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
+                    // 表示按了home键,程序直接进入到后台
+                    QtApplication.invokeDelegate();
+                    System.out.println("MyActivity HOME键被按下...");
+                } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
+                    // 表示长按home键,显示最近使用的程序
+                    QtApplication.invokeDelegate();
+                    System.out.println("MyActivity 长按HOME键...");
+                }
+            }
+        }
+    };
 
 }
 
