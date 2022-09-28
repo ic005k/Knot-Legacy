@@ -1063,24 +1063,28 @@ in skydrive folder</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="61"/>
+        <location filename="dlgMemos.ui" line="67"/>
         <source>Insert Image</source>
         <translation>插入图像</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="98"/>
+        <location filename="dlgMemos.ui" line="104"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="129"/>
+        <location filename="dlgMemos.ui" line="141"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="161"/>
+        <location filename="dlgMemos.ui" line="173"/>
+        <source>Source</source>
+        <translation>源</translation>
+    </message>
+    <message>
         <source>Edit Source</source>
-        <translation>编辑源文件</translation>
+        <translation type="vanished">编辑源文件</translation>
     </message>
     <message>
         <source>Please enter your password : </source>
@@ -1130,17 +1134,17 @@ in skydrive folder</source>
         <translation type="vanished">密码设置成功</translation>
     </message>
     <message>
-        <location filename="dlgMemos.cpp" line="327"/>
+        <location filename="dlgMemos.cpp" line="345"/>
         <source>Load Ds File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.cpp" line="360"/>
+        <location filename="dlgMemos.cpp" line="378"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.cpp" line="361"/>
+        <location filename="dlgMemos.cpp" line="379"/>
         <source>Picture Files (*.*)</source>
         <translation></translation>
     </message>
@@ -1927,8 +1931,8 @@ in skydrive folder</source>
         <location filename="dlgsteps.cpp" line="79"/>
         <location filename="dlgsteps.cpp" line="89"/>
         <location filename="dlgsteps.cpp" line="189"/>
-        <location filename="dlgsteps.cpp" line="305"/>
-        <location filename="dlgsteps.cpp" line="327"/>
+        <location filename="dlgsteps.cpp" line="306"/>
+        <location filename="dlgsteps.cpp" line="328"/>
         <source>Start</source>
         <translation>启动</translation>
     </message>
