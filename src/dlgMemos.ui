@@ -71,7 +71,7 @@
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
+        <enum>Qt::ToolButtonIconOnly</enum>
        </property>
       </widget>
      </item>
@@ -108,7 +108,7 @@
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
+        <enum>Qt::ToolButtonIconOnly</enum>
        </property>
       </widget>
      </item>
@@ -139,7 +139,7 @@
         </size>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
+        <enum>Qt::ToolButtonIconOnly</enum>
        </property>
       </widget>
      </item>
