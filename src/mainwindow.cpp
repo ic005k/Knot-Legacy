@@ -4263,13 +4263,13 @@ void MainWindow::on_btnFontLess_clicked() {
 void MainWindow::on_hSlider_sliderMoved(int position) {
   if (!isEpub) {
     ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position + 1) +
-                          " / " + QString::number(totallines / baseLines));
+                          "\n" + QString::number(totallines / baseLines));
     ui->progReader->setMinimum(0);
     ui->progReader->setMaximum(totallines / baseLines);
     ui->progReader->setValue(position + 1);
   } else {
     ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position) +
-                          " / " + QString::number(htmlFiles.count()));
+                          "\n" + QString::number(htmlFiles.count()));
     ui->progReader->setMinimum(1);
     ui->progReader->setMaximum(htmlFiles.count());
     if (position == 0) position = 1;

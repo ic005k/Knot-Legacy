@@ -573,7 +573,7 @@ void dlgReader::getLines() {
     mw_one->ui->btnPages->setText(
         tr("Pages") + "\n" +
         QString::number(mw_one->mydlgReaderFun->ui->hSlider->value() + 1) +
-        " / " + QString::number(totallines / baseLines));
+        "\n" + QString::number(totallines / baseLines));
     iPage = mw_one->mydlgReaderFun->ui->hSlider->value() * baseLines;
     qDebug() << "iPage" << iPage
              << mw_one->mydlgReaderFun->ui->hSlider->value();
@@ -1112,7 +1112,7 @@ void dlgReader::showInfo() {
       mw_one->mydlgReaderFun->ui->hSlider->setValue(iPage / baseLines);
       mw_one->mydlgReaderFun->ui->hSlider->setMaximum(totallines / baseLines);
       mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
-                                    QString::number(iPage / baseLines) + " / " +
+                                    QString::number(iPage / baseLines) + "\n" +
                                     QString::number(totallines / baseLines));
       mw_one->ui->progReader->setMaximum(totallines / baseLines);
       mw_one->ui->progReader->setValue(iPage / baseLines);
@@ -1126,7 +1126,7 @@ void dlgReader::showInfo() {
     mw_one->mydlgReaderFun->ui->hSlider->setValue(htmlIndex);
     mw_one->mydlgReaderFun->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
-                                  QString::number(htmlIndex + 1) + " / " +
+                                  QString::number(htmlIndex + 1) + "\n" +
                                   QString::number(htmlFiles.count()));
     mw_one->ui->progReader->setMaximum(htmlFiles.count());
     mw_one->ui->progReader->setValue(htmlIndex + 1);
