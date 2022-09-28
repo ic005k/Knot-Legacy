@@ -65,6 +65,18 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->btnSetTime->setStyleSheet("border:none");
   ui->btnRecycle->setStyleSheet("border:none");
 
+  QFont f = this->font();
+  f.setPointSize(12);
+  ui->btnAdd->setFont(f);
+  ui->btnBack->setFont(f);
+  ui->btnHigh->setFont(f);
+  ui->btnLow->setFont(f);
+  ui->btnModify->setFont(f);
+  ui->btnSetTime->setFont(f);
+  ui->btnRecycle->setFont(f);
+
+  ui->btnModify->hide();
+
   ui->textEdit->setFixedHeight(getEditTextHeight(ui->textEdit) + 2);
 }
 

@@ -52,8 +52,13 @@
          <height>50</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>Pic</string>
+        <string>Insert Image</string>
        </property>
        <property name="icon">
         <iconset resource="../res.qrc">
@@ -64,6 +69,9 @@
          <width>30</width>
          <height>30</height>
         </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
        </property>
       </widget>
      </item>
@@ -81,6 +89,11 @@
          <height>50</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Undo</string>
        </property>
@@ -94,6 +107,9 @@
          <height>30</height>
         </size>
        </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
+       </property>
       </widget>
      </item>
      <item>
@@ -103,6 +119,11 @@
          <width>50</width>
          <height>50</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
        </property>
        <property name="text">
         <string>Redo</string>
@@ -116,6 +137,9 @@
          <width>30</width>
          <height>30</height>
         </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
        </property>
       </widget>
      </item>
