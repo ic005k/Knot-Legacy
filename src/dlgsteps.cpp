@@ -203,11 +203,12 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
   QString strD0 = date;
   int m = strD0.split(" ").at(1).toInt();
   if (m == 0) {
-    str0 =
-        QDate::fromString(strD0, "ddd MMM d yyyy").toString("ddd MM dd yyyy");
+    QDate::fromString(strD0, "ddd MMM d yyyy").toString("ddd MM dd yyyy");
   } else
     str0 = strD0;
   date = str0;
+  QString str1 = QString::number(QDate::currentDate().year());
+  date.replace(str1, "");
 
   bool isYes = false;
 
