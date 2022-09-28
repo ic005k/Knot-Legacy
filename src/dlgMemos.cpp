@@ -77,21 +77,46 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
       newHeight = this->height();
     }
 
-    if (pAndroidKeyboard->isVisible()) {
-      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), newHeight);
+    if (!ui->textEdit->isHidden()) {
+      if (pAndroidKeyboard->isVisible()) {
+        this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                          mw_one->width(), newHeight);
 
-      minSliderMax = ui->textEdit->verticalScrollBar()->maximum();
-      minSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+        minSliderMax = ui->textEdit->verticalScrollBar()->maximum();
+        minSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
 
-      minSliderPosition = minSliderMax * maxSliderPosition / maxSliderMax;
-      ui->textEdit->verticalScrollBar()->setSliderPosition(minSliderPosition);
-    } else {
-      maxSliderMax = ui->textEdit->verticalScrollBar()->maximum();
-      maxSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+        minSliderPosition = minSliderMax * maxSliderPosition / maxSliderMax;
+        ui->textEdit->verticalScrollBar()->setSliderPosition(minSliderPosition);
+      } else {
+        maxSliderMax = ui->textEdit->verticalScrollBar()->maximum();
+        maxSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
 
-      maxSliderPosition = maxSliderMax * minSliderPosition / minSliderMax;
-      ui->textEdit->verticalScrollBar()->setSliderPosition(maxSliderPosition);
+        maxSliderPosition = maxSliderMax * minSliderPosition / minSliderMax;
+        ui->textEdit->verticalScrollBar()->setSliderPosition(maxSliderPosition);
+      }
+    }
+
+    if (!ui->plainTextEdit->isHidden()) {
+      if (pAndroidKeyboard->isVisible()) {
+        this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                          mw_one->width(), newHeight);
+
+        minSliderMax = ui->plainTextEdit->verticalScrollBar()->maximum();
+        minSliderPosition =
+            ui->plainTextEdit->verticalScrollBar()->sliderPosition();
+
+        minSliderPosition = minSliderMax * maxSliderPosition / maxSliderMax;
+        ui->plainTextEdit->verticalScrollBar()->setSliderPosition(
+            minSliderPosition);
+      } else {
+        maxSliderMax = ui->plainTextEdit->verticalScrollBar()->maximum();
+        maxSliderPosition =
+            ui->plainTextEdit->verticalScrollBar()->sliderPosition();
+
+        maxSliderPosition = maxSliderMax * minSliderPosition / minSliderMax;
+        ui->plainTextEdit->verticalScrollBar()->setSliderPosition(
+            maxSliderPosition);
+      }
     }
   }
 
@@ -102,7 +127,7 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
 
 void dlgMainNotes::on_btnBack_clicked() {
   pAndroidKeyboard->hide();
-  mw_one->Sleep(500);
+  mw_one->Sleep(100);
   saveMainNotes();
   close();
   ui->plainTextEdit->hide();
@@ -180,13 +205,6 @@ void dlgMainNotes::saveMainNotes() {
   Reg.setValue("/MainNotes/CurPos", curPos);
   Reg.setValue("/MainNotes/SlidePos", sliderPos);
   Reg.setValue("/MainNotes/CurrentOSIniDir", iniDir);
-
-  QStringList list = getImgFileFromHtml(iniDir + "memo/memo.html");
-  int count = list.count();
-  Reg.setValue("/MainNotes/imgcount", count);
-  for (int i = 0; i < count; i++) {
-    Reg.setValue("/MainNotes/img" + QString::number(i), list.at(i));
-  }
 
   // QString file = iniDir + "mainnotes.txt";
   // mw_one->TextEditToFile(ui->textEdit, file);
