@@ -260,7 +260,7 @@ qlonglong dlgSteps::getCurrentSteps() {
   if (count == 0) return 0;
 
   QString str = ui->tableWidget->item(count - 1, 0)->text();
-  if (str == QDate::currentDate().toString("ddd MM dd yyyy"))
+  if (str == QDate::currentDate().toString("ddd MM dd "))
     return ui->tableWidget->item(count - 1, 1)->text().toLongLong();
   return 0;
 }
