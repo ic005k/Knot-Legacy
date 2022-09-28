@@ -3481,14 +3481,14 @@ void MainWindow::on_actionMemos_triggered() {
     btnCancel->setText(tr("Cancel"));
     connect(btnCancel, &QToolButton::clicked, [=]() {
       dlg->close();
-      closeGrayWindows();
+
       return;
     });
     QToolButton* btnOk = new QToolButton(this);
     btnOk->setText(tr("Ok"));
     connect(btnOk, &QToolButton::clicked, [=]() {
       dlg->close();
-      closeGrayWindows();
+
       bool ok = true;
       QString text = edit->text().trimmed();
 
@@ -3512,6 +3512,8 @@ void MainWindow::on_actionMemos_triggered() {
         }
       }
     });
+
+    connect(dlg, &QDialog::rejected, [=]() { closeGrayWindows(); });
 
     edit->setFixedHeight(32);
     btnCancel->setFixedHeight(32);
