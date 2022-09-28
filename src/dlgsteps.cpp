@@ -273,7 +273,7 @@ void dlgSteps::setTableSteps(qlonglong steps) {
   }
   if (count > 0) {
     QString strDate = ui->tableWidget->item(count - 1, 0)->text();
-    if (strDate == QDate::currentDate().toString("ddd MM dd yyyy")) {
+    if (strDate == QDate::currentDate().toString("ddd MM dd ")) {
       QTableWidgetItem* item = new QTableWidgetItem(QString::number(steps));
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       item->setBackground(brush1);
