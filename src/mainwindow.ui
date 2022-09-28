@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>488</width>
+    <width>495</width>
     <height>1728</height>
    </rect>
   </property>
@@ -343,7 +343,9 @@
                </size>
               </property>
               <property name="text">
-               <string>0 / 0</string>
+               <string>Pages
+0
+0</string>
               </property>
               <property name="icon">
                <iconset>
@@ -1992,7 +1994,7 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>488</width>
+     <width>495</width>
      <height>24</height>
     </rect>
    </property>
