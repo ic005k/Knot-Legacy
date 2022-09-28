@@ -15,7 +15,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
   this->setModal(true);
-  ui->gridLayout_2->setMargin(1);
+  ui->gridLayout_2->setContentsMargins(10, 2, 10, 2);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
