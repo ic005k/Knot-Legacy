@@ -23,6 +23,10 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
 
+                <!-- category android:name="android.intent.category.HOME"/ -->
+                <!-- category android:name="android.intent.category.LEANBACK_LAUNCHER"/ -->
+                <!-- category android:name="android.intent.category.DEFAULT"/ -->
+
             </intent-filter>
             <!-- Application arguments -->
             <!-- meta-data android:name="android.app.arguments" android:value="arg1 arg2 arg3"/ -->

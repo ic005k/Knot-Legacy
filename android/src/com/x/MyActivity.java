@@ -98,7 +98,7 @@ import java.util.Random;
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
-    private static MyActivity m_instance;
+    private static MyActivity m_instance = null;
     private static SensorManager mSensorManager;
     public static int isStepCounter = -1;
     public static float stepCounts;
@@ -122,7 +122,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public native static void CallJavaNotify_4();
 
     public MyActivity() {
-        m_instance = this;
+        //m_instance = this;
     }
 
     //------------------------------------------------------------------------
@@ -266,7 +266,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     }
 
     // 屏幕唤醒相关
-    private ScreenStatusReceiver mScreenStatusReceiver;
+    private ScreenStatusReceiver mScreenStatusReceiver = null;
 
     private void registSreenStatusReceiver() {
         mScreenStatusReceiver = new ScreenStatusReceiver();
@@ -431,10 +431,34 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         }
     }
 
+    private String processViewIntent(Intent intent) {
+        return intent.getDataString();
+    }
+
     //-----------------------------------------------------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (m_instance != null) {
+            Log.d(TAG, "App is already running... this won't work");
+            Intent intent = getIntent();
+            if (intent != null) {
+                Log.d(TAG, "There's an intent waiting...");
+                String sharedData = processViewIntent(intent);
+                if (sharedData != null) {
+                    Log.d(TAG, "It's a view intent");
+                    Intent viewIntent = new Intent(getApplicationContext(), MyActivity.class);
+                    viewIntent.setAction(Intent.ACTION_VIEW);
+                    viewIntent.putExtra("sharedData", sharedData);
+                    startActivity(viewIntent);
+                }
+            }
+            finish();
+            return;
+        }
+        m_instance = this;
+        Log.d(TAG, "Android activity created");
 
         //唤醒锁
         //acquireWakeLock();
@@ -513,8 +537,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     protected void onDestroy() {
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
-        unregisterReceiver(mHomeKeyEvent);
-        unregisterReceiver(mScreenStatusReceiver);
+
+        //if(mHomeKeyEvent!=null)
+        //unregisterReceiver(mHomeKeyEvent);
+
+        //if(mScreenStatusReceiver!=null)
+        //unregisterReceiver(mScreenStatusReceiver);
+
         android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
         QtApplication.invokeDelegate();
@@ -979,11 +1008,10 @@ This method can parse out the real local file path from a file URI.
                 String reason = intent.getStringExtra(SYSTEM_REASON);
                 if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     // 表示按了home键,程序直接进入到后台
-                    QtApplication.invokeDelegate();
+                    //QtApplication.invokeDelegate();
                     System.out.println("MyActivity HOME键被按下...");
                 } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
                     // 表示长按home键,显示最近使用的程序
-                    QtApplication.invokeDelegate();
                     System.out.println("MyActivity 长按HOME键...");
                 }
             }
