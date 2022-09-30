@@ -2834,6 +2834,7 @@ void MainWindow::on_actionReport_triggered() {
 
     isBreakReport = false;
     isReport = true;
+    tableReport->horizontalHeader()->hide();
     myReadEBookThread->start();
   }
 }
@@ -4311,7 +4312,9 @@ void MainWindow::readEBookDone() {
 
   if (isReport) {
     dlgProgEBook->close();
+
     mydlgReport->updateTable();
+    tableReport->horizontalHeader()->show();
     mydlgReport->ui->lblTitle->setText(
         tabData->tabText(tabData->currentIndex()));
     mydlgReport->ui->tableDetails->setRowCount(0);
