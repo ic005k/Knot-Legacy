@@ -923,10 +923,12 @@ void MainWindow::on_btnPlus_clicked() {
   mydlgSetTime->setModal(true);
   mydlgSetTime->ui->lblTitle->setText(
       tr("Add") + "  : " + tabData->tabText(tabData->currentIndex()));
-  mydlgSetTime->ui->dialH->setValue(QTime::currentTime().hour());
-  mydlgSetTime->ui->dialM->setValue(QTime::currentTime().minute());
-  mydlgSetTime->getTime(mydlgSetTime->ui->dialH->value(),
-                        mydlgSetTime->ui->dialM->value());
+
+  mydlgSetTime->ui->hsH->setValue(QTime::currentTime().hour());
+  mydlgSetTime->ui->hsM->setValue(QTime::currentTime().minute());
+  mydlgSetTime->getTime(mydlgSetTime->ui->hsH->value(),
+                        mydlgSetTime->ui->hsM->value());
+
   mydlgSetTime->ui->editDesc->setText("");
   mydlgSetTime->ui->editAmount->setText("");
   mydlgSetTime->show();
@@ -1661,8 +1663,10 @@ void MainWindow::on_twItemDoubleClicked() {
     }
     mydlgSetTime->ui->lblTitle->setText(
         tr("Modify") + "  : " + tabData->tabText(tabData->currentIndex()));
-    mydlgSetTime->ui->dialH->setValue(sh.toInt());
-    mydlgSetTime->ui->dialM->setValue(sm.toInt());
+
+    mydlgSetTime->ui->hsH->setValue(sh.toInt());
+    mydlgSetTime->ui->hsM->setValue(sm.toInt());
+
     mydlgSetTime->ui->lblTime->setText(t.trimmed());
 
     QString str = item->text(1);

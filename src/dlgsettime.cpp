@@ -14,11 +14,12 @@ extern bool isBreak, isImport;
 dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
   ui->setupUi(this);
+
   this->installEventFilter(this);
   QFont font;
   font.setPointSize(23);
   font.setBold(true);
-  ui->lblTime->setFont(font);
+
   ui->editAmount->setFont(font);
   ui->editDesc->setFont(font);
   ui->btn0->setFont(font);
@@ -43,6 +44,8 @@ dlgSetTime::dlgSetTime(QWidget* parent)
 
   ui->btnClearAmount->setStyleSheet("border:none");
   ui->btnClearDesc->setStyleSheet("border:none");
+
+  ui->hsM->setStyleSheet(ui->hsH->styleSheet());
 }
 
 dlgSetTime::~dlgSetTime() { delete ui; }
@@ -206,10 +209,6 @@ void dlgSetTime::init_Desc() {
   }
 }
 
-void dlgSetTime::on_dialH_valueChanged(int value) {
-  getTime(value, ui->dialM->value());
-}
-
 void dlgSetTime::getTime(int h, int m) {
   QString strh, strm, strs;
   if (h < 10)
@@ -226,10 +225,6 @@ void dlgSetTime::getTime(int h, int m) {
   else
     strs = QString::number(s);
   ui->lblTime->setText(strh + ":" + strm + ":" + strs);
-}
-
-void dlgSetTime::on_dialM_valueChanged(int value) {
-  getTime(ui->dialH->value(), value);
 }
 
 bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
@@ -264,4 +259,12 @@ void dlgSetTime::on_editAmount_textChanged(const QString& arg1) {
       break;
     }
   }
+}
+
+void dlgSetTime::on_hsH_valueChanged(int value) {
+  getTime(value, ui->hsM->value());
+}
+
+void dlgSetTime::on_hsM_valueChanged(int value) {
+  getTime(ui->hsH->value(), value);
 }
