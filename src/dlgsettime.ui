@@ -87,36 +87,62 @@ selection-background-color: lightblue;
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>35</height>
+         </size>
+        </property>
         <property name="styleSheet">
-         <string notr="true">QSlider::groove:horizontal 
-{ 
-	border: 1px solid #999999; 
-	height: 2px; 
-	margin: 0px 0;
-	left: 5px; 
-	right: 5px; 
-}  
-
-QSlider::add-page:horizontal
-{
-	background-color: gray;
-
+         <string notr="true">QSlider::groove:horizontal {
+  border: 0px solid #bbb;
 }
-
-QSlider::sub-page:horizontal
-{
-	background-color: gray;
-
+ 
+QSlider::sub-page:horizontal {
+  background: rgb(255,25,0);
+  border-radius: 0px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
-
-QSlider::handle:horizontal
-{
-	border: 0px ;
-	border-image: url(:/res/qslider_btn.png);			
-	width: 20px; 
-	
-	margin: -10px -5px -10px -5px; 
-	
+ 
+QSlider::add-page:horizontal {
+  background: rgb(100,100,100);
+  border: 0px solid #777; 
+  border-radius: 2px; 
+  margin-top: 15px; 
+  margin-bottom: 15px; 
+}
+ 
+QSlider::handle:horizontal { 
+  background: rgb(255,255,255); 
+  border: 1px solid rgba(10,10,10,255); 
+  width: 25px; 
+  height: 15px; 
+  border-radius: 5px; 
+  margin-top: 5px; 
+  margin-bottom: 5px; 
+}
+ 
+QSlider::handle:horizontal:hover { 
+  background: rgb(255,25,0); 
+  border: 1px solid rgba(25,25,25,255); 
+  border-radius: 5px; 
+}
+ 
+QSlider::sub-page:horizontal:disabled { 
+  background: #bbb; 
+  border-color: #999; 
+}
+ 
+QSlider::add-page:horizontal:disabled { 
+  background: #eee; 
+  border-color: #999; 
+}
+ 
+QSlider::handle:horizontal:disabled { 
+  background: #eee; 
+  border: 1px solid #aaa; 
+  border-radius: 4px; 
 }</string>
         </property>
         <property name="maximum">
@@ -125,6 +151,9 @@ QSlider::handle:horizontal
         <property name="pageStep">
          <number>1</number>
         </property>
+        <property name="value">
+         <number>10</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -132,11 +161,20 @@ QSlider::handle:horizontal
       </item>
       <item>
        <widget class="QSlider" name="hsM">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>35</height>
+         </size>
+        </property>
         <property name="maximum">
          <number>59</number>
         </property>
         <property name="pageStep">
          <number>1</number>
+        </property>
+        <property name="value">
+         <number>10</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
