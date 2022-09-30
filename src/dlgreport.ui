@@ -176,8 +176,14 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lblTitle">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>22</height>
+      </size>
+     </property>
      <property name="text">
-      <string>TextLabel</string>
+      <string>Title</string>
      </property>
     </widget>
    </item>
@@ -226,6 +232,12 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="lblDetails">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>22</height>
+      </size>
+     </property>
      <property name="text">
       <string>Details</string>
      </property>
@@ -271,6 +283,12 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lblTotal">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>22</height>
+      </size>
+     </property>
      <property name="text">
       <string>Total</string>
      </property>

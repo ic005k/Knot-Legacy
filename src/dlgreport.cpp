@@ -21,6 +21,7 @@ void setTableNoItemFlags(QTableWidget* t, int row);
 
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
+
   this->installEventFilter(this);
   this->setModal(true);
   tableReport = ui->tableReport;
