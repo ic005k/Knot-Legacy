@@ -68,7 +68,10 @@ ReadEBookThread::ReadEBookThread(QObject* parent) : QThread{parent} {}
 void ReadEBookThread::run() {
   isReadEBookEnd = false;
 
-  if (isEBook) mw_one->mydlgReader->openFile(ebookFile);
+  if (isEBook) {
+    mw_one->mydlgReader->openFile(ebookFile);
+    mw_one->mydlgReader->processHtml();
+  }
 
   if (isReport) {
     mw_one->mydlgReport->getMonthData();
@@ -2828,8 +2831,6 @@ void MainWindow::on_actionReport_triggered() {
     mydlgReport->init();
     isReportWindowsShow = true;
 
-    showGrayWindows();
-
     dlgProgEBook = mydlgReader->getProgBar();
     dlgProgEBook->show();
 
@@ -4345,7 +4346,6 @@ void MainWindow::readEBookDone() {
 
   dlgProgEBook->close();
   isReadEBookEnd = true;
-  closeGrayWindows();
 }
 
 void MainWindow::on_btnReadList_clicked() {

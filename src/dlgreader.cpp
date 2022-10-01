@@ -815,91 +815,90 @@ void dlgReader::setEpubPagePosition(int index) {
   showInfo();
 }
 
+void dlgReader::processHtml() {
+  if (!isEpub) return;
+
+  for (int i = 0; i < htmlFiles.count(); i++) {
+    QString hf = htmlFiles.at(i);
+
+    QTextEdit* edit = new QTextEdit;
+    QString strHtml = mw_one->loadText(hf);
+    strHtml = strHtml.replace("</p>", "</p>\n");
+    strHtml = strHtml.replace("/>", "/>\n");
+
+    strHtml = strHtml.replace("><", ">\n<");
+
+    strHtml = strHtml.replace("<img", "\n<img");
+
+    strHtml = strHtml.replace(".css", "");
+    strHtml = strHtml.replace("font-family:", "font0-family:");
+
+    QString space0, mystyle;
+    space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    mystyle = " style='line-height:35px; width:100% ; text-indent:40px; ' ";
+
+    edit->setPlainText(strHtml);
+    QPlainTextEdit* edit1 = new QPlainTextEdit;
+
+    for (int i = 0; i < edit->document()->lineCount(); i++) {
+      QString str = getTextEditLineText(edit, i);
+      str = str.trimmed();
+
+      if (str.contains("</head>")) {
+        QString css =
+            "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
+            "/>";
+        css.replace("../", "file://" + strOpfPath);
+        edit1->appendPlainText(css);
+        edit1->appendPlainText("</head>");
+      } else {
+        if (str.trimmed() != "") {
+          if (str.contains("<image") && str.contains("xlink:href=")) {
+            str.replace("xlink:href=", "src=");
+            str.replace("<image", "<img");
+            str.replace("height", "height1");
+            str.replace("width", "width1");
+          }
+
+          if (str.mid(0, 4) == "<img") {
+            QString str1 = str;
+            QStringList list = str1.split(" ");
+            QString strSrc;
+            for (int k = 0; k < list.count(); k++) {
+              QString s1 = list.at(k);
+              if (s1.contains("src=")) {
+                strSrc = s1;
+                break;
+              }
+            }
+            strSrc = strSrc.replace("src=", "");
+            strSrc = strSrc.replace("/>", "");
+            str = "<a href=" + strSrc + ">" + str + "</a>";
+            qDebug() << "strSrc=" << strSrc << str;
+
+            str = str.replace("width=", "width1=");
+            str = str.replace("height=", "height1=");
+          }
+
+          if (!str.contains("stylesheet") && !str.contains("<style") &&
+              !str.contains("/style>"))
+            edit1->appendPlainText(str);
+        }
+      }
+    }
+
+    TextEditToFile(edit1, hf);
+  }
+}
+
 void dlgReader::setQMLHtml() {
   QString hf = htmlFiles.at(htmlIndex);
-  QVariant msg, strhtml;
+  QVariant msg;
 
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
 
-  QTextEdit* edit = new QTextEdit;
-  QString strHtml = mw_one->loadText(hf);
-  strHtml = strHtml.replace("</p>", "</p>\n");
-  strHtml = strHtml.replace("/>", "/>\n");
-
-  // strhtml = strHtml.replace("<span", "<p");
-  // strhtml = strHtml.replace("/span>", "/p>");
-
-  strHtml = strHtml.replace("><", ">\n<");
-
-  strHtml = strHtml.replace("<img", "\n<img");
-
-  strHtml = strHtml.replace(".css", "");
-  strHtml = strHtml.replace("font-family:", "font0-family:");
-  strhtml = strHtml.replace("font-size:", "font0-size:");
-
-  strhtml = strHtml.replace("class=\"center\"", "class=\"center0\"");
-  strhtml = strHtml.replace("class=\"left\"", "class=\"left0\"");
-
-  QString space0, mystyle;
-  space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-  mystyle = " style='line-height:35px; width:100% ; text-indent:40px; ' ";
-
-  edit->setPlainText(strHtml);
-  QPlainTextEdit* edit1 = new QPlainTextEdit;
-
-  for (int i = 0; i < edit->document()->lineCount(); i++) {
-    QString str = getTextEditLineText(edit, i);
-    str = str.trimmed();
-
-    if (str.contains("</head>")) {
-      QString css =
-          "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
-          "/>";
-      css.replace("../", "file://" + strOpfPath);
-      edit1->appendPlainText(css);
-      edit1->appendPlainText("</head>");
-    } else {
-      if (str.trimmed() != "") {
-        if (str.contains("<image") && str.contains("xlink:href=")) {
-          str.replace("xlink:href=", "src=");
-          str.replace("<image", "<img");
-          str.replace("height", "height1");
-          str.replace("width", "width1");
-        }
-
-        if (str.mid(0, 4) == "<img") {
-          QString str1 = str;
-          QStringList list = str1.split(" ");
-          QString strSrc;
-          for (int k = 0; k < list.count(); k++) {
-            QString s1 = list.at(k);
-            if (s1.contains("src=")) {
-              strSrc = s1;
-              break;
-            }
-          }
-          strSrc = strSrc.replace("src=", "");
-          strSrc = strSrc.replace("/>", "");
-          str = "<a href=" + strSrc + ">" + str + "</a>";
-          qDebug() << "strSrc=" << strSrc << str;
-
-          str = str.replace("width=", "width1=");
-          str = str.replace("height=", "height1=");
-        }
-
-        if (!str.contains("stylesheet") && !str.contains("<style") &&
-            !str.contains("/style>"))
-          edit1->appendPlainText(str);
-      }
-    }
-  }
-
-  TextEditToFile(edit1, hf);
-  strHtml = edit1->toPlainText();
-  strHtml = strHtml.replace("../", "file://" + strOpfPath);
-
   msg = hf;
-  strhtml = strHtml;
+
   currentHtmlFile = hf;
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
