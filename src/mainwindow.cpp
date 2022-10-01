@@ -2828,13 +2828,14 @@ void MainWindow::on_actionReport_triggered() {
     mydlgReport->init();
     isReportWindowsShow = true;
 
-    tableReport->setRowCount(0);
+    showGrayWindows();
+
     dlgProgEBook = mydlgReader->getProgBar();
     dlgProgEBook->show();
 
     isBreakReport = false;
     isReport = true;
-    tableReport->horizontalHeader()->hide();
+
     myReadEBookThread->start();
   }
 }
@@ -4344,6 +4345,7 @@ void MainWindow::readEBookDone() {
 
   dlgProgEBook->close();
   isReadEBookEnd = true;
+  closeGrayWindows();
 }
 
 void MainWindow::on_btnReadList_clicked() {
