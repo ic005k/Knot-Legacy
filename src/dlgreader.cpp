@@ -892,14 +892,13 @@ void dlgReader::processHtml() {
 }
 
 void dlgReader::setQMLHtml() {
-  QString hf = htmlFiles.at(htmlIndex);
-  QVariant msg;
-
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
 
+  QString hf = htmlFiles.at(htmlIndex);
+  QVariant msg;
   msg = hf;
-
   currentHtmlFile = hf;
+
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 
