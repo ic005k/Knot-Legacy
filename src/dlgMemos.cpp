@@ -27,12 +27,14 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   // ui->textEdit->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  ui->textEdit->hide();
 
   // ui->textBrowser->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
   ui->editSource->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   // ui->editSource->setTextInteractionFlags(Qt::NoTextInteraction);
-  ui->editSource->setHidden(true);
+
+  ui->btnEditSource->hide();
 
   mw_one->setSCrollPro(ui->editSource);
   mw_one->setSCrollPro(ui->textEdit);
@@ -135,10 +137,11 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
 void dlgMainNotes::on_btnBack_clicked() {
   pAndroidKeyboard->hide();
   mw_one->Sleep(100);
+  if (!ui->editSource->isHidden())
+    ui->textEdit->setMarkdown(ui->editSource->toPlainText());
   saveMainNotes();
+
   close();
-  ui->editSource->hide();
-  ui->textEdit->show();
 }
 
 void dlgMainNotes::saveMainNotes() {
@@ -149,9 +152,11 @@ void dlgMainNotes::saveMainNotes() {
   dir.mkpath(path);
 
   QString strMD = iniDir + "memo/memo.md";
-  QFile memofile(strMD);
 
-  if (memofile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+  mw_one->mydlgReader->TextEditToFile(ui->editSource, strMD);
+
+  /*QFile memofile(strMD);
+    if (memofile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile);
     if (!ui->editSource->isHidden())
       ui->textEdit->setMarkdown(ui->editSource->toPlainText());
@@ -159,13 +164,13 @@ void dlgMainNotes::saveMainNotes() {
     stream << ui->textEdit->toMarkdown(
         QTextDocument::MarkdownDialectCommonMark);
     memofile.close();
-  }
+  }*/
 
   QString htmlFileName = iniDir + "memo/memo.html";
   QFile memofile1(htmlFileName);
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
-    ui->textEdit->setMarkdown(mw_one->loadText(strMD));
+    // ui->textEdit->setMarkdown(mw_one->loadText(strMD));
     ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
     stream << ui->textEdit->toHtml().toUtf8();
     memofile1.close();
@@ -205,7 +210,7 @@ void dlgMainNotes::saveMainNotes() {
 
   mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
 
-  sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
+  // sliderPos = ui->editSource->verticalScrollBar()->sliderPosition();
 
   loadMemoQML();
 
@@ -533,6 +538,7 @@ void dlgMainNotes::loadMemoQML() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
+  sliderPos = Reg.value("/MainNotes/SlidePos").toReal();
   QString str = mw_one->loadText(file);
   if (strIniDir != "") {
     str.replace(strIniDir, iniDir);
@@ -542,11 +548,10 @@ void dlgMainNotes::loadMemoQML() {
     mw_one->TextEditToFile(edit, file);
   }
 
-  mw_one->ui->quickWidgetMemo->setSource(
-      QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, file));
 
+  mw_one->Sleep(1000);
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
 }
@@ -624,4 +629,8 @@ void dlgMainNotes::on_btnWells_clicked() {
 
 void dlgMainNotes::on_btnVLine_clicked() {
   ui->editSource->insertPlainText("|");
+}
+
+void dlgMainNotes::on_btnAsterisk_clicked() {
+  ui->editSource->insertPlainText("*");
 }

@@ -90,6 +90,8 @@ class dlgMainNotes : public QDialog {
 
   void on_btnVLine_clicked();
 
+  void on_btnAsterisk_clicked();
+
  private:
   int newHeight = 0;
   bool one = false;

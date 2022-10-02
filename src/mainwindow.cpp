@@ -3560,9 +3560,9 @@ void MainWindow::showMemos() {
   QFont f(this->font());
   f.setPointSize(fontSize);
   mydlgMainNotes->ui->textEdit->setFont(f);
+  mydlgMainNotes->ui->editSource->setFont(f);
 
   memoHeight = ui->quickWidgetMemo->height();
-  mydlgMainNotes->setCursorPosition();
 
   mydlgMainNotes->ui->btnUndo->setEnabled(false);
   mydlgMainNotes->ui->btnRedo->setEnabled(false);
@@ -4577,15 +4577,14 @@ void MainWindow::on_btnEdit_clicked() {
     str.replace(strIniDir, iniDir);
   }
 
-  mydlgMainNotes->ui->frameFun->hide();
   mydlgMainNotes->init();
   mydlgMainNotes->show();
 
-  mydlgMainNotes->ui->textEdit->setMarkdown(str);
+  mydlgMainNotes->ui->editSource->setPlainText(str);
   mydlgMainNotes->ui->btnPic->setEnabled(true);
   mydlgMainNotes->ui->btnEditSource->setEnabled(true);
 
-  mydlgMainNotes->ui->textEdit->verticalScrollBar()->setSliderPosition(
+  mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(
       mydlgMainNotes->sliderPos);
 
   mydlgMainNotes->isShow = true;
