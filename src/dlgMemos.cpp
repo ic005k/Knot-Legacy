@@ -632,3 +632,21 @@ void dlgMainNotes::on_btnVLine_clicked() {
 void dlgMainNotes::on_btnAsterisk_clicked() {
   ui->editSource->insertPlainText("*");
 }
+
+void dlgMainNotes::on_btnS1_clicked() { ui->editSource->insertPlainText("~"); }
+
+void dlgMainNotes::on_btnS2_clicked() {
+  ui->editSource->insertPlainText("[ ]");
+}
+
+void dlgMainNotes::on_btnS3_clicked() {
+  ui->editSource->insertPlainText("( )");
+}
+
+void dlgMainNotes::on_btnS4_clicked() {
+  ui->editSource->insertPlainText("{ }");
+}
+
+void dlgMainNotes::on_btnColor_clicked() {
+  ui->editSource->insertPlainText("<font color=#FF0000 >红色</font>");
+}

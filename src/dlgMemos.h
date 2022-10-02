@@ -51,7 +51,7 @@ class dlgMainNotes : public QDialog {
   void loadMemoQML();
 
   void setVPos();
-  public slots:
+ public slots:
   void editVSBarValueChanged();
 
  protected:
@@ -92,6 +92,16 @@ class dlgMainNotes : public QDialog {
   void on_btnVLine_clicked();
 
   void on_btnAsterisk_clicked();
+
+  void on_btnS1_clicked();
+
+  void on_btnS2_clicked();
+
+  void on_btnS3_clicked();
+
+  void on_btnS4_clicked();
+
+  void on_btnColor_clicked();
 
  private:
   int newHeight = 0;
