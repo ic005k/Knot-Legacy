@@ -1058,44 +1058,99 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="34"/>
+        <location filename="dlgMemos.ui" line="69"/>
+        <source>2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="83"/>
+        <source>3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="96"/>
+        <source>Color</source>
+        <translation>颜色</translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="113"/>
+        <source>-</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="126"/>
+        <source>|</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="139"/>
+        <source>*</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="152"/>
+        <source>#</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="165"/>
+        <source>~</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="178"/>
+        <source>[ ]</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="191"/>
+        <source>( )</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="204"/>
+        <source>{ }</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="240"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="64"/>
+        <location filename="dlgMemos.ui" line="270"/>
         <source>Insert Image</source>
         <translation>插入图像</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="101"/>
+        <location filename="dlgMemos.ui" line="307"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="138"/>
+        <location filename="dlgMemos.ui" line="344"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="170"/>
+        <location filename="dlgMemos.ui" line="376"/>
         <source>Source</source>
         <translation>源</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="221"/>
+        <location filename="dlgMemos.ui" line="55"/>
         <source>Insert Table</source>
         <translation>插入表格</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="228"/>
-        <location filename="dlgMemos.cpp" line="48"/>
+        <location filename="dlgMemos.ui" line="62"/>
+        <location filename="dlgMemos.cpp" line="49"/>
         <source>Row</source>
         <translation>行</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="238"/>
-        <location filename="dlgMemos.cpp" line="50"/>
+        <location filename="dlgMemos.ui" line="76"/>
+        <location filename="dlgMemos.cpp" line="51"/>
         <source>Column</source>
         <translation>列</translation>
     </message>
@@ -1151,22 +1206,22 @@ in skydrive folder</source>
         <translation type="vanished">密码设置成功</translation>
     </message>
     <message>
-        <location filename="dlgMemos.cpp" line="353"/>
+        <location filename="dlgMemos.cpp" line="350"/>
         <source>Load Ds File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.cpp" line="396"/>
+        <location filename="dlgMemos.cpp" line="393"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.cpp" line="397"/>
+        <location filename="dlgMemos.cpp" line="394"/>
         <source>Picture Files (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.cpp" line="575"/>
+        <location filename="dlgMemos.cpp" line="581"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
