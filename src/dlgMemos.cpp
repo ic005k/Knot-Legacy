@@ -8,10 +8,12 @@ extern MainWindow* mw_one;
 extern QString iniFile, iniDir, fontname;
 extern bool isImport;
 extern int fontSize;
+extern QRegularExpression regxNumber;
 
 dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
   ui->setupUi(this);
+
   ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
   this->setModal(true);
@@ -28,18 +30,24 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
 
   // ui->textBrowser->setVerticalScrollBar(vScrollBar);
-  QScroller::grabGesture(ui->plainTextEdit, QScroller::LeftMouseButtonGesture);
-  ui->plainTextEdit->verticalScrollBar()->setStyleSheet(
-      mw_one->vsbarStyleSmall);
-  // ui->plainTextEdit->setTextInteractionFlags(Qt::NoTextInteraction);
-  ui->plainTextEdit->setHidden(true);
+  QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
+  ui->editSource->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  // ui->editSource->setTextInteractionFlags(Qt::NoTextInteraction);
+  ui->editSource->setHidden(true);
 
-  mw_one->setSCrollPro(ui->plainTextEdit);
+  mw_one->setSCrollPro(ui->editSource);
   mw_one->setSCrollPro(ui->textEdit);
 
   ui->textEdit->setAcceptRichText(true);
   connect(ui->textEdit->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
           SLOT(editVSBarValueChanged()));
+
+  QValidator* validator =
+      new QRegularExpressionValidator(regxNumber, ui->editRow);
+  ui->editRow->setValidator(validator);
+  ui->editRow->setPlaceholderText(tr("Row"));
+  ui->editCol->setValidator(validator);
+  ui->editCol->setPlaceholderText(tr("Column"));
 }
 
 void dlgMainNotes::init() {
@@ -96,25 +104,25 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
       }
     }
 
-    if (!ui->plainTextEdit->isHidden()) {
+    if (!ui->editSource->isHidden()) {
       if (pAndroidKeyboard->isVisible()) {
         this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                           mw_one->width(), newHeight);
 
-        minSliderMax = ui->plainTextEdit->verticalScrollBar()->maximum();
+        minSliderMax = ui->editSource->verticalScrollBar()->maximum();
         minSliderPosition =
-            ui->plainTextEdit->verticalScrollBar()->sliderPosition();
+            ui->editSource->verticalScrollBar()->sliderPosition();
 
         minSliderPosition = minSliderMax * maxSliderPosition / maxSliderMax;
-        ui->plainTextEdit->verticalScrollBar()->setSliderPosition(
+        ui->editSource->verticalScrollBar()->setSliderPosition(
             minSliderPosition);
       } else {
-        maxSliderMax = ui->plainTextEdit->verticalScrollBar()->maximum();
+        maxSliderMax = ui->editSource->verticalScrollBar()->maximum();
         maxSliderPosition =
-            ui->plainTextEdit->verticalScrollBar()->sliderPosition();
+            ui->editSource->verticalScrollBar()->sliderPosition();
 
         maxSliderPosition = maxSliderMax * minSliderPosition / minSliderMax;
-        ui->plainTextEdit->verticalScrollBar()->setSliderPosition(
+        ui->editSource->verticalScrollBar()->setSliderPosition(
             maxSliderPosition);
       }
     }
@@ -130,7 +138,7 @@ void dlgMainNotes::on_btnBack_clicked() {
   mw_one->Sleep(100);
   saveMainNotes();
   close();
-  ui->plainTextEdit->hide();
+  ui->editSource->hide();
   ui->textEdit->show();
 }
 
@@ -146,8 +154,8 @@ void dlgMainNotes::saveMainNotes() {
 
   if (memofile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile);
-    if (!ui->btnPic->isEnabled())
-      ui->textEdit->setMarkdown(ui->plainTextEdit->toPlainText());
+    if (!ui->editSource->isHidden())
+      ui->textEdit->setMarkdown(ui->editSource->toPlainText());
 
     stream << ui->textEdit->toMarkdown(
         QTextDocument::MarkdownDialectCommonMark);
@@ -351,9 +359,19 @@ QString dlgMainNotes::Deciphering(const QString& fileName) {
   file.close();
 }
 
-void dlgMainNotes::on_btnUndo_clicked() { ui->textEdit->undo(); }
+void dlgMainNotes::on_btnUndo_clicked() {
+  if (!ui->textEdit->isHidden())
+    ui->textEdit->undo();
+  else
+    ui->editSource->undo();
+}
 
-void dlgMainNotes::on_btnRedo_clicked() { ui->textEdit->redo(); }
+void dlgMainNotes::on_btnRedo_clicked() {
+  if (!ui->textEdit->isHidden())
+    ui->textEdit->redo();
+  else
+    ui->editSource->redo();
+}
 
 void dlgMainNotes::on_textEdit_textChanged() {}
 
@@ -422,18 +440,22 @@ void dlgMainNotes::on_btnPic_clicked() {
     fragment = QTextDocumentFragment::fromHtml("<img src=" + strTar + ">");
     ui->textEdit->textCursor().insertFragment(fragment);*/
 
-    QUrl Uri(QString("file://%1").arg(strTar));
-    QImage image = QImageReader(strTar).read();
+    if (!ui->textEdit->isHidden()) {
+      QUrl Uri(QString("file://%1").arg(strTar));
+      QImage image = QImageReader(strTar).read();
 
-    QTextDocument* textDocument = ui->textEdit->document();
-    textDocument->addResource(QTextDocument::ImageResource, Uri,
-                              QVariant(image));
-    QTextCursor cursor = ui->textEdit->textCursor();
-    QTextImageFormat imageFormat;
-    imageFormat.setWidth(image.width());
-    imageFormat.setHeight(image.height());
-    imageFormat.setName(Uri.toString());
-    cursor.insertImage(imageFormat);
+      QTextDocument* textDocument = ui->textEdit->document();
+      textDocument->addResource(QTextDocument::ImageResource, Uri,
+                                QVariant(image));
+      QTextCursor cursor = ui->textEdit->textCursor();
+      QTextImageFormat imageFormat;
+      imageFormat.setWidth(image.width());
+      imageFormat.setHeight(image.height());
+      imageFormat.setName(Uri.toString());
+      cursor.insertImage(imageFormat);
+    } else {
+      ui->editSource->insertPlainText("![image](file://" + strTar + ")\n");
+    }
 
     QMessageBox box;
     box.setText(strTar);
@@ -537,12 +559,57 @@ void dlgMainNotes::on_btnEditSource_clicked() {
 
   int vpos = ui->textEdit->verticalScrollBar()->sliderPosition();
 
-  ui->plainTextEdit->setPlainText(mw_one->loadText(iniDir + "/memo/memo.md"));
+  ui->editSource->setPlainText(mw_one->loadText(iniDir + "/memo/memo.md"));
 
-  ui->btnPic->setEnabled(false);
   ui->btnEditSource->setEnabled(false);
 
   ui->textEdit->hide();
-  ui->plainTextEdit->show();
-  ui->plainTextEdit->verticalScrollBar()->setSliderPosition(vpos);
+  ui->editSource->show();
+  ui->frameFun->show();
+  ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
+}
+
+void dlgMainNotes::on_btnInsertTable_clicked() {
+  int row = ui->editRow->text().trimmed().toInt();
+  int col = ui->editCol->text().trimmed().toInt();
+
+  if (row == 0 || col == 0) return;
+
+  QString strTitle = tr("Title");
+  QString strCol = "|" + strTitle + "1|";
+  QString strHead = "|------|";
+  QString strRow = "|      |";
+
+  for (int i = 0; i < col - 1; i++) {
+    strCol = strCol + strTitle + QString::number(i + 2) + "|";
+    strHead = strHead + "------|";
+    strRow = strRow + "      |";
+  }
+
+  if (!ui->editSource->isHidden()) {
+    ui->editSource->insertPlainText(strCol + "\n" + strHead + "\n");
+    for (int j = 0; j < row; j++) {
+      ui->editSource->insertPlainText(strRow + "\n");
+    }
+  } else {
+    // ui->textEdit->insertPlainText(strCol + "\n" + strHead + "\n");
+
+    // for (int j = 0; j < row; j++) {
+    //   ui->textEdit->insertPlainText(strRow + "\n");
+    // }
+  }
+}
+
+void dlgMainNotes::on_editSource_redoAvailable(bool b) {
+  if (b)
+    ui->btnRedo->setEnabled(true);
+  else
+    ui->btnRedo->setEnabled(false);
+}
+
+void dlgMainNotes::on_editSource_undoAvailable(bool b) {
+  if (b)
+    ui->btnUndo->setEnabled(true);
+  else
+    ui->btnUndo->setEnabled(false);
 }

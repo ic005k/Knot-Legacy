@@ -4577,6 +4577,7 @@ void MainWindow::on_btnEdit_clicked() {
     str.replace(strIniDir, iniDir);
   }
 
+  mydlgMainNotes->ui->frameFun->hide();
   mydlgMainNotes->init();
   mydlgMainNotes->show();
 

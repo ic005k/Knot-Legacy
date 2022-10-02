@@ -78,6 +78,12 @@ class dlgMainNotes : public QDialog {
 
   void on_btnEditSource_clicked();
 
+  void on_btnInsertTable_clicked();
+
+  void on_editSource_redoAvailable(bool b);
+
+  void on_editSource_undoAvailable(bool b);
+
  private:
   int newHeight = 0;
   bool one = false;
