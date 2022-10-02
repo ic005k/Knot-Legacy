@@ -15,6 +15,7 @@ class dlgNotes : public QDialog {
   ~dlgNotes();
   Ui::dlgNotes *ui;
 
+  int sliderPos;
   void init_Notes();
  public slots:
   bool eventFilter(QObject *obj, QEvent *evn) override;

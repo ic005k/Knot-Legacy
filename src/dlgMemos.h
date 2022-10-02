@@ -50,7 +50,8 @@ class dlgMainNotes : public QDialog {
 
   void loadMemoQML();
 
- public slots:
+  void setVPos();
+  public slots:
   void editVSBarValueChanged();
 
  protected:

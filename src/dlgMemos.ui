@@ -149,7 +149,11 @@
     <widget class="QTextEdit" name="textEdit"/>
    </item>
    <item>
-    <widget class="QPlainTextEdit" name="editSource"/>
+    <widget class="QTextEdit" name="editSource">
+     <property name="acceptRichText">
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

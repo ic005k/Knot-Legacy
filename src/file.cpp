@@ -74,13 +74,14 @@ qreal File::textPos() {
 }
 
 qreal File::textHeight() {
-  if (!mw_one->mydlgMainNotes->isHidden())
+  if (!mw_one->ui->frameMemo->isHidden())
     mw_one->mydlgMainNotes->textHeight = m_textHeight;
 
   if (!mw_one->ui->frameReader->isHidden())
     mw_one->mydlgReader->textHeight = m_textHeight;
 
-  qDebug() << "m_textHeight" << m_textHeight;
+  qDebug() << "m_textHeight" << m_textHeight
+           << mw_one->mydlgMainNotes->textHeight;
   return m_textHeight;
 }
 

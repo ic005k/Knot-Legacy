@@ -20,7 +20,7 @@ QString iniFile, iniDir, strDate, readDate, noteText, strStats, SaveType, strY,
     strM, btnYText, btnMText, btnDText, CurrentYearMonth;
 QStringList listM;
 
-int curPos, sliderPos, today, fontSize, red, currentTabIndex;
+int curPos, today, fontSize, red, currentTabIndex;
 int chartMax = 5;
 double yMaxMonth, yMaxDay;
 MainWindow* mw_one;
@@ -3433,8 +3433,8 @@ void MainWindow::updateHardSensorSteps() {
 void MainWindow::on_actionMemos_triggered() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  QString file = iniDir + "mainnotes.txt";
-  QString strDec = Reg.value("/MainNotes/Text").toString();
+  // QString file = iniDir + "mainnotes.txt";
+  // QString strDec = Reg.value("/MainNotes/Text").toString();
 
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
   if (strPw != "") {
@@ -3503,7 +3503,7 @@ void MainWindow::on_actionMemos_triggered() {
 
       if (ok && !text.isEmpty()) {
         if (text.trimmed() == strPw) {
-          strText = decMemos(strDec, file);
+          // strText = decMemos(strDec, file);
 
           showMemos();
 
@@ -3538,7 +3538,7 @@ void MainWindow::on_actionMemos_triggered() {
     dlg->show();
 
   } else {
-    strText = decMemos(strDec, file);
+    // strText = decMemos(strDec, file);
 
     showMemos();
   }
@@ -3546,10 +3546,6 @@ void MainWindow::on_actionMemos_triggered() {
 
 void MainWindow::showMemos() {
   mydlgFloatFun->close();
-
-  ui->frameMain->hide();
-  ui->frameSetKey->hide();
-  ui->frameMemo->show();
 
   ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
   ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
@@ -3566,6 +3562,12 @@ void MainWindow::showMemos() {
 
   mydlgMainNotes->ui->btnUndo->setEnabled(false);
   mydlgMainNotes->ui->btnRedo->setEnabled(false);
+
+  ui->frameMain->hide();
+  ui->frameSetKey->hide();
+  ui->frameMemo->show();
+
+  mydlgMainNotes->setCursorPosition();
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -3823,8 +3825,6 @@ void MainWindow::init_UIWidget() {
   ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
   ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
   ui->quickWidget->rootContext()->setContextProperty("mw_one", mw_one);
-
-  ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4578,11 +4578,11 @@ void MainWindow::on_btnEdit_clicked() {
   }
 
   mydlgMainNotes->init();
-  mydlgMainNotes->show();
 
   mydlgMainNotes->ui->editSource->setPlainText(str);
   mydlgMainNotes->ui->btnPic->setEnabled(true);
   mydlgMainNotes->ui->btnEditSource->setEnabled(true);
+  mydlgMainNotes->show();
 
   mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(
       mydlgMainNotes->sliderPos);
@@ -4590,9 +4590,9 @@ void MainWindow::on_btnEdit_clicked() {
   mydlgMainNotes->isShow = true;
   mainHeight = this->height();
   mydlgMainNotes->maxSliderMax =
-      mydlgMainNotes->ui->textEdit->verticalScrollBar()->maximum();
+      mydlgMainNotes->ui->editSource->verticalScrollBar()->maximum();
   mydlgMainNotes->maxSliderPosition =
-      mydlgMainNotes->ui->textEdit->verticalScrollBar()->sliderPosition();
+      mydlgMainNotes->ui->editSource->verticalScrollBar()->sliderPosition();
 }
 
 void MainWindow::on_btnCode_clicked() {

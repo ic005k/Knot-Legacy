@@ -7,7 +7,6 @@ extern MainWindow* mw_one;
 extern bool loading, zh_cn;
 extern QString noteText;
 extern int curPos;
-extern int sliderPos;
 
 dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
