@@ -15,12 +15,6 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QTextEdit" name="textEdit"/>
-   </item>
-   <item>
-    <widget class="QTextEdit" name="editSource"/>
-   </item>
-   <item>
     <widget class="QFrame" name="frameFun">
      <property name="minimumSize">
       <size>
@@ -137,6 +131,12 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="textEdit"/>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="editSource"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

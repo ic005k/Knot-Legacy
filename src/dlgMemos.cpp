@@ -27,7 +27,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   // ui->textEdit->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  ui->textEdit->horizontalScrollBar()->hide();
 
   // ui->textBrowser->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
