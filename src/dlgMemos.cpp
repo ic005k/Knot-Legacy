@@ -558,7 +558,8 @@ void dlgMainNotes::on_btnEditSource_clicked() {
 
   int vpos = ui->textEdit->verticalScrollBar()->sliderPosition();
 
-  ui->editSource->setPlainText(mw_one->loadText(iniDir + "/memo/memo.md"));
+  QString str = mw_one->loadText(iniDir + "/memo/memo.md");
+  ui->editSource->setPlainText(str);
 
   ui->btnEditSource->setEnabled(false);
 
