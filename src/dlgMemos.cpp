@@ -613,3 +613,15 @@ void dlgMainNotes::on_editSource_undoAvailable(bool b) {
   else
     ui->btnUndo->setEnabled(false);
 }
+
+void dlgMainNotes::on_btnSeparator_clicked() {
+  ui->editSource->insertPlainText("-");
+}
+
+void dlgMainNotes::on_btnWells_clicked() {
+  ui->editSource->insertPlainText("#");
+}
+
+void dlgMainNotes::on_btnVLine_clicked() {
+  ui->editSource->insertPlainText("|");
+}

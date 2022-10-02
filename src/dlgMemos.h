@@ -84,6 +84,12 @@ class dlgMainNotes : public QDialog {
 
   void on_editSource_undoAvailable(bool b);
 
+  void on_btnSeparator_clicked();
+
+  void on_btnWells_clicked();
+
+  void on_btnVLine_clicked();
+
  private:
   int newHeight = 0;
   bool one = false;
