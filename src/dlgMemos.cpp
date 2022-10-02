@@ -17,7 +17,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
   this->setModal(true);
-  ui->gridLayout_2->setContentsMargins(10, 2, 10, 2);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
@@ -28,6 +27,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   // ui->textEdit->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  ui->textEdit->horizontalScrollBar()->hide();
 
   // ui->textBrowser->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
