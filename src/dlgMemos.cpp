@@ -40,7 +40,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   mw_one->setSCrollPro(ui->textEdit);
 
   ui->textEdit->setAcceptRichText(true);
-  connect(ui->textEdit->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
+  connect(ui->editSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
           SLOT(editVSBarValueChanged()));
 
   QValidator* validator =
@@ -67,12 +67,12 @@ void dlgMainNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
 void dlgMainNotes::editVSBarValueChanged() {
   if (pAndroidKeyboard->isVisible()) {
-    minSliderMax = ui->textEdit->verticalScrollBar()->maximum();
-    minSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+    minSliderMax = ui->editSource->verticalScrollBar()->maximum();
+    minSliderPosition = ui->editSource->verticalScrollBar()->sliderPosition();
     qDebug() << "min=" << minSliderPosition << minSliderMax;
   } else {
-    maxSliderMax = ui->textEdit->verticalScrollBar()->maximum();
-    maxSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
+    maxSliderMax = ui->editSource->verticalScrollBar()->maximum();
+    maxSliderPosition = ui->editSource->verticalScrollBar()->sliderPosition();
 
     qDebug() << "max=" << maxSliderPosition << maxSliderMax;
   }
@@ -117,6 +117,7 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
         minSliderPosition = minSliderMax * maxSliderPosition / maxSliderMax;
         ui->editSource->verticalScrollBar()->setSliderPosition(
             minSliderPosition);
+
       } else {
         maxSliderMax = ui->editSource->verticalScrollBar()->maximum();
         maxSliderPosition =
