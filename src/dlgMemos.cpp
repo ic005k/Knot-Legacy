@@ -558,12 +558,13 @@ void dlgMainNotes::loadMemoQML() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
-  // sliderPos = Reg.value("/MainNotes/SlidePos").toReal();
+
   QString str = mw_one->loadText(file);
   if (strIniDir != "") {
     str.replace(strIniDir, iniDir);
 
     QTextEdit* edit = new QTextEdit;
+    edit->setAcceptRichText(false);
     edit->setPlainText(str);
     mw_one->TextEditToFile(edit, file);
   }
@@ -571,7 +572,10 @@ void dlgMainNotes::loadMemoQML() {
   mw_one->ui->quickWidgetMemo->setSource(
       QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, file));
+  // QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant,
+  // file));
+  QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
+                            Q_ARG(QVariant, str));
 }
 
 void dlgMainNotes::setVPos() {
