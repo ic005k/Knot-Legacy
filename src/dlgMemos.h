@@ -103,6 +103,8 @@ class dlgMainNotes : public QDialog {
 
   void on_btnColor_clicked();
 
+  void on_btnS5_clicked();
+
  private:
   int newHeight = 0;
   bool one = false;

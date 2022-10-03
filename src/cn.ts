@@ -1073,67 +1073,72 @@ in skydrive folder</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="113"/>
+        <location filename="dlgMemos.ui" line="109"/>
+        <source>...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.ui" line="130"/>
         <source>-</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="126"/>
+        <location filename="dlgMemos.ui" line="143"/>
         <source>|</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="139"/>
+        <location filename="dlgMemos.ui" line="156"/>
         <source>*</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="152"/>
+        <location filename="dlgMemos.ui" line="169"/>
         <source>#</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="165"/>
+        <location filename="dlgMemos.ui" line="182"/>
         <source>~</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="178"/>
+        <location filename="dlgMemos.ui" line="199"/>
         <source>[ ]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="191"/>
+        <location filename="dlgMemos.ui" line="216"/>
         <source>( )</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="204"/>
+        <location filename="dlgMemos.ui" line="233"/>
         <source>{ }</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="240"/>
+        <location filename="dlgMemos.ui" line="273"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="270"/>
+        <location filename="dlgMemos.ui" line="303"/>
         <source>Insert Image</source>
         <translation>插入图像</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="307"/>
+        <location filename="dlgMemos.ui" line="340"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="344"/>
+        <location filename="dlgMemos.ui" line="377"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="dlgMemos.ui" line="376"/>
+        <location filename="dlgMemos.ui" line="409"/>
         <source>Source</source>
         <translation>源</translation>
     </message>
@@ -1224,6 +1229,36 @@ in skydrive folder</source>
         <location filename="dlgMemos.cpp" line="581"/>
         <source>Title</source>
         <translation>标题</translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.cpp" line="638"/>
+        <source>Bold Italic</source>
+        <translation>粗斜体</translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.cpp" line="644"/>
+        <source>Italic</source>
+        <translation>斜体</translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.cpp" line="650"/>
+        <source>Underline</source>
+        <translation>下划线</translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.cpp" line="656"/>
+        <source>Strickout</source>
+        <translation>删除线</translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.cpp" line="662"/>
+        <source>Red</source>
+        <translation>红色</translation>
+    </message>
+    <message>
+        <location filename="dlgMemos.cpp" line="668"/>
+        <source>Bold</source>
+        <translation>粗体</translation>
     </message>
     <message>
         <source>Ok</source>

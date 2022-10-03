@@ -64,5 +64,10 @@
         <file>res/info.png</file>
         <file>src/texteditor.html</file>
         <file>res/b3.png</file>
+        <file>res/font1.png</file>
+        <file>res/font2.png</file>
+        <file>res/font3.png</file>
+        <file>res/font4.png</file>
+        <file>res/font5.png</file>
     </qresource>
 </RCC>

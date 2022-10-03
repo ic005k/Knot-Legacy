@@ -633,20 +633,38 @@ void dlgMainNotes::on_btnAsterisk_clicked() {
   ui->editSource->insertPlainText("*");
 }
 
-void dlgMainNotes::on_btnS1_clicked() { ui->editSource->insertPlainText("~"); }
+void dlgMainNotes::on_btnS1_clicked() {
+  QString str = ui->editSource->textCursor().selectedText();
+  if (str == "") str = tr("Bold Italic");
+  ui->editSource->insertPlainText("_**" + str + "**_");
+}
 
 void dlgMainNotes::on_btnS2_clicked() {
-  ui->editSource->insertPlainText("[ ]");
+  QString str = ui->editSource->textCursor().selectedText();
+  if (str == "") str = tr("Italic");
+  ui->editSource->insertPlainText("_" + str + "_");
 }
 
 void dlgMainNotes::on_btnS3_clicked() {
-  ui->editSource->insertPlainText("( )");
+  QString str = ui->editSource->textCursor().selectedText();
+  if (str == "") str = tr("Underline");
+  ui->editSource->insertPlainText("<u>" + str + "</u>");
 }
 
 void dlgMainNotes::on_btnS4_clicked() {
-  ui->editSource->insertPlainText("{ }");
+  QString str = ui->editSource->textCursor().selectedText();
+  if (str == "") str = tr("Strickout");
+  ui->editSource->insertPlainText("~~" + str + "~~");
 }
 
 void dlgMainNotes::on_btnColor_clicked() {
-  ui->editSource->insertPlainText("<font color=#FF0000 >红色</font>");
+  QString str = ui->editSource->textCursor().selectedText();
+  if (str == "") str = tr("Red");
+  ui->editSource->insertPlainText("<font color=#FF0000 >" + str + "</font>");
+}
+
+void dlgMainNotes::on_btnS5_clicked() {
+  QString str = ui->editSource->textCursor().selectedText();
+  if (str == "") str = tr("Bold");
+  ui->editSource->insertPlainText("**" + str + "**");
 }
