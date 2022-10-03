@@ -64,12 +64,11 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   QFont font;
   font.setPixelSize(fontSize);
   ui->editLineSn->setFont(font);
-  ui->editSource->setFont(font);
   ui->editLineSn->setFixedWidth(ui->editLineSn->font().pixelSize() + 10);
   lastLine = 1;
-  connect(
-      ui->editSource->verticalScrollBar(), &QScrollBar::valueChanged,
-      [&](int value) { ui->editLineSn->verticalScrollBar()->setValue(value); });
+  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
+  ui->editSource->setFont(font);
+  ui->editSource->setAcceptRichText(false);
 
   connect(ui->editSource, &QTextEdit::textChanged, this,
           &dlgMainNotes::onTextChange);
@@ -81,7 +80,6 @@ void dlgMainNotes::init() {
 }
 
 void dlgMainNotes::wheelEvent(QWheelEvent* e) {
-  //当捕获到事件后，调用相对滚动的槽函数
   vScrollBar->scroll(e->angleDelta().y());
 }
 
@@ -100,6 +98,10 @@ void dlgMainNotes::editVSBarValueChanged() {
 
     qDebug() << "max=" << maxSliderPosition << maxSliderMax;
   }
+
+  if (ui->editLineSn->isHidden()) return;
+  ui->editLineSn->verticalScrollBar()->setValue(
+      ui->editSource->verticalScrollBar()->value());
 }
 
 void dlgMainNotes::resizeEvent(QResizeEvent* event) {
@@ -726,6 +728,7 @@ void dlgMainNotes::highlightCurrentLine() {
 
   ui->editSource->setExtraSelections(extraSelections);
 
+  if (ui->editLineSn->isHidden()) return;
   ui->editLineSn->blockSignals(true);
   ui->editSource->blockSignals(true);
   ui->editLineSn->verticalScrollBar()->setValue(
@@ -735,6 +738,8 @@ void dlgMainNotes::highlightCurrentLine() {
 }
 
 void dlgMainNotes::onTextChange() {
+  if (ui->editLineSn->isHidden()) return;
+
   int jsonTextEditRow = ui->editSource->document()->lineCount();
   if (jsonTextEditRow == lastLine) return;
 

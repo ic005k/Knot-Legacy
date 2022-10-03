@@ -617,7 +617,11 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QTextEdit" name="editLineSn"/>
+      <widget class="QTextEdit" name="editLineSn">
+       <property name="acceptRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QTextEdit" name="editSource">
