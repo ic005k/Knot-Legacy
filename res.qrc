@@ -70,5 +70,6 @@
         <file>res/font4.png</file>
         <file>res/font5.png</file>
         <file>res/link.png</file>
+        <file>res/color.png</file>
     </qresource>
 </RCC>
