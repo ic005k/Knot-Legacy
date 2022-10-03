@@ -672,3 +672,13 @@ void dlgMainNotes::on_btnS5_clicked() {
 void dlgMainNotes::on_btnLink_clicked() {
   ui->editSource->insertPlainText("[Knot](https://github.com/ic005k/Knot)");
 }
+
+void dlgMainNotes::on_btnS6_clicked() { ui->editSource->insertPlainText("~"); }
+
+void dlgMainNotes::on_btnS7_clicked() {
+  ui->editSource->insertPlainText("[ ]");
+}
+
+void dlgMainNotes::on_btnS8_clicked() {
+  ui->editSource->insertPlainText("( )");
+}

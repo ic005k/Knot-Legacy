@@ -107,6 +107,12 @@ class dlgMainNotes : public QDialog {
 
   void on_btnLink_clicked();
 
+  void on_btnS6_clicked();
+
+  void on_btnS7_clicked();
+
+  void on_btnS8_clicked();
+
  private:
   int newHeight = 0;
   bool one = false;
