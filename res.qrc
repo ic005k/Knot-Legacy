@@ -69,5 +69,6 @@
         <file>res/font3.png</file>
         <file>res/font4.png</file>
         <file>res/font5.png</file>
+        <file>res/link.png</file>
     </qresource>
 </RCC>

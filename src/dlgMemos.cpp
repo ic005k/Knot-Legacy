@@ -668,3 +668,7 @@ void dlgMainNotes::on_btnS5_clicked() {
   if (str == "") str = tr("Bold");
   ui->editSource->insertPlainText("**" + str + "**");
 }
+
+void dlgMainNotes::on_btnLink_clicked() {
+  ui->editSource->insertPlainText("[Knot](https://github.com/ic005k/Knot)");
+}
