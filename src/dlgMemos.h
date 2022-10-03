@@ -8,6 +8,7 @@
 #include <QImageReader>
 #include <QInputMethod>
 #include <QPlainTextEdit>
+#include <QTextBlock>
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
@@ -58,7 +59,11 @@ class dlgMainNotes : public QDialog {
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
+
  private slots:
+
+  void highlightCurrentLine();
+
   void on_btnBack_clicked();
 
   void on_btnCloseText_clicked();
@@ -113,7 +118,13 @@ class dlgMainNotes : public QDialog {
 
   void on_btnS8_clicked();
 
+  void on_btnS9_clicked();
+
+  void onTextChange();
+
  private:
+  QWidget *lineNumberArea;
+  int lastLine;
   int newHeight = 0;
   bool one = false;
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
