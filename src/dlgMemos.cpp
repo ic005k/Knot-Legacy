@@ -29,7 +29,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->textEdit->hide();
 
-  // ui->textBrowser->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
   ui->editSource->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   // ui->editSource->setTextInteractionFlags(Qt::NoTextInteraction);
@@ -732,13 +731,36 @@ void dlgMainNotes::highlightCurrentLine() {
 
   ui->editSource->setExtraSelections(extraSelections);
 
-  if (ui->editLineSn->isHidden()) return;
-  ui->editLineSn->blockSignals(true);
-  ui->editSource->blockSignals(true);
-  ui->editLineSn->verticalScrollBar()->setValue(
-      ui->editSource->verticalScrollBar()->value());
-  ui->editLineSn->blockSignals(false);
-  ui->editSource->blockSignals(false);
+  if (!ui->editLineSn->isHidden()) {
+    ui->editLineSn->blockSignals(true);
+    ui->editSource->blockSignals(true);
+    ui->editLineSn->verticalScrollBar()->setValue(
+        ui->editSource->verticalScrollBar()->value());
+    ui->editLineSn->blockSignals(false);
+    ui->editSource->blockSignals(false);
+  }
+
+  QString str1, str2, str3, str4;
+
+  //当前光标
+  QTextCursor tc = ui->editSource->textCursor();
+  QTextLayout* lay = tc.block().layout();
+  //当前光标在本BLOCK内的相对位置
+  int iCurPos = tc.position() - tc.block().position();
+  //光标所在行
+  int iCurrentLine = lay->lineForTextPosition(iCurPos).lineNumber() +
+                     tc.block().firstLineNumber();
+  int iLineCount = ui->editSource->document()->lineCount();
+  //或者
+  int iRowNum = tc.blockNumber() + 1;  //获取光标所在行的行号
+
+  str1 = QString::number(iLineCount);
+  str2 = QString::number(ui->editSource->textCursor().position());
+  str3 = QString::number(iCurPos);
+  str4 = QString::number(iRowNum);
+  ui->lblInfo->setText(tr("Row") + " : " + str4 + "  " + tr("Col") + " : " +
+                       str3 + "    " + tr("Total Lines") + " : " + str1 + "  " +
+                       tr("Cursor Pos") + " : " + str2);
 }
 
 void dlgMainNotes::onTextChange() {
@@ -774,3 +796,7 @@ void dlgMainNotes::onTextChange() {
   ui->editLineSn->blockSignals(false);
   ui->editSource->blockSignals(false);
 }
+
+void dlgMainNotes::openMD(QString mdFileName) {}
+
+void dlgMainNotes::saveMD(QString mdFileName) {}

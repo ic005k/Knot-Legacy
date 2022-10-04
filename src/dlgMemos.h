@@ -52,6 +52,8 @@ class dlgMainNotes : public QDialog {
   void loadMemoQML();
 
   void setVPos();
+  void openMD(QString mdFileName);
+  void saveMD(QString mdFileName);
  public slots:
   void editVSBarValueChanged();
 
