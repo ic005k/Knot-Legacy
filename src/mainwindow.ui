@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>495</width>
+    <width>502</width>
     <height>1728</height>
    </rect>
   </property>
@@ -1924,7 +1924,7 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>50</height>
+             <height>40</height>
             </size>
            </property>
            <property name="text">
@@ -1949,7 +1949,7 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>50</height>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -1964,9 +1964,9 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="btnSetKey">
+          <widget class="QToolButton" name="btnNotesList">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1974,7 +1974,26 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>50</height>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Notes List</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnSetKey">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
             </size>
            </property>
            <property name="text">
@@ -1994,7 +2013,7 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>495</width>
+     <width>502</width>
      <height>24</height>
     </rect>
    </property>

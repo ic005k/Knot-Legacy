@@ -3691,6 +3691,7 @@ void MainWindow::init_UIWidget() {
   mydlgReaderFun = new dlgReaderFun(this);
   mydlgSetText = new dlgSetText(this);
   m_widget = new QWidget(this);
+  mydlgNotesList = new dlgNotesList(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -4709,4 +4710,10 @@ void MainWindow::showGrayWindows() {
 void MainWindow::closeGrayWindows() {
   m_widget->close();
   mydlgFloatFun->init();
+}
+
+void MainWindow::on_btnNotesList_clicked() {
+  mydlgNotesList->setGeometry(geometry().x(), geometry().y(), width() * 2 / 3,
+                              ui->quickWidgetMemo->height());
+  mydlgNotesList->show();
 }

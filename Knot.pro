@@ -32,6 +32,7 @@ INSTALLS += dataFiles
 SOURCES += \
     src/chart.cpp \
     src/dlgMemos.cpp \
+    src/dlgNotesList.cpp \
     src/dlgOneDrive.cpp \
     src/dlgReaderFun.cpp \
     src/dlgSetText.cpp \
@@ -61,6 +62,7 @@ HEADERS += \
     src/chart.h \
     src/count_steps.h \
     src/dlgMemos.h \
+    src/dlgNotesList.h \
     src/dlgOneDrive.h \
     src/dlgReaderFun.h \
     src/dlgSetText.h \
@@ -88,6 +90,7 @@ HEADERS += \
 
 FORMS += \
     src/dlgMemos.ui \
+    src/dlgNotesList.ui \
     src/dlgOneDrive.ui \
     src/dlgReaderFun.ui \
     src/dlgSetText.ui \

@@ -56,6 +56,7 @@
 
 #include "dlgReaderFun.h"
 #include "src/dlgMemos.h"
+#include "src/dlgNotesList.h"
 #include "src/dlgOneDrive.h"
 #include "src/dlgSetText.h"
 #include "src/dlgfloatfun.h"
@@ -74,6 +75,7 @@
 #include "src/onedrive/dlgweb.h"
 #include "src/specialaccelerometerpedometer.h"
 #include "ui_dlgMemos.h"
+#include "ui_dlgNotesList.h"
 #include "ui_dlgReaderFun.h"
 #include "ui_dlgSetText.h"
 #include "ui_dlgfloatfun.h"
@@ -113,6 +115,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QString treeStyle = "QTreeWidget::item {height: 28;}";
   QWidget *m_widget;
   int mainHeight = 0;
   bool floatfun = true;
@@ -191,6 +194,7 @@ class MainWindow : public QMainWindow {
   dlgFloatFun *mydlgFloatFun;
   dlgReaderFun *mydlgReaderFun;
   dlgSetText *mydlgSetText;
+  dlgNotesList *mydlgNotesList;
 
   File *myfile;
 
@@ -483,6 +487,8 @@ class MainWindow : public QMainWindow {
 
   void on_timerMousePress();
 
+  void on_btnNotesList_clicked();
+
  private:
   int memoHeight;
   int frameChartHeight = 220;
@@ -492,11 +498,6 @@ class MainWindow : public QMainWindow {
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
 
-  QString treeStyle = "QTreeWidget::item {height: 28;}";
-  /*"QTreeWidget::item {background-color: #ffffff;color: #000000;border: "
-  "transparent;border-bottom: 1px solid #dbdbdb; padding: 2px;height: 20;}"
-  "QTreeWidget::item:hover {background-color: #f5f5f5;}"
-  "QTreeWidget::item:selected {border-left: 0px solid #777777;}";*/
   void init_ChartWidget();
   void init_Sensors();
   void init_UIWidget();
