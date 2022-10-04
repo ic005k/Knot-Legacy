@@ -747,20 +747,20 @@ void dlgMainNotes::highlightCurrentLine() {
   QTextLayout* lay = tc.block().layout();
   //当前光标在本BLOCK内的相对位置
   int iCurPos = tc.position() - tc.block().position();
-  //光标所在行
+  //光标所在行号
   int iCurrentLine = lay->lineForTextPosition(iCurPos).lineNumber() +
                      tc.block().firstLineNumber();
   int iLineCount = ui->editSource->document()->lineCount();
-  //或者
-  int iRowNum = tc.blockNumber() + 1;  //获取光标所在行的行号
+  //或者  获取光标所在行的行号
+  int iRowNum = tc.blockNumber() + 1;
 
   str1 = QString::number(iLineCount);
   str2 = QString::number(ui->editSource->textCursor().position());
   str3 = QString::number(iCurPos);
   str4 = QString::number(iRowNum);
-  ui->lblInfo->setText(tr("Row") + " : " + str4 + "  " + tr("Col") + " : " +
-                       str3 + "    " + tr("Total Lines") + " : " + str1 + "  " +
-                       tr("Cursor Pos") + " : " + str2);
+  ui->lblInfo->setText(tr("Row") + ":" + str4 + "  " + tr("Col") + ":" + str3 +
+                       "  " + tr("Total Lines") + ":" + str1 + "  " +
+                       tr("Cursor Pos") + ":" + str2);
 }
 
 void dlgMainNotes::onTextChange() {

@@ -18,7 +18,7 @@
     <number>2</number>
    </property>
    <property name="bottomMargin">
-    <number>1</number>
+    <number>12</number>
    </property>
    <item>
     <widget class="QFrame" name="frameFun">
@@ -615,6 +615,22 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="lblInfo">
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(18, 150, 219);
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Info</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QTextEdit" name="textEdit"/>
    </item>
    <item>
@@ -637,22 +653,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QLabel" name="lblInfo">
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(18, 150, 219);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Info</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
