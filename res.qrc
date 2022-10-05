@@ -71,5 +71,7 @@
         <file>res/font5.png</file>
         <file>res/link.png</file>
         <file>res/color.png</file>
+        <file>res/left.png</file>
+        <file>res/right.png</file>
     </qresource>
 </RCC>

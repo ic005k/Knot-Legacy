@@ -32,6 +32,13 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
   ui->editSource->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   // ui->editSource->setTextInteractionFlags(Qt::NoTextInteraction);
+  QPalette pt = palette();
+  pt.setBrush(QPalette::Text, Qt::black);
+  pt.setBrush(QPalette::Base, QColor(255, 255, 255));
+  pt.setBrush(QPalette::Highlight, Qt::red);
+  pt.setBrush(QPalette::HighlightedText, Qt::white);
+  ui->editSource->setPalette(pt);
+  ui->editSource->setStyleSheet("border:none");
 
   ui->btnEditSource->hide();
 
@@ -98,9 +105,19 @@ void dlgMainNotes::editVSBarValueChanged() {
     qDebug() << "max=" << maxSliderPosition << maxSliderMax;
   }
 
-  if (ui->editLineSn->isHidden()) return;
-  ui->editLineSn->verticalScrollBar()->setValue(
-      ui->editSource->verticalScrollBar()->value());
+  if (!ui->editLineSn->isHidden()) {
+    ui->editLineSn->verticalScrollBar()->setValue(
+        ui->editSource->verticalScrollBar()->value());
+  }
+
+  int curY = ui->editSource->viewport()->cursor().pos().y();
+  int y0 = ui->frameFun->y() + ui->frameFun->height() + 10;
+  int y1 = ui->editSource->y() + ui->editSource->height() + 10;
+  // if (curY < y0 || curY > y1)
+  //  ui->editSource->viewport()->cursor().setPos(0, (y1 - y0) / 2);
+  // ui->frameFun->setFocus();
+  qDebug() << "光标坐标  " << ui->editSource->viewport()->cursor().pos();
+  qDebug() << "上下区间  " << y0 << y1;
 }
 
 void dlgMainNotes::resizeEvent(QResizeEvent* event) {

@@ -30,6 +30,7 @@ INSTALLS += dataFiles
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dlgsetedittext.cpp \
     src/chart.cpp \
     src/dlgMemos.cpp \
     src/dlgNotesList.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
     src/dlgReaderFun.cpp \
     src/dlgSetText.cpp \
     src/dlgfloatfun.cpp \
+    src/dlgleft.cpp \
     src/dlglist.cpp \
     src/dlgloadpic.cpp \
     src/dlgnotes.cpp \
@@ -44,6 +46,7 @@ SOURCES += \
     src/dlgreader.cpp \
     src/dlgrename.cpp \
     src/dlgreport.cpp \
+    src/dlgright.cpp \
     src/dlgsettime.cpp \
     src/dlgsteps.cpp \
     src/dlgtodo.cpp \
@@ -59,6 +62,7 @@ SOURCES += \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
+    dlgsetedittext.h \
     src/chart.h \
     src/count_steps.h \
     src/dlgMemos.h \
@@ -67,6 +71,7 @@ HEADERS += \
     src/dlgReaderFun.h \
     src/dlgSetText.h \
     src/dlgfloatfun.h \
+    src/dlgleft.h \
     src/dlglist.h \
     src/dlgloadpic.h \
     src/dlgnotes.h \
@@ -74,6 +79,7 @@ HEADERS += \
     src/dlgreader.h \
     src/dlgrename.h \
     src/dlgreport.h \
+    src/dlgright.h \
     src/dlgsteps.h \
     src/dlgsettime.h \
     src/dlgtodo.h \
@@ -89,12 +95,14 @@ HEADERS += \
     src/specialaccelerometerpedometer.h
 
 FORMS += \
+    dlgsetedittext.ui \
     src/dlgMemos.ui \
     src/dlgNotesList.ui \
     src/dlgOneDrive.ui \
     src/dlgReaderFun.ui \
     src/dlgSetText.ui \
     src/dlgfloatfun.ui \
+    src/dlgleft.ui \
     src/dlglist.ui \
     src/dlgloadpic.ui \
     src/dlgnotes.ui \
@@ -102,6 +110,7 @@ FORMS += \
     src/dlgreader.ui \
     src/dlgrename.ui \
     src/dlgreport.ui \
+    src/dlgright.ui \
     src/dlgsettime.ui \
     src/dlgsteps.ui \
     src/dlgtodo.ui \

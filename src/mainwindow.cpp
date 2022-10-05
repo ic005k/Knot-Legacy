@@ -3635,6 +3635,7 @@ void MainWindow::init_UIWidget() {
   ui->frameOne->hide();
   ui->frameFunWeb->hide();
   ui->btnStorageInfo->hide();
+  ui->btnNotesList->hide();
 
   ui->frameMemo->hide();
   ui->frameMemo->setContentsMargins(1, 1, 1, 1);
