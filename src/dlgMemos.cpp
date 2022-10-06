@@ -15,6 +15,9 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->setupUi(this);
 
   m_SetEditText = new dlgSetEditText(this);
+  m_Left = new dlgLeft(this);
+  m_Right = new dlgRight(this);
+
   ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
   ui->editSource->installEventFilter(this);
@@ -321,6 +324,9 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
 
       timer->start(1300);
       ui->editSource->cursor().setPos(event->globalPos());
+
+      x_left = ui->editSource->cursor().pos().x();
+      y_left = ui->editSource->cursor().pos().y();
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
@@ -333,6 +339,7 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
           isFunShow = false;
 
           m_SetEditText->init(y1);
+          ui->editSource->setFocus();
 
           QTextCursor cursor = ui->editSource->textCursor();
           cursor.setPosition(start);
@@ -894,7 +901,11 @@ void dlgMainNotes::showFunPanel() {
     end = start + 2;
     QTextCursor cursor = ui->editSource->textCursor();
     cursor.setPosition(start);
+    x_left = ui->editSource->cursor().pos().x();
+    y_left = ui->editSource->cursor().pos().y();
     cursor.setPosition(end, QTextCursor::KeepAnchor);
+    x_right = ui->editSource->cursor().pos().x();
+    y_right = ui->editSource->cursor().pos().y();
     ui->editSource->setTextCursor(cursor);
 
     m_SetEditText->ui->lineEdit->setText(
@@ -902,6 +913,8 @@ void dlgMainNotes::showFunPanel() {
 
     if (m_SetEditText->ui->lineEdit->text() != "") {
       m_SetEditText->init(y1);
+
+      m_Left->init(x_left, y_left);
     }
   }
 }

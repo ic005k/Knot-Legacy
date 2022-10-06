@@ -12,6 +12,8 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
+#include "src/dlgleft.h"
+#include "src/dlgright.h"
 #include "src/dlgsetedittext.h"
 #include "src/smoothscrollbar.h"
 #include "ui_dlgsetedittext.h"
@@ -29,6 +31,8 @@ class dlgMainNotes : public QDialog {
   Ui::dlgMainNotes *ui;
 
   dlgSetEditText *m_SetEditText;
+  dlgLeft *m_Left;
+  dlgRight *m_Right;
   qreal textHeight;
   double maxSliderPosition, maxSliderMax, minSliderPosition, minSliderMax;
   bool isShow = false;
@@ -133,6 +137,7 @@ class dlgMainNotes : public QDialog {
   void showFunPanel();
 
  private:
+  int x_left, x_right, y_left, y_right;
   int y1;
   int start;
   int end;

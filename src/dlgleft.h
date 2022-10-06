@@ -7,16 +7,17 @@ namespace Ui {
 class dlgLeft;
 }
 
-class dlgLeft : public QDialog
-{
-    Q_OBJECT
+class dlgLeft : public QDialog {
+  Q_OBJECT
 
-public:
-    explicit dlgLeft(QWidget *parent = nullptr);
-    ~dlgLeft();
+ public:
+  explicit dlgLeft(QWidget *parent = nullptr);
+  ~dlgLeft();
 
-private:
-    Ui::dlgLeft *ui;
+  void init(int x, int y);
+
+ private:
+  Ui::dlgLeft *ui;
 };
 
-#endif // DLGLEFT_H
+#endif  // DLGLEFT_H
