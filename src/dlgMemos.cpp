@@ -322,12 +322,16 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
       else
         y1 = event->globalY() + a;
 
-      m_SetEditText->setFixedWidth(mw_one->width() * 2 / 3);
-      timer->start(1300);
+      m_SetEditText->setFixedWidth(mw_one->width() - 20);
+
       ui->editSource->cursor().setPos(event->globalPos());
 
       x_left = ui->editSource->cursor().pos().x();
       y_left = ui->editSource->cursor().pos().y();
+
+      if (pAndroidKeyboard->isVisible()) {
+        timer->start(1300);
+      }
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
