@@ -322,6 +322,7 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
       else
         y1 = event->globalY() + a;
 
+      m_SetEditText->setFixedWidth(mw_one->width() * 2 / 3);
       timer->start(1300);
       ui->editSource->cursor().setPos(event->globalPos());
 

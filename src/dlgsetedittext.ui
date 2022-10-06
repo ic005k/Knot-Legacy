@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
-    <height>72</height>
+    <width>306</width>
+    <height>105</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,10 +22,7 @@
 	border-color:rgb(251, 51, 51);		
 }</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2">
-   <property name="spacing">
-    <number>5</number>
-   </property>
+  <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
     <number>8</number>
    </property>
@@ -38,7 +35,19 @@
    <property name="bottomMargin">
     <number>8</number>
    </property>
-   <item>
+   <property name="spacing">
+    <number>8</number>
+   </property>
+   <item row="0" column="0" colspan="3">
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QToolButton" name="btnLeft1">
@@ -68,7 +77,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="1">
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
       <widget class="QToolButton" name="btnRight1">
@@ -98,7 +107,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="2">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
@@ -122,15 +131,6 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-       </widget>
-      </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -172,6 +172,10 @@
           </property>
          </widget>
         </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QToolButton" name="btnPaste">
           <property name="sizePolicy">
