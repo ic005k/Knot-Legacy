@@ -85,6 +85,9 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
   connect(ui->editSource, &QTextEdit::textChanged, this,
           &dlgMainNotes::onTextChange);
+
+  timer = new QTimer(this);
+  connect(timer, SIGNAL(timeout()), this, SLOT(showFunPanel()));
 }
 
 void dlgMainNotes::init() {
@@ -185,6 +188,7 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
 }
 
 void dlgMainNotes::on_btnBack_clicked() {
+  m_SetEditText->close();
   pAndroidKeyboard->hide();
   mw_one->Sleep(100);
 
@@ -308,12 +312,34 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
       isMousePress = true;
       iMouseMove = false;
       m_SetEditText->close();
+
+      int a = 30;
+      if (event->globalY() - a - m_SetEditText->height() >= 0)
+        y1 = event->globalY() - a - m_SetEditText->height();
+      else
+        y1 = event->globalY() + a;
+
+      timer->start(1300);
+      ui->editSource->cursor().setPos(event->globalPos());
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
       isMouseRelease = true;
       isMousePress = false;
       iMouseMove = false;
+
+      if (m_SetEditText->ui->lineEdit->text() != "") {
+        if (isFunShow) {
+          isFunShow = false;
+
+          m_SetEditText->init(y1);
+
+          QTextCursor cursor = ui->editSource->textCursor();
+          cursor.setPosition(start);
+          cursor.setPosition(end, QTextCursor::KeepAnchor);
+          ui->editSource->setTextCursor(cursor);
+        }
+      }
     }
 
     if (event->type() == QEvent::MouseMove) {
@@ -859,3 +885,23 @@ void dlgMainNotes::openMD(QString mdFileName) {}
 void dlgMainNotes::saveMD(QString mdFileName) {}
 
 void dlgMainNotes::on_btnPaste_clicked() { ui->editSource->paste(); }
+
+void dlgMainNotes::showFunPanel() {
+  timer->stop();
+  if (isMousePress) {
+    isFunShow = true;
+    start = ui->editSource->textCursor().position();
+    end = start + 2;
+    QTextCursor cursor = ui->editSource->textCursor();
+    cursor.setPosition(start);
+    cursor.setPosition(end, QTextCursor::KeepAnchor);
+    ui->editSource->setTextCursor(cursor);
+
+    m_SetEditText->ui->lineEdit->setText(
+        ui->editSource->textCursor().selectedText());
+
+    if (m_SetEditText->ui->lineEdit->text() != "") {
+      m_SetEditText->init(y1);
+    }
+  }
+}

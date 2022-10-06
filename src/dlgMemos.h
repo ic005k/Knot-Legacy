@@ -130,7 +130,14 @@ class dlgMainNotes : public QDialog {
 
   void on_btnPaste_clicked();
 
+  void showFunPanel();
+
  private:
+  int y1;
+  int start;
+  int end;
+  bool isFunShow;
+  QTimer *timer;
   bool isMouseRelease = false;
   bool isMousePress = false;
   bool iMouseMove = false;

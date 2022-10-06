@@ -10,11 +10,16 @@ dlgSetEditText::dlgSetEditText(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetEditText) {
   ui->setupUi(this);
   ui->lineEdit->setReadOnly(true);
+  ui->lineEdit->setText("");
 }
 
 dlgSetEditText::~dlgSetEditText() { delete ui; }
 
-void dlgSetEditText::on_btnClose_clicked() { close(); }
+void dlgSetEditText::on_btnClose_clicked() {
+  ui->lineEdit->clear();
+  mw_one->mydlgMainNotes->ui->editSource->textCursor().clearSelection();
+  close();
+}
 
 void dlgSetEditText::init(int y) {
   setGeometry(mw_one->geometry().x() + (mw_one->width() - this->width()) / 2, y,
@@ -37,6 +42,9 @@ bool dlgSetEditText::eventFilter(QObject* watch, QEvent* evn) {
 
 void dlgSetEditText::on_btnCopy_clicked() {
   mw_one->mydlgMainNotes->ui->editSource->copy();
+
+  ui->lineEdit->clear();
+  mw_one->mydlgMainNotes->ui->editSource->textCursor().clearSelection();
   close();
 }
 
