@@ -2,6 +2,7 @@
 #define DLGLEFT_H
 
 #include <QDialog>
+#include <QMouseEvent>
 
 namespace Ui {
 class dlgLeft;
@@ -16,8 +17,14 @@ class dlgLeft : public QDialog {
 
   void init(int x, int y);
 
+ protected:
+  bool eventFilter(QObject *obj, QEvent *evn) override;
+
  private:
   Ui::dlgLeft *ui;
+  bool isMouseRelease = false;
+  bool isMousePress = false;
+  bool iMouseMove = false;
 };
 
 #endif  // DLGLEFT_H

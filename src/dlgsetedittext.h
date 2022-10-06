@@ -32,6 +32,14 @@ class dlgSetEditText : public QDialog {
 
   void on_btnSetAll_clicked();
 
+  void on_btnLeft1_clicked();
+
+  void on_btnLeft0_clicked();
+
+  void on_btnRight1_clicked();
+
+  void on_btnRight0_clicked();
+
  private:
 };
 

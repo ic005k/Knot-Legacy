@@ -30,6 +30,8 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  int start;
+  int end;
   dlgSetEditText *m_SetEditText;
   dlgLeft *m_Left;
   dlgRight *m_Right;
@@ -62,6 +64,7 @@ class dlgMainNotes : public QDialog {
   void setVPos();
   void openMD(QString mdFileName);
   void saveMD(QString mdFileName);
+  void selectText(int start, int end);
  public slots:
   void editVSBarValueChanged();
 
@@ -139,8 +142,7 @@ class dlgMainNotes : public QDialog {
  private:
   int x_left, x_right, y_left, y_right;
   int y1;
-  int start;
-  int end;
+
   bool isFunShow;
   QTimer *timer;
   bool isMouseRelease = false;

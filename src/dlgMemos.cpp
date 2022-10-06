@@ -914,7 +914,18 @@ void dlgMainNotes::showFunPanel() {
     if (m_SetEditText->ui->lineEdit->text() != "") {
       m_SetEditText->init(y1);
 
-      m_Left->init(x_left, y_left);
+      // m_Left->init(x_left, y_left);
     }
   }
+}
+
+void dlgMainNotes::selectText(int start, int end) {
+  QTextCursor cursor = ui->editSource->textCursor();
+  cursor.setPosition(start);
+  x_left = ui->editSource->cursor().pos().x();
+  y_left = ui->editSource->cursor().pos().y();
+  cursor.setPosition(end, QTextCursor::KeepAnchor);
+  x_right = ui->editSource->cursor().pos().x();
+  y_right = ui->editSource->cursor().pos().y();
+  ui->editSource->setTextCursor(cursor);
 }
