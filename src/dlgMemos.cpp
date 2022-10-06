@@ -910,9 +910,9 @@ void dlgMainNotes::showFunPanel() {
 
     m_SetEditText->ui->lineEdit->setText(cursor.selectedText());
 
-    if (m_SetEditText->ui->lineEdit->text() != "") {
-      m_SetEditText->init(y1);
-    }
+    // if (m_SetEditText->ui->lineEdit->text() != "") {
+    m_SetEditText->init(y1);
+    //}
   }
 }
 
