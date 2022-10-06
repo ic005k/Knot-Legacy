@@ -6,7 +6,7 @@
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, fontname;
-extern bool isImport;
+extern bool isImport, isAndroid, isIOS;
 extern int fontSize;
 extern QRegularExpression regxNumber;
 
@@ -329,9 +329,12 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
       x_left = ui->editSource->cursor().pos().x();
       y_left = ui->editSource->cursor().pos().y();
 
-      if (pAndroidKeyboard->isVisible()) {
+      if (isAndroid) {
+        if (pAndroidKeyboard->isVisible()) {
+          timer->start(1300);
+        }
+      } else
         timer->start(1300);
-      }
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
@@ -676,24 +679,6 @@ void dlgMainNotes::setVPos() {
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
-}
-
-void dlgMainNotes::on_btnEditSource_clicked() {
-  pAndroidKeyboard->hide();
-  mw_one->Sleep(500);
-  saveMainNotes();
-
-  int vpos = ui->textEdit->verticalScrollBar()->sliderPosition();
-
-  QString str = mw_one->loadText(iniDir + "/memo/memo.md");
-  ui->editSource->setPlainText(str);
-
-  ui->btnEditSource->setEnabled(false);
-
-  ui->textEdit->hide();
-  ui->editSource->show();
-  ui->frameFun->show();
-  ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
 }
 
 void dlgMainNotes::on_btnInsertTable_clicked() {

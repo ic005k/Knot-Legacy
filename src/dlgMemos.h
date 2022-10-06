@@ -95,8 +95,6 @@ class dlgMainNotes : public QDialog {
 
   void on_btnPic_clicked();
 
-  void on_btnEditSource_clicked();
-
   void on_btnInsertTable_clicked();
 
   void on_editSource_redoAvailable(bool b);
