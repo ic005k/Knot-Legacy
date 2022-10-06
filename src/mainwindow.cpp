@@ -1733,6 +1733,9 @@ void MainWindow::saveNotes(int tabIndex) {
 void MainWindow::on_actionNotes_triggered() {
   showGrayWindows();
 
+  mydlgMainNotes->m_SetEditText->close();
+  mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgNotes);
+
   mydlgNotes->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                           this->width(), this->height() / 2);
 
@@ -1740,12 +1743,14 @@ void MainWindow::on_actionNotes_triggered() {
 
   mydlgNotes->ui->frameAbout->hide();
   mydlgNotes->ui->textEdit->setHidden(false);
-  mydlgNotes->setModal(true);
   mydlgNotes->ui->lblTitle->show();
+  mydlgNotes->ui->btnPaste->show();
   mydlgNotes->ui->lblTitle->setText(tr("Notes") + " : " +
                                     tabData->tabText(tabData->currentIndex()));
-  mydlgNotes->show();
+
   mydlgNotes->init_Notes();
+
+  mydlgNotes->show();
 }
 
 void MainWindow::on_btnNotes_clicked() { on_actionNotes_triggered(); }
@@ -2411,6 +2416,7 @@ void MainWindow::on_about() {
   mydlgNotes->ui->textEdit->setHidden(true);
 
   mydlgNotes->ui->lblTitle->hide();
+  mydlgNotes->ui->btnPaste->hide();
   mydlgNotes->ui->lblAbout->setText(textBrowser->toPlainText());
   mydlgNotes->ui->frameAbout->show();
   mydlgNotes->setGeometry(this->geometry().x(), this->geometry().y(),
@@ -4571,6 +4577,9 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
+  mydlgMainNotes->m_SetEditText->close();
+  mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgMainNotes);
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();

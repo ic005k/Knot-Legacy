@@ -308,72 +308,74 @@ void dlgMainNotes::setCursorPosition() {
 
 void dlgMainNotes::on_btnCloseText_clicked() {}
 
+void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QMouseEvent* event) {
+  if (event->type() == QEvent::MouseButtonPress) {
+    isMousePress = true;
+    iMouseMove = false;
+    m_SetEditText->close();
+
+    int a = 30;
+    if (event->globalY() - a - m_SetEditText->height() >= 0)
+      y1 = event->globalY() - a - m_SetEditText->height();
+    else
+      y1 = event->globalY() + a;
+
+    m_SetEditText->setFixedWidth(mw_one->width() - 20);
+
+    textEdit->cursor().setPos(event->globalPos());
+
+    if (isAndroid) {
+      if (pAndroidKeyboard->isVisible()) {
+        timer->start(1300);
+      }
+    } else
+      timer->start(1300);
+  }
+
+  if (event->type() == QEvent::MouseButtonRelease) {
+    isMouseRelease = true;
+    isMousePress = false;
+    iMouseMove = false;
+
+    if (m_SetEditText->ui->lineEdit->text() != "") {
+      if (isFunShow) {
+        isFunShow = false;
+
+        m_SetEditText->init(y1);
+        textEdit->setFocus();
+
+        QTextCursor cursor = textEdit->textCursor();
+        cursor.setPosition(start);
+        cursor.setPosition(end, QTextCursor::KeepAnchor);
+        textEdit->setTextCursor(cursor);
+      }
+    }
+  }
+
+  if (event->type() == QEvent::MouseMove) {
+    iMouseMove = true;
+    if (isMousePress) {
+      QString str = textEdit->textCursor().selectedText().trimmed();
+      m_SetEditText->ui->lineEdit->setText(str);
+      if (str != "") {
+        int y1;
+        int a = 30;
+        if (event->globalY() - a - m_SetEditText->height() >= 0)
+          y1 = event->globalY() - a - m_SetEditText->height();
+        else
+          y1 = event->globalY() + a;
+
+        m_SetEditText->init(y1);
+      }
+    }
+  }
+}
+
 bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
+
   if (obj == ui->editSource->viewport()) {
-    if (event->type() == QEvent::MouseButtonPress) {
-      isMousePress = true;
-      iMouseMove = false;
-      m_SetEditText->close();
-
-      int a = 30;
-      if (event->globalY() - a - m_SetEditText->height() >= 0)
-        y1 = event->globalY() - a - m_SetEditText->height();
-      else
-        y1 = event->globalY() + a;
-
-      m_SetEditText->setFixedWidth(mw_one->width() - 20);
-
-      ui->editSource->cursor().setPos(event->globalPos());
-
-      x_left = ui->editSource->cursor().pos().x();
-      y_left = ui->editSource->cursor().pos().y();
-
-      if (isAndroid) {
-        if (pAndroidKeyboard->isVisible()) {
-          timer->start(1300);
-        }
-      } else
-        timer->start(1300);
-    }
-
-    if (event->type() == QEvent::MouseButtonRelease) {
-      isMouseRelease = true;
-      isMousePress = false;
-      iMouseMove = false;
-
-      if (m_SetEditText->ui->lineEdit->text() != "") {
-        if (isFunShow) {
-          isFunShow = false;
-
-          m_SetEditText->init(y1);
-          ui->editSource->setFocus();
-
-          QTextCursor cursor = ui->editSource->textCursor();
-          cursor.setPosition(start);
-          cursor.setPosition(end, QTextCursor::KeepAnchor);
-          ui->editSource->setTextCursor(cursor);
-        }
-      }
-    }
-
-    if (event->type() == QEvent::MouseMove) {
-      iMouseMove = true;
-      if (isMousePress) {
-        QString str = ui->editSource->textCursor().selectedText().trimmed();
-        m_SetEditText->ui->lineEdit->setText(str);
-        if (str != "") {
-          int y1;
-          int a = 30;
-          if (event->globalY() - a - m_SetEditText->height() >= 0)
-            y1 = event->globalY() - a - m_SetEditText->height();
-          else
-            y1 = event->globalY() + a;
-
-          m_SetEditText->init(y1);
-        }
-      }
-    }
+    getEditPanel(ui->editSource, event);
   }
 
   if (evn->type() == QEvent::KeyPress) {
@@ -887,35 +889,46 @@ void dlgMainNotes::showFunPanel() {
   timer->stop();
   if (isMousePress) {
     isFunShow = true;
-    start = ui->editSource->textCursor().position();
-    end = start + 2;
-    QTextCursor cursor = ui->editSource->textCursor();
-    cursor.setPosition(start);
-    x_left = ui->editSource->cursor().pos().x();
-    y_left = ui->editSource->cursor().pos().y();
-    cursor.setPosition(end, QTextCursor::KeepAnchor);
-    x_right = ui->editSource->cursor().pos().x();
-    y_right = ui->editSource->cursor().pos().y();
-    ui->editSource->setTextCursor(cursor);
 
-    m_SetEditText->ui->lineEdit->setText(
-        ui->editSource->textCursor().selectedText());
+    QTextCursor cursor;
+    if (!isHidden()) start = ui->editSource->textCursor().position();
+    if (!mw_one->mydlgNotes->isHidden())
+      start = mw_one->mydlgNotes->ui->textEdit->textCursor().position();
+
+    end = start + 2;
+
+    if (!isHidden()) cursor = ui->editSource->textCursor();
+    if (!mw_one->mydlgNotes->isHidden())
+      cursor = mw_one->mydlgNotes->ui->textEdit->textCursor();
+
+    cursor.setPosition(start);
+    cursor.setPosition(end, QTextCursor::KeepAnchor);
+
+    if (!isHidden()) ui->editSource->setTextCursor(cursor);
+    if (!mw_one->mydlgNotes->isHidden())
+      mw_one->mydlgNotes->ui->textEdit->setTextCursor(cursor);
+
+    m_SetEditText->ui->lineEdit->setText(cursor.selectedText());
 
     if (m_SetEditText->ui->lineEdit->text() != "") {
       m_SetEditText->init(y1);
-
-      // m_Left->init(x_left, y_left);
     }
   }
 }
 
 void dlgMainNotes::selectText(int start, int end) {
-  QTextCursor cursor = ui->editSource->textCursor();
+  QTextCursor cursor;
+
+  if (!isHidden()) cursor = ui->editSource->textCursor();
+  if (!mw_one->mydlgNotes->isHidden())
+    cursor = mw_one->mydlgNotes->ui->textEdit->textCursor();
+
   cursor.setPosition(start);
-  x_left = ui->editSource->cursor().pos().x();
-  y_left = ui->editSource->cursor().pos().y();
   cursor.setPosition(end, QTextCursor::KeepAnchor);
-  x_right = ui->editSource->cursor().pos().x();
-  y_right = ui->editSource->cursor().pos().y();
-  ui->editSource->setTextCursor(cursor);
+
+  if (!isHidden()) ui->editSource->setTextCursor(cursor);
+  if (!mw_one->mydlgNotes->isHidden())
+    mw_one->mydlgNotes->ui->textEdit->setTextCursor(cursor);
+
+  m_SetEditText->ui->lineEdit->setText(cursor.selectedText());
 }

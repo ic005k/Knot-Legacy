@@ -34,6 +34,8 @@ class dlgNotes : public QDialog {
 
   void on_btnMirrorDL_clicked();
 
+  void on_btnPaste_clicked();
+
  private:
 };
 

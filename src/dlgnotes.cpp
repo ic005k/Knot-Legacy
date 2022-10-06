@@ -11,7 +11,10 @@ extern int curPos;
 dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
   ui->setupUi(this);
 
+  setModal(true);
   this->installEventFilter(this);
+  ui->textEdit->installEventFilter(this);
+  ui->textEdit->viewport()->installEventFilter(this);
 
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(ui->textEdit);
@@ -31,7 +34,7 @@ dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
 dlgNotes::~dlgNotes() { delete ui; }
 
 void dlgNotes::on_btnBack_clicked() {
-  mw_one->closeGrayWindows();
+  mw_one->mydlgMainNotes->m_SetEditText->close();
 
   noteText = ui->textEdit->toPlainText();
   curPos = ui->textEdit->textCursor().position();
@@ -43,11 +46,18 @@ void dlgNotes::on_btnBack_clicked() {
   if (!ui->textEdit->isHidden()) mw_one->startSave("notes");
   ui->textEdit->clear();
   close();
+  mw_one->closeGrayWindows();
 }
 
 void dlgNotes::on_textEdit_textChanged() {}
 
 bool dlgNotes::eventFilter(QObject* obj, QEvent* evn) {
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);
+
+  if (obj == ui->textEdit->viewport()) {
+    mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, event);
+  }
+
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -106,3 +116,5 @@ void dlgNotes::on_btnMirrorDL_clicked() {
   QUrl url(str);
   QDesktopServices::openUrl(url);
 }
+
+void dlgNotes::on_btnPaste_clicked() { ui->textEdit->paste(); }

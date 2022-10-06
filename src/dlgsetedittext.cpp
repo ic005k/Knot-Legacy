@@ -41,55 +41,67 @@ bool dlgSetEditText::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void dlgSetEditText::on_btnCopy_clicked() {
-  mw_one->mydlgMainNotes->ui->editSource->copy();
+  if (!mw_one->mydlgMainNotes->isHidden())
+    mw_one->mydlgMainNotes->ui->editSource->copy();
+
+  if (!mw_one->mydlgNotes->isHidden()) mw_one->mydlgNotes->ui->textEdit->copy();
 
   ui->lineEdit->clear();
-  mw_one->mydlgMainNotes->ui->editSource->textCursor().clearSelection();
+
   close();
 }
 
 void dlgSetEditText::on_btnCut_clicked() {
-  mw_one->mydlgMainNotes->ui->editSource->cut();
+  if (!mw_one->mydlgMainNotes->isHidden())
+    mw_one->mydlgMainNotes->ui->editSource->cut();
+
+  if (!mw_one->mydlgNotes->isHidden()) mw_one->mydlgNotes->ui->textEdit->cut();
+
   close();
 }
 
 void dlgSetEditText::on_btnPaste_clicked() {
-  mw_one->mydlgMainNotes->ui->editSource->paste();
+  if (!mw_one->mydlgMainNotes->isHidden())
+    mw_one->mydlgMainNotes->ui->editSource->paste();
+
+  if (!mw_one->mydlgNotes->isHidden())
+    mw_one->mydlgNotes->ui->textEdit->paste();
+
   close();
 }
 
 void dlgSetEditText::on_btnSetAll_clicked() {
-  mw_one->mydlgMainNotes->ui->editSource->selectAll();
+  if (!mw_one->mydlgMainNotes->isHidden())
+    mw_one->mydlgMainNotes->ui->editSource->selectAll();
+
+  if (!mw_one->mydlgNotes->isHidden())
+    mw_one->mydlgNotes->ui->textEdit->selectAll();
 }
 
 void dlgSetEditText::on_btnLeft1_clicked() {
   mw_one->mydlgMainNotes->start--;
+  if (mw_one->mydlgMainNotes->start < 0) mw_one->mydlgMainNotes->start = 0;
+
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
-  ui->lineEdit->setText(
-      mw_one->mydlgMainNotes->ui->editSource->textCursor().selectedText());
 }
 
 void dlgSetEditText::on_btnLeft0_clicked() {
   mw_one->mydlgMainNotes->start++;
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
-  ui->lineEdit->setText(
-      mw_one->mydlgMainNotes->ui->editSource->textCursor().selectedText());
 }
 
 void dlgSetEditText::on_btnRight1_clicked() {
   mw_one->mydlgMainNotes->end++;
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
-  ui->lineEdit->setText(
-      mw_one->mydlgMainNotes->ui->editSource->textCursor().selectedText());
 }
 
 void dlgSetEditText::on_btnRight0_clicked() {
   mw_one->mydlgMainNotes->end--;
+  if (mw_one->mydlgMainNotes->end < 0) mw_one->mydlgMainNotes->end = 0;
+
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
-  ui->lineEdit->setText(
-      mw_one->mydlgMainNotes->ui->editSource->textCursor().selectedText());
 }
