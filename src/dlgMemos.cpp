@@ -14,8 +14,11 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
   ui->setupUi(this);
 
+  m_SetEditText = new dlgSetEditText(this);
   ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
+  ui->editSource->installEventFilter(this);
+  ui->editSource->viewport()->installEventFilter(this);
   this->setModal(true);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
@@ -39,6 +42,10 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   pt.setBrush(QPalette::HighlightedText, Qt::white);
   ui->editSource->setPalette(pt);
   ui->editSource->setStyleSheet("border:none");
+  QFont f = this->font();
+  f.setPointSize(fontSize - 1);
+  ui->lblInfo->setFont(f);
+  ui->frameFun->setFont(f);
 
   ui->btnEditSource->hide();
 
@@ -295,6 +302,39 @@ void dlgMainNotes::setCursorPosition() {
 void dlgMainNotes::on_btnCloseText_clicked() {}
 
 bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);
+  if (obj == ui->editSource->viewport()) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      isMousePress = true;
+      iMouseMove = false;
+      m_SetEditText->close();
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      isMouseRelease = true;
+      isMousePress = false;
+      iMouseMove = false;
+    }
+
+    if (event->type() == QEvent::MouseMove) {
+      iMouseMove = true;
+      if (isMousePress) {
+        QString str = ui->editSource->textCursor().selectedText().trimmed();
+        m_SetEditText->ui->lineEdit->setText(str);
+        if (str != "") {
+          int y1;
+          int a = 30;
+          if (event->globalY() - a - m_SetEditText->height() >= 0)
+            y1 = event->globalY() - a - m_SetEditText->height();
+          else
+            y1 = event->globalY() + a;
+
+          m_SetEditText->init(y1);
+        }
+      }
+    }
+  }
+
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -775,9 +815,9 @@ void dlgMainNotes::highlightCurrentLine() {
   str2 = QString::number(ui->editSource->textCursor().position());
   str3 = QString::number(iCurPos);
   str4 = QString::number(iRowNum);
-  ui->lblInfo->setText(tr("Row") + ":" + str4 + "  " + tr("Col") + ":" + str3 +
-                       "  " + tr("Total Lines") + ":" + str1 + "  " +
-                       tr("Cursor Pos") + ":" + str2);
+  ui->lblInfo->setText(tr("R") + ":" + str4 + "  " + tr("C") + ":" + str3 +
+                       "  " + tr("TR") + ":" + str1 + "  " + tr("CP") + ":" +
+                       str2);
 }
 
 void dlgMainNotes::onTextChange() {
@@ -817,3 +857,5 @@ void dlgMainNotes::onTextChange() {
 void dlgMainNotes::openMD(QString mdFileName) {}
 
 void dlgMainNotes::saveMD(QString mdFileName) {}
+
+void dlgMainNotes::on_btnPaste_clicked() { ui->editSource->paste(); }

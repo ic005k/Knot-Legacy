@@ -12,7 +12,10 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
+#include "src/dlgsetedittext.h"
 #include "src/smoothscrollbar.h"
+#include "ui_dlgsetedittext.h"
+
 namespace Ui {
 class dlgMainNotes;
 }
@@ -25,6 +28,7 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  dlgSetEditText *m_SetEditText;
   qreal textHeight;
   double maxSliderPosition, maxSliderMax, minSliderPosition, minSliderMax;
   bool isShow = false;
@@ -124,7 +128,12 @@ class dlgMainNotes : public QDialog {
 
   void onTextChange();
 
+  void on_btnPaste_clicked();
+
  private:
+  bool isMouseRelease = false;
+  bool isMousePress = false;
+  bool iMouseMove = false;
   QWidget *lineNumberArea;
   int lastLine;
   int newHeight = 0;

@@ -14,6 +14,9 @@
    <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>2</number>
+   </property>
    <item>
     <widget class="QFrame" name="frameFun">
      <property name="minimumSize">
@@ -609,20 +612,32 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="lblInfo">
-     <property name="font">
-      <font>
-       <pointsize>13</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(18, 150, 219);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Info</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QToolButton" name="btnPaste">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Paste</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblInfo">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(18, 15, 21);
+color: rgb(25, 255, 25);</string>
+       </property>
+       <property name="text">
+        <string>Info</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QTextEdit" name="textEdit"/>
