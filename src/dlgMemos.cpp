@@ -270,6 +270,7 @@ void dlgMainNotes::on_btnCloseText_clicked() {}
 
 void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
+  byTextEdit = textEdit;
 
   if (event->type() == QEvent::MouseButtonPress) {
     if (event->button() == Qt::LeftButton) {
@@ -858,28 +859,12 @@ void dlgMainNotes::showFunPanel() {
     isFunShow = true;
 
     QTextCursor cursor;
-    if (!isHidden()) start = ui->editSource->textCursor().position();
-    if (!mw_one->mydlgNotes->isHidden())
-      start = mw_one->mydlgNotes->ui->textEdit->textCursor().position();
-    if (!mw_one->mydlgTodo->isHidden())
-      start = mw_one->mydlgTodo->ui->textEdit->textCursor().position();
-
+    start = byTextEdit->textCursor().position();
     end = start + 2;
-
-    if (!isHidden()) cursor = ui->editSource->textCursor();
-    if (!mw_one->mydlgNotes->isHidden())
-      cursor = mw_one->mydlgNotes->ui->textEdit->textCursor();
-    if (!mw_one->mydlgTodo->isHidden())
-      cursor = mw_one->mydlgTodo->ui->textEdit->textCursor();
-
+    cursor = byTextEdit->textCursor();
     cursor.setPosition(start);
     cursor.setPosition(end, QTextCursor::KeepAnchor);
-
-    if (!isHidden()) ui->editSource->setTextCursor(cursor);
-    if (!mw_one->mydlgNotes->isHidden())
-      mw_one->mydlgNotes->ui->textEdit->setTextCursor(cursor);
-    if (!mw_one->mydlgTodo->isHidden())
-      mw_one->mydlgTodo->ui->textEdit->setTextCursor(cursor);
+    byTextEdit->setTextCursor(cursor);
 
     m_SetEditText->ui->lineEdit->setText(cursor.selectedText());
 
@@ -889,22 +874,10 @@ void dlgMainNotes::showFunPanel() {
 
 void dlgMainNotes::selectText(int start, int end) {
   QTextCursor cursor;
-
-  if (!isHidden()) cursor = ui->editSource->textCursor();
-  if (!mw_one->mydlgNotes->isHidden())
-    cursor = mw_one->mydlgNotes->ui->textEdit->textCursor();
-  if (!mw_one->mydlgTodo->isHidden())
-    cursor = mw_one->mydlgTodo->ui->textEdit->textCursor();
-
+  cursor = byTextEdit->textCursor();
   cursor.setPosition(start);
   cursor.setPosition(end, QTextCursor::KeepAnchor);
-
-  if (!isHidden()) ui->editSource->setTextCursor(cursor);
-  if (!mw_one->mydlgNotes->isHidden())
-    mw_one->mydlgNotes->ui->textEdit->setTextCursor(cursor);
-  if (!mw_one->mydlgTodo->isHidden())
-    mw_one->mydlgTodo->ui->textEdit->setTextCursor(cursor);
-
+  byTextEdit->setTextCursor(cursor);
   m_SetEditText->ui->lineEdit->setText(cursor.selectedText());
 }
 

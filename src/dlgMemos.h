@@ -31,6 +31,8 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  QTextEdit *byTextEdit;
+  QLineEdit *byLineEdit;
   int androidKeyH;
   int start;
   int end;

@@ -11,9 +11,6 @@ dlgSetEditText::dlgSetEditText(QWidget* parent)
   ui->setupUi(this);
   ui->lineEdit->setReadOnly(true);
 
-  // this->setObjectName("myframe");
-  // this->setStyleSheet("QFrame#myframe{border-image:url(:/res/b.png)}");
-
   this->installEventFilter(this);
   ui->btnLeft0->installEventFilter(this);
   ui->btnLeft1->installEventFilter(this);
@@ -100,12 +97,7 @@ bool dlgSetEditText::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void dlgSetEditText::on_btnCopy_clicked() {
-  if (!mw_one->mydlgMainNotes->isHidden())
-    mw_one->mydlgMainNotes->ui->editSource->copy();
-
-  if (!mw_one->mydlgNotes->isHidden()) mw_one->mydlgNotes->ui->textEdit->copy();
-
-  if (!mw_one->mydlgTodo->isHidden()) mw_one->mydlgTodo->ui->textEdit->copy();
+  mw_one->mydlgMainNotes->byTextEdit->copy();
 
   ui->lineEdit->clear();
 
@@ -113,38 +105,19 @@ void dlgSetEditText::on_btnCopy_clicked() {
 }
 
 void dlgSetEditText::on_btnCut_clicked() {
-  if (!mw_one->mydlgMainNotes->isHidden()) {
-    mw_one->mydlgMainNotes->ui->editSource->cut();
-  }
-
-  if (!mw_one->mydlgNotes->isHidden()) mw_one->mydlgNotes->ui->textEdit->cut();
-
-  if (!mw_one->mydlgTodo->isHidden()) mw_one->mydlgTodo->ui->textEdit->cut();
+  mw_one->mydlgMainNotes->byTextEdit->cut();
 
   close();
 }
 
 void dlgSetEditText::on_btnPaste_clicked() {
-  if (!mw_one->mydlgMainNotes->isHidden())
-    mw_one->mydlgMainNotes->ui->editSource->paste();
-
-  if (!mw_one->mydlgNotes->isHidden())
-    mw_one->mydlgNotes->ui->textEdit->paste();
-
-  if (!mw_one->mydlgTodo->isHidden()) mw_one->mydlgTodo->ui->textEdit->paste();
+  mw_one->mydlgMainNotes->byTextEdit->paste();
 
   close();
 }
 
 void dlgSetEditText::on_btnSetAll_clicked() {
-  if (!mw_one->mydlgMainNotes->isHidden())
-    mw_one->mydlgMainNotes->ui->editSource->selectAll();
-
-  if (!mw_one->mydlgNotes->isHidden())
-    mw_one->mydlgNotes->ui->textEdit->selectAll();
-
-  if (!mw_one->mydlgTodo->isHidden())
-    mw_one->mydlgTodo->ui->textEdit->selectAll();
+  mw_one->mydlgMainNotes->byTextEdit->selectAll();
 }
 
 void dlgSetEditText::on_btnLeft1_clicked() {
