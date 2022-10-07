@@ -121,6 +121,10 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
     if (this->height() != mw_one->mainHeight) {
       newHeight = this->height();
       androidKeyH = mw_one->mainHeight - newHeight;
+
+      QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
+      Reg.setValue("KeyHeight", androidKeyH);
+      Reg.setValue("newHeight", newHeight);
     }
 
     if (!ui->editSource->isHidden()) {
@@ -144,7 +148,10 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
 }
 
 void dlgMainNotes::on_btnBack_clicked() {
-  m_SetEditText->close();
+  if (!m_SetEditText->isHidden()) {
+    m_SetEditText->close();
+    return;
+  }
   pAndroidKeyboard->hide();
   mw_one->Sleep(100);
 
@@ -351,6 +358,18 @@ void dlgMainNotes::on_KVChanged() {
   if (!pAndroidKeyboard->isVisible()) {
     this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                       mw_one->width(), mw_one->mainHeight);
+  } else {
+    QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
+    int newh = Reg.value("newHeight").toInt();
+    if (newh > 0) {
+      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                        mw_one->width(), newh);
+      if (!m_SetEditText->isHidden()) {
+        m_SetEditText->setGeometry(m_SetEditText->geometry().x(), 10,
+                                   m_SetEditText->width(),
+                                   m_SetEditText->height());
+      }
+    }
   }
 }
 

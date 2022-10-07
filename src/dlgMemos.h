@@ -8,6 +8,7 @@
 #include <QImageReader>
 #include <QInputMethod>
 #include <QPlainTextEdit>
+#include <QSettings>
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QTextDocumentFragment>
@@ -67,6 +68,7 @@ class dlgMainNotes : public QDialog {
   void selectText(int start, int end);
 
   void getEditPanel(QTextEdit *textEdit, QEvent *evn);
+
  public slots:
   void editVSBarValueChanged();
 
