@@ -1,7 +1,7 @@
 package com.x;
 
 import org.qtproject.qt5.android.bindings.QtActivity;
-import org.qtproject.qt5.android.bindings.QtApplication;
+//import org.qtproject.qt5.android.bindings.QtApplication;
 
 import android.app.Application;
 
@@ -530,7 +530,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public void onStop() {
         System.out.println("onStop...");
         super.onStop();
-        QtApplication.invokeDelegate();
+        //QtApplication.invokeDelegate();
     }
 
     @Override
@@ -546,7 +546,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
-        QtApplication.invokeDelegate();
+        //QtApplication.invokeDelegate();
     }
 
     @Override

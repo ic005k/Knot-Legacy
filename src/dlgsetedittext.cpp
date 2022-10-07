@@ -10,10 +10,21 @@ dlgSetEditText::dlgSetEditText(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetEditText) {
   ui->setupUi(this);
   ui->lineEdit->setReadOnly(true);
+
+  // this->setObjectName("myframe");
+  // this->setStyleSheet("QFrame#myframe{border-image:url(:/res/b.png)}");
+
+  this->installEventFilter(this);
   ui->btnLeft0->installEventFilter(this);
   ui->btnLeft1->installEventFilter(this);
   ui->btnRight0->installEventFilter(this);
   ui->btnRight1->installEventFilter(this);
+  ui->btnClose->installEventFilter(this);
+  ui->btnCopy->installEventFilter(this);
+  ui->btnCut->installEventFilter(this);
+  ui->btnPaste->installEventFilter(this);
+  ui->btnSetAll->installEventFilter(this);
+  ui->lineEdit->installEventFilter(this);
 
   int a = 500;
   int b = 50;
@@ -52,6 +63,29 @@ void dlgSetEditText::init(int y) {
 bool dlgSetEditText::eventFilter(QObject* watch, QEvent* evn) {
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
   if (event->type() == QEvent::MouseButtonPress) {
+    isMousePress = true;
+    isMouseRelease = false;
+  }
+
+  if (event->type() == QEvent::MouseButtonRelease) {
+    isMousePress = false;
+    isMouseMove = false;
+    isMouseRelease = true;
+  }
+
+  if (event->type() == QEvent::MouseMove) {
+    isMouseMove = true;
+
+    if (isMousePress) {
+      if (watch == this || watch == ui->btnClose || watch == ui->btnCopy ||
+          watch == ui->btnPaste || watch == ui->btnCut ||
+          watch == ui->btnSetAll || watch == ui->lineEdit) {
+        int y = event->globalY();
+        if (y <= 0) y = 0;
+        if (y >= mw_one->height() - height()) y = mw_one->height() - height();
+        this->setGeometry(geometry().x(), y, width(), height());
+      }
+    }
   }
 
   if (evn->type() == QEvent::KeyPress) {

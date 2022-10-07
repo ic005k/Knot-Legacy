@@ -1,7 +1,7 @@
 package com.x;
 
-import org.qtproject.qt5.android.bindings.QtActivity;
-import org.qtproject.qt5.android.bindings.QtApplication;
+//import org.qtproject.qt5.android.bindings.QtActivity;
+//import org.qtproject.qt5.android.bindings.QtApplication;
 
 import android.content.IntentFilter;
 import android.content.Intent;
@@ -238,7 +238,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
 
-        QtApplication.invokeDelegate();
+        //QtApplication.invokeDelegate();
 
     }
 

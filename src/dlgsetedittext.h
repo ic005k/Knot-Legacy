@@ -41,6 +41,9 @@ class dlgSetEditText : public QDialog {
   void on_btnRight0_clicked();
 
  private:
+  bool isMouseRelease = false;
+  bool isMousePress = false;
+  bool isMouseMove = false;
 };
 
 #endif  // DLGSETEDITTEXT_H
