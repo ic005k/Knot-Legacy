@@ -4604,10 +4604,6 @@ void MainWindow::on_btnEdit_clicked() {
 
   mydlgMainNotes->isShow = true;
   mainHeight = this->height();
-  mydlgMainNotes->maxSliderMax =
-      mydlgMainNotes->ui->editSource->verticalScrollBar()->maximum();
-  mydlgMainNotes->maxSliderPosition =
-      mydlgMainNotes->ui->editSource->verticalScrollBar()->sliderPosition();
 }
 
 void MainWindow::on_btnCode_clicked() {

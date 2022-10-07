@@ -113,8 +113,9 @@ void dlgSetEditText::on_btnCopy_clicked() {
 }
 
 void dlgSetEditText::on_btnCut_clicked() {
-  if (!mw_one->mydlgMainNotes->isHidden())
+  if (!mw_one->mydlgMainNotes->isHidden()) {
     mw_one->mydlgMainNotes->ui->editSource->cut();
+  }
 
   if (!mw_one->mydlgNotes->isHidden()) mw_one->mydlgNotes->ui->textEdit->cut();
 

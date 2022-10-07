@@ -30,13 +30,13 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  int androidKeyH;
   int start;
   int end;
   dlgSetEditText *m_SetEditText;
   dlgLeft *m_Left;
   dlgRight *m_Right;
   qreal textHeight;
-  double maxSliderPosition, maxSliderMax, minSliderPosition, minSliderMax;
   bool isShow = false;
   QString textMemo;
   void saveMainNotes();
@@ -139,6 +139,8 @@ class dlgMainNotes : public QDialog {
 
   void showFunPanel();
 
+  void on_btnTest_clicked();
+
  private:
   int x_left, x_right, y_left, y_right;
   int y1;
@@ -151,7 +153,7 @@ class dlgMainNotes : public QDialog {
   QWidget *lineNumberArea;
   int lastLine;
   int newHeight = 0;
-  bool one = false;
+
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   SmoothScrollBar *vScrollBar;
   void wheelEvent(QWheelEvent *e) override;  //捕获鼠标滚轮事件

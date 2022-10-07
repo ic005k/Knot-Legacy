@@ -13,6 +13,7 @@ extern QRegularExpression regxNumber;
 dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
   ui->setupUi(this);
+  ui->btnTest->hide();
 
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);
@@ -107,30 +108,10 @@ dlgMainNotes::~dlgMainNotes() { delete ui; }
 void dlgMainNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
 void dlgMainNotes::editVSBarValueChanged() {
-  if (pAndroidKeyboard->isVisible()) {
-    minSliderMax = ui->editSource->verticalScrollBar()->maximum();
-    minSliderPosition = ui->editSource->verticalScrollBar()->sliderPosition();
-    qDebug() << "min=" << minSliderPosition << minSliderMax;
-  } else {
-    maxSliderMax = ui->editSource->verticalScrollBar()->maximum();
-    maxSliderPosition = ui->editSource->verticalScrollBar()->sliderPosition();
-
-    qDebug() << "max=" << maxSliderPosition << maxSliderMax;
-  }
-
   if (!ui->editLineSn->isHidden()) {
     ui->editLineSn->verticalScrollBar()->setValue(
         ui->editSource->verticalScrollBar()->value());
   }
-
-  int curY = ui->editSource->viewport()->cursor().pos().y();
-  int y0 = ui->frameFun->y() + ui->frameFun->height() + 10;
-  int y1 = ui->editSource->y() + ui->editSource->height() + 10;
-  // if (curY < y0 || curY > y1)
-  //  ui->editSource->viewport()->cursor().setPos(0, (y1 - y0) / 2);
-  // ui->frameFun->setFocus();
-  qDebug() << "光标坐标  " << ui->editSource->viewport()->cursor().pos();
-  qDebug() << "上下区间  " << y0 << y1;
 }
 
 void dlgMainNotes::resizeEvent(QResizeEvent* event) {
@@ -139,48 +120,20 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   if (isShow) {
     if (this->height() != mw_one->mainHeight) {
       newHeight = this->height();
-    }
-
-    if (!ui->textEdit->isHidden()) {
-      if (pAndroidKeyboard->isVisible()) {
-        this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                          mw_one->width(), newHeight);
-
-        minSliderMax = ui->textEdit->verticalScrollBar()->maximum();
-        minSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
-
-        minSliderPosition = minSliderMax * maxSliderPosition / maxSliderMax;
-        ui->textEdit->verticalScrollBar()->setSliderPosition(minSliderPosition);
-      } else {
-        maxSliderMax = ui->textEdit->verticalScrollBar()->maximum();
-        maxSliderPosition = ui->textEdit->verticalScrollBar()->sliderPosition();
-
-        maxSliderPosition = maxSliderMax * minSliderPosition / minSliderMax;
-        ui->textEdit->verticalScrollBar()->setSliderPosition(maxSliderPosition);
-      }
+      androidKeyH = mw_one->mainHeight - newHeight;
     }
 
     if (!ui->editSource->isHidden()) {
       if (pAndroidKeyboard->isVisible()) {
         this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                           mw_one->width(), newHeight);
+      }
 
-        minSliderMax = ui->editSource->verticalScrollBar()->maximum();
-        minSliderPosition =
-            ui->editSource->verticalScrollBar()->sliderPosition();
-
-        minSliderPosition = minSliderMax * maxSliderPosition / maxSliderMax;
-        ui->editSource->verticalScrollBar()->setSliderPosition(
-            minSliderPosition);
-
-      } else {
-        maxSliderMax = ui->editSource->verticalScrollBar()->maximum();
-        maxSliderPosition =
-            ui->editSource->verticalScrollBar()->sliderPosition();
-
-        maxSliderPosition = maxSliderMax * minSliderPosition / minSliderMax;
-        ui->editSource->verticalScrollBar()->setSliderPosition(
-            maxSliderPosition);
+      if (this->height() == newHeight) {
+        int p = ui->editSource->textCursor().position();
+        QTextCursor tmpCursor = ui->editSource->textCursor();
+        tmpCursor.setPosition(p);
+        ui->editSource->setTextCursor(tmpCursor);
       }
     }
   }
@@ -707,12 +660,6 @@ void dlgMainNotes::on_btnInsertTable_clicked() {
     for (int j = 0; j < row; j++) {
       ui->editSource->insertPlainText(strRow + "\n");
     }
-  } else {
-    // ui->textEdit->insertPlainText(strCol + "\n" + strHead + "\n");
-
-    // for (int j = 0; j < row; j++) {
-    //   ui->textEdit->insertPlainText(strRow + "\n");
-    // }
   }
 }
 
@@ -940,4 +887,16 @@ void dlgMainNotes::selectText(int start, int end) {
     mw_one->mydlgTodo->ui->textEdit->setTextCursor(cursor);
 
   m_SetEditText->ui->lineEdit->setText(cursor.selectedText());
+}
+
+void dlgMainNotes::on_btnTest_clicked() {
+  if (!ui->textEdit->isHidden())
+    ui->textEdit->hide();
+  else {
+    ui->textEdit->show();
+    int p = ui->editSource->textCursor().position();
+    QTextCursor tmpCursor = ui->editSource->textCursor();
+    tmpCursor.setPosition(p);
+    ui->editSource->setTextCursor(tmpCursor);
+  }
 }

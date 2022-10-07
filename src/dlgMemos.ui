@@ -640,9 +640,6 @@ color: rgb(2, 2, 2);</string>
     </layout>
    </item>
    <item>
-    <widget class="QTextEdit" name="textEdit"/>
-   </item>
-   <item>
     <widget class="QFrame" name="frameEdit">
      <property name="minimumSize">
       <size>
@@ -682,6 +679,22 @@ color: rgb(2, 2, 2);</string>
        </layout>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="textEdit"/>
+   </item>
+   <item>
+    <widget class="QToolButton" name="btnTest">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Test</string>
+     </property>
     </widget>
    </item>
   </layout>
