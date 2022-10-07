@@ -25,7 +25,8 @@ class dlgSetTime : public QDialog {
 
   void getTime(int h, int m);
 
- protected:
+  void init();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:

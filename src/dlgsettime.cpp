@@ -16,6 +16,8 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->setupUi(this);
 
   this->installEventFilter(this);
+  ui->editDesc->installEventFilter(this);
+  ui->editDesc->viewport()->installEventFilter(this);
   QFont font;
   font.setPointSize(23);
   font.setBold(true);
@@ -40,12 +42,26 @@ dlgSetTime::dlgSetTime(QWidget* parent)
       new QRegularExpressionValidator(regxNumber, ui->editAmount);
   ui->editAmount->setValidator(validator);
   ui->editDesc->setPlaceholderText(tr("Please enter a category"));
-  ui->editDesc->setStyleSheet(ui->editAmount->styleSheet());
 
   ui->btnClearAmount->setStyleSheet("border:none");
   ui->btnClearDesc->setStyleSheet("border:none");
 
   ui->hsM->setStyleSheet(ui->hsH->styleSheet());
+}
+
+void dlgSetTime::init() {
+  mw_one->mydlgMainNotes->m_SetEditText->close();
+  mw_one->mydlgMainNotes->m_SetEditText = new dlgSetEditText(this);
+
+  setFixedHeight(mw_one->height());
+  setFixedWidth(mw_one->width());
+  setModal(true);
+
+  if (mw_one->isAdd) {
+    ui->editDesc->setText("");
+    ui->editAmount->setText("");
+  }
+  show();
 }
 
 dlgSetTime::~dlgSetTime() { delete ui; }
@@ -64,17 +80,17 @@ void dlgSetTime::on_btnOk_clicked() {
       for (int i = 0; i < 500; i++)
         mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                          ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                         ui->editDesc->text().trimmed());
+                         ui->editDesc->toPlainText().trimmed());
     } else
       mw_one->addUndo(tr("Add Item") + " ( " + mw_one->getTabText() + " ) ");
 
     mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                      ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                     ui->editDesc->text().trimmed());
+                     ui->editDesc->toPlainText().trimmed());
   }
 
   // Save Desc Text
-  QString str = ui->editDesc->text().trimmed();
+  QString str = ui->editDesc->toPlainText().trimmed();
   int count = mw_one->mydlgList->ui->listWidget->count();
   for (int i = 0; i < count; i++) {
     QString str1 = mw_one->mydlgList->ui->listWidget->item(i)->text().trimmed();
@@ -228,6 +244,10 @@ void dlgSetTime::getTime(int h, int m) {
 }
 
 bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
+  if (watch == ui->editDesc->viewport()) {
+    mw_one->mydlgMainNotes->getEditPanel(ui->editDesc, evn);
+  }
+
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -238,6 +258,10 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
         on_btnBack_clicked();
         return true;
       }
+    }
+
+    if (keyEvent->key() == Qt::Key_Return) {
+      return true;
     }
   }
 

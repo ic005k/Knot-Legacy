@@ -921,9 +921,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
 
 void MainWindow::on_btnPlus_clicked() {
   isAdd = true;
-  mydlgSetTime->setFixedHeight(this->height());
-  mydlgSetTime->setFixedWidth(this->width());
-  mydlgSetTime->setModal(true);
+
   mydlgSetTime->ui->lblTitle->setText(
       tr("Add") + "  : " + tabData->tabText(tabData->currentIndex()));
 
@@ -932,9 +930,7 @@ void MainWindow::on_btnPlus_clicked() {
   mydlgSetTime->getTime(mydlgSetTime->ui->hsH->value(),
                         mydlgSetTime->ui->hsM->value());
 
-  mydlgSetTime->ui->editDesc->setText("");
-  mydlgSetTime->ui->editAmount->setText("");
-  mydlgSetTime->show();
+  mydlgSetTime->init();
 }
 
 void MainWindow::on_btnLess_clicked() {
@@ -1578,7 +1574,7 @@ void MainWindow::set_Time() {
       item->setText(1, "");
     else
       item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 2));
-    item->setText(2, mydlgSetTime->ui->editDesc->text().trimmed());
+    item->setText(2, mydlgSetTime->ui->editDesc->toPlainText().trimmed());
     // Amount
     int child = item->parent()->childCount();
     double amount = 0;
@@ -1679,11 +1675,8 @@ void MainWindow::on_twItemDoubleClicked() {
       mydlgSetTime->ui->editAmount->setText(str);
     mydlgSetTime->ui->editDesc->setText(item->text(2));
 
-    mydlgSetTime->setFixedHeight(this->height());
-    mydlgSetTime->setFixedWidth(this->width());
-    mydlgSetTime->setModal(true);
     isAdd = false;
-    mydlgSetTime->show();
+    mydlgSetTime->init();
   }
 
   if (item == tw->topLevelItem(tw->topLevelItemCount() - 1)) {
