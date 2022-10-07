@@ -840,9 +840,8 @@ void dlgMainNotes::highlightCurrentLine() {
   str2 = QString::number(ui->editSource->textCursor().position());
   str3 = QString::number(iCurPos);
   str4 = QString::number(iRowNum);
-  ui->lblInfo->setText(tr("R") + ":" + str4 + "  " + tr("C") + ":" + str3 +
-                       "  " + tr("TR") + ":" + str1 + "  " + tr("CP") + ":" +
-                       str2);
+  ui->lblInfo->setText(" ( " + str4 + " , " + str3 + " )  " + tr("TR") + ":" +
+                       str1 + "  " + tr("CP") + ":" + str2);
 }
 
 void dlgMainNotes::onTextChange() {
