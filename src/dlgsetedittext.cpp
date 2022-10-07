@@ -10,7 +10,28 @@ dlgSetEditText::dlgSetEditText(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetEditText) {
   ui->setupUi(this);
   ui->lineEdit->setReadOnly(true);
-  ui->lineEdit->setText("");
+  ui->btnLeft0->installEventFilter(this);
+  ui->btnLeft1->installEventFilter(this);
+  ui->btnRight0->installEventFilter(this);
+  ui->btnRight1->installEventFilter(this);
+
+  int a = 500;
+  int b = 50;
+  ui->btnLeft0->setAutoRepeat(true);       //启用长按
+  ui->btnLeft0->setAutoRepeatDelay(a);     //触发长按的时间
+  ui->btnLeft0->setAutoRepeatInterval(b);  //长按时click信号间隔
+
+  ui->btnLeft1->setAutoRepeat(true);
+  ui->btnLeft1->setAutoRepeatDelay(a);
+  ui->btnLeft1->setAutoRepeatInterval(b);
+
+  ui->btnRight0->setAutoRepeat(true);
+  ui->btnRight0->setAutoRepeatDelay(a);
+  ui->btnRight0->setAutoRepeatInterval(b);
+
+  ui->btnRight1->setAutoRepeat(true);
+  ui->btnRight1->setAutoRepeatDelay(a);
+  ui->btnRight1->setAutoRepeatInterval(b);
 }
 
 dlgSetEditText::~dlgSetEditText() { delete ui; }
@@ -29,6 +50,10 @@ void dlgSetEditText::init(int y) {
 }
 
 bool dlgSetEditText::eventFilter(QObject* watch, QEvent* evn) {
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);
+  if (event->type() == QEvent::MouseButtonPress) {
+  }
+
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
