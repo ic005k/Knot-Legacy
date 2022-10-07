@@ -105,6 +105,8 @@ void dlgSetEditText::on_btnCopy_clicked() {
 
   if (!mw_one->mydlgNotes->isHidden()) mw_one->mydlgNotes->ui->textEdit->copy();
 
+  if (!mw_one->mydlgTodo->isHidden()) mw_one->mydlgTodo->ui->textEdit->copy();
+
   ui->lineEdit->clear();
 
   close();
@@ -116,6 +118,8 @@ void dlgSetEditText::on_btnCut_clicked() {
 
   if (!mw_one->mydlgNotes->isHidden()) mw_one->mydlgNotes->ui->textEdit->cut();
 
+  if (!mw_one->mydlgTodo->isHidden()) mw_one->mydlgTodo->ui->textEdit->cut();
+
   close();
 }
 
@@ -126,6 +130,8 @@ void dlgSetEditText::on_btnPaste_clicked() {
   if (!mw_one->mydlgNotes->isHidden())
     mw_one->mydlgNotes->ui->textEdit->paste();
 
+  if (!mw_one->mydlgTodo->isHidden()) mw_one->mydlgTodo->ui->textEdit->paste();
+
   close();
 }
 
@@ -135,6 +141,9 @@ void dlgSetEditText::on_btnSetAll_clicked() {
 
   if (!mw_one->mydlgNotes->isHidden())
     mw_one->mydlgNotes->ui->textEdit->selectAll();
+
+  if (!mw_one->mydlgTodo->isHidden())
+    mw_one->mydlgTodo->ui->textEdit->selectAll();
 }
 
 void dlgSetEditText::on_btnLeft1_clicked() {

@@ -20,6 +20,7 @@ extern int fontSize;
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
   this->installEventFilter(this);
+  ui->textEdit->viewport()->installEventFilter(this);
   this->setContentsMargins(1, 5, 1, 5);
   ui->gridLayout_2->setContentsMargins(1, 1, 1, 1);
   ui->frameSetTime->hide();
@@ -347,6 +348,10 @@ void dlgTodo::closeEvent(QCloseEvent* event) {
 
 bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
+
+  if (watch == ui->textEdit->viewport()) {
+    mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
+  }
 
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);

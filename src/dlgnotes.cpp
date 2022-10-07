@@ -52,10 +52,8 @@ void dlgNotes::on_btnBack_clicked() {
 void dlgNotes::on_textEdit_textChanged() {}
 
 bool dlgNotes::eventFilter(QObject* obj, QEvent* evn) {
-  QMouseEvent* event = static_cast<QMouseEvent*>(evn);
-
   if (obj == ui->textEdit->viewport()) {
-    mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, event);
+    mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
   }
 
   if (evn->type() == QEvent::KeyPress) {

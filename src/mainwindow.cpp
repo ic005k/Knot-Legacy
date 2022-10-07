@@ -2615,6 +2615,9 @@ void MainWindow::on_btnHide_clicked() { on_btnFind_clicked(); }
 void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 
 void MainWindow::on_btnTodo_clicked() {
+  mydlgMainNotes->m_SetEditText->close();
+  mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgTodo);
+
   mydlgTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                          this->width(), this->height());
 

@@ -66,7 +66,7 @@ class dlgMainNotes : public QDialog {
   void saveMD(QString mdFileName);
   void selectText(int start, int end);
 
-  void getEditPanel(QTextEdit *textEdit, QMouseEvent *event);
+  void getEditPanel(QTextEdit *textEdit, QEvent *evn);
  public slots:
   void editVSBarValueChanged();
 
