@@ -99,6 +99,16 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   // timerCur->start(500);
   connect(this, SIGNAL(sendUpdate()), this, SLOT(update()));
   connect(timerCur, SIGNAL(timeout()), this, SLOT(timerSlot()));
+
+  int a = 500;
+  int b = 50;
+  ui->btnLeft->setAutoRepeat(true);
+  ui->btnLeft->setAutoRepeatDelay(a);
+  ui->btnLeft->setAutoRepeatInterval(b);
+
+  ui->btnRight->setAutoRepeat(true);
+  ui->btnRight->setAutoRepeatDelay(a);
+  ui->btnRight->setAutoRepeatInterval(b);
 }
 
 void dlgMainNotes::init() {
@@ -271,12 +281,14 @@ void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
 
       textEdit->cursor().setPos(event->globalPos());
 
-      if (isAndroid) {
-        if (pAndroidKeyboard->isVisible()) {
+      if (m_SetEditText->isHidden()) {
+        if (isAndroid) {
+          if (pAndroidKeyboard->isVisible()) {
+            timer->start(1300);
+          }
+        } else
           timer->start(1300);
-        }
-      } else
-        timer->start(1300);
+      }
     }
   }
 
@@ -803,9 +815,7 @@ void dlgMainNotes::highlightCurrentLine() {
   str2 = QString::number(ui->editSource->textCursor().position());
   str3 = QString::number(iCurPos);
   str4 = QString::number(iRowNum);
-  ui->lblInfo->setText(" ( " + str4 + " , " + str3 +
-                       " ) ");  // + tr("TR") + ":" +
-                                // str1 + "  " + tr("CP") + ":" + str2);
+  ui->lblInfo->setText(" " + str4 + " , " + str3);
 }
 
 void dlgMainNotes::onTextChange() {

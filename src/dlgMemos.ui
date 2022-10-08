@@ -395,6 +395,10 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 25, 25);
+color: rgb(255, 255, 255);</string>
+          </property>
           <property name="text">
            <string>Paste</string>
           </property>

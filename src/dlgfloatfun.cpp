@@ -34,7 +34,7 @@ void dlgFloatFun::init() {
   this->setGeometry(
       mw_one->geometry().x() + mw_one->width() - this->width() - 12,
       mw_one->geometry().y() + mw_one->ui->frameMenu->height() +
-          mw_one->ui->tabWidget->height() - this->height(),
+          mw_one->ui->tabWidget->height() - this->height() * 2,
       this->width(), this->height());
 
   QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
