@@ -4588,7 +4588,6 @@ void MainWindow::on_btnEdit_clicked() {
   mydlgMainNotes->ui->editSource->setPlainText(str);
 
   mydlgMainNotes->ui->btnPic->setEnabled(true);
-  mydlgMainNotes->ui->btnEditSource->setEnabled(true);
   mydlgMainNotes->show();
 
   mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(

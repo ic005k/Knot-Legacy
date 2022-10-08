@@ -46,12 +46,12 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   pt.setBrush(QPalette::HighlightedText, Qt::white);
   ui->editSource->setPalette(pt);
   ui->editSource->setStyleSheet("border:none");
+  QFontMetrics fm(this->font());
+  ui->editSource->setCursorWidth(fm.width("c"));
   QFont f = this->font();
   f.setPointSize(fontSize - 1);
   ui->lblInfo->setFont(f);
   ui->frameFun->setFont(f);
-
-  ui->btnEditSource->hide();
 
   mw_one->setSCrollPro(ui->editSource);
   mw_one->setSCrollPro(ui->textEdit);
@@ -92,6 +92,12 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(showFunPanel()));
+
+  bCursorVisible = true;
+  timerCur = new QTimer(this);
+  // timerCur->start(500);
+  connect(this, SIGNAL(sendUpdate()), this, SLOT(update()));
+  connect(timerCur, SIGNAL(timeout()), this, SLOT(timerSlot()));
 }
 
 void dlgMainNotes::init() {
@@ -752,6 +758,8 @@ void dlgMainNotes::on_btnS9_clicked() {
   ui->editSource->insertPlainText("{ }");
 }
 
+void dlgMainNotes::on_btnS10_clicked() { ui->editSource->insertPlainText("_"); }
+
 void dlgMainNotes::highlightCurrentLine() {
   QList<QTextEdit::ExtraSelection> extraSelections;
 
@@ -794,8 +802,9 @@ void dlgMainNotes::highlightCurrentLine() {
   str2 = QString::number(ui->editSource->textCursor().position());
   str3 = QString::number(iCurPos);
   str4 = QString::number(iRowNum);
-  ui->lblInfo->setText(" ( " + str4 + " , " + str3 + " )  " + tr("TR") + ":" +
-                       str1 + "  " + tr("CP") + ":" + str2);
+  ui->lblInfo->setText(" ( " + str4 + " , " + str3 +
+                       " ) ");  // + tr("TR") + ":" +
+                                // str1 + "  " + tr("CP") + ":" + str2);
 }
 
 void dlgMainNotes::onTextChange() {
@@ -876,4 +885,42 @@ void dlgMainNotes::on_btnTest_clicked() {
     tmpCursor.setPosition(p);
     ui->editSource->setTextCursor(tmpCursor);
   }
+}
+
+void dlgMainNotes::paintEvent(QPaintEvent* event) {
+  return;
+
+  if (ui->editSource->hasFocus()) {
+    if (bCursorVisible) {
+      const QRect qRect =
+          ui->editSource->cursorRect(ui->editSource->textCursor());
+      QPainter qPainter(ui->editSource->viewport());
+      qPainter.fillRect(qRect, QColor(255, 0, 0, 255));
+    } else {
+      const QRect qRect =
+          ui->editSource->cursorRect(ui->editSource->textCursor());
+      QPainter qPainter(ui->editSource->viewport());
+      qPainter.fillRect(qRect, QColor(0, 255, 0, 255));
+    }
+  }
+}
+
+void dlgMainNotes::timerSlot() {
+  if (bCursorVisible) {
+    bCursorVisible = false;
+  } else {
+    bCursorVisible = true;
+  }
+
+  emit sendUpdate();
+}
+
+void dlgMainNotes::on_btnLeft_clicked() {
+  ui->editSource->moveCursor(QTextCursor::PreviousCharacter,
+                             QTextCursor::MoveAnchor);
+}
+
+void dlgMainNotes::on_btnRight_clicked() {
+  ui->editSource->moveCursor(QTextCursor::NextCharacter,
+                             QTextCursor::MoveAnchor);
 }

@@ -7,6 +7,7 @@
 #include <QDialog>
 #include <QImageReader>
 #include <QInputMethod>
+#include <QPainter>
 #include <QPlainTextEdit>
 #include <QSettings>
 #include <QTextBlock>
@@ -77,8 +78,11 @@ class dlgMainNotes : public QDialog {
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
+  void paintEvent(QPaintEvent *pEvent) override;
 
  private slots:
+
+  void timerSlot();
 
   void highlightCurrentLine();
 
@@ -144,9 +148,22 @@ class dlgMainNotes : public QDialog {
 
   void on_btnTest_clicked();
 
+  void on_btnLeft_clicked();
+
+  void on_btnRight_clicked();
+
+  void on_btnS10_clicked();
+
+ signals:
+  void sendUpdate();
+
  private:
   int x_left, x_right, y_left, y_right;
   int y1;
+
+  QTimer *timerCur;
+  QPainter *pPainter;
+  bool bCursorVisible;
 
   bool isFunShow;
   QTimer *timer;
