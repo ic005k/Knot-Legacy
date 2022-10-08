@@ -105,8 +105,8 @@ Item {
             state = "autoscroll"
             file.textPos = contentY
             file.textHeight = contentHeight
-            console.log(file.textPos)
-            console.log(file.textHeight)
+            console.log("滚动条位置：" + file.textPos)
+            console.log("文本高度：" + file.textHeight)
         }
 
         TextArea.flickable: TextArea {
@@ -195,6 +195,8 @@ Item {
         }
 
         Component.onCompleted: {
+            file.textPos = flickable.contentY
+            file.textHeight = flickable.contentHeight
             console.log(textArea.lineCount)
             console.log(textArea.height)
             console.log(control.position)

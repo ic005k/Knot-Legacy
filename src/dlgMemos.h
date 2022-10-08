@@ -54,8 +54,6 @@ class dlgMainNotes : public QDialog {
   void encryption(const QString &fileName);
   QString Deciphering(const QString &fileName);
 
-  void setCursorPosition();
-
   void init();
 
   QStringList getImgFileFromHtml(QString htmlfile);
@@ -64,13 +62,14 @@ class dlgMainNotes : public QDialog {
 
   void loadMemoQML();
 
-  void setVPos();
   void openMD(QString mdFileName);
   void saveMD(QString mdFileName);
   void selectText(int start, int end);
 
   void getEditPanel(QTextEdit *textEdit, QEvent *evn);
 
+  qreal getVHeight();
+  void setVPos(qreal sliderPos);
  public slots:
   void editVSBarValueChanged();
 

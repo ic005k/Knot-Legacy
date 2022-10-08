@@ -3435,8 +3435,7 @@ void MainWindow::updateHardSensorSteps() {
 void MainWindow::on_actionMemos_triggered() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  // QString file = iniDir + "mainnotes.txt";
-  // QString strDec = Reg.value("/MainNotes/Text").toString();
+  mydlgMainNotes->sliderPos = Reg.value("/MainNotes/SlidePos").toReal();
 
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
   if (strPw != "") {
@@ -3569,7 +3568,7 @@ void MainWindow::showMemos() {
   ui->frameSetKey->hide();
   ui->frameMemo->show();
 
-  mydlgMainNotes->setCursorPosition();
+  mydlgMainNotes->setVPos(mydlgMainNotes->sliderPos);
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -4510,11 +4509,11 @@ void MainWindow::on_btnUserInfo_clicked() {
 }
 
 void MainWindow::on_btnBackMemo_clicked() {
-  ui->frameMemo->hide();
-  ui->frameMain->show();
-
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setValue("/MainNotes/SlidePos", mydlgMainNotes->sliderPos);
+
+  ui->frameMemo->hide();
+  ui->frameMain->show();
 
   delete mw_one->mydlgFloatFun;
   mydlgFloatFun = new dlgFloatFun(this);

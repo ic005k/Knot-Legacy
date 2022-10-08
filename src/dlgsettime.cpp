@@ -245,7 +245,7 @@ void dlgSetTime::getTime(int h, int m) {
 
 bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
   if (watch == ui->editDesc->viewport()) {
-    mw_one->mydlgMainNotes->getEditPanel(ui->editDesc, evn);
+    // mw_one->mydlgMainNotes->getEditPanel(ui->editDesc, evn);
   }
 
   if (evn->type() == QEvent::KeyPress) {

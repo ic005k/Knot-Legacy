@@ -158,8 +158,17 @@ void dlgMainNotes::on_btnBack_clicked() {
   saveMainNotes();
 
   loadMemoQML();
+
+  qreal a0, b0, a1, b1;
+  setVPos(0);
+  b0 = textHeight - mw_one->ui->quickWidgetMemo->height();
+  a1 = ui->editSource->verticalScrollBar()->sliderPosition();
+  b1 = ui->editSource->verticalScrollBar()->maximum();
+  a0 = b0 * a1 / b1;
+  sliderPos = a0;
+  qDebug() << a0 << b0 << a1 << b1;
   close();
-  setVPos();
+  setVPos(sliderPos);
 }
 
 void dlgMainNotes::saveMainNotes() {
@@ -228,43 +237,10 @@ void dlgMainNotes::saveMainNotes() {
 
   mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
 
-  sliderPos = ui->editSource->verticalScrollBar()->sliderPosition();
-
-  loadMemoQML();
-
-  Reg.setValue("/MainNotes/CurPos", curPos);
-  Reg.setValue("/MainNotes/SlidePos", sliderPos);
   Reg.setValue("/MainNotes/CurrentOSIniDir", iniDir);
-
-  // QString file = iniDir + "mainnotes.txt";
-  // mw_one->TextEditToFile(ui->textEdit, file);
-  // encryption(file);
-  // encode(file);
-  // Reg.setValue("/MainNotes/Text", mw_one->loadText(file));
-  // QFile::remove(file);
 }
 
 void dlgMainNotes::init_MainNotes() { loadMemoQML(); }
-
-void dlgMainNotes::setCursorPosition() {
-  QString ini_file = iniDir + "mainnotes.ini";
-  QSettings Reg(ini_file, QSettings::IniFormat);
-
-  sliderPos = Reg.value("/MainNotes/SlidePos").toReal();
-  curPos = Reg.value("/MainNotes/CurPos").toLongLong();
-
-  QTextCursor tmpCursor = ui->textEdit->textCursor();
-  tmpCursor.setPosition(curPos);
-
-  if (ui->textEdit->isHidden()) {
-    ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
-  }
-
-  // mw_one->Sleep(1000);
-  if (!mw_one->ui->quickWidgetMemo->isHidden()) {
-    setVPos();
-  }
-}
 
 void dlgMainNotes::on_btnCloseText_clicked() {}
 
@@ -650,12 +626,21 @@ void dlgMainNotes::loadMemoQML() {
   // file));
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, str));
+
+  getVHeight();
 }
 
-void dlgMainNotes::setVPos() {
+void dlgMainNotes::setVPos(qreal sliderPos) {
+  if (sliderPos < 0) sliderPos = 0;
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
+}
+
+qreal dlgMainNotes::getVHeight() {
+  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getVHeight");
+  return textHeight;
 }
 
 void dlgMainNotes::on_btnInsertTable_clicked() {
