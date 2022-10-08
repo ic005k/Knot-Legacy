@@ -47,7 +47,8 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->editSource->setPalette(pt);
   ui->editSource->setStyleSheet("border:none");
   QFontMetrics fm(this->font());
-  ui->editSource->setCursorWidth(fm.width("c"));
+  ui->editSource->setCursorWidth(2);
+
   QFont f = this->font();
   f.setPointSize(fontSize - 1);
   ui->lblInfo->setFont(f);
