@@ -37,7 +37,7 @@ Item {
 
     function getVHeight() {
         file.textHeight = flickable.contentHeight
-        console.log(file.textPos)
+        console.log("获取文本的高度 " + file.textHeight)
     }
 
     function move(x0) {
@@ -195,9 +195,7 @@ Item {
         }
 
         Component.onCompleted: {
-            file.textPos = flickable.contentY
-            file.textHeight = flickable.contentHeight
-            console.log(textArea.lineCount)
+                        console.log(textArea.lineCount)
             console.log(textArea.height)
             console.log(control.position)
         }
