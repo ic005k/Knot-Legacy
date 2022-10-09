@@ -115,6 +115,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  int imgSize = 5000;
   QString treeStyle = "QTreeWidget::item {height: 28;}";
   QWidget *m_widget;
   int mainHeight = 0;
@@ -480,6 +481,9 @@ class MainWindow : public QMainWindow {
   void on_btnMemos_clicked();
 
   void on_btnOneDriveBak_clicked();
+  void on_btnZoomIn_clicked();
+
+  void on_btnZoomOut_clicked();
 
  private slots:
 

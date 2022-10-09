@@ -1999,6 +1999,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         }
       }
 
+      if (!ui->f_ImgView->isHidden()) {
+        on_btnBackImg_clicked();
+      }
+
       if (!ui->frameMain->isHidden()) {
         if (!listSelTab->isHidden()) {
           listSelTab->close();
@@ -3826,6 +3830,9 @@ void MainWindow::init_UIWidget() {
   ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
   ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
   ui->quickWidget->rootContext()->setContextProperty("mw_one", mw_one);
+
+  ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
+  ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4719,4 +4726,18 @@ void MainWindow::on_btnNotesList_clicked() {
 void MainWindow::on_btnBackImg_clicked() {
   ui->f_ImgView->hide();
   ui->frameReader->show();
+}
+
+void MainWindow::on_btnZoomIn_clicked() {
+  imgSize = imgSize + 1000;
+  mw_one->ui->qw_Img->rootContext()->setContextProperty("imgW", imgSize);
+  mw_one->ui->qw_Img->rootContext()->setContextProperty("imgH", imgSize);
+
+  QQuickItem* root = ui->qw_Img->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "zoomin");
+}
+
+void MainWindow::on_btnZoomOut_clicked() {
+  QQuickItem* root = ui->qw_Img->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "zoomout");
 }

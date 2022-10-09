@@ -54,6 +54,12 @@ void dlgLoadPic::initMain(QString imgFile) {
   mw_one->ui->frameReader->hide();
   mw_one->ui->f_ImgView->show();
 
+  QImage img(imgFile);
+
+  mw_one->ui->qw_Img->rootContext()->setContextProperty("imgW",
+                                                        img.width() * 2);
+  mw_one->ui->qw_Img->rootContext()->setContextProperty("imgH",
+                                                        img.height() * 2);
   mw_one->ui->qw_Img->rootContext()->setContextProperty("imgFile", imgFile);
   mw_one->ui->qw_Img->setSource(QUrl(QStringLiteral("qrc:/src/imgview.qml")));
 }
