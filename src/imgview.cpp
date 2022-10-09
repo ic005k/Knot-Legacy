@@ -9,6 +9,10 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPointF>
 
+#include "src/mainwindow.h"
+
+extern MainWindow* mw_one;
+
 QImageWidget::QImageWidget(QPixmap* pixmap) {
   m_pix = *pixmap;
   setAcceptDrops(false);
@@ -43,16 +47,14 @@ void QImageWidget::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
     QPoint p;
     p.setX(event->pos().rx());
     p.setY(event->pos().ry());
-    QPoint point = (p - m_startPos) * m_scaleValue;
-
-    moveBy(point.x(), point.y());
-
-    qDebug() << point;
+    endPoint = (p - m_startPos) * m_scaleValue;
+    // moveBy(endPoint.x(), endPoint.y());
   }
 }
 
 void QImageWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
   m_isMove = false;
+  moveBy(endPoint.x(), endPoint.y());
 }
 
 void QImageWidget::wheelEvent(QGraphicsSceneWheelEvent* event) {

@@ -35,4 +35,5 @@ class QImageWidget : public QGraphicsItem {
   int m_zoomState;
   bool m_isMove;
   QPoint m_startPos;
+  QPoint endPoint;
 };

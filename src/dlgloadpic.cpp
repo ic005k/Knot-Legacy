@@ -71,11 +71,6 @@ bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
 
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
   if (watch == ui->lblPic) {
-    static int press_x;
-    static int press_y;
-    static int relea_x;
-    static int relea_y;
-
     if (event->type() == QEvent::MouseButtonPress) {
       isMousePress = true;
       isMouseRelease = false;
@@ -99,9 +94,6 @@ bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
       relea_y = event->globalY();
 
       if (isMousePress) {
-        // QPointF point = (event->pos() - m_startPos) * m_pImage->m_scaleValue;
-        // m_pImage->setPos(point);
-
         int mx = qAbs(relea_x - press_x) / 10;
         //判断滑动方向（右滑）
         if ((relea_x - press_x) > 0) {
