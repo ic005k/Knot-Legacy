@@ -299,7 +299,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
       dlp->initMain();
       dlp->show();
       dlp->loadPic(picfile, 0);
-      dlp->ui->hsZoom->setValue(200);
+      dlp->ui->hsZoom->setValue(50);
       dlp->loadPic(picfile, 200);
     } else {
       QString memoPicFile = picfile;

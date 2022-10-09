@@ -55,7 +55,7 @@ border: none;
         <x>0</x>
         <y>0</y>
         <width>420</width>
-        <height>209</height>
+        <height>110</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -83,6 +83,28 @@ border: none;
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGraphicsView" name="graphicsView">
+     <property name="acceptDrops">
+      <bool>false</bool>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="interactive">
+      <bool>true</bool>
+     </property>
+     <property name="renderHints">
+      <set>QPainter::TextAntialiasing</set>
+     </property>
+     <property name="cacheMode">
+      <set>QGraphicsView::CacheNone</set>
+     </property>
     </widget>
    </item>
    <item>
@@ -123,6 +145,12 @@ QSlider::handle:horizontal
 	margin: -10px -5px -10px -5px; 
 	
 }</string>
+       </property>
+       <property name="pageStep">
+        <number>1</number>
+       </property>
+       <property name="value">
+        <number>49</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

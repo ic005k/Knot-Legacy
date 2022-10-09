@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QKeyEvent>
 
+#include "src/QImageWidget.h"
+
 namespace Ui {
 class dlgLoadPic;
 }
@@ -20,6 +22,8 @@ class dlgLoadPic : public QDialog {
 
   void loadPic(QString picfile, int k);
 
+  void recvShowPicSignal(QImage image);
+
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
@@ -35,8 +39,13 @@ class dlgLoadPic : public QDialog {
   void on_hsZoom_sliderReleased();
 
  private:
+  QImageWidget *m_pImage;
+  QPoint m_startPos;
   int k = 0;
   void showRatio(double w0, double w1);
+  bool isMouseRelease = false;
+  bool isMousePress = false;
+  bool iMouseMove = false;
 };
 
 #endif  // DLGLOADPIC_H
