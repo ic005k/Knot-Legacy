@@ -167,7 +167,6 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
 void dlgMainNotes::on_btnBack_clicked() {
   if (!m_SetEditText->isHidden()) {
     m_SetEditText->close();
-    return;
   }
   pAndroidKeyboard->hide();
   mw_one->Sleep(100);
@@ -339,9 +338,14 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (pAndroidKeyboard->isVisible())
+      if (!m_SetEditText->isHidden()) {
+        m_SetEditText->close();
+
+      } else if (pAndroidKeyboard->isVisible()) {
         pAndroidKeyboard->hide();
-      else
+        setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
+                    mw_one->mainHeight);
+      } else
         on_btnBack_clicked();
       return true;
     }

@@ -46,7 +46,6 @@ dlgSetEditText::~dlgSetEditText() { delete ui; }
 
 void dlgSetEditText::on_btnClose_clicked() {
   ui->lineEdit->clear();
-  mw_one->mydlgMainNotes->ui->editSource->textCursor().clearSelection();
   close();
 }
 
