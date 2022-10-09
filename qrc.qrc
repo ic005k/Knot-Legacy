@@ -6,5 +6,6 @@
         <file>src/memo.qml</file>
         <file>src/onedrive/web.qml</file>
         <file>src/steps.qml</file>
+        <file>src/imgview.qml</file>
     </qresource>
 </RCC>

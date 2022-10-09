@@ -152,6 +152,7 @@ DISTFILES += \
     android/res/values/libs.xml \
     src/cn.qm \
     src/cn.ts \
+    src/imgview.qml \
     src/memo.qml \
     src/onedrive/log.qml \
     src/onedrive/web.qml \

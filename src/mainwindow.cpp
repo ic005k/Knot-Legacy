@@ -3624,9 +3624,7 @@ void MainWindow::init_UIWidget() {
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->layout()->setSpacing(1);
-  // ui->quickWidget->setObjectName("myframe");
-  // ui->quickWidget->setStyleSheet(
-  //     "QFrame#myframe{border-image:url(:/res/b.png)}");
+  ui->f_ImgView->hide();
 
   ui->frameMain->layout()->setMargin(0);
   ui->frameMain->layout()->setContentsMargins(0, 0, 0, 0);
@@ -4716,4 +4714,9 @@ void MainWindow::on_btnNotesList_clicked() {
   mydlgNotesList->setGeometry(geometry().x(), geometry().y(), width() * 2 / 3,
                               ui->quickWidgetMemo->height());
   mydlgNotesList->show();
+}
+
+void MainWindow::on_btnBackImg_clicked() {
+  ui->f_ImgView->hide();
+  ui->frameReader->show();
 }

@@ -18,11 +18,11 @@ class dlgLoadPic : public QDialog {
   ~dlgLoadPic();
   Ui::dlgLoadPic *ui;
 
-  void initMain();
-
   void loadPic(QString picfile, int k);
 
   void recvShowPicSignal(QImage image);
+
+  void initMain(QString imgFile);
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;

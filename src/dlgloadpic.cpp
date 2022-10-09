@@ -38,8 +38,6 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
   this->layout()->setSpacing(3);
   ui->scrollArea->setContentsMargins(1, 1, 1, 1);
 
-  initMain();
-
   QPixmap pixmap(":/res/icon.png");
   int sx, sy;
   sx = ui->scrollArea->width();
@@ -48,16 +46,16 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
   ui->lblPic->setPixmap(pixmap);
 
   setModal(true);
-  show();
-
-  close();
 }
 
 dlgLoadPic::~dlgLoadPic() { delete ui; }
 
-void dlgLoadPic::initMain() {
-  this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                    mw_one->width(), mw_one->height());
+void dlgLoadPic::initMain(QString imgFile) {
+  mw_one->ui->frameReader->hide();
+  mw_one->ui->f_ImgView->show();
+
+  mw_one->ui->qw_Img->rootContext()->setContextProperty("imgFile", imgFile);
+  mw_one->ui->qw_Img->setSource(QUrl(QStringLiteral("qrc:/src/imgview.qml")));
 }
 
 bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {

@@ -489,6 +489,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnNotesList_clicked();
 
+  void on_btnBackImg_clicked();
+
  private:
   int memoHeight;
   int frameChartHeight = 220;
