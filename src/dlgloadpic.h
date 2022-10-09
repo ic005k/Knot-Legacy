@@ -46,10 +46,10 @@ class dlgLoadPic : public QDialog {
   bool isMouseRelease = false;
   bool isMousePress = false;
   bool iMouseMove = false;
-  static int press_x;
-  static int press_y;
-  static int relea_x;
-  static int relea_y;
+  int press_x;
+  int press_y;
+  int relea_x;
+  int relea_y;
 };
 
 #endif  // DLGLOADPIC_H
