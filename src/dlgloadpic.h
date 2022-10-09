@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QKeyEvent>
 
-#include "src/QImageWidget.h"
+#include "src/imgview.h"
 
 namespace Ui {
 class dlgLoadPic;

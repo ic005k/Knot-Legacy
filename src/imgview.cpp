@@ -1,5 +1,5 @@
 
-#include "QImageWidget.h"
+#include "imgview.h"
 
 #include <math.h>
 

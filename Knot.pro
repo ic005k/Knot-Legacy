@@ -30,7 +30,6 @@ INSTALLS += dataFiles
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/QImageWidget.cpp \
     src/chart.cpp \
     src/dlgMemos.cpp \
     src/dlgNotesList.cpp \
@@ -53,6 +52,7 @@ SOURCES += \
     src/dlgtodo.cpp \
     src/documenthandler.cpp \
     src/file.cpp \
+    src/imgview.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/msgdialog.cpp \
@@ -63,7 +63,6 @@ SOURCES += \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
-    src/QImageWidget.h \
     src/chart.h \
     src/count_steps.h \
     src/dlgMemos.h \
@@ -87,6 +86,7 @@ HEADERS += \
     src/dlgtodo.h \
     src/documenthandler.h \
     src/file.h \
+    src/imgview.h \
     src/mainwindow.h \
     src/msgdialog.h \
     src/onedrive/dlgweb.h \

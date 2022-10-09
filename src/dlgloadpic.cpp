@@ -9,13 +9,17 @@ extern QString picfile;
 dlgLoadPic::dlgLoadPic(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgLoadPic) {
   ui->setupUi(this);
+
+  ui->graphicsView->setObjectName("myframe");
+  ui->graphicsView->setStyleSheet(
+      "QFrame#myframe{border-image:url(:/res/b.png)}");
+
   this->installEventFilter(this);
   ui->lblPic->installEventFilter(this);
-  // ui->graphicsView->viewport()->installEventFilter(this);
+  ui->graphicsView->viewport()->installEventFilter(this);
   ui->scrollArea->hide();
   ui->hsZoom->hide();
   ui->lblRatio->hide();
-  // ui->graphicsView->hide();
 
   ui->hsZoom->setMaximum(100);
 
