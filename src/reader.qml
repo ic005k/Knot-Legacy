@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
-//import QtWebView 1.1
 import MyModel1 1.0
 import MyModel2 1.0
 
@@ -81,7 +80,6 @@ Item {
         id: rocket
         width: myW
         height: myH
-        //fillMode: Image.TileHorizontally
         fillMode: Image.Tile
         horizontalAlignment: Image.AlignLeft
         verticalAlignment: Image.AlignTop
@@ -110,13 +108,6 @@ Item {
             console.log(file.textHeight)
         }
 
-
-        /*WebView {
-            id: webView
-            visible: isWebViewShow
-            anchors.fill: parent
-            url: initialUrl
-        }*/
         TextArea.flickable: TextArea {
             id: textArea
             visible: !isWebViewShow
@@ -206,7 +197,8 @@ Item {
             anchors.right: parent.right
             policy: ScrollBar.AsNeeded
 
-            contentItem: Rectangle {
+
+            /*contentItem: Rectangle {
                 id: slider
                 implicitWidth: 4
                 implicitHeight: 76
@@ -214,7 +206,7 @@ Item {
                 color: control.pressed ? "#e7e7e7" : "#1296db"
                 opacity: (control.policy === ScrollBar.AlwaysOn
                           || control.size < 1.0) ? 1.0 : 0.0
-            }
+            }*/
         }
 
         Component.onCompleted: {

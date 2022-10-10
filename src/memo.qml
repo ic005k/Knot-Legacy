@@ -78,7 +78,6 @@ Item {
         id: rocket
         width: myW
         height: myH
-        //fillMode: Image.TileHorizontally
         fillMode: Image.Tile
         horizontalAlignment: Image.AlignLeft
         verticalAlignment: Image.AlignTop
@@ -183,7 +182,8 @@ Item {
             anchors.right: parent.right
             policy: ScrollBar.AsNeeded
 
-            contentItem: Rectangle {
+
+            /*contentItem: Rectangle {
                 id: slider
                 implicitWidth: 4
                 implicitHeight: 76
@@ -191,11 +191,11 @@ Item {
                 color: control.pressed ? "#e7e7e7" : "#1296db"
                 opacity: (control.policy === ScrollBar.AlwaysOn
                           || control.size < 1.0) ? 1.0 : 0.0
-            }
+            }*/
         }
 
         Component.onCompleted: {
-                        console.log(textArea.lineCount)
+            console.log(textArea.lineCount)
             console.log(textArea.height)
             console.log(control.position)
         }
