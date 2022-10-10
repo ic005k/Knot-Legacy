@@ -1,7 +1,6 @@
 #include "dlgtodo.h"
 
 #include "mainwindow.h"
-#include "smoothscrollbar.h"
 #include "ui_dlgtodo.h"
 #include "ui_mainwindow.h"
 

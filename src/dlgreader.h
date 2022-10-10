@@ -20,7 +20,7 @@
 
 #include "src/documenthandler.h"
 #include "src/file.h"
-#include "src/smoothscrollbar.h"
+
 namespace Ui {
 class dlgReader;
 }

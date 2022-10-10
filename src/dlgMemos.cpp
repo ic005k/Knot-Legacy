@@ -1,4 +1,4 @@
-#include "dlgMemos.h"
+#include "src/dlgMemos.h"
 
 #include "mainwindow.h"
 #include "ui_dlgMemos.h"
@@ -28,10 +28,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
 
-  vScrollBar = new SmoothScrollBar();
-  vScrollBar->setOrientation(Qt::Orientation::Vertical);
-
-  // ui->textEdit->setVerticalScrollBar(vScrollBar);
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->textEdit->hide();
@@ -116,9 +112,7 @@ void dlgMainNotes::init() {
                     mw_one->width(), mw_one->height());
 }
 
-void dlgMainNotes::wheelEvent(QWheelEvent* e) {
-  vScrollBar->scroll(e->angleDelta().y());
-}
+void dlgMainNotes::wheelEvent(QWheelEvent* e) {}
 
 dlgMainNotes::~dlgMainNotes() { delete ui; }
 

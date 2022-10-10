@@ -17,7 +17,6 @@
 #include "src/dlgleft.h"
 #include "src/dlgright.h"
 #include "src/dlgsetedittext.h"
-#include "src/smoothscrollbar.h"
 #include "ui_dlgsetedittext.h"
 
 namespace Ui {
@@ -175,8 +174,7 @@ class dlgMainNotes : public QDialog {
   int newHeight = 0;
 
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
-  SmoothScrollBar *vScrollBar;
-  void wheelEvent(QWheelEvent *e) override;  //捕获鼠标滚轮事件
+  void wheelEvent(QWheelEvent *e) override;
 };
 
 #endif  // DLGMEMOS_H

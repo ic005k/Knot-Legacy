@@ -52,14 +52,12 @@ SOURCES += \
     src/dlgtodo.cpp \
     src/documenthandler.cpp \
     src/file.cpp \
-    src/imgview.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/msgdialog.cpp \
     src/onedrive/dlgweb.cpp \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
-    src/smoothscrollbar.cpp \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
@@ -86,14 +84,12 @@ HEADERS += \
     src/dlgtodo.h \
     src/documenthandler.h \
     src/file.h \
-    src/imgview.h \
     src/mainwindow.h \
     src/msgdialog.h \
     src/onedrive/dlgweb.h \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
-    src/smoothscrollbar.h \
     src/specialaccelerometerpedometer.h
 
 FORMS += \
