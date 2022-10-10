@@ -115,6 +115,8 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  bool isMemoVisible;
+  bool isReaderVisible;
   int imgSize = 5000;
   QString treeStyle = "QTreeWidget::item {height: 28;}";
   QWidget *m_widget;

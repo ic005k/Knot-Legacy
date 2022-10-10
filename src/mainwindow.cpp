@@ -2000,7 +2000,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
 
       if (!ui->f_ImgView->isHidden()) {
-        on_btnBackImg_clicked();
       }
 
       if (!ui->frameMain->isHidden()) {
@@ -3551,6 +3550,8 @@ void MainWindow::on_actionMemos_triggered() {
 
 void MainWindow::showMemos() {
   mydlgFloatFun->close();
+  isMemoVisible = true;
+  isReaderVisible = false;
 
   ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
   ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
@@ -4203,6 +4204,8 @@ QString MainWindow::getYMD(QString date) {
 void MainWindow::on_btnReader_clicked() {
   floatfun = false;
   mydlgFloatFun->close();
+  isReaderVisible = true;
+  isMemoVisible = false;
 
   if (!isOne) {
     mwh = this->height();
@@ -4725,7 +4728,8 @@ void MainWindow::on_btnNotesList_clicked() {
 
 void MainWindow::on_btnBackImg_clicked() {
   ui->f_ImgView->hide();
-  ui->frameReader->show();
+  if (isReaderVisible) ui->frameReader->show();
+  if (isMemoVisible) ui->frameMemo->show();
 }
 
 void MainWindow::on_btnZoomIn_clicked() {

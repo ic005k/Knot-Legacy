@@ -51,7 +51,8 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
 dlgLoadPic::~dlgLoadPic() { delete ui; }
 
 void dlgLoadPic::initMain(QString imgFile) {
-  mw_one->ui->frameReader->hide();
+  if (mw_one->isReaderVisible) mw_one->ui->frameReader->hide();
+  if (mw_one->isMemoVisible) mw_one->ui->frameMemo->hide();
   mw_one->ui->f_ImgView->show();
 
   QImage img(imgFile);
