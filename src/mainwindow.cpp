@@ -2000,6 +2000,13 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
 
       if (!ui->f_ImgView->isHidden()) {
+        if (isReaderVisible) {
+          ui->f_ImgView->hide();
+          ui->frameReader->show();
+        } else if (isMemoVisible) {
+          ui->f_ImgView->hide();
+          ui->frameMemo->show();
+        }
       }
 
       if (!ui->frameMain->isHidden()) {

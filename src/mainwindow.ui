@@ -2021,6 +2021,21 @@ QRadioButton::indicator:checked {
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>5</number>
+       </property>
        <item>
         <widget class="QQuickWidget" name="qw_Img">
          <property name="resizeMode">
@@ -2044,16 +2059,16 @@ QRadioButton::indicator:checked {
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <property name="leftMargin">
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="bottomMargin">
-           <number>0</number>
+           <number>2</number>
           </property>
           <item>
            <widget class="QToolButton" name="btnBackImg">
