@@ -27,12 +27,14 @@ Item {
         source: "/res/b.png"
     }
 
-    Item {
+    Flickable {
         id: mapItemArea
         width: imgW
         height: imgH
         anchors.centerIn: parent
         clip: true
+
+
         Image {
             id: mapImg
             //这里使图片居中显示
