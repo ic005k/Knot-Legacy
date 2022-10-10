@@ -10,9 +10,9 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgLoadPic) {
   ui->setupUi(this);
 
-  // ui->graphicsView->setObjectName("myframe");
-  // ui->graphicsView->setStyleSheet(
-  //     "QFrame#myframe{border-image:url(:/res/b.png)}");
+  mw_one->ui->f_ImgFun->setObjectName("myframe");
+  mw_one->ui->f_ImgFun->setStyleSheet(
+      "QFrame#myframe{border-image:url(:/res/b.png)}");
 
   this->installEventFilter(this);
 

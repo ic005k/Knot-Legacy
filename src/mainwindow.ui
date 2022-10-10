@@ -2022,7 +2022,7 @@ QRadioButton::indicator:checked {
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <property name="spacing">
-        <number>2</number>
+        <number>0</number>
        </property>
        <property name="leftMargin">
         <number>0</number>
