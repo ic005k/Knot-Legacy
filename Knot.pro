@@ -30,7 +30,6 @@ INSTALLS += dataFiles
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/chart.cpp \
     src/dlgMemos.cpp \
     src/dlgNotesList.cpp \
     src/dlgOneDrive.cpp \
@@ -61,7 +60,6 @@ SOURCES += \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
-    src/chart.h \
     src/count_steps.h \
     src/dlgMemos.h \
     src/dlgNotesList.h \
