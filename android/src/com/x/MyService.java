@@ -25,6 +25,8 @@ import android.app.NotificationChannel;
 import android.support.v4.app.NotificationCompat;
 import android.annotation.TargetApi;
 
+//import androidx.core.app.NotificationCompat
+
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,6 +45,7 @@ public class MyService extends Service {
     public native static void CallJavaNotify_2();
 
     public native static void CallJavaNotify_3();
+
     public native static void CallJavaNotify_4();
 
     //private static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -84,8 +87,7 @@ public class MyService extends Service {
     public static Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            //handler.postDelayed(this, 60 * 1000);
-            //CallJavaNotify_3();
+
         }
     };
 
@@ -240,6 +242,7 @@ public class MyService extends Service {
     }
 
     //----------------------------------------------
+    //每天行走的步数通知
     private static NotificationManager m_notificationManager;
     private static Notification.Builder m_builder;
 
@@ -277,7 +280,8 @@ public class MyService extends Service {
         }
     }
 
-    //----------------------------------------------
+    //------------------------------------------------------------------------------
+    // 待办事项定时任务通知
     private static NotificationManager m_notificationManagerAlarm;
     private static Notification.Builder m_builderAlarm;
 
@@ -289,9 +293,8 @@ public class MyService extends Service {
                 int importance = NotificationManager.IMPORTANCE_DEFAULT;
                 NotificationChannel notificationChannel = new NotificationChannel("Knot Alarm", "Knot Notifier Alarm", importance);
                 m_notificationManagerAlarm.createNotificationChannel(notificationChannel);
-
                 m_builderAlarm = new Notification.Builder(context, notificationChannel.getId());
-                //m_builder.setOnlyAlertOnce(true);
+
             } else {
                 m_builderAlarm = new Notification.Builder(context);
             }
@@ -300,14 +303,13 @@ public class MyService extends Service {
                     .setContentText(message)
                     .setSmallIcon(R.drawable.alarm)
                     .setColor(Color.GREEN)
-                    .setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_ALL);
+                    .setAutoCancel(true);
+                    //.setDefaults(Notification.DEFAULT_ALL);
 
             Notification notification = m_builderAlarm.build();
 
             m_notificationManagerAlarm.notify(strTodo, 10, notification);
 
-            //startForeground(1,m_builder.build());
         } catch (Exception e) {
             e.printStackTrace();
         }

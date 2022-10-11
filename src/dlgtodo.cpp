@@ -5,9 +5,6 @@
 #include "ui_mainwindow.h"
 
 QString highLblStyle = "color:rgb(212,35,122)";
-// "color:rgb(212,35,122)";
-// "background-color: rgb(254,234,112);color:rgb(39,36,17)";
-// "background-color: rgb(255,255,255);color:rgb(212,35,122)";
 int highCount;
 QString orgLblStyle;
 QListWidget *listTodo, *listRecycle;
@@ -35,6 +32,7 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   listTodo = ui->listWidget;
   listRecycle = new QListWidget;
   listRecycle = ui->listRecycle;
+  // 删除线风格
   // ui->listRecycle->setStyleSheet("text-decoration: line-through;");
   ui->listRecycle->setWordWrap(true);
 
@@ -47,13 +45,6 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->listRecycle->horizontalScrollBar()->setHidden(true);
   ui->listRecycle->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
 
-  /*QScrollerProperties sp;
-  sp.setScrollMetric(QScrollerProperties::DragStartDistance, 0.00001);
-  sp.setScrollMetric(QScrollerProperties::ScrollingCurve, QEasingCurve::Linear);
-  QScroller* qs = QScroller::scroller(listTodo);
-  QScroller* qs1 = QScroller::scroller(ui->listRecycle);
-  qs->setScrollerProperties(sp);
-  qs1->setScrollerProperties(sp);*/
   mw_one->setSCrollPro(listTodo);
   mw_one->setSCrollPro(ui->listRecycle);
 
@@ -272,7 +263,6 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   lblTime->setStyleSheet("QLabel{color:rgb(80,80,80);}");
   if (time.contains(tr("Alarm"))) {
     lblTime->setStyleSheet(alarmStyle);
-    // lblTime->setStyleSheet(mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
     f.setBold(true);
     lblTime->setFont(f);
   }
@@ -335,7 +325,6 @@ void dlgTodo::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
 
 void dlgTodo::on_listWidget_currentRowChanged(int currentRow) {
   Q_UNUSED(currentRow);
-  // if (editItem != NULL) listTodo->closePersistentEditor(editItem);
 }
 
 void dlgTodo::closeEvent(QCloseEvent* event) {
@@ -700,26 +689,11 @@ void dlgTodo::on_Alarm() {
           total_cur_m = cur_h * 60 + cur_m;
 
           if (total_cur_m >= total_m - 1) {
-            // if (QTime::currentTime().toString("HH:mm") >= time) {
-
             lbl->setText(str);
             saveTodo();
             QString text = getMainLabel(i)->text().trimmed();
             sendMsgAlarm(text);
             lbl->setStyleSheet(getMainLabel(i)->styleSheet());
-            QMessageBox msgBox;
-            msgBox.setText(tr("Todo"));
-            msgBox.setInformativeText(str + "\n\n" + text);
-            QPushButton* btnOk =
-                msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-            btnOk->setFocus();
-            // msgBox.exec();
-
-            // msgDlg = new msgDialog(mw_one);
-            // msgDlg->initDlg();
-            // msgDlg->ui->lblText->setText(tr("Todo") + " : " + str + "\n\n" +
-            //                              text);
-            // msgDlg->show();
 
             break;
           }
@@ -756,8 +730,6 @@ void dlgTodo::stopTimerAlarm() {
 
   jo.callStaticMethod<int>("com.x/MyActivity", "stopAlarm", "()I");
 #endif
-
-  // if (mw_one->isHardStepSensor == 1) mw_one->mydlgSteps->releaseWakeLock();
 }
 
 void dlgTodo::sendMsgAlarm(QString text) {
