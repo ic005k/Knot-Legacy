@@ -1,5 +1,5 @@
-#ifndef DLGMEMOS_H
-#define DLGMEMOS_H
+#ifndef DLGMAINNOTES_H
+#define DLGMAINNOTES_H
 
 #include <QApplication>
 #include <QChar>
@@ -185,4 +185,4 @@ class dlgMainNotes : public QDialog {
   void wheelEvent(QWheelEvent *e) override;
 };
 
-#endif  // DLGMEMOS_H
+#endif  // DLGMAINNOTES_H

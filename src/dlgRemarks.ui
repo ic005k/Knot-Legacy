@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>dlgNotes</class>
- <widget class="QDialog" name="dlgNotes">
+ <class>dlgRemarks</class>
+ <widget class="QDialog" name="dlgRemarks">
   <property name="geometry">
    <rect>
     <x>0</x>

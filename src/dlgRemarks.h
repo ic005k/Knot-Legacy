@@ -1,19 +1,19 @@
-#ifndef DLGNOTES_H
-#define DLGNOTES_H
+#ifndef DLGREMARKS_H
+#define DLGREMARKS_H
 
 #include <QDialog>
 
 namespace Ui {
-class dlgNotes;
+class dlgRemarks;
 }
 
-class dlgNotes : public QDialog {
+class dlgRemarks : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgNotes(QWidget *parent = nullptr);
-  ~dlgNotes();
-  Ui::dlgNotes *ui;
+  explicit dlgRemarks(QWidget *parent = nullptr);
+  ~dlgRemarks();
+  Ui::dlgRemarks *ui;
 
   int sliderPos;
   void init_Notes();
@@ -39,4 +39,4 @@ class dlgNotes : public QDialog {
  private:
 };
 
-#endif  // DLGNOTES_H
+#endif  // DLGREMARKS_H

@@ -1727,23 +1727,23 @@ void MainWindow::on_actionNotes_triggered() {
   showGrayWindows();
 
   mydlgMainNotes->m_SetEditText->close();
-  mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgNotes);
+  mydlgMainNotes->m_SetEditText = new dlgSetEditText(m_Remarks);
 
-  mydlgNotes->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                          this->width(), this->height() / 2);
+  m_Remarks->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                         this->width(), this->height() / 2);
 
-  mydlgNotes->ui->textEdit->clear();
+  m_Remarks->ui->textEdit->clear();
 
-  mydlgNotes->ui->frameAbout->hide();
-  mydlgNotes->ui->textEdit->setHidden(false);
-  mydlgNotes->ui->lblTitle->show();
-  mydlgNotes->ui->btnPaste->show();
-  mydlgNotes->ui->lblTitle->setText(tr("Notes") + " : " +
-                                    tabData->tabText(tabData->currentIndex()));
+  m_Remarks->ui->frameAbout->hide();
+  m_Remarks->ui->textEdit->setHidden(false);
+  m_Remarks->ui->lblTitle->show();
+  m_Remarks->ui->btnPaste->show();
+  m_Remarks->ui->lblTitle->setText(tr("Notes") + " : " +
+                                   tabData->tabText(tabData->currentIndex()));
 
-  mydlgNotes->init_Notes();
+  m_Remarks->init_Notes();
 
-  mydlgNotes->show();
+  m_Remarks->show();
 }
 
 void MainWindow::on_btnNotes_clicked() { on_actionNotes_triggered(); }
@@ -2399,7 +2399,7 @@ QTreeWidget* MainWindow::get_tw(int tabIndex) {
 }
 
 void MainWindow::on_about() {
-  mydlgNotes->init_Notes();
+  m_Remarks->init_Notes();
 
   bakData(iniFile, false);
 
@@ -2418,16 +2418,16 @@ void MainWindow::on_about() {
   textBrowser->append("Login Time: " + loginTime);
   textBrowser->append("");
   textBrowser->setHidden(true);
-  mydlgNotes->ui->textEdit->setHidden(true);
+  m_Remarks->ui->textEdit->setHidden(true);
 
-  mydlgNotes->ui->lblTitle->hide();
-  mydlgNotes->ui->btnPaste->hide();
-  mydlgNotes->ui->lblAbout->setText(textBrowser->toPlainText());
-  mydlgNotes->ui->frameAbout->show();
-  mydlgNotes->setGeometry(this->geometry().x(), this->geometry().y(),
-                          this->width(), this->height());
-  mydlgNotes->setModal(true);
-  mydlgNotes->show();
+  m_Remarks->ui->lblTitle->hide();
+  m_Remarks->ui->btnPaste->hide();
+  m_Remarks->ui->lblAbout->setText(textBrowser->toPlainText());
+  m_Remarks->ui->frameAbout->show();
+  m_Remarks->setGeometry(this->geometry().x(), this->geometry().y(),
+                         this->width(), this->height());
+  m_Remarks->setModal(true);
+  m_Remarks->show();
 }
 
 void MainWindow::on_btnFind_clicked() {
@@ -3677,8 +3677,8 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->setMouseTracking(true);
 
   myfile = new File();
-  mydlgNotes = new dlgNotes(this);
-  mydlgNotes->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
+  m_Remarks = new dlgRemarks(this);
+  m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
 
   mydlgRename = new dlgRename(this);
   mydlgSetTime = new dlgSetTime(this);

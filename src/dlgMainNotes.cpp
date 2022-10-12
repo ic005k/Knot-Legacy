@@ -1,4 +1,4 @@
-#include "src/dlgMemos.h"
+#include "src/dlgMainNotes.h".h "
 
 #include "mainwindow.h"
 #include "ui_dlgMemos.h"
@@ -109,12 +109,13 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnRight->setAutoRepeat(true);
   ui->btnRight->setAutoRepeatDelay(a);
   ui->btnRight->setAutoRepeatInterval(b);
+
+  ui->editSource->setFocus();
 }
 
 void dlgMainNotes::init() {
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
-  ui->editSource->setFocus();
 }
 
 void dlgMainNotes::wheelEvent(QWheelEvent* e) {}

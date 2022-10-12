@@ -55,14 +55,14 @@
 #include <QValueAxis>
 
 #include "dlgReaderFun.h"
-#include "src/dlgMemos.h"
+#include "src/dlgMainNotes.h"
 #include "src/dlgNotesList.h"
 #include "src/dlgOneDrive.h"
+#include "src/dlgRemarks.h"
 #include "src/dlgSetText.h"
 #include "src/dlgfloatfun.h"
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
-#include "src/dlgnotes.h"
 #include "src/dlgpreferences.h"
 #include "src/dlgreader.h"
 #include "src/dlgrename.h"
@@ -77,11 +77,11 @@
 #include "ui_dlgMemos.h"
 #include "ui_dlgNotesList.h"
 #include "ui_dlgReaderFun.h"
+#include "ui_dlgRemarks.h"
 #include "ui_dlgSetText.h"
 #include "ui_dlgfloatfun.h"
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
-#include "ui_dlgnotes.h"
 #include "ui_dlgpreferences.h"
 #include "ui_dlgreader.h"
 #include "ui_dlgrename.h"
@@ -181,7 +181,7 @@ class MainWindow : public QMainWindow {
   static QString get_Month(QString date);
   void init_Options();
   QStringList listMonth;
-  dlgNotes *mydlgNotes;
+  dlgRemarks *m_Remarks;
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
   dlgTodo *mydlgTodo;

@@ -31,6 +31,8 @@ class dlgNotesList : public QDialog {
 
   void on_btnRename_clicked();
 
+  void on_btnDel_clicked();
+
  private:
 };
 

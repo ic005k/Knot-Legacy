@@ -8,6 +8,11 @@ extern MainWindow* mw_one;
 
 dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
+  QPalette pal = palette();
+  pal.setColor(QPalette::Background, QColor(128, 42, 42, 100));
+  setPalette(pal);
+  setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool | Qt::FramelessWindowHint);
+
   ui->setupUi(this);
   setModal(true);
   this->layout()->setSpacing(5);
@@ -32,6 +37,7 @@ dlgNotesList::dlgNotesList(QWidget* parent)
 
   ui->treeWidget->setFocus();
   ui->treeWidget->expandAll();
+  on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
 }
 
 dlgNotesList::~dlgNotesList() { delete ui; }
@@ -78,4 +84,11 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
 void dlgNotesList::on_btnRename_clicked() {
   QTreeWidgetItem* item = ui->treeWidget->currentItem();
   item->setText(0, ui->editName->text().trimmed());
+}
+
+void dlgNotesList::on_btnDel_clicked() {
+  if (mw_one->showMsgBox("Kont", tr("Delete?"), "", 2)) {
+    QTreeWidgetItem* item = ui->treeWidget->currentItem();
+    // ui->treeWidget->takeTopLevelItem(item);
+  }
 }

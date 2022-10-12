@@ -1,14 +1,15 @@
-#include "dlgnotes.h"
+#include "dlgRemarks.h"
 
 #include "mainwindow.h"
-#include "ui_dlgnotes.h"
+#include "ui_dlgRemarks.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern bool loading, zh_cn;
 extern QString noteText;
 extern int curPos;
 
-dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
+dlgRemarks::dlgRemarks(QWidget* parent)
+    : QDialog(parent), ui(new Ui::dlgRemarks) {
   ui->setupUi(this);
 
   setModal(true);
@@ -31,9 +32,9 @@ dlgNotes::dlgNotes(QWidget* parent) : QDialog(parent), ui(new Ui::dlgNotes) {
       "}");
 }
 
-dlgNotes::~dlgNotes() { delete ui; }
+dlgRemarks::~dlgRemarks() { delete ui; }
 
-void dlgNotes::on_btnBack_clicked() {
+void dlgRemarks::on_btnBack_clicked() {
   mw_one->mydlgMainNotes->m_SetEditText->close();
 
   noteText = ui->textEdit->toPlainText();
@@ -49,9 +50,9 @@ void dlgNotes::on_btnBack_clicked() {
   mw_one->closeGrayWindows();
 }
 
-void dlgNotes::on_textEdit_textChanged() {}
+void dlgRemarks::on_textEdit_textChanged() {}
 
-bool dlgNotes::eventFilter(QObject* obj, QEvent* evn) {
+bool dlgRemarks::eventFilter(QObject* obj, QEvent* evn) {
   if (obj == ui->textEdit->viewport()) {
     mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
   }
@@ -67,14 +68,14 @@ bool dlgNotes::eventFilter(QObject* obj, QEvent* evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void dlgNotes::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
+void dlgRemarks::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
-void dlgNotes::resizeEvent(QResizeEvent* event) {
+void dlgRemarks::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);
   qDebug() << "resize" << ui->textEdit->height();
 }
 
-void dlgNotes::init_Notes() {
+void dlgRemarks::init_Notes() {
   int index = mw_one->ui->tabWidget->currentIndex();
   QString str = mw_one->ui->tabWidget->tabToolTip(index);
   QStringList list = str.split("|");
@@ -91,7 +92,7 @@ void dlgNotes::init_Notes() {
     ui->textEdit->setPlainText(str);
 }
 
-void dlgNotes::on_btnDL_clicked() {
+void dlgRemarks::on_btnDL_clicked() {
   QString str;
   str =
       "https://github.com/ic005k/Knot/releases/download/2022/"
@@ -100,14 +101,14 @@ void dlgNotes::on_btnDL_clicked() {
   QDesktopServices::openUrl(url);
 }
 
-void dlgNotes::on_btnHomePage_clicked() {
+void dlgRemarks::on_btnHomePage_clicked() {
   QString str;
   str = "https://github.com/ic005k/Knot/issues";
   QUrl url(str);
   QDesktopServices::openUrl(url);
 }
 
-void dlgNotes::on_btnMirrorDL_clicked() {
+void dlgRemarks::on_btnMirrorDL_clicked() {
   QString str =
       "https://ghproxy.com/https://github.com/ic005k/Knot/releases/download/"
       "2022/android-build-release-signed.apk";
@@ -115,4 +116,4 @@ void dlgNotes::on_btnMirrorDL_clicked() {
   QDesktopServices::openUrl(url);
 }
 
-void dlgNotes::on_btnPaste_clicked() { ui->textEdit->paste(); }
+void dlgRemarks::on_btnPaste_clicked() { ui->textEdit->paste(); }
