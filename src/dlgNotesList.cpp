@@ -20,13 +20,12 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   mw_one->setSCrollPro(ui->treeWidget);
 
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
+  ui->treeWidget->setColumnHidden(1, true);
   if (ui->treeWidget->topLevelItemCount() == 0) {
     QTreeWidgetItem* item = new QTreeWidgetItem();
     item->setText(0, tr("Default"));
-
     QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
     item1->setText(0, tr("My Notes"));
-
     ui->treeWidget->addTopLevelItem(item);
   }
 
@@ -40,7 +39,7 @@ bool dlgNotesList::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      close();
+      on_btnClose_clicked();
       return true;
     }
   }
@@ -49,3 +48,11 @@ bool dlgNotesList::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void dlgNotesList::on_btnClose_clicked() { close(); }
+
+void dlgNotesList::on_btnNewNoteBook_clicked() {
+  QTreeWidgetItem* item = new QTreeWidgetItem();
+  item->setText(0, ui->editBook->text().trimmed());
+  QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
+  item1->setText(0, ui->editNote->text().trimmed());
+  ui->treeWidget->addTopLevelItem(item);
+}

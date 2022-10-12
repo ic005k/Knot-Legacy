@@ -23,6 +23,8 @@ class dlgNotesList : public QDialog {
  private slots:
   void on_btnClose_clicked();
 
+  void on_btnNewNoteBook_clicked();
+
  private:
 };
 
