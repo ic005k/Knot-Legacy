@@ -8,11 +8,6 @@ extern MainWindow* mw_one;
 
 dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
-  QPalette pal = palette();
-  pal.setColor(QPalette::Background, QColor(128, 42, 42, 100));
-  setPalette(pal);
-  setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool | Qt::FramelessWindowHint);
-
   ui->setupUi(this);
   setModal(true);
   this->layout()->setSpacing(5);
@@ -67,6 +62,8 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
 }
 
 void dlgNotesList::on_btnNewNote_clicked() {
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
+
   QTreeWidgetItem* topitem = ui->treeWidget->currentItem();
   if (topitem->childCount() == 0) topitem = topitem->parent();
 
@@ -78,17 +75,50 @@ void dlgNotesList::on_btnNewNote_clicked() {
 
 void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
                                              int column) {
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
+
   ui->editName->setText(item->text(column));
 }
 
 void dlgNotesList::on_btnRename_clicked() {
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
+
   QTreeWidgetItem* item = ui->treeWidget->currentItem();
   item->setText(0, ui->editName->text().trimmed());
 }
 
 void dlgNotesList::on_btnDel_clicked() {
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
+
   if (mw_one->showMsgBox("Kont", tr("Delete?"), "", 2)) {
     QTreeWidgetItem* item = ui->treeWidget->currentItem();
-    // ui->treeWidget->takeTopLevelItem(item);
+    if (item->parent() == NULL) {
+      ui->treeWidget->takeTopLevelItem(ui->treeWidget->currentIndex().row());
+    } else {
+      item->parent()->removeChild(item);
+    }
   }
+}
+
+void dlgNotesList::on_btnImport_clicked() {
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
+
+  QString fileName;
+  fileName =
+      QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("MD File (*.md)"));
+  if (QFile(fileName).exists()) {
+    QTreeWidgetItem* item = ui->treeWidget->currentItem();
+
+    if (item->parent() == NULL) {
+      QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
+      item1->setText(0, tr("Notes Imported"));
+    } else {
+      QTreeWidgetItem* item1 = new QTreeWidgetItem(item->parent());
+      item1->setText(0, tr("Notes Imported"));
+    }
+  }
+}
+
+void dlgNotesList::on_btnExport_clicked() {
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
 }

@@ -74,6 +74,7 @@
 #include "src/msgdialog.h"
 #include "src/onedrive/dlgweb.h"
 #include "src/specialaccelerometerpedometer.h"
+#include "ui_dlgMainNotes.h"
 #include "ui_dlgNotesList.h"
 #include "ui_dlgReaderFun.h"
 #include "ui_dlgRemarks.h"

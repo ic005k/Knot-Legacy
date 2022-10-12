@@ -4586,6 +4586,9 @@ void MainWindow::on_btnEdit_clicked() {
   mydlgMainNotes->m_SetEditText->close();
   mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgMainNotes);
 
+  mydlgMainNotes->isShow = true;
+  mainHeight = this->height();
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
@@ -4605,9 +4608,6 @@ void MainWindow::on_btnEdit_clicked() {
   QTextCursor tmpCursor = mydlgMainNotes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);
   mydlgMainNotes->ui->editSource->setTextCursor(tmpCursor);
-
-  mydlgMainNotes->isShow = true;
-  mainHeight = this->height();
 }
 
 void MainWindow::on_btnCode_clicked() {

@@ -33,6 +33,10 @@ class dlgNotesList : public QDialog {
 
   void on_btnDel_clicked();
 
+  void on_btnImport_clicked();
+
+  void on_btnExport_clicked();
+
  private:
 };
 
