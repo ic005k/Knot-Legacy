@@ -69,7 +69,7 @@ class dlgMainNotes : public QDialog {
   void getEditPanel(QTextEdit *textEdit, QEvent *evn);
 
   qreal getVHeight();
-  void setVPos(qreal sliderPos);
+  void setVPos();
  public slots:
   void editVSBarValueChanged();
 
@@ -152,6 +152,14 @@ class dlgMainNotes : public QDialog {
   void on_btnRight_clicked();
 
   void on_btnS10_clicked();
+
+  void on_btnL1_clicked();
+
+  void on_btnL0_clicked();
+
+  void on_btnR1_clicked();
+
+  void on_btnR0_clicked();
 
  signals:
   void sendUpdate();

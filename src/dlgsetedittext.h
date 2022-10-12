@@ -21,6 +21,16 @@ class dlgSetEditText : public QDialog {
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
+
+ public slots:
+  void on_btnLeft1_clicked();
+
+  void on_btnLeft0_clicked();
+
+  void on_btnRight1_clicked();
+
+  void on_btnRight0_clicked();
+
  private slots:
   void on_btnClose_clicked();
 
@@ -31,14 +41,6 @@ class dlgSetEditText : public QDialog {
   void on_btnPaste_clicked();
 
   void on_btnSetAll_clicked();
-
-  void on_btnLeft1_clicked();
-
-  void on_btnLeft0_clicked();
-
-  void on_btnRight1_clicked();
-
-  void on_btnRight0_clicked();
 
  private:
   bool isMouseRelease = false;

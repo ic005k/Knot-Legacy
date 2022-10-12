@@ -3447,7 +3447,6 @@ void MainWindow::updateHardSensorSteps() {
 void MainWindow::on_actionMemos_triggered() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  mydlgMainNotes->sliderPos = Reg.value("/MainNotes/SlidePos").toReal();
 
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
   if (strPw != "") {
@@ -3516,8 +3515,6 @@ void MainWindow::on_actionMemos_triggered() {
 
       if (ok && !text.isEmpty()) {
         if (text.trimmed() == strPw) {
-          // strText = decMemos(strDec, file);
-
           showMemos();
 
         } else {
@@ -3551,8 +3548,6 @@ void MainWindow::on_actionMemos_triggered() {
     dlg->show();
 
   } else {
-    // strText = decMemos(strDec, file);
-
     showMemos();
   }
 }
@@ -3582,7 +3577,7 @@ void MainWindow::showMemos() {
   ui->frameSetKey->hide();
   ui->frameMemo->show();
 
-  mydlgMainNotes->setVPos(mydlgMainNotes->sliderPos);
+  mydlgMainNotes->setVPos();
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -3648,7 +3643,6 @@ void MainWindow::init_UIWidget() {
   ui->frameOne->hide();
   ui->frameFunWeb->hide();
   ui->btnStorageInfo->hide();
-  ui->btnNotesList->hide();
 
   ui->frameMemo->hide();
   ui->frameMemo->setContentsMargins(1, 1, 1, 1);
@@ -4601,14 +4595,16 @@ void MainWindow::on_btnEdit_clicked() {
   }
 
   mydlgMainNotes->init();
-
   mydlgMainNotes->ui->editSource->setPlainText(str);
 
-  mydlgMainNotes->ui->btnPic->setEnabled(true);
   mydlgMainNotes->show();
 
-  mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(
-      mydlgMainNotes->sliderPos);
+  int vpos = Reg.value("/MainNotes/editVPos").toInt();
+  int cpos = Reg.value("/MainNotes/editCPos").toInt();
+  mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
+  QTextCursor tmpCursor = mydlgMainNotes->ui->editSource->textCursor();
+  tmpCursor.setPosition(cpos);
+  mydlgMainNotes->ui->editSource->setTextCursor(tmpCursor);
 
   mydlgMainNotes->isShow = true;
   mainHeight = this->height();

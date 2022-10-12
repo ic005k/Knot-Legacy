@@ -14,6 +14,10 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
   ui->setupUi(this);
   ui->btnTest->hide();
+  ui->btnL0->hide();
+  ui->btnL1->hide();
+  ui->btnR0->hide();
+  ui->btnR1->hide();
 
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);
@@ -110,6 +114,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 void dlgMainNotes::init() {
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
+  ui->editSource->setFocus();
 }
 
 void dlgMainNotes::wheelEvent(QWheelEvent* e) {}
@@ -169,20 +174,21 @@ void dlgMainNotes::on_btnBack_clicked() {
 
   loadMemoQML();
 
-  qreal a0, b0, a1, b1;
+  /*qreal a0, b0, a1, b1;
   setVPos(0);
   b0 = textHeight - mw_one->ui->quickWidgetMemo->height();
   a1 = ui->editSource->verticalScrollBar()->sliderPosition();
   b1 = ui->editSource->verticalScrollBar()->maximum();
   a0 = b0 * a1 / b1;
   sliderPos = a0;
-  qDebug() << a0 << b0 << a1 << b1;
+  qDebug() << a0 << b0 << a1 << b1;*/
   close();
-  setVPos(sliderPos);
+  setVPos();
 }
 
 void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setValue("/MainNotes/SlidePos", sliderPos);
 
   QString path = iniDir + "memo/";
   QDir dir;
@@ -248,6 +254,9 @@ void dlgMainNotes::saveMainNotes() {
   mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
 
   Reg.setValue("/MainNotes/CurrentOSIniDir", iniDir);
+  Reg.setValue("/MainNotes/editVPos",
+               ui->editSource->verticalScrollBar()->sliderPosition());
+  Reg.setValue("/MainNotes/editCPos", ui->editSource->textCursor().position());
 }
 
 void dlgMainNotes::init_MainNotes() { loadMemoQML(); }
@@ -647,7 +656,9 @@ void dlgMainNotes::loadMemoQML() {
   getVHeight();
 }
 
-void dlgMainNotes::setVPos(qreal sliderPos) {
+void dlgMainNotes::setVPos() {
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  sliderPos = Reg.value("/MainNotes/SlidePos").toReal();
   if (sliderPos < 0) sliderPos = 0;
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
@@ -933,3 +944,11 @@ void dlgMainNotes::on_btnRight_clicked() {
   ui->editSource->moveCursor(QTextCursor::NextCharacter,
                              QTextCursor::MoveAnchor);
 }
+
+void dlgMainNotes::on_btnL1_clicked() { m_SetEditText->on_btnLeft1_clicked(); }
+
+void dlgMainNotes::on_btnL0_clicked() { m_SetEditText->on_btnLeft0_clicked(); }
+
+void dlgMainNotes::on_btnR1_clicked() { m_SetEditText->on_btnRight1_clicked(); }
+
+void dlgMainNotes::on_btnR0_clicked() { m_SetEditText->on_btnRight0_clicked(); }
