@@ -1,7 +1,7 @@
-#include "src/dlgMainNotes.h".h "
+#include "src/dlgMainNotes.h"
 
 #include "mainwindow.h"
-#include "ui_dlgMemos.h"
+#include "ui_dlgMainNotes.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
