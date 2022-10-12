@@ -27,6 +27,7 @@ dlgNotesList::dlgNotesList(QWidget* parent)
     QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
     item1->setText(0, tr("My Notes"));
     ui->treeWidget->addTopLevelItem(item);
+    ui->treeWidget->setCurrentItem(item->child(item->childCount() - 1));
   }
 
   ui->treeWidget->setFocus();
@@ -55,4 +56,26 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
   QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
   item1->setText(0, ui->editNote->text().trimmed());
   ui->treeWidget->addTopLevelItem(item);
+
+  ui->treeWidget->setCurrentItem(item->child(item->childCount() - 1));
+}
+
+void dlgNotesList::on_btnNewNote_clicked() {
+  QTreeWidgetItem* topitem = ui->treeWidget->currentItem();
+  if (topitem->childCount() == 0) topitem = topitem->parent();
+
+  QTreeWidgetItem* item1 = new QTreeWidgetItem(topitem);
+  item1->setText(0, ui->editNote->text().trimmed());
+
+  ui->treeWidget->setCurrentItem(topitem->child(topitem->childCount() - 1));
+}
+
+void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
+                                             int column) {
+  ui->editName->setText(item->text(column));
+}
+
+void dlgNotesList::on_btnRename_clicked() {
+  QTreeWidgetItem* item = ui->treeWidget->currentItem();
+  item->setText(0, ui->editName->text().trimmed());
 }

@@ -25,6 +25,12 @@ class dlgNotesList : public QDialog {
 
   void on_btnNewNoteBook_clicked();
 
+  void on_btnNewNote_clicked();
+
+  void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
+
+  void on_btnRename_clicked();
+
  private:
 };
 
