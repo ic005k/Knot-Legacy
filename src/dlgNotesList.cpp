@@ -63,9 +63,8 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
   //     ".md");
   ui->treeWidget->addTopLevelItem(item);
 
+  ui->treeWidget->setCurrentItem(item);
   on_btnNewNote_clicked();
-
-  ui->treeWidget->setCurrentItem(item->child(item->childCount() - 1));
 }
 
 void dlgNotesList::on_btnNewNote_clicked() {
@@ -74,7 +73,7 @@ void dlgNotesList::on_btnNewNote_clicked() {
   QString noteFile =
       iniDir + "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + ".md";
   QTreeWidgetItem* topitem = ui->treeWidget->currentItem();
-  if (topitem->childCount() == 0) topitem = topitem->parent();
+  if (topitem->parent() != NULL) topitem = topitem->parent();
 
   QTreeWidgetItem* item1 = new QTreeWidgetItem(topitem);
   item1->setText(0, ui->editNote->text().trimmed());
@@ -101,10 +100,18 @@ void dlgNotesList::on_btnRename_clicked() {
 }
 
 void dlgNotesList::on_btnDel_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0) return;
+  QTreeWidgetItem* item = ui->treeWidget->currentItem();
+  int count = ui->treeWidget->topLevelItemCount();
+
+  if (item->parent() == NULL) {
+    if (ui->treeWidget->currentIndex().row() == 0) return;
+  } else {
+    if (ui->treeWidget->currentIndex().row() == 0) {
+      if (count == 1) return;
+    }
+  }
 
   if (mw_one->showMsgBox("Kont", tr("Delete?"), "", 2)) {
-    QTreeWidgetItem* item = ui->treeWidget->currentItem();
     if (item->parent() == NULL) {
       ui->treeWidget->takeTopLevelItem(ui->treeWidget->currentIndex().row());
     } else {
