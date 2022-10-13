@@ -10,6 +10,7 @@ extern QString iniDir;
 dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
   ui->setupUi(this);
+  setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
   tw = ui->treeWidget;
   setModal(true);
   this->layout()->setSpacing(5);
@@ -40,6 +41,13 @@ dlgNotesList::dlgNotesList(QWidget* parent)
 
     saveNotesList();
   }
+
+  ui->editBook->setStyleSheet(
+      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
+  ui->editName->setStyleSheet(
+      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
+  ui->editNote->setStyleSheet(
+      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
 }
 
 dlgNotesList::~dlgNotesList() { delete ui; }
@@ -269,6 +277,7 @@ void dlgNotesList::initNotesList() {
       QString strChild1 = childItem->text(1);
       if (strChild1 == currentMDFile) {
         tw->setCurrentItem(childItem);
+        on_treeWidget_itemClicked(childItem, 0);
         stop = true;
         break;
       }
