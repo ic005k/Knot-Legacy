@@ -162,9 +162,24 @@ void dlgNotesList::on_btnImport_clicked() {
   fileName =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("MD File (*.*)"));
 
-  if (!fileName.contains(".md")) {
+  bool isMD = false;
+  QString strInfo;
+  isMD = fileName.contains(".md");
+  strInfo = fileName;
+#ifdef Q_OS_ANDROID
+  QString fileAndroid = mw_one->mydlgReader->getUriRealPath(fileName);
+  isMD = fileAndroid.contains(".md");
+
+  QStringList list = fileAndroid.split("/");
+  QString str = list.at(list.count() - 1);
+  if (str.toInt() > 0) isMD = true;
+  strInfo = fileAndroid;
+
+#endif
+
+  if (!isMD) {
     QMessageBox box;
-    box.setText(tr("Invalid Markdown file."));
+    box.setText(tr("Invalid Markdown file.") + "\n\n" + strInfo);
     box.exec();
     return;
   }
@@ -214,14 +229,7 @@ void dlgNotesList::on_btnExport_clicked() {
   edit->setAcceptRichText(false);
   edit->setPlainText(str);
 
-  if (fileName.contains(".md")) fileName.replace(".md", "");
-  if (QFile(fileName + ".md").exists()) {
-    if (!mw_one->showMsgBox(
-            "Knot", tr("The file already exists, is it overwritten?"), "", 2))
-      return;
-  }
-
-  mw_one->TextEditToFile(edit, fileName + ".md");
+  mw_one->TextEditToFile(edit, fileName);
 }
 
 void dlgNotesList::closeEvent(QCloseEvent* event) {
