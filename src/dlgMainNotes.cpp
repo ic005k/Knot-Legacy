@@ -722,15 +722,18 @@ void dlgMainNotes::on_btnLink_clicked() {
 void dlgMainNotes::on_btnS6_clicked() { ui->editSource->insertPlainText("~"); }
 
 void dlgMainNotes::on_btnS7_clicked() {
-  ui->editSource->insertPlainText("[ ]");
+  ui->editSource->insertPlainText("[]");
+  ui->btnLeft->click();
 }
 
 void dlgMainNotes::on_btnS8_clicked() {
-  ui->editSource->insertPlainText("( )");
+  ui->editSource->insertPlainText("()");
+  ui->btnLeft->click();
 }
 
 void dlgMainNotes::on_btnS9_clicked() {
-  ui->editSource->insertPlainText("{ }");
+  ui->editSource->insertPlainText("{}");
+  ui->btnLeft->click();
 }
 
 void dlgMainNotes::on_btnS10_clicked() { ui->editSource->insertPlainText("_"); }

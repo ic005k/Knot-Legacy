@@ -10,7 +10,6 @@ extern QString iniDir;
 dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
   ui->setupUi(this);
-  setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
   tw = ui->treeWidget;
   setModal(true);
   this->layout()->setSpacing(5);
@@ -176,7 +175,12 @@ void dlgNotesList::on_btnImport_clicked() {
     tw->setCurrentItem(item1);
     currentMDFile =
         iniDir + "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + ".md";
-    QFile::copy(fileName, currentMDFile);
+    QString str = mw_one->loadText(fileName);
+    QTextEdit* edit = new QTextEdit();
+    edit->setAcceptRichText(false);
+    edit->setPlainText(str);
+    mw_one->TextEditToFile(edit, currentMDFile);
+
     item1->setText(1, currentMDFile);
 
     on_treeWidget_itemClicked(item1, 1);
@@ -192,7 +196,6 @@ void dlgNotesList::on_btnExport_clicked() {
   QString fileName;
   QFileDialog fd;
   fileName = fd.getSaveFileName(this, tr("Knot"), "", tr("MD File(*.md)"));
-  if (!fileName.contains(".md")) fileName = fileName + ".md";
 
   QString mdfile = item->text(1);
 
@@ -201,6 +204,10 @@ void dlgNotesList::on_btnExport_clicked() {
   edit->setAcceptRichText(false);
   edit->setPlainText(str);
   mw_one->TextEditToFile(edit, fileName);
+
+  if (!fileName.contains(".md")) {
+    QFile::rename(fileName, fileName + ".md");
+  }
 }
 
 void dlgNotesList::closeEvent(QCloseEvent* event) {

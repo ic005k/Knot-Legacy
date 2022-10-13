@@ -177,7 +177,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>[ ]</string>
+           <string>[]</string>
           </property>
          </widget>
         </item>
@@ -190,7 +190,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>( )</string>
+           <string>()</string>
           </property>
          </widget>
         </item>
@@ -379,7 +379,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>{ }</string>
+           <string>{}</string>
           </property>
          </widget>
         </item>
@@ -407,6 +407,9 @@ color: rgb(255, 255, 255);</string>
           </property>
           <property name="text">
            <string>Paste</string>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
           </property>
          </widget>
         </item>
@@ -660,6 +663,9 @@ color: rgb(255, 255, 255);</string>
          <width>25</width>
          <height>25</height>
         </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextOnly</enum>
        </property>
       </widget>
      </item>

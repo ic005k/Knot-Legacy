@@ -4733,7 +4733,9 @@ void MainWindow::closeGrayWindows() {
 
 void MainWindow::on_btnNotesList_clicked() {
   mydlgMainNotes->saveQMLVPos();
-  mydlgNotesList->setGeometry(geometry().x(), geometry().y(), width() * 2 / 3,
+  int w = width() * 2 / 3;
+  int x = geometry().x() + width() - w - 2;
+  mydlgNotesList->setGeometry(x, geometry().y(), w,
                               ui->quickWidgetMemo->height());
   mydlgNotesList->show();
   mydlgNotesList->tw->setFocus();
