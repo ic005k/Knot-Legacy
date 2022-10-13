@@ -215,23 +215,20 @@ void TestDialog::on_pushButton_deleteFile_clicked() {
 
 void TestDialog::on_pushButton_upload2_clicked() {
   // QFileDialog fdlg;
-  QString filePath;  // = fdlg.getOpenFileName(this, "Select File");
-  filePath = mw_one->on_actionOneClickBakData(false);
-  if (filePath.isEmpty()) return;
-  if (!QFile(filePath).exists()) return;
+  QString zipfile =
+      iniDir + "memo.zip";  // = fdlg.getOpenFileName(this, "Select File");
+  mw_one->bakData(zipfile, false);
 
   if (!mw_one->showMsgBox(
           "OneDrive",
           tr("Uploading data?") + "\n\n" +
               tr("This operation will overwrite the data on OneDrive.") +
-              "\n\n" +
-              mw_one->mydlgReader->getUriRealPath(iniDir + "memo.zip") +
-              "\n\nSIZE: " +
-              mw_one->getFileSize(QFile(iniDir + "memo.zip").size(), 2),
+              "\n\n" + mw_one->mydlgReader->getUriRealPath(zipfile) +
+              "\n\nSIZE: " + mw_one->getFileSize(QFile(zipfile).size(), 2),
           "", 2))
     return;
 
-  oneDrive->uploadFile(filePath, "memo.zip",
+  oneDrive->uploadFile(zipfile, "memo.zip",
                        ui->lineEdit_fileID->text().trimmed());
   mw_one->ui->progressBar->setValue(0);
 }

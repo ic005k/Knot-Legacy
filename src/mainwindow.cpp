@@ -2265,12 +2265,14 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
     QFile::remove(iniDir + "memo/mainnotes.ini");
     QFile::copy(iniDir + "mainnotes.ini", iniDir + "memo/mainnotes.ini");
 
-    QString filePath = iniDir + "memo.zip";
-    QFile(filePath).remove();
+    QString zipfile = iniDir + "memo.zip";
+    QFile(zipfile).remove();
     mw_one->mydlgMainNotes->zipMemo();
 
-    QFile::remove(fileName);
-    QFile::copy(filePath, fileName);
+    if (fileName != zipfile) {
+      QFile::remove(fileName);
+      QFile::copy(zipfile, fileName);
+    }
 
     ui->progBar->setMaximum(100);
 
