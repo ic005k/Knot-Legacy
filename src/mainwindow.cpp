@@ -3565,7 +3565,6 @@ void MainWindow::showMemos() {
 
   QFont f(this->font());
   f.setPointSize(fontSize);
-  mydlgMainNotes->ui->textEdit->setFont(f);
   mydlgMainNotes->ui->editSource->setFont(f);
 
   memoHeight = ui->quickWidgetMemo->height();

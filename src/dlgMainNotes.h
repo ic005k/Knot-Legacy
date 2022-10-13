@@ -70,7 +70,9 @@ class dlgMainNotes : public QDialog {
 
   qreal getVHeight();
   void setVPos();
- public slots:
+  QString getDateTimeStr();
+  void MD2Html(QString mdFile);
+  public slots:
   void editVSBarValueChanged();
 
  protected:
@@ -144,8 +146,6 @@ class dlgMainNotes : public QDialog {
   void on_btnPaste_clicked();
 
   void showFunPanel();
-
-  void on_btnTest_clicked();
 
   void on_btnLeft_clicked();
 

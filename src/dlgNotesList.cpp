@@ -5,6 +5,7 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
+extern QString iniDir;
 
 dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
@@ -26,6 +27,7 @@ dlgNotesList::dlgNotesList(QWidget* parent)
     item->setText(0, tr("Default"));
     QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
     item1->setText(0, tr("My Notes"));
+    item1->setText(1, iniDir + "memo/memo.md");
     ui->treeWidget->addTopLevelItem(item);
     ui->treeWidget->setCurrentItem(item->child(item->childCount() - 1));
   }
@@ -54,9 +56,14 @@ void dlgNotesList::on_btnClose_clicked() { close(); }
 void dlgNotesList::on_btnNewNoteBook_clicked() {
   QTreeWidgetItem* item = new QTreeWidgetItem();
   item->setText(0, ui->editBook->text().trimmed());
-  QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
-  item1->setText(0, ui->editNote->text().trimmed());
+  // QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
+  // item1->setText(0, ui->editNote->text().trimmed());
+  // item1->setText(
+  //     1, iniDir + "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() +
+  //     ".md");
   ui->treeWidget->addTopLevelItem(item);
+
+  on_btnNewNote_clicked();
 
   ui->treeWidget->setCurrentItem(item->child(item->childCount() - 1));
 }
@@ -64,11 +71,17 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
 void dlgNotesList::on_btnNewNote_clicked() {
   if (ui->treeWidget->topLevelItemCount() == 0) return;
 
+  QString noteFile =
+      iniDir + "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + ".md";
   QTreeWidgetItem* topitem = ui->treeWidget->currentItem();
   if (topitem->childCount() == 0) topitem = topitem->parent();
 
   QTreeWidgetItem* item1 = new QTreeWidgetItem(topitem);
   item1->setText(0, ui->editNote->text().trimmed());
+  item1->setText(1, noteFile);
+  QTextEdit* edit = new QTextEdit();
+  mw_one->TextEditToFile(edit, noteFile);
+  mw_one->mydlgMainNotes->MD2Html(noteFile);
 
   ui->treeWidget->setCurrentItem(topitem->child(topitem->childCount() - 1));
 }

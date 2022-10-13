@@ -19,11 +19,14 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnR0->hide();
   ui->btnR1->hide();
 
+  QString path = iniDir + "memo/";
+  QDir dir;
+  dir.mkpath(path);
+
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);
   m_Right = new dlgRight(this);
 
-  ui->textEdit->installEventFilter(this);
   this->installEventFilter(this);
   ui->editSource->installEventFilter(this);
   ui->editSource->viewport()->installEventFilter(this);
@@ -31,10 +34,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
-
-  QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
-  ui->textEdit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  ui->textEdit->hide();
 
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
   ui->editSource->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
@@ -55,9 +54,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->frameFun->setFont(f);
 
   mw_one->setSCrollPro(ui->editSource);
-  mw_one->setSCrollPro(ui->textEdit);
 
-  ui->textEdit->setAcceptRichText(true);
   connect(ui->editSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
           SLOT(editVSBarValueChanged()));
 
@@ -96,7 +93,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
   bCursorVisible = true;
   timerCur = new QTimer(this);
-  // timerCur->start(500);
   connect(this, SIGNAL(sendUpdate()), this, SLOT(update()));
   connect(timerCur, SIGNAL(timeout()), this, SLOT(timerSlot()));
 
@@ -175,51 +171,31 @@ void dlgMainNotes::on_btnBack_clicked() {
 
   loadMemoQML();
 
-  /*qreal a0, b0, a1, b1;
-  setVPos(0);
-  b0 = textHeight - mw_one->ui->quickWidgetMemo->height();
-  a1 = ui->editSource->verticalScrollBar()->sliderPosition();
-  b1 = ui->editSource->verticalScrollBar()->maximum();
-  a0 = b0 * a1 / b1;
-  sliderPos = a0;
-  qDebug() << a0 << b0 << a1 << b1;*/
   close();
   setVPos();
+}
+
+void dlgMainNotes::MD2Html(QString mdFile) {
+  QString htmlFileName = iniDir + "memo/memo.html";
+  QFile memofile1(htmlFileName);
+  if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    QTextStream stream(&memofile1);
+    QTextEdit* edit = new QTextEdit();
+    edit->setMarkdown(mw_one->loadText(mdFile));
+    stream << edit->toHtml().toUtf8();
+    memofile1.close();
+  }
 }
 
 void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setValue("/MainNotes/SlidePos", sliderPos);
 
-  QString path = iniDir + "memo/";
-  QDir dir;
-  dir.mkpath(path);
-
   QString strMD = iniDir + "memo/memo.md";
-
   mw_one->TextEditToFile(ui->editSource, strMD);
-
-  /*QFile memofile(strMD);
-    if (memofile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    QTextStream stream(&memofile);
-    if (!ui->editSource->isHidden())
-      ui->textEdit->setMarkdown(ui->editSource->toPlainText());
-
-    stream << ui->textEdit->toMarkdown(
-        QTextDocument::MarkdownDialectCommonMark);
-    memofile.close();
-  }*/
+  MD2Html(strMD);
 
   QString htmlFileName = iniDir + "memo/memo.html";
-  QFile memofile1(htmlFileName);
-  if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    QTextStream stream(&memofile1);
-    ui->textEdit->setMarkdown(ui->editSource->toPlainText());
-    ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
-    stream << ui->textEdit->toHtml().toUtf8();
-    memofile1.close();
-  }
-
   QTextEdit* edit = new QTextEdit;
   QPlainTextEdit* edit1 = new QPlainTextEdit;
   QString strhtml = mw_one->loadText(htmlFileName);
@@ -459,19 +435,9 @@ QString dlgMainNotes::Deciphering(const QString& fileName) {
   file.close();
 }
 
-void dlgMainNotes::on_btnUndo_clicked() {
-  if (!ui->textEdit->isHidden())
-    ui->textEdit->undo();
-  else
-    ui->editSource->undo();
-}
+void dlgMainNotes::on_btnUndo_clicked() { ui->editSource->undo(); }
 
-void dlgMainNotes::on_btnRedo_clicked() {
-  if (!ui->textEdit->isHidden())
-    ui->textEdit->redo();
-  else
-    ui->editSource->redo();
-}
+void dlgMainNotes::on_btnRedo_clicked() { ui->editSource->redo(); }
 
 void dlgMainNotes::on_textEdit_textChanged() {}
 
@@ -489,6 +455,20 @@ void dlgMainNotes::on_textEdit_undoAvailable(bool b) {
     ui->btnUndo->setEnabled(false);
 }
 
+QString dlgMainNotes::getDateTimeStr() {
+  int y, m, d, hh, mm, s;
+  y = QDate::currentDate().year();
+  m = QDate::currentDate().month();
+  d = QDate::currentDate().day();
+  hh = QTime::currentTime().hour();
+  mm = QTime::currentTime().minute();
+  s = QTime::currentTime().second();
+  QString newname = QString::number(y) + QString::number(m) +
+                    QString::number(d) + "_" + QString::number(hh) +
+                    QString::number(mm) + QString::number(s);
+  return newname;
+}
+
 void dlgMainNotes::on_btnPic_clicked() {
   pAndroidKeyboard->hide();
 
@@ -500,18 +480,7 @@ void dlgMainNotes::on_btnPic_clicked() {
     QDir dir;
     dir.mkpath(iniDir + "memo/images/");
 
-    int y, m, d, hh, mm, s;
-    y = QDate::currentDate().year();
-    m = QDate::currentDate().month();
-    d = QDate::currentDate().day();
-    hh = QTime::currentTime().hour();
-    mm = QTime::currentTime().minute();
-    s = QTime::currentTime().second();
-    QString newname = QString::number(y) + QString::number(m) +
-                      QString::number(d) + "_" + QString::number(hh) +
-                      QString::number(mm) + QString::number(s);
-
-    QString strTar = iniDir + "memo/images/" + newname +
+    QString strTar = iniDir + "memo/images/" + getDateTimeStr() +
                      ".png";  // + list.at(list.count() - 1);
     if (QFile(strTar).exists()) QFile(strTar).remove();
 
@@ -537,26 +506,7 @@ void dlgMainNotes::on_btnPic_clicked() {
         pix.scaled(new_w, new_h, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pix.save(strTar);
 
-    /*QTextDocumentFragment fragment;
-    fragment = QTextDocumentFragment::fromHtml("<img src=" + strTar + ">");
-    ui->textEdit->textCursor().insertFragment(fragment);*/
-
-    if (!ui->textEdit->isHidden()) {
-      QUrl Uri(QString("file://%1").arg(strTar));
-      QImage image = QImageReader(strTar).read();
-
-      QTextDocument* textDocument = ui->textEdit->document();
-      textDocument->addResource(QTextDocument::ImageResource, Uri,
-                                QVariant(image));
-      QTextCursor cursor = ui->textEdit->textCursor();
-      QTextImageFormat imageFormat;
-      imageFormat.setWidth(image.width());
-      imageFormat.setHeight(image.height());
-      imageFormat.setName(Uri.toString());
-      cursor.insertImage(imageFormat);
-    } else {
-      ui->editSource->insertPlainText("![image](file://" + strTar + ")\n");
-    }
+    ui->editSource->insertPlainText("![image](file://" + strTar + ")\n");
 
     QMessageBox box;
     box.setText(strTar);
@@ -894,18 +844,6 @@ void dlgMainNotes::selectText(int start, int end) {
   cursor.setPosition(end, QTextCursor::KeepAnchor);
   byTextEdit->setTextCursor(cursor);
   m_SetEditText->ui->lineEdit->setText(cursor.selectedText());
-}
-
-void dlgMainNotes::on_btnTest_clicked() {
-  if (!ui->textEdit->isHidden())
-    ui->textEdit->hide();
-  else {
-    ui->textEdit->show();
-    int p = ui->editSource->textCursor().position();
-    QTextCursor tmpCursor = ui->editSource->textCursor();
-    tmpCursor.setPosition(p);
-    ui->editSource->setTextCursor(tmpCursor);
-  }
 }
 
 void dlgMainNotes::paintEvent(QPaintEvent* event) {
