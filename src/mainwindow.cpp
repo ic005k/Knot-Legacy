@@ -2036,6 +2036,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
       if (!ui->frameMemo->isHidden()) {
         if (!m_NotesList->isHidden()) {
+          m_NotesList->close();
           return true;
         } else {
           on_btnBackMemo_clicked();

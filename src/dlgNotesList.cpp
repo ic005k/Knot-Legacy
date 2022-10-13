@@ -55,6 +55,7 @@ bool dlgNotesList::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
+      on_btnClose_clicked();
       return true;
     }
   }
@@ -62,7 +63,7 @@ bool dlgNotesList::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgNotesList::on_btnClose_clicked() { close(); }
+void dlgNotesList::on_btnClose_clicked() { this->close(); }
 
 void dlgNotesList::on_btnNewNoteBook_clicked() {
   QTreeWidgetItem* item = new QTreeWidgetItem();
@@ -233,6 +234,7 @@ void dlgNotesList::closeEvent(QCloseEvent* event) {
 
 void dlgNotesList::saveNotesList() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   Reg.setValue("/MainNotes/currentItem", currentMDFile);
 
   int count = tw->topLevelItemCount();
@@ -263,6 +265,7 @@ void dlgNotesList::saveNotesList() {
 void dlgNotesList::initNotesList() {
   tw->clear();
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   int topCount = Reg.value("/MainNotes/topItemCount").toInt();
   for (int i = 0; i < topCount; i++) {
     QString strTop =
