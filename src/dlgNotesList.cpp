@@ -113,11 +113,27 @@ void dlgNotesList::on_btnDel_clicked() {
 
   if (mw_one->showMsgBox("Kont", tr("Delete?"), "", 2)) {
     if (item->parent() == NULL) {
+      int count = item->childCount();
+      for (int i = 0; i < count; i++) {
+        QString file = item->child(i)->text(1);
+        delFile(file);
+      }
       ui->treeWidget->takeTopLevelItem(ui->treeWidget->currentIndex().row());
+
     } else {
+      QString file = item->text(1);
+      delFile(file);
       item->parent()->removeChild(item);
     }
   }
+}
+
+void dlgNotesList::delFile(QString file) {
+  QFile _file(file);
+  bool yes;
+  if (_file.exists()) yes = _file.remove();
+  _file.close();
+  qDebug() << file << yes;
 }
 
 void dlgNotesList::on_btnImport_clicked() {

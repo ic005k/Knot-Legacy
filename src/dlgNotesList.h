@@ -17,7 +17,8 @@ class dlgNotesList : public QDialog {
   ~dlgNotesList();
   Ui::dlgNotesList *ui;
 
- protected:
+  void delFile(QString file);
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  private slots:
