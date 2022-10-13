@@ -4736,6 +4736,7 @@ void MainWindow::on_btnNotesList_clicked() {
   mydlgNotesList->setGeometry(geometry().x(), geometry().y(), width() * 2 / 3,
                               ui->quickWidgetMemo->height());
   mydlgNotesList->show();
+  mydlgNotesList->tw->setFocus();
 }
 
 void MainWindow::on_btnBackImg_clicked() {

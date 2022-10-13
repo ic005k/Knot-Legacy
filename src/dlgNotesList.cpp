@@ -23,6 +23,8 @@ dlgNotesList::dlgNotesList(QWidget* parent)
 
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
   ui->treeWidget->setColumnHidden(1, true);
+
+  initNotesList();
   if (ui->treeWidget->topLevelItemCount() == 0) {
     QTreeWidgetItem* item = new QTreeWidgetItem();
     item->setText(0, tr("Default"));
@@ -31,11 +33,13 @@ dlgNotesList::dlgNotesList(QWidget* parent)
     item1->setText(1, iniDir + "memo/memo.md");
     ui->treeWidget->addTopLevelItem(item);
     ui->treeWidget->setCurrentItem(item->child(item->childCount() - 1));
-  }
 
-  ui->treeWidget->setFocus();
-  ui->treeWidget->expandAll();
-  on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
+    ui->treeWidget->setFocus();
+    ui->treeWidget->expandAll();
+    on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
+
+    saveNotesList();
+  }
 }
 
 dlgNotesList::~dlgNotesList() { delete ui; }
@@ -98,7 +102,7 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
     if (!mw_one->initMain) mw_one->mydlgMainNotes->setVPos();
   }
 
-  ui->editName->setText(item->text(column));
+  ui->editName->setText(item->text(0));
 }
 
 void dlgNotesList::on_btnRename_clicked() {
@@ -189,4 +193,85 @@ void dlgNotesList::on_btnExport_clicked() {
   edit->setAcceptRichText(false);
   edit->setPlainText(str);
   mw_one->TextEditToFile(edit, fileName);
+}
+
+void dlgNotesList::closeEvent(QCloseEvent* event) {
+  Q_UNUSED(event);
+  saveNotesList();
+}
+
+void dlgNotesList::saveNotesList() {
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setValue("/MainNotes/currentItem", currentMDFile);
+
+  int count = tw->topLevelItemCount();
+  Reg.setValue("/MainNotes/topItemCount", count);
+  for (int i = 0; i < count; i++) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    QString strtop = topItem->text(0);
+    Reg.setValue("/MainNotes/strTopItem" + QString::number(i), strtop);
+
+    int childCount = topItem->childCount();
+    Reg.setValue("/MainNotes/childCount" + QString::number(i), childCount);
+
+    for (int j = 0; j < childCount; j++) {
+      QTreeWidgetItem* childItem = tw->topLevelItem(i)->child(j);
+      QString strChild0 = childItem->text(0);
+      QString strChild1 = childItem->text(1);
+
+      Reg.setValue(
+          "/MainNotes/childItem0" + QString::number(i) + QString::number(j),
+          strChild0);
+      Reg.setValue(
+          "/MainNotes/childItem1" + QString::number(i) + QString::number(j),
+          strChild1);
+    }
+  }
+}
+
+void dlgNotesList::initNotesList() {
+  tw->clear();
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  int topCount = Reg.value("/MainNotes/topItemCount").toInt();
+  for (int i = 0; i < topCount; i++) {
+    QString strTop =
+        Reg.value("/MainNotes/strTopItem" + QString::number(i)).toString();
+    QTreeWidgetItem* topItem = new QTreeWidgetItem;
+    topItem->setText(0, strTop);
+
+    int childCount =
+        Reg.value("/MainNotes/childCount" + QString::number(i)).toInt();
+    for (int j = 0; j < childCount; j++) {
+      QString str0, str1;
+      str0 = Reg.value("/MainNotes/childItem0" + QString::number(i) +
+                       QString::number(j))
+                 .toString();
+      str1 = Reg.value("/MainNotes/childItem1" + QString::number(i) +
+                       QString::number(j))
+                 .toString();
+      QTreeWidgetItem* childItem = new QTreeWidgetItem(topItem);
+      childItem->setText(0, str0);
+      childItem->setText(1, str1);
+    }
+    tw->addTopLevelItem(topItem);
+  }
+
+  tw->expandAll();
+  currentMDFile = Reg.value("/MainNotes/currentItem").toString();
+  bool stop = false;
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    if (stop) break;
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    int childCount = topItem->childCount();
+
+    for (int j = 0; j < childCount; j++) {
+      QTreeWidgetItem* childItem = topItem->child(j);
+      QString strChild1 = childItem->text(1);
+      if (strChild1 == currentMDFile) {
+        tw->setCurrentItem(childItem);
+        stop = true;
+        break;
+      }
+    }
+  }
 }

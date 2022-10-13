@@ -21,9 +21,12 @@ class dlgNotesList : public QDialog {
   QString currentMDFile;
   void delFile(QString file);
 
- protected:
+  void saveNotesList();
+  void initNotesList();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
+  void closeEvent(QCloseEvent *event) override;
  private slots:
   void on_btnClose_clicked();
 
