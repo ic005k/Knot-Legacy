@@ -94,8 +94,8 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
     mdfile = item->text(1);
     mw_one->mydlgMainNotes->MD2Html(mdfile);
     mw_one->mydlgMainNotes->loadMemoQML();
-    if (!mw_one->initMain) mw_one->mydlgMainNotes->setVPos();
     currentMDFile = mdfile;
+    if (!mw_one->initMain) mw_one->mydlgMainNotes->setVPos();
   }
 
   ui->editName->setText(item->text(column));
@@ -173,4 +173,20 @@ void dlgNotesList::on_btnImport_clicked() {
 
 void dlgNotesList::on_btnExport_clicked() {
   if (ui->treeWidget->topLevelItemCount() == 0) return;
+
+  QTreeWidgetItem* item = tw->currentItem();
+  if (item->parent() == NULL) return;
+
+  QString fileName;
+  QFileDialog fd;
+  fileName = fd.getSaveFileName(this, tr("Knot"), "", tr("MD File(*.md)"));
+  if (!fileName.contains(".md")) fileName = fileName + ".md";
+
+  QString mdfile = item->text(1);
+
+  QString str = mw_one->loadText(mdfile);
+  QTextEdit* edit = new QTextEdit();
+  edit->setAcceptRichText(false);
+  edit->setPlainText(str);
+  mw_one->TextEditToFile(edit, fileName);
 }
