@@ -10,6 +10,7 @@ extern QString iniDir;
 dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
   ui->setupUi(this);
+  tw = ui->treeWidget;
   setModal(true);
   this->layout()->setSpacing(5);
 
@@ -80,14 +81,21 @@ void dlgNotesList::on_btnNewNote_clicked() {
   item1->setText(1, noteFile);
   QTextEdit* edit = new QTextEdit();
   mw_one->TextEditToFile(edit, noteFile);
-  mw_one->mydlgMainNotes->MD2Html(noteFile);
 
   ui->treeWidget->setCurrentItem(topitem->child(topitem->childCount() - 1));
+  on_treeWidget_itemClicked(item1, 0);
 }
 
 void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
                                              int column) {
   if (ui->treeWidget->topLevelItemCount() == 0) return;
+  QString mdfile;
+  if (item->parent() != NULL) {
+    mdfile = item->text(1);
+    mw_one->mydlgMainNotes->MD2Html(mdfile);
+    mw_one->mydlgMainNotes->loadMemoQML();
+    currentMDFile = mdfile;
+  }
 
   ui->editName->setText(item->text(column));
 }

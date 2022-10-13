@@ -4591,7 +4591,8 @@ void MainWindow::on_btnEdit_clicked() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
-  QString str = mw_one->loadText(iniDir + "memo/memo.md");
+
+  QString str = mw_one->loadText(mydlgNotesList->currentMDFile);
   if (strIniDir != "") {
     str.replace(strIniDir, iniDir);
   }
@@ -4601,8 +4602,10 @@ void MainWindow::on_btnEdit_clicked() {
 
   mydlgMainNotes->show();
 
-  int vpos = Reg.value("/MainNotes/editVPos").toInt();
-  int cpos = Reg.value("/MainNotes/editCPos").toInt();
+  int vpos =
+      Reg.value("/MainNotes/editVPos" + mydlgNotesList->currentMDFile).toInt();
+  int cpos =
+      Reg.value("/MainNotes/editCPos" + mydlgNotesList->currentMDFile).toInt();
   mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
   QTextCursor tmpCursor = mydlgMainNotes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);
