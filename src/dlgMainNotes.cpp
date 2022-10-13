@@ -14,10 +14,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
   ui->setupUi(this);
   ui->btnTest->hide();
-  ui->btnL0->hide();
-  ui->btnL1->hide();
-  ui->btnR0->hide();
-  ui->btnR1->hide();
 
   QString path = iniDir + "memo/";
   QDir dir;
@@ -189,7 +185,8 @@ void dlgMainNotes::MD2Html(QString mdFile) {
 
 void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  Reg.setValue("/MainNotes/SlidePos", sliderPos);
+  Reg.setValue("/MainNotes/SlidePos" + mw_one->mydlgNotesList->currentMDFile,
+               sliderPos);
 
   mw_one->TextEditToFile(ui->editSource, mw_one->mydlgNotesList->currentMDFile);
   MD2Html(mw_one->mydlgNotesList->currentMDFile);
@@ -609,7 +606,9 @@ void dlgMainNotes::loadMemoQML() {
 
 void dlgMainNotes::setVPos() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  sliderPos = Reg.value("/MainNotes/SlidePos").toReal();
+  sliderPos =
+      Reg.value("/MainNotes/SlidePos" + mw_one->mydlgNotesList->currentMDFile)
+          .toReal();
   if (sliderPos < 0) sliderPos = 0;
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
@@ -883,11 +882,3 @@ void dlgMainNotes::on_btnRight_clicked() {
   ui->editSource->moveCursor(QTextCursor::NextCharacter,
                              QTextCursor::MoveAnchor);
 }
-
-void dlgMainNotes::on_btnL1_clicked() { m_SetEditText->on_btnLeft1_clicked(); }
-
-void dlgMainNotes::on_btnL0_clicked() { m_SetEditText->on_btnLeft0_clicked(); }
-
-void dlgMainNotes::on_btnR1_clicked() { m_SetEditText->on_btnRight1_clicked(); }
-
-void dlgMainNotes::on_btnR0_clicked() { m_SetEditText->on_btnRight0_clicked(); }

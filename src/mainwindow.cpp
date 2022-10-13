@@ -2035,8 +2035,13 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
 
       if (!ui->frameMemo->isHidden()) {
-        on_btnBackMemo_clicked();
-        return true;
+        if (!mydlgNotesList->isHidden()) {
+          mydlgNotesList->close();
+          return true;
+        } else {
+          on_btnBackMemo_clicked();
+          return true;
+        }
       }
     }
   }
@@ -4520,7 +4525,8 @@ void MainWindow::on_btnUserInfo_clicked() {
 
 void MainWindow::on_btnBackMemo_clicked() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  Reg.setValue("/MainNotes/SlidePos", mydlgMainNotes->sliderPos);
+  Reg.setValue("/MainNotes/SlidePos" + mydlgNotesList->currentMDFile,
+               mydlgMainNotes->sliderPos);
 
   ui->frameMemo->hide();
   ui->frameMain->show();

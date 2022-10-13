@@ -1420,7 +1420,7 @@ QRadioButton::indicator:checked {
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Memos</string>
+               <string>Notes</string>
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">

@@ -672,34 +672,6 @@ color: rgb(255, 255, 255);</string>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="btnL1">
-       <property name="text">
-        <string>+</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="btnL0">
-       <property name="text">
-        <string>-</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="btnR1">
-       <property name="text">
-        <string>+</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="btnR0">
-       <property name="text">
-        <string>-</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="lblInfo">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(180, 180, 180);
