@@ -4524,9 +4524,7 @@ void MainWindow::on_btnUserInfo_clicked() {
 }
 
 void MainWindow::on_btnBackMemo_clicked() {
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  Reg.setValue("/MainNotes/SlidePos" + mydlgNotesList->currentMDFile,
-               mydlgMainNotes->sliderPos);
+  mydlgMainNotes->saveQMLVPos();
 
   ui->frameMemo->hide();
   ui->frameMain->show();
@@ -4734,6 +4732,7 @@ void MainWindow::closeGrayWindows() {
 }
 
 void MainWindow::on_btnNotesList_clicked() {
+  mydlgMainNotes->saveQMLVPos();
   mydlgNotesList->setGeometry(geometry().x(), geometry().y(), width() * 2 / 3,
                               ui->quickWidgetMemo->height());
   mydlgNotesList->show();

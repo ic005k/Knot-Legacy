@@ -164,11 +164,10 @@ void dlgMainNotes::on_btnBack_clicked() {
   mw_one->Sleep(100);
 
   saveMainNotes();
-
+  saveQMLVPos();
   loadMemoQML();
-
-  close();
   setVPos();
+  close();
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
@@ -185,8 +184,6 @@ void dlgMainNotes::MD2Html(QString mdFile) {
 
 void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  Reg.setValue("/MainNotes/SlidePos" + mw_one->mydlgNotesList->currentMDFile,
-               sliderPos);
 
   mw_one->TextEditToFile(ui->editSource, mw_one->mydlgNotesList->currentMDFile);
   MD2Html(mw_one->mydlgNotesList->currentMDFile);
@@ -602,6 +599,12 @@ void dlgMainNotes::loadMemoQML() {
                             Q_ARG(QVariant, str));
 
   getVHeight();
+}
+
+void dlgMainNotes::saveQMLVPos() {
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setValue("/MainNotes/SlidePos" + mw_one->mydlgNotesList->currentMDFile,
+               sliderPos);
 }
 
 void dlgMainNotes::setVPos() {

@@ -72,7 +72,8 @@ class dlgMainNotes : public QDialog {
   void setVPos();
   QString getDateTimeStr();
   void MD2Html(QString mdFile);
- public slots:
+  void saveQMLVPos();
+  public slots:
   void editVSBarValueChanged();
 
  protected:

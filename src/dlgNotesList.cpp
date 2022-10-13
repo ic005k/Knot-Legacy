@@ -94,6 +94,7 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
     mdfile = item->text(1);
     mw_one->mydlgMainNotes->MD2Html(mdfile);
     mw_one->mydlgMainNotes->loadMemoQML();
+    if (!mw_one->initMain) mw_one->mydlgMainNotes->setVPos();
     currentMDFile = mdfile;
   }
 
@@ -141,7 +142,6 @@ void dlgNotesList::delFile(QString file) {
   bool yes;
   if (_file.exists()) yes = _file.remove();
   _file.close();
-  qDebug() << file << yes;
 }
 
 void dlgNotesList::on_btnImport_clicked() {
@@ -153,13 +153,21 @@ void dlgNotesList::on_btnImport_clicked() {
   if (QFile(fileName).exists()) {
     QTreeWidgetItem* item = ui->treeWidget->currentItem();
 
+    QTreeWidgetItem* item1;
     if (item->parent() == NULL) {
-      QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
+      item1 = new QTreeWidgetItem(item);
       item1->setText(0, tr("Notes Imported"));
     } else {
-      QTreeWidgetItem* item1 = new QTreeWidgetItem(item->parent());
+      item1 = new QTreeWidgetItem(item->parent());
       item1->setText(0, tr("Notes Imported"));
     }
+    tw->setCurrentItem(item1);
+    currentMDFile =
+        iniDir + "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + ".md";
+    QFile::copy(fileName, currentMDFile);
+    item1->setText(1, currentMDFile);
+
+    on_treeWidget_itemClicked(item1, 1);
   }
 }
 
