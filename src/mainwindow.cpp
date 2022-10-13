@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.22";
+QString ver = "1.0.23";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -2035,8 +2035,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       }
 
       if (!ui->frameMemo->isHidden()) {
-        if (!mydlgNotesList->isHidden()) {
-          mydlgNotesList->close();
+        if (!m_NotesList->isHidden()) {
           return true;
         } else {
           on_btnBackMemo_clicked();
@@ -2211,8 +2210,7 @@ void MainWindow::on_actionExport_Data_triggered() {
 
   QString fileName;
   QFileDialog fd;
-  fileName =
-      fd.getSaveFileName(this, tr("KnotBak"), "", tr("Data Files(*.ini)"));
+  fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.*)"));
 
   bakData(fileName, true);
 
@@ -2255,7 +2253,6 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
     edit->append(loadText(iniDir + "todo.ini"));
     edit->append(loadText(iniDir + "ymd.ini"));
     edit->append(loadText(iniDir + "notes.ini"));
-    edit->append(loadText(iniDir + "mainnotes.ini"));
     edit->append(loadText(iniDir + "steps.ini"));
     edit->append(loadText(iniDir + "reader.ini"));
 
@@ -2264,7 +2261,16 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
     }
 
-    TextEditToFile(edit, fileName);
+    TextEditToFile(edit, iniDir + "memo/KnotSync.ini");
+    QFile::remove(iniDir + "memo/mainnotes.ini");
+    QFile::copy(iniDir + "mainnotes.ini", iniDir + "memo/mainnotes.ini");
+
+    QString filePath = iniDir + "memo.zip";
+    QFile(filePath).remove();
+    mw_one->mydlgMainNotes->zipMemo();
+
+    QFile::remove(fileName);
+    QFile::copy(filePath, fileName);
 
     ui->progBar->setMaximum(100);
 
@@ -2285,27 +2291,26 @@ void MainWindow::on_actionImport_Data_triggered() {
   if (!isSaveEnd) return;
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
-                                          tr("Data Files (*.ini)"));
+                                          tr("Zip File (*.*)"));
+
+  QFile::remove(iniDir + "memo.zip");
+  QFile::copy(fileName, iniDir + "memo.zip");
+  mw_one->mydlgMainNotes->unzipMemo();
 
   if (QFileInfo(fileName).exists()) addUndo(tr("Import Data"));
-  importBakData(fileName, true, true);
+
+  QString file = iniDir + "memo/KnotSync.ini";
+  importBakData(file, true, true);
 }
 
 bool MainWindow::importBakData(QString fileName, bool msg, bool book) {
   if (!fileName.isNull()) {
     if (msg) {
-      QMessageBox msgBox;
-      msgBox.setText(appName);
-      msgBox.setInformativeText(tr("Import this data?") + "\n" +
-                                mw_one->mydlgReader->getUriRealPath(fileName));
-      QPushButton* btnCancel =
-          msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-      QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-      btnOk->setFocus();
-      msgBox.exec();
-      if (msgBox.clickedButton() == btnCancel) {
+      if (!mw_one->showMsgBox("Kont",
+                              tr("Import this data?") + "\n" +
+                                  mw_one->mydlgReader->getUriRealPath(fileName),
+                              "", 2))
         return false;
-      }
     }
 
     QString txt = loadText(fileName);
@@ -2333,35 +2338,25 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book) {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     startSave("alltab");
+
+    // Notes
     QFile::remove(iniDir + "mainnotes.ini");
-    QSettings RegTotalIni(iniFile, QSettings::IniFormat);
-    RegTotalIni.setIniCodec("utf-8");
-    QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-    Reg.setIniCodec("utf-8");
-    Reg.setValue("/MainNotes/UserKey",
-                 RegTotalIni.value("/MainNotes/UserKey").toString());
-    Reg.setValue("/MainNotes/Text",
-                 RegTotalIni.value("/MainNotes/Text").toString());
-    Reg.setValue("/MainNotes/CurPos",
-                 RegTotalIni.value("/MainNotes/CurPos").toLongLong());
-    Reg.setValue("/MainNotes/SlidePos",
-                 RegTotalIni.value("/MainNotes/SlidePos").toLongLong());
-    Reg.setValue("/MainNotes/FileName",
-                 RegTotalIni.value("/MainNotes/FileName").toString());
-    Reg.setValue("/MainNotes/CurrentOSIniDir",
-                 RegTotalIni.value("/MainNotes/CurrentOSIniDir").toString());
+    if (QFile::copy(iniDir + "memo/mainnotes.ini", iniDir + "mainnotes.ini"))
+      QFile::remove(iniDir + "memo/mainnotes.ini");
+    m_NotesList->initNotesList();
 
     // TextReader
+    QSettings RegTotalIni(iniFile, QSettings::IniFormat);
+    RegTotalIni.setIniCodec("utf-8");
+
     QString strReader = iniDir + "reader.ini";
     QFile::remove(strReader);
     QSettings Reg1(strReader, QSettings::IniFormat);
     Reg1.setIniCodec("utf-8");
     RegTotalIni.beginGroup("Reader");
     QStringList list = RegTotalIni.allKeys();
-    // qDebug() << "Reader--allKeys : " << list << endl;
     foreach (QString key, list) {
       QString value = RegTotalIni.value(key).toString();
-      // qDebug() << key << " = " << value << endl;
       Reg1.setValue("/Reader/" + key, value);
     }
     RegTotalIni.endGroup();
@@ -3703,7 +3698,7 @@ void MainWindow::init_UIWidget() {
   mydlgReaderFun = new dlgReaderFun(this);
   mydlgSetText = new dlgSetText(this);
   m_widget = new QWidget(this);
-  mydlgNotesList = new dlgNotesList(this);
+  m_NotesList = new dlgNotesList(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -4596,7 +4591,7 @@ void MainWindow::on_btnEdit_clicked() {
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
 
-  QString str = mw_one->loadText(mydlgNotesList->currentMDFile);
+  QString str = mw_one->loadText(m_NotesList->currentMDFile);
   if (strIniDir != "") {
     str.replace(strIniDir, iniDir);
   }
@@ -4607,9 +4602,9 @@ void MainWindow::on_btnEdit_clicked() {
   mydlgMainNotes->show();
 
   int vpos =
-      Reg.value("/MainNotes/editVPos" + mydlgNotesList->currentMDFile).toInt();
+      Reg.value("/MainNotes/editVPos" + m_NotesList->currentMDFile).toInt();
   int cpos =
-      Reg.value("/MainNotes/editCPos" + mydlgNotesList->currentMDFile).toInt();
+      Reg.value("/MainNotes/editCPos" + m_NotesList->currentMDFile).toInt();
   mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
   QTextCursor tmpCursor = mydlgMainNotes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);
@@ -4735,10 +4730,9 @@ void MainWindow::on_btnNotesList_clicked() {
   mydlgMainNotes->saveQMLVPos();
   int w = width() * 2 / 3;
   int x = geometry().x() + width() - w - 2;
-  mydlgNotesList->setGeometry(x, geometry().y(), w,
-                              ui->quickWidgetMemo->height());
-  mydlgNotesList->show();
-  mydlgNotesList->tw->setFocus();
+  m_NotesList->setGeometry(x, geometry().y(), w, ui->quickWidgetMemo->height());
+  m_NotesList->show();
+  m_NotesList->tw->setFocus();
 }
 
 void MainWindow::on_btnBackImg_clicked() {

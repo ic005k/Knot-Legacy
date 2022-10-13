@@ -55,7 +55,6 @@ bool dlgNotesList::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      on_btnClose_clicked();
       return true;
     }
   }
@@ -68,13 +67,7 @@ void dlgNotesList::on_btnClose_clicked() { close(); }
 void dlgNotesList::on_btnNewNoteBook_clicked() {
   QTreeWidgetItem* item = new QTreeWidgetItem();
   item->setText(0, ui->editBook->text().trimmed());
-  // QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
-  // item1->setText(0, ui->editNote->text().trimmed());
-  // item1->setText(
-  //     1, iniDir + "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() +
-  //     ".md");
   ui->treeWidget->addTopLevelItem(item);
-
   ui->treeWidget->setCurrentItem(item);
   on_btnNewNote_clicked();
 }
@@ -121,13 +114,12 @@ void dlgNotesList::on_btnRename_clicked() {
 
 void dlgNotesList::on_btnDel_clicked() {
   QTreeWidgetItem* item = ui->treeWidget->currentItem();
-  int count = ui->treeWidget->topLevelItemCount();
 
   if (item->parent() == NULL) {
-    if (ui->treeWidget->currentIndex().row() == 0) return;
+    if (tw->currentIndex().row() == 0) return;
   } else {
-    if (ui->treeWidget->currentIndex().row() == 0) {
-      if (count == 1) return;
+    if (tw->currentIndex().row() == 0) {
+      if (tw->currentIndex().parent().row() == 0) return;
     }
   }
 
@@ -145,6 +137,8 @@ void dlgNotesList::on_btnDel_clicked() {
       delFile(file);
       item->parent()->removeChild(item);
     }
+
+    on_treeWidget_itemClicked(tw->currentItem(), 0);
   }
 }
 

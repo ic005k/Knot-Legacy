@@ -197,7 +197,7 @@ class MainWindow : public QMainWindow {
   dlgFloatFun *mydlgFloatFun;
   dlgReaderFun *mydlgReaderFun;
   dlgSetText *mydlgSetText;
-  dlgNotesList *mydlgNotesList;
+  dlgNotesList *m_NotesList;
 
   File *myfile;
 

@@ -185,8 +185,8 @@ void dlgMainNotes::MD2Html(QString mdFile) {
 void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 
-  mw_one->TextEditToFile(ui->editSource, mw_one->mydlgNotesList->currentMDFile);
-  MD2Html(mw_one->mydlgNotesList->currentMDFile);
+  mw_one->TextEditToFile(ui->editSource, mw_one->m_NotesList->currentMDFile);
+  MD2Html(mw_one->m_NotesList->currentMDFile);
 
   QString htmlFileName = iniDir + "memo/memo.html";
   QTextEdit* edit = new QTextEdit;
@@ -224,9 +224,9 @@ void dlgMainNotes::saveMainNotes() {
   mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
 
   Reg.setValue("/MainNotes/CurrentOSIniDir", iniDir);
-  Reg.setValue("/MainNotes/editVPos" + mw_one->mydlgNotesList->currentMDFile,
+  Reg.setValue("/MainNotes/editVPos" + mw_one->m_NotesList->currentMDFile,
                ui->editSource->verticalScrollBar()->sliderPosition());
-  Reg.setValue("/MainNotes/editCPos" + mw_one->mydlgNotesList->currentMDFile,
+  Reg.setValue("/MainNotes/editCPos" + mw_one->m_NotesList->currentMDFile,
                ui->editSource->textCursor().position());
 }
 
@@ -603,14 +603,14 @@ void dlgMainNotes::loadMemoQML() {
 
 void dlgMainNotes::saveQMLVPos() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  Reg.setValue("/MainNotes/SlidePos" + mw_one->mydlgNotesList->currentMDFile,
+  Reg.setValue("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile,
                sliderPos);
 }
 
 void dlgMainNotes::setVPos() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   sliderPos =
-      Reg.value("/MainNotes/SlidePos" + mw_one->mydlgNotesList->currentMDFile)
+      Reg.value("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile)
           .toReal();
   if (sliderPos < 0) sliderPos = 0;
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();

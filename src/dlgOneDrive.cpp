@@ -220,16 +220,6 @@ void TestDialog::on_pushButton_upload2_clicked() {
   if (filePath.isEmpty()) return;
   if (!QFile(filePath).exists()) return;
 
-  QDir dir;
-  dir.mkpath(iniDir + "memo/");
-  QString oldbak = iniDir + "memo/KontSync.ini";
-  QFile(oldbak).remove();
-  QFile::copy(filePath, oldbak);
-
-  filePath = iniDir + "memo.zip";
-  QFile(filePath).remove();
-  mw_one->mydlgMainNotes->zipMemo();
-
   if (!mw_one->showMsgBox(
           "OneDrive",
           tr("Uploading data?") + "\n\n" +
