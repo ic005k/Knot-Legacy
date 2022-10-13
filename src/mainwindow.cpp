@@ -2293,14 +2293,9 @@ void MainWindow::on_actionImport_Data_triggered() {
   fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
                                           tr("Zip File (*.*)"));
 
-  QFile::remove(iniDir + "memo.zip");
-  QFile::copy(fileName, iniDir + "memo.zip");
-  mw_one->mydlgMainNotes->unzipMemo();
-
   if (QFileInfo(fileName).exists()) addUndo(tr("Import Data"));
 
-  QString file = iniDir + "memo/KnotSync.ini";
-  importBakData(file, true, true);
+  importBakData(fileName, true, true);
 }
 
 bool MainWindow::importBakData(QString fileName, bool msg, bool book) {
@@ -2313,7 +2308,14 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book) {
         return false;
     }
 
-    QString txt = loadText(fileName);
+    if (fileName != iniDir + "memo.zip") {
+      QFile::remove(iniDir + "memo.zip");
+      QFile::copy(fileName, iniDir + "memo.zip");
+    }
+    mw_one->mydlgMainNotes->unzipMemo();
+    QString file = iniDir + "memo/KnotSync.ini";
+
+    QString txt = loadText(file);
     if (!txt.contains(appName)) {
       QMessageBox msgBox;
       msgBox.setText(appName);

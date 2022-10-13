@@ -409,15 +409,13 @@ void QtOneDrive::downloadFile(const QUrl& url) {
       if (!checkReplyJson(reply).isEmpty()) {
         state_ = Empty;
 
-        mw_one->mydlgMainNotes->unzipMemo();
-
-        QString file = iniDir + "memo/KontSync.ini";
+        QString fileName = iniDir + "memo.zip";
         emit successDownloadFile(
-            tmp_fileId_ + "\n" + iniDir + "memo.zip" + "\n\n" + "SIZE: " +
-            mw_one->getFileSize(QFile(iniDir + "memo.zip").size(), 2));
+            tmp_fileId_ + "\n" + fileName + "\n\n" +
+            "SIZE: " + mw_one->getFileSize(QFile(fileName).size(), 2));
 
-        if (QFile(file).exists()) {
-          mw_one->importBakData(file, true, true);
+        if (QFile(fileName).exists()) {
+          mw_one->importBakData(fileName, true, true);
         }
       }
     }
