@@ -160,7 +160,15 @@ void dlgNotesList::on_btnImport_clicked() {
 
   QString fileName;
   fileName =
-      QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("MD File (*.md)"));
+      QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("MD File (*.*)"));
+
+  if (!fileName.contains(".md")) {
+    QMessageBox box;
+    box.setText(tr("Invalid Markdown file."));
+    box.exec();
+    return;
+  }
+
   if (QFile(fileName).exists()) {
     QTreeWidgetItem* item = ui->treeWidget->currentItem();
 
@@ -195,7 +203,9 @@ void dlgNotesList::on_btnExport_clicked() {
 
   QString fileName;
   QFileDialog fd;
-  fileName = fd.getSaveFileName(this, tr("Knot"), "", tr("MD File(*.md)"));
+  fileName = fd.getSaveFileName(this, tr("Knot"), "", tr("MD File(*.*)"));
+
+  if (fileName == "") return;
 
   QString mdfile = item->text(1);
 
@@ -203,11 +213,15 @@ void dlgNotesList::on_btnExport_clicked() {
   QTextEdit* edit = new QTextEdit();
   edit->setAcceptRichText(false);
   edit->setPlainText(str);
-  mw_one->TextEditToFile(edit, fileName);
 
-  if (!fileName.contains(".md")) {
-    QFile::rename(fileName, fileName + ".md");
+  if (fileName.contains(".md")) fileName.replace(".md", "");
+  if (QFile(fileName + ".md").exists()) {
+    if (!mw_one->showMsgBox(
+            "Knot", tr("The file already exists, is it overwritten?"), "", 2))
+      return;
   }
+
+  mw_one->TextEditToFile(edit, fileName + ".md");
 }
 
 void dlgNotesList::closeEvent(QCloseEvent* event) {

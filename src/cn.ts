@@ -236,7 +236,7 @@
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1956"/>
+        <location filename="mainwindow.ui" line="1981"/>
         <source>Notes List</source>
         <translation>笔记列表</translation>
     </message>
@@ -365,7 +365,7 @@
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1981"/>
+        <location filename="mainwindow.ui" line="1962"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
@@ -1090,7 +1090,7 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="dlgMainNotes.ui" line="216"/>
-        <location filename="dlgMainNotes.ui" line="422"/>
+        <location filename="dlgMainNotes.ui" line="431"/>
         <source>...</source>
         <translation></translation>
     </message>
@@ -1116,25 +1116,32 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="dlgMainNotes.ui" line="167"/>
-        <location filename="dlgMainNotes.ui" line="451"/>
+        <location filename="dlgMainNotes.ui" line="460"/>
         <source>~</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="180"/>
-        <location filename="dlgMainNotes.ui" line="480"/>
+        <location filename="dlgMainNotes.ui" line="489"/>
         <source>[ ]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="193"/>
         <location filename="dlgMainNotes.ui" line="317"/>
         <source>( )</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="dlgMainNotes.ui" line="180"/>
+        <source>[]</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMainNotes.ui" line="193"/>
+        <source>()</source>
+        <translation></translation>
+    </message>
+    <message>
         <location filename="dlgMainNotes.ui" line="346"/>
-        <location filename="dlgMainNotes.ui" line="382"/>
         <source>{ }</source>
         <translation></translation>
     </message>
@@ -1144,32 +1151,37 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="403"/>
+        <location filename="dlgMainNotes.ui" line="382"/>
+        <source>{}</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgMainNotes.ui" line="409"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="650"/>
+        <location filename="dlgMainNotes.ui" line="659"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="663"/>
+        <location filename="dlgMainNotes.ui" line="675"/>
         <source>&lt;--</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="670"/>
+        <location filename="dlgMainNotes.ui" line="682"/>
         <source>--&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="681"/>
+        <location filename="dlgMainNotes.ui" line="693"/>
         <source>Info</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="696"/>
+        <location filename="dlgMainNotes.ui" line="708"/>
         <source>Test</source>
         <translation></translation>
     </message>
@@ -1179,12 +1191,12 @@ in skydrive folder</source>
         <translation>插入图像</translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="520"/>
+        <location filename="dlgMainNotes.ui" line="529"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="dlgMainNotes.ui" line="563"/>
+        <location filename="dlgMainNotes.ui" line="572"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
@@ -1378,53 +1390,53 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="26"/>
+        <location filename="dlgNotesList.ui" line="38"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="42"/>
+        <location filename="dlgNotesList.ui" line="54"/>
         <source>New Notebook</source>
         <translation>新建笔记本</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="49"/>
+        <location filename="dlgNotesList.ui" line="61"/>
         <location filename="dlgNotesList.cpp" line="24"/>
         <source>Notebook</source>
         <translation>笔记本</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="66"/>
+        <location filename="dlgNotesList.ui" line="78"/>
         <source>New Note</source>
         <translation>新建笔记</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="73"/>
+        <location filename="dlgNotesList.ui" line="85"/>
         <source>Note</source>
         <translation>笔记</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="90"/>
+        <location filename="dlgNotesList.ui" line="102"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="110"/>
+        <location filename="dlgNotesList.ui" line="122"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="123"/>
+        <location filename="dlgNotesList.ui" line="135"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="140"/>
+        <location filename="dlgNotesList.ui" line="152"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.ui" line="153"/>
+        <location filename="dlgNotesList.ui" line="165"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -1439,31 +1451,42 @@ in skydrive folder</source>
         <translation>我的笔记</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.cpp" line="127"/>
+        <location filename="dlgNotesList.cpp" line="134"/>
         <source>Delete?</source>
         <translation>删除？</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.cpp" line="156"/>
-        <location filename="dlgNotesList.cpp" line="186"/>
+        <location filename="dlgNotesList.cpp" line="163"/>
+        <location filename="dlgNotesList.cpp" line="206"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgNotesList.cpp" line="156"/>
-        <source>MD File (*.md)</source>
+        <location filename="dlgNotesList.cpp" line="163"/>
+        <source>MD File (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgNotesList.cpp" line="163"/>
-        <location filename="dlgNotesList.cpp" line="166"/>
+        <location filename="dlgNotesList.cpp" line="167"/>
+        <source>Invalid Markdown file.</source>
+        <oldsource>Invalid MarkDown file.</oldsource>
+        <translation>无效的Markdown文件</translation>
+    </message>
+    <message>
+        <location filename="dlgNotesList.cpp" line="206"/>
+        <source>MD File(*.*)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="dlgNotesList.cpp" line="220"/>
+        <source>The file already exists, is it overwritten?</source>
+        <translation>文件已存在，是否覆盖？</translation>
+    </message>
+    <message>
+        <location filename="dlgNotesList.cpp" line="178"/>
+        <location filename="dlgNotesList.cpp" line="181"/>
         <source>Notes Imported</source>
         <translation>导入的笔记</translation>
-    </message>
-    <message>
-        <location filename="dlgNotesList.cpp" line="186"/>
-        <source>MD File(*.md)</source>
-        <translation></translation>
     </message>
 </context>
 <context>
