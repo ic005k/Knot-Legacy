@@ -604,7 +604,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2289"/>
         <source>Please turn on the storage permission of the app.</source>
-        <translation>请开启APP的存储权限</translation>
+        <translation>请开启APP的存储权限！</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2304"/>
