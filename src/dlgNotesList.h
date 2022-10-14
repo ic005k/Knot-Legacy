@@ -23,7 +23,9 @@ class dlgNotesList : public QDialog {
 
   void saveNotesList();
   void initNotesList();
-  protected:
+  void init();
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

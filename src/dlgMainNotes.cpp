@@ -621,8 +621,9 @@ void dlgMainNotes::loadMemoQML() {
 void dlgMainNotes::saveQMLVPos() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  Reg.setValue("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile,
-               sliderPos);
+  if (QFile(mw_one->m_NotesList->currentMDFile).exists())
+    Reg.setValue("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile,
+                 sliderPos);
 }
 
 void dlgMainNotes::setVPos() {

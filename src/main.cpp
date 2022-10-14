@@ -12,24 +12,6 @@ void loadLocal();
 bool zh_cn = false;
 bool isAndroid, isIOS;
 int main(int argc, char* argv[]) {
-#ifdef Q_OS_ANDROID
-  RegJni("com/x/MyService");
-  RegJni("com/x/MyActivity");
-  RegJni("com/x/ClockActivity");
-
-  //禁用文本选择（针对所有的可输入的编辑框）
-  qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
-  qDebug() << "OS=Linux Android";
-  isAndroid = true;
-  isIOS = false;
-#endif
-
-#ifdef Q_OS_UNIX
-  isAndroid = false;
-  isIOS = true;
-  qDebug() << "OS=UNIX IOS";
-#endif
-
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
     qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
@@ -42,28 +24,48 @@ int main(int argc, char* argv[]) {
   QApplication a(argc, argv);
   QtWebView::initialize();
 
-  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
-  Reg.setIniCodec("utf-8");
-
   QDir dir;
   QString path;
   path = dir.currentPath();
   qDebug() << "Path:" << path;
-  if (isIOS) {
-    QString str1 = QDir::homePath() + "/" + appName + "/";
-    QDir dir0;
-    dir0.mkpath(str1);
-    iniDir = str1;
-    iniFile = iniDir + appName + ".ini";
 
-    Reg.setValue("/Options/macIniDir", iniDir);
-  }
-  if (isAndroid) {
-    iniDir = path + "/";
-    iniFile = iniDir + appName + ".ini";
+#ifdef Q_OS_ANDROID
+  RegJni("com/x/MyService");
+  RegJni("com/x/MyActivity");
+  RegJni("com/x/ClockActivity");
 
-    Reg.setValue("/Options/androidIniDir", iniDir);
-  }
+  //禁用文本选择（针对所有的可输入的编辑框）
+  qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
+  qDebug() << "OS=Linux Android";
+  isAndroid = true;
+  isIOS = false;
+
+  iniDir = path + "/";
+  iniFile = iniDir + appName + ".ini";
+#endif
+
+#ifdef Q_OS_UNIX
+  isAndroid = false;
+  isIOS = true;
+  qDebug() << "OS=UNIX IOS";
+
+  QString str1 = QDir::homePath() + "/" + appName + "/";
+  QDir dir0;
+  dir0.mkpath(str1);
+  iniDir = str1;
+  iniFile = iniDir + appName + ".ini";
+#endif
+
+  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+
+#ifdef Q_OS_UNIX
+  Reg.setValue("/Options/macIniDir", iniDir);
+#endif
+
+#ifdef Q_OS_ANDROID
+  Reg.setValue("/Options/androidIniDir", iniDir);
+#endif
 
   fontSize = Reg.value("/Options/FontSize", 16).toInt();
   bool isReaderFont = Reg.value("/Options/ReaderFont", false).toBool();

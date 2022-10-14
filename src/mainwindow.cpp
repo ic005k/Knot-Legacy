@@ -444,8 +444,8 @@ void MainWindow::init_Options() {
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
 
-  androidIniDir = Reg.value("/Options/androidIniDir").toString();
-  macIniDir = Reg.value("/Options/macIniDir").toString();
+  androidIniDir = Reg.value("/Options/androidIniDir", "").toString();
+  macIniDir = Reg.value("/Options/macIniDir", "").toString();
 
   mydlgPre->ui->chkReaderFont->setChecked(
       Reg.value("/Options/ReaderFont", false).toBool());
@@ -4779,16 +4779,17 @@ void MainWindow::closeGrayWindows() {
 void MainWindow::on_btnNotesList_clicked() {
   mydlgMainNotes->saveQMLVPos();
 
-#ifdef Q_OS_ANDROID
   m_NotesList->close();
-  delete m_NotesList;
   m_NotesList = new dlgNotesList(this);
-#endif
+  m_NotesList->init();
 
-  int w = width() * 2 / 3;
-  int x = geometry().x() + width() - w - 2;
-  m_NotesList->setGeometry(x, geometry().y(), w, ui->quickWidgetMemo->height());
+  int w = mw_one->width() * 2 / 3;
+  int x = mw_one->geometry().x() + mw_one->width() - w - 2;
+  m_NotesList->setGeometry(x, mw_one->geometry().y(), w,
+                           mw_one->ui->quickWidgetMemo->height());
+
   m_NotesList->show();
+
   m_NotesList->tw->setFocus();
 }
 

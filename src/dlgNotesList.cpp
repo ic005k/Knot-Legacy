@@ -24,6 +24,17 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
   ui->treeWidget->setColumnHidden(1, true);
 
+  ui->editBook->setStyleSheet(
+      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
+  ui->editName->setStyleSheet(
+      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
+  ui->editNote->setStyleSheet(
+      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
+
+  init();
+}
+
+void dlgNotesList::init() {
   QString path = iniDir + "memo/";
   QDir dir(path);
   if (!dir.exists()) dir.mkdir(path);
@@ -32,27 +43,22 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   if (ui->treeWidget->topLevelItemCount() == 0) {
     QTreeWidgetItem* item = new QTreeWidgetItem();
     item->setText(0, tr("Default Notebook"));
+
     QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
     item1->setText(0, tr("My Notes"));
     QString mdfile = iniDir + "memo/memo.md";
-
+    currentMDFile = mdfile;
     item1->setText(1, mdfile);
     ui->treeWidget->addTopLevelItem(item);
-    ui->treeWidget->setCurrentItem(item->child(item->childCount() - 1));
 
     ui->treeWidget->setFocus();
     ui->treeWidget->expandAll();
+    ui->treeWidget->setCurrentItem(item->child(0));
+
     on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
 
     saveNotesList();
   }
-
-  ui->editBook->setStyleSheet(
-      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
-  ui->editName->setStyleSheet(
-      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
-  ui->editNote->setStyleSheet(
-      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
 }
 
 dlgNotesList::~dlgNotesList() { delete ui; }
@@ -102,6 +108,12 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
   if (ui->treeWidget->topLevelItemCount() == 0) return;
   QString mdfile;
   if (item->parent() != NULL) {
+    if (tw->currentIndex().row() == 0) {
+      if (tw->currentIndex().parent().row() == 0) {
+        item->setText(1, iniDir + "memo/memo.md");
+      }
+    }
+
     mdfile = item->text(1);
 
     mw_one->mydlgMainNotes->MD2Html(mdfile);
@@ -113,6 +125,8 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
   }
 
   ui->editName->setText(item->text(0));
+
+  qDebug() << "currentMDFile " << currentMDFile;
 }
 
 void dlgNotesList::on_btnRename_clicked() {
@@ -246,7 +260,8 @@ void dlgNotesList::closeEvent(QCloseEvent* event) {
 void dlgNotesList::saveNotesList() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  Reg.setIniCodec("utf-8");
+
+  if (!QFile(currentMDFile).exists()) currentMDFile = "None";
   Reg.setValue("/MainNotes/currentItem", currentMDFile);
 
   int count = tw->topLevelItemCount();
@@ -263,6 +278,7 @@ void dlgNotesList::saveNotesList() {
       QTreeWidgetItem* childItem = tw->topLevelItem(i)->child(j);
       QString strChild0 = childItem->text(0);
       QString strChild1 = childItem->text(1);
+      if (!QFile(strChild1).exists()) strChild1 = "None";
 
       Reg.setValue(
           "/MainNotes/childItem0" + QString::number(i) + QString::number(j),
@@ -278,7 +294,7 @@ void dlgNotesList::initNotesList() {
   tw->clear();
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  Reg.setIniCodec("utf-8");
+
   int topCount = Reg.value("/MainNotes/topItemCount").toInt();
   for (int i = 0; i < topCount; i++) {
     QString strTop =
@@ -298,11 +314,13 @@ void dlgNotesList::initNotesList() {
                  .toString();
 
 #ifdef Q_OS_MAC
-      str1.replace(mw_one->androidIniDir, iniDir);
+      if (!str1.contains(iniDir) && mw_one->androidIniDir != "")
+        str1.replace(mw_one->androidIniDir, iniDir);
 #endif
 
 #ifdef Q_OS_ANDROID
-      str1.replace(mw_one->macIniDir, iniDir);
+      if (!str1.contains(iniDir) && mw_one->macIniDir != "")
+        str1.replace(mw_one->macIniDir, iniDir);
 #endif
 
       QTreeWidgetItem* childItem = new QTreeWidgetItem(topItem);
