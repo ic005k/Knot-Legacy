@@ -97,10 +97,18 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
   QString mdfile;
   if (item->parent() != NULL) {
     mdfile = item->text(1);
+
+    QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+    QString strIniDir;
+    strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
+    mdfile.replace(strIniDir, iniDir);
+
     mw_one->mydlgMainNotes->MD2Html(mdfile);
     mw_one->mydlgMainNotes->loadMemoQML();
     currentMDFile = mdfile;
     if (!mw_one->initMain) mw_one->mydlgMainNotes->setVPos();
+
+    mw_one->ui->lblNoteName->setText(item->text(0));
   }
 
   ui->editName->setText(item->text(0));

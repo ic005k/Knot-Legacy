@@ -415,7 +415,7 @@ void QtOneDrive::downloadFile(const QUrl& url) {
             "SIZE: " + mw_one->getFileSize(QFile(fileName).size(), 2));
 
         if (QFile(fileName).exists()) {
-          mw_one->importBakData(fileName, true, true);
+          mw_one->importBakData(fileName, true, true, false);
         }
       }
     }

@@ -778,9 +778,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
   bool isYes = false;
 
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
-  if (isTesting) {
-    // strDate = strDate.replace("3", "3");
-  }
+
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
     if (getYMD(str) == getYMD(strDate)) {
@@ -816,7 +814,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       break;
     }
   }
-  // if (isTesting) isYes = false;
+
   if (!isYes) {
     QTreeWidgetItem* topItem = new QTreeWidgetItem;
     topItem->setText(0, strDate);
@@ -844,15 +842,13 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       topItem->setText(2, strAmount);
   }
 
-  if (!isTesting) {
-    int topCount = tw->topLevelItemCount();
-    QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
-    tw->setCurrentItem(topItem);
-    sort_childItem(topItem->child(0));
-    tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
+  int topCount = tw->topLevelItemCount();
+  QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
+  tw->setCurrentItem(topItem);
+  sort_childItem(topItem->child(0));
+  tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
 
-    startSave("tab");
-  }
+  startSave("tab");
 }
 
 void MainWindow::del_Data(QTreeWidget* tw) {
@@ -2240,9 +2236,36 @@ QString MainWindow::on_actionOneClickBakData(bool msg) {
   return fileName;
 }
 
+void MainWindow::bakIniData(QString unredoFile, bool unre) {
+  // ui->progBar->setHidden(false);
+  // ui->progBar->setMaximum(0);
+
+  QTextEdit* edit = new QTextEdit;
+  edit->append("[" + appName + "]");
+  edit->append("Ver: " + ver);
+  edit->append(loadText(iniDir + "tab.ini"));
+  edit->append(loadText(iniDir + "font.ini"));
+  edit->append(loadText(iniDir + "desc.ini"));
+  edit->append(loadText(iniDir + "todo.ini"));
+  edit->append(loadText(iniDir + "ymd.ini"));
+  edit->append(loadText(iniDir + "notes.ini"));
+  edit->append(loadText(iniDir + "steps.ini"));
+  edit->append(loadText(iniDir + "reader.ini"));
+
+  for (int i = 0; i < tabData->tabBar()->count(); i++) {
+    QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
+    if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
+  }
+
+  TextEditToFile(edit, iniDir + "memo/KnotSync.ini");
+  if (unre) {
+    TextEditToFile(edit, unredoFile);
+  }
+}
+
 void MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
-    ui->progBar->setHidden(false);
+    /*ui->progBar->setHidden(false);
     ui->progBar->setMaximum(0);
 
     QTextEdit* edit = new QTextEdit;
@@ -2262,7 +2285,10 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
     }
 
-    TextEditToFile(edit, iniDir + "memo/KnotSync.ini");
+    TextEditToFile(edit, iniDir + "memo/KnotSync.ini");*/
+
+    bakIniData("", false);
+
     QFile::remove(iniDir + "memo/mainnotes.ini");
     QFile::copy(iniDir + "mainnotes.ini", iniDir + "memo/mainnotes.ini");
 
@@ -2275,7 +2301,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       QFile::copy(zipfile, fileName);
     }
 
-    ui->progBar->setMaximum(100);
+    // ui->progBar->setMaximum(100);
 
     if (QFile(fileName).exists() && msgbox) {
       QMessageBox msgBox;
@@ -2298,10 +2324,11 @@ void MainWindow::on_actionImport_Data_triggered() {
 
   if (QFileInfo(fileName).exists()) addUndo(tr("Import Data"));
 
-  importBakData(fileName, true, true);
+  importBakData(fileName, true, true, false);
 }
 
-bool MainWindow::importBakData(QString fileName, bool msg, bool book) {
+bool MainWindow::importBakData(QString fileName, bool msg, bool book,
+                               bool unre) {
   if (!fileName.isNull()) {
     if (msg) {
       if (!mw_one->showMsgBox("Kont",
@@ -2311,12 +2338,16 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book) {
         return false;
     }
 
-    if (fileName != iniDir + "memo.zip") {
-      QFile::remove(iniDir + "memo.zip");
-      QFile::copy(fileName, iniDir + "memo.zip");
-    }
-    mw_one->mydlgMainNotes->unzipMemo();
-    QString file = iniDir + "memo/KnotSync.ini";
+    QString file;
+    if (!unre) {
+      if (fileName != iniDir + "memo.zip") {
+        QFile::remove(iniDir + "memo.zip");
+        QFile::copy(fileName, iniDir + "memo.zip");
+      }
+      mw_one->mydlgMainNotes->unzipMemo();
+      file = iniDir + "memo/KnotSync.ini";
+    } else
+      file = fileName;
 
     QString txt = loadText(file);
     if (!txt.contains(appName)) {
@@ -2345,10 +2376,12 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book) {
     startSave("alltab");
 
     // Notes
-    QFile::remove(iniDir + "mainnotes.ini");
-    if (QFile::copy(iniDir + "memo/mainnotes.ini", iniDir + "mainnotes.ini"))
-      QFile::remove(iniDir + "memo/mainnotes.ini");
-    m_NotesList->initNotesList();
+    if (!unre) {
+      QFile::remove(iniDir + "mainnotes.ini");
+      if (QFile::copy(iniDir + "memo/mainnotes.ini", iniDir + "mainnotes.ini"))
+        QFile::remove(iniDir + "memo/mainnotes.ini");
+      m_NotesList->initNotesList();
+    }
 
     // TextReader
     QSettings RegTotalIni(iniFile, QSettings::IniFormat);
@@ -2365,6 +2398,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book) {
       Reg1.setValue("/Reader/" + key, value);
     }
     RegTotalIni.endGroup();
+
     if (book) mydlgReader->initReader();
   }
 
@@ -3999,14 +4033,18 @@ void MainWindow::on_actionOneDriveBackupData() {
   mydlgOneDrive->loadLogQML();
 }
 
-void MainWindow::undo() { importBakData(iniDir + "undoFile", true, false); }
+void MainWindow::undo() {
+  importBakData(iniDir + "undoFile", true, false, true);
+}
 
-void MainWindow::redo() { importBakData(iniDir + "redoFile", true, false); }
+void MainWindow::redo() {
+  importBakData(iniDir + "redoFile", true, false, true);
+}
 
 void MainWindow::addUndo(QString log) {
   if (!isImport) {
     QString undoFile = iniDir + QDateTime::currentDateTime().toString();
-    bakData(undoFile, false);
+    bakIniData(undoFile, true);
 
     for (int i = 0; i < timeLines.count(); i++) {
       QString str = timeLines.at(i);
@@ -4037,7 +4075,7 @@ void MainWindow::addUndo(QString log) {
 void MainWindow::addRedo() {
   if (!isImport) {
     QString redoFile = iniDir + LatestTime;
-    bakData(redoFile, false);
+    bakIniData(redoFile, true);
   }
 }
 
@@ -4080,7 +4118,7 @@ void MainWindow::on_actionTimeMachine() {
     QStringList list0 = str.split("\n");
     if (list0.count() == 2) str = list0.at(0);
     QString file = iniDir + str.trimmed();
-    if (importBakData(file, true, false)) btnBack->click();
+    if (importBakData(file, true, false, true)) btnBack->click();
   });
 
   if (list->count() > 0) {
@@ -4733,6 +4771,13 @@ void MainWindow::closeGrayWindows() {
 
 void MainWindow::on_btnNotesList_clicked() {
   mydlgMainNotes->saveQMLVPos();
+
+#ifdef Q_OS_ANDROID
+  m_NotesList->close();
+  delete m_NotesList;
+  m_NotesList = new dlgNotesList(this);
+#endif
+
   int w = width() * 2 / 3;
   int x = geometry().x() + width() - w - 2;
   m_NotesList->setGeometry(x, geometry().y(), w, ui->quickWidgetMemo->height());

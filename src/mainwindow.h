@@ -304,7 +304,7 @@ class MainWindow : public QMainWindow {
   void bakData(QString fileName, bool msgbox);
   void setSCrollPro(QObject *obj);
 
-  bool importBakData(QString fileName, bool msg, bool book);
+  bool importBakData(QString fileName, bool msg, bool book, bool unre);
   void addUndo(QString log);
   QString getTabText();
   void addRedo();
@@ -320,6 +320,7 @@ class MainWindow : public QMainWindow {
 
   void showGrayWindows();
   void closeGrayWindows();
+  void bakIniData(QString unredoFile, bool unre);
  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();

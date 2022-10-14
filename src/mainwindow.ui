@@ -1899,6 +1899,19 @@ QRadioButton::indicator:checked {
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="lblNoteName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Notes</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QQuickWidget" name="quickWidgetMemo">
          <property name="minimumSize">
           <size>
