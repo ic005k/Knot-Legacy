@@ -2206,7 +2206,7 @@ void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
 
   QString fileName;
-#ifdef Q_OS_UNIX
+#ifdef Q_OS_MAC
   QFileDialog fd;
   fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.*)"));
 #endif
@@ -2289,7 +2289,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
 #endif
     }
 
-    if (QFile(fileName).exists() && msgbox) {
+    if (QFile(infoStr).exists() && msgbox) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("The data was exported successfully.") +
