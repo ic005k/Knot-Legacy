@@ -1002,6 +1002,8 @@ This method can parse out the real local file path from a file URI.
      * @return boolean 成功true、失败false
      */
    static public int copyFile(String srcPath, String FileName) {
+       //FileName = m_instance.getUriPath(FileName);
+
         Log.i(TAG, "src  " + srcPath);
         Log.i(TAG, "dest  " +  FileName);
 
@@ -1010,7 +1012,8 @@ This method can parse out the real local file path from a file URI.
             return result;
         }
         File src = new File(srcPath);
-        File dest = new File("/storage/emulated/0/Download/ " + FileName);
+        //File dest = new File("/storage/emulated/0/Download/ " + FileName);
+        File dest = new File( FileName);
         if (dest != null && dest.exists()) {
             dest.delete(); // delete file
         }

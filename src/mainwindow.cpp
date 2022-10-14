@@ -2206,13 +2206,13 @@ void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
 
   QString fileName;
-#ifdef Q_OS_MAC
   QFileDialog fd;
+#ifdef Q_OS_MAC
   fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.*)"));
 #endif
 
 #ifdef Q_OS_ANDROID
-  fileName = "android";
+  fileName = "android";  // fd.getExistingDirectory();
 #endif
 
   bakData(fileName, true);
@@ -2278,9 +2278,12 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       QFile::remove(fileName);
 
 #ifdef Q_OS_ANDROID
+      QDir* folder = new QDir;
+      QString path = "/storage/emulated/0/KnotBak/";
+      folder->mkdir(path);
       QString str = mydlgMainNotes->getDateTimeStr();
-      mydlgMainNotes->androidCopyFile(zipfile, str + "_Knot.zip");
-      infoStr = "/storage/emulated/0/Download/" + str + "_Knot.zip";
+      mydlgMainNotes->androidCopyFile(zipfile, path + str + "_Knot.zip");
+      infoStr = path + str + "_Knot.zip";
 #endif
 
 #ifdef Q_OS_MAC
@@ -2289,7 +2292,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
 #endif
     }
 
-    if (QFile(infoStr).exists() && msgbox) {
+    if (msgbox) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("The data was exported successfully.") +
