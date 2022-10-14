@@ -444,6 +444,9 @@ void MainWindow::init_Options() {
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
 
+  androidIniDir = Reg.value("/Options/androidIniDir").toString();
+  macIniDir = Reg.value("/Options/macIniDir").toString();
+
   mydlgPre->ui->chkReaderFont->setChecked(
       Reg.value("/Options/ReaderFont", false).toBool());
   mydlgPre->ui->chkClose->setChecked(
@@ -2313,8 +2316,17 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
 void MainWindow::on_actionImport_Data_triggered() {
   if (!isSaveEnd) return;
   QString fileName;
+  QString path = "/storage/emulated/0/KnotBak/";
+
+#ifdef Q_OS_MAC
   fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
                                           tr("Zip File (*.*)"));
+#endif
+
+#ifdef Q_OS_ANDROID
+  fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), path,
+                                          tr("Zip File (*.*)"));
+#endif
 
   if (QFileInfo(fileName).exists()) addUndo(tr("Import Data"));
 
@@ -3931,6 +3943,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   QAction* actExportData = new QAction(tr("Export Data"));
   QAction* actImportData = new QAction(tr("Import Data"));
   QAction* actOneClickBakData = new QAction(tr("One Click Data Backup"));
+  actOneClickBakData->setVisible(false);
   QAction* actPreferences = new QAction(tr("Preferences"));
   QAction* actMemos = new QAction(tr("Memos"));
   actMemos->setVisible(false);

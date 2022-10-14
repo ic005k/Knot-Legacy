@@ -24,13 +24,19 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
   ui->treeWidget->setColumnHidden(1, true);
 
+  QString path = iniDir + "memo/";
+  QDir dir(path);
+  if (!dir.exists()) dir.mkdir(path);
+
   initNotesList();
   if (ui->treeWidget->topLevelItemCount() == 0) {
     QTreeWidgetItem* item = new QTreeWidgetItem();
     item->setText(0, tr("Default Notebook"));
     QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
     item1->setText(0, tr("My Notes"));
-    item1->setText(1, iniDir + "memo/memo.md");
+    QString mdfile = iniDir + "memo/memo.md";
+
+    item1->setText(1, mdfile);
     ui->treeWidget->addTopLevelItem(item);
     ui->treeWidget->setCurrentItem(item->child(item->childCount() - 1));
 
@@ -97,11 +103,6 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
   QString mdfile;
   if (item->parent() != NULL) {
     mdfile = item->text(1);
-
-    QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-    QString strIniDir;
-    strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
-    mdfile.replace(strIniDir, iniDir);
 
     mw_one->mydlgMainNotes->MD2Html(mdfile);
     mw_one->mydlgMainNotes->loadMemoQML();
@@ -245,6 +246,7 @@ void dlgNotesList::closeEvent(QCloseEvent* event) {
 void dlgNotesList::saveNotesList() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
+  Reg.setIniCodec("utf-8");
   Reg.setValue("/MainNotes/currentItem", currentMDFile);
 
   int count = tw->topLevelItemCount();
@@ -276,6 +278,7 @@ void dlgNotesList::initNotesList() {
   tw->clear();
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
+  Reg.setIniCodec("utf-8");
   int topCount = Reg.value("/MainNotes/topItemCount").toInt();
   for (int i = 0; i < topCount; i++) {
     QString strTop =
@@ -293,6 +296,15 @@ void dlgNotesList::initNotesList() {
       str1 = Reg.value("/MainNotes/childItem1" + QString::number(i) +
                        QString::number(j))
                  .toString();
+
+#ifdef Q_OS_MAC
+      str1.replace(mw_one->androidIniDir, iniDir);
+#endif
+
+#ifdef Q_OS_ANDROID
+      str1.replace(mw_one->macIniDir, iniDir);
+#endif
+
       QTreeWidgetItem* childItem = new QTreeWidgetItem(topItem);
       childItem->setText(0, str0);
       childItem->setText(1, str1);

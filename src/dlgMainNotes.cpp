@@ -15,10 +15,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->setupUi(this);
   ui->btnTest->hide();
 
-  QString path = iniDir + "memo/";
-  QDir dir;
-  dir.mkpath(path);
-
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);
   m_Right = new dlgRight(this);
@@ -184,9 +180,14 @@ void dlgMainNotes::MD2Html(QString mdFile) {
 
 void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
 
   mw_one->TextEditToFile(ui->editSource, mw_one->m_NotesList->currentMDFile);
   MD2Html(mw_one->m_NotesList->currentMDFile);
+
+  QString path = iniDir + "memo/";
+  QDir dir(path);
+  if (!dir.exists()) dir.mkdir(path);
 
   QString htmlFileName = iniDir + "memo/memo.html";
   QTextEdit* edit = new QTextEdit;
@@ -592,6 +593,7 @@ void dlgMainNotes::unzipMemo() {
 void dlgMainNotes::loadMemoQML() {
   QString file = iniDir + "memo/memo.html";
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
 
@@ -618,12 +620,14 @@ void dlgMainNotes::loadMemoQML() {
 
 void dlgMainNotes::saveQMLVPos() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   Reg.setValue("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile,
                sliderPos);
 }
 
 void dlgMainNotes::setVPos() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
   sliderPos =
       Reg.value("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile)
           .toReal();

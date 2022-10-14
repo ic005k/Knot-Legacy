@@ -115,6 +115,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QString androidIniDir, macIniDir;
   bool isMemoVisible;
   bool isReaderVisible;
   int imgSize = 5000;

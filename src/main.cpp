@@ -42,6 +42,9 @@ int main(int argc, char* argv[]) {
   QApplication a(argc, argv);
   QtWebView::initialize();
 
+  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+
   QDir dir;
   QString path;
   path = dir.currentPath();
@@ -52,14 +55,16 @@ int main(int argc, char* argv[]) {
     dir0.mkpath(str1);
     iniDir = str1;
     iniFile = iniDir + appName + ".ini";
+
+    Reg.setValue("/Options/macIniDir", iniDir);
   }
   if (isAndroid) {
     iniDir = path + "/";
     iniFile = iniDir + appName + ".ini";
+
+    Reg.setValue("/Options/androidIniDir", iniDir);
   }
 
-  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
-  Reg.setIniCodec("utf-8");
   fontSize = Reg.value("/Options/FontSize", 16).toInt();
   bool isReaderFont = Reg.value("/Options/ReaderFont", false).toBool();
   bool isCustomFont = Reg.value("/Options/chkCustomFont", false).toBool();
