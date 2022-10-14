@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.23";
+QString ver = "1.0.24";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -2282,8 +2282,14 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       QString path = "/storage/emulated/0/KnotBak/";
       folder->mkdir(path);
       QString str = mydlgMainNotes->getDateTimeStr();
-      mydlgMainNotes->androidCopyFile(zipfile, path + str + "_Knot.zip");
       infoStr = path + str + "_Knot.zip";
+      mydlgMainNotes->androidCopyFile(zipfile, infoStr);
+      if (!QFile(infoStr).exists()) {
+        QMessageBox box;
+        box.setText(tr("Please turn on the storage permission of the app."));
+        box.exec();
+      }
+
 #endif
 
 #ifdef Q_OS_MAC
@@ -2292,7 +2298,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
 #endif
     }
 
-    if (msgbox) {
+    if (msgbox && QFile(infoStr).exists()) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("The data was exported successfully.") +
