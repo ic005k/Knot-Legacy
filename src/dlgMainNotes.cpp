@@ -888,3 +888,27 @@ void dlgMainNotes::on_btnRight_clicked() {
   ui->editSource->moveCursor(QTextCursor::NextCharacter,
                              QTextCursor::MoveAnchor);
 }
+
+bool dlgMainNotes::androidCopyFile(QString src, QString des) {
+  bool result = false;
+
+#ifdef Q_OS_ANDROID
+
+  /*QAndroidJniObject jobj_src = QAndroidJniObject::fromString(src);
+  QAndroidJniObject jobj_des = QAndroidJniObject::fromString(des);
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  QAndroidJniObject s = m_activity.callObjectMethod(
+      "copyFile", "(Ljava/lang/String;)Ljava/lang/String;",
+      jobj_src.object<jstring>(), jobj_des.object<jstring>());*/
+
+  QAndroidJniObject srcObj = QAndroidJniObject::fromString(src);
+  QAndroidJniObject desObj = QAndroidJniObject::fromString(des);
+  QAndroidJniObject m_activity = QAndroidJniObject::fromString("copyFile");
+  result = m_activity.callStaticMethod<int>(
+      "com.x/MyActivity", "copyFile", "(Ljava/lang/String;Ljava/lang/String;)I",
+      srcObj.object<jstring>(), desObj.object<jstring>());
+
+#endif
+  qDebug() << "copyFile " << src << des;
+  return result;
+}

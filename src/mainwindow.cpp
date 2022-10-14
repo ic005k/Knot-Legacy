@@ -2265,28 +2265,6 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
 
 void MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
-    /*ui->progBar->setHidden(false);
-    ui->progBar->setMaximum(0);
-
-    QTextEdit* edit = new QTextEdit;
-    edit->append("[" + appName + "]");
-    edit->append("Ver: " + ver);
-    edit->append(loadText(iniDir + "tab.ini"));
-    edit->append(loadText(iniDir + "font.ini"));
-    edit->append(loadText(iniDir + "desc.ini"));
-    edit->append(loadText(iniDir + "todo.ini"));
-    edit->append(loadText(iniDir + "ymd.ini"));
-    edit->append(loadText(iniDir + "notes.ini"));
-    edit->append(loadText(iniDir + "steps.ini"));
-    edit->append(loadText(iniDir + "reader.ini"));
-
-    for (int i = 0; i < tabData->tabBar()->count(); i++) {
-      QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
-      if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
-    }
-
-    TextEditToFile(edit, iniDir + "memo/KnotSync.ini");*/
-
     bakIniData("", false);
 
     QFile::remove(iniDir + "memo/mainnotes.ini");
@@ -2298,10 +2276,15 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
 
     if (fileName != zipfile) {
       QFile::remove(fileName);
-      QFile::copy(zipfile, fileName);
-    }
 
-    // ui->progBar->setMaximum(100);
+#ifdef Q_OS_ANDROID
+      mydlgMainNotes->androidCopyFile(zipfile, fileName);
+#endif
+
+#ifdef Q_OS_MAC
+      QFile::copy(zipfile, fileName);
+#endif
+    }
 
     if (QFile(fileName).exists() && msgbox) {
       QMessageBox msgBox;
@@ -2440,7 +2423,7 @@ QTreeWidget* MainWindow::get_tw(int tabIndex) {
 void MainWindow::on_about() {
   m_Remarks->init_Notes();
 
-  bakData(iniFile, false);
+  bakIniData(iniFile, false);
 
   QSettings Reg(iniFile, QSettings::IniFormat);
   Reg.setIniCodec("utf-8");

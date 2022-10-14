@@ -84,6 +84,10 @@ import java.util.zip.ZipOutputStream;
 
 import java.net.URLDecoder;
 
+import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.widget.Toast;
@@ -127,13 +131,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     //------------------------------------------------------------------------
     public static int startAlarm(String str) {
-        //Intent intent = new Intent(context, ClockActivity.class);
-        //Random r = new Random();
-        //int id = alarmCount++;//r.nextInt();
-        //PendingIntent pi = PendingIntent.getActivity(context, id, intent, 0);
-
-        //int y, m, d, hourOfDay, minute;
-
         // 特殊转义字符，必须加"\\"（“.”和“|”都是转义字符）
         String[] array = str.split("\\|");
         for (int i = 0; i < array.length; i++)
@@ -143,27 +140,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         String strText = array[1];
         String strTotalS = array[2];
 
-        /*String[] arrayDT = strTime.split(" ");
-        String strD = arrayDT[0];
-        String strT = arrayDT[1];
-
-        String[] arrayYMD = strD.split("-");
-        y = Integer.parseInt(arrayYMD[0]);
-        m = Integer.parseInt(arrayYMD[1]);
-        d = Integer.parseInt(arrayYMD[2]);
-
-        String[] arrayHM = strT.split(":");
-        hourOfDay = Integer.parseInt(arrayHM[0]);
-        minute = Integer.parseInt(arrayHM[1]);*/
-
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
-
-        /*c.set(Calendar.YEAR, y);
-        c.set(Calendar.MONTH, m);
-        c.set(Calendar.DAY_OF_MONTH, d);
-        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        c.set(Calendar.MINUTE, minute);*/
 
         int ts = Integer.parseInt(strTotalS);
         c.add(Calendar.SECOND, ts);
@@ -173,11 +151,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         Log.e("Alarm Manager", c.getTimeInMillis() + "");
         Log.e("Alarm Manager", str);
-        //System.out.println(y);
-        //System.out.println(m);
-        //System.out.println(d);
-        //System.out.println(hourOfDay);
-        //System.out.println(minute);
+
         System.out.println(ts);
         System.out.println("startAlarm+++++++++++++++++++++++");
         return 1;
@@ -1017,6 +991,59 @@ This method can parse out the real local file path from a file URI.
             }
         }
     };
+
+    //---------------------------------------------------------------------------------------------
+    private final static String FileName = "_knot.zip";
+    /**
+     * 根据文件路径拷贝文件
+     *
+     * @param src            源文件
+     * @param destPath目标文件路径
+     * @return boolean 成功true、失败false
+     */
+   static public int copyFile(String srcPath, String destPath) {
+       destPath = m_instance.getUriPath(destPath);
+        Log.i(TAG, "src  " + srcPath);
+        Log.i(TAG, "dest  " + destPath + FileName);
+
+        int result = 0;
+        if ((srcPath == null) || (destPath == null)) {
+            return result;
+        }
+        File src = new File(srcPath);
+        File dest = new File(destPath + FileName);
+        if (dest != null && dest.exists()) {
+            dest.delete(); // delete file
+        }
+        try {
+            dest.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        FileChannel srcChannel = null;
+        FileChannel dstChannel = null;
+
+        try {
+            srcChannel = new FileInputStream(src).getChannel();
+            dstChannel = new FileOutputStream(dest).getChannel();
+            srcChannel.transferTo(0, srcChannel.size(), dstChannel);
+            result = 1;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return result;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return result;
+        }
+        try {
+            srcChannel.close();
+            dstChannel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+       return result;
+    }
 
 }
 

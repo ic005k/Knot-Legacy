@@ -27,7 +27,7 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   initNotesList();
   if (ui->treeWidget->topLevelItemCount() == 0) {
     QTreeWidgetItem* item = new QTreeWidgetItem();
-    item->setText(0, tr("Default"));
+    item->setText(0, tr("Default Notebook"));
     QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
     item1->setText(0, tr("My Notes"));
     item1->setText(1, iniDir + "memo/memo.md");
@@ -132,7 +132,9 @@ void dlgNotesList::on_btnDel_clicked() {
     }
   }
 
-  if (mw_one->showMsgBox("Kont", tr("Delete?"), "", 2)) {
+  if (mw_one->showMsgBox(
+          "Kont", tr("Delete?") + "\n\n" + tw->currentItem()->text(0) + "\n",
+          "", 2)) {
     if (item->parent() == NULL) {
       int count = item->childCount();
       for (int i = 0; i < count; i++) {

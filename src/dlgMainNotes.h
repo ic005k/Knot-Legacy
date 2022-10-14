@@ -73,6 +73,7 @@ class dlgMainNotes : public QDialog {
   QString getDateTimeStr();
   void MD2Html(QString mdFile);
   void saveQMLVPos();
+  bool androidCopyFile(QString src, QString des);
   public slots:
   void editVSBarValueChanged();
 
