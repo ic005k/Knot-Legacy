@@ -2206,14 +2206,16 @@ void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
 
   QString fileName;
+#ifdef Q_OS_UNIX
   QFileDialog fd;
   fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.*)"));
+#endif
+
+#ifdef Q_OS_ANDROID
+  fileName = "android";
+#endif
 
   bakData(fileName, true);
-
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-  Reg.setIniCodec("utf-8");
-  Reg.setValue("/MainNotes/FileName", fileName);
 }
 
 QString MainWindow::on_actionOneClickBakData(bool msg) {
@@ -2237,9 +2239,6 @@ QString MainWindow::on_actionOneClickBakData(bool msg) {
 }
 
 void MainWindow::bakIniData(QString unredoFile, bool unre) {
-  // ui->progBar->setHidden(false);
-  // ui->progBar->setMaximum(0);
-
   QTextEdit* edit = new QTextEdit;
   edit->append("[" + appName + "]");
   edit->append("Ver: " + ver);
@@ -2267,6 +2266,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
     bakIniData("", false);
 
+    QString infoStr;
     QFile::remove(iniDir + "memo/mainnotes.ini");
     QFile::copy(iniDir + "mainnotes.ini", iniDir + "memo/mainnotes.ini");
 
@@ -2278,11 +2278,14 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       QFile::remove(fileName);
 
 #ifdef Q_OS_ANDROID
-      mydlgMainNotes->androidCopyFile(zipfile, fileName);
+      QString str = mydlgMainNotes->getDateTimeStr();
+      mydlgMainNotes->androidCopyFile(zipfile, str + "_Knot.zip");
+      infoStr = "/storage/emulated/0/Download/" + str + "_Knot.zip";
 #endif
 
 #ifdef Q_OS_MAC
       QFile::copy(zipfile, fileName);
+      infoStr = fileName;
 #endif
     }
 
@@ -2290,8 +2293,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("The data was exported successfully.") +
-                                +"\n\n" +
-                                mw_one->mydlgReader->getUriRealPath(fileName));
+                                +"\n\n" + infoStr);
       QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
       btnOk->setFocus();
       msgBox.exec();

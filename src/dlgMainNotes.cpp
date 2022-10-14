@@ -457,9 +457,24 @@ QString dlgMainNotes::getDateTimeStr() {
   hh = QTime::currentTime().hour();
   mm = QTime::currentTime().minute();
   s = QTime::currentTime().second();
-  QString newname = QString::number(y) + QString::number(m) +
-                    QString::number(d) + "_" + QString::number(hh) +
-                    QString::number(mm) + QString::number(s);
+
+  QString s_m, s_d, s_hh, s_mm, s_s;
+  s_m = QString::number(m);
+  if (s_m.length() == 1) s_m = "0" + s_m;
+
+  s_d = QString::number(d);
+  if (s_d.length() == 1) s_d = "0" + s_d;
+
+  s_hh = QString::number(hh);
+  if (s_hh.length() == 1) s_hh = "0" + s_hh;
+
+  s_mm = QString::number(mm);
+  if (s_mm.length() == 1) s_mm = "0" + s_mm;
+
+  s_s = QString::number(s);
+  if (s_s.length() == 1) s_s = "0" + s_s;
+
+  QString newname = QString::number(y) + s_m + s_d + "_" + s_hh + s_mm + s_s;
   return newname;
 }
 
