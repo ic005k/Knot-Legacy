@@ -4658,10 +4658,10 @@ void MainWindow::on_btnEdit_clicked() {
 
   mydlgMainNotes->show();
 
-  int vpos =
-      Reg.value("/MainNotes/editVPos" + m_NotesList->currentMDFile).toInt();
-  int cpos =
-      Reg.value("/MainNotes/editCPos" + m_NotesList->currentMDFile).toInt();
+  QString a = m_NotesList->currentMDFile;
+  a.replace(iniDir, "");
+  int vpos = Reg.value("/MainNotes/editVPos" + a).toInt();
+  int cpos = Reg.value("/MainNotes/editCPos" + a).toInt();
   mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
   QTextCursor tmpCursor = mydlgMainNotes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);

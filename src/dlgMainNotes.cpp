@@ -633,9 +633,9 @@ void dlgMainNotes::saveQMLVPos() {
 void dlgMainNotes::setVPos() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
-  sliderPos =
-      Reg.value("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile)
-          .toReal();
+  QString a = mw_one->m_NotesList->currentMDFile;
+
+  sliderPos = Reg.value("/MainNotes/SlidePos" + a.replace(iniDir, "")).toReal();
   if (sliderPos < 0) sliderPos = 0;
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
