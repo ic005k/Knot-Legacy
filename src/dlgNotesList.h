@@ -30,7 +30,12 @@ class dlgNotesList : public QDialog {
 
   void setWinPos();
 
- protected:
+  void addItem(QTreeWidget *tw, QTreeWidgetItem *item);
+
+  void delItem(QTreeWidget *tw, QTreeWidgetItem *item);
+  void saveRecycle();
+  void initRecycle();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -59,8 +64,7 @@ class dlgNotesList : public QDialog {
 
   void on_btnDel_2_clicked();
 
-  private:
-  void addToRecycle(QTreeWidgetItem *item);
+ private:
 };
 
 #endif  // DLGNOTESLIST_H

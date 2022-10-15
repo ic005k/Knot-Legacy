@@ -444,6 +444,13 @@ void MainWindow::init_Options() {
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
 
+#ifdef Q_OS_UNIX
+  Reg.setValue("/Options/macIniDir", iniDir);
+#endif
+
+#ifdef Q_OS_ANDROID
+  Reg.setValue("/Options/androidIniDir", iniDir);
+#endif
   androidIniDir = Reg.value("/Options/androidIniDir", "").toString();
   macIniDir = Reg.value("/Options/macIniDir", "").toString();
 
@@ -4782,11 +4789,8 @@ void MainWindow::on_btnNotesList_clicked() {
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
   m_NotesList->init();
-
   m_NotesList->setWinPos();
-
   m_NotesList->show();
-
   m_NotesList->tw->setFocus();
 }
 

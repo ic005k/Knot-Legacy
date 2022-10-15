@@ -59,14 +59,6 @@ int main(int argc, char* argv[]) {
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
 
-#ifdef Q_OS_UNIX
-  Reg.setValue("/Options/macIniDir", iniDir);
-#endif
-
-#ifdef Q_OS_ANDROID
-  Reg.setValue("/Options/androidIniDir", iniDir);
-#endif
-
   fontSize = Reg.value("/Options/FontSize", 16).toInt();
   bool isReaderFont = Reg.value("/Options/ReaderFont", false).toBool();
   bool isCustomFont = Reg.value("/Options/chkCustomFont", false).toBool();

@@ -32,7 +32,15 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
   ui->treeWidget->setColumnHidden(1, true);
   twrb->header()->hide();
+  // twrb->setColumnHidden(1, true);
   twrb->setColumnWidth(0, 200);
+  if (twrb->topLevelItemCount() == 0) {
+    QTreeWidgetItem* topItem = new QTreeWidgetItem;
+    topItem->setText(0, tr("Notes Recycle Bin"));
+    twrb->addTopLevelItem(topItem);
+    twrb->setCurrentItem(topItem);
+    saveRecycle();
+  }
 
   ui->editBook->setStyleSheet(
       mw_one->mydlgSetTime->ui->editAmount->styleSheet());
@@ -50,6 +58,7 @@ void dlgNotesList::init() {
   if (!dir.exists()) dir.mkdir(path);
 
   initNotesList();
+  initRecycle();
   if (ui->treeWidget->topLevelItemCount() == 0) {
     QTreeWidgetItem* item = new QTreeWidgetItem();
     item->setText(0, tr("Default Notebook"));
@@ -163,40 +172,34 @@ void dlgNotesList::on_btnDel_clicked() {
     if (item->parent() == NULL) {
       int count = item->childCount();
       for (int i = 0; i < count; i++) {
-        // QString file = item->child(i)->text(1);
-        // delFile(file);
-        addToRecycle(item->child(i));
+        QTreeWidgetItem* childItem = new QTreeWidgetItem;
+        childItem->setText(0, item->child(i)->text(0));
+        childItem->setText(1, item->child(i)->text(1));
+        addItem(twrb, childItem);
       }
       ui->treeWidget->takeTopLevelItem(ui->treeWidget->currentIndex().row());
 
     } else {
-      // QString file = item->text(1);
-      // delFile(file);
       item->parent()->removeChild(item);
-      addToRecycle(item);
+      addItem(twrb, item);
     }
 
     on_treeWidget_itemClicked(tw->currentItem(), 0);
   }
 }
 
-void dlgNotesList::addToRecycle(QTreeWidgetItem* item) {
-  QTreeWidgetItem* topItem = new QTreeWidgetItem;
-  if (twrb->topLevelItemCount() == 0) {
-    topItem->setText(0, tr("Notes Recycle Bin"));
-    twrb->addTopLevelItem(topItem);
-    twrb->setCurrentItem(topItem);
-  }
-
-  QTreeWidgetItem* curItem = twrb->currentItem();
+void dlgNotesList::addItem(QTreeWidget* tw, QTreeWidgetItem* item) {
+  QTreeWidgetItem* curItem = tw->currentItem();
   if (curItem->parent() == NULL) {
     curItem->addChild(item);
   } else {
     curItem->parent()->addChild(item);
   }
 
-  twrb->expandAll();
+  tw->expandAll();
 }
+
+void dlgNotesList::delItem(QTreeWidget* tw, QTreeWidgetItem* item) {}
 
 void dlgNotesList::delFile(QString file) {
   QFile _file(file);
@@ -285,6 +288,7 @@ void dlgNotesList::on_btnExport_clicked() {
 void dlgNotesList::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   saveNotesList();
+  saveRecycle();
 }
 
 void dlgNotesList::saveNotesList() {
@@ -315,6 +319,36 @@ void dlgNotesList::saveNotesList() {
           strChild0);
       Reg.setValue(
           "/MainNotes/childItem1" + QString::number(i) + QString::number(j),
+          strChild1);
+    }
+  }
+}
+
+void dlgNotesList::saveRecycle() {
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+
+  int count = twrb->topLevelItemCount();
+  Reg.setValue("/MainNotes/rbtopItemCount", count);
+  for (int i = 0; i < count; i++) {
+    QTreeWidgetItem* topItem = twrb->topLevelItem(i);
+    QString strtop = topItem->text(0);
+    Reg.setValue("/MainNotes/rbstrTopItem" + QString::number(i), strtop);
+
+    int childCount = topItem->childCount();
+    Reg.setValue("/MainNotes/rbchildCount" + QString::number(i), childCount);
+
+    for (int j = 0; j < childCount; j++) {
+      QTreeWidgetItem* childItem = twrb->topLevelItem(i)->child(j);
+      QString strChild0 = childItem->text(0);
+      QString strChild1 = childItem->text(1);
+      if (!QFile(strChild1).exists()) strChild1 = "None";
+
+      Reg.setValue(
+          "/MainNotes/rbchildItem0" + QString::number(i) + QString::number(j),
+          strChild0);
+      Reg.setValue(
+          "/MainNotes/rbchildItem1" + QString::number(i) + QString::number(j),
           strChild1);
     }
   }
@@ -381,21 +415,86 @@ void dlgNotesList::initNotesList() {
   }
 }
 
+void dlgNotesList::initRecycle() {
+  twrb->clear();
+  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  Reg.setIniCodec("utf-8");
+
+  int topCount = Reg.value("/MainNotes/rbtopItemCount").toInt();
+  for (int i = 0; i < topCount; i++) {
+    QString strTop =
+        Reg.value("/MainNotes/rbstrTopItem" + QString::number(i)).toString();
+    QTreeWidgetItem* topItem = new QTreeWidgetItem;
+    topItem->setText(0, strTop);
+
+    int childCount =
+        Reg.value("/MainNotes/rbchildCount" + QString::number(i)).toInt();
+    for (int j = 0; j < childCount; j++) {
+      QString str0, str1;
+      str0 = Reg.value("/MainNotes/rbchildItem0" + QString::number(i) +
+                       QString::number(j))
+                 .toString();
+      str1 = Reg.value("/MainNotes/rbchildItem1" + QString::number(i) +
+                       QString::number(j))
+                 .toString();
+
+#ifdef Q_OS_MAC
+      if (!str1.contains(iniDir) && mw_one->androidIniDir != "")
+        str1.replace(mw_one->androidIniDir, iniDir);
+#endif
+
+#ifdef Q_OS_ANDROID
+      if (!str1.contains(iniDir) && mw_one->macIniDir != "")
+        str1.replace(mw_one->macIniDir, iniDir);
+#endif
+
+      QTreeWidgetItem* childItem = new QTreeWidgetItem(topItem);
+      childItem->setText(0, str0);
+      childItem->setText(1, str1);
+    }
+    twrb->addTopLevelItem(topItem);
+  }
+
+  twrb->expandAll();
+}
+
 void dlgNotesList::on_btnRecycle_clicked() {
   ui->frame0->hide();
   ui->frame1->show();
   setWinPos();
+  twrb->setFocus();
 }
 
 void dlgNotesList::on_btnBack_clicked() {
   ui->frame1->hide();
   ui->frame0->show();
   setWinPos();
+  tw->setFocus();
 }
 
-void dlgNotesList::on_btnRestore_clicked() {}
+void dlgNotesList::on_btnRestore_clicked() {
+  QTreeWidgetItem* curItem = twrb->currentItem();
+  if (curItem->parent() == NULL) {
+    return;
+  } else {
+    QTreeWidgetItem* item = new QTreeWidgetItem;
+    item->setText(0, curItem->text(0));
+    item->setText(1, curItem->text(1));
+    addItem(tw, item);
+    curItem->parent()->removeChild(curItem);
+  }
+}
 
-void dlgNotesList::on_btnDel_2_clicked() {}
+void dlgNotesList::on_btnDel_2_clicked() {
+  QTreeWidgetItem* curItem = twrb->currentItem();
+  if (curItem->parent() == NULL) {
+    return;
+  } else {
+    QString md = curItem->text(1);
+    delFile(md);
+    curItem->parent()->removeChild(curItem);
+  }
+}
 
 void dlgNotesList::setWinPos() {
   int w = mw_one->width() * 2 / 3;
