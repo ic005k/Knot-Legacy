@@ -4701,8 +4701,10 @@ void MainWindow::clearSelectBox() {
     QMetaObject::invokeMethod((QObject*)root, "loadHtml",
                               Q_ARG(QVariant, tempFile));
 
-    QMetaObject::invokeMethod((QObject*)root, "loadHtml",
-                              Q_ARG(QVariant, file));
+    // QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+    //                           Q_ARG(QVariant, file));
+    QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
+                              Q_ARG(QVariant, mydlgMainNotes->htmlBuffer));
     QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
   }
 }

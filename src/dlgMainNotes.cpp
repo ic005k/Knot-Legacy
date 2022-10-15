@@ -601,14 +601,14 @@ void dlgMainNotes::loadMemoQML() {
   if (strIniDir != "") {
     str1.replace(strIniDir, iniDir);
   }
-
+  htmlBuffer = str1;
   mw_one->ui->quickWidgetMemo->setSource(
       QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant,
   // htmlFileName));
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
-                            Q_ARG(QVariant, str1));
+                            Q_ARG(QVariant, htmlBuffer));
 
   getVHeight();
 }
