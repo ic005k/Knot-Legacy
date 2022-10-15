@@ -1467,26 +1467,18 @@ void MainWindow::on_actionDel_Tab_triggered() {
   if (index < 0) return;
 
   QString str1 = ui->tabWidget->tabText(index);
-  QMessageBox msgBox;
-  msgBox.setText("Knot");
-  msgBox.setInformativeText(tr("Whether to remove") + "  " + str1 + " ? ");
-  QPushButton* btnCancel =
-      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-  QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-  btnOk->setFocus();
-  msgBox.exec();
-  if (msgBox.clickedButton() == btnCancel) {
+
+  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + str1 + " ? ", "", 2))
     return;
-  }
 
   addUndo(tr("Del Tab") + " ( " + getTabText() + " ) ");
 
-  ui->tabWidget->removeTab(index);
-
   int TabCount = ui->tabWidget->tabBar()->count();
-  if (TabCount == 0) {
-    ui->tabWidget->addTab(init_TreeWidget("tab1"),
-                          tr("Tab") + " " + QString::number(1));
+  if (TabCount > 1) ui->tabWidget->removeTab(index);
+  if (TabCount == 1) {
+    QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+    tw->clear();
+
     ui->tabWidget->setTabToolTip(0, "");
   }
 
@@ -2394,6 +2386,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
       if (QFile::copy(iniDir + "memo/mainnotes.ini", iniDir + "mainnotes.ini"))
         QFile::remove(iniDir + "memo/mainnotes.ini");
       m_NotesList->initNotesList();
+      m_NotesList->initRecycle();
     }
 
     // TextReader
