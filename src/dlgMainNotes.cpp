@@ -341,6 +341,7 @@ void dlgMainNotes::on_KVChanged() {
     if (newh > 0) {
       this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                         mw_one->width(), newh);
+
       if (!m_SetEditText->isHidden()) {
         m_SetEditText->setGeometry(m_SetEditText->geometry().x(), 10,
                                    m_SetEditText->width(),
