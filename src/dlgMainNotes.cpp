@@ -189,41 +189,6 @@ void dlgMainNotes::saveMainNotes() {
   QDir dir(path);
   if (!dir.exists()) dir.mkdir(path);
 
-  QString htmlFileName = iniDir + "memo/memo.html";
-  QTextEdit* edit = new QTextEdit;
-  QPlainTextEdit* edit1 = new QPlainTextEdit;
-  QString strhtml = mw_one->loadText(htmlFileName);
-  strhtml = strhtml.replace("><", ">\n<");
-  edit->setPlainText(strhtml);
-
-  for (int i = 0; i < edit->document()->lineCount(); i++) {
-    QString str = mw_one->mydlgReader->getTextEditLineText(edit, i);
-    str = str.trimmed();
-    if (str.mid(0, 4) == "<img") {
-      QString str1 = str;
-      QStringList list = str1.split(" ");
-      QString strSrc;
-      for (int k = 0; k < list.count(); k++) {
-        QString s1 = list.at(k);
-        if (s1.contains("src=")) {
-          strSrc = s1;
-          break;
-        }
-      }
-      strSrc = strSrc.replace("src=", "");
-      strSrc = strSrc.replace("/>", "");
-      str = "<a href=" + strSrc + ">" + str + "</a>";
-      qDebug() << "strSrc=" << strSrc << str;
-
-      str = str.replace("width=", "width1=");
-      str = str.replace("height=", "height1=");
-    }
-
-    edit1->appendPlainText(str);
-  }
-
-  mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
-
   QString strTag = mw_one->m_NotesList->currentMDFile;
   strTag.replace(iniDir, "");
   Reg.setValue("/MainNotes/CurrentOSIniDir", iniDir);
@@ -594,29 +559,56 @@ void dlgMainNotes::unzipMemo() {
 }
 
 void dlgMainNotes::loadMemoQML() {
-  QString file = iniDir + "memo/memo.html";
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
   Reg.setIniCodec("utf-8");
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
 
-  QString str = mw_one->loadText(file);
-  if (strIniDir != "") {
-    str.replace(strIniDir, iniDir);
+  QString htmlFileName = iniDir + "memo/memo.html";
+  QTextEdit* edit = new QTextEdit;
+  QPlainTextEdit* edit1 = new QPlainTextEdit;
+  QString strhtml = mw_one->loadText(htmlFileName);
+  strhtml = strhtml.replace("><", ">\n<");
+  edit->setPlainText(strhtml);
+  QString str;
+  for (int i = 0; i < edit->document()->lineCount(); i++) {
+    str = mw_one->mydlgReader->getTextEditLineText(edit, i);
+    str = str.trimmed();
+    if (str.mid(0, 4) == "<img") {
+      QString str1 = str;
+      QStringList list = str1.split(" ");
+      QString strSrc;
+      for (int k = 0; k < list.count(); k++) {
+        QString s1 = list.at(k);
+        if (s1.contains("src=")) {
+          strSrc = s1;
+          break;
+        }
+      }
+      strSrc = strSrc.replace("src=", "");
+      strSrc = strSrc.replace("/>", "");
+      str = "<a href=" + strSrc + ">" + str + "</a>";
+      qDebug() << "strSrc=" << strSrc << str;
 
-    QTextEdit* edit = new QTextEdit;
-    edit->setAcceptRichText(false);
-    edit->setPlainText(str);
-    mw_one->TextEditToFile(edit, file);
+      str = str.replace("width=", "width1=");
+      str = str.replace("height=", "height1=");
+    }
+
+    edit1->appendPlainText(str);
+  }
+
+  QString str1 = edit1->toPlainText();
+  if (strIniDir != "") {
+    str1.replace(strIniDir, iniDir);
   }
 
   mw_one->ui->quickWidgetMemo->setSource(
       QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant,
-  // file));
+  // htmlFileName));
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
-                            Q_ARG(QVariant, str));
+                            Q_ARG(QVariant, str1));
 
   getVHeight();
 }

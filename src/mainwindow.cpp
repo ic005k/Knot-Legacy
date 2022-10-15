@@ -2210,7 +2210,7 @@ void MainWindow::on_actionExport_Data_triggered() {
   QString fileName;
   QFileDialog fd;
 #ifdef Q_OS_MAC
-  fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.*)"));
+  fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.zip)"));
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -2267,6 +2267,8 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
 void MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
     bakIniData("", false);
+
+    m_NotesList->clearFiles();
 
     QString infoStr;
     QFile::remove(iniDir + "memo/mainnotes.ini");

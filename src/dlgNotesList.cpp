@@ -490,3 +490,72 @@ void dlgNotesList::setWinPos() {
   this->setGeometry(x, mw_one->geometry().y(), w,
                     mw_one->ui->quickWidgetMemo->height());
 }
+
+void dlgNotesList::clearFiles() {
+  QString tempDir = iniDir + "memo/";
+  files.clear();
+  QStringList fmt = QString("md;html;jpg;bmp;png").split(';');
+  getAllFiles(tempDir, files, fmt);
+  qDebug() << files;
+
+  clearMD_Pic(tw);
+  clearMD_Pic(twrb);
+
+  qDebug() << files;
+
+  for (int i = 0; i < files.count(); i++) {
+    QString a = files.at(i);
+    QFile file(a);
+    if (a != iniDir + "memo/memo.md" && a != iniDir + "memo/memo.html")
+      file.remove();
+  }
+}
+
+void dlgNotesList::clearMD_Pic(QTreeWidget* tw) {
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    int childCount = topItem->childCount();
+    for (int j = 0; j < childCount; j++) {
+      QString str = topItem->child(j)->text(1);
+      removeFromFiles(str);
+      removePicFromMD(iniDir + str);
+    }
+  }
+}
+
+void dlgNotesList::removePicFromMD(QString mdfile) {
+  QString txt = mw_one->loadText(mdfile);
+  qDebug() << txt;
+  for (int i = 0; i < files.count(); i++) {
+    QString str0 = files.at(i);
+    str0.replace(iniDir, "");
+    qDebug() << "....." << str0;
+    if (txt.contains(str0)) {
+      files.removeAt(i);
+      break;
+    }
+  }
+}
+
+void dlgNotesList::removeFromFiles(QString str) {
+  for (int i = 0; i < files.count(); i++) {
+    QString str0 = files.at(i);
+    if (str0.contains(str)) {
+      files.removeAt(i);
+      break;
+    }
+  }
+}
+
+void dlgNotesList::getAllFiles(const QString& foldPath, QStringList& folds,
+                               const QStringList& formats) {
+  QDirIterator it(foldPath, QDir::Files | QDir::NoDotAndDotDot,
+                  QDirIterator::Subdirectories);
+  while (it.hasNext()) {
+    it.next();
+    QFileInfo fileInfo = it.fileInfo();
+    if (formats.contains(fileInfo.suffix())) {  //检测格式，按需保存
+      folds << fileInfo.absoluteFilePath();
+    }
+  }
+}

@@ -2,6 +2,7 @@
 #define DLGNOTESLIST_H
 
 #include <QDialog>
+#include <QDirIterator>
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -35,7 +36,11 @@ class dlgNotesList : public QDialog {
   void delItem(QTreeWidget *tw, QTreeWidgetItem *item);
   void saveRecycle();
   void initRecycle();
-  protected:
+  void clearFiles();
+  void getAllFiles(const QString &foldPath, QStringList &folds,
+                   const QStringList &formats);
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -65,6 +70,10 @@ class dlgNotesList : public QDialog {
   void on_btnDel_2_clicked();
 
  private:
+  QStringList files;
+  void clearMD_Pic(QTreeWidget *tw);
+  void removePicFromMD(QString mdfile);
+  void removeFromFiles(QString str);
 };
 
 #endif  // DLGNOTESLIST_H

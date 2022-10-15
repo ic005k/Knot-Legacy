@@ -1570,6 +1570,25 @@ QRadioButton::indicator:checked {
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
+             <widget class="QToolButton" name="btnUpload">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>35</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Upload</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QToolButton" name="btnSignIn">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1607,67 +1626,10 @@ QRadioButton::indicator:checked {
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QToolButton" name="btnRefreshToken">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>35</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Refresh Token</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="QToolButton" name="btnUpload">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>35</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Upload</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="btnDownload">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>35</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Download</string>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="QToolButton" name="btnStorageInfo">
               <property name="sizePolicy">
@@ -1688,6 +1650,25 @@ QRadioButton::indicator:checked {
              </widget>
             </item>
             <item>
+             <widget class="QToolButton" name="btnRefreshToken">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>35</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Refresh Token</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QToolButton" name="btnUserInfo">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1703,6 +1684,25 @@ QRadioButton::indicator:checked {
               </property>
               <property name="text">
                <string>User Info</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnDownload">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>35</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Download</string>
               </property>
              </widget>
             </item>

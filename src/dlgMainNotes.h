@@ -74,7 +74,8 @@ class dlgMainNotes : public QDialog {
   void MD2Html(QString mdFile);
   void saveQMLVPos();
   bool androidCopyFile(QString src, QString des);
-  public slots:
+
+ public slots:
   void editVSBarValueChanged();
 
  protected:
