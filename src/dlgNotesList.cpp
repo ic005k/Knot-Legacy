@@ -11,18 +11,28 @@ dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
   ui->setupUi(this);
   tw = ui->treeWidget;
+  twrb = ui->treeWidgetRecycle;
   setModal(true);
   this->layout()->setSpacing(5);
+  this->layout()->setContentsMargins(2, 2, 2, 2);
+  ui->frame1->hide();
 
-  QScrollBar* SB = ui->treeWidget->verticalScrollBar();
-  SB->setStyleSheet(mw_one->vsbarStyleSmall);
-  ui->treeWidget->setStyleSheet(mw_one->treeStyle);
-  ui->treeWidget->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
-  QScroller::grabGesture(ui->treeWidget, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(ui->treeWidget);
+  tw->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  tw->setStyleSheet(mw_one->treeStyle);
+  tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
+  QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(tw);
+
+  twrb->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  twrb->setStyleSheet(mw_one->treeStyle);
+  twrb->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
+  QScroller::grabGesture(twrb, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(twrb);
 
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
   ui->treeWidget->setColumnHidden(1, true);
+  twrb->header()->hide();
+  twrb->setColumnWidth(0, 200);
 
   ui->editBook->setStyleSheet(
       mw_one->mydlgSetTime->ui->editAmount->styleSheet());
@@ -153,19 +163,39 @@ void dlgNotesList::on_btnDel_clicked() {
     if (item->parent() == NULL) {
       int count = item->childCount();
       for (int i = 0; i < count; i++) {
-        QString file = item->child(i)->text(1);
-        delFile(file);
+        // QString file = item->child(i)->text(1);
+        // delFile(file);
+        addToRecycle(item->child(i));
       }
       ui->treeWidget->takeTopLevelItem(ui->treeWidget->currentIndex().row());
 
     } else {
-      QString file = item->text(1);
-      delFile(file);
+      // QString file = item->text(1);
+      // delFile(file);
       item->parent()->removeChild(item);
+      addToRecycle(item);
     }
 
     on_treeWidget_itemClicked(tw->currentItem(), 0);
   }
+}
+
+void dlgNotesList::addToRecycle(QTreeWidgetItem* item) {
+  QTreeWidgetItem* topItem = new QTreeWidgetItem;
+  if (twrb->topLevelItemCount() == 0) {
+    topItem->setText(0, tr("Notes Recycle Bin"));
+    twrb->addTopLevelItem(topItem);
+    twrb->setCurrentItem(topItem);
+  }
+
+  QTreeWidgetItem* curItem = twrb->currentItem();
+  if (curItem->parent() == NULL) {
+    curItem->addChild(item);
+  } else {
+    curItem->parent()->addChild(item);
+  }
+
+  twrb->expandAll();
 }
 
 void dlgNotesList::delFile(QString file) {
@@ -349,4 +379,27 @@ void dlgNotesList::initNotesList() {
       }
     }
   }
+}
+
+void dlgNotesList::on_btnRecycle_clicked() {
+  ui->frame0->hide();
+  ui->frame1->show();
+  setWinPos();
+}
+
+void dlgNotesList::on_btnBack_clicked() {
+  ui->frame1->hide();
+  ui->frame0->show();
+  setWinPos();
+}
+
+void dlgNotesList::on_btnRestore_clicked() {}
+
+void dlgNotesList::on_btnDel_2_clicked() {}
+
+void dlgNotesList::setWinPos() {
+  int w = mw_one->width() * 2 / 3;
+  int x = mw_one->geometry().x() + mw_one->width() - w - 2;
+  this->setGeometry(x, mw_one->geometry().y(), w,
+                    mw_one->ui->quickWidgetMemo->height());
 }

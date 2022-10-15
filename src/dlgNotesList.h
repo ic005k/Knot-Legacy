@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QKeyEvent>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include <QTreeWidgetItem>
 
 namespace Ui {
@@ -17,6 +19,7 @@ class dlgNotesList : public QDialog {
   ~dlgNotesList();
   Ui::dlgNotesList *ui;
 
+  QTreeWidget *twrb;
   QTreeWidget *tw;
   QString currentMDFile;
   void delFile(QString file);
@@ -24,6 +27,8 @@ class dlgNotesList : public QDialog {
   void saveNotesList();
   void initNotesList();
   void init();
+
+  void setWinPos();
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -46,7 +51,16 @@ class dlgNotesList : public QDialog {
 
   void on_btnExport_clicked();
 
- private:
+  void on_btnRecycle_clicked();
+
+  void on_btnBack_clicked();
+
+  void on_btnRestore_clicked();
+
+  void on_btnDel_2_clicked();
+
+  private:
+  void addToRecycle(QTreeWidgetItem *item);
 };
 
 #endif  // DLGNOTESLIST_H

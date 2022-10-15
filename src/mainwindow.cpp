@@ -4783,10 +4783,7 @@ void MainWindow::on_btnNotesList_clicked() {
   m_NotesList = new dlgNotesList(this);
   m_NotesList->init();
 
-  int w = mw_one->width() * 2 / 3;
-  int x = mw_one->geometry().x() + mw_one->width() - w - 2;
-  m_NotesList->setGeometry(x, mw_one->geometry().y(), w,
-                           mw_one->ui->quickWidgetMemo->height());
+  m_NotesList->setWinPos();
 
   m_NotesList->show();
 
