@@ -222,6 +222,8 @@ void dlgNotesList::on_btnImport_clicked() {
   fileName =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("MD File (*.*)"));
 
+  if (fileName.isNull()) return;
+
   bool isMD = false;
   QString strInfo;
   isMD = fileName.contains(".md");
@@ -256,17 +258,17 @@ void dlgNotesList::on_btnImport_clicked() {
       item1->setText(0, tr("Notes Imported"));
     }
     tw->setCurrentItem(item1);
-    currentMDFile =
-        iniDir + "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + ".md";
+    QString a = "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + ".md";
+    currentMDFile = iniDir + a;
     QString str = mw_one->loadText(fileName);
     QTextEdit* edit = new QTextEdit();
     edit->setAcceptRichText(false);
     edit->setPlainText(str);
     mw_one->TextEditToFile(edit, currentMDFile);
 
-    item1->setText(1, currentMDFile);
+    item1->setText(1, a);
 
-    on_treeWidget_itemClicked(item1, 1);
+    on_treeWidget_itemClicked(item1, 0);
   }
 }
 
@@ -278,11 +280,11 @@ void dlgNotesList::on_btnExport_clicked() {
 
   QString fileName;
   QFileDialog fd;
-  fileName = fd.getSaveFileName(this, tr("Knot"), "", tr("MD File(*.*)"));
+  fileName = fd.getSaveFileName(this, "Knot.md", "", tr("MD File(*.*)"));
 
   if (fileName == "") return;
 
-  QString mdfile = item->text(1);
+  QString mdfile = iniDir + item->text(1);
 
   QString str = mw_one->loadText(mdfile);
   QTextEdit* edit = new QTextEdit();
