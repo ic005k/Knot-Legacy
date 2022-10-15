@@ -34,6 +34,8 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   twrb->header()->hide();
   twrb->setColumnHidden(1, true);
   twrb->setColumnWidth(0, 180);
+
+  initRecycle();
   if (twrb->topLevelItemCount() == 0) {
     QTreeWidgetItem* topItem = new QTreeWidgetItem;
     topItem->setText(0, tr("Notes Recycle Bin"));
@@ -58,7 +60,6 @@ void dlgNotesList::init() {
   if (!dir.exists()) dir.mkdir(path);
 
   initNotesList();
-  initRecycle();
   if (ui->treeWidget->topLevelItemCount() == 0) {
     QTreeWidgetItem* item = new QTreeWidgetItem();
     item->setText(0, tr("Default Notebook"));
@@ -347,7 +348,6 @@ void dlgNotesList::saveRecycle() {
       QTreeWidgetItem* childItem = twrb->topLevelItem(i)->child(j);
       QString strChild0 = childItem->text(0);
       QString strChild1 = childItem->text(1);
-      if (!QFile(strChild1).exists()) strChild1 = "None";
 
       Reg.setValue(
           "/MainNotes/rbchildItem0" + QString::number(i) + QString::number(j),
@@ -433,16 +433,6 @@ void dlgNotesList::initRecycle() {
       str1 = Reg.value("/MainNotes/rbchildItem1" + QString::number(i) +
                        QString::number(j))
                  .toString();
-
-#ifdef Q_OS_MAC
-      if (!str1.contains(iniDir) && mw_one->androidIniDir != "")
-        str1.replace(mw_one->androidIniDir, iniDir);
-#endif
-
-#ifdef Q_OS_ANDROID
-      if (!str1.contains(iniDir) && mw_one->macIniDir != "")
-        str1.replace(mw_one->macIniDir, iniDir);
-#endif
 
       QTreeWidgetItem* childItem = new QTreeWidgetItem(topItem);
       childItem->setText(0, str0);
