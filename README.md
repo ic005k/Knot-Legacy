@@ -12,6 +12,12 @@
 * Data export and import
 * Backup data to OneDrive
 
+
+QR code for downloading:
+
+![QR code for downloading](https://github.com/ic005k/Knot/blob/main/res/apk.png)
+
+
 ### Credits
 
 * [Pedometer](https://github.com/vikasy/Pedometer)
