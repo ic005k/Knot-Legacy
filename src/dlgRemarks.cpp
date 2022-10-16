@@ -24,11 +24,11 @@ dlgRemarks::dlgRemarks(QWidget* parent)
   ui->lblAbout->setWordWrap(true);
   ui->lblLogo->adjustSize();
   ui->lblLogo->setText("");
-  ui->lblLogo->setFixedHeight(120);
-  ui->lblLogo->setFixedWidth(120);
+  ui->lblLogo->setFixedHeight(200);
+  ui->lblLogo->setFixedWidth(200);
   ui->lblLogo->setStyleSheet(
       "QLabel{"
-      "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
+      "border-image:url(:/res/apk.png) 4 4 4 4 stretch stretch;"
       "}");
 }
 

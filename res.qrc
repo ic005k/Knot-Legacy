@@ -73,5 +73,6 @@
         <file>res/color.png</file>
         <file>res/left.png</file>
         <file>res/right.png</file>
+        <file>res/apk.png</file>
     </qresource>
 </RCC>

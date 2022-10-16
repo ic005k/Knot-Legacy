@@ -3894,6 +3894,7 @@ void MainWindow::on_btnSelTab_clicked() {
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
+  setSCrollPro(list);
   QFont font;
   font.setPointSize(fontSize + 2);
   list->setFont(font);
