@@ -285,7 +285,7 @@ public class MyService extends Service {
     private static NotificationManager m_notificationManagerAlarm;
     private static Notification.Builder m_builderAlarm;
 
-    public static void notifyAlarm(Context context, String message) {
+    public static void notifyTodoAlarm(Context context, String message) {
         try {
             m_notificationManagerAlarm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 

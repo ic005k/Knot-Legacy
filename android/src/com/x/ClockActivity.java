@@ -233,13 +233,11 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
             CallJavaNotify_3();
         }
 
-        MyService.notifyAlarm(context, str2);
-
+        MyService.notifyTodoAlarm(context, str2);
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
 
         //QtApplication.invokeDelegate();
-
     }
 
     @Override

@@ -737,7 +737,7 @@ void dlgTodo::sendMsgAlarm(QString text) {
   QString strNotify = tr("Todo") + " : " + text;
   QAndroidJniObject javaNotification = QAndroidJniObject::fromString(strNotify);
   QAndroidJniObject::callStaticMethod<void>(
-      "com/x/MyService", "notifyAlarm",
+      "com/x/MyService", "notifyTodoAlarm",
       "(Landroid/content/Context;Ljava/lang/String;)V",
       QtAndroid::androidContext().object(), javaNotification.object<jstring>());
 #endif
