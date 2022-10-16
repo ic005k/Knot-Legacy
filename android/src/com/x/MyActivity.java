@@ -993,18 +993,10 @@ This method can parse out the real local file path from a file URI.
     };
 
     //---------------------------------------------------------------------------------------------
-
-    /**
-     * 根据文件路径拷贝文件
-     *
-     * @param src            源文件
-     * @param destPath目标文件路径
-     * @return boolean 成功true、失败false
-     */
-   static public int copyFile(String srcPath, String FileName) {
+    static public int copyFile(String srcPath, String FileName) {
 
         Log.i(TAG, "src  " + srcPath);
-        Log.i(TAG, "dest  " +  FileName);
+        Log.i(TAG, "dest  " + FileName);
 
         int result = 0;
         if ((srcPath == null) || (FileName == null)) {
@@ -1012,7 +1004,7 @@ This method can parse out the real local file path from a file URI.
         }
         File src = new File(srcPath);
         //File dest = new File("/storage/emulated/0/Download/ " + FileName);
-        File dest = new File( FileName);
+        File dest = new File(FileName);
         if (dest != null && dest.exists()) {
             dest.delete(); // delete file
         }
@@ -1043,7 +1035,7 @@ This method can parse out the real local file path from a file URI.
         } catch (IOException e) {
             e.printStackTrace();
         }
-       return result;
+        return result;
     }
 
 }

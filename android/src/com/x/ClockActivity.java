@@ -435,37 +435,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
     @Override
     public void onActivityStopped(Activity activity) {
-        //比如我的应用主页面是ActMain ActMain进入后台就认定应用进入后台
-        /*if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                        // 要执行的操作
-                        if (activity instanceof ClockActivity) {
-                        if (MyActivity.isScreenOff == false && isRefreshAlarm) {
-                            //在这里处理后台的操作
-
-                            if (strMute.equals("false")) {
-                                mediaPlayer.stop();
-                            }
-                            if (strMute.equals("false")) {
-                                setMediaVolume(curVol);
-                            }
-                            ClockActivity.this.finish();
-                            if (!isRefreshAlarm) {
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                            }
-                        }
-
-                    }
-
-                }
-            }, 3000);//3秒后执行Runnable中的run方法Handler handler = new Handler();
-
-        }*/
         System.out.println("ClockActivity onActivityStopped...");
-
     }
 
     @Override
