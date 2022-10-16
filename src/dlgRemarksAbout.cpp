@@ -1,7 +1,7 @@
-#include "dlgRemarks.h"
+#include "src/dlgRemarksAbout.h"
 
 #include "mainwindow.h"
-#include "ui_dlgRemarks.h"
+#include "ui_dlgRemarksAbout.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern bool loading, zh_cn;
@@ -24,8 +24,8 @@ dlgRemarks::dlgRemarks(QWidget* parent)
   ui->lblAbout->setWordWrap(true);
   ui->lblLogo->adjustSize();
   ui->lblLogo->setText("");
-  ui->lblLogo->setFixedHeight(200);
-  ui->lblLogo->setFixedWidth(200);
+  ui->lblLogo->setFixedHeight(190);
+  ui->lblLogo->setFixedWidth(190);
   ui->lblLogo->setStyleSheet(
       "QLabel{"
       "border-image:url(:/res/apk.png) 4 4 4 4 stretch stretch;"

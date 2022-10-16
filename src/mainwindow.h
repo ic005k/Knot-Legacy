@@ -58,7 +58,7 @@
 #include "src/dlgMainNotes.h"
 #include "src/dlgNotesList.h"
 #include "src/dlgOneDrive.h"
-#include "src/dlgRemarks.h"
+#include "src/dlgRemarksAbout.h"
 #include "src/dlgSetText.h"
 #include "src/dlgfloatfun.h"
 #include "src/dlglist.h"

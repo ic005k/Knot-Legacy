@@ -34,7 +34,7 @@ SOURCES += \
     src/dlgNotesList.cpp \
     src/dlgOneDrive.cpp \
     src/dlgReaderFun.cpp \
-    src/dlgRemarks.cpp \
+    src/dlgRemarksAbout.cpp \
     src/dlgSetText.cpp \
     src/dlgfloatfun.cpp \
     src/dlgleft.cpp \
@@ -65,7 +65,7 @@ HEADERS += \
     src/dlgNotesList.h \
     src/dlgOneDrive.h \
     src/dlgReaderFun.h \
-    src/dlgRemarks.h \
+    src/dlgRemarksAbout.h \
     src/dlgSetText.h \
     src/dlgfloatfun.h \
     src/dlgleft.h \
@@ -95,7 +95,7 @@ FORMS += \
     src/dlgNotesList.ui \
     src/dlgOneDrive.ui \
     src/dlgReaderFun.ui \
-    src/dlgRemarks.ui \
+    src/dlgRemarksAbout.ui \
     src/dlgSetText.ui \
     src/dlgfloatfun.ui \
     src/dlgleft.ui \
