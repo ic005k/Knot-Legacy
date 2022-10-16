@@ -53,10 +53,10 @@ SOURCES += \
     src/file.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/msgdialog.cpp \
     src/onedrive/dlgweb.cpp \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
+    src/setTodoAlarm.cpp \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
@@ -83,11 +83,11 @@ HEADERS += \
     src/documenthandler.h \
     src/file.h \
     src/mainwindow.h \
-    src/msgdialog.h \
     src/onedrive/dlgweb.h \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
+    src/setTodoAlarm.h \
     src/specialaccelerometerpedometer.h
 
 FORMS += \
@@ -111,8 +111,8 @@ FORMS += \
     src/dlgsteps.ui \
     src/dlgtodo.ui \
     src/mainwindow.ui \
-    src/msgdialog.ui \
-    src/onedrive/dlgweb.ui
+    src/onedrive/dlgweb.ui \
+    src/setTodoAlarm.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

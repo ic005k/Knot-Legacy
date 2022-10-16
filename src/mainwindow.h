@@ -71,7 +71,7 @@
 #include "src/dlgsteps.h"
 #include "src/dlgtodo.h"
 #include "src/file.h"
-#include "src/msgdialog.h"
+#include "src/setTodoAlarm.h"
 #include "src/onedrive/dlgweb.h"
 #include "src/specialaccelerometerpedometer.h"
 #include "ui_dlgMainNotes.h"
