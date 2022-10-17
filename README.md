@@ -3,12 +3,12 @@
 * Android version >= 8.0
 * Bookkeeping
 * Counters
-* To-do list
+* Todo list
 * Pedometer
 * Statistical charts
 * Statistical reports
 * Reader(txt,epub)
-* Memo(Markdown)
+* Notes(Markdown)
 * Data export and import
 * Backup data to OneDrive
 
