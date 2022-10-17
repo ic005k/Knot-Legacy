@@ -32,6 +32,7 @@ INSTALLS += dataFiles
 SOURCES += \
     src/Preferences.cpp \
     src/RemarksAbout.cpp \
+    src/Report.cpp \
     src/dlgMainNotes.cpp \
     src/dlgNotesList.cpp \
     src/dlgOneDrive.cpp \
@@ -43,7 +44,6 @@ SOURCES += \
     src/dlgloadpic.cpp \
     src/dlgreader.cpp \
     src/dlgrename.cpp \
-    src/dlgreport.cpp \
     src/dlgright.cpp \
     src/dlgsetedittext.cpp \
     src/dlgsettime.cpp \
@@ -62,6 +62,7 @@ SOURCES += \
 HEADERS += \
     src/Preferences.h \
     src/RemarksAbout.h \
+    src/Report.h \
     src/count_steps.h \
     src/dlgMainNotes.h \
     src/dlgNotesList.h \
@@ -74,7 +75,6 @@ HEADERS += \
     src/dlgloadpic.h \
     src/dlgreader.h \
     src/dlgrename.h \
-    src/dlgreport.h \
     src/dlgright.h \
     src/dlgsetedittext.h \
     src/dlgsteps.h \
@@ -93,6 +93,7 @@ HEADERS += \
 FORMS += \
     src/Preferences.ui \
     src/RemarksAbout.ui \
+    src/Report.ui \
     src/dlgMainNotes.ui \
     src/dlgNotesList.ui \
     src/dlgOneDrive.ui \
@@ -104,7 +105,6 @@ FORMS += \
     src/dlgloadpic.ui \
     src/dlgreader.ui \
     src/dlgrename.ui \
-    src/dlgreport.ui \
     src/dlgright.ui \
     src/dlgsetedittext.ui \
     src/dlgsettime.ui \

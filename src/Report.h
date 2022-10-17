@@ -1,5 +1,5 @@
-#ifndef DLGREPORT_H
-#define DLGREPORT_H
+#ifndef REPORT_H
+#define REPORT_H
 
 #include <QDialog>
 #include <QKeyEvent>
@@ -60,4 +60,4 @@ class dlgReport : public QDialog {
   QPrinter *printer;
 };
 
-#endif  // DLGREPORT_H
+#endif  // REPORT_H

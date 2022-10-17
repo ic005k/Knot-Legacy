@@ -1,7 +1,7 @@
-#include "dlgreport.h"
+#include "Report.h"
 
 #include "mainwindow.h"
-#include "ui_dlgreport.h"
+#include "ui_Report.h"
 #include "ui_mainwindow.h"
 
 extern int fontSize;
@@ -930,7 +930,8 @@ void dlgReport::on_btnOut2Img_clicked() {
     QDir* folder = new QDir;
     QString path = "/storage/emulated/0/KnotBak/";
     folder->mkdir(path);
-    QString str = ui->btnYear->text() + "-" + ui->btnMonth->text() + ".png";
+    QString str = ui->lblTitle->text() + "-" + ui->btnYear->text() + "-" +
+                  ui->btnMonth->text() + ".png";
     QString infoStr = path + str;
     mw_one->mydlgMainNotes->androidCopyFile(img, infoStr);
     QMessageBox box;
