@@ -496,7 +496,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnBackImg_clicked();
 
-  void on_btnReport1_clicked();
+  void on_btnReport_clicked();
 
  private:
   int memoHeight;

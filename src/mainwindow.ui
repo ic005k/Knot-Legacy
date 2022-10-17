@@ -640,7 +640,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QToolButton" name="btnReport1">
+           <widget class="QToolButton" name="btnReport">
             <property name="minimumSize">
              <size>
               <width>40</width>

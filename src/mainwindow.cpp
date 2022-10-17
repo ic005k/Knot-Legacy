@@ -3898,7 +3898,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   QAction* actFind = new QAction(tr("Find"));
   actFind->setVisible(false);
   QAction* actReport = new QAction(tr("Report"));
-  actReport->setVisible(false);
+  actReport->setVisible(true);
   QAction* actRemarks = new QAction(tr("Remarks"));
   actRemarks->setVisible(false);
 
@@ -3967,14 +3967,14 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   mainMenu->addAction(actDelTab);
   mainMenu->addAction(actRenameTab);
 
+  mainMenu->addAction(actFind);
+  mainMenu->addAction(actReport);
+  mainMenu->addAction(actRemarks);
+
   mainMenu->addAction(actUndo);
   mainMenu->addAction(actRedo);
 
   mainMenu->addAction(actTimeMachine);
-
-  mainMenu->addAction(actFind);
-  mainMenu->addAction(actReport);
-  mainMenu->addAction(actRemarks);
 
   mainMenu->addAction(actExportData);
   mainMenu->addAction(actImportData);
@@ -4768,4 +4768,4 @@ void MainWindow::on_btnZoomOut_clicked() {
   QMetaObject::invokeMethod((QObject*)root, "zoomout");
 }
 
-void MainWindow::on_btnReport1_clicked() { on_Report(); }
+void MainWindow::on_btnReport_clicked() { on_Report(); }
