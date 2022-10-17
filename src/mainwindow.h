@@ -365,8 +365,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnNotes_clicked();
 
-  void on_actionAbout_triggered();
-
   void on_actionExport_Data_triggered();
 
   void on_actionImport_Data_triggered();

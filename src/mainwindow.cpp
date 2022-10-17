@@ -2193,16 +2193,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void MainWindow::on_actionAbout_triggered() {
-  QString str;
-  if (zh_cn)
-    str = "https://gitee.com/ic005k/knot/releases";
-  else
-    str = "https://github.com/ic005k/Knot/releases/latest";
-  QUrl url(str);
-  QDesktopServices::openUrl(url);
-}
-
 void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
 
@@ -2454,6 +2444,7 @@ void MainWindow::on_about() {
   int keys = Reg.allKeys().count();
 
   QTextBrowser* textBrowser = new QTextBrowser;
+  textBrowser->append("");
   textBrowser->append("[" + appName + "]");
   textBrowser->append("Ver: " + ver);
   textBrowser->append("All Keys: " + QString::number(keys));
