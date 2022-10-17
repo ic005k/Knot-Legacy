@@ -14,6 +14,7 @@ QString btnYearText, btnMonthText;
 QStringList listCategory;
 QTableWidget *tableReport, *tableReport0, *tableDetails, *tableDetails0,
     *tableCategory, *tableCategory0;
+QTreeWidget* twOut2Img;
 QLabel *lblTotal, *lblDetails;
 QToolButton *btnCategory, *btnMonth, *btnYear;
 
@@ -33,6 +34,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   tableDetails0->setColumnCount(3);
   tableCategory0 = new QTableWidget;
   tableCategory0->setColumnCount(3);
+  twOut2Img = new QTreeWidget;
   lblTotal = ui->lblTotal;
   lblDetails = ui->lblDetails;
   btnCategory = ui->btnCategory;
@@ -420,6 +422,7 @@ void dlgReport::getMonthData() {
   int freq = 0;
   double amount = 0;
   int j = 0;
+  twOut2Img->clear();
 
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     if (isBreakReport) {
@@ -450,6 +453,8 @@ void dlgReport::getMonthData() {
         tableItem = new QTableWidgetItem(txt2);
         tableReport0->setItem(j, 2, tableItem);
 
+        twOut2Img->addTopLevelItem(tw->topLevelItem(i));
+
         j++;
       }
     } else {
@@ -470,6 +475,8 @@ void dlgReport::getMonthData() {
         amount = amount + txt2.toDouble();
         tableItem = new QTableWidgetItem(txt2);
         tableReport0->setItem(j, 2, tableItem);
+
+        twOut2Img->addTopLevelItem(tw->topLevelItem(i));
 
         j++;
       }
@@ -868,4 +875,12 @@ void dlgReport::plotPic(QPrinter* printer) {
   painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
   painter.setWindow(p_w_picpath.rect());
   painter.drawPixmap(0, 0, p_w_picpath);
+}
+
+void dlgReport::on_btnOut2Img_clicked() {
+  twOut2Img->setGeometry(0, 0, this->width(), this->height());
+  qDebug() << twOut2Img->topLevelItemCount();
+  QPixmap pixmap(twOut2Img->size());
+  twOut2Img->render(&pixmap);
+  pixmap.save("/Users/hz/Knot/1.png", "PNG");
 }

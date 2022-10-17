@@ -10,6 +10,7 @@
 #include <QScroller>
 #include <QStandardItemModel>
 #include <QTableWidgetItem>
+#include <QTreeWidget>
 
 namespace Ui {
 class dlgReport;
@@ -51,6 +52,8 @@ class dlgReport : public QDialog {
   void on_btnPrint_clicked();
 
   void plotPic(QPrinter *);
+
+  void on_btnOut2Img_clicked();
 
  private:
   QPrintPreviewDialog *preview;
