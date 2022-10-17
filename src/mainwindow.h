@@ -71,8 +71,8 @@
 #include "src/dlgsteps.h"
 #include "src/dlgtodo.h"
 #include "src/file.h"
-#include "src/setTodoAlarm.h"
 #include "src/onedrive/dlgweb.h"
+#include "src/setTodoAlarm.h"
 #include "src/specialaccelerometerpedometer.h"
 #include "ui_dlgMainNotes.h"
 #include "ui_dlgNotesList.h"
@@ -333,9 +333,9 @@ class MainWindow : public QMainWindow {
   void on_btnPageNext_clicked();
   QString on_actionOneClickBakData(bool msg);
   void on_actionOneDriveBackupData();
-  void on_btnPlus_clicked();
+  void on_AddRecord();
   void on_actionReport_triggered();
-  void on_btnLess_clicked();
+  void on_DelRecord();
 
  protected:
   void closeEvent(QCloseEvent *event) override;
@@ -484,7 +484,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnMemos_clicked();
 
-  void on_btnOneDriveBak_clicked();
   void on_btnZoomIn_clicked();
 
   void on_btnZoomOut_clicked();

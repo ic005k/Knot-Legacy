@@ -94,8 +94,7 @@ void MainWindow::readTWDone() {
     QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
     tw->setCurrentItem(tw->topLevelItem(tw->topLevelItemCount() - 1));
   }
-  ui->btnPlus->setEnabled(true);
-  ui->btnLess->setEnabled(true);
+
   ui->actionImport_Data->setEnabled(true);
   ui->actionExport_Data->setEnabled(true);
   ui->actionDel_Tab->setEnabled(true);
@@ -692,8 +691,6 @@ void MainWindow::init_TabData() {
   ui->tabWidget->setCurrentIndex(currentTabIndex);
   QTreeWidget* twCur = (QTreeWidget*)tabData->currentWidget();
   readData(twCur);
-  ui->btnPlus->setEnabled(false);
-  ui->btnLess->setEnabled(false);
   ui->actionImport_Data->setEnabled(false);
   ui->actionExport_Data->setEnabled(false);
   ui->actionDel_Tab->setEnabled(false);
@@ -925,7 +922,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
   startSave("tab");
 }
 
-void MainWindow::on_btnPlus_clicked() {
+void MainWindow::on_AddRecord() {
   isAdd = true;
 
   mydlgSetTime->ui->lblTitle->setText(
@@ -939,7 +936,7 @@ void MainWindow::on_btnPlus_clicked() {
   mydlgSetTime->init();
 }
 
-void MainWindow::on_btnLess_clicked() {
+void MainWindow::on_DelRecord() {
   del_Data((QTreeWidget*)ui->tabWidget->currentWidget());
 }
 
@@ -3803,22 +3800,13 @@ void MainWindow::init_UIWidget() {
   int s = 28;
   if (isIOS) {
   }
-  ui->btnPlus->hide();
-  ui->btnLess->hide();
-  ui->btnPlus->setIconSize(QSize(s, s));
-  ui->btnLess->setIconSize(QSize(s, s));
+
   ui->btnMemos->setIconSize(QSize(s, s));
-
-  ui->btnOneDriveBak->setIconSize(QSize(s, s));
-  ui->btnOneDriveBak->hide();
-
   ui->btnReport->setIconSize(QSize(s, s));
   ui->btnTodo->setIconSize(QSize(s, s));
   ui->btnMax->setIconSize(QSize(s, s));
   ui->btnSteps->setIconSize(QSize(s, s));
   ui->btnReader->setIconSize(QSize(s, s));
-  ui->btnPlus->setIcon(QIcon(":/res/1.png"));
-  ui->btnLess->setIcon(QIcon(":/res/2.png"));
   ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
   ui->btnMax->setIcon(QIcon(":/res/zoom.png"));
   ui->btnSteps->setIcon(QIcon(":/res/step.png"));
@@ -3830,13 +3818,9 @@ void MainWindow::init_UIWidget() {
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
-  ui->btnOneDriveBak->setStyleSheet("border:none");
   ui->btnNotes->setStyleSheet("border:none");
   ui->btnPause->setStyleSheet("border:none");
   ui->btnSelTab->setStyleSheet("border:none");
-
-  ui->btnPlus->setStyleSheet("border:none");
-  ui->btnLess->setStyleSheet("border:none");
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnMax->setStyleSheet("border:none");
@@ -3845,14 +3829,11 @@ void MainWindow::init_UIWidget() {
 
   QFont f = this->font();
   f.setPointSize(11);
-  ui->btnPlus->setFont(f);
-  ui->btnLess->setFont(f);
   ui->btnTodo->setFont(f);
   ui->btnSteps->setFont(f);
   ui->btnMax->setFont(f);
   ui->btnReader->setFont(f);
   ui->btnReport->setFont(f);
-  ui->btnOneDriveBak->setFont(f);
   ui->btnMemos->setFont(f);
 
   tabChart->setCurrentIndex(0);
@@ -4672,8 +4653,6 @@ void MainWindow::on_btnCode_clicked() {
 }
 
 void MainWindow::on_btnMemos_clicked() { on_actionMemos_triggered(); }
-
-void MainWindow::on_btnOneDriveBak_clicked() { on_actionOneDriveBackupData(); }
 
 void MainWindow::clearSelectBox() {
   QString tempFile = iniDir + "memo/texteditor.html";

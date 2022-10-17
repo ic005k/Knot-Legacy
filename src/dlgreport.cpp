@@ -739,10 +739,11 @@ void dlgReport::getCategoryText() {
   listCategory.clear();
   listCategory.append(tr("None"));
 
-  for (int i = 0; i < count - 1; i++) {
+  for (int i = 0; i < count; i++) {
     on_tableReport0_cellClicked(i, 0);
     for (int j = 0; j < tableDetails0->rowCount(); j++) {
       QString str = tableDetails0->item(j, 2)->text().trimmed();
+      qDebug() << str;
       if (str != "") {
         if (!listCategory.removeOne(str)) {
           listCategory.insert(1, str);
@@ -752,6 +753,7 @@ void dlgReport::getCategoryText() {
       }
     }
   }
+  qDebug() << listCategory;
 }
 
 void dlgReport::getCategoryData() {
