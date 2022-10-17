@@ -638,12 +638,6 @@
           </item>
           <item>
            <widget class="QToolButton" name="btnReport">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
             <property name="minimumSize">
              <size>
               <width>40</width>
@@ -651,20 +645,17 @@
              </size>
             </property>
             <property name="text">
-             <string>Report</string>
+             <string>...</string>
             </property>
             <property name="icon">
              <iconset resource="../res.qrc">
               <normaloff>:/res/report.png</normaloff>:/res/report.png</iconset>
             </property>
-            <property name="autoRepeat">
-             <bool>false</bool>
-            </property>
-            <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonIconOnly</enum>
-            </property>
-            <property name="autoRaise">
-             <bool>false</bool>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -683,6 +674,12 @@
              <iconset resource="../res.qrc">
               <normaloff>:/res/remarks.png</normaloff>:/res/remarks.png</iconset>
             </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
            </widget>
           </item>
           <item>
@@ -699,6 +696,12 @@
             <property name="icon">
              <iconset resource="../res.qrc">
               <normaloff>:/res/find.png</normaloff>:/res/find.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -976,6 +979,12 @@
               <property name="icon">
                <iconset resource="../res.qrc">
                 <normaloff>:/res/tab.png</normaloff>:/res/tab.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>30</width>
+                <height>30</height>
+               </size>
               </property>
              </widget>
             </item>
@@ -1380,6 +1389,16 @@ QRadioButton::indicator:checked {
               <property name="text">
                <string>Reader</string>
               </property>
+              <property name="icon">
+               <iconset resource="../res.qrc">
+                <normaloff>:/res/one.png</normaloff>:/res/one.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>28</width>
+                <height>28</height>
+               </size>
+              </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>
               </property>
@@ -1396,6 +1415,16 @@ QRadioButton::indicator:checked {
               <property name="text">
                <string>ToDo</string>
               </property>
+              <property name="icon">
+               <iconset resource="../res.qrc">
+                <normaloff>:/res/todo.png</normaloff>:/res/todo.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>28</width>
+                <height>28</height>
+               </size>
+              </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>
               </property>
@@ -1411,6 +1440,16 @@ QRadioButton::indicator:checked {
               </property>
               <property name="text">
                <string>Steps</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../res.qrc">
+                <normaloff>:/res/step.png</normaloff>:/res/step.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>28</width>
+                <height>28</height>
+               </size>
               </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -1432,6 +1471,12 @@ QRadioButton::indicator:checked {
                <iconset resource="../res.qrc">
                 <normaloff>:/res/memos.png</normaloff>:/res/memos.png</iconset>
               </property>
+              <property name="iconSize">
+               <size>
+                <width>28</width>
+                <height>28</height>
+               </size>
+              </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>
               </property>
@@ -1447,6 +1492,16 @@ QRadioButton::indicator:checked {
               </property>
               <property name="text">
                <string>Max</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../res.qrc">
+                <normaloff>:/res/zoom.png</normaloff>:/res/zoom.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>28</width>
+                <height>28</height>
+               </size>
               </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>

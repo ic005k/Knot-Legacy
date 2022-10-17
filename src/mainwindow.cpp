@@ -2873,7 +2873,7 @@ void MainWindow::on_btnDay_clicked() {
   }
 }
 
-void MainWindow::on_actionReport_triggered() {
+void MainWindow::on_Report() {
   if (isEBook || !isSaveEnd) return;
 
   if (!isReadEBookEnd) {
@@ -2922,7 +2922,7 @@ void MainWindow::on_RunCategory() {
   }
 }
 
-void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
+void MainWindow::on_btnReport_clicked() { on_Report(); }
 
 void MainWindow::on_actionPreferences_triggered() {
   mydlgPre->setFixedWidth(this->width());
@@ -3791,27 +3791,9 @@ void MainWindow::init_UIWidget() {
 
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
 
-  int iz = 25;
-  ui->btnFind->setIconSize(QSize(iz, iz));
-  ui->btnNotes->setIconSize(QSize(iz, iz));
-  ui->btnSelTab->setIconSize(QSize(iz, iz));
-  ui->btnPause->setIconSize(QSize(iz, iz));
-
-  int s = 28;
   if (isIOS) {
   }
 
-  ui->btnMemos->setIconSize(QSize(s, s));
-  ui->btnReport->setIconSize(QSize(s, s));
-  ui->btnTodo->setIconSize(QSize(s, s));
-  ui->btnMax->setIconSize(QSize(s, s));
-  ui->btnSteps->setIconSize(QSize(s, s));
-  ui->btnReader->setIconSize(QSize(s, s));
-  ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
-  ui->btnMax->setIcon(QIcon(":/res/zoom.png"));
-  ui->btnSteps->setIcon(QIcon(":/res/step.png"));
-  ui->btnReader->setIcon(QIcon(":/res/one.png"));
-  ui->btnMemos->setIcon(QIcon(":/res/memos.png"));
   ui->frame_tab->setMaximumHeight(this->height());
 
   ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
@@ -3956,8 +3938,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 
   connect(actFind, &QAction::triggered, this,
           &MainWindow::on_actionFind_triggered);
-  connect(actReport, &QAction::triggered, this,
-          &MainWindow::on_actionReport_triggered);
+  connect(actReport, &QAction::triggered, this, &MainWindow::on_Report);
   connect(actRemarks, &QAction::triggered, this,
           &MainWindow::on_actionNotes_triggered);
   connect(actExportData, &QAction::triggered, this,
