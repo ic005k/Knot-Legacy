@@ -163,7 +163,7 @@ void dlgReport::on_btnYear_clicked() {
     list->close();
 
     listCategory.clear();
-    mw_one->on_Report();
+    mw_one->on_actionReport_triggered();
   });
 
   int h = 30 * list->count() + 4;
@@ -507,7 +507,7 @@ void dlgReport::on_btnMonth_clicked() {
     list->close();
 
     listCategory.clear();
-    mw_one->on_Report();
+    mw_one->on_actionReport_triggered();
   });
 
   int h = 30 * list->count() + 4;

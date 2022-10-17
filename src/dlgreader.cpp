@@ -222,8 +222,6 @@ void dlgReader::setReaderStyle() {
 void dlgReader::startOpenFile(QString openfile) {
   if (isReport) return;
 
-  isEBook = true;
-
   setReaderStyle();
 
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isWebViewShow",
@@ -239,6 +237,7 @@ void dlgReader::startOpenFile(QString openfile) {
       QUrl(QStringLiteral("qrc:/src/reader.qml")));
 
   if (QFile(openfile).exists()) {
+    isEBook = true;
     strTitle = "";
     mw_one->ui->btnPages->setText(tr("Pages") + "\n" + QString::number(0) +
                                   " / " + QString::number(0));

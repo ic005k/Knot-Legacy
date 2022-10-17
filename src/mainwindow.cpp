@@ -10,11 +10,12 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.25";
+QString ver = "1.0.26";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
 bool isImport, isEBook, isReport, isRunCategory;
+
 QString appName = "Knot";
 QString iniFile, iniDir, strDate, readDate, noteText, strStats, SaveType, strY,
     strM, btnYText, btnMText, btnDText, CurrentYearMonth;
@@ -25,7 +26,8 @@ int chartMax = 5;
 double yMaxMonth, yMaxDay;
 MainWindow* mw_one;
 QTabWidget *tabData, *tabChart;
-bool loading, isReadEnd, isReadTWEnd, isReadEBookEnd;
+bool loading, isReadEnd, isReadTWEnd;
+bool isReadEBookEnd = true;
 bool isSaveEnd = true;
 bool isBreak = false;
 bool isBreakReport = false;
@@ -2873,7 +2875,7 @@ void MainWindow::on_btnDay_clicked() {
   }
 }
 
-void MainWindow::on_Report() {
+void MainWindow::on_actionReport_triggered() {
   if (isEBook || !isSaveEnd) return;
 
   if (!isReadEBookEnd) {
@@ -3898,7 +3900,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   QAction* actFind = new QAction(tr("Find"));
   actFind->setVisible(false);
   QAction* actReport = new QAction(tr("Report"));
-  actReport->setVisible(true);
+  actReport->setVisible(false);
   QAction* actRemarks = new QAction(tr("Remarks"));
   actRemarks->setVisible(false);
 
@@ -3934,7 +3936,8 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 
   connect(actFind, &QAction::triggered, this,
           &MainWindow::on_actionFind_triggered);
-  connect(actReport, &QAction::triggered, this, &MainWindow::on_Report);
+  connect(actReport, &QAction::triggered, this,
+          &MainWindow::on_actionReport_triggered);
   connect(actRemarks, &QAction::triggered, this,
           &MainWindow::on_actionNotes_triggered);
   connect(actExportData, &QAction::triggered, this,
@@ -4768,4 +4771,4 @@ void MainWindow::on_btnZoomOut_clicked() {
   QMetaObject::invokeMethod((QObject*)root, "zoomout");
 }
 
-void MainWindow::on_btnReport_clicked() { on_Report(); }
+void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }

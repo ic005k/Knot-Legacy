@@ -334,7 +334,7 @@ class MainWindow : public QMainWindow {
   QString on_actionOneClickBakData(bool msg);
   void on_actionOneDriveBackupData();
   void on_AddRecord();
-  void on_Report();
+  void on_actionReport_triggered();
   void on_DelRecord();
 
  protected:
