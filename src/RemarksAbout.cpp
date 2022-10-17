@@ -1,7 +1,7 @@
-#include "src/dlgRemarksAbout.h"
+#include "src/RemarksAbout.h"
 
 #include "mainwindow.h"
-#include "ui_dlgRemarksAbout.h"
+#include "ui_RemarksAbout.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern bool loading, zh_cn;

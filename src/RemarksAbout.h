@@ -1,5 +1,5 @@
-#ifndef DLGREMARKSABOUT_H
-#define DLGREMARKSABOUT_H
+#ifndef REMARKSABOUT_H
+#define REMARKSABOUT_H
 
 #include <QDialog>
 
@@ -39,4 +39,4 @@ class dlgRemarks : public QDialog {
  private:
 };
 
-#endif  // DLGREMARKSABOUT_H
+#endif  // REMARKSABOUT_H

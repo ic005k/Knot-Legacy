@@ -39,7 +39,7 @@
          <string notr="true">QSlider::groove:horizontal 
 { 
 	border: 1px solid #999999; 
-	height: 2px; 
+	height: 6px; 
 	margin: 0px 0;
 	left: 5px; 
 	right: 5px; 

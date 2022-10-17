@@ -1,5 +1,5 @@
-#ifndef DLGPREFERENCES_H
-#define DLGPREFERENCES_H
+#ifndef PREFERENCES_H
+#define PREFERENCES_H
 
 #include <QDialog>
 
@@ -41,7 +41,9 @@ class dlgPreferences : public QDialog {
 
   void on_chkCustomFont_clicked();
 
+  void on_sliderFontSize_valueChanged(int value);
+
  private:
 };
 
-#endif  // DLGPREFERENCES_H
+#endif  // PREFERENCES_H

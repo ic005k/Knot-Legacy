@@ -1,9 +1,9 @@
-#include "dlgpreferences.h"
+#include "Preferences.h"
 
 #include <QKeyEvent>
 
 #include "mainwindow.h"
-#include "ui_dlgpreferences.h"
+#include "ui_Preferences.h"
 #include "ui_mainwindow.h"
 extern QString iniFile, iniDir, hsStyle, fontname;
 extern MainWindow* mw_one;
@@ -160,3 +160,7 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
 }
 
 void dlgPreferences::on_chkCustomFont_clicked() { isFontChange = true; }
+
+void dlgPreferences::on_sliderFontSize_valueChanged(int value) {
+  on_sliderFontSize_sliderMoved(value);
+}

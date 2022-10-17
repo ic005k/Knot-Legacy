@@ -2,7 +2,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "ui_msgdialog.h"
+#include "ui_setTodoAlarm.h"
 
 extern MainWindow* mw_one;
 QString hsStyle;

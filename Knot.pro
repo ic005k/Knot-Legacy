@@ -30,17 +30,17 @@ INSTALLS += dataFiles
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/Preferences.cpp \
+    src/RemarksAbout.cpp \
     src/dlgMainNotes.cpp \
     src/dlgNotesList.cpp \
     src/dlgOneDrive.cpp \
     src/dlgReaderFun.cpp \
-    src/dlgRemarksAbout.cpp \
     src/dlgSetText.cpp \
     src/dlgfloatfun.cpp \
     src/dlgleft.cpp \
     src/dlglist.cpp \
     src/dlgloadpic.cpp \
-    src/dlgpreferences.cpp \
     src/dlgreader.cpp \
     src/dlgrename.cpp \
     src/dlgreport.cpp \
@@ -60,18 +60,18 @@ SOURCES += \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
+    src/Preferences.h \
+    src/RemarksAbout.h \
     src/count_steps.h \
     src/dlgMainNotes.h \
     src/dlgNotesList.h \
     src/dlgOneDrive.h \
     src/dlgReaderFun.h \
-    src/dlgRemarksAbout.h \
     src/dlgSetText.h \
     src/dlgfloatfun.h \
     src/dlgleft.h \
     src/dlglist.h \
     src/dlgloadpic.h \
-    src/dlgpreferences.h \
     src/dlgreader.h \
     src/dlgrename.h \
     src/dlgreport.h \
@@ -91,17 +91,17 @@ HEADERS += \
     src/specialaccelerometerpedometer.h
 
 FORMS += \
+    src/Preferences.ui \
+    src/RemarksAbout.ui \
     src/dlgMainNotes.ui \
     src/dlgNotesList.ui \
     src/dlgOneDrive.ui \
     src/dlgReaderFun.ui \
-    src/dlgRemarksAbout.ui \
     src/dlgSetText.ui \
     src/dlgfloatfun.ui \
     src/dlgleft.ui \
     src/dlglist.ui \
     src/dlgloadpic.ui \
-    src/dlgpreferences.ui \
     src/dlgreader.ui \
     src/dlgrename.ui \
     src/dlgreport.ui \
