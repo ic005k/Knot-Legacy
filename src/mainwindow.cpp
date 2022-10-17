@@ -1489,8 +1489,6 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   QTreeWidget* tw = new QTreeWidget(this);
   tw->setObjectName(name);
 
-  // QString style = "QTreeWidget::item:selected{background:  #567dbc);}";
-  // tw->setStyleSheet(style);
   QFont font;
   font.setPointSize(fontSize);
   tw->setFont(font);

@@ -10,6 +10,7 @@ extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
 extern QTabWidget *tabData, *tabChart;
 extern bool isImport, isEBook, isReport, isBreakReport, isReportWindowsShow,
     isRunCategory;
+
 QString btnYearText, btnMonthText;
 QStringList listCategory;
 QTableWidget *tableReport, *tableReport0, *tableDetails, *tableDetails0,
@@ -17,6 +18,7 @@ QTableWidget *tableReport, *tableReport0, *tableDetails, *tableDetails0,
 QTreeWidget* twOut2Img;
 QLabel *lblTotal, *lblDetails;
 QToolButton *btnCategory, *btnMonth, *btnYear;
+int twTotalRow = 0;
 
 void setTableNoItemFlags(QTableWidget* t, int row);
 
@@ -34,7 +36,14 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   tableDetails0->setColumnCount(3);
   tableCategory0 = new QTableWidget;
   tableCategory0->setColumnCount(3);
+
   twOut2Img = new QTreeWidget;
+  twOut2Img->setColumnCount(3);
+  twOut2Img->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  twOut2Img->header()->setDefaultAlignment(Qt::AlignCenter);
+  twOut2Img->setAlternatingRowColors(true);
+  twOut2Img->setStyleSheet(mw_one->treeStyle);
+
   lblTotal = ui->lblTotal;
   lblDetails = ui->lblDetails;
   btnCategory = ui->btnCategory;
@@ -423,6 +432,7 @@ void dlgReport::getMonthData() {
   double amount = 0;
   int j = 0;
   twOut2Img->clear();
+  twTotalRow = 0;
 
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     if (isBreakReport) {
@@ -453,7 +463,11 @@ void dlgReport::getMonthData() {
         tableItem = new QTableWidgetItem(txt2);
         tableReport0->setItem(j, 2, tableItem);
 
-        twOut2Img->addTopLevelItem(tw->topLevelItem(i));
+        twTotalRow = twTotalRow + 1;
+        QTreeWidgetItem* item = new QTreeWidgetItem;
+        item = tw->topLevelItem(i)->clone();
+        twTotalRow = twTotalRow + item->childCount();
+        twOut2Img->addTopLevelItem(item);
 
         j++;
       }
@@ -476,7 +490,11 @@ void dlgReport::getMonthData() {
         tableItem = new QTableWidgetItem(txt2);
         tableReport0->setItem(j, 2, tableItem);
 
-        twOut2Img->addTopLevelItem(tw->topLevelItem(i));
+        twTotalRow = twTotalRow + 1;
+        QTreeWidgetItem* item = new QTreeWidgetItem;
+        item = tw->topLevelItem(i)->clone();
+        twTotalRow = twTotalRow + item->childCount();
+        twOut2Img->addTopLevelItem(item);
 
         j++;
       }
@@ -750,7 +768,7 @@ void dlgReport::getCategoryText() {
     on_tableReport0_cellClicked(i, 0);
     for (int j = 0; j < tableDetails0->rowCount(); j++) {
       QString str = tableDetails0->item(j, 2)->text().trimmed();
-      qDebug() << str;
+
       if (str != "") {
         if (!listCategory.removeOne(str)) {
           listCategory.insert(1, str);
@@ -760,7 +778,6 @@ void dlgReport::getCategoryText() {
       }
     }
   }
-  qDebug() << listCategory;
 }
 
 void dlgReport::getCategoryData() {
@@ -878,9 +895,52 @@ void dlgReport::plotPic(QPrinter* printer) {
 }
 
 void dlgReport::on_btnOut2Img_clicked() {
-  twOut2Img->setGeometry(0, 0, this->width(), this->height());
-  qDebug() << twOut2Img->topLevelItemCount();
-  QPixmap pixmap(twOut2Img->size());
-  twOut2Img->render(&pixmap);
-  pixmap.save("/Users/hz/Knot/1.png", "PNG");
+  if (twOut2Img->topLevelItemCount() == 0) return;
+
+  if (twOut2Img->topLevelItem(0)->text(0) != ui->btnYear->text()) {
+    twOut2Img->expandAll();
+
+    QTreeWidgetItem* item0 = new QTreeWidgetItem;
+    item0->setText(0, ui->btnYear->text());
+    item0->setText(1, ui->btnMonth->text());
+    twOut2Img->insertTopLevelItem(0, item0);
+
+    int count = ui->tableReport->rowCount();
+    QTreeWidgetItem* item = new QTreeWidgetItem;
+    item->setText(0, ui->tableReport->item(count - 1, 0)->text());
+    item->setText(1, ui->tableReport->item(count - 1, 1)->text());
+    item->setText(2, ui->tableReport->item(count - 1, 2)->text());
+    twOut2Img->addTopLevelItem(item);
+
+    twTotalRow = twTotalRow + 3;
+    qreal h = twTotalRow * 28;
+    twOut2Img->setGeometry(0, 0, this->width(), h);
+
+    // 方法1
+    // QPixmap pixmap(twOut2Img->size());
+    // twOut2Img->render(&pixmap);
+
+    // 方法2
+    QPixmap pixmap = QPixmap::grabWidget(twOut2Img);
+
+    QString img = iniDir + "1.png";
+    pixmap.save(img, "PNG");
+
+#ifdef Q_OS_ANDROID
+    QDir* folder = new QDir;
+    QString path = "/storage/emulated/0/KnotBak/";
+    folder->mkdir(path);
+    QString str = ui->btnYear->text() + "-" + ui->btnMonth->text() + ".png";
+    QString infoStr = path + str;
+    mw_one->mydlgMainNotes->androidCopyFile(img, infoStr);
+    QMessageBox box;
+    if (!QFile(infoStr).exists()) {
+      box.setText(tr("Please turn on the storage permission of the app."));
+      box.exec();
+    } else {
+      box.setText(tr("Picture output successful!") + "\n\n" + infoStr);
+      box.exec();
+    }
+#endif
+  }
 }
