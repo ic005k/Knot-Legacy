@@ -608,6 +608,9 @@
               <height>28</height>
              </size>
             </property>
+            <property name="styleSheet">
+             <string notr="true">border:none</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -637,12 +640,15 @@
            </spacer>
           </item>
           <item>
-           <widget class="QToolButton" name="btnReport">
+           <widget class="QToolButton" name="btnReport1">
             <property name="minimumSize">
              <size>
               <width>40</width>
               <height>28</height>
              </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border:none</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -667,6 +673,9 @@
               <height>28</height>
              </size>
             </property>
+            <property name="styleSheet">
+             <string notr="true">border:none</string>
+            </property>
             <property name="text">
              <string>Remarks</string>
             </property>
@@ -689,6 +698,9 @@
               <width>40</width>
               <height>28</height>
              </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border:none</string>
             </property>
             <property name="text">
              <string>Find</string>
@@ -718,6 +730,9 @@
               <width>45</width>
               <height>0</height>
              </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border:none</string>
             </property>
             <property name="text">
              <string>Menu</string>

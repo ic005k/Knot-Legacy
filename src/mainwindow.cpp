@@ -2922,8 +2922,6 @@ void MainWindow::on_RunCategory() {
   }
 }
 
-void MainWindow::on_btnReport_clicked() { on_Report(); }
-
 void MainWindow::on_actionPreferences_triggered() {
   mydlgPre->setFixedWidth(this->width());
   mydlgPre->setGeometry(geometry().x(), geometry().y(), mydlgPre->width(),
@@ -3799,7 +3797,6 @@ void MainWindow::init_UIWidget() {
   ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
-  ui->btnReport->setStyleSheet("border:none");
   ui->btnNotes->setStyleSheet("border:none");
   ui->btnPause->setStyleSheet("border:none");
   ui->btnSelTab->setStyleSheet("border:none");
@@ -3815,7 +3812,6 @@ void MainWindow::init_UIWidget() {
   ui->btnSteps->setFont(f);
   ui->btnMax->setFont(f);
   ui->btnReader->setFont(f);
-  ui->btnReport->setFont(f);
   ui->btnMemos->setFont(f);
 
   tabChart->setCurrentIndex(0);
@@ -4771,3 +4767,5 @@ void MainWindow::on_btnZoomOut_clicked() {
   QQuickItem* root = ui->qw_Img->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "zoomout");
 }
+
+void MainWindow::on_btnReport1_clicked() { on_Report(); }

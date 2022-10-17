@@ -399,8 +399,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnDay_clicked();
 
-  void on_btnReport_clicked();
-
   void dealDone();
 
   void readDone();
@@ -497,6 +495,8 @@ class MainWindow : public QMainWindow {
   void on_btnNotesList_clicked();
 
   void on_btnBackImg_clicked();
+
+  void on_btnReport1_clicked();
 
  private:
   int memoHeight;
