@@ -206,8 +206,6 @@ void dlgNotesList::addItem(QTreeWidget* tw, QTreeWidgetItem* item) {
   tw->expandAll();
 }
 
-void dlgNotesList::delItem(QTreeWidget* tw, QTreeWidgetItem* item) {}
-
 void dlgNotesList::delFile(QString file) {
   QFile _file(file);
   bool yes;

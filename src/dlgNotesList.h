@@ -33,7 +33,6 @@ class dlgNotesList : public QDialog {
 
   void addItem(QTreeWidget *tw, QTreeWidgetItem *item);
 
-  void delItem(QTreeWidget *tw, QTreeWidgetItem *item);
   void saveRecycle();
   void initRecycle();
   void clearFiles();

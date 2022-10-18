@@ -7,10 +7,10 @@ QT += xml
 #Qt6
 #QT += core5compat
 
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets #webenginewidgets
 
 CONFIG += c++11
+CONFIG+=sdk_no_version_check
 
 ICON = res/icon.icns
 TRANSLATIONS += src/cn.ts

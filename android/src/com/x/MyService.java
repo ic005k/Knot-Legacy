@@ -14,7 +14,6 @@ import android.util.Log;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.graphics.BitmapFactory;
@@ -25,15 +24,12 @@ import android.app.NotificationChannel;
 import android.support.v4.app.NotificationCompat;
 import android.annotation.TargetApi;
 
-//import androidx.core.app.NotificationCompat
-
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Locale;
-
 
 public class MyService extends Service {
     private static final String TAG = "MyService";
@@ -94,15 +90,6 @@ public class MyService extends Service {
     public static int startTimerAlarm() {
         stopTimerAlarm();
 
-        /*timerAlarm = new Timer();
-        timerAlarm.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                CallJavaNotify_3();
-            }
-        }, 0, 300000);*/
-
-        //handler = new Handler();
         handler = new Handler(Looper.getMainLooper());
         handler.post(runnable);//立即调用
         System.out.println("startTimerAlarm+++++++++++++++++++++++");
@@ -110,12 +97,6 @@ public class MyService extends Service {
     }
 
     public static int stopTimerAlarm() {
-        /*if (timerAlarm != null) {
-            timerAlarm.cancel();
-            timerAlarm.purge();
-
-        }*/
-
         if (handler != null) {
             handler.removeCallbacks(runnable);
 
@@ -201,6 +182,7 @@ public class MyService extends Service {
         if (Build.VERSION.SDK_INT >= 26) {
             setForeground();
         } else {
+            // android 8.0 以下
             Intent notificationIntent = new Intent(this, MyActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                     notificationIntent, 0);
@@ -254,7 +236,6 @@ public class MyService extends Service {
                 //int importance = NotificationManager.IMPORTANCE_DEFAULT;
                 int importance = NotificationManager.IMPORTANCE_LOW; //这个低频道不包含任何声音，达到静音的效果
                 NotificationChannel notificationChannel = new NotificationChannel("Knot", "Knot Notifier Steps", importance);
-                //notificationChannel.setSound(null, null);//设置频道静音
                 m_notificationManager.createNotificationChannel(notificationChannel);
 
                 m_builder = new Notification.Builder(context, notificationChannel.getId());
@@ -268,13 +249,9 @@ public class MyService extends Service {
                     .setSmallIcon(R.drawable.icon)
                     .setColor(Color.GREEN)
                     .setAutoCancel(true);
-            //.setDefaults(Notification.DEFAULT_LIGHTS)
-            //.setSmallIcon(R.drawable.icon)
-            //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.icon))
 
             m_notificationManager.notify(0, m_builder.build());
 
-            //startForeground(1,m_builder.build());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -303,8 +280,8 @@ public class MyService extends Service {
                     .setContentText(message)
                     .setSmallIcon(R.drawable.alarm)
                     .setColor(Color.GREEN)
-                    .setAutoCancel(true);
-                    //.setDefaults(Notification.DEFAULT_ALL);
+                    .setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_ALL);
 
             Notification notification = m_builderAlarm.build();
 

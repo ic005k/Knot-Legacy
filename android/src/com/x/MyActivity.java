@@ -1,12 +1,13 @@
 package com.x;
 
+//Qt5
+
 import org.qtproject.qt5.android.bindings.QtActivity;
-//import org.qtproject.qt5.android.bindings.QtApplication;
+
+import com.x.MyService;
 
 import android.app.Application;
-
 import android.app.Activity;
-
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.DialogInterface;
@@ -27,9 +28,6 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.Handler;
 import android.os.Looper;
-
-import com.x.MyService;
-
 import android.app.PendingIntent;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,10 +35,8 @@ import android.os.Build;
 import android.graphics.Color;
 import android.view.WindowManager;
 import android.view.View;
-
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
 import android.hardware.SensorManager;
@@ -78,12 +74,10 @@ import java.util.List;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-
 import java.util.Objects;
 import java.util.zip.ZipOutputStream;
-
+import java.util.Random;
 import java.net.URLDecoder;
-
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -96,9 +90,6 @@ import java.util.Calendar;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-
-import java.util.Random;
-
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
@@ -126,6 +117,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public native static void CallJavaNotify_4();
 
     public MyActivity() {
+        //不用在此初始化，已采用新方法
         //m_instance = this;
     }
 
@@ -147,6 +139,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         c.add(Calendar.SECOND, ts);
 
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+
+        //定时精度不够
         //alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
 
         Log.e("Alarm Manager", c.getTimeInMillis() + "");
@@ -190,10 +184,10 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     //全透状态栏
     private void setStatusBarFullTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//透明状态栏
+            //透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             // 状态栏字体设置为深色，SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 为SDK23增加
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
             // 部分机型的statusbar会有半透明的黑色背景
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -201,7 +195,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         }
     }
 
-    // 非全透,带颜色的状态栏,需要指定颜色
+    // 非全透,带颜色的状态栏,需要指定颜色（目前采用）
     private void setStatusBarColor(String color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // 需要安卓版本大于5.0以上
@@ -434,7 +428,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         m_instance = this;
         Log.d(TAG, "Android activity created");
 
-        //唤醒锁
+        //唤醒锁（手机上不推荐使用，其它插电安卓系统可考虑，比如广告机等）
         //acquireWakeLock();
         mySerivece = new PersistService();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -446,7 +440,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         //状态栏
         context = getApplicationContext();  // 获取程序句柄
         // 设置状态栏颜色,需要安卓版本大于5.0
-        // this.setStatusBarColor("#FF4040"); //红
         this.setStatusBarColor("#F3F3F3");  //灰
         // 设置状态栏全透明
         // this.setStatusBarFullTransparent();
@@ -469,14 +462,16 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             startService(new Intent(bindIntent));
         }
 
+        //Test
         //MyService.notify(getApplicationContext(), "Hello!");
 
-        //定时闹钟
+        // 定时闹钟
         alarmCount = 0;
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         intent = new Intent(MyActivity.this, ClockActivity.class);
         pi = PendingIntent.getActivity(MyActivity.this, 0, intent, 0);
 
+        // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }
 
@@ -489,7 +484,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             // Auto-generated method stub
-
         }
     };
 
@@ -504,6 +498,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public void onStop() {
         System.out.println("onStop...");
         super.onStop();
+
+        //目前暂不需要，已采用新方法
         //QtApplication.invokeDelegate();
     }
 
@@ -512,6 +508,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
 
+        //让系统自行处理，否则退出时有可能出现崩溃
         //if(mHomeKeyEvent!=null)
         //unregisterReceiver(mHomeKeyEvent);
 
@@ -520,6 +517,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
+
+        //目前暂不需要，已采用新方法
         //QtApplication.invokeDelegate();
     }
 
@@ -601,7 +600,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     //--------------------------------------------------------------------------------
     // 备用参考
-    private static final List<ZipEntry> entries = new ArrayList<ZipEntry>();
+   /* private static final List<ZipEntry> entries = new ArrayList<ZipEntry>();
 
     public static void unZipDirectory(String zipFileDirectory, String outputDirectory) throws ZipException, IOException {
         File file = new File(zipFileDirectory);
@@ -730,7 +729,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             }
         }
         zin.closeEntry();
-    }
+    }*/
 
     //----------------------------------------------------------------------------------------------
     /*
@@ -982,7 +981,6 @@ This method can parse out the real local file path from a file URI.
                 String reason = intent.getStringExtra(SYSTEM_REASON);
                 if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     // 表示按了home键,程序直接进入到后台
-                    //QtApplication.invokeDelegate();
                     System.out.println("MyActivity HOME键被按下...");
                 } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
                     // 表示长按home键,显示最近使用的程序

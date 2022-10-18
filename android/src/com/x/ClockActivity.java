@@ -1,8 +1,5 @@
 package com.x;
 
-//import org.qtproject.qt5.android.bindings.QtActivity;
-//import org.qtproject.qt5.android.bindings.QtApplication;
-
 import android.content.IntentFilter;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
@@ -25,9 +22,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.view.WindowManager;
 import android.view.Window;
-
-//import android.support.v7.app.AppCompatActivity;
-//import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -212,6 +206,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         else
             strTodo = "Todo: ";
 
+        //显示一个警报框，目前已弃用，采用全屏幕显示
         /*new AlertDialog.Builder(ClockActivity.this).setTitle(str1).setMessage(str2 + "\n\n\n" + strCurDT)
                 .setPositiveButton(str3, new DialogInterface.OnClickListener() {
                     @Override
@@ -237,7 +232,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
 
-        //QtApplication.invokeDelegate();
     }
 
     @Override
