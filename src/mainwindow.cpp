@@ -4015,6 +4015,7 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 
 #ifdef Q_OS_ANDROID
   mainMenu->addAction(actOpenKnotBakDir);
+  actOpenKnotBakDir->setVisible(false);
 #endif
 
   mainMenu->addAction(actPreferences);
