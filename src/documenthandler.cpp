@@ -59,7 +59,11 @@
 #include <QQmlFileSelector>
 #include <QQuickTextDocument>
 #include <QTextCharFormat>
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QTextCodec>
+#endif
+
 #include <QTextDocument>
 
 #include "src/dlgloadpic.h"
@@ -316,12 +320,14 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
 }
 
 void DocumentHandler::loadBuffer(QString str) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QByteArray data = str.toUtf8();
   QTextCodec *codec = QTextCodec::codecForName("utf-8");
   emit loaded(codec->toUnicode(data), Qt::AutoText);
   reset();
 
   emit fileUrlChanged();
+#endif
 }
 
 void DocumentHandler::load(const QUrl &fileUrl) {
@@ -341,8 +347,11 @@ void DocumentHandler::load(const QUrl &fileUrl) {
           emit loaded(QString::fromUtf8(data), Qt::MarkdownText);
         } else {
           // QTextCodec *codec = QTextCodec::codecForHtml(data);
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
           QTextCodec *codec = QTextCodec::codecForName("utf-8");  //解决中文乱码
           emit loaded(codec->toUnicode(data), Qt::AutoText);
+#endif
         }
         doc->setModified(false);
       }

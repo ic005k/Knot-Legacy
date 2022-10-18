@@ -16,7 +16,6 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
 
   this->installEventFilter(this);
 
-  this->layout()->setMargin(1);
   this->layout()->setContentsMargins(1, 1, 1, 1);
   this->layout()->setSpacing(3);
 

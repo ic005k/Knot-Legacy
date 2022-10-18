@@ -882,9 +882,11 @@ void dlgReport::plotPic(QPrinter* printer) {
   QPainter painter(printer);
   QPixmap p_w_picpath;
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   p_w_picpath = p_w_picpath.grabWidget(ui->tableReport->viewport(), 0, 0,
                                        ui->tableReport->width(),
                                        ui->tableReport->height());
+#endif
 
   QRect rect = painter.viewport();
   QSize size = p_w_picpath.size();
@@ -917,11 +919,11 @@ void dlgReport::on_btnOut2Img_clicked() {
     twOut2Img->setGeometry(0, 0, this->width(), h);
 
     // 方法1
-    // QPixmap pixmap(twOut2Img->size());
-    // twOut2Img->render(&pixmap);
+    QPixmap pixmap(twOut2Img->size());
+    twOut2Img->render(&pixmap);
 
     // 方法2
-    QPixmap pixmap = QPixmap::grabWidget(twOut2Img);
+    // QPixmap pixmap = QPixmap::grabWidget(twOut2Img);
 
     QString img = iniDir + "1.png";
     pixmap.save(img, "PNG");

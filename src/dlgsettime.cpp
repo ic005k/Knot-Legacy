@@ -195,9 +195,14 @@ int dlgSetTime::removeDuplicates(QStringList* that) {
     if (setSize == seen.size())  // unchanged size => was already seen
       continue;
     ++setSize;
+
     // //将不重复项与重复项交换（新，IOS无法编译通过）
-    // if (j != i) that->swapItemsAt(i, j);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    if (j != i) that->swapItemsAt(i, j);
+#else
     if (j != i) that->swap(i, j);
+#endif
+
     ++j;
   }
   if (n != j) that->erase(that->begin() + j, that->end());

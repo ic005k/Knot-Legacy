@@ -216,14 +216,21 @@ MainWindow::MainWindow(QWidget* parent)
   ui->setupUi(this);
   initMain = true;
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QDesktopWidget* desktop = QApplication::desktop();
   QRect screen = desktop->screenGeometry();
   int screenWidth = screen.width();
   int screenHeight = screen.height();
+
   if (!isAndroid) {
     this->setGeometry(1 * (screenWidth - this->width()) / 2, 0, this->width(),
                       screenHeight - 60);
   }
+#else
+  if (!isAndroid) {
+    this->setGeometry(500, 0, this->width(), this->height() - 60);
+  }
+#endif
 
   qRegisterMetaType<QVector<int>>("QVector<int>");
   loading = true;
@@ -286,7 +293,9 @@ void MainWindow::initTodayInitSteps() {
   tc = a;
 
   QSettings Reg(iniDir + "initsteps.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   QString str = QDate::currentDate().toString("ddd MM dd yyyy");
 
   if (!Reg.allKeys().contains(str)) {
@@ -443,7 +452,9 @@ void MainWindow::sendMsg(int CurTableCount) {
 
 void MainWindow::init_Options() {
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
 #ifdef Q_OS_UNIX
   Reg.setValue("/Options/macIniDir", iniDir);
@@ -487,7 +498,9 @@ void MainWindow::init_Options() {
                             << "12";
 
   QSettings Reg2(iniDir + "ymd.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg2.setIniCodec("utf-8");
+#endif
   btnYText = Reg2.value("/YMD/btnYText", 2022).toString();
   ui->btnYear->setText(btnYText);
   btnMText = Reg2.value("/YMD/btnMText", tr("Month")).toString();
@@ -501,7 +514,9 @@ void MainWindow::init_Options() {
 
   // time machine
   QSettings RegTime(iniDir + "timemachine.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   RegTime.setIniCodec("utf-8");
+#endif
   int countTime = RegTime.value("/TimeLines/Count", 0).toInt();
   for (int i = 0; i < countTime; i++)
     timeLines.append(
@@ -511,10 +526,10 @@ void MainWindow::init_Options() {
 void MainWindow::init_ChartWidget() {
   ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->glMonth->layout()->setContentsMargins(0, 0, 0, 0);
-  ui->glMonth->layout()->setMargin(0);
+
   ui->glMonth->layout()->setSpacing(0);
   ui->glDay->layout()->setContentsMargins(0, 0, 0, 0);
-  ui->glDay->layout()->setMargin(0);
+
   ui->glDay->layout()->setSpacing(0);
 
   chartMonth = new QChart();
@@ -654,14 +669,18 @@ void MainWindow::init_TabData() {
   else
     ini_file = iniDir + "tab.ini";
   QSettings RegTab(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   RegTab.setIniCodec("utf-8");
+#endif
 
   if (isImport)
     ini_file1 = iniFile;
   else
     ini_file1 = iniDir + "notes.ini";
   QSettings RegNotes(ini_file1, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   RegNotes.setIniCodec("utf-8");
+#endif
   int TabCount = RegTab.value("TabCount", 0).toInt();
 
   for (int i = 0; i < TabCount; i++) {
@@ -985,7 +1004,9 @@ QObjectList MainWindow::getAllUIControls(QObject* parent) {
 void MainWindow::saveTab() {
   // Tab
   QSettings Reg(iniDir + "tab.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   int TabCount = tabData->tabBar()->count();
   Reg.setValue("TabCount", TabCount);
   int CurrentIndex = tabData->currentIndex();
@@ -1024,7 +1045,9 @@ void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
   QString name = "tab" + QString::number(tabIndex + 1);
   QString ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   int count = tw->topLevelItemCount();
   int abc = count;
   tw->setObjectName(name);
@@ -1172,7 +1195,9 @@ void MainWindow::readData(QTreeWidget* tw) {
   else
     ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   int rowCount = Reg.value("/" + name + "/TopCount").toInt();
   for (int i = 0; i < rowCount; i++) {
     int childCount =
@@ -1242,7 +1267,11 @@ QString MainWindow::loadText(QString textFile) {
 
     } else {
       QTextStream in(&file);
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
       in.setCodec("UTF-8");
+#endif
+
       QString text = in.readAll();
       return text;
     }
@@ -1699,7 +1728,9 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   tw->setFocus();
   if (!loading) {
     QSettings Reg(iniDir + "tab.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
+#endif
     Reg.setValue("CurrentIndex", index);
   }
 
@@ -1712,7 +1743,9 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 void MainWindow::saveNotes(int tabIndex) {
   if (loading) return;
   QSettings Reg(iniDir + "notes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   QTreeWidget* tw = (QTreeWidget*)tabData->widget(tabIndex);
   QString name = tw->objectName();
   Reg.setValue("/" + name + "/Note", tabData->tabToolTip(tabIndex));
@@ -2209,7 +2242,9 @@ void MainWindow::on_actionExport_Data_triggered() {
 
 QString MainWindow::on_actionOneClickBakData(bool msg) {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   QString fileName = Reg.value("/MainNotes/FileName").toString();
   if (QFile(fileName).exists()) {
     bakData(fileName, msg);
@@ -2380,12 +2415,16 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
 
     // TextReader
     QSettings RegTotalIni(iniFile, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     RegTotalIni.setIniCodec("utf-8");
+#endif
 
     QString strReader = iniDir + "reader.ini";
     QFile::remove(strReader);
     QSettings Reg1(strReader, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg1.setIniCodec("utf-8");
+#endif
     RegTotalIni.beginGroup("Reader");
     QStringList list = RegTotalIni.allKeys();
     foreach (QString key, list) {
@@ -2438,7 +2477,9 @@ void MainWindow::on_about() {
   bakIniData(iniFile, false);
 
   QSettings Reg(iniFile, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   int keys = Reg.allKeys().count();
 
   QTextBrowser* textBrowser = new QTextBrowser;
@@ -3479,7 +3520,9 @@ void MainWindow::updateHardSensorSteps() {
 
 void MainWindow::on_actionMemos_triggered() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
   if (strPw != "") {
@@ -3646,6 +3689,9 @@ void MainWindow::init_Sensors() {
 }
 
 void MainWindow::init_UIWidget() {
+  qmlRegisterType<File>("MyModel1", 1, 0, "File");
+  qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
+
   mw_one = this;
   listSelFont = new QListWidget();
   listSelTab = new QListWidget();
@@ -3661,13 +3707,12 @@ void MainWindow::init_UIWidget() {
   tabChart = ui->tabCharts;
 
   ui->frameReader->hide();
-  ui->frameReader->layout()->setMargin(0);
+
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->layout()->setSpacing(1);
   ui->f_ImgView->hide();
 
-  ui->frameMain->layout()->setMargin(0);
   ui->frameMain->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frameMain->setContentsMargins(0, 0, 0, 0);
   ui->frameMain->layout()->setSpacing(1);
@@ -3678,21 +3723,18 @@ void MainWindow::init_UIWidget() {
 
   ui->frameMemo->hide();
   ui->frameMemo->setContentsMargins(1, 1, 1, 1);
-  ui->frameMemo->layout()->setMargin(1);
+
   ui->edit1->setEchoMode(QLineEdit::EchoMode::Password);
   ui->edit2->setEchoMode(QLineEdit::EchoMode::Password);
 
-  this->layout()->setMargin(0);
-  ui->centralwidget->layout()->setMargin(1);
   ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 2);
   ui->centralwidget->layout()->setSpacing(1);
   ui->frame_charts->setContentsMargins(0, 0, 0, 0);
-  ui->frame_charts->layout()->setMargin(0);
+
   ui->frame_charts->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frame_charts->layout()->setSpacing(0);
   ui->frame_charts->setMaximumHeight(frameChartHeight);
 
-  ui->frame_tab->layout()->setMargin(0);
   ui->frame_tab->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frame_tab->setContentsMargins(0, 0, 0, 0);
   ui->frame_tab->layout()->setSpacing(1);
@@ -3886,8 +3928,8 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   QAction* actDelTab = new QAction(tr("Del Tab"));
   QAction* actRenameTab = new QAction(tr("Rename Tab"));
 
-  QAction* actFind = new QAction(tr("Find"));
-  actFind->setVisible(false);
+  QAction* actOpenKnotBakDir = new QAction(tr("Open KnotBak Dir"));
+
   QAction* actReport = new QAction(tr("Report"));
   actReport->setVisible(false);
   QAction* actRemarks = new QAction(tr("Remarks"));
@@ -3923,8 +3965,8 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   connect(actTimeMachine, &QAction::triggered, this,
           &MainWindow::on_actionTimeMachine);
 
-  connect(actFind, &QAction::triggered, this,
-          &MainWindow::on_actionFind_triggered);
+  connect(actOpenKnotBakDir, &QAction::triggered, this,
+          &MainWindow::on_openKnotBakDir);
   connect(actReport, &QAction::triggered, this,
           &MainWindow::on_actionReport_triggered);
   connect(actRemarks, &QAction::triggered, this,
@@ -3959,7 +4001,6 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   mainMenu->addAction(actDelTab);
   mainMenu->addAction(actRenameTab);
 
-  mainMenu->addAction(actFind);
   mainMenu->addAction(actReport);
   mainMenu->addAction(actRemarks);
 
@@ -3972,6 +4013,10 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   mainMenu->addAction(actImportData);
   mainMenu->addAction(actOneClickBakData);
 
+#ifdef Q_OS_ANDROID
+  mainMenu->addAction(actOpenKnotBakDir);
+#endif
+
   mainMenu->addAction(actPreferences);
 
   mainMenu->addAction(actMemos);
@@ -3979,6 +4024,13 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
   mainMenu->addAction(actAbout);
 
   mainMenu->setStyleSheet(qss);
+}
+
+void MainWindow::on_openKnotBakDir() {
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  m_activity.callMethod<void>("openKnotBakDir");
+#endif
 }
 
 void MainWindow::on_actionOneDriveBackupData() {
@@ -4025,7 +4077,9 @@ void MainWindow::addUndo(QString log) {
       timeLines.removeAt(count);
     }
     QSettings Reg(iniDir + "timemachine.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
+#endif
     Reg.setValue("/TimeLines/Count", count);
     for (int i = 0; i < count; i++)
       Reg.setValue("/TimeLines/Files" + QString::number(i), timeLines.at(i));

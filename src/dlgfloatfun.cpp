@@ -21,10 +21,10 @@ void dlgFloatFun::init() {
                  Qt::WindowDoesNotAcceptFocus);
 #endif
 
-  QPalette pal = palette();
-  QColor color = QColor(Qt::Key_Blue);
-  pal.setColor(QPalette::Background, color);
-  // setPalette(pal);
+  // QPalette pal = palette();
+  // QColor color = QColor(Qt::Key_Blue);
+  // pal.setColor(QPalette::Background, color);
+  //  setPalette(pal);
 
   this->setContentsMargins(1, 1, 1, 1);
 

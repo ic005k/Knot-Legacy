@@ -10,7 +10,6 @@ QString hsStyle;
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
-  this->layout()->setMargin(1);
   this->layout()->setSpacing(1);
   this->installEventFilter(this);
   initDlg();
@@ -143,7 +142,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
   int count = 0;
 
   QGridLayout* gl = new QGridLayout(this);
-  gl->setMargin(5);
+
   gl->setSpacing(5);
   ui->frameSel->setLayout(gl);
 
@@ -293,7 +292,7 @@ void msgDialog::addDial(int min, int max, QString flag) {
   qDeleteAll(ui->frameSel->findChildren<QObject*>());
 
   QGridLayout* gl = new QGridLayout(this);
-  gl->setMargin(5);
+
   gl->setSpacing(5);
   ui->frameSel->setLayout(gl);
 

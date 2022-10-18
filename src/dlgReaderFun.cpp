@@ -11,7 +11,13 @@ extern QString iniDir;
 dlgReaderFun::dlgReaderFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgReaderFun) {
   QPalette pal = palette();
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   pal.setColor(QPalette::Background, QColor(128, 42, 42, 100));
+#else
+  pal.setColor(QPalette::Window, QColor(128, 42, 42, 100));
+#endif
+
   setPalette(pal);
 
   ui->setupUi(this);
@@ -76,7 +82,9 @@ void dlgReaderFun::on_hSlider_sliderMoved(int position) {
 
 void dlgReaderFun::on_btnStyle1_clicked() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   Reg.setValue("/Reader/Style", "1");
   mw_one->mydlgReader->readerStyle = "1";
   mw_one->mydlgReader->setReaderStyle();
@@ -84,7 +92,9 @@ void dlgReaderFun::on_btnStyle1_clicked() {
 
 void dlgReaderFun::on_btnStyle2_clicked() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   Reg.setValue("/Reader/Style", "2");
   mw_one->mydlgReader->readerStyle = "2";
   mw_one->mydlgReader->setReaderStyle();
@@ -92,7 +102,9 @@ void dlgReaderFun::on_btnStyle2_clicked() {
 
 void dlgReaderFun::on_btnStyle3_clicked() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   Reg.setValue("/Reader/Style", "3");
   mw_one->mydlgReader->readerStyle = "3";
   mw_one->mydlgReader->setReaderStyle();

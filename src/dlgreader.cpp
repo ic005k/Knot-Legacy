@@ -23,15 +23,11 @@ QDialog* dlgProgEBook;
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
 
-  myDocHandler = new DocumentHandler(this);
-  qmlRegisterType<File>("MyModel1", 1, 0, "File");
-  qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
-
   this->installEventFilter(this);
 
   this->setContentsMargins(0, 0, 0, 0);
   this->layout()->setContentsMargins(0, 0, 0, 0);
-  this->layout()->setMargin(0);
+
   this->setStyleSheet(
       "background-image: url(:/res/b.png);border-width:0;border-style:outset;");
 
@@ -121,7 +117,7 @@ QDialog* dlgReader::getProgBar() {
   dlgProgEBook->setFixedWidth(mw_one->width());
   QVBoxLayout* vbox = new QVBoxLayout;
   vbox->setSpacing(1);
-  vbox->setMargin(1);
+
   vbox->setContentsMargins(1, 1, 1, 12);
   dlgProgEBook->setLayout(vbox);
   dlgProgEBook->setGeometry(
@@ -497,7 +493,9 @@ QString dlgReader::getTextEditLineText(QTextEdit* txtEdit, int i) {
 
 void dlgReader::saveReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   Reg.setValue("/Reader/FileName", fileName);
   Reg.setValue("/Reader/FontName", fontname);
@@ -523,7 +521,9 @@ void dlgReader::saveReader() {
 
 void dlgReader::initReader() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   readerStyle = Reg.value("/Reader/Style", "1").toString();
 
@@ -549,7 +549,9 @@ void dlgReader::initReader() {
 
 void dlgReader::getBookList() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   // book list
   int count = Reg.value("/Reader/BookCount", 0).toInt();
   bookList.clear();
@@ -689,7 +691,9 @@ void dlgReader::on_btnFont_clicked() {
   font = fd.getFont(&ok, font);
   if (ok) {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
+#endif
     Reg.setValue("/Reader/FontName", font.family());
     mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
                                                                font.family());
@@ -700,7 +704,9 @@ QFont dlgReader::get_Font() {
   QFont font;
 
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   font.setFamily(Reg.value("/Reader/FontName", "Menlo").toString());
 
   font.setPixelSize(Reg.value("/Reader/FontSize", 12).toInt());
@@ -942,6 +948,7 @@ QStringList dlgReader::readText(QString textFile) {
 }
 
 QString dlgReader::GetCorrectUnicode(const QByteArray& text) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QTextCodec::ConverterState state;
   QTextCodec* codec = QTextCodec::codecForName("UTF-8");
   QString strtext = codec->toUnicode(text.constData(), text.size(), &state);
@@ -950,8 +957,11 @@ QString dlgReader::GetCorrectUnicode(const QByteArray& text) {
   } else {
     strtext = text;
   }
-
   return strtext;
+#else
+
+#endif
+  return text;
 }
 
 void dlgReader::closeEvent(QCloseEvent* event) {
@@ -965,7 +975,9 @@ void dlgReader::paintEvent(QPaintEvent* event) { Q_UNUSED(event); }
 void dlgReader::goPostion() {
   if (isOpen) {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
+#endif
 
     iPage = Reg.value("/Reader/iPage" + fileName, 0).toULongLong();
     htmlIndex = Reg.value("/Reader/htmlIndex" + fileName, 0).toInt() - 1;
@@ -1048,7 +1060,9 @@ void dlgReader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
 
 void dlgReader::savePageVPos() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   if (isEpub) {
     if (htmlIndex >= 0)
       Reg.setValue("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex),
@@ -1060,7 +1074,9 @@ void dlgReader::savePageVPos() {
 
 void dlgReader::setPageVPos() {
   QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   if (isEpub) {
     if (htmlIndex >= 0)
       textPos =

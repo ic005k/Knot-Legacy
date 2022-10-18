@@ -135,7 +135,7 @@ void TestDialog::init() {
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
   ui->frameOne->setMaximumHeight(100);
-  ui->frameOne->layout()->setMargin(1);
+
   this->setModal(true);
 }
 

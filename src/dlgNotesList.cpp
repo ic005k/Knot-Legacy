@@ -302,7 +302,9 @@ void dlgNotesList::closeEvent(QCloseEvent* event) {
 
 void dlgNotesList::saveNotesList() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   QString a = currentMDFile;
   Reg.setValue("/MainNotes/currentItem", a.replace(iniDir, ""));
@@ -334,7 +336,9 @@ void dlgNotesList::saveNotesList() {
 
 void dlgNotesList::saveRecycle() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   int count = twrb->topLevelItemCount();
   Reg.setValue("/MainNotes/rbtopItemCount", count);
@@ -364,7 +368,9 @@ void dlgNotesList::saveRecycle() {
 void dlgNotesList::initNotesList() {
   tw->clear();
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   int topCount = Reg.value("/MainNotes/topItemCount").toInt();
   for (int i = 0; i < topCount; i++) {
@@ -416,7 +422,9 @@ void dlgNotesList::initNotesList() {
 void dlgNotesList::initRecycle() {
   twrb->clear();
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   int topCount = Reg.value("/MainNotes/rbtopItemCount").toInt();
   for (int i = 0; i < topCount; i++) {

@@ -1038,6 +1038,29 @@ This method can parse out the real local file path from a file URI.
         return result;
     }
 
+    //----------------------------------------------------------------------------------------------
+    private final static int REQUEST_CODE = 100;
+
+    public void openKnotBakDir() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        Uri dir = Uri.parse("/storage/emulated/0/KnotBak");
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, dir);
+        intent.setType("*/*");
+        String[] mimeTypes = {
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "application/vnd.ms-powerpoint",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                "application/vnd.ms-excel",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "application/pdf",
+                "application/zip",
+                "application/png"
+        };
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
 }
 
 

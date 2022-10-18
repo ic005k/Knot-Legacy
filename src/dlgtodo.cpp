@@ -83,7 +83,9 @@ void dlgTodo::on_btnBack_clicked() { close(); }
 void dlgTodo::saveTodo() {
   highCount = 0;
   QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   int count = listTodo->count();
   Reg.setValue("/Todo/Count", count);
   for (int i = 0; i < count; i++) {
@@ -123,7 +125,9 @@ void dlgTodo::init_Items() {
   else
     ini_file = iniDir + "todo.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   int count = Reg.value("/Todo/Count").toInt();
   for (int i = 0; i < count; i++) {
     QString str = Reg.value("/Todo/Item" + QString::number(i)).toString();
@@ -181,7 +185,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   w->setContentsMargins(0, 0, 0, 0);
 
   QHBoxLayout* layout = new QHBoxLayout;
-  layout->setMargin(0);
+
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
   QToolButton* btn = new QToolButton(this);
@@ -269,7 +273,7 @@ void dlgTodo::add_Item(QString str, QString time, bool insert) {
   vbox->addWidget(lblTime);
   vbox->addLayout(hbox);
   frame->setLayout(vbox);
-  frame->layout()->setMargin(0);
+
   frame->layout()->setContentsMargins(0, 0, 0, 0);
 
   layout->addWidget(lblSn);
@@ -798,7 +802,9 @@ void dlgTodo::refreshAlarm() {
   QString ini_file;
   ini_file = "/data/data/com.x/files/msg.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   QStringList listAlarm;
   QList<qlonglong> listTotalS;

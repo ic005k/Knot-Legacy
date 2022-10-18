@@ -57,7 +57,9 @@ int main(int argc, char* argv[]) {
 #endif
 
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   fontSize = Reg.value("/Options/FontSize", 16).toInt();
   bool isReaderFont = Reg.value("/Options/ReaderFont", false).toBool();
@@ -88,7 +90,9 @@ int main(int argc, char* argv[]) {
     fontname = fontName;
   } else {
     QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
+#endif
     fontname = Reg.value("/Reader/FontName").toString();
   }
 

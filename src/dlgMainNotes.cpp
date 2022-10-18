@@ -180,7 +180,9 @@ void dlgMainNotes::MD2Html(QString mdFile) {
 
 void dlgMainNotes::saveMainNotes() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
 
   mw_one->TextEditToFile(ui->editSource, mw_one->m_NotesList->currentMDFile);
   MD2Html(mw_one->m_NotesList->currentMDFile);
@@ -560,7 +562,9 @@ void dlgMainNotes::unzipMemo() {
 
 void dlgMainNotes::loadMemoQML() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
 
@@ -615,7 +619,9 @@ void dlgMainNotes::loadMemoQML() {
 
 void dlgMainNotes::saveQMLVPos() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   if (QFile(mw_one->m_NotesList->currentMDFile).exists()) {
     QString strTag = mw_one->m_NotesList->currentMDFile;
     strTag.replace(iniDir, "");
@@ -625,7 +631,9 @@ void dlgMainNotes::saveQMLVPos() {
 
 void dlgMainNotes::setVPos() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
+#endif
   QString a = mw_one->m_NotesList->currentMDFile;
 
   sliderPos = Reg.value("/MainNotes/SlidePos" + a.replace(iniDir, "")).toReal();
@@ -910,14 +918,6 @@ bool dlgMainNotes::androidCopyFile(QString src, QString des) {
   bool result = false;
 
 #ifdef Q_OS_ANDROID
-
-  /*QAndroidJniObject jobj_src = QAndroidJniObject::fromString(src);
-  QAndroidJniObject jobj_des = QAndroidJniObject::fromString(des);
-  QAndroidJniObject m_activity = QtAndroid::androidActivity();
-  QAndroidJniObject s = m_activity.callObjectMethod(
-      "copyFile", "(Ljava/lang/String;)Ljava/lang/String;",
-      jobj_src.object<jstring>(), jobj_des.object<jstring>());*/
-
   QAndroidJniObject srcObj = QAndroidJniObject::fromString(src);
   QAndroidJniObject desObj = QAndroidJniObject::fromString(des);
   QAndroidJniObject m_activity = QAndroidJniObject::fromString("copyFile");

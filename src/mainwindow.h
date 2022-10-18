@@ -20,7 +20,11 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QDesktopServices>
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QDesktopWidget>
+#endif
+
 #include <QDir>
 #include <QElapsedTimer>
 #include <QFileDialog>
@@ -99,7 +103,10 @@ class ReadEBookThread;
 
 #include <QMetaType>
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 QT_CHARTS_USE_NAMESPACE
+#endif
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -484,7 +491,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnZoomOut_clicked();
 
- private slots:
+  void on_openKnotBakDir();
+  private slots:
 
   void on_textBrowser_selectionChanged();
 
