@@ -9,7 +9,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="64"/>
+        <location filename="autoupdatedialog.ui" line="46"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="autoupdatedialog.cpp" line="69"/>
         <source>Download Progress</source>
         <translation>下载进度</translation>
     </message>
@@ -771,55 +776,55 @@
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="autoupdatedialog.cpp" line="147"/>
+        <location filename="autoupdatedialog.cpp" line="160"/>
         <location filename="mainwindow.cpp" line="1024"/>
         <source>bytes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="148"/>
+        <location filename="autoupdatedialog.cpp" line="161"/>
         <location filename="mainwindow.cpp" line="1025"/>
         <source>KiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="149"/>
+        <location filename="autoupdatedialog.cpp" line="162"/>
         <location filename="mainwindow.cpp" line="1026"/>
         <source>MiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="150"/>
+        <location filename="autoupdatedialog.cpp" line="163"/>
         <location filename="mainwindow.cpp" line="1027"/>
         <source>GiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="151"/>
+        <location filename="autoupdatedialog.cpp" line="164"/>
         <location filename="mainwindow.cpp" line="1028"/>
         <source>TiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="152"/>
+        <location filename="autoupdatedialog.cpp" line="165"/>
         <location filename="mainwindow.cpp" line="1029"/>
         <source>PiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="153"/>
+        <location filename="autoupdatedialog.cpp" line="166"/>
         <location filename="mainwindow.cpp" line="1030"/>
         <source>EiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="154"/>
+        <location filename="autoupdatedialog.cpp" line="167"/>
         <location filename="mainwindow.cpp" line="1031"/>
         <source>ZiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="155"/>
+        <location filename="autoupdatedialog.cpp" line="168"/>
         <location filename="mainwindow.cpp" line="1032"/>
         <source>YiB</source>
         <translation></translation>
@@ -1858,7 +1863,7 @@ in skydrive folder</source>
         <translation type="vanished">取消</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="206"/>
+        <location filename="RemarksAbout.cpp" line="207"/>
         <source>You are currently using the latest version!</source>
         <translation>目前使用的是最新版！</translation>
     </message>

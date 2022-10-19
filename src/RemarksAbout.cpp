@@ -196,6 +196,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
         int y = (mw_one->height() - m_AutoUpdate->height()) / 2;
         m_AutoUpdate->setGeometry(mw_one->geometry().x(), y, mw_one->width(),
                                   m_AutoUpdate->height());
+        mw_one->showGrayWindows();
         m_AutoUpdate->show();
         m_AutoUpdate->startDownload(str);
         qDebug() << "ret=" << ret << "start dl..... " << str;

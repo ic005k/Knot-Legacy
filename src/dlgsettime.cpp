@@ -23,7 +23,6 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   font.setBold(true);
 
   ui->editAmount->setFont(font);
-  ui->editDesc->setFont(font);
   ui->btn0->setFont(font);
   ui->btn1->setFont(font);
   ui->btn2->setFont(font);
@@ -37,6 +36,9 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->btn0->setFont(font);
   ui->btnDot->setFont(font);
   ui->btnDel->setFont(font);
+
+  font.setPointSize(22);
+  ui->editDesc->setFont(font);
 
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editAmount);

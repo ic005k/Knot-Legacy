@@ -10,7 +10,7 @@ AutoUpdateDialog::AutoUpdateDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::AutoUpdateDialog) {
   ui->setupUi(this);
   setModal(true);
-
+  ui->lblTxt->adjustSize();
   setWindowTitle("");
 
   Init();
@@ -45,13 +45,18 @@ void AutoUpdateDialog::doProcessReadyRead()  //读取并写入
 void AutoUpdateDialog::doProcessFinished() {
   myfile->close();
   this->close();
+  mw_one->closeGrayWindows();
+  if (isCancel) return;
 
-  // install apk
+    // install apk
 #ifdef Q_OS_ANDROID
-  QAndroidJniObject jo = QAndroidJniObject::fromString(iniDir + "knot.apk");
+  // "/storage/emulated/0/KnotBak/"
+  QAndroidJniObject jo = QAndroidJniObject::fromString(tarFile);
+  jo.callStaticMethod<void>("com.x/MyActivity", "setIniDir",
+                            "(Ljava/lang/String;)V", jo.object<jstring>());
 
-  jo.callStaticMethod<int>("com.x/MyActivity", "installApk",
-                           "(Ljava/lang/String;)V", jo.object<jstring>());
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  m_activity.callMethod<void>("installApk");
 
 #endif
 }
@@ -77,7 +82,7 @@ void AutoUpdateDialog::doProcessDownloadProgress(qint64 recv_total,
 void AutoUpdateDialog::startUpdate() {}
 
 void AutoUpdateDialog::startDownload(QString strLink) {
-  setWindowTitle("");
+  isCancel = false;
 
   this->repaint();
 
@@ -97,11 +102,19 @@ void AutoUpdateDialog::startDownload(QString strLink) {
           &AutoUpdateDialog::doProcessDownloadProgress);  //大小
 
   filename = "kont.apk";
-  QString file = iniDir + filename;
-  QFile apk(file);
+
+#ifdef Q_OS_MAC
+  tarFile = iniDir + filename;
+#endif
+
+#ifdef Q_OS_ANDROID
+  // "/storage/emulated/0/KnotBak/"
+  tarFile = iniDir + filename;
+#endif
+  QFile apk(tarFile);
   apk.remove();
 
-  myfile->setFileName(file);
+  myfile->setFileName(tarFile);
   bool ret =
       myfile->open(QIODevice::WriteOnly | QIODevice::Truncate);  //创建文件
   if (!ret) {
@@ -206,4 +219,9 @@ void AutoUpdateDialog::keyPressEvent(QKeyEvent* event) {
       this->setWindowState(Qt::WindowMaximized);
     }
   }
+}
+
+void AutoUpdateDialog::on_btnCancel_clicked() {
+  isCancel = true;
+  close();
 }

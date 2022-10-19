@@ -91,6 +91,8 @@ import java.util.Calendar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
+import android.support.v4.content.FileProvider;
+
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
     private static MyActivity m_instance = null;
@@ -1049,11 +1051,29 @@ This method can parse out the real local file path from a file URI.
     }
 
     //----------------------------------------------------------------------------------------------
-    static public void installApk(String filePath) {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        //String filePath = "/sdcard/download/downloadtest.apk";
-        i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
-        startActivity(i);
+    private static String iniDir;
+
+    public static void setIniDir(String inidir) {
+        iniDir = inidir;
+    }
+
+    public void installApk() {
+        String filePath = iniDir;
+        Log.i(TAG, "install APK file=" + filePath + "  PackgeName=" + context.getPackageName());
+        File apkFile = new File(filePath);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName(), apkFile);
+
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            Log.i(TAG, "contentUri=" + contentUri);
+        } else {
+            intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        startActivity(intent);
     }
 }
 

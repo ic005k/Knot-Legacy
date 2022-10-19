@@ -52,7 +52,11 @@ class AutoUpdateDialog : public QDialog {
   bool eventFilter(QObject* watch, QEvent* evn);
  private slots:
 
+  void on_btnCancel_clicked();
+
  private:
+  QString tarFile;
+  bool isCancel = false;
 };
 
 #endif  // AUTOUPDATEDIALOG_H
