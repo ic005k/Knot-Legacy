@@ -293,7 +293,9 @@ public class MyService extends Service {
     }
 
     public static void clearNotify() {
-        m_notificationManagerAlarm.cancel(strTodo, 10);
-        System.out.println("MyService Clear Notiry...");
+        if (m_notificationManagerAlarm != null) {
+            m_notificationManagerAlarm.cancel(strTodo, 10);
+            System.out.println("MyService Clear Notiry...");
+        }
     }
 }
