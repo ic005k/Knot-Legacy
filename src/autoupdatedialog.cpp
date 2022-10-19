@@ -13,7 +13,8 @@ AutoUpdateDialog::AutoUpdateDialog(QWidget* parent)
   ui->lblTxt->adjustSize();
   setWindowTitle("");
 
-  Init();
+  myfile = new QFile(this);
+  manager = new QNetworkAccessManager(this);
 }
 
 bool AutoUpdateDialog::eventFilter(QObject* watch, QEvent* evn) {
@@ -28,11 +29,6 @@ bool AutoUpdateDialog::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 AutoUpdateDialog::~AutoUpdateDialog() { delete ui; }
-
-void AutoUpdateDialog::Init() {
-  manager = new QNetworkAccessManager(this);
-  myfile = new QFile(this);
-}
 
 void AutoUpdateDialog::doProcessReadyRead()  //读取并写入
 {
@@ -84,8 +80,6 @@ void AutoUpdateDialog::startUpdate() {}
 void AutoUpdateDialog::startDownload(QString strLink) {
   isCancel = false;
 
-  this->repaint();
-
   QNetworkRequest request;
   request.setUrl(QUrl(strLink));
 
@@ -128,6 +122,7 @@ void AutoUpdateDialog::startDownload(QString strLink) {
 void AutoUpdateDialog::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   reply->close();
+  myfile->close();
 }
 
 QString AutoUpdateDialog::GetFileSize(qint64 size) {

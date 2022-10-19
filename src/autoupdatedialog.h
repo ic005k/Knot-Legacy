@@ -31,7 +31,7 @@ class AutoUpdateDialog : public QDialog {
   QNetworkAccessManager* manager;
   QNetworkReply* reply;
   QFile* myfile;
-  void Init();
+
   void doProcessReadyRead();
   void doProcessFinished();
   void doProcessDownloadProgress(qint64, qint64);

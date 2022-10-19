@@ -33,7 +33,6 @@ dlgRemarks::dlgRemarks(QWidget* parent)
       "border-image:url(:/res/apk.png) 4 4 4 4 stretch stretch;"
       "}");
 
-  m_AutoUpdate = new AutoUpdateDialog(this);
   manager = new QNetworkAccessManager(this);
   connect(manager, SIGNAL(finished(QNetworkReply*)), this,
           SLOT(replyFinished(QNetworkReply*)));
@@ -191,15 +190,20 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
 
       if (ret >= 0) {
         QString str = "https://ghproxy.com/" + Url;
+
         // QUrl url(str);
         // QDesktopServices::openUrl(url);
+
+        m_AutoUpdate = new AutoUpdateDialog(this);
         int y = (mw_one->height() - m_AutoUpdate->height()) / 2;
         m_AutoUpdate->setGeometry(mw_one->geometry().x(), y, mw_one->width(),
                                   m_AutoUpdate->height());
+
         mw_one->showGrayWindows();
         m_AutoUpdate->show();
         m_AutoUpdate->startDownload(str);
         qDebug() << "ret=" << ret << "start dl..... " << str;
+        this->close();
       }
     } else {
       if (!blAutoCheckUpdate)
