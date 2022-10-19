@@ -5,12 +5,14 @@
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern bool loading, zh_cn;
-extern QString noteText;
+extern QString noteText, appName, ver;
 extern int curPos;
 
 dlgRemarks::dlgRemarks(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgRemarks) {
   ui->setupUi(this);
+  ui->btnMirrorDL->hide();
+  ui->btnDL->hide();
 
   setModal(true);
   this->installEventFilter(this);
@@ -30,6 +32,12 @@ dlgRemarks::dlgRemarks(QWidget* parent)
       "QLabel{"
       "border-image:url(:/res/apk.png) 4 4 4 4 stretch stretch;"
       "}");
+
+  manager = new QNetworkAccessManager(this);
+  connect(manager, SIGNAL(finished(QNetworkReply*)), this,
+          SLOT(replyFinished(QNetworkReply*)));
+  blAutoCheckUpdate = true;
+  CheckUpdate();
 }
 
 dlgRemarks::~dlgRemarks() { delete ui; }
@@ -117,3 +125,83 @@ void dlgRemarks::on_btnMirrorDL_clicked() {
 }
 
 void dlgRemarks::on_btnPaste_clicked() { ui->textEdit->paste(); }
+
+void dlgRemarks::CheckUpdate() {
+  QNetworkRequest quest;
+  quest.setUrl(QUrl("https://api.github.com/repos/ic005k/" + appName +
+                    "/releases/latest"));
+  quest.setHeader(QNetworkRequest::UserAgentHeader, "RT-Thread ART");
+  manager->get(quest);
+}
+
+void dlgRemarks::replyFinished(QNetworkReply* reply) {
+  QString str = reply->readAll();
+  parse_UpdateJSON(str);
+  reply->deleteLater();
+}
+
+QString dlgRemarks::getUrl(QVariantList list) {
+  QString androidUrl;
+  for (int i = 0; i < list.count(); i++) {
+    QVariantMap map = list[i].toMap();
+    QString fName = map["name"].toString();
+
+    if (fName.contains("android"))
+      androidUrl = map["browser_download_url"].toString();
+  }
+
+  QString Url;
+  Url = androidUrl;
+
+  return Url;
+}
+
+int dlgRemarks::parse_UpdateJSON(QString str) {
+  QJsonParseError err_rpt;
+  QJsonDocument root_Doc = QJsonDocument::fromJson(str.toUtf8(), &err_rpt);
+
+  if (err_rpt.error != QJsonParseError::NoError) {
+    if (!blAutoCheckUpdate)
+      QMessageBox::critical(this, "", tr("Network error!"));
+    blAutoCheckUpdate = false;
+    return -1;
+  }
+  if (root_Doc.isObject()) {
+    QJsonObject root_Obj = root_Doc.object();
+
+    QVariantList list = root_Obj.value("assets").toArray().toVariantList();
+    QString Url = getUrl(list);
+
+    QJsonObject PulseValue = root_Obj.value("assets").toObject();
+    QString Verison = root_Obj.value("tag_name").toString();
+    QString UpdateTime = root_Obj.value("published_at").toString();
+    QString ReleaseNote = root_Obj.value("body").toString();
+
+    if (Verison > ver && Url != "") {
+      QString warningStr = tr("New version detected!") + "\n" +
+                           tr("Version: ") + "V" + Verison + "\n" +
+                           tr("Published at: ") + UpdateTime + "\n" +
+                           tr("Release Notes: ") + "\n" + ReleaseNote;
+
+      // int ret = QMessageBox::warning(this, "", warningStr, tr("Download"),
+      //                                tr("Cancel"));
+      // for Android ret = 3 Mac ret = 0 or 1(Cancel)
+      int ret = QMessageBox::warning(this, "", warningStr, tr("Download"));
+
+      if (ret >= 0) {
+        QString str = "https://ghproxy.com/" + Url;
+        QUrl url(str);
+        QDesktopServices::openUrl(url);
+        qDebug() << "ret=" << ret << "start dl..... " << url;
+      }
+    } else {
+      if (!blAutoCheckUpdate)
+        QMessageBox::information(
+            this, "", tr("You are currently using the latest version!"));
+    }
+  }
+  blAutoCheckUpdate = false;
+  return 0;
+}
+
+void dlgRemarks::on_btnCheckUpdate_clicked() { CheckUpdate(); }

@@ -140,7 +140,7 @@
         <location filename="mainwindow.ui" line="1831"/>
         <location filename="mainwindow.ui" line="1950"/>
         <location filename="mainwindow.ui" line="2110"/>
-        <location filename="mainwindow.cpp" line="4101"/>
+        <location filename="mainwindow.cpp" line="4104"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
@@ -430,7 +430,7 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3576"/>
-        <location filename="mainwindow.cpp" line="4450"/>
+        <location filename="mainwindow.cpp" line="4453"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -441,10 +441,10 @@
         <location filename="mainwindow.cpp" line="2387"/>
         <location filename="mainwindow.cpp" line="3583"/>
         <location filename="mainwindow.cpp" line="3601"/>
-        <location filename="mainwindow.cpp" line="4451"/>
-        <location filename="mainwindow.cpp" line="4602"/>
-        <location filename="mainwindow.cpp" line="4621"/>
-        <location filename="mainwindow.cpp" line="4632"/>
+        <location filename="mainwindow.cpp" line="4454"/>
+        <location filename="mainwindow.cpp" line="4605"/>
+        <location filename="mainwindow.cpp" line="4624"/>
+        <location filename="mainwindow.cpp" line="4635"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -653,24 +653,24 @@
         <translation>时光机</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4340"/>
-        <location filename="mainwindow.cpp" line="4346"/>
+        <location filename="mainwindow.cpp" line="4343"/>
+        <location filename="mainwindow.cpp" line="4349"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="112"/>
-        <location filename="mainwindow.cpp" line="4453"/>
+        <location filename="mainwindow.cpp" line="4456"/>
         <source>Copy</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4601"/>
+        <location filename="mainwindow.cpp" line="4604"/>
         <source>The password is removed.</source>
         <translation>密码被删除</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4620"/>
+        <location filename="mainwindow.cpp" line="4623"/>
         <source>The password is set successfully.</source>
         <translation>密码设置成功</translation>
     </message>
@@ -698,7 +698,7 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3599"/>
-        <location filename="mainwindow.cpp" line="4631"/>
+        <location filename="mainwindow.cpp" line="4634"/>
         <source>The entered password does not match.</source>
         <translation>输入的密码不匹配</translation>
     </message>
@@ -1484,23 +1484,23 @@ in skydrive folder</source>
         <translation>删除？</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.cpp" line="223"/>
+        <location filename="dlgNotesList.cpp" line="221"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgNotesList.cpp" line="223"/>
+        <location filename="dlgNotesList.cpp" line="221"/>
         <source>MD File (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgNotesList.cpp" line="244"/>
+        <location filename="dlgNotesList.cpp" line="242"/>
         <source>Invalid Markdown file.</source>
         <oldsource>Invalid MarkDown file.</oldsource>
         <translation>无效的Markdown文件</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.cpp" line="283"/>
+        <location filename="dlgNotesList.cpp" line="281"/>
         <source>MD File(*.*)</source>
         <translation></translation>
     </message>
@@ -1509,8 +1509,8 @@ in skydrive folder</source>
         <translation type="vanished">文件已存在，是否覆盖？</translation>
     </message>
     <message>
-        <location filename="dlgNotesList.cpp" line="255"/>
-        <location filename="dlgNotesList.cpp" line="258"/>
+        <location filename="dlgNotesList.cpp" line="253"/>
+        <location filename="dlgNotesList.cpp" line="256"/>
         <source>Notes Imported</source>
         <translation>导入的笔记</translation>
     </message>
@@ -1782,19 +1782,64 @@ in skydrive folder</source>
         <translation>报告问题</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="202"/>
+        <location filename="RemarksAbout.ui" line="200"/>
+        <source>Upgrade Check</source>
+        <translation>检查更新</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.ui" line="215"/>
         <source>Download (original site)</source>
         <translation>下载（原始网址）</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="217"/>
+        <location filename="RemarksAbout.ui" line="230"/>
         <source>Download (mirror site)</source>
         <translation>下载（镜像网址  速度快）</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="252"/>
+        <location filename="RemarksAbout.ui" line="265"/>
         <source>Back</source>
         <translation>返回</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.cpp" line="167"/>
+        <source>Network error!</source>
+        <translation>网络错误！</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.cpp" line="183"/>
+        <source>New version detected!</source>
+        <translation>有新版本！</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.cpp" line="184"/>
+        <source>Version: </source>
+        <translation>版本：</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.cpp" line="185"/>
+        <source>Published at: </source>
+        <translation>发布时间：</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.cpp" line="186"/>
+        <source>Release Notes: </source>
+        <translation>发布说明：</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.cpp" line="187"/>
+        <source>Download</source>
+        <translation>下载</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.cpp" line="188"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.cpp" line="197"/>
+        <source>You are currently using the latest version!</source>
+        <translation>目前使用的是最新版！</translation>
     </message>
 </context>
 <context>

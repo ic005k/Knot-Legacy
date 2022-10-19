@@ -2,6 +2,12 @@
 #define REMARKSABOUT_H
 
 #include <QDialog>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
 
 namespace Ui {
 class dlgRemarks;
@@ -15,8 +21,13 @@ class dlgRemarks : public QDialog {
   ~dlgRemarks();
   Ui::dlgRemarks *ui;
 
+  QNetworkAccessManager *manager;
+  int parse_UpdateJSON(QString str);
+  bool blAutoCheckUpdate;
+
   int sliderPos;
   void init_Notes();
+  void CheckUpdate();
  public slots:
   bool eventFilter(QObject *obj, QEvent *evn) override;
 
@@ -36,7 +47,12 @@ class dlgRemarks : public QDialog {
 
   void on_btnPaste_clicked();
 
+  void replyFinished(QNetworkReply *reply);
+
+  void on_btnCheckUpdate_clicked();
+
  private:
+  QString getUrl(QVariantList list);
 };
 
 #endif  // REMARKSABOUT_H
