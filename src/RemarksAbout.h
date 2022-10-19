@@ -9,6 +9,8 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 
+#include "src/autoupdatedialog.h"
+
 namespace Ui {
 class dlgRemarks;
 }
@@ -21,6 +23,7 @@ class dlgRemarks : public QDialog {
   ~dlgRemarks();
   Ui::dlgRemarks *ui;
 
+  AutoUpdateDialog *m_AutoUpdate;
   QNetworkAccessManager *manager;
   int parse_UpdateJSON(QString str);
   bool blAutoCheckUpdate;

@@ -2,6 +2,19 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>AutoUpdateDialog</name>
+    <message>
+        <location filename="autoupdatedialog.ui" line="14"/>
+        <source>Xiasl</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="autoupdatedialog.cpp" line="64"/>
+        <source>Download Progress</source>
+        <translation>下载进度</translation>
+    </message>
+</context>
+<context>
     <name>DocumentHandler</name>
     <message>
         <location filename="documenthandler.cpp" line="253"/>
@@ -758,46 +771,55 @@
 <context>
     <name>QInstaller</name>
     <message>
+        <location filename="autoupdatedialog.cpp" line="147"/>
         <location filename="mainwindow.cpp" line="1024"/>
         <source>bytes</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="autoupdatedialog.cpp" line="148"/>
         <location filename="mainwindow.cpp" line="1025"/>
         <source>KiB</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="autoupdatedialog.cpp" line="149"/>
         <location filename="mainwindow.cpp" line="1026"/>
         <source>MiB</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="autoupdatedialog.cpp" line="150"/>
         <location filename="mainwindow.cpp" line="1027"/>
         <source>GiB</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="autoupdatedialog.cpp" line="151"/>
         <location filename="mainwindow.cpp" line="1028"/>
         <source>TiB</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="autoupdatedialog.cpp" line="152"/>
         <location filename="mainwindow.cpp" line="1029"/>
         <source>PiB</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="autoupdatedialog.cpp" line="153"/>
         <location filename="mainwindow.cpp" line="1030"/>
         <source>EiB</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="autoupdatedialog.cpp" line="154"/>
         <location filename="mainwindow.cpp" line="1031"/>
         <source>ZiB</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="autoupdatedialog.cpp" line="155"/>
         <location filename="mainwindow.cpp" line="1032"/>
         <source>YiB</source>
         <translation></translation>
@@ -1802,42 +1824,41 @@ in skydrive folder</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="167"/>
+        <location filename="RemarksAbout.cpp" line="166"/>
         <source>Network error!</source>
         <translation>网络错误！</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="183"/>
+        <location filename="RemarksAbout.cpp" line="182"/>
         <source>New version detected!</source>
         <translation>有新版本！</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="184"/>
+        <location filename="RemarksAbout.cpp" line="183"/>
         <source>Version: </source>
         <translation>版本：</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="185"/>
+        <location filename="RemarksAbout.cpp" line="184"/>
         <source>Published at: </source>
         <translation>发布时间：</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="186"/>
+        <location filename="RemarksAbout.cpp" line="185"/>
         <source>Release Notes: </source>
         <translation>发布说明：</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="187"/>
+        <location filename="RemarksAbout.cpp" line="190"/>
         <source>Download</source>
         <translation>下载</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="188"/>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation type="vanished">取消</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="197"/>
+        <location filename="RemarksAbout.cpp" line="206"/>
         <source>You are currently using the latest version!</source>
         <translation>目前使用的是最新版！</translation>
     </message>

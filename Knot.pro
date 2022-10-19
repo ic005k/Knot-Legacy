@@ -37,6 +37,7 @@ SOURCES += \
     src/Preferences.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
+    src/autoupdatedialog.cpp \
     src/dlgMainNotes.cpp \
     src/dlgNotesList.cpp \
     src/dlgOneDrive.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
     src/Preferences.h \
     src/RemarksAbout.h \
     src/Report.h \
+    src/autoupdatedialog.h \
     src/count_steps.h \
     src/dlgMainNotes.h \
     src/dlgNotesList.h \
@@ -98,6 +100,7 @@ FORMS += \
     src/Preferences.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
+    src/autoupdatedialog.ui \
     src/dlgMainNotes.ui \
     src/dlgNotesList.ui \
     src/dlgOneDrive.ui \

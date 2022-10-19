@@ -1048,6 +1048,13 @@ This method can parse out the real local file path from a file URI.
         startActivityForResult(intent, REQUEST_CODE);
     }
 
+    //----------------------------------------------------------------------------------------------
+    static public void installApk(String filePath) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        //String filePath = "/sdcard/download/downloadtest.apk";
+        i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
+        startActivity(i);
+    }
 }
 
 
