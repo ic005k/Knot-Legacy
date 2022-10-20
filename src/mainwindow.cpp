@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.31";
+QString ver = "1.0.32";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -2474,9 +2474,10 @@ QTreeWidget* MainWindow::get_tw(int tabIndex) {
 void MainWindow::on_about() {
   m_Remarks->init_Notes();
 
-  bakIniData(iniFile, false);
+  bakIniData("", false);
 
-  QSettings Reg(iniFile, QSettings::IniFormat);
+  QString bakini = iniDir + "memo/KnotSync.ini";
+  QSettings Reg(bakini, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -2484,11 +2485,10 @@ void MainWindow::on_about() {
 
   QTextBrowser* textBrowser = new QTextBrowser;
   textBrowser->append("");
-  textBrowser->append("[" + appName + "]");
-  textBrowser->append("Ver: " + ver);
+  textBrowser->append(appName + "  Ver: " + ver);
   textBrowser->append("All Keys: " + QString::number(keys));
-  textBrowser->append("File Size: " + getFileSize(QFile(iniFile).size(), 2));
-  textBrowser->append("File: " + iniFile);
+  textBrowser->append("File Size: " + getFileSize(QFile(bakini).size(), 2));
+  textBrowser->append("File: " + bakini);
 
   textBrowser->append("");
   textBrowser->append("Login Time: " + loginTime);
