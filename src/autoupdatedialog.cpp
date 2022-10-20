@@ -48,11 +48,13 @@ void AutoUpdateDialog::doProcessFinished() {
 #ifdef Q_OS_ANDROID
   // "/storage/emulated/0/KnotBak/"
   QAndroidJniObject jo = QAndroidJniObject::fromString(tarFile);
-  jo.callStaticMethod<void>("com.x/MyActivity", "setAPKFile",
-                            "(Ljava/lang/String;)V", jo.object<jstring>());
+  // jo.callStaticMethod<void>("com.x/MyActivity", "setAPKFile",
+  //                          "(Ljava/lang/String;)V", jo.object<jstring>());
 
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
-  m_activity.callMethod<void>("installApk");
+  // m_activity.callMethod<void>("installApk");
+  m_activity.callMethod<void>("installApk", "(Ljava/lang/String;)V",
+                              jo.object<jstring>());
 
 #endif
 }

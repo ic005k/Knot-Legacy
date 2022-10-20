@@ -1064,37 +1064,24 @@ This method can parse out the real local file path from a file URI.
         souAPK = apkfile;
     }
 
-    public void installApk() {
-        Log.i(TAG, "install APK file=" + souAPK + "  PackgeName=" + context.getPackageName());
-        File apkFile = new File(souAPK);
-
-        //判断是否是AndroidN以及更高的版本
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        if (Build.VERSION.SDK_INT >= 24)
-        {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName(), apkFile);
-
-            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-            Log.i(TAG, "contentUri=" + contentUri);
-            startActivity(intent);
+    public void installApk(String sou) {
+        File newApkFile = new File(sou);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String type = "application/vnd.android.package-archive";
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(context, context.getPackageName() , newApkFile);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            uri = Uri.fromFile(newApkFile);
         }
-        if (Build.VERSION.SDK_INT < 24) {
-            //intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
-            //另外一种方法
-            //intent.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
-            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            Uri uri = Uri.fromFile(apkFile);
-            Intent intent = new Intent();
-            intent.setClassName("com.android.packageinstaller", "com.android.packageinstaller.PackageInstallerActivity");
-            intent.setData(uri);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-
+        intent.setDataAndType(uri, type);
+        context.startActivity(intent);
     }
+
+
 }
 
 

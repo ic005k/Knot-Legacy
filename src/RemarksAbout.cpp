@@ -205,7 +205,8 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
 
 void dlgRemarks::show_download() {
   int aver = getAndroidVer();
-  if (aver >= 2) {
+  // Android7.0及以上
+  if (aver >= 24) {
     m_AutoUpdate = new AutoUpdateDialog(this);
     int y = (mw_one->height() - m_AutoUpdate->height()) / 2;
     m_AutoUpdate->setGeometry(mw_one->geometry().x(), y, mw_one->width(),
@@ -217,6 +218,7 @@ void dlgRemarks::show_download() {
     qDebug() << "start dl..... " << s_link;
     this->close();
   } else {
+    // Android6.0及以下通过浏览器下载
     QUrl url(s_link);
     QDesktopServices::openUrl(url);
   }
