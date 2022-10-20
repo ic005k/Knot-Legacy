@@ -3423,14 +3423,27 @@ void MainWindow::getSteps2() {
       step_algo_run(&step_algo_output);
     }
 
-    if (step_algo_output.step_type == STATIC)
-      step_type = "STATIONARY";
-    else if (step_algo_output.step_type == WALK)
-      step_type = "WALKING";
-    else if (step_algo_output.step_type == RUN)
-      step_type = "RUNNING";
-    else if (step_algo_output.step_type == HOP)
-      step_type = "HOPPING";
+    if (step_algo_output.step_type == STATIC) {
+      // step_type = "STATIONARY";
+
+      step_type = new char[11];
+      strcpy(step_type, "STATIONARY");
+    } else if (step_algo_output.step_type == WALK) {
+      // step_type = "WALKING";
+
+      step_type = new char[8];
+      strcpy(step_type, "WALKING");
+    } else if (step_algo_output.step_type == RUN) {
+      // step_type = "RUNNING";
+
+      step_type = new char[8];
+      strcpy(step_type, "RUNNING");
+    } else if (step_algo_output.step_type == HOP) {
+      // step_type = "HOPPING";
+
+      step_type = new char[8];
+      strcpy(step_type, "HOPPING");
+    }
 
     // fprintf(fpout, "%d, %d, %s, %s, %f, %f, %f, %f, %f, %f, %f, %d, %s,
     // %d\n",
