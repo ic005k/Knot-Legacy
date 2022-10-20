@@ -10,7 +10,7 @@
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true"/>
     <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true"/>
     <uses-permission android:name="android.permission.DEVICE_POWER"/>
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
          Remove the comment if you do not require these default features. -->
@@ -79,18 +79,9 @@
             <meta-data android:name="android.app.splash_screen_drawable_landscape" android:resource="@drawable/splashscreen_land"/>
         </activity>
         <receiver android:name="com.x.AlarmReceiver"/>
-
-<provider android:name="android.support.v4.content.FileProvider"
-  android:authorities="com.x"
-  android:grantUriPermissions="true"
-  android:exported="false">
-  <meta-data
-    android:name="android.support.FILE_PROVIDER_PATHS"
-    android:resource="@xml/file_paths" />
+        <provider android:name="android.support.v4.content.FileProvider" android:authorities="com.x" android:grantUriPermissions="true" android:exported="false">
+  <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"/>
 </provider>
-
     </application>
 
  </manifest>
-
-

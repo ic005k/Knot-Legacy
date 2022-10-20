@@ -37,7 +37,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->btnDot->setFont(font);
   ui->btnDel->setFont(font);
 
-  font.setPointSize(22);
+  font.setPointSize(21);
   ui->editDesc->setFont(font);
 
   QValidator* validator =

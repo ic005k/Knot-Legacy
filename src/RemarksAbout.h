@@ -31,6 +31,8 @@ class dlgRemarks : public QDialog {
   int sliderPos;
   void init_Notes();
   void CheckUpdate();
+  void show_download();
+  int getAndroidVer();
  public slots:
   bool eventFilter(QObject *obj, QEvent *evn) override;
 
@@ -54,8 +56,11 @@ class dlgRemarks : public QDialog {
 
   void on_btnCheckUpdate_clicked();
 
+  void on_btnTest_clicked();
+
  private:
   QString getUrl(QVariantList list);
+  QString s_link;
 };
 
 #endif  // REMARKSABOUT_H

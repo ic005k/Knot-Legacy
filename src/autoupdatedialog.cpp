@@ -11,7 +11,7 @@ AutoUpdateDialog::AutoUpdateDialog(QWidget* parent)
   ui->setupUi(this);
   setModal(true);
   ui->lblTxt->adjustSize();
-  setWindowTitle("");
+  ui->lblTxt->setText(tr("Download Progress") + " : \n" + "");
 
   myfile = new QFile(this);
   manager = new QNetworkAccessManager(this);
@@ -48,7 +48,7 @@ void AutoUpdateDialog::doProcessFinished() {
 #ifdef Q_OS_ANDROID
   // "/storage/emulated/0/KnotBak/"
   QAndroidJniObject jo = QAndroidJniObject::fromString(tarFile);
-  jo.callStaticMethod<void>("com.x/MyActivity", "setIniDir",
+  jo.callStaticMethod<void>("com.x/MyActivity", "setAPKFile",
                             "(Ljava/lang/String;)V", jo.object<jstring>());
 
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
@@ -58,11 +58,10 @@ void AutoUpdateDialog::doProcessFinished() {
 }
 
 void AutoUpdateDialog::doProcessDownloadProgress(qint64 recv_total,
-                                                 qint64 all_total)  //显示
-{
+                                                 qint64 all_total) {
   ui->progressBar->setMaximum(all_total);
   ui->progressBar->setValue(recv_total);
-  ui->lblTxt->setText(tr("Download Progress") + " : \n\n" +
+  ui->lblTxt->setText(tr("Download Progress") + " : \n" +
                       GetFileSize(recv_total, 2) + " -> " +
                       GetFileSize(all_total, 2));
 

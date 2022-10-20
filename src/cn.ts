@@ -9,12 +9,13 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.ui" line="46"/>
+        <location filename="autoupdatedialog.ui" line="49"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="69"/>
+        <location filename="autoupdatedialog.cpp" line="14"/>
+        <location filename="autoupdatedialog.cpp" line="64"/>
         <source>Download Progress</source>
         <translation>下载进度</translation>
     </message>
@@ -776,55 +777,55 @@
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="autoupdatedialog.cpp" line="160"/>
+        <location filename="autoupdatedialog.cpp" line="154"/>
         <location filename="mainwindow.cpp" line="1024"/>
         <source>bytes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="161"/>
+        <location filename="autoupdatedialog.cpp" line="155"/>
         <location filename="mainwindow.cpp" line="1025"/>
         <source>KiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="162"/>
+        <location filename="autoupdatedialog.cpp" line="156"/>
         <location filename="mainwindow.cpp" line="1026"/>
         <source>MiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="163"/>
+        <location filename="autoupdatedialog.cpp" line="157"/>
         <location filename="mainwindow.cpp" line="1027"/>
         <source>GiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="164"/>
+        <location filename="autoupdatedialog.cpp" line="158"/>
         <location filename="mainwindow.cpp" line="1028"/>
         <source>TiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="165"/>
+        <location filename="autoupdatedialog.cpp" line="159"/>
         <location filename="mainwindow.cpp" line="1029"/>
         <source>PiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="166"/>
+        <location filename="autoupdatedialog.cpp" line="160"/>
         <location filename="mainwindow.cpp" line="1030"/>
         <source>EiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="167"/>
+        <location filename="autoupdatedialog.cpp" line="161"/>
         <location filename="mainwindow.cpp" line="1031"/>
         <source>ZiB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="autoupdatedialog.cpp" line="168"/>
+        <location filename="autoupdatedialog.cpp" line="162"/>
         <location filename="mainwindow.cpp" line="1032"/>
         <source>YiB</source>
         <translation></translation>
@@ -1820,41 +1821,46 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="RemarksAbout.ui" line="230"/>
+        <source>Download Upgrade Packages</source>
+        <translation>下载升级包</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.ui" line="243"/>
         <source>Download (mirror site)</source>
         <translation>下载（镜像网址  速度快）</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="265"/>
+        <location filename="RemarksAbout.ui" line="278"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="166"/>
+        <location filename="RemarksAbout.cpp" line="165"/>
         <source>Network error!</source>
         <translation>网络错误！</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="182"/>
+        <location filename="RemarksAbout.cpp" line="181"/>
         <source>New version detected!</source>
         <translation>有新版本！</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="183"/>
+        <location filename="RemarksAbout.cpp" line="182"/>
         <source>Version: </source>
         <translation>版本：</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="184"/>
+        <location filename="RemarksAbout.cpp" line="183"/>
         <source>Published at: </source>
         <translation>发布时间：</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="185"/>
+        <location filename="RemarksAbout.cpp" line="184"/>
         <source>Release Notes: </source>
         <translation>发布说明：</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="190"/>
+        <location filename="RemarksAbout.cpp" line="189"/>
         <source>Download</source>
         <translation>下载</translation>
     </message>
@@ -1863,7 +1869,7 @@ in skydrive folder</source>
         <translation type="vanished">取消</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="207"/>
+        <location filename="RemarksAbout.cpp" line="202"/>
         <source>You are currently using the latest version!</source>
         <translation>目前使用的是最新版！</translation>
     </message>
@@ -2264,17 +2270,17 @@ in skydrive folder</source>
         <translation type="vanished">数字</translation>
     </message>
     <message>
-        <location filename="dlgsettime.cpp" line="44"/>
+        <location filename="dlgsettime.cpp" line="46"/>
         <source>Please enter a category</source>
         <translation>请输入分类</translation>
     </message>
     <message>
-        <location filename="dlgsettime.cpp" line="75"/>
+        <location filename="dlgsettime.cpp" line="77"/>
         <source>Modify Item</source>
         <translation>修改条目</translation>
     </message>
     <message>
-        <location filename="dlgsettime.cpp" line="85"/>
+        <location filename="dlgsettime.cpp" line="87"/>
         <source>Add Item</source>
         <translation>增加条目</translation>
     </message>

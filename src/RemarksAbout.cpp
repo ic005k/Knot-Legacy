@@ -189,21 +189,9 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
       int ret = QMessageBox::warning(this, "", warningStr, tr("Download"));
 
       if (ret >= 0) {
-        QString str = "https://ghproxy.com/" + Url;
+        s_link = "https://ghproxy.com/" + Url;
 
-        // QUrl url(str);
-        // QDesktopServices::openUrl(url);
-
-        m_AutoUpdate = new AutoUpdateDialog(this);
-        int y = (mw_one->height() - m_AutoUpdate->height()) / 2;
-        m_AutoUpdate->setGeometry(mw_one->geometry().x(), y, mw_one->width(),
-                                  m_AutoUpdate->height());
-
-        mw_one->showGrayWindows();
-        m_AutoUpdate->show();
-        m_AutoUpdate->startDownload(str);
-        qDebug() << "ret=" << ret << "start dl..... " << str;
-        this->close();
+        show_download();
       }
     } else {
       if (!blAutoCheckUpdate)
@@ -215,4 +203,39 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
   return 0;
 }
 
+void dlgRemarks::show_download() {
+  int aver = getAndroidVer();
+  if (aver >= 2) {
+    m_AutoUpdate = new AutoUpdateDialog(this);
+    int y = (mw_one->height() - m_AutoUpdate->height()) / 2;
+    m_AutoUpdate->setGeometry(mw_one->geometry().x(), y, mw_one->width(),
+                              m_AutoUpdate->height());
+
+    mw_one->showGrayWindows();
+    m_AutoUpdate->show();
+    m_AutoUpdate->startDownload(s_link);
+    qDebug() << "start dl..... " << s_link;
+    this->close();
+  } else {
+    QUrl url(s_link);
+    QDesktopServices::openUrl(url);
+  }
+}
+
 void dlgRemarks::on_btnCheckUpdate_clicked() { CheckUpdate(); }
+
+void dlgRemarks::on_btnTest_clicked() {
+  if (s_link == "") return;
+  show_download();
+}
+
+int dlgRemarks::getAndroidVer() {
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject jo = QAndroidJniObject::fromString("ver");
+  int a = jo.callStaticMethod<int>("com.x/MyActivity", "getAndroidVer", "()I");
+  QMessageBox box;
+  box.setText(QString::number(a));
+  // box.exec();
+  return a;
+#endif
+}

@@ -1051,29 +1051,49 @@ This method can parse out the real local file path from a file URI.
     }
 
     //----------------------------------------------------------------------------------------------
-    private static String iniDir;
+    public static int getAndroidVer() {
+        int a = Build.VERSION.SDK_INT;
 
-    public static void setIniDir(String inidir) {
-        iniDir = inidir;
+        Log.i(TAG, "os ver=" + a);
+        return a;
+    }
+
+    private static String souAPK;
+
+    public static void setAPKFile(String apkfile) {
+        souAPK = apkfile;
     }
 
     public void installApk() {
-        String filePath = iniDir;
-        Log.i(TAG, "install APK file=" + filePath + "  PackgeName=" + context.getPackageName());
-        File apkFile = new File(filePath);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Log.i(TAG, "install APK file=" + souAPK + "  PackgeName=" + context.getPackageName());
+        File apkFile = new File(souAPK);
+
         //判断是否是AndroidN以及更高的版本
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT >= 24)
+        {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName(), apkFile);
 
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
             Log.i(TAG, "contentUri=" + contentUri);
-        } else {
-            intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
-        startActivity(intent);
+        if (Build.VERSION.SDK_INT < 24) {
+            //intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+            //另外一种方法
+            //intent.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
+            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            Uri uri = Uri.fromFile(apkFile);
+            Intent intent = new Intent();
+            intent.setClassName("com.android.packageinstaller", "com.android.packageinstaller.PackageInstallerActivity");
+            intent.setData(uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
     }
 }
 
