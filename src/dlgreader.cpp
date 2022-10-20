@@ -31,6 +31,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   this->setStyleSheet(
       "background-image: url(:/res/b.png);border-width:0;border-style:outset;");
 
+  mw_one->ui->btnSelText->hide();
   mw_one->ui->lblTitle->hide();
   mw_one->ui->frameReaderFun2->hide();
   mw_one->ui->btnBackward->hide();
