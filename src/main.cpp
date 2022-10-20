@@ -56,6 +56,17 @@ int main(int argc, char* argv[]) {
   iniFile = iniDir + appName + ".ini";
 #endif
 
+#ifdef Q_OS_WIN
+  isAndroid = false;
+  isIOS = true;
+
+  QString str1 = QDir::homePath() + "/" + appName + "/";
+  QDir dir0;
+  dir0.mkpath(str1);
+  iniDir = str1;
+  iniFile = iniDir + appName + ".ini";
+#endif
+
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");

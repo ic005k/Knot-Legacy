@@ -223,8 +223,14 @@ MainWindow::MainWindow(QWidget* parent)
   int screenHeight = screen.height();
 
   if (!isAndroid) {
+#ifdef Q_OS_MAC
     this->setGeometry(1 * (screenWidth - this->width()) / 2, 0, this->width(),
                       screenHeight - 60);
+#endif
+
+#ifdef Q_OS_WIN
+    this->setGeometry(0, 25, this->width(), screenHeight - 75);
+#endif
   }
 #else
   if (!isAndroid) {
