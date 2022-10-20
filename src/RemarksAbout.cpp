@@ -171,6 +171,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
 
     QVariantList list = root_Obj.value("assets").toArray().toVariantList();
     QString Url = getUrl(list);
+    s_link = "https://ghproxy.com/" + Url;
 
     QJsonObject PulseValue = root_Obj.value("assets").toObject();
     QString Verison = root_Obj.value("tag_name").toString();
@@ -189,8 +190,6 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
       int ret = QMessageBox::warning(this, "", warningStr, tr("Download"));
 
       if (ret >= 0) {
-        s_link = "https://ghproxy.com/" + Url;
-
         show_download();
       }
     } else {
@@ -235,9 +234,6 @@ int dlgRemarks::getAndroidVer() {
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("ver");
   int a = jo.callStaticMethod<int>("com.x/MyActivity", "getAndroidVer", "()I");
-  QMessageBox box;
-  box.setText(QString::number(a));
-  // box.exec();
   return a;
 #endif
 }
