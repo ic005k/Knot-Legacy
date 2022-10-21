@@ -232,6 +232,14 @@ void dlgRemarks::on_btnTest_clicked() {
 
 int dlgRemarks::getAndroidVer() {
   int a = 0;
+#ifdef Q_OS_UNIX
+  a = 24;
+#endif
+
+#ifdef Q_OS_WIN
+  a = 24;
+#endif
+
 #ifdef Q_OS_ANDROID
   QAndroidJniObject jo = QAndroidJniObject::fromString("ver");
   a = jo.callStaticMethod<int>("com.x/MyActivity", "getAndroidVer", "()I");
