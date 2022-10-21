@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.34";
+QString ver = "1.0.35";
 QGridLayout* gl1;
 QTreeWidgetItem* parentItem;
 bool isrbFreq = true;
@@ -1545,8 +1545,7 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
           &MainWindow::on_twItemDoubleClicked);
   connect(tw, &QTreeWidget::itemPressed, [=]() {});
 
-  connect(tw->verticalScrollBar(), &QScrollBar::valueChanged,
-          [=]() { tw->verticalScrollBar()->show(); });
+  connect(tw->verticalScrollBar(), &QScrollBar::valueChanged, [=]() {});
 
   // tw->setUniformRowHeights(false); //对速度可能有影响，数据量大时
   QScrollBar* SB = tw->verticalScrollBar();
@@ -1819,7 +1818,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
-      tw->verticalScrollBar()->hide();
     }
   }
 

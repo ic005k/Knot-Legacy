@@ -75,10 +75,10 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->textEdit->setFixedHeight(getEditTextHeight(ui->textEdit) + 2);
 
   connect(ui->listWidget->verticalScrollBar(), &QScrollBar::valueChanged,
-          [=]() { ui->listWidget->verticalScrollBar()->show(); });
+          [=]() {});
 
   connect(ui->listRecycle->verticalScrollBar(), &QScrollBar::valueChanged,
-          [=]() { ui->listRecycle->verticalScrollBar()->show(); });
+          [=]() {});
 }
 
 dlgTodo::~dlgTodo() { delete ui; }
@@ -354,13 +354,11 @@ bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
 
   if (watch == ui->listWidget->viewport()) {
     if (event->type() == QEvent::MouseButtonRelease) {
-      ui->listWidget->verticalScrollBar()->hide();
     }
   }
 
   if (watch == ui->listRecycle->viewport()) {
     if (event->type() == QEvent::MouseButtonRelease) {
-      ui->listRecycle->verticalScrollBar()->hide();
     }
   }
 
