@@ -17,6 +17,10 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
   this->installEventFilter(this);
   ui->textEdit->viewport()->installEventFilter(this);
+  ui->listRecycle->installEventFilter(this);
+  ui->listWidget->installEventFilter(this);
+  ui->listRecycle->viewport()->installEventFilter(this);
+  ui->listWidget->viewport()->installEventFilter(this);
   this->setContentsMargins(1, 5, 1, 5);
   ui->gridLayout_2->setContentsMargins(1, 1, 1, 1);
   ui->frameSetTime->hide();
@@ -69,6 +73,12 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->btnModify->hide();
 
   ui->textEdit->setFixedHeight(getEditTextHeight(ui->textEdit) + 2);
+
+  connect(ui->listWidget->verticalScrollBar(), &QScrollBar::valueChanged,
+          [=]() { ui->listWidget->verticalScrollBar()->show(); });
+
+  connect(ui->listRecycle->verticalScrollBar(), &QScrollBar::valueChanged,
+          [=]() { ui->listRecycle->verticalScrollBar()->show(); });
 }
 
 dlgTodo::~dlgTodo() { delete ui; }
@@ -340,6 +350,19 @@ void dlgTodo::closeEvent(QCloseEvent* event) {
 
 bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);
+
+  if (watch == ui->listWidget->viewport()) {
+    if (event->type() == QEvent::MouseButtonRelease) {
+      ui->listWidget->verticalScrollBar()->hide();
+    }
+  }
+
+  if (watch == ui->listRecycle->viewport()) {
+    if (event->type() == QEvent::MouseButtonRelease) {
+      ui->listRecycle->verticalScrollBar()->hide();
+    }
+  }
 
   if (watch == ui->textEdit->viewport()) {
     mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);

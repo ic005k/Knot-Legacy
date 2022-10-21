@@ -1538,11 +1538,16 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   tw->setAlternatingRowColors(true);
   tw->setFrameShape(QTreeWidget::NoFrame);
   tw->installEventFilter(this);
+  tw->viewport()->installEventFilter(this);
   tw->setUniformRowHeights(true);  //加快展开速度
   connect(tw, &QTreeWidget::itemClicked, this, &MainWindow::on_twItemClicked);
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
   connect(tw, &QTreeWidget::itemPressed, [=]() {});
+
+  connect(tw->verticalScrollBar(), &QScrollBar::valueChanged,
+          [=]() { tw->verticalScrollBar()->show(); });
+
   // tw->setUniformRowHeights(false); //对速度可能有影响，数据量大时
   QScrollBar* SB = tw->verticalScrollBar();
   SB->setStyleSheet(vsbarStyleSmall);
@@ -1787,7 +1792,6 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
   QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
-  tw->viewport()->installEventFilter(this);
 
   if (evn->type() == QEvent::ToolTip) {
     QToolTip::hideText();
@@ -1812,6 +1816,10 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       mydlgFloatFun->setY(newy);
 
       qDebug() << "tw Press: " << press_x << press_y << press_y0;
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      tw->verticalScrollBar()->hide();
     }
   }
 
@@ -1913,13 +1921,11 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       y = 0;
       w = tw->width();
       h = tw->height();
-      // qDebug() << "Press:" << press_x << press_y;
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
       relea_x = event->globalX();
       relea_y = event->globalY();
-      // qDebug() << "Release:" << relea_x << relea_y;
     }
 
     //判断滑动方向（右滑）
