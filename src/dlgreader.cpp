@@ -322,7 +322,7 @@ void dlgReader::openFile(QString openfile) {
         box.exec();
       }
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
       QProcess* pro = new QProcess;
       pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
       pro->waitForFinished();

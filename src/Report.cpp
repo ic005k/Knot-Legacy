@@ -50,8 +50,8 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   btnMonth = ui->btnMonth;
   btnYear = ui->btnYear;
   ui->tableCategory->hide();
-  printer = new QPrinter(QPrinter::HighResolution);
-  preview = new QPrintPreviewDialog(printer, this);
+  // printer = new QPrinter(QPrinter::HighResolution);
+  // preview = new QPrintPreviewDialog(printer, this);
   ui->btnPrint->hide();
 
   QFont font = ui->lblTotal->font();
@@ -136,10 +136,6 @@ bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
 
 void dlgReport::on_btnBack_clicked() {
   mw_one->startSave("ymd");
-  if (!preview->isHidden()) {
-    preview->close();
-    return;
-  }
 
   isReportWindowsShow = false;
   listCategory.clear();
@@ -860,40 +856,6 @@ void setTableNoItemFlags(QTableWidget* t, int row) {
   for (int z = 0; z < t->columnCount(); z++) {
     t->item(row, z)->setFlags(Qt::NoItemFlags);
   }
-}
-
-void dlgReport::on_btnPrint_clicked() {
-  preview->setFixedHeight(this->height());
-  preview->setFixedWidth(this->width());
-
-  connect(preview, SIGNAL(paintRequested(QPrinter*)), this,
-          SLOT(plotPic(QPrinter*)));
-
-  QMessageBox msgBox;
-  msgBox.setText(tr("Please select the printing method"));
-  msgBox.addButton(tr("Output to document"), QMessageBox::AcceptRole);
-  msgBox.addButton(tr("Output to printer"), QMessageBox::RejectRole);
-  if (msgBox.exec() == QMessageBox::AcceptRole)
-    printer->setOutputFormat(QPrinter::PdfFormat);
-  preview->show();
-}
-
-void dlgReport::plotPic(QPrinter* printer) {
-  QPainter painter(printer);
-  QPixmap p_w_picpath;
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  p_w_picpath = p_w_picpath.grabWidget(ui->tableReport->viewport(), 0, 0,
-                                       ui->tableReport->width(),
-                                       ui->tableReport->height());
-#endif
-
-  QRect rect = painter.viewport();
-  QSize size = p_w_picpath.size();
-  size.scale(rect.size(), Qt::KeepAspectRatio);  //此处保证图片显示完整
-  painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
-  painter.setWindow(p_w_picpath.rect());
-  painter.drawPixmap(0, 0, p_w_picpath);
 }
 
 void dlgReport::on_btnOut2Img_clicked() {

@@ -5,8 +5,8 @@
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QPainter>
-#include <QPrintPreviewDialog>
-#include <QPrinter>
+//#include <QPrintPreviewDialog>
+//#include <QPrinter>
 #include <QScroller>
 #include <QStandardItemModel>
 #include <QTableWidgetItem>
@@ -47,17 +47,11 @@ class dlgReport : public QDialog {
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:
-  void on_btnBack_clicked();
-
-  void on_btnPrint_clicked();
-
-  void plotPic(QPrinter *);
 
   void on_btnOut2Img_clicked();
 
+     void on_btnBack_clicked();
  private:
-  QPrintPreviewDialog *preview;
-  QPrinter *printer;
 };
 
 #endif  // REPORT_H

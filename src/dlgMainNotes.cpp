@@ -517,7 +517,7 @@ QStringList dlgMainNotes::getImgFileFromHtml(QString htmlfile) {
 
 void dlgMainNotes::zipMemo() {
   QDir::setCurrent(iniDir);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
   QProcess* pro = new QProcess;
   pro->execute("zip", QStringList() << "-r"
                                     << "memo.zip"
@@ -541,7 +541,7 @@ void dlgMainNotes::zipMemo() {
 void dlgMainNotes::unzipMemo() {
   mw_one->mydlgReader->deleteDirfile(iniDir + "memo");
   QDir::setCurrent(iniDir);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
   QProcess* pro = new QProcess;
   pro->execute("unzip", QStringList() << "-o" << iniDir + "memo.zip"
                                       << "-d" << iniDir);
