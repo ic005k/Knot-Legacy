@@ -169,3 +169,7 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 
 android: include(/Users/hz/Library/Android/sdk/android_openssl/openssl.pri)
+android: include(C:/android_openssl/openssl.pri)
+
+ANDROID_EXTRA_LIBS = $$PWD/../../../AppData/Local/Android/Sdk/android_openssl/latest/x86_64/libcrypto_1_1.so $$PWD/../../../AppData/Local/Android/Sdk/android_openssl/latest/x86_64/libssl_1_1.so
+android: include(C:/Users/zh/AppData/Local/Android/Sdk/android_openssl/openssl.pri)
