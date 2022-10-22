@@ -1776,7 +1776,7 @@ void MainWindow::on_actionNotes_triggered() {
   m_Remarks->ui->textEdit->setHidden(false);
   m_Remarks->ui->lblTitle->show();
   m_Remarks->ui->btnPaste->show();
-  m_Remarks->ui->lblTitle->setText(tr("Notes") + " : " +
+  m_Remarks->ui->lblTitle->setText(tr("Remarks") + " : " +
                                    tabData->tabText(tabData->currentIndex()));
 
   m_Remarks->init_Notes();
