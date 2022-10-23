@@ -3946,12 +3946,7 @@ void MainWindow::on_btnSelTab_clicked() {
     mydlgFloatFun->init();
   });
 
-  int h = 0;
-  if (count <= 15)
-    h = count * 35 + 4;
-  else
-    h = 15 * 35 + 4;
-
+  int h = height() * 2 / 3;
   int w = 220;
   int y = (this->height() - h) / 2;
   int x = (this->width() - w) / 2 + 3;
