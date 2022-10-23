@@ -23,6 +23,8 @@ dlgList::~dlgList() { delete ui; }
 
 void dlgList::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
 
+void dlgList::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
+
 bool dlgList::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);

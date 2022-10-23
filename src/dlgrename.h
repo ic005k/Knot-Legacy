@@ -16,7 +16,8 @@ class dlgRename : public QDialog {
   ~dlgRename();
   Ui::dlgRename *ui;
 
- protected:
+  void init();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
  private slots:

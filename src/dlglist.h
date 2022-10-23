@@ -19,6 +19,7 @@ class dlgList : public QDialog {
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
+  void closeEvent(QCloseEvent *event) override;
  private slots:
   void on_listWidget_itemClicked(QListWidgetItem *item);
 
@@ -30,7 +31,7 @@ class dlgList : public QDialog {
 
   void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
-  private:
+ private:
   void setCategoryText();
 };
 

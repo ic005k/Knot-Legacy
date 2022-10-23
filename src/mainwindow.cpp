@@ -1465,21 +1465,21 @@ void MainWindow::initChartDay() {
 void MainWindow::on_actionRename_triggered() {
   showGrayWindows();
 
-  int index = ui->tabWidget->currentIndex();
-  /*bool ok;
-  QString text = QInputDialog::getText(this, tr("Rename tab name"),
-                                       tr("Tab name:"), QLineEdit::Normal,
-                                       ui->tabWidget->tabText(index), &ok);
+  /*int index = ui->tabWidget->currentIndex();
+  bool ok;
+  QInputDialog* idlg = new QInputDialog(this);
+  idlg->setContentsMargins(6, 6, 6, 6);
+  QString text =
+      idlg->getText(this, tr("Rename tab name"), tr("Tab name:"),
+                    QLineEdit::Normal, ui->tabWidget->tabText(index), &ok);
+  idlg->setOkButtonText(tr("Ok"));
+  idlg->setCancelButtonText(tr("Cancel"));
   if (ok && !text.isEmpty()) {
     ui->tabWidget->setTabText(index, text);
     saveTab();
   }*/
-  mydlgRename->setGeometry(geometry().x(), geometry().y(), width(), height());
-  mydlgRename->setModal(true);
-  mydlgRename->ui->editName->setText(ui->tabWidget->tabText(index));
-  mydlgRename->ui->editName->setFocus();
-  mydlgRename->ui->editName->selectAll();
-  mydlgRename->show();
+
+  mydlgRename->init();
 }
 
 void MainWindow::on_actionAdd_Tab_triggered() {
@@ -2052,6 +2052,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       if (!ui->frameMain->isHidden()) {
         if (!listSelTab->isHidden()) {
           listSelTab->close();
+          closeGrayWindows();
 
           delete mw_one->mydlgFloatFun;
           mydlgFloatFun = new dlgFloatFun(this);
@@ -3906,7 +3907,7 @@ void MainWindow::on_btnSelTab_clicked() {
   QListWidget* list = new QListWidget(this);
   listSelTab = list;
   list->setAlternatingRowColors(true);
-  list->setStyleSheet(listStyle);
+  // list->setStyleSheet(listStyle);
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
@@ -3926,6 +3927,7 @@ void MainWindow::on_btnSelTab_clicked() {
   connect(list, &QListWidget::itemClicked, [=]() {
     tabData->setCurrentIndex(list->currentRow());
     list->close();
+    closeGrayWindows();
 
     delete mw_one->mydlgFloatFun;
     mydlgFloatFun = new dlgFloatFun(this);
@@ -3943,6 +3945,7 @@ void MainWindow::on_btnSelTab_clicked() {
   int x = (this->width() - w) / 2 + 3;
   list->setGeometry(x, y, w, h);
   list->setCurrentRow(tabData->currentIndex());
+  showGrayWindows();
   list->show();
   list->setFocus();
 }
@@ -4799,7 +4802,7 @@ void MainWindow::showGrayWindows() {
 
   m_widget->resize(this->width(), this->height());
   m_widget->move(0, 0);
-  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,70%);");
+  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,15%);");
   m_widget->show();
 }
 
