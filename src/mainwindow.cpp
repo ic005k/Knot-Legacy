@@ -3902,8 +3902,22 @@ void MainWindow::init_UIWidget() {
 void MainWindow::on_btnSelTab_clicked() {
   mydlgFloatFun->close();
 
+  QFrame* frame = new QFrame(this);
+  frame->setStyleSheet(
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px}");
+  frame->setGeometry(5, 5, this->width() - 5, this->height() - 5);
+  QGraphicsDropShadowEffect* shadow_effect =
+      new QGraphicsDropShadowEffect(this);
+  shadow_effect->setOffset(0, 0);
+  shadow_effect->setColor(Qt::black);
+  shadow_effect->setBlurRadius(10);
+  frame->setGraphicsEffect(shadow_effect);
+  QVBoxLayout* vbox = new QVBoxLayout;
+  frame->setLayout(vbox);
+
   QListWidget* list = new QListWidget(this);
-  listSelTab = list;
+  vbox->addWidget(list);
+  listSelTab = frame;
   list->setAlternatingRowColors(true);
   // list->setStyleSheet(listStyle);
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
@@ -3924,7 +3938,7 @@ void MainWindow::on_btnSelTab_clicked() {
   }
   connect(list, &QListWidget::itemClicked, [=]() {
     tabData->setCurrentIndex(list->currentRow());
-    list->close();
+    frame->close();
     closeGrayWindows();
 
     delete mw_one->mydlgFloatFun;
@@ -3941,10 +3955,10 @@ void MainWindow::on_btnSelTab_clicked() {
   int w = 220;
   int y = (this->height() - h) / 2;
   int x = (this->width() - w) / 2 + 3;
-  list->setGeometry(x, y, w, h);
+  frame->setGeometry(x, y, w, h);
   list->setCurrentRow(tabData->currentIndex());
   showGrayWindows();
-  list->show();
+  frame->show();
   list->setFocus();
 }
 

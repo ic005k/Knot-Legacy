@@ -679,7 +679,22 @@ void dlgReport::on_btnCategory_clicked() {
     btnCategory->setText(tr("Category"));
     return;
   }
+
+  QFrame* frame = new QFrame(this);
+  frame->setStyleSheet(
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px}");  //设置圆角与背景透明
+  frame->setGeometry(5, 5, this->width() - 5,
+                     this->height() - 5);  //设置有效范围框
+  QGraphicsDropShadowEffect* shadow_effect =
+      new QGraphicsDropShadowEffect(this);
+  shadow_effect->setOffset(0, 0);
+  shadow_effect->setColor(Qt::black);
+  shadow_effect->setBlurRadius(10);
+  frame->setGraphicsEffect(shadow_effect);
+  QVBoxLayout* vbox = new QVBoxLayout;
+  frame->setLayout(vbox);
   QListWidget* list = new QListWidget(mw_one->mydlgReport);
+  vbox->addWidget(list);
   list->setViewMode(QListView::IconMode);
   list->setSpacing(12);
   list->setMovement(QListView::Static);
@@ -737,8 +752,8 @@ void dlgReport::on_btnCategory_clicked() {
   if (list->count() * 30 < h) h = list->count() * 30 + 4;
   int w = mw_one->width() - 40;
   int x = (mw_one->width() - w) / 2;
-  list->setGeometry(x, btnCategory->y() - h / 2, w, h);
-  if (list->count() > 1) list->show();
+  frame->setGeometry(x, btnCategory->y() - h / 2, w, h);
+  if (list->count() > 1) frame->show();
 
   connect(list, &QListWidget::itemClicked, [=]() {
     btnCategory->setText(list->currentItem()->text());
@@ -746,13 +761,13 @@ void dlgReport::on_btnCategory_clicked() {
       lblDetails->setText(tr("Details"));
       tableCategory->hide();
       tableDetails->show();
-      list->close();
+      frame->close();
       return;
     }
 
     mw_one->on_RunCategory();
 
-    list->close();
+    frame->close();
   });
 }
 

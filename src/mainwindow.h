@@ -143,7 +143,8 @@ class MainWindow : public QMainWindow {
   QString LatestTime = tr("Latest Time");
   QStringList timeLines;
   QString loginTime;
-  QListWidget *listSelTab, *listSelFont, *listReadList, *listTimeMachine;
+  QListWidget *listSelFont, *listReadList, *listTimeMachine;
+  QFrame *listSelTab;
   int mwh;
   int textFontSize;
   bool isOne = false;

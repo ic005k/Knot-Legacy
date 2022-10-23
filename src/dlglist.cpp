@@ -6,9 +6,11 @@
 extern MainWindow* mw_one;
 extern int fontSize, red;
 extern QTabWidget *tabData, *tabChart;
+
 dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   this->installEventFilter(this);
+
   ui->listWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
@@ -17,6 +19,7 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->listWidget->setSpacing(12);
   ui->listWidget->setStyleSheet(mw_one->listStyleMain);
   ui->listWidget->setMovement(QListView::Static);
+  mw_one->setSCrollPro(ui->listWidget);
 }
 
 dlgList::~dlgList() { delete ui; }
@@ -63,10 +66,10 @@ void dlgList::on_btnChange_clicked() {
   if (ui->listWidget->count() == 0) return;
   QString str = ui->listWidget->currentItem()->text().trimmed();
   bool ok;
+
   QInputDialog* idlg = new QInputDialog(this);
-  QString style =
-      "QDialog{background: "
-      "rgb(236,236,236);border-radius:0px;border:2px solid blue;}";
+  QString style = "QDialog{border-radius:0px;border:2px solid red;}";
+
   idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
