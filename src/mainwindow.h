@@ -287,7 +287,7 @@ class MainWindow : public QMainWindow {
       "QListWidget::item:hover{background-color:#e6e6e6;margin:1px,1px,1px,"
       "1px;border-radius:6;"
       "color:black}"
-      "QListWidget::item:selected{background:#e6e6e6; border:0px "
+      "QListWidget::item:selected{background:rgb(219,244,255); border:0px "
       "blue;margin:1px,1px,1px,1px;border-radius:6;"
       "color:blue}";
 
