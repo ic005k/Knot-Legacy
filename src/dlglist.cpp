@@ -63,7 +63,7 @@ void dlgList::on_btnChange_clicked() {
   QInputDialog* idlg = new QInputDialog(this);
   QString style =
       "QDialog{background: "
-      "rgb(244,237,241);border-radius:0px;border:2px solid gray;}";
+      "rgb(244,237,241);border-radius:0px;border:2px solid blue;}";
   idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
