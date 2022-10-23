@@ -14,6 +14,8 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
   ui->listWidget->setStyleSheet(mw_one->listStyle);
+  ui->listWidget->setSpacing(12);
+  ui->listWidget->setStyleSheet(mw_one->listStyleMain);
 }
 
 dlgList::~dlgList() { delete ui; }
@@ -82,7 +84,7 @@ void dlgList::on_btnChange_clicked() {
     int index = ui->listWidget->currentRow();
     ui->listWidget->takeItem(index);
     QListWidgetItem* item = new QListWidgetItem(text);
-    item->setSizeHint(QSize(ui->listWidget->width() - 20, 35));
+    // item->setSizeHint(QSize(ui->listWidget->width() - 20, 35));
     ui->listWidget->insertItem(index, item);
 
     QStringList list;
@@ -93,7 +95,7 @@ void dlgList::on_btnChange_clicked() {
     ui->listWidget->clear();
     for (int i = 0; i < list.count(); i++) {
       QListWidgetItem* item = new QListWidgetItem(list.at(i));
-      item->setSizeHint(QSize(ui->listWidget->width() - 20, 35));
+      // item->setSizeHint(QSize(ui->listWidget->width() - 20, 35));
       ui->listWidget->addItem(item);
     }
     if (index >= 0) ui->listWidget->setCurrentRow(index);

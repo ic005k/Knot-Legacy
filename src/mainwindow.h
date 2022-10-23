@@ -150,8 +150,10 @@ class MainWindow : public QMainWindow {
   int isHardStepSensor = -1;
   qlonglong initTodaySteps, resetSteps, tc;
   QString listStyle =
-      "QListWidget{background: "
-      "rgb(244,237,241);border-radius:0px;border:2px solid gray;}";
+      "QListWidget{item-background: "
+      "rgb(244,23,24); item-color:rgb(255,255,255); "
+      "border-radius:2px;border:2px "
+      "solid red;}";
   int sRate = 0;
   qreal ax, ay, az, gx, gy, gz;
   int testCount1 = 0;
@@ -280,6 +282,14 @@ class MainWindow : public QMainWindow {
       "background:url() center no-repeat;}"
       "QScrollBar::sub-line:vertical{"  //向上箭头样式
       "background:url() center no-repeat;}";
+
+  QString listStyleMain =
+      "QListWidget::item:hover{background-color:#e6e6e6;margin:1px,1px,1px,"
+      "1px;border-radius:6;"
+      "color:black}"
+      "QListWidget::item:selected{background:#e6e6e6; border:0px "
+      "blue;margin:1px,1px,1px,1px;border-radius:6;"
+      "color:blue}";
 
   void sort_childItem(QTreeWidgetItem *);
   static QString getFileSize(const qint64 &size, int precision);
@@ -492,7 +502,7 @@ class MainWindow : public QMainWindow {
   void on_btnZoomOut_clicked();
 
   void on_openKnotBakDir();
-  private slots:
+ private slots:
 
   void on_textBrowser_selectionChanged();
 
