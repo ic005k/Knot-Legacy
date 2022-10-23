@@ -688,6 +688,7 @@ void dlgReport::on_btnCategory_clicked() {
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   list->horizontalScrollBar()->hide();
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(list);
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
