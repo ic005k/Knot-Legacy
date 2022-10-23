@@ -69,6 +69,12 @@
    </item>
    <item row="0" column="0">
     <widget class="QListWidget" name="listWidget">
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::NoDragDrop</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::IgnoreAction</enum>
+     </property>
      <property name="viewMode">
       <enum>QListView::IconMode</enum>
      </property>

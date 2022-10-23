@@ -16,6 +16,7 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->listWidget->setStyleSheet(mw_one->listStyle);
   ui->listWidget->setSpacing(12);
   ui->listWidget->setStyleSheet(mw_one->listStyleMain);
+  ui->listWidget->setMovement(QListView::Static);
 }
 
 dlgList::~dlgList() { delete ui; }
@@ -63,13 +64,15 @@ void dlgList::on_btnChange_clicked() {
   QInputDialog* idlg = new QInputDialog(this);
   QString style =
       "QDialog{background: "
-      "rgb(244,237,241);border-radius:0px;border:2px solid blue;}";
+      "rgb(236,236,236);border-radius:0px;border:2px solid blue;}";
   idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
   idlg->setWindowTitle(tr("Please enter a new name : "));
   idlg->setTextValue(str);
   idlg->setLabelText(tr("New Name : "));
+  idlg->setContentsMargins(6, 6, 6, 6);
+
   QLineEdit::EchoMode echoMode = QLineEdit::Normal;
   idlg->setTextEchoMode(echoMode);
   QString text;

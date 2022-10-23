@@ -3905,6 +3905,7 @@ void MainWindow::on_btnSelTab_clicked() {
 
   QListWidget* list = new QListWidget(this);
   listSelTab = list;
+  list->setAlternatingRowColors(true);
   list->setStyleSheet(listStyle);
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);

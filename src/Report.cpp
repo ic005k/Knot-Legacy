@@ -680,7 +680,10 @@ void dlgReport::on_btnCategory_clicked() {
     return;
   }
   QListWidget* list = new QListWidget(mw_one->mydlgReport);
-  list->setStyleSheet(mw_one->listStyle);
+  list->setViewMode(QListView::IconMode);
+  list->setSpacing(12);
+  list->setMovement(QListView::Static);
+  list->setStyleSheet(mw_one->listStyleMain);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   list->horizontalScrollBar()->hide();
@@ -693,7 +696,7 @@ void dlgReport::on_btnCategory_clicked() {
     QStringList listType;
     listType.append(tr("None"));
     QListWidgetItem* pItem = new QListWidgetItem();
-    pItem->setSizeHint(QSize(btnCategory->width() - 20, 30));
+    // pItem->setSizeHint(QSize(btnCategory->width() - 20, 30));
     pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
     pItem->setText(tr("None"));
     list->addItem(pItem);
@@ -708,7 +711,7 @@ void dlgReport::on_btnCategory_clicked() {
           if (!listType.removeOne(str)) {
             listType.append(str);
             QListWidgetItem* pItem = new QListWidgetItem();
-            pItem->setSizeHint(QSize(btnCategory->width() - 20, 30));
+            // pItem->setSizeHint(QSize(btnCategory->width() - 20, 30));
             pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
             pItem->setText(str);
             list->addItem(pItem);
@@ -722,17 +725,18 @@ void dlgReport::on_btnCategory_clicked() {
   } else {
     for (int i = 0; i < listCategory.count(); i++) {
       QListWidgetItem* pItem = new QListWidgetItem();
-      pItem->setSizeHint(QSize(btnCategory->width() - 20, 30));
+      // pItem->setSizeHint(QSize(btnCategory->width() - 20, 30));
       pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
       pItem->setText(listCategory.at(i));
       list->addItem(pItem);
     }
   }
 
-  int h = mw_one->height() / 2;
+  int h = mw_one->height() / 3;
   if (list->count() * 30 < h) h = list->count() * 30 + 4;
-  list->setGeometry(btnCategory->x(), btnCategory->y() - h / 2,
-                    btnCategory->width(), h);
+  int w = mw_one->width() - 40;
+  int x = (mw_one->width() - w) / 2;
+  list->setGeometry(x, btnCategory->y() - h / 2, w, h);
   if (list->count() > 1) list->show();
 
   connect(list, &QListWidget::itemClicked, [=]() {
