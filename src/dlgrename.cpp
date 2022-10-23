@@ -30,6 +30,7 @@ void dlgRename::init() {
       mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()));
   ui->editName->setFocus();
   ui->editName->selectAll();
+  mw_one->showGrayWindows();
   show();
 }
 

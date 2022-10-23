@@ -1463,8 +1463,6 @@ void MainWindow::initChartDay() {
 }
 
 void MainWindow::on_actionRename_triggered() {
-  showGrayWindows();
-
   /*int index = ui->tabWidget->currentIndex();
   bool ok;
   QInputDialog* idlg = new QInputDialog(this);
