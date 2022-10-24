@@ -27,6 +27,8 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
 
   this->installEventFilter(this);
   this->setModal(true);
+  m_widget = new QWidget(this);
+
   tableReport = ui->tableReport;
   tableDetails = ui->tableDetails;
   tableCategory = ui->tableCategory;
@@ -682,21 +684,23 @@ void dlgReport::on_btnCategory_clicked() {
 
   QFrame* frame = new QFrame(this);
   frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px}");  //设置圆角与背景透明
-  frame->setGeometry(5, 5, this->width() - 5,
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "border:0px solid gray;}");  //设置圆角与背景透明
+  /*frame->setGeometry(5, 5, this->width() - 5,
                      this->height() - 5);  //设置有效范围框
   QGraphicsDropShadowEffect* shadow_effect =
       new QGraphicsDropShadowEffect(this);
   shadow_effect->setOffset(0, 0);
   shadow_effect->setColor(Qt::black);
   shadow_effect->setBlurRadius(10);
-  frame->setGraphicsEffect(shadow_effect);
+  frame->setGraphicsEffect(shadow_effect);*/
   QVBoxLayout* vbox = new QVBoxLayout;
   frame->setLayout(vbox);
   QListWidget* list = new QListWidget(mw_one->mydlgReport);
   vbox->addWidget(list);
-  list->setViewMode(QListView::IconMode);
+
   list->setSpacing(12);
+  list->setViewMode(QListView::IconMode);
   list->setMovement(QListView::Static);
   list->setStyleSheet(mw_one->listStyleMain);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
@@ -705,7 +709,7 @@ void dlgReport::on_btnCategory_clicked() {
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(list);
   QFont font;
-  font.setPointSize(fontSize);
+  font.setPointSize(fontSize + 1);
   list->setFont(font);
 
   if (listCategory.count() == 0) {
@@ -748,12 +752,15 @@ void dlgReport::on_btnCategory_clicked() {
     }
   }
 
-  int h = mw_one->height() / 3;
+  int h = mw_one->height() / 2;
   if (list->count() * 30 < h) h = list->count() * 30 + 4;
   int w = mw_one->width() - 40;
   int x = (mw_one->width() - w) / 2;
   frame->setGeometry(x, btnCategory->y() - h / 2, w, h);
-  if (list->count() > 1) frame->show();
+  if (list->count() > 1) {
+    showGrayWindows();
+    frame->show();
+  }
 
   connect(list, &QListWidget::itemClicked, [=]() {
     btnCategory->setText(list->currentItem()->text());
@@ -762,12 +769,14 @@ void dlgReport::on_btnCategory_clicked() {
       tableCategory->hide();
       tableDetails->show();
       frame->close();
+      m_widget->close();
       return;
     }
 
     mw_one->on_RunCategory();
 
     frame->close();
+    m_widget->close();
   });
 }
 
@@ -928,4 +937,11 @@ void dlgReport::on_btnOut2Img_clicked() {
     }
 #endif
   }
+}
+
+void dlgReport::showGrayWindows() {
+  m_widget->resize(this->width(), this->height());
+  m_widget->move(0, 0);
+  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,15%);");
+  m_widget->show();
 }

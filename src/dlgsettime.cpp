@@ -156,8 +156,8 @@ void dlgSetTime::on_btnCustom_clicked() {
   if (dlg->isHidden()) {
     dlg->setModal(true);
 
-    int h = mw_one->height() * 2 / 3;
-    int y = mw_one->geometry().y() + 4;
+    int h = ui->frame->y() + ui->frame->height() - 2;
+    int y = mw_one->geometry().y() + 6;
     dlg->setGeometry(mw_one->geometry().x() + ui->frame->x(), y,
                      ui->frame->width(), h);
     dlg->show();

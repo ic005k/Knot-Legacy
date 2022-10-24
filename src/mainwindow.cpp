@@ -3904,36 +3904,40 @@ void MainWindow::on_btnSelTab_clicked() {
 
   QFrame* frame = new QFrame(this);
   frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px}");
-  frame->setGeometry(5, 5, this->width() - 5, this->height() - 5);
+      "QFrame{background-color: rgb(255, 255, "
+      "255);border-radius:10px;border:0px solid gray;}");
+  /*frame->setGeometry(5, 5, this->width() - 5, this->height() - 5);
   QGraphicsDropShadowEffect* shadow_effect =
       new QGraphicsDropShadowEffect(this);
   shadow_effect->setOffset(0, 0);
   shadow_effect->setColor(Qt::black);
   shadow_effect->setBlurRadius(10);
-  frame->setGraphicsEffect(shadow_effect);
+  frame->setGraphicsEffect(shadow_effect);*/
   QVBoxLayout* vbox = new QVBoxLayout;
   frame->setLayout(vbox);
 
   QListWidget* list = new QListWidget(this);
   vbox->addWidget(list);
   listSelTab = frame;
+  list->setSpacing(2);
   list->setAlternatingRowColors(true);
-  // list->setStyleSheet(listStyle);
+  // list->setViewMode(QListView::IconMode);
+  list->setMovement(QListView::Static);
+  list->setStyleSheet(listStyleMain);
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   setSCrollPro(list);
   QFont font;
-  font.setPointSize(fontSize + 2);
+  font.setPointSize(fontSize + 1);
   list->setFont(font);
 
   int count = tabData->tabBar()->count();
   for (int i = 0; i < count; i++) {
     QListWidgetItem* item = new QListWidgetItem;
-    item->setSizeHint(QSize(135, 35));  // item->sizeHint().width()
+    item->setSizeHint(QSize(width() / 2 - 68, 35));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    item->setText(" " + QString::number(i + 1) + " . " + tabData->tabText(i));
+    item->setText(tabData->tabText(i));
     list->addItem(item);
   }
   connect(list, &QListWidget::itemClicked, [=]() {
@@ -3947,9 +3951,9 @@ void MainWindow::on_btnSelTab_clicked() {
   });
 
   int h = height() * 2 / 3;
-  int w = 220;
+  int w = width() / 2;
   int y = (this->height() - h) / 2;
-  int x = (this->width() - w) / 2 + 3;
+  int x = (this->width() - w) / 2;
   frame->setGeometry(x, y, w, h);
   list->setCurrentRow(tabData->currentIndex());
   showGrayWindows();

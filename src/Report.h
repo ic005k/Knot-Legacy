@@ -50,8 +50,11 @@ class dlgReport : public QDialog {
 
   void on_btnOut2Img_clicked();
 
-     void on_btnBack_clicked();
+  void on_btnBack_clicked();
+
  private:
+  void showGrayWindows();
+  QWidget *m_widget;
 };
 
 #endif  // REPORT_H
