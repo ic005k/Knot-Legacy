@@ -3935,7 +3935,7 @@ void MainWindow::on_btnSelTab_clicked() {
   int count = tabData->tabBar()->count();
   for (int i = 0; i < count; i++) {
     QListWidgetItem* item = new QListWidgetItem;
-    item->setSizeHint(QSize(width() / 2 - 68, 35));
+    item->setSizeHint(QSize(width() * 2 / 3 - 68, 35));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     item->setText(tabData->tabText(i));
     list->addItem(item);
@@ -3951,7 +3951,7 @@ void MainWindow::on_btnSelTab_clicked() {
   });
 
   int h = height() * 2 / 3;
-  int w = width() / 2;
+  int w = width() * 2 / 3;
   int y = (this->height() - h) / 2;
   int x = (this->width() - w) / 2;
   frame->setGeometry(x, y, w, h);

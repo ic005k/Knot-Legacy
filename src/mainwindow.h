@@ -284,10 +284,10 @@ class MainWindow : public QMainWindow {
       "QScrollBar::sub-line:vertical{"  //向上箭头样式
       "background:url() center no-repeat;}";
 
+  //"QListWidget::item:hover{background-color:#e6e6e6;margin:1px,1px,1px,"
+  //"1px;border-radius:6;"
+  //"color:black}"
   QString listStyleMain =
-      "QListWidget::item:hover{background-color:#e6e6e6;margin:1px,1px,1px,"
-      "1px;border-radius:6;"
-      "color:black}"
       "QListWidget::item:selected{background:rgb(219,244,255); border:0px "
       "blue;margin:1px,1px,1px,1px;border-radius:6;"
       "color:blue}";
