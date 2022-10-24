@@ -11,28 +11,29 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   setModal(true);
   // 窗口无边框
-  setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+  // setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
   // 设置窗口背景透明 （需要设置窗口为无边框的才能实现背景透明，否则背景为黑色）
-  setAttribute(Qt::WA_TranslucentBackground);
+  // setAttribute(Qt::WA_TranslucentBackground);
 
   this->installEventFilter(this);
-  ui->frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, "
-      "255);border-radius:10px;border:0px solid gray;}");
+  // ui->frame->setStyleSheet(
+  //     "QFrame{background-color: rgb(255, 255, "
+  //     "255);border-radius:10px;border:0px solid gray;}");
 
   ui->listWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
-  ui->listWidget->setStyleSheet(mw_one->listStyle);
-  ui->listWidget->setSpacing(12);
-  ui->listWidget->setStyleSheet(mw_one->listStyleMain);
+  ui->listWidget->setViewMode(QListView::IconMode);
   ui->listWidget->setMovement(QListView::Static);
+  ui->listWidget->setStyleSheet(mw_one->listStyleMain);
+  ui->listWidget->setSpacing(12);
   mw_one->setSCrollPro(ui->listWidget);
   QFont font;
   font.setPointSize(fontSize + 1);
   ui->listWidget->setFont(font);
   mw_one->setLineEditQss(ui->editRename, 4, 1, "#4169E1", "#4169E1");
+  ui->btnRename->setFixedHeight(ui->editRename->height());
 }
 
 dlgList::~dlgList() { delete ui; }
@@ -42,7 +43,7 @@ void dlgList::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
 void dlgList::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   mw_one->closeGrayWindows();
-  mw_one->mydlgSetTime->show();
+  mw_one->m_widget = new QWidget(mw_one);
 }
 
 bool dlgList::eventFilter(QObject* watch, QEvent* evn) {
@@ -83,6 +84,7 @@ void dlgList::setCategoryText() {
   }
 
   close();
+  mw_one->mydlgSetTime->frameList->close();
 }
 
 void dlgList::on_btnChange_clicked() {
@@ -153,6 +155,8 @@ void dlgList::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
 }
 
 void dlgList::on_btnRename_clicked() {
+  if (ui->listWidget->count() == 0) return;
+
   QString text = ui->editRename->text().trimmed();
   QString str = ui->listWidget->currentItem()->text();
   if (!text.isEmpty() && text != str) {
@@ -190,3 +194,5 @@ void dlgList::on_btnRename_clicked() {
     mw_one->startSave("alltab");
   }
 }
+
+void dlgList::init() {}

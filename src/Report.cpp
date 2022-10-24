@@ -27,7 +27,6 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
 
   this->installEventFilter(this);
   this->setModal(true);
-  m_widget = new QWidget(this);
 
   tableReport = ui->tableReport;
   tableDetails = ui->tableDetails;
@@ -128,6 +127,12 @@ bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
+      if (!frameCategory->isHidden()) {
+        frameCategory->close();
+        mw_one->closeGrayWindows();
+        return true;
+      }
+
       on_btnBack_clicked();
       return true;
     }
@@ -143,6 +148,12 @@ void dlgReport::on_btnBack_clicked() {
   listCategory.clear();
 
   close();
+}
+
+void dlgReport::closeEvent(QCloseEvent* event) {
+  Q_UNUSED(event);
+  mw_one->closeGrayWindows();
+  mw_one->m_widget = new QWidget(mw_one);
 }
 
 void dlgReport::on_btnYear_clicked() {
@@ -682,10 +693,13 @@ void dlgReport::on_btnCategory_clicked() {
     return;
   }
 
+  mw_one->m_widget = new QWidget(this);
   QFrame* frame = new QFrame(this);
+  frameCategory = frame;
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
       "border:0px solid gray;}");  //设置圆角与背景透明
+
   /*frame->setGeometry(5, 5, this->width() - 5,
                      this->height() - 5);  //设置有效范围框
   QGraphicsDropShadowEffect* shadow_effect =
@@ -694,6 +708,7 @@ void dlgReport::on_btnCategory_clicked() {
   shadow_effect->setColor(Qt::black);
   shadow_effect->setBlurRadius(10);
   frame->setGraphicsEffect(shadow_effect);*/
+
   QVBoxLayout* vbox = new QVBoxLayout;
   frame->setLayout(vbox);
   QListWidget* list = new QListWidget(mw_one->mydlgReport);
@@ -758,7 +773,7 @@ void dlgReport::on_btnCategory_clicked() {
   int x = (mw_one->width() - w) / 2;
   frame->setGeometry(x, btnCategory->y() - h / 2, w, h);
   if (list->count() > 1) {
-    showGrayWindows();
+    mw_one->showGrayWindows();
     frame->show();
   }
 
@@ -769,14 +784,14 @@ void dlgReport::on_btnCategory_clicked() {
       tableCategory->hide();
       tableDetails->show();
       frame->close();
-      m_widget->close();
+      mw_one->closeGrayWindows();
       return;
     }
 
     mw_one->on_RunCategory();
 
     frame->close();
-    m_widget->close();
+    mw_one->closeGrayWindows();
   });
 }
 
@@ -937,11 +952,4 @@ void dlgReport::on_btnOut2Img_clicked() {
     }
 #endif
   }
-}
-
-void dlgReport::showGrayWindows() {
-  m_widget->resize(this->width(), this->height());
-  m_widget->move(0, 0);
-  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,15%);");
-  m_widget->show();
 }

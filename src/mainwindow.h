@@ -196,7 +196,6 @@ class MainWindow : public QMainWindow {
   dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
   dlgTodo *mydlgTodo;
-  dlgList *mydlgList;
   dlgReport *mydlgReport;
   dlgPreferences *mydlgPre;
   dlgMainNotes *mydlgMainNotes;

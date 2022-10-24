@@ -6,6 +6,8 @@
 #include <QSet>
 #include <QWidgetAction>
 
+#include "src/dlglist.h"
+
 namespace Ui {
 class dlgSetTime;
 }
@@ -18,6 +20,7 @@ class dlgSetTime : public QDialog {
   ~dlgSetTime();
   Ui::dlgSetTime *ui;
 
+  QFrame *frameList;
   static void saveCustomDesc();
 
   static int removeDuplicates(QStringList *that);

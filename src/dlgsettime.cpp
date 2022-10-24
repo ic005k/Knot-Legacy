@@ -11,9 +11,13 @@ extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
 extern bool isBreak, isImport;
 
+dlgList* m_List;
+
 dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
   ui->setupUi(this);
+
+  m_List = new dlgList(this);
 
   this->installEventFilter(this);
   ui->editDesc->installEventFilter(this);
@@ -94,11 +98,11 @@ void dlgSetTime::on_btnOk_clicked() {
 
   // Save Desc Text
   QString str = ui->editDesc->toPlainText().trimmed();
-  int count = mw_one->mydlgList->ui->listWidget->count();
+  int count = m_List->ui->listWidget->count();
   for (int i = 0; i < count; i++) {
-    QString str1 = mw_one->mydlgList->ui->listWidget->item(i)->text().trimmed();
+    QString str1 = m_List->ui->listWidget->item(i)->text().trimmed();
     if (str == str1) {
-      mw_one->mydlgList->ui->listWidget->takeItem(i);
+      m_List->ui->listWidget->takeItem(i);
       break;
     }
   }
@@ -108,7 +112,7 @@ void dlgSetTime::on_btnOk_clicked() {
     QFontMetrics fm(this->font());
     int w = fm.width(str, -1);
     // item->setSizeHint(QSize(w, 35));
-    mw_one->mydlgList->ui->listWidget->insertItem(0, item);
+    m_List->ui->listWidget->insertItem(0, item);
   }
 
   close();
@@ -153,34 +157,43 @@ void dlgSetTime::set_Amount(QString Number) {
 }
 
 void dlgSetTime::on_btnCustom_clicked() {
-  dlgList* dlg = mw_one->mydlgList;
-  if (dlg->isHidden()) {
-    int h = ui->frame->y() + ui->frame->height() - 2;
-    int y = mw_one->geometry().y() + 6;
-    dlg->setGeometry(mw_one->geometry().x() + ui->frame->x(), y,
-                     ui->frame->width(), h);
+  mw_one->m_widget = new QWidget(this);
 
-    this->hide();
-    mw_one->showGrayWindows();
+  int h = mw_one->height() - 60;
+  int y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
+  int w = mw_one->width() - 40;
+  int x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+  // m_List->setGeometry(x, y, w, h);
 
-    dlg->show();
+  frameList = new QFrame(this);
+  frameList->setStyleSheet(
+      "QFrame{background-color: rgb(255, 255, "
+      "255);border-radius:10px;border:0px solid gray;}");
+  QVBoxLayout* vbox = new QVBoxLayout;
+  frameList->setLayout(vbox);
+  vbox->addWidget(m_List->ui->frame);
+  frameList->setGeometry(20, (mw_one->height() - h) / 2, w, h);
 
-    dlg->ui->listWidget->setFocus();
-    if (dlg->ui->listWidget->count() > 0) {
-      dlg->ui->listWidget->setCurrentRow(0);
-      dlg->on_listWidget_itemClicked(dlg->ui->listWidget->currentItem());
-    }
+  init_Desc();
+  m_List->ui->listWidget->setFocus();
+  if (m_List->ui->listWidget->count() > 0) {
+    m_List->ui->listWidget->setCurrentRow(0);
+    m_List->on_listWidget_itemClicked(m_List->ui->listWidget->currentItem());
   }
+
+  mw_one->showGrayWindows();
+
+  frameList->show();
 }
 
 void dlgSetTime::saveCustomDesc() {
   QSettings Reg(iniDir + "desc.ini", QSettings::IniFormat);
-  int count = mw_one->mydlgList->ui->listWidget->count();
+  int count = m_List->ui->listWidget->count();
 
   QStringList list;
   for (int i = 0; i < count; i++) {
     if (isBreak) break;
-    list.append(mw_one->mydlgList->ui->listWidget->item(i)->text().trimmed());
+    list.append(m_List->ui->listWidget->item(i)->text().trimmed());
   }
   // list = QSet<QString>(list.begin(), list.end()).values(); //IOS无法编译通过
   removeDuplicates(&list);
@@ -228,7 +241,8 @@ void dlgSetTime::init_Desc() {
     ini_file = iniDir + "desc.ini";
   QSettings RegDesc(ini_file, QSettings::IniFormat);
 
-  mw_one->mydlgList->ui->listWidget->clear();
+  m_List->ui->listWidget->clear();
+  m_List->ui->listWidget->setViewMode(QListView::IconMode);
   int descCount = RegDesc.value("/CustomDesc/Count").toInt();
   for (int i = 0; i < descCount; i++) {
     QString str =
@@ -236,7 +250,7 @@ void dlgSetTime::init_Desc() {
     QListWidgetItem* item = new QListWidgetItem(str);
     // item->setSizeHint(
     //    QSize(mw_one->mydlgList->ui->listWidget->width() - 20, 35));
-    mw_one->mydlgList->ui->listWidget->addItem(item);
+    m_List->ui->listWidget->addItem(item);
   }
 }
 
@@ -266,8 +280,9 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!mw_one->mydlgList->isHidden()) {
-        mw_one->mydlgList->close();
+      if (!m_List->isHidden() || !frameList->isHidden()) {
+        m_List->close();
+        frameList->close();
         return true;
       } else {
         on_btnBack_clicked();

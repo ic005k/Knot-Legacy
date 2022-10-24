@@ -14,14 +14,16 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QDialog{	
-	/*background-color: rgb(255, 25, 25);*/	
-	/*border-image:url(:/res/b.png);	*/
+   <string notr="true">/*QDialog{	
+	
 	border-style:solid;						
 	border-width:2px;						
 	border-color:rgb(251, 51, 51);		
 
-}</string>
+}*/
+
+/*background-color: rgb(255, 25, 25);*/	
+	/*border-image:url(:/res/b.png);	*/</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -39,13 +41,13 @@
       <item>
        <widget class="QListWidget" name="listWidget">
         <property name="dragDropMode">
-         <enum>QAbstractItemView::DragDrop</enum>
+         <enum>QAbstractItemView::NoDragDrop</enum>
         </property>
         <property name="defaultDropAction">
-         <enum>Qt::IgnoreAction</enum>
+         <enum>Qt::CopyAction</enum>
         </property>
         <property name="viewMode">
-         <enum>QListView::IconMode</enum>
+         <enum>QListView::ListMode</enum>
         </property>
        </widget>
       </item>
@@ -72,19 +74,6 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QToolButton" name="btnBack">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Ok</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QToolButton" name="btnClear">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -94,6 +83,19 @@
           </property>
           <property name="text">
            <string>Del</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnBack">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Ok</string>
           </property>
          </widget>
         </item>

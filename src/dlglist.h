@@ -16,6 +16,9 @@ class dlgList : public QDialog {
   ~dlgList();
   Ui::dlgList *ui;
 
+  QFrame *frame;
+  void init();
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;

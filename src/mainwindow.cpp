@@ -1487,6 +1487,7 @@ void MainWindow::on_actionRename_triggered() {
     saveTab();
   }*/
 
+  m_widget = new QWidget(this);
   mydlgRename->init();
 }
 
@@ -3795,7 +3796,6 @@ void MainWindow::init_UIWidget() {
   mydlgSetTime = new dlgSetTime(this);
   mydlgTodo = new dlgTodo(this);
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
-  mydlgList = new dlgList(this);
   mydlgReport = new dlgReport(this);
   mydlgPre = new dlgPreferences(this);
   mydlgMainNotes = new dlgMainNotes(this);
@@ -3807,9 +3807,11 @@ void MainWindow::init_UIWidget() {
   mydlgOneDrive = new TestDialog;
   mydlgWeb = new dlgWeb(this);
   mydlgFloatFun = new dlgFloatFun(this);
+  mydlgFloatFun->close();
   mydlgReaderFun = new dlgReaderFun(this);
   mydlgSetText = new dlgSetText(this);
   m_widget = new QWidget(this);
+  m_widget->close();
   m_NotesList = new dlgNotesList(this);
 
   timer = new QTimer(this);
@@ -3952,7 +3954,7 @@ void MainWindow::on_btnSelTab_clicked() {
     QListWidgetItem* item = new QListWidgetItem;
     // item->setSizeHint(QSize(width() * 2 / 3 - 68, 35));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    item->setText(tabData->tabText(i));
+    item->setText(QString::number(i + 1) + "." + tabData->tabText(i));
     list->addItem(item);
   }
   connect(list, &QListWidget::itemClicked, [=]() {
@@ -3971,6 +3973,7 @@ void MainWindow::on_btnSelTab_clicked() {
   int x = (this->width() - w) / 2;
   frame->setGeometry(x, y, w, h);
   list->setCurrentRow(tabData->currentIndex());
+
   showGrayWindows();
   frame->show();
   list->setFocus();

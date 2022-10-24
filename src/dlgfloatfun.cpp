@@ -66,30 +66,11 @@ bool dlgFloatFun::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgFloatFun::closeEvent(QCloseEvent* event) {
-  Q_UNUSED(event);
-
-  QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
-  m_pAnimation->setTargetObject(this);
-  m_pAnimation->setDuration(2000);
-  QGraphicsOpacityEffect* m_pOpacity = new QGraphicsOpacityEffect();
-  this->setGraphicsEffect(m_pOpacity);
-  m_pOpacity->setOpacity(1);
-  m_pAnimation->setTargetObject(m_pOpacity);
-  m_pAnimation->setPropertyName("opacity");
-  m_pAnimation->setStartValue(1);
-  m_pAnimation->setEndValue(0);
-  // m_pAnimation->start();
-}
+void dlgFloatFun::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
 
 void dlgFloatFun::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
   return;
-
-  /*QStyleOption opt;
-  opt.init(this);
-  QPainter painter(this);
-  style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);*/
 
   QPainter painter(this);
   painter.fillRect(this->rect(), QColor(0, 0, 0, 0));

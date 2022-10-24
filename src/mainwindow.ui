@@ -596,7 +596,7 @@
            <widget class="QToolButton" name="btnAdd">
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>40</width>
               <height>28</height>
              </size>
             </property>
@@ -622,7 +622,7 @@
            <widget class="QToolButton" name="btnDel">
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>40</width>
               <height>28</height>
              </size>
             </property>
