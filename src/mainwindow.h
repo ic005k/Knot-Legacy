@@ -515,6 +515,12 @@ class MainWindow : public QMainWindow {
 
   void on_btnReport_clicked();
 
+  void on_btnPasteCode_clicked();
+
+  void on_btnAdd_clicked();
+
+  void on_btnDel_clicked();
+
  private:
   int memoHeight;
   int frameChartHeight = 220;

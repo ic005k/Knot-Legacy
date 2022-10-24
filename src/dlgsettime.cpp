@@ -18,6 +18,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   this->installEventFilter(this);
   ui->editDesc->installEventFilter(this);
   ui->editDesc->viewport()->installEventFilter(this);
+
   QFont font;
   font.setPointSize(23);
   font.setBold(true);
@@ -154,15 +155,21 @@ void dlgSetTime::set_Amount(QString Number) {
 void dlgSetTime::on_btnCustom_clicked() {
   dlgList* dlg = mw_one->mydlgList;
   if (dlg->isHidden()) {
-    dlg->setModal(true);
-
     int h = ui->frame->y() + ui->frame->height() - 2;
     int y = mw_one->geometry().y() + 6;
     dlg->setGeometry(mw_one->geometry().x() + ui->frame->x(), y,
                      ui->frame->width(), h);
+
+    this->hide();
+    mw_one->showGrayWindows();
+
     dlg->show();
+
     dlg->ui->listWidget->setFocus();
-    if (dlg->ui->listWidget->count() > 0) dlg->ui->listWidget->setCurrentRow(0);
+    if (dlg->ui->listWidget->count() > 0) {
+      dlg->ui->listWidget->setCurrentRow(0);
+      dlg->on_listWidget_itemClicked(dlg->ui->listWidget->currentItem());
+    }
   }
 }
 

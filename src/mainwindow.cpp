@@ -257,7 +257,7 @@ MainWindow::MainWindow(QWidget* parent)
 
   initMain = false;
 
-  timerShowFloatFun->start(1500);
+  // timerShowFloatFun->start(1500);
 }
 
 void MainWindow::initHardStepSensor() {
@@ -831,6 +831,8 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       int childCount = topItem->childCount();
 
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
+      topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
+      item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
 
       // Amount
       double amount = 0;
@@ -861,7 +863,11 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
       item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
     item11->setText(2, strDesc);
     int child = topItem->childCount();
+
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
+    topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
+    item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
+
     //  Amount
     double amount = 0;
     for (int m = 0; m < child; m++) {
@@ -1225,6 +1231,8 @@ void MainWindow::readData(QTreeWidget* tw) {
       tw->addTopLevelItem(topItem);
 
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
+      topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
+
       topItem->setText(
           1, Reg.value("/" + name + "/" + QString::number(i + 1) + "-topFreq")
                  .toString());
@@ -1243,6 +1251,8 @@ void MainWindow::readData(QTreeWidget* tw) {
         item11->setText(2, Reg.value("/" + name + "/" + QString::number(i + 1) +
                                      "-childDesc" + QString::number(j))
                                .toString());
+
+        item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
       }
     }
   }
@@ -1527,6 +1537,10 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   tw->setFont(font);
   font.setBold(true);
   tw->header()->setFont(font);
+
+  font.setPointSize(fontSize + 1);
+  ui->lblKnot->setFont(font);
+
   tw->setColumnCount(3);
   tw->headerItem()->setText(0, "  " + tr("Date") + "  ");
   tw->headerItem()->setText(1, "  " + tr("Freq") + "  ");
@@ -2052,16 +2066,16 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
           listSelTab->close();
           closeGrayWindows();
 
-          delete mw_one->mydlgFloatFun;
-          mydlgFloatFun = new dlgFloatFun(this);
-          mydlgFloatFun->init();
+          // delete mw_one->mydlgFloatFun;
+          // mydlgFloatFun = new dlgFloatFun(this);
+          // mydlgFloatFun->init();
           return true;
         } else if (!listTimeMachine->isHidden()) {
           listTimeMachine->close();
 
-          delete mydlgFloatFun;
-          mydlgFloatFun = new dlgFloatFun(this);
-          mydlgFloatFun->init();
+          // delete mydlgFloatFun;
+          // mydlgFloatFun = new dlgFloatFun(this);
+          // mydlgFloatFun->init();
           return true;
         }
       }
@@ -2775,9 +2789,9 @@ void MainWindow::on_btnMax_clicked() {
     ui->btnMax->setText(tr("Max"));
   }
 
-  delete mw_one->mydlgFloatFun;
-  mydlgFloatFun = new dlgFloatFun(this);
-  mydlgFloatFun->init();
+  // delete mw_one->mydlgFloatFun;
+  // mydlgFloatFun = new dlgFloatFun(this);
+  // mydlgFloatFun->init();
 }
 
 void MainWindow::on_btnYear_clicked() {
@@ -3728,6 +3742,7 @@ void MainWindow::init_UIWidget() {
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
 
+  ui->lblIcon->hide();
   ui->frameReader->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
@@ -3919,9 +3934,9 @@ void MainWindow::on_btnSelTab_clicked() {
   QListWidget* list = new QListWidget(this);
   vbox->addWidget(list);
   listSelTab = frame;
-  list->setSpacing(2);
-  list->setAlternatingRowColors(true);
-  // list->setViewMode(QListView::IconMode);
+  list->setSpacing(12);
+  // list->setAlternatingRowColors(true);
+  list->setViewMode(QListView::IconMode);
   list->setMovement(QListView::Static);
   list->setStyleSheet(listStyleMain);
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
@@ -3935,7 +3950,7 @@ void MainWindow::on_btnSelTab_clicked() {
   int count = tabData->tabBar()->count();
   for (int i = 0; i < count; i++) {
     QListWidgetItem* item = new QListWidgetItem;
-    item->setSizeHint(QSize(width() * 2 / 3 - 68, 35));
+    // item->setSizeHint(QSize(width() * 2 / 3 - 68, 35));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     item->setText(tabData->tabText(i));
     list->addItem(item);
@@ -3945,13 +3960,13 @@ void MainWindow::on_btnSelTab_clicked() {
     frame->close();
     closeGrayWindows();
 
-    delete mw_one->mydlgFloatFun;
-    mydlgFloatFun = new dlgFloatFun(this);
-    mydlgFloatFun->init();
+    // delete mw_one->mydlgFloatFun;
+    // mydlgFloatFun = new dlgFloatFun(this);
+    // mydlgFloatFun->init();
   });
 
-  int h = height() * 2 / 3;
-  int w = width() * 2 / 3;
+  int h = height() / 2;
+  int w = width() - 40;
   int y = (this->height() - h) / 2;
   int x = (this->width() - w) / 2;
   frame->setGeometry(x, y, w, h);
@@ -4210,9 +4225,9 @@ void MainWindow::on_btnZoom_clicked() {
     ui->frame_tab->show();
     ui->frame_charts->setMaximumHeight(frameChartHeight);
 
-    delete mw_one->mydlgFloatFun;
-    mydlgFloatFun = new dlgFloatFun(this);
-    mydlgFloatFun->init();
+    // delete mw_one->mydlgFloatFun;
+    // mydlgFloatFun = new dlgFloatFun(this);
+    // mydlgFloatFun->init();
   }
 }
 
@@ -4340,9 +4355,9 @@ void MainWindow::on_btnBack_clicked() {
   ui->frameReader->hide();
   ui->frameMain->show();
 
-  delete mw_one->mydlgFloatFun;
-  mydlgFloatFun = new dlgFloatFun(this);
-  mydlgFloatFun->init();
+  // delete mw_one->mydlgFloatFun;
+  // mydlgFloatFun = new dlgFloatFun(this);
+  // mydlgFloatFun->init();
 }
 
 void MainWindow::on_btnOpen_clicked() {
@@ -4588,9 +4603,9 @@ void MainWindow::on_btnBack_One_clicked() {
       ui->frameOne->hide();
       ui->frameMain->show();
 
-      delete mw_one->mydlgFloatFun;
-      mydlgFloatFun = new dlgFloatFun(this);
-      mydlgFloatFun->init();
+      // delete mw_one->mydlgFloatFun;
+      // mydlgFloatFun = new dlgFloatFun(this);
+      // mydlgFloatFun->init();
     }
   }
 }
@@ -4620,9 +4635,9 @@ void MainWindow::on_btnBackMemo_clicked() {
   ui->frameMemo->hide();
   ui->frameMain->show();
 
-  delete mw_one->mydlgFloatFun;
-  mydlgFloatFun = new dlgFloatFun(this);
-  mydlgFloatFun->init();
+  // delete mw_one->mydlgFloatFun;
+  // mydlgFloatFun = new dlgFloatFun(this);
+  // mydlgFloatFun->init();
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -4708,7 +4723,7 @@ void MainWindow::on_btnEdit_clicked() {
 }
 
 void MainWindow::on_btnCode_clicked() {
-  QString str = ui->editCode->text().trimmed();
+  QString str = ui->editCode->toPlainText().trimmed();
   if (str != "" && str.contains("?code=")) {
     dialog_->sendMsg(str);
   }
@@ -4814,12 +4829,25 @@ void MainWindow::showGrayWindows() {
   m_widget->resize(this->width(), this->height());
   m_widget->move(0, 0);
   m_widget->setStyleSheet("background-color:rgba(0, 0, 0,15%);");
+
+  QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
+  m_pAnimation->setTargetObject(m_widget);
+  m_pAnimation->setDuration(500);
+  QGraphicsOpacityEffect* m_pOpacity = new QGraphicsOpacityEffect();
+  m_widget->setGraphicsEffect(m_pOpacity);
+  m_pOpacity->setOpacity(1);
+  m_pAnimation->setTargetObject(m_pOpacity);
+  m_pAnimation->setPropertyName("opacity");
+  m_pAnimation->setStartValue(0);
+  m_pAnimation->setEndValue(1);
+  m_pAnimation->start();
+
   m_widget->show();
 }
 
 void MainWindow::closeGrayWindows() {
   m_widget->close();
-  mydlgFloatFun->init();
+  // mydlgFloatFun->init();
 }
 
 void MainWindow::on_btnNotesList_clicked() {
@@ -4854,3 +4882,13 @@ void MainWindow::on_btnZoomOut_clicked() {
 }
 
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
+
+void MainWindow::on_btnPasteCode_clicked() {
+  QClipboard* clipboard = QApplication::clipboard();
+  QString originalText = clipboard->text();
+  ui->editCode->setPlainText(originalText);
+}
+
+void MainWindow::on_btnAdd_clicked() { on_AddRecord(); }
+
+void MainWindow::on_btnDel_clicked() { on_DelRecord(); }

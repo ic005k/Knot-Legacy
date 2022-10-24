@@ -17,6 +17,7 @@ class dlgSetTime : public QDialog {
   explicit dlgSetTime(QWidget *parent = nullptr);
   ~dlgSetTime();
   Ui::dlgSetTime *ui;
+
   static void saveCustomDesc();
 
   static int removeDuplicates(QStringList *that);
@@ -26,7 +27,9 @@ class dlgSetTime : public QDialog {
   void getTime(int h, int m);
 
   void init();
-  protected:
+  void showGrayWindows();
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:

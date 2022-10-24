@@ -545,13 +545,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>28</height>
+           <height>30</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>28</height>
+           <height>30</height>
           </size>
          </property>
          <property name="frameShape">
@@ -581,9 +581,66 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="lblKnot">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string>Knot</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="btnAdd">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border:none</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../res.qrc">
+              <normaloff>:/res/additem.png</normaloff>:/res/additem.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>28</width>
+              <height>28</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="btnDel">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border:none</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../res.qrc">
+              <normaloff>:/res/delitem.png</normaloff>:/res/delitem.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>28</width>
+              <height>28</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -743,8 +800,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>26</width>
-              <height>26</height>
+              <width>28</width>
+              <height>28</height>
              </size>
             </property>
            </widget>
@@ -1768,7 +1825,25 @@ QRadioButton::indicator:checked {
            <number>1</number>
           </property>
           <item>
-           <widget class="QLineEdit" name="editCode">
+           <widget class="QTextEdit" name="editCode">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
             <property name="placeholderText">
              <string>Url with authorization code</string>
             </property>
@@ -1776,6 +1851,13 @@ QRadioButton::indicator:checked {
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QToolButton" name="btnPasteCode">
+              <property name="text">
+               <string>Paste</string>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QToolButton" name="btnCode">
               <property name="sizePolicy">
