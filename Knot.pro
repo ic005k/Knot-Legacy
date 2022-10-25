@@ -3,8 +3,8 @@ QT += charts sensors
 QT += qml quick quickwidgets webview
 QT += xml
 
-#Qt6
-#QT += core5compat
+# Qt > 5 (Qt6)
+greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets #webenginewidgets
 

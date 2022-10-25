@@ -84,9 +84,11 @@ void AutoUpdateDialog::startDownload(QString strLink) {
   QNetworkRequest request;
   request.setUrl(QUrl(strLink));
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   // github redirects the request, so this attribute must be set to true,
   // otherwise returns nothing from qt5.6
   request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+#endif
 
   reply = manager->get(request);  //发送请求
   connect(reply, &QNetworkReply::readyRead, this,

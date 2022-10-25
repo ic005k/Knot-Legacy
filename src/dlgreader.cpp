@@ -952,7 +952,6 @@ QStringList dlgReader::readText(QString textFile) {
 }
 
 QString dlgReader::GetCorrectUnicode(const QByteArray& text) {
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QTextCodec::ConverterState state;
   QTextCodec* codec = QTextCodec::codecForName("UTF-8");
   QString strtext = codec->toUnicode(text.constData(), text.size(), &state);
@@ -962,10 +961,6 @@ QString dlgReader::GetCorrectUnicode(const QByteArray& text) {
     strtext = text;
   }
   return strtext;
-#else
-
-#endif
-  return text;
 }
 
 void dlgReader::closeEvent(QCloseEvent* event) {

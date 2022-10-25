@@ -112,8 +112,8 @@ void dlgSetTime::on_btnOk_clicked() {
 
   if (str.length() > 0) {
     QListWidgetItem* item = new QListWidgetItem(str);
-    QFontMetrics fm(this->font());
-    int w = fm.width(str, -1);
+    // QFontMetrics fm(this->font());
+    // int w = fm.width(str, -1);
     // item->setSizeHint(QSize(w, 35));
     m_List->ui->listWidget->insertItem(0, item);
   }

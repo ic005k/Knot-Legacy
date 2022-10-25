@@ -53,12 +53,14 @@
 
 #include <QFont>
 #include <QObject>
+#include <QQuickTextDocument>
 #include <QTextCursor>
+#include <QTextDocument>
 #include <QUrl>
 
 QT_BEGIN_NAMESPACE
-class QTextDocument;
-class QQuickTextDocument;
+// class QTextDocument;
+// class QQuickTextDocument;
 QT_END_NAMESPACE
 
 class DocumentHandler : public QObject {

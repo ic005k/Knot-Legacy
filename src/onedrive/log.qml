@@ -7,8 +7,8 @@ import MyModel1 1.0
 import MyModel2 1.0
 
 import QtQuick.Layouts 1.1
-import QtQuick.Controls.Styles 1.2
 
+//import QtQuick.Controls.Styles 1.2
 Item {
     id: textitem
     visible: true
@@ -158,16 +158,6 @@ Item {
             orientation: Qt.Vertical
             anchors.right: parent.right
             policy: ScrollBar.AsNeeded
-
-            contentItem: Rectangle {
-                id: slider
-                implicitWidth: 4
-                implicitHeight: 76
-                radius: width / 2
-                color: control.pressed ? "#e7e7e7" : "#1296db"
-                opacity: (control.policy === ScrollBar.AlwaysOn
-                          || control.size < 1.0) ? 1.0 : 0.0
-            }
         }
 
         Component.onCompleted: {
