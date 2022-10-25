@@ -273,7 +273,7 @@ class MainWindow : public QMainWindow {
       "padding-right:1px;"   //右预留位置（美观）
       "border-left:0px solid #d7d7d7;}"     //左分割线
       "QScrollBar::handle:vertical{"        //滑块样式
-      "background:#1296db;"                 //滑块颜色
+      "background:rgb(202,197,191);"        //滑块颜色
       "border-radius:6px;"                  //边角圆润
       "min-height:60px;}"                   //滑块最小高度
       "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式

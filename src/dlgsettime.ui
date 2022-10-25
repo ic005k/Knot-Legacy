@@ -50,7 +50,13 @@ selection-background-color: lightblue;
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>120</height>
+       <height>130</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>160</height>
       </size>
      </property>
      <property name="frameShape">
@@ -67,7 +73,7 @@ selection-background-color: lightblue;
        <widget class="QLabel" name="lblTime">
         <property name="font">
          <font>
-          <pointsize>35</pointsize>
+          <pointsize>30</pointsize>
           <bold>true</bold>
          </font>
         </property>
@@ -537,7 +543,7 @@ selection-background-color: lightblue;
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>50</height>
+         <height>45</height>
         </size>
        </property>
        <property name="text">
@@ -556,7 +562,7 @@ selection-background-color: lightblue;
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>50</height>
+         <height>45</height>
         </size>
        </property>
        <property name="text">
