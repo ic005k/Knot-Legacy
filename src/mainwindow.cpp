@@ -3758,6 +3758,7 @@ void MainWindow::init_UIWidget() {
   ui->frameOne->hide();
   ui->frameFunWeb->hide();
   ui->btnStorageInfo->hide();
+  ui->editCode->setLineWrapMode(QTextEdit::NoWrap);
 
   ui->frameMemo->hide();
   ui->frameMemo->setContentsMargins(1, 1, 1, 1);
