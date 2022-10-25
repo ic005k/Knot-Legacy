@@ -3751,8 +3751,8 @@ void MainWindow::init_UIWidget() {
   ui->frameReader->layout()->setSpacing(1);
   ui->f_ImgView->hide();
 
-  ui->frameMain->layout()->setContentsMargins(0, 0, 0, 0);
-  ui->frameMain->setContentsMargins(0, 0, 0, 0);
+  ui->frameMain->layout()->setContentsMargins(1, 0, 1, 0);
+  ui->frameMain->setContentsMargins(1, 0, 1, 0);
   ui->frameMain->layout()->setSpacing(1);
 
   ui->frameOne->hide();
