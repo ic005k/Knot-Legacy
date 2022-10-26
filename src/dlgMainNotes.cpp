@@ -939,12 +939,22 @@ bool dlgMainNotes::androidCopyFile(QString src, QString des) {
   bool result = false;
 
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject srcObj = QAndroidJniObject::fromString(src);
   QAndroidJniObject desObj = QAndroidJniObject::fromString(des);
   QAndroidJniObject m_activity = QAndroidJniObject::fromString("copyFile");
   result = m_activity.callStaticMethod<int>(
       "com.x/MyActivity", "copyFile", "(Ljava/lang/String;Ljava/lang/String;)I",
       srcObj.object<jstring>(), desObj.object<jstring>());
+#else
+  QJniObject srcObj = QJniObject::fromString(src);
+  QJniObject desObj = QJniObject::fromString(des);
+  QJniObject m_activity = QJniObject::fromString("copyFile");
+  result = m_activity.callStaticMethod<int>(
+      "com.x/MyActivity", "copyFile", "(Ljava/lang/String;Ljava/lang/String;)I",
+      srcObj.object<jstring>(), desObj.object<jstring>());
+#endif
 
 #endif
   qDebug() << "copyFile " << src << des;

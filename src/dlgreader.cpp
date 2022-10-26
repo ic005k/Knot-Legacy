@@ -1328,11 +1328,21 @@ void dlgReader::proceImg() {
 QString dlgReader::getUriRealPath(QString uripath) {
 #ifdef Q_OS_ANDROID
   QString realpath;
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject javaUriPath = QAndroidJniObject::fromString(uripath);
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
   QAndroidJniObject s = m_activity.callObjectMethod(
       "getUriPath", "(Ljava/lang/String;)Ljava/lang/String;",
       javaUriPath.object<jstring>());
+#else
+  QJniObject javaUriPath = QJniObject::fromString(uripath);
+  QJniObject m_activity = QNativeInterface::QAndroidApplication::context();
+  QJniObject s = m_activity.callObjectMethod(
+      "getUriPath", "(Ljava/lang/String;)Ljava/lang/String;",
+      javaUriPath.object<jstring>());
+#endif
+
   realpath = s.toString();
   qDebug() << "RealPath" << realpath;
   return realpath;

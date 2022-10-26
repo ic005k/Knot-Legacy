@@ -1357,8 +1357,15 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     }
 
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QAndroidJniObject jo = QAndroidJniObject::fromString("MiniWin");
     jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
+#else
+    QJniObject jo = QJniObject::fromString("MiniWin");
+    jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
+#endif
+
 #endif
 
     event->ignore();
@@ -3563,11 +3570,20 @@ void MainWindow::updateHardSensorSteps() {
   qlonglong steps = 0;
 #ifdef Q_OS_ANDROID
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
   m_activity.callMethod<void>("initStepSensor");
 
   QAndroidJniObject jo = QAndroidJniObject::fromString("getSteps");
   tc = jo.callStaticMethod<float>("com.x/MyActivity", "getSteps", "()F");
+#else
+  QJniObject m_activity = QNativeInterface::QAndroidApplication::context();
+  m_activity.callMethod<void>("initStepSensor");
+
+  QJniObject jo = QJniObject::fromString("getSteps");
+  tc = jo.callStaticMethod<float>("com.x/MyActivity", "getSteps", "()F");
+#endif
+
 #endif
   steps = tc - initTodaySteps;
 
@@ -4112,8 +4128,15 @@ void MainWindow::init_Menu(QMenu* mainMenu) {
 
 void MainWindow::on_openKnotBakDir() {
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
   m_activity.callMethod<void>("openKnotBakDir");
+#else
+  QJniObject m_activity = QNativeInterface::QAndroidApplication::context();
+  m_activity.callMethod<void>("openKnotBakDir");
+#endif
+
 #endif
 }
 
@@ -4263,8 +4286,15 @@ void MainWindow::on_btnZoom_clicked() {
 
 void MainWindow::stopJavaTimer() {
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("StopWin");
   jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
+#else
+  QJniObject jo = QJniObject::fromString("StopWin");
+  jo.callStaticMethod<int>("com.x/MyService", "stopTimer", "()I");
+#endif
+
 #endif
   accel_pedometer->stop();
   accel_pedometer->setActive(false);
@@ -4310,6 +4340,7 @@ static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_4", "()V", (void*)JavaNotify_4}};
 
 void RegJni(const char* myClassName) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QtAndroid::runOnAndroidThreadSync([=]() {
     QAndroidJniEnvironment Environment;
     const char* mClassName = myClassName;  //"com/x/MyService";
@@ -4329,6 +4360,28 @@ void RegJni(const char* myClassName) {
     }
   });
   qDebug() << "++++++++++++++++++++++++";
+#else
+
+  QNativeInterface::QAndroidApplication::runOnAndroidMainThread([=]() {
+    QJniEnvironment Environment;
+    const char* mClassName = myClassName;  //"com/x/MyService";
+    jclass j_class;
+    j_class = Environment->FindClass(mClassName);
+    if (j_class == nullptr) {
+      qDebug() << "erro clazz";
+      return;
+    }
+    jint mj = Environment->RegisterNatives(
+        j_class, gMethods, sizeof(gMethods) / sizeof(gMethods[0]));
+    if (mj != JNI_OK) {
+      qDebug() << "register native method failed!";
+      return;
+    } else {
+      qDebug() << "RegisterNatives success!";
+    }
+  });
+  qDebug() << "++++++++++++++++++++++++";
+#endif
 }
 
 #endif
