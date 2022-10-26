@@ -319,8 +319,15 @@ void dlgSteps::on_rbAlg1_clicked() {
   mw_one->gyroscope->setActive(false);
 
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep1Win");
   jo.callStaticMethod<int>("com.x/MyService", "setSleep1", "()I");
+#else
+  QJniObject jo = QJniObject::fromString("Sleep1Win");
+  jo.callStaticMethod<int>("com.x/MyService", "setSleep1", "()I");
+#endif
+
 #endif
 }
 
@@ -340,22 +347,37 @@ void dlgSteps::on_rbAlg2_clicked() {
   mw_one->gyroscope->setActive(true);
 
 #ifdef Q_OS_ANDROID
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep2Win");
   jo.callStaticMethod<int>("com.x/MyService", "setSleep2", "()I");
+#else
+  QJniObject jo = QJniObject::fromString("Sleep2Win");
+  jo.callStaticMethod<int>("com.x/MyService", "setSleep2", "()I");
+#endif
 #endif
 }
 
 void dlgSteps::releaseWakeLock() {
 #ifdef Q_OS_ANDROID
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("releaseWakeLock");
   jo.callStaticMethod<void>("com.x/MyActivity", "releaseWakeLock", "()V");
+#else
+  QJniObject jo = QJniObject::fromString("releaseWakeLock");
+  jo.callStaticMethod<void>("com.x/MyActivity", "releaseWakeLock", "()V");
+#endif
 #endif
 }
 
 void dlgSteps::acquireWakeLock() {
 #ifdef Q_OS_ANDROID
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
   m_activity.callMethod<void>("acquireWakeLock");
+#else
+  QJniObject m_activity = QNativeInterface::QAndroidApplication::context();
+  m_activity.callMethod<void>("acquireWakeLock");
+#endif
 #endif
 }
 

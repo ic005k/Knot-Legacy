@@ -329,6 +329,8 @@ void dlgReader::openFile(QString openfile) {
 #endif
 
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
       QAndroidJniObject javaZipFile = QAndroidJniObject::fromString(temp);
       QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(dirpath);
       QAndroidJniObject m_activity = QAndroidJniObject::fromString("Unzip");
@@ -336,6 +338,15 @@ void dlgReader::openFile(QString openfile) {
           "com.x/MyActivity", "Unzip",
           "(Ljava/lang/String;Ljava/lang/String;)V",
           javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
+#else
+      QJniObject javaZipFile = QJniObject::fromString(temp);
+      QJniObject javaZipDir = QJniObject::fromString(dirpath);
+      QJniObject m_activity = QJniObject::fromString("Unzip");
+      m_activity.callStaticMethod<void>(
+          "com.x/MyActivity", "Unzip",
+          "(Ljava/lang/String;Ljava/lang/String;)V",
+          javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
+#endif
 
 #endif
 

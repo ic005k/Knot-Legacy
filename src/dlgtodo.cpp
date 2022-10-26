@@ -736,6 +736,8 @@ void dlgTodo::on_Alarm() {
 
 void dlgTodo::startTimerAlarm(QString text) {
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString(text);
   // jo.callStaticMethod<int>("com.x/MyService", "startTimerAlarm", "()I");
 
@@ -744,27 +746,54 @@ void dlgTodo::startTimerAlarm(QString text) {
 
   jo.callStaticMethod<int>("com.x/ClockActivity", "setInfoText",
                            "(Ljava/lang/String;)I", jo.object<jstring>());
+#else
+  QJniObject jo = QJniObject::fromString(text);
+
+  jo.callStaticMethod<int>("com.x/MyActivity", "startAlarm",
+                           "(Ljava/lang/String;)I", jo.object<jstring>());
+
+  jo.callStaticMethod<int>("com.x/ClockActivity", "setInfoText",
+                           "(Ljava/lang/String;)I", jo.object<jstring>());
+#endif
 
 #endif
 }
 
 void dlgTodo::stopTimerAlarm() {
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("stopTimerAlarm");
   // jo.callStaticMethod<int>("com.x/MyService", "stopTimerAlarm", "()I");
 
   jo.callStaticMethod<int>("com.x/MyActivity", "stopAlarm", "()I");
+#else
+  QJniObject jo = QJniObject::fromString("stopTimerAlarm");
+
+  jo.callStaticMethod<int>("com.x/MyActivity", "stopAlarm", "()I");
+#endif
+
 #endif
 }
 
 void dlgTodo::sendMsgAlarm(QString text) {
 #ifdef Q_OS_ANDROID
   QString strNotify = tr("Todo") + " : " + text;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject javaNotification = QAndroidJniObject::fromString(strNotify);
   QAndroidJniObject::callStaticMethod<void>(
       "com/x/MyService", "notifyTodoAlarm",
       "(Landroid/content/Context;Ljava/lang/String;)V",
       QtAndroid::androidContext().object(), javaNotification.object<jstring>());
+#else
+  QJniObject javaNotification = QJniObject::fromString(strNotify);
+  QJniObject::callStaticMethod<void>(
+      "com/x/MyService", "notifyTodoAlarm",
+      "(Landroid/content/Context;Ljava/lang/String;)V",
+      QNativeInterface::QAndroidApplication::context(),
+      javaNotification.object<jstring>());
+#endif
+
 #endif
 }
 

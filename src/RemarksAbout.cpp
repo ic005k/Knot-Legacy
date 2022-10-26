@@ -241,8 +241,15 @@ int dlgRemarks::getAndroidVer() {
 #endif
 
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("ver");
   a = jo.callStaticMethod<int>("com.x/MyActivity", "getAndroidVer", "()I");
+#else
+  QJniObject jo = QJniObject::fromString("ver");
+  a = jo.callStaticMethod<int>("com.x/MyActivity", "getAndroidVer", "()I");
+#endif
+
 #endif
   return a;
 }

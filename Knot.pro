@@ -18,10 +18,10 @@ unix:!macx:{
 
 }
 
-lessThan(QT_MAJOR_VERSION, 6):
-{
-    android: QT += androidextras
+android: {
+    lessThan(QT_MAJOR_VERSION, 6):QT += androidextras
 }
+
 
 android
 {

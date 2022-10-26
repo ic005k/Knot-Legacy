@@ -263,9 +263,15 @@ MainWindow::MainWindow(QWidget* parent)
 void MainWindow::initHardStepSensor() {
 #ifdef Q_OS_ANDROID
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("CheckSensorWin");
   isHardStepSensor =
       jo.callStaticMethod<int>("com.x/MyActivity", "getHardStepCounter", "()I");
+#else
+  QJniObject jo = QJniObject::fromString("CheckSensorWin");
+  isHardStepSensor =
+      jo.callStaticMethod<int>("com.x/MyActivity", "getHardStepCounter", "()I");
+#endif
 
   if (isHardStepSensor == 0) {
     if (mydlgSteps->ui->rbAlg1->isChecked()) mydlgSteps->on_rbAlg1_clicked();
@@ -292,10 +298,19 @@ void MainWindow::initHardStepSensor() {
 
 void MainWindow::initTodayInitSteps() {
   qlonglong a, b;
+
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("getSteps");
   a = jo.callStaticMethod<float>("com.x/MyActivity", "getSteps", "()F");
+#else
+  QJniObject jo = QJniObject::fromString("getSteps");
+  a = jo.callStaticMethod<float>("com.x/MyActivity", "getSteps", "()F");
 #endif
+
+#endif
+
   tc = a;
 
   QSettings Reg(iniDir + "initsteps.ini", QSettings::IniFormat);
@@ -448,11 +463,22 @@ void MainWindow::sendMsg(int CurTableCount) {
   double gl = x / 1000;
   QString strNotify = tr("Today") + " : " + QString::number(CurTableCount) +
                       "  ( " + QString::number(gl) + " " + tr("km") + " )";
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject javaNotification = QAndroidJniObject::fromString(strNotify);
   QAndroidJniObject::callStaticMethod<void>(
       "com/x/MyService", "notify",
       "(Landroid/content/Context;Ljava/lang/String;)V",
       QtAndroid::androidContext().object(), javaNotification.object<jstring>());
+#else
+  QJniObject javaNotification = QJniObject::fromString(strNotify);
+  QJniObject::callStaticMethod<void>(
+      "com/x/MyService", "notify",
+      "(Landroid/content/Context;Ljava/lang/String;)V",
+      QNativeInterface::QAndroidApplication::context(),
+      javaNotification.object<jstring>());
+#endif
+
 #endif
 }
 

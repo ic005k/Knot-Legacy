@@ -526,6 +526,8 @@ void dlgMainNotes::zipMemo() {
 #endif
 
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject javaZipFile =
       QAndroidJniObject::fromString(iniDir + "memo.zip");
   QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(iniDir + "memo");
@@ -534,6 +536,15 @@ void dlgMainNotes::zipMemo() {
                                     "(Ljava/lang/String;Ljava/lang/String;)V",
                                     javaZipDir.object<jstring>(),
                                     javaZipFile.object<jstring>());
+#else
+  QJniObject javaZipFile = QJniObject::fromString(iniDir + "memo.zip");
+  QJniObject javaZipDir = QJniObject::fromString(iniDir + "memo");
+  QJniObject m_activity = QJniObject::fromString("zip");
+  m_activity.callStaticMethod<void>("com.x/MyActivity", "compressFileToZip",
+                                    "(Ljava/lang/String;Ljava/lang/String;)V",
+                                    javaZipDir.object<jstring>(),
+                                    javaZipFile.object<jstring>());
+#endif
 
 #endif
 }
@@ -549,6 +560,8 @@ void dlgMainNotes::unzipMemo() {
 #endif
 
 #ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject javaZipFile =
       QAndroidJniObject::fromString(iniDir + "memo.zip");
   QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(iniDir);
@@ -556,6 +569,14 @@ void dlgMainNotes::unzipMemo() {
   m_activity.callStaticMethod<void>(
       "com.x/MyActivity", "Unzip", "(Ljava/lang/String;Ljava/lang/String;)V",
       javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
+#else
+  QJniObject javaZipFile = QJniObject::fromString(iniDir + "memo.zip");
+  QJniObject javaZipDir = QJniObject::fromString(iniDir);
+  QJniObject m_activity = QJniObject::fromString("Unzip");
+  m_activity.callStaticMethod<void>(
+      "com.x/MyActivity", "Unzip", "(Ljava/lang/String;Ljava/lang/String;)V",
+      javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
+#endif
 
 #endif
 }
