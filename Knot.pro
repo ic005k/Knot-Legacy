@@ -155,6 +155,7 @@ DISTFILES += \
     android/gradlew.bat \
     android/gradlew.bat \
     android/res/values/libs.xml \
+    android/res/values/libs.xml \
     src/cn.qm \
     src/cn.ts \
     src/imgview.qml \

@@ -11,6 +11,7 @@ extern void RegJni(const char* myClassName);
 void loadLocal();
 bool zh_cn = false;
 bool isAndroid, isIOS;
+
 int main(int argc, char* argv[]) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {

@@ -256,8 +256,6 @@ MainWindow::MainWindow(QWidget* parent)
   initHardStepSensor();
 
   initMain = false;
-
-  // timerShowFloatFun->start(1500);
 }
 
 void MainWindow::initHardStepSensor() {
@@ -3966,6 +3964,7 @@ void MainWindow::on_btnSelTab_clicked() {
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, "
       "255);border-radius:10px;border:0px solid gray;}");
+
   /*frame->setGeometry(5, 5, this->width() - 5, this->height() - 5);
   QGraphicsDropShadowEffect* shadow_effect =
       new QGraphicsDropShadowEffect(this);
@@ -3973,6 +3972,7 @@ void MainWindow::on_btnSelTab_clicked() {
   shadow_effect->setColor(Qt::black);
   shadow_effect->setBlurRadius(10);
   frame->setGraphicsEffect(shadow_effect);*/
+
   QVBoxLayout* vbox = new QVBoxLayout;
   frame->setLayout(vbox);
 

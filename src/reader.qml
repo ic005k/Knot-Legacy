@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.15
 import MyModel1 1.0
 import MyModel2 1.0
 
-Item {
+Rectangle {
     id: textitem
     visible: true
     width: myW
@@ -190,8 +190,8 @@ Item {
 
         ScrollBar.vertical: ScrollBar {
             id: control
-            size: 0.3
-            position: 0.2
+            //size: 0.3
+            //position: 0.2
             active: true
             orientation: Qt.Vertical
             anchors.right: parent.right
