@@ -1579,6 +1579,7 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   tw->headerItem()->setText(2, tr("Amount"));
   tw->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
+  tw->headerItem()->setTextAlignment(2, Qt::AlignRight);
   tw->setAlternatingRowColors(true);
   tw->setFrameShape(QTreeWidget::NoFrame);
   tw->installEventFilter(this);
