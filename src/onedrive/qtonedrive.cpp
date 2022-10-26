@@ -130,10 +130,6 @@ void QtOneDrive::getUserInfo() {
   INIT_AND_CHECK_BUSY_AND_AUTH(GetUserInfo)
   TRY_REFRESH_TOKEN
 
-  // 获取openssl相关信息 Qt6.4(1.1.1.m版本的openssl）
-  qDebug() << networkManager_->supportedSchemes();
-  qDebug() << QSslSocket::sslLibraryBuildVersionString();
-
   QNetworkRequest request(urlGetUserInfo());
 
   request.setHeader(QNetworkRequest::ContentTypeHeader,

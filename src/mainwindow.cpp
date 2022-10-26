@@ -4630,6 +4630,12 @@ void MainWindow::on_btnRefreshWeb_clicked() {
 }
 
 void MainWindow::on_btnUserInfo_clicked() {
+  // 获取openssl相关信息并自行编译安装 Qt6.4(1.1.1.m版本的openssl）
+  // openssl下载网址：https://www.openssl.org/source/old/
+  QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+  qDebug() << manager->supportedSchemes();
+  qDebug() << QSslSocket::sslLibraryBuildVersionString();
+
   mydlgOneDrive->on_pushButton_GetUserInfo_clicked();
 }
 
