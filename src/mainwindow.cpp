@@ -4361,7 +4361,6 @@ void RegJni(const char* myClassName) {
   });
   qDebug() << "++++++++++++++++++++++++";
 #else
-
   QNativeInterface::QAndroidApplication::runOnAndroidMainThread([=]() {
     QJniEnvironment Environment;
     const char* mClassName = myClassName;  //"com/x/MyService";
