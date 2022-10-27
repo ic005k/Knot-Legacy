@@ -11,8 +11,8 @@ QList<QPointF> PointList;
 QList<double> doubleList;
 
 QString ver = "1.0.36";
-QGridLayout* gl1;
-QTreeWidgetItem* parentItem;
+QGridLayout *gl1;
+QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
 bool isImport, isEBook, isReport, isRunCategory;
 
@@ -24,7 +24,7 @@ QStringList listM;
 int curPos, today, fontSize, red, currentTabIndex;
 int chartMax = 5;
 double yMaxMonth, yMaxDay;
-MainWindow* mw_one;
+MainWindow *mw_one;
 QTabWidget *tabData, *tabChart;
 bool loading, isReadEnd, isReadTWEnd;
 bool isReadEBookEnd = true;
@@ -40,12 +40,12 @@ extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
     fileName, strOpfPath, fontname;
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
 extern QStringList readTextList, htmlFiles;
-extern QDialog* dlgProgEBook;
+extern QDialog *dlgProgEBook;
 extern QTableWidget *tableReport, *tableCategory;
-extern void setTableNoItemFlags(QTableWidget* t, int row);
-extern QtOneDriveAuthorizationDialog* dialog_;
+extern void setTableNoItemFlags(QTableWidget *t, int row);
+extern QtOneDriveAuthorizationDialog *dialog_;
 
-void RegJni(const char* myClassName);
+void RegJni(const char *myClassName);
 static void JavaNotify_1();
 static void JavaNotify_2();
 static void JavaNotify_3();
@@ -66,7 +66,7 @@ unsigned int num_steps_walk, num_steps_run, num_steps_hop;
 
 QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 
-ReadEBookThread::ReadEBookThread(QObject* parent) : QThread{parent} {}
+ReadEBookThread::ReadEBookThread(QObject *parent) : QThread{parent} {}
 void ReadEBookThread::run() {
   isReadEBookEnd = false;
 
@@ -85,7 +85,7 @@ void ReadEBookThread::run() {
   emit isDone();
 }
 
-ReadTWThread::ReadTWThread(QObject* parent) : QThread{parent} {}
+ReadTWThread::ReadTWThread(QObject *parent) : QThread{parent} {}
 void ReadTWThread::run() {
   isReadTWEnd = false;
   MainWindow::readDataInThread(currentTabIndex);
@@ -93,7 +93,7 @@ void ReadTWThread::run() {
 }
 void MainWindow::readTWDone() {
   for (int i = 0; i < tabData->tabBar()->count(); i++) {
-    QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
+    QTreeWidget *tw = (QTreeWidget *)tabData->widget(i);
     tw->setCurrentItem(tw->topLevelItem(tw->topLevelItemCount() - 1));
   }
 
@@ -107,7 +107,7 @@ void MainWindow::readTWDone() {
   ui->progBar->setMaximum(100);
 }
 
-ReadThread::ReadThread(QObject* parent) : QThread{parent} {}
+ReadThread::ReadThread(QObject *parent) : QThread{parent} {}
 void ReadThread::run() {
   if (isBreak) {
     emit isDone();
@@ -120,7 +120,7 @@ void ReadThread::run() {
 
 void MainWindow::ReadChartData() {
   int index = tabData->currentIndex();
-  QTreeWidget* tw = (QTreeWidget*)tabData->widget(index);
+  QTreeWidget *tw = (QTreeWidget *)tabData->widget(index);
 
   strY = get_Year(readDate);
   strM = get_Month(readDate);
@@ -148,7 +148,7 @@ void MainWindow::readDone() {
   isReadEnd = true;
 }
 
-SearchThread::SearchThread(QObject* parent) : QThread{parent} {}
+SearchThread::SearchThread(QObject *parent) : QThread{parent} {}
 void SearchThread::run() {
   isSaveEnd = false;
   MainWindow::SaveFile(SaveType);
@@ -173,7 +173,7 @@ void MainWindow::dealDone() {
 void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
     int index = tabData->currentIndex();
-    QTreeWidget* tw = (QTreeWidget*)tabData->widget(index);
+    QTreeWidget *tw = (QTreeWidget *)tabData->widget(index);
     saveData(tw, index);
     saveNotes(index);
     saveTab();
@@ -187,7 +187,7 @@ void MainWindow::SaveFile(QString SaveType) {
       QString ini_file = iniDir + name + ".ini";
       if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
-      QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
+      QTreeWidget *tw = (QTreeWidget *)tabData->widget(i);
       tw->setObjectName(name);
       saveData(tw, i);
       saveNotes(i);
@@ -211,13 +211,13 @@ void MainWindow::SaveFile(QString SaveType) {
   }
 }
 
-MainWindow::MainWindow(QWidget* parent)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   initMain = true;
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  QDesktopWidget* desktop = QApplication::desktop();
+  QDesktopWidget *desktop = QApplication::desktop();
   QRect screen = desktop->screenGeometry();
   int screenWidth = screen.width();
   int screenHeight = screen.height();
@@ -247,7 +247,7 @@ MainWindow::MainWindow(QWidget* parent)
   init_TabData();
   loading = false;
 
-  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   startRead(strDate);
   get_Today(tw);
   init_Stats(tw);
@@ -672,7 +672,7 @@ void MainWindow::init_ChartWidget() {
   }
 }
 
-void MainWindow::slotPointHoverd(const QPointF& point, bool state) {
+void MainWindow::slotPointHoverd(const QPointF &point, bool state) {
   if (state) {
     m_valueLabel->setText(QString::asprintf("%1.0f", point.y()));
 
@@ -715,7 +715,7 @@ void MainWindow::init_TabData() {
 
   for (int i = 0; i < TabCount; i++) {
     QString name = "tab" + QString::number(i + 1);
-    QTreeWidget* tw = init_TreeWidget(name);
+    QTreeWidget *tw = init_TreeWidget(name);
     ui->tabWidget->addTab(tw, RegTab
                                   .value("TabName" + QString::number(i),
                                          tr("Tab") + QString::number(i + 1))
@@ -740,7 +740,7 @@ void MainWindow::init_TabData() {
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
-  QTreeWidget* twCur = (QTreeWidget*)tabData->currentWidget();
+  QTreeWidget *twCur = (QTreeWidget *)tabData->currentWidget();
   readData(twCur);
   ui->actionImport_Data->setEnabled(false);
   ui->actionExport_Data->setEnabled(false);
@@ -754,7 +754,7 @@ void MainWindow::readDataInThread(int ExceptIndex) {
   int count = tabData->tabBar()->count();
   for (int i = 0; i < count; i++) {
     if (i != ExceptIndex) {
-      QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
+      QTreeWidget *tw = (QTreeWidget *)tabData->widget(i);
       readData(tw);
     }
   }
@@ -831,7 +831,7 @@ void MainWindow::startRead(QString Date) {
   }
 }
 
-void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
+void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
                           QString strDesc) {
   bool isYes = false;
 
@@ -842,8 +842,8 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
     if (getYMD(str) == getYMD(strDate)) {
       isYes = true;
 
-      QTreeWidgetItem* topItem = tw->topLevelItem(i);
-      QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
+      QTreeWidgetItem *topItem = tw->topLevelItem(i);
+      QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
       item11->setText(0, strTime);
       if (strAmount == "")
         item11->setText(1, "");
@@ -876,10 +876,10 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
   }
 
   if (!isYes) {
-    QTreeWidgetItem* topItem = new QTreeWidgetItem;
+    QTreeWidgetItem *topItem = new QTreeWidgetItem;
     topItem->setText(0, strDate);
     tw->addTopLevelItem(topItem);
-    QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
+    QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
     item11->setText(0, strTime);
     if (strAmount == "")
       item11->setText(1, "");
@@ -907,7 +907,7 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
   }
 
   int topCount = tw->topLevelItemCount();
-  QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
+  QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
   tw->setCurrentItem(topItem);
   sort_childItem(topItem->child(0));
   tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
@@ -915,14 +915,14 @@ void MainWindow::add_Data(QTreeWidget* tw, QString strTime, QString strAmount,
   startSave("tab");
 }
 
-void MainWindow::del_Data(QTreeWidget* tw) {
+void MainWindow::del_Data(QTreeWidget *tw) {
   bool isNo = true;
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QString str = tw->topLevelItem(i)->text(0);
     if (getYMD(str) == getYMD(strDate)) {
       isNo = false;
-      QTreeWidgetItem* topItem = tw->topLevelItem(i);
+      QTreeWidgetItem *topItem = tw->topLevelItem(i);
       int childCount = topItem->childCount();
       if (childCount > 0) {
         QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
@@ -962,7 +962,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
     msgBox.setInformativeText(
         tr("Only the reduction of the day's records is allowed."));
 
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
     btnOk->setFocus();
     msgBox.exec();
     return;
@@ -970,7 +970,7 @@ void MainWindow::del_Data(QTreeWidget* tw) {
 
   int topCount = tw->topLevelItemCount();
   if (topCount > 0) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
+    QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
     tw->setCurrentItem(topItem);
 
   } else
@@ -994,12 +994,12 @@ void MainWindow::on_AddRecord() {
 }
 
 void MainWindow::on_DelRecord() {
-  del_Data((QTreeWidget*)ui->tabWidget->currentWidget());
+  del_Data((QTreeWidget *)ui->tabWidget->currentWidget());
 }
 
 QObjectList MainWindow::getAllTreeWidget(QObjectList lstUIControls) {
   QObjectList lst;
-  foreach (QObject* obj, lstUIControls) {
+  foreach (QObject *obj, lstUIControls) {
     if (obj->metaObject()->className() == QStringLiteral("QTreeWidget")) {
       lst.append(obj);
     }
@@ -1009,7 +1009,7 @@ QObjectList MainWindow::getAllTreeWidget(QObjectList lstUIControls) {
 
 QObjectList MainWindow::getAllToolButton(QObjectList lstUIControls) {
   QObjectList lst;
-  foreach (QObject* obj, lstUIControls) {
+  foreach (QObject *obj, lstUIControls) {
     if (obj->metaObject()->className() == QStringLiteral("QToolButton")) {
       lst.append(obj);
     }
@@ -1017,7 +1017,7 @@ QObjectList MainWindow::getAllToolButton(QObjectList lstUIControls) {
   return lst;
 }
 
-QObjectList MainWindow::getAllUIControls(QObject* parent) {
+QObjectList MainWindow::getAllUIControls(QObject *parent) {
   QObjectList lstOfChildren, lstTemp;
   if (parent) {
     lstOfChildren = parent->children();
@@ -1028,7 +1028,7 @@ QObjectList MainWindow::getAllUIControls(QObject* parent) {
 
   lstTemp = lstOfChildren;
 
-  foreach (QObject* obj, lstTemp) {
+  foreach (QObject *obj, lstTemp) {
     QObjectList lst = getAllUIControls(obj);
     if (!lst.isEmpty()) {
       lstOfChildren.append(lst);
@@ -1053,7 +1053,7 @@ void MainWindow::saveTab() {
   }
 }
 
-QString MainWindow::getFileSize(const qint64& size, int precision) {
+QString MainWindow::getFileSize(const qint64 &size, int precision) {
   double sizeAsDouble = size;
   static QStringList measures;
   if (measures.isEmpty())
@@ -1077,7 +1077,7 @@ QString MainWindow::getFileSize(const qint64& size, int precision) {
       .arg(measure);
 }
 
-void MainWindow::saveData(QTreeWidget* tw, int tabIndex) {
+void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
   QString name = "tab" + QString::number(tabIndex + 1);
   QString ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
@@ -1129,7 +1129,7 @@ void MainWindow::drawMonthChart() {
 }
 
 void MainWindow::drawDayChart() {
-  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   if (loading) return;
   PointList.clear();
 
@@ -1140,12 +1140,12 @@ void MainWindow::drawDayChart() {
 
   if (topCount > 0) {
     if (!tw->currentIndex().isValid()) {
-      QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
+      QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
       tw->setCurrentItem(topItem);
     }
   }
 
-  QTreeWidgetItem* item = tw->currentItem();
+  QTreeWidgetItem *item = tw->currentItem();
   bool child;
   int childCount;
   if (item->parent() == NULL)
@@ -1222,7 +1222,7 @@ void MainWindow::drawDayChart() {
   }
 }
 
-void MainWindow::readData(QTreeWidget* tw) {
+void MainWindow::readData(QTreeWidget *tw) {
   tw->clear();
   QString name = tw->objectName();
   QString ini_file;
@@ -1241,7 +1241,7 @@ void MainWindow::readData(QTreeWidget* tw) {
             .toInt();
     // 不显示子项为0的数据
     if (childCount > 0) {
-      QTreeWidgetItem* topItem = new QTreeWidgetItem;
+      QTreeWidgetItem *topItem = new QTreeWidgetItem;
       QString strD0 =
           Reg.value("/" + name + "/" + QString::number(i + 1) + "-topDate")
               .toString();
@@ -1265,7 +1265,7 @@ void MainWindow::readData(QTreeWidget* tw) {
                  .toString());
 
       for (int j = 0; j < childCount; j++) {
-        QTreeWidgetItem* item11 = new QTreeWidgetItem(topItem);
+        QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
         item11->setText(0, Reg.value("/" + name + "/" + QString::number(i + 1) +
                                      "-childTime" + QString::number(j))
                                .toString());
@@ -1282,7 +1282,7 @@ void MainWindow::readData(QTreeWidget* tw) {
   }
 }
 
-void MainWindow::get_Today(QTreeWidget* tw) {
+void MainWindow::get_Today(QTreeWidget *tw) {
   int count = tw->topLevelItemCount();
   if (count <= 0) {
     today = 0;
@@ -1321,8 +1321,8 @@ QString MainWindow::loadText(QString textFile) {
   return "";
 }
 
-void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
-  QFile* file;
+void MainWindow::TextEditToFile(QTextEdit *txtEdit, QString fileName) {
+  QFile *file;
   QString txtFile;
   file = new QFile;
   file->setFileName(fileName);
@@ -1337,9 +1337,20 @@ void MainWindow::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
     qDebug() << "Write failure!" << fileName;
 }
 
-void MainWindow::closeEvent(QCloseEvent* event) {
+void MainWindow::closeEvent(QCloseEvent *event) {
   mydlgSteps->saveSteps();
-  if (mydlgPre->ui->chkClose->isChecked()) {
+
+  bool isClose = false;
+
+#ifdef Q_OS_WIN
+  isClose = true;
+#endif
+
+#ifdef Q_OS_MAC
+  isClose = true;
+#endif
+
+  if (isClose) {
     mydlgFloatFun->close();
 
     stopJavaTimer();
@@ -1370,7 +1381,7 @@ void MainWindow::closeEvent(QCloseEvent* event) {
   }
 }
 
-void MainWindow::init_Stats(QTreeWidget* tw) {
+void MainWindow::init_Stats(QTreeWidget *tw) {
   int count = tw->topLevelItemCount();
   int tatol = 0;
   double amount = 0;
@@ -1401,7 +1412,7 @@ void MainWindow::initChartMonth(QString strY, QString strM) {
   m_scatterSeries->clear();
   bool isOne = true;
 
-  QBarSet* setY = new QBarSet("Y");
+  QBarSet *setY = new QBarSet("Y");
   QStringList categories;
 
   for (int i = 0; i < count; i++) {
@@ -1550,7 +1561,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
   int TabCount = ui->tabWidget->tabBar()->count();
   if (TabCount > 1) ui->tabWidget->removeTab(index);
   if (TabCount == 1) {
-    QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+    QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
     tw->clear();
 
     ui->tabWidget->setTabToolTip(0, "");
@@ -1560,8 +1571,8 @@ void MainWindow::on_actionDel_Tab_triggered() {
   startSave("alltab");
 }
 
-QTreeWidget* MainWindow::init_TreeWidget(QString name) {
-  QTreeWidget* tw = new QTreeWidget(this);
+QTreeWidget *MainWindow::init_TreeWidget(QString name) {
+  QTreeWidget *tw = new QTreeWidget(this);
   tw->setObjectName(name);
 
   QFont font;
@@ -1593,7 +1604,7 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
   connect(tw->verticalScrollBar(), &QScrollBar::valueChanged, [=]() {});
 
   // tw->setUniformRowHeights(false); //对速度可能有影响，数据量大时
-  QScrollBar* SB = tw->verticalScrollBar();
+  QScrollBar *SB = tw->verticalScrollBar();
   SB->setStyleSheet(vsbarStyleSmall);
   tw->setStyleSheet(treeStyle);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
@@ -1603,10 +1614,10 @@ QTreeWidget* MainWindow::init_TreeWidget(QString name) {
 }
 
 void MainWindow::on_twItemClicked() {
-  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
-  QTreeWidgetItem* item = tw->currentItem();
+  QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
+  QTreeWidgetItem *item = tw->currentItem();
   if (item->parent() == NULL && item->childCount() == 0) return;
-  QTreeWidgetItem* pItem;
+  QTreeWidgetItem *pItem;
 
   if (item->childCount() > 0) {
     pItem = item;
@@ -1644,8 +1655,8 @@ void MainWindow::on_twItemClicked() {
 }
 
 void MainWindow::set_Time() {
-  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
-  QTreeWidgetItem* item = tw->currentItem();
+  QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
+  QTreeWidgetItem *item = tw->currentItem();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     item->setText(0, mydlgSetTime->ui->lblTime->text().trimmed());
     QString sa = mydlgSetTime->ui->editAmount->text().trimmed();
@@ -1675,7 +1686,7 @@ void MainWindow::set_Time() {
   }
 }
 
-void MainWindow::sort_childItem(QTreeWidgetItem* item) {
+void MainWindow::sort_childItem(QTreeWidgetItem *item) {
   QStringList keys, list, keyTime, keysNew;
   int childCount = item->parent()->childCount();
 
@@ -1693,7 +1704,7 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
   }
 
   std::sort(keyTime.begin(), keyTime.end(),
-            [](const QString& s1, const QString& s2) { return s1 < s2; });
+            [](const QString &s1, const QString &s2) { return s1 < s2; });
 
   for (int i = 0; i < keyTime.count(); i++) {
     QString time = keyTime.at(i);
@@ -1708,7 +1719,7 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
   }
 
   for (int i = 0; i < childCount; i++) {
-    QTreeWidgetItem* childItem = item->parent()->child(i);
+    QTreeWidgetItem *childItem = item->parent()->child(i);
     QString str = keysNew.at(i);
     list.clear();
     list = str.split("|");
@@ -1726,8 +1737,8 @@ void MainWindow::sort_childItem(QTreeWidgetItem* item) {
 }
 
 void MainWindow::on_twItemDoubleClicked() {
-  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
-  QTreeWidgetItem* item = tw->currentItem();
+  QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
+  QTreeWidgetItem *item = tw->currentItem();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     QString t = item->text(0);
     QStringList l0 = t.split(".");
@@ -1779,7 +1790,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
     return;
   }
 
-  QTreeWidget* tw = (QTreeWidget*)tabData->widget(index);
+  QTreeWidget *tw = (QTreeWidget *)tabData->widget(index);
   tw->setFocus();
   if (!loading) {
     QSettings Reg(iniDir + "tab.ini", QSettings::IniFormat);
@@ -1801,7 +1812,7 @@ void MainWindow::saveNotes(int tabIndex) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  QTreeWidget* tw = (QTreeWidget*)tabData->widget(tabIndex);
+  QTreeWidget *tw = (QTreeWidget *)tabData->widget(tabIndex);
   QString name = tw->objectName();
   Reg.setValue("/" + name + "/Note", tabData->tabToolTip(tabIndex));
 }
@@ -1831,11 +1842,11 @@ void MainWindow::on_actionNotes_triggered() {
 
 void MainWindow::on_btnNotes_clicked() { on_actionNotes_triggered(); }
 
-bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
+bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
 
-  QMouseEvent* event = static_cast<QMouseEvent*>(evn);  //将之转换为鼠标事件
-  QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->currentWidget();
+  QMouseEvent *event = static_cast<QMouseEvent *>(evn);  //将之转换为鼠标事件
+  QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
 
   if (evn->type() == QEvent::ToolTip) {
     QToolTip::hideText();
@@ -1935,7 +1946,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
     if (event->type() == QEvent::MouseButtonRelease) {
       bool move = false;
       for (int i = 0; i < ui->tabWidget->tabBar()->count(); i++) {
-        QTreeWidget* tw = (QTreeWidget*)ui->tabWidget->widget(i);
+        QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->widget(i);
         QString name = tw->objectName();
         if (name != "tab" + QString::number(i + 1)) {
           move = true;
@@ -1981,7 +1992,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         // ui->lblStats->setPixmap(ui->tabWidget->currentWidget()
         //                             ->grab());
         //                             //捕获当前界面并绘制到label上
-        QPropertyAnimation* animation1 =
+        QPropertyAnimation *animation1 =
             // new QPropertyAnimation(ui->lblStats, "geometry");
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
         animation1->setDuration(350);  //设置动画时间为0.5秒
@@ -1990,13 +2001,13 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
         ui->tabWidget->setCurrentIndex(current_page + 1);  //切换界面
 
-        QPropertyAnimation* animation2 =
+        QPropertyAnimation *animation2 =
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
         animation2->setDuration(350);
         animation2->setStartValue(QRect(-w * 2, y, w, h));
         animation2->setEndValue(QRect(x, y, w, h));
 
-        QParallelAnimationGroup* group = new QParallelAnimationGroup;
+        QParallelAnimationGroup *group = new QParallelAnimationGroup;
         group->addAnimation(animation1);
         group->addAnimation(animation2);
         group->start();
@@ -2022,7 +2033,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         isSlide = true;
         // ui->lblStats->setPixmap(ui->tabWidget->currentWidget()->grab());
 
-        QPropertyAnimation* animation1 =
+        QPropertyAnimation *animation1 =
             // new QPropertyAnimation(ui->lblStats, "geometry");
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
         animation1->setDuration(350);
@@ -2031,13 +2042,13 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
 
         ui->tabWidget->setCurrentIndex(current_page - 1);
 
-        QPropertyAnimation* animation2 =
+        QPropertyAnimation *animation2 =
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
         animation2->setDuration(350);
         animation2->setStartValue(QRect(w * 2, y, w, h));
         animation2->setEndValue(QRect(x, y, w, h));
 
-        QParallelAnimationGroup* group = new QParallelAnimationGroup;
+        QParallelAnimationGroup *group = new QParallelAnimationGroup;
         group->addAnimation(animation1);
         group->addAnimation(animation2);
         group->start();
@@ -2056,7 +2067,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (evn->type() == QEvent::KeyPress) {
-    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
         if (!listSelFont->isHidden()) {
@@ -2173,7 +2184,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       relea_x = event->globalX();
       relea_y = event->globalY();
       ui->lblTitle->hide();
-      QQuickItem* root = ui->quickWidget->rootObject();
+      QQuickItem *root = ui->quickWidget->rootObject();
 
       isTurnThePage = false;
       isMousePress = false;
@@ -2184,13 +2195,13 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
         if (!isEpub) {
           if (iPage - baseLines <= 0) {
-            QMetaObject::invokeMethod((QObject*)root, "setX",
+            QMetaObject::invokeMethod((QObject *)root, "setX",
                                       Q_ARG(QVariant, 0));
             return QWidget::eventFilter(watch, evn);
           }
         } else {
           if (htmlIndex <= 0) {
-            QMetaObject::invokeMethod((QObject*)root, "setX",
+            QMetaObject::invokeMethod((QObject *)root, "setX",
                                       Q_ARG(QVariant, 0));
             return QWidget::eventFilter(watch, evn);
           }
@@ -2224,13 +2235,13 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
       if ((press_x - relea_x) > length && qAbs(relea_y - press_y) < 35) {
         if (!isEpub) {
           if (iPage + baseLines > totallines) {
-            QMetaObject::invokeMethod((QObject*)root, "setX",
+            QMetaObject::invokeMethod((QObject *)root, "setX",
                                       Q_ARG(QVariant, 0));
             return QWidget::eventFilter(watch, evn);
           }
         } else {
           if (htmlIndex + 1 >= htmlFiles.count()) {
-            QMetaObject::invokeMethod((QObject*)root, "setX",
+            QMetaObject::invokeMethod((QObject *)root, "setX",
                                       Q_ARG(QVariant, 0));
             return QWidget::eventFilter(watch, evn);
           }
@@ -2260,7 +2271,7 @@ bool MainWindow::eventFilter(QObject* watch, QEvent* evn) {
         ui->lblTitle->show();*/
       }
 
-      QMetaObject::invokeMethod((QObject*)root, "setX", Q_ARG(QVariant, 0));
+      QMetaObject::invokeMethod((QObject *)root, "setX", Q_ARG(QVariant, 0));
 
       // qDebug() << "Release:" << relea_x << relea_y;
       curx = 0;
@@ -2310,7 +2321,7 @@ QString MainWindow::on_actionOneClickBakData(bool msg) {
     msgBox.setInformativeText(
         tr("The previous file does not exist, please export the data first to "
            "generate a default file name."));
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
     btnOk->setFocus();
     msgBox.exec();
   }
@@ -2319,7 +2330,7 @@ QString MainWindow::on_actionOneClickBakData(bool msg) {
 }
 
 void MainWindow::bakIniData(QString unredoFile, bool unre) {
-  QTextEdit* edit = new QTextEdit;
+  QTextEdit *edit = new QTextEdit;
   edit->append("[" + appName + "]");
   edit->append("Ver: " + ver);
   edit->append(loadText(iniDir + "tab.ini"));
@@ -2360,7 +2371,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       QFile::remove(fileName);
 
 #ifdef Q_OS_ANDROID
-      QDir* folder = new QDir;
+      QDir *folder = new QDir;
       QString path = "/storage/emulated/0/KnotBak/";
       folder->mkdir(path);
       QString str = mydlgMainNotes->getDateTimeStr();
@@ -2385,7 +2396,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("The data was exported successfully.") +
                                 +"\n\n" + infoStr);
-      QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+      QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
       btnOk->setFocus();
       msgBox.exec();
     }
@@ -2440,14 +2451,14 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("Invalid data file."));
 
-      QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+      QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
       btnOk->setFocus();
       msgBox.exec();
       return false;
     }
 
     if (QFile(iniFile).exists()) QFile(iniFile).remove();
-    QTextEdit* txtEdit = new QTextEdit;
+    QTextEdit *txtEdit = new QTextEdit;
     txtEdit->setPlainText(txt);
     TextEditToFile(txtEdit, iniFile);
     isImport = true;
@@ -2522,8 +2533,8 @@ QString MainWindow::get_Year(QString date) {
   return "";
 }
 
-QTreeWidget* MainWindow::get_tw(int tabIndex) {
-  QTreeWidget* tw = (QTreeWidget*)tabData->widget(tabIndex);
+QTreeWidget *MainWindow::get_tw(int tabIndex) {
+  QTreeWidget *tw = (QTreeWidget *)tabData->widget(tabIndex);
   return tw;
 }
 
@@ -2539,7 +2550,7 @@ void MainWindow::on_about() {
 #endif
   int keys = Reg.allKeys().count();
 
-  QTextBrowser* textBrowser = new QTextBrowser;
+  QTextBrowser *textBrowser = new QTextBrowser;
   textBrowser->append("");
   textBrowser->append(appName + "  Ver: " + ver);
   textBrowser->append("All Keys: " + QString::number(keys));
@@ -2585,10 +2596,10 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   PointList.clear();
   doubleList.clear();
 
-  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     if (isBreak) break;
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
     QString str0 = topItem->text(0);
     QString y, m, d;
     y = get_Year(str0);
@@ -2619,7 +2630,7 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   return listMonth;
 }
 
-void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
+void MainWindow::on_cboxYear_currentTextChanged(const QString &arg1) {
   Q_UNUSED(arg1);
 
   series->clear();
@@ -2627,7 +2638,7 @@ void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
   barSeries->clear();
   series2->clear();
   m_scatterSeries2->clear();
-  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
     QString str = tw->topLevelItem(i)->text(0);
@@ -2656,12 +2667,12 @@ void MainWindow::on_cboxYear_currentTextChanged(const QString& arg1) {
 
 void MainWindow::on_btnGo_clicked() {
   ui->lblStats->setText("");
-  QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
+  QTreeWidget *tw = get_tw(ui->tabWidget->currentIndex());
   if (isFindTextChange) findItemList = findDisc();
   int total = findItemList.count();
   if (total > 0) {
     tw->setFocus();
-    QTreeWidgetItem* item = findItemList.at(findPos);
+    QTreeWidgetItem *item = findItemList.at(findPos);
     tw->setCurrentItem(item);
     ui->lblStats->setText(tr("Search Results : ") + item->parent()->text(0) +
                           "  ( " + QString::number(findPos + 1) + " -> " +
@@ -2671,11 +2682,11 @@ void MainWindow::on_btnGo_clicked() {
   }
 }
 
-QList<QTreeWidgetItem*> MainWindow::findDisc() {
+QList<QTreeWidgetItem *> MainWindow::findDisc() {
   findItemList.clear();
-  QTreeWidget* tw = get_tw(ui->tabWidget->currentIndex());
+  QTreeWidget *tw = get_tw(ui->tabWidget->currentIndex());
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
     int count = topItem->childCount();
     for (int j = 0; j < count; j++) {
       QString str = topItem->child(j)->text(2).trimmed().toLower();
@@ -2694,15 +2705,15 @@ QList<QTreeWidgetItem*> MainWindow::findDisc() {
   return findItemList;
 }
 
-void MainWindow::on_editFind_textChanged(const QString& arg1) {
+void MainWindow::on_editFind_textChanged(const QString &arg1) {
   Q_UNUSED(arg1);
   setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
   isFindTextChange = true;
 }
 
-QString MainWindow::setLineEditQss(QLineEdit* txt, int radius, int borderWidth,
-                                   const QString& normalColor,
-                                   const QString& focusColor) {
+QString MainWindow::setLineEditQss(QLineEdit *txt, int radius, int borderWidth,
+                                   const QString &normalColor,
+                                   const QString &focusColor) {
   QStringList list;
   list.append(QString("QLineEdit{border-style:none;padding:3px;border-radius:%"
                       "1px;border:%2px solid %3;}")
@@ -2718,9 +2729,9 @@ QString MainWindow::setLineEditQss(QLineEdit* txt, int radius, int borderWidth,
   return qss;
 }
 
-QString MainWindow::setComboBoxQss(QComboBox* txt, int radius, int borderWidth,
-                                   const QString& normalColor,
-                                   const QString& focusColor) {
+QString MainWindow::setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
+                                   const QString &normalColor,
+                                   const QString &focusColor) {
   QStringList list;
   list.append(QString("QComboBox{border-style:none;padding:3px;border-radius:%"
                       "1px;border:%2px solid %3;}")
@@ -2779,7 +2790,7 @@ void MainWindow::on_rbAmount_clicked() {
   chartDay->setTitle(tr("Amount"));
 }
 
-void MainWindow::paintEvent(QPaintEvent* event) {
+void MainWindow::paintEvent(QPaintEvent *event) {
   Q_UNUSED(event);
   if (floatfun && !initMain) {
     floatfun = false;
@@ -2829,7 +2840,7 @@ void MainWindow::on_btnMax_clicked() {
 
 void MainWindow::on_btnYear_clicked() {
   int w = ui->btnYear->width();
-  QListWidget* list = new QListWidget(this);
+  QListWidget *list = new QListWidget(this);
   list->setStyleSheet(listStyle);
   QFont font;
   font.setPointSize(fontSize);
@@ -2841,7 +2852,7 @@ void MainWindow::on_btnYear_clicked() {
   }
 
   for (int i = 0; i < strList.count(); i++) {
-    QListWidgetItem* item = new QListWidgetItem;
+    QListWidgetItem *item = new QListWidgetItem;
     item->setSizeHint(QSize(w, 30));  // item->sizeHint().width()
     item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     item->setText(strList.at(i));
@@ -2873,7 +2884,7 @@ void MainWindow::on_btnYear_clicked() {
 
 void MainWindow::on_btnMonth_clicked() {
   int w = ui->btnYear->width();
-  QListWidget* list = new QListWidget(this);
+  QListWidget *list = new QListWidget(this);
   list->setStyleSheet(listStyle);
   QFont font;
   font.setPointSize(fontSize);
@@ -2882,7 +2893,7 @@ void MainWindow::on_btnMonth_clicked() {
   QStringList strList = listMonth;
 
   for (int i = 0; i < strList.count(); i++) {
-    QListWidgetItem* item = new QListWidgetItem;
+    QListWidgetItem *item = new QListWidgetItem;
     item->setSizeHint(QSize(w, 30));  // item->sizeHint().width()
     item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     item->setText(strList.at(i));
@@ -2913,7 +2924,7 @@ void MainWindow::on_btnMonth_clicked() {
 
 void MainWindow::on_btnDay_clicked() {
   int w = ui->btnDay->width();
-  QListWidget* list = new QListWidget(this);
+  QListWidget *list = new QListWidget(this);
   list->setStyleSheet(listStyle);
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
@@ -2930,7 +2941,7 @@ void MainWindow::on_btnDay_clicked() {
   }
 
   for (int i = 0; i < strList.count(); i++) {
-    QListWidgetItem* item = new QListWidgetItem;
+    QListWidgetItem *item = new QListWidgetItem;
     item->setSizeHint(QSize(w - 20, 30));  // item->sizeHint().width()
     item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     item->setText(strList.at(i));
@@ -3026,7 +3037,7 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
   }
 
   if (index == 1) {
-    QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+    QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
     int topCount = tw->topLevelItemCount();
     if (topCount == 0) {
       series2->clear();
@@ -3036,7 +3047,7 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
 
     if (topCount > 0) {
       if (!tw->currentIndex().isValid()) {
-        QTreeWidgetItem* topItem = tw->topLevelItem(topCount - 1);
+        QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
         tw->setCurrentItem(topItem);
       }
     }
@@ -3066,13 +3077,13 @@ void MainWindow::on_btnSteps_clicked() {
   }*/
 }
 
-void MainWindow::changeEvent(QEvent* event) {
+void MainWindow::changeEvent(QEvent *event) {
   if (event->type() == QEvent::WindowStateChange) {
   }
 }
 
 void MainWindow::on_rbSteps_clicked() {
-  QTableWidget* t = mydlgSteps->ui->tableWidget;
+  QTableWidget *t = mydlgSteps->ui->tableWidget;
   int count = t->rowCount();
   if (count <= 0) return;
 
@@ -3113,7 +3124,7 @@ void MainWindow::Sleep(int msec) {
  *  The  zero crossing is computed by finding points where the data changes
  * sign. Input: Pointer to the algo output data Output: None
  */
-static void step_algo_run(algo_out_t* step_algo_output) {
+static void step_algo_run(algo_out_t *step_algo_output) {
 #define VERY_HIGH_VAL (100000)
 #define NO_DETECT_DUR_SEC \
   (0.2f) /* Duration to avoid very close peaks not related to step */
@@ -3311,7 +3322,7 @@ static void step_algo_run(algo_out_t* step_algo_output) {
  *  Input: Pointer to filter state var, Input data to filter
  *  Output: Filtered data
  */
-static float apply_filter(filter_t* filt_data, float in_data) {
+static float apply_filter(filter_t *filt_data, float in_data) {
   float out_data;
 
   /* compute new output */
@@ -3370,7 +3381,7 @@ void MainWindow::getSteps2() {
   unsigned int skip_lines = 2;
   unsigned int run_step_algo = 0;
   unsigned int timeconst_samp = 0;
-  char* step_type;
+  char *step_type;
 
   /*if( argc != 3) {
     printf("Usage: %s inputfile outputfile\n", argv[0]);
@@ -3636,28 +3647,28 @@ void MainWindow::on_actionMemos_triggered() {
       return;
     }*/
 
-    QDialog* dlg = new QDialog(this);
+    QDialog *dlg = new QDialog(this);
     dlg->setModal(true);
     dlg->setStyleSheet(
         "QDialog{border-style:solid;border-width:0px;border-color:rgb(251, "
         "51, 51);}");
-    QVBoxLayout* vbox = new QVBoxLayout;
+    QVBoxLayout *vbox = new QVBoxLayout;
     int space = 8;
     vbox->setContentsMargins(space, space, space, space);
     vbox->setSpacing(space);
     dlg->setLayout(vbox);
-    QLabel* lblTitle = new QLabel(this);
+    QLabel *lblTitle = new QLabel(this);
     lblTitle->setText(tr("Please enter your password") + " : ");
-    QLineEdit* edit = new QLineEdit(this);
+    QLineEdit *edit = new QLineEdit(this);
     edit->setEchoMode(QLineEdit::Password);
-    QToolButton* btnCancel = new QToolButton(this);
+    QToolButton *btnCancel = new QToolButton(this);
     btnCancel->setText(tr("Cancel"));
     connect(btnCancel, &QToolButton::clicked, [=]() {
       dlg->close();
 
       return;
     });
-    QToolButton* btnOk = new QToolButton(this);
+    QToolButton *btnOk = new QToolButton(this);
     btnOk->setText(tr("Ok"));
     connect(btnOk, &QToolButton::clicked, [=]() {
       dlg->close();
@@ -3675,7 +3686,7 @@ void MainWindow::on_actionMemos_triggered() {
           QMessageBox msgBox;
           msgBox.setText("Knot");
           msgBox.setInformativeText(tr("The entered password does not match."));
-          QPushButton* btnOk =
+          QPushButton *btnOk =
               msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
           btnOk->setFocus();
           msgBox.exec();
@@ -3735,7 +3746,7 @@ void MainWindow::showMemos() {
 
 QString MainWindow::decMemos(QString strDec, QString file) {
   QString text;
-  QTextEdit* edit = new QTextEdit;
+  QTextEdit *edit = new QTextEdit;
   edit->setPlainText(strDec);
   TextEditToFile(edit, file);
   if (QFile(file).exists()) {
@@ -3961,7 +3972,7 @@ void MainWindow::init_UIWidget() {
 void MainWindow::on_btnSelTab_clicked() {
   mydlgFloatFun->close();
 
-  QFrame* frame = new QFrame(this);
+  QFrame *frame = new QFrame(this);
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, "
       "255);border-radius:10px;border:0px solid gray;}");
@@ -3974,10 +3985,10 @@ void MainWindow::on_btnSelTab_clicked() {
   shadow_effect->setBlurRadius(10);
   frame->setGraphicsEffect(shadow_effect);*/
 
-  QVBoxLayout* vbox = new QVBoxLayout;
+  QVBoxLayout *vbox = new QVBoxLayout;
   frame->setLayout(vbox);
 
-  QListWidget* list = new QListWidget(this);
+  QListWidget *list = new QListWidget(this);
   vbox->addWidget(list);
   listSelTab = frame;
   list->setSpacing(12);
@@ -3995,7 +4006,7 @@ void MainWindow::on_btnSelTab_clicked() {
 
   int count = tabData->tabBar()->count();
   for (int i = 0; i < count; i++) {
-    QListWidgetItem* item = new QListWidgetItem;
+    QListWidgetItem *item = new QListWidgetItem;
     // item->setSizeHint(QSize(width() * 2 / 3 - 68, 35));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     item->setText(QString::number(i + 1) + "." + tabData->tabText(i));
@@ -4023,34 +4034,34 @@ void MainWindow::on_btnSelTab_clicked() {
   list->setFocus();
 }
 
-void MainWindow::init_Menu(QMenu* mainMenu) {
-  QAction* actAddTab = new QAction(tr("Add Tab"));
-  QAction* actDelTab = new QAction(tr("Del Tab"));
-  QAction* actRenameTab = new QAction(tr("Rename Tab"));
+void MainWindow::init_Menu(QMenu *mainMenu) {
+  QAction *actAddTab = new QAction(tr("Add Tab"));
+  QAction *actDelTab = new QAction(tr("Del Tab"));
+  QAction *actRenameTab = new QAction(tr("Rename Tab"));
 
-  QAction* actOpenKnotBakDir = new QAction(tr("Open KnotBak Dir"));
+  QAction *actOpenKnotBakDir = new QAction(tr("Open KnotBak Dir"));
 
-  QAction* actReport = new QAction(tr("Report"));
+  QAction *actReport = new QAction(tr("Report"));
   actReport->setVisible(false);
-  QAction* actRemarks = new QAction(tr("Remarks"));
+  QAction *actRemarks = new QAction(tr("Remarks"));
   actRemarks->setVisible(false);
 
-  QAction* actExportData = new QAction(tr("Export Data"));
-  QAction* actImportData = new QAction(tr("Import Data"));
-  QAction* actOneClickBakData = new QAction(tr("One Click Data Backup"));
+  QAction *actExportData = new QAction(tr("Export Data"));
+  QAction *actImportData = new QAction(tr("Import Data"));
+  QAction *actOneClickBakData = new QAction(tr("One Click Data Backup"));
   actOneClickBakData->setVisible(false);
-  QAction* actPreferences = new QAction(tr("Preferences"));
-  QAction* actMemos = new QAction(tr("Memos"));
+  QAction *actPreferences = new QAction(tr("Preferences"));
+  QAction *actMemos = new QAction(tr("Memos"));
   actMemos->setVisible(false);
-  QAction* actAbout = new QAction(tr("About") + " (" + ver + ")");
-  QAction* actOneDrive = new QAction(tr("OneDrive Backup Data"));
+  QAction *actAbout = new QAction(tr("About") + " (" + ver + ")");
+  QAction *actOneDrive = new QAction(tr("OneDrive Backup Data"));
 
-  QAction* actUndo = new QAction(tr("Undo"));
-  QAction* actRedo = new QAction(tr("Redo"));
+  QAction *actUndo = new QAction(tr("Undo"));
+  QAction *actRedo = new QAction(tr("Redo"));
   actUndo->setVisible(false);
   actRedo->setVisible(false);
 
-  QAction* actTimeMachine = new QAction(tr("Time Machine"));
+  QAction *actTimeMachine = new QAction(tr("Time Machine"));
 
   connect(actAddTab, &QAction::triggered, this,
           &MainWindow::on_actionAdd_Tab_triggered);
@@ -4202,17 +4213,17 @@ void MainWindow::addRedo() {
 }
 
 void MainWindow::on_actionTimeMachine() {
-  QDialog* dlg = new QDialog(this);
-  QVBoxLayout* vbox = new QVBoxLayout;
+  QDialog *dlg = new QDialog(this);
+  QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setContentsMargins(3, 3, 3, 3);
   dlg->setLayout(vbox);
-  QToolButton* btnBack = new QToolButton(this);
+  QToolButton *btnBack = new QToolButton(this);
   btnBack->setFixedHeight(40);
   btnBack->setText(tr("Back"));
   btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   connect(btnBack, &QToolButton::clicked, [=]() { dlg->close(); });
 
-  QListWidget* list = new QListWidget(this);
+  QListWidget *list = new QListWidget(this);
   mw_one->listTimeMachine = list;
   list->setStyleSheet(mw_one->listWidgetStyle);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
@@ -4227,7 +4238,7 @@ void MainWindow::on_actionTimeMachine() {
 
   for (int i = 0; i < timeLines.count(); i++) {
     QString str = timeLines.at(i);
-    QListWidgetItem* item;
+    QListWidgetItem *item;
     item = new QListWidgetItem(QIcon(":/res/timemachine.png"),
                                QFileInfo(str).baseName());
     item->setSizeHint(QSize(130, fm.height() * 3));
@@ -4256,7 +4267,7 @@ void MainWindow::on_actionTimeMachine() {
 }
 
 void MainWindow::on_btnMenu_clicked() {
-  QMenu* mainMenu = new QMenu(this);
+  QMenu *mainMenu = new QMenu(this);
   init_Menu(mainMenu);
   int x = mw_one->geometry().x() +
           (mw_one->geometry().width() - mainMenu->width()) - 10;
@@ -4335,16 +4346,16 @@ static void JavaNotify_4() {
 }
 
 static const JNINativeMethod gMethods[] = {
-    {"CallJavaNotify_1", "()V", (void*)JavaNotify_1},
-    {"CallJavaNotify_2", "()V", (void*)JavaNotify_2},
-    {"CallJavaNotify_3", "()V", (void*)JavaNotify_3},
-    {"CallJavaNotify_4", "()V", (void*)JavaNotify_4}};
+    {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
+    {"CallJavaNotify_2", "()V", (void *)JavaNotify_2},
+    {"CallJavaNotify_3", "()V", (void *)JavaNotify_3},
+    {"CallJavaNotify_4", "()V", (void *)JavaNotify_4}};
 
-void RegJni(const char* myClassName) {
+void RegJni(const char *myClassName) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QtAndroid::runOnAndroidThreadSync([=]() {
     QAndroidJniEnvironment Environment;
-    const char* mClassName = myClassName;  //"com/x/MyService";
+    const char *mClassName = myClassName;  //"com/x/MyService";
     jclass j_class;
     j_class = Environment->FindClass(mClassName);
     if (j_class == nullptr) {
@@ -4364,7 +4375,7 @@ void RegJni(const char* myClassName) {
 #else
   QNativeInterface::QAndroidApplication::runOnAndroidMainThread([=]() {
     QJniEnvironment Environment;
-    const char* mClassName = myClassName;  //"com/x/MyService";
+    const char *mClassName = myClassName;  //"com/x/MyService";
     jclass j_class;
     j_class = Environment->FindClass(mClassName);
     if (j_class == nullptr) {
@@ -4419,11 +4430,11 @@ void MainWindow::on_btnReader_clicked() {
   }
 }
 
-void MainWindow::setSCrollPro(QObject* obj) {
+void MainWindow::setSCrollPro(QObject *obj) {
   QScrollerProperties sp;
   sp.setScrollMetric(QScrollerProperties::DragStartDistance, 0.001);
   sp.setScrollMetric(QScrollerProperties::ScrollingCurve, QEasingCurve::Linear);
-  QScroller* qs = QScroller::scroller(obj);
+  QScroller *qs = QScroller::scroller(obj);
   qs->setScrollerProperties(sp);
 }
 
@@ -4577,7 +4588,7 @@ void MainWindow::refreshMainUI() {
 bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
                             int buttonCount) {
   QMessageBox msgBox;
-  QPushButton* btnCopy;
+  QPushButton *btnCopy;
   msgBox.setText(title);
   msgBox.setInformativeText(info);
 
@@ -4585,9 +4596,9 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
   pix.setDevicePixelRatio(8);
   msgBox.setIconPixmap(pix);
 
-  QPushButton* btnCancel =
+  QPushButton *btnCancel =
       msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-  QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+  QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
   if (buttonCount == 3)
     btnCopy = msgBox.addButton(tr("Copy"), QMessageBox::AcceptRole);
   btnOk->setFocus();
@@ -4597,7 +4608,7 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
   }
   if (buttonCount == 3) {
     if (msgBox.clickedButton() == btnCopy) {
-      QClipboard* clipboard = QApplication::clipboard();
+      QClipboard *clipboard = QApplication::clipboard();
       clipboard->setText(copyText);
       return false;
     }
@@ -4711,7 +4722,7 @@ void MainWindow::on_btnRefreshWeb_clicked() {
 void MainWindow::on_btnUserInfo_clicked() {
   // 获取openssl相关信息并自行编译安装 Qt6.4(1.1.1.m版本的openssl）
   // openssl下载网址：https://www.openssl.org/source/old/
-  QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+  QNetworkAccessManager *manager = new QNetworkAccessManager(this);
   qDebug() << manager->supportedSchemes();
   qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
@@ -4744,7 +4755,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     QMessageBox msgBox;
     msgBox.setText("Knot");
     msgBox.setInformativeText(tr("The password is removed."));
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
     btnOk->setFocus();
     msgBox.exec();
 
@@ -4763,7 +4774,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     QMessageBox msgBox;
     msgBox.setText("Knot");
     msgBox.setInformativeText(tr("The password is set successfully."));
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
     btnOk->setFocus();
     msgBox.exec();
     ui->frameSetKey->hide();
@@ -4774,7 +4785,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     QMessageBox msgBox;
     msgBox.setText("Knot");
     msgBox.setInformativeText(tr("The entered password does not match."));
-    QPushButton* btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
     btnOk->setFocus();
     msgBox.exec();
   }
@@ -4825,13 +4836,13 @@ void MainWindow::clearSelectBox() {
   if (!mw_one->ui->frameReader->isHidden()) {
     mw_one->mydlgReader->savePageVPos();
     mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
-    QQuickItem* root = mw_one->ui->quickWidget->rootObject();
-    QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+    QQuickItem *root = mw_one->ui->quickWidget->rootObject();
+    QMetaObject::invokeMethod((QObject *)root, "loadHtml",
                               Q_ARG(QVariant, tempFile));
     Sleep(50);
     if (isEpub) {
       QMetaObject::invokeMethod(
-          (QObject*)root, "loadHtml",
+          (QObject *)root, "loadHtml",
           Q_ARG(QVariant, mw_one->mydlgReader->currentHtmlFile));
     } else {
       ui->quickWidget->rootContext()->setContextProperty(
@@ -4843,20 +4854,20 @@ void MainWindow::clearSelectBox() {
   if (!mw_one->ui->frameMemo->isHidden()) {
     QString file = iniDir + "memo/memo.html";
     int pos = mydlgMainNotes->sliderPos;
-    QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
-    QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+    QQuickItem *root = mw_one->ui->quickWidgetMemo->rootObject();
+    QMetaObject::invokeMethod((QObject *)root, "loadHtml",
                               Q_ARG(QVariant, tempFile));
 
     // QMetaObject::invokeMethod((QObject*)root, "loadHtml",
     //                           Q_ARG(QVariant, file));
-    QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
+    QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
                               Q_ARG(QVariant, mydlgMainNotes->htmlBuffer));
-    QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
+    QMetaObject::invokeMethod((QObject *)root, "setVPos", Q_ARG(QVariant, pos));
   }
 }
 
 void MainWindow::on_btnCopy_clicked() {
-  QClipboard* clipboard = QApplication::clipboard();
+  QClipboard *clipboard = QApplication::clipboard();
   clipboard->setText(mydlgSetText->ui->lineEdit->text().trimmed());
   on_btnCancelSel_clicked();
 }
@@ -4864,8 +4875,8 @@ void MainWindow::on_btnCopy_clicked() {
 QString MainWindow::getSelectedText() {
   QString str;
   QVariant returnedValue;
-  QQuickItem* root = ui->quickWidget->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "getSelectedText",
+  QQuickItem *root = ui->quickWidget->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "getSelectedText",
                             Q_RETURN_ARG(QVariant, returnedValue));
   str = returnedValue.toString();
   return str.trimmed();
@@ -4919,10 +4930,10 @@ void MainWindow::showGrayWindows() {
   m_widget->move(0, 0);
   m_widget->setStyleSheet("background-color:rgba(0, 0, 0,15%);");
 
-  QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
+  QPropertyAnimation *m_pAnimation = new QPropertyAnimation();
   m_pAnimation->setTargetObject(m_widget);
   m_pAnimation->setDuration(500);
-  QGraphicsOpacityEffect* m_pOpacity = new QGraphicsOpacityEffect();
+  QGraphicsOpacityEffect *m_pOpacity = new QGraphicsOpacityEffect();
   m_widget->setGraphicsEffect(m_pOpacity);
   m_pOpacity->setOpacity(1);
   m_pAnimation->setTargetObject(m_pOpacity);
@@ -4961,19 +4972,19 @@ void MainWindow::on_btnZoomIn_clicked() {
   mw_one->ui->qw_Img->rootContext()->setContextProperty("imgW", imgSize);
   mw_one->ui->qw_Img->rootContext()->setContextProperty("imgH", imgSize);
 
-  QQuickItem* root = ui->qw_Img->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "zoomin");
+  QQuickItem *root = ui->qw_Img->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "zoomin");
 }
 
 void MainWindow::on_btnZoomOut_clicked() {
-  QQuickItem* root = ui->qw_Img->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "zoomout");
+  QQuickItem *root = ui->qw_Img->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "zoomout");
 }
 
 void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
 
 void MainWindow::on_btnPasteCode_clicked() {
-  QClipboard* clipboard = QApplication::clipboard();
+  QClipboard *clipboard = QApplication::clipboard();
   QString originalText = clipboard->text();
   ui->editCode->setPlainText(originalText);
 }

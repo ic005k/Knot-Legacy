@@ -15,6 +15,8 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->setupUi(this);
   this->installEventFilter(this);
 
+  ui->chkClose->hide();
+
   ui->sliderFontSize->setValue(fontSize);
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
