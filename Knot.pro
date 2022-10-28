@@ -166,5 +166,4 @@ DISTFILES += \
     src/steps.qml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-android: include(/Users/hz/Library/Android/sdk/android_openssl/openssl.pri)
 android: include(C:/Users/Administrator/AppData/Local/Android/Sdk/android_openssl/openssl.pri)
