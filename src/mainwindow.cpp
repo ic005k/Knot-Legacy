@@ -229,7 +229,7 @@ MainWindow::MainWindow(QWidget *parent)
 #endif
 
 #ifdef Q_OS_WIN
-    this->setGeometry(0, 25, this->width(), screenHeight - 75);
+    this->setGeometry(730, 25, this->width(), screenHeight - 75);
 #endif
   }
 #else
