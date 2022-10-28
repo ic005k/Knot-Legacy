@@ -21,6 +21,13 @@ int main(int argc, char* argv[]) {
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
+
+#ifdef Q_OS_WIN
+    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
+        Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
   }
 #endif
   QtWebView::initialize();
