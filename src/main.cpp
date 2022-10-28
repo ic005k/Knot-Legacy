@@ -15,15 +15,16 @@ bool isAndroid, isIOS;
 int main(int argc, char* argv[]) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
+#ifdef Q_OS_ANDROID
     qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
   }
 #endif
-
-  QApplication a(argc, argv);
   QtWebView::initialize();
+  QApplication a(argc, argv);
 
   QDir dir;
   QString path;
