@@ -294,8 +294,9 @@ class MainWindow : public QMainWindow {
   //"1px;border-radius:6;"
   //"color:black}"
   QString listStyleMain =
+      "QListWidget{outline:0px;}"
       "QListWidget::item:selected{background:rgb(219,244,255); border:0px "
-      "blue;margin:1px,1px,1px,1px;border-radius:6;"
+      "blue;margin:0px,0px,0px,0px;border-radius:5;"
       "color:blue}";
 
   void sort_childItem(QTreeWidgetItem *);
