@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.37";
+QString ver = "1.0.38";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -1836,7 +1836,8 @@ void MainWindow::saveNotes(int tabIndex) {
   Reg.setValue("/" + name + "/Note", tabData->tabToolTip(tabIndex));
 }
 
-void MainWindow::on_actionNotes_triggered() {
+void MainWindow::on_btnRemarks_clicked() {
+  m_widget = new QWidget(this);
   showGrayWindows();
 
   mydlgMainNotes->m_SetEditText->close();
@@ -1858,8 +1859,6 @@ void MainWindow::on_actionNotes_triggered() {
 
   m_Remarks->show();
 }
-
-void MainWindow::on_btnNotes_clicked() { on_actionNotes_triggered(); }
 
 bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
@@ -3892,7 +3891,7 @@ void MainWindow::init_UIWidget() {
   ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
-  ui->btnNotes->setStyleSheet("border:none");
+  ui->btnRemarks->setStyleSheet("border:none");
   ui->btnPause->setStyleSheet("border:none");
   ui->btnSelTab->setStyleSheet("border:none");
   ui->btnTodo->setStyleSheet("border:none");
@@ -3941,6 +3940,7 @@ void MainWindow::init_UIWidget() {
 
 void MainWindow::on_btnSelTab_clicked() {
   mydlgFloatFun->close();
+  m_widget = new QWidget(this);
 
   QFrame *frame = new QFrame(this);
   frame->setStyleSheet(
@@ -4013,8 +4013,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   QAction *actReport = new QAction(tr("Report"));
   actReport->setVisible(false);
-  QAction *actRemarks = new QAction(tr("Remarks"));
-  actRemarks->setVisible(false);
 
   QAction *actExportData = new QAction(tr("Export Data"));
   QAction *actImportData = new QAction(tr("Import Data"));
@@ -4050,8 +4048,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
           &MainWindow::on_openKnotBakDir);
   connect(actReport, &QAction::triggered, this,
           &MainWindow::on_actionReport_triggered);
-  connect(actRemarks, &QAction::triggered, this,
-          &MainWindow::on_actionNotes_triggered);
+
   connect(actExportData, &QAction::triggered, this,
           &MainWindow::on_actionExport_Data_triggered);
   connect(actOneClickBakData, &QAction::triggered, this,
@@ -4083,7 +4080,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   mainMenu->addAction(actRenameTab);
 
   mainMenu->addAction(actReport);
-  mainMenu->addAction(actRemarks);
 
   mainMenu->addAction(actUndo);
   mainMenu->addAction(actRedo);

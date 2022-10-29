@@ -723,7 +723,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="btnNotes">
+           <widget class="QToolButton" name="btnRemarks">
             <property name="minimumSize">
              <size>
               <width>40</width>
