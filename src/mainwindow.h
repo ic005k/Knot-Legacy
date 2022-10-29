@@ -98,7 +98,6 @@
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
 #include "ui_dlgreader.h"
-#include "ui_dlgrename.h"
 #include "ui_dlgsettime.h"
 #include "ui_dlgsteps.h"
 #include "ui_dlgtodo.h"
