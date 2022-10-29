@@ -3750,6 +3750,7 @@ void MainWindow::init_Sensors() {
 void MainWindow::init_UIWidget() {
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
+  ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
 
   mw_one = this;
   listSelFont = new QListWidget();

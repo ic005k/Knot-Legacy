@@ -295,9 +295,9 @@ class MainWindow : public QMainWindow {
   //"color:black}"
   QString listStyleMain =
       "QListWidget{outline:0px;}"
-      "QListWidget::item:selected{background:rgb(219,244,255); border:0px "
+      "QListWidget::item:selected{background:rgb(255,0,0); border:0px "
       "blue;margin:0px,0px,0px,0px;border-radius:5;"
-      "color:blue}";
+      "color:white}";
 
   void sort_childItem(QTreeWidgetItem *);
   static QString getFileSize(const qint64 &size, int precision);
