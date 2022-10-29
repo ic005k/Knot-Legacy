@@ -85,6 +85,7 @@ void dlgList::setCategoryText() {
 
   close();
   mw_one->mydlgSetTime->frameList->close();
+  mw_one->mydlgSetTime->frameList = NULL;
 }
 
 void dlgList::on_btnChange_clicked() {

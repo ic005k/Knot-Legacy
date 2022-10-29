@@ -18,6 +18,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->setupUi(this);
 
   m_List = new dlgList(this);
+  frameList = NULL;
 
   this->installEventFilter(this);
   ui->editDesc->installEventFilter(this);
@@ -164,12 +165,6 @@ void dlgSetTime::set_Amount(QString Number) {
 void dlgSetTime::on_btnCustom_clicked() {
   mw_one->m_widget = new QWidget(this);
 
-  int h = mw_one->height() - 60;
-  int y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
-  int w = mw_one->width() - 40;
-  int x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  // m_List->setGeometry(x, y, w, h);
-
   frameList = new QFrame(this);
   frameList->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, "
@@ -177,6 +172,9 @@ void dlgSetTime::on_btnCustom_clicked() {
   QVBoxLayout* vbox = new QVBoxLayout;
   frameList->setLayout(vbox);
   vbox->addWidget(m_List->ui->frame);
+
+  int h = mw_one->height() - 60;
+  int w = mw_one->width() - 40;
   frameList->setGeometry(20, (mw_one->height() - h) / 2, w, h);
 
   init_Desc();
@@ -282,11 +280,12 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!m_List->isHidden() || !frameList->isHidden()) {
-        m_List->close();
+      if (frameList != NULL) {
         frameList->close();
+        mw_one->closeGrayWindows();
+        frameList = NULL;
         return true;
-      } else {
+      } else if (!mw_one->mydlgSetTime->isHidden()) {
         on_btnBack_clicked();
         return true;
       }
