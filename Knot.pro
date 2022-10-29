@@ -52,7 +52,6 @@ SOURCES += \
     src/dlglist.cpp \
     src/dlgloadpic.cpp \
     src/dlgreader.cpp \
-    src/dlgrename.cpp \
     src/dlgright.cpp \
     src/dlgsetedittext.cpp \
     src/dlgsettime.cpp \
@@ -84,7 +83,6 @@ HEADERS += \
     src/dlglist.h \
     src/dlgloadpic.h \
     src/dlgreader.h \
-    src/dlgrename.h \
     src/dlgright.h \
     src/dlgsetedittext.h \
     src/dlgsteps.h \
@@ -115,7 +113,6 @@ FORMS += \
     src/dlglist.ui \
     src/dlgloadpic.ui \
     src/dlgreader.ui \
-    src/dlgrename.ui \
     src/dlgright.ui \
     src/dlgsetedittext.ui \
     src/dlgsettime.ui \

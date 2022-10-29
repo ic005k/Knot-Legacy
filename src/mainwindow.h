@@ -80,7 +80,6 @@
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
 #include "src/dlgreader.h"
-#include "src/dlgrename.h"
 #include "src/dlgsettime.h"
 #include "src/dlgsteps.h"
 #include "src/dlgtodo.h"
@@ -203,7 +202,6 @@ class MainWindow : public QMainWindow {
   void init_Options();
   QStringList listMonth;
   dlgRemarks *m_Remarks;
-  dlgRename *mydlgRename;
   dlgSetTime *mydlgSetTime;
   dlgTodo *mydlgTodo;
   dlgReport *mydlgReport;

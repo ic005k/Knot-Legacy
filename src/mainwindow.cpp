@@ -1515,22 +1515,38 @@ void MainWindow::initChartDay() {
 }
 
 void MainWindow::on_actionRename_triggered() {
-  /*int index = ui->tabWidget->currentIndex();
+  int index = ui->tabWidget->currentIndex();
   bool ok;
-  QInputDialog* idlg = new QInputDialog(this);
-  idlg->setContentsMargins(6, 6, 6, 6);
-  QString text =
-      idlg->getText(this, tr("Rename tab name"), tr("Tab name:"),
-                    QLineEdit::Normal, ui->tabWidget->tabText(index), &ok);
+  QString text;
+  QInputDialog *idlg = new QInputDialog(this);
+  QString style =
+      "QDialog{background: "
+      "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
+  idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
+  idlg->setContentsMargins(6, 6, 6, 6);
+
+  // QString text =
+  //     idlg->getText(this, tr("Rename tab name"), tr("Tab name:"),
+  //                   QLineEdit::Normal, ui->tabWidget->tabText(index), &ok);
+
+  idlg->setWindowTitle(tr("Rename tab name : "));
+  idlg->setTextValue(ui->tabWidget->tabText(index));
+  idlg->setLabelText(tr("Tab name : "));
+
+  if (QDialog::Accepted == idlg->exec()) {
+    ok = true;
+    text = idlg->textValue();
+  } else {
+    ok = false;
+    return;
+  }
+
   if (ok && !text.isEmpty()) {
     ui->tabWidget->setTabText(index, text);
     saveTab();
-  }*/
-
-  m_widget = new QWidget(this);
-  mydlgRename->init();
+  }
 }
 
 void MainWindow::on_actionAdd_Tab_triggered() {
@@ -3615,7 +3631,7 @@ void MainWindow::on_actionMemos_triggered() {
 
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
   if (strPw != "") {
-    showGrayWindows();
+    // showGrayWindows();
 
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
@@ -3623,21 +3639,21 @@ void MainWindow::on_actionMemos_triggered() {
     }
     strPw = baPw;
 
-    /*bool ok;
+    bool ok;
     QString text;
-    QInputDialog* idlg = new QInputDialog(this);
+    QInputDialog *idlg = new QInputDialog(this);
     QString style =
         "QDialog{background: "
-        "rgb(244,237,241);border-radius:0px;border:2px solid gray;}";
+        "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
     idlg->setStyleSheet(style);
     idlg->setOkButtonText(tr("Ok"));
     idlg->setCancelButtonText(tr("Cancel"));
+    idlg->setContentsMargins(6, 6, 6, 6);
     idlg->setWindowTitle(tr("Please enter your password : "));
     idlg->setTextValue("");
     idlg->setLabelText(tr("Password : "));
     QLineEdit::EchoMode echoMode = QLineEdit::Password;
     idlg->setTextEchoMode(echoMode);
-
 
     if (QDialog::Accepted == idlg->exec()) {
       ok = true;
@@ -3645,72 +3661,23 @@ void MainWindow::on_actionMemos_triggered() {
     } else {
       ok = false;
       return;
-    }*/
+    }
 
-    QDialog *dlg = new QDialog(this);
-    dlg->setModal(true);
-    dlg->setStyleSheet(
-        "QDialog{border-style:solid;border-width:0px;border-color:rgb(251, "
-        "51, 51);}");
-    QVBoxLayout *vbox = new QVBoxLayout;
-    int space = 8;
-    vbox->setContentsMargins(space, space, space, space);
-    vbox->setSpacing(space);
-    dlg->setLayout(vbox);
-    QLabel *lblTitle = new QLabel(this);
-    lblTitle->setText(tr("Please enter your password") + " : ");
-    QLineEdit *edit = new QLineEdit(this);
-    edit->setEchoMode(QLineEdit::Password);
-    QToolButton *btnCancel = new QToolButton(this);
-    btnCancel->setText(tr("Cancel"));
-    connect(btnCancel, &QToolButton::clicked, [=]() {
-      dlg->close();
+    if (ok && !text.isEmpty()) {
+      if (text.trimmed() == strPw) {
+        showMemos();
 
-      return;
-    });
-    QToolButton *btnOk = new QToolButton(this);
-    btnOk->setText(tr("Ok"));
-    connect(btnOk, &QToolButton::clicked, [=]() {
-      dlg->close();
-
-      bool ok = true;
-      QString text = edit->text().trimmed();
-
-      if (text.isEmpty()) return;
-
-      if (ok && !text.isEmpty()) {
-        if (text.trimmed() == strPw) {
-          showMemos();
-
-        } else {
-          QMessageBox msgBox;
-          msgBox.setText("Knot");
-          msgBox.setInformativeText(tr("The entered password does not match."));
-          QPushButton *btnOk =
-              msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-          btnOk->setFocus();
-          msgBox.exec();
-          return;
-        }
+      } else {
+        QMessageBox msgBox;
+        msgBox.setText("Knot");
+        msgBox.setInformativeText(tr("The entered password does not match."));
+        QPushButton *btnOk =
+            msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+        btnOk->setFocus();
+        msgBox.exec();
+        return;
       }
-    });
-
-    connect(dlg, &QDialog::rejected, [=]() { closeGrayWindows(); });
-
-    edit->setFixedHeight(32);
-    btnCancel->setFixedHeight(32);
-    btnOk->setFixedHeight(32);
-    btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    vbox->addWidget(lblTitle);
-    vbox->addWidget(edit);
-    vbox->addWidget(btnCancel);
-    vbox->addWidget(btnOk);
-
-    dlg->setFixedWidth(this->width());
-    dlg->setGeometry(geometry().x(), geometry().y(), dlg->width(),
-                     dlg->height());
-    dlg->show();
+    }
 
   } else {
     showMemos();
@@ -3845,7 +3812,6 @@ void MainWindow::init_UIWidget() {
   m_Remarks = new dlgRemarks(this);
   m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
 
-  mydlgRename = new dlgRename(this);
   mydlgSetTime = new dlgSetTime(this);
   mydlgTodo = new dlgTodo(this);
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
@@ -4889,7 +4855,8 @@ void MainWindow::on_btnSearch_clicked() {
   QString strurl;
   if (zh_cn)
     strurl =
-        "https://wap.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=" +
+        "https://wap.baidu.com/"
+        "s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=" +
         str;
   else
     strurl = "https://bing.com/search?q=" + str;

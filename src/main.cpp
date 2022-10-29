@@ -26,6 +26,9 @@ int main(int argc, char* argv[]) {
   QtWebView::initialize();
   QApplication a(argc, argv);
 
+  //禁用文本选择（针对所有的可输入的编辑框）
+  qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
+
   QDir dir;
   QString path;
   path = dir.currentPath();
@@ -36,9 +39,6 @@ int main(int argc, char* argv[]) {
   RegJni("com/x/MyActivity");
   RegJni("com/x/ClockActivity");
 
-  //禁用文本选择（针对所有的可输入的编辑框）
-  qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
-  qDebug() << "OS=Linux Android";
   isAndroid = true;
   isIOS = false;
 
