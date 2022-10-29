@@ -36,6 +36,9 @@ class dlgList : public QDialog {
 
   void on_btnRename_clicked();
 
+ private slots:
+  void on_btnClearDesc_clicked();
+
  private:
   void setCategoryText();
 };

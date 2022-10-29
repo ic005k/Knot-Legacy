@@ -44,6 +44,7 @@ extern QDialog *dlgProgEBook;
 extern QTableWidget *tableReport, *tableCategory;
 extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern QtOneDriveAuthorizationDialog *dialog_;
+extern dlgList *m_List;
 
 void RegJni(const char *myClassName);
 static void JavaNotify_1();
@@ -1680,7 +1681,7 @@ void MainWindow::set_Time() {
       item->setText(1, "");
     else
       item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 2));
-    item->setText(2, mydlgSetTime->ui->editDesc->toPlainText().trimmed());
+    item->setText(2, m_List->ui->editDesc->toPlainText().trimmed());
     // Amount
     int child = item->parent()->childCount();
     double amount = 0;
@@ -1779,7 +1780,9 @@ void MainWindow::on_twItemDoubleClicked() {
       mydlgSetTime->ui->editAmount->setText("");
     else
       mydlgSetTime->ui->editAmount->setText(str);
-    mydlgSetTime->ui->editDesc->setText(item->text(2));
+
+    m_List->ui->editDesc->setPlainText(item->text(2));
+    mydlgSetTime->ui->lblCategory->setText(tr("Category : ") + item->text(2));
 
     isAdd = false;
     mydlgSetTime->init();

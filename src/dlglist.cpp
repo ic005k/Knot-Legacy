@@ -62,6 +62,7 @@ void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
   Q_UNUSED(item);
   QString txt = item->text();
   ui->editRename->setText(txt);
+  ui->editDesc->setPlainText(txt);
 }
 
 void dlgList::on_btnClear_clicked() {
@@ -79,8 +80,8 @@ void dlgList::on_btnBack_clicked() { setCategoryText(); }
 void dlgList::setCategoryText() {
   int row = ui->listWidget->currentRow();
   if (row >= 0) {
-    mw_one->mydlgSetTime->ui->editDesc->setText(
-        ui->listWidget->item(row)->text());
+    mw_one->mydlgSetTime->ui->lblCategory->setText(
+        tr("Category : ") + ui->editDesc->toPlainText().trimmed());
   }
 
   close();
@@ -192,7 +193,11 @@ void dlgList::on_btnRename_clicked() {
       }
     }
     mw_one->startSave("alltab");
+
+    ui->editDesc->setPlainText(ui->editRename->text().trimmed());
   }
 }
 
 void dlgList::init() {}
+
+void dlgList::on_btnClearDesc_clicked() { ui->editDesc->clear(); }

@@ -20,8 +20,8 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   m_List = new dlgList(this);
 
   this->installEventFilter(this);
-  ui->editDesc->installEventFilter(this);
-  ui->editDesc->viewport()->installEventFilter(this);
+  m_List->ui->editDesc->installEventFilter(this);
+  m_List->ui->editDesc->viewport()->installEventFilter(this);
 
   QFont font;
   font.setPointSize(23);
@@ -43,7 +43,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->btnDel->setFont(font);
 
   font.setPointSize(21);
-  ui->editDesc->setFont(font);
+  m_List->ui->editDesc->setFont(font);
 
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editAmount);
@@ -51,10 +51,11 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->editAmount->setAttribute(Qt::WA_InputMethodEnabled, false);
   ui->editAmount->setReadOnly(true);
 
-  ui->editDesc->setPlaceholderText(tr("Please enter a category"));
+  m_List->ui->editDesc->setPlaceholderText(tr("Please enter a category"));
 
   ui->btnClearAmount->setStyleSheet("border:none");
-  ui->btnClearDesc->setStyleSheet("border:none");
+  m_List->ui->btnClearDesc->setStyleSheet("border:none");
+  ui->lblCategory->setStyleSheet(ui->lblTitle->styleSheet());
 
   ui->hsM->setStyleSheet(ui->hsH->styleSheet());
 }
@@ -68,7 +69,7 @@ void dlgSetTime::init() {
   setModal(true);
 
   if (mw_one->isAdd) {
-    ui->editDesc->setText("");
+    m_List->ui->editDesc->setPlainText("");
     ui->editAmount->setText("");
   }
   show();
@@ -90,17 +91,17 @@ void dlgSetTime::on_btnOk_clicked() {
       for (int i = 0; i < 500; i++)
         mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                          ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                         ui->editDesc->toPlainText().trimmed());
+                         m_List->ui->editDesc->toPlainText().trimmed());
     } else
       mw_one->addUndo(tr("Add Item") + " ( " + mw_one->getTabText() + " ) ");
 
     mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                      ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                     ui->editDesc->toPlainText().trimmed());
+                     m_List->ui->editDesc->toPlainText().trimmed());
   }
 
   // Save Desc Text
-  QString str = ui->editDesc->toPlainText().trimmed();
+  QString str = m_List->ui->editDesc->toPlainText().trimmed();
   int count = m_List->ui->listWidget->count();
   for (int i = 0; i < count; i++) {
     QString str1 = m_List->ui->listWidget->item(i)->text().trimmed();
@@ -179,10 +180,7 @@ void dlgSetTime::on_btnCustom_clicked() {
 
   init_Desc();
   m_List->ui->listWidget->setFocus();
-  if (m_List->ui->listWidget->count() > 0) {
-    m_List->ui->listWidget->setCurrentRow(0);
-    m_List->on_listWidget_itemClicked(m_List->ui->listWidget->currentItem());
-  }
+  m_List->ui->editRename->clear();
 
   mw_one->showGrayWindows();
 
@@ -276,7 +274,7 @@ void dlgSetTime::getTime(int h, int m) {
 }
 
 bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
-  if (watch == ui->editDesc->viewport()) {
+  if (watch == m_List->ui->editDesc->viewport()) {
     // mw_one->mydlgMainNotes->getEditPanel(ui->editDesc, evn);
   }
 
@@ -303,7 +301,7 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
 
 void dlgSetTime::on_btnClearAmount_clicked() { ui->editAmount->clear(); }
 
-void dlgSetTime::on_btnClearDesc_clicked() { ui->editDesc->clear(); }
+void dlgSetTime::on_btnClearDesc_clicked() { m_List->ui->editDesc->clear(); }
 
 void dlgSetTime::on_editAmount_textChanged(const QString& arg1) {
   int count = 0;
