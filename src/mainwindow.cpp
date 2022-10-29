@@ -1681,7 +1681,7 @@ void MainWindow::set_Time() {
       item->setText(1, "");
     else
       item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 2));
-    item->setText(2, m_List->ui->editDesc->toPlainText().trimmed());
+    item->setText(2, mydlgSetTime->ui->editDesc->toPlainText().trimmed());
     // Amount
     int child = item->parent()->childCount();
     double amount = 0;
@@ -1781,8 +1781,8 @@ void MainWindow::on_twItemDoubleClicked() {
     else
       mydlgSetTime->ui->editAmount->setText(str);
 
-    m_List->ui->editDesc->setPlainText(item->text(2));
-    mydlgSetTime->ui->lblCategory->setText(tr("Category : ") + item->text(2));
+    mydlgSetTime->ui->editDesc->setPlainText(item->text(2));
+    mydlgSetTime->ui->frame->setFocus();
 
     isAdd = false;
     mydlgSetTime->init();
