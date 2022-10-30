@@ -133,8 +133,8 @@ bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
         return true;
       } else if (!mw_one->mydlgReport->isHidden()) {
         on_btnBack_clicked();
+        return true;
       }
-      return true;
     }
   }
 
