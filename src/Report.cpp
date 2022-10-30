@@ -783,6 +783,7 @@ void dlgReport::on_btnCategory_clicked() {
     mw_one->on_RunCategory();
 
     frame->close();
+    frameCategory = NULL;
     mw_one->closeGrayWindows();
   });
 }
