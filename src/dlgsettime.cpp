@@ -220,11 +220,11 @@ int dlgSetTime::removeDuplicates(QStringList* that) {
     ++setSize;
 
     // //将不重复项与重复项交换（新，IOS无法编译通过）
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    //#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     if (j != i) that->swapItemsAt(i, j);
-#else
-    if (j != i) that->swap(i, j);
-#endif
+    //#else
+    //    if (j != i) that->swap(i, j);
+    //#endif
 
     ++j;
   }
