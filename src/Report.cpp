@@ -611,14 +611,6 @@ void dlgReport::on_tableReport_cellClicked(int row, int column) {
 
 void dlgReport::on_tableReport0_cellClicked(int row, int column) {
   Q_UNUSED(column);
-  bool isSetDetailsText = true;
-  if (btnCategory->text() != tr("None") &&
-      btnCategory->text() != tr("Category")) {
-    isSetDetailsText = false;
-  }
-
-  // if (isSetDetailsText) lblDetails->setText(tr("Details"));
-  // markColor(row);
 
   tableDetails0->setRowCount(0);
   QString str = tableReport0->item(row, 0)->text();
@@ -627,7 +619,6 @@ void dlgReport::on_tableReport0_cellClicked(int row, int column) {
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
     if (str == topItem->text(0)) {
-      // if (isSetDetailsText) lblDetails->setText(tr("Details") + " : " + str);
       int childCount = topItem->childCount();
       tableDetails0->setRowCount(childCount);
       for (int m = 0; m < childCount; m++) {

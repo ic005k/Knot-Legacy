@@ -647,7 +647,7 @@ void dlgReader::setQML(QString txt1) {
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", true);
 }
 
-void dlgReader::on_btnFont_clicked() {
+void dlgReader::selectFont() {
   QStringList listFonts;
   QFontDatabase fontDatebase;
   foreach (QString family, fontDatebase.families()) {

@@ -47,10 +47,13 @@ extern QtOneDriveAuthorizationDialog *dialog_;
 extern dlgList *m_List;
 
 void RegJni(const char *myClassName);
+
+#ifdef Q_OS_ANDROID
 static void JavaNotify_1();
 static void JavaNotify_2();
 static void JavaNotify_3();
 static void JavaNotify_4();
+#endif
 
 /* Low pass filter for smoothening sensor input data */
 static filter_t lp_filter_x, lp_filter_y, lp_filter_z;
@@ -284,6 +287,8 @@ void MainWindow::initHardStepSensor() {
 
 void MainWindow::initTodayInitSteps() {
   qlonglong a, b;
+  a = 0;
+  b = 0;
 
 #ifdef Q_OS_ANDROID
 
@@ -442,6 +447,7 @@ void MainWindow::updateSteps() {
 }
 
 void MainWindow::sendMsg(int CurTableCount) {
+  Q_UNUSED(CurTableCount);
 #ifdef Q_OS_ANDROID
   double sl = mydlgSteps->ui->editStepLength->text().toDouble();
   double d0 = sl / 100;
@@ -3354,6 +3360,12 @@ static float apply_filter(filter_t *filt_data, float in_data) {
 static unsigned int step_algo_preproc(float timestamp, float arx, float ary,
                                       float arz, float grx, float gry,
                                       float grz) {
+  Q_UNUSED(arx);
+  Q_UNUSED(arz);
+  Q_UNUSED(grx);
+  Q_UNUSED(gry);
+  Q_UNUSED(grz);
+
   static unsigned int count = 0;
   unsigned int ret_val = 0;
   float ary_flt = 0.0f;
@@ -3383,7 +3395,6 @@ void MainWindow::getSteps2() {
   float grx = 0.0f, gry = 0.0f, grz = 0.0f; /* rad/s */
   // float timestamp = 0.0f;                   /* sec */
   char line_buff[MAX_CHAR_PER_LINE] = {0};
-  unsigned int skip_lines = 2;
   unsigned int run_step_algo = 0;
   unsigned int timeconst_samp = 0;
   char *step_type;
@@ -4421,7 +4432,7 @@ void MainWindow::on_btnPageNext_clicked() {
   mydlgReader->on_btnPageNext_clicked();
 }
 
-void MainWindow::on_btnFont_clicked() { mydlgReader->on_btnFont_clicked(); }
+void MainWindow::on_btnFont_clicked() { mydlgReader->selectFont(); }
 
 void MainWindow::on_btnPages_clicked() {
   if (!mydlgReaderFun->isHidden()) {

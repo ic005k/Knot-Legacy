@@ -73,7 +73,7 @@ void dlgReaderFun::on_btnFontLess_clicked() {
 
 void dlgReaderFun::on_btnFont_clicked() {
   close();
-  mw_one->mydlgReader->on_btnFont_clicked();
+  mw_one->mydlgReader->selectFont();
 }
 
 void dlgReaderFun::on_hSlider_sliderMoved(int position) {
