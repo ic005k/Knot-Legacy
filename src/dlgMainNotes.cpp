@@ -106,7 +106,7 @@ void dlgMainNotes::init() {
                     mw_one->width(), mw_one->height());
 }
 
-void dlgMainNotes::wheelEvent(QWheelEvent* e) {}
+void dlgMainNotes::wheelEvent(QWheelEvent* e) { Q_UNUSED(e); }
 
 dlgMainNotes::~dlgMainNotes() { delete ui; }
 
@@ -816,8 +816,8 @@ void dlgMainNotes::highlightCurrentLine() {
   //当前光标在本BLOCK内的相对位置
   int iCurPos = tc.position() - tc.block().position();
   //光标所在行号
-  int iCurrentLine = lay->lineForTextPosition(iCurPos).lineNumber() +
-                     tc.block().firstLineNumber();
+  // int iCurrentLine = lay->lineForTextPosition(iCurPos).lineNumber() +
+  //                   tc.block().firstLineNumber();
   int iLineCount = ui->editSource->document()->lineCount();
   //或者  获取光标所在行的行号
   int iRowNum = tc.blockNumber() + 1;
@@ -863,10 +863,6 @@ void dlgMainNotes::onTextChange() {
   ui->editSource->blockSignals(false);
 }
 
-void dlgMainNotes::openMD(QString mdFileName) {}
-
-void dlgMainNotes::saveMD(QString mdFileName) {}
-
 void dlgMainNotes::on_btnPaste_clicked() { ui->editSource->paste(); }
 
 void dlgMainNotes::showFunPanel() {
@@ -898,6 +894,7 @@ void dlgMainNotes::selectText(int start, int end) {
 }
 
 void dlgMainNotes::paintEvent(QPaintEvent* event) {
+  Q_UNUSED(event);
   return;
 
   if (ui->editSource->hasFocus()) {

@@ -1,6 +1,8 @@
 #include "specialaccelerometerpedometer.h"
 
 SpecialAccelerometerPedometer::SpecialAccelerometerPedometer(QObject *parent) {
+  Q_UNUSED(parent);
+
   // initialize values
   m_rollValue = 0.00;
   m_pitchValue = 0.00;

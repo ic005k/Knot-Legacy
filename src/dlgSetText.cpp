@@ -37,4 +37,6 @@ void dlgSetText::on_btnCopy_clicked() { mw_one->on_btnCopy_clicked(); }
 
 void dlgSetText::on_btnSearch_clicked() { mw_one->on_btnSearch_clicked(); }
 
-void dlgSetText::on_lineEdit_textChanged(const QString& arg1) {}
+void dlgSetText::on_lineEdit_textChanged(const QString& arg1) {
+  Q_UNUSED(arg1);
+}

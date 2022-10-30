@@ -67,8 +67,6 @@ class dlgMainNotes : public QDialog {
 
   void loadMemoQML();
 
-  void openMD(QString mdFileName);
-  void saveMD(QString mdFileName);
   void selectText(int start, int end);
 
   void getEditPanel(QTextEdit *textEdit, QEvent *evn);

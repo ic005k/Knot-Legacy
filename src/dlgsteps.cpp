@@ -400,6 +400,9 @@ void dlgSteps::setMaxMark() {
 }
 
 void dlgSteps::appendDataToTable(QString str1, QString str2, QString str3) {
+  Q_UNUSED(str1);
+  Q_UNUSED(str2);
+  Q_UNUSED(str3);
   /*QQuickItem* root = ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
                             Q_ARG(QVariant, str1), Q_ARG(QVariant, str2),
