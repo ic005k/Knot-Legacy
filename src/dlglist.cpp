@@ -10,15 +10,7 @@ extern QTabWidget *tabData, *tabChart;
 dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   setModal(true);
-  // 窗口无边框
-  // setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
-  // 设置窗口背景透明 （需要设置窗口为无边框的才能实现背景透明，否则背景为黑色）
-  // setAttribute(Qt::WA_TranslucentBackground);
-
   this->installEventFilter(this);
-  // ui->frame->setStyleSheet(
-  //     "QFrame{background-color: rgb(255, 255, "
-  //     "255);border-radius:10px;border:0px solid gray;}");
 
   ui->listWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
@@ -64,7 +56,7 @@ void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
   ui->editRename->setText(txt);
 }
 
-void dlgList::on_btnClear_clicked() {
+void dlgList::on_btnDel_clicked() {
   int row = ui->listWidget->currentRow();
   if (row >= 0) ui->listWidget->takeItem(row);
   mw_one->mydlgSetTime->saveCustomDesc();
@@ -197,10 +189,4 @@ void dlgList::on_btnRename_clicked() {
     mw_one->mydlgSetTime->ui->editDesc->setPlainText(
         ui->editRename->text().trimmed());
   }
-}
-
-void dlgList::init() {}
-
-void dlgList::on_btnClearDesc_clicked() {
-  mw_one->mydlgSetTime->ui->editDesc->clear();
 }

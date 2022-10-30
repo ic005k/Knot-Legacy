@@ -17,7 +17,6 @@ class dlgList : public QDialog {
   Ui::dlgList *ui;
 
   QFrame *frame;
-  void init();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -26,7 +25,7 @@ class dlgList : public QDialog {
  public slots:
   void on_listWidget_itemClicked(QListWidgetItem *item);
 
-  void on_btnClear_clicked();
+  void on_btnDel_clicked();
 
   void on_btnBack_clicked();
 
@@ -37,7 +36,6 @@ class dlgList : public QDialog {
   void on_btnRename_clicked();
 
  private slots:
-  void on_btnClearDesc_clicked();
 
  private:
   void setCategoryText();

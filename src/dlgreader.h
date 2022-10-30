@@ -82,14 +82,15 @@ class dlgReader : public QDialog {
   qreal getVHeight();
   qreal getNewVPos(qreal pos1, qreal h1, qreal h2);
   static void processHtml();
- public slots:
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
   void on_btnOpen_clicked();
   void on_btnFont_clicked();
-
+  void on_btnBack_clicked();
   void on_hSlider_sliderReleased(int position);
+
+ public slots:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
@@ -97,7 +98,6 @@ class dlgReader : public QDialog {
   void closeEvent(QCloseEvent *event) override;
   void paintEvent(QPaintEvent *event) override;
  private slots:
-  void on_btnBack_clicked();
 
  private:
   int x, y, w, h;

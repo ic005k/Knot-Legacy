@@ -104,7 +104,7 @@ QDialog* dlgReader::getProgBar() {
   progReadEbook->setStyleSheet(
       "QProgressBar{border:0px solid #FFFFFF;"
       "height:25;"
-      "background:rgba(25,255,25,0);"
+      "background:rgb(25,255,25);"
       "text-align:right;"
       "color:rgb(255,255,255);"
       "border-radius:0px;}"
