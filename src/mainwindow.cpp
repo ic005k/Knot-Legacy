@@ -222,7 +222,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   if (!isAndroid) {
 #ifdef Q_OS_MAC
-    this->setGeometry(700, 0, this->width(), this->height() - 60);
+    this->setGeometry(800, 0, 390, this->height() - 60);
 #endif
 
 #ifdef Q_OS_WIN

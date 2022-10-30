@@ -66,9 +66,9 @@ void dlgSetTime::init() {
   mw_one->mydlgMainNotes->m_SetEditText->close();
   mw_one->mydlgMainNotes->m_SetEditText = new dlgSetEditText(this);
 
-  setFixedHeight(mw_one->height());
-  setFixedWidth(mw_one->width());
   setModal(true);
+  setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), mw_one->width(),
+              mw_one->height());
 
   if (mw_one->isAdd) {
     ui->editDesc->setPlainText("");
