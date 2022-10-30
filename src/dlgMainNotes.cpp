@@ -812,7 +812,7 @@ void dlgMainNotes::highlightCurrentLine() {
 
   //当前光标
   QTextCursor tc = ui->editSource->textCursor();
-  QTextLayout* lay = tc.block().layout();
+  // QTextLayout* lay = tc.block().layout();
   //当前光标在本BLOCK内的相对位置
   int iCurPos = tc.position() - tc.block().position();
   //光标所在行号

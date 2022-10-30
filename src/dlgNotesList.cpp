@@ -208,8 +208,7 @@ void dlgNotesList::addItem(QTreeWidget* tw, QTreeWidgetItem* item) {
 
 void dlgNotesList::delFile(QString file) {
   QFile _file(file);
-  bool yes;
-  if (_file.exists()) yes = _file.remove();
+  if (_file.exists()) _file.remove();
   _file.close();
 }
 
