@@ -8,8 +8,6 @@ import MyModel2 1.0
 Item {
     id: textitem
     visible: true
-    width: myW
-    height: myH
 
     File {
         id: file
@@ -74,18 +72,6 @@ Item {
         }
     }
 
-    Image {
-        id: rocket
-        width: myW
-        height: myH
-        fillMode: Image.Tile
-        horizontalAlignment: Image.AlignLeft
-        verticalAlignment: Image.AlignTop
-
-        smooth: true
-        source: "/1res/b.png"
-    }
-
     Flickable {
         id: flickable
         flickableDirection: Flickable.VerticalFlick
@@ -118,13 +104,10 @@ Item {
             font.hintingPreference: Font.PreferVerticalHinting
             textFormat: Qt.AutoText
 
-            //onTextChanged: file.text = text
-            //Component.onCompleted: text = file.text
             wrapMode: TextArea.Wrap
-            readOnly: isReadOnly
+            readOnly: true
             focus: true
             persistentSelection: false
-            selectByMouse: isBySelect
             selectByKeyboard: true
             smooth: true
 
