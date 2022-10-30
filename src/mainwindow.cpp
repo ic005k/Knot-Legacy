@@ -892,6 +892,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
       QString str = topItem->child(m)->text(1);
       amount = amount + str.toDouble();
     }
+
     QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
     topItem->setText(1, QString::number(child));
     if (strAmount == "0.00")
@@ -1598,6 +1599,7 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
   tw->headerItem()->setText(0, "  " + tr("Date") + "  ");
   tw->headerItem()->setText(1, "  " + tr("Freq") + "  ");
   tw->headerItem()->setText(2, tr("Amount"));
+
   tw->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
   tw->headerItem()->setTextAlignment(2, Qt::AlignRight);

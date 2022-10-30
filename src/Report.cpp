@@ -28,6 +28,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   this->installEventFilter(this);
   this->setModal(true);
 
+  frameCategory = NULL;
   tableReport = ui->tableReport;
   tableDetails = ui->tableDetails;
   tableCategory = ui->tableCategory;
@@ -51,8 +52,6 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   btnMonth = ui->btnMonth;
   btnYear = ui->btnYear;
   ui->tableCategory->hide();
-  // printer = new QPrinter(QPrinter::HighResolution);
-  // preview = new QPrintPreviewDialog(printer, this);
   ui->btnPrint->hide();
 
   QFont font = ui->lblTotal->font();
@@ -127,13 +126,14 @@ bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!frameCategory->isHidden()) {
+      if (frameCategory != NULL) {
         frameCategory->close();
+        frameCategory = NULL;
         mw_one->closeGrayWindows();
         return true;
+      } else if (!mw_one->mydlgReport->isHidden()) {
+        on_btnBack_clicked();
       }
-
-      on_btnBack_clicked();
       return true;
     }
   }
@@ -775,6 +775,7 @@ void dlgReport::on_btnCategory_clicked() {
       tableCategory->hide();
       tableDetails->show();
       frame->close();
+      frameCategory = NULL;
       mw_one->closeGrayWindows();
       return;
     }
