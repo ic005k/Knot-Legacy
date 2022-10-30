@@ -217,27 +217,15 @@ MainWindow::MainWindow(QWidget *parent)
   ui->setupUi(this);
   initMain = true;
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  QDesktopWidget *desktop = QApplication::desktop();
-  QRect screen = desktop->screenGeometry();
-  int screenWidth = screen.width();
-  int screenHeight = screen.height();
-
   if (!isAndroid) {
 #ifdef Q_OS_MAC
-    this->setGeometry(1 * (screenWidth - this->width()) / 2, 0, this->width(),
-                      screenHeight - 60);
+    this->setGeometry(700, 0, this->width(), this->height() - 60);
 #endif
 
 #ifdef Q_OS_WIN
-    this->setGeometry(730, 25, this->width(), screenHeight - 75);
+    this->setGeometry(730, 25, this->width(), this->height() - 75);
 #endif
   }
-#else
-  if (!isAndroid) {
-    this->setGeometry(500, 0, this->width(), this->height() - 60);
-  }
-#endif
 
   qRegisterMetaType<QVector<int>>("QVector<int>");
   loading = true;
@@ -252,7 +240,6 @@ MainWindow::MainWindow(QWidget *parent)
   startRead(strDate);
   get_Today(tw);
   init_Stats(tw);
-  isInit = true;
 
   initHardStepSensor();
 

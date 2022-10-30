@@ -234,7 +234,6 @@ class MainWindow : public QMainWindow {
   void initChartMonth(QString, QString);
   void initChartDay();
   static void saveNotes(int);
-  bool isInit = false;
 
   static void saveTab();
   bool isSlide = false;
