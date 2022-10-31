@@ -346,6 +346,7 @@ class MainWindow : public QMainWindow {
   void showGrayWindows();
   void closeGrayWindows();
   void bakIniData(QString unredoFile, bool unre);
+  bool msgBox(QString text);
  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();

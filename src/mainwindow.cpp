@@ -918,6 +918,46 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   startSave("tab");
 }
 
+bool MainWindow::msgBox(QString text) {
+  QFrame *frame = new QFrame(this);
+  frame->setStyleSheet(
+      "QFrame{background-color: rgb(255, 234, 112);border-radius:10px; "
+      "border:0px solid gray;}");
+  QVBoxLayout *vbox = new QVBoxLayout;
+  vbox->setContentsMargins(6, 6, 6, 6);
+  vbox->setSpacing(12);
+  frame->setLayout(vbox);
+  QLabel *lbl = new QLabel(this);
+  lbl->setText(text);
+  vbox->addWidget(lbl);
+  QPushButton *btnCancel = new QPushButton(this);
+  QPushButton *btnOk = new QPushButton(this);
+  btnCancel->setText(tr("Cancel"));
+  btnOk->setText(tr("Delete"));
+  // btnOk->setStyleSheet(
+  //     "QPushButton {background-color: rgb(255, 0, 0);color: rgb(255, "
+  //     "255, 255);}");
+  vbox->addWidget(btnCancel);
+  vbox->addWidget(btnOk);
+  int x, y, w, h;
+  w = mw_one->width() * 2 / 3;
+  h = 300;
+  x = (mw_one->width() - w) / 2;
+  y = (mw_one->height() - h) / 2;
+  frame->setGeometry(x, y, w, h);
+  connect(btnCancel, &QPushButton::clicked, [=]() {
+    frame->close();
+    return false;
+  });
+  connect(btnOk, &QPushButton::clicked, [=]() {
+    frame->close();
+    return true;
+  });
+  frame->show();
+
+  return false;
+}
+
 void MainWindow::del_Data(QTreeWidget *tw) {
   bool isNo = true;
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
@@ -936,8 +976,6 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        // if (showMsgBox(str, tr("Less") + "\n\n" + str1, "", 2) == false)
-        // return;
         QMessageBox msgBox;
         msgBox.setText(str);
         msgBox.setInformativeText(tr("Less") + "\n\n" + str1);
@@ -948,6 +986,9 @@ void MainWindow::del_Data(QTreeWidget *tw) {
         btnOk->setFocus();
         btnOk->setStyleSheet(
             "QPushButton {background-color: rgb(255, 0, 0);color: rgb(255, "
+            "255, 255);}");
+        msgBox.setStyleSheet(
+            "QMessageBox {background-color: rgb(254, 234, 112);color: rgb(255, "
             "255, 255);}");
         msgBox.exec();
         if (msgBox.clickedButton() == btnCancel) {
