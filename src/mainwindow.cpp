@@ -1829,14 +1829,6 @@ void MainWindow::on_twItemDoubleClicked() {
 
 void MainWindow::on_tabWidget_currentChanged(int index) {
   int count = ui->tabWidget->tabBar()->count();
-  if (index >= 0) {
-    for (int i = 0; i < count; i++) {
-      if (i == index)
-        tabData->tabBar()->setTabTextColor(i, Qt::blue);
-      else
-        tabData->tabBar()->setTabTextColor(i, Qt::black);
-    }
-  }
 
   if (isSlide || loading || count <= 0) {
     return;
@@ -1846,9 +1838,11 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   tw->setFocus();
   if (!loading) {
     QSettings Reg(iniDir + "tab.ini", QSettings::IniFormat);
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
 #endif
+
     Reg.setValue("CurrentIndex", index);
   }
 
@@ -1856,6 +1850,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   m_scatterSeries->clear();
   barSeries->clear();
   startRead(strDate);
+  on_twItemClicked();
 }
 
 void MainWindow::saveNotes(int tabIndex) {
