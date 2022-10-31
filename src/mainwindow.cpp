@@ -1131,7 +1131,6 @@ void MainWindow::drawMonthChart() {
   listM.clear();
   listM = get_MonthList(strY, strM);
   CurrentYearMonth = strY + strM;
-  // qDebug() << "Month List Count: " << listM.count();
 }
 
 void MainWindow::drawDayChart() {
@@ -1172,9 +1171,6 @@ void MainWindow::drawDayChart() {
     day = get_Day(item->text(0));
     month = get_Month(item->text(0));
   }
-
-  QString strMonthDay = month + QString("%1").arg(day, 2, 10, QLatin1Char('0'));
-  tabChart->setTabText(1, strMonthDay);
 
   QList<double> dList;
   double x, y;
@@ -1551,10 +1547,6 @@ void MainWindow::on_actionRename_triggered() {
   idlg->setCancelButtonText(tr("Cancel"));
   idlg->setContentsMargins(6, 6, 6, 6);
 
-  // QString text =
-  //     idlg->getText(this, tr("Rename tab name"), tr("Tab name:"),
-  //                   QLineEdit::Normal, ui->tabWidget->tabText(index), &ok);
-
   idlg->setWindowTitle(tr("Rename tab name : "));
   idlg->setTextValue(ui->tabWidget->tabText(index));
   idlg->setLabelText(tr("Tab name : "));
@@ -1662,12 +1654,17 @@ void MainWindow::on_twItemClicked() {
   if (item->parent() == NULL && item->childCount() == 0) return;
   QTreeWidgetItem *pItem;
 
-  QString year;
-  if (item->parent() == NULL)
+  QString year, stra;
+  if (item->parent() == NULL) {
     year = item->text(3);
-  else
+    stra = item->text(0);
+  } else {
     year = item->parent()->text(3);
+    stra = item->parent()->text(0);
+  }
   tw->headerItem()->setText(0, "" + tr("Date") + "  " + year);
+  ui->tabCharts->setTabText(0, stra.split(" ").at(1));
+  ui->tabCharts->setTabText(1, stra.split(" ").at(2));
 
   if (item->childCount() > 0) {
     pItem = item;
@@ -1696,8 +1693,10 @@ void MainWindow::on_twItemClicked() {
       if (strYearMonth == CurrentYearMonth) return;
       startRead(str);
     }
-  } else
+  } else {
     init_Stats(tw);
+  }
+
   if (parentItem == pItem) {
     return;
   }

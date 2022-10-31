@@ -692,10 +692,10 @@ void dlgReport::on_btnCategory_clicked() {
   frameCategory = frame;
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:0px solid gray;}");  //设置圆角与背景透明
+      "border:0px solid gray;}");
 
   /*frame->setGeometry(5, 5, this->width() - 5,
-                     this->height() - 5);  //设置有效范围框
+                     this->height() - 5);
   QGraphicsDropShadowEffect* shadow_effect =
       new QGraphicsDropShadowEffect(this);
   shadow_effect->setOffset(0, 0);
