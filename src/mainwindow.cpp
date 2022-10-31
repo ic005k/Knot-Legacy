@@ -141,7 +141,7 @@ void MainWindow::ReadChartData() {
 
 void MainWindow::readDone() {
   if (tabChart->currentIndex() == 0) {
-    initChartMonth(strY, strM);
+    initChartMonth();
   }
   if (tabChart->currentIndex() == 1) {
     initChartDay();
@@ -1415,10 +1415,8 @@ void MainWindow::init_Stats(QTreeWidget *tw) {
   strStats = tr("Total") + " : " + QString::number(tatol) + "    $" + strAmount;
 }
 
-void MainWindow::initChartMonth(QString strY, QString strM) {
+void MainWindow::initChartMonth() {
   if (loading) return;
-  tabChart->setTabText(0, strM);
-  strY = "";
 
   int count = PointList.count();
   if (count == 0) {
@@ -1919,8 +1917,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       mydlgFloatFun->setY(newy);
-
-      qDebug() << "tw Press: " << press_x << press_y << press_y0;
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
@@ -3082,13 +3078,14 @@ void MainWindow::on_actionPreferences_triggered() {
 void MainWindow::on_tabCharts_currentChanged(int index) {
   if (ui->rbSteps->isChecked() || loading) return;
 
+  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
+  int topCount = tw->topLevelItemCount();
+
   if (index == 0) {
-    startRead(strDate);
+    return;
   }
 
   if (index == 1) {
-    QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
-    int topCount = tw->topLevelItemCount();
     if (topCount == 0) {
       series2->clear();
       m_scatterSeries2->clear();
@@ -3100,9 +3097,16 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
         QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
         tw->setCurrentItem(topItem);
       }
-      on_twItemClicked();
     }
   }
+
+  QTreeWidgetItem *item = tw->currentItem();
+  QString a;
+  if (item->parent() == NULL)
+    a = item->text(0) + " " + item->text(3);
+  else
+    a = item->parent()->text(0) + " " + item->parent()->text(3);
+  startRead(a);
 }
 
 void MainWindow::on_btnSteps_clicked() {
@@ -3154,7 +3158,7 @@ void MainWindow::on_rbSteps_clicked() {
     }
   }
 
-  initChartMonth("", sm);
+  initChartMonth();
   chartMonth->setTitle(tr("Steps"));
 }
 
