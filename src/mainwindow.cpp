@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.39";
+QString ver = "1.0.40";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -947,12 +947,13 @@ void MainWindow::msgBox(QString text) {
   vbox->addLayout(hbox, 0);
 
   int x, y, w, h;
-  w = mw_one->width() * 2 / 3;
-  h = frame->height();
+  w = mw_one->width() - 30;
+  h = 240;
   x = geometry().x() + (width() - w) / 2;
-  y = (height() - h) / 2;
+  y = geometry().y() + (mw_one->height() - h) / 2;
   frame->setGeometry(x, y, w, h);
 
+  isOK = false;
   connect(btnCancel, &QToolButton::clicked, [=]() mutable {
     isOK = false;
     frame->close();
