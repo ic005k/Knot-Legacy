@@ -769,6 +769,8 @@ void dlgReport::on_btnCategory_clicked() {
   if (list->count() > 1) {
     mw_one->showGrayWindows();
     frame->show();
+  } else {
+    frameCategory = NULL;
   }
 
   connect(list, &QListWidget::itemClicked, [=]() {
