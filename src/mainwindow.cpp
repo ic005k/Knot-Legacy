@@ -1572,6 +1572,9 @@ void MainWindow::on_actionAdd_Tab_triggered() {
                         tr("Tab") + " " + QString::number(count + 1));
   ui->tabWidget->setCurrentIndex(count);
 
+  ui->tabCharts->setTabText(0, tr("Month"));
+  ui->tabCharts->setTabText(1, tr("Day"));
+
   on_actionRename_triggered();
 
   startSave("alltab");
