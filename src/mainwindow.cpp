@@ -1159,16 +1159,14 @@ void MainWindow::drawDayChart() {
     child = true;
 
   QString month;
-  int day;
+
   if (child) {
     childCount = item->parent()->childCount();
     parentItem = item->parent();
-    day = get_Day(item->parent()->text(0));
     month = get_Month(item->parent()->text(0));
   } else {
     childCount = item->childCount();
     parentItem = item;
-    day = get_Day(item->text(0));
     month = get_Month(item->text(0));
   }
 
@@ -1650,7 +1648,10 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
 
 void MainWindow::on_twItemClicked() {
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
+  if (!tw->currentIndex().isValid()) return;
+
   QTreeWidgetItem *item = tw->currentItem();
+
   if (item->parent() == NULL && item->childCount() == 0) return;
   QTreeWidgetItem *pItem;
 
@@ -3076,7 +3077,7 @@ void MainWindow::on_actionPreferences_triggered() {
 }
 
 void MainWindow::on_tabCharts_currentChanged(int index) {
-  if (ui->rbSteps->isChecked()) return;
+  if (ui->rbSteps->isChecked() || loading) return;
 
   if (index == 0) {
     startRead(strDate);
@@ -3096,8 +3097,8 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
         QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
         tw->setCurrentItem(topItem);
       }
+      on_twItemClicked();
     }
-    on_twItemClicked();
   }
 }
 
