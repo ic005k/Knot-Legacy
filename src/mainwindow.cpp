@@ -918,44 +918,53 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   startSave("tab");
 }
 
-bool MainWindow::msgBox(QString text) {
-  QFrame *frame = new QFrame(this);
-  frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 234, 112);border-radius:10px; "
-      "border:0px solid gray;}");
+void MainWindow::msgBox(QString text) {
+  m_widget = new QWidget(this);
+  QDialog *frame = new QDialog(this);
+  frame->setModal(true);
   QVBoxLayout *vbox = new QVBoxLayout;
-  vbox->setContentsMargins(6, 6, 6, 6);
+  vbox->setContentsMargins(12, 12, 12, 12);
   vbox->setSpacing(12);
   frame->setLayout(vbox);
   QLabel *lbl = new QLabel(this);
+  lbl->adjustSize();
+  lbl->setWordWrap(true);
   lbl->setText(text);
   vbox->addWidget(lbl);
-  QPushButton *btnCancel = new QPushButton(this);
-  QPushButton *btnOk = new QPushButton(this);
+  QToolButton *btnCancel = new QToolButton(this);
+  QToolButton *btnOk = new QToolButton(this);
   btnCancel->setText(tr("Cancel"));
   btnOk->setText(tr("Delete"));
-  // btnOk->setStyleSheet(
-  //     "QPushButton {background-color: rgb(255, 0, 0);color: rgb(255, "
-  //     "255, 255);}");
-  vbox->addWidget(btnCancel);
-  vbox->addWidget(btnOk);
+  btnOk->setStyleSheet(
+      "QToolButton {background-color: rgb(255, 0, 0);color: rgb(255, "
+      "255, 255);}");
+
+  QHBoxLayout *hbox = new QHBoxLayout;
+  hbox->addWidget(btnCancel);
+  hbox->addWidget(btnOk);
+  btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  vbox->addLayout(hbox, 0);
+
   int x, y, w, h;
   w = mw_one->width() * 2 / 3;
-  h = 300;
-  x = (mw_one->width() - w) / 2;
-  y = (mw_one->height() - h) / 2;
+  h = frame->height();
+  x = geometry().x() + (width() - w) / 2;
+  y = (height() - h) / 2;
   frame->setGeometry(x, y, w, h);
-  connect(btnCancel, &QPushButton::clicked, [=]() {
-    frame->close();
-    return false;
-  });
-  connect(btnOk, &QPushButton::clicked, [=]() {
-    frame->close();
-    return true;
-  });
-  frame->show();
 
-  return false;
+  connect(btnCancel, &QToolButton::clicked, [=]() mutable {
+    isOK = false;
+    frame->close();
+    closeGrayWindows();
+  });
+  connect(btnOk, &QToolButton::clicked, [=]() mutable {
+    isOK = true;
+    frame->close();
+    closeGrayWindows();
+  });
+  showGrayWindows();
+  frame->exec();
 }
 
 void MainWindow::del_Data(QTreeWidget *tw) {
@@ -976,7 +985,10 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        QMessageBox msgBox;
+        msgBox(str + "\n\n" + tr("Less") + "\n\n" + str1);
+        if (!isOK) return;
+        // qDebug() << "ccc" << isOK;
+        /*QMessageBox msgBox;
         msgBox.setText(str);
         msgBox.setInformativeText(tr("Less") + "\n\n" + str1);
         QPushButton *btnCancel =
@@ -993,7 +1005,7 @@ void MainWindow::del_Data(QTreeWidget *tw) {
         msgBox.exec();
         if (msgBox.clickedButton() == btnCancel) {
           return;
-        }
+        }*/
 
         addUndo(tr("Del Item") + " ( " + getTabText() + " ) ");
 

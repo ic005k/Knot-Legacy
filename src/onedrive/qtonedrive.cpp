@@ -244,6 +244,7 @@ void QtOneDrive::uploadFile(const QString& localFilePath,
 
   connect(reply, &QNetworkReply::uploadProgress,
           [reply, this, localFilePath](qint64 bytesSent, qint64 bytesTotal) {
+            Q_UNUSED(reply);
             qDebug() << "uploadProgress:" << bytesSent << bytesTotal;
             if (bytesTotal > 0)
               emit progressUploadFile(localFilePath,
@@ -284,6 +285,7 @@ void QtOneDrive::uploadFile(QFile* file, const QString& remoteFileName,
 
   connect(reply, &QNetworkReply::uploadProgress,
           [reply, this](qint64 bytesSent, qint64 bytesTotal) {
+            Q_UNUSED(reply);
             qDebug() << "uploadProgress:" << bytesSent << bytesTotal;
             if (bytesTotal > 0)
               emit progressUploadFile(tmp_localFileName_,
@@ -428,6 +430,7 @@ void QtOneDrive::downloadFile(const QUrl& url) {
 
   connect(reply, &QNetworkReply::downloadProgress,
           [reply, this](qint64 bytesSent, qint64 bytesTotal) {
+            Q_UNUSED(reply);
             qDebug() << "downloadProgress:" << bytesSent << bytesTotal;
             if (bytesTotal > 0)
               emit progressDownloadFile(tmp_fileId_,

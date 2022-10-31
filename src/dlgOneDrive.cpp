@@ -51,6 +51,7 @@ TestDialog::TestDialog(QWidget *parent)
   });
 
   connect(oneDrive, &QtOneDrive::successCreateFolder, [this](const QString id) {
+    Q_UNUSED(this);
     QTextEdit *text = new QTextEdit(0);
     text->resize(QSize(500, 400));
     text->setWindowTitle("OneDrive");
@@ -96,16 +97,19 @@ TestDialog::TestDialog(QWidget *parent)
 
   connect(oneDrive, &QtOneDrive::progressUploadFile,
           [this](const QString, int percent) {
+            Q_UNUSED(this);
             mw_one->ui->progressBar->setValue(percent);
           });
 
   connect(oneDrive, &QtOneDrive::progressDownloadFile,
           [this](const QString, int percent) {
+            Q_UNUSED(this);
             mw_one->ui->progressBar->setValue(percent);
           });
 
   connect(oneDrive, &QtOneDrive::successTraverseFolder,
           [this](const QJsonObject array) {
+            Q_UNUSED(this);
             QTextEdit *text = new QTextEdit(0);
             text->resize(QSize(500, 400));
             text->setWindowTitle("OneDrive");
