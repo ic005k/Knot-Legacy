@@ -958,6 +958,7 @@ void MainWindow::msgBox(QString text) {
     frame->close();
     closeGrayWindows();
   });
+  connect(frame, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
     isOK = true;
     frame->close();
