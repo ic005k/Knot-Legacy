@@ -1662,13 +1662,18 @@ void MainWindow::on_twItemClicked() {
   if (item->parent() == NULL && item->childCount() == 0) return;
   QTreeWidgetItem *pItem;
 
+  QString year;
+  if (item->parent() == NULL)
+    year = item->text(3);
+  else
+    year = item->parent()->text(3);
+  tw->headerItem()->setText(0, "" + tr("Date") + "  " + year);
+
   if (item->childCount() > 0) {
     pItem = item;
     if (tabChart->currentIndex() == 0) {
-      QString year = item->text(3);
       QString str = item->text(0) + " " + year;
       QString strYearMonth = get_Year(str) + get_Month(str);
-      tw->headerItem()->setText(0, "" + tr("Date") + "  " + year);
       if (strYearMonth == CurrentYearMonth) return;
       startRead(str);
     }
@@ -1686,10 +1691,8 @@ void MainWindow::on_twItemClicked() {
     }
 
     if (tabChart->currentIndex() == 0) {
-      QString year = item->parent()->text(3);
       QString str = item->parent()->text(0) + " " + year;
       QString strYearMonth = get_Year(str) + get_Month(str);
-      tw->headerItem()->setText(0, "" + tr("Date") + "  " + year);
       if (strYearMonth == CurrentYearMonth) return;
       startRead(str);
     }
