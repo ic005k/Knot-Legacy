@@ -2,6 +2,8 @@ buildscript {
     repositories {
         google()
         jcenter()
+
+
     }
 
     dependencies {
@@ -13,13 +15,22 @@ buildscript {
 repositories {
     google()
     jcenter()
+
+
 }
 
 apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    compile "com.android.support:support-v4:23.0.+"
 }
+
+dependencies {
+    //compile fileTree(dir: 'libs', include: ['*.jar'])
+    //compile "com.android.support:support-v4:23.0.+"
+    //compile "com.android.support:support-v7:28.0.+"
+   }
 
 
 
@@ -79,11 +90,7 @@ android {
     }
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:support-v4:23.0.+"
-    //compile "com.android.support:support-v7:28.0.+"
-   }
+
 
 // 显示所有已过时的警告详细信息
 allprojects {

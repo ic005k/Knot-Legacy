@@ -92,6 +92,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import android.support.v4.content.FileProvider;
+//import androidx.core.content.FileProvider;
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
