@@ -832,7 +832,8 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
 
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QString str = tw->topLevelItem(i)->text(0);
+    QString str =
+        tw->topLevelItem(i)->text(0) + " " + tw->topLevelItem(i)->text(3);
     if (getYMD(str) == getYMD(strDate)) {
       isYes = true;
 
@@ -871,7 +872,14 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
 
   if (!isYes) {
     QTreeWidgetItem *topItem = new QTreeWidgetItem;
-    topItem->setText(0, strDate);
+
+    QStringList lista = strDate.split(" ");
+    if (lista.count() == 4) {
+      QString a = lista.at(0) + " " + lista.at(1) + " " + lista.at(2);
+      topItem->setText(0, a);
+      topItem->setText(3, lista.at(3));
+    }
+
     tw->addTopLevelItem(topItem);
     QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
     item11->setText(0, strTime);
@@ -914,7 +922,8 @@ void MainWindow::del_Data(QTreeWidget *tw) {
   bool isNo = true;
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QString str = tw->topLevelItem(i)->text(0);
+    QString str =
+        tw->topLevelItem(i)->text(0) + " " + tw->topLevelItem(i)->text(3);
     if (getYMD(str) == getYMD(strDate)) {
       isNo = false;
       QTreeWidgetItem *topItem = tw->topLevelItem(i);
@@ -1090,6 +1099,8 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
     if (childCount > 0) {
       Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topDate",
                    tw->topLevelItem(i)->text(0));
+      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topYear",
+                   tw->topLevelItem(i)->text(3));
       Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topFreq",
                    tw->topLevelItem(i)->text(1));
       Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topAmount",
@@ -1618,6 +1629,7 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
   tw->headerItem()->setText(1, "  " + tr("Freq") + "  ");
   tw->headerItem()->setText(2, tr("Amount"));
   tw->headerItem()->setText(3, tr("Year"));
+  tw->setColumnHidden(3, true);
 
   tw->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
@@ -1656,6 +1668,7 @@ void MainWindow::on_twItemClicked() {
       QString year = item->text(3);
       QString str = item->text(0) + " " + year;
       QString strYearMonth = get_Year(str) + get_Month(str);
+      tw->headerItem()->setText(0, "" + tr("Date") + "  " + year);
       if (strYearMonth == CurrentYearMonth) return;
       startRead(str);
     }
@@ -1676,6 +1689,7 @@ void MainWindow::on_twItemClicked() {
       QString year = item->parent()->text(3);
       QString str = item->parent()->text(0) + " " + year;
       QString strYearMonth = get_Year(str) + get_Month(str);
+      tw->headerItem()->setText(0, "" + tr("Date") + "  " + year);
       if (strYearMonth == CurrentYearMonth) return;
       startRead(str);
     }

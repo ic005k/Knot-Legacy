@@ -449,8 +449,10 @@ void dlgReport::getMonthData() {
       return;
     }
 
-    QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
-    QString strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0));
+    QString strYear;
+    strYear = tw->topLevelItem(i)->text(3);
+    QString strMonth =
+        mw_one->get_Month(tw->topLevelItem(i)->text(0) + " " + strYear);
 
     if (btnMonthText == tr("Year-Round")) {
       if (strYear == btnYearText) {
