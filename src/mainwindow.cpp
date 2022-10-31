@@ -1225,28 +1225,46 @@ void MainWindow::readData(QTreeWidget *tw) {
     ini_file = iniFile;
   else
     ini_file = iniDir + name + ".ini";
+
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
+
   int rowCount = Reg.value("/" + name + "/TopCount").toInt();
   for (int i = 0; i < rowCount; i++) {
     int childCount =
         Reg.value("/" + name + "/" + QString::number(i + 1) + "-childCount")
             .toInt();
+
     // 不显示子项为0的数据
     if (childCount > 0) {
       QTreeWidgetItem *topItem = new QTreeWidgetItem;
       QString strD0 =
           Reg.value("/" + name + "/" + QString::number(i + 1) + "-topDate")
               .toString();
-      int m = strD0.split(" ").at(1).toInt();
+
+      /*int m = strD0.split(" ").at(1).toInt();
       if (m == 0) {
         QString strD1 = QDate::fromString(strD0, "ddd MMM d yyyy")
                             .toString("ddd MM dd yyyy");
         topItem->setText(0, strD1);
       } else
+        topItem->setText(0, strD0);*/
+
+      QStringList lista = strD0.split(" ");
+      if (lista.count() == 4) {
+        QString a0 = lista.at(0) + " " + lista.at(1) + " " + lista.at(2);
+        topItem->setText(0, a0);
+        topItem->setText(3, lista.at(3));
+      } else {
         topItem->setText(0, strD0);
+        QString year =
+            Reg.value("/" + name + "/" + QString::number(i + 1) + "-topYear")
+                .toString();
+        topItem->setText(3, year);
+      }
+
       tw->addTopLevelItem(topItem);
 
       topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -1595,10 +1613,11 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
   font.setPointSize(fontSize + 1);
   ui->lblKnot->setFont(font);
 
-  tw->setColumnCount(3);
+  tw->setColumnCount(4);
   tw->headerItem()->setText(0, "  " + tr("Date") + "  ");
   tw->headerItem()->setText(1, "  " + tr("Freq") + "  ");
   tw->headerItem()->setText(2, tr("Amount"));
+  tw->headerItem()->setText(3, tr("Year"));
 
   tw->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   tw->header()->setDefaultAlignment(Qt::AlignCenter);
@@ -1634,12 +1653,14 @@ void MainWindow::on_twItemClicked() {
   if (item->childCount() > 0) {
     pItem = item;
     if (tabChart->currentIndex() == 0) {
-      QString str = item->text(0);
+      QString year = item->text(3);
+      QString str = item->text(0) + " " + year;
       QString strYearMonth = get_Year(str) + get_Month(str);
       if (strYearMonth == CurrentYearMonth) return;
       startRead(str);
     }
   }
+
   if (item->childCount() == 0 && item->parent()->childCount() > 0)
     pItem = item->parent();
   if (item->parent() != NULL) {
@@ -1652,7 +1673,8 @@ void MainWindow::on_twItemClicked() {
     }
 
     if (tabChart->currentIndex() == 0) {
-      QString str = item->parent()->text(0);
+      QString year = item->parent()->text(3);
+      QString str = item->parent()->text(0) + " " + year;
       QString strYearMonth = get_Year(str) + get_Month(str);
       if (strYearMonth == CurrentYearMonth) return;
       startRead(str);
@@ -2613,7 +2635,7 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     if (isBreak) break;
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
-    QString str0 = topItem->text(0);
+    QString str0 = topItem->text(0) + " " + topItem->text(3);
     QString y, m, d;
     y = get_Year(str0);
     m = get_Month(str0);

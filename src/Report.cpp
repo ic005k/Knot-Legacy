@@ -681,6 +681,7 @@ void dlgReport::on_btnCategory_clicked() {
   int count = tableReport->rowCount();
   if (count == 0) {
     btnCategory->setText(tr("Category"));
+    frameCategory = NULL;
     return;
   }
 
