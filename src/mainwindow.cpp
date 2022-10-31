@@ -936,7 +936,23 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        if (showMsgBox(str, tr("Less") + "\n\n" + str1, "", 2) == false) return;
+        // if (showMsgBox(str, tr("Less") + "\n\n" + str1, "", 2) == false)
+        // return;
+        QMessageBox msgBox;
+        msgBox.setText(str);
+        msgBox.setInformativeText(tr("Less") + "\n\n" + str1);
+        QPushButton *btnCancel =
+            msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+        QPushButton *btnOk =
+            msgBox.addButton(tr("Delete"), QMessageBox::AcceptRole);
+        btnOk->setFocus();
+        btnOk->setStyleSheet(
+            "QPushButton {background-color: rgb(255, 0, 0);color: rgb(255, "
+            "255, 255);}");
+        msgBox.exec();
+        if (msgBox.clickedButton() == btnCancel) {
+          return;
+        }
 
         addUndo(tr("Del Item") + " ( " + getTabText() + " ) ");
 
@@ -1904,7 +1920,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
   if (watch == tw->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
-      int press_x = event->globalX();
       int press_y = event->globalY();
       int press_y0 = event->pos().y();
       int newy = 0;
