@@ -1728,8 +1728,8 @@ void MainWindow::on_twItemClicked() {
   if (!tw->currentIndex().isValid()) return;
 
   QTreeWidgetItem *item = tw->currentItem();
-
   if (item->parent() == NULL && item->childCount() == 0) return;
+
   QTreeWidgetItem *pItem;
 
   QString year, stra;
@@ -1744,39 +1744,34 @@ void MainWindow::on_twItemClicked() {
   ui->tabCharts->setTabText(0, stra.split(" ").at(1));
   ui->tabCharts->setTabText(1, stra.split(" ").at(2));
 
+  // top item
   if (item->childCount() > 0) {
     pItem = item;
-    if (tabChart->currentIndex() == 0) {
-      QString str = item->text(0) + " " + year;
-      QString strYearMonth = get_Year(str) + get_Month(str);
-      if (strYearMonth == CurrentYearMonth) return;
-      startRead(str);
-    }
+
+    ui->lblStats->setText(strStats);
   }
 
-  if (item->childCount() == 0 && item->parent()->childCount() > 0)
+  // child items
+  if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     pItem = item->parent();
-  if (item->parent() != NULL) {
+
     QString str = item->text(2);
     if (str.length() > 0)
       ui->lblStats->setText(str);
     else {
-      init_Stats(tw);
       ui->lblStats->setText(strStats);
     }
-
-    if (tabChart->currentIndex() == 0) {
-      QString str = item->parent()->text(0) + " " + year;
-      QString strYearMonth = get_Year(str) + get_Month(str);
-      if (strYearMonth == CurrentYearMonth) return;
-      startRead(str);
-    }
-  } else {
-    init_Stats(tw);
   }
 
   if (parentItem == pItem) {
     return;
+  }
+
+  if (tabChart->currentIndex() == 0) {
+    QString str = stra + " " + year;
+    QString strYearMonth = get_Year(str) + get_Month(str);
+    if (strYearMonth == CurrentYearMonth) return;
+    startRead(str);
   }
 
   if (tabChart->currentIndex() == 1) startRead(strDate);
