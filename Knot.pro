@@ -61,7 +61,6 @@ SOURCES += \
     src/file.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/onedrive/dlgweb.cpp \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
     src/setTodoAlarm.cpp \
@@ -91,7 +90,6 @@ HEADERS += \
     src/documenthandler.h \
     src/file.h \
     src/mainwindow.h \
-    src/onedrive/dlgweb.h \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
@@ -119,7 +117,6 @@ FORMS += \
     src/dlgsteps.ui \
     src/dlgtodo.ui \
     src/mainwindow.ui \
-    src/onedrive/dlgweb.ui \
     src/setTodoAlarm.ui
 
 # Default rules for deployment.
