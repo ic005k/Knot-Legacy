@@ -929,6 +929,9 @@ void MainWindow::msgBox(QString text) {
   QLabel *lbl = new QLabel(this);
   lbl->adjustSize();
   lbl->setWordWrap(true);
+  QFont f = this->font();
+  f.setPointSize(fontSize + 2);
+  lbl->setFont(f);
   lbl->setText(text);
   vbox->addWidget(lbl);
   QToolButton *btnCancel = new QToolButton(this);
@@ -948,7 +951,7 @@ void MainWindow::msgBox(QString text) {
 
   int x, y, w, h;
   w = mw_one->width() - 30;
-  h = 240;
+  h = 280;
   x = geometry().x() + (width() - w) / 2;
   y = geometry().y() + (mw_one->height() - h) / 2;
   frame->setGeometry(x, y, w, h);
@@ -987,7 +990,9 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        msgBox(str + "\n\n" + tr("Less") + "\n\n" + str1);
+        msgBox(str + " : \n\n" +
+               tr("The last record added today will be deleted!") + "\n\n" +
+               str1);
         if (!isOK) return;
         // qDebug() << "ccc" << isOK;
         /*QMessageBox msgBox;
