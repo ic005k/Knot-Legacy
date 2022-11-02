@@ -10,6 +10,10 @@ QString hsStyle;
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
+  this->layout()->setContentsMargins(1, 1, 1, 1);
+  ui->frameDaily->setContentsMargins(1, 1, 1, 1);
+  ui->frameDT->setContentsMargins(1, 1, 1, 1);
+  ui->frameSel->setContentsMargins(1, 1, 1, 1);
   this->layout()->setSpacing(1);
   this->installEventFilter(this);
   initDlg();
@@ -140,7 +144,8 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
 
   QGridLayout* gl = new QGridLayout(this);
 
-  gl->setSpacing(5);
+  gl->setSpacing(2);
+  gl->setContentsMargins(2, 2, 2, 2);
   ui->frameSel->setLayout(gl);
 
   for (int i = 0; i < total; i++) {

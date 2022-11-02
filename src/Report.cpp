@@ -688,11 +688,12 @@ void dlgReport::on_btnCategory_clicked() {
   QDialog* dlg = new QDialog(this);
   QVBoxLayout* vbox0 = new QVBoxLayout;
   dlg->setLayout(vbox0);
+  vbox0->setContentsMargins(5, 5, 5, 5);
   dlg->setModal(true);
   dlg->setWindowFlag(Qt::FramelessWindowHint);
-  dlg->setAttribute(Qt::WA_TranslucentBackground);
+  // dlg->setAttribute(Qt::WA_TranslucentBackground);
 
-  QFrame* frame = new QFrame(this);
+  QFrame* frame = new QFrame(dlg);
   vbox0->addWidget(frame);
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
