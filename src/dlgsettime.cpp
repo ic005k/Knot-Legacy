@@ -17,6 +17,8 @@ dlgSetTime::dlgSetTime(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetTime) {
   ui->setupUi(this);
 
+  mw_one->set_btnStyle(this);
+
   m_List = new dlgList(this);
   frameList = NULL;
 

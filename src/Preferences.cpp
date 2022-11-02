@@ -13,6 +13,9 @@ extern int fontSize;
 dlgPreferences::dlgPreferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgPreferences) {
   ui->setupUi(this);
+
+  mw_one->set_btnStyle(this);
+
   this->installEventFilter(this);
 
   ui->chkClose->hide();

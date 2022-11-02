@@ -15,6 +15,9 @@ extern int fontSize;
 
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
+
+  mw_one->set_btnStyle(this);
+
   this->installEventFilter(this);
   ui->textEdit->viewport()->installEventFilter(this);
   ui->listRecycle->installEventFilter(this);

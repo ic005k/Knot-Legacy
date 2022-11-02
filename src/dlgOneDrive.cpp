@@ -18,6 +18,7 @@ extern QString iniFile, iniDir;
 TestDialog::TestDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::TestDialog) {
   ui->setupUi(this);
+
   this->installEventFilter(this);
   init();
   initQuick();

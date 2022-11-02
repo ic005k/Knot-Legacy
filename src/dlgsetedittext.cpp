@@ -9,6 +9,9 @@ extern MainWindow* mw_one;
 dlgSetEditText::dlgSetEditText(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgSetEditText) {
   ui->setupUi(this);
+
+  mw_one->set_btnStyle(this);
+
   ui->lineEdit->setReadOnly(true);
 
   this->installEventFilter(this);

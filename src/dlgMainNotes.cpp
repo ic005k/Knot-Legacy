@@ -13,6 +13,9 @@ extern QRegularExpression regxNumber;
 dlgMainNotes::dlgMainNotes(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
   ui->setupUi(this);
+
+  mw_one->set_btnStyle(this);
+
   ui->btnTest->hide();
 
   m_SetEditText = new dlgSetEditText(this);

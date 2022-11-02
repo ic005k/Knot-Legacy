@@ -11,6 +11,9 @@ extern int curPos;
 dlgRemarks::dlgRemarks(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgRemarks) {
   ui->setupUi(this);
+
+  mw_one->set_btnStyle(this);
+
   ui->btnMirrorDL->hide();
   ui->btnDL->hide();
 

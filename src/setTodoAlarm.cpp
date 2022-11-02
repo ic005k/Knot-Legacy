@@ -10,14 +10,13 @@ QString hsStyle;
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
+  mw_one->set_btnStyle(this);
+
   this->layout()->setSpacing(1);
   this->installEventFilter(this);
   initDlg();
 
   ui->dateTimeEdit->hide();
-  // ui->lblTodoText->setWordWrap(true);
-  // ui->lblTodoText->adjustSize();
-  btnNorStyle = ui->btnCancelDT->styleSheet();
   ui->dateTimeEdit->setReadOnly(true);
   ui->lblTodoText->setStyleSheet(
       mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
@@ -131,7 +130,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
   for (int i = 0; i < lstOfChildren0.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
-    w->setStyleSheet(btnNorStyle);
+    w->setStyleSheet(mw_one->btnStyle);
     QStringList list = w->text().split("\n");
     if (list.at(1) == flag) w->setStyleSheet(btnSelStyle);
   }
@@ -149,6 +148,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
   for (int i = 0; i < total; i++) {
     for (int j = 0; j < col; j++) {
       QToolButton* btn = new QToolButton(ui->frameSel);
+      btn->setStyleSheet(mw_one->btnStyle);
       btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
       btn->setObjectName("btn" + QString::number(count));
       QString str = QString::number(count + start);
@@ -186,6 +186,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
 
   for (int i = 0; i < total; i++) {
     QToolButton* btn = new QToolButton(ui->frameSel);
+    btn->setStyleSheet(mw_one->btnStyle);
     btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     btn->setObjectName("btn" + QString::number(count + i));
     QString str = QString::number(count + i + start);
@@ -215,6 +216,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameSel));
   for (int i = 0; i < lstOfChildren.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren.at(i);
+    w->setStyleSheet(mw_one->btnStyle);
     if (flag == tr("Year")) {
       if (w->text() == y) {
         w->setStyleSheet(btnSelStyle);
@@ -248,7 +250,7 @@ void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameSel));
   for (int i = 0; i < lstOfChildren.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren.at(i);
-    w->setStyleSheet(btnNorStyle);
+    w->setStyleSheet(mw_one->btnStyle);
   }
   btn->setStyleSheet(btnSelStyle);
 
@@ -284,7 +286,7 @@ void msgDialog::addDial(int min, int max, QString flag) {
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
   for (int i = 0; i < lstOfChildren0.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
-    w->setStyleSheet(btnNorStyle);
+    w->setStyleSheet(mw_one->btnStyle);
     QStringList list = w->text().split("\n");
     if (list.at(1) == flag) w->setStyleSheet(btnSelStyle);
   }

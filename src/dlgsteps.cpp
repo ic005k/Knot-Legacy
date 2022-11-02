@@ -51,6 +51,12 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   QFont font = ui->tableWidget->horizontalHeader()->font();
   font.setBold(true);
   ui->tableWidget->horizontalHeader()->setFont(font);
+
+  ui->btnBack->setStyleSheet(mw_one->btnStyle);
+  ui->btnDefaultIntercept->setStyleSheet(mw_one->btnStyle);
+  ui->btnDefaultSlope->setStyleSheet(mw_one->btnStyle);
+  ui->btnPause->setStyleSheet(mw_one->btnStyle);
+  ui->btnReset->setStyleSheet(mw_one->btnStyle);
 }
 
 dlgSteps::~dlgSteps() { delete ui; }

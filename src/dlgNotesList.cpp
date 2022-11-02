@@ -10,6 +10,17 @@ extern QString iniDir;
 dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
   ui->setupUi(this);
+
+  mw_one->set_btnStyle(this);
+
+  setWindowFlag(Qt::FramelessWindowHint);
+  setAttribute(Qt::WA_TranslucentBackground);
+  ui->frame0->setStyleSheet(
+      "#frame0{background-color: rgb(236, 236, 236);border-radius:10px; "
+      "border:1px solid gray;}");
+  ui->frame1->setStyleSheet(
+      "#frame1{background-color: rgb(236, 236, 236);border-radius:10px; "
+      "border:1px solid gray;}");
   tw = ui->treeWidget;
   twrb = ui->treeWidgetRecycle;
   setModal(true);

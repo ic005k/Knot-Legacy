@@ -240,6 +240,10 @@ class MainWindow : public QMainWindow {
   void add_Data(QTreeWidget *, QString, QString, QString);
   void del_Data(QTreeWidget *);
   static QTreeWidget *get_tw(int tabIndex);
+  QString btnStyle =
+      "QToolButton {background-color: rgb(236, 236, 236);border-radius:10px; "
+      "border:1px solid gray; } QToolButton:pressed { background-color: "
+      "rgb(220,220,230);}";
   QString listWidgetStyle =
       "QListWidget::indicator{width:25;height:25;right: 5px;}"
       "QListView {outline: none;}"
@@ -346,7 +350,8 @@ class MainWindow : public QMainWindow {
   void bakIniData(QString unredoFile, bool unre);
   bool isOK = false;
   void msgBox(QString text);
- public slots:
+  void set_btnStyle(QObject *parent);
+  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();

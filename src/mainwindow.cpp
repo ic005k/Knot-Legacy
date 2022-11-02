@@ -920,8 +920,20 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
 
 void MainWindow::msgBox(QString text) {
   m_widget = new QWidget(this);
-  QDialog *frame = new QDialog(this);
-  frame->setModal(true);
+
+  QDialog *dlg = new QDialog(this);
+  QVBoxLayout *vbox0 = new QVBoxLayout;
+  dlg->setLayout(vbox0);
+  dlg->setModal(true);
+  dlg->setWindowFlag(Qt::FramelessWindowHint);
+  dlg->setAttribute(Qt::WA_TranslucentBackground);
+
+  QFrame *frame = new QFrame(this);
+  vbox0->addWidget(frame);
+  frame->setStyleSheet(
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "border:0px solid gray;}");
+
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setContentsMargins(12, 12, 12, 12);
   vbox->setSpacing(12);
@@ -940,7 +952,9 @@ void MainWindow::msgBox(QString text) {
   btnOk->setText(tr("Delete"));
   btnOk->setStyleSheet(
       "QToolButton {background-color: rgb(255, 0, 0);color: rgb(255, "
-      "255, 255);}");
+      "255, 255);border-radius:10px;border:1px solid gray;}");
+
+  btnCancel->setStyleSheet(btnStyle);
 
   QHBoxLayout *hbox = new QHBoxLayout;
   hbox->addWidget(btnCancel);
@@ -954,22 +968,23 @@ void MainWindow::msgBox(QString text) {
   h = 280;
   x = geometry().x() + (width() - w) / 2;
   y = geometry().y() + (mw_one->height() - h) / 2;
-  frame->setGeometry(x, y, w, h);
+  dlg->setGeometry(x, y, w, h);
 
   isOK = false;
   connect(btnCancel, &QToolButton::clicked, [=]() mutable {
     isOK = false;
-    frame->close();
+    dlg->close();
     closeGrayWindows();
   });
-  connect(frame, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
+  connect(dlg, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
     isOK = true;
-    frame->close();
+    dlg->close();
     closeGrayWindows();
   });
+
   showGrayWindows();
-  frame->exec();
+  dlg->exec();
 }
 
 void MainWindow::del_Data(QTreeWidget *tw) {
@@ -1075,6 +1090,14 @@ void MainWindow::on_AddRecord() {
 
 void MainWindow::on_DelRecord() {
   del_Data((QTreeWidget *)ui->tabWidget->currentWidget());
+}
+
+void MainWindow::set_btnStyle(QObject *parent) {
+  QObjectList btnList = getAllToolButton(getAllUIControls(parent));
+  for (int i = 0; i < btnList.count(); i++) {
+    QToolButton *btn = (QToolButton *)btnList.at(i);
+    btn->setStyleSheet(btnStyle);
+  }
 }
 
 QObjectList MainWindow::getAllTreeWidget(QObjectList lstUIControls) {
@@ -3858,6 +3881,8 @@ void MainWindow::init_Sensors() {
 }
 
 void MainWindow::init_UIWidget() {
+  set_btnStyle(this);
+
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
