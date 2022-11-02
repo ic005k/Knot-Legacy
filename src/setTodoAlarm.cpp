@@ -11,14 +11,13 @@ QString hsStyle;
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
-  QFont font0 = this->font();
+  font0 = this->font();
   if (fontSize > 17)
     font0.setPointSize(17);
   else
     font0.setPointSize(fontSize);
   this->setFont(font0);
 
-  font0.setPixelSize(20);
   this->layout()->setContentsMargins(1, 1, 1, 1);
   ui->frameDaily->setContentsMargins(1, 1, 1, 1);
   ui->frameDT->setContentsMargins(1, 1, 1, 1);
@@ -261,8 +260,10 @@ void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
   for (int i = 0; i < lstOfChildren.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren.at(i);
     w->setStyleSheet(mw_one->btnStyle);
+    w->setFont(font0);
   }
   btn->setStyleSheet(btnSelStyle);
+  btn->setFont(font0);
 
   QString title = btn->text();
 

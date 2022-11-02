@@ -5036,7 +5036,7 @@ void MainWindow::showGrayWindows() {
 
   QPropertyAnimation *m_pAnimation = new QPropertyAnimation();
   m_pAnimation->setTargetObject(m_widget);
-  m_pAnimation->setDuration(300);
+  m_pAnimation->setDuration(250);
   QGraphicsOpacityEffect *m_pOpacity = new QGraphicsOpacityEffect();
   m_widget->setGraphicsEffect(m_pOpacity);
   m_pOpacity->setOpacity(1);

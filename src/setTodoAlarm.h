@@ -55,6 +55,7 @@ class msgDialog : public QDialog {
   void on_btnNextWeek_clicked();
 
  private:
+  QFont font0;
   void onBtnClick(QToolButton *btn, QString flag);
   QString y, m, d, h, mm;
   void setBtnTitle();
