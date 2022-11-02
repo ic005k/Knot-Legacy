@@ -696,7 +696,7 @@ void dlgReport::on_btnCategory_clicked() {
   QFrame* frame = new QFrame(dlg);
   vbox0->addWidget(frame);
   frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:0px; "
       "border:0px solid gray;}");
 
   /*frame->setGeometry(5, 5, this->width() - 5,

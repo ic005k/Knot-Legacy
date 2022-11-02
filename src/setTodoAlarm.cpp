@@ -5,11 +5,20 @@
 #include "ui_setTodoAlarm.h"
 
 extern MainWindow* mw_one;
+extern int fontSize;
 QString hsStyle;
 
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
+  QFont font0 = this->font();
+  if (fontSize > 17)
+    font0.setPointSize(17);
+  else
+    font0.setPointSize(fontSize);
+  this->setFont(font0);
+
+  font0.setPixelSize(20);
   this->layout()->setContentsMargins(1, 1, 1, 1);
   ui->frameDaily->setContentsMargins(1, 1, 1, 1);
   ui->frameDT->setContentsMargins(1, 1, 1, 1);
@@ -117,15 +126,9 @@ void msgDialog::on_btnDay_clicked() {
   addBtn(1, maxDay, 6, tr("Day"), true);
 }
 
-void msgDialog::on_btnHour_clicked() {
-  // addBtn(0, 24, 5, tr("Hour"));
-  addDial(0, 23, tr("Hour"));
-}
+void msgDialog::on_btnHour_clicked() { addDial(0, 23, tr("Hour")); }
 
-void msgDialog::on_btnMinute_clicked() {
-  // addBtn(0, 60, 6, tr("Minute"));
-  addDial(0, 59, tr("Minute"));
-}
+void msgDialog::on_btnMinute_clicked() { addDial(0, 59, tr("Minute")); }
 
 void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
   QObjectList lstOfChildren0 =
@@ -133,6 +136,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
   for (int i = 0; i < lstOfChildren0.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
     w->setStyleSheet(mw_one->btnStyle);
+
     QStringList list = w->text().split("\n");
     if (list.at(1) == flag) w->setStyleSheet(btnSelStyle);
   }
@@ -144,13 +148,14 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
 
   QGridLayout* gl = new QGridLayout(this);
 
-  gl->setSpacing(2);
-  gl->setContentsMargins(2, 2, 2, 2);
+  gl->setSpacing(5);
+  gl->setContentsMargins(5, 5, 5, 5);
   ui->frameSel->setLayout(gl);
 
   for (int i = 0; i < total; i++) {
     for (int j = 0; j < col; j++) {
       QToolButton* btn = new QToolButton(ui->frameSel);
+
       btn->setStyleSheet(mw_one->btnStyle);
       btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
       btn->setObjectName("btn" + QString::number(count));
@@ -189,6 +194,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
 
   for (int i = 0; i < total; i++) {
     QToolButton* btn = new QToolButton(ui->frameSel);
+
     btn->setStyleSheet(mw_one->btnStyle);
     btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     btn->setObjectName("btn" + QString::number(count + i));
@@ -219,6 +225,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameSel));
   for (int i = 0; i < lstOfChildren.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren.at(i);
+
     w->setStyleSheet(mw_one->btnStyle);
     if (flag == tr("Year")) {
       if (w->text() == y) {
