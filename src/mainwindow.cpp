@@ -3938,7 +3938,6 @@ void MainWindow::init_UIWidget() {
   mydlgReader = new dlgReader(this);
   mymsgDlg = new msgDialog(this);
   mydlgOneDrive = new TestDialog;
-  mydlgWeb = new dlgWeb(this);
   mydlgFloatFun = new dlgFloatFun(this);
   mydlgFloatFun->close();
   mydlgReaderFun = new dlgReaderFun(this);

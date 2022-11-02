@@ -5,8 +5,6 @@
 #include <QQuickWidget>
 #include <QUrl>
 
-#include "src/onedrive/dlgweb.h"
-
 class QWebEngineView;
 
 class QtOneDriveAuthorizationDialog : public QDialog {
@@ -16,7 +14,6 @@ class QtOneDriveAuthorizationDialog : public QDialog {
   explicit QtOneDriveAuthorizationDialog(const QUrl &url, QWidget *parent = 0);
   ~QtOneDriveAuthorizationDialog();
 
-  dlgWeb *mydlgWeb;
   QQuickWidget *webView_ = nullptr;
   static bool isExists() { return isExists_; }
   void setNeedToClose(bool close) { isNeedToClose_ = close; }
