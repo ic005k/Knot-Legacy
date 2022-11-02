@@ -2250,20 +2250,9 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameMain->isHidden()) {
-        if (!listSelTab->isHidden()) {
-          listSelTab->close();
-          closeGrayWindows();
-
-          // delete mw_one->mydlgFloatFun;
-          // mydlgFloatFun = new dlgFloatFun(this);
-          // mydlgFloatFun->init();
-          return true;
-        } else if (!listTimeMachine->isHidden()) {
+        if (!listTimeMachine->isHidden()) {
           listTimeMachine->close();
 
-          // delete mydlgFloatFun;
-          // mydlgFloatFun = new dlgFloatFun(this);
-          // mydlgFloatFun->init();
           return true;
         }
       }
@@ -3894,7 +3883,6 @@ void MainWindow::init_UIWidget() {
 
   mw_one = this;
   listSelFont = new QListWidget();
-  listSelTab = new QListWidget();
   listReadList = new QListWidget();
   listTimeMachine = new QListWidget();
   loginTime = QDateTime::currentDateTime().toString();
@@ -4088,25 +4076,24 @@ void MainWindow::on_btnSelTab_clicked() {
   mydlgFloatFun->close();
   m_widget = new QWidget(this);
 
+  QDialog *dlg = new QDialog(this);
+  QVBoxLayout *vbox0 = new QVBoxLayout;
+  dlg->setLayout(vbox0);
+  dlg->setModal(true);
+  dlg->setWindowFlag(Qt::FramelessWindowHint);
+  dlg->setAttribute(Qt::WA_TranslucentBackground);
+
   QFrame *frame = new QFrame(this);
+  vbox0->addWidget(frame);
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, "
       "255);border-radius:10px;border:0px solid gray;}");
-
-  /*frame->setGeometry(5, 5, this->width() - 5, this->height() - 5);
-  QGraphicsDropShadowEffect* shadow_effect =
-      new QGraphicsDropShadowEffect(this);
-  shadow_effect->setOffset(0, 0);
-  shadow_effect->setColor(Qt::black);
-  shadow_effect->setBlurRadius(10);
-  frame->setGraphicsEffect(shadow_effect);*/
 
   QVBoxLayout *vbox = new QVBoxLayout;
   frame->setLayout(vbox);
 
   QListWidget *list = new QListWidget(this);
   vbox->addWidget(list);
-  listSelTab = frame;
   list->setSpacing(12);
   // list->setAlternatingRowColors(true);
   list->setViewMode(QListView::IconMode);
@@ -4130,23 +4117,23 @@ void MainWindow::on_btnSelTab_clicked() {
   }
   connect(list, &QListWidget::itemClicked, [=]() {
     tabData->setCurrentIndex(list->currentRow());
-    frame->close();
+    dlg->close();
     closeGrayWindows();
-
-    // delete mw_one->mydlgFloatFun;
-    // mydlgFloatFun = new dlgFloatFun(this);
-    // mydlgFloatFun->init();
+  });
+  connect(dlg, &QDialog::rejected, [=]() {
+    dlg->close();
+    closeGrayWindows();
   });
 
   int h = height() / 2;
   int w = width() - 40;
-  int y = (this->height() - h) / 2;
-  int x = (this->width() - w) / 2;
-  frame->setGeometry(x, y, w, h);
+  int y = geometry().y() + (this->height() - h) / 2;
+  int x = geometry().x() + (this->width() - w) / 2;
+  dlg->setGeometry(x, y, w, h);
   list->setCurrentRow(tabData->currentIndex());
 
   showGrayWindows();
-  frame->show();
+  dlg->show();
   list->setFocus();
 }
 

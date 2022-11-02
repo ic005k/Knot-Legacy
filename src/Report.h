@@ -54,7 +54,6 @@ class dlgReport : public QDialog {
   void on_btnBack_clicked();
 
  private:
-  QFrame *frameCategory;
 };
 
 #endif  // REPORT_H

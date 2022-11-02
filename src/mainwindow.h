@@ -151,7 +151,7 @@ class MainWindow : public QMainWindow {
   QStringList timeLines;
   QString loginTime;
   QListWidget *listSelFont, *listReadList, *listTimeMachine;
-  QFrame *listSelTab;
+
   int mwh;
   int textFontSize;
   bool isOne = false;

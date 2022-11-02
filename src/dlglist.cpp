@@ -10,6 +10,11 @@ extern QTabWidget *tabData, *tabChart;
 dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   mw_one->set_btnStyle(this);
+  setWindowFlag(Qt::FramelessWindowHint);
+  setAttribute(Qt::WA_TranslucentBackground);
+  ui->frame->setStyleSheet(
+      "#frame{background-color: rgb(236, 236, 236);border-radius:10px; "
+      "border:1px solid gray;}");
   setModal(true);
   this->installEventFilter(this);
 
@@ -77,8 +82,6 @@ void dlgList::setCategoryText() {
   }
 
   close();
-  mw_one->mydlgSetTime->frameList->close();
-  mw_one->mydlgSetTime->frameList = NULL;
 }
 
 void dlgList::on_btnChange_clicked() {

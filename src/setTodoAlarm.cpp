@@ -10,8 +10,6 @@ QString hsStyle;
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
-  mw_one->set_btnStyle(this);
-
   this->layout()->setSpacing(1);
   this->installEventFilter(this);
   initDlg();
@@ -39,7 +37,7 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->chkDaily->setStyleSheet(strStyleChk);
   ui->frameDaily->setContentsMargins(10, 1, 10, 1);
 
-  // this->show();
+  mw_one->set_btnStyle(this);
 }
 
 msgDialog::~msgDialog() { delete ui; }

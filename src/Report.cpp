@@ -25,12 +25,9 @@ void setTableNoItemFlags(QTableWidget* t, int row);
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
 
-  mw_one->set_btnStyle(this);
-
   this->installEventFilter(this);
   this->setModal(true);
 
-  frameCategory = NULL;
   tableReport = ui->tableReport;
   tableDetails = ui->tableDetails;
   tableCategory = ui->tableCategory;
@@ -112,6 +109,8 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   font.setBold(true);
   ui->tableReport->horizontalHeader()->setFont(font);
   ui->tableDetails->horizontalHeader()->setFont(font);
+
+  mw_one->set_btnStyle(this);
 }
 
 void dlgReport::init() {
@@ -128,12 +127,7 @@ bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (frameCategory != NULL) {
-        frameCategory->close();
-        frameCategory = NULL;
-        mw_one->closeGrayWindows();
-        return true;
-      } else if (!mw_one->mydlgReport->isHidden()) {
+      if (!mw_one->mydlgReport->isHidden()) {
         on_btnBack_clicked();
         return true;
       }
@@ -685,13 +679,21 @@ void dlgReport::on_btnCategory_clicked() {
   int count = tableReport->rowCount();
   if (count == 0) {
     btnCategory->setText(tr("Category"));
-    frameCategory = NULL;
+
     return;
   }
 
   mw_one->m_widget = new QWidget(this);
+
+  QDialog* dlg = new QDialog(this);
+  QVBoxLayout* vbox0 = new QVBoxLayout;
+  dlg->setLayout(vbox0);
+  dlg->setModal(true);
+  dlg->setWindowFlag(Qt::FramelessWindowHint);
+  dlg->setAttribute(Qt::WA_TranslucentBackground);
+
   QFrame* frame = new QFrame(this);
-  frameCategory = frame;
+  vbox0->addWidget(frame);
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
       "border:0px solid gray;}");
@@ -766,13 +768,11 @@ void dlgReport::on_btnCategory_clicked() {
   int h = mw_one->height() / 2;
   if (list->count() * 30 < h) h = list->count() * 30 + 4;
   int w = mw_one->width() - 40;
-  int x = (mw_one->width() - w) / 2;
-  frame->setGeometry(x, btnCategory->y() - h / 2, w, h);
+  int x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+  dlg->setGeometry(x, btnCategory->y() - h / 2, w, h);
   if (list->count() > 1) {
     mw_one->showGrayWindows();
-    frame->show();
-  } else {
-    frameCategory = NULL;
+    dlg->show();
   }
 
   connect(list, &QListWidget::itemClicked, [=]() {
@@ -781,16 +781,19 @@ void dlgReport::on_btnCategory_clicked() {
       lblDetails->setText(tr("Details"));
       tableCategory->hide();
       tableDetails->show();
-      frame->close();
-      frameCategory = NULL;
+      dlg->close();
       mw_one->closeGrayWindows();
       return;
     }
 
     mw_one->on_RunCategory();
 
-    frame->close();
-    frameCategory = NULL;
+    dlg->close();
+    mw_one->closeGrayWindows();
+  });
+
+  connect(dlg, &QDialog::rejected, [=]() {
+    dlg->close();
     mw_one->closeGrayWindows();
   });
 }

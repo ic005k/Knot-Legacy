@@ -20,7 +20,6 @@ class dlgSetTime : public QDialog {
   ~dlgSetTime();
   Ui::dlgSetTime *ui;
 
-  QFrame *frameList;
   static void saveCustomDesc();
 
   static int removeDuplicates(QStringList *that);

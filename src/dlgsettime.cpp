@@ -20,7 +20,6 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   mw_one->set_btnStyle(this);
 
   m_List = new dlgList(this);
-  frameList = NULL;
 
   this->installEventFilter(this);
   ui->editDesc->installEventFilter(this);
@@ -167,17 +166,11 @@ void dlgSetTime::set_Amount(QString Number) {
 void dlgSetTime::on_btnCustom_clicked() {
   mw_one->m_widget = new QWidget(this);
 
-  frameList = new QFrame(this);
-  frameList->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, "
-      "255);border-radius:10px;border:0px solid gray;}");
-  QVBoxLayout* vbox = new QVBoxLayout;
-  frameList->setLayout(vbox);
-  vbox->addWidget(m_List->ui->frame);
-
   int h = mw_one->height() - 60;
   int w = mw_one->width() - 40;
-  frameList->setGeometry(20, (mw_one->height() - h) / 2, w, h);
+  m_List->setGeometry(mw_one->geometry().x() + 20,
+                      mw_one->geometry().y() + (mw_one->height() - h) / 2, w,
+                      h);
 
   init_Desc();
   m_List->ui->listWidget->setFocus();
@@ -185,7 +178,7 @@ void dlgSetTime::on_btnCustom_clicked() {
 
   mw_one->showGrayWindows();
 
-  frameList->show();
+  m_List->show();
 }
 
 void dlgSetTime::saveCustomDesc() {
@@ -282,10 +275,10 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (frameList != NULL) {
-        frameList->close();
+      if (!m_List->isHidden()) {
+        m_List->close();
         mw_one->closeGrayWindows();
-        frameList = NULL;
+
         return true;
       } else if (!mw_one->mydlgSetTime->isHidden()) {
         on_btnBack_clicked();
