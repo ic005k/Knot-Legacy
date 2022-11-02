@@ -9,6 +9,7 @@ extern QTabWidget *tabData, *tabChart;
 
 dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
+  mw_one->set_btnStyle(this);
   setModal(true);
   this->installEventFilter(this);
 

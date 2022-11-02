@@ -9,6 +9,7 @@ extern QString iniDir;
 AutoUpdateDialog::AutoUpdateDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::AutoUpdateDialog) {
   ui->setupUi(this);
+  mw_one->set_btnStyle(this);
   setModal(true);
   ui->lblTxt->adjustSize();
   ui->lblTxt->setText(tr("Download Progress") + " : \n" + "");

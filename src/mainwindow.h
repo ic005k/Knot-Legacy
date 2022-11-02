@@ -244,6 +244,10 @@ class MainWindow : public QMainWindow {
       "QToolButton {background-color: rgb(236, 236, 236);border-radius:10px; "
       "border:1px solid gray; } QToolButton:pressed { background-color: "
       "rgb(220,220,230);}";
+  QString pushbtnStyle =
+      "QPushButton {background-color: rgb(236, 236, 236);border-radius:10px; "
+      "border:1px solid gray; } QPushButton:pressed { background-color: "
+      "rgb(220,220,230);}";
   QString listWidgetStyle =
       "QListWidget::indicator{width:25;height:25;right: 5px;}"
       "QListView {outline: none;}"
@@ -351,7 +355,7 @@ class MainWindow : public QMainWindow {
   bool isOK = false;
   void msgBox(QString text);
   void set_btnStyle(QObject *parent);
-  public slots:
+ public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();

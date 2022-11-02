@@ -952,9 +952,14 @@ void MainWindow::msgBox(QString text) {
   btnOk->setText(tr("Delete"));
   btnOk->setStyleSheet(
       "QToolButton {background-color: rgb(255, 0, 0);color: rgb(255, "
-      "255, 255);border-radius:10px;border:1px solid gray;}");
+      "255, 255);border-radius:10px;border:1px solid gray;} "
+      "QToolButton:pressed "
+      "{ background-color: "
+      "rgb(220,220,230);color: black}");
 
   btnCancel->setStyleSheet(btnStyle);
+  btnOk->setFixedHeight(30);
+  btnCancel->setFixedHeight(30);
 
   QHBoxLayout *hbox = new QHBoxLayout;
   hbox->addWidget(btnCancel);
@@ -4696,6 +4701,7 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
                             int buttonCount) {
   QMessageBox msgBox;
   QPushButton *btnCopy;
+
   msgBox.setText(title);
   msgBox.setInformativeText(info);
 
@@ -4705,9 +4711,12 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
 
   QPushButton *btnCancel =
       msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+
   QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-  if (buttonCount == 3)
+
+  if (buttonCount == 3) {
     btnCopy = msgBox.addButton(tr("Copy"), QMessageBox::AcceptRole);
+  }
   btnOk->setFocus();
   msgBox.exec();
   if (msgBox.clickedButton() == btnCancel) {

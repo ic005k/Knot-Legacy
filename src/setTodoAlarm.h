@@ -22,7 +22,7 @@ class msgDialog : public QDialog {
   void initDlg();
   // QString btnSelStyle = "QToolButton {background-color: blue;color: white;}";
   QString btnSelStyle =
-      "QToolButton {background-color: rgb(0, 0, 255);color: "
+      "QToolButton {background-color: rgb(30, 144, 255);color: "
       "white;border-radius:10px; "
       "border:1px solid gray; } QToolButton:pressed { background-color: "
       "rgb(220,220,230);}";
