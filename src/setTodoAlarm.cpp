@@ -12,8 +12,8 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);
 
   font0 = this->font();
-  if (fontSize > 17)
-    font0.setPointSize(17);
+  if (fontSize > 16)
+    font0.setPointSize(16);
   else
     font0.setPointSize(fontSize);
   this->setFont(font0);
