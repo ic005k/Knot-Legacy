@@ -932,7 +932,7 @@ void MainWindow::showDelMsgBox(QString text) {
   vbox0->addWidget(frame);
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:1px solid gray;}");
+      "border:0px solid gray;}");
 
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setContentsMargins(12, 12, 12, 12);
@@ -4347,9 +4347,8 @@ void MainWindow::on_actionTimeMachine() {
 void MainWindow::on_btnMenu_clicked() {
   QMenu *mainMenu = new QMenu(this);
   init_Menu(mainMenu);
-  int x = mw_one->geometry().x() +
-          (mw_one->geometry().width() - mainMenu->width()) - 10;
-  int y = ui->frameMenu->y() + ui->frameMenu->height();
+  int x = mw_one->geometry().x() + 2;
+  int y = geometry().y() + ui->frameMenu->height() + 2;
   QPoint pos(x, y);
   mainMenu->exec(pos);
 }
