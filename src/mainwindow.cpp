@@ -3694,6 +3694,7 @@ void MainWindow::init_UIWidget() {
   tabChart = ui->tabCharts;
 
   ui->lblIcon->hide();
+  ui->lblKnot->hide();
   ui->frameReader->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
