@@ -66,8 +66,15 @@ class dlgSetTime : public QDialog {
 
   void on_btnClearDetails_clicked();
 
+  void on_editDesc_textChanged(const QString &arg1);
+
+  void on_editDetails_textChanged(const QString &arg1);
+
  private:
   void set_Amount(QString Number);
+  QString lblStyleHighLight =
+      "QLabel{background: rgb(150,202,246);color:black;}";
+  QString lblStyle;
 };
 
 #endif  // DLGSETTIME_H

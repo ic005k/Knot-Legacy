@@ -57,9 +57,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->btnClearAmount->setStyleSheet("border:none");
   ui->btnClearDesc->setStyleSheet("border:none");
   ui->btnClearDetails->setStyleSheet("border:none");
-  ui->lblCategory->setStyleSheet(ui->lblTitle->styleSheet());
-  ui->lblAmount->setStyleSheet(ui->lblTitle->styleSheet());
-  ui->lblDetails->setStyleSheet(ui->lblTitle->styleSheet());
+  lblStyle = ui->lblCategory->styleSheet();
 
   ui->hsM->setStyleSheet(ui->hsH->styleSheet());
 }
@@ -306,6 +304,11 @@ void dlgSetTime::on_editAmount_textChanged(const QString& arg1) {
       break;
     }
   }
+
+  if (arg1.length() > 0)
+    ui->lblAmount->setStyleSheet(lblStyleHighLight);
+  else
+    ui->lblAmount->setStyleSheet(lblStyle);
 }
 
 void dlgSetTime::on_hsH_valueChanged(int value) {
@@ -317,3 +320,17 @@ void dlgSetTime::on_hsM_valueChanged(int value) {
 }
 
 void dlgSetTime::on_btnClearDetails_clicked() { ui->editDetails->clear(); }
+
+void dlgSetTime::on_editDesc_textChanged(const QString& arg1) {
+  if (arg1.length() > 0)
+    ui->lblCategory->setStyleSheet(lblStyleHighLight);
+  else
+    ui->lblCategory->setStyleSheet(lblStyle);
+}
+
+void dlgSetTime::on_editDetails_textChanged(const QString& arg1) {
+  if (arg1.length() > 0)
+    ui->lblDetails->setStyleSheet(lblStyleHighLight);
+  else
+    ui->lblDetails->setStyleSheet(lblStyle);
+}
