@@ -2181,89 +2181,98 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="478"/>
+        <location filename="dlgsettime.ui" line="215"/>
+        <source>Details</source>
+        <translation>详细</translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="481"/>
         <source>7</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="497"/>
+        <location filename="dlgsettime.ui" line="500"/>
         <source>8</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="516"/>
+        <location filename="dlgsettime.ui" line="519"/>
         <source>9</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="417"/>
+        <location filename="dlgsettime.ui" line="420"/>
         <source>4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="436"/>
+        <location filename="dlgsettime.ui" line="439"/>
         <source>5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="455"/>
+        <location filename="dlgsettime.ui" line="458"/>
         <source>6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="295"/>
+        <location filename="dlgsettime.ui" line="298"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="640"/>
+        <location filename="dlgsettime.ui" line="539"/>
+        <source>Amount</source>
+        <translation>金额</translation>
+    </message>
+    <message>
+        <location filename="dlgsettime.ui" line="643"/>
         <source>00:00:00</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="176"/>
-        <location filename="dlgsettime.ui" line="253"/>
-        <location filename="dlgsettime.ui" line="588"/>
+        <location filename="dlgsettime.ui" line="179"/>
+        <location filename="dlgsettime.ui" line="256"/>
+        <location filename="dlgsettime.ui" line="591"/>
         <source>...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="212"/>
         <source>Details : </source>
-        <translation>详细：</translation>
+        <translation type="vanished">详细：</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="314"/>
+        <location filename="dlgsettime.ui" line="317"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="333"/>
+        <location filename="dlgsettime.ui" line="336"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="356"/>
+        <location filename="dlgsettime.ui" line="359"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="375"/>
+        <location filename="dlgsettime.ui" line="378"/>
         <source>.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="394"/>
+        <location filename="dlgsettime.ui" line="397"/>
         <source>&lt;-</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="135"/>
         <source>Category : </source>
-        <translation>分类：</translation>
+        <translation type="vanished">分类：</translation>
     </message>
     <message>
         <location filename="dlgsettime.ui" line="90"/>
+        <location filename="dlgsettime.ui" line="138"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
@@ -2278,9 +2287,8 @@ in skydrive folder</source>
         <translation type="vanished">描述：</translation>
     </message>
     <message>
-        <location filename="dlgsettime.ui" line="536"/>
         <source>Amount : </source>
-        <translation>金额：</translation>
+        <translation type="vanished">金额：</translation>
     </message>
     <message>
         <source>Description</source>

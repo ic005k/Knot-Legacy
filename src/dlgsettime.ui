@@ -115,7 +115,7 @@ selection-background-color: lightblue;
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_8">
      <property name="spacing">
-      <number>1</number>
+      <number>2</number>
      </property>
      <item>
       <widget class="QLabel" name="lblCategory">
@@ -135,7 +135,7 @@ selection-background-color: lightblue;
         <string notr="true"/>
        </property>
        <property name="text">
-        <string>Category : </string>
+        <string>Category</string>
        </property>
       </widget>
      </item>
@@ -195,7 +195,7 @@ selection-background-color: lightblue;
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_9">
      <property name="spacing">
-      <number>1</number>
+      <number>2</number>
      </property>
      <item>
       <widget class="QLabel" name="lblDetails">
@@ -212,7 +212,7 @@ selection-background-color: lightblue;
         </size>
        </property>
        <property name="text">
-        <string>Details : </string>
+        <string>Details</string>
        </property>
       </widget>
      </item>
@@ -525,7 +525,7 @@ selection-background-color: lightblue;
       <item row="0" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="spacing">
-         <number>1</number>
+         <number>2</number>
         </property>
         <item>
          <widget class="QLabel" name="lblAmount">
@@ -536,7 +536,7 @@ selection-background-color: lightblue;
            </size>
           </property>
           <property name="text">
-           <string>Amount : </string>
+           <string>Amount</string>
           </property>
          </widget>
         </item>
