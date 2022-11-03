@@ -982,7 +982,7 @@ void MainWindow::showDelMsgBox(QString text) {
   int x, y, w, h;
   w = mw_one->width() - 40;
   x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  h = calcStringPixelHeight(this->font(), fontSize) * 16;
+  h = calcStringPixelHeight(this->font(), fontSize) * 15;
 
   y = geometry().y() + (height() - h) / 2;
   dlg->setGeometry(x, y, w, h);
