@@ -422,12 +422,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnMax_clicked();
 
-  void on_btnYear_clicked();
-
-  void on_btnMonth_clicked();
-
-  void on_btnDay_clicked();
-
   void dealDone();
 
   void readDone();
@@ -548,7 +542,6 @@ class MainWindow : public QMainWindow {
   void init_UIWidget();
   void init_Menu(QMenu *);
   void on_btnZoom_clicked();
-  void on_cboxYear_currentTextChanged(const QString &arg1);
 
   void updateRunTime();
   void showSensorValues();

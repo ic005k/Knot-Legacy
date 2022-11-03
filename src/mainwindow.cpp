@@ -526,11 +526,11 @@ void MainWindow::init_Options() {
   Reg2.setIniCodec("utf-8");
 #endif
   btnYText = Reg2.value("/YMD/btnYText", 2022).toString();
-  ui->btnYear->setText(btnYText);
+
   btnMText = Reg2.value("/YMD/btnMText", tr("Month")).toString();
-  ui->btnMonth->setText(btnMText);
+
   btnDText = Reg2.value("/YMD/btnDText", 1).toString();
-  ui->btnDay->setText(btnDText);
+
   btnYearText = Reg2.value("/YMD/btnYearText", "2022").toString();
   mydlgReport->ui->btnYear->setText(btnYearText);
   btnMonthText = Reg2.value("/YMD/btnMonthText", tr("Month")).toString();
@@ -2688,15 +2688,10 @@ void MainWindow::on_about() {
 void MainWindow::on_btnFind_clicked() {
   if (ui->frame_find->isHidden()) {
     ui->frame_find->show();
-    ui->frameYear->show();
     ui->frameBtn->hide();
-    // ui->frame_charts->setMaximumHeight(frameChartHeight +
-    //                                    ui->frameYear->height());
 
   } else {
-    // ui->frame_charts->setMaximumHeight(frameChartHeight);
     ui->frame_find->hide();
-    ui->frameYear->hide();
     ui->frameBtn->show();
   }
 }
@@ -2740,41 +2735,6 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   }
 
   return listMonth;
-}
-
-void MainWindow::on_cboxYear_currentTextChanged(const QString &arg1) {
-  Q_UNUSED(arg1);
-
-  series->clear();
-  m_scatterSeries->clear();
-  barSeries->clear();
-  series2->clear();
-  m_scatterSeries2->clear();
-  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
-  int count = tw->topLevelItemCount();
-  for (int i = 0; i < count; i++) {
-    QString str = tw->topLevelItem(i)->text(0);
-    if (get_Year(str) == ui->btnYear->text()) {
-      if (get_Month(str) == ui->btnMonth->text()) {
-        if (tabChart->currentIndex() == 0) {
-          startRead(str);
-          break;
-        }
-        if (tabChart->currentIndex() == 1) {
-          if (get_Day(str) == ui->btnDay->text().toInt()) {
-            tw->setCurrentItem(tw->topLevelItem(i));
-            tw->setFocus();
-
-            parentItem = NULL;
-            on_twItemClicked();
-
-            break;
-          }
-        }
-      }
-    }
-  }
-  startSave("ymd");
 }
 
 void MainWindow::on_btnGo_clicked() {
@@ -2935,152 +2895,12 @@ void MainWindow::on_btnMax_clicked() {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(true);
     ui->frame_find->show();
-    ui->frameYear->hide();
     ui->btnMax->setText(tr("Min"));
   } else if (ui->btnMax->text() == tr("Min")) {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(false);
     ui->frame_find->hide();
-    ui->frameYear->hide();
     ui->btnMax->setText(tr("Max"));
-  }
-
-  // delete mw_one->mydlgFloatFun;
-  // mydlgFloatFun = new dlgFloatFun(this);
-  // mydlgFloatFun->init();
-}
-
-void MainWindow::on_btnYear_clicked() {
-  int w = ui->btnYear->width();
-  QListWidget *list = new QListWidget(this);
-  list->setStyleSheet(listStyle);
-  QFont font;
-  font.setPointSize(fontSize);
-  list->setFont(font);
-  int year = 2022;
-  QStringList strList;
-  for (int i = 0; i < 10; i++) {
-    strList.append(QString::number(year + i));
-  }
-
-  for (int i = 0; i < strList.count(); i++) {
-    QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(w, 30));  // item->sizeHint().width()
-    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    item->setText(strList.at(i));
-    list->addItem(item);
-  }
-  connect(list, &QListWidget::itemClicked, [=]() {
-    ui->btnYear->setText(list->currentItem()->text());
-    btnYText = ui->btnYear->text();
-
-    list->close();
-    on_cboxYear_currentTextChanged("");
-  });
-
-  int h = 30 * list->count() + 4;
-  int y = ui->frame_find->y() - h / 2;
-
-  list->setGeometry(ui->frameYear->x(), y, w + 15, h);
-
-  list->show();
-
-  QString str = ui->btnYear->text();
-  for (int i = 0; i < list->count(); i++) {
-    if (str == list->item(i)->text()) {
-      list->setCurrentRow(i);
-      break;
-    }
-  }
-}
-
-void MainWindow::on_btnMonth_clicked() {
-  int w = ui->btnYear->width();
-  QListWidget *list = new QListWidget(this);
-  list->setStyleSheet(listStyle);
-  QFont font;
-  font.setPointSize(fontSize);
-  list->setFont(font);
-
-  QStringList strList = listMonth;
-
-  for (int i = 0; i < strList.count(); i++) {
-    QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(w, 30));  // item->sizeHint().width()
-    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    item->setText(strList.at(i));
-    list->addItem(item);
-  }
-  connect(list, &QListWidget::itemClicked, [=]() {
-    ui->btnMonth->setText(list->currentItem()->text());
-    btnMText = ui->btnMonth->text();
-    list->close();
-    on_cboxYear_currentTextChanged("");
-  });
-
-  int h = 30 * list->count() + 4;
-  int y = ui->frame_find->y() - h / 2;
-
-  list->setGeometry(ui->btnMonth->x() + ui->frameYear->x() + 5, y, w + 5, h);
-
-  list->show();
-
-  QString str = ui->btnMonth->text();
-  for (int i = 0; i < list->count(); i++) {
-    if (str == list->item(i)->text()) {
-      list->setCurrentRow(i);
-      break;
-    }
-  }
-}
-
-void MainWindow::on_btnDay_clicked() {
-  int w = ui->btnDay->width();
-  QListWidget *list = new QListWidget(this);
-  list->setStyleSheet(listStyle);
-  list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
-  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
-  QFont font;
-  font.setPointSize(fontSize);
-  list->setFont(font);
-  QStringList strList;
-  for (int i = 0; i < 31; i++) {
-    if (i <= 8)
-      strList.append("0" + QString::number(i + 1));
-    else
-      strList.append(QString::number(i + 1));
-  }
-
-  for (int i = 0; i < strList.count(); i++) {
-    QListWidgetItem *item = new QListWidgetItem;
-    item->setSizeHint(QSize(w - 20, 30));  // item->sizeHint().width()
-    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    item->setText(strList.at(i));
-    list->addItem(item);
-  }
-
-  connect(list, &QListWidget::itemClicked, [=]() {
-    ui->btnDay->setText(list->currentItem()->text());
-    btnDText = ui->btnDay->text();
-    list->close();
-    on_cboxYear_currentTextChanged("");
-  });
-
-  int h = 13 * 30;
-  int y = ui->frame_find->y() - h / 2;
-  int x = ui->btnDay->x() + ui->frameYear->x();
-  list->setGeometry(x, y, w + 15, h);
-  list->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-  list->show();
-
-  QString str = ui->btnDay->text();
-  for (int i = 0; i < list->count(); i++) {
-    if (str == list->item(i)->text()) {
-      list->setCurrentRow(i);
-      break;
-    }
   }
 }
 
@@ -3969,7 +3789,6 @@ void MainWindow::init_UIWidget() {
   connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::dealDone);
 
   ui->frame_find->setHidden(true);
-  ui->frameYear->hide();
 
   ui->progBar->setMaximumHeight(4);
   ui->progBar->hide();
