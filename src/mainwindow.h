@@ -353,7 +353,7 @@ class MainWindow : public QMainWindow {
   void closeGrayWindows();
   void bakIniData(QString unredoFile, bool unre);
   bool isOK = false;
-  void msgBox(QString text);
+  void showDelMsgBox(QString text);
   void set_btnStyle(QObject *parent);
  public slots:
   void on_SetReaderFunVisible();

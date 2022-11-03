@@ -918,7 +918,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   startSave("tab");
 }
 
-void MainWindow::msgBox(QString text) {
+void MainWindow::showDelMsgBox(QString text) {
   m_widget = new QWidget(this);
 
   QDialog *dlg = new QDialog(this);
@@ -932,7 +932,7 @@ void MainWindow::msgBox(QString text) {
   vbox0->addWidget(frame);
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:0px solid gray;}");
+      "border:1px solid gray;}");
 
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setContentsMargins(12, 12, 12, 12);
@@ -958,8 +958,8 @@ void MainWindow::msgBox(QString text) {
       "rgb(220,220,230);color: black}");
 
   btnCancel->setStyleSheet(btnStyle);
-  btnOk->setFixedHeight(30);
-  btnCancel->setFixedHeight(30);
+  btnOk->setFixedHeight(35);
+  btnCancel->setFixedHeight(35);
 
   QHBoxLayout *hbox = new QHBoxLayout;
   hbox->addWidget(btnCancel);
@@ -968,25 +968,23 @@ void MainWindow::msgBox(QString text) {
   btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   vbox->addLayout(hbox, 0);
 
-  int x, y, w, h;
-  w = mw_one->width() - 30;
-  h = 280;
-  x = geometry().x() + (width() - w) / 2;
-  y = geometry().y() + (mw_one->height() - h) / 2;
-  dlg->setGeometry(x, y, w, h);
-
   isOK = false;
   connect(btnCancel, &QToolButton::clicked, [=]() mutable {
     isOK = false;
     dlg->close();
-    closeGrayWindows();
   });
   connect(dlg, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
     isOK = true;
     dlg->close();
-    closeGrayWindows();
   });
+
+  int x, y, w, h;
+  w = width() - 40;
+  h = height() * 2 / 3;
+  x = geometry().x() + (width() - w) / 2;
+  y = geometry().y() + (mw_one->height() - h) / 2;
+  dlg->setGeometry(x, y, w, h);
 
   showGrayWindows();
   dlg->exec();
@@ -1010,29 +1008,10 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        msgBox(str + " : \n\n" +
-               tr("The last record added today will be deleted!") + "\n\n" +
-               str1);
+        showDelMsgBox(str + " : \n\n" +
+                      tr("The last record added today will be deleted!") +
+                      "\n\n" + str1);
         if (!isOK) return;
-        // qDebug() << "ccc" << isOK;
-        /*QMessageBox msgBox;
-        msgBox.setText(str);
-        msgBox.setInformativeText(tr("Less") + "\n\n" + str1);
-        QPushButton *btnCancel =
-            msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-        QPushButton *btnOk =
-            msgBox.addButton(tr("Delete"), QMessageBox::AcceptRole);
-        btnOk->setFocus();
-        btnOk->setStyleSheet(
-            "QPushButton {background-color: rgb(255, 0, 0);color: rgb(255, "
-            "255, 255);}");
-        msgBox.setStyleSheet(
-            "QMessageBox {background-color: rgb(254, 234, 112);color: rgb(255, "
-            "255, 255);}");
-        msgBox.exec();
-        if (msgBox.clickedButton() == btnCancel) {
-          return;
-        }*/
 
         addUndo(tr("Del Item") + " ( " + getTabText() + " ) ");
 
@@ -4698,7 +4677,7 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
   pix.setDevicePixelRatio(8);
   msgBox.setIconPixmap(pix);
 
-  if (buttonCount == 1) {
+  if (buttonCount >= 1) {
     btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
     btnOk->setFixedHeight(35);
     btnOk->setFixedWidth(100);
@@ -4707,11 +4686,6 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
 
   if (buttonCount >= 2) {
     btnCancel = msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-    btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-
-    btnOk->setFixedHeight(35);
-    btnOk->setFixedWidth(100);
-    btnOk->setStyleSheet(pushbtnStyle);
 
     btnCancel->setFixedHeight(35);
     btnCancel->setFixedWidth(100);
@@ -4725,11 +4699,13 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
     btnCopy->setStyleSheet(pushbtnStyle);
   }
 
-  btnOk->setFocus();
-  msgBox.exec();
+  if (buttonCount >= 1) btnOk->setFocus();
 
-  if (msgBox.clickedButton() == btnCancel) {
-    return false;
+  msgBox.exec();
+  if (buttonCount >= 2) {
+    if (msgBox.clickedButton() == btnCancel) {
+      return false;
+    }
   }
 
   if (msgBox.clickedButton() == btnCopy && buttonCount == 3) {
@@ -5057,7 +5033,7 @@ void MainWindow::showGrayWindows() {
 
   QPropertyAnimation *m_pAnimation = new QPropertyAnimation();
   m_pAnimation->setTargetObject(m_widget);
-  m_pAnimation->setDuration(250);
+  m_pAnimation->setDuration(200);
   QGraphicsOpacityEffect *m_pOpacity = new QGraphicsOpacityEffect();
   m_widget->setGraphicsEffect(m_pOpacity);
   m_pOpacity->setOpacity(1);
