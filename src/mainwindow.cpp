@@ -980,14 +980,28 @@ void MainWindow::showDelMsgBox(QString text) {
   });
 
   int x, y, w, h;
-  w = width() - 40;
-  h = height() * 2 / 3;
-  x = geometry().x() + (width() - w) / 2;
-  y = geometry().y() + (mw_one->height() - h) / 2;
+  w = mw_one->width() - 40;
+  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+  h = calcStringPixelHeight(this->font(), fontSize) * 16;
+
+  y = geometry().y() + (height() - h) / 2;
   dlg->setGeometry(x, y, w, h);
 
   showGrayWindows();
   dlg->exec();
+}
+
+int MainWindow::calcStringPixelWidth(QString s_str, QFont font,
+                                     int n_font_size) {
+  font.setPointSize(n_font_size);
+  QFontMetrics fm(font);
+  return fm.horizontalAdvance(s_str);
+}
+
+int MainWindow::calcStringPixelHeight(QFont font, int n_font_size) {
+  font.setPointSize(n_font_size);
+  QFontMetrics fm(font);
+  return fm.height();
 }
 
 void MainWindow::del_Data(QTreeWidget *tw) {
@@ -4852,7 +4866,7 @@ void MainWindow::showGrayWindows() {
 
   QPropertyAnimation *m_pAnimation = new QPropertyAnimation();
   m_pAnimation->setTargetObject(m_widget);
-  m_pAnimation->setDuration(200);
+  m_pAnimation->setDuration(50);
   QGraphicsOpacityEffect *m_pOpacity = new QGraphicsOpacityEffect();
   m_widget->setGraphicsEffect(m_pOpacity);
   m_pOpacity->setOpacity(1);

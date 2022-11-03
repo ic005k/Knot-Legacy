@@ -355,7 +355,9 @@ class MainWindow : public QMainWindow {
   bool isOK = false;
   void showDelMsgBox(QString text);
   void set_btnStyle(QObject *parent);
- public slots:
+  int calcStringPixelWidth(QString s_str, QFont font, int n_font_size);
+  int calcStringPixelHeight(QFont font, int n_font_size);
+  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();
