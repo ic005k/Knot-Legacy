@@ -64,6 +64,8 @@ class dlgSetTime : public QDialog {
 
   void on_hsM_valueChanged(int value);
 
+  void on_btnClearDetails_clicked();
+
  private:
   void set_Amount(QString Number);
 };

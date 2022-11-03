@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.40";
+QString ver = "1.0.41";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -846,6 +846,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
         item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
 
       item11->setText(2, strDesc);
+      item11->setText(3, mydlgSetTime->ui->editDetails->text().trimmed());
 
       int childCount = topItem->childCount();
 
@@ -888,13 +889,14 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
     else
       item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
     item11->setText(2, strDesc);
-    int child = topItem->childCount();
+    item11->setText(3, mydlgSetTime->ui->editDetails->text().trimmed());
 
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
     item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
 
     //  Amount
+    int child = topItem->childCount();
     double amount = 0;
     for (int m = 0; m < child; m++) {
       QString str = topItem->child(m)->text(1);
@@ -1077,6 +1079,7 @@ void MainWindow::on_AddRecord() {
 
   mydlgSetTime->ui->lblTitle->setText(
       tr("Add") + "  : " + tabData->tabText(tabData->currentIndex()));
+  mydlgSetTime->ui->editDetails->clear();
 
   mydlgSetTime->ui->hsH->setValue(QTime::currentTime().hour());
   mydlgSetTime->ui->hsM->setValue(QTime::currentTime().minute());
@@ -1216,6 +1219,9 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
         Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childDesc" +
                          QString::number(j),
                      tw->topLevelItem(i)->child(j)->text(2));
+        Reg.setValue("/" + name + "/" + QString::number(i + 1) +
+                         "-childDetails" + QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(3));
       }
     } else
       abc = abc - 1;
@@ -1346,14 +1352,6 @@ void MainWindow::readData(QTreeWidget *tw) {
           Reg.value("/" + name + "/" + QString::number(i + 1) + "-topDate")
               .toString();
 
-      /*int m = strD0.split(" ").at(1).toInt();
-      if (m == 0) {
-        QString strD1 = QDate::fromString(strD0, "ddd MMM d yyyy")
-                            .toString("ddd MM dd yyyy");
-        topItem->setText(0, strD1);
-      } else
-        topItem->setText(0, strD0);*/
-
       QStringList lista = strD0.split(" ");
       if (lista.count() == 4) {
         QString a0 = lista.at(0) + " " + lista.at(1) + " " + lista.at(2);
@@ -1389,6 +1387,9 @@ void MainWindow::readData(QTreeWidget *tw) {
                                .toString());
         item11->setText(2, Reg.value("/" + name + "/" + QString::number(i + 1) +
                                      "-childDesc" + QString::number(j))
+                               .toString());
+        item11->setText(3, Reg.value("/" + name + "/" + QString::number(i + 1) +
+                                     "-childDetails" + QString::number(j))
                                .toString());
 
         item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
@@ -1776,7 +1777,7 @@ void MainWindow::on_twItemClicked() {
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     pItem = item->parent();
 
-    QString str = item->text(2);
+    QString str = item->text(3);
     if (str.length() > 0)
       ui->lblStats->setText(str);
     else {
@@ -1808,7 +1809,8 @@ void MainWindow::set_Time() {
       item->setText(1, "");
     else
       item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 2));
-    item->setText(2, mydlgSetTime->ui->editDesc->toPlainText().trimmed());
+    item->setText(2, mydlgSetTime->ui->editDesc->text().trimmed());
+    item->setText(3, mydlgSetTime->ui->editDetails->text().trimmed());
     // Amount
     int child = item->parent()->childCount();
     double amount = 0;
@@ -1908,7 +1910,8 @@ void MainWindow::on_twItemDoubleClicked() {
     else
       mydlgSetTime->ui->editAmount->setText(str);
 
-    mydlgSetTime->ui->editDesc->setPlainText(item->text(2));
+    mydlgSetTime->ui->editDesc->setText(item->text(2));
+    mydlgSetTime->ui->editDetails->setText(item->text(3));
     mydlgSetTime->ui->frame->setFocus();
 
     isAdd = false;

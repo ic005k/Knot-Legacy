@@ -23,7 +23,6 @@ dlgSetTime::dlgSetTime(QWidget* parent)
 
   this->installEventFilter(this);
   ui->editDesc->installEventFilter(this);
-  ui->editDesc->viewport()->installEventFilter(this);
 
   QFont font;
   font.setPointSize(23);
@@ -44,8 +43,8 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   ui->btnDot->setFont(font);
   ui->btnDel->setFont(font);
 
-  font.setPointSize(21);
-  ui->editDesc->setFont(font);
+  font.setPointSize(18);
+  // ui->editDesc->setFont(font);
 
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editAmount);
@@ -57,8 +56,10 @@ dlgSetTime::dlgSetTime(QWidget* parent)
 
   ui->btnClearAmount->setStyleSheet("border:none");
   ui->btnClearDesc->setStyleSheet("border:none");
+  ui->btnClearDetails->setStyleSheet("border:none");
   ui->lblCategory->setStyleSheet(ui->lblTitle->styleSheet());
   ui->lblAmount->setStyleSheet(ui->lblTitle->styleSheet());
+  ui->lblDetails->setStyleSheet(ui->lblTitle->styleSheet());
 
   ui->hsM->setStyleSheet(ui->hsH->styleSheet());
 }
@@ -72,7 +73,7 @@ void dlgSetTime::init() {
               mw_one->height());
 
   if (mw_one->isAdd) {
-    ui->editDesc->setPlainText("");
+    ui->editDesc->setText("");
     ui->editAmount->setText("");
   }
   show();
@@ -94,17 +95,17 @@ void dlgSetTime::on_btnOk_clicked() {
       for (int i = 0; i < 500; i++)
         mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                          ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                         ui->editDesc->toPlainText().trimmed());
+                         ui->editDesc->text().trimmed());
     } else
       mw_one->addUndo(tr("Add Item") + " ( " + mw_one->getTabText() + " ) ");
 
     mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                      ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                     ui->editDesc->toPlainText().trimmed());
+                     ui->editDesc->text().trimmed());
   }
 
   // Save Desc Text
-  QString str = ui->editDesc->toPlainText().trimmed();
+  QString str = ui->editDesc->text().trimmed();
   int count = m_List->ui->listWidget->count();
   for (int i = 0; i < count; i++) {
     QString str1 = m_List->ui->listWidget->item(i)->text().trimmed();
@@ -268,10 +269,6 @@ void dlgSetTime::getTime(int h, int m) {
 }
 
 bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
-  if (watch == ui->editDesc->viewport()) {
-    // mw_one->mydlgMainNotes->getEditPanel(ui->editDesc, evn);
-  }
-
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -318,3 +315,5 @@ void dlgSetTime::on_hsH_valueChanged(int value) {
 void dlgSetTime::on_hsM_valueChanged(int value) {
   getTime(ui->hsH->value(), value);
 }
+
+void dlgSetTime::on_btnClearDetails_clicked() { ui->editDetails->clear(); }
