@@ -4688,6 +4688,8 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
                             int buttonCount) {
   QMessageBox msgBox;
   QPushButton *btnCopy;
+  QPushButton *btnCancel;
+  QPushButton *btnOk;
 
   msgBox.setText(title);
   msgBox.setInformativeText(info);
@@ -4696,25 +4698,44 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
   pix.setDevicePixelRatio(8);
   msgBox.setIconPixmap(pix);
 
-  QPushButton *btnCancel =
-      msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+  if (buttonCount == 1) {
+    btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+    btnOk->setFixedHeight(35);
+    btnOk->setFixedWidth(100);
+    btnOk->setStyleSheet(pushbtnStyle);
+  }
 
-  QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+  if (buttonCount >= 2) {
+    btnCancel = msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+    btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+
+    btnOk->setFixedHeight(35);
+    btnOk->setFixedWidth(100);
+    btnOk->setStyleSheet(pushbtnStyle);
+
+    btnCancel->setFixedHeight(35);
+    btnCancel->setFixedWidth(100);
+    btnCancel->setStyleSheet(pushbtnStyle);
+  }
 
   if (buttonCount == 3) {
     btnCopy = msgBox.addButton(tr("Copy"), QMessageBox::AcceptRole);
+    btnCopy->setFixedHeight(35);
+    btnCopy->setFixedWidth(100);
+    btnCopy->setStyleSheet(pushbtnStyle);
   }
+
   btnOk->setFocus();
   msgBox.exec();
+
   if (msgBox.clickedButton() == btnCancel) {
     return false;
   }
-  if (buttonCount == 3) {
-    if (msgBox.clickedButton() == btnCopy) {
-      QClipboard *clipboard = QApplication::clipboard();
-      clipboard->setText(copyText);
-      return false;
-    }
+
+  if (msgBox.clickedButton() == btnCopy && buttonCount == 3) {
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(copyText);
+    return false;
   }
 
   return true;

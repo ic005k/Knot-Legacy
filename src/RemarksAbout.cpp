@@ -197,8 +197,9 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
       }
     } else {
       if (!blAutoCheckUpdate)
-        QMessageBox::information(
-            this, "", tr("You are currently using the latest version!"));
+        mw_one->showMsgBox(tr("Upgrade Check"),
+                           tr("You are currently using the latest version!"),
+                           "", 1);
     }
   }
   blAutoCheckUpdate = false;
