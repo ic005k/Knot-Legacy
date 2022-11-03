@@ -73,7 +73,7 @@ class dlgSetTime : public QDialog {
  private:
   void set_Amount(QString Number);
   QString lblStyleHighLight =
-      "QLabel{background: rgb(150,202,246);color:black;}";
+      "QLabel{background: rgb(45,182,116); color:white;}";
   QString lblStyle;
 };
 
