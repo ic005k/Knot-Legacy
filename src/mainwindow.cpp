@@ -923,9 +923,6 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
 void MainWindow::showDelMsgBox(QString title, QString info) {
   m_widget = new QWidget(this);
 
-  QFont f = this->font();
-  f.setPointSize(fontSize + 2);
-
   QDialog *dlg = new QDialog(this);
   QVBoxLayout *vbox0 = new QVBoxLayout;
   dlg->setLayout(vbox0);
@@ -947,7 +944,6 @@ void MainWindow::showDelMsgBox(QString title, QString info) {
   QLabel *lblTitle = new QLabel(this);
   lblTitle->adjustSize();
   lblTitle->setWordWrap(true);
-  lblTitle->setFont(f);
   lblTitle->setText(title);
   vbox->addWidget(lblTitle);
 
@@ -959,7 +955,6 @@ void MainWindow::showDelMsgBox(QString title, QString info) {
   QLabel *lbl = new QLabel(this);
   lbl->adjustSize();
   lbl->setWordWrap(true);
-  lbl->setFont(f);
   lbl->setText(info);
   vbox->addWidget(lbl);
 
@@ -983,6 +978,11 @@ void MainWindow::showDelMsgBox(QString title, QString info) {
   hbox->addWidget(btnOk);
   btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+  QSpacerItem *sparcer_item =
+      new QSpacerItem(0, 160, QSizePolicy::Fixed, QSizePolicy::Expanding);
+  vbox->addItem(sparcer_item);
+
   vbox->addLayout(hbox, 0);
 
   isOK = false;
@@ -999,12 +999,12 @@ void MainWindow::showDelMsgBox(QString title, QString info) {
   int x, y, w, h;
   w = mw_one->width() - 40;
   x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  h = calcStringPixelHeight(this->font(), fontSize + 2) * 15;
-
+  h = calcStringPixelHeight(this->font(), fontSize) * 15;
   y = geometry().y() + (height() - h) / 2;
   dlg->setGeometry(x, y, w, h);
 
   showGrayWindows();
+
   dlg->exec();
 }
 
