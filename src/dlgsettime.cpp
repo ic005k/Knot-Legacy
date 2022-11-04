@@ -10,6 +10,7 @@ extern QTabWidget* tabData;
 extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
 extern bool isBreak, isImport;
+QStringList c_list;
 
 dlgList* m_List;
 
@@ -118,6 +119,14 @@ void dlgSetTime::on_btnOk_clicked() {
     m_List->ui->listWidget->insertItem(0, item);
   }
 
+  QString strDetails = ui->editDetails->text().trimmed();
+  if (strDetails != "") {
+    if (!c_list.removeOne(strDetails))
+      c_list.insert(0, strDetails);
+    else
+      c_list.append(strDetails);
+  }
+
   close();
 }
 
@@ -195,6 +204,14 @@ void dlgSetTime::saveCustomDesc() {
       Reg.setValue("/CustomDesc/Item" + QString::number(i), str);
   }
   Reg.setValue("/CustomDesc/Count", list.count());
+
+  // Details
+  for (int i = 0; i < c_list.count(); i++) {
+    if (isBreak) break;
+    QString str = c_list.at(i);
+    Reg.setValue("/Details/Item" + QString::number(i), str);
+  }
+  Reg.setValue("/Details/Count", c_list.count());
 }
 
 int dlgSetTime::removeDuplicates(QStringList* that) {
@@ -242,6 +259,15 @@ void dlgSetTime::init_Desc() {
     // item->setSizeHint(
     //    QSize(mw_one->mydlgList->ui->listWidget->width() - 20, 35));
     m_List->ui->listWidget->addItem(item);
+  }
+
+  // Details
+  c_list.clear();
+  int DetailsCount = RegDesc.value("/Details/Count").toInt();
+  for (int i = 0; i < DetailsCount; i++) {
+    QString str =
+        RegDesc.value("/Details/Item" + QString::number(i)).toString();
+    c_list.append(str);
   }
 }
 
@@ -330,4 +356,7 @@ void dlgSetTime::on_editDetails_textChanged(const QString& arg1) {
     ui->lblDetails->setStyleSheet(lblStyleHighLight);
   else
     ui->lblDetails->setStyleSheet(lblStyle);
+
+  QCompleter* completer = new QCompleter(c_list);
+  ui->editDetails->setCompleter(completer);
 }

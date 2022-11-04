@@ -1,6 +1,7 @@
 #ifndef DLGSETTIME_H
 #define DLGSETTIME_H
 
+#include <QCompleter>
 #include <QDialog>
 #include <QListWidget>
 #include <QSet>
