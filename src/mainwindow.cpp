@@ -920,8 +920,11 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   startSave("tab");
 }
 
-void MainWindow::showDelMsgBox(QString text) {
+void MainWindow::showDelMsgBox(QString title, QString info) {
   m_widget = new QWidget(this);
+
+  QFont f = this->font();
+  f.setPointSize(fontSize + 2);
 
   QDialog *dlg = new QDialog(this);
   QVBoxLayout *vbox0 = new QVBoxLayout;
@@ -940,14 +943,26 @@ void MainWindow::showDelMsgBox(QString text) {
   vbox->setContentsMargins(12, 12, 12, 12);
   vbox->setSpacing(12);
   frame->setLayout(vbox);
+
+  QLabel *lblTitle = new QLabel(this);
+  lblTitle->adjustSize();
+  lblTitle->setWordWrap(true);
+  lblTitle->setFont(f);
+  lblTitle->setText(title);
+  vbox->addWidget(lblTitle);
+
+  QFrame *hframe = new QFrame(this);
+  hframe->setFrameShape(QFrame::HLine);
+  hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
+  vbox->addWidget(hframe);
+
   QLabel *lbl = new QLabel(this);
   lbl->adjustSize();
   lbl->setWordWrap(true);
-  QFont f = this->font();
-  f.setPointSize(fontSize + 2);
   lbl->setFont(f);
-  lbl->setText(text);
+  lbl->setText(info);
   vbox->addWidget(lbl);
+
   QToolButton *btnCancel = new QToolButton(this);
   QToolButton *btnOk = new QToolButton(this);
   btnCancel->setText(tr("Cancel"));
@@ -984,7 +999,7 @@ void MainWindow::showDelMsgBox(QString text) {
   int x, y, w, h;
   w = mw_one->width() - 40;
   x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  h = calcStringPixelHeight(this->font(), fontSize) * 15;
+  h = calcStringPixelHeight(this->font(), fontSize + 2) * 15;
 
   y = geometry().y() + (height() - h) / 2;
   dlg->setGeometry(x, y, w, h);
@@ -1007,6 +1022,8 @@ int MainWindow::calcStringPixelHeight(QFont font, int n_font_size) {
 }
 
 void MainWindow::del_Data(QTreeWidget *tw) {
+  if (tw->topLevelItemCount() == 0) return;
+
   bool isNo = true;
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
@@ -1024,9 +1041,9 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        showDelMsgBox(str + " : \n\n" +
-                      tr("The last record added today will be deleted!") +
-                      "\n\n" + str1);
+        showDelMsgBox(
+            str + " : ",
+            tr("The last record added today will be deleted!") + "\n\n" + str1);
         if (!isOK) return;
 
         addUndo(tr("Del Item") + " ( " + getTabText() + " ) ");
@@ -1051,15 +1068,9 @@ void MainWindow::del_Data(QTreeWidget *tw) {
   }
 
   if (isNo) {
-    QMessageBox msgBox;
     QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-    msgBox.setText(str);
-    msgBox.setInformativeText(
-        tr("Only the reduction of the day's records is allowed."));
-
-    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    msgBox.exec();
+    showMsgBox(str, tr("Only the reduction of the day's records is allowed."),
+               "", 1);
     return;
   }
 
