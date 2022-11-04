@@ -119,12 +119,15 @@ void dlgSetTime::on_btnOk_clicked() {
     m_List->ui->listWidget->insertItem(0, item);
   }
 
+  // Save Details
   QString strDetails = ui->editDetails->text().trimmed();
   if (strDetails != "") {
-    if (!c_list.removeOne(strDetails))
-      c_list.insert(0, strDetails);
-    else
-      c_list.append(strDetails);
+    if (c_list.count() > 50) {
+      c_list.removeAt(c_list.count() - 1);
+    }
+
+    c_list.removeOne(strDetails);
+    c_list.insert(0, strDetails);
   }
 
   close();
