@@ -89,6 +89,7 @@ android {
         minSdkVersion = qtMinSdkVersion
         targetSdkVersion = qtTargetSdkVersion
     }
+
 }
 
 

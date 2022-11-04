@@ -9,6 +9,13 @@ extern QString iniDir;
 AutoUpdateDialog::AutoUpdateDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::AutoUpdateDialog) {
   ui->setupUi(this);
+
+  setWindowFlag(Qt::FramelessWindowHint);
+  setAttribute(Qt::WA_TranslucentBackground);
+  ui->frame->setStyleSheet(
+      "#frame{background-color: rgb(236, 236, 236);border-radius:10px; "
+      "border:1px solid gray;}");
+
   mw_one->set_btnStyle(this);
   setModal(true);
   ui->lblTxt->adjustSize();

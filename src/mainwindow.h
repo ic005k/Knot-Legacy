@@ -100,7 +100,6 @@
 #include "ui_dlgsettime.h"
 #include "ui_dlgsteps.h"
 #include "ui_dlgtodo.h"
-#include "ui_dlgweb.h"
 #include "ui_setTodoAlarm.h"
 
 class SearchThread;
@@ -357,7 +356,7 @@ class MainWindow : public QMainWindow {
   void set_btnStyle(QObject *parent);
   int calcStringPixelWidth(QString s_str, QFont font, int n_font_size);
   int calcStringPixelHeight(QFont font, int n_font_size);
-  public slots:
+ public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();

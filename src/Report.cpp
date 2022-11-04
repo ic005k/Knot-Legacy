@@ -935,25 +935,26 @@ void dlgReport::on_btnOut2Img_clicked() {
     // 方法2
     // QPixmap pixmap = QPixmap::grabWidget(twOut2Img);
 
-    QString img = iniDir + "1.png";
-    pixmap.save(img, "PNG");
+    QString strFile = ui->lblTitle->text() + "-" + ui->btnYear->text() + "-" +
+                      ui->btnMonth->text() + ".png";
 
 #ifdef Q_OS_ANDROID
     QDir* folder = new QDir;
     QString path = "/storage/emulated/0/KnotBak/";
     folder->mkdir(path);
-    QString str = ui->lblTitle->text() + "-" + ui->btnYear->text() + "-" +
-                  ui->btnMonth->text() + ".png";
-    QString infoStr = path + str;
-    mw_one->mydlgMainNotes->androidCopyFile(img, infoStr);
+    QString filename = path + strFile;
+    pixmap.save(filename, "PNG");
     QMessageBox box;
-    if (!QFile(infoStr).exists()) {
+    if (!QFile(filename).exists()) {
       box.setText(tr("Please turn on the storage permission of the app."));
       box.exec();
     } else {
-      box.setText(tr("Picture output successful!") + "\n\n" + infoStr);
+      box.setText(tr("Picture output successful!") + "\n\n" + filename);
       box.exec();
     }
+#else
+    QString filename = iniDir + strFile;
+    pixmap.save(filename, "PNG");
 #endif
   }
 }
