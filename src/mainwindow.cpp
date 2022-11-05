@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.42";
+QString ver = "1.0.43";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -2447,28 +2447,6 @@ void MainWindow::on_actionExport_Data_triggered() {
   bakData(fileName, true);
 }
 
-QString MainWindow::on_actionOneClickBakData(bool msg) {
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  QString fileName = Reg.value("/MainNotes/FileName").toString();
-  if (QFile(fileName).exists()) {
-    bakData(fileName, msg);
-  } else {
-    QMessageBox msgBox;
-    msgBox.setText(appName);
-    msgBox.setInformativeText(
-        tr("The previous file does not exist, please export the data first to "
-           "generate a default file name."));
-    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    msgBox.exec();
-  }
-
-  return fileName;
-}
-
 void MainWindow::bakIniData(QString unredoFile, bool unre) {
   QTextEdit *edit = new QTextEdit;
   edit->append("[" + appName + "]");
@@ -3976,8 +3954,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   QAction *actExportData = new QAction(tr("Export Data"));
   QAction *actImportData = new QAction(tr("Import Data"));
-  QAction *actOneClickBakData = new QAction(tr("One Click Data Backup"));
-  actOneClickBakData->setVisible(false);
+
   QAction *actPreferences = new QAction(tr("Preferences"));
   QAction *actMemos = new QAction(tr("Memos"));
   actMemos->setVisible(false);
@@ -4011,8 +3988,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   connect(actExportData, &QAction::triggered, this,
           &MainWindow::on_actionExport_Data_triggered);
-  connect(actOneClickBakData, &QAction::triggered, this,
-          &MainWindow::on_btnOneClickBak_clicked);
+
   connect(actImportData, &QAction::triggered, this,
           &MainWindow::on_actionImport_Data_triggered);
   connect(actPreferences, &QAction::triggered, this,
@@ -4048,7 +4024,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   mainMenu->addAction(actExportData);
   mainMenu->addAction(actImportData);
-  mainMenu->addAction(actOneClickBakData);
 
 #ifdef Q_OS_ANDROID
   mainMenu->addAction(actOpenKnotBakDir);
@@ -4373,10 +4348,6 @@ void MainWindow::on_btnBack_clicked() {
 
   ui->frameReader->hide();
   ui->frameMain->show();
-
-  // delete mw_one->mydlgFloatFun;
-  // mydlgFloatFun = new dlgFloatFun(this);
-  // mydlgFloatFun->init();
 }
 
 void MainWindow::on_btnOpen_clicked() {
@@ -4497,8 +4468,6 @@ void MainWindow::on_btnReadList_clicked() {
 }
 
 void MainWindow::on_btnBackDir_clicked() { mydlgReader->backDir(); }
-
-void MainWindow::on_btnOneClickBak_clicked() { on_actionOneClickBakData(true); }
 
 QString MainWindow::getTabText() {
   return tabData->tabText(tabData->currentIndex());

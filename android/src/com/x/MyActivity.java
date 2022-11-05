@@ -1040,15 +1040,14 @@ This method can parse out the real local file path from a file URI.
     }
 
     //----------------------------------------------------------------------------------------------
-    private final static int REQUEST_CODE = 100;
-
     public void openKnotBakDir() {
         Uri dir = Uri.parse("/storage/emulated/0/KnotBak/");
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        int PICKFILE_RESULT_CODE = 1;
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, dir);
         intent.setType("*/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, REQUEST_CODE);
+        Intent i = Intent.createChooser(intent, "View Default File Manager");
+        startActivityForResult(i, PICKFILE_RESULT_CODE);
     }
 
     //----------------------------------------------------------------------------------------------
@@ -1073,7 +1072,7 @@ This method can parse out the real local file path from a file URI.
         String type = "application/vnd.android.package-archive";
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context, context.getPackageName() , newApkFile);
+            uri = FileProvider.getUriForFile(context, context.getPackageName(), newApkFile);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             uri = Uri.fromFile(newApkFile);

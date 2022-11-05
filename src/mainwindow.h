@@ -365,7 +365,7 @@ class MainWindow : public QMainWindow {
   void readEBookDone();
   void on_btnPageUp_clicked();
   void on_btnPageNext_clicked();
-  QString on_actionOneClickBakData(bool msg);
+
   void on_actionOneDriveBackupData();
   void on_AddRecord();
   void on_actionReport_triggered();
@@ -466,8 +466,6 @@ class MainWindow : public QMainWindow {
   void on_btnReadList_clicked();
 
   void on_btnBackDir_clicked();
-
-  void on_btnOneClickBak_clicked();
 
   void undo();
   void redo();
