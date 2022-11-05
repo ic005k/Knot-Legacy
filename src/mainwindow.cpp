@@ -496,7 +496,8 @@ void MainWindow::init_Options() {
       Reg.value("/Options/Close", false).toBool());
   mydlgPre->ui->chkAutoTime->setChecked(
       Reg.value("/Options/AutoTimeY", true).toBool());
-  mydlgPre->ui->chkMute->setChecked(Reg.value("/Options/Mute", true).toBool());
+  mydlgPre->ui->chkShowCY->setChecked(
+      Reg.value("/Options/ShowCurrentYear", true).toBool());
 
   QString strf = Reg.value("/Options/CustomFont").toString();
   mydlgPre->setFontDemo(strf);

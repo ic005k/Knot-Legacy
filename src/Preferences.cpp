@@ -19,18 +19,17 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   this->installEventFilter(this);
 
   ui->chkClose->hide();
+  ui->chkShowCY->hide();
 
   ui->sliderFontSize->setValue(fontSize);
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
-  ui->chkMute->setStyleSheet(ui->chkClose->styleSheet());
-  ui->chkMute->hide();
   hsStyle = ui->sliderFontSize->styleSheet();
 
   chkStyle = ui->chkAutoTime->styleSheet();
   ui->chkClose->setStyleSheet(chkStyle);
   ui->chkDebug->setStyleSheet(chkStyle);
-  ui->chkMute->setStyleSheet(chkStyle);
+  ui->chkShowCY->setStyleSheet(chkStyle);
   ui->chkReaderFont->setStyleSheet(chkStyle);
   ui->chkCustomFont->setStyleSheet(chkStyle);
   ui->lblTip->setStyleSheet("color:red;");
@@ -76,7 +75,7 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
-  Reg.setValue("/Options/Mute", ui->chkMute->isChecked());
+  Reg.setValue("/Options/ShowCurrentYear", ui->chkShowCY->isChecked());
   Reg.setValue("/Options/chkCustomFont", ui->chkCustomFont->isChecked());
 }
 

@@ -950,8 +950,7 @@ void dlgTodo::refreshAlarm() {
   }
 
   Reg.setValue("count", count);
-  QString strMute = "false";
-  if (mw_one->mydlgPre->ui->chkMute->isChecked()) strMute = "true";
+  QString strMute = "true";
   Reg.setValue("mute", strMute);
 
   if (!QFile(ini_file).exists())
