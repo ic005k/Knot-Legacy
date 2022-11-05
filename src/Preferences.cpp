@@ -107,8 +107,6 @@ void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
 
 void dlgPreferences::on_chkReaderFont_clicked() { isFontChange = true; }
 
-void dlgPreferences::on_chkMute_clicked() { mw_one->mydlgTodo->refreshAlarm(); }
-
 void dlgPreferences::on_btnCustomFont_clicked() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("Font"), "",
