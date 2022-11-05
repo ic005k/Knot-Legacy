@@ -61,8 +61,6 @@ void dlgRemarks::on_btnBack_clicked() {
   mw_one->closeGrayWindows();
 }
 
-void dlgRemarks::on_textEdit_textChanged() {}
-
 bool dlgRemarks::eventFilter(QObject* obj, QEvent* evn) {
   if (obj == ui->textEdit->viewport()) {
     mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);

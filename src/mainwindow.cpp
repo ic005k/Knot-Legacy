@@ -3624,10 +3624,6 @@ void MainWindow::showMemos() {
   isMemoVisible = true;
   isReaderVisible = false;
 
-  ui->quickWidgetMemo->rootContext()->setContextProperty("isReadOnly", true);
-  ui->quickWidgetMemo->rootContext()->setContextProperty("isBySelect", false);
-  ui->quickWidgetMemo->rootContext()->setContextProperty("fontSize", fontSize);
-
   mydlgMainNotes->loadMemoQML();
 
   QFont f(this->font());
@@ -4361,24 +4357,11 @@ void MainWindow::on_btnPageNext_clicked() {
   mydlgReader->on_btnPageNext_clicked();
 }
 
-void MainWindow::on_btnFont_clicked() { mydlgReader->selectFont(); }
-
 void MainWindow::on_btnPages_clicked() {
   if (!mydlgReaderFun->isHidden()) {
     mydlgReaderFun->close();
   } else
     mydlgReaderFun->init();
-}
-
-void MainWindow::on_btnFontPlus_clicked() {
-  textFontSize++;
-  mydlgReader->setFontSize(textFontSize);
-}
-
-void MainWindow::on_btnFontLess_clicked() {
-  if (textFontSize <= 8) return;
-  textFontSize--;
-  mydlgReader->setFontSize(textFontSize);
 }
 
 void MainWindow::on_hSlider_sliderMoved(int position) {

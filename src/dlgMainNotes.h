@@ -95,19 +95,11 @@ class dlgMainNotes : public QDialog {
 
   void on_btnBack_clicked();
 
-  void on_btnCloseText_clicked();
-
   void on_KVChanged();
 
   void on_btnUndo_clicked();
 
   void on_btnRedo_clicked();
-
-  void on_textEdit_textChanged();
-
-  void on_textEdit_redoAvailable(bool b);
-
-  void on_textEdit_undoAvailable(bool b);
 
   void on_btnPic_clicked();
 

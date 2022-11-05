@@ -738,6 +738,7 @@ void dlgTodo::on_Alarm() {
 }
 
 void dlgTodo::startTimerAlarm(QString text) {
+  Q_UNUSED(text);
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -780,6 +781,7 @@ void dlgTodo::stopTimerAlarm() {
 }
 
 void dlgTodo::sendMsgAlarm(QString text) {
+  Q_UNUSED(text);
 #ifdef Q_OS_ANDROID
   QString strNotify = tr("Todo") + " : " + text;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

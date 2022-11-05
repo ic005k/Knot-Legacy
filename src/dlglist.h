@@ -29,8 +29,6 @@ class dlgList : public QDialog {
 
   void on_btnBack_clicked();
 
-  void on_btnChange_clicked();
-
   void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
   void on_btnRename_clicked();

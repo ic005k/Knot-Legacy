@@ -42,8 +42,6 @@ class dlgRemarks : public QDialog {
  private slots:
   void on_btnBack_clicked();
 
-  void on_textEdit_textChanged();
-
   void on_btnDL_clicked();
 
   void on_btnHomePage_clicked();

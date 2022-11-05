@@ -356,6 +356,8 @@ class MainWindow : public QMainWindow {
   void set_btnStyle(QObject *parent);
   int calcStringPixelWidth(QString s_str, QFont font, int n_font_size);
   int calcStringPixelHeight(QFont font, int n_font_size);
+  void on_hSlider_sliderMoved(int position);
+
  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
@@ -453,15 +455,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnOpen_clicked();
 
-  void on_btnFont_clicked();
-
   void on_btnPages_clicked();
-
-  void on_btnFontPlus_clicked();
-
-  void on_btnFontLess_clicked();
-
-  void on_hSlider_sliderMoved(int position);
 
   void on_btnReadList_clicked();
 

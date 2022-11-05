@@ -205,8 +205,6 @@ void dlgMainNotes::saveMainNotes() {
 
 void dlgMainNotes::init_MainNotes() { loadMemoQML(); }
 
-void dlgMainNotes::on_btnCloseText_clicked() {}
-
 void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
   byTextEdit = textEdit;
@@ -407,22 +405,6 @@ void dlgMainNotes::on_btnUndo_clicked() { ui->editSource->undo(); }
 
 void dlgMainNotes::on_btnRedo_clicked() { ui->editSource->redo(); }
 
-void dlgMainNotes::on_textEdit_textChanged() {}
-
-void dlgMainNotes::on_textEdit_redoAvailable(bool b) {
-  if (b)
-    ui->btnRedo->setEnabled(true);
-  else
-    ui->btnRedo->setEnabled(false);
-}
-
-void dlgMainNotes::on_textEdit_undoAvailable(bool b) {
-  if (b)
-    ui->btnUndo->setEnabled(true);
-  else
-    ui->btnUndo->setEnabled(false);
-}
-
 QString dlgMainNotes::getDateTimeStr() {
   int y, m, d, hh, mm, s;
   y = QDate::currentDate().year();
@@ -616,7 +598,7 @@ void dlgMainNotes::loadMemoQML() {
       strSrc = strSrc.replace("src=", "");
       strSrc = strSrc.replace("/>", "");
       str = "<a href=" + strSrc + ">" + str + "</a>";
-      qDebug() << "strSrc=" << strSrc << str;
+      // qDebug() << "strSrc=" << strSrc << str;
 
       str = str.replace("width=", "width1=");
       str = str.replace("height=", "height1=");
@@ -633,6 +615,7 @@ void dlgMainNotes::loadMemoQML() {
   mw_one->ui->quickWidgetMemo->setSource(
       QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant,
   // htmlFileName));
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",

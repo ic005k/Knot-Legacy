@@ -97,7 +97,7 @@ Item {
         TextArea.flickable: TextArea {
             id: textArea
             visible: true
-            font.pixelSize: FontSize
+            //font.pixelSize: FontSize
             //font.family: FontName
             //font.letterSpacing: 2
             renderType: Text.NativeRendering
@@ -114,7 +114,7 @@ Item {
             color: "#664E30"
 
             //color: Qt.AutoColor
-            text: strText
+            //text: strText
 
             MouseArea {
                 acceptedButtons: Qt.RightButton
