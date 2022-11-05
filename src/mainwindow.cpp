@@ -1209,30 +1209,32 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
     int childCount = tw->topLevelItem(i)->childCount();
 
     if (childCount > 0) {
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topDate",
+      QString year = tw->topLevelItem(i)->text(3);
+      QString flag = "/" + name + "-" + year + "/";
+
+      Reg.setValue(flag + QString::number(i + 1) + "-topDate",
                    tw->topLevelItem(i)->text(0));
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topYear",
+      Reg.setValue(flag + QString::number(i + 1) + "-topYear",
                    tw->topLevelItem(i)->text(3));
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topFreq",
+      Reg.setValue(flag + QString::number(i + 1) + "-topFreq",
                    tw->topLevelItem(i)->text(1));
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-topAmount",
+      Reg.setValue(flag + QString::number(i + 1) + "-topAmount",
                    tw->topLevelItem(i)->text(2));
 
-      Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childCount",
-                   childCount);
+      Reg.setValue(flag + QString::number(i + 1) + "-childCount", childCount);
       for (int j = 0; j < childCount; j++) {
         if (isBreak) return;
-        Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childTime" +
+        Reg.setValue(
+            flag + QString::number(i + 1) + "-childTime" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(0));
+        Reg.setValue(
+            flag + QString::number(i + 1) + "-childAmount" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(1));
+        Reg.setValue(
+            flag + QString::number(i + 1) + "-childDesc" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(2));
+        Reg.setValue(flag + QString::number(i + 1) + "-childDetails" +
                          QString::number(j),
-                     tw->topLevelItem(i)->child(j)->text(0));
-        Reg.setValue("/" + name + "/" + QString::number(i + 1) +
-                         "-childAmount" + QString::number(j),
-                     tw->topLevelItem(i)->child(j)->text(1));
-        Reg.setValue("/" + name + "/" + QString::number(i + 1) + "-childDesc" +
-                         QString::number(j),
-                     tw->topLevelItem(i)->child(j)->text(2));
-        Reg.setValue("/" + name + "/" + QString::number(i + 1) +
-                         "-childDetails" + QString::number(j),
                      tw->topLevelItem(i)->child(j)->text(3));
       }
     } else
