@@ -1209,8 +1209,7 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
     int childCount = tw->topLevelItem(i)->childCount();
 
     if (childCount > 0) {
-      QString year = tw->topLevelItem(i)->text(3);
-      QString flag = "/" + name + "-" + year + "/";
+      QString flag = "/" + name + "/";
 
       Reg.setValue(flag + QString::number(i + 1) + "-topDate",
                    tw->topLevelItem(i)->text(0));
