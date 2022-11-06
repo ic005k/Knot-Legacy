@@ -81,6 +81,9 @@ selection-background-color: lightblue;
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>12</number>
+      </property>
       <item>
        <spacer name="verticalSpacer_2">
         <property name="orientation">
