@@ -11,6 +11,8 @@ extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
 extern bool isBreak, isImport;
 
+bool del = false;
+
 QStringList c_list;
 
 dlgList* m_List;
@@ -115,9 +117,6 @@ void dlgSetTime::on_btnOk_clicked() {
 
   if (str.length() > 0) {
     QListWidgetItem* item = new QListWidgetItem(str);
-    // QFontMetrics fm(this->font());
-    // int w = fm.width(str, -1);
-    // item->setSizeHint(QSize(w, 35));
     m_List->ui->listWidget->insertItem(0, item);
   }
 
@@ -132,11 +131,10 @@ void dlgSetTime::on_btnOk_clicked() {
     c_list.insert(0, strDetails);
   }
 
-  saveCustomDesc();
+  del = false;
+  mw_one->startSave("tab");
 
   close();
-
-  saveOne(false);
 }
 
 void dlgSetTime::on_btn7_clicked() { set_Amount("7"); }
@@ -370,7 +368,7 @@ void dlgSetTime::on_editDetails_textChanged(const QString& arg1) {
   ui->editDetails->setCompleter(completer);
 }
 
-void dlgSetTime::saveOne(bool del) {
+void dlgSetTime::saveOne() {
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   int tabIndex = tabData->currentIndex();
 

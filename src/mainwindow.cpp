@@ -35,7 +35,7 @@ bool isReportWindowsShow = false;
 
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
-extern bool isAndroid, isIOS, zh_cn, isEpub;
+extern bool isAndroid, isIOS, zh_cn, isEpub, del;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
     fileName, strOpfPath, fontname;
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
@@ -176,12 +176,9 @@ void MainWindow::dealDone() {
 }
 void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
-    int index = tabData->currentIndex();
-    QTreeWidget *tw = (QTreeWidget *)tabData->widget(index);
-    saveData(tw, index);
-    saveNotes(index);
+    dlgSetTime::saveOne();
     saveTab();
-    dlgSetTime::saveCustomDesc();
+    if (!del) dlgSetTime::saveCustomDesc();
   }
 
   if (SaveType == "alltab") {
@@ -917,8 +914,6 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   tw->setCurrentItem(topItem);
   sort_childItem(topItem->child(0));
   tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
-
-  // startSave("tab");
 }
 
 void MainWindow::showDelMsgBox(QString title, QString info) {
@@ -1083,9 +1078,8 @@ void MainWindow::del_Data(QTreeWidget *tw) {
   } else
     return;
 
-  // startSave("tab");
-
-  mydlgSetTime->saveOne(true);
+  del = true;
+  startSave("tab");
 }
 
 void MainWindow::on_AddRecord() {
@@ -1840,8 +1834,6 @@ void MainWindow::set_Time() {
       item->parent()->setText(2, strAmount);
 
     sort_childItem(item);
-
-    // startSave("tab");
   }
 }
 

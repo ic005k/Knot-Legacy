@@ -32,7 +32,7 @@ class dlgSetTime : public QDialog {
   void init();
   void showGrayWindows();
 
-  void saveOne(bool del);
+  static void saveOne();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
