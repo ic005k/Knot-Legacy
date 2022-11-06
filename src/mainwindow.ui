@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>502</width>
+    <width>760</width>
     <height>1753</height>
    </rect>
   </property>
@@ -734,6 +734,9 @@
                 <width>0</width>
                 <height>0</height>
                </size>
+              </property>
+              <property name="placeholderText">
+               <string>Find in category</string>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -2149,8 +2152,8 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>502</width>
-     <height>24</height>
+     <width>760</width>
+     <height>29</height>
     </rect>
    </property>
    <property name="styleSheet">

@@ -223,7 +223,7 @@ MainWindow::MainWindow(QWidget *parent)
 #endif
 
 #ifdef Q_OS_WIN
-    this->setGeometry(730, 25, this->width(), 645);
+    this->setGeometry(730, 25, 450, 645);
 #endif
   }
 
@@ -4110,6 +4110,7 @@ void MainWindow::on_actionTimeMachine() {
   vbox->setContentsMargins(3, 3, 3, 3);
   dlg->setLayout(vbox);
   QToolButton *btnBack = new QToolButton(this);
+  btnBack->setStyleSheet(btnStyle);
   btnBack->setFixedHeight(40);
   btnBack->setText(tr("Back"));
   btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
