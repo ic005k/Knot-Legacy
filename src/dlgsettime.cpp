@@ -94,6 +94,7 @@ void dlgSetTime::on_btnOk_clicked() {
                          ui->lblTime->text(), ui->editAmount->text().trimmed(),
                          ui->editDesc->text().trimmed());
     } else
+
       mw_one->addUndo(tr("Add Item") + " ( " + mw_one->getTabText() + " ) ");
 
     mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
@@ -130,6 +131,8 @@ void dlgSetTime::on_btnOk_clicked() {
     c_list.removeOne(strDetails);
     c_list.insert(0, strDetails);
   }
+
+  saveCustomDesc();
 
   close();
 
@@ -388,7 +391,6 @@ void dlgSetTime::saveOne(bool del) {
     i = tw->indexOfTopLevelItem(item);
   else
     i = tw->indexOfTopLevelItem(item->parent());
-  qDebug() << "iiii " << i;
 
   QString flag = "/" + name + "/";
 

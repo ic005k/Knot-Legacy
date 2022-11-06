@@ -1454,10 +1454,8 @@ QString MainWindow::loadText(QString textFile) {
 
 void MainWindow::TextEditToFile(QTextEdit *txtEdit, QString fileName) {
   QFile *file;
-  QString txtFile;
   file = new QFile;
   file->setFileName(fileName);
-  file->setPermissions(txtFile, QFile::WriteOwner | QFile::ReadOwner);
   bool ok = file->open(QIODevice::WriteOnly | QIODevice::Text);
   if (ok) {
     QTextStream out(file);
@@ -4093,7 +4091,8 @@ void MainWindow::addUndo(QString log) {
       count = 30;
       QString str = timeLines.at(count);
       QString oldFile = str.split("\n").at(0);
-      if (QFile().remove(oldFile)) qDebug() << oldFile << "del...";
+      if (QFile().remove(oldFile))
+        qDebug() << oldFile << "addUndo del oldFile...";
       timeLines.removeAt(count);
     }
     QSettings Reg(iniDir + "timemachine.ini", QSettings::IniFormat);
