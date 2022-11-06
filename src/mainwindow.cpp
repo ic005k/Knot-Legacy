@@ -2962,14 +2962,10 @@ void MainWindow::on_actionPreferences_triggered() {
 }
 
 void MainWindow::on_tabCharts_currentChanged(int index) {
-  if (ui->rbSteps->isChecked() || loading) return;
+  if (ui->rbSteps->isChecked() || loading || index < 0) return;
 
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   int topCount = tw->topLevelItemCount();
-
-  if (index == 0) {
-    return;
-  }
 
   if (index == 1) {
     if (topCount == 0) {
@@ -2987,12 +2983,12 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
   }
 
   QTreeWidgetItem *item = tw->currentItem();
-  QString a;
+  QString date;
   if (item->parent() == NULL)
-    a = item->text(0) + " " + item->text(3);
+    date = item->text(0) + " " + item->text(3);
   else
-    a = item->parent()->text(0) + " " + item->parent()->text(3);
-  startRead(a);
+    date = item->parent()->text(0) + " " + item->parent()->text(3);
+  startRead(date);
 }
 
 void MainWindow::on_btnSteps_clicked() {
