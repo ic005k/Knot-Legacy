@@ -61,6 +61,10 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   lblStyle = ui->lblCategory->styleSheet();
 
   ui->hsM->setStyleSheet(ui->hsH->styleSheet());
+
+  mw_one->setLineEditQss(ui->editAmount, 10, 1, "#4169E1", "#4169E1");
+  mw_one->setLineEditQss(ui->editDesc, 10, 1, "#4169E1", "#4169E1");
+  mw_one->setLineEditQss(ui->editDetails, 10, 1, "#4169E1", "#4169E1");
 }
 
 void dlgSetTime::init() {

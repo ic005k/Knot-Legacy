@@ -1640,6 +1640,7 @@ void MainWindow::on_actionRename_triggered() {
   bool ok;
   QString text;
   QInputDialog *idlg = new QInputDialog(this);
+  idlg->setWindowFlag(Qt::FramelessWindowHint);
   QString style =
       "QDialog{background: "
       "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
@@ -3567,6 +3568,7 @@ void MainWindow::on_actionMemos_triggered() {
     bool ok;
     QString text;
     QInputDialog *idlg = new QInputDialog(this);
+    idlg->setWindowFlag(Qt::FramelessWindowHint);
     QString style =
         "QDialog{background: "
         "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
@@ -3800,7 +3802,9 @@ void MainWindow::init_UIWidget() {
   ui->progReader->setStyleSheet(ui->progBar->styleSheet());
   ui->progReader->setFixedHeight(4);
 
-  setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
+  setLineEditQss(ui->editFind, 10, 1, "#4169E1", "#4169E1");
+  ui->edit1->setStyleSheet(ui->editFind->styleSheet());
+  ui->edit2->setStyleSheet(ui->editFind->styleSheet());
 
   if (isIOS) {
   }
