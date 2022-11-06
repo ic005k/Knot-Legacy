@@ -228,9 +228,6 @@ selection-background-color: lightblue;
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout"/>
-      </item>
-      <item>
        <widget class="QToolButton" name="btnMirrorDL">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
