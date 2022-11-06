@@ -918,7 +918,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   sort_childItem(topItem->child(0));
   tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
 
-  startSave("tab");
+  // startSave("tab");
 }
 
 void MainWindow::showDelMsgBox(QString title, QString info) {
@@ -1083,7 +1083,9 @@ void MainWindow::del_Data(QTreeWidget *tw) {
   } else
     return;
 
-  startSave("tab");
+  // startSave("tab");
+
+  mydlgSetTime->saveOne(true);
 }
 
 void MainWindow::on_AddRecord() {
@@ -1841,7 +1843,7 @@ void MainWindow::set_Time() {
 
     sort_childItem(item);
 
-    startSave("tab");
+    // startSave("tab");
   }
 }
 

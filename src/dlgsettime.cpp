@@ -10,6 +10,7 @@ extern QTabWidget* tabData;
 extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
 extern bool isBreak, isImport;
+
 QStringList c_list;
 
 dlgList* m_List;
@@ -131,6 +132,8 @@ void dlgSetTime::on_btnOk_clicked() {
   }
 
   close();
+
+  saveOne(false);
 }
 
 void dlgSetTime::on_btn7_clicked() { set_Amount("7"); }
@@ -362,4 +365,64 @@ void dlgSetTime::on_editDetails_textChanged(const QString& arg1) {
 
   QCompleter* completer = new QCompleter(c_list);
   ui->editDetails->setCompleter(completer);
+}
+
+void dlgSetTime::saveOne(bool del) {
+  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  int tabIndex = tabData->currentIndex();
+
+  QString name = "tab" + QString::number(tabIndex + 1);
+  tw->setObjectName(name);
+
+  QString ini_file = iniDir + name + ".ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  int count = tw->topLevelItemCount();
+
+  QTreeWidgetItem* item = tw->currentItem();
+  int i = 0;
+  if (item->parent() == NULL)
+    i = tw->indexOfTopLevelItem(item);
+  else
+    i = tw->indexOfTopLevelItem(item->parent());
+  qDebug() << "iiii " << i;
+
+  QString flag = "/" + name + "/";
+
+  Reg.setValue(flag + QString::number(i + 1) + "-topDate",
+               tw->topLevelItem(i)->text(0));
+  Reg.setValue(flag + QString::number(i + 1) + "-topYear",
+               tw->topLevelItem(i)->text(3));
+  Reg.setValue(flag + QString::number(i + 1) + "-topFreq",
+               tw->topLevelItem(i)->text(1));
+  Reg.setValue(flag + QString::number(i + 1) + "-topAmount",
+               tw->topLevelItem(i)->text(2));
+
+  int childCount = tw->topLevelItem(i)->childCount();
+
+  if (childCount > 0) {
+    if (!del) {
+      for (int j = 0; j < childCount; j++) {
+        if (isBreak) return;
+        Reg.setValue(
+            flag + QString::number(i + 1) + "-childTime" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(0));
+        Reg.setValue(
+            flag + QString::number(i + 1) + "-childAmount" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(1));
+        Reg.setValue(
+            flag + QString::number(i + 1) + "-childDesc" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(2));
+        Reg.setValue(flag + QString::number(i + 1) + "-childDetails" +
+                         QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(3));
+      }
+    }
+  }
+
+  Reg.setValue(flag + QString::number(i + 1) + "-childCount", childCount);
+  Reg.setValue("/" + name + "/TopCount", count);
 }

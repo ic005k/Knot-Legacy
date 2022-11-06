@@ -32,6 +32,8 @@ class dlgSetTime : public QDialog {
   void init();
   void showGrayWindows();
 
+  void saveOne(bool del);
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
