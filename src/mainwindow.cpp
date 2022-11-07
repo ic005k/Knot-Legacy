@@ -2968,18 +2968,16 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   int topCount = tw->topLevelItemCount();
 
-  if (index == 1) {
-    if (topCount == 0) {
-      series2->clear();
-      m_scatterSeries2->clear();
-      return;
-    }
+  if (topCount == 0) {
+    series2->clear();
+    m_scatterSeries2->clear();
+    return;
+  }
 
-    if (topCount > 0) {
-      if (!tw->currentIndex().isValid()) {
-        QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
-        tw->setCurrentItem(topItem);
-      }
+  if (topCount > 0) {
+    if (!tw->currentIndex().isValid()) {
+      QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
+      tw->setCurrentItem(topItem);
     }
   }
 
