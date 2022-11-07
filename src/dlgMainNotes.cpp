@@ -545,7 +545,7 @@ void dlgMainNotes::unzipMemo() {
 #endif
 
 #ifdef Q_OS_WIN
-  QString strZip, strPath, strExec, strUnzip, tagDir;
+  QString strZip, strExec, strUnzip, tagDir;
   tagDir = iniDir;
   strZip = iniDir + "memo.zip";
   QTextEdit* txtEdit = new QTextEdit();

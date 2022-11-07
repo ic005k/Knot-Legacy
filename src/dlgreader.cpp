@@ -20,8 +20,15 @@ int baseLines = 20;
 int htmlIndex = 0;
 QDialog* dlgProgEBook;
 
+QTextEdit* text_edit;
+QPlainTextEdit *plain_edit, *plain_editHead;
+
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
+
+  text_edit = new QTextEdit;
+  plain_edit = new QPlainTextEdit;
+  plain_editHead = new QPlainTextEdit;
 
   this->installEventFilter(this);
 
@@ -282,6 +289,22 @@ void dlgReader::startOpenFile(QString openfile) {
         fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
     strfilepath =
         openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+
+    QString strZip, strExec, strUnzip, tagDir;
+    tagDir = iniDir + "temp/";
+    strZip = iniDir + "temp.zip";
+    QTextEdit* txtEdit = new QTextEdit();
+    strUnzip = iniDir + "unzip.exe";
+    strUnzip = "\"" + strUnzip + "\"";
+    strZip = "\"" + strZip + "\"";
+    strExec = iniDir;
+    strExec = "\"" + strExec + "\"";
+    QString strCommand1;
+    QString strx = "\"" + tagDir + "\"";
+    strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
+    txtEdit->append(strCommand1);
+    QString fileName = iniDir + "unbook.bat";
+    mw_one->TextEditToFile(txtEdit, fileName);
 #endif
 
     mw_one->ui->quickWidget->rootContext()->setContextProperty(
@@ -326,6 +349,14 @@ void dlgReader::openFile(QString openfile) {
       QProcess* pro = new QProcess;
       pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
       pro->waitForFinished();
+#endif
+
+#ifdef Q_OS_WIN
+      QString fileName = iniDir + "unbook.bat";
+      QProcess* pro = new QProcess;
+      pro->execute("cmd.exe", QStringList() << "/c" << fileName);
+      pro->waitForFinished();
+
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -841,7 +872,8 @@ void dlgReader::processHtml() {
   for (int i = 0; i < htmlFiles.count(); i++) {
     QString hf = htmlFiles.at(i);
 
-    QTextEdit* edit = new QTextEdit;
+    text_edit->clear();
+
     QString strHtml = mw_one->loadText(hf);
     strHtml = strHtml.replace("</p>", "</p>\n");
     strHtml = strHtml.replace("/>", "/>\n");
@@ -857,11 +889,11 @@ void dlgReader::processHtml() {
     space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     mystyle = " style='line-height:35px; width:100% ; text-indent:40px; ' ";
 
-    edit->setPlainText(strHtml);
-    QPlainTextEdit* edit1 = new QPlainTextEdit;
+    text_edit->setPlainText(strHtml);
+    plain_edit->clear();
 
-    for (int i = 0; i < edit->document()->lineCount(); i++) {
-      QString str = getTextEditLineText(edit, i);
+    for (int i = 0; i < text_edit->document()->lineCount(); i++) {
+      QString str = getTextEditLineText(text_edit, i);
       str = str.trimmed();
 
       if (str.contains("</head>")) {
@@ -869,8 +901,8 @@ void dlgReader::processHtml() {
             "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
             "/>";
         css.replace("../", "file://" + strOpfPath);
-        edit1->appendPlainText(css);
-        edit1->appendPlainText("</head>");
+        plain_edit->appendPlainText(css);
+        plain_edit->appendPlainText("</head>");
       } else {
         if (str.trimmed() != "") {
           if (str.contains("<image") && str.contains("xlink:href=")) {
@@ -902,12 +934,12 @@ void dlgReader::processHtml() {
 
           if (!str.contains("stylesheet") && !str.contains("<style") &&
               !str.contains("/style>"))
-            edit1->appendPlainText(str);
+            plain_edit->appendPlainText(str);
         }
       }
     }
 
-    TextEditToFile(edit1, hf);
+    TextEditToFile(plain_edit, hf);
   }
 }
 
@@ -1157,23 +1189,22 @@ void dlgReader::showInfo() {
 }
 
 void dlgReader::SplitFile(QString qfile) {
-  QTextEdit* edit1 = new QTextEdit;
-  QPlainTextEdit* editHead = new QPlainTextEdit;
-  QPlainTextEdit* edit3 = new QPlainTextEdit;
   QFileInfo fi(qfile);
 
+  text_edit->clear();
   QString text = mw_one->loadText(qfile);
   text = text.replace("><", ">\n<");
   text = text.replace("</head>", "</head>\n");
-  edit1->setPlainText(text);
-  int count = edit1->document()->lineCount();
+  text_edit->setPlainText(text);
+  int count = text_edit->document()->lineCount();
   for (int i = 0; i < count; i++) {
-    QString str = getTextEditLineText(edit1, i);
-    editHead->appendPlainText(str);
+    QString str = getTextEditLineText(text_edit, i);
+    plain_editHead->clear();
+    plain_editHead->appendPlainText(str);
     if (str.trimmed() == "</head>") break;
   }
 
-  int countHead = editHead->document()->lineCount();
+  int countHead = plain_editHead->document()->lineCount();
   int countBody = count - countHead;
   int n;
   qint64 bb = fi.size();
@@ -1190,32 +1221,33 @@ void dlgReader::SplitFile(QString qfile) {
     if (x == 1) {
       // 1
       for (int i = 0; i < count; i++) {
-        QString str = getTextEditLineText(edit1, i);
-        edit3->appendPlainText(str);
+        QString str = getTextEditLineText(text_edit, i);
+        plain_edit->clear();
+        plain_edit->appendPlainText(str);
         if (i == countHead + split) {
-          edit3->appendPlainText("</body>");
-          edit3->appendPlainText("</html>");
+          plain_edit->appendPlainText("</body>");
+          plain_edit->appendPlainText("</html>");
           breakLine = i;
           break;
         }
       }
 
       QString file1 = fi.path() + "/" + fi.baseName() + "." + fi.suffix();
-      TextEditToFile(edit3, file1);
+      TextEditToFile(plain_edit, file1);
       htmlFiles.append(file1);
     }
 
     // 2...n-1
     if (x > 1 && x < n) {
-      edit3->clear();
-      edit3->setPlainText(editHead->toPlainText());
-      edit3->appendPlainText("<body>");
+      plain_edit->clear();
+      plain_edit->setPlainText(plain_editHead->toPlainText());
+      plain_edit->appendPlainText("<body>");
       for (int i = breakLine + 1; i < count; i++) {
-        QString str = getTextEditLineText(edit1, i);
-        edit3->appendPlainText(str);
+        QString str = getTextEditLineText(text_edit, i);
+        plain_edit->appendPlainText(str);
         if (i == countHead + split * x) {
-          edit3->appendPlainText("</body>");
-          edit3->appendPlainText("</html>");
+          plain_edit->appendPlainText("</body>");
+          plain_edit->appendPlainText("</html>");
           breakLine = i;
           break;
         }
@@ -1223,23 +1255,23 @@ void dlgReader::SplitFile(QString qfile) {
 
       QString file2 = fi.path() + "/" + fi.baseName() + "_" +
                       QString::number(x - 1) + "." + fi.suffix();
-      TextEditToFile(edit3, file2);
+      TextEditToFile(plain_edit, file2);
       htmlFiles.append(file2);
     }
 
     if (x == n) {
       // n
-      edit3->clear();
-      edit3->setPlainText(editHead->toPlainText());
-      edit3->appendPlainText("<body>");
+      plain_edit->clear();
+      plain_edit->setPlainText(plain_editHead->toPlainText());
+      plain_edit->appendPlainText("<body>");
       for (int i = breakLine + 1; i < count; i++) {
-        QString str = getTextEditLineText(edit1, i);
-        edit3->appendPlainText(str);
+        QString str = getTextEditLineText(text_edit, i);
+        plain_edit->appendPlainText(str);
       }
 
       QString filen = fi.path() + "/" + fi.baseName() + "_" +
                       QString::number(x - 1) + "." + fi.suffix();
-      TextEditToFile(edit3, filen);
+      TextEditToFile(plain_edit, filen);
       htmlFiles.append(filen);
     }
   }

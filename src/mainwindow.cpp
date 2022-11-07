@@ -46,6 +46,9 @@ extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern dlgList *m_List;
 
+extern QTextEdit *text_edit;
+extern QPlainTextEdit *plain_edit, *plain_editHead;
+
 void RegJni(const char *myClassName);
 
 #ifdef Q_OS_ANDROID
