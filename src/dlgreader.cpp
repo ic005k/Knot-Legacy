@@ -532,8 +532,7 @@ QString dlgReader::get_href(QString idref, QStringList opfList) {
 QString dlgReader::getTextEditLineText(QTextEdit* txtEdit, int i) {
   QTextBlock block = txtEdit->document()->findBlockByNumber(i);
   txtEdit->setTextCursor(QTextCursor(block));
-  QString lineText =
-      txtEdit->document()->findBlockByNumber(i).text();  //.trimmed();
+  QString lineText = txtEdit->document()->findBlockByNumber(i).text();
   return lineText;
 }
 
@@ -1189,9 +1188,12 @@ void dlgReader::showInfo() {
 }
 
 void dlgReader::SplitFile(QString qfile) {
+  text_edit->clear();
+  plain_edit->clear();
+  plain_editHead->clear();
+
   QFileInfo fi(qfile);
 
-  text_edit->clear();
   QString text = mw_one->loadText(qfile);
   text = text.replace("><", ">\n<");
   text = text.replace("</head>", "</head>\n");
@@ -1199,7 +1201,6 @@ void dlgReader::SplitFile(QString qfile) {
   int count = text_edit->document()->lineCount();
   for (int i = 0; i < count; i++) {
     QString str = getTextEditLineText(text_edit, i);
-    plain_editHead->clear();
     plain_editHead->appendPlainText(str);
     if (str.trimmed() == "</head>") break;
   }
@@ -1222,7 +1223,6 @@ void dlgReader::SplitFile(QString qfile) {
       // 1
       for (int i = 0; i < count; i++) {
         QString str = getTextEditLineText(text_edit, i);
-        plain_edit->clear();
         plain_edit->appendPlainText(str);
         if (i == countHead + split) {
           plain_edit->appendPlainText("</body>");
