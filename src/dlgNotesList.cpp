@@ -56,11 +56,11 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   }
 
   ui->editBook->setStyleSheet(
-      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
+      mw_one->myEditRecord->ui->editAmount->styleSheet());
   ui->editName->setStyleSheet(
-      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
+      mw_one->myEditRecord->ui->editAmount->styleSheet());
   ui->editNote->setStyleSheet(
-      mw_one->mydlgSetTime->ui->editAmount->styleSheet());
+      mw_one->myEditRecord->ui->editAmount->styleSheet());
 
   init();
 }

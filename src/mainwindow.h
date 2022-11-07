@@ -69,6 +69,7 @@
 #include <QValueAxis>
 
 #include "dlgReaderFun.h"
+#include "src/EditRecord.h"
 #include "src/Preferences.h"
 #include "src/RemarksAbout.h"
 #include "src/Report.h"
@@ -80,12 +81,12 @@
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
 #include "src/dlgreader.h"
-#include "src/dlgsettime.h"
 #include "src/dlgsteps.h"
 #include "src/dlgtodo.h"
 #include "src/file.h"
 #include "src/setTodoAlarm.h"
 #include "src/specialaccelerometerpedometer.h"
+#include "ui_EditRecord.h"
 #include "ui_Preferences.h"
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
@@ -97,7 +98,6 @@
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
 #include "ui_dlgreader.h"
-#include "ui_dlgsettime.h"
 #include "ui_dlgsteps.h"
 #include "ui_dlgtodo.h"
 #include "ui_setTodoAlarm.h"
@@ -199,7 +199,7 @@ class MainWindow : public QMainWindow {
   void init_Options();
   QStringList listMonth;
   dlgRemarks *m_Remarks;
-  dlgSetTime *mydlgSetTime;
+  EditRecord *myEditRecord;
   dlgTodo *mydlgTodo;
   dlgReport *mydlgReport;
   dlgPreferences *mydlgPre;

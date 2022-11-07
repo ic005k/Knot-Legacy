@@ -1,9 +1,9 @@
-#include "src/dlgsettime.h"
+#include "src/EditRecord.h"
 
 #include <QKeyEvent>
 
 #include "mainwindow.h"
-#include "ui_dlgsettime.h"
+#include "ui_EditRecord.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
@@ -17,8 +17,8 @@ QStringList c_list;
 
 dlgList* m_List;
 
-dlgSetTime::dlgSetTime(QWidget* parent)
-    : QDialog(parent), ui(new Ui::dlgSetTime) {
+EditRecord::EditRecord(QWidget* parent)
+    : QDialog(parent), ui(new Ui::EditRecord) {
   ui->setupUi(this);
 
   mw_one->set_btnStyle(this);
@@ -67,7 +67,7 @@ dlgSetTime::dlgSetTime(QWidget* parent)
   mw_one->setLineEditQss(ui->editDetails, 10, 1, "#4169E1", "#4169E1");
 }
 
-void dlgSetTime::init() {
+void EditRecord::init() {
   mw_one->mydlgMainNotes->m_SetEditText->close();
   mw_one->mydlgMainNotes->m_SetEditText = new dlgSetEditText(this);
 
@@ -82,13 +82,13 @@ void dlgSetTime::init() {
   show();
 }
 
-dlgSetTime::~dlgSetTime() { delete ui; }
+EditRecord::~EditRecord() { delete ui; }
 
-void dlgSetTime::on_btnBack_clicked() { close(); }
+void EditRecord::on_btnBack_clicked() { close(); }
 
-void dlgSetTime::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
+void EditRecord::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
-void dlgSetTime::on_btnOk_clicked() {
+void EditRecord::on_btnOk_clicked() {
   if (!mw_one->isAdd) {
     mw_one->addUndo(tr("Modify Item") + " ( " + mw_one->getTabText() + " ) ");
 
@@ -141,35 +141,35 @@ void dlgSetTime::on_btnOk_clicked() {
   close();
 }
 
-void dlgSetTime::on_btn7_clicked() { set_Amount("7"); }
+void EditRecord::on_btn7_clicked() { set_Amount("7"); }
 
-void dlgSetTime::on_btn8_clicked() { set_Amount("8"); }
+void EditRecord::on_btn8_clicked() { set_Amount("8"); }
 
-void dlgSetTime::on_btn9_clicked() { set_Amount("9"); }
+void EditRecord::on_btn9_clicked() { set_Amount("9"); }
 
-void dlgSetTime::on_btn4_clicked() { set_Amount("4"); }
+void EditRecord::on_btn4_clicked() { set_Amount("4"); }
 
-void dlgSetTime::on_btn5_clicked() { set_Amount("5"); }
+void EditRecord::on_btn5_clicked() { set_Amount("5"); }
 
-void dlgSetTime::on_btn6_clicked() { set_Amount("6"); }
+void EditRecord::on_btn6_clicked() { set_Amount("6"); }
 
-void dlgSetTime::on_btn1_clicked() { set_Amount("1"); }
+void EditRecord::on_btn1_clicked() { set_Amount("1"); }
 
-void dlgSetTime::on_btn2_clicked() { set_Amount("2"); }
+void EditRecord::on_btn2_clicked() { set_Amount("2"); }
 
-void dlgSetTime::on_btn3_clicked() { set_Amount("3"); }
+void EditRecord::on_btn3_clicked() { set_Amount("3"); }
 
-void dlgSetTime::on_btn0_clicked() { set_Amount("0"); }
+void EditRecord::on_btn0_clicked() { set_Amount("0"); }
 
-void dlgSetTime::on_btnDot_clicked() { set_Amount("."); }
+void EditRecord::on_btnDot_clicked() { set_Amount("."); }
 
-void dlgSetTime::on_btnDel_clicked() {
+void EditRecord::on_btnDel_clicked() {
   QString str = ui->editAmount->text().trimmed();
   str = str.mid(0, str.length() - 1);
   ui->editAmount->setText(str);
 }
 
-void dlgSetTime::set_Amount(QString Number) {
+void EditRecord::set_Amount(QString Number) {
   QString str = ui->editAmount->text().trimmed();
   if (str == "0.00") ui->editAmount->setText("");
   if (str.split(".").count() == 2 && str != "0.00") {
@@ -179,7 +179,7 @@ void dlgSetTime::set_Amount(QString Number) {
   ui->editAmount->setText(str + Number);
 }
 
-void dlgSetTime::on_btnCustom_clicked() {
+void EditRecord::on_btnCustom_clicked() {
   mw_one->m_widget = new QWidget(this);
 
   int h = mw_one->height() - 60;
@@ -197,7 +197,7 @@ void dlgSetTime::on_btnCustom_clicked() {
   m_List->show();
 }
 
-void dlgSetTime::saveCustomDesc() {
+void EditRecord::saveCustomDesc() {
   QSettings Reg(iniDir + "desc.ini", QSettings::IniFormat);
   int count = m_List->ui->listWidget->count();
 
@@ -225,7 +225,7 @@ void dlgSetTime::saveCustomDesc() {
   Reg.setValue("/Details/Count", c_list.count());
 }
 
-int dlgSetTime::removeDuplicates(QStringList* that) {
+int EditRecord::removeDuplicates(QStringList* that) {
   int n = that->size();
   int j = 0;
   QSet<QString> seen;
@@ -251,7 +251,7 @@ int dlgSetTime::removeDuplicates(QStringList* that) {
   return n - j;
 }
 
-void dlgSetTime::init_Desc() {
+void EditRecord::init_Desc() {
   // Custom Desc
   QString ini_file;
   if (isImport)
@@ -282,7 +282,7 @@ void dlgSetTime::init_Desc() {
   }
 }
 
-void dlgSetTime::getTime(int h, int m) {
+void EditRecord::getTime(int h, int m) {
   QString strh, strm, strs;
   if (h < 10)
     strh = "0" + QString::number(h);
@@ -300,7 +300,7 @@ void dlgSetTime::getTime(int h, int m) {
   ui->lblTime->setText(strh + ":" + strm + ":" + strs);
 }
 
-bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
+bool EditRecord::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -309,7 +309,7 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
         mw_one->closeGrayWindows();
 
         return true;
-      } else if (!mw_one->mydlgSetTime->isHidden()) {
+      } else if (!mw_one->myEditRecord->isHidden()) {
         on_btnBack_clicked();
         return true;
       }
@@ -323,11 +323,11 @@ bool dlgSetTime::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgSetTime::on_btnClearAmount_clicked() { ui->editAmount->clear(); }
+void EditRecord::on_btnClearAmount_clicked() { ui->editAmount->clear(); }
 
-void dlgSetTime::on_btnClearDesc_clicked() { ui->editDesc->clear(); }
+void EditRecord::on_btnClearDesc_clicked() { ui->editDesc->clear(); }
 
-void dlgSetTime::on_editAmount_textChanged(const QString& arg1) {
+void EditRecord::on_editAmount_textChanged(const QString& arg1) {
   int count = 0;
   for (int i = 0; i < arg1.count(); i++) {
     if (arg1.mid(i, 1) == ".") count++;
@@ -345,24 +345,24 @@ void dlgSetTime::on_editAmount_textChanged(const QString& arg1) {
     ui->lblAmount->setStyleSheet(lblStyle);
 }
 
-void dlgSetTime::on_hsH_valueChanged(int value) {
+void EditRecord::on_hsH_valueChanged(int value) {
   getTime(value, ui->hsM->value());
 }
 
-void dlgSetTime::on_hsM_valueChanged(int value) {
+void EditRecord::on_hsM_valueChanged(int value) {
   getTime(ui->hsH->value(), value);
 }
 
-void dlgSetTime::on_btnClearDetails_clicked() { ui->editDetails->clear(); }
+void EditRecord::on_btnClearDetails_clicked() { ui->editDetails->clear(); }
 
-void dlgSetTime::on_editDesc_textChanged(const QString& arg1) {
+void EditRecord::on_editDesc_textChanged(const QString& arg1) {
   if (arg1.length() > 0)
     ui->lblCategory->setStyleSheet(lblStyleHighLight);
   else
     ui->lblCategory->setStyleSheet(lblStyle);
 }
 
-void dlgSetTime::on_editDetails_textChanged(const QString& arg1) {
+void EditRecord::on_editDetails_textChanged(const QString& arg1) {
   if (arg1.length() > 0)
     ui->lblDetails->setStyleSheet(lblStyleHighLight);
   else
@@ -372,7 +372,7 @@ void dlgSetTime::on_editDetails_textChanged(const QString& arg1) {
   ui->editDetails->setCompleter(completer);
 }
 
-void dlgSetTime::saveOne() {
+void EditRecord::saveOne() {
   QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
   int tabIndex = tabData->currentIndex();
 

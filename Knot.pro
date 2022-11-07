@@ -38,6 +38,7 @@ INSTALLS += dataFiles
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/EditRecord.cpp \
     src/Preferences.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
@@ -54,7 +55,6 @@ SOURCES += \
     src/dlgreader.cpp \
     src/dlgright.cpp \
     src/dlgsetedittext.cpp \
-    src/dlgsettime.cpp \
     src/dlgsteps.cpp \
     src/dlgtodo.cpp \
     src/documenthandler.cpp \
@@ -67,6 +67,7 @@ SOURCES += \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
+    src/EditRecord.h \
     src/Preferences.h \
     src/RemarksAbout.h \
     src/Report.h \
@@ -85,7 +86,6 @@ HEADERS += \
     src/dlgright.h \
     src/dlgsetedittext.h \
     src/dlgsteps.h \
-    src/dlgsettime.h \
     src/dlgtodo.h \
     src/documenthandler.h \
     src/file.h \
@@ -97,6 +97,7 @@ HEADERS += \
     src/specialaccelerometerpedometer.h
 
 FORMS += \
+    src/EditRecord.ui \
     src/Preferences.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
@@ -113,7 +114,6 @@ FORMS += \
     src/dlgreader.ui \
     src/dlgright.ui \
     src/dlgsetedittext.ui \
-    src/dlgsettime.ui \
     src/dlgsteps.ui \
     src/dlgtodo.ui \
     src/mainwindow.ui \

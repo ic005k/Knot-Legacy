@@ -29,7 +29,7 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->dateTimeEdit->hide();
   ui->dateTimeEdit->setReadOnly(true);
   ui->lblTodoText->setStyleSheet(
-      mw_one->mydlgSetTime->ui->lblTitle->styleSheet());
+      mw_one->myEditRecord->ui->lblTitle->styleSheet());
   QFont font = this->font();
   font.setBold(true);
   ui->btnYear->setFont(font);

@@ -66,7 +66,7 @@ void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
 void dlgList::on_btnDel_clicked() {
   int row = ui->listWidget->currentRow();
   if (row >= 0) ui->listWidget->takeItem(row);
-  mw_one->mydlgSetTime->saveCustomDesc();
+  mw_one->myEditRecord->saveCustomDesc();
   if (ui->listWidget->count() > 0)
     on_listWidget_itemClicked(ui->listWidget->currentItem());
   else
@@ -78,7 +78,7 @@ void dlgList::on_btnBack_clicked() { setCategoryText(); }
 void dlgList::setCategoryText() {
   int row = ui->listWidget->currentRow();
   if (row >= 0) {
-    mw_one->mydlgSetTime->ui->editDesc->setText(
+    mw_one->myEditRecord->ui->editDesc->setText(
         ui->listWidget->currentItem()->text());
   }
 
@@ -106,7 +106,7 @@ void dlgList::on_btnRename_clicked() {
     for (int i = 0; i < ui->listWidget->count(); i++) {
       list.append(ui->listWidget->item(i)->text().trimmed());
     }
-    mw_one->mydlgSetTime->removeDuplicates(&list);
+    mw_one->myEditRecord->removeDuplicates(&list);
     ui->listWidget->clear();
     for (int i = 0; i < list.count(); i++) {
       QListWidgetItem* item = new QListWidgetItem(list.at(i));
@@ -114,7 +114,7 @@ void dlgList::on_btnRename_clicked() {
       ui->listWidget->addItem(item);
     }
     if (index >= 0) ui->listWidget->setCurrentRow(index);
-    mw_one->mydlgSetTime->saveCustomDesc();
+    mw_one->myEditRecord->saveCustomDesc();
 
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
       QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);
@@ -129,7 +129,7 @@ void dlgList::on_btnRename_clicked() {
     }
     mw_one->startSave("alltab");
 
-    mw_one->mydlgSetTime->ui->editDesc->setText(
+    mw_one->myEditRecord->ui->editDesc->setText(
         ui->editRename->text().trimmed());
   }
 }

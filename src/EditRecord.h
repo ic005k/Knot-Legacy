@@ -1,5 +1,5 @@
-#ifndef DLGSETTIME_H
-#define DLGSETTIME_H
+#ifndef EDITRECORD_H
+#define EDITRECORD_H
 
 #include <QCompleter>
 #include <QDialog>
@@ -10,16 +10,16 @@
 #include "src/dlglist.h"
 
 namespace Ui {
-class dlgSetTime;
+class EditRecord;
 }
 
-class dlgSetTime : public QDialog {
+class EditRecord : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgSetTime(QWidget *parent = nullptr);
-  ~dlgSetTime();
-  Ui::dlgSetTime *ui;
+  explicit EditRecord(QWidget *parent = nullptr);
+  ~EditRecord();
+  Ui::EditRecord *ui;
 
   static void saveCustomDesc();
 
@@ -80,4 +80,4 @@ class dlgSetTime : public QDialog {
   QString lblStyle;
 };
 
-#endif  // DLGSETTIME_H
+#endif  // EDITRECORD_H

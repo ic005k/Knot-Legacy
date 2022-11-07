@@ -176,9 +176,9 @@ void MainWindow::dealDone() {
 }
 void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
-    dlgSetTime::saveOne();
+    EditRecord::saveOne();
     saveTab();
-    if (!del) dlgSetTime::saveCustomDesc();
+    if (!del) EditRecord::saveCustomDesc();
   }
 
   if (SaveType == "alltab") {
@@ -195,7 +195,7 @@ void MainWindow::SaveFile(QString SaveType) {
     }
 
     saveTab();
-    dlgSetTime::saveCustomDesc();
+    EditRecord::saveCustomDesc();
     dlgTodo::saveTodo();
   }
 
@@ -726,7 +726,7 @@ void MainWindow::init_TabData() {
 
   mydlgMainNotes->init_MainNotes();
   mydlgTodo->init_Items();
-  mydlgSetTime->init_Desc();
+  myEditRecord->init_Desc();
   mydlgSteps->init_Steps();
   mydlgReader->initReader();
 
@@ -844,7 +844,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
         item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
 
       item11->setText(2, strDesc);
-      item11->setText(3, mydlgSetTime->ui->editDetails->text().trimmed());
+      item11->setText(3, myEditRecord->ui->editDetails->text().trimmed());
 
       int childCount = topItem->childCount();
 
@@ -887,7 +887,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
     else
       item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
     item11->setText(2, strDesc);
-    item11->setText(3, mydlgSetTime->ui->editDetails->text().trimmed());
+    item11->setText(3, myEditRecord->ui->editDetails->text().trimmed());
 
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
@@ -1085,16 +1085,16 @@ void MainWindow::del_Data(QTreeWidget *tw) {
 void MainWindow::on_AddRecord() {
   isAdd = true;
 
-  mydlgSetTime->ui->lblTitle->setText(
+  myEditRecord->ui->lblTitle->setText(
       tr("Add") + "  : " + tabData->tabText(tabData->currentIndex()));
-  mydlgSetTime->ui->editDetails->clear();
+  myEditRecord->ui->editDetails->clear();
 
-  mydlgSetTime->ui->hsH->setValue(QTime::currentTime().hour());
-  mydlgSetTime->ui->hsM->setValue(QTime::currentTime().minute());
-  mydlgSetTime->getTime(mydlgSetTime->ui->hsH->value(),
-                        mydlgSetTime->ui->hsM->value());
+  myEditRecord->ui->hsH->setValue(QTime::currentTime().hour());
+  myEditRecord->ui->hsM->setValue(QTime::currentTime().minute());
+  myEditRecord->getTime(myEditRecord->ui->hsH->value(),
+                        myEditRecord->ui->hsM->value());
 
-  mydlgSetTime->init();
+  myEditRecord->init();
 }
 
 void MainWindow::on_DelRecord() {
@@ -1811,14 +1811,14 @@ void MainWindow::set_Time() {
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
   QTreeWidgetItem *item = tw->currentItem();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
-    item->setText(0, mydlgSetTime->ui->lblTime->text().trimmed());
-    QString sa = mydlgSetTime->ui->editAmount->text().trimmed();
+    item->setText(0, myEditRecord->ui->lblTime->text().trimmed());
+    QString sa = myEditRecord->ui->editAmount->text().trimmed();
     if (sa == "")
       item->setText(1, "");
     else
       item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 2));
-    item->setText(2, mydlgSetTime->ui->editDesc->text().trimmed());
-    item->setText(3, mydlgSetTime->ui->editDetails->text().trimmed());
+    item->setText(2, myEditRecord->ui->editDesc->text().trimmed());
+    item->setText(3, myEditRecord->ui->editDetails->text().trimmed());
     // Amount
     int child = item->parent()->childCount();
     double amount = 0;
@@ -1902,26 +1902,26 @@ void MainWindow::on_twItemDoubleClicked() {
       sm = list.at(1);
       ss = list.at(2);
     }
-    mydlgSetTime->ui->lblTitle->setText(
+    myEditRecord->ui->lblTitle->setText(
         tr("Modify") + "  : " + tabData->tabText(tabData->currentIndex()));
 
-    mydlgSetTime->ui->hsH->setValue(sh.toInt());
-    mydlgSetTime->ui->hsM->setValue(sm.toInt());
+    myEditRecord->ui->hsH->setValue(sh.toInt());
+    myEditRecord->ui->hsM->setValue(sm.toInt());
 
-    mydlgSetTime->ui->lblTime->setText(t.trimmed());
+    myEditRecord->ui->lblTime->setText(t.trimmed());
 
     QString str = item->text(1);
     if (str == "0.00")
-      mydlgSetTime->ui->editAmount->setText("");
+      myEditRecord->ui->editAmount->setText("");
     else
-      mydlgSetTime->ui->editAmount->setText(str);
+      myEditRecord->ui->editAmount->setText(str);
 
-    mydlgSetTime->ui->editDesc->setText(item->text(2));
-    mydlgSetTime->ui->editDetails->setText(item->text(3));
-    mydlgSetTime->ui->frame->setFocus();
+    myEditRecord->ui->editDesc->setText(item->text(2));
+    myEditRecord->ui->editDetails->setText(item->text(3));
+    myEditRecord->ui->frame->setFocus();
 
     isAdd = false;
-    mydlgSetTime->init();
+    myEditRecord->init();
   }
 
   if (item == tw->topLevelItem(tw->topLevelItemCount() - 1)) {
@@ -3736,7 +3736,7 @@ void MainWindow::init_UIWidget() {
   m_Remarks = new dlgRemarks(this);
   m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
 
-  mydlgSetTime = new dlgSetTime(this);
+  myEditRecord = new EditRecord(this);
   mydlgTodo = new dlgTodo(this);
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
   mydlgReport = new dlgReport(this);
@@ -3834,7 +3834,7 @@ void MainWindow::init_UIWidget() {
 
   tabChart->setCurrentIndex(0);
 
-  QString lblStyle = mydlgSetTime->ui->lblTitle->styleSheet();
+  QString lblStyle = myEditRecord->ui->lblTitle->styleSheet();
   mydlgReport->ui->lblTotal->setStyleSheet(lblStyle);
   mydlgReport->ui->lblDetails->setStyleSheet(lblStyle);
   mydlgReport->ui->lblTitle->setStyleSheet(lblStyle);
