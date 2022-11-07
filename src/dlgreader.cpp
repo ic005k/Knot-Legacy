@@ -20,15 +20,8 @@ int baseLines = 20;
 int htmlIndex = 0;
 QDialog* dlgProgEBook;
 
-QTextEdit* text_edit;
-QPlainTextEdit *plain_edit, *plain_editHead;
-
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
-
-  text_edit = new QTextEdit;
-  plain_edit = new QPlainTextEdit;
-  plain_editHead = new QPlainTextEdit;
 
   this->installEventFilter(this);
 
@@ -871,7 +864,7 @@ void dlgReader::processHtml() {
   for (int i = 0; i < htmlFiles.count(); i++) {
     QString hf = htmlFiles.at(i);
 
-    text_edit->clear();
+    QTextEdit* text_edit = new QTextEdit;
 
     QString strHtml = mw_one->loadText(hf);
     strHtml = strHtml.replace("</p>", "</p>\n");
@@ -889,7 +882,7 @@ void dlgReader::processHtml() {
     mystyle = " style='line-height:35px; width:100% ; text-indent:40px; ' ";
 
     text_edit->setPlainText(strHtml);
-    plain_edit->clear();
+    QPlainTextEdit* plain_edit = new QPlainTextEdit;
 
     for (int i = 0; i < text_edit->document()->lineCount(); i++) {
       QString str = getTextEditLineText(text_edit, i);
@@ -1188,9 +1181,9 @@ void dlgReader::showInfo() {
 }
 
 void dlgReader::SplitFile(QString qfile) {
-  text_edit->clear();
-  plain_edit->clear();
-  plain_editHead->clear();
+  QTextEdit* text_edit = new QTextEdit;
+  QPlainTextEdit* plain_edit = new QPlainTextEdit;
+  QPlainTextEdit* plain_editHead = new QPlainTextEdit;
 
   QFileInfo fi(qfile);
 
