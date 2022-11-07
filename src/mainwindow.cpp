@@ -1423,7 +1423,8 @@ void MainWindow::get_Today(QTreeWidget *tw) {
 }
 
 QString MainWindow::loadText(QString textFile) {
-  if (QFile(textFile).exists()) {
+  bool isExists = QFile(textFile).exists();
+  if (isExists) {
     QFile file(textFile);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
       qDebug() << tr("Cannot read file %1:\n%2.")

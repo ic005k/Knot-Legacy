@@ -544,6 +544,27 @@ void dlgMainNotes::unzipMemo() {
   pro->waitForFinished();
 #endif
 
+#ifdef Q_OS_WIN
+  QString strZip, strPath, strExec, strUnzip, tagDir;
+  tagDir = iniDir;
+  strZip = iniDir + "memo.zip";
+  QTextEdit* txtEdit = new QTextEdit();
+  strUnzip = iniDir + "unzip.exe";
+  strUnzip = "\"" + strUnzip + "\"";
+  strZip = "\"" + strZip + "\"";
+  strExec = iniDir;
+  strExec = "\"" + strExec + "\"";
+  QString strCommand1;
+  QString strx = "\"" + tagDir + "\"";
+  strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
+  txtEdit->append(strCommand1);
+  QString fileName = iniDir + "un.bat";
+  mw_one->TextEditToFile(txtEdit, fileName);
+
+  QProcess::execute("cmd.exe", QStringList() << "/c" << fileName);
+
+#endif
+
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
