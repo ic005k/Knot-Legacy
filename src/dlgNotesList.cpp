@@ -120,7 +120,10 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
 void dlgNotesList::on_btnNewNote_clicked() {
   if (ui->treeWidget->topLevelItemCount() == 0) return;
 
-  QString noteFile = "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + ".md";
+  int rand = QRandomGenerator::global()->generate();
+
+  QString noteFile = "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + "_" +
+                     QString::number(rand) + ".md";
   QTreeWidgetItem* topitem = ui->treeWidget->currentItem();
   if (topitem->parent() != NULL) topitem = topitem->parent();
 

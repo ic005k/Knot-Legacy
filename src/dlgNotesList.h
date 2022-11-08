@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QRandomGenerator>
 #include <QTreeWidgetItem>
 
 namespace Ui {
