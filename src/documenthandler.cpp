@@ -86,10 +86,10 @@ void DocumentHandler::setDocument(QQuickTextDocument *document) {
 
   if (m_document) m_document->textDocument()->disconnect(this);
   m_document = document;
-  // if (m_document)
-  //  connect(m_document->textDocument(), &QTextDocument::modificationChanged,
-  //          this, &DocumentHandler::modifiedChanged);
-  // emit documentChanged();
+  if (m_document)
+    connect(m_document->textDocument(), &QTextDocument::modificationChanged,
+            this, &DocumentHandler::modifiedChanged);
+  emit documentChanged();
 }
 
 int DocumentHandler::cursorPosition() const { return m_cursorPosition; }
@@ -352,7 +352,8 @@ void DocumentHandler::load(const QUrl &fileUrl) {
   }
 
   m_fileUrl = fileUrl;
-  emit fileUrlChanged();
+
+  // emit fileUrlChanged();
 }
 
 void DocumentHandler::saveAs(const QUrl &fileUrl) {

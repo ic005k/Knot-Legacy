@@ -304,6 +304,7 @@ void dlgReader::startOpenFile(QString openfile) {
         "strText", tr("Book Info : ") + "\n" + strfilepath);
 
     ebookFile = openfile;
+
 #ifdef Q_OS_WIN
     openFile(ebookFile);
     processHtml();
