@@ -162,7 +162,7 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 #Win
-include(C:/Users/Administrator/AppData/Local/Android/Sdk/android_openssl/openssl.pri)
+android: include(C:/Users/Administrator/AppData/Local/Android/Sdk/android_openssl/openssl.pri)
 ANDROID_EXTRA_LIBS = C:/Users/Administrator/Documents/GitHub/Knot/../../../AppData/Local/Android/Sdk/android_openssl/latest/x86_64/libcrypto_1_1.so C:/Users/Administrator/Documents/GitHub/Knot/../../../AppData/Local/Android/Sdk/android_openssl/latest/x86_64/libssl_1_1.so $$PWD/../../../AppData/Local/Android/Sdk/android_openssl/latest/arm64/libcrypto_1_1.so $$PWD/../../../AppData/Local/Android/Sdk/android_openssl/latest/arm64/libssl_1_1.so
 
 #mac
@@ -171,4 +171,4 @@ ANDROID_EXTRA_LIBS = C:/Users/Administrator/Documents/GitHub/Knot/../../../AppDa
 
 
 
-android: include(C:/Users/Administrator/AppData/Local/Android/Sdk/android_openssl/openssl.pri)
+
