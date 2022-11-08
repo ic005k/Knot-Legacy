@@ -945,15 +945,21 @@ void dlgReader::processHtml() {
 void dlgReader::setQMLHtml() {
   mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
 
-  QString hf = htmlFiles.at(htmlIndex);
-  QVariant msg;
-  msg = hf;
-  currentHtmlFile = hf;
+  currentHtmlFile = htmlFiles.at(htmlIndex);
 
   QQuickItem* root = mw_one->ui->quickWidget->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 
-  qDebug() << "Html File : " << msg;
+#ifdef Q_OS_WIN
+  QString htmlBuffer = mw_one->loadText(currentHtmlFile);
+  QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
+                            Q_ARG(QVariant, htmlBuffer));
+#else
+  QVariant msg;
+  msg = currentHtmlFile;
+  QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
+#endif
+
+  qDebug() << "Html File : " << currentHtmlFile;
 
   if (isPageNext)
     mw_one->ui->quickWidget->rootContext()->setContextProperty("aniW",
