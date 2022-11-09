@@ -109,12 +109,10 @@ Item {
             focus: true
             persistentSelection: false
             selectByKeyboard: true
+            selectByMouse: false
             smooth: true
 
             color: "#664E30"
-
-            //color: Qt.AutoColor
-            //text: strText
 
             MouseArea {
                 acceptedButtons: Qt.RightButton
@@ -160,6 +158,7 @@ Item {
             id: control
             size: 0.3
             position: 0.2
+            width: 7
             active: true
             orientation: Qt.Vertical
             anchors.right: parent.right

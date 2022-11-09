@@ -189,13 +189,17 @@ Rectangle {
         }
 
         ScrollBar.vertical: ScrollBar {
-            id: control
-            //size: 0.3
-            //position: 0.2
-            active: true
-            orientation: Qt.Vertical
-            anchors.right: parent.right
+            id: vbar
+            position: 0.2
             policy: ScrollBar.AsNeeded
+            width: 7
+            hoverEnabled: true
+            active: hovered || pressed
+            orientation: Qt.Vertical
+            size: frame.height / content.height
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
 
             /*contentItem: Rectangle {
@@ -203,16 +207,16 @@ Rectangle {
                 implicitWidth: 4
                 implicitHeight: 76
                 radius: width / 2
-                color: control.pressed ? "#e7e7e7" : "#1296db"
-                opacity: (control.policy === ScrollBar.AlwaysOn
-                          || control.size < 1.0) ? 1.0 : 0.0
+                color: vbar.pressed ? "#e7e7e7" : "#1296db"
+                opacity: (vbar.policy === ScrollBar.AlwaysOn
+                          || vbar.size < 1.0) ? 1.0 : 0.0
             }*/
         }
 
         Component.onCompleted: {
             console.log("lineCount=" + textArea.lineCount)
             console.log("textHeight=" + textArea.height)
-            console.log("textPosition=" + control.position)
+            console.log("textPosition=" + vbar.position)
         }
     }
 

@@ -154,6 +154,7 @@ Item {
             id: control
             size: 0.3
             position: 0.2
+            width: 7
             active: true
             orientation: Qt.Vertical
             anchors.right: parent.right

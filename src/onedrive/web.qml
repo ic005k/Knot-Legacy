@@ -1,3 +1,5 @@
+
+
 /****************************************************************************
 **
 ** Copyright (C) 2017 The Qt Company Ltd.
@@ -47,31 +49,22 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 //import QtQuick.Layouts 1.15
 import QtWebView 1.1
 import MyModel1 1.0
 
-Item{
+Item {
     id: mywebitem
 
-    property bool showProgress: webView.loading
-                                && Qt.platform.os !== "ios"
+    property bool showProgress: webView.loading && Qt.platform.os !== "ios"
                                 && Qt.platform.os !== "winrt"
     visible: true
 
     File {
         id: file
     }
-
-    /*x: initialX
-    y: initialY
-    width: initialWidth
-    height: initialHeight*/
-
-    //title: webView.title
 
     /*toolBar: ToolBar {
         id: navigationBar
@@ -155,6 +148,7 @@ Item{
         }
     }*/
 
+
     /*statusBar: StatusBar {
         id: statusBar
         visible: showProgress
@@ -163,31 +157,30 @@ Item{
             Label { text: webView.loadProgress == 100 ? qsTr("Done") : qsTr("Loading: ") + webView.loadProgress + "%" }
         }
     }*/
-
     WebView {
         id: webView
         anchors.fill: parent
         url: initialUrl
+
 
         /*(onLoadingChanged: {
             if (loadRequest.errorString)
                 console.error(loadRequest.errorString);
             console.log("Loading changed...")
         }*/
-
         onLoadProgressChanged: {
             console.log(webView.loadProgress)
-            file.prog=webView.loadProgress
-            if(webView.loadProgress == 100){
+            file.prog = webView.loadProgress
+            if (webView.loadProgress == 100) {
                 console.log("loadProgress=100%")
                 console.log("CurrentUrl=" + webView.url)
-                file.webEnd = webView.url.toString();
+                file.webEnd = webView.url.toString()
                 //file.loadWebEndChanged()
             }
         }
     }
 
     Component.onCompleted: {
-       console.log(webView.url)
+        console.log(webView.url)
     }
 }
