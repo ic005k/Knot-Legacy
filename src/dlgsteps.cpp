@@ -114,6 +114,9 @@ void dlgSteps::on_btnReset_clicked() {
 
 void dlgSteps::saveSteps() {
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   Reg.setValue("/Steps/Intercept",
                ui->editTangentLineIntercept->text().trimmed());
   Reg.setValue("/Steps/Slope", ui->editTangentLineSlope->text().trimmed());
@@ -152,6 +155,9 @@ void dlgSteps::init_Steps() {
   else
     ini_file = iniDir + "steps.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
 
   ui->editTangentLineIntercept->setText(
       Reg.value("/Steps/Intercept", dleInter).toString());
