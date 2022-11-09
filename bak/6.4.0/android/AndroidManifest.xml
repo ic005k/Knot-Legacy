@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.x" android:installLocation="auto" android:versionCode="-- %%INSERT_VERSION_CODE%% --" android:versionName="-- %%INSERT_VERSION_NAME%% --">
+    <!-- %%INSERT_PERMISSIONS -->
+
+<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true"/>
+    <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true"/>
+    <uses-permission android:name="android.permission.DEVICE_POWER"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+
+    <!-- %%INSERT_FEATURES -->
+    <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
+    <application android:name="org.qtproject.qt.android.bindings.QtApplication" android:hardwareAccelerated="true"  android:label="-- %%INSERT_APP_NAME%% --" android:requestLegacyExternalStorage="true" android:extractNativeLibs="true" android:allowNativeHeapPointerTagging="false" android:allowBackup="true" android:fullBackupOnly="false" android:icon="@drawable/icon">
+        <activity android:name="com.x.MyActivity" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:label="-- %%INSERT_APP_NAME%% --" android:launchMode="singleTop" android:screenOrientation="unspecified" android:exported="true" android:theme="@style/splashScreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+            <meta-data android:name="android.app.arguments" android:value="-- %%INSERT_APP_ARGUMENTS%% --"/>
+            <meta-data android:name="android.app.extract_android_style" android:value="minimal"/>
+            <meta-data android:name="android.app.splash_screen_drawable" android:resource="@drawable/splashscreen"/>
+            <meta-data android:name="android.app.splash_screen_drawable_portrait" android:resource="@drawable/splashscreen_port"/>
+            <meta-data android:name="android.app.splash_screen_drawable_landscape" android:resource="@drawable/splashscreen_land"/>
+        </activity>
+
+<service android:name="com.x.MyService">
+            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+        </service>
+
+<activity android:name="com.x.ClockActivity" android:label="Knot" android:screenOrientation="unspecified" android:theme="@style/splashScreenTheme">
+            <!-- meta-data android:name="android.app.splash_screen_drawable" android:resource="@drawable/splashscreen"/>
+            <meta-data android:name="android.app.splash_screen_drawable_portrait" android:resource="@drawable/splashscreen_port"/>
+            <meta-data android:name="android.app.splash_screen_drawable_landscape" android:resource="@drawable/splashscreen_land"/ -->
+            <meta-data android:name="android.app.splash_screen_drawable" android:resource="@drawable/splashscreen"/>
+            <meta-data android:name="android.app.splash_screen_drawable_portrait" android:resource="@drawable/splashscreen_port"/>
+            <meta-data android:name="android.app.splash_screen_drawable_landscape" android:resource="@drawable/splashscreen_land"/>
+        </activity>
+        <receiver android:name="com.x.AlarmReceiver"/>
+        <provider android:name="android.support.v4.content.FileProvider" android:authorities="com.x" android:grantUriPermissions="true" android:exported="false">
+  <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"/>
+</provider>
+    </application>
+</manifest>
