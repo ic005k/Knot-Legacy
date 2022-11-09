@@ -4643,6 +4643,9 @@ void MainWindow::on_btnSetKey_clicked() {
 
 void MainWindow::on_btnSetKeyOK_clicked() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   if (ui->edit1->text().trimmed() == "" && ui->edit2->text().trimmed() == "") {
     Reg.remove("/MainNotes/UserKey");
     ui->frameSetKey->hide();
@@ -4693,6 +4696,9 @@ void MainWindow::on_btnEdit_clicked() {
   mainHeight = this->height();
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
 

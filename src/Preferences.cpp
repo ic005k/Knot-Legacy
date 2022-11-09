@@ -69,7 +69,11 @@ void dlgPreferences::on_btnBack_clicked() {
 
 void dlgPreferences::saveOptions() {
   if (isBreak) return;
+
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   Reg.setValue("/Options/FontSize", ui->sliderFontSize->value());
   Reg.setValue("/Options/ReaderFont", ui->chkReaderFont->isChecked());
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
@@ -116,6 +120,9 @@ void dlgPreferences::on_btnCustomFont_clicked() {
   setFontDemo(fileName);
   isFontChange = true;
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   Reg.setValue("/Options/CustomFont", fileName);
 }
 

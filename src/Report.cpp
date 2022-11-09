@@ -668,6 +668,9 @@ void dlgReport::markColor(int row) {
 
 void dlgReport::saveYMD() {
   QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   Reg.setValue("/YMD/btnYearText", btnYearText);
   Reg.setValue("/YMD/btnMonthText", btnMonthText);
   Reg.setValue("/YMD/btnYText", btnYText);

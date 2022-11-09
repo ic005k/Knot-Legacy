@@ -199,6 +199,9 @@ void EditRecord::on_btnCustom_clicked() {
 
 void EditRecord::saveCustomDesc() {
   QSettings Reg(iniDir + "desc.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   int count = m_List->ui->listWidget->count();
 
   QStringList list;
@@ -259,6 +262,9 @@ void EditRecord::init_Desc() {
   else
     ini_file = iniDir + "desc.ini";
   QSettings RegDesc(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  RegDesc.setIniCodec("utf-8");
+#endif
 
   m_List->ui->listWidget->clear();
   m_List->ui->listWidget->setViewMode(QListView::IconMode);

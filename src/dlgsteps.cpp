@@ -139,6 +139,9 @@ void dlgSteps::saveSteps() {
   }
 
   QSettings Reg1(iniDir + "initsteps.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg1.setIniCodec("utf-8");
+#endif
   Reg1.setValue("TodaySteps", getCurrentSteps());
 }
 
