@@ -523,7 +523,8 @@ class MainWindow : public QMainWindow {
 
  private:
   int memoHeight;
-  int frameChartHeight = 220;
+  int frameChartHeight;
+  int yScale = 3;
   int x, y, w, h;
   qreal aoldX, aoldY, aoldZ;
   int countOne = 0;

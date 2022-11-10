@@ -587,23 +587,23 @@ void MainWindow::init_ChartWidget() {
   chartDay->setAnimationOptions(QChart::SeriesAnimations);
 
   series2 = new QSplineSeries(chartDay);
-  series2->setPen(QPen(Qt::blue, 3, Qt::SolidLine));
+  series2->setPen(QPen(Qt::blue, 1, Qt::SolidLine));
   m_scatterSeries2 = new QScatterSeries();
   m_scatterSeries2_1 = new QScatterSeries();
 
   //散点图(用于边框)
   m_scatterSeries2->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);                    //圆形的点
-  m_scatterSeries2->setBorderColor(QColor(21, 100, 255));    //边框颜色
-  m_scatterSeries2->setBrush(QBrush(QColor(21, 100, 255)));  //背景颜色
-  m_scatterSeries2->setMarkerSize(12);                       //点大小
+      QScatterSeries::MarkerShapeCircle);                 //圆形的点
+  m_scatterSeries2->setBorderColor(QColor(255, 0, 0));    //边框颜色
+  m_scatterSeries2->setBrush(QBrush(QColor(255, 0, 0)));  //背景颜色
+  m_scatterSeries2->setMarkerSize(5);                     //点大小
 
   //散点图(用于中心)
   m_scatterSeries2_1->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);           //圆形的点
-  m_scatterSeries2_1->setBorderColor(Qt::white);    //边框颜色
-  m_scatterSeries2_1->setBrush(QBrush(Qt::white));  //背景颜色
-  m_scatterSeries2_1->setMarkerSize(6);             //点大小
+      QScatterSeries::MarkerShapeCircle);         //圆形的点
+  m_scatterSeries2_1->setBorderColor(Qt::red);    //边框颜色
+  m_scatterSeries2_1->setBrush(QBrush(Qt::red));  //背景颜色
+  m_scatterSeries2_1->setMarkerSize(4);           //点大小
   connect(m_scatterSeries2_1, &QScatterSeries::hovered, this,
           &MainWindow::slotPointHoverd);  //用于鼠标移动到点上显示数值
   m_valueLabel = new QLabel(this);
@@ -644,10 +644,10 @@ void MainWindow::init_ChartWidget() {
   chartDay->setTitleFont(font1);
   axisX->setLabelsFont(font1);
   axisY->setLabelsFont(font1);
-  axisY->setTickCount(5);
+  axisY->setTickCount(yScale);
   axisX2->setLabelsFont(font1);
   axisY2->setLabelsFont(font1);
-  axisY2->setTickCount(5);
+  axisY2->setTickCount(yScale);
 
   // Get the background color to fit the dark mode
   QPalette pal = this->palette();
@@ -3717,7 +3717,9 @@ void MainWindow::init_UIWidget() {
 
   ui->frame_charts->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frame_charts->layout()->setSpacing(0);
+  frameChartHeight = 160;
   ui->frame_charts->setMaximumHeight(frameChartHeight);
+  tabChart->setCurrentIndex(0);
 
   ui->frame_tab->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frame_tab->setContentsMargins(0, 0, 0, 0);
@@ -3833,8 +3835,6 @@ void MainWindow::init_UIWidget() {
   ui->btnMax->setFont(f);
   ui->btnReader->setFont(f);
   ui->btnMemos->setFont(f);
-
-  tabChart->setCurrentIndex(0);
 
   QString lblStyle = myEditRecord->ui->lblTitle->styleSheet();
   mydlgReport->ui->lblTotal->setStyleSheet(lblStyle);
@@ -4177,14 +4177,10 @@ void MainWindow::on_btnZoom_clicked() {
     floatfun = false;
     mydlgFloatFun->close();
   } else {
-    axisY->setTickCount(5);
-    axisY2->setTickCount(5);
+    axisY->setTickCount(yScale);
+    axisY2->setTickCount(yScale);
     ui->frame_tab->show();
     ui->frame_charts->setMaximumHeight(frameChartHeight);
-
-    // delete mw_one->mydlgFloatFun;
-    // mydlgFloatFun = new dlgFloatFun(this);
-    // mydlgFloatFun->init();
   }
 }
 
@@ -4736,7 +4732,8 @@ void MainWindow::clearSelectBox() {
   QString tempFile = iniDir + "memo/texteditor.html";
   if (!mw_one->ui->frameReader->isHidden()) {
     mw_one->mydlgReader->savePageVPos();
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
+    bool isAni = false;
+    mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", isAni);
     QQuickItem *root = mw_one->ui->quickWidget->rootObject();
     QMetaObject::invokeMethod((QObject *)root, "loadHtml",
                               Q_ARG(QVariant, tempFile));
