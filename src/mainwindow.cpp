@@ -587,7 +587,7 @@ void MainWindow::init_ChartWidget() {
   chartDay->setAnimationOptions(QChart::SeriesAnimations);
 
   series2 = new QSplineSeries(chartDay);
-  series2->setPen(QPen(Qt::blue, 1, Qt::SolidLine));
+  series2->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
   m_scatterSeries2 = new QScatterSeries();
   m_scatterSeries2_1 = new QScatterSeries();
 
