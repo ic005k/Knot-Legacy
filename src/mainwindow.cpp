@@ -554,6 +554,7 @@ void MainWindow::init_ChartWidget() {
 
   ui->glDay->layout()->setSpacing(0);
 
+  // Month
   chartMonth = new QChart();
   chartview = new QChartView(chartMonth);
   chartview->installEventFilter(this);
@@ -637,18 +638,18 @@ void MainWindow::init_ChartWidget() {
   chartDay->setTitle(tr("Freq"));
 
   QFont font1;
-  font1.setPointSize(13);
+  font1.setPointSize(12);
   font1.setBold(true);
-  // chartMonth->setTitleFont(font1);
-  // chartDay->setTitleFont(font1);
+  chartMonth->setTitleFont(font1);
+  chartDay->setTitleFont(font1);
   axisX->setLabelsFont(font1);
   axisY->setLabelsFont(font1);
-  axisY->setTickCount(4);
+  axisY->setTickCount(5);
   axisX2->setLabelsFont(font1);
   axisY2->setLabelsFont(font1);
-  axisY2->setTickCount(4);
+  axisY2->setTickCount(5);
 
-  // 获取背景色
+  // Get the background color to fit the dark mode
   QPalette pal = this->palette();
   QBrush brush = pal.window();
   red = brush.color().red();
@@ -4169,15 +4170,15 @@ void MainWindow::on_btnMenu_clicked() {
 
 void MainWindow::on_btnZoom_clicked() {
   if (!ui->frame_tab->isHidden()) {
-    axisY->setTickCount(10);
-    axisY2->setTickCount(10);
+    axisY->setTickCount(11);
+    axisY2->setTickCount(11);
     ui->frame_tab->hide();
     ui->frame_charts->setMaximumHeight(this->height());
     floatfun = false;
     mydlgFloatFun->close();
   } else {
-    axisY->setTickCount(4);
-    axisY2->setTickCount(4);
+    axisY->setTickCount(5);
+    axisY2->setTickCount(5);
     ui->frame_tab->show();
     ui->frame_charts->setMaximumHeight(frameChartHeight);
 

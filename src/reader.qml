@@ -192,11 +192,11 @@ Rectangle {
             id: vbar
             position: 0.2
             policy: ScrollBar.AsNeeded
-            width: 7
+            width: 8
             hoverEnabled: true
             active: hovered || pressed
             orientation: Qt.Vertical
-            size: frame.height / content.height
+            size: 0.3
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.bottom: parent.bottom
