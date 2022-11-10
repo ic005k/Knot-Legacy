@@ -16,8 +16,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
   mw_one->set_btnStyle(this);
 
-  ui->btnTest->hide();
-
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);
   m_Right = new dlgRight(this);
@@ -106,7 +104,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
 void dlgMainNotes::init() {
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                    mw_one->width(), mw_one->height());
+                    mw_one->width(), mw_one->mainHeight);
 }
 
 void dlgMainNotes::wheelEvent(QWheelEvent* e) { Q_UNUSED(e); }
@@ -135,24 +133,21 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
       Reg.setValue("newHeight", newHeight);
     }
 
-    if (!ui->editSource->isHidden()) {
-      if (pAndroidKeyboard->isVisible()) {
-        this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                          mw_one->width(), newHeight);
-      }
-
-      if (this->height() == newHeight) {
-        int p = ui->editSource->textCursor().position();
-        QTextCursor tmpCursor = ui->editSource->textCursor();
-        tmpCursor.setPosition(p);
-        ui->editSource->setTextCursor(tmpCursor);
-      }
+    if (pAndroidKeyboard->isVisible()) {
+      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                        mw_one->width(), newHeight);
     }
-  }
 
-  qDebug() << pAndroidKeyboard->keyboardRectangle().height()
-           << "this height=" << this->height();
-  qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
+    if (this->height() == newHeight) {
+      int p = ui->editSource->textCursor().position();
+      QTextCursor tmpCursor = ui->editSource->textCursor();
+      tmpCursor.setPosition(p);
+      ui->editSource->setTextCursor(tmpCursor);
+    }
+
+    qDebug() << "newHeight=" << newHeight << "notes height=" << this->height()
+             << "main height=" << mw_one->mainHeight;
+  }
 }
 
 void dlgMainNotes::on_btnBack_clicked() {
@@ -167,6 +162,7 @@ void dlgMainNotes::on_btnBack_clicked() {
   loadMemoQML();
   setVPos();
   close();
+  isShow = false;
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
@@ -300,21 +296,23 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
 }
 
 void dlgMainNotes::on_KVChanged() {
+  QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
   if (!pAndroidKeyboard->isVisible()) {
     this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                       mw_one->width(), mw_one->mainHeight);
   } else {
-    QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
     int newh = Reg.value("newHeight").toInt();
     if (newh > 0) {
       this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                         mw_one->width(), newh);
 
-      if (!m_SetEditText->isHidden()) {
-        m_SetEditText->setGeometry(m_SetEditText->geometry().x(), 10,
-                                   m_SetEditText->width(),
-                                   m_SetEditText->height());
-      }
+    } else {
+    }
+
+    if (!m_SetEditText->isHidden()) {
+      m_SetEditText->setGeometry(m_SetEditText->geometry().x(), 10,
+                                 m_SetEditText->width(),
+                                 m_SetEditText->height());
     }
   }
 }

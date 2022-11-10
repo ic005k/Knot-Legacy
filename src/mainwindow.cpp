@@ -4689,8 +4689,7 @@ void MainWindow::on_btnEdit_clicked() {
   mydlgMainNotes->m_SetEditText->close();
   mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgMainNotes);
 
-  mydlgMainNotes->isShow = true;
-  mainHeight = this->height();
+  mainHeight = mw_one->height();
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -4708,6 +4707,7 @@ void MainWindow::on_btnEdit_clicked() {
   mydlgMainNotes->ui->editSource->setPlainText(str);
 
   mydlgMainNotes->show();
+  mydlgMainNotes->isShow = true;
 
   QString a = m_NotesList->currentMDFile;
   a.replace(iniDir, "");
