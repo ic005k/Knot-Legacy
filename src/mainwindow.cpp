@@ -3856,15 +3856,10 @@ void MainWindow::init_UIWidget() {
   connect(clearaction1, &QAction::triggered,
           [=]() { ui->editFind->setText(""); });
 
-  ui->quickWidgetOne->setSource(
-      QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
-
-  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/src/reader.qml")));
   ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
   ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
   ui->quickWidget->rootContext()->setContextProperty("mw_one", mw_one);
 
-  ui->qw_Img->setSource(QUrl(QStringLiteral("qrc:/src/imgview.qml")));
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
