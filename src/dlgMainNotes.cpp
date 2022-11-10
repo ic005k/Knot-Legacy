@@ -62,17 +62,10 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
           &dlgMainNotes::highlightCurrentLine);
 
   highlightCurrentLine();
-  ui->editLineSn->hide();
-  ui->editLineSn->setStyleSheet("background-color:#fafafa;");
-  ui->editLineSn->verticalScrollBar()->hide();
-  ui->editLineSn->horizontalScrollBar()->hide();
-  ui->editLineSn->insertPlainText(QStringLiteral("1\n"));
-  ui->editLineSn->setFocusPolicy(Qt::NoFocus);
-  ui->editLineSn->setContextMenuPolicy(Qt::NoContextMenu);
+
   QFont font;
   font.setPixelSize(fontSize);
-  ui->editLineSn->setFont(font);
-  ui->editLineSn->setFixedWidth(ui->editLineSn->font().pixelSize() + 10);
+
   lastLine = 1;
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
   ui->editSource->setFont(font);
@@ -113,12 +106,7 @@ dlgMainNotes::~dlgMainNotes() { delete ui; }
 
 void dlgMainNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
-void dlgMainNotes::editVSBarValueChanged() {
-  if (!ui->editLineSn->isHidden()) {
-    ui->editLineSn->verticalScrollBar()->setValue(
-        ui->editSource->verticalScrollBar()->value());
-  }
-}
+void dlgMainNotes::editVSBarValueChanged() {}
 
 void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);
@@ -804,15 +792,6 @@ void dlgMainNotes::highlightCurrentLine() {
 
   ui->editSource->setExtraSelections(extraSelections);
 
-  if (!ui->editLineSn->isHidden()) {
-    ui->editLineSn->blockSignals(true);
-    ui->editSource->blockSignals(true);
-    ui->editLineSn->verticalScrollBar()->setValue(
-        ui->editSource->verticalScrollBar()->value());
-    ui->editLineSn->blockSignals(false);
-    ui->editSource->blockSignals(false);
-  }
-
   QString str1, str2, str3, str4;
 
   //当前光标
@@ -834,39 +813,7 @@ void dlgMainNotes::highlightCurrentLine() {
   ui->lblInfo->setText(" " + str4 + " , " + str3);
 }
 
-void dlgMainNotes::onTextChange() {
-  if (ui->editLineSn->isHidden()) return;
-
-  int jsonTextEditRow = ui->editSource->document()->lineCount();
-  if (jsonTextEditRow == lastLine) return;
-
-  ui->editLineSn->blockSignals(true);
-  ui->editSource->blockSignals(true);
-
-  int countOfRow = 0;
-  int temp = jsonTextEditRow;
-  while (temp != 0) {
-    temp = temp / 10;
-    ++countOfRow;
-  }
-  ui->editLineSn->setFixedWidth(
-      ui->editLineSn->font().pixelSize() * countOfRow + 10);
-
-  ui->editLineSn->clear();
-  QString str;
-  ++jsonTextEditRow;
-  for (int i = 1; i < jsonTextEditRow; ++i) {
-    str.append(QString("%1\n").arg(i));
-  }
-  ui->editLineSn->setPlainText(str);
-
-  lastLine = ui->editSource->document()->lineCount();
-
-  ui->editLineSn->verticalScrollBar()->setValue(
-      ui->editSource->verticalScrollBar()->value());
-  ui->editLineSn->blockSignals(false);
-  ui->editSource->blockSignals(false);
-}
+void dlgMainNotes::onTextChange() {}
 
 void dlgMainNotes::on_btnPaste_clicked() { ui->editSource->paste(); }
 

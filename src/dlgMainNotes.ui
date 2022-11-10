@@ -855,13 +855,6 @@ color: rgb(255, 255, 255);</string>
          <number>0</number>
         </property>
         <item>
-         <widget class="QTextEdit" name="editLineSn">
-          <property name="acceptRichText">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QTextEdit" name="editSource">
           <property name="acceptRichText">
            <bool>false</bool>
