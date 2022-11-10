@@ -271,10 +271,10 @@ void TestDialog::on_btnBack_clicked() {
 }
 
 void TestDialog::loadLogQML() {
-  mw_one->ui->quickWidgetOne->rootContext()->setContextProperty(
-      "strText", oneDrive->debugInfo());
   mw_one->ui->quickWidgetOne->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
+  mw_one->ui->quickWidgetOne->rootContext()->setContextProperty(
+      "strText", oneDrive->debugInfo());
 }
 
 void TestDialog::initQuick() {

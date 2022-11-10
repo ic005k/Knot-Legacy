@@ -233,8 +233,6 @@ void dlgReader::startOpenFile(QString openfile) {
   mw_one->ui->quickWidget->rootContext()->setContextProperty("aniW",
                                                              mw_one->width());
   mw_one->ui->quickWidget->rootContext()->setContextProperty("toW", 0);
-  mw_one->ui->quickWidget->setSource(
-      QUrl(QStringLiteral("qrc:/src/reader.qml")));
 
   if (QFile(openfile).exists()) {
     isEBook = true;

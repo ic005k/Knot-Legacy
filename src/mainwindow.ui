@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>760</width>
+    <width>502</width>
     <height>1753</height>
    </rect>
   </property>
@@ -2152,8 +2152,8 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>760</width>
-     <height>29</height>
+     <width>502</width>
+     <height>24</height>
     </rect>
    </property>
    <property name="styleSheet">

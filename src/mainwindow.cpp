@@ -3856,13 +3856,19 @@ void MainWindow::init_UIWidget() {
   connect(clearaction1, &QAction::triggered,
           [=]() { ui->editFind->setText(""); });
 
+  ui->quickWidgetOne->setSource(
+      QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
+
+  ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/src/reader.qml")));
   ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
   ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
   ui->quickWidget->rootContext()->setContextProperty("mw_one", mw_one);
 
+  ui->qw_Img->setSource(QUrl(QStringLiteral("qrc:/src/imgview.qml")));
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
+  ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
   ui->quickWidgetMemo->rootContext()->setContextProperty("FontSize", fontSize);
   ui->quickWidgetMemo->rootContext()->setContextProperty("strText", "");
 }
@@ -4563,6 +4569,8 @@ void MainWindow::on_btnSelText_clicked() {
 }
 
 void MainWindow::on_btnSignIn_clicked() {
+  ui->quickWidgetOne->setSource(
+      QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
   mydlgOneDrive->on_pushButton_SignIn_clicked();
 }
 
@@ -4583,14 +4591,11 @@ void MainWindow::on_btnBack_One_clicked() {
     if (ui->frameOneFun->isHidden()) {
       ui->frameOneFun->show();
       ui->frameFunWeb->hide();
+
       mydlgOneDrive->loadLogQML();
     } else {
       ui->frameOne->hide();
       ui->frameMain->show();
-
-      // delete mw_one->mydlgFloatFun;
-      // mydlgFloatFun = new dlgFloatFun(this);
-      // mydlgFloatFun->init();
     }
   }
 }
@@ -4604,8 +4609,6 @@ void MainWindow::on_btnStorageInfo_clicked() {
 }
 
 void MainWindow::on_btnRefreshWeb_clicked() {
-  ui->quickWidgetOne->setSource(
-      QUrl(QStringLiteral("qrc:/src/onedrive/main.qml")));
   ui->quickWidgetOne->rootContext()->setContextProperty("initialUrl",
                                                         strRefreshUrl);
 }

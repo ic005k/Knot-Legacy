@@ -51,8 +51,7 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
 
   mw_one->ui->frameOneFun->hide();
   mw_one->ui->frameFunWeb->show();
-  mw_one->ui->quickWidgetOne->setSource(
-      QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
+
   mw_one->ui->quickWidgetOne->rootContext()->setContextProperty("initialUrl",
                                                                 url);
 

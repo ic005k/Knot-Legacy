@@ -619,8 +619,7 @@ void dlgMainNotes::loadMemoQML() {
     str1.replace(strIniDir, iniDir);
   }
   htmlBuffer = str1;
-  mw_one->ui->quickWidgetMemo->setSource(
-      QUrl(QStringLiteral("qrc:/src/memo.qml")));
+
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
 
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant,
