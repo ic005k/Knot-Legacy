@@ -4171,8 +4171,8 @@ void MainWindow::on_btnMenu_clicked() {
 
 void MainWindow::on_btnZoom_clicked() {
   if (!ui->frame_tab->isHidden()) {
-    axisY->setTickCount(11);
-    axisY2->setTickCount(11);
+    axisY->setTickCount(13);
+    axisY2->setTickCount(13);
     ui->frame_tab->hide();
     ui->frame_charts->setMaximumHeight(this->height());
     floatfun = false;
