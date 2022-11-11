@@ -16,64 +16,71 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
   mw_one->set_btnStyle(this);
 
+  ui->btnTest->hide();
+
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);
   m_Right = new dlgRight(this);
 
   this->installEventFilter(this);
-  mw_one->ui->editSource->installEventFilter(this);
-  mw_one->ui->editSource->viewport()->installEventFilter(this);
+  ui->editSource->installEventFilter(this);
+  ui->editSource->viewport()->installEventFilter(this);
   this->setModal(true);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
 
-  QScroller::grabGesture(mw_one->ui->editSource,
-                         QScroller::LeftMouseButtonGesture);
-  mw_one->ui->editSource->verticalScrollBar()->setStyleSheet(
-      mw_one->vsbarStyleSmall);
+  QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
+  ui->editSource->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   // ui->editSource->setTextInteractionFlags(Qt::NoTextInteraction);
   QPalette pt = palette();
   pt.setBrush(QPalette::Text, Qt::black);
   pt.setBrush(QPalette::Base, QColor(255, 255, 255));
   pt.setBrush(QPalette::Highlight, Qt::red);
   pt.setBrush(QPalette::HighlightedText, Qt::white);
-  mw_one->ui->editSource->setPalette(pt);
-  mw_one->ui->editSource->setStyleSheet("border:none");
+  ui->editSource->setPalette(pt);
+  ui->editSource->setStyleSheet("border:none");
   QFontMetrics fm(this->font());
-  mw_one->ui->editSource->setCursorWidth(2);
+  ui->editSource->setCursorWidth(2);
 
   QFont f = this->font();
   f.setPointSize(fontSize - 1);
-  mw_one->ui->lblInfo->setFont(f);
-  mw_one->ui->frameFun->setFont(f);
+  ui->lblInfo->setFont(f);
+  ui->frameFun->setFont(f);
 
-  mw_one->setSCrollPro(mw_one->ui->editSource);
+  mw_one->setSCrollPro(ui->editSource);
 
-  connect(mw_one->ui->editSource->verticalScrollBar(),
-          SIGNAL(valueChanged(int)), this, SLOT(editVSBarValueChanged()));
+  connect(ui->editSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
+          SLOT(editVSBarValueChanged()));
 
   QValidator* validator =
-      new QRegularExpressionValidator(regxNumber, mw_one->ui->editRow);
-  mw_one->ui->editRow->setValidator(validator);
-  mw_one->ui->editRow->setPlaceholderText(tr("Row"));
-  mw_one->ui->editCol->setValidator(validator);
-  mw_one->ui->editCol->setPlaceholderText(tr("Column"));
+      new QRegularExpressionValidator(regxNumber, ui->editRow);
+  ui->editRow->setValidator(validator);
+  ui->editRow->setPlaceholderText(tr("Row"));
+  ui->editCol->setValidator(validator);
+  ui->editCol->setPlaceholderText(tr("Column"));
 
-  connect(mw_one->ui->editSource, &QTextEdit::cursorPositionChanged, this,
+  connect(ui->editSource, &QTextEdit::cursorPositionChanged, this,
           &dlgMainNotes::highlightCurrentLine);
 
   highlightCurrentLine();
-
+  ui->editLineSn->hide();
+  ui->editLineSn->setStyleSheet("background-color:#fafafa;");
+  ui->editLineSn->verticalScrollBar()->hide();
+  ui->editLineSn->horizontalScrollBar()->hide();
+  ui->editLineSn->insertPlainText(QStringLiteral("1\n"));
+  ui->editLineSn->setFocusPolicy(Qt::NoFocus);
+  ui->editLineSn->setContextMenuPolicy(Qt::NoContextMenu);
   QFont font;
   font.setPixelSize(fontSize);
-
+  ui->editLineSn->setFont(font);
+  ui->editLineSn->setFixedWidth(ui->editLineSn->font().pixelSize() + 10);
   lastLine = 1;
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
-  mw_one->ui->editSource->setFont(font);
-  mw_one->ui->editSource->setAcceptRichText(false);
+  ui->editSource->setFont(font);
+  ui->editSource->setAcceptRichText(false);
 
-  connect(mw_one->ui->editSource, &QTextEdit::textChanged, this,
+  connect(ui->editSource, &QTextEdit::textChanged, this,
           &dlgMainNotes::onTextChange);
 
   timer = new QTimer(this);
@@ -86,21 +93,20 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
   int a = 500;
   int b = 50;
-  mw_one->ui->btnLeft->setAutoRepeat(true);
-  mw_one->ui->btnLeft->setAutoRepeatDelay(a);
-  mw_one->ui->btnLeft->setAutoRepeatInterval(b);
+  ui->btnLeft->setAutoRepeat(true);
+  ui->btnLeft->setAutoRepeatDelay(a);
+  ui->btnLeft->setAutoRepeatInterval(b);
 
-  mw_one->ui->btnRight->setAutoRepeat(true);
-  mw_one->ui->btnRight->setAutoRepeatDelay(a);
-  mw_one->ui->btnRight->setAutoRepeatInterval(b);
+  ui->btnRight->setAutoRepeat(true);
+  ui->btnRight->setAutoRepeatDelay(a);
+  ui->btnRight->setAutoRepeatInterval(b);
 
-  mw_one->ui->editSource->setFocus();
+  ui->editSource->setFocus();
 }
 
 void dlgMainNotes::init() {
-  mw_one->ui->frameNoteEdit->setGeometry(mw_one->geometry().x(),
-                                         mw_one->geometry().y(),
-                                         mw_one->width(), mw_one->height());
+  this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                    mw_one->width(), mw_one->height());
 }
 
 void dlgMainNotes::wheelEvent(QWheelEvent* e) { Q_UNUSED(e); }
@@ -109,12 +115,17 @@ dlgMainNotes::~dlgMainNotes() { delete ui; }
 
 void dlgMainNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
 
-void dlgMainNotes::editVSBarValueChanged() {}
+void dlgMainNotes::editVSBarValueChanged() {
+  if (!ui->editLineSn->isHidden()) {
+    ui->editLineSn->verticalScrollBar()->setValue(
+        ui->editSource->verticalScrollBar()->value());
+  }
+}
 
 void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   Q_UNUSED(event);
 
-  /*if (isShow) {
+  if (isShow) {
     if (this->height() != mw_one->mainHeight) {
       newHeight = this->height();
       androidKeyH = mw_one->mainHeight - newHeight;
@@ -124,36 +135,38 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
       Reg.setValue("newHeight", newHeight);
     }
 
-    if (pAndroidKeyboard->isVisible()) {
-      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), newHeight);
-    }
+    if (!ui->editSource->isHidden()) {
+      if (pAndroidKeyboard->isVisible()) {
+        this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                          mw_one->width(), newHeight);
+      }
 
-    if (this->height() == newHeight) {
-      int p = ui->editSource->textCursor().position();
-      QTextCursor tmpCursor = ui->editSource->textCursor();
-      tmpCursor.setPosition(p);
-      ui->editSource->setTextCursor(tmpCursor);
+      if (this->height() == newHeight) {
+        int p = ui->editSource->textCursor().position();
+        QTextCursor tmpCursor = ui->editSource->textCursor();
+        tmpCursor.setPosition(p);
+        ui->editSource->setTextCursor(tmpCursor);
+      }
     }
+  }
 
-    qDebug() << "newHeight=" << newHeight << "notes height=" << this->height()
-             << "main height=" << mw_one->mainHeight
-             << "mw_one h=" << mw_one->height() << mw_one->geometry().y();
-    qDebug() << "memo h====" << mw_one->ui->frameMemo->height()
-             << mw_one->ui->frameMemo->y();
-  }*/
+  qDebug() << pAndroidKeyboard->keyboardRectangle().height()
+           << "this height=" << this->height();
+  qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
 }
 
 void dlgMainNotes::on_btnBack_clicked() {
   if (!m_SetEditText->isHidden()) {
     m_SetEditText->close();
   }
+  pAndroidKeyboard->hide();
+  mw_one->Sleep(100);
 
   saveMainNotes();
   saveQMLVPos();
   loadMemoQML();
   setVPos();
-  mw_one->ui->frameNoteEdit->hide();
+  close();
   mw_one->ui->frameMemo->show();
 }
 
@@ -175,8 +188,7 @@ void dlgMainNotes::saveMainNotes() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  mw_one->TextEditToFile(mw_one->ui->editSource,
-                         mw_one->m_NotesList->currentMDFile);
+  mw_one->TextEditToFile(ui->editSource, mw_one->m_NotesList->currentMDFile);
   MD2Html(mw_one->m_NotesList->currentMDFile);
 
   QString path = iniDir + "memo/";
@@ -187,9 +199,9 @@ void dlgMainNotes::saveMainNotes() {
   strTag.replace(iniDir, "");
   Reg.setValue("/MainNotes/CurrentOSIniDir", iniDir);
   Reg.setValue("/MainNotes/editVPos" + strTag,
-               mw_one->ui->editSource->verticalScrollBar()->sliderPosition());
+               ui->editSource->verticalScrollBar()->sliderPosition());
   Reg.setValue("/MainNotes/editCPos" + strTag,
-               mw_one->ui->editSource->textCursor().position());
+               ui->editSource->textCursor().position());
 }
 
 void dlgMainNotes::init_MainNotes() { loadMemoQML(); }
@@ -265,8 +277,8 @@ void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
 }
 
 bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
-  if (obj == mw_one->ui->editSource->viewport()) {
-    getEditPanel(mw_one->ui->editSource, evn);
+  if (obj == ui->editSource->viewport()) {
+    getEditPanel(ui->editSource, evn);
   }
 
   if (evn->type() == QEvent::KeyPress) {
@@ -289,24 +301,23 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
 }
 
 void dlgMainNotes::on_KVChanged() {
-  /*QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
   if (!pAndroidKeyboard->isVisible()) {
-
     this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                       mw_one->width(), mw_one->mainHeight);
-
   } else {
+    QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
     int newh = Reg.value("newHeight").toInt();
+    if (newh > 0) {
+      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                        mw_one->width(), newh);
 
-    this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                      mw_one->width(), newh);
-
-    if (!m_SetEditText->isHidden()) {
-      m_SetEditText->setGeometry(m_SetEditText->geometry().x(), 10,
-                                 m_SetEditText->width(),
-                                 m_SetEditText->height());
+      if (!m_SetEditText->isHidden()) {
+        m_SetEditText->setGeometry(m_SetEditText->geometry().x(), 10,
+                                   m_SetEditText->width(),
+                                   m_SetEditText->height());
+      }
     }
-  }*/
+  }
 }
 
 /*
@@ -391,9 +402,9 @@ QString dlgMainNotes::Deciphering(const QString& fileName) {
   file.close();
 }
 
-void dlgMainNotes::on_btnUndo_clicked() { mw_one->ui->editSource->undo(); }
+void dlgMainNotes::on_btnUndo_clicked() { ui->editSource->undo(); }
 
-void dlgMainNotes::on_btnRedo_clicked() { mw_one->ui->editSource->redo(); }
+void dlgMainNotes::on_btnRedo_clicked() { ui->editSource->redo(); }
 
 QString dlgMainNotes::getDateTimeStr() {
   int y, m, d, hh, mm, s;
@@ -444,7 +455,7 @@ void dlgMainNotes::on_btnPic_clicked() {
     int new_w, new_h;
     w = img.width();
     h = img.height();
-    int w0 = mw_one->ui->editSource->width();
+    int w0 = ui->editSource->width();
     double r = (double)w / h;
     if (w > w0 - 26) {
       new_w = w0 - 26;
@@ -461,8 +472,7 @@ void dlgMainNotes::on_btnPic_clicked() {
         pix.scaled(new_w, new_h, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pix.save(strTar);
 
-    mw_one->ui->editSource->insertPlainText("![image](file://" + strTar +
-                                            ")\n");
+    ui->editSource->insertPlainText("![image](file://" + strTar + ")\n");
 
     QMessageBox box;
     box.setText(strTar);
@@ -624,7 +634,8 @@ void dlgMainNotes::loadMemoQML() {
     str1.replace(strIniDir, iniDir);
   }
   htmlBuffer = str1;
-
+  mw_one->ui->quickWidgetMemo->setSource(
+      QUrl(QStringLiteral("qrc:/src/memo.qml")));
   QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
 
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant,
@@ -668,8 +679,8 @@ qreal dlgMainNotes::getVHeight() {
 }
 
 void dlgMainNotes::on_btnInsertTable_clicked() {
-  int row = mw_one->ui->editRow->text().trimmed().toInt();
-  int col = mw_one->ui->editCol->text().trimmed().toInt();
+  int row = ui->editRow->text().trimmed().toInt();
+  int col = ui->editCol->text().trimmed().toInt();
 
   if (row == 0 || col == 0) return;
 
@@ -684,94 +695,102 @@ void dlgMainNotes::on_btnInsertTable_clicked() {
     strRow = strRow + "      |";
   }
 
-  if (!mw_one->ui->editSource->isHidden()) {
-    mw_one->ui->editSource->insertPlainText(strCol + "\n" + strHead + "\n");
+  if (!ui->editSource->isHidden()) {
+    ui->editSource->insertPlainText(strCol + "\n" + strHead + "\n");
     for (int j = 0; j < row; j++) {
-      mw_one->ui->editSource->insertPlainText(strRow + "\n");
+      ui->editSource->insertPlainText(strRow + "\n");
     }
   }
 }
 
+void dlgMainNotes::on_editSource_redoAvailable(bool b) {
+  if (b)
+    ui->btnRedo->setEnabled(true);
+  else
+    ui->btnRedo->setEnabled(false);
+}
+
+void dlgMainNotes::on_editSource_undoAvailable(bool b) {
+  if (b)
+    ui->btnUndo->setEnabled(true);
+  else
+    ui->btnUndo->setEnabled(false);
+}
+
 void dlgMainNotes::on_btnSeparator_clicked() {
-  mw_one->ui->editSource->insertPlainText("-");
+  ui->editSource->insertPlainText("-");
 }
 
 void dlgMainNotes::on_btnWells_clicked() {
-  mw_one->ui->editSource->insertPlainText("#");
+  ui->editSource->insertPlainText("#");
 }
 
 void dlgMainNotes::on_btnVLine_clicked() {
-  mw_one->ui->editSource->insertPlainText("|");
+  ui->editSource->insertPlainText("|");
 }
 
 void dlgMainNotes::on_btnAsterisk_clicked() {
-  mw_one->ui->editSource->insertPlainText("*");
+  ui->editSource->insertPlainText("*");
 }
 
 void dlgMainNotes::on_btnS1_clicked() {
-  QString str = mw_one->ui->editSource->textCursor().selectedText();
+  QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Bold Italic");
-  mw_one->ui->editSource->insertPlainText("_**" + str + "**_");
+  ui->editSource->insertPlainText("_**" + str + "**_");
 }
 
 void dlgMainNotes::on_btnS2_clicked() {
-  QString str = mw_one->ui->editSource->textCursor().selectedText();
+  QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Italic");
-  mw_one->ui->editSource->insertPlainText("_" + str + "_");
+  ui->editSource->insertPlainText("_" + str + "_");
 }
 
 void dlgMainNotes::on_btnS3_clicked() {
-  QString str = mw_one->ui->editSource->textCursor().selectedText();
+  QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Underline");
-  mw_one->ui->editSource->insertPlainText("<u>" + str + "</u>");
+  ui->editSource->insertPlainText("<u>" + str + "</u>");
 }
 
 void dlgMainNotes::on_btnS4_clicked() {
-  QString str = mw_one->ui->editSource->textCursor().selectedText();
+  QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Strickout");
-  mw_one->ui->editSource->insertPlainText("~~" + str + "~~");
+  ui->editSource->insertPlainText("~~" + str + "~~");
 }
 
 void dlgMainNotes::on_btnColor_clicked() {
-  QString str = mw_one->ui->editSource->textCursor().selectedText();
+  QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Red");
-  mw_one->ui->editSource->insertPlainText("<font color=#FF0000 >" + str +
-                                          "</font>");
+  ui->editSource->insertPlainText("<font color=#FF0000 >" + str + "</font>");
 }
 
 void dlgMainNotes::on_btnS5_clicked() {
-  QString str = mw_one->ui->editSource->textCursor().selectedText();
+  QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Bold");
-  mw_one->ui->editSource->insertPlainText("**" + str + "**");
+  ui->editSource->insertPlainText("**" + str + "**");
 }
 
 void dlgMainNotes::on_btnLink_clicked() {
-  mw_one->ui->editSource->insertPlainText(
-      "[Knot](https://github.com/ic005k/Knot)");
+  ui->editSource->insertPlainText("[Knot](https://github.com/ic005k/Knot)");
 }
 
-void dlgMainNotes::on_btnS6_clicked() {
-  mw_one->ui->editSource->insertPlainText("~");
-}
+void dlgMainNotes::on_btnS6_clicked() { ui->editSource->insertPlainText("~"); }
 
 void dlgMainNotes::on_btnS7_clicked() {
-  mw_one->ui->editSource->insertPlainText("[]");
-  mw_one->ui->btnLeft->click();
+  ui->editSource->insertPlainText("[]");
+  ui->btnLeft->click();
 }
 
 void dlgMainNotes::on_btnS8_clicked() {
-  mw_one->ui->editSource->insertPlainText("()");
-  mw_one->ui->btnLeft->click();
+  ui->editSource->insertPlainText("()");
+  ui->btnLeft->click();
 }
 
 void dlgMainNotes::on_btnS9_clicked() {
-  mw_one->ui->editSource->insertPlainText("{}");
-  mw_one->ui->btnLeft->click();
+  ui->editSource->insertPlainText("{}");
+  ui->btnLeft->click();
 }
 
-void dlgMainNotes::on_btnS10_clicked() {
-  mw_one->ui->editSource->insertPlainText("_");
-}
+void dlgMainNotes::on_btnS10_clicked() { ui->editSource->insertPlainText("_"); }
 
 void dlgMainNotes::highlightCurrentLine() {
   QList<QTextEdit::ExtraSelection> extraSelections;
@@ -782,36 +801,77 @@ void dlgMainNotes::highlightCurrentLine() {
 
   selection.format.setBackground(lineColor);
   selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-  selection.cursor = mw_one->ui->editSource->textCursor();
+  selection.cursor = ui->editSource->textCursor();
   selection.cursor.clearSelection();
   extraSelections.append(selection);
 
-  mw_one->ui->editSource->setExtraSelections(extraSelections);
+  ui->editSource->setExtraSelections(extraSelections);
+
+  if (!ui->editLineSn->isHidden()) {
+    ui->editLineSn->blockSignals(true);
+    ui->editSource->blockSignals(true);
+    ui->editLineSn->verticalScrollBar()->setValue(
+        ui->editSource->verticalScrollBar()->value());
+    ui->editLineSn->blockSignals(false);
+    ui->editSource->blockSignals(false);
+  }
 
   QString str1, str2, str3, str4;
 
   //当前光标
-  QTextCursor tc = mw_one->ui->editSource->textCursor();
+  QTextCursor tc = ui->editSource->textCursor();
   // QTextLayout* lay = tc.block().layout();
   //当前光标在本BLOCK内的相对位置
   int iCurPos = tc.position() - tc.block().position();
   //光标所在行号
   // int iCurrentLine = lay->lineForTextPosition(iCurPos).lineNumber() +
   //                   tc.block().firstLineNumber();
-  int iLineCount = mw_one->ui->editSource->document()->lineCount();
+  int iLineCount = ui->editSource->document()->lineCount();
   //或者  获取光标所在行的行号
   int iRowNum = tc.blockNumber() + 1;
 
   str1 = QString::number(iLineCount);
-  str2 = QString::number(mw_one->ui->editSource->textCursor().position());
+  str2 = QString::number(ui->editSource->textCursor().position());
   str3 = QString::number(iCurPos);
   str4 = QString::number(iRowNum);
-  mw_one->ui->lblInfo->setText(" " + str4 + " , " + str3);
+  ui->lblInfo->setText(" " + str4 + " , " + str3);
 }
 
-void dlgMainNotes::onTextChange() {}
+void dlgMainNotes::onTextChange() {
+  if (ui->editLineSn->isHidden()) return;
 
-void dlgMainNotes::on_btnPaste_clicked() { mw_one->ui->editSource->paste(); }
+  int jsonTextEditRow = ui->editSource->document()->lineCount();
+  if (jsonTextEditRow == lastLine) return;
+
+  ui->editLineSn->blockSignals(true);
+  ui->editSource->blockSignals(true);
+
+  int countOfRow = 0;
+  int temp = jsonTextEditRow;
+  while (temp != 0) {
+    temp = temp / 10;
+    ++countOfRow;
+  }
+  ui->editLineSn->setFixedWidth(
+      ui->editLineSn->font().pixelSize() * countOfRow + 10);
+
+  ui->editLineSn->clear();
+  QString str;
+  ++jsonTextEditRow;
+  for (int i = 1; i < jsonTextEditRow; ++i) {
+    str.append(QString("%1\n").arg(i));
+  }
+  ui->editLineSn->setPlainText(str);
+
+  lastLine = ui->editSource->document()->lineCount();
+
+  ui->editLineSn->verticalScrollBar()->setValue(
+      ui->editSource->verticalScrollBar()->value());
+  ui->editLineSn->blockSignals(false);
+  ui->editSource->blockSignals(false);
+}
+
+void dlgMainNotes::on_btnPaste_clicked() { ui->editSource->paste(); }
 
 void dlgMainNotes::showFunPanel() {
   timer->stop();
@@ -845,16 +905,16 @@ void dlgMainNotes::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
   return;
 
-  if (mw_one->ui->editSource->hasFocus()) {
+  if (ui->editSource->hasFocus()) {
     if (bCursorVisible) {
-      const QRect qRect = mw_one->ui->editSource->cursorRect(
-          mw_one->ui->editSource->textCursor());
-      QPainter qPainter(mw_one->ui->editSource->viewport());
+      const QRect qRect =
+          ui->editSource->cursorRect(ui->editSource->textCursor());
+      QPainter qPainter(ui->editSource->viewport());
       qPainter.fillRect(qRect, QColor(255, 0, 0, 255));
     } else {
-      const QRect qRect = mw_one->ui->editSource->cursorRect(
-          mw_one->ui->editSource->textCursor());
-      QPainter qPainter(mw_one->ui->editSource->viewport());
+      const QRect qRect =
+          ui->editSource->cursorRect(ui->editSource->textCursor());
+      QPainter qPainter(ui->editSource->viewport());
       qPainter.fillRect(qRect, QColor(0, 255, 0, 255));
     }
   }
@@ -871,13 +931,13 @@ void dlgMainNotes::timerSlot() {
 }
 
 void dlgMainNotes::on_btnLeft_clicked() {
-  mw_one->ui->editSource->moveCursor(QTextCursor::PreviousCharacter,
-                                     QTextCursor::MoveAnchor);
+  ui->editSource->moveCursor(QTextCursor::PreviousCharacter,
+                             QTextCursor::MoveAnchor);
 }
 
 void dlgMainNotes::on_btnRight_clicked() {
-  mw_one->ui->editSource->moveCursor(QTextCursor::NextCharacter,
-                                     QTextCursor::MoveAnchor);
+  ui->editSource->moveCursor(QTextCursor::NextCharacter,
+                             QTextCursor::MoveAnchor);
 }
 
 bool dlgMainNotes::androidCopyFile(QString src, QString des) {

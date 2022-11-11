@@ -35,11 +35,10 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
-  int editHeight;
   QString htmlBuffer;
   QTextEdit *byTextEdit;
   QLineEdit *byLineEdit;
-  int androidKeyH = 350;
+  int androidKeyH;
   int start;
   int end;
   dlgSetEditText *m_SetEditText;
@@ -88,7 +87,10 @@ class dlgMainNotes : public QDialog {
   bool eventFilter(QObject *obj, QEvent *event) override;
   void paintEvent(QPaintEvent *pEvent) override;
 
- public:
+ private slots:
+
+  void timerSlot();
+
   void highlightCurrentLine();
 
   void on_btnBack_clicked();
@@ -102,6 +104,10 @@ class dlgMainNotes : public QDialog {
   void on_btnPic_clicked();
 
   void on_btnInsertTable_clicked();
+
+  void on_editSource_redoAvailable(bool b);
+
+  void on_editSource_undoAvailable(bool b);
 
   void on_btnSeparator_clicked();
 
@@ -137,15 +143,13 @@ class dlgMainNotes : public QDialog {
 
   void on_btnPaste_clicked();
 
+  void showFunPanel();
+
   void on_btnLeft_clicked();
 
   void on_btnRight_clicked();
 
   void on_btnS10_clicked();
-
- public slots:
-  void showFunPanel();
-  void timerSlot();
 
  signals:
   void sendUpdate();

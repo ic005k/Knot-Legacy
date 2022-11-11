@@ -1999,10 +1999,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);  //将之转换为鼠标事件
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
 
-  if (watch == ui->editSource->viewport()) {
-    mydlgMainNotes->getEditPanel(ui->editSource, evn);
-  }
-
   if (evn->type() == QEvent::ToolTip) {
     QToolTip::hideText();
     evn->ignore();
@@ -2237,9 +2233,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         } else if (!ui->textBrowser->isHidden()) {
           on_btnSelText_clicked();
           return true;
-        } else if (!ui->frameNoteEdit->isHidden()) {
-          ui->frameNoteEdit->hide();
-          ui->frameMemo->show();
         }
 
         else {
@@ -3627,12 +3620,12 @@ void MainWindow::showMemos() {
 
   QFont f(this->font());
   f.setPointSize(fontSize);
-  ui->editSource->setFont(f);
+  mydlgMainNotes->ui->editSource->setFont(f);
 
   memoHeight = ui->quickWidgetMemo->height();
 
-  ui->btnUndo->setEnabled(false);
-  ui->btnRedo->setEnabled(false);
+  mydlgMainNotes->ui->btnUndo->setEnabled(false);
+  mydlgMainNotes->ui->btnRedo->setEnabled(false);
 
   ui->frameMain->hide();
   ui->frameSetKey->hide();
@@ -3681,6 +3674,9 @@ void MainWindow::init_UIWidget() {
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
 
+  connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
+          &MainWindow::on_KVChanged);
+
   mw_one = this;
   listSelFont = new QListWidget();
   listReadList = new QListWidget();
@@ -3697,7 +3693,6 @@ void MainWindow::init_UIWidget() {
   ui->lblIcon->hide();
   ui->lblKnot->hide();
   ui->frameReader->hide();
-  ui->frameNoteEdit->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -4694,9 +4689,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 
 void MainWindow::on_btnEdit_clicked() {
   mydlgMainNotes->m_SetEditText->close();
-  mydlgMainNotes->m_SetEditText = new dlgSetEditText(this);
-
-  mainHeight = mw_one->height();
+  mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgMainNotes);
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -4711,19 +4704,20 @@ void MainWindow::on_btnEdit_clicked() {
   }
 
   mydlgMainNotes->init();
-  ui->editSource->setPlainText(str);
+  mydlgMainNotes->ui->editSource->setPlainText(str);
 
   ui->frameMemo->hide();
-  ui->frameNoteEdit->show();
+  mydlgMainNotes->show();
+  mainHeight = mw_one->height();
 
   QString a = m_NotesList->currentMDFile;
   a.replace(iniDir, "");
   int vpos = Reg.value("/MainNotes/editVPos" + a).toInt();
   int cpos = Reg.value("/MainNotes/editCPos" + a).toInt();
-  ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
-  QTextCursor tmpCursor = ui->editSource->textCursor();
+  mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
+  QTextCursor tmpCursor = mydlgMainNotes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);
-  ui->editSource->setTextCursor(tmpCursor);
+  mydlgMainNotes->ui->editSource->setTextCursor(tmpCursor);
 }
 
 void MainWindow::on_btnCode_clicked() {
@@ -4899,80 +4893,6 @@ void MainWindow::on_btnAdd_clicked() { on_AddRecord(); }
 
 void MainWindow::on_btnDel_clicked() { on_DelRecord(); }
 
-void MainWindow::on_btnInsertTable_clicked() {
-  mydlgMainNotes->on_btnInsertTable_clicked();
-}
+void MainWindow::resizeEvent(QResizeEvent *event) { Q_UNUSED(event); }
 
-void MainWindow::on_btnSeparator_clicked() {
-  mydlgMainNotes->on_btnSeparator_clicked();
-}
-
-void MainWindow::on_btnVLine_clicked() {
-  mydlgMainNotes->on_btnVLine_clicked();
-}
-
-void MainWindow::on_btnAsterisk_clicked() {
-  mydlgMainNotes->on_btnAsterisk_clicked();
-}
-
-void MainWindow::on_btnWells_clicked() {
-  mydlgMainNotes->on_btnWells_clicked();
-}
-
-void MainWindow::on_btnS6_clicked() { mydlgMainNotes->on_btnS6_clicked(); }
-
-void MainWindow::on_btnS7_clicked() { mydlgMainNotes->on_btnS7_clicked(); }
-
-void MainWindow::on_btnS8_clicked() { mydlgMainNotes->on_btnS8_clicked(); }
-
-void MainWindow::on_btnLink_clicked() { mydlgMainNotes->on_btnLink_clicked(); }
-
-void MainWindow::on_btnPic_clicked() { mydlgMainNotes->on_btnPic_clicked(); }
-
-void MainWindow::on_btnColor_clicked() {
-  mydlgMainNotes->on_btnColor_clicked();
-}
-
-void MainWindow::on_btnS3_clicked() { mydlgMainNotes->on_btnS3_clicked(); }
-
-void MainWindow::on_btnS4_clicked() { mydlgMainNotes->on_btnS4_clicked(); }
-
-void MainWindow::on_btnS10_clicked() { mydlgMainNotes->on_btnS10_clicked(); }
-
-void MainWindow::on_btnS9_clicked() { mydlgMainNotes->on_btnS9_clicked(); }
-
-void MainWindow::on_btnPaste_clicked() {
-  mydlgMainNotes->on_btnPaste_clicked();
-}
-
-void MainWindow::on_btnS5_clicked() { mydlgMainNotes->on_btnS5_clicked(); }
-
-void MainWindow::on_btnS1_clicked() { mydlgMainNotes->on_btnS1_clicked(); }
-
-void MainWindow::on_btnS2_clicked() { mydlgMainNotes->on_btnS2_clicked(); }
-
-void MainWindow::on_btnUndo_clicked() { mydlgMainNotes->on_btnUndo_clicked(); }
-
-void MainWindow::on_btnRedo_clicked() { mydlgMainNotes->on_btnRedo_clicked(); }
-
-void MainWindow::on_btnDone_clicked() { mydlgMainNotes->on_btnBack_clicked(); }
-
-void MainWindow::on_btnLeft_clicked() { mydlgMainNotes->on_btnLeft_clicked(); }
-
-void MainWindow::on_btnRight_clicked() {
-  mydlgMainNotes->on_btnRight_clicked();
-}
-
-void MainWindow::on_editSource_redoAvailable(bool b) {
-  if (b)
-    ui->btnRedo->setEnabled(true);
-  else
-    ui->btnRedo->setEnabled(false);
-}
-
-void MainWindow::on_editSource_undoAvailable(bool b) {
-  if (b)
-    ui->btnUndo->setEnabled(true);
-  else
-    ui->btnUndo->setEnabled(false);
-}
+void MainWindow::on_KVChanged() {}
