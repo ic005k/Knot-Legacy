@@ -88,10 +88,7 @@ class dlgMainNotes : public QDialog {
   bool eventFilter(QObject *obj, QEvent *event) override;
   void paintEvent(QPaintEvent *pEvent) override;
 
- public slots:
-
-  void timerSlot();
-
+ public:
   void highlightCurrentLine();
 
   void on_btnBack_clicked();
@@ -140,13 +137,15 @@ class dlgMainNotes : public QDialog {
 
   void on_btnPaste_clicked();
 
-  void showFunPanel();
-
   void on_btnLeft_clicked();
 
   void on_btnRight_clicked();
 
   void on_btnS10_clicked();
+
+ public slots:
+  void showFunPanel();
+  void timerSlot();
 
  signals:
   void sendUpdate();

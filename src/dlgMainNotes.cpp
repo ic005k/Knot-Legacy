@@ -148,8 +148,6 @@ void dlgMainNotes::on_btnBack_clicked() {
   if (!m_SetEditText->isHidden()) {
     m_SetEditText->close();
   }
-  pAndroidKeyboard->hide();
-  mw_one->Sleep(100);
 
   saveMainNotes();
   saveQMLVPos();
