@@ -4706,9 +4706,10 @@ void MainWindow::on_btnEdit_clicked() {
   mydlgMainNotes->init();
   mydlgMainNotes->ui->editSource->setPlainText(str);
 
+  mainHeight = mw_one->height();
   ui->frameMemo->hide();
   mydlgMainNotes->show();
-  mainHeight = mw_one->height();
+  mydlgMainNotes->isShow = true;
 
   QString a = m_NotesList->currentMDFile;
   a.replace(iniDir, "");

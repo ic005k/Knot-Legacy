@@ -291,8 +291,10 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
         pAndroidKeyboard->hide();
         setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
                     mw_one->mainHeight);
-      } else
+      } else {
+        mw_one->ui->frameMemo->show();
         on_btnBack_clicked();
+      }
       return true;
     }
   }
@@ -307,9 +309,9 @@ void dlgMainNotes::on_KVChanged() {
   } else {
     QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
     int newh = Reg.value("newHeight").toInt();
-    if (newh > 0) {
+    if (newHeight > 0) {
       this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), newh);
+                        mw_one->width(), newHeight);
 
       if (!m_SetEditText->isHidden()) {
         m_SetEditText->setGeometry(m_SetEditText->geometry().x(), 10,
