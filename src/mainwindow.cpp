@@ -1999,6 +1999,10 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);  //将之转换为鼠标事件
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
 
+  if (watch == ui->editSource->viewport()) {
+    mydlgMainNotes->getEditPanel(ui->editSource, evn);
+  }
+
   if (evn->type() == QEvent::ToolTip) {
     QToolTip::hideText();
     evn->ignore();
@@ -2233,6 +2237,9 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         } else if (!ui->textBrowser->isHidden()) {
           on_btnSelText_clicked();
           return true;
+        } else if (!ui->frameNoteEdit->isHidden()) {
+          ui->frameNoteEdit->hide();
+          ui->frameMemo->show();
         }
 
         else {
@@ -3620,12 +3627,12 @@ void MainWindow::showMemos() {
 
   QFont f(this->font());
   f.setPointSize(fontSize);
-  mydlgMainNotes->ui->editSource->setFont(f);
+  ui->editSource->setFont(f);
 
   memoHeight = ui->quickWidgetMemo->height();
 
-  mydlgMainNotes->ui->btnUndo->setEnabled(false);
-  mydlgMainNotes->ui->btnRedo->setEnabled(false);
+  ui->btnUndo->setEnabled(false);
+  ui->btnRedo->setEnabled(false);
 
   ui->frameMain->hide();
   ui->frameSetKey->hide();
@@ -3690,6 +3697,7 @@ void MainWindow::init_UIWidget() {
   ui->lblIcon->hide();
   ui->lblKnot->hide();
   ui->frameReader->hide();
+  ui->frameNoteEdit->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3746,6 +3754,7 @@ void MainWindow::init_UIWidget() {
   mydlgReport = new dlgReport(this);
   mydlgPre = new dlgPreferences(this);
   mydlgMainNotes = new dlgMainNotes(this);
+  mydlgMainNotes->close();
   mydlgSteps = new dlgSteps(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
@@ -4685,7 +4694,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 
 void MainWindow::on_btnEdit_clicked() {
   mydlgMainNotes->m_SetEditText->close();
-  mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgMainNotes);
+  mydlgMainNotes->m_SetEditText = new dlgSetEditText(this);
 
   mainHeight = mw_one->height();
 
@@ -4702,21 +4711,19 @@ void MainWindow::on_btnEdit_clicked() {
   }
 
   mydlgMainNotes->init();
-  mydlgMainNotes->ui->editSource->setPlainText(str);
+  ui->editSource->setPlainText(str);
 
-  mydlgMainNotes->show();
-  mydlgMainNotes->isShow = true;
-  mydlgMainNotes->editHeight = mydlgMainNotes->ui->frameEdit->height();
-  mydlgMainNotes->ui->frameKey->setFixedHeight(0);
+  ui->frameMemo->hide();
+  ui->frameNoteEdit->show();
 
   QString a = m_NotesList->currentMDFile;
   a.replace(iniDir, "");
   int vpos = Reg.value("/MainNotes/editVPos" + a).toInt();
   int cpos = Reg.value("/MainNotes/editCPos" + a).toInt();
-  mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
-  QTextCursor tmpCursor = mydlgMainNotes->ui->editSource->textCursor();
+  ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
+  QTextCursor tmpCursor = ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);
-  mydlgMainNotes->ui->editSource->setTextCursor(tmpCursor);
+  ui->editSource->setTextCursor(tmpCursor);
 }
 
 void MainWindow::on_btnCode_clicked() {
