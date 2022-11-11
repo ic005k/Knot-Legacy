@@ -155,19 +155,20 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
 }
 
-void dlgMainNotes::on_btnBack_clicked() {
+void dlgMainNotes::on_btnDone_clicked() {
   if (!m_SetEditText->isHidden()) {
     m_SetEditText->close();
   }
-  pAndroidKeyboard->hide();
+  if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
   mw_one->Sleep(100);
 
   mw_one->ui->frameMemo->show();
+
   saveMainNotes();
   saveQMLVPos();
+  close();
   loadMemoQML();
   setVPos();
-  close();
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
@@ -292,8 +293,7 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
         setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
                     mw_one->mainHeight);
       } else {
-        mw_one->ui->frameMemo->show();
-        on_btnBack_clicked();
+        on_btnDone_clicked();
       }
       return true;
     }
@@ -307,8 +307,6 @@ void dlgMainNotes::on_KVChanged() {
     this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                       mw_one->width(), mw_one->mainHeight);
   } else {
-    QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
-    int newh = Reg.value("newHeight").toInt();
     if (newHeight > 0) {
       this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                         mw_one->width(), newHeight);

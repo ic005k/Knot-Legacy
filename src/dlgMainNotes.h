@@ -93,7 +93,7 @@ class dlgMainNotes : public QDialog {
 
   void highlightCurrentLine();
 
-  void on_btnBack_clicked();
+  void on_btnDone_clicked();
 
   void on_KVChanged();
 

@@ -3867,7 +3867,6 @@ void MainWindow::init_UIWidget() {
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
-  ui->quickWidgetMemo->setSource(QUrl(QStringLiteral("qrc:/src/memo.qml")));
   ui->quickWidgetMemo->rootContext()->setContextProperty("FontSize", fontSize);
   ui->quickWidgetMemo->rootContext()->setContextProperty("strText", "");
 }

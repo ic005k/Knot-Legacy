@@ -876,7 +876,7 @@ color: rgb(255, 255, 255);</string>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
-      <widget class="QToolButton" name="btnBack">
+      <widget class="QToolButton" name="btnDone">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
