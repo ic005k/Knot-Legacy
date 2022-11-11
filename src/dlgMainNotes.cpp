@@ -162,12 +162,12 @@ void dlgMainNotes::on_btnBack_clicked() {
   pAndroidKeyboard->hide();
   mw_one->Sleep(100);
 
+  mw_one->ui->frameMemo->show();
   saveMainNotes();
   saveQMLVPos();
   loadMemoQML();
   setVPos();
   close();
-  mw_one->ui->frameMemo->show();
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
