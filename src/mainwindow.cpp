@@ -4898,3 +4898,81 @@ void MainWindow::on_btnPasteCode_clicked() {
 void MainWindow::on_btnAdd_clicked() { on_AddRecord(); }
 
 void MainWindow::on_btnDel_clicked() { on_DelRecord(); }
+
+void MainWindow::on_btnInsertTable_clicked() {
+  mydlgMainNotes->on_btnInsertTable_clicked();
+}
+
+void MainWindow::on_btnSeparator_clicked() {
+  mydlgMainNotes->on_btnSeparator_clicked();
+}
+
+void MainWindow::on_btnVLine_clicked() {
+  mydlgMainNotes->on_btnVLine_clicked();
+}
+
+void MainWindow::on_btnAsterisk_clicked() {
+  mydlgMainNotes->on_btnAsterisk_clicked();
+}
+
+void MainWindow::on_btnWells_clicked() {
+  mydlgMainNotes->on_btnWells_clicked();
+}
+
+void MainWindow::on_btnS6_clicked() { mydlgMainNotes->on_btnS6_clicked(); }
+
+void MainWindow::on_btnS7_clicked() { mydlgMainNotes->on_btnS7_clicked(); }
+
+void MainWindow::on_btnS8_clicked() { mydlgMainNotes->on_btnS8_clicked(); }
+
+void MainWindow::on_btnLink_clicked() { mydlgMainNotes->on_btnLink_clicked(); }
+
+void MainWindow::on_btnPic_clicked() { mydlgMainNotes->on_btnPic_clicked(); }
+
+void MainWindow::on_btnColor_clicked() {
+  mydlgMainNotes->on_btnColor_clicked();
+}
+
+void MainWindow::on_btnS3_clicked() { mydlgMainNotes->on_btnS3_clicked(); }
+
+void MainWindow::on_btnS4_clicked() { mydlgMainNotes->on_btnS4_clicked(); }
+
+void MainWindow::on_btnS10_clicked() { mydlgMainNotes->on_btnS10_clicked(); }
+
+void MainWindow::on_btnS9_clicked() { mydlgMainNotes->on_btnS9_clicked(); }
+
+void MainWindow::on_btnPaste_clicked() {
+  mydlgMainNotes->on_btnPaste_clicked();
+}
+
+void MainWindow::on_btnS5_clicked() { mydlgMainNotes->on_btnS5_clicked(); }
+
+void MainWindow::on_btnS1_clicked() { mydlgMainNotes->on_btnS1_clicked(); }
+
+void MainWindow::on_btnS2_clicked() { mydlgMainNotes->on_btnS2_clicked(); }
+
+void MainWindow::on_btnUndo_clicked() { mydlgMainNotes->on_btnUndo_clicked(); }
+
+void MainWindow::on_btnRedo_clicked() { mydlgMainNotes->on_btnRedo_clicked(); }
+
+void MainWindow::on_btnDone_clicked() { mydlgMainNotes->on_btnBack_clicked(); }
+
+void MainWindow::on_btnLeft_clicked() { mydlgMainNotes->on_btnLeft_clicked(); }
+
+void MainWindow::on_btnRight_clicked() {
+  mydlgMainNotes->on_btnRight_clicked();
+}
+
+void MainWindow::on_editSource_redoAvailable(bool b) {
+  if (b)
+    ui->btnRedo->setEnabled(true);
+  else
+    ui->btnRedo->setEnabled(false);
+}
+
+void MainWindow::on_editSource_undoAvailable(bool b) {
+  if (b)
+    ui->btnUndo->setEnabled(true);
+  else
+    ui->btnUndo->setEnabled(false);
+}

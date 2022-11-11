@@ -155,8 +155,8 @@ void dlgMainNotes::on_btnBack_clicked() {
   saveQMLVPos();
   loadMemoQML();
   setVPos();
-  close();
-  isShow = false;
+  mw_one->ui->frameNoteEdit->hide();
+  mw_one->ui->frameMemo->show();
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
@@ -692,20 +692,6 @@ void dlgMainNotes::on_btnInsertTable_clicked() {
       mw_one->ui->editSource->insertPlainText(strRow + "\n");
     }
   }
-}
-
-void dlgMainNotes::on_editSource_redoAvailable(bool b) {
-  if (b)
-    mw_one->ui->btnRedo->setEnabled(true);
-  else
-    mw_one->ui->btnRedo->setEnabled(false);
-}
-
-void dlgMainNotes::on_editSource_undoAvailable(bool b) {
-  if (b)
-    mw_one->ui->btnUndo->setEnabled(true);
-  else
-    mw_one->ui->btnUndo->setEnabled(false);
 }
 
 void dlgMainNotes::on_btnSeparator_clicked() {

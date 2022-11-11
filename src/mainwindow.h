@@ -521,6 +521,58 @@ class MainWindow : public QMainWindow {
 
   void on_btnDel_clicked();
 
+  void on_btnInsertTable_clicked();
+
+  void on_btnSeparator_clicked();
+
+  void on_btnVLine_clicked();
+
+  void on_btnAsterisk_clicked();
+
+  void on_btnWells_clicked();
+
+  void on_btnS6_clicked();
+
+  void on_btnS7_clicked();
+
+  void on_btnS8_clicked();
+
+  void on_btnLink_clicked();
+
+  void on_btnPic_clicked();
+
+  void on_btnColor_clicked();
+
+  void on_btnS3_clicked();
+
+  void on_btnS4_clicked();
+
+  void on_btnS10_clicked();
+
+  void on_btnS9_clicked();
+
+  void on_btnPaste_clicked();
+
+  void on_btnS5_clicked();
+
+  void on_btnS1_clicked();
+
+  void on_btnS2_clicked();
+
+  void on_btnUndo_clicked();
+
+  void on_btnRedo_clicked();
+
+  void on_btnDone_clicked();
+
+  void on_btnLeft_clicked();
+
+  void on_btnRight_clicked();
+
+  void on_editSource_redoAvailable(bool b);
+
+  void on_editSource_undoAvailable(bool b);
+
  private:
   int memoHeight;
   int frameChartHeight;
