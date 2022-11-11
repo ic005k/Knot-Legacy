@@ -4706,6 +4706,8 @@ void MainWindow::on_btnEdit_clicked() {
 
   mydlgMainNotes->show();
   mydlgMainNotes->isShow = true;
+  mydlgMainNotes->editHeight = mydlgMainNotes->ui->frameEdit->height();
+  mydlgMainNotes->ui->frameKey->setFixedHeight(0);
 
   QString a = m_NotesList->currentMDFile;
   a.replace(iniDir, "");

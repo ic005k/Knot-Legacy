@@ -114,7 +114,7 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
   if (isShow) {
     if (this->height() != mw_one->mainHeight) {
       newHeight = this->height();
-      androidKeyH = mw_one->mainHeight - newHeight;
+      // androidKeyH = mw_one->mainHeight - newHeight;
 
       QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
       Reg.setValue("KeyHeight", androidKeyH);
@@ -122,8 +122,8 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
     }
 
     if (pAndroidKeyboard->isVisible()) {
-      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), newHeight);
+      // this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+      //                 mw_one->width(), newHeight);
     }
 
     if (this->height() == newHeight) {
@@ -134,7 +134,10 @@ void dlgMainNotes::resizeEvent(QResizeEvent* event) {
     }
 
     qDebug() << "newHeight=" << newHeight << "notes height=" << this->height()
-             << "main height=" << mw_one->mainHeight;
+             << "main height=" << mw_one->mainHeight
+             << "mw_one h=" << mw_one->height() << mw_one->geometry().y();
+    qDebug() << "memo h====" << mw_one->ui->frameMemo->height()
+             << mw_one->ui->frameMemo->y();
   }
 }
 
@@ -151,6 +154,7 @@ void dlgMainNotes::on_btnBack_clicked() {
   setVPos();
   close();
   isShow = false;
+  ui->frameKey->setFixedHeight(0);
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
@@ -286,16 +290,15 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
 void dlgMainNotes::on_KVChanged() {
   QSettings Reg(iniDir + "android.ini", QSettings::IniFormat);
   if (!pAndroidKeyboard->isVisible()) {
+    ui->frameKey->setFixedHeight(0);
     this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                       mw_one->width(), mw_one->mainHeight);
+
   } else {
     int newh = Reg.value("newHeight").toInt();
-    if (newh > 0) {
-      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), newh);
 
-    } else {
-    }
+    this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                      mw_one->width(), mw_one->mainHeight - androidKeyH);
 
     if (!m_SetEditText->isHidden()) {
       m_SetEditText->setGeometry(m_SetEditText->geometry().x(), 10,

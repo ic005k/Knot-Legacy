@@ -35,10 +35,11 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  int editHeight;
   QString htmlBuffer;
   QTextEdit *byTextEdit;
   QLineEdit *byLineEdit;
-  int androidKeyH;
+  int androidKeyH = 350;
   int start;
   int end;
   dlgSetEditText *m_SetEditText;

@@ -912,21 +912,24 @@ color: rgb(2, 2, 2);</string>
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <property name="spacing">
-         <number>0</number>
+      <item row="0" column="0">
+       <widget class="QTextEdit" name="editSource">
+        <property name="acceptRichText">
+         <bool>false</bool>
         </property>
-        <item>
-         <widget class="QTextEdit" name="editSource">
-          <property name="acceptRichText">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frameKey">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
     </widget>
    </item>
   </layout>

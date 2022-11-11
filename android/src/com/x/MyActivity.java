@@ -93,6 +93,11 @@ import android.content.DialogInterface;
 import android.support.v4.content.FileProvider;
 //import androidx.core.content.FileProvider;
 
+import android.graphics.Rect;
+import android.view.ViewTreeObserver;
+import java.lang.reflect.Field;
+import android.widget.LinearLayout;
+
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
     private static MyActivity m_instance = null;
@@ -109,6 +114,10 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public static String strAlarmInfo;
     public static int alarmCount;
     public static boolean isScreenOff = false;
+    public static int keyBoardHeight;
+
+    private final static String TAG = "QtKnot";
+    private static Context context;
 
     public native static void CallJavaNotify_1();
 
@@ -175,8 +184,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     }
 
     //------------------------------------------------------------------------
-    private final static String TAG = "QtFullscreen";
-    private static Context context;
+
 
     //全局获取Context
     public static Context getContext() {
@@ -475,7 +483,44 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
+        // Keyboard Height
+        View content= getWindow().getDecorView();
+        content.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                    @Override
+                    public void onGlobalLayout() {
+                        // TODO Auto-generated method stub
+                        if (keyBoardHeight <= 100) {
+                            Rect r = new Rect();
+                            content.getWindowVisibleDisplayFrame(r);
+
+                            int screenHeight = content.getRootView()
+                                    .getHeight();
+                            int heightDifference = screenHeight
+                                    - (r.bottom - r.top);
+                            int resourceId = getResources()
+                                    .getIdentifier("status_bar_height",
+                                            "dimen", "android");
+                            if (resourceId > 0) {
+                                heightDifference -= getResources()
+                                        .getDimensionPixelSize(resourceId);
+                            }
+                            if (heightDifference > 100) {
+                                keyBoardHeight = heightDifference;
+                            }
+
+                            Log.d("Keyboard Size", "Size: " + keyBoardHeight);
+                        }
+
+                    }
+                });
+
+
     }
+
+
 
     private static ServiceConnection mCon = new ServiceConnection() {
         @Override
