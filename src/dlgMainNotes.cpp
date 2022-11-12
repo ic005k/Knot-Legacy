@@ -169,6 +169,8 @@ void dlgMainNotes::on_btnDone_clicked() {
   close();
   loadMemoQML();
   setVPos();
+
+  mw_one->repaint();
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
