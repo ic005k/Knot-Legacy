@@ -17,7 +17,7 @@ QR code for downloading:
 
 ![QR code for downloading](https://github.com/ic005k/Knot/blob/main/res/apk.png)
 
-![](https://github.com/ic005k/Knot/blob/main/src/demo.png)
+![Screen capture:](https://github.com/ic005k/Knot/blob/main/src/demo.png)
 
 
 ### Credits
