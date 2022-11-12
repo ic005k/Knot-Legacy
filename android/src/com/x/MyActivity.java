@@ -1,6 +1,7 @@
 package com.x;
 
 //Qt5
+
 import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
@@ -95,8 +96,12 @@ import android.support.v4.content.FileProvider;
 
 import android.graphics.Rect;
 import android.view.ViewTreeObserver;
+
 import java.lang.reflect.Field;
+
 import android.widget.LinearLayout;
+
+//import javax.swing.text.View;
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
@@ -484,42 +489,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
-        // Keyboard Height
-        View content= getWindow().getDecorView();
-        content.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                    @Override
-                    public void onGlobalLayout() {
-                        // TODO Auto-generated method stub
-                        if (keyBoardHeight <= 100) {
-                            Rect r = new Rect();
-                            content.getWindowVisibleDisplayFrame(r);
-
-                            int screenHeight = content.getRootView()
-                                    .getHeight();
-                            int heightDifference = screenHeight
-                                    - (r.bottom - r.top);
-                            int resourceId = getResources()
-                                    .getIdentifier("status_bar_height",
-                                            "dimen", "android");
-                            if (resourceId > 0) {
-                                heightDifference -= getResources()
-                                        .getDimensionPixelSize(resourceId);
-                            }
-                            if (heightDifference > 100) {
-                                keyBoardHeight = heightDifference;
-                            }
-
-                            Log.d("Keyboard Size", "Size: " + keyBoardHeight);
-                        }
-
-                    }
-                });
-
-
     }
-
 
 
     private static ServiceConnection mCon = new ServiceConnection() {
