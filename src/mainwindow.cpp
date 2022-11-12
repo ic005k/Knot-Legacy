@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 
 #include "count_steps.h"
 #include "math.h"  //using this for converting the CSV data from float to int
@@ -3878,6 +3878,7 @@ void MainWindow::on_btnSelTab_clicked() {
   QDialog *dlg = new QDialog(this);
   QVBoxLayout *vbox0 = new QVBoxLayout;
   dlg->setLayout(vbox0);
+
   dlg->setModal(true);
   dlg->setWindowFlag(Qt::FramelessWindowHint);
   dlg->setAttribute(Qt::WA_TranslucentBackground);
@@ -3886,10 +3887,12 @@ void MainWindow::on_btnSelTab_clicked() {
   vbox0->addWidget(frame);
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, "
-      "255);border-radius:10px;border:0px solid gray;}");
+      "255);border-radius:10px;border:1px solid gray;}");
 
   QVBoxLayout *vbox = new QVBoxLayout;
   frame->setLayout(vbox);
+
+  vbox->setContentsMargins(1, 1, 1, 1);
 
   QListWidget *list = new QListWidget(this);
   vbox->addWidget(list);
@@ -3917,11 +3920,11 @@ void MainWindow::on_btnSelTab_clicked() {
   connect(list, &QListWidget::itemClicked, [=]() {
     tabData->setCurrentIndex(list->currentRow());
     dlg->close();
-    closeGrayWindows();
+    // closeGrayWindows();
   });
   connect(dlg, &QDialog::rejected, [=]() {
     dlg->close();
-    closeGrayWindows();
+    // closeGrayWindows();
   });
 
   int h = height() / 2;
@@ -3931,7 +3934,7 @@ void MainWindow::on_btnSelTab_clicked() {
   dlg->setGeometry(x, y, w, h);
   list->setCurrentRow(tabData->currentIndex());
 
-  showGrayWindows();
+  // showGrayWindows();
   dlg->show();
   list->setFocus();
 }
