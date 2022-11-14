@@ -163,7 +163,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
 
   if (err_rpt.error != QJsonParseError::NoError) {
     if (!blAutoCheckUpdate)
-      QMessageBox::critical(this, "", tr("Network error!"));
+      mw_one->showMsgBox(appName, tr("Network error!"), "", 1);
     blAutoCheckUpdate = false;
     return -1;
   }
