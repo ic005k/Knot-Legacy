@@ -102,15 +102,9 @@ int main(int argc, char* argv[]) {
 
   if (isReaderFont) {
     fontname = fontName;
-  } else {
-    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    Reg.setIniCodec("utf-8");
-#endif
-    fontname = Reg.value("/Reader/FontName").toString();
   }
 
-  QFont font(fontName, fontSize);
+  QFont font(fontname, fontSize);
   a.setFont(font);
 
   loadLocal();

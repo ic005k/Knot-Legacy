@@ -21,6 +21,7 @@ dlgReaderFun::dlgReaderFun(QWidget* parent)
   setPalette(pal);
 
   ui->setupUi(this);
+  ui->btnFont->hide();
 
   ui->btnFont->setStyleSheet("border:none");
   ui->btnFontLess->setStyleSheet("border:none");
