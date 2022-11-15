@@ -4541,13 +4541,6 @@ void MainWindow::on_btnSelText_clicked() {
     ui->textBrowser->verticalScrollBar()->setSliderPosition(
         mydlgReader->textPos);
 
-    /*int start = 10;
-    int end = start + 5;
-    QTextCursor cursor = ui->textBrowser->textCursor();
-    cursor.setPosition(start);
-    cursor.setPosition(end, QTextCursor::KeepAnchor);
-    ui->textBrowser->setTextCursor(cursor);*/
-
     mydlgSetText->setFixedWidth(width() * 2 / 3);
     mydlgSetText->init(geometry().x() + (width() - mydlgSetText->width()) / 2,
                        geometry().y(), mydlgSetText->width(),

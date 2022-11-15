@@ -578,8 +578,6 @@ void dlgReader::initReader() {
   font.setPointSize(fsize);
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
 
-  // fontname = Reg.value("/Reader/FontName",
-  // mw_one->font().family()).toString();
   mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
                                                              fontname);
 
