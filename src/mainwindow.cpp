@@ -526,6 +526,7 @@ void MainWindow::init_Options() {
     timeLines.append(
         RegTime.value("/TimeLines/Files" + QString::number(i)).toString());
 
+  mydlgPre->initValues();
   mydlgPre->ui->btnReStart->hide();
   QString style =
       "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "
@@ -624,8 +625,8 @@ void MainWindow::init_ChartWidget() {
   m_scatterSeries2_1->attachAxis(axisX2);
   m_scatterSeries2_1->attachAxis(axisY2);
 
-  chartMonth->setTitle(tr("Freq"));
-  chartDay->setTitle(tr("Freq"));
+  chartMonth->setTitle("Y:" + tr("Freq") + "    X:" + tr("Days"));
+  chartDay->setTitle("Y:" + tr("Freq") + "    X:" + tr("Time"));
 
   QFont font1;
   font1.setPointSize(12);
@@ -1603,6 +1604,10 @@ void MainWindow::initChartMonth() {
 
   if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
     axisY->setRange(0, 24);
+    chartMonth->setTitle("Y:" + tr("Time") + "    X:" + tr("Days"));
+  } else {
+    axisY->setRange(0, yMaxMonth);
+    chartMonth->setTitle("Y:" + tr("Freq") + "    X:" + tr("Days"));
   }
 }
 
@@ -2951,7 +2956,7 @@ void MainWindow::on_actionPreferences_triggered() {
   mydlgPre->setGeometry(geometry().x(), geometry().y(), mydlgPre->width(),
                         height());
   mydlgPre->setModal(true);
-  mydlgPre->initValues();
+
   mydlgPre->show();
 }
 
