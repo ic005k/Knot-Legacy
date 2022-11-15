@@ -3666,6 +3666,8 @@ void MainWindow::init_Sensors() {
 void MainWindow::init_UIWidget() {
   set_btnStyle(this);
 
+  if (fontname == "") fontname = this->font().family();
+
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());

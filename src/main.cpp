@@ -89,23 +89,25 @@ int main(int argc, char* argv[]) {
   bool isUIFont = Reg.value("/Options/chkUIFont", false).toBool();
   QString customFontPath = Reg.value("/Options/CustomFont").toString();
 
-  // fontname = "Droid Sans Fallback";
   QString fontName;
-  if (QFile(customFontPath).exists()) {
-    int loadedFontID = QFontDatabase::addApplicationFont(
-        customFontPath);  //":/res/CangErJinKai01-9128-W02-3.otf"
-    QStringList loadedFontFamilies =
-        QFontDatabase::applicationFontFamilies(loadedFontID);
-    if (!loadedFontFamilies.empty()) {
-      fontName = loadedFontFamilies.at(0);
+  QFont font;
+  if (isUIFont) {
+    if (QFile(customFontPath).exists()) {
+      int loadedFontID = QFontDatabase::addApplicationFont(
+          customFontPath);  //":/res/CangErJinKai01-9128-W02-3.otf"
+      QStringList loadedFontFamilies =
+          QFontDatabase::applicationFontFamilies(loadedFontID);
+      if (!loadedFontFamilies.empty()) {
+        fontName = loadedFontFamilies.at(0);
+        font.setFamily(fontName);
+      }
     }
   }
 
-  QFont font;
-  if (isUIFont) {
+  if (isReaderFont) {
     fontname = fontName;
-    font.setFamily(fontname);
   }
+
   font.setPointSize(fontSize);
   a.setFont(font);
 

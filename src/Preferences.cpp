@@ -192,6 +192,8 @@ void dlgPreferences::initValues() {
   Reg.setIniCodec("utf-8");
 #endif
 
+  bool chkUIFont = Reg.value("/Options/chkUIFont", false).toBool();
+  ui->chkUIFont->setChecked(chkUIFont);
   ui->chkReaderFont->setChecked(
       Reg.value("/Options/chkReaderFont", false).toBool());
   ui->chkClose->setChecked(Reg.value("/Options/Close", false).toBool());
@@ -199,14 +201,12 @@ void dlgPreferences::initValues() {
   ui->chkShowCY->setChecked(
       Reg.value("/Options/ShowCurrentYear", true).toBool());
 
-  QString strf = Reg.value("/Options/CustomFont").toString();
-  setFontDemo(strf);
-  bool chkUIFont = Reg.value("/Options/chkUIFont", false).toBool();
-  ui->chkUIFont->setChecked(chkUIFont);
-
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   ui->chkDebug->setChecked(debugmode);
   on_chkDebug_clicked();
+
+  QString strf = Reg.value("/Options/CustomFont").toString();
+  setFontDemo(strf);
 }
 
 void dlgPreferences::on_btnReStart_clicked() {
