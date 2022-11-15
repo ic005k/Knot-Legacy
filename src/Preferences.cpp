@@ -32,7 +32,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->chkDebug->setStyleSheet(chkStyle);
   ui->chkShowCY->setStyleSheet(chkStyle);
   ui->chkReaderFont->setStyleSheet(chkStyle);
-  ui->chkCustomFont->setStyleSheet(chkStyle);
+  ui->chkUIFont->setStyleSheet(chkStyle);
   ui->lblTip->setStyleSheet("color:red;");
   ui->lblFontSize->setFixedHeight(40);
   ui->lblFontPath->setWordWrap(true);
@@ -75,13 +75,14 @@ void dlgPreferences::saveOptions() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
+
   Reg.setValue("/Options/FontSize", ui->sliderFontSize->value());
-  Reg.setValue("/Options/ReaderFont", ui->chkReaderFont->isChecked());
+  Reg.setValue("/Options/chkReaderFont", ui->chkReaderFont->isChecked());
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
   Reg.setValue("/Options/ShowCurrentYear", ui->chkShowCY->isChecked());
-  Reg.setValue("/Options/chkCustomFont", ui->chkCustomFont->isChecked());
+  Reg.setValue("/Options/chkUIFont", ui->chkUIFont->isChecked());
 }
 
 void dlgPreferences::on_chkDebug_clicked() {
@@ -115,7 +116,7 @@ void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
 
 void dlgPreferences::on_chkReaderFont_clicked() {
   isFontChange = true;
-  saveOptions();
+
   ui->btnReStart->show();
 }
 
@@ -178,9 +179,9 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
         "background-color: rgb(255, 255, 255);color:red;");
 }
 
-void dlgPreferences::on_chkCustomFont_clicked() {
+void dlgPreferences::on_chkUIFont_clicked() {
   isFontChange = true;
-  saveOptions();
+
   ui->btnReStart->show();
 }
 
@@ -188,7 +189,32 @@ void dlgPreferences::on_sliderFontSize_valueChanged(int value) {
   on_sliderFontSize_sliderMoved(value);
 }
 
+void dlgPreferences::initValues() {
+  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  ui->chkReaderFont->setChecked(
+      Reg.value("/Options/chkReaderFont", false).toBool());
+  ui->chkClose->setChecked(Reg.value("/Options/Close", false).toBool());
+  ui->chkAutoTime->setChecked(Reg.value("/Options/AutoTimeY", true).toBool());
+  ui->chkShowCY->setChecked(
+      Reg.value("/Options/ShowCurrentYear", true).toBool());
+
+  QString strf = Reg.value("/Options/CustomFont").toString();
+  setFontDemo(strf);
+  bool chkUIFont = Reg.value("/Options/chkUIFont", false).toBool();
+  ui->chkUIFont->setChecked(chkUIFont);
+
+  bool debugmode = Reg.value("/Options/Debug", false).toBool();
+  ui->chkDebug->setChecked(debugmode);
+  on_chkDebug_clicked();
+}
+
 void dlgPreferences::on_btnReStart_clicked() {
+  saveOptions();
+
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

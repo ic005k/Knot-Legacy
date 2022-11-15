@@ -21,7 +21,8 @@ class dlgPreferences : public QDialog {
 
   void setFontDemo(QString customFontPath);
 
- protected:
+  void initValues();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -37,7 +38,7 @@ class dlgPreferences : public QDialog {
 
   void on_btnCustomFont_clicked();
 
-  void on_chkCustomFont_clicked();
+  void on_chkUIFont_clicked();
 
   void on_sliderFontSize_valueChanged(int value);
 

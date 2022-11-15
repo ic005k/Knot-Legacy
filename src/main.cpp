@@ -85,8 +85,8 @@ int main(int argc, char* argv[]) {
 #endif
 
   fontSize = Reg.value("/Options/FontSize", 16).toInt();
-  bool isReaderFont = Reg.value("/Options/ReaderFont", false).toBool();
-  bool isCustomFont = Reg.value("/Options/chkCustomFont", false).toBool();
+  bool isReaderFont = Reg.value("/Options/chkReaderFont", false).toBool();
+  bool isCustomFont = Reg.value("/Options/chkUIFont", false).toBool();
   QString customFontPath = Reg.value("/Options/CustomFont").toString();
 
   QFont font;

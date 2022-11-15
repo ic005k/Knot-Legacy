@@ -487,24 +487,6 @@ void MainWindow::init_Options() {
   androidIniDir = Reg.value("/Options/androidIniDir", "").toString();
   macIniDir = Reg.value("/Options/macIniDir", "").toString();
 
-  mydlgPre->ui->chkReaderFont->setChecked(
-      Reg.value("/Options/ReaderFont", false).toBool());
-  mydlgPre->ui->chkClose->setChecked(
-      Reg.value("/Options/Close", false).toBool());
-  mydlgPre->ui->chkAutoTime->setChecked(
-      Reg.value("/Options/AutoTimeY", true).toBool());
-  mydlgPre->ui->chkShowCY->setChecked(
-      Reg.value("/Options/ShowCurrentYear", true).toBool());
-
-  QString strf = Reg.value("/Options/CustomFont").toString();
-  mydlgPre->setFontDemo(strf);
-  mydlgPre->ui->chkCustomFont->setChecked(
-      Reg.value("/Options/chkCustomFont", false).toBool());
-
-  bool debugmode = Reg.value("/Options/Debug", false).toBool();
-  mydlgPre->ui->chkDebug->setChecked(debugmode);
-  mydlgPre->on_chkDebug_clicked();
-
   // MainUI Find YMD
   listMonth = QStringList() << "01"
                             << "02"
@@ -544,6 +526,7 @@ void MainWindow::init_Options() {
     timeLines.append(
         RegTime.value("/TimeLines/Files" + QString::number(i)).toString());
 
+  mydlgPre->initValues();
   mydlgPre->ui->btnReStart->hide();
   QString style =
       "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "

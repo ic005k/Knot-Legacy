@@ -117,7 +117,7 @@ QSlider::handle:horizontal
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chkCustomFont">
+       <widget class="QCheckBox" name="chkUIFont">
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
@@ -243,6 +243,12 @@ QCheckBox::indicator:checked{
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>30</height>
+      </size>
      </property>
      <property name="text">
       <string>Restart the app to make the settings take effect</string>
