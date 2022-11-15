@@ -20,6 +20,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
 
   ui->chkClose->hide();
   ui->chkShowCY->hide();
+  ui->lblTip->hide();
 
   ui->sliderFontSize->setValue(fontSize);
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
@@ -107,9 +108,16 @@ void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(position));
   ui->lblFontSize->setFont(font);
   isFontChange = true;
+
+  saveOptions();
+  ui->btnReStart->show();
 }
 
-void dlgPreferences::on_chkReaderFont_clicked() { isFontChange = true; }
+void dlgPreferences::on_chkReaderFont_clicked() {
+  isFontChange = true;
+  saveOptions();
+  ui->btnReStart->show();
+}
 
 void dlgPreferences::on_btnCustomFont_clicked() {
   QString fileName;
@@ -124,6 +132,8 @@ void dlgPreferences::on_btnCustomFont_clicked() {
   Reg.setIniCodec("utf-8");
 #endif
   Reg.setValue("/Options/CustomFont", fileName);
+
+  ui->btnReStart->show();
 }
 
 void dlgPreferences::setFontDemo(QString customFontPath) {
@@ -168,8 +178,32 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
         "background-color: rgb(255, 255, 255);color:red;");
 }
 
-void dlgPreferences::on_chkCustomFont_clicked() { isFontChange = true; }
+void dlgPreferences::on_chkCustomFont_clicked() {
+  isFontChange = true;
+  saveOptions();
+  ui->btnReStart->show();
+}
 
 void dlgPreferences::on_sliderFontSize_valueChanged(int value) {
   on_sliderFontSize_sliderMoved(value);
+}
+
+void dlgPreferences::on_btnReStart_clicked() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jo = QAndroidJniObject::fromString("setReOpen");
+  jo.callStaticMethod<int>("com.x/MyActivity", "setReOpen", "()I");
+#else
+  QJniObject jo = QJniObject::fromString("setReOpen");
+  jo.callStaticMethod<int>("com.x/MyActivity", "setReOpen", "()I");
+#endif
+
+#endif
+
+  mw_one->close();
+
+#ifdef Q_OS_MACX
+  QProcess::startDetached(qApp->applicationFilePath(), QStringList());
+#endif
 }

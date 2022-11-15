@@ -41,6 +41,8 @@ class dlgPreferences : public QDialog {
 
   void on_sliderFontSize_valueChanged(int value);
 
+  void on_btnReStart_clicked();
+
  private:
 };
 

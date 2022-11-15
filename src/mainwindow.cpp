@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.44";
+QString ver = "1.0.45";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -543,6 +543,14 @@ void MainWindow::init_Options() {
   for (int i = 0; i < countTime; i++)
     timeLines.append(
         RegTime.value("/TimeLines/Files" + QString::number(i)).toString());
+
+  mydlgPre->ui->btnReStart->hide();
+  QString style =
+      "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "
+      "border-radius:10px; "
+      "border:0px solid gray; } QToolButton:pressed { background-color: "
+      "rgb(220,220,230);}";
+  mydlgPre->ui->btnReStart->setStyleSheet(style);
 }
 
 void MainWindow::init_ChartWidget() {
