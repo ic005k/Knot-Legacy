@@ -1,7 +1,7 @@
-#include "dlgsteps.h"
+#include "Steps.h"
 
 #include "mainwindow.h"
-#include "ui_dlgsteps.h"
+#include "ui_Steps.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
@@ -52,6 +52,11 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   QFont font = ui->tableWidget->horizontalHeader()->font();
   font.setBold(true);
   ui->tableWidget->horizontalHeader()->setFont(font);
+
+  QString style = mw_one->myEditRecord->ui->editAmount->styleSheet();
+  ui->editStepLength->setStyleSheet(style);
+  ui->editTangentLineIntercept->setStyleSheet(style);
+  ui->editTangentLineSlope->setStyleSheet(style);
 }
 
 dlgSteps::~dlgSteps() { delete ui; }

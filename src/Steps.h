@@ -1,5 +1,5 @@
-#ifndef DLGSTEPS_H
-#define DLGSTEPS_H
+#ifndef STEPS_H
+#define STEPS_H
 
 #include <QAccelerometer>
 #include <QDialog>
@@ -68,4 +68,4 @@ class dlgSteps : public QDialog {
   QBrush brushMax = QBrush(QColor(245, 222, 79));
 };
 
-#endif  // DLGSTEPS_H
+#endif  // STEPS_H

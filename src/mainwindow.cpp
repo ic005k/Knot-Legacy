@@ -526,7 +526,6 @@ void MainWindow::init_Options() {
     timeLines.append(
         RegTime.value("/TimeLines/Files" + QString::number(i)).toString());
 
-  mydlgPre->initValues();
   mydlgPre->ui->btnReStart->hide();
   QString style =
       "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "
@@ -2952,6 +2951,7 @@ void MainWindow::on_actionPreferences_triggered() {
   mydlgPre->setGeometry(geometry().x(), geometry().y(), mydlgPre->width(),
                         height());
   mydlgPre->setModal(true);
+  mydlgPre->initValues();
   mydlgPre->show();
 }
 

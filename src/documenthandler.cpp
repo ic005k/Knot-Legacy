@@ -69,7 +69,7 @@
 extern MainWindow *mw_one;
 extern QStringList readTextList, htmlFiles;
 extern int htmlIndex;
-extern QString strOpfPath;
+extern QString strOpfPath, appName;
 QString picfile;
 
 DocumentHandler::DocumentHandler(QObject *parent)
@@ -245,8 +245,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
   if (htmlFile.contains("http")) {
     QUrl url = htmlFile;
     bool ok = mw_one->showMsgBox(
-        tr("Reader"), tr("Open this URL?") + "\n\n" + htmlFile + "\n", htmlFile,
-        3);
+        appName, tr("Open this URL?") + "\n\n" + htmlFile + "\n", htmlFile, 3);
     if (ok) QDesktopServices::openUrl(url);
     mw_one->clearSelectBox();
   }
@@ -255,8 +254,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     QString str = htmlFile;
     str.replace("mailto:", "");
     bool ok = mw_one->showMsgBox(
-        tr("Memos"), tr("Writing an email?") + "\n\n" + htmlFile + "\n", str,
-        3);
+        appName, tr("Writing an email?") + "\n\n" + htmlFile + "\n", str, 3);
     if (ok) QDesktopServices::openUrl(QUrl(htmlFile));
 
     mw_one->clearSelectBox();

@@ -59,10 +59,7 @@ Item {
         cursorPosition: textArea.cursorPosition
         selectionStart: textArea.selectionStart
         selectionEnd: textArea.selectionEnd
-        //textColor: "#FF0000"
 
-        //Component.onCompleted: document.load("qml:/texteditor.html")
-        //Component.onCompleted: document.load("file://" + htmlFile)
         onLoaded: {
             textArea.text = text
         }
@@ -97,9 +94,7 @@ Item {
         TextArea.flickable: TextArea {
             id: textArea
             visible: true
-            //font.pixelSize: FontSize
-            //font.family: FontName
-            //font.letterSpacing: 2
+
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting
             textFormat: Qt.AutoText
@@ -121,9 +116,7 @@ Item {
             }
 
             onLinkActivated: {
-                //Qt.openUrlExternally(link)
                 document.setBackDir(link)
-                //document.load("file://" + htmlPath + link)
                 document.setReadPosition(link)
                 console.log(htmlPath + link)
                 console.log(htmlPath)

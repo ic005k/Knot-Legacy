@@ -42,6 +42,7 @@ SOURCES += \
     src/Preferences.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
+    src/Steps.cpp \
     src/autoupdatedialog.cpp \
     src/dlgMainNotes.cpp \
     src/dlgNotesList.cpp \
@@ -55,7 +56,6 @@ SOURCES += \
     src/dlgreader.cpp \
     src/dlgright.cpp \
     src/dlgsetedittext.cpp \
-    src/dlgsteps.cpp \
     src/dlgtodo.cpp \
     src/documenthandler.cpp \
     src/file.cpp \
@@ -71,6 +71,7 @@ HEADERS += \
     src/Preferences.h \
     src/RemarksAbout.h \
     src/Report.h \
+    src/Steps.h \
     src/autoupdatedialog.h \
     src/count_steps.h \
     src/dlgMainNotes.h \
@@ -85,7 +86,6 @@ HEADERS += \
     src/dlgreader.h \
     src/dlgright.h \
     src/dlgsetedittext.h \
-    src/dlgsteps.h \
     src/dlgtodo.h \
     src/documenthandler.h \
     src/file.h \
@@ -101,6 +101,7 @@ FORMS += \
     src/Preferences.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
+    src/Steps.ui \
     src/autoupdatedialog.ui \
     src/dlgMainNotes.ui \
     src/dlgNotesList.ui \
@@ -114,7 +115,6 @@ FORMS += \
     src/dlgreader.ui \
     src/dlgright.ui \
     src/dlgsetedittext.ui \
-    src/dlgsteps.ui \
     src/dlgtodo.ui \
     src/mainwindow.ui \
     src/setTodoAlarm.ui

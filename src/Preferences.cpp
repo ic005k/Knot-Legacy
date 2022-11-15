@@ -69,8 +69,6 @@ void dlgPreferences::on_btnBack_clicked() {
 }
 
 void dlgPreferences::saveOptions() {
-  if (isBreak) return;
-
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -110,7 +108,6 @@ void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
   ui->lblFontSize->setFont(font);
   isFontChange = true;
 
-  saveOptions();
   ui->btnReStart->show();
 }
 
