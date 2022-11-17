@@ -55,25 +55,27 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   mw_one->setSCrollPro(listTodo);
   mw_one->setSCrollPro(ui->listRecycle);
 
-  ui->btnAdd->setStyleSheet("border:none");
-  ui->btnBack->setStyleSheet("border:none");
-  ui->btnHigh->setStyleSheet("border:none");
-  ui->btnLow->setStyleSheet("border:none");
-  ui->btnModify->setStyleSheet("border:none");
-  ui->btnSetTime->setStyleSheet("border:none");
-  ui->btnRecycle->setStyleSheet("border:none");
+  mw_one->ui->frameTodo->layout()->setContentsMargins(1, 1, 1, 1);
+  mw_one->ui->frameTodo->layout()->setSpacing(2);
+  mw_one->ui->btnAddTodo->setStyleSheet("border:none");
+  mw_one->ui->btnBackTodo->setStyleSheet("border:none");
+  mw_one->ui->btnHigh->setStyleSheet("border:none");
+  mw_one->ui->btnLow->setStyleSheet("border:none");
+  mw_one->ui->btnModify->setStyleSheet("border:none");
+  mw_one->ui->btnSetTime->setStyleSheet("border:none");
+  mw_one->ui->btnRecycle->setStyleSheet("border:none");
 
   QFont f = this->font();
   f.setPointSize(12);
-  ui->btnAdd->setFont(f);
-  ui->btnBack->setFont(f);
-  ui->btnHigh->setFont(f);
-  ui->btnLow->setFont(f);
-  ui->btnModify->setFont(f);
-  ui->btnSetTime->setFont(f);
-  ui->btnRecycle->setFont(f);
+  mw_one->ui->btnAddTodo->setFont(f);
+  mw_one->ui->btnBackTodo->setFont(f);
+  mw_one->ui->btnHigh->setFont(f);
+  mw_one->ui->btnLow->setFont(f);
+  mw_one->ui->btnModify->setFont(f);
+  mw_one->ui->btnSetTime->setFont(f);
+  mw_one->ui->btnRecycle->setFont(f);
 
-  ui->btnModify->hide();
+  mw_one->ui->btnModify->hide();
 
   ui->textEdit->setFixedHeight(getEditTextHeight(ui->textEdit) + 2);
 
@@ -168,20 +170,37 @@ void dlgTodo::init_Items() {
 }
 
 void dlgTodo::on_btnAdd_clicked() {
-  QString str = ui->textEdit->toPlainText().trimmed();
-  for (int i = 0; i < listTodo->count(); i++) {
-    QLabel* lbl = getMainLabel(i);
-    if (lbl->text() == str) {
-      listTodo->setCurrentRow(i);
+  QString str = mw_one->ui->textEdit->toPlainText().trimmed();
+  if (str == "") return;
+
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  int count = itemCount.toInt();
+  for (int i = 0; i < count; i++) {
+    QVariant itemToDoText;
+    QMetaObject::invokeMethod((QObject*)root, "getTodoText",
+                              Q_RETURN_ARG(QVariant, itemToDoText),
+                              Q_ARG(QVariant, i));
+    QString strTodo = itemToDoText.toString();
+
+    if (str == strTodo) {
+      QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
+                                Q_ARG(QVariant, i));
       return;
     }
   }
-  add_Item(str,
-           QDate::currentDate().toString("ddd MM dd yyyy") + "  " +
-               QTime::currentTime().toString(),
-           true);
-  ui->textEdit->setText("");
-  listTodo->verticalScrollBar()->setSliderPosition(0);
+
+  QString strTime = QDateTime::currentDateTime().toString();
+
+  QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, strTime),
+                            Q_ARG(QVariant, str));
+
+  QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
+                            Q_ARG(QVariant, count));
+
+  mw_one->ui->textEdit->setText("");
 }
 
 void dlgTodo::add_Item(QString str, QString time, bool insert) {

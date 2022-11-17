@@ -156,6 +156,8 @@ DISTFILES += \
     src/memo.qml \
     src/onedrive/log.qml \
     src/onedrive/web.qml \
+    src/qmlsrc/TodoModel.qml \
+    src/qmlsrc/todo.qml \
     src/reader.qml \
     src/steps.qml
 

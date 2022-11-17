@@ -2839,7 +2839,12 @@ void MainWindow::on_btnTodo_clicked() {
   mydlgTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                          this->width(), this->height());
 
-  mydlgTodo->show();
+  // mydlgTodo->show();
+  ui->frameMain->hide();
+  ui->frameTodo->setGeometry(this->geometry().x(), this->geometry().y(),
+                             this->width(), this->height());
+  ui->frameTodo->show();
+
   mydlgTodo->refreshAlarm();
   mydlgTodo->setAlartTop(mydlgTodo->minAlartItem);
 }
@@ -3691,6 +3696,8 @@ void MainWindow::init_UIWidget() {
   ui->lblIcon->hide();
   ui->lblKnot->hide();
   ui->frameReader->hide();
+  ui->frameTodo->hide();
+  ui->frameRecycle->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3867,6 +3874,8 @@ void MainWindow::init_UIWidget() {
 
   ui->quickWidgetMemo->rootContext()->setContextProperty("FontSize", fontSize);
   ui->quickWidgetMemo->rootContext()->setContextProperty("strText", "");
+
+  ui->qwTodo->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/todo.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4890,3 +4899,5 @@ void MainWindow::on_btnDel_clicked() { on_DelRecord(); }
 void MainWindow::resizeEvent(QResizeEvent *event) { Q_UNUSED(event); }
 
 void MainWindow::on_KVChanged() {}
+
+void MainWindow::on_btnAddTodo_clicked() { mydlgTodo->on_btnAdd_clicked(); }

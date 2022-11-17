@@ -63,7 +63,7 @@ class dlgTodo : public QDialog {
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
- private slots:
+ public slots:
   void on_btnBack_clicked();
 
   void on_btnAdd_clicked();

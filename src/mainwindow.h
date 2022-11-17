@@ -526,6 +526,8 @@ class MainWindow : public QMainWindow {
 
   void on_KVChanged();
 
+  void on_btnAddTodo_clicked();
+
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;

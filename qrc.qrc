@@ -7,5 +7,7 @@
         <file>src/onedrive/web.qml</file>
         <file>src/steps.qml</file>
         <file>src/imgview.qml</file>
+        <file>src/qmlsrc/todo.qml</file>
+        <file>src/qmlsrc/TodoModel.qml</file>
     </qresource>
 </RCC>
