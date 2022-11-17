@@ -61,9 +61,17 @@ class dlgTodo : public QDialog {
   QString getItemTodoText(int index);
   void delItem(int index);
   void setCurrentIndex(int index);
-  public slots:
+  void setHighPriority(bool isBool);
+
+  void addItem(QString strTime, QString strText);
+  int getCount();
+
+  void modifyTime(int index, QString strTime);
+  void modifyTodoText(int index, QString strTodoText);
+ public slots:
   void on_btnOK_clicked();
   void on_btnCancel_clicked();
+  void isAlarm(int index);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -100,7 +108,8 @@ class dlgTodo : public QDialog {
 
   void on_textEdit_textChanged();
 
- private:
+  void reeditText();
+  private:
   QListWidgetItem *editItem;
   void add_ItemSn(int index);
   QLabel *lblModi;

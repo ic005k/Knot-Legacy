@@ -3869,6 +3869,8 @@ void MainWindow::init_UIWidget() {
   ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
   ui->quickWidget->rootContext()->setContextProperty("mw_one", mw_one);
 
+  ui->qwTodo->rootContext()->setContextProperty("mydlgTodo", mydlgTodo);
+
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
@@ -4908,3 +4910,7 @@ void MainWindow::on_btnBackTodo_clicked() {
 }
 
 void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }
+
+void MainWindow::on_btnLow_clicked() { mydlgTodo->on_btnLow_clicked(); }
+
+void MainWindow::on_btnSetTime_clicked() { mydlgTodo->on_btnSetTime_clicked(); }

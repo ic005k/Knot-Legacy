@@ -532,6 +532,10 @@ class MainWindow : public QMainWindow {
 
   void on_btnHigh_clicked();
 
+  void on_btnLow_clicked();
+
+  void on_btnSetTime_clicked();
+
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;

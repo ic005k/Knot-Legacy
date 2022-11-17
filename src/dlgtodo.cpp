@@ -187,11 +187,7 @@ void dlgTodo::on_btnAdd_clicked() {
   QString str = mw_one->ui->textEdit->toPlainText().trimmed();
   if (str == "") return;
 
-  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
-  QVariant itemCount;
-  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
-                            Q_RETURN_ARG(QVariant, itemCount));
-  int count = itemCount.toInt();
+  int count = getCount();
   for (int i = 0; i < count; i++) {
     QString strTodo = getItemTodoText(i);
 
@@ -203,8 +199,7 @@ void dlgTodo::on_btnAdd_clicked() {
 
   QString strTime = QDateTime::currentDateTime().toString();
 
-  QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, strTime),
-                            Q_ARG(QVariant, str));
+  addItem(strTime, str);
 
   setCurrentIndex(count);
 
@@ -451,17 +446,14 @@ void dlgTodo::on_btnHigh_clicked() {
 }
 
 void dlgTodo::on_btnLow_clicked() {
-  int row = listTodo->currentRow();
+  int row = getCurrentIndex();
   if (row < 0) return;
-  QListWidgetItem* item = listTodo->currentItem();
-  QWidget* w = listTodo->itemWidget(item);
-  QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
-  listTodo->takeItem(row);
-  QString str = lbl->text();
-  QLabel* lblTime = (QLabel*)w->children().at(2)->children().at(1);
-  add_Item(str, lblTime->text(), false);
-  listTodo->setCurrentRow(listTodo->count() - 1);
-  listTodo->scrollToBottom();
+
+  QString strTime = getItemTime(row);
+  QString strTodoText = getItemTodoText(row);
+  delItem(row);
+  addItem(strTime, strTodoText);
+  setCurrentIndex(getCount() - 1);
 
   refreshAlarm();
   setAlartTop(minAlartItem);
@@ -494,7 +486,11 @@ QLabel* dlgTodo::getMainLabel(QListWidgetItem* item) {
 }
 
 void dlgTodo::on_btnOK_clicked() {
-  QLabel* lbl = getTimeLabel(listTodo->currentRow());
+  int row = getCurrentIndex();
+  if (row < 0) return;
+  QString strTodoText = getItemTodoText(row);
+  QString strTime;
+
   if (!mw_one->mymsgDlg->ui->chk1->isChecked() &&
       !mw_one->mymsgDlg->ui->chk2->isChecked() &&
       !mw_one->mymsgDlg->ui->chk3->isChecked() &&
@@ -515,17 +511,17 @@ void dlgTodo::on_btnOK_clicked() {
     if (mw_one->mymsgDlg->ui->chk6->isChecked()) str = str + "6";
     if (mw_one->mymsgDlg->ui->chk7->isChecked()) str = str + "7";
 
-    lbl->setText(tr("Alarm") + "  " + str + "  " +
-                 mw_one->mymsgDlg->ui->dateTimeEdit->time().toString("HH:mm"));
+    strTime = tr("Alarm") + "  " + str + "  " +
+              mw_one->mymsgDlg->ui->dateTimeEdit->time().toString("HH:mm");
+
   } else {
-    lbl->setText(tr("Alarm") + "  " +
-                 mw_one->mymsgDlg->ui->dateTimeEdit->text());
+    strTime = tr("Alarm") + "  " + mw_one->mymsgDlg->ui->dateTimeEdit->text();
   }
 
-  lbl->setStyleSheet(alarmStyle);
-  QFont f = lbl->font();
-  f.setBold(true);
-  lbl->setFont(f);
+  delItem(row);
+  insertItem(strTime, strTodoText, row);
+  setCurrentIndex(row);
+
   ui->frameSetTime->hide();
   mw_one->mymsgDlg->close();
   refreshAlarm();
@@ -601,11 +597,10 @@ qlonglong dlgTodo::getSecond(QString strDateTime) {
 }
 
 void dlgTodo::on_btnSetTime_clicked() {
-  if (!listTodo->currentIndex().isValid()) return;
+  int row = getCurrentIndex();
+  if (row < 0) return;
 
-  QLabel* lblMain = getMainLabel(listTodo->currentRow());
-  QLabel* lbl = getTimeLabel(listTodo->currentRow());
-  QString str = lbl->text().trimmed();
+  QString str = getItemTime(row);
   QDate date;
   QTime time;
   mw_one->mymsgDlg->ui->chk1->setChecked(false);
@@ -693,7 +688,7 @@ void dlgTodo::on_btnSetTime_clicked() {
   }
 
   mw_one->mymsgDlg->initDlg();
-  QString txt = tr("Todo") + " : " + lblMain->text();
+  QString txt = tr("Todo") + " : " + getItemTodoText(row);
   txt = txt.replace("\n", " ");
   QFontMetrics fm(this->font());
   QString qsLine = fm.elidedText(txt, Qt::ElideRight, this->width() - 10);
@@ -702,11 +697,12 @@ void dlgTodo::on_btnSetTime_clicked() {
 }
 
 void dlgTodo::on_btnCancel_clicked() {
-  QLabel* lbl = getTimeLabel(listTodo->currentRow());
-  QString str = lbl->text().trimmed();
+  int row = getCurrentIndex();
+  if (row < 0) return;
+
+  QString str = getItemTime(row);
   if (str.contains(tr("Alarm"))) str = str.replace(tr("Alarm"), "");
-  lbl->setText(str.trimmed());
-  lbl->setStyleSheet(getMainLabel(listTodo->currentRow())->styleSheet());
+  modifyTime(row, str);
   ui->frameSetTime->hide();
   mw_one->mymsgDlg->close();
   refreshAlarm();
@@ -1077,8 +1073,128 @@ void dlgTodo::delItem(int index) {
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
+void dlgTodo::addItem(QString strTime, QString strText) {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, strTime),
+                            Q_ARG(QVariant, strText));
+}
+
 void dlgTodo::setCurrentIndex(int index) {
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
                             Q_ARG(QVariant, index));
+}
+
+void dlgTodo::setHighPriority(bool isBool) {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setHighPriority",
+                            Q_ARG(QVariant, isBool));
+}
+
+int dlgTodo::getCount() {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
+void dlgTodo::modifyTime(int index, QString strTime) {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "modifyItemTime",
+                            Q_ARG(QVariant, index), Q_ARG(QVariant, strTime));
+}
+
+void dlgTodo::modifyTodoText(int index, QString strTodoText) {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "modifyItemText",
+                            Q_ARG(QVariant, index),
+                            Q_ARG(QVariant, strTodoText));
+}
+
+void dlgTodo::isAlarm(int index) {
+  bool a = false;
+  QString strTime = getItemTime(index);
+  if (strTime.contains(tr("Alarm"))) a = true;
+  qDebug() << "aabb" << a;
+  setHighPriority(a);
+}
+
+void dlgTodo::reeditText() {
+  int row = getCurrentIndex();
+  if (row < 0) return;
+
+  QDialog* dlg = new QDialog(this);
+  QVBoxLayout* vbox0 = new QVBoxLayout;
+  dlg->setLayout(vbox0);
+  dlg->setModal(true);
+  dlg->setWindowFlag(Qt::FramelessWindowHint);
+  dlg->setAttribute(Qt::WA_TranslucentBackground);
+
+  QFrame* frame = new QFrame(this);
+  vbox0->addWidget(frame);
+  frame->setStyleSheet(
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "border:0px solid gray;}");
+
+  QVBoxLayout* vbox = new QVBoxLayout;
+  vbox->setContentsMargins(12, 12, 12, 12);
+  vbox->setSpacing(12);
+  frame->setLayout(vbox);
+
+  QLabel* lblTitle = new QLabel(this);
+  lblTitle->adjustSize();
+  lblTitle->setWordWrap(true);
+  lblTitle->setText(tr("Editor"));
+  vbox->addWidget(lblTitle);
+
+  QFrame* hframe = new QFrame(this);
+  hframe->setFrameShape(QFrame::HLine);
+  hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
+  vbox->addWidget(hframe);
+
+  QTextEdit* edit = new QTextEdit(this);
+  vbox->addWidget(edit);
+  edit->setPlainText(getItemTodoText(row));
+
+  QToolButton* btnCancel = new QToolButton(this);
+  QToolButton* btnOk = new QToolButton(this);
+  btnCancel->setText(tr("Cancel"));
+  btnOk->setText(tr("OK"));
+  btnOk->setStyleSheet(
+      "QToolButton {background-color: rgb(0, 0, 255);color: rgb(255, "
+      "255, 255);border-radius:10px;border:1px solid gray;} "
+      "QToolButton:pressed "
+      "{ background-color: "
+      "rgb(220,220,230);color: black}");
+
+  btnCancel->setStyleSheet(mw_one->btnStyle);
+  btnOk->setFixedHeight(35);
+  btnCancel->setFixedHeight(35);
+
+  QHBoxLayout* hbox = new QHBoxLayout;
+  hbox->addWidget(btnCancel);
+  hbox->addWidget(btnOk);
+  btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+  QSpacerItem* sparcer_item =
+      new QSpacerItem(0, 160, QSizePolicy::Fixed, QSizePolicy::Expanding);
+  vbox->addItem(sparcer_item);
+
+  vbox->addLayout(hbox, 0);
+
+  connect(btnCancel, &QToolButton::clicked, [=]() mutable { dlg->close(); });
+  connect(dlg, &QDialog::rejected, [=]() mutable {});
+  connect(btnOk, &QToolButton::clicked, [=]() mutable { dlg->close(); });
+
+  int x, y, w, h;
+  w = mw_one->width() - 40;
+  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+  h = mw_one->height() / 3;
+  y = geometry().y() + (height() - h) / 2;
+  dlg->setGeometry(x, y, w, h);
+
+  dlg->setModal(true);
+  dlg->show();
 }

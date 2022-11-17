@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
+import QtQuick 2.15
+import QtQuick.Window 2.15
 import QtQml 2.3
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.1
@@ -12,6 +12,17 @@ Rectangle {
 
     property int itemH: 120
     property int itemCount: 0
+    property bool isHighPriority: false
+
+    function isAlarm(index)
+    {
+        //mydlgTodo.isAlarm(index)
+        return isHighPriority
+    }
+
+    function setHighPriority(isFalse) {
+        isHighPriority = isFalse
+    }
 
     function clearAllItems() {
         itemCount = view.count
@@ -52,7 +63,6 @@ Rectangle {
     }
 
     function addItem(strTime, strText) {
-
         view.model.append({
                               "time": strTime,
                               "dototext": strText
@@ -112,6 +122,8 @@ Rectangle {
                     width: 10
                     radius: 4
                     color: getListEleHeadColor(1)
+                    visible: isAlarm(view.currentIndex)
+
                     Text {
                         anchors.centerIn: parent
                     }
@@ -135,7 +147,7 @@ Rectangle {
                         id: text2
                         width: parent.width
                         wrapMode: TextArea.Wrap
-
+                        color: isHighPriority ? "#EF5B98" : "#000000"
                         text: dototext
                     }
                 }
@@ -167,6 +179,13 @@ Rectangle {
 
                     view.currentIndex = index //实现item切换
 
+                    //var data = view.model.get(view.currentIndex)
+                    //console.log(data.time + "," + data.dototext + ", count=" + view.count)
+                    //console.log("Alarm=" + isAlarm(view.currentIndex))
+                }
+
+                onDoubleClicked: {
+                    mydlgTodo.reeditText()
                     var data = view.model.get(view.currentIndex)
                     console.log(data.time + "," + data.dototext + ", count=" + view.count)
                 }
