@@ -536,6 +536,16 @@ class MainWindow : public QMainWindow {
 
   void on_btnSetTime_clicked();
 
+  void on_btnRecycle_clicked();
+
+  void on_btnReturnRecycle_clicked();
+
+  void on_btnClearRecycle_clicked();
+
+  void on_btnDelRecycle_clicked();
+
+  void on_btnRestoreRecycle_clicked();
+
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;

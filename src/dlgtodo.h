@@ -68,7 +68,8 @@ class dlgTodo : public QDialog {
 
   void modifyTime(int index, QString strTime);
   void modifyTodoText(int index, QString strTodoText);
- public slots:
+  void clearAll();
+  public slots:
   void on_btnOK_clicked();
   void on_btnCancel_clicked();
   void isAlarm(int index);
@@ -109,6 +110,7 @@ class dlgTodo : public QDialog {
   void on_textEdit_textChanged();
 
   void reeditText();
+  void addToRecycle();
   private:
   QListWidgetItem *editItem;
   void add_ItemSn(int index);

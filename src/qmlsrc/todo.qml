@@ -14,23 +14,13 @@ Rectangle {
     property int itemCount: 0
     property bool isHighPriority: false
 
-    function isAlarm(index)
-    {
+    function isAlarm(index) {
         //mydlgTodo.isAlarm(index)
         return isHighPriority
     }
 
     function setHighPriority(isFalse) {
         isHighPriority = isFalse
-    }
-
-    function clearAllItems() {
-        itemCount = view.count
-        if (itemCount > 0) {
-            for (i = 0; i < itemCount; i++) {
-                delItem(0)
-            }
-        }
     }
 
     function setCurrentItem(currentIndex) {
@@ -174,7 +164,6 @@ Rectangle {
                     }
                 }
 
-                //鼠标选中
                 onClicked: {
 
                     view.currentIndex = index //实现item切换
@@ -234,6 +223,7 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
+                        mydlgTodo.addToRecycle()
                         view.model.remove(index)
                     }
                 }

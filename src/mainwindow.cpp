@@ -4914,3 +4914,19 @@ void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }
 void MainWindow::on_btnLow_clicked() { mydlgTodo->on_btnLow_clicked(); }
 
 void MainWindow::on_btnSetTime_clicked() { mydlgTodo->on_btnSetTime_clicked(); }
+
+void MainWindow::on_btnRecycle_clicked() { mydlgTodo->on_btnRecycle_clicked(); }
+
+void MainWindow::on_btnReturnRecycle_clicked() {
+  mydlgTodo->on_btnReturn_clicked();
+}
+
+void MainWindow::on_btnClearRecycle_clicked() {
+  mydlgTodo->on_btnClear_clicked();
+}
+
+void MainWindow::on_btnDelRecycle_clicked() { mydlgTodo->on_btnDel_clicked(); }
+
+void MainWindow::on_btnRestoreRecycle_clicked() {
+  mydlgTodo->on_btnRestore_clicked();
+}

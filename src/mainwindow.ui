@@ -2548,7 +2548,7 @@ QListView {
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_14">
          <item>
-          <widget class="QToolButton" name="btnReturn">
+          <widget class="QToolButton" name="btnReturnRecycle">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -2573,7 +2573,7 @@ QListView {
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="btnClear">
+          <widget class="QToolButton" name="btnClearRecycle">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -2598,7 +2598,7 @@ QListView {
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="btnDel_2">
+          <widget class="QToolButton" name="btnDelRecycle">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -2623,7 +2623,7 @@ QListView {
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="btnRestore">
+          <widget class="QToolButton" name="btnRestoreRecycle">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
