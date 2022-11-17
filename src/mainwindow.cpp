@@ -4901,3 +4901,10 @@ void MainWindow::resizeEvent(QResizeEvent *event) { Q_UNUSED(event); }
 void MainWindow::on_KVChanged() {}
 
 void MainWindow::on_btnAddTodo_clicked() { mydlgTodo->on_btnAdd_clicked(); }
+
+void MainWindow::on_btnBackTodo_clicked() {
+  ui->frameTodo->hide();
+  ui->frameMain->show();
+  mydlgTodo->saveTodo();
+  mydlgTodo->refreshAlarm();
+}

@@ -13,6 +13,18 @@ Rectangle {
     property int itemH: 120
     property int itemCount: 0
 
+    function clearAllItems()
+    {
+        itemCount = view.count;
+        if(itemCount>0) {
+        for(i=0;i<itemCount;i++)
+        {
+            delItem(0);
+
+        }
+        }
+    }
+
     function setCurrentItem(currentIndex)
     {
         view.currentIndex = currentIndex

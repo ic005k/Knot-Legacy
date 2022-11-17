@@ -528,6 +528,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnAddTodo_clicked();
 
+  void on_btnBackTodo_clicked();
+
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;

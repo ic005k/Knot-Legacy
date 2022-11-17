@@ -101,24 +101,34 @@ void dlgTodo::saveTodo() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  int count = listTodo->count();
-  Reg.setValue("/Todo/Count", count);
-  for (int i = 0; i < count; i++) {
-    if (isBreak) break;
-    QListWidgetItem* item = listTodo->item(i);
-    QWidget* w = listTodo->itemWidget(item);
-    QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
-    QString str = lbl->text();
-    QLabel* lblTime = (QLabel*)w->children().at(2)->children().at(1);
-    QString strTime = lblTime->text();
-    Reg.setValue("/Todo/Item" + QString::number(i), str);
+
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  int count_items = itemCount.toInt();
+
+  Reg.setValue("/Todo/Count", count_items);
+  for (int i = 0; i < count_items; i++) {
+    QVariant itemToDoTime;
+    QMetaObject::invokeMethod((QObject*)root, "getTime",
+                              Q_RETURN_ARG(QVariant, itemToDoTime),
+                              Q_ARG(QVariant, i));
+    QVariant itemToDoText;
+    QMetaObject::invokeMethod((QObject*)root, "getTodoText",
+                              Q_RETURN_ARG(QVariant, itemToDoText),
+                              Q_ARG(QVariant, i));
+
+    QString strText = itemToDoText.toString();
+    QString strTime = itemToDoTime.toString();
+    Reg.setValue("/Todo/Item" + QString::number(i), strText);
     Reg.setValue("/Todo/Time" + QString::number(i), strTime);
 
-    QLabel* lblSn = (QLabel*)w->children().at(2);
+    /*QLabel* lblSn = (QLabel*)w->children().at(2);
     if (orgLblStyle != lblSn->styleSheet()) {
       highCount++;
       Reg.setValue("/Todo/HighLightSn" + QString::number(highCount), i);
-    }
+    }*/
   }
 
   int count1 = listRecycle->count();
@@ -128,11 +138,13 @@ void dlgTodo::saveTodo() {
     Reg.setValue("/Todo/ItemRecycle" + QString::number(i), str);
   }
 
-  Reg.setValue("/Todo/HighCount", highCount);
+  // Reg.setValue("/Todo/HighCount", highCount);
 }
 
 void dlgTodo::init_Items() {
-  listTodo->clear();
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "clearAllItems");
+
   ui->listRecycle->clear();
   QString ini_file;
   if (isImport)
@@ -147,7 +159,9 @@ void dlgTodo::init_Items() {
   for (int i = 0; i < count; i++) {
     QString str = Reg.value("/Todo/Item" + QString::number(i)).toString();
     QString strTime = Reg.value("/Todo/Time" + QString::number(i)).toString();
-    add_Item(str, strTime, false);
+
+    QMetaObject::invokeMethod((QObject*)root, "addItem",
+                              Q_ARG(QVariant, strTime), Q_ARG(QVariant, str));
   }
 
   int count1 = Reg.value("/Todo/Count1").toInt();
@@ -157,14 +171,14 @@ void dlgTodo::init_Items() {
     ui->listRecycle->addItem(str);
   }
 
-  highCount = Reg.value("/Todo/HighCount").toInt();
+  /*highCount = Reg.value("/Todo/HighCount").toInt();
   for (int i = 0; i < highCount; i++) {
     int index = Reg.value("/Todo/HighLightSn" + QString::number(i + 1)).toInt();
     QListWidgetItem* item = listTodo->item(index);
     QWidget* w = listTodo->itemWidget(item);
     QLabel* lbl = (QLabel*)w->children().at(2);
     lbl->setStyleSheet(highLblStyle);
-  }
+  }*/
 
   refreshAlarm();
 }
@@ -871,7 +885,8 @@ void dlgTodo::refreshAlarm() {
   int count = 0;
   isToday = false;
   QString str;
-  QLabel* lbl;
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  // QLabel* lbl;
 
   QString ini_file;
   ini_file = "/data/data/com.x/files/msg.ini";
@@ -883,18 +898,38 @@ void dlgTodo::refreshAlarm() {
   QStringList listAlarm;
   QList<qlonglong> listTotalS;
   QList<QListWidgetItem*> listAlarmItems;
-  for (int i = 0; i < listTodo->count(); i++) {
-    lbl = getTimeLabel(i);
-    str = lbl->text().trimmed();
+
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  int count_items = itemCount.toInt();
+
+  for (int i = 0; i < count_items; i++) {
+    // lbl = getTimeLabel(i);
+    // str = lbl->text().trimmed();
+    QVariant itemTime;
+    QMetaObject::invokeMethod((QObject*)root, "getTime",
+                              Q_RETURN_ARG(QVariant, itemTime),
+                              Q_ARG(QVariant, i));
+    str = itemTime.toString();
+    qDebug() << "ddddd" << str;
+
     if (str.contains(tr("Alarm"))) {
       str = str.replace(tr("Alarm"), "").trimmed();
       qlonglong totals = getSecond(str);
 
       if (totals > 0) {
         count++;
-        QLabel* lblMain = getMainLabel(i);
-        QString str1 = str + "|" + lblMain->text() + "|" +
-                       QString::number(totals) + "|" + tr("Close");
+        // QLabel* lblMain = getMainLabel(i);
+        // QString str1 = str + "|" + lblMain->text() + "|" +
+        //                QString::number(totals) + "|" + tr("Close");
+        QVariant itemTodoText;
+        QMetaObject::invokeMethod((QObject*)root, "getTodoText",
+                                  Q_RETURN_ARG(QVariant, itemTodoText),
+                                  Q_ARG(QVariant, i));
+        QString todo_text = itemTodoText.toString();
+        QString str1 = str + "|" + todo_text + "|" + QString::number(totals) +
+                       "|" + tr("Close");
 
         listAlarm.append(str1);
         listTotalS.append(totals);
@@ -907,37 +942,44 @@ void dlgTodo::refreshAlarm() {
         QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
         if (strDate.contains("-")) {
           if (strDate == strToday) {
-            lbl->setStyleSheet(alarmStyleToday);
+            // lbl->setStyleSheet(alarmStyleToday);
             isToday = true;
           }
 
           if (strTmo == strDate) {
-            lbl->setStyleSheet(alarmStyleTomorrow);
+            // lbl->setStyleSheet(alarmStyleTomorrow);
           }
         } else {
           if (isWeekValid(str, strToday) && !isTomorrow) {
-            lbl->setStyleSheet(alarmStyleToday);
+            // lbl->setStyleSheet(alarmStyleToday);
             isToday = true;
           }
 
           if (isWeekValid(str, strTmo) && isTomorrow) {
-            lbl->setStyleSheet(alarmStyleTomorrow);
+            // lbl->setStyleSheet(alarmStyleTomorrow);
           }
         }
 
       } else {
         if (str.contains("-")) {
-          lbl->setText(str);
-          lbl->setStyleSheet(getMainLabel(i)->styleSheet());
+          // lbl->setText(str);
+          // lbl->setStyleSheet(getMainLabel(i)->styleSheet());
+          QMetaObject::invokeMethod((QObject*)root, "modifyItemTime",
+                                    Q_ARG(QVariant, i), Q_ARG(QVariant, str));
         }
 
         if (!str.contains("-")) {
-          lbl->setText(tr("Alarm") + "  " + str);
-          lbl->setStyleSheet(alarmStyle);
+          // lbl->setText(tr("Alarm") + "  " + str);
+          // lbl->setStyleSheet(alarmStyle);
+          QMetaObject::invokeMethod((QObject*)root, "modifyItemTime",
+                                    Q_ARG(QVariant, i),
+                                    Q_ARG(QVariant, tr("Alarm") + "  " + str));
 
           QDateTime ctime = QDateTime::currentDateTime();
           QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
-          if (isWeekValid(str, strTmo)) lbl->setStyleSheet(alarmStyleTomorrow);
+          if (isWeekValid(str, strTmo)) {
+            // lbl->setStyleSheet(alarmStyleTomorrow);
+          }
         }
       }
     }

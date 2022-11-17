@@ -54,8 +54,9 @@ import QtQuick 2.15
 ListModel {
     id:listm
 
+    // test
 
-    ListElement {
+    /*ListElement {
         time: "2022-11-15 08:41"
         dototext: "完成软件的测试项目,可能需要两周时间，在12月份左右，新版能正常上线。"
 
@@ -71,7 +72,7 @@ ListModel {
         dototext: "完成软件的测试项目"
 
     }
-    /*ListElement {
+    ListElement {
         time: "2022-11-15 08:41"
         dototext: "完成软件的测试项目"
 
