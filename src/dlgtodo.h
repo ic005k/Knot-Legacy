@@ -55,7 +55,13 @@ class dlgTodo : public QDialog {
   int getEditTextHeight(QTextEdit *edit);
   QLabel *getTimeLabel(QListWidgetItem *item);
   QLabel *getMainLabel(QListWidgetItem *item);
- public slots:
+  void insertItem(QString strTime, QString strText, int curIndex);
+  int getCurrentIndex();
+  QString getItemTime(int index);
+  QString getItemTodoText(int index);
+  void delItem(int index);
+  void setCurrentIndex(int index);
+  public slots:
   void on_btnOK_clicked();
   void on_btnCancel_clicked();
 

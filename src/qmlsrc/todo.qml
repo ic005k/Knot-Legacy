@@ -13,121 +13,86 @@ Rectangle {
     property int itemH: 120
     property int itemCount: 0
 
-    function clearAllItems()
-    {
-        itemCount = view.count;
-        if(itemCount>0) {
-        for(i=0;i<itemCount;i++)
-        {
-            delItem(0);
-
-        }
+    function clearAllItems() {
+        itemCount = view.count
+        if (itemCount > 0) {
+            for (i = 0; i < itemCount; i++) {
+                delItem(0)
+            }
         }
     }
 
-    function setCurrentItem(currentIndex)
-    {
+    function setCurrentItem(currentIndex) {
         view.currentIndex = currentIndex
     }
 
-    function getItemCount(){
-        itemCount=view.count
+    function getCurrentIndex() {
+        return view.currentIndex
+    }
+
+    function getItemCount() {
+        itemCount = view.count
         console.log("count=" + itemCount)
         return itemCount
     }
 
-     function getItemText(itemIndex)
-     {
-         var data = view.model.get(itemIndex)
+    function getItemText(itemIndex) {
+        var data = view.model.get(itemIndex)
         return data.time + "|=|" + data.dototext
-     }
-
-     function getTime(itemIndex)
-     {
-         var data = view.model.get(itemIndex)
-        return data.time
-     }
-
-     function getTodoText(itemIndex)
-     {
-         var data = view.model.get(itemIndex)
-        return  data.dototext
-     }
-
-    function addItem( strTime,strText)
-    {
-
-       view.model.append({"time":strTime,"dototext":strText})
-
     }
 
-    function delItem(currentIndex)
-    {
+    function getTime(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.time
+    }
+
+    function getTodoText(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.dototext
+    }
+
+    function addItem(strTime, strText) {
+
+        view.model.append({
+                              "time": strTime,
+                              "dototext": strText
+                          })
+    }
+
+    function insertItem(strTime, strText, curIndex) {
+        view.model.insert(curIndex, {
+                              "time": strTime,
+                              "dototext": strText
+                          })
+    }
+
+    function delItem(currentIndex) {
         view.model.remove(currentIndex)
     }
 
-    function modifyItem(currentIndex,strTime,strText)
-    {
+    function modifyItem(currentIndex, strTime, strText) {
 
         view.model.setProperty(currentIndex, "time", strTime)
         view.model.setProperty(currentIndex, "dototext", strText)
     }
 
-    function modifyItemTime(currentIndex,strTime)
-    {
+    function modifyItemTime(currentIndex, strTime) {
 
         view.model.setProperty(currentIndex, "time", strTime)
-
     }
 
-    function modifyItemText(currentIndex,strText)
-    {
+    function modifyItemText(currentIndex, strText) {
         view.model.setProperty(currentIndex, "dototext", strText)
     }
 
     Component {
         id: dragDelegate
 
-
-        /*Rectangle {
-            id: content
-
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            height: column.implicitHeight + 4
-
-            border.width: 1
-            border.color: "lightsteelblue"
-
-            radius: 10
-
-            Column {
-                id: column
-                anchors {
-                    fill: parent
-                    margins: 2
-                }
-
-                Text {
-                    text: 'Time: ' + time
-                }
-                Text {
-                    text: 'Text: ' + dototext
-                }
-            }
-        }*/
         Rectangle {
             id: listItem
             width: ListView.view.width
             height: itemH
             color: ListView.isCurrentItem ? "#DCDCDC" : "#ffffff" //选中颜色设置
-
-            /*anchors {
-                left: parent.left
-                right: parent.right
-            }*/
 
             border.width: 1
             border.color: "lightsteelblue"
@@ -233,6 +198,7 @@ Rectangle {
                     color: "#ffffff"
                 }
 
+
                 /*Image {
                     id: delBtn00
                     anchors.centerIn: parent
@@ -246,7 +212,6 @@ Rectangle {
                     smooth: true
                     source: "/tab.png"
                 }*/
-
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {

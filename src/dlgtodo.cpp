@@ -193,15 +193,10 @@ void dlgTodo::on_btnAdd_clicked() {
                             Q_RETURN_ARG(QVariant, itemCount));
   int count = itemCount.toInt();
   for (int i = 0; i < count; i++) {
-    QVariant itemToDoText;
-    QMetaObject::invokeMethod((QObject*)root, "getTodoText",
-                              Q_RETURN_ARG(QVariant, itemToDoText),
-                              Q_ARG(QVariant, i));
-    QString strTodo = itemToDoText.toString();
+    QString strTodo = getItemTodoText(i);
 
     if (str == strTodo) {
-      QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
-                                Q_ARG(QVariant, i));
+      setCurrentIndex(i);
       return;
     }
   }
@@ -211,8 +206,7 @@ void dlgTodo::on_btnAdd_clicked() {
   QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, strTime),
                             Q_ARG(QVariant, str));
 
-  QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
-                            Q_ARG(QVariant, count));
+  setCurrentIndex(count);
 
   mw_one->ui->textEdit->setText("");
 }
@@ -442,20 +436,15 @@ void dlgTodo::on_btnModify_clicked() {
 }
 
 void dlgTodo::on_btnHigh_clicked() {
-  int row = listTodo->currentRow();
+  int row = getCurrentIndex();
   if (row < 0) return;
-  QListWidgetItem* item = listTodo->currentItem();
-  QWidget* w = listTodo->itemWidget(item);
-  QLabel* lbl = (QLabel*)w->children().at(2)->children().at(2);
-  listTodo->takeItem(row);
-  QString str = lbl->text();
-  QLabel* lblTime = (QLabel*)w->children().at(2)->children().at(1);
-  add_Item(str, lblTime->text(), true);
-  QListWidgetItem* item1 = listTodo->currentItem();
-  QWidget* w1 = listTodo->itemWidget(item1);
-  QFrame* frame = (QFrame*)w1->children().at(2);
-  frame->setStyleSheet(highLblStyle);
-  listTodo->scrollToTop();
+
+  QString strTime = getItemTime(row);
+  QString strText = getItemTodoText(row);
+
+  delItem(row);
+  insertItem(strTime, strText, 0);
+  setCurrentIndex(0);
 
   refreshAlarm();
   setAlartTop(minAlartItem);
@@ -886,7 +875,6 @@ void dlgTodo::refreshAlarm() {
   isToday = false;
   QString str;
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
-  // QLabel* lbl;
 
   QString ini_file;
   ini_file = "/data/data/com.x/files/msg.ini";
@@ -905,13 +893,7 @@ void dlgTodo::refreshAlarm() {
   int count_items = itemCount.toInt();
 
   for (int i = 0; i < count_items; i++) {
-    // lbl = getTimeLabel(i);
-    // str = lbl->text().trimmed();
-    QVariant itemTime;
-    QMetaObject::invokeMethod((QObject*)root, "getTime",
-                              Q_RETURN_ARG(QVariant, itemTime),
-                              Q_ARG(QVariant, i));
-    str = itemTime.toString();
+    str = getItemTime(i);
     qDebug() << "ddddd" << str;
 
     if (str.contains(tr("Alarm"))) {
@@ -920,14 +902,8 @@ void dlgTodo::refreshAlarm() {
 
       if (totals > 0) {
         count++;
-        // QLabel* lblMain = getMainLabel(i);
-        // QString str1 = str + "|" + lblMain->text() + "|" +
-        //                QString::number(totals) + "|" + tr("Close");
-        QVariant itemTodoText;
-        QMetaObject::invokeMethod((QObject*)root, "getTodoText",
-                                  Q_RETURN_ARG(QVariant, itemTodoText),
-                                  Q_ARG(QVariant, i));
-        QString todo_text = itemTodoText.toString();
+
+        QString todo_text = getItemTodoText(i);
         QString str1 = str + "|" + todo_text + "|" + QString::number(totals) +
                        "|" + tr("Close");
 
@@ -1061,4 +1037,48 @@ void dlgTodo::setAlartTop(QListWidgetItem* item) {
 void dlgTodo::on_textEdit_textChanged() {
   int h = getEditTextHeight(ui->textEdit) + 2;
   ui->textEdit->setFixedHeight(h);
+}
+
+void dlgTodo::insertItem(QString strTime, QString strText, int curIndex) {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "insertItem",
+                            Q_ARG(QVariant, strTime), Q_ARG(QVariant, strText),
+                            Q_ARG(QVariant, curIndex));
+}
+
+int dlgTodo::getCurrentIndex() {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QVariant itemIndex;
+  QMetaObject::invokeMethod((QObject*)root, "getCurrentIndex",
+                            Q_RETURN_ARG(QVariant, itemIndex));
+  return itemIndex.toInt();
+}
+
+QString dlgTodo::getItemTime(int index) {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QVariant itemTime;
+  QMetaObject::invokeMethod((QObject*)root, "getTime",
+                            Q_RETURN_ARG(QVariant, itemTime),
+                            Q_ARG(QVariant, index));
+  return itemTime.toString();
+}
+
+QString dlgTodo::getItemTodoText(int index) {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QVariant itemTodoText;
+  QMetaObject::invokeMethod((QObject*)root, "getTodoText",
+                            Q_RETURN_ARG(QVariant, itemTodoText),
+                            Q_ARG(QVariant, index));
+  return itemTodoText.toString();
+}
+
+void dlgTodo::delItem(int index) {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+}
+
+void dlgTodo::setCurrentIndex(int index) {
+  QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
+                            Q_ARG(QVariant, index));
 }

@@ -4230,8 +4230,6 @@ static void JavaNotify_2() {
   qDebug() << "C++ JavaNotify_2";
 }
 static void JavaNotify_3() {
-  // mw_one->mydlgTodo->on_Alarm();
-
   mw_one->alertWindowsCount++;
 
   qDebug() << "C++ JavaNotify_3";
@@ -4908,3 +4906,5 @@ void MainWindow::on_btnBackTodo_clicked() {
   mydlgTodo->saveTodo();
   mydlgTodo->refreshAlarm();
 }
+
+void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }
