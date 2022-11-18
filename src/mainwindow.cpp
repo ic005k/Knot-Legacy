@@ -698,6 +698,7 @@ void MainWindow::init_TabData() {
   for (int i = 0; i < TabCount; i++) {
     QString name = "tab" + QString::number(i + 1);
     QTreeWidget *tw = init_TreeWidget(name);
+
     ui->tabWidget->addTab(tw, RegTab
                                   .value("TabName" + QString::number(i),
                                          tr("Tab") + QString::number(i + 1))
@@ -708,8 +709,9 @@ void MainWindow::init_TabData() {
   }
 
   if (TabCount == 0) {
-    ui->tabWidget->addTab(init_TreeWidget("tab1"),
-                          tr("Tab") + " " + QString::number(1));
+    QTreeWidget *tw = init_TreeWidget("tab1");
+
+    ui->tabWidget->addTab(tw, tr("Tab") + " " + QString::number(1));
 
     ui->tabWidget->setTabToolTip(0, "");
   }
@@ -904,6 +906,8 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   tw->setCurrentItem(topItem);
   sort_childItem(topItem->child(0));
   tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
+
+  reloadMain();
 }
 
 void MainWindow::showDelMsgBox(QString title, QString info) {
@@ -950,7 +954,7 @@ void MainWindow::showDelMsgBox(QString title, QString info) {
   btnOk->setText(tr("Delete"));
   btnOk->setStyleSheet(
       "QToolButton {background-color: rgb(255, 0, 0);color: rgb(255, "
-      "255, 255);border-radius:10px;border:1px solid gray;} "
+      "255, 255);border-radius:10px;border:0px solid gray;} "
       "QToolButton:pressed "
       "{ background-color: "
       "rgb(220,220,230);color: black}");
@@ -1047,9 +1051,12 @@ void MainWindow::del_Data(QTreeWidget *tw) {
         if (strAmount == "0.00") strAmount = "";
         topItem->setText(1, QString::number(childCount - 1));
         topItem->setText(2, strAmount);
+
+        reloadMain();
         break;
       }
       tw->takeTopLevelItem(tw->topLevelItemCount() - 1);
+      reloadMain();
     }
   }
 
@@ -1667,14 +1674,16 @@ void MainWindow::on_actionAdd_Tab_triggered() {
   QString ini_file = iniDir + "tab" + QString::number(count + 1) + ".ini";
   if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
-  ui->tabWidget->addTab(init_TreeWidget("tab" + QString::number(count + 1)),
-                        tr("Tab") + " " + QString::number(count + 1));
+  QTreeWidget *tw = init_TreeWidget("tab" + QString::number(count + 1));
+
+  ui->tabWidget->addTab(tw, tr("Tab") + " " + QString::number(count + 1));
   ui->tabWidget->setCurrentIndex(count);
 
   ui->tabCharts->setTabText(0, tr("Month"));
   ui->tabCharts->setTabText(1, tr("Day"));
 
   on_actionRename_triggered();
+  reloadMain();
 
   startSave("alltab");
 }
@@ -1705,6 +1714,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
 QTreeWidget *MainWindow::init_TreeWidget(QString name) {
   QTreeWidget *tw = new QTreeWidget(this);
+  tw->setFixedHeight(0);
   tw->setObjectName(name);
 
   QFont font;
@@ -1830,6 +1840,8 @@ void MainWindow::set_Time() {
       item->parent()->setText(2, strAmount);
 
     sort_childItem(item);
+
+    reloadMain();
   }
 }
 
@@ -2163,6 +2175,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         m_scatterSeries->clear();
         startRead(strDate);
 
+        reloadMain();
+
         isSlide = false;
       }
     }
@@ -2203,6 +2217,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         series->clear();
         m_scatterSeries->clear();
         startRead(strDate);
+
+        reloadMain();
 
         isSlide = false;
       }
@@ -3676,12 +3692,17 @@ void MainWindow::init_Sensors() {
 
 void MainWindow::init_UIWidget() {
   set_btnStyle(this);
+  tabData = new QTabWidget;
+  tabData = ui->tabWidget;
+  tabChart = new QTabWidget;
+  tabChart = ui->tabCharts;
 
   if (fontname == "") fontname = this->font().family();
 
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
+  tabData->setFixedHeight(tabData->tabBar()->height());
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &MainWindow::on_KVChanged);
@@ -3694,10 +3715,6 @@ void MainWindow::init_UIWidget() {
 
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   isReadEnd = true;
-  tabData = new QTabWidget;
-  tabData = ui->tabWidget;
-  tabChart = new QTabWidget;
-  tabChart = ui->tabCharts;
 
   ui->lblIcon->hide();
   ui->lblKnot->hide();
@@ -4970,13 +4987,32 @@ void MainWindow::clearAll() {
   }
 }
 
+void MainWindow::setCurrentIndex(int index) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setCurrentItem",
+                            Q_ARG(QVariant, index));
+}
+
+void MainWindow::gotoEnd() {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "gotoEnd");
+}
+
+void MainWindow::gotoIndex(int index) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "gotoIndex",
+                            Q_ARG(QVariant, index));
+}
+
 void MainWindow::reloadMain() {
   clearAll();
   QTreeWidget *tw = get_tw(tabData->currentIndex());
+
   int total = tw->topLevelItemCount();
   int a;
-  if (total - 5 > 0)
-    a = total - 5;
+  int days = 45;
+  if (total - days > 0)
+    a = total - days;
   else
     a = 0;
 
@@ -4997,4 +5033,8 @@ void MainWindow::reloadMain() {
       addItem(text0, text1, text2, 0);
     }
   }
+
+  int count = getCount();
+  gotoIndex(count - 1);
+  setCurrentIndex(count - 1);
 }

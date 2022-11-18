@@ -14,6 +14,21 @@ Rectangle {
     property int itemCount: 0
     property bool isHighPriority: false
 
+    function gotoEnd()
+    {
+        view.positionViewAtEnd()
+    }
+
+    function gotoBeginning()
+    {
+        view.positionViewAtBeginning()
+    }
+
+    function gotoIndex(index)
+    {
+        view.positionViewAtIndex(index,Tumbler.Center)
+    }
+
     function isAlarm(index) {
         //mydlgTodo.isAlarm(index)
         return isHighPriority
@@ -215,7 +230,7 @@ Rectangle {
 
             Rectangle {
                 id: delBtn
-                visible: true
+                visible: false
                 height: parent.height
                 width: 0
                 color: "#FF0000"

@@ -366,6 +366,9 @@ class MainWindow : public QMainWindow {
   int getCount();
   void clearAll();
   void reloadMain();
+  void setCurrentIndex(int index);
+  void gotoEnd();
+  void gotoIndex(int index);
   public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
