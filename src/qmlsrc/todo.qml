@@ -52,16 +52,23 @@ Rectangle {
         return data.dototext
     }
 
-    function addItem(strTime, strText) {
+    function getType(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.type
+    }
+
+    function addItem(strTime,type, strText) {
         view.model.append({
                               "time": strTime,
+                              "type":type,
                               "dototext": strText
                           })
     }
 
-    function insertItem(strTime, strText, curIndex) {
+    function insertItem(strTime,type ,strText, curIndex) {
         view.model.insert(curIndex, {
                               "time": strTime,
+                              "type":type,
                               "dototext": strText
                           })
     }
@@ -79,6 +86,11 @@ Rectangle {
     function modifyItemTime(currentIndex, strTime) {
 
         view.model.setProperty(currentIndex, "time", strTime)
+    }
+
+    function modifyItemType(currentIndex, type) {
+
+        view.model.setProperty(currentIndex, "type", type)
     }
 
     function modifyItemText(currentIndex, strText) {
@@ -109,10 +121,11 @@ Rectangle {
 
                 Rectangle {
                     height: itemH - 6
-                    width: 10
+                    width: 8
                     radius: 4
-                    color: getListEleHeadColor(1)
-                    visible: isAlarm(view.currentIndex)
+                    anchors.leftMargin: 1
+                    color: getListEleHeadColor(type)
+                    //visible: isAlarm(view.currentIndex)
 
                     Text {
                         anchors.centerIn: parent
@@ -135,8 +148,14 @@ Rectangle {
                     }
                     TextArea {
                         id: text2
+                        visible: false
                         width: parent.width
-
+                        wrapMode: TextArea.Wrap
+                        text: type
+                    }
+                    TextArea {
+                        id: text3
+                        width: parent.width
                         wrapMode: TextArea.Wrap
                         color: isHighPriority ? "#EF5B98" : "#000000"
                         text: dototext

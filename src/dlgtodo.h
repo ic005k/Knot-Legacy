@@ -34,7 +34,7 @@ class dlgTodo : public QDialog {
       "QLabel{background:rgb(245,245,25);color:black;border:2px;"
       "border-radius:4px;padding:2px 4px;}";
 
-  static void saveTodo();
+  void saveTodo();
   QString styleDark =
       "#listWidget::item {background-color: #393d49;color: #ffffff;border: "
       "transparent;padding: 8px; height: 65;}"
@@ -50,7 +50,7 @@ class dlgTodo : public QDialog {
   void refreshAlarm();
   int getEditTextHeight(QTextEdit *edit);
 
-  void insertItem(QString strTime, QString strText, int curIndex);
+  void insertItem(QString strTime, int type, QString strText, int curIndex);
   int getCurrentIndex();
   QString getItemTime(int index);
   QString getItemTodoText(int index);
@@ -58,13 +58,15 @@ class dlgTodo : public QDialog {
   void setCurrentIndex(int index);
   void setHighPriority(bool isBool);
 
-  void addItem(QString strTime, QString strText);
   int getCount();
 
   void modifyTime(int index, QString strTime);
   void modifyTodoText(int index, QString strTodoText);
   void clearAll();
- public slots:
+  void addItem(QString strTime, int type, QString strText);
+  int getItemType(int index);
+  void modifyType(int index, int type);
+  public slots:
   void on_btnOK_clicked();
   void on_btnCancel_clicked();
   void isAlarm(int index);
