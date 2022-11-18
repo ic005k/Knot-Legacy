@@ -125,7 +125,6 @@ Rectangle {
                     radius: 2
                     anchors.leftMargin: 1
                     color: getListEleHeadColor(type)
-
                     //visible: isAlarm(view.currentIndex)
                     Text {
                         anchors.centerIn: parent
@@ -134,7 +133,7 @@ Rectangle {
 
                 ColumnLayout {
                     height: parent.height
-                    width: parent.width-6
+                    width: parent.width - 6
                     spacing: 2
                     Layout.fillWidth: true
 

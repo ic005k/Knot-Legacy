@@ -788,6 +788,8 @@ void dlgTodo::reeditText() {
   vbox->setContentsMargins(12, 12, 12, 12);
   vbox->setSpacing(12);
   frame->setLayout(vbox);
+  vbox->setContentsMargins(3, 3, 3, 3);
+  vbox->setSpacing(3);
 
   QLabel* lblTitle = new QLabel(this);
   lblTitle->adjustSize();
@@ -833,7 +835,7 @@ void dlgTodo::reeditText() {
   btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
   QSpacerItem* sparcer_item =
-      new QSpacerItem(0, 160, QSizePolicy::Fixed, QSizePolicy::Expanding);
+      new QSpacerItem(0, 60, QSizePolicy::Fixed, QSizePolicy::Expanding);
   vbox->addItem(sparcer_item);
 
   vbox->addLayout(hbox, 0);
