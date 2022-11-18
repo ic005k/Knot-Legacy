@@ -57,18 +57,18 @@ Rectangle {
         return data.type
     }
 
-    function addItem(strTime,type, strText) {
+    function addItem(strTime, type, strText) {
         view.model.append({
                               "time": strTime,
-                              "type":type,
+                              "type": type,
                               "dototext": strText
                           })
     }
 
-    function insertItem(strTime,type ,strText, curIndex) {
+    function insertItem(strTime, type, strText, curIndex) {
         view.model.insert(curIndex, {
                               "time": strTime,
-                              "type":type,
+                              "type": type,
                               "dototext": strText
                           })
     }
@@ -116,17 +116,17 @@ Rectangle {
                 id: idlistElemnet
                 height: parent.height
                 width: parent.width
-                spacing: 5
+                spacing: 2
                 Layout.fillWidth: true
 
                 Rectangle {
                     height: itemH - 6
-                    width: 8
-                    radius: 4
+                    width: 6
+                    radius: 2
                     anchors.leftMargin: 1
                     color: getListEleHeadColor(type)
-                    //visible: isAlarm(view.currentIndex)
 
+                    //visible: isAlarm(view.currentIndex)
                     Text {
                         anchors.centerIn: parent
                     }
@@ -134,11 +134,12 @@ Rectangle {
 
                 ColumnLayout {
                     height: parent.height
-                    width: parent.width
-                    spacing: 8
-                    Layout.fillWidth: false
-                    anchors.leftMargin: 10
-                    anchors.rightMargin: 10
+                    width: parent.width-6
+                    spacing: 2
+                    Layout.fillWidth: true
+
+                    anchors.leftMargin: 0
+                    anchors.rightMargin: 0
 
                     TextArea {
                         id: text1
@@ -155,6 +156,7 @@ Rectangle {
                     }
                     TextArea {
                         id: text3
+
                         width: parent.width
                         wrapMode: TextArea.Wrap
                         color: isHighPriority ? "#EF5B98" : "#000000"
@@ -171,7 +173,7 @@ Rectangle {
                 onPressed: {
                     clickPos = Qt.point(mouse.x, mouse.y)
                 }
-                onReleased:   {
+                onReleased: {
                     var delta = Qt.point(mouse.x - clickPos.x,
                                          mouse.y - clickPos.y)
                     console.debug("delta.x: " + delta.x)
@@ -291,13 +293,13 @@ Rectangle {
     function getListEleHeadColor(ntype) {
         switch (ntype) {
         case 0:
-            return "lightblue"
+            return "lightgray"
         case 1:
             return "red"
         case 2:
             return "yellow"
         case 3:
-            return "green"
+            return "lightblue"
         default:
             return "black"
         }

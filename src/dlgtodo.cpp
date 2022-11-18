@@ -549,6 +549,7 @@ void dlgTodo::refreshAlarm() {
     str = getItemTime(i);
 
     if (str.contains(tr("Alarm"))) {
+      modifyType(i, 3);
       str = str.replace(tr("Alarm"), "").trimmed();
       qlonglong totals = getSecond(str);
 
@@ -605,7 +606,7 @@ void dlgTodo::refreshAlarm() {
           // lbl->setStyleSheet(alarmStyle);
 
           modifyTime(i, tr("Alarm") + "  " + str);
-          modifyType(i, 0);
+          modifyType(i, 3);
 
           QDateTime ctime = QDateTime::currentDateTime();
           QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
