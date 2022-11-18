@@ -1,8 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtQml 2.3
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.1
+import QtQml 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Rectangle {
     id: root
@@ -10,23 +10,20 @@ Rectangle {
     width: 500
     height: 400
 
-    property int itemH: 28
+    property int itemH: 32
     property int itemCount: 0
     property bool isHighPriority: false
 
-    function gotoEnd()
-    {
+    function gotoEnd() {
         view.positionViewAtEnd()
     }
 
-    function gotoBeginning()
-    {
+    function gotoBeginning() {
         view.positionViewAtBeginning()
     }
 
-    function gotoIndex(index)
-    {
-        view.positionViewAtIndex(index,Tumbler.Center)
+    function gotoIndex(index) {
+        view.positionViewAtIndex(index, Tumbler.Center)
     }
 
     function isAlarm(index) {
@@ -72,13 +69,12 @@ Rectangle {
         return data.type
     }
 
-    function addItem(text0,text1,text2,type) {
+    function addItem(text0, text1, text2, type) {
         view.model.append({
                               "text0": text0,
-                              "text1":text1,
-                              "text2":text2,
+                              "text1": text1,
+                              "text2": text2,
                               "type": type
-
                           })
     }
 
@@ -137,51 +133,57 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Rectangle {
-                    height: itemH - 6
+                    height: itemH - 2
                     width: 6
                     radius: 2
                     anchors.leftMargin: 1
                     color: getListEleHeadColor(type)
-                    //visible: isAlarm(view.currentIndex)
+
                     Text {
                         anchors.centerIn: parent
                     }
                 }
 
+                TextArea {
+                    id: item0
+                    readOnly: true
+                    width: parent.width
+                    wrapMode: TextArea.NoWrap
+                    text: text0
+                }
 
+                Text {
+                    id: item1
+                    Layout.preferredWidth: parent.width / 4
+                    Layout.alignment: Qt.AlignHCenter
+                    horizontalAlignment: Text.AlignRight
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                    width: parent.width
+                    wrapMode: TextArea.NoWrap
+                    color: isHighPriority ? "#EF5B98" : "#000000"
+                    text: text1
+                }
 
-                    TextArea {
-                        id: item0
-                        width: parent.width
-                        wrapMode: TextArea.Wrap
-                        text: text0
-                    }
+                Text {
+                    id: item2
+                    Layout.preferredWidth: parent.width / 3
+                    Layout.alignment: Qt.AlignHCenter
+                    horizontalAlignment: Text.AlignRight
+                    elide: Text.ElideRight
+                    width: parent.width
+                    wrapMode: TextArea.NoWrap
+                    text: text2
+                    anchors.rightMargin: 10
+                }
 
-                    TextArea {
-                        id: item1
-
-                        width: parent.width
-                        wrapMode: TextArea.Wrap
-                        color: isHighPriority ? "#EF5B98" : "#000000"
-                        text: text1
-                    }
-
-                    TextArea {
-                        id: item2
-                        anchors.alignWhenCentered: right
-                        width: parent.width
-                        wrapMode: TextArea.Wrap
-                        text: text2
-                    }
-
-                    TextArea {
-                        id: item_type
-                        visible: false
-                        width: parent.width
-                        wrapMode: TextArea.Wrap
-                        text: type
-                    }
-
+                TextArea {
+                    id: item_type
+                    visible: false
+                    width: parent.width
+                    wrapMode: TextArea.Wrap
+                    text: type
+                }
             }
 
             MouseArea {

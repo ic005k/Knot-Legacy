@@ -142,12 +142,14 @@ Rectangle {
 
                     TextArea {
                         id: text1
+                        readOnly: true
                         width: parent.width
                         wrapMode: TextArea.Wrap
                         text: time
                     }
                     TextArea {
                         id: text2
+                        readOnly: true
                         visible: false
                         width: parent.width
                         wrapMode: TextArea.Wrap
@@ -155,7 +157,7 @@ Rectangle {
                     }
                     TextArea {
                         id: text3
-
+                        readOnly: true
                         width: parent.width
                         wrapMode: TextArea.Wrap
                         color: isHighPriority ? "#EF5B98" : "#000000"
