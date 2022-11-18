@@ -66,7 +66,8 @@ class dlgTodo : public QDialog {
   void addItem(QString strTime, int type, QString strText);
   int getItemType(int index);
   void modifyType(int index, int type);
-  public slots:
+
+ public slots:
   void on_btnOK_clicked();
   void on_btnCancel_clicked();
   void isAlarm(int index);

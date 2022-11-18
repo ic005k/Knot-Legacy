@@ -9,5 +9,7 @@
         <file>src/imgview.qml</file>
         <file>src/qmlsrc/todo.qml</file>
         <file>src/qmlsrc/TodoModel.qml</file>
+        <file>src/qmlsrc/main.qml</file>
+        <file>src/qmlsrc/MainModel.qml</file>
     </qresource>
 </RCC>

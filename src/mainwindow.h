@@ -361,7 +361,12 @@ class MainWindow : public QMainWindow {
   int calcStringPixelHeight(QFont font, int n_font_size);
   void on_hSlider_sliderMoved(int position);
 
- public slots:
+  void addItem(QString text0, QString text1, QString text2, int type);
+  void delItem(int index);
+  int getCount();
+  void clearAll();
+  void reloadMain();
+  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();

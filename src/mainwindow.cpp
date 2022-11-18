@@ -244,6 +244,7 @@ MainWindow::MainWindow(QWidget *parent)
   initHardStepSensor();
 
   initMain = false;
+  reloadMain();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -1942,6 +1943,8 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 
     Reg.setValue("CurrentIndex", index);
   }
+
+  reloadMain();
 
   series->clear();
   m_scatterSeries->clear();
@@ -3881,6 +3884,7 @@ void MainWindow::init_UIWidget() {
   ui->quickWidgetMemo->rootContext()->setContextProperty("strText", "");
 
   ui->qwTodo->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/todo.qml")));
+  ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4936,4 +4940,61 @@ void MainWindow::on_btnRestoreRecycle_clicked() {
 
 void MainWindow::on_textEdit_textChanged() {
   mydlgTodo->on_textEdit_textChanged();
+}
+
+void MainWindow::addItem(QString text0, QString text1, QString text2,
+                         int type) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "addItem", Q_ARG(QVariant, text0),
+                            Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
+                            Q_ARG(QVariant, type));
+}
+
+void MainWindow::delItem(int index) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "delItem", Q_ARG(QVariant, index));
+}
+
+int MainWindow::getCount() {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject *)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
+void MainWindow::clearAll() {
+  int count = getCount();
+  for (int i = 0; i < count; i++) {
+    delItem(0);
+  }
+}
+
+void MainWindow::reloadMain() {
+  clearAll();
+  QTreeWidget *tw = get_tw(tabData->currentIndex());
+  int total = tw->topLevelItemCount();
+  int a;
+  if (total - 5 > 0)
+    a = total - 5;
+  else
+    a = 0;
+
+  for (int i = a; i < total; i++) {
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
+    QString text0, text1, text2;
+    text0 = topItem->text(0);
+    text1 = topItem->text(1);
+    text2 = topItem->text(2);
+    addItem(text0, text1, text2, 1);
+
+    int childCount = topItem->childCount();
+    for (int j = 0; j < childCount; j++) {
+      QTreeWidgetItem *childItem = topItem->child(j);
+      text0 = childItem->text(0);
+      text1 = childItem->text(1);
+      text2 = childItem->text(2);
+      addItem(text0, text1, text2, 0);
+    }
+  }
 }
