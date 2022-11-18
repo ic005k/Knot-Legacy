@@ -2459,13 +2459,13 @@ QRadioButton::indicator:checked {
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>40</height>
+           <height>32</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>40</height>
+           <height>32</height>
           </size>
          </property>
          <property name="placeholderText">

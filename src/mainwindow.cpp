@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.45";
+QString ver = "1.0.46";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -196,11 +196,11 @@ void MainWindow::SaveFile(QString SaveType) {
 
     saveTab();
     EditRecord::saveCustomDesc();
-    dlgTodo::saveTodo();
+    // dlgTodo::saveTodo();
   }
 
   if (SaveType == "todo") {
-    dlgTodo::saveTodo();
+    // dlgTodo::saveTodo();
   }
 
   if (SaveType == "notes") {
@@ -645,12 +645,9 @@ void MainWindow::init_ChartWidget() {
   QBrush brush = pal.window();
   red = brush.color().red();
   if (red < 55) {
-    mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
     chartMonth->setTheme(QChart::ChartThemeDark);
     chartDay->setTheme(QChart::ChartThemeDark);
   } else {
-    mydlgTodo->ui->listWidget->setStyleSheet(
-        mydlgTodo->ui->listWidget->styleSheet());
     chartMonth->setTheme(QChart::ChartThemeLight);
     chartDay->setTheme(QChart::ChartThemeLight);
   }
@@ -2270,6 +2267,16 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           return true;
         }
       }
+
+      if (!ui->frameTodo->isHidden()) {
+        on_btnBackTodo_clicked();
+        return true;
+      }
+
+      if (!ui->frameRecycle->isHidden()) {
+        on_btnReturnRecycle_clicked();
+        return true;
+      }
     }
   }
 
@@ -2846,7 +2853,6 @@ void MainWindow::on_btnTodo_clicked() {
   ui->frameTodo->show();
 
   mydlgTodo->refreshAlarm();
-  mydlgTodo->setAlartTop(mydlgTodo->minAlartItem);
 }
 
 void MainWindow::on_rbFreq_clicked() {
@@ -2878,14 +2884,11 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   if (c_red != red) {
     red = c_red;
     if (red < 55) {
-      mydlgTodo->ui->listWidget->setStyleSheet(mydlgTodo->styleDark);
       chartMonth->setTheme(QChart::ChartThemeDark);
       chartDay->setTheme(QChart::ChartThemeDark);
     }
 
     else {
-      mydlgTodo->ui->listWidget->setStyleSheet(
-          mydlgTodo->ui->listWidget->styleSheet());
       chartMonth->setTheme(QChart::ChartThemeLight);
       chartDay->setTheme(QChart::ChartThemeLight);
     }
@@ -4929,4 +4932,8 @@ void MainWindow::on_btnDelRecycle_clicked() { mydlgTodo->on_btnDel_clicked(); }
 
 void MainWindow::on_btnRestoreRecycle_clicked() {
   mydlgTodo->on_btnRestore_clicked();
+}
+
+void MainWindow::on_textEdit_textChanged() {
+  mydlgTodo->on_textEdit_textChanged();
 }

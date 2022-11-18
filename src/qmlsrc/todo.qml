@@ -124,8 +124,8 @@ Rectangle {
                     width: parent.width
                     spacing: 8
                     Layout.fillWidth: false
-                    anchors.left: parent.left
                     anchors.leftMargin: 10
+                    anchors.rightMargin: 10
 
                     TextArea {
                         id: text1
@@ -136,6 +136,7 @@ Rectangle {
                     TextArea {
                         id: text2
                         width: parent.width
+
                         wrapMode: TextArea.Wrap
                         color: isHighPriority ? "#EF5B98" : "#000000"
                         text: dototext
@@ -151,11 +152,11 @@ Rectangle {
                 onPressed: {
                     clickPos = Qt.point(mouse.x, mouse.y)
                 }
-                onReleased: {
+                onReleased:   {
                     var delta = Qt.point(mouse.x - clickPos.x,
                                          mouse.y - clickPos.y)
                     console.debug("delta.x: " + delta.x)
-                    if ((delta.x < -30) && (aBtnShow.running === false)
+                    if ((delta.x < 0) && (aBtnShow.running === false)
                             && (delBtn.width == 0)) {
                         aBtnShow.start()
                     } else if (aBtnHide.running === false
