@@ -54,14 +54,14 @@ Rectangle {
         return data.time + "|=|" + data.dototext
     }
 
-    function getTime(itemIndex) {
+    function getText0(itemIndex) {
         var data = view.model.get(itemIndex)
-        return data.time
+        return data.text0
     }
 
-    function getTodoText(itemIndex) {
+    function getTop(itemIndex) {
         var data = view.model.get(itemIndex)
-        return data.dototext
+        return data.text_top
     }
 
     function getType(itemIndex) {
@@ -69,12 +69,13 @@ Rectangle {
         return data.type
     }
 
-    function addItem(text0, text1, text2, type) {
+    function addItem(text0, text1, text2, type, text_top) {
         view.model.append({
                               "text0": text0,
                               "text1": text1,
                               "text2": text2,
-                              "type": type
+                              "type": type,
+                              "text_top": text_top
                           })
     }
 
@@ -144,11 +145,11 @@ Rectangle {
                     }
                 }
 
-                TextArea {
+                Text {
                     id: item0
-                    readOnly: true
                     width: parent.width
                     wrapMode: TextArea.NoWrap
+                    font.bold: type
                     text: text0
                 }
 
@@ -181,8 +182,16 @@ Rectangle {
                     id: item_type
                     visible: false
                     width: parent.width
-                    wrapMode: TextArea.Wrap
+                    wrapMode: TextArea.NoWrap
                     text: type
+                }
+
+                Text {
+                    id: item_top
+                    visible: false
+                    width: parent.width
+                    wrapMode: TextArea.NoWrap
+                    text: text_top
                 }
             }
 

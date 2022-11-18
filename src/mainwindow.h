@@ -361,7 +361,6 @@ class MainWindow : public QMainWindow {
   int calcStringPixelHeight(QFont font, int n_font_size);
   void on_hSlider_sliderMoved(int position);
 
-  void addItem(QString text0, QString text1, QString text2, int type);
   void delItem(int index);
   int getCount();
   void clearAll();
@@ -369,7 +368,12 @@ class MainWindow : public QMainWindow {
   void setCurrentIndex(int index);
   void gotoEnd();
   void gotoIndex(int index);
-  public slots:
+  void addItem(QString text0, QString text1, QString text2, int type,
+               QString topitem);
+  QString getTop(int index);
+  QString getText0(int index);
+  int getItemType(int index);
+ public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();

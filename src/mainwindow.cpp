@@ -4959,12 +4959,39 @@ void MainWindow::on_textEdit_textChanged() {
   mydlgTodo->on_textEdit_textChanged();
 }
 
-void MainWindow::addItem(QString text0, QString text1, QString text2,
-                         int type) {
+void MainWindow::addItem(QString text0, QString text1, QString text2, int type,
+                         QString topitem) {
   QQuickItem *root = mw_one->ui->qwMain->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "addItem", Q_ARG(QVariant, text0),
                             Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
-                            Q_ARG(QVariant, type));
+                            Q_ARG(QVariant, type), Q_ARG(QVariant, topitem));
+}
+
+QString MainWindow::getTop(int index) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QVariant itemTime;
+  QMetaObject::invokeMethod((QObject *)root, "getTop",
+                            Q_RETURN_ARG(QVariant, itemTime),
+                            Q_ARG(QVariant, index));
+  return itemTime.toString();
+}
+
+QString MainWindow::getText0(int index) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject *)root, "getText0",
+                            Q_RETURN_ARG(QVariant, item),
+                            Q_ARG(QVariant, index));
+  return item.toString();
+}
+
+int MainWindow::getItemType(int index) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QVariant itemType;
+  QMetaObject::invokeMethod((QObject *)root, "getType",
+                            Q_RETURN_ARG(QVariant, itemType),
+                            Q_ARG(QVariant, index));
+  return itemType.toInt();
 }
 
 void MainWindow::delItem(int index) {
@@ -5018,11 +5045,12 @@ void MainWindow::reloadMain() {
 
   for (int i = a; i < total; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
-    QString text0, text1, text2;
+    QString text0, text1, text2, topitem;
     text0 = topItem->text(0);
     text1 = topItem->text(1);
     text2 = topItem->text(2);
-    addItem(text0, text1, text2, 1);
+    topitem = text0;
+    addItem(text0, text1, text2, 1, topitem);
 
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
@@ -5030,7 +5058,7 @@ void MainWindow::reloadMain() {
       text0 = childItem->text(0);
       text1 = childItem->text(1);
       text2 = childItem->text(2);
-      addItem(text0, text1, text2, 0);
+      addItem(text0, text1, text2, 0, topitem);
     }
   }
 
