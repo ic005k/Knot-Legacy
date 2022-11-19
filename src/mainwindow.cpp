@@ -1815,8 +1815,10 @@ void MainWindow::on_twItemClicked() {
 void MainWindow::set_Time() {
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
   QTreeWidgetItem *item = tw->currentItem();
+  QTreeWidgetItem *topItem = item->parent();
+  QString newtime = myEditRecord->ui->lblTime->text().trimmed();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
-    item->setText(0, myEditRecord->ui->lblTime->text().trimmed());
+    item->setText(0, newtime);
     QString sa = myEditRecord->ui->editAmount->text().trimmed();
     if (sa == "")
       item->setText(1, "");
@@ -1839,9 +1841,31 @@ void MainWindow::set_Time() {
     else
       item->parent()->setText(2, strAmount);
 
+    int childRow0 = tw->currentIndex().row();
     sort_childItem(item);
 
+    int childRow1 = 0;
+    for (int i = 0; i < topItem->childCount(); i++) {
+      QTreeWidgetItem *childItem = topItem->child(i);
+
+      QString time = childItem->text(0).split(".").at(1);
+      time = time.trimmed();
+
+      if (time == newtime) {
+        childRow1 = i;
+        break;
+      }
+    }
+
+    int newrow;
+    int row = getCurrentIndex();
+    if (childRow0 - childRow1 == 0) newrow = row;
+    if (childRow0 - childRow1 < 0) newrow = row + childRow1 - childRow0;
+    if (childRow0 - childRow1 > 0) newrow = row - (childRow0 - childRow1);
+
     reloadMain();
+    gotoIndex(newrow);
+    setCurrentIndex(newrow);
   }
 }
 
@@ -3702,7 +3726,7 @@ void MainWindow::init_UIWidget() {
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
-  tabData->setFixedHeight(tabData->tabBar()->height());
+  tabData->setFixedHeight(tabData->tabBar()->height() + 4);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &MainWindow::on_KVChanged);
@@ -3749,7 +3773,7 @@ void MainWindow::init_UIWidget() {
   ui->frame_charts->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frame_charts->layout()->setSpacing(0);
   frameChartHeight = 160;
-  ui->frame_charts->setMaximumHeight(frameChartHeight);
+  ui->frame_charts->setFixedHeight(frameChartHeight);
   tabChart->setCurrentIndex(0);
 
   ui->frame_tab->layout()->setContentsMargins(0, 0, 0, 0);
@@ -3893,6 +3917,7 @@ void MainWindow::init_UIWidget() {
   ui->quickWidget->rootContext()->setContextProperty("mw_one", mw_one);
 
   ui->qwTodo->rootContext()->setContextProperty("mydlgTodo", mydlgTodo);
+  ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
 
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
@@ -4220,7 +4245,7 @@ void MainWindow::on_btnZoom_clicked() {
     axisY->setTickCount(yScale);
     axisY2->setTickCount(yScale);
     ui->frame_tab->show();
-    ui->frame_charts->setMaximumHeight(frameChartHeight);
+    ui->frame_charts->setFixedHeight(frameChartHeight);
   }
 }
 
@@ -5031,6 +5056,14 @@ void MainWindow::gotoIndex(int index) {
                             Q_ARG(QVariant, index));
 }
 
+int MainWindow::getCurrentIndex() {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QVariant itemIndex;
+  QMetaObject::invokeMethod((QObject *)root, "getCurrentIndex",
+                            Q_RETURN_ARG(QVariant, itemIndex));
+  return itemIndex.toInt();
+}
+
 void MainWindow::reloadMain() {
   clearAll();
   QTreeWidget *tw = get_tw(tabData->currentIndex());
@@ -5065,4 +5098,47 @@ void MainWindow::reloadMain() {
   int count = getCount();
   gotoIndex(count - 1);
   setCurrentIndex(count - 1);
+}
+
+void MainWindow::reeditData() {
+  if (setTWCurrentItem()) {
+    on_twItemDoubleClicked();
+  }
+}
+
+void MainWindow::clickData() {
+  if (setTWCurrentItem()) on_twItemClicked();
+}
+
+bool MainWindow::setTWCurrentItem() {
+  bool isSel = false;
+  int row = getCurrentIndex();
+  if (row < 0) return false;
+
+  int type = getItemType(row);
+  if (type == 1) return false;
+
+  QString textTop = getTop(row);
+  QString text0 = getText0(row);
+  QStringList list = text0.split(".");
+  int childIndex;
+  if (list.count() > 0) {
+    childIndex = list.at(0).toInt() - 1;
+  }
+
+  if (childIndex < 0) return false;
+
+  QTreeWidget *tw = get_tw(tabData->currentIndex());
+  int count = tw->topLevelItemCount();
+  for (int i = 0; i < count; i++) {
+    QTreeWidgetItem *topItem = tw->topLevelItem(count - 1 - i);
+    if (topItem->text(0) == textTop) {
+      QTreeWidgetItem *childItem = topItem->child(childIndex);
+      tw->setCurrentItem(childItem, 0);
+      isSel = true;
+      break;
+    }
+  }
+
+  return isSel;
 }

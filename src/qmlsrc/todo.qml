@@ -298,7 +298,7 @@ Rectangle {
         case 1:
             return "red"
         case 2:
-            return "yellow"
+            return "orange"
         case 3:
             return "lightblue"
         default:

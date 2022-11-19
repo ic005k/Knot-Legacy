@@ -163,6 +163,7 @@ Rectangle {
                     width: parent.width
                     wrapMode: TextArea.NoWrap
                     color: isHighPriority ? "#EF5B98" : "#000000"
+                    font.bold: type
                     text: text1
                 }
 
@@ -174,6 +175,7 @@ Rectangle {
                     elide: Text.ElideRight
                     width: parent.width
                     wrapMode: TextArea.NoWrap
+                    font.bold: type
                     text: text2
                     anchors.rightMargin: 10
                 }
@@ -217,18 +219,14 @@ Rectangle {
                 }
 
                 onClicked: {
-
                     view.currentIndex = index //实现item切换
-
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.time + "," + data.dototext + ", count=" + view.count)
-                    //console.log("Alarm=" + isAlarm(view.currentIndex))
+                    mw_one.clickData()
                 }
 
                 onDoubleClicked: {
-                    mydlgTodo.reeditText()
+                    mw_one.reeditData()
                     var data = view.model.get(view.currentIndex)
-                    console.log(data.time + "," + data.dototext + ", count=" + view.count)
+                    console.log(data.text0 + "," + data.type + ", count=" + view.count)
                 }
             }
 

@@ -845,7 +845,7 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QVBoxLayout" name="verticalLayout_15">
           <property name="leftMargin">
            <number>0</number>
           </property>
@@ -858,20 +858,7 @@
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item row="2" column="0">
-           <widget class="QLabel" name="lblStats">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Stats</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
+          <item>
            <widget class="QTabWidget" name="tabWidget">
             <property name="minimumSize">
              <size>
@@ -1009,7 +996,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item>
            <widget class="QQuickWidget" name="qwMain">
             <property name="minimumSize">
              <size>
@@ -1019,6 +1006,25 @@
             </property>
             <property name="resizeMode">
              <enum>QQuickWidget::SizeRootObjectToView</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStats">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Stats</string>
             </property>
            </widget>
           </item>
@@ -1275,6 +1281,21 @@ QRadioButton::indicator:checked {
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
+          <property name="leftMargin">
+           <number>1</number>
+          </property>
+          <property name="topMargin">
+           <number>1</number>
+          </property>
+          <property name="rightMargin">
+           <number>1</number>
+          </property>
+          <property name="bottomMargin">
+           <number>1</number>
+          </property>
+          <property name="horizontalSpacing">
+           <number>1</number>
+          </property>
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabCharts">
             <property name="minimumSize">

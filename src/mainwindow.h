@@ -373,7 +373,9 @@ class MainWindow : public QMainWindow {
   QString getTop(int index);
   QString getText0(int index);
   int getItemType(int index);
- public slots:
+  int getCurrentIndex();
+  bool setTWCurrentItem();
+  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();
@@ -518,7 +520,9 @@ class MainWindow : public QMainWindow {
   void on_btnZoomOut_clicked();
 
   void on_openKnotBakDir();
- private slots:
+  void reeditData();
+  void clickData();
+  private slots:
 
   void on_textBrowser_selectionChanged();
 
