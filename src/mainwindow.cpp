@@ -2663,6 +2663,8 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     if (book) mydlgReader->initReader();
   }
 
+  reloadMain();
+
   return true;
 }
 
@@ -3916,16 +3918,17 @@ void MainWindow::init_UIWidget() {
   ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
   ui->quickWidget->rootContext()->setContextProperty("mw_one", mw_one);
 
-  ui->qwTodo->rootContext()->setContextProperty("mydlgTodo", mydlgTodo);
-  ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
-
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
   ui->quickWidgetMemo->rootContext()->setContextProperty("FontSize", fontSize);
   ui->quickWidgetMemo->rootContext()->setContextProperty("strText", "");
 
+  ui->qwTodo->rootContext()->setContextProperty("mydlgTodo", mydlgTodo);
+  ui->qwTodo->rootContext()->setContextProperty("FontSize", fontSize);
   ui->qwTodo->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/todo.qml")));
+
+  ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
 }
 

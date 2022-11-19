@@ -142,6 +142,8 @@ Rectangle {
 
                     TextArea {
                         id: text1
+                        color: "gray"
+                        font.pixelSize: FontSize-1
                         readOnly: true
                         width: parent.width
                         wrapMode: TextArea.Wrap
@@ -157,6 +159,7 @@ Rectangle {
                     }
                     TextArea {
                         id: text3
+                        font.pixelSize: FontSize
                         readOnly: true
                         width: parent.width
                         wrapMode: TextArea.Wrap
@@ -191,9 +194,7 @@ Rectangle {
 
                     view.currentIndex = index //实现item切换
 
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.time + "," + data.dototext + ", count=" + view.count)
-                    //console.log("Alarm=" + isAlarm(view.currentIndex))
+
                 }
 
                 onDoubleClicked: {
