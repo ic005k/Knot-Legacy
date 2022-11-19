@@ -2787,6 +2787,21 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   return listMonth;
 }
 
+void MainWindow::gotoMainItem(QTreeWidgetItem *item) {
+  int count = getCount();
+  for (int i = 0; i < count; i++) {
+    QString text0 = getText0(i);
+    QString text1 = getText1(i);
+    QString text2 = getText2(i);
+    if (item->text(0) == text0 && item->text(1) == text1 &&
+        item->text(2) == text2) {
+      gotoIndex(i);
+      setCurrentIndex(i);
+      break;
+    }
+  }
+}
+
 void MainWindow::on_btnGo_clicked() {
   ui->lblStats->setText("");
   QTreeWidget *tw = get_tw(ui->tabWidget->currentIndex());
@@ -2796,6 +2811,9 @@ void MainWindow::on_btnGo_clicked() {
     tw->setFocus();
     QTreeWidgetItem *item = findItemList.at(findPos);
     tw->setCurrentItem(item);
+
+    gotoMainItem(item);
+
     ui->lblStats->setText(tr("Search Results : ") + item->parent()->text(0) +
                           "  ( " + QString::number(findPos + 1) + " -> " +
                           QString::number(total) + " ) ");
@@ -2807,7 +2825,16 @@ void MainWindow::on_btnGo_clicked() {
 QList<QTreeWidgetItem *> MainWindow::findDisc() {
   findItemList.clear();
   QTreeWidget *tw = get_tw(ui->tabWidget->currentIndex());
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+
+  int total = tw->topLevelItemCount();
+  int a;
+
+  if (total - days > 0)
+    a = total - days;
+  else
+    a = 0;
+
+  for (int i = a; i < total; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
     int count = topItem->childCount();
     for (int j = 0; j < count; j++) {
@@ -5013,6 +5040,24 @@ QString MainWindow::getText0(int index) {
   return item.toString();
 }
 
+QString MainWindow::getText1(int index) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject *)root, "getText1",
+                            Q_RETURN_ARG(QVariant, item),
+                            Q_ARG(QVariant, index));
+  return item.toString();
+}
+
+QString MainWindow::getText2(int index) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject *)root, "getText2",
+                            Q_RETURN_ARG(QVariant, item),
+                            Q_ARG(QVariant, index));
+  return item.toString();
+}
+
 int MainWindow::getItemType(int index) {
   QQuickItem *root = mw_one->ui->qwMain->rootObject();
   QVariant itemType;
@@ -5073,7 +5118,7 @@ void MainWindow::reloadMain() {
 
   int total = tw->topLevelItemCount();
   int a;
-  int days = 45;
+
   if (total - days > 0)
     a = total - days;
   else

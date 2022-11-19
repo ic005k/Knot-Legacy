@@ -144,7 +144,8 @@ Rectangle {
                     TextArea {
                         id: text1
                         color: "gray"
-                        font.pixelSize: FontSize - 1
+                        font.pixelSize: FontSize - 2
+                        font.bold: true
                         readOnly: true
                         width: parent.width
                         wrapMode: TextArea.Wrap

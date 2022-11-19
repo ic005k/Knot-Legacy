@@ -375,7 +375,10 @@ class MainWindow : public QMainWindow {
   int getItemType(int index);
   int getCurrentIndex();
   bool setTWCurrentItem();
-  public slots:
+  QString getText1(int index);
+  QString getText2(int index);
+  void gotoMainItem(QTreeWidgetItem *item);
+ public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();
@@ -522,7 +525,7 @@ class MainWindow : public QMainWindow {
   void on_openKnotBakDir();
   void reeditData();
   void clickData();
-  private slots:
+ private slots:
 
   void on_textBrowser_selectionChanged();
 
@@ -567,7 +570,7 @@ class MainWindow : public QMainWindow {
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;
-
+  int days = 45;
   int frameChartHeight;
   int yScale = 3;
   int x, y, w, h;

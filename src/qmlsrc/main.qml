@@ -26,10 +26,7 @@ Rectangle {
         view.positionViewAtIndex(index, Tumbler.Center)
     }
 
-    function isAlarm(index) {
-        //mydlgTodo.isAlarm(index)
-        return isHighPriority
-    }
+
 
     function setHighPriority(isFalse) {
         isHighPriority = isFalse
@@ -57,6 +54,16 @@ Rectangle {
     function getText0(itemIndex) {
         var data = view.model.get(itemIndex)
         return data.text0
+    }
+
+    function getText1(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.text1
+    }
+
+    function getText2(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.text2
     }
 
     function getTop(itemIndex) {
