@@ -67,6 +67,7 @@ class dlgTodo : public QDialog {
   int getItemType(int index);
   void modifyType(int index, int type);
 
+  int setItemHeight(QString strTodoText);
  public slots:
   void on_btnOK_clicked();
   void on_btnCancel_clicked();

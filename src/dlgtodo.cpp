@@ -147,7 +147,6 @@ void dlgTodo::on_btnAdd_clicked() {
   }
 
   QString strTime = QDateTime::currentDateTime().toString();
-
   insertItem(strTime, 0, str, 0);
 
   setCurrentIndex(0);
@@ -660,11 +659,13 @@ void dlgTodo::on_textEdit_textChanged() {
 
 void dlgTodo::insertItem(QString strTime, int type, QString strText,
                          int curIndex) {
+  int itemheight = setItemHeight(strText);
+
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "insertItem",
-                            Q_ARG(QVariant, strTime), Q_ARG(QVariant, type),
-                            Q_ARG(QVariant, strText),
-                            Q_ARG(QVariant, curIndex));
+  QMetaObject::invokeMethod(
+      (QObject*)root, "insertItem", Q_ARG(QVariant, strTime),
+      Q_ARG(QVariant, type), Q_ARG(QVariant, strText),
+      Q_ARG(QVariant, itemheight), Q_ARG(QVariant, curIndex));
 }
 
 int dlgTodo::getCurrentIndex() {
@@ -708,9 +709,12 @@ void dlgTodo::delItem(int index) {
 }
 
 void dlgTodo::addItem(QString strTime, int type, QString strText) {
+  int itemheight = setItemHeight(strText);
+
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, strTime),
-                            Q_ARG(QVariant, type), Q_ARG(QVariant, strText));
+                            Q_ARG(QVariant, type), Q_ARG(QVariant, strText),
+                            Q_ARG(QVariant, itemheight));
 }
 
 void dlgTodo::setCurrentIndex(int index) {
@@ -723,6 +727,19 @@ void dlgTodo::setHighPriority(bool isBool) {
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setHighPriority",
                             Q_ARG(QVariant, isBool));
+}
+
+int dlgTodo::setItemHeight(QString strTodoText) {
+  QFont font = this->font();
+  font.setPointSize(fontSize);
+  QFontMetrics fm(font);
+  int fontHeight = fm.height();
+
+  QTextEdit* edit = new QTextEdit;
+  edit->append(strTodoText);
+  int itemHeight = fontHeight * 2 + getEditTextHeight(edit);
+
+  return itemHeight;
 }
 
 int dlgTodo::getCount() {

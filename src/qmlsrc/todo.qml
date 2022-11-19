@@ -10,12 +10,11 @@ Rectangle {
     width: 500
     height: 400
 
-    property int itemH: 120
     property int itemCount: 0
     property bool isHighPriority: false
 
     function isAlarm(index) {
-        //mydlgTodo.isAlarm(index)
+
         return isHighPriority
     }
 
@@ -57,19 +56,21 @@ Rectangle {
         return data.type
     }
 
-    function addItem(strTime, type, strText) {
+    function addItem(strTime, type, strText, height) {
         view.model.append({
                               "time": strTime,
                               "type": type,
-                              "dototext": strText
+                              "dototext": strText,
+                              "itemheight": height
                           })
     }
 
-    function insertItem(strTime, type, strText, curIndex) {
+    function insertItem(strTime, type, strText, height, curIndex) {
         view.model.insert(curIndex, {
                               "time": strTime,
                               "type": type,
-                              "dototext": strText
+                              "dototext": strText,
+                              "itemheight": height
                           })
     }
 
@@ -103,7 +104,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: itemH
+            height: itemheight
             color: ListView.isCurrentItem ? "#DCDCDC" : "#ffffff" //选中颜色设置
 
             border.width: 1
@@ -120,7 +121,7 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Rectangle {
-                    height: itemH - 6
+                    height: itemheight - 6
                     width: 6
                     radius: 2
                     anchors.leftMargin: 1
@@ -143,7 +144,7 @@ Rectangle {
                     TextArea {
                         id: text1
                         color: "gray"
-                        font.pixelSize: FontSize-1
+                        font.pixelSize: FontSize - 1
                         readOnly: true
                         width: parent.width
                         wrapMode: TextArea.Wrap
@@ -165,6 +166,14 @@ Rectangle {
                         wrapMode: TextArea.Wrap
                         color: isHighPriority ? "#EF5B98" : "#000000"
                         text: dototext
+                    }
+                    TextArea {
+                        id: text4
+                        readOnly: true
+                        visible: false
+                        width: parent.width
+                        wrapMode: TextArea.Wrap
+                        text: itemheight
                     }
                 }
             }
@@ -193,8 +202,7 @@ Rectangle {
                 onClicked: {
 
                     view.currentIndex = index //实现item切换
-
-
+                    console.log("ItemHeight=" + text1.contentHeight + text3.contentHeight)
                 }
 
                 onDoubleClicked: {
