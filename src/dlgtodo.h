@@ -72,6 +72,7 @@ class dlgTodo : public QDialog {
   void reeditText();
   void addToRecycle();
   void isAlarm(int index);
+  void insertRecycle(QString strTime, int type, QString strText, int curIndex);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -101,7 +102,14 @@ class dlgTodo : public QDialog {
 
   void on_textEdit_textChanged();
 
- private:
+  void delItemRecycle(int index);
+  int getCountRecycle();
+  void clearAllRecycle();
+  int getCurrentIndexRecycle();
+  QString getItemTodoTextRecycle(int index);
+  QString getItemTimeRecycle(int index);
+  void addItemRecycle(QString strTime, int type, QString strText);
+  private:
   QListWidgetItem *editItem;
 
   QLabel *lblModi;

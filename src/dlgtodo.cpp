@@ -7,7 +7,7 @@
 QString highLblStyle = "color:rgb(212,35,122)";
 int highCount;
 QString orgLblStyle;
-QListWidget* listRecycle;
+
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
 extern bool loading, isBreak, isImport;
@@ -15,16 +15,12 @@ extern int fontSize;
 
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   ui->setupUi(this);
-  listRecycle = new QListWidget;
-  listRecycle = mw_one->ui->listRecycle;
 
   mw_one->set_btnStyle(this);
 
   this->installEventFilter(this);
   mw_one->ui->textEdit->viewport()->installEventFilter(this);
-  listRecycle->installEventFilter(this);
   mw_one->ui->qwTodo->installEventFilter(this);
-  listRecycle->viewport()->installEventFilter(this);
 
   this->setModal(true);
 
@@ -33,13 +29,6 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
 
   // 删除线风格
   // ui->listRecycle->setStyleSheet("text-decoration: line-through;");
-  listRecycle->setWordWrap(true);
-
-  listRecycle->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  QScroller::grabGesture(listRecycle, QScroller::LeftMouseButtonGesture);
-  listRecycle->horizontalScrollBar()->setHidden(true);
-  listRecycle->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  mw_one->setSCrollPro(listRecycle);
 
   mw_one->ui->frameTodo->layout()->setContentsMargins(1, 1, 1, 1);
   mw_one->ui->frameTodo->layout()->setSpacing(2);
@@ -93,16 +82,17 @@ void dlgTodo::saveTodo() {
     Reg.setValue("/Todo/Type" + QString::number(i), type);
   }
 
-  int count1 = listRecycle->count();
+  int count1 = getCountRecycle();
   Reg.setValue("/Todo/Count1", count1);
   for (int i = 0; i < count1; i++) {
-    QString str = listRecycle->item(i)->text().trimmed();
+    QString doneTime = getItemTimeRecycle(i);
+    QString str = getItemTodoTextRecycle(i);
     Reg.setValue("/Todo/ItemRecycle" + QString::number(i), str);
+    Reg.setValue("/Todo/ItemRecycleDoneTime" + QString::number(i), doneTime);
   }
 }
 
 void dlgTodo::init_Items() {
-  mw_one->ui->listRecycle->clear();
   QString ini_file;
   if (isImport) {
     ini_file = iniFile;
@@ -122,11 +112,14 @@ void dlgTodo::init_Items() {
     addItem(strTime, type, str);
   }
 
+  clearAllRecycle();
   int count1 = Reg.value("/Todo/Count1").toInt();
   for (int i = 0; i < count1; i++) {
+    QString doneTime =
+        Reg.value("/Todo/ItemRecycleDoneTime" + QString::number(i)).toString();
     QString str =
         Reg.value("/Todo/ItemRecycle" + QString::number(i)).toString();
-    listRecycle->addItem(str);
+    addItemRecycle(doneTime, 0, str);
   }
 
   refreshAlarm();
@@ -490,11 +483,6 @@ void dlgTodo::sendMsgAlarm(QString text) {
 void dlgTodo::on_btnRecycle_clicked() {
   mw_one->ui->frameTodo->hide();
   mw_one->ui->frameRecycle->show();
-
-  if (mw_one->ui->listRecycle->count() > 0) {
-    mw_one->ui->listRecycle->setFocus();
-    mw_one->ui->listRecycle->setCurrentRow(0);
-  }
 }
 
 void dlgTodo::on_btnReturn_clicked() {
@@ -502,28 +490,24 @@ void dlgTodo::on_btnReturn_clicked() {
   mw_one->ui->frameTodo->show();
 }
 
-void dlgTodo::on_btnClear_clicked() { mw_one->ui->listRecycle->clear(); }
+void dlgTodo::on_btnClear_clicked() { clearAllRecycle(); }
 
 void dlgTodo::on_btnRestore_clicked() {
-  if (mw_one->ui->listRecycle->count() == 0) return;
+  if (getCountRecycle() == 0) return;
 
-  QString str1 = mw_one->ui->listRecycle->currentItem()->text();
-  QStringList list0 = str1.split("\n");
-  if (list0.count() > 0) str1 = str1.replace(list0.at(0) + "\n", "");
-
+  int row = getCurrentIndexRecycle();
   QString strTime = QDate::currentDate().toString("ddd MM dd yyyy") + "  " +
                     QTime::currentTime().toString();
-  QString strText = str1.trimmed();
+  QString strText = getItemTodoTextRecycle(row);
   addItem(strTime, 0, strText);
 
   on_btnDel_clicked();
 }
 
 void dlgTodo::on_btnDel_clicked() {
-  if (mw_one->ui->listRecycle->currentIndex().isValid()) {
-    int row = mw_one->ui->listRecycle->currentRow();
-    mw_one->ui->listRecycle->takeItem(row);
-  }
+  int row = getCurrentIndexRecycle();
+  if (row < 0) return;
+  delItemRecycle(row);
 }
 
 void dlgTodo::refreshAlarm() {
@@ -668,6 +652,17 @@ void dlgTodo::insertItem(QString strTime, int type, QString strText,
       Q_ARG(QVariant, itemheight), Q_ARG(QVariant, curIndex));
 }
 
+void dlgTodo::insertRecycle(QString strTime, int type, QString strText,
+                            int curIndex) {
+  int itemheight = setItemHeight(strText);
+
+  QQuickItem* root = mw_one->ui->qwRecycle->rootObject();
+  QMetaObject::invokeMethod(
+      (QObject*)root, "insertRecycle", Q_ARG(QVariant, strTime),
+      Q_ARG(QVariant, type), Q_ARG(QVariant, strText),
+      Q_ARG(QVariant, itemheight), Q_ARG(QVariant, curIndex));
+}
+
 int dlgTodo::getCurrentIndex() {
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
   QVariant itemIndex;
@@ -676,8 +671,25 @@ int dlgTodo::getCurrentIndex() {
   return itemIndex.toInt();
 }
 
+int dlgTodo::getCurrentIndexRecycle() {
+  QQuickItem* root = mw_one->ui->qwRecycle->rootObject();
+  QVariant itemIndex;
+  QMetaObject::invokeMethod((QObject*)root, "getCurrentIndex",
+                            Q_RETURN_ARG(QVariant, itemIndex));
+  return itemIndex.toInt();
+}
+
 QString dlgTodo::getItemTime(int index) {
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QVariant itemTime;
+  QMetaObject::invokeMethod((QObject*)root, "getTime",
+                            Q_RETURN_ARG(QVariant, itemTime),
+                            Q_ARG(QVariant, index));
+  return itemTime.toString();
+}
+
+QString dlgTodo::getItemTimeRecycle(int index) {
+  QQuickItem* root = mw_one->ui->qwRecycle->rootObject();
   QVariant itemTime;
   QMetaObject::invokeMethod((QObject*)root, "getTime",
                             Q_RETURN_ARG(QVariant, itemTime),
@@ -703,8 +715,22 @@ QString dlgTodo::getItemTodoText(int index) {
   return itemTodoText.toString();
 }
 
+QString dlgTodo::getItemTodoTextRecycle(int index) {
+  QQuickItem* root = mw_one->ui->qwRecycle->rootObject();
+  QVariant itemTodoText;
+  QMetaObject::invokeMethod((QObject*)root, "getTodoText",
+                            Q_RETURN_ARG(QVariant, itemTodoText),
+                            Q_ARG(QVariant, index));
+  return itemTodoText.toString();
+}
+
 void dlgTodo::delItem(int index) {
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+}
+
+void dlgTodo::delItemRecycle(int index) {
+  QQuickItem* root = mw_one->ui->qwRecycle->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
@@ -712,6 +738,15 @@ void dlgTodo::addItem(QString strTime, int type, QString strText) {
   int itemheight = setItemHeight(strText);
 
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, strTime),
+                            Q_ARG(QVariant, type), Q_ARG(QVariant, strText),
+                            Q_ARG(QVariant, itemheight));
+}
+
+void dlgTodo::addItemRecycle(QString strTime, int type, QString strText) {
+  int itemheight = setItemHeight(strText);
+
+  QQuickItem* root = mw_one->ui->qwRecycle->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, strTime),
                             Q_ARG(QVariant, type), Q_ARG(QVariant, strText),
                             Q_ARG(QVariant, itemheight));
@@ -750,6 +785,14 @@ int dlgTodo::getCount() {
   return itemCount.toInt();
 }
 
+int dlgTodo::getCountRecycle() {
+  QQuickItem* root = mw_one->ui->qwRecycle->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
 void dlgTodo::modifyTime(int index, QString strTime) {
   QQuickItem* root = mw_one->ui->qwTodo->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "modifyItemTime",
@@ -773,6 +816,13 @@ void dlgTodo::clearAll() {
   int count = getCount();
   for (int i = 0; i < count; i++) {
     delItem(0);
+  }
+}
+
+void dlgTodo::clearAllRecycle() {
+  int count = getCountRecycle();
+  for (int i = 0; i < count; i++) {
+    delItemRecycle(0);
   }
 }
 
@@ -883,11 +933,10 @@ void dlgTodo::reeditText() {
 void dlgTodo::addToRecycle() {
   int row = getCurrentIndex();
   QString strTodoText = getItemTodoText(row);
-  QListWidgetItem* item = new QListWidgetItem;
-  item->setSizeHint(QSize(listRecycle->width() - 16, 80));
-  item->setText(QDateTime::currentDateTime().toString() + "  " + tr("Done") +
-                "\n" + strTodoText);
-  mw_one->ui->listRecycle->insertItem(0, item);
+  QString doneTime =
+      QDateTime::currentDateTime().toString() + "  " + tr("Done");
+
+  insertRecycle(doneTime, 0, strTodoText, 0);
 
   refreshAlarm();
 }

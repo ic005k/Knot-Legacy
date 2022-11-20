@@ -11,5 +11,6 @@
         <file>src/qmlsrc/main.qml</file>
         <file>src/qmlsrc/MainModel.qml</file>
         <file>src/qmlsrc/steps.qml</file>
+        <file>src/qmlsrc/todorecycle.qml</file>
     </qresource>
 </RCC>

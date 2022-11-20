@@ -241,13 +241,13 @@ void dlgSteps::setTableSteps(qlonglong steps) {
     addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
   }
   if (count > 0) {
-    QString strDate = getDate(count - 1);
-    if (strDate == QDate::currentDate().toString("ddd MM dd ")) {
+    QString date = getDate(count - 1);
+    if (date == QDate::currentDate().toString("ddd MM dd ")) {
       double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
                   steps / 100 / 1000;
       QString strKM = QString("%1").arg(km, 0, 'f', 2);
 
-      setTableData(count - 1, strDate, steps, strKM);
+      setTableData(count - 1, date, steps, strKM);
     } else
       addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
   }

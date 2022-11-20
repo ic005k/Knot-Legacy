@@ -3940,6 +3940,10 @@ void MainWindow::init_UIWidget() {
   ui->qwTodo->rootContext()->setContextProperty("FontSize", fontSize);
   ui->qwTodo->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/todo.qml")));
 
+  ui->qwRecycle->rootContext()->setContextProperty("FontSize", fontSize);
+  ui->qwRecycle->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/todorecycle.qml")));
+
   ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
 

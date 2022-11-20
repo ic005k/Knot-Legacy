@@ -161,6 +161,7 @@ DISTFILES += \
     src/qmlsrc/main.qml \
     src/qmlsrc/steps.qml \
     src/qmlsrc/todo.qml \
+    src/qmlsrc/todorecycle.qml \
     src/reader.qml \
     src/steps.qml
 

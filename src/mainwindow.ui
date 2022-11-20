@@ -246,7 +246,7 @@
                <string>Back</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/back.png</normaloff>:/res/back.png</iconset>
               </property>
               <property name="iconSize">
@@ -283,7 +283,7 @@
                <string>Open</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/open.png</normaloff>:/res/open.png</iconset>
               </property>
               <property name="iconSize">
@@ -314,7 +314,7 @@
                <string>Books</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/ReadList.png</normaloff>:/res/ReadList.png</iconset>
               </property>
               <property name="iconSize">
@@ -385,7 +385,7 @@
                <string>Previous</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/up.png</normaloff>:/res/up.png</iconset>
               </property>
               <property name="iconSize">
@@ -422,7 +422,7 @@
                <string>Next</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/down.png</normaloff>:/res/down.png</iconset>
               </property>
               <property name="iconSize">
@@ -453,7 +453,7 @@
                <string>List</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/dir.png</normaloff>:/res/dir.png</iconset>
               </property>
               <property name="iconSize">
@@ -484,7 +484,7 @@
                <string>Set Text</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/choice0.png</normaloff>:/res/choice0.png</iconset>
               </property>
               <property name="iconSize">
@@ -610,7 +610,7 @@
              <string>Menu</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/icon.png</normaloff>:/res/icon.png</iconset>
             </property>
             <property name="iconSize">
@@ -636,7 +636,7 @@
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/additem.png</normaloff>:/res/additem.png</iconset>
             </property>
             <property name="iconSize">
@@ -662,7 +662,7 @@
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/delitem.png</normaloff>:/res/delitem.png</iconset>
             </property>
             <property name="iconSize">
@@ -701,7 +701,7 @@
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/run.png</normaloff>:/res/run.png</iconset>
             </property>
             <property name="iconSize">
@@ -740,7 +740,7 @@
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/report.png</normaloff>:/res/report.png</iconset>
             </property>
             <property name="iconSize">
@@ -766,7 +766,7 @@
              <string>Remarks</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/remarks.png</normaloff>:/res/remarks.png</iconset>
             </property>
             <property name="iconSize">
@@ -792,7 +792,7 @@
              <string>Find</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/find.png</normaloff>:/res/find.png</iconset>
             </property>
             <property name="iconSize">
@@ -1072,7 +1072,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/tab.png</normaloff>:/res/tab.png</iconset>
               </property>
               <property name="iconSize">
@@ -1397,7 +1397,7 @@ QRadioButton::indicator:checked {
                <string>Reader</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/one.png</normaloff>:/res/one.png</iconset>
               </property>
               <property name="iconSize">
@@ -1423,7 +1423,7 @@ QRadioButton::indicator:checked {
                <string>ToDo</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/todo.png</normaloff>:/res/todo.png</iconset>
               </property>
               <property name="iconSize">
@@ -1449,7 +1449,7 @@ QRadioButton::indicator:checked {
                <string>Steps</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/step.png</normaloff>:/res/step.png</iconset>
               </property>
               <property name="iconSize">
@@ -1475,7 +1475,7 @@ QRadioButton::indicator:checked {
                <string>Notes</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/memos.png</normaloff>:/res/memos.png</iconset>
               </property>
               <property name="iconSize">
@@ -1501,7 +1501,7 @@ QRadioButton::indicator:checked {
                <string>Max</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/zoom.png</normaloff>:/res/zoom.png</iconset>
               </property>
               <property name="iconSize">
@@ -2238,7 +2238,7 @@ QRadioButton::indicator:checked {
                <string>Back</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/back.png</normaloff>:/res/back.png</iconset>
               </property>
               <property name="iconSize">
@@ -2276,7 +2276,7 @@ QRadioButton::indicator:checked {
                <string>High Priority</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/high.png</normaloff>:/res/high.png</iconset>
               </property>
               <property name="iconSize">
@@ -2314,7 +2314,7 @@ QRadioButton::indicator:checked {
                <string>Add</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/add.png</normaloff>:/res/add.png</iconset>
               </property>
               <property name="iconSize">
@@ -2352,7 +2352,7 @@ QRadioButton::indicator:checked {
                <string>Low Priority</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/low.png</normaloff>:/res/low.png</iconset>
               </property>
               <property name="iconSize">
@@ -2390,7 +2390,7 @@ QRadioButton::indicator:checked {
                <string>Modify</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/edit.png</normaloff>:/res/edit.png</iconset>
               </property>
               <property name="iconSize">
@@ -2428,7 +2428,7 @@ QRadioButton::indicator:checked {
                <string>Set Time</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/time.png</normaloff>:/res/time.png</iconset>
               </property>
               <property name="iconSize">
@@ -2466,7 +2466,7 @@ QRadioButton::indicator:checked {
                <string>Recycle</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/recycle.png</normaloff>:/res/recycle.png</iconset>
               </property>
               <property name="iconSize">
@@ -2537,42 +2537,15 @@ QRadioButton::indicator:checked {
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="listRecycle">
-         <property name="styleSheet">
-          <string notr="true">QListWidget::indicator{
-		width:25;
-		height:25;
-		right: 5px;
-}
-
-QListView {
-    outline: none;
-	/*text-decoration: line-through;*/
-}
-
-#listRecycle::item {
-    background-color: #ffffff;
-    color: gray;
-    border: transparent;
-    border-bottom: 1px solid #dbdbdb;
-    padding: 8px;
-	height: 85;
-	
-}
-
-#listRecycle::item:hover {
-    background-color: #f5f5f5;
-}
-
-#listRecycle::item:selected {
-    border-left: 5px solid #777777;
-	
-}
-
-</string>
+        <widget class="QQuickWidget" name="qwRecycle">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
+         <property name="resizeMode">
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -3163,8 +3136,6 @@ QRadioButton::indicator:checked {
    <header location="global">QtQuickWidgets/QQuickWidget</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../res.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
