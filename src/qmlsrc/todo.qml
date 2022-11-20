@@ -129,7 +129,7 @@ Rectangle {
             Rectangle {
                 id: rectan
                 anchors.fill: parent
-                width: ListView.view.width
+                width: parent.width
                 height: itemheight
                 border.width: 1
                 border.color: "lightsteelblue"
@@ -205,7 +205,7 @@ Rectangle {
 
                 MouseArea {
                     anchors.fill: parent
-                    onPressed:  {
+                    onClicked: {
                         view.currentIndex = index //实现item切换
                         //console.log("index=" + index + "  c_index=" + ListView.isCurrentItem)
                     }

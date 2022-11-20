@@ -249,7 +249,8 @@ void dlgSteps::setTableSteps(qlonglong steps) {
         QString strKM = QString("%1").arg(km, 0, 'f', 2);
 
         setTableData(count - 1, date, steps, strKM);
-      }
+      } else
+        addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
     }
   }
 

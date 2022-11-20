@@ -126,7 +126,7 @@ Rectangle {
                     radius: 2
                     anchors.leftMargin: 1
                     color: getListEleHeadColor(type)
-                    //visible: isAlarm(view.currentIndex)
+                    visible: false
                     Text {
                         anchors.centerIn: parent
                     }
@@ -222,7 +222,7 @@ Rectangle {
 
             Rectangle {
                 id: delBtn
-                visible: true
+                visible: false
                 height: parent.height
                 width: 0
                 color: "#FF0000"
