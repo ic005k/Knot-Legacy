@@ -567,6 +567,12 @@ class MainWindow : public QMainWindow {
 
   void on_textEdit_textChanged();
 
+  void on_btnBackSteps_clicked();
+
+  void on_btnPauseSteps_clicked();
+
+  void on_btnReset_clicked();
+
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;

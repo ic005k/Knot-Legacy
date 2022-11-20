@@ -35,9 +35,15 @@ class dlgSteps : public QDialog {
 
   void setMaxMark();
 
-  void appendDataToTable(QString str1, QString str2, QString str3);
+  void appendSteps(QString date, int steps, QString km);
+  int getCount();
+  QString getDate(int row);
+  int getSteps(int row);
 
- protected:
+  void delItem(int index);
+  QString getKM(int row);
+  void clearAll();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -47,7 +53,7 @@ class dlgSteps : public QDialog {
 
   void on_rbAlg2_clicked();
 
- private slots:
+ public slots:
   void on_btnBack_clicked();
 
   void on_btnPause_clicked();

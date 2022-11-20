@@ -77,7 +77,8 @@ bool dlgSteps::eventFilter(QObject* watch, QEvent* evn) {
 
 void dlgSteps::on_btnBack_clicked() {
   saveSteps();
-  close();
+  mw_one->ui->frameSteps->hide();
+  mw_one->ui->frameMain->show();
 }
 
 void dlgSteps::on_btnPause_clicked() {
@@ -130,18 +131,15 @@ void dlgSteps::saveSteps() {
   Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Alg2", mw_one->ui->rbAlg2->isChecked());
 
-  if (ui->tableWidget->rowCount() > 45) {
-    ui->tableWidget->removeRow(0);
+  if (getCount() > 45) {
+    delItem(0);
   }
-  int count = ui->tableWidget->rowCount();
+  int count = getCount();
   Reg.setValue("/Steps/Count", count);
   for (int i = 0; i < count; i++) {
-    Reg.setValue("/Steps/Table-" + QString::number(i) + "-0",
-                 ui->tableWidget->item(i, 0)->text());
-    Reg.setValue("/Steps/Table-" + QString::number(i) + "-1",
-                 ui->tableWidget->item(i, 1)->text());
-    Reg.setValue("/Steps/Table-" + QString::number(i) + "-2",
-                 ui->tableWidget->item(i, 2)->text());
+    Reg.setValue("/Steps/Table-" + QString::number(i) + "-0", getDate(i));
+    Reg.setValue("/Steps/Table-" + QString::number(i) + "-1", getSteps(i));
+    Reg.setValue("/Steps/Table-" + QString::number(i) + "-2", getKM(i));
   }
 
   QSettings Reg1(iniDir + "initsteps.ini", QSettings::IniFormat);
@@ -178,7 +176,7 @@ void dlgSteps::init_Steps() {
   mw_one->ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
 
   int count = Reg.value("/Steps/Count").toInt();
-  ui->tableWidget->setRowCount(0);
+  clearAll();
   for (int i = 0; i < count; i++) {
     QString str0 =
         Reg.value("/Steps/Table-" + QString::number(i) + "-0").toString();
@@ -191,13 +189,14 @@ void dlgSteps::init_Steps() {
                   steps / 100 / 1000;
       str2 = QString("%1").arg(km, 0, 'f', 2);
     }
-    addRecord(str0, steps, str2);
+    // addRecord(str0, steps, str2);
+    appendSteps(str0, steps, str2);
   }
 
   for (int i = 0; i < count; i++) {
-    if (QDate::currentDate().toString("ddd MM dd yyyy") ==
-        ui->tableWidget->item(i, 0)->text()) {
-      toDayInitSteps = ui->tableWidget->item(i, 1)->text().toInt();
+    QString date = getDate(i);
+    if (QDate::currentDate().toString("ddd MM dd") == date) {
+      toDayInitSteps = getSteps(i);
       break;
     }
   }
@@ -417,12 +416,51 @@ void dlgSteps::setMaxMark() {
   }
 }
 
-void dlgSteps::appendDataToTable(QString str1, QString str2, QString str3) {
-  Q_UNUSED(str1);
-  Q_UNUSED(str2);
-  Q_UNUSED(str3);
-  /*QQuickItem* root = ui->qwSteps->rootObject();
+void dlgSteps::appendSteps(QString date, int steps, QString km) {
+  QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
-                            Q_ARG(QVariant, str1), Q_ARG(QVariant, str2),
-                            Q_ARG(QVariant, str3));*/
+                            Q_ARG(QVariant, date), Q_ARG(QVariant, steps),
+                            Q_ARG(QVariant, km));
+}
+
+int dlgSteps::getCount() {
+  QQuickItem* root = mw_one->ui->qwSteps->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
+QString dlgSteps::getDate(int row) {
+  QQuickItem* root = mw_one->ui->qwSteps->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject*)root, "getDate",
+                            Q_RETURN_ARG(QVariant, item), Q_ARG(QVariant, row));
+  return item.toString();
+}
+
+int dlgSteps::getSteps(int row) {
+  QQuickItem* root = mw_one->ui->qwSteps->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject*)root, "getSteps",
+                            Q_RETURN_ARG(QVariant, item), Q_ARG(QVariant, row));
+  return item.toInt();
+}
+
+QString dlgSteps::getKM(int row) {
+  QQuickItem* root = mw_one->ui->qwSteps->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject*)root, "getKM",
+                            Q_RETURN_ARG(QVariant, item), Q_ARG(QVariant, row));
+  return item.toString();
+}
+
+void dlgSteps::delItem(int index) {
+  QQuickItem* root = mw_one->ui->qwSteps->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+}
+
+void dlgSteps::clearAll() {
+  int count = getCount();
+  for (int i = 0; i < count; i++) delItem(0);
 }

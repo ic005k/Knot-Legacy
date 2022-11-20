@@ -2319,6 +2319,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         on_btnReturnRecycle_clicked();
         return true;
       }
+
+      if (!ui->frameSteps->isHidden()) {
+        on_btnBackSteps_clicked();
+        return true;
+      }
     }
   }
 
@@ -5195,3 +5200,11 @@ bool MainWindow::setTWCurrentItem() {
 
   return isSel;
 }
+
+void MainWindow::on_btnBackSteps_clicked() { mydlgSteps->on_btnBack_clicked(); }
+
+void MainWindow::on_btnPauseSteps_clicked() {
+  mydlgSteps->on_btnPause_clicked();
+}
+
+void MainWindow::on_btnReset_clicked() { mydlgSteps->on_btnReset_clicked(); }

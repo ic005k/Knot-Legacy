@@ -15,6 +15,31 @@ Rectangle {
         tableModel.contentY = tableModel.contentHeight - tableModel.height
     }
 
+    function getItemCount() {
+
+        console.log("count=" + tableModel.rowCount())
+        return tableModel.rowCount()
+    }
+
+    function getDate(itemIndex) {
+        var data = tableModel.getRow(itemIndex)
+        return data.Date
+    }
+
+    function getSteps(itemIndex) {
+        var data = tableModel.getRow(itemIndex)
+        return data.Steps
+    }
+
+    function getKM(itemIndex) {
+        var data = tableModel.getRow(itemIndex)
+        return data.KM
+    }
+
+    function delItem(currentIndex) {
+        tableModel.removeRow(currentIndex)
+    }
+
     Rectangle {
         id: header
         width: parent.width
