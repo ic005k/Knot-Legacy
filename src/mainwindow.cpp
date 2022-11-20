@@ -261,24 +261,21 @@ void MainWindow::initHardStepSensor() {
 #endif
 
   if (isHardStepSensor == 0) {
-    if (mydlgSteps->ui->rbAlg1->isChecked()) mydlgSteps->on_rbAlg1_clicked();
-    if (mydlgSteps->ui->rbAlg2->isChecked()) mydlgSteps->on_rbAlg2_clicked();
+    if (ui->rbAlg1->isChecked()) mydlgSteps->on_rbAlg1_clicked();
+    if (ui->rbAlg2->isChecked()) mydlgSteps->on_rbAlg2_clicked();
   }
   if (isHardStepSensor == 1) {
-    mydlgSteps->ui->btnPause->click();
-    mydlgSteps->ui->gboxAlg->hide();
-    mydlgSteps->ui->lblSteps->hide();
-    mydlgSteps->ui->btnPause->hide();
-    mydlgSteps->ui->lblTotalRunTime->hide();
+    ui->btnPause->click();
+    ui->gboxAlg->hide();
+    ui->lblSteps->hide();
+    ui->btnPause->hide();
+    ui->lblTotalRunTime->hide();
     mydlgPre->ui->chkDebug->setChecked(false);
     mydlgPre->on_chkDebug_clicked();
     mydlgPre->ui->chkDebug->hide();
     ui->btnPause->hide();
     initTodayInitSteps();
     resetSteps = tc;
-
-    // QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep3Win");
-    // jo.callStaticMethod<int>("com.x/MyService", "setSleep3", "()I");
   }
 #endif
 }
@@ -446,7 +443,7 @@ void MainWindow::updateSteps() {
 void MainWindow::sendMsg(int CurTableCount) {
   Q_UNUSED(CurTableCount);
 #ifdef Q_OS_ANDROID
-  double sl = mydlgSteps->ui->editStepLength->text().toDouble();
+  double sl = ui->editStepLength->text().toDouble();
   double d0 = sl / 100;
   double x = CurTableCount * d0;
   double gl = x / 1000;
