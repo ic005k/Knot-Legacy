@@ -44,8 +44,6 @@ class dlgSteps : public QDialog {
   QString getKM(int row);
   void clearAll();
 
-  void setTableData(int index, int steps, QString km);
-
   void setScrollBarPos(double pos);
 
  protected:
@@ -71,6 +69,8 @@ class dlgSteps : public QDialog {
   void on_btnDefaultIntercept_clicked();
 
   void on_btnDefaultSlope_clicked();
+
+  void setTableData(int index, QString date, int steps, QString km);
 
  private:
   QBrush brush1 = QBrush(QColor(255, 228, 225));

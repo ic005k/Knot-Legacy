@@ -15,7 +15,7 @@ Rectangle {
 
     function setScrollBarPos(pos) {
         //vbar.setPosition(pos)
-        tableView.contentY= tableView.contentHeight-tableView.height
+        tableView.contentY = tableView.contentHeight - tableView.height
         console.log("contentH=" + tableView.contentHeight + "  h=" + tableView.height)
     }
 
@@ -39,9 +39,12 @@ Rectangle {
         return data.KM
     }
 
-    function setTableData(currentIndex, steps, km) {
-        tableModel.setData(currentIndex, "Setps", steps)
-        tableModel.setData(currentIndex, "KM", km)
+    function setTableData(currentIndex, date, steps, km) {
+        tableModel.setRow(currentIndex, {
+                              "Date": date,
+                              "Steps": steps,
+                              "KM": km
+                          })
     }
 
     function delItem(currentIndex) {
@@ -97,6 +100,7 @@ Rectangle {
                 color: "#666666"
             }
             // Always show
+
             /*onActiveChanged: {
                 active = true;
             }

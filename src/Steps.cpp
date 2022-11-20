@@ -247,7 +247,7 @@ void dlgSteps::setTableSteps(qlonglong steps) {
                   steps / 100 / 1000;
       QString strKM = QString("%1").arg(km, 0, 'f', 2);
 
-      setTableData(count - 1, steps, strKM);
+      setTableData(count - 1, strDate, steps, strKM);
     } else
       addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
   }
@@ -402,11 +402,11 @@ void dlgSteps::delItem(int index) {
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
-void dlgSteps::setTableData(int index, int steps, QString km) {
+void dlgSteps::setTableData(int index, QString date, int steps, QString km) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setTableData",
-                            Q_ARG(QVariant, index), Q_ARG(QVariant, steps),
-                            Q_ARG(QVariant, km));
+                            Q_ARG(QVariant, index), Q_ARG(QVariant, date),
+                            Q_ARG(QVariant, steps), Q_ARG(QVariant, km));
 }
 
 void dlgSteps::clearAll() {
