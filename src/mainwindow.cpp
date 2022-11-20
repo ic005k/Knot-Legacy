@@ -2935,16 +2935,12 @@ void MainWindow::on_rbFreq_clicked() {
   tabChart->setTabEnabled(1, true);
   isrbFreq = true;
   startRead(strDate);
-  chartMonth->setTitle(tr("Freq"));
-  chartDay->setTitle(tr("Freq"));
 }
 
 void MainWindow::on_rbAmount_clicked() {
   tabChart->setTabEnabled(1, true);
   isrbFreq = false;
   startRead(strDate);
-  chartMonth->setTitle(tr("Amount"));
-  chartDay->setTitle(tr("Amount"));
 }
 
 void MainWindow::paintEvent(QPaintEvent *event) {
@@ -3076,25 +3072,11 @@ void MainWindow::on_btnSteps_clicked() {
   if (isHardStepSensor == 1) updateHardSensorSteps();
   mydlgSteps->setGeometry(this->geometry().x(), this->geometry().y(),
                           this->width(), this->height());
-  mydlgSteps->ui->tableWidget->scrollToBottom();
-  mydlgSteps->ui->tableWidget->setFocus();
-  mydlgSteps->setMaxMark();
-  mydlgSteps->setModal(true);
-  // mydlgSteps->show();
 
   ui->frameMain->hide();
   ui->frameSteps->show();
-
-  /*mydlgSteps->ui->qwSteps->setSource(
-      QUrl(QStringLiteral("qrc:/src/steps.qml")));
-
-  for (int i = 0; i < mydlgSteps->ui->tableWidget->rowCount(); i++) {
-    QString str1, str2, str3;
-    str1 = mydlgSteps->ui->tableWidget->item(i, 0)->text();
-    str2 = mydlgSteps->ui->tableWidget->item(i, 1)->text();
-    str3 = mydlgSteps->ui->tableWidget->item(i, 2)->text();
-    mydlgSteps->appendDataToTable(str1, str2, str3);
-  }*/
+  mydlgSteps->setScrollBarPos(0.88);
+  mydlgSteps->setMaxMark();
 }
 
 void MainWindow::changeEvent(QEvent *event) {
@@ -3103,8 +3085,7 @@ void MainWindow::changeEvent(QEvent *event) {
 }
 
 void MainWindow::on_rbSteps_clicked() {
-  QTableWidget *t = mydlgSteps->ui->tableWidget;
-  int count = t->rowCount();
+  int count = mydlgSteps->getCount();
   if (count <= 0) return;
 
   tabChart->setCurrentIndex(0);
@@ -3115,10 +3096,10 @@ void MainWindow::on_rbSteps_clicked() {
 
   QString sm = get_Month(QDate::currentDate().toString("ddd MM dd yyyy"));
   for (int i = 0; i < count; i++) {
-    QString strD = t->item(i, 0)->text();
+    QString strD = mydlgSteps->getDate(i);
     if (sm == get_Month(strD)) {
       int day = get_Day(strD);
-      int steps = t->item(i, 1)->text().toInt();
+      int steps = mydlgSteps->getSteps(i);
       PointList.append(QPointF(day, steps));
       doubleList.append(steps);
     }

@@ -11,14 +11,16 @@ Rectangle {
                                  "Steps": Steps,
                                  "KM": KM
                              })
-        vbar.setPosition(1.0)
-        tableModel.contentY = tableModel.contentHeight - tableModel.height
+    }
+
+    function setScrollBarPos(pos) {
+        vbar.setPosition(pos)
+        console.log("contentH=" + tableView.maximumFlickVelocity + "  h=" + tableView.height)
     }
 
     function getItemCount() {
 
-        console.log("count=" + tableModel.rowCount())
-        return tableModel.rowCount()
+        return tableModel.rowCount
     }
 
     function getDate(itemIndex) {
@@ -34,6 +36,11 @@ Rectangle {
     function getKM(itemIndex) {
         var data = tableModel.getRow(itemIndex)
         return data.KM
+    }
+
+    function setTableData(currentIndex, steps, km) {
+        tableModel.setData(currentIndex, "Setps", steps)
+        tableModel.setData(currentIndex, "KM", km)
     }
 
     function delItem(currentIndex) {
@@ -89,6 +96,7 @@ Rectangle {
                 color: "#666666"
             }
             // Always show
+
 
             /*onActiveChanged: {
                 active = true;

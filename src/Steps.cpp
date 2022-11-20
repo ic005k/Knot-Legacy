@@ -16,7 +16,7 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->setupUi(this);
   mw_one->set_btnStyle(this);
   this->installEventFilter(this);
-
+  setModal(true);
   mw_one->ui->lblSingle->adjustSize();
 
   QFont font1;
@@ -33,25 +33,6 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   mw_one->ui->editTangentLineIntercept->setValidator(validator);
   mw_one->ui->editTangentLineSlope->setValidator(validator);
   mw_one->ui->editStepLength->setValidator(validator);
-
-  for (int y = 0; y < ui->tableWidget->columnCount(); y++) {
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(
-        y, QHeaderView::ResizeToContents);
-  }
-
-  ui->tableWidget->setAlternatingRowColors(true);
-  ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
-  ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-  ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-  ui->tableWidget->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
-  QScroller::grabGesture(ui->tableWidget, QScroller::LeftMouseButtonGesture);
-  ui->tableWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  mw_one->setSCrollPro(ui->tableWidget);
-
-  QFont font = ui->tableWidget->horizontalHeader()->font();
-  font.setBold(true);
-  ui->tableWidget->horizontalHeader()->setFont(font);
 
   QString style = mw_one->myEditRecord->ui->editAmount->styleSheet();
   mw_one->ui->editStepLength->setStyleSheet(style);
@@ -103,7 +84,6 @@ void dlgSteps::on_btnPause_clicked() {
 
     mw_one->ui->btnPause->setIcon(QIcon(":/res/run.png"));
   }
-  ui->tableWidget->setFocus();
 }
 
 void dlgSteps::on_btnReset_clicked() {
@@ -189,8 +169,7 @@ void dlgSteps::init_Steps() {
                   steps / 100 / 1000;
       str2 = QString("%1").arg(km, 0, 'f', 2);
     }
-    // addRecord(str0, steps, str2);
-    appendSteps(str0, steps, str2);
+    addRecord(str0, steps, str2);
   }
 
   for (int i = 0; i < count; i++) {
@@ -229,24 +208,11 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
 
   bool isYes = false;
 
-  int count = ui->tableWidget->rowCount();
+  int count = getCount();
   for (int i = 0; i < count; i++) {
-    QString str = ui->tableWidget->item(i, 0)->text();
+    QString str = getDate(i);
     if (mw_one->getYMD(str) == mw_one->getYMD(date)) {
-      QTableWidgetItem* item = new QTableWidgetItem(date);
-      ui->tableWidget->setItem(i, 0, item);
-
-      item = new QTableWidgetItem(QString::number(steps));
-      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      item->setBackground(brush1);
-      ui->tableWidget->setItem(i, 1, item);
-
-      item = new QTableWidgetItem(km);
-      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      item->setBackground(brush2);
-      ui->tableWidget->setItem(i, 2, item);
-
-      setTableNoItemFlags(ui->tableWidget, i);
+      appendSteps(date, steps, km);
 
       isYes = true;
       break;
@@ -254,58 +220,34 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
   }
 
   if (!isYes) {
-    ui->tableWidget->setRowCount(count + 1);
-    QTableWidgetItem* item = new QTableWidgetItem(date);
-    ui->tableWidget->setItem(count, 0, item);
-
-    item = new QTableWidgetItem(QString::number(steps));
-    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    item->setBackground(brush1);
-    ui->tableWidget->setItem(count, 1, item);
-
-    item = new QTableWidgetItem(km);
-    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    item->setBackground(brush2);
-    ui->tableWidget->setItem(count, 2, item);
-
-    setTableNoItemFlags(ui->tableWidget, count);
+    appendSteps(date, steps, km);
   }
 }
 
 qlonglong dlgSteps::getCurrentSteps() {
-  int count = ui->tableWidget->rowCount();
+  int count = getCount();
   if (count == 0) return 0;
 
-  QString str = ui->tableWidget->item(count - 1, 0)->text();
+  QString str = getDate(count - 1);
   if (str == QDate::currentDate().toString("ddd MM dd "))
-    return ui->tableWidget->item(count - 1, 1)->text().toLongLong();
+    return getSteps(count - 1);
   return 0;
 }
 
 void dlgSteps::setTableSteps(qlonglong steps) {
-  int count = ui->tableWidget->rowCount();
+  int count = getCount();
 
   if (count == 0) {
     addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
   }
   if (count > 0) {
-    QString strDate = ui->tableWidget->item(count - 1, 0)->text();
+    QString strDate = getDate(count - 1);
     if (strDate == QDate::currentDate().toString("ddd MM dd ")) {
-      QTableWidgetItem* item = new QTableWidgetItem(QString::number(steps));
-      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      item->setBackground(brush1);
-      ui->tableWidget->setItem(count - 1, 1, item);
-
       double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
                   steps / 100 / 1000;
       QString strKM = QString("%1").arg(km, 0, 'f', 2);
-      item = new QTableWidgetItem(strKM);
-      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      item->setBackground(brush2);
-      ui->tableWidget->setItem(count - 1, 2, item);
 
-      ui->tableWidget->item(count - 1, 1)->setFlags(Qt::NoItemFlags);
-      ui->tableWidget->item(count - 1, 2)->setFlags(Qt::NoItemFlags);
+      setTableData(count - 1, steps, strKM);
     } else
       addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
   }
@@ -321,7 +263,7 @@ void dlgSteps::on_btnDefaultSlope_clicked() {
 
 void dlgSteps::on_rbAlg1_clicked() {
   if (mw_one->ui->btnPauseSteps->text() == tr("Start")) return;
-  if (mw_one->mydlgPre->ui->chkDebug->isChecked()) ui->frameWay1->show();
+  // if (mw_one->mydlgPre->ui->chkDebug->isChecked()) ui->frameWay1->show();
   mw_one->ui->lblSteps->setText("");
   rlistX.clear();
   rlistY.clear();
@@ -350,7 +292,7 @@ void dlgSteps::on_rbAlg1_clicked() {
 
 void dlgSteps::on_rbAlg2_clicked() {
   if (mw_one->ui->btnPauseSteps->text() == tr("Start")) return;
-  ui->frameWay1->hide();
+
   rlistX.clear();
   rlistY.clear();
   rlistZ.clear();
@@ -399,17 +341,17 @@ void dlgSteps::acquireWakeLock() {
 }
 
 void dlgSteps::setMaxMark() {
-  if (ui->tableWidget->rowCount() > 1) {
+  if (getCount() > 1) {
     QList<int> list;
 
-    for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
-      list.append(ui->tableWidget->item(i, 1)->text().toInt());
+    for (int i = 0; i < getCount(); i++) {
+      list.append(getSteps(i));
     }
 
     int maxValue = *std::max_element(list.begin(), list.end());
     for (int i = 0; i < list.count(); i++) {
       if (maxValue == list.at(i)) {
-        ui->tableWidget->item(i, 0)->setBackground(brushMax);
+        // max value
         break;
       }
     }
@@ -460,7 +402,20 @@ void dlgSteps::delItem(int index) {
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
+void dlgSteps::setTableData(int index, int steps, QString km) {
+  QQuickItem* root = mw_one->ui->qwSteps->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setTableData",
+                            Q_ARG(QVariant, index), Q_ARG(QVariant, steps),
+                            Q_ARG(QVariant, km));
+}
+
 void dlgSteps::clearAll() {
   int count = getCount();
   for (int i = 0; i < count; i++) delItem(0);
+}
+
+void dlgSteps::setScrollBarPos(double pos) {
+  QQuickItem* root = mw_one->ui->qwSteps->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
+                            Q_ARG(QVariant, pos));
 }

@@ -43,7 +43,12 @@ class dlgSteps : public QDialog {
   void delItem(int index);
   QString getKM(int row);
   void clearAll();
-  protected:
+
+  void setTableData(int index, int steps, QString km);
+
+  void setScrollBarPos(double pos);
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;
