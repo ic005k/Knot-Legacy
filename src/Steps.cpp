@@ -242,7 +242,7 @@ void dlgSteps::setTableSteps(qlonglong steps) {
   }
   if (count > 0) {
     QString strDate = getDate(count - 1);
-    if (strDate == QDate::currentDate().toString("ddd MM dd yyyy")) {
+    if (strDate == QDate::currentDate().toString("ddd MM dd ")) {
       double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
                   steps / 100 / 1000;
       QString strKM = QString("%1").arg(km, 0, 'f', 2);

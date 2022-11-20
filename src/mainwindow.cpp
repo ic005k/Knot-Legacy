@@ -268,7 +268,7 @@ void MainWindow::initHardStepSensor() {
     ui->btnPause->click();
     ui->gboxAlg->hide();
     ui->lblSteps->hide();
-    ui->btnPause->hide();
+    ui->btnPauseSteps->hide();
     ui->lblTotalRunTime->hide();
     mydlgPre->ui->chkDebug->setChecked(false);
     mydlgPre->on_chkDebug_clicked();
@@ -316,8 +316,6 @@ void MainWindow::initTodayInitSteps() {
     } else
       initTodaySteps = b;
   }
-
-  // mydlgSteps->ui->lblStepLength->setText(QString::number(initTodaySteps));
 }
 
 void MainWindow::newDatas() {
