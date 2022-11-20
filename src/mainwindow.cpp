@@ -3072,7 +3072,7 @@ void MainWindow::on_btnSteps_clicked() {
 
   ui->frameMain->hide();
   ui->frameSteps->show();
-  mydlgSteps->setScrollBarPos(0.88);
+  mydlgSteps->setScrollBarPos(0.85);
   mydlgSteps->setMaxMark();
 }
 
@@ -3760,6 +3760,7 @@ void MainWindow::init_UIWidget() {
   ui->frameTodo->hide();
   ui->frameRecycle->hide();
   ui->frameSteps->hide();
+  ui->frameDebug->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);

@@ -53,12 +53,11 @@ class dlgSteps : public QDialog {
 
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
- public slots:
+ public:
   void on_rbAlg1_clicked();
 
   void on_rbAlg2_clicked();
 
- public slots:
   void on_btnBack_clicked();
 
   void on_btnPause_clicked();

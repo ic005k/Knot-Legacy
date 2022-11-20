@@ -69,16 +69,18 @@ class dlgTodo : public QDialog {
 
   int setItemHeight(QString strTodoText);
  public slots:
-  void on_btnOK_clicked();
-  void on_btnCancel_clicked();
+  void reeditText();
+  void addToRecycle();
   void isAlarm(int index);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
- public slots:
 
+ public:
+  void on_btnOK_clicked();
+  void on_btnCancel_clicked();
   void on_btnAdd_clicked();
 
   void on_btnHigh_clicked();
@@ -98,9 +100,6 @@ class dlgTodo : public QDialog {
   void on_btnDel_clicked();
 
   void on_textEdit_textChanged();
-
-  void reeditText();
-  void addToRecycle();
 
  private:
   QListWidgetItem *editItem;

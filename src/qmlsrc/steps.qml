@@ -14,8 +14,9 @@ Rectangle {
     }
 
     function setScrollBarPos(pos) {
-        vbar.setPosition(pos)
-        console.log("contentH=" + tableView.maximumFlickVelocity + "  h=" + tableView.height)
+        //vbar.setPosition(pos)
+        tableView.contentY= tableView.contentHeight-tableView.height
+        console.log("contentH=" + tableView.contentHeight + "  h=" + tableView.height)
     }
 
     function getItemCount() {
@@ -68,7 +69,7 @@ Rectangle {
                     Text {
                         text: modelData
                         anchors.centerIn: parent
-                        font.pointSize: 12
+                        //font.pointSize: 12
                         color: "white"
                     }
                 }
@@ -96,8 +97,6 @@ Rectangle {
                 color: "#666666"
             }
             // Always show
-
-
             /*onActiveChanged: {
                 active = true;
             }
@@ -134,7 +133,7 @@ Rectangle {
             Text {
                 text: display
                 anchors.centerIn: parent
-                font.pointSize: 12
+                //font.pointSize: 12
                 color: "white"
             }
         }
