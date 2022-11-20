@@ -5,11 +5,11 @@
         <file>src/onedrive/log.qml</file>
         <file>src/memo.qml</file>
         <file>src/onedrive/web.qml</file>
-        <file>src/steps.qml</file>
         <file>src/imgview.qml</file>
         <file>src/qmlsrc/todo.qml</file>
         <file>src/qmlsrc/TodoModel.qml</file>
         <file>src/qmlsrc/main.qml</file>
         <file>src/qmlsrc/MainModel.qml</file>
+        <file>src/qmlsrc/steps.qml</file>
     </qresource>
 </RCC>

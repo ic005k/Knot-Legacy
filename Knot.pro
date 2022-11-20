@@ -159,6 +159,7 @@ DISTFILES += \
     src/qmlsrc/MainModel.qml \
     src/qmlsrc/TodoModel.qml \
     src/qmlsrc/main.qml \
+    src/qmlsrc/steps.qml \
     src/qmlsrc/todo.qml \
     src/reader.qml \
     src/steps.qml

@@ -85,19 +85,17 @@ void dlgPreferences::saveOptions() {
 
 void dlgPreferences::on_chkDebug_clicked() {
   if (ui->chkDebug->isChecked()) {
-    mw_one->mydlgSteps->ui->lblX->show();
-    mw_one->mydlgSteps->ui->lblY->show();
-    mw_one->mydlgSteps->ui->lblZ->show();
+    mw_one->ui->lblX->show();
+    mw_one->ui->lblY->show();
+    mw_one->ui->lblZ->show();
 
-    if (mw_one->mydlgSteps->ui->rbAlg1->isChecked())
-      mw_one->mydlgSteps->ui->frameWay1->show();
-    if (mw_one->mydlgSteps->ui->rbAlg2->isChecked())
-      mw_one->mydlgSteps->ui->frameWay1->hide();
+    // if (mw_one->ui->rbAlg1->isChecked()) mw_one->ui->frameWay1->show();
+    // if (mw_one->ui->rbAlg2->isChecked()) mw_one->ui->frameWay1->hide();
   } else if (!ui->chkDebug->isChecked()) {
-    mw_one->mydlgSteps->ui->lblX->hide();
-    mw_one->mydlgSteps->ui->lblY->hide();
-    mw_one->mydlgSteps->ui->lblZ->hide();
-    mw_one->mydlgSteps->ui->frameWay1->hide();
+    mw_one->ui->lblX->hide();
+    mw_one->ui->lblY->hide();
+    mw_one->ui->lblZ->hide();
+    // mw_one->ui->frameWay1->hide();
   }
 }
 

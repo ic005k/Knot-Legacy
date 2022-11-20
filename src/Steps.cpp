@@ -17,22 +17,22 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   mw_one->set_btnStyle(this);
   this->installEventFilter(this);
 
-  ui->lblSingle->adjustSize();
+  mw_one->ui->lblSingle->adjustSize();
 
   QFont font1;
   font1.setPointSize(15);
-  ui->lblX->setFont(font1);
-  ui->lblY->setFont(font1);
-  ui->lblZ->setFont(font1);
-  ui->lblSteps->setFont(font1);
+  mw_one->ui->lblX->setFont(font1);
+  mw_one->ui->lblY->setFont(font1);
+  mw_one->ui->lblZ->setFont(font1);
+  mw_one->ui->lblSteps->setFont(font1);
 
-  lblStyleNormal = ui->lblX->styleSheet();
+  lblStyleNormal = mw_one->ui->lblX->styleSheet();
 
-  QValidator* validator =
-      new QRegularExpressionValidator(regxNumber, ui->editTangentLineIntercept);
-  ui->editTangentLineIntercept->setValidator(validator);
-  ui->editTangentLineSlope->setValidator(validator);
-  ui->editStepLength->setValidator(validator);
+  QValidator* validator = new QRegularExpressionValidator(
+      regxNumber, mw_one->ui->editTangentLineIntercept);
+  mw_one->ui->editTangentLineIntercept->setValidator(validator);
+  mw_one->ui->editTangentLineSlope->setValidator(validator);
+  mw_one->ui->editStepLength->setValidator(validator);
 
   for (int y = 0; y < ui->tableWidget->columnCount(); y++) {
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(
@@ -54,9 +54,9 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   ui->tableWidget->horizontalHeader()->setFont(font);
 
   QString style = mw_one->myEditRecord->ui->editAmount->styleSheet();
-  ui->editStepLength->setStyleSheet(style);
-  ui->editTangentLineIntercept->setStyleSheet(style);
-  ui->editTangentLineSlope->setStyleSheet(style);
+  mw_one->ui->editStepLength->setStyleSheet(style);
+  mw_one->ui->editTangentLineIntercept->setStyleSheet(style);
+  mw_one->ui->editTangentLineSlope->setStyleSheet(style);
 }
 
 dlgSteps::~dlgSteps() { delete ui; }
@@ -81,8 +81,8 @@ void dlgSteps::on_btnBack_clicked() {
 }
 
 void dlgSteps::on_btnPause_clicked() {
-  if (ui->btnPause->text() == tr("Pause")) {
-    ui->btnPause->setText(tr("Start"));
+  if (mw_one->ui->btnPauseSteps->text() == tr("Pause")) {
+    mw_one->ui->btnPauseSteps->setText(tr("Start"));
     mw_one->stopJavaTimer();
     mw_one->accel_pedometer->stop();
     mw_one->accel_pedometer->setActive(false);
@@ -92,13 +92,13 @@ void dlgSteps::on_btnPause_clicked() {
 
     releaseWakeLock();
 
-  } else if (ui->btnPause->text() == tr("Start")) {
-    ui->btnPause->setText(tr("Pause"));
+  } else if (mw_one->ui->btnPauseSteps->text() == tr("Start")) {
+    mw_one->ui->btnPauseSteps->setText(tr("Pause"));
 
     acquireWakeLock();
 
-    if (ui->rbAlg1->isChecked()) on_rbAlg1_clicked();
-    if (ui->rbAlg2->isChecked()) on_rbAlg2_clicked();
+    if (mw_one->ui->rbAlg1->isChecked()) on_rbAlg1_clicked();
+    if (mw_one->ui->rbAlg2->isChecked()) on_rbAlg2_clicked();
 
     mw_one->ui->btnPause->setIcon(QIcon(":/res/run.png"));
   }
@@ -111,7 +111,7 @@ void dlgSteps::on_btnReset_clicked() {
   num_steps_run = 0;
   num_steps_hop = 0;
   mw_one->CurrentSteps = 0;
-  ui->lblSingle->setText("0");
+  mw_one->ui->lblSingle->setText("0");
   mw_one->ui->btnSteps->setText(tr("Steps"));
   toDayInitSteps = getCurrentSteps();
   if (mw_one->isHardStepSensor == 1) mw_one->resetSteps = mw_one->tc;
@@ -123,11 +123,12 @@ void dlgSteps::saveSteps() {
   Reg.setIniCodec("utf-8");
 #endif
   Reg.setValue("/Steps/Intercept",
-               ui->editTangentLineIntercept->text().trimmed());
-  Reg.setValue("/Steps/Slope", ui->editTangentLineSlope->text().trimmed());
-  Reg.setValue("/Steps/Length", ui->editStepLength->text().trimmed());
-  Reg.setValue("/Steps/Alg1", ui->rbAlg1->isChecked());
-  Reg.setValue("/Steps/Alg2", ui->rbAlg2->isChecked());
+               mw_one->ui->editTangentLineIntercept->text().trimmed());
+  Reg.setValue("/Steps/Slope",
+               mw_one->ui->editTangentLineSlope->text().trimmed());
+  Reg.setValue("/Steps/Length", mw_one->ui->editStepLength->text().trimmed());
+  Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
+  Reg.setValue("/Steps/Alg2", mw_one->ui->rbAlg2->isChecked());
 
   if (ui->tableWidget->rowCount() > 45) {
     ui->tableWidget->removeRow(0);
@@ -152,8 +153,8 @@ void dlgSteps::saveSteps() {
 
 void dlgSteps::init_Steps() {
   bool isRun = false;
-  if (ui->btnPause->text() == tr("Pause")) {
-    ui->btnPause->click();
+  if (mw_one->ui->btnPauseSteps->text() == tr("Pause")) {
+    mw_one->ui->btnPauseSteps->click();
     isRun = true;
   }
 
@@ -167,13 +168,14 @@ void dlgSteps::init_Steps() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  ui->editTangentLineIntercept->setText(
+  mw_one->ui->editTangentLineIntercept->setText(
       Reg.value("/Steps/Intercept", dleInter).toString());
-  ui->editTangentLineSlope->setText(
+  mw_one->ui->editTangentLineSlope->setText(
       Reg.value("/Steps/Slope", dleSlope).toString());
-  ui->editStepLength->setText(Reg.value("/Steps/Length", "35").toString());
-  ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
-  ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
+  mw_one->ui->editStepLength->setText(
+      Reg.value("/Steps/Length", "35").toString());
+  mw_one->ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
+  mw_one->ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
 
   int count = Reg.value("/Steps/Count").toInt();
   ui->tableWidget->setRowCount(0);
@@ -185,8 +187,8 @@ void dlgSteps::init_Steps() {
     QString str2 =
         Reg.value("/Steps/Table-" + QString::number(i) + "-2").toString();
     if (str2 == "") {
-      double km =
-          ui->editStepLength->text().trimmed().toDouble() * steps / 100 / 1000;
+      double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
+                  steps / 100 / 1000;
       str2 = QString("%1").arg(km, 0, 'f', 2);
     }
     addRecord(str0, steps, str2);
@@ -201,7 +203,8 @@ void dlgSteps::init_Steps() {
   }
 
   if (isRun) {
-    if (ui->btnPause->text() == tr("Start")) ui->btnPause->click();
+    if (mw_one->ui->btnPauseSteps->text() == tr("Start"))
+      mw_one->ui->btnPause->click();
   }
 }
 
@@ -294,8 +297,8 @@ void dlgSteps::setTableSteps(qlonglong steps) {
       item->setBackground(brush1);
       ui->tableWidget->setItem(count - 1, 1, item);
 
-      double km =
-          ui->editStepLength->text().trimmed().toDouble() * steps / 100 / 1000;
+      double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
+                  steps / 100 / 1000;
       QString strKM = QString("%1").arg(km, 0, 'f', 2);
       item = new QTableWidgetItem(strKM);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -310,17 +313,17 @@ void dlgSteps::setTableSteps(qlonglong steps) {
 }
 
 void dlgSteps::on_btnDefaultIntercept_clicked() {
-  ui->editTangentLineIntercept->setText(QString::number(dleInter));
+  mw_one->ui->editTangentLineIntercept->setText(QString::number(dleInter));
 }
 
 void dlgSteps::on_btnDefaultSlope_clicked() {
-  ui->editTangentLineSlope->setText(QString::number(dleSlope));
+  mw_one->ui->editTangentLineSlope->setText(QString::number(dleSlope));
 }
 
 void dlgSteps::on_rbAlg1_clicked() {
-  if (ui->btnPause->text() == tr("Start")) return;
+  if (mw_one->ui->btnPauseSteps->text() == tr("Start")) return;
   if (mw_one->mydlgPre->ui->chkDebug->isChecked()) ui->frameWay1->show();
-  ui->lblSteps->setText("");
+  mw_one->ui->lblSteps->setText("");
   rlistX.clear();
   rlistY.clear();
   rlistZ.clear();
@@ -347,7 +350,7 @@ void dlgSteps::on_rbAlg1_clicked() {
 }
 
 void dlgSteps::on_rbAlg2_clicked() {
-  if (ui->btnPause->text() == tr("Start")) return;
+  if (mw_one->ui->btnPauseSteps->text() == tr("Start")) return;
   ui->frameWay1->hide();
   rlistX.clear();
   rlistY.clear();

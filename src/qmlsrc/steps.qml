@@ -4,20 +4,31 @@ import Qt.labs.qmlmodels 1.0
 
 Rectangle {
 
+    function appendTableRow(Date, Steps, KM) {
 
-    Rectangle{
-        id:header
+        tableModel.appendRow({
+                                 "Date": Date,
+                                 "Steps": Steps,
+                                 "KM": KM
+                             })
+        vbar.setPosition(1.0)
+        tableModel.contentY = tableModel.contentHeight - tableModel.height
+    }
+
+    Rectangle {
+        id: header
         width: parent.width
         height: 30
 
-        Row{
+        Row {
             spacing: 0
 
-            Repeater{
-                model: [qsTr("Date"),qsTr("Steps"),qsTr("KM")]
+            Repeater {
+                // Table Header
+                model: [qsTr("Date"), qsTr("Steps"), qsTr("KM")]
 
-                Rectangle{
-                    width: header.width/4
+                Rectangle {
+                    width: header.width / 3
                     height: header.height
                     color: "#666666"
                     border.width: 1
@@ -32,48 +43,57 @@ Rectangle {
             }
         }
     }
-    TableView{
-        id:tableView
+    TableView {
+        id: tableView
         width: parent.width
-        anchors.top:header.bottom
+        anchors.top: header.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         clip: true
         boundsBehavior: Flickable.OvershootBounds
 
-
         ScrollBar.vertical: ScrollBar {
-            anchors.right:parent.right
+            id: vbar
+            anchors.right: parent.right
             anchors.rightMargin: 0
+            policy: ScrollBar.AsNeeded
+            width: 8
             visible: tableModel.rowCount > 5
-            background: Rectangle{
-                color:"#666666"
+            background: Rectangle {
+                color: "#666666"
             }
-            onActiveChanged: {
+            // Always show
+
+            /*onActiveChanged: {
                 active = true;
             }
             contentItem: Rectangle
             {
+
                 implicitWidth  : 6
                 implicitHeight : 30
                 radius : 3
                 color  : "#848484"
-            }
+            }*/
         }
 
         model: TableModel {
-            id:tableModel
+            id: tableModel
 
-            TableModelColumn{display: qsTr("Date")}
-            TableModelColumn{display: qsTr("Steps")}
-            TableModelColumn{display: qsTr("KM")}
-
-
+            TableModelColumn {
+                display: "Date"
+            }
+            TableModelColumn {
+                display: "Steps"
+            }
+            TableModelColumn {
+                display: "KM"
+            }
         }
-        delegate:Rectangle{
+        delegate: Rectangle {
             color: "#666666"
-            implicitWidth: tableView.width/4
+            implicitWidth: tableView.width / 3
             implicitHeight: 32
             border.width: 1
             border.color: "#848484"
@@ -88,14 +108,6 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        //tableModel.appendRow({"Date":"小明","Steps":12,"KM":"三年二班"})
-
+        appendTableRow("2022-11-19", "3500", 1.65)
     }
-
-    function appendTableRow(Date,Steps,KM){
-
-    tableModel.appendRow({"Date":Date,"Steps":Steps,"KM":KM})
 }
-
-}
-

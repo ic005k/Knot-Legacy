@@ -330,13 +330,13 @@ void MainWindow::newDatas() {
   updateRunTime();
 
   countOne++;
-  if (mydlgSteps->ui->rbAlg1->isChecked()) {
+  if (ui->rbAlg1->isChecked()) {
     if (countOne >= 2) {
       aoldZ = az;
       countOne = 0;
     }
   }
-  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+  if (ui->rbAlg2->isChecked()) {
     if (countOne >= 300) {
       aoldZ = az;
       countOne = 0;
@@ -347,14 +347,14 @@ void MainWindow::newDatas() {
     return;
   }
 
-  if (mydlgSteps->ui->rbAlg1->isChecked()) {
+  if (ui->rbAlg1->isChecked()) {
     accel_pedometer->runStepCountAlgorithm();
     timeCount++;
-    mydlgSteps->ui->lblSteps->setText(tr("Number of Operations") + " : " +
-                                      QString::number(timeCount));
+    ui->lblSteps->setText(tr("Number of Operations") + " : " +
+                          QString::number(timeCount));
   }
 
-  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+  if (ui->rbAlg2->isChecked()) {
     ax = accel_pedometer->reading()->x();
     ay = accel_pedometer->reading()->y();
     gx = gyroscope->reading()->x();
@@ -374,70 +374,69 @@ void MainWindow::newDatas() {
 
 void MainWindow::showSensorValues() {
   if (mydlgPre->ui->chkDebug->isChecked()) {
-    mydlgSteps->ui->lblX->setText("AX:" + QString::number(ax) + "\n" +
-                                  "GX:" + QString::number(gx));
-    mydlgSteps->ui->lblY->setText("AY:" + QString::number(ay) + "\n" +
-                                  "GY:" + QString::number(gy));
-    mydlgSteps->ui->lblZ->setText("AZ:" + QString::number(az) + "\n" +
-                                  "GZ:" + QString::number(gz));
+    ui->lblX->setText("AX:" + QString::number(ax) + "\n" +
+                      "GX:" + QString::number(gx));
+    ui->lblY->setText("AY:" + QString::number(ay) + "\n" +
+                      "GY:" + QString::number(gy));
+    ui->lblZ->setText("AZ:" + QString::number(az) + "\n" +
+                      "GZ:" + QString::number(gz));
 
-    if (mydlgSteps->ui->lblX->isHidden()) {
-      mydlgSteps->ui->lblX->show();
-      mydlgSteps->ui->lblY->show();
-      mydlgSteps->ui->lblZ->show();
+    if (ui->lblX->isHidden()) {
+      ui->lblX->show();
+      ui->lblY->show();
+      ui->lblZ->show();
     }
   } else {
-    if (!mydlgSteps->ui->lblX->isHidden()) {
-      mydlgSteps->ui->lblX->hide();
-      mydlgSteps->ui->lblY->hide();
-      mydlgSteps->ui->lblZ->hide();
+    if (!ui->lblX->isHidden()) {
+      ui->lblX->hide();
+      ui->lblY->hide();
+      ui->lblZ->hide();
     }
   }
 }
 
 void MainWindow::updateRunTime() {
   smallCount++;
-  if (mydlgSteps->ui->rbAlg1->isChecked()) {
+  if (ui->rbAlg1->isChecked()) {
     if (smallCount >= 5) {
       timeTest++;
       smallCount = 0;
       pausePedometer();
     }
   }
-  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+  if (ui->rbAlg2->isChecked()) {
     if (smallCount >= 100) {
       timeTest++;
       smallCount = 0;
       pausePedometer();
     }
   }
-  mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
-                                           secondsToTime(timeTest));
+  ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
+                               secondsToTime(timeTest));
 }
 
 void MainWindow::pausePedometer() {
   if (QTime::currentTime().toString("hh-mm-ss") == "22-00-00") {
-    if (mydlgSteps->ui->btnPause->text() == tr("Pause"))
-      mydlgSteps->ui->btnPause->click();
+    if (ui->btnPauseSteps->text() == tr("Pause")) ui->btnPauseSteps->click();
   }
 }
 
 void MainWindow::updateSteps() {
   // CurrentSteps = accel_pedometer->stepCount();
-  if (mydlgSteps->ui->rbAlg1->isChecked()) {
+  if (ui->rbAlg1->isChecked()) {
     CurrentSteps++;
     CurTableCount = mydlgSteps->getCurrentSteps();
     CurTableCount++;
     mydlgSteps->toDayInitSteps++;
   }
 
-  if (mydlgSteps->ui->rbAlg2->isChecked()) {
+  if (ui->rbAlg2->isChecked()) {
     CurrentSteps = num_steps_walk + num_steps_run + num_steps_hop;
     CurTableCount = mydlgSteps->toDayInitSteps + CurrentSteps;
   }
 
-  mydlgSteps->ui->lcdNumber->display(QString::number(CurTableCount));
-  mydlgSteps->ui->lblSingle->setText(QString::number(CurrentSteps));
+  ui->lcdNumber->display(QString::number(CurTableCount));
+  ui->lblSingle->setText(QString::number(CurrentSteps));
   mydlgSteps->setTableSteps(CurTableCount);
 
   if (CurrentSteps == 0) return;
@@ -745,8 +744,8 @@ void MainWindow::readDataInThread(int ExceptIndex) {
 }
 
 void MainWindow::timerUpdate() {
-  mydlgSteps->ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
-                                           secondsToTime(timeTest++));
+  ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
+                               secondsToTime(timeTest++));
   if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00") {
     mydlgPre->isFontChange = true;
     this->close();
@@ -3076,7 +3075,10 @@ void MainWindow::on_btnSteps_clicked() {
   mydlgSteps->ui->tableWidget->setFocus();
   mydlgSteps->setMaxMark();
   mydlgSteps->setModal(true);
-  mydlgSteps->show();
+  // mydlgSteps->show();
+
+  ui->frameMain->hide();
+  ui->frameSteps->show();
 
   /*mydlgSteps->ui->qwSteps->setSource(
       QUrl(QStringLiteral("qrc:/src/steps.qml")));
@@ -3552,8 +3554,8 @@ void MainWindow::getSteps2() {
   QString str3 = tr("Run") + " : " + QString::number(num_steps_run);
   QString str4 = tr("Hop") + " : " + QString::number(num_steps_hop);
 
-  mydlgSteps->ui->lblSteps->setText(str0 + "\n" + str1 + "\n" + str2 + "  " +
-                                    str3 + "  " + str4);
+  ui->lblSteps->setText(str0 + "\n" + str1 + "\n" + str2 + "  " + str3 + "  " +
+                        str4);
   mw_one->updateSteps();
   rlistX.clear();
   rlistY.clear();
@@ -3587,8 +3589,8 @@ QString MainWindow::secondsToTime(ulong totalTime) {
 
 void MainWindow::updateHardSensorSteps() {
   timeTest = timeTest + 1;
-  mydlgSteps->ui->lblTotalRunTime->setText(tr("Number of Operations") + " : " +
-                                           QString::number(timeTest));
+  ui->lblTotalRunTime->setText(tr("Number of Operations") + " : " +
+                               QString::number(timeTest));
 
   if (strDate != QDate::currentDate().toString("ddd MM dd yyyy")) {
     initTodayInitSteps();
@@ -3618,8 +3620,8 @@ void MainWindow::updateHardSensorSteps() {
   if (steps < 0) return;
   if (steps > 100000000) return;
   CurrentSteps = tc - resetSteps;
-  mydlgSteps->ui->lcdNumber->display(QString::number(steps));
-  mydlgSteps->ui->lblSingle->setText(QString::number(CurrentSteps));
+  ui->lcdNumber->display(QString::number(steps));
+  ui->lblSingle->setText(QString::number(CurrentSteps));
   mydlgSteps->setTableSteps(steps);
 
   sendMsg(steps);
@@ -3733,9 +3735,9 @@ void MainWindow::init_Sensors() {
           SLOT(updateSteps()));
 
   accel_pedometer->setTangentLineIntercept(
-      mydlgSteps->ui->editTangentLineIntercept->text().toFloat());
+      ui->editTangentLineIntercept->text().toFloat());
   accel_pedometer->setTangentLineSlope(
-      mydlgSteps->ui->editTangentLineSlope->text().toFloat());
+      ui->editTangentLineSlope->text().toFloat());
   accel_pedometer->setDataRate(100);
   accel_pedometer->setAccelerationMode(QAccelerometer::User);
   accel_pedometer->setAlwaysOn(true);
@@ -3774,6 +3776,7 @@ void MainWindow::init_UIWidget() {
   ui->frameReader->hide();
   ui->frameTodo->hide();
   ui->frameRecycle->hide();
+  ui->frameSteps->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3957,6 +3960,8 @@ void MainWindow::init_UIWidget() {
 
   ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
+
+  ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4378,7 +4383,7 @@ void RegJni(const char *myClassName) {
 
 #endif
 
-void MainWindow::on_btnPause_clicked() { mydlgSteps->ui->btnPause->click(); }
+void MainWindow::on_btnPause_clicked() { ui->btnPauseSteps->click(); }
 
 QString MainWindow::getYMD(QString date) {
   QStringList list = date.split(" ");
