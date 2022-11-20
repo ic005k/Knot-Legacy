@@ -95,6 +95,7 @@ void ReadTWThread::run() {
   MainWindow::readDataInThread(currentTabIndex);
   emit isDone();
 }
+
 void MainWindow::readTWDone() {
   for (int i = 0; i < tabData->tabBar()->count(); i++) {
     QTreeWidget *tw = (QTreeWidget *)tabData->widget(i);
@@ -112,6 +113,7 @@ void MainWindow::readTWDone() {
 }
 
 ReadThread::ReadThread(QObject *parent) : QThread{parent} {}
+
 void ReadThread::run() {
   if (isBreak) {
     emit isDone();
@@ -139,7 +141,7 @@ void MainWindow::ReadChartData() {
   init_Stats(tw);
 }
 
-void MainWindow::readDone() {
+void MainWindow::readChartDone() {
   if (tabChart->currentIndex() == 0) {
     initChartMonth();
   }
@@ -619,9 +621,6 @@ void MainWindow::init_ChartWidget() {
   m_scatterSeries2->attachAxis(axisY2);
   m_scatterSeries2_1->attachAxis(axisX2);
   m_scatterSeries2_1->attachAxis(axisY2);
-
-  chartMonth->setTitle("Y:" + tr("Freq") + "    X:" + tr("Days"));
-  chartDay->setTitle("Y:" + tr("Freq") + "    X:" + tr("Time"));
 
   QFont font1;
   font1.setPointSize(12);
@@ -1606,7 +1605,11 @@ void MainWindow::initChartMonth() {
     chartMonth->setTitle("Y:" + tr("Time") + "    X:" + tr("Days"));
   } else {
     axisY->setRange(0, yMaxMonth);
-    chartMonth->setTitle("Y:" + tr("Freq") + "    X:" + tr("Days"));
+    if (ui->rbFreq->isChecked())
+      chartMonth->setTitle("Y:" + tr("Freq") + "    X:" + tr("Days"));
+
+    if (ui->rbAmount->isChecked())
+      chartMonth->setTitle("Y:" + tr("Amount") + "    X:" + tr("Days"));
   }
 }
 
@@ -1629,6 +1632,12 @@ void MainWindow::initChartDay() {
   axisX2->setTickCount(7);
 
   axisY2->setRange(0, yMaxDay + 1);
+
+  if (ui->rbFreq->isChecked())
+    chartDay->setTitle("Y:" + tr("Freq") + "    X:" + tr("Time"));
+
+  if (ui->rbAmount->isChecked())
+    chartDay->setTitle("Y:" + tr("Amount") + "    X:" + tr("Time"));
 }
 
 void MainWindow::on_actionRename_triggered() {
@@ -3101,7 +3110,7 @@ void MainWindow::on_rbSteps_clicked() {
   }
 
   initChartMonth();
-  chartMonth->setTitle(tr("Steps"));
+  chartMonth->setTitle("Y:" + tr("Steps") + "    X:" + tr("Days"));
 }
 
 void MainWindow::Sleep(int msec) {
@@ -3850,7 +3859,7 @@ void MainWindow::init_UIWidget() {
   connect(myReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
 
   myReadThread = new ReadThread();
-  connect(myReadThread, &ReadThread::isDone, this, &MainWindow::readDone);
+  connect(myReadThread, &ReadThread::isDone, this, &MainWindow::readChartDone);
 
   mySearchThread = new SearchThread();
   connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::dealDone);
@@ -5162,7 +5171,7 @@ bool MainWindow::setTWCurrentItem() {
   QString textTop = getTop(row);
   QString text0 = getText0(row);
   QStringList list = text0.split(".");
-  int childIndex;
+  int childIndex = 0;
   if (list.count() > 0) {
     childIndex = list.at(0).toInt() - 1;
   }

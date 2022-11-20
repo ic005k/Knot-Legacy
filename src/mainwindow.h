@@ -129,6 +129,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  int days = 45;
   int newHeight;
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   QString androidIniDir, macIniDir;
@@ -447,7 +448,7 @@ class MainWindow : public QMainWindow {
 
   void dealDone();
 
-  void readDone();
+  void readChartDone();
 
   void on_actionPreferences_triggered();
 
@@ -576,7 +577,6 @@ class MainWindow : public QMainWindow {
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;
-  int days = 45;
   int frameChartHeight;
   int yScale = 3;
   int x, y, w, h;
