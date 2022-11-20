@@ -237,19 +237,24 @@ qlonglong dlgSteps::getCurrentSteps() {
 void dlgSteps::setTableSteps(qlonglong steps) {
   int count = getCount();
 
-  if (count == 0) {
-    addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
-  }
-  if (count > 0) {
-    QString date = getDate(count - 1);
-    if (date == QDate::currentDate().toString("ddd MM dd ")) {
-      double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
-                  steps / 100 / 1000;
-      QString strKM = QString("%1").arg(km, 0, 'f', 2);
-
-      setTableData(count - 1, date, steps, strKM);
-    } else
+  if (!isOnScreen) {
+    if (count == 0) {
       addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 1, "0");
+    }
+    if (count > 0) {
+      QString date = getDate(count - 1);
+      if (date == QDate::currentDate().toString("ddd MM dd ")) {
+        double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
+                    steps / 100 / 1000;
+        QString strKM = QString("%1").arg(km, 0, 'f', 2);
+
+        setTableData(count - 1, date, steps, strKM);
+      }
+    }
+  }
+
+  else {
+    isOnScreen = false;
   }
 }
 
