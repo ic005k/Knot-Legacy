@@ -525,6 +525,9 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_14">
+       <property name="spacing">
+        <number>1</number>
+       </property>
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -1327,7 +1330,7 @@ QRadioButton::indicator:checked {
              <enum>QTabWidget::Rounded</enum>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <property name="usesScrollButtons">
              <bool>true</bool>
@@ -1340,6 +1343,21 @@ QRadioButton::indicator:checked {
               <string>Month</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout">
+              <property name="spacing">
+               <number>1</number>
+              </property>
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>1</number>
+              </property>
               <item>
                <layout class="QGridLayout" name="glMonth">
                 <property name="spacing">
@@ -1354,6 +1372,21 @@ QRadioButton::indicator:checked {
               <string>Day</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_2">
+              <property name="spacing">
+               <number>1</number>
+              </property>
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>1</number>
+              </property>
               <item>
                <layout class="QGridLayout" name="glDay">
                 <property name="spacing">

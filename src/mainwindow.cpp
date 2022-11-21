@@ -536,12 +536,12 @@ void MainWindow::init_Options() {
 void MainWindow::init_ChartWidget() {
   ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->glMonth->layout()->setContentsMargins(0, 0, 0, 0);
-
   ui->glMonth->layout()->setSpacing(0);
   ui->glDay->layout()->setContentsMargins(0, 0, 0, 0);
-
   ui->glDay->layout()->setSpacing(0);
 
+  int a0 = 0;
+  int a1 = -6;
   // Month
   chartMonth = new QChart();
   chartview = new QChartView(chartMonth);
@@ -549,8 +549,8 @@ void MainWindow::init_ChartWidget() {
   ui->glMonth->addWidget(chartview);
   chartview->setRenderHint(QPainter::Antialiasing);
   chartMonth->legend()->hide();
-  chartMonth->setMargins(QMargins(0, 0, 0, 0));
-  chartMonth->setContentsMargins(0, 0, 0, 0);
+  chartMonth->setMargins(QMargins(a0, a0, a0, a0));
+  chartMonth->setContentsMargins(a1, a1, a1, a1);
   chartMonth->setAnimationOptions(QChart::SeriesAnimations);
 
   barSeries = new QBarSeries();
@@ -570,8 +570,8 @@ void MainWindow::init_ChartWidget() {
   ui->glDay->addWidget(chartview1);
   chartview1->setRenderHint(QPainter::Antialiasing);
   chartDay->legend()->hide();
-  chartDay->setMargins(QMargins(0, 0, 0, 0));
-  chartDay->setContentsMargins(0, 0, 0, 0);
+  chartDay->setMargins(QMargins(a0, a0, a0, a0));
+  chartDay->setContentsMargins(a1, a1, a1, a1);
   chartDay->setAnimationOptions(QChart::SeriesAnimations);
 
   series2 = new QSplineSeries(chartDay);
@@ -3747,7 +3747,7 @@ void MainWindow::init_UIWidget() {
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
-  tabData->setFixedHeight(tabData->tabBar()->height() + 4);
+  tabData->setFixedHeight(tabData->tabBar()->height() + 0);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &MainWindow::on_KVChanged);
