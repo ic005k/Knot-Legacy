@@ -40,10 +40,13 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
 
   twOut2Img = new QTreeWidget;
   twOut2Img->setColumnCount(3);
+
   twOut2Img->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   twOut2Img->header()->setDefaultAlignment(Qt::AlignCenter);
+  twOut2Img->headerItem()->setTextAlignment(2, Qt::AlignRight);
   twOut2Img->setAlternatingRowColors(true);
   twOut2Img->setStyleSheet(mw_one->treeStyle);
+  twOut2Img->setUniformRowHeights(true);
 
   lblTotal = ui->lblTotal;
   lblDetails = ui->lblDetails;
@@ -473,8 +476,8 @@ void dlgReport::getMonthData() {
         twTotalRow = twTotalRow + 1;
         QTreeWidgetItem* item = new QTreeWidgetItem;
         item = tw->topLevelItem(i)->clone();
-        twTotalRow = twTotalRow + item->childCount();
-        twOut2Img->addTopLevelItem(item);
+
+        setTWImgData(item);
 
         j++;
       }
@@ -500,13 +503,49 @@ void dlgReport::getMonthData() {
         twTotalRow = twTotalRow + 1;
         QTreeWidgetItem* item = new QTreeWidgetItem;
         item = tw->topLevelItem(i)->clone();
-        twTotalRow = twTotalRow + item->childCount();
-        twOut2Img->addTopLevelItem(item);
+
+        setTWImgData(item);
 
         j++;
       }
     }
   }
+}
+
+void dlgReport::setTWImgData(QTreeWidgetItem* item) {
+  QTreeWidgetItem* newtop = new QTreeWidgetItem;
+  QFont f = newtop->font(0);
+  f.setBold(true);
+  newtop->setFont(0, f);
+  newtop->setFont(1, f);
+  newtop->setFont(2, f);
+  newtop->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
+  newtop->setText(0, item->text(0));
+  newtop->setText(1, item->text(1));
+  newtop->setText(2, item->text(2));
+  twOut2Img->addTopLevelItem(newtop);
+  twOut2Img->setCurrentItem(newtop);
+  QBrush brush(Qt::lightGray);
+  newtop->setBackground(0, brush);
+  newtop->setBackground(1, brush);
+  newtop->setBackground(2, brush);
+
+  for (int z = 0; z < item->childCount(); z++) {
+    QTreeWidgetItem* newchild = new QTreeWidgetItem(newtop);
+    newchild->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
+    newchild->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
+    newchild->setText(0, item->child(z)->text(0));
+    newchild->setText(1, item->child(z)->text(1));
+    newchild->setText(2, item->child(z)->text(2));
+
+    QString strDes = item->child(z)->text(3);
+    if (strDes.trimmed().length() > 0) {
+      QTreeWidgetItem* des = new QTreeWidgetItem(newtop);
+      des->setText(0, tr("Details") + ":" + item->child(z)->text(3));
+    }
+  }
+
+  twTotalRow = twTotalRow + newtop->childCount();
 }
 
 void dlgReport::on_btnMonth_clicked() {
@@ -916,8 +955,7 @@ void dlgReport::on_btnOut2Img_clicked() {
     twOut2Img->expandAll();
 
     QTreeWidgetItem* item0 = new QTreeWidgetItem;
-    item0->setText(0, ui->btnYear->text());
-    item0->setText(1, ui->btnMonth->text());
+    item0->setText(0, ui->btnYear->text() + " . " + ui->btnMonth->text());
     twOut2Img->insertTopLevelItem(0, item0);
 
     int count = ui->tableReport->rowCount();
@@ -931,12 +969,43 @@ void dlgReport::on_btnOut2Img_clicked() {
     qreal h = twTotalRow * 28;
     twOut2Img->setGeometry(0, 0, this->width(), h);
 
+    // The column merge is implemented
+    QTreeWidget* m_t = new QTreeWidget(this);
+    QFont f = this->font();
+    f.setPointSize(f.pointSize() - 1);
+    m_t->setFont(f);
+    m_t->setColumnCount(3);
+    m_t->headerItem()->setText(0, "  " + tr("Date") + "  ");
+    m_t->headerItem()->setText(1, tr("Freq"));
+    m_t->headerItem()->setText(2, tr("Amount"));
+    m_t->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_t->header()->setDefaultAlignment(Qt::AlignCenter);
+    m_t->headerItem()->setTextAlignment(1, Qt::AlignLeft);
+    m_t->headerItem()->setTextAlignment(2, Qt::AlignRight);
+    m_t->setAlternatingRowColors(true);
+    m_t->setStyleSheet(mw_one->treeStyle);
+    m_t->setUniformRowHeights(true);
+    for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
+      QTreeWidgetItem* top = twOut2Img->topLevelItem(i)->clone();
+      m_t->addTopLevelItem(top);
+    }
+
+    for (int i = 0; i < m_t->topLevelItemCount(); i++) {
+      QTreeWidgetItem* top = m_t->topLevelItem(i);
+      for (int j = 0; j < top->childCount(); j++) {
+        if (top->child(j)->text(0).contains(tr("Details")))
+          top->child(j)->setFirstColumnSpanned(true);
+      }
+    }
+    m_t->expandAll();
+    m_t->setGeometry(0, 0, this->width(), h + m_t->header()->height());
+
     // 方法1
-    QPixmap pixmap(twOut2Img->size());
-    twOut2Img->render(&pixmap);
+    QPixmap pixmap(m_t->size());
+    m_t->render(&pixmap);
 
     // 方法2
-    // QPixmap pixmap = QPixmap::grabWidget(twOut2Img);
+    // QPixmap pixmap = QPixmap::grabWidget(m_t);
 
     QString strFile = ui->lblTitle->text() + "-" + ui->btnYear->text() + "-" +
                       ui->btnMonth->text() + ".png";

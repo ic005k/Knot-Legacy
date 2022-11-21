@@ -37,6 +37,7 @@ class dlgReport : public QDialog {
   static void getCategoryText();
   static void on_tableReport0_cellClicked(int row, int column);
 
+  static void setTWImgData(QTreeWidgetItem *item);
  public slots:
   static void on_tableReport_cellClicked(int row, int column);
   void on_btnYear_clicked();
