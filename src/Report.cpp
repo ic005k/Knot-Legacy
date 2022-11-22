@@ -13,8 +13,7 @@ extern bool isImport, isEBook, isReport, isBreakReport, isReportWindowsShow,
 
 QString btnYearText, btnMonthText;
 QStringList listCategory;
-QTableWidget *tableReport, *tableReport0, *tableDetails, *tableDetails0,
-    *tableCategory, *tableCategory0;
+
 QTreeWidget* twOut2Img;
 QLabel *lblTotal, *lblDetails;
 QToolButton *btnCategory, *btnMonth, *btnYear;
@@ -27,16 +26,6 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
 
   this->installEventFilter(this);
   this->setModal(true);
-
-  tableReport = ui->tableReport;
-  tableDetails = ui->tableDetails;
-  tableCategory = ui->tableCategory;
-  tableReport0 = new QTableWidget;
-  tableReport0->setColumnCount(3);
-  tableDetails0 = new QTableWidget;
-  tableDetails0->setColumnCount(3);
-  tableCategory0 = new QTableWidget;
-  tableCategory0->setColumnCount(3);
 
   twOut2Img = new QTreeWidget;
   twOut2Img->setColumnCount(3);
@@ -53,65 +42,14 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   btnCategory = mw_one->ui->btnCategory;
   btnMonth = mw_one->ui->btnMonth;
   btnYear = mw_one->ui->btnYear;
-  ui->tableCategory->hide();
 
   QFont font = mw_one->ui->lblTotal->font();
   font.setBold(true);
   mw_one->ui->lblTotal->setFont(font);
   mw_one->ui->lblDetails->setFont(font);
-  mw_one->ui->lblTotal->setStyleSheet(
-      "background-color: rgb(25, 0, 250);color:white");
-  mw_one->ui->lblDetails->setStyleSheet(
-      "background-color: rgb(250, 0, 25);color:white");
+  mw_one->ui->lblTitle_Report->setFont(font);
   mw_one->ui->lblDetails->setWordWrap(true);
   mw_one->ui->lblDetails->adjustSize();
-
-  for (int y = 0; y < ui->tableReport->columnCount(); y++) {
-    ui->tableReport->horizontalHeader()->setSectionResizeMode(
-        y, QHeaderView::ResizeToContents);
-  }
-  for (int y = 0; y < ui->tableDetails->columnCount(); y++) {
-    ui->tableDetails->horizontalHeader()->setSectionResizeMode(
-        y, QHeaderView::ResizeToContents);
-  }
-  for (int y = 0; y < ui->tableCategory->columnCount(); y++) {
-    ui->tableCategory->horizontalHeader()->setSectionResizeMode(
-        y, QHeaderView::ResizeToContents);
-  }
-
-  ui->tableReport->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->tableReport->setSelectionBehavior(QAbstractItemView::SelectRows);
-  ui->tableReport->setSelectionMode(QAbstractItemView::SingleSelection);
-  ui->tableReport->setSelectionBehavior(QAbstractItemView::SelectRows);
-  ui->tableReport->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
-  QScroller::grabGesture(ui->tableReport, QScroller::LeftMouseButtonGesture);
-  ui->tableReport->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  mw_one->setSCrollPro(ui->tableReport);
-
-  ui->tableDetails->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->tableDetails->setSelectionBehavior(QAbstractItemView::SelectRows);
-  ui->tableDetails->setSelectionMode(QAbstractItemView::SingleSelection);
-  ui->tableDetails->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
-  QScroller::grabGesture(ui->tableDetails, QScroller::LeftMouseButtonGesture);
-  ui->tableDetails->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  mw_one->setSCrollPro(ui->tableDetails);
-  //自动换行，数据量大时，效率非常低，不推荐
-  // connect(ui->tableDetails, SIGNAL(itemChanged(QTableWidgetItem*)),
-  //         ui->tableDetails, SLOT(resizeRowsToContents()));
-
-  ui->tableCategory->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->tableCategory->setSelectionBehavior(QAbstractItemView::SelectRows);
-  ui->tableCategory->setSelectionMode(QAbstractItemView::SingleSelection);
-  ui->tableCategory->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
-  QScroller::grabGesture(ui->tableCategory, QScroller::LeftMouseButtonGesture);
-  ui->tableCategory->verticalScrollBar()->setStyleSheet(
-      mw_one->vsbarStyleSmall);
-  mw_one->setSCrollPro(ui->tableCategory);
-
-  font = ui->tableReport->horizontalHeader()->font();
-  font.setBold(true);
-  ui->tableReport->horizontalHeader()->setFont(font);
-  ui->tableDetails->horizontalHeader()->setFont(font);
 
   mw_one->set_btnStyle(this);
 }
@@ -123,6 +61,8 @@ void dlgReport::init() {
   mw_one->ui->qwReportSub->setMinimumHeight(mw_one->height() / 3);
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameReport->show();
+  mw_one->ui->lblTitle_Report->setText(
+      mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()));
 }
 
 dlgReport::~dlgReport() { delete ui; }
@@ -162,7 +102,7 @@ void dlgReport::closeEvent(QCloseEvent* event) {
 void dlgReport::on_btnYear_clicked() {
   mw_one->ui->lblDetails->setText(tr("Details"));
   int w = mw_one->ui->btnYear->width();
-  QListWidget* list = new QListWidget(this);
+  QListWidget* list = new QListWidget(mw_one);
   list->setStyleSheet(mw_one->listStyle);
   QFont font;
   font.setPointSize(fontSize);
@@ -207,8 +147,7 @@ void dlgReport::on_btnYear_clicked() {
 
 void dlgReport::sel_Year() {
   QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
-  tableReport->setRowCount(0);
-  tableDetails->setRowCount(0);
+
   int freq = 0;
   double amount = 0;
   int j = 0;
@@ -220,63 +159,13 @@ void dlgReport::sel_Year() {
 
     QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
     if (strYear == btnYearText) {
-      tableReport->setRowCount(tableReport->rowCount() + 1);
-
-      QTableWidgetItem* tableItem =
-          new QTableWidgetItem(tw->topLevelItem(i)->text(0));
-      tableReport->setItem(j, 0, tableItem);
-
-      QString txt1 = tw->topLevelItem(i)->text(1);
-      freq = freq + txt1.toInt();
-      tableItem = new QTableWidgetItem(txt1);
-      tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      tableReport->setItem(j, 1, tableItem);
-
-      QString txt2 = tw->topLevelItem(i)->text(2);
-      amount = amount + txt2.toDouble();
-      tableItem = new QTableWidgetItem(txt2);
-      tableReport->setItem(j, 2, tableItem);
-
-      tableReport->setColumnWidth(0, 10);
-      tableReport->setRowHeight(j, 30);
-
-      setTableNoItemFlags(tableReport, j);
-
-      j++;
     }
   }
 
   lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " + tr("Amount") +
                     " 0");
-  int count = tableReport->rowCount();
-  if (count > 0) {
-    tableReport->setRowCount(count + 1);
-    QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
-    tableReport->setItem(count, 0, tableItem);
-
-    tableItem = new QTableWidgetItem(QString::number(freq));
-    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    tableReport->setItem(count, 1, tableItem);
-
-    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-    tableItem = new QTableWidgetItem(strAmount);
-    tableReport->setItem(count, 2, tableItem);
-
-    lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
-                      QString::number(freq) + "    " + tr("Amount") + " " +
-                      strAmount);
-
-    tableReport->setColumnWidth(0, 10);
-    tableReport->setRowHeight(count, 30);
-
-    setTableNoItemFlags(tableReport, count);
-
-    on_tableReport_cellClicked(0, 0);
-  }
 
   btnCategory->setText(tr("Category"));
-  tableCategory->hide();
-  tableDetails->show();
 }
 
 void dlgReport::sel_Month() {
@@ -286,8 +175,7 @@ void dlgReport::sel_Month() {
   }
 
   QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
-  tableReport->setRowCount(0);
-  tableDetails->setRowCount(0);
+
   int freq = 0;
   double amount = 0;
   int j = 0;
@@ -300,151 +188,43 @@ void dlgReport::sel_Month() {
     QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
     QString strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0));
     if (strYear == btnYearText && strMonth == btnMonthText) {
-      tableReport->setRowCount(tableReport->rowCount() + 1);
-
-      QTableWidgetItem* tableItem =
-          new QTableWidgetItem(tw->topLevelItem(i)->text(0));
-      tableReport->setItem(j, 0, tableItem);
-
-      QString txt1 = tw->topLevelItem(i)->text(1);
-      freq = freq + txt1.toInt();
-      tableItem = new QTableWidgetItem(txt1);
-      tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      tableReport->setItem(j, 1, tableItem);
-
-      QString txt2 = tw->topLevelItem(i)->text(2);
-      amount = amount + txt2.toDouble();
-      tableItem = new QTableWidgetItem(txt2);
-      tableReport->setItem(j, 2, tableItem);
-
-      tableReport->setColumnWidth(0, 10);
-      tableReport->setRowHeight(j, 30);
-
-      tableReport->item(j, 0)->setFlags(Qt::NoItemFlags);
-      tableReport->item(j, 1)->setFlags(Qt::NoItemFlags);
-      tableReport->item(j, 2)->setFlags(Qt::NoItemFlags);
-
-      j++;
     }
   }
 
   lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " + tr("Amount") +
                     " 0");
 
-  int count = tableReport->rowCount();
-  if (count > 0) {
-    tableReport->setRowCount(count + 1);
-    QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
-    tableReport->setItem(count, 0, tableItem);
-
-    tableItem = new QTableWidgetItem(QString::number(freq));
-    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    tableReport->setItem(count, 1, tableItem);
-
-    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-    tableItem = new QTableWidgetItem(strAmount);
-    tableReport->setItem(count, 2, tableItem);
-
-    lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
-                      QString::number(freq) + "    " + tr("Amount") + " " +
-                      strAmount);
-
-    tableReport->setColumnWidth(0, 10);
-    tableReport->setRowHeight(count, 30);
-
-    tableReport->item(count, 0)->setFlags(Qt::NoItemFlags);
-    tableReport->item(count, 1)->setFlags(Qt::NoItemFlags);
-    tableReport->item(count, 2)->setFlags(Qt::NoItemFlags);
-
-    on_tableReport_cellClicked(0, 0);
-  }
-
   btnCategory->setText(tr("Category"));
-  tableCategory->hide();
-  tableDetails->show();
 }
 
 void dlgReport::updateTable() {
-  tableReport->setRowCount(0);
-  tableDetails->setRowCount(0);
-
   int freq = 0;
   double amount = 0;
+  clearAll();
+  clearAll_xx();
+  mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " +
+                                tr("Amount") + " 0");
 
-  for (int i = 0; i < tableReport0->rowCount(); i++) {
-    tableReport->setRowCount(tableReport->rowCount() + 1);
-
-    QTableWidgetItem* tableItem0 =
-        new QTableWidgetItem(tableReport0->item(i, 0)->text());
-    tableReport->setItem(i, 0, tableItem0);
-
-    QString txt1 = tableReport0->item(i, 1)->text();
-    freq = freq + txt1.toInt();
-    QTableWidgetItem* tableItem1 = new QTableWidgetItem(txt1);
-
-    tableItem1->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    tableReport->setItem(i, 1, tableItem1);
-
-    QString txt2 = tableReport0->item(i, 2)->text();
-    amount = amount + txt2.toDouble();
-
-    QTableWidgetItem* tableItem2 = new QTableWidgetItem(txt2);
-    tableReport->setItem(i, 2, tableItem2);
-
-    tableReport->setColumnWidth(0, 10);
-    tableReport->setRowHeight(i, 30);
-
-    setTableNoItemFlags(tableReport, i);
+  for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
+    QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
+    QString text0 = topItem->text(0);
+    QString text1 = topItem->text(1);
+    QString text2 = topItem->text(2);
+    freq = freq + text1.toInt();
+    if (text2.length() > 0) amount = amount + text2.toDouble();
+    appendSteps(text0, text1, text2);
   }
 
-  lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " + tr("Amount") +
-                    " 0");
+  mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") +
+                                QString::number(freq) + "    " + tr("Amount") +
+                                QString("%1").arg(amount, 0, 'f', 2));
 
-  int count = tableReport->rowCount();
-  if (count > 0) {
-    tableReport->setRowCount(count + 1);
-    QTableWidgetItem* tableItem = new QTableWidgetItem(tr("Total"));
-    tableReport->setItem(count, 0, tableItem);
-
-    tableItem = new QTableWidgetItem(QString::number(freq));
-    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    tableReport->setItem(count, 1, tableItem);
-
-    QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-    tableItem = new QTableWidgetItem(strAmount);
-    tableReport->setItem(count, 2, tableItem);
-
-    lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
-                      QString::number(freq) + "    " + tr("Amount") + " " +
-                      strAmount);
-
-    tableReport->setColumnWidth(0, 10);
-    tableReport->setRowHeight(count, 30);
-
-    setTableNoItemFlags(tableReport, count);
-
-    tableReport0->setRowCount(count + 1);
-    tableReport0->setItem(
-        count, 0, new QTableWidgetItem(tableReport->item(count, 0)->text()));
-    tableReport0->setItem(
-        count, 1, new QTableWidgetItem(tableReport->item(count, 1)->text()));
-    tableReport0->setItem(
-        count, 2, new QTableWidgetItem(tableReport->item(count, 2)->text()));
-
-    on_tableReport_cellClicked(0, 0);
-  }
-
-  btnCategory->setText(tr("Category"));
-  tableCategory->hide();
-  tableDetails->show();
+  mw_one->ui->btnCategory->setText(tr("Category"));
 }
 
 void dlgReport::getMonthData() {
-  tableReport0->setRowCount(0);
   QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
-  int freq = 0;
-  double amount = 0;
-  int j = 0;
+
   twOut2Img->clear();
   twTotalRow = 0;
 
@@ -461,58 +241,19 @@ void dlgReport::getMonthData() {
 
     if (btnMonthText == tr("Year-Round")) {
       if (strYear == btnYearText) {
-        tableReport0->setRowCount(tableReport0->rowCount() + 1);
-
-        QString txt0 = tw->topLevelItem(i)->text(0);
-        QTableWidgetItem* tableItem = new QTableWidgetItem;
-        tableItem->setText(txt0);
-        tableReport0->setItem(j, 0, tableItem);
-
-        QString txt1 = tw->topLevelItem(i)->text(1);
-        freq = freq + txt1.toInt();
-        tableItem = new QTableWidgetItem(txt1);
-        tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        tableReport0->setItem(j, 1, tableItem);
-
-        QString txt2 = tw->topLevelItem(i)->text(2);
-        amount = amount + txt2.toDouble();
-        tableItem = new QTableWidgetItem(txt2);
-        tableReport0->setItem(j, 2, tableItem);
-
         twTotalRow = twTotalRow + 1;
         QTreeWidgetItem* item = new QTreeWidgetItem;
         item = tw->topLevelItem(i)->clone();
 
         setTWImgData(item);
-
-        j++;
       }
     } else {
       if (strYear == btnYearText && strMonth == btnMonthText) {
-        tableReport0->setRowCount(tableReport0->rowCount() + 1);
-
-        QTableWidgetItem* tableItem =
-            new QTableWidgetItem(tw->topLevelItem(i)->text(0));
-        tableReport0->setItem(j, 0, tableItem);
-
-        QString txt1 = tw->topLevelItem(i)->text(1);
-        freq = freq + txt1.toInt();
-        tableItem = new QTableWidgetItem(txt1);
-        tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        tableReport0->setItem(j, 1, tableItem);
-
-        QString txt2 = tw->topLevelItem(i)->text(2);
-        amount = amount + txt2.toDouble();
-        tableItem = new QTableWidgetItem(txt2);
-        tableReport0->setItem(j, 2, tableItem);
-
         twTotalRow = twTotalRow + 1;
         QTreeWidgetItem* item = new QTreeWidgetItem;
         item = tw->topLevelItem(i)->clone();
 
         setTWImgData(item);
-
-        j++;
       }
     }
   }
@@ -557,7 +298,7 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
 void dlgReport::on_btnMonth_clicked() {
   mw_one->ui->lblDetails->setText(tr("Details"));
   int w = mw_one->ui->btnYear->width();
-  QListWidget* list = new QListWidget(this);
+  QListWidget* list = new QListWidget(mw_one);
   list->setStyleSheet(mw_one->listStyle);
   QFont font;
   font.setPointSize(fontSize);
@@ -603,114 +344,6 @@ void dlgReport::on_btnMonth_clicked() {
   }
 }
 
-void dlgReport::on_tableReport_cellClicked(int row, int column) {
-  Q_UNUSED(column);
-  bool isSetDetailsText = true;
-  if (btnCategory->text() != tr("None") &&
-      btnCategory->text() != tr("Category")) {
-    isSetDetailsText = false;
-  }
-
-  if (isSetDetailsText) lblDetails->setText(tr("Details"));
-  markColor(row);
-  tableDetails->setRowCount(0);
-  QString str = tableReport->item(row, 0)->text();
-  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
-
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
-    if (str == topItem->text(0)) {
-      if (isSetDetailsText) lblDetails->setText(tr("Details") + " : " + str);
-      int childCount = topItem->childCount();
-      tableDetails->setRowCount(childCount);
-      for (int m = 0; m < childCount; m++) {
-        tableDetails->setColumnWidth(0, 10);
-        tableDetails->setRowHeight(m, 30);
-
-        QTableWidgetItem* tableItem;
-        QString str = topItem->child(m)->text(0);
-        QStringList list = str.split(".");
-        if (list.count() == 2)
-          tableItem = new QTableWidgetItem(list.at(1));
-        else
-          tableItem = new QTableWidgetItem(str);
-        tableDetails->setItem(m, 0, tableItem);
-        tableItem = new QTableWidgetItem(topItem->child(m)->text(1));
-        tableDetails->setItem(m, 1, tableItem);
-        tableItem = new QTableWidgetItem(topItem->child(m)->text(2));
-        tableDetails->setItem(m, 2, tableItem);
-
-        tableDetails->item(m, 0)->setFlags(Qt::NoItemFlags);
-        tableDetails->item(m, 1)->setFlags(Qt::NoItemFlags);
-        tableDetails->item(m, 2)->setFlags(Qt::NoItemFlags);
-
-        //数量特别大的时候，影响性能
-        // tableDetails->scrollToBottom();
-      }
-      break;
-    }
-  }
-}
-
-void dlgReport::on_tableReport0_cellClicked(int row, int column) {
-  Q_UNUSED(column);
-
-  tableDetails0->setRowCount(0);
-  QString str = tableReport0->item(row, 0)->text();
-  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
-
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
-    if (str == topItem->text(0)) {
-      int childCount = topItem->childCount();
-      tableDetails0->setRowCount(childCount);
-      for (int m = 0; m < childCount; m++) {
-        tableDetails0->setColumnWidth(0, 10);
-        tableDetails0->setRowHeight(m, 30);
-
-        QTableWidgetItem* tableItem;
-        QString str = topItem->child(m)->text(0);
-        QStringList list = str.split(".");
-        if (list.count() == 2)
-          tableItem = new QTableWidgetItem(list.at(1));
-        else
-          tableItem = new QTableWidgetItem(str);
-        tableDetails0->setItem(m, 0, tableItem);
-        tableItem = new QTableWidgetItem(topItem->child(m)->text(1));
-        tableDetails0->setItem(m, 1, tableItem);
-        tableItem = new QTableWidgetItem(topItem->child(m)->text(2));
-        tableDetails0->setItem(m, 2, tableItem);
-
-        tableDetails0->item(m, 0)->setFlags(Qt::NoItemFlags);
-        tableDetails0->item(m, 1)->setFlags(Qt::NoItemFlags);
-        tableDetails0->item(m, 2)->setFlags(Qt::NoItemFlags);
-      }
-      break;
-    }
-  }
-}
-
-void dlgReport::markColor(int row) {
-  QIcon icon;
-  int size = 10;
-  icon.addFile(":/res/sel.png", QSize(size, size));
-  QIcon icon1;
-  icon1.addFile(":/res/nosel.png", QSize(size, size));
-  QTableWidgetItem* id1;
-
-  QBrush brush1 = QBrush(QColor(253, 185, 176));
-  for (int i = 0; i < tableReport->rowCount(); i++) {
-    if (i == row) {
-      id1 = new QTableWidgetItem(icon, QString::number(i + 1) + "  ");
-      id1->setBackground(brush1);
-
-    } else {
-      id1 = new QTableWidgetItem(icon1, QString::number(i + 1) + "  ");
-    }
-    tableReport->setVerticalHeaderItem(i, id1);
-  }
-}
-
 void dlgReport::saveYMD() {
   QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -724,7 +357,7 @@ void dlgReport::saveYMD() {
 }
 
 void dlgReport::on_btnCategory_clicked() {
-  int count = tableReport->rowCount();
+  int count;
   if (count == 0) {
     btnCategory->setText(tr("Category"));
 
@@ -786,23 +419,6 @@ void dlgReport::on_btnCategory_clicked() {
     listCategory.append(tr("None"));
 
     for (int i = 0; i < count - 1; i++) {
-      on_tableReport_cellClicked(i, 0);
-      for (int j = 0; j < tableDetails->rowCount(); j++) {
-        QString str = tableDetails->item(j, 2)->text().trimmed();
-        if (str != "") {
-          if (!listType.removeOne(str)) {
-            listType.append(str);
-            QListWidgetItem* pItem = new QListWidgetItem();
-            // pItem->setSizeHint(QSize(btnCategory->width() - 20, 30));
-            pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
-            pItem->setText(str);
-            list->addItem(pItem);
-
-            listCategory.append(str);
-          } else
-            listType.append(str);
-        }
-      }
     }
   } else {
     for (int i = 0; i < listCategory.count(); i++) {
@@ -828,8 +444,7 @@ void dlgReport::on_btnCategory_clicked() {
     btnCategory->setText(list->currentItem()->text());
     if (list->currentRow() == 0) {
       lblDetails->setText(tr("Details"));
-      tableCategory->hide();
-      tableDetails->show();
+
       dlg->close();
       mw_one->closeGrayWindows();
       return;
@@ -847,106 +462,11 @@ void dlgReport::on_btnCategory_clicked() {
   });
 }
 
-void dlgReport::getCategoryText() {
-  int count = tableReport0->rowCount();
-  if (count == 0) {
-    return;
-  }
+void dlgReport::getCategoryText() {}
 
-  listCategory.clear();
-  listCategory.append(tr("None"));
+void dlgReport::getCategoryData() {}
 
-  for (int i = 0; i < count; i++) {
-    on_tableReport0_cellClicked(i, 0);
-    for (int j = 0; j < tableDetails0->rowCount(); j++) {
-      QString str = tableDetails0->item(j, 2)->text().trimmed();
-
-      if (str != "") {
-        if (!listCategory.removeOne(str)) {
-          listCategory.insert(1, str);
-
-        } else
-          listCategory.insert(1, str);
-      }
-    }
-  }
-}
-
-void dlgReport::getCategoryData() {
-  tableCategory0->setRowCount(0);
-  double abc = 0;
-  double total =
-      tableReport0->item(tableReport0->rowCount() - 1, 2)->text().toDouble();
-  for (int i = 0; i < tableReport0->rowCount(); i++) {
-    on_tableReport0_cellClicked(i, 0);
-
-    for (int j = 0; j < tableDetails0->rowCount(); j++) {
-      if (tableDetails0->item(j, 2)->text() == btnCategory->text()) {
-        int count = tableCategory0->rowCount();
-        tableCategory0->setRowCount(count + 1);
-        QString str0 = tableReport0->item(i, 0)->text();
-        QStringList list0 = str0.split(" ");
-        if (list0.count() == 4) {
-          str0 = list0.at(0) + " " + list0.at(1) + " " + list0.at(2);
-        }
-        tableCategory0->setItem(count, 0, new QTableWidgetItem(str0));
-        tableCategory0->setItem(
-            count, 1, new QTableWidgetItem(tableDetails0->item(j, 0)->text()));
-        tableCategory0->setItem(
-            count, 2, new QTableWidgetItem(tableDetails0->item(j, 1)->text()));
-        abc = abc + tableDetails0->item(j, 1)->text().toDouble();
-
-        // setTableNoItemFlags(tableCategory0, count);
-      }
-    }
-  }
-  int t = tableCategory0->rowCount();
-  tableCategory0->setRowCount(t + 1);
-  tableCategory0->setItem(t, 0, new QTableWidgetItem(tr("Total")));
-  QTableWidgetItem* item = new QTableWidgetItem(QString::number(t));
-  item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  tableCategory0->setItem(t, 1, item);
-  QString strAmount = QString("%1").arg(abc, 0, 'f', 2);
-  tableCategory0->setItem(t, 2, new QTableWidgetItem(strAmount));
-
-  double bai = (abc / total) * 100;
-  QString strBai = QString::number(bai, 'f', 2);
-  if (total > 0)
-    lblDetails->setText(tr("Total") + " : " + tr("Freq") + " " +
-                        QString::number(t) + "    " + tr("Amount") + " " +
-                        strAmount + "    " + strBai + "%");
-  else
-    lblDetails->setText(tr("Total") + " : " + tr("Freq") + " " +
-                        QString::number(t) + "    " + tr("Amount") + " " +
-                        strAmount);
-  qDebug() << abc / total << "total=" << total;
-
-  // setTableNoItemFlags(tableCategory, t);
-
-  // tableDetails->hide();
-  // tableCategory->show();
-}
-
-void dlgReport::updateCategoryTable() {
-  tableCategory->setRowCount(tableCategory0->rowCount());
-  for (int i = 0; i < tableCategory0->rowCount(); i++) {
-    tableCategory->setItem(
-        i, 0, new QTableWidgetItem(tableCategory0->item(i, 0)->text()));
-
-    QTableWidgetItem* item =
-        new QTableWidgetItem(tableCategory0->item(i, 1)->text());
-    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    tableCategory->setItem(i, 1, item);
-
-    tableCategory->setItem(
-        i, 2, new QTableWidgetItem(tableCategory0->item(i, 2)->text()));
-
-    setTableNoItemFlags(tableCategory, i);
-  }
-
-  tableDetails->hide();
-  tableCategory->show();
-}
+void dlgReport::updateCategoryTable() {}
 
 void setTableNoItemFlags(QTableWidget* t, int row) {
   for (int z = 0; z < t->columnCount(); z++) {
@@ -965,11 +485,11 @@ void dlgReport::on_btnOut2Img_clicked() {
         0, mw_one->ui->btnYear->text() + " . " + mw_one->ui->btnMonth->text());
     twOut2Img->insertTopLevelItem(0, item0);
 
-    int count = ui->tableReport->rowCount();
+    int count;
     QTreeWidgetItem* item = new QTreeWidgetItem;
-    item->setText(0, ui->tableReport->item(count - 1, 0)->text());
-    item->setText(1, ui->tableReport->item(count - 1, 1)->text());
-    item->setText(2, ui->tableReport->item(count - 1, 2)->text());
+    item->setText(0, "");
+    item->setText(1, "");
+    item->setText(2, "");
     twOut2Img->addTopLevelItem(item);
 
     twTotalRow = twTotalRow + 3;
@@ -1036,5 +556,99 @@ void dlgReport::on_btnOut2Img_clicked() {
     QString filename = iniDir + strFile;
     pixmap.save(filename, "PNG");
 #endif
+  }
+}
+
+void dlgReport::appendSteps(QString date, QString steps, QString km) {
+  QQuickItem* root = mw_one->ui->qwReport->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
+                            Q_ARG(QVariant, date), Q_ARG(QVariant, steps),
+                            Q_ARG(QVariant, km));
+}
+
+int dlgReport::getCount() {
+  QQuickItem* root = mw_one->ui->qwReport->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
+void dlgReport::delItem(int index) {
+  QQuickItem* root = mw_one->ui->qwReport->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+}
+
+void dlgReport::clearAll() {
+  int count = getCount();
+  for (int i = 0; i < count; i++) delItem(0);
+}
+
+void dlgReport::appendSteps_xx(QString date, QString steps, QString km) {
+  QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
+                            Q_ARG(QVariant, date), Q_ARG(QVariant, steps),
+                            Q_ARG(QVariant, km));
+}
+
+int dlgReport::getCount_xx() {
+  QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
+void dlgReport::delItem_xx(int index) {
+  QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+}
+
+void dlgReport::clearAll_xx() {
+  int count = getCount_xx();
+  for (int i = 0; i < count; i++) delItem_xx(0);
+}
+
+int dlgReport::getCurrentIndex() {
+  QQuickItem* root = mw_one->ui->qwReport->rootObject();
+  QVariant itemIndex;
+  QMetaObject::invokeMethod((QObject*)root, "getCurrentIndex",
+                            Q_RETURN_ARG(QVariant, itemIndex));
+  return itemIndex.toInt();
+}
+
+QString dlgReport::getDate(int row) {
+  QQuickItem* root = mw_one->ui->qwReport->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject*)root, "getDate",
+                            Q_RETURN_ARG(QVariant, item), Q_ARG(QVariant, row));
+  return item.toString();
+}
+
+void dlgReport::loadDetails() {
+  mw_one->ui->qwReportSub->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
+  clearAll_xx();
+
+  int row = getCurrentIndex();
+  QString date = getDate(row);
+  qDebug() << "aaaaa" << date;
+
+  for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
+    QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
+    if (topItem->text(0) == date) {
+      int childCount = topItem->childCount();
+
+      for (int j = 0; j < childCount; j++) {
+        QTreeWidgetItem* childItem = topItem->child(j);
+        QString text0 = childItem->text(0);
+        QString text1 = childItem->text(1);
+        QString text2 = childItem->text(2);
+
+        if (!text0.contains(tr("Details"))) {
+          appendSteps_xx(text0, text1, text2);
+        }
+      }
+    }
   }
 }

@@ -24,7 +24,6 @@ class dlgReport : public QDialog {
   ~dlgReport();
   Ui::dlgReport *ui;
 
-  static void markColor(int row);
   static void sel_Year();
   static void sel_Month();
   static void saveYMD();
@@ -35,11 +34,20 @@ class dlgReport : public QDialog {
   void init();
   void updateCategoryTable();
   static void getCategoryText();
-  static void on_tableReport0_cellClicked(int row, int column);
 
   static void setTWImgData(QTreeWidgetItem *item);
- public slots:
-  static void on_tableReport_cellClicked(int row, int column);
+  void clearAll();
+  void delItem(int index);
+  int getCount();
+  void appendSteps(QString date, QString steps, QString km);
+  void appendSteps_xx(QString date, QString steps, QString km);
+  int getCount_xx();
+  void delItem_xx(int index);
+  void clearAll_xx();
+  QString getDate(int row);
+  int getCurrentIndex();
+  public slots:
+
   void on_btnYear_clicked();
   void on_btnCategory_clicked();
   void on_btnMonth_clicked();
@@ -54,7 +62,8 @@ class dlgReport : public QDialog {
 
   void on_btnBack_clicked();
 
- private:
+  void loadDetails();
+  private:
 };
 
 #endif  // REPORT_H

@@ -576,6 +576,12 @@ class MainWindow : public QMainWindow {
 
   void on_btnBack_Report_clicked();
 
+  void on_btnYear_clicked();
+
+  void on_btnMonth_clicked();
+
+  void on_btnOut2Img_clicked();
+
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;

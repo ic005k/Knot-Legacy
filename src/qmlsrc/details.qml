@@ -72,7 +72,6 @@ Rectangle {
                     Text {
                         text: modelData
                         anchors.centerIn: parent
-                        //font.pointSize: 12
                         color: "white"
                     }
                 }
@@ -99,7 +98,6 @@ Rectangle {
             background: Rectangle {
                 color: "#666666"
             }
-
         }
 
         model: TableModel {
@@ -132,6 +130,6 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        appendTableRow("2022-11-19", "3500", 1.65)
+        appendTableRow("2022-11-19", "3500", "4567")
     }
 }

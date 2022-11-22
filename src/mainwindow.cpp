@@ -41,7 +41,6 @@ extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
 extern QStringList readTextList, htmlFiles;
 extern QDialog *dlgProgEBook;
-extern QTableWidget *tableReport, *tableCategory;
 extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern dlgList *m_List;
@@ -3025,7 +3024,6 @@ void MainWindow::on_RunCategory() {
   }
 
   if (isReadEBookEnd) {
-    tableCategory->setRowCount(0);
     dlgProgEBook = mydlgReader->getProgBar();
     dlgProgEBook->show();
 
@@ -3920,6 +3918,7 @@ void MainWindow::init_UIWidget() {
   ui->lblTotal->setStyleSheet(lblStyle);
   ui->lblDetails->setStyleSheet(lblStyle);
   ui->lblTitle->setStyleSheet(lblStyle);
+  ui->lblTitle_Report->setStyleSheet(lblStyle);
   ui->lblStats->setStyleSheet(lblStyle);
 
   ui->lblIcon->setText("");
@@ -3959,6 +3958,7 @@ void MainWindow::init_UIWidget() {
 
   ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
 
+  ui->qwReport->rootContext()->setContextProperty("mydlgReport", mydlgReport);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
   ui->qwReportSub->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
@@ -4505,15 +4505,8 @@ void MainWindow::readEBookDone() {
     qDebug() << "开始处理表的界面数据...";
 
     mydlgReport->updateTable();
-    tableReport->horizontalHeader()->show();
-    ui->lblTitle->setText(tabData->tabText(tabData->currentIndex()));
-    mydlgReport->ui->tableDetails->setRowCount(0);
 
-    int count = tableReport->rowCount();
-    if (count > 1) {
-      mydlgReport->on_tableReport_cellClicked(count - 2, 0);
-      tableReport->scrollToBottom();
-    }
+    ui->lblTitle->setText(tabData->tabText(tabData->currentIndex()));
 
     if (!isReportWindowsShow) {
       ui->frameReport->setGeometry(this->geometry().x(), this->geometry().y(),
@@ -5207,4 +5200,12 @@ void MainWindow::on_btnReset_clicked() { mydlgSteps->on_btnReset_clicked(); }
 
 void MainWindow::on_btnBack_Report_clicked() {
   mydlgReport->on_btnBack_clicked();
+}
+
+void MainWindow::on_btnYear_clicked() { mydlgReport->on_btnYear_clicked(); }
+
+void MainWindow::on_btnMonth_clicked() { mydlgReport->on_btnMonth_clicked(); }
+
+void MainWindow::on_btnOut2Img_clicked() {
+  mydlgReport->on_btnOut2Img_clicked();
 }

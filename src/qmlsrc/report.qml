@@ -1,5 +1,5 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import Qt.labs.qmlmodels 1.0
 
 Rectangle {
@@ -14,9 +14,14 @@ Rectangle {
     }
 
     function setScrollBarPos(pos) {
-        //vbar.setPosition(pos)
+
         tableView.contentY = tableView.contentHeight - tableView.height
         console.log("contentH=" + tableView.contentHeight + "  h=" + tableView.height)
+    }
+
+    function getCurrentIndex()
+    {
+        return tableView.currentIndex
     }
 
     function getItemCount() {
@@ -24,9 +29,11 @@ Rectangle {
         return tableModel.rowCount
     }
 
+
+
     function getDate(itemIndex) {
-        var data = tableModel.getRow(itemIndex)
-        return data.Date
+        return "周五 08 26"
+
     }
 
     function getSteps(itemIndex) {
@@ -143,7 +150,13 @@ Rectangle {
                     tableView.forceActiveFocus()
                     tableView.currentIndex = row
 
+                    mydlgReport.loadDetails()
+
                     console.debug(row)
+                    //console.debug(tableModel.data(tableModel.index(row,0),Qt.DisplayRole))
+                    //console.log(tableModel.getRow(0));
+                    //     console.log(tableModel.rows[0].fruitName);
+
                 }
                 onDoubleClicked: {
                     tableView.selected(row, header.logicIndexMap[column])
@@ -151,20 +164,27 @@ Rectangle {
                 onEntered: tableView.hoverIndex = row
                 onExited: tableView.hoverIndex = -1
             }
+
+
         }
     }
 
     Component.onCompleted: {
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
-        appendTableRow("2022-11-19", "3500", 1.65)
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "test1")
     }
+
+
 }
