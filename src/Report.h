@@ -48,7 +48,7 @@ class dlgReport : public QDialog {
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;
- private slots:
+ public slots:
 
   void on_btnOut2Img_clicked();
 

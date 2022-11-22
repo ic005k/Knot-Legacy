@@ -48,23 +48,23 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   twOut2Img->setStyleSheet(mw_one->treeStyle);
   twOut2Img->setUniformRowHeights(true);
 
-  lblTotal = ui->lblTotal;
-  lblDetails = ui->lblDetails;
-  btnCategory = ui->btnCategory;
-  btnMonth = ui->btnMonth;
-  btnYear = ui->btnYear;
+  lblTotal = mw_one->ui->lblTotal;
+  lblDetails = mw_one->ui->lblDetails;
+  btnCategory = mw_one->ui->btnCategory;
+  btnMonth = mw_one->ui->btnMonth;
+  btnYear = mw_one->ui->btnYear;
   ui->tableCategory->hide();
-  ui->btnPrint->hide();
 
-  QFont font = ui->lblTotal->font();
+  QFont font = mw_one->ui->lblTotal->font();
   font.setBold(true);
-  ui->lblTotal->setFont(font);
-  ui->lblDetails->setFont(font);
-  ui->lblTotal->setStyleSheet("background-color: rgb(25, 0, 250);color:white");
-  ui->lblDetails->setStyleSheet(
+  mw_one->ui->lblTotal->setFont(font);
+  mw_one->ui->lblDetails->setFont(font);
+  mw_one->ui->lblTotal->setStyleSheet(
+      "background-color: rgb(25, 0, 250);color:white");
+  mw_one->ui->lblDetails->setStyleSheet(
       "background-color: rgb(250, 0, 25);color:white");
-  ui->lblDetails->setWordWrap(true);
-  ui->lblDetails->adjustSize();
+  mw_one->ui->lblDetails->setWordWrap(true);
+  mw_one->ui->lblDetails->adjustSize();
 
   for (int y = 0; y < ui->tableReport->columnCount(); y++) {
     ui->tableReport->horizontalHeader()->setSectionResizeMode(
@@ -117,9 +117,12 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
 }
 
 void dlgReport::init() {
-  this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                    mw_one->width(), mw_one->height());
-  show();
+  mw_one->ui->frameReport->setGeometry(mw_one->geometry().x(),
+                                       mw_one->geometry().y(), mw_one->width(),
+                                       mw_one->height());
+  mw_one->ui->qwReportSub->setMinimumHeight(mw_one->height() / 3);
+  mw_one->ui->frameMain->hide();
+  mw_one->ui->frameReport->show();
 }
 
 dlgReport::~dlgReport() { delete ui; }
@@ -146,7 +149,8 @@ void dlgReport::on_btnBack_clicked() {
   isReportWindowsShow = false;
   listCategory.clear();
 
-  close();
+  mw_one->ui->frameReport->hide();
+  mw_one->ui->frameMain->show();
 }
 
 void dlgReport::closeEvent(QCloseEvent* event) {
@@ -156,8 +160,8 @@ void dlgReport::closeEvent(QCloseEvent* event) {
 }
 
 void dlgReport::on_btnYear_clicked() {
-  ui->lblDetails->setText(tr("Details"));
-  int w = ui->btnYear->width();
+  mw_one->ui->lblDetails->setText(tr("Details"));
+  int w = mw_one->ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
   list->setStyleSheet(mw_one->listStyle);
   QFont font;
@@ -177,8 +181,8 @@ void dlgReport::on_btnYear_clicked() {
     list->addItem(item);
   }
   connect(list, &QListWidget::itemClicked, [=]() {
-    ui->btnYear->setText(list->currentItem()->text());
-    btnYearText = ui->btnYear->text();
+    mw_one->ui->btnYear->setText(list->currentItem()->text());
+    btnYearText = mw_one->ui->btnYear->text();
     list->close();
 
     listCategory.clear();
@@ -186,13 +190,13 @@ void dlgReport::on_btnYear_clicked() {
   });
 
   int h = 30 * list->count() + 4;
-  int y = ui->btnYear->y();
+  int y = mw_one->ui->btnYear->y();
 
-  list->setGeometry(ui->btnYear->x(), y, w, h);
+  list->setGeometry(mw_one->ui->btnYear->x(), y, w, h);
 
   list->show();
 
-  QString str = ui->btnYear->text();
+  QString str = mw_one->ui->btnYear->text();
   for (int i = 0; i < list->count(); i++) {
     if (str == list->item(i)->text()) {
       list->setCurrentRow(i);
@@ -370,20 +374,22 @@ void dlgReport::updateTable() {
   for (int i = 0; i < tableReport0->rowCount(); i++) {
     tableReport->setRowCount(tableReport->rowCount() + 1);
 
-    QTableWidgetItem* tableItem =
+    QTableWidgetItem* tableItem0 =
         new QTableWidgetItem(tableReport0->item(i, 0)->text());
-    tableReport->setItem(i, 0, tableItem);
+    tableReport->setItem(i, 0, tableItem0);
 
     QString txt1 = tableReport0->item(i, 1)->text();
     freq = freq + txt1.toInt();
-    tableItem = new QTableWidgetItem(txt1);
-    tableItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    tableReport->setItem(i, 1, tableItem);
+    QTableWidgetItem* tableItem1 = new QTableWidgetItem(txt1);
+
+    tableItem1->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    tableReport->setItem(i, 1, tableItem1);
 
     QString txt2 = tableReport0->item(i, 2)->text();
     amount = amount + txt2.toDouble();
-    tableItem = new QTableWidgetItem(txt2);
-    tableReport->setItem(i, 2, tableItem);
+
+    QTableWidgetItem* tableItem2 = new QTableWidgetItem(txt2);
+    tableReport->setItem(i, 2, tableItem2);
 
     tableReport->setColumnWidth(0, 10);
     tableReport->setRowHeight(i, 30);
@@ -549,8 +555,8 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
 }
 
 void dlgReport::on_btnMonth_clicked() {
-  ui->lblDetails->setText(tr("Details"));
-  int w = ui->btnYear->width();
+  mw_one->ui->lblDetails->setText(tr("Details"));
+  int w = mw_one->ui->btnYear->width();
   QListWidget* list = new QListWidget(this);
   list->setStyleSheet(mw_one->listStyle);
   QFont font;
@@ -573,8 +579,8 @@ void dlgReport::on_btnMonth_clicked() {
   list->addItem(item);
 
   connect(list, &QListWidget::itemClicked, [=]() {
-    ui->btnMonth->setText(list->currentItem()->text());
-    btnMonthText = ui->btnMonth->text();
+    mw_one->ui->btnMonth->setText(list->currentItem()->text());
+    btnMonthText = mw_one->ui->btnMonth->text();
     list->close();
 
     listCategory.clear();
@@ -582,13 +588,13 @@ void dlgReport::on_btnMonth_clicked() {
   });
 
   int h = 30 * list->count() + 4;
-  int y = ui->btnMonth->y();
+  int y = mw_one->ui->btnMonth->y();
 
-  list->setGeometry(ui->btnMonth->x(), y, w, h);
+  list->setGeometry(mw_one->ui->btnMonth->x(), y, w, h);
 
   list->show();
 
-  QString str = ui->btnMonth->text();
+  QString str = mw_one->ui->btnMonth->text();
   for (int i = 0; i < list->count(); i++) {
     if (str == list->item(i)->text()) {
       list->setCurrentRow(i);
@@ -951,11 +957,12 @@ void setTableNoItemFlags(QTableWidget* t, int row) {
 void dlgReport::on_btnOut2Img_clicked() {
   if (twOut2Img->topLevelItemCount() == 0) return;
 
-  if (twOut2Img->topLevelItem(0)->text(0) != ui->btnYear->text()) {
+  if (twOut2Img->topLevelItem(0)->text(0) != mw_one->ui->btnYear->text()) {
     twOut2Img->expandAll();
 
     QTreeWidgetItem* item0 = new QTreeWidgetItem;
-    item0->setText(0, ui->btnYear->text() + " . " + ui->btnMonth->text());
+    item0->setText(
+        0, mw_one->ui->btnYear->text() + " . " + mw_one->ui->btnMonth->text());
     twOut2Img->insertTopLevelItem(0, item0);
 
     int count = ui->tableReport->rowCount();
@@ -1007,8 +1014,9 @@ void dlgReport::on_btnOut2Img_clicked() {
     // 方法2
     // QPixmap pixmap = QPixmap::grabWidget(m_t);
 
-    QString strFile = ui->lblTitle->text() + "-" + ui->btnYear->text() + "-" +
-                      ui->btnMonth->text() + ".png";
+    QString strFile = mw_one->ui->lblTitle->text() + "-" +
+                      mw_one->ui->btnYear->text() + "-" +
+                      mw_one->ui->btnMonth->text() + ".png";
 
 #ifdef Q_OS_ANDROID
     QDir* folder = new QDir;

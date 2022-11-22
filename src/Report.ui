@@ -26,70 +26,7 @@
    <property name="bottomMargin">
     <number>1</number>
    </property>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QToolButton" name="btnYear">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Year</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="btnMonth">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Month</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="btnOut2Img">
-       <property name="text">
-        <string>Out to Image</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="btnPrint">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Print</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="2" column="0">
-    <widget class="QLabel" name="lblTotal">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>22</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Total</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
     <widget class="QTableWidget" name="tableDetails">
      <property name="alternatingRowColors">
       <bool>true</bool>
@@ -114,7 +51,7 @@
      </column>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="0" column="0">
     <widget class="QTableWidget" name="tableReport">
      <property name="styleSheet">
       <string notr="true">QHeaderView                    // QTableWidget 标题头整个区域
@@ -214,20 +151,7 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
      </column>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lblDetails">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>22</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Details</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
+   <item row="3" column="0">
     <widget class="QTableWidget" name="tableCategory">
      <column>
       <property name="text">
@@ -245,61 +169,6 @@ QScollBar::add-line:vertical, QScrollBar::sub-line:vertical  // 垂直滚动条 
       </property>
      </column>
     </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lblTitle">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>22</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Title</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QToolButton" name="btnBack">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>35</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Back</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="btnCategory">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>35</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Category</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

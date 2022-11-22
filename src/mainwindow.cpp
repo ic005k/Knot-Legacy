@@ -509,9 +509,9 @@ void MainWindow::init_Options() {
   btnDText = Reg2.value("/YMD/btnDText", 1).toString();
 
   btnYearText = Reg2.value("/YMD/btnYearText", "2022").toString();
-  mydlgReport->ui->btnYear->setText(btnYearText);
+  ui->btnYear->setText(btnYearText);
   btnMonthText = Reg2.value("/YMD/btnMonthText", tr("Month")).toString();
-  mydlgReport->ui->btnMonth->setText(btnMonthText);
+  ui->btnMonth->setText(btnMonthText);
 
   // time machine
   QSettings RegTime(iniDir + "timemachine.ini", QSettings::IniFormat);
@@ -3768,6 +3768,7 @@ void MainWindow::init_UIWidget() {
   ui->frameRecycle->hide();
   ui->frameSteps->hide();
   ui->frameDebug->hide();
+  ui->frameReport->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3916,9 +3917,9 @@ void MainWindow::init_UIWidget() {
   ui->btnMemos->setFont(f);
 
   QString lblStyle = myEditRecord->ui->lblTitle->styleSheet();
-  mydlgReport->ui->lblTotal->setStyleSheet(lblStyle);
-  mydlgReport->ui->lblDetails->setStyleSheet(lblStyle);
-  mydlgReport->ui->lblTitle->setStyleSheet(lblStyle);
+  ui->lblTotal->setStyleSheet(lblStyle);
+  ui->lblDetails->setStyleSheet(lblStyle);
+  ui->lblTitle->setStyleSheet(lblStyle);
   ui->lblStats->setStyleSheet(lblStyle);
 
   ui->lblIcon->setText("");
@@ -3957,6 +3958,10 @@ void MainWindow::init_UIWidget() {
   ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
 
   ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
+
+  ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
+  ui->qwReportSub->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4497,12 +4502,11 @@ void MainWindow::readEBookDone() {
   }
 
   if (isReport) {
-    dlgProgEBook->close();
+    qDebug() << "开始处理表的界面数据...";
 
     mydlgReport->updateTable();
     tableReport->horizontalHeader()->show();
-    mydlgReport->ui->lblTitle->setText(
-        tabData->tabText(tabData->currentIndex()));
+    ui->lblTitle->setText(tabData->tabText(tabData->currentIndex()));
     mydlgReport->ui->tableDetails->setRowCount(0);
 
     int count = tableReport->rowCount();
@@ -4512,10 +4516,10 @@ void MainWindow::readEBookDone() {
     }
 
     if (!isReportWindowsShow) {
-      mydlgReport->setGeometry(this->geometry().x(), this->geometry().y(),
-                               this->width(), this->height());
-      mydlgReport->setModal(true);
-      mydlgReport->show();
+      ui->frameReport->setGeometry(this->geometry().x(), this->geometry().y(),
+                                   this->width(), this->height());
+      ui->frameMain->hide();
+      ui->frameReport->show();
       isReportWindowsShow = true;
     }
 
@@ -5200,3 +5204,7 @@ void MainWindow::on_btnPauseSteps_clicked() {
 }
 
 void MainWindow::on_btnReset_clicked() { mydlgSteps->on_btnReset_clicked(); }
+
+void MainWindow::on_btnBack_Report_clicked() {
+  mydlgReport->on_btnBack_clicked();
+}

@@ -158,7 +158,10 @@ DISTFILES += \
     src/onedrive/web.qml \
     src/qmlsrc/MainModel.qml \
     src/qmlsrc/TodoModel.qml \
+    src/qmlsrc/category.qml \
+    src/qmlsrc/details.qml \
     src/qmlsrc/main.qml \
+    src/qmlsrc/report.qml \
     src/qmlsrc/steps.qml \
     src/qmlsrc/todo.qml \
     src/qmlsrc/todorecycle.qml \
