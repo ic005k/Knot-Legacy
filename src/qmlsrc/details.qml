@@ -80,6 +80,7 @@ Rectangle {
     }
     TableView {
         id: tableView
+
         width: parent.width
         anchors.top: header.bottom
         anchors.left: parent.left

@@ -58,12 +58,14 @@ Rectangle {
 
         Row {
             spacing: 0
-
+            visible: false
             Repeater {
+
                 // Table Header
                 model: [qsTr("Date"), qsTr("Steps"), qsTr("KM")]
 
                 Rectangle {
+
                     width: header.width / 3
                     height: header.height
                     color: "#666666"

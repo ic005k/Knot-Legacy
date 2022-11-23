@@ -346,7 +346,7 @@ class MainWindow : public QMainWindow {
   QObjectList getAllToolButton(QObjectList lstUIControls);
 
   void refreshMainUI();
-  void on_RunCategory();
+
   void clearSelectBox();
   bool showMsgBox(QString title, QString info, QString copyText,
                   int buttonCount);
@@ -581,6 +581,8 @@ class MainWindow : public QMainWindow {
   void on_btnMonth_clicked();
 
   void on_btnOut2Img_clicked();
+
+  void on_btnCategory_clicked();
 
  private:
   bool isAndroidKeyShow = false;

@@ -28,12 +28,11 @@ class dlgReport : public QDialog {
   static void sel_Month();
   static void saveYMD();
 
-  static void getCategoryData();
+  void getCategoryData();
   static void getMonthData();
   void updateTable();
   void init();
   void updateCategoryTable();
-  static void getCategoryText();
 
   static void setTWImgData(QTreeWidgetItem *item);
   void clearAll();
@@ -46,7 +45,7 @@ class dlgReport : public QDialog {
   void clearAll_xx();
   QString getDate(int row);
   int getCurrentIndex();
-  public slots:
+ public slots:
 
   void on_btnYear_clicked();
   void on_btnCategory_clicked();
@@ -63,7 +62,9 @@ class dlgReport : public QDialog {
   void on_btnBack_clicked();
 
   void loadDetails();
-  private:
+
+ private:
+  double t_amount = 0;
 };
 
 #endif  // REPORT_H

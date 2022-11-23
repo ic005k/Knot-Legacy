@@ -153,7 +153,7 @@ Rectangle {
                     mydlgReport.loadDetails()
 
                     console.debug(row)
-                    //console.debug(tableModel.data(tableModel.index(row,0),Qt.DisplayRole))
+                    console.debug(tableModel.data(tableModel.index(row,0),Qt.DisplayRole))
                     //console.log(tableModel.getRow(0));
                     //     console.log(tableModel.rows[0].fruitName);
 

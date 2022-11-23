@@ -615,6 +615,18 @@ void dlgTodo::refreshAlarm() {
         qDebug() << "Min Time: " << listTotalS << minValue << str1
                  << "curVol: ";
 
+        // to top
+        int listcount = getCount();
+        for (int m = 0; m < listcount; m++) {
+          QString date = getItemTime(m);
+          QString text = getItemTodoText(m);
+          if (str1.contains(text)) {
+            delItem(m);
+            insertItem(date, 1, text, 0);
+            break;
+          }
+        }
+
         break;
       }
     }

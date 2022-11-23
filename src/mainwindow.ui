@@ -3227,7 +3227,7 @@ QRadioButton::indicator:checked {
             </size>
            </property>
            <property name="text">
-            <string>Category</string>
+            <string>View Category</string>
            </property>
           </widget>
          </item>
