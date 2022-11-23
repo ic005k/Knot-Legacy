@@ -4483,8 +4483,6 @@ void MainWindow::readEBookDone() {
   }
 
   if (isReport) {
-    qDebug() << "开始处理表的界面数据...";
-
     mydlgReport->updateTable();
 
     ui->lblTitle->setText(tabData->tabText(tabData->currentIndex()));

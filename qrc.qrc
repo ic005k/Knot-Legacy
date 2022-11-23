@@ -13,7 +13,6 @@
         <file>src/qmlsrc/steps.qml</file>
         <file>src/qmlsrc/todorecycle.qml</file>
         <file>src/qmlsrc/report.qml</file>
-        <file>src/qmlsrc/category.qml</file>
         <file>src/qmlsrc/details.qml</file>
     </qresource>
 </RCC>

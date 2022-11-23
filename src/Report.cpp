@@ -221,6 +221,8 @@ void dlgReport::updateTable() {
                                 " " + QString("%1").arg(t_amount, 0, 'f', 2));
 
   mw_one->ui->btnCategory->setText(tr("View Category"));
+
+  setScrollBarPos(0);
 }
 
 void dlgReport::getMonthData() {
@@ -642,6 +644,12 @@ QString dlgReport::getDate(int row) {
 void dlgReport::setCurrentHeader(int sn) {
   QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setHeader", Q_ARG(QVariant, sn));
+}
+
+void dlgReport::setScrollBarPos(double pos) {
+  QQuickItem* root = mw_one->ui->qwReport->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
+                            Q_ARG(QVariant, pos));
 }
 
 void dlgReport::loadDetails() {

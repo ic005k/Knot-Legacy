@@ -46,8 +46,10 @@ class dlgReport : public QDialog {
   QString getDate(int row);
   int getCurrentIndex();
   void setCurrentHeader(int sn);
-  public slots:
+  void setScrollBarPos(double pos);
 
+  void on_btnOut2Img_clicked();
+  void on_btnBack_clicked();
   void on_btnYear_clicked();
   void on_btnCategory_clicked();
   void on_btnMonth_clicked();
@@ -57,10 +59,6 @@ class dlgReport : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;
  public slots:
-
-  void on_btnOut2Img_clicked();
-
-  void on_btnBack_clicked();
 
   void loadDetails();
 

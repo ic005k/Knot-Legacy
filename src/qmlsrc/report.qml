@@ -15,7 +15,7 @@ Rectangle {
 
     function setScrollBarPos(pos) {
 
-        tableView.contentY = tableView.contentHeight - tableView.height
+        tableView.contentY = 0 //tableView.contentHeight - tableView.height
         console.log("contentH=" + tableView.contentHeight + "  h=" + tableView.height)
     }
 

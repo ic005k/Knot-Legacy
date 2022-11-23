@@ -553,48 +553,37 @@ void dlgTodo::refreshAlarm() {
         QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
         if (strDate.contains("-")) {
           if (strDate == strToday) {
-            // lbl->setStyleSheet(alarmStyleToday);
             modifyType(i, 1);
             isToday = true;
           }
 
           if (strTmo == strDate) {
-            // lbl->setStyleSheet(alarmStyleTomorrow);
             modifyType(i, 2);
           }
         } else {
           if (isWeekValid(str, strToday) && !isTomorrow) {
-            // lbl->setStyleSheet(alarmStyleToday);
             modifyType(i, 1);
             isToday = true;
           }
 
           if (isWeekValid(str, strTmo) && isTomorrow) {
-            // lbl->setStyleSheet(alarmStyleTomorrow);
             modifyType(i, 2);
           }
         }
 
       } else {
         if (str.contains("-")) {
-          // lbl->setText(str);
-          // lbl->setStyleSheet(getMainLabel(i)->styleSheet());
-
           modifyTime(i, str);
           modifyType(i, 0);
         }
 
         if (!str.contains("-")) {
-          // lbl->setText(tr("Alarm") + "  " + str);
-          // lbl->setStyleSheet(alarmStyle);
-
           modifyTime(i, tr("Alarm") + "  " + str);
           modifyType(i, 3);
 
           QDateTime ctime = QDateTime::currentDateTime();
           QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
           if (isWeekValid(str, strTmo)) {
-            // lbl->setStyleSheet(alarmStyleTomorrow);
             modifyType(i, 2);
           }
         }
@@ -619,10 +608,11 @@ void dlgTodo::refreshAlarm() {
         int listcount = getCount();
         for (int m = 0; m < listcount; m++) {
           QString date = getItemTime(m);
+          int type = getItemType(m);
           QString text = getItemTodoText(m);
           if (str1.contains(text)) {
             delItem(m);
-            insertItem(date, 1, text, 0);
+            insertItem(date, type, text, 0);
             break;
           }
         }

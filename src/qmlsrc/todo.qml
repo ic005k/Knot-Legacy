@@ -7,8 +7,8 @@ import QtQuick.Layouts 1.1
 Rectangle {
     id: root
 
-    width: parent.width
-    height: parent.height
+    width: 400
+    height: 500
 
     property int itemCount: 0
     property bool isHighPriority: false
