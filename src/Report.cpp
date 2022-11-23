@@ -8,8 +8,7 @@ extern int fontSize;
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
 extern QTabWidget *tabData, *tabChart;
-extern bool isImport, isEBook, isReport, isBreakReport, isReportWindowsShow,
-    isRunCategory;
+extern bool isImport, isEBook, isReport;
 
 QString btnYearText, btnMonthText;
 QStringList listCategory;
@@ -86,7 +85,6 @@ bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
 void dlgReport::on_btnBack_clicked() {
   mw_one->startSave("ymd");
 
-  isReportWindowsShow = false;
   listCategory.clear();
 
   mw_one->ui->frameReport->hide();
@@ -126,7 +124,7 @@ void dlgReport::on_btnYear_clicked() {
     list->close();
 
     listCategory.clear();
-    mw_one->on_actionReport_triggered();
+    mw_one->startInitReport();
   });
 
   int h = 30 * list->count() + 4;
@@ -181,11 +179,6 @@ void dlgReport::getMonthData() {
   listCategory.clear();
 
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    if (isBreakReport) {
-      break;
-      return;
-    }
-
     QString strYear;
     strYear = tw->topLevelItem(i)->text(3);
     QString strMonth =
@@ -280,7 +273,7 @@ void dlgReport::on_btnMonth_clicked() {
     list->close();
 
     listCategory.clear();
-    mw_one->on_actionReport_triggered();
+    mw_one->startInitReport();
   });
 
   int h = 30 * list->count() + 4;
@@ -425,6 +418,8 @@ void dlgReport::getCategoryData() {
   QString ta = QString("%1").arg(d_amount, 0, 'f', 2);
   appendSteps_xx(tr("Total"), QString::number(freq), ta);
   double bfb = d_amount / t_amount;
+  mw_one->ui->lblDetails->setStyleSheet(
+      mw_one->myEditRecord->ui->lblTitle->styleSheet());
   mw_one->ui->lblDetails->setText(
       tr("Details") + " : " + tr("Amount") + " " + ta + "    " +
       QString("%1").arg(bfb * 100, 0, 'f', 2) + " %");
@@ -615,6 +610,7 @@ void dlgReport::loadDetails() {
   mw_one->ui->lblDetails->setText(tr("Details"));
   clearAll_xx();
   setCurrentHeader(1);
+  str_xx.clear();
 
   int row = getCurrentIndex();
   QString date = getDate(row);
@@ -626,14 +622,38 @@ void dlgReport::loadDetails() {
 
       for (int j = 0; j < childCount; j++) {
         QTreeWidgetItem* childItem = topItem->child(j);
-        QString text0 = childItem->text(0).split(".").at(1);
+
+        QString text0 = childItem->text(0);
+        QStringList list = text0.split(".");
+        if (list.count() == 2) text0 = list.at(1);
+
         QString text1 = childItem->text(1);
         QString text2 = childItem->text(2);
 
         if (!text0.contains(tr("Details"))) {
           appendSteps_xx(text0, text1, text2);
+
+        } else {
+          QString t0, t1, t2;
+          QTreeWidgetItem* c_item = topItem->child(j - 1);
+          t0 = c_item->text(0);
+          QStringList list = t0.split(".");
+          if (list.count() == 2) t0 = list.at(1);
+
+          t1 = c_item->text(1);
+          t2 = c_item->text(2);
+
+          str_xx = str_xx + t0 + "  " + t1 + "  " + t2 + "\n" + text0 + "\n\n";
         }
       }
     }
   }
+
+  if (str_xx.length() > 0) {
+    mw_one->ui->lblDetails->setStyleSheet(
+        mw_one->myEditRecord->lblStyleHighLight);
+
+  } else
+    mw_one->ui->lblDetails->setStyleSheet(
+        mw_one->myEditRecord->ui->lblTitle->styleSheet());
 }

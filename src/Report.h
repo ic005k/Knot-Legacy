@@ -25,7 +25,7 @@ class dlgReport : public QDialog {
   Ui::dlgReport *ui;
 
   static void saveYMD();
-
+  QString str_xx;
   void getCategoryData();
   static void getMonthData();
   void updateTable();

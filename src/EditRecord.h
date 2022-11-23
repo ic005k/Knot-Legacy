@@ -22,7 +22,8 @@ class EditRecord : public QDialog {
   Ui::EditRecord *ui;
 
   static void saveCustomDesc();
-
+  QString lblStyleHighLight =
+      "QLabel{background: rgb(45,182,116); color:white;}";
   static int removeDuplicates(QStringList *that);
 
   void init_Desc();
@@ -75,8 +76,7 @@ class EditRecord : public QDialog {
 
  private:
   void set_Amount(QString Number);
-  QString lblStyleHighLight =
-      "QLabel{background: rgb(45,182,116); color:white;}";
+
   QString lblStyle;
 };
 

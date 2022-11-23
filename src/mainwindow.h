@@ -379,7 +379,8 @@ class MainWindow : public QMainWindow {
   QString getText1(int index);
   QString getText2(int index);
   void gotoMainItem(QTreeWidgetItem *item);
- public slots:
+  void startInitReport();
+  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();

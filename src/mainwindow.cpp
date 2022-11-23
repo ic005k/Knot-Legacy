@@ -30,8 +30,6 @@ bool loading, isReadEnd, isReadTWEnd;
 bool isReadEBookEnd = true;
 bool isSaveEnd = true;
 bool isBreak = false;
-bool isBreakReport = false;
-bool isReportWindowsShow = false;
 
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
@@ -2035,6 +2033,15 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     return true;
   }
 
+  if (watch == ui->lblDetails) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      if (ui->btnCategory->text() == tr("View Category") &&
+          mydlgReport->str_xx.length() > 0)
+
+        showMsgBox(tr("Details") + " : ", mydlgReport->str_xx, "", 1);
+    }
+  }
+
   if (watch == tw->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
       int press_y = event->globalY();
@@ -2988,30 +2995,19 @@ void MainWindow::on_btnMax_clicked() {
 }
 
 void MainWindow::on_actionReport_triggered() {
-  if (isEBook || !isSaveEnd) return;
-
-  if (!isReadEBookEnd) {
-    /*isBreakReport = true;
-    myReadTWThread->quit();
-    myReadTWThread->wait();
-
-    while (!isReadEBookEnd)
-      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);*/
-    return;
-  }
+  if (isEBook || !isSaveEnd || !isReadEBookEnd) return;
 
   if (isReadEBookEnd) {
     mydlgReport->init();
-    isReportWindowsShow = true;
-
-    dlgProgEBook = mydlgReader->getProgBar();
-    dlgProgEBook->show();
-
-    isBreakReport = false;
-    isReport = true;
-
-    myReadEBookThread->start();
+    startInitReport();
   }
+}
+
+void MainWindow::startInitReport() {
+  dlgProgEBook = mydlgReader->getProgBar();
+  dlgProgEBook->show();
+  isReport = true;
+  myReadEBookThread->start();
 }
 
 void MainWindow::on_actionPreferences_triggered() {
@@ -3793,6 +3789,7 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
+  ui->lblDetails->installEventFilter(this);
 
   myfile = new File();
   m_Remarks = new dlgRemarks(this);
@@ -4484,17 +4481,7 @@ void MainWindow::readEBookDone() {
 
   if (isReport) {
     mydlgReport->updateTable();
-
     ui->lblTitle->setText(tabData->tabText(tabData->currentIndex()));
-
-    if (!isReportWindowsShow) {
-      ui->frameReport->setGeometry(this->geometry().x(), this->geometry().y(),
-                                   this->width(), this->height());
-      ui->frameMain->hide();
-      ui->frameReport->show();
-      isReportWindowsShow = true;
-    }
-
     isReport = false;
   }
 
