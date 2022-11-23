@@ -51,6 +51,17 @@ Rectangle {
         tableModel.removeRow(currentIndex)
     }
 
+    property var header1: [qsTr("Time"), qsTr("Amount"), qsTr("Category")]
+    property var header2: [qsTr("Date"), qsTr("Time"), qsTr("Amount")]
+    property var cur_header: [qsTr("Time"), qsTr("Amount"), qsTr("Category")]
+    function setHeader(sn) {
+
+        if (sn === 1)
+            cur_header = header1
+        if (sn === 2)
+            cur_header = header2
+    }
+
     Rectangle {
         id: header
         width: parent.width
@@ -61,7 +72,7 @@ Rectangle {
 
             Repeater {
                 // Table Header
-                model: [qsTr("Time"), qsTr("Amount"), qsTr("Category")]
+                model: cur_header
 
                 Rectangle {
                     width: header.width / 3

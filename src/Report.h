@@ -45,7 +45,8 @@ class dlgReport : public QDialog {
   void clearAll_xx();
   QString getDate(int row);
   int getCurrentIndex();
- public slots:
+  void setCurrentHeader(int sn);
+  public slots:
 
   void on_btnYear_clicked();
   void on_btnCategory_clicked();

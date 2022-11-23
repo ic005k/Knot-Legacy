@@ -2688,7 +2688,7 @@ int MainWindow::get_Day(QString date) {
 
 QString MainWindow::get_Month(QString date) {
   QStringList list = date.split(" ");
-  if (list.count() == 4) {
+  if (list.count() > 1) {
     QString str = list.at(1);
     return str;
   }
@@ -2991,12 +2991,13 @@ void MainWindow::on_actionReport_triggered() {
   if (isEBook || !isSaveEnd) return;
 
   if (!isReadEBookEnd) {
-    isBreakReport = true;
+    /*isBreakReport = true;
     myReadTWThread->quit();
     myReadTWThread->wait();
 
     while (!isReadEBookEnd)
-      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);*/
+    return;
   }
 
   if (isReadEBookEnd) {

@@ -244,7 +244,7 @@ void dlgReport::getMonthData() {
     if (btnMonthText == tr("Year-Round")) {
       if (strYear == btnYearText) {
         twTotalRow = twTotalRow + 1;
-        QTreeWidgetItem* item = new QTreeWidgetItem;
+        QTreeWidgetItem* item;
         item = tw->topLevelItem(i)->clone();
 
         setTWImgData(item);
@@ -252,7 +252,7 @@ void dlgReport::getMonthData() {
     } else {
       if (strYear == btnYearText && strMonth == btnMonthText) {
         twTotalRow = twTotalRow + 1;
-        QTreeWidgetItem* item = new QTreeWidgetItem;
+        QTreeWidgetItem* item;
         item = tw->topLevelItem(i)->clone();
 
         setTWImgData(item);
@@ -273,7 +273,6 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
   newtop->setText(1, item->text(1));
   newtop->setText(2, item->text(2));
   twOut2Img->addTopLevelItem(newtop);
-  twOut2Img->setCurrentItem(newtop);
   QBrush brush(Qt::lightGray);
   newtop->setBackground(0, brush);
   newtop->setBackground(1, brush);
@@ -294,7 +293,7 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
     QString strDes = item->child(z)->text(3);
     if (strDes.trimmed().length() > 0) {
       QTreeWidgetItem* des = new QTreeWidgetItem(newtop);
-      des->setText(0, tr("Details") + ":" + item->child(z)->text(3));
+      des->setText(0, tr("Details") + ":" + strDes);
     }
   }
 
@@ -451,6 +450,7 @@ void dlgReport::on_btnCategory_clicked() {
 
 void dlgReport::getCategoryData() {
   clearAll_xx();
+  setCurrentHeader(2);
   int freq = 0;
   double d_amount = 0;
   for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
@@ -639,12 +639,18 @@ QString dlgReport::getDate(int row) {
   return item.toString();
 }
 
+void dlgReport::setCurrentHeader(int sn) {
+  QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setHeader", Q_ARG(QVariant, sn));
+}
+
 void dlgReport::loadDetails() {
   mw_one->ui->qwReportSub->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
   btnCategory->setText(tr("View Category"));
   mw_one->ui->lblDetails->setText(tr("Details"));
   clearAll_xx();
+  setCurrentHeader(1);
 
   int row = getCurrentIndex();
   QString date = getDate(row);
