@@ -151,6 +151,8 @@ void dlgReport::updateTable() {
   mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " +
                                 tr("Amount") + " 0");
   mw_one->ui->lblDetails->setText(tr("Details"));
+  mw_one->ui->lblDetails->setStyleSheet(
+      mw_one->myEditRecord->ui->lblTitle->styleSheet());
 
   for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
@@ -426,8 +428,6 @@ void dlgReport::getCategoryData() {
 
   setScrollBarPos_xx(0);
 }
-
-void dlgReport::updateCategoryTable() {}
 
 void setTableNoItemFlags(QTableWidget* t, int row) {
   for (int z = 0; z < t->columnCount(); z++) {

@@ -30,7 +30,6 @@ class dlgReport : public QDialog {
   static void getMonthData();
   void updateTable();
   void init();
-  void updateCategoryTable();
 
   static void setTWImgData(QTreeWidgetItem *item);
   void clearAll();
