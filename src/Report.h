@@ -24,8 +24,6 @@ class dlgReport : public QDialog {
   ~dlgReport();
   Ui::dlgReport *ui;
 
-  static void sel_Year();
-  static void sel_Month();
   static void saveYMD();
 
   void getCategoryData();
@@ -54,6 +52,8 @@ class dlgReport : public QDialog {
   void on_btnCategory_clicked();
   void on_btnMonth_clicked();
 
+  void setScrollBarPos_xx(double pos);
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -64,6 +64,7 @@ class dlgReport : public QDialog {
 
  private:
   double t_amount = 0;
+  int freq = 0;
 };
 
 #endif  // REPORT_H

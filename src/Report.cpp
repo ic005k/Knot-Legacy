@@ -145,60 +145,8 @@ void dlgReport::on_btnYear_clicked() {
   }
 }
 
-void dlgReport::sel_Year() {
-  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
-
-  int freq = 0;
-  double amount = 0;
-  int j = 0;
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    if (isBreakReport) {
-      break;
-      return;
-    }
-
-    QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
-    if (strYear == btnYearText) {
-    }
-  }
-
-  lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " + tr("Amount") +
-                    " 0");
-
-  btnCategory->setText(tr("View Category"));
-}
-
-void dlgReport::sel_Month() {
-  if (btnMonth->text() == tr("Year-Round")) {
-    sel_Year();
-    return;
-  }
-
-  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
-
-  int freq = 0;
-  double amount = 0;
-  int j = 0;
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    if (isBreakReport) {
-      break;
-      return;
-    }
-
-    QString strYear = mw_one->get_Year(tw->topLevelItem(i)->text(0));
-    QString strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0));
-    if (strYear == btnYearText && strMonth == btnMonthText) {
-    }
-  }
-
-  lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " + tr("Amount") +
-                    " 0");
-
-  btnCategory->setText(tr("View Category"));
-}
-
 void dlgReport::updateTable() {
-  int freq = 0;
+  freq = 0;
   t_amount = 0;
   clearAll();
   clearAll_xx();
@@ -480,6 +428,8 @@ void dlgReport::getCategoryData() {
   mw_one->ui->lblDetails->setText(
       tr("Details") + " : " + tr("Amount") + " " + ta + "    " +
       QString("%1").arg(bfb * 100, 0, 'f', 2) + " %");
+
+  setScrollBarPos_xx(0);
 }
 
 void dlgReport::updateCategoryTable() {}
@@ -501,11 +451,11 @@ void dlgReport::on_btnOut2Img_clicked() {
         0, mw_one->ui->btnYear->text() + " . " + mw_one->ui->btnMonth->text());
     twOut2Img->insertTopLevelItem(0, item0);
 
-    int count;
     QTreeWidgetItem* item = new QTreeWidgetItem;
-    item->setText(0, "");
-    item->setText(1, "");
-    item->setText(2, "");
+    item->setText(0, tr("Total") + " : ");
+    item->setText(1, tr("Freq") + " " + QString::number(freq));
+    item->setText(2,
+                  tr("Amount") + " " + QString("%1").arg(t_amount, 0, 'f', 2));
     twOut2Img->addTopLevelItem(item);
 
     twTotalRow = twTotalRow + 3;
@@ -652,6 +602,12 @@ void dlgReport::setScrollBarPos(double pos) {
                             Q_ARG(QVariant, pos));
 }
 
+void dlgReport::setScrollBarPos_xx(double pos) {
+  QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
+                            Q_ARG(QVariant, pos));
+}
+
 void dlgReport::loadDetails() {
   mw_one->ui->qwReportSub->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
@@ -670,7 +626,7 @@ void dlgReport::loadDetails() {
 
       for (int j = 0; j < childCount; j++) {
         QTreeWidgetItem* childItem = topItem->child(j);
-        QString text0 = childItem->text(0);
+        QString text0 = childItem->text(0).split(".").at(1);
         QString text1 = childItem->text(1);
         QString text2 = childItem->text(2);
 
