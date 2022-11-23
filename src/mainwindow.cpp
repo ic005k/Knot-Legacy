@@ -2324,6 +2324,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         on_btnBackSteps_clicked();
         return true;
       }
+
+      if (!ui->frameReport->isHidden()) {
+        on_btnBack_Report_clicked();
+        return true;
+      }
     }
   }
 

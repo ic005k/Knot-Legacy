@@ -19,8 +19,7 @@ Rectangle {
         console.log("contentH=" + tableView.contentHeight + "  h=" + tableView.height)
     }
 
-    function getCurrentIndex()
-    {
+    function getCurrentIndex() {
         return tableView.currentIndex
     }
 
@@ -29,11 +28,8 @@ Rectangle {
         return tableModel.rowCount
     }
 
-
-
     function getDate(itemIndex) {
-        return "周五 08 26"
-
+        return tableModel.rows[itemIndex].Date
     }
 
     function getSteps(itemIndex) {
@@ -153,10 +149,7 @@ Rectangle {
                     mydlgReport.loadDetails()
 
                     console.debug(row)
-                    console.debug(tableModel.data(tableModel.index(row,0),Qt.DisplayRole))
-                    //console.log(tableModel.getRow(0));
-                    //     console.log(tableModel.rows[0].fruitName);
-
+                    //console.log(tableModel.rows[row].Date)
                 }
                 onDoubleClicked: {
                     tableView.selected(row, header.logicIndexMap[column])
@@ -164,8 +157,6 @@ Rectangle {
                 onEntered: tableView.hoverIndex = row
                 onExited: tableView.hoverIndex = -1
             }
-
-
         }
     }
 
@@ -185,6 +176,4 @@ Rectangle {
         appendTableRow("2022-11-19", "3500", "test1")
         appendTableRow("2022-11-19", "3500", "test1")
     }
-
-
 }

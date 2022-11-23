@@ -204,6 +204,7 @@ void dlgReport::updateTable() {
   clearAll_xx();
   mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " +
                                 tr("Amount") + " 0");
+  mw_one->ui->lblDetails->setText(tr("Details"));
 
   for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
@@ -474,9 +475,9 @@ void dlgReport::getCategoryData() {
   QString ta = QString("%1").arg(d_amount, 0, 'f', 2);
   appendSteps_xx(tr("Total"), QString::number(freq), ta);
   double bfb = d_amount / t_amount;
-  mw_one->ui->lblDetails->setText(tr("Details") + " : " + tr("Amount") + " " +
-                                  ta + "    " +
-                                  QString("%1").arg(bfb, 0, 'f', 2) + " %");
+  mw_one->ui->lblDetails->setText(
+      tr("Details") + " : " + tr("Amount") + " " + ta + "    " +
+      QString("%1").arg(bfb * 100, 0, 'f', 2) + " %");
 }
 
 void dlgReport::updateCategoryTable() {}
@@ -647,7 +648,6 @@ void dlgReport::loadDetails() {
 
   int row = getCurrentIndex();
   QString date = getDate(row);
-  qDebug() << "aaaaa" << date;
 
   for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
