@@ -105,12 +105,11 @@ Rectangle {
 
         anchors {
             fill: parent
-            margins: 4
+            margins: 0
         }
-        model: TodoModel {}
-
         spacing: 4
         cacheBuffer: 50
+        model: TodoModel {}
 
         ScrollBar.vertical: ScrollBar {
             width: 8
@@ -158,7 +157,7 @@ Rectangle {
 
                     ColumnLayout {
                         height: parent.height
-                        width: parent.width - flagColor.width - donebtn.width
+                        width: parent.width - flagColor.width - donebtn.width - 4
                         spacing: 2
                         Layout.fillWidth: true
 
