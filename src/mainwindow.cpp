@@ -241,6 +241,9 @@ MainWindow::MainWindow(QWidget *parent)
 
   initMain = false;
   reloadMain();
+
+  mw_one->mydlgTodo->refreshAlarm();
+  mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -4286,12 +4289,10 @@ static void JavaNotify_1() {
   // qDebug() << "C++ JavaNotify_1";
 }
 static void JavaNotify_2() {
-  mw_one->mydlgSteps->isOnScreen = true;
-  mw_one->updateHardSensorSteps();
-
   if (!mw_one->ui->frameReader->isHidden()) mw_one->mydlgReader->saveReader();
 
   mw_one->mydlgTodo->refreshAlarm();
+  mw_one->updateHardSensorSteps();
 
   qDebug() << "C++ JavaNotify_2";
 }

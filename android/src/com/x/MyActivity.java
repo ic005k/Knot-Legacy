@@ -190,6 +190,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
 
+        if(isStepCounter==1)
+        {
+            CallJavaNotify_2();
+        }
+
         return 1;
     }
 
@@ -278,7 +283,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             if (SCREEN_ON.equals(intent.getAction())) {
                 if (isStepCounter == 1) {
 
-                    CallJavaNotify_2();
+
                 }
                 isScreenOff = false;
                 Log.w("Knot", "屏幕亮了");
@@ -287,8 +292,9 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                 if (isStepCounter == 1) {
                     if (mySerivece != null) {
                         mSensorManager.unregisterListener(mySerivece);
-
                     }
+
+
                 }
                 isScreenOff = true;
                 Log.w("Knot", "屏幕熄了");
@@ -1014,6 +1020,7 @@ This method can parse out the real local file path from a file URI.
                 String reason = intent.getStringExtra(SYSTEM_REASON);
                 if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     // 表示按了home键,程序直接进入到后台
+                    
                     System.out.println("MyActivity HOME键被按下...");
                 } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
                     // 表示长按home键,显示最近使用的程序

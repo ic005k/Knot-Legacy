@@ -17,7 +17,6 @@ class dlgSteps : public QDialog {
   ~dlgSteps();
   Ui::dlgSteps *ui;
 
-  bool isOnScreen = false;
   int toDayInitSteps = 0;
   double dleInter = 5;
   double dleSlope = 5;
