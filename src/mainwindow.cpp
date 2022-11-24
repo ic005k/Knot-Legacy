@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.47";
+QString ver = "1.0.48";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -241,9 +241,6 @@ MainWindow::MainWindow(QWidget *parent)
 
   initMain = false;
   reloadMain();
-
-  mw_one->mydlgTodo->refreshAlarm();
-  mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -2936,8 +2933,9 @@ void MainWindow::on_btnTodo_clicked() {
 
   mydlgTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                          this->width(), this->height());
+  mw_one->ui->qwTodo->rootContext()->setContextProperty("m_width",
+                                                        mw_one->width());
 
-  // mydlgTodo->show();
   ui->frameMain->hide();
   ui->frameTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                              this->width(), this->height());
@@ -3556,6 +3554,8 @@ QString MainWindow::secondsToTime(ulong totalTime) {
 }
 
 void MainWindow::updateHardSensorSteps() {
+  qDebug() << "Started updating the hardware sensor steps...";
+
   timeTest = timeTest + 1;
   ui->lblTotalRunTime->setText(tr("Number of Operations") + " : " +
                                QString::number(timeTest));
@@ -4292,7 +4292,6 @@ static void JavaNotify_2() {
   if (!mw_one->ui->frameReader->isHidden()) mw_one->mydlgReader->saveReader();
 
   mw_one->mydlgTodo->refreshAlarm();
-  mw_one->updateHardSensorSteps();
 
   qDebug() << "C++ JavaNotify_2";
 }

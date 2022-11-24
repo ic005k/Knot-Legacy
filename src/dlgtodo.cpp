@@ -636,6 +636,8 @@ void dlgTodo::refreshAlarm() {
     qDebug() << "ini no exists";
   else
     qDebug() << "ini ok";
+
+  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
 void dlgTodo::on_textEdit_textChanged() {
@@ -939,6 +941,4 @@ void dlgTodo::addToRecycle() {
       QDateTime::currentDateTime().toString() + "  " + tr("Done");
 
   insertRecycle(doneTime, 0, strTodoText, 0);
-
-  refreshAlarm();
 }

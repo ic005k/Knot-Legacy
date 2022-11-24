@@ -119,10 +119,10 @@ Rectangle {
 
         delegate: Flickable {
             id: flack
-
-            width: parent.width
+            property int myw: m_width - 8
+            width: myw
             height: itemheight
-            contentWidth: parent.width + donebtn.width + 5
+            contentWidth: myw + donebtn.width + 5
             contentHeight: itemheight
             boundsBehavior: Flickable.StopAtBounds //该属性设置过后，边界不会被拉出
 
@@ -236,6 +236,7 @@ Rectangle {
 
                             mydlgTodo.addToRecycle()
                             view.model.remove(index)
+                            mydlgTodo.refreshAlarm()
                             console.log("mouse isclick")
                         }
                     }

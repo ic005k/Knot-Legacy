@@ -380,3 +380,14 @@ void msgDialog::on_btnNextWeek_clicked() {
   setBtnTitle();
   on_btnDay_clicked();
 }
+
+void msgDialog::on_chkDaily_clicked() {
+  bool chk = ui->chkDaily->isChecked();
+  ui->chk1->setChecked(chk);
+  ui->chk2->setChecked(chk);
+  ui->chk3->setChecked(chk);
+  ui->chk4->setChecked(chk);
+  ui->chk5->setChecked(chk);
+  ui->chk6->setChecked(chk);
+  ui->chk7->setChecked(chk);
+}

@@ -47,7 +47,7 @@ class dlgTodo : public QDialog {
   void sendMsgAlarm(QString text);
 
   qlonglong getSecond(QString strDateTime);
-  void refreshAlarm();
+
   int getEditTextHeight(QTextEdit *edit);
 
   void insertItem(QString strTime, int type, QString strText, int curIndex);
@@ -69,6 +69,7 @@ class dlgTodo : public QDialog {
 
   int setItemHeight(QString strTodoText);
  public slots:
+  void refreshAlarm();
   void reeditText();
   void addToRecycle();
   void isAlarm(int index);
@@ -109,7 +110,8 @@ class dlgTodo : public QDialog {
   QString getItemTodoTextRecycle(int index);
   QString getItemTimeRecycle(int index);
   void addItemRecycle(QString strTime, int type, QString strText);
-  private:
+
+ private:
   QListWidgetItem *editItem;
 
   QLabel *lblModi;
