@@ -3893,6 +3893,9 @@ void MainWindow::init_UIWidget() {
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
   ui->qwReportSub->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
+
+  ui->qwOneDriver->rootContext()->setContextProperty("mydlgOneDrive",
+                                                     mydlgOneDrive);
 }
 
 void MainWindow::on_btnSelTab_clicked() {

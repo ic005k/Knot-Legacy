@@ -9,11 +9,13 @@
 
 #include "src/mainwindow.h"
 #include "src/onedrive/qtonedrive.h"
+#include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_dlgOneDrive.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;
 extern QString iniFile, iniDir;
+extern QtOneDriveAuthorizationDialog *dialog_;
 
 TestDialog::TestDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::TestDialog) {
@@ -283,4 +285,12 @@ void TestDialog::initQuick() {
   const QSize size(400, 400);
   quickWidget->resize(size);
   quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+}
+
+int TestDialog::getProg() {
+  QQuickItem *root = mw_one->ui->qwOneDriver->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject *)root, "getPorg",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
 }

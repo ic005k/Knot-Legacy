@@ -23,6 +23,10 @@ class TestDialog : public QDialog {
 
   void initQuick();
 
+  int getProg();
+
+ signals:
+
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
  public slots:
