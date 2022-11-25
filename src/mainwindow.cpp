@@ -2174,11 +2174,9 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       int current_page = ui->tabWidget->currentIndex();
       if (current_page < count - 1) {
         isSlide = true;
-        // ui->lblStats->setPixmap(ui->tabWidget->currentWidget()
-        //                             ->grab());
-        //                             //捕获当前界面并绘制到label上
+
         QPropertyAnimation *animation1 =
-            // new QPropertyAnimation(ui->lblStats, "geometry");
+
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
         animation1->setDuration(350);  //设置动画时间为0.5秒
         animation1->setStartValue(QRect(x, y, w, h));
@@ -2218,10 +2216,9 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       int current_page = ui->tabWidget->currentIndex();
       if (current_page >= 0) {
         isSlide = true;
-        // ui->lblStats->setPixmap(ui->tabWidget->currentWidget()->grab());
 
         QPropertyAnimation *animation1 =
-            // new QPropertyAnimation(ui->lblStats, "geometry");
+
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
         animation1->setDuration(350);
         animation1->setStartValue(QRect(x, y, w, h));
@@ -2366,16 +2363,12 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     if (event->type() == QEvent::MouseButtonPress) {
       isMousePress = true;
 
-      Sleep(1);
-      mydlgReader->setVPos(mydlgReader->textPos);
       press_x = event->globalX();
       press_y = event->globalY();
       x = 0;
       y = 0;
       w = ui->qwReader->width();
       h = ui->qwReader->height();
-
-      // qDebug() << "Press:" << press_x << press_y;
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
@@ -2388,7 +2381,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       isMousePress = false;
       isMouseMove = false;
 
-      qDebug() << "release curx=" << curx;
       //判断滑动方向（右滑）
       if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
         if (!isEpub) {
@@ -2406,27 +2398,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         }
         isTurnThePage = true;
 
-        /*ui->lblTitle->setPixmap(ui->qwReader->grab());
-    QPropertyAnimation* animation1 =
-        new QPropertyAnimation(ui->lblTitle, "geometry");
-
-        animation1->setDuration(abc);
-        animation1->setStartValue(QRect(x, y, w, h));
-        animation1->setEndValue(QRect(w * 1, y, w, h));*/
-
         on_btnPageUp_clicked();
-
-        /*QPropertyAnimation* animation2 =
-        new QPropertyAnimation(ui->qwReader, "geometry");
-    animation2->setDuration(abc);
-    animation2->setStartValue(QRect(-w * 0, y, w, h));
-    animation2->setEndValue(QRect(x, y, w, h));
-
-        QParallelAnimationGroup* group = new QParallelAnimationGroup;
-        group->addAnimation(animation1);
-        group->addAnimation(animation2);
-        group->start();
-        ui->lblTitle->show();*/
       }
 
       //判断滑动方向（左滑）
@@ -2446,34 +2418,12 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         }
         isTurnThePage = true;
 
-        /*ui->lblTitle->setPixmap(ui->qwReader->grab());
-    QPropertyAnimation* animation1 =
-        new QPropertyAnimation(ui->lblTitle, "geometry");
-
-        animation1->setDuration(abc);
-        animation1->setStartValue(QRect(x, y, w, h));
-        animation1->setEndValue(QRect(-w, y, w, h));*/
-
         on_btnPageNext_clicked();
-
-        /*QPropertyAnimation* animation2 =
-        new QPropertyAnimation(ui->qwReader, "geometry");
-    animation2->setDuration(abc);
-    animation2->setStartValue(QRect(w * 1, y, w, h));
-    animation2->setEndValue(QRect(x, y, w, h));
-
-        QParallelAnimationGroup* group = new QParallelAnimationGroup;
-        group->addAnimation(animation1);
-        group->addAnimation(animation2);
-        group->start();
-        ui->lblTitle->show();*/
       }
 
       QMetaObject::invokeMethod((QObject *)root, "setX", Q_ARG(QVariant, 0));
 
-      // qDebug() << "Release:" << relea_x << relea_y;
       curx = 0;
-      qDebug() << "release2 curx=" << curx;
     }
 
     if (event->type() == QEvent::MouseMove) {
@@ -4666,10 +4616,6 @@ void MainWindow::on_btnBackMemo_clicked() {
 
   ui->frameMemo->hide();
   ui->frameMain->show();
-
-  // delete mw_one->mydlgFloatFun;
-  // mydlgFloatFun = new dlgFloatFun(this);
-  // mydlgFloatFun->init();
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -4885,10 +4831,7 @@ void MainWindow::showGrayWindows() {
   m_widget->show();
 }
 
-void MainWindow::closeGrayWindows() {
-  m_widget->close();
-  // mydlgFloatFun->init();
-}
+void MainWindow::closeGrayWindows() { m_widget->close(); }
 
 void MainWindow::on_btnNotesList_clicked() {
   mydlgMainNotes->saveQMLVPos();

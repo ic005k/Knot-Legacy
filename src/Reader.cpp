@@ -543,6 +543,7 @@ void dlgReader::saveReader() {
   Reg.setValue("/Reader/FileName", fileName);
   Reg.setValue("/Reader/FontName", fontname);
   Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
+  textPos = getVPos();
   Reg.setValue("/Reader/vpos" + fileName, textPos);
   if (!isEpub) {
     Reg.setValue("/Reader/iPage" + fileName, iPage - baseLines);
@@ -1102,6 +1103,7 @@ void dlgReader::savePageVPos() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
+  textPos = getVPos();
   if (isEpub) {
     if (htmlIndex >= 0)
       Reg.setValue("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex),
@@ -1138,14 +1140,20 @@ void dlgReader::setVPos(qreal pos) {
 }
 
 qreal dlgReader::getVPos() {
+  QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "getVPos");
+  QMetaObject::invokeMethod((QObject*)root, "getVPos",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  textPos = itemCount.toDouble();
   return textPos;
 }
 
 qreal dlgReader::getVHeight() {
+  QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "getVHeight");
+  QMetaObject::invokeMethod((QObject*)root, "getVHeight",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  textHeight = itemCount.toDouble();
   return textHeight;
 }
 

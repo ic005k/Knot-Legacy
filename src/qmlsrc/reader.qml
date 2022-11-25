@@ -32,13 +32,15 @@ Rectangle {
     }
 
     function getVPos() {
-        file.textPos = contentY
-        console.log(file.textPos)
+        //file.textPos = contentY
+        //console.log(file.textPos)
+        return flickable.contentY
     }
 
     function getVHeight() {
-        file.textHeight = textArea.contentHeight
-        console.log(file.textHeight)
+        //file.textHeight = textArea.contentHeight
+        //console.log(file.textHeight)
+        return textArea.contentHeight
     }
 
     function getSelectedText() {
@@ -102,10 +104,10 @@ Rectangle {
 
         onMovementEnded: {
             state = "autoscroll"
-            file.textPos = contentY
-            file.textHeight = contentHeight
-            console.log(file.textPos)
-            console.log(file.textHeight)
+            //file.textPos = contentY
+            //file.textHeight = contentHeight
+            //console.log(file.textPos)
+            //console.log(file.textHeight)
         }
 
         TextArea.flickable: TextArea {
