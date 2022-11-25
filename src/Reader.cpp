@@ -1,9 +1,9 @@
-#include "dlgreader.h"
+#include "Reader.h"
 
 #include <QKeyEvent>
 
 #include "mainwindow.h"
-#include "ui_dlgreader.h"
+#include "ui_Reader.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
@@ -143,10 +143,10 @@ void dlgReader::setReaderStyle() {
   QColor textColor, baseColor;
 
   if (readerStyle == "1") {
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
-                                                               "/res/b.png");
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
-                                                               "#664E30");
+    mw_one->ui->qwReader->rootContext()->setContextProperty("backImgFile",
+                                                            "/res/b.png");
+    mw_one->ui->qwReader->rootContext()->setContextProperty("myTextColor",
+                                                            "#664E30");
 
     mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
@@ -166,10 +166,9 @@ void dlgReader::setReaderStyle() {
   }
 
   if (readerStyle == "2") {
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
-                                                               "");
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
-                                                               "#000000");
+    mw_one->ui->qwReader->rootContext()->setContextProperty("backImgFile", "");
+    mw_one->ui->qwReader->rootContext()->setContextProperty("myTextColor",
+                                                            "#000000");
 
     mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
@@ -189,10 +188,10 @@ void dlgReader::setReaderStyle() {
   }
 
   if (readerStyle == "3") {
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("backImgFile",
-                                                               "/res/b3.png");
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("myTextColor",
-                                                               "#2E8B57");
+    mw_one->ui->qwReader->rootContext()->setContextProperty("backImgFile",
+                                                            "/res/b3.png");
+    mw_one->ui->qwReader->rootContext()->setContextProperty("myTextColor",
+                                                            "#2E8B57");
 
     mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
@@ -224,17 +223,17 @@ void dlgReader::startOpenFile(QString openfile) {
 
   setReaderStyle();
 
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("isWebViewShow",
-                                                             false);
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", "");
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("isSelText",
-                                                             mw_one->isSelText);
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", true);
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("aniW",
-                                                             mw_one->width());
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("toW", 0);
-  mw_one->ui->quickWidget->setSource(
-      QUrl(QStringLiteral("qrc:/src/reader.qml")));
+  mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
+                                                          false);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
+  mw_one->ui->qwReader->rootContext()->setContextProperty("isSelText",
+                                                          mw_one->isSelText);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
+                                                          mw_one->width());
+  mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
+  mw_one->ui->qwReader->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
 
   if (QFile(openfile).exists()) {
     isEBook = true;
@@ -300,7 +299,7 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->TextEditToFile(txtEdit, fileName);
 #endif
 
-    mw_one->ui->quickWidget->rootContext()->setContextProperty(
+    mw_one->ui->qwReader->rootContext()->setContextProperty(
         "strText", tr("Book Info : ") + "\n" + strfilepath);
 
     ebookFile = openfile;
@@ -574,12 +573,11 @@ void dlgReader::initReader() {
   QFont font;
   int fsize = Reg.value("/Reader/FontSize", 18).toInt();
   mw_one->textFontSize = fsize;
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize", fsize);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("FontSize", fsize);
   font.setPointSize(fsize);
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
 
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
-                                                             fontname);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("FontName", fontname);
 
   fileName = Reg.value("/Reader/FileName").toString();
   if (!QFile(fileName).exists() && zh_cn) fileName = ":/res/test.txt";
@@ -645,7 +643,7 @@ void dlgReader::getLines() {
 }
 
 void dlgReader::setQML(QString txt1) {
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
 
   // white-space: pre-wrap;
   // text-indent:40px;
@@ -662,16 +660,16 @@ void dlgReader::setQML(QString txt1) {
   qsShow = str1 + qsShow + str2;
 
   currentTxt = qsShow;
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("strText", qsShow);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("strText", qsShow);
 
   if (isPageNext)
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("aniW",
-                                                               mw_one->width());
+    mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
+                                                            mw_one->width());
   else
-    mw_one->ui->quickWidget->rootContext()->setContextProperty(
-        "aniW", -mw_one->width());
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("toW", 0);
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", true);
+    mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
+                                                            -mw_one->width());
+  mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
 }
 
 void dlgReader::selectFont() {
@@ -705,8 +703,8 @@ void dlgReader::selectFont() {
     savePageVPos();
 
     fontname = list->currentItem()->text();
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
-                                                               fontname);
+    mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
+                                                            fontname);
 
     list->close();
     setPageVPos();
@@ -737,8 +735,8 @@ void dlgReader::selectFont() {
     Reg.setIniCodec("utf-8");
 #endif
     Reg.setValue("/Reader/FontName", font.family());
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
-                                                               font.family());
+    mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
+                                                            font.family());
   }
 }
 
@@ -941,11 +939,11 @@ void dlgReader::processHtml() {
 }
 
 void dlgReader::setQMLHtml() {
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", false);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
 
   currentHtmlFile = htmlFiles.at(htmlIndex);
 
-  QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+  QQuickItem* root = mw_one->ui->qwReader->rootObject();
 
 #ifdef Q_OS_WIN
   QString htmlBuffer = mw_one->loadText(currentHtmlFile);
@@ -960,13 +958,13 @@ void dlgReader::setQMLHtml() {
   qDebug() << "Html File : " << currentHtmlFile;
 
   if (isPageNext)
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("aniW",
-                                                               mw_one->width());
+    mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
+                                                            mw_one->width());
   else
-    mw_one->ui->quickWidget->rootContext()->setContextProperty(
-        "aniW", -mw_one->width());
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("toW", 0);
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", true);
+    mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
+                                                            -mw_one->width());
+  mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
 }
 
 QStringList dlgReader::readText(QString textFile) {
@@ -1076,8 +1074,8 @@ void dlgReader::setFontSize(int textFontSize) {
   qreal pos1 = getVPos();
   qreal h1 = getVHeight();
 
-  mw_one->ui->quickWidget->rootContext()->setContextProperty("FontSize",
-                                                             textFontSize);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("FontSize",
+                                                          textFontSize);
 
   qreal h2 = getVHeight();
   qreal pos2 = getNewVPos(pos1, h1, h2);
@@ -1135,18 +1133,18 @@ void dlgReader::setPageVPos() {
 }
 
 void dlgReader::setVPos(qreal pos) {
-  QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+  QQuickItem* root = mw_one->ui->qwReader->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
 }
 
 qreal dlgReader::getVPos() {
-  QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+  QQuickItem* root = mw_one->ui->qwReader->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getVPos");
   return textPos;
 }
 
 qreal dlgReader::getVHeight() {
-  QQuickItem* root = mw_one->ui->quickWidget->rootObject();
+  QQuickItem* root = mw_one->ui->qwReader->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getVHeight");
   return textHeight;
 }

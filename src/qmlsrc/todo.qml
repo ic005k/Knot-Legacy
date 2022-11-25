@@ -159,7 +159,7 @@ Rectangle {
                         height: parent.height
                         width: parent.width - flagColor.width - donebtn.width - 4
                         spacing: 2
-                        Layout.fillWidth: true
+                        Layout.fillWidth: false
 
                         anchors.leftMargin: 0
                         anchors.rightMargin: 0
@@ -169,34 +169,33 @@ Rectangle {
                             color: "gray"
                             font.pixelSize: FontSize - 2
                             font.bold: true
-                            readOnly: true
                             width: parent.width
-                            wrapMode: TextArea.Wrap
+                            wrapMode: Text.Wrap
+                            readOnly: true
                             text: time
                         }
-                        TextArea {
+                        Text {
                             id: text2
-                            readOnly: true
                             visible: false
                             width: parent.width
-                            wrapMode: TextArea.Wrap
+                            wrapMode: Text.Wrap
                             text: type
                         }
                         TextArea {
                             id: text3
                             font.pixelSize: FontSize
-                            readOnly: true
                             width: parent.width
-                            wrapMode: TextArea.Wrap
+                            //background: Qt.rgba(0, 0, 0, 0)
+                            readOnly: true
+                            wrapMode: Text.Wrap
                             color: isHighPriority ? "#EF5B98" : "#000000"
                             text: dototext
                         }
-                        TextArea {
+                        Text {
                             id: text4
-                            readOnly: true
                             visible: false
                             width: parent.width
-                            wrapMode: TextArea.Wrap
+                            wrapMode: Text.Wrap
                             text: itemheight
                         }
                     }

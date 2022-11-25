@@ -40,6 +40,7 @@ INSTALLS += dataFiles
 SOURCES += \
     src/EditRecord.cpp \
     src/Preferences.cpp \
+    src/Reader.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
     src/Steps.cpp \
@@ -53,7 +54,6 @@ SOURCES += \
     src/dlgleft.cpp \
     src/dlglist.cpp \
     src/dlgloadpic.cpp \
-    src/dlgreader.cpp \
     src/dlgright.cpp \
     src/dlgsetedittext.cpp \
     src/dlgtodo.cpp \
@@ -69,6 +69,7 @@ SOURCES += \
 HEADERS += \
     src/EditRecord.h \
     src/Preferences.h \
+    src/Reader.h \
     src/RemarksAbout.h \
     src/Report.h \
     src/Steps.h \
@@ -83,7 +84,6 @@ HEADERS += \
     src/dlgleft.h \
     src/dlglist.h \
     src/dlgloadpic.h \
-    src/dlgreader.h \
     src/dlgright.h \
     src/dlgsetedittext.h \
     src/dlgtodo.h \
@@ -99,6 +99,7 @@ HEADERS += \
 FORMS += \
     src/EditRecord.ui \
     src/Preferences.ui \
+    src/Reader.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
     src/Steps.ui \
@@ -112,7 +113,6 @@ FORMS += \
     src/dlgleft.ui \
     src/dlglist.ui \
     src/dlgloadpic.ui \
-    src/dlgreader.ui \
     src/dlgright.ui \
     src/dlgsetedittext.ui \
     src/dlgtodo.ui \
@@ -159,7 +159,11 @@ DISTFILES += \
     src/qmlsrc/MainModel.qml \
     src/qmlsrc/TodoModel.qml \
     src/qmlsrc/details.qml \
+    src/qmlsrc/imgview.qml \
     src/qmlsrc/main.qml \
+    src/qmlsrc/memo.qml \
+    src/qmlsrc/notes.qml \
+    src/qmlsrc/reader.qml \
     src/qmlsrc/report.qml \
     src/qmlsrc/steps.qml \
     src/qmlsrc/todo.qml \

@@ -37,7 +37,7 @@ dlgReaderFun::~dlgReaderFun() { delete ui; }
 
 void dlgReaderFun::init() {
   setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
-              mw_one->ui->quickWidget->height());
+              mw_one->ui->qwReader->height());
   // setWindowFlags(Qt::WindowStaysOnTopHint);
 
   setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool | Qt::FramelessWindowHint);

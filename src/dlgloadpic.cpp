@@ -36,7 +36,8 @@ void dlgLoadPic::initMain(QString imgFile) {
   mw_one->ui->qw_Img->rootContext()->setContextProperty("imgH",
                                                         img.height() * 2);
   mw_one->ui->qw_Img->rootContext()->setContextProperty("imgFile", imgFile);
-  mw_one->ui->qw_Img->setSource(QUrl(QStringLiteral("qrc:/src/imgview.qml")));
+  mw_one->ui->qw_Img->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/imgview.qml")));
 }
 
 bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {

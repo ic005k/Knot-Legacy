@@ -2145,7 +2145,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   }
 
   if (watch != ui->tabWidget->tabBar() && watch != tw &&
-      watch != ui->quickWidget) {
+      watch != ui->qwReader) {
     static int press_x;
     static int press_y;
     static int relea_x;
@@ -2339,7 +2339,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
-  if (watch == ui->quickWidget) {
+  if (watch == ui->qwReader) {
     static int press_x;
     static int press_y;
     static int relea_x;
@@ -2372,8 +2372,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       press_y = event->globalY();
       x = 0;
       y = 0;
-      w = ui->quickWidget->width();
-      h = ui->quickWidget->height();
+      w = ui->qwReader->width();
+      h = ui->qwReader->height();
 
       // qDebug() << "Press:" << press_x << press_y;
     }
@@ -2382,7 +2382,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       relea_x = event->globalX();
       relea_y = event->globalY();
       ui->lblTitle->hide();
-      QQuickItem *root = ui->quickWidget->rootObject();
+      QQuickItem *root = ui->qwReader->rootObject();
 
       isTurnThePage = false;
       isMousePress = false;
@@ -2406,7 +2406,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         }
         isTurnThePage = true;
 
-        /*ui->lblTitle->setPixmap(ui->quickWidget->grab());
+        /*ui->lblTitle->setPixmap(ui->qwReader->grab());
     QPropertyAnimation* animation1 =
         new QPropertyAnimation(ui->lblTitle, "geometry");
 
@@ -2417,7 +2417,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         on_btnPageUp_clicked();
 
         /*QPropertyAnimation* animation2 =
-        new QPropertyAnimation(ui->quickWidget, "geometry");
+        new QPropertyAnimation(ui->qwReader, "geometry");
     animation2->setDuration(abc);
     animation2->setStartValue(QRect(-w * 0, y, w, h));
     animation2->setEndValue(QRect(x, y, w, h));
@@ -2446,7 +2446,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         }
         isTurnThePage = true;
 
-        /*ui->lblTitle->setPixmap(ui->quickWidget->grab());
+        /*ui->lblTitle->setPixmap(ui->qwReader->grab());
     QPropertyAnimation* animation1 =
         new QPropertyAnimation(ui->lblTitle, "geometry");
 
@@ -2457,7 +2457,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         on_btnPageNext_clicked();
 
         /*QPropertyAnimation* animation2 =
-        new QPropertyAnimation(ui->quickWidget, "geometry");
+        new QPropertyAnimation(ui->qwReader, "geometry");
     animation2->setDuration(abc);
     animation2->setStartValue(QRect(w * 1, y, w, h));
     animation2->setEndValue(QRect(x, y, w, h));
@@ -3668,7 +3668,7 @@ void MainWindow::showMemos() {
   f.setPointSize(fontSize);
   mydlgMainNotes->ui->editSource->setFont(f);
 
-  memoHeight = ui->quickWidgetMemo->height();
+  memoHeight = ui->qwNotes->height();
 
   mydlgMainNotes->ui->btnUndo->setEnabled(false);
   mydlgMainNotes->ui->btnRedo->setEnabled(false);
@@ -3787,7 +3787,7 @@ void MainWindow::init_UIWidget() {
   ui->textBrowser->setMouseTracking(true);
   ui->textBrowser->viewport()->installEventFilter(this);
   ui->textBrowser->viewport()->setMouseTracking(true);
-  ui->quickWidget->installEventFilter(this);
+  ui->qwReader->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
@@ -3916,15 +3916,15 @@ void MainWindow::init_UIWidget() {
   connect(clearaction1, &QAction::triggered,
           [=]() { ui->editFind->setText(""); });
 
-  ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
-  ui->quickWidget->rootContext()->setContextProperty("myH", this->height());
-  ui->quickWidget->rootContext()->setContextProperty("mw_one", mw_one);
+  ui->qwReader->rootContext()->setContextProperty("myW", this->width());
+  ui->qwReader->rootContext()->setContextProperty("myH", this->height());
+  ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
 
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
-  ui->quickWidgetMemo->rootContext()->setContextProperty("FontSize", fontSize);
-  ui->quickWidgetMemo->rootContext()->setContextProperty("strText", "");
+  ui->qwNotes->rootContext()->setContextProperty("FontSize", fontSize);
+  ui->qwNotes->rootContext()->setContextProperty("strText", "");
 
   ui->qwTodo->rootContext()->setContextProperty("mydlgTodo", mydlgTodo);
   ui->qwTodo->rootContext()->setContextProperty("FontSize", fontSize);
@@ -4383,8 +4383,8 @@ void MainWindow::on_btnReader_clicked() {
   if (!isOne) {
     mwh = this->height();
     setFixedHeight(mwh);
-    ui->quickWidget->rootContext()->setContextProperty("myW", this->width());
-    ui->quickWidget->rootContext()->setContextProperty("myH", mwh);
+    ui->qwReader->rootContext()->setContextProperty("myW", this->width());
+    ui->qwReader->rootContext()->setContextProperty("myH", mwh);
   }
 
   ui->frameMain->hide();
@@ -4474,7 +4474,7 @@ void MainWindow::readEBookDone() {
     }
     mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
 
-    ui->quickWidget->rootContext()->setContextProperty("htmlPath", strOpfPath);
+    ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
 
     isEBook = false;
   }
@@ -4568,7 +4568,7 @@ void MainWindow::on_btnSelText_clicked() {
     isSelText = true;
 
     ui->textBrowser->setReadOnly(true);
-    QFont font = ui->quickWidget->font();
+    QFont font = ui->qwReader->font();
     font.setPixelSize(textFontSize);
     font.setFamily(fontname);
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
@@ -4584,7 +4584,7 @@ void MainWindow::on_btnSelText_clicked() {
       ui->textBrowser->setHtml(str);
     }
 
-    ui->quickWidget->hide();
+    ui->qwReader->hide();
     ui->textBrowser->show();
 
     ui->textBrowser->verticalScrollBar()->setSliderPosition(
@@ -4601,15 +4601,14 @@ void MainWindow::on_btnSelText_clicked() {
     isSelText = false;
 
     ui->textBrowser->hide();
-    ui->quickWidget->show();
+    ui->qwReader->show();
 
     mydlgSetText->close();
   }
 }
 
 void MainWindow::on_btnSignIn_clicked() {
-  ui->quickWidgetOne->setSource(
-      QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
+  ui->qwOneDriver->setSource(QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
   mydlgOneDrive->on_pushButton_SignIn_clicked();
 }
 
@@ -4648,8 +4647,8 @@ void MainWindow::on_btnStorageInfo_clicked() {
 }
 
 void MainWindow::on_btnRefreshWeb_clicked() {
-  ui->quickWidgetOne->rootContext()->setContextProperty("initialUrl",
-                                                        strRefreshUrl);
+  ui->qwOneDriver->rootContext()->setContextProperty("initialUrl",
+                                                     strRefreshUrl);
 }
 
 void MainWindow::on_btnUserInfo_clicked() {
@@ -4775,8 +4774,8 @@ void MainWindow::clearSelectBox() {
   if (!mw_one->ui->frameReader->isHidden()) {
     mw_one->mydlgReader->savePageVPos();
     bool isAni = false;
-    mw_one->ui->quickWidget->rootContext()->setContextProperty("isAni", isAni);
-    QQuickItem *root = mw_one->ui->quickWidget->rootObject();
+    mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", isAni);
+    QQuickItem *root = mw_one->ui->qwReader->rootObject();
     QMetaObject::invokeMethod((QObject *)root, "loadHtml",
                               Q_ARG(QVariant, tempFile));
     Sleep(50);
@@ -4785,8 +4784,8 @@ void MainWindow::clearSelectBox() {
           (QObject *)root, "loadHtml",
           Q_ARG(QVariant, mw_one->mydlgReader->currentHtmlFile));
     } else {
-      ui->quickWidget->rootContext()->setContextProperty(
-          "strText", mydlgReader->currentTxt);
+      ui->qwReader->rootContext()->setContextProperty("strText",
+                                                      mydlgReader->currentTxt);
     }
     mw_one->mydlgReader->setPageVPos();
   }
@@ -4794,7 +4793,7 @@ void MainWindow::clearSelectBox() {
   if (!mw_one->ui->frameMemo->isHidden()) {
     QString file = iniDir + "memo/memo.html";
     int pos = mydlgMainNotes->sliderPos;
-    QQuickItem *root = mw_one->ui->quickWidgetMemo->rootObject();
+    QQuickItem *root = mw_one->ui->qwNotes->rootObject();
     QMetaObject::invokeMethod((QObject *)root, "loadHtml",
                               Q_ARG(QVariant, tempFile));
 
@@ -4815,7 +4814,7 @@ void MainWindow::on_btnCopy_clicked() {
 QString MainWindow::getSelectedText() {
   QString str;
   QVariant returnedValue;
-  QQuickItem *root = ui->quickWidget->rootObject();
+  QQuickItem *root = ui->qwReader->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "getSelectedText",
                             Q_RETURN_ARG(QVariant, returnedValue));
   str = returnedValue.toString();

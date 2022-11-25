@@ -153,8 +153,8 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
     if (ui->chkReaderFont->isChecked()) {
       fontname = fontName;
       mw_one->mydlgReader->savePageVPos();
-      mw_one->ui->quickWidget->rootContext()->setContextProperty("FontName",
-                                                                 fontname);
+      mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
+                                                              fontname);
       mw_one->mydlgReader->setPageVPos();
     }
   }

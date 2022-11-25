@@ -52,8 +52,7 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   mw_one->ui->frameOneFun->hide();
   mw_one->ui->frameFunWeb->show();
 
-  mw_one->ui->quickWidgetOne->rootContext()->setContextProperty("initialUrl",
-                                                                url);
+  mw_one->ui->qwOneDriver->rootContext()->setContextProperty("initialUrl", url);
 
   qDebug() << "web url = " << url.toString();
 

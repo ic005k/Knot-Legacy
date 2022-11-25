@@ -137,43 +137,42 @@ Rectangle {
                     width: parent.width - 6
                     spacing: 2
                     Layout.fillWidth: true
-
                     anchors.leftMargin: 0
                     anchors.rightMargin: 0
+
 
                     TextArea {
                         id: text1
                         color: "gray"
                         font.pixelSize: FontSize - 2
                         font.bold: true
-                        readOnly: true
                         width: parent.width
-                        wrapMode: TextArea.Wrap
+                        wrapMode: Text.Wrap
+                        readOnly: true
                         text: time
                     }
-                    TextArea {
+                    Text {
                         id: text2
-                        readOnly: true
                         visible: false
                         width: parent.width
-                        wrapMode: TextArea.Wrap
+                        wrapMode: Text.Wrap
                         text: type
                     }
                     TextArea {
                         id: text3
                         font.pixelSize: FontSize
-                        readOnly: true
                         width: parent.width
-                        wrapMode: TextArea.Wrap
+                        wrapMode: Text.Wrap
+                        //background: Qt.rgba(0,0,0,0)
+                        readOnly: true
                         color: isHighPriority ? "#EF5B98" : "#000000"
                         text: dototext
                     }
-                    TextArea {
+                    Text {
                         id: text4
-                        readOnly: true
                         visible: false
                         width: parent.width
-                        wrapMode: TextArea.Wrap
+                        wrapMode: Text.Wrap
                         text: itemheight
                     }
                 }

@@ -1,5 +1,5 @@
-#ifndef DLGREADER_H
-#define DLGREADER_H
+#ifndef READER_H
+#define READER_H
 
 #include <QDialog>
 #include <QDomDocument>
@@ -109,4 +109,4 @@ class dlgReader : public QDialog {
   static void proceImg();
 };
 
-#endif  // DLGREADER_H
+#endif  // READER_H

@@ -72,6 +72,7 @@
 #include "dlgReaderFun.h"
 #include "src/EditRecord.h"
 #include "src/Preferences.h"
+#include "src/Reader.h"
 #include "src/RemarksAbout.h"
 #include "src/Report.h"
 #include "src/Steps.h"
@@ -82,13 +83,13 @@
 #include "src/dlgfloatfun.h"
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
-#include "src/dlgreader.h"
 #include "src/dlgtodo.h"
 #include "src/file.h"
 #include "src/setTodoAlarm.h"
 #include "src/specialaccelerometerpedometer.h"
 #include "ui_EditRecord.h"
 #include "ui_Preferences.h"
+#include "ui_Reader.h"
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
 #include "ui_Steps.h"
@@ -99,7 +100,6 @@
 #include "ui_dlgfloatfun.h"
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
-#include "ui_dlgreader.h"
 #include "ui_dlgtodo.h"
 #include "ui_setTodoAlarm.h"
 
@@ -380,7 +380,7 @@ class MainWindow : public QMainWindow {
   QString getText2(int index);
   void gotoMainItem(QTreeWidgetItem *item);
   void startInitReport();
-  public slots:
+ public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();

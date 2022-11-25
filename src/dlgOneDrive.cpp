@@ -142,7 +142,7 @@ TestDialog::TestDialog(QWidget *parent)
     // ui->label_info->setText(oneDrive->debugInfo());
 
     if (!mw_one->ui->frameOne->isHidden()) {
-      mw_one->ui->quickWidgetOne->rootContext()->setContextProperty(
+      mw_one->ui->qwOneDriver->rootContext()->setContextProperty(
           "strText", oneDrive->debugInfo());
     }
 
@@ -271,9 +271,9 @@ void TestDialog::on_btnBack_clicked() {
 }
 
 void TestDialog::loadLogQML() {
-  mw_one->ui->quickWidgetOne->setSource(
+  mw_one->ui->qwOneDriver->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
-  mw_one->ui->quickWidgetOne->rootContext()->setContextProperty(
+  mw_one->ui->qwOneDriver->rootContext()->setContextProperty(
       "strText", oneDrive->debugInfo());
 }
 

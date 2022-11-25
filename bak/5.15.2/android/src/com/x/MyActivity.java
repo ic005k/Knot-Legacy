@@ -1,6 +1,7 @@
 package com.x;
 
 //Qt5
+
 import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
@@ -93,6 +94,19 @@ import android.content.DialogInterface;
 import android.support.v4.content.FileProvider;
 //import androidx.core.content.FileProvider;
 
+import android.graphics.Rect;
+import android.view.ViewTreeObserver;
+
+import java.lang.reflect.Field;
+
+import android.widget.LinearLayout;
+
+//import javax.swing.text.View;
+
+import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageInfo;
+
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
     private static MyActivity m_instance = null;
@@ -109,6 +123,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public static String strAlarmInfo;
     public static int alarmCount;
     public static boolean isScreenOff = false;
+    public static int keyBoardHeight;
+
+    private final static String TAG = "QtKnot";
+    private static Context context;
+    public static boolean ReOpen = false;
 
     public native static void CallJavaNotify_1();
 
@@ -171,12 +190,21 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
 
+        if(isStepCounter==1)
+        {
+            CallJavaNotify_2();
+        }
+
+        return 1;
+    }
+
+    public static int setReOpen() {
+        ReOpen = true;
         return 1;
     }
 
     //------------------------------------------------------------------------
-    private final static String TAG = "QtFullscreen";
-    private static Context context;
+
 
     //全局获取Context
     public static Context getContext() {
@@ -255,7 +283,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             if (SCREEN_ON.equals(intent.getAction())) {
                 if (isStepCounter == 1) {
 
-                    CallJavaNotify_2();
+
                 }
                 isScreenOff = false;
                 Log.w("Knot", "屏幕亮了");
@@ -264,8 +292,9 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                 if (isStepCounter == 1) {
                     if (mySerivece != null) {
                         mSensorManager.unregisterListener(mySerivece);
-
                     }
+
+
                 }
                 isScreenOff = true;
                 Log.w("Knot", "屏幕熄了");
@@ -475,7 +504,9 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
     }
+
 
     private static ServiceConnection mCon = new ServiceConnection() {
         @Override
@@ -517,7 +548,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         //if(mScreenStatusReceiver!=null)
         //unregisterReceiver(mScreenStatusReceiver);
 
+
+        if (ReOpen) {
+            doStartApplicationWithPackageName("com.x");
+        }
+
         android.os.Process.killProcess(android.os.Process.myPid());
+
         super.onDestroy();
 
         //目前暂不需要，已采用新方法
@@ -983,6 +1020,7 @@ This method can parse out the real local file path from a file URI.
                 String reason = intent.getStringExtra(SYSTEM_REASON);
                 if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     // 表示按了home键,程序直接进入到后台
+
                     System.out.println("MyActivity HOME键被按下...");
                 } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
                     // 表示长按home键,显示最近使用的程序
@@ -1078,6 +1116,50 @@ This method can parse out the real local file path from a file URI.
         }
         intent.setDataAndType(uri, type);
         context.startActivity(intent);
+    }
+
+    private void doStartApplicationWithPackageName(String packagename) {
+        Log.i(TAG, "自启动开始...");
+        // 通过包名获取此APP详细信息，包括Activities、services、versioncode、name等等
+        PackageInfo packageinfo = null;
+        try {
+            packageinfo = getPackageManager().getPackageInfo(packagename, 0);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageinfo == null) {
+            return;
+        }
+
+        // 创建一个类别为CATEGORY_LAUNCHER的该包名的Intent
+        Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+        resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        resolveIntent.setPackage(packageinfo.packageName);
+
+        // 通过getPackageManager()的queryIntentActivities方法遍历
+        List<ResolveInfo> resolveinfoList = getPackageManager()
+                .queryIntentActivities(resolveIntent, 0);
+
+        ResolveInfo resolveinfo = resolveinfoList.iterator().next();
+        if (resolveinfo != null) {
+            // packagename = 参数packname
+            String packageName = resolveinfo.activityInfo.packageName;
+            // 这个就是我们要找的该APP的LAUNCHER的Activity[组织形式：packagename.mainActivityname]
+            String className = resolveinfo.activityInfo.name;
+            // LAUNCHER Intent
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+            // 设置ComponentName参数1:packagename参数2:MainActivity路径
+            ComponentName cn = new ComponentName(packageName, className);
+
+            intent.setComponent(cn);
+            startActivity(intent);
+
+            Log.i(TAG, "启动自己已完成...");
+        }
+
+        Log.i(TAG, "过程完成...");
     }
 
 

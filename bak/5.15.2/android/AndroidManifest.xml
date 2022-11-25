@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.x" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.44" android:versionCode="1" android:installLocation="auto">
+<manifest package="com.x" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.48" android:versionCode="1" android:installLocation="auto">
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -18,7 +18,8 @@
 
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
     <application android:hardwareAccelerated="true" android:requestLegacyExternalStorage="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Knot" android:extractNativeLibs="true" android:icon="@drawable/icon">
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.x.MyActivity" android:label="Knot" android:screenOrientation="unspecified" android:launchMode="singleTop" android:theme="@style/splashScreenTheme">
+        <!-- android:windowSoftInputMode="adjustResize" -->
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.x.MyActivity" android:label="Knot" android:screenOrientation="unspecified" android:launchMode="singleTop" android:theme="@style/splashScreenTheme" android:windowSoftInputMode="stateUnspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

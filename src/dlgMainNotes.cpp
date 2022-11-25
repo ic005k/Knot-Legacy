@@ -636,9 +636,9 @@ void dlgMainNotes::loadMemoQML() {
     str1.replace(strIniDir, iniDir);
   }
   htmlBuffer = str1;
-  mw_one->ui->quickWidgetMemo->setSource(
-      QUrl(QStringLiteral("qrc:/src/memo.qml")));
-  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+  mw_one->ui->qwNotes->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
+  QQuickItem* root = mw_one->ui->qwNotes->rootObject();
 
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant,
   // htmlFileName));
@@ -669,13 +669,13 @@ void dlgMainNotes::setVPos() {
 
   sliderPos = Reg.value("/MainNotes/SlidePos" + a.replace(iniDir, "")).toReal();
   if (sliderPos < 0) sliderPos = 0;
-  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+  QQuickItem* root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
 }
 
 qreal dlgMainNotes::getVHeight() {
-  QQuickItem* root = mw_one->ui->quickWidgetMemo->rootObject();
+  QQuickItem* root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getVHeight");
   return textHeight;
 }

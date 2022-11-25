@@ -507,7 +507,7 @@ void dlgNotesList::setWinPos() {
   int w = mw_one->width() * 2 / 3;
   int x = mw_one->geometry().x() + mw_one->width() - w - 2;
   this->setGeometry(x, mw_one->geometry().y(), w,
-                    mw_one->ui->quickWidgetMemo->height());
+                    mw_one->ui->qwNotes->height());
 }
 
 void dlgNotesList::clearFiles() {

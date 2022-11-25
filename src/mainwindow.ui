@@ -158,7 +158,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QQuickWidget" name="quickWidget">
+        <widget class="QQuickWidget" name="qwReader">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -1749,7 +1749,7 @@ QRadioButton::indicator:checked {
         </widget>
        </item>
        <item>
-        <widget class="QQuickWidget" name="quickWidgetOne">
+        <widget class="QQuickWidget" name="qwOneDriver">
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
@@ -1978,7 +1978,7 @@ QRadioButton::indicator:checked {
         </widget>
        </item>
        <item>
-        <widget class="QQuickWidget" name="quickWidgetMemo">
+        <widget class="QQuickWidget" name="qwNotes">
          <property name="minimumSize">
           <size>
            <width>0</width>
