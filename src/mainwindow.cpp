@@ -4547,6 +4547,7 @@ void MainWindow::on_btnSelText_clicked() {
     ui->qwReader->hide();
     ui->textBrowser->show();
 
+    mydlgReader->getVPos();
     ui->textBrowser->verticalScrollBar()->setSliderPosition(
         mydlgReader->textPos);
 

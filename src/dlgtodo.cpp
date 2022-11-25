@@ -20,7 +20,6 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
 
   this->installEventFilter(this);
   mw_one->ui->textEdit->viewport()->installEventFilter(mw_one);
-  mw_one->ui->qwTodo->installEventFilter(mw_one);
 
   this->setModal(true);
 
