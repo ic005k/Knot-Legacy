@@ -39,13 +39,13 @@ INSTALLS += dataFiles
 
 SOURCES += \
     src/EditRecord.cpp \
+    src/Notes.cpp \
     src/Preferences.cpp \
     src/Reader.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
     src/Steps.cpp \
     src/autoupdatedialog.cpp \
-    src/dlgMainNotes.cpp \
     src/dlgNotesList.cpp \
     src/dlgOneDrive.cpp \
     src/dlgReaderFun.cpp \
@@ -68,6 +68,7 @@ SOURCES += \
 
 HEADERS += \
     src/EditRecord.h \
+    src/Notes.h \
     src/Preferences.h \
     src/Reader.h \
     src/RemarksAbout.h \
@@ -75,7 +76,6 @@ HEADERS += \
     src/Steps.h \
     src/autoupdatedialog.h \
     src/count_steps.h \
-    src/dlgMainNotes.h \
     src/dlgNotesList.h \
     src/dlgOneDrive.h \
     src/dlgReaderFun.h \
@@ -98,13 +98,13 @@ HEADERS += \
 
 FORMS += \
     src/EditRecord.ui \
+    src/Notes.ui \
     src/Preferences.ui \
     src/Reader.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
     src/Steps.ui \
     src/autoupdatedialog.ui \
-    src/dlgMainNotes.ui \
     src/dlgNotesList.ui \
     src/dlgOneDrive.ui \
     src/dlgReaderFun.ui \

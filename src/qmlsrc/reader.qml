@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
-import MyModel1 1.0
 import MyModel2 1.0
 
 Rectangle {
@@ -10,11 +9,6 @@ Rectangle {
     visible: true
     width: myW
     height: myH
-
-    File {
-        id: file
-        source: "" //"/Users/hz/Documents/1.txt"
-    }
 
     function loadHtml(msg) {
 
@@ -203,6 +197,7 @@ Rectangle {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
 
+            //自定义滚动条样式
 
             /*contentItem: Rectangle {
                 id: slider

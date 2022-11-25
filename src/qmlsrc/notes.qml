@@ -2,17 +2,11 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
-import MyModel1 1.0
 import MyModel2 1.0
 
 Item {
     id: textitem
     visible: true
-
-    File {
-        id: file
-        source: "" //"/Users/hz/Documents/1.txt"
-    }
 
     function loadHtml(msg) {
         document.load("file://" + msg)
@@ -29,13 +23,13 @@ Item {
     }
 
     function getVPos() {
-        file.textPos = flickable.contentY
-        console.log(file.textPos)
+
+        return flickable.contentY
     }
 
     function getVHeight() {
-        file.textHeight = flickable.contentHeight
-        console.log("获取文本的高度 " + file.textHeight)
+
+        return flickable.contentHeight
     }
 
     function move(x0) {
@@ -85,10 +79,6 @@ Item {
 
         onMovementEnded: {
             state = "autoscroll"
-            file.textPos = contentY
-            file.textHeight = contentHeight
-            console.log("滚动条位置：" + file.textPos)
-            console.log("文本高度：" + file.textHeight)
         }
 
         TextArea.flickable: TextArea {
@@ -156,17 +146,6 @@ Item {
             orientation: Qt.Vertical
             anchors.right: parent.right
             policy: ScrollBar.AsNeeded
-
-
-            /*contentItem: Rectangle {
-                id: slider
-                implicitWidth: 4
-                implicitHeight: 76
-                radius: width / 2
-                color: control.pressed ? "#e7e7e7" : "#1296db"
-                opacity: (control.policy === ScrollBar.AlwaysOn
-                          || control.size < 1.0) ? 1.0 : 0.0
-            }*/
         }
 
         Component.onCompleted: {

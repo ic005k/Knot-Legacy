@@ -1,4 +1,4 @@
-#include "src/dlgMainNotes.h"
+#include "src/Notes.h"
 
 #include "mainwindow.h"
 #include "ui_dlgMainNotes.h"
@@ -656,6 +656,7 @@ void dlgMainNotes::saveQMLVPos() {
   if (QFile(mw_one->m_NotesList->currentMDFile).exists()) {
     QString strTag = mw_one->m_NotesList->currentMDFile;
     strTag.replace(iniDir, "");
+    getVPos();
     Reg.setValue("/MainNotes/SlidePos" + strTag, sliderPos);
   }
 }
@@ -674,9 +675,21 @@ void dlgMainNotes::setVPos() {
                             Q_ARG(QVariant, sliderPos));
 }
 
-qreal dlgMainNotes::getVHeight() {
+qreal dlgMainNotes::getVPos() {
+  QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwNotes->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "getVHeight");
+  QMetaObject::invokeMethod((QObject*)root, "getVPos",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  sliderPos = itemCount.toDouble();
+  return sliderPos;
+}
+
+qreal dlgMainNotes::getVHeight() {
+  QVariant itemCount;
+  QQuickItem* root = mw_one->ui->qwNotes->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getVHeight",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  textHeight = itemCount.toDouble();
   return textHeight;
 }
 

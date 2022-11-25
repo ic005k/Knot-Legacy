@@ -1,5 +1,5 @@
-#ifndef DLGMAINNOTES_H
-#define DLGMAINNOTES_H
+#ifndef NOTES_H
+#define NOTES_H
 
 #include <QApplication>
 #include <QChar>
@@ -78,7 +78,8 @@ class dlgMainNotes : public QDialog {
   void saveQMLVPos();
   bool androidCopyFile(QString src, QString des);
 
- public slots:
+  qreal getVPos();
+  public slots:
   void editVSBarValueChanged();
 
  protected:
@@ -175,4 +176,4 @@ class dlgMainNotes : public QDialog {
   void wheelEvent(QWheelEvent *e) override;
 };
 
-#endif  // DLGMAINNOTES_H
+#endif  // NOTES_H

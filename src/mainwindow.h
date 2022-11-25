@@ -76,7 +76,7 @@
 #include "src/RemarksAbout.h"
 #include "src/Report.h"
 #include "src/Steps.h"
-#include "src/dlgMainNotes.h"
+#include "src/Notes.h"
 #include "src/dlgNotesList.h"
 #include "src/dlgOneDrive.h"
 #include "src/dlgSetText.h"
