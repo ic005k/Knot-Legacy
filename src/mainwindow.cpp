@@ -3698,6 +3698,7 @@ void MainWindow::init_UIWidget() {
   ui->frameDebug->hide();
   ui->frameReport->hide();
 
+  ui->textEdit->setContentsMargins(12, 0, 12, 0);
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->layout()->setSpacing(1);
@@ -4347,6 +4348,8 @@ void MainWindow::on_btnReader_clicked() {
     isOne = true;
     mydlgReader->setPageVPos();
   }
+
+  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::setSCrollPro(QObject *obj) {
@@ -4716,7 +4719,10 @@ void MainWindow::on_btnCode_clicked() {
   }
 }
 
-void MainWindow::on_btnMemos_clicked() { on_actionMemos_triggered(); }
+void MainWindow::on_btnMemos_clicked() {
+  on_actionMemos_triggered();
+  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+}
 
 void MainWindow::clearSelectBox() {
   QString tempFile = iniDir + "memo/texteditor.html";
@@ -4875,7 +4881,10 @@ void MainWindow::on_btnPasteCode_clicked() {
   ui->editCode->setPlainText(originalText);
 }
 
-void MainWindow::on_btnAdd_clicked() { on_AddRecord(); }
+void MainWindow::on_btnAdd_clicked() {
+  on_AddRecord();
+  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+}
 
 void MainWindow::on_btnDel_clicked() { on_DelRecord(); }
 

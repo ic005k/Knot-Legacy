@@ -154,7 +154,10 @@ int dlgTodo::getEditTextHeight(QTextEdit* edit) {
   return mainHeight;
 }
 
-void dlgTodo::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
+void dlgTodo::closeEvent(QCloseEvent* event) {
+  Q_UNUSED(event);
+  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+}
 
 bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
@@ -636,8 +639,6 @@ void dlgTodo::refreshAlarm() {
     qDebug() << "ini no exists";
   else
     qDebug() << "ini ok";
-
-  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
 void dlgTodo::on_textEdit_textChanged() {
