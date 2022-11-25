@@ -2024,6 +2024,10 @@ void MainWindow::on_btnRemarks_clicked() {
 bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
 
+  if (watch == ui->textEdit->viewport()) {
+    mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
+  }
+
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);  //将之转换为鼠标事件
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
 
