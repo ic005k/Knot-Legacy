@@ -221,6 +221,11 @@ void dlgReader::setReaderStyle() {
 void dlgReader::startOpenFile(QString openfile) {
   if (isReport) return;
 
+  if (!mw_one->ui->frameReader->isHidden()) {
+    saveReader();
+    savePageVPos();
+  }
+
   setReaderStyle();
 
   mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
@@ -251,10 +256,6 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->lblBookName->hide();
-    if (!mw_one->ui->frameReader->isHidden()) {
-      saveReader();
-      savePageVPos();
-    }
 
     QString strfilepath;
 #ifdef Q_OS_ANDROID
@@ -543,8 +544,7 @@ void dlgReader::saveReader() {
   Reg.setValue("/Reader/FileName", fileName);
   Reg.setValue("/Reader/FontName", fontname);
   Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
-  textPos = getVPos();
-  Reg.setValue("/Reader/vpos" + fileName, textPos);
+
   if (!isEpub) {
     Reg.setValue("/Reader/iPage" + fileName, iPage - baseLines);
   } else
@@ -1393,7 +1393,7 @@ void dlgReader::getReadList() {
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);
     QStringList list = str.split("|");
-    if (!QFileInfo(list.at(1)).exists()) {
+    if (!QFile(list.at(1)).exists()) {
       bookList.removeAt(i);
       i--;
     }
