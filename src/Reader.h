@@ -54,7 +54,7 @@ class dlgReader : public QDialog {
   void getLines();
   static QStringList readText(QString textFile);
   void goPostion();
-  void setQML(QString);
+  void setQMLText(QString);
   QFont get_Font();
   static int deleteDirfile(QString dirName);
   void setQMLHtml();
@@ -91,7 +91,8 @@ class dlgReader : public QDialog {
   void on_hSlider_sliderReleased(int position);
 
   void setAni();
-  public slots:
+  void loadQMLText(QString str);
+ public slots:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;

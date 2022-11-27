@@ -300,8 +300,7 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->TextEditToFile(txtEdit, fileName);
 #endif
 
-    mw_one->ui->qwReader->rootContext()->setContextProperty(
-        "strText", tr("Book Info : ") + "\n" + strfilepath);
+    loadQMLText(tr("Book Info : ") + "\n" + strfilepath);
 
     ebookFile = openfile;
 
@@ -639,7 +638,7 @@ void dlgReader::getLines() {
         "<p style='line-height:32px; width:100% ; white-space: pre-wrap; "
         "'>" +
         txt1 + "</p>";
-    setQML(qsShow);
+    setQMLText(qsShow);
 
   } else {
     mw_one->mydlgReaderFun->ui->hSlider->setMaximum(htmlFiles.count());
@@ -649,7 +648,7 @@ void dlgReader::getLines() {
   }
 }
 
-void dlgReader::setQML(QString txt1) {
+void dlgReader::setQMLText(QString txt1) {
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
 
   // white-space: pre-wrap;
@@ -668,11 +667,14 @@ void dlgReader::setQML(QString txt1) {
 
   currentTxt = qsShow;
 
-  QQuickItem* root = mw_one->ui->qwReader->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "loadText",
-                            Q_ARG(QVariant, currentTxt));
+  loadQMLText(currentTxt);
 
   setAni();
+}
+
+void dlgReader::loadQMLText(QString str) {
+  QQuickItem* root = mw_one->ui->qwReader->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "loadText", Q_ARG(QVariant, str));
 }
 
 void dlgReader::selectFont() {
@@ -794,7 +796,7 @@ void dlgReader::on_btnPageUp_clicked() {
         txt1 = txt1 + readTextList.at(i) + "\n" + strSpace;
     }
 
-    setQML(txt1);
+    setQMLText(txt1);
 
   } else {
     htmlIndex--;
@@ -834,7 +836,7 @@ void dlgReader::on_btnPageNext_clicked() {
       }
     }
 
-    setQML(txt1);
+    setQMLText(txt1);
 
   } else {
     htmlIndex++;
