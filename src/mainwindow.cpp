@@ -4903,6 +4903,7 @@ void MainWindow::on_btnBackTodo_clicked() {
   ui->frameTodo->hide();
   ui->frameMain->show();
   mydlgTodo->saveTodo();
+  mydlgTodo->refreshTableLists();
   mydlgTodo->refreshAlarm();
 }
 

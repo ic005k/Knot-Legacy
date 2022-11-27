@@ -45,6 +45,7 @@ SOURCES += \
     src/RemarksAbout.cpp \
     src/Report.cpp \
     src/Steps.cpp \
+    src/Todo.cpp \
     src/autoupdatedialog.cpp \
     src/dlgNotesList.cpp \
     src/dlgOneDrive.cpp \
@@ -56,7 +57,6 @@ SOURCES += \
     src/dlgloadpic.cpp \
     src/dlgright.cpp \
     src/dlgsetedittext.cpp \
-    src/dlgtodo.cpp \
     src/documenthandler.cpp \
     src/file.cpp \
     src/main.cpp \
@@ -74,6 +74,7 @@ HEADERS += \
     src/RemarksAbout.h \
     src/Report.h \
     src/Steps.h \
+    src/Todo.h \
     src/autoupdatedialog.h \
     src/count_steps.h \
     src/dlgNotesList.h \
@@ -86,7 +87,6 @@ HEADERS += \
     src/dlgloadpic.h \
     src/dlgright.h \
     src/dlgsetedittext.h \
-    src/dlgtodo.h \
     src/documenthandler.h \
     src/file.h \
     src/mainwindow.h \
@@ -104,6 +104,7 @@ FORMS += \
     src/RemarksAbout.ui \
     src/Report.ui \
     src/Steps.ui \
+    src/Todo.ui \
     src/autoupdatedialog.ui \
     src/dlgNotesList.ui \
     src/dlgOneDrive.ui \
@@ -115,7 +116,6 @@ FORMS += \
     src/dlgloadpic.ui \
     src/dlgright.ui \
     src/dlgsetedittext.ui \
-    src/dlgtodo.ui \
     src/mainwindow.ui \
     src/setTodoAlarm.ui
 

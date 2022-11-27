@@ -1,7 +1,7 @@
-#include "dlgtodo.h"
+#include "Todo.h"
 
 #include "mainwindow.h"
-#include "ui_dlgtodo.h"
+#include "ui_Todo.h"
 #include "ui_mainwindow.h"
 
 QString highLblStyle = "color:rgb(212,35,122)";
@@ -121,6 +121,7 @@ void dlgTodo::init_Items() {
     addItemRecycle(doneTime, 0, str);
   }
 
+  refreshTableLists();
   refreshAlarm();
 }
 
@@ -144,6 +145,7 @@ void dlgTodo::on_btnAdd_clicked() {
   setCurrentIndex(0);
 
   mw_one->ui->textEdit->setText("");
+  refreshTableLists();
 }
 
 int dlgTodo::getEditTextHeight(QTextEdit* edit) {
@@ -234,6 +236,8 @@ void dlgTodo::on_btnOK_clicked() {
 
   ui->frameSetTime->hide();
   mw_one->mymsgDlg->close();
+
+  refreshTableLists();
   refreshAlarm();
 }
 
@@ -414,6 +418,8 @@ void dlgTodo::on_btnCancel_clicked() {
   modifyTime(row, str);
   ui->frameSetTime->hide();
   mw_one->mymsgDlg->close();
+
+  refreshTableLists();
   refreshAlarm();
 }
 
@@ -512,14 +518,25 @@ void dlgTodo::on_btnDel_clicked() {
   delItemRecycle(row);
 }
 
+void dlgTodo::refreshTableLists() {
+  tableLists.clear();
+  int count_items = getCount();
+
+  for (int i = 0; i < count_items; i++) {
+    QString strTime = getItemTime(i);
+    QString strText = getItemTodoText(i);
+
+    tableLists.append(strTime + "|=|" + strText);
+  }
+}
+
 void dlgTodo::refreshAlarm() {
   stopTimerAlarm();
   int count = 0;
   isToday = false;
   QString str;
 
-  QString ini_file;
-  ini_file = "/data/data/com.x/files/msg.ini";
+  QString ini_file = "/data/data/com.x/files/msg.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -530,64 +547,90 @@ void dlgTodo::refreshAlarm() {
 
   int count_items = getCount();
 
-  for (int i = 0; i < count_items; i++) {
-    str = getItemTime(i);
+  if (count_items > 0) {
+    for (int i = 0; i < count_items; i++) {
+      str = getItemTime(i);
 
-    if (str.contains(tr("Alarm"))) {
-      modifyType(i, 3);
-      str = str.replace(tr("Alarm"), "").trimmed();
-      qlonglong totals = getSecond(str);
+      if (str.contains(tr("Alarm"))) {
+        modifyType(i, 3);
+        str = str.replace(tr("Alarm"), "").trimmed();
+        qlonglong totals = getSecond(str);
 
-      if (totals > 0) {
-        count++;
+        if (totals > 0) {
+          count++;
 
-        QString todo_text = getItemTodoText(i);
-        QString str1 = str + "|" + todo_text + "|" + QString::number(totals) +
-                       "|" + tr("Close");
+          QString todo_text = getItemTodoText(i);
+          QString str1 = str + "|" + todo_text + "|" + QString::number(totals) +
+                         "|" + tr("Close");
 
-        listAlarm.append(str1);
-        listTotalS.append(totals);
+          listAlarm.append(str1);
+          listTotalS.append(totals);
 
-        // set time marks
-        QString strDate = str.split(" ").at(0);
-        QString strToday = QDate::currentDate().toString("yyyy-M-d");
-        QDateTime ctime = QDateTime::currentDateTime();
-        QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
-        if (strDate.contains("-")) {
-          if (strDate == strToday) {
-            modifyType(i, 1);
-            isToday = true;
-          }
-
-          if (strTmo == strDate) {
-            modifyType(i, 2);
-          }
-        } else {
-          if (isWeekValid(str, strToday) && !isTomorrow) {
-            modifyType(i, 1);
-            isToday = true;
-          }
-
-          if (isWeekValid(str, strTmo) && isTomorrow) {
-            modifyType(i, 2);
-          }
-        }
-
-      } else {
-        if (str.contains("-")) {
-          modifyTime(i, str);
-          modifyType(i, 0);
-        }
-
-        if (!str.contains("-")) {
-          modifyTime(i, tr("Alarm") + "  " + str);
-          modifyType(i, 3);
-
+          // set time marks
+          QString strDate = str.split(" ").at(0);
+          QString strToday = QDate::currentDate().toString("yyyy-M-d");
           QDateTime ctime = QDateTime::currentDateTime();
           QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
-          if (isWeekValid(str, strTmo)) {
-            modifyType(i, 2);
+          if (strDate.contains("-")) {
+            if (strDate == strToday) {
+              modifyType(i, 1);
+              isToday = true;
+            }
+
+            if (strTmo == strDate) {
+              modifyType(i, 2);
+            }
+          } else {
+            if (isWeekValid(str, strToday) && !isTomorrow) {
+              modifyType(i, 1);
+              isToday = true;
+            }
+
+            if (isWeekValid(str, strTmo) && isTomorrow) {
+              modifyType(i, 2);
+            }
           }
+
+        } else {
+          if (str.contains("-")) {
+            modifyTime(i, str);
+            modifyType(i, 0);
+          }
+
+          if (!str.contains("-")) {
+            modifyTime(i, tr("Alarm") + "  " + str);
+            modifyType(i, 3);
+
+            QDateTime ctime = QDateTime::currentDateTime();
+            QString strTmo = ctime.addDays(+1).toString("yyyy-M-d");
+            if (isWeekValid(str, strTmo)) {
+              modifyType(i, 2);
+            }
+          }
+        }
+      }
+    }
+  } else {
+    count_items = tableLists.count();
+
+    for (int i = 0; i < count_items; i++) {
+      QString strList = tableLists.at(i);
+      QStringList list = strList.split("|=|");
+      QString strTime = list.at(0);
+
+      if (strTime.contains(tr("Alarm"))) {
+        strTime = strTime.replace(tr("Alarm"), "").trimmed();
+        qlonglong totals = getSecond(strTime);
+
+        if (totals > 0) {
+          count++;
+
+          QString todo_text = list.at(1);
+          QString str1 = strTime + "|" + todo_text + "|" +
+                         QString::number(totals) + "|" + tr("Close");
+
+          listAlarm.append(str1);
+          listTotalS.append(totals);
         }
       }
     }

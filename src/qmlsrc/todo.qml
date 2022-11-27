@@ -234,6 +234,7 @@ Rectangle {
 
                             mydlgTodo.addToRecycle()
                             view.model.remove(index)
+                            mydlgTodo.refreshTableLists()
                             mydlgTodo.refreshAlarm()
                             console.log("mouse isclick")
                         }

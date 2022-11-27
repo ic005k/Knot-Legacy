@@ -83,7 +83,7 @@
 #include "src/dlgfloatfun.h"
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
-#include "src/dlgtodo.h"
+#include "src/Todo.h"
 #include "src/file.h"
 #include "src/setTodoAlarm.h"
 #include "src/specialaccelerometerpedometer.h"

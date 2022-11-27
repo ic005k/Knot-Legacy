@@ -1,5 +1,5 @@
-#ifndef DLGTODO_H
-#define DLGTODO_H
+#ifndef TODO_H
+#define TODO_H
 
 #include <QCheckBox>
 #include <QDialog>
@@ -22,7 +22,7 @@ class dlgTodo : public QDialog {
   ~dlgTodo();
 
   bool isToday = false;
-
+  QStringList tableLists;
   void init_Items();
   QString alarmStyle =
       "QLabel{background:rgb(112,128,105);color:rgb(255,255,255);border:2px;"
@@ -69,6 +69,7 @@ class dlgTodo : public QDialog {
 
   int setItemHeight(QString strTodoText);
  public slots:
+  void refreshTableLists();
   void refreshAlarm();
   void reeditText();
   void addToRecycle();
@@ -120,4 +121,4 @@ class dlgTodo : public QDialog {
   bool isWeekValid(QString lblDateTime, QString strDate);
   bool isTomorrow = false;
 };
-#endif  // DLGTODO_H
+#endif  // TODO_H
