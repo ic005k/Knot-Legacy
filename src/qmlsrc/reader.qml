@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
+import QtWebView 1.1
 import MyModel2 1.0
 
 Rectangle {
@@ -10,9 +11,29 @@ Rectangle {
     width: myW
     height: myH
 
+    property string strUrl: ""
+    property string strText: ""
+    property bool isPDF: false
+    property bool isEPUBText: false
+
+    function loadText(str) {
+        strText = str
+        isPDF = false
+        isEPUBText = true
+    }
+
     function loadHtml(msg) {
 
         document.load("file://" + msg)
+        isPDF = false
+        isEPUBText = true
+    }
+
+    function loadPDF(pdffile) {
+        strUrl = "file://" + pdffile
+        isPDF = true
+        isEPUBText = false
+        console.debug(strUrl)
     }
 
     function loadHtmlBuffer(strhtml) {
@@ -26,14 +47,12 @@ Rectangle {
     }
 
     function getVPos() {
-        //file.textPos = contentY
-        //console.log(file.textPos)
+
         return flickable.contentY
     }
 
     function getVHeight() {
-        //file.textHeight = textArea.contentHeight
-        //console.log(file.textHeight)
+
         return textArea.contentHeight
     }
 
@@ -59,10 +78,7 @@ Rectangle {
         cursorPosition: textArea.cursorPosition
         selectionStart: textArea.selectionStart
         selectionEnd: textArea.selectionEnd
-        //textColor: "#FF0000"
 
-        //Component.onCompleted: document.load("qml:/texteditor.html")
-        //Component.onCompleted: document.load("file://" + htmlFile)
         onLoaded: {
             textArea.text = text
         }
@@ -84,6 +100,13 @@ Rectangle {
         source: backImgFile
     }
 
+    WebView {
+        id: webView
+        visible: isPDF
+        anchors.fill: parent
+        url: strUrl
+    }
+
     Flickable {
         id: flickable
         flickableDirection: Flickable.VerticalFlick
@@ -98,15 +121,11 @@ Rectangle {
 
         onMovementEnded: {
             state = "autoscroll"
-            //file.textPos = contentY
-            //file.textHeight = contentHeight
-            //console.log(file.textPos)
-            //console.log(file.textHeight)
         }
 
         TextArea.flickable: TextArea {
             id: textArea
-            visible: !isWebViewShow
+            visible: isEPUBText
             font.pixelSize: FontSize
             font.family: FontName
             font.letterSpacing: 2
@@ -114,23 +133,17 @@ Rectangle {
             font.hintingPreference: Font.PreferVerticalHinting
             textFormat: Qt.AutoText
 
-            //onTextChanged: file.text = text
-            //Component.onCompleted: text = file.text
             wrapMode: TextArea.Wrap
             readOnly: true
             focus: true
             persistentSelection: isSelText
             selectByMouse: isSelText
             smooth: true
-
             color: myTextColor
-
             text: strText
 
             onLinkActivated: {
-                //Qt.openUrlExternally(link)
                 document.setBackDir(link)
-                //document.load("file://" + htmlPath + link)
                 document.setReadPosition(link)
                 console.log(htmlPath + link)
                 console.log(htmlPath)
@@ -147,11 +160,9 @@ Rectangle {
                 acceptedButtons: Qt.RightButton
                 onClicked: {
 
-                    //contextMenu.open()
                 }
                 onPressAndHold: {
 
-                    //mw_one.on_btnSelText_clicked()
                 }
             }
 
@@ -168,10 +179,9 @@ Rectangle {
                 loops: 1 //Animation.Infinite
             }
 
-
-            /*SequentialAnimation on opacity {
+            SequentialAnimation on opacity {
                 //应用于透明度上的序列动画
-                running: isAni
+                running: false
                 loops: 1 //Animation.Infinite //无限循环
                 NumberAnimation {
                     from: 0
@@ -181,7 +191,7 @@ Rectangle {
                 PauseAnimation {
                     duration: 0
                 } //暂停400ms
-            }*/
+            }
         }
 
         ScrollBar.vertical: ScrollBar {
@@ -198,7 +208,6 @@ Rectangle {
             anchors.bottom: parent.bottom
 
             //自定义滚动条样式
-
             /*contentItem: Rectangle {
                 id: slider
                 implicitWidth: 4
@@ -211,30 +220,7 @@ Rectangle {
         }
 
         Component.onCompleted: {
-            console.log("lineCount=" + textArea.lineCount)
-            console.log("textHeight=" + textArea.height)
-            console.log("textPosition=" + vbar.position)
+
         }
     }
-
-
-    /*Menu {
-        id: contextMenu
-        MenuItem {
-            text: qsTr("Copy")
-            enabled: textArea.selectedText
-            onTriggered: textArea.copy()
-        }
-
-        MenuItem {
-            text: qsTr("Cut")
-            enabled: textArea.selectedText
-            onTriggered: textArea.cut()
-        }
-        MenuItem {
-            text: qsTr("Paste")
-            enabled: textArea.canPaste
-            onTriggered: textArea.paste()
-        }
-    }*/
 }

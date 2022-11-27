@@ -449,6 +449,12 @@ void dlgReader::openFile(QString openfile) {
         proceImg();
       }
 
+    } else if (strHead.trimmed().toLower().contains("pdf")) {
+      isEpub = false;
+      QQuickItem* root = mw_one->ui->qwReader->rootObject();
+      QMetaObject::invokeMethod((QObject*)root, "loadPDF",
+                                Q_ARG(QVariant, openfile));
+
     } else {  // txt file
       isEpub = false;
       iPage = 0;
@@ -661,16 +667,12 @@ void dlgReader::setQML(QString txt1) {
   qsShow = str1 + qsShow + str2;
 
   currentTxt = qsShow;
-  mw_one->ui->qwReader->rootContext()->setContextProperty("strText", qsShow);
 
-  if (isPageNext)
-    mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
-                                                            mw_one->width());
-  else
-    mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
-                                                            -mw_one->width());
-  mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
-  mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
+  QQuickItem* root = mw_one->ui->qwReader->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "loadText",
+                            Q_ARG(QVariant, currentTxt));
+
+  setAni();
 }
 
 void dlgReader::selectFont() {
@@ -876,8 +878,8 @@ void dlgReader::processHtml(int index) {
 
   strHtml = strHtml.replace("<img", "\n<img");
 
-  // strHtml = strHtml.replace(".css", "");
-  // strHtml = strHtml.replace("font-family:", "font0-family:");
+  strHtml = strHtml.replace(".css", "");
+  strHtml = strHtml.replace("font-family:", "font0-family:");
 
   // QString space0, mystyle;
   // space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -892,12 +894,12 @@ void dlgReader::processHtml(int index) {
     str = str.trimmed();
 
     if (str.contains("</head>")) {
-      /*QString css =
+      QString css =
           "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
           "/>";
       css.replace("../", "file://" + strOpfPath);
       plain_edit->appendPlainText(css);
-      plain_edit->appendPlainText("</head>");*/
+      plain_edit->appendPlainText("</head>");
     } else {
       if (str.trimmed() != "") {
         if (str.contains("<image") && str.contains("xlink:href=")) {
@@ -958,6 +960,10 @@ void dlgReader::setQMLHtml() {
 
   qDebug() << "Html File : " << currentHtmlFile;
 
+  setAni();
+}
+
+void dlgReader::setAni() {
   if (isPageNext)
     mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
                                                             mw_one->width());
@@ -971,7 +977,7 @@ void dlgReader::setQMLHtml() {
 QStringList dlgReader::readText(QString textFile) {
   QStringList list, list1;
 
-  if (QFileInfo(textFile).exists()) {
+  if (QFile(textFile).exists()) {
     QFile file(textFile);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
       qDebug() << tr("Cannot read file %1:\n%2.")
@@ -1281,6 +1287,9 @@ void dlgReader::SplitFile(QString qfile) {
       htmlFiles.append(filen);
     }
   }
+
+  delete plain_edit;
+  delete plain_editHead;
 }
 
 QString dlgReader::getNCX_File(QString path) {

@@ -90,7 +90,8 @@ class dlgReader : public QDialog {
   void on_btnBack_clicked();
   void on_hSlider_sliderReleased(int position);
 
- public slots:
+  void setAni();
+  public slots:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
