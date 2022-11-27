@@ -1,5 +1,5 @@
-#ifndef DLGONEDRIVE_H
-#define DLGONEDRIVE_H
+#ifndef ONEDRIVE_H
+#define ONEDRIVE_H
 
 #include <QDialog>
 #include <QQuickWidget>
@@ -59,4 +59,4 @@ class TestDialog : public QDialog {
   QtOneDrive *oneDrive = nullptr;
 };
 
-#endif  // DLGONEDRIVE_H
+#endif  // ONEDRIVE_H

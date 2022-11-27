@@ -13,7 +13,7 @@
 #include <QtWebView>
 
 #include "src/mainwindow.h"
-#include "ui_dlgOneDrive.h"
+#include "ui_OneDrive.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;
@@ -23,25 +23,6 @@ bool QtOneDriveAuthorizationDialog::isExists_ = false;
 QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
                                                              QWidget *parent)
     : QDialog(parent), url_(url) {
-  /*setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-  setAttribute(Qt::WA_DeleteOnClose);
-  setWindowTitle(tr("OneDrive Authorization"));
-  setMinimumSize(QSize(550, 650));
-  resize(QSize(550, 650));*/
-
-  /*webView_ = new QQuickWidget;
-  webView_->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), mw_one->height() - 300);
-  webView_->setWindowFlags(Qt::WindowStaysOnTopHint);
-  webView_->show();
-  webView_->setSource(QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
-  webView_->rootContext()->setContextProperty("initialUrl", url);*/
-
-  /*QVBoxLayout *layout = new QVBoxLayout(this);
-  this->setLayout(layout);
-  layout->addWidget(webView_);
-  webView_->load(url);*/
-
   isExists_ = true;
 
   timer = new QTimer(this);
@@ -55,11 +36,6 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   mw_one->ui->qwOneDriver->rootContext()->setContextProperty("initialUrl", url);
 
   qDebug() << "web url = " << url.toString();
-
-  // QDesktopServices::openUrl(url);
-
-  // connect(webView_, SIGNAL(loadFinished(bool)), this,
-  //         SLOT(on_webView_loadFinished(bool)));
 }
 
 QtOneDriveAuthorizationDialog::~QtOneDriveAuthorizationDialog() {

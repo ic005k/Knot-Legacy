@@ -1,7 +1,7 @@
-#include "dlgReaderFun.h"
+#include "ReaderFun.h"
 
 #include "mainwindow.h"
-#include "ui_dlgReaderFun.h"
+#include "ui_ReaderFun.h"
 #include "ui_mainwindow.h"
 
 extern int fontSize;

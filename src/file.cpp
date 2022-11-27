@@ -7,7 +7,7 @@
 #include "mainwindow.h"
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
-#include "ui_dlgOneDrive.h"
+#include "ui_OneDrive.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;

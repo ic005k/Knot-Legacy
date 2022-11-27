@@ -40,16 +40,17 @@ INSTALLS += dataFiles
 SOURCES += \
     src/EditRecord.cpp \
     src/Notes.cpp \
+    src/NotesList.cpp \
+    src/OneDrive.cpp \
     src/Preferences.cpp \
     src/Reader.cpp \
+    src/ReaderFun.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
     src/Steps.cpp \
     src/Todo.cpp \
+    src/TodoAlarm.cpp \
     src/autoupdatedialog.cpp \
-    src/dlgNotesList.cpp \
-    src/dlgOneDrive.cpp \
-    src/dlgReaderFun.cpp \
     src/dlgSetText.cpp \
     src/dlgfloatfun.cpp \
     src/dlgleft.cpp \
@@ -63,23 +64,23 @@ SOURCES += \
     src/mainwindow.cpp \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
-    src/setTodoAlarm.cpp \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
     src/EditRecord.h \
     src/Notes.h \
+    src/NotesList.h \
+    src/OneDrive.h \
     src/Preferences.h \
     src/Reader.h \
+    src/ReaderFun.h \
     src/RemarksAbout.h \
     src/Report.h \
     src/Steps.h \
     src/Todo.h \
+    src/TodoAlarm.h \
     src/autoupdatedialog.h \
     src/count_steps.h \
-    src/dlgNotesList.h \
-    src/dlgOneDrive.h \
-    src/dlgReaderFun.h \
     src/dlgSetText.h \
     src/dlgfloatfun.h \
     src/dlgleft.h \
@@ -93,22 +94,22 @@ HEADERS += \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
-    src/setTodoAlarm.h \
     src/specialaccelerometerpedometer.h
 
 FORMS += \
     src/EditRecord.ui \
     src/Notes.ui \
+    src/NotesList.ui \
+    src/OneDrive.ui \
     src/Preferences.ui \
     src/Reader.ui \
+    src/ReaderFun.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
     src/Steps.ui \
     src/Todo.ui \
+    src/TodoAlarm.ui \
     src/autoupdatedialog.ui \
-    src/dlgNotesList.ui \
-    src/dlgOneDrive.ui \
-    src/dlgReaderFun.ui \
     src/dlgSetText.ui \
     src/dlgfloatfun.ui \
     src/dlgleft.ui \
@@ -116,8 +117,7 @@ FORMS += \
     src/dlgloadpic.ui \
     src/dlgright.ui \
     src/dlgsetedittext.ui \
-    src/mainwindow.ui \
-    src/setTodoAlarm.ui
+    src/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

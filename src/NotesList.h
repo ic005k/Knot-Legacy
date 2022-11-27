@@ -1,5 +1,5 @@
-#ifndef DLGNOTESLIST_H
-#define DLGNOTESLIST_H
+#ifndef NOTESLIST_H
+#define NOTESLIST_H
 
 #include <QDialog>
 #include <QDirIterator>
@@ -76,4 +76,4 @@ class dlgNotesList : public QDialog {
   void removeFromFiles(QString str);
 };
 
-#endif  // DLGNOTESLIST_H
+#endif  // NOTESLIST_H

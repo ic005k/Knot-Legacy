@@ -1,5 +1,5 @@
-#ifndef DLGREADERFUN_H
-#define DLGREADERFUN_H
+#ifndef READERFUN_H
+#define READERFUN_H
 
 #include <QDialog>
 
@@ -39,4 +39,4 @@ class dlgReaderFun : public QDialog {
  private:
 };
 
-#endif  // DLGREADERFUN_H
+#endif  // READERFUN_H

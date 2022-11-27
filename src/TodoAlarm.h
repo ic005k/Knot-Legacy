@@ -1,5 +1,5 @@
-#ifndef SETTODOALARM_H
-#define SETTODOALARM_H
+#ifndef TODOALARM_H
+#define TODOALARM_H
 
 #include <QDial>
 #include <QDialog>
@@ -65,4 +65,4 @@ class msgDialog : public QDialog {
   void addDial(int min, int max, QString flag);
 };
 
-#endif  // SETTODOALARM_H
+#endif  // TODOALARM_H

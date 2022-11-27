@@ -1,8 +1,8 @@
-#include "setTodoAlarm.h"
+#include "TodoAlarm.h"
 
 #include "mainwindow.h"
+#include "ui_TodoAlarm.h"
 #include "ui_mainwindow.h"
-#include "ui_setTodoAlarm.h"
 
 extern MainWindow* mw_one;
 extern int fontSize;
