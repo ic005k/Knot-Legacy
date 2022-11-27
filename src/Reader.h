@@ -81,7 +81,7 @@ class dlgReader : public QDialog {
   void setReaderStyle();
   qreal getVHeight();
   qreal getNewVPos(qreal pos1, qreal h1, qreal h2);
-  static void processHtml();
+  static void processHtml(int index);
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();

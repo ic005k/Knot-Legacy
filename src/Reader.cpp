@@ -797,7 +797,7 @@ void dlgReader::on_btnPageUp_clicked() {
   } else {
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
-
+    processHtml(htmlIndex);
     setQMLHtml();
   }
 
@@ -837,7 +837,7 @@ void dlgReader::on_btnPageNext_clicked() {
   } else {
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
-
+    processHtml(htmlIndex);
     setQMLHtml();
   }
   setPageVPos();
@@ -861,82 +861,82 @@ void dlgReader::setEpubPagePosition(int index) {
   showInfo();
 }
 
-void dlgReader::processHtml() {
+void dlgReader::processHtml(int index) {
   if (!isEpub) return;
 
-  for (int i = 0; i < htmlFiles.count(); i++) {
-    QString hf = htmlFiles.at(i);
+  QString hf = htmlFiles.at(index);
 
-    QTextEdit* text_edit = new QTextEdit;
+  QTextEdit* text_edit = new QTextEdit;
 
-    QString strHtml = mw_one->loadText(hf);
-    strHtml = strHtml.replace("</p>", "</p>\n");
-    strHtml = strHtml.replace("/>", "/>\n");
+  QString strHtml = mw_one->loadText(hf);
+  strHtml = strHtml.replace("</p>", "</p>\n");
+  strHtml = strHtml.replace("/>", "/>\n");
 
-    strHtml = strHtml.replace("><", ">\n<");
+  strHtml = strHtml.replace("><", ">\n<");
 
-    strHtml = strHtml.replace("<img", "\n<img");
+  strHtml = strHtml.replace("<img", "\n<img");
 
-    strHtml = strHtml.replace(".css", "");
-    strHtml = strHtml.replace("font-family:", "font0-family:");
+  // strHtml = strHtml.replace(".css", "");
+  // strHtml = strHtml.replace("font-family:", "font0-family:");
 
-    QString space0, mystyle;
-    space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    mystyle = " style='line-height:35px; width:100% ; text-indent:40px; ' ";
+  // QString space0, mystyle;
+  // space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+  // mystyle = " style='line-height:35px; width:100% ; text-indent:40px; ' ";
 
-    text_edit->setPlainText(strHtml);
+  text_edit->setPlainText(strHtml);
 
-    QPlainTextEdit* plain_edit = new QPlainTextEdit;
+  QPlainTextEdit* plain_edit = new QPlainTextEdit;
 
-    for (int i = 0; i < text_edit->document()->lineCount(); i++) {
-      QString str = getTextEditLineText(text_edit, i);
-      str = str.trimmed();
+  for (int i = 0; i < text_edit->document()->lineCount(); i++) {
+    QString str = getTextEditLineText(text_edit, i);
+    str = str.trimmed();
 
-      if (str.contains("</head>")) {
-        QString css =
-            "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
-            "/>";
-        css.replace("../", "file://" + strOpfPath);
-        plain_edit->appendPlainText(css);
-        plain_edit->appendPlainText("</head>");
-      } else {
-        if (str.trimmed() != "") {
-          if (str.contains("<image") && str.contains("xlink:href=")) {
-            str.replace("xlink:href=", "src=");
-            str.replace("<image", "<img");
-            str.replace("height", "height1");
-            str.replace("width", "width1");
-          }
-
-          if (str.mid(0, 4) == "<img") {
-            QString str1 = str;
-            QStringList list = str1.split(" ");
-            QString strSrc;
-            for (int k = 0; k < list.count(); k++) {
-              QString s1 = list.at(k);
-              if (s1.contains("src=")) {
-                strSrc = s1;
-                break;
-              }
-            }
-            strSrc = strSrc.replace("src=", "");
-            strSrc = strSrc.replace("/>", "");
-            str = "<a href=" + strSrc + ">" + str + "</a>";
-            qDebug() << "strSrc=" << strSrc << str;
-
-            str = str.replace("width=", "width1=");
-            str = str.replace("height=", "height1=");
-          }
-
-          if (!str.contains("stylesheet") && !str.contains("<style") &&
-              !str.contains("/style>"))
-            plain_edit->appendPlainText(str);
+    if (str.contains("</head>")) {
+      /*QString css =
+          "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
+          "/>";
+      css.replace("../", "file://" + strOpfPath);
+      plain_edit->appendPlainText(css);
+      plain_edit->appendPlainText("</head>");*/
+    } else {
+      if (str.trimmed() != "") {
+        if (str.contains("<image") && str.contains("xlink:href=")) {
+          str.replace("xlink:href=", "src=");
+          str.replace("<image", "<img");
+          str.replace("height", "height1");
+          str.replace("width", "width1");
         }
+
+        if (str.mid(0, 4) == "<img") {
+          QString str1 = str;
+          QStringList list = str1.split(" ");
+          QString strSrc;
+          for (int k = 0; k < list.count(); k++) {
+            QString s1 = list.at(k);
+            if (s1.contains("src=")) {
+              strSrc = s1;
+              break;
+            }
+          }
+          strSrc = strSrc.replace("src=", "");
+          strSrc = strSrc.replace("/>", "");
+          str = "<a href=" + strSrc + ">" + str + "</a>";
+          qDebug() << "strSrc=" << strSrc << str;
+
+          str = str.replace("width=", "width1=");
+          str = str.replace("height=", "height1=");
+        }
+
+        // if (!str.contains("stylesheet") && !str.contains("<style") &&
+        //     !str.contains("/style>"))
+
+        plain_edit->appendPlainText(str);
       }
     }
-
-    TextEditToFile(plain_edit, hf);
   }
+
+  TextEditToFile(plain_edit, hf);
+  delete plain_edit;
 }
 
 void dlgReader::setQMLHtml() {

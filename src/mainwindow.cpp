@@ -10,7 +10,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.49";
+QString ver = "1.0.50";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -73,7 +73,8 @@ void ReadEBookThread::run() {
 
   if (isEBook) {
     mw_one->mydlgReader->openFile(ebookFile);
-    mw_one->mydlgReader->processHtml();
+    // for (int i = 0; i < htmlFiles.count(); i++)
+    //   mw_one->mydlgReader->processHtml(i);
   }
 
   if (isReport) {
