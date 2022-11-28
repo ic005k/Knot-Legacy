@@ -2,21 +2,12 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
-
-import MyModel1 1.0
 import MyModel2 1.0
-
 import QtQuick.Layouts 1.1
 
-//import QtQuick.Controls.Styles 1.2
 Item {
     id: textitem
     visible: true
-
-    File {
-        id: file
-        source: "" //"/Users/hz/Documents/1.txt"
-    }
 
     function loadHtml(msg) {
 
@@ -55,10 +46,7 @@ Item {
         cursorPosition: textArea.cursorPosition
         selectionStart: textArea.selectionStart
         selectionEnd: textArea.selectionEnd
-        //textColor: "#FF0000"
 
-        //Component.onCompleted: document.load("qml:/texteditor.html")
-        //Component.onCompleted: document.load("file://" + htmlFile)
         onLoaded: {
             textArea.text = text
         }
@@ -82,22 +70,17 @@ Item {
 
         onMovementEnded: {
             state = "autoscroll"
-            file.textPos = contentY
-            console.log(file.textPos)
+
         }
 
         TextArea.flickable: TextArea {
             id: textArea
 
-            //font.pixelSize: FontSize
-            //font.family: FontName
             font.letterSpacing: 2
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting
             textFormat: Qt.AutoText
 
-            //onTextChanged: file.text = text
-            //Component.onCompleted: text = file.text
             wrapMode: TextArea.Wrap
             readOnly: true
             focus: true
@@ -117,9 +100,7 @@ Item {
             }
 
             onLinkActivated: {
-                //Qt.openUrlExternally(link)
                 document.setBackDir(link)
-                //document.load("file://" + htmlPath + link)
                 document.setReadPosition(link)
                 console.log(htmlPath + link)
                 console.log(htmlPath)

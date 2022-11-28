@@ -14,6 +14,8 @@ CONFIG+=sdk_no_version_check
 ICON = res/icon.icns
 TRANSLATIONS += src/cn.ts
 
+
+
 unix:!macx:{
 
 }
@@ -125,7 +127,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    qrc.qrc \
+    qml.qrc \
     res.qrc
 
 CONFIG(debug,debug|release) {

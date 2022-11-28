@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
-import QtWebView 1.1
 import MyModel2 1.0
 
 Rectangle {
@@ -13,6 +12,7 @@ Rectangle {
 
     property string strUrl: ""
     property string strText: ""
+    property string pdfFile: ""
     property bool isPDF: false
     property bool isEPUBText: false
 
@@ -30,10 +30,10 @@ Rectangle {
     }
 
     function loadPDF(pdffile) {
-        strUrl = "file://" + pdffile
+        pdfFile = "file://" + pdffile
         isPDF = true
         isEPUBText = false
-        console.debug(strUrl)
+        console.debug(pdfFile)
     }
 
     function loadHtmlBuffer(strhtml) {
@@ -98,13 +98,6 @@ Rectangle {
 
         smooth: true
         source: backImgFile
-    }
-
-    WebView {
-        id: webView
-        visible: isPDF
-        anchors.fill: parent
-        url: strUrl
     }
 
     Flickable {
@@ -208,6 +201,8 @@ Rectangle {
             anchors.bottom: parent.bottom
 
             //自定义滚动条样式
+
+
             /*contentItem: Rectangle {
                 id: slider
                 implicitWidth: 4

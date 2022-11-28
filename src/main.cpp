@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
   }
 #endif
   QtWebView::initialize();
-  QApplication a(argc, argv);
+  QApplication app(argc, argv);
 
   QTextCodec* codec = QTextCodec::codecForName("UTF-8");
   QTextCodec::setCodecForLocale(codec);
@@ -109,14 +109,15 @@ int main(int argc, char* argv[]) {
   }
 
   font.setPointSize(fontSize);
-  a.setFont(font);
+  app.setFont(font);
 
   loadLocal();
 
   MainWindow w;
+
   w.show();
 
-  return a.exec();
+  return app.exec();
 }
 
 void loadLocal() {
