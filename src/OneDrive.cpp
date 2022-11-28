@@ -141,11 +141,8 @@ TestDialog::TestDialog(QWidget *parent)
   timer->start(15000);
   ui->label_info->setWordWrapMode(QTextOption::WrapAnywhere);
   connect(timer, &QTimer::timeout, [this]() {
-    // ui->label_info->setText(oneDrive->debugInfo());
-
     if (!mw_one->ui->frameOne->isHidden()) {
-      mw_one->ui->qwOneDriver->rootContext()->setContextProperty(
-          "strText", oneDrive->debugInfo());
+      loadText(oneDrive->debugInfo());
     }
 
     this->setEnabled(!oneDrive->isBusy());
@@ -275,8 +272,12 @@ void TestDialog::on_btnBack_clicked() {
 void TestDialog::loadLogQML() {
   mw_one->ui->qwOneDriver->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
-  mw_one->ui->qwOneDriver->rootContext()->setContextProperty(
-      "strText", oneDrive->debugInfo());
+  loadText(oneDrive->debugInfo());
+}
+
+void TestDialog::loadText(QString str) {
+  QQuickItem *root = mw_one->ui->qwOneDriver->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "loadText", Q_ARG(QVariant, str));
 }
 
 void TestDialog::initQuick() {

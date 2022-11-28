@@ -9,6 +9,13 @@ Item {
     id: textitem
     visible: true
 
+    property string strText: ""
+
+    function loadText(str)
+    {
+        strText = str
+    }
+
     function loadHtml(msg) {
 
         document.load("file://" + msg)

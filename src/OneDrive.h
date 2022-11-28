@@ -25,7 +25,8 @@ class TestDialog : public QDialog {
 
   int getProg();
 
- signals:
+  void loadText(QString str);
+  signals:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
