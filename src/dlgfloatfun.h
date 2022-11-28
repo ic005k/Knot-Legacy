@@ -19,6 +19,8 @@ class dlgFloatFun : public QDialog {
   void init();
 
   void setY(int y);
+  void setPicLeft();
+  void setPicRight();
   protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;

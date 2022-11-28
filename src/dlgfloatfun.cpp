@@ -9,11 +9,7 @@ extern MainWindow* mw_one;
 dlgFloatFun::dlgFloatFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgFloatFun) {
   ui->setupUi(this);
-}
-
-void dlgFloatFun::init() {
-  // setAttribute(Qt::WA_TranslucentBackground);
-
+  this->setContentsMargins(1, 1, 1, 1);
   setWindowFlags(Qt::WindowStaysOnTopHint);
 
 #ifdef Q_OS_MAC
@@ -21,32 +17,32 @@ void dlgFloatFun::init() {
                  Qt::WindowDoesNotAcceptFocus);
 #endif
 
-  this->setContentsMargins(1, 1, 1, 1);
+  setPicRight();
+}
 
-  ui->btnAdd->setStyleSheet("border:none");
-  ui->btnDel->setStyleSheet("border:none");
+void dlgFloatFun::setPicLeft() {
+  QPixmap* pixmap = new QPixmap(":/res/sleft.png");
+  pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
+                 Qt::SmoothTransformation);
+  ui->lblPic->setScaledContents(true);
+  ui->lblPic->setPixmap(*pixmap);
+}
 
+void dlgFloatFun::setPicRight() {
+  QPixmap* pixmap = new QPixmap(":/res/sright.png");
+  pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
+                 Qt::SmoothTransformation);
+  ui->lblPic->setScaledContents(true);
+  ui->lblPic->setPixmap(*pixmap);
+}
+
+void dlgFloatFun::init() {
   this->setGeometry(
-      mw_one->geometry().x() + mw_one->width() - this->width() - 12,
-      mw_one->geometry().y() + mw_one->ui->frameMenu->height() +
-          mw_one->ui->tabWidget->height() - this->height() * 2,
+      mw_one->geometry().x() + (mw_one->width() - this->width()) / 2,
+      mw_one->geometry().y() + (mw_one->height() - this->height()) / 2,
       this->width(), this->height());
 
-  QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
-  m_pAnimation->setTargetObject(this);
-  m_pAnimation->setDuration(500);
-  QGraphicsOpacityEffect* m_pOpacity = new QGraphicsOpacityEffect();
-  this->setGraphicsEffect(m_pOpacity);
-  m_pOpacity->setOpacity(1);
-  m_pAnimation->setTargetObject(m_pOpacity);
-  m_pAnimation->setPropertyName("opacity");
-  m_pAnimation->setStartValue(0);
-  m_pAnimation->setEndValue(1);
-  // m_pAnimation->start();
-
   this->show();
-
-  qDebug() << "floatfun=" << this->x(), this->y();
 }
 
 void dlgFloatFun::setY(int y) {

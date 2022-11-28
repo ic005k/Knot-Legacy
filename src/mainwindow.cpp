@@ -2362,6 +2362,20 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
       if (event->type() == QEvent::MouseMove) {
         isMouseMove = true;
+
+        if (isMousePress) {
+          if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
+            qDebug() << "book right...";
+            mydlgFloatFun->setPicRight();
+            mydlgFloatFun->init();
+          } else if ((press_x - relea_x) > length &&
+                     qAbs(relea_y - press_y) < 35) {
+            qDebug() << "book left...";
+            mydlgFloatFun->setPicLeft();
+            mydlgFloatFun->init();
+          } else
+            mydlgFloatFun->close();
+        }
       }
     }
 
@@ -2404,6 +2418,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         isTurnThePage = true;
 
         on_btnPageUp_clicked();
+        mydlgFloatFun->close();
       }
 
       //判断滑动方向（左滑）
@@ -2424,6 +2439,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         isTurnThePage = true;
 
         on_btnPageNext_clicked();
+        mydlgFloatFun->close();
       }
 
       QMetaObject::invokeMethod((QObject *)root, "setX", Q_ARG(QVariant, 0));

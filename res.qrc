@@ -74,5 +74,7 @@
         <file>res/left.png</file>
         <file>res/right.png</file>
         <file>res/apk.png</file>
+        <file>res/sleft.png</file>
+        <file>res/sright.png</file>
     </qresource>
 </RCC>
