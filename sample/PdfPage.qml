@@ -20,8 +20,7 @@ Rectangle {
     property string pdfPath: ""
     property bool isViewEnd: false
 
-    function setViewVisible(vv)
-    {
+    function setViewVisible(vv) {
         pdfView.visible = vv
     }
 
@@ -75,7 +74,7 @@ Rectangle {
                     width: parent.width
 
                     Text {
-                        text: qsTr("PDF Viewer")
+                        text: qsTr("PDF")
                         font.pixelSize: 16
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -86,6 +85,39 @@ Rectangle {
 
                     Row {
                         spacing: 6
+
+                        CustomComponents.Button {
+                            id: btnBack
+                            visible: true
+                            padding: 4
+                            image.source: "qrc:/icons/back.svg"
+
+                            onClicked: {
+                                mw_one.on_btnBack_clicked()
+                            }
+                        }
+
+                        CustomComponents.Button {
+                            id: btnOpen
+                            visible: true
+                            padding: 4
+                            image.source: "qrc:/icons/open.svg"
+
+                            onClicked: {
+                                mw_one.on_btnOpen_clicked()
+                            }
+                        }
+
+                        CustomComponents.Button {
+                            id: btnBookList
+                            visible: true
+                            padding: 4
+                            image.source: "qrc:/icons/booklist.svg"
+
+                            onClicked: {
+                                mw_one.on_btnReadList_clicked()
+                            }
+                        }
 
                         CustomComponents.Button {
                             id: btnShowPreview

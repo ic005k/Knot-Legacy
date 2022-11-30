@@ -254,7 +254,6 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->ui->lblTitle->hide();
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
-    mw_one->ui->lblBookName->hide();
 
     QString strfilepath;
 #ifdef Q_OS_ANDROID

@@ -3933,7 +3933,7 @@ void MainWindow::init_UIWidget() {
 
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
-  //"qrc:/sample/PdfPage.qml"
+  ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/sample/PdfPage.qml")));
 }
 
@@ -4451,7 +4451,6 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 
 void MainWindow::readEBookDone() {
   if (isEBook) {
-    ui->lblBookName->show();
     ui->lblBookName->setText(strTitle);
 
     ui->btnReader->setEnabled(true);
@@ -4463,6 +4462,7 @@ void MainWindow::readEBookDone() {
       qDebug() << "Read EBook End Text or Epub... ...";
       ui->qwPdf->hide();
       ui->qwReader->show();
+      ui->frameReaderFun->show();
       mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
                                                               false);
       mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
@@ -4482,7 +4482,7 @@ void MainWindow::readEBookDone() {
 
     if (isPDF) {
       qDebug() << "Read Pdf... ..." << fileName;
-
+      ui->frameReaderFun->hide();
       ui->qwReader->hide();
       ui->qwPdf->show();
 

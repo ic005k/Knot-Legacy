@@ -21,5 +21,8 @@
         <file>icons/table_chart_white_24dp.svg</file>
         <file>icons/text_format_white_24dp.svg</file>
         <file>icons/touch_app_white_24dp.svg</file>
+        <file>icons/booklist.svg</file>
+        <file>icons/open.svg</file>
+        <file>icons/back.svg</file>
     </qresource>
 </RCC>
