@@ -27,6 +27,7 @@ Screen capture:
 * [Pedometer](https://github.com/vikasy/Pedometer)
 * [android-qt-pedometer-accelerometer](https://github.com/adct-the-experimenter/android-qt-pedometer-accelerometer)
 * [QtOneDrive](https://github.com/AndreyMacritskiy/QtOneDrive)
+* [qt-pdf-viewer-library](https://github.com/develtar/qt-pdf-viewer-library)
 
 ---
 
