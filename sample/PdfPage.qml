@@ -21,8 +21,8 @@ Rectangle {
 
     function loadPDF(pdffile) {
         pdfPath = pdffile
-        pdfView.load("")
-        pdfView.load(pdfPath)
+
+        //pdfView.load(pdfPath)
         console.debug("pdfFile is open ...... " + pdfPath)
     }
 

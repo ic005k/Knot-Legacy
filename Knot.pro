@@ -40,7 +40,7 @@ android
 # @see: https://github.com/FalsinSoft/QtAndroidTools/tree/1.5.5
 
 #QML_IMPORT_PATH += $$PWD/libs/android/QtAndroidTools-1.5.5/QtAndroidTools
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 #DEFINES += \
 #    QTAT_APP_PERMISSIONS
 #include($$PWD/libs/android/QtAndroidTools-1.5.5/QtAndroidTools/QtAndroidTools.pri)

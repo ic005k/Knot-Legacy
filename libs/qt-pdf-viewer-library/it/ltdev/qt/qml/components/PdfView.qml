@@ -21,7 +21,6 @@ import QtWebSockets 1.1
 import QtWebChannel 1.0
 
 import it.ltdev.qt.cpp.components 1.0
-//import "/Users/hz/Documents/GitHub/Knot/libs/qt-pdf-viewer-library/it/ltdev/qt/qml/components/" 1.0
 
 Item {
     id: root
@@ -48,7 +47,7 @@ Item {
     /*
         The scaling value for the pdf
     */
-    property var scale: 1
+    property int scale: 1
 
     readonly property int _SCROLL_MODE_VERTICAL: 0
     readonly property int _SCROLL_MODE_HORIZONTAL: 1
