@@ -4401,12 +4401,15 @@ void MainWindow::setSCrollPro(QObject *obj) {
 }
 
 void MainWindow::on_btnBack_clicked() {
+  mydlgReader->setPdfViewVisible(false);
   mydlgReaderFun->close();
 
   if (isSelText) on_btnSelText_clicked();
 
-  mydlgReader->saveReader();
-  mydlgReader->savePageVPos();
+  if (isText || isEpub) {
+    mydlgReader->saveReader();
+    mydlgReader->savePageVPos();
+  }
 
   ui->frameReader->hide();
   ui->frameMain->show();

@@ -29,6 +29,7 @@ Rectangle {
 
         if (isViewEnd) {
             pdfView.visible = true
+            pdfView.load("")
             pdfView.load(pdfPath)
         }
 
