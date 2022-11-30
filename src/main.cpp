@@ -2,6 +2,7 @@
 #include <QTranslator>
 #include <QtWebView/QtWebView>
 
+#include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 #include "mainwindow.h"
 #include "specialaccelerometerpedometer.h"
 
@@ -30,8 +31,21 @@ int main(int argc, char* argv[]) {
 #endif
   }
 #endif
+
   QtWebView::initialize();
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+  LTDev::QtPdfViewerInitializer::initialize();
   QApplication app(argc, argv);
+#else
+  QApplication app(argc, argv);
+  LTDev::QtPdfViewerInitializer::initialize();
+#endif
+
+  // Delete QtPdfViewerInitializer instance on app close
+  QObject::connect(&app, &QGuiApplication::aboutToQuit,
+                   LTDev::QtPdfViewerInitializer::getInstance(),
+                   LTDev::QtPdfViewerInitializer::deleteInstance);
 
   QTextCodec* codec = QTextCodec::codecForName("UTF-8");
   QTextCodec::setCodecForLocale(codec);

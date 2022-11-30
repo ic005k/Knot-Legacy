@@ -12,7 +12,7 @@ extern bool isImport, zh_cn, isAndroid, isIOS, isEBook, isReport;
 extern int fontSize;
 
 bool isOpen = false;
-bool isEpub = false;
+bool isEpub, isText, isPDF;
 QStringList readTextList, htmlFiles;
 QString strOpfPath, fileName, ebookFile, strTitle, fontname;
 int iPage, sPos, totallines;
@@ -85,12 +85,14 @@ void dlgReader::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
 void dlgReader::on_btnBack_clicked() {
   close();
-  saveReader();
-  savePageVPos();
+  if (isText || isEpub) {
+    saveReader();
+    savePageVPos();
+  }
 }
 
 void dlgReader::on_btnOpen_clicked() {
-  QString openfile =
+  openfile =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
 
   if (!QFileInfo(openfile).exists()) return;
@@ -221,24 +223,18 @@ void dlgReader::setReaderStyle() {
 void dlgReader::startOpenFile(QString openfile) {
   if (isReport) return;
 
-  if (!mw_one->ui->frameReader->isHidden()) {
-    saveReader();
-    savePageVPos();
+  if (isText || isEpub) {
+    if (!mw_one->ui->frameReader->isHidden()) {
+      saveReader();
+      savePageVPos();
+    }
   }
 
-  setReaderStyle();
+  isEpub = false;
+  isText = false;
+  isPDF = false;
 
-  mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
-                                                          false);
-  mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
-  mw_one->ui->qwReader->rootContext()->setContextProperty("isSelText",
-                                                          mw_one->isSelText);
-  mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
-  mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
-                                                          mw_one->width());
-  mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
-  mw_one->ui->qwReader->setSource(
-      QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
+  setReaderStyle();
 
   if (QFile(openfile).exists()) {
     isEBook = true;
@@ -449,13 +445,10 @@ void dlgReader::openFile(QString openfile) {
       }
 
     } else if (strHead.trimmed().toLower().contains("pdf")) {
-      isEpub = false;
-      QQuickItem* root = mw_one->ui->qwReader->rootObject();
-      QMetaObject::invokeMethod((QObject*)root, "loadPDF",
-                                Q_ARG(QVariant, openfile));
+      isPDF = true;
 
     } else {  // txt file
-      isEpub = false;
+      isText = true;
       iPage = 0;
       sPos = 0;
 
@@ -499,20 +492,6 @@ QString dlgReader::get_href(QString idref, QStringList opfList) {
     str0 = str0.trimmed();
     if (str0.contains("href=") && str0.contains(idref) &&
         str0.mid(0, 5) == "<item" && str0.contains("htm")) {
-      /*QString str1 = str0;
-      QStringList list = str1.split(" ");
-      for (int i = 0; i < list.count(); i++) {
-        QString str = list.at(i);
-        if (str.contains("href=")) {
-          str = str.replace("href=", "");
-          str = str.replace("\"", "");
-          str = str.trimmed();
-          qDebug() << "href"
-                   << "idref = " << idref << str;
-          return str;
-          break;
-        }
-      }*/
       QString str1;
       for (int j = 0; j < str0.length(); j++) {
         if (str0.mid(j, 6) == "href=\"") {
@@ -550,10 +529,11 @@ void dlgReader::saveReader() {
   Reg.setValue("/Reader/FontName", fontname);
   Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
 
-  if (!isEpub) {
+  if (isText) {
     Reg.setValue("/Reader/iPage" + fileName, iPage - baseLines);
-  } else
-    Reg.setValue("/Reader/htmlIndex" + fileName, htmlIndex);
+  }
+
+  if (isEpub) Reg.setValue("/Reader/htmlIndex" + fileName, htmlIndex);
 
   qDebug() << "textPos" << textPos << "htmlIndex=" << htmlIndex << "iPage"
            << iPage;
@@ -615,7 +595,7 @@ void dlgReader::getLines() {
   mw_one->mydlgReaderFun->ui->hSlider->setMinimum(0);
   mw_one->mydlgReaderFun->ui->hSlider->setValue(sPos);
 
-  if (!isEpub) {
+  if (isText) {
     mw_one->mydlgReaderFun->ui->hSlider->setMaximum(totallines / baseLines - 1);
     mw_one->ui->btnPages->setText(
         tr("Pages") + "\n" +
@@ -639,8 +619,9 @@ void dlgReader::getLines() {
         "'>" +
         txt1 + "</p>";
     setQMLText(qsShow);
+  }
 
-  } else {
+  if (isEpub) {
     mw_one->mydlgReaderFun->ui->hSlider->setMaximum(htmlFiles.count());
     htmlIndex = sPos - 1;
     if (htmlIndex < 0) htmlIndex = 0;
@@ -673,8 +654,10 @@ void dlgReader::setQMLText(QString txt1) {
 }
 
 void dlgReader::loadQMLText(QString str) {
-  QQuickItem* root = mw_one->ui->qwReader->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "loadText", Q_ARG(QVariant, str));
+  if (isText || isEpub) {
+    QQuickItem* root = mw_one->ui->qwReader->rootObject();
+    QMetaObject::invokeMethod((QObject*)root, "loadText", Q_ARG(QVariant, str));
+  }
 }
 
 void dlgReader::selectFont() {
@@ -766,10 +749,8 @@ void dlgReader::on_hSlider_sliderReleased(int position) {
   mw_one->ui->lblTitle->hide();
 
   int max;
-  if (!isEpub)
-    max = totallines / baseLines;
-  else
-    max = htmlFiles.count();
+  if (isText) max = totallines / baseLines;
+  if (isEpub) max = htmlFiles.count();
   if (position >= max) position = max;
   sPos = position;
   getLines();
@@ -783,7 +764,7 @@ void dlgReader::on_btnPageUp_clicked() {
   isPageNext = false;
 
   savePageVPos();
-  if (!isEpub) {
+  if (isText) {
     int count = iPage - baseLines;
     if (count <= 0) return;
     textPos = 0;
@@ -797,8 +778,9 @@ void dlgReader::on_btnPageUp_clicked() {
     }
 
     setQMLText(txt1);
+  }
 
-  } else {
+  if (isEpub) {
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
     processHtml(htmlIndex);
@@ -816,7 +798,7 @@ void dlgReader::on_btnPageNext_clicked() {
   isPageNext = true;
 
   savePageVPos();
-  if (!isEpub) {
+  if (isText) {
     QString txt1;
     if (totallines > baseLines) {
       int count = iPage + baseLines;
@@ -837,8 +819,9 @@ void dlgReader::on_btnPageNext_clicked() {
     }
 
     setQMLText(txt1);
+  }
 
-  } else {
+  if (isEpub) {
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
     processHtml(htmlIndex);
@@ -1174,7 +1157,7 @@ qreal dlgReader::getNewVPos(qreal pos1, qreal h1, qreal h2) {
 void dlgReader::showInfo() {
   mw_one->mydlgReaderFun->ui->hSlider->setTickInterval(1);
 
-  if (!isEpub) {
+  if (isText) {
     if (totallines > baseLines) {
       mw_one->mydlgReaderFun->ui->hSlider->setMinimum(0);
       mw_one->mydlgReaderFun->ui->hSlider->setValue(iPage / baseLines);
@@ -1188,8 +1171,9 @@ void dlgReader::showInfo() {
       mw_one->ui->progReader->setMaximum(100);
       mw_one->ui->progReader->setValue(0);
     }
+  }
 
-  } else {
+  if (isEpub) {
     mw_one->mydlgReaderFun->ui->hSlider->setMinimum(1);
     mw_one->mydlgReaderFun->ui->hSlider->setValue(htmlIndex);
     mw_one->mydlgReaderFun->ui->hSlider->setMaximum(htmlFiles.count());

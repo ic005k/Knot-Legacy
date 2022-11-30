@@ -1,7 +1,7 @@
 QT += core gui network
 QT += charts sensors
 QT += qml quick quickwidgets webview
-QT += xml
+QT += xml svg
 
 # Qt > 5 (Qt6)
 greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat
@@ -13,6 +13,15 @@ CONFIG+=sdk_no_version_check
 
 ICON = res/icon.icns
 TRANSLATIONS += src/cn.ts
+
+# Pdf View library
+QML_IMPORT_PATH += $$PWD/
+QML_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/
+QML_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/it/ltdev/qt/qml/components/
+QML_DESIGNER_IMPORT_PATH += $$PWD/
+QML_DESIGNER_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/
+QML_DESIGNER_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/it/ltdev/qt/qml/components/
+include($$PWD/libs/qt-pdf-viewer-library/qtpdfviewer.pri)
 
 
 
@@ -27,12 +36,21 @@ android: {
 
 android
 {
+# Android permissions tools library
+# @see: https://github.com/FalsinSoft/QtAndroidTools/tree/1.5.5
+
+#QML_IMPORT_PATH += $$PWD/libs/android/QtAndroidTools-1.5.5/QtAndroidTools
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+#DEFINES += \
+#    QTAT_APP_PERMISSIONS
+#include($$PWD/libs/android/QtAndroidTools-1.5.5/QtAndroidTools/QtAndroidTools.pri)
+
 #dataFiles.files+=src/readme.txt
 #dataFiles.files+=src/1.png
 #dataFiles.files+=src/2.png
 dataFiles.path = /assets/data
 INSTALLS += dataFiles
+
 }
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -127,6 +145,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    icons.qrc \
+    knotqml.qrc \
     qml.qrc \
     res.qrc
 

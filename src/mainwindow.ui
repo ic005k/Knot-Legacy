@@ -171,6 +171,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QQuickWidget" name="qwPdf">
+         <property name="resizeMode">
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QTextEdit" name="textBrowser"/>
        </item>
        <item>

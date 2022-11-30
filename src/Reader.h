@@ -33,6 +33,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  QString openfile;
   QString readerStyle;
   QString currentTxt;
   QString currentHtmlFile;

@@ -1,6 +1,7 @@
 ﻿#include "mainwindow.h"
 
 #include "count_steps.h"
+#include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 #include "math.h"  //using this for converting the CSV data from float to int
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "stdint.h"
@@ -33,7 +34,7 @@ bool isBreak = false;
 
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
-extern bool isAndroid, isIOS, zh_cn, isEpub, del;
+extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
     fileName, strOpfPath, fontname;
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
@@ -2402,17 +2403,21 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
       //判断滑动方向（右滑）
       if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
-        if (!isEpub) {
+        if (isText) {
           if (iPage - baseLines <= 0) {
-            QMetaObject::invokeMethod((QObject *)root, "setX",
-                                      Q_ARG(QVariant, 0));
-            return QWidget::eventFilter(watch, evn);
+            if (isText || isEpub) {
+              QMetaObject::invokeMethod((QObject *)root, "setX",
+                                        Q_ARG(QVariant, 0));
+              return QWidget::eventFilter(watch, evn);
+            }
           }
-        } else {
+        } else if (isEpub) {
           if (htmlIndex <= 0) {
-            QMetaObject::invokeMethod((QObject *)root, "setX",
-                                      Q_ARG(QVariant, 0));
-            return QWidget::eventFilter(watch, evn);
+            if (isText || isEpub) {
+              QMetaObject::invokeMethod((QObject *)root, "setX",
+                                        Q_ARG(QVariant, 0));
+              return QWidget::eventFilter(watch, evn);
+            }
           }
         }
         isTurnThePage = true;
@@ -2423,17 +2428,21 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
       //判断滑动方向（左滑）
       if ((press_x - relea_x) > length && qAbs(relea_y - press_y) < 35) {
-        if (!isEpub) {
+        if (isText) {
           if (iPage + baseLines > totallines) {
-            QMetaObject::invokeMethod((QObject *)root, "setX",
-                                      Q_ARG(QVariant, 0));
-            return QWidget::eventFilter(watch, evn);
+            if (isText || isEpub) {
+              QMetaObject::invokeMethod((QObject *)root, "setX",
+                                        Q_ARG(QVariant, 0));
+              return QWidget::eventFilter(watch, evn);
+            }
           }
-        } else {
+        } else if (isEpub) {
           if (htmlIndex + 1 >= htmlFiles.count()) {
-            QMetaObject::invokeMethod((QObject *)root, "setX",
-                                      Q_ARG(QVariant, 0));
-            return QWidget::eventFilter(watch, evn);
+            if (isText || isEpub) {
+              QMetaObject::invokeMethod((QObject *)root, "setX",
+                                        Q_ARG(QVariant, 0));
+              return QWidget::eventFilter(watch, evn);
+            }
           }
         }
         isTurnThePage = true;
@@ -2442,7 +2451,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         mydlgFloatFun->close();
       }
 
-      QMetaObject::invokeMethod((QObject *)root, "setX", Q_ARG(QVariant, 0));
+      if (isText || isEpub)
+        QMetaObject::invokeMethod((QObject *)root, "setX", Q_ARG(QVariant, 0));
 
       curx = 0;
     }
@@ -3718,6 +3728,7 @@ void MainWindow::init_UIWidget() {
   ui->frameSteps->hide();
   ui->frameDebug->hide();
   ui->frameReport->hide();
+  ui->qwPdf->hide();
 
   ui->textEdit->setContentsMargins(12, 0, 12, 0);
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
@@ -3918,6 +3929,10 @@ void MainWindow::init_UIWidget() {
 
   ui->qwOneDriver->rootContext()->setContextProperty("mydlgOneDrive",
                                                      mydlgOneDrive);
+
+  ui->qwPdf->engine()->addImportPath("qrc:/");
+  ui->qwPdf->engine()->addImportPath(":/");
+  ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/sample/PdfPage.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4412,13 +4427,15 @@ void MainWindow::on_btnPages_clicked() {
 }
 
 void MainWindow::on_hSlider_sliderMoved(int position) {
-  if (!isEpub) {
+  if (isText) {
     ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position + 1) +
                           "\n" + QString::number(totallines / baseLines));
     ui->progReader->setMinimum(0);
     ui->progReader->setMaximum(totallines / baseLines);
     ui->progReader->setValue(position + 1);
-  } else {
+  }
+
+  if (isEpub) {
     ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position) +
                           "\n" + QString::number(htmlFiles.count()));
     ui->progReader->setMinimum(1);
@@ -4430,17 +4447,45 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 
 void MainWindow::readEBookDone() {
   if (isEBook) {
-    qDebug() << "Read EBook End... ...";
-    mydlgReader->goPostion();
+    ui->lblBookName->show();
+    ui->lblBookName->setText(strTitle);
 
     ui->btnReader->setEnabled(true);
-
     ui->frameReaderFun->setEnabled(true);
     ui->btnBackDir->setEnabled(false);
     this->repaint();
 
-    ui->lblBookName->show();
-    ui->lblBookName->setText(strTitle);
+    if (isText || isEpub) {
+      qDebug() << "Read EBook End Text or Epub... ...";
+      ui->qwPdf->hide();
+      ui->qwReader->show();
+      mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
+                                                              false);
+      mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
+      mw_one->ui->qwReader->rootContext()->setContextProperty(
+          "isSelText", mw_one->isSelText);
+      mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
+      mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
+                                                              mw_one->width());
+      mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
+      mw_one->ui->qwReader->setSource(
+          QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
+      mydlgReader->goPostion();
+
+      if (isEpub)
+        ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
+    }
+
+    if (isPDF) {
+      qDebug() << "Read Pdf... ..." << ebookFile;
+
+      ui->qwReader->hide();
+      ui->qwPdf->show();
+
+      QQuickItem *root = ui->qwPdf->rootObject();
+      QMetaObject::invokeMethod((QObject *)root, "loadPDF",
+                                Q_ARG(QVariant, ebookFile));
+    }
 
     for (int i = 0; i < mydlgReader->bookList.count(); i++) {
       QString str = mydlgReader->bookList.at(i);
@@ -4450,10 +4495,6 @@ void MainWindow::readEBookDone() {
       }
     }
     mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
-
-    ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
-
-    isEBook = false;
   }
 
   if (isReport) {
@@ -4551,9 +4592,9 @@ void MainWindow::on_btnSelText_clicked() {
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     ui->textBrowser->setFont(font);
 
-    if (!isEpub)
-      ui->textBrowser->setHtml(mydlgReader->currentTxt);
-    else {
+    if (isText) ui->textBrowser->setHtml(mydlgReader->currentTxt);
+
+    if (isEpub) {
       QString str = loadText(mydlgReader->currentHtmlFile);
       str.replace("..", strOpfPath);
       QDir dir;

@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>src/texteditor.html</file>
+        <file>src/onedrive/log.qml</file>
+        <file>src/onedrive/web.qml</file>
+        <file>src/qmlsrc/todo.qml</file>
+        <file>src/qmlsrc/TodoModel.qml</file>
+        <file>src/qmlsrc/main.qml</file>
+        <file>src/qmlsrc/MainModel.qml</file>
+        <file>src/qmlsrc/steps.qml</file>
+        <file>src/qmlsrc/todorecycle.qml</file>
+        <file>src/qmlsrc/report.qml</file>
+        <file>src/qmlsrc/details.qml</file>
+        <file>src/qmlsrc/notes.qml</file>
+        <file>src/qmlsrc/reader.qml</file>
+        <file>src/qmlsrc/imgview.qml</file>
+    </qresource>
+</RCC>
