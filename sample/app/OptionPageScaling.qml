@@ -4,7 +4,7 @@ import "../components" as CustomComponents
 import "../"
 
 BaseOptionSection {
-    title: "Scaling options:"
+    title: qsTr("Scaling options:")
 
     CustomComponents.Button {
         id: btnZoomOut

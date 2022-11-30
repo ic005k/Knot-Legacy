@@ -18,12 +18,22 @@ Rectangle {
 
     property StackView view
     property string pdfPath: ""
+    property bool isViewEnd: false
+
+    function setViewVisible(vv)
+    {
+        pdfView.visible = vv
+    }
 
     function loadPDF(pdffile) {
         pdfPath = pdffile
 
-        //pdfView.load(pdfPath)
-        console.debug("pdfFile is open ...... " + pdfPath)
+        if (isViewEnd) {
+            pdfView.visible = true
+            pdfView.load(pdfPath)
+        }
+
+        console.debug("pdfFile is open ...... " + pdfPath + "   " + isViewEnd)
     }
 
     property int closedTopbarHeight: 42
@@ -206,7 +216,7 @@ Rectangle {
                 }
 
                 onViewerLoaded: {
-
+                    isViewEnd = true
                     pdfView.load(pdfPath)
                     pdfView.visible = true
 

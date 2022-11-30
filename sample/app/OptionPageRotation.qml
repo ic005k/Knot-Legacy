@@ -4,7 +4,7 @@ import "../components" as CustomComponents
 import "../"
 
 BaseOptionSection {
-    title: "Page rotation:"
+    title: qsTr("Page rotation:")
 
     CustomComponents.Button{
         image.source: "qrc:/icons/rotate_left_white_24dp.svg"

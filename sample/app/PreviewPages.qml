@@ -11,7 +11,7 @@ Column {
     spacing: 16
 
     Text {
-        text: "Preview:"
+        text: qsTr("Preview:")
         color: "white"
         font.pixelSize: 16
     }

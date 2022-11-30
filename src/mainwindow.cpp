@@ -2173,7 +2173,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       relea_y = event->globalY();
     }
 
-    //判断滑动方向（右滑）
+    // Right
     if ((relea_x - press_x) > 75 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 35) {
@@ -2184,11 +2184,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         QPropertyAnimation *animation1 =
 
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
-        animation1->setDuration(350);  //设置动画时间为0.5秒
+        animation1->setDuration(350);
         animation1->setStartValue(QRect(x, y, w, h));
         animation1->setEndValue(QRect(w * 2, y, w, h));
 
-        ui->tabWidget->setCurrentIndex(current_page + 1);  //切换界面
+        ui->tabWidget->setCurrentIndex(current_page + 1);
 
         QPropertyAnimation *animation2 =
             new QPropertyAnimation(ui->tabWidget->currentWidget(), "geometry");
@@ -2215,7 +2215,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
     }
 
-    //判断滑动方向（左滑）
+    // Left
     if ((press_x - relea_x) > 75 &&
         event->type() == QEvent::MouseButtonRelease &&
         qAbs(relea_y - press_y) < 35 && index > 0) {
@@ -2262,6 +2262,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
+        mydlgReader->setPdfViewVisible(false);
         if (!listSelFont->isHidden()) {
           listSelFont->close();
           return true;
@@ -3933,7 +3934,7 @@ void MainWindow::init_UIWidget() {
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   //"qrc:/sample/PdfPage.qml"
-  ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
+  ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/sample/PdfPage.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4385,6 +4386,8 @@ void MainWindow::on_btnReader_clicked() {
     isOne = true;
     mydlgReader->setPageVPos();
   }
+
+  if (isPDF) mydlgReader->setPdfViewVisible(true);
 
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }

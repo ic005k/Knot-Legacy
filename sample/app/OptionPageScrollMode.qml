@@ -4,7 +4,7 @@ import "../components" as CustomComponents
 import "../"
 
 BaseOptionSection {
-    title: "Scroll modes:"
+    title: qsTr("Scroll modes:")
 
     CustomComponents.Button{
         image.source: "qrc:/icons/view_horizontal_white_24dp.svg"

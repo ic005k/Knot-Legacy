@@ -9,14 +9,18 @@ Item {
     id: pdfitem
     visible: true
 
-
-    property bool isViewEnd: false
     property string pdfPath: ""
+    property bool isViewEnd: false
+
+    function setViewVisible(vv) {
+        pdfView.visible = vv
+    }
 
     function loadPDF(pdffile) {
         pdfPath = pdffile
 
-        if (isViewEnd){
+        if (isViewEnd) {
+            pdfView.visible = true
             pdfView.load(pdfPath)
         }
 
@@ -34,10 +38,10 @@ Item {
         opacity: 0
 
         onError: {
+
             // Hide pdfview on error
             //pdfView.visible = false
             //pdfView.opacity = 0
-
             console.error("Error: ", message)
 
             // Parse json error message
@@ -64,6 +68,4 @@ Item {
             console.debug("onPdfLoaded......")
         }
     }
-
-
 }

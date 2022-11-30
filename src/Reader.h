@@ -93,7 +93,8 @@ class dlgReader : public QDialog {
 
   void setAni();
   void loadQMLText(QString str);
- public slots:
+  void setPdfViewVisible(bool vv);
+  public slots:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;

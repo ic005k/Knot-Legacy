@@ -4,7 +4,7 @@ import "../components" as CustomComponents
 import "../"
 
 BaseOptionSection {
-    title: "Search text:"
+    title: qsTr("Search text:")
 
     CustomComponents.TextField {
         id: tfSearch

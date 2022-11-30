@@ -84,6 +84,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
 void dlgReader::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
 void dlgReader::on_btnBack_clicked() {
+  setPdfViewVisible(false);
   close();
   if (isText || isEpub) {
     saveReader();
@@ -222,6 +223,8 @@ void dlgReader::setReaderStyle() {
 
 void dlgReader::startOpenFile(QString openfile) {
   if (isReport) return;
+
+  setPdfViewVisible(false);
 
   if (isText || isEpub) {
     if (!mw_one->ui->frameReader->isHidden()) {
@@ -1448,6 +1451,7 @@ void dlgReader::getReadList() {
     }
   }
 
+  setPdfViewVisible(false);
   list->show();
   list->setFocus();
 }
@@ -1495,4 +1499,10 @@ QString dlgReader::getCoverPicFile(QString htmlFile) {
     }
   }
   return "";
+}
+
+void dlgReader::setPdfViewVisible(bool vv) {
+  QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setViewVisible",
+                            Q_ARG(QVariant, vv));
 }

@@ -4,7 +4,7 @@ import "../components" as CustomComponents
 import "../"
 
 BaseOptionSection {
-    title: "Page selection:"
+    title: qsTr("Page selection:")
 
     CustomComponents.Button{
         image.source: "qrc:/icons/arrow_downward_white_24dp.svg"
