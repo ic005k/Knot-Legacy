@@ -4477,14 +4477,14 @@ void MainWindow::readEBookDone() {
     }
 
     if (isPDF) {
-      qDebug() << "Read Pdf... ..." << ebookFile;
+      qDebug() << "Read Pdf... ..." << fileName;
 
       ui->qwReader->hide();
       ui->qwPdf->show();
 
       QQuickItem *root = ui->qwPdf->rootObject();
       QMetaObject::invokeMethod((QObject *)root, "loadPDF",
-                                Q_ARG(QVariant, ebookFile));
+                                Q_ARG(QVariant, fileName));
     }
 
     for (int i = 0; i < mydlgReader->bookList.count(); i++) {
