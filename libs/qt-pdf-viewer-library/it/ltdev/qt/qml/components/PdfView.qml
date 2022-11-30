@@ -47,7 +47,7 @@ Item {
     /*
         The scaling value for the pdf
     */
-    property int scale: 1
+    property var scale: 1
 
     readonly property int _SCROLL_MODE_VERTICAL: 0
     readonly property int _SCROLL_MODE_HORIZONTAL: 1
@@ -357,7 +357,6 @@ Item {
         Component.onCompleted: {
             QtPdfViewerInitializer.viewerChanged.connect(function(){
                 webView.url = "file://"+QtPdfViewerInitializer.viewer
-                console.debug("webView.url=" + "file://"+QtPdfViewerInitializer.viewer)
             })
 
             QtPdfViewerInitializer.initializeViewer()

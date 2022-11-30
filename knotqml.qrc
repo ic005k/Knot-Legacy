@@ -14,5 +14,6 @@
         <file>src/qmlsrc/notes.qml</file>
         <file>src/qmlsrc/reader.qml</file>
         <file>src/qmlsrc/imgview.qml</file>
+        <file>src/qmlsrc/pdf.qml</file>
     </qresource>
 </RCC>

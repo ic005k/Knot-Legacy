@@ -3929,6 +3929,11 @@ void MainWindow::init_UIWidget() {
 
   ui->qwOneDriver->rootContext()->setContextProperty("mydlgOneDrive",
                                                      mydlgOneDrive);
+
+  ui->qwPdf->engine()->addImportPath("qrc:/");
+  ui->qwPdf->engine()->addImportPath(":/");
+  //"qrc:/sample/PdfPage.qml"
+  ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4477,10 +4482,6 @@ void MainWindow::readEBookDone() {
 
       ui->qwReader->hide();
       ui->qwPdf->show();
-      ui->qwPdf->engine()->addImportPath("qrc:/");
-      ui->qwPdf->engine()->addImportPath(":/");
-
-      ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/sample/PdfPage.qml")));
 
       QQuickItem *root = ui->qwPdf->rootObject();
       QMetaObject::invokeMethod((QObject *)root, "loadPDF",
