@@ -71,7 +71,7 @@ Rectangle {
 
                 RowLayout {
                     id: header
-                    spacing: 12
+                    spacing: 2
                     width: parent.width
 
                     Text {
@@ -85,7 +85,7 @@ Rectangle {
                     }
 
                     Row {
-                        spacing: 6
+                        spacing: 2
 
                         CustomComponents.Button {
                             id: btnBack

@@ -73,7 +73,7 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      on_btnBack_clicked();
+      mw_one->on_btnBack_clicked();
       return true;
     }
   }
@@ -82,15 +82,6 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
 }
 
 void dlgReader::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
-
-void dlgReader::on_btnBack_clicked() {
-  setPdfViewVisible(false);
-  close();
-  if (isText || isEpub) {
-    saveReader();
-    savePageVPos();
-  }
-}
 
 void dlgReader::on_btnOpen_clicked() {
   openfile =
@@ -1398,6 +1389,8 @@ void dlgReader::getReadList() {
 
   if (bookList.count() == 0) return;
 
+  setPdfViewVisible(false);
+
   QListWidget* list = new QListWidget(mw_one);
   mw_one->listReadList = list;
   list->setStyleSheet(mw_one->listWidgetStyle);
@@ -1450,7 +1443,6 @@ void dlgReader::getReadList() {
     }
   }
 
-  setPdfViewVisible(false);
   list->show();
   list->setFocus();
 }

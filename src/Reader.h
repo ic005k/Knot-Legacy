@@ -88,13 +88,13 @@ class dlgReader : public QDialog {
   void on_btnPageUp_clicked();
   void on_btnOpen_clicked();
   void selectFont();
-  void on_btnBack_clicked();
+
   void on_hSlider_sliderReleased(int position);
 
   void setAni();
   void loadQMLText(QString str);
   void setPdfViewVisible(bool vv);
-  public slots:
+ public slots:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;

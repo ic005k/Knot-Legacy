@@ -4406,10 +4406,8 @@ void MainWindow::on_btnBack_clicked() {
 
   if (isSelText) on_btnSelText_clicked();
 
-  if (isText || isEpub) {
-    mydlgReader->saveReader();
-    mydlgReader->savePageVPos();
-  }
+  mydlgReader->saveReader();
+  mydlgReader->savePageVPos();
 
   ui->frameReader->hide();
   ui->frameMain->show();
