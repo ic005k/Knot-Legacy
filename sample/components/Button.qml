@@ -11,7 +11,7 @@ Rectangle {
 
 
     implicitHeight: 35
-    implicitWidth: 52
+    implicitWidth: 40
     color: mouseArea.containsMouse || mouseArea.pressed? "#4a4a4a":"transparent"// "#424242":"#4d4d4d"
     radius: 6
 
