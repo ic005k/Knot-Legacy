@@ -75,6 +75,7 @@ Rectangle {
                     width: parent.width
 
                     Text {
+                        visible: false
                         text: qsTr("PDF")
                         font.pixelSize: 16
                         Layout.fillWidth: true
@@ -95,6 +96,28 @@ Rectangle {
 
                             onClicked: {
                                 mw_one.on_btnBack_clicked()
+                            }
+                        }
+
+                        CustomComponents.Button {
+                            id: btnSmall
+                            visible: true
+                            padding: 4
+                            image.source: "qrc:/icons/remove_white_24dp.svg"
+
+                            onClicked: {
+                                pdfView.zoomOut()
+                            }
+                        }
+
+                        CustomComponents.Button {
+                            id: btnBig
+                            visible: true
+                            padding: 4
+                            image.source: "qrc:/icons/add_white_24dp.svg"
+
+                            onClicked: {
+                                pdfView.zoomIn()
                             }
                         }
 
@@ -144,6 +167,7 @@ Rectangle {
 
                             onClicked: {
                                 optionsEnabled = !optionsEnabled
+
                             }
                         }
                     }
@@ -153,7 +177,7 @@ Rectangle {
                     id: divider
                     visible: containerOptions.visible
                     width: parent.width
-                    height: 24
+                    height: 5
                 }
 
 
@@ -163,7 +187,7 @@ Rectangle {
                 Flow {
                     id: containerOptions
                     visible: btnOptions.optionsEnabled
-                    spacing: 24
+                    spacing: 6
 
                     width: parent.width
 
@@ -193,7 +217,7 @@ Rectangle {
                     id: divider2
                     visible: containerPreviewPages.visible
                     width: parent.width
-                    height: 24
+                    height: 5
                 }
 
 
@@ -249,10 +273,11 @@ Rectangle {
                 }
 
                 onViewerLoaded: {
+                    if (pdfPath != "") {
+                        pdfView.load(pdfPath)
+                        pdfView.visible = true
+                    }
                     isViewEnd = true
-                    pdfView.load(pdfPath)
-                    pdfView.visible = true
-
                     console.debug("onViewerLoaded......")
                 }
 

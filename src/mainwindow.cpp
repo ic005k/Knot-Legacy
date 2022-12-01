@@ -2268,6 +2268,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           return true;
         } else if (!listReadList->isHidden()) {
           listReadList->close();
+          if (isPDF) mydlgReader->setPdfViewVisible(true);
           return true;
         } else if (!mydlgReaderFun->isHidden()) {
           mydlgReaderFun->close();

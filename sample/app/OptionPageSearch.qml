@@ -8,7 +8,7 @@ BaseOptionSection {
 
     CustomComponents.TextField {
         id: tfSearch
-        width: 100
+        width: 150
 
         textInput {
             onTextChanged: {
@@ -19,17 +19,23 @@ BaseOptionSection {
 
 
     CustomComponents.Button{
+        id:btnBack
         image.source: "qrc:/icons/backward_white_24dp.svg"
 
         onClicked: {
+            btnBack.focus=true
             pdfView.searchTextOccurance(tfSearch.textInput.text, true, false, true, true)
+
         }
     }
     CustomComponents.Button{
+        id:btnForward
         image.source: "qrc:/icons/forward_white_24dp.svg"
 
         onClicked: {
+            btnForward.focus=true
             pdfView.searchTextOccurance(tfSearch.textInput.text, true, false, true, false)
+
         }
     }
 

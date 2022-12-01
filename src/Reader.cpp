@@ -1413,6 +1413,8 @@ void dlgReader::getReadList() {
       item = new QListWidgetItem(QIcon(":/res/txt.png"), "txt");
     } else if (bookName.toLower().contains(".epub")) {
       item = new QListWidgetItem(QIcon(":/res/epub.png"), "epub");
+    } else if (bookName.toLower().contains(".pdf")) {
+      item = new QListWidgetItem(QIcon(":/res/pdf.png"), "pdf");
     } else
       item = new QListWidgetItem(QIcon(":/res/none.png"), "none");
     item->setSizeHint(QSize(130, fm.height() * 4));  // item->sizeHint().width()

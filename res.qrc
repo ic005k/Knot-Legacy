@@ -76,5 +76,6 @@
         <file>res/apk.png</file>
         <file>res/sleft.png</file>
         <file>res/sright.png</file>
+        <file>res/pdf.png</file>
     </qresource>
 </RCC>

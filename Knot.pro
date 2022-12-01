@@ -147,7 +147,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     icons.qrc \
     knotqml.qrc \
-    qml.qrc \
+    pdfqml.qrc \
     res.qrc
 
 CONFIG(debug,debug|release) {
