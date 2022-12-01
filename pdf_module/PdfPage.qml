@@ -71,21 +71,24 @@ Rectangle {
                 width: parent.width - 36
                 height: parent.height - 6
                 anchors.centerIn: parent
+                anchors.leftMargin: 2
 
                 RowLayout {
                     id: header
                     spacing: 2
                     width: parent.width
+                    anchors.leftMargin: 2
 
                     Text {
-                        visible: false
-                        text: qsTr("PDF")
-                        font.pixelSize: 16
+                        visible: true
+                        text: qsTr("P\nD\nF")
+                        font.pixelSize: 9
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
                         color: "white"
+                        anchors.leftMargin: 2
                     }
 
                     Row {
