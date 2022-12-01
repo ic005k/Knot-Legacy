@@ -4501,6 +4501,8 @@ void MainWindow::readEBookDone() {
       }
     }
     mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
+
+    isEBook = false;
   }
 
   if (isReport) {

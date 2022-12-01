@@ -24,5 +24,6 @@
         <file>icons/booklist.svg</file>
         <file>icons/open.svg</file>
         <file>icons/back.svg</file>
+        <file>icons/find.svg</file>
     </qresource>
 </RCC>

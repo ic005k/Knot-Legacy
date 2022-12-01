@@ -19,6 +19,9 @@ Rectangle {
     property StackView view
     property string pdfPath: ""
     property bool isViewEnd: false
+    property bool isFunpanel: true
+    property bool isFind: false
+    property bool isShowPanel: false
 
     function setViewVisible(vv) {
         pdfView.visible = vv
@@ -122,6 +125,22 @@ Rectangle {
                         }
 
                         CustomComponents.Button {
+                            id: btnFind
+                            property bool optionsEnabled: false
+
+                            padding: 4
+                            color: optionsEnabled ? "#4d4d4d" : "transparent"
+                            image.source: "qrc:/icons/find.svg"
+
+                            onClicked: {
+                                isFunpanel = false
+                                isFind = true
+                                optionsEnabled = !optionsEnabled
+                                isShowPanel = optionsEnabled
+                            }
+                        }
+
+                        CustomComponents.Button {
                             id: btnOpen
                             visible: true
                             padding: 4
@@ -153,6 +172,7 @@ Rectangle {
                             image.source: "qrc:/icons/table_chart_white_24dp.svg"
 
                             onClicked: {
+
                                 previewEnabled = !previewEnabled
                             }
                         }
@@ -166,8 +186,10 @@ Rectangle {
                             image.source: "qrc:/icons/tune_white_24dp.svg"
 
                             onClicked: {
+                                isFind = false
+                                isFunpanel = true
                                 optionsEnabled = !optionsEnabled
-
+                                isShowPanel = optionsEnabled
                             }
                         }
                     }
@@ -186,28 +208,33 @@ Rectangle {
                 */
                 Flow {
                     id: containerOptions
-                    visible: btnOptions.optionsEnabled
+                    visible: isShowPanel //btnOptions.optionsEnabled
                     spacing: 6
 
                     width: parent.width
 
                     OptionPageScrollMode {
+                        visible: isFunpanel
                         pdfView: pdfView
                     }
 
                     OptionPageSelection {
+                        visible: isFunpanel
                         pdfView: pdfView
                     }
 
                     OptionPageRotation {
+                        visible: isFunpanel
                         pdfView: pdfView
                     }
 
                     OptionPageSearch {
+                        visible: isFind
                         pdfView: pdfView
                     }
 
                     OptionPageScaling {
+                        visible: isFunpanel
                         pdfView: pdfView
                         maxWidth: parent.width
                     }
