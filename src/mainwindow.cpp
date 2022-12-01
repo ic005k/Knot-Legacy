@@ -3935,7 +3935,7 @@ void MainWindow::init_UIWidget() {
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
-  ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/sample/PdfPage.qml")));
+  ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
