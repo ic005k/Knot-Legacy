@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QQuickWindow>
 #include <QTranslator>
 #include <QtWebView/QtWebView>
 
@@ -14,6 +15,7 @@ bool zh_cn = false;
 bool isAndroid, isIOS;
 
 int main(int argc, char* argv[]) {
+  // QtWebView::initialize();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
 #ifdef Q_OS_ANDROID
@@ -28,11 +30,15 @@ int main(int argc, char* argv[]) {
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGLRhi);
+#endif
+
 #endif
   }
 #endif
-
-  QtWebView::initialize();
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   LTDev::QtPdfViewerInitializer::initialize();

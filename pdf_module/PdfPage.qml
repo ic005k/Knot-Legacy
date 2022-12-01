@@ -32,7 +32,7 @@ Rectangle {
 
         if (isViewEnd) {
             pdfView.visible = true
-            pdfView.load("")
+           // pdfView.load("")
             pdfView.load(pdfPath)
         }
 
@@ -304,8 +304,9 @@ Rectangle {
 
                 onViewerLoaded: {
                     if (pdfPath != "") {
-                        pdfView.load(pdfPath)
                         pdfView.visible = true
+                        pdfView.load(pdfPath)
+
                     }
                     isViewEnd = true
                     console.debug("onViewerLoaded......")

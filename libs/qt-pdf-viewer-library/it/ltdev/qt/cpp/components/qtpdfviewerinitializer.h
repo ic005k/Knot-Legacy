@@ -19,12 +19,12 @@
 #define QTPDFVIEWERINITIALIZER_H
 
 #include <QObject>
-#include <QtWebView/QtWebView>
 #include <QQmlApplicationEngine>
 #include <QtQml>
+#include <QtWebView/QtWebView>
 
-#include "fileutils.h"
 #include "WebSocketTransport.h"
+#include "fileutils.h"
 #include "singleton.cpp"
 
 #define PDF_VIEWER_VERSION "1.0.003"
@@ -32,70 +32,70 @@
 namespace LTDev {
 
 namespace DIR {
-    static const QString &path="libs/pdfjs/";
+static const QString &path = "libs/pdfjs/";
 }
 
-class QtPdfViewerInitializer : public QObject, public Singleton<QtPdfViewerInitializer>
-{
-    Q_OBJECT
+class QtPdfViewerInitializer : public QObject,
+                               public Singleton<QtPdfViewerInitializer> {
+  Q_OBJECT
 
-    Q_PROPERTY(QString viewer READ viewer NOTIFY viewerChanged)
+  Q_PROPERTY(QString viewer READ viewer NOTIFY viewerChanged)
 
-    friend class Singleton;
+  // friend class Singleton;  //clang for macosx
 
-public:
-    /**
-     * @brief Initializes the library
-     */
-    static void initialize();
+  friend class Singleton<QtPdfViewerInitializer>;  // vs2019
 
-    /**
-     * @brief Initializes the viewer creating the folders needed for the pdf view.
-     * Returns true if created or already initialized, false otherwise.
-     */
-    Q_INVOKABLE bool initializeViewer(bool force=false);
+ public:
+  /**
+   * @brief Initializes the library
+   */
+  static void initialize();
 
-    /**
-    * @brief Returns the base64 string of the given pdf file.
-    **/
-    Q_INVOKABLE static QByteArray pdfToBase64(const QString &path);
+  /**
+   * @brief Initializes the viewer creating the folders needed for the pdf view.
+   * Returns true if created or already initialized, false otherwise.
+   */
+  Q_INVOKABLE bool initializeViewer(bool force = false);
 
-    Q_INVOKABLE QString root(){ return this->_root;}
-    QString viewer(){ return this->_viewer;}
+  /**
+   * @brief Returns the base64 string of the given pdf file.
+   **/
+  Q_INVOKABLE static QByteArray pdfToBase64(const QString &path);
 
-    Q_INVOKABLE bool initialized(){ return this->_initialized;}
+  Q_INVOKABLE QString root() { return this->_root; }
+  QString viewer() { return this->_viewer; }
 
-    /**
-    * @brief Returns the qml instance.
-    **/
-    static QObject *getQmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine);
+  Q_INVOKABLE bool initialized() { return this->_initialized; }
 
-protected:
-    /**
-     * @brief the directory in which the library is exported
-     */
-    QString _root;
+  /**
+   * @brief Returns the qml instance.
+   **/
+  static QObject *getQmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine);
 
-    /**
-     * @brief the path of the html viewer
-     */
-    QString _viewer;
+ protected:
+  /**
+   * @brief the directory in which the library is exported
+   */
+  QString _root;
 
-    /**
-     * @brief flag to know if library has been already exported
-     */
-    bool _initialized;
+  /**
+   * @brief the path of the html viewer
+   */
+  QString _viewer;
 
+  /**
+   * @brief flag to know if library has been already exported
+   */
+  bool _initialized;
 
-    /**
-     * @brief Constructor
-     */
-    QtPdfViewerInitializer();
+  /**
+   * @brief Constructor
+   */
+  QtPdfViewerInitializer();
 
-signals:
-    void viewerChanged();
-
+ signals:
+  void viewerChanged();
 };
 
-}
-#endif // QTPDFVIEWERINITIALIZER_H
+}  // namespace LTDev
+#endif  // QTPDFVIEWERINITIALIZER_H

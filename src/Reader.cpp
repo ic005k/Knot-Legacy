@@ -295,7 +295,6 @@ void dlgReader::startOpenFile(QString openfile) {
 
 #ifdef Q_OS_WIN
     openFile(ebookFile);
-    processHtml();
     mw_one->readEBookDone();
 #else
     mw_one->myReadTWThread->quit();
