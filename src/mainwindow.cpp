@@ -4476,7 +4476,6 @@ void MainWindow::readEBookDone() {
       mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
       mw_one->ui->qwReader->setSource(
           QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
-      mydlgReader->goPostion();
 
       if (isEpub)
         ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
@@ -4492,6 +4491,8 @@ void MainWindow::readEBookDone() {
       QMetaObject::invokeMethod((QObject *)root, "loadPDF",
                                 Q_ARG(QVariant, fileName));
     }
+
+    mydlgReader->goPostion();
 
     for (int i = 0; i < mydlgReader->bookList.count(); i++) {
       QString str = mydlgReader->bookList.at(i);

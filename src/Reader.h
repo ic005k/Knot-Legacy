@@ -94,6 +94,8 @@ class dlgReader : public QDialog {
   void setAni();
   void loadQMLText(QString str);
   void setPdfViewVisible(bool vv);
+  int getPdfCurrentPage();
+  void setPdfPage(int page);
  public slots:
 
  protected:

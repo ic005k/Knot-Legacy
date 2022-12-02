@@ -217,9 +217,9 @@ void dlgReader::startOpenFile(QString openfile) {
 
   setPdfViewVisible(false);
 
-  if (isText || isEpub) {
-    if (!mw_one->ui->frameReader->isHidden()) {
-      saveReader();
+  if (!mw_one->ui->frameReader->isHidden()) {
+    saveReader();
+    if (isText || isEpub) {
       savePageVPos();
     }
   }
@@ -518,26 +518,30 @@ void dlgReader::saveReader() {
 #endif
 
   Reg.setValue("/Reader/FileName", fileName);
-  Reg.setValue("/Reader/FontName", fontname);
-  Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
 
-  if (isText) {
-    Reg.setValue("/Reader/iPage" + fileName, iPage - baseLines);
+  if (isText || isEpub) {
+    Reg.setValue("/Reader/FontName", fontname);
+    Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
+
+    if (isText) {
+      Reg.setValue("/Reader/iPage" + fileName, iPage - baseLines);
+    }
+
+    if (isEpub) Reg.setValue("/Reader/htmlIndex" + fileName, htmlIndex);
+
+    // dir
+    Reg.setValue("/Reader/" + fileName + "MainDirIndex", mainDirIndex);
   }
 
-  if (isEpub) Reg.setValue("/Reader/htmlIndex" + fileName, htmlIndex);
-
-  qDebug() << "textPos" << textPos << "htmlIndex=" << htmlIndex << "iPage"
-           << iPage;
+  if (isPDF) {
+    Reg.setValue("/Reader/PdfPage", getPdfCurrentPage());
+  }
 
   // book list
   Reg.setValue("/Reader/BookCount", bookList.count());
   for (int i = 0; i < bookList.count(); i++) {
     Reg.setValue("/Reader/BookSn" + QString::number(i), bookList.at(i));
   }
-
-  // dir
-  Reg.setValue("/Reader/" + fileName + "MainDirIndex", mainDirIndex);
 }
 
 void dlgReader::initReader() {
@@ -1006,17 +1010,23 @@ void dlgReader::goPostion() {
     Reg.setIniCodec("utf-8");
 #endif
 
-    iPage = Reg.value("/Reader/iPage" + fileName, 0).toULongLong();
-    htmlIndex = Reg.value("/Reader/htmlIndex" + fileName, 0).toInt() - 1;
-    if (htmlIndex <= 0) htmlIndex = -1;
-    qDebug() << "htmlIndex=" << htmlIndex;
+    if (isText || isEpub) {
+      iPage = Reg.value("/Reader/iPage" + fileName, 0).toULongLong();
+      htmlIndex = Reg.value("/Reader/htmlIndex" + fileName, 0).toInt() - 1;
+      if (htmlIndex <= 0) htmlIndex = -1;
 
-    if (iPage >= 0 || htmlIndex >= -1) {
-      on_btnPageNext_clicked();
+      if (iPage >= 0 || htmlIndex >= -1) {
+        on_btnPageNext_clicked();
 
-    } else {
-      iPage = 0;
-      htmlIndex = 0;
+      } else {
+        iPage = 0;
+        htmlIndex = 0;
+      }
+    }
+
+    if (isPDF) {
+      int page = Reg.value("/Reader/PdfPage", 1).toInt();
+      setPdfPage(page);
     }
   }
 }
@@ -1501,4 +1511,18 @@ void dlgReader::setPdfViewVisible(bool vv) {
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setViewVisible",
                             Q_ARG(QVariant, vv));
+}
+
+int dlgReader::getPdfCurrentPage() {
+  QVariant itemCount;
+  QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getCurrentPage",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
+void dlgReader::setPdfPage(int page) {
+  QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setPdfPage",
+                            Q_ARG(QVariant, page));
 }

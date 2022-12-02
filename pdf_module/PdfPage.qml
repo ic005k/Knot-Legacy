@@ -24,6 +24,20 @@ Rectangle {
     property bool isFind: false
     property bool isShowPanel: false
     property int padd: 2
+    property int currentPage: 1
+    property bool isOne: true
+
+    function getCurrentPage()
+    {
+        return pdfView.page
+    }
+
+    function setPdfPage(_page)
+    {
+       isOne = false
+        currentPage = _page
+
+    }
 
     function setViewVisible(vv) {
         pdfView.visible = vv
@@ -117,6 +131,7 @@ Rectangle {
 
                             onClicked: {
                                 pdfView.webView.goBack()
+
 
                             }
                         }
@@ -335,8 +350,8 @@ Rectangle {
                     if (pdfPath != "") {
                         pdfView.visible = true
                         pdfView.load(pdfPath)
-
                     }
+
                     isViewEnd = true
                     console.debug("onViewerLoaded......")
                 }
@@ -350,6 +365,13 @@ Rectangle {
                     containerError.textView.text = ""
 
                     console.debug("onPdfLoaded......")
+
+                    if(!isOne)
+                    {
+                        isOne = true
+                        pdfView.setPage(currentPage)
+                        console.debug("setPage... " + currentPage)
+                    }
                 }
             }
 
