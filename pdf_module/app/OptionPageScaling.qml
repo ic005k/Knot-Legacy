@@ -12,6 +12,7 @@ BaseOptionSection {
 
         onClicked: {
             pdfView.zoomOut()
+
         }
     }
 

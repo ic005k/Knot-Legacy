@@ -96,7 +96,8 @@ class dlgReader : public QDialog {
   void setPdfViewVisible(bool vv);
   int getPdfCurrentPage();
   void setPdfPage(int page);
- public slots:
+  void setHideShowTopBar();
+  public slots:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;

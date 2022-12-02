@@ -1,3 +1,4 @@
+
 /*
  *
  *  Copyright 2022 Leonardo Tarollo (LTDev) <develtar@gmail.com>
@@ -28,8 +29,8 @@ Item {
     height: 500
 
     signal error(var message)
-    signal pdfLoaded()
-    signal viewerLoaded()
+    signal pdfLoaded
+    signal viewerLoaded
 
     property alias webView: webView
     property alias webChannel: channel
@@ -39,10 +40,12 @@ Item {
     property int pages: 0
     property int page: 1
 
+
     /*
         The list of base64 images representing each pdf page
     */
     property var thumbnails: []
+
 
     /*
         The scaling value for the pdf
@@ -55,34 +58,25 @@ Item {
     property var scrollModes: [_SCROLL_MODE_VERTICAL, _SCROLL_MODE_HORIZONTAL, _SCROLL_MODE_WRAPPED]
     property int scrollMode: _SCROLL_MODE_VERTICAL
 
-
     readonly property string _SCALE_MODE_CUSTOM: "custom"
     readonly property string _SCALE_MODE_ACTUAL: "page-actual"
     readonly property string _SCALE_MODE_AUTO: "auto"
     readonly property string _SCALE_MODE_FIT_PAGE: "page-fit"
     readonly property string _SCALE_MODE_FIT_PAGE_WIDTH: "page-width"
     readonly property string _SCALE_MODE_FIT_PAGE_HEIGHT: "page-height"
-    property var scaleModes: [
-        _SCALE_MODE_ACTUAL,
-        _SCALE_MODE_AUTO,
-        _SCALE_MODE_FIT_PAGE,
-        _SCALE_MODE_FIT_PAGE_WIDTH,
-        _SCALE_MODE_FIT_PAGE_HEIGHT,
-    ]
+    property var scaleModes: [_SCALE_MODE_ACTUAL, _SCALE_MODE_AUTO, _SCALE_MODE_FIT_PAGE, _SCALE_MODE_FIT_PAGE_WIDTH, _SCALE_MODE_FIT_PAGE_HEIGHT]
     property string scaleMode: _SCALE_MODE_ACTUAL
 
-    property var toolModes: [
-        _TOOL_MODE_CURSOR,
-        _TOOL_MODE_HAND
-    ]
+    property var toolModes: [_TOOL_MODE_CURSOR, _TOOL_MODE_HAND]
     readonly property int _TOOL_MODE_CURSOR: 0
     readonly property int _TOOL_MODE_HAND: 1
     property int toolMode: -1
 
+
     /*
         Reloads the viewer
     */
-    function reloadViewer(){
+    function reloadViewer() {
         QtPdfViewerInitializer.initializeViewer()
     }
 
@@ -92,7 +86,7 @@ Item {
 
         @param path {string}: the path of the pdf to load
     */
-    function load(path){
+    function load(path) {
         // Convert pdf to base64
         var base64 = QtPdfViewerInitializer.pdfToBase64(path)
 
@@ -106,54 +100,59 @@ Item {
 
         @param page {int}: the page to set
     */
-    function setPage(page){
+    function setPage(page) {
         // Bound page number to min/max pages
         var p = Math.min(Math.max(1, page), pages)
-        if(page!==p) page = p
+        if (page !== p)
+            page = p
 
-        webView.runJavaScript("setPage(%1);".arg(p));
+        webView.runJavaScript("setPage(%1);".arg(p))
     }
+
 
     /*
         Sets the current page to the previous one
     */
-    function previousPage(){
-        var page = root.page-1
+    function previousPage() {
+        var page = root.page - 1
         setPage(page)
     }
+
 
     /*
         Sets the current page to the next one
     */
-    function nextPage(){
-        var page = root.page+1
+    function nextPage() {
+        var page = root.page + 1
         setPage(page)
     }
+
 
     /*
         Sets the pdf viewer scroll mode with the given value.
 
         @param scrollMode {int}: the scroll mode to apply
     */
-    function setScrollMode(scrollMode){
+    function setScrollMode(scrollMode) {
         // Check if current scale mode is provided by pdf.js library
-        var validMode = scrollModes.indexOf(scrollMode)!==-1
+        var validMode = scrollModes.indexOf(scrollMode) !== -1
 
-        if(validMode){
+        if (validMode) {
             webView.runJavaScript("setScrollMode(%1);".arg(scrollMode))
         }
     }
+
 
     /*
         Scales the pdf with the given mode.
 
         @param scaleMode {string}: the scaling mode to apply
     */
-    function setScaleMode(scaleMode){
+    function setScaleMode(scaleMode) {
         // Check if current scale mode is provided by pdf.js library
-        var validMode = scaleModes.indexOf(scaleMode)!==-1
+        var validMode = scaleModes.indexOf(scaleMode) !== -1
 
-        if(validMode){
+        if (validMode) {
             webView.runJavaScript("setScaleMode(\"%1\");".arg(scaleMode))
         } else {
             // Custom mode, it is set when applying a custom scale value
@@ -162,48 +161,53 @@ Item {
         }
     }
 
+
     /*
         Sets the pdf viewer tool mode with the given value.
 
         @param toolMode {int}: the toolMode mode to apply
     */
-    function setToolMode(toolMode){
+    function setToolMode(toolMode) {
         // Check if current scale mode is provided by pdf.js library
-        var validMode = toolModes.indexOf(toolMode)!==-1
+        var validMode = toolModes.indexOf(toolMode) !== -1
 
-        if(validMode){
+        if (validMode) {
             webView.runJavaScript("setToolMode(%1);".arg(toolMode))
         }
     }
+
 
     /*
         Rotates the pdf by the given angle.
 
         @param angle {float}: the rotation angle
     */
-    function rotate(angle){
-        webView.runJavaScript("rotate(%1);".arg(angle));
+    function rotate(angle) {
+        webView.runJavaScript("rotate(%1);".arg(angle))
     }
+
 
     /*
         Zooms the pdf in
     */
-    function zoomIn(){
+    function zoomIn() {
         // Set custom scaling mode
         scaleMode = _SCALE_MODE_CUSTOM
 
         webView.runJavaScript("zoomIn();")
     }
 
+
     /*
         Zooms the pdf out
     */
-    function zoomOut(){
+    function zoomOut() {
         // Set custom scaling mode
         scaleMode = _SCALE_MODE_CUSTOM
 
         webView.runJavaScript("zoomOut();")
     }
+
 
     /*
         Searches in the pdf document for the given text.
@@ -215,16 +219,13 @@ Item {
         @param highlightAll {boolean}: true if matches found must be highlighted, false otherwise
         @param findPrevious {boolean}: true if previous matches must be considered, false otherwise
     */
-    function searchText(query, phraseSearch, caseSensitive, highlightAll, findPrevious){
-        webView.runJavaScript("searchText(\"%1\", %2, %3, %4, %5, \"%6\");"
-                              .arg(query)
-                              .arg(phraseSearch)
-                              .arg(caseSensitive)
-                              .arg(highlightAll)
-                              .arg(findPrevious)
-                              .arg("find"))
-
+    function searchText(query, phraseSearch, caseSensitive, highlightAll, findPrevious) {
+        webView.runJavaScript("searchText(\"%1\", %2, %3, %4, %5, \"%6\");".arg(
+                                  query).arg(phraseSearch).arg(
+                                  caseSensitive).arg(highlightAll).arg(
+                                  findPrevious).arg("find"))
     }
+
 
     /*
         Searches in the pdf document for the given text.
@@ -236,14 +237,11 @@ Item {
         @param highlightAll {boolean}: true if matches found must be highlighted, false otherwise
         @param findPrevious {boolean}: true if previous matches must be considered, false otherwise
     */
-    function searchTextOccurance(query, phraseSearch, caseSensitive, highlightAll, findPrevious){
-        webView.runJavaScript("searchText(\"%1\", %2, %3, %4, %5, \"%6\");"
-                              .arg(query)
-                              .arg(phraseSearch)
-                              .arg(caseSensitive)
-                              .arg(highlightAll)
-                              .arg(findPrevious)
-                              .arg("findagain"))
+    function searchTextOccurance(query, phraseSearch, caseSensitive, highlightAll, findPrevious) {
+        webView.runJavaScript("searchText(\"%1\", %2, %3, %4, %5, \"%6\");".arg(
+                                  query).arg(phraseSearch).arg(
+                                  caseSensitive).arg(highlightAll).arg(
+                                  findPrevious).arg("findagain"))
     }
 
 
@@ -253,10 +251,12 @@ Item {
     QtObject {
         id: backend
 
+
         /*
             The ID under which this object will be known in the browser environment
         */
         WebChannel.id: "backend"
+
 
         /*
             Signals that some error has occurred.
@@ -265,18 +265,20 @@ Item {
 
             @param message {string}: the error message string (json)
         */
-        function error(message){
+        function error(message) {
             root.error(message)
         }
+
 
         /*
             Signals that the html viewer has been loaded.
 
             @note: It is called from the browser environment.
         */
-        function viewerLoaded(){
-            root.viewerLoaded();
+        function viewerLoaded() {
+            root.viewerLoaded()
         }
+
 
         /*
             Sets the pages property of the pdf view and notifies
@@ -286,10 +288,11 @@ Item {
 
             @param scale {float}: the scale value
         */
-        function pdfLoaded(pages){
+        function pdfLoaded(pages) {
             root.pages = pages
             root.pdfLoaded()
         }
+
 
         /*
             Sets the thumbnails array of the pdf view.
@@ -298,9 +301,10 @@ Item {
 
             @param thumbnails {array}: the list of base64 images which represent each pdf page
         */
-        function updateThumbnails(thumbnails){
+        function updateThumbnails(thumbnails) {
             root.thumbnails = thumbnails
         }
+
 
         /*
             Sets the page property of the pdf view.
@@ -309,9 +313,10 @@ Item {
 
             @param page {int}: the scale value
         */
-        function updatePage(page){
+        function updatePage(page) {
             root.page = page
         }
+
 
         /*
             Sets the scale property of the pdf view.
@@ -320,9 +325,10 @@ Item {
 
             @param scale {float}: the scale value
         */
-        function updateScale(scale){
+        function updateScale(scale) {
             root.scale = scale
         }
+
 
         /*
             Sets the scroll mode property of the pdf view.
@@ -331,9 +337,10 @@ Item {
 
             @param scrollMode {string}: the scroll mode
         */
-        function updateScrollMode(scrollMode){
+        function updateScrollMode(scrollMode) {
             root.scrollMode = scrollMode
         }
+
 
         /*
             Sets the tool mode property of the pdf view.
@@ -342,11 +349,11 @@ Item {
 
             @param toolMode {int}: the tool mode
         */
-        function updateToolMode(toolMode){
+        function updateToolMode(toolMode) {
             root.toolMode = toolMode
         }
-
     }
+
 
     /*
         The web view that will show the pdf document
@@ -355,15 +362,18 @@ Item {
         id: webView
 
         Component.onCompleted: {
-            QtPdfViewerInitializer.viewerChanged.connect(function(){
-                webView.url = "file://"+QtPdfViewerInitializer.viewer
+            QtPdfViewerInitializer.viewerChanged.connect(function () {
+                webView.url = "file://" + QtPdfViewerInitializer.viewer
             })
 
             QtPdfViewerInitializer.initializeViewer()
         }
 
         anchors.fill: parent
+
+
     }
+
 
     /*
         The channel through which data is exchanged between qml and browser environment
@@ -373,6 +383,7 @@ Item {
         registeredObjects: [backend]
     }
 
+
     /*
         The socket transport which allows the browser environment to communicate
         with the qml backend. Any change on browser side will notify qml.
@@ -380,6 +391,7 @@ Item {
     WebSocketTransport {
         id: transport
     }
+
 
     /*
         The socket server which allows the communication between qml and browser envirnoment.
@@ -390,9 +402,10 @@ Item {
         port: 55222
 
         onClientConnected: {
-            if(webSocket.status === WebSocket.Open) {
+            if (webSocket.status === WebSocket.Open) {
                 channel.connectTo(transport)
-                webSocket.onTextMessageReceived.connect(transport.textMessageReceive)
+                webSocket.onTextMessageReceived.connect(
+                            transport.textMessageReceive)
                 transport.onMessageChanged.connect(webSocket.sendTextMessage)
             }
         }

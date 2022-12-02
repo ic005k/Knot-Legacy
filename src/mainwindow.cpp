@@ -2403,7 +2403,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       isMousePress = false;
       isMouseMove = false;
 
-      //判断滑动方向（右滑）
+      // Right Slide
       if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
         if (isText) {
           if (iPage - baseLines <= 0) {
@@ -2428,7 +2428,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         mydlgFloatFun->close();
       }
 
-      //判断滑动方向（左滑）
+      // Left Slide
       if ((press_x - relea_x) > length && qAbs(relea_y - press_y) < 35) {
         if (isText) {
           if (iPage + baseLines > totallines) {
@@ -2466,6 +2466,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           qAbs(relea_y - press_y) < 20) {
         isMouseMove = true;
       }
+    }
+  }
+
+  if (watch == ui->qwPdf) {
+    if (event->type() == QEvent::MouseButtonPress) {
     }
   }
 
@@ -3773,6 +3778,7 @@ void MainWindow::init_UIWidget() {
   ui->textBrowser->viewport()->installEventFilter(this);
   ui->textBrowser->viewport()->setMouseTracking(true);
   ui->qwReader->installEventFilter(this);
+  ui->qwPdf->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);

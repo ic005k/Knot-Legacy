@@ -16,7 +16,6 @@ Rectangle {
     visible: true
     color: "#3e3f3f"
 
-
     property StackView view
     property string pdfPath: ""
     property bool isViewEnd: false
@@ -26,22 +25,32 @@ Rectangle {
     property int padd: 2
     property int currentPage: 1
     property bool isOne: true
+    property bool isHeaderVisible: true
+    property int topbarH: 0
 
-    function getCurrentPage()
+    function setHideShowTopBar()
     {
+        if (isHeaderVisible) {
+            closedTopbarHeight = 0
+            isHeaderVisible = false
+
+        } else if (!isHeaderVisible) {
+            closedTopbarHeight = 42
+            isHeaderVisible = true
+        }
+    }
+
+    function getCurrentPage() {
         return pdfView.page
     }
 
-    function setPdfPage(_page)
-    {
-       isOne = false
+    function setPdfPage(_page) {
+        isOne = false
         currentPage = _page
-
     }
 
     function setViewVisible(vv) {
         pdfView.visible = vv
-
     }
 
     function loadPDF(pdffile) {
@@ -56,14 +65,15 @@ Rectangle {
         console.debug("pdfFile is open ...... " + pdfPath + "   " + isViewEnd)
     }
 
-    property int closedTopbarHeight: 42
+    property int closedTopbarHeight: 36
     property int topbarHeight: {
         var h = closedTopbarHeight
         var optionsHeight = containerOptions.visible ? divider.height + containerOptions.height : 0
         var pagesPreviewHeight = containerPreviewPages.visible ? divider2.height
                                                                  + containerPreviewPages.height : 0
 
-        return closedTopbarHeight + optionsHeight + pagesPreviewHeight
+        topbarH = closedTopbarHeight + optionsHeight + pagesPreviewHeight
+        return topbarH
     }
 
     Column {
@@ -74,7 +84,7 @@ Rectangle {
             id: topbar
             width: parent.width
             height: topbarHeight
-
+            visible: isHeaderVisible
 
             Behavior on height {
                 SmoothedAnimation {
@@ -87,7 +97,7 @@ Rectangle {
             Column {
                 id: columnLayout
                 width: parent.width - 2
-                height: parent.height - 6
+                height: parent.height - 0
                 anchors.centerIn: parent
 
                 RowLayout {
@@ -95,11 +105,10 @@ Rectangle {
                     spacing: 2
                     width: parent.width
 
-
                     Text {
                         visible: true
                         text: qsTr("P\nD\nF")
-                        font.pixelSize: 10
+                        font.pixelSize: 9
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         horizontalAlignment: Text.AlignLeft
@@ -131,8 +140,6 @@ Rectangle {
 
                             onClicked: {
                                 pdfView.webView.goBack()
-
-
                             }
                         }
 
@@ -144,7 +151,6 @@ Rectangle {
 
                             onClicked: {
                                 pdfView.webView.goForward()
-
                             }
                         }
 
@@ -156,6 +162,7 @@ Rectangle {
 
                             onClicked: {
                                 pdfView.zoomOut()
+                                console.debug("zoomOut " + pdfView.scale)
                             }
                         }
 
@@ -167,6 +174,7 @@ Rectangle {
 
                             onClicked: {
                                 pdfView.zoomIn()
+                                console.debug("zoomIn " + pdfView.scale)
                             }
                         }
 
@@ -277,7 +285,6 @@ Rectangle {
                     OptionPageSearch {
                         visible: isFind
                         pdfView: pdfView
-
                     }
 
                     OptionPageScaling {
@@ -366,11 +373,21 @@ Rectangle {
 
                     console.debug("onPdfLoaded......")
 
-                    if(!isOne)
-                    {
+                    if (!isOne) {
                         isOne = true
                         pdfView.setPage(currentPage)
                         console.debug("setPage... " + currentPage)
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.AllButtons
+                    hoverEnabled: false
+                    onClicked: {
+
+                        console.debug(
+                                    "clicked... " + topbarH + " " + topbarHeight)
                     }
                 }
             }

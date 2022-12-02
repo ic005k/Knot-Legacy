@@ -1526,3 +1526,8 @@ void dlgReader::setPdfPage(int page) {
   QMetaObject::invokeMethod((QObject*)root, "setPdfPage",
                             Q_ARG(QVariant, page));
 }
+
+void dlgReader::setHideShowTopBar() {
+  QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setHideShowTopBar");
+}

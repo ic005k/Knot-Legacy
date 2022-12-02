@@ -41,9 +41,9 @@ class QtPdfViewerInitializer : public QObject,
 
   Q_PROPERTY(QString viewer READ viewer NOTIFY viewerChanged)
 
-  // friend class Singleton;  //clang for macosx
+  friend class Singleton;  // clang for macosx
 
-  friend class Singleton<QtPdfViewerInitializer>;  // vs2019
+  // friend class Singleton<QtPdfViewerInitializer>;  // vs2019
 
  public:
   /**
