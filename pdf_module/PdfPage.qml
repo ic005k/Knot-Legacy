@@ -16,15 +16,18 @@ Rectangle {
     visible: true
     color: "#3e3f3f"
 
+
     property StackView view
     property string pdfPath: ""
     property bool isViewEnd: false
     property bool isFunpanel: true
     property bool isFind: false
     property bool isShowPanel: false
+    property int padd: 2
 
     function setViewVisible(vv) {
         pdfView.visible = vv
+
     }
 
     function loadPDF(pdffile) {
@@ -58,6 +61,7 @@ Rectangle {
             width: parent.width
             height: topbarHeight
 
+
             Behavior on height {
                 SmoothedAnimation {
                     id: animOpen
@@ -68,21 +72,20 @@ Rectangle {
 
             Column {
                 id: columnLayout
-                width: parent.width - 36
+                width: parent.width - 2
                 height: parent.height - 6
                 anchors.centerIn: parent
-                anchors.leftMargin: 2
 
                 RowLayout {
                     id: header
                     spacing: 2
                     width: parent.width
-                    anchors.leftMargin: 2
+
 
                     Text {
                         visible: true
                         text: qsTr("P\nD\nF")
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         horizontalAlignment: Text.AlignLeft
@@ -92,23 +95,48 @@ Rectangle {
                     }
 
                     Row {
-                        spacing: 2
+                        spacing: 0
 
                         CustomComponents.Button {
                             id: btnBack
                             visible: true
-                            padding: 4
+                            padding: padd
                             image.source: "qrc:/icons/back.svg"
 
                             onClicked: {
+
                                 mw_one.on_btnBack_clicked()
+                            }
+                        }
+
+                        CustomComponents.Button {
+                            id: btnGoBack
+                            visible: true
+                            padding: padd
+                            image.source: "qrc:/icons/gb.svg"
+
+                            onClicked: {
+                                pdfView.webView.goBack()
+
+                            }
+                        }
+
+                        CustomComponents.Button {
+                            id: btnGoForward
+                            visible: true
+                            padding: padd
+                            image.source: "qrc:/icons/gf.svg"
+
+                            onClicked: {
+                                pdfView.webView.goForward()
+
                             }
                         }
 
                         CustomComponents.Button {
                             id: btnSmall
                             visible: true
-                            padding: 4
+                            padding: padd
                             image.source: "qrc:/icons/remove_white_24dp.svg"
 
                             onClicked: {
@@ -119,7 +147,7 @@ Rectangle {
                         CustomComponents.Button {
                             id: btnBig
                             visible: true
-                            padding: 4
+                            padding: padd
                             image.source: "qrc:/icons/add_white_24dp.svg"
 
                             onClicked: {
@@ -131,7 +159,7 @@ Rectangle {
                             id: btnFind
                             property bool optionsEnabled: false
 
-                            padding: 4
+                            padding: padd
                             color: optionsEnabled ? "#4d4d4d" : "transparent"
                             image.source: "qrc:/icons/find.svg"
 
@@ -146,7 +174,7 @@ Rectangle {
                         CustomComponents.Button {
                             id: btnOpen
                             visible: true
-                            padding: 4
+                            padding: padd
                             image.source: "qrc:/icons/open.svg"
 
                             onClicked: {
@@ -157,7 +185,7 @@ Rectangle {
                         CustomComponents.Button {
                             id: btnBookList
                             visible: true
-                            padding: 4
+                            padding: padd
                             image.source: "qrc:/icons/booklist.svg"
 
                             onClicked: {
@@ -170,7 +198,7 @@ Rectangle {
                             property bool previewEnabled: false
                             visible: pdfView.thumbnails.length > 0
 
-                            padding: 4
+                            padding: padd
                             color: previewEnabled ? "#4d4d4d" : "transparent"
                             image.source: "qrc:/icons/table_chart_white_24dp.svg"
 
@@ -184,7 +212,7 @@ Rectangle {
                             id: btnOptions
                             property bool optionsEnabled: false
 
-                            padding: 4
+                            padding: padd
                             color: optionsEnabled ? "#4d4d4d" : "transparent"
                             image.source: "qrc:/icons/tune_white_24dp.svg"
 

@@ -25,5 +25,7 @@
         <file>icons/open.svg</file>
         <file>icons/back.svg</file>
         <file>icons/find.svg</file>
+        <file>icons/gb.svg</file>
+        <file>icons/gf.svg</file>
     </qresource>
 </RCC>

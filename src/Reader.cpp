@@ -1427,7 +1427,11 @@ void dlgReader::getReadList() {
     QString str = bookList.at(index);
     QStringList listBooks = str.split("|");
     QString bookfile = listBooks.at(1);
-    if (bookfile != fileName) startOpenFile(bookfile);
+    if (bookfile != fileName)
+      startOpenFile(bookfile);
+    else {
+      if (isPDF) setPdfViewVisible(true);
+    }
     list->close();
   });
 

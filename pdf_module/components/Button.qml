@@ -10,8 +10,8 @@ Rectangle {
     property int padding: 4
 
 
-    implicitHeight: 35
-    implicitWidth: 35
+    implicitHeight: 30
+    implicitWidth: 30
     color: mouseArea.containsMouse || mouseArea.pressed? "#4a4a4a":"transparent"// "#424242":"#4d4d4d"
     radius: 6
 
