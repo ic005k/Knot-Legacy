@@ -8,7 +8,8 @@ BaseOptionSection {
 
     CustomComponents.TextField {
         id: tfSearch
-        width: 150
+        width: 180
+
 
         textInput {
             onTextChanged: {

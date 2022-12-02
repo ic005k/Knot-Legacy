@@ -21,14 +21,12 @@ class dlgFloatFun : public QDialog {
   void setY(int y);
   void setPicLeft();
   void setPicRight();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;
   void paintEvent(QPaintEvent *event) override;
  private slots:
-  void on_btnAdd_clicked();
-
-  void on_btnDel_clicked();
 
  private:
 };

@@ -262,6 +262,7 @@ Rectangle {
                     OptionPageSearch {
                         visible: isFind
                         pdfView: pdfView
+
                     }
 
                     OptionPageScaling {

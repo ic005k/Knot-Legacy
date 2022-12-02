@@ -74,7 +74,3 @@ void dlgFloatFun::paintEvent(QPaintEvent* event) {
 }
 
 dlgFloatFun::~dlgFloatFun() { delete ui; }
-
-void dlgFloatFun::on_btnAdd_clicked() { mw_one->on_AddRecord(); }
-
-void dlgFloatFun::on_btnDel_clicked() { mw_one->on_DelRecord(); }
