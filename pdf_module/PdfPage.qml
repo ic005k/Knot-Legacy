@@ -65,7 +65,7 @@ Rectangle {
         console.debug("pdfFile is open ...... " + pdfPath + "   " + isViewEnd)
     }
 
-    property int closedTopbarHeight: 36
+    property int closedTopbarHeight: 35
     property int topbarHeight: {
         var h = closedTopbarHeight
         var optionsHeight = containerOptions.visible ? divider.height + containerOptions.height : 0
