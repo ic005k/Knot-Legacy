@@ -534,7 +534,7 @@ void dlgReader::saveReader() {
   }
 
   if (isPDF) {
-    Reg.setValue("/Reader/PdfPage", getPdfCurrentPage());
+    Reg.setValue("/Reader/PdfPage" + fileName, getPdfCurrentPage());
   }
 
   // book list
@@ -1025,7 +1025,7 @@ void dlgReader::goPostion() {
     }
 
     if (isPDF) {
-      int page = Reg.value("/Reader/PdfPage", 1).toInt();
+      int page = Reg.value("/Reader/PdfPage" + fileName, 1).toInt();
       setPdfPage(page);
     }
   }
