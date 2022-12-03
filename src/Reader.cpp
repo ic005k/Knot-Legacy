@@ -1025,8 +1025,10 @@ void dlgReader::goPostion() {
     }
 
     if (isPDF) {
+#ifdef Q_OS_ANDROID
       int page = Reg.value("/Reader/PdfPage" + fileName, 1).toInt();
       setPdfPage(page);
+#endif
     }
   }
 }

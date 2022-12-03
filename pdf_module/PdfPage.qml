@@ -209,7 +209,7 @@ Rectangle {
                             id: btnBookList
                             visible: true
                             padding: padd
-                            image.source: "qrc:/icons/booklist.svg"
+                            image.source: "qrc:/icons/booklist.png"
 
                             onClicked: {
                                 mw_one.on_btnReadList_clicked()
@@ -223,7 +223,7 @@ Rectangle {
 
                             padding: padd
                             color: previewEnabled ? "#4d4d4d" : "transparent"
-                            image.source: "qrc:/icons/table_chart_white_24dp.svg"
+                            image.source: "qrc:/icons/list.png"
 
                             onClicked: {
 
@@ -325,7 +325,7 @@ Rectangle {
         Rectangle {
             id: pdfContainer
             width: parent.width
-            height: parent.height - closedTopbarHeight
+            height: (parent.height - closedTopbarHeight)
             color: "lightgrey"
 
             LTDev.PdfView {

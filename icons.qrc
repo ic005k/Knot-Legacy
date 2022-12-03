@@ -21,11 +21,12 @@
         <file>icons/table_chart_white_24dp.svg</file>
         <file>icons/text_format_white_24dp.svg</file>
         <file>icons/touch_app_white_24dp.svg</file>
-        <file>icons/booklist.svg</file>
         <file>icons/open.svg</file>
         <file>icons/back.svg</file>
         <file>icons/find.svg</file>
         <file>icons/gb.svg</file>
         <file>icons/gf.svg</file>
+        <file>icons/booklist.png</file>
+        <file>icons/list.png</file>
     </qresource>
 </RCC>
