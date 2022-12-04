@@ -50,7 +50,7 @@ Item {
     /*
         The scaling value for the pdf
     */
-    property int scale: 1
+    property real scale: 1
 
     readonly property int _SCROLL_MODE_VERTICAL: 0
     readonly property int _SCROLL_MODE_HORIZONTAL: 1

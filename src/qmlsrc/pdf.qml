@@ -1,71 +1,39 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Window 2.15
-import QtQuick.Layouts 1.15
-
-import it.ltdev.qt.qml.components 1.0 as LTDev
+import QtWebView 1.1
 
 Item {
-    id: pdfitem
+    id: mywebitem
+
+    property string pdfpath: ""
+
+    function setPdfPath(pdffile)
+    {
+        pdfpath = pdffile
+        console.debug("pdfpath=" + pdfpath)
+    }
+
+    property bool showProgress: webView.loading && Qt.platform.os !== "ios"
+                                && Qt.platform.os !== "winrt"
     visible: true
 
-    property string pdfPath: ""
-    property bool isViewEnd: false
-
-    function setViewVisible(vv) {
-        pdfView.visible = vv
+    property int m_prog: 0
+    function getProg() {
+        return m_prog
     }
 
-    function loadPDF(pdffile) {
-        pdfPath = pdffile
-
-        if (isViewEnd) {
-            pdfView.visible = true
-            pdfView.load(pdfPath)
-        }
-
-        console.debug("pdfFile is open ...... " + pdfPath + "   " + isViewEnd)
-    }
-
-    LTDev.PdfView {
-        id: pdfView
+    WebView {
+        id: webView
         anchors.fill: parent
 
-        // Setting visibility/opacity to manage loading states (eg. showing an error message or a busy indicator):
-        // - on Desktop: setting the opacity (only) should be sufficient to managing loading states
-        // - on Android: must be set both opacity and visibility to managing loading states
-        visible: true
-        opacity: 0
+        url: pdfpath
+        onLoadProgressChanged: {
 
-        onError: {
-
-            // Hide pdfview on error
-            //pdfView.visible = false
-            //pdfView.opacity = 0
-            console.error("Error: ", message)
-
-            // Parse json error message
-            var json = JSON.parse(message)
-
-            // Update container error text
-            //containerError.textView.text = "Error: " + json.error.generic + " "
-            //        + json.error.detailed
         }
+    }
 
-        onViewerLoaded: {
-
-            isViewEnd = true
-
-            pdfView.load(pdfPath)
-            pdfView.visible = true
-            console.debug("onViewerLoaded......  " + isViewEnd)
-        }
-
-        onPdfLoaded: {
-            // Pdf has been correctly loaded, ensure pdf view visibility
-            pdfView.visible = true
-            pdfView.opacity = 1
-            console.debug("onPdfLoaded......")
-        }
+    Component.onCompleted: {
+        WebView.url = pdfpath
+        console.log(webView.url)
     }
 }

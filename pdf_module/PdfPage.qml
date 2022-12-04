@@ -24,9 +24,9 @@ Rectangle {
     property bool isShowPanel: false
     property int padd: 2
     property int currentPage: 1
+    property real currentScale: 1
     property bool isOne: true
     property bool isHeaderVisible: true
-    property int topbarH: 0
 
     function setHideShowTopBar()
     {
@@ -44,9 +44,18 @@ Rectangle {
         return pdfView.page
     }
 
+    function getScale() {
+        return pdfView.scale
+    }
+
     function setPdfPage(_page) {
         isOne = false
         currentPage = _page
+    }
+
+    function setPdfScale(_scale) {
+        isOne = false
+        currentScale = _scale
     }
 
     function setViewVisible(vv) {
@@ -72,8 +81,8 @@ Rectangle {
         var pagesPreviewHeight = containerPreviewPages.visible ? divider2.height
                                                                  + containerPreviewPages.height : 0
 
-        topbarH = closedTopbarHeight + optionsHeight + pagesPreviewHeight
-        return topbarH
+        return closedTopbarHeight + optionsHeight + pagesPreviewHeight
+
     }
 
     Column {
@@ -376,7 +385,9 @@ Rectangle {
                     if (!isOne) {
                         isOne = true
                         pdfView.setPage(currentPage)
-                        console.debug("setPage... " + currentPage)
+                        pdfView.scale = currentScale
+
+                        console.debug("setPage... " + currentPage + " currentScale=" + currentScale)
                     }
                 }
 

@@ -63,7 +63,6 @@ class dlgMainNotes : public QDialog {
 
   QStringList getImgFileFromHtml(QString htmlfile);
   void zipMemo();
-  void unzipMemo();
 
   void loadMemoQML();
 
@@ -79,7 +78,8 @@ class dlgMainNotes : public QDialog {
   bool androidCopyFile(QString src, QString des);
 
   qreal getVPos();
-  public slots:
+  void unzip(QString zipfile);
+ public slots:
   void editVSBarValueChanged();
 
  protected:

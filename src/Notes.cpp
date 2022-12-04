@@ -537,20 +537,19 @@ void dlgMainNotes::zipMemo() {
 #endif
 }
 
-void dlgMainNotes::unzipMemo() {
+void dlgMainNotes::unzip(QString zipfile) {
   mw_one->mydlgReader->deleteDirfile(iniDir + "memo");
   QDir::setCurrent(iniDir);
 #ifdef Q_OS_MACOS
   QProcess* pro = new QProcess;
-  pro->execute("unzip", QStringList() << "-o" << iniDir + "memo.zip"
-                                      << "-d" << iniDir);
+  pro->execute("unzip", QStringList() << "-o" << zipfile << "-d" << iniDir);
   pro->waitForFinished();
 #endif
 
 #ifdef Q_OS_WIN
   QString strZip, strExec, strUnzip, tagDir;
   tagDir = iniDir;
-  strZip = iniDir + "memo.zip";
+  strZip = zipfile;
   QTextEdit* txtEdit = new QTextEdit();
   strUnzip = iniDir + "unzip.exe";
   strUnzip = "\"" + strUnzip + "\"";
@@ -571,15 +570,14 @@ void dlgMainNotes::unzipMemo() {
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  QAndroidJniObject javaZipFile =
-      QAndroidJniObject::fromString(iniDir + "memo.zip");
+  QAndroidJniObject javaZipFile = QAndroidJniObject::fromString(zipfile);
   QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(iniDir);
   QAndroidJniObject m_activity = QAndroidJniObject::fromString("Unzip");
   m_activity.callStaticMethod<void>(
       "com.x/MyActivity", "Unzip", "(Ljava/lang/String;Ljava/lang/String;)V",
       javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
 #else
-  QJniObject javaZipFile = QJniObject::fromString(iniDir + "memo.zip");
+  QJniObject javaZipFile = QJniObject::fromString(zipfile);
   QJniObject javaZipDir = QJniObject::fromString(iniDir);
   QJniObject m_activity = QJniObject::fromString("Unzip");
   m_activity.callStaticMethod<void>(

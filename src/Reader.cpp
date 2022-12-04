@@ -535,6 +535,7 @@ void dlgReader::saveReader() {
 
   if (isPDF) {
     Reg.setValue("/Reader/PdfPage" + fileName, getPdfCurrentPage());
+    Reg.setValue("/Reader/PdfScale" + fileName, getScale());
   }
 
   // book list
@@ -1025,10 +1026,15 @@ void dlgReader::goPostion() {
     }
 
     if (isPDF) {
-#ifdef Q_OS_ANDROID
-      int page = Reg.value("/Reader/PdfPage" + fileName, 1).toInt();
-      setPdfPage(page);
-#endif
+      //#ifdef Q_OS_ANDROID
+      if (!mw_one->isPdfNewMothod) {
+        int page = Reg.value("/Reader/PdfPage" + fileName, 1).toInt();
+        setPdfPage(page);
+
+        qreal scale = Reg.value("/Reader/PdfScale" + fileName, 1).toReal();
+        setPdfScale(scale);
+      }
+      //#endif
     }
   }
 }
@@ -1510,6 +1516,7 @@ QString dlgReader::getCoverPicFile(QString htmlFile) {
 }
 
 void dlgReader::setPdfViewVisible(bool vv) {
+  if (mw_one->isPdfNewMothod) return;
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setViewVisible",
                             Q_ARG(QVariant, vv));
@@ -1523,13 +1530,60 @@ int dlgReader::getPdfCurrentPage() {
   return itemCount.toInt();
 }
 
+qreal dlgReader::getScale() {
+  QVariant itemCount;
+  QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getScale",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toReal();
+}
+
 void dlgReader::setPdfPage(int page) {
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setPdfPage",
                             Q_ARG(QVariant, page));
 }
 
+void dlgReader::setPdfScale(qreal scale) {
+  QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setPdfScale",
+                            Q_ARG(QVariant, scale));
+}
+
 void dlgReader::setHideShowTopBar() {
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setHideShowTopBar");
+}
+
+//拷贝文件夹：
+bool dlgReader::copyDirectoryFiles(const QString& fromDir, const QString& toDir,
+                                   bool coverFileIfExist) {
+  QDir sourceDir(fromDir);
+  QDir targetDir(toDir);
+  if (!targetDir.exists()) { /**< 如果目标目录不存在，则进行创建 */
+    if (!targetDir.mkdir(targetDir.absolutePath())) return false;
+  }
+
+  QFileInfoList fileInfoList = sourceDir.entryInfoList();
+  foreach (QFileInfo fileInfo, fileInfoList) {
+    if (fileInfo.fileName() == "." || fileInfo.fileName() == "..") continue;
+
+    if (fileInfo.isDir()) { /**< 当为目录时，递归的进行copy */
+      if (!copyDirectoryFiles(fileInfo.filePath(),
+                              targetDir.filePath(fileInfo.fileName()),
+                              coverFileIfExist))
+        return false;
+    } else { /**< 当允许覆盖操作时，将旧文件进行删除操作 */
+      if (coverFileIfExist && targetDir.exists(fileInfo.fileName())) {
+        targetDir.remove(fileInfo.fileName());
+      }
+
+      /// 进行文件copy
+      if (!QFile::copy(fileInfo.filePath(),
+                       targetDir.filePath(fileInfo.fileName()))) {
+        return false;
+      }
+    }
+  }
+  return true;
 }

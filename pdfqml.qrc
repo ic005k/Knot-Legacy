@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        
         <file>pdf_module/app/permissions/AndroidPermissionsManager.qml</file>
         <file>pdf_module/app/permissions/BasePermissionsManager.qml</file>
         <file>pdf_module/app/BaseOptionSection.qml</file>
@@ -14,5 +13,6 @@
         <file>pdf_module/components/ContainerInfo.qml</file>
         <file>pdf_module/components/TextField.qml</file>
         <file>pdf_module/PdfPage.qml</file>
+        
     </qresource>
 </RCC>

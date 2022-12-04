@@ -97,6 +97,9 @@ class dlgReader : public QDialog {
   int getPdfCurrentPage();
   void setPdfPage(int page);
   void setHideShowTopBar();
+  bool copyDirectoryFiles(const QString &fromDir, const QString &toDir, bool coverFileIfExist);
+  qreal getScale();
+  void setPdfScale(qreal scale);
   public slots:
 
  protected:

@@ -2604,7 +2604,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
         QFile::remove(iniDir + "memo.zip");
         QFile::copy(fileName, iniDir + "memo.zip");
       }
-      mw_one->mydlgMainNotes->unzipMemo();
+      mw_one->mydlgMainNotes->unzip(iniDir + "memo.zip");
       file = iniDir + "memo/KnotSync.ini";
     } else
       file = fileName;
@@ -3941,7 +3941,10 @@ void MainWindow::init_UIWidget() {
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
-  ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
+  if (!isPdfNewMothod)
+    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
+  else
+    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4489,13 +4492,32 @@ void MainWindow::readEBookDone() {
 
     if (isPDF) {
       qDebug() << "Read Pdf... ..." << fileName;
-      ui->frameReaderFun->hide();
+      if (!isPdfNewMothod) ui->frameReaderFun->hide();
       ui->qwReader->hide();
       ui->qwPdf->show();
 
-      QQuickItem *root = ui->qwPdf->rootObject();
-      QMetaObject::invokeMethod((QObject *)root, "loadPDF",
-                                Q_ARG(QVariant, fileName));
+      QString str, strpdf;
+      QString PDFJS = "http://mozilla.github.io/pdf.js/web/viewer.html?file=";
+#ifdef Q_OS_ANDROID
+      PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
+      strpdf = mydlgReader->getUriRealPath(fileName);
+      if (QFile("assets:/web/viewer.html").exists())
+        qDebug() << "viewer.html exists......";
+#else
+      PDFJS = "file://" + iniDir + "pdfjs/web/viewer.html?file=";
+      strpdf = fileName;
+#endif
+      str = PDFJS + "file://" + strpdf;
+      if (isPdfNewMothod) {
+        QQuickItem *root = ui->qwPdf->rootObject();
+        QMetaObject::invokeMethod((QObject *)root, "setPdfPath",
+                                  Q_ARG(QVariant, str));
+
+      } else {
+        QQuickItem *root = ui->qwPdf->rootObject();
+        QMetaObject::invokeMethod((QObject *)root, "loadPDF",
+                                  Q_ARG(QVariant, fileName));
+      }
     }
 
     mydlgReader->goPostion();
