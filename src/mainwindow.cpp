@@ -2584,7 +2584,7 @@ void MainWindow::on_actionImport_Data_triggered() {
 
   if (QFileInfo(fileName).exists()) addUndo(tr("Import Data"));
 
-  importBakData(fileName, true, true, false);
+  importBakData(fileName, true, false, false);
 }
 
 bool MainWindow::importBakData(QString fileName, bool msg, bool book,
@@ -2645,26 +2645,28 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     }
 
     // TextReader
-    QSettings RegTotalIni(iniFile, QSettings::IniFormat);
+    if (book) {
+      QSettings RegTotalIni(iniFile, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    RegTotalIni.setIniCodec("utf-8");
+      RegTotalIni.setIniCodec("utf-8");
 #endif
 
-    QString strReader = iniDir + "reader.ini";
-    QFile::remove(strReader);
-    QSettings Reg1(strReader, QSettings::IniFormat);
+      QString strReader = iniDir + "reader.ini";
+      QFile::remove(strReader);
+      QSettings Reg1(strReader, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    Reg1.setIniCodec("utf-8");
+      Reg1.setIniCodec("utf-8");
 #endif
-    RegTotalIni.beginGroup("Reader");
-    QStringList list = RegTotalIni.allKeys();
-    foreach (QString key, list) {
-      QString value = RegTotalIni.value(key).toString();
-      Reg1.setValue("/Reader/" + key, value);
+      RegTotalIni.beginGroup("Reader");
+      QStringList list = RegTotalIni.allKeys();
+      foreach (QString key, list) {
+        QString value = RegTotalIni.value(key).toString();
+        Reg1.setValue("/Reader/" + key, value);
+      }
+      RegTotalIni.endGroup();
+
+      mydlgReader->initReader();
     }
-    RegTotalIni.endGroup();
-
-    if (book) mydlgReader->initReader();
   }
 
   reloadMain();
@@ -4496,22 +4498,24 @@ void MainWindow::readEBookDone() {
       ui->qwReader->hide();
       ui->qwPdf->show();
 
-      QString str, strpdf;
-      QString PDFJS = "http://mozilla.github.io/pdf.js/web/viewer.html?file=";
+      QString str;
+      QString PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html?file=";
 #ifdef Q_OS_ANDROID
       PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
-      strpdf = mydlgReader->getUriRealPath(fileName);
       if (QFile("assets:/web/viewer.html").exists())
         qDebug() << "viewer.html exists......";
 #else
       PDFJS = "file://" + iniDir + "pdfjs/web/viewer.html?file=";
-      strpdf = fileName;
+
 #endif
-      str = PDFJS + "file://" + strpdf;
+      str = PDFJS + fileName;
+      QUrl url;
+      url.setUrl(str);
+
       if (isPdfNewMothod) {
         QQuickItem *root = ui->qwPdf->rootObject();
         QMetaObject::invokeMethod((QObject *)root, "setPdfPath",
-                                  Q_ARG(QVariant, str));
+                                  Q_ARG(QVariant, url));
 
       } else {
         QQuickItem *root = ui->qwPdf->rootObject();
