@@ -709,6 +709,7 @@ void MainWindow::init_TabData() {
   mydlgTodo->init_Items();
   myEditRecord->init_Desc();
   mydlgSteps->init_Steps();
+  if (!isImport) mydlgReader->initReader();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
