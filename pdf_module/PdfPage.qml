@@ -398,7 +398,7 @@ Rectangle {
                     onClicked: {
 
                         console.debug(
-                                    "clicked... " + topbarH + " " + topbarHeight)
+                                    "clicked... "  + " " + topbarHeight)
                     }
                 }
             }

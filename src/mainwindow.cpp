@@ -2590,6 +2590,7 @@ void MainWindow::on_actionImport_Data_triggered() {
 bool MainWindow::importBakData(QString fileName, bool msg, bool book,
                                bool unre) {
   if (!fileName.isNull()) {
+    mydlgReader->setPdfViewVisible(false);
     if (msg) {
       if (!mw_one->showMsgBox("Kont",
                               tr("Import this data?") + "\n" +
