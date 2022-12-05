@@ -709,7 +709,6 @@ void MainWindow::init_TabData() {
   mydlgTodo->init_Items();
   myEditRecord->init_Desc();
   mydlgSteps->init_Steps();
-  mydlgReader->initReader();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
@@ -2582,7 +2581,7 @@ void MainWindow::on_actionImport_Data_triggered() {
                                           tr("Zip File (*.*)"));
 #endif
 
-  if (QFileInfo(fileName).exists()) addUndo(tr("Import Data"));
+  if (QFile(fileName).exists()) addUndo(tr("Import Data"));
 
   importBakData(fileName, true, false, false);
 }
@@ -2590,7 +2589,6 @@ void MainWindow::on_actionImport_Data_triggered() {
 bool MainWindow::importBakData(QString fileName, bool msg, bool book,
                                bool unre) {
   if (!fileName.isNull()) {
-    mydlgReader->setPdfViewVisible(false);
     if (msg) {
       if (!mw_one->showMsgBox("Kont",
                               tr("Import this data?") + "\n" +
