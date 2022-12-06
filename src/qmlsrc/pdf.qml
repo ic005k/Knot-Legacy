@@ -4,18 +4,22 @@ import QtWebView 1.1
 
 Item {
     id: mywebitem
+    visible: true
+
+    property bool showProgress: webView.loading && Qt.platform.os !== "ios"
+                                && Qt.platform.os !== "winrt"
 
     property string pdfpath: ""
+    property bool isVisible: true
 
-    function setPdfPath(pdffile)
-    {
+    function setPdfPath(pdffile) {
         pdfpath = pdffile
         console.debug("pdfpath=" + pdfpath)
     }
 
-    property bool showProgress: webView.loading && Qt.platform.os !== "ios"
-                                && Qt.platform.os !== "winrt"
-    visible: true
+    function setPdfVisible(vv) {
+        isVisible = vv
+    }
 
     property int m_prog: 0
     function getProg() {
@@ -25,15 +29,15 @@ Item {
     WebView {
         id: webView
         anchors.fill: parent
-
+        visible: isVisible
         url: pdfpath
+
         onLoadProgressChanged: {
 
         }
     }
 
     Component.onCompleted: {
-        WebView.url = pdfpath
         console.log(webView.url)
     }
 }

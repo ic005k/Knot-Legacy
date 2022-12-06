@@ -529,7 +529,7 @@ class MainWindow : public QMainWindow {
   void on_openKnotBakDir();
   void reeditData();
   void clickData();
- private slots:
+ public slots:
 
   void on_textBrowser_selectionChanged();
 

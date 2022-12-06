@@ -160,6 +160,15 @@ DISTFILES += \
     android/assets/pdfjs/build/pdf.js.map \
     android/assets/pdfjs/build/pdf.worker.js \
     android/assets/pdfjs/build/pdf.worker.js.map \
+    android/assets/pdfjs/debugger.js \
+    android/assets/pdfjs/pdf.js \
+    android/assets/pdfjs/pdf.viewer.bridge.js \
+    android/assets/pdfjs/pdf.viewer.css \
+    android/assets/pdfjs/pdf.worker.js \
+    android/assets/pdfjs/qwebchannel.js \
+    android/assets/pdfjs/viewer.css \
+    android/assets/pdfjs/viewer.html \
+    android/assets/pdfjs/viewer.js \
     android/assets/pdfjs/web/cmaps/78-EUC-H.bcmap \
     android/assets/pdfjs/web/cmaps/78-EUC-V.bcmap \
     android/assets/pdfjs/web/cmaps/78-H.bcmap \

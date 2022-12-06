@@ -28,12 +28,10 @@ Rectangle {
     property bool isOne: true
     property bool isHeaderVisible: true
 
-    function setHideShowTopBar()
-    {
+    function setHideShowTopBar() {
         if (isHeaderVisible) {
             closedTopbarHeight = 0
             isHeaderVisible = false
-
         } else if (!isHeaderVisible) {
             closedTopbarHeight = 42
             isHeaderVisible = true
@@ -63,10 +61,12 @@ Rectangle {
     }
 
     function loadPDF(pdffile) {
+        pdfView.visible = true
+        pdfView.opacity = 1
         pdfPath = pdffile
 
+        //pdfView.webView.url = "https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf" //+  pdfPath
         if (isViewEnd) {
-            pdfView.visible = true
             pdfView.load("")
             pdfView.load(pdfPath)
         }
@@ -82,7 +82,6 @@ Rectangle {
                                                                  + containerPreviewPages.height : 0
 
         return closedTopbarHeight + optionsHeight + pagesPreviewHeight
-
     }
 
     Column {
@@ -365,6 +364,7 @@ Rectangle {
                 onViewerLoaded: {
                     if (pdfPath != "") {
                         pdfView.visible = true
+                        pdfView.opacity = 1
                         pdfView.load(pdfPath)
                     }
 
@@ -374,8 +374,7 @@ Rectangle {
 
                 onPdfLoaded: {
                     // Pdf has been correctly loaded, ensure pdf view visibility
-                    pdfView.visible = true
-                    pdfView.opacity = 1
+
 
                     // Update container error text (no error occurred)
                     containerError.textView.text = ""
@@ -384,10 +383,11 @@ Rectangle {
 
                     if (!isOne) {
                         isOne = true
-                        pdfView.setPage(currentPage)
                         pdfView.scale = currentScale
-
-                        console.debug("setPage... " + currentPage + " currentScale=" + currentScale)
+                        pdfView.setScale(currentScale)
+                        pdfView.setPage(currentPage)
+                        console.debug(
+                                    "setPage... " + currentPage + " currentScale=" + currentScale)
                     }
                 }
 
@@ -397,8 +397,7 @@ Rectangle {
                     hoverEnabled: false
                     onClicked: {
 
-                        console.debug(
-                                    "clicked... "  + " " + topbarHeight)
+                        console.debug("clicked... " + " " + topbarHeight)
                     }
                 }
             }

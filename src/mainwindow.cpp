@@ -4308,6 +4308,7 @@ static void JavaNotify_3() {
 static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
   if (mw_one->alertWindowsCount == 0) {
+    if (!mw_one->ui->frameReader->isHidden()) mw_one->ui->btnBack->click();
     mw_one->ui->btnTodo->click();
   }
 
@@ -4498,17 +4499,23 @@ void MainWindow::readEBookDone() {
       ui->qwReader->hide();
       ui->qwPdf->show();
 
-      QString str;
-      QString PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html?file=";
+      QString PDFJS, str;
+
+      // https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf
+      // "https://mozilla.github.io/pdf.js/web/viewer.html";
 #ifdef Q_OS_ANDROID
       PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
+      PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";
+      str =
+          "https://mozilla.github.io/pdf.js/web/"
+          "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
+      str = PDFJS + "?file=" + fileName;
       if (QFile("assets:/web/viewer.html").exists())
         qDebug() << "viewer.html exists......";
 #else
-      PDFJS = "file://" + iniDir + "pdfjs/web/viewer.html?file=";
-
+      PDFJS = "file://" + iniDir + "pdfjs/web/viewer.html";
+      str = PDFJS + "?file=" + fileName;
 #endif
-      str = PDFJS + fileName;
       QUrl url;
       url.setUrl(str);
 

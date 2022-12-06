@@ -161,6 +161,13 @@ Item {
         }
     }
 
+    function setScale(value)
+    {
+        webView.runJavaScript("setScale(%1);".arg(value))
+
+    }
+
+
 
     /*
         Sets the pdf viewer tool mode with the given value.
@@ -370,8 +377,6 @@ Item {
         }
 
         anchors.fill: parent
-
-
     }
 
 

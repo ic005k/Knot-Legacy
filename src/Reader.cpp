@@ -1518,8 +1518,12 @@ QString dlgReader::getCoverPicFile(QString htmlFile) {
 void dlgReader::setPdfViewVisible(bool vv) {
   if (mw_one->isPdfNewMothod) return;
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "setViewVisible",
-                            Q_ARG(QVariant, vv));
+  if (!mw_one->isPdfNewMothod)
+    QMetaObject::invokeMethod((QObject*)root, "setViewVisible",
+                              Q_ARG(QVariant, vv));
+  else
+    QMetaObject::invokeMethod((QObject*)root, "setPdfVisible",
+                              Q_ARG(QVariant, vv));
 }
 
 int dlgReader::getPdfCurrentPage() {
