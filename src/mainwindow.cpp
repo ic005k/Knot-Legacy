@@ -2262,7 +2262,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
-        mydlgReader->setPdfViewVisible(false);
         if (!listSelFont->isHidden()) {
           listSelFont->close();
           return true;

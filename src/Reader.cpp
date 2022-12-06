@@ -73,8 +73,6 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      mw_one->on_btnBack_clicked();
-      return true;
     }
   }
 

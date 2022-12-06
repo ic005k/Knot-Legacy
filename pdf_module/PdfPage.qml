@@ -129,14 +129,14 @@ Rectangle {
                         spacing: 0
 
                         CustomComponents.Button {
-                            id: btnBack
+                            id: btnRotate
                             visible: true
                             padding: padd
-                            image.source: "qrc:/icons/back.svg"
+                            image.source: "qrc:/icons/r.png"
 
                             onClicked: {
-
-                                mw_one.on_btnBack_clicked()
+                                pdfView.rotate(-90)
+                                pdfView.setScrollMode(pdfView._SCROLL_MODE_HORIZONTAL)
                             }
                         }
 

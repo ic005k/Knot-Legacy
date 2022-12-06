@@ -28,5 +28,6 @@
         <file>icons/gf.svg</file>
         <file>icons/booklist.png</file>
         <file>icons/list.png</file>
+        <file>icons/r.png</file>
     </qresource>
 </RCC>
