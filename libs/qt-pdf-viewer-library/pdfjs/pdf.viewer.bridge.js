@@ -110,7 +110,7 @@ function connectPdfViewerSignals(){
 function loadDocument(base64){
     // Delay load to allow the javascript
     // environment to be ready
-    sleep(10).then(function() {
+    sleep(200).then(function() {
         var array = base64ToUint8Array(base64)
 
         // Load pdf document as an Uint8Array

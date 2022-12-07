@@ -374,6 +374,9 @@ Item {
             })
 
             QtPdfViewerInitializer.initializeViewer()
+
+            pdfView.visible = true
+            pdfView.opacity = 1
         }
 
         anchors.fill: parent

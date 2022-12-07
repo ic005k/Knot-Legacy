@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.52";
+QString ver = "1.0.53";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4495,7 +4495,6 @@ void MainWindow::readEBookDone() {
 
     if (isPDF) {
       qDebug() << "Read Pdf... ..." << fileName;
-      if (!isPdfNewMothod) ui->frameReaderFun->hide();
       ui->qwReader->hide();
       ui->qwPdf->show();
       ui->lblBookName->hide();

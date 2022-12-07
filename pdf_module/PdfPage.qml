@@ -64,17 +64,17 @@ Rectangle {
         pdfView.visible = true
         pdfView.opacity = 1
         pdfPath = pdffile
+        pdfView.load(pdfPath)
+
+        pdfView.scale = currentScale
+        pdfView.setScale(currentScale)
+        pdfView.setPage(currentPage)
 
         //pdfView.webView.url = "https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf" //+  pdfPath
-        if (isViewEnd) {
-            pdfView.load("")
-            pdfView.load(pdfPath)
-        }
-
-        console.debug("pdfFile is open ...... " + pdfPath + "   " + isViewEnd)
+        console.debug("pdfFile is open ...... " + pdfPath + "   " + currentPage + "  " + currentScale)
     }
 
-    property int closedTopbarHeight: 35
+    property int closedTopbarHeight: 0 // 35
     property int topbarHeight: {
         var h = closedTopbarHeight
         var optionsHeight = containerOptions.visible ? divider.height + containerOptions.height : 0
@@ -92,7 +92,7 @@ Rectangle {
             id: topbar
             width: parent.width
             height: topbarHeight
-            visible: isHeaderVisible
+            visible: false // isHeaderVisible
 
             Behavior on height {
                 SmoothedAnimation {
@@ -108,8 +108,10 @@ Rectangle {
                 height: parent.height - 0
                 anchors.centerIn: parent
 
+
                 RowLayout {
                     id: header
+
                     spacing: 2
                     width: parent.width
 
@@ -129,6 +131,17 @@ Rectangle {
                         spacing: 0
 
                         CustomComponents.Button {
+                            id: btnBack
+                            visible: true
+                            padding: padd
+                            image.source: "qrc:/icons/back.svg"
+
+                            onClicked: {
+                                mw_one.on_btnBack_clicked()
+                            }
+                        }
+
+                        CustomComponents.Button {
                             id: btnRotate
                             visible: true
                             padding: padd
@@ -136,7 +149,8 @@ Rectangle {
 
                             onClicked: {
                                 pdfView.rotate(-90)
-                                pdfView.setScrollMode(pdfView._SCROLL_MODE_HORIZONTAL)
+                                pdfView.setScrollMode(
+                                            pdfView._SCROLL_MODE_HORIZONTAL)
                             }
                         }
 
@@ -348,8 +362,8 @@ Rectangle {
 
                 onError: {
                     // Hide pdfview on error
-                    pdfView.visible = false
-                    pdfView.opacity = 0
+                    pdfView.visible = true
+                    pdfView.opacity = 1
 
                     console.error("Error: ", message)
 
@@ -362,43 +376,13 @@ Rectangle {
                 }
 
                 onViewerLoaded: {
-                    if (pdfPath != "") {
-                        pdfView.visible = true
-                        pdfView.opacity = 1
-                        pdfView.load(pdfPath)
-                    }
 
-                    isViewEnd = true
                     console.debug("onViewerLoaded......")
                 }
 
                 onPdfLoaded: {
-                    // Pdf has been correctly loaded, ensure pdf view visibility
-
-
-                    // Update container error text (no error occurred)
-                    containerError.textView.text = ""
 
                     console.debug("onPdfLoaded......")
-
-                    if (!isOne) {
-                        isOne = true
-                        pdfView.scale = currentScale
-                        pdfView.setScale(currentScale)
-                        pdfView.setPage(currentPage)
-                        console.debug(
-                                    "setPage... " + currentPage + " currentScale=" + currentScale)
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.AllButtons
-                    hoverEnabled: false
-                    onClicked: {
-
-                        console.debug("clicked... " + " " + topbarHeight)
-                    }
                 }
             }
 
