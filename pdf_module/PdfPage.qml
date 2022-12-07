@@ -61,20 +61,21 @@ Rectangle {
     }
 
     function loadPDF(pdffile) {
-        pdfView.visible = true
-        pdfView.opacity = 1
         pdfPath = pdffile
-        pdfView.load(pdfPath)
+        isOne = false
 
-        pdfView.scale = currentScale
-        pdfView.setScale(currentScale)
-        pdfView.setPage(currentPage)
+        if (isViewEnd){
+            pdfView.visible = true
+            pdfView.opacity = 1
+            pdfView.load(pdfPath)
+        }
 
         //pdfView.webView.url = "https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf" //+  pdfPath
-        console.debug("pdfFile is open ...... " + pdfPath + "   " + currentPage + "  " + currentScale)
+        console.debug(
+                    "pdfFile is open ...... " + pdfPath )
     }
 
-    property int closedTopbarHeight: 0 // 35
+    property int closedTopbarHeight: 35
     property int topbarHeight: {
         var h = closedTopbarHeight
         var optionsHeight = containerOptions.visible ? divider.height + containerOptions.height : 0
@@ -92,7 +93,7 @@ Rectangle {
             id: topbar
             width: parent.width
             height: topbarHeight
-            visible: false // isHeaderVisible
+            visible: isHeaderVisible
 
             Behavior on height {
                 SmoothedAnimation {
@@ -107,7 +108,6 @@ Rectangle {
                 width: parent.width - 2
                 height: parent.height - 0
                 anchors.centerIn: parent
-
 
                 RowLayout {
                     id: header
@@ -128,7 +128,7 @@ Rectangle {
                     }
 
                     Row {
-                        spacing: 0
+                        spacing: 10
 
                         CustomComponents.Button {
                             id: btnBack
@@ -178,7 +178,7 @@ Rectangle {
 
                         CustomComponents.Button {
                             id: btnSmall
-                            visible: true
+                            visible: false
                             padding: padd
                             image.source: "qrc:/icons/remove_white_24dp.svg"
 
@@ -190,7 +190,7 @@ Rectangle {
 
                         CustomComponents.Button {
                             id: btnBig
-                            visible: true
+                            visible: false
                             padding: padd
                             image.source: "qrc:/icons/add_white_24dp.svg"
 
@@ -202,6 +202,7 @@ Rectangle {
 
                         CustomComponents.Button {
                             id: btnFind
+                            visible: false
                             property bool optionsEnabled: false
 
                             padding: padd
@@ -377,12 +378,27 @@ Rectangle {
 
                 onViewerLoaded: {
 
+                    pdfView.visible = true
+                    pdfView.opacity = 1
+
+                    pdfView.load(pdfPath)
+                    isViewEnd = true
+
                     console.debug("onViewerLoaded......")
                 }
 
                 onPdfLoaded: {
+                    if (!isOne) {
+                        isOne = true
+                        pdfView.visible = true
+                        pdfView.opacity = 1
 
-                    console.debug("onPdfLoaded......")
+                        pdfView.scale = currentScale
+                        pdfView.setScale(currentScale)
+                        pdfView.setPage(currentPage)
+                    }
+
+                    console.debug("onPdfLoaded......  " + currentPage + "  " + currentScale)
                 }
             }
 

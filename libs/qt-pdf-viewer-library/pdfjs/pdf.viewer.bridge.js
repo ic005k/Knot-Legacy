@@ -261,7 +261,8 @@ function extractThumbnails(scale, callbackOnExtractionCompleted){
     }
 
     // Start page extraction from page 1
-    if (pagesCount>=1) {
+    //if (pagesCount>=1) {// Normal condition
+    if (pagesCount<0) {// Block preview
         extractThumbnail(1, scale, callbackOnExtractionCompleted);
     }
 }

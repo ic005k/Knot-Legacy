@@ -161,12 +161,9 @@ Item {
         }
     }
 
-    function setScale(value)
-    {
+    function setScale(value) {
         webView.runJavaScript("setScale(%1);".arg(value))
-
     }
-
 
 
     /*
@@ -367,6 +364,7 @@ Item {
     */
     WebView {
         id: webView
+        anchors.fill: parent
 
         Component.onCompleted: {
             QtPdfViewerInitializer.viewerChanged.connect(function () {
@@ -378,8 +376,6 @@ Item {
             pdfView.visible = true
             pdfView.opacity = 1
         }
-
-        anchors.fill: parent
     }
 
 
