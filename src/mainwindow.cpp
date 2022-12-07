@@ -4476,6 +4476,7 @@ void MainWindow::readEBookDone() {
       ui->qwPdf->hide();
       ui->qwReader->show();
       ui->frameReaderFun->show();
+      ui->lblBookName->show();
       mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
                                                               false);
       mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
@@ -4497,6 +4498,7 @@ void MainWindow::readEBookDone() {
       if (!isPdfNewMothod) ui->frameReaderFun->hide();
       ui->qwReader->hide();
       ui->qwPdf->show();
+      ui->lblBookName->hide();
 
       QString PDFJS, str;
 
