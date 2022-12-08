@@ -15,9 +15,6 @@ bool zh_cn = false;
 bool isAndroid, isIOS;
 
 int main(int argc, char* argv[]) {
-  QLocale locale;
-  if (locale.language() == QLocale::Chinese) zh_cn = true;
-
   QtWebView::initialize();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
@@ -135,7 +132,6 @@ int main(int argc, char* argv[]) {
   app.setFont(font);
   loadLocal();
   MainWindow w;
-
   w.show();
 
   return app.exec();

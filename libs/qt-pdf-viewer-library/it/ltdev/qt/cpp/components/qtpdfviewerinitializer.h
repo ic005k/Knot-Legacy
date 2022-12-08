@@ -95,6 +95,8 @@ class QtPdfViewerInitializer : public QObject,
 
  signals:
   void viewerChanged();
+
+ private:
 };
 
 }  // namespace LTDev

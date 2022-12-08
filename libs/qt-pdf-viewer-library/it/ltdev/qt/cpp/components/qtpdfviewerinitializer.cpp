@@ -16,7 +16,6 @@
  *
  */
 #include "qtpdfviewerinitializer.h"
-extern bool zh_cn;
 
 namespace LTDev {
 
@@ -105,22 +104,22 @@ QObject *QtPdfViewerInitializer::getQmlInstance(QQmlEngine *engine,
  * @brief Constructor
  */
 QtPdfViewerInitializer::QtPdfViewerInitializer() {
-  //#ifdef Q_OS_ANDROID
-  // this->_viewer = "/android_asset/pdfjs/viewer.html";
-  //#else
   QString appDir =
       QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
   QString dir = FileUtils::joinPaths(QStringList() << appDir << DIR::path);
-
   this->_root = dir;
 
-  if (zh_cn)
-    this->_viewer = FileUtils::joinPaths(QStringList() << dir << "viewer.html");
+  bool isCN = false;
+  QLocale locale;
+  if (locale.language() == QLocale::Chinese) isCN = true;
+
+  if (isCN)
+    this->_viewer =
+        FileUtils::joinPaths(QStringList() << dir << "viewer_cn.html");
   else
     this->_viewer = FileUtils::joinPaths(QStringList() << dir << "viewer.html");
-  //#endif
 
-  qDebug() << "bbbb..." << this->_viewer;
+  qDebug() << "this viewer.html..." << this->_viewer;
 
   this->_initialized = false;
 }
