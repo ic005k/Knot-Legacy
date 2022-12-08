@@ -92,12 +92,9 @@ Item {
 
         // Load pdf
         webView.runJavaScript("loadDocument(\"%1\");".arg(base64))
-
-
     }
 
-    function geturl()
-    {
+    function geturl() {
         return QtPdfViewerInitializer.getCurrentUrl()
     }
 
@@ -384,7 +381,6 @@ Item {
             pdfView.opacity = 1
         }
     }
-
 
     /*
         The channel through which data is exchanged between qml and browser environment

@@ -87,6 +87,7 @@ Rectangle {
     }
 
     Column {
+        id: col0
         anchors.fill: parent
         spacing: 0
 
@@ -418,4 +419,6 @@ Rectangle {
             }
         }
     }
+
+
 }
