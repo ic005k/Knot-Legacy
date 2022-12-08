@@ -4391,6 +4391,8 @@ void MainWindow::on_btnReader_clicked() {
     ui->qwReader->rootContext()->setContextProperty("myH", mwh);
   }
 
+  if (isPDF) mydlgReader->setPdfViewVisible(true);
+
   ui->frameMain->hide();
   ui->frameReader->show();
 
@@ -4398,8 +4400,6 @@ void MainWindow::on_btnReader_clicked() {
     isOne = true;
     mydlgReader->setPageVPos();
   }
-
-  if (isPDF) mydlgReader->setPdfViewVisible(true);
 
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
@@ -4413,8 +4413,8 @@ void MainWindow::setSCrollPro(QObject *obj) {
 }
 
 void MainWindow::on_btnBack_clicked() {
-  mydlgReader->setPdfViewVisible(false);
   mydlgReaderFun->close();
+  mydlgReader->setPdfViewVisible(false);
 
   if (isSelText) on_btnSelText_clicked();
 
