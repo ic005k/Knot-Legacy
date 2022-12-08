@@ -107,6 +107,6 @@
         <file>pdfjs/images/treeitem-collapsed@2x.png</file>
         <file>pdfjs/images/treeitem-expanded.png</file>
         <file>pdfjs/images/treeitem-expanded@2x.png</file>
-        <file>pdfjs/viewer.txt</file>
+        <file>pdfjs/viewer_cn.html</file>
     </qresource>
 </RCC>

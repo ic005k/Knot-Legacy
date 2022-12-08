@@ -35,7 +35,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 
 <!-- This snippet is used in production (included from viewer.html) -->
 
-<link rel="resource" type="application/l10n" href="viewer.txt">
+<link rel="resource" type="application/l10n" href="locale/locale.properties">
 
 <script src="pdf.js"></script>
 <script src="viewer.js"></script>
@@ -82,13 +82,13 @@ See https://github.com/adobe-type-tools/cmap-resources
       <div id="mainContainer">
         <div class="findbar hidden doorHanger" id="findbar">
           <div id="findbarInputContainer">
-            <input id="findInput" class="toolbarField" title="Find" placeholder="Find in document…" tabindex="91" data-l10n-id="find_input">
+            <input id="findInput" class="toolbarField" title="Find" placeholder="在文档中查找…" tabindex="91" data-l10n-id="find_input">
             <div class="splitToolbarButton">
-              <button id="findPrevious" class="toolbarButton findPrevious" title="Find the previous occurrence of the phrase" tabindex="92" data-l10n-id="find_previous">
+              <button id="findPrevious" class="toolbarButton findPrevious" title="查找词语上一次出现的位置" tabindex="92" data-l10n-id="find_previous">
                 <span data-l10n-id="find_previous_label">Previous</span>
               </button>
               <div class="splitToolbarButtonSeparator"></div>
-              <button id="findNext" class="toolbarButton findNext" title="Find the next occurrence of the phrase" tabindex="93" data-l10n-id="find_next">
+              <button id="findNext" class="toolbarButton findNext" title="查找词语后一次出现的位置" tabindex="93" data-l10n-id="find_next">
                 <span data-l10n-id="find_next_label">Next</span>
               </button>
             </div>
@@ -96,13 +96,13 @@ See https://github.com/adobe-type-tools/cmap-resources
 
           <div id="findbarOptionsOneContainer">
             <input type="checkbox" id="findHighlightAll" class="toolbarField" tabindex="94">
-            <label for="findHighlightAll" class="toolbarLabel" data-l10n-id="find_highlight">Highlight all</label>
+            <label for="findHighlightAll" class="toolbarLabel" data-l10n-id="find_highlight">全部高亮显示</label>
             <input type="checkbox" id="findMatchCase" class="toolbarField" tabindex="95">
-            <label for="findMatchCase" class="toolbarLabel" data-l10n-id="find_match_case_label">Match case</label>
+            <label for="findMatchCase" class="toolbarLabel" data-l10n-id="find_match_case_label">区分大小写</label>
           </div>
           <div id="findbarOptionsTwoContainer">
             <input type="checkbox" id="findEntireWord" class="toolbarField" tabindex="96">
-            <label for="findEntireWord" class="toolbarLabel" data-l10n-id="find_entire_word_label">Whole words</label>
+            <label for="findEntireWord" class="toolbarLabel" data-l10n-id="find_entire_word_label">字词匹配</label>
             <span id="findResultsCount" class="toolbarLabel hidden"></span>
           </div>
 
@@ -117,15 +117,15 @@ See https://github.com/adobe-type-tools/cmap-resources
               <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
             </button>
 
-            <button id="secondaryOpenFile" class="secondaryToolbarButton openFile visibleLargeView" title="Open File" tabindex="52" data-l10n-id="open_file">
+            <button id="secondaryOpenFile" class="secondaryToolbarButton openFile visibleLargeView" title="打开文件" tabindex="52" data-l10n-id="open_file">
               <span data-l10n-id="open_file_label">Open</span>
             </button>
 
-            <button id="secondaryPrint" class="secondaryToolbarButton print visibleMediumView" title="Print" tabindex="53" data-l10n-id="print">
+            <button id="secondaryPrint" class="secondaryToolbarButton print visibleMediumView" title="打印" tabindex="53" data-l10n-id="print">
               <span data-l10n-id="print_label">Print</span>
             </button>
 
-            <button id="secondaryDownload" class="secondaryToolbarButton download visibleMediumView" title="Download" tabindex="54" data-l10n-id="download">
+            <button id="secondaryDownload" class="secondaryToolbarButton download visibleMediumView" title="下载" tabindex="54" data-l10n-id="download">
               <span data-l10n-id="download_label">Download</span>
             </button>
 
@@ -220,7 +220,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
                 </button>
 
-                <button id="openFile" class="toolbarButton openFile hiddenLargeView" title="Open File" tabindex="32" data-l10n-id="open_file">
+                <button id="openFile" class="toolbarButton openFile hiddenLargeView" title="打开文件" tabindex="32" data-l10n-id="open_file">
                   <span data-l10n-id="open_file_label">Open</span>
                 </button>
 
@@ -240,6 +240,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                 <button id="secondaryToolbarToggle" class="toolbarButton" title="Tools" tabindex="36" data-l10n-id="tools" hidden=true>
                   <span data-l10n-id="tools_label">Tools</span>
                 </button>
+
               </div>
               <div id="toolbarViewerMiddle">
                 <div class="splitToolbarButton">

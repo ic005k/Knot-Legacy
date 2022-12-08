@@ -75,7 +75,7 @@ Rectangle {
                     "pdfFile is open ...... " + pdfPath )
     }
 
-    property int closedTopbarHeight: 35
+    property int closedTopbarHeight: 30
     property int topbarHeight: {
         var h = closedTopbarHeight
         var optionsHeight = containerOptions.visible ? divider.height + containerOptions.height : 0

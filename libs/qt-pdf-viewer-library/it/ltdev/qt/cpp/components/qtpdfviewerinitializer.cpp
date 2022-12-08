@@ -16,6 +16,7 @@
  *
  */
 #include "qtpdfviewerinitializer.h"
+extern bool zh_cn;
 
 namespace LTDev {
 
@@ -112,7 +113,12 @@ QtPdfViewerInitializer::QtPdfViewerInitializer() {
   QString dir = FileUtils::joinPaths(QStringList() << appDir << DIR::path);
 
   this->_root = dir;
-  this->_viewer = FileUtils::joinPaths(QStringList() << dir << "viewer.html");
+
+  if (zh_cn)
+    this->_viewer =
+        FileUtils::joinPaths(QStringList() << dir << "viewer_cn.html");
+  else
+    this->_viewer = FileUtils::joinPaths(QStringList() << dir << "viewer.html");
   //#endif
 
   qDebug() << "bbbb..." << this->_viewer;
