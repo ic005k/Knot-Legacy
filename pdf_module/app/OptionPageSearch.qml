@@ -4,17 +4,25 @@ import "../components" as CustomComponents
 import "../"
 
 BaseOptionSection {
-    title: qsTr("Search text:")
+    //title: qsTr("Search text:")
+    Text {
+        id: lblFind
+        text: qsTr("Search text:")
+        color: "white"
+        font.pixelSize: 16
+    }
 
     CustomComponents.TextField {
         id: tfSearch
         width: 180
-
+        height: 25
 
         textInput {
             onTextChanged: {
                 pdfView.searchText(textInput.text)
             }
+
+            font.pixelSize: 12
         }
     }
 

@@ -202,7 +202,7 @@ Rectangle {
 
                         CustomComponents.Button {
                             id: btnFind
-                            visible: false
+                            visible: true
                             property bool optionsEnabled: false
 
                             padding: padd

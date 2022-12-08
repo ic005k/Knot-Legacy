@@ -115,8 +115,7 @@ QtPdfViewerInitializer::QtPdfViewerInitializer() {
   this->_root = dir;
 
   if (zh_cn)
-    this->_viewer =
-        FileUtils::joinPaths(QStringList() << dir << "viewer_cn.html");
+    this->_viewer = FileUtils::joinPaths(QStringList() << dir << "viewer.html");
   else
     this->_viewer = FileUtils::joinPaths(QStringList() << dir << "viewer.html");
   //#endif
