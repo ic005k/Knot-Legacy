@@ -112,9 +112,10 @@ function loadDocument(base64){
     // environment to be ready
     sleep(200).then(function() {
         var array = base64ToUint8Array(base64)
-
+        //var array = convertDataURIToBinary(base64)
         // Load pdf document as an Uint8Array
         PDFViewerApplication.open(array);
+
     });
 }
 
@@ -287,6 +288,22 @@ function base64ToUint8Array(base64){
 
     return array
 }
+
+function convertDataURIToBinary(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+                        .replace(/-/g, '+')
+                        .replace(/_/g, '/');
+
+    const rawData = atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+           for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+           }
+           return outputArray;
+}
+
 
 /*
     Creates a promise object that will be active

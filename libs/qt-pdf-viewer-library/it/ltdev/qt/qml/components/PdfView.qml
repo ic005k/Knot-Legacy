@@ -92,6 +92,13 @@ Item {
 
         // Load pdf
         webView.runJavaScript("loadDocument(\"%1\");".arg(base64))
+
+
+    }
+
+    function geturl()
+    {
+        return QtPdfViewerInitializer.getCurrentUrl()
     }
 
 

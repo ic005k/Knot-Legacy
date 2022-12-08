@@ -16,7 +16,7 @@
  *
  */
 #include "qtpdfviewerinitializer.h"
-
+QString url;
 namespace LTDev {
 
 /**
@@ -119,9 +119,12 @@ QtPdfViewerInitializer::QtPdfViewerInitializer() {
   else
     this->_viewer = FileUtils::joinPaths(QStringList() << dir << "viewer.html");
 
+  url = this->_viewer;
   qDebug() << "this viewer.html..." << this->_viewer;
 
   this->_initialized = false;
 }
+
+QString QtPdfViewerInitializer::getCurrentUrl() { return url; }
 
 }  // namespace LTDev

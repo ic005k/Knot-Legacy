@@ -46,6 +46,7 @@ class QtPdfViewerInitializer : public QObject,
   // friend class Singleton<QtPdfViewerInitializer>;  // vs2019
 
  public:
+  Q_INVOKABLE static QString getCurrentUrl();
   /**
    * @brief Initializes the library
    */

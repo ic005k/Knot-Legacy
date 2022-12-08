@@ -49,6 +49,64 @@ See https://github.com/adobe-type-tools/cmap-resources
     <script type="text/javascript" src="qwebchannel.js"></script>
     <script src="pdf.viewer.bridge.js"></script>
 
+<script type="text/javascript">
+  var touchState = null;   //记录触屏手势触点信息的对象
+  //绑定触屏事件
+  function addPinchListener() {
+    let element = document.getElementById("viewerContainer");
+    element.addEventListener("touchstart", onTouchStart, false);
+    element.addEventListener("touchmove", onTouchMove, false);
+    element.addEventListener("touchend", onTouchEnd, false);
+  }
+  //记录触屏触点坐标 记录起始和结束点
+  function onTouchStart(evt) {
+    touchState = {
+      //多点触屏的第一点
+      startX: evt.touches[0].pageX,
+      startY: evt.touches[0].pageY,
+      endX: evt.touches[0].pageX,
+      endY: evt.touches[0].pageY,
+
+      //多点触屏的第二点  单点触屏时记录坐标为 -1
+      startX2: evt.touches[1] ? evt.touches[1].pageX : -1,
+      startY2: evt.touches[1] ? evt.touches[1].pageY : -1,
+      endX2: evt.touches[1] ? evt.touches[1].pageX : -1,
+      endY2: evt.touches[1] ? evt.touches[1].pageY : -1
+    };
+  }
+  //记录触屏触点坐标 触屏移动时更新结束点坐标
+  function onTouchMove(evt) {
+    if (touchState === null) {
+      return;
+    }
+    touchState.endX = evt.touches[0].pageX;
+    touchState.endY = evt.touches[0].pageY;
+    touchState.endX2 = evt.touches[1] ? evt.touches[1].pageX : -1;
+    touchState.endY2 = evt.touches[1] ? evt.touches[1].pageY : -1;
+  }
+  //触屏结束时 判断是否放大缩小
+  function onTouchEnd(evt) {
+    if (touchState === null) {
+      return;
+    }
+    //计算两点间距离
+    var getDistance = function (startX, startY, endX, endY) {
+      return Math.hypot(endX - startX, endY - startY);
+    };
+    if (touchState.startX2 != -1 && touchState.endX2 != -1 && touchState.startY2 != -1 && touchState.endY2 != -1) {
+      let distanceStart = getDistance(touchState.startX, touchState.startY, touchState.startX2, touchState.startY2);
+      let distanceEnd = getDistance(touchState.endX, touchState.endY, touchState.endX2, touchState.endY2);
+      //起始时两点距离和结束时两单距离进行比较，判断是方法还是缩小
+      if (distanceStart < distanceEnd) {
+        PDFViewerApplication.zoomIn();
+      } else if (distanceStart > distanceEnd) {
+        PDFViewerApplication.zoomOut();
+      }
+    }
+  }
+  addPinchListener();
+</script>
+
   </head>
 
   <body tabindex="1" class="loadingInProgress">

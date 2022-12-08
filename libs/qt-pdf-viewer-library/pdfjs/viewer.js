@@ -666,7 +666,6 @@ var PDFViewerApplication = {
     } while (--ticks > 0 && newScale > _ui_utils.MIN_SCALE);
     this.pdfViewer.currentScaleValue = newScale;
   },
-
   get pagesCount() {
     return this.pdfDocument ? this.pdfDocument.numPages : 0;
   },

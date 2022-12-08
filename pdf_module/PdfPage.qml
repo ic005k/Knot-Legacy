@@ -64,15 +64,16 @@ Rectangle {
         pdfPath = pdffile
         isOne = false
 
-        if (isViewEnd){
+        if (isViewEnd) {
             pdfView.visible = true
             pdfView.opacity = 1
             pdfView.load(pdfPath)
         }
 
+        //var url = pdfView.geturl()
+        //pdfView.webView.url ="file://" + url + "?file=file://" + encodeURIComponent(pdfPath)
         //pdfView.webView.url = "https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf" //+  pdfPath
-        console.debug(
-                    "pdfFile is open ...... " + pdfPath )
+        //console.debug("pdfFile is open ...... " + pdfView.webView.url)
     }
 
     property int closedTopbarHeight: 30
@@ -398,7 +399,8 @@ Rectangle {
                         pdfView.setPage(currentPage)
                     }
 
-                    console.debug("onPdfLoaded......  " + currentPage + "  " + currentScale)
+                    console.debug(
+                                "onPdfLoaded......  " + currentPage + "  " + currentScale)
                 }
             }
 
