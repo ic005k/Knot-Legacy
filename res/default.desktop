@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=OCAuxiliaryTools
-Exec=OCAuxiliaryTools
+Name=Knot
+Exec=Knot
 Icon=icon
-Comment=OCAuxiliaryTools
+Comment=Knot
 Categories=Application;
 Terminal=true
