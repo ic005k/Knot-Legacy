@@ -96,7 +96,7 @@ Rectangle {
             anchors.rightMargin: 0
             policy: ScrollBar.AsNeeded
             width: 8
-            visible: tableModel.rowCount > 5
+            visible: tableView.contentHeight>tableView.height //tableModel.rowCount > 15
             background: Rectangle {
                 color: "#666666"
             }
