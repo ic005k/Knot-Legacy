@@ -27,7 +27,7 @@ jobs:
         qt_arch: [gcc_64]
         
     env:
-        targetName: OCAuxiliaryTools
+        targetName: Knot
         VERSION: Linux
         orgName: Knot
       
@@ -38,6 +38,7 @@ jobs:
         with:
           version: ${{ matrix.qt_ver }}
           cached: 'false'
+          modules: qtcharts
       
       - name: ubuntu install GL library
         run: sudo apt-get install -y libglew-dev libglfw3-dev libxcb*

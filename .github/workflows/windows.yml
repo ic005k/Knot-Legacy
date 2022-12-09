@@ -31,7 +31,7 @@ jobs:
             qt_arch_install: msvc2019_64          
           
     env:
-      targetName: OCAuxiliaryTools.exe
+      targetName: Knot.exe
       VERSION: Win64
       orgName: Knot
       
@@ -48,6 +48,8 @@ jobs:
           # target: ${{ matrix.qt_target }}
           arch: ${{ matrix.qt_arch }}
           cached: 'false'
+          modules: qtcharts
+          
       # 拉取代码
       - uses: actions/checkout@v2
         with:
