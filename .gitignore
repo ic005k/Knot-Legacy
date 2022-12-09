@@ -3,3 +3,5 @@ android/.DS_Store
 .DS_Store
 Knot.pro.user
 bin/release/Knot.exe
+bin/release/libcrypto-1_1-x64.dll
+bin/release/libssl-1_1-x64.dll
