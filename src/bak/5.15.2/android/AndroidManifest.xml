@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
-<manifest package="com.x" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.48" android:versionCode="1" android:installLocation="auto">
+<manifest package="com.x" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.54" android:versionCode="1" android:installLocation="auto">
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true"/>
@@ -17,7 +19,7 @@
 
 
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
-    <application android:hardwareAccelerated="true" android:requestLegacyExternalStorage="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Knot" android:extractNativeLibs="true" android:icon="@drawable/icon">
+    <application android:usesCleartextTraffic="true" android:hardwareAccelerated="true" android:requestLegacyExternalStorage="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Knot" android:extractNativeLibs="true" android:icon="@drawable/icon">
         <!-- android:windowSoftInputMode="adjustResize" -->
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.x.MyActivity" android:label="Knot" android:screenOrientation="unspecified" android:launchMode="singleTop" android:theme="@style/splashScreenTheme" android:windowSoftInputMode="stateUnspecified">
             <intent-filter>

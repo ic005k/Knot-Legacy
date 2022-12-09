@@ -102,6 +102,14 @@ import java.lang.reflect.Field;
 import android.widget.LinearLayout;
 
 //import javax.swing.text.View;
+import android.webkit.WebView;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebViewClient;
+import 	android.webkit.WebSettings;
+import android.view.ActionMode;
+import 	android.view.MotionEvent;
+import android.view.ContextMenu;
+import android.util.AttributeSet;
 
 import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -638,137 +646,105 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     }
 
     //--------------------------------------------------------------------------------
-    // 备用参考
-   /* private static final List<ZipEntry> entries = new ArrayList<ZipEntry>();
 
-    public static void unZipDirectory(String zipFileDirectory, String outputDirectory) throws ZipException, IOException {
-        File file = new File(zipFileDirectory);
-        File[] files = file.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].getName().endsWith(".zip")) {
-                unzip(zipFileDirectory + File.separator + files[i].getName(),
-                        outputDirectory);
-            }
+    public class PDFView extends WebView {
+
+        public boolean isTop = true, isBottom = false;//用于判断滑动位置
+
+        private final static String PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
+
+        public PDFView(Context context) {
+            super(context);
+            init();
         }
-    }
 
-    public static void unzip(String string, String outputDirectory)
-            throws ZipException, IOException {
-        ZipFile zipFile = new ZipFile(string);
-        Enumeration<ZipEntry> enu = (Enumeration<ZipEntry>) zipFile.entries();
-        while (enu.hasMoreElements()) {
-            ZipEntry entry = (ZipEntry) enu.nextElement();
-            if (entry.isDirectory()) {
-                String fileName = entry.getName().substring(0,
-                        entry.getName().length() - 1);
-                String directoryPath = outputDirectory + File.separator
-                        + fileName;
-                File directory = new File(directoryPath);
-                directory.mkdir();
-            }
-            entries.add(entry);
+        public PDFView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            init();
         }
-        unzip(zipFile, entries, outputDirectory);
-    }
 
-    private static void unzip(ZipFile zipFile, List<ZipEntry> entries2,
-                              String outputDirectory) throws IOException {
-        // TODO Auto-generated method stub
-        Iterator<ZipEntry> it = entries.iterator();
-        while (it.hasNext()) {
-            ZipEntry zipEntry = (ZipEntry) it.next();
-            // MultiThreadEntry mte = new MultiThreadEntry(zipFile, zipEntry,
-            //         outputDirectory);
+        public PDFView(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+            init();
+        }
 
-            // Thread thread = new Thread(mte);
-            // thread.start();
-            bis = new BufferedInputStream(zipFile.getInputStream(zipEntry));
-            try {
-                unzipFiles(zipEntry, outputDirectory);
-                Log.i(TAG, zipEntry.getName());
-                Log.i(TAG, outputDirectory);
-            } catch (IOException e) {
-                try {
-                    bis.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+        @Override
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            return false;
+        }
+
+        private void init() {
+            WebSettings settings = getSettings();
+            settings.setJavaScriptEnabled(true);
+            settings.setAllowUniversalAccessFromFileURLs(true);
+            settings.setSupportZoom(true);
+            settings.setUseWideViewPort(true);
+            settings.setBuiltInZoomControls(true);
+            settings.setDisplayZoomControls(false);
+
+            setWebViewClient(new WebViewClient() {// 注册滑动监听方法viewerContainer为加载pdf的viewid
+                @Override
+                public void onPageFinished(WebView webView, String s) {
+                    super.onPageFinished(webView, s);
+                    //滑动监听
+                    String startSave = "\n" +
+                            "document.getElementById(\"viewerContainer\").addEventListener('scroll',function () {\n" +
+                            "if(this.scrollHeight-this.scrollTop - this.clientHeight < 50){\n" +
+                            "window.java.bottom(); \n" +
+                            "}\n" +
+                            "else if(this.scrollTop==0){\n" +
+                            "window.java.top(); \n" +
+                            "}\n" +
+                            "else {\n" +
+                            "window.java.scrolling(); \n" +
+                            "}\n" +
+                            "});";
+                    webView.loadUrl("javascript:" + startSave);
                 }
-            } finally {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            });
+            addJavascriptInterface(new Object() {
+                @JavascriptInterface
+                public void bottom() {
+                    Log.e("msg+++++++", "到了低端");
+                    isBottom = true;
+                    isTop = false;
                 }
-            }
-        }
-    }
 
-    public static final int BUFFER_SIZE = 4096;
-    private static BufferedInputStream bis;
-
-    public static void unzipFiles(ZipEntry zipEntry, String outputDirectory)
-            throws IOException {
-
-        byte[] data = new byte[BUFFER_SIZE];
-        String entryName = zipEntry.getName();
-        entryName = new String(entryName.getBytes("GBK"));
-        FileOutputStream fos = new FileOutputStream(outputDirectory
-                + File.separator + entryName);
-        if (zipEntry.isDirectory()) {
-
-        } else {
-            BufferedOutputStream bos = new BufferedOutputStream(fos,
-                    BUFFER_SIZE);
-            int count = 0;
-            while ((count = bis.read(data, 0, BUFFER_SIZE)) != -1) {
-                bos.write(data, 0, count);
-            }
-            bos.flush();
-            bos.close();
-        }
-    }
-
-    //读取压缩文件中的内容名称
-    public static List<String> readZipFile(String file) throws Exception {
-        List<String> list = new ArrayList<String>();
-        InputStream in = new BufferedInputStream(new FileInputStream(file));
-        ZipInputStream zin = new ZipInputStream(in);
-        ZipEntry ze;
-        while ((ze = zin.getNextEntry()) != null) {
-            if (ze.isDirectory()) {
-            } else {
-                String zeName = new String(ze.getName().getBytes("iso-8859-1"), "utf-8");
-                list.add(zeName);
-            }
-        }
-        zin.closeEntry();
-        return list;
-    }
-
-    public static void readZipFile2(String file) throws Exception {
-        ZipFile zf = new ZipFile(file);
-        InputStream in = new BufferedInputStream(new FileInputStream(file));
-        ZipInputStream zin = new ZipInputStream(in);
-        ZipEntry ze;
-        while ((ze = zin.getNextEntry()) != null) {
-            if (ze.isDirectory()) {
-            } else {
-                String zeName = new String(ze.getName().getBytes("iso-8859-1"), "utf-8");
-                System.out.println("获取文件名称：" + zeName);
-                long size = ze.getSize();
-                if (size > 0) {
-                    BufferedReader br = new BufferedReader(
-                            new InputStreamReader(zf.getInputStream(ze)));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        // System.out.println(line);
-                    }
-                    br.close();
+                @JavascriptInterface
+                public void scrolling() {
+                    Log.e("msg+++++++", "滑动中");
+                    isBottom = false;
+                    isTop = false;
                 }
-            }
+                @JavascriptInterface
+                public void top() {
+                    Log.e("msg+++++++", "到了顶端");
+                    isBottom = false;
+                    isTop = true;
+                }
+            }, "java");
         }
-        zin.closeEntry();
-    }*/
+
+        @Override
+        protected void onCreateContextMenu(ContextMenu menu) {
+            super.onCreateContextMenu(menu);
+        }
+
+        @Override
+        public ActionMode startActionMode(ActionMode.Callback callback) {
+            return super.startActionMode(callback);
+        }
+        //加载本地的pdf
+        public void loadLocalPDF(String path) {
+            loadUrl(PDFJS + "file://" + path);
+        }
+
+        //加载url的pdf
+        public void loadOnlinePDF(String url) {
+            loadUrl(PDFJS + url);
+        }
+    }
+
 
     //----------------------------------------------------------------------------------------------
     /*
