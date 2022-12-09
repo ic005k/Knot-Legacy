@@ -609,6 +609,7 @@ class MainWindow : public QMainWindow {
   QString decMemos(QString strDec, QString file);
   void initHardStepSensor();
   void showMemos();
+  void resetWinPos();
 };
 
 class SearchThread : public QThread {

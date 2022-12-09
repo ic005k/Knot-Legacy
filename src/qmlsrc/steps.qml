@@ -3,6 +3,7 @@ import QtQuick.Controls 2.13
 import Qt.labs.qmlmodels 1.0
 
 Rectangle {
+    width: parent.width
 
     function appendTableRow(Date, Steps, KM) {
 
@@ -101,13 +102,11 @@ Rectangle {
                 color: "#666666"
             }
             // Always show
-
             /*onActiveChanged: {
                 active = true;
             }
             contentItem: Rectangle
             {
-
                 implicitWidth  : 6
                 implicitHeight : 30
                 radius : 3

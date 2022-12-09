@@ -243,6 +243,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   initMain = false;
   reloadMain();
+  resetWinPos();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -1489,6 +1490,32 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     event->ignore();
   }
+
+  QSettings Reg(iniDir + "winpos.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  Reg.setValue("x", this->geometry().x());
+  Reg.setValue("y", this->geometry().y());
+  Reg.setValue("w", this->geometry().width());
+  Reg.setValue("h", this->geometry().height());
+}
+
+void MainWindow::resetWinPos() {
+  QSettings Reg(iniDir + "winpos.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  int x, y, w, h;
+  x = Reg.value("x").toInt();
+  y = Reg.value("y").toInt();
+  w = Reg.value("w").toInt();
+  h = Reg.value("h").toInt();
+
+  if (x < 0) x = 0;
+  if (y < 0) y = 0;
+
+  if (x > 0 && y > 0 && w > 0 && h > 0) this->setGeometry(x, y, w, h);
 }
 
 void MainWindow::init_Stats(QTreeWidget *tw) {
@@ -4990,7 +5017,11 @@ void MainWindow::on_btnAdd_clicked() {
 
 void MainWindow::on_btnDel_clicked() { on_DelRecord(); }
 
-void MainWindow::resizeEvent(QResizeEvent *event) { Q_UNUSED(event); }
+void MainWindow::resizeEvent(QResizeEvent *event) {
+  Q_UNUSED(event);
+  ui->qwReader->rootContext()->setContextProperty("myW", this->width());
+  ui->qwReader->rootContext()->setContextProperty("myH", this->height());
+}
 
 void MainWindow::on_KVChanged() {}
 
