@@ -5,3 +5,10 @@ Knot.pro.user
 bin/release/Knot.exe
 bin/release/libcrypto-1_1-x64.dll
 bin/release/libssl-1_1-x64.dll
+bin/release/Knot.app/Contents/Info.plist
+bin/release/Knot.app/Contents/MacOS/Knot
+bin/release/Knot.app/Contents/PkgInfo
+bin/release/Knot.app/Contents/Resources/empty.lproj
+bin/release/Knot.app/Contents/Resources/icon.icns
+bin/release/libKnot_arm64-v8a.so
+bin/release/libKnot_x86_64.so

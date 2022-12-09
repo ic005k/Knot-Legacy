@@ -142,16 +142,17 @@ Rectangle {
                 console.log(htmlPath)
                 console.log("isLink=" + link)
             }
-            onReleased: {
-                mw_one.on_SetReaderFunVisible()
+            onReleased:  {
+
             }
 
             MouseArea {
                 id: mouse_area
                 anchors.fill: parent
                 hoverEnabled: true
-                acceptedButtons: Qt.RightButton
-                onClicked: {
+                acceptedButtons: Qt.AllButtons
+                onDoubleClicked: {
+                    mw_one.on_SetReaderFunVisible()
 
                 }
                 onPressAndHold: {

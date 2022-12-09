@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.53";
+QString ver = "1.0.54";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -2050,18 +2050,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
   if (watch == tw->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
-      int press_y = event->globalY();
-      int press_y0 = event->pos().y();
-      int newy = 0;
-      if (press_y0 <= tw->height() / 2) {
-        newy = press_y + 35;
-      }
-
-      if (press_y0 > tw->height() / 2) {
-        newy = press_y - mydlgFloatFun->height() - 35;
-      }
-
-      mydlgFloatFun->setY(newy);
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
