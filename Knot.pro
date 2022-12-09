@@ -6,13 +6,15 @@ QT += xml svg
 # Qt > 5 (Qt6)
 greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets #webenginewidgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 CONFIG+=sdk_no_version_check
 
-ICON = res/icon.icns
 TRANSLATIONS += src/cn.ts
+
+ICON = res/icon.icns
+RC_FILE +=win.rc
 
 # Pdf View library
 QML_IMPORT_PATH += $$PWD/
@@ -31,25 +33,6 @@ android: {
     lessThan(QT_MAJOR_VERSION, 6):QT += androidextras
 }
 
-
-android
-{
-# Android permissions tools library
-# @see: https://github.com/FalsinSoft/QtAndroidTools/tree/1.5.5
-
-#QML_IMPORT_PATH += $$PWD/libs/android/QtAndroidTools-1.5.5/QtAndroidTools
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-#DEFINES += \
-#    QTAT_APP_PERMISSIONS
-#include($$PWD/libs/android/QtAndroidTools-1.5.5/QtAndroidTools/QtAndroidTools.pri)
-
-#dataFiles.files+=src/readme.txt
-#dataFiles.files+=src/1.png
-#dataFiles.files+=src/2.png
-dataFiles.path = /assets/data
-INSTALLS += dataFiles
-
-}
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -112,7 +95,8 @@ HEADERS += \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
-    src/specialaccelerometerpedometer.h
+    src/specialaccelerometerpedometer.h \
+    win.rc
 
 FORMS += \
     src/EditRecord.ui \
@@ -149,9 +133,9 @@ RESOURCES += \
     res.qrc
 
 CONFIG(debug,debug|release) {
-    #DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/debug)
+    DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/debug)
 } else {
-    #DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
+    DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
 }
 
 DISTFILES += \

@@ -77,5 +77,6 @@
         <file>res/sleft.png</file>
         <file>res/sright.png</file>
         <file>res/pdf.png</file>
+        <file>res/icon.ico</file>
     </qresource>
 </RCC>
