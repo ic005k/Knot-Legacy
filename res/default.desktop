@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=OCAuxiliaryTools
+Exec=OCAuxiliaryTools
+Icon=icon
+Comment=OCAuxiliaryTools
+Categories=Application;
+Terminal=true
