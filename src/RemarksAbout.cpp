@@ -191,7 +191,13 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
       int ret = QMessageBox::warning(this, "", warningStr, tr("Download"));
 
       if (ret >= 0) {
+#ifdef Q_OS_ANDROID
         show_download();
+#else
+        const QUrl url("https://github.com/ic005k/" + appName +
+                       "/releases/latest");
+        QDesktopServices::openUrl(url);
+#endif
       }
     } else {
       if (!blAutoCheckUpdate)
@@ -229,7 +235,13 @@ void dlgRemarks::on_btnCheckUpdate_clicked() { CheckUpdate(); }
 
 void dlgRemarks::on_btnTest_clicked() {
   if (s_link == "") return;
+
+#ifdef Q_OS_ANDROID
   show_download();
+#else
+  const QUrl url("https://github.com/ic005k/" + appName + "/releases/latest");
+  QDesktopServices::openUrl(url);
+#endif
 }
 
 int dlgRemarks::getAndroidVer() {
