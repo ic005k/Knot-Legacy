@@ -4166,10 +4166,7 @@ void MainWindow::redo() {
 
 void MainWindow::addUndo(QString log) {
   if (!isImport) {
-    QString undoFile =
-        iniDir +
-        mydlgMainNotes
-            ->getDateTimeStr();  // QDateTime::currentDateTime().toString();
+    QString undoFile = iniDir + mydlgMainNotes->getDateTimeStr();
     bakIniData(undoFile, true);
 
     for (int i = 0; i < timeLines.count(); i++) {
