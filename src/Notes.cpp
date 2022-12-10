@@ -551,7 +551,8 @@ void dlgMainNotes::unzip(QString zipfile) {
   tagDir = iniDir;
   strZip = zipfile;
   QTextEdit* txtEdit = new QTextEdit();
-  strUnzip = iniDir + "unzip.exe";
+  strUnzip = qApp->applicationDirPath() + "/unzip.exe";
+  qDebug() << qApp->applicationDirPath() << ".....";
   strUnzip = "\"" + strUnzip + "\"";
   strZip = "\"" + strZip + "\"";
   strExec = iniDir;

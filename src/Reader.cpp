@@ -274,7 +274,7 @@ void dlgReader::startOpenFile(QString openfile) {
     tagDir = iniDir + "temp/";
     strZip = iniDir + "temp.zip";
     QTextEdit* txtEdit = new QTextEdit();
-    strUnzip = iniDir + "unzip.exe";
+    strUnzip = qApp->applicationDirPath() + "/unzip.exe";
     strUnzip = "\"" + strUnzip + "\"";
     strZip = "\"" + strZip + "\"";
     strExec = iniDir;
