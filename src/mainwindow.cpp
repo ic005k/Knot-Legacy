@@ -2588,7 +2588,7 @@ void MainWindow::on_actionImport_Data_triggered() {
                                           tr("Zip File (*.*)"));
 #else
   fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
-                                          tr("Zip File (*.zip)"));
+                                          tr("Zip File (*.zip);;All(*.*)"));
 #endif
 
   if (QFile(fileName).exists()) addUndo(tr("Import Data"));
@@ -3878,7 +3878,13 @@ void MainWindow::init_UIWidget() {
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
   ui->btnRemarks->setStyleSheet("border:none");
+
   ui->btnPause->setStyleSheet("border:none");
+#ifdef Q_OS_ANDROID
+#else
+  ui->btnPause->hide();
+#endif
+
   ui->btnSelTab->setStyleSheet("border:none");
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
@@ -4160,7 +4166,10 @@ void MainWindow::redo() {
 
 void MainWindow::addUndo(QString log) {
   if (!isImport) {
-    QString undoFile = iniDir + QDateTime::currentDateTime().toString();
+    QString undoFile =
+        iniDir +
+        mydlgMainNotes
+            ->getDateTimeStr();  // QDateTime::currentDateTime().toString();
     bakIniData(undoFile, true);
 
     for (int i = 0; i < timeLines.count(); i++) {
