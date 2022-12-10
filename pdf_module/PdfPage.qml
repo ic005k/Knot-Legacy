@@ -60,6 +60,19 @@ Rectangle {
         pdfView.visible = vv
     }
 
+    function setViewEnd(vv) {
+        isViewEnd = vv
+    }
+
+    function loadPDFWin(pdfjs,pdfpath)
+    {
+        pdfView.visible = true
+        pdfView.opacity = 1
+        pdfView.webView.url =pdfjs + encodeURIComponent(pdfpath)
+
+        console.debug("pdfFile is open ...... " + pdfView.webView.url + "  isViewEnd=" + isViewEnd)
+    }
+
     function loadPDF(pdffile) {
         pdfPath = pdffile
         isOne = false
@@ -68,12 +81,14 @@ Rectangle {
             pdfView.visible = true
             pdfView.opacity = 1
             pdfView.load(pdfPath)
+            console.debug("pdfFile is open ...... " + pdfView.webView.url + "  isViewEnd=" + isViewEnd)
         }
+
 
         //var url = pdfView.geturl()
         //pdfView.webView.url ="file://" + url + "?file=file://" + encodeURIComponent(pdfPath)
         //pdfView.webView.url = "https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf" //+  pdfPath
-        //console.debug("pdfFile is open ...... " + pdfView.webView.url)
+
     }
 
     property int closedTopbarHeight: 30

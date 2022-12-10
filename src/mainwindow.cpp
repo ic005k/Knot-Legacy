@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.52";
+QString ver = "1.0.54";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4528,7 +4528,7 @@ void MainWindow::readEBookDone() {
         qDebug() << "viewer.html exists......";
 #else
       PDFJS = "file://" + iniDir + "pdfjs/web/viewer.html";
-      str = PDFJS + "?file=" + fileName;
+      str = PDFJS + "?file=file://" + fileName;
 #endif
       QUrl url;
       url.setUrl(str);
@@ -4540,6 +4540,15 @@ void MainWindow::readEBookDone() {
 
       } else {
         QQuickItem *root = ui->qwPdf->rootObject();
+#ifdef Q_OS_WIN
+        QMetaObject::invokeMethod((QObject *)root, "setViewEnd",
+                                  Q_ARG(QVariant, true));
+#endif
+
+        // QMetaObject::invokeMethod((QObject *)root, "loadPDFWin",
+        //                          Q_ARG(QVariant, PDFJS + "?file="),
+        //                          Q_ARG(QVariant, fileName));
+
         QMetaObject::invokeMethod((QObject *)root, "loadPDF",
                                   Q_ARG(QVariant, fileName));
       }
