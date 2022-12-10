@@ -513,6 +513,31 @@ void dlgMainNotes::zipMemo() {
   pro->waitForFinished();
 #endif
 
+#ifdef Q_OS_WIN
+
+  QString strZip, strExec, strzip, tagDir;
+  tagDir = "memo";
+  strZip = iniDir + "memo.zip";
+  QTextEdit* txtEdit = new QTextEdit();
+  strzip = qApp->applicationDirPath() + "/zip.exe";
+  strzip = "\"" + strzip + "\"";
+  strZip = "\"" + strZip + "\"";
+  strExec = iniDir;
+  strExec = "\"" + strExec + "\"";
+  QString strCommand1;
+  QString strx = "\"" + tagDir + "\"";
+  strCommand1 = strzip + " -r " + strZip + " " + strx;
+  txtEdit->append(strCommand1);
+  QString fileName = iniDir + "zip.bat";
+  mw_one->TextEditToFile(txtEdit, fileName);
+
+  QString exefile = iniDir + "zip.bat";
+  QProcess* pro = new QProcess;
+  pro->execute("cmd.exe", QStringList() << "/c" << exefile);
+  pro->waitForFinished();
+
+#endif
+
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

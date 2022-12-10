@@ -2496,12 +2496,11 @@ void MainWindow::on_actionExport_Data_triggered() {
 
   QString fileName;
   QFileDialog fd;
-#ifdef Q_OS_MAC
-  fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.zip)"));
-#endif
 
 #ifdef Q_OS_ANDROID
-  fileName = "android";  // fd.getExistingDirectory();
+  fileName = "android";
+#else
+  fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.zip)"));
 #endif
 
   bakData(fileName, true);
@@ -2561,9 +2560,7 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
         box.exec();
       }
 
-#endif
-
-#ifdef Q_OS_MAC
+#else
       QFile::copy(zipfile, fileName);
       infoStr = fileName;
 #endif
@@ -2584,16 +2581,14 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
 void MainWindow::on_actionImport_Data_triggered() {
   if (!isSaveEnd) return;
   QString fileName;
-  QString path = "/storage/emulated/0/KnotBak/";
-
-#ifdef Q_OS_MAC
-  fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
-                                          tr("Zip File (*.*)"));
-#endif
 
 #ifdef Q_OS_ANDROID
+  QString path = "/storage/emulated/0/KnotBak/";
   fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), path,
                                           tr("Zip File (*.*)"));
+#else
+  fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
+                                          tr("Zip File (*.zip)"));
 #endif
 
   if (QFile(fileName).exists()) addUndo(tr("Import Data"));
