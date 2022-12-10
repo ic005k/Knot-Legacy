@@ -12,3 +12,5 @@ bin/release/Knot.app/Contents/Resources/empty.lproj
 bin/release/Knot.app/Contents/Resources/icon.icns
 bin/release/libKnot_arm64-v8a.so
 bin/release/libKnot_x86_64.so
+bin/release/unzip.exe
+bin/release/zip.exe
