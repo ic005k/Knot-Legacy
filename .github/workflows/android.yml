@@ -44,7 +44,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         if: ${{ matrix.qt_ver == '5.15.2' }}
         with:
-          modules: 'qtcharts'
+          modules: qtcharts qtwebengine
           version: ${{ matrix.qt_ver }}
           target: ${{ matrix.qt_target }}
           # here need not arch
