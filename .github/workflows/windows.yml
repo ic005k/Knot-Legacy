@@ -48,7 +48,7 @@ jobs:
           # target: ${{ matrix.qt_target }}
           arch: ${{ matrix.qt_arch }}
           cached: 'false'
-          modules: qtcharts
+          modules: qtcharts qtwebengine
           
       # 拉取代码
       - uses: actions/checkout@v2
