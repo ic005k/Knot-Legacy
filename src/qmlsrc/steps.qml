@@ -3,7 +3,7 @@ import QtQuick.Controls 2.13
 import Qt.labs.qmlmodels 1.0
 
 Rectangle {
-    width: parent.width
+    width: myW
 
     function appendTableRow(Date, Steps, KM) {
 

@@ -15,7 +15,7 @@ bool zh_cn = false;
 bool isAndroid, isIOS;
 
 int main(int argc, char* argv[]) {
-  QtWebView::initialize();
+  LTDev::QtPdfViewerInitializer::initialize();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
 #ifdef Q_OS_ANDROID
@@ -40,13 +40,7 @@ int main(int argc, char* argv[]) {
   }
 #endif
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-  LTDev::QtPdfViewerInitializer::initialize();
   QApplication app(argc, argv);
-#else
-  QApplication app(argc, argv);
-  LTDev::QtPdfViewerInitializer::initialize();
-#endif
 
   // Delete QtPdfViewerInitializer instance on app close
   QObject::connect(&app, &QGuiApplication::aboutToQuit,

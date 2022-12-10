@@ -1,13 +1,16 @@
-
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick 2.2
+import QtQuick.Controls 1.1
 import QtWebView 1.1
+import QtQuick.Layouts 1.1
+import QtQuick.Controls.Styles 1.2
+
 import MyModel1 1.0
+
 
 Item {
     id: mywebitem
 
-    property bool showProgress: webView.loading && Qt.platform.os !== "ios"
+    property bool showProgress: webViewOne.loading && Qt.platform.os !== "ios"
                                 && Qt.platform.os !== "winrt"
     visible: true
 
@@ -21,26 +24,26 @@ Item {
     }
 
     WebView {
-        id: webView
+        id: webViewOne
         anchors.fill: parent
         url: initialUrl
 
         onLoadProgressChanged: {
 
-            file.prog = webView.loadProgress
-            m_prog = webView.loadProgress
+            file.prog = webViewOne.loadProgress
+            m_prog = webViewOne.loadProgress
 
             console.log(m_prog)
 
-            if (webView.loadProgress == 100) {
+            if (webViewOne.loadProgress == 100) {
                 console.log("loadProgress=100%")
-                console.log("CurrentUrl=" + webView.url)
-                file.webEnd = webView.url.toString()
+                console.log("CurrentUrl=" + webViewOne.url)
+                file.webEnd = webViewOne.url.toString()
             }
         }
     }
 
     Component.onCompleted: {
-        console.log(webView.url)
+        console.log(webViewOne.url)
     }
 }

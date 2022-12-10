@@ -3,9 +3,12 @@ QT += charts sensors
 QT += qml quick quickwidgets webview
 QT += xml svg
 
+!android: {
+    QT += webenginewidgets
+}
+
 # Qt > 5 (Qt6)
 greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -65,6 +68,7 @@ SOURCES += \
     src/mainwindow.cpp \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
+    src/onedrive/qtonedrivewebview.cpp \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
@@ -95,6 +99,7 @@ HEADERS += \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
+    src/onedrive/qtonedrivewebview.h \
     src/specialaccelerometerpedometer.h \
     win.rc
 

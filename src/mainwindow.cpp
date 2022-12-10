@@ -3944,6 +3944,7 @@ void MainWindow::init_UIWidget() {
   ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
 
+  ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
   ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
 
   ui->qwReport->rootContext()->setContextProperty("mydlgReport", mydlgReport);
@@ -4693,7 +4694,6 @@ void MainWindow::on_btnSelText_clicked() {
 }
 
 void MainWindow::on_btnSignIn_clicked() {
-  ui->qwOneDriver->setSource(QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
   mydlgOneDrive->on_pushButton_SignIn_clicked();
 }
 
@@ -5021,6 +5021,8 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
+
+  ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
 }
 
 void MainWindow::on_KVChanged() {}
