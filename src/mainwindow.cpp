@@ -4886,6 +4886,7 @@ void MainWindow::clearSelectBox() {
 
   if (!mw_one->ui->frameMemo->isHidden()) {
     QString file = iniDir + "memo/memo.html";
+    mydlgMainNotes->getVPos();
     int pos = mydlgMainNotes->sliderPos;
     QQuickItem *root = mw_one->ui->qwNotes->rootObject();
     QMetaObject::invokeMethod((QObject *)root, "loadHtml",
