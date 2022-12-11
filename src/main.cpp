@@ -66,32 +66,17 @@ int main(int argc, char* argv[]) {
   isAndroid = true;
   isIOS = false;
 
-  iniDir = path + "/";
+  // iniDir = path + "/";
+  iniDir = "/storage/emulated/0/KnotData/";
   iniFile = iniDir + appName + ".ini";
-#endif
-
-#ifdef Q_OS_UNIX
+#else
   isAndroid = false;
-  isIOS = true;
-  qDebug() << "OS=UNIX IOS";
-
-  QString str1 = QDir::homePath() + "/" + appName + "/";
-  QDir dir0;
-  dir0.mkpath(str1);
-  iniDir = str1;
+  iniDir = QDir::homePath() + "/" + appName + "Data/";
   iniFile = iniDir + appName + ".ini";
 #endif
 
-#ifdef Q_OS_WIN
-  isAndroid = false;
-  isIOS = true;
-
-  QString str1 = QDir::homePath() + "/" + appName + "/";
   QDir dir0;
-  dir0.mkpath(str1);
-  iniDir = str1;
-  iniFile = iniDir + appName + ".ini";
-#endif
+  dir0.mkpath(iniDir);
 
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

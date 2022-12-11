@@ -87,6 +87,7 @@
 #include "src/dlglist.h"
 #include "src/dlgloadpic.h"
 #include "src/file.h"
+#include "src/filesystemwatcher.h"
 #include "src/specialaccelerometerpedometer.h"
 #include "ui_EditRecord.h"
 #include "ui_Notes.h"

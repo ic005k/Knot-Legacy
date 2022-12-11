@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.54";
+QString ver = "1.0.55";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -244,6 +244,7 @@ MainWindow::MainWindow(QWidget *parent)
   initMain = false;
   reloadMain();
   resetWinPos();
+  FileSystemWatcher::addWatchPath(iniDir);
 }
 
 void MainWindow::initHardStepSensor() {

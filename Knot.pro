@@ -64,6 +64,7 @@ SOURCES += \
     src/dlgsetedittext.cpp \
     src/documenthandler.cpp \
     src/file.cpp \
+    src/filesystemwatcher.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/onedrive/qtonedrive.cpp \
@@ -95,6 +96,7 @@ HEADERS += \
     src/dlgsetedittext.h \
     src/documenthandler.h \
     src/file.h \
+    src/filesystemwatcher.h \
     src/mainwindow.h \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
