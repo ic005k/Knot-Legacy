@@ -23,7 +23,7 @@ class dlgTodo : public QDialog {
 
   bool isToday = false;
   QStringList tableLists;
-  void init_Items();
+  void init_Todo();
   QString alarmStyle =
       "QLabel{background:rgb(112,128,105);color:rgb(255,255,255);border:2px;"
       "border-radius:4px;padding:2px 4px;}";

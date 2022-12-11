@@ -228,8 +228,8 @@ class MainWindow : public QMainWindow {
   bool isAdd = false;
   QTimer *timer;
   QTimer *timerStep;
-  QTimer *timerShowFloatFun;
   QTimer *timerMousePress;
+  QTimer *timerSyncData;
 
   static void saveData(QTreeWidget *, int);
   static void readData(QTreeWidget *);
@@ -241,7 +241,7 @@ class MainWindow : public QMainWindow {
 
   static void saveTab();
   bool isSlide = false;
-  void init_TabData();
+  void init_TotalData();
   void set_Time();
   void add_Data(QTreeWidget *, QString, QString, QString);
   void del_Data(QTreeWidget *);
@@ -383,6 +383,10 @@ class MainWindow : public QMainWindow {
   QString getText2(int index);
   void gotoMainItem(QTreeWidgetItem *item);
   void startInitReport();
+
+  void startSyncData();
+  void removeFilesWatch();
+  void addFilesWatch();
  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
@@ -411,7 +415,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnCancelSel_clicked();
 
-  void on_timerShowFloatFun();
+  void on_timerSyncData();
   void timerUpdate();
 
   void on_actionRename_triggered();
@@ -587,6 +591,9 @@ class MainWindow : public QMainWindow {
   void on_btnOut2Img_clicked();
 
   void on_btnCategory_clicked();
+
+ private slots:
+  void on_btnSync_clicked();
 
  private:
   bool isAndroidKeyShow = false;

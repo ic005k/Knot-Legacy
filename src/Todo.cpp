@@ -63,6 +63,8 @@ void dlgTodo::keyReleaseEvent(QKeyEvent* event) {
 }
 
 void dlgTodo::saveTodo() {
+  mw_one->removeFilesWatch();
+
   highCount = 0;
   QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -89,15 +91,18 @@ void dlgTodo::saveTodo() {
     Reg.setValue("/Todo/ItemRecycle" + QString::number(i), str);
     Reg.setValue("/Todo/ItemRecycleDoneTime" + QString::number(i), doneTime);
   }
+
+  mw_one->addFilesWatch();
 }
 
-void dlgTodo::init_Items() {
+void dlgTodo::init_Todo() {
   QString ini_file;
   if (isImport) {
     ini_file = iniFile;
-    clearAll();
+
   } else
     ini_file = iniDir + "todo.ini";
+  clearAll();
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");

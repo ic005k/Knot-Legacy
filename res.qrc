@@ -78,5 +78,7 @@
         <file>res/sright.png</file>
         <file>res/pdf.png</file>
         <file>res/icon.ico</file>
+        <file>res/sync0.png</file>
+        <file>res/sync1.png</file>
     </qresource>
 </RCC>

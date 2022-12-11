@@ -49,7 +49,10 @@ void FileSystemWatcher::removeWatchPath(QString path) {
 
 // 只要任何监控的目录更新（添加、删除、重命名），就会调用。
 void FileSystemWatcher::directoryUpdated(const QString& path) {
-  qDebug() << QString("Directory updated: %1").arg(path);
+  qDebug() << QString("Directory updated...... %1").arg(path);
+
+  if (!mw_one->timerSyncData->isActive() && !mw_one->initMain)
+    mw_one->startSyncData();
 
   // 比较最新的内容和保存的内容找出区别(变化)
   QStringList currEntryList = m_currentContentsMap[path];

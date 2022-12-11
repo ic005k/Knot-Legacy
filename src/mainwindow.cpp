@@ -231,7 +231,8 @@ MainWindow::MainWindow(QWidget *parent)
   init_ChartWidget();
   init_Options();
   init_Sensors();
-  init_TabData();
+  init_TotalData();
+  mydlgReader->initReader();
   loading = false;
 
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
@@ -241,10 +242,10 @@ MainWindow::MainWindow(QWidget *parent)
 
   initHardStepSensor();
 
-  initMain = false;
   reloadMain();
   resetWinPos();
-  FileSystemWatcher::addWatchPath(iniDir);
+  initMain = false;
+  addFilesWatch();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -658,7 +659,7 @@ void MainWindow::slotPointHoverd(const QPointF &point, bool state) {
     m_valueLabel->hide();
 }
 
-void MainWindow::init_TabData() {
+void MainWindow::init_TotalData() {
   ui->progBar->setHidden(false);
   ui->progBar->setMaximum(0);
 
@@ -708,10 +709,9 @@ void MainWindow::init_TabData() {
   }
 
   mydlgMainNotes->init_MainNotes();
-  mydlgTodo->init_Items();
+  mydlgTodo->init_Todo();
   myEditRecord->init_Desc();
   mydlgSteps->init_Steps();
-  if (!isImport) mydlgReader->initReader();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
@@ -744,12 +744,22 @@ void MainWindow::timerUpdate() {
   }
 }
 
-void MainWindow::on_timerShowFloatFun() {
-  delete mw_one->mydlgFloatFun;
-  mydlgFloatFun = new dlgFloatFun(this);
-  mydlgFloatFun->init();
-  timerShowFloatFun->stop();
+void MainWindow::on_timerSyncData() {
+  qDebug() << ".......Sync.......";
+  timerSyncData->stop();
+  on_btnSync_clicked();
 }
+
+void MainWindow::startSyncData() {
+  if (initMain) return;
+  timerSyncData->start(10000);
+}
+
+void MainWindow::removeFilesWatch() {
+  FileSystemWatcher::removeWatchPath(iniDir);
+}
+
+void MainWindow::addFilesWatch() { FileSystemWatcher::addWatchPath(iniDir); }
 
 MainWindow::~MainWindow() {
   delete ui;
@@ -2637,7 +2647,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     TextEditToFile(txtEdit, iniFile);
     isImport = true;
     loading = true;
-    init_TabData();
+    init_TotalData();
     loading = false;
 
     while (!isReadTWEnd)
@@ -3826,9 +3836,8 @@ void MainWindow::init_UIWidget() {
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
   timerStep = new QTimer(this);
   connect(timerStep, SIGNAL(timeout()), this, SLOT(updateHardSensorSteps()));
-  timerShowFloatFun = new QTimer(this);
-  connect(timerShowFloatFun, SIGNAL(timeout()), this,
-          SLOT(on_timerShowFloatFun()));
+  timerSyncData = new QTimer(this);
+  connect(timerSyncData, SIGNAL(timeout()), this, SLOT(on_timerSyncData()));
   timerMousePress = new QTimer(this);
   connect(timerMousePress, SIGNAL(timeout()), this, SLOT(on_timerMousePress()));
 
@@ -4490,7 +4499,7 @@ void MainWindow::readEBookDone() {
     this->repaint();
 
     if (isText || isEpub) {
-      qDebug() << "Read EBook End Text or Epub... ...";
+      qDebug() << "Read  Text or Epub End... ...";
       ui->qwPdf->hide();
       ui->qwReader->show();
       ui->frameReaderFun->show();
@@ -5274,4 +5283,10 @@ void MainWindow::on_btnOut2Img_clicked() {
 
 void MainWindow::on_btnCategory_clicked() {
   mydlgReport->on_btnCategory_clicked();
+}
+
+void MainWindow::on_btnSync_clicked() {
+  loading = true;
+  init_TotalData();
+  loading = false;
 }
