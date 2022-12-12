@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.55";
+QString ver = "1.0.56";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -1476,6 +1476,12 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
   if (!ui->frameTodo->isHidden()) {
     on_btnBackTodo_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (!ui->frameRecycle->isHidden()) {
+    on_btnReturnRecycle_clicked();
     event->ignore();
     return;
   }

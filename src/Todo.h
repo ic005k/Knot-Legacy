@@ -114,7 +114,7 @@ class dlgTodo : public QDialog {
 
  private:
   QListWidgetItem *editItem;
-
+  bool isSave = false;
   QString todotxt;
   QLabel *lblModi;
   QTextEdit *editModi;
