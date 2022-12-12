@@ -282,9 +282,11 @@ void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
 }
 
 bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
+#ifdef Q_OS_ANDROID
   if (obj == ui->editSource->viewport()) {
     getEditPanel(ui->editSource, evn);
   }
+#endif
 
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
@@ -1005,4 +1007,9 @@ bool dlgMainNotes::androidCopyFile(QString src, QString des) {
 #endif
   qDebug() << "copyFile " << src << des;
   return result;
+}
+
+void dlgMainNotes::closeEvent(QCloseEvent* event) {
+  Q_UNUSED(event);
+  on_btnDone_clicked();
 }

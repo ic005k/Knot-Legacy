@@ -2080,9 +2080,11 @@ void MainWindow::on_btnRemarks_clicked() {
 bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
 
+#ifdef Q_OS_ANDROID
   if (watch == ui->textEdit->viewport()) {
     mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
   }
+#endif
 
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);  //将之转换为鼠标事件
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
@@ -3834,7 +3836,6 @@ void MainWindow::init_UIWidget() {
   mydlgReport = new dlgReport(this);
   mydlgPre = new dlgPreferences(this);
   mydlgMainNotes = new dlgMainNotes(this);
-  mydlgMainNotes->close();
   mydlgSteps = new dlgSteps(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);

@@ -88,7 +88,8 @@ class dlgMainNotes : public QDialog {
   bool eventFilter(QObject *obj, QEvent *event) override;
   void paintEvent(QPaintEvent *pEvent) override;
 
- private slots:
+  void closeEvent(QCloseEvent *event) override;
+ public slots:
 
   void timerSlot();
 
