@@ -21,6 +21,7 @@ class dlgTodo : public QDialog {
   Ui::dlgTodo *ui;
   ~dlgTodo();
 
+  bool isSave = false;
   bool isToday = false;
   QStringList tableLists;
   void init_Todo();
@@ -114,7 +115,7 @@ class dlgTodo : public QDialog {
 
  private:
   QListWidgetItem *editItem;
-  bool isSave = false;
+
   QString todotxt;
   QLabel *lblModi;
   QTextEdit *editModi;

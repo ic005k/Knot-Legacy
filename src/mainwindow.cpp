@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.56";
+QString ver = "1.0.57";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -2974,6 +2974,7 @@ void MainWindow::on_btnTodo_clicked() {
   ui->frameTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                              this->width(), this->height());
   ui->frameTodo->show();
+  mydlgTodo->init_Todo();
 
   mydlgTodo->refreshAlarm();
 }
