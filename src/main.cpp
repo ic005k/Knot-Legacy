@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
 #endif
 
   QDir dir0;
-  bool ismd = dir0.mkpath(iniDir);
+  dir0.mkpath(iniDir);
 
   QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -112,16 +112,6 @@ int main(int argc, char* argv[]) {
   font.setPointSize(fontSize);
   app.setFont(font);
   loadLocal();
-
-  if (!ismd) {
-    QMessageBox box;
-    if (zh_cn)
-      box.setText("请开启APP的存储权限。");
-    else
-      box.setText("Please turn on the storage permission of the app.");
-    box.exec();
-    qApp->exit();
-  }
 
   MainWindow w;
   w.show();

@@ -25,15 +25,8 @@ apply plugin: 'com.android.application'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile "com.android.support:support-v4:23.0.+"
+    compile 'com.android.support:appcompat-v7:24.2.1'
 }
-
-dependencies {
-    //compile fileTree(dir: 'libs', include: ['*.jar'])
-    //compile "com.android.support:support-v4:23.0.+"
-    //compile "com.android.support:support-v7:28.0.+"
-   }
-
-
 
 android {
     /*******************************************************
@@ -50,8 +43,11 @@ android {
      *******************************************************/
 
     compileSdkVersion androidCompileSdkVersion.toInteger()
-
     buildToolsVersion '28.0.3'
+
+    //compileSdkVersion 25
+    //buildToolsVersion "25.0.1"
+
 
     sourceSets {
         main {

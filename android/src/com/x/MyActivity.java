@@ -105,15 +105,18 @@ import android.widget.LinearLayout;
 import android.webkit.WebView;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebViewClient;
-import 	android.webkit.WebSettings;
+import android.webkit.WebSettings;
 import android.view.ActionMode;
-import 	android.view.MotionEvent;
+import android.view.MotionEvent;
 import android.view.ContextMenu;
 import android.util.AttributeSet;
 
 import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PackageInfo;
+
+import android.support.v4.app.ActivityCompat;
+import android.content.pm.PackageManager;
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
@@ -198,8 +201,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
 
-        if(isStepCounter==1)
-        {
+        if (isStepCounter == 1) {
             CallJavaNotify_2();
         }
 
@@ -446,6 +448,9 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //在onCreate方法这里调用来动态获取权限
+        verifyStoragePermissions(this);
 
         if (m_instance != null) {
             Log.d(TAG, "App is already running... this won't work");
@@ -716,6 +721,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                     isBottom = false;
                     isTop = false;
                 }
+
                 @JavascriptInterface
                 public void top() {
                     Log.e("msg+++++++", "到了顶端");
@@ -734,6 +740,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         public ActionMode startActionMode(ActionMode.Callback callback) {
             return super.startActionMode(callback);
         }
+
         //加载本地的pdf
         public void loadLocalPDF(String path) {
             loadUrl(PDFJS + "file://" + path);
@@ -1136,6 +1143,28 @@ This method can parse out the real local file path from a file URI.
         }
 
         Log.i(TAG, "过程完成...");
+    }
+
+    //==============================================================================================
+    //动态获取权限需要添加的常量
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE"};
+
+    //被调用的方法
+    public static void verifyStoragePermissions(Activity activity) {
+        try {
+            //检测是否有写的权限
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    "android.permission.WRITE_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // 没有写的权限，去申请写的权限，会弹出对话框
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
