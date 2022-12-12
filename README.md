@@ -17,11 +17,6 @@ QR code for downloading:
 
 ![QR code for downloading](https://github.com/ic005k/Knot/blob/main/res/apk.png)
 
-Screen capture:
-
-![Screen capture](https://github.com/ic005k/Knot/blob/main/src/demo.png)
-
-
 ### Credits
 
 * [Pedometer](https://github.com/vikasy/Pedometer)
