@@ -186,6 +186,9 @@ void dlgMainNotes::MD2Html(QString mdFile) {
 }
 
 void dlgMainNotes::saveMainNotes() {
+  mw_one->removeFilesWatch();
+  mw_one->isSelf = true;
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");

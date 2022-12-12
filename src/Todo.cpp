@@ -64,6 +64,7 @@ void dlgTodo::keyReleaseEvent(QKeyEvent* event) {
 
 void dlgTodo::saveTodo() {
   mw_one->removeFilesWatch();
+  mw_one->isSelf = true;
 
   highCount = 0;
   QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
@@ -91,8 +92,6 @@ void dlgTodo::saveTodo() {
     Reg.setValue("/Todo/ItemRecycle" + QString::number(i), str);
     Reg.setValue("/Todo/ItemRecycleDoneTime" + QString::number(i), doneTime);
   }
-
-  mw_one->addFilesWatch();
 }
 
 void dlgTodo::init_Todo() {

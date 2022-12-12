@@ -756,10 +756,14 @@ void MainWindow::startSyncData() {
 }
 
 void MainWindow::removeFilesWatch() {
-  FileSystemWatcher::removeWatchPath(iniDir);
+  FileSystemWatcher::removeWatchPath(iniDir + "todo.ini");
+  FileSystemWatcher::removeWatchPath(iniDir + "notes.ini");
 }
 
-void MainWindow::addFilesWatch() { FileSystemWatcher::addWatchPath(iniDir); }
+void MainWindow::addFilesWatch() {
+  FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
+  FileSystemWatcher::addWatchPath(iniDir + "notes.ini");
+}
 
 MainWindow::~MainWindow() {
   delete ui;

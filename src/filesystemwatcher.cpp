@@ -51,9 +51,6 @@ void FileSystemWatcher::removeWatchPath(QString path) {
 void FileSystemWatcher::directoryUpdated(const QString& path) {
   qDebug() << QString("Directory updated...... %1").arg(path);
 
-  if (!mw_one->timerSyncData->isActive() && !mw_one->initMain)
-    mw_one->startSyncData();
-
   // 比较最新的内容和保存的内容找出区别(变化)
   QStringList currEntryList = m_currentContentsMap[path];
   const QDir dir(path);
@@ -128,5 +125,13 @@ void FileSystemWatcher::directoryUpdated(const QString& path) {
 
 // 文件修改时调用
 void FileSystemWatcher::fileUpdated(const QString& path) {
-  qDebug() << QString("The file %1 at path %2 is updated").arg(path);
+  qDebug() << QString("The file %1 at path %2 is updated......").arg(path);
+  if (!mw_one->isSelf) {
+    if (path.contains("todo")) mw_one->mydlgTodo->init_Todo();
+    if (path.contains("notes")) mw_one->mydlgMainNotes->init_MainNotes();
+
+  } else {
+    mw_one->isSelf = false;
+    mw_one->addFilesWatch();
+  }
 }

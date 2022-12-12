@@ -195,6 +195,29 @@ void dlgPreferences::initValues() {
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   ui->chkDebug->setChecked(debugmode);
   on_chkDebug_clicked();
+  if (debugmode) {
+    mw_one->ui->frame_charts->hide();
+    mw_one->ui->frame_tab->hide();
+    mw_one->ui->frame_find->hide();
+    mw_one->ui->btnSteps->hide();
+    mw_one->ui->btnMax->hide();
+    mw_one->ui->btnReader->hide();
+    mw_one->ui->btnAdd->hide();
+    mw_one->ui->btnDel->hide();
+    mw_one->ui->btnSync->hide();
+    mw_one->ui->btnFind->hide();
+    mw_one->ui->btnRemarks->hide();
+    mw_one->ui->btnReport->hide();
+    mw_one->ui->frameMenu->hide();
+
+    int s = 100;
+    mw_one->ui->btnTodo->setFixedHeight(s);
+    mw_one->ui->btnTodo->setFixedWidth(s);
+    mw_one->ui->btnTodo->setIconSize(QSize(s - 20, s - 20));
+    mw_one->ui->btnMemos->setFixedHeight(s);
+    mw_one->ui->btnMemos->setFixedWidth(s);
+    mw_one->ui->btnMemos->setIconSize(QSize(s - 20, s - 20));
+  }
 
   QString strf = Reg.value("/Options/CustomFont").toString();
   setFontDemo(strf);

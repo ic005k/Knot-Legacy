@@ -131,6 +131,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  bool isSelf = false;
   bool isPdfNewMothod = false;
   int days = 45;
   int newHeight;
