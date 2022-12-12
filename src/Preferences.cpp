@@ -195,7 +195,9 @@ void dlgPreferences::initValues() {
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   ui->chkDebug->setChecked(debugmode);
   on_chkDebug_clicked();
-  if (debugmode) {
+#ifdef Q_OS_ANDROID
+#else
+  if (!debugmode) {
     mw_one->ui->frame_charts->hide();
     mw_one->ui->frame_tab->hide();
     mw_one->ui->frame_find->hide();
@@ -208,7 +210,9 @@ void dlgPreferences::initValues() {
     mw_one->ui->btnFind->hide();
     mw_one->ui->btnRemarks->hide();
     mw_one->ui->btnReport->hide();
-    mw_one->ui->frameMenu->hide();
+
+    ui->chkAutoTime->hide();
+    ui->chkReaderFont->hide();
 
     int s = 100;
     mw_one->ui->btnTodo->setFixedHeight(s);
@@ -218,6 +222,7 @@ void dlgPreferences::initValues() {
     mw_one->ui->btnMemos->setFixedWidth(s);
     mw_one->ui->btnMemos->setIconSize(QSize(s - 20, s - 20));
   }
+#endif
 
   QString strf = Reg.value("/Options/CustomFont").toString();
   setFontDemo(strf);

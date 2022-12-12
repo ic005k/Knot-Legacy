@@ -63,7 +63,6 @@ void dlgTodo::keyReleaseEvent(QKeyEvent* event) {
 }
 
 void dlgTodo::saveTodo() {
-  mw_one->removeFilesWatch();
   mw_one->isSelf = true;
 
   highCount = 0;

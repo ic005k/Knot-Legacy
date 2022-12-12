@@ -757,12 +757,14 @@ void MainWindow::startSyncData() {
 
 void MainWindow::removeFilesWatch() {
   FileSystemWatcher::removeWatchPath(iniDir + "todo.ini");
-  FileSystemWatcher::removeWatchPath(iniDir + "notes.ini");
+  FileSystemWatcher::removeWatchPath(iniDir + "mainnotes.ini");
+  qDebug() << "remove file watch......";
 }
 
 void MainWindow::addFilesWatch() {
   FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
-  FileSystemWatcher::addWatchPath(iniDir + "notes.ini");
+  FileSystemWatcher::addWatchPath(iniDir + "mainnotes.ini");
+  qDebug() << "add file watch......" << isSelf;
 }
 
 MainWindow::~MainWindow() {
@@ -1468,12 +1470,22 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
   bool isClose = false;
 
-#ifdef Q_OS_WIN
+#ifdef Q_OS_ANDROID
+#else
   isClose = true;
-#endif
 
-#ifdef Q_OS_MAC
-  isClose = true;
+  if (!ui->frameTodo->isHidden()) {
+    on_btnBackTodo_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (!ui->frameMemo->isHidden()) {
+    on_btnBackMemo_clicked();
+    event->ignore();
+    return;
+  }
+
 #endif
 
   if (isClose) {
@@ -4275,12 +4287,24 @@ void MainWindow::on_actionTimeMachine() {
 }
 
 void MainWindow::on_btnMenu_clicked() {
+#ifdef Q_OS_ANDROID
   QMenu *mainMenu = new QMenu(this);
   init_Menu(mainMenu);
   int x = mw_one->geometry().x() + 2;
   int y = geometry().y() + ui->frameMenu->height() + 2;
   QPoint pos(x, y);
   mainMenu->exec(pos);
+#else
+  if (mydlgPre->ui->chkDebug->isChecked()) {
+    QMenu *mainMenu = new QMenu(this);
+    init_Menu(mainMenu);
+    int x = mw_one->geometry().x() + 2;
+    int y = geometry().y() + ui->frameMenu->height() + 2;
+    QPoint pos(x, y);
+    mainMenu->exec(pos);
+  } else
+    on_actionPreferences_triggered();
+#endif
 }
 
 void MainWindow::on_btnZoom_clicked() {

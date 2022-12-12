@@ -128,7 +128,10 @@ void FileSystemWatcher::fileUpdated(const QString& path) {
   qDebug() << QString("The file %1 at path %2 is updated......").arg(path);
   if (!mw_one->isSelf) {
     if (path.contains("todo")) mw_one->mydlgTodo->init_Todo();
-    if (path.contains("notes")) mw_one->mydlgMainNotes->init_MainNotes();
+    if (path.contains("mainnotes")) {
+      mw_one->mydlgMainNotes->init_MainNotes();
+      mw_one->m_NotesList->initNotesList();
+    }
 
   } else {
     mw_one->isSelf = false;
