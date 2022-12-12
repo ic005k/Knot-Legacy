@@ -3774,6 +3774,7 @@ void MainWindow::init_UIWidget() {
   ui->frameDebug->hide();
   ui->frameReport->hide();
   ui->qwPdf->hide();
+  ui->btnSync->hide();
 
   ui->textEdit->setContentsMargins(12, 0, 12, 0);
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
