@@ -18,8 +18,8 @@ bool isrbFreq = true;
 bool isImport, isEBook, isReport;
 
 QString appName = "Knot";
-QString iniFile, iniDir, strDate, readDate, noteText, strStats, SaveType, strY,
-    strM, btnYText, btnMText, btnDText, CurrentYearMonth;
+QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
+    SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -468,7 +468,7 @@ void MainWindow::sendMsg(int CurTableCount) {
 }
 
 void MainWindow::init_Options() {
-  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif

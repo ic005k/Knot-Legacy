@@ -5,7 +5,7 @@
 #include "mainwindow.h"
 #include "ui_Preferences.h"
 #include "ui_mainwindow.h"
-extern QString iniFile, iniDir, hsStyle, fontname;
+extern QString iniFile, iniDir, privateDir, hsStyle, fontname;
 extern MainWindow* mw_one;
 extern bool isBreak;
 extern int fontSize;
@@ -69,7 +69,7 @@ void dlgPreferences::on_btnBack_clicked() {
 }
 
 void dlgPreferences::saveOptions() {
-  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -116,7 +116,7 @@ void dlgPreferences::on_btnCustomFont_clicked() {
 
   setFontDemo(fileName);
   isFontChange = true;
-  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -178,7 +178,7 @@ void dlgPreferences::on_sliderFontSize_valueChanged(int value) {
 }
 
 void dlgPreferences::initValues() {
-  QSettings Reg(iniDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
