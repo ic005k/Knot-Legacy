@@ -57,8 +57,6 @@ jobs:
           
       - name: install linuxdeployqt 
         run: |
-          cp -r qml bin/release/qml
-           
           wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
           chmod a+x linuxdeployqt-continuous-x86_64.AppImage            
           
@@ -68,7 +66,7 @@ jobs:
          cp res/icon.png bin/release/icon.png
          cp res/default.desktop bin/release/default.desktop
          
-         
+         #cp -r qml bin/release/qml
          #export QML2_IMPORT_PATH=qml
          #export QML2_IMPORT_PATH=$QTDIR/qml
                   
@@ -78,7 +76,7 @@ jobs:
          #chmod +x bin/release/devDatabase/linux/ocpasswordgen
          
          export VERSION # linuxdeployqt uses this for naming the file
-         ./linuxdeployqt-continuous-x86_64.AppImage bin/release/${targetName} -unsupported-allow-new-glibc -appimage
+         ./linuxdeployqt-continuous-x86_64.AppImage bin/release/${targetName} -unsupported-allow-new-glibc -appimage -extra-plugins=qml
          #chmod +x ${{ env.targetName }}-${{ env.VERSION }}-x86_64.AppImage
          
          
