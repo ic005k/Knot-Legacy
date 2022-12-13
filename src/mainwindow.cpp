@@ -2565,7 +2565,7 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
   }
 }
 
-void MainWindow::bakData(QString fileName, bool msgbox) {
+QString MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
     bakIniData("", false);
 
@@ -2610,6 +2610,8 @@ void MainWindow::bakData(QString fileName, bool msgbox) {
       btnOk->setFocus();
       msgBox.exec();
     }
+
+    return infoStr;
   }
 }
 
@@ -4358,7 +4360,7 @@ static void JavaNotify_1() {
 
 static void JavaNotify_2() {
   mw_one->mydlgTodo->refreshAlarm();
-  mw_one->bakData("android", false);
+  mw_one->mydlgPre->autoBakData();
 
   qDebug() << "C++ JavaNotify_2";
 }

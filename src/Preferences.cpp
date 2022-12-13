@@ -249,3 +249,21 @@ void dlgPreferences::on_btnReStart_clicked() {
   QProcess::startDetached(qApp->applicationFilePath(), QStringList());
 #endif
 }
+
+void dlgPreferences::autoBakData() {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  int bakCount = Reg.value("/AutoBak/BakCount").toInt();
+  bakCount++;
+  Reg.setValue("/AutoBak/File" + QString::number(bakCount),
+               mw_one->bakData("android", false));
+  if (bakCount > 15) {
+    QString bakFile = Reg.value("/AutoBak/File1").toString();
+    QFile file(bakFile);
+    file.remove();
+    bakCount--;
+  }
+  Reg.setValue("/AutoBak/BakCount", bakCount);
+}

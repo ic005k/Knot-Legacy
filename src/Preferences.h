@@ -22,6 +22,7 @@ class dlgPreferences : public QDialog {
   void setFontDemo(QString customFontPath);
 
   void initValues();
+  void autoBakData();
   protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
