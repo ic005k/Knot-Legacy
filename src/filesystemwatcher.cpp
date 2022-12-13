@@ -128,6 +128,11 @@ void FileSystemWatcher::fileUpdated(const QString& path) {
   qDebug() << QString("The file %1 at path %2 is updated......").arg(path);
   if (!mw_one->isSelf) {
     if (path.contains("todo")) {
+      if (!mw_one->ui->frameRecycle->isHidden()) {
+        mw_one->mydlgTodo->isSave = false;
+        mw_one->ui->btnReturnRecycle->click();
+      }
+
       if (!mw_one->ui->frameTodo->isHidden()) {
         mw_one->mydlgTodo->isSave = false;
         mw_one->ui->btnBackTodo->click();
