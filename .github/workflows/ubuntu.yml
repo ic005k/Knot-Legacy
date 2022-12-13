@@ -66,7 +66,8 @@ jobs:
          cp res/default.desktop bin/release/default.desktop
          
          cp -r qml bin/release/qml
-         export QML2_IMPORT_PATH=/qml
+         export QML2_IMPORT_PATH=qml
+         export QML2_IMPORT_PATH=$QTDIR/qml
                   
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
