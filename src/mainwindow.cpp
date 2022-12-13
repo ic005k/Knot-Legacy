@@ -1524,7 +1524,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     event->ignore();
   }
 
-  QSettings Reg(iniDir + "winpos.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "winpos.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -1535,7 +1535,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::resetWinPos() {
-  QSettings Reg(iniDir + "winpos.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "winpos.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
