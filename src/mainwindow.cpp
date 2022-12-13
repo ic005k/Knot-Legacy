@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.57";
+QString ver = "1.0.58";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4355,13 +4355,14 @@ static void JavaNotify_1() {
   mw_one->newDatas();
   // qDebug() << "C++ JavaNotify_1";
 }
-static void JavaNotify_2() {
-  if (!mw_one->ui->frameReader->isHidden()) mw_one->mydlgReader->saveReader();
 
+static void JavaNotify_2() {
   mw_one->mydlgTodo->refreshAlarm();
+  mw_one->bakData("android", false);
 
   qDebug() << "C++ JavaNotify_2";
 }
+
 static void JavaNotify_3() {
   mw_one->alertWindowsCount++;
 

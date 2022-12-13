@@ -68,8 +68,9 @@ int main(int argc, char* argv[]) {
   isAndroid = true;
   isIOS = false;
 
-  privateDir = path + "/";
+  // privateDir = path + "/";
   iniDir = "/storage/emulated/0/KnotData/";
+  privateDir = "/storage/emulated/0/.Knot/";
 
 #else
   isAndroid = false;
