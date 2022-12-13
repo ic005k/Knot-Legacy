@@ -256,14 +256,23 @@ void dlgPreferences::autoBakData() {
   Reg.setIniCodec("utf-8");
 #endif
   int bakCount = Reg.value("/AutoBak/BakCount").toInt();
+  if (bakCount > 100000) {
+    bakCount = 0;
+    Reg.setValue("/AutoBak/BakCount", 0);
+    Reg.setValue("/AutoBak/NextDel", 0);
+  }
+  int nextDel = Reg.value("/AutoBak/NextDel").toInt();
   bakCount++;
   Reg.setValue("/AutoBak/File" + QString::number(bakCount),
                mw_one->bakData("android", false));
-  if (bakCount > 15) {
-    QString bakFile = Reg.value("/AutoBak/File1").toString();
+  if (bakCount - nextDel > 15) {
+    nextDel++;
+    QString bakFile =
+        Reg.value("/AutoBak/File" + QString::number(nextDel)).toString();
     QFile file(bakFile);
-    file.remove();
-    bakCount--;
+    file.remove(bakFile);
+    Reg.remove("/AutoBak/File" + QString::number(nextDel));
+    Reg.setValue("/AutoBak/NextDel", nextDel);
   }
   Reg.setValue("/AutoBak/BakCount", bakCount);
 }
