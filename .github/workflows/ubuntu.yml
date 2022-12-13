@@ -76,7 +76,7 @@ jobs:
          #chmod +x bin/release/devDatabase/linux/ocpasswordgen
          
          export VERSION # linuxdeployqt uses this for naming the file
-         ./linuxdeployqt-continuous-x86_64.AppImage bin/release/${targetName} -unsupported-allow-new-glibc -appimage -extra-plugins=qml
+         ./linuxdeployqt-continuous-x86_64.AppImage bin/release/${targetName} -unsupported-allow-new-glibc -appimage -extra-plugins=qmltooling
          #chmod +x ${{ env.targetName }}-${{ env.VERSION }}-x86_64.AppImage
          
          
