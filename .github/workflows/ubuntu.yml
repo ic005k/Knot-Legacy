@@ -37,7 +37,7 @@ jobs:
         uses: jurplel/install-qt-action@v2.13.0
         with:
           version: ${{ matrix.qt_ver }}
-          host: linux
+          host: .
           cached: 'false'
           modules: qtcharts qtwebengine
       
