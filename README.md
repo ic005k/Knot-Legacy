@@ -23,6 +23,8 @@ QR code for downloading:
 * [android-qt-pedometer-accelerometer](https://github.com/adct-the-experimenter/android-qt-pedometer-accelerometer)
 * [QtOneDrive](https://github.com/AndreyMacritskiy/QtOneDrive)
 * [qt-pdf-viewer-library](https://github.com/develtar/qt-pdf-viewer-library)
+* [pdf.js](https://github.com/mozilla/pdf.js)
+* [syncthing](https://github.com/syncthing/syncthing)
 
 ---
 
