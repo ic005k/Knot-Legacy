@@ -64,6 +64,8 @@ jobs:
         run: |
          cp res/icon.png bin/release/icon.png
          cp res/default.desktop bin/release/default.desktop
+         
+         cp -r qml bin/release/qml
                   
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
