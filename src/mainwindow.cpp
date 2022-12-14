@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.61";
+QString ver = "1.0.62";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -763,7 +763,7 @@ void MainWindow::removeFilesWatch() {
 void MainWindow::addFilesWatch() {
   FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
   FileSystemWatcher::addWatchPath(iniDir + "mainnotes.ini");
-  qDebug() << "add file watch......" << isSelf;
+  qDebug() << "add file watch...... isSelf=" << isSelf;
 }
 
 MainWindow::~MainWindow() {
@@ -2979,6 +2979,9 @@ void MainWindow::on_btnTodo_clicked() {
   mydlgTodo->init_Todo();
 
   mydlgTodo->refreshAlarm();
+
+  mw_one->removeFilesWatch();
+  mw_one->addFilesWatch();
 }
 
 void MainWindow::on_rbFreq_clicked() {
@@ -3640,8 +3643,6 @@ void MainWindow::on_btnMemos_clicked() {
 
   QString strPw = Reg.value("/MainNotes/UserKey").toString();
   if (strPw != "") {
-    // showGrayWindows();
-
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
       baPw[i] = baPw[i] - 66;  //解密User的密码
@@ -3694,6 +3695,9 @@ void MainWindow::on_btnMemos_clicked() {
   }
 
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+
+  mw_one->removeFilesWatch();
+  mw_one->addFilesWatch();
 }
 
 void MainWindow::showMemos() {
@@ -4897,6 +4901,9 @@ void MainWindow::on_btnEdit_clicked() {
   QTextCursor tmpCursor = mydlgMainNotes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);
   mydlgMainNotes->ui->editSource->setTextCursor(tmpCursor);
+
+  mw_one->removeFilesWatch();
+  mw_one->addFilesWatch();
 }
 
 void MainWindow::on_btnCode_clicked() {

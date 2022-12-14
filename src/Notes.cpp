@@ -167,6 +167,7 @@ void dlgMainNotes::on_btnDone_clicked() {
     saveMainNotes();
     saveQMLVPos();
   }
+
   close();
   loadMemoQML();
   setVPos();
@@ -684,6 +685,8 @@ void dlgMainNotes::loadMemoQML() {
 }
 
 void dlgMainNotes::saveQMLVPos() {
+  mw_one->isSelf = true;
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -697,6 +700,8 @@ void dlgMainNotes::saveQMLVPos() {
 }
 
 void dlgMainNotes::setVPos() {
+  mw_one->isSelf = true;
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
