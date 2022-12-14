@@ -2,7 +2,7 @@
 Type=Application
 Name=Knot
 Exec=Knot
-Icon=icon
+Icon=res/icon
 Comment=Knot
 Categories=Application;
 Terminal=true
