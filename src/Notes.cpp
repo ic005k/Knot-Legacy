@@ -569,7 +569,13 @@ void dlgMainNotes::zipMemo() {
 void dlgMainNotes::unzip(QString zipfile) {
   mw_one->mydlgReader->deleteDirfile(iniDir + "memo");
   QDir::setCurrent(iniDir);
-#ifdef Q_OS_MACOS || Q_OS_LINUX
+#ifdef Q_OS_MACOS
+  QProcess* pro = new QProcess;
+  pro->execute("unzip", QStringList() << "-o" << zipfile << "-d" << iniDir);
+  pro->waitForFinished();
+#endif
+
+#ifdef Q_OS_LINUX
   QProcess* pro = new QProcess;
   pro->execute("unzip", QStringList() << "-o" << zipfile << "-d" << iniDir);
   pro->waitForFinished();
