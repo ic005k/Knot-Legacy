@@ -26,6 +26,7 @@ class AutoUpdateDialog : public QDialog {
   ~AutoUpdateDialog();
   Ui::AutoUpdateDialog* ui;
 
+  QString strLinuxTargetFile;
   QString tempDir;
   QString filename;
   QNetworkAccessManager* manager;
