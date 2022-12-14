@@ -4,7 +4,7 @@
 #include "ui_autoupdatedialog.h"
 
 extern MainWindow* mw_one;
-extern QString iniDir;
+extern QString iniDir, privateDir;
 
 AutoUpdateDialog::AutoUpdateDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::AutoUpdateDialog) {
@@ -92,8 +92,6 @@ void AutoUpdateDialog::doProcessDownloadProgress(qint64 recv_total,
   }
 }
 
-void AutoUpdateDialog::startUpdate() {}
-
 void AutoUpdateDialog::startDownload(QString strLink) {
   isCancel = false;
 
@@ -136,6 +134,83 @@ void AutoUpdateDialog::startDownload(QString strLink) {
   }
   ui->progressBar->setValue(0);
   ui->progressBar->setMinimum(0);
+}
+
+void AutoUpdateDialog::startUpdate() {
+  QString strZip, strPath, strExec;
+  QFileInfo appInfo(qApp->applicationDirPath());
+  strZip = privateDir + filename;
+
+  QDir dir;
+  dir.setCurrent(privateDir);
+
+  qApp->exit();
+
+#ifdef Q_OS_MAC
+
+  QString fileName = tempDir + "up.sh";
+  QTextEdit* txtEdit = new QTextEdit();
+  QString strTarget = appInfo.path().replace("Contents", "");
+  strTarget = strTarget + ".";
+  strTarget = "\"" + strTarget + "\"";
+
+  txtEdit->append("hdiutil mount -mountpoint /Volumes/Knot " + strZip);
+  txtEdit->append(
+      "cp -R -p -f "
+      "/Volumes/Knot/Knot.app/. " +
+      strTarget);
+
+  txtEdit->append("hdiutil eject /Volumes/Knot");
+
+  strPath = appInfo.path().replace("Contents", "");
+  strExec = strPath.mid(0, strPath.length() - 1);
+  strExec = "\"" + strExec + "\"";
+  txtEdit->append("open " + strExec);
+
+  TextEditToFile(txtEdit, fileName);
+
+  QProcess::startDetached("bash", QStringList() << fileName);
+
+#endif
+
+#ifdef Q_OS_WIN
+  QString strUnzip;
+  QString fileName = privateDir + "up.bat";
+  strPath = appInfo.filePath();
+
+  QTextEdit* txtEdit = new QTextEdit();
+  strUnzip = strPath + "/unzip.exe";
+  strUnzip = "\"" + strUnzip + "\"";
+  strZip = "\"" + strZip + "\"";
+  strPath = "\"" + strPath + "\"";
+  strExec = qApp->applicationFilePath();
+  strExec = "\"" + strExec + "\"";
+  QString strCommand1, strCommand2;
+  QString strx = "\"" + privateDir + "\"";
+  strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
+  QString stry = privateDir + QFileInfo(filename).baseName();
+  stry = "\"" + stry + "\"";
+  strCommand2 = "xcopy " + stry + " " + strPath + " /s/y";
+  txtEdit->append(strCommand1 + " && " + strCommand2 + " && " + strExec);
+
+  TextEditToFile(txtEdit, fileName);
+
+  QProcess::startDetached("cmd.exe", QStringList() << "/c" << fileName);
+#endif
+
+#ifdef Q_OS_LINUX
+  QString fileName = privateDir + "up.sh";
+  QTextEdit* txtEdit = new QTextEdit();
+  strZip = "\"" + strZip + "\"";
+  strLinuxTargetFile = "\"" + strLinuxTargetFile + "\"";
+  txtEdit->append("cp -f " + strZip + " " + strLinuxTargetFile);
+  txtEdit->append(strLinuxTargetFile);
+
+  TextEditToFile(txtEdit, fileName);
+
+  QProcess::execute("chmod", QStringList() << "+x" << fileName);
+  QProcess::startDetached("bash", QStringList() << fileName);
+#endif
 }
 
 void AutoUpdateDialog::closeEvent(QCloseEvent* event) {

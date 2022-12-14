@@ -142,17 +142,35 @@ void dlgRemarks::replyFinished(QNetworkReply* reply) {
 }
 
 QString dlgRemarks::getUrl(QVariantList list) {
-  QString androidUrl;
+  QString androidUrl, macUrl, winUrl, linuxUrl;
   for (int i = 0; i < list.count(); i++) {
     QVariantMap map = list[i].toMap();
     QString fName = map["name"].toString();
 
     if (fName.contains("android"))
       androidUrl = map["browser_download_url"].toString();
+    if (fName.contains("Mac")) macUrl = map["browser_download_url"].toString();
+    if (fName.contains("Win")) winUrl = map["browser_download_url"].toString();
+    if (fName.contains("Linux"))
+      linuxUrl = map["browser_download_url"].toString();
   }
 
   QString Url;
+#ifdef Q_OS_ANDROID
   Url = androidUrl;
+#endif
+
+#ifdef Q_OS_MAC
+  Url = macUrl;
+#endif
+
+#ifdef Q_OS_WIN
+  Url = winUrl;
+#endif
+
+#ifdef Q_OS_Linux
+  Url = linuxUrl;
+#endif
 
   return Url;
 }
