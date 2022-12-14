@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>507</width>
+    <width>518</width>
     <height>3332</height>
    </rect>
   </property>
@@ -2407,6 +2407,9 @@ QRadioButton::indicator:checked {
                 <height>25</height>
                </size>
               </property>
+              <property name="shortcut">
+               <string>Ctrl+Return</string>
+              </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>
               </property>
@@ -2584,7 +2587,7 @@ QRadioButton::indicator:checked {
           </size>
          </property>
          <property name="placeholderText">
-          <string>Enter the to-do list text</string>
+          <string>Enter the to-do list text [Ctrl+Enter]</string>
          </property>
         </widget>
        </item>
@@ -3308,8 +3311,8 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>507</width>
-     <height>24</height>
+     <width>518</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="styleSheet">
