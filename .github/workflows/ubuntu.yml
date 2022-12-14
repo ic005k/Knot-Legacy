@@ -46,10 +46,7 @@ jobs:
          sudo apt-get install -y libglew-dev libglfw3-dev libxcb*
          sudo add-apt-repository universe
          sudo apt install libfuse2
-         
-         cp /home/runner/work/Knot/ExtBin/libfcitx5platforminputcontextplugin.so /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
-         chmod 755 /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
-                   
+                                    
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
@@ -70,9 +67,9 @@ jobs:
          cp res/default.desktop bin/release/default.desktop
          
          cp -r qml bin/release/qml
-         #export QML2_IMPORT_PATH=qml
-         #export QML2_IMPORT_PATH=$QTDIR/qml
-                  
+         cp ExtBin/libfcitx5platforminputcontextplugin.so /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+         chmod 755 /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+                           
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
          #chmod +x bin/release/devDatabase/linux/ocvalidate
