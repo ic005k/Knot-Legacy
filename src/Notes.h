@@ -160,6 +160,8 @@ class dlgMainNotes : public QDialog {
  private slots:
   void on_editSource_textChanged();
 
+  void on_editSource_cursorPositionChanged();
+
  private:
   int x_left, x_right, y_left, y_right;
   int y1;

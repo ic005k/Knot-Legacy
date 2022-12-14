@@ -3809,7 +3809,7 @@ void MainWindow::init_UIWidget() {
   ui->editCode->setLineWrapMode(QTextEdit::NoWrap);
 
   ui->frameMemo->hide();
-  ui->frameMemo->setContentsMargins(1, 1, 1, 1);
+  ui->frameMemo->layout()->setContentsMargins(1, 1, 1, 1);
 
   ui->edit1->setEchoMode(QLineEdit::EchoMode::Password);
   ui->edit2->setEchoMode(QLineEdit::EchoMode::Password);

@@ -22,17 +22,18 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   m_Left = new dlgLeft(this);
   m_Right = new dlgRight(this);
 
+  connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
+          &dlgMainNotes::on_KVChanged);
+
   this->installEventFilter(this);
   ui->editSource->installEventFilter(this);
   ui->editSource->viewport()->installEventFilter(this);
   this->setModal(true);
-
-  connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
-          &dlgMainNotes::on_KVChanged);
+  this->layout()->setContentsMargins(5, 5, 5, 5);
 
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
   ui->editSource->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  // ui->editSource->setTextInteractionFlags(Qt::NoTextInteraction);
+  ui->editSource->setContentsMargins(15, 15, 15, 15);
   QPalette pt = palette();
   pt.setBrush(QPalette::Text, Qt::black);
   pt.setBrush(QPalette::Base, QColor(255, 255, 255));
@@ -1025,3 +1026,5 @@ void dlgMainNotes::closeEvent(QCloseEvent* event) {
 }
 
 void dlgMainNotes::on_editSource_textChanged() { isSave = true; }
+
+void dlgMainNotes::on_editSource_cursorPositionChanged() { isSave = true; }
