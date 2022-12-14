@@ -139,8 +139,21 @@ void FileSystemWatcher::fileUpdated(const QString& path) {
       }
     }
     if (path.contains("mainnotes")) {
-      mw_one->mydlgMainNotes->init_MainNotes();
-      mw_one->m_NotesList->initNotesList();
+      if (!mw_one->m_NotesList->isHidden()) {
+        mw_one->m_NotesList->isSave = false;
+        mw_one->m_NotesList->close();
+        mw_one->m_NotesList->isSave = true;
+      }
+      if (!mw_one->mydlgMainNotes->isHidden()) {
+        mw_one->mydlgMainNotes->isSave = false;
+        mw_one->mydlgMainNotes->on_btnDone_clicked();
+        mw_one->mydlgMainNotes->isSave = true;
+      }
+      if (!mw_one->ui->frameMemo->isHidden()) {
+        mw_one->mydlgMainNotes->isSave = false;
+        mw_one->on_btnBackMemo_clicked();
+        mw_one->mydlgMainNotes->isSave = true;
+      }
     }
 
   } else {

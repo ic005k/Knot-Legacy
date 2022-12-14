@@ -80,5 +80,9 @@
         <file>res/icon.ico</file>
         <file>res/sync0.png</file>
         <file>res/sync1.png</file>
+        <file>tr/qt_zh_CN.qm</file>
+        <file>tr/qt_zh_CN.ts</file>
+        <file>tr/widgets_zh_cn.qm</file>
+        <file>tr/widgets_zh_cn.ts</file>
     </qresource>
 </RCC>

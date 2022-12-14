@@ -471,8 +471,6 @@ class MainWindow : public QMainWindow {
 
   void on_rbSteps_clicked();
 
-  void on_actionMemos_triggered();
-
   void on_btnSelTab_clicked();
 
   void on_btnMenu_clicked();

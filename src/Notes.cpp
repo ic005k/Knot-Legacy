@@ -40,7 +40,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   pt.setBrush(QPalette::HighlightedText, Qt::white);
   ui->editSource->setPalette(pt);
   ui->editSource->setStyleSheet("border:none");
-  QFontMetrics fm(this->font());
   ui->editSource->setCursorWidth(2);
 
   QFont f = this->font();
@@ -164,8 +163,10 @@ void dlgMainNotes::on_btnDone_clicked() {
 
   mw_one->ui->frameMemo->show();
 
-  saveMainNotes();
-  saveQMLVPos();
+  if (isSave) {
+    saveMainNotes();
+    saveQMLVPos();
+  }
   close();
   loadMemoQML();
   setVPos();

@@ -708,7 +708,6 @@ void MainWindow::init_TotalData() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
-  mydlgMainNotes->init_MainNotes();
   mydlgTodo->init_Todo();
   myEditRecord->init_Desc();
   mydlgSteps->init_Steps();
@@ -2613,6 +2612,7 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
 
     return infoStr;
   }
+  return "";
 }
 
 void MainWindow::on_actionImport_Data_triggered() {
@@ -3632,7 +3632,7 @@ void MainWindow::updateHardSensorSteps() {
   sendMsg(steps);
 }
 
-void MainWindow::on_actionMemos_triggered() {
+void MainWindow::on_btnMemos_clicked() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -3692,6 +3692,8 @@ void MainWindow::on_actionMemos_triggered() {
   } else {
     showMemos();
   }
+
+  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::showMemos() {
@@ -4084,8 +4086,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   QAction *actImportData = new QAction(tr("Import Data"));
 
   QAction *actPreferences = new QAction(tr("Preferences"));
-  QAction *actMemos = new QAction(tr("Memos"));
-  actMemos->setVisible(false);
+
   QAction *actAbout = new QAction(tr("About") + " (" + ver + ")");
   QAction *actOneDrive = new QAction(tr("OneDrive Backup Data"));
 
@@ -4121,8 +4122,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
           &MainWindow::on_actionImport_Data_triggered);
   connect(actPreferences, &QAction::triggered, this,
           &MainWindow::on_actionPreferences_triggered);
-  connect(actMemos, &QAction::triggered, this,
-          &MainWindow::on_actionMemos_triggered);
 
   connect(actOneDrive, &QAction::triggered, this,
           &MainWindow::on_actionOneDriveBackupData);
@@ -4160,7 +4159,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   mainMenu->addAction(actPreferences);
 
-  mainMenu->addAction(actMemos);
   mainMenu->addAction(actOneDrive);
   mainMenu->addAction(actAbout);
 
@@ -4807,7 +4805,7 @@ void MainWindow::on_btnUserInfo_clicked() {
 }
 
 void MainWindow::on_btnBackMemo_clicked() {
-  mydlgMainNotes->saveQMLVPos();
+  if (mydlgMainNotes->isSave) mydlgMainNotes->saveQMLVPos();
 
   ui->frameMemo->hide();
   ui->frameMain->show();
@@ -4906,11 +4904,6 @@ void MainWindow::on_btnCode_clicked() {
   if (str != "" && str.contains("?code=")) {
     dialog_->sendMsg(str);
   }
-}
-
-void MainWindow::on_btnMemos_clicked() {
-  on_actionMemos_triggered();
-  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::clearSelectBox() {

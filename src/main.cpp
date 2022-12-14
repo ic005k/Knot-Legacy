@@ -140,14 +140,14 @@ void loadLocal() {
     }
 
     bool tr1 = false;
-    tr1 = translator1.load(":/qt_zh_CN.qm");
+    tr1 = translator1.load(":/tr/qt_zh_CN.qm");
     if (tr1) {
       qApp->installTranslator(&translator1);
       zh_cn = true;
     }
 
     bool tr2 = false;
-    tr2 = translator2.load(":/widgets_zh_cn.qm");
+    tr2 = translator2.load(":/tr/widgets_zh_cn.qm");
     if (tr2) {
       qApp->installTranslator(&translator2);
       zh_cn = true;

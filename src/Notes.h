@@ -35,6 +35,7 @@ class dlgMainNotes : public QDialog {
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
 
+  bool isSave = true;
   QString htmlBuffer;
   QTextEdit *byTextEdit;
   QLineEdit *byLineEdit;

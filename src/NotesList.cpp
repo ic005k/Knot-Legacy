@@ -307,8 +307,10 @@ void dlgNotesList::on_btnExport_clicked() {
 
 void dlgNotesList::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
-  saveNotesList();
-  saveRecycle();
+  if (isSave) {
+    saveNotesList();
+    saveRecycle();
+  }
 }
 
 void dlgNotesList::saveNotesList() {
