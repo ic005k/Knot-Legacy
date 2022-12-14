@@ -4904,6 +4904,7 @@ void MainWindow::on_btnEdit_clicked() {
 
   mw_one->removeFilesWatch();
   mw_one->addFilesWatch();
+  mydlgMainNotes->isSave = false;
 }
 
 void MainWindow::on_btnCode_clicked() {
@@ -5041,6 +5042,7 @@ void MainWindow::on_btnNotesList_clicked() {
   m_NotesList->setWinPos();
   m_NotesList->show();
   m_NotesList->tw->setFocus();
+  m_NotesList->isSave = false;
 }
 
 void MainWindow::on_btnBackImg_clicked() {

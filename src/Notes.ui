@@ -900,6 +900,9 @@ color: rgb(255, 255, 255);</string>
          <height>25</height>
         </size>
        </property>
+       <property name="shortcut">
+        <string>Esc</string>
+       </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextOnly</enum>
        </property>

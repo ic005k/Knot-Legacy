@@ -18,7 +18,7 @@ Item {
 
     function setVPos(vpos) {
         flickable.contentY = vpos
-        console.log(vpos)
+
     }
 
     function getVPos() {
@@ -148,9 +148,7 @@ Item {
         }
 
         Component.onCompleted: {
-            console.log(textArea.lineCount)
-            console.log(textArea.height)
-            console.log(control.position)
+
         }
     }
 

@@ -115,6 +115,7 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
   ui->treeWidget->addTopLevelItem(item);
   ui->treeWidget->setCurrentItem(item);
   on_btnNewNote_clicked();
+  isSave = true;
 }
 
 void dlgNotesList::on_btnNewNote_clicked() {
@@ -135,6 +136,8 @@ void dlgNotesList::on_btnNewNote_clicked() {
 
   ui->treeWidget->setCurrentItem(topitem->child(topitem->childCount() - 1));
   on_treeWidget_itemClicked(item1, 0);
+
+  isSave = true;
 }
 
 void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
@@ -164,6 +167,7 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
   ui->editName->setText(item->text(0));
 
   qDebug() << "currentMDFile " << currentMDFile;
+  isSave = true;
 }
 
 void dlgNotesList::on_btnRename_clicked() {
@@ -171,6 +175,8 @@ void dlgNotesList::on_btnRename_clicked() {
 
   QTreeWidgetItem* item = ui->treeWidget->currentItem();
   item->setText(0, ui->editName->text().trimmed());
+
+  isSave = true;
 }
 
 void dlgNotesList::on_btnDel_clicked() {
@@ -206,6 +212,7 @@ void dlgNotesList::on_btnDel_clicked() {
   }
 
   tw->setFocus();
+  isSave = true;
 }
 
 void dlgNotesList::addItem(QTreeWidget* tw, QTreeWidgetItem* item) {
@@ -281,6 +288,8 @@ void dlgNotesList::on_btnImport_clicked() {
 
     on_treeWidget_itemClicked(item1, 0);
   }
+
+  isSave = true;
 }
 
 void dlgNotesList::on_btnExport_clicked() {
@@ -496,6 +505,8 @@ void dlgNotesList::on_btnRestore_clicked() {
     addItem(tw, item);
     curItem->parent()->removeChild(curItem);
   }
+
+  isSave = true;
 }
 
 void dlgNotesList::on_btnDel_2_clicked() {
@@ -507,6 +518,8 @@ void dlgNotesList::on_btnDel_2_clicked() {
     delFile(md);
     curItem->parent()->removeChild(curItem);
   }
+
+  isSave = true;
 }
 
 void dlgNotesList::setWinPos() {

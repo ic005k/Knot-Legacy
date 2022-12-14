@@ -2060,6 +2060,9 @@ QRadioButton::indicator:checked {
              <height>25</height>
             </size>
            </property>
+           <property name="shortcut">
+            <string>Esc</string>
+           </property>
           </widget>
          </item>
          <item>
@@ -2330,6 +2333,9 @@ QRadioButton::indicator:checked {
                 <width>25</width>
                 <height>25</height>
                </size>
+              </property>
+              <property name="shortcut">
+               <string>Esc</string>
               </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -2660,6 +2666,9 @@ QRadioButton::indicator:checked {
            </property>
            <property name="text">
             <string>Back</string>
+           </property>
+           <property name="shortcut">
+            <string>Esc</string>
            </property>
           </widget>
          </item>
@@ -3312,7 +3321,7 @@ QRadioButton::indicator:checked {
      <x>0</x>
      <y>0</y>
      <width>518</width>
-     <height>20</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="styleSheet">

@@ -158,6 +158,9 @@
           <property name="text">
            <string>Close</string>
           </property>
+          <property name="shortcut">
+           <string>Esc</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -220,6 +223,9 @@
           </property>
           <property name="text">
            <string>Back</string>
+          </property>
+          <property name="shortcut">
+           <string>Esc</string>
           </property>
          </widget>
         </item>

@@ -5,7 +5,7 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
-extern QString iniFile, iniDir, fontname;
+extern QString iniFile, iniDir, privateDir, fontname;
 extern bool isImport, isAndroid, isIOS;
 extern int fontSize;
 extern QRegularExpression regxNumber;
@@ -687,7 +687,7 @@ void dlgMainNotes::loadMemoQML() {
 void dlgMainNotes::saveQMLVPos() {
   mw_one->isSelf = true;
 
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -700,9 +700,7 @@ void dlgMainNotes::saveQMLVPos() {
 }
 
 void dlgMainNotes::setVPos() {
-  mw_one->isSelf = true;
-
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -1025,3 +1023,5 @@ void dlgMainNotes::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   on_btnDone_clicked();
 }
+
+void dlgMainNotes::on_editSource_textChanged() { isSave = true; }

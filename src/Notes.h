@@ -157,6 +157,9 @@ class dlgMainNotes : public QDialog {
  signals:
   void sendUpdate();
 
+ private slots:
+  void on_editSource_textChanged();
+
  private:
   int x_left, x_right, y_left, y_right;
   int y1;

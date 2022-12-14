@@ -21,7 +21,7 @@ class dlgNotesList : public QDialog {
   ~dlgNotesList();
   Ui::dlgNotesList *ui;
 
-  bool isSave = true;
+  bool isSave = false;
   QTreeWidget *twrb;
   QTreeWidget *tw;
   QString currentMDFile;
