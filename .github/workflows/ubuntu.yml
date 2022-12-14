@@ -47,7 +47,7 @@ jobs:
          sudo add-apt-repository universe
          sudo apt install libfuse2
          
-         cp ExtBin/libfcitx5platforminputcontextplugin.so /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+         cp /home/runner/work/Knot/ExtBin/libfcitx5platforminputcontextplugin.so /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
          chmod 755 /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
                    
       - uses: actions/checkout@v2
