@@ -339,7 +339,7 @@ class MainWindow : public QMainWindow {
   void initTodayInitSteps();
 
   QString getYMD(QString date);
-  QString bakData(QString fileName, bool msgbox);
+  QString bakData(QString fileName, bool msgbox, bool sync);
   void setSCrollPro(QObject *obj);
 
   bool importBakData(QString fileName, bool msg, bool book, bool unre);

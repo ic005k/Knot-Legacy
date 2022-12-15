@@ -237,7 +237,7 @@ void TestDialog::on_pushButton_upload2_clicked() {
   // QFileDialog fdlg;
   QString zipfile =
       iniDir + "memo.zip";  // = fdlg.getOpenFileName(this, "Select File");
-  mw_one->bakData(zipfile, false);
+  mw_one->bakData(zipfile, false, false);
 
   if (!mw_one->showMsgBox(
           "OneDrive",

@@ -11,6 +11,7 @@
 extern bool ReLoad;
 extern MainWindow* mw_one;
 extern QVector<QString> openFileList;
+extern QString syncDir;
 
 FileSystemWatcher* FileSystemWatcher::m_pInstance = NULL;
 
@@ -127,34 +128,30 @@ void FileSystemWatcher::directoryUpdated(const QString& path) {
 void FileSystemWatcher::fileUpdated(const QString& path) {
   qDebug() << QString("The file %1 at path %2 is updated......").arg(path);
   if (!mw_one->isSelf) {
-    if (path.contains("todo")) {
-      if (!mw_one->ui->frameRecycle->isHidden()) {
-        mw_one->mydlgTodo->isSave = false;
-        mw_one->ui->btnReturnRecycle->click();
-      }
+    if (!mw_one->ui->frameRecycle->isHidden()) {
+      mw_one->mydlgTodo->isSave = false;
+      mw_one->ui->btnReturnRecycle->click();
+    }
 
-      if (!mw_one->ui->frameTodo->isHidden()) {
-        mw_one->mydlgTodo->isSave = false;
-        mw_one->ui->btnBackTodo->click();
-      }
+    if (!mw_one->ui->frameTodo->isHidden()) {
+      mw_one->mydlgTodo->isSave = false;
+      mw_one->ui->btnBackTodo->click();
     }
-    if (path.contains("mainnotes")) {
-      if (!mw_one->m_NotesList->isHidden()) {
-        mw_one->m_NotesList->isSave = false;
-        mw_one->m_NotesList->close();
-        mw_one->m_NotesList->isSave = true;
-      }
-      if (!mw_one->mydlgMainNotes->isHidden()) {
-        mw_one->mydlgMainNotes->isSave = false;
-        mw_one->mydlgMainNotes->on_btnDone_clicked();
-        mw_one->mydlgMainNotes->isSave = true;
-      }
-      if (!mw_one->ui->frameMemo->isHidden()) {
-        mw_one->mydlgMainNotes->isSave = false;
-        mw_one->on_btnBackMemo_clicked();
-        mw_one->mydlgMainNotes->isSave = true;
-      }
+
+    if (!mw_one->m_NotesList->isHidden()) {
+      mw_one->m_NotesList->isSave = false;
+      mw_one->m_NotesList->close();
     }
+    if (!mw_one->mydlgMainNotes->isHidden()) {
+      mw_one->mydlgMainNotes->isSave = false;
+      mw_one->mydlgMainNotes->on_btnDone_clicked();
+    }
+    if (!mw_one->ui->frameMemo->isHidden()) {
+      mw_one->mydlgMainNotes->isSave = false;
+      mw_one->on_btnBackMemo_clicked();
+    }
+
+    mw_one->importBakData(syncDir + "KnotSync.zip", false, false, false);
 
   } else {
     mw_one->removeFilesWatch();

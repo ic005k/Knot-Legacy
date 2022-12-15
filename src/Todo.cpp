@@ -66,7 +66,6 @@ void dlgTodo::saveTodo() {
   if (!isSave) return;
 
   mw_one->isSelf = true;
-  isSave = false;
 
   highCount = 0;
   QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);

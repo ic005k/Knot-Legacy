@@ -268,7 +268,7 @@ void dlgPreferences::autoBakData() {
   int nextDel = Reg.value("/AutoBak/NextDel").toInt();
   bakCount++;
   Reg.setValue("/AutoBak/File" + QString::number(bakCount),
-               mw_one->bakData("android", false));
+               mw_one->bakData("android", false, false));
   if (bakCount - nextDel > 15) {
     nextDel++;
     QString bakFile =

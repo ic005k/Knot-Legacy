@@ -9,7 +9,7 @@
 #include "mainwindow.h"
 #include "specialaccelerometerpedometer.h"
 
-extern QString iniFile, txtFile, appName, iniDir, privateDir, fontname;
+extern QString iniFile, txtFile, appName, iniDir, privateDir, syncDir, fontname;
 extern int fontSize;
 extern void RegJni(const char* myClassName);
 void loadLocal();
@@ -71,11 +71,13 @@ int main(int argc, char* argv[]) {
   // privateDir = path + "/";
   iniDir = "/storage/emulated/0/KnotData/";
   privateDir = "/storage/emulated/0/.Knot/";
+  syncDir = "/storage/emulated/0/KnotSync/";
 
 #else
   isAndroid = false;
   iniDir = QDir::homePath() + "/" + appName + "Data/";
   privateDir = QDir::homePath() + "/." + appName + "/";
+  syncDir = QDir::homePath() + "/" + appName + "Sync/";
 
 #endif
   iniFile = iniDir + appName + ".ini";

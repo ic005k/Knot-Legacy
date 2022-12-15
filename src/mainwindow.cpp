@@ -18,8 +18,9 @@ bool isrbFreq = true;
 bool isImport, isEBook, isReport;
 
 QString appName = "Knot";
-QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
-    SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth;
+QString iniFile, iniDir, privateDir, syncDir, strDate, readDate, noteText,
+    strStats, SaveType, strY, strM, btnYText, btnMText, btnDText,
+    CurrentYearMonth;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -755,14 +756,12 @@ void MainWindow::startSyncData() {
 }
 
 void MainWindow::removeFilesWatch() {
-  FileSystemWatcher::removeWatchPath(iniDir + "todo.ini");
-  FileSystemWatcher::removeWatchPath(iniDir + "mainnotes.ini");
+  FileSystemWatcher::removeWatchPath(syncDir + "KnotSync.zip");
   qDebug() << QTime::currentTime().toString() << "remove file watch......";
 }
 
 void MainWindow::addFilesWatch() {
-  FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
-  FileSystemWatcher::addWatchPath(iniDir + "mainnotes.ini");
+  FileSystemWatcher::addWatchPath(syncDir + "KnotSync.zip");
   isSelf = false;
   qDebug() << QTime::currentTime().toString()
            << "add file watch...... isSelf=" << isSelf;
@@ -2545,7 +2544,7 @@ void MainWindow::on_actionExport_Data_triggered() {
   fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.zip)"));
 #endif
 
-  bakData(fileName, true);
+  bakData(fileName, true, false);
 }
 
 void MainWindow::bakIniData(QString unredoFile, bool unre) {
@@ -2572,7 +2571,7 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
   }
 }
 
-QString MainWindow::bakData(QString fileName, bool msgbox) {
+QString MainWindow::bakData(QString fileName, bool msgbox, bool sync) {
   if (!fileName.isNull()) {
     bakIniData("", false);
 
@@ -2591,10 +2590,16 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
 
 #ifdef Q_OS_ANDROID
       QDir *folder = new QDir;
-      QString path = "/storage/emulated/0/KnotBak/";
-      folder->mkdir(path);
-      QString str = mydlgMainNotes->getDateTimeStr();
-      infoStr = path + str + "_Knot.zip";
+      QString path;
+      if (!sync) {
+        path = "/storage/emulated/0/KnotBak/";
+        folder->mkdir(path);
+        QString str = mydlgMainNotes->getDateTimeStr();
+        infoStr = path + str + "_Knot.zip";
+      } else {
+        folder->mkdir(syncDir);
+        infoStr = syncDir + "KnotSync.zip";
+      }
       mydlgMainNotes->androidCopyFile(zipfile, infoStr);
       if (!QFile(infoStr).exists()) {
         QMessageBox box;
@@ -2603,8 +2608,16 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       }
 
 #else
-      QFile::copy(zipfile, fileName);
-      infoStr = fileName;
+      if (!sync) {
+        QFile::copy(zipfile, fileName);
+        infoStr = fileName;
+      } else {
+        QDir dir;
+        dir.mkpath(syncDir);
+        QString f = syncDir + "KnotSync.zip";
+        if (QFile(f).exists()) QFile::remove(f);
+        QFile::copy(zipfile, f);
+      }
 #endif
     }
 
@@ -4811,7 +4824,12 @@ void MainWindow::on_btnUserInfo_clicked() {
 
 void MainWindow::on_btnBackMemo_clicked() {
   mydlgMainNotes->saveQMLVPos();
-
+  if (mydlgMainNotes->isSave || m_NotesList->isSave) {
+    isSelf = true;
+    bakData("KnotSync", false, true);
+    mydlgMainNotes->isSave = false;
+    m_NotesList->isSave = false;
+  }
   ui->frameMemo->hide();
   ui->frameMain->show();
 }
@@ -5096,6 +5114,11 @@ void MainWindow::on_btnBackTodo_clicked() {
   mydlgTodo->saveTodo();
   mydlgTodo->refreshTableLists();
   mydlgTodo->refreshAlarm();
+  if (mydlgTodo->isSave) {
+    isSelf = true;
+    bakData("KnotSync", false, true);
+    mydlgTodo->isSave = false;
+  }
 }
 
 void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }
