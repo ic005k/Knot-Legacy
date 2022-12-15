@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.62";
+QString ver = "1.0.63";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -763,6 +763,7 @@ void MainWindow::removeFilesWatch() {
 void MainWindow::addFilesWatch() {
   FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
   FileSystemWatcher::addWatchPath(iniDir + "mainnotes.ini");
+  isSelf = false;
   qDebug() << "add file watch...... isSelf=" << isSelf;
 }
 
@@ -5034,6 +5035,7 @@ void MainWindow::showGrayWindows() {
 void MainWindow::closeGrayWindows() { m_widget->close(); }
 
 void MainWindow::on_btnNotesList_clicked() {
+  mw_one->removeFilesWatch();
   mydlgMainNotes->saveQMLVPos();
 
   m_NotesList->close();
@@ -5043,6 +5045,7 @@ void MainWindow::on_btnNotesList_clicked() {
   m_NotesList->show();
   m_NotesList->tw->setFocus();
   m_NotesList->isSave = false;
+  mw_one->addFilesWatch();
 }
 
 void MainWindow::on_btnBackImg_clicked() {

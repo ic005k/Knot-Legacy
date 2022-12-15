@@ -157,7 +157,6 @@ void FileSystemWatcher::fileUpdated(const QString& path) {
     }
 
   } else {
-    mw_one->isSelf = false;
     mw_one->removeFilesWatch();
     mw_one->addFilesWatch();
   }
