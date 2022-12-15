@@ -166,8 +166,8 @@ void dlgMainNotes::on_btnDone_clicked() {
 
   if (isSave) {
     saveMainNotes();
-    saveQMLVPos();
   }
+  saveQMLVPos();
 
   close();
   loadMemoQML();
@@ -177,7 +177,7 @@ void dlgMainNotes::on_btnDone_clicked() {
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
-  QString htmlFileName = iniDir + "memo/memo.html";
+  QString htmlFileName = privateDir + "memo.html";
   QFile memofile1(htmlFileName);
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
@@ -635,7 +635,7 @@ void dlgMainNotes::loadMemoQML() {
   QString strIniDir;
   strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
 
-  QString htmlFileName = iniDir + "memo/memo.html";
+  QString htmlFileName = privateDir + "memo.html";
   QTextEdit* edit = new QTextEdit;
   QPlainTextEdit* edit1 = new QPlainTextEdit;
   QString strhtml = mw_one->loadText(htmlFileName);
@@ -693,7 +693,7 @@ void dlgMainNotes::saveQMLVPos() {
   if (QFile(mw_one->m_NotesList->currentMDFile).exists()) {
     QString strTag = mw_one->m_NotesList->currentMDFile;
     strTag.replace(iniDir, "");
-    getVPos();
+    sliderPos = getVPos();
     Reg.setValue("/MainNotes/SlidePos" + strTag, sliderPos);
   }
 }
@@ -706,7 +706,7 @@ void dlgMainNotes::setVPos() {
   QString a = mw_one->m_NotesList->currentMDFile;
 
   sliderPos = Reg.value("/MainNotes/SlidePos" + a.replace(iniDir, "")).toReal();
-  if (sliderPos < 0) sliderPos = 0;
+
   QQuickItem* root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
@@ -717,7 +717,7 @@ qreal dlgMainNotes::getVPos() {
   QQuickItem* root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getVPos",
                             Q_RETURN_ARG(QVariant, itemCount));
-  sliderPos = itemCount.toDouble();
+  sliderPos = itemCount.toReal();
   return sliderPos;
 }
 
@@ -726,7 +726,7 @@ qreal dlgMainNotes::getVHeight() {
   QQuickItem* root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getVHeight",
                             Q_RETURN_ARG(QVariant, itemCount));
-  textHeight = itemCount.toDouble();
+  textHeight = itemCount.toReal();
   return textHeight;
 }
 

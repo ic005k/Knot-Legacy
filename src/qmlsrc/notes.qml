@@ -17,12 +17,14 @@ Item {
     }
 
     function setVPos(vpos) {
+        if (vpos < 0)
+            vpos = 0
         flickable.contentY = vpos
-
+        console.debug("set vpos=" + vpos)
     }
 
     function getVPos() {
-
+        console.debug("get vpos=" + flickable.contentY)
         return flickable.contentY
     }
 

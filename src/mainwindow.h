@@ -524,7 +524,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnCode_clicked();
 
-  void on_btnMemos_clicked();
+  void on_btnNotes_clicked();
 
   void on_btnZoomIn_clicked();
 

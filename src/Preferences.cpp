@@ -218,9 +218,9 @@ void dlgPreferences::initValues() {
     mw_one->ui->btnTodo->setFixedHeight(s);
     mw_one->ui->btnTodo->setFixedWidth(s);
     mw_one->ui->btnTodo->setIconSize(QSize(s - 20, s - 20));
-    mw_one->ui->btnMemos->setFixedHeight(s);
-    mw_one->ui->btnMemos->setFixedWidth(s);
-    mw_one->ui->btnMemos->setIconSize(QSize(s - 20, s - 20));
+    mw_one->ui->btnNotes->setFixedHeight(s);
+    mw_one->ui->btnNotes->setFixedWidth(s);
+    mw_one->ui->btnNotes->setIconSize(QSize(s - 20, s - 20));
   }
 #endif
 

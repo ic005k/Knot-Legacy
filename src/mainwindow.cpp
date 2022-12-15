@@ -757,14 +757,15 @@ void MainWindow::startSyncData() {
 void MainWindow::removeFilesWatch() {
   FileSystemWatcher::removeWatchPath(iniDir + "todo.ini");
   FileSystemWatcher::removeWatchPath(iniDir + "mainnotes.ini");
-  qDebug() << "remove file watch......";
+  qDebug() << QTime::currentTime().toString() << "remove file watch......";
 }
 
 void MainWindow::addFilesWatch() {
   FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
   FileSystemWatcher::addWatchPath(iniDir + "mainnotes.ini");
   isSelf = false;
-  qDebug() << "add file watch...... isSelf=" << isSelf;
+  qDebug() << QTime::currentTime().toString()
+           << "add file watch...... isSelf=" << isSelf;
 }
 
 MainWindow::~MainWindow() {
@@ -3636,7 +3637,7 @@ void MainWindow::updateHardSensorSteps() {
   sendMsg(steps);
 }
 
-void MainWindow::on_btnMemos_clicked() {
+void MainWindow::on_btnNotes_clicked() {
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -3650,7 +3651,7 @@ void MainWindow::on_btnMemos_clicked() {
     }
     strPw = baPw;
 
-    bool ok;
+    bool ok = false;
     QString text;
     QInputDialog *idlg = new QInputDialog(this);
     idlg->setWindowFlag(Qt::FramelessWindowHint);
@@ -3671,7 +3672,6 @@ void MainWindow::on_btnMemos_clicked() {
       ok = true;
       text = idlg->textValue();
     } else {
-      ok = false;
       return;
     }
 
@@ -3706,8 +3706,6 @@ void MainWindow::showMemos() {
   isMemoVisible = true;
   isReaderVisible = false;
 
-  mydlgMainNotes->loadMemoQML();
-
   QFont f(this->font());
   f.setPointSize(fontSize);
   mydlgMainNotes->ui->editSource->setFont(f);
@@ -3719,8 +3717,11 @@ void MainWindow::showMemos() {
 
   ui->frameMain->hide();
   ui->frameSetKey->hide();
-  ui->frameMemo->show();
 
+  m_NotesList->close();
+  m_NotesList = new dlgNotesList(this);
+
+  ui->frameMemo->show();
   mydlgMainNotes->setVPos();
 }
 
@@ -3934,7 +3935,7 @@ void MainWindow::init_UIWidget() {
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnMax->setStyleSheet("border:none");
   ui->btnReader->setStyleSheet("border:none");
-  ui->btnMemos->setStyleSheet("border:none");
+  ui->btnNotes->setStyleSheet("border:none");
   ui->btnAdd->setStyleSheet("border:none");
   ui->btnDel->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
@@ -3945,7 +3946,7 @@ void MainWindow::init_UIWidget() {
   ui->btnSteps->setFont(f);
   ui->btnMax->setFont(f);
   ui->btnReader->setFont(f);
-  ui->btnMemos->setFont(f);
+  ui->btnNotes->setFont(f);
 
   QString lblStyle = myEditRecord->ui->lblTitle->styleSheet();
   ui->lblTotal->setStyleSheet(lblStyle);
@@ -4810,7 +4811,7 @@ void MainWindow::on_btnUserInfo_clicked() {
 }
 
 void MainWindow::on_btnBackMemo_clicked() {
-  if (mydlgMainNotes->isSave) mydlgMainNotes->saveQMLVPos();
+  mydlgMainNotes->saveQMLVPos();
 
   ui->frameMemo->hide();
   ui->frameMain->show();
@@ -4937,7 +4938,6 @@ void MainWindow::clearSelectBox() {
   }
 
   if (!mw_one->ui->frameMemo->isHidden()) {
-    QString file = iniDir + "memo/memo.html";
     mydlgMainNotes->getVPos();
     int pos = mydlgMainNotes->sliderPos;
     QQuickItem *root = mw_one->ui->qwNotes->rootObject();
@@ -5035,17 +5035,13 @@ void MainWindow::showGrayWindows() {
 void MainWindow::closeGrayWindows() { m_widget->close(); }
 
 void MainWindow::on_btnNotesList_clicked() {
-  mw_one->removeFilesWatch();
-  mydlgMainNotes->saveQMLVPos();
-
+  if (!ui->frameMemo->isHidden()) mydlgMainNotes->saveQMLVPos();
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
-  m_NotesList->init();
-  m_NotesList->setWinPos();
   m_NotesList->show();
+  m_NotesList->setWinPos();
   m_NotesList->tw->setFocus();
   m_NotesList->isSave = false;
-  mw_one->addFilesWatch();
 }
 
 void MainWindow::on_btnBackImg_clicked() {

@@ -176,6 +176,7 @@ void dlgNotesList::on_btnRename_clicked() {
 
   QTreeWidgetItem* item = ui->treeWidget->currentItem();
   item->setText(0, ui->editName->text().trimmed());
+  mw_one->ui->lblNoteName->setText(item->text(0));
 
   isSave = true;
 }
@@ -429,9 +430,9 @@ void dlgNotesList::initNotesList() {
   tw->expandAll();
   QString b = Reg.value("/MainNotes/currentItem").toString();
   currentMDFile = iniDir + b;
+  qDebug() << currentMDFile;
   bool stop = false;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    if (stop) break;
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
     int childCount = topItem->childCount();
 
@@ -439,13 +440,18 @@ void dlgNotesList::initNotesList() {
       QTreeWidgetItem* childItem = topItem->child(j);
       QString strChild1 = childItem->text(1);
       if (strChild1 == b) {
+        stop = true;
         tw->setCurrentItem(childItem);
+        ui->editName->setText(childItem->text(0));
         if (mw_one->initMain || isImport)
           on_treeWidget_itemClicked(childItem, 0);
-        stop = true;
+
+        qDebug() << ".......curitem....." << b << "   " << currentMDFile;
+
         break;
       }
     }
+    if (stop) break;
   }
 }
 
@@ -548,8 +554,7 @@ void dlgNotesList::clearFiles() {
   for (int i = 0; i < files.count(); i++) {
     QString a = files.at(i);
     QFile file(a);
-    if (a != iniDir + "memo/memo.md" && a != iniDir + "memo/memo.html")
-      file.remove();
+    if (a != iniDir + "memo/memo.md") file.remove();
   }
 }
 
