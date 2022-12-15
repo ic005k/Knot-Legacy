@@ -1,8 +1,7 @@
-[Desktop Entry]
 Type=Application
 Name=Knot
-Exec=Knot
+Exec=AppRun %F
 Icon=icon
-Comment=Knot
+Comment=KnotTools
 Categories=Application;
 Terminal=true
