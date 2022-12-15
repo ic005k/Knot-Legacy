@@ -2111,6 +2111,12 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
+  if (watch == ui->lblIcon) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      on_actionPreferences_triggered();
+    }
+  }
+
   if (watch == tw->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
     }
@@ -3842,6 +3848,7 @@ void MainWindow::init_UIWidget() {
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
   ui->lblDetails->installEventFilter(this);
+  ui->lblIcon->installEventFilter(this);
 
   myfile = new File();
   m_Remarks = new dlgRemarks(this);
@@ -3954,14 +3961,6 @@ void MainWindow::init_UIWidget() {
   ui->lblTitle->setStyleSheet(lblStyle);
   ui->lblTitle_Report->setStyleSheet(lblStyle);
   ui->lblStats->setStyleSheet(lblStyle);
-
-  ui->lblIcon->setText("");
-  ui->lblIcon->setFixedHeight(22);
-  ui->lblIcon->setFixedWidth(22);
-  ui->lblIcon->setStyleSheet(
-      "QLabel{"
-      "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
-      "}");
 
   auto clearaction1 = new QAction;
   clearaction1->setIcon(QIcon(":/res/clear.png"));

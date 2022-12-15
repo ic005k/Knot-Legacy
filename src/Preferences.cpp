@@ -5,7 +5,7 @@
 #include "mainwindow.h"
 #include "ui_Preferences.h"
 #include "ui_mainwindow.h"
-extern QString iniFile, iniDir, privateDir, hsStyle, fontname;
+extern QString iniFile, iniDir, privateDir, hsStyle, fontname, ver;
 extern MainWindow* mw_one;
 extern bool isBreak;
 extern int fontSize;
@@ -210,6 +210,10 @@ void dlgPreferences::initValues() {
     mw_one->ui->btnFind->hide();
     mw_one->ui->btnRemarks->hide();
     mw_one->ui->btnReport->hide();
+    mw_one->ui->btnMenu->hide();
+    mw_one->ui->lblIcon->setText("V " + ver);
+    mw_one->ui->lblIcon->adjustSize();
+    mw_one->ui->lblIcon->show();
 
     ui->chkAutoTime->hide();
     ui->chkReaderFont->hide();
