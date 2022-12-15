@@ -11,6 +11,7 @@
 * Notes(Markdown)
 * Data export and import
 * Backup data to OneDrive
+* Clients can use [Syncthing](https://github.com/syncthing/syncthing) to seamlessly synchronize data.
 
 
 QR code for downloading:
