@@ -243,7 +243,13 @@ MainWindow::MainWindow(QWidget *parent)
 
   initHardStepSensor();
 
-  reloadMain();
+  if (QFile(syncDir + "KnotSync.zip").exists())
+    importBakData(syncDir + "KnotSync.zip", false, true, false);
+  else {
+    mydlgTodo->init_Todo();
+    reloadMain();
+  }
+
   resetWinPos();
   initMain = false;
   addFilesWatch();
@@ -709,7 +715,6 @@ void MainWindow::init_TotalData() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
-  mydlgTodo->init_Todo();
   myEditRecord->init_Desc();
   mydlgSteps->init_Steps();
 
@@ -2654,7 +2659,7 @@ void MainWindow::on_actionImport_Data_triggered() {
   importBakData(fileName, true, false, false);
 }
 
-bool MainWindow::importBakData(QString fileName, bool msg, bool book,
+bool MainWindow::importBakData(QString fileName, bool msg, bool sync,
                                bool unre) {
   if (!fileName.isNull()) {
     if (msg) {
@@ -2693,14 +2698,20 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     txtEdit->setPlainText(txt);
     TextEditToFile(txtEdit, iniFile);
     isImport = true;
-    loading = true;
-    init_TotalData();
-    loading = false;
 
-    while (!isReadTWEnd)
-      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    if (!sync) {
+      loading = true;
+      init_TotalData();
+      loading = false;
 
-    startSave("alltab");
+      while (!isReadTWEnd)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
+      startSave("alltab");
+    }
+
+    // Todo
+    mydlgTodo->init_Todo();
 
     // Notes
     if (!unre) {
@@ -2709,30 +2720,6 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
         QFile::remove(iniDir + "memo/mainnotes.ini");
       m_NotesList->initNotesList();
       m_NotesList->initRecycle();
-    }
-
-    // TextReader
-    if (book) {
-      QSettings RegTotalIni(iniFile, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      RegTotalIni.setIniCodec("utf-8");
-#endif
-
-      QString strReader = iniDir + "reader.ini";
-      QFile::remove(strReader);
-      QSettings Reg1(strReader, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      Reg1.setIniCodec("utf-8");
-#endif
-      RegTotalIni.beginGroup("Reader");
-      QStringList list = RegTotalIni.allKeys();
-      foreach (QString key, list) {
-        QString value = RegTotalIni.value(key).toString();
-        Reg1.setValue("/Reader/" + key, value);
-      }
-      RegTotalIni.endGroup();
-
-      mydlgReader->initReader();
     }
   }
 

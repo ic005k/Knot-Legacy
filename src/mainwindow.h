@@ -342,7 +342,7 @@ class MainWindow : public QMainWindow {
   QString bakData(QString fileName, bool msgbox, bool sync);
   void setSCrollPro(QObject *obj);
 
-  bool importBakData(QString fileName, bool msg, bool book, bool unre);
+  bool importBakData(QString fileName, bool msg, bool sync, bool unre);
   void addUndo(QString log);
   QString getTabText();
   void addRedo();

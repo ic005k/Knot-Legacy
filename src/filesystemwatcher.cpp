@@ -151,7 +151,7 @@ void FileSystemWatcher::fileUpdated(const QString& path) {
       mw_one->on_btnBackMemo_clicked();
     }
 
-    mw_one->importBakData(syncDir + "KnotSync.zip", false, false, false);
+    mw_one->importBakData(syncDir + "KnotSync.zip", false, true, false);
 
   } else {
     mw_one->removeFilesWatch();
