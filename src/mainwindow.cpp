@@ -2657,6 +2657,7 @@ void MainWindow::on_actionImport_Data_triggered() {
   if (QFile(fileName).exists()) addUndo(tr("Import Data"));
 
   importBakData(fileName, true, false, false);
+  bakData("KnotSync", false, true);
 }
 
 bool MainWindow::importBakData(QString fileName, bool msg, bool sync,
@@ -2682,7 +2683,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool sync,
       file = fileName;
 
     QString txt = loadText(file);
-    if (!txt.contains(appName)) {
+    if (!txt.contains(appName) && !sync) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("Invalid data file."));
@@ -3873,6 +3874,7 @@ void MainWindow::init_UIWidget() {
   m_widget = new QWidget(this);
   m_widget->close();
   m_NotesList = new dlgNotesList(this);
+  m_Left = new dlgLeft(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));

@@ -84,6 +84,8 @@ int main(int argc, char* argv[]) {
 
   QDir dir0;
   dir0.mkpath(iniDir);
+  dir0.mkpath(syncDir);
+  dir0.mkpath(privateDir);
 
   QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

@@ -19,7 +19,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnTest->hide();
 
   m_SetEditText = new dlgSetEditText(this);
-  m_Left = new dlgLeft(this);
+
   m_Right = new dlgRight(this);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,

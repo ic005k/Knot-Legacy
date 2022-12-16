@@ -43,7 +43,7 @@ class dlgMainNotes : public QDialog {
   int start;
   int end;
   dlgSetEditText *m_SetEditText;
-  dlgLeft *m_Left;
+
   dlgRight *m_Right;
   qreal textHeight;
   bool isShow = false;

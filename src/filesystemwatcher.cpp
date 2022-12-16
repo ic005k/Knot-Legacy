@@ -153,6 +153,13 @@ void FileSystemWatcher::fileUpdated(const QString& path) {
 
     mw_one->importBakData(syncDir + "KnotSync.zip", false, true, false);
 
+    mw_one->m_Left->close();
+    mw_one->m_Left->ui->textBrowser->append(
+        QDateTime::currentDateTime().toString() + "\n" +
+        tr("The data update is complete."));
+    mw_one->m_Left->ui->textBrowser->append("");
+    mw_one->m_Left->init();
+    mw_one->m_Left->show();
   } else {
     mw_one->removeFilesWatch();
     mw_one->addFilesWatch();

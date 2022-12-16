@@ -102,9 +102,9 @@
 #include "ui_TodoAlarm.h"
 #include "ui_dlgSetText.h"
 #include "ui_dlgfloatfun.h"
+#include "ui_dlgleft.h"
 #include "ui_dlglist.h"
 #include "ui_dlgloadpic.h"
-
 class SearchThread;
 class ReadThread;
 class ReadTWThread;
@@ -220,6 +220,7 @@ class MainWindow : public QMainWindow {
   dlgReaderFun *mydlgReaderFun;
   dlgSetText *mydlgSetText;
   dlgNotesList *m_NotesList;
+  dlgLeft *m_Left;
 
   File *myfile;
 
