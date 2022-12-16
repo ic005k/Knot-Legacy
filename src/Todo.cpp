@@ -57,9 +57,17 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
 
 dlgTodo::~dlgTodo() { delete ui; }
 
-void dlgTodo::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
+void dlgTodo::keyReleaseEvent(QKeyEvent* event) {
+  Q_UNUSED(event);
+  // event->accept();
+}
 
 void dlgTodo::saveTodo() {
+  if (!isSave) return;
+
+  mw_one->isSelf = true;
+  isSave = false;
+
   highCount = 0;
   QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -89,13 +97,8 @@ void dlgTodo::saveTodo() {
 }
 
 void dlgTodo::init_Todo() {
-  QString ini_file;
-  if (isImport) {
-    ini_file = iniFile;
-  } else
-    ini_file = iniDir + "todo.ini";
   clearAll();
-  QSettings Reg(ini_file, QSettings::IniFormat);
+  QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -153,7 +156,10 @@ int dlgTodo::getEditTextHeight(QTextEdit* edit) {
   return mainHeight;
 }
 
-void dlgTodo::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
+void dlgTodo::closeEvent(QCloseEvent* event) {
+  Q_UNUSED(event);
+  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+}
 
 bool dlgTodo::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {

@@ -522,7 +522,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         //File Watch
         if (null == mFileObserver) {
-            mFileObserver = new SDCardFileObserver("/storage/emulated/0/KnotSync/");
+            mFileObserver = new SDCardFileObserver("/storage/emulated/0/KnotData/");
             mFileObserver.startWatching(); //开始监听
         }
 
@@ -1194,25 +1194,25 @@ This method can parse out the real local file path from a file URI.
             final int action = event & FileObserver.ALL_EVENTS;
             switch (action) {
                 case FileObserver.ACCESS:
-                    System.out.println("event: 文件或目录被访问, path: " + path);
+                    //System.out.println("event: 文件或目录被访问, path: " + path);
                     break;
 
                 case FileObserver.DELETE:
-                    System.out.println("event: 文件或目录被删除, path: " + path);
+                    //System.out.println("event: 文件或目录被删除, path: " + path);
                     break;
 
                 case FileObserver.OPEN:
-                    System.out.println("event: 文件或目录被打开, path: " + path);
+                    //System.out.println("event: 文件或目录被打开, path: " + path);
                     break;
 
                 case FileObserver.MODIFY:
-                    if (path.equals("KnotSync.zip"))
+                    if (path.equals("todo.ini") || path.equals("mainnotes.ini"))
                         CallJavaNotify_0();
                     System.out.println("event: 文件或目录被修改, path: " + path);
                     break;
 
                 case FileObserver.CREATE:
-                    System.out.println("event: 文件或目录被创建, path: " + path);
+                    //System.out.println("event: 文件或目录被创建, path: " + path);
                     break;
             }
         }

@@ -15,16 +15,13 @@ class dlgLeft : public QDialog {
   explicit dlgLeft(QWidget *parent = nullptr);
   ~dlgLeft();
 
-  Ui::dlgLeft *ui;
-  void init();
+  void init(int x, int y);
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
 
- private slots:
-  void on_btnClose_clicked();
-
  private:
+  Ui::dlgLeft *ui;
   bool isMouseRelease = false;
   bool isMousePress = false;
   bool iMouseMove = false;

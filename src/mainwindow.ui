@@ -6,16 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>507</width>
+    <width>760</width>
     <height>3332</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Knot</string>
-  </property>
-  <property name="windowIcon">
-   <iconset resource="../res.qrc">
-    <normaloff>:/res/icon.png</normaloff>:/res/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -3324,8 +3320,8 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>507</width>
-     <height>24</height>
+     <width>760</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">

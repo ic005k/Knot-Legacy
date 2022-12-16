@@ -1,7 +1,0 @@
-Type=Application
-Name=Knot
-Exec=AppRun %F
-Icon=icon
-Comment=KnotTools
-Categories=Application;
-Terminal=true

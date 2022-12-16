@@ -19,7 +19,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnTest->hide();
 
   m_SetEditText = new dlgSetEditText(this);
-
+  m_Left = new dlgLeft(this);
   m_Right = new dlgRight(this);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
@@ -161,12 +161,19 @@ void dlgMainNotes::on_btnDone_clicked() {
   }
   if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
   mw_one->Sleep(100);
+
   mw_one->ui->frameMemo->show();
-  saveMainNotes();
+
+  if (isSave) {
+    saveMainNotes();
+  }
   saveQMLVPos();
+
   close();
   loadMemoQML();
   setVPos();
+
+  mw_one->repaint();
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
@@ -182,6 +189,8 @@ void dlgMainNotes::MD2Html(QString mdFile) {
 }
 
 void dlgMainNotes::saveMainNotes() {
+  mw_one->isSelf = true;
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");

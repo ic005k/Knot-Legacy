@@ -5,7 +5,7 @@
 #include "mainwindow.h"
 #include "ui_Preferences.h"
 #include "ui_mainwindow.h"
-extern QString iniFile, iniDir, privateDir, syncDir, hsStyle, fontname, ver;
+extern QString iniFile, iniDir, privateDir, hsStyle, fontname;
 extern MainWindow* mw_one;
 extern bool isBreak;
 extern int fontSize;
@@ -210,10 +210,6 @@ void dlgPreferences::initValues() {
     mw_one->ui->btnFind->hide();
     mw_one->ui->btnRemarks->hide();
     mw_one->ui->btnReport->hide();
-    mw_one->ui->btnMenu->hide();
-    mw_one->ui->lblIcon->setText("V " + ver);
-    mw_one->ui->lblIcon->adjustSize();
-    mw_one->ui->lblIcon->show();
 
     ui->chkAutoTime->hide();
     ui->chkReaderFont->hide();
@@ -268,7 +264,7 @@ void dlgPreferences::autoBakData() {
   int nextDel = Reg.value("/AutoBak/NextDel").toInt();
   bakCount++;
   Reg.setValue("/AutoBak/File" + QString::number(bakCount),
-               mw_one->bakData("android", false, false));
+               mw_one->bakData("android", false));
   if (bakCount - nextDel > 15) {
     nextDel++;
     QString bakFile =
@@ -279,39 +275,4 @@ void dlgPreferences::autoBakData() {
     Reg.setValue("/AutoBak/NextDel", nextDel);
   }
   Reg.setValue("/AutoBak/BakCount", bakCount);
-}
-
-void dlgPreferences::runSync() {
-  qDebug() << "runSync 文件被修改......";
-  if (!mw_one->isSelf) {
-    if (!mw_one->ui->frameRecycle->isHidden()) {
-      mw_one->ui->btnReturnRecycle->click();
-    }
-
-    if (!mw_one->ui->frameTodo->isHidden()) {
-      mw_one->mydlgTodo->isSave = false;
-      mw_one->on_btnBackTodo_clicked();
-    }
-
-    if (!mw_one->m_NotesList->isHidden()) {
-      mw_one->m_NotesList->close();
-    }
-    if (!mw_one->mydlgMainNotes->isHidden()) {
-      mw_one->mydlgMainNotes->on_btnDone_clicked();
-    }
-    if (!mw_one->ui->frameMemo->isHidden()) {
-      mw_one->mydlgMainNotes->isSave = false;
-      mw_one->on_btnBackMemo_clicked();
-    }
-
-    mw_one->importBakData(syncDir + "KnotSync.zip", false, true, false);
-
-    mw_one->m_Left->close();
-    mw_one->m_Left->ui->textBrowser->append(
-        QDateTime::currentDateTime().toString() + "\n" +
-        tr("The data update is complete."));
-    mw_one->m_Left->ui->textBrowser->append("");
-    mw_one->m_Left->init();
-    mw_one->m_Left->show();
-  }
 }

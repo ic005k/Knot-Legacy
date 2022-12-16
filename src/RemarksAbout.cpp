@@ -151,11 +151,8 @@ QString dlgRemarks::getUrl(QVariantList list) {
       androidUrl = map["browser_download_url"].toString();
     if (fName.contains("Mac")) macUrl = map["browser_download_url"].toString();
     if (fName.contains("Win")) winUrl = map["browser_download_url"].toString();
-    if (fName.contains("Linux")){
-
+    if (fName.contains("Linux"))
       linuxUrl = map["browser_download_url"].toString();
-
-    }
   }
 
   QString Url;
@@ -171,9 +168,8 @@ QString dlgRemarks::getUrl(QVariantList list) {
   Url = winUrl;
 #endif
 
-#ifdef Q_OS_LINUX
+#ifdef Q_OS_Linux
   Url = linuxUrl;
-
 #endif
 
   return Url;
@@ -195,7 +191,6 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
     QVariantList list = root_Obj.value("assets").toArray().toVariantList();
     QString Url = getUrl(list);
     s_link = "https://ghproxy.com/" + Url;
-    qDebug()<<"Current Url="<<Url;
 
     QJsonObject PulseValue = root_Obj.value("assets").toObject();
     QString Verison = root_Obj.value("tag_name").toString();
@@ -219,7 +214,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
 #else
         const QUrl url("https://github.com/ic005k/" + appName +
                        "/releases/latest");
-        QDesktopServices::openUrl(QUrl(s_link));
+        QDesktopServices::openUrl(url);
 #endif
       }
     } else {

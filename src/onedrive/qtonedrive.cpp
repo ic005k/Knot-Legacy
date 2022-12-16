@@ -16,7 +16,7 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
-extern QString iniFile, iniDir, syncDir;
+extern QString iniFile, iniDir;
 
 QtOneDriveAuthorizationDialog* dialog_ = nullptr;
 
@@ -418,7 +418,6 @@ void QtOneDrive::downloadFile(const QUrl& url) {
 
         if (QFile(fileName).exists()) {
           mw_one->importBakData(fileName, true, false, false);
-          mw_one->bakData("KnotSync", false, true);
         }
       }
     }

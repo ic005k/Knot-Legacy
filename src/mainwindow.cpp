@@ -11,16 +11,15 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.64";
+QString ver = "1.0.63";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
 bool isImport, isEBook, isReport;
 
 QString appName = "Knot";
-QString iniFile, iniDir, privateDir, syncDir, strDate, readDate, noteText,
-    strStats, SaveType, strY, strM, btnYText, btnMText, btnDText,
-    CurrentYearMonth;
+QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
+    SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -244,13 +243,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   initHardStepSensor();
 
-  if (QFile(syncDir + "KnotSync.zip").exists())
-    importBakData(syncDir + "KnotSync.zip", false, true, false);
-  else {
-    mydlgTodo->init_Todo();
-    reloadMain();
-  }
-
+  reloadMain();
   resetWinPos();
   initMain = false;
   addFilesWatch();
@@ -762,21 +755,17 @@ void MainWindow::startSyncData() {
 }
 
 void MainWindow::removeFilesWatch() {
-#ifdef Q_OS_ANDROID
-#else
-  FileSystemWatcher::removeWatchPath(syncDir + "KnotSync.zip");
+  FileSystemWatcher::removeWatchPath(iniDir + "todo.ini");
+  FileSystemWatcher::removeWatchPath(iniDir + "mainnotes.ini");
   qDebug() << QTime::currentTime().toString() << "remove file watch......";
-#endif
 }
 
 void MainWindow::addFilesWatch() {
-#ifdef Q_OS_ANDROID
-#else
-  FileSystemWatcher::addWatchPath(syncDir + "KnotSync.zip");
+  FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
+  FileSystemWatcher::addWatchPath(iniDir + "mainnotes.ini");
   isSelf = false;
   qDebug() << QTime::currentTime().toString()
            << "add file watch...... isSelf=" << isSelf;
-#endif
 }
 
 MainWindow::~MainWindow() {
@@ -2122,12 +2111,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
-  if (watch == ui->lblIcon) {
-    if (event->type() == QEvent::MouseButtonPress) {
-      on_actionPreferences_triggered();
-    }
-  }
-
   if (watch == tw->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
     }
@@ -2556,7 +2539,7 @@ void MainWindow::on_actionExport_Data_triggered() {
   fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.zip)"));
 #endif
 
-  bakData(fileName, true, false);
+  bakData(fileName, true);
 }
 
 void MainWindow::bakIniData(QString unredoFile, bool unre) {
@@ -2566,7 +2549,6 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
   edit->append(loadText(iniDir + "tab.ini"));
   edit->append(loadText(iniDir + "font.ini"));
   edit->append(loadText(iniDir + "desc.ini"));
-  edit->append(loadText(iniDir + "todo.ini"));
   edit->append(loadText(iniDir + "ymd.ini"));
   edit->append(loadText(iniDir + "notes.ini"));
   edit->append(loadText(iniDir + "steps.ini"));
@@ -2583,9 +2565,8 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
   }
 }
 
-QString MainWindow::bakData(QString fileName, bool msgbox, bool sync) {
+QString MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
-    isSelf = true;
     bakIniData("", false);
 
     m_NotesList->clearFiles();
@@ -2593,6 +2574,9 @@ QString MainWindow::bakData(QString fileName, bool msgbox, bool sync) {
     QString infoStr;
     QFile::remove(iniDir + "memo/mainnotes.ini");
     QFile::copy(iniDir + "mainnotes.ini", iniDir + "memo/mainnotes.ini");
+
+    QFile::remove(iniDir + "memo/todo.ini");
+    QFile::copy(iniDir + "todo.ini", iniDir + "memo/todo.ini");
 
     QString zipfile = iniDir + "memo.zip";
     QFile(zipfile).remove();
@@ -2603,17 +2587,10 @@ QString MainWindow::bakData(QString fileName, bool msgbox, bool sync) {
 
 #ifdef Q_OS_ANDROID
       QDir *folder = new QDir;
-      QString path;
-      if (!sync) {
-        path = "/storage/emulated/0/KnotBak/";
-        folder->mkdir(path);
-        QString str = mydlgMainNotes->getDateTimeStr();
-        infoStr = path + str + "_Knot.zip";
-      } else {
-        folder->mkdir(syncDir);
-        infoStr = syncDir + "KnotSync.zip";
-      }
-
+      QString path = "/storage/emulated/0/KnotBak/";
+      folder->mkdir(path);
+      QString str = mydlgMainNotes->getDateTimeStr();
+      infoStr = path + str + "_Knot.zip";
       mydlgMainNotes->androidCopyFile(zipfile, infoStr);
       if (!QFile(infoStr).exists()) {
         QMessageBox box;
@@ -2622,16 +2599,8 @@ QString MainWindow::bakData(QString fileName, bool msgbox, bool sync) {
       }
 
 #else
-      if (!sync) {
-        QFile::copy(zipfile, fileName);
-        infoStr = fileName;
-      } else {
-        QDir dir;
-        dir.mkpath(syncDir);
-        QString f = syncDir + "KnotSync.zip";
-        if (QFile(f).exists()) QFile::remove(f);
-        QFile::copy(zipfile, f);
-      }
+      QFile::copy(zipfile, fileName);
+      infoStr = fileName;
 #endif
     }
 
@@ -2645,7 +2614,6 @@ QString MainWindow::bakData(QString fileName, bool msgbox, bool sync) {
       msgBox.exec();
     }
 
-    isSelf = false;
     return infoStr;
   }
   return "";
@@ -2667,10 +2635,9 @@ void MainWindow::on_actionImport_Data_triggered() {
   if (QFile(fileName).exists()) addUndo(tr("Import Data"));
 
   importBakData(fileName, true, false, false);
-  bakData("KnotSync", false, true);
 }
 
-bool MainWindow::importBakData(QString fileName, bool msg, bool sync,
+bool MainWindow::importBakData(QString fileName, bool msg, bool book,
                                bool unre) {
   if (!fileName.isNull()) {
     if (msg) {
@@ -2693,7 +2660,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool sync,
       file = fileName;
 
     QString txt = loadText(file);
-    if (!txt.contains(appName) && !sync) {
+    if (!txt.contains(appName)) {
       QMessageBox msgBox;
       msgBox.setText(appName);
       msgBox.setInformativeText(tr("Invalid data file."));
@@ -2709,20 +2676,14 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool sync,
     txtEdit->setPlainText(txt);
     TextEditToFile(txtEdit, iniFile);
     isImport = true;
+    loading = true;
+    init_TotalData();
+    loading = false;
 
-    if (!sync) {
-      loading = true;
-      init_TotalData();
-      loading = false;
+    while (!isReadTWEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
-      while (!isReadTWEnd)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-
-      startSave("alltab");
-    }
-
-    // Todo
-    mydlgTodo->init_Todo();
+    startSave("alltab");
 
     // Notes
     if (!unre) {
@@ -2731,6 +2692,35 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool sync,
         QFile::remove(iniDir + "memo/mainnotes.ini");
       m_NotesList->initNotesList();
       m_NotesList->initRecycle();
+
+      QFile::remove(iniDir + "todo.ini");
+      if (QFile::copy(iniDir + "memo/todo.ini", iniDir + "todo.ini"))
+        QFile::remove(iniDir + "memo/todo.ini");
+      mydlgTodo->init_Todo();
+    }
+
+    // TextReader
+    if (book) {
+      QSettings RegTotalIni(iniFile, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+      RegTotalIni.setIniCodec("utf-8");
+#endif
+
+      QString strReader = iniDir + "reader.ini";
+      QFile::remove(strReader);
+      QSettings Reg1(strReader, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+      Reg1.setIniCodec("utf-8");
+#endif
+      RegTotalIni.beginGroup("Reader");
+      QStringList list = RegTotalIni.allKeys();
+      foreach (QString key, list) {
+        QString value = RegTotalIni.value(key).toString();
+        Reg1.setValue("/Reader/" + key, value);
+      }
+      RegTotalIni.endGroup();
+
+      mydlgReader->initReader();
     }
   }
 
@@ -2985,6 +2975,7 @@ void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 void MainWindow::on_btnTodo_clicked() {
   mydlgMainNotes->m_SetEditText->close();
   mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgTodo);
+  mydlgTodo->isSave = true;
 
   mydlgTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                          this->width(), this->height());
@@ -2995,9 +2986,12 @@ void MainWindow::on_btnTodo_clicked() {
   ui->frameTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                              this->width(), this->height());
   ui->frameTodo->show();
+  mydlgTodo->init_Todo();
 
   mydlgTodo->refreshAlarm();
-  mydlgTodo->isSave = true;
+
+  mw_one->removeFilesWatch();
+  mw_one->addFilesWatch();
 }
 
 void MainWindow::on_rbFreq_clicked() {
@@ -3710,7 +3704,9 @@ void MainWindow::on_btnNotes_clicked() {
   }
 
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
-  mydlgMainNotes->isSave = true;
+
+  mw_one->removeFilesWatch();
+  mw_one->addFilesWatch();
 }
 
 void MainWindow::showMemos() {
@@ -3854,7 +3850,6 @@ void MainWindow::init_UIWidget() {
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
   ui->lblDetails->installEventFilter(this);
-  ui->lblIcon->installEventFilter(this);
 
   myfile = new File();
   m_Remarks = new dlgRemarks(this);
@@ -3879,7 +3874,6 @@ void MainWindow::init_UIWidget() {
   m_widget = new QWidget(this);
   m_widget->close();
   m_NotesList = new dlgNotesList(this);
-  m_Left = new dlgLeft(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -3968,6 +3962,14 @@ void MainWindow::init_UIWidget() {
   ui->lblTitle->setStyleSheet(lblStyle);
   ui->lblTitle_Report->setStyleSheet(lblStyle);
   ui->lblStats->setStyleSheet(lblStyle);
+
+  ui->lblIcon->setText("");
+  ui->lblIcon->setFixedHeight(22);
+  ui->lblIcon->setFixedWidth(22);
+  ui->lblIcon->setStyleSheet(
+      "QLabel{"
+      "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
+      "}");
 
   auto clearaction1 = new QAction;
   clearaction1->setIcon(QIcon(":/res/clear.png"));
@@ -4364,8 +4366,7 @@ void MainWindow::stopJavaTimer() {
 
 #ifdef Q_OS_ANDROID
 static void JavaNotify_0() {
-  mw_one->mydlgPre->runSync();
-  qDebug() << "C++ JavaNotify_0";
+  // qDebug() << "C++ JavaNotify_0";
 }
 
 static void JavaNotify_1() {
@@ -4823,12 +4824,10 @@ void MainWindow::on_btnUserInfo_clicked() {
 }
 
 void MainWindow::on_btnBackMemo_clicked() {
-  removeFilesWatch();
   mydlgMainNotes->saveQMLVPos();
+
   ui->frameMemo->hide();
   ui->frameMain->show();
-  if (mydlgMainNotes->isSave) bakData("KnotSync", false, true);
-  addFilesWatch();
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -4918,6 +4917,8 @@ void MainWindow::on_btnEdit_clicked() {
   tmpCursor.setPosition(cpos);
   mydlgMainNotes->ui->editSource->setTextCursor(tmpCursor);
 
+  mw_one->removeFilesWatch();
+  mw_one->addFilesWatch();
   mydlgMainNotes->isSave = false;
 }
 
@@ -5104,14 +5105,11 @@ void MainWindow::on_KVChanged() {}
 void MainWindow::on_btnAddTodo_clicked() { mydlgTodo->on_btnAdd_clicked(); }
 
 void MainWindow::on_btnBackTodo_clicked() {
-  removeFilesWatch();
   ui->frameTodo->hide();
   ui->frameMain->show();
   mydlgTodo->saveTodo();
   mydlgTodo->refreshTableLists();
   mydlgTodo->refreshAlarm();
-  if (mydlgTodo->isSave) bakData("KnotSync", false, true);
-  addFilesWatch();
 }
 
 void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }
