@@ -2578,6 +2578,7 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
 
 QString MainWindow::bakData(QString fileName, bool msgbox, bool sync) {
   if (!fileName.isNull()) {
+    isSelf = true;
     bakIniData("", false);
 
     m_NotesList->clearFiles();
