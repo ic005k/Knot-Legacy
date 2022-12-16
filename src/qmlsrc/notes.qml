@@ -19,7 +19,8 @@ Item {
     function setVPos(vpos) {
         if (vpos < 0)
             vpos = 0
-        flickable.contentY = vpos
+        if (textArea.contentHeight > flickable.height)
+            flickable.contentY = vpos
         console.debug("set vpos=" + vpos)
     }
 

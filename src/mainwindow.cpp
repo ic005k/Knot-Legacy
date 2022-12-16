@@ -2986,12 +2986,8 @@ void MainWindow::on_btnTodo_clicked() {
   ui->frameTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                              this->width(), this->height());
   ui->frameTodo->show();
-  mydlgTodo->init_Todo();
 
   mydlgTodo->refreshAlarm();
-
-  mw_one->removeFilesWatch();
-  mw_one->addFilesWatch();
 }
 
 void MainWindow::on_rbFreq_clicked() {
@@ -3704,9 +3700,6 @@ void MainWindow::on_btnNotes_clicked() {
   }
 
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
-
-  mw_one->removeFilesWatch();
-  mw_one->addFilesWatch();
 }
 
 void MainWindow::showMemos() {

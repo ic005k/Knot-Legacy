@@ -318,12 +318,11 @@ void dlgNotesList::on_btnExport_clicked() {
 
 void dlgNotesList::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
-  mw_one->removeFilesWatch();
+
   if (isSave) {
     saveNotesList();
     saveRecycle();
   }
-  mw_one->addFilesWatch();
 }
 
 void dlgNotesList::saveNotesList() {
