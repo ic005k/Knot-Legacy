@@ -4807,12 +4807,7 @@ void MainWindow::on_btnUserInfo_clicked() {
 
 void MainWindow::on_btnBackMemo_clicked() {
   mydlgMainNotes->saveQMLVPos();
-  if (mydlgMainNotes->isSave || m_NotesList->isSave) {
-    isSelf = true;
-    bakData("KnotSync", false, true);
-    mydlgMainNotes->isSave = false;
-    m_NotesList->isSave = false;
-  }
+  bakData("KnotSync", false, true);
   ui->frameMemo->hide();
   ui->frameMain->show();
 }
@@ -5097,11 +5092,7 @@ void MainWindow::on_btnBackTodo_clicked() {
   mydlgTodo->saveTodo();
   mydlgTodo->refreshTableLists();
   mydlgTodo->refreshAlarm();
-  if (mydlgTodo->isSave) {
-    isSelf = true;
-    bakData("KnotSync", false, true);
-    mydlgTodo->isSave = false;
-  }
+  bakData("KnotSync", false, true);
 }
 
 void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }

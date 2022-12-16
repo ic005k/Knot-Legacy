@@ -319,15 +319,11 @@ void dlgNotesList::on_btnExport_clicked() {
 void dlgNotesList::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
 
-  if (isSave) {
-    saveNotesList();
-    saveRecycle();
-  }
+  saveNotesList();
+  saveRecycle();
 }
 
 void dlgNotesList::saveNotesList() {
-  mw_one->isSelf = true;
-
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -362,8 +358,6 @@ void dlgNotesList::saveNotesList() {
 }
 
 void dlgNotesList::saveRecycle() {
-  mw_one->isSelf = true;
-
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");

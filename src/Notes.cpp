@@ -161,19 +161,12 @@ void dlgMainNotes::on_btnDone_clicked() {
   }
   if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
   mw_one->Sleep(100);
-
   mw_one->ui->frameMemo->show();
-
-  if (isSave) {
-    saveMainNotes();
-  }
+  saveMainNotes();
   saveQMLVPos();
-
   close();
   loadMemoQML();
   setVPos();
-
-  mw_one->repaint();
 }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
@@ -189,8 +182,6 @@ void dlgMainNotes::MD2Html(QString mdFile) {
 }
 
 void dlgMainNotes::saveMainNotes() {
-  mw_one->isSelf = true;
-
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
