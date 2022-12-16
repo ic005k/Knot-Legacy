@@ -537,12 +537,9 @@ void dlgNotesList::clearFiles() {
   files.clear();
   QStringList fmt = QString("md;html;jpg;bmp;png").split(';');
   getAllFiles(tempDir, files, fmt);
-  qDebug() << files;
 
   clearMD_Pic(tw);
   clearMD_Pic(twrb);
-
-  qDebug() << files;
 
   for (int i = 0; i < files.count(); i++) {
     QString a = files.at(i);
@@ -565,11 +562,11 @@ void dlgNotesList::clearMD_Pic(QTreeWidget* tw) {
 
 void dlgNotesList::removePicFromMD(QString mdfile) {
   QString txt = mw_one->loadText(mdfile);
-  qDebug() << txt;
+
   for (int i = 0; i < files.count(); i++) {
     QString str0 = files.at(i);
     str0.replace(iniDir, "");
-    qDebug() << "....." << str0;
+
     if (txt.contains(str0)) {
       files.removeAt(i);
       break;

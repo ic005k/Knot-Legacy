@@ -48,6 +48,7 @@ extern dlgList *m_List;
 void RegJni(const char *myClassName);
 
 #ifdef Q_OS_ANDROID
+static void JavaNotify_0();
 static void JavaNotify_1();
 static void JavaNotify_2();
 static void JavaNotify_3();
@@ -761,15 +762,21 @@ void MainWindow::startSyncData() {
 }
 
 void MainWindow::removeFilesWatch() {
+#ifdef Q_OS_ANDROID
+#else
   FileSystemWatcher::removeWatchPath(syncDir + "KnotSync.zip");
   qDebug() << QTime::currentTime().toString() << "remove file watch......";
+#endif
 }
 
 void MainWindow::addFilesWatch() {
+#ifdef Q_OS_ANDROID
+#else
   FileSystemWatcher::addWatchPath(syncDir + "KnotSync.zip");
   isSelf = false;
   qDebug() << QTime::currentTime().toString()
            << "add file watch...... isSelf=" << isSelf;
+#endif
 }
 
 MainWindow::~MainWindow() {
@@ -2606,6 +2613,7 @@ QString MainWindow::bakData(QString fileName, bool msgbox, bool sync) {
         folder->mkdir(syncDir);
         infoStr = syncDir + "KnotSync.zip";
       }
+
       mydlgMainNotes->androidCopyFile(zipfile, infoStr);
       if (!QFile(infoStr).exists()) {
         QMessageBox box;
@@ -2637,6 +2645,7 @@ QString MainWindow::bakData(QString fileName, bool msgbox, bool sync) {
       msgBox.exec();
     }
 
+    isSelf = false;
     return infoStr;
   }
   return "";
@@ -2988,6 +2997,7 @@ void MainWindow::on_btnTodo_clicked() {
   ui->frameTodo->show();
 
   mydlgTodo->refreshAlarm();
+  mydlgTodo->isSave = true;
 }
 
 void MainWindow::on_rbFreq_clicked() {
@@ -3700,6 +3710,7 @@ void MainWindow::on_btnNotes_clicked() {
   }
 
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+  mydlgMainNotes->isSave = true;
 }
 
 void MainWindow::showMemos() {
@@ -4352,6 +4363,11 @@ void MainWindow::stopJavaTimer() {
 }
 
 #ifdef Q_OS_ANDROID
+static void JavaNotify_0() {
+  mw_one->mydlgPre->runSync();
+  qDebug() << "C++ JavaNotify_0";
+}
+
 static void JavaNotify_1() {
   mw_one->newDatas();
   // qDebug() << "C++ JavaNotify_1";
@@ -4382,6 +4398,7 @@ static void JavaNotify_4() {
 }
 
 static const JNINativeMethod gMethods[] = {
+    {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},
     {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
     {"CallJavaNotify_2", "()V", (void *)JavaNotify_2},
     {"CallJavaNotify_3", "()V", (void *)JavaNotify_3},
@@ -4806,10 +4823,12 @@ void MainWindow::on_btnUserInfo_clicked() {
 }
 
 void MainWindow::on_btnBackMemo_clicked() {
+  removeFilesWatch();
   mydlgMainNotes->saveQMLVPos();
-  bakData("KnotSync", false, true);
   ui->frameMemo->hide();
   ui->frameMain->show();
+  if (mydlgMainNotes->isSave) bakData("KnotSync", false, true);
+  addFilesWatch();
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -4899,8 +4918,6 @@ void MainWindow::on_btnEdit_clicked() {
   tmpCursor.setPosition(cpos);
   mydlgMainNotes->ui->editSource->setTextCursor(tmpCursor);
 
-  mw_one->removeFilesWatch();
-  mw_one->addFilesWatch();
   mydlgMainNotes->isSave = false;
 }
 
@@ -5087,12 +5104,14 @@ void MainWindow::on_KVChanged() {}
 void MainWindow::on_btnAddTodo_clicked() { mydlgTodo->on_btnAdd_clicked(); }
 
 void MainWindow::on_btnBackTodo_clicked() {
+  removeFilesWatch();
   ui->frameTodo->hide();
   ui->frameMain->show();
   mydlgTodo->saveTodo();
   mydlgTodo->refreshTableLists();
   mydlgTodo->refreshAlarm();
-  bakData("KnotSync", false, true);
+  if (mydlgTodo->isSave) bakData("KnotSync", false, true);
+  addFilesWatch();
 }
 
 void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }

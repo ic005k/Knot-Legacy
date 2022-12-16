@@ -127,41 +127,5 @@ void FileSystemWatcher::directoryUpdated(const QString& path) {
 // 文件修改时调用
 void FileSystemWatcher::fileUpdated(const QString& path) {
   qDebug() << QString("The file %1 at path %2 is updated......").arg(path);
-  if (!mw_one->isSelf) {
-    if (!mw_one->ui->frameRecycle->isHidden()) {
-      mw_one->mydlgTodo->isSave = false;
-      mw_one->ui->btnReturnRecycle->click();
-    }
-
-    if (!mw_one->ui->frameTodo->isHidden()) {
-      mw_one->mydlgTodo->isSave = false;
-      mw_one->ui->btnBackTodo->click();
-    }
-
-    if (!mw_one->m_NotesList->isHidden()) {
-      mw_one->m_NotesList->isSave = false;
-      mw_one->m_NotesList->close();
-    }
-    if (!mw_one->mydlgMainNotes->isHidden()) {
-      mw_one->mydlgMainNotes->isSave = false;
-      mw_one->mydlgMainNotes->on_btnDone_clicked();
-    }
-    if (!mw_one->ui->frameMemo->isHidden()) {
-      mw_one->mydlgMainNotes->isSave = false;
-      mw_one->on_btnBackMemo_clicked();
-    }
-
-    mw_one->importBakData(syncDir + "KnotSync.zip", false, true, false);
-
-    mw_one->m_Left->close();
-    mw_one->m_Left->ui->textBrowser->append(
-        QDateTime::currentDateTime().toString() + "\n" +
-        tr("The data update is complete."));
-    mw_one->m_Left->ui->textBrowser->append("");
-    mw_one->m_Left->init();
-    mw_one->m_Left->show();
-  } else {
-    mw_one->removeFilesWatch();
-    mw_one->addFilesWatch();
-  }
+  mw_one->mydlgPre->runSync();
 }
