@@ -33,6 +33,8 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
 
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
   ui->editSource->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  mw_one->setSCrollPro(ui->editSource);
+
   ui->editSource->setContentsMargins(15, 15, 15, 15);
   QPalette pt = palette();
   pt.setBrush(QPalette::Text, Qt::black);
@@ -47,8 +49,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   f.setPointSize(fontSize - 1);
   ui->lblInfo->setFont(f);
   ui->frameFun->setFont(f);
-
-  mw_one->setSCrollPro(ui->editSource);
 
   connect(ui->editSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
           SLOT(editVSBarValueChanged()));

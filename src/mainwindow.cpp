@@ -2979,6 +2979,8 @@ void MainWindow::on_btnHide_clicked() { on_btnFind_clicked(); }
 void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 
 void MainWindow::on_btnTodo_clicked() {
+  removeFilesWatch();
+  isSelf = true;
   mydlgMainNotes->m_SetEditText->close();
   mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgTodo);
 
@@ -3648,6 +3650,8 @@ void MainWindow::updateHardSensorSteps() {
 }
 
 void MainWindow::on_btnNotes_clicked() {
+  removeFilesWatch();
+  isSelf = true;
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -4830,6 +4834,7 @@ void MainWindow::on_btnBackMemo_clicked() {
   ui->frameMemo->hide();
   ui->frameMain->show();
   isSelf = false;
+  addFilesWatch();
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -5105,12 +5110,14 @@ void MainWindow::on_KVChanged() {}
 void MainWindow::on_btnAddTodo_clicked() { mydlgTodo->on_btnAdd_clicked(); }
 
 void MainWindow::on_btnBackTodo_clicked() {
+  mydlgTodo->saveTodo();
   ui->frameTodo->hide();
   ui->frameMain->show();
-  mydlgTodo->saveTodo();
+
   mydlgTodo->refreshTableLists();
   mydlgTodo->refreshAlarm();
   isSelf = false;
+  addFilesWatch();
 }
 
 void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }

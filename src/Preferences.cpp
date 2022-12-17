@@ -280,33 +280,7 @@ void dlgPreferences::autoBakData() {
 void dlgPreferences::runSync(QString path) {
   qDebug() << QTime::currentTime().toString() + "  Start Sync..." << path
            << "isSelf=" << mw_one->isSelf;
-  if (!mw_one->isSelf) {
-    if (!mw_one->ui->frameRecycle->isHidden()) {
-      mw_one->mydlgTodo->isSave = false;
-      mw_one->ui->btnReturnRecycle->click();
-    }
-
-    if (!mw_one->ui->frameTodo->isHidden()) {
-      mw_one->mydlgTodo->isSave = false;
-      mw_one->ui->btnBackTodo->click();
-    }
-
-    if (!mw_one->m_NotesList->isHidden()) {
-      mw_one->m_NotesList->isSave = false;
-      mw_one->m_NotesList->close();
-      mw_one->m_NotesList->isSave = true;
-    }
-    if (!mw_one->mydlgMainNotes->isHidden()) {
-      mw_one->mydlgMainNotes->isSave = false;
-      mw_one->mydlgMainNotes->on_btnDone_clicked();
-      mw_one->mydlgMainNotes->isSave = true;
-    }
-    if (!mw_one->ui->frameMemo->isHidden()) {
-      mw_one->mydlgMainNotes->isSave = false;
-      mw_one->on_btnBackMemo_clicked();
-      mw_one->mydlgMainNotes->isSave = true;
-    }
-
+  if (!mw_one->isSelf && !mw_one->initMain) {
     QString info = QDateTime::currentDateTime().toString() + "\n" +
                    tr("The data update is complete.") + "\n";
     mw_one->m_SyncInfo->close();

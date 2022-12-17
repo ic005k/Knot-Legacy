@@ -1240,7 +1240,9 @@ This method can parse out the real local file path from a file URI.
             final String tmpPath = path;
             switch (event) {
                 case FileObserver.ACCESS:
-                    // Log.i("FileWatcher", "ACCESS: " + path);
+                     Log.i("FileWatcher", "ACCESS: " + path);
+                    if (path.contains("/storage/emulated/0/KnotData//todo.ini") || path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
+                        CallJavaNotify_0();
                     break;
                 case FileObserver.ATTRIB:
                     // Log.i("FileWatcher", "ATTRIB: " + path);
@@ -1262,6 +1264,7 @@ This method can parse out the real local file path from a file URI.
                     break;
                 case FileObserver.CREATE:
                     Log.i(TAG, "CREATE: " + path);
+
                     mThreadHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -1283,8 +1286,7 @@ This method can parse out the real local file path from a file URI.
                     break;
                 case FileObserver.MODIFY:
                      Log.i("FileWatcher", "MODIFY: " + path);
-                    if (path.equals("/storage/emulated/0/KnotData//todo.ini") || path.equals("/storage/emulated/0/KnotData//mainnotes.ini"))
-                        CallJavaNotify_0();
+
                     break;
                 case FileObserver.MOVE_SELF:
                     // Log.i("FileWatcher", "MOVE_SELF: " + path);
@@ -1300,6 +1302,7 @@ This method can parse out the real local file path from a file URI.
                     break;
                 default:
                     Log.i(TAG, "DEFAULT(" + event + ";) : " + path);
+
                     break;
             }
         }
