@@ -155,24 +155,19 @@ QString dlgRemarks::getUrl(QVariantList list) {
       linuxUrl = map["browser_download_url"].toString();
   }
 
-  QString Url;
 #ifdef Q_OS_ANDROID
-  Url = androidUrl;
+  return androidUrl;
 #endif
 
 #ifdef Q_OS_MAC
-  Url = macUrl;
+  return macUrl;
 #endif
 
 #ifdef Q_OS_WIN
-  Url = winUrl;
+  return winUrl;
 #endif
 
-#ifdef Q_OS_LINUX
-  Url = linuxUrl;
-#endif
-
-  return Url;
+  return linuxUrl;
 }
 
 int dlgRemarks::parse_UpdateJSON(QString str) {
@@ -191,6 +186,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
     QVariantList list = root_Obj.value("assets").toArray().toVariantList();
     QString Url = getUrl(list);
     s_link = "https://ghproxy.com/" + Url;
+    qDebug() << "s_link" << s_link << Url;
 
     QJsonObject PulseValue = root_Obj.value("assets").toObject();
     QString Verison = root_Obj.value("tag_name").toString();

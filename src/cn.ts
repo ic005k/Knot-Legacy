@@ -1258,6 +1258,11 @@ F</source>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
+    <message>
+        <location filename="SyncInfo.cpp" line="46"/>
+        <source>The data update is complete.</source>
+        <translation>数据更新已完成</translation>
+    </message>
 </context>
 <context>
     <name>TestDialog</name>
@@ -2160,9 +2165,8 @@ in skydrive folder</source>
         <translation>字体文件 (*.*)</translation>
     </message>
     <message>
-        <location filename="Preferences.cpp" line="285"/>
         <source>The data update is complete.</source>
-        <translation>数据更新已完成</translation>
+        <translation type="vanished">数据更新已完成</translation>
     </message>
 </context>
 <context>
