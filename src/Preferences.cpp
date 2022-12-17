@@ -313,8 +313,5 @@ void dlgPreferences::runSync(QString path) {
     mw_one->m_SyncInfo->ui->textBrowser->append(info);
     mw_one->m_SyncInfo->init();
     mw_one->m_SyncInfo->show();
-  } else {
-    mw_one->Sleep(2000);
-    mw_one->isSelf = false;
   }
 }

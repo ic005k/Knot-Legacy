@@ -68,6 +68,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         return context;
     }
 
+    public native static void CallJavaNotify_0();
+
     public native static void CallJavaNotify_1();
 
     public native static void CallJavaNotify_2();

@@ -44,6 +44,8 @@ public class MyService extends Service {
     private static final String ID = "channel_1";
     private static final String NAME = "F_SERVICE";
 
+    public native static void CallJavaNotify_0();
+
     public native static void CallJavaNotify_1();
 
     public native static void CallJavaNotify_2();

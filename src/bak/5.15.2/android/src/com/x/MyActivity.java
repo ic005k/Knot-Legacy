@@ -6,6 +6,7 @@ import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
 
+import android.view.inputmethod.InputMethodSession.EventCallback;
 import android.app.Application;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -118,6 +119,9 @@ import android.content.pm.PackageInfo;
 import android.support.v4.app.ActivityCompat;
 import android.content.pm.PackageManager;
 
+import android.os.FileObserver;
+
+
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
     private static MyActivity m_instance = null;
@@ -139,6 +143,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     private final static String TAG = "QtKnot";
     private static Context context;
     public static boolean ReOpen = false;
+
+    public native static void CallJavaNotify_0();
 
     public native static void CallJavaNotify_1();
 
@@ -200,11 +206,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public static int mini() {
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
-
-        if (isStepCounter == 1) {
-            CallJavaNotify_2();
-        }
-
+        CallJavaNotify_2();
         return 1;
     }
 
@@ -518,6 +520,12 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
+        //File Watch
+        if (null == mFileObserver) {
+            mFileObserver = new SDCardFileObserver("/storage/emulated/0/KnotData/");
+            mFileObserver.startWatching(); //开始监听
+        }
+
     }
 
 
@@ -553,6 +561,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     protected void onDestroy() {
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
+        if (null != mFileObserver) mFileObserver.stopWatching(); //停止监听
 
         //让系统自行处理，否则退出时有可能出现崩溃
         //if(mHomeKeyEvent!=null)
@@ -1167,6 +1176,48 @@ This method can parse out the real local file path from a file URI.
         }
     }
 
+    //==============================================================================================
+    private FileObserver mFileObserver;
+
+    static class SDCardFileObserver extends FileObserver {
+        //mask:指定要监听的事件类型，默认为FileObserver.ALL_EVENTS
+        public SDCardFileObserver(String path, int mask) {
+            super(path, mask);
+        }
+
+        public SDCardFileObserver(String path) {
+            super(path);
+        }
+
+        @Override
+        public void onEvent(int event, String path) {
+            final int action = event & FileObserver.ALL_EVENTS;
+            switch (action) {
+                case FileObserver.ACCESS:
+                    //System.out.println("event: 文件或目录被访问, path: " + path);
+                    break;
+
+                case FileObserver.DELETE:
+                    //System.out.println("event: 文件或目录被删除, path: " + path);
+                    break;
+
+                case FileObserver.OPEN:
+                    //System.out.println("event: 文件或目录被打开, path: " + path);
+                    break;
+
+                case FileObserver.MODIFY:
+                    if (path.equals("todo.ini") || path.equals("mainnotes.ini"))
+                        CallJavaNotify_0();
+                    System.out.println("event: 文件或目录被修改, path: " + path);
+                    break;
+
+                case FileObserver.CREATE:
+                    //System.out.println("event: 文件或目录被创建, path: " + path);
+                    break;
+            }
+        }
+
+    }
 
 }
 

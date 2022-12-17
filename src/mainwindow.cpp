@@ -4829,6 +4829,7 @@ void MainWindow::on_btnBackMemo_clicked() {
 
   ui->frameMemo->hide();
   ui->frameMain->show();
+  isSelf = false;
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -5109,6 +5110,7 @@ void MainWindow::on_btnBackTodo_clicked() {
   mydlgTodo->saveTodo();
   mydlgTodo->refreshTableLists();
   mydlgTodo->refreshAlarm();
+  isSelf = false;
 }
 
 void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }
