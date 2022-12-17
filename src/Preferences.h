@@ -23,6 +23,7 @@ class dlgPreferences : public QDialog {
 
   void initValues();
   void autoBakData();
+  void runSync(QString path);
   protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 

@@ -514,7 +514,7 @@ void MainWindow::init_Options() {
   ui->btnMonth->setText(btnMonthText);
 
   // time machine
-  QSettings RegTime(iniDir + "timemachine.ini", QSettings::IniFormat);
+  QSettings RegTime(privateDir + "timemachine.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   RegTime.setIniCodec("utf-8");
 #endif
@@ -3874,6 +3874,7 @@ void MainWindow::init_UIWidget() {
   m_widget = new QWidget(this);
   m_widget->close();
   m_NotesList = new dlgNotesList(this);
+  m_SyncInfo = new SyncInfo(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -4215,7 +4216,7 @@ void MainWindow::redo() {
 
 void MainWindow::addUndo(QString log) {
   if (!isImport) {
-    QString undoFile = iniDir + mydlgMainNotes->getDateTimeStr();
+    QString undoFile = privateDir + mydlgMainNotes->getDateTimeStr();
     bakIniData(undoFile, true);
 
     for (int i = 0; i < timeLines.count(); i++) {
@@ -4227,7 +4228,7 @@ void MainWindow::addUndo(QString log) {
     }
 
     timeLines.insert(0, undoFile + "\n" + log);
-    timeLines.insert(0, iniDir + LatestTime);
+    timeLines.insert(0, privateDir + LatestTime);
     int count = timeLines.count();
     if (count > 30) {
       count = 30;
@@ -4237,7 +4238,7 @@ void MainWindow::addUndo(QString log) {
         qDebug() << oldFile << "addUndo del oldFile...";
       timeLines.removeAt(count);
     }
-    QSettings Reg(iniDir + "timemachine.ini", QSettings::IniFormat);
+    QSettings Reg(privateDir + "timemachine.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
 #endif
@@ -4249,7 +4250,7 @@ void MainWindow::addUndo(QString log) {
 
 void MainWindow::addRedo() {
   if (!isImport) {
-    QString redoFile = iniDir + LatestTime;
+    QString redoFile = privateDir + LatestTime;
     bakIniData(redoFile, true);
   }
 }
@@ -4293,7 +4294,7 @@ void MainWindow::on_actionTimeMachine() {
     QString str = list->currentItem()->text();
     QStringList list0 = str.split("\n");
     if (list0.count() == 2) str = list0.at(0);
-    QString file = iniDir + str.trimmed();
+    QString file = privateDir + str.trimmed();
     if (importBakData(file, true, false, true)) btnBack->click();
   });
 
@@ -4366,6 +4367,7 @@ void MainWindow::stopJavaTimer() {
 
 #ifdef Q_OS_ANDROID
 static void JavaNotify_0() {
+  mw_one->mydlgPre->runSync("");
   // qDebug() << "C++ JavaNotify_0";
 }
 

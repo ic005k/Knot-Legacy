@@ -52,6 +52,7 @@ SOURCES += \
     src/RemarksAbout.cpp \
     src/Report.cpp \
     src/Steps.cpp \
+    src/SyncInfo.cpp \
     src/Todo.cpp \
     src/TodoAlarm.cpp \
     src/autoupdatedialog.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     src/RemarksAbout.h \
     src/Report.h \
     src/Steps.h \
+    src/SyncInfo.h \
     src/Todo.h \
     src/TodoAlarm.h \
     src/autoupdatedialog.h \
@@ -116,6 +118,7 @@ FORMS += \
     src/RemarksAbout.ui \
     src/Report.ui \
     src/Steps.ui \
+    src/SyncInfo.ui \
     src/Todo.ui \
     src/TodoAlarm.ui \
     src/autoupdatedialog.ui \

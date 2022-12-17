@@ -80,6 +80,7 @@
 #include "src/RemarksAbout.h"
 #include "src/Report.h"
 #include "src/Steps.h"
+#include "src/SyncInfo.h"
 #include "src/Todo.h"
 #include "src/TodoAlarm.h"
 #include "src/dlgSetText.h"
@@ -98,6 +99,7 @@
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
 #include "ui_Steps.h"
+#include "ui_SyncInfo.h"
 #include "ui_Todo.h"
 #include "ui_TodoAlarm.h"
 #include "ui_dlgSetText.h"
@@ -220,6 +222,7 @@ class MainWindow : public QMainWindow {
   dlgReaderFun *mydlgReaderFun;
   dlgSetText *mydlgSetText;
   dlgNotesList *m_NotesList;
+  SyncInfo *m_SyncInfo;
 
   File *myfile;
 
