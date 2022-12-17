@@ -768,7 +768,7 @@ void MainWindow::addFilesWatch() {
 #else
   FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
   FileSystemWatcher::addWatchPath(iniDir + "mainnotes.ini");
-  isSelf = false;
+
   qDebug() << QTime::currentTime().toString()
            << "add file watch...... isSelf=" << isSelf;
 #endif
@@ -2981,7 +2981,6 @@ void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 void MainWindow::on_btnTodo_clicked() {
   mydlgMainNotes->m_SetEditText->close();
   mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgTodo);
-  mydlgTodo->isSave = true;
 
   mydlgTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                          this->width(), this->height());

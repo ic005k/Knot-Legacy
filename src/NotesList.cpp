@@ -445,8 +445,6 @@ void dlgNotesList::initNotesList() {
         if (mw_one->initMain || isImport)
           on_treeWidget_itemClicked(childItem, 0);
 
-        qDebug() << ".......curitem....." << b << "   " << currentMDFile;
-
         break;
       }
     }

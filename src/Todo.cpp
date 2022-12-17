@@ -57,10 +57,7 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
 
 dlgTodo::~dlgTodo() { delete ui; }
 
-void dlgTodo::keyReleaseEvent(QKeyEvent* event) {
-  Q_UNUSED(event);
-  // event->accept();
-}
+void dlgTodo::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
 void dlgTodo::saveTodo() {
   if (!isSave) return;

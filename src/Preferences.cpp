@@ -278,7 +278,8 @@ void dlgPreferences::autoBakData() {
 }
 
 void dlgPreferences::runSync(QString path) {
-  qDebug() << "Start Sync..." << path;
+  qDebug() << QTime::currentTime().toString() + "  Start Sync..." << path
+           << "isSelf=" << mw_one->isSelf;
   if (!mw_one->isSelf) {
     if (!mw_one->ui->frameRecycle->isHidden()) {
       mw_one->mydlgTodo->isSave = false;
@@ -312,5 +313,6 @@ void dlgPreferences::runSync(QString path) {
     mw_one->m_SyncInfo->ui->textBrowser->append(info);
     mw_one->m_SyncInfo->init();
     mw_one->m_SyncInfo->show();
-  }
+  } else
+    mw_one->isSelf = false;
 }
