@@ -276,16 +276,3 @@ void dlgPreferences::autoBakData() {
   }
   Reg.setValue("/AutoBak/BakCount", bakCount);
 }
-
-void dlgPreferences::runSync(QString path) {
-  qDebug() << QTime::currentTime().toString() + "  Start Sync..." << path
-           << "isSelf=" << mw_one->isSelf;
-  if (!mw_one->isSelf && !mw_one->initMain) {
-    QString info = QDateTime::currentDateTime().toString() + "\n" +
-                   tr("The data update is complete.") + "\n";
-    mw_one->m_SyncInfo->close();
-    mw_one->m_SyncInfo->ui->textBrowser->append(info);
-    mw_one->m_SyncInfo->init();
-    mw_one->m_SyncInfo->show();
-  }
-}

@@ -17,12 +17,15 @@ class SyncInfo : public QDialog {
   Ui::SyncInfo *ui;
 
   void init();
-  protected:
+  void runSync(QString path);
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:
   void on_btnClose_clicked();
 
  private:
+  QStringList infoList;
 };
 
 #endif  // SYNCINFO_H

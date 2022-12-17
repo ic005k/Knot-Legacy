@@ -126,5 +126,5 @@ void FileSystemWatcher::directoryUpdated(const QString& path) {
 // 文件修改时调用
 void FileSystemWatcher::fileUpdated(const QString& path) {
   qDebug() << QString("The file %1 at path %2 is updated......").arg(path);
-  mw_one->mydlgPre->runSync(path);
+  mw_one->m_SyncInfo->runSync(path);
 }

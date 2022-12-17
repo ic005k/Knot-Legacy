@@ -4370,7 +4370,7 @@ void MainWindow::stopJavaTimer() {
 
 #ifdef Q_OS_ANDROID
 static void JavaNotify_0() {
-  mw_one->mydlgPre->runSync("");
+  mw_one->m_SyncInfo->runSync("");
   // qDebug() << "C++ JavaNotify_0";
 }
 
