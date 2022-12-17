@@ -168,7 +168,7 @@ QString dlgRemarks::getUrl(QVariantList list) {
   Url = winUrl;
 #endif
 
-#ifdef Q_OS_Linux
+#ifdef Q_OS_LINUX
   Url = linuxUrl;
 #endif
 

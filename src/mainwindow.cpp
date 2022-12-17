@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.63";
+QString ver = "1.0.64";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -755,17 +755,23 @@ void MainWindow::startSyncData() {
 }
 
 void MainWindow::removeFilesWatch() {
+#ifdef Q_OS_ANDROID
+#else
   FileSystemWatcher::removeWatchPath(iniDir + "todo.ini");
   FileSystemWatcher::removeWatchPath(iniDir + "mainnotes.ini");
   qDebug() << QTime::currentTime().toString() << "remove file watch......";
+#endif
 }
 
 void MainWindow::addFilesWatch() {
+#ifdef Q_OS_ANDROID
+#else
   FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
   FileSystemWatcher::addWatchPath(iniDir + "mainnotes.ini");
   isSelf = false;
   qDebug() << QTime::currentTime().toString()
            << "add file watch...... isSelf=" << isSelf;
+#endif
 }
 
 MainWindow::~MainWindow() {
@@ -2989,9 +2995,6 @@ void MainWindow::on_btnTodo_clicked() {
   mydlgTodo->init_Todo();
 
   mydlgTodo->refreshAlarm();
-
-  mw_one->removeFilesWatch();
-  mw_one->addFilesWatch();
 }
 
 void MainWindow::on_rbFreq_clicked() {
@@ -3704,9 +3707,6 @@ void MainWindow::on_btnNotes_clicked() {
   }
 
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
-
-  mw_one->removeFilesWatch();
-  mw_one->addFilesWatch();
 }
 
 void MainWindow::showMemos() {
@@ -4919,8 +4919,6 @@ void MainWindow::on_btnEdit_clicked() {
   tmpCursor.setPosition(cpos);
   mydlgMainNotes->ui->editSource->setTextCursor(tmpCursor);
 
-  mw_one->removeFilesWatch();
-  mw_one->addFilesWatch();
   mydlgMainNotes->isSave = false;
 }
 
