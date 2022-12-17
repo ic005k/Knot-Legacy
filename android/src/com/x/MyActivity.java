@@ -1251,8 +1251,7 @@ This method can parse out the real local file path from a file URI.
                 case FileObserver.CLOSE_WRITE:
                     Log.i("FileWatcher", "CLOSE_WRITE: " + path);
                     // 文件写入完毕后会回调，可以在这对新写入的文件做操作
-                    if (path.equals("/storage/emulated/0/KnotData//todo.ini") || path.equals("/storage/emulated/0/KnotData//mainnotes.ini"))
-                        CallJavaNotify_0();
+
                     mThreadHandler.post(new Runnable() {
 
                         @Override
@@ -1283,7 +1282,9 @@ This method can parse out the real local file path from a file URI.
                     // Log.i("FileWatcher", "DELETE_SELF: " + path);
                     break;
                 case FileObserver.MODIFY:
-                    // Log.i("FileWatcher", "MODIFY: " + path);
+                     Log.i("FileWatcher", "MODIFY: " + path);
+                    if (path.equals("/storage/emulated/0/KnotData//todo.ini") || path.equals("/storage/emulated/0/KnotData//mainnotes.ini"))
+                        CallJavaNotify_0();
                     break;
                 case FileObserver.MOVE_SELF:
                     // Log.i("FileWatcher", "MOVE_SELF: " + path);
