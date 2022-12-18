@@ -136,6 +136,7 @@ Rectangle {
             text: strText
 
             onLinkActivated: {
+
                 document.setBackDir(link)
                 document.setReadPosition(link)
                 console.log(htmlPath + link)
@@ -144,15 +145,18 @@ Rectangle {
             }
             onReleased:  {
 
+                mw_one.on_SetReaderFunVisible()
             }
 
             MouseArea {
                 id: mouse_area
                 anchors.fill: parent
                 hoverEnabled: true
-                acceptedButtons: Qt.AllButtons
+                acceptedButtons: Qt.RightButton
+                onClicked: {
+
+                }
                 onDoubleClicked: {
-                    mw_one.on_SetReaderFunVisible()
 
                 }
                 onPressAndHold: {

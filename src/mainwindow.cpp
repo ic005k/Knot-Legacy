@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.66";
+QString ver = "1.0.67";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4398,6 +4398,9 @@ static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
   if (mw_one->alertWindowsCount == 0) {
     if (!mw_one->ui->frameReader->isHidden()) mw_one->ui->btnBack->click();
+    if (!mw_one->ui->frameMemo->isHidden()) mw_one->ui->btnBackMemo->click();
+    if (!mw_one->ui->frameOne->isHidden()) mw_one->ui->btnBack_One->click();
+    if (!mw_one->ui->frameSteps->isHidden()) mw_one->ui->btnBackSteps->click();
     mw_one->ui->btnTodo->click();
   }
 
