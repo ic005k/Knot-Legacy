@@ -50,8 +50,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
          java-version: '11'
-         distribution: 'adopt'
-         cache: gradle    
+          
           
       - uses: actions/checkout@v2
         with:
