@@ -250,6 +250,7 @@ void dlgRemarks::on_btnCheckUpdate_clicked() { CheckUpdate(); }
 void dlgRemarks::on_btnTest_clicked() {
   if (s_link == "") return;
 
+  mw_one->mydlgReader->setPdfViewVisible(false);
 #ifdef Q_OS_ANDROID
   show_download();
 #else
