@@ -3731,6 +3731,8 @@ void MainWindow::showMemos() {
 
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
+  QTreeWidgetItem *item = m_NotesList->ui->treeWidget->currentItem();
+  m_NotesList->on_treeWidget_itemClicked(item, 0);
 
   ui->frameMemo->show();
   mydlgMainNotes->setVPos();

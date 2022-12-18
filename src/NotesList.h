@@ -45,7 +45,7 @@ class dlgNotesList : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
- private slots:
+ public slots:
   void on_btnClose_clicked();
 
   void on_btnNewNoteBook_clicked();
