@@ -4175,6 +4175,16 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 #ifdef Q_OS_ANDROID
   mainMenu->addAction(actOpenKnotBakDir);
   actOpenKnotBakDir->setVisible(false);
+#else
+  if (!mydlgPre->devMode) {
+    actAddTab->setVisible(false);
+    actDelTab->setVisible(false);
+    actRenameTab->setVisible(false);
+    actTimeMachine->setVisible(false);
+    actExportData->setVisible(false);
+    actImportData->setVisible(false);
+    actOneDrive->setVisible(false);
+  }
 #endif
 
   mainMenu->addAction(actPreferences);
@@ -4316,24 +4326,12 @@ void MainWindow::on_actionTimeMachine() {
 }
 
 void MainWindow::on_btnMenu_clicked() {
-#ifdef Q_OS_ANDROID
   QMenu *mainMenu = new QMenu(this);
   init_Menu(mainMenu);
   int x = mw_one->geometry().x() + 2;
   int y = geometry().y() + ui->frameMenu->height() + 2;
   QPoint pos(x, y);
   mainMenu->exec(pos);
-#else
-  if (mydlgPre->devMode) {
-    QMenu *mainMenu = new QMenu(this);
-    init_Menu(mainMenu);
-    int x = mw_one->geometry().x() + 2;
-    int y = geometry().y() + ui->frameMenu->height() + 2;
-    QPoint pos(x, y);
-    mainMenu->exec(pos);
-  } else
-    on_actionPreferences_triggered();
-#endif
 }
 
 void MainWindow::on_btnZoom_clicked() {

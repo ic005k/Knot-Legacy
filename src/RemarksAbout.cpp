@@ -253,8 +253,9 @@ void dlgRemarks::on_btnTest_clicked() {
 #ifdef Q_OS_ANDROID
   show_download();
 #else
-  const QUrl url("https://github.com/ic005k/" + appName + "/releases/latest");
-  QDesktopServices::openUrl(url);
+  // const QUrl url("https://github.com/ic005k/" + appName +
+  // "/releases/latest");
+  QDesktopServices::openUrl(QUrl(s_link));
 #endif
 }
 

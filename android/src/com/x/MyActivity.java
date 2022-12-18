@@ -1240,7 +1240,7 @@ This method can parse out the real local file path from a file URI.
             final String tmpPath = path;
             switch (event) {
                 case FileObserver.ACCESS:
-                     Log.i("FileWatcher", "ACCESS: " + path);
+                   // Log.i("FileWatcher", "ACCESS: " + path);
                     if (path.contains("/storage/emulated/0/KnotData//todo.ini") || path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
                         CallJavaNotify_0();
                     break;
@@ -1251,7 +1251,7 @@ This method can parse out the real local file path from a file URI.
                     // Log.i("FileWatcher", "CLOSE_NOWRITE: " + path);
                     break;
                 case FileObserver.CLOSE_WRITE:
-                    Log.i("FileWatcher", "CLOSE_WRITE: " + path);
+                    //Log.i("FileWatcher", "CLOSE_WRITE: " + path);
                     // 文件写入完毕后会回调，可以在这对新写入的文件做操作
 
                     mThreadHandler.post(new Runnable() {
@@ -1263,7 +1263,7 @@ This method can parse out the real local file path from a file URI.
                     });
                     break;
                 case FileObserver.CREATE:
-                    Log.i(TAG, "CREATE: " + path);
+                    //Log.i(TAG, "CREATE: " + path);
 
                     mThreadHandler.post(new Runnable() {
                         @Override
@@ -1273,7 +1273,7 @@ This method can parse out the real local file path from a file URI.
                     });
                     break;
                 case FileObserver.DELETE:
-                    Log.i(TAG, "DELETE: " + path);
+                    // Log.i(TAG, "DELETE: " + path);
                     mThreadHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -1285,7 +1285,7 @@ This method can parse out the real local file path from a file URI.
                     // Log.i("FileWatcher", "DELETE_SELF: " + path);
                     break;
                 case FileObserver.MODIFY:
-                     Log.i("FileWatcher", "MODIFY: " + path);
+                    // Log.i("FileWatcher", "MODIFY: " + path);
 
                     break;
                 case FileObserver.MOVE_SELF:
@@ -1298,10 +1298,10 @@ This method can parse out the real local file path from a file URI.
                     // Log.i("FileWatcher", "MOVED_TO: " + path);
                     break;
                 case FileObserver.OPEN:
-                    Log.i("FileWatcher", "OPEN: " + path);
+                    // Log.i("FileWatcher", "OPEN: " + path);
                     break;
                 default:
-                    Log.i(TAG, "DEFAULT(" + event + ";) : " + path);
+                    // Log.i(TAG, "DEFAULT(" + event + ";) : " + path);
 
                     break;
             }
