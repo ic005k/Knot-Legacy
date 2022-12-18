@@ -442,8 +442,8 @@ void dlgNotesList::initNotesList() {
         stop = true;
         tw->setCurrentItem(childItem);
         ui->editName->setText(childItem->text(0));
-        if (mw_one->initMain || isImport)
-          on_treeWidget_itemClicked(childItem, 0);
+
+        on_treeWidget_itemClicked(childItem, 0);
 
         break;
       }
