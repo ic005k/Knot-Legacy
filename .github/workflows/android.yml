@@ -46,10 +46,7 @@ jobs:
           # here need not arch
           # arch: ${{ matrix.qt_arch }}
           
-      - name: set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-         java-version: '11'
+      
           
           
       - uses: actions/checkout@v2
