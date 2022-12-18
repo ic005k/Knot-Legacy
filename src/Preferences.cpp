@@ -17,6 +17,7 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   mw_one->set_btnStyle(this);
 
   this->installEventFilter(this);
+  ui->lblFontSize->installEventFilter(this);
 
   ui->chkClose->hide();
   ui->chkShowCY->hide();
@@ -52,11 +53,28 @@ dlgPreferences::~dlgPreferences() { delete ui; }
 void dlgPreferences::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
 bool dlgPreferences::eventFilter(QObject* watch, QEvent* evn) {
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnBack_clicked();
       return true;
+    }
+  }
+
+  if (watch == ui->lblFontSize) {
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+      Reg.setIniCodec("utf-8");
+#endif
+
+      if (devMode)
+        devMode = false;
+      else
+        devMode = true;
+      Reg.setValue("/Options/DevMode", devMode);
+      qDebug() << "devMode=" << devMode;
     }
   }
 
@@ -195,9 +213,12 @@ void dlgPreferences::initValues() {
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   ui->chkDebug->setChecked(debugmode);
   on_chkDebug_clicked();
+
+  devMode = Reg.value("/Options/DevMode", false).toBool();
 #ifdef Q_OS_ANDROID
 #else
-  if (!debugmode) {
+  ui->gboxAdditional->hide();
+  if (!devMode) {
     mw_one->ui->frame_charts->hide();
     mw_one->ui->frame_tab->hide();
     mw_one->ui->frame_find->hide();

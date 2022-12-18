@@ -4324,7 +4324,7 @@ void MainWindow::on_btnMenu_clicked() {
   QPoint pos(x, y);
   mainMenu->exec(pos);
 #else
-  if (mydlgPre->ui->chkDebug->isChecked()) {
+  if (mydlgPre->devMode) {
     QMenu *mainMenu = new QMenu(this);
     init_Menu(mainMenu);
     int x = mw_one->geometry().x() + 2;

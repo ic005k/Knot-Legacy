@@ -15,6 +15,7 @@ class dlgPreferences : public QDialog {
   ~dlgPreferences();
   Ui::dlgPreferences *ui;
 
+  bool devMode = false;
   QString chkStyle;
   bool isFontChange = false;
   void saveOptions();

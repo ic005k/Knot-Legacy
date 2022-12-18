@@ -154,7 +154,7 @@ QSlider::handle:horizontal
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="gboxAdditional">
      <property name="title">
       <string>Additional Options</string>
      </property>
