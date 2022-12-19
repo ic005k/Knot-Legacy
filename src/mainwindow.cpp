@@ -247,6 +247,7 @@ MainWindow::MainWindow(QWidget *parent)
   resetWinPos();
   initMain = false;
   addFilesWatch();
+  mydlgReader->setPdfViewVisible(false);
 }
 
 void MainWindow::initHardStepSensor() {
