@@ -147,7 +147,6 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
 
   if (ui->treeWidget->topLevelItemCount() == 0) return;
 
-  QString mdfile;
   if (item->parent() != NULL) {
     if (tw->currentIndex().row() == 0) {
       if (tw->currentIndex().parent().row() == 0) {
@@ -155,16 +154,12 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
       }
     }
 
-    mdfile = iniDir + item->text(1);
-
-    mw_one->mydlgMainNotes->MD2Html(mdfile);
+    currentMDFile = iniDir + item->text(1);
+    mw_one->mydlgMainNotes->MD2Html(currentMDFile);
     mw_one->mydlgMainNotes->loadMemoQML();
-    currentMDFile = mdfile;
     if (!mw_one->initMain) mw_one->mydlgMainNotes->setVPos();
-
     mw_one->ui->lblNoteName->setText(item->text(0));
   }
-
   ui->editName->setText(item->text(0));
 
   qDebug() << "currentMDFile " << currentMDFile;

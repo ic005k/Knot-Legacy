@@ -205,7 +205,7 @@ void dlgMainNotes::saveMainNotes() {
 
   QString strTag = mw_one->m_NotesList->currentMDFile;
   strTag.replace(iniDir, "");
-  Reg.setValue("/MainNotes/CurrentOSIniDir", iniDir);
+
   Reg.setValue("/MainNotes/editVPos" + strTag,
                ui->editSource->verticalScrollBar()->sliderPosition());
   Reg.setValue("/MainNotes/editCPos" + strTag,
@@ -638,7 +638,7 @@ void dlgMainNotes::loadMemoQML() {
   for (int i = 0; i < edit->document()->lineCount(); i++) {
     str = mw_one->mydlgReader->getTextEditLineText(edit, i);
     str = str.trimmed();
-    if (str.mid(0, 4) == "<img") {
+    if (str.mid(0, 4) == "<img" && str.contains("file://")) {
       QString str1 = str;
       qDebug() << "str1=" << str1;
       QStringList list = str1.split(" ");
@@ -669,17 +669,15 @@ void dlgMainNotes::loadMemoQML() {
     edit1->appendPlainText(str);
   }
 
-  QString htmlBuffer = edit1->toPlainText();
-
-  QString htmlfile = privateDir + "html.html";
-  mw_one->mydlgReader->TextEditToFile(edit1, htmlfile);
-
   mw_one->ui->qwNotes->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
   QQuickItem* root = mw_one->ui->qwNotes->rootObject();
 
+  // mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml",
-  //                          Q_ARG(QVariant, htmlfile));
+  //                           Q_ARG(QVariant, htmlFileName));
+
+  QString htmlBuffer = edit1->toPlainText();
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
 

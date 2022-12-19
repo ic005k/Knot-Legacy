@@ -4902,16 +4902,11 @@ void MainWindow::on_btnEdit_clicked() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  QString strIniDir;
-  strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
 
-  QString str = mw_one->loadText(m_NotesList->currentMDFile);
-  if (strIniDir != "") {
-    str.replace(strIniDir, iniDir);
-  }
+  QString mdfile = mw_one->loadText(m_NotesList->currentMDFile);
 
   mydlgMainNotes->init();
-  mydlgMainNotes->ui->editSource->setPlainText(str);
+  mydlgMainNotes->ui->editSource->setPlainText(mdfile);
 
   mainHeight = mw_one->height();
   ui->frameMemo->hide();

@@ -109,8 +109,7 @@ Item {
             onLinkActivated: {
                 document.setBackDir(link)
                 document.setReadPosition(link)
-                console.log(htmlPath + link)
-                console.log(htmlPath)
+
                 console.log(link)
             }
 
