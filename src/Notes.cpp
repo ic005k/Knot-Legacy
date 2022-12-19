@@ -628,13 +628,6 @@ void dlgMainNotes::unzip(QString zipfile) {
 }
 
 void dlgMainNotes::loadMemoQML() {
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  QString strIniDir;
-  strIniDir = Reg.value("/MainNotes/CurrentOSIniDir").toString();
-
   QString htmlFileName = privateDir + "memo.html";
   QTextEdit* edit = new QTextEdit;
   QPlainTextEdit* edit1 = new QPlainTextEdit;
@@ -647,6 +640,7 @@ void dlgMainNotes::loadMemoQML() {
     str = str.trimmed();
     if (str.mid(0, 4) == "<img") {
       QString str1 = str;
+      qDebug() << "str1=" << str1;
       QStringList list = str1.split(" ");
       QString strSrc;
       for (int k = 0; k < list.count(); k++) {
@@ -656,10 +650,17 @@ void dlgMainNotes::loadMemoQML() {
           break;
         }
       }
-      strSrc = strSrc.replace("src=", "");
-      strSrc = strSrc.replace("/>", "");
+      qDebug() << "strSrc=" << strSrc;
+
+      QStringList list1 = strSrc.split("/memo/");
+      strSrc = "\"file://" + iniDir + "memo/" + list1.at(1);
+
+      QStringList list2 = str1.split("/memo/");
+      str = "<img src=\"file://" + iniDir + "memo/" + list2.at(1);
+
       str = "<a href=" + strSrc + ">" + str + "</a>";
-      // qDebug() << "strSrc=" << strSrc << str;
+      qDebug() << "strSrc=" << strSrc;
+      qDebug() << "str=" << str;
 
       str = str.replace("width=", "width1=");
       str = str.replace("height=", "height1=");
@@ -668,17 +669,17 @@ void dlgMainNotes::loadMemoQML() {
     edit1->appendPlainText(str);
   }
 
-  QString str1 = edit1->toPlainText();
-  if (strIniDir != "") {
-    str1.replace(strIniDir, iniDir);
-  }
-  htmlBuffer = str1;
+  QString htmlBuffer = edit1->toPlainText();
+
+  QString htmlfile = privateDir + "html.html";
+  mw_one->mydlgReader->TextEditToFile(edit1, htmlfile);
+
   mw_one->ui->qwNotes->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
   QQuickItem* root = mw_one->ui->qwNotes->rootObject();
 
-  // QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant,
-  // htmlFileName));
+  // QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+  //                          Q_ARG(QVariant, htmlfile));
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
 

@@ -7,8 +7,8 @@ Item {
     id: textitem
     visible: true
 
-    function loadHtml(msg) {
-        document.load("file://" + msg)
+    function loadHtml(htmlfile) {
+        document.load("file://" + htmlfile)
     }
 
     function loadHtmlBuffer(strhtml) {
