@@ -618,7 +618,7 @@ class MainWindow : public QMainWindow {
   void showSensorValues();
   QString decMemos(QString strDec, QString file);
   void initHardStepSensor();
-  void showMemos();
+  void showNotes();
   void resetWinPos();
 };
 

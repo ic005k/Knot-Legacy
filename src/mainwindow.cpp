@@ -3692,7 +3692,7 @@ void MainWindow::on_btnNotes_clicked() {
 
     if (ok && !text.isEmpty()) {
       if (text.trimmed() == strPw) {
-        showMemos();
+        showNotes();
 
       } else {
         QMessageBox msgBox;
@@ -3707,13 +3707,13 @@ void MainWindow::on_btnNotes_clicked() {
     }
 
   } else {
-    showMemos();
+    showNotes();
   }
 
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
-void MainWindow::showMemos() {
+void MainWindow::showNotes() {
   mydlgFloatFun->close();
   isMemoVisible = true;
   isReaderVisible = false;
@@ -3731,6 +3731,7 @@ void MainWindow::showMemos() {
   ui->frameSetKey->hide();
 
   m_NotesList->close();
+  m_NotesList = new dlgNotesList(this);
   m_NotesList->initNotesList();
   m_NotesList->initRecycle();
   QTreeWidgetItem *item = m_NotesList->ui->treeWidget->currentItem();
@@ -5055,6 +5056,7 @@ void MainWindow::closeGrayWindows() { m_widget->close(); }
 void MainWindow::on_btnNotesList_clicked() {
   if (!ui->frameMemo->isHidden()) mydlgMainNotes->saveQMLVPos();
   m_NotesList->close();
+  m_NotesList = new dlgNotesList(this);
   m_NotesList->initNotesList();
   m_NotesList->initRecycle();
   m_NotesList->show();
