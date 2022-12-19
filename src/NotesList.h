@@ -29,7 +29,6 @@ class dlgNotesList : public QDialog {
 
   void saveNotesList();
   void initNotesList();
-  void init();
 
   void setWinPos();
 

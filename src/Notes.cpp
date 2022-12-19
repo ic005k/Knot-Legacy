@@ -675,7 +675,7 @@ void dlgMainNotes::loadMemoQML() {
 
   // mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml",
-  //                           Q_ARG(QVariant, htmlFileName));
+  //                          Q_ARG(QVariant, htmlFileName));
 
   QString htmlBuffer = edit1->toPlainText();
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",

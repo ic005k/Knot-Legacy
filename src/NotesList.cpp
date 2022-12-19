@@ -47,14 +47,9 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   twrb->setColumnHidden(1, true);
   twrb->setColumnWidth(0, 180);
 
-  initRecycle();
-  if (twrb->topLevelItemCount() == 0) {
-    QTreeWidgetItem* topItem = new QTreeWidgetItem;
-    topItem->setText(0, tr("Notes Recycle Bin"));
-    twrb->addTopLevelItem(topItem);
-    twrb->setCurrentItem(topItem);
-    saveRecycle();
-  }
+  QString path = iniDir + "memo/";
+  QDir dir(path);
+  if (!dir.exists()) dir.mkdir(path);
 
   ui->editBook->setStyleSheet(
       mw_one->myEditRecord->ui->editAmount->styleSheet());
@@ -62,36 +57,6 @@ dlgNotesList::dlgNotesList(QWidget* parent)
       mw_one->myEditRecord->ui->editAmount->styleSheet());
   ui->editNote->setStyleSheet(
       mw_one->myEditRecord->ui->editAmount->styleSheet());
-
-  init();
-}
-
-void dlgNotesList::init() {
-  QString path = iniDir + "memo/";
-  QDir dir(path);
-  if (!dir.exists()) dir.mkdir(path);
-
-  initNotesList();
-  if (ui->treeWidget->topLevelItemCount() == 0) {
-    QTreeWidgetItem* item = new QTreeWidgetItem();
-    item->setText(0, tr("Default Notebook"));
-
-    QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
-    item1->setText(0, tr("My Notes"));
-    QString a = "memo/memo.md";
-    QString mdfile = iniDir + a;
-    currentMDFile = mdfile;
-    item1->setText(1, a);
-    ui->treeWidget->addTopLevelItem(item);
-
-    ui->treeWidget->setFocus();
-    ui->treeWidget->expandAll();
-    ui->treeWidget->setCurrentItem(item->child(0));
-
-    on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
-
-    saveNotesList();
-  }
 }
 
 dlgNotesList::~dlgNotesList() { delete ui; }
@@ -157,9 +122,12 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
     currentMDFile = iniDir + item->text(1);
     mw_one->mydlgMainNotes->MD2Html(currentMDFile);
     mw_one->mydlgMainNotes->loadMemoQML();
+
     if (!mw_one->initMain) mw_one->mydlgMainNotes->setVPos();
+
     mw_one->ui->lblNoteName->setText(item->text(0));
   }
+
   ui->editName->setText(item->text(0));
 
   qDebug() << "currentMDFile " << currentMDFile;
@@ -328,8 +296,8 @@ void dlgNotesList::saveNotesList() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  QString a = currentMDFile;
-  Reg.setValue("/MainNotes/currentItem", a.replace(iniDir, ""));
+  QString curmd = currentMDFile;
+  Reg.setValue("/MainNotes/currentItem", curmd.replace(iniDir, ""));
 
   int count = tw->topLevelItemCount();
   Reg.setValue("/MainNotes/topItemCount", count);
@@ -402,6 +370,9 @@ void dlgNotesList::initNotesList() {
         Reg.value("/MainNotes/strTopItem" + QString::number(i)).toString();
     QTreeWidgetItem* topItem = new QTreeWidgetItem;
     topItem->setText(0, strTop);
+    QFont font = this->font();
+    font.setBold(true);
+    topItem->setFont(0, font);
 
     int childCount =
         Reg.value("/MainNotes/childCount" + QString::number(i)).toInt();
@@ -445,6 +416,27 @@ void dlgNotesList::initNotesList() {
     }
     if (stop) break;
   }
+
+  if (ui->treeWidget->topLevelItemCount() == 0) {
+    QTreeWidgetItem* item = new QTreeWidgetItem();
+    item->setText(0, tr("Default Notebook"));
+
+    QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
+    item1->setText(0, tr("My Notes"));
+    QString a = "memo/memo.md";
+    QString mdfile = iniDir + a;
+    currentMDFile = mdfile;
+    item1->setText(1, a);
+    ui->treeWidget->addTopLevelItem(item);
+
+    ui->treeWidget->setFocus();
+    ui->treeWidget->expandAll();
+    ui->treeWidget->setCurrentItem(item->child(0));
+
+    on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
+
+    saveNotesList();
+  }
 }
 
 void dlgNotesList::initRecycle() {
@@ -480,6 +472,14 @@ void dlgNotesList::initRecycle() {
   }
 
   twrb->expandAll();
+
+  if (twrb->topLevelItemCount() == 0) {
+    QTreeWidgetItem* topItem = new QTreeWidgetItem;
+    topItem->setText(0, tr("Notes Recycle Bin"));
+    twrb->addTopLevelItem(topItem);
+    twrb->setCurrentItem(topItem);
+    saveRecycle();
+  }
 }
 
 void dlgNotesList::on_btnRecycle_clicked() {

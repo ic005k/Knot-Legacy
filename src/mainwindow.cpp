@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.68";
+QString ver = "1.0.69";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3731,7 +3731,8 @@ void MainWindow::showMemos() {
   ui->frameSetKey->hide();
 
   m_NotesList->close();
-  m_NotesList = new dlgNotesList(this);
+  m_NotesList->initNotesList();
+  m_NotesList->initRecycle();
   QTreeWidgetItem *item = m_NotesList->ui->treeWidget->currentItem();
   m_NotesList->on_treeWidget_itemClicked(item, 0);
 
@@ -5054,11 +5055,13 @@ void MainWindow::closeGrayWindows() { m_widget->close(); }
 void MainWindow::on_btnNotesList_clicked() {
   if (!ui->frameMemo->isHidden()) mydlgMainNotes->saveQMLVPos();
   m_NotesList->close();
-  m_NotesList = new dlgNotesList(this);
+  m_NotesList->initNotesList();
+  m_NotesList->initRecycle();
   m_NotesList->show();
   m_NotesList->setWinPos();
   m_NotesList->tw->setFocus();
   m_NotesList->isSave = false;
+  m_NotesList->tw->scrollToItem(m_NotesList->tw->currentItem());
 }
 
 void MainWindow::on_btnBackImg_clicked() {
