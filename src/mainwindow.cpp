@@ -3732,8 +3732,6 @@ void MainWindow::showNotes() {
 
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
-  m_NotesList->initNotesList();
-  m_NotesList->initRecycle();
   QTreeWidgetItem *item = m_NotesList->ui->treeWidget->currentItem();
   m_NotesList->on_treeWidget_itemClicked(item, 0);
 
@@ -5057,8 +5055,6 @@ void MainWindow::on_btnNotesList_clicked() {
   if (!ui->frameMemo->isHidden()) mydlgMainNotes->saveQMLVPos();
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
-  m_NotesList->initNotesList();
-  m_NotesList->initRecycle();
   m_NotesList->show();
   m_NotesList->setWinPos();
   m_NotesList->tw->setFocus();

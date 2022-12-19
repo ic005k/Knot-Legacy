@@ -57,6 +57,9 @@ dlgNotesList::dlgNotesList(QWidget* parent)
       mw_one->myEditRecord->ui->editAmount->styleSheet());
   ui->editNote->setStyleSheet(
       mw_one->myEditRecord->ui->editAmount->styleSheet());
+
+  initNotesList();
+  initRecycle();
 }
 
 dlgNotesList::~dlgNotesList() { delete ui; }
