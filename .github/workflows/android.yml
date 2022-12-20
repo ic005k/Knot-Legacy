@@ -46,7 +46,14 @@ jobs:
           # here need not arch
           # arch: ${{ matrix.qt_arch }}
           
-      
+       
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+            java-version: 11.0.3
+
+      #- name: Grant Permission to Execute
+      #  run: chmod +x android/gradlew
           
           
       - uses: actions/checkout@v2
