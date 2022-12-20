@@ -135,6 +135,10 @@ Item {
                     duration: 0
                 }
             }
+
+            Component.onCompleted: {
+                console.debug("Load Notes Completed...")
+            }
         }
 
         ScrollBar.vertical: ScrollBar {
@@ -146,10 +150,6 @@ Item {
             orientation: Qt.Vertical
             anchors.right: parent.right
             policy: ScrollBar.AsNeeded
-        }
-
-        Component.onCompleted: {
-
         }
     }
 

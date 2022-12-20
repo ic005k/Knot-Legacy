@@ -134,8 +134,6 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
     mw_one->mydlgMainNotes->MD2Html(currentMDFile);
     mw_one->mydlgMainNotes->loadMemoQML();
 
-    if (!mw_one->initMain) mw_one->mydlgMainNotes->setVPos();
-
     mw_one->ui->lblNoteName->setText(item->text(0));
   }
 

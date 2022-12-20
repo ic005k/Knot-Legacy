@@ -171,7 +171,6 @@ void dlgMainNotes::on_btnDone_clicked() {
 
   close();
   loadMemoQML();
-  setVPos();
 
   mw_one->repaint();
 }
@@ -672,8 +671,6 @@ void dlgMainNotes::loadMemoQML() {
     edit1->appendPlainText(str);
   }
 
-  mw_one->ui->qwNotes->setSource(
-      QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
   QQuickItem* root = mw_one->ui->qwNotes->rootObject();
 
   // mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
@@ -685,6 +682,7 @@ void dlgMainNotes::loadMemoQML() {
                             Q_ARG(QVariant, htmlBuffer));
 
   getVHeight();
+  setVPos();
 }
 
 void dlgMainNotes::saveQMLVPos() {
@@ -701,17 +699,20 @@ void dlgMainNotes::saveQMLVPos() {
 }
 
 void dlgMainNotes::setVPos() {
-  QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
+  if (!mw_one->initMain && textHeight > mw_one->ui->qwNotes->height()) {
+    QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
+    Reg.setIniCodec("utf-8");
 #endif
-  QString a = mw_one->m_NotesList->currentMDFile;
+    QString curmd = mw_one->m_NotesList->currentMDFile;
 
-  sliderPos = Reg.value("/MainNotes/SlidePos" + a.replace(iniDir, "")).toReal();
+    sliderPos =
+        Reg.value("/MainNotes/SlidePos" + curmd.replace(iniDir, "")).toReal();
 
-  QQuickItem* root = mw_one->ui->qwNotes->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "setVPos",
-                            Q_ARG(QVariant, sliderPos));
+    QQuickItem* root = mw_one->ui->qwNotes->rootObject();
+    QMetaObject::invokeMethod((QObject*)root, "setVPos",
+                              Q_ARG(QVariant, sliderPos));
+  }
 }
 
 qreal dlgMainNotes::getVPos() {

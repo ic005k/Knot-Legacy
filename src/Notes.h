@@ -53,7 +53,7 @@ class dlgMainNotes : public QDialog {
   void init_MainNotes();
   qlonglong curPos;
   qreal sliderPos;
-
+  void loadMemoQML();
   void decode(QString filename);
   void encode(QString filename);
 
@@ -65,14 +65,12 @@ class dlgMainNotes : public QDialog {
   QStringList getImgFileFromHtml(QString htmlfile);
   void zipMemo();
 
-  void loadMemoQML();
-
   void selectText(int start, int end);
 
   void getEditPanel(QTextEdit *textEdit, QEvent *evn);
 
   qreal getVHeight();
-  void setVPos();
+
   QString getDateTimeStr();
   void MD2Html(QString mdFile);
   void saveQMLVPos();
@@ -80,20 +78,18 @@ class dlgMainNotes : public QDialog {
 
   qreal getVPos();
   void unzip(QString zipfile);
- public slots:
-  void editVSBarValueChanged();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
   void paintEvent(QPaintEvent *pEvent) override;
-
   void closeEvent(QCloseEvent *event) override;
+
  public slots:
-
+  void editVSBarValueChanged();
   void timerSlot();
-
+  void setVPos();
   void highlightCurrentLine();
 
   void on_btnDone_clicked();

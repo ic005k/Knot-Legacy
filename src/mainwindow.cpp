@@ -3653,6 +3653,7 @@ void MainWindow::updateHardSensorSteps() {
 void MainWindow::on_btnNotes_clicked() {
   removeFilesWatch();
   isSelf = true;
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -3729,6 +3730,7 @@ void MainWindow::showNotes() {
 
   ui->frameMain->hide();
   ui->frameSetKey->hide();
+  ui->frameMemo->show();
 
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
@@ -3736,9 +3738,6 @@ void MainWindow::showNotes() {
     QTreeWidgetItem *item = m_NotesList->ui->treeWidget->currentItem();
     m_NotesList->on_treeWidget_itemClicked(item, 0);
   }
-
-  ui->frameMemo->show();
-  mydlgMainNotes->setVPos();
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -3993,8 +3992,11 @@ void MainWindow::init_UIWidget() {
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
+  ui->qwNotes->rootContext()->setContextProperty("mydlgMainNotes",
+                                                 mydlgMainNotes);
   ui->qwNotes->rootContext()->setContextProperty("FontSize", fontSize);
   ui->qwNotes->rootContext()->setContextProperty("strText", "");
+  ui->qwNotes->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
 
   ui->qwTodo->rootContext()->setContextProperty("mydlgTodo", mydlgTodo);
   ui->qwTodo->rootContext()->setContextProperty("FontSize", fontSize);
