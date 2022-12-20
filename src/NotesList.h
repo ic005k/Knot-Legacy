@@ -21,6 +21,8 @@ class dlgNotesList : public QDialog {
   ~dlgNotesList();
   Ui::dlgNotesList *ui;
 
+  int findCount;
+  QList<QTreeWidgetItem *> findResultList;
   bool isSave = false;
   QTreeWidget *twrb;
   QTreeWidget *tw;
@@ -68,6 +70,17 @@ class dlgNotesList : public QDialog {
   void on_btnRestore_clicked();
 
   void on_btnDel_2_clicked();
+
+ private slots:
+  void on_btnFind_clicked();
+
+  void on_btnPrev_clicked();
+
+  void on_btnNext_clicked();
+
+  void on_editFind_textChanged(const QString &arg1);
+
+  void on_editFind_returnPressed();
 
  private:
   QStringList files;

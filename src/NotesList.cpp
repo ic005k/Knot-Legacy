@@ -57,6 +57,13 @@ dlgNotesList::dlgNotesList(QWidget* parent)
       mw_one->myEditRecord->ui->editAmount->styleSheet());
   ui->editNote->setStyleSheet(
       mw_one->myEditRecord->ui->editAmount->styleSheet());
+  ui->editFind->setStyleSheet(
+      mw_one->myEditRecord->ui->editAmount->styleSheet());
+  ui->btnPrev->setEnabled(false);
+  ui->btnNext->setEnabled(false);
+  QFont font = this->font();
+  font.setPointSize(10);
+  ui->lblCount->setFont(font);
 
   initNotesList();
   initRecycle();
@@ -140,7 +147,6 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
   ui->editName->setText(item->text(0));
 
   qDebug() << "currentMDFile " << currentMDFile;
-  // isSave = true;
 }
 
 void dlgNotesList::on_btnRename_clicked() {
@@ -623,4 +629,59 @@ void dlgNotesList::getAllFiles(const QString& foldPath, QStringList& folds,
       folds << fileInfo.absoluteFilePath();
     }
   }
+}
+
+void dlgNotesList::on_btnFind_clicked() {
+  QString strFind = ui->editFind->text().trimmed().toLower();
+  if (strFind == "") return;
+  findResultList.clear();
+  int count = tw->topLevelItemCount();
+  for (int i = 0; i < count; i++) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    if (topItem->text(0).contains(strFind)) findResultList.append(topItem);
+    int childCount = topItem->childCount();
+    for (int j = 0; j < childCount; j++) {
+      QTreeWidgetItem* childItem = topItem->child(j);
+      if (childItem->text(0).contains(strFind))
+        findResultList.append(childItem);
+    }
+  }
+
+  if (findResultList.count() > 0) {
+    ui->btnPrev->setEnabled(true);
+    ui->btnNext->setEnabled(true);
+    tw->setCurrentItem(findResultList.at(0));
+    tw->scrollToItem(tw->currentItem());
+    findCount = 0;
+    ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
+                          QString::number(findResultList.count()));
+  }
+}
+
+void dlgNotesList::on_btnPrev_clicked() {
+  findCount--;
+  if (findCount < 0) findCount = 0;
+  tw->setCurrentItem(findResultList.at(findCount));
+  tw->scrollToItem(tw->currentItem());
+  ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
+                        QString::number(findResultList.count()));
+}
+
+void dlgNotesList::on_btnNext_clicked() {
+  findCount++;
+  if (findCount >= findResultList.count())
+    findCount = findResultList.count() - 1;
+  tw->setCurrentItem(findResultList.at(findCount));
+  tw->scrollToItem(tw->currentItem());
+  ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
+                        QString::number(findResultList.count()));
+}
+
+void dlgNotesList::on_editFind_textChanged(const QString& arg1) {
+  Q_UNUSED(arg1);
+  on_btnFind_clicked();
+}
+
+void dlgNotesList::on_editFind_returnPressed() {
+  if (ui->btnNext->isEnabled()) on_btnNext_clicked();
 }
