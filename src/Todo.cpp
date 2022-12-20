@@ -94,6 +94,7 @@ void dlgTodo::saveTodo() {
 }
 
 void dlgTodo::init_Todo() {
+  mw_one->isSelf = true;
   clearAll();
   QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

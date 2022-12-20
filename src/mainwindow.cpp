@@ -3732,8 +3732,10 @@ void MainWindow::showNotes() {
 
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
-  QTreeWidgetItem *item = m_NotesList->ui->treeWidget->currentItem();
-  m_NotesList->on_treeWidget_itemClicked(item, 0);
+  if (QFile(m_NotesList->currentMDFile).exists()) {
+    QTreeWidgetItem *item = m_NotesList->ui->treeWidget->currentItem();
+    m_NotesList->on_treeWidget_itemClicked(item, 0);
+  }
 
   ui->frameMemo->show();
   mydlgMainNotes->setVPos();
@@ -4849,6 +4851,8 @@ void MainWindow::on_btnSetKey_clicked() {
 }
 
 void MainWindow::on_btnSetKeyOK_clicked() {
+  isSelf = true;
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -4896,6 +4900,8 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
+  isSelf = true;
+
   mydlgMainNotes->m_SetEditText->close();
   mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgMainNotes);
 

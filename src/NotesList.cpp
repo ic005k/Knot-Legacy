@@ -5,7 +5,7 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
-extern QString iniDir;
+extern QString iniDir, privateDir;
 extern bool isImport;
 
 dlgNotesList::dlgNotesList(QWidget* parent)
@@ -122,7 +122,15 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
       }
     }
 
-    currentMDFile = iniDir + item->text(1);
+    QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    Reg.setIniCodec("utf-8");
+#endif
+
+    QString curmd = item->text(1);
+    Reg.setValue("/MainNotes/currentItem", curmd);
+
+    currentMDFile = iniDir + curmd;
     mw_one->mydlgMainNotes->MD2Html(currentMDFile);
     mw_one->mydlgMainNotes->loadMemoQML();
 
@@ -134,7 +142,7 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
   ui->editName->setText(item->text(0));
 
   qDebug() << "currentMDFile " << currentMDFile;
-  isSave = true;
+  // isSave = true;
 }
 
 void dlgNotesList::on_btnRename_clicked() {
@@ -299,9 +307,6 @@ void dlgNotesList::saveNotesList() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  QString curmd = currentMDFile;
-  Reg.setValue("/MainNotes/currentItem", curmd.replace(iniDir, ""));
-
   int count = tw->topLevelItemCount();
   Reg.setValue("/MainNotes/topItemCount", count);
   for (int i = 0; i < count; i++) {
@@ -361,6 +366,7 @@ void dlgNotesList::saveRecycle() {
 }
 
 void dlgNotesList::initNotesList() {
+  mw_one->isSelf = true;
   tw->clear();
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -396,9 +402,27 @@ void dlgNotesList::initNotesList() {
   }
 
   tw->expandAll();
-  QString b = Reg.value("/MainNotes/currentItem").toString();
-  currentMDFile = iniDir + b;
+
+  QSettings RegNotes(privateDir + "notes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  RegNotes.setIniCodec("utf-8");
+#endif
+  QString curmd =
+      RegNotes.value("/MainNotes/currentItem", "memo/xxx.md").toString();
+  QString cm = iniDir + curmd;
+
+  if (QFile(cm).exists()) {
+    currentMDFile = cm;
+  } else {
+    if (tw->topLevelItemCount() > 0) {
+      QTreeWidgetItem* topItem = tw->topLevelItem(0);
+      QTreeWidgetItem* childItem = topItem->child(0);
+      tw->setCurrentItem(childItem);
+      currentMDFile = iniDir + childItem->text(1);
+    }
+  }
   qDebug() << currentMDFile;
+
   bool stop = false;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
@@ -407,7 +431,7 @@ void dlgNotesList::initNotesList() {
     for (int j = 0; j < childCount; j++) {
       QTreeWidgetItem* childItem = topItem->child(j);
       QString strChild1 = childItem->text(1);
-      if (strChild1 == b) {
+      if (strChild1 == curmd) {
         stop = true;
         tw->setCurrentItem(childItem);
         ui->editName->setText(childItem->text(0));
@@ -443,6 +467,7 @@ void dlgNotesList::initNotesList() {
 }
 
 void dlgNotesList::initRecycle() {
+  mw_one->isSelf = true;
   twrb->clear();
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

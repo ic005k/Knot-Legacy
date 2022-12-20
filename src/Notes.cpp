@@ -182,7 +182,10 @@ void dlgMainNotes::MD2Html(QString mdFile) {
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
     QTextEdit* edit = new QTextEdit();
-    edit->setMarkdown(mw_one->loadText(mdFile));
+    QString strmd = mw_one->loadText(mdFile);
+    edit->setPlainText(strmd);
+    edit->document()->setMarkdown(strmd, QTextDocument::MarkdownDialectGitHub);
+    // edit->setMarkdown(strmd);
     stream << edit->toHtml().toUtf8();
     memofile1.close();
   }
@@ -677,7 +680,7 @@ void dlgMainNotes::loadMemoQML() {
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml",
   //                          Q_ARG(QVariant, htmlFileName));
 
-  QString htmlBuffer = edit1->toPlainText();
+  htmlBuffer = edit1->toPlainText();
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
 
