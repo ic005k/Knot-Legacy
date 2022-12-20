@@ -52,8 +52,8 @@ jobs:
         with:
             java-version: 11.0.3
 
-      - name: Grant Permission to Execute
-        run: chmod +x android/gradlew
+      #- name: Grant Permission to Execute
+      #  run: chmod +x android/gradlew
           
           
       - uses: actions/checkout@v2
