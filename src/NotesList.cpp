@@ -63,6 +63,7 @@ dlgNotesList::dlgNotesList(QWidget* parent)
   ui->btnNext->setEnabled(false);
   QFont font = this->font();
   font.setPointSize(10);
+  font.setBold(true);
   ui->lblCount->setFont(font);
 
   initNotesList();
