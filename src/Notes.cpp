@@ -1029,3 +1029,8 @@ void dlgMainNotes::closeEvent(QCloseEvent* event) {
 void dlgMainNotes::on_editSource_textChanged() { isSave = true; }
 
 void dlgMainNotes::on_editSource_cursorPositionChanged() { isSave = true; }
+
+void dlgMainNotes::on_btnReference_clicked() {
+  QString str = ui->editSource->textCursor().selectedText();
+  ui->editSource->insertPlainText("> " + str);
+}

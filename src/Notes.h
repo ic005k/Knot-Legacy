@@ -158,6 +158,8 @@ class dlgMainNotes : public QDialog {
 
   void on_editSource_cursorPositionChanged();
 
+  void on_btnReference_clicked();
+
  private:
   int x_left, x_right, y_left, y_right;
   int y1;
