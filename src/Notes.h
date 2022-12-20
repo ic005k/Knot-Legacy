@@ -79,7 +79,10 @@ class dlgMainNotes : public QDialog {
   qreal getVPos();
   void unzip(QString zipfile);
 
- protected:
+  void show_findText();
+
+  void findText();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -159,6 +162,10 @@ class dlgMainNotes : public QDialog {
   void on_editSource_cursorPositionChanged();
 
   void on_btnReference_clicked();
+
+  void on_btnShowFind_clicked();
+
+  void on_btnFind_clicked();
 
  private:
   int x_left, x_right, y_left, y_right;

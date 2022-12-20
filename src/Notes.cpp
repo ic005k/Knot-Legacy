@@ -102,6 +102,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnRight->setAutoRepeatInterval(b);
 
   ui->editSource->setFocus();
+  ui->frameFind->hide();
 }
 
 void dlgMainNotes::init() {
@@ -1033,4 +1034,67 @@ void dlgMainNotes::on_editSource_cursorPositionChanged() { isSave = true; }
 void dlgMainNotes::on_btnReference_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
   ui->editSource->insertPlainText("> " + str);
+}
+
+void dlgMainNotes::on_btnShowFind_clicked() {
+  if (!ui->frameFind->isHidden())
+    ui->frameFind->hide();
+  else
+    ui->frameFind->show();
+}
+
+void dlgMainNotes::show_findText() {
+  QString findtext = ui->editFind->text().trimmed().toLower();
+  //获得对话框的内容
+  if (ui->editSource->find(findtext, QTextDocument::FindBackward))
+  //查找后一个
+  {
+    // 查找到后高亮显示
+    QPalette palette = ui->editSource->palette();
+    palette.setColor(QPalette::Highlight,
+                     palette.color(QPalette::Active, QPalette::Highlight));
+    ui->editSource->setPalette(palette);
+  } else {
+    QMessageBox::information(this, tr("注意"), tr("没有找到内容"),
+                             QMessageBox::Ok);
+  }
+}
+
+void dlgMainNotes::findText() {
+  QString search_text = ui->editFind->text().trimmed().toLower();
+  if (search_text.trimmed().isEmpty()) {
+    // QMessageBox::information(this, tr("Empty search field"),
+    //                          tr("The search field is empty."));
+    return;
+  } else {
+    QTextDocument* document = ui->editSource->document();
+    bool found = false;
+    QTextCursor highlight_cursor(document);
+    QTextCursor cursor(document);
+    //开始
+    cursor.beginEditBlock();
+    QTextCharFormat color_format(highlight_cursor.charFormat());
+    color_format.setForeground(Qt::red);
+    while (!highlight_cursor.isNull() && !highlight_cursor.atEnd()) {
+      //查找指定的文本，匹配整个单词
+      highlight_cursor = document->find(search_text, highlight_cursor,
+                                        QTextDocument::FindCaseSensitively);
+      if (!highlight_cursor.isNull()) {
+        if (!found) found = true;
+        highlight_cursor.mergeCharFormat(color_format);
+      }
+    }
+    cursor.endEditBlock();
+    //结束
+    if (found == false) {
+      QMessageBox::information(this, tr("Word not found"),
+                               tr("Sorry,the word cannot be found."));
+    }
+  }
+}
+
+void dlgMainNotes::on_btnFind_clicked() {
+  if (ui->editFind->text().trimmed() == "") return;
+  // show_findText();
+  findText();
 }
