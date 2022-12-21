@@ -82,7 +82,9 @@ class dlgMainNotes : public QDialog {
   void show_findText();
 
   void findText();
-  protected:
+  void show_findTextBack();
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -166,6 +168,12 @@ class dlgMainNotes : public QDialog {
   void on_btnShowFind_clicked();
 
   void on_btnFind_clicked();
+
+  void on_btnPrev_clicked();
+
+  void on_btnNext_clicked();
+
+  void on_editFind_returnPressed();
 
  private:
   int x_left, x_right, y_left, y_right;

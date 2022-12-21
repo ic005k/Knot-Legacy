@@ -17,6 +17,8 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   mw_one->set_btnStyle(this);
 
   ui->btnTest->hide();
+  ui->btnFind->hide();
+  ui->lblCount->hide();
 
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);
@@ -1046,6 +1048,24 @@ void dlgMainNotes::on_btnShowFind_clicked() {
 void dlgMainNotes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
   //获得对话框的内容
+  if (ui->editSource->find(findtext, QTextDocument::FindCaseSensitively))
+  //查找后一个
+  {
+    // 查找到后高亮显示
+    QPalette palette = ui->editSource->palette();
+    palette.setColor(QPalette::Highlight,
+                     palette.color(QPalette::Active, QPalette::Highlight));
+    ui->editSource->setPalette(palette);
+  } else {
+    QMessageBox::information(this, tr(""),
+                             tr("The end of the document has been reached."),
+                             QMessageBox::Ok);
+  }
+}
+
+void dlgMainNotes::show_findTextBack() {
+  QString findtext = ui->editFind->text().trimmed().toLower();
+  //获得对话框的内容
   if (ui->editSource->find(findtext, QTextDocument::FindBackward))
   //查找后一个
   {
@@ -1055,8 +1075,9 @@ void dlgMainNotes::show_findText() {
                      palette.color(QPalette::Active, QPalette::Highlight));
     ui->editSource->setPalette(palette);
   } else {
-    QMessageBox::information(this, tr("注意"), tr("没有找到内容"),
-                             QMessageBox::Ok);
+    QMessageBox::information(
+        this, tr(""), tr("The beginning of the document has been reached."),
+        QMessageBox::Ok);
   }
 }
 
@@ -1095,6 +1116,12 @@ void dlgMainNotes::findText() {
 
 void dlgMainNotes::on_btnFind_clicked() {
   if (ui->editFind->text().trimmed() == "") return;
-  // show_findText();
-  findText();
+  show_findText();
+  // findText();
 }
+
+void dlgMainNotes::on_btnPrev_clicked() { show_findTextBack(); }
+
+void dlgMainNotes::on_btnNext_clicked() { show_findText(); }
+
+void dlgMainNotes::on_editFind_returnPressed() { on_btnFind_clicked(); }
