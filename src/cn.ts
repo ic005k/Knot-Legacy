@@ -1557,60 +1557,60 @@ in skydrive folder</source>
 <context>
     <name>dlgMainNotes</name>
     <message>
-        <location filename="Notes.ui" line="108"/>
+        <location filename="Notes.ui" line="111"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="158"/>
+        <location filename="Notes.ui" line="164"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="522"/>
+        <location filename="Notes.ui" line="559"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="165"/>
-        <location filename="Notes.ui" line="444"/>
-        <location filename="Notes.ui" line="726"/>
+        <location filename="Notes.ui" line="180"/>
+        <location filename="Notes.ui" line="481"/>
+        <location filename="Notes.ui" line="763"/>
         <source>...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="259"/>
+        <location filename="Notes.ui" line="296"/>
         <source>-</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="284"/>
+        <location filename="Notes.ui" line="321"/>
         <source>|</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="309"/>
+        <location filename="Notes.ui" line="346"/>
         <source>*</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="334"/>
+        <location filename="Notes.ui" line="371"/>
         <source>#</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="365"/>
-        <location filename="Notes.ui" line="761"/>
+        <location filename="Notes.ui" line="402"/>
+        <location filename="Notes.ui" line="798"/>
         <source>~</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="796"/>
+        <location filename="Notes.ui" line="833"/>
         <source>[ ]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="557"/>
+        <location filename="Notes.ui" line="594"/>
         <source>( )</source>
         <translation></translation>
     </message>
@@ -1620,98 +1620,104 @@ in skydrive folder</source>
         <translation>笔记</translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="205"/>
+        <location filename="Notes.ui" line="220"/>
+        <location filename="Notes.ui" line="227"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="215"/>
+        <location filename="Notes.ui" line="237"/>
         <source>0/0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="222"/>
+        <location filename="Notes.ui" line="250"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="229"/>
-        <location filename="Notes.ui" line="701"/>
+        <location filename="Notes.ui" line="253"/>
+        <source>Shift+Return</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="Notes.ui" line="266"/>
+        <location filename="Notes.ui" line="738"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="390"/>
+        <location filename="Notes.ui" line="427"/>
         <source>[]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="415"/>
+        <location filename="Notes.ui" line="452"/>
         <source>()</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="592"/>
+        <location filename="Notes.ui" line="629"/>
         <source>{ }</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="627"/>
+        <location filename="Notes.ui" line="664"/>
         <source>_</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="652"/>
+        <location filename="Notes.ui" line="689"/>
         <source>{}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="685"/>
+        <location filename="Notes.ui" line="722"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="962"/>
+        <location filename="Notes.ui" line="999"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="971"/>
+        <location filename="Notes.ui" line="1008"/>
         <source>Esc</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="981"/>
+        <location filename="Notes.ui" line="1018"/>
         <source>&lt;--</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="988"/>
+        <location filename="Notes.ui" line="1025"/>
         <source>--&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="999"/>
+        <location filename="Notes.ui" line="1036"/>
         <source>Info</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="1014"/>
+        <location filename="Notes.ui" line="1051"/>
         <source>Test</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="484"/>
+        <location filename="Notes.ui" line="521"/>
         <source>Insert Image</source>
         <translation>插入图像</translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="836"/>
+        <location filename="Notes.ui" line="873"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="879"/>
+        <location filename="Notes.ui" line="916"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
@@ -1726,13 +1732,13 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="Notes.ui" line="83"/>
-        <location filename="Notes.cpp" line="59"/>
+        <location filename="Notes.cpp" line="61"/>
         <source>Row</source>
         <translation>行</translation>
     </message>
     <message>
-        <location filename="Notes.ui" line="133"/>
-        <location filename="Notes.cpp" line="61"/>
+        <location filename="Notes.ui" line="139"/>
+        <location filename="Notes.cpp" line="63"/>
         <source>Column</source>
         <translation>列</translation>
     </message>
@@ -1788,72 +1794,72 @@ in skydrive folder</source>
         <translation type="vanished">密码设置成功</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="408"/>
+        <location filename="Notes.cpp" line="418"/>
         <source>Load Ds File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="454"/>
+        <location filename="Notes.cpp" line="464"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="455"/>
+        <location filename="Notes.cpp" line="465"/>
         <source>Picture Files (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="743"/>
+        <location filename="Notes.cpp" line="753"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="794"/>
+        <location filename="Notes.cpp" line="804"/>
         <source>Bold Italic</source>
         <translation>粗斜体</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="800"/>
+        <location filename="Notes.cpp" line="810"/>
         <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="806"/>
+        <location filename="Notes.cpp" line="816"/>
         <source>Underline</source>
         <translation>下划线</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="812"/>
+        <location filename="Notes.cpp" line="822"/>
         <source>Strickout</source>
         <translation>删除线</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="818"/>
+        <location filename="Notes.cpp" line="828"/>
         <source>Red</source>
         <translation>红色</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="824"/>
+        <location filename="Notes.cpp" line="834"/>
         <source>Bold</source>
         <translation>粗体</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1059"/>
+        <location filename="Notes.cpp" line="1069"/>
         <source>The end of the document has been reached.</source>
         <translation>已到达文档的结尾</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1077"/>
+        <location filename="Notes.cpp" line="1087"/>
         <source>The beginning of the document has been reached.</source>
         <translation>已到达文档的开头</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1109"/>
+        <location filename="Notes.cpp" line="1119"/>
         <source>Word not found</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1110"/>
+        <location filename="Notes.cpp" line="1120"/>
         <source>Sorry,the word cannot be found.</source>
         <translation></translation>
     </message>
@@ -1925,8 +1931,8 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="148"/>
-        <location filename="NotesList.ui" line="244"/>
+        <location filename="NotesList.ui" line="165"/>
+        <location filename="NotesList.ui" line="261"/>
         <source>2</source>
         <translation></translation>
     </message>
@@ -1937,131 +1943,136 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="NotesList.ui" line="54"/>
-        <location filename="NotesList.cpp" line="44"/>
+        <location filename="NotesList.cpp" line="47"/>
         <source>Notebook</source>
         <translation>笔记本</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="71"/>
+        <location filename="NotesList.ui" line="74"/>
         <source>New Note</source>
         <translation>新建笔记</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="78"/>
+        <location filename="NotesList.ui" line="81"/>
         <source>Note</source>
         <translation>笔记</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="95"/>
+        <location filename="NotesList.ui" line="101"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="109"/>
+        <location filename="NotesList.ui" line="119"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="119"/>
+        <location filename="NotesList.ui" line="133"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="126"/>
+        <location filename="NotesList.ui" line="140"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="133"/>
+        <location filename="NotesList.ui" line="143"/>
+        <source>Shift+Return</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="NotesList.ui" line="150"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="164"/>
+        <location filename="NotesList.ui" line="181"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="177"/>
+        <location filename="NotesList.ui" line="194"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="194"/>
+        <location filename="NotesList.ui" line="211"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="197"/>
-        <location filename="NotesList.ui" line="263"/>
+        <location filename="NotesList.ui" line="214"/>
+        <location filename="NotesList.ui" line="280"/>
         <source>Esc</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="210"/>
-        <location filename="NotesList.ui" line="289"/>
+        <location filename="NotesList.ui" line="227"/>
+        <location filename="NotesList.ui" line="306"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="217"/>
+        <location filename="NotesList.ui" line="234"/>
         <source>Recycle</source>
         <translation>回收箱</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="239"/>
+        <location filename="NotesList.ui" line="256"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="260"/>
+        <location filename="NotesList.ui" line="277"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="276"/>
+        <location filename="NotesList.ui" line="293"/>
         <source>Restore</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="511"/>
+        <location filename="NotesList.cpp" line="514"/>
         <source>Notes Recycle Bin</source>
         <translation>笔记回收箱</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="454"/>
+        <location filename="NotesList.cpp" line="457"/>
         <source>Default Notebook</source>
         <oldsource>Default</oldsource>
         <translation>默认的笔记本</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="457"/>
+        <location filename="NotesList.cpp" line="460"/>
         <source>My Notes</source>
         <translation>我的笔记</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="175"/>
+        <location filename="NotesList.cpp" line="178"/>
         <source>Delete?</source>
         <translation>删除？</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="222"/>
+        <location filename="NotesList.cpp" line="225"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="222"/>
+        <location filename="NotesList.cpp" line="225"/>
         <source>MD File (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="243"/>
+        <location filename="NotesList.cpp" line="246"/>
         <source>Invalid Markdown file.</source>
         <oldsource>Invalid MarkDown file.</oldsource>
         <translation>无效的Markdown文件</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="284"/>
+        <location filename="NotesList.cpp" line="287"/>
         <source>MD File(*.*)</source>
         <translation></translation>
     </message>
@@ -2070,19 +2081,14 @@ in skydrive folder</source>
         <translation type="vanished">文件已存在，是否覆盖？</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="254"/>
         <location filename="NotesList.cpp" line="257"/>
+        <location filename="NotesList.cpp" line="260"/>
         <source>Notes Imported</source>
         <translation>导入的笔记</translation>
     </message>
 </context>
 <context>
     <name>dlgPreferences</name>
-    <message>
-        <location filename="Preferences.ui" line="14"/>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
     <message>
         <location filename="Preferences.ui" line="23"/>
         <location filename="Preferences.cpp" line="131"/>
@@ -2186,6 +2192,11 @@ in skydrive folder</source>
     <message>
         <source>Font Path</source>
         <translation type="vanished">字体路径</translation>
+    </message>
+    <message>
+        <location filename="Preferences.ui" line="14"/>
+        <source>Preferences</source>
+        <translation>偏好设置</translation>
     </message>
     <message>
         <location filename="Preferences.ui" line="129"/>
@@ -2326,11 +2337,6 @@ in skydrive folder</source>
 <context>
     <name>dlgRemarks</name>
     <message>
-        <location filename="RemarksAbout.ui" line="14"/>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="RemarksAbout.ui" line="28"/>
         <source>Paste</source>
         <translation>粘贴</translation>
@@ -2365,6 +2371,11 @@ in skydrive folder</source>
         <location filename="RemarksAbout.ui" line="203"/>
         <source>Download (original site)</source>
         <translation>下载（原始网址）</translation>
+    </message>
+    <message>
+        <location filename="RemarksAbout.ui" line="14"/>
+        <source>About</source>
+        <translation>关于</translation>
     </message>
     <message>
         <location filename="RemarksAbout.ui" line="216"/>
