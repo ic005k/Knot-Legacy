@@ -1,8 +1,10 @@
 #ifndef NOTESLIST_H
 #define NOTESLIST_H
 
+#include <QApplication>
 #include <QDialog>
 #include <QDirIterator>
+#include <QInputMethod>
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -71,7 +73,8 @@ class dlgNotesList : public QDialog {
 
   void on_btnDel_2_clicked();
 
- private slots:
+  void on_KVChanged();
+  private slots:
   void on_btnFind_clicked();
 
   void on_btnPrev_clicked();
@@ -83,6 +86,7 @@ class dlgNotesList : public QDialog {
   void on_editFind_returnPressed();
 
  private:
+  QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   QStringList files;
   void clearMD_Pic(QTreeWidget *tw);
   void removePicFromMD(QString mdfile);

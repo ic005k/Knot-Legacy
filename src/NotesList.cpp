@@ -6,13 +6,16 @@
 
 extern MainWindow* mw_one;
 extern QString iniDir, privateDir;
-extern bool isImport;
+extern bool isImport, isAndroid;
 
 dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
   ui->setupUi(this);
 
   mw_one->set_btnStyle(this);
+
+  connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
+          &dlgNotesList::on_KVChanged);
 
   setWindowFlag(Qt::FramelessWindowHint);
   setAttribute(Qt::WA_TranslucentBackground);
@@ -666,6 +669,10 @@ void dlgNotesList::on_btnPrev_clicked() {
   tw->scrollToItem(tw->currentItem());
   ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
                         QString::number(findResultList.count()));
+
+  if (isAndroid) {
+    if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
+  }
 }
 
 void dlgNotesList::on_btnNext_clicked() {
@@ -676,6 +683,10 @@ void dlgNotesList::on_btnNext_clicked() {
   tw->scrollToItem(tw->currentItem());
   ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
                         QString::number(findResultList.count()));
+
+  if (isAndroid) {
+    if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
+  }
 }
 
 void dlgNotesList::on_editFind_textChanged(const QString& arg1) {
@@ -685,4 +696,10 @@ void dlgNotesList::on_editFind_textChanged(const QString& arg1) {
 
 void dlgNotesList::on_editFind_returnPressed() {
   if (ui->btnNext->isEnabled()) on_btnNext_clicked();
+}
+
+void dlgNotesList::on_KVChanged() {
+  if (!pAndroidKeyboard->isVisible()) {
+  } else {
+  }
 }
