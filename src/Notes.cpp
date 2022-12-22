@@ -246,13 +246,14 @@ void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
       textEdit->cursor().setPos(event->globalPos());
 
       if (m_SetEditText->isHidden()) {
-        // if (isAndroid) {
-        //   if (pAndroidKeyboard->isVisible()) {
-        //     timer->start(1000);
-        //   }
-        // } else {
-        timer->start(1000);
-        //}
+        if (isAndroid) {
+          if (!pAndroidKeyboard->isVisible()) {
+            pAndroidKeyboard->setVisible(true);
+          }
+          timer->start(1000);
+        } else {
+          timer->start(1000);
+        }
       }
     }
   }
