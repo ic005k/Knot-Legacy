@@ -139,6 +139,9 @@
           <property name="text">
            <string>&lt;</string>
           </property>
+          <property name="shortcut">
+           <string>Shift+Return</string>
+          </property>
          </widget>
         </item>
         <item>

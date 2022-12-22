@@ -642,11 +642,12 @@ void dlgNotesList::on_btnFind_clicked() {
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
-    if (topItem->text(0).contains(strFind)) findResultList.append(topItem);
+    if (topItem->text(0).toLower().contains(strFind))
+      findResultList.append(topItem);
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
       QTreeWidgetItem* childItem = topItem->child(j);
-      if (childItem->text(0).contains(strFind))
+      if (childItem->text(0).toLower().contains(strFind))
         findResultList.append(childItem);
     }
   }
@@ -690,7 +691,7 @@ void dlgNotesList::on_btnNext_clicked() {
 }
 
 void dlgNotesList::on_editFind_textChanged(const QString& arg1) {
-  Q_UNUSED(arg1);
+  if (arg1.trimmed() == "") ui->lblCount->setText("0");
   on_btnFind_clicked();
 }
 

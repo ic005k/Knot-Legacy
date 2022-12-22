@@ -172,8 +172,8 @@
          <widget class="QToolButton" name="btnShowFind">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>0</height>
+            <width>40</width>
+            <height>25</height>
            </size>
           </property>
           <property name="text">
@@ -242,8 +242,8 @@
           <widget class="QToolButton" name="btnPrev">
            <property name="minimumSize">
             <size>
-             <width>30</width>
-             <height>0</height>
+             <width>40</width>
+             <height>25</height>
             </size>
            </property>
            <property name="text">
@@ -258,8 +258,8 @@
           <widget class="QToolButton" name="btnNext">
            <property name="minimumSize">
             <size>
-             <width>30</width>
-             <height>0</height>
+             <width>40</width>
+             <height>25</height>
             </size>
            </property>
            <property name="text">
