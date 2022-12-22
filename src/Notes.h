@@ -175,6 +175,8 @@ class dlgMainNotes : public QDialog {
 
   void on_editFind_returnPressed();
 
+  void on_editFind_textChanged(const QString &arg1);
+
  private:
   int x_left, x_right, y_left, y_right;
   int y1;
@@ -187,7 +189,7 @@ class dlgMainNotes : public QDialog {
   QTimer *timer;
   bool isMouseRelease = false;
   bool isMousePress = false;
-  bool iMouseMove = false;
+  bool isMouseMove = false;
   QWidget *lineNumberArea;
   int lastLine;
   int newHeight = 0;

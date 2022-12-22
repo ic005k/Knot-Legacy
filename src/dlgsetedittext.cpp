@@ -48,8 +48,8 @@ dlgSetEditText::dlgSetEditText(QWidget* parent)
 dlgSetEditText::~dlgSetEditText() { delete ui; }
 
 void dlgSetEditText::on_btnClose_clicked() {
-  ui->lineEdit->clear();
   close();
+  ui->lineEdit->clear();
 }
 
 void dlgSetEditText::init(int y) {

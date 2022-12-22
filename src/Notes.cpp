@@ -61,6 +61,12 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->editRow->setPlaceholderText(tr("Row"));
   ui->editCol->setValidator(validator);
   ui->editCol->setPlaceholderText(tr("Column"));
+  ui->editCol->setStyleSheet(
+      mw_one->myEditRecord->ui->editAmount->styleSheet());
+  ui->editRow->setStyleSheet(
+      mw_one->myEditRecord->ui->editAmount->styleSheet());
+  ui->editFind->setStyleSheet(
+      mw_one->myEditRecord->ui->editAmount->styleSheet());
 
   connect(ui->editSource, &QTextEdit::cursorPositionChanged, this,
           &dlgMainNotes::highlightCurrentLine);
@@ -226,7 +232,7 @@ void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
   if (event->type() == QEvent::MouseButtonPress) {
     if (event->button() == Qt::LeftButton) {
       isMousePress = true;
-      iMouseMove = false;
+      isMouseMove = false;
       m_SetEditText->close();
 
       int a = 30;
@@ -240,12 +246,13 @@ void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
       textEdit->cursor().setPos(event->globalPos());
 
       if (m_SetEditText->isHidden()) {
-        if (isAndroid) {
-          if (pAndroidKeyboard->isVisible()) {
-            timer->start(1300);
-          }
-        } else
-          timer->start(1300);
+        // if (isAndroid) {
+        //   if (pAndroidKeyboard->isVisible()) {
+        //     timer->start(1000);
+        //   }
+        // } else {
+        timer->start(1000);
+        //}
       }
     }
   }
@@ -253,7 +260,7 @@ void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
   if (event->type() == QEvent::MouseButtonRelease) {
     isMouseRelease = true;
     isMousePress = false;
-    iMouseMove = false;
+    isMouseMove = false;
 
     if (m_SetEditText->ui->lineEdit->text() != "") {
       if (isFunShow) {
@@ -271,7 +278,7 @@ void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
   }
 
   if (event->type() == QEvent::MouseMove) {
-    iMouseMove = true;
+    isMouseMove = true;
     if (isMousePress) {
       QString str = textEdit->textCursor().selectedText().trimmed();
       m_SetEditText->ui->lineEdit->setText(str);
@@ -1057,9 +1064,9 @@ void dlgMainNotes::show_findText() {
                      palette.color(QPalette::Active, QPalette::Highlight));
     ui->editSource->setPalette(palette);
   } else {
-    QMessageBox::information(this, tr(""),
-                             tr("The end of the document has been reached."),
-                             QMessageBox::Ok);
+    QMessageBox box;
+    box.setText(tr("The end of the document has been reached."));
+    box.exec();
   }
 }
 
@@ -1075,9 +1082,9 @@ void dlgMainNotes::show_findTextBack() {
                      palette.color(QPalette::Active, QPalette::Highlight));
     ui->editSource->setPalette(palette);
   } else {
-    QMessageBox::information(
-        this, tr(""), tr("The beginning of the document has been reached."),
-        QMessageBox::Ok);
+    QMessageBox box;
+    box.setText(tr("The beginning of the document has been reached."));
+    box.exec();
   }
 }
 
@@ -1125,3 +1132,7 @@ void dlgMainNotes::on_btnPrev_clicked() { show_findTextBack(); }
 void dlgMainNotes::on_btnNext_clicked() { show_findText(); }
 
 void dlgMainNotes::on_editFind_returnPressed() { on_btnFind_clicked(); }
+
+void dlgMainNotes::on_editFind_textChanged(const QString& arg1) {
+  Q_UNUSED(arg1);
+}
