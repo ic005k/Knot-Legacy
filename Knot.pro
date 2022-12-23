@@ -1,4 +1,4 @@
-QT += core gui network
+QT += core gui network printsupport
 QT += charts sensors
 QT += qml quick quickwidgets webview
 QT += xml svg

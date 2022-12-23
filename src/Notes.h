@@ -9,10 +9,12 @@
 #endif
 
 #include <QDialog>
+#include <QFileDialog>
 #include <QImageReader>
 #include <QInputMethod>
 #include <QPainter>
 #include <QPlainTextEdit>
+#include <QPrinter>
 #include <QSettings>
 #include <QTextBlock>
 #include <QTextDocument>
@@ -83,6 +85,8 @@ class dlgMainNotes : public QDialog {
 
   void findText();
   void show_findTextBack();
+
+  bool selectPDFFormat(QPrinter *printer);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -176,6 +180,8 @@ class dlgMainNotes : public QDialog {
   void on_editFind_returnPressed();
 
   void on_editFind_textChanged(const QString &arg1);
+
+  void on_btnPDF_clicked();
 
  private:
   int x_left, x_right, y_left, y_right;

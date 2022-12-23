@@ -836,7 +836,10 @@ void dlgMainNotes::on_btnS5_clicked() {
 }
 
 void dlgMainNotes::on_btnLink_clicked() {
-  ui->editSource->insertPlainText("[Knot](https://github.com/ic005k/Knot)");
+  ui->editSource->insertPlainText("[]()");
+  on_btnLeft_clicked();
+  on_btnLeft_clicked();
+  on_btnLeft_clicked();
 }
 
 void dlgMainNotes::on_btnS6_clicked() { ui->editSource->insertPlainText("~"); }
@@ -1138,4 +1141,123 @@ void dlgMainNotes::on_editFind_returnPressed() { on_btnFind_clicked(); }
 
 void dlgMainNotes::on_editFind_textChanged(const QString& arg1) {
   Q_UNUSED(arg1);
+}
+
+bool dlgMainNotes::selectPDFFormat(QPrinter* printer) {
+  QSettings settings;
+
+  // select the page size
+  QStringList pageSizeStrings;
+  pageSizeStrings << QStringLiteral("A0") << QStringLiteral("A1")
+                  << QStringLiteral("A2") << QStringLiteral("A3")
+                  << QStringLiteral("A4") << QStringLiteral("A5")
+                  << QStringLiteral("A6") << QStringLiteral("A7")
+                  << QStringLiteral("A8") << QStringLiteral("A9")
+                  << tr("Letter");
+  QList<QPageSize::PageSizeId> pageSizes;
+  pageSizes << QPageSize::A0 << QPageSize::A1 << QPageSize::A2 << QPageSize::A3
+            << QPageSize::A4 << QPageSize::A5 << QPageSize::A6 << QPageSize::A7
+            << QPageSize::A8 << QPageSize::A9 << QPageSize::Letter;
+
+  bool ok;
+  QInputDialog* idlg = new QInputDialog(this);
+  idlg->setOkButtonText(tr("Ok"));
+  idlg->setCancelButtonText(tr("Cancel"));
+  QString pageSizeString = idlg->getItem(
+      this, tr("Page size"), tr("Page size:"), pageSizeStrings,
+      settings.value(QStringLiteral("Printer/NotePDFExportPageSize"), 4)
+          .toInt(),
+      false, &ok);
+
+  if (!ok || pageSizeString.isEmpty()) {
+    return false;
+  }
+
+  int pageSizeIndex = pageSizeStrings.indexOf(pageSizeString);
+  if (pageSizeIndex == -1) {
+    return false;
+  }
+
+  QPageSize pageSize(pageSizes.at(pageSizeIndex));
+  settings.setValue(QStringLiteral("Printer/NotePDFExportPageSize"),
+                    pageSizeIndex);
+  printer->setPageSize(pageSize);
+
+  // select the orientation
+  QStringList orientationStrings;
+  orientationStrings << tr("Portrait") << tr("Landscape");
+  QList<QPageLayout::Orientation> orientations;
+  orientations << QPageLayout::Portrait << QPageLayout::Landscape;
+
+  QInputDialog* idlg2 = new QInputDialog(this);
+  idlg2->setOkButtonText(tr("Ok"));
+  idlg2->setCancelButtonText(tr("Cancel"));
+  QString orientationString = idlg2->getItem(
+      this, tr("Orientation"), tr("Orientation:"), orientationStrings,
+      settings.value(QStringLiteral("Printer/NotePDFExportOrientation"), 0)
+          .toInt(),
+      false, &ok);
+
+  if (!ok || orientationString.isEmpty()) {
+    return false;
+  }
+
+  int orientationIndex = orientationStrings.indexOf(orientationString);
+  if (orientationIndex == -1) {
+    return false;
+  }
+
+  printer->setPageOrientation(orientations.at(orientationIndex));
+  settings.setValue(QStringLiteral("Printer/NotePDFExportOrientation"),
+                    orientationIndex);
+
+  QString fileName;
+#ifdef Q_OS_ANDROID
+  fileName = "/storage/emulated/0/KnotBak/" + mw_one->ui->lblNoteName->text() +
+             QStringLiteral(".pdf");
+  QMessageBox box;
+  box.setText(tr("The PDF file is successfully exported.") + "\n\n" + fileName);
+  box.exec();
+#else
+  QFileDialog dialog(NULL, QStringLiteral("NotePDFExport"));
+  dialog.setFileMode(QFileDialog::AnyFile);
+  dialog.setAcceptMode(QFileDialog::AcceptSave);
+  dialog.setNameFilter(tr("PDF files") + QStringLiteral(" (*.pdf)"));
+  dialog.setWindowTitle(tr("Export current note as PDF"));
+  dialog.selectFile(mw_one->ui->lblNoteName->text() + QStringLiteral(".pdf"));
+  int ret = dialog.exec();
+
+  if (ret != QDialog::Accepted) {
+    return false;
+  }
+
+  fileName = dialog.selectedFiles().at(0);
+#endif
+
+  if (fileName.isEmpty()) {
+    return false;
+  }
+
+  if (QFileInfo(fileName).suffix().isEmpty()) {
+    fileName.append(QLatin1String(".pdf"));
+  }
+
+  printer->setOutputFormat(QPrinter::PdfFormat);
+  printer->setOutputFileName(fileName);
+  return true;
+}
+
+void dlgMainNotes::on_btnPDF_clicked() {
+  saveMainNotes();
+  QString html = mw_one->loadText(privateDir + "memo.html");
+  auto doc = new QTextDocument(this);
+  doc->setHtml(html);
+
+  auto* printer = new QPrinter(QPrinter::HighResolution);
+
+  if (selectPDFFormat(printer)) {
+    doc->print(printer);
+  }
+
+  delete printer;
 }
