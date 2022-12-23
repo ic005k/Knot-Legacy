@@ -19,6 +19,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnTest->hide();
   ui->btnFind->hide();
   ui->lblCount->hide();
+  ui->frameFind->hide();
 
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);
@@ -110,7 +111,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnRight->setAutoRepeatInterval(b);
 
   ui->editSource->setFocus();
-  ui->frameFind->hide();
 }
 
 void dlgMainNotes::init() {
@@ -1055,6 +1055,7 @@ void dlgMainNotes::on_btnShowFind_clicked() {
 
 void dlgMainNotes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
+  if (findtext == "") return;
   //获得对话框的内容
   if (ui->editSource->find(findtext, QTextDocument::FindCaseSensitively))
   //查找后一个
@@ -1073,6 +1074,7 @@ void dlgMainNotes::show_findText() {
 
 void dlgMainNotes::show_findTextBack() {
   QString findtext = ui->editFind->text().trimmed().toLower();
+  if (findtext == "") return;
   //获得对话框的内容
   if (ui->editSource->find(findtext, QTextDocument::FindBackward))
   //查找后一个

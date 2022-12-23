@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>499</width>
-    <height>549</height>
+    <height>452</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,6 +35,9 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <property name="spacing">
+       <number>5</number>
+      </property>
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -87,13 +90,13 @@
        <widget class="QToolButton" name="btnPrev">
         <property name="minimumSize">
          <size>
-          <width>45</width>
+          <width>60</width>
           <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
+          <width>60</width>
           <height>25</height>
          </size>
         </property>
@@ -109,13 +112,13 @@
        <widget class="QToolButton" name="btnNext">
         <property name="minimumSize">
          <size>
-          <width>45</width>
+          <width>60</width>
           <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
+          <width>60</width>
           <height>25</height>
          </size>
         </property>
@@ -1020,6 +1023,9 @@ color: rgb(255, 255, 255);</string>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <property name="spacing">
+      <number>5</number>
+     </property>
      <item>
       <widget class="QToolButton" name="btnDone">
        <property name="sizePolicy">
@@ -1059,20 +1065,56 @@ color: rgb(255, 255, 255);</string>
      </item>
      <item>
       <widget class="QToolButton" name="btnLeft">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="text">
-        <string>&lt;--</string>
+        <string>&lt;-|</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="btnRight">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="text">
-        <string>--&gt;</string>
+        <string>|-&gt;</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="lblInfo">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">background-color: rgb(180, 180, 180);
 color: rgb(2, 2, 2);</string>
