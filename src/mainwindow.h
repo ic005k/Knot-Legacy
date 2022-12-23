@@ -597,6 +597,8 @@ class MainWindow : public QMainWindow {
  private slots:
   void on_btnSync_clicked();
 
+  void on_btnPDF_clicked();
+
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;

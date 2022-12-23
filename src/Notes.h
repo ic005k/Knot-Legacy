@@ -159,6 +159,8 @@ class dlgMainNotes : public QDialog {
 
   void on_btnS10_clicked();
 
+  void on_btnPDF_clicked();
+
  signals:
   void sendUpdate();
 
@@ -180,8 +182,6 @@ class dlgMainNotes : public QDialog {
   void on_editFind_returnPressed();
 
   void on_editFind_textChanged(const QString &arg1);
-
-  void on_btnPDF_clicked();
 
  private:
   int x_left, x_right, y_left, y_right;

@@ -5360,3 +5360,5 @@ void MainWindow::on_btnSync_clicked() {
   init_TotalData();
   loading = false;
 }
+
+void MainWindow::on_btnPDF_clicked() { mydlgMainNotes->on_btnPDF_clicked(); }

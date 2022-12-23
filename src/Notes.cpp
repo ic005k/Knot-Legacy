@@ -1248,7 +1248,6 @@ bool dlgMainNotes::selectPDFFormat(QPrinter* printer) {
 }
 
 void dlgMainNotes::on_btnPDF_clicked() {
-  saveMainNotes();
   QString html = mw_one->loadText(privateDir + "memo.html");
   auto doc = new QTextDocument(this);
   doc->setHtml(html);

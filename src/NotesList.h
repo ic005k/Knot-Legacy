@@ -44,7 +44,8 @@ class dlgNotesList : public QDialog {
   void getAllFiles(const QString &foldPath, QStringList &folds,
                    const QStringList &formats);
 
- protected:
+  void setNoteName(QString name);
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

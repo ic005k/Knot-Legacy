@@ -302,7 +302,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/find.png</normaloff>:/res/find.png</iconset>
           </property>
           <property name="iconSize">
@@ -529,7 +529,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/link.png</normaloff>:/res/link.png</iconset>
           </property>
           <property name="iconSize">
@@ -569,7 +569,7 @@
            <string>Insert Image</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/pic.png</normaloff>:/res/pic.png</iconset>
           </property>
           <property name="iconSize">
@@ -607,7 +607,7 @@
            <string>Color</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/color.png</normaloff>:/res/color.png</iconset>
           </property>
           <property name="iconSize">
@@ -642,7 +642,7 @@
            <string>( )</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/font4.png</normaloff>:/res/font4.png</iconset>
           </property>
           <property name="iconSize">
@@ -677,7 +677,7 @@
            <string>{ }</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/font5.png</normaloff>:/res/font5.png</iconset>
           </property>
           <property name="iconSize">
@@ -811,7 +811,7 @@ color: rgb(255, 255, 255);</string>
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/font1.png</normaloff>:/res/font1.png</iconset>
           </property>
           <property name="iconSize">
@@ -846,7 +846,7 @@ color: rgb(255, 255, 255);</string>
            <string>~</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/font2.png</normaloff>:/res/font2.png</iconset>
           </property>
           <property name="iconSize">
@@ -881,7 +881,7 @@ color: rgb(255, 255, 255);</string>
            <string>[ ]</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/font3.png</normaloff>:/res/font3.png</iconset>
           </property>
           <property name="iconSize">
@@ -921,7 +921,7 @@ color: rgb(255, 255, 255);</string>
            <string>Undo</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/undo.png</normaloff>:/res/undo.png</iconset>
           </property>
           <property name="iconSize">
@@ -964,7 +964,7 @@ color: rgb(255, 255, 255);</string>
            <string>Redo</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../res.qrc">
             <normaloff>:/res/redo.png</normaloff>:/res/redo.png</iconset>
           </property>
           <property name="iconSize">
@@ -1102,19 +1102,6 @@ color: rgb(255, 255, 255);</string>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="btnPDF">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>25</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Export to PDF</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="lblInfo">
        <property name="minimumSize">
         <size>
@@ -1154,6 +1141,8 @@ color: rgb(2, 2, 2);</string>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
 </ui>

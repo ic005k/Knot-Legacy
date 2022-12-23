@@ -145,7 +145,7 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
     mw_one->mydlgMainNotes->MD2Html(currentMDFile);
     mw_one->mydlgMainNotes->loadMemoQML();
 
-    mw_one->ui->lblNoteName->setText(item->text(0));
+    setNoteName(item->text(0));
   }
 
   ui->editName->setText(item->text(0));
@@ -158,9 +158,18 @@ void dlgNotesList::on_btnRename_clicked() {
 
   QTreeWidgetItem* item = ui->treeWidget->currentItem();
   item->setText(0, ui->editName->text().trimmed());
-  mw_one->ui->lblNoteName->setText(item->text(0));
+  setNoteName(item->text(0));
 
   isSave = true;
+}
+
+void dlgNotesList::setNoteName(QString name) {
+  QFontMetrics fontWidth(mw_one->ui->lblNoteName->font());
+  QString elideNote = fontWidth.elidedText(
+      name, Qt::ElideRight, mw_one->width() - mw_one->ui->btnPDF->width() - 15);
+
+  mw_one->ui->lblNoteName->setText(elideNote);
+  mw_one->ui->lblNoteName->setToolTip(name);
 }
 
 void dlgNotesList::on_btnDel_clicked() {
