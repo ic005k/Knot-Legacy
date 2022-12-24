@@ -53,6 +53,8 @@ jobs:
           ANDROID_ABI: ${{ matrix.config.abi }}
         run: |
           export ANDROID_NDK_ROOT="${ANDROID_SDK_ROOT}/ndk-bundle"
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export ANDROID_NDK_ROOT=$ANDROID_HOME
          
           qmake
           make
