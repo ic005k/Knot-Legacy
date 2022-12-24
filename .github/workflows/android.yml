@@ -38,14 +38,13 @@ jobs:
                
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
-        if: ${{ matrix.qt_ver == '5.15.2' }}
+        
         with:
-          host: mac
-          version: ${{ matrix.qt_ver }}
-          target: ${{ matrix.qt_target }}
+          host: linux
+          version: 5.15.2
+          target: android
           modules: qtcharts qtwebengine
-          # here need not arch
-          # arch: ${{ matrix.qt_arch }}
+          arch: android_arm64_v8a
           
        
       - name: set up JDK
