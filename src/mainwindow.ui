@@ -2044,19 +2044,6 @@ QRadioButton::indicator:checked {
            </property>
           </spacer>
          </item>
-         <item>
-          <widget class="QToolButton" name="btnPDF">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Export to PDF</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
        <item>
@@ -2091,10 +2078,14 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Back</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/back.png</normaloff>:/res/back.png</iconset>
+           </property>
            <property name="iconSize">
             <size>
-             <width>25</width>
-             <height>25</height>
+             <width>30</width>
+             <height>30</height>
             </size>
            </property>
            <property name="shortcut">
@@ -2125,6 +2116,16 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Edit</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/edit.png</normaloff>:/res/edit.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -2144,6 +2145,16 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Notes List</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/ReadList.png</normaloff>:/res/ReadList.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -2162,6 +2173,45 @@ QRadioButton::indicator:checked {
            </property>
            <property name="text">
             <string>Set Key</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/setpass.png</normaloff>:/res/setpass.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnPDF">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Export to PDF</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/topdf.png</normaloff>:/res/topdf.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
            </property>
           </widget>
          </item>
