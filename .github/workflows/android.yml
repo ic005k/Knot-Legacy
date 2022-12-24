@@ -49,24 +49,10 @@ jobs:
           ANDROID_ABI: ${{ matrix.config.abi }}
         run: |
           export ANDROID_NDK_ROOT="${ANDROID_SDK_ROOT}/ndk-bundle"
-          mkdir build && cd build
-          cmake ../source/dependencies/maplibre-gl-native \
-            -DCMAKE_TOOLCHAIN_FILE="${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake" \
-            -DANDROID_ABI="${ANDROID_ABI}" \
-            -DANDROID_CCACHE=ccache \
-            -DANDROID_NATIVE_API_LEVEL=21 \
-            -G Ninja \
-            -DMBGL_WITH_QT=ON \
-            -DMBGL_QT_LIBRARY_ONLY=ON \
-            -DMBGL_QT_STATIC=ON \
-            -DMBGL_QT_WITH_INTERNAL_SQLITE=OFF \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_CXX_FLAGS_RELEASE=-g0 \
-            -DCMAKE_FIND_ROOT_PATH=${Qt5_Dir} \
-            -DCMAKE_PREFIX_PATH=${Qt5_Dir} \
-            -DCMAKE_INSTALL_PREFIX=../install-gl
-          ninja
-          ninja install
+          
+          qmake
+          make
+         
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
