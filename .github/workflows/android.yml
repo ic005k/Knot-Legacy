@@ -11,9 +11,9 @@ jobs:
     strategy:
       matrix:
         config:
-          - abi: x86
-          - abi: x86_64
-          - abi: armeabi-v7a
+          #- abi: x86
+          #- abi: x86_64
+          #- abi: armeabi-v7a
           - abi: arm64-v8a
 
     steps:
@@ -44,12 +44,16 @@ jobs:
         with:
           key: Android-maplibre-gl-native-${{ matrix.config.abi }}
 
-      - name: Build maplibre-gl-native
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: build android
+            
         env:
           ANDROID_ABI: ${{ matrix.config.abi }}
         run: |
           export ANDROID_NDK_ROOT="${ANDROID_SDK_ROOT}/ndk-bundle"
-          
+         
           qmake
           make
          
