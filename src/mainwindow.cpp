@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.72";
+QString ver = "1.0.73";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4916,6 +4916,7 @@ void MainWindow::on_btnEdit_clicked() {
 
   mydlgMainNotes->init();
   mydlgMainNotes->ui->editSource->setPlainText(mdfile);
+  new MarkdownHighlighter(mydlgMainNotes->ui->editSource->document());
 
   mainHeight = mw_one->height();
   ui->frameMemo->hide();

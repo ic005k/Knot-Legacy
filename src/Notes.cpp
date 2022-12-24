@@ -1,6 +1,7 @@
 #include "src/Notes.h"
 
 #include "mainwindow.h"
+#include "src/markdownhighlighter.h"
 #include "ui_Notes.h"
 #include "ui_mainwindow.h"
 
@@ -111,6 +112,9 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnRight->setAutoRepeatInterval(b);
 
   ui->editSource->setFocus();
+
+  // MarkdownHighlighter* hl = new
+  // MarkdownHighlighter(ui->editSource->document()); Q_UNUSED(hl);
 }
 
 void dlgMainNotes::init() {

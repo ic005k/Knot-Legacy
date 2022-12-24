@@ -71,6 +71,7 @@
 #include <QValueAxis>
 
 #include "ReaderFun.h"
+#include "markdownhighlighter.h"
 #include "src/EditRecord.h"
 #include "src/Notes.h"
 #include "src/NotesList.h"

@@ -68,9 +68,11 @@ SOURCES += \
     src/filesystemwatcher.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
+    src/markdownhighlighter.cpp \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
     src/onedrive/qtonedrivewebview.cpp \
+    src/qownlanguagedata.cpp \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
@@ -100,10 +102,12 @@ HEADERS += \
     src/file.h \
     src/filesystemwatcher.h \
     src/mainwindow.h \
+    src/markdownhighlighter.h \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
     src/onedrive/qtonedrivewebview.h \
+    src/qownlanguagedata.h \
     src/specialaccelerometerpedometer.h \
     win.rc
 
