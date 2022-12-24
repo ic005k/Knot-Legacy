@@ -165,8 +165,7 @@ void dlgNotesList::on_btnRename_clicked() {
 
 void dlgNotesList::setNoteName(QString name) {
   QFontMetrics fontWidth(mw_one->ui->lblNoteName->font());
-  QString elideNote = fontWidth.elidedText(
-      name, Qt::ElideRight, mw_one->width() - mw_one->ui->btnPDF->width() - 15);
+  QString elideNote = fontWidth.elidedText(name, Qt::ElideRight, 200);
 
   mw_one->ui->lblNoteName->setText(elideNote);
   mw_one->ui->lblNoteName->setToolTip(name);
