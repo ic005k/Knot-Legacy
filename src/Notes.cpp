@@ -112,9 +112,6 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnRight->setAutoRepeatInterval(b);
 
   ui->editSource->setFocus();
-
-  // MarkdownHighlighter* hl = new
-  // MarkdownHighlighter(ui->editSource->document()); Q_UNUSED(hl);
 }
 
 void dlgMainNotes::init() {
