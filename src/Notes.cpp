@@ -654,7 +654,7 @@ void dlgMainNotes::loadMemoQML() {
     str = str.trimmed();
     if (str.mid(0, 4) == "<img" && str.contains("file://")) {
       QString str1 = str;
-      qDebug() << "str1=" << str1;
+
       QStringList list = str1.split(" ");
       QString strSrc;
       for (int k = 0; k < list.count(); k++) {
@@ -664,7 +664,6 @@ void dlgMainNotes::loadMemoQML() {
           break;
         }
       }
-      qDebug() << "strSrc=" << strSrc;
 
       QStringList list1 = strSrc.split("/memo/");
       strSrc = "\"file://" + iniDir + "memo/" + list1.at(1);
@@ -673,8 +672,6 @@ void dlgMainNotes::loadMemoQML() {
       str = "<img src=\"file://" + iniDir + "memo/" + list2.at(1);
 
       str = "<a href=" + strSrc + ">" + str + "</a>";
-      qDebug() << "strSrc=" << strSrc;
-      qDebug() << "str=" << str;
 
       str = str.replace("width=", "width1=");
       str = str.replace("height=", "height1=");
@@ -683,6 +680,8 @@ void dlgMainNotes::loadMemoQML() {
     edit1->appendPlainText(str);
   }
 
+  mw_one->ui->qwNotes->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
   QQuickItem* root = mw_one->ui->qwNotes->rootObject();
 
   // mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
