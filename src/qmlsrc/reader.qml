@@ -29,6 +29,13 @@ Rectangle {
         isEPUBText = true
     }
 
+    function loadHtmlStr(str) {
+
+        strText = str
+        isPDF = false
+        isEPUBText = true
+    }
+
     function loadPDF(pdffile) {
         pdfFile = "file://" + pdffile
         isPDF = true
@@ -81,6 +88,7 @@ Rectangle {
 
         onLoaded: {
             textArea.text = text
+
         }
         onError: {
             errorDialog.text = message

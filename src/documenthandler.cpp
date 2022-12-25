@@ -351,7 +351,7 @@ void DocumentHandler::load(const QUrl &fileUrl) {
 
   m_fileUrl = fileUrl;
 
-  // emit fileUrlChanged();
+  emit fileUrlChanged();
 }
 
 void DocumentHandler::saveAs(const QUrl &fileUrl) {
