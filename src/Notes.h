@@ -87,6 +87,7 @@ class dlgMainNotes : public QDialog {
   void show_findTextBack();
 
   bool selectPDFFormat(QPrinter *printer);
+  void on_btnPDF_clicked();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -159,7 +160,7 @@ class dlgMainNotes : public QDialog {
 
   void on_btnS10_clicked();
 
-  void on_btnPDF_clicked();
+
 
  signals:
   void sendUpdate();
