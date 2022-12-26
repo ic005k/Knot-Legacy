@@ -8,6 +8,8 @@ import com.x.MyService;
 
 import android.os.Process;
 import android.os.HandlerThread;
+import android.content.ClipboardManager;
+import android.content.ClipData;
 
 import java.util.Stack;
 
@@ -533,6 +535,29 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
 
+    }
+
+    public String getShare(String uripath) {
+        //获取分享的数据
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        //设置接收类型为文本
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handlerText(intent);
+                return "1";
+            }
+        }
+        return "0";
+    }
+
+    //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
+    private void handlerText(Intent intent) {
+        String data = intent.getStringExtra(Intent.EXTRA_TEXT);
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Knot", data);
+        clipboard.setPrimaryClip(clip);
     }
 
 
@@ -1240,7 +1265,7 @@ This method can parse out the real local file path from a file URI.
             final String tmpPath = path;
             switch (event) {
                 case FileObserver.ACCESS:
-                   // Log.i("FileWatcher", "ACCESS: " + path);
+                    // Log.i("FileWatcher", "ACCESS: " + path);
                     if (path.contains("/storage/emulated/0/KnotData//todo.ini") || path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
                         CallJavaNotify_0();
                     break;

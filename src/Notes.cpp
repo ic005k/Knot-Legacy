@@ -1260,3 +1260,21 @@ void dlgMainNotes::on_btnPDF_clicked() {
 
   delete printer;
 }
+
+void dlgMainNotes::on_btnGetShare_clicked() {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  // QAndroidJniObject jo = QAndroidJniObject::fromString("GetShare");
+  // jo.callObjectMethod<int>("com.x/MyActivity", "getShare", "()I");
+
+  QAndroidJniObject javaUriPath = QAndroidJniObject::fromString("uripath");
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  QAndroidJniObject s = m_activity.callObjectMethod(
+      "getShare", "(Ljava/lang/String;)Ljava/lang/String;",
+      javaUriPath.object<jstring>());
+
+#else
+  QJniObject jo = QJniObject::fromString("GetShare");
+  jo.callObjectMethod<int>("com.x/MyActivity", "getShare", "()I");
+#endif
+  on_btnPaste_clicked();
+}
