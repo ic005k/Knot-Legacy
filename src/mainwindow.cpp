@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.74";
+QString ver = "1.0.75";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -2068,6 +2068,7 @@ void MainWindow::saveNotes(int tabIndex) {
 }
 
 void MainWindow::on_btnRemarks_clicked() {
+  mydlgReader->setPdfViewVisible(false);
   m_widget = new QWidget(this);
   showGrayWindows();
 
