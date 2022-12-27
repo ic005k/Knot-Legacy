@@ -21,6 +21,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   ui->btnFind->hide();
   ui->lblCount->hide();
   ui->frameFind->hide();
+  ui->btnGetShare->hide();
 
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);

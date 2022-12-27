@@ -4385,7 +4385,10 @@ static void JavaNotify_1() {
 }
 
 static void JavaNotify_2() {
-  mw_one->mydlgTodo->refreshAlarm();
+  if (mw_one->ui->frameTodo->isHidden()) {
+    mw_one->ui->btnTodo->click();
+    mw_one->ui->btnBackTodo->click();
+  }
   mw_one->mydlgPre->autoBakData();
 
   qDebug() << "C++ JavaNotify_2";
