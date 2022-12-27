@@ -1263,10 +1263,8 @@ void dlgMainNotes::on_btnPDF_clicked() {
 }
 
 void dlgMainNotes::on_btnGetShare_clicked() {
+#ifdef Q_OS_ANDROID
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  // QAndroidJniObject jo = QAndroidJniObject::fromString("GetShare");
-  // jo.callObjectMethod<int>("com.x/MyActivity", "getShare", "()I");
-
   QAndroidJniObject javaUriPath = QAndroidJniObject::fromString("uripath");
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
   QAndroidJniObject s = m_activity.callObjectMethod(
@@ -1274,8 +1272,12 @@ void dlgMainNotes::on_btnGetShare_clicked() {
       javaUriPath.object<jstring>());
 
 #else
-  QJniObject jo = QJniObject::fromString("GetShare");
-  jo.callObjectMethod<int>("com.x/MyActivity", "getShare", "()I");
+  QJniObject javaUriPath = QAndroidJniObject::fromString("uripath");
+  QJniObject m_activity = QtAndroid::androidActivity();
+  QJniObject s = m_activity.callObjectMethod(
+      "getShare", "(Ljava/lang/String;)Ljava/lang/String;",
+      javaUriPath.object<jstring>());
 #endif
   on_btnPaste_clicked();
+#endif
 }
