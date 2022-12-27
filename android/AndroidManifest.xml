@@ -23,6 +23,12 @@
         <!-- android:windowSoftInputMode="adjustResize" -->
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.x.MyActivity" android:label="Knot" android:screenOrientation="unspecified" android:launchMode="singleTop" android:theme="@style/splashScreenTheme" android:windowSoftInputMode="stateUnspecified">
 
+        <intent-filter>
+        <action android:name="android.intent.action.SEND"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+        </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
