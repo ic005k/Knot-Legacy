@@ -571,8 +571,9 @@ void dlgNotesList::on_btnDel_2_clicked() {
 void dlgNotesList::setWinPos() {
   int w = mw_one->width() * 3 / 4;
   int x = mw_one->geometry().x() + mw_one->width() - w - 2;
-  this->setGeometry(x, mw_one->geometry().y(), w,
-                    mw_one->ui->qwNotes->height());
+  this->setGeometry(
+      x, mw_one->geometry().y() + mw_one->ui->lblNoteName->height() * 1.2, w,
+      mw_one->ui->qwNotes->height());
 }
 
 void dlgNotesList::clearFiles() {
