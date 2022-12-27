@@ -46,6 +46,9 @@
           <property name="text">
            <string>New Notebook</string>
           </property>
+          <property name="shortcut">
+           <string>Meta+B</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -72,6 +75,9 @@
           </property>
           <property name="text">
            <string>New Note</string>
+          </property>
+          <property name="shortcut">
+           <string>Meta+N</string>
           </property>
          </widget>
         </item>
@@ -100,6 +106,9 @@
           <property name="text">
            <string>Rename</string>
           </property>
+          <property name="shortcut">
+           <string>Meta+R</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -117,6 +126,9 @@
          <widget class="QToolButton" name="btnFind">
           <property name="text">
            <string>Find</string>
+          </property>
+          <property name="shortcut">
+           <string>Meta+F</string>
           </property>
          </widget>
         </item>
@@ -139,15 +151,15 @@
           <property name="text">
            <string>&lt;</string>
           </property>
-          <property name="shortcut">
-           <string>Shift+Return</string>
-          </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="btnNext">
           <property name="text">
            <string>&gt;</string>
+          </property>
+          <property name="shortcut">
+           <string/>
           </property>
          </widget>
         </item>
