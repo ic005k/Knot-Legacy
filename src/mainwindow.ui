@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>507</width>
+    <width>410</width>
     <height>3332</height>
    </rect>
   </property>
@@ -2680,7 +2680,7 @@ QRadioButton::indicator:checked {
           </size>
          </property>
          <property name="placeholderText">
-          <string>Enter the to-do list text [Ctrl+Enter]</string>
+          <string>Enter the to-do list text</string>
          </property>
         </widget>
        </item>
@@ -3407,8 +3407,8 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>507</width>
-     <height>24</height>
+     <width>410</width>
+     <height>17</height>
     </rect>
    </property>
    <property name="styleSheet">
