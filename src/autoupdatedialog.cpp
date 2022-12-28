@@ -112,15 +112,15 @@ void AutoUpdateDialog::startDownload(QString strLink) {
   connect(reply, &QNetworkReply::downloadProgress, this,
           &AutoUpdateDialog::doProcessDownloadProgress);  //大小
 
-  filename = "kont.apk";
+  filename = "Knot.apk";
 
 #ifdef Q_OS_MAC
-  tarFile = iniDir + filename;
+  tarFile = privateDir + filename;
 #endif
 
 #ifdef Q_OS_ANDROID
   // "/storage/emulated/0/KnotBak/"
-  tarFile = iniDir + filename;
+  tarFile = privateDir + filename;
 #endif
   QFile apk(tarFile);
   apk.remove();
