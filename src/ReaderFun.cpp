@@ -6,7 +6,7 @@
 
 extern int fontSize;
 extern MainWindow* mw_one;
-extern QString iniDir;
+extern QString iniDir, privateDir;
 
 dlgReaderFun::dlgReaderFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgReaderFun) {
@@ -82,7 +82,7 @@ void dlgReaderFun::on_hSlider_sliderMoved(int position) {
 }
 
 void dlgReaderFun::on_btnStyle1_clicked() {
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -92,7 +92,7 @@ void dlgReaderFun::on_btnStyle1_clicked() {
 }
 
 void dlgReaderFun::on_btnStyle2_clicked() {
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -102,7 +102,7 @@ void dlgReaderFun::on_btnStyle2_clicked() {
 }
 
 void dlgReaderFun::on_btnStyle3_clicked() {
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif

@@ -2560,7 +2560,6 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
   edit->append(loadText(iniDir + "ymd.ini"));
   edit->append(loadText(iniDir + "notes.ini"));
   edit->append(loadText(iniDir + "steps.ini"));
-  edit->append(loadText(iniDir + "reader.ini"));
 
   for (int i = 0; i < tabData->tabBar()->count(); i++) {
     QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
@@ -2705,30 +2704,6 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
       if (QFile::copy(iniDir + "memo/todo.ini", iniDir + "todo.ini"))
         QFile::remove(iniDir + "memo/todo.ini");
       mydlgTodo->init_Todo();
-    }
-
-    // TextReader
-    if (book) {
-      QSettings RegTotalIni(iniFile, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      RegTotalIni.setIniCodec("utf-8");
-#endif
-
-      QString strReader = iniDir + "reader.ini";
-      QFile::remove(strReader);
-      QSettings Reg1(strReader, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      Reg1.setIniCodec("utf-8");
-#endif
-      RegTotalIni.beginGroup("Reader");
-      QStringList list = RegTotalIni.allKeys();
-      foreach (QString key, list) {
-        QString value = RegTotalIni.value(key).toString();
-        Reg1.setValue("/Reader/" + key, value);
-      }
-      RegTotalIni.endGroup();
-
-      mydlgReader->initReader();
     }
   }
 

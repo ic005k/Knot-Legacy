@@ -7,7 +7,7 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
-extern QString iniFile, iniDir;
+extern QString iniFile, iniDir, privateDir;
 extern bool isImport, zh_cn, isAndroid, isIOS, isEBook, isReport;
 extern int fontSize;
 
@@ -271,19 +271,19 @@ void dlgReader::startOpenFile(QString openfile) {
         openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
 
     QString strZip, strExec, strUnzip, tagDir;
-    tagDir = iniDir + "temp/";
-    strZip = iniDir + "temp.zip";
+    tagDir = privateDir + "temp/";
+    strZip = privateDir + "temp.zip";
     QTextEdit* txtEdit = new QTextEdit();
     strUnzip = qApp->applicationDirPath() + "/unzip.exe";
     strUnzip = "\"" + strUnzip + "\"";
     strZip = "\"" + strZip + "\"";
-    strExec = iniDir;
+    strExec = privateDir;
     strExec = "\"" + strExec + "\"";
     QString strCommand1;
     QString strx = "\"" + tagDir + "\"";
     strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
     txtEdit->append(strCommand1);
-    QString fileName = iniDir + "unbook.bat";
+    QString fileName = privateDir + "unbook.bat";
     mw_one->TextEditToFile(txtEdit, fileName);
 #endif
 
@@ -315,13 +315,13 @@ void dlgReader::openFile(QString openfile) {
 
     if (strHead.trimmed().mid(0, 2) == "PK") {
       QString dirpath, dirpathbak;
-      dirpath = iniDir + "temp/";
-      dirpathbak = iniDir + "tempbak/";
+      dirpath = privateDir + "temp/";
+      dirpathbak = privateDir + "tempbak/";
 
       QDir dir;
       dir.rename(dirpath, dirpathbak);
 
-      QString temp = iniDir + "temp.zip";
+      QString temp = privateDir + "temp.zip";
       QFile::remove(temp);
       if (!QFile::copy(openfile, temp)) {
         QMessageBox box;
@@ -336,7 +336,7 @@ void dlgReader::openFile(QString openfile) {
 #endif
 
 #ifdef Q_OS_WIN
-      QString fileName = iniDir + "unbook.bat";
+      QString fileName = privateDir + "unbook.bat";
       QProcess* pro = new QProcess;
       pro->execute("cmd.exe", QStringList() << "/c" << fileName);
       pro->waitForFinished();
@@ -510,7 +510,7 @@ QString dlgReader::getTextEditLineText(QTextEdit* txtEdit, int i) {
 }
 
 void dlgReader::saveReader() {
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -544,7 +544,7 @@ void dlgReader::saveReader() {
 }
 
 void dlgReader::initReader() {
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -569,7 +569,7 @@ void dlgReader::initReader() {
 }
 
 void dlgReader::getBookList() {
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -713,7 +713,7 @@ void dlgReader::selectFont() {
   QFont font = get_Font();
   font = fd.getFont(&ok, font);
   if (ok) {
-    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
 #endif
@@ -726,7 +726,7 @@ void dlgReader::selectFont() {
 QFont dlgReader::get_Font() {
   QFont font;
 
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -1004,7 +1004,7 @@ void dlgReader::paintEvent(QPaintEvent* event) { Q_UNUSED(event); }
 
 void dlgReader::goPostion() {
   if (isOpen) {
-    QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+    QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
 #endif
@@ -1098,7 +1098,7 @@ void dlgReader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
 }
 
 void dlgReader::savePageVPos() {
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -1113,7 +1113,7 @@ void dlgReader::savePageVPos() {
 }
 
 void dlgReader::setPageVPos() {
-  QSettings Reg(iniDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
