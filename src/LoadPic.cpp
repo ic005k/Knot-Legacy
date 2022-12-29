@@ -1,7 +1,7 @@
-#include "dlgloadpic.h"
+#include "LoadPic.h"
 
 #include "src/mainwindow.h"
-#include "ui_dlgloadpic.h"
+#include "ui_LoadPic.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern QString picfile;
@@ -29,7 +29,8 @@ void dlgLoadPic::initMain(QString imgFile) {
   if (mw_one->isMemoVisible) mw_one->ui->frameMemo->hide();
 
   mw_one->ui->qw_Img->rootContext()->setContextProperty("myW", mw_one->width());
-  mw_one->ui->qw_Img->rootContext()->setContextProperty("myH", mw_one->height());
+  mw_one->ui->qw_Img->rootContext()->setContextProperty("myH",
+                                                        mw_one->height());
 
   mw_one->ui->f_ImgView->show();
 

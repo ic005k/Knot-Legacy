@@ -1,5 +1,5 @@
-#ifndef DLGFLOATFUN_H
-#define DLGFLOATFUN_H
+#ifndef PAGEINDICATOR_H
+#define PAGEINDICATOR_H
 
 #include <QDialog>
 #include <QGraphicsOpacityEffect>
@@ -31,4 +31,4 @@ class dlgFloatFun : public QDialog {
  private:
 };
 
-#endif  // DLGFLOATFUN_H
+#endif  // PAGEINDICATOR_H

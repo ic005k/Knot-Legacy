@@ -42,10 +42,14 @@ android: {
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/AutoUpdate.cpp \
+    src/CategoryList.cpp \
     src/EditRecord.cpp \
+    src/LoadPic.cpp \
     src/Notes.cpp \
     src/NotesList.cpp \
     src/OneDrive.cpp \
+    src/PageIndicator.cpp \
     src/Preferences.cpp \
     src/Reader.cpp \
     src/ReaderFun.cpp \
@@ -55,12 +59,8 @@ SOURCES += \
     src/SyncInfo.cpp \
     src/Todo.cpp \
     src/TodoAlarm.cpp \
-    src/autoupdatedialog.cpp \
     src/dlgSetText.cpp \
-    src/dlgfloatfun.cpp \
     src/dlgleft.cpp \
-    src/dlglist.cpp \
-    src/dlgloadpic.cpp \
     src/dlgright.cpp \
     src/dlgsetedittext.cpp \
     src/documenthandler.cpp \
@@ -76,10 +76,14 @@ SOURCES += \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
+    src/AutoUpdate.h \
+    src/CategoryList.h \
     src/EditRecord.h \
+    src/LoadPic.h \
     src/Notes.h \
     src/NotesList.h \
     src/OneDrive.h \
+    src/PageIndicator.h \
     src/Preferences.h \
     src/Reader.h \
     src/ReaderFun.h \
@@ -89,13 +93,9 @@ HEADERS += \
     src/SyncInfo.h \
     src/Todo.h \
     src/TodoAlarm.h \
-    src/autoupdatedialog.h \
     src/count_steps.h \
     src/dlgSetText.h \
-    src/dlgfloatfun.h \
     src/dlgleft.h \
-    src/dlglist.h \
-    src/dlgloadpic.h \
     src/dlgright.h \
     src/dlgsetedittext.h \
     src/documenthandler.h \
@@ -112,10 +112,14 @@ HEADERS += \
     win.rc
 
 FORMS += \
+    src/AutoUpdate.ui \
+    src/CategoryList.ui \
     src/EditRecord.ui \
+    src/LoadPic.ui \
     src/Notes.ui \
     src/NotesList.ui \
     src/OneDrive.ui \
+    src/PageIndicator.ui \
     src/Preferences.ui \
     src/Reader.ui \
     src/ReaderFun.ui \
@@ -125,12 +129,8 @@ FORMS += \
     src/SyncInfo.ui \
     src/Todo.ui \
     src/TodoAlarm.ui \
-    src/autoupdatedialog.ui \
     src/dlgSetText.ui \
-    src/dlgfloatfun.ui \
     src/dlgleft.ui \
-    src/dlglist.ui \
-    src/dlgloadpic.ui \
     src/dlgright.ui \
     src/dlgsetedittext.ui \
     src/mainwindow.ui

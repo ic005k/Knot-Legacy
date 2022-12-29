@@ -1,7 +1,7 @@
-#include "dlgfloatfun.h"
+#include "PageIndicator.h"
 
 #include "src/mainwindow.h"
-#include "ui_dlgfloatfun.h"
+#include "ui_PageIndicator.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;

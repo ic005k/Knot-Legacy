@@ -7,7 +7,7 @@
 #include <QSet>
 #include <QWidgetAction>
 
-#include "src/dlglist.h"
+#include "src/CategoryList.h"
 
 namespace Ui {
 class EditRecord;

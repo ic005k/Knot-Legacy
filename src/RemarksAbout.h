@@ -9,7 +9,7 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 
-#include "src/autoupdatedialog.h"
+#include "src/AutoUpdate.h"
 
 namespace Ui {
 class dlgRemarks;

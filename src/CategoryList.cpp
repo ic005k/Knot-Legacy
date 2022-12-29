@@ -1,7 +1,7 @@
-#include "dlglist.h"
+#include "CategoryList.h"
 
 #include "mainwindow.h"
-#include "ui_dlglist.h"
+#include "ui_CategoryList.h"
 #include "ui_mainwindow.h"
 extern MainWindow* mw_one;
 extern int fontSize, red;

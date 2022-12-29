@@ -1,5 +1,5 @@
-#ifndef DLGLOADPIC_H
-#define DLGLOADPIC_H
+#ifndef LOADPIC_H
+#define LOADPIC_H
 
 #include <QDialog>
 #include <QKeyEvent>
@@ -26,4 +26,4 @@ class dlgLoadPic : public QDialog {
  private:
 };
 
-#endif  // DLGLOADPIC_H
+#endif  // LOADPIC_H

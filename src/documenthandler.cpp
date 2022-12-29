@@ -61,9 +61,9 @@
 #include <QTextCodec>
 #include <QTextDocument>
 
-#include "src/dlgloadpic.h"
+#include "src/LoadPic.h"
 #include "src/mainwindow.h"
-#include "ui_dlgloadpic.h"
+#include "ui_LoadPic.h"
 #include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;

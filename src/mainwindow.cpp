@@ -2705,6 +2705,9 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
         QFile::remove(iniDir + "memo/todo.ini");
       mydlgTodo->init_Todo();
     }
+
+    if (book) {
+    }
   }
 
   reloadMain();

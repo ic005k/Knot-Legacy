@@ -1,7 +1,7 @@
-#include "autoupdatedialog.h"
+#include "AutoUpdate.h"
 
 #include "mainwindow.h"
-#include "ui_autoupdatedialog.h"
+#include "ui_AutoUpdate.h"
 
 extern MainWindow* mw_one;
 extern QString iniDir, privateDir;

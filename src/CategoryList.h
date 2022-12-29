@@ -1,5 +1,5 @@
-#ifndef DLGLIST_H
-#define DLGLIST_H
+#ifndef CATEGORYLIST_H
+#define CATEGORYLIST_H
 
 #include <QDialog>
 #include <QListWidgetItem>
@@ -39,4 +39,4 @@ class dlgList : public QDialog {
   void setCategoryText();
 };
 
-#endif  // DLGLIST_H
+#endif  // CATEGORYLIST_H

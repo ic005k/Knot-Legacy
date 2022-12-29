@@ -1,5 +1,5 @@
-#ifndef AUTOUPDATEDIALOG_H
-#define AUTOUPDATEDIALOG_H
+#ifndef AUTOUPDATE_H
+#define AUTOUPDATE_H
 
 #include <QDebug>
 #include <QDialog>
@@ -60,4 +60,4 @@ class AutoUpdateDialog : public QDialog {
   bool isCancel = false;
 };
 
-#endif  // AUTOUPDATEDIALOG_H
+#endif  // AUTOUPDATE_H
