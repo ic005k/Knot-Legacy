@@ -1507,6 +1507,9 @@ QRadioButton::indicator:checked {
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="toolTip">
+               <string>Ctrl + T</string>
+              </property>
               <property name="text">
                <string>ToDo</string>
               </property>
@@ -1519,6 +1522,9 @@ QRadioButton::indicator:checked {
                 <width>28</width>
                 <height>28</height>
                </size>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+T</string>
               </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -1559,6 +1565,9 @@ QRadioButton::indicator:checked {
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="toolTip">
+               <string>Ctrl + N</string>
+              </property>
               <property name="text">
                <string>Notes</string>
               </property>
@@ -1571,6 +1580,9 @@ QRadioButton::indicator:checked {
                 <width>28</width>
                 <height>28</height>
                </size>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+N</string>
               </property>
               <property name="toolButtonStyle">
                <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -2075,6 +2087,9 @@ QRadioButton::indicator:checked {
              <height>40</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Esc</string>
+           </property>
            <property name="text">
             <string>Back</string>
            </property>
@@ -2113,6 +2128,9 @@ QRadioButton::indicator:checked {
              <height>16777215</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Ctrl + E</string>
+           </property>
            <property name="text">
             <string>Edit</string>
            </property>
@@ -2125,6 +2143,9 @@ QRadioButton::indicator:checked {
              <width>30</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="shortcut">
+            <string>Ctrl+E</string>
            </property>
           </widget>
          </item>
@@ -2142,6 +2163,9 @@ QRadioButton::indicator:checked {
              <height>40</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Ctrl + L</string>
+           </property>
            <property name="text">
             <string>Notes List</string>
            </property>
@@ -2154,6 +2178,9 @@ QRadioButton::indicator:checked {
              <width>30</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="shortcut">
+            <string>Ctrl+L</string>
            </property>
           </widget>
          </item>
@@ -2171,6 +2198,9 @@ QRadioButton::indicator:checked {
              <height>40</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Ctrl + K</string>
+           </property>
            <property name="text">
             <string>Set Key</string>
            </property>
@@ -2183,6 +2213,9 @@ QRadioButton::indicator:checked {
              <width>30</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="shortcut">
+            <string>Ctrl+K</string>
            </property>
           </widget>
          </item>
@@ -2200,6 +2233,9 @@ QRadioButton::indicator:checked {
              <height>40</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Ctrl + P</string>
+           </property>
            <property name="text">
             <string>Export to PDF</string>
            </property>
@@ -2212,6 +2248,9 @@ QRadioButton::indicator:checked {
              <width>30</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="shortcut">
+            <string>Ctrl+P</string>
            </property>
           </widget>
          </item>
@@ -2678,6 +2717,9 @@ QRadioButton::indicator:checked {
            <width>16777215</width>
            <height>32</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Ctrl + Enter</string>
          </property>
          <property name="placeholderText">
           <string>Enter the to-do list text</string>

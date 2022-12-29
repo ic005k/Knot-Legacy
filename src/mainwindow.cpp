@@ -4978,13 +4978,13 @@ void MainWindow::on_btnSearch_clicked() {
   if (str == "") return;
 
   QString strurl;
-  if (zh_cn)
+  /*if (zh_cn)
     strurl =
         "https://wap.baidu.com/"
         "s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=" +
         str;
-  else
-    strurl = "https://bing.com/search?q=" + str;
+  else*/
+  strurl = "https://bing.com/search?q=" + str;
 
   QUrl url(strurl);
   QDesktopServices::openUrl(url);

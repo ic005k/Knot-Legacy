@@ -1058,6 +1058,9 @@ color: rgb(255, 255, 255);</string>
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Esc</string>
+       </property>
        <property name="text">
         <string>Done</string>
        </property>

@@ -43,11 +43,14 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="toolTip">
+           <string>Ctrl + B</string>
+          </property>
           <property name="text">
            <string>New Notebook</string>
           </property>
           <property name="shortcut">
-           <string>Meta+B</string>
+           <string>Ctrl+B</string>
           </property>
          </widget>
         </item>
@@ -73,11 +76,14 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="toolTip">
+           <string>Ctrl + N</string>
+          </property>
           <property name="text">
            <string>New Note</string>
           </property>
           <property name="shortcut">
-           <string>Meta+N</string>
+           <string>Ctrl+N</string>
           </property>
          </widget>
         </item>
@@ -103,11 +109,14 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="toolTip">
+           <string>Ctrl + R</string>
+          </property>
           <property name="text">
            <string>Rename</string>
           </property>
           <property name="shortcut">
-           <string>Meta+R</string>
+           <string>Ctrl+R</string>
           </property>
          </widget>
         </item>
@@ -124,11 +133,14 @@
        <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
          <widget class="QToolButton" name="btnFind">
+          <property name="toolTip">
+           <string>Ctrl + F</string>
+          </property>
           <property name="text">
            <string>Find</string>
           </property>
           <property name="shortcut">
-           <string>Meta+F</string>
+           <string>Ctrl+F</string>
           </property>
          </widget>
         </item>
@@ -150,6 +162,9 @@
          <widget class="QToolButton" name="btnPrev">
           <property name="text">
            <string>&lt;</string>
+          </property>
+          <property name="shortcut">
+           <string>Shift+Return</string>
           </property>
          </widget>
         </item>
