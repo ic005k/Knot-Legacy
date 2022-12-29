@@ -11,7 +11,7 @@ extern bool isImport, isAndroid;
 dlgNotesList::dlgNotesList(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
   ui->setupUi(this);
-
+  this->installEventFilter(this);
   mw_one->set_btnStyle(this);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
@@ -81,6 +81,12 @@ bool dlgNotesList::eventFilter(QObject* watch, QEvent* evn) {
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnClose_clicked();
       return true;
+    }
+
+    if (keyEvent->key() == Qt::Key_Return) {
+        QTreeWidgetItem* item = tw->currentItem();
+        on_treeWidget_itemClicked(item,0);
+        return true;
     }
   }
 
