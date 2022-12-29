@@ -6,6 +6,13 @@ import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
 
+import android.os.Process;
+import android.os.HandlerThread;
+import android.content.ClipboardManager;
+import android.content.ClipData;
+
+import java.util.Stack;
+
 import android.view.inputmethod.InputMethodSession.EventCallback;
 import android.app.Application;
 import android.app.Activity;
@@ -143,6 +150,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     private final static String TAG = "QtKnot";
     private static Context context;
     public static boolean ReOpen = false;
+    private FileWatcher mFileWatcher;
 
     public native static void CallJavaNotify_0();
 
@@ -454,6 +462,12 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         //在onCreate方法这里调用来动态获取权限
         verifyStoragePermissions(this);
 
+        //File Watch FileWatcher
+        if (null == mFileWatcher) {
+            mFileWatcher = new FileWatcher("/storage/emulated/0/KnotData/");
+            mFileWatcher.startWatching(); //开始监听
+        }
+
         if (m_instance != null) {
             Log.d(TAG, "App is already running... this won't work");
             Intent intent = getIntent();
@@ -520,12 +534,31 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
-        //File Watch
-        if (null == mFileObserver) {
-            mFileObserver = new SDCardFileObserver("/storage/emulated/0/KnotData/");
-            mFileObserver.startWatching(); //开始监听
-        }
+        getShare("Knot");
 
+    }
+
+    public String getShare(String uripath) {
+        //获取分享的数据
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        //设置接收类型为文本
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handlerText(intent);
+                return "1";
+            }
+        }
+        return "0";
+    }
+
+    //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
+    private void handlerText(Intent intent) {
+        String data = intent.getStringExtra(Intent.EXTRA_TEXT);
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Knot", data);
+        clipboard.setPrimaryClip(clip);
     }
 
 
@@ -561,7 +594,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     protected void onDestroy() {
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
-        if (null != mFileObserver) mFileObserver.stopWatching(); //停止监听
+        if (null != mFileWatcher) mFileWatcher.stopWatching(); //停止监听
 
         //让系统自行处理，否则退出时有可能出现崩溃
         //if(mHomeKeyEvent!=null)
@@ -1177,46 +1210,267 @@ This method can parse out the real local file path from a file URI.
     }
 
     //==============================================================================================
-    private FileObserver mFileObserver;
 
-    static class SDCardFileObserver extends FileObserver {
-        //mask:指定要监听的事件类型，默认为FileObserver.ALL_EVENTS
-        public SDCardFileObserver(String path, int mask) {
-            super(path, mask);
+    public class FileWatcher extends FileObserver {
+        static final String TAG = "FileWatcher";
+        ArrayList<FileObserver> mObservers;
+        String mPath;
+        int mMask;
+
+        String mThreadName = FileWatcher.class.getSimpleName();
+        HandlerThread mThread;
+        Handler mThreadHandler;
+
+        private Context mContext;
+
+        public FileWatcher(Context context, String path) {
+            this(path, ALL_EVENTS);
+            mContext = context;
         }
 
-        public SDCardFileObserver(String path) {
-            super(path);
+        public FileWatcher(String path) {
+            this(path, ALL_EVENTS);
+        }
+
+        public FileWatcher(String path, int mask) {
+            super(path, mask);
+            mPath = path;
+            mMask = mask;
+        }
+
+        @Override
+        public void startWatching() {
+            mThreadName = FileWatcher.class.getSimpleName();
+            if (mThread == null || !mThread.isAlive()) {
+                mThread = new HandlerThread(mThreadName, Process.THREAD_PRIORITY_BACKGROUND);
+                mThread.start();
+
+                mThreadHandler = new Handler(mThread.getLooper());
+                mThreadHandler.post(new startRunnable());
+            }
+        }
+
+        @Override
+        public void stopWatching() {
+            if (null != mThreadHandler && null != mThread && mThread.isAlive()) {
+                mThreadHandler.post(new stopRunnable());
+            }
+            mThreadHandler = null;
+            mThread.quit();
+            mThread = null;
         }
 
         @Override
         public void onEvent(int event, String path) {
-            final int action = event & FileObserver.ALL_EVENTS;
-            switch (action) {
+            event = event & FileObserver.ALL_EVENTS;
+            final String tmpPath = path;
+            switch (event) {
                 case FileObserver.ACCESS:
-                    //System.out.println("event: 文件或目录被访问, path: " + path);
-                    break;
-
-                case FileObserver.DELETE:
-                    //System.out.println("event: 文件或目录被删除, path: " + path);
-                    break;
-
-                case FileObserver.OPEN:
-                    //System.out.println("event: 文件或目录被打开, path: " + path);
-                    break;
-
-                case FileObserver.MODIFY:
-                    if (path.equals("todo.ini") || path.equals("mainnotes.ini"))
+                    // Log.i("FileWatcher", "ACCESS: " + path);
+                    if (path.contains("/storage/emulated/0/KnotData//todo.ini") || path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
                         CallJavaNotify_0();
-                    System.out.println("event: 文件或目录被修改, path: " + path);
                     break;
+                case FileObserver.ATTRIB:
+                    // Log.i("FileWatcher", "ATTRIB: " + path);
+                    break;
+                case FileObserver.CLOSE_NOWRITE:
+                    // Log.i("FileWatcher", "CLOSE_NOWRITE: " + path);
+                    break;
+                case FileObserver.CLOSE_WRITE:
+                    //Log.i("FileWatcher", "CLOSE_WRITE: " + path);
+                    // 文件写入完毕后会回调，可以在这对新写入的文件做操作
 
+                    mThreadHandler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            //
+                        }
+                    });
+                    break;
                 case FileObserver.CREATE:
-                    //System.out.println("event: 文件或目录被创建, path: " + path);
+                    //Log.i(TAG, "CREATE: " + path);
+
+                    mThreadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            doCreate(tmpPath);
+                        }
+                    });
+                    break;
+                case FileObserver.DELETE:
+                    // Log.i(TAG, "DELETE: " + path);
+                    mThreadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            doDelete(tmpPath);
+                        }
+                    });
+                    break;
+                case FileObserver.DELETE_SELF:
+                    // Log.i("FileWatcher", "DELETE_SELF: " + path);
+                    break;
+                case FileObserver.MODIFY:
+                    // Log.i("FileWatcher", "MODIFY: " + path);
+
+                    break;
+                case FileObserver.MOVE_SELF:
+                    // Log.i("FileWatcher", "MOVE_SELF: " + path);
+                    break;
+                case FileObserver.MOVED_FROM:
+                    // Log.i("FileWatcher", "MOVED_FROM: " + path);
+                    break;
+                case FileObserver.MOVED_TO:
+                    // Log.i("FileWatcher", "MOVED_TO: " + path);
+                    break;
+                case FileObserver.OPEN:
+                    // Log.i("FileWatcher", "OPEN: " + path);
+                    break;
+                default:
+                    // Log.i(TAG, "DEFAULT(" + event + ";) : " + path);
+
                     break;
             }
         }
 
+        private void doCreate(String path) {
+            synchronized (FileWatcher.this) {
+                File file = new File(path);
+                if (!file.exists()) {
+                    return;
+                }
+
+                if (file.isDirectory()) {
+                    // 新建文件夹，对该文件夹及子目录添加监听
+                    Stack<String> stack = new Stack<String>();
+                    stack.push(path);
+
+                    while (!stack.isEmpty()) {
+                        String parent = stack.pop();
+                        SingleFileObserver observer = new SingleFileObserver(parent, mMask);
+                        observer.startWatching();
+
+                        mObservers.add(observer);
+                        Log.d(TAG, "add observer " + parent);
+                        File parentFile = new File(parent);
+                        File[] files = parentFile.listFiles();
+                        if (null == files) {
+                            continue;
+                        }
+
+                        for (File f : files) {
+                            if (f.isDirectory() && !f.getName().equals(".") && !f.getName().equals("..")) {
+                                stack.push(f.getPath());
+                            }
+                        }
+                    }
+
+                    stack.clear();
+                    stack = null;
+                } else {
+                    // 新建文件
+                }
+            }
+        }
+
+        private void doDelete(String path) {
+            synchronized (FileWatcher.this) {
+                Iterator<FileObserver> it = mObservers.iterator();
+                while (it.hasNext()) {
+                    SingleFileObserver sfo = (SingleFileObserver) it.next();
+                    // 如果删除的是文件夹移除对该文件夹及子目录的监听
+                    if (sfo.mPath != null && (sfo.mPath.equals(path) || sfo.mPath.startsWith(path + "/"))) {
+                        Log.d(TAG, "stop observer " + sfo.mPath);
+                        sfo.stopWatching();
+                        it.remove();
+                        sfo = null;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Monitor single directory and dispatch all events to its parent, with full
+         * path.
+         */
+        class SingleFileObserver extends FileObserver {
+            String mPath;
+
+            public SingleFileObserver(String path) {
+                this(path, ALL_EVENTS);
+                mPath = path;
+            }
+
+            public SingleFileObserver(String path, int mask) {
+                super(path, mask);
+                mPath = path;
+            }
+
+            @Override
+            public void onEvent(int event, String path) {
+                if (path == null) {
+                    return;
+                }
+                String newPath = mPath + "/" + path;
+                FileWatcher.this.onEvent(event, newPath);
+            }
+        }
+
+        class startRunnable implements Runnable {
+            @Override
+            public void run() {
+                synchronized (FileWatcher.this) {
+                    if (mObservers != null) {
+                        return;
+                    }
+
+                    mObservers = new ArrayList<FileObserver>();
+                    Stack<String> stack = new Stack<String>();
+                    stack.push(mPath);
+
+                    while (!stack.isEmpty()) {
+                        String parent = String.valueOf(stack.pop());
+                        mObservers.add(new SingleFileObserver(parent, mMask));
+                        File path = new File(parent);
+                        File[] files = path.listFiles();
+                        if (null == files) {
+                            continue;
+                        }
+
+                        for (File f : files) {
+                            if (f.isDirectory() && !f.getName().equals(".") && !f.getName().equals("..")) {
+                                stack.push(f.getPath());
+                            }
+                        }
+                    }
+
+                    Iterator<FileObserver> it = mObservers.iterator();
+                    while (it.hasNext()) {
+                        SingleFileObserver sfo = (SingleFileObserver) it.next();
+                        sfo.startWatching();
+                    }
+                }
+            }
+        }
+
+        class stopRunnable implements Runnable {
+            @Override
+            public void run() {
+                synchronized (FileWatcher.this) {
+                    if (mObservers == null) {
+                        return;
+                    }
+
+                    Iterator<FileObserver> it = mObservers.iterator();
+                    while (it.hasNext()) {
+                        FileObserver sfo = it.next();
+                        sfo.stopWatching();
+                    }
+                    mObservers.clear();
+                    mObservers = null;
+                }
+            }
+        }
     }
 
 }
