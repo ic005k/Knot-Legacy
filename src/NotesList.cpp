@@ -52,8 +52,7 @@ dlgNotesList::dlgNotesList(QWidget *parent)
 
   QString path = iniDir + "memo/";
   QDir dir(path);
-  if (!dir.exists())
-    dir.mkdir(path);
+  if (!dir.exists()) dir.mkdir(path);
 
   ui->editBook->setStyleSheet(
       mw_one->myEditRecord->ui->editAmount->styleSheet());
@@ -106,16 +105,14 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
 }
 
 void dlgNotesList::on_btnNewNote_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0)
-    return;
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
 
   int rand = QRandomGenerator::global()->generate();
 
   QString noteFile = "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + "_" +
                      QString::number(rand) + ".md";
   QTreeWidgetItem *topitem = ui->treeWidget->currentItem();
-  if (topitem->parent() != NULL)
-    topitem = topitem->parent();
+  if (topitem->parent() != NULL) topitem = topitem->parent();
 
   QTreeWidgetItem *item1 = new QTreeWidgetItem(topitem);
   item1->setText(0, ui->editNote->text().trimmed());
@@ -133,8 +130,7 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
                                              int column) {
   Q_UNUSED(column);
 
-  if (ui->treeWidget->topLevelItemCount() == 0)
-    return;
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
 
   if (item->parent() != NULL) {
     if (tw->currentIndex().row() == 0) {
@@ -164,8 +160,7 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
 }
 
 void dlgNotesList::on_btnRename_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0)
-    return;
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
 
   QTreeWidgetItem *item = ui->treeWidget->currentItem();
   item->setText(0, ui->editName->text().trimmed());
@@ -175,10 +170,11 @@ void dlgNotesList::on_btnRename_clicked() {
 }
 
 void dlgNotesList::setNoteName(QString name) {
-  QFontMetrics fontWidth(mw_one->ui->lblNoteName->font());
-  QString elideNote = fontWidth.elidedText(name, Qt::ElideRight, 240);
-
-  mw_one->ui->lblNoteName->setText(elideNote);
+  // QFontMetrics fontWidth(mw_one->ui->lblNoteName->font());
+  // QString elideNote = fontWidth.elidedText(name, Qt::ElideRight, 240);
+  mw_one->ui->lblNoteName->adjustSize();
+  mw_one->ui->lblNoteName->setWordWrap(true);
+  mw_one->ui->lblNoteName->setText(name);
   mw_one->ui->lblNoteName->setToolTip(name);
 }
 
@@ -186,12 +182,10 @@ void dlgNotesList::on_btnDel_clicked() {
   QTreeWidgetItem *item = ui->treeWidget->currentItem();
 
   if (item->parent() == NULL) {
-    if (tw->currentIndex().row() == 0)
-      return;
+    if (tw->currentIndex().row() == 0) return;
   } else {
     if (tw->currentIndex().row() == 0) {
-      if (tw->currentIndex().parent().row() == 0)
-        return;
+      if (tw->currentIndex().parent().row() == 0) return;
     }
   }
 
@@ -234,21 +228,18 @@ void dlgNotesList::addItem(QTreeWidget *tw, QTreeWidgetItem *item) {
 
 void dlgNotesList::delFile(QString file) {
   QFile _file(file);
-  if (_file.exists())
-    _file.remove();
+  if (_file.exists()) _file.remove();
   _file.close();
 }
 
 void dlgNotesList::on_btnImport_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0)
-    return;
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
 
   QString fileName;
   fileName =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("MD File (*.*)"));
 
-  if (fileName.isNull())
-    return;
+  if (fileName.isNull()) return;
 
   bool isMD = false;
   QString strInfo;
@@ -260,8 +251,7 @@ void dlgNotesList::on_btnImport_clicked() {
 
   QStringList list = fileAndroid.split("/");
   QString str = list.at(list.count() - 1);
-  if (str.toInt() > 0)
-    isMD = true;
+  if (str.toInt() > 0) isMD = true;
   strInfo = fileAndroid;
 
 #endif
@@ -302,19 +292,16 @@ void dlgNotesList::on_btnImport_clicked() {
 }
 
 void dlgNotesList::on_btnExport_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0)
-    return;
+  if (ui->treeWidget->topLevelItemCount() == 0) return;
 
   QTreeWidgetItem *item = tw->currentItem();
-  if (item->parent() == NULL)
-    return;
+  if (item->parent() == NULL) return;
 
   QString fileName;
   QFileDialog fd;
   fileName = fd.getSaveFileName(this, "Knot.md", "", tr("MD File(*.*)"));
 
-  if (fileName == "")
-    return;
+  if (fileName == "") return;
 
   QString mdfile = iniDir + item->text(1);
 
@@ -358,12 +345,12 @@ void dlgNotesList::saveNotesList() {
       QString strChild0 = childItem->text(0);
       QString strChild1 = childItem->text(1);
 
-      Reg.setValue("/MainNotes/childItem0" + QString::number(i) +
-                       QString::number(j),
-                   strChild0);
-      Reg.setValue("/MainNotes/childItem1" + QString::number(i) +
-                       QString::number(j),
-                   strChild1);
+      Reg.setValue(
+          "/MainNotes/childItem0" + QString::number(i) + QString::number(j),
+          strChild0);
+      Reg.setValue(
+          "/MainNotes/childItem1" + QString::number(i) + QString::number(j),
+          strChild1);
     }
   }
 }
@@ -391,12 +378,12 @@ void dlgNotesList::saveRecycle() {
       QString strChild0 = childItem->text(0);
       QString strChild1 = childItem->text(1);
 
-      Reg.setValue("/MainNotes/rbchildItem0" + QString::number(i) +
-                       QString::number(j),
-                   strChild0);
-      Reg.setValue("/MainNotes/rbchildItem1" + QString::number(i) +
-                       QString::number(j),
-                   strChild1);
+      Reg.setValue(
+          "/MainNotes/rbchildItem0" + QString::number(i) + QString::number(j),
+          strChild0);
+      Reg.setValue(
+          "/MainNotes/rbchildItem1" + QString::number(i) + QString::number(j),
+          strChild1);
     }
   }
 }
@@ -477,8 +464,7 @@ void dlgNotesList::initNotesList() {
         break;
       }
     }
-    if (stop)
-      break;
+    if (stop) break;
   }
 
   if (ui->treeWidget->topLevelItemCount() == 0) {
@@ -609,8 +595,7 @@ void dlgNotesList::clearFiles() {
   for (int i = 0; i < files.count(); i++) {
     QString a = files.at(i);
     QFile file(a);
-    if (a != iniDir + "memo/memo.md")
-      file.remove();
+    if (a != iniDir + "memo/memo.md") file.remove();
   }
 }
 
@@ -657,7 +642,7 @@ void dlgNotesList::getAllFiles(const QString &foldPath, QStringList &folds,
   while (it.hasNext()) {
     it.next();
     QFileInfo fileInfo = it.fileInfo();
-    if (formats.contains(fileInfo.suffix())) { //检测格式，按需保存
+    if (formats.contains(fileInfo.suffix())) {  //检测格式，按需保存
       folds << fileInfo.absoluteFilePath();
     }
   }
@@ -665,8 +650,7 @@ void dlgNotesList::getAllFiles(const QString &foldPath, QStringList &folds,
 
 void dlgNotesList::on_btnFind_clicked() {
   QString strFind = ui->editFind->text().trimmed().toLower();
-  if (strFind == "")
-    return;
+  if (strFind == "") return;
   findResultList.clear();
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
@@ -694,16 +678,14 @@ void dlgNotesList::on_btnFind_clicked() {
 
 void dlgNotesList::on_btnPrev_clicked() {
   findCount--;
-  if (findCount < 0)
-    findCount = 0;
+  if (findCount < 0) findCount = 0;
   tw->setCurrentItem(findResultList.at(findCount));
   tw->scrollToItem(tw->currentItem());
   ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
                         QString::number(findResultList.count()));
 
   if (isAndroid) {
-    if (pAndroidKeyboard->isVisible())
-      pAndroidKeyboard->setVisible(false);
+    if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
   }
 }
 
@@ -717,20 +699,17 @@ void dlgNotesList::on_btnNext_clicked() {
                         QString::number(findResultList.count()));
 
   if (isAndroid) {
-    if (pAndroidKeyboard->isVisible())
-      pAndroidKeyboard->setVisible(false);
+    if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
   }
 }
 
 void dlgNotesList::on_editFind_textChanged(const QString &arg1) {
-  if (arg1.trimmed() == "")
-    ui->lblCount->setText("0");
+  if (arg1.trimmed() == "") ui->lblCount->setText("0");
   on_btnFind_clicked();
 }
 
 void dlgNotesList::on_editFind_returnPressed() {
-  if (ui->btnNext->isEnabled())
-    on_btnNext_clicked();
+  if (ui->btnNext->isEnabled()) on_btnNext_clicked();
 }
 
 void dlgNotesList::on_KVChanged() {
