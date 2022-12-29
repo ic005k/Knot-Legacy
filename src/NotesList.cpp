@@ -4,11 +4,11 @@
 #include "ui_NotesList.h"
 #include "ui_mainwindow.h"
 
-extern MainWindow* mw_one;
+extern MainWindow *mw_one;
 extern QString iniDir, privateDir;
 extern bool isImport, isAndroid;
 
-dlgNotesList::dlgNotesList(QWidget* parent)
+dlgNotesList::dlgNotesList(QWidget *parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
   ui->setupUi(this);
   this->installEventFilter(this);
@@ -52,7 +52,8 @@ dlgNotesList::dlgNotesList(QWidget* parent)
 
   QString path = iniDir + "memo/";
   QDir dir(path);
-  if (!dir.exists()) dir.mkdir(path);
+  if (!dir.exists())
+    dir.mkdir(path);
 
   ui->editBook->setStyleSheet(
       mw_one->myEditRecord->ui->editAmount->styleSheet());
@@ -75,18 +76,18 @@ dlgNotesList::dlgNotesList(QWidget* parent)
 
 dlgNotesList::~dlgNotesList() { delete ui; }
 
-bool dlgNotesList::eventFilter(QObject* watch, QEvent* evn) {
+bool dlgNotesList::eventFilter(QObject *watch, QEvent *evn) {
   if (evn->type() == QEvent::KeyPress) {
-    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnClose_clicked();
       return true;
     }
 
     if (keyEvent->key() == Qt::Key_Return) {
-        QTreeWidgetItem* item = tw->currentItem();
-        on_treeWidget_itemClicked(item,0);
-        return true;
+      QTreeWidgetItem *item = tw->currentItem();
+      on_treeWidget_itemClicked(item, 0);
+      return true;
     }
   }
 
@@ -96,7 +97,7 @@ bool dlgNotesList::eventFilter(QObject* watch, QEvent* evn) {
 void dlgNotesList::on_btnClose_clicked() { this->close(); }
 
 void dlgNotesList::on_btnNewNoteBook_clicked() {
-  QTreeWidgetItem* item = new QTreeWidgetItem();
+  QTreeWidgetItem *item = new QTreeWidgetItem();
   item->setText(0, ui->editBook->text().trimmed());
   ui->treeWidget->addTopLevelItem(item);
   ui->treeWidget->setCurrentItem(item);
@@ -105,19 +106,21 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
 }
 
 void dlgNotesList::on_btnNewNote_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0) return;
+  if (ui->treeWidget->topLevelItemCount() == 0)
+    return;
 
   int rand = QRandomGenerator::global()->generate();
 
   QString noteFile = "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + "_" +
                      QString::number(rand) + ".md";
-  QTreeWidgetItem* topitem = ui->treeWidget->currentItem();
-  if (topitem->parent() != NULL) topitem = topitem->parent();
+  QTreeWidgetItem *topitem = ui->treeWidget->currentItem();
+  if (topitem->parent() != NULL)
+    topitem = topitem->parent();
 
-  QTreeWidgetItem* item1 = new QTreeWidgetItem(topitem);
+  QTreeWidgetItem *item1 = new QTreeWidgetItem(topitem);
   item1->setText(0, ui->editNote->text().trimmed());
   item1->setText(1, noteFile);
-  QTextEdit* edit = new QTextEdit();
+  QTextEdit *edit = new QTextEdit();
   mw_one->TextEditToFile(edit, noteFile);
 
   ui->treeWidget->setCurrentItem(topitem->child(topitem->childCount() - 1));
@@ -126,11 +129,12 @@ void dlgNotesList::on_btnNewNote_clicked() {
   isSave = true;
 }
 
-void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
+void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
                                              int column) {
   Q_UNUSED(column);
 
-  if (ui->treeWidget->topLevelItemCount() == 0) return;
+  if (ui->treeWidget->topLevelItemCount() == 0)
+    return;
 
   if (item->parent() != NULL) {
     if (tw->currentIndex().row() == 0) {
@@ -160,9 +164,10 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem* item,
 }
 
 void dlgNotesList::on_btnRename_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0) return;
+  if (ui->treeWidget->topLevelItemCount() == 0)
+    return;
 
-  QTreeWidgetItem* item = ui->treeWidget->currentItem();
+  QTreeWidgetItem *item = ui->treeWidget->currentItem();
   item->setText(0, ui->editName->text().trimmed());
   setNoteName(item->text(0));
 
@@ -178,13 +183,15 @@ void dlgNotesList::setNoteName(QString name) {
 }
 
 void dlgNotesList::on_btnDel_clicked() {
-  QTreeWidgetItem* item = ui->treeWidget->currentItem();
+  QTreeWidgetItem *item = ui->treeWidget->currentItem();
 
   if (item->parent() == NULL) {
-    if (tw->currentIndex().row() == 0) return;
+    if (tw->currentIndex().row() == 0)
+      return;
   } else {
     if (tw->currentIndex().row() == 0) {
-      if (tw->currentIndex().parent().row() == 0) return;
+      if (tw->currentIndex().parent().row() == 0)
+        return;
     }
   }
 
@@ -194,7 +201,7 @@ void dlgNotesList::on_btnDel_clicked() {
     if (item->parent() == NULL) {
       int count = item->childCount();
       for (int i = 0; i < count; i++) {
-        QTreeWidgetItem* childItem = new QTreeWidgetItem;
+        QTreeWidgetItem *childItem = new QTreeWidgetItem;
         childItem->setText(0, item->child(i)->text(0));
         childItem->setText(1, item->child(i)->text(1));
         addItem(twrb, childItem);
@@ -213,9 +220,9 @@ void dlgNotesList::on_btnDel_clicked() {
   isSave = true;
 }
 
-void dlgNotesList::addItem(QTreeWidget* tw, QTreeWidgetItem* item) {
+void dlgNotesList::addItem(QTreeWidget *tw, QTreeWidgetItem *item) {
   tw->setFocus();
-  QTreeWidgetItem* curItem = tw->currentItem();
+  QTreeWidgetItem *curItem = tw->currentItem();
   if (curItem->parent() == NULL) {
     curItem->addChild(item);
   } else {
@@ -227,18 +234,21 @@ void dlgNotesList::addItem(QTreeWidget* tw, QTreeWidgetItem* item) {
 
 void dlgNotesList::delFile(QString file) {
   QFile _file(file);
-  if (_file.exists()) _file.remove();
+  if (_file.exists())
+    _file.remove();
   _file.close();
 }
 
 void dlgNotesList::on_btnImport_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0) return;
+  if (ui->treeWidget->topLevelItemCount() == 0)
+    return;
 
   QString fileName;
   fileName =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("MD File (*.*)"));
 
-  if (fileName.isNull()) return;
+  if (fileName.isNull())
+    return;
 
   bool isMD = false;
   QString strInfo;
@@ -250,7 +260,8 @@ void dlgNotesList::on_btnImport_clicked() {
 
   QStringList list = fileAndroid.split("/");
   QString str = list.at(list.count() - 1);
-  if (str.toInt() > 0) isMD = true;
+  if (str.toInt() > 0)
+    isMD = true;
   strInfo = fileAndroid;
 
 #endif
@@ -263,9 +274,9 @@ void dlgNotesList::on_btnImport_clicked() {
   }
 
   if (QFile(fileName).exists()) {
-    QTreeWidgetItem* item = ui->treeWidget->currentItem();
+    QTreeWidgetItem *item = ui->treeWidget->currentItem();
 
-    QTreeWidgetItem* item1;
+    QTreeWidgetItem *item1;
     if (item->parent() == NULL) {
       item1 = new QTreeWidgetItem(item);
       item1->setText(0, tr("Notes Imported"));
@@ -277,7 +288,7 @@ void dlgNotesList::on_btnImport_clicked() {
     QString a = "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + ".md";
     currentMDFile = iniDir + a;
     QString str = mw_one->loadText(fileName);
-    QTextEdit* edit = new QTextEdit();
+    QTextEdit *edit = new QTextEdit();
     edit->setAcceptRichText(false);
     edit->setPlainText(str);
     mw_one->TextEditToFile(edit, currentMDFile);
@@ -291,28 +302,31 @@ void dlgNotesList::on_btnImport_clicked() {
 }
 
 void dlgNotesList::on_btnExport_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0) return;
+  if (ui->treeWidget->topLevelItemCount() == 0)
+    return;
 
-  QTreeWidgetItem* item = tw->currentItem();
-  if (item->parent() == NULL) return;
+  QTreeWidgetItem *item = tw->currentItem();
+  if (item->parent() == NULL)
+    return;
 
   QString fileName;
   QFileDialog fd;
   fileName = fd.getSaveFileName(this, "Knot.md", "", tr("MD File(*.*)"));
 
-  if (fileName == "") return;
+  if (fileName == "")
+    return;
 
   QString mdfile = iniDir + item->text(1);
 
   QString str = mw_one->loadText(mdfile);
-  QTextEdit* edit = new QTextEdit();
+  QTextEdit *edit = new QTextEdit();
   edit->setAcceptRichText(false);
   edit->setPlainText(str);
 
   mw_one->TextEditToFile(edit, fileName);
 }
 
-void dlgNotesList::closeEvent(QCloseEvent* event) {
+void dlgNotesList::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
 
   if (isSave) {
@@ -332,7 +346,7 @@ void dlgNotesList::saveNotesList() {
   int count = tw->topLevelItemCount();
   Reg.setValue("/MainNotes/topItemCount", count);
   for (int i = 0; i < count; i++) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
     QString strtop = topItem->text(0);
     Reg.setValue("/MainNotes/strTopItem" + QString::number(i), strtop);
 
@@ -340,16 +354,16 @@ void dlgNotesList::saveNotesList() {
     Reg.setValue("/MainNotes/childCount" + QString::number(i), childCount);
 
     for (int j = 0; j < childCount; j++) {
-      QTreeWidgetItem* childItem = tw->topLevelItem(i)->child(j);
+      QTreeWidgetItem *childItem = tw->topLevelItem(i)->child(j);
       QString strChild0 = childItem->text(0);
       QString strChild1 = childItem->text(1);
 
-      Reg.setValue(
-          "/MainNotes/childItem0" + QString::number(i) + QString::number(j),
-          strChild0);
-      Reg.setValue(
-          "/MainNotes/childItem1" + QString::number(i) + QString::number(j),
-          strChild1);
+      Reg.setValue("/MainNotes/childItem0" + QString::number(i) +
+                       QString::number(j),
+                   strChild0);
+      Reg.setValue("/MainNotes/childItem1" + QString::number(i) +
+                       QString::number(j),
+                   strChild1);
     }
   }
 }
@@ -365,7 +379,7 @@ void dlgNotesList::saveRecycle() {
   int count = twrb->topLevelItemCount();
   Reg.setValue("/MainNotes/rbtopItemCount", count);
   for (int i = 0; i < count; i++) {
-    QTreeWidgetItem* topItem = twrb->topLevelItem(i);
+    QTreeWidgetItem *topItem = twrb->topLevelItem(i);
     QString strtop = topItem->text(0);
     Reg.setValue("/MainNotes/rbstrTopItem" + QString::number(i), strtop);
 
@@ -373,16 +387,16 @@ void dlgNotesList::saveRecycle() {
     Reg.setValue("/MainNotes/rbchildCount" + QString::number(i), childCount);
 
     for (int j = 0; j < childCount; j++) {
-      QTreeWidgetItem* childItem = twrb->topLevelItem(i)->child(j);
+      QTreeWidgetItem *childItem = twrb->topLevelItem(i)->child(j);
       QString strChild0 = childItem->text(0);
       QString strChild1 = childItem->text(1);
 
-      Reg.setValue(
-          "/MainNotes/rbchildItem0" + QString::number(i) + QString::number(j),
-          strChild0);
-      Reg.setValue(
-          "/MainNotes/rbchildItem1" + QString::number(i) + QString::number(j),
-          strChild1);
+      Reg.setValue("/MainNotes/rbchildItem0" + QString::number(i) +
+                       QString::number(j),
+                   strChild0);
+      Reg.setValue("/MainNotes/rbchildItem1" + QString::number(i) +
+                       QString::number(j),
+                   strChild1);
     }
   }
 }
@@ -399,7 +413,7 @@ void dlgNotesList::initNotesList() {
   for (int i = 0; i < topCount; i++) {
     QString strTop =
         Reg.value("/MainNotes/strTopItem" + QString::number(i)).toString();
-    QTreeWidgetItem* topItem = new QTreeWidgetItem;
+    QTreeWidgetItem *topItem = new QTreeWidgetItem;
     topItem->setText(0, strTop);
     QFont font = this->font();
     font.setBold(true);
@@ -416,7 +430,7 @@ void dlgNotesList::initNotesList() {
                        QString::number(j))
                  .toString();
 
-      QTreeWidgetItem* childItem = new QTreeWidgetItem(topItem);
+      QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
       childItem->setText(0, str0);
       childItem->setText(1, str1);
     }
@@ -437,8 +451,8 @@ void dlgNotesList::initNotesList() {
     currentMDFile = cm;
   } else {
     if (tw->topLevelItemCount() > 0) {
-      QTreeWidgetItem* topItem = tw->topLevelItem(0);
-      QTreeWidgetItem* childItem = topItem->child(0);
+      QTreeWidgetItem *topItem = tw->topLevelItem(0);
+      QTreeWidgetItem *childItem = topItem->child(0);
       tw->setCurrentItem(childItem);
       currentMDFile = iniDir + childItem->text(1);
     }
@@ -447,11 +461,11 @@ void dlgNotesList::initNotesList() {
 
   bool stop = false;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
     int childCount = topItem->childCount();
 
     for (int j = 0; j < childCount; j++) {
-      QTreeWidgetItem* childItem = topItem->child(j);
+      QTreeWidgetItem *childItem = topItem->child(j);
       QString strChild1 = childItem->text(1);
       if (strChild1 == curmd) {
         stop = true;
@@ -463,14 +477,15 @@ void dlgNotesList::initNotesList() {
         break;
       }
     }
-    if (stop) break;
+    if (stop)
+      break;
   }
 
   if (ui->treeWidget->topLevelItemCount() == 0) {
-    QTreeWidgetItem* item = new QTreeWidgetItem();
+    QTreeWidgetItem *item = new QTreeWidgetItem();
     item->setText(0, tr("Default Notebook"));
 
-    QTreeWidgetItem* item1 = new QTreeWidgetItem(item);
+    QTreeWidgetItem *item1 = new QTreeWidgetItem(item);
     item1->setText(0, tr("My Notes"));
     QString a = "memo/memo.md";
     QString mdfile = iniDir + a;
@@ -500,7 +515,7 @@ void dlgNotesList::initRecycle() {
   for (int i = 0; i < topCount; i++) {
     QString strTop =
         Reg.value("/MainNotes/rbstrTopItem" + QString::number(i)).toString();
-    QTreeWidgetItem* topItem = new QTreeWidgetItem;
+    QTreeWidgetItem *topItem = new QTreeWidgetItem;
     topItem->setText(0, strTop);
 
     int childCount =
@@ -514,7 +529,7 @@ void dlgNotesList::initRecycle() {
                        QString::number(j))
                  .toString();
 
-      QTreeWidgetItem* childItem = new QTreeWidgetItem(topItem);
+      QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
       childItem->setText(0, str0);
       childItem->setText(1, str1);
     }
@@ -524,7 +539,7 @@ void dlgNotesList::initRecycle() {
   twrb->expandAll();
 
   if (twrb->topLevelItemCount() == 0) {
-    QTreeWidgetItem* topItem = new QTreeWidgetItem;
+    QTreeWidgetItem *topItem = new QTreeWidgetItem;
     topItem->setText(0, tr("Notes Recycle Bin"));
     twrb->addTopLevelItem(topItem);
     twrb->setCurrentItem(topItem);
@@ -547,11 +562,11 @@ void dlgNotesList::on_btnBack_clicked() {
 }
 
 void dlgNotesList::on_btnRestore_clicked() {
-  QTreeWidgetItem* curItem = twrb->currentItem();
+  QTreeWidgetItem *curItem = twrb->currentItem();
   if (curItem->parent() == NULL) {
     return;
   } else {
-    QTreeWidgetItem* item = new QTreeWidgetItem;
+    QTreeWidgetItem *item = new QTreeWidgetItem;
     item->setText(0, curItem->text(0));
     item->setText(1, curItem->text(1));
     addItem(tw, item);
@@ -562,7 +577,7 @@ void dlgNotesList::on_btnRestore_clicked() {
 }
 
 void dlgNotesList::on_btnDel_2_clicked() {
-  QTreeWidgetItem* curItem = twrb->currentItem();
+  QTreeWidgetItem *curItem = twrb->currentItem();
   if (curItem->parent() == NULL) {
     return;
   } else {
@@ -594,13 +609,14 @@ void dlgNotesList::clearFiles() {
   for (int i = 0; i < files.count(); i++) {
     QString a = files.at(i);
     QFile file(a);
-    if (a != iniDir + "memo/memo.md") file.remove();
+    if (a != iniDir + "memo/memo.md")
+      file.remove();
   }
 }
 
-void dlgNotesList::clearMD_Pic(QTreeWidget* tw) {
+void dlgNotesList::clearMD_Pic(QTreeWidget *tw) {
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
       QString str = topItem->child(j)->text(1);
@@ -634,14 +650,14 @@ void dlgNotesList::removeFromFiles(QString str) {
   }
 }
 
-void dlgNotesList::getAllFiles(const QString& foldPath, QStringList& folds,
-                               const QStringList& formats) {
+void dlgNotesList::getAllFiles(const QString &foldPath, QStringList &folds,
+                               const QStringList &formats) {
   QDirIterator it(foldPath, QDir::Files | QDir::NoDotAndDotDot,
                   QDirIterator::Subdirectories);
   while (it.hasNext()) {
     it.next();
     QFileInfo fileInfo = it.fileInfo();
-    if (formats.contains(fileInfo.suffix())) {  //检测格式，按需保存
+    if (formats.contains(fileInfo.suffix())) { //检测格式，按需保存
       folds << fileInfo.absoluteFilePath();
     }
   }
@@ -649,16 +665,17 @@ void dlgNotesList::getAllFiles(const QString& foldPath, QStringList& folds,
 
 void dlgNotesList::on_btnFind_clicked() {
   QString strFind = ui->editFind->text().trimmed().toLower();
-  if (strFind == "") return;
+  if (strFind == "")
+    return;
   findResultList.clear();
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
     if (topItem->text(0).toLower().contains(strFind))
       findResultList.append(topItem);
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
-      QTreeWidgetItem* childItem = topItem->child(j);
+      QTreeWidgetItem *childItem = topItem->child(j);
       if (childItem->text(0).toLower().contains(strFind))
         findResultList.append(childItem);
     }
@@ -677,14 +694,16 @@ void dlgNotesList::on_btnFind_clicked() {
 
 void dlgNotesList::on_btnPrev_clicked() {
   findCount--;
-  if (findCount < 0) findCount = 0;
+  if (findCount < 0)
+    findCount = 0;
   tw->setCurrentItem(findResultList.at(findCount));
   tw->scrollToItem(tw->currentItem());
   ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
                         QString::number(findResultList.count()));
 
   if (isAndroid) {
-    if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
+    if (pAndroidKeyboard->isVisible())
+      pAndroidKeyboard->setVisible(false);
   }
 }
 
@@ -698,17 +717,20 @@ void dlgNotesList::on_btnNext_clicked() {
                         QString::number(findResultList.count()));
 
   if (isAndroid) {
-    if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
+    if (pAndroidKeyboard->isVisible())
+      pAndroidKeyboard->setVisible(false);
   }
 }
 
-void dlgNotesList::on_editFind_textChanged(const QString& arg1) {
-  if (arg1.trimmed() == "") ui->lblCount->setText("0");
+void dlgNotesList::on_editFind_textChanged(const QString &arg1) {
+  if (arg1.trimmed() == "")
+    ui->lblCount->setText("0");
   on_btnFind_clicked();
 }
 
 void dlgNotesList::on_editFind_returnPressed() {
-  if (ui->btnNext->isEnabled()) on_btnNext_clicked();
+  if (ui->btnNext->isEnabled())
+    on_btnNext_clicked();
 }
 
 void dlgNotesList::on_KVChanged() {
