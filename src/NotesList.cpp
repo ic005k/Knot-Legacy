@@ -139,7 +139,7 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
       }
     }
 
-    QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
+    QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
 #endif
@@ -432,7 +432,7 @@ void dlgNotesList::initNotesList() {
 
   tw->expandAll();
 
-  QSettings RegNotes(privateDir + "notes.ini", QSettings::IniFormat);
+  QSettings RegNotes(iniDir + "curmd.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   RegNotes.setIniCodec("utf-8");
 #endif
