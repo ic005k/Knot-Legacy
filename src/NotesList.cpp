@@ -320,6 +320,12 @@ void dlgNotesList::closeEvent(QCloseEvent *event) {
     saveNotesList();
     saveRecycle();
   }
+
+  mw_one->ui->btnBackMemo->show();
+  mw_one->ui->btnEdit->show();
+  mw_one->ui->btnNotesList->show();
+  mw_one->ui->btnSetKey->show();
+  mw_one->ui->btnPDF->show();
 }
 
 void dlgNotesList::saveNotesList() {
@@ -579,8 +585,13 @@ void dlgNotesList::setWinPos() {
   int w = mw_one->width() * 3 / 4;
   int x = mw_one->geometry().x() + mw_one->width() - w - 2;
   this->setGeometry(
-      x, mw_one->geometry().y() + mw_one->ui->lblNoteName->height() + 10, w,
-      mw_one->ui->qwNotes->height());
+      x, mw_one->geometry().y() + mw_one->ui->lblNoteName->height() + 5, w,
+      mw_one->height() - mw_one->ui->lblNoteName->height() - 5);
+  mw_one->ui->btnBackMemo->hide();
+  mw_one->ui->btnEdit->hide();
+  mw_one->ui->btnNotesList->hide();
+  mw_one->ui->btnSetKey->hide();
+  mw_one->ui->btnPDF->hide();
 }
 
 void dlgNotesList::clearFiles() {
