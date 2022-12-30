@@ -2,10 +2,10 @@
 
 #include "count_steps.h"
 #include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
-#include "math.h"  //using this for converting the CSV data from float to int
+#include "math.h" //using this for converting the CSV data from float to int
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "stdint.h"
-#include "stdio.h"  //using this for printing debug outputs
+#include "stdio.h" //using this for printing debug outputs
 #include "ui_mainwindow.h"
 
 QList<QPointF> PointList;
@@ -171,21 +171,25 @@ void MainWindow::dealDone() {
 
   ui->progBar->setMaximum(100);
 
-  if (SaveType == "tab" || SaveType == "alltab") startRead(strDate);
+  if (SaveType == "tab" || SaveType == "alltab")
+    startRead(strDate);
 }
 void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
     EditRecord::saveOne();
     saveTab();
-    if (!del) EditRecord::saveCustomDesc();
+    if (!del)
+      EditRecord::saveCustomDesc();
   }
 
   if (SaveType == "alltab") {
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
-      if (isBreak) break;
+      if (isBreak)
+        break;
       QString name = "tab" + QString::number(i + 1);
       QString ini_file = iniDir + name + ".ini";
-      if (QFile(ini_file).exists()) QFile(ini_file).remove();
+      if (QFile(ini_file).exists())
+        QFile(ini_file).remove();
 
       QTreeWidget *tw = (QTreeWidget *)tabData->widget(i);
       tw->setObjectName(name);
@@ -264,8 +268,10 @@ void MainWindow::initHardStepSensor() {
 #endif
 
   if (isHardStepSensor == 0) {
-    if (ui->rbAlg1->isChecked()) mydlgSteps->on_rbAlg1_clicked();
-    if (ui->rbAlg2->isChecked()) mydlgSteps->on_rbAlg2_clicked();
+    if (ui->rbAlg1->isChecked())
+      mydlgSteps->on_rbAlg1_clicked();
+    if (ui->rbAlg2->isChecked())
+      mydlgSteps->on_rbAlg2_clicked();
   }
   if (isHardStepSensor == 1) {
     ui->btnPause->click();
@@ -364,7 +370,8 @@ void MainWindow::newDatas() {
     glistX.append(gx);
     glistY.append(gy);
     glistZ.append(gz);
-    if (rlistX.count() == 120) getSteps2();
+    if (rlistX.count() == 120)
+      getSteps2();
   }
 
   showSensorValues();
@@ -415,7 +422,8 @@ void MainWindow::updateRunTime() {
 
 void MainWindow::pausePedometer() {
   if (QTime::currentTime().toString("hh-mm-ss") == "22-00-00") {
-    if (ui->btnPauseSteps->text() == tr("Pause")) ui->btnPauseSteps->click();
+    if (ui->btnPauseSteps->text() == tr("Pause"))
+      ui->btnPauseSteps->click();
   }
 }
 
@@ -437,7 +445,8 @@ void MainWindow::updateSteps() {
   ui->lblSingle->setText(QString::number(CurrentSteps));
   mydlgSteps->setTableSteps(CurTableCount);
 
-  if (CurrentSteps == 0) return;
+  if (CurrentSteps == 0)
+    return;
   sendMsg(CurTableCount);
 }
 
@@ -582,19 +591,19 @@ void MainWindow::init_ChartWidget() {
 
   //散点图(用于边框)
   m_scatterSeries2->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);                 //圆形的点
-  m_scatterSeries2->setBorderColor(QColor(255, 0, 0));    //边框颜色
-  m_scatterSeries2->setBrush(QBrush(QColor(255, 0, 0)));  //背景颜色
-  m_scatterSeries2->setMarkerSize(5);                     //点大小
+      QScatterSeries::MarkerShapeCircle);                //圆形的点
+  m_scatterSeries2->setBorderColor(QColor(255, 0, 0));   //边框颜色
+  m_scatterSeries2->setBrush(QBrush(QColor(255, 0, 0))); //背景颜色
+  m_scatterSeries2->setMarkerSize(5);                    //点大小
 
   //散点图(用于中心)
   m_scatterSeries2_1->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);         //圆形的点
-  m_scatterSeries2_1->setBorderColor(Qt::red);    //边框颜色
-  m_scatterSeries2_1->setBrush(QBrush(Qt::red));  //背景颜色
-  m_scatterSeries2_1->setMarkerSize(4);           //点大小
+      QScatterSeries::MarkerShapeCircle);        //圆形的点
+  m_scatterSeries2_1->setBorderColor(Qt::red);   //边框颜色
+  m_scatterSeries2_1->setBrush(QBrush(Qt::red)); //背景颜色
+  m_scatterSeries2_1->setMarkerSize(4);          //点大小
   connect(m_scatterSeries2_1, &QScatterSeries::hovered, this,
-          &MainWindow::slotPointHoverd);  //用于鼠标移动到点上显示数值
+          &MainWindow::slotPointHoverd); //用于鼠标移动到点上显示数值
   m_valueLabel = new QLabel(this);
   m_valueLabel->adjustSize();
   m_valueLabel->setHidden(true);
@@ -654,7 +663,7 @@ void MainWindow::slotPointHoverd(const QPointF &point, bool state) {
 
     QPoint curPos = mapFromGlobal(QCursor::pos());
     m_valueLabel->move(curPos.x() - m_valueLabel->width() / 2,
-                       curPos.y() - m_valueLabel->height() * 1.5);  //移动数值
+                       curPos.y() - m_valueLabel->height() * 1.5); //移动数值
 
     m_valueLabel->show();
   } else
@@ -751,7 +760,8 @@ void MainWindow::on_timerSyncData() {
 }
 
 void MainWindow::startSyncData() {
-  if (initMain) return;
+  if (initMain)
+    return;
   timerSyncData->start(10000);
 }
 
@@ -811,7 +821,8 @@ void MainWindow::startSave(QString str_type) {
 }
 
 void MainWindow::startRead(QString Date) {
-  if (!isSaveEnd || loading) return;
+  if (!isSaveEnd || loading)
+    return;
 
   readDate = Date;
   if (!isReadEnd) {
@@ -826,7 +837,8 @@ void MainWindow::startRead(QString Date) {
   if (isReadEnd) {
     isBreak = false;
     myReadThread->start();
-    if (ui->rbSteps->isChecked()) ui->rbFreq->click();
+    if (ui->rbSteps->isChecked())
+      ui->rbFreq->click();
   }
 }
 
@@ -1027,7 +1039,8 @@ int MainWindow::calcStringPixelHeight(QFont font, int n_font_size) {
 }
 
 void MainWindow::del_Data(QTreeWidget *tw) {
-  if (tw->topLevelItemCount() == 0) return;
+  if (tw->topLevelItemCount() == 0)
+    return;
 
   bool isNo = true;
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
@@ -1046,10 +1059,11 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        showDelMsgBox(
-            str + " : ",
-            tr("The last record added today will be deleted!") + "\n\n" + str1);
-        if (!isOK) return;
+        showDelMsgBox(str + " : ",
+                      tr("The last record added today will be deleted!") +
+                          "\n\n" + str1);
+        if (!isOK)
+          return;
 
         addUndo(tr("Del Item") + " ( " + getTabText() + " ) ");
 
@@ -1063,7 +1077,8 @@ void MainWindow::del_Data(QTreeWidget *tw) {
           amount = amount + str.toDouble();
         }
         QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-        if (strAmount == "0.00") strAmount = "";
+        if (strAmount == "0.00")
+          strAmount = "";
         topItem->setText(1, QString::number(childCount - 1));
         topItem->setText(2, strAmount);
 
@@ -1172,7 +1187,8 @@ void MainWindow::saveTab() {
   int CurrentIndex = tabData->currentIndex();
   Reg.setValue("CurrentIndex", CurrentIndex);
   for (int i = 0; i < TabCount; i++) {
-    if (isBreak) break;
+    if (isBreak)
+      break;
     Reg.setValue("TabName" + QString::number(i), tabData->tabText(i));
   }
 }
@@ -1213,7 +1229,8 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
   tw->setObjectName(name);
 
   for (int i = 0; i < count; i++) {
-    if (isBreak) break;
+    if (isBreak)
+      break;
     int childCount = tw->topLevelItem(i)->childCount();
 
     if (childCount > 0) {
@@ -1230,16 +1247,17 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
 
       Reg.setValue(flag + QString::number(i + 1) + "-childCount", childCount);
       for (int j = 0; j < childCount; j++) {
-        if (isBreak) return;
-        Reg.setValue(
-            flag + QString::number(i + 1) + "-childTime" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(0));
-        Reg.setValue(
-            flag + QString::number(i + 1) + "-childAmount" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(1));
-        Reg.setValue(
-            flag + QString::number(i + 1) + "-childDesc" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(2));
+        if (isBreak)
+          return;
+        Reg.setValue(flag + QString::number(i + 1) + "-childTime" +
+                         QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(0));
+        Reg.setValue(flag + QString::number(i + 1) + "-childAmount" +
+                         QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(1));
+        Reg.setValue(flag + QString::number(i + 1) + "-childDesc" +
+                         QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(2));
         Reg.setValue(flag + QString::number(i + 1) + "-childDetails" +
                          QString::number(j),
                      tw->topLevelItem(i)->child(j)->text(3));
@@ -1259,7 +1277,8 @@ void MainWindow::drawMonthChart() {
 
 void MainWindow::drawDayChart() {
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
-  if (loading) return;
+  if (loading)
+    return;
   PointList.clear();
 
   int topCount = tw->topLevelItemCount();
@@ -1298,10 +1317,12 @@ void MainWindow::drawDayChart() {
   double x, y;
   QString str, str1;
   int step = 1;
-  if (childCount > 500) step = 100;
+  if (childCount > 500)
+    step = 100;
 
   for (int i = 0; i < childCount; i = i + step) {
-    if (isBreak) break;
+    if (isBreak)
+      break;
 
     if (child) {
       str = item->parent()->child(i)->text(0);
@@ -1311,7 +1332,8 @@ void MainWindow::drawDayChart() {
       str1 = item->child(i)->text(1);
     }
     QStringList l0 = str.split(".");
-    if (l0.count() == 2) str = l0.at(1);
+    if (l0.count() == 2)
+      str = l0.at(1);
     QStringList list = str.split(":");
     int t = 0;
     if (list.count() == 3) {
@@ -1553,10 +1575,13 @@ void MainWindow::resetWinPos() {
   w = Reg.value("w").toInt();
   h = Reg.value("h").toInt();
 
-  if (x < 0) x = 0;
-  if (y < 0) y = 0;
+  if (x < 0)
+    x = 0;
+  if (y < 0)
+    y = 0;
 
-  if (x > 0 && y > 0 && w > 0 && h > 0) this->setGeometry(x, y, w, h);
+  if (x > 0 && y > 0 && w > 0 && h > 0)
+    this->setGeometry(x, y, w, h);
 }
 
 void MainWindow::init_Stats(QTreeWidget *tw) {
@@ -1564,7 +1589,8 @@ void MainWindow::init_Stats(QTreeWidget *tw) {
   int tatol = 0;
   double amount = 0;
   for (int i = 0; i < count; i++) {
-    if (isBreak) break;
+    if (isBreak)
+      break;
     QString str1 = tw->topLevelItem(i)->text(1);
     QString str2 = tw->topLevelItem(i)->text(2);
     tatol = tatol + str1.toInt();
@@ -1576,7 +1602,8 @@ void MainWindow::init_Stats(QTreeWidget *tw) {
 }
 
 void MainWindow::initChartMonth() {
-  if (loading) return;
+  if (loading)
+    return;
 
   int count = PointList.count();
   if (count == 0) {
@@ -1592,7 +1619,8 @@ void MainWindow::initChartMonth() {
   QStringList categories;
 
   for (int i = 0; i < count; i++) {
-    if (PointList.at(i).y() != 1) isOne = false;
+    if (PointList.at(i).y() != 1)
+      isOne = false;
   }
 
   if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
@@ -1635,7 +1663,8 @@ void MainWindow::initChartMonth() {
 
   } else {
     max = 50.00;
-    if (maxValue >= max) max = maxValue;
+    if (maxValue >= max)
+      max = maxValue;
   }
 
   yMaxMonth = max;
@@ -1657,9 +1686,11 @@ void MainWindow::initChartMonth() {
     }
   }
 
-  for (int i = 0; i < 31; i++) setY->append(dList.at(i));
+  for (int i = 0; i < 31; i++)
+    setY->append(dList.at(i));
   categories.clear();
-  for (int i = 0; i < 31; i++) categories.append(QString::number(i + 1));
+  for (int i = 0; i < 31; i++)
+    categories.append(QString::number(i + 1));
   barSeries->append(setY);
   axisX->append(categories);
   axisY->setRange(0, yMaxMonth);
@@ -1678,13 +1709,15 @@ void MainWindow::initChartMonth() {
 }
 
 void MainWindow::initChartDay() {
-  if (loading) return;
+  if (loading)
+    return;
   series2->clear();
   m_scatterSeries2->clear();
   m_scatterSeries2_1->clear();
 
   int count = PointList.count();
-  if (count == 0) return;
+  if (count == 0)
+    return;
   for (int i = 0; i < count; i++) {
     series2->append(PointList.at(i));
     m_scatterSeries2->append(PointList.at(i));
@@ -1710,9 +1743,8 @@ void MainWindow::on_actionRename_triggered() {
   QString text;
   QInputDialog *idlg = new QInputDialog(this);
   idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style =
-      "QDialog{background: "
-      "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
+  QString style = "QDialog{background: "
+                  "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
   idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
@@ -1739,7 +1771,8 @@ void MainWindow::on_actionRename_triggered() {
 void MainWindow::on_actionAdd_Tab_triggered() {
   int count = ui->tabWidget->tabBar()->count();
   QString ini_file = iniDir + "tab" + QString::number(count + 1) + ".ini";
-  if (QFile(ini_file).exists()) QFile(ini_file).remove();
+  if (QFile(ini_file).exists())
+    QFile(ini_file).remove();
 
   QTreeWidget *tw = init_TreeWidget("tab" + QString::number(count + 1));
 
@@ -1757,7 +1790,8 @@ void MainWindow::on_actionAdd_Tab_triggered() {
 
 void MainWindow::on_actionDel_Tab_triggered() {
   int index = ui->tabWidget->currentIndex();
-  if (index < 0) return;
+  if (index < 0)
+    return;
 
   QString str1 = ui->tabWidget->tabText(index);
 
@@ -1767,7 +1801,8 @@ void MainWindow::on_actionDel_Tab_triggered() {
   addUndo(tr("Del Tab") + " ( " + getTabText() + " ) ");
 
   int TabCount = ui->tabWidget->tabBar()->count();
-  if (TabCount > 1) ui->tabWidget->removeTab(index);
+  if (TabCount > 1)
+    ui->tabWidget->removeTab(index);
   if (TabCount == 1) {
     QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
     tw->clear();
@@ -1807,7 +1842,7 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
   tw->setFrameShape(QTreeWidget::NoFrame);
   tw->installEventFilter(this);
   tw->viewport()->installEventFilter(this);
-  tw->setUniformRowHeights(true);  //加快展开速度
+  tw->setUniformRowHeights(true); //加快展开速度
   connect(tw, &QTreeWidget::itemClicked, this, &MainWindow::on_twItemClicked);
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
@@ -1827,10 +1862,12 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
 
 void MainWindow::on_twItemClicked() {
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
-  if (!tw->currentIndex().isValid()) return;
+  if (!tw->currentIndex().isValid())
+    return;
 
   QTreeWidgetItem *item = tw->currentItem();
-  if (item->parent() == NULL && item->childCount() == 0) return;
+  if (item->parent() == NULL && item->childCount() == 0)
+    return;
 
   QTreeWidgetItem *pItem;
 
@@ -1872,11 +1909,13 @@ void MainWindow::on_twItemClicked() {
   if (tabChart->currentIndex() == 0) {
     QString str = stra + " " + year;
     QString strYearMonth = get_Year(str) + get_Month(str);
-    if (strYearMonth == CurrentYearMonth) return;
+    if (strYearMonth == CurrentYearMonth)
+      return;
     startRead(str);
   }
 
-  if (tabChart->currentIndex() == 1) startRead(strDate);
+  if (tabChart->currentIndex() == 1)
+    startRead(strDate);
 }
 
 void MainWindow::set_Time() {
@@ -1926,9 +1965,12 @@ void MainWindow::set_Time() {
 
     int newrow;
     int row = getCurrentIndex();
-    if (childRow0 - childRow1 == 0) newrow = row;
-    if (childRow0 - childRow1 < 0) newrow = row + childRow1 - childRow0;
-    if (childRow0 - childRow1 > 0) newrow = row - (childRow0 - childRow1);
+    if (childRow0 - childRow1 == 0)
+      newrow = row;
+    if (childRow0 - childRow1 < 0)
+      newrow = row + childRow1 - childRow0;
+    if (childRow0 - childRow1 > 0)
+      newrow = row - (childRow0 - childRow1);
 
     reloadMain();
     gotoIndex(newrow);
@@ -1992,7 +2034,8 @@ void MainWindow::on_twItemDoubleClicked() {
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     QString t = item->text(0);
     QStringList l0 = t.split(".");
-    if (l0.count() == 2) t = l0.at(1);
+    if (l0.count() == 2)
+      t = l0.at(1);
     QStringList list = t.split(":");
     QString sh, sm, ss;
     if (list.count() == 3) {
@@ -2057,7 +2100,8 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 }
 
 void MainWindow::saveNotes(int tabIndex) {
-  if (loading) return;
+  if (loading)
+    return;
   QSettings Reg(iniDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -2093,7 +2137,8 @@ void MainWindow::on_btnRemarks_clicked() {
 }
 
 bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
-  if (loading) return QWidget::eventFilter(watch, evn);
+  if (loading)
+    return QWidget::eventFilter(watch, evn);
 
 #ifdef Q_OS_ANDROID
   if (watch == ui->textEdit->viewport()) {
@@ -2101,7 +2146,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   }
 #endif
 
-  QMouseEvent *event = static_cast<QMouseEvent *>(evn);  //将之转换为鼠标事件
+  QMouseEvent *event = static_cast<QMouseEvent *>(evn); //将之转换为鼠标事件
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
 
   if (evn->type() == QEvent::ToolTip) {
@@ -2148,9 +2193,9 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         else
           y1 = event->globalY() + a;
 
-        mydlgSetText->init(
-            geometry().x() + (width() - mydlgSetText->width()) / 2, y1,
-            mydlgSetText->width(), mydlgSetText->height());
+        mydlgSetText->init(geometry().x() +
+                               (width() - mydlgSetText->width()) / 2,
+                           y1, mydlgSetText->width(), mydlgSetText->height());
       }
     }
 
@@ -2167,9 +2212,9 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           else
             y1 = event->globalY() + a;
 
-          mydlgSetText->init(
-              geometry().x() + (width() - mydlgSetText->width()) / 2, y1,
-              mydlgSetText->width(), mydlgSetText->height());
+          mydlgSetText->init(geometry().x() +
+                                 (width() - mydlgSetText->width()) / 2,
+                             y1, mydlgSetText->width(), mydlgSetText->height());
         }
       }
     }
@@ -2190,7 +2235,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   }
 
   if (watch == ui->tabWidget->tabBar()) {
-    if (!isReadTWEnd) return QWidget::eventFilter(watch, evn);
+    if (!isReadTWEnd)
+      return QWidget::eventFilter(watch, evn);
     if (event->type() == QEvent::MouseButtonPress) {
     }
     if (event->type() == QEvent::MouseButtonRelease) {
@@ -2326,7 +2372,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           return true;
         } else if (!listReadList->isHidden()) {
           listReadList->close();
-          if (isPDF) mydlgReader->setPdfViewVisible(true);
+          if (isPDF)
+            mydlgReader->setPdfViewVisible(true);
           return true;
         } else if (!mydlgReaderFun->isHidden()) {
           mydlgReaderFun->close();
@@ -2413,7 +2460,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       if (event->type() == QEvent::MouseButtonPress) {
         isMousePress = true;
         isMouseMove = false;
-        if (!isMouseMove) timerMousePress->start(1300);
+        if (!isMouseMove)
+          timerMousePress->start(1300);
       }
 
       if (event->type() == QEvent::MouseButtonRelease) {
@@ -2536,7 +2584,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 }
 
 void MainWindow::on_actionExport_Data_triggered() {
-  if (!isSaveEnd) return;
+  if (!isSaveEnd)
+    return;
 
   QString fileName;
   QFileDialog fd;
@@ -2563,7 +2612,8 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
 
   for (int i = 0; i < tabData->tabBar()->count(); i++) {
     QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
-    if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
+    if (QFile(tabIniFile).exists())
+      edit->append(loadText(tabIniFile));
   }
 
   TextEditToFile(edit, iniDir + "memo/KnotSync.ini");
@@ -2574,6 +2624,8 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
 
 QString MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
+    isSelf = true;
+
     bakIniData("", false);
 
     m_NotesList->clearFiles();
@@ -2621,13 +2673,15 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       msgBox.exec();
     }
 
+    isSelf = false;
     return infoStr;
   }
   return "";
 }
 
 void MainWindow::on_actionImport_Data_triggered() {
-  if (!isSaveEnd) return;
+  if (!isSaveEnd)
+    return;
   QString fileName;
 
 #ifdef Q_OS_ANDROID
@@ -2639,7 +2693,8 @@ void MainWindow::on_actionImport_Data_triggered() {
                                           tr("Zip File (*.zip);;All(*.*)"));
 #endif
 
-  if (QFile(fileName).exists()) addUndo(tr("Import Data"));
+  if (QFile(fileName).exists())
+    addUndo(tr("Import Data"));
 
   importBakData(fileName, true, false, false);
 }
@@ -2678,7 +2733,8 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
       return false;
     }
 
-    if (QFile(iniFile).exists()) QFile(iniFile).remove();
+    if (QFile(iniFile).exists())
+      QFile(iniFile).remove();
     QTextEdit *txtEdit = new QTextEdit;
     txtEdit->setPlainText(txt);
     TextEditToFile(txtEdit, iniFile);
@@ -2795,14 +2851,16 @@ void MainWindow::on_btnFind_clicked() {
 
 QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   QStringList listMonth;
-  if (loading) return listMonth;
+  if (loading)
+    return listMonth;
   // 格式：记录第一个子项的时间
   PointList.clear();
   doubleList.clear();
 
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    if (isBreak) break;
+    if (isBreak)
+      break;
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
     QString str0 = topItem->text(0) + " " + topItem->text(3);
     QString y, m, d;
@@ -2814,8 +2872,7 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
       if (m == strM) {
         if (isrbFreq) {
           if (topItem->childCount() > 0)
-            listMonth.append(
-                topItem->child(0)->text(0));  //记录第一个子项的时间
+            listMonth.append(topItem->child(0)->text(0)); //记录第一个子项的时间
 
           double y0 = topItem->text(1).toDouble();
           doubleList.append(y0);
@@ -2852,7 +2909,8 @@ void MainWindow::gotoMainItem(QTreeWidgetItem *item) {
 void MainWindow::on_btnGo_clicked() {
   ui->lblStats->setText("");
   QTreeWidget *tw = get_tw(ui->tabWidget->currentIndex());
-  if (isFindTextChange) findItemList = findDisc();
+  if (isFindTextChange)
+    findItemList = findDisc();
   int total = findItemList.count();
   if (total > 0) {
     tw->setFocus();
@@ -2865,7 +2923,8 @@ void MainWindow::on_btnGo_clicked() {
                           "  ( " + QString::number(findPos + 1) + " -> " +
                           QString::number(total) + " ) ");
     findPos++;
-    if (findPos == total) findPos = 0;
+    if (findPos == total)
+      findPos = 0;
   }
 }
 
@@ -2937,9 +2996,8 @@ QString MainWindow::setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
   list.append(QString("QComboBox:focus{border:%1px solid %2;}")
                   .arg(borderWidth)
                   .arg(focusColor));
-  list.append(
-      QString("QComboBox::down-arrow{image:url(:/icon/"
-              "add_bottom.png);width:10px;height:10px;right:2px;}"));
+  list.append(QString("QComboBox::down-arrow{image:url(:/icon/"
+                      "add_bottom.png);width:10px;height:10px;right:2px;}"));
   list.append(QString(
       "QComboBox::drop-down{subcontrol-origin:padding;subcontrol-position:"
       "top "
@@ -3015,7 +3073,8 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 }
 
 void MainWindow::on_btnMax_clicked() {
-  if (ui->frame_tab->isHidden()) return;
+  if (ui->frame_tab->isHidden())
+    return;
   if (ui->btnMax->text() == tr("Max")) {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(true);
@@ -3030,7 +3089,8 @@ void MainWindow::on_btnMax_clicked() {
 }
 
 void MainWindow::on_actionReport_triggered() {
-  if (isEBook || !isSaveEnd || !isReadEBookEnd) return;
+  if (isEBook || !isSaveEnd || !isReadEBookEnd)
+    return;
 
   if (isReadEBookEnd) {
     mydlgReport->init();
@@ -3055,7 +3115,8 @@ void MainWindow::on_actionPreferences_triggered() {
 }
 
 void MainWindow::on_tabCharts_currentChanged(int index) {
-  if (ui->rbSteps->isChecked() || loading || index < 0) return;
+  if (ui->rbSteps->isChecked() || loading || index < 0)
+    return;
 
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   int topCount = tw->topLevelItemCount();
@@ -3083,7 +3144,8 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
 }
 
 void MainWindow::on_btnSteps_clicked() {
-  if (isHardStepSensor == 1) updateHardSensorSteps();
+  if (isHardStepSensor == 1)
+    updateHardSensorSteps();
   mydlgSteps->setGeometry(this->geometry().x(), this->geometry().y(),
                           this->width(), this->height());
 
@@ -3100,7 +3162,8 @@ void MainWindow::changeEvent(QEvent *event) {
 
 void MainWindow::on_rbSteps_clicked() {
   int count = mydlgSteps->getCount();
-  if (count <= 0) return;
+  if (count <= 0)
+    return;
 
   tabChart->setCurrentIndex(0);
   tabChart->setTabEnabled(1, false);
@@ -3141,19 +3204,19 @@ void MainWindow::Sleep(int msec) {
  */
 static void step_algo_run(algo_out_t *step_algo_output) {
 #define VERY_HIGH_VAL (100000)
-#define NO_DETECT_DUR_SEC \
+#define NO_DETECT_DUR_SEC                                                      \
   (0.2f) /* Duration to avoid very close peaks not related to step */
-#define CLOSE_TO_ZERO \
+#define CLOSE_TO_ZERO                                                          \
   (1.5) /* Threshold to detect if peak is reasonable height       */
-#define MAX_TIME_PERIOD_SEC \
+#define MAX_TIME_PERIOD_SEC                                                    \
   (1.5f) /* Maximum time duration of one step                      */
-#define SMALL_AMP \
+#define SMALL_AMP                                                              \
   (5.0) /* Lower threshold for change in accel during a step      */
-#define LARGE_AMP \
+#define LARGE_AMP                                                              \
   (15.0) /* Higher threshold for change in accel during a step     */
-#define SLOW_FREQ \
+#define SLOW_FREQ                                                              \
   (0.5) /* Lower threshold for step rate during a step            */
-#define FAST_FREQ \
+#define FAST_FREQ                                                              \
   (2.2) /* Lower threshold for step rate during a step            */
 
   /* Local Variables */
@@ -3206,7 +3269,8 @@ static void step_algo_run(algo_out_t *step_algo_output) {
   /* This is done by detecting rising/falling zero crossings in derivative of
    * Acc Data */
   for (i = 0; i < SAMP_BUFF_LEN; i = i + delta) {
-    if (i >= delta) prevAccDer = AccDer[i - delta];
+    if (i >= delta)
+      prevAccDer = AccDer[i - delta];
 
     if (prev_max_ts <= prev_min_ts) {
       /* need to find the next max val(falling ZC) */
@@ -3438,7 +3502,8 @@ void MainWindow::getSteps2() {
   lp_filter_x.prev_prev_out = lp_filter_y.prev_prev_out =
       lp_filter_z.prev_prev_out = 0.0f;
   timeconst_samp = (unsigned int)(SENSOR_SAMP_FREQ * 0.075f) + 1;
-  if (timeconst_samp > MAX_TC_SAMPLES) timeconst_samp = MAX_TC_SAMPLES;
+  if (timeconst_samp > MAX_TC_SAMPLES)
+    timeconst_samp = MAX_TC_SAMPLES;
   lp_filter_x.TC_samples = lp_filter_y.TC_samples = lp_filter_z.TC_samples =
       timeconst_samp;
 
@@ -3455,7 +3520,8 @@ void MainWindow::getSteps2() {
   ll_filter_x.prev_prev_out = ll_filter_y.prev_prev_out =
       ll_filter_z.prev_prev_out = 0.0f;
   timeconst_samp = (unsigned int)(SENSOR_SAMP_FREQ * 0.06f) + 1;
-  if (timeconst_samp > MAX_TC_SAMPLES) timeconst_samp = MAX_TC_SAMPLES;
+  if (timeconst_samp > MAX_TC_SAMPLES)
+    timeconst_samp = MAX_TC_SAMPLES;
   ll_filter_x.TC_samples = ll_filter_y.TC_samples = ll_filter_z.TC_samples =
       timeconst_samp;
 
@@ -3619,8 +3685,10 @@ void MainWindow::updateHardSensorSteps() {
 #endif
   steps = tc - initTodaySteps;
 
-  if (steps < 0) return;
-  if (steps > 100000000) return;
+  if (steps < 0)
+    return;
+  if (steps > 100000000)
+    return;
   CurrentSteps = tc - resetSteps;
   ui->lcdNumber->display(QString::number(steps));
   ui->lblSingle->setText(QString::number(CurrentSteps));
@@ -3642,7 +3710,7 @@ void MainWindow::on_btnNotes_clicked() {
   if (strPw != "") {
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
-      baPw[i] = baPw[i] - 66;  //解密User的密码
+      baPw[i] = baPw[i] - 66; //解密User的密码
     }
     strPw = baPw;
 
@@ -3650,9 +3718,8 @@ void MainWindow::on_btnNotes_clicked() {
     QString text;
     QInputDialog *idlg = new QInputDialog(this);
     idlg->setWindowFlag(Qt::FramelessWindowHint);
-    QString style =
-        "QDialog{background: "
-        "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
+    QString style = "QDialog{background: "
+                    "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
     idlg->setStyleSheet(style);
     idlg->setOkButtonText(tr("Ok"));
     idlg->setCancelButtonText(tr("Cancel"));
@@ -3690,7 +3757,8 @@ void MainWindow::on_btnNotes_clicked() {
     showNotes();
   }
 
-  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+  if (mw_one->isHardStepSensor == 1)
+    mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::showNotes() {
@@ -3759,7 +3827,8 @@ void MainWindow::init_UIWidget() {
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
 
-  if (fontname == "") fontname = this->font().family();
+  if (fontname == "")
+    fontname = this->font().family();
 
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
@@ -3890,18 +3959,17 @@ void MainWindow::init_UIWidget() {
 
   ui->progBar->setMaximumHeight(4);
   ui->progBar->hide();
-  ui->progBar->setStyleSheet(
-      "QProgressBar{border:0px solid #FFFFFF;"
-      "height:30;"
-      "background:rgba(25,255,25,0);"
-      "text-align:right;"
-      "color:rgb(255,255,255);"
-      "border-radius:0px;}"
+  ui->progBar->setStyleSheet("QProgressBar{border:0px solid #FFFFFF;"
+                             "height:30;"
+                             "background:rgba(25,255,25,0);"
+                             "text-align:right;"
+                             "color:rgb(255,255,255);"
+                             "border-radius:0px;}"
 
-      "QProgressBar:chunk{"
-      "border-radius:0px;"
-      "background-color:rgba(18,150,219,255);"
-      "}");
+                             "QProgressBar:chunk{"
+                             "border-radius:0px;"
+                             "background-color:rgba(18,150,219,255);"
+                             "}");
   ui->progReader->setStyleSheet(ui->progBar->styleSheet());
   ui->progReader->setFixedHeight(4);
 
@@ -4022,9 +4090,8 @@ void MainWindow::on_btnSelTab_clicked() {
 
   QFrame *frame = new QFrame(this);
   vbox0->addWidget(frame);
-  frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, "
-      "255);border-radius:10px;border:1px solid gray;}");
+  frame->setStyleSheet("QFrame{background-color: rgb(255, 255, "
+                       "255);border-radius:10px;border:1px solid gray;}");
 
   QVBoxLayout *vbox = new QVBoxLayout;
   frame->setLayout(vbox);
@@ -4131,16 +4198,15 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
           &MainWindow::on_actionOneDriveBackupData);
   connect(actAbout, &QAction::triggered, this, &MainWindow::on_about);
 
-  QString qss =
-      "QMenu {"
-      "border: 1px solid rgb(172, 172, 172);"
-      "border-radius: 3px; }"
-      "QMenu::item {"
-      "border-bottom: 1px solid rgb(172, 172, 172);"
-      "padding:10px 10px;"
-      "margin:0px 0px; }"
-      "QMenu::item:selected {"
-      "background-color: rgb(62, 186, 231); }";
+  QString qss = "QMenu {"
+                "border: 1px solid rgb(172, 172, 172);"
+                "border-radius: 3px; }"
+                "QMenu::item {"
+                "border-bottom: 1px solid rgb(172, 172, 172);"
+                "padding:10px 10px;"
+                "margin:0px 0px; }"
+                "QMenu::item:selected {"
+                "background-color: rgb(62, 186, 231); }";
 
   mainMenu->addAction(actAddTab);
   mainMenu->addAction(actDelTab);
@@ -4292,9 +4358,11 @@ void MainWindow::on_actionTimeMachine() {
   connect(list, &QListWidget::itemClicked, [=]() {
     QString str = list->currentItem()->text();
     QStringList list0 = str.split("\n");
-    if (list0.count() == 2) str = list0.at(0);
+    if (list0.count() == 2)
+      str = list0.at(0);
     QString file = privateDir + str.trimmed();
-    if (importBakData(file, true, false, true)) btnBack->click();
+    if (importBakData(file, true, false, true))
+      btnBack->click();
   });
 
   if (list->count() > 0) {
@@ -4382,10 +4450,14 @@ static void JavaNotify_3() {
 static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
   if (mw_one->alertWindowsCount == 0) {
-    if (!mw_one->ui->frameReader->isHidden()) mw_one->ui->btnBack->click();
-    if (!mw_one->ui->frameMemo->isHidden()) mw_one->ui->btnBackMemo->click();
-    if (!mw_one->ui->frameOne->isHidden()) mw_one->ui->btnBack_One->click();
-    if (!mw_one->ui->frameSteps->isHidden()) mw_one->ui->btnBackSteps->click();
+    if (!mw_one->ui->frameReader->isHidden())
+      mw_one->ui->btnBack->click();
+    if (!mw_one->ui->frameMemo->isHidden())
+      mw_one->ui->btnBackMemo->click();
+    if (!mw_one->ui->frameOne->isHidden())
+      mw_one->ui->btnBack_One->click();
+    if (!mw_one->ui->frameSteps->isHidden())
+      mw_one->ui->btnBackSteps->click();
     mw_one->ui->btnTodo->click();
   }
 
@@ -4404,7 +4476,7 @@ void RegJni(const char *myClassName) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QtAndroid::runOnAndroidThreadSync([=]() {
     QAndroidJniEnvironment Environment;
-    const char *mClassName = myClassName;  //"com/x/MyService";
+    const char *mClassName = myClassName; //"com/x/MyService";
     jclass j_class;
     j_class = Environment->FindClass(mClassName);
     if (j_class == nullptr) {
@@ -4424,7 +4496,7 @@ void RegJni(const char *myClassName) {
 #else
   QNativeInterface::QAndroidApplication::runOnAndroidMainThread([=]() {
     QJniEnvironment Environment;
-    const char *mClassName = myClassName;  //"com/x/MyService";
+    const char *mClassName = myClassName; //"com/x/MyService";
     jclass j_class;
     j_class = Environment->FindClass(mClassName);
     if (j_class == nullptr) {
@@ -4470,7 +4542,8 @@ void MainWindow::on_btnReader_clicked() {
     ui->qwReader->rootContext()->setContextProperty("myH", mwh);
   }
 
-  if (isPDF) mydlgReader->setPdfViewVisible(true);
+  if (isPDF)
+    mydlgReader->setPdfViewVisible(true);
 
   ui->frameMain->hide();
   ui->frameReader->show();
@@ -4480,7 +4553,8 @@ void MainWindow::on_btnReader_clicked() {
     mydlgReader->setPageVPos();
   }
 
-  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+  if (mw_one->isHardStepSensor == 1)
+    mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::setSCrollPro(QObject *obj) {
@@ -4495,7 +4569,8 @@ void MainWindow::on_btnBack_clicked() {
   mydlgReaderFun->close();
   mydlgReader->setPdfViewVisible(false);
 
-  if (isSelText) on_btnSelText_clicked();
+  if (isSelText)
+    on_btnSelText_clicked();
 
   mydlgReader->saveReader();
   mydlgReader->savePageVPos();
@@ -4536,7 +4611,8 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
                           "\n" + QString::number(htmlFiles.count()));
     ui->progReader->setMinimum(1);
     ui->progReader->setMaximum(htmlFiles.count());
-    if (position == 0) position = 1;
+    if (position == 0)
+      position = 1;
     ui->progReader->setValue(position);
   }
 }
@@ -4588,9 +4664,8 @@ void MainWindow::readEBookDone() {
 #ifdef Q_OS_ANDROID
       PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
       PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";
-      str =
-          "https://mozilla.github.io/pdf.js/web/"
-          "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
+      str = "https://mozilla.github.io/pdf.js/web/"
+            "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
       str = PDFJS + "?file=" + fileName;
       if (QFile("assets:/web/viewer.html").exists())
         qDebug() << "viewer.html exists......";
@@ -4699,7 +4774,8 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
     btnCopy->setStyleSheet(pushbtnStyle);
   }
 
-  if (buttonCount >= 1) btnOk->setFocus();
+  if (buttonCount >= 1)
+    btnOk->setFocus();
 
   msgBox.exec();
   if (buttonCount >= 2) {
@@ -4731,7 +4807,8 @@ void MainWindow::on_btnSelText_clicked() {
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     ui->textBrowser->setFont(font);
 
-    if (isText) ui->textBrowser->setHtml(mydlgReader->currentTxt);
+    if (isText)
+      ui->textBrowser->setHtml(mydlgReader->currentTxt);
 
     if (isEpub) {
       QString str = loadText(mydlgReader->currentHtmlFile);
@@ -4858,7 +4935,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     QString strPw = ui->edit1->text().trimmed();
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
-      baPw[i] = baPw[i] + 66;  //加密User的密码
+      baPw[i] = baPw[i] + 66; //加密User的密码
     }
     strPw = baPw;
     Reg.setValue("/MainNotes/UserKey", strPw);
@@ -4978,7 +5055,8 @@ QString MainWindow::getSelectedText() {
 
 void MainWindow::on_btnSearch_clicked() {
   QString str = mydlgSetText->ui->lineEdit->text().trimmed();
-  if (str == "") return;
+  if (str == "")
+    return;
 
   QString strurl;
   /*if (zh_cn)
@@ -5015,7 +5093,8 @@ void MainWindow::on_SetReaderFunVisible() {
 
 void MainWindow::on_timerMousePress() {
   timerMousePress->stop();
-  if (!isMouseMove && isMousePress) on_btnSelText_clicked();
+  if (!isMouseMove && isMousePress)
+    on_btnSelText_clicked();
 }
 
 void MainWindow::showGrayWindows() {
@@ -5043,7 +5122,8 @@ void MainWindow::showGrayWindows() {
 void MainWindow::closeGrayWindows() { m_widget->close(); }
 
 void MainWindow::on_btnNotesList_clicked() {
-  if (!ui->frameMemo->isHidden()) mydlgMainNotes->saveQMLVPos();
+  if (!ui->frameMemo->isHidden())
+    mydlgMainNotes->saveQMLVPos();
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
   m_NotesList->show();
@@ -5055,8 +5135,10 @@ void MainWindow::on_btnNotesList_clicked() {
 
 void MainWindow::on_btnBackImg_clicked() {
   ui->f_ImgView->hide();
-  if (isReaderVisible) ui->frameReader->show();
-  if (isMemoVisible) ui->frameMemo->show();
+  if (isReaderVisible)
+    ui->frameReader->show();
+  if (isMemoVisible)
+    ui->frameMemo->show();
 }
 
 void MainWindow::on_btnZoomIn_clicked() {
@@ -5083,7 +5165,8 @@ void MainWindow::on_btnPasteCode_clicked() {
 
 void MainWindow::on_btnAdd_clicked() {
   on_AddRecord();
-  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+  if (mw_one->isHardStepSensor == 1)
+    mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::on_btnDel_clicked() { on_DelRecord(); }
@@ -5278,16 +5361,19 @@ void MainWindow::reeditData() {
 }
 
 void MainWindow::clickData() {
-  if (setTWCurrentItem()) on_twItemClicked();
+  if (setTWCurrentItem())
+    on_twItemClicked();
 }
 
 bool MainWindow::setTWCurrentItem() {
   bool isSel = false;
   int row = getCurrentIndex();
-  if (row < 0) return false;
+  if (row < 0)
+    return false;
 
   int type = getItemType(row);
-  if (type == 1) return false;
+  if (type == 1)
+    return false;
 
   QString textTop = getTop(row);
   QString text0 = getText0(row);
@@ -5297,7 +5383,8 @@ bool MainWindow::setTWCurrentItem() {
     childIndex = list.at(0).toInt() - 1;
   }
 
-  if (childIndex < 0) return false;
+  if (childIndex < 0)
+    return false;
 
   QTreeWidget *tw = get_tw(tabData->currentIndex());
   int count = tw->topLevelItemCount();
