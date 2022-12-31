@@ -1058,8 +1058,7 @@ void dlgMainNotes::show_findTextBack() {
 void dlgMainNotes::findText() {
   QString search_text = ui->editFind->text().trimmed().toLower();
   if (search_text.trimmed().isEmpty()) {
-    // QMessageBox::information(this, tr("Empty search field"),
-    //                          tr("The search field is empty."));
+
     return;
   } else {
     QTextDocument *document = ui->editSource->document();
@@ -1093,7 +1092,6 @@ void dlgMainNotes::on_btnFind_clicked() {
   if (ui->editFind->text().trimmed() == "")
     return;
   show_findText();
-  // findText();
 }
 
 void dlgMainNotes::on_btnPrev_clicked() { show_findTextBack(); }
