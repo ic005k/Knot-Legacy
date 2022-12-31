@@ -150,26 +150,7 @@ void dlgMainNotes::resizeEvent(QResizeEvent *event) {
   qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
 }
 
-void dlgMainNotes::on_btnDone_clicked() {
-  if (!m_SetEditText->isHidden()) {
-    m_SetEditText->close();
-  }
-  if (pAndroidKeyboard->isVisible())
-    pAndroidKeyboard->hide();
-  mw_one->Sleep(100);
-
-  mw_one->ui->frameMemo->show();
-
-  if (isSave) {
-    saveMainNotes();
-  }
-  saveQMLVPos();
-
-  close();
-  loadMemoQML();
-
-  mw_one->repaint();
-}
+void dlgMainNotes::on_btnDone_clicked() { close(); }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
   QString htmlFileName = privateDir + "memo.html";
@@ -996,7 +977,22 @@ bool dlgMainNotes::androidCopyFile(QString src, QString des) {
 
 void dlgMainNotes::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
-  on_btnDone_clicked();
+
+  if (!m_SetEditText->isHidden()) {
+    m_SetEditText->close();
+  }
+  if (pAndroidKeyboard->isVisible())
+    pAndroidKeyboard->hide();
+  mw_one->Sleep(100);
+
+  mw_one->ui->frameMemo->show();
+
+  if (isSave) {
+    saveMainNotes();
+  }
+  saveQMLVPos();
+
+  loadMemoQML();
 }
 
 void dlgMainNotes::on_editSource_textChanged() { isSave = true; }
