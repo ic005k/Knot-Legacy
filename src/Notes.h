@@ -32,7 +32,7 @@ class dlgMainNotes;
 class dlgMainNotes : public QDialog {
   Q_OBJECT
 
- public:
+public:
   explicit dlgMainNotes(QWidget *parent = nullptr);
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
@@ -89,14 +89,14 @@ class dlgMainNotes : public QDialog {
   bool selectPDFFormat(QPrinter *printer);
   void on_btnPDF_clicked();
 
- protected:
+protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
   void paintEvent(QPaintEvent *pEvent) override;
   void closeEvent(QCloseEvent *event) override;
 
- public slots:
+public slots:
   void editVSBarValueChanged();
   void timerSlot();
   void setVPos();
@@ -160,10 +160,10 @@ class dlgMainNotes : public QDialog {
 
   void on_btnS10_clicked();
 
- signals:
+signals:
   void sendUpdate();
 
- private slots:
+private slots:
   void on_editSource_textChanged();
 
   void on_editSource_cursorPositionChanged();
@@ -184,7 +184,7 @@ class dlgMainNotes : public QDialog {
 
   void on_btnGetShare_clicked();
 
- private:
+private:
   int x_left, x_right, y_left, y_right;
   int y1;
 
@@ -198,11 +198,10 @@ class dlgMainNotes : public QDialog {
   bool isMousePress = false;
   bool isMouseMove = false;
   QWidget *lineNumberArea;
-  int lastLine;
   int newHeight = 0;
 
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   void wheelEvent(QWheelEvent *e) override;
 };
 
-#endif  // NOTES_H
+#endif // NOTES_H

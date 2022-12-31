@@ -3,19 +3,16 @@
 #include "mainwindow.h"
 #include "ui_RemarksAbout.h"
 #include "ui_mainwindow.h"
-extern MainWindow* mw_one;
+extern MainWindow *mw_one;
 extern bool loading, zh_cn;
 extern QString noteText, appName, ver;
 extern int curPos;
 
-dlgRemarks::dlgRemarks(QWidget* parent)
+dlgRemarks::dlgRemarks(QWidget *parent)
     : QDialog(parent), ui(new Ui::dlgRemarks) {
   ui->setupUi(this);
 
   mw_one->set_btnStyle(this);
-
-  ui->btnMirrorDL->hide();
-  ui->btnDL->hide();
 
   setModal(true);
   this->installEventFilter(this);
@@ -37,8 +34,8 @@ dlgRemarks::dlgRemarks(QWidget* parent)
       "}");
 
   manager = new QNetworkAccessManager(this);
-  connect(manager, SIGNAL(finished(QNetworkReply*)), this,
-          SLOT(replyFinished(QNetworkReply*)));
+  connect(manager, SIGNAL(finished(QNetworkReply *)), this,
+          SLOT(replyFinished(QNetworkReply *)));
   blAutoCheckUpdate = true;
   CheckUpdate();
 }
@@ -55,19 +52,22 @@ void dlgRemarks::on_btnBack_clicked() {
                  "|" + noteText;
   mw_one->ui->tabWidget->setTabToolTip(mw_one->ui->tabWidget->currentIndex(),
                                        text);
-  if (!ui->textEdit->isHidden()) mw_one->startSave("notes");
+  if (!ui->textEdit->isHidden())
+    mw_one->startSave("notes");
   ui->textEdit->clear();
   close();
   mw_one->closeGrayWindows();
 }
 
-bool dlgRemarks::eventFilter(QObject* obj, QEvent* evn) {
+bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
+#ifdef Q_OS_ANDROID
   if (obj == ui->textEdit->viewport()) {
     mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
   }
+#endif
 
   if (evn->type() == QEvent::KeyPress) {
-    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnBack_clicked();
       return true;
@@ -77,9 +77,9 @@ bool dlgRemarks::eventFilter(QObject* obj, QEvent* evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void dlgRemarks::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
+void dlgRemarks::keyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event); }
 
-void dlgRemarks::resizeEvent(QResizeEvent* event) {
+void dlgRemarks::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
   qDebug() << "resize" << ui->textEdit->height();
 }
@@ -101,26 +101,9 @@ void dlgRemarks::init_Notes() {
     ui->textEdit->setPlainText(str);
 }
 
-void dlgRemarks::on_btnDL_clicked() {
-  QString str;
-  str =
-      "https://github.com/ic005k/Knot/releases/download/2022/"
-      "android-build-release-signed.apk";
-  QUrl url(str);
-  QDesktopServices::openUrl(url);
-}
-
 void dlgRemarks::on_btnHomePage_clicked() {
   QString str;
   str = "https://github.com/ic005k/Knot/issues";
-  QUrl url(str);
-  QDesktopServices::openUrl(url);
-}
-
-void dlgRemarks::on_btnMirrorDL_clicked() {
-  QString str =
-      "https://ghproxy.com/https://github.com/ic005k/Knot/releases/download/"
-      "2022/android-build-release-signed.apk";
   QUrl url(str);
   QDesktopServices::openUrl(url);
 }
@@ -135,7 +118,7 @@ void dlgRemarks::CheckUpdate() {
   manager->get(quest);
 }
 
-void dlgRemarks::replyFinished(QNetworkReply* reply) {
+void dlgRemarks::replyFinished(QNetworkReply *reply) {
   QString str = reply->readAll();
   parse_UpdateJSON(str);
   reply->deleteLater();
@@ -149,8 +132,10 @@ QString dlgRemarks::getUrl(QVariantList list) {
 
     if (fName.contains("android"))
       androidUrl = map["browser_download_url"].toString();
-    if (fName.contains("Mac")) macUrl = map["browser_download_url"].toString();
-    if (fName.contains("Win")) winUrl = map["browser_download_url"].toString();
+    if (fName.contains("Mac"))
+      macUrl = map["browser_download_url"].toString();
+    if (fName.contains("Win"))
+      winUrl = map["browser_download_url"].toString();
     if (fName.contains("Linux"))
       linuxUrl = map["browser_download_url"].toString();
   }
@@ -247,8 +232,9 @@ void dlgRemarks::show_download() {
 
 void dlgRemarks::on_btnCheckUpdate_clicked() { CheckUpdate(); }
 
-void dlgRemarks::on_btnTest_clicked() {
-  if (s_link == "") return;
+void dlgRemarks::on_btnDownloadUP_clicked() {
+  if (s_link == "")
+    return;
 
 #ifdef Q_OS_ANDROID
   show_download();

@@ -5,13 +5,13 @@
 #include "ui_Notes.h"
 #include "ui_mainwindow.h"
 
-extern MainWindow* mw_one;
+extern MainWindow *mw_one;
 extern QString iniFile, iniDir, privateDir, fontname;
 extern bool isImport, isAndroid, isIOS;
 extern int fontSize;
 extern QRegularExpression regxNumber;
 
-dlgMainNotes::dlgMainNotes(QWidget* parent)
+dlgMainNotes::dlgMainNotes(QWidget *parent)
     : QDialog(parent), ui(new Ui::dlgMainNotes) {
   ui->setupUi(this);
 
@@ -58,7 +58,7 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
   connect(ui->editSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
           SLOT(editVSBarValueChanged()));
 
-  QValidator* validator =
+  QValidator *validator =
       new QRegularExpressionValidator(regxNumber, ui->editRow);
   ui->editRow->setValidator(validator);
   ui->editRow->setPlaceholderText(tr("Row"));
@@ -75,19 +75,8 @@ dlgMainNotes::dlgMainNotes(QWidget* parent)
           &dlgMainNotes::highlightCurrentLine);
 
   highlightCurrentLine();
-  ui->editLineSn->hide();
-  ui->editLineSn->setStyleSheet("background-color:#fafafa;");
-  ui->editLineSn->verticalScrollBar()->hide();
-  ui->editLineSn->horizontalScrollBar()->hide();
-  ui->editLineSn->insertPlainText(QStringLiteral("1\n"));
-  ui->editLineSn->setFocusPolicy(Qt::NoFocus);
-  ui->editLineSn->setContextMenuPolicy(Qt::NoContextMenu);
-  QFont font;
-  font.setPixelSize(fontSize);
-  ui->editLineSn->setFont(font);
-  ui->editLineSn->setFixedWidth(ui->editLineSn->font().pixelSize() + 10);
-  lastLine = 1;
-  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
+  QFont font = this->font();
+  font.setLetterSpacing(QFont::AbsoluteSpacing, 2); //字间距
   ui->editSource->setFont(font);
   ui->editSource->setAcceptRichText(false);
 
@@ -120,20 +109,15 @@ void dlgMainNotes::init() {
                     mw_one->width(), mw_one->height());
 }
 
-void dlgMainNotes::wheelEvent(QWheelEvent* e) { Q_UNUSED(e); }
+void dlgMainNotes::wheelEvent(QWheelEvent *e) { Q_UNUSED(e); }
 
 dlgMainNotes::~dlgMainNotes() { delete ui; }
 
-void dlgMainNotes::keyReleaseEvent(QKeyEvent* event) { event->accept(); }
+void dlgMainNotes::keyReleaseEvent(QKeyEvent *event) { event->accept(); }
 
-void dlgMainNotes::editVSBarValueChanged() {
-  if (!ui->editLineSn->isHidden()) {
-    ui->editLineSn->verticalScrollBar()->setValue(
-        ui->editSource->verticalScrollBar()->value());
-  }
-}
+void dlgMainNotes::editVSBarValueChanged() {}
 
-void dlgMainNotes::resizeEvent(QResizeEvent* event) {
+void dlgMainNotes::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
 
   if (isShow) {
@@ -170,7 +154,8 @@ void dlgMainNotes::on_btnDone_clicked() {
   if (!m_SetEditText->isHidden()) {
     m_SetEditText->close();
   }
-  if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
+  if (pAndroidKeyboard->isVisible())
+    pAndroidKeyboard->hide();
   mw_one->Sleep(100);
 
   mw_one->ui->frameMemo->show();
@@ -191,7 +176,7 @@ void dlgMainNotes::MD2Html(QString mdFile) {
   QFile memofile1(htmlFileName);
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
-    QTextEdit* edit = new QTextEdit();
+    QTextEdit *edit = new QTextEdit();
     QString strmd = mw_one->loadText(mdFile);
     edit->setPlainText(strmd);
     edit->document()->setMarkdown(strmd, QTextDocument::MarkdownDialectGitHub);
@@ -214,7 +199,8 @@ void dlgMainNotes::saveMainNotes() {
 
   QString path = iniDir + "memo/";
   QDir dir(path);
-  if (!dir.exists()) dir.mkdir(path);
+  if (!dir.exists())
+    dir.mkdir(path);
 
   QString strTag = mw_one->m_NotesList->currentMDFile;
   strTag.replace(iniDir, "");
@@ -227,8 +213,8 @@ void dlgMainNotes::saveMainNotes() {
 
 void dlgMainNotes::init_MainNotes() { loadMemoQML(); }
 
-void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
-  QMouseEvent* event = static_cast<QMouseEvent*>(evn);
+void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
+  QMouseEvent *event = static_cast<QMouseEvent *>(evn);
   byTextEdit = textEdit;
 
   if (event->type() == QEvent::MouseButtonPress) {
@@ -299,7 +285,7 @@ void dlgMainNotes::getEditPanel(QTextEdit* textEdit, QEvent* evn) {
   }
 }
 
-bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
+bool dlgMainNotes::eventFilter(QObject *obj, QEvent *evn) {
 #ifdef Q_OS_ANDROID
   if (obj == ui->editSource->viewport()) {
     getEditPanel(ui->editSource, evn);
@@ -307,7 +293,7 @@ bool dlgMainNotes::eventFilter(QObject* obj, QEvent* evn) {
 #endif
 
   if (evn->type() == QEvent::KeyPress) {
-    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!m_SetEditText->isHidden()) {
         m_SetEditText->close();
@@ -398,7 +384,7 @@ void dlgMainNotes::decode(QString filename) {
   file.close();
 }
 
-void dlgMainNotes::encryption(const QString& fileName) {
+void dlgMainNotes::encryption(const QString &fileName) {
   QFile original(fileName);
   if (!original.open(QIODevice::ReadOnly)) {
     QMessageBox::warning(0, "Read11", "Read error!", QMessageBox::Yes);
@@ -414,7 +400,7 @@ void dlgMainNotes::encryption(const QString& fileName) {
   dest.close();
 }
 
-QString dlgMainNotes::Deciphering(const QString& fileName) {
+QString dlgMainNotes::Deciphering(const QString &fileName) {
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly)) {
     QMessageBox::warning(this, tr("Load Ds File"), file.errorString(),
@@ -441,19 +427,24 @@ QString dlgMainNotes::getDateTimeStr() {
 
   QString s_m, s_d, s_hh, s_mm, s_s;
   s_m = QString::number(m);
-  if (s_m.length() == 1) s_m = "0" + s_m;
+  if (s_m.length() == 1)
+    s_m = "0" + s_m;
 
   s_d = QString::number(d);
-  if (s_d.length() == 1) s_d = "0" + s_d;
+  if (s_d.length() == 1)
+    s_d = "0" + s_d;
 
   s_hh = QString::number(hh);
-  if (s_hh.length() == 1) s_hh = "0" + s_hh;
+  if (s_hh.length() == 1)
+    s_hh = "0" + s_hh;
 
   s_mm = QString::number(mm);
-  if (s_mm.length() == 1) s_mm = "0" + s_mm;
+  if (s_mm.length() == 1)
+    s_mm = "0" + s_mm;
 
   s_s = QString::number(s);
-  if (s_s.length() == 1) s_s = "0" + s_s;
+  if (s_s.length() == 1)
+    s_s = "0" + s_s;
 
   QString newname = QString::number(y) + s_m + s_d + "_" + s_hh + s_mm + s_s;
   return newname;
@@ -471,8 +462,9 @@ void dlgMainNotes::on_btnPic_clicked() {
     dir.mkpath(iniDir + "memo/images/");
 
     QString strTar = iniDir + "memo/images/" + getDateTimeStr() +
-                     ".png";  // + list.at(list.count() - 1);
-    if (QFile(strTar).exists()) QFile(strTar).remove();
+                     ".png"; // + list.at(list.count() - 1);
+    if (QFile(strTar).exists())
+      QFile(strTar).remove();
 
     QImage img(fileName);
     double w, h;
@@ -509,7 +501,7 @@ QStringList dlgMainNotes::getImgFileFromHtml(QString htmlfile) {
   QStringList list;
   QString strHtml = mw_one->loadText(htmlfile);
   strHtml = strHtml.replace("><", ">\n<");
-  QTextEdit* edit = new QTextEdit;
+  QTextEdit *edit = new QTextEdit;
   edit->setPlainText(strHtml);
   for (int i = 0; i < edit->document()->lineCount(); i++) {
     QString str = mw_one->mydlgReader->getTextEditLineText(edit, i).trimmed();
@@ -528,7 +520,7 @@ QStringList dlgMainNotes::getImgFileFromHtml(QString htmlfile) {
 void dlgMainNotes::zipMemo() {
   QDir::setCurrent(iniDir);
 #ifdef Q_OS_MACOS
-  QProcess* pro = new QProcess;
+  QProcess *pro = new QProcess;
   pro->execute("zip", QStringList() << "-r"
                                     << "memo.zip"
                                     << "memo");
@@ -540,7 +532,7 @@ void dlgMainNotes::zipMemo() {
   QString strZip, strExec, strzip, tagDir;
   tagDir = "memo";
   strZip = iniDir + "memo.zip";
-  QTextEdit* txtEdit = new QTextEdit();
+  QTextEdit *txtEdit = new QTextEdit();
   strzip = qApp->applicationDirPath() + "/zip.exe";
   strzip = "\"" + strzip + "\"";
   strZip = "\"" + strZip + "\"";
@@ -554,7 +546,7 @@ void dlgMainNotes::zipMemo() {
   mw_one->TextEditToFile(txtEdit, fileName);
 
   QString exefile = iniDir + "zip.bat";
-  QProcess* pro = new QProcess;
+  QProcess *pro = new QProcess;
   pro->execute("cmd.exe", QStringList() << "/c" << exefile);
   pro->waitForFinished();
 
@@ -588,13 +580,13 @@ void dlgMainNotes::unzip(QString zipfile) {
   mw_one->mydlgReader->deleteDirfile(iniDir + "memo");
   QDir::setCurrent(iniDir);
 #ifdef Q_OS_MACOS
-  QProcess* pro = new QProcess;
+  QProcess *pro = new QProcess;
   pro->execute("unzip", QStringList() << "-o" << zipfile << "-d" << iniDir);
   pro->waitForFinished();
 #endif
 
 #ifdef Q_OS_LINUX
-  QProcess* pro = new QProcess;
+  QProcess *pro = new QProcess;
   pro->execute("unzip", QStringList() << "-o" << zipfile << "-d" << iniDir);
   pro->waitForFinished();
 #endif
@@ -603,7 +595,7 @@ void dlgMainNotes::unzip(QString zipfile) {
   QString strZip, strExec, strUnzip, tagDir;
   tagDir = iniDir;
   strZip = zipfile;
-  QTextEdit* txtEdit = new QTextEdit();
+  QTextEdit *txtEdit = new QTextEdit();
   strUnzip = qApp->applicationDirPath() + "/unzip.exe";
   qDebug() << qApp->applicationDirPath() << ".....";
   strUnzip = "\"" + strUnzip + "\"";
@@ -644,8 +636,8 @@ void dlgMainNotes::unzip(QString zipfile) {
 
 void dlgMainNotes::loadMemoQML() {
   QString htmlFileName = privateDir + "memo.html";
-  QTextEdit* edit = new QTextEdit;
-  QPlainTextEdit* edit1 = new QPlainTextEdit;
+  QTextEdit *edit = new QTextEdit;
+  QPlainTextEdit *edit1 = new QPlainTextEdit;
   QString strhtml = mw_one->loadText(htmlFileName);
   strhtml = strhtml.replace("><", ">\n<");
   edit->setPlainText(strhtml);
@@ -683,14 +675,14 @@ void dlgMainNotes::loadMemoQML() {
 
   mw_one->ui->qwNotes->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
-  QQuickItem* root = mw_one->ui->qwNotes->rootObject();
+  QQuickItem *root = mw_one->ui->qwNotes->rootObject();
 
   // mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml",
   //                          Q_ARG(QVariant, htmlFileName));
 
   htmlBuffer = edit1->toPlainText();
-  QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
+  QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
 
   getVHeight();
@@ -721,16 +713,16 @@ void dlgMainNotes::setVPos() {
     sliderPos =
         Reg.value("/MainNotes/SlidePos" + curmd.replace(iniDir, "")).toReal();
 
-    QQuickItem* root = mw_one->ui->qwNotes->rootObject();
-    QMetaObject::invokeMethod((QObject*)root, "setVPos",
+    QQuickItem *root = mw_one->ui->qwNotes->rootObject();
+    QMetaObject::invokeMethod((QObject *)root, "setVPos",
                               Q_ARG(QVariant, sliderPos));
   }
 }
 
 qreal dlgMainNotes::getVPos() {
   QVariant itemCount;
-  QQuickItem* root = mw_one->ui->qwNotes->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "getVPos",
+  QQuickItem *root = mw_one->ui->qwNotes->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "getVPos",
                             Q_RETURN_ARG(QVariant, itemCount));
   sliderPos = itemCount.toReal();
   return sliderPos;
@@ -738,8 +730,8 @@ qreal dlgMainNotes::getVPos() {
 
 qreal dlgMainNotes::getVHeight() {
   QVariant itemCount;
-  QQuickItem* root = mw_one->ui->qwNotes->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "getVHeight",
+  QQuickItem *root = mw_one->ui->qwNotes->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "getVHeight",
                             Q_RETURN_ARG(QVariant, itemCount));
   textHeight = itemCount.toReal();
   return textHeight;
@@ -749,7 +741,8 @@ void dlgMainNotes::on_btnInsertTable_clicked() {
   int row = ui->editRow->text().trimmed().toInt();
   int col = ui->editCol->text().trimmed().toInt();
 
-  if (row == 0 || col == 0) return;
+  if (row == 0 || col == 0)
+    return;
 
   QString strTitle = tr("Title");
   QString strCol = "|" + strTitle + "1|";
@@ -802,37 +795,43 @@ void dlgMainNotes::on_btnAsterisk_clicked() {
 
 void dlgMainNotes::on_btnS1_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "") str = tr("Bold Italic");
+  if (str == "")
+    str = tr("Bold Italic");
   ui->editSource->insertPlainText("_**" + str + "**_");
 }
 
 void dlgMainNotes::on_btnS2_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "") str = tr("Italic");
+  if (str == "")
+    str = tr("Italic");
   ui->editSource->insertPlainText("_" + str + "_");
 }
 
 void dlgMainNotes::on_btnS3_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "") str = tr("Underline");
+  if (str == "")
+    str = tr("Underline");
   ui->editSource->insertPlainText("<u>" + str + "</u>");
 }
 
 void dlgMainNotes::on_btnS4_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "") str = tr("Strickout");
+  if (str == "")
+    str = tr("Strickout");
   ui->editSource->insertPlainText("~~" + str + "~~");
 }
 
 void dlgMainNotes::on_btnColor_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "") str = tr("Red");
+  if (str == "")
+    str = tr("Red");
   ui->editSource->insertPlainText("<font color=#FF0000 >" + str + "</font>");
 }
 
 void dlgMainNotes::on_btnS5_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "") str = tr("Bold");
+  if (str == "")
+    str = tr("Bold");
   ui->editSource->insertPlainText("**" + str + "**");
 }
 
@@ -877,15 +876,6 @@ void dlgMainNotes::highlightCurrentLine() {
 
   ui->editSource->setExtraSelections(extraSelections);
 
-  if (!ui->editLineSn->isHidden()) {
-    ui->editLineSn->blockSignals(true);
-    ui->editSource->blockSignals(true);
-    ui->editLineSn->verticalScrollBar()->setValue(
-        ui->editSource->verticalScrollBar()->value());
-    ui->editLineSn->blockSignals(false);
-    ui->editSource->blockSignals(false);
-  }
-
   QString str1, str2, str3, str4;
 
   //当前光标
@@ -907,39 +897,7 @@ void dlgMainNotes::highlightCurrentLine() {
   ui->lblInfo->setText(" " + str4 + " , " + str3);
 }
 
-void dlgMainNotes::onTextChange() {
-  if (ui->editLineSn->isHidden()) return;
-
-  int jsonTextEditRow = ui->editSource->document()->lineCount();
-  if (jsonTextEditRow == lastLine) return;
-
-  ui->editLineSn->blockSignals(true);
-  ui->editSource->blockSignals(true);
-
-  int countOfRow = 0;
-  int temp = jsonTextEditRow;
-  while (temp != 0) {
-    temp = temp / 10;
-    ++countOfRow;
-  }
-  ui->editLineSn->setFixedWidth(
-      ui->editLineSn->font().pixelSize() * countOfRow + 10);
-
-  ui->editLineSn->clear();
-  QString str;
-  ++jsonTextEditRow;
-  for (int i = 1; i < jsonTextEditRow; ++i) {
-    str.append(QString("%1\n").arg(i));
-  }
-  ui->editLineSn->setPlainText(str);
-
-  lastLine = ui->editSource->document()->lineCount();
-
-  ui->editLineSn->verticalScrollBar()->setValue(
-      ui->editSource->verticalScrollBar()->value());
-  ui->editLineSn->blockSignals(false);
-  ui->editSource->blockSignals(false);
-}
+void dlgMainNotes::onTextChange() {}
 
 void dlgMainNotes::on_btnPaste_clicked() { ui->editSource->paste(); }
 
@@ -971,7 +929,7 @@ void dlgMainNotes::selectText(int start, int end) {
   m_SetEditText->ui->lineEdit->setText(cursor.selectedText());
 }
 
-void dlgMainNotes::paintEvent(QPaintEvent* event) {
+void dlgMainNotes::paintEvent(QPaintEvent *event) {
   Q_UNUSED(event);
   return;
 
@@ -1036,7 +994,7 @@ bool dlgMainNotes::androidCopyFile(QString src, QString des) {
   return result;
 }
 
-void dlgMainNotes::closeEvent(QCloseEvent* event) {
+void dlgMainNotes::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
   on_btnDone_clicked();
 }
@@ -1059,7 +1017,8 @@ void dlgMainNotes::on_btnShowFind_clicked() {
 
 void dlgMainNotes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
-  if (findtext == "") return;
+  if (findtext == "")
+    return;
   //获得对话框的内容
   if (ui->editSource->find(findtext, QTextDocument::FindCaseSensitively))
   //查找后一个
@@ -1078,7 +1037,8 @@ void dlgMainNotes::show_findText() {
 
 void dlgMainNotes::show_findTextBack() {
   QString findtext = ui->editFind->text().trimmed().toLower();
-  if (findtext == "") return;
+  if (findtext == "")
+    return;
   //获得对话框的内容
   if (ui->editSource->find(findtext, QTextDocument::FindBackward))
   //查找后一个
@@ -1102,7 +1062,7 @@ void dlgMainNotes::findText() {
     //                          tr("The search field is empty."));
     return;
   } else {
-    QTextDocument* document = ui->editSource->document();
+    QTextDocument *document = ui->editSource->document();
     bool found = false;
     QTextCursor highlight_cursor(document);
     QTextCursor cursor(document);
@@ -1115,7 +1075,8 @@ void dlgMainNotes::findText() {
       highlight_cursor = document->find(search_text, highlight_cursor,
                                         QTextDocument::FindCaseSensitively);
       if (!highlight_cursor.isNull()) {
-        if (!found) found = true;
+        if (!found)
+          found = true;
         highlight_cursor.mergeCharFormat(color_format);
       }
     }
@@ -1129,7 +1090,8 @@ void dlgMainNotes::findText() {
 }
 
 void dlgMainNotes::on_btnFind_clicked() {
-  if (ui->editFind->text().trimmed() == "") return;
+  if (ui->editFind->text().trimmed() == "")
+    return;
   show_findText();
   // findText();
 }
@@ -1140,11 +1102,11 @@ void dlgMainNotes::on_btnNext_clicked() { show_findText(); }
 
 void dlgMainNotes::on_editFind_returnPressed() { on_btnFind_clicked(); }
 
-void dlgMainNotes::on_editFind_textChanged(const QString& arg1) {
+void dlgMainNotes::on_editFind_textChanged(const QString &arg1) {
   Q_UNUSED(arg1);
 }
 
-bool dlgMainNotes::selectPDFFormat(QPrinter* printer) {
+bool dlgMainNotes::selectPDFFormat(QPrinter *printer) {
   QSettings settings;
 
   // select the page size
@@ -1161,7 +1123,7 @@ bool dlgMainNotes::selectPDFFormat(QPrinter* printer) {
             << QPageSize::A8 << QPageSize::A9 << QPageSize::Letter;
 
   bool ok;
-  QInputDialog* idlg = new QInputDialog(this);
+  QInputDialog *idlg = new QInputDialog(this);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
   QString pageSizeString = idlg->getItem(
@@ -1190,7 +1152,7 @@ bool dlgMainNotes::selectPDFFormat(QPrinter* printer) {
   QList<QPageLayout::Orientation> orientations;
   orientations << QPageLayout::Portrait << QPageLayout::Landscape;
 
-  QInputDialog* idlg2 = new QInputDialog(this);
+  QInputDialog *idlg2 = new QInputDialog(this);
   idlg2->setOkButtonText(tr("Ok"));
   idlg2->setCancelButtonText(tr("Cancel"));
   QString orientationString = idlg2->getItem(
@@ -1253,7 +1215,7 @@ void dlgMainNotes::on_btnPDF_clicked() {
   auto doc = new QTextDocument(this);
   doc->setHtml(html);
 
-  auto* printer = new QPrinter(QPrinter::HighResolution);
+  auto *printer = new QPrinter(QPrinter::HighResolution);
 
   if (selectPDFFormat(printer)) {
     doc->print(printer);
