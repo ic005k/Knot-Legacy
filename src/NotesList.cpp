@@ -728,3 +728,15 @@ void dlgNotesList::on_KVChanged() {
   } else {
   }
 }
+
+void dlgNotesList::on_btnUp_clicked()
+{
+
+}
+
+
+void dlgNotesList::on_btnDown_clicked()
+{
+
+}
+

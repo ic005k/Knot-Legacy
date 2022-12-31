@@ -86,7 +86,11 @@ class dlgNotesList : public QDialog {
 
   void on_editFind_returnPressed();
 
- private:
+  void on_btnUp_clicked();
+
+  void on_btnDown_clicked();
+
+  private:
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   QStringList files;
   void clearMD_Pic(QTreeWidget *tw);
