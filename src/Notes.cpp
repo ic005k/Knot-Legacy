@@ -27,6 +27,11 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
   m_Left = new dlgLeft(this);
   m_Right = new dlgRight(this);
 
+  QString path = iniDir + "memo/";
+  QDir dir(path);
+  if (!dir.exists())
+    dir.mkdir(path);
+
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
 
@@ -177,11 +182,6 @@ void dlgMainNotes::saveMainNotes() {
 
   mw_one->TextEditToFile(ui->editSource, mw_one->m_NotesList->currentMDFile);
   MD2Html(mw_one->m_NotesList->currentMDFile);
-
-  QString path = iniDir + "memo/";
-  QDir dir(path);
-  if (!dir.exists())
-    dir.mkdir(path);
 
   QString strTag = mw_one->m_NotesList->currentMDFile;
   strTag.replace(iniDir, "");
