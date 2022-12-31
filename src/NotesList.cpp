@@ -729,14 +729,32 @@ void dlgNotesList::on_KVChanged() {
   }
 }
 
-void dlgNotesList::on_btnUp_clicked()
-{
-
+void dlgNotesList::moveBy(int ud) {
+  QTreeWidgetItem *item = tw->currentItem();
+  if (item->parent() != NULL) {
+    QTreeWidgetItem *parentItem = item->parent();
+    int index = parentItem->indexOfChild(item);
+    if (ud == -1) {
+      if (index - 1 >= 0) {
+        parentItem->removeChild(item);
+        parentItem->insertChild(index - 1, item);
+        tw->setCurrentItem(item);
+        tw->scrollToItem(item);
+        isSave = true;
+      }
+    }
+    if (ud == 1) {
+      if (index + 1 <= parentItem->childCount() - 1) {
+        parentItem->removeChild(item);
+        parentItem->insertChild(index + 1, item);
+        tw->setCurrentItem(item);
+        tw->scrollToItem(item);
+        isSave = true;
+      }
+    }
+  }
 }
 
+void dlgNotesList::on_btnUp_clicked() { moveBy(-1); }
 
-void dlgNotesList::on_btnDown_clicked()
-{
-
-}
-
+void dlgNotesList::on_btnDown_clicked() { moveBy(1); }

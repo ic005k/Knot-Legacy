@@ -45,6 +45,7 @@ class dlgNotesList : public QDialog {
                    const QStringList &formats);
 
   void setNoteName(QString name);
+  void moveBy(int ud);
   protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
