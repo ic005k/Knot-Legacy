@@ -180,6 +180,8 @@ void dlgMainNotes::saveMainNotes() {
   Reg.setIniCodec("utf-8");
 #endif
 
+  if (QFile(mw_one->m_NotesList->currentMDFile).exists())
+    QFile::remove(mw_one->m_NotesList->currentMDFile);
   mw_one->TextEditToFile(ui->editSource, mw_one->m_NotesList->currentMDFile);
   MD2Html(mw_one->m_NotesList->currentMDFile);
 
