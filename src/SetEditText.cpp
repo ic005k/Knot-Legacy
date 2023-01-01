@@ -28,9 +28,9 @@ dlgSetEditText::dlgSetEditText(QWidget *parent)
 
   int a = 500;
   int b = 50;
-  ui->btnLeft0->setAutoRepeat(true);      //启用长按
-  ui->btnLeft0->setAutoRepeatDelay(a);    //触发长按的时间
-  ui->btnLeft0->setAutoRepeatInterval(b); //长按时click信号间隔
+  ui->btnLeft0->setAutoRepeat(true);       //启用长按
+  ui->btnLeft0->setAutoRepeatDelay(a);     //触发长按的时间
+  ui->btnLeft0->setAutoRepeatInterval(b);  //长按时click信号间隔
 
   ui->btnLeft1->setAutoRepeat(true);
   ui->btnLeft1->setAutoRepeatDelay(a);
@@ -56,7 +56,6 @@ void dlgSetEditText::init(int y) {
   setGeometry(mw_one->geometry().x() + (mw_one->width() - this->width()) / 2, y,
               this->width(), this->height());
   setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
-  show();
 }
 
 bool dlgSetEditText::eventFilter(QObject *watch, QEvent *evn) {
@@ -80,10 +79,8 @@ bool dlgSetEditText::eventFilter(QObject *watch, QEvent *evn) {
           watch == ui->btnPaste || watch == ui->btnCut ||
           watch == ui->btnSetAll || watch == ui->lineEdit) {
         int y = event->globalY();
-        if (y <= 0)
-          y = 0;
-        if (y >= mw_one->height() - height())
-          y = mw_one->height() - height();
+        if (y <= 0) y = 0;
+        if (y >= mw_one->height() - height()) y = mw_one->height() - height();
         this->setGeometry(geometry().x(), y, width(), height());
       }
     }
@@ -126,8 +123,7 @@ void dlgSetEditText::on_btnSetAll_clicked() {
 
 void dlgSetEditText::on_btnLeft1_clicked() {
   mw_one->mydlgMainNotes->start--;
-  if (mw_one->mydlgMainNotes->start < 0)
-    mw_one->mydlgMainNotes->start = 0;
+  if (mw_one->mydlgMainNotes->start < 0) mw_one->mydlgMainNotes->start = 0;
 
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
@@ -147,8 +143,7 @@ void dlgSetEditText::on_btnRight1_clicked() {
 
 void dlgSetEditText::on_btnRight0_clicked() {
   mw_one->mydlgMainNotes->end--;
-  if (mw_one->mydlgMainNotes->end < 0)
-    mw_one->mydlgMainNotes->end = 0;
+  if (mw_one->mydlgMainNotes->end < 0) mw_one->mydlgMainNotes->end = 0;
 
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);

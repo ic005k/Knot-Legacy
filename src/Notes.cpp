@@ -203,7 +203,7 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
     if (event->button() == Qt::LeftButton) {
       isMousePress = true;
       isMouseMove = false;
-      m_SetEditText->close();
+      m_SetEditText->ui->btnClose->click();
 
       int a = 30;
       if (event->globalY() - a - m_SetEditText->height() >= 0)
@@ -220,9 +220,9 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
           if (!pAndroidKeyboard->isVisible()) {
             pAndroidKeyboard->setVisible(true);
           }
-          timer->start(1000);
+          // timer->start(1000);
         } else {
-          timer->start(1000);
+          // timer->start(1000);
         }
       }
     }
@@ -234,6 +234,7 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
     isMouseMove = false;
 
     if (m_SetEditText->ui->lineEdit->text() != "") {
+      m_SetEditText->show();
       if (isFunShow) {
         isFunShow = false;
 
@@ -268,11 +269,11 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
 }
 
 bool dlgMainNotes::eventFilter(QObject *obj, QEvent *evn) {
-#ifdef Q_OS_ANDROID
+  //#ifdef Q_OS_ANDROID
   if (obj == ui->editSource->viewport()) {
     getEditPanel(ui->editSource, evn);
   }
-#endif
+  //#endif
 
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
