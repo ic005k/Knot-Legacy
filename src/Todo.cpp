@@ -19,7 +19,7 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
   mw_one->set_btnStyle(this);
 
   this->installEventFilter(this);
-  mw_one->ui->textEdit->viewport()->installEventFilter(mw_one);
+  mw_one->ui->editTodo->viewport()->installEventFilter(mw_one);
 
   this->setModal(true);
 
@@ -51,7 +51,7 @@ dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
 
   mw_one->ui->btnModify->hide();
 
-  mw_one->ui->textEdit->setFixedHeight(getEditTextHeight(mw_one->ui->textEdit) +
+  mw_one->ui->editTodo->setFixedHeight(getEditTextHeight(mw_one->ui->editTodo) +
                                        2);
 }
 
@@ -124,7 +124,7 @@ void dlgTodo::init_Todo() {
 }
 
 void dlgTodo::on_btnAdd_clicked() {
-  QString str = mw_one->ui->textEdit->toPlainText().trimmed();
+  QString str = mw_one->ui->editTodo->toPlainText().trimmed();
   if (str == "") return;
 
   int count = getCount();
@@ -142,7 +142,7 @@ void dlgTodo::on_btnAdd_clicked() {
 
   setCurrentIndex(0);
 
-  mw_one->ui->textEdit->setText("");
+  mw_one->ui->editTodo->setText("");
   refreshTableLists();
   isSave = true;
 }
@@ -694,9 +694,9 @@ void dlgTodo::refreshAlarm() {
     qDebug() << "ini ok";
 }
 
-void dlgTodo::on_textEdit_textChanged() {
-  int h = getEditTextHeight(mw_one->ui->textEdit) + 2;
-  mw_one->ui->textEdit->setFixedHeight(h);
+void dlgTodo::on_editTodo_textChanged() {
+  int h = getEditTextHeight(mw_one->ui->editTodo) + 2;
+  mw_one->ui->editTodo->setFixedHeight(h);
 }
 
 void dlgTodo::insertItem(QString strTime, int type, QString strText,

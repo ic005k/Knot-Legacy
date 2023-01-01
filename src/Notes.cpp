@@ -269,11 +269,11 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
 }
 
 bool dlgMainNotes::eventFilter(QObject *obj, QEvent *evn) {
-  //#ifdef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
   if (obj == ui->editSource->viewport()) {
-    getEditPanel(ui->editSource, evn);
+    //  getEditPanel(ui->editSource, evn);
   }
-  //#endif
+#endif
 
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);

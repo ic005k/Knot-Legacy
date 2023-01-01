@@ -103,7 +103,7 @@ class dlgTodo : public QDialog {
 
   void on_btnDel_clicked();
 
-  void on_textEdit_textChanged();
+  void on_editTodo_textChanged();
 
   void delItemRecycle(int index);
   int getCountRecycle();

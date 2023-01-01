@@ -2698,7 +2698,7 @@ QRadioButton::indicator:checked {
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit">
+        <widget class="QTextEdit" name="editTodo">
          <property name="minimumSize">
           <size>
            <width>0</width>

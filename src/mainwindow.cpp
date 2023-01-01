@@ -2096,8 +2096,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
 
 #ifdef Q_OS_ANDROID
-  if (watch == ui->textEdit->viewport()) {
-    mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
+  if (watch == ui->editTodo->viewport()) {
+    // mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
   }
 #endif
 
@@ -3795,7 +3795,7 @@ void MainWindow::init_UIWidget() {
   ui->qwPdf->hide();
   ui->btnSync->hide();
 
-  ui->textEdit->setContentsMargins(12, 0, 12, 0);
+  ui->editTodo->setContentsMargins(12, 0, 12, 0);
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->layout()->setSpacing(1);
@@ -5139,8 +5139,8 @@ void MainWindow::on_btnRestoreRecycle_clicked() {
   mydlgTodo->on_btnRestore_clicked();
 }
 
-void MainWindow::on_textEdit_textChanged() {
-  mydlgTodo->on_textEdit_textChanged();
+void MainWindow::on_editTodo_textChanged() {
+  mydlgTodo->on_editTodo_textChanged();
 }
 
 void MainWindow::addItem(QString text0, QString text1, QString text2, int type,
