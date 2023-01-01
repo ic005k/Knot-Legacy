@@ -1,5 +1,5 @@
-#ifndef DLGSETTEXT_H
-#define DLGSETTEXT_H
+#ifndef SETREADERTEXT_H
+#define SETREADERTEXT_H
 
 #include <QDialog>
 #include <QKeyEvent>
@@ -33,4 +33,4 @@ class dlgSetText : public QDialog {
  private:
 };
 
-#endif  // DLGSETTEXT_H
+#endif  // SETREADERTEXT_H

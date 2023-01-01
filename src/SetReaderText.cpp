@@ -1,11 +1,11 @@
-#include "dlgSetText.h"
+#include "SetReaderText.h"
 
 #include "src/mainwindow.h"
-#include "ui_dlgSetText.h"
+#include "ui_SetReaderText.h"
 
-extern MainWindow* mw_one;
+extern MainWindow *mw_one;
 
-dlgSetText::dlgSetText(QWidget* parent)
+dlgSetText::dlgSetText(QWidget *parent)
     : QDialog(parent), ui(new Ui::dlgSetText) {
   ui->setupUi(this);
 
@@ -22,9 +22,9 @@ void dlgSetText::init(int x, int y, int w, int h) {
   show();
 }
 
-bool dlgSetText::eventFilter(QObject* watch, QEvent* evn) {
+bool dlgSetText::eventFilter(QObject *watch, QEvent *evn) {
   if (evn->type() == QEvent::KeyPress) {
-    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       close();
       return true;
@@ -40,6 +40,6 @@ void dlgSetText::on_btnCopy_clicked() { mw_one->on_btnCopy_clicked(); }
 
 void dlgSetText::on_btnSearch_clicked() { mw_one->on_btnSearch_clicked(); }
 
-void dlgSetText::on_lineEdit_textChanged(const QString& arg1) {
+void dlgSetText::on_lineEdit_textChanged(const QString &arg1) {
   Q_UNUSED(arg1);
 }

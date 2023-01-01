@@ -20,10 +20,10 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
+#include "src/SetEditText.h"
 #include "src/dlgleft.h"
 #include "src/dlgright.h"
-#include "src/dlgsetedittext.h"
-#include "ui_dlgsetedittext.h"
+#include "ui_SetEditText.h"
 
 namespace Ui {
 class dlgMainNotes;

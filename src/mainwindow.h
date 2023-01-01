@@ -83,11 +83,11 @@
 #include "src/Reader.h"
 #include "src/RemarksAbout.h"
 #include "src/Report.h"
+#include "src/SetReaderText.h"
 #include "src/Steps.h"
 #include "src/SyncInfo.h"
 #include "src/Todo.h"
 #include "src/TodoAlarm.h"
-#include "src/dlgSetText.h"
 #include "src/file.h"
 #include "src/filesystemwatcher.h"
 #include "src/specialaccelerometerpedometer.h"
@@ -102,11 +102,11 @@
 #include "ui_ReaderFun.h"
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
+#include "ui_SetReaderText.h"
 #include "ui_Steps.h"
 #include "ui_SyncInfo.h"
 #include "ui_Todo.h"
 #include "ui_TodoAlarm.h"
-#include "ui_dlgSetText.h"
 
 class SearchThread;
 class ReadThread;
@@ -128,7 +128,7 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
- public:
+public:
   bool isTesting = false;
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
@@ -167,11 +167,10 @@ class MainWindow : public QMainWindow {
   bool isOne = false;
   int isHardStepSensor = -1;
   qlonglong initTodaySteps, resetSteps, tc;
-  QString listStyle =
-      "QListWidget{item-background: "
-      "rgb(244,23,24); item-color:rgb(255,255,255); "
-      "border-radius:2px;border:2px "
-      "solid red;}";
+  QString listStyle = "QListWidget{item-background: "
+                      "rgb(244,23,24); item-color:rgb(255,255,255); "
+                      "border-radius:2px;border:2px "
+                      "solid red;}";
   int sRate = 0;
   qreal ax, ay, az, gx, gy, gz;
   int testCount1 = 0;
@@ -267,43 +266,42 @@ class MainWindow : public QMainWindow {
       "#listWidget::item:hover {background-color: #f5f5f5;}"
       "#listWidget::item:selected {border-left: 5px solid #777777;}";
 
-  QString vsbarStyle =
-      "QScrollBar:vertical{"  //垂直滑块整体
-      "width:30px;"
-      "background:#FFFFFF;"   //背景色
-      "padding-top:25px;"     //上预留位置（放置向上箭头）
-      "padding-bottom:25px;"  //下预留位置（放置向下箭头）
-      "padding-left:3px;"     //左预留位置（美观）
-      "padding-right:3px;"    //右预留位置（美观）
-      "border-left:1px solid #d7d7d7;}"     //左分割线
-      "QScrollBar::handle:vertical{"        //滑块样式
-      "background:#dbdbdb;"                 //滑块颜色
-      "border-radius:6px;"                  //边角圆润
-      "min-height:60px;}"                   //滑块最小高度
-      "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
-      "background:#d0d0d0;}"                //滑块颜色
-      "QScrollBar::add-line:vertical{"      //向下箭头样式
-      "background:url(:/src/down.png) bottom no-repeat;}"
-      "QScrollBar::sub-line:vertical{"  //向上箭头样式
-      "background:url(:/src/up.png) top no-repeat;}";
+  QString vsbarStyle = "QScrollBar:vertical{" //垂直滑块整体
+                       "width:30px;"
+                       "background:#FFFFFF;" //背景色
+                       "padding-top:25px;" //上预留位置（放置向上箭头）
+                       "padding-bottom:25px;" //下预留位置（放置向下箭头）
+                       "padding-left:3px;"  //左预留位置（美观）
+                       "padding-right:3px;" //右预留位置（美观）
+                       "border-left:1px solid #d7d7d7;}" //左分割线
+                       "QScrollBar::handle:vertical{"    //滑块样式
+                       "background:#dbdbdb;"             //滑块颜色
+                       "border-radius:6px;"              //边角圆润
+                       "min-height:60px;}"               //滑块最小高度
+                       "QScrollBar::handle:vertical:hover{" //鼠标触及滑块样式
+                       "background:#d0d0d0;}"               //滑块颜色
+                       "QScrollBar::add-line:vertical{" //向下箭头样式
+                       "background:url(:/src/down.png) bottom no-repeat;}"
+                       "QScrollBar::sub-line:vertical{" //向上箭头样式
+                       "background:url(:/src/up.png) top no-repeat;}";
   QString vsbarStyleSmall =
-      "QScrollBar:vertical{"  //垂直滑块整体
+      "QScrollBar:vertical{" //垂直滑块整体
       "width:6px;"
-      "background:rgb(255,255,255);"  //背景色
-      "padding-top:0px;"              //上预留位置（放置向上箭头）
-      "padding-bottom:0px;"           //下预留位置（放置向下箭头）
-      "padding-left:1px;"             //左预留位置（美观）
-      "padding-right:1px;"            //右预留位置（美观）
-      "border-left:0px solid #d7d7d7;}"     //左分割线
-      "QScrollBar::handle:vertical{"        //滑块样式
-      "background:rgb(202,197,191);"        //滑块颜色
-      "border-radius:6px;"                  //边角圆润
-      "min-height:60px;}"                   //滑块最小高度
-      "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
-      "background:#d0d0d0;}"                //滑块颜色
-      "QScrollBar::add-line:vertical{"      //向下箭头样式
+      "background:rgb(255,255,255);" //背景色
+      "padding-top:0px;"             //上预留位置（放置向上箭头）
+      "padding-bottom:0px;"          //下预留位置（放置向下箭头）
+      "padding-left:1px;"            //左预留位置（美观）
+      "padding-right:1px;"           //右预留位置（美观）
+      "border-left:0px solid #d7d7d7;}"    //左分割线
+      "QScrollBar::handle:vertical{"       //滑块样式
+      "background:rgb(202,197,191);"       //滑块颜色
+      "border-radius:6px;"                 //边角圆润
+      "min-height:60px;}"                  //滑块最小高度
+      "QScrollBar::handle:vertical:hover{" //鼠标触及滑块样式
+      "background:#d0d0d0;}"               //滑块颜色
+      "QScrollBar::add-line:vertical{"     //向下箭头样式
       "background:url() center no-repeat;}"
-      "QScrollBar::sub-line:vertical{"  //向上箭头样式
+      "QScrollBar::sub-line:vertical{" //向上箭头样式
       "background:url() center no-repeat;}";
 
   //"QListWidget::item:hover{background-color:#e6e6e6;margin:1px,1px,1px,"
@@ -392,7 +390,7 @@ class MainWindow : public QMainWindow {
   void startSyncData();
   void removeFilesWatch();
   void addFilesWatch();
- public slots:
+public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();
@@ -407,13 +405,13 @@ class MainWindow : public QMainWindow {
   void on_actionReport_triggered();
   void on_DelRecord();
 
- protected:
+protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;
   void changeEvent(QEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
- public slots:
+public slots:
   void on_btnCopy_clicked();
 
   void on_btnSearch_clicked();
@@ -518,7 +516,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnUserInfo_clicked();
 
-  void on_btnBackMemo_clicked();
+  void on_btnBackNotes_clicked();
 
   void on_btnSetKey_clicked();
 
@@ -537,7 +535,7 @@ class MainWindow : public QMainWindow {
   void on_openKnotBakDir();
   void reeditData();
   void clickData();
- public slots:
+public slots:
 
   void on_textBrowser_selectionChanged();
 
@@ -595,12 +593,12 @@ class MainWindow : public QMainWindow {
 
   void on_btnCategory_clicked();
 
- private slots:
+private slots:
   void on_btnSync_clicked();
 
   void on_btnPDF_clicked();
 
- private:
+private:
   bool isAndroidKeyShow = false;
   int memoHeight;
   int frameChartHeight;
@@ -627,62 +625,62 @@ class MainWindow : public QMainWindow {
 
 class SearchThread : public QThread {
   Q_OBJECT
- public:
+public:
   explicit SearchThread(QObject *parent = nullptr);
 
- protected:
+protected:
   void run();
- signals:
-  void isDone();  //处理完成信号
+signals:
+  void isDone(); //处理完成信号
 
- signals:
+signals:
 
- public slots:
+public slots:
 };
 
 class ReadThread : public QThread {
   Q_OBJECT
- public:
+public:
   explicit ReadThread(QObject *parent = nullptr);
 
- protected:
+protected:
   void run();
- signals:
+signals:
   void isDone();
 
- signals:
+signals:
 
- public slots:
+public slots:
 };
 
 class ReadTWThread : public QThread {
   Q_OBJECT
- public:
+public:
   explicit ReadTWThread(QObject *parent = nullptr);
 
- protected:
+protected:
   void run();
- signals:
+signals:
   void isDone();
 
- signals:
+signals:
 
- public slots:
+public slots:
 };
 
 class ReadEBookThread : public QThread {
   Q_OBJECT
- public:
+public:
   explicit ReadEBookThread(QObject *parent = nullptr);
 
- protected:
+protected:
   void run();
- signals:
+signals:
   void isDone();
 
- signals:
+signals:
 
- public slots:
+public slots:
 };
 
-#endif  // MAINWINDOW_H
+#endif // MAINWINDOW_H

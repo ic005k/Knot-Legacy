@@ -55,14 +55,14 @@ SOURCES += \
     src/ReaderFun.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
+    src/SetEditText.cpp \
+    src/SetReaderText.cpp \
     src/Steps.cpp \
     src/SyncInfo.cpp \
     src/Todo.cpp \
     src/TodoAlarm.cpp \
-    src/dlgSetText.cpp \
     src/dlgleft.cpp \
     src/dlgright.cpp \
-    src/dlgsetedittext.cpp \
     src/documenthandler.cpp \
     src/file.cpp \
     src/filesystemwatcher.cpp \
@@ -89,15 +89,15 @@ HEADERS += \
     src/ReaderFun.h \
     src/RemarksAbout.h \
     src/Report.h \
+    src/SetEditText.h \
+    src/SetReaderText.h \
     src/Steps.h \
     src/SyncInfo.h \
     src/Todo.h \
     src/TodoAlarm.h \
     src/count_steps.h \
-    src/dlgSetText.h \
     src/dlgleft.h \
     src/dlgright.h \
-    src/dlgsetedittext.h \
     src/documenthandler.h \
     src/file.h \
     src/filesystemwatcher.h \
@@ -125,14 +125,14 @@ FORMS += \
     src/ReaderFun.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
+    src/SetEditText.ui \
+    src/SetReaderText.ui \
     src/Steps.ui \
     src/SyncInfo.ui \
     src/Todo.ui \
     src/TodoAlarm.ui \
-    src/dlgSetText.ui \
     src/dlgleft.ui \
     src/dlgright.ui \
-    src/dlgsetedittext.ui \
     src/mainwindow.ui
 
 # Default rules for deployment.

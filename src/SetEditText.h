@@ -1,5 +1,5 @@
-#ifndef DLGSETEDITTEXT_H
-#define DLGSETEDITTEXT_H
+#ifndef SETEDITTEXT_H
+#define SETEDITTEXT_H
 
 #include <QClipboard>
 #include <QDialog>
@@ -48,4 +48,4 @@ class dlgSetEditText : public QDialog {
   bool isMouseMove = false;
 };
 
-#endif  // DLGSETEDITTEXT_H
+#endif  // SETEDITTEXT_H
