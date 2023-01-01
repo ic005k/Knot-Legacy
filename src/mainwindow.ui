@@ -1957,7 +1957,7 @@ QRadioButton::indicator:checked {
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="frameMemo">
+     <widget class="QFrame" name="frameNotes">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>

@@ -65,7 +65,7 @@ qreal File::textPos() {
   if (!mw_one->ui->frameReader->isHidden())
     mw_one->mydlgReader->textPos = m_textPos;
 
-  if (!mw_one->ui->frameMemo->isHidden())
+  if (!mw_one->ui->frameNotes->isHidden())
     mw_one->mydlgMainNotes->sliderPos = m_textPos;
 
   qDebug() << "m_textPos" << m_textPos;
@@ -74,7 +74,7 @@ qreal File::textPos() {
 }
 
 qreal File::textHeight() {
-  if (!mw_one->ui->frameMemo->isHidden())
+  if (!mw_one->ui->frameNotes->isHidden())
     mw_one->mydlgMainNotes->textHeight = m_textHeight;
 
   if (!mw_one->ui->frameReader->isHidden())

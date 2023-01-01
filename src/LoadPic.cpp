@@ -26,7 +26,7 @@ dlgLoadPic::~dlgLoadPic() { delete ui; }
 
 void dlgLoadPic::initMain(QString imgFile) {
   if (mw_one->isReaderVisible) mw_one->ui->frameReader->hide();
-  if (mw_one->isMemoVisible) mw_one->ui->frameMemo->hide();
+  if (mw_one->isMemoVisible) mw_one->ui->frameNotes->hide();
 
   mw_one->ui->qw_Img->rootContext()->setContextProperty("myW", mw_one->width());
   mw_one->ui->qw_Img->rootContext()->setContextProperty("myH",
