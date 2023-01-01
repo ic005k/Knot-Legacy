@@ -2391,6 +2391,12 @@ QRadioButton::indicator:checked {
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_11">
+       <property name="spacing">
+        <number>12</number>
+       </property>
+       <property name="leftMargin">
+        <number>12</number>
+       </property>
        <item>
         <widget class="QFrame" name="frameToolBar">
          <property name="maximumSize">

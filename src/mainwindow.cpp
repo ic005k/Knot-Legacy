@@ -3795,7 +3795,6 @@ void MainWindow::init_UIWidget() {
   ui->qwPdf->hide();
   ui->btnSync->hide();
 
-  ui->editTodo->setContentsMargins(12, 0, 12, 0);
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->layout()->setSpacing(1);
