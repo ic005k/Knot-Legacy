@@ -220,9 +220,9 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
           if (!pAndroidKeyboard->isVisible()) {
             pAndroidKeyboard->setVisible(true);
           }
-          // timer->start(1000);
+          timer->start(1000);
         } else {
-          // timer->start(1000);
+          timer->start(1000);
         }
       }
     }
@@ -263,6 +263,7 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
           y1 = event->globalY() + a;
 
         m_SetEditText->init(y1);
+        m_SetEditText->show();
       }
     }
   }
@@ -271,7 +272,7 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
 bool dlgMainNotes::eventFilter(QObject *obj, QEvent *evn) {
 #ifdef Q_OS_ANDROID
   if (obj == ui->editSource->viewport()) {
-    //  getEditPanel(ui->editSource, evn);
+    getEditPanel(ui->editSource, evn);
   }
 #endif
 

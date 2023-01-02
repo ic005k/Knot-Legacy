@@ -61,7 +61,7 @@ void dlgRemarks::on_btnBack_clicked() {
 bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
 #ifdef Q_OS_ANDROID
   if (obj == ui->textEdit->viewport()) {
-    // mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
+    mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
   }
 #endif
 

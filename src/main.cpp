@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
   QTextCodec::setCodecForLocale(codec);
 
   //禁用文本选择（针对所有的可输入的编辑框）
-  // qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
+  qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
 
   QDir dir;
   QString path;
@@ -88,17 +88,17 @@ int main(int argc, char* argv[]) {
   Reg.setIniCodec("utf-8");
 #endif
 
-  fontSize = Reg.value("/Options/FontSize", 16).toInt();
+  fontSize = Reg.value("/Options/FontSize", 17).toInt();
   bool isReaderFont = Reg.value("/Options/chkReaderFont", false).toBool();
   bool isUIFont = Reg.value("/Options/chkUIFont", false).toBool();
   QString customFontPath = Reg.value("/Options/CustomFont").toString();
 
   QString fontName;
   QFont font;
+  font.setFamily("DroidSansFallback");
   if (isUIFont) {
     if (QFile(customFontPath).exists()) {
-      int loadedFontID = QFontDatabase::addApplicationFont(
-          customFontPath);  //":/res/CangErJinKai01-9128-W02-3.otf"
+      int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
       QStringList loadedFontFamilies =
           QFontDatabase::applicationFontFamilies(loadedFontID);
       if (!loadedFontFamilies.empty()) {

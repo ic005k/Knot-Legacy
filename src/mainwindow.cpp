@@ -2097,7 +2097,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
 #ifdef Q_OS_ANDROID
   if (watch == ui->editTodo->viewport()) {
-    // mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
+    mw_one->mydlgMainNotes->getEditPanel(ui->editTodo, evn);
   }
 #endif
 
