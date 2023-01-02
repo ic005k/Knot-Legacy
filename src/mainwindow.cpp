@@ -3939,6 +3939,7 @@ void MainWindow::init_UIWidget() {
   ui->btnAdd->setStyleSheet("border:none");
   ui->btnDel->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
+  ui->btnPasteTodo->setStyleSheet("border:none");
 
   QFont f = this->font();
   f.setPointSize(11);
