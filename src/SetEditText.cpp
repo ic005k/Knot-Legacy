@@ -131,19 +131,30 @@ void dlgSetEditText::on_btnLeft1_clicked() {
 
 void dlgSetEditText::on_btnLeft0_clicked() {
   mw_one->mydlgMainNotes->start++;
+  if (mw_one->mydlgMainNotes->start >= mw_one->mydlgMainNotes->end)
+    mw_one->mydlgMainNotes->start = mw_one->mydlgMainNotes->end - 1;
+
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
 }
 
 void dlgSetEditText::on_btnRight1_clicked() {
   mw_one->mydlgMainNotes->end++;
+
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
+
+  if (ui->lineEdit->text().trimmed() == "") {
+    mw_one->mydlgMainNotes->end--;
+    mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
+                                       mw_one->mydlgMainNotes->end);
+  }
 }
 
 void dlgSetEditText::on_btnRight0_clicked() {
   mw_one->mydlgMainNotes->end--;
-  if (mw_one->mydlgMainNotes->end < 0) mw_one->mydlgMainNotes->end = 0;
+  if (mw_one->mydlgMainNotes->end <= mw_one->mydlgMainNotes->start)
+    mw_one->mydlgMainNotes->end = mw_one->mydlgMainNotes->start + 1;
 
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
