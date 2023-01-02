@@ -600,6 +600,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnPDF_clicked();
 
+  void on_btnPasteTodo_clicked();
+
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;

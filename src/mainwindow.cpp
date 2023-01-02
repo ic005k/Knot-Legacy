@@ -5350,3 +5350,5 @@ void MainWindow::on_btnSync_clicked() {
 }
 
 void MainWindow::on_btnPDF_clicked() { mydlgMainNotes->on_btnPDF_clicked(); }
+
+void MainWindow::on_btnPasteTodo_clicked() { ui->editTodo->paste(); }

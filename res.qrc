@@ -86,5 +86,6 @@
         <file>tr/widgets_zh_cn.ts</file>
         <file>res/setpass.png</file>
         <file>res/topdf.png</file>
+        <file>res/paste.png</file>
     </qresource>
 </RCC>
