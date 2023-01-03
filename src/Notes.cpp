@@ -87,8 +87,8 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
   connect(ui->editSource, &QTextEdit::textChanged, this,
           &dlgMainNotes::onTextChange);
 
-  timer = new QTimer(this);
-  connect(timer, SIGNAL(timeout()), this, SLOT(showFunPanel()));
+  timerEditPanel = new QTimer(this);
+  connect(timerEditPanel, SIGNAL(timeout()), this, SLOT(on_showEditPanel()));
 
   bCursorVisible = true;
   timerCur = new QTimer(this);
@@ -220,10 +220,8 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
           if (!pAndroidKeyboard->isVisible()) {
             pAndroidKeyboard->setVisible(true);
           }
-          timer->start(1000);
-        } else {
-          timer->start(1000);
         }
+        timerEditPanel->start(1000);
       }
     }
   }
@@ -252,18 +250,21 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
   if (event->type() == QEvent::MouseMove) {
     isMouseMove = true;
     if (isMousePress) {
+      textEdit->cursor().setPos(event->globalPos());
       QString str = textEdit->textCursor().selectedText().trimmed();
+      end = textEdit->textCursor().position();
+      start = end - textEdit->textCursor().selectedText().length();
+      qDebug() << start << end;
+
+      QTextCursor cursor;
+      cursor = byTextEdit->textCursor();
+      cursor.setPosition(start);
+      cursor.setPosition(end, QTextCursor::KeepAnchor);
+      byTextEdit->setTextCursor(cursor);
+
       m_SetEditText->ui->lineEdit->setText(str);
       if (str != "") {
-        int y1;
-        int a = 30;
-        if (event->globalY() - a - m_SetEditText->height() >= 0)
-          y1 = event->globalY() - a - m_SetEditText->height();
-        else
-          y1 = event->globalY() + a;
-
         m_SetEditText->init(y1);
-        m_SetEditText->show();
       }
     }
   }
@@ -872,8 +873,8 @@ void dlgMainNotes::onTextChange() {}
 
 void dlgMainNotes::on_btnPaste_clicked() { ui->editSource->paste(); }
 
-void dlgMainNotes::showFunPanel() {
-  timer->stop();
+void dlgMainNotes::on_showEditPanel() {
+  timerEditPanel->stop();
   if (isMousePress) {
     isFunShow = true;
 

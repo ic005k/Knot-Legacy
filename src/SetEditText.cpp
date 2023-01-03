@@ -56,6 +56,8 @@ void dlgSetEditText::init(int y) {
   setGeometry(mw_one->geometry().x() + (mw_one->width() - this->width()) / 2, y,
               this->width(), this->height());
   setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
+
+  show();
 }
 
 bool dlgSetEditText::eventFilter(QObject *watch, QEvent *evn) {
@@ -127,6 +129,7 @@ void dlgSetEditText::on_btnLeft1_clicked() {
 
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
+  ui->lineEdit->setCursorPosition(0);
 }
 
 void dlgSetEditText::on_btnLeft0_clicked() {
@@ -136,6 +139,7 @@ void dlgSetEditText::on_btnLeft0_clicked() {
 
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
+  ui->lineEdit->setCursorPosition(0);
 }
 
 void dlgSetEditText::on_btnRight1_clicked() {
