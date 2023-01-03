@@ -135,7 +135,7 @@ Rectangle {
                     Text {
                         visible: true
                         text: qsTr("P\nD\nF")
-                        font.pixelSize: 9
+                        font.pixelSize: 8
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         horizontalAlignment: Text.AlignLeft
