@@ -24,6 +24,8 @@ dlgSetEditText::dlgSetEditText(QWidget *parent)
   ui->btnCut->installEventFilter(this);
   ui->btnPaste->installEventFilter(this);
   ui->btnSetAll->installEventFilter(this);
+  ui->btnDel->installEventFilter(this);
+  ui->btnBing->installEventFilter(this);
   ui->lineEdit->installEventFilter(this);
 
   int a = 500;
