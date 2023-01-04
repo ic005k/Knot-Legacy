@@ -25,12 +25,13 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
 
   m_SetEditText = new dlgSetEditText(this);
   m_Left = new dlgLeft(this);
+  m_Left->hide();
   m_Right = new dlgRight(this);
+  m_Right->hide();
 
   QString path = iniDir + "memo/";
   QDir dir(path);
-  if (!dir.exists())
-    dir.mkdir(path);
+  if (!dir.exists()) dir.mkdir(path);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &dlgMainNotes::on_KVChanged);
@@ -81,7 +82,7 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
 
   highlightCurrentLine();
   QFont font = this->font();
-  font.setLetterSpacing(QFont::AbsoluteSpacing, 2); //字间距
+  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
   ui->editSource->setFont(font);
   ui->editSource->setAcceptRichText(false);
 
@@ -204,18 +205,19 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
     if (event->button() == Qt::LeftButton) {
       isMousePress = true;
       isMouseMove = false;
+      m_SetEditText->init(-200);  //注意：初始化高度
       m_SetEditText->on_btnClose_clicked();
 
       px = event->globalX();
       py = event->globalY();
 
-      int a = 30;
-      if (event->globalY() - a - m_SetEditText->height() >= 0)
-        y1 = event->globalY() - a - m_SetEditText->height();
+      int a = 35;
+      if (py - a - m_SetEditText->height() >= 0)
+        y1 = py - a - m_SetEditText->height();
       else
-        y1 = event->globalY() + a;
+        y1 = py + a;
 
-      m_SetEditText->setFixedWidth(mw_one->width() - 20);
+      m_SetEditText->setFixedWidth(mw_one->width() - 10);
 
       textEdit->cursor().setPos(event->globalPos());
 
@@ -284,7 +286,6 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
 }
 
 bool dlgMainNotes::eventFilter(QObject *obj, QEvent *evn) {
-
   if (obj == ui->editSource->viewport()) {
     getEditPanel(ui->editSource, evn);
   }
@@ -424,24 +425,19 @@ QString dlgMainNotes::getDateTimeStr() {
 
   QString s_m, s_d, s_hh, s_mm, s_s;
   s_m = QString::number(m);
-  if (s_m.length() == 1)
-    s_m = "0" + s_m;
+  if (s_m.length() == 1) s_m = "0" + s_m;
 
   s_d = QString::number(d);
-  if (s_d.length() == 1)
-    s_d = "0" + s_d;
+  if (s_d.length() == 1) s_d = "0" + s_d;
 
   s_hh = QString::number(hh);
-  if (s_hh.length() == 1)
-    s_hh = "0" + s_hh;
+  if (s_hh.length() == 1) s_hh = "0" + s_hh;
 
   s_mm = QString::number(mm);
-  if (s_mm.length() == 1)
-    s_mm = "0" + s_mm;
+  if (s_mm.length() == 1) s_mm = "0" + s_mm;
 
   s_s = QString::number(s);
-  if (s_s.length() == 1)
-    s_s = "0" + s_s;
+  if (s_s.length() == 1) s_s = "0" + s_s;
 
   QString newname = QString::number(y) + s_m + s_d + "_" + s_hh + s_mm + s_s;
   return newname;
@@ -459,9 +455,8 @@ void dlgMainNotes::on_btnPic_clicked() {
     dir.mkpath(iniDir + "memo/images/");
 
     QString strTar = iniDir + "memo/images/" + getDateTimeStr() +
-                     ".png"; // + list.at(list.count() - 1);
-    if (QFile(strTar).exists())
-      QFile(strTar).remove();
+                     ".png";  // + list.at(list.count() - 1);
+    if (QFile(strTar).exists()) QFile(strTar).remove();
 
     QImage img(fileName);
     double w, h;
@@ -738,8 +733,7 @@ void dlgMainNotes::on_btnInsertTable_clicked() {
   int row = ui->editRow->text().trimmed().toInt();
   int col = ui->editCol->text().trimmed().toInt();
 
-  if (row == 0 || col == 0)
-    return;
+  if (row == 0 || col == 0) return;
 
   QString strTitle = tr("Title");
   QString strCol = "|" + strTitle + "1|";
@@ -792,43 +786,37 @@ void dlgMainNotes::on_btnAsterisk_clicked() {
 
 void dlgMainNotes::on_btnS1_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "")
-    str = tr("Bold Italic");
+  if (str == "") str = tr("Bold Italic");
   ui->editSource->insertPlainText("_**" + str + "**_");
 }
 
 void dlgMainNotes::on_btnS2_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "")
-    str = tr("Italic");
+  if (str == "") str = tr("Italic");
   ui->editSource->insertPlainText("_" + str + "_");
 }
 
 void dlgMainNotes::on_btnS3_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "")
-    str = tr("Underline");
+  if (str == "") str = tr("Underline");
   ui->editSource->insertPlainText("<u>" + str + "</u>");
 }
 
 void dlgMainNotes::on_btnS4_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "")
-    str = tr("Strickout");
+  if (str == "") str = tr("Strickout");
   ui->editSource->insertPlainText("~~" + str + "~~");
 }
 
 void dlgMainNotes::on_btnColor_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "")
-    str = tr("Red");
+  if (str == "") str = tr("Red");
   ui->editSource->insertPlainText("<font color=#FF0000 >" + str + "</font>");
 }
 
 void dlgMainNotes::on_btnS5_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
-  if (str == "")
-    str = tr("Bold");
+  if (str == "") str = tr("Bold");
   ui->editSource->insertPlainText("**" + str + "**");
 }
 
@@ -997,8 +985,7 @@ void dlgMainNotes::closeEvent(QCloseEvent *event) {
   if (!m_SetEditText->isHidden()) {
     m_SetEditText->close();
   }
-  if (pAndroidKeyboard->isVisible())
-    pAndroidKeyboard->hide();
+  if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
   mw_one->Sleep(100);
 
   if (isSave) {
@@ -1026,8 +1013,7 @@ void dlgMainNotes::on_btnShowFind_clicked() {
 
 void dlgMainNotes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
-  if (findtext == "")
-    return;
+  if (findtext == "") return;
   //获得对话框的内容
   if (ui->editSource->find(findtext, QTextDocument::FindCaseSensitively))
   //查找后一个
@@ -1046,8 +1032,7 @@ void dlgMainNotes::show_findText() {
 
 void dlgMainNotes::show_findTextBack() {
   QString findtext = ui->editFind->text().trimmed().toLower();
-  if (findtext == "")
-    return;
+  if (findtext == "") return;
   //获得对话框的内容
   if (ui->editSource->find(findtext, QTextDocument::FindBackward))
   //查找后一个
@@ -1082,8 +1067,7 @@ void dlgMainNotes::findText() {
       highlight_cursor = document->find(search_text, highlight_cursor,
                                         QTextDocument::FindCaseSensitively);
       if (!highlight_cursor.isNull()) {
-        if (!found)
-          found = true;
+        if (!found) found = true;
         highlight_cursor.mergeCharFormat(color_format);
       }
     }
@@ -1097,8 +1081,7 @@ void dlgMainNotes::findText() {
 }
 
 void dlgMainNotes::on_btnFind_clicked() {
-  if (ui->editFind->text().trimmed() == "")
-    return;
+  if (ui->editFind->text().trimmed() == "") return;
   show_findText();
 }
 

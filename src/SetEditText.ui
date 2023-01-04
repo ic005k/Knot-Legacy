@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>306</width>
-    <height>107</height>
+    <height>104</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,6 +50,9 @@
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>

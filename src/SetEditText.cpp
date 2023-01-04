@@ -165,11 +165,13 @@ void dlgSetEditText::on_btnRight0_clicked() {
 }
 
 void dlgSetEditText::on_btnBing_clicked() {
-  QString strurl =
-      "https://bing.com/search?q=" + ui->lineEdit->text().trimmed();
-  QUrl url(strurl);
-  QDesktopServices::openUrl(url);
-  on_btnClose_clicked();
+  QString str = ui->lineEdit->text().trimmed();
+  if (str.length() > 0) {
+    QString strurl = "https://bing.com/search?q=" + str;
+    QUrl url(strurl);
+    QDesktopServices::openUrl(url);
+    on_btnClose_clicked();
+  }
 }
 
 void dlgSetEditText::on_btnDel_clicked() {
