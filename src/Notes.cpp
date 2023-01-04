@@ -205,7 +205,7 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
     if (event->button() == Qt::LeftButton) {
       isMousePress = true;
       isMouseMove = false;
-      m_SetEditText->init(-200);  //注意：初始化高度
+
       m_SetEditText->on_btnClose_clicked();
 
       px = event->globalX();
@@ -217,7 +217,7 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
       else
         y1 = py + a;
 
-      m_SetEditText->setFixedWidth(mw_one->width() - 10);
+      m_SetEditText->setFixedWidth(mw_one->width() - 20);
 
       textEdit->cursor().setPos(event->globalPos());
 
