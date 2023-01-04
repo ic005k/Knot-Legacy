@@ -31,8 +31,9 @@ public slots:
 
   void on_btnRight0_clicked();
 
-private slots:
   void on_btnClose_clicked();
+
+private slots:
 
   void on_btnCopy_clicked();
 

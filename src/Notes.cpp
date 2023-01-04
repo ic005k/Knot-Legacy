@@ -204,7 +204,10 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
     if (event->button() == Qt::LeftButton) {
       isMousePress = true;
       isMouseMove = false;
-      m_SetEditText->ui->btnClose->click();
+      m_SetEditText->on_btnClose_clicked();
+
+      px = event->globalX();
+      py = event->globalY();
 
       int a = 30;
       if (event->globalY() - a - m_SetEditText->height() >= 0)
@@ -252,10 +255,19 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
     isMouseMove = true;
     if (isMousePress) {
       textEdit->cursor().setPos(event->globalPos());
+
+      mx = event->globalX();
+      my = event->globalY();
+
+      if (mx <= px) {
+        m_SetEditText->on_btnClose_clicked();
+        return;
+      }
+
       QString str = textEdit->textCursor().selectedText().trimmed();
+
       end = textEdit->textCursor().position();
       start = end - textEdit->textCursor().selectedText().length();
-      qDebug() << start << end;
 
       QTextCursor cursor;
       cursor = byTextEdit->textCursor();
@@ -272,11 +284,10 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
 }
 
 bool dlgMainNotes::eventFilter(QObject *obj, QEvent *evn) {
-  //#ifdef Q_OS_ANDROID
+
   if (obj == ui->editSource->viewport()) {
     getEditPanel(ui->editSource, evn);
   }
-  //#endif
 
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
