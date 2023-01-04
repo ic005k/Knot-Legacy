@@ -30,9 +30,9 @@ dlgSetEditText::dlgSetEditText(QWidget *parent)
 
   int a = 500;
   int b = 50;
-  ui->btnLeft0->setAutoRepeat(true);      //启用长按
-  ui->btnLeft0->setAutoRepeatDelay(a);    //触发长按的时间
-  ui->btnLeft0->setAutoRepeatInterval(b); //长按时click信号间隔
+  ui->btnLeft0->setAutoRepeat(true);       //启用长按
+  ui->btnLeft0->setAutoRepeatDelay(a);     //触发长按的时间
+  ui->btnLeft0->setAutoRepeatInterval(b);  //长按时click信号间隔
 
   ui->btnLeft1->setAutoRepeat(true);
   ui->btnLeft1->setAutoRepeatDelay(a);
@@ -81,10 +81,8 @@ bool dlgSetEditText::eventFilter(QObject *watch, QEvent *evn) {
     if (isMousePress) {
       if (watch == this || watch == ui->lineEdit) {
         int y = event->globalY();
-        if (y <= 0)
-          y = 0;
-        if (y >= mw_one->height() - height())
-          y = mw_one->height() - height();
+        if (y <= 0) y = 0;
+        if (y >= mw_one->height() - height()) y = mw_one->height() - height();
         this->setGeometry(geometry().x(), y, width(), height());
       }
     }
@@ -127,8 +125,7 @@ void dlgSetEditText::on_btnSetAll_clicked() {
 
 void dlgSetEditText::on_btnLeft1_clicked() {
   mw_one->mydlgMainNotes->start--;
-  if (mw_one->mydlgMainNotes->start < 0)
-    mw_one->mydlgMainNotes->start = 0;
+  if (mw_one->mydlgMainNotes->start < 0) mw_one->mydlgMainNotes->start = 0;
 
   mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
                                      mw_one->mydlgMainNotes->end);
@@ -172,9 +169,11 @@ void dlgSetEditText::on_btnBing_clicked() {
       "https://bing.com/search?q=" + ui->lineEdit->text().trimmed();
   QUrl url(strurl);
   QDesktopServices::openUrl(url);
+  on_btnClose_clicked();
 }
 
 void dlgSetEditText::on_btnDel_clicked() {
   if (ui->lineEdit->text().length() > 0)
     mw_one->mydlgMainNotes->byTextEdit->textCursor().removeSelectedText();
+  on_btnClose_clicked();
 }
