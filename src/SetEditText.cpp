@@ -46,8 +46,10 @@ dlgSetEditText::dlgSetEditText(QWidget *parent)
   ui->btnRight1->setAutoRepeatDelay(a);
   ui->btnRight1->setAutoRepeatInterval(b);
 
-  init(-300);  //注意：初始化高度
-  on_btnClose_clicked();
+  if (!mw_one->initMain) {
+    init(-300);  //注意：初始化高度
+    on_btnClose_clicked();
+  }
 }
 
 dlgSetEditText::~dlgSetEditText() { delete ui; }
