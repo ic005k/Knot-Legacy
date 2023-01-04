@@ -47,12 +47,6 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
   mw_one->setSCrollPro(ui->editSource);
 
   ui->editSource->setContentsMargins(15, 15, 15, 15);
-  QPalette pt = palette();
-  pt.setBrush(QPalette::Text, Qt::black);
-  pt.setBrush(QPalette::Base, QColor(255, 255, 255));
-  pt.setBrush(QPalette::Highlight, Qt::red);
-  pt.setBrush(QPalette::HighlightedText, Qt::white);
-  ui->editSource->setPalette(pt);
   ui->editSource->setStyleSheet("border:none");
   ui->editSource->setCursorWidth(2);
 
@@ -167,7 +161,6 @@ void dlgMainNotes::MD2Html(QString mdFile) {
     QString strmd = mw_one->loadText(mdFile);
     edit->setPlainText(strmd);
     edit->document()->setMarkdown(strmd, QTextDocument::MarkdownDialectGitHub);
-    // edit->setMarkdown(strmd);
     stream << edit->toHtml().toUtf8();
     memofile1.close();
   }
@@ -200,6 +193,13 @@ void dlgMainNotes::init_MainNotes() { loadMemoQML(); }
 void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);
   byTextEdit = textEdit;
+
+  QPalette pt = palette();
+  pt.setBrush(QPalette::Text, Qt::black);
+  pt.setBrush(QPalette::Base, QColor(255, 255, 255));
+  pt.setBrush(QPalette::Highlight, Qt::red);
+  pt.setBrush(QPalette::HighlightedText, Qt::white);
+  textEdit->setPalette(pt);
 
   if (event->type() == QEvent::MouseButtonPress) {
     if (event->button() == Qt::LeftButton) {

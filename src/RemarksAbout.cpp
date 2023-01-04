@@ -52,19 +52,16 @@ void dlgRemarks::on_btnBack_clicked() {
                  "|" + noteText;
   mw_one->ui->tabWidget->setTabToolTip(mw_one->ui->tabWidget->currentIndex(),
                                        text);
-  if (!ui->textEdit->isHidden())
-    mw_one->startSave("notes");
+  if (!ui->textEdit->isHidden()) mw_one->startSave("notes");
   ui->textEdit->clear();
   close();
   mw_one->closeGrayWindows();
 }
 
 bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
-#ifdef Q_OS_ANDROID
   if (obj == ui->textEdit->viewport()) {
     mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
   }
-#endif
 
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
@@ -133,10 +130,8 @@ QString dlgRemarks::getUrl(QVariantList list) {
 
     if (fName.contains("android"))
       androidUrl = map["browser_download_url"].toString();
-    if (fName.contains("Mac"))
-      macUrl = map["browser_download_url"].toString();
-    if (fName.contains("Win"))
-      winUrl = map["browser_download_url"].toString();
+    if (fName.contains("Mac")) macUrl = map["browser_download_url"].toString();
+    if (fName.contains("Win")) winUrl = map["browser_download_url"].toString();
     if (fName.contains("Linux"))
       linuxUrl = map["browser_download_url"].toString();
   }
@@ -235,8 +230,7 @@ void dlgRemarks::on_btnCheckUpdate_clicked() { CheckUpdate(); }
 
 void dlgRemarks::on_btnDownloadUP_clicked() {
   mw_one->mydlgReader->setPdfViewVisible(false);
-  if (s_link == "")
-    return;
+  if (s_link == "") return;
 
 #ifdef Q_OS_ANDROID
   show_download();
