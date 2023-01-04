@@ -12,17 +12,17 @@ class dlgSetEditText;
 class dlgSetEditText : public QDialog {
   Q_OBJECT
 
- public:
+public:
   explicit dlgSetEditText(QWidget *parent = nullptr);
   ~dlgSetEditText();
   Ui::dlgSetEditText *ui;
 
   void init(int y);
 
- protected:
+protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
- public slots:
+public slots:
   void on_btnLeft1_clicked();
 
   void on_btnLeft0_clicked();
@@ -31,7 +31,7 @@ class dlgSetEditText : public QDialog {
 
   void on_btnRight0_clicked();
 
- private slots:
+private slots:
   void on_btnClose_clicked();
 
   void on_btnCopy_clicked();
@@ -42,10 +42,14 @@ class dlgSetEditText : public QDialog {
 
   void on_btnSetAll_clicked();
 
- private:
+  void on_btnBing_clicked();
+
+  void on_btnDel_clicked();
+
+private:
   bool isMouseRelease = false;
   bool isMousePress = false;
   bool isMouseMove = false;
 };
 
-#endif  // SETEDITTEXT_H
+#endif // SETEDITTEXT_H

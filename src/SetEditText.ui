@@ -48,6 +48,9 @@
        <pointsize>20</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
     </widget>
    </item>
    <item row="1" column="0">
@@ -163,6 +166,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QToolButton" name="btnDel">
+          <property name="text">
+           <string>Del</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QToolButton" name="btnPaste">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -189,6 +199,13 @@
           </property>
           <property name="text">
            <string>Close</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnBing">
+          <property name="text">
+           <string>Bing</string>
           </property>
          </widget>
         </item>
