@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.84";
+QString ver = "1.0.85";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3083,12 +3083,14 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
 }
 
 void MainWindow::on_btnSteps_clicked() {
-  if (isHardStepSensor == 1) updateHardSensorSteps();
   mydlgSteps->setGeometry(this->geometry().x(), this->geometry().y(),
                           this->width(), this->height());
 
   ui->frameMain->hide();
   ui->frameSteps->show();
+
+  if (isHardStepSensor == 1) updateHardSensorSteps();
+
   mydlgSteps->setScrollBarPos(0.85);
   mydlgSteps->setMaxMark();
 }
