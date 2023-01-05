@@ -96,20 +96,19 @@ int main(int argc, char* argv[]) {
   QString fontName;
   QFont font;
   font.setFamily("DroidSansFallback");
-  if (isUIFont) {
-    if (QFile(customFontPath).exists()) {
-      int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
-      QStringList loadedFontFamilies =
-          QFontDatabase::applicationFontFamilies(loadedFontID);
-      if (!loadedFontFamilies.empty()) {
-        fontName = loadedFontFamilies.at(0);
-        font.setFamily(fontName);
-      }
-    }
-  }
 
-  if (isReaderFont) {
-    fontname = fontName;
+  if (QFile(customFontPath).exists()) {
+    int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
+    QStringList loadedFontFamilies =
+        QFontDatabase::applicationFontFamilies(loadedFontID);
+    if (!loadedFontFamilies.empty()) {
+      fontName = loadedFontFamilies.at(0);
+      if (isUIFont) font.setFamily(fontName);
+      if (isReaderFont)
+        fontname = fontName;
+      else
+        fontname = "DroidSansFallback";
+    }
   }
 
   font.setPointSize(fontSize);
