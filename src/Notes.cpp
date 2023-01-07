@@ -211,9 +211,10 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
       px = event->globalX();
       py = event->globalY();
 
-      int a = 35;
-      if (py - a - m_SetEditText->height() >= 0)
-        y1 = py - a - m_SetEditText->height();
+      int a = 50;
+      int hy = py - a - m_SetEditText->height() - 50;
+      if (hy >= 0)
+        y1 = hy;
       else
         y1 = py + a;
 

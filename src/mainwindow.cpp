@@ -4893,9 +4893,10 @@ void MainWindow::on_btnEdit_clicked() {
   isSelf = true;
 
   mydlgMainNotes->m_SetEditText->close();
+  delete      mydlgMainNotes->m_SetEditText;
   mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgMainNotes);
-  mydlgMainNotes->m_SetEditText->init(-300);  //注意：初始化高度
-  mydlgMainNotes->m_SetEditText->on_btnClose_clicked();
+  mydlgMainNotes->m_SetEditText->close();
+
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
