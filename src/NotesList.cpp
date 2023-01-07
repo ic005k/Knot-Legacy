@@ -220,7 +220,6 @@ void dlgNotesList::addItem(QTreeWidget *tw, QTreeWidgetItem *item) {
     tw->setCurrentItem(tw->topLevelItem(0));
     QTreeWidgetItem *curItem = tw->currentItem();
     curItem->addChild(item);
-
   } else {
     QTreeWidgetItem *curItem = tw->currentItem();
     if (curItem->parent() == NULL) {
