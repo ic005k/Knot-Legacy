@@ -87,5 +87,6 @@
         <file>res/setpass.png</file>
         <file>res/topdf.png</file>
         <file>res/paste.png</file>
+        <file>res/apk_en.png</file>
     </qresource>
 </RCC>

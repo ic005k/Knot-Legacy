@@ -28,10 +28,16 @@ dlgRemarks::dlgRemarks(QWidget *parent)
   ui->lblLogo->setText("");
   ui->lblLogo->setFixedHeight(185);
   ui->lblLogo->setFixedWidth(185);
-  ui->lblLogo->setStyleSheet(
-      "QLabel{"
-      "border-image:url(:/res/apk.png) 4 4 4 4 stretch stretch;"
-      "}");
+  if (zh_cn)
+    ui->lblLogo->setStyleSheet(
+        "QLabel{"
+        "border-image:url(:/res/apk.png) 4 4 4 4 stretch stretch;"
+        "}");
+  else
+    ui->lblLogo->setStyleSheet(
+        "QLabel{"
+        "border-image:url(:/res/apk_en.png) 4 4 4 4 stretch stretch;"
+        "}");
 
   manager = new QNetworkAccessManager(this);
   connect(manager, SIGNAL(finished(QNetworkReply *)), this,
