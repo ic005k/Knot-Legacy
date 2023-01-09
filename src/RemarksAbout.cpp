@@ -173,7 +173,8 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
     QVariantList list = root_Obj.value("assets").toArray().toVariantList();
     QString Url = getUrl(list);
     if (zh_cn)
-      s_link = "https://ghproxy.com/" + Url;
+      // "https://ghproxy.com/"
+      s_link = "https://gh.flyinbug.top/gh/" + Url;
     else
       s_link = Url;
     qDebug() << "s_link" << s_link << Url;
