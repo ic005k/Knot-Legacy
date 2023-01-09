@@ -606,6 +606,9 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 #ANDROID_EXTRA_LIBS = C:/Users/Administrator/Documents/GitHub/Knot/../../../AppData/Local/Android/Sdk/android_openssl/latest/x86_64/libcrypto_1_1.so C:/Users/Administrator/Documents/GitHub/Knot/../../../AppData/Local/Android/Sdk/android_openssl/latest/x86_64/libssl_1_1.so $$PWD/../../../AppData/Local/Android/Sdk/android_openssl/latest/arm64/libcrypto_1_1.so $$PWD/../../../AppData/Local/Android/Sdk/android_openssl/latest/arm64/libssl_1_1.so
 
 #mac
-android: include(/Users/hz/Library/Android/sdk/android_openssl/openssl.pri)
-ANDROID_EXTRA_LIBS = /Users/hz/Documents/GitHub/Knot/../../../Library/Android/sdk/android_openssl/latest/x86_64/libcrypto_1_1.so /Users/hz/Documents/GitHub/Knot/../../../Library/Android/sdk/android_openssl/latest/x86_64/libssl_1_1.so $$PWD/../../../Library/Android/sdk/android_openssl/latest/arm64/libcrypto_1_1.so $$PWD/../../../Library/Android/sdk/android_openssl/latest/arm64/libssl_1_1.so
+#android: include(/Users/hz/Library/Android/sdk/android_openssl/openssl.pri)
+#ANDROID_EXTRA_LIBS = /Users/hz/Documents/GitHub/Knot/../../../Library/Android/sdk/android_openssl/latest/x86_64/libcrypto_1_1.so /Users/hz/Documents/GitHub/Knot/../../../Library/Android/sdk/android_openssl/latest/x86_64/libssl_1_1.so $$PWD/../../../Library/Android/sdk/android_openssl/latest/arm64/libcrypto_1_1.so $$PWD/../../../Library/Android/sdk/android_openssl/latest/arm64/libssl_1_1.so
 android: include(/Volumes/macfiles/Android/sdk/android_openssl/openssl.pri)
+android: include(/home/zh/文档/android_openssl-master/latest/x86_64/openssl.pri)
+
+ANDROID_EXTRA_LIBS = /home/zh/文档/android_openssl-master/latest/x86_64/latest/arm/libcrypto_1_1.so /home/zh/文档/android_openssl-master/latest/x86_64/latest/arm/libssl_1_1.so /home/zh/文档/android_openssl-master/latest/x86_64/latest/arm64/libcrypto_1_1.so /home/zh/文档/android_openssl-master/latest/x86_64/latest/arm64/libssl_1_1.so /home/zh/文档/android_openssl-master/latest/x86_64/latest/x86/libcrypto_1_1.so /home/zh/文档/android_openssl-master/latest/x86_64/latest/x86/libssl_1_1.so /home/zh/文档/android_openssl-master/latest/x86_64/latest/x86_64/libcrypto_1_1.so /home/zh/文档/android_openssl-master/latest/x86_64/latest/x86_64/libssl_1_1.so /home/zh/文档/GitHub/Knot/../../android_openssl-master/latest/arm/libcrypto_1_1.so $$PWD/../../android_openssl-master/latest/arm/libssl_1_1.so
