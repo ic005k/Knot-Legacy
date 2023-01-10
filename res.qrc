@@ -88,5 +88,7 @@
         <file>res/topdf.png</file>
         <file>res/paste.png</file>
         <file>res/apk_en.png</file>
+        <file>res/cleft.png</file>
+        <file>res/cright.png</file>
     </qresource>
 </RCC>

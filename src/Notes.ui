@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>349</width>
+    <width>370</width>
     <height>452</height>
    </rect>
   </property>
@@ -1048,7 +1048,7 @@ color: rgb(255, 255, 255);</string>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>16777215</height>
+         <height>28</height>
         </size>
        </property>
        <property name="toolTip">
@@ -1082,11 +1082,21 @@ color: rgb(255, 255, 255);</string>
        <property name="maximumSize">
         <size>
          <width>60</width>
-         <height>16777215</height>
+         <height>28</height>
         </size>
        </property>
        <property name="text">
         <string>&lt;-|</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res.qrc">
+         <normaloff>:/res/cleft.png</normaloff>:/res/cleft.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -1101,11 +1111,21 @@ color: rgb(255, 255, 255);</string>
        <property name="maximumSize">
         <size>
          <width>60</width>
-         <height>16777215</height>
+         <height>28</height>
         </size>
        </property>
        <property name="text">
         <string>|-&gt;</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res.qrc">
+         <normaloff>:/res/cright.png</normaloff>:/res/cright.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -1115,6 +1135,12 @@ color: rgb(255, 255, 255);</string>
         <size>
          <width>50</width>
          <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>28</height>
         </size>
        </property>
        <property name="text">
@@ -1133,7 +1159,7 @@ color: rgb(255, 255, 255);</string>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>16777215</height>
+         <height>28</height>
         </size>
        </property>
        <property name="styleSheet">
