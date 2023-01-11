@@ -139,7 +139,6 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
   if (item->parent() != NULL) {
     if (tw->currentIndex().row() == 0) {
       if (tw->currentIndex().parent().row() == 0) {
-        item->setText(1, "memo/memo.md");
       }
     }
 
