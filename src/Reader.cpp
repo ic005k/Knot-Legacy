@@ -245,6 +245,14 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->ui->lblBookName->setWordWrap(true);
 
     QString strfilepath;
+#ifdef Q_OS_LINUX
+    QFileInfo fi(openfile);
+    strTitle =
+        fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+    strfilepath =
+        openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+#endif
+
 #ifdef Q_OS_ANDROID
     QString name, name1;
     name = getUriRealPath(openfile);
@@ -256,14 +264,6 @@ void dlgReader::startOpenFile(QString openfile) {
 #endif
 
 #ifdef Q_OS_MACOS
-    QFileInfo fi(openfile);
-    strTitle =
-        fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-    strfilepath =
-        openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-#endif
-
-#ifdef Q_OS_LINUX
     QFileInfo fi(openfile);
     strTitle =
         fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
