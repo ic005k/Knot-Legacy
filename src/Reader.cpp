@@ -255,7 +255,15 @@ void dlgReader::startOpenFile(QString openfile) {
         name + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
+    QFileInfo fi(openfile);
+    strTitle =
+        fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+    strfilepath =
+        openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+#endif
+
+#ifdef Q_OS_LINUX
     QFileInfo fi(openfile);
     strTitle =
         fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
@@ -330,6 +338,12 @@ void dlgReader::openFile(QString openfile) {
       }
 
 #ifdef Q_OS_MACOS
+      QProcess* pro = new QProcess;
+      pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
+      pro->waitForFinished();
+#endif
+
+#ifdef Q_OS_LINUX
       QProcess* pro = new QProcess;
       pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
       pro->waitForFinished();

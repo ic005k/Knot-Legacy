@@ -4601,7 +4601,7 @@ void MainWindow::readEBookDone() {
       if (QFile("assets:/web/viewer.html").exists())
         qDebug() << "viewer.html exists......";
 #else
-      PDFJS = "file://" + iniDir + "pdfjs/web/viewer.html";
+      PDFJS = "file://" + privateDir + "pdfjs/web/viewer.html";
       str = PDFJS + "?file=file://" + fileName;
 #endif
       QUrl url;
