@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.87";
+QString ver = "1.0.88";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4893,10 +4893,9 @@ void MainWindow::on_btnEdit_clicked() {
   isSelf = true;
 
   mydlgMainNotes->m_SetEditText->close();
-  delete      mydlgMainNotes->m_SetEditText;
+  delete mydlgMainNotes->m_SetEditText;
   mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgMainNotes);
   mydlgMainNotes->m_SetEditText->close();
-
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

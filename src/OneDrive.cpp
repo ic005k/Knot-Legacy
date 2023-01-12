@@ -23,7 +23,7 @@ TestDialog::TestDialog(QWidget *parent)
 
   this->installEventFilter(this);
   init();
-  initQuick();
+  // initQuick();
 
   oneDrive = new QtOneDrive("a7d66295-9a9f-424b-8dd1-7396c3b4573c",
                             "nk28Q~yPYNqIQbPmTZTk_OIyseXcO0OY5LudcbPQ",
