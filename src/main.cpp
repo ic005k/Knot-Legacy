@@ -94,7 +94,14 @@ int main(int argc, char* argv[]) {
 
   QString fontName;
   QFont font;
+
+#ifdef Q_OS_WIN
+  font.setFamily("Microsoft YaHei UI");
+#endif
+
+#ifdef Q_OS_ANDROID
   font.setFamily("DroidSansFallback");
+#endif
 
   if (QFile(customFontPath).exists()) {
     int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
