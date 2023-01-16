@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.90";
+QString ver = "1.0.91";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -1832,7 +1832,7 @@ void MainWindow::on_twItemClicked() {
   QTreeWidgetItem *item = tw->currentItem();
   if (item->parent() == NULL && item->childCount() == 0) return;
 
-  QTreeWidgetItem *pItem;
+  QTreeWidgetItem *pItem = NULL;
 
   QString year, stra;
   if (item->parent() == NULL) {
@@ -4670,9 +4670,9 @@ void MainWindow::refreshMainUI() {
 bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
                             int buttonCount) {
   QMessageBox msgBox;
-  QPushButton *btnCopy;
-  QPushButton *btnCancel;
-  QPushButton *btnOk;
+  QPushButton *btnCopy = NULL;
+  QPushButton *btnCancel = NULL;
+  QPushButton *btnOk = NULL;
 
   msgBox.setText(title);
   msgBox.setInformativeText(info);

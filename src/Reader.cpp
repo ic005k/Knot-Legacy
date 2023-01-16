@@ -757,7 +757,7 @@ QFont dlgReader::get_Font() {
 void dlgReader::on_hSlider_sliderReleased(int position) {
   mw_one->ui->lblTitle->hide();
 
-  int max;
+  int max = 0;
   if (isText) max = totallines / baseLines;
   if (isEpub) max = htmlFiles.count();
   if (position >= max) position = max;
@@ -1237,7 +1237,7 @@ void dlgReader::SplitFile(QString qfile) {
   qDebug() << "size======" << bb << n;
 
   int split = countBody / n;
-  int breakLine;
+  int breakLine = 0;
   for (int x = 1; x < n + 1; x++) {
     if (x == 1) {
       // 1
