@@ -151,7 +151,7 @@ void dlgTodo::on_btnAdd_clicked() {
 int dlgTodo::getEditTextHeight(QTextEdit* edit) {
   QTextDocument* doc = edit->document();
   doc->adjustSize();
-  int mainHeight = doc->size().rheight() * 1.1;
+  int mainHeight = doc->size().rheight() * 1.10;
   return mainHeight;
 }
 
