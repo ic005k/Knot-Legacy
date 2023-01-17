@@ -235,13 +235,14 @@ void dlgPreferences::initValues() {
     ui->chkAutoTime->hide();
     ui->chkReaderFont->hide();
 
-    int s = 100;
+    int s = 120;
+    int qs = s - 40;
     mw_one->ui->btnTodo->setFixedHeight(s);
     mw_one->ui->btnTodo->setFixedWidth(s);
-    mw_one->ui->btnTodo->setIconSize(QSize(s - 20, s - 20));
+    mw_one->ui->btnTodo->setIconSize(QSize(qs, qs));
     mw_one->ui->btnNotes->setFixedHeight(s);
     mw_one->ui->btnNotes->setFixedWidth(s);
-    mw_one->ui->btnNotes->setIconSize(QSize(s - 20, s - 20));
+    mw_one->ui->btnNotes->setIconSize(QSize(qs, qs));
   }
 #endif
 
