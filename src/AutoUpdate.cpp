@@ -108,7 +108,7 @@ void AutoUpdateDialog::startDownload(QString strLink) {
   connect(reply, &QNetworkReply::readyRead, this,
           &AutoUpdateDialog::doProcessReadyRead);  //可读
   connect(reply, &QNetworkReply::finished, this,
-          &AutoUpdateDialog::doProcessFinished);  //结束
+          &AutoUpdateDialog::doProcessFinished);
   connect(reply, &QNetworkReply::downloadProgress, this,
           &AutoUpdateDialog::doProcessDownloadProgress);  //大小
 
