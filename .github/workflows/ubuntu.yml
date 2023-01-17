@@ -39,7 +39,7 @@ jobs:
           version: ${{ matrix.qt_ver }}
           #host: linux
           cached: 'false'
-          modules: qtcharts qtwebengine
+          modules: 'qtcharts qtwebengine'
       
       - name: ubuntu install GL library
         run: |
