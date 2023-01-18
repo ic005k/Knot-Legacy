@@ -24,10 +24,6 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
   ui->btnGetShare->hide();
 
   m_SetEditText = new dlgSetEditText(this);
-  m_Left = new dlgLeft(this);
-  m_Left->hide();
-  m_Right = new dlgRight(this);
-  m_Right->hide();
 
   QString path = iniDir + "memo/";
   QDir dir(path);

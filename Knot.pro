@@ -61,8 +61,6 @@ SOURCES += \
     src/SyncInfo.cpp \
     src/Todo.cpp \
     src/TodoAlarm.cpp \
-    src/dlgleft.cpp \
-    src/dlgright.cpp \
     src/documenthandler.cpp \
     src/file.cpp \
     src/filesystemwatcher.cpp \
@@ -96,8 +94,6 @@ HEADERS += \
     src/Todo.h \
     src/TodoAlarm.h \
     src/count_steps.h \
-    src/dlgleft.h \
-    src/dlgright.h \
     src/documenthandler.h \
     src/file.h \
     src/filesystemwatcher.h \
@@ -131,8 +127,6 @@ FORMS += \
     src/SyncInfo.ui \
     src/Todo.ui \
     src/TodoAlarm.ui \
-    src/dlgleft.ui \
-    src/dlgright.ui \
     src/mainwindow.ui
 
 # Default rules for deployment.

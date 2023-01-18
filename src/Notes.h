@@ -21,8 +21,6 @@
 #include <QTextDocumentFragment>
 
 #include "src/SetEditText.h"
-#include "src/dlgleft.h"
-#include "src/dlgright.h"
 #include "ui_SetEditText.h"
 
 namespace Ui {
@@ -32,7 +30,7 @@ class dlgMainNotes;
 class dlgMainNotes : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit dlgMainNotes(QWidget *parent = nullptr);
   ~dlgMainNotes();
   Ui::dlgMainNotes *ui;
@@ -46,8 +44,6 @@ public:
   int start;
   int end;
   dlgSetEditText *m_SetEditText;
-  dlgLeft *m_Left;
-  dlgRight *m_Right;
   qreal textHeight;
   bool isShow = false;
   QString textMemo;
@@ -90,14 +86,14 @@ public:
   bool selectPDFFormat(QPrinter *printer);
   void on_btnPDF_clicked();
 
-protected:
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
   void paintEvent(QPaintEvent *pEvent) override;
   void closeEvent(QCloseEvent *event) override;
 
-public slots:
+ public slots:
   void editVSBarValueChanged();
   void timerSlot();
   void on_showEditPanel();
@@ -160,10 +156,10 @@ public slots:
 
   void on_btnS10_clicked();
 
-signals:
+ signals:
   void sendUpdate();
 
-private slots:
+ private slots:
 
   void on_editSource_textChanged();
 
@@ -185,7 +181,7 @@ private slots:
 
   void on_btnGetShare_clicked();
 
-private:
+ private:
   int x_left, x_right, y_left, y_right;
   int y1;
 
@@ -205,4 +201,4 @@ private:
   void wheelEvent(QWheelEvent *e) override;
 };
 
-#endif // NOTES_H
+#endif  // NOTES_H
