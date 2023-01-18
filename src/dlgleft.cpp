@@ -34,7 +34,11 @@ void dlgLeft::init(int x, int y) {
 bool dlgLeft::eventFilter(QObject* obj, QEvent* evn) {
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
   if (obj == ui->btnLeft) {
-    int x0, y0, x1, y1;
+    int x0 = 0;
+    int y0 = 0;
+    int x1 = 0;
+    int y1 = 0;
+
     if (event->type() == QEvent::MouseButtonPress) {
       isMousePress = true;
       iMouseMove = false;
