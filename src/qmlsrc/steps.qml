@@ -129,7 +129,7 @@ Rectangle {
         }
         delegate: Rectangle {
             color: "#666666"
-            implicitWidth: tableView.width / 3
+            implicitWidth: header.width / 3
             implicitHeight: 32
             border.width: 1
             border.color: "#848484"
