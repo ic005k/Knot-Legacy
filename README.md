@@ -32,4 +32,4 @@ QR code for downloading:
 
 ---
 
-API:https://api.github.com/repos/ic005k/Xcounter/releases/latest
+API:https://api.github.com/repos/ic005k/Knot/releases/latest
