@@ -161,19 +161,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
-        appendTableRow("2022-11-19", "3500", "test1")
+
+        //appendTableRow("2022-11-19", "3500", "test1")
     }
 }
