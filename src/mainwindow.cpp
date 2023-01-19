@@ -2575,6 +2575,7 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
     isSelf = true;
 
     bakIniData("", false);
+    m_NotesList->clearFiles();
 
     QString infoStr;
     QFile::remove(iniDir + "memo/mainnotes.ini");
@@ -5052,7 +5053,6 @@ void MainWindow::on_btnNotesList_clicked() {
   if (!ui->frameNotes->isHidden()) mydlgMainNotes->saveQMLVPos();
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
-  m_NotesList->clearFiles();
   m_NotesList->show();
   m_NotesList->setWinPos();
   m_NotesList->tw->setFocus();
