@@ -612,7 +612,7 @@ void dlgNotesList::clearFiles() {
     QString a = files.at(i);
 
     QFile file(a);
-    if (a.contains(".sync-conflict") && a.contains(".ini")) {
+    if (a.contains(".sync-conflict-")) {
       file.remove();
       i--;
     }
