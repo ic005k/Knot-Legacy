@@ -108,6 +108,7 @@ void dlgNotesList::on_btnNewNote_clicked() {
   if (ui->treeWidget->topLevelItemCount() == 0) return;
 
   int rand = QRandomGenerator::global()->generate();
+  if (rand < 0) rand = 0 - rand;
 
   QString noteFile = "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + "_" +
                      QString::number(rand) + ".md";
@@ -651,7 +652,7 @@ void dlgNotesList::getAllFiles(const QString &foldPath, QStringList &folds,
   while (it.hasNext()) {
     it.next();
     QFileInfo fileInfo = it.fileInfo();
-    if (formats.contains(fileInfo.suffix())) {  //检测格式，按需保存
+    if (formats.contains(fileInfo.suffix())) {  // 检测格式，按需保存
       folds << fileInfo.absoluteFilePath();
     }
   }
