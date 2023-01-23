@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.0.94";
+QString ver = "1.0.95";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3713,6 +3713,7 @@ void MainWindow::showNotes() {
   ui->frameNotes->show();
 
   m_NotesList->close();
+  mydlgMainNotes->MD2Html(m_NotesList->currentMDFile);
   mydlgMainNotes->loadMemoQML();
 }
 
