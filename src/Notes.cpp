@@ -149,7 +149,7 @@ void dlgMainNotes::resizeEvent(QResizeEvent *event) {
 void dlgMainNotes::on_btnDone_clicked() { close(); }
 
 void dlgMainNotes::MD2Html(QString mdFile) {
-  QString htmlFileName = privateDir + "memo.html";
+  QString htmlFileName = iniDir + "memo.html";
   QFile memofile1(htmlFileName);
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
@@ -624,7 +624,7 @@ void dlgMainNotes::unzip(QString zipfile) {
 }
 
 void dlgMainNotes::loadMemoQML() {
-  QString htmlFileName = privateDir + "memo.html";
+  QString htmlFileName = iniDir + "memo.html";
   QTextEdit *edit = new QTextEdit;
   QPlainTextEdit *edit1 = new QPlainTextEdit;
   QString strhtml = mw_one->loadText(htmlFileName);
@@ -1197,7 +1197,7 @@ bool dlgMainNotes::selectPDFFormat(QPrinter *printer) {
 }
 
 void dlgMainNotes::on_btnPDF_clicked() {
-  QString html = mw_one->loadText(privateDir + "memo.html");
+  QString html = mw_one->loadText(iniDir + "memo.html");
   auto doc = new QTextDocument(this);
   doc->setHtml(html);
 
