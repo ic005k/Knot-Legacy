@@ -3713,15 +3713,7 @@ void MainWindow::showNotes() {
   ui->frameNotes->show();
 
   m_NotesList->close();
-  m_NotesList = new dlgNotesList(this);
-  if (QFile(m_NotesList->currentMDFile).exists()) {
-    QTreeWidgetItem *item = m_NotesList->ui->treeWidget->currentItem();
-    m_NotesList->on_treeWidget_itemClicked(item, 0);
-  } else {
-    QTreeWidgetItem *item =
-        m_NotesList->ui->treeWidget->topLevelItem(0)->child(0);
-    m_NotesList->on_treeWidget_itemClicked(item, 0);
-  }
+  mydlgMainNotes->loadMemoQML();
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
