@@ -202,6 +202,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
         // const QUrl url("https://github.com/ic005k/" + appName +
         //                "/releases/latest");
         QDesktopServices::openUrl(QUrl(s_link));
+        QApplication::exit(0);
 #endif
       }
     } else {
