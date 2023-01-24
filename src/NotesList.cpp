@@ -65,9 +65,11 @@ dlgNotesList::dlgNotesList(QWidget *parent)
   ui->btnPrev->setEnabled(false);
   ui->btnNext->setEnabled(false);
   QFont font = this->font();
-  font.setPointSize(10);
+  font.setPointSize(font.pointSize() - 1);
   font.setBold(true);
   ui->lblCount->setFont(font);
+  ui->btnPrev->hide();
+  ui->btnNext->hide();
 
   initNotesList();
   initRecycle();
@@ -660,7 +662,11 @@ void dlgNotesList::getAllFiles(const QString &foldPath, QStringList &folds,
 
 void dlgNotesList::on_btnFind_clicked() {
   QString strFind = ui->editFind->text().trimmed().toLower();
-  if (strFind == "") return;
+  if (strFind == "") {
+    ui->btnPrev->hide();
+    ui->btnNext->hide();
+    return;
+  }
   findResultList.clear();
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
@@ -681,17 +687,24 @@ void dlgNotesList::on_btnFind_clicked() {
     tw->setCurrentItem(findResultList.at(0));
     tw->scrollToItem(tw->currentItem());
     findCount = 0;
-    ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
+    ui->lblCount->setText(QString::number(findCount + 1) + "->" +
                           QString::number(findResultList.count()));
+
+    ui->btnPrev->show();
+    ui->btnNext->show();
+  } else {
+    ui->btnPrev->hide();
+    ui->btnNext->hide();
+    ui->lblCount->setText("0");
   }
 }
 
 void dlgNotesList::on_btnPrev_clicked() {
   findCount--;
-  if (findCount < 0) findCount = 0;
+  if (findCount < 0) findCount = findResultList.count() - 1;  // findCount = 0;
   tw->setCurrentItem(findResultList.at(findCount));
   tw->scrollToItem(tw->currentItem());
-  ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
+  ui->lblCount->setText(QString::number(findCount + 1) + "->" +
                         QString::number(findResultList.count()));
 
   if (isAndroid) {
@@ -702,10 +715,10 @@ void dlgNotesList::on_btnPrev_clicked() {
 void dlgNotesList::on_btnNext_clicked() {
   findCount++;
   if (findCount >= findResultList.count())
-    findCount = findResultList.count() - 1;
+    findCount = 0;  // findResultList.count() - 1;
   tw->setCurrentItem(findResultList.at(findCount));
   tw->scrollToItem(tw->currentItem());
-  ui->lblCount->setText(QString::number(findCount + 1) + "\n" +
+  ui->lblCount->setText(QString::number(findCount + 1) + "->" +
                         QString::number(findResultList.count()));
 
   if (isAndroid) {
