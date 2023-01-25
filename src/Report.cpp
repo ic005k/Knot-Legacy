@@ -322,26 +322,19 @@ void dlgReport::on_btnCategory_clicked() {
   vbox0->setContentsMargins(5, 5, 5, 5);
   dlg->setModal(true);
   dlg->setWindowFlag(Qt::FramelessWindowHint);
-  // dlg->setAttribute(Qt::WA_TranslucentBackground);
+  dlg->setAttribute(Qt::WA_TranslucentBackground);
 
   QFrame* frame = new QFrame(dlg);
   vbox0->addWidget(frame);
-  frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:0px solid gray;}");
 
-  /*frame->setGeometry(5, 5, this->width() - 5,
-                     this->height() - 5);
-  QGraphicsDropShadowEffect* shadow_effect =
-      new QGraphicsDropShadowEffect(this);
-  shadow_effect->setOffset(0, 0);
-  shadow_effect->setColor(Qt::black);
-  shadow_effect->setBlurRadius(10);
-  frame->setGraphicsEffect(shadow_effect);*/
+  frame->setStyleSheet(
+      ".QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "border:1px solid gray;}");
 
   QVBoxLayout* vbox = new QVBoxLayout;
   frame->setLayout(vbox);
   QListWidget* list = new QListWidget(mw_one->mydlgReport);
+  list->setStyleSheet("QListWidget{border:0px solid gray;}");
   vbox->addWidget(list);
 
   list->setSpacing(12);

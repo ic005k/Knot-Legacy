@@ -14,16 +14,14 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/*QDialog{	
-	
+   <string notr="true">QDialog{	
+	/*background-color: rgb(255, 25, 25);*/	
+	/*border-image:url(:/res/b.png);	*/
 	border-style:solid;						
 	border-width:2px;						
 	border-color:rgb(251, 51, 51);		
 
-}*/
-
-/*background-color: rgb(255, 25, 25);*/	
-	/*border-image:url(:/res/b.png);	*/</string>
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -37,6 +35,9 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QListWidget" name="listWidget">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="dragDropMode">
          <enum>QAbstractItemView::NoDragDrop</enum>
         </property>

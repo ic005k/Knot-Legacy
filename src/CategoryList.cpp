@@ -11,14 +11,17 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   mw_one->set_btnStyle(this);
   setWindowFlag(Qt::FramelessWindowHint);
-  // setAttribute(Qt::WA_TranslucentBackground);
+  setAttribute(Qt::WA_TranslucentBackground);
   this->layout()->setContentsMargins(5, 5, 5, 5);
+
   ui->frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:0px solid gray;}");
+      "#frame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "border:1px solid gray;}");
+
   setModal(true);
   this->installEventFilter(this);
 
+  ui->listWidget->setStyleSheet("#listWidget{ border:None;}");
   ui->listWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
