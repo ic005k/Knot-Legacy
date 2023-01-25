@@ -411,17 +411,21 @@ void dlgNotesList::initNotesList() {
 #endif
 
   int topCount = Reg.value("/MainNotes/topItemCount").toInt();
+
+  int notesTotal = 0;
   for (int i = 0; i < topCount; i++) {
     QString strTop =
         Reg.value("/MainNotes/strTopItem" + QString::number(i)).toString();
+    int childCount =
+        Reg.value("/MainNotes/childCount" + QString::number(i)).toInt();
+    notesTotal = notesTotal + childCount;
+
     QTreeWidgetItem *topItem = new QTreeWidgetItem;
     topItem->setText(0, strTop);
     QFont font = this->font();
     font.setBold(true);
     topItem->setFont(0, font);
 
-    int childCount =
-        Reg.value("/MainNotes/childCount" + QString::number(i)).toInt();
     for (int j = 0; j < childCount; j++) {
       QString str0, str1;
       str0 = Reg.value("/MainNotes/childItem0" + QString::number(i) +
@@ -438,6 +442,9 @@ void dlgNotesList::initNotesList() {
     tw->addTopLevelItem(topItem);
   }
 
+  tw->headerItem()->setText(0, tr("Notebook") + "(" +
+                                   QString::number(topCount) + "  " +
+                                   QString::number(notesTotal) + ")");
   tw->expandAll();
 
   QSettings RegNotes(iniDir + "curmd.ini", QSettings::IniFormat);
