@@ -11,7 +11,8 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   mw_one->set_btnStyle(this);
   setWindowFlag(Qt::FramelessWindowHint);
-  setAttribute(Qt::WA_TranslucentBackground);
+  // setAttribute(Qt::WA_TranslucentBackground);
+
   this->layout()->setContentsMargins(5, 5, 5, 5);
 
   ui->frame->setStyleSheet(
@@ -42,11 +43,7 @@ dlgList::~dlgList() { delete ui; }
 
 void dlgList::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
 
-void dlgList::closeEvent(QCloseEvent* event) {
-  Q_UNUSED(event);
-  // mw_one->closeGrayWindows();
-  // mw_one->m_widget = new QWidget(mw_one);
-}
+void dlgList::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
 
 bool dlgList::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {

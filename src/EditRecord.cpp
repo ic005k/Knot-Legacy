@@ -180,21 +180,16 @@ void EditRecord::set_Amount(QString Number) {
 }
 
 void EditRecord::on_btnCustom_clicked() {
-  // mw_one->m_widget = new QWidget(this);
   m_List->close();
-  m_List = new dlgList(this);
+  m_List = new dlgList(mw_one->myEditRecord);
 
-  int h = mw_one->height() - 60;
-  int w = mw_one->width() - 40;
-  m_List->setGeometry(mw_one->geometry().x() + 20,
-                      mw_one->geometry().y() + (mw_one->height() - h) / 2, w,
-                      h);
+  int h = mw_one->height();
+  int w = mw_one->width();
+  m_List->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), w, h);
 
   init_Desc();
   m_List->ui->listWidget->setFocus();
   m_List->ui->editRename->clear();
-
-  // mw_one->showGrayWindows();
 
   m_List->show();
 }
