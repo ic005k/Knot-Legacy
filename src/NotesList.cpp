@@ -720,6 +720,8 @@ void dlgNotesList::on_btnPrev_clicked() {
 }
 
 void dlgNotesList::on_btnNext_clicked() {
+  if (ui->btnNext->isHidden()) return;
+
   findCount++;
   if (findCount >= findResultList.count())
     findCount = 0;  // findResultList.count() - 1;
