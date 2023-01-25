@@ -44,8 +44,8 @@ void dlgList::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
 
 void dlgList::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
-  mw_one->closeGrayWindows();
-  mw_one->m_widget = new QWidget(mw_one);
+  // mw_one->closeGrayWindows();
+  // mw_one->m_widget = new QWidget(mw_one);
 }
 
 bool dlgList::eventFilter(QObject* watch, QEvent* evn) {

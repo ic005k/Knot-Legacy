@@ -180,7 +180,9 @@ void EditRecord::set_Amount(QString Number) {
 }
 
 void EditRecord::on_btnCustom_clicked() {
-  mw_one->m_widget = new QWidget(this);
+  // mw_one->m_widget = new QWidget(this);
+  m_List->close();
+  m_List = new dlgList(this);
 
   int h = mw_one->height() - 60;
   int w = mw_one->width() - 40;
@@ -192,7 +194,7 @@ void EditRecord::on_btnCustom_clicked() {
   m_List->ui->listWidget->setFocus();
   m_List->ui->editRename->clear();
 
-  mw_one->showGrayWindows();
+  // mw_one->showGrayWindows();
 
   m_List->show();
 }
