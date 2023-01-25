@@ -11,9 +11,10 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->setupUi(this);
   mw_one->set_btnStyle(this);
   setWindowFlag(Qt::FramelessWindowHint);
+  setAttribute(Qt::WA_TranslucentBackground);
   this->layout()->setContentsMargins(5, 5, 5, 5);
   ui->frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:0px; "
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
       "border:0px solid gray;}");
   setModal(true);
   this->installEventFilter(this);

@@ -322,12 +322,12 @@ void dlgReport::on_btnCategory_clicked() {
   vbox0->setContentsMargins(5, 5, 5, 5);
   dlg->setModal(true);
   dlg->setWindowFlag(Qt::FramelessWindowHint);
-  // dlg->setAttribute(Qt::WA_TranslucentBackground);
+  dlg->setAttribute(Qt::WA_TranslucentBackground);
 
   QFrame* frame = new QFrame(dlg);
   vbox0->addWidget(frame);
   frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:0px; "
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
       "border:0px solid gray;}");
 
   /*frame->setGeometry(5, 5, this->width() - 5,
