@@ -29,6 +29,7 @@ QR code for downloading:
 * [pdf.js](https://github.com/mozilla/pdf.js)
 * [syncthing](https://github.com/syncthing/syncthing)
 * [QOwnNotes](https://github.com/pbek/QOwnNotes)
+* [iconfinder](https://www.iconfinder.com/)
 
 ---
 
