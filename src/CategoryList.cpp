@@ -12,7 +12,6 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   mw_one->set_btnStyle(this);
   setWindowFlag(Qt::FramelessWindowHint);
   // setAttribute(Qt::WA_TranslucentBackground);
-
   this->layout()->setContentsMargins(5, 5, 5, 5);
 
   ui->frame->setStyleSheet(

@@ -2069,8 +2069,6 @@ void MainWindow::saveNotes(int tabIndex) {
 
 void MainWindow::on_btnRemarks_clicked() {
   mydlgReader->setPdfViewVisible(false);
-  m_widget = new QWidget(this);
-  showGrayWindows();
 
   mydlgMainNotes->m_SetEditText->close();
   mydlgMainNotes->m_SetEditText = new dlgSetEditText(m_Remarks);

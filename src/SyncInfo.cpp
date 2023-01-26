@@ -8,6 +8,14 @@ extern MainWindow* mw_one;
 SyncInfo::SyncInfo(QWidget* parent) : QDialog(parent), ui(new Ui::SyncInfo) {
   ui->setupUi(this);
   this->installEventFilter(this);
+
+  setWindowFlag(Qt::FramelessWindowHint);
+  setAttribute(Qt::WA_TranslucentBackground);
+  ui->frame->setStyleSheet(
+      "#frame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "border:1px solid gray;}");
+  this->layout()->setContentsMargins(5, 5, 5, 5);
+
   setModal(true);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
   ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);

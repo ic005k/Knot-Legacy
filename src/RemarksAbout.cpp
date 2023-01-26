@@ -11,6 +11,12 @@ extern int curPos;
 dlgRemarks::dlgRemarks(QWidget *parent)
     : QDialog(parent), ui(new Ui::dlgRemarks) {
   ui->setupUi(this);
+  setWindowFlag(Qt::FramelessWindowHint);
+  setAttribute(Qt::WA_TranslucentBackground);
+  ui->frame->setStyleSheet(
+      "#frame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "border:1px solid gray;}");
+  this->layout()->setContentsMargins(5, 5, 5, 5);
 
   mw_one->set_btnStyle(this);
 
@@ -61,7 +67,6 @@ void dlgRemarks::on_btnBack_clicked() {
   if (!ui->textEdit->isHidden()) mw_one->startSave("notes");
   ui->textEdit->clear();
   close();
-  mw_one->closeGrayWindows();
 }
 
 bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
