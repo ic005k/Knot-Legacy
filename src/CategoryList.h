@@ -35,6 +35,8 @@ class dlgList : public QDialog {
 
  private slots:
 
+  void on_btnCancel_clicked();
+
  private:
   void setCategoryText();
 };

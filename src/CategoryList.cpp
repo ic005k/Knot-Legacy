@@ -132,3 +132,5 @@ void dlgList::on_btnRename_clicked() {
         ui->editRename->text().trimmed());
   }
 }
+
+void dlgList::on_btnCancel_clicked() { close(); }
