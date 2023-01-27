@@ -1713,6 +1713,7 @@ void MainWindow::on_actionRename_triggered() {
   QString style =
       "QDialog{background: "
       "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
+
   idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
