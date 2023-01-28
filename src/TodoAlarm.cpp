@@ -104,7 +104,7 @@ bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
 void msgDialog::on_btnOK_clicked() { close(); }
 
 void msgDialog::on_btnYear_clicked() {
-  addBtn(QDate::currentDate().year(), 15, 3, tr("Year"), false);
+  addBtn(QDate::currentDate().year(), 9, 3, tr("Year"), false);
 }
 
 void msgDialog::on_btnMonth_clicked() { addBtn(1, 12, 3, tr("Month"), false); }
