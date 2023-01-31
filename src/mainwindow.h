@@ -96,6 +96,7 @@
 #include "ui_LoadPic.h"
 #include "ui_Notes.h"
 #include "ui_NotesList.h"
+#include "ui_OneDrive.h"
 #include "ui_PageIndicator.h"
 #include "ui_Preferences.h"
 #include "ui_Reader.h"

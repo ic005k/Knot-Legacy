@@ -3784,7 +3784,6 @@ void MainWindow::init_UIWidget() {
   ui->frameDebug->hide();
   ui->frameReport->hide();
   ui->qwPdf->hide();
-  ui->btnSync->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3931,6 +3930,7 @@ void MainWindow::init_UIWidget() {
   ui->btnDel->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
   ui->btnPasteTodo->setStyleSheet("border:none");
+  ui->btnSync->setStyleSheet("border:none");
 
   QFont f = this->font();
   f.setPointSize(11);
@@ -5337,11 +5337,7 @@ void MainWindow::on_btnCategory_clicked() {
   mydlgReport->on_btnCategory_clicked();
 }
 
-void MainWindow::on_btnSync_clicked() {
-  loading = true;
-  init_TotalData();
-  loading = false;
-}
+void MainWindow::on_btnSync_clicked() { ui->btnUpload->click(); }
 
 void MainWindow::on_btnPDF_clicked() { mydlgMainNotes->on_btnPDF_clicked(); }
 
