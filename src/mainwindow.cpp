@@ -1708,16 +1708,29 @@ void MainWindow::on_actionRename_triggered() {
   int index = ui->tabWidget->currentIndex();
   bool ok;
   QString text;
+  QFrame *frame = new QFrame(this);
+  QVBoxLayout *vbox = new QVBoxLayout;
+  frame->setLayout(vbox);
   QInputDialog *idlg = new QInputDialog(this);
+
+  int x = 50;
+  int y = 0;
+  int w = mw_one->width() - 100;
+  int h = this->height();
+  frame->setGeometry(x, y, w, h);
+  frame->show();
+
   idlg->setWindowFlag(Qt::FramelessWindowHint);
   QString style =
       "QDialog{background: "
-      "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
+      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
+
+  vbox->addWidget(idlg);
 
   idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
-  idlg->setContentsMargins(6, 6, 6, 6);
+  idlg->setContentsMargins(10, 10, 10, 10);
 
   idlg->setWindowTitle(tr("Rename tab name : "));
   idlg->setTextValue(ui->tabWidget->tabText(index));
@@ -1726,8 +1739,10 @@ void MainWindow::on_actionRename_triggered() {
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
     text = idlg->textValue();
+    frame->close();
   } else {
     ok = false;
+    frame->close();
     return;
   }
 
