@@ -5337,7 +5337,10 @@ void MainWindow::on_btnCategory_clicked() {
   mydlgReport->on_btnCategory_clicked();
 }
 
-void MainWindow::on_btnSync_clicked() { ui->btnUpload->click(); }
+void MainWindow::on_btnSync_clicked() {
+  mydlgReader->setPdfViewVisible(false);
+  ui->btnUpload->click();
+}
 
 void MainWindow::on_btnPDF_clicked() { mydlgMainNotes->on_btnPDF_clicked(); }
 
