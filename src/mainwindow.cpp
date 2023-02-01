@@ -1706,13 +1706,13 @@ void MainWindow::initChartDay() {
 
 void MainWindow::on_actionRename_triggered() {
   int index = ui->tabWidget->currentIndex();
-  bool ok;
+  bool ok = false;
   QString text;
   QFrame *frame = new QFrame(this);
   QVBoxLayout *vbox = new QVBoxLayout;
   frame->setLayout(vbox);
   QInputDialog *idlg = new QInputDialog(this);
-  vbox->addWidget(idlg);
+  idlg->hide();
 
   idlg->setWindowFlag(Qt::FramelessWindowHint);
   QString style =
@@ -1728,6 +1728,8 @@ void MainWindow::on_actionRename_triggered() {
   idlg->setTextValue(ui->tabWidget->tabText(index));
   idlg->setLabelText(tr("Tab name : "));
 
+  vbox->addWidget(idlg);
+  idlg->show();
   int x = 50;
   int y = 0;
   int w = mw_one->width() - 100;
@@ -1740,7 +1742,6 @@ void MainWindow::on_actionRename_triggered() {
     text = idlg->textValue();
     frame->close();
   } else {
-    ok = false;
     frame->close();
     return;
   }
