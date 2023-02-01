@@ -3663,15 +3663,21 @@ void MainWindow::on_btnNotes_clicked() {
 
     bool ok = false;
     QString text;
+    QFrame *frame = new QFrame(this);
+    QVBoxLayout *vbox = new QVBoxLayout;
+    frame->setLayout(vbox);
     QInputDialog *idlg = new QInputDialog(this);
+    vbox->addWidget(idlg);
+    frame->setGeometry(50, 0, mw_one->width() - 100, this->height());
+    frame->show();
     idlg->setWindowFlag(Qt::FramelessWindowHint);
     QString style =
         "QDialog{background: "
-        "rgb(244,237,241);border-radius:0px;border:2px solid red;}";
+        "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
     idlg->setStyleSheet(style);
     idlg->setOkButtonText(tr("Ok"));
     idlg->setCancelButtonText(tr("Cancel"));
-    idlg->setContentsMargins(6, 6, 6, 6);
+    idlg->setContentsMargins(10, 10, 10, 10);
     idlg->setWindowTitle(tr("Please enter your password : "));
     idlg->setTextValue("");
     idlg->setLabelText(tr("Password : "));
@@ -3681,7 +3687,9 @@ void MainWindow::on_btnNotes_clicked() {
     if (QDialog::Accepted == idlg->exec()) {
       ok = true;
       text = idlg->textValue();
+      frame->close();
     } else {
+      frame->close();
       return;
     }
 
