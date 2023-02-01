@@ -1713,6 +1713,7 @@ void MainWindow::on_actionRename_triggered() {
   frame->setLayout(vbox);
   QInputDialog *idlg = new QInputDialog(this);
   idlg->hide();
+  vbox->addWidget(idlg);
 
   idlg->setWindowFlag(Qt::FramelessWindowHint);
   QString style =
@@ -1728,13 +1729,8 @@ void MainWindow::on_actionRename_triggered() {
   idlg->setTextValue(ui->tabWidget->tabText(index));
   idlg->setLabelText(tr("Tab name : "));
 
-  vbox->addWidget(idlg);
+  frame->setGeometry(50, 0, mw_one->width() - 100, this->height());
   idlg->show();
-  int x = 50;
-  int y = 0;
-  int w = mw_one->width() - 100;
-  int h = this->height();
-  frame->setGeometry(x, y, w, h);
   frame->show();
 
   if (QDialog::Accepted == idlg->exec()) {
