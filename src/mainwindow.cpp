@@ -1719,13 +1719,6 @@ void MainWindow::on_actionRename_triggered() {
       "QDialog{background: "
       "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
 
-  int x = 50;
-  int y = 0;
-  int w = mw_one->width() - 100;
-  int h = this->height();
-  frame->setGeometry(x, y, w, h);
-  frame->show();
-
   idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
@@ -1734,6 +1727,13 @@ void MainWindow::on_actionRename_triggered() {
   idlg->setWindowTitle(tr("Rename tab name : "));
   idlg->setTextValue(ui->tabWidget->tabText(index));
   idlg->setLabelText(tr("Tab name : "));
+
+  int x = 50;
+  int y = 0;
+  int w = mw_one->width() - 100;
+  int h = this->height();
+  frame->setGeometry(x, y, w, h);
+  frame->show();
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
@@ -3667,8 +3667,7 @@ void MainWindow::on_btnNotes_clicked() {
     frame->setLayout(vbox);
     QInputDialog *idlg = new QInputDialog(this);
     vbox->addWidget(idlg);
-    frame->setGeometry(50, 0, mw_one->width() - 100, this->height());
-    frame->show();
+
     idlg->setWindowFlag(Qt::FramelessWindowHint);
     QString style =
         "QDialog{background: "
@@ -3682,6 +3681,9 @@ void MainWindow::on_btnNotes_clicked() {
     idlg->setLabelText(tr("Password : "));
     QLineEdit::EchoMode echoMode = QLineEdit::Password;
     idlg->setTextEchoMode(echoMode);
+
+    frame->setGeometry(50, 0, mw_one->width() - 100, this->height());
+    frame->show();
 
     if (QDialog::Accepted == idlg->exec()) {
       ok = true;
