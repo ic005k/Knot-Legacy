@@ -1712,6 +1712,7 @@ void MainWindow::on_actionRename_triggered() {
   QVBoxLayout *vbox = new QVBoxLayout;
   frame->setLayout(vbox);
   QInputDialog *idlg = new QInputDialog(this);
+  vbox->addWidget(idlg);
 
   int x = 50;
   int y = 0;
@@ -1724,8 +1725,6 @@ void MainWindow::on_actionRename_triggered() {
   QString style =
       "QDialog{background: "
       "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
-
-  vbox->addWidget(idlg);
 
   idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));

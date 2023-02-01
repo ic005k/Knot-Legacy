@@ -99,7 +99,7 @@ void dlgReport::closeEvent(QCloseEvent* event) {
 
 void dlgReport::on_btnYear_clicked() {
   mw_one->ui->lblDetails->setText(tr("Details"));
-  int w = mw_one->ui->btnYear->width();
+  int w = mw_one->ui->btnYear->width() + 1;
   QListWidget* list = new QListWidget(mw_one);
   list->setStyleSheet(mw_one->listStyle);
   QFont font;
@@ -247,7 +247,8 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
 
 void dlgReport::on_btnMonth_clicked() {
   mw_one->ui->lblDetails->setText(tr("Details"));
-  int w = mw_one->ui->btnYear->width();
+  int w = mw_one->ui->btnMonth->width() + 1;
+
   QListWidget* list = new QListWidget(mw_one);
   list->setStyleSheet(mw_one->listStyle);
   QFont font;
