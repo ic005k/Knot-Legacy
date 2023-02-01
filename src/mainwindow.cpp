@@ -1714,17 +1714,17 @@ void MainWindow::on_actionRename_triggered() {
   QInputDialog *idlg = new QInputDialog(this);
   vbox->addWidget(idlg);
 
+  idlg->setWindowFlag(Qt::FramelessWindowHint);
+  QString style =
+      "QDialog{background: "
+      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
+
   int x = 50;
   int y = 0;
   int w = mw_one->width() - 100;
   int h = this->height();
   frame->setGeometry(x, y, w, h);
   frame->show();
-
-  idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style =
-      "QDialog{background: "
-      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
 
   idlg->setStyleSheet(style);
   idlg->setOkButtonText(tr("Ok"));
