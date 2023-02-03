@@ -3380,7 +3380,7 @@ QRadioButton::indicator:checked {
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_25">
          <item>
-          <widget class="QComboBox" name="comboBox_3">
+          <widget class="QComboBox" name="cboxM1">
            <item>
             <property name="text">
              <string>01</string>
@@ -3444,7 +3444,7 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_2">
+          <widget class="QComboBox" name="cboxD1">
            <item>
             <property name="text">
              <string>01</string>
@@ -3616,7 +3616,7 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_5">
+          <widget class="QComboBox" name="cboxM2">
            <item>
             <property name="text">
              <string>01</string>
@@ -3680,7 +3680,7 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_6">
+          <widget class="QComboBox" name="cboxD2">
            <item>
             <property name="text">
              <string>01</string>

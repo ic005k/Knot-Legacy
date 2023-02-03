@@ -83,7 +83,7 @@ bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void dlgReport::on_btnBack_clicked() {
-  mw_one->startSave("ymd");
+  saveYMD();
 
   listCategory.clear();
 
@@ -305,6 +305,11 @@ void dlgReport::saveYMD() {
   Reg.setValue("/YMD/btnYText", btnYText);
   Reg.setValue("/YMD/btnMText", btnMText);
   Reg.setValue("/YMD/btnDText", btnDText);
+
+  Reg.setValue("/YMD/M1", mw_one->ui->cboxM1->currentIndex());
+  Reg.setValue("/YMD/M2", mw_one->ui->cboxM2->currentIndex());
+  Reg.setValue("/YMD/D1", mw_one->ui->cboxD1->currentIndex());
+  Reg.setValue("/YMD/D2", mw_one->ui->cboxD2->currentIndex());
 }
 
 void dlgReport::on_btnCategory_clicked() {

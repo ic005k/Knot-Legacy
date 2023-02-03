@@ -205,10 +205,6 @@ void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "notes") {
     saveNotes(tabData->currentIndex());
   }
-
-  if (SaveType == "ymd") {
-    dlgReport::saveYMD();
-  }
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -513,6 +509,11 @@ void MainWindow::init_Options() {
   ui->btnYear->setText(btnYearText);
   btnMonthText = Reg2.value("/YMD/btnMonthText", tr("Month")).toString();
   ui->btnMonth->setText(btnMonthText);
+
+  ui->cboxM1->setCurrentIndex(Reg2.value("/YMD/M1").toInt());
+  ui->cboxM2->setCurrentIndex(Reg2.value("/YMD/M2").toInt());
+  ui->cboxD1->setCurrentIndex(Reg2.value("/YMD/D1").toInt());
+  ui->cboxD2->setCurrentIndex(Reg2.value("/YMD/D2").toInt());
 
   // time machine
   QSettings RegTime(privateDir + "timemachine.ini", QSettings::IniFormat);
