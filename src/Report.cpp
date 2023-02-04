@@ -26,6 +26,12 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   this->installEventFilter(this);
   this->setModal(true);
 
+  mw_one->ui->cboxM1->hide();
+  mw_one->ui->cboxM2->hide();
+  mw_one->ui->cboxD1->hide();
+  mw_one->ui->cboxD2->hide();
+  mw_one->ui->label->hide();
+
   twOut2Img = new QTreeWidget;
   twOut2Img->setColumnCount(3);
 
