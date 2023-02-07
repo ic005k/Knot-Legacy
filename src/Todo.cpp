@@ -939,8 +939,10 @@ void dlgTodo::reeditText() {
   mw_one->setSCrollPro(edit);
 
   QToolButton* btnCancel = new QToolButton(this);
+  QToolButton* btnCopy = new QToolButton(this);
   QToolButton* btnOk = new QToolButton(this);
   btnCancel->setText(tr("Cancel"));
+  btnCopy->setText(tr("Copy"));
   btnOk->setText(tr("OK"));
   btnOk->setStyleSheet(
       "QToolButton {background-color: rgb(0, 0, 255);color: rgb(255, "
@@ -950,14 +952,18 @@ void dlgTodo::reeditText() {
       "rgb(220,220,230);color: black}");
 
   btnCancel->setStyleSheet(mw_one->btnStyle);
+  btnCopy->setStyleSheet(mw_one->btnStyle);
   btnOk->setStyleSheet(mw_one->btnStyle);
   btnOk->setFixedHeight(35);
   btnCancel->setFixedHeight(35);
+  btnCopy->setFixedHeight(35);
 
   QHBoxLayout* hbox = new QHBoxLayout;
   hbox->addWidget(btnCancel);
+  hbox->addWidget(btnCopy);
   hbox->addWidget(btnOk);
   btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  btnCopy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
   QSpacerItem* sparcer_item =
@@ -968,6 +974,11 @@ void dlgTodo::reeditText() {
 
   connect(btnCancel, &QToolButton::clicked, [=]() mutable { dlg->close(); });
   connect(dlg, &QDialog::rejected, [=]() mutable {});
+  connect(btnCopy, &QToolButton::clicked, [=]() mutable {
+    edit->selectAll();
+    edit->copy();
+    dlg->close();
+  });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
     QString strTime = getItemTime(row);
     int type = getItemType(row);
