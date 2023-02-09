@@ -244,6 +244,8 @@ MainWindow::MainWindow(QWidget *parent)
   initMain = false;
   addFilesWatch();
   mydlgReader->setPdfViewVisible(false);
+  mw_one->ui->btnTodo->click();
+  mw_one->ui->btnBackTodo->click();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -1523,9 +1525,13 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QAndroidJniObject jo = QAndroidJniObject::fromString("MiniWin");
     jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
+
+    mw_one->mydlgPre->autoBakData();
 #else
     QJniObject jo = QJniObject::fromString("MiniWin");
     jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
+
+    mw_one->mydlgPre->autoBakData();
 #endif
 
 #endif
@@ -4382,15 +4388,7 @@ static void JavaNotify_1() {
   // qDebug() << "C++ JavaNotify_1";
 }
 
-static void JavaNotify_2() {
-  if (mw_one->ui->frameTodo->isHidden()) {
-    mw_one->ui->btnTodo->click();
-    mw_one->ui->btnBackTodo->click();
-  }
-  mw_one->mydlgPre->autoBakData();
-
-  qDebug() << "C++ JavaNotify_2";
-}
+static void JavaNotify_2() { qDebug() << "C++ JavaNotify_2"; }
 
 static void JavaNotify_3() {
   mw_one->alertWindowsCount++;
