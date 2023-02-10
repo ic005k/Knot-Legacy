@@ -214,6 +214,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public static int mini() {
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
+
         CallJavaNotify_2();
         return 1;
     }
