@@ -282,9 +282,8 @@ void MainWindow::initHardStepSensor() {
 }
 
 void MainWindow::initTodayInitSteps() {
-  qlonglong a, b;
-  a = 0;
-  b = 0;
+  qlonglong a = 0;
+  qlonglong b = 0;
 
 #ifdef Q_OS_ANDROID
 
