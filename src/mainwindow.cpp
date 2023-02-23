@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.02";
+QString ver = "1.1.03";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -1735,7 +1735,7 @@ void MainWindow::on_actionRename_triggered() {
   idlg->setTextValue(ui->tabWidget->tabText(index));
   idlg->setLabelText(tr("Tab name : "));
 
-  frame->setGeometry(50, 0, mw_one->width() - 100, this->height());
+  frame->setGeometry(50, -100, mw_one->width() - 100, this->height());
   idlg->show();
   frame->show();
 
@@ -3685,7 +3685,7 @@ void MainWindow::on_btnNotes_clicked() {
     QLineEdit::EchoMode echoMode = QLineEdit::Password;
     idlg->setTextEchoMode(echoMode);
 
-    frame->setGeometry(50, 0, mw_one->width() - 100, this->height());
+    frame->setGeometry(50, -100, mw_one->width() - 100, this->height());
     frame->show();
 
     if (QDialog::Accepted == idlg->exec()) {
