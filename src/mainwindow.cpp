@@ -3641,7 +3641,8 @@ void MainWindow::updateHardSensorSteps() {
   CurrentSteps = tc - resetSteps;
   ui->lcdNumber->display(QString::number(steps));
   ui->lblSingle->setText(QString::number(CurrentSteps));
-  mydlgSteps->setTableSteps(steps);
+
+  if (!mydlgSteps->isHidden()) mydlgSteps->setTableSteps(steps);
 
   sendMsg(steps);
 }
