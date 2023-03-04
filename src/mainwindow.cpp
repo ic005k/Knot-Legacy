@@ -3642,7 +3642,7 @@ void MainWindow::updateHardSensorSteps() {
   ui->lcdNumber->display(QString::number(steps));
   ui->lblSingle->setText(QString::number(CurrentSteps));
 
-  if (!mydlgSteps->isHidden()) mydlgSteps->setTableSteps(steps);
+  if (isWriteStepsToTable) mydlgSteps->setTableSteps(steps);
 
   sendMsg(steps);
 }
@@ -4389,7 +4389,9 @@ static void JavaNotify_1() {
 }
 
 static void JavaNotify_2() {
+  mw_one->isWriteStepsToTable = false;
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+  mw_one->isWriteStepsToTable = true;
   qDebug() << "C++ JavaNotify_2";
 }
 
