@@ -135,7 +135,6 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
-  bool isWriteStepsToTable = true;
   bool isSelf = false;
   bool isPdfNewMothod = false;
   int days = 45;
