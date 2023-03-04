@@ -2,10 +2,18 @@ package com.x;
 
 //Qt5
 
-import org.qtproject.qt.android.bindings.QtActivity;
+import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
 
+import android.os.Process;
+import android.os.HandlerThread;
+import android.content.ClipboardManager;
+import android.content.ClipData;
+
+import java.util.Stack;
+
+import android.view.inputmethod.InputMethodSession.EventCallback;
 import android.app.Application;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -94,6 +102,33 @@ import android.content.DialogInterface;
 import android.support.v4.content.FileProvider;
 //import androidx.core.content.FileProvider;
 
+import android.graphics.Rect;
+import android.view.ViewTreeObserver;
+
+import java.lang.reflect.Field;
+
+import android.widget.LinearLayout;
+
+//import javax.swing.text.View;
+import android.webkit.WebView;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebViewClient;
+import android.webkit.WebSettings;
+import android.view.ActionMode;
+import android.view.MotionEvent;
+import android.view.ContextMenu;
+import android.util.AttributeSet;
+
+import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageInfo;
+
+import android.support.v4.app.ActivityCompat;
+import android.content.pm.PackageManager;
+
+import android.os.FileObserver;
+
+
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
     private static MyActivity m_instance = null;
@@ -110,6 +145,14 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public static String strAlarmInfo;
     public static int alarmCount;
     public static boolean isScreenOff = false;
+    public static int keyBoardHeight;
+
+    private final static String TAG = "QtKnot";
+    private static Context context;
+    public static boolean ReOpen = false;
+    private FileWatcher mFileWatcher;
+
+    public native static void CallJavaNotify_0();
 
     public native static void CallJavaNotify_1();
 
@@ -120,8 +163,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public native static void CallJavaNotify_4();
 
     public MyActivity() {
-        //不用在此初始化，已采用新方法
-        //m_instance = this;
+
     }
 
     //------------------------------------------------------------------------
@@ -175,9 +217,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         return 1;
     }
 
+    public static int setReOpen() {
+        ReOpen = true;
+        return 1;
+    }
+
     //------------------------------------------------------------------------
-    private final static String TAG = "QtFullscreen";
-    private static Context context;
+
 
     //全局获取Context
     public static Context getContext() {
@@ -256,17 +302,19 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             if (SCREEN_ON.equals(intent.getAction())) {
                 if (isStepCounter == 1) {
 
-                    CallJavaNotify_2();
+
                 }
                 isScreenOff = false;
+                CallJavaNotify_2();
                 Log.w("Knot", "屏幕亮了");
 
             } else if (SCREEN_OFF.equals(intent.getAction())) {
                 if (isStepCounter == 1) {
                     if (mySerivece != null) {
                         mSensorManager.unregisterListener(mySerivece);
-
                     }
+
+
                 }
                 isScreenOff = true;
                 Log.w("Knot", "屏幕熄了");
@@ -411,6 +459,15 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //在onCreate方法这里调用来动态获取权限
+        verifyStoragePermissions(this);
+
+        //File Watch FileWatcher
+        if (null == mFileWatcher) {
+            mFileWatcher = new FileWatcher("/storage/emulated/0/KnotData/");
+            mFileWatcher.startWatching(); //开始监听
+        }
+
         if (m_instance != null) {
             Log.d(TAG, "App is already running... this won't work");
             Intent intent = getIntent();
@@ -476,7 +533,34 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
+        getShare("Knot");
+
     }
+
+    public String getShare(String uripath) {
+        //获取分享的数据
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        //设置接收类型为文本
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handlerText(intent);
+                return "1";
+            }
+        }
+        return "0";
+    }
+
+    //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
+    private void handlerText(Intent intent) {
+        String data = intent.getStringExtra(Intent.EXTRA_TEXT);
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Knot", data);
+        clipboard.setPrimaryClip(clip);
+    }
+
 
     private static ServiceConnection mCon = new ServiceConnection() {
         @Override
@@ -510,6 +594,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     protected void onDestroy() {
         Log.i(TAG, "onDestroy...");
         releaseWakeLock();
+        if (null != mFileWatcher) mFileWatcher.stopWatching(); //停止监听
 
         //让系统自行处理，否则退出时有可能出现崩溃
         //if(mHomeKeyEvent!=null)
@@ -518,7 +603,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         //if(mScreenStatusReceiver!=null)
         //unregisterReceiver(mScreenStatusReceiver);
 
+
+        if (ReOpen) {
+            doStartApplicationWithPackageName("com.x");
+        }
+
         android.os.Process.killProcess(android.os.Process.myPid());
+
         super.onDestroy();
 
         //目前暂不需要，已采用新方法
@@ -602,137 +693,107 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     }
 
     //--------------------------------------------------------------------------------
-    // 备用参考
-   /* private static final List<ZipEntry> entries = new ArrayList<ZipEntry>();
 
-    public static void unZipDirectory(String zipFileDirectory, String outputDirectory) throws ZipException, IOException {
-        File file = new File(zipFileDirectory);
-        File[] files = file.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].getName().endsWith(".zip")) {
-                unzip(zipFileDirectory + File.separator + files[i].getName(),
-                        outputDirectory);
-            }
+    public class PDFView extends WebView {
+
+        public boolean isTop = true, isBottom = false;//用于判断滑动位置
+
+        private final static String PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
+
+        public PDFView(Context context) {
+            super(context);
+            init();
         }
-    }
 
-    public static void unzip(String string, String outputDirectory)
-            throws ZipException, IOException {
-        ZipFile zipFile = new ZipFile(string);
-        Enumeration<ZipEntry> enu = (Enumeration<ZipEntry>) zipFile.entries();
-        while (enu.hasMoreElements()) {
-            ZipEntry entry = (ZipEntry) enu.nextElement();
-            if (entry.isDirectory()) {
-                String fileName = entry.getName().substring(0,
-                        entry.getName().length() - 1);
-                String directoryPath = outputDirectory + File.separator
-                        + fileName;
-                File directory = new File(directoryPath);
-                directory.mkdir();
-            }
-            entries.add(entry);
+        public PDFView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            init();
         }
-        unzip(zipFile, entries, outputDirectory);
-    }
 
-    private static void unzip(ZipFile zipFile, List<ZipEntry> entries2,
-                              String outputDirectory) throws IOException {
-        // TODO Auto-generated method stub
-        Iterator<ZipEntry> it = entries.iterator();
-        while (it.hasNext()) {
-            ZipEntry zipEntry = (ZipEntry) it.next();
-            // MultiThreadEntry mte = new MultiThreadEntry(zipFile, zipEntry,
-            //         outputDirectory);
+        public PDFView(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+            init();
+        }
 
-            // Thread thread = new Thread(mte);
-            // thread.start();
-            bis = new BufferedInputStream(zipFile.getInputStream(zipEntry));
-            try {
-                unzipFiles(zipEntry, outputDirectory);
-                Log.i(TAG, zipEntry.getName());
-                Log.i(TAG, outputDirectory);
-            } catch (IOException e) {
-                try {
-                    bis.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+        @Override
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            return false;
+        }
+
+        private void init() {
+            WebSettings settings = getSettings();
+            settings.setJavaScriptEnabled(true);
+            settings.setAllowUniversalAccessFromFileURLs(true);
+            settings.setSupportZoom(true);
+            settings.setUseWideViewPort(true);
+            settings.setBuiltInZoomControls(true);
+            settings.setDisplayZoomControls(false);
+
+            setWebViewClient(new WebViewClient() {// 注册滑动监听方法viewerContainer为加载pdf的viewid
+                @Override
+                public void onPageFinished(WebView webView, String s) {
+                    super.onPageFinished(webView, s);
+                    //滑动监听
+                    String startSave = "\n" +
+                            "document.getElementById(\"viewerContainer\").addEventListener('scroll',function () {\n" +
+                            "if(this.scrollHeight-this.scrollTop - this.clientHeight < 50){\n" +
+                            "window.java.bottom(); \n" +
+                            "}\n" +
+                            "else if(this.scrollTop==0){\n" +
+                            "window.java.top(); \n" +
+                            "}\n" +
+                            "else {\n" +
+                            "window.java.scrolling(); \n" +
+                            "}\n" +
+                            "});";
+                    webView.loadUrl("javascript:" + startSave);
                 }
-            } finally {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            });
+            addJavascriptInterface(new Object() {
+                @JavascriptInterface
+                public void bottom() {
+                    Log.e("msg+++++++", "到了低端");
+                    isBottom = true;
+                    isTop = false;
                 }
-            }
-        }
-    }
 
-    public static final int BUFFER_SIZE = 4096;
-    private static BufferedInputStream bis;
-
-    public static void unzipFiles(ZipEntry zipEntry, String outputDirectory)
-            throws IOException {
-
-        byte[] data = new byte[BUFFER_SIZE];
-        String entryName = zipEntry.getName();
-        entryName = new String(entryName.getBytes("GBK"));
-        FileOutputStream fos = new FileOutputStream(outputDirectory
-                + File.separator + entryName);
-        if (zipEntry.isDirectory()) {
-
-        } else {
-            BufferedOutputStream bos = new BufferedOutputStream(fos,
-                    BUFFER_SIZE);
-            int count = 0;
-            while ((count = bis.read(data, 0, BUFFER_SIZE)) != -1) {
-                bos.write(data, 0, count);
-            }
-            bos.flush();
-            bos.close();
-        }
-    }
-
-    //读取压缩文件中的内容名称
-    public static List<String> readZipFile(String file) throws Exception {
-        List<String> list = new ArrayList<String>();
-        InputStream in = new BufferedInputStream(new FileInputStream(file));
-        ZipInputStream zin = new ZipInputStream(in);
-        ZipEntry ze;
-        while ((ze = zin.getNextEntry()) != null) {
-            if (ze.isDirectory()) {
-            } else {
-                String zeName = new String(ze.getName().getBytes("iso-8859-1"), "utf-8");
-                list.add(zeName);
-            }
-        }
-        zin.closeEntry();
-        return list;
-    }
-
-    public static void readZipFile2(String file) throws Exception {
-        ZipFile zf = new ZipFile(file);
-        InputStream in = new BufferedInputStream(new FileInputStream(file));
-        ZipInputStream zin = new ZipInputStream(in);
-        ZipEntry ze;
-        while ((ze = zin.getNextEntry()) != null) {
-            if (ze.isDirectory()) {
-            } else {
-                String zeName = new String(ze.getName().getBytes("iso-8859-1"), "utf-8");
-                System.out.println("获取文件名称：" + zeName);
-                long size = ze.getSize();
-                if (size > 0) {
-                    BufferedReader br = new BufferedReader(
-                            new InputStreamReader(zf.getInputStream(ze)));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        // System.out.println(line);
-                    }
-                    br.close();
+                @JavascriptInterface
+                public void scrolling() {
+                    Log.e("msg+++++++", "滑动中");
+                    isBottom = false;
+                    isTop = false;
                 }
-            }
+
+                @JavascriptInterface
+                public void top() {
+                    Log.e("msg+++++++", "到了顶端");
+                    isBottom = false;
+                    isTop = true;
+                }
+            }, "java");
         }
-        zin.closeEntry();
-    }*/
+
+        @Override
+        protected void onCreateContextMenu(ContextMenu menu) {
+            super.onCreateContextMenu(menu);
+        }
+
+        @Override
+        public ActionMode startActionMode(ActionMode.Callback callback) {
+            return super.startActionMode(callback);
+        }
+
+        //加载本地的pdf
+        public void loadLocalPDF(String path) {
+            loadUrl(PDFJS + "file://" + path);
+        }
+
+        //加载url的pdf
+        public void loadOnlinePDF(String url) {
+            loadUrl(PDFJS + url);
+        }
+    }
+
 
     //----------------------------------------------------------------------------------------------
     /*
@@ -984,6 +1045,7 @@ This method can parse out the real local file path from a file URI.
                 String reason = intent.getStringExtra(SYSTEM_REASON);
                 if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     // 表示按了home键,程序直接进入到后台
+
                     System.out.println("MyActivity HOME键被按下...");
                 } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
                     // 表示长按home键,显示最近使用的程序
@@ -1081,6 +1143,335 @@ This method can parse out the real local file path from a file URI.
         context.startActivity(intent);
     }
 
+    private void doStartApplicationWithPackageName(String packagename) {
+        Log.i(TAG, "自启动开始...");
+        // 通过包名获取此APP详细信息，包括Activities、services、versioncode、name等等
+        PackageInfo packageinfo = null;
+        try {
+            packageinfo = getPackageManager().getPackageInfo(packagename, 0);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageinfo == null) {
+            return;
+        }
+
+        // 创建一个类别为CATEGORY_LAUNCHER的该包名的Intent
+        Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+        resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        resolveIntent.setPackage(packageinfo.packageName);
+
+        // 通过getPackageManager()的queryIntentActivities方法遍历
+        List<ResolveInfo> resolveinfoList = getPackageManager()
+                .queryIntentActivities(resolveIntent, 0);
+
+        ResolveInfo resolveinfo = resolveinfoList.iterator().next();
+        if (resolveinfo != null) {
+            // packagename = 参数packname
+            String packageName = resolveinfo.activityInfo.packageName;
+            // 这个就是我们要找的该APP的LAUNCHER的Activity[组织形式：packagename.mainActivityname]
+            String className = resolveinfo.activityInfo.name;
+            // LAUNCHER Intent
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+            // 设置ComponentName参数1:packagename参数2:MainActivity路径
+            ComponentName cn = new ComponentName(packageName, className);
+
+            intent.setComponent(cn);
+            startActivity(intent);
+
+            Log.i(TAG, "启动自己已完成...");
+        }
+
+        Log.i(TAG, "过程完成...");
+    }
+
+    //==============================================================================================
+    //动态获取权限需要添加的常量
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE"};
+
+    //被调用的方法
+    public static void verifyStoragePermissions(Activity activity) {
+        try {
+            //检测是否有写的权限
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    "android.permission.WRITE_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // 没有写的权限，去申请写的权限，会弹出对话框
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //==============================================================================================
+
+    public class FileWatcher extends FileObserver {
+        static final String TAG = "FileWatcher";
+        ArrayList<FileObserver> mObservers;
+        String mPath;
+        int mMask;
+
+        String mThreadName = FileWatcher.class.getSimpleName();
+        HandlerThread mThread;
+        Handler mThreadHandler;
+
+        private Context mContext;
+
+        public FileWatcher(Context context, String path) {
+            this(path, ALL_EVENTS);
+            mContext = context;
+        }
+
+        public FileWatcher(String path) {
+            this(path, ALL_EVENTS);
+        }
+
+        public FileWatcher(String path, int mask) {
+            super(path, mask);
+            mPath = path;
+            mMask = mask;
+        }
+
+        @Override
+        public void startWatching() {
+            mThreadName = FileWatcher.class.getSimpleName();
+            if (mThread == null || !mThread.isAlive()) {
+                mThread = new HandlerThread(mThreadName, Process.THREAD_PRIORITY_BACKGROUND);
+                mThread.start();
+
+                mThreadHandler = new Handler(mThread.getLooper());
+                mThreadHandler.post(new startRunnable());
+            }
+        }
+
+        @Override
+        public void stopWatching() {
+            if (null != mThreadHandler && null != mThread && mThread.isAlive()) {
+                mThreadHandler.post(new stopRunnable());
+            }
+            mThreadHandler = null;
+            mThread.quit();
+            mThread = null;
+        }
+
+        @Override
+        public void onEvent(int event, String path) {
+            event = event & FileObserver.ALL_EVENTS;
+            final String tmpPath = path;
+            switch (event) {
+                case FileObserver.ACCESS:
+                    // Log.i("FileWatcher", "ACCESS: " + path);
+                    if (path.contains("/storage/emulated/0/KnotData//todo.ini") || path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
+                        CallJavaNotify_0();
+                    break;
+                case FileObserver.ATTRIB:
+                    // Log.i("FileWatcher", "ATTRIB: " + path);
+                    break;
+                case FileObserver.CLOSE_NOWRITE:
+                    // Log.i("FileWatcher", "CLOSE_NOWRITE: " + path);
+                    break;
+                case FileObserver.CLOSE_WRITE:
+                    //Log.i("FileWatcher", "CLOSE_WRITE: " + path);
+                    // 文件写入完毕后会回调，可以在这对新写入的文件做操作
+
+                    mThreadHandler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            //
+                        }
+                    });
+                    break;
+                case FileObserver.CREATE:
+                    //Log.i(TAG, "CREATE: " + path);
+
+                    mThreadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            doCreate(tmpPath);
+                        }
+                    });
+                    break;
+                case FileObserver.DELETE:
+                    // Log.i(TAG, "DELETE: " + path);
+                    mThreadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            doDelete(tmpPath);
+                        }
+                    });
+                    break;
+                case FileObserver.DELETE_SELF:
+                    // Log.i("FileWatcher", "DELETE_SELF: " + path);
+                    break;
+                case FileObserver.MODIFY:
+                    // Log.i("FileWatcher", "MODIFY: " + path);
+
+                    break;
+                case FileObserver.MOVE_SELF:
+                    // Log.i("FileWatcher", "MOVE_SELF: " + path);
+                    break;
+                case FileObserver.MOVED_FROM:
+                    // Log.i("FileWatcher", "MOVED_FROM: " + path);
+                    break;
+                case FileObserver.MOVED_TO:
+                    // Log.i("FileWatcher", "MOVED_TO: " + path);
+                    break;
+                case FileObserver.OPEN:
+                    // Log.i("FileWatcher", "OPEN: " + path);
+                    break;
+                default:
+                    // Log.i(TAG, "DEFAULT(" + event + ";) : " + path);
+
+                    break;
+            }
+        }
+
+        private void doCreate(String path) {
+            synchronized (FileWatcher.this) {
+                File file = new File(path);
+                if (!file.exists()) {
+                    return;
+                }
+
+                if (file.isDirectory()) {
+                    // 新建文件夹，对该文件夹及子目录添加监听
+                    Stack<String> stack = new Stack<String>();
+                    stack.push(path);
+
+                    while (!stack.isEmpty()) {
+                        String parent = stack.pop();
+                        SingleFileObserver observer = new SingleFileObserver(parent, mMask);
+                        observer.startWatching();
+
+                        mObservers.add(observer);
+                        Log.d(TAG, "add observer " + parent);
+                        File parentFile = new File(parent);
+                        File[] files = parentFile.listFiles();
+                        if (null == files) {
+                            continue;
+                        }
+
+                        for (File f : files) {
+                            if (f.isDirectory() && !f.getName().equals(".") && !f.getName().equals("..")) {
+                                stack.push(f.getPath());
+                            }
+                        }
+                    }
+
+                    stack.clear();
+                    stack = null;
+                } else {
+                    // 新建文件
+                }
+            }
+        }
+
+        private void doDelete(String path) {
+            synchronized (FileWatcher.this) {
+                Iterator<FileObserver> it = mObservers.iterator();
+                while (it.hasNext()) {
+                    SingleFileObserver sfo = (SingleFileObserver) it.next();
+                    // 如果删除的是文件夹移除对该文件夹及子目录的监听
+                    if (sfo.mPath != null && (sfo.mPath.equals(path) || sfo.mPath.startsWith(path + "/"))) {
+                        Log.d(TAG, "stop observer " + sfo.mPath);
+                        sfo.stopWatching();
+                        it.remove();
+                        sfo = null;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Monitor single directory and dispatch all events to its parent, with full
+         * path.
+         */
+        class SingleFileObserver extends FileObserver {
+            String mPath;
+
+            public SingleFileObserver(String path) {
+                this(path, ALL_EVENTS);
+                mPath = path;
+            }
+
+            public SingleFileObserver(String path, int mask) {
+                super(path, mask);
+                mPath = path;
+            }
+
+            @Override
+            public void onEvent(int event, String path) {
+                if (path == null) {
+                    return;
+                }
+                String newPath = mPath + "/" + path;
+                FileWatcher.this.onEvent(event, newPath);
+            }
+        }
+
+        class startRunnable implements Runnable {
+            @Override
+            public void run() {
+                synchronized (FileWatcher.this) {
+                    if (mObservers != null) {
+                        return;
+                    }
+
+                    mObservers = new ArrayList<FileObserver>();
+                    Stack<String> stack = new Stack<String>();
+                    stack.push(mPath);
+
+                    while (!stack.isEmpty()) {
+                        String parent = String.valueOf(stack.pop());
+                        mObservers.add(new SingleFileObserver(parent, mMask));
+                        File path = new File(parent);
+                        File[] files = path.listFiles();
+                        if (null == files) {
+                            continue;
+                        }
+
+                        for (File f : files) {
+                            if (f.isDirectory() && !f.getName().equals(".") && !f.getName().equals("..")) {
+                                stack.push(f.getPath());
+                            }
+                        }
+                    }
+
+                    Iterator<FileObserver> it = mObservers.iterator();
+                    while (it.hasNext()) {
+                        SingleFileObserver sfo = (SingleFileObserver) it.next();
+                        sfo.startWatching();
+                    }
+                }
+            }
+        }
+
+        class stopRunnable implements Runnable {
+            @Override
+            public void run() {
+                synchronized (FileWatcher.this) {
+                    if (mObservers == null) {
+                        return;
+                    }
+
+                    Iterator<FileObserver> it = mObservers.iterator();
+                    while (it.hasNext()) {
+                        FileObserver sfo = it.next();
+                        sfo.stopWatching();
+                    }
+                    mObservers.clear();
+                    mObservers = null;
+                }
+            }
+        }
+    }
 
 }
 

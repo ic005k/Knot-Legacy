@@ -4387,7 +4387,10 @@ static void JavaNotify_1() {
   // qDebug() << "C++ JavaNotify_1";
 }
 
-static void JavaNotify_2() { qDebug() << "C++ JavaNotify_2"; }
+static void JavaNotify_2() {
+  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+  qDebug() << "C++ JavaNotify_2";
+}
 
 static void JavaNotify_3() {
   mw_one->alertWindowsCount++;

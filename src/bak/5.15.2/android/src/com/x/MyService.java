@@ -126,7 +126,9 @@ public class MyService extends Service {
                 if (MyActivity.isStepCounter == 0)
                     CallJavaNotify_1();
                 if (MyActivity.isStepCounter == 1)
-                    CallJavaNotify_2();
+                {
+
+                }
 
 
             }

@@ -1,5 +1,7 @@
 package com.x;
 
+import com.x.MyActivity;
+
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,14 +29,22 @@ import android.annotation.TargetApi;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Locale;
+
+import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageInfo;
+import android.content.ComponentName;
 
 public class MyService extends Service {
     private static final String TAG = "MyService";
     private static final String ID = "channel_1";
     private static final String NAME = "F_SERVICE";
+
+    public native static void CallJavaNotify_0();
 
     public native static void CallJavaNotify_1();
 
@@ -116,7 +126,9 @@ public class MyService extends Service {
                 if (MyActivity.isStepCounter == 0)
                     CallJavaNotify_1();
                 if (MyActivity.isStepCounter == 1)
-                    CallJavaNotify_2();
+                {
+
+                }
 
 
             }
@@ -179,6 +191,7 @@ public class MyService extends Service {
 
         Log.d("MyService", "onStartCommand()-------");
 
+
         if (Build.VERSION.SDK_INT >= 26) {
             setForeground();
         } else {
@@ -204,6 +217,7 @@ public class MyService extends Service {
     @Override
     public void onDestroy() {
         Log.d("MyService", "onDestroy()-------");
+
         super.onDestroy();
 
     }

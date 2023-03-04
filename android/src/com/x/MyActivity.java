@@ -163,8 +163,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public native static void CallJavaNotify_4();
 
     public MyActivity() {
-        //不用在此初始化，已采用新方法
-        //m_instance = this;
+
     }
 
     //------------------------------------------------------------------------
@@ -215,7 +214,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
 
-        CallJavaNotify_2();
         return 1;
     }
 
@@ -307,6 +305,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
                 }
                 isScreenOff = false;
+                CallJavaNotify_2();
                 Log.w("Knot", "屏幕亮了");
 
             } else if (SCREEN_OFF.equals(intent.getAction())) {

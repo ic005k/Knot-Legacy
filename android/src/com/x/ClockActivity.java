@@ -226,7 +226,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT);
 
         if (isRefreshAlarm) {
-            CallJavaNotify_2();
             CallJavaNotify_3();
         }
 
