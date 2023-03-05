@@ -23,7 +23,7 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->frameDT->setContentsMargins(1, 1, 1, 1);
   ui->frameSel->setContentsMargins(1, 1, 1, 1);
   this->layout()->setSpacing(1);
-  this->installEventFilter(this);
+
   initDlg();
 
   ui->dateTimeEdit->hide();
@@ -73,6 +73,7 @@ void msgDialog::initDlg() {
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
   this->setModal(true);
+  this->installEventFilter(this);
   on_btnYear_clicked();
   ui->btnSetDT->setFocus();
 }
