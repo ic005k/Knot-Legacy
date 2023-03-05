@@ -1519,20 +1519,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
       return;
     }
 
+    setMini();
 #ifdef Q_OS_ANDROID
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QAndroidJniObject jo = QAndroidJniObject::fromString("MiniWin");
-    jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
-
     mw_one->mydlgPre->autoBakData();
-#else
-    QJniObject jo = QJniObject::fromString("MiniWin");
-    jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
-
-    mw_one->mydlgPre->autoBakData();
-#endif
-
 #endif
 
     event->ignore();
@@ -1546,6 +1535,22 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   Reg.setValue("y", this->geometry().y());
   Reg.setValue("w", this->geometry().width());
   Reg.setValue("h", this->geometry().height());
+}
+
+void MainWindow::setMini() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jo = QAndroidJniObject::fromString("MiniWin");
+  jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
+
+#else
+  QJniObject jo = QJniObject::fromString("MiniWin");
+  jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
+
+#endif
+
+#endif
 }
 
 void MainWindow::resetWinPos() {
