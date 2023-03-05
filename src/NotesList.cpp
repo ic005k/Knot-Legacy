@@ -100,6 +100,7 @@ void dlgNotesList::on_btnClose_clicked() { this->close(); }
 void dlgNotesList::on_btnNewNoteBook_clicked() {
   QTreeWidgetItem *item = new QTreeWidgetItem();
   item->setText(0, ui->editBook->text().trimmed());
+  item->setForeground(0, Qt::red);
   ui->treeWidget->addTopLevelItem(item);
   ui->treeWidget->setCurrentItem(item);
   on_btnNewNote_clicked();
@@ -120,6 +121,7 @@ void dlgNotesList::on_btnNewNote_clicked() {
   QTreeWidgetItem *item1 = new QTreeWidgetItem(topitem);
   item1->setText(0, ui->editNote->text().trimmed());
   item1->setText(1, noteFile);
+
   QTextEdit *edit = new QTextEdit();
   mw_one->TextEditToFile(edit, iniDir + noteFile);
 
@@ -422,6 +424,7 @@ void dlgNotesList::initNotesList() {
 
     QTreeWidgetItem *topItem = new QTreeWidgetItem;
     topItem->setText(0, strTop);
+    topItem->setForeground(0, Qt::red);
     QFont font = this->font();
     font.setBold(true);
     topItem->setFont(0, font);

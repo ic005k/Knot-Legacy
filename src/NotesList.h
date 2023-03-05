@@ -46,7 +46,8 @@ class dlgNotesList : public QDialog {
 
   void setNoteName(QString name);
   void moveBy(int ud);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -76,7 +77,7 @@ class dlgNotesList : public QDialog {
   void on_btnDel_2_clicked();
 
   void on_KVChanged();
-  private slots:
+ private slots:
   void on_btnFind_clicked();
 
   void on_btnPrev_clicked();
@@ -91,7 +92,7 @@ class dlgNotesList : public QDialog {
 
   void on_btnDown_clicked();
 
-  private:
+ private:
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   QStringList files;
   void clearMD_Pic(QTreeWidget *tw);
