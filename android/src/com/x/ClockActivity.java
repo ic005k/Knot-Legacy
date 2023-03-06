@@ -266,7 +266,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         if (!isRefreshAlarm) {
             android.os.Process.killProcess(android.os.Process.myPid());
         } else {
-            CallJavaNotify_4(); 
+            CallJavaNotify_4();
         }
 
         super.onDestroy();
