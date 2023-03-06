@@ -4393,8 +4393,10 @@ static void JavaNotify_1() {
 }
 
 static void JavaNotify_2() {
-  mw_one->ui->btnSteps->click();
-  mw_one->ui->btnBackSteps->click();
+  if (!mw_one->ui->frameMain->isHidden()) {
+    mw_one->ui->btnSteps->click();
+    mw_one->ui->btnBackSteps->click();
+  }
   qDebug() << "C++ JavaNotify_2";
 }
 
