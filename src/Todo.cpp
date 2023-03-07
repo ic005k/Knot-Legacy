@@ -316,6 +316,9 @@ void dlgTodo::on_btnSetTime_clicked() {
   int row = getCurrentIndex();
   if (row < 0) return;
 
+  delete mw_one->mymsgDlg;
+  mw_one->mymsgDlg = new msgDialog(this);
+
   QString str = getItemTime(row);
   QDate date;
   QTime time;
