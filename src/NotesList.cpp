@@ -481,6 +481,7 @@ void dlgNotesList::initNotesList() {
       if (strChild1 == curmd) {
         stop = true;
         tw->setCurrentItem(childItem);
+        qDebug() << "set current item...";
         ui->editName->setText(childItem->text(0));
         if (mw_one->initMain || isImport)
           on_treeWidget_itemClicked(childItem, 0);

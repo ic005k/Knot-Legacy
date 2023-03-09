@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.03";
+QString ver = "1.1.04";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -195,11 +195,9 @@ void MainWindow::SaveFile(QString SaveType) {
 
     saveTab();
     EditRecord::saveCustomDesc();
-    // dlgTodo::saveTodo();
   }
 
   if (SaveType == "todo") {
-    // dlgTodo::saveTodo();
   }
 
   if (SaveType == "notes") {
@@ -3744,8 +3742,10 @@ void MainWindow::showNotes() {
   ui->frameNotes->show();
 
   m_NotesList->close();
-  mydlgMainNotes->MD2Html(m_NotesList->currentMDFile);
-  mydlgMainNotes->loadMemoQML();
+  ui->btnNotesList->click();
+  m_NotesList->on_treeWidget_itemClicked(
+      m_NotesList->ui->treeWidget->currentItem(), 0);
+  m_NotesList->ui->btnClose->click();
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -5072,7 +5072,6 @@ void MainWindow::showGrayWindows() {
 void MainWindow::closeGrayWindows() { m_widget->close(); }
 
 void MainWindow::on_btnNotesList_clicked() {
-  if (!ui->frameNotes->isHidden()) mydlgMainNotes->saveQMLVPos();
   m_NotesList->close();
   m_NotesList = new dlgNotesList(this);
   m_NotesList->show();
