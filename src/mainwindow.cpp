@@ -2782,7 +2782,7 @@ void MainWindow::on_about() {
   textBrowser->append("");
   textBrowser->append(appName + "  Ver: " + ver);
   textBrowser->append("All Keys: " + QString::number(keys));
-  textBrowser->append("File Size: " + getFileSize(QFile(bakini).size(), 2));
+  textBrowser->append("Data Size: " + getFileSize(QFile(bakini).size(), 2));
 
   textBrowser->append("");
   textBrowser->append("Login Time: " + loginTime);
