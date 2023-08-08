@@ -604,6 +604,18 @@ class MainWindow : public QMainWindow {
 
   void on_btnPasteTodo_clicked();
 
+  void on_cboxY1_currentTextChanged(const QString &arg1);
+
+  void on_cboxM1_currentTextChanged(const QString &arg1);
+
+  void on_cboxD1_currentTextChanged(const QString &arg1);
+
+  void on_cboxY2_currentTextChanged(const QString &arg1);
+
+  void on_cboxM2_currentTextChanged(const QString &arg1);
+
+  void on_cboxD2_currentTextChanged(const QString &arg1);
+
  private:
   bool isAndroidKeyShow = false;
   int memoHeight;

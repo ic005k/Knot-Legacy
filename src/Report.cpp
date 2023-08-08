@@ -17,6 +17,8 @@ QTreeWidget* twOut2Img;
 QLabel *lblTotal, *lblDetails;
 QToolButton *btnCategory, *btnMonth, *btnYear;
 int twTotalRow = 0;
+bool isWholeMonth = true;
+bool isDateSection = false;
 
 void setTableNoItemFlags(QTableWidget* t, int row);
 
@@ -26,11 +28,16 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   this->installEventFilter(this);
   this->setModal(true);
 
-  mw_one->ui->cboxM1->hide();
-  mw_one->ui->cboxM2->hide();
-  mw_one->ui->cboxD1->hide();
-  mw_one->ui->cboxD2->hide();
-  mw_one->ui->label->hide();
+  QFont font0;
+  font0.setPixelSize(13);
+  font0.setBold(true);
+  mw_one->ui->cboxY1->setFont(font0);
+  mw_one->ui->cboxY2->setFont(font0);
+  mw_one->ui->cboxM1->setFont(font0);
+  mw_one->ui->cboxM2->setFont(font0);
+  mw_one->ui->cboxD1->setFont(font0);
+  mw_one->ui->cboxD2->setFont(font0);
+  mw_one->ui->label->setFont(font0);
 
   twOut2Img = new QTreeWidget;
   twOut2Img->setColumnCount(3);
@@ -129,6 +136,8 @@ void dlgReport::on_btnYear_clicked() {
     btnYearText = mw_one->ui->btnYear->text();
     list->close();
 
+    isWholeMonth = true;
+    isDateSection = false;
     listCategory.clear();
     mw_one->startInitReport();
   });
@@ -187,27 +196,32 @@ void dlgReport::getMonthData() {
   listCategory.clear();
 
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QString strYear;
+    QString strYear, strMonth, strDay;
     strYear = tw->topLevelItem(i)->text(3);
-    QString strMonth =
-        mw_one->get_Month(tw->topLevelItem(i)->text(0) + " " + strYear);
+    strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0) + " " + strYear);
+    strDay = mw_one->get_Day(tw->topLevelItem(i)->text(0) + " " + strYear);
 
-    if (btnMonthText == tr("Year-Round")) {
-      if (strYear == btnYearText) {
-        twTotalRow = twTotalRow + 1;
-        QTreeWidgetItem* item;
-        item = tw->topLevelItem(i)->clone();
+    if (isWholeMonth) {
+      if (btnMonthText == tr("Year-Round")) {
+        if (strYear == btnYearText) {
+          twTotalRow = twTotalRow + 1;
+          QTreeWidgetItem* item;
+          item = tw->topLevelItem(i)->clone();
 
-        setTWImgData(item);
+          setTWImgData(item);
+        }
+      } else {
+        if (strYear == btnYearText && strMonth == btnMonthText) {
+          twTotalRow = twTotalRow + 1;
+          QTreeWidgetItem* item;
+          item = tw->topLevelItem(i)->clone();
+
+          setTWImgData(item);
+        }
       }
-    } else {
-      if (strYear == btnYearText && strMonth == btnMonthText) {
-        twTotalRow = twTotalRow + 1;
-        QTreeWidgetItem* item;
-        item = tw->topLevelItem(i)->clone();
+    }
 
-        setTWImgData(item);
-      }
+    if (isDateSection) {
     }
   }
 }
@@ -281,6 +295,8 @@ void dlgReport::on_btnMonth_clicked() {
     btnMonthText = mw_one->ui->btnMonth->text();
     list->close();
 
+    isWholeMonth = true;
+    isDateSection = false;
     listCategory.clear();
     mw_one->startInitReport();
   });
@@ -312,6 +328,8 @@ void dlgReport::saveYMD() {
   Reg.setValue("/YMD/btnMText", btnMText);
   Reg.setValue("/YMD/btnDText", btnDText);
 
+  Reg.setValue("/YMD/Y1", mw_one->ui->cboxY1->currentIndex());
+  Reg.setValue("/YMD/Y2", mw_one->ui->cboxY2->currentIndex());
   Reg.setValue("/YMD/M1", mw_one->ui->cboxM1->currentIndex());
   Reg.setValue("/YMD/M2", mw_one->ui->cboxM2->currentIndex());
   Reg.setValue("/YMD/D1", mw_one->ui->cboxD1->currentIndex());

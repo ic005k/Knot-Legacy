@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.05";
+QString ver = "1.1.06";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -34,11 +34,12 @@ bool isBreak = false;
 
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
-extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del;
+extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del, isWholeMonth,
+    isDateSection;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
     fileName, strOpfPath, fontname;
 extern int iPage, sPos, totallines, baseLines, htmlIndex;
-extern QStringList readTextList, htmlFiles;
+extern QStringList readTextList, htmlFiles, listCategory;
 extern QDialog *dlgProgEBook;
 extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern QtOneDriveAuthorizationDialog *dialog_;
@@ -509,6 +510,8 @@ void MainWindow::init_Options() {
   btnMonthText = Reg2.value("/YMD/btnMonthText", tr("Month")).toString();
   ui->btnMonth->setText(btnMonthText);
 
+  ui->cboxY1->setCurrentIndex(Reg2.value("/YMD/Y1").toInt());
+  ui->cboxY2->setCurrentIndex(Reg2.value("/YMD/Y2").toInt());
   ui->cboxM1->setCurrentIndex(Reg2.value("/YMD/M1").toInt());
   ui->cboxM2->setCurrentIndex(Reg2.value("/YMD/M2").toInt());
   ui->cboxD1->setCurrentIndex(Reg2.value("/YMD/D1").toInt());
@@ -5374,3 +5377,33 @@ void MainWindow::on_btnSync_clicked() {
 void MainWindow::on_btnPDF_clicked() { mydlgMainNotes->on_btnPDF_clicked(); }
 
 void MainWindow::on_btnPasteTodo_clicked() { ui->editTodo->paste(); }
+
+void MainWindow::on_cboxY1_currentTextChanged(const QString &arg1) {
+  Q_UNUSED(arg1);
+  if (!initMain) {
+    isWholeMonth = false;
+    isDateSection = true;
+    listCategory.clear();
+    startInitReport();
+  }
+}
+
+void MainWindow::on_cboxM1_currentTextChanged(const QString &arg1) {
+  on_cboxY1_currentTextChanged(arg1);
+}
+
+void MainWindow::on_cboxD1_currentTextChanged(const QString &arg1) {
+  on_cboxY1_currentTextChanged(arg1);
+}
+
+void MainWindow::on_cboxY2_currentTextChanged(const QString &arg1) {
+  on_cboxY1_currentTextChanged(arg1);
+}
+
+void MainWindow::on_cboxM2_currentTextChanged(const QString &arg1) {
+  on_cboxY1_currentTextChanged(arg1);
+}
+
+void MainWindow::on_cboxD2_currentTextChanged(const QString &arg1) {
+  on_cboxY1_currentTextChanged(arg1);
+}

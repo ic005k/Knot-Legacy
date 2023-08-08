@@ -3380,6 +3380,55 @@ QRadioButton::indicator:checked {
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_25">
          <item>
+          <widget class="QComboBox" name="cboxY1">
+           <item>
+            <property name="text">
+             <string>2022</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2023</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2024</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2025</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2026</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2027</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2028</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2029</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2030</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
           <widget class="QComboBox" name="cboxM1">
            <item>
             <property name="text">
@@ -3613,6 +3662,55 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>--</string>
            </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cboxY2">
+           <item>
+            <property name="text">
+             <string>2022</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2023</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2024</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2025</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2026</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2027</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2028</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2029</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2030</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item>
