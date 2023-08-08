@@ -1,5 +1,7 @@
 #include "Report.h"
 
+#include <qdebug.h>
+
 #include "mainwindow.h"
 #include "ui_Report.h"
 #include "ui_mainwindow.h"
@@ -19,6 +21,7 @@ QToolButton *btnCategory, *btnMonth, *btnYear;
 int twTotalRow = 0;
 bool isWholeMonth = true;
 bool isDateSection = false;
+int s_y1, s_m1, s_d1, s_y2, s_m2, s_d2;
 
 void setTableNoItemFlags(QTableWidget* t, int row);
 
@@ -196,10 +199,10 @@ void dlgReport::getMonthData() {
   listCategory.clear();
 
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QString strYear, strMonth, strDay;
+    QString strYear, strMonth;
     strYear = tw->topLevelItem(i)->text(3);
     strMonth = mw_one->get_Month(tw->topLevelItem(i)->text(0) + " " + strYear);
-    strDay = mw_one->get_Day(tw->topLevelItem(i)->text(0) + " " + strYear);
+    int iDay = mw_one->get_Day(tw->topLevelItem(i)->text(0) + " " + strYear);
 
     if (isWholeMonth) {
       if (btnMonthText == tr("Year-Round")) {
@@ -222,6 +225,23 @@ void dlgReport::getMonthData() {
     }
 
     if (isDateSection) {
+      int sy, sm, sd;
+      sy = strYear.toInt();
+      sm = strMonth.toInt();
+      sd = iDay;
+      QDateTime currentDateTime = QDateTime(QDate(sy, sm, sd), QTime(0, 0));
+      QDateTime startDateTime = QDateTime(QDate(s_y1, s_m1, s_d1), QTime(0, 0));
+      QDateTime endDateTime = QDateTime(QDate(s_y2, s_m2, s_d2), QTime(0, 0));
+      int secondsDiff1 = startDateTime.secsTo(currentDateTime);
+      int secondsDiff2 = currentDateTime.secsTo(endDateTime);
+
+      if (secondsDiff1 >= 0 && secondsDiff2 >= 0) {
+        twTotalRow = twTotalRow + 1;
+        QTreeWidgetItem* item;
+        item = tw->topLevelItem(i)->clone();
+
+        setTWImgData(item);
+      }
     }
   }
 }

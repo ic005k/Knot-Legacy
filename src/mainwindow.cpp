@@ -38,7 +38,8 @@ extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del, isWholeMonth,
     isDateSection;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
     fileName, strOpfPath, fontname;
-extern int iPage, sPos, totallines, baseLines, htmlIndex;
+extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
+    s_y2, s_m2, s_d2;
 extern QStringList readTextList, htmlFiles, listCategory;
 extern QDialog *dlgProgEBook;
 extern void setTableNoItemFlags(QTableWidget *t, int row);
@@ -5384,6 +5385,14 @@ void MainWindow::on_cboxY1_currentTextChanged(const QString &arg1) {
     isWholeMonth = false;
     isDateSection = true;
     listCategory.clear();
+
+    s_y1 = ui->cboxY1->currentText().toInt();
+    s_m1 = ui->cboxM1->currentText().toInt();
+    s_d1 = ui->cboxD1->currentText().toInt();
+    s_y2 = ui->cboxY2->currentText().toInt();
+    s_m2 = ui->cboxM2->currentText().toInt();
+    s_d2 = ui->cboxD2->currentText().toInt();
+
     startInitReport();
   }
 }
