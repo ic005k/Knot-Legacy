@@ -505,8 +505,15 @@ void dlgReport::on_btnOut2Img_clicked() {
     twOut2Img->expandAll();
 
     QTreeWidgetItem* item0 = new QTreeWidgetItem;
-    item0->setText(0, mw_one->ui->lblTitle_Report->text());
+    QTreeWidgetItem* item1 = new QTreeWidgetItem;
+    QString st = mw_one->ui->lblTitle_Report->text();
+    QStringList st_list = st.split("(");
+    QString st1 = st_list.at(0);
+    QString st2 = "(" + st_list.at(1);
+    item0->setText(0, st2);
     twOut2Img->insertTopLevelItem(0, item0);
+    item1->setText(0, st1);
+    twOut2Img->insertTopLevelItem(0, item1);
 
     QTreeWidgetItem* item = new QTreeWidgetItem;
     item->setText(0, tr("Total") + " : ");
@@ -515,14 +522,14 @@ void dlgReport::on_btnOut2Img_clicked() {
                   tr("Amount") + " " + QString("%1").arg(t_amount, 0, 'f', 2));
     twOut2Img->addTopLevelItem(item);
 
-    twTotalRow = twTotalRow + 3;
+    twTotalRow = twTotalRow + 4;
     qreal h = twTotalRow * 28;
     twOut2Img->setGeometry(0, 0, this->width(), h);
 
     // The column merge is implemented
     QTreeWidget* m_t = new QTreeWidget(this);
     QFont f = this->font();
-    f.setPointSize(f.pointSize() - 1);
+    f.setPointSize(f.pointSize() - 2);
     m_t->setFont(f);
     m_t->setColumnCount(3);
     m_t->headerItem()->setText(0, "  " + tr("Date") + "  ");
