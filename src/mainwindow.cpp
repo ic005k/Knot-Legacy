@@ -5379,8 +5379,8 @@ void MainWindow::on_btnPDF_clicked() { mydlgMainNotes->on_btnPDF_clicked(); }
 
 void MainWindow::on_btnPasteTodo_clicked() { ui->editTodo->paste(); }
 
-void MainWindow::on_cboxY1_currentTextChanged(const QString &arg1) {
-  Q_UNUSED(arg1);
+void MainWindow::on_cboxY1_activated(int index) {
+  Q_UNUSED(index);
   if (!initMain) {
     isWholeMonth = false;
     isDateSection = true;
@@ -5397,22 +5397,12 @@ void MainWindow::on_cboxY1_currentTextChanged(const QString &arg1) {
   }
 }
 
-void MainWindow::on_cboxM1_currentTextChanged(const QString &arg1) {
-  on_cboxY1_currentTextChanged(arg1);
-}
+void MainWindow::on_cboxM1_activated(int index) { on_cboxY1_activated(index); }
 
-void MainWindow::on_cboxD1_currentTextChanged(const QString &arg1) {
-  on_cboxY1_currentTextChanged(arg1);
-}
+void MainWindow::on_cboxD1_activated(int index) { on_cboxY1_activated(index); }
 
-void MainWindow::on_cboxY2_currentTextChanged(const QString &arg1) {
-  on_cboxY1_currentTextChanged(arg1);
-}
+void MainWindow::on_cboxY2_activated(int index) { on_cboxY1_activated(index); }
 
-void MainWindow::on_cboxM2_currentTextChanged(const QString &arg1) {
-  on_cboxY1_currentTextChanged(arg1);
-}
+void MainWindow::on_cboxM2_activated(int index) { on_cboxY1_activated(index); }
 
-void MainWindow::on_cboxD2_currentTextChanged(const QString &arg1) {
-  on_cboxY1_currentTextChanged(arg1);
-}
+void MainWindow::on_cboxD2_activated(int index) { on_cboxY1_activated(index); }

@@ -32,7 +32,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   this->setModal(true);
 
   QFont font0;
-  font0.setPixelSize(13);
+  font0.setPixelSize(12);
   font0.setBold(true);
   mw_one->ui->cboxY1->setFont(font0);
   mw_one->ui->cboxY2->setFont(font0);
@@ -538,9 +538,16 @@ void dlgReport::on_btnOut2Img_clicked() {
     // 方法2
     // QPixmap pixmap = QPixmap::grabWidget(m_t);
 
-    QString strFile = mw_one->ui->lblTitle->text() + "-" +
-                      mw_one->ui->btnYear->text() + "-" +
-                      mw_one->ui->btnMonth->text() + ".png";
+    QString strFile;
+    if (isWholeMonth)
+      strFile = mw_one->ui->lblTitle->text() + "(" +
+                mw_one->ui->btnYear->text() + "-" +
+                mw_one->ui->btnMonth->text() + ")" + ".png";
+    if (isDateSection)
+      strFile = mw_one->ui->lblTitle->text() + "(" + QString::number(s_y1) +
+                "-" + QString::number(s_m1) + "-" + QString::number(s_d1) +
+                "~" + QString::number(s_y2) + "-" + QString::number(s_m2) +
+                "-" + QString::number(s_d2) + ")" + ".png";
 
 #ifdef Q_OS_ANDROID
     QDir* folder = new QDir;

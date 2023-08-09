@@ -3426,6 +3426,11 @@ QRadioButton::indicator:checked {
              <string>2030</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>2031</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item>
@@ -3660,7 +3665,7 @@ QRadioButton::indicator:checked {
             </sizepolicy>
            </property>
            <property name="text">
-            <string>--</string>
+            <string>-</string>
            </property>
           </widget>
          </item>
@@ -3709,6 +3714,11 @@ QRadioButton::indicator:checked {
            <item>
             <property name="text">
              <string>2030</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2031</string>
             </property>
            </item>
           </widget>
