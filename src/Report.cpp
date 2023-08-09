@@ -505,8 +505,7 @@ void dlgReport::on_btnOut2Img_clicked() {
     twOut2Img->expandAll();
 
     QTreeWidgetItem* item0 = new QTreeWidgetItem;
-    item0->setText(
-        0, mw_one->ui->btnYear->text() + " . " + mw_one->ui->btnMonth->text());
+    item0->setText(0, mw_one->ui->lblTitle_Report->text());
     twOut2Img->insertTopLevelItem(0, item0);
 
     QTreeWidgetItem* item = new QTreeWidgetItem;
