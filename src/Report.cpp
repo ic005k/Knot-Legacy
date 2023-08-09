@@ -76,8 +76,20 @@ void dlgReport::init() {
   mw_one->ui->qwReportSub->setMinimumHeight(mw_one->height() / 3);
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameReport->show();
-  mw_one->ui->lblTitle_Report->setText(
-      mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()));
+  if (isWholeMonth)
+    mw_one->ui->lblTitle_Report->setText(
+        mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
+        "(" + mw_one->ui->btnYear->text() + "-" + mw_one->ui->btnMonth->text() +
+        ")");
+  if (isDateSection)
+    mw_one->ui->lblTitle_Report->setText(
+        mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
+        "(" + mw_one->ui->cboxY1->currentText() + "-" +
+        mw_one->ui->cboxM1->currentText() + "-" +
+        mw_one->ui->cboxD1->currentText() + "~" +
+        mw_one->ui->cboxY2->currentText() + "-" +
+        mw_one->ui->cboxM2->currentText() + "-" +
+        mw_one->ui->cboxD2->currentText() + ")");
 }
 
 dlgReport::~dlgReport() { delete ui; }
@@ -141,6 +153,10 @@ void dlgReport::on_btnYear_clicked() {
 
     isWholeMonth = true;
     isDateSection = false;
+    mw_one->ui->lblTitle_Report->setText(
+        mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
+        "(" + mw_one->ui->btnYear->text() + "-" + mw_one->ui->btnMonth->text() +
+        ")");
     listCategory.clear();
     mw_one->startInitReport();
   });
@@ -317,6 +333,10 @@ void dlgReport::on_btnMonth_clicked() {
 
     isWholeMonth = true;
     isDateSection = false;
+    mw_one->ui->lblTitle_Report->setText(
+        mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
+        "(" + mw_one->ui->btnYear->text() + "-" + mw_one->ui->btnMonth->text() +
+        ")");
     listCategory.clear();
     mw_one->startInitReport();
   });
@@ -531,23 +551,15 @@ void dlgReport::on_btnOut2Img_clicked() {
     m_t->expandAll();
     m_t->setGeometry(0, 0, this->width(), h + m_t->header()->height());
 
-    // 方法1
+    // Method1
     QPixmap pixmap(m_t->size());
     m_t->render(&pixmap);
 
-    // 方法2
+    // Method2
     // QPixmap pixmap = QPixmap::grabWidget(m_t);
 
     QString strFile;
-    if (isWholeMonth)
-      strFile = mw_one->ui->lblTitle->text() + "(" +
-                mw_one->ui->btnYear->text() + "-" +
-                mw_one->ui->btnMonth->text() + ")" + ".png";
-    if (isDateSection)
-      strFile = mw_one->ui->lblTitle->text() + "(" + QString::number(s_y1) +
-                "-" + QString::number(s_m1) + "-" + QString::number(s_d1) +
-                "~" + QString::number(s_y2) + "-" + QString::number(s_m2) +
-                "-" + QString::number(s_d2) + ")" + ".png";
+    strFile = mw_one->ui->lblTitle_Report->text() + ".png";
 
 #ifdef Q_OS_ANDROID
     QDir* folder = new QDir;

@@ -5393,6 +5393,12 @@ void MainWindow::on_cboxY1_activated(int index) {
     s_m2 = ui->cboxM2->currentText().toInt();
     s_d2 = ui->cboxD2->currentText().toInt();
 
+    ui->lblTitle_Report->setText(
+        ui->tabWidget->tabText(ui->tabWidget->currentIndex()) + "(" +
+        ui->cboxY1->currentText() + "-" + ui->cboxM1->currentText() + "-" +
+        ui->cboxD1->currentText() + "~" + ui->cboxY2->currentText() + "-" +
+        ui->cboxM2->currentText() + "-" + ui->cboxD2->currentText() + ")");
+
     startInitReport();
   }
 }
