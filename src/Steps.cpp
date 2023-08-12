@@ -111,7 +111,7 @@ void dlgSteps::saveSteps() {
   Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Alg2", mw_one->ui->rbAlg2->isChecked());
 
-  if (getCount() > mw_one->days) {
+  if (getCount() > 90) {
     delItem(0);
   }
   int count = getCount();
