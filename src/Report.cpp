@@ -133,10 +133,10 @@ void dlgReport::on_btnYear_clicked() {
   QFont font;
   font.setPointSize(fontSize);
   list->setFont(font);
-  int year = 2022;
+  int cy = QDate::currentDate().year();
   QStringList strList;
-  for (int i = 0; i < 10; i++) {
-    strList.append(QString::number(year + i));
+  for (int i = 2022; i <=cy; i++) {
+    strList.append(QString::number(i));
   }
 
   for (int i = 0; i < strList.count(); i++) {

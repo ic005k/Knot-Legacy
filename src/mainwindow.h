@@ -394,7 +394,8 @@ class MainWindow : public QMainWindow {
   void startSyncData();
   void removeFilesWatch();
   void addFilesWatch();
- public slots:
+  void init_report_widget_year();
+  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();

@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.07";
+QString ver = "1.1.08";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -226,6 +226,7 @@ MainWindow::MainWindow(QWidget *parent)
   loading = true;
   init_UIWidget();
   init_ChartWidget();
+  init_report_widget_year();
   init_Options();
   init_Sensors();
   init_TotalData();
@@ -511,12 +512,12 @@ void MainWindow::init_Options() {
   btnMonthText = Reg2.value("/YMD/btnMonthText", tr("Month")).toString();
   ui->btnMonth->setText(btnMonthText);
 
-  ui->cboxY1->setCurrentIndex(Reg2.value("/YMD/Y1").toInt());
-  ui->cboxY2->setCurrentIndex(Reg2.value("/YMD/Y2").toInt());
-  ui->cboxM1->setCurrentIndex(Reg2.value("/YMD/M1").toInt());
-  ui->cboxM2->setCurrentIndex(Reg2.value("/YMD/M2").toInt());
-  ui->cboxD1->setCurrentIndex(Reg2.value("/YMD/D1").toInt());
-  ui->cboxD2->setCurrentIndex(Reg2.value("/YMD/D2").toInt());
+  ui->cboxY1->setCurrentIndex(Reg2.value("/YMD/Y1",0).toInt());
+  ui->cboxY2->setCurrentIndex(Reg2.value("/YMD/Y2",0).toInt());
+  ui->cboxM1->setCurrentIndex(Reg2.value("/YMD/M1",0).toInt());
+  ui->cboxM2->setCurrentIndex(Reg2.value("/YMD/M2",0).toInt());
+  ui->cboxD1->setCurrentIndex(Reg2.value("/YMD/D1",0).toInt());
+  ui->cboxD2->setCurrentIndex(Reg2.value("/YMD/D2",0).toInt());
 
   // time machine
   QSettings RegTime(privateDir + "timemachine.ini", QSettings::IniFormat);
@@ -5412,3 +5413,15 @@ void MainWindow::on_cboxY2_activated(int index) { on_cboxY1_activated(index); }
 void MainWindow::on_cboxM2_activated(int index) { on_cboxY1_activated(index); }
 
 void MainWindow::on_cboxD2_activated(int index) { on_cboxY1_activated(index); }
+
+void MainWindow::init_report_widget_year()
+{
+  int cy = QDate::currentDate().year();
+  ui->cboxY1->clear();
+  ui->cboxY2->clear();
+  for(int i=2022;i<=cy;i++)
+  {
+    ui->cboxY1->addItem(QString::number(i));
+    ui->cboxY2->addItem(QString::number(i));
+  }
+}
