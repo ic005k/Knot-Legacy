@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.08";
+QString ver = "1.1.09";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4407,7 +4407,7 @@ static void JavaNotify_2() {
 
 static void JavaNotify_3() {
   mw_one->alertWindowsCount++;
-
+  mw_one->mydlgTodo->refreshAlarm();
   qDebug() << "C++ JavaNotify_3";
 }
 
