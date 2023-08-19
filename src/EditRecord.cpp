@@ -5,8 +5,8 @@
 #include "mainwindow.h"
 #include "ui_EditRecord.h"
 #include "ui_mainwindow.h"
-extern MainWindow* mw_one;
-extern QTabWidget* tabData;
+extern MainWindow *mw_one;
+extern QTabWidget *tabData;
 extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
 extern bool isBreak, isImport;
@@ -15,9 +15,9 @@ bool del = false;
 
 QStringList c_list;
 
-dlgList* m_List;
+dlgList *m_List;
 
-EditRecord::EditRecord(QWidget* parent)
+EditRecord::EditRecord(QWidget *parent)
     : QDialog(parent), ui(new Ui::EditRecord) {
   ui->setupUi(this);
 
@@ -26,7 +26,7 @@ EditRecord::EditRecord(QWidget* parent)
   m_List = new dlgList(this);
 
   this->installEventFilter(this);
-  ui->editDesc->installEventFilter(this);
+  ui->editCategory->installEventFilter(this);
 
   QFont font;
   font.setPointSize(23);
@@ -47,13 +47,13 @@ EditRecord::EditRecord(QWidget* parent)
   ui->btnDot->setFont(font);
   ui->btnDel->setFont(font);
 
-  QValidator* validator =
+  QValidator *validator =
       new QRegularExpressionValidator(regxNumber, ui->editAmount);
   ui->editAmount->setValidator(validator);
   ui->editAmount->setAttribute(Qt::WA_InputMethodEnabled, false);
   ui->editAmount->setReadOnly(true);
 
-  ui->editDesc->setPlaceholderText(tr("Please enter a category"));
+  ui->editCategory->setPlaceholderText(tr("Please enter a category"));
 
   ui->btnClearAmount->setStyleSheet("border:none");
   ui->btnClearDesc->setStyleSheet("border:none");
@@ -63,7 +63,7 @@ EditRecord::EditRecord(QWidget* parent)
   ui->hsM->setStyleSheet(ui->hsH->styleSheet());
 
   mw_one->setLineEditQss(ui->editAmount, 10, 1, "#4169E1", "#4169E1");
-  mw_one->setLineEditQss(ui->editDesc, 10, 1, "#4169E1", "#4169E1");
+  mw_one->setLineEditQss(ui->editCategory, 10, 1, "#4169E1", "#4169E1");
   mw_one->setLineEditQss(ui->editDetails, 10, 1, "#4169E1", "#4169E1");
 }
 
@@ -76,7 +76,7 @@ void EditRecord::init() {
               mw_one->height());
 
   if (mw_one->isAdd) {
-    ui->editDesc->setText("");
+    ui->editCategory->setText("");
     ui->editAmount->setText("");
   }
   show();
@@ -86,9 +86,11 @@ EditRecord::~EditRecord() { delete ui; }
 
 void EditRecord::on_btnBack_clicked() { close(); }
 
-void EditRecord::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
+void EditRecord::keyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event); }
 
 void EditRecord::on_btnOk_clicked() {
+  close();
+
   if (!mw_one->isAdd) {
     mw_one->addUndo(tr("Modify Item") + " ( " + mw_one->getTabText() + " ) ");
 
@@ -98,18 +100,18 @@ void EditRecord::on_btnOk_clicked() {
       for (int i = 0; i < 500; i++)
         mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                          ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                         ui->editDesc->text().trimmed());
+                         ui->editCategory->text().trimmed());
     } else
 
       mw_one->addUndo(tr("Add Item") + " ( " + mw_one->getTabText() + " ) ");
 
     mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                      ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                     ui->editDesc->text().trimmed());
+                     ui->editCategory->text().trimmed());
   }
 
   // Save Desc Text
-  QString str = ui->editDesc->text().trimmed();
+  QString str = ui->editCategory->text().trimmed();
   int count = m_List->ui->listWidget->count();
   for (int i = 0; i < count; i++) {
     QString str1 = m_List->ui->listWidget->item(i)->text().trimmed();
@@ -120,7 +122,7 @@ void EditRecord::on_btnOk_clicked() {
   }
 
   if (str.length() > 0) {
-    QListWidgetItem* item = new QListWidgetItem(str);
+    QListWidgetItem *item = new QListWidgetItem(str);
     m_List->ui->listWidget->insertItem(0, item);
   }
 
@@ -137,8 +139,6 @@ void EditRecord::on_btnOk_clicked() {
 
   del = false;
   mw_one->startSave("tab");
-
-  close();
 }
 
 void EditRecord::on_btn7_clicked() { set_Amount("7"); }
@@ -171,10 +171,12 @@ void EditRecord::on_btnDel_clicked() {
 
 void EditRecord::set_Amount(QString Number) {
   QString str = ui->editAmount->text().trimmed();
-  if (str == "0.00") ui->editAmount->setText("");
+  if (str == "0.00")
+    ui->editAmount->setText("");
   if (str.split(".").count() == 2 && str != "0.00") {
     QString str0 = str.split(".").at(1);
-    if (str0.length() == 2) return;
+    if (str0.length() == 2)
+      return;
   }
   ui->editAmount->setText(str + Number);
 }
@@ -203,13 +205,15 @@ void EditRecord::saveCustomDesc() {
 
   QStringList list;
   for (int i = 0; i < count; i++) {
-    if (isBreak) break;
+    if (isBreak)
+      break;
     list.append(m_List->ui->listWidget->item(i)->text().trimmed());
   }
   // list = QSet<QString>(list.begin(), list.end()).values(); //IOS无法编译通过
   removeDuplicates(&list);
   for (int i = 0; i < list.count(); i++) {
-    if (isBreak) break;
+    if (isBreak)
+      break;
     QString str = list.at(i);
     if (str.length() > 0)
       Reg.setValue("/CustomDesc/Item" + QString::number(i), str);
@@ -218,36 +222,39 @@ void EditRecord::saveCustomDesc() {
 
   // Details
   for (int i = 0; i < c_list.count(); i++) {
-    if (isBreak) break;
+    if (isBreak)
+      break;
     QString str = c_list.at(i);
     Reg.setValue("/Details/Item" + QString::number(i), str);
   }
   Reg.setValue("/Details/Count", c_list.count());
 }
 
-int EditRecord::removeDuplicates(QStringList* that) {
+int EditRecord::removeDuplicates(QStringList *that) {
   int n = that->size();
   int j = 0;
   QSet<QString> seen;
   seen.reserve(n);
   int setSize = 0;
   for (int i = 0; i < n; ++i) {
-    const QString& s = that->at(i);
+    const QString &s = that->at(i);
     seen.insert(s);
-    if (setSize == seen.size())  // unchanged size => was already seen
+    if (setSize == seen.size()) // unchanged size => was already seen
       continue;
     ++setSize;
 
     // //将不重复项与重复项交换（新，IOS无法编译通过）
     //#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    if (j != i) that->swapItemsAt(i, j);
+    if (j != i)
+      that->swapItemsAt(i, j);
     //#else
     //    if (j != i) that->swap(i, j);
     //#endif
 
     ++j;
   }
-  if (n != j) that->erase(that->begin() + j, that->end());
+  if (n != j)
+    that->erase(that->begin() + j, that->end());
   return n - j;
 }
 
@@ -269,7 +276,7 @@ void EditRecord::init_Desc() {
   for (int i = 0; i < descCount; i++) {
     QString str =
         RegDesc.value("/CustomDesc/Item" + QString::number(i)).toString();
-    QListWidgetItem* item = new QListWidgetItem(str);
+    QListWidgetItem *item = new QListWidgetItem(str);
     // item->setSizeHint(
     //    QSize(mw_one->mydlgList->ui->listWidget->width() - 20, 35));
     m_List->ui->listWidget->addItem(item);
@@ -303,9 +310,9 @@ void EditRecord::getTime(int h, int m) {
   ui->lblTime->setText(strh + ":" + strm + ":" + strs);
 }
 
-bool EditRecord::eventFilter(QObject* watch, QEvent* evn) {
+bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
   if (evn->type() == QEvent::KeyPress) {
-    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!m_List->isHidden()) {
         m_List->close();
@@ -328,12 +335,13 @@ bool EditRecord::eventFilter(QObject* watch, QEvent* evn) {
 
 void EditRecord::on_btnClearAmount_clicked() { ui->editAmount->clear(); }
 
-void EditRecord::on_btnClearDesc_clicked() { ui->editDesc->clear(); }
+void EditRecord::on_btnClearDesc_clicked() { ui->editCategory->clear(); }
 
-void EditRecord::on_editAmount_textChanged(const QString& arg1) {
+void EditRecord::on_editAmount_textChanged(const QString &arg1) {
   int count = 0;
   for (int i = 0; i < arg1.count(); i++) {
-    if (arg1.mid(i, 1) == ".") count++;
+    if (arg1.mid(i, 1) == ".")
+      count++;
     if (count == 2) {
       QString str0 = arg1;
       QString str = str0.mid(0, str0.length() - 1);
@@ -358,25 +366,25 @@ void EditRecord::on_hsM_valueChanged(int value) {
 
 void EditRecord::on_btnClearDetails_clicked() { ui->editDetails->clear(); }
 
-void EditRecord::on_editDesc_textChanged(const QString& arg1) {
+void EditRecord::on_editDesc_textChanged(const QString &arg1) {
   if (arg1.length() > 0)
     ui->lblCategory->setStyleSheet(lblStyleHighLight);
   else
     ui->lblCategory->setStyleSheet(lblStyle);
 }
 
-void EditRecord::on_editDetails_textChanged(const QString& arg1) {
+void EditRecord::on_editDetails_textChanged(const QString &arg1) {
   if (arg1.length() > 0)
     ui->lblDetails->setStyleSheet(lblStyleHighLight);
   else
     ui->lblDetails->setStyleSheet(lblStyle);
 
-  QCompleter* completer = new QCompleter(c_list);
+  QCompleter *completer = new QCompleter(c_list);
   ui->editDetails->setCompleter(completer);
 }
 
 void EditRecord::saveOne() {
-  QTreeWidget* tw = (QTreeWidget*)tabData->currentWidget();
+  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   int tabIndex = tabData->currentIndex();
 
   QString name = "tab" + QString::number(tabIndex + 1);
@@ -390,7 +398,7 @@ void EditRecord::saveOne() {
 
   int count = tw->topLevelItemCount();
 
-  QTreeWidgetItem* item = tw->currentItem();
+  QTreeWidgetItem *item = tw->currentItem();
   int i = 0;
   if (item->parent() == NULL)
     i = tw->indexOfTopLevelItem(item);
@@ -413,16 +421,17 @@ void EditRecord::saveOne() {
   if (childCount > 0) {
     if (!del) {
       for (int j = 0; j < childCount; j++) {
-        if (isBreak) return;
-        Reg.setValue(
-            flag + QString::number(i + 1) + "-childTime" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(0));
-        Reg.setValue(
-            flag + QString::number(i + 1) + "-childAmount" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(1));
-        Reg.setValue(
-            flag + QString::number(i + 1) + "-childDesc" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(2));
+        if (isBreak)
+          return;
+        Reg.setValue(flag + QString::number(i + 1) + "-childTime" +
+                         QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(0));
+        Reg.setValue(flag + QString::number(i + 1) + "-childAmount" +
+                         QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(1));
+        Reg.setValue(flag + QString::number(i + 1) + "-childDesc" +
+                         QString::number(j),
+                     tw->topLevelItem(i)->child(j)->text(2));
         Reg.setValue(flag + QString::number(i + 1) + "-childDetails" +
                          QString::number(j),
                      tw->topLevelItem(i)->child(j)->text(3));

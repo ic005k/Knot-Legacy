@@ -77,7 +77,7 @@ void dlgList::on_btnBack_clicked() { setCategoryText(); }
 void dlgList::setCategoryText() {
   int row = ui->listWidget->currentRow();
   if (row >= 0) {
-    mw_one->myEditRecord->ui->editDesc->setText(
+    mw_one->myEditRecord->ui->editCategory->setText(
         ui->listWidget->currentItem()->text());
   }
 
@@ -128,7 +128,7 @@ void dlgList::on_btnRename_clicked() {
     }
     mw_one->startSave("alltab");
 
-    mw_one->myEditRecord->ui->editDesc->setText(
+    mw_one->myEditRecord->ui->editCategory->setText(
         ui->editRename->text().trimmed());
   }
 }

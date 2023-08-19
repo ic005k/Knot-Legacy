@@ -140,7 +140,7 @@ selection-background-color: lightblue;
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="editDesc">
+      <widget class="QLineEdit" name="editCategory">
        <property name="minimumSize">
         <size>
          <width>0</width>
