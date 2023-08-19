@@ -540,6 +540,7 @@ void MainWindow::init_Options() {
 }
 
 void MainWindow::init_ChartWidget() {
+  CurrentYear = QString::number(QDate::currentDate().year());
   ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->glMonth->layout()->setContentsMargins(0, 0, 0, 0);
   ui->glMonth->layout()->setSpacing(0);
