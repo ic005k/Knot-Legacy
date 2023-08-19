@@ -152,6 +152,7 @@ class MainWindow : public QMainWindow {
   int alertWindowsCount = 0;
   QString strText;
   QString strRefreshUrl;
+  QString CurrentYear = "20xx";
   qreal curx = 0;
   bool isMousePress = false;
   bool isMouseMove = false;
@@ -395,7 +396,7 @@ class MainWindow : public QMainWindow {
   void removeFilesWatch();
   void addFilesWatch();
   void init_report_widget_year();
-  public slots:
+ public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();

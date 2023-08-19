@@ -171,12 +171,10 @@ void EditRecord::on_btnDel_clicked() {
 
 void EditRecord::set_Amount(QString Number) {
   QString str = ui->editAmount->text().trimmed();
-  if (str == "0.00")
-    ui->editAmount->setText("");
+  if (str == "0.00") ui->editAmount->setText("");
   if (str.split(".").count() == 2 && str != "0.00") {
     QString str0 = str.split(".").at(1);
-    if (str0.length() == 2)
-      return;
+    if (str0.length() == 2) return;
   }
   ui->editAmount->setText(str + Number);
 }
@@ -205,15 +203,13 @@ void EditRecord::saveCustomDesc() {
 
   QStringList list;
   for (int i = 0; i < count; i++) {
-    if (isBreak)
-      break;
+    if (isBreak) break;
     list.append(m_List->ui->listWidget->item(i)->text().trimmed());
   }
   // list = QSet<QString>(list.begin(), list.end()).values(); //IOS无法编译通过
   removeDuplicates(&list);
   for (int i = 0; i < list.count(); i++) {
-    if (isBreak)
-      break;
+    if (isBreak) break;
     QString str = list.at(i);
     if (str.length() > 0)
       Reg.setValue("/CustomDesc/Item" + QString::number(i), str);
@@ -222,8 +218,7 @@ void EditRecord::saveCustomDesc() {
 
   // Details
   for (int i = 0; i < c_list.count(); i++) {
-    if (isBreak)
-      break;
+    if (isBreak) break;
     QString str = c_list.at(i);
     Reg.setValue("/Details/Item" + QString::number(i), str);
   }
@@ -239,22 +234,20 @@ int EditRecord::removeDuplicates(QStringList *that) {
   for (int i = 0; i < n; ++i) {
     const QString &s = that->at(i);
     seen.insert(s);
-    if (setSize == seen.size()) // unchanged size => was already seen
+    if (setSize == seen.size())  // unchanged size => was already seen
       continue;
     ++setSize;
 
     // //将不重复项与重复项交换（新，IOS无法编译通过）
     //#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    if (j != i)
-      that->swapItemsAt(i, j);
+    if (j != i) that->swapItemsAt(i, j);
     //#else
     //    if (j != i) that->swap(i, j);
     //#endif
 
     ++j;
   }
-  if (n != j)
-    that->erase(that->begin() + j, that->end());
+  if (n != j) that->erase(that->begin() + j, that->end());
   return n - j;
 }
 
@@ -340,8 +333,7 @@ void EditRecord::on_btnClearDesc_clicked() { ui->editCategory->clear(); }
 void EditRecord::on_editAmount_textChanged(const QString &arg1) {
   int count = 0;
   for (int i = 0; i < arg1.count(); i++) {
-    if (arg1.mid(i, 1) == ".")
-      count++;
+    if (arg1.mid(i, 1) == ".") count++;
     if (count == 2) {
       QString str0 = arg1;
       QString str = str0.mid(0, str0.length() - 1);
@@ -421,17 +413,16 @@ void EditRecord::saveOne() {
   if (childCount > 0) {
     if (!del) {
       for (int j = 0; j < childCount; j++) {
-        if (isBreak)
-          return;
-        Reg.setValue(flag + QString::number(i + 1) + "-childTime" +
-                         QString::number(j),
-                     tw->topLevelItem(i)->child(j)->text(0));
-        Reg.setValue(flag + QString::number(i + 1) + "-childAmount" +
-                         QString::number(j),
-                     tw->topLevelItem(i)->child(j)->text(1));
-        Reg.setValue(flag + QString::number(i + 1) + "-childDesc" +
-                         QString::number(j),
-                     tw->topLevelItem(i)->child(j)->text(2));
+        if (isBreak) return;
+        Reg.setValue(
+            flag + QString::number(i + 1) + "-childTime" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(0));
+        Reg.setValue(
+            flag + QString::number(i + 1) + "-childAmount" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(1));
+        Reg.setValue(
+            flag + QString::number(i + 1) + "-childDesc" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(2));
         Reg.setValue(flag + QString::number(i + 1) + "-childDetails" +
                          QString::number(j),
                      tw->topLevelItem(i)->child(j)->text(3));
