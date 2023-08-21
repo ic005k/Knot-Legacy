@@ -135,7 +135,7 @@ void dlgReport::on_btnYear_clicked() {
   list->setFont(font);
   int cy = QDate::currentDate().year();
   QStringList strList;
-  for (int i = 2022; i <=cy; i++) {
+  for (int i = 2022; i <= cy; i++) {
     strList.append(QString::number(i));
   }
 
@@ -273,6 +273,7 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
   newtop->setText(0, item->text(0));
   newtop->setText(1, item->text(1));
   newtop->setText(2, item->text(2));
+  newtop->setText(3, item->text(3));
   twOut2Img->addTopLevelItem(newtop);
   QBrush brush(Qt::lightGray);
   newtop->setBackground(0, brush);
@@ -686,6 +687,9 @@ void dlgReport::loadDetails() {
   for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
     if (topItem->text(0) == date) {
+      mw_one->ui->lblDetails->setText(tr("Details") + "    " + date + "    " +
+                                      topItem->text(3));
+
       int childCount = topItem->childCount();
 
       for (int j = 0; j < childCount; j++) {
