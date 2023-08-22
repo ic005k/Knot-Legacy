@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.11";
+QString ver = "1.1.12";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4083,7 +4083,7 @@ void MainWindow::on_btnSelTab_clicked() {
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   setSCrollPro(list);
   QFont font;
-  font.setPointSize(fontSize + 2);
+  font.setPointSize(fontSize + 3);
   list->setFont(font);
 
   int count = tabData->tabBar()->count();
