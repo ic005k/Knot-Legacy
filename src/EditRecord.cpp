@@ -189,6 +189,8 @@ void EditRecord::on_btnCustom_clicked() {
 
   init_Desc();
   m_List->ui->listWidget->setFocus();
+  if (m_List->ui->listWidget->count() > 0)
+    m_List->ui->listWidget->setCurrentRow(0);
   m_List->ui->editRename->clear();
 
   m_List->show();

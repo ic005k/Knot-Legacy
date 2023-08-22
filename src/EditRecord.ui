@@ -144,13 +144,13 @@ selection-background-color: lightblue;
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>25</height>
+         <height>35</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>26</height>
+         <height>35</height>
         </size>
        </property>
       </widget>
@@ -166,13 +166,13 @@ selection-background-color: lightblue;
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>25</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>26</height>
+         <height>35</height>
         </size>
        </property>
        <property name="text">
@@ -221,13 +221,13 @@ selection-background-color: lightblue;
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>25</height>
+         <height>35</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>26</height>
+         <height>35</height>
         </size>
        </property>
       </widget>
@@ -243,13 +243,13 @@ selection-background-color: lightblue;
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>25</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>26</height>
+         <height>35</height>
         </size>
        </property>
        <property name="text">
