@@ -28,6 +28,11 @@
        <height>35</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="styleSheet">
       <string notr="true">QLabel
 {
