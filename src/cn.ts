@@ -2710,8 +2710,9 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="Reader.cpp" line="1429"/>
         <source>Back</source>
-        <translation type="vanished">返回</translation>
+        <translation>返回</translation>
     </message>
     <message>
         <source>Open</source>
@@ -2731,6 +2732,11 @@ in skydrive folder</source>
         <location filename="Reader.cpp" line="125"/>
         <source>Reading, please wait...</source>
         <translation>读取中，请稍候...</translation>
+    </message>
+    <message>
+        <location filename="Reader.cpp" line="1427"/>
+        <source>Clear All Records</source>
+        <translation>清除所有的记录</translation>
     </message>
     <message>
         <source>Reading in progress...</source>

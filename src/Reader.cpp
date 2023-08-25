@@ -1420,6 +1420,22 @@ void dlgReader::getReadList() {
 
   setPdfViewVisible(false);
 
+  QFrame* frame = new QFrame();
+  QVBoxLayout* vbox = new QVBoxLayout();
+  QHBoxLayout* hbox = new QHBoxLayout();
+  QToolButton* btnClear = new QToolButton();
+  btnClear->setText(tr("Clear All Records"));
+  QToolButton* btnBack = new QToolButton();
+  btnBack->setText(tr("Back"));
+  btnBack->setMaximumWidth(150);
+  hbox->addWidget(btnBack);
+  hbox->addWidget(btnClear);
+
+  frame->setLayout(vbox);
+  frame->layout()->setMargin(10);
+  frame->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                     mw_one->geometry().width(), mw_one->geometry().height());
+
   QListWidget* list = new QListWidget(mw_one);
   mw_one->listReadList = list;
   list->setStyleSheet(mw_one->listWidgetStyle);
@@ -1462,7 +1478,7 @@ void dlgReader::getReadList() {
     else {
       if (isPDF) setPdfViewVisible(true);
     }
-    list->close();
+    frame->close();
   });
 
   list->setGeometry(0, 0, mw_one->width(), mw_one->height());
@@ -1478,7 +1494,26 @@ void dlgReader::getReadList() {
     }
   }
 
-  list->show();
+  connect(btnBack, &QToolButton::clicked, [=]() { frame->close(); });
+
+  connect(btnClear, &QToolButton::clicked, [=]() {
+    list->clear();
+    mw_one->listReadList->clear();
+    bookList.clear();
+    QFile file(privateDir + "reader.ini");
+    if (file.exists()) file.remove();
+
+#ifdef Q_OS_ANDROID
+
+#else
+
+#endif
+  });
+
+  vbox->addWidget(list);
+  vbox->addLayout(hbox);
+  mw_one->set_btnStyle(frame);
+  frame->show();
   list->setFocus();
 }
 
