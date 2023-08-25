@@ -1437,7 +1437,7 @@ void dlgReader::getReadList() {
                      mw_one->geometry().width(), mw_one->geometry().height());
 
   QListWidget* list = new QListWidget(mw_one);
-  mw_one->listReadList = list;
+  mw_one->listReadList = frame;
   list->setStyleSheet(mw_one->listWidgetStyle);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
@@ -1498,7 +1498,6 @@ void dlgReader::getReadList() {
 
   connect(btnClear, &QToolButton::clicked, [=]() {
     list->clear();
-    mw_one->listReadList->clear();
     bookList.clear();
     QFile file(privateDir + "reader.ini");
     if (file.exists()) file.remove();

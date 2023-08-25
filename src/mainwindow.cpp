@@ -2386,8 +2386,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameMain->isHidden()) {
-        if (!listTimeMachine->isHidden()) {
-          listTimeMachine->close();
+        if (!dlgTimeMachine->isHidden()) {
+          dlgTimeMachine->close();
 
           return true;
         }
@@ -3811,8 +3811,7 @@ void MainWindow::init_UIWidget() {
 
   mw_one = this;
   listSelFont = new QListWidget();
-  listReadList = new QListWidget();
-  listTimeMachine = new QListWidget();
+  listReadList = new QFrame();
   loginTime = QDateTime::currentDateTime().toString();
 
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
@@ -4295,19 +4294,18 @@ void MainWindow::addRedo() {
 }
 
 void MainWindow::on_actionTimeMachine() {
-  QDialog *dlg = new QDialog(this);
+  dlgTimeMachine = new QFrame();
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setContentsMargins(3, 3, 3, 3);
-  dlg->setLayout(vbox);
+  dlgTimeMachine->setLayout(vbox);
   QToolButton *btnBack = new QToolButton(this);
   btnBack->setStyleSheet(btnStyle);
   btnBack->setFixedHeight(40);
   btnBack->setText(tr("Back"));
   btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-  connect(btnBack, &QToolButton::clicked, [=]() { dlg->close(); });
+  connect(btnBack, &QToolButton::clicked, [=]() { dlgTimeMachine->close(); });
 
   QListWidget *list = new QListWidget(this);
-  mw_one->listTimeMachine = list;
   list->setStyleSheet(mw_one->listWidgetStyle);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
@@ -4343,9 +4341,9 @@ void MainWindow::on_actionTimeMachine() {
 
   vbox->addWidget(list);
   vbox->addWidget(btnBack);
-  dlg->setGeometry(geometry().x(), geometry().y(), width(), height());
-  dlg->setModal(true);
-  dlg->show();
+  dlgTimeMachine->setGeometry(geometry().x(), geometry().y(), width(),
+                              height());
+  dlgTimeMachine->show();
   list->setFocus();
 }
 
