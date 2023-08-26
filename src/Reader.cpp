@@ -1428,6 +1428,8 @@ void dlgReader::getReadList() {
   QToolButton* btnBack = new QToolButton();
   btnBack->setText(tr("Back"));
   btnBack->setMaximumWidth(150);
+  btnBack->setFixedHeight(35);
+  btnClear->setFixedHeight(35);
   hbox->addWidget(btnBack);
   hbox->addWidget(btnClear);
 

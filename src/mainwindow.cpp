@@ -4300,7 +4300,7 @@ void MainWindow::on_actionTimeMachine() {
   dlgTimeMachine->setLayout(vbox);
   QToolButton *btnBack = new QToolButton(this);
   btnBack->setStyleSheet(btnStyle);
-  btnBack->setFixedHeight(40);
+  btnBack->setFixedHeight(35);
   btnBack->setText(tr("Back"));
   btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   connect(btnBack, &QToolButton::clicked, [=]() { dlgTimeMachine->close(); });
