@@ -4060,8 +4060,9 @@ void MainWindow::on_btnSelTab_clicked() {
     list->addItem(item);
   }
   connect(list, &QListWidget::itemClicked, [=]() {
-    tabData->setCurrentIndex(list->currentRow());
     dlg->close();
+    tabData->setCurrentIndex(list->currentRow());
+
     // closeGrayWindows();
   });
   connect(dlg, &QDialog::rejected, [=]() {
@@ -4069,7 +4070,7 @@ void MainWindow::on_btnSelTab_clicked() {
     // closeGrayWindows();
   });
 
-  int h = height() / 2;
+  int h = height() * 3 / 4;
   int w = width() - 40;
   int y = geometry().y() + (this->height() - h) / 2;
   int x = geometry().x() + (this->width() - w) / 2;
