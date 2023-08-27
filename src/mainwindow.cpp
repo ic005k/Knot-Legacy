@@ -1480,57 +1480,10 @@ void MainWindow::TextEditToFile(QTextEdit *txtEdit, QString fileName) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  mydlgSteps->saveSteps();
-
-  bool isClose = false;
-
 #ifdef Q_OS_ANDROID
+  event->ignore();
+  return;
 #else
-  isClose = true;
-
-  if (!ui->frameTodo->isHidden()) {
-    on_btnBackTodo_clicked();
-    event->ignore();
-    return;
-  }
-
-  if (!ui->frameRecycle->isHidden()) {
-    on_btnReturnRecycle_clicked();
-    event->ignore();
-    return;
-  }
-
-  if (!ui->frameNotes->isHidden()) {
-    on_btnBackNotes_clicked();
-    event->ignore();
-    return;
-  }
-
-#endif
-
-  if (isClose) {
-    mydlgFloatFun->close();
-
-    stopJavaTimer();
-    event->accept();
-
-  } else {
-    if (mydlgPre->isFontChange) {
-      mydlgFloatFun->close();
-
-      stopJavaTimer();
-      event->accept();
-      return;
-    }
-
-    setMini();
-#ifdef Q_OS_ANDROID
-    mw_one->mydlgPre->autoBakData();
-#endif
-
-    event->ignore();
-  }
-
   QSettings Reg(privateDir + "winpos.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -1539,6 +1492,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   Reg.setValue("y", this->geometry().y());
   Reg.setValue("w", this->geometry().width());
   Reg.setValue("h", this->geometry().height());
+
+  event->accept();
+#endif
 }
 
 void MainWindow::setMini() {
@@ -2385,12 +2341,18 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         }
       }
 
-      if (!ui->frameMain->isHidden()) {
-        if (!dlgTimeMachine->isHidden()) {
-          dlgTimeMachine->close();
+      if (!dlgTimeMachine->isHidden()) {
+        dlgTimeMachine->close();
+        return true;
+      }
 
-          return true;
-        }
+      if (!ui->frameMain->isHidden()) {
+        mydlgSteps->saveSteps();
+        stopJavaTimer();
+        setMini();
+        mw_one->mydlgPre->autoBakData();
+
+        return true;
       }
 
       if (!ui->frameOne->isHidden()) {
@@ -3898,6 +3860,8 @@ void MainWindow::init_UIWidget() {
   m_widget->close();
   m_NotesList = new dlgNotesList(this);
   m_SyncInfo = new SyncInfo(this);
+  dlgTimeMachine = new QFrame();
+  dlgTimeMachine->close();
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
