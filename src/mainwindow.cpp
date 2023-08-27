@@ -1481,8 +1481,11 @@ void MainWindow::TextEditToFile(QTextEdit *txtEdit, QString fileName) {
 
 void MainWindow::closeEvent(QCloseEvent *event) {
 #ifdef Q_OS_ANDROID
-  event->ignore();
-  return;
+  if (mydlgPre->isFontChange) {
+    stopJavaTimer();
+    event->accept();
+    return;
+  }
 #else
   QSettings Reg(privateDir + "winpos.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -2348,9 +2351,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
       if (!ui->frameMain->isHidden()) {
         mydlgSteps->saveSteps();
-        stopJavaTimer();
         setMini();
-        mw_one->mydlgPre->autoBakData();
+        mydlgPre->autoBakData();
 
         return true;
       }
