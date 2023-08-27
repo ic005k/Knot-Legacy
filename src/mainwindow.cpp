@@ -3768,7 +3768,7 @@ void MainWindow::init_UIWidget() {
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
-  tabData->setFixedHeight(tabData->tabBar()->height() + 0);
+  ui->tabWidget->setFixedHeight(ui->tabWidget->tabBar()->height() + 0);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &MainWindow::on_KVChanged);

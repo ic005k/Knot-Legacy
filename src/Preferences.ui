@@ -35,14 +35,14 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>25</height>
+          <height>30</height>
          </size>
         </property>
         <property name="styleSheet">
          <string notr="true">QSlider::groove:horizontal 
 { 
 	border: 1px solid #999999; 
-	height: 6px; 
+	height: 10px; 
 	margin: 0px 0;
 	left: 5px; 
 	right: 5px; 
@@ -62,16 +62,16 @@ QSlider::handle:horizontal
 {
 	border: 0px ;
 	border-image: url(:/res/qslider_btn.png);			
-	width: 20px; 
+	width: 25px; 
 	margin: -10px -5px -10px -5px; 
 	
 }</string>
         </property>
         <property name="minimum">
-         <number>13</number>
+         <number>12</number>
         </property>
         <property name="maximum">
-         <number>30</number>
+         <number>28</number>
         </property>
         <property name="pageStep">
          <number>1</number>
