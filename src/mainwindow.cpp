@@ -4071,7 +4071,7 @@ void MainWindow::on_btnSelTab_clicked() {
   });
 
   int h = height() * 3 / 4;
-  int w = width() - 40;
+  int w = width() - 10;
   int y = geometry().y() + (this->height() - h) / 2;
   int x = geometry().x() + (this->width() - w) / 2;
   dlg->setGeometry(x, y, w, h);
