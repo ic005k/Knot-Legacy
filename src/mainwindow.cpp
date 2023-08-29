@@ -4033,13 +4033,12 @@ void MainWindow::on_btnSelTab_clicked() {
 
   QVBoxLayout *vbox = new QVBoxLayout;
   frame->setLayout(vbox);
-
   vbox->setContentsMargins(1, 1, 1, 1);
 
   QListWidget *list = new QListWidget(this);
   vbox->addWidget(list);
-  list->setSpacing(12);
-  // list->setAlternatingRowColors(true);
+  list->setSpacing(8);
+  list->setAlternatingRowColors(true);
   list->setViewMode(QListView::IconMode);
   list->setMovement(QListView::Static);
   list->setStyleSheet(listStyleMain);
@@ -4051,33 +4050,32 @@ void MainWindow::on_btnSelTab_clicked() {
   font.setPointSize(fontSize + 3);
   list->setFont(font);
 
+  QLabel *lblTotal = new QLabel;
+  vbox->addWidget(lblTotal);
+
   int count = tabData->tabBar()->count();
   for (int i = 0; i < count; i++) {
     QListWidgetItem *item = new QListWidgetItem;
     // item->setSizeHint(QSize(width() * 2 / 3 - 68, 35));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    item->setText(QString::number(i + 1) + "." + tabData->tabText(i));
+    item->setText(tabData->tabText(i));
     list->addItem(item);
   }
   connect(list, &QListWidget::itemClicked, [=]() {
     dlg->close();
     tabData->setCurrentIndex(list->currentRow());
-
-    // closeGrayWindows();
   });
-  connect(dlg, &QDialog::rejected, [=]() {
-    dlg->close();
-    // closeGrayWindows();
-  });
+  connect(dlg, &QDialog::rejected, [=]() { dlg->close(); });
 
-  int h = height() * 3 / 4;
-  int w = width() - 10;
+  int h = geometry().height() * 3 / 4;
+  int w = geometry().width() - 10;
   int y = geometry().y() + (this->height() - h) / 2;
   int x = geometry().x() + (this->width() - w) / 2;
   dlg->setGeometry(x, y, w, h);
   list->setCurrentRow(tabData->currentIndex());
+  lblTotal->setText(tr("Total") + " : " + QString::number(list->count()) +
+                    " ( " + QString::number(list->currentRow() + 1) + " ) ");
 
-  // showGrayWindows();
   dlg->show();
   list->setFocus();
 }
