@@ -2760,7 +2760,7 @@ void MainWindow::on_about() {
   textBrowser->append("Data Size: " + getFileSize(QFile(bakini).size(), 2));
 
   textBrowser->append("");
-  textBrowser->append("Login Time: " + loginTime);
+  textBrowser->append("Launched: " + loginTime);
   textBrowser->append("");
   textBrowser->setHidden(true);
   m_Remarks->ui->textEdit->setHidden(true);
