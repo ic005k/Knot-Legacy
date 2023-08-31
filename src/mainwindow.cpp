@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.12";
+QString ver = "1.1.13";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4064,8 +4064,12 @@ void MainWindow::on_btnSelTab_clicked() {
   connect(list, &QListWidget::itemClicked, [=]() {
     dlg->close();
     tabData->setCurrentIndex(list->currentRow());
+    closeGrayWindows();
   });
-  connect(dlg, &QDialog::rejected, [=]() { dlg->close(); });
+  connect(dlg, &QDialog::rejected, [=]() {
+    dlg->close();
+    closeGrayWindows();
+  });
 
   int h = geometry().height() * 3 / 4;
   int w = geometry().width() - 10;
@@ -4075,7 +4079,7 @@ void MainWindow::on_btnSelTab_clicked() {
   list->setCurrentRow(tabData->currentIndex());
   lblTotal->setText(tr("Total") + " : " + QString::number(list->count()) +
                     " ( " + QString::number(list->currentRow() + 1) + " ) ");
-
+  showGrayWindows();
   dlg->show();
   list->setFocus();
 }
@@ -4233,8 +4237,8 @@ void MainWindow::addUndo(QString log) {
     timeLines.insert(0, undoFile + "\n" + log);
     timeLines.insert(0, privateDir + LatestTime);
     int count = timeLines.count();
-    if (count > 30) {
-      count = 30;
+    if (count > 50) {
+      count = 50;
       QString str = timeLines.at(count);
       QString oldFile = str.split("\n").at(0);
       if (QFile().remove(oldFile))
@@ -4304,6 +4308,10 @@ void MainWindow::on_actionTimeMachine() {
     list->setCurrentRow(0);
   }
 
+  QLabel *lblTitle = new QLabel;
+  lblTitle->setText(tr("Tab Time Machine") + "    " + tr("Total") + " : " +
+                    QString::number(timeLines.count()));
+  vbox->addWidget(lblTitle);
   vbox->addWidget(list);
   vbox->addWidget(btnBack);
   dlgTimeMachine->setGeometry(geometry().x(), geometry().y(), width(),
