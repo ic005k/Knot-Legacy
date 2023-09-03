@@ -241,6 +241,7 @@ MainWindow::MainWindow(QWidget *parent)
   initHardStepSensor();
 
   reloadMain();
+  clickData();
   resetWinPos();
   initMain = false;
   addFilesWatch();
