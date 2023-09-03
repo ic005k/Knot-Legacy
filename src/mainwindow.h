@@ -164,7 +164,6 @@ class MainWindow : public QMainWindow {
   QStringList timeLines;
   QString loginTime;
   QListWidget *listSelFont;
-  QFrame *listReadList;
   QFrame *dlgTimeMachine;
 
   int mwh;

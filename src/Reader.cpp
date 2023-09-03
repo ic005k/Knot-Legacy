@@ -1420,7 +1420,7 @@ void dlgReader::getReadList() {
 
   setPdfViewVisible(false);
 
-  QFrame* frame = new QFrame();
+  frame = new QDialog();
   QVBoxLayout* vbox = new QVBoxLayout();
   QHBoxLayout* hbox = new QHBoxLayout();
   QToolButton* btnClear = new QToolButton();
@@ -1439,7 +1439,6 @@ void dlgReader::getReadList() {
                      mw_one->geometry().width(), mw_one->geometry().height());
 
   QListWidget* list = new QListWidget(mw_one);
-  mw_one->listReadList = frame;
   list->setStyleSheet(mw_one->listWidgetStyle);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
@@ -1496,7 +1495,14 @@ void dlgReader::getReadList() {
     }
   }
 
-  connect(btnBack, &QToolButton::clicked, [=]() { frame->close(); });
+  connect(btnBack, &QToolButton::clicked, [=]() {
+    frame->close();
+    delete frame;
+  });
+
+  connect(frame, &QDialog::rejected, [=]() mutable {
+    if (isPDF) setPdfViewVisible(true);
+  });
 
   connect(btnClear, &QToolButton::clicked, [=]() {
     list->clear();

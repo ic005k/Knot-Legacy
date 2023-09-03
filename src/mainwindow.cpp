@@ -2311,16 +2311,15 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         if (!listSelFont->isHidden()) {
           listSelFont->close();
           return true;
-        } else if (!listReadList->isHidden()) {
-          listReadList->close();
-          if (isPDF) mydlgReader->setPdfViewVisible(true);
-          return true;
+
         } else if (!mydlgReaderFun->isHidden()) {
           mydlgReaderFun->close();
           return true;
+
         } else if (!mydlgSetText->isHidden()) {
           mydlgSetText->close();
           return true;
+
         } else if (!ui->textBrowser->isHidden()) {
           on_btnSelText_clicked();
           return true;
@@ -3775,7 +3774,6 @@ void MainWindow::init_UIWidget() {
 
   mw_one = this;
   listSelFont = new QListWidget();
-  listReadList = new QFrame();
   loginTime = QDateTime::currentDateTime().toString();
 
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");

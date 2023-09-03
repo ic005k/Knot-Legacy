@@ -33,6 +33,7 @@ class dlgReader : public QDialog {
   ~dlgReader();
   Ui::dlgReader *ui;
 
+  QDialog *frame;
   QString openfile;
   QString readerStyle;
   QString currentTxt;
@@ -97,10 +98,11 @@ class dlgReader : public QDialog {
   int getPdfCurrentPage();
   void setPdfPage(int page);
   void setHideShowTopBar();
-  bool copyDirectoryFiles(const QString &fromDir, const QString &toDir, bool coverFileIfExist);
+  bool copyDirectoryFiles(const QString &fromDir, const QString &toDir,
+                          bool coverFileIfExist);
   qreal getScale();
   void setPdfScale(qreal scale);
-  public slots:
+ public slots:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
