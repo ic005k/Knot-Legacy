@@ -25,7 +25,7 @@ class dlgReport : public QDialog {
   static void saveYMD();
   QString str_xx;
   void getCategoryData(QString strCategory, bool appendTable);
-  QStringList listCatetorySort;
+  QStringList listCategorySort;
   QList<double> listD;
   static void getMonthData();
   void updateTable();
@@ -66,6 +66,7 @@ class dlgReport : public QDialog {
  private:
   double t_amount = 0;
   int freq = 0;
+  int indexCategory = 0;
 };
 
 #endif  // REPORT_H

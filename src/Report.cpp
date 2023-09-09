@@ -114,6 +114,7 @@ void dlgReport::on_btnBack_clicked() {
   saveYMD();
 
   listCategory.clear();
+  indexCategory = 0;
 
   mw_one->ui->frameReport->hide();
   mw_one->ui->frameMain->show();
@@ -410,7 +411,7 @@ void dlgReport::on_btnCategory_clicked() {
   list->setStyleSheet("QListWidget{border:0px solid gray;}");
   vbox->addWidget(list);
 
-  list->setSpacing(12);
+  list->setSpacing(6);
   // list->setViewMode(QListView::IconMode);
   list->setMovement(QListView::Static);
   list->setStyleSheet(mw_one->listStyleMain);
@@ -424,7 +425,7 @@ void dlgReport::on_btnCategory_clicked() {
   list->setFont(font);
 
   if (listCategory.count() > 0) {
-    listCatetorySort.clear();
+    listCategorySort.clear();
     listD.clear();
     for (int i = 0; i < listCategory.count(); i++) {
       getCategoryData(listCategory.at(i), false);
@@ -435,8 +436,8 @@ void dlgReport::on_btnCategory_clicked() {
 
     QStringList listNew;
     for (int j = 0; j < listE.count(); j++) {
-      for (int i = 0; i < listCatetorySort.count(); i++) {
-        QString str1 = listCatetorySort.at(i);
+      for (int i = 0; i < listCategorySort.count(); i++) {
+        QString str1 = listCategorySort.at(i);
         QStringList l1 = str1.split("-");
         if (l1.count() == 2 && l1.at(0).trimmed() != "") {
           if (QString::number(listE.at(j)) == l1.at(1)) {
@@ -445,7 +446,7 @@ void dlgReport::on_btnCategory_clicked() {
                            " %";
 
             listNew.insert(0, str2);
-            listCatetorySort.removeOne(str1);
+            listCategorySort.removeOne(str1);
 
             break;
           }
@@ -453,7 +454,7 @@ void dlgReport::on_btnCategory_clicked() {
       }
     }
 
-    qDebug() << listCatetorySort << listE << listNew;
+    qDebug() << listCategorySort << listE << listNew;
 
     for (int i = 0; i < listNew.count(); i++) {
       QListWidgetItem* pItem = new QListWidgetItem();
@@ -469,9 +470,11 @@ void dlgReport::on_btnCategory_clicked() {
   int w = mw_one->width() - 40;
   int x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   dlg->setGeometry(x, btnCategory->y() - h / 2, w, h);
-  if (list->count() > 1) {
+  if (list->count() > 0) {
     mw_one->showGrayWindows();
     dlg->show();
+    if (list->count() - 1 < indexCategory) indexCategory = 0;
+    list->setCurrentRow(indexCategory);
   }
 
   connect(list, &QListWidget::itemClicked, [=]() {
@@ -480,7 +483,7 @@ void dlgReport::on_btnCategory_clicked() {
     btnCategory->setText(list0.at(0));
 
     getCategoryData(mw_one->ui->btnCategory->text(), true);
-
+    indexCategory = list->currentRow();
     dlg->close();
     mw_one->closeGrayWindows();
   });
@@ -536,7 +539,7 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
 
     setScrollBarPos_xx(0);
   } else {
-    listCatetorySort.append(strCategory + "-" + QString::number(bfb));
+    listCategorySort.append(strCategory + "-" + QString::number(bfb));
     listD.append(bfb);
   }
 }
