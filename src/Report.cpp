@@ -411,7 +411,7 @@ void dlgReport::on_btnCategory_clicked() {
   vbox->addWidget(list);
 
   list->setSpacing(12);
-  list->setViewMode(QListView::IconMode);
+  // list->setViewMode(QListView::IconMode);
   list->setMovement(QListView::Static);
   list->setStyleSheet(mw_one->listStyleMain);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
@@ -457,15 +457,15 @@ void dlgReport::on_btnCategory_clicked() {
 
     for (int i = 0; i < listNew.count(); i++) {
       QListWidgetItem* pItem = new QListWidgetItem();
-      // pItem->setSizeHint(QSize(btnCategory->width() - 20, 30));
+      // pItem->setSizeHint(QSize(mw_one->width() - 60, 30));
       pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
       pItem->setText(listNew.at(i));
       list->addItem(pItem);
     }
   }
 
-  int h = mw_one->height() / 2;
-  if (list->count() * 30 < h) h = list->count() * 30 + 4;
+  int h = mw_one->height() * 3 / 4;
+
   int w = mw_one->width() - 40;
   int x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   dlg->setGeometry(x, btnCategory->y() - h / 2, w, h);
