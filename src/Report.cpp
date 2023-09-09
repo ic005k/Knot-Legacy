@@ -430,28 +430,30 @@ void dlgReport::on_btnCategory_clicked() {
       getCategoryData(listCategory.at(i), false);
     }
 
-    QList<double> listE = listD.toSet().toList();
+    QList<double> listE = listD;
     std::sort(listE.begin(), listE.end());
 
     QStringList listNew;
-    for (int j = listD.count() - 1; j >= 0; j--) {
+    for (int j = 0; j < listE.count(); j++) {
       for (int i = 0; i < listCatetorySort.count(); i++) {
         QString str1 = listCatetorySort.at(i);
         QStringList l1 = str1.split("-");
-        if (l1.count() == 2) {
+        if (l1.count() == 2 && l1.at(0).trimmed() != "") {
           if (QString::number(listE.at(j)) == l1.at(1)) {
-            if (!listNew.contains(l1.at(0))) {
-              listNew.append(l1.at(0) + "-" +
-                             QString("%1").arg(listE.at(j) * 100, 0, 'f', 2) +
-                             " %");
-              break;
-            }
+            QString str2 = l1.at(0) + "-" +
+                           QString("%1").arg(listE.at(j) * 100, 0, 'f', 2) +
+                           " %";
+
+            listNew.insert(0, str2);
+            listCatetorySort.removeOne(str1);
+
+            break;
           }
         }
       }
     }
 
-    qDebug() << listCatetorySort << listD << listNew;
+    qDebug() << listCatetorySort << listE << listNew;
 
     for (int i = 0; i < listNew.count(); i++) {
       QListWidgetItem* pItem = new QListWidgetItem();
@@ -502,9 +504,12 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
     for (int j = 0; j < topItem->childCount(); j++) {
       QTreeWidgetItem* childItem = topItem->child(j);
       QString strClass = childItem->text(2);
-      if (strClass == strCategory) {
-        QString date = topItem->text(0);
-        QString time = childItem->text(0).split(".").at(1);
+      if (strClass == strCategory && strClass.trimmed() != "") {
+        QString date, time;
+        if (appendTable) {
+          date = topItem->text(0);
+          time = childItem->text(0).split(".").at(1);
+        }
         QString amount = childItem->text(1);
         if (appendTable) appendSteps_xx(date, time, amount);
 
@@ -516,7 +521,8 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
     }
   }
 
-  double bfb = d_amount / t_amount;
+  double bfb;
+  if (t_amount > 0) bfb = d_amount / t_amount;
 
   if (appendTable) {
     QString ta = QString("%1").arg(d_amount, 0, 'f', 2);
