@@ -377,6 +377,8 @@ void dlgReport::saveYMD() {
   Reg.setValue("/YMD/D2", mw_one->ui->cboxD2->currentIndex());
 }
 
+int dlgReport::cmp(const void* a, const void* b) { return *(int*)a < *(int*)b; }
+
 void dlgReport::on_btnCategory_clicked() {
   int count = getCount();
   if (count == 0) {
@@ -421,13 +423,41 @@ void dlgReport::on_btnCategory_clicked() {
   font.setPointSize(fontSize + 1);
   list->setFont(font);
 
-  if (listCategory.count() == 0) {
-  } else {
+  if (listCategory.count() > 0) {
+    listCatetorySort.clear();
+    listD.clear();
     for (int i = 0; i < listCategory.count(); i++) {
+      getCategoryData(listCategory.at(i), false);
+    }
+
+    QList<double> listE = listD.toSet().toList();
+    std::sort(listE.begin(), listE.end());
+
+    QStringList listNew;
+    for (int j = listD.count() - 1; j >= 0; j--) {
+      for (int i = 0; i < listCatetorySort.count(); i++) {
+        QString str1 = listCatetorySort.at(i);
+        QStringList l1 = str1.split("-");
+        if (l1.count() == 2) {
+          if (QString::number(listE.at(j)) == l1.at(1)) {
+            if (!listNew.contains(l1.at(0))) {
+              listNew.append(l1.at(0) + "-" +
+                             QString("%1").arg(listE.at(j) * 100, 0, 'f', 2) +
+                             " %");
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    qDebug() << listCatetorySort << listD << listNew;
+
+    for (int i = 0; i < listNew.count(); i++) {
       QListWidgetItem* pItem = new QListWidgetItem();
       // pItem->setSizeHint(QSize(btnCategory->width() - 20, 30));
       pItem->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
-      pItem->setText(listCategory.at(i));
+      pItem->setText(listNew.at(i));
       list->addItem(pItem);
     }
   }
@@ -443,9 +473,11 @@ void dlgReport::on_btnCategory_clicked() {
   }
 
   connect(list, &QListWidget::itemClicked, [=]() {
-    btnCategory->setText(list->currentItem()->text());
+    QString str0 = list->currentItem()->text();
+    QStringList list0 = str0.split("-");
+    btnCategory->setText(list0.at(0));
 
-    getCategoryData();
+    getCategoryData(mw_one->ui->btnCategory->text(), true);
 
     dlg->close();
     mw_one->closeGrayWindows();
@@ -457,9 +489,12 @@ void dlgReport::on_btnCategory_clicked() {
   });
 }
 
-void dlgReport::getCategoryData() {
-  clearAll_xx();
-  setCurrentHeader(2);
+void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
+  if (appendTable) {
+    clearAll_xx();
+    setCurrentHeader(2);
+  }
+
   int freq = 0;
   double d_amount = 0;
   for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
@@ -467,11 +502,11 @@ void dlgReport::getCategoryData() {
     for (int j = 0; j < topItem->childCount(); j++) {
       QTreeWidgetItem* childItem = topItem->child(j);
       QString strClass = childItem->text(2);
-      if (strClass == mw_one->ui->btnCategory->text()) {
+      if (strClass == strCategory) {
         QString date = topItem->text(0);
         QString time = childItem->text(0).split(".").at(1);
         QString amount = childItem->text(1);
-        appendSteps_xx(date, time, amount);
+        if (appendTable) appendSteps_xx(date, time, amount);
 
         freq++;
         if (amount.length() > 0) {
@@ -481,16 +516,23 @@ void dlgReport::getCategoryData() {
     }
   }
 
-  QString ta = QString("%1").arg(d_amount, 0, 'f', 2);
-  appendSteps_xx(tr("Total"), QString::number(freq), ta);
   double bfb = d_amount / t_amount;
-  mw_one->ui->lblDetails->setStyleSheet(
-      mw_one->myEditRecord->ui->lblTitle->styleSheet());
-  mw_one->ui->lblDetails->setText(
-      tr("Details") + " : " + tr("Amount") + " " + ta + "    " +
-      QString("%1").arg(bfb * 100, 0, 'f', 2) + " %");
 
-  setScrollBarPos_xx(0);
+  if (appendTable) {
+    QString ta = QString("%1").arg(d_amount, 0, 'f', 2);
+    appendSteps_xx(tr("Total"), QString::number(freq), ta);
+
+    mw_one->ui->lblDetails->setStyleSheet(
+        mw_one->myEditRecord->ui->lblTitle->styleSheet());
+    mw_one->ui->lblDetails->setText(
+        tr("Details") + " : " + tr("Amount") + " " + ta + "    " +
+        QString("%1").arg(bfb * 100, 0, 'f', 2) + " %");
+
+    setScrollBarPos_xx(0);
+  } else {
+    listCatetorySort.append(strCategory + "-" + QString::number(bfb));
+    listD.append(bfb);
+  }
 }
 
 void setTableNoItemFlags(QTableWidget* t, int row) {

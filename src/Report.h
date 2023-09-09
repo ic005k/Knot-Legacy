@@ -5,8 +5,6 @@
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QPainter>
-//#include <QPrintPreviewDialog>
-//#include <QPrinter>
 #include <QScroller>
 #include <QStandardItemModel>
 #include <QTableWidgetItem>
@@ -26,7 +24,9 @@ class dlgReport : public QDialog {
 
   static void saveYMD();
   QString str_xx;
-  void getCategoryData();
+  void getCategoryData(QString strCategory, bool appendTable);
+  QStringList listCatetorySort;
+  QList<double> listD;
   static void getMonthData();
   void updateTable();
   void init();
@@ -52,6 +52,8 @@ class dlgReport : public QDialog {
   void on_btnMonth_clicked();
 
   void setScrollBarPos_xx(double pos);
+
+  static int cmp(const void *a, const void *b);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;

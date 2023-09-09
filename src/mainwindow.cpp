@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.13";
+QString ver = "1.1.14";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4055,7 +4055,6 @@ void MainWindow::on_btnSelTab_clicked() {
   int count = tabData->tabBar()->count();
   for (int i = 0; i < count; i++) {
     QListWidgetItem *item = new QListWidgetItem;
-    // item->setSizeHint(QSize(width() * 2 / 3 - 68, 35));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     item->setText(tabData->tabText(i));
     list->addItem(item);
@@ -4063,12 +4062,8 @@ void MainWindow::on_btnSelTab_clicked() {
   connect(list, &QListWidget::itemClicked, [=]() {
     dlg->close();
     tabData->setCurrentIndex(list->currentRow());
-    closeGrayWindows();
   });
-  connect(dlg, &QDialog::rejected, [=]() {
-    dlg->close();
-    closeGrayWindows();
-  });
+  connect(dlg, &QDialog::rejected, [=]() { dlg->close(); });
 
   int h = geometry().height() * 3 / 4;
   int w = geometry().width() - 10;
@@ -4078,7 +4073,7 @@ void MainWindow::on_btnSelTab_clicked() {
   list->setCurrentRow(tabData->currentIndex());
   lblTotal->setText(tr("Total") + " : " + QString::number(list->count()) +
                     " ( " + QString::number(list->currentRow() + 1) + " ) ");
-  showGrayWindows();
+
   dlg->show();
   list->setFocus();
 }
