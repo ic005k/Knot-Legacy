@@ -402,7 +402,7 @@ void dlgReport::on_btnCategory_clicked() {
   vbox0->addWidget(frame);
 
   frame->setStyleSheet(
-      ".QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      ".QFrame{background-color: rgb(255, 255, 255);border-radius:2px; "
       "border:1px solid gray;}");
 
   QVBoxLayout* vbox = new QVBoxLayout;
@@ -478,8 +478,8 @@ void dlgReport::on_btnCategory_clicked() {
 
             table->setItem(0, 0, new QTableWidgetItem(str2.split("|").at(0)));
 
-            QTableWidgetItem* tableItem2 =
-                new QTableWidgetItem(str2.split("-").at(1));
+            QString pre = str2.split("-").at(1);
+            QTableWidgetItem* tableItem2 = new QTableWidgetItem(pre);
             tableItem2->setTextAlignment(Qt::AlignCenter);
             table->setItem(0, 1, tableItem2);
 
@@ -499,8 +499,8 @@ void dlgReport::on_btnCategory_clicked() {
     // qDebug() << listCategorySort << listE;
   }
 
-  int h = mw_one->geometry().height() - 4;
-  int w = mw_one->width() - 4;
+  int h = mw_one->geometry().height() - 0;
+  int w = mw_one->width() - 0;
   int x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   int y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
   dlg->setGeometry(x, y, w, h);
