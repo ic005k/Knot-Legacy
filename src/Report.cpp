@@ -410,6 +410,16 @@ void dlgReport::on_btnCategory_clicked() {
   QListWidget* list = new QListWidget(mw_one->mydlgReport);
   list->setStyleSheet("QListWidget{border:0px solid gray;}");
 
+  QLabel* lblTitle = new QLabel;
+  QLabel* lblTotal = new QLabel;
+  QFont ft = lblTitle->font();
+  ft.setBold(true);
+  lblTitle->setFont(ft);
+  lblTitle->setText(mw_one->ui->lblTitle_Report->text());
+  lblTotal->setText(mw_one->ui->lblTotal->text());
+  vbox->addWidget(lblTitle);
+  vbox->addWidget(lblTotal);
+
   QTableWidget* table = new QTableWidget;
   table->setColumnCount(3);
   table->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Category")));
@@ -489,11 +499,11 @@ void dlgReport::on_btnCategory_clicked() {
     // qDebug() << listCategorySort << listE;
   }
 
-  int h = mw_one->height() * 3 / 4;
-
-  int w = mw_one->width() - 10;
+  int h = mw_one->geometry().height() - 4;
+  int w = mw_one->width() - 4;
   int x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  dlg->setGeometry(x, btnCategory->y() - h / 2, w, h);
+  int y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
+  dlg->setGeometry(x, y, w, h);
   if (table->rowCount() > 0) {
     mw_one->showGrayWindows();
     dlg->show();
