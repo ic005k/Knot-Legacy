@@ -432,7 +432,7 @@ void dlgReport::on_btnCategory_clicked() {
   vbox->addWidget(table);
 
   list->setSpacing(6);
-  // list->setViewMode(QListView::IconMode);
+  list->setViewMode(QListView::IconMode);
   list->setMovement(QListView::Static);
   list->setStyleSheet(mw_one->listStyleMain);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
@@ -454,7 +454,6 @@ void dlgReport::on_btnCategory_clicked() {
     QList<double> listE = listD;
     std::sort(listE.begin(), listE.end());
 
-    QStringList listNew;
     for (int j = 0; j < listE.count(); j++) {
       for (int i = 0; i < listCategorySort.count(); i++) {
         QString str1 = listCategorySort.at(i);
@@ -465,7 +464,6 @@ void dlgReport::on_btnCategory_clicked() {
                            QString("%1").arg(listE.at(j) * 100, 0, 'f', 2) +
                            " %";
 
-            listNew.insert(0, str2);
             table->insertRow(0);
 
             table->setItem(0, 0, new QTableWidgetItem(str2.split("|").at(0)));
@@ -488,7 +486,7 @@ void dlgReport::on_btnCategory_clicked() {
       }
     }
 
-    qDebug() << listCategorySort << listE << listNew;
+    // qDebug() << listCategorySort << listE;
   }
 
   int h = mw_one->height() * 3 / 4;
