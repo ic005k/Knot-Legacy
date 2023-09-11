@@ -544,7 +544,8 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
       if (strClass == strCategory && strClass.trimmed() != "") {
         QString date, time;
         if (appendTable) {
-          date = topItem->text(0);
+          date = topItem->text(3) + "-" + topItem->text(0).split(" ").at(1) +
+                 "-" + topItem->text(0).split(" ").at(2);
           time = childItem->text(0).split(".").at(1);
         }
         QString amount = childItem->text(1);
