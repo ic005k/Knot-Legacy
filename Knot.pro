@@ -604,3 +604,4 @@ android: include(/Users/hz/Library/Android/sdk/android_openssl/openssl.pri)
 #ANDROID_EXTRA_LIBS = /Users/hz/Documents/GitHub/Knot/../../../Library/Android/sdk/android_openssl/latest/x86_64/libcrypto_1_1.so /Users/hz/Documents/GitHub/Knot/../../../Library/Android/sdk/android_openssl/latest/x86_64/libssl_1_1.so $$PWD/../../../Library/Android/sdk/android_openssl/latest/arm64/libcrypto_1_1.so $$PWD/../../../Library/Android/sdk/android_openssl/latest/arm64/libssl_1_1.so
 android: include(/home/zh/Android/Sdk/android_openssl/openssl.pri)
 android: include(/Users/zh/Documents/android_openssl/openssl.pri)
+android: include(/home/zh/文档/android_openssl/openssl.pri)
