@@ -2744,19 +2744,17 @@ QTreeWidget *MainWindow::get_tw(int tabIndex) {
 void MainWindow::on_about() {
   m_Remarks->init_Notes();
 
-  bakIniData("", false);
-
   QString bakini = iniDir + "memo/KnotSync.ini";
   QSettings Reg(bakini, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  int keys = Reg.allKeys().count();
+  int allkeys = Reg.allKeys().count();
 
   QTextBrowser *textBrowser = new QTextBrowser;
   textBrowser->append("");
   textBrowser->append(appName + "  Ver: " + ver);
-  textBrowser->append("All Keys: " + QString::number(keys));
+  textBrowser->append("All Keys: " + QString::number(allkeys));
   textBrowser->append("Data Size: " + getFileSize(QFile(bakini).size(), 2));
 
   textBrowser->append("");
