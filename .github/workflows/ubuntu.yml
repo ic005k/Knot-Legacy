@@ -73,6 +73,8 @@ jobs:
          cp -r qml bin/release/qml
          cp ExtBin/libfcitx5platforminputcontextplugin.so /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
          chmod 755 /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
+
+         cp ExtBin/nss/*.* bin/release/
                            
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
