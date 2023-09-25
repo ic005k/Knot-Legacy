@@ -3010,12 +3010,10 @@ void MainWindow::on_btnMax_clicked() {
   if (ui->btnMax->text() == tr("Max")) {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(true);
-    ui->frame_find->show();
-    ui->btnMax->setText(tr("Min"));
-  } else if (ui->btnMax->text() == tr("Min")) {
+    ui->btnMax->setText(tr("Normal"));
+  } else if (ui->btnMax->text() == tr("Normal")) {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(false);
-    ui->frame_find->hide();
     ui->btnMax->setText(tr("Max"));
   }
 }
