@@ -74,7 +74,6 @@ jobs:
          cp ExtBin/libfcitx5platforminputcontextplugin.so /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
          chmod 755 /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
 
-         cp -r ExtBin/nss/*.* bin/release/lib/
                            
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
@@ -85,7 +84,8 @@ jobs:
          ./linuxdeployqt-continuous-x86_64.AppImage bin/release/${targetName} -unsupported-allow-new-glibc -appimage -extra-plugins=webview
          #chmod +x ${{ env.targetName }}-${{ env.VERSION }}-x86_64.AppImage
          
-         
+         cp -r ExtBin/nss/*.* bin/release/lib/
+
         
       # 上传artifacts          
       - uses: actions/upload-artifact@v2
