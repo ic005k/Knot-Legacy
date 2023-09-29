@@ -11,7 +11,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.15";
+QString ver = "1.1.16";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -519,6 +519,16 @@ void MainWindow::init_Options() {
   ui->cboxM2->setCurrentIndex(Reg2.value("/YMD/M2", 0).toInt());
   ui->cboxD1->setCurrentIndex(Reg2.value("/YMD/D1", 0).toInt());
   ui->cboxD2->setCurrentIndex(Reg2.value("/YMD/D2", 0).toInt());
+
+  s_y1 = ui->cboxY1->currentText().toInt();
+  s_y2 = ui->cboxY2->currentText().toInt();
+  s_m1 = ui->cboxM1->currentText().toInt();
+  s_m2 = ui->cboxM2->currentText().toInt();
+  s_d1 = ui->cboxD1->currentText().toInt();
+  s_d2 = ui->cboxD2->currentText().toInt();
+
+  isWholeMonth = Reg2.value("/YMD/isWholeMonth", 1).toBool();
+  isDateSection = Reg2.value("/YMD/isDateSection", 0).toBool();
 
   // time machine
   QSettings RegTime(privateDir + "timemachine.ini", QSettings::IniFormat);

@@ -376,6 +376,9 @@ void dlgReport::saveYMD() {
   Reg.setValue("/YMD/M2", mw_one->ui->cboxM2->currentIndex());
   Reg.setValue("/YMD/D1", mw_one->ui->cboxD1->currentIndex());
   Reg.setValue("/YMD/D2", mw_one->ui->cboxD2->currentIndex());
+
+  Reg.setValue("/YMD/isWholeMonth", isWholeMonth);
+  Reg.setValue("/YMD/isDateSection", isDateSection);
 }
 
 int dlgReport::cmp(const void* a, const void* b) { return *(int*)a < *(int*)b; }
