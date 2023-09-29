@@ -290,8 +290,10 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
     newchild->setText(1, item->child(z)->text(1));
     newchild->setText(2, strClass);
 
-    listCategory.removeOne(strClass);
-    listCategory.append(strClass);
+    if (strClass.trimmed() != "") {
+      listCategory.removeOne(strClass);
+      listCategory.append(strClass);
+    }
 
     QString strDes = item->child(z)->text(3);
     if (strDes.trimmed().length() > 0) {

@@ -88,6 +88,115 @@ void ReadEBookThread::run() {
   emit isDone();
 }
 
+void MainWindow::readEBookDone() {
+  if (isEBook) {
+    ui->lblBookName->setText(strTitle);
+
+    ui->btnReader->setEnabled(true);
+    ui->frameReaderFun->setEnabled(true);
+    ui->btnBackDir->setEnabled(false);
+    this->repaint();
+
+    if (isText || isEpub) {
+      qDebug() << "Read  Text or Epub End... ...";
+      ui->qwPdf->hide();
+      ui->qwReader->show();
+      ui->frameReaderFun->show();
+      ui->lblBookName->show();
+      ui->progReader->show();
+      mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
+                                                              false);
+      mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
+      mw_one->ui->qwReader->rootContext()->setContextProperty(
+          "isSelText", mw_one->isSelText);
+      mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
+      mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
+                                                              mw_one->width());
+      mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
+      mw_one->ui->qwReader->setSource(
+          QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
+
+      if (isEpub)
+        ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
+    }
+
+    if (isPDF) {
+      qDebug() << "Read Pdf... ..." << fileName;
+      ui->lblBookName->hide();
+      ui->progReader->hide();
+      ui->qwReader->hide();
+      ui->frameReaderFun->hide();
+      ui->qwPdf->show();
+
+      QString PDFJS, str;
+
+// https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf
+// "https://mozilla.github.io/pdf.js/web/viewer.html";
+#ifdef Q_OS_ANDROID
+      PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
+      PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";
+      str =
+          "https://mozilla.github.io/pdf.js/web/"
+          "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
+      str = PDFJS + "?file=" + fileName;
+      if (QFile("assets:/web/viewer.html").exists())
+        qDebug() << "viewer.html exists......";
+#else
+      PDFJS = "file://" + privateDir + "pdfjs/web/viewer.html";
+      str = PDFJS + "?file=file://" + fileName;
+#endif
+      QUrl url;
+      url.setUrl(str);
+
+      if (isPdfNewMothod) {
+        QQuickItem *root = ui->qwPdf->rootObject();
+        QMetaObject::invokeMethod((QObject *)root, "setPdfPath",
+                                  Q_ARG(QVariant, url));
+
+      } else {
+        QQuickItem *root = ui->qwPdf->rootObject();
+#ifdef Q_OS_WIN
+        QMetaObject::invokeMethod((QObject *)root, "setViewEnd",
+                                  Q_ARG(QVariant, true));
+#endif
+
+        // QMetaObject::invokeMethod((QObject *)root, "loadPDFWin",
+        //                          Q_ARG(QVariant, PDFJS + "?file="),
+        //                          Q_ARG(QVariant, fileName));
+
+        QMetaObject::invokeMethod((QObject *)root, "loadPDF",
+                                  Q_ARG(QVariant, fileName));
+      }
+    }
+
+    mydlgReader->goPostion();
+
+    for (int i = 0; i < mydlgReader->bookList.count(); i++) {
+      QString str = mydlgReader->bookList.at(i);
+      if (str.contains(fileName)) {
+        mydlgReader->bookList.removeAt(i);
+        break;
+      }
+    }
+    mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
+
+    isEBook = false;
+  }
+
+  if (isReport) {
+    mydlgReport->updateTable();
+    ui->lblTitle->setText(tabData->tabText(tabData->currentIndex()));
+
+    ui->btnCategory->setEnabled(false);
+    if (listCategory.count() > 0) ui->btnCategory->setEnabled(true);
+
+    isReport = false;
+  }
+
+  dlgProgEBook->close();
+  isReadEBookEnd = true;
+}
+
 ReadTWThread::ReadTWThread(QObject *parent) : QThread{parent} {}
 void ReadTWThread::run() {
   isReadTWEnd = false;
@@ -4548,111 +4657,6 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
     if (position == 0) position = 1;
     ui->progReader->setValue(position);
   }
-}
-
-void MainWindow::readEBookDone() {
-  if (isEBook) {
-    ui->lblBookName->setText(strTitle);
-
-    ui->btnReader->setEnabled(true);
-    ui->frameReaderFun->setEnabled(true);
-    ui->btnBackDir->setEnabled(false);
-    this->repaint();
-
-    if (isText || isEpub) {
-      qDebug() << "Read  Text or Epub End... ...";
-      ui->qwPdf->hide();
-      ui->qwReader->show();
-      ui->frameReaderFun->show();
-      ui->lblBookName->show();
-      ui->progReader->show();
-      mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
-                                                              false);
-      mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
-      mw_one->ui->qwReader->rootContext()->setContextProperty(
-          "isSelText", mw_one->isSelText);
-      mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
-      mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
-                                                              mw_one->width());
-      mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
-      mw_one->ui->qwReader->setSource(
-          QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
-
-      if (isEpub)
-        ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
-    }
-
-    if (isPDF) {
-      qDebug() << "Read Pdf... ..." << fileName;
-      ui->lblBookName->hide();
-      ui->progReader->hide();
-      ui->qwReader->hide();
-      ui->frameReaderFun->hide();
-      ui->qwPdf->show();
-
-      QString PDFJS, str;
-
-      // https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf
-      // "https://mozilla.github.io/pdf.js/web/viewer.html";
-#ifdef Q_OS_ANDROID
-      PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
-      PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";
-      str =
-          "https://mozilla.github.io/pdf.js/web/"
-          "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
-      str = PDFJS + "?file=" + fileName;
-      if (QFile("assets:/web/viewer.html").exists())
-        qDebug() << "viewer.html exists......";
-#else
-      PDFJS = "file://" + privateDir + "pdfjs/web/viewer.html";
-      str = PDFJS + "?file=file://" + fileName;
-#endif
-      QUrl url;
-      url.setUrl(str);
-
-      if (isPdfNewMothod) {
-        QQuickItem *root = ui->qwPdf->rootObject();
-        QMetaObject::invokeMethod((QObject *)root, "setPdfPath",
-                                  Q_ARG(QVariant, url));
-
-      } else {
-        QQuickItem *root = ui->qwPdf->rootObject();
-#ifdef Q_OS_WIN
-        QMetaObject::invokeMethod((QObject *)root, "setViewEnd",
-                                  Q_ARG(QVariant, true));
-#endif
-
-        // QMetaObject::invokeMethod((QObject *)root, "loadPDFWin",
-        //                          Q_ARG(QVariant, PDFJS + "?file="),
-        //                          Q_ARG(QVariant, fileName));
-
-        QMetaObject::invokeMethod((QObject *)root, "loadPDF",
-                                  Q_ARG(QVariant, fileName));
-      }
-    }
-
-    mydlgReader->goPostion();
-
-    for (int i = 0; i < mydlgReader->bookList.count(); i++) {
-      QString str = mydlgReader->bookList.at(i);
-      if (str.contains(fileName)) {
-        mydlgReader->bookList.removeAt(i);
-        break;
-      }
-    }
-    mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
-
-    isEBook = false;
-  }
-
-  if (isReport) {
-    mydlgReport->updateTable();
-    ui->lblTitle->setText(tabData->tabText(tabData->currentIndex()));
-    isReport = false;
-  }
-
-  dlgProgEBook->close();
-  isReadEBookEnd = true;
 }
 
 void MainWindow::on_btnReadList_clicked() {
