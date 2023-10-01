@@ -2163,12 +2163,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   }
 
   reloadMain();
-
-  series->clear();
-  m_scatterSeries->clear();
-  barSeries->clear();
-  startRead(strDate);
-  on_twItemClicked();
+  clickData();
 }
 
 void MainWindow::saveNotes(int tabIndex) {
