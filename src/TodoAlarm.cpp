@@ -114,14 +114,7 @@ void msgDialog::on_btnDay_clicked() {
   int maxDay = 0;
   QString sy = ui->btnYear->text().split("\n").at(0);
   QString sm = ui->btnMonth->text().split("\n").at(0);
-  for (int i = 0; i < 50; i++) {
-    QString strDate = sy + "-" + sm + "-" + QString::number(i + 1);
-    QDate date = QDate::fromString(strDate, "yyyy-M-d");
-    if (date.dayOfWeek() == 0) {
-      maxDay = i;
-      break;
-    }
-  }
+  maxDay = mw_one->getMaxDay(sy, sm);
 
   addBtn(1, maxDay, 6, tr("Day"), true);
 }

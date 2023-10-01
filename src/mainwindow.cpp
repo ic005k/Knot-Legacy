@@ -1739,11 +1739,11 @@ void MainWindow::initChartMonth() {
     tempDList.append(PointList.at(i).y());
     categories.append(QString::number(PointList.at(i).x()));
   }
-  for (int i = 0; i < 31; i++) {
+  for (int i = 0; i < max_day; i++) {
     dList.append(0);
   }
   for (int i = 0; i < categories.count(); i++) {
-    for (int n = 0; n < 31; n++) {
+    for (int n = 0; n < max_day; n++) {
       if (categories.at(i) == QString::number(n + 1)) {
         dList.removeAt(n);
         dList.insert(n, PointList.at(i).y());
@@ -1751,10 +1751,11 @@ void MainWindow::initChartMonth() {
     }
   }
 
-  for (int i = 0; i < 31; i++) setY->append(dList.at(i));
+  for (int i = 0; i < max_day; i++) setY->append(dList.at(i));
   categories.clear();
-  for (int i = 0; i < 31; i++) categories.append(QString::number(i + 1));
+  for (int i = 0; i < max_day; i++) categories.append(QString::number(i + 1));
   barSeries->append(setY);
+  axisX->setRange("", QString::number(max_day));
   axisX->append(categories);
   axisY->setRange(0, yMaxMonth);
 
@@ -1967,6 +1968,9 @@ void MainWindow::on_twItemClicked() {
   // child items
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     pItem = item->parent();
+    QString sy = pItem->text(3);
+    QString sm = pItem->text(0).split(" ").at(1);
+    max_day = getMaxDay(sy, sm);
 
     QString str = item->text(3);
     if (str.length() > 0)
@@ -5403,4 +5407,18 @@ void MainWindow::init_report_widget_year() {
     ui->cboxY1->addItem(QString::number(i));
     ui->cboxY2->addItem(QString::number(i));
   }
+}
+
+int MainWindow::getMaxDay(QString sy, QString sm) {
+  int maxDay = 0;
+  for (int i = 0; i < 50; i++) {
+    QString strDate = sy + "-" + sm + "-" + QString::number(i + 1);
+    QDate date = QDate::fromString(strDate, "yyyy-M-d");
+    if (date.dayOfWeek() == 0) {
+      maxDay = i;
+      break;
+    }
+  }
+
+  return maxDay;
 }

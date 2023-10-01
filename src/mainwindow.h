@@ -397,6 +397,7 @@ class MainWindow : public QMainWindow {
   void removeFilesWatch();
   void addFilesWatch();
   void init_report_widget_year();
+  int getMaxDay(QString sy, QString sm);
  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
@@ -627,6 +628,7 @@ class MainWindow : public QMainWindow {
   int x, y, w, h;
   qreal aoldX, aoldY, aoldZ;
   int countOne = 0;
+  int max_day = 31;
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
 
