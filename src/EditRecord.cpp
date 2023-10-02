@@ -10,6 +10,7 @@ extern QTabWidget *tabData;
 extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
 extern bool isBreak, isImport;
+extern int fontSize;
 
 bool del = false;
 
@@ -47,6 +48,10 @@ EditRecord::EditRecord(QWidget *parent)
   ui->btnDot->setFont(font);
   ui->btnDel->setFont(font);
 
+  font.setPointSize(fontSize + 2);
+  font.setBold(true);
+  ui->lblTitle->setFont(font);
+
   QValidator *validator =
       new QRegularExpressionValidator(regxNumber, ui->editAmount);
   ui->editAmount->setValidator(validator);
@@ -79,6 +84,7 @@ void EditRecord::init() {
     ui->editCategory->setText("");
     ui->editAmount->setText("");
   }
+
   show();
 }
 

@@ -30,7 +30,7 @@
      </property>
      <property name="font">
       <font>
-       <bold>true</bold>
+       <bold>false</bold>
       </font>
      </property>
      <property name="styleSheet">
@@ -47,6 +47,9 @@ selection-background-color: lightblue;
      </property>
      <property name="text">
       <string>Add</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
