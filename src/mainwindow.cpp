@@ -1961,7 +1961,6 @@ void MainWindow::on_twItemClicked() {
   // top item
   if (item->childCount() > 0) {
     pItem = item;
-
     ui->lblStats->setText(strStats);
   }
 
@@ -2163,6 +2162,11 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   }
 
   reloadMain();
+
+  series->clear();
+  m_scatterSeries->clear();
+  barSeries->clear();
+  startRead(strDate);
   clickData();
 }
 
