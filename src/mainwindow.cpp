@@ -2398,14 +2398,10 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         while (t.elapsed() < 600) {
           QCoreApplication::processEvents();
         }
-        series->clear();
-        m_scatterSeries->clear();
-        startRead(strDate);
-
-        reloadMain();
-        clickData();
 
         isSlide = false;
+
+        on_tabWidget_currentChanged(tabData->currentIndex());
       }
     }
 
@@ -2441,14 +2437,10 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         while (t.elapsed() < 500) {
           QCoreApplication::processEvents();
         }
-        series->clear();
-        m_scatterSeries->clear();
-        startRead(strDate);
-
-        reloadMain();
-        clickData();
 
         isSlide = false;
+
+        on_tabWidget_currentChanged(tabData->currentIndex());
       }
     }
   }
@@ -2852,7 +2844,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     }
   }
 
-  reloadMain();
+  on_tabWidget_currentChanged(tabData->currentIndex());
 
   return true;
 }
