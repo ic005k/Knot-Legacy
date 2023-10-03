@@ -257,8 +257,6 @@ void MainWindow::readChartDone() {
     initChartDay();
   }
 
-  ui->lblStats->setText(strStats);
-
   isReadEnd = true;
 }
 
@@ -706,21 +704,21 @@ void MainWindow::init_ChartWidget() {
   m_scatterSeries2 = new QScatterSeries();
   m_scatterSeries2_1 = new QScatterSeries();
 
-  //散点图(用于边框)
+  // 散点图(用于边框)
   m_scatterSeries2->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);                 //圆形的点
-  m_scatterSeries2->setBorderColor(QColor(255, 0, 0));    //边框颜色
-  m_scatterSeries2->setBrush(QBrush(QColor(255, 0, 0)));  //背景颜色
-  m_scatterSeries2->setMarkerSize(5);                     //点大小
+      QScatterSeries::MarkerShapeCircle);                 // 圆形的点
+  m_scatterSeries2->setBorderColor(QColor(255, 0, 0));    // 边框颜色
+  m_scatterSeries2->setBrush(QBrush(QColor(255, 0, 0)));  // 背景颜色
+  m_scatterSeries2->setMarkerSize(5);                     // 点大小
 
-  //散点图(用于中心)
+  // 散点图(用于中心)
   m_scatterSeries2_1->setMarkerShape(
-      QScatterSeries::MarkerShapeCircle);         //圆形的点
-  m_scatterSeries2_1->setBorderColor(Qt::red);    //边框颜色
-  m_scatterSeries2_1->setBrush(QBrush(Qt::red));  //背景颜色
-  m_scatterSeries2_1->setMarkerSize(4);           //点大小
+      QScatterSeries::MarkerShapeCircle);         // 圆形的点
+  m_scatterSeries2_1->setBorderColor(Qt::red);    // 边框颜色
+  m_scatterSeries2_1->setBrush(QBrush(Qt::red));  // 背景颜色
+  m_scatterSeries2_1->setMarkerSize(4);           // 点大小
   connect(m_scatterSeries2_1, &QScatterSeries::hovered, this,
-          &MainWindow::slotPointHoverd);  //用于鼠标移动到点上显示数值
+          &MainWindow::slotPointHoverd);  // 用于鼠标移动到点上显示数值
   m_valueLabel = new QLabel(this);
   m_valueLabel->adjustSize();
   m_valueLabel->setHidden(true);
@@ -780,7 +778,7 @@ void MainWindow::slotPointHoverd(const QPointF &point, bool state) {
 
     QPoint curPos = mapFromGlobal(QCursor::pos());
     m_valueLabel->move(curPos.x() - m_valueLabel->width() / 2,
-                       curPos.y() - m_valueLabel->height() * 1.5);  //移动数值
+                       curPos.y() - m_valueLabel->height() * 1.5);  // 移动数值
 
     m_valueLabel->show();
   } else
@@ -1919,7 +1917,7 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
   tw->setFrameShape(QTreeWidget::NoFrame);
   tw->installEventFilter(this);
   tw->viewport()->installEventFilter(this);
-  tw->setUniformRowHeights(true);  //加快展开速度
+  tw->setUniformRowHeights(true);  // 加快展开速度
   connect(tw, &QTreeWidget::itemClicked, this, &MainWindow::on_twItemClicked);
   connect(tw, &QTreeWidget::itemDoubleClicked, this,
           &MainWindow::on_twItemDoubleClicked);
@@ -1961,6 +1959,10 @@ void MainWindow::on_twItemClicked() {
   // top item
   if (item->childCount() > 0) {
     pItem = item;
+    QString sy = pItem->text(3);
+    QString sm = pItem->text(0).split(" ").at(1);
+    max_day = getMaxDay(sy, sm);
+
     ui->lblStats->setText(strStats);
   }
 
@@ -1972,7 +1974,7 @@ void MainWindow::on_twItemClicked() {
     max_day = getMaxDay(sy, sm);
 
     QString str = item->text(3);
-    if (str.length() > 0)
+    if (str.trimmed().length() > 0)
       ui->lblStats->setText(str);
     else {
       ui->lblStats->setText(strStats);
@@ -2211,7 +2213,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     mw_one->mydlgMainNotes->getEditPanel(ui->editTodo, evn);
   }
 
-  QMouseEvent *event = static_cast<QMouseEvent *>(evn);  //将之转换为鼠标事件
+  QMouseEvent *event = static_cast<QMouseEvent *>(evn);  // 将之转换为鼠标事件
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
 
   if (evn->type() == QEvent::ToolTip) {
@@ -2928,7 +2930,7 @@ QStringList MainWindow::get_MonthList(QString strY, QString strM) {
         if (isrbFreq) {
           if (topItem->childCount() > 0)
             listMonth.append(
-                topItem->child(0)->text(0));  //记录第一个子项的时间
+                topItem->child(0)->text(0));  // 记录第一个子项的时间
 
           double y0 = topItem->text(1).toDouble();
           doubleList.append(y0);
@@ -3108,7 +3110,7 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   if (floatfun && !initMain) {
     floatfun = false;
   }
-  //获取背景色
+  // 获取背景色
   QPalette pal = ui->btnFind->palette();
   QBrush brush = pal.window();
   int c_red = brush.color().red();
@@ -3755,7 +3757,7 @@ void MainWindow::on_btnNotes_clicked() {
   if (strPw != "") {
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
-      baPw[i] = baPw[i] - 66;  //解密User的密码
+      baPw[i] = baPw[i] - 66;  // 解密User的密码
     }
     strPw = baPw;
 
@@ -4874,7 +4876,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     QString strPw = ui->edit1->text().trimmed();
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
-      baPw[i] = baPw[i] + 66;  //加密User的密码
+      baPw[i] = baPw[i] + 66;  // 加密User的密码
     }
     strPw = baPw;
     Reg.setValue("/MainNotes/UserKey", strPw);
@@ -5303,8 +5305,8 @@ bool MainWindow::setTWCurrentItem() {
   int row = getCurrentIndex();
   if (row < 0) return false;
 
+  // type==0 child; type==1 top
   int type = getItemType(row);
-  if (type == 1) return false;
 
   QString textTop = getTop(row);
   QString text0 = getText0(row);
@@ -5314,15 +5316,24 @@ bool MainWindow::setTWCurrentItem() {
     childIndex = list.at(0).toInt() - 1;
   }
 
-  if (childIndex < 0) return false;
+  if (type == 0) {
+    if (childIndex < 0) return false;
+  }
 
   QTreeWidget *tw = get_tw(tabData->currentIndex());
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(count - 1 - i);
     if (topItem->text(0) == textTop) {
-      QTreeWidgetItem *childItem = topItem->child(childIndex);
-      tw->setCurrentItem(childItem, 0);
+      if (type == 0) {
+        QTreeWidgetItem *childItem = topItem->child(childIndex);
+        tw->setCurrentItem(childItem, 0);
+      }
+
+      if (type == 1) {
+        tw->setCurrentItem(topItem);
+      }
+
       isSel = true;
       break;
     }
