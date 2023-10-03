@@ -1981,10 +1981,6 @@ void MainWindow::on_twItemClicked() {
     }
   }
 
-  if (parentItem == pItem) {
-    return;
-  }
-
   if (tabChart->currentIndex() == 0) {
     QString str = stra + " " + CurrentYear;
     QString strYearMonth = get_Year(str) + get_Month(str);
@@ -1992,7 +1988,9 @@ void MainWindow::on_twItemClicked() {
     startRead(str);
   }
 
-  if (tabChart->currentIndex() == 1) startRead(strDate);
+  if (tabChart->currentIndex() == 1 && parentItem != pItem) {
+    startRead(strDate);
+  }
 }
 
 void MainWindow::set_Time() {
