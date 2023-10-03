@@ -5266,10 +5266,11 @@ void MainWindow::reloadMain() {
 
   for (int i = a; i < total; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
-    QString text0, text1, text2, topitem;
+    QString text0, text1, text2, text3, topitem;
     text0 = topItem->text(0);
     text1 = topItem->text(1);
     text2 = topItem->text(2);
+
     topitem = text0;
     addItem(text0, text1, text2, 1, topitem);
 
@@ -5279,6 +5280,8 @@ void MainWindow::reloadMain() {
       text0 = childItem->text(0);
       text1 = childItem->text(1);
       text2 = childItem->text(2);
+      text3 = childItem->text(3);
+      if (text3.trimmed().length() > 0) text2 = "*" + text2;
       addItem(text0, text1, text2, 0, topitem);
     }
   }
