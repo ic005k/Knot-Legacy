@@ -257,7 +257,10 @@ void MainWindow::readChartDone() {
     initChartDay();
   }
 
-  ui->lblStats->setText(strStats);
+  if (isShowDetails)
+    ui->lblStats->setText(strShowDetails);
+  else
+    ui->lblStats->setText(strStats);
   isReadEnd = true;
 }
 
@@ -1964,6 +1967,7 @@ void MainWindow::on_twItemClicked() {
     QString sm = pItem->text(0).split(" ").at(1);
     max_day = getMaxDay(sy, sm);
 
+    isShowDetails = false;
     ui->lblStats->setText(strStats);
   }
 
@@ -1975,9 +1979,12 @@ void MainWindow::on_twItemClicked() {
     max_day = getMaxDay(sy, sm);
 
     QString str = item->text(3);
-    if (str.trimmed().length() > 0 && !isTabChanged)
+    if (str.trimmed().length() > 0 && !isTabChanged) {
+      isShowDetails = true;
+      strShowDetails = str;
       ui->lblStats->setText(str);
-    else {
+    } else {
+      isShowDetails = false;
       ui->lblStats->setText(strStats);
     }
   }

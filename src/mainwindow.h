@@ -621,6 +621,8 @@ class MainWindow : public QMainWindow {
   void on_cboxD2_activated(int index);
 
  private:
+  bool isShowDetails = false;
+  QString strShowDetails;
   bool isTabChanged = false;
   bool isAndroidKeyShow = false;
   int memoHeight;
