@@ -2403,6 +2403,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         startRead(strDate);
 
         reloadMain();
+        clickData();
 
         isSlide = false;
       }
@@ -2445,6 +2446,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         startRead(strDate);
 
         reloadMain();
+        clickData();
 
         isSlide = false;
       }
