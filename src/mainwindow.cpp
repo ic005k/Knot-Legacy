@@ -257,6 +257,7 @@ void MainWindow::readChartDone() {
     initChartDay();
   }
 
+  ui->lblStats->setText(strStats);
   isReadEnd = true;
 }
 
@@ -1974,7 +1975,7 @@ void MainWindow::on_twItemClicked() {
     max_day = getMaxDay(sy, sm);
 
     QString str = item->text(3);
-    if (str.trimmed().length() > 0)
+    if (str.trimmed().length() > 0 && !isTabChanged)
       ui->lblStats->setText(str);
     else {
       ui->lblStats->setText(strStats);
@@ -1984,12 +1985,22 @@ void MainWindow::on_twItemClicked() {
   if (tabChart->currentIndex() == 0) {
     QString str = stra + " " + CurrentYear;
     QString strYearMonth = get_Year(str) + get_Month(str);
-    if (strYearMonth == CurrentYearMonth) return;
+    if (!isTabChanged) {
+      if (strYearMonth == CurrentYearMonth) return;
+    } else
+      isTabChanged = false;
     startRead(str);
   }
 
-  if (tabChart->currentIndex() == 1 && parentItem != pItem) {
-    startRead(strDate);
+  if (tabChart->currentIndex() == 1) {
+    if (!isTabChanged) {
+      if (parentItem != pItem) {
+        startRead(strDate);
+      }
+    } else {
+      startRead(strDate);
+      isTabChanged = false;
+    }
   }
 }
 
@@ -2151,6 +2162,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 
   QTreeWidget *tw = (QTreeWidget *)tabData->widget(index);
   tw->setFocus();
+
   if (!loading) {
     QSettings Reg(iniDir + "tab.ini", QSettings::IniFormat);
 
@@ -2166,7 +2178,12 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   series->clear();
   m_scatterSeries->clear();
   barSeries->clear();
-  startRead(strDate);
+
+  series2->clear();
+  m_scatterSeries2->clear();
+  m_scatterSeries2_1->clear();
+
+  isTabChanged = true;
   clickData();
 }
 

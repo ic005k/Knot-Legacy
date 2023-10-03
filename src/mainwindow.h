@@ -272,42 +272,42 @@ class MainWindow : public QMainWindow {
       "#listWidget::item:selected {border-left: 5px solid #777777;}";
 
   QString vsbarStyle =
-      "QScrollBar:vertical{"  //垂直滑块整体
+      "QScrollBar:vertical{"  // 垂直滑块整体
       "width:30px;"
-      "background:#FFFFFF;"   //背景色
-      "padding-top:25px;"     //上预留位置（放置向上箭头）
-      "padding-bottom:25px;"  //下预留位置（放置向下箭头）
-      "padding-left:3px;"     //左预留位置（美观）
-      "padding-right:3px;"    //右预留位置（美观）
-      "border-left:1px solid #d7d7d7;}"     //左分割线
-      "QScrollBar::handle:vertical{"        //滑块样式
-      "background:#dbdbdb;"                 //滑块颜色
-      "border-radius:6px;"                  //边角圆润
-      "min-height:60px;}"                   //滑块最小高度
-      "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
-      "background:#d0d0d0;}"                //滑块颜色
-      "QScrollBar::add-line:vertical{"      //向下箭头样式
+      "background:#FFFFFF;"   // 背景色
+      "padding-top:25px;"     // 上预留位置（放置向上箭头）
+      "padding-bottom:25px;"  // 下预留位置（放置向下箭头）
+      "padding-left:3px;"     // 左预留位置（美观）
+      "padding-right:3px;"    // 右预留位置（美观）
+      "border-left:1px solid #d7d7d7;}"     // 左分割线
+      "QScrollBar::handle:vertical{"        // 滑块样式
+      "background:#dbdbdb;"                 // 滑块颜色
+      "border-radius:6px;"                  // 边角圆润
+      "min-height:60px;}"                   // 滑块最小高度
+      "QScrollBar::handle:vertical:hover{"  // 鼠标触及滑块样式
+      "background:#d0d0d0;}"                // 滑块颜色
+      "QScrollBar::add-line:vertical{"      // 向下箭头样式
       "background:url(:/src/down.png) bottom no-repeat;}"
-      "QScrollBar::sub-line:vertical{"  //向上箭头样式
+      "QScrollBar::sub-line:vertical{"  // 向上箭头样式
       "background:url(:/src/up.png) top no-repeat;}";
   QString vsbarStyleSmall =
-      "QScrollBar:vertical{"  //垂直滑块整体
+      "QScrollBar:vertical{"  // 垂直滑块整体
       "width:6px;"
-      "background:rgb(255,255,255);"  //背景色
-      "padding-top:0px;"              //上预留位置（放置向上箭头）
-      "padding-bottom:0px;"           //下预留位置（放置向下箭头）
-      "padding-left:1px;"             //左预留位置（美观）
-      "padding-right:1px;"            //右预留位置（美观）
-      "border-left:0px solid #d7d7d7;}"     //左分割线
-      "QScrollBar::handle:vertical{"        //滑块样式
-      "background:rgb(202,197,191);"        //滑块颜色
-      "border-radius:6px;"                  //边角圆润
-      "min-height:60px;}"                   //滑块最小高度
-      "QScrollBar::handle:vertical:hover{"  //鼠标触及滑块样式
-      "background:#d0d0d0;}"                //滑块颜色
-      "QScrollBar::add-line:vertical{"      //向下箭头样式
+      "background:rgb(255,255,255);"  // 背景色
+      "padding-top:0px;"              // 上预留位置（放置向上箭头）
+      "padding-bottom:0px;"           // 下预留位置（放置向下箭头）
+      "padding-left:1px;"             // 左预留位置（美观）
+      "padding-right:1px;"            // 右预留位置（美观）
+      "border-left:0px solid #d7d7d7;}"     // 左分割线
+      "QScrollBar::handle:vertical{"        // 滑块样式
+      "background:rgb(202,197,191);"        // 滑块颜色
+      "border-radius:6px;"                  // 边角圆润
+      "min-height:60px;}"                   // 滑块最小高度
+      "QScrollBar::handle:vertical:hover{"  // 鼠标触及滑块样式
+      "background:#d0d0d0;}"                // 滑块颜色
+      "QScrollBar::add-line:vertical{"      // 向下箭头样式
       "background:url() center no-repeat;}"
-      "QScrollBar::sub-line:vertical{"  //向上箭头样式
+      "QScrollBar::sub-line:vertical{"  // 向上箭头样式
       "background:url() center no-repeat;}";
 
   //"QListWidget::item:hover{background-color:#e6e6e6;margin:1px,1px,1px,"
@@ -621,6 +621,7 @@ class MainWindow : public QMainWindow {
   void on_cboxD2_activated(int index);
 
  private:
+  bool isTabChanged = false;
   bool isAndroidKeyShow = false;
   int memoHeight;
   int frameChartHeight;
@@ -654,7 +655,7 @@ class SearchThread : public QThread {
  protected:
   void run();
  signals:
-  void isDone();  //处理完成信号
+  void isDone();  // 处理完成信号
 
  signals:
 
