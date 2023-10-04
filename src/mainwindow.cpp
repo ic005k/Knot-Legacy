@@ -3112,13 +3112,17 @@ void MainWindow::on_btnTodo_clicked() {
 void MainWindow::on_rbFreq_clicked() {
   tabChart->setTabEnabled(1, true);
   isrbFreq = true;
-  startRead(strDate);
+  CurrentYearMonth = "";
+  parentItem = NULL;
+  clickData();
 }
 
 void MainWindow::on_rbAmount_clicked() {
   tabChart->setTabEnabled(1, true);
   isrbFreq = false;
-  startRead(strDate);
+  CurrentYearMonth = "";
+  parentItem = NULL;
+  clickData();
 }
 
 void MainWindow::paintEvent(QPaintEvent *event) {
@@ -3186,29 +3190,7 @@ void MainWindow::on_actionPreferences_triggered() {
 void MainWindow::on_tabCharts_currentChanged(int index) {
   if (ui->rbSteps->isChecked() || loading || index < 0) return;
 
-  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
-  int topCount = tw->topLevelItemCount();
-
-  if (topCount == 0) {
-    series2->clear();
-    m_scatterSeries2->clear();
-    return;
-  }
-
-  if (topCount > 0) {
-    if (!tw->currentIndex().isValid()) {
-      QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
-      tw->setCurrentItem(topItem);
-    }
-  }
-
-  QTreeWidgetItem *item = tw->currentItem();
-  QString date;
-  if (item->parent() == NULL)
-    date = item->text(0) + " " + item->text(3);
-  else
-    date = item->parent()->text(0) + " " + item->parent()->text(3);
-  startRead(date);
+  clickData();
 }
 
 void MainWindow::on_btnSteps_clicked() {
