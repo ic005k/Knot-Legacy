@@ -788,6 +788,7 @@ void dlgReport::loadDetails() {
   int row = getCurrentIndex();
   QString date = getDate(row);
   date.replace("*", "");
+  date = date.trimmed();
 
   for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
@@ -820,7 +821,7 @@ void dlgReport::loadDetails() {
           t1 = c_item->text(1);
           t2 = c_item->text(2);
 
-          str_xx = str_xx + t0 + "  " + t1 + "  " + t2 + "\n" + text0 + "\n\n";
+          str_xx = str_xx + t0 + "  $" + t1 + "  " + t2 + "\n" + text0 + "\n\n";
         }
       }
     }
