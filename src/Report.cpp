@@ -196,6 +196,18 @@ void dlgReport::updateTable() {
     QString text2 = topItem->text(2);
     freq = freq + text1.toInt();
     if (text2.length() > 0) t_amount = t_amount + text2.toDouble();
+
+    bool isDetails = false;
+    for (int j = 0; j < topItem->childCount(); j++) {
+      QTreeWidgetItem* child = topItem->child(j);
+      if (child->text(0).contains(tr("Details"))) {
+        isDetails = true;
+        break;
+      }
+    }
+
+    if (isDetails) text0 = "*" + text0;
+
     appendSteps(text0, text1, text2);
   }
 
@@ -775,6 +787,7 @@ void dlgReport::loadDetails() {
 
   int row = getCurrentIndex();
   QString date = getDate(row);
+  date.replace("*", "");
 
   for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
