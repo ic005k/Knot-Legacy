@@ -144,7 +144,7 @@ Rectangle {
                     TextArea {
                         id: text1
                         color: "gray"
-                        font.pixelSize: FontSize - 2
+                        font.pointSize: FontSize - 2
                         font.bold: true
                         width: parent.width
                         wrapMode: Text.Wrap
@@ -160,7 +160,7 @@ Rectangle {
                     }
                     TextArea {
                         id: text3
-                        font.pixelSize: FontSize
+                        font.pointSize: FontSize
                         width: parent.width
                         wrapMode: Text.Wrap
                         //background: Qt.rgba(0,0,0,0)
