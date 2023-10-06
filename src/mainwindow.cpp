@@ -4155,7 +4155,7 @@ void MainWindow::on_btnSelTab_clicked() {
   QListWidget *list = new QListWidget(this);
   vbox->addWidget(list);
   list->setSpacing(8);
-  list->setAlternatingRowColors(true);
+  list->setAlternatingRowColors(false);
   list->setViewMode(QListView::IconMode);
   list->setMovement(QListView::Static);
   list->setStyleSheet(listStyleMain);
