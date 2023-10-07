@@ -67,12 +67,6 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   mw_one->ui->lblDetails->adjustSize();
 
   mw_one->set_btnStyle(this);
-
-#ifdef Q_OS_ANDROID
-#else
-  QDir dir;
-  dir.mkpath(QDir::homePath() + "/KnotBak/");
-#endif
 }
 
 void dlgReport::init() {
@@ -693,8 +687,15 @@ void dlgReport::on_btnOut2Img_clicked() {
       box.exec();
     }
 #else
-    QString filename = QDir::homePath() + "/KnotBak/" + strFile;
-    pixmap.save(filename, "PNG");
+    QString fileName;
+    fileName = QFileDialog::getSaveFileName(this, tr("Save Config"),
+                                            QDir::homePath() + "/" + strFile,
+                                            tr("PNG files(*.png)"));
+
+    if (!fileName.isNull()) {
+      pixmap.save(fileName, "PNG");
+    }
+
 #endif
   }
 }
