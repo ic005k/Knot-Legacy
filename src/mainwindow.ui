@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
+    <width>651</width>
     <height>3332</height>
    </rect>
   </property>
@@ -791,11 +791,16 @@
               <height>28</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
             <property name="styleSheet">
              <string notr="true">border:none</string>
             </property>
             <property name="text">
-             <string/>
+             <string>Steps</string>
             </property>
             <property name="icon">
              <iconset resource="../res.qrc">
@@ -806,6 +811,9 @@
               <width>28</width>
               <height>28</height>
              </size>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -4097,8 +4105,8 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>641</width>
-     <height>27</height>
+     <width>651</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">
