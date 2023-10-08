@@ -131,7 +131,7 @@ Rectangle {
                 width: parent.width
                 height: itemheight
                 border.width: 1
-                border.color: "lightsteelblue"
+                border.color: "lightgray"
                 radius: 0
                 //color: ListView.isCurrentItem ? "#DCDCDC" : "#ffffff" //选中颜色设置
                 color: view.currentIndex === index ? "#DCDCDC" : "#ffffff"

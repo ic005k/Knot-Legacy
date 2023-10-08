@@ -26,8 +26,6 @@ Rectangle {
         view.positionViewAtIndex(index, Tumbler.Center)
     }
 
-
-
     function setHighPriority(isFalse) {
         isHighPriority = isFalse
     }
@@ -128,7 +126,7 @@ Rectangle {
             color: ListView.isCurrentItem ? "#94caf7" : "#ffffff" //选中颜色设置
 
             border.width: 1
-            border.color: "lightsteelblue"
+            border.color: "lightgray" //"lightsteelblue"
 
             radius: 0
 

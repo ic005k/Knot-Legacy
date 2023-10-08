@@ -108,7 +108,7 @@ Rectangle {
             color: ListView.isCurrentItem ? "#DCDCDC" : "#ffffff" //选中颜色设置
 
             border.width: 1
-            border.color: "lightsteelblue"
+            border.color: "lightgray"
 
             radius: 0
 
