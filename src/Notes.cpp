@@ -72,7 +72,7 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
 
   highlightCurrentLine();
   QFont font = this->font();
-  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
+  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  // 字间距
   ui->editSource->setFont(font);
   ui->editSource->setAcceptRichText(false);
 
@@ -508,6 +508,15 @@ QStringList dlgMainNotes::getImgFileFromHtml(QString htmlfile) {
 
 void dlgMainNotes::zipMemo() {
   QDir::setCurrent(iniDir);
+
+#ifdef Q_OS_LINUX
+  QProcess *pro = new QProcess;
+  pro->execute("zip", QStringList() << "-r"
+                                    << "memo.zip"
+                                    << "memo");
+  pro->waitForFinished();
+#endif
+
 #ifdef Q_OS_MACOS
   QProcess *pro = new QProcess;
   pro->execute("zip", QStringList() << "-r"
@@ -860,16 +869,16 @@ void dlgMainNotes::highlightCurrentLine() {
 
   QString str1, str2, str3, str4;
 
-  //当前光标
+  // 当前光标
   QTextCursor tc = ui->editSource->textCursor();
   // QTextLayout* lay = tc.block().layout();
-  //当前光标在本BLOCK内的相对位置
+  // 当前光标在本BLOCK内的相对位置
   int iCurPos = tc.position() - tc.block().position();
-  //光标所在行号
-  // int iCurrentLine = lay->lineForTextPosition(iCurPos).lineNumber() +
-  //                   tc.block().firstLineNumber();
+  // 光标所在行号
+  //  int iCurrentLine = lay->lineForTextPosition(iCurPos).lineNumber() +
+  //                    tc.block().firstLineNumber();
   int iLineCount = ui->editSource->document()->lineCount();
-  //或者  获取光标所在行的行号
+  // 或者  获取光标所在行的行号
   int iRowNum = tc.blockNumber() + 1;
 
   str1 = QString::number(iLineCount);
@@ -1011,9 +1020,9 @@ void dlgMainNotes::on_btnShowFind_clicked() {
 void dlgMainNotes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
   if (findtext == "") return;
-  //获得对话框的内容
+  // 获得对话框的内容
   if (ui->editSource->find(findtext, QTextDocument::FindCaseSensitively))
-  //查找后一个
+  // 查找后一个
   {
     // 查找到后高亮显示
     QPalette palette = ui->editSource->palette();
@@ -1030,9 +1039,9 @@ void dlgMainNotes::show_findText() {
 void dlgMainNotes::show_findTextBack() {
   QString findtext = ui->editFind->text().trimmed().toLower();
   if (findtext == "") return;
-  //获得对话框的内容
+  // 获得对话框的内容
   if (ui->editSource->find(findtext, QTextDocument::FindBackward))
-  //查找后一个
+  // 查找后一个
   {
     // 查找到后高亮显示
     QPalette palette = ui->editSource->palette();
@@ -1055,12 +1064,12 @@ void dlgMainNotes::findText() {
     bool found = false;
     QTextCursor highlight_cursor(document);
     QTextCursor cursor(document);
-    //开始
+    // 开始
     cursor.beginEditBlock();
     QTextCharFormat color_format(highlight_cursor.charFormat());
     color_format.setForeground(Qt::red);
     while (!highlight_cursor.isNull() && !highlight_cursor.atEnd()) {
-      //查找指定的文本，匹配整个单词
+      // 查找指定的文本，匹配整个单词
       highlight_cursor = document->find(search_text, highlight_cursor,
                                         QTextDocument::FindCaseSensitively);
       if (!highlight_cursor.isNull()) {
@@ -1069,7 +1078,7 @@ void dlgMainNotes::findText() {
       }
     }
     cursor.endEditBlock();
-    //结束
+    // 结束
     if (found == false) {
       QMessageBox::information(this, tr("Word not found"),
                                tr("Sorry,the word cannot be found."));

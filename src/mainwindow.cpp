@@ -2723,7 +2723,7 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
     mw_one->mydlgMainNotes->zipMemo();
 
     if (fileName != zipfile) {
-      QFile::remove(fileName);
+      if (QFile::exists(fileName)) QFile::remove(fileName);
 
 #ifdef Q_OS_ANDROID
       QDir *folder = new QDir;

@@ -614,21 +614,21 @@ void dlgNotesList::setWinPos() {
 }
 
 void dlgNotesList::clearFiles() {
-  QString tempDir = iniDir + "memo/";
+  QString tempDir = iniDir;
   files.clear();
-  QStringList fmt = QString("md;html;jpg;bmp;png;ini").split(';');
+  QStringList fmt = QString("zip;md;html;jpg;bmp;png;ini").split(';');
   getAllFiles(tempDir, files, fmt);
 
   clearMD_Pic(tw);
   clearMD_Pic(twrb);
 
-  for (int i = 0; i < files.count(); i++) {
+  int count = files.count();
+  for (int i = 0; i < count; i++) {
     QString a = files.at(i);
 
     QFile file(a);
     if (a.contains(".sync-conflict-")) {
       file.remove();
-      i--;
     }
   }
 }
