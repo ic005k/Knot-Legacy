@@ -53,7 +53,7 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   setGeometry(x, y, w, h);
   webView_ = new QtOneDriveWebView(this);
   QVBoxLayout *layout = new QVBoxLayout(this);
-  layout->setMargin(5);
+  layout->setContentsMargins(5, 5, 5, 5);
   this->setLayout(layout);
   layout->addWidget(webView_);
   webView_->load(url);

@@ -570,7 +570,7 @@ void dlgReader::initReader() {
   mw_one->textFontSize = fsize;
   mw_one->ui->qwReader->rootContext()->setContextProperty("FontSize", fsize);
   font.setPointSize(fsize);
-  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  //字间距
+  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  // 字间距
 
   mw_one->ui->qwReader->rootContext()->setContextProperty("FontName", fontname);
 
@@ -1038,7 +1038,7 @@ void dlgReader::goPostion() {
     }
 
     if (isPDF) {
-      //#ifdef Q_OS_ANDROID
+      // #ifdef Q_OS_ANDROID
       if (!mw_one->isPdfNewMothod) {
         int page = Reg.value("/Reader/PdfPage" + fileName, 1).toInt();
         setPdfPage(page);
@@ -1046,7 +1046,7 @@ void dlgReader::goPostion() {
         qreal scale = Reg.value("/Reader/PdfScale" + fileName, 1).toReal();
         setPdfScale(scale);
       }
-      //#endif
+      // #endif
     }
   }
 }
@@ -1434,7 +1434,7 @@ void dlgReader::getReadList() {
   hbox->addWidget(btnClear);
 
   frame->setLayout(vbox);
-  frame->layout()->setMargin(10);
+  frame->layout()->setContentsMargins(10, 10, 10, 10);
   frame->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                      mw_one->geometry().width(), mw_one->geometry().height());
 
@@ -1613,7 +1613,7 @@ void dlgReader::setHideShowTopBar() {
   QMetaObject::invokeMethod((QObject*)root, "setHideShowTopBar");
 }
 
-//拷贝文件夹：
+// 拷贝文件夹：
 bool dlgReader::copyDirectoryFiles(const QString& fromDir, const QString& toDir,
                                    bool coverFileIfExist) {
   QDir sourceDir(fromDir);
