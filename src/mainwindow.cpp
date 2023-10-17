@@ -1195,11 +1195,12 @@ void MainWindow::del_Data(QTreeWidget *tw) {
         topItem->setText(1, QString::number(childCount - 1));
         topItem->setText(2, strAmount);
 
+        if (topItem->childCount() == 0)
+          tw->takeTopLevelItem(tw->topLevelItemCount() - 1);
+
         reloadMain();
         break;
       }
-      tw->takeTopLevelItem(tw->topLevelItemCount() - 1);
-      reloadMain();
     }
   }
 
@@ -5103,7 +5104,10 @@ void MainWindow::on_btnAdd_clicked() {
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
-void MainWindow::on_btnDel_clicked() { on_DelRecord(); }
+void MainWindow::on_btnDel_clicked() {
+  mydlgReader->setPdfViewVisible(false);
+  on_DelRecord();
+}
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
