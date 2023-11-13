@@ -116,10 +116,9 @@ QDialog* dlgReader::getProgBar() {
 
   vbox->setContentsMargins(1, 1, 1, 12);
   dlgProgEBook->setLayout(vbox);
-  dlgProgEBook->setGeometry(
-      mw_one->geometry().x(),
-      (mw_one->height() - dlgProgEBook->height()) / 2 + 100,
-      dlgProgEBook->width(), dlgProgEBook->height());
+  dlgProgEBook->setGeometry(mw_one->geometry().x(),
+                            (mw_one->height() - dlgProgEBook->height()) / 2 + 0,
+                            dlgProgEBook->width(), dlgProgEBook->height());
 
   QLabel* lbl = new QLabel(dlgProgEBook);
   lbl->setText(tr("Reading, please wait..."));
