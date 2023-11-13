@@ -2812,6 +2812,9 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
         return false;
     }
 
+    dlgProgEBook = mw_one->mydlgReader->getProgBar();
+    dlgProgEBook->show();
+
     QString file;
     if (!unre) {
       if (fileName != iniDir + "memo.zip") {
@@ -2868,6 +2871,8 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
   }
 
   on_tabWidget_currentChanged(tabData->currentIndex());
+
+  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
 
   return true;
 }
