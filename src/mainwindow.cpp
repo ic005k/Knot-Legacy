@@ -15,11 +15,12 @@ QString ver = "1.1.18";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
-bool isImport, isEBook, isReport;
+bool isImport, isEBook, isReport, isUpData;
 
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
-    SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth;
+    SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
+    zipfile;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -70,6 +71,22 @@ static float AccBuff[NUM_DIM + 1][SAMP_BUFF_LEN];
 unsigned int num_steps_walk, num_steps_run, num_steps_hop;
 
 QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
+
+BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
+void BakDataThread::run() {
+  if (isUpData)
+    mw_one->bakData(zipfile, false);
+  else
+    mw_one->bakData(zipfile, true);
+
+  emit isDone();
+}
+
+void MainWindow::bakDataDone() {
+  if (isUpData) {
+    mydlgOneDrive->uploadData();
+  }
+}
 
 ReadEBookThread::ReadEBookThread(QObject *parent) : QThread{parent} {}
 void ReadEBookThread::run() {
@@ -286,6 +303,7 @@ void MainWindow::dealDone() {
 
   if (SaveType == "tab" || SaveType == "alltab") startRead(strDate);
 }
+
 void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
     EditRecord::saveOne();
@@ -2671,16 +2689,15 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
 
-  QString fileName;
-  QFileDialog fd;
-
 #ifdef Q_OS_ANDROID
-  fileName = "android";
+  zipfile = "android";
 #else
-  fileName = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.zip)"));
+  QFileDialog fd;
+  zipfile = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.zip)"));
 #endif
 
-  bakData(fileName, true);
+  isUpData = false;
+  myBakDataThread->start();
 }
 
 void MainWindow::bakIniData(QString unredoFile, bool unre) {
@@ -2709,6 +2726,9 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
     isSelf = true;
 
+    dlgProgEBook = mw_one->mydlgReader->getProgBar();
+    dlgProgEBook->show();
+
     bakIniData("", false);
     m_NotesList->clearFiles();
 
@@ -2722,6 +2742,8 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
     QString zipfile = iniDir + "memo.zip";
     QFile(zipfile).remove();
     mw_one->mydlgMainNotes->zipMemo();
+
+    if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
 
     if (fileName != zipfile) {
       if (QFile::exists(fileName)) QFile::remove(fileName);
@@ -4006,6 +4028,10 @@ void MainWindow::init_UIWidget() {
 
   mySearchThread = new SearchThread();
   connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::dealDone);
+
+  myBakDataThread = new BakDataThread();
+  connect(myBakDataThread, &BakDataThread::isDone, this,
+          &MainWindow::bakDataDone);
 
   ui->frame_find->setHidden(true);
 

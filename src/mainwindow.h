@@ -113,6 +113,7 @@ class SearchThread;
 class ReadThread;
 class ReadTWThread;
 class ReadEBookThread;
+class BakDataThread;
 
 #include <QMetaType>
 
@@ -207,6 +208,7 @@ class MainWindow : public QMainWindow {
   ReadThread *myReadThread;
   ReadTWThread *myReadTWThread;
   ReadEBookThread *myReadEBookThread;
+  BakDataThread *myBakDataThread;
   static void ReadChartData();
   static int get_Day(QString date);
   static QString get_Year(QString date);
@@ -467,6 +469,8 @@ class MainWindow : public QMainWindow {
 
   void dealDone();
 
+  void bakDataDone();
+
   void readChartDone();
 
   void on_actionPreferences_triggered();
@@ -698,6 +702,21 @@ class ReadEBookThread : public QThread {
   Q_OBJECT
  public:
   explicit ReadEBookThread(QObject *parent = nullptr);
+
+ protected:
+  void run();
+ signals:
+  void isDone();
+
+ signals:
+
+ public slots:
+};
+
+class BakDataThread : public QThread {
+  Q_OBJECT
+ public:
+  explicit BakDataThread(QObject *parent = nullptr);
 
  protected:
   void run();

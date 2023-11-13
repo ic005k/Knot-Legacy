@@ -14,8 +14,10 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow *mw_one;
-extern QString iniFile, iniDir;
+extern QString iniFile, iniDir, zipfile;
 extern QtOneDriveAuthorizationDialog *dialog_;
+extern QDialog *dlgProgEBook;
+extern bool isUpData;
 
 TestDialog::TestDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::TestDialog) {
@@ -235,10 +237,14 @@ void TestDialog::on_pushButton_deleteFile_clicked() {
 
 void TestDialog::on_pushButton_upload2_clicked() {
   // QFileDialog fdlg;
-  QString zipfile =
+  zipfile =
       iniDir + "memo.zip";  // = fdlg.getOpenFileName(this, "Select File");
-  mw_one->bakData(zipfile, false);
 
+  isUpData = true;
+  mw_one->myBakDataThread->start();
+}
+
+void TestDialog::uploadData() {
   if (!mw_one->showMsgBox(
           "OneDrive",
           tr("Uploading data?") + "\n\n" +
