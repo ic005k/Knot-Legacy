@@ -1453,6 +1453,8 @@ QRadioButton::indicator:checked {
 	background:rgb(255,0,0);  
 	color:rgb(255,255,255);
 }
+
+QTabBar::scroller {width:0}
 </string>
             </property>
             <property name="tabShape">
@@ -4106,7 +4108,7 @@ QRadioButton::indicator:checked {
      <x>0</x>
      <y>0</y>
      <width>651</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">
