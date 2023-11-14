@@ -281,8 +281,8 @@ void MainWindow::readChartDone() {
   isReadEnd = true;
 }
 
-SearchThread::SearchThread(QObject *parent) : QThread{parent} {}
-void SearchThread::run() {
+SaveThread::SaveThread(QObject *parent) : QThread{parent} {}
+void SaveThread::run() {
   isSaveEnd = false;
   MainWindow::SaveFile(SaveType);
   emit isDone();
@@ -4034,8 +4034,8 @@ void MainWindow::init_UIWidget() {
   myReadThread = new ReadThread();
   connect(myReadThread, &ReadThread::isDone, this, &MainWindow::readChartDone);
 
-  mySearchThread = new SearchThread();
-  connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::dealDone);
+  mySearchThread = new SaveThread();
+  connect(mySearchThread, &SaveThread::isDone, this, &MainWindow::dealDone);
 
   myBakDataThread = new BakDataThread();
   connect(myBakDataThread, &BakDataThread::isDone, this,

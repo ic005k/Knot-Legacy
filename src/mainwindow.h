@@ -109,7 +109,7 @@
 #include "ui_Todo.h"
 #include "ui_TodoAlarm.h"
 
-class SearchThread;
+class SaveThread;
 class ReadThread;
 class ReadTWThread;
 class ReadEBookThread;
@@ -204,7 +204,7 @@ class MainWindow : public QMainWindow {
   QScatterSeries *m_scatterSeries2;
   QScatterSeries *m_scatterSeries2_1;
   static void get_Today(QTreeWidget *);
-  SearchThread *mySearchThread;
+  SaveThread *mySearchThread;
   ReadThread *myReadThread;
   ReadTWThread *myReadTWThread;
   ReadEBookThread *myReadEBookThread;
@@ -653,10 +653,10 @@ class MainWindow : public QMainWindow {
   void resetWinPos();
 };
 
-class SearchThread : public QThread {
+class SaveThread : public QThread {
   Q_OBJECT
  public:
-  explicit SearchThread(QObject *parent = nullptr);
+  explicit SaveThread(QObject *parent = nullptr);
 
  protected:
   void run();
