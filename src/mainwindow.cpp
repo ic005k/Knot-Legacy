@@ -3230,6 +3230,8 @@ void MainWindow::on_btnSteps_clicked() {
 
   if (isHardStepSensor == 1) updateHardSensorSteps();
 
+  mydlgSteps->init_Steps();
+
   mydlgSteps->setScrollBarPos(0.85);
   mydlgSteps->setMaxMark();
 }
@@ -4520,8 +4522,10 @@ static void JavaNotify_1() {
 
 static void JavaNotify_2() {
   if (!mw_one->ui->frameMain->isHidden()) {
-    mw_one->ui->btnSteps->click();
-    mw_one->ui->btnBackSteps->click();
+    // mw_one->ui->btnSteps->click();
+    // mw_one->ui->btnBackSteps->click();
+
+    mw_one->updateHardSensorSteps();
   }
   qDebug() << "C++ JavaNotify_2";
 }

@@ -235,20 +235,53 @@ qlonglong dlgSteps::getCurrentSteps() {
 }
 
 void dlgSteps::setTableSteps(qlonglong steps) {
-  int count = getCount();
+  // int count = getCount();
+
+  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  int count = Reg.value("/Steps/Count", 0).toInt();
 
   if (count > 0) {
-    QString date = getDate(count - 1);
+    QString date;  // = getDate(count - 1);
+
+    date = Reg.value("/Steps/Table-" + QString::number(count - 1) + "-0")
+               .toString();
+
     if (date == QDate::currentDate().toString("ddd MM dd ")) {
       double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
                   steps / 100 / 1000;
       QString strKM = QString("%1").arg(km, 0, 'f', 2);
 
-      setTableData(count - 1, date, steps, strKM);
-    } else
-      addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 0, "0");
-  } else
-    addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 0, "0");
+      // setTableData(count - 1, date, steps, strKM);
+
+      Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-0", date);
+      Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-1", steps);
+      Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-2", strKM);
+
+    } else {
+      // addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 0, "0");
+
+      count = count + 1;
+      Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-0",
+                   QDate::currentDate().toString("ddd MM dd "));
+      Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-1", 0);
+      Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-2", "0");
+
+      Reg.setValue("/Steps/Count", count);
+    }
+  } else {
+    // addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 0, "0");
+
+    count = count + 1;
+    Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-0",
+                 QDate::currentDate().toString("ddd MM dd "));
+    Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-1", 0);
+    Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-2", "0");
+
+    Reg.setValue("/Steps/Count", count);
+  }
 }
 
 void dlgSteps::on_btnDefaultIntercept_clicked() {
