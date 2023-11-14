@@ -857,7 +857,9 @@ void MainWindow::init_TotalData() {
   }
 
   myEditRecord->init_Desc();
+
   mydlgSteps->init_Steps();
+  mydlgSteps->saveSteps();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
@@ -2509,7 +2511,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameMain->isHidden()) {
-        mydlgSteps->saveSteps();
         setMini();
         mydlgPre->autoBakData();
 
@@ -4522,9 +4523,7 @@ static void JavaNotify_1() {
 
 static void JavaNotify_2() {
   if (!mw_one->ui->frameMain->isHidden()) {
-    // mw_one->ui->btnSteps->click();
-    // mw_one->ui->btnBackSteps->click();
-
+    // When the screen lights up.
     mw_one->updateHardSensorSteps();
   }
   qDebug() << "C++ JavaNotify_2";
