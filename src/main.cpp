@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
   QTextCodec* codec = QTextCodec::codecForName("UTF-8");
   QTextCodec::setCodecForLocale(codec);
 
-  //禁用文本选择（针对所有的可输入的编辑框）
+  // 禁用文本选择（针对所有的可输入的编辑框）
   qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
 
   QDir dir;
@@ -78,7 +78,11 @@ int main(int argc, char* argv[]) {
   path = dir.currentPath();
   qDebug() << "Path:" << path;
 
+  int defaultFontSize;
+
 #ifdef Q_OS_ANDROID
+  defaultFontSize = 17;
+
   RegJni("com/x/MyService");
   RegJni("com/x/MyActivity");
   RegJni("com/x/ClockActivity");
@@ -91,11 +95,14 @@ int main(int argc, char* argv[]) {
   privateDir = "/storage/emulated/0/.Knot/";
 
 #else
+  defaultFontSize = 12;
+
   isAndroid = false;
   iniDir = QDir::homePath() + "/" + appName + "Data/";
   privateDir = QDir::homePath() + "/." + appName + "/";
 
 #endif
+
   iniFile = iniDir + appName + ".ini";
 
   QDir dir0;
@@ -106,7 +113,7 @@ int main(int argc, char* argv[]) {
   Reg.setIniCodec("utf-8");
 #endif
 
-  fontSize = Reg.value("/Options/FontSize", 17).toInt();
+  fontSize = Reg.value("/Options/FontSize", defaultFontSize).toInt();
   bool isReaderFont = Reg.value("/Options/chkReaderFont", false).toBool();
   bool isUIFont = Reg.value("/Options/chkUIFont", false).toBool();
   QString customFontPath = Reg.value("/Options/CustomFont").toString();
