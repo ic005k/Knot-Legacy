@@ -925,8 +925,8 @@ void MainWindow::addFilesWatch() {
 
 MainWindow::~MainWindow() {
   delete ui;
-  mySearchThread->quit();
-  mySearchThread->wait();
+  mySaveThread->quit();
+  mySaveThread->wait();
 
   myReadThread->quit();
   myReadThread->wait();
@@ -941,8 +941,8 @@ MainWindow::~MainWindow() {
 void MainWindow::startSave(QString str_type) {
   if (!isSaveEnd) {
     isBreak = true;
-    mySearchThread->quit();
-    mySearchThread->wait();
+    mySaveThread->quit();
+    mySaveThread->wait();
 
     while (!isSaveEnd)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
@@ -954,7 +954,7 @@ void MainWindow::startSave(QString str_type) {
     ui->progBar->setHidden(false);
     ui->progBar->setMaximum(0);
 
-    mySearchThread->start();
+    mySaveThread->start();
   }
 }
 
@@ -4034,8 +4034,8 @@ void MainWindow::init_UIWidget() {
   myReadThread = new ReadThread();
   connect(myReadThread, &ReadThread::isDone, this, &MainWindow::readChartDone);
 
-  mySearchThread = new SaveThread();
-  connect(mySearchThread, &SaveThread::isDone, this, &MainWindow::dealDone);
+  mySaveThread = new SaveThread();
+  connect(mySaveThread, &SaveThread::isDone, this, &MainWindow::dealDone);
 
   myBakDataThread = new BakDataThread();
   connect(myBakDataThread, &BakDataThread::isDone, this,

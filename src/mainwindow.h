@@ -204,7 +204,7 @@ class MainWindow : public QMainWindow {
   QScatterSeries *m_scatterSeries2;
   QScatterSeries *m_scatterSeries2_1;
   static void get_Today(QTreeWidget *);
-  SaveThread *mySearchThread;
+  SaveThread *mySaveThread;
   ReadThread *myReadThread;
   ReadTWThread *myReadTWThread;
   ReadEBookThread *myReadEBookThread;
