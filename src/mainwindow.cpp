@@ -3233,7 +3233,7 @@ void MainWindow::on_btnSteps_clicked() {
 
   mydlgSteps->init_Steps();
 
-  mydlgSteps->setScrollBarPos(0.85);
+  mydlgSteps->setScrollBarPos(1.00);
   mydlgSteps->setMaxMark();
 }
 
