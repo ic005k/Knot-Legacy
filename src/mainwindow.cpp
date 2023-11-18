@@ -393,6 +393,9 @@ void MainWindow::initHardStepSensor() {
 #endif
 
   if (isHardStepSensor == 0) {
+    ui->btnPause->click();
+    ui->btnPause->setHidden(true);
+    ui->btnSteps->setHidden(true);
     if (ui->rbAlg1->isChecked()) mydlgSteps->on_rbAlg1_clicked();
     if (ui->rbAlg2->isChecked()) mydlgSteps->on_rbAlg2_clicked();
   }
