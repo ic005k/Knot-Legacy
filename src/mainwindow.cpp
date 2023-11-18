@@ -375,8 +375,9 @@ MainWindow::MainWindow(QWidget *parent)
   initMain = false;
   addFilesWatch();
   mydlgReader->setPdfViewVisible(false);
-  mw_one->ui->btnTodo->click();
-  mw_one->ui->btnBackTodo->click();
+
+  mydlgTodo->refreshTableListsFromIni();
+  mydlgTodo->refreshAlarm();
 }
 
 void MainWindow::initHardStepSensor() {

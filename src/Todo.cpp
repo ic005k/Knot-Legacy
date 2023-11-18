@@ -545,6 +545,23 @@ void dlgTodo::refreshTableLists() {
   }
 }
 
+void dlgTodo::refreshTableListsFromIni() {
+  QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  tableLists.clear();
+  int count_items = Reg.value("/Todo/Count", 0).toInt();
+
+  for (int i = 0; i < count_items; i++) {
+    QString strTime = Reg.value("/Todo/Time" + QString::number(i)).toString();
+    QString strText = Reg.value("/Todo/Item" + QString::number(i)).toString();
+
+    tableLists.append(strTime + "|=|" + strText);
+  }
+}
+
 void dlgTodo::refreshAlarm() {
   stopTimerAlarm();
   int count = 0;
