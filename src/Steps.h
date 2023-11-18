@@ -76,6 +76,7 @@ class dlgSteps : public QDialog {
   QBrush brush1 = QBrush(QColor(255, 228, 225));
   QBrush brush2 = QBrush(QColor(245, 222, 179));
   QBrush brushMax = QBrush(QColor(245, 222, 79));
+  int maxCount = 90;
 };
 
 #endif  // STEPS_H

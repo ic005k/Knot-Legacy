@@ -111,7 +111,7 @@ void dlgSteps::saveSteps() {
   Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Alg2", mw_one->ui->rbAlg2->isChecked());
 
-  if (getCount() > 90) {
+  if (getCount() > maxCount) {
     delItem(0);
   }
   int count = getCount();
@@ -156,8 +156,10 @@ void dlgSteps::init_Steps() {
   mw_one->ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
 
   int count = Reg.value("/Steps/Count").toInt();
+  int start = 0;
+  if (count > maxCount) start = 1;
   clearAll();
-  for (int i = 0; i < count; i++) {
+  for (int i = start; i < count; i++) {
     QString str0 =
         Reg.value("/Steps/Table-" + QString::number(i) + "-0").toString();
     qlonglong steps =
@@ -172,9 +174,9 @@ void dlgSteps::init_Steps() {
     addRecord(str0, steps, str2);
   }
 
-  for (int i = 0; i < count; i++) {
+  for (int i = start; i < count; i++) {
     QString date = getDate(i);
-    if (QDate::currentDate().toString("ddd MM dd") == date) {
+    if (QDate::currentDate().toString("ddd MM dd ") == date) {
       toDayInitSteps = getSteps(i);
       break;
     }
