@@ -2839,6 +2839,9 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
 
       QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
       btnOk->setFocus();
+
+      if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
+
       msgBox.exec();
       return false;
     }
