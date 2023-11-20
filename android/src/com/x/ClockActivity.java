@@ -112,10 +112,20 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_cancel:
-                ClockActivity.this.finish();
-                btn_cancel.setVisibility(View.GONE);
+                // ClockActivity.this.finish();
+                // btn_cancel.setVisibility(View.GONE);
+
+                onBackPressed();
                 break;
         }
+    }
+
+    private void AnimationWhenClosed() {
+        // 淡出效果
+        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        // 或者使用底部滑出效果(自定义文件exit_anim.xml)
+        overridePendingTransition(0, R.anim.exit_anim);
     }
 
     @Override
@@ -248,6 +258,13 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
         super.onStop();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        AnimationWhenClosed();
     }
 
     @Override
