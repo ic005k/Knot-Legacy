@@ -64,7 +64,15 @@ void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
 
 void dlgList::on_btnDel_clicked() {
   int row = ui->listWidget->currentRow();
-  if (row >= 0) ui->listWidget->takeItem(row);
+  if (row >= 0) {
+    if (!mw_one->showMsgBox("Kont",
+                            tr("Delete this category?") + "\n\n" +
+                                ui->listWidget->currentItem()->text(),
+                            "", 2))
+      return;
+
+    ui->listWidget->takeItem(row);
+  }
   mw_one->myEditRecord->saveCustomDesc();
   if (ui->listWidget->count() > 0)
     on_listWidget_itemClicked(ui->listWidget->currentItem());
