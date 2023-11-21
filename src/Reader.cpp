@@ -22,6 +22,7 @@ QDialog* dlgProgEBook;
 
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
+  this->hide();
 
   this->installEventFilter(this);
 
@@ -1022,18 +1023,18 @@ void dlgReader::goPostion() {
     Reg.setIniCodec("utf-8");
 #endif
 
-    if (isText || isEpub) {
+    if (isText) {
       iPage = Reg.value("/Reader/iPage" + fileName, 0).toULongLong();
-      htmlIndex = Reg.value("/Reader/htmlIndex" + fileName, 0).toInt() - 1;
-      if (htmlIndex <= 0) htmlIndex = -1;
+      on_btnPageNext_clicked();
+    }
 
-      if (iPage >= 0 || htmlIndex >= -1) {
-        on_btnPageNext_clicked();
+    if (isEpub) {
+      htmlIndex = Reg.value("/Reader/htmlIndex" + fileName, 0).toInt();
 
-      } else {
-        iPage = 0;
-        htmlIndex = 0;
-      }
+      processHtml(htmlIndex);
+      setQMLHtml();
+      setPageVPos();
+      showInfo();
     }
 
     if (isPDF) {
