@@ -210,7 +210,9 @@ void MainWindow::readEBookDone() {
     isReport = false;
   }
 
-  dlgProgEBook->close();
+  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
+  delete dlgProgEBook;
+
   isReadEBookEnd = true;
 }
 

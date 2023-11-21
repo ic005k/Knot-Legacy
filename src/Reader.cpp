@@ -237,9 +237,6 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->ui->btnReader->setEnabled(false);
     mw_one->ui->frameReaderFun->setEnabled(false);
 
-    dlgProgEBook = getProgBar();
-    if (!mw_one->ui->frameReader->isHidden()) dlgProgEBook->show();
-
     mw_one->ui->lblTitle->hide();
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
@@ -305,6 +302,10 @@ void dlgReader::startOpenFile(QString openfile) {
 #else
     mw_one->myReadTWThread->quit();
     mw_one->myReadTWThread->wait();
+
+    dlgProgEBook = getProgBar();
+    if (!mw_one->ui->frameReader->isHidden()) dlgProgEBook->show();
+
     mw_one->myReadEBookThread->start();
 #endif
 
