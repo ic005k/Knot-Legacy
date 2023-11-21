@@ -2826,6 +2826,11 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     if (!unre) {
       if (fileName != iniDir + "memo.zip") {
         QFile::remove(iniDir + "memo.zip");
+
+        QString oldPath = iniDir + "memo";
+        QDir dirOld(oldPath);
+        dirOld.rename(oldPath, iniDir + "memo_bak");
+
         QFile::copy(fileName, iniDir + "memo.zip");
       }
       mw_one->mydlgMainNotes->unzip(iniDir + "memo.zip");
@@ -2845,8 +2850,15 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
       if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
 
       msgBox.exec();
+
+      QString oldPath = iniDir + "memo_bak";
+      QDir dirOld(oldPath);
+      dirOld.rename(oldPath, iniDir + "memo");
+
       return false;
     }
+
+    mw_one->mydlgReader->deleteDirfile(iniDir + "memo_bak");
 
     if (QFile(iniFile).exists()) QFile(iniFile).remove();
     QTextEdit *txtEdit = new QTextEdit;
