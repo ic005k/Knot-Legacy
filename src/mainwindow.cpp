@@ -131,10 +131,23 @@ void MainWindow::importDataDone() {
     on_tabWidget_currentChanged(tabData->currentIndex());
   }
 
+  closeProgress();
+
   if (isTimeMachine) {
   }
 
-  closeProgress();
+  if (isMenuImport) {
+    if (!isZipOK) {
+      QMessageBox msgBox;
+      msgBox.setText(appName);
+      msgBox.setInformativeText(tr("Invalid data file."));
+
+      QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+      btnOk->setFocus();
+
+      msgBox.exec();
+    }
+  }
 }
 
 ReadEBookThread::ReadEBookThread(QObject *parent) : QThread{parent} {}
@@ -2881,17 +2894,6 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
 
     txt = loadText(file);
     if (!txt.contains(appName)) {
-      QMessageBox msgBox;
-      msgBox.setText(appName);
-      msgBox.setInformativeText(tr("Invalid data file."));
-
-      QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-      btnOk->setFocus();
-
-      if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
-
-      msgBox.exec();
-
       QString oldPath = iniDir + "memo_bak";
       QDir dirOld(oldPath);
       dirOld.rename(oldPath, iniDir + "memo");
