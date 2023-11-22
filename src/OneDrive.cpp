@@ -241,6 +241,7 @@ void TestDialog::on_pushButton_upload2_clicked() {
       iniDir + "memo.zip";  // = fdlg.getOpenFileName(this, "Select File");
 
   isUpData = true;
+  mw_one->showProgress();
   mw_one->myBakDataThread->start();
 }
 

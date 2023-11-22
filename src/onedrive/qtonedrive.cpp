@@ -16,7 +16,8 @@
 #include "ui_mainwindow.h"
 
 extern MainWindow* mw_one;
-extern QString iniFile, iniDir;
+extern QString iniFile, iniDir, zipfile;
+extern bool isZipOK, isMenuImport, isTimeMachine, isDownData;
 
 QtOneDriveAuthorizationDialog* dialog_ = nullptr;
 
@@ -411,15 +412,32 @@ void QtOneDrive::downloadFile(const QUrl& url) {
       if (!checkReplyJson(reply).isEmpty()) {
         state_ = Empty;
 
-        QString fileName = iniDir + "memo.zip";
+        zipfile = iniDir + "memo.zip";
         emit successDownloadFile(
-            tmp_fileId_ + "\n" + fileName + "\n\n" +
-            "SIZE: " + mw_one->getFileSize(QFile(fileName).size(), 2));
+            tmp_fileId_ + "\n" + zipfile + "\n\n" +
+            "SIZE: " + mw_one->getFileSize(QFile(zipfile).size(), 2));
 
-        if (QFile(fileName).exists()) {
-          bool isOk;
-          isOk = mw_one->importBakData(fileName, true, false, false);
-          if (isOk) mw_one->on_btnBack_One_clicked();
+        if (QFile(zipfile).exists()) {
+          if (!zipfile.isNull()) {
+            if (!mw_one->showMsgBox(
+                    "Kont",
+                    tr("Import this data?") + "\n" +
+                        mw_one->mydlgReader->getUriRealPath(zipfile),
+                    "", 2)) {
+              isZipOK = false;
+              return;
+            }
+          }
+          isZipOK = true;
+
+          mw_one->showProgress();
+
+          isMenuImport = false;
+          isTimeMachine = false;
+          isDownData = true;
+          mw_one->myImportDataThread->start();
+
+          if (isZipOK) mw_one->on_btnBack_One_clicked();
         }
       }
     }

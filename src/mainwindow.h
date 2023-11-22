@@ -114,6 +114,7 @@ class ReadThread;
 class ReadTWThread;
 class ReadEBookThread;
 class BakDataThread;
+class ImportDataThread;
 
 #include <QMetaType>
 
@@ -209,6 +210,7 @@ class MainWindow : public QMainWindow {
   ReadTWThread *myReadTWThread;
   ReadEBookThread *myReadEBookThread;
   BakDataThread *myBakDataThread;
+  ImportDataThread *myImportDataThread;
   static void ReadChartData();
   static int get_Day(QString date);
   static QString get_Year(QString date);
@@ -350,9 +352,9 @@ class MainWindow : public QMainWindow {
 
   QString getYMD(QString date);
   QString bakData(QString fileName, bool msgbox);
+  bool importBakData(QString fileName, bool msg, bool book, bool unre);
   void setSCrollPro(QObject *obj);
 
-  bool importBakData(QString fileName, bool msg, bool book, bool unre);
   void addUndo(QString log);
   QString getTabText();
   void addRedo();
@@ -400,6 +402,7 @@ class MainWindow : public QMainWindow {
   void addFilesWatch();
   void init_report_widget_year();
   int getMaxDay(QString sy, QString sm);
+  void showProgress();
  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
@@ -470,6 +473,8 @@ class MainWindow : public QMainWindow {
   void dealDone();
 
   void bakDataDone();
+
+  void importDataDone();
 
   void readChartDone();
 
@@ -605,6 +610,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnCategory_clicked();
 
+  void closeProgress();
  private slots:
   void on_btnSync_clicked();
 
@@ -717,6 +723,21 @@ class BakDataThread : public QThread {
   Q_OBJECT
  public:
   explicit BakDataThread(QObject *parent = nullptr);
+
+ protected:
+  void run();
+ signals:
+  void isDone();
+
+ signals:
+
+ public slots:
+};
+
+class ImportDataThread : public QThread {
+  Q_OBJECT
+ public:
+  explicit ImportDataThread(QObject *parent = nullptr);
 
  protected:
   void run();

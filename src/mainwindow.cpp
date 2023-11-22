@@ -15,12 +15,13 @@ QString ver = "1.1.18";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
-bool isImport, isEBook, isReport, isUpData;
+bool isImport, isEBook, isReport, isUpData, isZipOK, isMenuImport,
+    isTimeMachine, isDownData;
 
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
-    zipfile;
+    zipfile, txt;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -86,6 +87,42 @@ void MainWindow::bakDataDone() {
   if (isUpData) {
     mydlgOneDrive->uploadData();
   }
+
+  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
+  delete dlgProgEBook;
+}
+
+ImportDataThread::ImportDataThread(QObject *parent) : QThread{parent} {}
+void ImportDataThread::run() {
+  if (isMenuImport || isDownData)
+    mw_one->importBakData(zipfile, true, false, false);
+
+  if (isTimeMachine) mw_one->importBakData(zipfile, true, false, true);
+
+  emit isDone();
+}
+
+void MainWindow::importDataDone() {
+  if (!zipfile.isNull() && isZipOK) {
+    if (QFile(iniFile).exists()) QFile(iniFile).remove();
+    QTextEdit *txtEdit = new QTextEdit;
+    txtEdit->setPlainText(txt);
+    TextEditToFile(txtEdit, iniFile);
+    isImport = true;
+    loading = true;
+    init_TotalData();
+    loading = false;
+
+    while (!isReadTWEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
+    startSave("alltab");
+
+    on_tabWidget_currentChanged(tabData->currentIndex());
+  }
+
+  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
+  delete dlgProgEBook;
 }
 
 ReadEBookThread::ReadEBookThread(QObject *parent) : QThread{parent} {}
@@ -2704,6 +2741,7 @@ void MainWindow::on_actionExport_Data_triggered() {
 #endif
 
   isUpData = false;
+  showProgress();
   myBakDataThread->start();
 }
 
@@ -2733,9 +2771,6 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
     isSelf = true;
 
-    dlgProgEBook = mw_one->mydlgReader->getProgBar();
-    dlgProgEBook->show();
-
     bakIniData("", false);
     m_NotesList->clearFiles();
 
@@ -2749,8 +2784,6 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
     QString zipfile = iniDir + "memo.zip";
     QFile(zipfile).remove();
     mw_one->mydlgMainNotes->zipMemo();
-
-    if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
 
     if (fileName != zipfile) {
       if (QFile::exists(fileName)) QFile::remove(fileName);
@@ -2792,35 +2825,42 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
 
 void MainWindow::on_actionImport_Data_triggered() {
   if (!isSaveEnd) return;
-  QString fileName;
 
+  zipfile = "";
 #ifdef Q_OS_ANDROID
   QString path = "/storage/emulated/0/KnotBak/";
-  fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), path,
-                                          tr("Zip File (*.*)"));
+  zipfile = QFileDialog::getOpenFileName(this, tr("KnotBak"), path,
+                                         tr("Zip File (*.*)"));
 #else
-  fileName = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
-                                          tr("Zip File (*.zip);;All(*.*)"));
+  zipfile = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
+                                         tr("Zip File (*.zip);;All(*.*)"));
 #endif
 
-  if (QFile(fileName).exists()) addUndo(tr("Import Data"));
+  if (QFile(zipfile).exists()) addUndo(tr("Import Data"));
 
-  importBakData(fileName, true, false, false);
+  if (!zipfile.isNull()) {
+    if (!mw_one->showMsgBox("Kont",
+                            tr("Import this data?") + "\n" +
+                                mw_one->mydlgReader->getUriRealPath(zipfile),
+                            "", 2)) {
+      isZipOK = false;
+      return;
+    }
+  }
+
+  showProgress();
+
+  isMenuImport = true;
+  isTimeMachine = false;
+  isDownData = false;
+  myImportDataThread->start();
 }
 
 bool MainWindow::importBakData(QString fileName, bool msg, bool book,
                                bool unre) {
   if (!fileName.isNull()) {
     if (msg) {
-      if (!mw_one->showMsgBox("Kont",
-                              tr("Import this data?") + "\n" +
-                                  mw_one->mydlgReader->getUriRealPath(fileName),
-                              "", 2))
-        return false;
     }
-
-    dlgProgEBook = mw_one->mydlgReader->getProgBar();
-    dlgProgEBook->show();
 
     QString file;
     if (!unre) {
@@ -2838,7 +2878,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     } else
       file = fileName;
 
-    QString txt = loadText(file);
+    txt = loadText(file);
     if (!txt.contains(appName)) {
       QMessageBox msgBox;
       msgBox.setText(appName);
@@ -2855,24 +2895,12 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
       QDir dirOld(oldPath);
       dirOld.rename(oldPath, iniDir + "memo");
 
+      isZipOK = false;
       return false;
     }
 
+    isZipOK = true;
     mw_one->mydlgReader->deleteDirfile(iniDir + "memo_bak");
-
-    if (QFile(iniFile).exists()) QFile(iniFile).remove();
-    QTextEdit *txtEdit = new QTextEdit;
-    txtEdit->setPlainText(txt);
-    TextEditToFile(txtEdit, iniFile);
-    isImport = true;
-    loading = true;
-    init_TotalData();
-    loading = false;
-
-    while (!isReadTWEnd)
-      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-
-    startSave("alltab");
 
     // Notes
     if (!unre) {
@@ -2892,11 +2920,17 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     }
   }
 
-  on_tabWidget_currentChanged(tabData->currentIndex());
-
-  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
-
   return true;
+}
+
+void MainWindow::showProgress() {
+  dlgProgEBook = mw_one->mydlgReader->getProgBar();
+  dlgProgEBook->show();
+}
+
+void MainWindow::closeProgress() {
+  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
+  delete dlgProgEBook;
 }
 
 int MainWindow::get_Day(QString date) {
@@ -4062,6 +4096,10 @@ void MainWindow::init_UIWidget() {
   connect(myBakDataThread, &BakDataThread::isDone, this,
           &MainWindow::bakDataDone);
 
+  myImportDataThread = new ImportDataThread();
+  connect(myImportDataThread, &ImportDataThread::isDone, this,
+          &MainWindow::importDataDone);
+
   ui->frame_find->setHidden(true);
 
   ui->progBar->setMaximumHeight(4);
@@ -4468,8 +4506,26 @@ void MainWindow::on_actionTimeMachine() {
     QString str = list->currentItem()->text();
     QStringList list0 = str.split("\n");
     if (list0.count() == 2) str = list0.at(0);
-    QString file = privateDir + str.trimmed();
-    if (importBakData(file, true, false, true)) btnBack->click();
+    zipfile = privateDir + str.trimmed();
+
+    if (!zipfile.isNull()) {
+      if (!mw_one->showMsgBox("Kont",
+                              tr("Import this data?") + "\n" +
+                                  mw_one->mydlgReader->getUriRealPath(zipfile),
+                              "", 2)) {
+        isZipOK = false;
+        return;
+      }
+    }
+
+    isZipOK = true;
+    showProgress();
+
+    isMenuImport = false;
+    isTimeMachine = true;
+    isDownData = false;
+    myImportDataThread->start();
+    if (isZipOK) btnBack->click();
   });
 
   if (list->count() > 0) {
