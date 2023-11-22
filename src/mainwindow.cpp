@@ -21,7 +21,7 @@ bool isImport, isEBook, isReport, isUpData, isZipOK, isMenuImport,
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
-    zipfile, txt;
+    zipfile, txt, infoStr;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -84,12 +84,22 @@ void BakDataThread::run() {
 }
 
 void MainWindow::bakDataDone() {
+  closeProgress();
+
   if (isUpData) {
     mydlgOneDrive->uploadData();
-  }
+  } else {
+    if (QFile(infoStr).exists()) {
+      QMessageBox msgBox;
+      msgBox.setText(appName);
+      msgBox.setInformativeText(tr("The data was exported successfully.") +
+                                +"\n\n" + infoStr);
+      QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
+      btnOk->setFocus();
 
-  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
-  delete dlgProgEBook;
+      msgBox.exec();
+    }
+  }
 }
 
 ImportDataThread::ImportDataThread(QObject *parent) : QThread{parent} {}
@@ -121,8 +131,10 @@ void MainWindow::importDataDone() {
     on_tabWidget_currentChanged(tabData->currentIndex());
   }
 
-  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
-  delete dlgProgEBook;
+  if (isTimeMachine) {
+  }
+
+  closeProgress();
 }
 
 ReadEBookThread::ReadEBookThread(QObject *parent) : QThread{parent} {}
@@ -2774,7 +2786,6 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
     bakIniData("", false);
     m_NotesList->clearFiles();
 
-    QString infoStr;
     QFile::remove(iniDir + "memo/mainnotes.ini");
     QFile::copy(iniDir + "mainnotes.ini", iniDir + "memo/mainnotes.ini");
 
@@ -2805,16 +2816,6 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       QFile::copy(zipfile, fileName);
       infoStr = fileName;
 #endif
-    }
-
-    if (msgbox && QFile(infoStr).exists()) {
-      QMessageBox msgBox;
-      msgBox.setText(appName);
-      msgBox.setInformativeText(tr("The data was exported successfully.") +
-                                +"\n\n" + infoStr);
-      QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-      btnOk->setFocus();
-      msgBox.exec();
     }
 
     isSelf = false;
@@ -4519,13 +4520,13 @@ void MainWindow::on_actionTimeMachine() {
     }
 
     isZipOK = true;
+    dlgTimeMachine->close();
     showProgress();
 
     isMenuImport = false;
     isTimeMachine = true;
     isDownData = false;
     myImportDataThread->start();
-    if (isZipOK) btnBack->click();
   });
 
   if (list->count() > 0) {
