@@ -12,7 +12,8 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
   this->setContentsMargins(1, 1, 1, 1);
   setWindowFlags(Qt::WindowStaysOnTopHint);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_ANDROID
+#else
   setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint |
                  Qt::WindowDoesNotAcceptFocus);
 #endif

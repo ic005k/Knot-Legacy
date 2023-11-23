@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>155</width>
-    <height>71</height>
+    <width>112</width>
+    <height>105</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,7 +39,7 @@ dlgFloatFun{
    <item row="0" column="0">
     <widget class="QLabel" name="lblPic">
      <property name="text">
-      <string>Right or Left</string>
+      <string>RL</string>
      </property>
     </widget>
    </item>
