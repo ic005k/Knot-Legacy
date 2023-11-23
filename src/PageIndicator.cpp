@@ -45,8 +45,7 @@ void dlgFloatFun::setPicRight() {
 void dlgFloatFun::init() {
   this->setGeometry(
       mw_one->geometry().x() + (mw_one->width() - this->width()) / 2,
-      mw_one->geometry().y() + (mw_one->height() - this->height()) / 4,
-      this->width(), this->height());
+      mw_one->geometry().y() + 10, this->width(), this->height());
 
   this->show();
 }
