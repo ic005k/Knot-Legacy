@@ -10,6 +10,7 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgFloatFun) {
   ui->setupUi(this);
   ui->lblPageNumber->setStyleSheet("color:#ff6600;");
+  ui->lblPic->setHidden(true);
   this->setContentsMargins(1, 1, 1, 1);
   setWindowFlags(Qt::WindowStaysOnTopHint);
 
@@ -59,6 +60,8 @@ void dlgFloatFun::showPageNumber(QString page) {
       sn = cn + 1;
     else
       sn = tn;
+
+    ui->lblPageNumber->setText(QString::number(sn) + " <==");
   }
 
   if (page == "right") {
@@ -66,9 +69,9 @@ void dlgFloatFun::showPageNumber(QString page) {
       sn = cn - 1;
     else
       sn = 1;
-  }
 
-  ui->lblPageNumber->setText(QString::number(sn));
+    ui->lblPageNumber->setText("==> " + QString::number(sn));
+  }
 }
 
 void dlgFloatFun::setY(int y) {
