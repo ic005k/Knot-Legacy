@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>112</width>
-    <height>105</height>
+    <width>256</width>
+    <height>197</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,12 +36,35 @@ dlgFloatFun{
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="lblPic">
-     <property name="text">
-      <string>RL</string>
-     </property>
-    </widget>
+   <item row="1" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="lblPic">
+       <property name="text">
+        <string>Left or Right</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblPageNumber">
+       <property name="font">
+        <font>
+         <pointsize>50</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>123456</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

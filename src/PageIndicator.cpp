@@ -9,6 +9,7 @@ extern MainWindow* mw_one;
 dlgFloatFun::dlgFloatFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgFloatFun) {
   ui->setupUi(this);
+  ui->lblPageNumber->setStyleSheet("color:#ff6600;");
   this->setContentsMargins(1, 1, 1, 1);
   setWindowFlags(Qt::WindowStaysOnTopHint);
 
@@ -25,16 +26,20 @@ void dlgFloatFun::setPicLeft() {
   QPixmap* pixmap = new QPixmap(":/res/sleft.png");
   pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
                  Qt::SmoothTransformation);
-  ui->lblPic->setScaledContents(true);
+  ui->lblPic->setScaledContents(false);
   ui->lblPic->setPixmap(*pixmap);
+
+  showPageNumber("left");
 }
 
 void dlgFloatFun::setPicRight() {
   QPixmap* pixmap = new QPixmap(":/res/sright.png");
   pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
                  Qt::SmoothTransformation);
-  ui->lblPic->setScaledContents(true);
+  ui->lblPic->setScaledContents(false);
   ui->lblPic->setPixmap(*pixmap);
+
+  showPageNumber("right");
 }
 
 void dlgFloatFun::init() {
@@ -44,6 +49,27 @@ void dlgFloatFun::init() {
       this->width(), this->height());
 
   this->show();
+}
+
+void dlgFloatFun::showPageNumber(QString page) {
+  int sn = 0;
+  int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
+  int tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
+  if (page == "left") {
+    if (cn + 1 < tn)
+      sn = cn + 1;
+    else
+      sn = tn;
+  }
+
+  if (page == "right") {
+    if (cn - 1 > 0)
+      sn = cn - 1;
+    else
+      sn = 1;
+  }
+
+  ui->lblPageNumber->setText(QString::number(sn));
 }
 
 void dlgFloatFun::setY(int y) {
