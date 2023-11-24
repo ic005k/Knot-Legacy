@@ -23,13 +23,15 @@ class dlgFloatFun : public QDialog {
   void setPicRight();
 
   void showPageNumber(QString page);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;
   void paintEvent(QPaintEvent *event) override;
  private slots:
 
  private:
+  int sn, cn, tn;
 };
 
 #endif  // PAGEINDICATOR_H

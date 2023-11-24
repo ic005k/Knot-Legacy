@@ -52,24 +52,26 @@ void dlgFloatFun::init() {
 }
 
 void dlgFloatFun::showPageNumber(QString page) {
-  int sn = 0;
-  int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
-  int tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
+  sn = 0;
+  cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
+  tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
   if (page == "left") {
-    if (cn + 1 < tn)
+    if (cn + 1 < tn) {
       sn = cn + 1;
-    else
-      sn = tn;
 
+    } else {
+      sn = tn;
+    }
     ui->lblPageNumber->setText(QString::number(sn) + " <==");
   }
 
   if (page == "right") {
-    if (cn - 1 > 0)
+    if (cn - 1 > 0) {
       sn = cn - 1;
-    else
-      sn = 1;
 
+    } else {
+      sn = 1;
+    }
     ui->lblPageNumber->setText("==> " + QString::number(sn));
   }
 }

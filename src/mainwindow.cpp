@@ -2647,13 +2647,20 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         if (isMousePress) {
           if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
             qDebug() << "book right...";
-            mydlgFloatFun->setPicRight();
-            mydlgFloatFun->init();
+            int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
+            if (cn != 1) {
+              mydlgFloatFun->setPicRight();
+              mydlgFloatFun->init();
+            }
           } else if ((press_x - relea_x) > length &&
                      qAbs(relea_y - press_y) < 35) {
             qDebug() << "book left...";
-            mydlgFloatFun->setPicLeft();
-            mydlgFloatFun->init();
+            int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
+            int tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
+            if (cn != tn) {
+              mydlgFloatFun->setPicLeft();
+              mydlgFloatFun->init();
+            }
           } else
             mydlgFloatFun->close();
         }
