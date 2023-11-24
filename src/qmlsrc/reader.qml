@@ -88,7 +88,6 @@ Rectangle {
 
         onLoaded: {
             textArea.text = text
-
         }
         onError: {
             errorDialog.text = message
@@ -151,7 +150,7 @@ Rectangle {
                 console.log(htmlPath)
                 console.log("isLink=" + link)
             }
-            onReleased:  {
+            onReleased: {
 
                 mw_one.on_SetReaderFunVisible()
             }
