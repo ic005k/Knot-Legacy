@@ -128,6 +128,9 @@ void MainWindow::importDataDone() {
 
     startSave("alltab");
 
+    while (!isSaveEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
     on_tabWidget_currentChanged(tabData->currentIndex());
   }
 
@@ -352,7 +355,7 @@ void SaveThread::run() {
   emit isDone();
 }
 
-void MainWindow::dealDone() {
+void MainWindow::saveDone() {
   if (isBreak) {
     isSaveEnd = true;
     return;
@@ -4100,7 +4103,7 @@ void MainWindow::init_UIWidget() {
   connect(myReadThread, &ReadThread::isDone, this, &MainWindow::readChartDone);
 
   mySaveThread = new SaveThread();
-  connect(mySaveThread, &SaveThread::isDone, this, &MainWindow::dealDone);
+  connect(mySaveThread, &SaveThread::isDone, this, &MainWindow::saveDone);
 
   myBakDataThread = new BakDataThread();
   connect(myBakDataThread, &BakDataThread::isDone, this,

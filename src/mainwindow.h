@@ -470,7 +470,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnMax_clicked();
 
-  void dealDone();
+  void saveDone();
 
   void bakDataDone();
 
