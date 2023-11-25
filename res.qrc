@@ -74,8 +74,6 @@
         <file>res/left.png</file>
         <file>res/right.png</file>
         <file>res/apk.png</file>
-        <file>res/sleft.png</file>
-        <file>res/sright.png</file>
         <file>res/pdf.png</file>
         <file>res/icon.ico</file>
         <file>res/sync0.png</file>
@@ -90,5 +88,7 @@
         <file>res/apk_en.png</file>
         <file>res/cleft.png</file>
         <file>res/cright.png</file>
+        <file>res/sleft.svg</file>
+        <file>res/sright.svg</file>
     </qresource>
 </RCC>

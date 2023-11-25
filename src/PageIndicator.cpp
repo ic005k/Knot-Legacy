@@ -10,8 +10,12 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgFloatFun) {
   ui->setupUi(this);
   ui->lblPageNumber->setStyleSheet("color:#ff6600;");
-  ui->lblPic->setHidden(true);
+  ui->lblPic->setHidden(false);
+  ui->lblPic->setFixedSize(100, 100);
+
   this->setContentsMargins(1, 1, 1, 1);
+  this->layout()->setContentsMargins(1, 1, 1, 1);
+
   setWindowFlags(Qt::WindowStaysOnTopHint);
 
 #ifdef Q_OS_ANDROID
@@ -24,20 +28,20 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
 }
 
 void dlgFloatFun::setPicLeft() {
-  QPixmap* pixmap = new QPixmap(":/res/sleft.png");
+  QPixmap* pixmap = new QPixmap(":/res/sleft.svg");
   pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
                  Qt::SmoothTransformation);
-  ui->lblPic->setScaledContents(false);
+  ui->lblPic->setScaledContents(true);
   ui->lblPic->setPixmap(*pixmap);
 
   showPageNumber("left");
 }
 
 void dlgFloatFun::setPicRight() {
-  QPixmap* pixmap = new QPixmap(":/res/sright.png");
+  QPixmap* pixmap = new QPixmap(":/res/sright.svg");
   pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
                  Qt::SmoothTransformation);
-  ui->lblPic->setScaledContents(false);
+  ui->lblPic->setScaledContents(true);
   ui->lblPic->setPixmap(*pixmap);
 
   showPageNumber("right");
@@ -46,7 +50,7 @@ void dlgFloatFun::setPicRight() {
 void dlgFloatFun::init() {
   this->setGeometry(
       mw_one->geometry().x() + (mw_one->width() - this->width()) / 2,
-      mw_one->geometry().y() + 10, this->width(), this->height());
+      mw_one->geometry().y() + 5, this->width(), this->height());
 
   this->show();
 }
@@ -62,7 +66,7 @@ void dlgFloatFun::showPageNumber(QString page) {
     } else {
       sn = tn;
     }
-    ui->lblPageNumber->setText(QString::number(sn) + " <==");
+    ui->lblPageNumber->setText(QString::number(sn));
   }
 
   if (page == "right") {
@@ -72,7 +76,7 @@ void dlgFloatFun::showPageNumber(QString page) {
     } else {
       sn = 1;
     }
-    ui->lblPageNumber->setText("==> " + QString::number(sn));
+    ui->lblPageNumber->setText(QString::number(sn));
   }
 }
 
