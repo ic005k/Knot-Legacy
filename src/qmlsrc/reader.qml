@@ -202,7 +202,7 @@ Rectangle {
         ScrollBar.vertical: ScrollBar {
             id: vbar
             position: 0.2
-            policy: ScrollBar.AsNeeded
+            policy: ScrollBar.AlwaysOn
             width: 8
             hoverEnabled: true
             active: hovered || pressed
@@ -211,6 +211,9 @@ Rectangle {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.bottom: parent.bottom
+            contentItem: Rectangle {
+                color: "#1E90FF"
+            }
 
             //自定义滚动条样式
 
