@@ -10,7 +10,7 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
     : QDialog(parent), ui(new Ui::dlgFloatFun) {
   ui->setupUi(this);
   ui->lblPageNumber->setStyleSheet("color:#ff6600;");
-  ui->lblPic->setHidden(false);
+  ui->lblPic->setHidden(true);
   ui->lblPic->setFixedSize(100, 100);
 
   this->setContentsMargins(1, 1, 1, 1);

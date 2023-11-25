@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>337</width>
+    <width>377</width>
     <height>240</height>
    </rect>
   </property>
@@ -42,7 +42,7 @@ dlgFloatFun{
       <widget class="QLabel" name="lblPageNumber">
        <property name="font">
         <font>
-         <pointsize>65</pointsize>
+         <pointsize>78</pointsize>
          <bold>true</bold>
         </font>
        </property>
