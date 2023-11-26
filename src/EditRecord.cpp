@@ -28,6 +28,8 @@ EditRecord::EditRecord(QWidget *parent)
 
   this->installEventFilter(this);
   ui->editCategory->installEventFilter(this);
+  ui->editDetails->installEventFilter(this);
+  ui->editDetails->viewport()->installEventFilter(this);
 
   QFont font;
   font.setPointSize(23);
@@ -319,6 +321,10 @@ void EditRecord::getTime(int h, int m) {
 }
 
 bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
+  if (watch == ui->editDetails->viewport()) {
+    mw_one->mydlgMainNotes->getEditPanel(ui->editDetails, evn);
+  }
+
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
