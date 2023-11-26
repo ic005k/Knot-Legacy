@@ -1070,7 +1070,8 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
         item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
 
       item11->setText(2, strDesc);
-      item11->setText(3, myEditRecord->ui->editDetails->text().trimmed());
+      item11->setText(3,
+                      myEditRecord->ui->editDetails->toPlainText().trimmed());
 
       int childCount = topItem->childCount();
 
@@ -1113,7 +1114,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
     else
       item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
     item11->setText(2, strDesc);
-    item11->setText(3, myEditRecord->ui->editDetails->text().trimmed());
+    item11->setText(3, myEditRecord->ui->editDetails->toPlainText().trimmed());
 
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
@@ -2116,7 +2117,7 @@ void MainWindow::set_Time() {
     else
       item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 2));
     item->setText(2, myEditRecord->ui->editCategory->text().trimmed());
-    item->setText(3, myEditRecord->ui->editDetails->text().trimmed());
+    item->setText(3, myEditRecord->ui->editDetails->toPlainText().trimmed());
     // Amount
     int child = item->parent()->childCount();
     double amount = 0;

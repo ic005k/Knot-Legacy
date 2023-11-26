@@ -69,7 +69,13 @@ EditRecord::EditRecord(QWidget *parent)
 
   mw_one->setLineEditQss(ui->editAmount, 10, 1, "#4169E1", "#4169E1");
   mw_one->setLineEditQss(ui->editCategory, 10, 1, "#4169E1", "#4169E1");
-  mw_one->setLineEditQss(ui->editDetails, 10, 1, "#4169E1", "#4169E1");
+  // mw_one->setLineEditQss(ui->editDetails, 10, 1, "#4169E1", "#4169E1");
+
+  ui->editDetails->setStyleSheet(
+      "border-radius:0px;border: 1px groove #4169E1;");
+  ui->editDetails->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  QScroller::grabGesture(ui->editDetails, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(ui->editDetails);
 }
 
 void EditRecord::init() {
@@ -134,7 +140,7 @@ void EditRecord::on_btnOk_clicked() {
   }
 
   // Save Details
-  QString strDetails = ui->editDetails->text().trimmed();
+  QString strDetails = ui->editDetails->toPlainText().trimmed();
   if (strDetails != "") {
     if (c_list.count() > 50) {
       c_list.removeAt(c_list.count() - 1);
@@ -248,11 +254,11 @@ int EditRecord::removeDuplicates(QStringList *that) {
     ++setSize;
 
     // //将不重复项与重复项交换（新，IOS无法编译通过）
-    //#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    // #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     if (j != i) that->swapItemsAt(i, j);
-    //#else
-    //    if (j != i) that->swap(i, j);
-    //#endif
+    // #else
+    //     if (j != i) that->swap(i, j);
+    // #endif
 
     ++j;
   }
@@ -380,8 +386,8 @@ void EditRecord::on_editDetails_textChanged(const QString &arg1) {
   else
     ui->lblDetails->setStyleSheet(lblStyle);
 
-  QCompleter *completer = new QCompleter(c_list);
-  ui->editDetails->setCompleter(completer);
+  // QCompleter *completer = new QCompleter(c_list);
+  //  ui->editDetails->setCompleter(completer);
 }
 
 void EditRecord::saveOne() {
