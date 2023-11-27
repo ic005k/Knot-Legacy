@@ -70,9 +70,9 @@ class EditRecord : public QDialog {
 
   void on_btnClearDetails_clicked();
 
-  void on_editDesc_textChanged(const QString &arg1);
+  void on_editCategory_textChanged(const QString &arg1);
 
-  void on_editDetails_textChanged(const QString &arg1);
+  void on_editDetails_textChanged();
 
  private:
   void set_Amount(QString Number);

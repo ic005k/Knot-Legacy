@@ -379,14 +379,15 @@ void EditRecord::on_hsM_valueChanged(int value) {
 
 void EditRecord::on_btnClearDetails_clicked() { ui->editDetails->clear(); }
 
-void EditRecord::on_editDesc_textChanged(const QString &arg1) {
+void EditRecord::on_editCategory_textChanged(const QString &arg1) {
   if (arg1.length() > 0)
     ui->lblCategory->setStyleSheet(lblStyleHighLight);
   else
     ui->lblCategory->setStyleSheet(lblStyle);
 }
 
-void EditRecord::on_editDetails_textChanged(const QString &arg1) {
+void EditRecord::on_editDetails_textChanged() {
+  QString arg1 = ui->editDetails->toPlainText();
   if (arg1.length() > 0)
     ui->lblDetails->setStyleSheet(lblStyleHighLight);
   else
