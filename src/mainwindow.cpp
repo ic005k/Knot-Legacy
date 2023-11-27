@@ -2650,7 +2650,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
         if (isMousePress) {
           if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
-            qDebug() << "book right...";
+            // qDebug() << "book right...";
             int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
             if (cn != 1) {
               mydlgFloatFun->setPicRight();
@@ -2658,7 +2658,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
             }
           } else if ((press_x - relea_x) > length &&
                      qAbs(relea_y - press_y) < 35) {
-            qDebug() << "book left...";
+            // qDebug() << "book left...";
             int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
             int tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
             if (cn != tn) {
@@ -2804,6 +2804,7 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
 }
 
 QString MainWindow::bakData(QString fileName, bool msgbox) {
+  Q_UNUSED(msgbox);
   if (!fileName.isNull()) {
     isSelf = true;
 
