@@ -341,7 +341,7 @@ bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
     }
 
     if (keyEvent->key() == Qt::Key_Return) {
-      return true;
+      return false;
     }
   }
 
