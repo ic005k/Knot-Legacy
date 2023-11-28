@@ -122,10 +122,11 @@ void EditRecord::on_btnOk_clicked() {
     mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                      ui->lblTime->text(), ui->editAmount->text().trimmed(),
                      ui->editCategory->text().trimmed());
-    mw_one->clickData();
   }
 
-  // Save Desc Text
+  mw_one->clickData();
+
+  // Save Category Text
   QString str = ui->editCategory->text().trimmed();
   int count = m_List->ui->listWidget->count();
   for (int i = 0; i < count; i++) {
