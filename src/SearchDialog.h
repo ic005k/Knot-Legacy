@@ -18,8 +18,10 @@ class SearchDialog : public QDialog {
   void startSearch();
   void initSearchResults();
 
+  void init();
+
  protected:
-  bool eventFilter(QObject *watch, QEvent *evn) override;
+  bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
   void on_btnBack_clicked();

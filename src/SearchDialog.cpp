@@ -57,10 +57,19 @@ SearchDialog::SearchDialog(QWidget* parent)
 #endif
 }
 
+void SearchDialog::init() {
+  setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+              mw_one->geometry().width(), mw_one->geometry().height());
+  setWindowTitle(tr("Search"));
+  ui->btnBack->setFixedWidth(mw_one->geometry().width() - 20);
+
+  show();
+}
+
 SearchDialog::~SearchDialog() { delete ui; }
 
-bool SearchDialog::eventFilter(QObject* watch, QEvent* evn) {
-  if (evn->type() == QEvent::KeyPress) {
+bool SearchDialog::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnBack_clicked();
@@ -68,7 +77,7 @@ bool SearchDialog::eventFilter(QObject* watch, QEvent* evn) {
     }
   }
 
-  return QWidget::eventFilter(watch, evn);
+  return QWidget::eventFilter(watchDlgSearch, evn);
 }
 
 void SearchDialog::on_btnBack_clicked() { this->close(); }
@@ -138,6 +147,8 @@ void SearchDialog::initSearchResults() {
     ui->tableSearch->setItem(i, 2, new QTableWidgetItem(str2));
     ui->tableSearch->setItem(i, 3, new QTableWidgetItem(str3));
   }
+
+  ui->tableSearch->setCurrentCell(0, 0);
 }
 
 void SearchDialog::on_btnClearText_clicked() {

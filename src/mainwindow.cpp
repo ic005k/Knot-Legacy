@@ -3023,15 +3023,7 @@ void MainWindow::on_about() {
   m_Remarks->show();
 }
 
-void MainWindow::on_btnFind_clicked() {
-  mySearchDialog->setGeometry(this->geometry().x(), this->geometry().y(),
-                              this->geometry().width(),
-                              this->geometry().height());
-  mySearchDialog->setWindowTitle(tr("Search"));
-  mySearchDialog->ui->btnBack->setFixedWidth(this->geometry().width() - 20);
-
-  mySearchDialog->show();
-}
+void MainWindow::on_btnFind_clicked() { mySearchDialog->init(); }
 
 QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   QStringList listMonth;
