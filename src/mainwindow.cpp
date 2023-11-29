@@ -4008,6 +4008,7 @@ void MainWindow::init_UIWidget() {
   ui->frameDebug->hide();
   ui->frameReport->hide();
   ui->qwPdf->hide();
+  ui->btnFind->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
