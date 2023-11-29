@@ -3013,14 +3013,13 @@ void MainWindow::on_about() {
 }
 
 void MainWindow::on_btnFind_clicked() {
-  if (ui->frame_find->isHidden()) {
-    ui->frame_find->show();
-    ui->frameBtn->hide();
-
-  } else {
-    ui->frame_find->hide();
-    ui->frameBtn->show();
-  }
+  mySearchDialog->setGeometry(this->geometry().x(), this->geometry().y(),
+                              this->geometry().width(),
+                              this->geometry().height());
+  mySearchDialog->setWindowTitle(tr("Search"));
+  mySearchDialog->ui->btnBack->setFixedWidth(this->geometry().width() - 20);
+  mySearchDialog->setModal(true);
+  mySearchDialog->show();
 }
 
 QStringList MainWindow::get_MonthList(QString strY, QString strM) {
@@ -4008,7 +4007,6 @@ void MainWindow::init_UIWidget() {
   ui->frameDebug->hide();
   ui->frameReport->hide();
   ui->qwPdf->hide();
-  ui->btnFind->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -4083,6 +4081,7 @@ void MainWindow::init_UIWidget() {
   m_SyncInfo = new SyncInfo(this);
   dlgTimeMachine = new QFrame();
   dlgTimeMachine->close();
+  mySearchDialog = new SearchDialog(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));

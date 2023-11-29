@@ -71,6 +71,7 @@
 #include <QValueAxis>
 
 #include "ReaderFun.h"
+#include "SearchDialog.h"
 #include "markdownhighlighter.h"
 #include "src/CategoryList.h"
 #include "src/EditRecord.h"
@@ -103,6 +104,7 @@
 #include "ui_ReaderFun.h"
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
+#include "ui_SearchDialog.h"
 #include "ui_SetReaderText.h"
 #include "ui_Steps.h"
 #include "ui_SyncInfo.h"
@@ -232,6 +234,7 @@ class MainWindow : public QMainWindow {
   dlgSetText *mydlgSetText;
   dlgNotesList *m_NotesList;
   SyncInfo *m_SyncInfo;
+  SearchDialog *mySearchDialog;
 
   File *myfile;
 

@@ -55,6 +55,7 @@ SOURCES += \
     src/ReaderFun.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
+    src/SearchDialog.cpp \
     src/SetEditText.cpp \
     src/SetReaderText.cpp \
     src/Steps.cpp \
@@ -87,6 +88,7 @@ HEADERS += \
     src/ReaderFun.h \
     src/RemarksAbout.h \
     src/Report.h \
+    src/SearchDialog.h \
     src/SetEditText.h \
     src/SetReaderText.h \
     src/Steps.h \
@@ -121,6 +123,7 @@ FORMS += \
     src/ReaderFun.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
+    src/SearchDialog.ui \
     src/SetEditText.ui \
     src/SetReaderText.ui \
     src/Steps.ui \
