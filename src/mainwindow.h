@@ -117,6 +117,7 @@ class ReadTWThread;
 class ReadEBookThread;
 class BakDataThread;
 class ImportDataThread;
+class SearchThread;
 
 #include <QMetaType>
 
@@ -213,6 +214,7 @@ class MainWindow : public QMainWindow {
   ReadEBookThread *myReadEBookThread;
   BakDataThread *myBakDataThread;
   ImportDataThread *myImportDataThread;
+  SearchThread *mySearchThread;
   static void ReadChartData();
   static int get_Day(QString date);
   static QString get_Year(QString date);
@@ -406,6 +408,14 @@ class MainWindow : public QMainWindow {
   void init_report_widget_year();
   int getMaxDay(QString sy, QString sm);
   void showProgress();
+
+ protected:
+  void closeEvent(QCloseEvent *event) override;
+  bool eventFilter(QObject *watch, QEvent *evn) override;
+  void paintEvent(QPaintEvent *event) override;
+  void changeEvent(QEvent *event) override;
+  void resizeEvent(QResizeEvent *event) override;
+
  public slots:
   void on_SetReaderFunVisible();
   void updateSteps();
@@ -421,13 +431,6 @@ class MainWindow : public QMainWindow {
   void on_actionReport_triggered();
   void on_DelRecord();
 
- protected:
-  void closeEvent(QCloseEvent *event) override;
-  bool eventFilter(QObject *watch, QEvent *evn) override;
-  void paintEvent(QPaintEvent *event) override;
-  void changeEvent(QEvent *event) override;
-  void resizeEvent(QResizeEvent *event) override;
- public slots:
   void on_btnCopy_clicked();
 
   void on_btnSearch_clicked();
@@ -481,11 +484,13 @@ class MainWindow : public QMainWindow {
 
   void readChartDone();
 
+  void readTWDone();
+
+  void searchDone();
+
   void on_actionPreferences_triggered();
 
   void on_tabCharts_currentChanged(int index);
-
-  void readTWDone();
 
   void on_btnSteps_clicked();
 
@@ -670,7 +675,7 @@ class SaveThread : public QThread {
  protected:
   void run();
  signals:
-  void isDone();  // 处理完成信号
+  void isDone();
 
  signals:
 
@@ -741,6 +746,21 @@ class ImportDataThread : public QThread {
   Q_OBJECT
  public:
   explicit ImportDataThread(QObject *parent = nullptr);
+
+ protected:
+  void run();
+ signals:
+  void isDone();
+
+ signals:
+
+ public slots:
+};
+
+class SearchThread : public QThread {
+  Q_OBJECT
+ public:
+  explicit SearchThread(QObject *parent = nullptr);
 
  protected:
   void run();

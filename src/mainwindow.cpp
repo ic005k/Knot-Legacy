@@ -153,6 +153,17 @@ void MainWindow::importDataDone() {
   }
 }
 
+SearchThread::SearchThread(QObject *parent) : QThread{parent} {}
+void SearchThread::run() {
+  mw_one->mySearchDialog->startSearch();
+  emit isDone();
+}
+
+void MainWindow::searchDone() {
+  mySearchDialog->initSearchResults();
+  closeProgress();
+}
+
 ReadEBookThread::ReadEBookThread(QObject *parent) : QThread{parent} {}
 void ReadEBookThread::run() {
   isReadEBookEnd = false;
@@ -3018,7 +3029,6 @@ void MainWindow::on_btnFind_clicked() {
                               this->geometry().height());
   mySearchDialog->setWindowTitle(tr("Search"));
   mySearchDialog->ui->btnBack->setFixedWidth(this->geometry().width() - 20);
-  mySearchDialog->setModal(true);
   mySearchDialog->show();
 }
 
@@ -4114,6 +4124,9 @@ void MainWindow::init_UIWidget() {
   myImportDataThread = new ImportDataThread();
   connect(myImportDataThread, &ImportDataThread::isDone, this,
           &MainWindow::importDataDone);
+
+  mySearchThread = new SearchThread();
+  connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::searchDone);
 
   ui->frame_find->setHidden(true);
 

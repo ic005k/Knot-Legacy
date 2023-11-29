@@ -16,11 +16,18 @@ class SearchDialog : public QDialog {
   ~SearchDialog();
   Ui::SearchDialog *ui;
 
+  void startSearch();
+  void initSearchResults();
+
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
- private slots:
+ public slots:
   void on_btnBack_clicked();
+
+ private slots:
+
+  void on_btnSearch_clicked();
 
  private:
 };
