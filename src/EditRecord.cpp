@@ -142,17 +142,6 @@ void EditRecord::on_btnOk_clicked() {
     m_List->ui->listWidget->insertItem(0, item);
   }
 
-  // Save Details
-  QString strDetails = ui->editDetails->toPlainText().trimmed();
-  if (strDetails != "") {
-    if (c_list.count() > 50) {
-      c_list.removeAt(c_list.count() - 1);
-    }
-
-    c_list.removeOne(strDetails);
-    c_list.insert(0, strDetails);
-  }
-
   del = false;
   mw_one->startSave("tab");
 }
@@ -219,28 +208,21 @@ void EditRecord::saveCustomDesc() {
 #endif
   int count = m_List->ui->listWidget->count();
 
-  QStringList list;
+  c_list.clear();
   for (int i = 0; i < count; i++) {
     if (isBreak) break;
-    list.append(m_List->ui->listWidget->item(i)->text().trimmed());
+    c_list.append(m_List->ui->listWidget->item(i)->text().trimmed());
   }
   // list = QSet<QString>(list.begin(), list.end()).values(); //IOS无法编译通过
-  removeDuplicates(&list);
-  for (int i = 0; i < list.count(); i++) {
-    if (isBreak) break;
-    QString str = list.at(i);
-    if (str.length() > 0)
-      Reg.setValue("/CustomDesc/Item" + QString::number(i), str);
-  }
-  Reg.setValue("/CustomDesc/Count", list.count());
+  removeDuplicates(&c_list);
 
-  // Details
   for (int i = 0; i < c_list.count(); i++) {
     if (isBreak) break;
     QString str = c_list.at(i);
-    Reg.setValue("/Details/Item" + QString::number(i), str);
+    if (str.length() > 0)
+      Reg.setValue("/CustomDesc/Item" + QString::number(i), str);
   }
-  Reg.setValue("/Details/Count", c_list.count());
+  Reg.setValue("/CustomDesc/Count", c_list.count());
 }
 
 int EditRecord::removeDuplicates(QStringList *that) {
@@ -281,6 +263,7 @@ void EditRecord::init_Desc() {
   RegDesc.setIniCodec("utf-8");
 #endif
 
+  c_list.clear();
   m_List->ui->listWidget->clear();
   m_List->ui->listWidget->setViewMode(QListView::IconMode);
   int descCount = RegDesc.value("/CustomDesc/Count").toInt();
@@ -291,14 +274,6 @@ void EditRecord::init_Desc() {
     // item->setSizeHint(
     //    QSize(mw_one->mydlgList->ui->listWidget->width() - 20, 35));
     m_List->ui->listWidget->addItem(item);
-  }
-
-  // Details
-  c_list.clear();
-  int DetailsCount = RegDesc.value("/Details/Count").toInt();
-  for (int i = 0; i < DetailsCount; i++) {
-    QString str =
-        RegDesc.value("/Details/Item" + QString::number(i)).toString();
     c_list.append(str);
   }
 }
@@ -385,6 +360,9 @@ void EditRecord::on_editCategory_textChanged(const QString &arg1) {
     ui->lblCategory->setStyleSheet(lblStyleHighLight);
   else
     ui->lblCategory->setStyleSheet(lblStyle);
+
+  QCompleter *completer = new QCompleter(c_list);
+  ui->editCategory->setCompleter(completer);
 }
 
 void EditRecord::on_editDetails_textChanged() {
@@ -393,9 +371,6 @@ void EditRecord::on_editDetails_textChanged() {
     ui->lblDetails->setStyleSheet(lblStyleHighLight);
   else
     ui->lblDetails->setStyleSheet(lblStyle);
-
-  // QCompleter *completer = new QCompleter(c_list);
-  //  ui->editDetails->setCompleter(completer);
 }
 
 void EditRecord::saveOne() {
