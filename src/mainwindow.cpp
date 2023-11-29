@@ -3029,6 +3029,7 @@ void MainWindow::on_btnFind_clicked() {
                               this->geometry().height());
   mySearchDialog->setWindowTitle(tr("Search"));
   mySearchDialog->ui->btnBack->setFixedWidth(this->geometry().width() - 20);
+
   mySearchDialog->show();
 }
 

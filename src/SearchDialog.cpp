@@ -16,6 +16,7 @@ SearchDialog::SearchDialog(QWidget* parent)
   setModal(true);
   ui->btnBack->setStyleSheet(mw_one->btnStyle);
   ui->btnSearch->setStyleSheet(mw_one->btnStyle);
+  ui->btnClearText->setStyleSheet("border:none");
   mw_one->setLineEditQss(ui->editSearchText, 10, 1, "#4169E1", "#4169E1");
 
   ui->tableSearch->setColumnCount(4);
@@ -79,31 +80,36 @@ void SearchDialog::on_btnSearch_clicked() {
 }
 
 void SearchDialog::startSearch() {
-  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
   resultsList.clear();
+  int tabCount = tabData->count();
+  for (int j = 0; j < tabCount; j++) {
+    QTreeWidget* tw = mw_one->get_tw(j);
 
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QString strYear, strMonthDay;
-    strYear = tw->topLevelItem(i)->text(3);
-    strMonthDay = tw->topLevelItem(i)->text(0);
+    for (int i = 0; i < tw->topLevelItemCount(); i++) {
+      QString strYear, strMonthDay;
+      strYear = tw->topLevelItem(i)->text(3);
+      strMonthDay = tw->topLevelItem(i)->text(0);
 
-    QTreeWidgetItem* topItem;
-    topItem = tw->topLevelItem(i);
-    int childCount = topItem->childCount();
-    for (int j = 0; j < childCount; j++) {
-      QString txt2, txt3;
-      QTreeWidgetItem* childItem = topItem->child(j);
-      txt2 = childItem->text(2);
-      txt3 = childItem->text(3);
-      if (txt2.contains(searchStr) || txt3.contains(searchStr)) {
-        QString str0, str1, str2, str3;
-        str0 = "\n" + strYear + " \n" + strMonthDay + "\n" +
-               childItem->text(0).split(".").at(1).trimmed() + "\n";
-        str1 = childItem->text(1);
-        str2 = childItem->text(2);
-        str3 = childItem->text(3);
+      QTreeWidgetItem* topItem;
+      topItem = tw->topLevelItem(i);
+      int childCount = topItem->childCount();
+      for (int j = 0; j < childCount; j++) {
+        QString txt1, txt2, txt3;
+        QTreeWidgetItem* childItem = topItem->child(j);
+        txt1 = childItem->text(1);
+        txt2 = childItem->text(2);
+        txt3 = childItem->text(3);
+        if (txt1.contains(searchStr) || txt2.contains(searchStr) ||
+            txt3.contains(searchStr)) {
+          QString str0, str1, str2, str3;
+          str0 = "\n" + strYear + " \n" + strMonthDay + "\n" +
+                 childItem->text(0).split(".").at(1).trimmed() + "\n";
+          str1 = childItem->text(1);
+          str2 = childItem->text(2);
+          str3 = childItem->text(3);
 
-        resultsList.append(str0 + "=|=" + str1 + "=|=" + str2 + "=|=" + str3);
+          resultsList.append(str0 + "=|=" + str1 + "=|=" + str2 + "=|=" + str3);
+        }
       }
     }
   }
@@ -128,4 +134,8 @@ void SearchDialog::initSearchResults() {
     ui->tableSearch->setItem(i, 2, new QTableWidgetItem(str2));
     ui->tableSearch->setItem(i, 3, new QTableWidgetItem(str3));
   }
+}
+
+void SearchDialog::on_btnClearText_clicked() {
+  if (ui->editSearchText->text().length() > 0) ui->editSearchText->setText("");
 }

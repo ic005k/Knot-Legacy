@@ -29,6 +29,8 @@ class SearchDialog : public QDialog {
 
   void on_btnSearch_clicked();
 
+  void on_btnClearText_clicked();
+
  private:
 };
 
