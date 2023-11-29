@@ -1,8 +1,9 @@
 #include "SearchDialog.h"
 
+#include <QKeyEvent>
+
 #include "mainwindow.h"
 #include "ui_SearchDialog.h"
-
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
 
@@ -12,8 +13,10 @@ QString searchStr;
 SearchDialog::SearchDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::SearchDialog) {
   ui->setupUi(this);
-  this->installEventFilter(this);
+
   setModal(true);
+  this->installEventFilter(this);
+
   ui->btnBack->setStyleSheet(mw_one->btnStyle);
   ui->btnSearch->setStyleSheet(mw_one->btnStyle);
   ui->btnClearText->setStyleSheet("border:none");
@@ -60,7 +63,7 @@ bool SearchDialog::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      close();
+      on_btnBack_clicked();
       return true;
     }
   }
@@ -84,6 +87,7 @@ void SearchDialog::startSearch() {
   int tabCount = tabData->count();
   for (int j = 0; j < tabCount; j++) {
     QTreeWidget* tw = mw_one->get_tw(j);
+    QString tabStr = tabData->tabText(j);
 
     for (int i = 0; i < tw->topLevelItemCount(); i++) {
       QString strYear, strMonthDay;
@@ -102,7 +106,7 @@ void SearchDialog::startSearch() {
         if (txt1.contains(searchStr) || txt2.contains(searchStr) ||
             txt3.contains(searchStr)) {
           QString str0, str1, str2, str3;
-          str0 = "\n" + strYear + " \n" + strMonthDay + "\n" +
+          str0 = "\n" + tabStr + "\n\n" + strYear + " \n" + strMonthDay + "\n" +
                  childItem->text(0).split(".").at(1).trimmed() + "\n";
           str1 = childItem->text(1);
           str2 = childItem->text(2);

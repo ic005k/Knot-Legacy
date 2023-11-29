@@ -2,7 +2,6 @@
 #define SEARCHDIALOG_H
 
 #include <QDialog>
-#include <QKeyEvent>
 
 namespace Ui {
 class SearchDialog;
