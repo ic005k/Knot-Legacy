@@ -80,7 +80,6 @@ void dlgSteps::on_btnPause_clicked() {
     acquireWakeLock();
 
     if (mw_one->ui->rbAlg1->isChecked()) on_rbAlg1_clicked();
-    if (mw_one->ui->rbAlg2->isChecked()) on_rbAlg2_clicked();
 
     mw_one->ui->btnPause->setIcon(QIcon(":/res/run.png"));
   }
@@ -88,9 +87,7 @@ void dlgSteps::on_btnPause_clicked() {
 
 void dlgSteps::on_btnReset_clicked() {
   mw_one->accel_pedometer->resetStepCount();
-  num_steps_walk = 0;
-  num_steps_run = 0;
-  num_steps_hop = 0;
+
   mw_one->CurrentSteps = 0;
   mw_one->ui->lblSingle->setText("0");
   mw_one->ui->btnSteps->setText(tr("Steps"));
@@ -109,7 +106,6 @@ void dlgSteps::saveSteps() {
                mw_one->ui->editTangentLineSlope->text().trimmed());
   Reg.setValue("/Steps/Length", mw_one->ui->editStepLength->text().trimmed());
   Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
-  Reg.setValue("/Steps/Alg2", mw_one->ui->rbAlg2->isChecked());
 
   if (getCount() > maxCount) {
     delItem(0);
@@ -153,7 +149,6 @@ void dlgSteps::init_Steps() {
   mw_one->ui->editStepLength->setText(
       Reg.value("/Steps/Length", "35").toString());
   mw_one->ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
-  mw_one->ui->rbAlg2->setChecked(Reg.value("Steps/Alg2", false).toBool());
 
   int count = Reg.value("/Steps/Count").toInt();
   int start = 0;
@@ -298,12 +293,6 @@ void dlgSteps::on_rbAlg1_clicked() {
   if (mw_one->ui->btnPauseSteps->text() == tr("Start")) return;
   // if (mw_one->mydlgPre->ui->chkDebug->isChecked()) ui->frameWay1->show();
   mw_one->ui->lblSteps->setText("");
-  rlistX.clear();
-  rlistY.clear();
-  rlistZ.clear();
-  glistX.clear();
-  glistY.clear();
-  glistZ.clear();
 
   mw_one->accel_pedometer->start();
   mw_one->accel_pedometer->setActive(true);
@@ -323,31 +312,7 @@ void dlgSteps::on_rbAlg1_clicked() {
 #endif
 }
 
-void dlgSteps::on_rbAlg2_clicked() {
-  if (mw_one->ui->btnPauseSteps->text() == tr("Start")) return;
-
-  rlistX.clear();
-  rlistY.clear();
-  rlistZ.clear();
-  glistX.clear();
-  glistY.clear();
-  glistZ.clear();
-
-  mw_one->accel_pedometer->start();
-  mw_one->accel_pedometer->setActive(true);
-  mw_one->gyroscope->start();
-  mw_one->gyroscope->setActive(true);
-
-#ifdef Q_OS_ANDROID
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep2Win");
-  jo.callStaticMethod<int>("com.x/MyService", "setSleep2", "()I");
-#else
-  QJniObject jo = QJniObject::fromString("Sleep2Win");
-  jo.callStaticMethod<int>("com.x/MyService", "setSleep2", "()I");
-#endif
-#endif
-}
+void dlgSteps::on_rbAlg2_clicked() {}
 
 void dlgSteps::releaseWakeLock() {
 #ifdef Q_OS_ANDROID

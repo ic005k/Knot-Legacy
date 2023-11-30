@@ -52,7 +52,7 @@ SearchDialog::SearchDialog(QWidget* parent)
 
 #ifdef Q_OS_ANDROID
   QFont font;
-  font.setPointSize(16);
+  font.setPointSize(15);
   ui->tableSearch->setFont(font);
 #endif
 }

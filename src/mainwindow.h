@@ -348,7 +348,7 @@ class MainWindow : public QMainWindow {
   static void readDataInThread(int ExceptIndex);
 
   void Sleep(int msec);
-  void getSteps2();
+
   QString secondsToTime(ulong ulSeconds);
   void stopJavaTimer();
   void pausePedometer();

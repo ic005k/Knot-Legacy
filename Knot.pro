@@ -95,7 +95,6 @@ HEADERS += \
     src/SyncInfo.h \
     src/Todo.h \
     src/TodoAlarm.h \
-    src/count_steps.h \
     src/documenthandler.h \
     src/file.h \
     src/filesystemwatcher.h \
