@@ -1,11 +1,7 @@
 ﻿#include "mainwindow.h"
 
 #include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
-
-// #include "math.h"  //using this for converting the CSV data from float to int
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
-// #include "stdint.h"
-// #include "stdio.h"  //using this for printing debug outputs
 #include "ui_mainwindow.h"
 
 QList<QPointF> PointList;

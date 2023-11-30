@@ -63,8 +63,9 @@ void SearchDialog::init() {
               mw_one->geometry().width(), mw_one->geometry().height());
   setWindowTitle(tr("Search"));
   ui->btnBack->setFixedWidth(mw_one->geometry().width() - 20);
-  ui->editSearchText->setFocus();
+
   show();
+  ui->editSearchText->setFocus();
 }
 
 SearchDialog::~SearchDialog() { delete ui; }
