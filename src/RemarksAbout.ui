@@ -209,7 +209,7 @@ selection-background-color: lightblue;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Download Upgrade Packages</string>
+            <string>Download the latest version</string>
            </property>
           </widget>
          </item>
