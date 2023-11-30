@@ -16,6 +16,7 @@ SearchDialog::SearchDialog(QWidget* parent)
 
   setModal(true);
   this->installEventFilter(this);
+  ui->editSearchText->installEventFilter(this);
 
   ui->btnBack->setStyleSheet(mw_one->btnStyle);
   ui->btnSearch->setStyleSheet(mw_one->btnStyle);
@@ -62,7 +63,7 @@ void SearchDialog::init() {
               mw_one->geometry().width(), mw_one->geometry().height());
   setWindowTitle(tr("Search"));
   ui->btnBack->setFixedWidth(mw_one->geometry().width() - 20);
-
+  ui->editSearchText->setFocus();
   show();
 }
 
@@ -73,6 +74,12 @@ bool SearchDialog::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnBack_clicked();
+      return true;
+    }
+
+    if (watchDlgSearch == ui->editSearchText &&
+        keyEvent->key() == Qt::Key_Return) {
+      on_btnSearch_clicked();
       return true;
     }
   }
@@ -153,4 +160,5 @@ void SearchDialog::initSearchResults() {
 
 void SearchDialog::on_btnClearText_clicked() {
   if (ui->editSearchText->text().length() > 0) ui->editSearchText->setText("");
+  ui->editSearchText->setFocus();
 }
