@@ -173,6 +173,7 @@ void MainWindow::readEBookDone() {
 
     if (isText || isEpub) {
       qDebug() << "Read  Text or Epub End... ...";
+
       ui->qwPdf->hide();
       ui->qwReader->show();
       ui->frameReaderFun->show();
@@ -252,6 +253,7 @@ void MainWindow::readEBookDone() {
         break;
       }
     }
+
     mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
 
     isEBook = false;
@@ -267,8 +269,7 @@ void MainWindow::readEBookDone() {
     isReport = false;
   }
 
-  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
-  delete dlgProgEBook;
+  closeProgress();
 
   isReadEBookEnd = true;
 }
@@ -2903,8 +2904,10 @@ void MainWindow::showProgress() {
 }
 
 void MainWindow::closeProgress() {
-  if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
-  delete dlgProgEBook;
+  if (!initMain) {
+    if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
+    delete dlgProgEBook;
+  }
 }
 
 int MainWindow::get_Day(QString date) {
