@@ -7,7 +7,6 @@
 
 #include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 #include "mainwindow.h"
-#include "specialaccelerometerpedometer.h"
 
 extern QString iniFile, txtFile, appName, iniDir, privateDir, fontname;
 extern int fontSize;

@@ -2945,8 +2945,10 @@ void MainWindow::showProgress() {
 }
 
 void MainWindow::closeProgress() {
-  dlgProg->close();
-  delete dlgProg;
+  if (!initMain) {
+    dlgProg->close();
+    delete dlgProg;
+  }
 }
 
 int MainWindow::get_Day(QString date) {
