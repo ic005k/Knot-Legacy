@@ -76,7 +76,7 @@ class dlgReader : public QDialog {
   void backDir();
   static QString get_idref(QString str0);
   void setVPos(qreal pos);
-  QDialog *getProgBar();
+
   void refreshEpubPage();
   static QString getCoverPicFile(QString htmlFile);
   qreal getVPos();

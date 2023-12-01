@@ -18,7 +18,6 @@ QString strOpfPath, fileName, ebookFile, strTitle, fontname;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
-QDialog* dlgProgEBook;
 
 dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   ui->setupUi(this);
@@ -89,46 +88,6 @@ void dlgReader::on_btnOpen_clicked() {
   if (!QFileInfo(openfile).exists()) return;
 
   startOpenFile(openfile);
-}
-
-QDialog* dlgReader::getProgBar() {
-  QDialog* dlgProgEBook;
-  QProgressBar* progReadEbook = new QProgressBar(this);
-  progReadEbook->setStyleSheet(
-      "QProgressBar{border:0px solid #FFFFFF;"
-      "height:25;"
-      "background:rgb(25,255,25);"
-      "text-align:right;"
-      "color:rgb(255,255,255);"
-      "border-radius:0px;}"
-
-      "QProgressBar:chunk{"
-      "border-radius:0px;"
-      "background-color:rgba(18,150,219,255);"
-      "}");
-  progReadEbook->setMaximum(0);
-  progReadEbook->setMinimum(0);
-
-  dlgProgEBook = new QDialog(this);
-  dlgProgEBook->setFixedHeight(80);
-  dlgProgEBook->setFixedWidth(mw_one->width());
-  QVBoxLayout* vbox = new QVBoxLayout;
-  vbox->setSpacing(1);
-
-  vbox->setContentsMargins(1, 1, 1, 12);
-  dlgProgEBook->setLayout(vbox);
-  dlgProgEBook->setGeometry(mw_one->geometry().x(),
-                            (mw_one->height() - dlgProgEBook->height()) / 2 + 0,
-                            dlgProgEBook->width(), dlgProgEBook->height());
-
-  QLabel* lbl = new QLabel(dlgProgEBook);
-  lbl->setText(tr("Reading, please wait..."));
-  lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  dlgProgEBook->layout()->addWidget(lbl);
-  dlgProgEBook->layout()->addWidget(progReadEbook);
-  dlgProgEBook->setModal(true);
-
-  return dlgProgEBook;
 }
 
 void dlgReader::setReaderStyle() {
@@ -303,8 +262,7 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->myReadTWThread->quit();
     mw_one->myReadTWThread->wait();
 
-    dlgProgEBook = getProgBar();
-    if (!mw_one->ui->frameReader->isHidden()) dlgProgEBook->show();
+    mw_one->showProgress();
 
     mw_one->myReadEBookThread->start();
 #endif

@@ -140,6 +140,8 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QDialog *dlgProg;
+  QDialog *getProgBar();
   void setMini();
   bool isSelf = false;
   bool isPdfNewMothod = false;

@@ -16,7 +16,6 @@
 extern MainWindow *mw_one;
 extern QString iniFile, iniDir, zipfile;
 extern QtOneDriveAuthorizationDialog *dialog_;
-extern QDialog *dlgProgEBook;
 extern bool isUpData;
 
 TestDialog::TestDialog(QWidget *parent)

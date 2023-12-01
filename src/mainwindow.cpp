@@ -39,7 +39,6 @@ extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2;
 extern QStringList readTextList, htmlFiles, listCategory;
-extern QDialog *dlgProgEBook;
 extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern dlgList *m_List;
@@ -2898,16 +2897,56 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
   return true;
 }
 
+QDialog *MainWindow::getProgBar() {
+  QDialog *dlgProgEBook;
+  QProgressBar *progReadEbook = new QProgressBar(this);
+  progReadEbook->setStyleSheet(
+      "QProgressBar{border:0px solid #FFFFFF;"
+      "height:25;"
+      "background:rgb(25,255,25);"
+      "text-align:right;"
+      "color:rgb(255,255,255);"
+      "border-radius:0px;}"
+
+      "QProgressBar:chunk{"
+      "border-radius:0px;"
+      "background-color:rgba(18,150,219,255);"
+      "}");
+  progReadEbook->setMaximum(0);
+  progReadEbook->setMinimum(0);
+
+  dlgProgEBook = new QDialog(this);
+  dlgProgEBook->setFixedHeight(80);
+  dlgProgEBook->setFixedWidth(mw_one->width());
+  QVBoxLayout *vbox = new QVBoxLayout;
+  vbox->setSpacing(1);
+
+  vbox->setContentsMargins(1, 1, 1, 12);
+  dlgProgEBook->setLayout(vbox);
+  dlgProgEBook->setGeometry(mw_one->geometry().x(),
+                            (mw_one->height() - dlgProgEBook->height()) / 2 + 0,
+                            dlgProgEBook->width(), dlgProgEBook->height());
+
+  QLabel *lbl = new QLabel(dlgProgEBook);
+  lbl->setText(tr("Reading, please wait..."));
+  lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  dlgProgEBook->layout()->addWidget(lbl);
+  dlgProgEBook->layout()->addWidget(progReadEbook);
+  dlgProgEBook->setModal(true);
+
+  return dlgProgEBook;
+}
+
 void MainWindow::showProgress() {
-  dlgProgEBook = mw_one->mydlgReader->getProgBar();
-  dlgProgEBook->show();
+  dlgProg = new QDialog();
+  dlgProg = getProgBar();
+
+  if (!initMain) dlgProg->show();
 }
 
 void MainWindow::closeProgress() {
-  if (!initMain) {
-    if (!dlgProgEBook->isHidden()) dlgProgEBook->close();
-    delete dlgProgEBook;
-  }
+  dlgProg->close();
+  delete dlgProg;
 }
 
 int MainWindow::get_Day(QString date) {
@@ -3224,8 +3263,8 @@ void MainWindow::on_actionReport_triggered() {
 }
 
 void MainWindow::startInitReport() {
-  dlgProgEBook = mydlgReader->getProgBar();
-  dlgProgEBook->show();
+  showProgress();
+
   isReport = true;
   myReadEBookThread->start();
 }
