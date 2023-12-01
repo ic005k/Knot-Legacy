@@ -32,7 +32,8 @@ class SearchDialog : public QDialog {
 
   void on_btnClearText_clicked();
 
- private:
+  private:
+  void setCellText(int row, int column, QString str);
 };
 
 #endif  // SEARCHDIALOG_H

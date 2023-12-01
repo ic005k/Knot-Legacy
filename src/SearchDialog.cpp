@@ -151,12 +151,28 @@ void SearchDialog::initSearchResults() {
     str3 = list.at(3);
 
     ui->tableSearch->setItem(i, 0, new QTableWidgetItem(str0));
-    ui->tableSearch->setItem(i, 1, new QTableWidgetItem(str1));
-    ui->tableSearch->setItem(i, 2, new QTableWidgetItem(str2));
-    ui->tableSearch->setItem(i, 3, new QTableWidgetItem(str3));
+    setCellText(i, 1, str1);
+    setCellText(i, 2, str2);
+    setCellText(i, 3, str3);
   }
 
   ui->tableSearch->setCurrentCell(0, 0);
+}
+
+void SearchDialog::setCellText(int row, int column, QString str) {
+  QString a0("<span style=\"color: green;background: gold;\">");
+  QString a1("</span>");
+
+  if (str.contains(searchStr)) {
+    str = str.replace(searchStr, a0 + searchStr + a1);
+
+    QLabel* lbl = new QLabel();
+    lbl->adjustSize();
+    lbl->setWordWrap(true);
+    lbl->setText(str);
+    ui->tableSearch->setCellWidget(row, column, lbl);
+  } else
+    ui->tableSearch->setItem(row, column, new QTableWidgetItem(str));
 }
 
 void SearchDialog::on_btnClearText_clicked() {
