@@ -2,6 +2,7 @@
 #define SEARCHDIALOG_H
 
 #include <QDialog>
+#include <QTableWidget>
 
 namespace Ui {
 class SearchDialog;
@@ -32,8 +33,9 @@ class SearchDialog : public QDialog {
 
   void on_btnClearText_clicked();
 
-  private:
-  void setCellText(int row, int column, QString str);
+ private:
+  void setCellText(int row, int column, QString str, QTableWidget *table);
+  void generateData(int count, QTableWidget *table);
 };
 
 #endif  // SEARCHDIALOG_H

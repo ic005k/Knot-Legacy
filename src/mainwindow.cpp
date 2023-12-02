@@ -136,11 +136,12 @@ void MainWindow::importDataDone() {
 SearchThread::SearchThread(QObject *parent) : QThread{parent} {}
 void SearchThread::run() {
   mw_one->mySearchDialog->startSearch();
+
   emit isDone();
 }
 
 void MainWindow::searchDone() {
-  mySearchDialog->initSearchResults();
+  mw_one->mySearchDialog->initSearchResults();
   closeProgress();
 }
 

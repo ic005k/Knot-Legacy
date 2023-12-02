@@ -9,10 +9,16 @@ extern QTabWidget* tabData;
 
 QStringList resultsList;
 QString searchStr;
+QTableWidget* table;
+int maxw;
 
 SearchDialog::SearchDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::SearchDialog) {
   ui->setupUi(this);
+  table = new QTableWidget();
+  table->setColumnCount(4);
+  table->horizontalHeader()->setSectionResizeMode(
+      2, QHeaderView::ResizeToContents);
 
   setModal(true);
   this->installEventFilter(this);
@@ -26,6 +32,7 @@ SearchDialog::SearchDialog(QWidget* parent)
   mw_one->setLineEditQss(ui->editSearchText, 10, 1, "#4169E1", "#4169E1");
 
   ui->tableSearch->setColumnCount(4);
+
   ui->tableSearch->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Time")));
   ui->tableSearch->setHorizontalHeaderItem(1,
                                            new QTableWidgetItem(tr("Amount")));
@@ -33,12 +40,12 @@ SearchDialog::SearchDialog(QWidget* parent)
       2, new QTableWidgetItem(tr("Category")));
   ui->tableSearch->setHorizontalHeaderItem(3,
                                            new QTableWidgetItem(tr("Details")));
+
   ui->tableSearch->horizontalHeader()->setSectionResizeMode(
       0, QHeaderView::ResizeToContents);
   ui->tableSearch->horizontalHeader()->setSectionResizeMode(
       1, QHeaderView::ResizeToContents);
-  ui->tableSearch->horizontalHeader()->setSectionResizeMode(
-      2, QHeaderView::ResizeToContents);
+
   ui->tableSearch->verticalHeader()->setSectionResizeMode(
       QHeaderView::ResizeToContents);
 
@@ -69,6 +76,8 @@ void SearchDialog::init() {
 
   show();
   ui->editSearchText->setFocus();
+  maxw = this->geometry().width() / 6;
+  ui->tableSearch->setColumnWidth(2, maxw);
 }
 
 SearchDialog::~SearchDialog() { delete ui; }
@@ -113,6 +122,9 @@ void SearchDialog::startSearch() {
       QString strYear, strMonthDay;
       strYear = tw->topLevelItem(i)->text(3);
       strMonthDay = tw->topLevelItem(i)->text(0);
+      QString weeks = strMonthDay.split(" ").at(0);
+      QString day =
+          strMonthDay.split(" ").at(1) + " " + strMonthDay.split(" ").at(2);
 
       QTreeWidgetItem* topItem;
       topItem = tw->topLevelItem(i);
@@ -126,8 +138,8 @@ void SearchDialog::startSearch() {
         if (txt1.contains(searchStr) || txt2.contains(searchStr) ||
             txt3.contains(searchStr)) {
           QString str0, str1, str2, str3;
-          str0 = "\n" + tabStr + "\n\n" + strYear + " \n" + strMonthDay + "\n" +
-                 childItem->text(0).split(".").at(1).trimmed() + "\n";
+          str0 = "\n" + tabStr + "\n\n" + strYear + " \n" + day + "\n" + weeks +
+                 "\n" + childItem->text(0).split(".").at(1).trimmed() + "\n";
           str1 = childItem->text(1);
           str2 = childItem->text(2);
           str3 = childItem->text(3);
@@ -140,11 +152,21 @@ void SearchDialog::startSearch() {
 }
 
 void SearchDialog::initSearchResults() {
-  qDebug() << resultsList;
+  // qDebug() << resultsList;
+
+  table->horizontalHeader()->setSectionResizeMode(
+      2, QHeaderView::ResizeToContents);
+
   int count = resultsList.count();
   if (count == 0) return;
 
-  ui->tableSearch->setRowCount(count);
+  generateData(count, ui->tableSearch);
+
+  ui->tableSearch->setCurrentCell(0, 0);
+}
+
+void SearchDialog::generateData(int count, QTableWidget* table) {
+  table->setRowCount(count);
   for (int i = 0; i < count; i++) {
     QStringList list = resultsList.at(i).split("=|=");
     QString str0, str1, str2, str3;
@@ -153,16 +175,15 @@ void SearchDialog::initSearchResults() {
     str2 = list.at(2);
     str3 = list.at(3);
 
-    ui->tableSearch->setItem(i, 0, new QTableWidgetItem(str0));
-    setCellText(i, 1, str1);
-    setCellText(i, 2, str2);
-    setCellText(i, 3, str3);
+    table->setItem(i, 0, new QTableWidgetItem(str0));
+    setCellText(i, 1, str1, table);
+    setCellText(i, 2, str2, table);
+    setCellText(i, 3, str3, table);
   }
-
-  ui->tableSearch->setCurrentCell(0, 0);
 }
 
-void SearchDialog::setCellText(int row, int column, QString str) {
+void SearchDialog::setCellText(int row, int column, QString str,
+                               QTableWidget* table) {
   QString a0("<span style=\"color: white;background: red;\">");
   QString a1("</span>");
 
@@ -173,9 +194,9 @@ void SearchDialog::setCellText(int row, int column, QString str) {
     lbl->adjustSize();
     lbl->setWordWrap(true);
     lbl->setText(str);
-    ui->tableSearch->setCellWidget(row, column, lbl);
+    table->setCellWidget(row, column, lbl);
   } else
-    ui->tableSearch->setItem(row, column, new QTableWidgetItem(str));
+    table->setItem(row, column, new QTableWidgetItem(str));
 }
 
 void SearchDialog::on_btnClearText_clicked() {
