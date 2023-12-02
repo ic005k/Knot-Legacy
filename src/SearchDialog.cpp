@@ -18,6 +18,8 @@ SearchDialog::SearchDialog(QWidget* parent)
   this->installEventFilter(this);
   ui->editSearchText->installEventFilter(this);
 
+  setWindowTitle(tr("Search"));
+
   ui->btnBack->setStyleSheet(mw_one->btnStyle);
   ui->btnSearch->setStyleSheet(mw_one->btnStyle);
   ui->btnClearText->setStyleSheet("border:none");
@@ -59,10 +61,11 @@ SearchDialog::SearchDialog(QWidget* parent)
 }
 
 void SearchDialog::init() {
-  setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-              mw_one->geometry().width(), mw_one->geometry().height());
-  setWindowTitle(tr("Search"));
-  ui->btnBack->setFixedWidth(mw_one->geometry().width() - 20);
+  int w = mw_one->geometry().width();
+  int h = mw_one->geometry().height();
+  setFixedWidth(w);
+  setFixedHeight(h);
+  setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), w, h);
 
   show();
   ui->editSearchText->setFocus();
@@ -160,7 +163,7 @@ void SearchDialog::initSearchResults() {
 }
 
 void SearchDialog::setCellText(int row, int column, QString str) {
-  QString a0("<span style=\"color: green;background: gold;\">");
+  QString a0("<span style=\"color: white;background: red;\">");
   QString a1("</span>");
 
   if (str.contains(searchStr)) {
