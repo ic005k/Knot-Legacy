@@ -96,7 +96,7 @@ void dlgReport::init() {
   mw_one->ui->frameReport->setGeometry(
       mw_one->geometry().x(), mw_one->geometry().y(),
       mw_one->geometry().width(), mw_one->geometry().height());
-  mw_one->ui->qwReportSub->setMinimumHeight(mw_one->height() / 3);
+  mw_one->ui->qwReport->setFixedHeight(mw_one->height() / 3);
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameReport->show();
   if (isWholeMonth)
@@ -829,7 +829,7 @@ void dlgReport::loadDetails() {
 
         QString text0 = childItem->text(0);
         QStringList list = text0.split(".");
-        if (list.count() == 2) text0 = list.at(1);
+        if (list.count() == 2) text0 = list.at(1).trimmed();
 
         QString text1 = childItem->text(1);
         QString text2 = childItem->text(2);
@@ -849,7 +849,7 @@ void dlgReport::loadDetails() {
         lbl3->adjustSize();
         lbl3->setWordWrap(true);
 
-        lbl0->setText(text0);
+        lbl0->setText(tr("Time") + " : " + text0);
         lbl1->setText(tr("Amount") + " : " + text1);
         lbl2->setText(tr("Category") + " : " + text2);
         lbl3->setText(tr("Details") + " : " + text3);
@@ -866,6 +866,9 @@ void dlgReport::loadDetails() {
       }
     }
   }
+
+  if (mw_one->ui->tableDetails->rowCount() > 0)
+    mw_one->ui->tableDetails->setCurrentCell(0, 0);
 }
 
 void dlgReport::loadDetailsQml() {
