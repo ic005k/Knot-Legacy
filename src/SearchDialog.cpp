@@ -9,16 +9,10 @@ extern QTabWidget* tabData;
 
 QStringList resultsList;
 QString searchStr;
-QTableWidget* table;
-int maxw;
 
 SearchDialog::SearchDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::SearchDialog) {
   ui->setupUi(this);
-  table = new QTableWidget();
-  table->setColumnCount(4);
-  table->horizontalHeader()->setSectionResizeMode(
-      2, QHeaderView::ResizeToContents);
 
   setModal(true);
   this->installEventFilter(this);
@@ -31,20 +25,10 @@ SearchDialog::SearchDialog(QWidget* parent)
   ui->btnClearText->setStyleSheet("border:none");
   mw_one->setLineEditQss(ui->editSearchText, 10, 1, "#4169E1", "#4169E1");
 
-  ui->tableSearch->setColumnCount(4);
+  ui->tableSearch->setColumnCount(1);
 
-  ui->tableSearch->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Time")));
-  ui->tableSearch->setHorizontalHeaderItem(1,
-                                           new QTableWidgetItem(tr("Amount")));
-  ui->tableSearch->setHorizontalHeaderItem(
-      2, new QTableWidgetItem(tr("Category")));
-  ui->tableSearch->setHorizontalHeaderItem(3,
-                                           new QTableWidgetItem(tr("Details")));
-
-  ui->tableSearch->horizontalHeader()->setSectionResizeMode(
-      0, QHeaderView::ResizeToContents);
-  ui->tableSearch->horizontalHeader()->setSectionResizeMode(
-      1, QHeaderView::ResizeToContents);
+  ui->tableSearch->setHorizontalHeaderItem(0,
+                                           new QTableWidgetItem(tr("Results")));
 
   ui->tableSearch->verticalHeader()->setSectionResizeMode(
       QHeaderView::ResizeToContents);
@@ -76,8 +60,6 @@ void SearchDialog::init() {
 
   show();
   ui->editSearchText->setFocus();
-  maxw = this->geometry().width() / 6;
-  ui->tableSearch->setColumnWidth(2, maxw);
 }
 
 SearchDialog::~SearchDialog() { delete ui; }
@@ -138,8 +120,8 @@ void SearchDialog::startSearch() {
         if (txt1.contains(searchStr) || txt2.contains(searchStr) ||
             txt3.contains(searchStr)) {
           QString str0, str1, str2, str3;
-          str0 = "\n" + tabStr + "\n\n" + strYear + " \n" + day + "\n" + weeks +
-                 "\n" + childItem->text(0).split(".").at(1).trimmed() + "\n";
+          str0 = tabStr + "\n\n" + strYear + " " + day + " " + weeks + " " +
+                 childItem->text(0).split(".").at(1).trimmed();
           str1 = childItem->text(1);
           str2 = childItem->text(2);
           str3 = childItem->text(3);
@@ -154,10 +136,9 @@ void SearchDialog::startSearch() {
 void SearchDialog::initSearchResults() {
   // qDebug() << resultsList;
 
-  table->horizontalHeader()->setSectionResizeMode(
-      2, QHeaderView::ResizeToContents);
-
   int count = resultsList.count();
+  ui->tableSearch->setHorizontalHeaderItem(
+      0, new QTableWidgetItem(tr("Results") + " : " + QString::number(count)));
   if (count == 0) return;
 
   generateData(count, ui->tableSearch);
@@ -175,10 +156,49 @@ void SearchDialog::generateData(int count, QTableWidget* table) {
     str2 = list.at(2);
     str3 = list.at(3);
 
-    table->setItem(i, 0, new QTableWidgetItem(str0));
-    setCellText(i, 1, str1, table);
-    setCellText(i, 2, str2, table);
-    setCellText(i, 3, str3, table);
+    QLabel* lbl0 = new QLabel();
+    QLabel* lbl1 = new QLabel();
+    QLabel* lbl2 = new QLabel();
+    QLabel* lbl3 = new QLabel();
+
+    lbl0->adjustSize();
+    lbl0->setWordWrap(true);
+    lbl1->adjustSize();
+    lbl1->setWordWrap(true);
+    lbl2->adjustSize();
+    lbl2->setWordWrap(true);
+    lbl3->adjustSize();
+    lbl3->setWordWrap(true);
+
+    QString a0("<span style=\"color: white;background: red;\">");
+    QString a1("</span>");
+
+    if (str1.contains(searchStr)) {
+      str1 = str1.replace(searchStr, a0 + searchStr + a1);
+    }
+
+    if (str2.contains(searchStr)) {
+      str2 = str2.replace(searchStr, a0 + searchStr + a1);
+    }
+
+    if (str3.contains(searchStr)) {
+      str3 = str3.replace(searchStr, a0 + searchStr + a1);
+    }
+
+    lbl0->setText(str0);
+    lbl1->setText(tr("Amount") + " : " + str1);
+    lbl2->setText(tr("Category") + " : " + str2);
+    lbl3->setText(tr("Details") + " : " + str3);
+
+    QWidget* widget = new QWidget();
+    QVBoxLayout* vbox = new QVBoxLayout;
+    widget->setLayout(vbox);
+    vbox->addWidget(lbl0);
+    if (str1.trimmed().length() > 0) vbox->addWidget(lbl1);
+    if (str2.trimmed().length() > 0) vbox->addWidget(lbl2);
+    if (str3.trimmed().length() > 0) vbox->addWidget(lbl3);
+
+    table->setCellWidget(i, 0, widget);
   }
 }
 
