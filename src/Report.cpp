@@ -32,7 +32,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   this->setModal(true);
 
   QFont font0;
-  font0.setPixelSize(12);
+  font0.setPixelSize(11);
   font0.setBold(true);
   mw_one->ui->cboxY1->setFont(font0);
   mw_one->ui->cboxY2->setFont(font0);
@@ -70,9 +70,9 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
 }
 
 void dlgReport::init() {
-  mw_one->ui->frameReport->setGeometry(mw_one->geometry().x(),
-                                       mw_one->geometry().y(), mw_one->width(),
-                                       mw_one->height());
+  mw_one->ui->frameReport->setGeometry(
+      mw_one->geometry().x(), mw_one->geometry().y(),
+      mw_one->geometry().width(), mw_one->geometry().height());
   mw_one->ui->qwReportSub->setMinimumHeight(mw_one->height() / 3);
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameReport->show();

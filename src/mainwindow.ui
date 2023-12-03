@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>651</width>
+    <width>654</width>
     <height>3332</height>
    </rect>
   </property>
@@ -3400,6 +3400,12 @@ QRadioButton::indicator:checked {
          </item>
          <item>
           <widget class="QToolButton" name="btnOut2Img">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Out to Image</string>
            </property>
@@ -3411,6 +3417,11 @@ QRadioButton::indicator:checked {
         <layout class="QHBoxLayout" name="horizontalLayout_25">
          <item>
           <widget class="QComboBox" name="cboxY1">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <item>
             <property name="text">
              <string>2022</string>
@@ -3465,6 +3476,11 @@ QRadioButton::indicator:checked {
          </item>
          <item>
           <widget class="QComboBox" name="cboxM1">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <item>
             <property name="text">
              <string>01</string>
@@ -3529,6 +3545,11 @@ QRadioButton::indicator:checked {
          </item>
          <item>
           <widget class="QComboBox" name="cboxD1">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <item>
             <property name="text">
              <string>01</string>
@@ -3701,6 +3722,11 @@ QRadioButton::indicator:checked {
          </item>
          <item>
           <widget class="QComboBox" name="cboxY2">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <item>
             <property name="text">
              <string>2022</string>
@@ -3755,6 +3781,11 @@ QRadioButton::indicator:checked {
          </item>
          <item>
           <widget class="QComboBox" name="cboxM2">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <item>
             <property name="text">
              <string>01</string>
@@ -3819,6 +3850,11 @@ QRadioButton::indicator:checked {
          </item>
          <item>
           <widget class="QComboBox" name="cboxD2">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <item>
             <property name="text">
              <string>01</string>
@@ -4076,8 +4112,8 @@ QRadioButton::indicator:checked {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>651</width>
-     <height>23</height>
+     <width>654</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">

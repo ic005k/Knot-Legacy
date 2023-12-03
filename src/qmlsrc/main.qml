@@ -10,7 +10,7 @@ Rectangle {
     width: 500
     height: 400
 
-    property int itemH: 32
+    //property int itemH: 90 //32
     property int itemCount: 0
     property bool isHighPriority: false
 
@@ -150,55 +150,68 @@ Rectangle {
                     }
                 }
 
-                Text {
-                    id: item0
-                    width: parent.width
-                    wrapMode: TextArea.NoWrap
-                    font.bold: type
-                    text: text0
-                }
+                ColumnLayout {
 
-                Text {
-                    id: item1
-                    Layout.preferredWidth: parent.width / 4
-                    Layout.alignment: Qt.AlignHCenter
-                    horizontalAlignment: Text.AlignRight
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
+                    id: idlistElemnet4
+                    height: parent.height
                     width: parent.width
-                    wrapMode: TextArea.NoWrap
-                    color: isHighPriority ? "#EF5B98" : "#000000"
-                    font.bold: type
-                    text: text1
-                }
+                    spacing: 2
+                    Layout.fillWidth: true
 
-                Text {
-                    id: item2
-                    Layout.preferredWidth: parent.width / 3
-                    Layout.alignment: Qt.AlignHCenter
-                    horizontalAlignment: Text.AlignRight
-                    elide: Text.ElideRight
-                    width: parent.width
-                    wrapMode: TextArea.NoWrap
-                    font.bold: type
-                    text: text2
-                    anchors.rightMargin: 10
-                }
+                    Text {
+                        id: item0
+                        width: parent.width
+                        wrapMode: TextArea.NoWrap
+                        font.bold: type
+                        text: text0
+                    }
 
-                TextArea {
-                    id: item_type
-                    visible: false
-                    width: parent.width
-                    wrapMode: TextArea.NoWrap
-                    text: type
-                }
+                    Text {
+                        id: item1
+                        Layout.preferredWidth: parent.width // / 4
+                        Layout.alignment: Qt.AlignHCenter
+                        horizontalAlignment: Text.AlignLeft //Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                        width: parent.width
+                        wrapMode: TextArea.NoWrap
+                        color: isHighPriority ? "#EF5B98" : "#000000"
+                        font.bold: type
+                        text: text1
 
-                Text {
-                    id: item_top
-                    visible: false
-                    width: parent.width
-                    wrapMode: TextArea.NoWrap
-                    text: text_top
+                        visible: item1.text.length ? true : false
+                    }
+
+                    Text {
+                        id: item2
+                        Layout.preferredWidth: parent.width // / 3
+                        Layout.alignment: Qt.AlignHCenter
+                        horizontalAlignment: Text.AlignLeft //Text.AlignRight
+                        elide: Text.ElideRight
+                        width: parent.width
+                        wrapMode: TextArea.NoWrap
+                        font.bold: type
+                        text: text2
+                        anchors.rightMargin: 10
+
+                        visible: item2.text.length ? true : false
+                    }
+
+                    TextArea {
+                        id: item_type
+                        visible: false
+                        width: parent.width
+                        wrapMode: TextArea.NoWrap
+                        text: type
+                    }
+
+                    Text {
+                        id: item_top
+                        visible: false
+                        width: parent.width
+                        wrapMode: TextArea.NoWrap
+                        text: text_top
+                    }
                 }
             }
 

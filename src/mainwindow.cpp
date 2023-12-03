@@ -2918,7 +2918,7 @@ QDialog *MainWindow::getProgBar() {
 
   dlgProgEBook = new QDialog(this);
   dlgProgEBook->setFixedHeight(80);
-  dlgProgEBook->setFixedWidth(mw_one->width());
+  dlgProgEBook->setFixedWidth(mw_one->geometry().width());
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setSpacing(1);
 
@@ -4947,6 +4947,12 @@ int MainWindow::getCurrentIndex() {
 
 void MainWindow::reloadMain() {
   clearAll();
+
+  QFontMetrics fontMetrics(font());
+  int nFontHeight = fontMetrics.height();
+  mw_one->ui->qwMain->rootContext()->setContextProperty("itemH",
+                                                        nFontHeight * 4.0);
+
   QTreeWidget *tw = get_tw(tabData->currentIndex());
 
   int total = tw->topLevelItemCount();
@@ -4964,6 +4970,9 @@ void MainWindow::reloadMain() {
     text1 = topItem->text(1);
     text2 = topItem->text(2);
 
+    if (text1.length() > 0) text1 = tr("Freq") + " : " + text1;
+    if (text2.length() > 0) text2 = tr("Amount") + " : " + text2;
+
     topitem = text0;
     addItem(text0, text1, text2, 1, topitem);
 
@@ -4975,6 +4984,10 @@ void MainWindow::reloadMain() {
       text2 = childItem->text(2);
       text3 = childItem->text(3);
       if (text3.trimmed().length() > 0) text2 = "*" + text2;
+
+      if (text1.length() > 0) text1 = tr("Amount") + " : " + text1;
+      if (text2.length() > 0) text2 = tr("Category") + " : " + text2;
+
       addItem(text0, text1, text2, 0, topitem);
     }
   }
