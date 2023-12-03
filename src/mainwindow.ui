@@ -4053,7 +4053,7 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>100</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
@@ -4072,7 +4072,7 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
@@ -4101,6 +4101,9 @@ QRadioButton::indicator:checked {
           <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tableDetails"/>
        </item>
       </layout>
      </widget>

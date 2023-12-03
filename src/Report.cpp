@@ -65,6 +65,29 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   mw_one->ui->lblTitle_Report->setFont(font);
   mw_one->ui->lblDetails->setWordWrap(true);
   mw_one->ui->lblDetails->adjustSize();
+  mw_one->ui->lblDetails->setHidden(true);
+  mw_one->ui->qwReportSub->setHidden(true);
+
+  mw_one->ui->tableDetails->setColumnCount(1);
+  mw_one->ui->tableDetails->setHorizontalHeaderItem(
+      0, new QTableWidgetItem(tr("Details")));
+  mw_one->ui->tableDetails->verticalHeader()->setSectionResizeMode(
+      QHeaderView::ResizeToContents);
+
+  mw_one->ui->tableDetails->horizontalHeader()->setStretchLastSection(true);
+  mw_one->ui->tableDetails->setAlternatingRowColors(true);
+  mw_one->ui->tableDetails->setSelectionBehavior(QTableWidget::SelectRows);
+  mw_one->ui->tableDetails->setSelectionMode(
+      QAbstractItemView::SingleSelection);
+  mw_one->ui->tableDetails->setEditTriggers(QTableWidget::NoEditTriggers);
+  mw_one->ui->tableDetails->setHorizontalScrollBarPolicy(
+      Qt::ScrollBarAlwaysOff);
+  mw_one->ui->tableDetails->verticalScrollBar()->setStyleSheet(
+      mw_one->vsbarStyleSmall);
+  mw_one->ui->tableDetails->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(mw_one->ui->tableDetails,
+                         QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(mw_one->ui->tableDetails);
 
   mw_one->set_btnStyle(this);
 }
@@ -784,6 +807,68 @@ void dlgReport::setScrollBarPos_xx(double pos) {
 }
 
 void dlgReport::loadDetails() {
+  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
+  mw_one->ui->tableDetails->setRowCount(0);
+
+  int row = getCurrentIndex();
+  QString date = getDate(row);
+  date.replace("*", "");
+  date = date.trimmed();
+
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
+    if (topItem->text(0) == date) {
+      mw_one->ui->tableDetails->setHorizontalHeaderItem(
+          0, new QTableWidgetItem(tr("Details") + "    " + date + "    " +
+                                  topItem->text(3)));
+
+      int childCount = topItem->childCount();
+      mw_one->ui->tableDetails->setRowCount(childCount);
+      for (int j = 0; j < childCount; j++) {
+        QTreeWidgetItem* childItem = topItem->child(j);
+
+        QString text0 = childItem->text(0);
+        QStringList list = text0.split(".");
+        if (list.count() == 2) text0 = list.at(1);
+
+        QString text1 = childItem->text(1);
+        QString text2 = childItem->text(2);
+        QString text3 = childItem->text(3);
+
+        QLabel* lbl0 = new QLabel();
+        QLabel* lbl1 = new QLabel();
+        QLabel* lbl2 = new QLabel();
+        QLabel* lbl3 = new QLabel();
+
+        lbl0->adjustSize();
+        lbl0->setWordWrap(true);
+        lbl1->adjustSize();
+        lbl1->setWordWrap(true);
+        lbl2->adjustSize();
+        lbl2->setWordWrap(true);
+        lbl3->adjustSize();
+        lbl3->setWordWrap(true);
+
+        lbl0->setText(text0);
+        lbl1->setText(tr("Amount") + " : " + text1);
+        lbl2->setText(tr("Category") + " : " + text2);
+        lbl3->setText(tr("Details") + " : " + text3);
+
+        QWidget* widget = new QWidget();
+        QVBoxLayout* vbox = new QVBoxLayout;
+        widget->setLayout(vbox);
+        vbox->addWidget(lbl0);
+        if (text1.trimmed().length() > 0) vbox->addWidget(lbl1);
+        if (text2.trimmed().length() > 0) vbox->addWidget(lbl2);
+        if (text3.trimmed().length() > 0) vbox->addWidget(lbl3);
+
+        mw_one->ui->tableDetails->setCellWidget(j, 0, widget);
+      }
+    }
+  }
+}
+
+void dlgReport::loadDetailsQml() {
   mw_one->ui->qwReportSub->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
   btnCategory->setText(tr("View Category"));

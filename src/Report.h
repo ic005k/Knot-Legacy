@@ -63,6 +63,8 @@ class dlgReport : public QDialog {
 
   void loadDetails();
 
+  void loadDetailsQml();
+
  private:
   double t_amount = 0;
   int freq = 0;
