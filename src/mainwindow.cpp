@@ -266,6 +266,10 @@ void MainWindow::readEBookDone() {
     ui->btnCategory->setEnabled(false);
     if (listCategory.count() > 0) ui->btnCategory->setEnabled(true);
 
+    ui->tableDetails->setHorizontalHeaderItem(
+        0, new QTableWidgetItem(tr("Details")));
+    ui->tableDetails->setRowCount(0);
+
     isReport = false;
   }
 
@@ -2021,6 +2025,7 @@ void MainWindow::on_twItemClicked() {
     max_day = getMaxDay(sy, sm);
 
     isShowDetails = false;
+    ui->lblStats->setStyleSheet(myEditRecord->ui->lblTitle->styleSheet());
     ui->lblStats->setText(strStats);
   }
 
@@ -2035,9 +2040,12 @@ void MainWindow::on_twItemClicked() {
     if (str.trimmed().length() > 0 && !isTabChanged) {
       isShowDetails = true;
       strShowDetails = str;
+      ui->lblStats->setStyleSheet(
+          "color: black; background-color: lightyellow");
       ui->lblStats->setText(str);
     } else {
       isShowDetails = false;
+      ui->lblStats->setStyleSheet(myEditRecord->ui->lblTitle->styleSheet());
       ui->lblStats->setText(strStats);
     }
   }
