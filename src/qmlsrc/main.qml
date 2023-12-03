@@ -10,7 +10,7 @@ Rectangle {
     width: 500
     height: 400
 
-    //property int itemH: 90 //32
+    //property int itemH: 32
     property int itemCount: 0
     property bool isHighPriority: false
 
@@ -133,13 +133,13 @@ Rectangle {
             RowLayout {
 
                 id: idlistElemnet
-                height: parent.height
+                height: itemH
                 width: parent.width
                 spacing: 2
                 Layout.fillWidth: true
 
                 Rectangle {
-                    height: itemH - 2
+                    height: parent.height - 2
                     width: 6
                     radius: 2
                     anchors.leftMargin: 1
@@ -161,6 +161,10 @@ Rectangle {
                     Text {
                         id: item0
                         width: parent.width
+                        Layout.preferredWidth: parent.width
+                        Layout.alignment: Qt.AlignHCenter
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
                         wrapMode: TextArea.NoWrap
                         font.bold: type
                         text: text0
@@ -189,7 +193,7 @@ Rectangle {
                         horizontalAlignment: Text.AlignLeft //Text.AlignRight
                         elide: Text.ElideRight
                         width: parent.width
-                        wrapMode: TextArea.NoWrap
+                        wrapMode: TextArea.WordWrap
                         font.bold: type
                         text: text2
                         anchors.rightMargin: 10

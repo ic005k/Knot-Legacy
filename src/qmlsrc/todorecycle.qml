@@ -172,7 +172,7 @@ Rectangle {
                         id: text4
                         visible: false
                         width: parent.width
-                        wrapMode: Text.Wrap
+                        wrapMode: TextArea.WordWrap
                         text: itemheight
                     }
                 }

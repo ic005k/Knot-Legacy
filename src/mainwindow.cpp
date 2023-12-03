@@ -3780,6 +3780,7 @@ void MainWindow::init_UIWidget() {
       QUrl(QStringLiteral("qrc:/src/qmlsrc/todorecycle.qml")));
 
   ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
+  ui->qwMain->rootContext()->setContextProperty("itemH", 32);
   ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
 
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
@@ -4950,8 +4951,8 @@ void MainWindow::reloadMain() {
 
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();
-  mw_one->ui->qwMain->rootContext()->setContextProperty("itemH",
-                                                        nFontHeight * 4.0);
+  int itemHeight = nFontHeight * 4.0;
+  mw_one->ui->qwMain->rootContext()->setContextProperty("itemH", itemHeight);
 
   QTreeWidget *tw = get_tw(tabData->currentIndex());
 
@@ -4966,11 +4967,12 @@ void MainWindow::reloadMain() {
   for (int i = a; i < total; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
     QString text0, text1, text2, text3, topitem;
-    text0 = topItem->text(0);
+    text0 = topItem->text(0) + "  " + topItem->text(3);
     text1 = topItem->text(1);
     text2 = topItem->text(2);
 
     if (text1.length() > 0) text1 = tr("Freq") + " : " + text1;
+
     if (text2.length() > 0) text2 = tr("Amount") + " : " + text2;
 
     topitem = text0;
@@ -4985,8 +4987,10 @@ void MainWindow::reloadMain() {
       text3 = childItem->text(3);
       if (text3.trimmed().length() > 0) text2 = "*" + text2;
 
-      if (text1.length() > 0) text1 = tr("Amount") + " : " + text1;
-      if (text2.length() > 0) text2 = tr("Category") + " : " + text2;
+      text0 = "  " + text0;
+      if (text1.length() > 0) text1 = "  " + tr("Amount") + " : " + text1;
+
+      if (text2.length() > 0) text2 = "  " + tr("Category") + " : " + text2;
 
       addItem(text0, text1, text2, 0, topitem);
     }
@@ -5031,7 +5035,7 @@ bool MainWindow::setTWCurrentItem() {
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(count - 1 - i);
-    if (topItem->text(0) == textTop) {
+    if (topItem->text(0) + "  " + topItem->text(3) == textTop) {
       if (type == 0) {
         QTreeWidgetItem *childItem = topItem->child(childIndex);
         tw->setCurrentItem(childItem, 0);
