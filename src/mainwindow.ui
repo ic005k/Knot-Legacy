@@ -4126,7 +4126,7 @@ QRadioButton::indicator:checked {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">

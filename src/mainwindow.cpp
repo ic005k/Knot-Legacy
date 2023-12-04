@@ -3546,6 +3546,7 @@ void MainWindow::init_UIWidget() {
   set_btnStyle(this);
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
+
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
 
@@ -3553,6 +3554,10 @@ void MainWindow::init_UIWidget() {
 
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
+
+  QFontMetrics fontMetrics(font());
+  int nFontHeight = fontMetrics.height();
+  ui->tabWidget->tabBar()->setFixedHeight(nFontHeight * 1.5);
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
   ui->tabWidget->setFixedHeight(ui->tabWidget->tabBar()->height() + 0);
 
