@@ -10,7 +10,6 @@ Rectangle {
     width: 500
     height: 400
 
-    property int myh: 0
     property int itemCount: 0
     property bool isHighPriority: false
 
@@ -82,9 +81,9 @@ Rectangle {
                               "text1": t1,
                               "text2": t2,
                               "type": type0,
-                              "text_top": txt_top
+                              "text_top": txt_top,
+                              "myh": height
                           })
-        myh = height
     }
 
     function insertItem(strTime, type, strText, curIndex) {
@@ -125,7 +124,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: item_height.text
+            height: myh
             color: ListView.isCurrentItem ? "#94caf7" : "#ffffff" //选中颜色设置
 
             border.width: 1
@@ -223,14 +222,6 @@ Rectangle {
                         width: parent.width
                         wrapMode: TextArea.NoWrap
                         text: text_top
-                    }
-
-                    Text {
-                        id: item_height
-                        visible: false
-                        width: parent.width
-                        wrapMode: TextArea.WordWrap
-                        text: myh
                     }
                 }
             }

@@ -4997,7 +4997,7 @@ void MainWindow::reloadMain() {
     }
 
     topitem = text0;
-    addItem(text0, text1, text2, 1, topitem, nFontHeight * (3 + 1));
+    addItem(text0, text1, text2, 1, topitem, nFontHeight * (nullrows + 1));
 
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
@@ -5023,7 +5023,7 @@ void MainWindow::reloadMain() {
         nullrows++;
       }
 
-      addItem(text0, text1, text2, 0, topitem, nFontHeight * (3 + 1));
+      addItem(text0, text1, text2, 0, topitem, nFontHeight * (nullrows + 1));
     }
   }
 
