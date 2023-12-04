@@ -1114,6 +1114,9 @@
         }*/
 </string>
             </property>
+            <property name="tabShape">
+             <enum>QTabWidget::Triangular</enum>
+            </property>
             <property name="currentIndex">
              <number>-1</number>
             </property>
@@ -1125,6 +1128,13 @@
             </property>
             <property name="movable">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -4116,7 +4126,7 @@ QRadioButton::indicator:checked {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">

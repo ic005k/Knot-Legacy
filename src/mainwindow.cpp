@@ -4862,11 +4862,12 @@ void MainWindow::setItemHeight(int h) {
 }
 
 void MainWindow::addItem(QString text0, QString text1, QString text2, int type,
-                         QString topitem) {
+                         QString topitem, int itemH) {
   QQuickItem *root = mw_one->ui->qwMain->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "addItem", Q_ARG(QVariant, text0),
                             Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
-                            Q_ARG(QVariant, type), Q_ARG(QVariant, topitem));
+                            Q_ARG(QVariant, type), Q_ARG(QVariant, topitem),
+                            Q_ARG(QVariant, itemH));
 }
 
 QString MainWindow::getTop(int index) {
@@ -4964,8 +4965,6 @@ void MainWindow::reloadMain() {
 
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();
-  int itemHeight = nFontHeight * 4.0;
-  setItemHeight(itemHeight);
 
   QTreeWidget *tw = get_tw(tabData->currentIndex());
 
@@ -4986,19 +4985,19 @@ void MainWindow::reloadMain() {
     text1 = topItem->text(1);
     text2 = topItem->text(2);
 
-    nullrows = 0;
-    if (text1.length() > 0)
+    nullrows = 1;
+    if (text1.length() > 0) {
       text1 = tr("Freq") + " : " + text1;
-    else
       nullrows++;
+    }
 
-    if (text2.length() > 0)
+    if (text2.length() > 0) {
       text2 = tr("Amount") + " : " + text2;
-    else
       nullrows++;
+    }
 
     topitem = text0;
-    addItem(text0, text1, text2, 1, topitem);
+    addItem(text0, text1, text2, 1, topitem, nFontHeight * (3 + 1));
 
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
@@ -5008,24 +5007,23 @@ void MainWindow::reloadMain() {
       text2 = childItem->text(2);
       text3 = childItem->text(3);
 
-      nullrows = 0;
-      if (text3.trimmed().length() > 0)
+      if (text3.trimmed().length() > 0) {
         text2 = "*" + text2;
-      else
-        nullrows++;
+      }
 
+      nullrows = 1;
       text0 = "  " + text0;
-      if (text1.length() > 0)
+      if (text1.length() > 0) {
         text1 = "  " + tr("Amount") + " : " + text1;
-      else
         nullrows++;
+      }
 
-      if (text2.length() > 0)
+      if (text2.length() > 0) {
         text2 = "  " + tr("Category") + " : " + text2;
-      else
         nullrows++;
+      }
 
-      addItem(text0, text1, text2, 0, topitem);
+      addItem(text0, text1, text2, 0, topitem, nFontHeight * (3 + 1));
     }
   }
 

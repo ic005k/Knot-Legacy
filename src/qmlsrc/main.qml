@@ -1,8 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtQml 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQml 2.3
+import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.1
 
 Rectangle {
     id: root
@@ -10,13 +10,11 @@ Rectangle {
     width: 500
     height: 400
 
-    property int itemheight: 0
+    property int myh: 0
     property int itemCount: 0
     property bool isHighPriority: false
 
-    function setItemHeight(h) {
-        itemheight = h
-    }
+    function setItemHeight(h) {}
 
     function gotoEnd() {
         view.positionViewAtEnd()
@@ -78,14 +76,15 @@ Rectangle {
         return data.type
     }
 
-    function addItem(text0, text1, text2, type, text_top) {
+    function addItem(t0, t1, t2, type0, txt_top, height) {
         view.model.append({
-                              "text0": text0,
-                              "text1": text1,
-                              "text2": text2,
-                              "type": type,
-                              "text_top": text_top
+                              "text0": t0,
+                              "text1": t1,
+                              "text2": t2,
+                              "type": type0,
+                              "text_top": txt_top
                           })
+        myh = height
     }
 
     function insertItem(strTime, type, strText, curIndex) {
@@ -126,7 +125,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: itemheight
+            height: item_height.text
             color: ListView.isCurrentItem ? "#94caf7" : "#ffffff" //选中颜色设置
 
             border.width: 1
@@ -224,6 +223,14 @@ Rectangle {
                         width: parent.width
                         wrapMode: TextArea.NoWrap
                         text: text_top
+                    }
+
+                    Text {
+                        id: item_height
+                        visible: false
+                        width: parent.width
+                        wrapMode: TextArea.WordWrap
+                        text: myh
                     }
                 }
             }

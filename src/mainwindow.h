@@ -394,7 +394,7 @@ class MainWindow : public QMainWindow {
   void gotoIndex(int index);
   void setItemHeight(int h);
   void addItem(QString text0, QString text1, QString text2, int type,
-               QString topitem);
+               QString topitem, int itemH);
   QString getTop(int index);
   QString getText0(int index);
   int getItemType(int index);
