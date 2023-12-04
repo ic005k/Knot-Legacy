@@ -10,9 +10,13 @@ Rectangle {
     width: 500
     height: 400
 
-    //property int itemH: 32
+    property int itemheight: 0
     property int itemCount: 0
     property bool isHighPriority: false
+
+    function setItemHeight(h) {
+        itemheight = h
+    }
 
     function gotoEnd() {
         view.positionViewAtEnd()
@@ -122,7 +126,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: itemH
+            height: itemheight
             color: ListView.isCurrentItem ? "#94caf7" : "#ffffff" //选中颜色设置
 
             border.width: 1
@@ -133,7 +137,7 @@ Rectangle {
             RowLayout {
 
                 id: idlistElemnet
-                height: itemH
+                height: parent.height
                 width: parent.width
                 spacing: 2
                 Layout.fillWidth: true
@@ -151,15 +155,17 @@ Rectangle {
                 }
 
                 ColumnLayout {
-
                     id: idlistElemnet4
                     height: parent.height
                     width: parent.width
                     spacing: 2
                     Layout.fillWidth: true
+                    anchors.leftMargin: 0
+                    anchors.rightMargin: 0
 
                     Text {
                         id: item0
+
                         width: parent.width
                         Layout.preferredWidth: parent.width
                         Layout.alignment: Qt.AlignHCenter
@@ -173,10 +179,12 @@ Rectangle {
                     Text {
                         id: item1
                         Layout.preferredWidth: parent.width // / 4
+
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft //Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
+
                         width: parent.width
                         wrapMode: TextArea.NoWrap
                         color: isHighPriority ? "#EF5B98" : "#000000"
@@ -192,6 +200,7 @@ Rectangle {
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft //Text.AlignRight
                         elide: Text.ElideRight
+
                         width: parent.width
                         wrapMode: TextArea.WordWrap
                         font.bold: type
@@ -278,20 +287,6 @@ Rectangle {
                     color: "#ffffff"
                 }
 
-
-                /*Image {
-                    id: delBtn00
-                    anchors.centerIn: parent
-
-                    width: 0
-                    height: 40
-                    fillMode: Image.scale
-                    horizontalAlignment: Image.AlignLeft
-                    verticalAlignment: Image.AlignTop
-
-                    smooth: true
-                    source: "/tab.png"
-                }*/
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {

@@ -3788,7 +3788,6 @@ void MainWindow::init_UIWidget() {
       QUrl(QStringLiteral("qrc:/src/qmlsrc/todorecycle.qml")));
 
   ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
-  ui->qwMain->rootContext()->setContextProperty("itemH", 32);
   ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
 
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
@@ -4856,6 +4855,12 @@ void MainWindow::on_editTodo_textChanged() {
   mydlgTodo->on_editTodo_textChanged();
 }
 
+void MainWindow::setItemHeight(int h) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setItemHeight",
+                            Q_ARG(QVariant, h));
+}
+
 void MainWindow::addItem(QString text0, QString text1, QString text2, int type,
                          QString topitem) {
   QQuickItem *root = mw_one->ui->qwMain->rootObject();
@@ -4960,7 +4965,7 @@ void MainWindow::reloadMain() {
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();
   int itemHeight = nFontHeight * 4.0;
-  mw_one->ui->qwMain->rootContext()->setContextProperty("itemH", itemHeight);
+  setItemHeight(itemHeight);
 
   QTreeWidget *tw = get_tw(tabData->currentIndex());
 
@@ -4972,16 +4977,25 @@ void MainWindow::reloadMain() {
   else
     a = 0;
 
+  int nullrows = 0;
+  QString text0, text1, text2, text3, topitem;
   for (int i = a; i < total; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
-    QString text0, text1, text2, text3, topitem;
+
     text0 = topItem->text(0) + "  " + topItem->text(3);
     text1 = topItem->text(1);
     text2 = topItem->text(2);
 
-    if (text1.length() > 0) text1 = tr("Freq") + " : " + text1;
+    nullrows = 0;
+    if (text1.length() > 0)
+      text1 = tr("Freq") + " : " + text1;
+    else
+      nullrows++;
 
-    if (text2.length() > 0) text2 = tr("Amount") + " : " + text2;
+    if (text2.length() > 0)
+      text2 = tr("Amount") + " : " + text2;
+    else
+      nullrows++;
 
     topitem = text0;
     addItem(text0, text1, text2, 1, topitem);
@@ -4993,12 +5007,23 @@ void MainWindow::reloadMain() {
       text1 = childItem->text(1);
       text2 = childItem->text(2);
       text3 = childItem->text(3);
-      if (text3.trimmed().length() > 0) text2 = "*" + text2;
+
+      nullrows = 0;
+      if (text3.trimmed().length() > 0)
+        text2 = "*" + text2;
+      else
+        nullrows++;
 
       text0 = "  " + text0;
-      if (text1.length() > 0) text1 = "  " + tr("Amount") + " : " + text1;
+      if (text1.length() > 0)
+        text1 = "  " + tr("Amount") + " : " + text1;
+      else
+        nullrows++;
 
-      if (text2.length() > 0) text2 = "  " + tr("Category") + " : " + text2;
+      if (text2.length() > 0)
+        text2 = "  " + tr("Category") + " : " + text2;
+      else
+        nullrows++;
 
       addItem(text0, text1, text2, 0, topitem);
     }

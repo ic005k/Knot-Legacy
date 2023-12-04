@@ -168,6 +168,7 @@ Rectangle {
                         color: isHighPriority ? "#EF5B98" : "#000000"
                         text: dototext
                     }
+
                     Text {
                         id: text4
                         visible: false
