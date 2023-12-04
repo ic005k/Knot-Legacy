@@ -2305,12 +2305,9 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     return true;
   }
 
-  if (watch == ui->lblDetails) {
-    if (event->type() == QEvent::MouseButtonPress) {
-      if (ui->btnCategory->text() == tr("View Category") &&
-          mydlgReport->str_xx.length() > 0)
-
-        showMsgBox(tr("Details") + " : ", mydlgReport->str_xx, "", 1);
+  if (watch == ui->lblStats) {
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      on_btnSelTab_clicked();
     }
   }
 
@@ -2506,7 +2503,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
@@ -3607,7 +3604,7 @@ void MainWindow::init_UIWidget() {
 
   ui->frame_charts->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frame_charts->layout()->setSpacing(0);
-  frameChartHeight = 160;
+  frameChartHeight = 150;
   ui->frame_charts->setFixedHeight(frameChartHeight);
   tabChart->setCurrentIndex(0);
 
@@ -3626,7 +3623,7 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->installEventFilter(this);
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
-  ui->lblDetails->installEventFilter(this);
+  ui->lblStats->installEventFilter(this);
 
   myfile = new File();
   m_Remarks = new dlgRemarks(this);

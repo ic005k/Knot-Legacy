@@ -300,7 +300,7 @@ bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
     mw_one->mydlgMainNotes->getEditPanel(ui->editDetails, evn);
   }
 
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!m_List->isHidden()) {
