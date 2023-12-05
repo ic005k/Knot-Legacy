@@ -2401,8 +2401,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
-  if (watch != ui->tabWidget->tabBar() && watch != tw &&
-      watch != ui->qwReader) {
+  if (watch == ui->lblStats) {
     static int press_x;
     static int press_y;
     static int relea_x;
