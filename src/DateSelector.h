@@ -17,7 +17,11 @@ class DateSelector : public QDialog {
 
   Ui::DateSelector *ui;
 
+  int dateFlag = 0; /*1=btnYeat 2=btnMonth 3=btnStartDate 4=btnEnDate*/
+
   void init();
+
+  void initStartEndDate(QString flag);
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;

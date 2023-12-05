@@ -58,7 +58,9 @@ class dlgReport : public QDialog {
 
   static int cmp(const void *a, const void *b);
 
- protected:
+  void startReport1();
+  void startReport2();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;

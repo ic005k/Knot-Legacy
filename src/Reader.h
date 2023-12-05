@@ -102,8 +102,8 @@ class dlgReader : public QDialog {
                           bool coverFileIfExist);
   qreal getScale();
   void setPdfScale(qreal scale);
-  void startReport1();
-  public slots:
+
+ public slots:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;

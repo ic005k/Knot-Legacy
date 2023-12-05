@@ -93,6 +93,7 @@
 #include "src/filesystemwatcher.h"
 #include "src/specialaccelerometerpedometer.h"
 #include "ui_CategoryList.h"
+#include "ui_DateSelector.h"
 #include "ui_EditRecord.h"
 #include "ui_LoadPic.h"
 #include "ui_Notes.h"
@@ -408,7 +409,7 @@ class MainWindow : public QMainWindow {
   void startSyncData();
   void removeFilesWatch();
   void addFilesWatch();
-  void init_report_widget_year();
+
   int getMaxDay(QString sy, QString sm);
   void showProgress();
 
@@ -629,17 +630,9 @@ class MainWindow : public QMainWindow {
 
   void on_btnPasteTodo_clicked();
 
-  void on_cboxY1_activated(int index);
+  void on_btnStartDate_clicked();
 
-  void on_cboxM1_activated(int index);
-
-  void on_cboxD1_activated(int index);
-
-  void on_cboxY2_activated(int index);
-
-  void on_cboxM2_activated(int index);
-
-  void on_cboxD2_activated(int index);
+  void on_btnEndDate_clicked();
 
  private:
   bool isShowDetails = false;

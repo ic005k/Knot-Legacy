@@ -34,17 +34,6 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
 
   myDateSelector = new DateSelector(this);
 
-  QFont font0;
-  font0.setPixelSize(11);
-  font0.setBold(true);
-  mw_one->ui->cboxY1->setFont(font0);
-  mw_one->ui->cboxY2->setFont(font0);
-  mw_one->ui->cboxM1->setFont(font0);
-  mw_one->ui->cboxM2->setFont(font0);
-  mw_one->ui->cboxD1->setFont(font0);
-  mw_one->ui->cboxD2->setFont(font0);
-  mw_one->ui->label->setFont(font0);
-
   twOut2Img = new QTreeWidget;
   twOut2Img->setColumnCount(3);
 
@@ -107,15 +96,15 @@ void dlgReport::init() {
         mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
         "(" + mw_one->ui->btnYear->text() + "-" + mw_one->ui->btnMonth->text() +
         ")");
-  if (isDateSection)
+
+  if (isDateSection) {
+    QStringList listStart = mw_one->ui->btnStartDate->text().split("  ");
+    QStringList listEnd = mw_one->ui->btnEndDate->text().split("  ");
     mw_one->ui->lblTitle_Report->setText(
         mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
-        "(" + mw_one->ui->cboxY1->currentText() + "-" +
-        mw_one->ui->cboxM1->currentText() + "-" +
-        mw_one->ui->cboxD1->currentText() + "~" +
-        mw_one->ui->cboxY2->currentText() + "-" +
-        mw_one->ui->cboxM2->currentText() + "-" +
-        mw_one->ui->cboxD2->currentText() + ")");
+        "(" + listStart.at(0) + "-" + listStart.at(1) + "-" + listStart.at(2) +
+        "~" + listEnd.at(0) + "-" + listEnd.at(1) + "-" + listEnd.at(2) + ")");
+  }
 }
 
 dlgReport::~dlgReport() { delete ui; }
@@ -153,61 +142,24 @@ void dlgReport::closeEvent(QCloseEvent* event) {
 }
 
 void dlgReport::on_btnYear_clicked() {
+  myDateSelector->dateFlag = 1;
   mw_one->ui->lblDetails->setText(tr("Details"));
-  int w = mw_one->ui->btnYear->width() + 1;
-  QListWidget* list = new QListWidget(mw_one);
-  list->setStyleSheet(mw_one->listStyle);
-  QFont font;
-  font.setPointSize(fontSize);
-  list->setFont(font);
-  int cy = QDate::currentDate().year();
-  QStringList strList;
-  for (int i = 2022; i <= cy; i++) {
-    strList.append(QString::number(i));
-  }
 
-  for (int i = 0; i < strList.count(); i++) {
-    QListWidgetItem* item = new QListWidgetItem;
-    item->setSizeHint(QSize(w - 10, 30));  // item->sizeHint().width()
-    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    item->setText(strList.at(i));
-    list->addItem(item);
-  }
-  connect(list, &QListWidget::itemClicked, [=]() {
-    mw_one->ui->btnYear->setText(list->currentItem()->text());
-    btnYearText = mw_one->ui->btnYear->text();
-    list->close();
+  myDateSelector->ui->hsYear->setValue(mw_one->ui->btnYear->text().toInt());
+  myDateSelector->ui->gboxYear->setTitle(mw_one->ui->btnYear->text() +
+                                         tr("Year"));
 
-    isWholeMonth = true;
-    isDateSection = false;
-    mw_one->ui->lblTitle_Report->setText(
-        mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
-        "(" + mw_one->ui->btnYear->text() + "-" + mw_one->ui->btnMonth->text() +
-        ")");
-    listCategory.clear();
-    mw_one->startInitReport();
-  });
-
-  int h = 30 * list->count() + 4;
-  int y = mw_one->ui->btnYear->y();
-
-  list->setGeometry(mw_one->ui->btnYear->x(), y, w, h);
-
-  list->show();
-
-  QString str = mw_one->ui->btnYear->text();
-  for (int i = 0; i < list->count(); i++) {
-    if (str == list->item(i)->text()) {
-      list->setCurrentRow(i);
-      break;
-    }
-  }
+  myDateSelector->ui->gboxMonth->hide();
+  myDateSelector->ui->gboxDay->hide();
+  myDateSelector->ui->gboxYear->setHidden(false);
+  myDateSelector->setFixedHeight(240);
 
   myDateSelector->init();
 }
 
-void dlgReader::startReport1() {
+void dlgReport::startReport1() {
   btnYearText = mw_one->ui->btnYear->text();
+  btnMonthText = mw_one->ui->btnMonth->text();
 
   isWholeMonth = true;
   isDateSection = false;
@@ -216,6 +168,31 @@ void dlgReader::startReport1() {
       "(" + mw_one->ui->btnYear->text() + "-" + mw_one->ui->btnMonth->text() +
       ")");
   listCategory.clear();
+  mw_one->startInitReport();
+}
+
+void dlgReport::startReport2() {
+  isWholeMonth = false;
+  isDateSection = true;
+  listCategory.clear();
+
+  QString start = mw_one->ui->btnStartDate->text();
+  QString end = mw_one->ui->btnEndDate->text();
+  QStringList listStart = start.split("  ");
+  QStringList listEnd = end.split("  ");
+
+  s_y1 = listStart.at(0).toInt();
+  s_m1 = listStart.at(1).toInt();
+  s_d1 = listStart.at(2).toInt();
+  s_y2 = listEnd.at(0).toInt();
+  s_m2 = listEnd.at(1).toInt();
+  s_d2 = listEnd.at(2).toInt();
+
+  mw_one->ui->lblTitle_Report->setText(
+      mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
+      "(" + listStart.at(0) + "-" + listStart.at(1) + "-" + listStart.at(2) +
+      "~" + listEnd.at(0) + "-" + listEnd.at(1) + "-" + listEnd.at(2) + ")");
+
   mw_one->startInitReport();
 }
 
@@ -359,71 +336,20 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
 }
 
 void dlgReport::on_btnMonth_clicked() {
+  myDateSelector->dateFlag = 2;
+  myDateSelector->ui->hsMonth->setMaximum(13);
   mw_one->ui->lblDetails->setText(tr("Details"));
-
-  myDateSelector->ui->hsYear->setValue(mw_one->ui->btnYear->text().toInt());
-  myDateSelector->ui->gboxYear->setTitle(tr("Year") + " : " +
-                                         mw_one->ui->btnYear->text());
 
   if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
     myDateSelector->ui->hsMonth->setValue(13);
   else
     myDateSelector->ui->hsMonth->setValue(mw_one->ui->btnMonth->text().toInt());
+  myDateSelector->ui->gboxYear->hide();
   myDateSelector->ui->gboxDay->hide();
+  myDateSelector->ui->gboxMonth->setHidden(false);
+  myDateSelector->setFixedHeight(240);
 
   myDateSelector->init();
-  /*int w = mw_one->ui->btnMonth->width() + 1;
-
-  QListWidget* list = new QListWidget(mw_one);
-  list->setStyleSheet(mw_one->listStyle);
-  QFont font;
-  font.setPointSize(fontSize);
-  list->setFont(font);
-
-  QStringList strList = mw_one->listMonth;
-
-  for (int i = 0; i < strList.count(); i++) {
-    QListWidgetItem* item = new QListWidgetItem;
-    item->setSizeHint(QSize(w - 10, 30));  // item->sizeHint().width()
-    item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    item->setText(strList.at(i));
-    list->addItem(item);
-  }
-  QListWidgetItem* item = new QListWidgetItem;
-  item->setSizeHint(QSize(w - 10, 30));
-  item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  item->setText(tr("Year-Round"));
-  list->addItem(item);
-
-  connect(list, &QListWidget::itemClicked, [=]() {
-    mw_one->ui->btnMonth->setText(list->currentItem()->text());
-    btnMonthText = mw_one->ui->btnMonth->text();
-    list->close();
-
-    isWholeMonth = true;
-    isDateSection = false;
-    mw_one->ui->lblTitle_Report->setText(
-        mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
-        "(" + mw_one->ui->btnYear->text() + "-" + mw_one->ui->btnMonth->text() +
-        ")");
-    listCategory.clear();
-    mw_one->startInitReport();
-  });
-
-  int h = 30 * list->count() + 4;
-  int y = mw_one->ui->btnMonth->y();
-
-  list->setGeometry(mw_one->ui->btnMonth->x(), y, w, h);
-
-  list->show();
-
-  QString str = mw_one->ui->btnMonth->text();
-  for (int i = 0; i < myDateSelector->ui->hsYear->maximum(); i++) {
-    if (str == list->item(i)->text()) {
-      list->setCurrentRow(i);
-      break;
-    }
-  }*/
 }
 
 void dlgReport::saveYMD() {
@@ -437,12 +363,15 @@ void dlgReport::saveYMD() {
   Reg.setValue("/YMD/btnMText", btnMText);
   Reg.setValue("/YMD/btnDText", btnDText);
 
-  Reg.setValue("/YMD/Y1", mw_one->ui->cboxY1->currentIndex());
-  Reg.setValue("/YMD/Y2", mw_one->ui->cboxY2->currentIndex());
-  Reg.setValue("/YMD/M1", mw_one->ui->cboxM1->currentIndex());
-  Reg.setValue("/YMD/M2", mw_one->ui->cboxM2->currentIndex());
-  Reg.setValue("/YMD/D1", mw_one->ui->cboxD1->currentIndex());
-  Reg.setValue("/YMD/D2", mw_one->ui->cboxD2->currentIndex());
+  QStringList list1, list2;
+  list1 = mw_one->ui->btnStartDate->text().split("  ");
+  list2 = mw_one->ui->btnEndDate->text().split("  ");
+  Reg.setValue("/YMD/Y1", list1.at(0));
+  Reg.setValue("/YMD/Y2", list2.at(0));
+  Reg.setValue("/YMD/M1", list1.at(1));
+  Reg.setValue("/YMD/M2", list2.at(1));
+  Reg.setValue("/YMD/D1", list1.at(2));
+  Reg.setValue("/YMD/D2", list2.at(2));
 
   Reg.setValue("/YMD/isWholeMonth", isWholeMonth);
   Reg.setValue("/YMD/isDateSection", isDateSection);

@@ -419,7 +419,6 @@ MainWindow::MainWindow(QWidget *parent)
   loading = true;
   init_UIWidget();
   init_ChartWidget();
-  init_report_widget_year();
   init_Options();
   init_Sensors();
   init_TotalData();
@@ -677,19 +676,21 @@ void MainWindow::init_Options() {
   btnMonthText = Reg2.value("/YMD/btnMonthText", tr("Month")).toString();
   ui->btnMonth->setText(btnMonthText);
 
-  ui->cboxY1->setCurrentIndex(Reg2.value("/YMD/Y1", 0).toInt());
-  ui->cboxY2->setCurrentIndex(Reg2.value("/YMD/Y2", 0).toInt());
-  ui->cboxM1->setCurrentIndex(Reg2.value("/YMD/M1", 0).toInt());
-  ui->cboxM2->setCurrentIndex(Reg2.value("/YMD/M2", 0).toInt());
-  ui->cboxD1->setCurrentIndex(Reg2.value("/YMD/D1", 0).toInt());
-  ui->cboxD2->setCurrentIndex(Reg2.value("/YMD/D2", 0).toInt());
+  s_y1 = Reg2.value("/YMD/Y1", 0).toInt();
+  s_y2 = Reg2.value("/YMD/Y2", 0).toInt();
+  s_m1 = Reg2.value("/YMD/M1", 0).toInt();
+  s_m2 = Reg2.value("/YMD/M2", 0).toInt();
+  s_d1 = Reg2.value("/YMD/D1", 0).toInt();
+  s_d2 = Reg2.value("/YMD/D2", 0).toInt();
 
-  s_y1 = ui->cboxY1->currentText().toInt();
-  s_y2 = ui->cboxY2->currentText().toInt();
-  s_m1 = ui->cboxM1->currentText().toInt();
-  s_m2 = ui->cboxM2->currentText().toInt();
-  s_d1 = ui->cboxD1->currentText().toInt();
-  s_d2 = ui->cboxD2->currentText().toInt();
+  ui->btnStartDate->setText(QString::number(s_y1) + "  " +
+                            QString("%1").arg(s_m1, 2, 10, QLatin1Char('0')) +
+                            "  " +
+                            QString("%1").arg(s_d1, 2, 10, QLatin1Char('0')));
+  ui->btnEndDate->setText(QString::number(s_y2) + "  " +
+                          QString("%1").arg(s_m2, 2, 10, QLatin1Char('0')) +
+                          "  " +
+                          QString("%1").arg(s_d2, 2, 10, QLatin1Char('0')));
 
   isWholeMonth = Reg2.value("/YMD/isWholeMonth", 1).toBool();
   isDateSection = Reg2.value("/YMD/isDateSection", 0).toBool();
@@ -5123,50 +5124,6 @@ void MainWindow::on_btnPDF_clicked() { mydlgMainNotes->on_btnPDF_clicked(); }
 
 void MainWindow::on_btnPasteTodo_clicked() { ui->editTodo->paste(); }
 
-void MainWindow::on_cboxY1_activated(int index) {
-  Q_UNUSED(index);
-  if (!initMain) {
-    isWholeMonth = false;
-    isDateSection = true;
-    listCategory.clear();
-
-    s_y1 = ui->cboxY1->currentText().toInt();
-    s_m1 = ui->cboxM1->currentText().toInt();
-    s_d1 = ui->cboxD1->currentText().toInt();
-    s_y2 = ui->cboxY2->currentText().toInt();
-    s_m2 = ui->cboxM2->currentText().toInt();
-    s_d2 = ui->cboxD2->currentText().toInt();
-
-    ui->lblTitle_Report->setText(
-        ui->tabWidget->tabText(ui->tabWidget->currentIndex()) + "(" +
-        ui->cboxY1->currentText() + "-" + ui->cboxM1->currentText() + "-" +
-        ui->cboxD1->currentText() + "~" + ui->cboxY2->currentText() + "-" +
-        ui->cboxM2->currentText() + "-" + ui->cboxD2->currentText() + ")");
-
-    startInitReport();
-  }
-}
-
-void MainWindow::on_cboxM1_activated(int index) { on_cboxY1_activated(index); }
-
-void MainWindow::on_cboxD1_activated(int index) { on_cboxY1_activated(index); }
-
-void MainWindow::on_cboxY2_activated(int index) { on_cboxY1_activated(index); }
-
-void MainWindow::on_cboxM2_activated(int index) { on_cboxY1_activated(index); }
-
-void MainWindow::on_cboxD2_activated(int index) { on_cboxY1_activated(index); }
-
-void MainWindow::init_report_widget_year() {
-  int cy = QDate::currentDate().year();
-  ui->cboxY1->clear();
-  ui->cboxY2->clear();
-  for (int i = 2022; i <= cy; i++) {
-    ui->cboxY1->addItem(QString::number(i));
-    ui->cboxY2->addItem(QString::number(i));
-  }
-}
-
 int MainWindow::getMaxDay(QString sy, QString sm) {
   int maxDay = 0;
   for (int i = 0; i < 50; i++) {
@@ -5179,4 +5136,12 @@ int MainWindow::getMaxDay(QString sy, QString sm) {
   }
 
   return maxDay;
+}
+
+void MainWindow::on_btnStartDate_clicked() {
+  mydlgReport->myDateSelector->initStartEndDate("start");
+}
+
+void MainWindow::on_btnEndDate_clicked() {
+  mydlgReport->myDateSelector->initStartEndDate("end");
 }

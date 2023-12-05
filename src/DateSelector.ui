@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
-    <height>338</height>
+    <width>347</width>
+    <height>519</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,22 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">
     <widget class="QGroupBox" name="gboxDay">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>30</pointsize>
+      </font>
+     </property>
      <property name="title">
       <string>Day</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
@@ -26,6 +40,12 @@
          <size>
           <width>0</width>
           <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="minimum">
@@ -47,8 +67,22 @@
    </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="gboxYear">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>30</pointsize>
+      </font>
+     </property>
      <property name="title">
       <string>Year</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="1" column="0">
@@ -130,8 +164,22 @@ QSlider::handle:horizontal:disabled {
    </item>
    <item row="1" column="0">
     <widget class="QGroupBox" name="gboxMonth">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>30</pointsize>
+      </font>
+     </property>
      <property name="title">
       <string>Month</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">

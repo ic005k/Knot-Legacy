@@ -46,27 +46,88 @@ void DateSelector::init() {
 }
 
 void DateSelector::on_hsYear_valueChanged(int value) {
-  ui->gboxYear->setTitle(tr("Year") + " : " + QString::number(value));
+  ui->gboxYear->setTitle(QString::number(value) + "  " + tr("Year"));
 }
 
 void DateSelector::on_hsMonth_valueChanged(int value)
 
 {
   if (value == 13)
-    ui->gboxMonth->setTitle(tr("Month") + " : " + tr("Year-Round"));
-  else
-    ui->gboxMonth->setTitle(tr("Month") + " : " + QString::number(value));
+    ui->gboxMonth->setTitle(QString::number(ui->hsYear->value()) + "  " +
+                            tr("Year-Round"));
+  else {
+    ui->gboxMonth->setTitle(QString::number(value) + "  " + tr("Month"));
+  }
 }
 
 void DateSelector::on_hsDay_valueChanged(int value) {
-  ui->gboxDay->setTitle(tr("Day") + " : " + QString::number(value));
+  ui->gboxDay->setTitle(QString::number(value) + "  " + tr("Day"));
 }
 
 void DateSelector::on_btnOk_clicked() {
-  mw_one->ui->btnYear->setText(QString::number(ui->hsYear->value()));
-  if (ui->hsMonth->value() == 13)
-    mw_one->ui->btnMonth->setText(tr("Year-Round"));
-  else
-    mw_one->ui->btnMonth->setText(QString::number(ui->hsMonth->value()));
+  QString y, m, d;
+  y = QString::number(ui->hsYear->value());
+  m = QString::number(ui->hsMonth->value());
+  d = QString::number(ui->hsDay->value());
+  if (m.length() == 1) m = "0" + m;
+  if (d.length() == 1) d = "0" + d;
+
+  if (dateFlag == 1) mw_one->ui->btnYear->setText(y);
+
+  if (dateFlag == 2) {
+    int value = ui->hsMonth->value();
+    if (value == 13)
+      mw_one->ui->btnMonth->setText(tr("Year-Round"));
+    else {
+      mw_one->ui->btnMonth->setText(m);
+    }
+  }
+
+  if (dateFlag == 1 || dateFlag == 2) mw_one->mydlgReport->startReport1();
+
+  if (dateFlag == 3) {
+    mw_one->ui->btnStartDate->setText(y + "  " + m + "  " + d);
+  }
+
+  if (dateFlag == 4) {
+    mw_one->ui->btnEndDate->setText(y + "  " + m + "  " + d);
+  }
+
+  if (dateFlag == 3 || dateFlag == 4) mw_one->mydlgReport->startReport2();
+
   close();
+}
+
+void DateSelector::initStartEndDate(QString flag) {
+  ui->hsMonth->setMaximum(12);
+  ui->hsYear->setValue(2030);
+  ui->hsMonth->setValue(8);
+  ui->hsDay->setValue(8);
+
+  QString str;
+  if (flag == "start") {
+    str = mw_one->ui->btnStartDate->text();
+    dateFlag = 3;
+  }
+
+  if (flag == "end") {
+    str = mw_one->ui->btnEndDate->text();
+    dateFlag = 4;
+  }
+
+  QStringList list = str.split("  ");
+  int y, m, d;
+  y = list.at(0).toInt();
+  m = list.at(1).toInt();
+  d = list.at(2).toInt();
+  ui->hsYear->setValue(y);
+  ui->hsMonth->setValue(m);
+  ui->hsDay->setValue(d);
+
+  ui->gboxYear->setHidden(false);
+  ui->gboxMonth->setHidden(false);
+  ui->gboxDay->setHidden(false);
+
+  setFixedHeight(450);
+  init();
 }
