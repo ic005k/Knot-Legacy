@@ -44,6 +44,7 @@ android: {
 SOURCES += \
     src/AutoUpdate.cpp \
     src/CategoryList.cpp \
+    src/DateSelector.cpp \
     src/EditRecord.cpp \
     src/LoadPic.cpp \
     src/Notes.cpp \
@@ -77,6 +78,7 @@ SOURCES += \
 HEADERS += \
     src/AutoUpdate.h \
     src/CategoryList.h \
+    src/DateSelector.h \
     src/EditRecord.h \
     src/LoadPic.h \
     src/Notes.h \
@@ -111,6 +113,7 @@ HEADERS += \
 FORMS += \
     src/AutoUpdate.ui \
     src/CategoryList.ui \
+    src/DateSelector.ui \
     src/EditRecord.ui \
     src/LoadPic.ui \
     src/Notes.ui \

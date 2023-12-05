@@ -10,6 +10,8 @@
 #include <QTableWidgetItem>
 #include <QTreeWidget>
 
+#include "DateSelector.h"
+
 namespace Ui {
 class dlgReport;
 }
@@ -22,6 +24,7 @@ class dlgReport : public QDialog {
   ~dlgReport();
   Ui::dlgReport *ui;
 
+  DateSelector *myDateSelector;
   static void saveYMD();
   QString str_xx;
   void getCategoryData(QString strCategory, bool appendTable);

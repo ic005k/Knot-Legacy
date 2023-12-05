@@ -3,6 +3,7 @@
 #include <qdebug.h>
 
 #include "mainwindow.h"
+#include "ui_DateSelector.h"
 #include "ui_Report.h"
 #include "ui_mainwindow.h"
 
@@ -30,6 +31,8 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
 
   this->installEventFilter(this);
   this->setModal(true);
+
+  myDateSelector = new DateSelector(this);
 
   QFont font0;
   font0.setPixelSize(11);
@@ -199,6 +202,21 @@ void dlgReport::on_btnYear_clicked() {
       break;
     }
   }
+
+  myDateSelector->init();
+}
+
+void dlgReader::startReport1() {
+  btnYearText = mw_one->ui->btnYear->text();
+
+  isWholeMonth = true;
+  isDateSection = false;
+  mw_one->ui->lblTitle_Report->setText(
+      mw_one->ui->tabWidget->tabText(mw_one->ui->tabWidget->currentIndex()) +
+      "(" + mw_one->ui->btnYear->text() + "-" + mw_one->ui->btnMonth->text() +
+      ")");
+  listCategory.clear();
+  mw_one->startInitReport();
 }
 
 void dlgReport::updateTable() {
@@ -342,7 +360,19 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
 
 void dlgReport::on_btnMonth_clicked() {
   mw_one->ui->lblDetails->setText(tr("Details"));
-  int w = mw_one->ui->btnMonth->width() + 1;
+
+  myDateSelector->ui->hsYear->setValue(mw_one->ui->btnYear->text().toInt());
+  myDateSelector->ui->gboxYear->setTitle(tr("Year") + " : " +
+                                         mw_one->ui->btnYear->text());
+
+  if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
+    myDateSelector->ui->hsMonth->setValue(13);
+  else
+    myDateSelector->ui->hsMonth->setValue(mw_one->ui->btnMonth->text().toInt());
+  myDateSelector->ui->gboxDay->hide();
+
+  myDateSelector->init();
+  /*int w = mw_one->ui->btnMonth->width() + 1;
 
   QListWidget* list = new QListWidget(mw_one);
   list->setStyleSheet(mw_one->listStyle);
@@ -388,12 +418,12 @@ void dlgReport::on_btnMonth_clicked() {
   list->show();
 
   QString str = mw_one->ui->btnMonth->text();
-  for (int i = 0; i < list->count(); i++) {
+  for (int i = 0; i < myDateSelector->ui->hsYear->maximum(); i++) {
     if (str == list->item(i)->text()) {
       list->setCurrentRow(i);
       break;
     }
-  }
+  }*/
 }
 
 void dlgReport::saveYMD() {

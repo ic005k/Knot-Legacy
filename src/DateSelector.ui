@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DateSelector</class>
+ <widget class="QDialog" name="DateSelector">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>261</width>
+    <height>338</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Date Selector</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="gboxDay">
+     <property name="title">
+      <string>Day</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="QSlider" name="hsDay">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>31</number>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="gboxYear">
+     <property name="title">
+      <string>Year</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="0">
+       <widget class="QSlider" name="hsYear">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QSlider::groove:horizontal {
+  border: 0px solid #bbb;
+}
+ 
+QSlider::sub-page:horizontal {
+  background: rgb(255,25,0);
+  border-radius: 0px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+ 
+QSlider::add-page:horizontal {
+  background: rgb(100,100,100);
+  border: 0px solid #777; 
+  border-radius: 2px; 
+  margin-top: 15px; 
+  margin-bottom: 15px; 
+}
+ 
+QSlider::handle:horizontal { 
+  background: rgb(255,255,255); 
+  border: 1px solid rgba(10,10,10,255); 
+  width: 25px; 
+  height: 15px; 
+  border-radius: 5px; 
+  margin-top: 5px; 
+  margin-bottom: 5px; 
+}
+ 
+QSlider::handle:horizontal:hover { 
+  background: rgb(255,25,0); 
+  border: 1px solid rgba(25,25,25,255); 
+  border-radius: 5px; 
+}
+ 
+QSlider::sub-page:horizontal:disabled { 
+  background: #bbb; 
+  border-color: #999; 
+}
+ 
+QSlider::add-page:horizontal:disabled { 
+  background: #eee; 
+  border-color: #999; 
+}
+ 
+QSlider::handle:horizontal:disabled { 
+  background: #eee; 
+  border: 1px solid #aaa; 
+  border-radius: 4px; 
+}</string>
+        </property>
+        <property name="minimum">
+         <number>2022</number>
+        </property>
+        <property name="maximum">
+         <number>5022</number>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="gboxMonth">
+     <property name="title">
+      <string>Month</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QSlider" name="hsMonth">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>13</number>
+        </property>
+        <property name="pageStep">
+         <number>1</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QToolButton" name="btnOk">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>35</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Ok</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
