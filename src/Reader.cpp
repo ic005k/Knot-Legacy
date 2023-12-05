@@ -190,8 +190,7 @@ void dlgReader::startOpenFile(QString openfile) {
   if (QFile(openfile).exists()) {
     isEBook = true;
     strTitle = "";
-    mw_one->ui->btnPages->setText(tr("Pages") + "\n" + QString::number(0) +
-                                  " / " + QString::number(0));
+    mw_one->ui->btnPages->setText(tr("Pages") + "\n1\n1");
     mw_one->ui->progReader->setValue(0);
     mw_one->ui->btnReader->setEnabled(false);
     mw_one->ui->frameReaderFun->setEnabled(false);
