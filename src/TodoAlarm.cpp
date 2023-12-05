@@ -91,7 +91,7 @@ void msgDialog::setBtnTitle() {
 }
 
 bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnOK_clicked();

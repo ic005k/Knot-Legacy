@@ -26,7 +26,7 @@ AutoUpdateDialog::AutoUpdateDialog(QWidget* parent)
 }
 
 bool AutoUpdateDialog::eventFilter(QObject* watch, QEvent* evn) {
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       return false;
@@ -38,7 +38,7 @@ bool AutoUpdateDialog::eventFilter(QObject* watch, QEvent* evn) {
 
 AutoUpdateDialog::~AutoUpdateDialog() { delete ui; }
 
-void AutoUpdateDialog::doProcessReadyRead()  //读取并写入
+void AutoUpdateDialog::doProcessReadyRead()  // 读取并写入
 {
   while (!reply->atEnd()) {
     QByteArray ba = reply->readAll();
@@ -104,13 +104,13 @@ void AutoUpdateDialog::startDownload(QString strLink) {
   request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
 #endif
 
-  reply = manager->get(request);  //发送请求
+  reply = manager->get(request);  // 发送请求
   connect(reply, &QNetworkReply::readyRead, this,
-          &AutoUpdateDialog::doProcessReadyRead);  //可读
+          &AutoUpdateDialog::doProcessReadyRead);  // 可读
   connect(reply, &QNetworkReply::finished, this,
           &AutoUpdateDialog::doProcessFinished);
   connect(reply, &QNetworkReply::downloadProgress, this,
-          &AutoUpdateDialog::doProcessDownloadProgress);  //大小
+          &AutoUpdateDialog::doProcessDownloadProgress);  // 大小
 
   filename = "Knot.apk";
 
@@ -127,7 +127,7 @@ void AutoUpdateDialog::startDownload(QString strLink) {
 
   myfile->setFileName(tarFile);
   bool ret =
-      myfile->open(QIODevice::WriteOnly | QIODevice::Truncate);  //创建文件
+      myfile->open(QIODevice::WriteOnly | QIODevice::Truncate);  // 创建文件
   if (!ret) {
     QMessageBox::warning(this, "warning", "Failed to open.");
     return;

@@ -2570,8 +2570,13 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameTodo->isHidden()) {
-        on_btnBackTodo_clicked();
-        return true;
+        if (!mw_one->mydlgMainNotes->m_SetEditText->isHidden()) {
+          mw_one->mydlgMainNotes->m_SetEditText->close();
+          return true;
+        } else {
+          on_btnBackTodo_clicked();
+          return true;
+        }
       }
 
       if (!ui->frameRecycle->isHidden()) {

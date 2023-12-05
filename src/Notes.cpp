@@ -287,7 +287,7 @@ bool dlgMainNotes::eventFilter(QObject *obj, QEvent *evn) {
     getEditPanel(ui->editSource, evn);
   }
 
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!m_SetEditText->isHidden()) {

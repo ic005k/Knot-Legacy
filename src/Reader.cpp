@@ -70,7 +70,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
 dlgReader::~dlgReader() { delete ui; }
 
 bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
     }

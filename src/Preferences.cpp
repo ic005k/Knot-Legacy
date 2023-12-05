@@ -54,7 +54,7 @@ void dlgPreferences::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
 bool dlgPreferences::eventFilter(QObject* watch, QEvent* evn) {
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnBack_clicked();

@@ -23,7 +23,7 @@ void dlgSetText::init(int x, int y, int w, int h) {
 }
 
 bool dlgSetText::eventFilter(QObject *watch, QEvent *evn) {
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       close();

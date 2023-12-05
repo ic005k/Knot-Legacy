@@ -75,11 +75,16 @@ bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
     mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
   }
 
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      on_btnBack_clicked();
-      return true;
+      if (!mw_one->mydlgMainNotes->m_SetEditText->isHidden()) {
+        mw_one->mydlgMainNotes->m_SetEditText->close();
+        return true;
+      } else {
+        on_btnBack_clicked();
+        return true;
+      }
     }
   }
 

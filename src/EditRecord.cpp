@@ -303,7 +303,10 @@ bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!m_List->isHidden()) {
+      if (!mw_one->mydlgMainNotes->m_SetEditText->isHidden()) {
+        mw_one->mydlgMainNotes->m_SetEditText->close();
+        return true;
+      } else if (!m_List->isHidden()) {
         m_List->close();
         mw_one->closeGrayWindows();
 

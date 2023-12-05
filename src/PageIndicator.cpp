@@ -87,7 +87,7 @@ void dlgFloatFun::setY(int y) {
 }
 
 bool dlgFloatFun::eventFilter(QObject* watch, QEvent* evn) {
-  if (evn->type() == QEvent::KeyPress) {
+  if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       return true;
