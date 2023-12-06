@@ -56,6 +56,7 @@ SOURCES += \
     src/ReaderFun.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
+    src/RollingBox.cpp \
     src/SearchDialog.cpp \
     src/SetEditText.cpp \
     src/SetReaderText.cpp \
@@ -90,6 +91,7 @@ HEADERS += \
     src/ReaderFun.h \
     src/RemarksAbout.h \
     src/Report.h \
+    src/RollingBox.h \
     src/SearchDialog.h \
     src/SetEditText.h \
     src/SetReaderText.h \

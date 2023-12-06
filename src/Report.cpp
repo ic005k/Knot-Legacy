@@ -150,8 +150,8 @@ void dlgReport::closeEvent(QCloseEvent* event) {
 void dlgReport::on_btnYear_clicked() {
   myDateSelector->dateFlag = 1;
   mw_one->ui->lblDetails->setText(tr("Details"));
-  myDateSelector->ui->hsYear->setValue(2122);
-  myDateSelector->ui->hsYear->setValue(mw_one->ui->btnYear->text().toInt());
+
+  myDateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
 
   myDateSelector->init();
 }
@@ -336,15 +336,13 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
 
 void dlgReport::on_btnMonth_clicked() {
   myDateSelector->dateFlag = 2;
-  myDateSelector->ui->hsMonth->setMaximum(13);
   mw_one->ui->lblDetails->setText(tr("Details"));
 
-  myDateSelector->ui->hsYear->setValue(mw_one->ui->btnYear->text().toInt());
-  myDateSelector->ui->hsMonth->setValue(3);
+  myDateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
   if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
-    myDateSelector->ui->hsMonth->setValue(13);
+    myDateSelector->rboxMonth->setValue(13);
   else
-    myDateSelector->ui->hsMonth->setValue(mw_one->ui->btnMonth->text().toInt());
+    myDateSelector->rboxMonth->setValue(mw_one->ui->btnMonth->text().toInt());
 
   myDateSelector->init();
 }

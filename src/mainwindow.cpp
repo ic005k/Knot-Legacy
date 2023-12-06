@@ -3274,7 +3274,7 @@ void MainWindow::on_actionPreferences_triggered() {
                         height());
   mydlgPre->setModal(true);
   mydlgPre->ui->sliderFontSize->setStyleSheet(
-      mydlgReport->myDateSelector->ui->hsYear->styleSheet());
+      myEditRecord->ui->hsM->styleSheet());
   mydlgPre->show();
 }
 

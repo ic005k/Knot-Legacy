@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QKeyEvent>
 
+#include "RollingBox.h"
+
 namespace Ui {
 class DateSelector;
 }
@@ -14,8 +16,9 @@ class DateSelector : public QDialog {
  public:
   explicit DateSelector(QWidget *parent = nullptr);
   ~DateSelector();
-
   Ui::DateSelector *ui;
+
+  RollingBox *rboxYear, *rboxMonth, *rboxDay;
 
   int dateFlag = 0; /*1=btnYeat 2=btnMonth 3=btnStartDate 4=btnEnDate*/
 
@@ -36,6 +39,7 @@ class DateSelector : public QDialog {
   void on_btnOk_clicked();
 
  private:
+  void initRBox(RollingBox *rbox);
 };
 
 #endif  // DATESELECTOR_H

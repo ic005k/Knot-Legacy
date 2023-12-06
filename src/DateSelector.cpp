@@ -11,10 +11,23 @@ DateSelector::DateSelector(QWidget *parent)
   ui->setupUi(this);
   this->installEventFilter(this);
 
-  ui->hsMonth->setStyleSheet(ui->hsYear->styleSheet());
-  ui->hsDay->setStyleSheet(ui->hsYear->styleSheet());
+  rboxYear = new RollingBox(this);
+  rboxMonth = new RollingBox(this);
+  rboxDay = new RollingBox(this);
+  initRBox(rboxYear);
+  initRBox(rboxMonth);
+  initRBox(rboxDay);
+
+  ui->gboxYear->layout()->addWidget(rboxYear);
+  ui->gboxMonth->layout()->addWidget(rboxMonth);
+  ui->gboxDay->layout()->addWidget(rboxDay);
 
   setModal(true);
+}
+
+void DateSelector::initRBox(RollingBox *rbox) {
+  rbox->setFixedHeight(50);
+  rbox->setFixedWidth(258);
 }
 
 DateSelector::~DateSelector() { delete ui; }
@@ -33,7 +46,7 @@ bool DateSelector::eventFilter(QObject *watch, QEvent *evn) {
 
 void DateSelector::init() {
   int cy = QDate::currentDate().year();
-  ui->hsYear->setMaximum(cy);
+  rboxYear->setRange(2022, cy);
 
   if (dateFlag == 1) {
     ui->gboxMonth->hide();
@@ -44,6 +57,7 @@ void DateSelector::init() {
     ui->lblMonth->hide();
     ui->lblDay->hide();
     ui->lblFlag->hide();
+
     setFixedHeight(200);
   }
 
@@ -56,6 +70,8 @@ void DateSelector::init() {
     ui->lblYear->hide();
     ui->lblDay->hide();
     ui->lblFlag->hide();
+
+    rboxMonth->setRange(1, 13);
     setFixedHeight(200);
   }
 
@@ -66,7 +82,10 @@ void DateSelector::init() {
     if (dateFlag == 3) ui->lblFlag->setText(tr("Start Date"));
     if (dateFlag == 4) ui->lblFlag->setText(tr("End Date"));
     ui->lblFlag->setHidden(false);
-    setFixedHeight(450);
+
+    rboxMonth->setRange(1, 12);
+    rboxDay->setRange(1, 31);
+    setFixedHeight(490);
   }
 
   setFixedWidth(mw_one->width() - 40);
@@ -88,7 +107,7 @@ void DateSelector::on_hsMonth_valueChanged(int value)
 
 {
   if (value == 13)
-    ui->lblMonth->setText(QString::number(ui->hsYear->value()) + "  " +
+    ui->lblMonth->setText(QString::number(rboxMonth->readValue()) + "  " +
                           tr("Year-Round"));
   else {
     ui->lblMonth->setText(QString::number(value) + "  " + tr("Month"));
@@ -101,16 +120,16 @@ void DateSelector::on_hsDay_valueChanged(int value) {
 
 void DateSelector::on_btnOk_clicked() {
   QString y, m, d;
-  y = QString::number(ui->hsYear->value());
-  m = QString::number(ui->hsMonth->value());
-  d = QString::number(ui->hsDay->value());
+  y = QString::number(rboxYear->readValue());
+  m = QString::number(rboxMonth->readValue());
+  d = QString::number(rboxDay->readValue());
   if (m.length() == 1) m = "0" + m;
   if (d.length() == 1) d = "0" + d;
 
   if (dateFlag == 1) mw_one->ui->btnYear->setText(y);
 
   if (dateFlag == 2) {
-    int value = ui->hsMonth->value();
+    int value = rboxMonth->readValue();
     if (value == 13)
       mw_one->ui->btnMonth->setText(tr("Year-Round"));
     else {
@@ -134,11 +153,6 @@ void DateSelector::on_btnOk_clicked() {
 }
 
 void DateSelector::initStartEndDate(QString flag) {
-  ui->hsMonth->setMaximum(12);
-  ui->hsYear->setValue(2030);
-  ui->hsMonth->setValue(8);
-  ui->hsDay->setValue(8);
-
   QString str;
   if (flag == "start") {
     str = mw_one->ui->btnStartDate->text();
@@ -155,9 +169,9 @@ void DateSelector::initStartEndDate(QString flag) {
   y = list.at(0).toInt();
   m = list.at(1).toInt();
   d = list.at(2).toInt();
-  ui->hsYear->setValue(y);
-  ui->hsMonth->setValue(m);
-  ui->hsDay->setValue(d);
+  rboxYear->setValue(y);
+  rboxMonth->setValue(m);
+  rboxDay->setValue(d);
 
   ui->gboxYear->setHidden(false);
   ui->gboxMonth->setHidden(false);
