@@ -65,7 +65,7 @@ background-color:white; border: 1px solid rgb(125,125,125);
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>50</height>
+          <height>45</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -131,7 +131,7 @@ background-color:white; border: 1px solid rgb(125,125,125);
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>50</height>
+          <height>45</height>
          </size>
         </property>
         <property name="minimum">
@@ -191,7 +191,13 @@ background-color:white; border: 1px solid rgb(125,125,125);
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>50</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -200,7 +206,7 @@ background-color:white; border: 1px solid rgb(125,125,125);
 }
  
 QSlider::sub-page:horizontal {
-  background: rgb(235,100,100);
+  background: #1ABC9C;
   border-radius: 0px;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -209,7 +215,7 @@ QSlider::sub-page:horizontal {
 QSlider::add-page:horizontal {
   background: rgb(100,100,100);
   border: 0px solid #777; 
-  border-radius: 2px; 
+  border-radius: 0px; 
   margin-top: 15px; 
   margin-bottom: 15px; 
 }
@@ -219,7 +225,7 @@ QSlider::handle:horizontal {
   border: 1px solid rgba(10,10,10,255); 
   width: 25px; 
   height: 15px; 
-  border-radius: 5px; 
+  border-radius: 0px; 
   margin-top: 5px; 
   margin-bottom: 5px; 
 }
@@ -227,7 +233,7 @@ QSlider::handle:horizontal {
 QSlider::handle:horizontal:hover { 
   background: rgb(0,191,255); 
   border: 1px solid rgba(25,25,25,255); 
-  border-radius: 5px; 
+  border-radius: 0px; 
 }
  
 QSlider::sub-page:horizontal:disabled { 

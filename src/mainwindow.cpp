@@ -3273,7 +3273,8 @@ void MainWindow::on_actionPreferences_triggered() {
   mydlgPre->setGeometry(geometry().x(), geometry().y(), mydlgPre->width(),
                         height());
   mydlgPre->setModal(true);
-
+  mydlgPre->ui->sliderFontSize->setStyleSheet(
+      mydlgReport->myDateSelector->ui->hsYear->styleSheet());
   mydlgPre->show();
 }
 

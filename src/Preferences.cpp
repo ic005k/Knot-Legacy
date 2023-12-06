@@ -5,7 +5,7 @@
 #include "mainwindow.h"
 #include "ui_Preferences.h"
 #include "ui_mainwindow.h"
-extern QString iniFile, iniDir, privateDir, hsStyle, fontname;
+extern QString iniFile, iniDir, privateDir, fontname;
 extern MainWindow* mw_one;
 extern bool isBreak;
 extern int fontSize;
@@ -26,7 +26,6 @@ dlgPreferences::dlgPreferences(QWidget* parent)
   ui->sliderFontSize->setValue(fontSize);
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
-  hsStyle = ui->sliderFontSize->styleSheet();
 
   chkStyle = ui->chkAutoTime->styleSheet();
   ui->chkClose->setStyleSheet(chkStyle);

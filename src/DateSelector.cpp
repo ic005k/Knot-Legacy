@@ -14,9 +14,6 @@ DateSelector::DateSelector(QWidget *parent)
   ui->hsMonth->setStyleSheet(ui->hsYear->styleSheet());
   ui->hsDay->setStyleSheet(ui->hsYear->styleSheet());
 
-  int cy = QDate::currentDate().year();
-  ui->hsYear->setMaximum(cy + 2);
-
   setModal(true);
 }
 
@@ -35,6 +32,9 @@ bool DateSelector::eventFilter(QObject *watch, QEvent *evn) {
 }
 
 void DateSelector::init() {
+  int cy = QDate::currentDate().year();
+  ui->hsYear->setMaximum(cy);
+
   if (dateFlag == 1) {
     ui->gboxMonth->hide();
     ui->gboxDay->hide();

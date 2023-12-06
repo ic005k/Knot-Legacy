@@ -341,6 +341,7 @@ class MainWindow : public QMainWindow {
                          const QString &normalColor, const QString &focusColor);
   QString setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
                          const QString &normalColor, const QString &focusColor);
+
   static void SaveFile(QString);
 
   static void init_Stats(QTreeWidget *);

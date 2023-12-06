@@ -6,7 +6,6 @@
 
 extern MainWindow* mw_one;
 extern int fontSize;
-QString hsStyle;
 
 msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   ui->setupUi(this);

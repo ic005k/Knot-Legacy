@@ -25,6 +25,18 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="lblFontSize">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>42</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>42</height>
+         </size>
+        </property>
         <property name="text">
          <string>Font Size</string>
         </property>
@@ -32,40 +44,20 @@
       </item>
       <item>
        <widget class="QSlider" name="sliderFontSize">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>30</height>
+          <height>35</height>
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">QSlider::groove:horizontal 
-{ 
-	border: 1px solid #999999; 
-	height: 10px; 
-	margin: 0px 0;
-	left: 5px; 
-	right: 5px; 
-}  
-
-QSlider::add-page:horizontal
-{
-	background-color: gray;
-}
-
-QSlider::sub-page:horizontal
-{
-	background-color: gray;
-}
-
-QSlider::handle:horizontal
-{
-	border: 0px ;
-	border-image: url(:/res/qslider_btn.png);			
-	width: 25px; 
-	margin: -10px -5px -10px -5px; 
-	
-}</string>
+         <string notr="true"/>
         </property>
         <property name="minimum">
          <number>12</number>
