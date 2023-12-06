@@ -13,6 +13,13 @@
   <property name="windowTitle">
    <string>Date Selector</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#DateSelector{
+
+background-color:white; border: 1px solid #FF0000;
+
+}</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="4" column="0">
     <widget class="QToolButton" name="btnOk">
@@ -83,6 +90,11 @@
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="lblDay">
+        <property name="font">
+         <font>
+          <pointsize>28</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Day</string>
         </property>
@@ -138,6 +150,11 @@
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="lblMonth">
+        <property name="font">
+         <font>
+          <pointsize>28</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Month</string>
         </property>
@@ -245,6 +262,11 @@ QSlider::handle:horizontal:disabled {
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="lblYear">
+        <property name="font">
+         <font>
+          <pointsize>28</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Year</string>
         </property>

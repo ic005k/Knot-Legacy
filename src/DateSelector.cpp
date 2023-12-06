@@ -48,6 +48,7 @@ void DateSelector::init() {
     ui->lblMonth->hide();
     ui->lblDay->hide();
     ui->lblFlag->hide();
+    setFixedHeight(220);
   }
 
   if (dateFlag == 2) {
@@ -55,6 +56,7 @@ void DateSelector::init() {
     ui->lblYear->hide();
     ui->lblDay->hide();
     ui->lblFlag->hide();
+    setFixedHeight(220);
   }
 
   if (dateFlag == 3 || dateFlag == 4) {

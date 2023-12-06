@@ -156,7 +156,6 @@ void dlgReport::on_btnYear_clicked() {
   myDateSelector->ui->gboxMonth->hide();
   myDateSelector->ui->gboxDay->hide();
   myDateSelector->ui->gboxYear->setHidden(false);
-  myDateSelector->setFixedHeight(240);
 
   myDateSelector->init();
 }
@@ -344,6 +343,7 @@ void dlgReport::on_btnMonth_clicked() {
   myDateSelector->ui->hsMonth->setMaximum(13);
   mw_one->ui->lblDetails->setText(tr("Details"));
 
+  myDateSelector->ui->hsMonth->setValue(3);
   if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
     myDateSelector->ui->hsMonth->setValue(13);
   else
@@ -351,7 +351,6 @@ void dlgReport::on_btnMonth_clicked() {
   myDateSelector->ui->gboxYear->hide();
   myDateSelector->ui->gboxDay->hide();
   myDateSelector->ui->gboxMonth->setHidden(false);
-  myDateSelector->setFixedHeight(240);
 
   myDateSelector->init();
 }
