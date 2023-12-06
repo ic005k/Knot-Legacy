@@ -35,28 +35,28 @@ bool DateSelector::eventFilter(QObject *watch, QEvent *evn) {
 }
 
 void DateSelector::init() {
-  setFixedWidth(mw_one->width() - 40);
-  int x, y, w, h;
-  x = mw_one->geometry().x() + 20;
-  y = mw_one->geometry().y() + (mw_one->height() - height()) / 2;
-  w = width();
-  h = height();
-  setGeometry(x, y, w, h);
-
   if (dateFlag == 1) {
+    ui->gboxMonth->hide();
+    ui->gboxDay->hide();
+    ui->gboxYear->setHidden(false);
+
     ui->lblYear->setHidden(false);
     ui->lblMonth->hide();
     ui->lblDay->hide();
     ui->lblFlag->hide();
-    setFixedHeight(220);
+    setFixedHeight(200);
   }
 
   if (dateFlag == 2) {
+    ui->gboxYear->hide();
+    ui->gboxDay->hide();
+    ui->gboxMonth->setHidden(false);
+
     ui->lblMonth->setHidden(false);
     ui->lblYear->hide();
     ui->lblDay->hide();
     ui->lblFlag->hide();
-    setFixedHeight(220);
+    setFixedHeight(200);
   }
 
   if (dateFlag == 3 || dateFlag == 4) {
@@ -66,7 +66,16 @@ void DateSelector::init() {
     if (dateFlag == 3) ui->lblFlag->setText(tr("Start Date"));
     if (dateFlag == 4) ui->lblFlag->setText(tr("End Date"));
     ui->lblFlag->setHidden(false);
+    setFixedHeight(450);
   }
+
+  setFixedWidth(mw_one->width() - 40);
+  int x, y, w, h;
+  x = mw_one->geometry().x() + 20;
+  y = mw_one->geometry().y() + (mw_one->height() - height()) / 2;
+  w = width();
+  h = height();
+  setGeometry(x, y, w, h);
 
   show();
 }
@@ -154,6 +163,5 @@ void DateSelector::initStartEndDate(QString flag) {
   ui->gboxMonth->setHidden(false);
   ui->gboxDay->setHidden(false);
 
-  setFixedHeight(450);
   init();
 }

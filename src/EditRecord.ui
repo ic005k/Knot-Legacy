@@ -51,6 +51,9 @@ selection-background-color: lightblue;
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>
@@ -674,7 +677,7 @@ selection-background-color: lightblue;
 }
  
 QSlider::sub-page:horizontal {
-  background: rgb(255,25,0);
+  background: rgb(235,100,100);
   border-radius: 0px;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -699,7 +702,7 @@ QSlider::handle:horizontal {
 }
  
 QSlider::handle:horizontal:hover { 
-  background: rgb(255,25,0); 
+  background: rgb(0,191,255); 
   border: 1px solid rgba(25,25,25,255); 
   border-radius: 5px; 
 }

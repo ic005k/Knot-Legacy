@@ -153,10 +153,6 @@ void dlgReport::on_btnYear_clicked() {
   myDateSelector->ui->hsYear->setValue(2122);
   myDateSelector->ui->hsYear->setValue(mw_one->ui->btnYear->text().toInt());
 
-  myDateSelector->ui->gboxMonth->hide();
-  myDateSelector->ui->gboxDay->hide();
-  myDateSelector->ui->gboxYear->setHidden(false);
-
   myDateSelector->init();
 }
 
@@ -348,9 +344,6 @@ void dlgReport::on_btnMonth_clicked() {
     myDateSelector->ui->hsMonth->setValue(13);
   else
     myDateSelector->ui->hsMonth->setValue(mw_one->ui->btnMonth->text().toInt());
-  myDateSelector->ui->gboxYear->hide();
-  myDateSelector->ui->gboxDay->hide();
-  myDateSelector->ui->gboxMonth->setHidden(false);
 
   myDateSelector->init();
 }
