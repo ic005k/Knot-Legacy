@@ -283,6 +283,17 @@ class MainWindow : public QMainWindow {
       "#listWidget::item:hover {background-color: #f5f5f5;}"
       "#listWidget::item:selected {border-left: 5px solid #777777;}";
 
+  QString setPushButtonQss(
+      QToolButton *btn,                              // 按钮对象
+      int radius = 5,                                // 圆角半径
+      int padding = 8,                               // 间距
+      const QString &normalColor = "#34495E",        // 正常颜色
+      const QString &normalTextColor = "#FFFFFF",    // 文字颜色
+      const QString &hoverColor = "#4E6D8C",         // 悬停颜色
+      const QString &hoverTextColor = "#F0F0F0",     // 悬停文字颜色
+      const QString &pressedColor = "#2D3E50",       // 按下颜色
+      const QString &pressedTextColor = "#B8C6D1");  // 按下文字颜色
+
   QString vsbarStyle =
       "QScrollBar:vertical{"  // 垂直滑块整体
       "width:30px;"

@@ -263,8 +263,8 @@ void MainWindow::readEBookDone() {
     mydlgReport->updateTable();
     ui->lblTitle->setText(tabData->tabText(tabData->currentIndex()));
 
-    ui->btnCategory->setEnabled(false);
-    if (listCategory.count() > 0) ui->btnCategory->setEnabled(true);
+    ui->btnCategory->hide();
+    if (listCategory.count() > 0) ui->btnCategory->setHidden(false);
 
     ui->tableDetails->setHorizontalHeaderItem(
         0, new QTableWidgetItem(tr("Details")));
@@ -1289,7 +1289,11 @@ void MainWindow::set_btnStyle(QObject *parent) {
   QObjectList btnList = getAllToolButton(getAllUIControls(parent));
   for (int i = 0; i < btnList.count(); i++) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
-    btn->setStyleSheet(btnStyle);
+
+    if (btn != ui->btnBackNotes && btn != ui->btnEdit &&
+        btn != ui->btnNotesList && btn != ui->btnSetKey && btn != ui->btnPDF)
+      setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF",
+                       "#2483C7", "#A0DAFB");
   }
 }
 
@@ -3143,6 +3147,32 @@ QString MainWindow::setLineEditQss(QLineEdit *txt, int radius, int borderWidth,
 
   QString qss = list.join("");
   txt->setStyleSheet(qss);
+  return qss;
+}
+
+QString MainWindow::setPushButtonQss(QToolButton *btn, int radius, int padding,
+                                     const QString &normalColor,
+                                     const QString &normalTextColor,
+                                     const QString &hoverColor,
+                                     const QString &hoverTextColor,
+                                     const QString &pressedColor,
+                                     const QString &pressedTextColor) {
+  QStringList list;
+  list.append(QString("QToolButton{border-style:none;padding:%1px;border-"
+                      "radius:%2px;color:%3;background:%4;}")
+                  .arg(padding)
+                  .arg(radius)
+                  .arg(normalTextColor)
+                  .arg(normalColor));
+  list.append(QString("QToolButton:hover{color:%1;background:%2;}")
+                  .arg(hoverTextColor)
+                  .arg(hoverColor));
+  list.append(QString("QToolButton:pressed{color:%1;background:%2;}")
+                  .arg(pressedTextColor)
+                  .arg(pressedColor));
+
+  QString qss = list.join("");
+  btn->setStyleSheet(qss);
   return qss;
 }
 

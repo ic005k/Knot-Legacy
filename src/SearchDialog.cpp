@@ -13,15 +13,13 @@ QString searchStr;
 SearchDialog::SearchDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::SearchDialog) {
   ui->setupUi(this);
-
+  mw_one->set_btnStyle(this);
   setModal(true);
   this->installEventFilter(this);
   ui->editSearchText->installEventFilter(this);
 
   setWindowTitle(tr("Search"));
 
-  ui->btnBack->setStyleSheet(mw_one->btnStyle);
-  ui->btnSearch->setStyleSheet(mw_one->btnStyle);
   ui->btnClearText->setStyleSheet("border:none");
   mw_one->setLineEditQss(ui->editSearchText, 10, 1, "#4169E1", "#4169E1");
 
