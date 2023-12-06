@@ -23,32 +23,48 @@
         <translation>日期选择</translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="20"/>
-        <location filename="DateSelector.cpp" line="62"/>
+        <location filename="DateSelector.ui" line="87"/>
+        <location filename="DateSelector.cpp" line="88"/>
         <source>Day</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="51"/>
-        <location filename="DateSelector.cpp" line="49"/>
+        <location filename="DateSelector.ui" line="249"/>
+        <location filename="DateSelector.cpp" line="73"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="134"/>
-        <location filename="DateSelector.cpp" line="56"/>
-        <location filename="DateSelector.cpp" line="58"/>
+        <location filename="DateSelector.ui" line="262"/>
+        <source>Flag</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="DateSelector.ui" line="142"/>
+        <location filename="DateSelector.cpp" line="83"/>
         <source>Month</source>
         <translation>月</translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="177"/>
+        <location filename="DateSelector.ui" line="32"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="DateSelector.cpp" line="56"/>
-        <location filename="DateSelector.cpp" line="68"/>
+        <location filename="DateSelector.cpp" line="64"/>
+        <source>Start Date</source>
+        <oldsource>Start</oldsource>
+        <translation>起始日期</translation>
+    </message>
+    <message>
+        <location filename="DateSelector.cpp" line="65"/>
+        <source>End Date</source>
+        <oldsource>End</oldsource>
+        <translation>结束日期</translation>
+    </message>
+    <message>
+        <location filename="DateSelector.cpp" line="81"/>
+        <location filename="DateSelector.cpp" line="104"/>
         <source>Year-Round</source>
         <translation>全年</translation>
     </message>
@@ -224,8 +240,8 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="1693"/>
-        <location filename="mainwindow.cpp" line="3257"/>
-        <location filename="mainwindow.cpp" line="3264"/>
+        <location filename="mainwindow.cpp" line="3258"/>
+        <location filename="mainwindow.cpp" line="3265"/>
         <source>Max</source>
         <translation>最大化</translation>
     </message>
@@ -335,8 +351,8 @@
         <location filename="mainwindow.ui" line="2536"/>
         <location filename="mainwindow.ui" line="2909"/>
         <location filename="mainwindow.ui" line="3333"/>
-        <location filename="mainwindow.ui" line="4070"/>
-        <location filename="mainwindow.cpp" line="4071"/>
+        <location filename="mainwindow.ui" line="3512"/>
+        <location filename="mainwindow.cpp" line="4072"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
@@ -366,13 +382,13 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="3394"/>
-        <location filename="mainwindow.cpp" line="1971"/>
+        <location filename="mainwindow.cpp" line="1972"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1513"/>
-        <location filename="mainwindow.cpp" line="1921"/>
+        <location filename="mainwindow.cpp" line="1922"/>
         <source>Day</source>
         <translation>日</translation>
     </message>
@@ -482,14 +498,14 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="887"/>
-        <location filename="mainwindow.ui" line="4179"/>
+        <location filename="mainwindow.ui" line="3621"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="921"/>
-        <location filename="mainwindow.ui" line="4154"/>
-        <location filename="mainwindow.cpp" line="2284"/>
+        <location filename="mainwindow.ui" line="3596"/>
+        <location filename="mainwindow.cpp" line="2285"/>
         <source>Remarks</source>
         <translation>备注</translation>
     </message>
@@ -631,10 +647,6 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="3097"/>
-        <location filename="mainwindow.ui" line="3541"/>
-        <location filename="mainwindow.ui" line="3610"/>
-        <location filename="mainwindow.ui" line="3846"/>
-        <location filename="mainwindow.ui" line="3915"/>
         <source>10</source>
         <translation></translation>
     </message>
@@ -651,8 +663,6 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="3122"/>
-        <location filename="mainwindow.ui" line="3685"/>
-        <location filename="mainwindow.ui" line="3990"/>
         <source>25</source>
         <translation></translation>
     </message>
@@ -665,6 +675,11 @@
         <location filename="mainwindow.ui" line="3171"/>
         <source>Way 1</source>
         <translation>方法 1</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="3450"/>
+        <source>--</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Way 2</source>
@@ -707,285 +722,31 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="3437"/>
-        <location filename="mainwindow.ui" line="3742"/>
-        <source>2022</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3442"/>
-        <location filename="mainwindow.ui" line="3747"/>
-        <source>2023</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3447"/>
-        <location filename="mainwindow.ui" line="3752"/>
-        <source>2024</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3452"/>
-        <location filename="mainwindow.ui" line="3757"/>
-        <source>2025</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3457"/>
-        <location filename="mainwindow.ui" line="3762"/>
-        <source>2026</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3462"/>
-        <location filename="mainwindow.ui" line="3767"/>
-        <source>2027</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3467"/>
-        <location filename="mainwindow.ui" line="3772"/>
-        <source>2028</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3472"/>
-        <location filename="mainwindow.ui" line="3777"/>
-        <source>2029</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3477"/>
-        <location filename="mainwindow.ui" line="3782"/>
-        <source>2030</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3482"/>
-        <location filename="mainwindow.ui" line="3787"/>
-        <source>2031</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3496"/>
-        <location filename="mainwindow.ui" line="3565"/>
-        <location filename="mainwindow.ui" line="3801"/>
-        <location filename="mainwindow.ui" line="3870"/>
-        <source>01</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3501"/>
-        <location filename="mainwindow.ui" line="3570"/>
-        <location filename="mainwindow.ui" line="3806"/>
-        <location filename="mainwindow.ui" line="3875"/>
-        <source>02</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3506"/>
-        <location filename="mainwindow.ui" line="3575"/>
-        <location filename="mainwindow.ui" line="3811"/>
-        <location filename="mainwindow.ui" line="3880"/>
-        <source>03</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3511"/>
-        <location filename="mainwindow.ui" line="3580"/>
-        <location filename="mainwindow.ui" line="3816"/>
-        <location filename="mainwindow.ui" line="3885"/>
-        <source>04</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3516"/>
-        <location filename="mainwindow.ui" line="3585"/>
-        <location filename="mainwindow.ui" line="3821"/>
-        <location filename="mainwindow.ui" line="3890"/>
-        <source>05</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3521"/>
-        <location filename="mainwindow.ui" line="3590"/>
-        <location filename="mainwindow.ui" line="3826"/>
-        <location filename="mainwindow.ui" line="3895"/>
-        <source>06</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3526"/>
-        <location filename="mainwindow.ui" line="3595"/>
-        <location filename="mainwindow.ui" line="3831"/>
-        <location filename="mainwindow.ui" line="3900"/>
-        <source>07</source>
-        <translation></translation>
+        <location filename="mainwindow.ui" line="3463"/>
+        <source>2022  01  01</source>
+        <oldsource>2022</oldsource>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="3531"/>
-        <location filename="mainwindow.ui" line="3600"/>
-        <location filename="mainwindow.ui" line="3836"/>
-        <location filename="mainwindow.ui" line="3905"/>
-        <source>08</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3536"/>
-        <location filename="mainwindow.ui" line="3605"/>
-        <location filename="mainwindow.ui" line="3841"/>
-        <location filename="mainwindow.ui" line="3910"/>
-        <source>09</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3546"/>
-        <location filename="mainwindow.ui" line="3615"/>
-        <location filename="mainwindow.ui" line="3851"/>
-        <location filename="mainwindow.ui" line="3920"/>
-        <source>11</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3551"/>
-        <location filename="mainwindow.ui" line="3620"/>
-        <location filename="mainwindow.ui" line="3856"/>
-        <location filename="mainwindow.ui" line="3925"/>
-        <source>12</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3625"/>
-        <location filename="mainwindow.ui" line="3930"/>
-        <source>13</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3630"/>
-        <location filename="mainwindow.ui" line="3935"/>
-        <source>14</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3635"/>
-        <location filename="mainwindow.ui" line="3940"/>
-        <source>15</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3640"/>
-        <location filename="mainwindow.ui" line="3945"/>
-        <source>16</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3645"/>
-        <location filename="mainwindow.ui" line="3950"/>
-        <source>17</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3650"/>
-        <location filename="mainwindow.ui" line="3955"/>
-        <source>18</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3655"/>
-        <location filename="mainwindow.ui" line="3960"/>
-        <source>19</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3660"/>
-        <location filename="mainwindow.ui" line="3965"/>
-        <source>20</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3665"/>
-        <location filename="mainwindow.ui" line="3970"/>
-        <source>21</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3670"/>
-        <location filename="mainwindow.ui" line="3975"/>
-        <source>22</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3675"/>
-        <location filename="mainwindow.ui" line="3980"/>
-        <source>23</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3680"/>
-        <location filename="mainwindow.ui" line="3985"/>
-        <source>24</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3690"/>
-        <location filename="mainwindow.ui" line="3995"/>
-        <source>26</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3695"/>
-        <location filename="mainwindow.ui" line="4000"/>
-        <source>27</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3700"/>
-        <location filename="mainwindow.ui" line="4005"/>
-        <source>28</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3705"/>
-        <location filename="mainwindow.ui" line="4010"/>
-        <source>29</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3710"/>
-        <location filename="mainwindow.ui" line="4015"/>
-        <source>30</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3715"/>
-        <location filename="mainwindow.ui" line="4020"/>
-        <source>31</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="3729"/>
-        <source>-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="4089"/>
         <source>View Category</source>
         <translation>查看分类</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4104"/>
+        <location filename="mainwindow.ui" line="3546"/>
         <location filename="mainwindow.cpp" line="270"/>
         <source>Details</source>
         <translation>详细</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4139"/>
-        <location filename="mainwindow.cpp" line="3888"/>
+        <location filename="mainwindow.ui" line="3581"/>
+        <location filename="mainwindow.cpp" line="3889"/>
         <source>Rename Tab</source>
         <translation>重命名标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4189"/>
-        <location filename="mainwindow.cpp" line="3898"/>
+        <location filename="mainwindow.ui" line="3631"/>
+        <location filename="mainwindow.cpp" line="3899"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
@@ -998,12 +759,12 @@
         <translation type="vanished">图表分类：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1229"/>
-        <location filename="mainwindow.cpp" line="1832"/>
-        <location filename="mainwindow.cpp" line="1862"/>
-        <location filename="mainwindow.cpp" line="1970"/>
-        <location filename="mainwindow.cpp" line="5001"/>
-        <location filename="mainwindow.cpp" line="5023"/>
+        <location filename="mainwindow.cpp" line="1230"/>
+        <location filename="mainwindow.cpp" line="1833"/>
+        <location filename="mainwindow.cpp" line="1863"/>
+        <location filename="mainwindow.cpp" line="1971"/>
+        <location filename="mainwindow.cpp" line="5005"/>
+        <location filename="mainwindow.cpp" line="5027"/>
         <source>Amount</source>
         <translation>金额</translation>
     </message>
@@ -1014,7 +775,7 @@
     <message>
         <location filename="mainwindow.ui" line="675"/>
         <location filename="mainwindow.ui" line="2615"/>
-        <location filename="mainwindow.cpp" line="1286"/>
+        <location filename="mainwindow.cpp" line="1287"/>
         <source>Add</source>
         <translation>增加</translation>
     </message>
@@ -1038,9 +799,9 @@
     <message>
         <location filename="mainwindow.ui" line="1484"/>
         <location filename="mainwindow.ui" line="3407"/>
-        <location filename="mainwindow.cpp" line="671"/>
-        <location filename="mainwindow.cpp" line="677"/>
-        <location filename="mainwindow.cpp" line="1920"/>
+        <location filename="mainwindow.cpp" line="670"/>
+        <location filename="mainwindow.cpp" line="676"/>
+        <location filename="mainwindow.cpp" line="1921"/>
         <source>Month</source>
         <translation>月</translation>
     </message>
@@ -1049,10 +810,10 @@
         <translation type="vanished">数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1228"/>
-        <location filename="mainwindow.cpp" line="1823"/>
-        <location filename="mainwindow.cpp" line="1859"/>
-        <location filename="mainwindow.cpp" line="1863"/>
+        <location filename="mainwindow.cpp" line="1229"/>
+        <location filename="mainwindow.cpp" line="1824"/>
+        <location filename="mainwindow.cpp" line="1860"/>
+        <location filename="mainwindow.cpp" line="1864"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
@@ -1066,51 +827,51 @@
         <translation type="vanished">重命名标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4144"/>
-        <location filename="mainwindow.cpp" line="3886"/>
+        <location filename="mainwindow.ui" line="3586"/>
+        <location filename="mainwindow.cpp" line="3887"/>
         <source>Add Tab</source>
         <translation>增加标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4149"/>
-        <location filename="mainwindow.cpp" line="1938"/>
-        <location filename="mainwindow.cpp" line="3887"/>
+        <location filename="mainwindow.ui" line="3591"/>
+        <location filename="mainwindow.cpp" line="1939"/>
+        <location filename="mainwindow.cpp" line="3888"/>
         <source>Del Tab</source>
         <translation>删除标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4159"/>
-        <location filename="mainwindow.cpp" line="3900"/>
+        <location filename="mainwindow.ui" line="3601"/>
+        <location filename="mainwindow.cpp" line="3901"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4164"/>
-        <location filename="mainwindow.cpp" line="3895"/>
+        <location filename="mainwindow.ui" line="3606"/>
+        <location filename="mainwindow.cpp" line="3896"/>
         <source>Export Data</source>
         <translation>导出数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4169"/>
-        <location filename="mainwindow.cpp" line="2834"/>
-        <location filename="mainwindow.cpp" line="3896"/>
+        <location filename="mainwindow.ui" line="3611"/>
+        <location filename="mainwindow.cpp" line="2835"/>
+        <location filename="mainwindow.cpp" line="3897"/>
         <source>Import Data</source>
         <translation>导入数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4174"/>
+        <location filename="mainwindow.ui" line="3616"/>
         <source>View App Data</source>
         <translation>查看App数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4194"/>
+        <location filename="mainwindow.ui" line="3636"/>
         <source>Memos</source>
         <translation>备忘录</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="850"/>
-        <location filename="mainwindow.ui" line="4184"/>
-        <location filename="mainwindow.cpp" line="3892"/>
+        <location filename="mainwindow.ui" line="3626"/>
+        <location filename="mainwindow.cpp" line="3893"/>
         <source>Report</source>
         <translation>报表</translation>
     </message>
@@ -1127,61 +888,61 @@
         <translation type="vanished">描述</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1152"/>
-        <location filename="mainwindow.cpp" line="1884"/>
-        <location filename="mainwindow.cpp" line="3445"/>
-        <location filename="mainwindow.cpp" line="4408"/>
+        <location filename="mainwindow.cpp" line="1153"/>
+        <location filename="mainwindow.cpp" line="1885"/>
+        <location filename="mainwindow.cpp" line="3446"/>
+        <location filename="mainwindow.cpp" line="4412"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="77"/>
         <location filename="mainwindow.cpp" line="128"/>
-        <location filename="mainwindow.cpp" line="1883"/>
-        <location filename="mainwindow.cpp" line="3444"/>
-        <location filename="mainwindow.cpp" line="3474"/>
-        <location filename="mainwindow.cpp" line="4401"/>
-        <location filename="mainwindow.cpp" line="4570"/>
-        <location filename="mainwindow.cpp" line="4589"/>
-        <location filename="mainwindow.cpp" line="4600"/>
+        <location filename="mainwindow.cpp" line="1884"/>
+        <location filename="mainwindow.cpp" line="3445"/>
+        <location filename="mainwindow.cpp" line="3475"/>
+        <location filename="mainwindow.cpp" line="4405"/>
+        <location filename="mainwindow.cpp" line="4574"/>
+        <location filename="mainwindow.cpp" line="4593"/>
+        <location filename="mainwindow.cpp" line="4604"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1265"/>
+        <location filename="mainwindow.cpp" line="1266"/>
         <source>Only the reduction of the day&apos;s records is allowed.</source>
         <translation>只允许减少当天的记录。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1824"/>
-        <location filename="mainwindow.cpp" line="1829"/>
-        <location filename="mainwindow.cpp" line="1833"/>
-        <location filename="mainwindow.cpp" line="3341"/>
+        <location filename="mainwindow.cpp" line="1825"/>
+        <location filename="mainwindow.cpp" line="1830"/>
+        <location filename="mainwindow.cpp" line="1834"/>
+        <location filename="mainwindow.cpp" line="3342"/>
         <source>Days</source>
         <translation>天数</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="2962"/>
-        <location filename="mainwindow.cpp" line="1153"/>
+        <location filename="mainwindow.cpp" line="1154"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1235"/>
+        <location filename="mainwindow.cpp" line="1236"/>
         <source>The last record added today will be deleted!</source>
         <translation>今天新增的最后一条记录将被删除！</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1627"/>
+        <location filename="mainwindow.cpp" line="1628"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="4036"/>
-        <location filename="mainwindow.cpp" line="1728"/>
-        <location filename="mainwindow.cpp" line="3878"/>
-        <location filename="mainwindow.cpp" line="4128"/>
+        <location filename="mainwindow.ui" line="3478"/>
+        <location filename="mainwindow.cpp" line="1729"/>
+        <location filename="mainwindow.cpp" line="3879"/>
+        <location filename="mainwindow.cpp" line="4129"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
@@ -1198,15 +959,15 @@
         <translation type="vanished">天数（近30天）</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="614"/>
+        <location filename="mainwindow.cpp" line="613"/>
         <source>Today</source>
         <translation>今天</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1828"/>
-        <location filename="mainwindow.cpp" line="1858"/>
-        <location filename="mainwindow.cpp" line="1969"/>
-        <location filename="mainwindow.cpp" line="4996"/>
+        <location filename="mainwindow.cpp" line="1829"/>
+        <location filename="mainwindow.cpp" line="1859"/>
+        <location filename="mainwindow.cpp" line="1970"/>
+        <location filename="mainwindow.cpp" line="5000"/>
         <source>Freq</source>
         <translation>频次</translation>
     </message>
@@ -1219,13 +980,13 @@
         <translation type="vanished">第一个标签页不允许删除。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1935"/>
+        <location filename="mainwindow.cpp" line="1936"/>
         <source>Whether to remove</source>
         <translation>是否删除</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1968"/>
-        <location filename="mainwindow.cpp" line="2016"/>
+        <location filename="mainwindow.cpp" line="1969"/>
+        <location filename="mainwindow.cpp" line="2017"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
@@ -1237,13 +998,13 @@
         <location filename="mainwindow.ui" line="803"/>
         <location filename="mainwindow.ui" line="1635"/>
         <location filename="mainwindow.ui" line="3184"/>
-        <location filename="mainwindow.cpp" line="3341"/>
+        <location filename="mainwindow.cpp" line="3342"/>
         <source>Steps</source>
         <translation>步数</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="2694"/>
-        <location filename="mainwindow.cpp" line="2197"/>
+        <location filename="mainwindow.cpp" line="2198"/>
         <source>Modify</source>
         <translation>修改</translation>
     </message>
@@ -1256,25 +1017,25 @@
         <translation type="vanished">今天的步数</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="615"/>
+        <location filename="mainwindow.cpp" line="614"/>
         <source>km</source>
         <translation>公里</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="580"/>
-        <location filename="mainwindow.cpp" line="922"/>
+        <location filename="mainwindow.cpp" line="579"/>
+        <location filename="mainwindow.cpp" line="923"/>
         <source>Total Working Hours</source>
         <translation>运行的总时间</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="540"/>
-        <location filename="mainwindow.cpp" line="3376"/>
+        <location filename="mainwindow.cpp" line="539"/>
+        <location filename="mainwindow.cpp" line="3377"/>
         <source>Number of Operations</source>
         <translation>运算次数</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="3352"/>
-        <location filename="mainwindow.cpp" line="586"/>
+        <location filename="mainwindow.cpp" line="585"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
@@ -1283,20 +1044,20 @@
         <translation type="vanished">启动</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="879"/>
-        <location filename="mainwindow.cpp" line="889"/>
-        <location filename="mainwindow.cpp" line="1917"/>
+        <location filename="mainwindow.cpp" line="880"/>
+        <location filename="mainwindow.cpp" line="890"/>
+        <location filename="mainwindow.cpp" line="1918"/>
         <source>Tab</source>
         <translation>标签页</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1230"/>
-        <location filename="mainwindow.cpp" line="5028"/>
+        <location filename="mainwindow.cpp" line="1231"/>
+        <location filename="mainwindow.cpp" line="5032"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1238"/>
+        <location filename="mainwindow.cpp" line="1239"/>
         <source>Del Item</source>
         <translation>删除条目</translation>
     </message>
@@ -1309,12 +1070,12 @@
         <translation type="vanished">标签页名称：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1887"/>
+        <location filename="mainwindow.cpp" line="1888"/>
         <source>Rename tab name : </source>
         <translation>重命名标签页：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1889"/>
+        <location filename="mainwindow.cpp" line="1890"/>
         <source>Tab name : </source>
         <translation>标签页名称：</translation>
     </message>
@@ -1323,14 +1084,14 @@
         <translation type="vanished">分类：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2745"/>
-        <location filename="mainwindow.cpp" line="2827"/>
-        <location filename="mainwindow.cpp" line="2830"/>
+        <location filename="mainwindow.cpp" line="2746"/>
+        <location filename="mainwindow.cpp" line="2828"/>
+        <location filename="mainwindow.cpp" line="2831"/>
         <source>KnotBak</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2745"/>
+        <location filename="mainwindow.cpp" line="2746"/>
         <source>Zip File(*.zip)</source>
         <translation></translation>
     </message>
@@ -1339,7 +1100,7 @@
         <translation type="vanished">之前的文件不存在，请先导出数据，以生成一个默认的文件名。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2805"/>
+        <location filename="mainwindow.cpp" line="2806"/>
         <source>Please turn on the storage permission of the app.</source>
         <translation>请开启APP的存储权限！</translation>
     </message>
@@ -1349,18 +1110,18 @@
         <translation>数据导出成功。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2828"/>
+        <location filename="mainwindow.cpp" line="2829"/>
         <source>Zip File (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2831"/>
+        <location filename="mainwindow.cpp" line="2832"/>
         <source>Zip File (*.zip);;All(*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2838"/>
-        <location filename="mainwindow.cpp" line="4105"/>
+        <location filename="mainwindow.cpp" line="2839"/>
+        <location filename="mainwindow.cpp" line="4106"/>
         <source>Import this data?</source>
         <translation>是否导入这个数据？</translation>
     </message>
@@ -1374,7 +1135,7 @@
         <translation type="vanished">请输入密码</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3890"/>
+        <location filename="mainwindow.cpp" line="3891"/>
         <source>Open KnotBak Dir</source>
         <translation>打开KnotBak目录</translation>
     </message>
@@ -1383,54 +1144,54 @@
         <translation type="vanished">一键数据备份</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2941"/>
+        <location filename="mainwindow.cpp" line="2942"/>
         <source>Reading, please wait...</source>
         <translation>读取中，请稍候...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3901"/>
+        <location filename="mainwindow.cpp" line="3902"/>
         <source>OneDrive Backup Data</source>
         <translation>OneDrive 备份数据</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3903"/>
+        <location filename="mainwindow.cpp" line="3904"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3904"/>
+        <location filename="mainwindow.cpp" line="3905"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3908"/>
+        <location filename="mainwindow.cpp" line="3909"/>
         <source>Time Machine</source>
         <translation>时光机</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4128"/>
+        <location filename="mainwindow.cpp" line="4129"/>
         <source>Tab Time Machine</source>
         <translation>标签页时光机</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4352"/>
-        <location filename="mainwindow.cpp" line="4360"/>
+        <location filename="mainwindow.cpp" line="4356"/>
+        <location filename="mainwindow.cpp" line="4364"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="116"/>
-        <location filename="mainwindow.cpp" line="4416"/>
+        <location filename="mainwindow.cpp" line="4420"/>
         <source>Copy</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4569"/>
+        <location filename="mainwindow.cpp" line="4573"/>
         <source>The password is removed.</source>
         <translation>密码被删除</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="4588"/>
+        <location filename="mainwindow.cpp" line="4592"/>
         <source>The password is set successfully.</source>
         <translation>密码设置成功</translation>
     </message>
@@ -1443,24 +1204,24 @@
         <translation type="vanished">App数据：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3098"/>
+        <location filename="mainwindow.cpp" line="3099"/>
         <source>Search Results : </source>
         <translation>搜索结果：</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="2096"/>
-        <location filename="mainwindow.cpp" line="3447"/>
+        <location filename="mainwindow.cpp" line="3448"/>
         <source>Please enter your password : </source>
         <translation>请输入密码：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3449"/>
+        <location filename="mainwindow.cpp" line="3450"/>
         <source>Password : </source>
         <translation>密码：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3472"/>
-        <location filename="mainwindow.cpp" line="4599"/>
+        <location filename="mainwindow.cpp" line="3473"/>
+        <location filename="mainwindow.cpp" line="4603"/>
         <source>The entered password does not match.</source>
         <translation>输入的密码不匹配</translation>
     </message>
@@ -1469,8 +1230,8 @@
         <translation type="vanished">检查新版本</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3260"/>
         <location filename="mainwindow.cpp" line="3261"/>
+        <location filename="mainwindow.cpp" line="3262"/>
         <source>Normal</source>
         <translation>正常</translation>
     </message>
@@ -1503,7 +1264,7 @@
         <translation type="vanished">跳</translation>
     </message>
     <message>
-        <location filename="mainwindow.h" line="170"/>
+        <location filename="mainwindow.h" line="171"/>
         <source>Latest Time</source>
         <translation>最新的时间</translation>
     </message>
@@ -1574,55 +1335,55 @@ F</source>
     <name>QInstaller</name>
     <message>
         <location filename="AutoUpdate.cpp" line="249"/>
-        <location filename="mainwindow.cpp" line="1369"/>
+        <location filename="mainwindow.cpp" line="1370"/>
         <source>bytes</source>
         <translation></translation>
     </message>
     <message>
         <location filename="AutoUpdate.cpp" line="250"/>
-        <location filename="mainwindow.cpp" line="1370"/>
+        <location filename="mainwindow.cpp" line="1371"/>
         <source>KiB</source>
         <translation></translation>
     </message>
     <message>
         <location filename="AutoUpdate.cpp" line="251"/>
-        <location filename="mainwindow.cpp" line="1371"/>
+        <location filename="mainwindow.cpp" line="1372"/>
         <source>MiB</source>
         <translation></translation>
     </message>
     <message>
         <location filename="AutoUpdate.cpp" line="252"/>
-        <location filename="mainwindow.cpp" line="1372"/>
+        <location filename="mainwindow.cpp" line="1373"/>
         <source>GiB</source>
         <translation></translation>
     </message>
     <message>
         <location filename="AutoUpdate.cpp" line="253"/>
-        <location filename="mainwindow.cpp" line="1373"/>
+        <location filename="mainwindow.cpp" line="1374"/>
         <source>TiB</source>
         <translation></translation>
     </message>
     <message>
         <location filename="AutoUpdate.cpp" line="254"/>
-        <location filename="mainwindow.cpp" line="1374"/>
+        <location filename="mainwindow.cpp" line="1375"/>
         <source>PiB</source>
         <translation></translation>
     </message>
     <message>
         <location filename="AutoUpdate.cpp" line="255"/>
-        <location filename="mainwindow.cpp" line="1375"/>
+        <location filename="mainwindow.cpp" line="1376"/>
         <source>EiB</source>
         <translation></translation>
     </message>
     <message>
         <location filename="AutoUpdate.cpp" line="256"/>
-        <location filename="mainwindow.cpp" line="1376"/>
+        <location filename="mainwindow.cpp" line="1377"/>
         <source>ZiB</source>
         <translation></translation>
     </message>
     <message>
         <location filename="AutoUpdate.cpp" line="257"/>
-        <location filename="mainwindow.cpp" line="1377"/>
+        <location filename="mainwindow.cpp" line="1378"/>
         <source>YiB</source>
         <translation></translation>
     </message>
@@ -3024,9 +2785,8 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="365"/>
         <source>Year</source>
-        <translation>年</translation>
+        <translation type="vanished">年</translation>
     </message>
     <message>
         <source>Month</source>
@@ -3041,13 +2801,13 @@ in skydrive folder</source>
         <translation type="vanished">打印</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="495"/>
-        <location filename="Report.cpp" line="884"/>
+        <location filename="Report.cpp" line="428"/>
+        <location filename="Report.cpp" line="817"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="882"/>
+        <location filename="Report.cpp" line="815"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
@@ -3060,65 +2820,65 @@ in skydrive folder</source>
         <translation type="vanished">标题</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="76"/>
-        <location filename="Report.cpp" line="156"/>
-        <location filename="Report.cpp" line="229"/>
-        <location filename="Report.cpp" line="244"/>
-        <location filename="Report.cpp" line="354"/>
-        <location filename="Report.cpp" line="362"/>
-        <location filename="Report.cpp" line="642"/>
-        <location filename="Report.cpp" line="711"/>
-        <location filename="Report.cpp" line="852"/>
-        <location filename="Report.cpp" line="885"/>
-        <location filename="Report.cpp" line="908"/>
-        <location filename="Report.cpp" line="921"/>
-        <location filename="Report.cpp" line="936"/>
+        <location filename="Report.cpp" line="71"/>
+        <location filename="Report.cpp" line="152"/>
+        <location filename="Report.cpp" line="210"/>
+        <location filename="Report.cpp" line="225"/>
+        <location filename="Report.cpp" line="335"/>
+        <location filename="Report.cpp" line="345"/>
+        <location filename="Report.cpp" line="575"/>
+        <location filename="Report.cpp" line="644"/>
+        <location filename="Report.cpp" line="785"/>
+        <location filename="Report.cpp" line="818"/>
+        <location filename="Report.cpp" line="841"/>
+        <location filename="Report.cpp" line="854"/>
+        <location filename="Report.cpp" line="869"/>
         <source>Details</source>
         <translation>详细</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="259"/>
-        <location filename="Report.cpp" line="456"/>
-        <location filename="Report.cpp" line="907"/>
+        <location filename="Report.cpp" line="240"/>
+        <location filename="Report.cpp" line="389"/>
+        <location filename="Report.cpp" line="840"/>
         <source>View Category</source>
         <translation>查看分类</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="496"/>
+        <location filename="Report.cpp" line="429"/>
         <source>Percent</source>
         <translation>百分比</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="693"/>
+        <location filename="Report.cpp" line="626"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="744"/>
+        <location filename="Report.cpp" line="677"/>
         <source>Save Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="746"/>
+        <location filename="Report.cpp" line="679"/>
         <source>PNG files(*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="227"/>
-        <location filename="Report.cpp" line="255"/>
-        <location filename="Report.cpp" line="678"/>
-        <location filename="Report.cpp" line="694"/>
+        <location filename="Report.cpp" line="208"/>
+        <location filename="Report.cpp" line="236"/>
+        <location filename="Report.cpp" line="611"/>
+        <location filename="Report.cpp" line="627"/>
         <source>Freq</source>
         <translation>频次</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="228"/>
-        <location filename="Report.cpp" line="256"/>
-        <location filename="Report.cpp" line="497"/>
-        <location filename="Report.cpp" line="642"/>
-        <location filename="Report.cpp" line="680"/>
-        <location filename="Report.cpp" line="695"/>
-        <location filename="Report.cpp" line="883"/>
+        <location filename="Report.cpp" line="209"/>
+        <location filename="Report.cpp" line="237"/>
+        <location filename="Report.cpp" line="430"/>
+        <location filename="Report.cpp" line="575"/>
+        <location filename="Report.cpp" line="613"/>
+        <location filename="Report.cpp" line="628"/>
+        <location filename="Report.cpp" line="816"/>
         <source>Amount</source>
         <translation>金额</translation>
     </message>
@@ -3127,16 +2887,16 @@ in skydrive folder</source>
         <translation type="vanished">返回</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="227"/>
-        <location filename="Report.cpp" line="255"/>
-        <location filename="Report.cpp" line="637"/>
-        <location filename="Report.cpp" line="677"/>
+        <location filename="Report.cpp" line="208"/>
+        <location filename="Report.cpp" line="236"/>
+        <location filename="Report.cpp" line="570"/>
+        <location filename="Report.cpp" line="610"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="278"/>
-        <location filename="Report.cpp" line="369"/>
+        <location filename="Report.cpp" line="259"/>
+        <location filename="Report.cpp" line="347"/>
         <source>Year-Round</source>
         <translation>全年</translation>
     </message>
@@ -3157,12 +2917,12 @@ in skydrive folder</source>
         <translation type="vanished">输出到打印机</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="736"/>
+        <location filename="Report.cpp" line="669"/>
         <source>Please turn on the storage permission of the app.</source>
         <translation>请开启APP的存储权限！</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="739"/>
+        <location filename="Report.cpp" line="672"/>
         <source>Picture output successful!</source>
         <translation>图片输出成功！</translation>
     </message>

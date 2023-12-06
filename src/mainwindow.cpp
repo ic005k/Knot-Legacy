@@ -647,20 +647,6 @@ void MainWindow::init_Options() {
   androidIniDir = Reg.value("/Options/androidIniDir", "").toString();
   macIniDir = Reg.value("/Options/macIniDir", "").toString();
 
-  // MainUI Find YMD
-  listMonth = QStringList() << "01"
-                            << "02"
-                            << "03"
-                            << "04"
-                            << "05"
-                            << "06"
-                            << "07"
-                            << "08"
-                            << "09"
-                            << "10"
-                            << "11"
-                            << "12";
-
   QSettings Reg2(iniDir + "ymd.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg2.setIniCodec("utf-8");
@@ -673,15 +659,15 @@ void MainWindow::init_Options() {
 
   btnYearText = Reg2.value("/YMD/btnYearText", "2022").toString();
   ui->btnYear->setText(btnYearText);
-  btnMonthText = Reg2.value("/YMD/btnMonthText", tr("Month")).toString();
+  btnMonthText = Reg2.value("/YMD/btnMonthText", "01").toString();
   ui->btnMonth->setText(btnMonthText);
 
-  s_y1 = Reg2.value("/YMD/Y1", 0).toInt();
-  s_y2 = Reg2.value("/YMD/Y2", 0).toInt();
-  s_m1 = Reg2.value("/YMD/M1", 0).toInt();
-  s_m2 = Reg2.value("/YMD/M2", 0).toInt();
-  s_d1 = Reg2.value("/YMD/D1", 0).toInt();
-  s_d2 = Reg2.value("/YMD/D2", 0).toInt();
+  s_y1 = Reg2.value("/YMD/Y1", 2022).toInt();
+  s_y2 = Reg2.value("/YMD/Y2", 2022).toInt();
+  s_m1 = Reg2.value("/YMD/M1", 1).toInt();
+  s_m2 = Reg2.value("/YMD/M2", 12).toInt();
+  s_d1 = Reg2.value("/YMD/D1", 1).toInt();
+  s_d2 = Reg2.value("/YMD/D2", 1).toInt();
 
   ui->btnStartDate->setText(QString::number(s_y1) + "  " +
                             QString("%1").arg(s_m1, 2, 10, QLatin1Char('0')) +
@@ -4208,6 +4194,9 @@ static void JavaNotify_3() {
 static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
   if (mw_one->alertWindowsCount == 0) {
+    if (!mw_one->mydlgReport->myDateSelector->isHidden())
+      mw_one->mydlgReport->myDateSelector->close();
+    if (!mw_one->mydlgReport->isHidden()) mw_one->ui->btnBack_Report->click();
     if (!mw_one->ui->frameReader->isHidden()) mw_one->ui->btnBack->click();
     if (!mw_one->ui->frameNotes->isHidden()) mw_one->ui->btnBackNotes->click();
     if (!mw_one->ui->frameOne->isHidden()) mw_one->ui->btnBack_One->click();

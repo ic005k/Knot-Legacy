@@ -42,26 +42,50 @@ void DateSelector::init() {
   w = width();
   h = height();
   setGeometry(x, y, w, h);
+
+  if (dateFlag == 1) {
+    ui->lblYear->setHidden(false);
+    ui->lblMonth->hide();
+    ui->lblDay->hide();
+    ui->lblFlag->hide();
+  }
+
+  if (dateFlag == 2) {
+    ui->lblMonth->setHidden(false);
+    ui->lblYear->hide();
+    ui->lblDay->hide();
+    ui->lblFlag->hide();
+  }
+
+  if (dateFlag == 3 || dateFlag == 4) {
+    ui->lblYear->setHidden(false);
+    ui->lblMonth->setHidden(false);
+    ui->lblDay->setHidden(false);
+    if (dateFlag == 3) ui->lblFlag->setText(tr("Start Date"));
+    if (dateFlag == 4) ui->lblFlag->setText(tr("End Date"));
+    ui->lblFlag->setHidden(false);
+  }
+
   show();
 }
 
 void DateSelector::on_hsYear_valueChanged(int value) {
-  ui->gboxYear->setTitle(QString::number(value) + "  " + tr("Year"));
+  ui->lblYear->setText(QString::number(value) + "  " + tr("Year"));
 }
 
 void DateSelector::on_hsMonth_valueChanged(int value)
 
 {
   if (value == 13)
-    ui->gboxMonth->setTitle(QString::number(ui->hsYear->value()) + "  " +
-                            tr("Year-Round"));
+    ui->lblMonth->setText(QString::number(ui->hsYear->value()) + "  " +
+                          tr("Year-Round"));
   else {
-    ui->gboxMonth->setTitle(QString::number(value) + "  " + tr("Month"));
+    ui->lblMonth->setText(QString::number(value) + "  " + tr("Month"));
   }
 }
 
 void DateSelector::on_hsDay_valueChanged(int value) {
-  ui->gboxDay->setTitle(QString::number(value) + "  " + tr("Day"));
+  ui->lblDay->setText(QString::number(value) + "  " + tr("Day"));
 }
 
 void DateSelector::on_btnOk_clicked() {

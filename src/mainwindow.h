@@ -223,7 +223,7 @@ class MainWindow : public QMainWindow {
   static QString get_Year(QString date);
   static QString get_Month(QString date);
   void init_Options();
-  QStringList listMonth;
+
   dlgRemarks *m_Remarks;
   EditRecord *myEditRecord;
   dlgTodo *mydlgTodo;

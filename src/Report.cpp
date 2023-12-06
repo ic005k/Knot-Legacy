@@ -22,7 +22,13 @@ QToolButton *btnCategory, *btnMonth, *btnYear;
 int twTotalRow = 0;
 bool isWholeMonth = true;
 bool isDateSection = false;
-int s_y1, s_m1, s_d1, s_y2, s_m2, s_d2;
+
+int s_y1 = 0;
+int s_m1 = 0;
+int s_d1 = 0;
+int s_y2 = 0;
+int s_m2 = 0;
+int s_d2 = 0;
 
 void setTableNoItemFlags(QTableWidget* t, int row);
 
@@ -144,10 +150,8 @@ void dlgReport::closeEvent(QCloseEvent* event) {
 void dlgReport::on_btnYear_clicked() {
   myDateSelector->dateFlag = 1;
   mw_one->ui->lblDetails->setText(tr("Details"));
-
+  myDateSelector->ui->hsYear->setValue(2122);
   myDateSelector->ui->hsYear->setValue(mw_one->ui->btnYear->text().toInt());
-  myDateSelector->ui->gboxYear->setTitle(mw_one->ui->btnYear->text() +
-                                         tr("Year"));
 
   myDateSelector->ui->gboxMonth->hide();
   myDateSelector->ui->gboxDay->hide();
