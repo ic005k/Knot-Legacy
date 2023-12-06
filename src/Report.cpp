@@ -339,6 +339,7 @@ void dlgReport::on_btnMonth_clicked() {
   myDateSelector->ui->hsMonth->setMaximum(13);
   mw_one->ui->lblDetails->setText(tr("Details"));
 
+  myDateSelector->ui->hsYear->setValue(mw_one->ui->btnYear->text().toInt());
   myDateSelector->ui->hsMonth->setValue(3);
   if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
     myDateSelector->ui->hsMonth->setValue(13);
