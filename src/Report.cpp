@@ -401,8 +401,6 @@ void dlgReport::on_btnCategory_clicked() {
 
   QVBoxLayout* vbox = new QVBoxLayout;
   frame->setLayout(vbox);
-  QListWidget* list = new QListWidget(mw_one->mydlgReport);
-  list->setStyleSheet("QListWidget{border:0px solid gray;}");
 
   QLabel* lblTitle = new QLabel;
   QLabel* lblTotal = new QLabel;
@@ -415,24 +413,11 @@ void dlgReport::on_btnCategory_clicked() {
   vbox->addWidget(lblTotal);
 
   QTableWidget* table = new QTableWidget;
-  table->setColumnCount(3);
-
-  table->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Category")));
-
-  QTableWidgetItem* item1 = new QTableWidgetItem(tr("Percent"));
-  item1->setTextAlignment(Qt::AlignRight);
-  table->setHorizontalHeaderItem(1, item1);
-
-  QTableWidgetItem* item2 = new QTableWidgetItem(tr("Amount"));
-  item2->setTextAlignment(Qt::AlignRight);
-  table->setHorizontalHeaderItem(2, item2);
+  table->setColumnCount(1);
+  table->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("View Category")));
 
   table->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-  table->setColumnWidth(0, mw_one->width() / 3 + 5);
-
-  table->horizontalHeader()->setSectionResizeMode(
-      1, QHeaderView::ResizeToContents);
   table->horizontalHeader()->setStretchLastSection(true);
   table->setAlternatingRowColors(true);
   table->setSelectionBehavior(QTableWidget::SelectRows);
@@ -444,19 +429,6 @@ void dlgReport::on_btnCategory_clicked() {
   QScroller::grabGesture(table, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(table);
   vbox->addWidget(table);
-
-  list->setSpacing(6);
-  list->setViewMode(QListView::IconMode);
-  list->setMovement(QListView::Static);
-  list->setStyleSheet(mw_one->listStyleMain);
-  list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  list->horizontalScrollBar()->hide();
-  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(list);
-  QFont font;
-  font.setPointSize(fontSize + 1);
-  list->setFont(font);
 
   if (listCategory.count() > 0) {
     listCategorySort.clear();
@@ -480,19 +452,16 @@ void dlgReport::on_btnCategory_clicked() {
 
             table->insertRow(0);
 
-            QTableWidgetItem* tableItem1 =
-                new QTableWidgetItem(str2.split("|").at(0));
-            table->setItem(0, 0, tableItem1);
+            QString item0 = str2.split("|").at(0);
 
             QString pre = str2.split("-").at(1);
-            QTableWidgetItem* tableItem2 = new QTableWidgetItem(pre);
-            tableItem2->setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
-            table->setItem(0, 1, tableItem2);
 
-            QTableWidgetItem* tableItem3 =
-                new QTableWidgetItem(str2.split("-").at(0).split("|").at(1));
-            tableItem3->setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
-            table->setItem(0, 2, tableItem3);
+            QString item1 = str2.split("-").at(0).split("|").at(1);
+
+            QString item = tr("Category") + " : " + item0 + "\n" +
+                           tr("Percent") + " : " + pre + "\n" + tr("Amount") +
+                           " : " + item1;
+            table->setItem(0, 0, new QTableWidgetItem(item));
 
             listCategorySort.removeOne(str1);
 
@@ -502,7 +471,8 @@ void dlgReport::on_btnCategory_clicked() {
       }
     }
 
-    // qDebug() << listCategorySort << listE;
+    qDebug() << "listCategorySort=" << listCategorySort;
+    qDebug() << "listE=" << listE;
   }
 
   int h = mw_one->geometry().height() - 0;
@@ -520,9 +490,9 @@ void dlgReport::on_btnCategory_clicked() {
 
   connect(table, &QTableWidget::itemClicked, [=]() {
     QString str0 = table->item(table->currentRow(), 0)->text();
-    btnCategory->setText(str0);
-
-    getCategoryData(mw_one->ui->btnCategory->text(), true);
+    str0 = str0.split("\n").at(0);
+    str0 = str0.replace(tr("Category") + " : ", "").trimmed();
+    getCategoryData(str0, true);
     indexCategory = table->currentRow();
     dlg->close();
     mw_one->closeGrayWindows();
@@ -597,7 +567,7 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
                              QString::number(freq) + "\n" + tr("Amount") +
                              " : " + ta));
     mw_one->ui->tableDetails->setHorizontalHeaderItem(
-        0, new QTableWidgetItem(tr("Details") + "  " + tr("Freq") + " : " +
+        0, new QTableWidgetItem(strCategory + "\n" + tr("Freq") + " : " +
                                 QString::number(freq) + "  " + tr("Amount") +
                                 " : " + ta));
 
@@ -613,6 +583,9 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
                             QString::number(bfb));
     listD.append(bfb);
   }
+
+  if (mw_one->ui->tableDetails->rowCount() > 0)
+    mw_one->ui->tableDetails->setCurrentCell(0, 0);
 }
 
 void setTableNoItemFlags(QTableWidget* t, int row) {
