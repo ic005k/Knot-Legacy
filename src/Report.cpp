@@ -532,9 +532,10 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
 
   int freq = 0;
   double d_amount = 0;
-  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
+  QTreeWidget* tw = twOut2Img;
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
+
     for (int j = 0; j < topItem->childCount(); j++) {
       QTreeWidgetItem* childItem = topItem->child(j);
       QString strClass = childItem->text(2);
