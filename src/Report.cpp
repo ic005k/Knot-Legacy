@@ -526,26 +526,43 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
   if (appendTable) {
     clearAll_xx();
     setCurrentHeader(2);
+
+    mw_one->ui->tableDetails->setRowCount(0);
   }
 
   int freq = 0;
   double d_amount = 0;
-  for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
-    QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
+  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
     for (int j = 0; j < topItem->childCount(); j++) {
       QTreeWidgetItem* childItem = topItem->child(j);
       QString strClass = childItem->text(2);
       if (strClass == strCategory && strClass.trimmed() != "") {
-        QString date, time;
+        freq++;
+        QString date, time, details;
         if (appendTable) {
           date = topItem->text(3) + "-" + topItem->text(0).split(" ").at(1) +
                  "-" + topItem->text(0).split(" ").at(2);
           time = childItem->text(0).split(".").at(1);
+          details = childItem->text(3);
         }
         QString amount = childItem->text(1);
-        if (appendTable) appendSteps_xx(date, time, amount);
+        if (appendTable) {  // appendSteps_xx(date, time, amount);
+          mw_one->ui->tableDetails->setRowCount(freq);
+          QString str;
+          if (details.trimmed().length() > 0)
+            str = tr("Date") + " : " + date + "  " + time + "\n" +
+                  tr("Amount") + " : " + amount + "\n" + tr("Details") + " : " +
+                  details;
+          else
+            str = tr("Date") + " : " + date + "  " + time + "\n" +
+                  tr("Amount") + " : " + amount;
 
-        freq++;
+          QTableWidgetItem* item = new QTableWidgetItem(str);
+          mw_one->ui->tableDetails->setItem(freq - 1, 0, item);
+        }
+
         if (amount.length() > 0) {
           d_amount = d_amount + amount.toDouble();
         }
@@ -558,7 +575,17 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
 
   QString ta = QString("%1").arg(d_amount, 0, 'f', 2);
   if (appendTable) {
-    appendSteps_xx(tr("Total"), QString::number(freq), ta);
+    // appendSteps_xx(tr("Total"), QString::number(freq), ta);
+    mw_one->ui->tableDetails->setRowCount(freq + 1);
+    mw_one->ui->tableDetails->setItem(
+        freq, 0,
+        new QTableWidgetItem(tr("Total") + "\n" + tr("Freq") + " : " +
+                             QString::number(freq) + "\n" + tr("Amount") +
+                             " : " + ta));
+    mw_one->ui->tableDetails->setHorizontalHeaderItem(
+        0, new QTableWidgetItem(tr("Details") + "  " + tr("Freq") + " : " +
+                                QString::number(freq) + "  " + tr("Amount") +
+                                " : " + ta));
 
     mw_one->ui->lblDetails->setStyleSheet(
         mw_one->myEditRecord->ui->lblTitle->styleSheet());
@@ -763,6 +790,7 @@ void dlgReport::setScrollBarPos_xx(double pos) {
 void dlgReport::loadDetails() {
   QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
   mw_one->ui->tableDetails->setRowCount(0);
+  mw_one->ui->btnCategory->setText(tr("View Category"));
 
   int row = getCurrentIndex();
   QString date = getDate(row);
