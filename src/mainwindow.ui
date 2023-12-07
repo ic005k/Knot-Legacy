@@ -3500,7 +3500,7 @@ QRadioButton::indicator:checked {
          <item>
           <widget class="QToolButton" name="btnBack_Report">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>

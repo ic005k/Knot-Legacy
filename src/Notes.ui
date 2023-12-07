@@ -299,11 +299,7 @@
            </size>
           </property>
           <property name="text">
-           <string>...</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../res.qrc">
-            <normaloff>:/res/find.png</normaloff>:/res/find.png</iconset>
+           <string>Find</string>
           </property>
           <property name="iconSize">
            <size>
@@ -526,11 +522,7 @@
            </size>
           </property>
           <property name="text">
-           <string>...</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../res.qrc">
-            <normaloff>:/res/link.png</normaloff>:/res/link.png</iconset>
+           <string>Url</string>
           </property>
           <property name="iconSize">
            <size>
@@ -560,17 +552,8 @@
             <height>25</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
           <property name="text">
-           <string>Insert Image</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../res.qrc">
-            <normaloff>:/res/pic.png</normaloff>:/res/pic.png</iconset>
+           <string>Pic</string>
           </property>
           <property name="iconSize">
            <size>
@@ -606,10 +589,6 @@
           <property name="text">
            <string>Color</string>
           </property>
-          <property name="icon">
-           <iconset resource="../res.qrc">
-            <normaloff>:/res/color.png</normaloff>:/res/color.png</iconset>
-          </property>
           <property name="iconSize">
            <size>
             <width>20</width>
@@ -638,12 +617,13 @@
             <height>25</height>
            </size>
           </property>
-          <property name="text">
-           <string>( )</string>
+          <property name="font">
+           <font>
+            <underline>true</underline>
+           </font>
           </property>
-          <property name="icon">
-           <iconset resource="../res.qrc">
-            <normaloff>:/res/font4.png</normaloff>:/res/font4.png</iconset>
+          <property name="text">
+           <string>U</string>
           </property>
           <property name="iconSize">
            <size>
@@ -674,11 +654,7 @@
            </size>
           </property>
           <property name="text">
-           <string>{ }</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../res.qrc">
-            <normaloff>:/res/font5.png</normaloff>:/res/font5.png</iconset>
+           <string>S</string>
           </property>
           <property name="iconSize">
            <size>
@@ -819,12 +795,13 @@ color: rgb(255, 255, 255);</string>
             <height>25</height>
            </size>
           </property>
-          <property name="text">
-           <string>...</string>
+          <property name="font">
+           <font>
+            <bold>true</bold>
+           </font>
           </property>
-          <property name="icon">
-           <iconset resource="../res.qrc">
-            <normaloff>:/res/font1.png</normaloff>:/res/font1.png</iconset>
+          <property name="text">
+           <string>B</string>
           </property>
           <property name="iconSize">
            <size>
@@ -854,12 +831,14 @@ color: rgb(255, 255, 255);</string>
             <height>25</height>
            </size>
           </property>
-          <property name="text">
-           <string>~</string>
+          <property name="font">
+           <font>
+            <italic>true</italic>
+            <bold>true</bold>
+           </font>
           </property>
-          <property name="icon">
-           <iconset resource="../res.qrc">
-            <normaloff>:/res/font2.png</normaloff>:/res/font2.png</iconset>
+          <property name="text">
+           <string>I</string>
           </property>
           <property name="iconSize">
            <size>
@@ -889,12 +868,13 @@ color: rgb(255, 255, 255);</string>
             <height>25</height>
            </size>
           </property>
-          <property name="text">
-           <string>[ ]</string>
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
           </property>
-          <property name="icon">
-           <iconset resource="../res.qrc">
-            <normaloff>:/res/font3.png</normaloff>:/res/font3.png</iconset>
+          <property name="text">
+           <string>I</string>
           </property>
           <property name="iconSize">
            <size>

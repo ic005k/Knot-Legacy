@@ -550,6 +550,7 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
         QString amount = childItem->text(1);
         if (appendTable) {  // appendSteps_xx(date, time, amount);
           mw_one->ui->tableDetails->setRowCount(freq);
+
           QString str;
           if (details.trimmed().length() > 0)
             str = tr("Date") + " : " + date + "  " + time + "\n" +
