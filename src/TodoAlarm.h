@@ -7,6 +7,8 @@
 #include <QObjectList>
 #include <QToolButton>
 
+#include "RollingBox.h"
+
 namespace Ui {
 class msgDialog;
 }
@@ -62,7 +64,10 @@ class msgDialog : public QDialog {
   QString y, m, d, h, mm;
   void setBtnTitle();
   void onDial(QDial *btn, QString flag);
+  void onRollBox(RollingBox *btn, QString flag);
   void addDial(int min, int max, QString flag);
+
+  int WidgetType = 2; /*1=Dial  2=RollBox*/
 };
 
 #endif  // TODOALARM_H

@@ -114,7 +114,8 @@ class dlgTodo : public QDialog {
   void addItemRecycle(QString strTime, int type, QString strText);
 
   void refreshTableListsFromIni();
-  private:
+
+ private:
   QListWidgetItem *editItem;
 
   QString todotxt;

@@ -302,26 +302,48 @@ void msgDialog::addDial(int min, int max, QString flag) {
   gl->setSpacing(5);
   ui->frameSel->setLayout(gl);
 
-  QDial* btn = new QDial(ui->frameSel);
-  btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-  btn->setObjectName("btn");
-  btn->setMinimum(min);
-  btn->setMaximum(max);
-  btn->setNotchTarget(1.00);
-  btn->setWrapping(false);
-  btn->setNotchesVisible(true);
-  btn->setPageStep(5);
-  if (flag == tr("Hour")) btn->setPageStep(2);
+  if (WidgetType == 1) {
+    QDial* btn = new QDial(ui->frameSel);
+    btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    btn->setObjectName("btn");
+    btn->setMinimum(min);
+    btn->setMaximum(max);
+    btn->setNotchTarget(1.00);
+    btn->setWrapping(false);
+    btn->setNotchesVisible(true);
+    btn->setPageStep(5);
+    if (flag == tr("Hour")) btn->setPageStep(2);
 
-  connect(btn, &QDial::valueChanged, [=]() { onDial(btn, flag); });
+    connect(btn, &QDial::valueChanged, [=]() { onDial(btn, flag); });
 
-  gl->addWidget(btn, 0, 0, 1, 1);
+    gl->addWidget(btn, 0, 0, 1, 1);
 
-  if (flag == tr("Minute")) {
-    btn->setSliderPosition(mm.toInt());
+    if (flag == tr("Minute")) {
+      btn->setSliderPosition(mm.toInt());
+    }
+    if (flag == tr("Hour")) {
+      btn->setSliderPosition(h.toInt());
+    }
   }
-  if (flag == tr("Hour")) {
-    btn->setSliderPosition(h.toInt());
+
+  if (WidgetType == 2) {
+    RollingBox* btn = new RollingBox(ui->frameSel);
+    btn->setFixedHeight(100);
+    btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    btn->setObjectName("btn");
+    btn->setRange(min, max);
+
+    connect(btn, &RollingBox::currentValueChanged,
+            [=]() { onRollBox(btn, flag); });
+
+    gl->addWidget(btn, 0, 0, 1, 1);
+
+    if (flag == tr("Minute")) {
+      btn->setValue(mm.toInt());
+    }
+    if (flag == tr("Hour")) {
+      btn->setValue(h.toInt());
+    }
   }
 }
 
@@ -333,6 +355,19 @@ void msgDialog::onDial(QDial* btn, QString flag) {
 
   if (flag == tr("Minute")) {
     mm = QString::number(btn->sliderPosition());
+    if (mm.length() == 1) mm = "0" + mm;
+  }
+  setBtnTitle();
+}
+
+void msgDialog::onRollBox(RollingBox* btn, QString flag) {
+  if (flag == tr("Hour")) {
+    h = QString::number(btn->readValue());
+    if (h.length() == 1) h = "0" + h;
+  }
+
+  if (flag == tr("Minute")) {
+    mm = QString::number(btn->readValue());
     if (mm.length() == 1) mm = "0" + mm;
   }
   setBtnTitle();
