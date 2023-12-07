@@ -88,9 +88,9 @@ void DateSelector::init() {
     setFixedHeight(490);
   }
 
-  setFixedWidth(mw_one->width() - 40);
+  setFixedWidth(mw_one->width() - 10);
   int x, y, w, h;
-  x = mw_one->geometry().x() + 20;
+  x = mw_one->geometry().x() + 5;
   y = mw_one->geometry().y() + (mw_one->height() - height()) / 2;
   w = width();
   h = height();

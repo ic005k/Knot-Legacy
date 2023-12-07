@@ -44,9 +44,19 @@ void RollingBox::mousePressEvent(QMouseEvent *e) {
 void RollingBox::mouseMoveEvent(QMouseEvent *e) {
   if (isDragging) {
     // 数值到边界时，阻止继续往对应方向移动
-    if ((m_currentValue == m_minRange && e->pos().x() >= m_mouseSrcPos) ||
-        (m_currentValue == m_maxRange && e->pos().x() <= m_mouseSrcPos))
-      return;
+    /* if ((m_currentValue == m_minRange && e->pos().x() >= m_mouseSrcPos) ||
+        (m_currentValue == m_maxRange && e->pos().x() <= m_mouseSrcPos)) {
+       return;
+    } */
+
+    // 循环移动
+    if (m_currentValue == m_minRange && e->pos().x() >= m_mouseSrcPos) {
+      m_currentValue = m_maxRange;
+    }
+
+    if (m_currentValue == m_maxRange && e->pos().x() <= m_mouseSrcPos) {
+      m_currentValue = m_minRange;
+    }
 
     m_deviation = e->pos().x() - m_mouseSrcPos;
 

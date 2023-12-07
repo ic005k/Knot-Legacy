@@ -364,6 +364,7 @@ void EditRecord::on_editCategory_textChanged(const QString &arg1) {
     ui->lblCategory->setStyleSheet(lblStyle);
 
   QCompleter *completer = new QCompleter(c_list);
+  completer->setFilterMode(Qt::MatchContains);
   ui->editCategory->setCompleter(completer);
 }
 
