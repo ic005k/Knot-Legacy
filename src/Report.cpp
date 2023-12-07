@@ -416,11 +416,21 @@ void dlgReport::on_btnCategory_clicked() {
 
   QTableWidget* table = new QTableWidget;
   table->setColumnCount(3);
+
   table->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Category")));
-  table->setHorizontalHeaderItem(1, new QTableWidgetItem(tr("Percent")));
-  table->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Amount")));
-  table->horizontalHeader()->setSectionResizeMode(
-      0, QHeaderView::ResizeToContents);
+
+  QTableWidgetItem* item1 = new QTableWidgetItem(tr("Percent"));
+  item1->setTextAlignment(Qt::AlignRight);
+  table->setHorizontalHeaderItem(1, item1);
+
+  QTableWidgetItem* item2 = new QTableWidgetItem(tr("Amount"));
+  item2->setTextAlignment(Qt::AlignRight);
+  table->setHorizontalHeaderItem(2, item2);
+
+  table->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+  table->setColumnWidth(0, mw_one->width() / 3 + 5);
+
   table->horizontalHeader()->setSectionResizeMode(
       1, QHeaderView::ResizeToContents);
   table->horizontalHeader()->setStretchLastSection(true);
@@ -470,16 +480,18 @@ void dlgReport::on_btnCategory_clicked() {
 
             table->insertRow(0);
 
-            table->setItem(0, 0, new QTableWidgetItem(str2.split("|").at(0)));
+            QTableWidgetItem* tableItem1 =
+                new QTableWidgetItem(str2.split("|").at(0));
+            table->setItem(0, 0, tableItem1);
 
             QString pre = str2.split("-").at(1);
             QTableWidgetItem* tableItem2 = new QTableWidgetItem(pre);
-            tableItem2->setTextAlignment(Qt::AlignCenter);
+            tableItem2->setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
             table->setItem(0, 1, tableItem2);
 
             QTableWidgetItem* tableItem3 =
                 new QTableWidgetItem(str2.split("-").at(0).split("|").at(1));
-            tableItem3->setTextAlignment(Qt::AlignRight);
+            tableItem3->setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
             table->setItem(0, 2, tableItem3);
 
             listCategorySort.removeOne(str1);
