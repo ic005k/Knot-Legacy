@@ -1292,8 +1292,8 @@ void MainWindow::set_btnStyle(QObject *parent) {
 
     if (btn != ui->btnBackNotes && btn != ui->btnEdit &&
         btn != ui->btnNotesList && btn != ui->btnSetKey && btn != ui->btnPDF)
-      setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF",
-                       "#2483C7", "#A0DAFB");
+      setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB", "#FFFFFF",
+                       "#2483C7", "#A0DAFB");  // #5DACE4 #E5FEFF
   }
 }
 
@@ -2074,7 +2074,7 @@ void MainWindow::set_Time() {
     if (sa == "")
       item->setText(1, "");
     else
-      item->setText(1, QString("%1").arg(sa.toFloat(), 0, 'f', 2));
+      item->setText(1, QString("%1").arg(sa.toDouble(), 0, 'f', 2));
     item->setText(2, myEditRecord->ui->editCategory->text().trimmed());
     item->setText(3, myEditRecord->ui->editDetails->toPlainText().trimmed());
     // Amount
@@ -3074,64 +3074,6 @@ void MainWindow::gotoMainItem(QTreeWidgetItem *item) {
   }
 }
 
-void MainWindow::on_btnGo_clicked() {
-  ui->lblStats->setText("");
-  QTreeWidget *tw = get_tw(ui->tabWidget->currentIndex());
-  if (isFindTextChange) findItemList = findDisc();
-  int total = findItemList.count();
-  if (total > 0) {
-    tw->setFocus();
-    QTreeWidgetItem *item = findItemList.at(findPos);
-    tw->setCurrentItem(item);
-
-    gotoMainItem(item);
-
-    ui->lblStats->setText(tr("Search Results : ") + item->parent()->text(0) +
-                          "  ( " + QString::number(findPos + 1) + " -> " +
-                          QString::number(total) + " ) ");
-    findPos++;
-    if (findPos == total) findPos = 0;
-  }
-}
-
-QList<QTreeWidgetItem *> MainWindow::findDisc() {
-  findItemList.clear();
-  QTreeWidget *tw = get_tw(ui->tabWidget->currentIndex());
-
-  int total = tw->topLevelItemCount();
-  int a;
-
-  if (total - days > 0)
-    a = total - days;
-  else
-    a = 0;
-
-  for (int i = a; i < total; i++) {
-    QTreeWidgetItem *topItem = tw->topLevelItem(i);
-    int count = topItem->childCount();
-    for (int j = 0; j < count; j++) {
-      QString str = topItem->child(j)->text(2).trimmed().toLower();
-      QString strFind = ui->editFind->text().trimmed().toLower();
-      if (str.contains(strFind)) {
-        findItemList.append(topItem->child(j));
-      }
-    }
-  }
-  isFindTextChange = false;
-  findPos = 0;
-  if (findItemList.count() > 0)
-    setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
-  else
-    setLineEditQss(ui->editFind, 4, 1, "#FA0000", "##FA0000");
-  return findItemList;
-}
-
-void MainWindow::on_editFind_textChanged(const QString &arg1) {
-  Q_UNUSED(arg1);
-  setLineEditQss(ui->editFind, 4, 1, "#4169E1", "#4169E1");
-  isFindTextChange = true;
-}
-
 QString MainWindow::setLineEditQss(QLineEdit *txt, int radius, int borderWidth,
                                    const QString &normalColor,
                                    const QString &focusColor) {
@@ -3204,8 +3146,6 @@ QString MainWindow::setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
   txt->setStyleSheet(qss);
   return qss;
 }
-
-void MainWindow::on_btnHide_clicked() { on_btnFind_clicked(); }
 
 void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 
@@ -3710,8 +3650,6 @@ void MainWindow::init_UIWidget() {
   mySearchThread = new SearchThread();
   connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::searchDone);
 
-  ui->frame_find->setHidden(true);
-
   ui->progBar->setMaximumHeight(4);
   ui->progBar->hide();
   ui->progBar->setStyleSheet(
@@ -3729,9 +3667,8 @@ void MainWindow::init_UIWidget() {
   ui->progReader->setStyleSheet(ui->progBar->styleSheet());
   ui->progReader->setFixedHeight(4);
 
-  setLineEditQss(ui->editFind, 10, 1, "#4169E1", "#4169E1");
-  ui->edit1->setStyleSheet(ui->editFind->styleSheet());
-  ui->edit2->setStyleSheet(ui->editFind->styleSheet());
+  setLineEditQss(ui->edit1, 10, 1, "#4169E1", "#4169E1");
+  ui->edit2->setStyleSheet(ui->edit1->styleSheet());
 
   if (isIOS) {
   }
@@ -3783,12 +3720,6 @@ void MainWindow::init_UIWidget() {
       "QLabel{"
       "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
       "}");
-
-  auto clearaction1 = new QAction;
-  clearaction1->setIcon(QIcon(":/res/clear.png"));
-  ui->editFind->addAction(clearaction1, QLineEdit::TrailingPosition);
-  connect(clearaction1, &QAction::triggered,
-          [=]() { ui->editFind->setText(""); });
 
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());

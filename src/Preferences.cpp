@@ -220,7 +220,6 @@ void dlgPreferences::initValues() {
   if (!devMode) {
     mw_one->ui->frame_charts->hide();
     mw_one->ui->frame_tab->hide();
-    mw_one->ui->frame_find->hide();
     mw_one->ui->btnSteps->hide();
     mw_one->ui->btnMax->hide();
     mw_one->ui->btnReader->hide();

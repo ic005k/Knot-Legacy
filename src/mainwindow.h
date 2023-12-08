@@ -347,7 +347,7 @@ class MainWindow : public QMainWindow {
 
   static QStringList get_MonthList(QString strY, QString strM);
   static void drawMonthChart();
-  QList<QTreeWidgetItem *> findDisc();
+
   QString setLineEditQss(QLineEdit *txt, int radius, int borderWidth,
                          const QString &normalColor, const QString &focusColor);
   QString setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
@@ -477,12 +477,6 @@ class MainWindow : public QMainWindow {
   void on_about();
 
   void on_btnFind_clicked();
-
-  void on_btnGo_clicked();
-
-  void on_editFind_textChanged(const QString &arg1);
-
-  void on_btnHide_clicked();
 
   void on_actionFind_triggered();
 

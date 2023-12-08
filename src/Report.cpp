@@ -414,6 +414,7 @@ void dlgReport::on_btnCategory_clicked() {
 
   QTableWidget* table = new QTableWidget;
   table->setColumnCount(1);
+
   table->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("View Category")));
 
   table->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
