@@ -413,7 +413,8 @@ void dlgReport::on_btnCategory_clicked() {
   vbox->addWidget(lblTotal);
 
   QTableWidget* table = new QTableWidget;
-  table->setColumnCount(1);
+  table->setColumnCount(2);
+  table->setColumnHidden(1, true);
 
   table->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("View Category")));
 
@@ -430,6 +431,13 @@ void dlgReport::on_btnCategory_clicked() {
   QScroller::grabGesture(table, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(table);
   vbox->addWidget(table);
+
+  QToolButton* btnOk = new QToolButton();
+  btnOk->setText(tr("Ok"));
+  btnOk->setFixedHeight(35);
+  btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  btnOk->setStyleSheet(mw_one->ui->btnYear->styleSheet());
+  vbox->addWidget(btnOk);
 
   if (listCategory.count() > 0) {
     listCategorySort.clear();
@@ -459,10 +467,37 @@ void dlgReport::on_btnCategory_clicked() {
 
             QString item1 = str2.split("===").at(0).split("|").at(1);
 
+            QLabel* lbl0 = new QLabel();
+            lbl0->adjustSize();
+            lbl0->setWordWrap(true);
+            lbl0->setText(tr("Category") + " : " + item0);
+            QFont font = this->font();
+            font.setBold(true);
+            lbl0->setFont(font);
+
+            QLabel* lblPre = new QLabel();
+            lblPre->adjustSize();
+            lblPre->setWordWrap(true);
+            lblPre->setText(tr("Percent") + " : " + pre);
+
+            QLabel* lbl1 = new QLabel();
+            lbl1->adjustSize();
+            lbl1->setWordWrap(true);
+            lbl1->setText(tr("Amount") + " : " + item1);
+
+            QWidget* itemW = new QWidget();
+            QVBoxLayout* vbox = new QVBoxLayout();
+            vbox->addWidget(lbl0);
+            vbox->addWidget(lblPre);
+            vbox->addWidget(lbl1);
+            itemW->setLayout(vbox);
+
+            table->setCellWidget(0, 0, itemW);
+
             QString item = tr("Category") + " : " + item0 + "\n" +
                            tr("Percent") + " : " + pre + "\n" + tr("Amount") +
                            " : " + item1;
-            table->setItem(0, 0, new QTableWidgetItem(item));
+            table->setItem(0, 1, new QTableWidgetItem(item));
 
             listCategorySort.removeOne(str1);
 
@@ -497,6 +532,16 @@ void dlgReport::on_btnCategory_clicked() {
 
   connect(table, &QTableWidget::itemClicked, [=]() {
     QString str0 = table->item(table->currentRow(), 0)->text();
+    str0 = str0.split("\n").at(0);
+    str0 = str0.replace(tr("Category") + " : ", "").trimmed();
+    getCategoryData(str0, true);
+    indexCategory = table->currentRow();
+    dlg->close();
+    mw_one->closeGrayWindows();
+  });
+
+  connect(btnOk, &QToolButton::clicked, [=]() {
+    QString str0 = table->item(table->currentRow(), 1)->text();
     str0 = str0.split("\n").at(0);
     str0 = str0.replace(tr("Category") + " : ", "").trimmed();
     getCategoryData(str0, true);

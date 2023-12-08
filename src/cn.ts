@@ -2808,14 +2808,16 @@ in skydrive folder</source>
         <translation type="vanished">打印</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="462"/>
-        <location filename="Report.cpp" line="501"/>
-        <location filename="Report.cpp" line="830"/>
+        <location filename="Report.cpp" line="472"/>
+        <location filename="Report.cpp" line="496"/>
+        <location filename="Report.cpp" line="535"/>
+        <location filename="Report.cpp" line="545"/>
+        <location filename="Report.cpp" line="874"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="828"/>
+        <location filename="Report.cpp" line="872"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
@@ -2834,71 +2836,78 @@ in skydrive folder</source>
         <location filename="Report.cpp" line="220"/>
         <location filename="Report.cpp" line="330"/>
         <location filename="Report.cpp" line="339"/>
-        <location filename="Report.cpp" line="547"/>
-        <location filename="Report.cpp" line="584"/>
-        <location filename="Report.cpp" line="656"/>
-        <location filename="Report.cpp" line="798"/>
-        <location filename="Report.cpp" line="831"/>
-        <location filename="Report.cpp" line="854"/>
-        <location filename="Report.cpp" line="867"/>
-        <location filename="Report.cpp" line="882"/>
+        <location filename="Report.cpp" line="591"/>
+        <location filename="Report.cpp" line="628"/>
+        <location filename="Report.cpp" line="700"/>
+        <location filename="Report.cpp" line="842"/>
+        <location filename="Report.cpp" line="875"/>
+        <location filename="Report.cpp" line="898"/>
+        <location filename="Report.cpp" line="911"/>
+        <location filename="Report.cpp" line="926"/>
         <source>Details</source>
         <translation>详细</translation>
     </message>
     <message>
         <location filename="Report.cpp" line="235"/>
         <location filename="Report.cpp" line="380"/>
-        <location filename="Report.cpp" line="418"/>
-        <location filename="Report.cpp" line="477"/>
-        <location filename="Report.cpp" line="787"/>
-        <location filename="Report.cpp" line="853"/>
+        <location filename="Report.cpp" line="419"/>
+        <location filename="Report.cpp" line="511"/>
+        <location filename="Report.cpp" line="831"/>
+        <location filename="Report.cpp" line="897"/>
         <source>View Category</source>
         <translation>查看分类</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="463"/>
+        <location filename="Report.cpp" line="436"/>
+        <source>Ok</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="Report.cpp" line="480"/>
+        <location filename="Report.cpp" line="497"/>
         <source>Percent</source>
         <translation>百分比</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="546"/>
-        <location filename="Report.cpp" line="550"/>
-        <location filename="Report.cpp" line="638"/>
+        <location filename="Report.cpp" line="590"/>
+        <location filename="Report.cpp" line="594"/>
+        <location filename="Report.cpp" line="682"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="689"/>
+        <location filename="Report.cpp" line="733"/>
         <source>Save Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="691"/>
+        <location filename="Report.cpp" line="735"/>
         <source>PNG files(*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Report.cpp" line="203"/>
         <location filename="Report.cpp" line="231"/>
-        <location filename="Report.cpp" line="573"/>
-        <location filename="Report.cpp" line="577"/>
-        <location filename="Report.cpp" line="623"/>
-        <location filename="Report.cpp" line="639"/>
+        <location filename="Report.cpp" line="617"/>
+        <location filename="Report.cpp" line="621"/>
+        <location filename="Report.cpp" line="667"/>
+        <location filename="Report.cpp" line="683"/>
         <source>Freq</source>
         <translation>频次</translation>
     </message>
     <message>
         <location filename="Report.cpp" line="204"/>
         <location filename="Report.cpp" line="232"/>
-        <location filename="Report.cpp" line="463"/>
-        <location filename="Report.cpp" line="547"/>
-        <location filename="Report.cpp" line="551"/>
-        <location filename="Report.cpp" line="574"/>
-        <location filename="Report.cpp" line="578"/>
-        <location filename="Report.cpp" line="584"/>
-        <location filename="Report.cpp" line="625"/>
-        <location filename="Report.cpp" line="640"/>
-        <location filename="Report.cpp" line="829"/>
+        <location filename="Report.cpp" line="485"/>
+        <location filename="Report.cpp" line="497"/>
+        <location filename="Report.cpp" line="591"/>
+        <location filename="Report.cpp" line="595"/>
+        <location filename="Report.cpp" line="618"/>
+        <location filename="Report.cpp" line="622"/>
+        <location filename="Report.cpp" line="628"/>
+        <location filename="Report.cpp" line="669"/>
+        <location filename="Report.cpp" line="684"/>
+        <location filename="Report.cpp" line="873"/>
         <source>Amount</source>
         <translation>金额</translation>
     </message>
@@ -2909,8 +2918,8 @@ in skydrive folder</source>
     <message>
         <location filename="Report.cpp" line="203"/>
         <location filename="Report.cpp" line="231"/>
-        <location filename="Report.cpp" line="573"/>
-        <location filename="Report.cpp" line="622"/>
+        <location filename="Report.cpp" line="617"/>
+        <location filename="Report.cpp" line="666"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
@@ -2937,12 +2946,12 @@ in skydrive folder</source>
         <translation type="vanished">输出到打印机</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="681"/>
+        <location filename="Report.cpp" line="725"/>
         <source>Please turn on the storage permission of the app.</source>
         <translation>请开启APP的存储权限！</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="684"/>
+        <location filename="Report.cpp" line="728"/>
         <source>Picture output successful!</source>
         <translation>图片输出成功！</translation>
     </message>
