@@ -443,20 +443,20 @@ void dlgReport::on_btnCategory_clicked() {
     for (int j = 0; j < listE.count(); j++) {
       for (int i = 0; i < listCategorySort.count(); i++) {
         QString str1 = listCategorySort.at(i);
-        QStringList l1 = str1.split("-");
+        QStringList l1 = str1.split("-=-");
         if (l1.count() == 2 && l1.at(0).split("|").at(0).trimmed() != "") {
           if (QString::number(listE.at(j)) == l1.at(1)) {
-            QString str2 = l1.at(0) + "-" +
-                           QString("%1").arg(listE.at(j) * 100, 0, 'f', 2) +
-                           " %";
+            QString str2 =
+                l1.at(0) +
+                "===" + QString("%1").arg(listE.at(j) * 100, 0, 'f', 2) + " %";
 
             table->insertRow(0);
 
             QString item0 = str2.split("|").at(0);
 
-            QString pre = str2.split("-").at(1);
+            QString pre = str2.split("===").at(1);
 
-            QString item1 = str2.split("-").at(0).split("|").at(1);
+            QString item1 = str2.split("===").at(0).split("|").at(1);
 
             QString item = tr("Category") + " : " + item0 + "\n" +
                            tr("Percent") + " : " + pre + "\n" + tr("Amount") +
@@ -471,8 +471,14 @@ void dlgReport::on_btnCategory_clicked() {
       }
     }
 
-    qDebug() << "listCategorySort=" << listCategorySort;
-    qDebug() << "listE=" << listE;
+    if (table->rowCount() > 0)
+      table->setHorizontalHeaderItem(
+          0, new QTableWidgetItem(tr("View Category") + "  " +
+                                  QString::number(table->rowCount())));
+
+    // qDebug() << "listCategorySort=" << listCategorySort.count()
+    //        << listCategorySort;
+    // qDebug() << "listE=" << listE.count() << listE;
   }
 
   int h = mw_one->geometry().height() - 0;
@@ -579,7 +585,7 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
 
     setScrollBarPos_xx(0);
   } else {
-    listCategorySort.append(strCategory + "|" + ta + "-" +
+    listCategorySort.append(strCategory + "|" + ta + "-=-" +
                             QString::number(bfb));
     listD.append(bfb);
   }

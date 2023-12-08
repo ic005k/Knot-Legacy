@@ -4227,7 +4227,8 @@ static void JavaNotify_4() {
   if (mw_one->alertWindowsCount == 0) {
     if (!mw_one->mydlgReport->myDateSelector->isHidden())
       mw_one->mydlgReport->myDateSelector->close();
-    if (!mw_one->mydlgReport->isHidden()) mw_one->ui->btnBack_Report->click();
+    if (!mw_one->ui->frameReport->isHidden())
+      mw_one->ui->btnBack_Report->click();
     if (!mw_one->ui->frameReader->isHidden()) mw_one->ui->btnBack->click();
     if (!mw_one->ui->frameNotes->isHidden()) mw_one->ui->btnBackNotes->click();
     if (!mw_one->ui->frameOne->isHidden()) mw_one->ui->btnBack_One->click();
