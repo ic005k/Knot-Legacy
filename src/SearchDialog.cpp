@@ -30,7 +30,7 @@ SearchDialog::SearchDialog(QWidget* parent)
 
   ui->tableSearch->verticalHeader()->setSectionResizeMode(
       QHeaderView::ResizeToContents);
-
+  ui->tableSearch->setStyleSheet("selection-background-color: lightblue");
   ui->tableSearch->horizontalHeader()->setStretchLastSection(true);
   ui->tableSearch->setAlternatingRowColors(true);
   ui->tableSearch->setSelectionBehavior(QTableWidget::SelectRows);

@@ -71,7 +71,8 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
       0, new QTableWidgetItem(tr("Details")));
   mw_one->ui->tableDetails->verticalHeader()->setSectionResizeMode(
       QHeaderView::ResizeToContents);
-
+  mw_one->ui->tableDetails->setStyleSheet(
+      "selection-background-color: lightblue");
   mw_one->ui->tableDetails->horizontalHeader()->setStretchLastSection(true);
   mw_one->ui->tableDetails->setAlternatingRowColors(true);
   mw_one->ui->tableDetails->setSelectionBehavior(QTableWidget::SelectRows);
@@ -427,9 +428,12 @@ void dlgReport::on_btnCategory_clicked() {
   table->setEditTriggers(QTableWidget::NoEditTriggers);
   table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   table->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  table->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  table->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
   QScroller::grabGesture(table, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(table);
+
+  table->setStyleSheet("selection-background-color: lightblue");
+
   vbox->addWidget(table);
 
   QToolButton* btnOk = new QToolButton();
