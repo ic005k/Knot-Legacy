@@ -10,7 +10,7 @@ RollingBox::RollingBox(QWidget *parent)
       m_numSize(6) {
   homingAni = new QPropertyAnimation(this, "deviation");
   homingAni->setDuration(300);
-  homingAni->setEasingCurve(QEasingCurve::OutQuad);
+  homingAni->setEasingCurve(QEasingCurve::OutBack);  // OutQuad
 }
 
 void RollingBox::setRange(int min, int max) {

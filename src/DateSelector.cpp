@@ -27,7 +27,7 @@ DateSelector::DateSelector(QWidget *parent)
 
 void DateSelector::initRBox(RollingBox *rbox) {
   rbox->setFixedHeight(50);
-  rbox->setFixedWidth(258);
+  rbox->setFixedWidth(width());
 }
 
 DateSelector::~DateSelector() { delete ui; }
