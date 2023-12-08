@@ -39,7 +39,7 @@ class DateSelector : public QDialog {
   void on_btnOk_clicked();
 
  private:
-  void initRBox(RollingBox *rbox);
+  void initRBox(RollingBox *rbox, int w);
 };
 
 #endif  // DATESELECTOR_H

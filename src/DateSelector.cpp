@@ -14,9 +14,11 @@ DateSelector::DateSelector(QWidget *parent)
   rboxYear = new RollingBox(this);
   rboxMonth = new RollingBox(this);
   rboxDay = new RollingBox(this);
-  initRBox(rboxYear);
-  initRBox(rboxMonth);
-  initRBox(rboxDay);
+
+  int rw = 260;
+  initRBox(rboxYear, rw);
+  initRBox(rboxMonth, rw);
+  initRBox(rboxDay, rw);
 
   ui->gboxYear->layout()->addWidget(rboxYear);
   ui->gboxMonth->layout()->addWidget(rboxMonth);
@@ -25,9 +27,9 @@ DateSelector::DateSelector(QWidget *parent)
   setModal(true);
 }
 
-void DateSelector::initRBox(RollingBox *rbox) {
+void DateSelector::initRBox(RollingBox *rbox, int w) {
   rbox->setFixedHeight(50);
-  rbox->setFixedWidth(width());
+  rbox->setFixedWidth(w);
 }
 
 DateSelector::~DateSelector() { delete ui; }
@@ -95,7 +97,6 @@ void DateSelector::init() {
   w = width();
   h = height();
   setGeometry(x, y, w, h);
-
   show();
 }
 
