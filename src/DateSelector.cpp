@@ -150,6 +150,7 @@ void DateSelector::on_btnOk_clicked() {
 
   if (dateFlag == 3 || dateFlag == 4) mw_one->mydlgReport->startReport2();
 
+  mw_one->mydlgReport->saveYMD();
   close();
 }
 

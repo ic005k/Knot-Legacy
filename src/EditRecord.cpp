@@ -69,8 +69,8 @@ EditRecord::EditRecord(QWidget *parent)
 
   ui->hsM->setStyleSheet(ui->hsH->styleSheet());
 
-  mw_one->setLineEditQss(ui->editAmount, 10, 1, "#4169E1", "#4169E1");
-  mw_one->setLineEditQss(ui->editCategory, 10, 1, "#4169E1", "#4169E1");
+  mw_one->setLineEditQss(ui->editAmount, 0, 1, "#4169E1", "#4169E1");
+  mw_one->setLineEditQss(ui->editCategory, 0, 1, "#4169E1", "#4169E1");
 
   ui->editDetails->setStyleSheet(
       "border-radius:0px;border: 1px groove #4169E1;");

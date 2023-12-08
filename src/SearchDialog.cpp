@@ -21,7 +21,7 @@ SearchDialog::SearchDialog(QWidget* parent)
   setWindowTitle(tr("Search"));
 
   ui->btnClearText->setStyleSheet("border:none");
-  mw_one->setLineEditQss(ui->editSearchText, 10, 1, "#4169E1", "#4169E1");
+  mw_one->setLineEditQss(ui->editSearchText, 0, 1, "#4169E1", "#4169E1");
 
   ui->tableSearch->setColumnCount(1);
 

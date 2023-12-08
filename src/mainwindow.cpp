@@ -3667,7 +3667,7 @@ void MainWindow::init_UIWidget() {
   ui->progReader->setStyleSheet(ui->progBar->styleSheet());
   ui->progReader->setFixedHeight(4);
 
-  setLineEditQss(ui->edit1, 10, 1, "#4169E1", "#4169E1");
+  setLineEditQss(ui->edit1, 0, 1, "#4169E1", "#4169E1");
   ui->edit2->setStyleSheet(ui->edit1->styleSheet());
 
   if (isIOS) {

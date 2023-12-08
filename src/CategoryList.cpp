@@ -34,7 +34,7 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   QFont font;
   font.setPointSize(fontSize + 3);
   ui->listWidget->setFont(font);
-  mw_one->setLineEditQss(ui->editRename, 10, 1, "#4169E1", "#4169E1");
+  mw_one->setLineEditQss(ui->editRename, 0, 1, "#4169E1", "#4169E1");
   ui->btnRename->setFixedHeight(ui->editRename->height() + 2);
 }
 
