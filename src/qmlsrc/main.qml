@@ -125,7 +125,7 @@ Rectangle {
             id: listItem
             width: ListView.view.width
             height: myh
-            color: ListView.isCurrentItem ? "#94caf7" : "#ffffff" //选中颜色设置
+            color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
             border.color: "lightgray" //"lightsteelblue"

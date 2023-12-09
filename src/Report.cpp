@@ -328,7 +328,7 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
     QString strDes = item->child(z)->text(3);
     if (strDes.trimmed().length() > 0) {
       QTreeWidgetItem* des = new QTreeWidgetItem(newtop);
-      des->setText(0, tr("Details") + ":" + strDes);
+      des->setText(0, tr("Details") + " : " + strDes);
     }
   }
 
@@ -584,7 +584,14 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
           date = topItem->text(3) + "-" + topItem->text(0).split(" ").at(1) +
                  "-" + topItem->text(0).split(" ").at(2);
           time = childItem->text(0).split(".").at(1);
-          details = childItem->text(3);
+
+          if (j + 1 < topItem->childCount()) {
+            QTreeWidgetItem* nextChild = topItem->child(j + 1);
+
+            if (nextChild->text(0).contains(tr("Details"))) {
+              details = nextChild->text(0);
+            }
+          }
         }
         QString amount = childItem->text(1);
         if (appendTable) {  // appendSteps_xx(date, time, amount);
@@ -593,8 +600,7 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
           QString str;
           if (details.trimmed().length() > 0)
             str = tr("Date") + " : " + date + "  " + time + "\n" +
-                  tr("Amount") + " : " + amount + "\n" + tr("Details") + " : " +
-                  details;
+                  tr("Amount") + " : " + amount + "\n" + details;
           else
             str = tr("Date") + " : " + date + "  " + time + "\n" +
                   tr("Amount") + " : " + amount;
@@ -616,12 +622,7 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
   QString ta = QString("%1").arg(d_amount, 0, 'f', 2);
   if (appendTable) {
     // appendSteps_xx(tr("Total"), QString::number(freq), ta);
-    mw_one->ui->tableDetails->setRowCount(freq + 1);
-    mw_one->ui->tableDetails->setItem(
-        freq, 0,
-        new QTableWidgetItem(tr("Total") + "\n" + tr("Freq") + " : " +
-                             QString::number(freq) + "\n" + tr("Amount") +
-                             " : " + ta));
+
     mw_one->ui->tableDetails->setHorizontalHeaderItem(
         0, new QTableWidgetItem(strCategory + "\n" + tr("Freq") + " : " +
                                 QString::number(freq) + "  " + tr("Amount") +
