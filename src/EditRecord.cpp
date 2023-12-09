@@ -105,8 +105,6 @@ void EditRecord::on_btnOk_clicked() {
   close();
 
   if (!mw_one->isAdd) {
-    mw_one->addUndo(tr("Modify Item") + " ( " + mw_one->getTabText() + " ) ");
-
     mw_one->set_Time();
   } else {
     if (mw_one->isTesting) {
@@ -116,11 +114,9 @@ void EditRecord::on_btnOk_clicked() {
                          ui->editCategory->text().trimmed());
     } else
 
-      mw_one->addUndo(tr("Add Item") + " ( " + mw_one->getTabText() + " ) ");
-
-    mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
-                     ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                     ui->editCategory->text().trimmed());
+      mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
+                       ui->lblTime->text(), ui->editAmount->text().trimmed(),
+                       ui->editCategory->text().trimmed());
   }
 
   mw_one->clickData();

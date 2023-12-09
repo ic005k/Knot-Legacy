@@ -95,7 +95,7 @@ void dlgReport::init() {
   mw_one->ui->frameReport->setGeometry(
       mw_one->geometry().x(), mw_one->geometry().y(),
       mw_one->geometry().width(), mw_one->geometry().height());
-  mw_one->ui->qwReport->setFixedHeight(mw_one->height() / 3);
+  mw_one->ui->qwReport->setFixedHeight(mw_one->height() / 3 - 15);
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameReport->show();
   if (isWholeMonth)

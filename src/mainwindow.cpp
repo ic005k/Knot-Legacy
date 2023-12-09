@@ -1006,13 +1006,14 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
 
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
 
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QString str =
-        tw->topLevelItem(i)->text(0) + " " + tw->topLevelItem(i)->text(3);
+  int topc = tw->topLevelItemCount();
+  for (int i = 0; i < topc; i++) {
+    QString str = tw->topLevelItem(topc - 1 - i)->text(0) + " " +
+                  tw->topLevelItem(topc - 1 - i)->text(3);
     if (getYMD(str) == getYMD(strDate)) {
       isYes = true;
 
-      QTreeWidgetItem *topItem = tw->topLevelItem(i);
+      QTreeWidgetItem *topItem = tw->topLevelItem(topc - 1 - i);
       QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
       item11->setText(0, strTime);
       if (strAmount == "")
@@ -1044,7 +1045,8 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
         topItem->setText(2, strAmount);
 
       break;
-    }
+    } else
+      break;
   }
 
   if (!isYes) {
@@ -1221,8 +1223,6 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             str + " : ",
             tr("The last record added today will be deleted!") + "\n\n" + str1);
         if (!isOK) return;
-
-        addUndo(tr("Del Item") + " ( " + getTabText() + " ) ");
 
         topItem->removeChild(topItem->child(childCount - 1));
         topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -4015,7 +4015,7 @@ void MainWindow::on_actionTimeMachine() {
   vbox->setContentsMargins(3, 3, 3, 3);
   dlgTimeMachine->setLayout(vbox);
   QToolButton *btnBack = new QToolButton(this);
-  btnBack->setStyleSheet(btnStyle);
+  btnBack->setStyleSheet(ui->btnSetKeyOK->styleSheet());
   btnBack->setFixedHeight(35);
   btnBack->setText(tr("Back"));
   btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
