@@ -94,10 +94,9 @@ void ImportDataThread::run() {
 
 void MainWindow::importDataDone() {
   if (!zipfile.isNull() && isZipOK) {
-    if (QFile(iniFile).exists()) QFile(iniFile).remove();
-    QTextEdit *txtEdit = new QTextEdit;
-    txtEdit->setPlainText(txt);
-    TextEditToFile(txtEdit, iniFile);
+    m_NotesList->initNotesList();
+    m_NotesList->initRecycle();
+    mydlgTodo->init_Todo();
 
     loading = true;
     init_TotalData();
@@ -105,8 +104,6 @@ void MainWindow::importDataDone() {
 
     while (!isReadTWEnd)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-
-    startSave("alltab");
 
     while (!isSaveEnd)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
@@ -2878,7 +2875,12 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
         isZipOK = false;
         return false;
       }
+    }
 
+    isZipOK = true;
+    mw_one->mydlgReader->deleteDirfile(iniDir + "memo_bak");
+
+    if (!unre) {
       // Remove old ini files
       QStringList iniFiles;
       QStringList fmt;
@@ -2902,21 +2904,33 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
       }
     }
 
-    isZipOK = true;
-    mw_one->mydlgReader->deleteDirfile(iniDir + "memo_bak");
-
-    // Notes
-    if (!unre) {
-      m_NotesList->initNotesList();
-      m_NotesList->initRecycle();
-
-      mydlgTodo->init_Todo();
-    }
-
     if (book) {
     }
   }
 
+  return true;
+}
+
+bool MainWindow::copyFileToPath(QString sourceDir, QString toDir,
+                                bool coverFileIfExist) {
+  toDir.replace("\\", "/");
+  if (sourceDir == toDir) {
+    return true;
+  }
+  if (!QFile::exists(sourceDir)) {
+    return false;
+  }
+  QDir *createfile = new QDir;
+  bool exist = createfile->exists(toDir);
+  if (exist) {
+    if (coverFileIfExist) {
+      createfile->remove(toDir);
+    }
+  }  // end if
+
+  if (!QFile::copy(sourceDir, toDir)) {
+    return false;
+  }
   return true;
 }
 
@@ -3009,18 +3023,9 @@ QTreeWidget *MainWindow::get_tw(int tabIndex) {
 void MainWindow::on_about() {
   m_Remarks->init_Notes();
 
-  QString bakini = iniDir + "memo/KnotSync.ini";
-  QSettings Reg(bakini, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  int allkeys = Reg.allKeys().count();
-
   QTextBrowser *textBrowser = new QTextBrowser;
   textBrowser->append("");
   textBrowser->append(appName + "  Ver: " + ver);
-  textBrowser->append("All Keys: " + QString::number(allkeys));
-  textBrowser->append("Data Size: " + getFileSize(QFile(bakini).size(), 2));
 
   textBrowser->append("");
   textBrowser->append("Launched: " + loginTime);
@@ -3877,6 +3882,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   actRedo->setVisible(false);
 
   QAction *actTimeMachine = new QAction(tr("Time Machine"));
+  actTimeMachine->setVisible(false);
 
   connect(actAddTab, &QAction::triggered, this,
           &MainWindow::on_actionAdd_Tab_triggered);

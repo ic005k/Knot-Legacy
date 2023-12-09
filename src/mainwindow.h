@@ -425,7 +425,8 @@ class MainWindow : public QMainWindow {
   int getMaxDay(QString sy, QString sm);
   void showProgress();
 
- protected:
+  bool copyFileToPath(QString sourceDir, QString toDir, bool coverFileIfExist);
+  protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;
