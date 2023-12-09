@@ -6,7 +6,7 @@
 
 extern MainWindow *mw_one;
 extern QString iniDir, privateDir;
-extern bool isImport, isAndroid;
+extern bool isAndroid;
 
 dlgNotesList::dlgNotesList(QWidget *parent)
     : QDialog(parent), ui(new Ui::dlgNotesList) {
@@ -483,8 +483,7 @@ void dlgNotesList::initNotesList() {
         tw->setCurrentItem(childItem);
         qDebug() << "set current item...";
         ui->editName->setText(childItem->text(0));
-        if (mw_one->initMain || isImport)
-          on_treeWidget_itemClicked(childItem, 0);
+        if (mw_one->initMain) on_treeWidget_itemClicked(childItem, 0);
 
         break;
       }

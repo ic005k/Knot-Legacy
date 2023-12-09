@@ -8,7 +8,7 @@ extern MainWindow* mw_one;
 extern QRegularExpression regxNumber;
 extern QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 extern unsigned int num_steps_walk, num_steps_run, num_steps_hop;
-extern bool loading, isImport;
+extern bool loading;
 extern QString iniFile, iniDir;
 extern void setTableNoItemFlags(QTableWidget* t, int row);
 
@@ -133,10 +133,8 @@ void dlgSteps::init_Steps() {
   }
 
   QString ini_file;
-  if (isImport)
-    ini_file = iniFile;
-  else
-    ini_file = iniDir + "steps.ini";
+
+  ini_file = iniDir + "steps.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");

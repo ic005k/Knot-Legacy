@@ -9,7 +9,7 @@ extern MainWindow *mw_one;
 extern QTabWidget *tabData;
 extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
-extern bool isBreak, isImport;
+extern bool isBreak;
 extern int fontSize;
 
 bool del = false;
@@ -249,10 +249,8 @@ int EditRecord::removeDuplicates(QStringList *that) {
 void EditRecord::init_Desc() {
   // Custom Desc
   QString ini_file;
-  if (isImport)
-    ini_file = iniFile;
-  else
-    ini_file = iniDir + "desc.ini";
+
+  ini_file = iniDir + "desc.ini";
   QSettings RegDesc(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   RegDesc.setIniCodec("utf-8");

@@ -11,8 +11,8 @@ QString ver = "1.1.20";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
-bool isImport, isEBook, isReport, isUpData, isZipOK, isMenuImport,
-    isTimeMachine, isDownData;
+bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isTimeMachine,
+    isDownData;
 
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
@@ -98,7 +98,7 @@ void MainWindow::importDataDone() {
     QTextEdit *txtEdit = new QTextEdit;
     txtEdit->setPlainText(txt);
     TextEditToFile(txtEdit, iniFile);
-    isImport = true;
+
     loading = true;
     init_TotalData();
     loading = false;
@@ -361,7 +361,6 @@ void MainWindow::saveDone() {
   addRedo();
 
   isSaveEnd = true;
-  isImport = false;
 
   ui->progBar->setMaximum(100);
 
@@ -838,19 +837,14 @@ void MainWindow::init_TotalData() {
     ui->tabWidget->removeTab(0);
   }
   QString ini_file, ini_file1;
-  if (isImport)
-    ini_file = iniFile;
-  else
-    ini_file = iniDir + "tab.ini";
+
+  ini_file = iniDir + "tab.ini";
   QSettings RegTab(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   RegTab.setIniCodec("utf-8");
 #endif
 
-  if (isImport)
-    ini_file1 = iniFile;
-  else
-    ini_file1 = iniDir + "notes.ini";
+  ini_file1 = iniDir + "notes.ini";
   QSettings RegNotes(ini_file1, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   RegNotes.setIniCodec("utf-8");
@@ -1526,10 +1520,8 @@ void MainWindow::readData(QTreeWidget *tw) {
   tw->clear();
   QString name = tw->objectName();
   QString ini_file;
-  if (isImport)
-    ini_file = iniFile;
-  else
-    ini_file = iniDir + name + ".ini";
+
+  ini_file = iniDir + name + ".ini";
 
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -2746,7 +2738,6 @@ void MainWindow::bakIniData(QString unredoFile, bool unre) {
   edit->append("[" + appName + "]");
   edit->append("Ver: " + ver);
   edit->append(loadText(iniDir + "tab.ini"));
-  edit->append(loadText(iniDir + "font.ini"));
   edit->append(loadText(iniDir + "desc.ini"));
   edit->append(loadText(iniDir + "ymd.ini"));
   edit->append(loadText(iniDir + "notes.ini"));
@@ -2768,14 +2759,25 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
   if (!fileName.isNull()) {
     isSelf = true;
 
-    bakIniData("", false);
     m_NotesList->clearFiles();
 
-    QFile::remove(iniDir + "memo/mainnotes.ini");
-    QFile::copy(iniDir + "mainnotes.ini", iniDir + "memo/mainnotes.ini");
+    // Remove old ini files
+    QStringList iniFiles;
+    QStringList fmt;
+    fmt.append("ini");
+    m_NotesList->getAllFiles(iniDir + "memo/", iniFiles, fmt);
+    for (int i = 0; i < iniFiles.count(); i++) {
+      QFile::remove(iniFiles.at(i));
+    }
 
-    QFile::remove(iniDir + "memo/todo.ini");
-    QFile::copy(iniDir + "todo.ini", iniDir + "memo/todo.ini");
+    // Copy new ini files
+    iniFiles.clear();
+    m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
+    for (int i = 0; i < iniFiles.count(); i++) {
+      QString strf = iniFiles.at(i);
+      QFileInfo fi(strf);
+      QFile::copy(strf, iniDir + "memo/" + fi.fileName());
+    }
 
     QString zipfile = iniDir + "memo.zip";
     QFile(zipfile).remove();
@@ -2801,6 +2803,13 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       QFile::copy(zipfile, fileName);
       infoStr = fileName;
 #endif
+    }
+
+    // Remove old ini files
+    iniFiles.clear();
+    m_NotesList->getAllFiles(iniDir + "memo/", iniFiles, fmt);
+    for (int i = 0; i < iniFiles.count(); i++) {
+      QFile::remove(iniFiles.at(i));
     }
 
     isSelf = false;
@@ -2848,7 +2857,6 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     if (msg) {
     }
 
-    QString file;
     if (!unre) {
       if (fileName != iniDir + "memo.zip") {
         QFile::remove(iniDir + "memo.zip");
@@ -2860,18 +2868,38 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
         QFile::copy(fileName, iniDir + "memo.zip");
       }
       mw_one->mydlgMainNotes->unzip(iniDir + "memo.zip");
-      file = iniDir + "memo/KnotSync.ini";
-    } else
-      file = fileName;
 
-    txt = loadText(file);
-    if (!txt.contains(appName)) {
-      QString oldPath = iniDir + "memo_bak";
-      QDir dirOld(oldPath);
-      dirOld.rename(oldPath, iniDir + "memo");
+      QFile file(iniDir + "memo/tab.ini");
+      if (!file.exists()) {
+        QString oldPath = iniDir + "memo_bak";
+        QDir dirOld(oldPath);
+        dirOld.rename(oldPath, iniDir + "memo");
 
-      isZipOK = false;
-      return false;
+        isZipOK = false;
+        return false;
+      }
+
+      // Remove old ini files
+      QStringList iniFiles;
+      QStringList fmt;
+      fmt.append("ini");
+      m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
+      for (int i = 0; i < iniFiles.count(); i++) {
+        QString file = iniFiles.at(i);
+        if (!file.contains("/memo/")) QFile::remove(file);
+      }
+
+      // Copy new ini files
+      iniFiles.clear();
+      m_NotesList->getAllFiles(iniDir + "memo/", iniFiles, fmt);
+      for (int i = 0; i < iniFiles.count(); i++) {
+        QString strf = iniFiles.at(i);
+        QFileInfo fi(strf);
+        QFile::copy(strf, iniDir + fi.fileName());
+
+        // Del ini bak files
+        QFile::remove(strf);
+      }
     }
 
     isZipOK = true;
@@ -2879,15 +2907,9 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
 
     // Notes
     if (!unre) {
-      QFile::remove(iniDir + "mainnotes.ini");
-      if (QFile::copy(iniDir + "memo/mainnotes.ini", iniDir + "mainnotes.ini"))
-        QFile::remove(iniDir + "memo/mainnotes.ini");
       m_NotesList->initNotesList();
       m_NotesList->initRecycle();
 
-      QFile::remove(iniDir + "todo.ini");
-      if (QFile::copy(iniDir + "memo/todo.ini", iniDir + "todo.ini"))
-        QFile::remove(iniDir + "memo/todo.ini");
       mydlgTodo->init_Todo();
     }
 
@@ -3969,44 +3991,40 @@ void MainWindow::redo() {
 }
 
 void MainWindow::addUndo(QString log) {
-  if (!isImport) {
-    QString undoFile = privateDir + mydlgMainNotes->getDateTimeStr();
-    bakIniData(undoFile, true);
+  QString undoFile = privateDir + mydlgMainNotes->getDateTimeStr();
+  bakIniData(undoFile, true);
 
-    for (int i = 0; i < timeLines.count(); i++) {
-      QString str = timeLines.at(i);
-      if (str.contains(LatestTime)) {
-        timeLines.removeAt(i);
-        break;
-      }
+  for (int i = 0; i < timeLines.count(); i++) {
+    QString str = timeLines.at(i);
+    if (str.contains(LatestTime)) {
+      timeLines.removeAt(i);
+      break;
     }
-
-    timeLines.insert(0, undoFile + "\n" + log);
-    timeLines.insert(0, privateDir + LatestTime);
-    int count = timeLines.count();
-    if (count > 50) {
-      count = 50;
-      QString str = timeLines.at(count);
-      QString oldFile = str.split("\n").at(0);
-      if (QFile().remove(oldFile))
-        qDebug() << oldFile << "addUndo del oldFile...";
-      timeLines.removeAt(count);
-    }
-    QSettings Reg(privateDir + "timemachine.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    Reg.setIniCodec("utf-8");
-#endif
-    Reg.setValue("/TimeLines/Count", count);
-    for (int i = 0; i < count; i++)
-      Reg.setValue("/TimeLines/Files" + QString::number(i), timeLines.at(i));
   }
+
+  timeLines.insert(0, undoFile + "\n" + log);
+  timeLines.insert(0, privateDir + LatestTime);
+  int count = timeLines.count();
+  if (count > 50) {
+    count = 50;
+    QString str = timeLines.at(count);
+    QString oldFile = str.split("\n").at(0);
+    if (QFile().remove(oldFile))
+      qDebug() << oldFile << "addUndo del oldFile...";
+    timeLines.removeAt(count);
+  }
+  QSettings Reg(privateDir + "timemachine.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  Reg.setValue("/TimeLines/Count", count);
+  for (int i = 0; i < count; i++)
+    Reg.setValue("/TimeLines/Files" + QString::number(i), timeLines.at(i));
 }
 
 void MainWindow::addRedo() {
-  if (!isImport) {
-    QString redoFile = privateDir + LatestTime;
-    bakIniData(redoFile, true);
-  }
+  QString redoFile = privateDir + LatestTime;
+  bakIniData(redoFile, true);
 }
 
 void MainWindow::on_actionTimeMachine() {

@@ -11,7 +11,7 @@ extern int fontSize;
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
 extern QTabWidget *tabData, *tabChart;
-extern bool isImport, isEBook, isReport;
+extern bool isEBook, isReport;
 
 QString btnYearText, btnMonthText;
 QStringList listCategory;

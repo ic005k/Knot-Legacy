@@ -10,7 +10,7 @@ QString orgLblStyle;
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
-extern bool loading, isBreak, isImport;
+extern bool loading, isBreak;
 extern int fontSize;
 
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {

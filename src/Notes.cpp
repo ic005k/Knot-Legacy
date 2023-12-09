@@ -7,7 +7,7 @@
 
 extern MainWindow *mw_one;
 extern QString iniFile, iniDir, privateDir, fontname;
-extern bool isImport, isAndroid, isIOS;
+extern bool isAndroid, isIOS;
 extern int fontSize;
 extern QRegularExpression regxNumber;
 

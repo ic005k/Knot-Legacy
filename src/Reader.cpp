@@ -8,7 +8,7 @@
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, privateDir;
-extern bool isImport, zh_cn, isAndroid, isIOS, isEBook, isReport;
+extern bool zh_cn, isAndroid, isIOS, isEBook, isReport;
 extern int fontSize;
 
 bool isOpen = false;
