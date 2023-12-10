@@ -4039,6 +4039,12 @@ void MainWindow::on_actionTimeMachine() {
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setContentsMargins(3, 3, 3, 3);
   dlgTimeMachine->setLayout(vbox);
+
+  QLabel *lblTitle = new QLabel();
+  lblTitle->setWordWrap(true);
+  lblTitle->adjustSize();
+  lblTitle->setText("");
+
   QToolButton *btnBack = new QToolButton(this);
   btnBack->setStyleSheet(ui->btnSetKeyOK->styleSheet());
   btnBack->setFixedHeight(35);
@@ -4081,11 +4087,13 @@ void MainWindow::on_actionTimeMachine() {
     table->insertRow(0);
     table->setItem(0, 1, new QTableWidgetItem(bakfile));
 
-    QFileInfo fi(bakfile);
-    QString item = action + "\n" + getFileSize(QFile(bakfile).size(), 2) +
-                   "\n" + fi.fileName();
+    QString item = action + "\n" + getFileSize(QFile(bakfile).size(), 2);
     table->setItem(0, 0, new QTableWidgetItem(item));
   }
+
+  connect(table, &QTableWidget::itemClicked, [=]() {
+    lblTitle->setText(table->item(table->currentRow(), 1)->text());
+  });
 
   connect(btnImport, &QToolButton::clicked, [=]() {
     if (table->rowCount() == 0) return;
@@ -4122,6 +4130,7 @@ void MainWindow::on_actionTimeMachine() {
                               " : " + QString::number(table->rowCount())));
 
   vbox->addWidget(table);
+  vbox->addWidget(lblTitle);
 
   QHBoxLayout *hbox = new QHBoxLayout();
   hbox->addWidget(btnBack);
