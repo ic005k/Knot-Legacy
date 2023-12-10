@@ -146,8 +146,6 @@ void SearchDialog::initSearchResults() {
 
 void SearchDialog::generateData(int count, QTableWidget* table) {
   table->setRowCount(count);
-  QFont font = this->font();
-  font.setBold(true);
   for (int i = 0; i < count; i++) {
     QStringList list = resultsList.at(i).split("=|=");
     QString str0, str1, str2, str3;
@@ -186,7 +184,6 @@ void SearchDialog::generateData(int count, QTableWidget* table) {
     }
 
     lbl0->setText(str0);
-    lbl0->setFont(font);
     lbl1->setText(tr("Amount") + " : " + str1);
     lbl2->setText(tr("Category") + " : " + str2);
     lbl3->setText(tr("Details") + " : " + str3);
