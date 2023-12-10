@@ -80,6 +80,8 @@ void MainWindow::bakDataDone() {
       msgBox.exec();
     }
   }
+
+  isUpData = false;
 }
 
 ImportDataThread::ImportDataThread(QObject *parent) : QThread{parent} {}
@@ -2807,9 +2809,9 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       QFile::remove(iniFiles.at(i));
     }
 
-    mydlgPre->appendBakFile(QDate::currentDate().toString() + "  " +
-                                QTime::currentTime().toString(),
-                            infoStr);
+    if (!isUpData)
+      mydlgPre->appendBakFile(
+          QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss"), infoStr);
 
     isSelf = false;
     return infoStr;
@@ -3934,8 +3936,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   mainMenu->addAction(actUndo);
   mainMenu->addAction(actRedo);
 
-  mainMenu->addAction(actTimeMachine);
-
   mainMenu->addAction(actExportData);
   mainMenu->addAction(actImportData);
 
@@ -3957,6 +3957,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   mainMenu->addAction(actPreferences);
 
   mainMenu->addAction(actOneDrive);
+  mainMenu->addAction(actTimeMachine);
   mainMenu->addAction(actAbout);
 
   mainMenu->setStyleSheet(qss);
@@ -4080,25 +4081,10 @@ void MainWindow::on_actionTimeMachine() {
     table->insertRow(0);
     table->setItem(0, 1, new QTableWidgetItem(bakfile));
 
-    QLabel *lbl0 = new QLabel();
-    lbl0->adjustSize();
-    lbl0->setWordWrap(true);
-    lbl0->setText(action);
-    QFont fo = this->font();
-    fo.setBold(true);
-    lbl0->setFont(fo);
-
-    QLabel *lbl1 = new QLabel();
-    lbl1->adjustSize();
-    lbl1->setWordWrap(true);
-    lbl1->setText(bakfile);
-
-    QWidget *wg = new QWidget();
-    QVBoxLayout *vbox = new QVBoxLayout();
-    wg->setLayout(vbox);
-    vbox->addWidget(lbl0);
-    vbox->addWidget(lbl1);
-    table->setCellWidget(0, 0, wg);
+    QFileInfo fi(bakfile);
+    QString item = action + "\n" + getFileSize(QFile(bakfile).size(), 2) +
+                   "\n" + fi.fileName();
+    table->setItem(0, 0, new QTableWidgetItem(item));
   }
 
   connect(btnImport, &QToolButton::clicked, [=]() {
