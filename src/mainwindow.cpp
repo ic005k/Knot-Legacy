@@ -3881,8 +3881,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   actUndo->setVisible(false);
   actRedo->setVisible(false);
 
-  QAction *actTimeMachine = new QAction(tr("Time Machine"));
-  actTimeMachine->setVisible(false);
+  QAction *actTimeMachine = new QAction(tr("Backup File List"));
 
   connect(actAddTab, &QAction::triggered, this,
           &MainWindow::on_actionAdd_Tab_triggered);
@@ -4045,32 +4044,35 @@ void MainWindow::on_actionTimeMachine() {
   btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   connect(btnBack, &QToolButton::clicked, [=]() { dlgTimeMachine->close(); });
 
-  QListWidget *list = new QListWidget(this);
-  list->setStyleSheet(mw_one->listWidgetStyle);
-  list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(list);
-  QFont font0 = this->font();
-  QFontMetrics fm(font0);
-  int size = fm.height() * 2;
-  list->setIconSize(QSize(size, size));
-  list->setWordWrap(true);
+  QToolButton *btnImport = new QToolButton(this);
+  btnImport->setStyleSheet(ui->btnSetKeyOK->styleSheet());
+  btnImport->setFixedHeight(35);
+  btnImport->setText(tr("Import"));
+  btnImport->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-  for (int i = 0; i < timeLines.count(); i++) {
-    QString str = timeLines.at(i);
-    QListWidgetItem *item;
-    item = new QListWidgetItem(QIcon(":/res/timemachine.png"),
-                               QFileInfo(str).baseName());
-    item->setSizeHint(QSize(130, fm.height() * 3));
-    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    list->addItem(item);
-  }
+  QTableWidget *table = new QTableWidget;
+  table->setColumnCount(2);
+  table->setColumnHidden(1, true);
 
-  connect(list, &QListWidget::itemClicked, [=]() {
-    QString str = list->currentItem()->text();
-    QStringList list0 = str.split("\n");
-    if (list0.count() == 2) str = list0.at(0);
+  table->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+  table->horizontalHeader()->setStretchLastSection(true);
+  table->setAlternatingRowColors(true);
+  table->setSelectionBehavior(QTableWidget::SelectRows);
+  table->setSelectionMode(QAbstractItemView::SingleSelection);
+  table->setEditTriggers(QTableWidget::NoEditTriggers);
+  table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  table->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  table->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
+  QScroller::grabGesture(table, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(table);
+
+  table->setStyleSheet("selection-background-color: lightblue");
+
+  connect(btnImport, &QToolButton::clicked, [=]() {
+    if (table->rowCount() == 0) return;
+
+    QString str = table->currentItem()->text().split("\n").at(1);
     zipfile = privateDir + str.trimmed();
 
     if (!zipfile.isNull()) {
@@ -4093,20 +4095,24 @@ void MainWindow::on_actionTimeMachine() {
     myImportDataThread->start();
   });
 
-  if (list->count() > 0) {
-    list->setCurrentRow(0);
+  if (table->rowCount() > 0) {
+    table->setCurrentCell(0, 0);
   }
 
-  QLabel *lblTitle = new QLabel;
-  lblTitle->setText(tr("Tab Time Machine") + "    " + tr("Total") + " : " +
-                    QString::number(timeLines.count()));
-  vbox->addWidget(lblTitle);
-  vbox->addWidget(list);
-  vbox->addWidget(btnBack);
+  table->setHorizontalHeaderItem(
+      0, new QTableWidgetItem(tr("Backup File List") + "    " + tr("Total") +
+                              " : " + QString::number(table->rowCount())));
+
+  vbox->addWidget(table);
+
+  QHBoxLayout *hbox = new QHBoxLayout();
+  hbox->addWidget(btnBack);
+  hbox->addWidget(btnImport);
+  vbox->addLayout(hbox);
+
   dlgTimeMachine->setGeometry(geometry().x(), geometry().y(), width(),
                               height());
   dlgTimeMachine->show();
-  list->setFocus();
 }
 
 void MainWindow::on_btnMenu_clicked() {

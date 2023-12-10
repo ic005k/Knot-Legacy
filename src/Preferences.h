@@ -25,7 +25,15 @@ class dlgPreferences : public QDialog {
   void initValues();
   void autoBakData();
 
- protected:
+  void setBakStatus(bool status);
+  bool getBakStatus();
+  void setLatestAction(QString action);
+  QString getLatestAction();
+
+  void appendBakFile(QString action, QString bakfile);
+
+  QStringList getBakFilesList();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;

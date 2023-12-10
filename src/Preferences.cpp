@@ -297,3 +297,74 @@ void dlgPreferences::autoBakData() {
   }
   Reg.setValue("/AutoBak/BakCount", bakCount);
 }
+
+void dlgPreferences::setBakStatus(bool status) {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue("/BakFiles/BakStatus", status);
+}
+
+bool dlgPreferences::getBakStatus() {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  return Reg.value("/BakFiles/BakStatus", 0).toBool();
+}
+
+void dlgPreferences::setLatestAction(QString action) {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue("/BakFiles/BakAction", action);
+}
+
+QString dlgPreferences::getLatestAction() {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  return Reg.value("/BakFiles/BakAction").toString();
+}
+
+void dlgPreferences::appendBakFile(QString action, QString bakfile) {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  int count = Reg.value("/BakFiles/BakCount", 0).toInt();
+  count++;
+  Reg.setValue("BakFiles/BakCount", count);
+  Reg.setValue("/BakFiles/Action" + QString::number(count - 1), action);
+  Reg.setValue("/BakFiles/File" + QString::number(count - 1), bakfile);
+}
+
+QStringList dlgPreferences::getBakFilesList() {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  QStringList fileList;
+  QString action, bakfile;
+  int count = Reg.value("/BakFiles/BakCount", 0).toInt();
+  for (int i = 0; i < count; i++) {
+    action = Reg.value("/BakFiles/Action" + QString::number(i)).toString();
+    bakfile = Reg.value("/BakFiles/File" + QString::number(i)).toString();
+
+    QFile file(bakfile);
+    if (file.exists()) {
+      fileList.insert(0, action + "-===-" + bakfile);
+    }
+  }
+
+  return fileList;
+}
