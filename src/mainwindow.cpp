@@ -1217,6 +1217,9 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             tr("The last record added today will be deleted!") + "\n\n" + str1);
         if (!isOK) return;
 
+        isNeedAutoBackup = true;
+        strLatestModify = tr("Del Item") + " ( " + getTabText() + " ) ";
+
         topItem->removeChild(topItem->child(childCount - 1));
         topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
 
@@ -1906,6 +1909,9 @@ void MainWindow::on_actionAdd_Tab_triggered() {
   reloadMain();
 
   startSave("alltab");
+
+  isNeedAutoBackup = true;
+  strLatestModify = tr("Add Tab") + " ( " + getTabText() + " ) ";
 }
 
 void MainWindow::on_actionDel_Tab_triggered() {
@@ -1916,6 +1922,9 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
   if (!showMsgBox("Knot", tr("Whether to remove") + "  " + str1 + " ? ", "", 2))
     return;
+
+  isNeedAutoBackup = true;
+  strLatestModify = tr("Del Tab") + " ( " + getTabText() + " ) ";
 
   int TabCount = ui->tabWidget->tabBar()->count();
   if (TabCount > 1) ui->tabWidget->removeTab(index);
@@ -2811,7 +2820,9 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
 
     if (!isUpData)
       mydlgPre->appendBakFile(
-          QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss"), infoStr);
+          QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss") + "\n" +
+              strLatestModify,
+          infoStr);
 
     isSelf = false;
     return infoStr;

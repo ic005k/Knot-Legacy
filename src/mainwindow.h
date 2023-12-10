@@ -141,6 +141,9 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  bool isNeedAutoBackup = false;
+  QString strLatestModify = "None";
+
   QDialog *dlgProg;
   QDialog *getProgBar();
   void setMini();
@@ -426,7 +429,8 @@ class MainWindow : public QMainWindow {
   void showProgress();
 
   bool copyFileToPath(QString sourceDir, QString toDir, bool coverFileIfExist);
-  protected:
+
+ protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;

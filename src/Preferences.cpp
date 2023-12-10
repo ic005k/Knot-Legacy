@@ -272,6 +272,8 @@ void dlgPreferences::on_btnReStart_clicked() {
 }
 
 void dlgPreferences::autoBakData() {
+  if (!mw_one->isNeedAutoBackup) return;
+
   QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -296,6 +298,8 @@ void dlgPreferences::autoBakData() {
     Reg.setValue("/AutoBak/NextDel", nextDel);
   }
   Reg.setValue("/AutoBak/BakCount", bakCount);
+
+  mw_one->isNeedAutoBackup = false;
 }
 
 void dlgPreferences::setBakStatus(bool status) {

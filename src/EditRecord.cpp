@@ -107,6 +107,10 @@ void EditRecord::on_btnOk_clicked() {
   if (!mw_one->isAdd) {
     mw_one->set_Time();
 
+    mw_one->isNeedAutoBackup = true;
+    mw_one->strLatestModify =
+        tr("Modify Item") + " ( " + mw_one->getTabText() + " ) ";
+
   } else {
     if (mw_one->isTesting) {
       for (int i = 0; i < 500; i++)
@@ -118,6 +122,10 @@ void EditRecord::on_btnOk_clicked() {
       mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
                        ui->lblTime->text(), ui->editAmount->text().trimmed(),
                        ui->editCategory->text().trimmed());
+
+    mw_one->isNeedAutoBackup = true;
+    mw_one->strLatestModify =
+        tr("Add Item") + " ( " + mw_one->getTabText() + " ) ";
   }
 
   mw_one->clickData();
