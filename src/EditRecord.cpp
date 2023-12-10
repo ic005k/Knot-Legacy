@@ -106,6 +106,7 @@ void EditRecord::on_btnOk_clicked() {
 
   if (!mw_one->isAdd) {
     mw_one->set_Time();
+
   } else {
     if (mw_one->isTesting) {
       for (int i = 0; i < 500; i++)

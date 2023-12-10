@@ -33,7 +33,8 @@ class dlgPreferences : public QDialog {
   void appendBakFile(QString action, QString bakfile);
 
   QStringList getBakFilesList();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -56,6 +57,7 @@ class dlgPreferences : public QDialog {
   void on_btnReStart_clicked();
 
  private:
+  QString iniBakFiles = "BakFiles.ini";
 };
 
 #endif  // PREFERENCES_H

@@ -284,14 +284,14 @@ void dlgPreferences::autoBakData() {
   }
   int nextDel = Reg.value("/AutoBak/NextDel").toInt();
   bakCount++;
-  Reg.setValue("/AutoBak/File" + QString::number(bakCount),
-               mw_one->bakData("android", false));
+  QString fileName = mw_one->bakData("android", false);
+  Reg.setValue("/AutoBak/File" + QString::number(bakCount), fileName);
   if (bakCount - nextDel > 15) {
     nextDel++;
-    QString bakFile =
+    QString oldBakFile =
         Reg.value("/AutoBak/File" + QString::number(nextDel)).toString();
-    QFile file(bakFile);
-    file.remove(bakFile);
+    QFile file(oldBakFile);
+    file.remove(oldBakFile);
     Reg.remove("/AutoBak/File" + QString::number(nextDel));
     Reg.setValue("/AutoBak/NextDel", nextDel);
   }
@@ -299,7 +299,7 @@ void dlgPreferences::autoBakData() {
 }
 
 void dlgPreferences::setBakStatus(bool status) {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -308,7 +308,7 @@ void dlgPreferences::setBakStatus(bool status) {
 }
 
 bool dlgPreferences::getBakStatus() {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -317,16 +317,18 @@ bool dlgPreferences::getBakStatus() {
 }
 
 void dlgPreferences::setLatestAction(QString action) {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
 
   Reg.setValue("/BakFiles/BakAction", action);
+
+  setBakStatus(false);
 }
 
 QString dlgPreferences::getLatestAction() {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -335,7 +337,7 @@ QString dlgPreferences::getLatestAction() {
 }
 
 void dlgPreferences::appendBakFile(QString action, QString bakfile) {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -348,7 +350,7 @@ void dlgPreferences::appendBakFile(QString action, QString bakfile) {
 }
 
 QStringList dlgPreferences::getBakFilesList() {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -362,8 +364,14 @@ QStringList dlgPreferences::getBakFilesList() {
 
     QFile file(bakfile);
     if (file.exists()) {
-      fileList.insert(0, action + "-===-" + bakfile);
+      fileList.append(action + "-===-" + bakfile);
     }
+  }
+
+  Reg.setValue("/BakFiles/BakCount", 0);
+  for (int i = 0; i < fileList.count(); i++) {
+    QString str = fileList.at(i);
+    appendBakFile(str.split("-===-").at(0), str.split("-===-").at(1));
   }
 
   return fileList;

@@ -1915,8 +1915,6 @@ void MainWindow::on_actionDel_Tab_triggered() {
   if (!showMsgBox("Knot", tr("Whether to remove") + "  " + str1 + " ? ", "", 2))
     return;
 
-  addUndo(tr("Del Tab") + " ( " + getTabText() + " ) ");
-
   int TabCount = ui->tabWidget->tabBar()->count();
   if (TabCount > 1) ui->tabWidget->removeTab(index);
   if (TabCount == 1) {
@@ -2809,6 +2807,10 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       QFile::remove(iniFiles.at(i));
     }
 
+    mydlgPre->appendBakFile(QDate::currentDate().toString() + "  " +
+                                QTime::currentTime().toString(),
+                            infoStr);
+
     isSelf = false;
     return infoStr;
   }
@@ -2854,54 +2856,53 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     if (msg) {
     }
 
-    if (!unre) {
-      if (fileName != iniDir + "memo.zip") {
-        QFile::remove(iniDir + "memo.zip");
+    if (unre) {
+    }
 
-        QString oldPath = iniDir + "memo";
-        QDir dirOld(oldPath);
-        dirOld.rename(oldPath, iniDir + "memo_bak");
+    if (fileName != iniDir + "memo.zip") {
+      QFile::remove(iniDir + "memo.zip");
 
-        QFile::copy(fileName, iniDir + "memo.zip");
-      }
-      mw_one->mydlgMainNotes->unzip(iniDir + "memo.zip");
+      QString oldPath = iniDir + "memo";
+      QDir dirOld(oldPath);
+      dirOld.rename(oldPath, iniDir + "memo_bak");
 
-      QFile file(iniDir + "memo/tab.ini");
-      if (!file.exists()) {
-        QString oldPath = iniDir + "memo_bak";
-        QDir dirOld(oldPath);
-        dirOld.rename(oldPath, iniDir + "memo");
+      QFile::copy(fileName, iniDir + "memo.zip");
+    }
+    mw_one->mydlgMainNotes->unzip(iniDir + "memo.zip");
 
-        isZipOK = false;
-        return false;
-      }
+    QFile file(iniDir + "memo/tab.ini");
+    if (!file.exists()) {
+      QString oldPath = iniDir + "memo_bak";
+      QDir dirOld(oldPath);
+      dirOld.rename(oldPath, iniDir + "memo");
+
+      isZipOK = false;
+      return false;
     }
 
     isZipOK = true;
     mw_one->mydlgReader->deleteDirfile(iniDir + "memo_bak");
 
-    if (!unre) {
-      // Remove old ini files
-      QStringList iniFiles;
-      QStringList fmt;
-      fmt.append("ini");
-      m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
-      for (int i = 0; i < iniFiles.count(); i++) {
-        QString file = iniFiles.at(i);
-        if (!file.contains("/memo/")) QFile::remove(file);
-      }
+    // Remove old ini files
+    QStringList iniFiles;
+    QStringList fmt;
+    fmt.append("ini");
+    m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
+    for (int i = 0; i < iniFiles.count(); i++) {
+      QString file = iniFiles.at(i);
+      if (!file.contains("/memo/")) QFile::remove(file);
+    }
 
-      // Copy new ini files
-      iniFiles.clear();
-      m_NotesList->getAllFiles(iniDir + "memo/", iniFiles, fmt);
-      for (int i = 0; i < iniFiles.count(); i++) {
-        QString strf = iniFiles.at(i);
-        QFileInfo fi(strf);
-        QFile::copy(strf, iniDir + fi.fileName());
+    // Copy new ini files
+    iniFiles.clear();
+    m_NotesList->getAllFiles(iniDir + "memo/", iniFiles, fmt);
+    for (int i = 0; i < iniFiles.count(); i++) {
+      QString strf = iniFiles.at(i);
+      QFileInfo fi(strf);
+      QFile::copy(strf, iniDir + fi.fileName());
 
-        // Del ini bak files
-        QFile::remove(strf);
-      }
+      // Del ini bak files
+      QFile::remove(strf);
     }
 
     if (book) {
@@ -4069,11 +4070,42 @@ void MainWindow::on_actionTimeMachine() {
 
   table->setStyleSheet("selection-background-color: lightblue");
 
+  QStringList bakFileList = mydlgPre->getBakFilesList();
+  int bakCount = bakFileList.count();
+  for (int i = 0; i < bakCount; i++) {
+    QString action, bakfile;
+    QString str = bakFileList.at(i);
+    action = str.split("-===-").at(0);
+    bakfile = str.split("-===-").at(1);
+    table->insertRow(0);
+    table->setItem(0, 1, new QTableWidgetItem(bakfile));
+
+    QLabel *lbl0 = new QLabel();
+    lbl0->adjustSize();
+    lbl0->setWordWrap(true);
+    lbl0->setText(action);
+    QFont fo = this->font();
+    fo.setBold(true);
+    lbl0->setFont(fo);
+
+    QLabel *lbl1 = new QLabel();
+    lbl1->adjustSize();
+    lbl1->setWordWrap(true);
+    lbl1->setText(bakfile);
+
+    QWidget *wg = new QWidget();
+    QVBoxLayout *vbox = new QVBoxLayout();
+    wg->setLayout(vbox);
+    vbox->addWidget(lbl0);
+    vbox->addWidget(lbl1);
+    table->setCellWidget(0, 0, wg);
+  }
+
   connect(btnImport, &QToolButton::clicked, [=]() {
     if (table->rowCount() == 0) return;
 
-    QString str = table->currentItem()->text().split("\n").at(1);
-    zipfile = privateDir + str.trimmed();
+    QString str = table->item(table->currentRow(), 1)->text();
+    zipfile = str.trimmed();
 
     if (!zipfile.isNull()) {
       if (!mw_one->showMsgBox("Kont",
@@ -4086,7 +4118,7 @@ void MainWindow::on_actionTimeMachine() {
     }
 
     isZipOK = true;
-    dlgTimeMachine->close();
+    btnBack->clicked();
     showProgress();
 
     isMenuImport = false;
