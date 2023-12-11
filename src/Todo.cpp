@@ -66,6 +66,9 @@ void dlgTodo::saveTodo() {
   mw_one->isSelf = true;
   isSave = false;
 
+  mw_one->isNeedAutoBackup = true;
+  mw_one->strLatestModify = tr("Modi Todo");
+
   highCount = 0;
   QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

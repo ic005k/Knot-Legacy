@@ -65,7 +65,13 @@ void dlgRemarks::on_btnBack_clicked() {
                  "|" + noteText;
   mw_one->ui->tabWidget->setTabToolTip(mw_one->ui->tabWidget->currentIndex(),
                                        text);
-  if (!ui->textEdit->isHidden()) mw_one->startSave("notes");
+  if (!ui->textEdit->isHidden()) {
+    mw_one->startSave("notes");
+
+    mw_one->isNeedAutoBackup = true;
+    mw_one->strLatestModify =
+        tr("Modi Remarks") + " ( " + mw_one->getTabText() + " ) ";
+  }
   ui->textEdit->clear();
   close();
 }

@@ -142,7 +142,7 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
 
   bool isNeedAutoBackup = false;
-  QString strLatestModify = "None";
+  QString strLatestModify = tr("None");
 
   QDialog *dlgProg;
   QDialog *getProgBar();
