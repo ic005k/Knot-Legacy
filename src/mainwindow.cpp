@@ -4213,6 +4213,9 @@ void MainWindow::on_actionTabRecycle() {
 
     reloadMain();
     clickData();
+
+    isNeedAutoBackup = true;
+    strLatestModify = tr("Restore Tab") + "(" + tab_name + ")";
   });
 
   if (table->rowCount() > 0) {
