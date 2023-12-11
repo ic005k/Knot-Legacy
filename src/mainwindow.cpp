@@ -4142,7 +4142,8 @@ void MainWindow::on_actionTabRecycle() {
   });
 
   connect(btnDel, &QToolButton::clicked, [=]() {
-    if (table->currentRow() < 0) return;
+    if (table->rowCount() == 0) return;
+
     QFile file(table->item(table->currentRow(), 1)->text());
     file.remove();
     table->removeRow(table->currentRow());
@@ -4171,12 +4172,41 @@ void MainWindow::on_actionTabRecycle() {
     if (file.exists()) file.remove();
     QFile::copy(recycle, newini);
 
+    QSettings Reg(newini, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    Reg.setIniCodec("utf-8");
+#endif
+    QString oldGroup = Reg.childGroups().at(0);
+    QString newGroup = "tab" + QString::number(ini_count);
+    QStringList newList;
+    Reg.beginGroup(oldGroup);
+    QStringList keysList = Reg.allKeys();
+
+    foreach (QString key, keysList) {
+      QString value = Reg.value(key).toString();
+      newList.append(key + "-===-" + value);
+    }
+    Reg.endGroup();
+
+    for (int i = 0; i < newList.count(); i++) {
+      QString str = newList.at(i);
+      QString key, value;
+      key = str.split("-===-").at(0);
+      value = str.split("-===-").at(1);
+      Reg.setValue("/" + newGroup + "/" + key, value);
+    }
+
+    Reg.remove(oldGroup);
+
     btnDel->clicked();
-    close();
+    btnBack->clicked();
 
     loading = true;
     init_TotalData();
     loading = false;
+
+    reloadMain();
+    clickData();
   });
 
   if (table->rowCount() > 0) {
