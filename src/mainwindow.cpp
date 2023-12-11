@@ -1926,13 +1926,24 @@ void MainWindow::on_actionDel_Tab_triggered() {
   int index = ui->tabWidget->currentIndex();
   if (index < 0) return;
 
-  QString str1 = ui->tabWidget->tabText(index);
+  QString tab_name = ui->tabWidget->tabText(index);
 
-  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + str1 + " ? ", "", 2))
+  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + tab_name + " ? ", "",
+                  2))
     return;
 
   isNeedAutoBackup = true;
-  strLatestModify = tr("Del Tab") + " ( " + getTabText() + " ) ";
+  strLatestModify = tr("Del Tab") + " ( " + tab_name + " ) ";
+
+  QString tab_file =
+      iniDir + "tab" + QString::number(tabData->currentIndex() + 1) + ".ini";
+  QString date_time = mydlgMainNotes->getDateTimeStr();
+  QFile::copy(tab_file,
+              iniDir + "recycle_" + tab_name + "_" + date_time + ".ini");
+  QString latest_tab_file =
+      iniDir + "tab" + QString::number(tabData->tabBar()->count()) + ".ini";
+  QFile file(latest_tab_file);
+  file.remove();
 
   int TabCount = ui->tabWidget->tabBar()->count();
   if (TabCount > 1) ui->tabWidget->removeTab(index);
@@ -3898,6 +3909,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   actRedo->setVisible(false);
 
   QAction *actTimeMachine = new QAction(tr("Backup File List"));
+  QAction *actTabRecycle = new QAction(tr("Tab Recycle"));
 
   connect(actAddTab, &QAction::triggered, this,
           &MainWindow::on_actionAdd_Tab_triggered);
@@ -3911,6 +3923,9 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   connect(actTimeMachine, &QAction::triggered, this,
           &MainWindow::on_actionTimeMachine);
+
+  connect(actTabRecycle, &QAction::triggered, this,
+          &MainWindow::on_actionTabRecycle);
 
   connect(actOpenKnotBakDir, &QAction::triggered, this,
           &MainWindow::on_openKnotBakDir);
@@ -3971,6 +3986,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   mainMenu->addAction(actOneDrive);
   mainMenu->addAction(actTimeMachine);
+  mainMenu->addAction(actTabRecycle);
   mainMenu->addAction(actAbout);
 
   mainMenu->setStyleSheet(qss);
@@ -4045,6 +4061,144 @@ void MainWindow::addUndo(QString log) {
 void MainWindow::addRedo() {
   QString redoFile = privateDir + LatestTime;
   bakIniData(redoFile, true);
+}
+
+void MainWindow::on_actionTabRecycle() {
+  dlgTimeMachine = new QFrame();
+  QVBoxLayout *vbox = new QVBoxLayout;
+  vbox->setContentsMargins(3, 3, 3, 3);
+  dlgTimeMachine->setLayout(vbox);
+
+  QLabel *lblTitle = new QLabel();
+  lblTitle->setWordWrap(true);
+  lblTitle->adjustSize();
+  lblTitle->setText("");
+
+  QToolButton *btnBack = new QToolButton(this);
+  btnBack->setStyleSheet(ui->btnSetKeyOK->styleSheet());
+  btnBack->setFixedHeight(35);
+  btnBack->setText(tr("Back"));
+  btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  connect(btnBack, &QToolButton::clicked, [=]() { dlgTimeMachine->close(); });
+
+  QToolButton *btnDel = new QToolButton(this);
+  btnDel->setStyleSheet(ui->btnSetKeyOK->styleSheet());
+  btnDel->setFixedHeight(35);
+  btnDel->setText(tr("Delete"));
+  btnDel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+  QToolButton *btnImport = new QToolButton(this);
+  btnImport->setStyleSheet(ui->btnSetKeyOK->styleSheet());
+  btnImport->setFixedHeight(35);
+  btnImport->setText(tr("Restore"));
+  btnImport->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+  QFontMetrics fontMetrics(font());
+  int nFontHeight = fontMetrics.height();
+  int lineHeight = 3.5 * nFontHeight;
+
+  QTableWidget *table = new QTableWidget;
+  table->setColumnCount(2);
+  table->setColumnHidden(1, true);
+
+  table->horizontalHeader()->setStretchLastSection(true);
+  table->setAlternatingRowColors(true);
+  table->setSelectionBehavior(QTableWidget::SelectRows);
+  table->setSelectionMode(QAbstractItemView::SingleSelection);
+  table->setEditTriggers(QTableWidget::NoEditTriggers);
+  table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  table->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  table->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
+  QScroller::grabGesture(table, QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(table);
+
+  table->setStyleSheet("selection-background-color: lightblue");
+
+  QString tab_name, tab_time;
+  QStringList iniFiles;
+  QStringList fmt;
+  fmt.append("ini");
+  m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
+  for (int i = 0; i < iniFiles.count(); i++) {
+    QString ini_file = iniFiles.at(i);
+    if (ini_file.contains("recycle_")) {
+      QFileInfo fi(ini_file);
+      QString ini_filename = fi.fileName();
+      ini_filename = ini_filename.replace(".ini", "");
+      tab_name = ini_filename.split("_").at(1);
+      tab_time =
+          ini_filename.split("_").at(2) + "  " + ini_filename.split("_").at(3);
+      table->insertRow(0);
+      table->setItem(0, 1, new QTableWidgetItem(ini_file));
+
+      QString item = tab_name + "\n" + tab_time;
+      table->setRowHeight(0, lineHeight);
+      table->setItem(0, 0, new QTableWidgetItem(item));
+    }
+  }
+
+  connect(table, &QTableWidget::itemClicked, [=]() {
+    lblTitle->setText(table->item(table->currentRow(), 1)->text());
+  });
+
+  connect(btnDel, &QToolButton::clicked, [=]() {
+    if (table->currentRow() < 0) return;
+    QFile file(table->item(table->currentRow(), 1)->text());
+    file.remove();
+    table->removeRow(table->currentRow());
+    lblTitle->setText("");
+  });
+
+  connect(btnImport, &QToolButton::clicked, [=]() {
+    if (table->rowCount() == 0) return;
+
+    QSettings RegTab(iniDir + "tab.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    RegTab.setIniCodec("utf-8");
+#endif
+
+    int ini_count = RegTab.value("TabCount").toInt();
+    ini_count++;
+    RegTab.setValue("TabCount", ini_count);
+    QString tab_name =
+        table->item(table->currentRow(), 0)->text().split("\n").at(0);
+    RegTab.setValue("TabName" + QString::number(ini_count - 1), tab_name);
+    RegTab.setValue("CurrentIndex", ini_count - 1);
+
+    QString recycle = table->item(table->currentRow(), 1)->text();
+    QString newini = iniDir + "tab" + QString::number(ini_count) + ".ini";
+    QFile file(newini);
+    if (file.exists()) file.remove();
+    QFile::copy(recycle, newini);
+
+    btnDel->clicked();
+    close();
+
+    loading = true;
+    init_TotalData();
+    loading = false;
+  });
+
+  if (table->rowCount() > 0) {
+    table->setCurrentCell(0, 0);
+  }
+
+  table->setHorizontalHeaderItem(
+      0, new QTableWidgetItem(tr("Tab Recycle") + "    " + tr("Total") + " : " +
+                              QString::number(table->rowCount())));
+
+  vbox->addWidget(table);
+  vbox->addWidget(lblTitle);
+
+  QHBoxLayout *hbox = new QHBoxLayout();
+  hbox->addWidget(btnBack);
+  hbox->addWidget(btnDel);
+  hbox->addWidget(btnImport);
+  vbox->addLayout(hbox);
+
+  dlgTimeMachine->setGeometry(geometry().x(), geometry().y(), width(),
+                              height());
+  dlgTimeMachine->show();
 }
 
 void MainWindow::on_actionTimeMachine() {

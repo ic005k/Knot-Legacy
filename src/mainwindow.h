@@ -634,6 +634,7 @@ class MainWindow : public QMainWindow {
   void on_btnCategory_clicked();
 
   void closeProgress();
+
  private slots:
   void on_btnSync_clicked();
 
@@ -644,6 +645,8 @@ class MainWindow : public QMainWindow {
   void on_btnStartDate_clicked();
 
   void on_btnEndDate_clicked();
+
+  void on_actionTabRecycle();
 
  private:
   bool isShowDetails = false;
