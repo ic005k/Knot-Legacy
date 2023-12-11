@@ -1890,6 +1890,9 @@ void MainWindow::on_actionRename_triggered() {
     ui->tabWidget->setTabText(index, text);
     saveTab();
   }
+
+  isNeedAutoBackup = true;
+  strLatestModify = tr("Rename Tab");
 }
 
 void MainWindow::on_actionAdd_Tab_triggered() {
@@ -4069,11 +4072,13 @@ void MainWindow::on_actionTimeMachine() {
   btnImport->setText(tr("Import"));
   btnImport->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
+  QFontMetrics fontMetrics(font());
+  int nFontHeight = fontMetrics.height();
+  int lineHeight = 4.5 * nFontHeight;
+
   QTableWidget *table = new QTableWidget;
   table->setColumnCount(2);
   table->setColumnHidden(1, true);
-
-  table->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
   table->horizontalHeader()->setStretchLastSection(true);
   table->setAlternatingRowColors(true);
@@ -4099,6 +4104,7 @@ void MainWindow::on_actionTimeMachine() {
     table->setItem(0, 1, new QTableWidgetItem(bakfile));
 
     QString item = action + "\n" + getFileSize(QFile(bakfile).size(), 2);
+    table->setRowHeight(0, lineHeight);
     table->setItem(0, 0, new QTableWidgetItem(item));
   }
 

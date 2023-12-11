@@ -27,19 +27,26 @@ dlgNotesList::dlgNotesList(QWidget *parent)
       "border:1px solid gray;}");
   tw = ui->treeWidget;
   twrb = ui->treeWidgetRecycle;
+
+#ifdef Q_OS_ANDROID
+  ui->treeWidget->setStyleSheet("selection-background-color: lightblue");
+#else
+  ui->treeWidget->setStyleSheet(mw_one->treeStyle);
+#endif
+
+  ui->treeWidgetRecycle->setStyleSheet(ui->treeWidget->styleSheet());
+
   setModal(true);
   this->layout()->setSpacing(5);
   this->layout()->setContentsMargins(2, 2, 2, 2);
   ui->frame1->hide();
 
   tw->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  tw->setStyleSheet(mw_one->treeStyle);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(tw);
 
   twrb->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  twrb->setStyleSheet(mw_one->treeStyle);
   twrb->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(twrb, QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(twrb);
