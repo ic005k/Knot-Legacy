@@ -4144,7 +4144,12 @@ void MainWindow::on_actionTabRecycle() {
   connect(btnDel, &QToolButton::clicked, [=]() {
     if (table->rowCount() == 0) return;
 
-    QFile file(table->item(table->currentRow(), 1)->text());
+    QString tab_file = table->item(table->currentRow(), 1)->text();
+    if (!showMsgBox("Knot", tr("Whether to remove") + "  " + tab_file + " ? ",
+                    "", 2))
+      return;
+
+    QFile file(tab_file);
     file.remove();
     table->removeRow(table->currentRow());
     lblTitle->setText("");
@@ -4188,6 +4193,8 @@ void MainWindow::on_actionTabRecycle() {
     }
     Reg.endGroup();
 
+    Reg.remove(oldGroup);
+
     for (int i = 0; i < newList.count(); i++) {
       QString str = newList.at(i);
       QString key, value;
@@ -4196,9 +4203,8 @@ void MainWindow::on_actionTabRecycle() {
       Reg.setValue("/" + newGroup + "/" + key, value);
     }
 
-    Reg.remove(oldGroup);
-
-    btnDel->clicked();
+    QFile recycle_file(recycle);
+    recycle_file.remove();
     btnBack->clicked();
 
     loading = true;
