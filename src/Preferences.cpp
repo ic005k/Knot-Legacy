@@ -5,7 +5,7 @@
 #include "mainwindow.h"
 #include "ui_Preferences.h"
 #include "ui_mainwindow.h"
-extern QString iniFile, iniDir, privateDir, fontname;
+extern QString iniFile, iniDir, privateDir, fontname, infoStr;
 extern MainWindow* mw_one;
 extern bool isBreak;
 extern int fontSize;
@@ -298,6 +298,10 @@ void dlgPreferences::autoBakData() {
     Reg.setValue("/AutoBak/NextDel", nextDel);
   }
   Reg.setValue("/AutoBak/BakCount", bakCount);
+
+  appendBakFile(QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss") +
+                    "\n" + tr("Auto Backup") + "\n" + mw_one->strLatestModify,
+                infoStr);
 
   mw_one->isNeedAutoBackup = false;
 }

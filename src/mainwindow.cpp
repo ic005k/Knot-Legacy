@@ -78,6 +78,11 @@ void MainWindow::bakDataDone() {
       btnOk->setFocus();
 
       msgBox.exec();
+
+      mydlgPre->appendBakFile(
+          QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss") + "\n" +
+              tr("Manual Backup") + "\n" + strLatestModify,
+          infoStr);
     }
   }
 
@@ -2821,12 +2826,6 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       QFile::remove(iniFiles.at(i));
     }
 
-    if (!isUpData)
-      mydlgPre->appendBakFile(
-          QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss") + "\n" +
-              strLatestModify,
-          infoStr);
-
     isSelf = false;
     return infoStr;
   }
@@ -4074,7 +4073,7 @@ void MainWindow::on_actionTimeMachine() {
 
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();
-  int lineHeight = 4.5 * nFontHeight;
+  int lineHeight = 5.5 * nFontHeight;
 
   QTableWidget *table = new QTableWidget;
   table->setColumnCount(2);
