@@ -856,13 +856,16 @@ void MainWindow::init_TotalData() {
   int TabCount = RegTab.value("TabCount", 0).toInt();
 
   for (int i = 0; i < TabCount; i++) {
-    QString name = "tab" + QString::number(i + 1);
+    QString name;
+    name = RegTab.value("twName" + QString::number(i)).toString();
+    if (name.trimmed().length() == 0) name = "tab" + QString::number(i + 1);
     QTreeWidget *tw = init_TreeWidget(name);
 
     ui->tabWidget->addTab(tw, RegTab
                                   .value("TabName" + QString::number(i),
                                          tr("Tab") + QString::number(i + 1))
                                   .toString());
+    RegTab.setValue("twName" + QString::number(i), name);
 
     QString strNotes = RegNotes.value("/" + name + "/Note").toString();
     ui->tabWidget->setTabToolTip(i, strNotes);
@@ -1351,6 +1354,9 @@ void MainWindow::saveTab() {
   for (int i = 0; i < TabCount; i++) {
     if (isBreak) break;
     Reg.setValue("TabName" + QString::number(i), tabData->tabText(i));
+
+    QTreeWidget *tw = (QTreeWidget *)tabData->widget(i);
+    Reg.setValue("twName" + QString::number(i), tw->objectName());
   }
 }
 
@@ -1535,17 +1541,19 @@ void MainWindow::readData(QTreeWidget *tw) {
   Reg.setIniCodec("utf-8");
 #endif
 
-  int rowCount = Reg.value("/" + name + "/TopCount").toInt();
+  QString group = Reg.childGroups().at(0);
+
+  int rowCount = Reg.value("/" + group + "/TopCount").toInt();
   for (int i = 0; i < rowCount; i++) {
     int childCount =
-        Reg.value("/" + name + "/" + QString::number(i + 1) + "-childCount")
+        Reg.value("/" + group + "/" + QString::number(i + 1) + "-childCount")
             .toInt();
 
     // 不显示子项为0的数据
     if (childCount > 0) {
       QTreeWidgetItem *topItem = new QTreeWidgetItem;
       QString strD0 =
-          Reg.value("/" + name + "/" + QString::number(i + 1) + "-topDate")
+          Reg.value("/" + group + "/" + QString::number(i + 1) + "-topDate")
               .toString();
 
       QStringList lista = strD0.split(" ");
@@ -1556,7 +1564,7 @@ void MainWindow::readData(QTreeWidget *tw) {
       } else {
         topItem->setText(0, strD0);
         QString year =
-            Reg.value("/" + name + "/" + QString::number(i + 1) + "-topYear")
+            Reg.value("/" + group + "/" + QString::number(i + 1) + "-topYear")
                 .toString();
         topItem->setText(3, year);
       }
@@ -1567,26 +1575,30 @@ void MainWindow::readData(QTreeWidget *tw) {
       topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
 
       topItem->setText(
-          1, Reg.value("/" + name + "/" + QString::number(i + 1) + "-topFreq")
+          1, Reg.value("/" + group + "/" + QString::number(i + 1) + "-topFreq")
                  .toString());
-      topItem->setText(
-          2, Reg.value("/" + name + "/" + QString::number(i + 1) + "-topAmount")
-                 .toString());
+      topItem->setText(2, Reg.value("/" + group + "/" + QString::number(i + 1) +
+                                    "-topAmount")
+                              .toString());
 
       for (int j = 0; j < childCount; j++) {
         QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
-        item11->setText(0, Reg.value("/" + name + "/" + QString::number(i + 1) +
-                                     "-childTime" + QString::number(j))
-                               .toString());
-        item11->setText(1, Reg.value("/" + name + "/" + QString::number(i + 1) +
-                                     "-childAmount" + QString::number(j))
-                               .toString());
-        item11->setText(2, Reg.value("/" + name + "/" + QString::number(i + 1) +
-                                     "-childDesc" + QString::number(j))
-                               .toString());
-        item11->setText(3, Reg.value("/" + name + "/" + QString::number(i + 1) +
-                                     "-childDetails" + QString::number(j))
-                               .toString());
+        item11->setText(0,
+                        Reg.value("/" + group + "/" + QString::number(i + 1) +
+                                  "-childTime" + QString::number(j))
+                            .toString());
+        item11->setText(1,
+                        Reg.value("/" + group + "/" + QString::number(i + 1) +
+                                  "-childAmount" + QString::number(j))
+                            .toString());
+        item11->setText(2,
+                        Reg.value("/" + group + "/" + QString::number(i + 1) +
+                                  "-childDesc" + QString::number(j))
+                            .toString());
+        item11->setText(3,
+                        Reg.value("/" + group + "/" + QString::number(i + 1) +
+                                  "-childDetails" + QString::number(j))
+                            .toString());
 
         item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
       }
@@ -1902,10 +1914,12 @@ void MainWindow::on_actionRename_triggered() {
 
 void MainWindow::on_actionAdd_Tab_triggered() {
   int count = ui->tabWidget->tabBar()->count();
-  QString ini_file = iniDir + "tab" + QString::number(count + 1) + ".ini";
+  QString twName =
+      mydlgMainNotes->getDateTimeStr() + "_" + QString::number(count + 1);
+  QString ini_file = iniDir + twName + ".ini";
   if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
-  QTreeWidget *tw = init_TreeWidget("tab" + QString::number(count + 1));
+  QTreeWidget *tw = init_TreeWidget(twName);
 
   ui->tabWidget->addTab(tw, tr("Tab") + " " + QString::number(count + 1));
   ui->tabWidget->setCurrentIndex(count);
@@ -1916,7 +1930,7 @@ void MainWindow::on_actionAdd_Tab_triggered() {
   on_actionRename_triggered();
   reloadMain();
 
-  startSave("alltab");
+  saveTab();
 
   isNeedAutoBackup = true;
   strLatestModify = tr("Add Tab") + " ( " + getTabText() + " ) ";
@@ -1935,14 +1949,14 @@ void MainWindow::on_actionDel_Tab_triggered() {
   isNeedAutoBackup = true;
   strLatestModify = tr("Del Tab") + " ( " + tab_name + " ) ";
 
-  QString tab_file =
-      iniDir + "tab" + QString::number(tabData->currentIndex() + 1) + ".ini";
+  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
+  QString twName = tw->objectName();
+  QString tab_file = iniDir + twName + ".ini";
   QString date_time = mydlgMainNotes->getDateTimeStr();
   QFile::copy(tab_file,
               iniDir + "recycle_" + tab_name + "_" + date_time + ".ini");
-  QString latest_tab_file =
-      iniDir + "tab" + QString::number(tabData->tabBar()->count()) + ".ini";
-  QFile file(latest_tab_file);
+
+  QFile file(tab_file);
   file.remove();
 
   int TabCount = ui->tabWidget->tabBar()->count();
@@ -1954,8 +1968,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
-  // Save all
-  startSave("alltab");
+  saveTab();
 }
 
 QTreeWidget *MainWindow::init_TreeWidget(QString name) {
@@ -4158,58 +4171,70 @@ void MainWindow::on_actionTabRecycle() {
   connect(btnImport, &QToolButton::clicked, [=]() {
     if (table->rowCount() == 0) return;
 
-    QSettings RegTab(iniDir + "tab.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    RegTab.setIniCodec("utf-8");
-#endif
+    /* QSettings RegTab(iniDir + "tab.ini", QSettings::IniFormat);
+ #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+     RegTab.setIniCodec("utf-8");
+ #endif
 
-    int ini_count = RegTab.value("TabCount").toInt();
-    ini_count++;
-    RegTab.setValue("TabCount", ini_count);
-    QString tab_name =
-        table->item(table->currentRow(), 0)->text().split("\n").at(0);
-    RegTab.setValue("TabName" + QString::number(ini_count - 1), tab_name);
-    RegTab.setValue("CurrentIndex", ini_count - 1);
+     int ini_count = RegTab.value("TabCount").toInt();
+     ini_count++;
+     RegTab.setValue("TabCount", ini_count);
+     QString tab_name =
+         table->item(table->currentRow(), 0)->text().split("\n").at(0);
+     RegTab.setValue("TabName" + QString::number(ini_count - 1), tab_name);
+     RegTab.setValue("CurrentIndex", ini_count - 1);
 
+     QString recycle = table->item(table->currentRow(), 1)->text();
+     QString newini = iniDir + "tab" + QString::number(ini_count) + ".ini";
+     QFile file(newini);
+     if (file.exists()) file.remove();
+     QFile::copy(recycle, newini);
+
+     QSettings Reg(newini, QSettings::IniFormat);
+ #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+     Reg.setIniCodec("utf-8");
+ #endif
+     QString oldGroup = Reg.childGroups().at(0);
+     QString newGroup = "tab" + QString::number(ini_count);
+     QStringList newList;
+     Reg.beginGroup(oldGroup);
+     QStringList keysList = Reg.allKeys();
+
+     foreach (QString key, keysList) {
+       QString value = Reg.value(key).toString();
+       newList.append(key + "-===-" + value);
+     }
+     Reg.endGroup();
+
+     Reg.remove(oldGroup);
+
+     for (int i = 0; i < newList.count(); i++) {
+       QString str = newList.at(i);
+       QString key, value;
+       key = str.split("-===-").at(0);
+       value = str.split("-===-").at(1);
+       Reg.setValue("/" + newGroup + "/" + key, value);
+     }*/
+
+    int count = ui->tabWidget->tabBar()->count();
+    QString twName =
+        mydlgMainNotes->getDateTimeStr() + "_" + QString::number(count + 1);
+    QString ini_file = iniDir + twName + ".ini";
+    if (QFile(ini_file).exists()) QFile(ini_file).remove();
     QString recycle = table->item(table->currentRow(), 1)->text();
-    QString newini = iniDir + "tab" + QString::number(ini_count) + ".ini";
-    QFile file(newini);
-    if (file.exists()) file.remove();
-    QFile::copy(recycle, newini);
+    QFile::copy(recycle, ini_file);
 
-    QSettings Reg(newini, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    Reg.setIniCodec("utf-8");
-#endif
-    QString oldGroup = Reg.childGroups().at(0);
-    QString newGroup = "tab" + QString::number(ini_count);
-    QStringList newList;
-    Reg.beginGroup(oldGroup);
-    QStringList keysList = Reg.allKeys();
+    QTreeWidget *tw = init_TreeWidget(twName);
+    ui->tabWidget->addTab(tw, tr("Tab") + " " + QString::number(count + 1));
+    ui->tabWidget->setCurrentIndex(count);
 
-    foreach (QString key, keysList) {
-      QString value = Reg.value(key).toString();
-      newList.append(key + "-===-" + value);
-    }
-    Reg.endGroup();
-
-    Reg.remove(oldGroup);
-
-    for (int i = 0; i < newList.count(); i++) {
-      QString str = newList.at(i);
-      QString key, value;
-      key = str.split("-===-").at(0);
-      value = str.split("-===-").at(1);
-      Reg.setValue("/" + newGroup + "/" + key, value);
-    }
+    readData(tw);
 
     QFile recycle_file(recycle);
     recycle_file.remove();
     btnBack->clicked();
 
-    loading = true;
-    init_TotalData();
-    loading = false;
+    saveTab();
 
     reloadMain();
     clickData();

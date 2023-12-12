@@ -381,10 +381,8 @@ void EditRecord::on_editDetails_textChanged() {
 
 void EditRecord::saveOne() {
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
-  int tabIndex = tabData->currentIndex();
 
-  QString name = "tab" + QString::number(tabIndex + 1);
-  tw->setObjectName(name);
+  QString name = tw->objectName();
 
   QString ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
