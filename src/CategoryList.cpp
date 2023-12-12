@@ -138,6 +138,8 @@ void dlgList::on_btnRename_clicked() {
 
     mw_one->myEditRecord->ui->editCategory->setText(
         ui->editRename->text().trimmed());
+
+    mw_one->reloadMain();
   }
 }
 

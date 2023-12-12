@@ -872,7 +872,7 @@ void MainWindow::init_TotalData() {
   }
 
   if (TabCount == 0) {
-    QTreeWidget *tw = init_TreeWidget("tab_1");
+    QTreeWidget *tw = init_TreeWidget("20220303_101010_1");
 
     ui->tabWidget->addTab(tw, tr("Tab") + " " + QString::number(1));
 
@@ -1393,6 +1393,12 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
+
+  if (!QFile::exists(ini_file)) {
+    Reg.setValue("/" + name + "/" + "CreatedTime",
+                 QDateTime::currentDateTime().toString());
+  }
+
   int count = tw->topLevelItemCount();
   int abc = count;
 
