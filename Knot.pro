@@ -70,10 +70,16 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/markdownhighlighter.cpp \
+    src/mywheel.cpp \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
     src/onedrive/qtonedrivewebview.cpp \
     src/qownlanguagedata.cpp \
+    src/qwt/qwt.cpp \
+    src/qwt/qwt_clipper.cpp \
+    src/qwt/qwt_math.cpp \
+    src/qwt/qwt_painter.cpp \
+    src/qwt/qwt_scale_map.cpp \
     src/specialaccelerometerpedometer.cpp
 
 HEADERS += \
@@ -104,11 +110,18 @@ HEADERS += \
     src/filesystemwatcher.h \
     src/mainwindow.h \
     src/markdownhighlighter.h \
+    src/mywheel.h \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
     src/onedrive/qtonedrivewebview.h \
     src/qownlanguagedata.h \
+    src/qwt/qwt.h \
+    src/qwt/qwt_clipper.h \
+    src/qwt/qwt_global.h \
+    src/qwt/qwt_math.h \
+    src/qwt/qwt_painter.h \
+    src/qwt/qwt_scale_map.h \
     src/specialaccelerometerpedometer.h \
     win.rc
 

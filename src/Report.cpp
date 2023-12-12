@@ -152,7 +152,10 @@ void dlgReport::on_btnYear_clicked() {
   myDateSelector->dateFlag = 1;
   mw_one->ui->lblDetails->setText(tr("Details"));
 
-  myDateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
+  if (myDateSelector->nWidgetType == 1)
+    myDateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
+  if (myDateSelector->nWidgetType == 2)
+    myDateSelector->wheelYear->setValue(mw_one->ui->btnYear->text().toInt());
 
   myDateSelector->init();
 }

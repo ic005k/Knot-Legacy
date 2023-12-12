@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 
 #include "RollingBox.h"
+#include "mywheel.h"
 
 namespace Ui {
 class DateSelector;
@@ -20,11 +21,15 @@ class DateSelector : public QDialog {
 
   RollingBox *rboxYear, *rboxMonth, *rboxDay;
 
+  QwtWheel *wheelYear, *wheelMonth, *wheelDay;
+
   int dateFlag = 0; /*1=btnYeat 2=btnMonth 3=btnStartDate 4=btnEnDate*/
 
   void init();
 
   void initStartEndDate(QString flag);
+
+  int nWidgetType = 1; /*1 rbox  2 whell*/
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -37,6 +42,8 @@ class DateSelector : public QDialog {
   void on_hsDay_valueChanged(int value);
 
   void on_btnOk_clicked();
+
+  void setNum();
 
  private:
   void initRBox(RollingBox *rbox, int w);

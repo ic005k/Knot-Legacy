@@ -11,20 +11,47 @@ DateSelector::DateSelector(QWidget *parent)
   ui->setupUi(this);
   this->installEventFilter(this);
 
-  rboxYear = new RollingBox(this);
-  rboxMonth = new RollingBox(this);
-  rboxDay = new RollingBox(this);
+  if (nWidgetType == 1) {
+    rboxYear = new RollingBox(this);
+    rboxMonth = new RollingBox(this);
+    rboxDay = new RollingBox(this);
 
-  int rw = 260;
-  initRBox(rboxYear, rw);
-  initRBox(rboxMonth, rw);
-  initRBox(rboxDay, rw);
+    int rw = 260;
+    initRBox(rboxYear, rw);
+    initRBox(rboxMonth, rw);
+    initRBox(rboxDay, rw);
 
-  ui->gboxYear->layout()->addWidget(rboxYear);
-  ui->gboxMonth->layout()->addWidget(rboxMonth);
-  ui->gboxDay->layout()->addWidget(rboxDay);
+    ui->gboxYear->layout()->addWidget(rboxYear);
+    ui->gboxMonth->layout()->addWidget(rboxMonth);
+    ui->gboxDay->layout()->addWidget(rboxDay);
+  }
+
+  if (nWidgetType == 2) {
+    wheelYear = new QwtWheel(this);
+    wheelMonth = new QwtWheel(this);
+    wheelDay = new QwtWheel(this);
+
+    wheelYear->setRange(0, 1000);
+    wheelMonth->setRange(1, 12);
+    wheelDay->setRange(1, 31);
+
+    wheelYear->setFixedHeight(60);
+    wheelYear->setFixedWidth(240);
+
+    ui->gboxYear->layout()->addWidget(wheelYear);
+    ui->gboxMonth->layout()->addWidget(wheelMonth);
+    ui->gboxDay->layout()->addWidget(wheelDay);
+
+    connect(wheelYear, SIGNAL(valueChanged(double)), this, SLOT(setNum()));
+  }
 
   setModal(true);
+}
+
+void DateSelector::setNum() {
+  qDebug() << wheelYear->value();
+  ui->lblYear->setText(QString::number(2022 + (int)wheelYear->value() / 100) +
+                       "  " + tr("Year"));
 }
 
 void DateSelector::initRBox(RollingBox *rbox, int w) {
@@ -48,11 +75,13 @@ bool DateSelector::eventFilter(QObject *watch, QEvent *evn) {
 
 void DateSelector::init() {
   int cy = QDate::currentDate().year();
-  rboxYear->setRange(2022, cy);
+  if (nWidgetType == 1) rboxYear->setRange(2022, cy);
+  if (nWidgetType == 2) wheelYear->setRange(2022, cy);
 
   if (dateFlag == 1) {
     ui->gboxMonth->hide();
     ui->gboxDay->hide();
+
     ui->gboxYear->setHidden(false);
 
     ui->lblYear->setHidden(false);
@@ -73,7 +102,9 @@ void DateSelector::init() {
     ui->lblDay->hide();
     ui->lblFlag->hide();
 
-    rboxMonth->setRange(1, 13);
+    if (nWidgetType == 1) rboxMonth->setRange(1, 13);
+    if (nWidgetType == 2) wheelMonth->setRange(1, 13);
+
     setFixedHeight(200);
   }
 
@@ -85,8 +116,14 @@ void DateSelector::init() {
     if (dateFlag == 4) ui->lblFlag->setText(tr("End Date"));
     ui->lblFlag->setHidden(false);
 
-    rboxMonth->setRange(1, 12);
-    rboxDay->setRange(1, 31);
+    if (nWidgetType == 1) {
+      rboxMonth->setRange(1, 12);
+      rboxDay->setRange(1, 31);
+    }
+    if (nWidgetType == 2) {
+      wheelMonth->setRange(1, 12);
+      wheelDay->setRange(1, 31);
+    }
     setFixedHeight(490);
   }
 
