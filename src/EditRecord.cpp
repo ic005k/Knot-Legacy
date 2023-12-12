@@ -390,6 +390,13 @@ void EditRecord::saveOne() {
   Reg.setIniCodec("utf-8");
 #endif
 
+  QString flag;
+  QString group = Reg.childGroups().at(0);
+  if (group.trimmed().length() == 0)
+    flag = "/" + name + "/";
+  else
+    flag = "/" + group + "/";
+
   int count = tw->topLevelItemCount();
 
   QTreeWidgetItem *item = tw->currentItem();
@@ -398,13 +405,6 @@ void EditRecord::saveOne() {
     i = tw->indexOfTopLevelItem(item);
   else
     i = tw->indexOfTopLevelItem(item->parent());
-
-  QString flag;
-  QString group = Reg.childGroups().at(0);
-  if (group.trimmed().length() == 0)
-    flag = "/" + name + "/";
-  else
-    flag = "/" + group + "/";
 
   Reg.setValue(flag + QString::number(i + 1) + "-topDate",
                tw->topLevelItem(i)->text(0));

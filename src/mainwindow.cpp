@@ -872,7 +872,7 @@ void MainWindow::init_TotalData() {
   }
 
   if (TabCount == 0) {
-    QTreeWidget *tw = init_TreeWidget("tab1");
+    QTreeWidget *tw = init_TreeWidget("tab_1");
 
     ui->tabWidget->addTab(tw, tr("Tab") + " " + QString::number(1));
 
@@ -1538,9 +1538,9 @@ void MainWindow::drawDayChart() {
 void MainWindow::readData(QTreeWidget *tw) {
   tw->clear();
   QString name = tw->objectName();
-  QString ini_file;
+  QString ini_file = iniDir + name + ".ini";
 
-  ini_file = iniDir + name + ".ini";
+  if (!QFile::exists(ini_file)) return;
 
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -1972,6 +1972,8 @@ void MainWindow::on_actionDel_Tab_triggered() {
     tw->clear();
 
     ui->tabWidget->setTabToolTip(0, "");
+
+    reloadMain();
   }
 
   saveTab();
@@ -1981,6 +1983,16 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
   QTreeWidget *tw = new QTreeWidget(this);
   tw->setFixedHeight(0);
   tw->setObjectName(name);
+
+  QString ini_file = iniDir + name + ".ini";
+  if (!QFile::exists(ini_file)) {
+    QSettings RegTab(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    RegTab.setIniCodec("utf-8");
+#endif
+    RegTab.setValue("/" + name + "/" + "CreatedTime",
+                    QDateTime::currentDateTime().toString());
+  }
 
   QFont font;
   font.setPointSize(fontSize);
@@ -4177,51 +4189,6 @@ void MainWindow::on_actionTabRecycle() {
   connect(btnImport, &QToolButton::clicked, [=]() {
     if (table->rowCount() == 0) return;
 
-    /* QSettings RegTab(iniDir + "tab.ini", QSettings::IniFormat);
- #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-     RegTab.setIniCodec("utf-8");
- #endif
-
-     int ini_count = RegTab.value("TabCount").toInt();
-     ini_count++;
-     RegTab.setValue("TabCount", ini_count);
-     QString tab_name =
-         table->item(table->currentRow(), 0)->text().split("\n").at(0);
-     RegTab.setValue("TabName" + QString::number(ini_count - 1), tab_name);
-     RegTab.setValue("CurrentIndex", ini_count - 1);
-
-     QString recycle = table->item(table->currentRow(), 1)->text();
-     QString newini = iniDir + "tab" + QString::number(ini_count) + ".ini";
-     QFile file(newini);
-     if (file.exists()) file.remove();
-     QFile::copy(recycle, newini);
-
-     QSettings Reg(newini, QSettings::IniFormat);
- #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-     Reg.setIniCodec("utf-8");
- #endif
-     QString oldGroup = Reg.childGroups().at(0);
-     QString newGroup = "tab" + QString::number(ini_count);
-     QStringList newList;
-     Reg.beginGroup(oldGroup);
-     QStringList keysList = Reg.allKeys();
-
-     foreach (QString key, keysList) {
-       QString value = Reg.value(key).toString();
-       newList.append(key + "-===-" + value);
-     }
-     Reg.endGroup();
-
-     Reg.remove(oldGroup);
-
-     for (int i = 0; i < newList.count(); i++) {
-       QString str = newList.at(i);
-       QString key, value;
-       key = str.split("-===-").at(0);
-       value = str.split("-===-").at(1);
-       Reg.setValue("/" + newGroup + "/" + key, value);
-     }*/
-
     int count = ui->tabWidget->tabBar()->count();
     QString twName =
         mydlgMainNotes->getDateTimeStr() + "_" + QString::number(count + 1);
@@ -4230,8 +4197,11 @@ void MainWindow::on_actionTabRecycle() {
     QString recycle = table->item(table->currentRow(), 1)->text();
     QFile::copy(recycle, ini_file);
 
+    QString tab_name =
+        table->item(table->currentRow(), 0)->text().split("\n").at(0);
     QTreeWidget *tw = init_TreeWidget(twName);
-    ui->tabWidget->addTab(tw, tr("Tab") + " " + QString::number(count + 1));
+    ui->tabWidget->addTab(tw, tab_name);
+
     ui->tabWidget->setCurrentIndex(count);
 
     readData(tw);
