@@ -399,7 +399,12 @@ void EditRecord::saveOne() {
   else
     i = tw->indexOfTopLevelItem(item->parent());
 
-  QString flag = "/" + name + "/";
+  QString flag;
+  QString group = Reg.childGroups().at(0);
+  if (group.trimmed().length() == 0)
+    flag = "/" + name + "/";
+  else
+    flag = "/" + group + "/";
 
   Reg.setValue(flag + QString::number(i + 1) + "-topDate",
                tw->topLevelItem(i)->text(0));
@@ -433,5 +438,5 @@ void EditRecord::saveOne() {
   }
 
   Reg.setValue(flag + QString::number(i + 1) + "-childCount", childCount);
-  Reg.setValue("/" + name + "/TopCount", count);
+  Reg.setValue(flag + "TopCount", count);
 }

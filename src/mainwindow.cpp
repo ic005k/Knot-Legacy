@@ -381,12 +381,12 @@ void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "alltab") {
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
       if (isBreak) break;
-      QString name = "tab" + QString::number(i + 1);
+
+      QTreeWidget *tw = (QTreeWidget *)tabData->widget(i);
+      QString name = tw->objectName();
       QString ini_file = iniDir + name + ".ini";
       if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
-      QTreeWidget *tw = (QTreeWidget *)tabData->widget(i);
-      tw->setObjectName(name);
       saveData(tw, i);
       saveNotes(i);
     }
@@ -1385,7 +1385,9 @@ QString MainWindow::getFileSize(const qint64 &size, int precision) {
 }
 
 void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
-  QString name = "tab" + QString::number(tabIndex + 1);
+  Q_UNUSED(tabIndex);
+
+  QString name = tw->objectName();
   QString ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -1393,15 +1395,19 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
 #endif
   int count = tw->topLevelItemCount();
   int abc = count;
-  tw->setObjectName(name);
+
+  QString flag;
+  QString group = Reg.childGroups().at(0);
+  if (group.trimmed().length() == 0)
+    flag = "/" + name + "/";
+  else
+    flag = "/" + group + "/";
 
   for (int i = 0; i < count; i++) {
     if (isBreak) break;
     int childCount = tw->topLevelItem(i)->childCount();
 
     if (childCount > 0) {
-      QString flag = "/" + name + "/";
-
       Reg.setValue(flag + QString::number(i + 1) + "-topDate",
                    tw->topLevelItem(i)->text(0));
       Reg.setValue(flag + QString::number(i + 1) + "-topYear",
@@ -1428,9 +1434,9 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
                      tw->topLevelItem(i)->child(j)->text(3));
       }
     } else
-      abc = abc - 1;
+      abc--;
 
-    Reg.setValue("/" + name + "/TopCount", abc);
+    Reg.setValue(flag + "TopCount", abc);
   }
 }
 
@@ -2417,7 +2423,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
       if (move) {
         qDebug() << "ok save";
-        startSave("alltab");
+        saveTab();
       }
     }
   }
