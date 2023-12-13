@@ -2,7 +2,7 @@
 
 #include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 QList<QPointF> PointList;
 QList<double> doubleList;
