@@ -48,7 +48,7 @@
 **
 ****************************************************************************/
 
-#include "documenthandler.h"
+#include "DocumentHandler.h"
 
 #include <QDebug>
 #include <QFile>
@@ -62,9 +62,9 @@
 #include <QTextDocument>
 
 #include "src/LoadPic.h"
-#include "src/mainwindow.h"
+#include "src/MainWindow.h"
 #include "ui_LoadPic.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
 extern QStringList readTextList, htmlFiles;

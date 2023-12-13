@@ -7,11 +7,11 @@
 #include <QMessageBox>
 #include <QTimer>
 
-#include "src/mainwindow.h"
+#include "src/MainWindow.h"
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_OneDrive.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
 extern QString iniFile, iniDir, zipfile;

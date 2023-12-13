@@ -1,9 +1,9 @@
 #include "src/Notes.h"
 
-#include "mainwindow.h"
-#include "src/markdownhighlighter.h"
+#include "MainWindow.h"
+#include "src/MarkdownHighlighter.h"
 #include "ui_Notes.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
 extern QString iniFile, iniDir, privateDir, fontname;

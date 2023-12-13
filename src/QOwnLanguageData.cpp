@@ -11,7 +11,7 @@
  * for more details.
  *
  */
-#include "qownlanguagedata.h"
+#include "QOwnLanguageData.h"
 
 #include <QLatin1String>
 #include <QMultiHash>

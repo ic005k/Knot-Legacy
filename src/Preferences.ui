@@ -150,8 +150,8 @@
      <property name="title">
       <string>Additional Options</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
        <widget class="QCheckBox" name="chkClose">
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
@@ -165,7 +165,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item>
        <widget class="QCheckBox" name="chkAutoTime">
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
@@ -191,17 +191,7 @@ QCheckBox::indicator:checked{
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="chkShowCY">
-        <property name="text">
-         <string>Only current year data is displayed</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
+      <item>
        <widget class="QCheckBox" name="chkDebug">
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
@@ -212,6 +202,16 @@ QCheckBox::indicator:checked{
         </property>
         <property name="text">
          <string>Debug Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkShowCY">
+        <property name="text">
+         <string>Only current year data is displayed</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

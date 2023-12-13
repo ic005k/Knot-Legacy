@@ -1,6 +1,6 @@
 #include "SetReaderText.h"
 
-#include "src/mainwindow.h"
+#include "src/MainWindow.h"
 #include "ui_SetReaderText.h"
 
 extern MainWindow *mw_one;

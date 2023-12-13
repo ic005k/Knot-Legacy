@@ -1,8 +1,8 @@
 #include "DateSelector.h"
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_DateSelector.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
 

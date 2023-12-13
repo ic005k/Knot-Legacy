@@ -1,6 +1,6 @@
 #include "AutoUpdate.h"
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_AutoUpdate.h"
 
 extern MainWindow* mw_one;

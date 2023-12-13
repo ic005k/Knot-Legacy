@@ -7,7 +7,7 @@
  * modify it under the terms of the Qwt License, Version 1.0
  *****************************************************************************/
 
-#include "mywheel.h"
+#include "MyWheel.h"
 
 #include <qdrawutil.h>
 #include <qelapsedtimer.h>

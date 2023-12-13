@@ -1,4 +1,4 @@
-#include "specialaccelerometerpedometer.h"
+#include "SpecialAccelerometerPedometer.h"
 
 SpecialAccelerometerPedometer::SpecialAccelerometerPedometer(QObject *parent) {
   Q_UNUSED(parent);

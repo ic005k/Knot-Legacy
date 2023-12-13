@@ -1,8 +1,8 @@
 #include "src/RemarksAbout.h"
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_RemarksAbout.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 extern MainWindow *mw_one;
 extern bool loading, zh_cn;
 extern QString noteText, appName, ver;

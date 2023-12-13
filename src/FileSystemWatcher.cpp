@@ -1,12 +1,12 @@
-#include "filesystemwatcher.h"
+#include "FileSystemWatcher.h"
 
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QMainWindow>
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "MainWindow.h"
+#include "ui_MainWindow.h"
 
 extern bool ReLoad;
 extern MainWindow* mw_one;

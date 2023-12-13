@@ -1,8 +1,8 @@
 #include "PageIndicator.h"
 
-#include "src/mainwindow.h"
+#include "src/MainWindow.h"
 #include "ui_PageIndicator.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 extern MainWindow* mw_one;
 

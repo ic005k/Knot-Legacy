@@ -1,8 +1,8 @@
 #include "LoadPic.h"
 
-#include "src/mainwindow.h"
+#include "src/MainWindow.h"
 #include "ui_LoadPic.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 extern MainWindow* mw_one;
 extern QString picfile;
 

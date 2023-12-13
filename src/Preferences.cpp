@@ -2,9 +2,9 @@
 
 #include <QKeyEvent>
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_Preferences.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 extern QString iniFile, iniDir, privateDir, fontname, infoStr;
 extern MainWindow* mw_one;
 extern bool isBreak;

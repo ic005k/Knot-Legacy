@@ -1,8 +1,8 @@
 #include "Todo.h"
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_Todo.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 QString highLblStyle = "color:rgb(212,35,122)";
 int highCount;

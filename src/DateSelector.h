@@ -5,7 +5,7 @@
 #include <QKeyEvent>
 
 #include "RollingBox.h"
-#include "mywheel.h"
+#include "MyWheel.h"
 
 namespace Ui {
 class DateSelector;

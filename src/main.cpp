@@ -6,7 +6,7 @@
 #include <QtWebView/QtWebView>
 
 #include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
 
 extern QString iniFile, txtFile, appName, iniDir, privateDir, fontname;
 extern int fontSize;

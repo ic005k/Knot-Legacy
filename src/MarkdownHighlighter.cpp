@@ -15,7 +15,7 @@
  * QPlainTextEdit markdown highlighter
  */
 
-#include "markdownhighlighter.h"
+#include "MarkdownHighlighter.h"
 
 #include <QDebug>
 #include <QRegularExpression>
@@ -25,7 +25,7 @@
 #include <QTimer>
 #include <utility>
 
-#include "qownlanguagedata.h"
+#include "QOwnLanguageData.h"
 
 // We enable QStringView with Qt 5.15.1
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 1)

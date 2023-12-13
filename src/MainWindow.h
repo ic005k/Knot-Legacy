@@ -72,7 +72,7 @@
 
 #include "ReaderFun.h"
 #include "SearchDialog.h"
-#include "markdownhighlighter.h"
+#include "MarkdownHighlighter.h"
 #include "src/CategoryList.h"
 #include "src/EditRecord.h"
 #include "src/LoadPic.h"
@@ -89,9 +89,10 @@
 #include "src/SyncInfo.h"
 #include "src/Todo.h"
 #include "src/TodoAlarm.h"
-#include "src/file.h"
-#include "src/filesystemwatcher.h"
-#include "src/specialaccelerometerpedometer.h"
+#include "src/components/qtmaterialcircularprogress.h"
+#include "src/File.h"
+#include "src/FileSystemWatcher.h"
+#include "src/SpecialAccelerometerPedometer.h"
 #include "ui_CategoryList.h"
 #include "ui_DateSelector.h"
 #include "ui_EditRecord.h"
@@ -675,6 +676,8 @@ class MainWindow : public QMainWindow {
   void initHardStepSensor();
   void showNotes();
   void resetWinPos();
+
+  int nProgressBarType = 2;
 };
 
 class SaveThread : public QThread {

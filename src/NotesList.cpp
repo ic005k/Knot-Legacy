@@ -1,8 +1,8 @@
 #include "NotesList.h"
 
-#include "src/mainwindow.h"
+#include "src/MainWindow.h"
 #include "ui_NotesList.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
 extern QString iniDir, privateDir;

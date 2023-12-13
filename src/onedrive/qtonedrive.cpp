@@ -12,8 +12,8 @@
 #include <QSettings>
 
 #include "qtonedriveauthorizationdialog.h"
-#include "src/mainwindow.h"
-#include "ui_mainwindow.h"
+#include "src/MainWindow.h"
+#include "ui_MainWindow.h"
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, zipfile;

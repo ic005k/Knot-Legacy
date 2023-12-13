@@ -1,4 +1,4 @@
-﻿#include "mainwindow.h"
+﻿#include "MainWindow.h"
 
 #include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
@@ -2999,43 +2999,54 @@ bool MainWindow::copyFileToPath(QString sourceDir, QString toDir,
 }
 
 QDialog *MainWindow::getProgBar() {
-  QDialog *dlgProgEBook;
-  QProgressBar *progReadEbook = new QProgressBar(this);
-  progReadEbook->setStyleSheet(
-      "QProgressBar{border:0px solid #FFFFFF;"
-      "height:25;"
-      "background:rgb(25,255,25);"
-      "text-align:right;"
-      "color:rgb(255,255,255);"
-      "border-radius:0px;}"
+  QDialog *dlg;
 
-      "QProgressBar:chunk{"
-      "border-radius:0px;"
-      "background-color:rgba(18,150,219,255);"
-      "}");
-  progReadEbook->setMaximum(0);
-  progReadEbook->setMinimum(0);
-
-  dlgProgEBook = new QDialog(this);
-  dlgProgEBook->setFixedHeight(80);
-  dlgProgEBook->setFixedWidth(mw_one->geometry().width());
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setSpacing(1);
-
   vbox->setContentsMargins(1, 1, 1, 12);
-  dlgProgEBook->setLayout(vbox);
-  dlgProgEBook->setGeometry(mw_one->geometry().x(),
-                            (mw_one->height() - dlgProgEBook->height()) / 2 + 0,
-                            dlgProgEBook->width(), dlgProgEBook->height());
 
-  QLabel *lbl = new QLabel(dlgProgEBook);
+  if (nProgressBarType == 1) {
+    QProgressBar *prog = new QProgressBar(this);
+    prog->setStyleSheet(
+        "QProgressBar{border:0px solid #FFFFFF;"
+        "height:25;"
+        "background:rgb(25,255,25);"
+        "text-align:right;"
+        "color:rgb(255,255,255);"
+        "border-radius:0px;}"
+
+        "QProgressBar:chunk{"
+        "border-radius:0px;"
+        "background-color:rgba(18,150,219,255);"
+        "}");
+    prog->setMaximum(0);
+    prog->setMinimum(0);
+    dlg->layout()->addWidget(prog);
+  }
+
+  dlg = new QDialog(this);
+  dlg->setFixedHeight(200);
+  dlg->setFixedWidth(geometry().width() - 50);
+
+  dlg->setLayout(vbox);
+  dlg->setGeometry(geometry().x() + (width() - dlg->width()) / 2,
+                   (height() - dlg->height()) / 2 + 0, dlg->width(),
+                   dlg->height());
+
+  QLabel *lbl = new QLabel(dlg);
   lbl->setText(tr("Reading, please wait..."));
   lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  dlgProgEBook->layout()->addWidget(lbl);
-  dlgProgEBook->layout()->addWidget(progReadEbook);
-  dlgProgEBook->setModal(true);
+  dlg->layout()->addWidget(lbl);
 
-  return dlgProgEBook;
+  dlg->setModal(true);
+
+  if (nProgressBarType == 2) {
+    QtMaterialCircularProgress *qmProgress =
+        new QtMaterialCircularProgress(this);
+    dlg->layout()->addWidget(qmProgress);
+  }
+
+  return dlg;
 }
 
 void MainWindow::showProgress() {

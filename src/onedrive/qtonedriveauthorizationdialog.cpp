@@ -17,9 +17,9 @@
 #include "qtonedrivewebview.h"
 #endif
 
-#include "src/mainwindow.h"
+#include "src/MainWindow.h"
 #include "ui_OneDrive.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
 

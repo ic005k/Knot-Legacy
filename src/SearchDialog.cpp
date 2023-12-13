@@ -2,7 +2,7 @@
 
 #include <QKeyEvent>
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_SearchDialog.h"
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;

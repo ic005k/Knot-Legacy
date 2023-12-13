@@ -18,8 +18,8 @@
 #include <QVBoxLayout>
 #include <QXmlStreamReader>
 
-#include "src/documenthandler.h"
-#include "src/file.h"
+#include "src/DocumentHandler.h"
+#include "src/File.h"
 
 namespace Ui {
 class dlgReader;

@@ -45,13 +45,20 @@ SOURCES += \
     src/AutoUpdate.cpp \
     src/CategoryList.cpp \
     src/DateSelector.cpp \
+    src/DocumentHandler.cpp \
     src/EditRecord.cpp \
+    src/File.cpp \
+    src/FileSystemWatcher.cpp \
     src/LoadPic.cpp \
+    src/MainWindow.cpp \
+    src/MarkdownHighlighter.cpp \
+    src/MyWheel.cpp \
     src/Notes.cpp \
     src/NotesList.cpp \
     src/OneDrive.cpp \
     src/PageIndicator.cpp \
     src/Preferences.cpp \
+    src/QOwnLanguageData.cpp \
     src/Reader.cpp \
     src/ReaderFun.cpp \
     src/RemarksAbout.cpp \
@@ -60,39 +67,47 @@ SOURCES += \
     src/SearchDialog.cpp \
     src/SetEditText.cpp \
     src/SetReaderText.cpp \
+    src/SpecialAccelerometerPedometer.cpp \
     src/Steps.cpp \
     src/SyncInfo.cpp \
     src/Todo.cpp \
     src/TodoAlarm.cpp \
-    src/documenthandler.cpp \
-    src/file.cpp \
-    src/filesystemwatcher.cpp \
+    src/components/lib/qtmaterialoverlaywidget.cpp \
+    src/components/lib/qtmaterialripple.cpp \
+    src/components/lib/qtmaterialrippleoverlay.cpp \
+    src/components/lib/qtmaterialstyle.cpp \
+    src/components/lib/qtmaterialtheme.cpp \
+    src/components/qtmaterialcircularprogress.cpp \
+    src/components/qtmaterialcircularprogress_internal.cpp \
+    src/components/qtmaterialprogress_internal.cpp \
     src/main.cpp \
-    src/mainwindow.cpp \
-    src/markdownhighlighter.cpp \
-    src/mywheel.cpp \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
     src/onedrive/qtonedrivewebview.cpp \
-    src/qownlanguagedata.cpp \
     src/qwt/qwt.cpp \
     src/qwt/qwt_clipper.cpp \
     src/qwt/qwt_math.cpp \
     src/qwt/qwt_painter.cpp \
-    src/qwt/qwt_scale_map.cpp \
-    src/specialaccelerometerpedometer.cpp
+    src/qwt/qwt_scale_map.cpp
 
 HEADERS += \
     src/AutoUpdate.h \
     src/CategoryList.h \
     src/DateSelector.h \
+    src/DocumentHandler.h \
     src/EditRecord.h \
+    src/File.h \
+    src/FileSystemWatcher.h \
     src/LoadPic.h \
+    src/MainWindow.h \
+    src/MarkdownHighlighter.h \
+    src/MyWheel.h \
     src/Notes.h \
     src/NotesList.h \
     src/OneDrive.h \
     src/PageIndicator.h \
     src/Preferences.h \
+    src/QOwnLanguageData.h \
     src/Reader.h \
     src/ReaderFun.h \
     src/RemarksAbout.h \
@@ -101,28 +116,33 @@ HEADERS += \
     src/SearchDialog.h \
     src/SetEditText.h \
     src/SetReaderText.h \
+    src/SpecialAccelerometerPedometer.h \
     src/Steps.h \
     src/SyncInfo.h \
     src/Todo.h \
     src/TodoAlarm.h \
-    src/documenthandler.h \
-    src/file.h \
-    src/filesystemwatcher.h \
-    src/mainwindow.h \
-    src/markdownhighlighter.h \
-    src/mywheel.h \
+    src/components/lib/qtmaterialoverlaywidget.h \
+    src/components/lib/qtmaterialripple.h \
+    src/components/lib/qtmaterialrippleoverlay.h \
+    src/components/lib/qtmaterialstyle.h \
+    src/components/lib/qtmaterialstyle_p.h \
+    src/components/lib/qtmaterialtheme.h \
+    src/components/lib/qtmaterialtheme_p.h \
+    src/components/qtmaterialcircularprogress.h \
+    src/components/qtmaterialcircularprogress_internal.h \
+    src/components/qtmaterialcircularprogress_p.h \
+    src/components/qtmaterialprogress_internal.h \
+    src/components/qtmaterialprogress_p.h \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
     src/onedrive/qtonedrivewebview.h \
-    src/qownlanguagedata.h \
     src/qwt/qwt.h \
     src/qwt/qwt_clipper.h \
     src/qwt/qwt_global.h \
     src/qwt/qwt_math.h \
     src/qwt/qwt_painter.h \
     src/qwt/qwt_scale_map.h \
-    src/specialaccelerometerpedometer.h \
     win.rc
 
 FORMS += \
@@ -131,6 +151,7 @@ FORMS += \
     src/DateSelector.ui \
     src/EditRecord.ui \
     src/LoadPic.ui \
+    src/MainWindow.ui \
     src/Notes.ui \
     src/NotesList.ui \
     src/OneDrive.ui \
@@ -146,8 +167,7 @@ FORMS += \
     src/Steps.ui \
     src/SyncInfo.ui \
     src/Todo.ui \
-    src/TodoAlarm.ui \
-    src/mainwindow.ui
+    src/TodoAlarm.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
