@@ -3000,10 +3000,20 @@ bool MainWindow::copyFileToPath(QString sourceDir, QString toDir,
 
 QDialog *MainWindow::getProgBar() {
   QDialog *dlg;
-
+  dlg = new QDialog(this);
+  dlg->setModal(true);
+  dlg->setFixedHeight(200);
+  dlg->setFixedWidth(geometry().width() - 50);
   QVBoxLayout *vbox = new QVBoxLayout;
-  vbox->setSpacing(1);
-  vbox->setContentsMargins(1, 1, 1, 12);
+  dlg->setLayout(vbox);
+  dlg->setGeometry(geometry().x() + (width() - dlg->width()) / 2,
+                   (height() - dlg->height()) / 2 + 0, dlg->width(),
+                   dlg->height());
+
+  QLabel *lbl = new QLabel(dlg);
+  lbl->setText(tr("Reading, please wait..."));
+  lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  dlg->layout()->addWidget(lbl);
 
   if (nProgressBarType == 1) {
     QProgressBar *prog = new QProgressBar(this);
@@ -3023,22 +3033,6 @@ QDialog *MainWindow::getProgBar() {
     prog->setMinimum(0);
     dlg->layout()->addWidget(prog);
   }
-
-  dlg = new QDialog(this);
-  dlg->setFixedHeight(200);
-  dlg->setFixedWidth(geometry().width() - 50);
-
-  dlg->setLayout(vbox);
-  dlg->setGeometry(geometry().x() + (width() - dlg->width()) / 2,
-                   (height() - dlg->height()) / 2 + 0, dlg->width(),
-                   dlg->height());
-
-  QLabel *lbl = new QLabel(dlg);
-  lbl->setText(tr("Reading, please wait..."));
-  lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  dlg->layout()->addWidget(lbl);
-
-  dlg->setModal(true);
 
   if (nProgressBarType == 2) {
     QtMaterialCircularProgress *qmProgress =
