@@ -26,10 +26,9 @@ class SearchDialog : public QDialog {
 
  public slots:
   void on_btnBack_clicked();
+  void on_btnSearch_clicked();
 
  private slots:
-
-  void on_btnSearch_clicked();
 
   void on_btnClearText_clicked();
 

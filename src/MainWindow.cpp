@@ -2549,6 +2549,12 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
+
+    if (watch == ui->editSearchText && keyEvent->key() == Qt::Key_Return) {
+      on_btnStartSearch_clicked();
+      return true;
+    }
+
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
         if (!listSelFont->isHidden()) {
@@ -2635,6 +2641,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
       if (!ui->frameReport->isHidden()) {
         on_btnBack_Report_clicked();
+        return true;
+      }
+
+      if (!ui->frameSearch->isHidden()) {
+        on_btnBackSearch_clicked();
         return true;
       }
     }
@@ -3112,7 +3123,10 @@ void MainWindow::on_about() {
   m_Remarks->show();
 }
 
-void MainWindow::on_btnFind_clicked() { mySearchDialog->init(); }
+void MainWindow::on_btnFind_clicked() {
+  ui->frameMain->hide();
+  ui->frameSearch->show();
+}
 
 QStringList MainWindow::get_MonthList(QString strY, QString strM) {
   QStringList listMonth;
@@ -3634,6 +3648,7 @@ void MainWindow::init_UIWidget() {
   ui->frameSteps->hide();
   ui->frameDebug->hide();
   ui->frameReport->hide();
+  ui->frameSearch->hide();
   ui->qwPdf->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
@@ -3851,6 +3866,10 @@ void MainWindow::init_UIWidget() {
 
   ui->qwOneDriver->rootContext()->setContextProperty("mydlgOneDrive",
                                                      mydlgOneDrive);
+
+  ui->qwSearch->rootContext()->setContextProperty("mySearchDialog",
+                                                  mySearchDialog);
+  ui->qwSearch->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/search.qml")));
 
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
@@ -5374,4 +5393,17 @@ void MainWindow::on_btnStartDate_clicked() {
 
 void MainWindow::on_btnEndDate_clicked() {
   mydlgReport->myDateSelector->initStartEndDate("end");
+}
+
+void MainWindow::on_btnBackSearch_clicked() {
+  ui->frameSearch->hide();
+  ui->frameMain->show();
+}
+
+void MainWindow::on_btnClearSearchText_clicked() {
+  ui->editSearchText->setText("");
+}
+
+void MainWindow::on_btnStartSearch_clicked() {
+  mySearchDialog->on_btnSearch_clicked();
 }

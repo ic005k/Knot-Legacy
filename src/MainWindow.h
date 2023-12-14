@@ -649,6 +649,12 @@ class MainWindow : public QMainWindow {
 
   void on_actionTabRecycle();
 
+  void on_btnBackSearch_clicked();
+
+  void on_btnClearSearchText_clicked();
+
+  void on_btnStartSearch_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
