@@ -15,5 +15,6 @@
         <file>src/qmlsrc/reader.qml</file>
         <file>src/qmlsrc/imgview.qml</file>
         <file>src/qmlsrc/pdf.qml</file>
+        <file>src/qmlsrc/search.qml</file>
     </qresource>
 </RCC>

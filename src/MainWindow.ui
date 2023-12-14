@@ -3537,6 +3537,22 @@ QRadioButton::indicator:checked {
         </layout>
        </item>
        <item>
+        <widget class="QLabel" name="lblSearchResult">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Results</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QQuickWidget" name="qwSearch">
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>

@@ -21,6 +21,14 @@ class SearchDialog : public QDialog {
 
   void init();
 
+  void setCurrentIndex(int index);
+  void clearAll();
+  int getCount();
+  void delItem(int index);
+
+  void addItem(QString text0, QString text1, QString text2, QString text3,
+               int itemH);
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
@@ -34,7 +42,7 @@ class SearchDialog : public QDialog {
 
  private:
   void setCellText(int row, int column, QString str, QTableWidget *table);
-  void generateData(int count, QTableWidget *table);
+  void generateData(int count);
 };
 
 #endif  // SEARCHDIALOG_H

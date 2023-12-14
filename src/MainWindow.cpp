@@ -3126,6 +3126,7 @@ void MainWindow::on_about() {
 void MainWindow::on_btnFind_clicked() {
   ui->frameMain->hide();
   ui->frameSearch->show();
+  ui->editSearchText->setFocus();
 }
 
 QStringList MainWindow::get_MonthList(QString strY, QString strM) {
@@ -3697,6 +3698,7 @@ void MainWindow::init_UIWidget() {
   ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
   ui->lblStats->installEventFilter(this);
+  ui->editSearchText->installEventFilter(this);
 
   myfile = new File();
   m_Remarks = new dlgRemarks(this);
@@ -5402,6 +5404,7 @@ void MainWindow::on_btnBackSearch_clicked() {
 
 void MainWindow::on_btnClearSearchText_clicked() {
   ui->editSearchText->setText("");
+  ui->editSearchText->setFocus();
 }
 
 void MainWindow::on_btnStartSearch_clicked() {

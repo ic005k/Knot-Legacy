@@ -3,7 +3,9 @@
 #include <QKeyEvent>
 
 #include "MainWindow.h"
+#include "ui_MainWindow.h"
 #include "ui_SearchDialog.h"
+
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
 
@@ -62,6 +64,40 @@ void SearchDialog::init() {
 
 SearchDialog::~SearchDialog() { delete ui; }
 
+void SearchDialog::addItem(QString text0, QString text1, QString text2,
+                           QString text3, int itemH) {
+  QQuickItem* root = mw_one->ui->qwSearch->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, text0),
+                            Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
+                            Q_ARG(QVariant, text3), Q_ARG(QVariant, itemH));
+}
+
+void SearchDialog::delItem(int index) {
+  QQuickItem* root = mw_one->ui->qwSearch->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+}
+
+int SearchDialog::getCount() {
+  QQuickItem* root = mw_one->ui->qwSearch->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
+void SearchDialog::clearAll() {
+  int count = getCount();
+  for (int i = 0; i < count; i++) {
+    delItem(0);
+  }
+}
+
+void SearchDialog::setCurrentIndex(int index) {
+  QQuickItem* root = mw_one->ui->qwSearch->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
+                            Q_ARG(QVariant, index));
+}
+
 bool SearchDialog::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
@@ -83,7 +119,7 @@ bool SearchDialog::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
 void SearchDialog::on_btnBack_clicked() { this->close(); }
 
 void SearchDialog::on_btnSearch_clicked() {
-  searchStr = ui->editSearchText->text().trimmed();
+  searchStr = mw_one->ui->editSearchText->text().trimmed();
   if (searchStr.length() == 0) return;
 
   mw_one->showProgress();
@@ -135,17 +171,23 @@ void SearchDialog::initSearchResults() {
   // qDebug() << resultsList;
 
   int count = resultsList.count();
-  ui->tableSearch->setHorizontalHeaderItem(
-      0, new QTableWidgetItem(tr("Results") + " : " + QString::number(count)));
+
+  mw_one->ui->lblSearchResult->setText(tr("Results") + " : " +
+                                       QString::number(count));
   if (count == 0) return;
 
-  generateData(count, ui->tableSearch);
+  generateData(count);
 
-  ui->tableSearch->setCurrentCell(0, 0);
+  setCurrentIndex(0);
 }
 
-void SearchDialog::generateData(int count, QTableWidget* table) {
-  table->setRowCount(count);
+void SearchDialog::generateData(int count) {
+  clearAll();
+
+  QFontMetrics fontMetrics(font());
+  int nFontHeight = fontMetrics.height();
+  int line_count;
+
   for (int i = 0; i < count; i++) {
     QStringList list = resultsList.at(i).split("=|=");
     QString str0, str1, str2, str3;
@@ -153,20 +195,6 @@ void SearchDialog::generateData(int count, QTableWidget* table) {
     str1 = list.at(1);
     str2 = list.at(2);
     str3 = list.at(3);
-
-    QLabel* lbl0 = new QLabel();
-    QLabel* lbl1 = new QLabel();
-    QLabel* lbl2 = new QLabel();
-    QLabel* lbl3 = new QLabel();
-
-    lbl0->adjustSize();
-    lbl0->setWordWrap(true);
-    lbl1->adjustSize();
-    lbl1->setWordWrap(true);
-    lbl2->adjustSize();
-    lbl2->setWordWrap(true);
-    lbl3->adjustSize();
-    lbl3->setWordWrap(true);
 
     QString a0("<span style=\"color: white;background: red;\">");
     QString a1("</span>");
@@ -183,20 +211,22 @@ void SearchDialog::generateData(int count, QTableWidget* table) {
       str3 = str3.replace(searchStr, a0 + searchStr + a1);
     }
 
-    lbl0->setText(str0);
-    lbl1->setText(tr("Amount") + " : " + str1);
-    lbl2->setText(tr("Category") + " : " + str2);
-    lbl3->setText(tr("Details") + " : " + str3);
+    line_count = 4;
+    QString text1, text2, text3;
+    if (str1.trimmed().length() > 0) {
+      text1 = tr("Amount") + " : " + str1;
+      line_count++;
+    }
+    if (str2.trimmed().length() > 0) {
+      text2 = tr("Category") + " : " + str2;
+      line_count++;
+    }
+    if (str3.trimmed().length() > 0) {
+      text3 = tr("Details") + " : " + str3;
+      line_count++;
+    }
 
-    QWidget* widget = new QWidget();
-    QVBoxLayout* vbox = new QVBoxLayout;
-    widget->setLayout(vbox);
-    vbox->addWidget(lbl0);
-    if (str1.trimmed().length() > 0) vbox->addWidget(lbl1);
-    if (str2.trimmed().length() > 0) vbox->addWidget(lbl2);
-    if (str3.trimmed().length() > 0) vbox->addWidget(lbl3);
-
-    table->setCellWidget(i, 0, widget);
+    addItem(str0, text1, text2, text3, nFontHeight * (line_count + 1));
   }
 }
 

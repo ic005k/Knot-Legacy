@@ -75,15 +75,15 @@ Rectangle {
         return data.type
     }
 
-    function addItem(t0, t1, t2, type0, txt_top, height) {
+    function addItem(t0, t1, t2, t3, height) {
         view.model.append({
                               "text0": t0,
                               "text1": t1,
                               "text2": t2,
-                              "type": type0,
-                              "text_top": txt_top,
+                              "text3": t3,
                               "myh": height
                           })
+
     }
 
     function insertItem(strTime, type, strText, curIndex) {
@@ -140,7 +140,8 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
 
-                Rectangle {
+
+                /* Rectangle {
                     height: parent.height - 2
                     width: 6
                     radius: 2
@@ -150,8 +151,7 @@ Rectangle {
                     Text {
                         anchors.centerIn: parent
                     }
-                }
-
+                }*/
                 ColumnLayout {
                     id: idlistElemnet4
                     height: parent.height
@@ -170,13 +170,13 @@ Rectangle {
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: TextArea.NoWrap
-                        font.bold: type
+                        font.bold: true
                         text: text0
                     }
 
                     Text {
                         id: item1
-                        Layout.preferredWidth: parent.width // / 4
+                        Layout.preferredWidth: parent.width
 
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft //Text.AlignRight
@@ -184,9 +184,9 @@ Rectangle {
                         elide: Text.ElideRight
 
                         width: parent.width
-                        wrapMode: TextArea.NoWrap
+                        wrapMode: TextArea.WordWrap
                         color: isHighPriority ? "#EF5B98" : "#000000"
-                        font.bold: type
+                        font.bold: false
                         text: text1
 
                         visible: item1.text.length ? true : false
@@ -194,34 +194,27 @@ Rectangle {
 
                     Text {
                         id: item2
-                        Layout.preferredWidth: parent.width // / 3
+                        Layout.preferredWidth: parent.width
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft //Text.AlignRight
                         elide: Text.ElideRight
 
                         width: parent.width
                         wrapMode: TextArea.WordWrap
-                        font.bold: type
+                        font.bold: false
                         text: text2
                         anchors.rightMargin: 10
 
                         visible: item2.text.length ? true : false
                     }
 
-                    TextArea {
-                        id: item_type
-                        visible: false
-                        width: parent.width
-                        wrapMode: TextArea.NoWrap
-                        text: type
-                    }
-
                     Text {
-                        id: item_top
-                        visible: false
+                        id: item3
+                        visible: item3.text.length ? true : false
                         width: parent.width
-                        wrapMode: TextArea.NoWrap
-                        text: text_top
+                        wrapMode: Text.Wrap
+                        font.bold: false
+                        text: text3
                     }
                 }
             }
@@ -248,14 +241,16 @@ Rectangle {
                 }
 
                 onClicked: {
+
                     view.currentIndex = index //实现item切换
-                    mw_one.clickData()
+                    //mw_one.clickData()
                 }
 
                 onDoubleClicked: {
-                    mw_one.reeditData()
-                    var data = view.model.get(view.currentIndex)
-                    console.log(data.text0 + "," + data.type + ", count=" + view.count)
+
+                    //mw_one.reeditData()
+                    //var data = view.model.get(view.currentIndex)
+                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
                 }
             }
 
@@ -321,7 +316,19 @@ Rectangle {
             margins: 4
         }
 
-        model: MainModel {}
+        model: ListModel {
+            id: listmain
+
+            // debug
+
+            ListElement {
+                text0: "str0"
+                text1: "str1"
+                text2: "str2"
+                text3: "str3 1234567890 1234567890 1234567890 1234567890"
+                myh: 150
+            }
+        }
         delegate: dragDelegate
 
         spacing: 4
