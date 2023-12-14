@@ -1,8 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtQml 2.3
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.1
+import QtQml 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Rectangle {
     id: root
@@ -83,7 +83,6 @@ Rectangle {
                               "text3": t3,
                               "myh": height
                           })
-
     }
 
     function insertItem(strTime, type, strText, curIndex) {
@@ -124,7 +123,8 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: myh
+            height: item0.contentHeight + item1.contentHeight
+                    + item2.contentHeight + item3.contentHeight + 10 //myh
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
@@ -140,18 +140,6 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
 
-
-                /* Rectangle {
-                    height: parent.height - 2
-                    width: 6
-                    radius: 2
-                    anchors.leftMargin: 1
-                    color: getListEleHeadColor(type)
-
-                    Text {
-                        anchors.centerIn: parent
-                    }
-                }*/
                 ColumnLayout {
                     id: idlistElemnet4
                     height: parent.height
@@ -165,23 +153,25 @@ Rectangle {
                         id: item0
 
                         width: parent.width
-                        Layout.preferredWidth: parent.width
+                        Layout.preferredWidth: listItem.width
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: TextArea.NoWrap
                         font.bold: true
                         text: text0
+
+                        leftPadding: 5
+                        rightPadding: 5
                     }
 
                     Text {
                         id: item1
-                        Layout.preferredWidth: parent.width
+                        Layout.preferredWidth: listItem.width
 
                         Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft //Text.AlignRight
+                        horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
 
                         width: parent.width
                         wrapMode: TextArea.WordWrap
@@ -189,32 +179,45 @@ Rectangle {
                         font.bold: false
                         text: text1
 
+                        leftPadding: 5
+                        rightPadding: 5
+
                         visible: item1.text.length ? true : false
                     }
 
                     Text {
                         id: item2
-                        Layout.preferredWidth: parent.width
+                        anchors.rightMargin: 0
+                        Layout.preferredWidth: listItem.width
                         Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft //Text.AlignRight
-                        elide: Text.ElideRight
 
+                        horizontalAlignment: Text.AlignLeft
                         width: parent.width
                         wrapMode: TextArea.WordWrap
                         font.bold: false
                         text: text2
-                        anchors.rightMargin: 10
+
+                        leftPadding: 5
+                        rightPadding: 5
 
                         visible: item2.text.length ? true : false
                     }
 
                     Text {
                         id: item3
-                        visible: item3.text.length ? true : false
+                        anchors.rightMargin: 0
                         width: parent.width
-                        wrapMode: Text.Wrap
+                        wrapMode: Text.WordWrap
+                        elide: Text.ElideRight
+                        //Layout.maximumWidth: listItem.width
+                        Layout.preferredWidth: listItem.width
                         font.bold: false
                         text: text3
+
+                        leftPadding: 5
+                        rightPadding: 5
+
+                        visible: item3.text.length ? true : false
                     }
                 }
             }
@@ -321,13 +324,13 @@ Rectangle {
 
             // debug
 
-            ListElement {
-                text0: "str0"
-                text1: "str1"
-                text2: "str2"
-                text3: "str3 1234567890 1234567890 1234567890 1234567890"
-                myh: 150
-            }
+            /* ListElement {
+                text0: '<span style="background-color: #ff6600;">Hello</span>'
+                text1: "123456  <b>Hello</b> <i>World!</i>  123456"
+                text2: '123456 <font color="red"><b>TEST</b></font>  123456'
+                text3: "str3 1234567890 1234567890  1234567890 1234567890"
+                myh: 0
+            }*/
         }
         delegate: dragDelegate
 

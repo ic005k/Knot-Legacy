@@ -170,6 +170,7 @@ void SearchDialog::startSearch() {
 void SearchDialog::initSearchResults() {
   // qDebug() << resultsList;
 
+  clearAll();
   int count = resultsList.count();
 
   mw_one->ui->lblSearchResult->setText(tr("Results") + " : " +
@@ -182,8 +183,6 @@ void SearchDialog::initSearchResults() {
 }
 
 void SearchDialog::generateData(int count) {
-  clearAll();
-
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();
   int line_count;
@@ -196,8 +195,11 @@ void SearchDialog::generateData(int count) {
     str2 = list.at(2);
     str3 = list.at(3);
 
-    QString a0("<span style=\"color: white;background: red;\">");
-    QString a1("</span>");
+    // QString a0("<span style=\"color: white;background: red;\">");
+    // QString a1("</span>");
+
+    QString a0 = "<font color=\" red \"><b>";
+    QString a1 = "</b></font>";
 
     if (str1.contains(searchStr)) {
       str1 = str1.replace(searchStr, a0 + searchStr + a1);
@@ -226,7 +228,7 @@ void SearchDialog::generateData(int count) {
       line_count++;
     }
 
-    addItem(str0, text1, text2, text3, nFontHeight * (line_count + 1));
+    addItem(str0, text1, text2, text3, nFontHeight * (0));
   }
 }
 
