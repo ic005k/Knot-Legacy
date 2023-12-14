@@ -4295,7 +4295,7 @@ void MainWindow::on_actionBakFileList() {
 
   for (int i = 0; i < bakCount; i++) {
     QString action, bakfile;
-    QString str = bakFileList.at(i);
+    QString str = bakFileList.at(bakCount - 1 - i);
     action = str.split("-===-").at(0);
     bakfile = str.split("-===-").at(1);
 

@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 import Qt.labs.qmlmodels 1.0
 
 Rectangle {
@@ -8,19 +8,14 @@ Rectangle {
 
         tableModel.appendRow({
                                  "Date": Date,
-                                 "Freq": Steps,
-                                 "Amount": KM
+                                 "Steps": Steps,
+                                 "KM": KM
                              })
     }
 
     function setScrollBarPos(pos) {
-
         tableView.contentY = 0 //tableView.contentHeight - tableView.height
         console.log("contentH=" + tableView.contentHeight + "  h=" + tableView.height)
-    }
-
-    function getCurrentIndex() {
-        return tableView.currentIndex
     }
 
     function getItemCount() {
@@ -29,7 +24,8 @@ Rectangle {
     }
 
     function getDate(itemIndex) {
-        return tableModel.rows[itemIndex].Date
+        var data = tableModel.getRow(itemIndex)
+        return data.Date
     }
 
     function getSteps(itemIndex) {
@@ -45,13 +41,24 @@ Rectangle {
     function setTableData(currentIndex, date, steps, km) {
         tableModel.setRow(currentIndex, {
                               "Date": date,
-                              "Freq": steps,
-                              "Amount": km
+                              "Steps": steps,
+                              "KM": km
                           })
     }
 
     function delItem(currentIndex) {
         tableModel.removeRow(currentIndex)
+    }
+
+    property var header1: [qsTr("Time"), qsTr("Amount"), qsTr("Category")]
+    property var header2: [qsTr("Date"), qsTr("Time"), qsTr("Amount")]
+    property var cur_header: [qsTr("Time"), qsTr("Amount"), qsTr("Category")]
+    function setHeader(sn) {
+
+        if (sn === 1)
+            cur_header = header1
+        if (sn === 2)
+            cur_header = header2
     }
 
     Rectangle {
@@ -64,7 +71,7 @@ Rectangle {
 
             Repeater {
                 // Table Header
-                model: [qsTr("Date"), qsTr("Freq"), qsTr("Amount")]
+                model: cur_header
 
                 Rectangle {
                     width: header.width / 3
@@ -75,7 +82,6 @@ Rectangle {
                     Text {
                         text: modelData
                         anchors.centerIn: parent
-                        //font.pointSize: 12
                         color: "white"
                     }
                 }
@@ -83,9 +89,8 @@ Rectangle {
         }
     }
     TableView {
-        property int hoverIndex: -1
-        property int currentIndex: -1
         id: tableView
+
         width: parent.width
         anchors.top: header.bottom
         anchors.left: parent.left
@@ -113,19 +118,14 @@ Rectangle {
                 display: "Date"
             }
             TableModelColumn {
-                display: "Freq"
+                display: "Steps"
             }
             TableModelColumn {
-                display: "Amount"
+                display: "KM"
             }
         }
         delegate: Rectangle {
-            //color: "#666666"
-            color: {
-                //tableView.currentIndex === row ? "#3298FE" : (tableView.hoverIndex === row ? "#97CBFF" : (row % 2 ? "#666666" : "#666666"))
-                tableView.currentIndex === row ? "#3298FE" : (row % 2 ? "#666666" : "#666666")
-            }
-
+            color: "#666666"
             implicitWidth: tableView.width / 3
             implicitHeight: 32
             border.width: 1
@@ -137,31 +137,10 @@ Rectangle {
 
                 color: "white"
             }
-
-            MouseArea {
-                id: cashierMouse
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: {
-                    tableView.forceActiveFocus()
-                    tableView.currentIndex = row
-
-                    mydlgReport.loadDetailsQml()
-
-                    console.debug(row)
-                    //console.log(tableModel.rows[row].Date)
-                }
-                onDoubleClicked: {
-                    tableView.selected(row, header.logicIndexMap[column])
-                }
-                onEntered: tableView.hoverIndex = row
-                onExited: tableView.hoverIndex = -1
-            }
         }
     }
 
     Component.onCompleted: {
-
-        //appendTableRow("2022-11-19", "3500", "test1")
+        appendTableRow("2022-11-19", "3500", "4567")
     }
 }

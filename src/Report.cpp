@@ -4,8 +4,8 @@
 
 #include "MainWindow.h"
 #include "ui_DateSelector.h"
-#include "ui_Report.h"
 #include "ui_MainWindow.h"
+#include "ui_Report.h"
 
 extern int fontSize;
 extern MainWindow* mw_one;
@@ -63,8 +63,6 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   mw_one->ui->lblTitle_Report->setFont(font);
   mw_one->ui->lblDetails->setWordWrap(true);
   mw_one->ui->lblDetails->adjustSize();
-  mw_one->ui->lblDetails->setHidden(true);
-  mw_one->ui->qwReportSub->setHidden(true);
 
   mw_one->ui->tableDetails->setColumnCount(1);
   mw_one->ui->tableDetails->setHorizontalHeaderItem(
@@ -87,6 +85,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   QScroller::grabGesture(mw_one->ui->tableDetails,
                          QScroller::LeftMouseButtonGesture);
   mw_one->setSCrollPro(mw_one->ui->tableDetails);
+  mw_one->ui->tableDetails->hide();
 
   mw_one->set_btnStyle(this);
 }
@@ -602,14 +601,16 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
 
           QString str;
           if (details.trimmed().length() > 0)
-            str = tr("Date") + " : " + date + "  " + time + "\n" +
-                  tr("Amount") + " : " + amount + "\n" + details;
+            str = details;
           else
-            str = tr("Date") + " : " + date + "  " + time + "\n" +
-                  tr("Amount") + " : " + amount;
+            str = "";
 
           QTableWidgetItem* item = new QTableWidgetItem(str);
           mw_one->ui->tableDetails->setItem(freq - 1, 0, item);
+
+          mw_one->mySearchDialog->addItemBakList(
+              mw_one->ui->qwReportSub, tr("Date") + " : " + date + "  " + time,
+              tr("Amount") + " : " + amount, str, "", 0);
         }
 
         if (amount.length() > 0) {
@@ -633,9 +634,9 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
 
     mw_one->ui->lblDetails->setStyleSheet(
         mw_one->myEditRecord->ui->lblTitle->styleSheet());
-    mw_one->ui->lblDetails->setText(
-        tr("Details") + " : " + tr("Amount") + " " + ta + "    " +
-        QString("%1").arg(bfb * 100, 0, 'f', 2) + " %");
+    mw_one->ui->lblDetails->setText(strCategory + "\n" + tr("Freq") + " : " +
+                                    QString::number(freq) + "  " +
+                                    tr("Amount") + " : " + ta);
 
     setScrollBarPos_xx(0);
   } else {
@@ -901,8 +902,6 @@ void dlgReport::loadDetails() {
 }
 
 void dlgReport::loadDetailsQml() {
-  mw_one->ui->qwReportSub->setSource(
-      QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
   btnCategory->setText(tr("View Category"));
   mw_one->ui->lblDetails->setText(tr("Details"));
   clearAll_xx();
@@ -914,8 +913,9 @@ void dlgReport::loadDetailsQml() {
   date.replace("*", "");
   date = date.trimmed();
 
-  for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
-    QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);
+  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
+  for (int i = 0; i < tw->topLevelItemCount(); i++) {
+    QTreeWidgetItem* topItem = tw->topLevelItem(i);
     if (topItem->text(0) == date) {
       mw_one->ui->lblDetails->setText(tr("Details") + "    " + date + "    " +
                                       topItem->text(3));
@@ -927,35 +927,22 @@ void dlgReport::loadDetailsQml() {
 
         QString text0 = childItem->text(0);
         QStringList list = text0.split(".");
-        if (list.count() == 2) text0 = list.at(1);
+        if (list.count() == 2) text0 = list.at(1).trimmed();
+        text0 = tr("Time") + " : " + text0;
 
         QString text1 = childItem->text(1);
         QString text2 = childItem->text(2);
+        QString text3 = childItem->text(3);
 
-        if (!text0.contains(tr("Details"))) {
-          appendSteps_xx(text0, text1, text2);
+        QString str1, str2, str3;
+        if (text1.trimmed().length() > 0) str1 = tr("Amount") + " : " + text1;
+        if (text2.trimmed().length() > 0) str2 = tr("Category") + " : " + text2;
+        if (text3.trimmed().length() > 0) str3 = tr("Details") + " : " + text3;
 
-        } else {
-          QString t0, t1, t2;
-          QTreeWidgetItem* c_item = topItem->child(j - 1);
-          t0 = c_item->text(0);
-          QStringList list = t0.split(".");
-          if (list.count() == 2) t0 = list.at(1);
-
-          t1 = c_item->text(1);
-          t2 = c_item->text(2);
-
-          str_xx = str_xx + t0 + "  $" + t1 + "  " + t2 + "\n" + text0 + "\n\n";
-        }
+        // appendSteps_xx(text0, text1, text2);
+        mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwReportSub, text0,
+                                               str1, str2, str3, 0);
       }
     }
   }
-
-  if (str_xx.length() > 0) {
-    mw_one->ui->lblDetails->setStyleSheet(
-        mw_one->myEditRecord->lblStyleHighLight);
-
-  } else
-    mw_one->ui->lblDetails->setStyleSheet(
-        mw_one->myEditRecord->ui->lblTitle->styleSheet());
 }

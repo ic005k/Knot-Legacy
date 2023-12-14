@@ -1,146 +1,361 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import Qt.labs.qmlmodels 1.0
+import QtQuick 2.15
+import QtQuick.Window 2.15
+import QtQml 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Rectangle {
+    id: root
 
-    function appendTableRow(Date, Steps, KM) {
+    width: 500
+    height: 400
 
-        tableModel.appendRow({
-                                 "Date": Date,
-                                 "Steps": Steps,
-                                 "KM": KM
-                             })
+    property int itemCount: 0
+    property bool isHighPriority: false
+
+    function setItemHeight(h) {}
+
+    function gotoEnd() {
+        view.positionViewAtEnd()
     }
 
-    function setScrollBarPos(pos) {
-        tableView.contentY = 0 //tableView.contentHeight - tableView.height
-        console.log("contentH=" + tableView.contentHeight + "  h=" + tableView.height)
+    function gotoBeginning() {
+        view.positionViewAtBeginning()
+    }
+
+    function gotoIndex(index) {
+        view.positionViewAtIndex(index, Tumbler.Center)
+    }
+
+    function setHighPriority(isFalse) {
+        isHighPriority = isFalse
+    }
+
+    function setCurrentItem(currentIndex) {
+        view.currentIndex = currentIndex
+    }
+
+    function getCurrentIndex() {
+        return view.currentIndex
     }
 
     function getItemCount() {
-
-        return tableModel.rowCount
+        itemCount = view.count
+        console.log("count=" + itemCount)
+        return itemCount
     }
 
-    function getDate(itemIndex) {
-        var data = tableModel.getRow(itemIndex)
-        return data.Date
+    function getItemText(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.time + "|=|" + data.dototext
     }
 
-    function getSteps(itemIndex) {
-        var data = tableModel.getRow(itemIndex)
-        return data.Steps
+    function getText0(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.text0
     }
 
-    function getKM(itemIndex) {
-        var data = tableModel.getRow(itemIndex)
-        return data.KM
+    function getText1(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.text1
     }
 
-    function setTableData(currentIndex, date, steps, km) {
-        tableModel.setRow(currentIndex, {
-                              "Date": date,
-                              "Steps": steps,
-                              "KM": km
+    function getText2(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.text2
+    }
+
+    function getTop(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.text_top
+    }
+
+    function getType(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.type
+    }
+
+    function addItem(t0, t1, t2, t3, height) {
+        view.model.append({
+                              "text0": t0,
+                              "text1": t1,
+                              "text2": t2,
+                              "text3": t3,
+                              "myh": height
+                          })
+    }
+
+    function insertItem(strTime, type, strText, curIndex) {
+        view.model.insert(curIndex, {
+                              "time": strTime,
+                              "type": type,
+                              "dototext": strText
                           })
     }
 
     function delItem(currentIndex) {
-        tableModel.removeRow(currentIndex)
+        view.model.remove(currentIndex)
     }
 
-    property var header1: [qsTr("Time"), qsTr("Amount"), qsTr("Category")]
-    property var header2: [qsTr("Date"), qsTr("Time"), qsTr("Amount")]
-    property var cur_header: [qsTr("Time"), qsTr("Amount"), qsTr("Category")]
-    function setHeader(sn) {
+    function modifyItem(currentIndex, strTime, strText) {
 
-        if (sn === 1)
-            cur_header = header1
-        if (sn === 2)
-            cur_header = header2
+        view.model.setProperty(currentIndex, "time", strTime)
+        view.model.setProperty(currentIndex, "dototext", strText)
     }
 
-    Rectangle {
-        id: header
-        width: parent.width
-        height: 30
+    function modifyItemTime(currentIndex, strTime) {
 
-        Row {
-            spacing: 0
+        view.model.setProperty(currentIndex, "time", strTime)
+    }
 
-            Repeater {
-                // Table Header
-                model: cur_header
+    function modifyItemType(currentIndex, type) {
 
-                Rectangle {
-                    width: header.width / 3
-                    height: header.height
-                    color: "#666666"
-                    border.width: 1
-                    border.color: "#848484"
+        view.model.setProperty(currentIndex, "type", type)
+    }
+
+    function modifyItemText(currentIndex, strText) {
+        view.model.setProperty(currentIndex, "dototext", strText)
+    }
+
+    Component {
+        id: dragDelegate
+
+        Rectangle {
+            id: listItem
+            width: ListView.view.width
+            height: item0.contentHeight + item1.contentHeight
+                    + item2.contentHeight + item3.contentHeight + 10 //myh
+            color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
+
+            border.width: 1
+            border.color: "lightgray" //"lightsteelblue"
+
+            radius: 0
+
+            RowLayout {
+
+                id: idlistElemnet
+                height: parent.height
+                width: parent.width
+                spacing: 2
+                Layout.fillWidth: true
+
+                ColumnLayout {
+                    id: idlistElemnet4
+                    height: parent.height
+                    width: parent.width
+                    spacing: 2
+                    Layout.fillWidth: true
+                    anchors.leftMargin: 0
+                    anchors.rightMargin: 0
+
                     Text {
-                        text: modelData
-                        anchors.centerIn: parent
-                        color: "white"
+                        id: item0
+
+                        width: parent.width
+                        Layout.preferredWidth: listItem.width
+                        Layout.alignment: Qt.AlignHCenter
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: TextArea.NoWrap
+                        font.bold: true
+                        text: text0
+
+                        leftPadding: 5
+                        rightPadding: 5
+                    }
+
+                    Text {
+                        id: item1
+                        Layout.preferredWidth: listItem.width
+
+                        Layout.alignment: Qt.AlignHCenter
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+
+                        width: parent.width
+                        wrapMode: TextArea.WordWrap
+                        color: isHighPriority ? "#EF5B98" : "#000000"
+                        font.bold: false
+                        text: text1
+
+                        leftPadding: 5
+                        rightPadding: 5
+
+                        visible: item1.text.length ? true : false
+                    }
+
+                    Text {
+                        id: item2
+                        anchors.rightMargin: 0
+                        Layout.preferredWidth: listItem.width
+                        Layout.alignment: Qt.AlignHCenter
+
+                        horizontalAlignment: Text.AlignLeft
+                        width: parent.width
+                        wrapMode: TextArea.WordWrap
+                        font.bold: false
+                        text: text2
+
+                        leftPadding: 5
+                        rightPadding: 5
+
+                        visible: item2.text.length ? true : false
+                    }
+
+                    Text {
+                        id: item3
+                        anchors.rightMargin: 0
+                        width: parent.width
+                        wrapMode: Text.WordWrap
+                        elide: Text.ElideRight
+                        //Layout.maximumWidth: listItem.width
+                        Layout.preferredWidth: listItem.width
+                        font.bold: false
+                        text: text3
+
+                        leftPadding: 5
+                        rightPadding: 5
+
+                        visible: item3.text.length ? true : false
                     }
                 }
             }
+
+            MouseArea {
+
+                property point clickPos: "0,0"
+
+                anchors.fill: parent
+                onPressed: {
+                    clickPos = Qt.point(mouse.x, mouse.y)
+                }
+                onReleased: {
+                    var delta = Qt.point(mouse.x - clickPos.x,
+                                         mouse.y - clickPos.y)
+                    console.debug("delta.x: " + delta.x)
+                    if ((delta.x < 0) && (aBtnShow.running === false)
+                            && (delBtn.width == 0)) {
+                        aBtnShow.start()
+                    } else if (aBtnHide.running === false
+                               && (delBtn.width > 0)) {
+                        aBtnHide.start()
+                    }
+                }
+
+                onClicked: {
+
+                    view.currentIndex = index //实现item切换
+                    //mw_one.clickData()
+                }
+
+                onDoubleClicked: {
+
+                    //mw_one.reeditData()
+                    //var data = view.model.get(view.currentIndex)
+                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
+                }
+            }
+
+            Rectangle {
+                color: "#AAAAAA"
+                height: 0
+                width: parent.width
+                anchors.bottom: parent.bottom
+            }
+
+            Rectangle {
+                id: delBtn
+                visible: false
+                height: parent.height
+                width: 0
+                color: "#FF0000"
+
+                anchors.right: parent.right
+                anchors.rightMargin: -30
+                radius: 0
+
+                Text {
+                    width: 56
+                    anchors.centerIn: parent
+
+                    text: qsTr("Done")
+                    color: "#ffffff"
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        mydlgTodo.addToRecycle()
+                        view.model.remove(index)
+                    }
+                }
+            }
+
+            PropertyAnimation {
+                id: aBtnShow
+                target: delBtn
+                property: "width"
+                duration: 100
+                from: 0
+                to: 80
+            }
+            PropertyAnimation {
+                id: aBtnHide
+                target: delBtn
+                property: "width"
+                duration: 100
+                from: 80
+                to: 0
+            }
         }
     }
-    TableView {
-        id: tableView
 
-        width: parent.width
-        anchors.top: header.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        clip: true
-        boundsBehavior: Flickable.OvershootBounds
+    ListView {
+        id: view
+
+        anchors {
+            fill: parent
+            margins: 4
+        }
+
+        model: ListModel {
+            id: listmain
+
+            // debug
+
+
+            /* ListElement {
+                text0: '<span style="background-color: #ff6600;">Hello</span>'
+                text1: "123456  <b>Hello</b> <i>World!</i>  123456"
+                text2: '123456 <font color="red"><b>TEST</b></font>  123456'
+                text3: "str3 1234567890 1234567890  1234567890 1234567890"
+                myh: 0
+            }*/
+        }
+        delegate: dragDelegate
+
+        spacing: 4
+        cacheBuffer: 50
 
         ScrollBar.vertical: ScrollBar {
-            id: vbar
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            policy: ScrollBar.AsNeeded
             width: 8
-            visible: tableModel.rowCount > 5
-            background: Rectangle {
-                color: "#666666"
-            }
-        }
-
-        model: TableModel {
-            id: tableModel
-
-            TableModelColumn {
-                display: "Date"
-            }
-            TableModelColumn {
-                display: "Steps"
-            }
-            TableModelColumn {
-                display: "KM"
-            }
-        }
-        delegate: Rectangle {
-            color: "#666666"
-            implicitWidth: tableView.width / 3
-            implicitHeight: 32
-            border.width: 1
-            border.color: "#848484"
-
-            Text {
-                text: display
-                anchors.centerIn: parent
-
-                color: "white"
-            }
+            policy: ScrollBar.AsNeeded
         }
     }
 
-    Component.onCompleted: {
-        appendTableRow("2022-11-19", "3500", "4567")
+    function getListEleHeadColor(ntype) {
+        switch (ntype) {
+        case 0:
+            return "lightgray"
+        case 1:
+            return "red"
+        case 2:
+            return "yellow"
+        case 3:
+            return "lightblue"
+        default:
+            return "black"
+        }
     }
 }
