@@ -7,8 +7,8 @@ import QtQuick.Layouts 1.15
 Rectangle {
     id: root
 
-    width: myW
-    height: myH
+    width: 500
+    height: 400
 
     property int itemCount: 0
     property bool isHighPriority: false
@@ -127,7 +127,7 @@ Rectangle {
 
         Rectangle {
             id: listItem
-            width: myW // ListView.view.width
+            width: ListView.view.width
             height: item0.contentHeight + item1.contentHeight
                     + item2.contentHeight + item3.contentHeight + 10 //myh
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7

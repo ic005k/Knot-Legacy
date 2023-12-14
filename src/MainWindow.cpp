@@ -2648,6 +2648,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         on_btnBackSearch_clicked();
         return true;
       }
+
+      if (!ui->frameBakList->isHidden()) {
+        on_btnBackBakList_clicked();
+        return true;
+      }
     }
   }
 
@@ -3650,6 +3655,7 @@ void MainWindow::init_UIWidget() {
   ui->frameDebug->hide();
   ui->frameReport->hide();
   ui->frameSearch->hide();
+  ui->frameBakList->hide();
   ui->qwPdf->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
@@ -3873,6 +3879,10 @@ void MainWindow::init_UIWidget() {
                                                   mySearchDialog);
   ui->qwSearch->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/search.qml")));
 
+  ui->qwBakList->rootContext()->setContextProperty("mySearchDialog",
+                                                   mySearchDialog);
+  ui->qwBakList->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/baklist.qml")));
+
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3971,7 +3981,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   actUndo->setVisible(false);
   actRedo->setVisible(false);
 
-  QAction *actTimeMachine = new QAction(tr("Backup File List"));
+  QAction *actBakFileList = new QAction(tr("Backup File List"));
   QAction *actTabRecycle = new QAction(tr("Tab Recycle"));
 
   connect(actAddTab, &QAction::triggered, this,
@@ -3984,8 +3994,8 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   connect(actUndo, &QAction::triggered, this, &MainWindow::undo);
   connect(actRedo, &QAction::triggered, this, &MainWindow::redo);
 
-  connect(actTimeMachine, &QAction::triggered, this,
-          &MainWindow::on_actionTimeMachine);
+  connect(actBakFileList, &QAction::triggered, this,
+          &MainWindow::on_actionBakFileList);
 
   connect(actTabRecycle, &QAction::triggered, this,
           &MainWindow::on_actionTabRecycle);
@@ -4038,17 +4048,18 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
     actAddTab->setVisible(false);
     actDelTab->setVisible(false);
     actRenameTab->setVisible(false);
-    actTimeMachine->setVisible(false);
+    actBakFileList->setVisible(false);
     actExportData->setVisible(false);
     actImportData->setVisible(false);
     actOneDrive->setVisible(false);
+    actTabRecycle->setVisible(false);
   }
 #endif
 
   mainMenu->addAction(actPreferences);
 
   mainMenu->addAction(actOneDrive);
-  mainMenu->addAction(actTimeMachine);
+  mainMenu->addAction(actBakFileList);
   mainMenu->addAction(actTabRecycle);
   mainMenu->addAction(actAbout);
 
@@ -4273,37 +4284,15 @@ void MainWindow::on_actionTabRecycle() {
   dlgTimeMachine->show();
 }
 
-void MainWindow::on_actionTimeMachine() {
-  dlgTimeMachine = new QFrame();
-  dlgTimeMachine->setGeometry(geometry().x(), geometry().y(), width(),
-                              height());
-  QVBoxLayout *vbox = new QVBoxLayout;
-  vbox->setContentsMargins(3, 3, 3, 3);
-  dlgTimeMachine->setLayout(vbox);
+void MainWindow::on_actionBakFileList() {
+  ui->frameMain->hide();
+  ui->frameBakList->show();
 
-  QToolButton *btnBack = new QToolButton(this);
-  btnBack->setStyleSheet(ui->btnSetKeyOK->styleSheet());
-  btnBack->setFixedHeight(35);
-  btnBack->setText(tr("Back"));
-  btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-  connect(btnBack, &QToolButton::clicked, [=]() { dlgTimeMachine->close(); });
-
-  QToolButton *btnImport = new QToolButton(this);
-  btnImport->setStyleSheet(ui->btnSetKeyOK->styleSheet());
-  btnImport->setFixedHeight(35);
-  btnImport->setText(tr("Import"));
-  btnImport->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-  QQuickWidget *qwBakList = new QQuickWidget(dlgTimeMachine);
-  qwBakList->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-  qwBakList->rootContext()->setContextProperty("myW", this->width());
-  qwBakList->rootContext()->setContextProperty("myH", this->height());
-  qwBakList->rootContext()->setContextProperty("mySearchDialog",
-                                               mySearchDialog);
-  qwBakList->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/baklist.qml")));
+  mySearchDialog->clearAllBakList(ui->qwBakList);
 
   QStringList bakFileList = mydlgPre->getBakFilesList();
   int bakCount = bakFileList.count();
+
   for (int i = 0; i < bakCount; i++) {
     QString action, bakfile;
     QString str = bakFileList.at(i);
@@ -4312,54 +4301,15 @@ void MainWindow::on_actionTimeMachine() {
 
     QString item = action + "\n" + getFileSize(QFile(bakfile).size(), 2);
 
-    mySearchDialog->addItemBakList(qwBakList, item, "", "", bakfile, 0);
+    mySearchDialog->addItemBakList(ui->qwBakList, item, "", "", bakfile, 0);
   }
 
-  connect(btnImport, &QToolButton::clicked, [=]() {
-    if (mySearchDialog->getCountBakList(qwBakList) == 0) return;
+  if (mySearchDialog->getCountBakList(ui->qwBakList) > 0)
+    mySearchDialog->setCurrentIndexBakList(ui->qwBakList, 0);
 
-    int cur_index = mySearchDialog->getCurrentIndexBakList(qwBakList);
-    QString str = mySearchDialog->getText3(qwBakList, cur_index);
-    zipfile = str.trimmed();
-
-    if (!zipfile.isNull()) {
-      if (!mw_one->showMsgBox("Kont",
-                              tr("Import this data?") + "\n" +
-                                  mw_one->mydlgReader->getUriRealPath(zipfile),
-                              "", 2)) {
-        isZipOK = false;
-        return;
-      }
-    }
-
-    isZipOK = true;
-    btnBack->clicked();
-    showProgress();
-
-    isMenuImport = false;
-    isTimeMachine = true;
-    isDownData = false;
-    myImportDataThread->start();
-  });
-
-  if (mySearchDialog->getCountBakList(qwBakList) > 0)
-    mySearchDialog->setCurrentIndexBakList(qwBakList, 0);
-
-  QLabel *lblCount = new QLabel();
-  lblCount->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-  lblCount->setText(
+  ui->lblBakListTitle->setText(
       tr("Backup File List") + "    " + tr("Total") + " : " +
-      QString::number(mySearchDialog->getCountBakList(qwBakList)));
-
-  vbox->addWidget(lblCount);
-  vbox->addWidget(qwBakList);
-
-  QHBoxLayout *hbox = new QHBoxLayout();
-  hbox->addWidget(btnBack);
-  hbox->addWidget(btnImport);
-  vbox->addLayout(hbox);
-
-  dlgTimeMachine->show();
+      QString::number(mySearchDialog->getCountBakList(ui->qwBakList)));
 }
 
 void MainWindow::on_btnMenu_clicked() {
@@ -5387,4 +5337,36 @@ void MainWindow::on_btnClearSearchText_clicked() {
 
 void MainWindow::on_btnStartSearch_clicked() {
   mySearchDialog->on_btnSearch_clicked();
+}
+
+void MainWindow::on_btnBackBakList_clicked() {
+  ui->frameBakList->hide();
+  ui->frameMain->show();
+}
+
+void MainWindow::on_btnImportBakList_clicked() {
+  if (mySearchDialog->getCountBakList(ui->qwBakList) == 0) return;
+
+  int cur_index = mySearchDialog->getCurrentIndexBakList(ui->qwBakList);
+  QString str = mySearchDialog->getText3(ui->qwBakList, cur_index);
+  zipfile = str.trimmed();
+
+  if (!zipfile.isNull()) {
+    if (!mw_one->showMsgBox("Kont",
+                            tr("Import this data?") + "\n" +
+                                mw_one->mydlgReader->getUriRealPath(zipfile),
+                            "", 2)) {
+      isZipOK = false;
+      return;
+    }
+  }
+
+  isZipOK = true;
+  ui->btnBackBakList->clicked();
+  showProgress();
+
+  isMenuImport = false;
+  isTimeMachine = true;
+  isDownData = false;
+  myImportDataThread->start();
 }

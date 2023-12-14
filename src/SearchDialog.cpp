@@ -121,7 +121,7 @@ int SearchDialog::getCountBakList(QQuickWidget* qw) {
 }
 
 void SearchDialog::clearAllBakList(QQuickWidget* qw) {
-  int count = getCount();
+  int count = getCountBakList(qw);
   for (int i = 0; i < count; i++) {
     delItemBakList(qw, 0);
   }

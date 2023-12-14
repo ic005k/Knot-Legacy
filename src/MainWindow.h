@@ -534,7 +534,7 @@ class MainWindow : public QMainWindow {
   void undo();
   void redo();
 
-  void on_actionTimeMachine();
+  void on_actionBakFileList();
 
   void on_btnSelText_clicked();
 
@@ -653,6 +653,10 @@ class MainWindow : public QMainWindow {
   void on_btnClearSearchText_clicked();
 
   void on_btnStartSearch_clicked();
+
+  void on_btnBackBakList_clicked();
+
+  void on_btnImportBakList_clicked();
 
  private:
   bool isShowDetails = false;
