@@ -98,6 +98,58 @@ void SearchDialog::setCurrentIndex(int index) {
                             Q_ARG(QVariant, index));
 }
 
+void SearchDialog::addItemBakList(QQuickWidget* qw, QString text0,
+                                  QString text1, QString text2, QString text3,
+                                  int itemH) {
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, text0),
+                            Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
+                            Q_ARG(QVariant, text3), Q_ARG(QVariant, itemH));
+}
+
+void SearchDialog::delItemBakList(QQuickWidget* qw, int index) {
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+}
+
+int SearchDialog::getCountBakList(QQuickWidget* qw) {
+  QQuickItem* root = qw->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
+void SearchDialog::clearAllBakList(QQuickWidget* qw) {
+  int count = getCount();
+  for (int i = 0; i < count; i++) {
+    delItemBakList(qw, 0);
+  }
+}
+
+void SearchDialog::setCurrentIndexBakList(QQuickWidget* qw, int index) {
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
+                            Q_ARG(QVariant, index));
+}
+
+int SearchDialog::getCurrentIndexBakList(QQuickWidget* qw) {
+  QQuickItem* root = qw->rootObject();
+  QVariant itemIndex;
+  QMetaObject::invokeMethod((QObject*)root, "getCurrentIndex",
+                            Q_RETURN_ARG(QVariant, itemIndex));
+  return itemIndex.toInt();
+}
+
+QString SearchDialog::getText3(QQuickWidget* qw, int index) {
+  QQuickItem* root = qw->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject*)root, "getText3",
+                            Q_RETURN_ARG(QVariant, item),
+                            Q_ARG(QVariant, index));
+  return item.toString();
+}
+
 bool SearchDialog::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);

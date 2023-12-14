@@ -2,6 +2,7 @@
 #define SEARCHDIALOG_H
 
 #include <QDialog>
+#include <QQuickWidget>
 #include <QTableWidget>
 
 namespace Ui {
@@ -29,7 +30,16 @@ class SearchDialog : public QDialog {
   void addItem(QString text0, QString text1, QString text2, QString text3,
                int itemH);
 
- protected:
+  void setCurrentIndexBakList(QQuickWidget *qw, int index);
+  void clearAllBakList(QQuickWidget *qw);
+  int getCountBakList(QQuickWidget *qw);
+  void delItemBakList(QQuickWidget *qw, int index);
+  void addItemBakList(QQuickWidget *qw, QString text0, QString text1,
+                      QString text2, QString text3, int itemH);
+
+  QString getText3(QQuickWidget *qw, int index);
+  int getCurrentIndexBakList(QQuickWidget *qw);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

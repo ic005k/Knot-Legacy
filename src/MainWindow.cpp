@@ -4275,14 +4275,11 @@ void MainWindow::on_actionTabRecycle() {
 
 void MainWindow::on_actionTimeMachine() {
   dlgTimeMachine = new QFrame();
+  dlgTimeMachine->setGeometry(geometry().x(), geometry().y(), width(),
+                              height());
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setContentsMargins(3, 3, 3, 3);
   dlgTimeMachine->setLayout(vbox);
-
-  QLabel *lblTitle = new QLabel();
-  lblTitle->setWordWrap(true);
-  lblTitle->adjustSize();
-  lblTitle->setText("");
 
   QToolButton *btnBack = new QToolButton(this);
   btnBack->setStyleSheet(ui->btnSetKeyOK->styleSheet());
@@ -4297,26 +4294,13 @@ void MainWindow::on_actionTimeMachine() {
   btnImport->setText(tr("Import"));
   btnImport->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-  QFontMetrics fontMetrics(font());
-  int nFontHeight = fontMetrics.height();
-  int lineHeight = 5.5 * nFontHeight;
-
-  QTableWidget *table = new QTableWidget;
-  table->setColumnCount(2);
-  table->setColumnHidden(1, true);
-
-  table->horizontalHeader()->setStretchLastSection(true);
-  table->setAlternatingRowColors(true);
-  table->setSelectionBehavior(QTableWidget::SelectRows);
-  table->setSelectionMode(QAbstractItemView::SingleSelection);
-  table->setEditTriggers(QTableWidget::NoEditTriggers);
-  table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  table->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  table->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
-  QScroller::grabGesture(table, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(table);
-
-  table->setStyleSheet("selection-background-color: lightblue");
+  QQuickWidget *qwBakList = new QQuickWidget(dlgTimeMachine);
+  qwBakList->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+  qwBakList->rootContext()->setContextProperty("myW", this->width());
+  qwBakList->rootContext()->setContextProperty("myH", this->height());
+  qwBakList->rootContext()->setContextProperty("mySearchDialog",
+                                               mySearchDialog);
+  qwBakList->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/baklist.qml")));
 
   QStringList bakFileList = mydlgPre->getBakFilesList();
   int bakCount = bakFileList.count();
@@ -4325,22 +4309,17 @@ void MainWindow::on_actionTimeMachine() {
     QString str = bakFileList.at(i);
     action = str.split("-===-").at(0);
     bakfile = str.split("-===-").at(1);
-    table->insertRow(0);
-    table->setItem(0, 1, new QTableWidgetItem(bakfile));
 
     QString item = action + "\n" + getFileSize(QFile(bakfile).size(), 2);
-    table->setRowHeight(0, lineHeight);
-    table->setItem(0, 0, new QTableWidgetItem(item));
+
+    mySearchDialog->addItemBakList(qwBakList, item, "", "", bakfile, 0);
   }
 
-  connect(table, &QTableWidget::itemClicked, [=]() {
-    lblTitle->setText(table->item(table->currentRow(), 1)->text());
-  });
-
   connect(btnImport, &QToolButton::clicked, [=]() {
-    if (table->rowCount() == 0) return;
+    if (mySearchDialog->getCountBakList(qwBakList) == 0) return;
 
-    QString str = table->item(table->currentRow(), 1)->text();
+    int cur_index = mySearchDialog->getCurrentIndexBakList(qwBakList);
+    QString str = mySearchDialog->getText3(qwBakList, cur_index);
     zipfile = str.trimmed();
 
     if (!zipfile.isNull()) {
@@ -4363,24 +4342,23 @@ void MainWindow::on_actionTimeMachine() {
     myImportDataThread->start();
   });
 
-  if (table->rowCount() > 0) {
-    table->setCurrentCell(0, 0);
-  }
+  if (mySearchDialog->getCountBakList(qwBakList) > 0)
+    mySearchDialog->setCurrentIndexBakList(qwBakList, 0);
 
-  table->setHorizontalHeaderItem(
-      0, new QTableWidgetItem(tr("Backup File List") + "    " + tr("Total") +
-                              " : " + QString::number(table->rowCount())));
+  QLabel *lblCount = new QLabel();
+  lblCount->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  lblCount->setText(
+      tr("Backup File List") + "    " + tr("Total") + " : " +
+      QString::number(mySearchDialog->getCountBakList(qwBakList)));
 
-  vbox->addWidget(table);
-  vbox->addWidget(lblTitle);
+  vbox->addWidget(lblCount);
+  vbox->addWidget(qwBakList);
 
   QHBoxLayout *hbox = new QHBoxLayout();
   hbox->addWidget(btnBack);
   hbox->addWidget(btnImport);
   vbox->addLayout(hbox);
 
-  dlgTimeMachine->setGeometry(geometry().x(), geometry().y(), width(),
-                              height());
   dlgTimeMachine->show();
 }
 

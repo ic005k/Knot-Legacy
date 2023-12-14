@@ -177,7 +177,6 @@ class MainWindow : public QMainWindow {
   QString loginTime;
   QListWidget *listSelFont;
   QFrame *dlgTimeMachine;
-
   int mwh;
   int textFontSize;
   bool isOne = false;

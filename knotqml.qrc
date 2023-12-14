@@ -16,5 +16,6 @@
         <file>src/qmlsrc/imgview.qml</file>
         <file>src/qmlsrc/pdf.qml</file>
         <file>src/qmlsrc/search.qml</file>
+        <file>src/qmlsrc/baklist.qml</file>
     </qresource>
 </RCC>
