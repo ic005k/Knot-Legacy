@@ -8,6 +8,7 @@
 
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
+extern QString iniDir;
 
 QStringList resultsList;
 QString searchStr;
@@ -313,4 +314,55 @@ void SearchDialog::setCellText(int row, int column, QString str,
 void SearchDialog::on_btnClearText_clicked() {
   if (ui->editSearchText->text().length() > 0) ui->editSearchText->setText("");
   ui->editSearchText->setFocus();
+}
+
+void SearchDialog::clickNoteBook() {
+  clearAllBakList(mw_one->ui->qwNoteList);
+  int index = getCurrentIndexBakList(mw_one->ui->qwNoteBook);
+  QTreeWidgetItem* topItem = mw_one->m_NotesList->tw->topLevelItem(index);
+  int child_count = topItem->childCount();
+  for (int i = 0; i < child_count; i++) {
+    QString text0 = topItem->child(i)->text(0);
+    QString text3 = topItem->child(i)->text(1);
+    addItemBakList(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
+  }
+
+  clickNoteList();
+}
+
+void SearchDialog::clickNoteList() {
+  int index = getCurrentIndexBakList(mw_one->ui->qwNoteList);
+  QString noteFile = iniDir + getText3(mw_one->ui->qwNoteList, index);
+  QString noteName = getText0(mw_one->ui->qwNoteList, index);
+  mw_one->mydlgMainNotes->MD2Html(noteFile);
+  mw_one->mydlgMainNotes->loadMemoQML();
+  mw_one->ui->lblNoteName->setText(noteName);
+}
+
+void SearchDialog::saveCurNoteIndex() {
+  QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue("/MainNotes/notebookIndex",
+               getCurrentIndexBakList(mw_one->ui->qwNoteBook));
+  Reg.setValue("/MainNotes/noteIndex",
+               getCurrentIndexBakList(mw_one->ui->qwNoteList));
+}
+
+QList<int> SearchDialog::getCurNoteIndex() {
+  QList<int> indexList;
+  QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  int notebookIndex = Reg.value("/MainNotes/notebookIndex", 0).toInt();
+  int noteIndex = Reg.value("/MainNotes/noteIndex", 0).toInt();
+
+  indexList.append(notebookIndex);
+  indexList.append(noteIndex);
+
+  return indexList;
 }

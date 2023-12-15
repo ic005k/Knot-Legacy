@@ -162,7 +162,7 @@ Rectangle {
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
-                        wrapMode: TextArea.NoWrap
+                        wrapMode: TextArea.WordWrap
                         font.bold: true
                         text: text0
 
@@ -251,7 +251,9 @@ Rectangle {
                 onClicked: {
 
                     view.currentIndex = index //实现item切换
-                    //mw_one.clickData()
+
+                    mySearchDialog.clickNoteBook()
+
                 }
 
                 onDoubleClicked: {

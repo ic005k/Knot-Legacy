@@ -3679,16 +3679,18 @@ void MainWindow::initQW() {
   ui->qwTabRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/tabrecycle.qml")));
 
-  ui->qwNoteBook->rootContext()->setContextProperty("mydlgReport", mydlgReport);
+  ui->qwNoteBook->rootContext()->setContextProperty("mySearchDialog",
+                                                    mySearchDialog);
   ui->qwNoteBook->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notebook.qml")));
 
-  ui->qwNoteList->rootContext()->setContextProperty("mydlgReport", mydlgReport);
+  ui->qwNoteList->rootContext()->setContextProperty("mySearchDialog",
+                                                    mySearchDialog);
   ui->qwNoteList->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notelist.qml")));
 
-  ui->qwNoteRecycle->rootContext()->setContextProperty("mydlgReport",
-                                                       mydlgReport);
+  ui->qwNoteRecycle->rootContext()->setContextProperty("mySearchDialog",
+                                                       mySearchDialog);
   ui->qwNoteRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/noterecycle.qml")));
 
@@ -4898,6 +4900,24 @@ void MainWindow::on_btnNotesList_clicked() {
   ui->frameNotes->hide();
   ui->frameNoteList->show();
 
+  mySearchDialog->clearAllBakList(ui->qwNoteBook);
+  int count = m_NotesList->tw->topLevelItemCount();
+  for (int i = 0; i < count; i++) {
+    QString str = m_NotesList->tw->topLevelItem(i)->text(0);
+    mySearchDialog->addItemBakList(ui->qwNoteBook, str, "", "", "", 0);
+  }
+
+  int notebookIndex = mySearchDialog->getCurNoteIndex().at(0);
+  int noteIndex = mySearchDialog->getCurNoteIndex().at(1);
+
+  qDebug() << "===" << notebookIndex << noteIndex;
+
+  mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteBook, notebookIndex);
+  mySearchDialog->clickNoteBook();
+
+  mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteList, noteIndex);
+  mySearchDialog->clickNoteList();
+
   return;
 
   m_NotesList->show();
@@ -5403,6 +5423,8 @@ void MainWindow::on_btnDelBakFile_clicked() {
 void MainWindow::on_btnBackNoteList_clicked() {
   ui->frameNoteList->hide();
   ui->frameNotes->show();
+
+  mySearchDialog->saveCurNoteIndex();
 }
 
 void MainWindow::on_btnBackNoteRecycle_clicked() {

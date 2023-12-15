@@ -40,12 +40,18 @@ class SearchDialog : public QDialog {
   QString getText3(QQuickWidget *qw, int index);
   int getCurrentIndexBakList(QQuickWidget *qw);
   QString getText0(QQuickWidget *qw, int index);
+
+  void saveCurNoteIndex();
+  QList<int> getCurNoteIndex();
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
   void on_btnBack_clicked();
   void on_btnSearch_clicked();
+
+  void clickNoteBook();
+  void clickNoteList();
 
  private slots:
 
