@@ -39,6 +39,7 @@ class SearchDialog : public QDialog {
 
   QString getText3(QQuickWidget *qw, int index);
   int getCurrentIndexBakList(QQuickWidget *qw);
+  QString getText0(QQuickWidget *qw, int index);
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

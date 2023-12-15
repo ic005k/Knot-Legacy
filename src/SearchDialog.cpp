@@ -141,6 +141,15 @@ int SearchDialog::getCurrentIndexBakList(QQuickWidget* qw) {
   return itemIndex.toInt();
 }
 
+QString SearchDialog::getText0(QQuickWidget* qw, int index) {
+  QQuickItem* root = qw->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject*)root, "getText0",
+                            Q_RETURN_ARG(QVariant, item),
+                            Q_ARG(QVariant, index));
+  return item.toString();
+}
+
 QString SearchDialog::getText3(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QVariant item;

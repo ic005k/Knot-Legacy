@@ -658,6 +658,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnImportBakList_clicked();
 
+  void on_btnOkViewCate_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

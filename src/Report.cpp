@@ -64,29 +64,6 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   mw_one->ui->lblDetails->setWordWrap(true);
   mw_one->ui->lblDetails->adjustSize();
 
-  mw_one->ui->tableDetails->setColumnCount(1);
-  mw_one->ui->tableDetails->setHorizontalHeaderItem(
-      0, new QTableWidgetItem(tr("Details")));
-  mw_one->ui->tableDetails->verticalHeader()->setSectionResizeMode(
-      QHeaderView::ResizeToContents);
-  mw_one->ui->tableDetails->setStyleSheet(
-      "selection-background-color: lightblue");
-  mw_one->ui->tableDetails->horizontalHeader()->setStretchLastSection(true);
-  mw_one->ui->tableDetails->setAlternatingRowColors(true);
-  mw_one->ui->tableDetails->setSelectionBehavior(QTableWidget::SelectRows);
-  mw_one->ui->tableDetails->setSelectionMode(
-      QAbstractItemView::SingleSelection);
-  mw_one->ui->tableDetails->setEditTriggers(QTableWidget::NoEditTriggers);
-  mw_one->ui->tableDetails->setHorizontalScrollBarPolicy(
-      Qt::ScrollBarAlwaysOff);
-  mw_one->ui->tableDetails->verticalScrollBar()->setStyleSheet(
-      mw_one->vsbarStyleSmall);
-  mw_one->ui->tableDetails->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  QScroller::grabGesture(mw_one->ui->tableDetails,
-                         QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(mw_one->ui->tableDetails);
-  mw_one->ui->tableDetails->hide();
-
   mw_one->set_btnStyle(this);
 }
 
@@ -238,6 +215,8 @@ void dlgReport::updateTable() {
   mw_one->ui->btnCategory->setText(tr("View Category"));
 
   setScrollBarPos(0);
+  mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwReport, 0);
+  loadDetailsQml();
 }
 
 void dlgReport::getMonthData() {
@@ -402,15 +381,18 @@ void dlgReport::on_btnCategory_clicked() {
     QList<double> listE = listD;
     std::sort(listE.begin(), listE.end());
 
-    for (int j = 0; j < listE.count(); j++) {
-      for (int i = 0; i < listCategorySort.count(); i++) {
+    int nListCateSort = listCategorySort.count();
+    int nListECount = listE.count();
+    for (int j = 0; j < nListECount; j++) {
+      for (int i = 0; i < nListCateSort; i++) {
         QString str1 = listCategorySort.at(i);
         QStringList l1 = str1.split("-=-");
         if (l1.count() == 2 && l1.at(0).split("|").at(0).trimmed() != "") {
-          if (QString::number(listE.at(j)) == l1.at(1)) {
-            QString str2 =
-                l1.at(0) +
-                "===" + QString("%1").arg(listE.at(j) * 100, 0, 'f', 2) + " %";
+          if (QString::number(listE.at(nListECount - 1 - j)) == l1.at(1)) {
+            QString str2 = l1.at(0) + "===" +
+                           QString("%1").arg(
+                               listE.at(nListECount - 1 - j) * 100, 0, 'f', 2) +
+                           " %";
 
             QString item0 = str2.split("|").at(0);
 
@@ -418,13 +400,9 @@ void dlgReport::on_btnCategory_clicked() {
 
             QString item1 = str2.split("===").at(0).split("|").at(1);
 
-            QString item = tr("Category") + " : " + item0 + "\n" +
-                           tr("Percent") + " : " + pre + "\n" + tr("Amount") +
-                           " : " + item1;
-
             mw_one->mySearchDialog->addItemBakList(
                 mw_one->ui->qwViewCate, tr("Category") + " : " + item0,
-                tr("Percent") + " : " + pre, tr("Amount") + " : " + item1, item,
+                tr("Percent") + " : " + pre, tr("Amount") + " : " + item1, "",
                 0);
 
             listCategorySort.removeOne(str1);
@@ -440,7 +418,8 @@ void dlgReport::on_btnCategory_clicked() {
     if (cate_count > 0) {
       mw_one->ui->lblViewCate3->setText(tr("View Category") + "  " +
                                         QString::number(cate_count));
-      mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwViewCate, 0);
+      mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwViewCate,
+                                                     indexCategory);
     }
 
     // qDebug() << "listCategorySort=" << listCategorySort.count()
@@ -453,19 +432,19 @@ void dlgReport::on_CateOk() {
   int index =
       mw_one->mySearchDialog->getCurrentIndexBakList(mw_one->ui->qwViewCate);
   QString str0 =
-      mw_one->mySearchDialog->getText3(mw_one->ui->qwViewCate, index);
-  str0 = str0.split("\n").at(0);
+      mw_one->mySearchDialog->getText0(mw_one->ui->qwViewCate, index);
   str0 = str0.replace(tr("Category") + " : ", "").trimmed();
+
   getCategoryData(str0, true);
   indexCategory = index;
+
+  mw_one->ui->frameViewCate->hide();
+  mw_one->ui->frameReport->show();
 }
 
 void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
   if (appendTable) {
-    clearAll_xx();
-    setCurrentHeader(2);
-
-    mw_one->ui->tableDetails->setRowCount(0);
+    mw_one->mySearchDialog->clearAllBakList(mw_one->ui->qwReportSub);
   }
 
   int freq = 0;
@@ -494,21 +473,19 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
           }
         }
         QString amount = childItem->text(1);
-        if (appendTable) {  // appendSteps_xx(date, time, amount);
-          mw_one->ui->tableDetails->setRowCount(freq);
-
+        if (appendTable) {
           QString str;
           if (details.trimmed().length() > 0)
             str = details;
           else
             str = "";
 
-          QTableWidgetItem* item = new QTableWidgetItem(str);
-          mw_one->ui->tableDetails->setItem(freq - 1, 0, item);
-
-          mw_one->mySearchDialog->addItemBakList(
-              mw_one->ui->qwReportSub, tr("Date") + " : " + date + "  " + time,
-              tr("Amount") + " : " + amount, str, "", 0);
+          QString text0, text1, text2, text3;
+          text0 = tr("Date") + " : " + date + "  " + time;
+          text1 = tr("Amount") + " : " + amount;
+          text2 = str;
+          mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwReportSub, text0,
+                                                 text1, text2, text3, 0);
         }
 
         if (amount.length() > 0) {
@@ -523,15 +500,6 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
 
   QString ta = QString("%1").arg(d_amount, 0, 'f', 2);
   if (appendTable) {
-    // appendSteps_xx(tr("Total"), QString::number(freq), ta);
-
-    mw_one->ui->tableDetails->setHorizontalHeaderItem(
-        0, new QTableWidgetItem(strCategory + "\n" + tr("Freq") + " : " +
-                                QString::number(freq) + "  " + tr("Amount") +
-                                " : " + ta));
-
-    mw_one->ui->lblDetails->setStyleSheet(
-        mw_one->myEditRecord->ui->lblTitle->styleSheet());
     mw_one->ui->lblDetails->setText(strCategory + "\n" + tr("Freq") + " : " +
                                     QString::number(freq) + "  " +
                                     tr("Amount") + " : " + ta);
@@ -543,8 +511,8 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
     listD.append(bfb);
   }
 
-  if (mw_one->ui->tableDetails->rowCount() > 0)
-    mw_one->ui->tableDetails->setCurrentCell(0, 0);
+  if (mw_one->mySearchDialog->getCountBakList(mw_one->ui->qwReportSub) > 0)
+    mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwReportSub, 0);
 }
 
 void setTableNoItemFlags(QTableWidget* t, int row) {
@@ -731,72 +699,6 @@ void dlgReport::setScrollBarPos_xx(double pos) {
   QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
                             Q_ARG(QVariant, pos));
-}
-
-void dlgReport::loadDetails() {
-  QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
-  mw_one->ui->tableDetails->setRowCount(0);
-  mw_one->ui->btnCategory->setText(tr("View Category"));
-
-  int row = getCurrentIndex();
-  QString date = getDate(row);
-  date.replace("*", "");
-  date = date.trimmed();
-
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QTreeWidgetItem* topItem = tw->topLevelItem(i);
-    if (topItem->text(0) == date) {
-      mw_one->ui->tableDetails->setHorizontalHeaderItem(
-          0, new QTableWidgetItem(tr("Details") + "    " + date + "    " +
-                                  topItem->text(3)));
-
-      int childCount = topItem->childCount();
-      mw_one->ui->tableDetails->setRowCount(childCount);
-      for (int j = 0; j < childCount; j++) {
-        QTreeWidgetItem* childItem = topItem->child(j);
-
-        QString text0 = childItem->text(0);
-        QStringList list = text0.split(".");
-        if (list.count() == 2) text0 = list.at(1).trimmed();
-
-        QString text1 = childItem->text(1);
-        QString text2 = childItem->text(2);
-        QString text3 = childItem->text(3);
-
-        QLabel* lbl0 = new QLabel();
-        QLabel* lbl1 = new QLabel();
-        QLabel* lbl2 = new QLabel();
-        QLabel* lbl3 = new QLabel();
-
-        lbl0->adjustSize();
-        lbl0->setWordWrap(true);
-        lbl1->adjustSize();
-        lbl1->setWordWrap(true);
-        lbl2->adjustSize();
-        lbl2->setWordWrap(true);
-        lbl3->adjustSize();
-        lbl3->setWordWrap(true);
-
-        lbl0->setText(tr("Time") + " : " + text0);
-        lbl1->setText(tr("Amount") + " : " + text1);
-        lbl2->setText(tr("Category") + " : " + text2);
-        lbl3->setText(tr("Details") + " : " + text3);
-
-        QWidget* widget = new QWidget();
-        QVBoxLayout* vbox = new QVBoxLayout;
-        widget->setLayout(vbox);
-        vbox->addWidget(lbl0);
-        if (text1.trimmed().length() > 0) vbox->addWidget(lbl1);
-        if (text2.trimmed().length() > 0) vbox->addWidget(lbl2);
-        if (text3.trimmed().length() > 0) vbox->addWidget(lbl3);
-
-        mw_one->ui->tableDetails->setCellWidget(j, 0, widget);
-      }
-    }
-  }
-
-  if (mw_one->ui->tableDetails->rowCount() > 0)
-    mw_one->ui->tableDetails->setCurrentCell(0, 0);
 }
 
 void dlgReport::loadDetailsQml() {

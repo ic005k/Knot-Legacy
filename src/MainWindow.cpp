@@ -270,10 +270,6 @@ void MainWindow::readEBookDone() {
     ui->btnCategory->hide();
     if (listCategory.count() > 0) ui->btnCategory->setHidden(false);
 
-    ui->tableDetails->setHorizontalHeaderItem(
-        0, new QTableWidgetItem(tr("Details")));
-    ui->tableDetails->setRowCount(0);
-
     isReport = false;
   }
 
@@ -5379,3 +5375,5 @@ void MainWindow::on_btnImportBakList_clicked() {
   isDownData = false;
   myImportDataThread->start();
 }
+
+void MainWindow::on_btnOkViewCate_clicked() { mydlgReport->on_CateOk(); }

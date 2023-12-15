@@ -65,6 +65,11 @@ Rectangle {
         return data.text2
     }
 
+    function getText3(itemIndex) {
+        var data = view.model.get(itemIndex)
+        return data.text3
+    }
+
     function getTop(itemIndex) {
         var data = view.model.get(itemIndex)
         return data.text_top
@@ -323,8 +328,7 @@ Rectangle {
             id: listmain
 
             // debug
-
-             ListElement {
+            ListElement {
                 text0: '<span style="background-color: #ff6600;">Hello</span>'
                 text1: "123456  <b>Hello</b> <i>World!</i>  123456"
                 text2: '123456 <font color="red"><b>TEST</b></font>  123456'

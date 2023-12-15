@@ -42,6 +42,10 @@ Rectangle {
         return data.KM
     }
 
+    function setCurrentItem(currentIndex) {
+        tableView.currentIndex = currentIndex
+    }
+
     function setTableData(currentIndex, date, steps, km) {
         tableModel.setRow(currentIndex, {
                               "Date": date,

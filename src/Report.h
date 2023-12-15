@@ -61,13 +61,12 @@ class dlgReport : public QDialog {
   void startReport1();
   void startReport2();
   void on_CateOk();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;
  public slots:
-
-  void loadDetails();
 
   void loadDetailsQml();
 
