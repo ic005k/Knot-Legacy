@@ -2630,6 +2630,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         return true;
       }
 
+      if (!ui->frameTabRecycle->isHidden()) {
+        on_btnBackTabRecycle_clicked();
+        return true;
+      }
+
       if (!ui->frameSteps->isHidden()) {
         on_btnBackSteps_clicked();
         return true;
@@ -3660,6 +3665,7 @@ void MainWindow::init_UIWidget() {
   ui->frameBakList->hide();
   ui->qwPdf->hide();
   ui->frameViewCate->hide();
+  ui->frameTabRecycle->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3889,6 +3895,11 @@ void MainWindow::init_UIWidget() {
   ui->qwViewCate->rootContext()->setContextProperty("mydlgReport", mydlgReport);
   ui->qwViewCate->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/viewcate.qml")));
+
+  ui->qwTabRecycle->rootContext()->setContextProperty("mydlgReport",
+                                                      mydlgReport);
+  ui->qwTabRecycle->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/tabrecycle.qml")));
 
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
@@ -4145,55 +4156,10 @@ void MainWindow::addRedo() {
 }
 
 void MainWindow::on_actionTabRecycle() {
-  dlgTimeMachine = new QFrame();
-  QVBoxLayout *vbox = new QVBoxLayout;
-  vbox->setContentsMargins(3, 3, 3, 3);
-  dlgTimeMachine->setLayout(vbox);
+  ui->frameMain->hide();
+  ui->frameTabRecycle->show();
 
-  QLabel *lblTitle = new QLabel();
-  lblTitle->setWordWrap(true);
-  lblTitle->adjustSize();
-  lblTitle->setText("");
-
-  QToolButton *btnBack = new QToolButton(this);
-  btnBack->setStyleSheet(ui->btnSetKeyOK->styleSheet());
-  btnBack->setFixedHeight(35);
-  btnBack->setText(tr("Back"));
-  btnBack->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-  connect(btnBack, &QToolButton::clicked, [=]() { dlgTimeMachine->close(); });
-
-  QToolButton *btnDel = new QToolButton(this);
-  btnDel->setStyleSheet(ui->btnSetKeyOK->styleSheet());
-  btnDel->setFixedHeight(35);
-  btnDel->setText(tr("Delete"));
-  btnDel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-  QToolButton *btnImport = new QToolButton(this);
-  btnImport->setStyleSheet(ui->btnSetKeyOK->styleSheet());
-  btnImport->setFixedHeight(35);
-  btnImport->setText(tr("Restore"));
-  btnImport->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-  QFontMetrics fontMetrics(font());
-  int nFontHeight = fontMetrics.height();
-  int lineHeight = 3.5 * nFontHeight;
-
-  QTableWidget *table = new QTableWidget;
-  table->setColumnCount(2);
-  table->setColumnHidden(1, true);
-
-  table->horizontalHeader()->setStretchLastSection(true);
-  table->setAlternatingRowColors(true);
-  table->setSelectionBehavior(QTableWidget::SelectRows);
-  table->setSelectionMode(QAbstractItemView::SingleSelection);
-  table->setEditTriggers(QTableWidget::NoEditTriggers);
-  table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  table->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  table->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
-  QScroller::grabGesture(table, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(table);
-
-  table->setStyleSheet("selection-background-color: lightblue");
+  mySearchDialog->clearAllBakList(ui->qwTabRecycle);
 
   QString tab_name, tab_time;
   QStringList iniFiles;
@@ -4209,86 +4175,19 @@ void MainWindow::on_actionTabRecycle() {
       tab_name = ini_filename.split("_").at(1);
       tab_time =
           ini_filename.split("_").at(2) + "  " + ini_filename.split("_").at(3);
-      table->insertRow(0);
-      table->setItem(0, 1, new QTableWidgetItem(ini_file));
 
-      QString item = tab_name + "\n" + tab_time;
-      table->setRowHeight(0, lineHeight);
-      table->setItem(0, 0, new QTableWidgetItem(item));
+      mySearchDialog->addItemBakList(ui->qwTabRecycle, tab_name, tab_time, "",
+                                     ini_file, 0);
     }
   }
 
-  connect(table, &QTableWidget::itemClicked, [=]() {
-    lblTitle->setText(table->item(table->currentRow(), 1)->text());
-  });
-
-  connect(btnDel, &QToolButton::clicked, [=]() {
-    if (table->rowCount() == 0) return;
-
-    QString tab_file = table->item(table->currentRow(), 1)->text();
-    if (!showMsgBox("Knot", tr("Whether to remove") + "  " + tab_file + " ? ",
-                    "", 2))
-      return;
-
-    QFile file(tab_file);
-    file.remove();
-    table->removeRow(table->currentRow());
-    lblTitle->setText("");
-  });
-
-  connect(btnImport, &QToolButton::clicked, [=]() {
-    if (table->rowCount() == 0) return;
-
-    int count = ui->tabWidget->tabBar()->count();
-    QString twName =
-        mydlgMainNotes->getDateTimeStr() + "_" + QString::number(count + 1);
-    QString ini_file = iniDir + twName + ".ini";
-    if (QFile(ini_file).exists()) QFile(ini_file).remove();
-    QString recycle = table->item(table->currentRow(), 1)->text();
-    QFile::copy(recycle, ini_file);
-
-    QString tab_name =
-        table->item(table->currentRow(), 0)->text().split("\n").at(0);
-    QTreeWidget *tw = init_TreeWidget(twName);
-    ui->tabWidget->addTab(tw, tab_name);
-
-    ui->tabWidget->setCurrentIndex(count);
-
-    readData(tw);
-
-    QFile recycle_file(recycle);
-    recycle_file.remove();
-    btnBack->clicked();
-
-    saveTab();
-
-    reloadMain();
-    clickData();
-
-    isNeedAutoBackup = true;
-    strLatestModify = tr("Restore Tab") + "(" + tab_name + ")";
-  });
-
-  if (table->rowCount() > 0) {
-    table->setCurrentCell(0, 0);
+  int t_count = mySearchDialog->getCountBakList(ui->qwTabRecycle);
+  if (t_count > 0) {
+    mySearchDialog->setCurrentIndexBakList(ui->qwTabRecycle, 0);
   }
 
-  table->setHorizontalHeaderItem(
-      0, new QTableWidgetItem(tr("Tab Recycle") + "    " + tr("Total") + " : " +
-                              QString::number(table->rowCount())));
-
-  vbox->addWidget(table);
-  vbox->addWidget(lblTitle);
-
-  QHBoxLayout *hbox = new QHBoxLayout();
-  hbox->addWidget(btnBack);
-  hbox->addWidget(btnDel);
-  hbox->addWidget(btnImport);
-  vbox->addLayout(hbox);
-
-  dlgTimeMachine->setGeometry(geometry().x(), geometry().y(), width(),
-                              height());
-  dlgTimeMachine->show();
+  ui->lblTitleTabRecycle->setText(tr("Tab Recycle") + "    " + tr("Total") +
+                                  " : " + QString::number(t_count));
 }
 
 void MainWindow::on_actionBakFileList() {
@@ -5379,3 +5278,77 @@ void MainWindow::on_btnImportBakList_clicked() {
 }
 
 void MainWindow::on_btnOkViewCate_clicked() { mydlgReport->on_CateOk(); }
+
+void MainWindow::on_btnBackTabRecycle_clicked() {
+  ui->frameTabRecycle->hide();
+  ui->frameMain->show();
+}
+
+void MainWindow::on_btnDelTabRecycle_clicked() {
+  if (mySearchDialog->getCountBakList(ui->qwTabRecycle) == 0) return;
+  int index = mySearchDialog->getCurrentIndexBakList(ui->qwTabRecycle);
+  QString tab_file = mySearchDialog->getText3(ui->qwTabRecycle, index);
+  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + tab_file + " ? ", "",
+                  2))
+    return;
+
+  QFile file(tab_file);
+  file.remove();
+  mySearchDialog->delItemBakList(ui->qwTabRecycle, index);
+
+  ui->lblTitleTabRecycle->setText(
+      tr("Tab Recycle") + "    " + tr("Total") + " : " +
+      QString::number(mySearchDialog->getCountBakList(ui->qwTabRecycle)));
+}
+
+void MainWindow::on_btnRestoreTab_clicked() {
+  if (mySearchDialog->getCountBakList(ui->qwTabRecycle) == 0) return;
+
+  int count = ui->tabWidget->tabBar()->count();
+  QString twName =
+      mydlgMainNotes->getDateTimeStr() + "_" + QString::number(count + 1);
+  QString ini_file = iniDir + twName + ".ini";
+  if (QFile(ini_file).exists()) QFile(ini_file).remove();
+
+  int index = mySearchDialog->getCurrentIndexBakList(ui->qwTabRecycle);
+  QString recycle = mySearchDialog->getText3(ui->qwTabRecycle, index);
+  QFile::copy(recycle, ini_file);
+
+  QString tab_name = mySearchDialog->getText0(ui->qwTabRecycle, index);
+  QTreeWidget *tw = init_TreeWidget(twName);
+  ui->tabWidget->addTab(tw, tab_name);
+
+  ui->tabWidget->setCurrentIndex(count);
+
+  readData(tw);
+
+  QFile recycle_file(recycle);
+  recycle_file.remove();
+  on_btnBackTabRecycle_clicked();
+
+  saveTab();
+
+  reloadMain();
+  clickData();
+
+  isNeedAutoBackup = true;
+  strLatestModify = tr("Restore Tab") + "(" + tab_name + ")";
+}
+
+void MainWindow::on_btnDelBakFile_clicked() {
+  if (mySearchDialog->getCountBakList(ui->qwBakList) == 0) return;
+
+  int index = mySearchDialog->getCurrentIndexBakList(ui->qwBakList);
+  QString bak_file = mySearchDialog->getText3(ui->qwBakList, index);
+  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + bak_file + " ? ", "",
+                  2))
+    return;
+
+  QFile file(bak_file);
+  file.remove();
+  mySearchDialog->delItemBakList(ui->qwBakList, index);
+
+  ui->lblBakListTitle->setText(
+      tr("Backup File List") + "    " + tr("Total") + " : " +
+      QString::number(mySearchDialog->getCountBakList(ui->qwBakList)));
+}

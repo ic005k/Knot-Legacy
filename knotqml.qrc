@@ -18,5 +18,6 @@
         <file>src/qmlsrc/search.qml</file>
         <file>src/qmlsrc/baklist.qml</file>
         <file>src/qmlsrc/viewcate.qml</file>
+        <file>src/qmlsrc/tabrecycle.qml</file>
     </qresource>
 </RCC>

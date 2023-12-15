@@ -660,6 +660,14 @@ class MainWindow : public QMainWindow {
 
   void on_btnOkViewCate_clicked();
 
+  void on_btnBackTabRecycle_clicked();
+
+  void on_btnDelTabRecycle_clicked();
+
+  void on_btnRestoreTab_clicked();
+
+  void on_btnDelBakFile_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
