@@ -2640,7 +2640,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameReport->isHidden()) {
-        on_btnBack_Report_clicked();
+        if (!ui->frameViewCate->isHidden()) {
+          ui->frameViewCate->hide();
+          ui->frameReport->show();
+        } else
+          on_btnBack_Report_clicked();
         return true;
       }
 
@@ -3657,6 +3661,7 @@ void MainWindow::init_UIWidget() {
   ui->frameSearch->hide();
   ui->frameBakList->hide();
   ui->qwPdf->hide();
+  ui->frameViewCate->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3882,6 +3887,10 @@ void MainWindow::init_UIWidget() {
   ui->qwBakList->rootContext()->setContextProperty("mySearchDialog",
                                                    mySearchDialog);
   ui->qwBakList->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/baklist.qml")));
+
+  ui->qwViewCate->rootContext()->setContextProperty("mydlgReport", mydlgReport);
+  ui->qwViewCate->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/viewcate.qml")));
 
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");

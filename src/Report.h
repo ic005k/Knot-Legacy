@@ -60,6 +60,7 @@ class dlgReport : public QDialog {
 
   void startReport1();
   void startReport2();
+  void on_CateOk();
   protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;

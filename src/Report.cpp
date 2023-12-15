@@ -378,6 +378,9 @@ void dlgReport::saveYMD() {
 int dlgReport::cmp(const void* a, const void* b) { return *(int*)a < *(int*)b; }
 
 void dlgReport::on_btnCategory_clicked() {
+  mw_one->ui->frameReport->hide();
+  mw_one->ui->frameViewCate->show();
+
   int count = getCount();
   if (count == 0) {
     btnCategory->setText(tr("View Category"));
@@ -385,65 +388,9 @@ void dlgReport::on_btnCategory_clicked() {
     return;
   }
 
-  mw_one->m_widget = new QWidget(this);
-
-  QDialog* dlg = new QDialog(this);
-  QVBoxLayout* vbox0 = new QVBoxLayout;
-  dlg->setLayout(vbox0);
-  vbox0->setContentsMargins(5, 5, 5, 5);
-  dlg->setModal(true);
-  dlg->setWindowFlag(Qt::FramelessWindowHint);
-  dlg->setAttribute(Qt::WA_TranslucentBackground);
-
-  QFrame* frame = new QFrame(dlg);
-  vbox0->addWidget(frame);
-
-  frame->setStyleSheet(
-      ".QFrame{background-color: rgb(255, 255, 255);border-radius:2px; "
-      "border:1px solid gray;}");
-
-  QVBoxLayout* vbox = new QVBoxLayout;
-  frame->setLayout(vbox);
-
-  QLabel* lblTitle = new QLabel;
-  QLabel* lblTotal = new QLabel;
-  QFont ft = lblTitle->font();
-  ft.setBold(true);
-  lblTitle->setFont(ft);
-  lblTitle->setText(mw_one->ui->lblTitle_Report->text());
-  lblTotal->setText(mw_one->ui->lblTotal->text());
-  vbox->addWidget(lblTitle);
-  vbox->addWidget(lblTotal);
-
-  QTableWidget* table = new QTableWidget;
-  table->setColumnCount(2);
-  table->setColumnHidden(1, true);
-
-  table->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("View Category")));
-
-  table->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-  table->horizontalHeader()->setStretchLastSection(true);
-  table->setAlternatingRowColors(true);
-  table->setSelectionBehavior(QTableWidget::SelectRows);
-  table->setSelectionMode(QAbstractItemView::SingleSelection);
-  table->setEditTriggers(QTableWidget::NoEditTriggers);
-  table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  table->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  table->setVerticalScrollMode(QTableWidget::ScrollPerPixel);
-  QScroller::grabGesture(table, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(table);
-
-  table->setStyleSheet("selection-background-color: lightblue");
-
-  vbox->addWidget(table);
-
-  QToolButton* btnOk = new QToolButton();
-  btnOk->setText(tr("Ok"));
-  btnOk->setFixedHeight(35);
-  btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-  btnOk->setStyleSheet(mw_one->ui->btnYear->styleSheet());
-  vbox->addWidget(btnOk);
+  mw_one->mySearchDialog->clearAllBakList(mw_one->ui->qwViewCate);
+  mw_one->ui->lblViewCate1->setText(mw_one->ui->lblTitle_Report->text());
+  mw_one->ui->lblViewCate2->setText(mw_one->ui->lblTotal->text());
 
   if (listCategory.count() > 0) {
     listCategorySort.clear();
@@ -465,45 +412,20 @@ void dlgReport::on_btnCategory_clicked() {
                 l1.at(0) +
                 "===" + QString("%1").arg(listE.at(j) * 100, 0, 'f', 2) + " %";
 
-            table->insertRow(0);
-
             QString item0 = str2.split("|").at(0);
 
             QString pre = str2.split("===").at(1);
 
             QString item1 = str2.split("===").at(0).split("|").at(1);
 
-            QLabel* lbl0 = new QLabel();
-            lbl0->adjustSize();
-            lbl0->setWordWrap(true);
-            lbl0->setText(tr("Category") + " : " + item0);
-            QFont font = this->font();
-            font.setBold(true);
-            lbl0->setFont(font);
-
-            QLabel* lblPre = new QLabel();
-            lblPre->adjustSize();
-            lblPre->setWordWrap(true);
-            lblPre->setText(tr("Percent") + " : " + pre);
-
-            QLabel* lbl1 = new QLabel();
-            lbl1->adjustSize();
-            lbl1->setWordWrap(true);
-            lbl1->setText(tr("Amount") + " : " + item1);
-
-            QWidget* itemW = new QWidget();
-            QVBoxLayout* vbox = new QVBoxLayout();
-            vbox->addWidget(lbl0);
-            vbox->addWidget(lblPre);
-            vbox->addWidget(lbl1);
-            itemW->setLayout(vbox);
-
-            table->setCellWidget(0, 0, itemW);
-
             QString item = tr("Category") + " : " + item0 + "\n" +
                            tr("Percent") + " : " + pre + "\n" + tr("Amount") +
                            " : " + item1;
-            table->setItem(0, 1, new QTableWidgetItem(item));
+
+            mw_one->mySearchDialog->addItemBakList(
+                mw_one->ui->qwViewCate, tr("Category") + " : " + item0,
+                tr("Percent") + " : " + pre, tr("Amount") + " : " + item1, item,
+                0);
 
             listCategorySort.removeOne(str1);
 
@@ -513,53 +435,29 @@ void dlgReport::on_btnCategory_clicked() {
       }
     }
 
-    if (table->rowCount() > 0)
-      table->setHorizontalHeaderItem(
-          0, new QTableWidgetItem(tr("View Category") + "  " +
-                                  QString::number(table->rowCount())));
+    int cate_count =
+        mw_one->mySearchDialog->getCountBakList(mw_one->ui->qwViewCate);
+    if (cate_count > 0) {
+      mw_one->ui->lblViewCate3->setText(tr("View Category") + "  " +
+                                        QString::number(cate_count));
+      mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwViewCate, 0);
+    }
 
     // qDebug() << "listCategorySort=" << listCategorySort.count()
     //        << listCategorySort;
     // qDebug() << "listE=" << listE.count() << listE;
   }
+}
 
-  int h = mw_one->geometry().height() - 0;
-  int w = mw_one->width() - 0;
-  int x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  int y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
-  dlg->setGeometry(x, y, w, h);
-  if (table->rowCount() > 0) {
-    mw_one->showGrayWindows();
-    dlg->show();
-    table->setFocus();
-    if (table->rowCount() - 1 < indexCategory) indexCategory = 0;
-    table->setCurrentCell(indexCategory, 0);
-  }
-
-  connect(table, &QTableWidget::itemClicked, [=]() {
-    QString str0 = table->item(table->currentRow(), 0)->text();
-    str0 = str0.split("\n").at(0);
-    str0 = str0.replace(tr("Category") + " : ", "").trimmed();
-    getCategoryData(str0, true);
-    indexCategory = table->currentRow();
-    dlg->close();
-    mw_one->closeGrayWindows();
-  });
-
-  connect(btnOk, &QToolButton::clicked, [=]() {
-    QString str0 = table->item(table->currentRow(), 1)->text();
-    str0 = str0.split("\n").at(0);
-    str0 = str0.replace(tr("Category") + " : ", "").trimmed();
-    getCategoryData(str0, true);
-    indexCategory = table->currentRow();
-    dlg->close();
-    mw_one->closeGrayWindows();
-  });
-
-  connect(dlg, &QDialog::rejected, [=]() {
-    dlg->close();
-    mw_one->closeGrayWindows();
-  });
+void dlgReport::on_CateOk() {
+  int index =
+      mw_one->mySearchDialog->getCurrentIndexBakList(mw_one->ui->qwViewCate);
+  QString str0 =
+      mw_one->mySearchDialog->getText3(mw_one->ui->qwViewCate, index);
+  str0 = str0.split("\n").at(0);
+  str0 = str0.replace(tr("Category") + " : ", "").trimmed();
+  getCategoryData(str0, true);
+  indexCategory = index;
 }
 
 void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
