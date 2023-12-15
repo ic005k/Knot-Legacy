@@ -2605,14 +2605,19 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         return true;
       }
 
+      if (!ui->frameNoteRecycle->isHidden()) {
+        on_btnBackNoteRecycle_clicked();
+        return true;
+      }
+
+      if (!ui->frameNoteList->isHidden()) {
+        on_btnBackNoteList_clicked();
+        return true;
+      }
+
       if (!ui->frameNotes->isHidden()) {
-        if (!m_NotesList->isHidden()) {
-          m_NotesList->close();
-          return true;
-        } else {
-          on_btnBackNotes_clicked();
-          return true;
-        }
+        on_btnBackNotes_clicked();
+        return true;
       }
 
       if (!ui->frameTodo->isHidden()) {
