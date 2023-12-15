@@ -668,6 +668,12 @@ class MainWindow : public QMainWindow {
 
   void on_btnDelBakFile_clicked();
 
+  void on_btnBackNoteList_clicked();
+
+  void on_btnBackNoteRecycle_clicked();
+
+  void on_btnNoteRecycle_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
@@ -697,6 +703,7 @@ class MainWindow : public QMainWindow {
   void resetWinPos();
 
   int nProgressBarType = 2;
+  void initQW();
 };
 
 class SaveThread : public QThread {

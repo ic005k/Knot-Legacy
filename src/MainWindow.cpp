@@ -3584,6 +3584,8 @@ void MainWindow::showNotes() {
   ui->frameSetKey->hide();
   ui->frameNotes->show();
 
+  return;
+
   m_NotesList->close();
   ui->btnNotesList->click();
   m_NotesList->on_treeWidget_itemClicked(
@@ -3622,6 +3624,81 @@ void MainWindow::init_Sensors() {
   accel_pedometer->setAlwaysOn(true);
 
   gyroscope = new QGyroscope(this);
+}
+
+void MainWindow::initQW() {
+  ui->qwReader->rootContext()->setContextProperty("myW", this->width());
+  ui->qwReader->rootContext()->setContextProperty("myH", this->height());
+  ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
+
+  ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
+  ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
+
+  ui->qwNotes->rootContext()->setContextProperty("mydlgMainNotes",
+                                                 mydlgMainNotes);
+  ui->qwNotes->rootContext()->setContextProperty("FontSize", fontSize);
+  ui->qwNotes->rootContext()->setContextProperty("strText", "");
+  ui->qwNotes->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
+
+  ui->qwTodo->rootContext()->setContextProperty("mydlgTodo", mydlgTodo);
+  ui->qwTodo->rootContext()->setContextProperty("FontSize", fontSize);
+  ui->qwTodo->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/todo.qml")));
+
+  ui->qwRecycle->rootContext()->setContextProperty("FontSize", fontSize);
+  ui->qwRecycle->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/todorecycle.qml")));
+
+  ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
+  ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
+
+  ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
+  ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
+
+  ui->qwReport->rootContext()->setContextProperty("mydlgReport", mydlgReport);
+  ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
+  ui->qwReportSub->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
+
+  ui->qwOneDriver->rootContext()->setContextProperty("mydlgOneDrive",
+                                                     mydlgOneDrive);
+
+  ui->qwSearch->rootContext()->setContextProperty("mySearchDialog",
+                                                  mySearchDialog);
+  ui->qwSearch->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/search.qml")));
+
+  ui->qwBakList->rootContext()->setContextProperty("mySearchDialog",
+                                                   mySearchDialog);
+  ui->qwBakList->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/baklist.qml")));
+
+  ui->qwViewCate->rootContext()->setContextProperty("mydlgReport", mydlgReport);
+  ui->qwViewCate->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/viewcate.qml")));
+
+  ui->qwTabRecycle->rootContext()->setContextProperty("mydlgReport",
+                                                      mydlgReport);
+  ui->qwTabRecycle->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/tabrecycle.qml")));
+
+  ui->qwNoteBook->rootContext()->setContextProperty("mydlgReport", mydlgReport);
+  ui->qwNoteBook->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/notebook.qml")));
+
+  ui->qwNoteList->rootContext()->setContextProperty("mydlgReport", mydlgReport);
+  ui->qwNoteList->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/notelist.qml")));
+
+  ui->qwNoteRecycle->rootContext()->setContextProperty("mydlgReport",
+                                                       mydlgReport);
+  ui->qwNoteRecycle->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/noterecycle.qml")));
+
+  ui->qwPdf->engine()->addImportPath("qrc:/");
+  ui->qwPdf->engine()->addImportPath(":/");
+  ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
+  if (!isPdfNewMothod)
+    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
+  else
+    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
 }
 
 void MainWindow::init_UIWidget() {
@@ -3666,6 +3743,8 @@ void MainWindow::init_UIWidget() {
   ui->qwPdf->hide();
   ui->frameViewCate->hide();
   ui->frameTabRecycle->hide();
+  ui->frameNoteList->hide();
+  ui->frameNoteRecycle->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3849,65 +3928,7 @@ void MainWindow::init_UIWidget() {
       "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
       "}");
 
-  ui->qwReader->rootContext()->setContextProperty("myW", this->width());
-  ui->qwReader->rootContext()->setContextProperty("myH", this->height());
-  ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
-
-  ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
-  ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
-
-  ui->qwNotes->rootContext()->setContextProperty("mydlgMainNotes",
-                                                 mydlgMainNotes);
-  ui->qwNotes->rootContext()->setContextProperty("FontSize", fontSize);
-  ui->qwNotes->rootContext()->setContextProperty("strText", "");
-  ui->qwNotes->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
-
-  ui->qwTodo->rootContext()->setContextProperty("mydlgTodo", mydlgTodo);
-  ui->qwTodo->rootContext()->setContextProperty("FontSize", fontSize);
-  ui->qwTodo->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/todo.qml")));
-
-  ui->qwRecycle->rootContext()->setContextProperty("FontSize", fontSize);
-  ui->qwRecycle->setSource(
-      QUrl(QStringLiteral("qrc:/src/qmlsrc/todorecycle.qml")));
-
-  ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
-  ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
-
-  ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
-  ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
-
-  ui->qwReport->rootContext()->setContextProperty("mydlgReport", mydlgReport);
-  ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
-  ui->qwReportSub->setSource(
-      QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
-
-  ui->qwOneDriver->rootContext()->setContextProperty("mydlgOneDrive",
-                                                     mydlgOneDrive);
-
-  ui->qwSearch->rootContext()->setContextProperty("mySearchDialog",
-                                                  mySearchDialog);
-  ui->qwSearch->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/search.qml")));
-
-  ui->qwBakList->rootContext()->setContextProperty("mySearchDialog",
-                                                   mySearchDialog);
-  ui->qwBakList->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/baklist.qml")));
-
-  ui->qwViewCate->rootContext()->setContextProperty("mydlgReport", mydlgReport);
-  ui->qwViewCate->setSource(
-      QUrl(QStringLiteral("qrc:/src/qmlsrc/viewcate.qml")));
-
-  ui->qwTabRecycle->rootContext()->setContextProperty("mydlgReport",
-                                                      mydlgReport);
-  ui->qwTabRecycle->setSource(
-      QUrl(QStringLiteral("qrc:/src/qmlsrc/tabrecycle.qml")));
-
-  ui->qwPdf->engine()->addImportPath("qrc:/");
-  ui->qwPdf->engine()->addImportPath(":/");
-  ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
-  if (!isPdfNewMothod)
-    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
-  else
-    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
+  initQW();
 }
 
 void MainWindow::on_btnSelTab_clicked() {
@@ -4874,6 +4895,11 @@ void MainWindow::showGrayWindows() {
 void MainWindow::closeGrayWindows() { m_widget->close(); }
 
 void MainWindow::on_btnNotesList_clicked() {
+  ui->frameNotes->hide();
+  ui->frameNoteList->show();
+
+  return;
+
   m_NotesList->show();
   m_NotesList->setWinPos();
   m_NotesList->tw->setFocus();
@@ -5372,4 +5398,19 @@ void MainWindow::on_btnDelBakFile_clicked() {
   ui->lblBakListTitle->setText(
       tr("Backup File List") + "    " + tr("Total") + " : " +
       QString::number(mySearchDialog->getCountBakList(ui->qwBakList)));
+}
+
+void MainWindow::on_btnBackNoteList_clicked() {
+  ui->frameNoteList->hide();
+  ui->frameNotes->show();
+}
+
+void MainWindow::on_btnBackNoteRecycle_clicked() {
+  ui->frameNoteRecycle->hide();
+  ui->frameNoteList->show();
+}
+
+void MainWindow::on_btnNoteRecycle_clicked() {
+  ui->frameNoteList->hide();
+  ui->frameNoteRecycle->show();
 }

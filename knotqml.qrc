@@ -21,5 +21,6 @@
         <file>src/qmlsrc/tabrecycle.qml</file>
         <file>src/qmlsrc/notelist.qml</file>
         <file>src/qmlsrc/noterecycle.qml</file>
+        <file>src/qmlsrc/notebook.qml</file>
     </qresource>
 </RCC>

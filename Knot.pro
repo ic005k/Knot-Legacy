@@ -628,6 +628,7 @@ DISTFILES += \
     src/qmlsrc/imgview.qml \
     src/qmlsrc/main.qml \
     src/qmlsrc/memo.qml \
+    src/qmlsrc/notebook.qml \
     src/qmlsrc/notelist.qml \
     src/qmlsrc/noterecycle.qml \
     src/qmlsrc/notes.qml \
