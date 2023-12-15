@@ -2635,12 +2635,14 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         return true;
       }
 
+      if (!ui->frameViewCate->isHidden()) {
+        ui->frameViewCate->hide();
+        ui->frameReport->show();
+        return true;
+      }
+
       if (!ui->frameReport->isHidden()) {
-        if (!ui->frameViewCate->isHidden()) {
-          ui->frameViewCate->hide();
-          ui->frameReport->show();
-        } else
-          on_btnBack_Report_clicked();
+        on_btnBack_Report_clicked();
         return true;
       }
 
