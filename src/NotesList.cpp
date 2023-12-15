@@ -1,8 +1,8 @@
 #include "NotesList.h"
 
 #include "src/MainWindow.h"
-#include "ui_NotesList.h"
 #include "ui_MainWindow.h"
+#include "ui_NotesList.h"
 
 extern MainWindow *mw_one;
 extern QString iniDir, privateDir;
@@ -88,8 +88,15 @@ bool dlgNotesList::eventFilter(QObject *watch, QEvent *evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      on_btnClose_clicked();
-      return true;
+      if (!ui->frame1->isHidden()) {
+        on_btnBack_clicked();
+        return true;
+      }
+
+      if (!ui->frame0->isHidden()) {
+        on_btnClose_clicked();
+        return true;
+      }
     }
 
     if (keyEvent->key() == Qt::Key_Return) {
@@ -572,6 +579,7 @@ void dlgNotesList::on_btnRecycle_clicked() {
   ui->frame1->show();
   setWinPos();
   twrb->setFocus();
+  twrb->setCurrentItem(twrb->topLevelItem(0));
 }
 
 void dlgNotesList::on_btnBack_clicked() {
@@ -610,11 +618,9 @@ void dlgNotesList::on_btnDel_2_clicked() {
 }
 
 void dlgNotesList::setWinPos() {
-  int w = mw_one->width() * 3 / 4;
-  int x = mw_one->geometry().x() + mw_one->width() - w - 2;
-  this->setGeometry(
-      x, mw_one->geometry().y() + mw_one->ui->lblNoteName->height() + 5, w,
-      mw_one->height() - mw_one->ui->lblNoteName->height() - 5);
+  int w = mw_one->width();
+  int x = mw_one->geometry().x();
+  this->setGeometry(x, mw_one->geometry().y(), w, mw_one->height());
   mw_one->ui->btnBackNotes->hide();
   mw_one->ui->btnEdit->hide();
   mw_one->ui->btnNotesList->hide();

@@ -19,5 +19,7 @@
         <file>src/qmlsrc/baklist.qml</file>
         <file>src/qmlsrc/viewcate.qml</file>
         <file>src/qmlsrc/tabrecycle.qml</file>
+        <file>src/qmlsrc/notelist.qml</file>
+        <file>src/qmlsrc/noterecycle.qml</file>
     </qresource>
 </RCC>

@@ -2045,11 +2045,19 @@ QTabBar::scroller {width:0}
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="font">
+            <font>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string>Notes</string>
            </property>
            <property name="scaledContents">
             <bool>false</bool>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
