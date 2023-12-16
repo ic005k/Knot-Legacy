@@ -149,6 +149,8 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
                                              int column) {
   Q_UNUSED(column);
 
+  return;
+
   if (ui->treeWidget->topLevelItemCount() == 0) return;
 
   if (item->parent() != NULL) {
@@ -175,6 +177,17 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
   ui->editName->setText(item->text(0));
 
   qDebug() << "currentMDFile " << currentMDFile;
+}
+
+QString dlgNotesList::getCurrentMDFile() {
+  QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  QString curmd = Reg.value("/MainNotes/currentItem", "memo/xxx.md").toString();
+  // currentMDFile = iniDir + curmd;
+  return iniDir + curmd;
 }
 
 void dlgNotesList::on_btnRename_clicked() {
@@ -467,7 +480,7 @@ void dlgNotesList::initNotesList() {
                                    QString::number(notesTotal) + ")");
   tw->expandAll();
 
-  QSettings RegNotes(iniDir + "curmd.ini", QSettings::IniFormat);
+  /*QSettings RegNotes(iniDir + "curmd.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   RegNotes.setIniCodec("utf-8");
 #endif
@@ -485,28 +498,7 @@ void dlgNotesList::initNotesList() {
       currentMDFile = iniDir + curmd;
     }
   }
-  qDebug() << "init notes list" << currentMDFile;
-
-  bool stop = false;
-  for (int i = 0; i < tw->topLevelItemCount(); i++) {
-    QTreeWidgetItem *topItem = tw->topLevelItem(i);
-    int childCount = topItem->childCount();
-
-    for (int j = 0; j < childCount; j++) {
-      QTreeWidgetItem *childItem = topItem->child(j);
-      QString strChild1 = childItem->text(1);
-      if (strChild1 == curmd) {
-        stop = true;
-        tw->setCurrentItem(childItem);
-        qDebug() << "set current item...";
-        ui->editName->setText(childItem->text(0));
-        if (mw_one->initMain) on_treeWidget_itemClicked(childItem, 0);
-
-        break;
-      }
-    }
-    if (stop) break;
-  }
+  qDebug() << "init notes list" << currentMDFile;*/
 
   if (ui->treeWidget->topLevelItemCount() == 0) {
     QTreeWidgetItem *item = new QTreeWidgetItem();

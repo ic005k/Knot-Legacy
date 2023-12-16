@@ -47,7 +47,8 @@ class dlgNotesList : public QDialog {
   void setNoteName(QString name);
   void moveBy(int ud);
 
- protected:
+  QString getCurrentMDFile();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

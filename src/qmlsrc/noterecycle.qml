@@ -162,8 +162,8 @@ Rectangle {
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
-                        wrapMode: TextArea.NoWrap
-                        font.bold: true
+                        wrapMode: TextArea.WordWrap
+                        font.bold: false
                         text: text0
 
                         leftPadding: 5
@@ -222,7 +222,7 @@ Rectangle {
                         leftPadding: 5
                         rightPadding: 5
 
-                        visible: item3.text.length ? true : false
+                        visible: false // item3.text.length ? true : false
                     }
                 }
             }

@@ -5430,9 +5430,11 @@ void MainWindow::on_btnBackNoteList_clicked() {
   ui->frameNotes->show();
 
   mySearchDialog->saveCurNoteIndex();
+  m_NotesList->saveNotesList();
 }
 
 void MainWindow::on_btnBackNoteRecycle_clicked() {
+  m_NotesList->saveRecycle();
   ui->frameNoteRecycle->hide();
   ui->frameNoteList->show();
 }
@@ -5440,4 +5442,14 @@ void MainWindow::on_btnBackNoteRecycle_clicked() {
 void MainWindow::on_btnNoteRecycle_clicked() {
   ui->frameNoteList->hide();
   ui->frameNoteRecycle->show();
+
+  mySearchDialog->clearAllBakList(ui->qwNoteRecycle);
+  int childCount = m_NotesList->twrb->topLevelItem(0)->childCount();
+  for (int i = 0; i < childCount; i++) {
+    QTreeWidgetItem *childItem = m_NotesList->twrb->topLevelItem(0)->child(i);
+    QString text0 = childItem->text(0);
+    QString text3 = childItem->text(1);
+
+    mySearchDialog->addItemBakList(ui->qwNoteRecycle, text0, "", "", text3, 0);
+  }
 }

@@ -62,9 +62,6 @@ EditRecord::EditRecord(QWidget *parent)
 
   ui->editCategory->setPlaceholderText(tr("Please enter a category"));
 
-  ui->btnClearAmount->setStyleSheet("border:none");
-  ui->btnClearDesc->setStyleSheet("border:none");
-  ui->btnClearDetails->setStyleSheet("border:none");
   lblStyle = ui->lblCategory->styleSheet();
 
   ui->hsM->setStyleSheet(ui->hsH->styleSheet());
