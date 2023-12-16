@@ -5453,3 +5453,45 @@ void MainWindow::on_btnNoteRecycle_clicked() {
     mySearchDialog->addItemBakList(ui->qwNoteRecycle, text0, "", "", text3, 0);
   }
 }
+
+void MainWindow::on_btnDelNoteRecycle_clicked() {
+  int count = mySearchDialog->getCountBakList(ui->qwNoteRecycle);
+  if (count == 0) return;
+
+  int index = mySearchDialog->getCurrentIndexBakList(ui->qwNoteRecycle);
+  QString file = mySearchDialog->getText0(ui->qwNoteRecycle, index);
+
+  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + file + " ? ", "", 2))
+    return;
+
+  QTreeWidgetItem *topItem = m_NotesList->twrb->topLevelItem(0);
+  m_NotesList->twrb->setCurrentItem(topItem->child(index));
+  m_NotesList->ui->btnDel_2->click();
+
+  mySearchDialog->delItemBakList(ui->qwNoteRecycle, index);
+}
+
+void MainWindow::on_btnRestoreNoteRecycle_clicked() {
+  int count = mySearchDialog->getCountBakList(ui->qwNoteRecycle);
+  if (count == 0) return;
+
+  int indexRecycle = mySearchDialog->getCurrentIndexBakList(ui->qwNoteRecycle);
+  m_NotesList->twrb->setCurrentItem(
+      m_NotesList->twrb->topLevelItem(0)->child(indexRecycle));
+
+  int indexTop = mySearchDialog->getCurrentIndexBakList(ui->qwNoteBook);
+  int indexChild = mySearchDialog->getCurrentIndexBakList(ui->qwNoteList);
+
+  m_NotesList->tw->setCurrentItem(
+      m_NotesList->tw->topLevelItem(indexTop)->child(indexChild));
+
+  m_NotesList->on_btnRestore_clicked();
+
+  mySearchDialog->delItemBakList(ui->qwNoteRecycle, indexRecycle);
+
+  int noteCount = mySearchDialog->getCountBakList(ui->qwNoteList);
+  mySearchDialog->setCurrentIndexBakList(ui->qwNoteList, noteCount - 1);
+  mySearchDialog->clickNoteList();
+
+  on_btnBackNoteRecycle_clicked();
+}

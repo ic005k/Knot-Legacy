@@ -583,13 +583,21 @@ void dlgNotesList::on_btnBack_clicked() {
 
 void dlgNotesList::on_btnRestore_clicked() {
   QTreeWidgetItem *curItem = twrb->currentItem();
+
   if (curItem->parent() == NULL) {
     return;
   } else {
     QTreeWidgetItem *item = new QTreeWidgetItem;
-    item->setText(0, curItem->text(0));
-    item->setText(1, curItem->text(1));
+    QString str0 = curItem->text(0);
+    QString str1 = curItem->text(1);
+
+    item->setText(0, str0);
+    item->setText(1, str1);
     addItem(tw, item);
+
+    mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwNoteList, str0, "", "",
+                                           str1, 0);
+
     curItem->parent()->removeChild(curItem);
   }
 

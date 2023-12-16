@@ -674,6 +674,10 @@ class MainWindow : public QMainWindow {
 
   void on_btnNoteRecycle_clicked();
 
+  void on_btnDelNoteRecycle_clicked();
+
+  void on_btnRestoreNoteRecycle_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
