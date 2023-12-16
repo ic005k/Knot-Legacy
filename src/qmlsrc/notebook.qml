@@ -10,6 +10,7 @@ Rectangle {
     width: 500
     height: 400
 
+    property int i: 0
     property int itemCount: 0
     property bool isHighPriority: false
 
@@ -118,8 +119,12 @@ Rectangle {
         view.model.setProperty(currentIndex, "type", type)
     }
 
-    function modifyItemText(currentIndex, strText) {
-        view.model.setProperty(currentIndex, "dototext", strText)
+    function modifyItemText0(currentIndex, strText) {
+        view.model.setProperty(currentIndex, "text0", strText)
+    }
+
+    function modifyItemText2(currentIndex, strText) {
+        view.model.setProperty(currentIndex, "text2", strText)
     }
 
     Component {
@@ -143,6 +148,18 @@ Rectangle {
                 width: parent.width
                 spacing: 2
                 Layout.fillWidth: true
+
+                Rectangle {
+                    height: parent.height - 2
+                    width: 6
+                    radius: 2
+                    anchors.leftMargin: 1
+                    color: "red"
+                    visible: item2.text.length ? true : false
+                    Text {
+                        anchors.centerIn: parent
+                    }
+                }
 
                 ColumnLayout {
                     id: idlistElemnet4
@@ -204,7 +221,7 @@ Rectangle {
                         leftPadding: 5
                         rightPadding: 5
 
-                        visible: item2.text.length ? true : false
+                        visible: false // item2.text.length ? true : false
                     }
 
                     Text {
@@ -250,6 +267,11 @@ Rectangle {
                 onClicked: {
 
                     view.currentIndex = index //实现item切换
+
+                    for (i = 0; i < view.count; i++) {
+                        view.model.setProperty(i, "text2", "")
+                    }
+                    view.model.setProperty(index, "text2", "ShowRect")
 
                     mySearchDialog.clickNoteBook()
                 }

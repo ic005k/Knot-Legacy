@@ -4923,6 +4923,8 @@ void MainWindow::on_btnNotesList_clicked() {
   mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteList, noteIndex);
   mySearchDialog->clickNoteList();
 
+  mySearchDialog->modifyItemText2(ui->qwNoteBook, notebookIndex, "ShowRect");
+
   return;
 
   m_NotesList->show();

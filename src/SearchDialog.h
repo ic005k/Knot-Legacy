@@ -43,6 +43,7 @@ class SearchDialog : public QDialog {
 
   void saveCurNoteIndex();
   QList<int> getCurNoteIndex();
+  void modifyItemText2(QQuickWidget *qw, int index, QString strText);
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
