@@ -128,8 +128,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: item0.contentHeight + item1.contentHeight
-                    + item2.contentHeight + item3.contentHeight + 10 //myh
+            height: item0.contentHeight + 16
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
@@ -252,6 +251,10 @@ Rectangle {
 
                     view.currentIndex = index //实现item切换
                     mySearchDialog.clickNoteList()
+                }
+
+                onPressAndHold: {
+                    mySearchDialog.showNotsListMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {

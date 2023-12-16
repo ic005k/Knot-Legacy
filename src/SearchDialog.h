@@ -53,7 +53,9 @@ class SearchDialog : public QDialog {
   void clickNoteBook();
   void clickNoteList();
 
- private slots:
+  void showNoteBookMenu(int x, int y);
+  void showNotsListMenu(int x, int y);
+  private slots:
 
   void on_btnClearText_clicked();
 

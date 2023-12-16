@@ -366,3 +366,19 @@ QList<int> SearchDialog::getCurNoteIndex() {
 
   return indexList;
 }
+
+void SearchDialog::showNoteBookMenu(int x, int y) {
+  QMenu* mainMenu = new QMenu(this);
+  mw_one->m_NotesList->init_NoteBookMenu(mainMenu);
+
+  QPoint pos(mw_one->geometry().x() + x, mw_one->geometry().y() + y);
+  mainMenu->exec(pos);
+}
+
+void SearchDialog::showNotsListMenu(int x, int y) {
+  QMenu* mainMenu = new QMenu(this);
+  mw_one->m_NotesList->init_NotesListMenu(mainMenu);
+
+  QPoint pos(mw_one->geometry().x() + x, mw_one->geometry().y() + y);
+  mainMenu->exec(pos);
+}

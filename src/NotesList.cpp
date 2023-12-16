@@ -821,3 +821,117 @@ void dlgNotesList::moveBy(int ud) {
 void dlgNotesList::on_btnUp_clicked() { moveBy(-1); }
 
 void dlgNotesList::on_btnDown_clicked() { moveBy(1); }
+
+void dlgNotesList::on_actionAdd_NoteBook_triggered() {}
+
+void dlgNotesList::on_actionDel_NoteBook_triggered() {}
+
+void dlgNotesList::on_actionRename_NoteBook_triggered() {}
+
+void dlgNotesList::on_actionMoveUp_NoteBook_triggered() {}
+
+void dlgNotesList::on_actionMoveDown_NoteBook_triggered() {}
+
+void dlgNotesList::init_NoteBookMenu(QMenu *mainMenu) {
+  QAction *actNew = new QAction(tr("New NoteBook"));
+  QAction *actDel = new QAction(tr("Del NoteBook"));
+  QAction *actRename = new QAction(tr("Rename NoteBook"));
+  QAction *actMoveUp = new QAction(tr("Move Up"));
+  QAction *actMoveDown = new QAction(tr("Move Down"));
+
+  connect(actNew, &QAction::triggered, this,
+          &dlgNotesList::on_actionAdd_NoteBook_triggered);
+  connect(actDel, &QAction::triggered, this,
+          &dlgNotesList::on_actionDel_NoteBook_triggered);
+  connect(actRename, &QAction::triggered, this,
+          &dlgNotesList::on_actionRename_NoteBook_triggered);
+
+  connect(actMoveUp, &QAction::triggered, this,
+          &dlgNotesList::on_actionMoveUp_NoteBook_triggered);
+  connect(actMoveDown, &QAction::triggered, this,
+          &dlgNotesList::on_actionMoveDown_NoteBook_triggered);
+
+  QString qss =
+      "QMenu {"
+      "border: 1px solid rgb(172, 172, 172);"
+      "border-radius: 3px; }"
+      "QMenu::item {"
+      "border-bottom: 1px solid rgb(172, 172, 172);"
+      "padding:10px 10px;"
+      "margin:0px 0px; }"
+      "QMenu::item:selected {"
+      "background-color: rgb(62, 186, 231); }";
+
+  mainMenu->addAction(actNew);
+  mainMenu->addAction(actDel);
+  mainMenu->addAction(actRename);
+
+  mainMenu->addAction(actMoveUp);
+  mainMenu->addAction(actMoveDown);
+
+  mainMenu->setStyleSheet(qss);
+}
+
+void dlgNotesList::on_actionAdd_Note_triggered() {}
+
+void dlgNotesList::on_actionDel_Note_triggered() {}
+
+void dlgNotesList::on_actionRename_Note_triggered() {}
+
+void dlgNotesList::on_actionMoveUp_Note_triggered() {}
+
+void dlgNotesList::on_actionMoveDown_Note_triggered() {}
+
+void dlgNotesList::on_actionImport_Note_triggered() {}
+
+void dlgNotesList::on_actionExport_Note_triggered() {}
+
+void dlgNotesList::init_NotesListMenu(QMenu *mainMenu) {
+  QAction *actNew = new QAction(tr("New Note"));
+  QAction *actDel = new QAction(tr("Del Note"));
+  QAction *actRename = new QAction(tr("Rename Note"));
+  QAction *actMoveUp = new QAction(tr("Move Up"));
+  QAction *actMoveDown = new QAction(tr("Move Down"));
+  QAction *actImport = new QAction(tr("Import"));
+  QAction *actExport = new QAction(tr("Export"));
+
+  connect(actNew, &QAction::triggered, this,
+          &dlgNotesList::on_actionAdd_Note_triggered);
+  connect(actDel, &QAction::triggered, this,
+          &dlgNotesList::on_actionDel_Note_triggered);
+  connect(actRename, &QAction::triggered, this,
+          &dlgNotesList::on_actionRename_Note_triggered);
+
+  connect(actMoveUp, &QAction::triggered, this,
+          &dlgNotesList::on_actionMoveUp_Note_triggered);
+  connect(actMoveDown, &QAction::triggered, this,
+          &dlgNotesList::on_actionMoveDown_Note_triggered);
+
+  connect(actImport, &QAction::triggered, this,
+          &dlgNotesList::on_actionImport_Note_triggered);
+  connect(actExport, &QAction::triggered, this,
+          &dlgNotesList::on_actionExport_Note_triggered);
+
+  QString qss =
+      "QMenu {"
+      "border: 1px solid rgb(172, 172, 172);"
+      "border-radius: 3px; }"
+      "QMenu::item {"
+      "border-bottom: 1px solid rgb(172, 172, 172);"
+      "padding:10px 10px;"
+      "margin:0px 0px; }"
+      "QMenu::item:selected {"
+      "background-color: rgb(62, 186, 231); }";
+
+  mainMenu->addAction(actNew);
+  mainMenu->addAction(actDel);
+  mainMenu->addAction(actRename);
+
+  mainMenu->addAction(actImport);
+  mainMenu->addAction(actExport);
+
+  mainMenu->addAction(actMoveUp);
+  mainMenu->addAction(actMoveDown);
+
+  mainMenu->setStyleSheet(qss);
+}

@@ -48,7 +48,10 @@ class dlgNotesList : public QDialog {
   void moveBy(int ud);
 
   QString getCurrentMDFile();
-  protected:
+  void init_NotesListMenu(QMenu *mainMenu);
+  void init_NoteBookMenu(QMenu *mainMenu);
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -92,6 +95,20 @@ class dlgNotesList : public QDialog {
   void on_btnUp_clicked();
 
   void on_btnDown_clicked();
+
+  void on_actionAdd_NoteBook_triggered();
+  void on_actionDel_NoteBook_triggered();
+  void on_actionRename_NoteBook_triggered();
+  void on_actionMoveUp_NoteBook_triggered();
+  void on_actionMoveDown_NoteBook_triggered();
+
+  void on_actionAdd_Note_triggered();
+  void on_actionDel_Note_triggered();
+  void on_actionRename_Note_triggered();
+  void on_actionMoveUp_Note_triggered();
+  void on_actionMoveDown_Note_triggered();
+  void on_actionImport_Note_triggered();
+  void on_actionExport_Note_triggered();
 
  private:
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
