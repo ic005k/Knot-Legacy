@@ -91,11 +91,12 @@ Rectangle {
                           })
     }
 
-    function insertItem(strTime, type, strText, curIndex) {
+    function insertItem(text0, text1, text2, text3, curIndex) {
         view.model.insert(curIndex, {
-                              "time": strTime,
-                              "type": type,
-                              "dototext": strText
+                              "text0": text0,
+                              "text1": text1,
+                              "text2": text2,
+                              "text3": text3
                           })
     }
 
@@ -155,7 +156,7 @@ Rectangle {
                     radius: 2
                     anchors.leftMargin: 1
                     color: "red"
-                    visible: item2.text.length ? true : false
+                    visible: false // item2.text.length ? true : false
                     Text {
                         anchors.centerIn: parent
                     }

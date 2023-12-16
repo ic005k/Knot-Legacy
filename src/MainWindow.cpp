@@ -17,7 +17,7 @@ bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isTimeMachine,
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
-    zipfile, txt, infoStr;
+    zipfile, txt, infoStr, searchStr;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -4905,12 +4905,7 @@ void MainWindow::on_btnNotesList_clicked() {
   ui->frameNotes->hide();
   ui->frameNoteList->show();
 
-  mySearchDialog->clearAllBakList(ui->qwNoteBook);
-  int count = m_NotesList->tw->topLevelItemCount();
-  for (int i = 0; i < count; i++) {
-    QString str = m_NotesList->tw->topLevelItem(i)->text(0);
-    mySearchDialog->addItemBakList(ui->qwNoteBook, str, "", "", "", 0);
-  }
+  m_NotesList->loadAllNoteBook();
 
   int notebookIndex = mySearchDialog->getCurNoteIndex().at(0);
   int noteIndex = mySearchDialog->getCurNoteIndex().at(1);
@@ -4924,6 +4919,7 @@ void MainWindow::on_btnNotesList_clicked() {
   mySearchDialog->clickNoteList();
 
   mySearchDialog->modifyItemText2(ui->qwNoteBook, notebookIndex, "ShowRect");
+  mySearchDialog->modifyItemText2(ui->qwNoteList, noteIndex, "ShowRect");
 
   return;
 
@@ -5316,7 +5312,11 @@ void MainWindow::on_btnClearSearchText_clicked() {
 }
 
 void MainWindow::on_btnStartSearch_clicked() {
-  mySearchDialog->on_btnSearch_clicked();
+  searchStr = ui->editSearchText->text().trimmed();
+  if (searchStr.length() == 0) return;
+
+  showProgress();
+  mySearchThread->start();
 }
 
 void MainWindow::on_btnBackBakList_clicked() {

@@ -44,21 +44,22 @@ class SearchDialog : public QDialog {
   void saveCurNoteIndex();
   QList<int> getCurNoteIndex();
   void modifyItemText2(QQuickWidget *qw, int index, QString strText);
-  protected:
+
+  void modifyItemText0(QQuickWidget *qw, int index, QString strText);
+  void insertItem(QQuickWidget *qw, QString text0, QString text1, QString text2,
+                  QString text3, int curIndex);
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
-  void on_btnBack_clicked();
-  void on_btnSearch_clicked();
 
   void clickNoteBook();
   void clickNoteList();
 
   void showNoteBookMenu(int x, int y);
   void showNotsListMenu(int x, int y);
-  private slots:
-
-  void on_btnClearText_clicked();
+ private slots:
 
  private:
   void setCellText(int row, int column, QString str, QTableWidget *table);

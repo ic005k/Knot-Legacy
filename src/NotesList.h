@@ -51,7 +51,14 @@ class dlgNotesList : public QDialog {
   void init_NotesListMenu(QMenu *mainMenu);
   void init_NoteBookMenu(QMenu *mainMenu);
 
- protected:
+  int getNoteBookCurrentIndex();
+  int getNotesListCurrentIndex();
+  void setNoteBookCurrentIndex(int index);
+  void setNotesListCurrentIndex(int index);
+  int getNoteBookCount();
+  int getNotesListCount();
+  void loadAllNoteBook();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

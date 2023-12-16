@@ -8,10 +8,9 @@
 
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
-extern QString iniDir;
+extern QString iniDir, searchStr;
 
 QStringList resultsList;
-QString searchStr;
 
 SearchDialog::SearchDialog(QWidget* parent)
     : QDialog(parent), ui(new Ui::SearchDialog) {
@@ -19,37 +18,8 @@ SearchDialog::SearchDialog(QWidget* parent)
   mw_one->set_btnStyle(this);
   setModal(true);
   this->installEventFilter(this);
-  ui->editSearchText->installEventFilter(this);
 
   setWindowTitle(tr("Search"));
-
-  ui->btnClearText->setStyleSheet("border:none");
-  mw_one->setLineEditQss(ui->editSearchText, 0, 1, "#4169E1", "#4169E1");
-
-  ui->tableSearch->setColumnCount(1);
-
-  ui->tableSearch->setHorizontalHeaderItem(0,
-                                           new QTableWidgetItem(tr("Results")));
-
-  ui->tableSearch->verticalHeader()->setSectionResizeMode(
-      QHeaderView::ResizeToContents);
-  ui->tableSearch->setStyleSheet("selection-background-color: lightblue");
-  ui->tableSearch->horizontalHeader()->setStretchLastSection(true);
-  ui->tableSearch->setAlternatingRowColors(true);
-  ui->tableSearch->setSelectionBehavior(QTableWidget::SelectRows);
-  ui->tableSearch->setSelectionMode(QAbstractItemView::SingleSelection);
-  ui->tableSearch->setEditTriggers(QTableWidget::NoEditTriggers);
-  ui->tableSearch->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  ui->tableSearch->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  ui->tableSearch->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  QScroller::grabGesture(ui->tableSearch, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(ui->tableSearch);
-
-#ifdef Q_OS_ANDROID
-  QFont font;
-  font.setPointSize(15);
-  // ui->tableSearch->setFont(font);
-#endif
 }
 
 void SearchDialog::init() {
@@ -60,7 +30,6 @@ void SearchDialog::init() {
   setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), w, h);
 
   show();
-  ui->editSearchText->setFocus();
 }
 
 SearchDialog::~SearchDialog() { delete ui; }
@@ -108,6 +77,15 @@ void SearchDialog::addItemBakList(QQuickWidget* qw, QString text0,
                             Q_ARG(QVariant, text3), Q_ARG(QVariant, itemH));
 }
 
+void SearchDialog::insertItem(QQuickWidget* qw, QString text0, QString text1,
+                              QString text2, QString text3, int curIndex) {
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "insertItem",
+                            Q_ARG(QVariant, text0), Q_ARG(QVariant, text1),
+                            Q_ARG(QVariant, text2), Q_ARG(QVariant, text3),
+                            Q_ARG(QVariant, curIndex));
+}
+
 void SearchDialog::delItemBakList(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
@@ -142,6 +120,13 @@ int SearchDialog::getCurrentIndexBakList(QQuickWidget* qw) {
   return itemIndex.toInt();
 }
 
+void SearchDialog::modifyItemText0(QQuickWidget* qw, int index,
+                                   QString strText) {
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "modifyItemText0",
+                            Q_ARG(QVariant, index), Q_ARG(QVariant, strText));
+}
+
 void SearchDialog::modifyItemText2(QQuickWidget* qw, int index,
                                    QString strText) {
   QQuickItem* root = qw->rootObject();
@@ -171,29 +156,12 @@ bool SearchDialog::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      on_btnBack_clicked();
-      return true;
-    }
-
-    if (watchDlgSearch == ui->editSearchText &&
-        keyEvent->key() == Qt::Key_Return) {
-      on_btnSearch_clicked();
+      close();
       return true;
     }
   }
 
   return QWidget::eventFilter(watchDlgSearch, evn);
-}
-
-void SearchDialog::on_btnBack_clicked() { this->close(); }
-
-void SearchDialog::on_btnSearch_clicked() {
-  searchStr = mw_one->ui->editSearchText->text().trimmed();
-  if (searchStr.length() == 0) return;
-
-  mw_one->showProgress();
-  ui->tableSearch->setRowCount(0);
-  mw_one->mySearchThread->start();
 }
 
 void SearchDialog::startSearch() {
@@ -316,11 +284,6 @@ void SearchDialog::setCellText(int row, int column, QString str,
     table->setCellWidget(row, column, lbl);
   } else
     table->setItem(row, column, new QTableWidgetItem(str));
-}
-
-void SearchDialog::on_btnClearText_clicked() {
-  if (ui->editSearchText->text().length() > 0) ui->editSearchText->setText("");
-  ui->editSearchText->setFocus();
 }
 
 void SearchDialog::clickNoteBook() {
