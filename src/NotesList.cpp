@@ -692,6 +692,8 @@ void dlgNotesList::on_btnFind_clicked() {
   if (strFind == "") {
     ui->btnPrev->hide();
     ui->btnNext->hide();
+    mw_one->ui->btnFindNextNote->hide();
+    mw_one->ui->btnFindPreviousNote->hide();
     return;
   }
   findResultList.clear();
@@ -717,12 +719,38 @@ void dlgNotesList::on_btnFind_clicked() {
     ui->lblCount->setText(QString::number(findCount + 1) + "->" +
                           QString::number(findResultList.count()));
 
+    mw_one->ui->lblFindNoteCount->setText(ui->lblCount->text());
+
     ui->btnPrev->show();
     ui->btnNext->show();
+
+    mw_one->ui->btnFindNextNote->show();
+    mw_one->ui->btnFindPreviousNote->show();
   } else {
     ui->btnPrev->hide();
     ui->btnNext->hide();
+
+    mw_one->ui->btnFindNextNote->hide();
+    mw_one->ui->btnFindPreviousNote->hide();
+
     ui->lblCount->setText("0");
+
+    mw_one->ui->lblFindNoteCount->setText(ui->lblCount->text());
+  }
+}
+
+void dlgNotesList::localItem() {
+  QTreeWidgetItem *item = tw->currentItem();
+  if (item->parent() == NULL) {
+    int topIndex = tw->currentIndex().row();
+    setNoteBookCurrentIndex(topIndex);
+    mw_one->mySearchDialog->clickNoteBook();
+  } else {
+    int topIndex = item->parent()->indexOfChild(item);
+    int childIndex = tw->currentIndex().row();
+    setNoteBookCurrentIndex(topIndex);
+    mw_one->mySearchDialog->clickNoteBook();
+    setNotesListCurrentIndex(childIndex);
   }
 }
 
@@ -734,9 +762,13 @@ void dlgNotesList::on_btnPrev_clicked() {
   ui->lblCount->setText(QString::number(findCount + 1) + "->" +
                         QString::number(findResultList.count()));
 
+  mw_one->ui->lblFindNoteCount->setText(ui->lblCount->text());
+
   if (isAndroid) {
     if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
   }
+
+  localItem();
 }
 
 void dlgNotesList::on_btnNext_clicked() {
@@ -750,13 +782,20 @@ void dlgNotesList::on_btnNext_clicked() {
   ui->lblCount->setText(QString::number(findCount + 1) + "->" +
                         QString::number(findResultList.count()));
 
+  mw_one->ui->lblFindNoteCount->setText(ui->lblCount->text());
+
   if (isAndroid) {
     if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
   }
+
+  localItem();
 }
 
 void dlgNotesList::on_editFind_textChanged(const QString &arg1) {
-  if (arg1.trimmed() == "") ui->lblCount->setText("0");
+  if (arg1.trimmed() == "") {
+    ui->lblCount->setText("0");
+    mw_one->ui->lblFindNoteCount->setText("0");
+  }
   on_btnFind_clicked();
 }
 

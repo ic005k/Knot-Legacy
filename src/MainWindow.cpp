@@ -3758,6 +3758,8 @@ void MainWindow::init_UIWidget() {
   ui->frameTabRecycle->hide();
   ui->frameNoteList->hide();
   ui->frameNoteRecycle->hide();
+  ui->btnFindPreviousNote->hide();
+  ui->btnFindNextNote->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -5497,4 +5499,20 @@ void MainWindow::on_btnRestoreNoteRecycle_clicked() {
   mySearchDialog->clickNoteList();
 
   on_btnBackNoteRecycle_clicked();
+}
+
+void MainWindow::on_btnFindNotes_clicked() {
+  m_NotesList->on_btnFind_clicked();
+}
+
+void MainWindow::on_editFindNote_textChanged(const QString &arg1) {
+  m_NotesList->ui->editFind->setText(arg1.trimmed());
+}
+
+void MainWindow::on_btnFindPreviousNote_clicked() {
+  m_NotesList->on_btnPrev_clicked();
+}
+
+void MainWindow::on_btnFindNextNote_clicked() {
+  m_NotesList->on_btnNext_clicked();
 }

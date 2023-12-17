@@ -59,6 +59,8 @@ class dlgNotesList : public QDialog {
   int getNotesListCount();
   void loadAllNoteBook();
 
+  void localItem();
+
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
@@ -89,12 +91,14 @@ class dlgNotesList : public QDialog {
   void on_btnDel_2_clicked();
 
   void on_KVChanged();
- private slots:
+
   void on_btnFind_clicked();
 
   void on_btnPrev_clicked();
 
   void on_btnNext_clicked();
+
+ private slots:
 
   void on_editFind_textChanged(const QString &arg1);
 

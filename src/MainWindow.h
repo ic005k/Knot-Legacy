@@ -678,6 +678,14 @@ class MainWindow : public QMainWindow {
 
   void on_btnRestoreNoteRecycle_clicked();
 
+  void on_btnFindNotes_clicked();
+
+  void on_editFindNote_textChanged(const QString &arg1);
+
+  void on_btnFindPreviousNote_clicked();
+
+  void on_btnFindNextNote_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
