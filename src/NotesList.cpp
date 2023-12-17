@@ -268,14 +268,14 @@ void dlgNotesList::delFile(QString file) {
   _file.close();
 }
 
-void dlgNotesList::on_btnImport_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0) return;
+bool dlgNotesList::on_btnImport_clicked() {
+  if (ui->treeWidget->topLevelItemCount() == 0) return false;
 
   QString fileName;
   fileName =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("MD File (*.*)"));
 
-  if (fileName.isNull()) return;
+  if (fileName.isNull()) return false;
 
   bool isMD = false;
   QString strInfo;
@@ -296,7 +296,7 @@ void dlgNotesList::on_btnImport_clicked() {
     QMessageBox box;
     box.setText(tr("Invalid Markdown file.") + "\n\n" + strInfo);
     box.exec();
-    return;
+    return false;
   }
 
   if (QFile(fileName).exists()) {
@@ -322,9 +322,11 @@ void dlgNotesList::on_btnImport_clicked() {
     item1->setText(1, a);
 
     on_treeWidget_itemClicked(item1, 0);
-  }
+  } else
+    return false;
 
   isSave = true;
+  return true;
 }
 
 void dlgNotesList::on_btnExport_clicked() {
@@ -1049,19 +1051,181 @@ void dlgNotesList::init_NoteBookMenu(QMenu *mainMenu) {
   mainMenu->setStyleSheet(qss);
 }
 
-void dlgNotesList::on_actionAdd_Note_triggered() {}
+void dlgNotesList::on_actionAdd_Note_triggered() {
+  bool ok = false;
+  QString text;
+  QFrame *frame = new QFrame(mw_one);
+  QVBoxLayout *vbox = new QVBoxLayout;
+  frame->setLayout(vbox);
+  QInputDialog *idlg = new QInputDialog(mw_one);
+  idlg->hide();
+  vbox->addWidget(idlg);
 
-void dlgNotesList::on_actionDel_Note_triggered() {}
+  idlg->setWindowFlag(Qt::FramelessWindowHint);
+  QString style =
+      "QDialog{background: "
+      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
 
-void dlgNotesList::on_actionRename_Note_triggered() {}
+  idlg->setStyleSheet(style);
+  idlg->setOkButtonText(tr("Ok"));
+  idlg->setCancelButtonText(tr("Cancel"));
+  idlg->setContentsMargins(10, 10, 10, 10);
 
-void dlgNotesList::on_actionMoveUp_Note_triggered() {}
+  idlg->setWindowTitle(tr("New Note"));
+  idlg->setTextValue("");
+  idlg->setLabelText(tr("New Note Name"));
 
-void dlgNotesList::on_actionMoveDown_Note_triggered() {}
+  frame->setGeometry(25, -100, mw_one->width() - 50, this->height());
+  idlg->show();
 
-void dlgNotesList::on_actionImport_Note_triggered() {}
+  frame->show();
 
-void dlgNotesList::on_actionExport_Note_triggered() {}
+  if (QDialog::Accepted == idlg->exec()) {
+    ok = true;
+    text = idlg->textValue();
+    frame->close();
+  } else {
+    frame->close();
+    return;
+  }
+
+  if (ok && !text.isEmpty()) {
+    int notebookIndex = getNoteBookCurrentIndex();
+    tw->setCurrentItem(tw->topLevelItem(notebookIndex));
+    ui->editNote->setText(text);
+    on_btnNewNote_clicked();
+
+    mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwNoteList, text, "", "",
+                                           "", 0);
+
+    int count = mw_one->mySearchDialog->getCountBakList(mw_one->ui->qwNoteList);
+    mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteList,
+                                                   count - 1);
+    mw_one->mySearchDialog->clickNoteList();
+  }
+}
+
+void dlgNotesList::on_actionDel_Note_triggered() {
+  if (getNotesListCount() == 0) return;
+
+  int notebookIndex = getNoteBookCurrentIndex();
+  int notelistIndex = getNotesListCurrentIndex();
+  if (!mw_one->showMsgBox("Knot",
+                          tr("Whether to remove") + "  " +
+                              mw_one->mySearchDialog->getText0(
+                                  mw_one->ui->qwNoteList, notelistIndex) +
+                              " ? ",
+                          "", 2))
+    return;
+
+  tw->setCurrentItem(tw->topLevelItem(notebookIndex)->child(notelistIndex));
+  on_btnDel_clicked();
+
+  mw_one->mySearchDialog->delItemBakList(mw_one->ui->qwNoteList, notelistIndex);
+  if (getNotesListCount() > 0) {
+    setNotesListCurrentIndex(notelistIndex - 1);
+    mw_one->mySearchDialog->clickNoteList();
+  }
+}
+
+void dlgNotesList::on_actionRename_Note_triggered() {
+  bool ok = false;
+  QString text;
+  QFrame *frame = new QFrame(mw_one);
+  QVBoxLayout *vbox = new QVBoxLayout;
+  frame->setLayout(vbox);
+  QInputDialog *idlg = new QInputDialog(mw_one);
+  idlg->hide();
+  vbox->addWidget(idlg);
+
+  idlg->setWindowFlag(Qt::FramelessWindowHint);
+  QString style =
+      "QDialog{background: "
+      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
+
+  idlg->setStyleSheet(style);
+  idlg->setOkButtonText(tr("Ok"));
+  idlg->setCancelButtonText(tr("Cancel"));
+  idlg->setContentsMargins(10, 10, 10, 10);
+
+  idlg->setWindowTitle(tr("Rename Note"));
+  idlg->setTextValue(mw_one->mySearchDialog->getText0(
+      mw_one->ui->qwNoteList, getNotesListCurrentIndex()));
+  idlg->setLabelText(tr("Note Name"));
+
+  frame->setGeometry(25, -100, mw_one->width() - 50, this->height());
+  idlg->show();
+
+  frame->show();
+
+  if (QDialog::Accepted == idlg->exec()) {
+    ok = true;
+    text = idlg->textValue();
+    frame->close();
+  } else {
+    frame->close();
+    return;
+  }
+
+  if (ok && !text.isEmpty()) {
+    int notebookIndex = getNoteBookCurrentIndex();
+    tw->setCurrentItem(
+        tw->topLevelItem(notebookIndex)->child(getNotesListCurrentIndex()));
+    ui->editName->setText(text);
+    on_btnRename_clicked();
+
+    mw_one->mySearchDialog->modifyItemText0(mw_one->ui->qwNoteList,
+                                            getNotesListCurrentIndex(), text);
+  }
+}
+
+void dlgNotesList::on_actionMoveUp_Note_triggered() {
+  int indexBook = getNoteBookCurrentIndex();
+  int indexNote = getNotesListCurrentIndex();
+  if (indexNote == 0) return;
+
+  tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
+  on_btnUp_clicked();
+
+  mw_one->mySearchDialog->clickNoteBook();
+  setNotesListCurrentIndex(indexNote - 1);
+  mw_one->mySearchDialog->saveCurNoteIndex();
+}
+
+void dlgNotesList::on_actionMoveDown_Note_triggered() {
+  int indexBook = getNoteBookCurrentIndex();
+  int indexNote = getNotesListCurrentIndex();
+  if (indexNote + 1 == getNotesListCount()) return;
+
+  tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
+  on_btnDown_clicked();
+
+  mw_one->mySearchDialog->clickNoteBook();
+  setNotesListCurrentIndex(indexNote + 1);
+  mw_one->mySearchDialog->saveCurNoteIndex();
+}
+
+void dlgNotesList::on_actionImport_Note_triggered() {
+  int indexBook = getNoteBookCurrentIndex();
+  int indexNote = getNotesListCurrentIndex();
+
+  tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
+  bool isOk = on_btnImport_clicked();
+
+  if (isOk) {
+    mw_one->mySearchDialog->clickNoteBook();
+    setNotesListCurrentIndex(getNotesListCount() - 1);
+    mw_one->mySearchDialog->clickNoteList();
+    mw_one->mySearchDialog->saveCurNoteIndex();
+  }
+}
+
+void dlgNotesList::on_actionExport_Note_triggered() {
+  int indexBook = getNoteBookCurrentIndex();
+  int indexNote = getNotesListCurrentIndex();
+  tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
+  on_btnExport_clicked();
+}
 
 void dlgNotesList::init_NotesListMenu(QMenu *mainMenu) {
   QAction *actNew = new QAction(tr("New Note"));
@@ -1101,8 +1265,8 @@ void dlgNotesList::init_NotesListMenu(QMenu *mainMenu) {
       "background-color: rgb(62, 186, 231); }";
 
   mainMenu->addAction(actNew);
-  mainMenu->addAction(actDel);
   mainMenu->addAction(actRename);
+  mainMenu->addAction(actDel);
 
   mainMenu->addAction(actImport);
   mainMenu->addAction(actExport);

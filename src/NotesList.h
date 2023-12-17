@@ -58,7 +58,8 @@ class dlgNotesList : public QDialog {
   int getNoteBookCount();
   int getNotesListCount();
   void loadAllNoteBook();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -75,7 +76,7 @@ class dlgNotesList : public QDialog {
 
   void on_btnDel_clicked();
 
-  void on_btnImport_clicked();
+  bool on_btnImport_clicked();
 
   void on_btnExport_clicked();
 
