@@ -296,8 +296,6 @@ void SearchDialog::clickNoteBook() {
     QString text3 = topItem->child(i)->text(1);
     addItemBakList(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
   }
-
-  clickNoteList();
 }
 
 void SearchDialog::clickNoteList() {
@@ -307,6 +305,10 @@ void SearchDialog::clickNoteList() {
   mw_one->mydlgMainNotes->MD2Html(noteFile);
   mw_one->mydlgMainNotes->loadMemoQML();
   mw_one->ui->lblNoteName->setText(noteName);
+
+  mw_one->m_NotesList->currentMDFile = noteFile;
+
+  saveCurNoteIndex();
 }
 
 void SearchDialog::saveCurNoteIndex() {
@@ -319,6 +321,8 @@ void SearchDialog::saveCurNoteIndex() {
                getCurrentIndexBakList(mw_one->ui->qwNoteBook));
   Reg.setValue("/MainNotes/noteIndex",
                getCurrentIndexBakList(mw_one->ui->qwNoteList));
+  Reg.setValue("/MainNotes/currentItem", mw_one->m_NotesList->currentMDFile);
+  Reg.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
 }
 
 QList<int> SearchDialog::getCurNoteIndex() {

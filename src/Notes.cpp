@@ -98,9 +98,6 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
   ui->btnRight->setAutoRepeatInterval(b);
 
   ui->editSource->setFocus();
-
-  MD2Html(mw_one->m_NotesList->getCurrentMDFile());
-  loadMemoQML();
 }
 
 void dlgMainNotes::init() {

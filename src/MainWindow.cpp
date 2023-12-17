@@ -440,6 +440,12 @@ MainWindow::MainWindow(QWidget *parent)
 
   mydlgTodo->refreshTableListsFromIni();
   mydlgTodo->refreshAlarm();
+
+  // load note
+  m_NotesList->currentMDFile = m_NotesList->getCurrentMDFile();
+  mw_one->mydlgMainNotes->MD2Html(m_NotesList->currentMDFile);
+  mw_one->mydlgMainNotes->loadMemoQML();
+  qDebug() << "======" << m_NotesList->currentMDFile;
 }
 
 void MainWindow::initHardStepSensor() {
@@ -4910,13 +4916,9 @@ void MainWindow::on_btnNotesList_clicked() {
   int notebookIndex = mySearchDialog->getCurNoteIndex().at(0);
   int noteIndex = mySearchDialog->getCurNoteIndex().at(1);
 
-  qDebug() << "===" << notebookIndex << noteIndex;
-
   mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteBook, notebookIndex);
   mySearchDialog->clickNoteBook();
-
   mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteList, noteIndex);
-  mySearchDialog->clickNoteList();
 
   mySearchDialog->modifyItemText2(ui->qwNoteBook, notebookIndex, "ShowRect");
   mySearchDialog->modifyItemText2(ui->qwNoteList, noteIndex, "ShowRect");
@@ -5431,7 +5433,6 @@ void MainWindow::on_btnBackNoteList_clicked() {
   ui->frameNoteList->hide();
   ui->frameNotes->show();
 
-  mySearchDialog->saveCurNoteIndex();
   m_NotesList->saveNotesList();
 }
 
