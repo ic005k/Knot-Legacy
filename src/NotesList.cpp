@@ -692,8 +692,8 @@ void dlgNotesList::on_btnFind_clicked() {
   if (strFind == "") {
     ui->btnPrev->hide();
     ui->btnNext->hide();
-    mw_one->ui->btnFindNextNote->hide();
-    mw_one->ui->btnFindPreviousNote->hide();
+    mw_one->ui->btnFindNextNote->setEnabled(false);
+    mw_one->ui->btnFindPreviousNote->setEnabled(false);
     return;
   }
   findResultList.clear();
@@ -727,14 +727,14 @@ void dlgNotesList::on_btnFind_clicked() {
     ui->btnPrev->show();
     ui->btnNext->show();
 
-    mw_one->ui->btnFindNextNote->show();
-    mw_one->ui->btnFindPreviousNote->show();
+    mw_one->ui->btnFindNextNote->setEnabled(true);
+    mw_one->ui->btnFindPreviousNote->setEnabled(true);
   } else {
     ui->btnPrev->hide();
     ui->btnNext->hide();
 
-    mw_one->ui->btnFindNextNote->hide();
-    mw_one->ui->btnFindPreviousNote->hide();
+    mw_one->ui->btnFindNextNote->setEnabled(false);
+    mw_one->ui->btnFindPreviousNote->setEnabled(false);
 
     ui->lblCount->setText("0");
 
@@ -750,6 +750,7 @@ void dlgNotesList::localItem() {
   if (item->childCount() > 0) {
     int topIndex = tw->indexOfTopLevelItem(item);
     setNoteBookCurrentIndex(topIndex);
+
     mw_one->mySearchDialog->clickNoteBook();
     setNotesListCurrentIndex(-1);
   } else {
@@ -759,6 +760,22 @@ void dlgNotesList::localItem() {
     mw_one->mySearchDialog->clickNoteBook();
     setNotesListCurrentIndex(childIndex);
   }
+}
+
+QString dlgNotesList::getNoteBookText0(int index) {
+  return mw_one->mySearchDialog->getText0(mw_one->ui->qwNoteBook, index);
+}
+
+QString dlgNotesList::getNotesListText0(int index) {
+  return mw_one->mySearchDialog->getText0(mw_one->ui->qwNoteList, index);
+}
+
+void dlgNotesList::modifyNoteBookText0(QString text0, int index) {
+  mw_one->mySearchDialog->modifyItemText0(mw_one->ui->qwNoteBook, index, text0);
+}
+
+void dlgNotesList::modifyNotesListText0(QString text0, int index) {
+  mw_one->mySearchDialog->modifyItemText0(mw_one->ui->qwNoteList, index, text0);
 }
 
 void dlgNotesList::on_btnPrev_clicked() {

@@ -3763,9 +3763,9 @@ void MainWindow::init_UIWidget() {
   ui->frameTabRecycle->hide();
   ui->frameNoteList->hide();
   ui->frameNoteRecycle->hide();
-  ui->btnFindPreviousNote->hide();
-  ui->btnFindNextNote->hide();
   ui->f_FindNotes->hide();
+  ui->btnFindNextNote->setEnabled(false);
+  ui->btnFindPreviousNote->setEnabled(false);
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
