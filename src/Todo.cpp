@@ -500,11 +500,11 @@ void dlgTodo::sendMsgAlarm(QString text) {
 
 void dlgTodo::on_btnRecycle_clicked() {
   mw_one->ui->frameTodo->hide();
-  mw_one->ui->frameRecycle->show();
+  mw_one->ui->frameTodoRecycle->show();
 }
 
 void dlgTodo::on_btnReturn_clicked() {
-  mw_one->ui->frameRecycle->hide();
+  mw_one->ui->frameTodoRecycle->hide();
   mw_one->ui->frameTodo->show();
 }
 

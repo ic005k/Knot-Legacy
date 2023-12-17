@@ -296,6 +296,8 @@ void SearchDialog::clickNoteBook() {
     QString text3 = topItem->child(i)->text(1);
     addItemBakList(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
   }
+
+  mw_one->m_NotesList->setNoteLabel();
 }
 
 void SearchDialog::clickNoteList() {

@@ -2781,7 +2781,7 @@ QTabBar::scroller {width:0}
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="frameRecycle">
+     <widget class="QFrame" name="frameTodoRecycle">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>

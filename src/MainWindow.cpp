@@ -1675,6 +1675,36 @@ void MainWindow::TextEditToFile(QTextEdit *txtEdit, QString fileName) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+  if (!ui->frameNoteRecycle->isHidden()) {
+    on_btnBackNoteRecycle_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (!ui->frameNoteList->isHidden()) {
+    on_btnBackNoteList_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (!ui->frameNotes->isHidden()) {
+    on_btnBackNotes_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (!ui->frameTodoRecycle->isHidden()) {
+    on_btnReturnRecycle_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (!ui->frameTodo->isHidden()) {
+    on_btnBackTodo_clicked();
+    event->ignore();
+    return;
+  }
+
 #ifdef Q_OS_ANDROID
   if (mydlgPre->isFontChange) {
     stopJavaTimer();
@@ -2641,7 +2671,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         }
       }
 
-      if (!ui->frameRecycle->isHidden()) {
+      if (!ui->frameTodoRecycle->isHidden()) {
         on_btnReturnRecycle_clicked();
         return true;
       }
@@ -3752,7 +3782,7 @@ void MainWindow::init_UIWidget() {
   ui->lblKnot->hide();
   ui->frameReader->hide();
   ui->frameTodo->hide();
-  ui->frameRecycle->hide();
+  ui->frameTodoRecycle->hide();
   ui->frameSteps->hide();
   ui->frameDebug->hide();
   ui->frameReport->hide();
@@ -4351,6 +4381,12 @@ static void JavaNotify_4() {
     if (!mw_one->m_NotesList->isHidden())
       mw_one->m_NotesList->ui->btnClose->click();
 
+    if (!mw_one->ui->frameNoteRecycle->isHidden())
+      mw_one->ui->btnBackNoteRecycle->click();
+
+    if (!mw_one->ui->frameNoteList->isHidden())
+      mw_one->ui->btnBackNoteList->click();
+
     if (!mw_one->ui->frameNotes->isHidden()) mw_one->ui->btnBackNotes->click();
 
     if (!mw_one->ui->frameOne->isHidden()) mw_one->ui->btnBack_One->click();
@@ -4931,6 +4967,8 @@ void MainWindow::on_btnNotesList_clicked() {
 
   mySearchDialog->modifyItemText2(ui->qwNoteBook, notebookIndex, "ShowRect");
   mySearchDialog->modifyItemText2(ui->qwNoteList, noteIndex, "ShowRect");
+
+  m_NotesList->setNoteLabel();
 
   return;
 

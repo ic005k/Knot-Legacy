@@ -481,26 +481,6 @@ void dlgNotesList::initNotesList() {
                                    QString::number(notesTotal) + ")");
   tw->expandAll();
 
-  /* QSettings RegNotes(iniDir + "curmd.ini", QSettings::IniFormat);
- #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-   RegNotes.setIniCodec("utf-8");
- #endif
-   QString curmd = "memo/xxx.md";
-   curmd = RegNotes.value("/MainNotes/currentItem", "memo/xxx.md").toString();
-   QString cm = iniDir + curmd;
-   if (QFile(cm).exists()) {
-     currentMDFile = cm;
-   } else {
-     if (tw->topLevelItemCount() > 0) {
-       QTreeWidgetItem *topItem = tw->topLevelItem(0);
-       QTreeWidgetItem *childItem = topItem->child(0);
-       tw->setCurrentItem(childItem);
-       curmd = childItem->text(1);
-       currentMDFile = iniDir + curmd;
-     }
-   }
-   qDebug() << "init notes list" << currentMDFile;*/
-
   if (ui->treeWidget->topLevelItemCount() == 0) {
     QTreeWidgetItem *item = new QTreeWidgetItem();
     item->setText(0, tr("Default Notebook"));
@@ -518,6 +498,14 @@ void dlgNotesList::initNotesList() {
     ui->treeWidget->setCurrentItem(item->child(0));
 
     on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
+
+    QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    Reg.setIniCodec("utf-8");
+#endif
+
+    Reg.setValue("/MainNotes/currentItem", mdfile);
+    Reg.setValue("/MainNotes/NoteName", tr("My Notes"));
 
     saveNotesList();
   }
@@ -953,6 +941,8 @@ void dlgNotesList::on_actionDel_NoteBook_triggered() {
   on_btnDel_clicked();
 
   mw_one->mySearchDialog->delItemBakList(mw_one->ui->qwNoteBook, index);
+
+  setNoteLabel();
 }
 
 void dlgNotesList::on_actionRename_NoteBook_triggered() {
@@ -1166,6 +1156,8 @@ void dlgNotesList::on_actionAdd_Note_triggered() {
                                                    count - 1);
     mw_one->mySearchDialog->clickNoteList();
   }
+
+  setNoteLabel();
 }
 
 void dlgNotesList::on_actionDel_Note_triggered() {
@@ -1189,6 +1181,8 @@ void dlgNotesList::on_actionDel_Note_triggered() {
     setNotesListCurrentIndex(notelistIndex - 1);
     mw_one->mySearchDialog->clickNoteList();
   }
+
+  setNoteLabel();
 }
 
 void dlgNotesList::on_actionRename_Note_triggered() {
@@ -1338,4 +1332,11 @@ void dlgNotesList::init_NotesListMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveDown);
 
   mainMenu->setStyleSheet(qss);
+}
+
+void dlgNotesList::setNoteLabel() {
+  mw_one->ui->lblNoteBook->setText(tr("Note Book") + " : " +
+                                   QString::number(getNoteBookCount()));
+  mw_one->ui->lblNoteList->setText(tr("Note List") + " : " +
+                                   QString::number(getNotesListCount()));
 }

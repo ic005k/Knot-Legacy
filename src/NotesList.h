@@ -65,6 +65,7 @@ class dlgNotesList : public QDialog {
   void modifyNotesListText0(QString text0, int index);
   QString getNoteBookText0(int index);
   QString getNotesListText0(int index);
+  void setNoteLabel();
   protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
