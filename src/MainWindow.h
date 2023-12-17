@@ -686,6 +686,10 @@ class MainWindow : public QMainWindow {
 
   void on_btnFindNextNote_clicked();
 
+  void on_btnClearNoteFindText_clicked();
+
+  void on_btnShowFindNotes_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

@@ -2557,6 +2557,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       return true;
     }
 
+    if (watch == ui->editFindNote && keyEvent->key() == Qt::Key_Return) {
+      on_btnFindNextNote_clicked();
+      return true;
+    }
+
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
         if (!listSelFont->isHidden()) {
@@ -3760,6 +3765,7 @@ void MainWindow::init_UIWidget() {
   ui->frameNoteRecycle->hide();
   ui->btnFindPreviousNote->hide();
   ui->btnFindNextNote->hide();
+  ui->f_FindNotes->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3808,6 +3814,7 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->setMouseTracking(true);
   ui->lblStats->installEventFilter(this);
   ui->editSearchText->installEventFilter(this);
+  ui->editFindNote->installEventFilter(this);
 
   myfile = new File();
   m_Remarks = new dlgRemarks(this);
@@ -5515,4 +5522,21 @@ void MainWindow::on_btnFindPreviousNote_clicked() {
 
 void MainWindow::on_btnFindNextNote_clicked() {
   m_NotesList->on_btnNext_clicked();
+}
+
+void MainWindow::on_btnClearNoteFindText_clicked() {
+  ui->editFindNote->setText("");
+}
+
+void MainWindow::on_btnShowFindNotes_clicked() {
+  if (ui->btnShowFindNotes->text() == tr("Show Find")) {
+    ui->f_FindNotes->show();
+    ui->editFindNote->setFocus();
+    ui->btnShowFindNotes->setText(tr("Hide Find"));
+  } else {
+    if (ui->btnShowFindNotes->text() == tr("Hide Find")) {
+      ui->f_FindNotes->hide();
+      ui->btnShowFindNotes->setText(tr("Show Find"));
+    }
+  }
 }

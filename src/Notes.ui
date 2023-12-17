@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>370</width>
+    <width>439</width>
     <height>452</height>
    </rect>
   </property>
@@ -553,7 +553,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Pic</string>
+           <string>P</string>
           </property>
           <property name="iconSize">
            <size>
@@ -587,7 +587,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Color</string>
+           <string>C</string>
           </property>
           <property name="iconSize">
            <size>

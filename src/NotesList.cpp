@@ -715,6 +715,9 @@ void dlgNotesList::on_btnFind_clicked() {
     ui->btnNext->setEnabled(true);
     tw->setCurrentItem(findResultList.at(0));
     tw->scrollToItem(tw->currentItem());
+
+    localItem();
+
     findCount = 0;
     ui->lblCount->setText(QString::number(findCount + 1) + "->" +
                           QString::number(findResultList.count()));
@@ -736,17 +739,21 @@ void dlgNotesList::on_btnFind_clicked() {
     ui->lblCount->setText("0");
 
     mw_one->ui->lblFindNoteCount->setText(ui->lblCount->text());
+
+    setNoteBookCurrentIndex(-1);
+    setNotesListCurrentIndex(-1);
   }
 }
 
 void dlgNotesList::localItem() {
   QTreeWidgetItem *item = tw->currentItem();
-  if (item->parent() == NULL) {
-    int topIndex = tw->currentIndex().row();
+  if (item->childCount() > 0) {
+    int topIndex = tw->indexOfTopLevelItem(item);
     setNoteBookCurrentIndex(topIndex);
     mw_one->mySearchDialog->clickNoteBook();
+    setNotesListCurrentIndex(-1);
   } else {
-    int topIndex = item->parent()->indexOfChild(item);
+    int topIndex = tw->indexOfTopLevelItem(item->parent());
     int childIndex = tw->currentIndex().row();
     setNoteBookCurrentIndex(topIndex);
     mw_one->mySearchDialog->clickNoteBook();
