@@ -22,5 +22,7 @@
         <file>src/qmlsrc/notelist.qml</file>
         <file>src/qmlsrc/noterecycle.qml</file>
         <file>src/qmlsrc/notebook.qml</file>
+        <file>src/qmlsrc/maindate.qml</file>
+        <file>src/qmlsrc/mainevent.qml</file>
     </qresource>
 </RCC>

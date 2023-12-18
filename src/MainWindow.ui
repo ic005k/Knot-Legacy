@@ -548,21 +548,6 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_14">
-       <property name="spacing">
-        <number>1</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
        <item>
         <widget class="QFrame" name="frameMenu">
          <property name="minimumSize">
@@ -1137,6 +1122,36 @@
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_35">
+            <item>
+             <widget class="QQuickWidget" name="qwMainDate">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>10</height>
+               </size>
+              </property>
+              <property name="resizeMode">
+               <enum>QQuickWidget::SizeRootObjectToView</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QQuickWidget" name="qwMainEvent">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>10</height>
+               </size>
+              </property>
+              <property name="resizeMode">
+               <enum>QQuickWidget::SizeRootObjectToView</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="QQuickWidget" name="qwMain">

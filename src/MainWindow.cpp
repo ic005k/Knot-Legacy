@@ -3740,6 +3740,16 @@ void MainWindow::initQW() {
   ui->qwNoteRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/noterecycle.qml")));
 
+  ui->qwMainDate->rootContext()->setContextProperty("mySearchDialog",
+                                                    mySearchDialog);
+  ui->qwMainDate->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/maindate.qml")));
+
+  ui->qwMainEvent->rootContext()->setContextProperty("mySearchDialog",
+                                                     mySearchDialog);
+  ui->qwMainEvent->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/mainevent.qml")));
+
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3796,6 +3806,7 @@ void MainWindow::init_UIWidget() {
   ui->f_FindNotes->hide();
   ui->btnFindNextNote->setEnabled(false);
   ui->btnFindPreviousNote->setEnabled(false);
+  ui->qwMain->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);

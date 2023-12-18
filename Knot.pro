@@ -627,6 +627,8 @@ DISTFILES += \
     src/qmlsrc/details.qml \
     src/qmlsrc/imgview.qml \
     src/qmlsrc/main.qml \
+    src/qmlsrc/maindate.qml \
+    src/qmlsrc/mainevent.qml \
     src/qmlsrc/memo.qml \
     src/qmlsrc/notebook.qml \
     src/qmlsrc/notelist.qml \
