@@ -297,6 +297,7 @@ void SearchDialog::clickNoteBook() {
     addItemBakList(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
   }
 
+  mw_one->m_NotesList->setNotesListCurrentIndex(-1);
   mw_one->m_NotesList->setNoteLabel();
 }
 

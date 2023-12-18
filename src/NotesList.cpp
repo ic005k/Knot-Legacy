@@ -875,6 +875,8 @@ void dlgNotesList::on_btnUp_clicked() { moveBy(-1); }
 void dlgNotesList::on_btnDown_clicked() { moveBy(1); }
 
 void dlgNotesList::on_actionAdd_NoteBook_triggered() {
+  if (getNoteBookCurrentIndex() < 0) return;
+
   bool ok = false;
   QString text;
   QFrame *frame = new QFrame(mw_one);
@@ -918,17 +920,18 @@ void dlgNotesList::on_actionAdd_NoteBook_triggered() {
     mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwNoteBook, text, "", "",
                                            "", 0);
 
-    int count = mw_one->mySearchDialog->getCountBakList(mw_one->ui->qwNoteBook);
-    mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteBook,
-                                                   count - 1);
+    int count = getNoteBookCount();
+    setNoteBookCurrentIndex(count - 1);
     mw_one->mySearchDialog->clickNoteBook();
+    setNotesListCurrentIndex(0);
+    mw_one->mySearchDialog->clickNoteList();
   }
 }
 
 void dlgNotesList::on_actionDel_NoteBook_triggered() {
-  if (getNoteBookCount() == 0) return;
-
   int index = getNoteBookCurrentIndex();
+  if (index < 0) return;
+
   if (!mw_one->showMsgBox(
           "Knot",
           tr("Whether to remove") + "  " +
@@ -942,10 +945,22 @@ void dlgNotesList::on_actionDel_NoteBook_triggered() {
 
   mw_one->mySearchDialog->delItemBakList(mw_one->ui->qwNoteBook, index);
 
+  if (index - 1 >= 0) {
+    setNoteBookCurrentIndex(index - 1);
+    mw_one->mySearchDialog->clickNoteBook();
+    if (getNotesListCount() > 0) {
+      setNotesListCurrentIndex(0);
+      mw_one->mySearchDialog->clickNoteList();
+    }
+  }
+
   setNoteLabel();
 }
 
 void dlgNotesList::on_actionRename_NoteBook_triggered() {
+  int index = getNoteBookCurrentIndex();
+  if (index < 0) return;
+
   bool ok = false;
   QString text;
   QFrame *frame = new QFrame(mw_one);
@@ -985,7 +1000,6 @@ void dlgNotesList::on_actionRename_NoteBook_triggered() {
   }
 
   if (ok && !text.isEmpty()) {
-    int index = getNoteBookCurrentIndex();
     tw->setCurrentItem(tw->topLevelItem(index));
     ui->editName->setText(text);
     on_btnRename_clicked();
@@ -1027,7 +1041,7 @@ void dlgNotesList::setNotesListCurrentIndex(int index) {
 
 void dlgNotesList::on_actionMoveUp_NoteBook_triggered() {
   int index = getNoteBookCurrentIndex();
-  if (index == 0) return;
+  if (index <= 0) return;
 
   QString text0 =
       mw_one->mySearchDialog->getText0(mw_one->ui->qwNoteBook, index);
@@ -1043,6 +1057,9 @@ void dlgNotesList::on_actionMoveUp_NoteBook_triggered() {
 
 void dlgNotesList::on_actionMoveDown_NoteBook_triggered() {
   int index = getNoteBookCurrentIndex();
+
+  if (index < 0) return;
+
   if (index == getNoteBookCount() - 1) return;
 
   int oldIndex = index;
@@ -1105,6 +1122,9 @@ void dlgNotesList::init_NoteBookMenu(QMenu *mainMenu) {
 }
 
 void dlgNotesList::on_actionAdd_Note_triggered() {
+  int notebookIndex = getNoteBookCurrentIndex();
+  if (notebookIndex < 0) return;
+
   bool ok = false;
   QString text;
   QFrame *frame = new QFrame(mw_one);
@@ -1143,7 +1163,6 @@ void dlgNotesList::on_actionAdd_Note_triggered() {
   }
 
   if (ok && !text.isEmpty()) {
-    int notebookIndex = getNoteBookCurrentIndex();
     tw->setCurrentItem(tw->topLevelItem(notebookIndex));
     ui->editNote->setText(text);
     on_btnNewNote_clicked();
@@ -1165,6 +1184,10 @@ void dlgNotesList::on_actionDel_Note_triggered() {
 
   int notebookIndex = getNoteBookCurrentIndex();
   int notelistIndex = getNotesListCurrentIndex();
+
+  if (notebookIndex < 0) return;
+  if (notelistIndex < 0) return;
+
   if (!mw_one->showMsgBox("Knot",
                           tr("Whether to remove") + "  " +
                               mw_one->mySearchDialog->getText0(
@@ -1186,6 +1209,11 @@ void dlgNotesList::on_actionDel_Note_triggered() {
 }
 
 void dlgNotesList::on_actionRename_Note_triggered() {
+  int notebookIndex = getNoteBookCurrentIndex();
+  int noteIndex = getNotesListCurrentIndex();
+  if (notebookIndex < 0) return;
+  if (noteIndex < 0) return;
+
   bool ok = false;
   QString text;
   QFrame *frame = new QFrame(mw_one);
@@ -1225,21 +1253,20 @@ void dlgNotesList::on_actionRename_Note_triggered() {
   }
 
   if (ok && !text.isEmpty()) {
-    int notebookIndex = getNoteBookCurrentIndex();
-    tw->setCurrentItem(
-        tw->topLevelItem(notebookIndex)->child(getNotesListCurrentIndex()));
+    tw->setCurrentItem(tw->topLevelItem(notebookIndex)->child(noteIndex));
     ui->editName->setText(text);
     on_btnRename_clicked();
 
-    mw_one->mySearchDialog->modifyItemText0(mw_one->ui->qwNoteList,
-                                            getNotesListCurrentIndex(), text);
+    mw_one->mySearchDialog->modifyItemText0(mw_one->ui->qwNoteList, noteIndex,
+                                            text);
   }
 }
 
 void dlgNotesList::on_actionMoveUp_Note_triggered() {
   int indexBook = getNoteBookCurrentIndex();
   int indexNote = getNotesListCurrentIndex();
-  if (indexNote == 0) return;
+  if (indexBook < 0) return;
+  if (indexNote <= 0) return;
 
   tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
   on_btnUp_clicked();
@@ -1252,6 +1279,8 @@ void dlgNotesList::on_actionMoveUp_Note_triggered() {
 void dlgNotesList::on_actionMoveDown_Note_triggered() {
   int indexBook = getNoteBookCurrentIndex();
   int indexNote = getNotesListCurrentIndex();
+  if (indexBook < 0) return;
+  if (indexNote < 0) return;
   if (indexNote + 1 == getNotesListCount()) return;
 
   tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));

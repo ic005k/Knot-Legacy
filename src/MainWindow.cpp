@@ -4361,6 +4361,9 @@ static void JavaNotify_3() {
 
 static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
+
+  reurn;
+
   if (mw_one->alertWindowsCount == 0) {
     if (!mw_one->mydlgReport->myDateSelector->isHidden())
       mw_one->mydlgReport->myDateSelector->close();
@@ -4375,19 +4378,13 @@ static void JavaNotify_4() {
 
     if (!mw_one->ui->frameReader->isHidden()) mw_one->ui->btnBack->click();
 
-    if (!mw_one->m_NotesList->ui->frame1->isHidden())
-      mw_one->m_NotesList->ui->btnBack->click();
-
-    if (!mw_one->m_NotesList->isHidden())
-      mw_one->m_NotesList->ui->btnClose->click();
-
     if (!mw_one->ui->frameNoteRecycle->isHidden())
-      mw_one->ui->btnBackNoteRecycle->click();
+      mw_one->on_btnBackNoteRecycle_clicked();
 
     if (!mw_one->ui->frameNoteList->isHidden())
-      mw_one->ui->btnBackNoteList->click();
+      mw_one->on_btnBackNoteList_clicked();
 
-    if (!mw_one->ui->frameNotes->isHidden()) mw_one->ui->btnBackNotes->click();
+    if (!mw_one->ui->frameNotes->isHidden()) mw_one->on_btnNotes_clicked();
 
     if (!mw_one->ui->frameOne->isHidden()) mw_one->ui->btnBack_One->click();
 
