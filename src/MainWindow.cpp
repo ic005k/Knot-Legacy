@@ -5175,6 +5175,12 @@ int MainWindow::getCurrentIndex() {
   return itemIndex.toInt();
 }
 
+void MainWindow::setScrollBarPos(double pos) {
+  QQuickItem *root = mw_one->ui->qwMain->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setScrollBarPos",
+                            Q_ARG(QVariant, pos));
+}
+
 void MainWindow::reloadMain() {
   clearAll();
 
@@ -5242,8 +5248,8 @@ void MainWindow::reloadMain() {
     }
   }
 
+  gotoEnd();
   int count = getCount();
-  gotoIndex(count - 1);
   setCurrentIndex(count - 1);
 }
 

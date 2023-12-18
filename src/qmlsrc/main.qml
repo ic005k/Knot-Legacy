@@ -27,6 +27,13 @@ Rectangle {
         view.positionViewAtIndex(index, Tumbler.Center)
     }
 
+    function setScrollBarPos(pos) {
+        //vbar.setPosition(pos)
+        if(view.contentHeight>view.height)
+        view.contentY = view.contentHeight - view.height
+        console.log("contentH=" + view.contentHeight + "  h=" + view.height)
+    }
+
     function setHighPriority(isFalse) {
         isHighPriority = isFalse
     }
