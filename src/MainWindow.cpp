@@ -2200,6 +2200,9 @@ void MainWindow::set_Time() {
     if (childRow0 - childRow1 < 0) newrow = row + childRow1 - childRow0;
     if (childRow0 - childRow1 > 0) newrow = row - (childRow0 - childRow1);
 
+    int maindateIndex = mySearchDialog->getCurrentIndexBakList(ui->qwMainDate);
+    reloadMain();
+    mySearchDialog->setCurrentIndexBakList(ui->qwMainDate, maindateIndex);
     mySearchDialog->clickMainDate();
     mySearchDialog->setCurrentIndexBakList(ui->qwMainEvent, newrow);
   }
@@ -5273,6 +5276,12 @@ void MainWindow::reloadMain() {
   QTreeWidget *tw = get_tw(tabData->currentIndex());
 
   int total = tw->topLevelItemCount();
+
+  if (total == 0) {
+    mySearchDialog->clearAllBakList(ui->qwMainEvent);
+    return;
+  }
+
   int a;
 
   if (total - days > 0)
