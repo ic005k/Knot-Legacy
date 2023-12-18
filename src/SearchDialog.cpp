@@ -403,8 +403,6 @@ void SearchDialog::reeditMainEventData() {
 
   tw->setCurrentItem(tw->topLevelItem(topIndex)->child(childIndex));
   mw_one->on_twItemDoubleClicked();
-
-  setCurrentIndexBakList(mw_one->ui->qwMainEvent, childIndex);
 }
 
 void SearchDialog::saveCurNoteIndex() {

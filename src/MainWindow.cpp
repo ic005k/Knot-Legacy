@@ -2195,14 +2195,13 @@ void MainWindow::set_Time() {
     }
 
     int newrow;
-    int row = getCurrentIndex();
+    int row = mySearchDialog->getCurrentIndexBakList(ui->qwMainEvent);
     if (childRow0 - childRow1 == 0) newrow = row;
     if (childRow0 - childRow1 < 0) newrow = row + childRow1 - childRow0;
     if (childRow0 - childRow1 > 0) newrow = row - (childRow0 - childRow1);
 
-    reloadMain();
-    gotoIndex(newrow);
-    setCurrentIndex(newrow);
+    mySearchDialog->clickMainDate();
+    mySearchDialog->setCurrentIndexBakList(ui->qwMainEvent, newrow);
   }
 }
 

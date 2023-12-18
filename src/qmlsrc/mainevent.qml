@@ -134,14 +134,42 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: item0.contentHeight + item1.contentHeight
-                    + item2.contentHeight + item3.contentHeight + 16
+            height: getItemHeight() + 16
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
             border.color: "lightgray" //"lightsteelblue"
 
             radius: 0
+
+            function getItemHeight() {
+                var item0H
+                var item1H
+                var item2H
+                var item3H
+
+                if (item0.text.length == 0)
+                    item0H = 0
+                else
+                    item0H = item0.contentHeight
+
+                if (item1.text.length == 0)
+                    item1H = 0
+                else
+                    item1H = item1.contentHeight
+
+                if (item2.text.length == 0)
+                    item2H = 0
+                else
+                    item2H = item2.contentHeight
+
+                if (item3.text.length == 0)
+                    item3H = 0
+                else
+                    item3H = item3.contentHeight
+
+                return item0H + item1H + item2H + item3H
+            }
 
             RowLayout {
 
@@ -164,7 +192,7 @@ Rectangle {
                 }
 
                 ColumnLayout {
-                    id: idlistElemnet4
+                    id: colLayout
                     height: parent.height
                     width: parent.width
                     spacing: 2
