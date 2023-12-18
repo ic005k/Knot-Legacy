@@ -278,7 +278,8 @@ Rectangle {
                 }
 
                 onPressAndHold: {
-                    mySearchDialog.showNoteBookMenu(mouse.x, mouse.y)
+
+                    //mySearchDialog.showNoteBookMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {

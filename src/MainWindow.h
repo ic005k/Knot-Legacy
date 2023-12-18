@@ -577,6 +577,10 @@ class MainWindow : public QMainWindow {
   void clickData();
  public slots:
 
+  void on_btnBackNoteList_clicked();
+
+  void on_btnBackNoteRecycle_clicked();
+
   void on_textBrowser_selectionChanged();
 
   void on_timerMousePress();
@@ -668,10 +672,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnDelBakFile_clicked();
 
-  void on_btnBackNoteList_clicked();
-
-  void on_btnBackNoteRecycle_clicked();
-
   void on_btnNoteRecycle_clicked();
 
   void on_btnDelNoteRecycle_clicked();
@@ -689,6 +689,10 @@ class MainWindow : public QMainWindow {
   void on_btnClearNoteFindText_clicked();
 
   void on_btnShowFindNotes_clicked();
+
+  void on_btnNoteBookMenu_clicked();
+
+  void on_btnNoteMenu_clicked();
 
  private:
   bool isShowDetails = false;

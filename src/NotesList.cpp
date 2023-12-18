@@ -1203,6 +1203,7 @@ void dlgNotesList::on_actionDel_Note_triggered() {
   if (getNotesListCount() > 0) {
     setNotesListCurrentIndex(notelistIndex - 1);
     mw_one->mySearchDialog->clickNoteList();
+  } else {
   }
 
   setNoteLabel();

@@ -4362,7 +4362,7 @@ static void JavaNotify_3() {
 static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
 
-  reurn;
+  return;
 
   if (mw_one->alertWindowsCount == 0) {
     if (!mw_one->mydlgReport->myDateSelector->isHidden())
@@ -4957,6 +4957,13 @@ void MainWindow::on_btnNotesList_clicked() {
 
   int notebookIndex = mySearchDialog->getCurNoteIndex().at(0);
   int noteIndex = mySearchDialog->getCurNoteIndex().at(1);
+
+  int notebookCount = m_NotesList->getNoteBookCount();
+  int noteCount = m_NotesList->getNotesListCount();
+  if (notebookIndex + 1 >= notebookCount) notebookIndex = notebookCount - 1;
+  if (noteIndex + 1 >= noteCount) noteIndex = noteCount - 1;
+  if (notebookIndex < 0) notebookIndex = 0;
+  if (noteIndex < 0) noteIndex = 0;
 
   mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteBook, notebookIndex);
   mySearchDialog->clickNoteBook();
@@ -5574,4 +5581,12 @@ void MainWindow::on_btnShowFindNotes_clicked() {
       ui->btnShowFindNotes->setText(tr("Show Find"));
     }
   }
+}
+
+void MainWindow::on_btnNoteBookMenu_clicked() {
+  mySearchDialog->showNoteBookMenu(ui->qwNoteBook->x(), ui->qwNoteBook->y());
+}
+
+void MainWindow::on_btnNoteMenu_clicked() {
+  mySearchDialog->showNotsListMenu(ui->qwNoteList->x(), ui->qwNoteList->y());
 }

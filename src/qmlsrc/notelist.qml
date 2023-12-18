@@ -278,7 +278,7 @@ Rectangle {
                 }
 
                 onPressAndHold: {
-                    mySearchDialog.showNotsListMenu(mouse.x, mouse.y)
+                    //mySearchDialog.showNotsListMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {
