@@ -49,6 +49,8 @@ class SearchDialog : public QDialog {
   void insertItem(QQuickWidget *qw, QString text0, QString text1, QString text2,
                   QString text3, int curIndex);
 
+  void gotoEnd(QQuickWidget *qw);
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
@@ -59,7 +61,12 @@ class SearchDialog : public QDialog {
 
   void showNoteBookMenu(int x, int y);
   void showNotsListMenu(int x, int y);
- private slots:
+  void clickMainDate();
+
+  void clickMainDateData();
+  void clickMainEventData();
+  void reeditMainEventData();
+  private slots:
 
  private:
   void setCellText(int row, int column, QString str, QTableWidget *table);

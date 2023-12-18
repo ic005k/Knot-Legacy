@@ -134,7 +134,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: item0.contentHeight + 16
+            height: item0.contentHeight + item1.contentHeight +item2.contentHeight + 16
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
@@ -222,7 +222,7 @@ Rectangle {
                         leftPadding: 5
                         rightPadding: 5
 
-                        visible: false // item2.text.length ? true : false
+                        visible:  item2.text.length ? true : false
                     }
 
                     Text {
@@ -269,12 +269,9 @@ Rectangle {
 
                     view.currentIndex = index //实现item切换
 
-                    for (i = 0; i < view.count; i++) {
-                        view.model.setProperty(i, "text2", "")
-                    }
-                    view.model.setProperty(index, "text2", "ShowRect")
 
-                    mySearchDialog.clickNoteBook()
+                    mySearchDialog.clickMainDate()
+                    mySearchDialog.clickMainDateData()
                 }
 
                 onPressAndHold: {

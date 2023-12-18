@@ -431,6 +431,7 @@ class MainWindow : public QMainWindow {
   bool copyFileToPath(QString sourceDir, QString toDir, bool coverFileIfExist);
 
   void setScrollBarPos(double pos);
+  void reloadMainOld();
   protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;

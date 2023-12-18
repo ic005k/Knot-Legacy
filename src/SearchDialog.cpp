@@ -106,6 +106,11 @@ void SearchDialog::clearAllBakList(QQuickWidget* qw) {
   }
 }
 
+void SearchDialog::gotoEnd(QQuickWidget* qw) {
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "gotoEnd");
+}
+
 void SearchDialog::setCurrentIndexBakList(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
@@ -312,6 +317,94 @@ void SearchDialog::clickNoteList() {
   mw_one->m_NotesList->currentMDFile = noteFile;
 
   saveCurNoteIndex();
+}
+
+void SearchDialog::clickMainDate() {
+  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
+  int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
+  int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
+
+  if (topIndex < 0) return;
+
+  clearAllBakList(mw_one->ui->qwMainEvent);
+  QTreeWidgetItem* topItem = tw->topLevelItem(topIndex);
+  int childCount = topItem->childCount();
+  QString text0, text1, text2, text3;
+  int nullrows;
+  for (int j = 0; j < childCount; j++) {
+    QTreeWidgetItem* childItem = topItem->child(j);
+    text0 = childItem->text(0);
+    text1 = childItem->text(1);
+    text2 = childItem->text(2);
+    text3 = childItem->text(3);
+
+    nullrows = 1;
+
+    if (text1.length() > 0) {
+      text1 = tr("Amount") + " : " + text1;
+      nullrows++;
+    }
+
+    if (text2.length() > 0) {
+      text2 = tr("Category") + " : " + text2;
+      nullrows++;
+    }
+
+    if (text3.length() > 0) {
+      text3 = tr("Details") + " : " + text3;
+      nullrows++;
+    }
+
+    addItemBakList(mw_one->ui->qwMainEvent, text0, text1, text2, text3, 0);
+  }
+
+  gotoEnd(mw_one->ui->qwMainEvent);
+  int count = getCountBakList(mw_one->ui->qwMainEvent);
+  setCurrentIndexBakList(mw_one->ui->qwMainEvent, count - 1);
+}
+
+void SearchDialog::clickMainDateData() {
+  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
+  int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
+  int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
+
+  if (topIndex < 0) return;
+
+  tw->setCurrentItem(tw->topLevelItem(topIndex));
+
+  mw_one->on_twItemClicked();
+}
+
+void SearchDialog::clickMainEventData() {
+  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
+  int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
+  int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
+  int childIndex = getCurrentIndexBakList(mw_one->ui->qwMainEvent);
+  tw->setCurrentItem(tw->topLevelItem(topIndex)->child(childIndex));
+
+  if (topIndex < 0) return;
+  if (childIndex < 0) return;
+
+  mw_one->on_twItemClicked();
+}
+
+void SearchDialog::reeditMainEventData() {
+  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
+  int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
+  int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
+  int childIndex = getCurrentIndexBakList(mw_one->ui->qwMainEvent);
+
+  if (topIndex < 0) return;
+  if (childIndex < 0) return;
+
+  tw->setCurrentItem(tw->topLevelItem(topIndex)->child(childIndex));
+  mw_one->on_twItemDoubleClicked();
+
+  setCurrentIndexBakList(mw_one->ui->qwMainEvent, childIndex);
 }
 
 void SearchDialog::saveCurNoteIndex() {
