@@ -27,15 +27,15 @@ class dlgList : public QDialog {
 
   void on_btnDel_clicked();
 
-  void on_btnBack_clicked();
+  void on_btnOk_clicked();
 
   void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
   void on_btnRename_clicked();
 
- private slots:
-
   void on_btnCancel_clicked();
+
+ private slots:
 
  private:
   void setCategoryText();

@@ -66,6 +66,8 @@ class SearchDialog : public QDialog {
   void clickMainDateData();
   void clickMainEventData();
   void reeditMainEventData();
+  void setTypeRenameText();
+  void okType();
   private slots:
 
  private:

@@ -2708,6 +2708,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         on_btnBackBakList_clicked();
         return true;
       }
+
+      if (!ui->frameCategory->isHidden()) {
+        on_btnCancelType_clicked();
+        return true;
+      }
     }
   }
 
@@ -5671,8 +5676,13 @@ void MainWindow::on_btnNoteMenu_clicked() {
   mySearchDialog->showNotsListMenu(ui->qwNoteList->x(), ui->qwNoteList->y());
 }
 
-void MainWindow::on_btnCancelType_clicked() {
-  ui->frameCategory->hide();
-  ui->frameMain->show();
-  myEditRecord->show();
+void MainWindow::on_btnCancelType_clicked() { m_List->on_btnCancel_clicked(); }
+
+void MainWindow::on_btnOkType_clicked() { m_List->on_btnOk_clicked(); }
+
+void MainWindow::on_btnDelType_clicked() { m_List->on_btnDel_clicked(); }
+
+void MainWindow::on_btnRenameType_clicked() {
+  m_List->ui->editRename->setText(ui->editRenameType->text().trimmed());
+  m_List->on_btnRename_clicked();
 }

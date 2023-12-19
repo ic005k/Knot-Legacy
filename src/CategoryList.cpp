@@ -63,7 +63,12 @@ void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
 }
 
 void dlgList::on_btnDel_clicked() {
-  int row = ui->listWidget->currentRow();
+  int row =
+      mw_one->mySearchDialog->getCurrentIndexBakList(mw_one->ui->qwCategory);
+
+  if (row < 0) return;
+
+  ui->listWidget->setCurrentRow(row);
   if (row >= 0) {
     if (!mw_one->showMsgBox("Kont",
                             tr("Delete this category?") + "\n\n" +
@@ -72,6 +77,8 @@ void dlgList::on_btnDel_clicked() {
       return;
 
     ui->listWidget->takeItem(row);
+
+    mw_one->mySearchDialog->delItemBakList(mw_one->ui->qwCategory, row);
   }
   mw_one->myEditRecord->saveCustomDesc();
   if (ui->listWidget->count() > 0)
@@ -80,7 +87,15 @@ void dlgList::on_btnDel_clicked() {
     ui->editRename->clear();
 }
 
-void dlgList::on_btnBack_clicked() { setCategoryText(); }
+void dlgList::on_btnOk_clicked() {
+  int index =
+      mw_one->mySearchDialog->getCurrentIndexBakList(mw_one->ui->qwCategory);
+  ui->listWidget->setCurrentRow(index);
+
+  setCategoryText();
+
+  on_btnCancel_clicked();
+}
 
 void dlgList::setCategoryText() {
   int row = ui->listWidget->currentRow();
@@ -100,14 +115,20 @@ void dlgList::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
 void dlgList::on_btnRename_clicked() {
   if (ui->listWidget->count() == 0) return;
 
+  int row =
+      mw_one->mySearchDialog->getCurrentIndexBakList(mw_one->ui->qwCategory);
+  ui->listWidget->setCurrentRow(row);
+
   QString text = ui->editRename->text().trimmed();
   QString str = ui->listWidget->currentItem()->text();
   if (!text.isEmpty() && text != str) {
     int index = ui->listWidget->currentRow();
     ui->listWidget->takeItem(index);
     QListWidgetItem* item = new QListWidgetItem(text);
-    // item->setSizeHint(QSize(ui->listWidget->width() - 20, 35));
+
     ui->listWidget->insertItem(index, item);
+
+    mw_one->mySearchDialog->modifyItemText0(mw_one->ui->qwCategory, row, text);
 
     QStringList list;
     for (int i = 0; i < ui->listWidget->count(); i++) {
@@ -117,7 +138,7 @@ void dlgList::on_btnRename_clicked() {
     ui->listWidget->clear();
     for (int i = 0; i < list.count(); i++) {
       QListWidgetItem* item = new QListWidgetItem(list.at(i));
-      // item->setSizeHint(QSize(ui->listWidget->width() - 20, 35));
+
       ui->listWidget->addItem(item);
     }
     if (index >= 0) ui->listWidget->setCurrentRow(index);
@@ -143,4 +164,8 @@ void dlgList::on_btnRename_clicked() {
   }
 }
 
-void dlgList::on_btnCancel_clicked() { close(); }
+void dlgList::on_btnCancel_clicked() {
+  mw_one->ui->frameCategory->hide();
+  mw_one->ui->frameMain->show();
+  mw_one->myEditRecord->show();
+}

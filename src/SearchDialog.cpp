@@ -9,6 +9,7 @@
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
 extern QString iniDir, searchStr;
+extern dlgList* m_List;
 
 QStringList resultsList;
 
@@ -449,4 +450,18 @@ void SearchDialog::showNotsListMenu(int x, int y) {
 
   QPoint pos(mw_one->geometry().x() + x, mw_one->geometry().y() + y);
   mainMenu->exec(pos);
+}
+
+void SearchDialog::setTypeRenameText() {
+  int index = getCurrentIndexBakList(mw_one->ui->qwCategory);
+  QString str = getText0(mw_one->ui->qwCategory, index);
+  mw_one->ui->editRenameType->setText(str);
+}
+
+void SearchDialog::okType() {
+  int index = getCurrentIndexBakList(mw_one->ui->qwCategory);
+  m_List->ui->listWidget->setCurrentRow(index);
+  QListWidgetItem* item = m_List->ui->listWidget->currentItem();
+  m_List->on_listWidget_itemDoubleClicked(item);
+  m_List->on_btnCancel_clicked();
 }

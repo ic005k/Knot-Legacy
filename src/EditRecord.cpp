@@ -189,6 +189,10 @@ void EditRecord::on_btnCustom_clicked() {
   this->close();
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameCategory->show();
+  init_Desc();
+  m_List->ui->listWidget->setCurrentRow(0);
+  mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwCategory, 0);
+  mw_one->mySearchDialog->setTypeRenameText();
 
   return;
 
@@ -268,6 +272,8 @@ void EditRecord::init_Desc() {
   RegDesc.setIniCodec("utf-8");
 #endif
 
+  mw_one->mySearchDialog->clearAllBakList(mw_one->ui->qwCategory);
+
   c_list.clear();
   m_List->ui->listWidget->clear();
   m_List->ui->listWidget->setViewMode(QListView::IconMode);
@@ -276,10 +282,12 @@ void EditRecord::init_Desc() {
     QString str =
         RegDesc.value("/CustomDesc/Item" + QString::number(i)).toString();
     QListWidgetItem *item = new QListWidgetItem(str);
-    // item->setSizeHint(
-    //    QSize(mw_one->mydlgList->ui->listWidget->width() - 20, 35));
+
     m_List->ui->listWidget->addItem(item);
     c_list.append(str);
+
+    mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwCategory, str, "", "",
+                                           "", 0);
   }
 }
 

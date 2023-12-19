@@ -700,6 +700,12 @@ class MainWindow : public QMainWindow {
 
   void on_btnCancelType_clicked();
 
+  void on_btnOkType_clicked();
+
+  void on_btnDelType_clicked();
+
+  void on_btnRenameType_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
