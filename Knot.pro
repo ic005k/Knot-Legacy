@@ -78,10 +78,13 @@ SOURCES += \
     src/components/lib/qtmaterialoverlaywidget.cpp \
     src/components/lib/qtmaterialripple.cpp \
     src/components/lib/qtmaterialrippleoverlay.cpp \
+    src/components/lib/qtmaterialstatetransition.cpp \
     src/components/lib/qtmaterialstyle.cpp \
     src/components/lib/qtmaterialtheme.cpp \
     src/components/qtmaterialcircularprogress.cpp \
     src/components/qtmaterialcircularprogress_internal.cpp \
+    src/components/qtmaterialdialog.cpp \
+    src/components/qtmaterialdialog_internal.cpp \
     src/components/qtmaterialprogress_internal.cpp \
     src/main.cpp \
     src/onedrive/qtonedrive.cpp \
@@ -127,6 +130,8 @@ HEADERS += \
     src/components/lib/qtmaterialoverlaywidget.h \
     src/components/lib/qtmaterialripple.h \
     src/components/lib/qtmaterialrippleoverlay.h \
+    src/components/lib/qtmaterialstatetransition.h \
+    src/components/lib/qtmaterialstatetransitionevent.h \
     src/components/lib/qtmaterialstyle.h \
     src/components/lib/qtmaterialstyle_p.h \
     src/components/lib/qtmaterialtheme.h \
@@ -134,6 +139,9 @@ HEADERS += \
     src/components/qtmaterialcircularprogress.h \
     src/components/qtmaterialcircularprogress_internal.h \
     src/components/qtmaterialcircularprogress_p.h \
+    src/components/qtmaterialdialog.h \
+    src/components/qtmaterialdialog_internal.h \
+    src/components/qtmaterialdialog_p.h \
     src/components/qtmaterialprogress_internal.h \
     src/components/qtmaterialprogress_p.h \
     src/onedrive/qtonedrive.h \

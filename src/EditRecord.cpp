@@ -395,6 +395,9 @@ void EditRecord::saveOne() {
     flag = "/" + group + "/";
 
   int count = tw->topLevelItemCount();
+  Reg.setValue(flag + "TopCount", count);
+
+  if (count == 0) return;
 
   QTreeWidgetItem *item = tw->currentItem();
   int i = 0;
@@ -435,5 +438,4 @@ void EditRecord::saveOne() {
   }
 
   Reg.setValue(flag + QString::number(i + 1) + "-childCount", childCount);
-  Reg.setValue(flag + "TopCount", count);
 }

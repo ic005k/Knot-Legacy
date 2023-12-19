@@ -93,6 +93,7 @@
 #include "src/Todo.h"
 #include "src/TodoAlarm.h"
 #include "src/components/qtmaterialcircularprogress.h"
+#include "src/components/qtmaterialdialog.h"
 #include "ui_CategoryList.h"
 #include "ui_DateSelector.h"
 #include "ui_EditRecord.h"
@@ -432,7 +433,8 @@ class MainWindow : public QMainWindow {
 
   void setScrollBarPos(double pos);
   void reloadMainOld();
-  protected:
+
+ protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;

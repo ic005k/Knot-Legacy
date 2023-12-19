@@ -1248,6 +1248,7 @@ void MainWindow::del_Data(QTreeWidget *tw) {
           tw->takeTopLevelItem(tw->topLevelItemCount() - 1);
 
         reloadMain();
+
         break;
       }
     }
@@ -1264,9 +1265,7 @@ void MainWindow::del_Data(QTreeWidget *tw) {
   if (topCount > 0) {
     QTreeWidgetItem *topItem = tw->topLevelItem(topCount - 1);
     tw->setCurrentItem(topItem);
-
-  } else
-    return;
+  }
 
   del = true;
   startSave("tab");
@@ -4944,7 +4943,7 @@ void MainWindow::showGrayWindows() {
 
   m_widget->resize(this->width(), this->height());
   m_widget->move(0, 0);
-  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,15%);");
+  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,25%);");
 
   QPropertyAnimation *m_pAnimation = new QPropertyAnimation();
   m_pAnimation->setTargetObject(m_widget);
@@ -5032,6 +5031,7 @@ void MainWindow::on_btnAdd_clicked() {
 
 void MainWindow::on_btnDel_clicked() {
   mydlgReader->setPdfViewVisible(false);
+
   on_DelRecord();
 }
 
