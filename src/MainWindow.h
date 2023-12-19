@@ -698,6 +698,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnNoteMenu_clicked();
 
+  void on_btnCancelType_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

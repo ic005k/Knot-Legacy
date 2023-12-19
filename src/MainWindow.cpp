@@ -3752,6 +3752,10 @@ void MainWindow::initQW() {
   ui->qwMainEvent->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/mainevent.qml")));
 
+  ui->qwCategory->rootContext()->setContextProperty("mySearchDialog",
+                                                    mySearchDialog);
+  ui->qwCategory->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/type.qml")));
+
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3809,6 +3813,7 @@ void MainWindow::init_UIWidget() {
   ui->btnFindNextNote->setEnabled(false);
   ui->btnFindPreviousNote->setEnabled(false);
   ui->qwMain->hide();
+  ui->frameCategory->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -5664,4 +5669,10 @@ void MainWindow::on_btnNoteBookMenu_clicked() {
 
 void MainWindow::on_btnNoteMenu_clicked() {
   mySearchDialog->showNotsListMenu(ui->qwNoteList->x(), ui->qwNoteList->y());
+}
+
+void MainWindow::on_btnCancelType_clicked() {
+  ui->frameCategory->hide();
+  ui->frameMain->show();
+  myEditRecord->show();
 }

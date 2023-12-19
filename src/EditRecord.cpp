@@ -186,6 +186,12 @@ void EditRecord::set_Amount(QString Number) {
 }
 
 void EditRecord::on_btnCustom_clicked() {
+  this->close();
+  mw_one->ui->frameMain->hide();
+  mw_one->ui->frameCategory->show();
+
+  return;
+
   m_List->close();
   m_List = new dlgList(mw_one->myEditRecord);
 

@@ -649,6 +649,7 @@ DISTFILES += \
     src/qmlsrc/tabrecycle.qml \
     src/qmlsrc/todo.qml \
     src/qmlsrc/todorecycle.qml \
+    src/qmlsrc/type.qml \
     src/qmlsrc/viewcate.qml \
     src/reader.qml \
     src/steps.qml
