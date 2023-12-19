@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>654</width>
-    <height>5134</height>
+    <height>5316</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -4375,6 +4375,19 @@ QRadioButton::indicator:checked {
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="lblTypeInfo">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Info</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_36">
          <item>
           <widget class="QToolButton" name="btnRenameType">
@@ -4542,7 +4555,7 @@ QRadioButton::indicator:checked {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">

@@ -194,6 +194,10 @@ void EditRecord::on_btnCustom_clicked() {
   mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwCategory, 0);
   mw_one->mySearchDialog->setTypeRenameText();
 
+  int count = mw_one->mySearchDialog->getCountBakList(mw_one->ui->qwCategory);
+  mw_one->ui->lblTypeInfo->setText(tr("Total") + " : " +
+                                   QString::number(count));
+
   return;
 
   m_List->close();

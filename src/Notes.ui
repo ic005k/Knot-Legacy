@@ -171,7 +171,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Insert Table</string>
+           <string>Table</string>
           </property>
          </widget>
         </item>
@@ -252,7 +252,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Column</string>
+           <string>Col</string>
           </property>
          </widget>
         </item>
