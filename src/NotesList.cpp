@@ -204,8 +204,6 @@ void dlgNotesList::on_btnRename_clicked() {
 }
 
 void dlgNotesList::setNoteName(QString name) {
-  // QFontMetrics fontWidth(mw_one->ui->lblNoteName->font());
-  // QString elideNote = fontWidth.elidedText(name, Qt::ElideRight, 240);
   mw_one->ui->lblNoteName->adjustSize();
   mw_one->ui->lblNoteName->setWordWrap(true);
   mw_one->ui->lblNoteName->setText(name);
@@ -213,15 +211,9 @@ void dlgNotesList::setNoteName(QString name) {
 }
 
 void dlgNotesList::on_btnDel_clicked() {
-  QTreeWidgetItem *item = ui->treeWidget->currentItem();
+  if (tw->topLevelItemCount() == 0) return;
 
-  if (item->parent() == NULL) {
-    if (tw->currentIndex().row() == 0) return;
-  } else {
-    if (tw->currentIndex().row() == 0) {
-      if (tw->currentIndex().parent().row() == 0) return;
-    }
-  }
+  QTreeWidgetItem *item = ui->treeWidget->currentItem();
 
   if (item->parent() == NULL) {
     int count = item->childCount();
@@ -480,35 +472,6 @@ void dlgNotesList::initNotesList() {
                                    QString::number(topCount) + "  " +
                                    QString::number(notesTotal) + ")");
   tw->expandAll();
-
-  if (ui->treeWidget->topLevelItemCount() == 0) {
-    QTreeWidgetItem *item = new QTreeWidgetItem();
-    item->setText(0, tr("Default Notebook"));
-
-    QTreeWidgetItem *item1 = new QTreeWidgetItem(item);
-    item1->setText(0, tr("My Notes"));
-    QString a = "memo/memo.md";
-    QString mdfile = iniDir + a;
-    currentMDFile = mdfile;
-    item1->setText(1, a);
-    ui->treeWidget->addTopLevelItem(item);
-
-    ui->treeWidget->setFocus();
-    ui->treeWidget->expandAll();
-    ui->treeWidget->setCurrentItem(item->child(0));
-
-    on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
-
-    QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    Reg.setIniCodec("utf-8");
-#endif
-
-    Reg.setValue("/MainNotes/currentItem", mdfile);
-    Reg.setValue("/MainNotes/NoteName", tr("My Notes"));
-
-    saveNotesList();
-  }
 }
 
 void dlgNotesList::initRecycle() {
@@ -875,8 +838,6 @@ void dlgNotesList::on_btnUp_clicked() { moveBy(-1); }
 void dlgNotesList::on_btnDown_clicked() { moveBy(1); }
 
 void dlgNotesList::on_actionAdd_NoteBook_triggered() {
-  if (getNoteBookCurrentIndex() < 0) return;
-
   bool ok = false;
   QString text;
   QFrame *frame = new QFrame(mw_one);
@@ -943,7 +904,7 @@ void dlgNotesList::on_actionDel_NoteBook_triggered() {
   tw->setCurrentItem(tw->topLevelItem(index));
   on_btnDel_clicked();
 
-  mw_one->mySearchDialog->delItemBakList(mw_one->ui->qwNoteBook, index);
+  loadAllNoteBook();
 
   if (index - 1 >= 0) {
     setNoteBookCurrentIndex(index - 1);
@@ -1073,6 +1034,7 @@ void dlgNotesList::on_actionMoveDown_NoteBook_triggered() {
 
 void dlgNotesList::loadAllNoteBook() {
   mw_one->mySearchDialog->clearAllBakList(mw_one->ui->qwNoteBook);
+  mw_one->mySearchDialog->clearAllBakList(mw_one->ui->qwNoteList);
   int count = mw_one->m_NotesList->tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
     QString str = mw_one->m_NotesList->tw->topLevelItem(i)->text(0);

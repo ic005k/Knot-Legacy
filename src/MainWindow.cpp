@@ -4997,22 +4997,23 @@ void MainWindow::on_btnNotesList_clicked() {
 
   m_NotesList->loadAllNoteBook();
 
-  int notebookIndex = mySearchDialog->getCurNoteIndex().at(0);
-  int noteIndex = mySearchDialog->getCurNoteIndex().at(1);
-
   int notebookCount = m_NotesList->getNoteBookCount();
-  int noteCount = m_NotesList->getNotesListCount();
-  if (notebookIndex + 1 >= notebookCount) notebookIndex = notebookCount - 1;
-  if (noteIndex + 1 >= noteCount) noteIndex = noteCount - 1;
-  if (notebookIndex < 0) notebookIndex = 0;
-  if (noteIndex < 0) noteIndex = 0;
+  if (notebookCount > 0) {
+    int notebookIndex = mySearchDialog->getCurNoteIndex().at(0);
+    int noteIndex = mySearchDialog->getCurNoteIndex().at(1);
 
-  mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteBook, notebookIndex);
-  mySearchDialog->clickNoteBook();
-  mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteList, noteIndex);
+    if (notebookIndex + 1 >= notebookCount) notebookIndex = notebookCount - 1;
+    if (notebookIndex < 0) notebookIndex = 0;
 
-  mySearchDialog->modifyItemText2(ui->qwNoteBook, notebookIndex, "ShowRect");
-  mySearchDialog->modifyItemText2(ui->qwNoteList, noteIndex, "ShowRect");
+    mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteBook,
+                                           notebookIndex);
+    mySearchDialog->clickNoteBook();
+
+    int noteCount = m_NotesList->getNotesListCount();
+    if (noteIndex + 1 >= noteCount) noteIndex = noteCount - 1;
+    if (noteIndex < 0) noteIndex = 0;
+    mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteList, noteIndex);
+  }
 
   m_NotesList->setNoteLabel();
 
