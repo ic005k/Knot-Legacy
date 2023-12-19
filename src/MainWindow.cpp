@@ -2111,19 +2111,6 @@ void MainWindow::on_twItemClicked() {
     QString sy = pItem->text(3);
     QString sm = pItem->text(0).split(" ").at(1);
     max_day = getMaxDay(sy, sm);
-
-    QString str = item->text(3);
-    if (str.trimmed().length() > 0 && !isTabChanged) {
-      isShowDetails = true;
-      strShowDetails = str;
-      ui->lblStats->setStyleSheet(
-          "color: black; background-color: lightyellow");
-      ui->lblStats->setText(str);
-    } else {
-      isShowDetails = false;
-      ui->lblStats->setStyleSheet(myEditRecord->ui->lblTitle->styleSheet());
-      ui->lblStats->setText(strStats);
-    }
   }
 
   if (tabChart->currentIndex() == 0) {
