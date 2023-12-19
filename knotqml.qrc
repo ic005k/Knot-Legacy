@@ -25,5 +25,6 @@
         <file>src/qmlsrc/maindate.qml</file>
         <file>src/qmlsrc/mainevent.qml</file>
         <file>src/qmlsrc/type.qml</file>
+        <file>src/qmlsrc/seltab.qml</file>
     </qresource>
 </RCC>

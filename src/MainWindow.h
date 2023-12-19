@@ -643,7 +643,8 @@ class MainWindow : public QMainWindow {
 
   void closeProgress();
 
- private slots:
+  void selTab();
+  private slots:
   void on_btnSync_clicked();
 
   void on_btnPDF_clicked();
@@ -705,6 +706,8 @@ class MainWindow : public QMainWindow {
   void on_btnDelType_clicked();
 
   void on_btnRenameType_clicked();
+
+  void on_btnBackSetTab_clicked();
 
  private:
   bool isShowDetails = false;

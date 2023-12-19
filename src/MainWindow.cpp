@@ -2713,6 +2713,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         on_btnCancelType_clicked();
         return true;
       }
+
+      if (!ui->frameSetTab->isHidden()) {
+        on_btnBackSetTab_clicked();
+        return true;
+      }
     }
   }
 
@@ -3761,6 +3766,9 @@ void MainWindow::initQW() {
                                                     mySearchDialog);
   ui->qwCategory->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/type.qml")));
 
+  ui->qwSelTab->rootContext()->setContextProperty("mw_one", mw_one);
+  ui->qwSelTab->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/seltab.qml")));
+
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3819,6 +3827,7 @@ void MainWindow::init_UIWidget() {
   ui->btnFindPreviousNote->setEnabled(false);
   ui->qwMain->hide();
   ui->frameCategory->hide();
+  ui->frameSetTab->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -4006,7 +4015,30 @@ void MainWindow::init_UIWidget() {
   initQW();
 }
 
+void MainWindow::selTab() {
+  int index = mySearchDialog->getCurrentIndexBakList(ui->qwSelTab);
+  tabData->setCurrentIndex(index);
+  on_btnBackSetTab_clicked();
+}
+
 void MainWindow::on_btnSelTab_clicked() {
+  ui->frameMain->hide();
+  ui->frameSetTab->show();
+  mySearchDialog->clearAllBakList(ui->qwSelTab);
+  int tab_count = tabData->tabBar()->count();
+  for (int i = 0; i < tab_count; i++) {
+    QString text0 = tabData->tabText(i);
+    mySearchDialog->addItemBakList(ui->qwSelTab, text0, "", "", "", 0);
+  }
+
+  int index = ui->tabWidget->currentIndex();
+  mySearchDialog->setCurrentIndexBakList(ui->qwSelTab, index);
+
+  ui->lblSelTabInfo->setText(tr("Total") + " : " + QString::number(tab_count) +
+                             " ( " + QString::number(index + 1) + " ) ");
+
+  return;
+
   mydlgFloatFun->close();
   m_widget = new QWidget(this);
 
@@ -5685,4 +5717,9 @@ void MainWindow::on_btnDelType_clicked() { m_List->on_btnDel_clicked(); }
 void MainWindow::on_btnRenameType_clicked() {
   m_List->ui->editRename->setText(ui->editRenameType->text().trimmed());
   m_List->on_btnRename_clicked();
+}
+
+void MainWindow::on_btnBackSetTab_clicked() {
+  ui->frameSetTab->hide();
+  ui->frameMain->show();
 }

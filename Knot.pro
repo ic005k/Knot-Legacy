@@ -645,6 +645,7 @@ DISTFILES += \
     src/qmlsrc/reader.qml \
     src/qmlsrc/report.qml \
     src/qmlsrc/search.qml \
+    src/qmlsrc/seltab.qml \
     src/qmlsrc/steps.qml \
     src/qmlsrc/tabrecycle.qml \
     src/qmlsrc/todo.qml \
