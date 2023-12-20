@@ -139,13 +139,13 @@ void MainWindow::importDataDone() {
 
 SearchThread::SearchThread(QObject *parent) : QThread{parent} {}
 void SearchThread::run() {
-  mw_one->mySearchDialog->startSearch();
+  mw_one->m_Method->startSearch();
 
   emit isDone();
 }
 
 void MainWindow::searchDone() {
-  mw_one->mySearchDialog->initSearchResults();
+  mw_one->m_Method->initSearchResults();
   closeProgress();
 }
 
@@ -2181,16 +2181,16 @@ void MainWindow::set_Time() {
     }
 
     int newrow;
-    int row = mySearchDialog->getCurrentIndexBakList(ui->qwMainEvent);
+    int row = m_Method->getCurrentIndexBakList(ui->qwMainEvent);
     if (childRow0 - childRow1 == 0) newrow = row;
     if (childRow0 - childRow1 < 0) newrow = row + childRow1 - childRow0;
     if (childRow0 - childRow1 > 0) newrow = row - (childRow0 - childRow1);
 
-    int maindateIndex = mySearchDialog->getCurrentIndexBakList(ui->qwMainDate);
+    int maindateIndex = m_Method->getCurrentIndexBakList(ui->qwMainDate);
     reloadMain();
-    mySearchDialog->setCurrentIndexBakList(ui->qwMainDate, maindateIndex);
-    mySearchDialog->clickMainDate();
-    mySearchDialog->setCurrentIndexBakList(ui->qwMainEvent, newrow);
+    m_Method->setCurrentIndexBakList(ui->qwMainDate, maindateIndex);
+    m_Method->clickMainDate();
+    m_Method->setCurrentIndexBakList(ui->qwMainEvent, newrow);
   }
 }
 
@@ -2318,7 +2318,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 
   isTabChanged = true;
   // clickData();
-  mySearchDialog->clickMainDateData();
+  m_Method->clickMainDateData();
 }
 
 void MainWindow::saveNotes(int tabIndex) {
@@ -3707,12 +3707,10 @@ void MainWindow::initQW() {
   ui->qwOneDriver->rootContext()->setContextProperty("mydlgOneDrive",
                                                      mydlgOneDrive);
 
-  ui->qwSearch->rootContext()->setContextProperty("mySearchDialog",
-                                                  mySearchDialog);
+  ui->qwSearch->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwSearch->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/search.qml")));
 
-  ui->qwBakList->rootContext()->setContextProperty("mySearchDialog",
-                                                   mySearchDialog);
+  ui->qwBakList->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwBakList->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/baklist.qml")));
 
   ui->qwViewCate->rootContext()->setContextProperty("mydlgReport", mydlgReport);
@@ -3724,33 +3722,27 @@ void MainWindow::initQW() {
   ui->qwTabRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/tabrecycle.qml")));
 
-  ui->qwNoteBook->rootContext()->setContextProperty("mySearchDialog",
-                                                    mySearchDialog);
+  ui->qwNoteBook->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwNoteBook->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notebook.qml")));
 
-  ui->qwNoteList->rootContext()->setContextProperty("mySearchDialog",
-                                                    mySearchDialog);
+  ui->qwNoteList->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwNoteList->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notelist.qml")));
 
-  ui->qwNoteRecycle->rootContext()->setContextProperty("mySearchDialog",
-                                                       mySearchDialog);
+  ui->qwNoteRecycle->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwNoteRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/noterecycle.qml")));
 
-  ui->qwMainDate->rootContext()->setContextProperty("mySearchDialog",
-                                                    mySearchDialog);
+  ui->qwMainDate->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwMainDate->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/maindate.qml")));
 
-  ui->qwMainEvent->rootContext()->setContextProperty("mySearchDialog",
-                                                     mySearchDialog);
+  ui->qwMainEvent->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwMainEvent->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/mainevent.qml")));
 
-  ui->qwCategory->rootContext()->setContextProperty("mySearchDialog",
-                                                    mySearchDialog);
+  ui->qwCategory->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwCategory->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/type.qml")));
 
   ui->qwSelTab->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3891,7 +3883,7 @@ void MainWindow::init_UIWidget() {
   m_SyncInfo = new SyncInfo(this);
   dlgTimeMachine = new QFrame();
   dlgTimeMachine->close();
-  mySearchDialog = new SearchDialog(this);
+  m_Method = new Method(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -4003,7 +3995,7 @@ void MainWindow::init_UIWidget() {
 }
 
 void MainWindow::selTab() {
-  int index = mySearchDialog->getCurrentIndexBakList(ui->qwSelTab);
+  int index = m_Method->getCurrentIndexBakList(ui->qwSelTab);
   tabData->setCurrentIndex(index);
   on_btnBackSetTab_clicked();
 }
@@ -4011,15 +4003,15 @@ void MainWindow::selTab() {
 void MainWindow::on_btnSelTab_clicked() {
   ui->frameMain->hide();
   ui->frameSetTab->show();
-  mySearchDialog->clearAllBakList(ui->qwSelTab);
+  m_Method->clearAllBakList(ui->qwSelTab);
   int tab_count = tabData->tabBar()->count();
   for (int i = 0; i < tab_count; i++) {
     QString text0 = tabData->tabText(i);
-    mySearchDialog->addItemBakList(ui->qwSelTab, text0, "", "", "", 0);
+    m_Method->addItemBakList(ui->qwSelTab, text0, "", "", "", 0);
   }
 
   int index = ui->tabWidget->currentIndex();
-  mySearchDialog->setCurrentIndexBakList(ui->qwSelTab, index);
+  m_Method->setCurrentIndexBakList(ui->qwSelTab, index);
 
   ui->lblSelTabInfo->setText(tr("Total") + " : " + QString::number(tab_count) +
                              " ( " + QString::number(index + 1) + " ) ");
@@ -4274,7 +4266,7 @@ void MainWindow::on_actionTabRecycle() {
   ui->frameMain->hide();
   ui->frameTabRecycle->show();
 
-  mySearchDialog->clearAllBakList(ui->qwTabRecycle);
+  m_Method->clearAllBakList(ui->qwTabRecycle);
 
   QString tab_name, tab_time;
   QStringList iniFiles;
@@ -4291,14 +4283,14 @@ void MainWindow::on_actionTabRecycle() {
       tab_time =
           ini_filename.split("_").at(2) + "  " + ini_filename.split("_").at(3);
 
-      mySearchDialog->addItemBakList(ui->qwTabRecycle, tab_name, tab_time, "",
-                                     ini_file, 0);
+      m_Method->addItemBakList(ui->qwTabRecycle, tab_name, tab_time, "",
+                               ini_file, 0);
     }
   }
 
-  int t_count = mySearchDialog->getCountBakList(ui->qwTabRecycle);
+  int t_count = m_Method->getCountBakList(ui->qwTabRecycle);
   if (t_count > 0) {
-    mySearchDialog->setCurrentIndexBakList(ui->qwTabRecycle, 0);
+    m_Method->setCurrentIndexBakList(ui->qwTabRecycle, 0);
   }
 
   ui->lblTitleTabRecycle->setText(tr("Tab Recycle") + "    " + tr("Total") +
@@ -4309,7 +4301,7 @@ void MainWindow::on_actionBakFileList() {
   ui->frameMain->hide();
   ui->frameBakList->show();
 
-  mySearchDialog->clearAllBakList(ui->qwBakList);
+  m_Method->clearAllBakList(ui->qwBakList);
 
   QStringList bakFileList = mydlgPre->getBakFilesList();
   int bakCount = bakFileList.count();
@@ -4322,15 +4314,15 @@ void MainWindow::on_actionBakFileList() {
 
     QString item = action + "\n" + getFileSize(QFile(bakfile).size(), 2);
 
-    mySearchDialog->addItemBakList(ui->qwBakList, item, "", "", bakfile, 0);
+    m_Method->addItemBakList(ui->qwBakList, item, "", "", bakfile, 0);
   }
 
-  if (mySearchDialog->getCountBakList(ui->qwBakList) > 0)
-    mySearchDialog->setCurrentIndexBakList(ui->qwBakList, 0);
+  if (m_Method->getCountBakList(ui->qwBakList) > 0)
+    m_Method->setCurrentIndexBakList(ui->qwBakList, 0);
 
   ui->lblBakListTitle->setText(
       tr("Backup File List") + "    " + tr("Total") + " : " +
-      QString::number(mySearchDialog->getCountBakList(ui->qwBakList)));
+      QString::number(m_Method->getCountBakList(ui->qwBakList)));
 }
 
 void MainWindow::on_btnMenu_clicked() {
@@ -4999,20 +4991,19 @@ void MainWindow::on_btnNotesList_clicked() {
 
   int notebookCount = m_NotesList->getNoteBookCount();
   if (notebookCount > 0) {
-    int notebookIndex = mySearchDialog->getCurNoteIndex().at(0);
-    int noteIndex = mySearchDialog->getCurNoteIndex().at(1);
+    int notebookIndex = m_Method->getCurNoteIndex().at(0);
+    int noteIndex = m_Method->getCurNoteIndex().at(1);
 
     if (notebookIndex + 1 >= notebookCount) notebookIndex = notebookCount - 1;
     if (notebookIndex < 0) notebookIndex = 0;
 
-    mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteBook,
-                                           notebookIndex);
-    mySearchDialog->clickNoteBook();
+    m_Method->setCurrentIndexBakList(mw_one->ui->qwNoteBook, notebookIndex);
+    m_Method->clickNoteBook();
 
     int noteCount = m_NotesList->getNotesListCount();
     if (noteIndex + 1 >= noteCount) noteIndex = noteCount - 1;
     if (noteIndex < 0) noteIndex = 0;
-    mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteList, noteIndex);
+    m_Method->setCurrentIndexBakList(mw_one->ui->qwNoteList, noteIndex);
   }
 
   m_NotesList->setNoteLabel();
@@ -5298,7 +5289,7 @@ void MainWindow::reloadMainOld() {
 }
 
 void MainWindow::reloadMain() {
-  mySearchDialog->clearAllBakList(ui->qwMainDate);
+  m_Method->clearAllBakList(ui->qwMainDate);
 
   // QFontMetrics fontMetrics(font());
   // int nFontHeight = fontMetrics.height();
@@ -5308,7 +5299,7 @@ void MainWindow::reloadMain() {
   int total = tw->topLevelItemCount();
 
   if (total == 0) {
-    mySearchDialog->clearAllBakList(ui->qwMainEvent);
+    m_Method->clearAllBakList(ui->qwMainEvent);
     return;
   }
 
@@ -5341,15 +5332,14 @@ void MainWindow::reloadMain() {
 
     topitem = text0;
 
-    mySearchDialog->addItemBakList(ui->qwMainDate, text0, text1, text2, text3,
-                                   0);
+    m_Method->addItemBakList(ui->qwMainDate, text0, text1, text2, text3, 0);
   }
 
-  mySearchDialog->gotoEnd(ui->qwMainDate);
-  int count = mySearchDialog->getCountBakList(ui->qwMainDate);
-  mySearchDialog->setCurrentIndexBakList(ui->qwMainDate, count - 1);
+  m_Method->gotoEnd(ui->qwMainDate);
+  int count = m_Method->getCountBakList(ui->qwMainDate);
+  m_Method->setCurrentIndexBakList(ui->qwMainDate, count - 1);
 
-  mySearchDialog->clickMainDate();
+  m_Method->clickMainDate();
 }
 
 void MainWindow::reeditData() {
@@ -5483,10 +5473,10 @@ void MainWindow::on_btnBackBakList_clicked() {
 }
 
 void MainWindow::on_btnImportBakList_clicked() {
-  if (mySearchDialog->getCountBakList(ui->qwBakList) == 0) return;
+  if (m_Method->getCountBakList(ui->qwBakList) == 0) return;
 
-  int cur_index = mySearchDialog->getCurrentIndexBakList(ui->qwBakList);
-  QString str = mySearchDialog->getText3(ui->qwBakList, cur_index);
+  int cur_index = m_Method->getCurrentIndexBakList(ui->qwBakList);
+  QString str = m_Method->getText3(ui->qwBakList, cur_index);
   zipfile = str.trimmed();
 
   if (!zipfile.isNull()) {
@@ -5517,24 +5507,24 @@ void MainWindow::on_btnBackTabRecycle_clicked() {
 }
 
 void MainWindow::on_btnDelTabRecycle_clicked() {
-  if (mySearchDialog->getCountBakList(ui->qwTabRecycle) == 0) return;
-  int index = mySearchDialog->getCurrentIndexBakList(ui->qwTabRecycle);
-  QString tab_file = mySearchDialog->getText3(ui->qwTabRecycle, index);
+  if (m_Method->getCountBakList(ui->qwTabRecycle) == 0) return;
+  int index = m_Method->getCurrentIndexBakList(ui->qwTabRecycle);
+  QString tab_file = m_Method->getText3(ui->qwTabRecycle, index);
   if (!showMsgBox("Knot", tr("Whether to remove") + "  " + tab_file + " ? ", "",
                   2))
     return;
 
   QFile file(tab_file);
   file.remove();
-  mySearchDialog->delItemBakList(ui->qwTabRecycle, index);
+  m_Method->delItemBakList(ui->qwTabRecycle, index);
 
   ui->lblTitleTabRecycle->setText(
       tr("Tab Recycle") + "    " + tr("Total") + " : " +
-      QString::number(mySearchDialog->getCountBakList(ui->qwTabRecycle)));
+      QString::number(m_Method->getCountBakList(ui->qwTabRecycle)));
 }
 
 void MainWindow::on_btnRestoreTab_clicked() {
-  if (mySearchDialog->getCountBakList(ui->qwTabRecycle) == 0) return;
+  if (m_Method->getCountBakList(ui->qwTabRecycle) == 0) return;
 
   int count = ui->tabWidget->tabBar()->count();
   QString twName =
@@ -5542,11 +5532,11 @@ void MainWindow::on_btnRestoreTab_clicked() {
   QString ini_file = iniDir + twName + ".ini";
   if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
-  int index = mySearchDialog->getCurrentIndexBakList(ui->qwTabRecycle);
-  QString recycle = mySearchDialog->getText3(ui->qwTabRecycle, index);
+  int index = m_Method->getCurrentIndexBakList(ui->qwTabRecycle);
+  QString recycle = m_Method->getText3(ui->qwTabRecycle, index);
   QFile::copy(recycle, ini_file);
 
-  QString tab_name = mySearchDialog->getText0(ui->qwTabRecycle, index);
+  QString tab_name = m_Method->getText0(ui->qwTabRecycle, index);
   QTreeWidget *tw = init_TreeWidget(twName);
   ui->tabWidget->addTab(tw, tab_name);
 
@@ -5568,21 +5558,21 @@ void MainWindow::on_btnRestoreTab_clicked() {
 }
 
 void MainWindow::on_btnDelBakFile_clicked() {
-  if (mySearchDialog->getCountBakList(ui->qwBakList) == 0) return;
+  if (m_Method->getCountBakList(ui->qwBakList) == 0) return;
 
-  int index = mySearchDialog->getCurrentIndexBakList(ui->qwBakList);
-  QString bak_file = mySearchDialog->getText3(ui->qwBakList, index);
+  int index = m_Method->getCurrentIndexBakList(ui->qwBakList);
+  QString bak_file = m_Method->getText3(ui->qwBakList, index);
   if (!showMsgBox("Knot", tr("Whether to remove") + "  " + bak_file + " ? ", "",
                   2))
     return;
 
   QFile file(bak_file);
   file.remove();
-  mySearchDialog->delItemBakList(ui->qwBakList, index);
+  m_Method->delItemBakList(ui->qwBakList, index);
 
   ui->lblBakListTitle->setText(
       tr("Backup File List") + "    " + tr("Total") + " : " +
-      QString::number(mySearchDialog->getCountBakList(ui->qwBakList)));
+      QString::number(m_Method->getCountBakList(ui->qwBakList)));
 }
 
 void MainWindow::on_btnBackNoteList_clicked() {
@@ -5602,23 +5592,23 @@ void MainWindow::on_btnNoteRecycle_clicked() {
   ui->frameNoteList->hide();
   ui->frameNoteRecycle->show();
 
-  mySearchDialog->clearAllBakList(ui->qwNoteRecycle);
+  m_Method->clearAllBakList(ui->qwNoteRecycle);
   int childCount = m_NotesList->twrb->topLevelItem(0)->childCount();
   for (int i = 0; i < childCount; i++) {
     QTreeWidgetItem *childItem = m_NotesList->twrb->topLevelItem(0)->child(i);
     QString text0 = childItem->text(0);
     QString text3 = childItem->text(1);
 
-    mySearchDialog->addItemBakList(ui->qwNoteRecycle, text0, "", "", text3, 0);
+    m_Method->addItemBakList(ui->qwNoteRecycle, text0, "", "", text3, 0);
   }
 }
 
 void MainWindow::on_btnDelNoteRecycle_clicked() {
-  int count = mySearchDialog->getCountBakList(ui->qwNoteRecycle);
+  int count = m_Method->getCountBakList(ui->qwNoteRecycle);
   if (count == 0) return;
 
-  int index = mySearchDialog->getCurrentIndexBakList(ui->qwNoteRecycle);
-  QString file = mySearchDialog->getText0(ui->qwNoteRecycle, index);
+  int index = m_Method->getCurrentIndexBakList(ui->qwNoteRecycle);
+  QString file = m_Method->getText0(ui->qwNoteRecycle, index);
 
   if (!showMsgBox("Knot", tr("Whether to remove") + "  " + file + " ? ", "", 2))
     return;
@@ -5627,32 +5617,32 @@ void MainWindow::on_btnDelNoteRecycle_clicked() {
   m_NotesList->twrb->setCurrentItem(topItem->child(index));
   m_NotesList->ui->btnDel_2->click();
 
-  mySearchDialog->delItemBakList(ui->qwNoteRecycle, index);
+  m_Method->delItemBakList(ui->qwNoteRecycle, index);
 }
 
 void MainWindow::on_btnRestoreNoteRecycle_clicked() {
-  int count = mySearchDialog->getCountBakList(ui->qwNoteRecycle);
+  int count = m_Method->getCountBakList(ui->qwNoteRecycle);
   if (count == 0) return;
 
   if (m_NotesList->getNoteBookCount() == 0) return;
 
-  int indexRecycle = mySearchDialog->getCurrentIndexBakList(ui->qwNoteRecycle);
+  int indexRecycle = m_Method->getCurrentIndexBakList(ui->qwNoteRecycle);
   m_NotesList->twrb->setCurrentItem(
       m_NotesList->twrb->topLevelItem(0)->child(indexRecycle));
 
-  int indexTop = mySearchDialog->getCurrentIndexBakList(ui->qwNoteBook);
-  int indexChild = mySearchDialog->getCurrentIndexBakList(ui->qwNoteList);
+  int indexTop = m_Method->getCurrentIndexBakList(ui->qwNoteBook);
+  int indexChild = m_Method->getCurrentIndexBakList(ui->qwNoteList);
 
   m_NotesList->tw->setCurrentItem(
       m_NotesList->tw->topLevelItem(indexTop)->child(indexChild));
 
   m_NotesList->on_btnRestore_clicked();
 
-  mySearchDialog->delItemBakList(ui->qwNoteRecycle, indexRecycle);
+  m_Method->delItemBakList(ui->qwNoteRecycle, indexRecycle);
 
-  int noteCount = mySearchDialog->getCountBakList(ui->qwNoteList);
-  mySearchDialog->setCurrentIndexBakList(ui->qwNoteList, noteCount - 1);
-  mySearchDialog->clickNoteList();
+  int noteCount = m_Method->getCountBakList(ui->qwNoteList);
+  m_Method->setCurrentIndexBakList(ui->qwNoteList, noteCount - 1);
+  m_Method->clickNoteList();
 
   on_btnBackNoteRecycle_clicked();
 }
@@ -5691,11 +5681,11 @@ void MainWindow::on_btnShowFindNotes_clicked() {
 }
 
 void MainWindow::on_btnNoteBookMenu_clicked() {
-  mySearchDialog->showNoteBookMenu(ui->qwNoteBook->x(), ui->qwNoteBook->y());
+  m_Method->showNoteBookMenu(ui->qwNoteBook->x(), ui->qwNoteBook->y());
 }
 
 void MainWindow::on_btnNoteMenu_clicked() {
-  mySearchDialog->showNotsListMenu(ui->qwNoteList->x(), ui->qwNoteList->y());
+  m_Method->showNotsListMenu(ui->qwNoteList->x(), ui->qwNoteList->y());
 }
 
 void MainWindow::on_btnCancelType_clicked() { m_List->on_btnCancel_clicked(); }

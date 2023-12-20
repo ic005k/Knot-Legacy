@@ -1,10 +1,10 @@
-#include "SearchDialog.h"
+#include "Method.h"
 
 #include <QKeyEvent>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "ui_SearchDialog.h"
+#include "ui_Method.h"
 
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
@@ -13,8 +13,7 @@ extern dlgList* m_List;
 
 QStringList resultsList;
 
-SearchDialog::SearchDialog(QWidget* parent)
-    : QDialog(parent), ui(new Ui::SearchDialog) {
+Method::Method(QWidget* parent) : QDialog(parent), ui(new Ui::Method) {
   ui->setupUi(this);
   mw_one->set_btnStyle(this);
   setModal(true);
@@ -23,7 +22,7 @@ SearchDialog::SearchDialog(QWidget* parent)
   setWindowTitle(tr("Search"));
 }
 
-void SearchDialog::init() {
+void Method::init() {
   int w = mw_one->geometry().width();
   int h = mw_one->geometry().height();
   setFixedWidth(w);
@@ -33,22 +32,22 @@ void SearchDialog::init() {
   show();
 }
 
-SearchDialog::~SearchDialog() { delete ui; }
+Method::~Method() { delete ui; }
 
-void SearchDialog::addItem(QString text0, QString text1, QString text2,
-                           QString text3, int itemH) {
+void Method::addItem(QString text0, QString text1, QString text2, QString text3,
+                     int itemH) {
   QQuickItem* root = mw_one->ui->qwSearch->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, text0),
                             Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
                             Q_ARG(QVariant, text3), Q_ARG(QVariant, itemH));
 }
 
-void SearchDialog::delItem(int index) {
+void Method::delItem(int index) {
   QQuickItem* root = mw_one->ui->qwSearch->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
-int SearchDialog::getCount() {
+int Method::getCount() {
   QQuickItem* root = mw_one->ui->qwSearch->rootObject();
   QVariant itemCount;
   QMetaObject::invokeMethod((QObject*)root, "getItemCount",
@@ -56,30 +55,29 @@ int SearchDialog::getCount() {
   return itemCount.toInt();
 }
 
-void SearchDialog::clearAll() {
+void Method::clearAll() {
   int count = getCount();
   for (int i = 0; i < count; i++) {
     delItem(0);
   }
 }
 
-void SearchDialog::setCurrentIndex(int index) {
+void Method::setCurrentIndex(int index) {
   QQuickItem* root = mw_one->ui->qwSearch->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
                             Q_ARG(QVariant, index));
 }
 
-void SearchDialog::addItemBakList(QQuickWidget* qw, QString text0,
-                                  QString text1, QString text2, QString text3,
-                                  int itemH) {
+void Method::addItemBakList(QQuickWidget* qw, QString text0, QString text1,
+                            QString text2, QString text3, int itemH) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, text0),
                             Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
                             Q_ARG(QVariant, text3), Q_ARG(QVariant, itemH));
 }
 
-void SearchDialog::insertItem(QQuickWidget* qw, QString text0, QString text1,
-                              QString text2, QString text3, int curIndex) {
+void Method::insertItem(QQuickWidget* qw, QString text0, QString text1,
+                        QString text2, QString text3, int curIndex) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "insertItem",
                             Q_ARG(QVariant, text0), Q_ARG(QVariant, text1),
@@ -87,12 +85,12 @@ void SearchDialog::insertItem(QQuickWidget* qw, QString text0, QString text1,
                             Q_ARG(QVariant, curIndex));
 }
 
-void SearchDialog::delItemBakList(QQuickWidget* qw, int index) {
+void Method::delItemBakList(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
-int SearchDialog::getCountBakList(QQuickWidget* qw) {
+int Method::getCountBakList(QQuickWidget* qw) {
   QQuickItem* root = qw->rootObject();
   QVariant itemCount;
   QMetaObject::invokeMethod((QObject*)root, "getItemCount",
@@ -100,25 +98,25 @@ int SearchDialog::getCountBakList(QQuickWidget* qw) {
   return itemCount.toInt();
 }
 
-void SearchDialog::clearAllBakList(QQuickWidget* qw) {
+void Method::clearAllBakList(QQuickWidget* qw) {
   int count = getCountBakList(qw);
   for (int i = 0; i < count; i++) {
     delItemBakList(qw, 0);
   }
 }
 
-void SearchDialog::gotoEnd(QQuickWidget* qw) {
+void Method::gotoEnd(QQuickWidget* qw) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "gotoEnd");
 }
 
-void SearchDialog::setCurrentIndexBakList(QQuickWidget* qw, int index) {
+void Method::setCurrentIndexBakList(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
                             Q_ARG(QVariant, index));
 }
 
-int SearchDialog::getCurrentIndexBakList(QQuickWidget* qw) {
+int Method::getCurrentIndexBakList(QQuickWidget* qw) {
   QQuickItem* root = qw->rootObject();
   QVariant itemIndex;
   QMetaObject::invokeMethod((QObject*)root, "getCurrentIndex",
@@ -126,21 +124,19 @@ int SearchDialog::getCurrentIndexBakList(QQuickWidget* qw) {
   return itemIndex.toInt();
 }
 
-void SearchDialog::modifyItemText0(QQuickWidget* qw, int index,
-                                   QString strText) {
+void Method::modifyItemText0(QQuickWidget* qw, int index, QString strText) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "modifyItemText0",
                             Q_ARG(QVariant, index), Q_ARG(QVariant, strText));
 }
 
-void SearchDialog::modifyItemText2(QQuickWidget* qw, int index,
-                                   QString strText) {
+void Method::modifyItemText2(QQuickWidget* qw, int index, QString strText) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "modifyItemText2",
                             Q_ARG(QVariant, index), Q_ARG(QVariant, strText));
 }
 
-QString SearchDialog::getText0(QQuickWidget* qw, int index) {
+QString Method::getText0(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QVariant item;
   QMetaObject::invokeMethod((QObject*)root, "getText0",
@@ -149,7 +145,7 @@ QString SearchDialog::getText0(QQuickWidget* qw, int index) {
   return item.toString();
 }
 
-QString SearchDialog::getText3(QQuickWidget* qw, int index) {
+QString Method::getText3(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QVariant item;
   QMetaObject::invokeMethod((QObject*)root, "getText3",
@@ -158,7 +154,7 @@ QString SearchDialog::getText3(QQuickWidget* qw, int index) {
   return item.toString();
 }
 
-bool SearchDialog::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
+bool Method::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -170,7 +166,7 @@ bool SearchDialog::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
   return QWidget::eventFilter(watchDlgSearch, evn);
 }
 
-void SearchDialog::startSearch() {
+void Method::startSearch() {
   resultsList.clear();
   int tabCount = tabData->count();
   for (int j = 0; j < tabCount; j++) {
@@ -210,7 +206,7 @@ void SearchDialog::startSearch() {
   }
 }
 
-void SearchDialog::initSearchResults() {
+void Method::initSearchResults() {
   // qDebug() << resultsList;
 
   clearAll();
@@ -225,7 +221,7 @@ void SearchDialog::initSearchResults() {
   setCurrentIndex(0);
 }
 
-void SearchDialog::generateData(int count) {
+void Method::generateData(int count) {
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();
   int line_count;
@@ -275,8 +271,8 @@ void SearchDialog::generateData(int count) {
   }
 }
 
-void SearchDialog::setCellText(int row, int column, QString str,
-                               QTableWidget* table) {
+void Method::setCellText(int row, int column, QString str,
+                         QTableWidget* table) {
   QString a0("<span style=\"color: white;background: red;\">");
   QString a1("</span>");
 
@@ -292,7 +288,7 @@ void SearchDialog::setCellText(int row, int column, QString str,
     table->setItem(row, column, new QTableWidgetItem(str));
 }
 
-void SearchDialog::clickNoteBook() {
+void Method::clickNoteBook() {
   clearAllBakList(mw_one->ui->qwNoteList);
   int index = getCurrentIndexBakList(mw_one->ui->qwNoteBook);
   QTreeWidgetItem* topItem = mw_one->m_NotesList->tw->topLevelItem(index);
@@ -307,7 +303,7 @@ void SearchDialog::clickNoteBook() {
   mw_one->m_NotesList->setNoteLabel();
 }
 
-void SearchDialog::clickNoteList() {
+void Method::clickNoteList() {
   int index = getCurrentIndexBakList(mw_one->ui->qwNoteList);
   QString noteFile = iniDir + getText3(mw_one->ui->qwNoteList, index);
   QString noteName = getText0(mw_one->ui->qwNoteList, index);
@@ -320,7 +316,7 @@ void SearchDialog::clickNoteList() {
   saveCurNoteIndex();
 }
 
-void SearchDialog::clickMainDate() {
+void Method::clickMainDate() {
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
   int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
@@ -365,7 +361,7 @@ void SearchDialog::clickMainDate() {
   setCurrentIndexBakList(mw_one->ui->qwMainEvent, count - 1);
 }
 
-void SearchDialog::clickMainDateData() {
+void Method::clickMainDateData() {
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
   int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
@@ -378,7 +374,7 @@ void SearchDialog::clickMainDateData() {
   mw_one->on_twItemClicked();
 }
 
-void SearchDialog::clickMainEventData() {
+void Method::clickMainEventData() {
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
   int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
@@ -392,7 +388,7 @@ void SearchDialog::clickMainEventData() {
   mw_one->on_twItemClicked();
 }
 
-void SearchDialog::reeditMainEventData() {
+void Method::reeditMainEventData() {
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
   int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
@@ -406,7 +402,7 @@ void SearchDialog::reeditMainEventData() {
   mw_one->on_twItemDoubleClicked();
 }
 
-void SearchDialog::saveCurNoteIndex() {
+void Method::saveCurNoteIndex() {
   QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -420,7 +416,7 @@ void SearchDialog::saveCurNoteIndex() {
   Reg.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
 }
 
-QList<int> SearchDialog::getCurNoteIndex() {
+QList<int> Method::getCurNoteIndex() {
   QList<int> indexList;
   QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -436,7 +432,7 @@ QList<int> SearchDialog::getCurNoteIndex() {
   return indexList;
 }
 
-void SearchDialog::showNoteBookMenu(int x, int y) {
+void Method::showNoteBookMenu(int x, int y) {
   QMenu* mainMenu = new QMenu(this);
   mw_one->m_NotesList->init_NoteBookMenu(mainMenu);
 
@@ -444,7 +440,7 @@ void SearchDialog::showNoteBookMenu(int x, int y) {
   mainMenu->exec(pos);
 }
 
-void SearchDialog::showNotsListMenu(int x, int y) {
+void Method::showNotsListMenu(int x, int y) {
   QMenu* mainMenu = new QMenu(this);
   mw_one->m_NotesList->init_NotesListMenu(mainMenu);
 
@@ -452,13 +448,13 @@ void SearchDialog::showNotsListMenu(int x, int y) {
   mainMenu->exec(pos);
 }
 
-void SearchDialog::setTypeRenameText() {
+void Method::setTypeRenameText() {
   int index = getCurrentIndexBakList(mw_one->ui->qwCategory);
   QString str = getText0(mw_one->ui->qwCategory, index);
   mw_one->ui->editRenameType->setText(str);
 }
 
-void SearchDialog::okType() {
+void Method::okType() {
   int index = getCurrentIndexBakList(mw_one->ui->qwCategory);
   m_List->ui->listWidget->setCurrentRow(index);
   QListWidgetItem* item = m_List->ui->listWidget->currentItem();

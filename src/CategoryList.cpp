@@ -63,8 +63,7 @@ void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
 }
 
 void dlgList::on_btnDel_clicked() {
-  int row =
-      mw_one->mySearchDialog->getCurrentIndexBakList(mw_one->ui->qwCategory);
+  int row = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwCategory);
 
   if (row < 0) return;
 
@@ -78,7 +77,7 @@ void dlgList::on_btnDel_clicked() {
 
     ui->listWidget->takeItem(row);
 
-    mw_one->mySearchDialog->delItemBakList(mw_one->ui->qwCategory, row);
+    mw_one->m_Method->delItemBakList(mw_one->ui->qwCategory, row);
   }
   mw_one->myEditRecord->saveCustomDesc();
   if (ui->listWidget->count() > 0)
@@ -88,8 +87,7 @@ void dlgList::on_btnDel_clicked() {
 }
 
 void dlgList::on_btnOk_clicked() {
-  int index =
-      mw_one->mySearchDialog->getCurrentIndexBakList(mw_one->ui->qwCategory);
+  int index = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwCategory);
   ui->listWidget->setCurrentRow(index);
 
   setCategoryText();
@@ -115,8 +113,7 @@ void dlgList::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
 void dlgList::on_btnRename_clicked() {
   if (ui->listWidget->count() == 0) return;
 
-  int row =
-      mw_one->mySearchDialog->getCurrentIndexBakList(mw_one->ui->qwCategory);
+  int row = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwCategory);
   ui->listWidget->setCurrentRow(row);
 
   QString text = ui->editRename->text().trimmed();
@@ -128,7 +125,7 @@ void dlgList::on_btnRename_clicked() {
 
     ui->listWidget->insertItem(index, item);
 
-    mw_one->mySearchDialog->modifyItemText0(mw_one->ui->qwCategory, row, text);
+    mw_one->m_Method->modifyItemText0(mw_one->ui->qwCategory, row, text);
 
     QStringList list;
     for (int i = 0; i < ui->listWidget->count(); i++) {

@@ -1,21 +1,21 @@
-#ifndef SEARCHDIALOG_H
-#define SEARCHDIALOG_H
+#ifndef METHOD_H
+#define METHOD_H
 
 #include <QDialog>
 #include <QQuickWidget>
 #include <QTableWidget>
 
 namespace Ui {
-class SearchDialog;
+class Method;
 }
 
-class SearchDialog : public QDialog {
+class Method : public QDialog {
   Q_OBJECT
 
  public:
-  explicit SearchDialog(QWidget *parent = nullptr);
-  ~SearchDialog();
-  Ui::SearchDialog *ui;
+  explicit Method(QWidget *parent = nullptr);
+  ~Method();
+  Ui::Method *ui;
 
   void startSearch();
   void initSearchResults();
@@ -68,11 +68,11 @@ class SearchDialog : public QDialog {
   void reeditMainEventData();
   void setTypeRenameText();
   void okType();
-  private slots:
+ private slots:
 
  private:
   void setCellText(int row, int column, QString str, QTableWidget *table);
   void generateData(int count);
 };
 
-#endif  // SEARCHDIALOG_H
+#endif  // METHOD_H

@@ -191,10 +191,10 @@ void EditRecord::on_btnCustom_clicked() {
   mw_one->ui->frameCategory->show();
   init_Desc();
   m_List->ui->listWidget->setCurrentRow(0);
-  mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwCategory, 0);
-  mw_one->mySearchDialog->setTypeRenameText();
+  mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwCategory, 0);
+  mw_one->m_Method->setTypeRenameText();
 
-  int count = mw_one->mySearchDialog->getCountBakList(mw_one->ui->qwCategory);
+  int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwCategory);
   mw_one->ui->lblTypeInfo->setText(tr("Total") + " : " +
                                    QString::number(count));
 
@@ -276,7 +276,7 @@ void EditRecord::init_Desc() {
   RegDesc.setIniCodec("utf-8");
 #endif
 
-  mw_one->mySearchDialog->clearAllBakList(mw_one->ui->qwCategory);
+  mw_one->m_Method->clearAllBakList(mw_one->ui->qwCategory);
 
   c_list.clear();
   m_List->ui->listWidget->clear();
@@ -290,8 +290,8 @@ void EditRecord::init_Desc() {
     m_List->ui->listWidget->addItem(item);
     c_list.append(str);
 
-    mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwCategory, str, "", "",
-                                           "", 0);
+    mw_one->m_Method->addItemBakList(mw_one->ui->qwCategory, str, "", "", "",
+                                     0);
   }
 }
 

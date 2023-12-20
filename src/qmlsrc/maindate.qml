@@ -298,13 +298,13 @@ Rectangle {
 
                     view.currentIndex = index //实现item切换
 
-                    mySearchDialog.clickMainDate()
-                    mySearchDialog.clickMainDateData()
+                    m_Method.clickMainDate()
+                    m_Method.clickMainDateData()
                 }
 
                 onPressAndHold: {
 
-                    //mySearchDialog.showNoteBookMenu(mouse.x, mouse.y)
+                    //m_Method.showNoteBookMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {

@@ -55,6 +55,7 @@ SOURCES += \
     src/LoadPic.cpp \
     src/MainWindow.cpp \
     src/MarkdownHighlighter.cpp \
+    src/Method.cpp \
     src/MyWheel.cpp \
     src/Notes.cpp \
     src/NotesList.cpp \
@@ -67,7 +68,6 @@ SOURCES += \
     src/RemarksAbout.cpp \
     src/Report.cpp \
     src/RollingBox.cpp \
-    src/SearchDialog.cpp \
     src/SetEditText.cpp \
     src/SetReaderText.cpp \
     src/SpecialAccelerometerPedometer.cpp \
@@ -107,6 +107,7 @@ HEADERS += \
     src/LoadPic.h \
     src/MainWindow.h \
     src/MarkdownHighlighter.h \
+    src/Method.h \
     src/MyWheel.h \
     src/Notes.h \
     src/NotesList.h \
@@ -119,7 +120,6 @@ HEADERS += \
     src/RemarksAbout.h \
     src/Report.h \
     src/RollingBox.h \
-    src/SearchDialog.h \
     src/SetEditText.h \
     src/SetReaderText.h \
     src/SpecialAccelerometerPedometer.h \
@@ -163,6 +163,7 @@ FORMS += \
     src/EditRecord.ui \
     src/LoadPic.ui \
     src/MainWindow.ui \
+    src/Method.ui \
     src/Notes.ui \
     src/NotesList.ui \
     src/OneDrive.ui \
@@ -172,7 +173,6 @@ FORMS += \
     src/ReaderFun.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
-    src/SearchDialog.ui \
     src/SetEditText.ui \
     src/SetReaderText.ui \
     src/Steps.ui \

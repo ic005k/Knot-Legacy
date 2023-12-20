@@ -274,11 +274,11 @@ Rectangle {
                     }
                     view.model.setProperty(index, "text2", "ShowRect")
 
-                    mySearchDialog.clickNoteList()
+                    m_Method.clickNoteList()
                 }
 
                 onPressAndHold: {
-                    //mySearchDialog.showNotsListMenu(mouse.x, mouse.y)
+                    //m_Method.showNotsListMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {

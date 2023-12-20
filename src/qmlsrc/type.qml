@@ -298,16 +298,16 @@ Rectangle {
 
                     view.currentIndex = index //实现item切换
 
-                    mySearchDialog.setTypeRenameText()
+                    m_Method.setTypeRenameText()
                 }
 
                 onPressAndHold: {
 
-                    // mySearchDialog.showNotsListMenu(mouse.x, mouse.y)
+                    // m_Method.showNotsListMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {
-                    mySearchDialog.okType()
+                    m_Method.okType()
 
                     //var data = view.model.get(view.currentIndex)
                     //console.log(data.text0 + "," + data.type + ", count=" + view.count)

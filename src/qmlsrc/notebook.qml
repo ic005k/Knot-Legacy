@@ -274,12 +274,12 @@ Rectangle {
                     }
                     view.model.setProperty(index, "text2", "ShowRect")
 
-                    mySearchDialog.clickNoteBook()
+                    m_Method.clickNoteBook()
                 }
 
                 onPressAndHold: {
 
-                    //mySearchDialog.showNoteBookMenu(mouse.x, mouse.y)
+                    //m_Method.showNoteBookMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {

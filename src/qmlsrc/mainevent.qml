@@ -298,16 +298,16 @@ Rectangle {
 
                     view.currentIndex = index //实现item切换
 
-                    mySearchDialog.clickMainEventData()
+                    m_Method.clickMainEventData()
                 }
 
                 onPressAndHold: {
 
-                    //mySearchDialog.showNotsListMenu(mouse.x, mouse.y)
+                    //m_Method.showNotsListMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {
-                    mySearchDialog.reeditMainEventData()
+                    m_Method.reeditMainEventData()
 
                     //mw_one.reeditData()
                     //var data = view.model.get(view.currentIndex)

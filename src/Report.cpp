@@ -215,7 +215,7 @@ void dlgReport::updateTable() {
   mw_one->ui->btnCategory->setText(tr("View Category"));
 
   setScrollBarPos(0);
-  mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwReport, 0);
+  mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwReport, 0);
   loadDetailsQml();
 }
 
@@ -367,7 +367,7 @@ void dlgReport::on_btnCategory_clicked() {
     return;
   }
 
-  mw_one->mySearchDialog->clearAllBakList(mw_one->ui->qwViewCate);
+  mw_one->m_Method->clearAllBakList(mw_one->ui->qwViewCate);
   mw_one->ui->lblViewCate1->setText(mw_one->ui->lblTitle_Report->text());
   mw_one->ui->lblViewCate2->setText(mw_one->ui->lblTotal->text());
 
@@ -400,7 +400,7 @@ void dlgReport::on_btnCategory_clicked() {
 
             QString item1 = str2.split("===").at(0).split("|").at(1);
 
-            mw_one->mySearchDialog->addItemBakList(
+            mw_one->m_Method->addItemBakList(
                 mw_one->ui->qwViewCate, tr("Category") + " : " + item0,
                 tr("Percent") + " : " + pre, tr("Amount") + " : " + item1, "",
                 0);
@@ -413,13 +413,12 @@ void dlgReport::on_btnCategory_clicked() {
       }
     }
 
-    int cate_count =
-        mw_one->mySearchDialog->getCountBakList(mw_one->ui->qwViewCate);
+    int cate_count = mw_one->m_Method->getCountBakList(mw_one->ui->qwViewCate);
     if (cate_count > 0) {
       mw_one->ui->lblViewCate3->setText(tr("View Category") + "  " +
                                         QString::number(cate_count));
-      mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwViewCate,
-                                                     indexCategory);
+      mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwViewCate,
+                                               indexCategory);
     }
 
     // qDebug() << "listCategorySort=" << listCategorySort.count()
@@ -429,10 +428,8 @@ void dlgReport::on_btnCategory_clicked() {
 }
 
 void dlgReport::on_CateOk() {
-  int index =
-      mw_one->mySearchDialog->getCurrentIndexBakList(mw_one->ui->qwViewCate);
-  QString str0 =
-      mw_one->mySearchDialog->getText0(mw_one->ui->qwViewCate, index);
+  int index = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwViewCate);
+  QString str0 = mw_one->m_Method->getText0(mw_one->ui->qwViewCate, index);
   str0 = str0.replace(tr("Category") + " : ", "").trimmed();
 
   getCategoryData(str0, true);
@@ -444,7 +441,7 @@ void dlgReport::on_CateOk() {
 
 void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
   if (appendTable) {
-    mw_one->mySearchDialog->clearAllBakList(mw_one->ui->qwReportSub);
+    mw_one->m_Method->clearAllBakList(mw_one->ui->qwReportSub);
   }
 
   int freq = 0;
@@ -484,8 +481,8 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
           text0 = tr("Date") + " : " + date + "  " + time;
           text1 = tr("Amount") + " : " + amount;
           text2 = str;
-          mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwReportSub, text0,
-                                                 text1, text2, text3, 0);
+          mw_one->m_Method->addItemBakList(mw_one->ui->qwReportSub, text0,
+                                           text1, text2, text3, 0);
         }
 
         if (amount.length() > 0) {
@@ -511,8 +508,8 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
     listD.append(bfb);
   }
 
-  if (mw_one->mySearchDialog->getCountBakList(mw_one->ui->qwReportSub) > 0)
-    mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwReportSub, 0);
+  if (mw_one->m_Method->getCountBakList(mw_one->ui->qwReportSub) > 0)
+    mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwReportSub, 0);
 }
 
 void setTableNoItemFlags(QTableWidget* t, int row) {
@@ -740,8 +737,8 @@ void dlgReport::loadDetailsQml() {
         if (text3.trimmed().length() > 0) str3 = tr("Details") + " : " + text3;
 
         // appendSteps_xx(text0, text1, text2);
-        mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwReportSub, text0,
-                                               str1, str2, str3, 0);
+        mw_one->m_Method->addItemBakList(mw_one->ui->qwReportSub, text0, str1,
+                                         str2, str3, 0);
       }
     }
   }

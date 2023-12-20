@@ -71,8 +71,8 @@
 #include <QValueAxis>
 
 #include "MarkdownHighlighter.h"
+#include "Method.h"
 #include "ReaderFun.h"
-#include "SearchDialog.h"
 #include "src/CategoryList.h"
 #include "src/EditRecord.h"
 #include "src/File.h"
@@ -98,6 +98,7 @@
 #include "ui_DateSelector.h"
 #include "ui_EditRecord.h"
 #include "ui_LoadPic.h"
+#include "ui_Method.h"
 #include "ui_Notes.h"
 #include "ui_NotesList.h"
 #include "ui_OneDrive.h"
@@ -107,7 +108,6 @@
 #include "ui_ReaderFun.h"
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
-#include "ui_SearchDialog.h"
 #include "ui_SetReaderText.h"
 #include "ui_Steps.h"
 #include "ui_SyncInfo.h"
@@ -243,7 +243,7 @@ class MainWindow : public QMainWindow {
   dlgSetText *mydlgSetText;
   dlgNotesList *m_NotesList;
   SyncInfo *m_SyncInfo;
-  SearchDialog *mySearchDialog;
+  Method *m_Method;
 
   File *myfile;
 
@@ -644,7 +644,7 @@ class MainWindow : public QMainWindow {
   void closeProgress();
 
   void selTab();
-  private slots:
+ private slots:
   void on_btnSync_clicked();
 
   void on_btnPDF_clicked();
