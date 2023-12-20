@@ -5634,6 +5634,8 @@ void MainWindow::on_btnRestoreNoteRecycle_clicked() {
   int count = mySearchDialog->getCountBakList(ui->qwNoteRecycle);
   if (count == 0) return;
 
+  if (m_NotesList->getNoteBookCount() == 0) return;
+
   int indexRecycle = mySearchDialog->getCurrentIndexBakList(ui->qwNoteRecycle);
   m_NotesList->twrb->setCurrentItem(
       m_NotesList->twrb->topLevelItem(0)->child(indexRecycle));

@@ -117,7 +117,7 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
   item->setForeground(0, Qt::red);
   ui->treeWidget->addTopLevelItem(item);
   ui->treeWidget->setCurrentItem(item);
-  on_btnNewNote_clicked();
+
   isSave = true;
 }
 
@@ -916,6 +916,13 @@ void dlgNotesList::on_actionDel_NoteBook_triggered() {
   }
 
   setNoteLabel();
+
+  saveRecycle();
+  saveNotesList();
+
+  if (getNoteBookCount() == 0) {
+    loadEmptyNote();
+  }
 }
 
 void dlgNotesList::on_actionRename_NoteBook_triggered() {
@@ -1129,12 +1136,14 @@ void dlgNotesList::on_actionAdd_Note_triggered() {
     ui->editNote->setText(text);
     on_btnNewNote_clicked();
 
+    QTreeWidgetItem *childItem = tw->currentItem();
+    int childCount = childItem->parent()->childCount();
+    QString text3 = childItem->parent()->child(childCount - 1)->text(1);
     mw_one->mySearchDialog->addItemBakList(mw_one->ui->qwNoteList, text, "", "",
-                                           "", 0);
+                                           text3, 0);
 
-    int count = mw_one->mySearchDialog->getCountBakList(mw_one->ui->qwNoteList);
-    mw_one->mySearchDialog->setCurrentIndexBakList(mw_one->ui->qwNoteList,
-                                                   count - 1);
+    int count = getNotesListCount();
+    setNotesListCurrentIndex(count - 1);
     mw_one->mySearchDialog->clickNoteList();
   }
 
@@ -1169,6 +1178,22 @@ void dlgNotesList::on_actionDel_Note_triggered() {
   }
 
   setNoteLabel();
+
+  saveRecycle();
+  saveNotesList();
+
+  if (getNotesListCount() == 0) {
+    loadEmptyNote();
+  }
+}
+
+void dlgNotesList::loadEmptyNote() {
+  currentMDFile = "";
+  mw_one->mydlgMainNotes->MD2Html(currentMDFile);
+  mw_one->mydlgMainNotes->loadMemoQML();
+  mw_one->ui->lblNoteName->setText("");
+
+  mw_one->mySearchDialog->saveCurNoteIndex();
 }
 
 void dlgNotesList::on_actionRename_Note_triggered() {
