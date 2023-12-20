@@ -84,6 +84,10 @@ void dlgList::on_btnDel_clicked() {
     on_listWidget_itemClicked(ui->listWidget->currentItem());
   else
     ui->editRename->clear();
+
+  int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwCategory);
+  mw_one->ui->lblTypeInfo->setText(tr("Total") + " : " +
+                                   QString::number(count));
 }
 
 void dlgList::on_btnOk_clicked() {

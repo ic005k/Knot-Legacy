@@ -1909,6 +1909,11 @@ in skydrive folder</source>
         <source>Delete this category?</source>
         <translation>删除这个分类？</translation>
     </message>
+    <message>
+        <location filename="CategoryList.cpp" line="89"/>
+        <source>Total</source>
+        <translation>总计</translation>
+    </message>
 </context>
 <context>
     <name>dlgLoadPic</name>
