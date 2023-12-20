@@ -30,7 +30,7 @@ QR code for downloading:
 * [syncthing](https://github.com/syncthing/syncthing)
 * [QOwnNotes](https://github.com/pbek/QOwnNotes)
 * [iconfinder](https://www.iconfinder.com/)
-* [Qwt](https://gitcode.com/mirrors/laserpants/qt-material-widgets?utm_source=csdn_github_accelerator&isLogin=1)
+* [Qwt](https://qwt.sourceforge.io/index.html)
 * [Qt Material Design Desktop Widgets](https://gitcode.com/mirrors/laserpants/qt-material-widgets/tree/master?utm_source=csdn_github_accelerator&isLogin=1)
 
 ---
