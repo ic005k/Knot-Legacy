@@ -2377,6 +2377,12 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
+  if (watch == ui->qwReader) {
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      on_SetReaderFunVisible();
+    }
+  }
+
   if (watch == tw->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
     }

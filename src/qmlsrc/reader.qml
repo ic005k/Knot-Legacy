@@ -123,6 +123,24 @@ Rectangle {
             state = "autoscroll"
         }
 
+        MouseArea {
+            id: mouse_area
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.LeftButton
+            propagateComposedEvents: false
+
+            onClicked: {
+
+            }
+            onDoubleClicked: {
+
+            }
+            onPressAndHold: {
+
+            }
+        }
+
         TextArea.flickable: TextArea {
             id: textArea
             visible: isEPUBText
@@ -150,25 +168,10 @@ Rectangle {
                 console.log(htmlPath)
                 console.log("isLink=" + link)
             }
+
             onReleased: {
 
-                mw_one.on_SetReaderFunVisible()
-            }
-
-            MouseArea {
-                id: mouse_area
-                anchors.fill: parent
-                hoverEnabled: true
-                acceptedButtons: Qt.RightButton
-                onClicked: {
-
-                }
-                onDoubleClicked: {
-
-                }
-                onPressAndHold: {
-
-                }
+                // mw_one.on_SetReaderFunVisible()
             }
 
             onActiveFocusOnPressChanged: {
