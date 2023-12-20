@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>440</width>
     <height>545</height>
    </rect>
   </property>
@@ -366,7 +366,7 @@
         <item>
          <widget class="QCheckBox" name="chkDaily">
           <property name="text">
-           <string>Daily (Select by week)</string>
+           <string>Daily (Sel by week)</string>
           </property>
          </widget>
         </item>
