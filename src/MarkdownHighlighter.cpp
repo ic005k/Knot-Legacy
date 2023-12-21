@@ -322,8 +322,8 @@ void MarkdownHighlighter::initTextFormats(int defaultFontSize) {
 
   // set character format for code blocks
   format = QTextCharFormat();
-  format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-  // format.setBackground(QColor(220, 220, 220));
+  // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  format.setBackground(QColor(220, 220, 220));
   _formats[CodeBlock] = format;
   _formats[InlineCodeBlock] = format;
 
@@ -350,7 +350,7 @@ void MarkdownHighlighter::initTextFormats(int defaultFontSize) {
 
   // set character format for masked syntax
   format = QTextCharFormat();
-  format.setForeground(QColor(104, 104, 104));  //超链接 此处有改动
+  format.setForeground(QColor(104, 104, 104));  // 超链接 此处有改动
   _formats[MaskedSyntax] = std::move(format);
 
   // set character format for tables
@@ -375,37 +375,37 @@ void MarkdownHighlighter::initTextFormats(int defaultFontSize) {
    ***************************************/
 
   format = QTextCharFormat();
-  format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
   format.setForeground(QColor(249, 38, 114));
   _formats[CodeKeyWord] = std::move(format);
 
   format = QTextCharFormat();
-  format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
   format.setForeground(QColor(163, 155, 78));
   _formats[CodeString] = std::move(format);
 
   format = QTextCharFormat();
-  format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
   format.setForeground(QColor(117, 113, 94));
   _formats[CodeComment] = std::move(format);
 
   format = QTextCharFormat();
-  format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
   format.setForeground(QColor(84, 174, 191));
   _formats[CodeType] = std::move(format);
 
   format = QTextCharFormat();
-  format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
   format.setForeground(QColor(219, 135, 68));
   _formats[CodeOther] = std::move(format);
 
   format = QTextCharFormat();
-  format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
   format.setForeground(QColor(174, 129, 255));
   _formats[CodeNumLiteral] = std::move(format);
 
   format = QTextCharFormat();
-  format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
   format.setForeground(QColor(1, 138, 15));
   _formats[CodeBuiltIn] = std::move(format);
 }
