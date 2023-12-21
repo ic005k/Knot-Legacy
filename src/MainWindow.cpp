@@ -445,7 +445,6 @@ MainWindow::MainWindow(QWidget *parent)
   m_NotesList->currentMDFile = m_NotesList->getCurrentMDFile();
   mw_one->mydlgMainNotes->MD2Html(m_NotesList->currentMDFile);
   mw_one->mydlgMainNotes->loadMemoQML();
-  qDebug() << "======" << m_NotesList->currentMDFile;
 }
 
 void MainWindow::initHardStepSensor() {
@@ -3634,6 +3633,7 @@ void MainWindow::showNotes() {
   ui->frameMain->hide();
   ui->frameSetKey->hide();
   ui->frameNotes->show();
+  mydlgMainNotes->setVPos();
 
   return;
 

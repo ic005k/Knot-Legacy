@@ -674,8 +674,6 @@ void dlgMainNotes::loadMemoQML() {
     edit1->appendPlainText(str);
   }
 
-  // mw_one->ui->qwNotes->setSource(
-  //     QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
 
   // mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
@@ -686,7 +684,6 @@ void dlgMainNotes::loadMemoQML() {
   QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
 
-  getVHeight();
   setVPos();
 }
 
@@ -695,29 +692,29 @@ void dlgMainNotes::saveQMLVPos() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
+
   if (QFile(mw_one->m_NotesList->currentMDFile).exists()) {
-    QString strTag = mw_one->m_NotesList->currentMDFile;
-    strTag.replace(iniDir, "");
     sliderPos = getVPos();
-    Reg.setValue("/MainNotes/SlidePos" + strTag, sliderPos);
+    Reg.setValue("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile,
+                 sliderPos);
   }
 }
 
 void dlgMainNotes::setVPos() {
-  if (!mw_one->initMain && textHeight > mw_one->ui->qwNotes->height()) {
-    QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    Reg.setIniCodec("utf-8");
+  Reg.setIniCodec("utf-8");
 #endif
-    QString curmd = mw_one->m_NotesList->currentMDFile;
 
-    sliderPos =
-        Reg.value("/MainNotes/SlidePos" + curmd.replace(iniDir, "")).toReal();
+  sliderPos =
+      Reg.value("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile)
+          .toReal();
 
-    QQuickItem *root = mw_one->ui->qwNotes->rootObject();
-    QMetaObject::invokeMethod((QObject *)root, "setVPos",
-                              Q_ARG(QVariant, sliderPos));
-  }
+  QQuickItem *root = mw_one->ui->qwNotes->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setVPos",
+                            Q_ARG(QVariant, sliderPos));
+
+  qDebug() << "setvpos======" << sliderPos;
 }
 
 qreal dlgMainNotes::getVPos() {
@@ -726,15 +723,16 @@ qreal dlgMainNotes::getVPos() {
   QMetaObject::invokeMethod((QObject *)root, "getVPos",
                             Q_RETURN_ARG(QVariant, itemCount));
   sliderPos = itemCount.toReal();
+  qDebug() << "pos=" << sliderPos;
   return sliderPos;
 }
 
 qreal dlgMainNotes::getVHeight() {
-  QVariant itemCount;
+  QVariant h;
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "getVHeight",
-                            Q_RETURN_ARG(QVariant, itemCount));
-  textHeight = itemCount.toReal();
+                            Q_RETURN_ARG(QVariant, h));
+  textHeight = h.toReal();
   return textHeight;
 }
 
@@ -1000,7 +998,7 @@ void dlgMainNotes::closeEvent(QCloseEvent *event) {
   if (isSave) {
     saveMainNotes();
   }
-  saveQMLVPos();
+
   loadMemoQML();
 }
 
