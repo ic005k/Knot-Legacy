@@ -7,8 +7,8 @@
 #include "MainWindow.h"
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
-#include "ui_OneDrive.h"
 #include "ui_MainWindow.h"
+#include "ui_OneDrive.h"
 
 extern MainWindow *mw_one;
 extern QtOneDriveAuthorizationDialog *dialog_;
@@ -66,7 +66,7 @@ qreal File::textPos() {
     mw_one->mydlgReader->textPos = m_textPos;
 
   if (!mw_one->ui->frameNotes->isHidden())
-    mw_one->mydlgMainNotes->sliderPos = m_textPos;
+    mw_one->m_Notes->sliderPos = m_textPos;
 
   qDebug() << "m_textPos" << m_textPos;
 
@@ -75,13 +75,12 @@ qreal File::textPos() {
 
 qreal File::textHeight() {
   if (!mw_one->ui->frameNotes->isHidden())
-    mw_one->mydlgMainNotes->textHeight = m_textHeight;
+    mw_one->m_Notes->textHeight = m_textHeight;
 
   if (!mw_one->ui->frameReader->isHidden())
     mw_one->mydlgReader->textHeight = m_textHeight;
 
-  qDebug() << "m_textHeight" << m_textHeight
-           << mw_one->mydlgMainNotes->textHeight;
+  qDebug() << "m_textHeight" << m_textHeight << mw_one->m_Notes->textHeight;
   return m_textHeight;
 }
 

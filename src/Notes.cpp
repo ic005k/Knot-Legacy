@@ -11,8 +11,7 @@ extern bool isAndroid, isIOS;
 extern int fontSize;
 extern QRegularExpression regxNumber;
 
-dlgMainNotes::dlgMainNotes(QWidget *parent)
-    : QDialog(parent), ui(new Ui::dlgMainNotes) {
+Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
 
   mw_one->set_btnStyle(this);
@@ -30,7 +29,7 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
   if (!dir.exists()) dir.mkdir(path);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
-          &dlgMainNotes::on_KVChanged);
+          &Notes::on_KVChanged);
 
   this->installEventFilter(this);
   ui->editSource->installEventFilter(this);
@@ -68,7 +67,7 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
       mw_one->myEditRecord->ui->editAmount->styleSheet());
 
   connect(ui->editSource, &QTextEdit::cursorPositionChanged, this,
-          &dlgMainNotes::highlightCurrentLine);
+          &Notes::highlightCurrentLine);
 
   highlightCurrentLine();
   QFont font = this->font();
@@ -76,8 +75,7 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
   ui->editSource->setFont(font);
   ui->editSource->setAcceptRichText(false);
 
-  connect(ui->editSource, &QTextEdit::textChanged, this,
-          &dlgMainNotes::onTextChange);
+  connect(ui->editSource, &QTextEdit::textChanged, this, &Notes::onTextChange);
 
   timerEditPanel = new QTimer(this);
   connect(timerEditPanel, SIGNAL(timeout()), this, SLOT(on_showEditPanel()));
@@ -100,20 +98,20 @@ dlgMainNotes::dlgMainNotes(QWidget *parent)
   ui->editSource->setFocus();
 }
 
-void dlgMainNotes::init() {
+void Notes::init() {
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                     mw_one->width(), mw_one->height());
 }
 
-void dlgMainNotes::wheelEvent(QWheelEvent *e) { Q_UNUSED(e); }
+void Notes::wheelEvent(QWheelEvent *e) { Q_UNUSED(e); }
 
-dlgMainNotes::~dlgMainNotes() { delete ui; }
+Notes::~Notes() { delete ui; }
 
-void dlgMainNotes::keyReleaseEvent(QKeyEvent *event) { event->accept(); }
+void Notes::keyReleaseEvent(QKeyEvent *event) { event->accept(); }
 
-void dlgMainNotes::editVSBarValueChanged() {}
+void Notes::editVSBarValueChanged() {}
 
-void dlgMainNotes::resizeEvent(QResizeEvent *event) {
+void Notes::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
 
   if (isShow) {
@@ -146,9 +144,9 @@ void dlgMainNotes::resizeEvent(QResizeEvent *event) {
   qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
 }
 
-void dlgMainNotes::on_btnDone_clicked() { close(); }
+void Notes::on_btnDone_clicked() { close(); }
 
-void dlgMainNotes::MD2Html(QString mdFile) {
+void Notes::MD2Html(QString mdFile) {
   QString htmlFileName = iniDir + "memo.html";
   QFile memofile1(htmlFileName);
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -162,7 +160,7 @@ void dlgMainNotes::MD2Html(QString mdFile) {
   }
 }
 
-void dlgMainNotes::saveMainNotes() {
+void Notes::saveMainNotes() {
   mw_one->isSelf = true;
 
   mw_one->isNeedAutoBackup = true;
@@ -187,9 +185,9 @@ void dlgMainNotes::saveMainNotes() {
                ui->editSource->textCursor().position());
 }
 
-void dlgMainNotes::init_MainNotes() { loadMemoQML(); }
+void Notes::init_MainNotes() { loadMemoQML(); }
 
-void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
+void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);
   byTextEdit = textEdit;
 
@@ -285,7 +283,7 @@ void dlgMainNotes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
   }
 }
 
-bool dlgMainNotes::eventFilter(QObject *obj, QEvent *evn) {
+bool Notes::eventFilter(QObject *obj, QEvent *evn) {
   if (obj == ui->editSource->viewport()) {
     getEditPanel(ui->editSource, evn);
   }
@@ -310,7 +308,7 @@ bool dlgMainNotes::eventFilter(QObject *obj, QEvent *evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void dlgMainNotes::on_KVChanged() {
+void Notes::on_KVChanged() {
   if (!pAndroidKeyboard->isVisible()) {
     this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                       mw_one->width(), mw_one->mainHeight);
@@ -332,7 +330,7 @@ void dlgMainNotes::on_KVChanged() {
 加密文件
 将文件读到字符串中，将每个字符都减1，然后将字符串写到文件中
 */
-void dlgMainNotes::encode(QString filename) {
+void Notes::encode(QString filename) {
   QFile file(filename);
   QTextStream in(&file);
   QString str;
@@ -359,7 +357,7 @@ void dlgMainNotes::encode(QString filename) {
 解密文件
 将文件读到字符串中，将每个字符加1，将字符写到文件中
 */
-void dlgMainNotes::decode(QString filename) {
+void Notes::decode(QString filename) {
   QFile file(filename);
   QTextStream fin(&file);
   QString str;
@@ -382,7 +380,7 @@ void dlgMainNotes::decode(QString filename) {
   file.close();
 }
 
-void dlgMainNotes::encryption(const QString &fileName) {
+void Notes::encryption(const QString &fileName) {
   QFile original(fileName);
   if (!original.open(QIODevice::ReadOnly)) {
     QMessageBox::warning(0, "Read11", "Read error!", QMessageBox::Yes);
@@ -398,7 +396,7 @@ void dlgMainNotes::encryption(const QString &fileName) {
   dest.close();
 }
 
-QString dlgMainNotes::Deciphering(const QString &fileName) {
+QString Notes::Deciphering(const QString &fileName) {
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly)) {
     QMessageBox::warning(this, tr("Load Ds File"), file.errorString(),
@@ -410,11 +408,11 @@ QString dlgMainNotes::Deciphering(const QString &fileName) {
   file.close();
 }
 
-void dlgMainNotes::on_btnUndo_clicked() { ui->editSource->undo(); }
+void Notes::on_btnUndo_clicked() { ui->editSource->undo(); }
 
-void dlgMainNotes::on_btnRedo_clicked() { ui->editSource->redo(); }
+void Notes::on_btnRedo_clicked() { ui->editSource->redo(); }
 
-QString dlgMainNotes::getDateTimeStr() {
+QString Notes::getDateTimeStr() {
   int y, m, d, hh, mm, s;
   y = QDate::currentDate().year();
   m = QDate::currentDate().month();
@@ -443,7 +441,7 @@ QString dlgMainNotes::getDateTimeStr() {
   return newname;
 }
 
-void dlgMainNotes::on_btnPic_clicked() {
+void Notes::on_btnPic_clicked() {
   pAndroidKeyboard->hide();
 
   QString fileName;
@@ -489,7 +487,7 @@ void dlgMainNotes::on_btnPic_clicked() {
   }
 }
 
-QStringList dlgMainNotes::getImgFileFromHtml(QString htmlfile) {
+QStringList Notes::getImgFileFromHtml(QString htmlfile) {
   QStringList list;
   QString strHtml = mw_one->loadText(htmlfile);
   strHtml = strHtml.replace("><", ">\n<");
@@ -509,7 +507,7 @@ QStringList dlgMainNotes::getImgFileFromHtml(QString htmlfile) {
   return list;
 }
 
-void dlgMainNotes::zipMemo() {
+void Notes::zipMemo() {
   QDir::setCurrent(iniDir);
 
 #ifdef Q_OS_LINUX
@@ -577,7 +575,7 @@ void dlgMainNotes::zipMemo() {
 #endif
 }
 
-void dlgMainNotes::unzip(QString zipfile) {
+void Notes::unzip(QString zipfile) {
   mw_one->mydlgReader->deleteDirfile(iniDir + "memo");
   QDir::setCurrent(iniDir);
 #ifdef Q_OS_MACOS
@@ -635,7 +633,7 @@ void dlgMainNotes::unzip(QString zipfile) {
 #endif
 }
 
-void dlgMainNotes::loadMemoQML() {
+void Notes::loadMemoQML() {
   QString htmlFileName = iniDir + "memo.html";
   QTextEdit *edit = new QTextEdit;
   QPlainTextEdit *edit1 = new QPlainTextEdit;
@@ -687,7 +685,7 @@ void dlgMainNotes::loadMemoQML() {
   setVPos();
 }
 
-void dlgMainNotes::saveQMLVPos() {
+void Notes::saveQMLVPos() {
   QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -700,7 +698,7 @@ void dlgMainNotes::saveQMLVPos() {
   }
 }
 
-void dlgMainNotes::setVPos() {
+void Notes::setVPos() {
   QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -713,11 +711,9 @@ void dlgMainNotes::setVPos() {
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "setVPos",
                             Q_ARG(QVariant, sliderPos));
-
-  qDebug() << "setvpos======" << sliderPos;
 }
 
-qreal dlgMainNotes::getVPos() {
+qreal Notes::getVPos() {
   QVariant itemCount;
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "getVPos",
@@ -727,7 +723,7 @@ qreal dlgMainNotes::getVPos() {
   return sliderPos;
 }
 
-qreal dlgMainNotes::getVHeight() {
+qreal Notes::getVHeight() {
   QVariant h;
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "getVHeight",
@@ -736,7 +732,7 @@ qreal dlgMainNotes::getVHeight() {
   return textHeight;
 }
 
-void dlgMainNotes::on_btnInsertTable_clicked() {
+void Notes::on_btnInsertTable_clicked() {
   int row = ui->editRow->text().trimmed().toInt();
   int col = ui->editCol->text().trimmed().toInt();
 
@@ -761,99 +757,91 @@ void dlgMainNotes::on_btnInsertTable_clicked() {
   }
 }
 
-void dlgMainNotes::on_editSource_redoAvailable(bool b) {
+void Notes::on_editSource_redoAvailable(bool b) {
   if (b)
     ui->btnRedo->setEnabled(true);
   else
     ui->btnRedo->setEnabled(false);
 }
 
-void dlgMainNotes::on_editSource_undoAvailable(bool b) {
+void Notes::on_editSource_undoAvailable(bool b) {
   if (b)
     ui->btnUndo->setEnabled(true);
   else
     ui->btnUndo->setEnabled(false);
 }
 
-void dlgMainNotes::on_btnSeparator_clicked() {
-  ui->editSource->insertPlainText("-");
-}
+void Notes::on_btnSeparator_clicked() { ui->editSource->insertPlainText("-"); }
 
-void dlgMainNotes::on_btnWells_clicked() {
-  ui->editSource->insertPlainText("#");
-}
+void Notes::on_btnWells_clicked() { ui->editSource->insertPlainText("#"); }
 
-void dlgMainNotes::on_btnVLine_clicked() {
-  ui->editSource->insertPlainText("|");
-}
+void Notes::on_btnVLine_clicked() { ui->editSource->insertPlainText("|"); }
 
-void dlgMainNotes::on_btnAsterisk_clicked() {
-  ui->editSource->insertPlainText("*");
-}
+void Notes::on_btnAsterisk_clicked() { ui->editSource->insertPlainText("*"); }
 
-void dlgMainNotes::on_btnS1_clicked() {
+void Notes::on_btnS1_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Bold Italic");
   ui->editSource->insertPlainText("_**" + str + "**_");
 }
 
-void dlgMainNotes::on_btnS2_clicked() {
+void Notes::on_btnS2_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Italic");
   ui->editSource->insertPlainText("_" + str + "_");
 }
 
-void dlgMainNotes::on_btnS3_clicked() {
+void Notes::on_btnS3_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Underline");
   ui->editSource->insertPlainText("<u>" + str + "</u>");
 }
 
-void dlgMainNotes::on_btnS4_clicked() {
+void Notes::on_btnS4_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Strickout");
   ui->editSource->insertPlainText("~~" + str + "~~");
 }
 
-void dlgMainNotes::on_btnColor_clicked() {
+void Notes::on_btnColor_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Red");
   ui->editSource->insertPlainText("<font color=#FF0000 >" + str + "</font>");
 }
 
-void dlgMainNotes::on_btnS5_clicked() {
+void Notes::on_btnS5_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
   if (str == "") str = tr("Bold");
   ui->editSource->insertPlainText("**" + str + "**");
 }
 
-void dlgMainNotes::on_btnLink_clicked() {
+void Notes::on_btnLink_clicked() {
   ui->editSource->insertPlainText("[]()");
   on_btnLeft_clicked();
   on_btnLeft_clicked();
   on_btnLeft_clicked();
 }
 
-void dlgMainNotes::on_btnS6_clicked() { ui->editSource->insertPlainText("~"); }
+void Notes::on_btnS6_clicked() { ui->editSource->insertPlainText("~"); }
 
-void dlgMainNotes::on_btnS7_clicked() {
+void Notes::on_btnS7_clicked() {
   ui->editSource->insertPlainText("[]");
   ui->btnLeft->click();
 }
 
-void dlgMainNotes::on_btnS8_clicked() {
+void Notes::on_btnS8_clicked() {
   ui->editSource->insertPlainText("()");
   ui->btnLeft->click();
 }
 
-void dlgMainNotes::on_btnS9_clicked() {
+void Notes::on_btnS9_clicked() {
   ui->editSource->insertPlainText("{}");
   ui->btnLeft->click();
 }
 
-void dlgMainNotes::on_btnS10_clicked() { ui->editSource->insertPlainText("_"); }
+void Notes::on_btnS10_clicked() { ui->editSource->insertPlainText("_"); }
 
-void dlgMainNotes::highlightCurrentLine() {
+void Notes::highlightCurrentLine() {
   QList<QTextEdit::ExtraSelection> extraSelections;
 
   QTextEdit::ExtraSelection selection;
@@ -889,11 +877,11 @@ void dlgMainNotes::highlightCurrentLine() {
   ui->lblInfo->setText(" " + str4 + " , " + str3);
 }
 
-void dlgMainNotes::onTextChange() {}
+void Notes::onTextChange() {}
 
-void dlgMainNotes::on_btnPaste_clicked() { ui->editSource->paste(); }
+void Notes::on_btnPaste_clicked() { ui->editSource->paste(); }
 
-void dlgMainNotes::on_showEditPanel() {
+void Notes::on_showEditPanel() {
   timerEditPanel->stop();
   if (isMousePress) {
     isFunShow = true;
@@ -912,7 +900,7 @@ void dlgMainNotes::on_showEditPanel() {
   }
 }
 
-void dlgMainNotes::selectText(int start, int end) {
+void Notes::selectText(int start, int end) {
   QTextCursor cursor;
   cursor = byTextEdit->textCursor();
   cursor.setPosition(start);
@@ -921,7 +909,7 @@ void dlgMainNotes::selectText(int start, int end) {
   m_SetEditText->ui->lineEdit->setText(cursor.selectedText());
 }
 
-void dlgMainNotes::paintEvent(QPaintEvent *event) {
+void Notes::paintEvent(QPaintEvent *event) {
   Q_UNUSED(event);
   return;
 
@@ -940,7 +928,7 @@ void dlgMainNotes::paintEvent(QPaintEvent *event) {
   }
 }
 
-void dlgMainNotes::timerSlot() {
+void Notes::timerSlot() {
   if (bCursorVisible) {
     bCursorVisible = false;
   } else {
@@ -950,17 +938,17 @@ void dlgMainNotes::timerSlot() {
   emit sendUpdate();
 }
 
-void dlgMainNotes::on_btnLeft_clicked() {
+void Notes::on_btnLeft_clicked() {
   ui->editSource->moveCursor(QTextCursor::PreviousCharacter,
                              QTextCursor::MoveAnchor);
 }
 
-void dlgMainNotes::on_btnRight_clicked() {
+void Notes::on_btnRight_clicked() {
   ui->editSource->moveCursor(QTextCursor::NextCharacter,
                              QTextCursor::MoveAnchor);
 }
 
-bool dlgMainNotes::androidCopyFile(QString src, QString des) {
+bool Notes::androidCopyFile(QString src, QString des) {
   bool result = false;
 
 #ifdef Q_OS_ANDROID
@@ -986,7 +974,7 @@ bool dlgMainNotes::androidCopyFile(QString src, QString des) {
   return result;
 }
 
-void dlgMainNotes::closeEvent(QCloseEvent *event) {
+void Notes::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
   mw_one->ui->frameNotes->show();
   if (!m_SetEditText->isHidden()) {
@@ -1002,23 +990,23 @@ void dlgMainNotes::closeEvent(QCloseEvent *event) {
   loadMemoQML();
 }
 
-void dlgMainNotes::on_editSource_textChanged() { isSave = true; }
+void Notes::on_editSource_textChanged() { isSave = true; }
 
-void dlgMainNotes::on_editSource_cursorPositionChanged() { isSave = true; }
+void Notes::on_editSource_cursorPositionChanged() { isSave = true; }
 
-void dlgMainNotes::on_btnReference_clicked() {
+void Notes::on_btnReference_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
   ui->editSource->insertPlainText("> " + str);
 }
 
-void dlgMainNotes::on_btnShowFind_clicked() {
+void Notes::on_btnShowFind_clicked() {
   if (!ui->frameFind->isHidden())
     ui->frameFind->hide();
   else
     ui->frameFind->show();
 }
 
-void dlgMainNotes::show_findText() {
+void Notes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
   if (findtext == "") return;
   // 获得对话框的内容
@@ -1037,7 +1025,7 @@ void dlgMainNotes::show_findText() {
   }
 }
 
-void dlgMainNotes::show_findTextBack() {
+void Notes::show_findTextBack() {
   QString findtext = ui->editFind->text().trimmed().toLower();
   if (findtext == "") return;
   // 获得对话框的内容
@@ -1056,7 +1044,7 @@ void dlgMainNotes::show_findTextBack() {
   }
 }
 
-void dlgMainNotes::findText() {
+void Notes::findText() {
   QString search_text = ui->editFind->text().trimmed().toLower();
   if (search_text.trimmed().isEmpty()) {
     return;
@@ -1087,22 +1075,20 @@ void dlgMainNotes::findText() {
   }
 }
 
-void dlgMainNotes::on_btnFind_clicked() {
+void Notes::on_btnFind_clicked() {
   if (ui->editFind->text().trimmed() == "") return;
   show_findText();
 }
 
-void dlgMainNotes::on_btnPrev_clicked() { show_findTextBack(); }
+void Notes::on_btnPrev_clicked() { show_findTextBack(); }
 
-void dlgMainNotes::on_btnNext_clicked() { show_findText(); }
+void Notes::on_btnNext_clicked() { show_findText(); }
 
-void dlgMainNotes::on_editFind_returnPressed() { on_btnFind_clicked(); }
+void Notes::on_editFind_returnPressed() { on_btnFind_clicked(); }
 
-void dlgMainNotes::on_editFind_textChanged(const QString &arg1) {
-  Q_UNUSED(arg1);
-}
+void Notes::on_editFind_textChanged(const QString &arg1) { Q_UNUSED(arg1); }
 
-bool dlgMainNotes::selectPDFFormat(QPrinter *printer) {
+bool Notes::selectPDFFormat(QPrinter *printer) {
   QSettings settings;
 
   // select the page size
@@ -1206,7 +1192,7 @@ bool dlgMainNotes::selectPDFFormat(QPrinter *printer) {
   return true;
 }
 
-void dlgMainNotes::on_btnPDF_clicked() {
+void Notes::on_btnPDF_clicked() {
   QString html = mw_one->loadText(iniDir + "memo.html");
   auto doc = new QTextDocument(this);
   doc->setHtml(html);
@@ -1220,7 +1206,7 @@ void dlgMainNotes::on_btnPDF_clicked() {
   delete printer;
 }
 
-void dlgMainNotes::on_btnGetShare_clicked() {
+void Notes::on_btnGetShare_clicked() {
 #ifdef Q_OS_ANDROID
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject javaUriPath = QAndroidJniObject::fromString("uripath");

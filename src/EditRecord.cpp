@@ -77,8 +77,8 @@ EditRecord::EditRecord(QWidget *parent)
 }
 
 void EditRecord::init() {
-  mw_one->mydlgMainNotes->m_SetEditText->close();
-  mw_one->mydlgMainNotes->m_SetEditText = new dlgSetEditText(this);
+  mw_one->m_Notes->m_SetEditText->close();
+  mw_one->m_Notes->m_SetEditText = new dlgSetEditText(this);
 
   setModal(true);
   setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), mw_one->width(),
@@ -315,14 +315,14 @@ void EditRecord::getTime(int h, int m) {
 
 bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
   if (watch == ui->editDetails->viewport()) {
-    mw_one->mydlgMainNotes->getEditPanel(ui->editDetails, evn);
+    mw_one->m_Notes->getEditPanel(ui->editDetails, evn);
   }
 
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!mw_one->mydlgMainNotes->m_SetEditText->isHidden()) {
-        mw_one->mydlgMainNotes->m_SetEditText->close();
+      if (!mw_one->m_Notes->m_SetEditText->isHidden()) {
+        mw_one->m_Notes->m_SetEditText->close();
         return true;
       } else if (!m_List->isHidden()) {
         m_List->close();

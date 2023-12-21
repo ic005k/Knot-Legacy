@@ -1,8 +1,8 @@
 #include "SetEditText.h"
 
 #include "src/MainWindow.h"
-#include "ui_SetEditText.h"
 #include "ui_MainWindow.h"
+#include "ui_SetEditText.h"
 
 extern MainWindow *mw_one;
 
@@ -100,7 +100,7 @@ bool dlgSetEditText::eventFilter(QObject *watch, QEvent *evn) {
 }
 
 void dlgSetEditText::on_btnCopy_clicked() {
-  mw_one->mydlgMainNotes->byTextEdit->copy();
+  mw_one->m_Notes->byTextEdit->copy();
 
   ui->lineEdit->clear();
 
@@ -108,60 +108,55 @@ void dlgSetEditText::on_btnCopy_clicked() {
 }
 
 void dlgSetEditText::on_btnCut_clicked() {
-  mw_one->mydlgMainNotes->byTextEdit->cut();
+  mw_one->m_Notes->byTextEdit->cut();
 
   close();
 }
 
 void dlgSetEditText::on_btnPaste_clicked() {
-  mw_one->mydlgMainNotes->byTextEdit->paste();
+  mw_one->m_Notes->byTextEdit->paste();
 
   close();
 }
 
 void dlgSetEditText::on_btnSetAll_clicked() {
-  mw_one->mydlgMainNotes->byTextEdit->selectAll();
+  mw_one->m_Notes->byTextEdit->selectAll();
 }
 
 void dlgSetEditText::on_btnLeft1_clicked() {
-  mw_one->mydlgMainNotes->start--;
-  if (mw_one->mydlgMainNotes->start < 0) mw_one->mydlgMainNotes->start = 0;
+  mw_one->m_Notes->start--;
+  if (mw_one->m_Notes->start < 0) mw_one->m_Notes->start = 0;
 
-  mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
-                                     mw_one->mydlgMainNotes->end);
+  mw_one->m_Notes->selectText(mw_one->m_Notes->start, mw_one->m_Notes->end);
   ui->lineEdit->setCursorPosition(0);
 }
 
 void dlgSetEditText::on_btnLeft0_clicked() {
-  mw_one->mydlgMainNotes->start++;
-  if (mw_one->mydlgMainNotes->start >= mw_one->mydlgMainNotes->end)
-    mw_one->mydlgMainNotes->start = mw_one->mydlgMainNotes->end - 1;
+  mw_one->m_Notes->start++;
+  if (mw_one->m_Notes->start >= mw_one->m_Notes->end)
+    mw_one->m_Notes->start = mw_one->m_Notes->end - 1;
 
-  mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
-                                     mw_one->mydlgMainNotes->end);
+  mw_one->m_Notes->selectText(mw_one->m_Notes->start, mw_one->m_Notes->end);
   ui->lineEdit->setCursorPosition(0);
 }
 
 void dlgSetEditText::on_btnRight1_clicked() {
-  mw_one->mydlgMainNotes->end++;
+  mw_one->m_Notes->end++;
 
-  mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
-                                     mw_one->mydlgMainNotes->end);
+  mw_one->m_Notes->selectText(mw_one->m_Notes->start, mw_one->m_Notes->end);
 
   if (ui->lineEdit->text().trimmed() == "") {
-    mw_one->mydlgMainNotes->end--;
-    mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
-                                       mw_one->mydlgMainNotes->end);
+    mw_one->m_Notes->end--;
+    mw_one->m_Notes->selectText(mw_one->m_Notes->start, mw_one->m_Notes->end);
   }
 }
 
 void dlgSetEditText::on_btnRight0_clicked() {
-  mw_one->mydlgMainNotes->end--;
-  if (mw_one->mydlgMainNotes->end <= mw_one->mydlgMainNotes->start)
-    mw_one->mydlgMainNotes->end = mw_one->mydlgMainNotes->start + 1;
+  mw_one->m_Notes->end--;
+  if (mw_one->m_Notes->end <= mw_one->m_Notes->start)
+    mw_one->m_Notes->end = mw_one->m_Notes->start + 1;
 
-  mw_one->mydlgMainNotes->selectText(mw_one->mydlgMainNotes->start,
-                                     mw_one->mydlgMainNotes->end);
+  mw_one->m_Notes->selectText(mw_one->m_Notes->start, mw_one->m_Notes->end);
 }
 
 void dlgSetEditText::on_btnBing_clicked() {
@@ -176,6 +171,6 @@ void dlgSetEditText::on_btnBing_clicked() {
 
 void dlgSetEditText::on_btnDel_clicked() {
   if (ui->lineEdit->text().length() > 0)
-    mw_one->mydlgMainNotes->byTextEdit->textCursor().removeSelectedText();
+    mw_one->m_Notes->byTextEdit->textCursor().removeSelectedText();
   on_btnClose_clicked();
 }

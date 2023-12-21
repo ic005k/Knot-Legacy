@@ -233,7 +233,7 @@ class MainWindow : public QMainWindow {
   dlgTodo *mydlgTodo;
   dlgReport *mydlgReport;
   dlgPreferences *mydlgPre;
-  dlgMainNotes *mydlgMainNotes;
+  Notes *m_Notes;
   dlgSteps *mydlgSteps;
   dlgReader *mydlgReader;
   msgDialog *mymsgDlg;

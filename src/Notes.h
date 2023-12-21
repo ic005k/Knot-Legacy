@@ -24,16 +24,16 @@
 #include "ui_SetEditText.h"
 
 namespace Ui {
-class dlgMainNotes;
+class Notes;
 }
 
-class dlgMainNotes : public QDialog {
+class Notes : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgMainNotes(QWidget *parent = nullptr);
-  ~dlgMainNotes();
-  Ui::dlgMainNotes *ui;
+  explicit Notes(QWidget *parent = nullptr);
+  ~Notes();
+  Ui::Notes *ui;
 
   int px, py, mx, my;
   bool isSave = true;

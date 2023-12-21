@@ -1,8 +1,8 @@
 #include "src/RemarksAbout.h"
 
 #include "MainWindow.h"
-#include "ui_RemarksAbout.h"
 #include "ui_MainWindow.h"
+#include "ui_RemarksAbout.h"
 extern MainWindow *mw_one;
 extern bool loading, zh_cn;
 extern QString noteText, appName, ver;
@@ -56,7 +56,7 @@ dlgRemarks::dlgRemarks(QWidget *parent)
 dlgRemarks::~dlgRemarks() { delete ui; }
 
 void dlgRemarks::on_btnBack_clicked() {
-  mw_one->mydlgMainNotes->m_SetEditText->close();
+  mw_one->m_Notes->m_SetEditText->close();
 
   noteText = ui->textEdit->toPlainText();
   curPos = ui->textEdit->textCursor().position();
@@ -78,14 +78,14 @@ void dlgRemarks::on_btnBack_clicked() {
 
 bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
   if (obj == ui->textEdit->viewport()) {
-    mw_one->mydlgMainNotes->getEditPanel(ui->textEdit, evn);
+    mw_one->m_Notes->getEditPanel(ui->textEdit, evn);
   }
 
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!mw_one->mydlgMainNotes->m_SetEditText->isHidden()) {
-        mw_one->mydlgMainNotes->m_SetEditText->close();
+      if (!mw_one->m_Notes->m_SetEditText->isHidden()) {
+        mw_one->m_Notes->m_SetEditText->close();
         return true;
       } else {
         on_btnBack_clicked();

@@ -127,7 +127,7 @@ void dlgNotesList::on_btnNewNote_clicked() {
   int rand = QRandomGenerator::global()->generate();
   if (rand < 0) rand = 0 - rand;
 
-  QString noteFile = "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + "_" +
+  QString noteFile = "memo/" + mw_one->m_Notes->getDateTimeStr() + "_" +
                      QString::number(rand) + ".md";
   QTreeWidgetItem *topitem = ui->treeWidget->currentItem();
   if (topitem->parent() != NULL) topitem = topitem->parent();
@@ -168,8 +168,8 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
     Reg.setValue("/MainNotes/currentItem", curmd);
 
     currentMDFile = iniDir + curmd;
-    mw_one->mydlgMainNotes->MD2Html(currentMDFile);
-    mw_one->mydlgMainNotes->loadMemoQML();
+    mw_one->m_Notes->MD2Html(currentMDFile);
+    mw_one->m_Notes->loadMemoQML();
 
     setNoteName(item->text(0));
   }
@@ -303,7 +303,7 @@ bool dlgNotesList::on_btnImport_clicked() {
       item1->setText(0, tr("Notes Imported"));
     }
     tw->setCurrentItem(item1);
-    QString a = "memo/" + mw_one->mydlgMainNotes->getDateTimeStr() + ".md";
+    QString a = "memo/" + mw_one->m_Notes->getDateTimeStr() + ".md";
     currentMDFile = iniDir + a;
     QString str = mw_one->loadText(fileName);
     QTextEdit *edit = new QTextEdit();
@@ -1184,8 +1184,8 @@ void dlgNotesList::on_actionDel_Note_triggered() {
 
 void dlgNotesList::loadEmptyNote() {
   currentMDFile = "";
-  mw_one->mydlgMainNotes->MD2Html(currentMDFile);
-  mw_one->mydlgMainNotes->loadMemoQML();
+  mw_one->m_Notes->MD2Html(currentMDFile);
+  mw_one->m_Notes->loadMemoQML();
   mw_one->ui->lblNoteName->setText("");
 
   mw_one->m_Method->saveCurNoteIndex();

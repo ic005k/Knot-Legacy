@@ -304,14 +304,14 @@ void Method::clickNoteBook() {
 }
 
 void Method::clickNoteList() {
-  mw_one->mydlgMainNotes->saveQMLVPos();
+  mw_one->m_Notes->saveQMLVPos();
 
   int index = getCurrentIndexBakList(mw_one->ui->qwNoteList);
   mw_one->m_NotesList->currentMDFile =
       iniDir + getText3(mw_one->ui->qwNoteList, index);
   QString noteName = getText0(mw_one->ui->qwNoteList, index);
-  mw_one->mydlgMainNotes->MD2Html(mw_one->m_NotesList->currentMDFile);
-  mw_one->mydlgMainNotes->loadMemoQML();
+  mw_one->m_Notes->MD2Html(mw_one->m_NotesList->currentMDFile);
+  mw_one->m_Notes->loadMemoQML();
   mw_one->ui->lblNoteName->setText(noteName);
 
   saveCurNoteIndex();

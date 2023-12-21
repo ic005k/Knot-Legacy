@@ -443,8 +443,8 @@ MainWindow::MainWindow(QWidget *parent)
 
   // load note
   m_NotesList->currentMDFile = m_NotesList->getCurrentMDFile();
-  mw_one->mydlgMainNotes->MD2Html(m_NotesList->currentMDFile);
-  mw_one->mydlgMainNotes->loadMemoQML();
+  mw_one->m_Notes->MD2Html(m_NotesList->currentMDFile);
+  mw_one->m_Notes->loadMemoQML();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -1956,8 +1956,7 @@ void MainWindow::on_actionRename_triggered() {
 
 void MainWindow::on_actionAdd_Tab_triggered() {
   int count = ui->tabWidget->tabBar()->count();
-  QString twName =
-      mydlgMainNotes->getDateTimeStr() + "_" + QString::number(count + 1);
+  QString twName = m_Notes->getDateTimeStr() + "_" + QString::number(count + 1);
   QString ini_file = iniDir + twName + ".ini";
   if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
@@ -1994,7 +1993,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
   QString twName = tw->objectName();
   QString tab_file = iniDir + twName + ".ini";
-  QString date_time = mydlgMainNotes->getDateTimeStr();
+  QString date_time = m_Notes->getDateTimeStr();
   QFile::copy(tab_file,
               iniDir + "recycle_" + tab_name + "_" + date_time + ".ini");
 
@@ -2334,8 +2333,8 @@ void MainWindow::saveNotes(int tabIndex) {
 void MainWindow::on_btnRemarks_clicked() {
   mydlgReader->setPdfViewVisible(false);
 
-  mydlgMainNotes->m_SetEditText->close();
-  mydlgMainNotes->m_SetEditText = new dlgSetEditText(m_Remarks);
+  m_Notes->m_SetEditText->close();
+  m_Notes->m_SetEditText = new dlgSetEditText(m_Remarks);
 
   m_Remarks->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                          this->width(), this->height() / 2);
@@ -2358,7 +2357,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
 
   if (watch == ui->editTodo->viewport()) {
-    mw_one->mydlgMainNotes->getEditPanel(ui->editTodo, evn);
+    mw_one->m_Notes->getEditPanel(ui->editTodo, evn);
   }
 
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);  // 将之转换为鼠标事件
@@ -2656,8 +2655,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameTodo->isHidden()) {
-        if (!mw_one->mydlgMainNotes->m_SetEditText->isHidden()) {
-          mw_one->mydlgMainNotes->m_SetEditText->close();
+        if (!mw_one->m_Notes->m_SetEditText->isHidden()) {
+          mw_one->m_Notes->m_SetEditText->close();
           return true;
         } else {
           on_btnBackTodo_clicked();
@@ -2916,7 +2915,7 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
 
     QString zipfile = iniDir + "memo.zip";
     QFile(zipfile).remove();
-    mw_one->mydlgMainNotes->zipMemo();
+    mw_one->m_Notes->zipMemo();
 
     if (fileName != zipfile) {
       if (QFile::exists(fileName)) QFile::remove(fileName);
@@ -2925,9 +2924,9 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       QDir *folder = new QDir;
       QString path = "/storage/emulated/0/KnotBak/";
       folder->mkdir(path);
-      QString str = mydlgMainNotes->getDateTimeStr();
+      QString str = m_Notes->getDateTimeStr();
       infoStr = path + str + "_Knot.zip";
-      mydlgMainNotes->androidCopyFile(zipfile, infoStr);
+      m_Notes->androidCopyFile(zipfile, infoStr);
       if (!QFile(infoStr).exists()) {
         QMessageBox box;
         box.setText(tr("Please turn on the storage permission of the app."));
@@ -3004,7 +3003,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
 
       QFile::copy(fileName, iniDir + "memo.zip");
     }
-    mw_one->mydlgMainNotes->unzip(iniDir + "memo.zip");
+    mw_one->m_Notes->unzip(iniDir + "memo.zip");
 
     QFile file(iniDir + "memo/tab.ini");
     if (!file.exists()) {
@@ -3325,8 +3324,8 @@ void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 void MainWindow::on_btnTodo_clicked() {
   removeFilesWatch();
   isSelf = true;
-  mydlgMainNotes->m_SetEditText->close();
-  mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgTodo);
+  m_Notes->m_SetEditText->close();
+  m_Notes->m_SetEditText = new dlgSetEditText(mydlgTodo);
 
   mydlgTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                          this->width(), this->height());
@@ -3623,17 +3622,17 @@ void MainWindow::showNotes() {
 
   QFont f(this->font());
   f.setPointSize(fontSize);
-  mydlgMainNotes->ui->editSource->setFont(f);
+  m_Notes->ui->editSource->setFont(f);
 
   memoHeight = ui->qwNotes->height();
 
-  mydlgMainNotes->ui->btnUndo->setEnabled(false);
-  mydlgMainNotes->ui->btnRedo->setEnabled(false);
+  m_Notes->ui->btnUndo->setEnabled(false);
+  m_Notes->ui->btnRedo->setEnabled(false);
 
   ui->frameMain->hide();
   ui->frameSetKey->hide();
   ui->frameNotes->show();
-  mydlgMainNotes->setVPos();
+  m_Notes->setVPos();
 
   return;
 
@@ -3650,8 +3649,8 @@ QString MainWindow::decMemos(QString strDec, QString file) {
   edit->setPlainText(strDec);
   TextEditToFile(edit, file);
   if (QFile(file).exists()) {
-    mydlgMainNotes->decode(file);
-    text = mydlgMainNotes->Deciphering(file);
+    m_Notes->decode(file);
+    text = m_Notes->Deciphering(file);
 
     QFile::remove(file);
   }
@@ -3685,8 +3684,7 @@ void MainWindow::initQW() {
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
-  ui->qwNotes->rootContext()->setContextProperty("mydlgMainNotes",
-                                                 mydlgMainNotes);
+  ui->qwNotes->rootContext()->setContextProperty("m_Notes", m_Notes);
   ui->qwNotes->rootContext()->setContextProperty("FontSize", fontSize);
   ui->qwNotes->rootContext()->setContextProperty("strText", "");
   ui->qwNotes->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
@@ -3872,7 +3870,7 @@ void MainWindow::init_UIWidget() {
   mydlgTodo->setStyleSheet(vsbarStyleSmall);
   mydlgReport = new dlgReport(this);
   mydlgPre = new dlgPreferences(this);
-  mydlgMainNotes = new dlgMainNotes(this);
+  m_Notes = new Notes(this);
   mydlgSteps = new dlgSteps(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
@@ -4232,7 +4230,7 @@ void MainWindow::redo() {
 }
 
 void MainWindow::addUndo(QString log) {
-  QString undoFile = privateDir + mydlgMainNotes->getDateTimeStr();
+  QString undoFile = privateDir + m_Notes->getDateTimeStr();
   bakIniData(undoFile, true);
 
   for (int i = 0; i < timeLines.count(); i++) {
@@ -4764,7 +4762,7 @@ void MainWindow::on_btnUserInfo_clicked() {
 }
 
 void MainWindow::on_btnBackNotes_clicked() {
-  mydlgMainNotes->saveQMLVPos();
+  m_Notes->saveQMLVPos();
 
   ui->frameNotes->hide();
   ui->frameMain->show();
@@ -4831,10 +4829,10 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 void MainWindow::on_btnEdit_clicked() {
   isSelf = true;
 
-  mydlgMainNotes->m_SetEditText->close();
-  delete mydlgMainNotes->m_SetEditText;
-  mydlgMainNotes->m_SetEditText = new dlgSetEditText(mydlgMainNotes);
-  mydlgMainNotes->m_SetEditText->close();
+  m_Notes->m_SetEditText->close();
+  delete m_Notes->m_SetEditText;
+  m_Notes->m_SetEditText = new dlgSetEditText(m_Notes);
+  m_Notes->m_SetEditText->close();
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -4843,25 +4841,25 @@ void MainWindow::on_btnEdit_clicked() {
 
   QString mdfile = mw_one->loadText(m_NotesList->currentMDFile);
 
-  mydlgMainNotes->init();
-  mydlgMainNotes->ui->editSource->setPlainText(mdfile);
-  new MarkdownHighlighter(mydlgMainNotes->ui->editSource->document());
+  m_Notes->init();
+  m_Notes->ui->editSource->setPlainText(mdfile);
+  new MarkdownHighlighter(m_Notes->ui->editSource->document());
 
   mainHeight = mw_one->height();
   ui->frameNotes->hide();
-  mydlgMainNotes->show();
-  mydlgMainNotes->isShow = true;
+  m_Notes->show();
+  m_Notes->isShow = true;
 
   QString a = m_NotesList->currentMDFile;
   a.replace(iniDir, "");
   int vpos = Reg.value("/MainNotes/editVPos" + a).toInt();
   int cpos = Reg.value("/MainNotes/editCPos" + a).toInt();
-  mydlgMainNotes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
-  QTextCursor tmpCursor = mydlgMainNotes->ui->editSource->textCursor();
+  m_Notes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
+  QTextCursor tmpCursor = m_Notes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);
-  mydlgMainNotes->ui->editSource->setTextCursor(tmpCursor);
+  m_Notes->ui->editSource->setTextCursor(tmpCursor);
 
-  mydlgMainNotes->isSave = false;
+  m_Notes->isSave = false;
 }
 
 void MainWindow::on_btnCode_clicked() {
@@ -4893,8 +4891,8 @@ void MainWindow::clearSelectBox() {
   }
 
   if (!mw_one->ui->frameNotes->isHidden()) {
-    mydlgMainNotes->getVPos();
-    int pos = mydlgMainNotes->sliderPos;
+    m_Notes->getVPos();
+    int pos = m_Notes->sliderPos;
     QQuickItem *root = mw_one->ui->qwNotes->rootObject();
     QMetaObject::invokeMethod((QObject *)root, "loadHtml",
                               Q_ARG(QVariant, tempFile));
@@ -4902,7 +4900,7 @@ void MainWindow::clearSelectBox() {
     // QMetaObject::invokeMethod((QObject*)root, "loadHtml",
     //                           Q_ARG(QVariant, file));
     QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
-                              Q_ARG(QVariant, mydlgMainNotes->htmlBuffer));
+                              Q_ARG(QVariant, m_Notes->htmlBuffer));
     QMetaObject::invokeMethod((QObject *)root, "setVPos", Q_ARG(QVariant, pos));
   }
 }
@@ -5429,7 +5427,7 @@ void MainWindow::on_btnSync_clicked() {
   ui->btnUpload->click();
 }
 
-void MainWindow::on_btnPDF_clicked() { mydlgMainNotes->on_btnPDF_clicked(); }
+void MainWindow::on_btnPDF_clicked() { m_Notes->on_btnPDF_clicked(); }
 
 void MainWindow::on_btnPasteTodo_clicked() { ui->editTodo->paste(); }
 
@@ -5533,8 +5531,7 @@ void MainWindow::on_btnRestoreTab_clicked() {
   if (m_Method->getCountBakList(ui->qwTabRecycle) == 0) return;
 
   int count = ui->tabWidget->tabBar()->count();
-  QString twName =
-      mydlgMainNotes->getDateTimeStr() + "_" + QString::number(count + 1);
+  QString twName = m_Notes->getDateTimeStr() + "_" + QString::number(count + 1);
   QString ini_file = iniDir + twName + ".ini";
   if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
