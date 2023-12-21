@@ -1275,9 +1275,8 @@ void dlgNotesList::on_actionMoveDown_Note_triggered() {
 
 void dlgNotesList::on_actionImport_Note_triggered() {
   int indexBook = getNoteBookCurrentIndex();
-  int indexNote = getNotesListCurrentIndex();
 
-  tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
+  tw->setCurrentItem(tw->topLevelItem(indexBook));
   bool isOk = on_btnImport_clicked();
 
   if (isOk) {
@@ -1291,6 +1290,10 @@ void dlgNotesList::on_actionImport_Note_triggered() {
 void dlgNotesList::on_actionExport_Note_triggered() {
   int indexBook = getNoteBookCurrentIndex();
   int indexNote = getNotesListCurrentIndex();
+
+  if (indexBook < 0) return;
+  if (indexNote < 0) return;
+
   tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
   on_btnExport_clicked();
 }

@@ -87,6 +87,9 @@ SOURCES += \
     src/components/qtmaterialdialog_internal.cpp \
     src/components/qtmaterialprogress_internal.cpp \
     src/main.cpp \
+    src/md4c/entity.c \
+    src/md4c/md4c-html.c \
+    src/md4c/md4c.c \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
     src/onedrive/qtonedrivewebview.cpp \
@@ -144,6 +147,9 @@ HEADERS += \
     src/components/qtmaterialdialog_p.h \
     src/components/qtmaterialprogress_internal.h \
     src/components/qtmaterialprogress_p.h \
+    src/md4c/entity.h \
+    src/md4c/md4c-html.h \
+    src/md4c/md4c.h \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
