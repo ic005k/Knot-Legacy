@@ -271,13 +271,13 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
         str1 = list2.at(list2.count() - 1);
       }
       if (str.contains(str1)) {
-        mw_one->mydlgReader->setEpubPagePosition(i);
+        mw_one->m_Reader->setEpubPagePosition(i);
         break;
       }
     }
   } else {
     // open picture
-    if (htmlIndex == 0 && !mw_one->mydlgReader->isHidden()) {
+    if (htmlIndex == 0 && !mw_one->m_Reader->isHidden()) {
       mw_one->clearSelectBox();
 
       return;
@@ -339,7 +339,7 @@ void DocumentHandler::load(const QUrl &fileUrl) {
         } else {
           // QTextCodec *codec = QTextCodec::codecForHtml(data);
 
-          QTextCodec *codec = QTextCodec::codecForName("utf-8");  //解决中文乱码
+          QTextCodec *codec = QTextCodec::codecForName("utf-8");  // 解决中文乱码
           emit loaded(codec->toUnicode(data), Qt::AutoText);
         }
         doc->setModified(false);
@@ -423,9 +423,9 @@ void DocumentHandler::setModified(bool m) {
 
 void DocumentHandler::setBackDir(QString link) {
   if (link.contains(".html") || link.contains(".xhtml")) {
-    mw_one->mydlgReader->mainDirIndex = htmlIndex;
+    mw_one->m_Reader->mainDirIndex = htmlIndex;
     mw_one->ui->btnBackDir->setEnabled(true);
     mw_one->repaint();
-    qDebug() << "mainDirIndex: " << mw_one->mydlgReader->mainDirIndex;
+    qDebug() << "mainDirIndex: " << mw_one->m_Reader->mainDirIndex;
   }
 }

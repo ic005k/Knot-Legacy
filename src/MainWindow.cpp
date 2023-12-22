@@ -103,7 +103,7 @@ void MainWindow::importDataDone() {
   if (!zipfile.isNull() && isZipOK) {
     m_NotesList->initNotesList();
     m_NotesList->initRecycle();
-    mydlgTodo->init_Todo();
+    m_Todo->init_Todo();
 
     loading = true;
     init_TotalData();
@@ -154,9 +154,9 @@ void ReadEBookThread::run() {
   isReadEBookEnd = false;
 
   if (isEBook) {
-    mw_one->mydlgReader->openFile(ebookFile);
+    mw_one->m_Reader->openFile(ebookFile);
     // for (int i = 0; i < htmlFiles.count(); i++)
-    //   mw_one->mydlgReader->processHtml(i);
+    //   mw_one->m_Reader->processHtml(i);
   }
 
   if (isReport) {
@@ -248,17 +248,17 @@ void MainWindow::readEBookDone() {
       }
     }
 
-    mydlgReader->goPostion();
+    m_Reader->goPostion();
 
-    for (int i = 0; i < mydlgReader->bookList.count(); i++) {
-      QString str = mydlgReader->bookList.at(i);
+    for (int i = 0; i < m_Reader->bookList.count(); i++) {
+      QString str = m_Reader->bookList.at(i);
       if (str.contains(fileName)) {
-        mydlgReader->bookList.removeAt(i);
+        m_Reader->bookList.removeAt(i);
         break;
       }
     }
 
-    mydlgReader->bookList.insert(0, strTitle + "|" + fileName);
+    m_Reader->bookList.insert(0, strTitle + "|" + fileName);
 
     isEBook = false;
   }
@@ -421,7 +421,7 @@ MainWindow::MainWindow(QWidget *parent)
   init_Options();
   init_Sensors();
   init_TotalData();
-  mydlgReader->initReader();
+  m_Reader->initReader();
   loading = false;
 
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
@@ -436,10 +436,10 @@ MainWindow::MainWindow(QWidget *parent)
   resetWinPos();
   initMain = false;
   addFilesWatch();
-  mydlgReader->setPdfViewVisible(false);
+  m_Reader->setPdfViewVisible(false);
 
-  mydlgTodo->refreshTableListsFromIni();
-  mydlgTodo->refreshAlarm();
+  m_Todo->refreshTableListsFromIni();
+  m_Todo->refreshAlarm();
 
   // load note
   m_NotesList->currentMDFile = m_NotesList->getCurrentMDFile();
@@ -464,7 +464,7 @@ void MainWindow::initHardStepSensor() {
     ui->btnPause->click();
     ui->btnPause->setHidden(true);
     ui->btnSteps->setHidden(true);
-    if (ui->rbAlg1->isChecked()) mydlgSteps->on_rbAlg1_clicked();
+    if (ui->rbAlg1->isChecked()) m_Steps->on_rbAlg1_clicked();
   }
   if (isHardStepSensor == 1) {
     ui->btnPause->click();
@@ -594,14 +594,14 @@ void MainWindow::updateSteps() {
   // CurrentSteps = accel_pedometer->stepCount();
   if (ui->rbAlg1->isChecked()) {
     CurrentSteps++;
-    CurTableCount = mydlgSteps->getCurrentSteps();
+    CurTableCount = m_Steps->getCurrentSteps();
     CurTableCount++;
-    mydlgSteps->toDayInitSteps++;
+    m_Steps->toDayInitSteps++;
   }
 
   ui->lcdNumber->display(QString::number(CurTableCount));
   ui->lblSingle->setText(QString::number(CurrentSteps));
-  mydlgSteps->setTableSteps(CurTableCount);
+  m_Steps->setTableSteps(CurTableCount);
 
   if (CurrentSteps == 0) return;
   sendMsg(CurTableCount);
@@ -882,8 +882,8 @@ void MainWindow::init_TotalData() {
 
   myEditRecord->init_Desc();
 
-  mydlgSteps->init_Steps();
-  mydlgSteps->saveSteps();
+  m_Steps->init_Steps();
+  m_Steps->saveSteps();
 
   currentTabIndex = RegTab.value("CurrentIndex").toInt();
   ui->tabWidget->setCurrentIndex(currentTabIndex);
@@ -2331,7 +2331,7 @@ void MainWindow::saveNotes(int tabIndex) {
 }
 
 void MainWindow::on_btnRemarks_clicked() {
-  mydlgReader->setPdfViewVisible(false);
+  m_Reader->setPdfViewVisible(false);
 
   m_Notes->m_SetEditText->close();
   m_Notes->m_SetEditText = new dlgSetEditText(m_Remarks);
@@ -2970,7 +2970,7 @@ void MainWindow::on_actionImport_Data_triggered() {
   if (!zipfile.isNull()) {
     if (!mw_one->showMsgBox("Kont",
                             tr("Import this data?") + "\n" +
-                                mw_one->mydlgReader->getUriRealPath(zipfile),
+                                mw_one->m_Reader->getUriRealPath(zipfile),
                             "", 2)) {
       isZipOK = false;
       return;
@@ -3016,7 +3016,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     }
 
     isZipOK = true;
-    mw_one->mydlgReader->deleteDirfile(iniDir + "memo_bak");
+    mw_one->m_Reader->deleteDirfile(iniDir + "memo_bak");
 
     // Remove old ini files
     QStringList iniFiles;
@@ -3325,10 +3325,10 @@ void MainWindow::on_btnTodo_clicked() {
   removeFilesWatch();
   isSelf = true;
   m_Notes->m_SetEditText->close();
-  m_Notes->m_SetEditText = new dlgSetEditText(mydlgTodo);
+  m_Notes->m_SetEditText = new dlgSetEditText(m_Todo);
 
-  mydlgTodo->setGeometry(this->geometry().x(), this->geometry().y(),
-                         this->width(), this->height());
+  m_Todo->setGeometry(this->geometry().x(), this->geometry().y(), this->width(),
+                      this->height());
   mw_one->ui->qwTodo->rootContext()->setContextProperty("m_width",
                                                         mw_one->width());
 
@@ -3336,9 +3336,9 @@ void MainWindow::on_btnTodo_clicked() {
   ui->frameTodo->setGeometry(this->geometry().x(), this->geometry().y(),
                              this->width(), this->height());
   ui->frameTodo->show();
-  mydlgTodo->init_Todo();
+  m_Todo->init_Todo();
 
-  mydlgTodo->refreshAlarm();
+  m_Todo->refreshAlarm();
 }
 
 void MainWindow::on_rbFreq_clicked() {
@@ -3346,7 +3346,7 @@ void MainWindow::on_rbFreq_clicked() {
   isrbFreq = true;
   CurrentYearMonth = "";
   parentItem = NULL;
-  clickData();
+  m_Method->clickMainDateData();
 }
 
 void MainWindow::on_rbAmount_clicked() {
@@ -3354,7 +3354,7 @@ void MainWindow::on_rbAmount_clicked() {
   isrbFreq = false;
   CurrentYearMonth = "";
   parentItem = NULL;
-  clickData();
+  m_Method->clickMainDateData();
 }
 
 void MainWindow::paintEvent(QPaintEvent *event) {
@@ -3423,22 +3423,22 @@ void MainWindow::on_actionPreferences_triggered() {
 void MainWindow::on_tabCharts_currentChanged(int index) {
   if (ui->rbSteps->isChecked() || loading || index < 0) return;
 
-  clickData();
+  m_Method->clickMainDateData();
 }
 
 void MainWindow::on_btnSteps_clicked() {
-  mydlgSteps->setGeometry(this->geometry().x(), this->geometry().y(),
-                          this->width(), this->height());
+  m_Steps->setGeometry(this->geometry().x(), this->geometry().y(),
+                       this->width(), this->height());
 
   ui->frameMain->hide();
   ui->frameSteps->show();
 
   if (isHardStepSensor == 1) updateHardSensorSteps();
 
-  mydlgSteps->init_Steps();
+  m_Steps->init_Steps();
 
-  mydlgSteps->setScrollBarPos(1.00);
-  mydlgSteps->setMaxMark();
+  m_Steps->setScrollBarPos(1.00);
+  m_Steps->setMaxMark();
 }
 
 void MainWindow::changeEvent(QEvent *event) {
@@ -3447,7 +3447,7 @@ void MainWindow::changeEvent(QEvent *event) {
 }
 
 void MainWindow::on_rbSteps_clicked() {
-  int count = mydlgSteps->getCount();
+  int count = m_Steps->getCount();
   if (count <= 0) return;
 
   tabChart->setCurrentIndex(0);
@@ -3458,10 +3458,10 @@ void MainWindow::on_rbSteps_clicked() {
 
   QString sm = get_Month(QDate::currentDate().toString("ddd MM dd yyyy"));
   for (int i = 0; i < count; i++) {
-    QString strD = mydlgSteps->getDate(i);
+    QString strD = m_Steps->getDate(i);
     if (sm == get_Month(strD)) {
       int day = get_Day(strD);
-      int steps = mydlgSteps->getSteps(i);
+      int steps = m_Steps->getSteps(i);
       PointList.append(QPointF(day, steps));
       doubleList.append(steps);
     }
@@ -3536,7 +3536,7 @@ void MainWindow::updateHardSensorSteps() {
   CurrentSteps = tc - resetSteps;
   ui->lcdNumber->display(QString::number(steps));
   ui->lblSingle->setText(QString::number(CurrentSteps));
-  mydlgSteps->setTableSteps(steps);
+  m_Steps->setTableSteps(steps);
 
   sendMsg(steps);
 }
@@ -3689,7 +3689,7 @@ void MainWindow::initQW() {
   ui->qwNotes->rootContext()->setContextProperty("strText", "");
   ui->qwNotes->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
 
-  ui->qwTodo->rootContext()->setContextProperty("mydlgTodo", mydlgTodo);
+  ui->qwTodo->rootContext()->setContextProperty("m_Todo", m_Todo);
   ui->qwTodo->rootContext()->setContextProperty("FontSize", fontSize);
   ui->qwTodo->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/todo.qml")));
 
@@ -3866,16 +3866,16 @@ void MainWindow::init_UIWidget() {
   m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
 
   myEditRecord = new EditRecord(this);
-  mydlgTodo = new dlgTodo(this);
-  mydlgTodo->setStyleSheet(vsbarStyleSmall);
+  m_Todo = new dlgTodo(this);
+  m_Todo->setStyleSheet(vsbarStyleSmall);
   mydlgReport = new dlgReport(this);
   mydlgPre = new dlgPreferences(this);
   m_Notes = new Notes(this);
-  mydlgSteps = new dlgSteps(this);
+  m_Steps = new dlgSteps(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
-  mydlgReader = new dlgReader(this);
-  mymsgDlg = new msgDialog(this);
+  m_Reader = new dlgReader(this);
+  m_TodoAlarm = new TodoAlarm(this);
   mydlgOneDrive = new TestDialog;
   mydlgFloatFun = new dlgFloatFun(this);
   mydlgFloatFun->close();
@@ -4393,7 +4393,7 @@ static void JavaNotify_2() {
 
 static void JavaNotify_3() {
   mw_one->alertWindowsCount++;
-  mw_one->mydlgTodo->refreshAlarm();
+  mw_one->m_Todo->refreshAlarm();
   qDebug() << "C++ JavaNotify_3";
 }
 
@@ -4518,14 +4518,14 @@ void MainWindow::on_btnReader_clicked() {
     ui->qwReader->rootContext()->setContextProperty("myH", mwh);
   }
 
-  if (isPDF) mydlgReader->setPdfViewVisible(true);
+  if (isPDF) m_Reader->setPdfViewVisible(true);
 
   ui->frameMain->hide();
   ui->frameReader->show();
 
   if (!isOne) {
     isOne = true;
-    mydlgReader->setPageVPos();
+    m_Reader->setPageVPos();
   }
 
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
@@ -4541,12 +4541,12 @@ void MainWindow::setSCrollPro(QObject *obj) {
 
 void MainWindow::on_btnBack_clicked() {
   mydlgReaderFun->close();
-  mydlgReader->setPdfViewVisible(false);
+  m_Reader->setPdfViewVisible(false);
 
   if (isSelText) on_btnSelText_clicked();
 
-  mydlgReader->saveReader();
-  mydlgReader->savePageVPos();
+  m_Reader->saveReader();
+  m_Reader->savePageVPos();
 
   ui->frameReader->hide();
   ui->frameMain->show();
@@ -4554,13 +4554,13 @@ void MainWindow::on_btnBack_clicked() {
 
 void MainWindow::on_btnOpen_clicked() {
   mw_one->mydlgReaderFun->close();
-  mydlgReader->on_btnOpen_clicked();
+  m_Reader->on_btnOpen_clicked();
 }
 
-void MainWindow::on_btnPageUp_clicked() { mydlgReader->on_btnPageUp_clicked(); }
+void MainWindow::on_btnPageUp_clicked() { m_Reader->on_btnPageUp_clicked(); }
 
 void MainWindow::on_btnPageNext_clicked() {
-  mydlgReader->on_btnPageNext_clicked();
+  m_Reader->on_btnPageNext_clicked();
 }
 
 void MainWindow::on_btnPages_clicked() {
@@ -4591,10 +4591,10 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 
 void MainWindow::on_btnReadList_clicked() {
   mydlgReaderFun->close();
-  mydlgReader->getReadList();
+  m_Reader->getReadList();
 }
 
-void MainWindow::on_btnBackDir_clicked() { mydlgReader->backDir(); }
+void MainWindow::on_btnBackDir_clicked() { m_Reader->backDir(); }
 
 QString MainWindow::getTabText() {
   return tabData->tabText(tabData->currentIndex());
@@ -4674,10 +4674,10 @@ void MainWindow::on_btnSelText_clicked() {
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     ui->textBrowser->setFont(font);
 
-    if (isText) ui->textBrowser->setHtml(mydlgReader->currentTxt);
+    if (isText) ui->textBrowser->setHtml(m_Reader->currentTxt);
 
     if (isEpub) {
-      QString str = loadText(mydlgReader->currentHtmlFile);
+      QString str = loadText(m_Reader->currentHtmlFile);
       str.replace("..", strOpfPath);
       QDir dir;
       dir.setCurrent(strOpfPath);
@@ -4687,9 +4687,8 @@ void MainWindow::on_btnSelText_clicked() {
     ui->qwReader->hide();
     ui->textBrowser->show();
 
-    mydlgReader->getVPos();
-    ui->textBrowser->verticalScrollBar()->setSliderPosition(
-        mydlgReader->textPos);
+    m_Reader->getVPos();
+    ui->textBrowser->verticalScrollBar()->setSliderPosition(m_Reader->textPos);
 
     mydlgSetText->setFixedWidth(width() * 2 / 3);
     mydlgSetText->init(geometry().x() + (width() - mydlgSetText->width()) / 2,
@@ -4872,7 +4871,7 @@ void MainWindow::on_btnCode_clicked() {
 void MainWindow::clearSelectBox() {
   QString tempFile = iniDir + "memo/texteditor.html";
   if (!mw_one->ui->frameReader->isHidden()) {
-    mw_one->mydlgReader->savePageVPos();
+    mw_one->m_Reader->savePageVPos();
     bool isAni = false;
     mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", isAni);
     QQuickItem *root = mw_one->ui->qwReader->rootObject();
@@ -4882,12 +4881,12 @@ void MainWindow::clearSelectBox() {
     if (isEpub) {
       QMetaObject::invokeMethod(
           (QObject *)root, "loadHtml",
-          Q_ARG(QVariant, mw_one->mydlgReader->currentHtmlFile));
+          Q_ARG(QVariant, mw_one->m_Reader->currentHtmlFile));
     } else {
       ui->qwReader->rootContext()->setContextProperty("strText",
-                                                      mydlgReader->currentTxt);
+                                                      m_Reader->currentTxt);
     }
-    mw_one->mydlgReader->setPageVPos();
+    mw_one->m_Reader->setPageVPos();
   }
 
   if (!mw_one->ui->frameNotes->isHidden()) {
@@ -5055,7 +5054,7 @@ void MainWindow::on_btnAdd_clicked() {
 }
 
 void MainWindow::on_btnDel_clicked() {
-  mydlgReader->setPdfViewVisible(false);
+  m_Reader->setPdfViewVisible(false);
 
   on_DelRecord();
 }
@@ -5070,43 +5069,41 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 
 void MainWindow::on_KVChanged() {}
 
-void MainWindow::on_btnAddTodo_clicked() { mydlgTodo->on_btnAdd_clicked(); }
+void MainWindow::on_btnAddTodo_clicked() { m_Todo->on_btnAdd_clicked(); }
 
 void MainWindow::on_btnBackTodo_clicked() {
-  mydlgTodo->saveTodo();
+  m_Todo->saveTodo();
   ui->frameTodo->hide();
   ui->frameMain->show();
 
-  mydlgTodo->refreshTableLists();
-  mydlgTodo->refreshAlarm();
+  m_Todo->refreshTableLists();
+  m_Todo->refreshAlarm();
   isSelf = false;
   addFilesWatch();
 }
 
-void MainWindow::on_btnHigh_clicked() { mydlgTodo->on_btnHigh_clicked(); }
+void MainWindow::on_btnHigh_clicked() { m_Todo->on_btnHigh_clicked(); }
 
-void MainWindow::on_btnLow_clicked() { mydlgTodo->on_btnLow_clicked(); }
+void MainWindow::on_btnLow_clicked() { m_Todo->on_btnLow_clicked(); }
 
-void MainWindow::on_btnSetTime_clicked() { mydlgTodo->on_btnSetTime_clicked(); }
+void MainWindow::on_btnSetTime_clicked() { m_Todo->on_btnSetTime_clicked(); }
 
-void MainWindow::on_btnRecycle_clicked() { mydlgTodo->on_btnRecycle_clicked(); }
+void MainWindow::on_btnRecycle_clicked() { m_Todo->on_btnRecycle_clicked(); }
 
 void MainWindow::on_btnReturnRecycle_clicked() {
-  mydlgTodo->on_btnReturn_clicked();
+  m_Todo->on_btnReturn_clicked();
 }
 
-void MainWindow::on_btnClearRecycle_clicked() {
-  mydlgTodo->on_btnClear_clicked();
-}
+void MainWindow::on_btnClearRecycle_clicked() { m_Todo->on_btnClear_clicked(); }
 
-void MainWindow::on_btnDelRecycle_clicked() { mydlgTodo->on_btnDel_clicked(); }
+void MainWindow::on_btnDelRecycle_clicked() { m_Todo->on_btnDel_clicked(); }
 
 void MainWindow::on_btnRestoreRecycle_clicked() {
-  mydlgTodo->on_btnRestore_clicked();
+  m_Todo->on_btnRestore_clicked();
 }
 
 void MainWindow::on_editTodo_textChanged() {
-  mydlgTodo->on_editTodo_textChanged();
+  m_Todo->on_editTodo_textChanged();
 }
 
 void MainWindow::setItemHeight(int h) {
@@ -5398,13 +5395,11 @@ bool MainWindow::setTWCurrentItem() {
   return isSel;
 }
 
-void MainWindow::on_btnBackSteps_clicked() { mydlgSteps->on_btnBack_clicked(); }
+void MainWindow::on_btnBackSteps_clicked() { m_Steps->on_btnBack_clicked(); }
 
-void MainWindow::on_btnPauseSteps_clicked() {
-  mydlgSteps->on_btnPause_clicked();
-}
+void MainWindow::on_btnPauseSteps_clicked() { m_Steps->on_btnPause_clicked(); }
 
-void MainWindow::on_btnReset_clicked() { mydlgSteps->on_btnReset_clicked(); }
+void MainWindow::on_btnReset_clicked() { m_Steps->on_btnReset_clicked(); }
 
 void MainWindow::on_btnBack_Report_clicked() {
   mydlgReport->on_btnBack_clicked();
@@ -5423,7 +5418,7 @@ void MainWindow::on_btnCategory_clicked() {
 }
 
 void MainWindow::on_btnSync_clicked() {
-  mydlgReader->setPdfViewVisible(false);
+  m_Reader->setPdfViewVisible(false);
   ui->btnUpload->click();
 }
 
@@ -5486,7 +5481,7 @@ void MainWindow::on_btnImportBakList_clicked() {
   if (!zipfile.isNull()) {
     if (!mw_one->showMsgBox("Kont",
                             tr("Import this data?") + "\n" +
-                                mw_one->mydlgReader->getUriRealPath(zipfile),
+                                mw_one->m_Reader->getUriRealPath(zipfile),
                             "", 2)) {
       isZipOK = false;
       return;

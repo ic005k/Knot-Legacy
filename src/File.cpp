@@ -63,7 +63,7 @@ QString File::text() const { return m_text; }
 
 qreal File::textPos() {
   if (!mw_one->ui->frameReader->isHidden())
-    mw_one->mydlgReader->textPos = m_textPos;
+    mw_one->m_Reader->textPos = m_textPos;
 
   if (!mw_one->ui->frameNotes->isHidden())
     mw_one->m_Notes->sliderPos = m_textPos;
@@ -78,7 +78,7 @@ qreal File::textHeight() {
     mw_one->m_Notes->textHeight = m_textHeight;
 
   if (!mw_one->ui->frameReader->isHidden())
-    mw_one->mydlgReader->textHeight = m_textHeight;
+    mw_one->m_Reader->textHeight = m_textHeight;
 
   qDebug() << "m_textHeight" << m_textHeight << mw_one->m_Notes->textHeight;
   return m_textHeight;

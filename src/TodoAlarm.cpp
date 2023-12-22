@@ -1,13 +1,13 @@
 #include "TodoAlarm.h"
 
 #include "MainWindow.h"
-#include "ui_TodoAlarm.h"
 #include "ui_MainWindow.h"
+#include "ui_TodoAlarm.h"
 
 extern MainWindow* mw_one;
 extern int fontSize;
 
-msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
+TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->setupUi(this);
 
   font0 = this->font();
@@ -51,9 +51,9 @@ msgDialog::msgDialog(QWidget* parent) : QDialog(parent), ui(new Ui::msgDialog) {
   mw_one->set_btnStyle(this);
 }
 
-msgDialog::~msgDialog() { delete ui; }
+TodoAlarm::~TodoAlarm() { delete ui; }
 
-void msgDialog::initDlg() {
+void TodoAlarm::initDlg() {
   QString str = ui->dateTimeEdit->text();
   QStringList list = str.split(" ");
   QString strDate = list.at(0);
@@ -77,7 +77,7 @@ void msgDialog::initDlg() {
   ui->btnSetDT->setFocus();
 }
 
-void msgDialog::setBtnTitle() {
+void TodoAlarm::setBtnTitle() {
   QString strDT;
   strDT = y + "-" + m + "-" + d + " " + h + ":" + mm;
   ui->dateTimeEdit->setDateTime(QDateTime::fromString(strDT, "yyyy-M-d HH:mm"));
@@ -89,7 +89,7 @@ void msgDialog::setBtnTitle() {
   ui->btnMinute->setText(mm + "\n" + tr("Minute"));
 }
 
-bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
+bool TodoAlarm::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -101,15 +101,15 @@ bool msgDialog::eventFilter(QObject* obj, QEvent* evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void msgDialog::on_btnOK_clicked() { close(); }
+void TodoAlarm::on_btnOK_clicked() { close(); }
 
-void msgDialog::on_btnYear_clicked() {
+void TodoAlarm::on_btnYear_clicked() {
   addBtn(QDate::currentDate().year(), 9, 3, tr("Year"), false);
 }
 
-void msgDialog::on_btnMonth_clicked() { addBtn(1, 12, 3, tr("Month"), false); }
+void TodoAlarm::on_btnMonth_clicked() { addBtn(1, 12, 3, tr("Month"), false); }
 
-void msgDialog::on_btnDay_clicked() {
+void TodoAlarm::on_btnDay_clicked() {
   int maxDay = 0;
   QString sy = ui->btnYear->text().split("\n").at(0);
   QString sm = ui->btnMonth->text().split("\n").at(0);
@@ -118,11 +118,11 @@ void msgDialog::on_btnDay_clicked() {
   addBtn(1, maxDay, 6, tr("Day"), true);
 }
 
-void msgDialog::on_btnHour_clicked() { addDial(0, 23, tr("Hour")); }
+void TodoAlarm::on_btnHour_clicked() { addDial(0, 23, tr("Hour")); }
 
-void msgDialog::on_btnMinute_clicked() { addDial(0, 59, tr("Minute")); }
+void TodoAlarm::on_btnMinute_clicked() { addDial(0, 59, tr("Minute")); }
 
-void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
+void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
   QObjectList lstOfChildren0 =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
   for (int i = 0; i < lstOfChildren0.count(); i++) {
@@ -247,7 +247,7 @@ void msgDialog::addBtn(int start, int total, int col, QString flag, bool week) {
   }
 }
 
-void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
+void TodoAlarm::onBtnClick(QToolButton* btn, QString flag) {
   QObjectList lstOfChildren =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameSel));
   for (int i = 0; i < lstOfChildren.count(); i++) {
@@ -279,13 +279,13 @@ void msgDialog::onBtnClick(QToolButton* btn, QString flag) {
   setBtnTitle();
 }
 
-void msgDialog::on_btnCancelDT_clicked() {
-  mw_one->mydlgTodo->on_btnCancel_clicked();
+void TodoAlarm::on_btnCancelDT_clicked() {
+  mw_one->m_Todo->on_btnCancel_clicked();
 }
 
-void msgDialog::on_btnSetDT_clicked() { mw_one->mydlgTodo->on_btnOK_clicked(); }
+void TodoAlarm::on_btnSetDT_clicked() { mw_one->m_Todo->on_btnOK_clicked(); }
 
-void msgDialog::addDial(int min, int max, QString flag) {
+void TodoAlarm::addDial(int min, int max, QString flag) {
   QObjectList lstOfChildren0 =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
   for (int i = 0; i < lstOfChildren0.count(); i++) {
@@ -347,7 +347,7 @@ void msgDialog::addDial(int min, int max, QString flag) {
   }
 }
 
-void msgDialog::onDial(QDial* btn, QString flag) {
+void TodoAlarm::onDial(QDial* btn, QString flag) {
   if (flag == tr("Hour")) {
     h = QString::number(btn->sliderPosition());
     if (h.length() == 1) h = "0" + h;
@@ -360,7 +360,7 @@ void msgDialog::onDial(QDial* btn, QString flag) {
   setBtnTitle();
 }
 
-void msgDialog::onRollBox(RollingBox* btn, QString flag) {
+void TodoAlarm::onRollBox(RollingBox* btn, QString flag) {
   if (flag == tr("Hour")) {
     h = QString::number(btn->readValue());
     if (h.length() == 1) h = "0" + h;
@@ -373,7 +373,7 @@ void msgDialog::onRollBox(RollingBox* btn, QString flag) {
   setBtnTitle();
 }
 
-void msgDialog::on_btnToday_clicked() {
+void TodoAlarm::on_btnToday_clicked() {
   int day = QDate::currentDate().day();
   y = QString::number(QDate::currentDate().year());
   m = QString::number(QDate::currentDate().month());
@@ -383,7 +383,7 @@ void msgDialog::on_btnToday_clicked() {
   on_btnDay_clicked();
 }
 
-void msgDialog::on_btnTomorrow_clicked() {
+void TodoAlarm::on_btnTomorrow_clicked() {
   QDateTime time = QDateTime::currentDateTime();
   QString str = time.addDays(+1).toString("yyyy-M-d");
   y = str.split("-").at(0);
@@ -394,7 +394,7 @@ void msgDialog::on_btnTomorrow_clicked() {
   on_btnDay_clicked();
 }
 
-void msgDialog::on_btnNextWeek_clicked() {
+void TodoAlarm::on_btnNextWeek_clicked() {
   int week = QDate::currentDate().dayOfWeek();
   int x = 8 - week;
 
@@ -409,7 +409,7 @@ void msgDialog::on_btnNextWeek_clicked() {
   on_btnDay_clicked();
 }
 
-void msgDialog::on_chkDaily_clicked() {
+void TodoAlarm::on_chkDaily_clicked() {
   bool chk = ui->chkDaily->isChecked();
   ui->chk1->setChecked(chk);
   ui->chk2->setChecked(chk);

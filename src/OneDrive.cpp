@@ -10,8 +10,8 @@
 #include "src/MainWindow.h"
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
-#include "ui_OneDrive.h"
 #include "ui_MainWindow.h"
+#include "ui_OneDrive.h"
 
 extern MainWindow *mw_one;
 extern QString iniFile, iniDir, zipfile;
@@ -249,7 +249,7 @@ void TestDialog::uploadData() {
           "OneDrive",
           tr("Uploading data?") + "\n\n" +
               tr("This operation will overwrite the data on OneDrive.") +
-              "\n\n" + mw_one->mydlgReader->getUriRealPath(zipfile) +
+              "\n\n" + mw_one->m_Reader->getUriRealPath(zipfile) +
               "\n\nSIZE: " + mw_one->getFileSize(QFile(zipfile).size(), 2),
           "", 2))
     return;

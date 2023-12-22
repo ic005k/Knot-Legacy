@@ -1,8 +1,8 @@
 #include "ReaderFun.h"
 
 #include "MainWindow.h"
-#include "ui_ReaderFun.h"
 #include "ui_MainWindow.h"
+#include "ui_ReaderFun.h"
 
 extern int fontSize;
 extern MainWindow* mw_one;
@@ -58,23 +58,23 @@ bool dlgReaderFun::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void dlgReaderFun::on_hSlider_sliderReleased() {
-  mw_one->mydlgReader->on_hSlider_sliderReleased(ui->hSlider->value());
+  mw_one->m_Reader->on_hSlider_sliderReleased(ui->hSlider->value());
 }
 
 void dlgReaderFun::on_btnFontPlus_clicked() {
   mw_one->textFontSize++;
-  mw_one->mydlgReader->setFontSize(mw_one->textFontSize);
+  mw_one->m_Reader->setFontSize(mw_one->textFontSize);
 }
 
 void dlgReaderFun::on_btnFontLess_clicked() {
   if (mw_one->textFontSize <= 8) return;
   mw_one->textFontSize--;
-  mw_one->mydlgReader->setFontSize(mw_one->textFontSize);
+  mw_one->m_Reader->setFontSize(mw_one->textFontSize);
 }
 
 void dlgReaderFun::on_btnFont_clicked() {
   close();
-  mw_one->mydlgReader->selectFont();
+  mw_one->m_Reader->selectFont();
 }
 
 void dlgReaderFun::on_hSlider_sliderMoved(int position) {
@@ -87,8 +87,8 @@ void dlgReaderFun::on_btnStyle1_clicked() {
   Reg.setIniCodec("utf-8");
 #endif
   Reg.setValue("/Reader/Style", "1");
-  mw_one->mydlgReader->readerStyle = "1";
-  mw_one->mydlgReader->setReaderStyle();
+  mw_one->m_Reader->readerStyle = "1";
+  mw_one->m_Reader->setReaderStyle();
 }
 
 void dlgReaderFun::on_btnStyle2_clicked() {
@@ -97,8 +97,8 @@ void dlgReaderFun::on_btnStyle2_clicked() {
   Reg.setIniCodec("utf-8");
 #endif
   Reg.setValue("/Reader/Style", "2");
-  mw_one->mydlgReader->readerStyle = "2";
-  mw_one->mydlgReader->setReaderStyle();
+  mw_one->m_Reader->readerStyle = "2";
+  mw_one->m_Reader->setReaderStyle();
 }
 
 void dlgReaderFun::on_btnStyle3_clicked() {
@@ -107,6 +107,6 @@ void dlgReaderFun::on_btnStyle3_clicked() {
   Reg.setIniCodec("utf-8");
 #endif
   Reg.setValue("/Reader/Style", "3");
-  mw_one->mydlgReader->readerStyle = "3";
-  mw_one->mydlgReader->setReaderStyle();
+  mw_one->m_Reader->readerStyle = "3";
+  mw_one->m_Reader->setReaderStyle();
 }

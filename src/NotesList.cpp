@@ -274,7 +274,7 @@ bool dlgNotesList::on_btnImport_clicked() {
   isMD = fileName.contains(".md");
   strInfo = fileName;
 #ifdef Q_OS_ANDROID
-  QString fileAndroid = mw_one->mydlgReader->getUriRealPath(fileName);
+  QString fileAndroid = mw_one->m_Reader->getUriRealPath(fileName);
   isMD = fileAndroid.contains(".md");
 
   QStringList list = fileAndroid.split("/");

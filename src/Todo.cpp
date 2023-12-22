@@ -1,8 +1,8 @@
 #include "Todo.h"
 
 #include "MainWindow.h"
-#include "ui_Todo.h"
 #include "ui_MainWindow.h"
+#include "ui_Todo.h"
 
 QString highLblStyle = "color:rgb(212,35,122)";
 int highCount;
@@ -208,31 +208,32 @@ void dlgTodo::on_btnOK_clicked() {
   QString strTodoText = getItemTodoText(row);
   QString strTime;
 
-  if (!mw_one->mymsgDlg->ui->chk1->isChecked() &&
-      !mw_one->mymsgDlg->ui->chk2->isChecked() &&
-      !mw_one->mymsgDlg->ui->chk3->isChecked() &&
-      !mw_one->mymsgDlg->ui->chk4->isChecked() &&
-      !mw_one->mymsgDlg->ui->chk5->isChecked() &&
-      !mw_one->mymsgDlg->ui->chk6->isChecked() &&
-      !mw_one->mymsgDlg->ui->chk7->isChecked()) {
-    mw_one->mymsgDlg->ui->chkDaily->setChecked(false);
+  if (!mw_one->m_TodoAlarm->ui->chk1->isChecked() &&
+      !mw_one->m_TodoAlarm->ui->chk2->isChecked() &&
+      !mw_one->m_TodoAlarm->ui->chk3->isChecked() &&
+      !mw_one->m_TodoAlarm->ui->chk4->isChecked() &&
+      !mw_one->m_TodoAlarm->ui->chk5->isChecked() &&
+      !mw_one->m_TodoAlarm->ui->chk6->isChecked() &&
+      !mw_one->m_TodoAlarm->ui->chk7->isChecked()) {
+    mw_one->m_TodoAlarm->ui->chkDaily->setChecked(false);
   }
 
-  if (mw_one->mymsgDlg->ui->chkDaily->isChecked()) {
+  if (mw_one->m_TodoAlarm->ui->chkDaily->isChecked()) {
     QString str;
-    if (mw_one->mymsgDlg->ui->chk1->isChecked()) str = str + "1";
-    if (mw_one->mymsgDlg->ui->chk2->isChecked()) str = str + "2";
-    if (mw_one->mymsgDlg->ui->chk3->isChecked()) str = str + "3";
-    if (mw_one->mymsgDlg->ui->chk4->isChecked()) str = str + "4";
-    if (mw_one->mymsgDlg->ui->chk5->isChecked()) str = str + "5";
-    if (mw_one->mymsgDlg->ui->chk6->isChecked()) str = str + "6";
-    if (mw_one->mymsgDlg->ui->chk7->isChecked()) str = str + "7";
+    if (mw_one->m_TodoAlarm->ui->chk1->isChecked()) str = str + "1";
+    if (mw_one->m_TodoAlarm->ui->chk2->isChecked()) str = str + "2";
+    if (mw_one->m_TodoAlarm->ui->chk3->isChecked()) str = str + "3";
+    if (mw_one->m_TodoAlarm->ui->chk4->isChecked()) str = str + "4";
+    if (mw_one->m_TodoAlarm->ui->chk5->isChecked()) str = str + "5";
+    if (mw_one->m_TodoAlarm->ui->chk6->isChecked()) str = str + "6";
+    if (mw_one->m_TodoAlarm->ui->chk7->isChecked()) str = str + "7";
 
     strTime = tr("Alarm") + "  " + str + "  " +
-              mw_one->mymsgDlg->ui->dateTimeEdit->time().toString("HH:mm");
+              mw_one->m_TodoAlarm->ui->dateTimeEdit->time().toString("HH:mm");
 
   } else {
-    strTime = tr("Alarm") + "  " + mw_one->mymsgDlg->ui->dateTimeEdit->text();
+    strTime =
+        tr("Alarm") + "  " + mw_one->m_TodoAlarm->ui->dateTimeEdit->text();
   }
 
   delItem(row);
@@ -240,7 +241,7 @@ void dlgTodo::on_btnOK_clicked() {
   setCurrentIndex(row);
 
   ui->frameSetTime->hide();
-  mw_one->mymsgDlg->close();
+  mw_one->m_TodoAlarm->close();
 
   refreshTableLists();
   refreshAlarm();
@@ -319,20 +320,20 @@ void dlgTodo::on_btnSetTime_clicked() {
   int row = getCurrentIndex();
   if (row < 0) return;
 
-  delete mw_one->mymsgDlg;
-  mw_one->mymsgDlg = new msgDialog(this);
+  delete mw_one->m_TodoAlarm;
+  mw_one->m_TodoAlarm = new TodoAlarm(this);
 
   QString str = getItemTime(row);
   QDate date;
   QTime time;
-  mw_one->mymsgDlg->ui->chk1->setChecked(false);
-  mw_one->mymsgDlg->ui->chk2->setChecked(false);
-  mw_one->mymsgDlg->ui->chk3->setChecked(false);
-  mw_one->mymsgDlg->ui->chk4->setChecked(false);
-  mw_one->mymsgDlg->ui->chk5->setChecked(false);
-  mw_one->mymsgDlg->ui->chk6->setChecked(false);
-  mw_one->mymsgDlg->ui->chk7->setChecked(false);
-  mw_one->mymsgDlg->ui->chkDaily->setChecked(false);
+  mw_one->m_TodoAlarm->ui->chk1->setChecked(false);
+  mw_one->m_TodoAlarm->ui->chk2->setChecked(false);
+  mw_one->m_TodoAlarm->ui->chk3->setChecked(false);
+  mw_one->m_TodoAlarm->ui->chk4->setChecked(false);
+  mw_one->m_TodoAlarm->ui->chk5->setChecked(false);
+  mw_one->m_TodoAlarm->ui->chk6->setChecked(false);
+  mw_one->m_TodoAlarm->ui->chk7->setChecked(false);
+  mw_one->m_TodoAlarm->ui->chkDaily->setChecked(false);
 
   if (str.contains(tr("Alarm"))) {
     str = str.replace(tr("Alarm"), "").trimmed();
@@ -344,13 +345,13 @@ void dlgTodo::on_btnSetTime_clicked() {
       QString s1 = list.at(0);
       for (int i = 0; i < s1.length(); i++) {
         QString s2 = s1.mid(i, 1);
-        if (s2 == "1") mw_one->mymsgDlg->ui->chk1->setChecked(true);
-        if (s2 == "2") mw_one->mymsgDlg->ui->chk2->setChecked(true);
-        if (s2 == "3") mw_one->mymsgDlg->ui->chk3->setChecked(true);
-        if (s2 == "4") mw_one->mymsgDlg->ui->chk4->setChecked(true);
-        if (s2 == "5") mw_one->mymsgDlg->ui->chk5->setChecked(true);
-        if (s2 == "6") mw_one->mymsgDlg->ui->chk6->setChecked(true);
-        if (s2 == "7") mw_one->mymsgDlg->ui->chk7->setChecked(true);
+        if (s2 == "1") mw_one->m_TodoAlarm->ui->chk1->setChecked(true);
+        if (s2 == "2") mw_one->m_TodoAlarm->ui->chk2->setChecked(true);
+        if (s2 == "3") mw_one->m_TodoAlarm->ui->chk3->setChecked(true);
+        if (s2 == "4") mw_one->m_TodoAlarm->ui->chk4->setChecked(true);
+        if (s2 == "5") mw_one->m_TodoAlarm->ui->chk5->setChecked(true);
+        if (s2 == "6") mw_one->m_TodoAlarm->ui->chk6->setChecked(true);
+        if (s2 == "7") mw_one->m_TodoAlarm->ui->chk7->setChecked(true);
       }
       date = QDate::currentDate();
 
@@ -361,11 +362,11 @@ void dlgTodo::on_btnSetTime_clicked() {
         }
       }
 
-      mw_one->mymsgDlg->ui->chkDaily->setChecked(true);
+      mw_one->m_TodoAlarm->ui->chkDaily->setChecked(true);
     }
 
-    mw_one->mymsgDlg->ui->dateTimeEdit->setDate(date);
-    mw_one->mymsgDlg->ui->dateTimeEdit->setTime(time);
+    mw_one->m_TodoAlarm->ui->dateTimeEdit->setDate(date);
+    mw_one->m_TodoAlarm->ui->dateTimeEdit->setTime(time);
 
   } else {
     QStringList list = str.split(" ");
@@ -386,13 +387,13 @@ void dlgTodo::on_btnSetTime_clicked() {
       QString s1 = list.at(0);
       for (int i = 0; i < s1.length(); i++) {
         QString s2 = s1.mid(i, 1);
-        if (s2 == "1") mw_one->mymsgDlg->ui->chk1->setChecked(true);
-        if (s2 == "2") mw_one->mymsgDlg->ui->chk2->setChecked(true);
-        if (s2 == "3") mw_one->mymsgDlg->ui->chk3->setChecked(true);
-        if (s2 == "4") mw_one->mymsgDlg->ui->chk4->setChecked(true);
-        if (s2 == "5") mw_one->mymsgDlg->ui->chk5->setChecked(true);
-        if (s2 == "6") mw_one->mymsgDlg->ui->chk6->setChecked(true);
-        if (s2 == "7") mw_one->mymsgDlg->ui->chk7->setChecked(true);
+        if (s2 == "1") mw_one->m_TodoAlarm->ui->chk1->setChecked(true);
+        if (s2 == "2") mw_one->m_TodoAlarm->ui->chk2->setChecked(true);
+        if (s2 == "3") mw_one->m_TodoAlarm->ui->chk3->setChecked(true);
+        if (s2 == "4") mw_one->m_TodoAlarm->ui->chk4->setChecked(true);
+        if (s2 == "5") mw_one->m_TodoAlarm->ui->chk5->setChecked(true);
+        if (s2 == "6") mw_one->m_TodoAlarm->ui->chk6->setChecked(true);
+        if (s2 == "7") mw_one->m_TodoAlarm->ui->chk7->setChecked(true);
       }
       date = QDate::currentDate();
       for (int i = 0; i < list.count(); i++) {
@@ -402,20 +403,20 @@ void dlgTodo::on_btnSetTime_clicked() {
         }
       }
 
-      mw_one->mymsgDlg->ui->chkDaily->setChecked(true);
+      mw_one->m_TodoAlarm->ui->chkDaily->setChecked(true);
     }
 
-    mw_one->mymsgDlg->ui->dateTimeEdit->setDate(date);
-    mw_one->mymsgDlg->ui->dateTimeEdit->setTime(time);
+    mw_one->m_TodoAlarm->ui->dateTimeEdit->setDate(date);
+    mw_one->m_TodoAlarm->ui->dateTimeEdit->setTime(time);
   }
 
-  mw_one->mymsgDlg->initDlg();
+  mw_one->m_TodoAlarm->initDlg();
   QString txt = tr("Todo") + " : " + getItemTodoText(row);
   txt = txt.replace("\n", " ");
   QFontMetrics fm(this->font());
   QString qsLine = fm.elidedText(txt, Qt::ElideRight, this->width() - 10);
-  mw_one->mymsgDlg->ui->lblTodoText->setText(qsLine);
-  mw_one->mymsgDlg->show();
+  mw_one->m_TodoAlarm->ui->lblTodoText->setText(qsLine);
+  mw_one->m_TodoAlarm->show();
 }
 
 void dlgTodo::on_btnCancel_clicked() {
@@ -426,7 +427,7 @@ void dlgTodo::on_btnCancel_clicked() {
   if (str.contains(tr("Alarm"))) str = str.replace(tr("Alarm"), "");
   modifyTime(row, str);
   ui->frameSetTime->hide();
-  mw_one->mymsgDlg->close();
+  mw_one->m_TodoAlarm->close();
 
   refreshTableLists();
   refreshAlarm();

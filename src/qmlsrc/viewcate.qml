@@ -319,7 +319,7 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        mydlgTodo.addToRecycle()
+                        m_Todo.addToRecycle()
                         view.model.remove(index)
                     }
                 }

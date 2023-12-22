@@ -207,7 +207,7 @@ Rectangle {
                 }
 
                 onDoubleClicked: {
-                    mydlgTodo.reeditText()
+                    m_Todo.reeditText()
                     var data = view.model.get(view.currentIndex)
                     console.log(data.time + "," + data.dototext + ", count=" + view.count)
                 }
@@ -256,7 +256,7 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        mydlgTodo.addToRecycle()
+                        m_Todo.addToRecycle()
                         view.model.remove(index)
                     }
                 }

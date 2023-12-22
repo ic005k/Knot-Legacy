@@ -209,7 +209,7 @@ Rectangle {
                     }
 
                     onDoubleClicked: {
-                        mydlgTodo.reeditText()
+                        m_Todo.reeditText()
                         var data = view.model.get(view.currentIndex)
                         console.log(data.time + "," + data.dototext + ", count=" + view.count)
                     }
@@ -232,10 +232,10 @@ Rectangle {
                         onClicked: {
                             view.currentIndex = index
 
-                            mydlgTodo.addToRecycle()
+                            m_Todo.addToRecycle()
                             view.model.remove(index)
-                            mydlgTodo.refreshTableLists()
-                            mydlgTodo.refreshAlarm()
+                            m_Todo.refreshTableLists()
+                            m_Todo.refreshAlarm()
                             console.log("mouse isclick")
                         }
                     }

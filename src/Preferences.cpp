@@ -3,8 +3,8 @@
 #include <QKeyEvent>
 
 #include "MainWindow.h"
-#include "ui_Preferences.h"
 #include "ui_MainWindow.h"
+#include "ui_Preferences.h"
 extern QString iniFile, iniDir, privateDir, fontname, infoStr;
 extern MainWindow* mw_one;
 extern bool isBreak;
@@ -158,7 +158,7 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
 
     QString str = customFontPath;
 #ifdef Q_OS_ANDROID
-    str = mw_one->mydlgReader->getUriRealPath(customFontPath);
+    str = mw_one->m_Reader->getUriRealPath(customFontPath);
 #endif
     ui->lblFontPath->setText(str);
 
@@ -169,10 +169,10 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
 
     if (ui->chkReaderFont->isChecked()) {
       fontname = fontName;
-      mw_one->mydlgReader->savePageVPos();
+      mw_one->m_Reader->savePageVPos();
       mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
                                                               fontname);
-      mw_one->mydlgReader->setPageVPos();
+      mw_one->m_Reader->setPageVPos();
     }
   }
 

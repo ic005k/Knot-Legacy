@@ -10,16 +10,16 @@
 #include "RollingBox.h"
 
 namespace Ui {
-class msgDialog;
+class TodoAlarm;
 }
 
-class msgDialog : public QDialog {
+class TodoAlarm : public QDialog {
   Q_OBJECT
 
  public:
-  explicit msgDialog(QWidget *parent = nullptr);
-  ~msgDialog();
-  Ui::msgDialog *ui;
+  explicit TodoAlarm(QWidget *parent = nullptr);
+  ~TodoAlarm();
+  Ui::TodoAlarm *ui;
 
   void initDlg();
   // QString btnSelStyle = "QToolButton {background-color: blue;color: white;}";

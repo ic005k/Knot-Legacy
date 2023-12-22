@@ -494,7 +494,7 @@ QStringList Notes::getImgFileFromHtml(QString htmlfile) {
   QTextEdit *edit = new QTextEdit;
   edit->setPlainText(strHtml);
   for (int i = 0; i < edit->document()->lineCount(); i++) {
-    QString str = mw_one->mydlgReader->getTextEditLineText(edit, i).trimmed();
+    QString str = mw_one->m_Reader->getTextEditLineText(edit, i).trimmed();
     if (str.contains("<img src=")) {
       str = str.replace("<img src=", "");
       str = str.replace("/>", "");
@@ -576,7 +576,7 @@ void Notes::zipMemo() {
 }
 
 void Notes::unzip(QString zipfile) {
-  mw_one->mydlgReader->deleteDirfile(iniDir + "memo");
+  mw_one->m_Reader->deleteDirfile(iniDir + "memo");
   QDir::setCurrent(iniDir);
 #ifdef Q_OS_MACOS
   QProcess *pro = new QProcess;
@@ -642,7 +642,7 @@ void Notes::loadMemoQML() {
   edit->setPlainText(strhtml);
   QString str;
   for (int i = 0; i < edit->document()->lineCount(); i++) {
-    str = mw_one->mydlgReader->getTextEditLineText(edit, i);
+    str = mw_one->m_Reader->getTextEditLineText(edit, i);
     str = str.trimmed();
     if (str.mid(0, 4) == "<img" && str.contains("file://")) {
       QString str1 = str;
@@ -674,7 +674,7 @@ void Notes::loadMemoQML() {
 
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
 
-  // mw_one->mydlgReader->TextEditToFile(edit1, htmlFileName);
+  // mw_one->m_Reader->TextEditToFile(edit1, htmlFileName);
   // QMetaObject::invokeMethod((QObject*)root, "loadHtml",
   //                          Q_ARG(QVariant, htmlFileName));
 

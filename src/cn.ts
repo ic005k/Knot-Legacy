@@ -797,8 +797,8 @@
     </message>
     <message>
         <location filename="MainWindow.ui" line="4228"/>
-        <location filename="MainWindow.cpp" line="5672"/>
-        <location filename="MainWindow.cpp" line="5679"/>
+        <location filename="MainWindow.cpp" line="5667"/>
+        <location filename="MainWindow.cpp" line="5674"/>
         <source>Show Find</source>
         <translation>显示查找</translation>
     </message>
@@ -849,9 +849,9 @@
         <location filename="MainWindow.cpp" line="1876"/>
         <location filename="MainWindow.cpp" line="1906"/>
         <location filename="MainWindow.cpp" line="2044"/>
-        <location filename="MainWindow.cpp" line="5255"/>
-        <location filename="MainWindow.cpp" line="5277"/>
-        <location filename="MainWindow.cpp" line="5333"/>
+        <location filename="MainWindow.cpp" line="5252"/>
+        <location filename="MainWindow.cpp" line="5274"/>
+        <location filename="MainWindow.cpp" line="5330"/>
         <source>Amount</source>
         <translation>金额</translation>
     </message>
@@ -992,9 +992,9 @@
         <location filename="MainWindow.cpp" line="3574"/>
         <location filename="MainWindow.cpp" line="3604"/>
         <location filename="MainWindow.cpp" line="4624"/>
-        <location filename="MainWindow.cpp" line="4793"/>
-        <location filename="MainWindow.cpp" line="4812"/>
-        <location filename="MainWindow.cpp" line="4823"/>
+        <location filename="MainWindow.cpp" line="4792"/>
+        <location filename="MainWindow.cpp" line="4811"/>
+        <location filename="MainWindow.cpp" line="4822"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -1038,8 +1038,8 @@
         <location filename="MainWindow.cpp" line="4083"/>
         <location filename="MainWindow.cpp" line="4300"/>
         <location filename="MainWindow.cpp" line="4328"/>
-        <location filename="MainWindow.cpp" line="5526"/>
-        <location filename="MainWindow.cpp" line="5577"/>
+        <location filename="MainWindow.cpp" line="5521"/>
+        <location filename="MainWindow.cpp" line="5572"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
@@ -1064,8 +1064,8 @@
         <location filename="MainWindow.cpp" line="1872"/>
         <location filename="MainWindow.cpp" line="1902"/>
         <location filename="MainWindow.cpp" line="2043"/>
-        <location filename="MainWindow.cpp" line="5250"/>
-        <location filename="MainWindow.cpp" line="5328"/>
+        <location filename="MainWindow.cpp" line="5247"/>
+        <location filename="MainWindow.cpp" line="5325"/>
         <source>Freq</source>
         <translation>频次</translation>
     </message>
@@ -1079,9 +1079,9 @@
     </message>
     <message>
         <location filename="MainWindow.cpp" line="1986"/>
-        <location filename="MainWindow.cpp" line="5517"/>
-        <location filename="MainWindow.cpp" line="5568"/>
-        <location filename="MainWindow.cpp" line="5616"/>
+        <location filename="MainWindow.cpp" line="5512"/>
+        <location filename="MainWindow.cpp" line="5563"/>
+        <location filename="MainWindow.cpp" line="5611"/>
         <source>Whether to remove</source>
         <translation>是否删除</translation>
     </message>
@@ -1153,7 +1153,7 @@
     </message>
     <message>
         <location filename="MainWindow.cpp" line="1221"/>
-        <location filename="MainWindow.cpp" line="5282"/>
+        <location filename="MainWindow.cpp" line="5279"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
@@ -1227,13 +1227,13 @@
     </message>
     <message>
         <location filename="MainWindow.cpp" line="2972"/>
-        <location filename="MainWindow.cpp" line="5488"/>
+        <location filename="MainWindow.cpp" line="5483"/>
         <source>Import this data?</source>
         <translation>是否导入这个数据？</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="5675"/>
-        <location filename="MainWindow.cpp" line="5677"/>
+        <location filename="MainWindow.cpp" line="5670"/>
+        <location filename="MainWindow.cpp" line="5672"/>
         <source>Hide Find</source>
         <translation>隐藏查找</translation>
     </message>
@@ -1241,7 +1241,7 @@
         <location filename="MainWindow.ui" line="3652"/>
         <location filename="MainWindow.cpp" line="4113"/>
         <location filename="MainWindow.cpp" line="4328"/>
-        <location filename="MainWindow.cpp" line="5577"/>
+        <location filename="MainWindow.cpp" line="5572"/>
         <source>Backup File List</source>
         <translation>备份文件列表</translation>
     </message>
@@ -1249,12 +1249,12 @@
         <location filename="MainWindow.ui" line="3890"/>
         <location filename="MainWindow.cpp" line="4114"/>
         <location filename="MainWindow.cpp" line="4300"/>
-        <location filename="MainWindow.cpp" line="5526"/>
+        <location filename="MainWindow.cpp" line="5521"/>
         <source>Tab Recycle</source>
         <translation>标签页回收箱</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="5560"/>
+        <location filename="MainWindow.cpp" line="5555"/>
         <source>Restore Tab</source>
         <translation>恢复标签页</translation>
     </message>
@@ -1334,12 +1334,12 @@
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4792"/>
+        <location filename="MainWindow.cpp" line="4791"/>
         <source>The password is removed.</source>
         <translation>密码被删除</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4811"/>
+        <location filename="MainWindow.cpp" line="4810"/>
         <source>The password is set successfully.</source>
         <translation>密码设置成功</translation>
     </message>
@@ -1368,7 +1368,7 @@
     </message>
     <message>
         <location filename="MainWindow.cpp" line="3602"/>
-        <location filename="MainWindow.cpp" line="4822"/>
+        <location filename="MainWindow.cpp" line="4821"/>
         <source>The entered password does not match.</source>
         <translation>输入的密码不匹配</translation>
     </message>
@@ -2127,6 +2127,192 @@ in skydrive folder</source>
     <message>
         <source>Ok</source>
         <translation type="vanished">确定</translation>
+    </message>
+</context>
+<context>
+    <name>TodoAlarm</name>
+    <message>
+        <location filename="TodoAlarm.ui" line="14"/>
+        <source>Alarm</source>
+        <translation>定时提醒</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="26"/>
+        <source>TodoText</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="97"/>
+        <source>yyyy-M-d HH:mm</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="110"/>
+        <source>Back</source>
+        <translation>返回</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="135"/>
+        <source>Del Alarm</source>
+        <translation>删除定时</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="160"/>
+        <source>Set Alarm</source>
+        <translation>设置定时</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="209"/>
+        <location filename="TodoAlarm.cpp" line="85"/>
+        <location filename="TodoAlarm.cpp" line="107"/>
+        <location filename="TodoAlarm.cpp" line="222"/>
+        <location filename="TodoAlarm.cpp" line="263"/>
+        <source>Year</source>
+        <translation>年</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="222"/>
+        <location filename="TodoAlarm.cpp" line="86"/>
+        <location filename="TodoAlarm.cpp" line="110"/>
+        <location filename="TodoAlarm.cpp" line="227"/>
+        <location filename="TodoAlarm.cpp" line="266"/>
+        <source>Month</source>
+        <translation>月</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="235"/>
+        <location filename="TodoAlarm.cpp" line="87"/>
+        <location filename="TodoAlarm.cpp" line="118"/>
+        <location filename="TodoAlarm.cpp" line="232"/>
+        <location filename="TodoAlarm.cpp" line="269"/>
+        <source>Day</source>
+        <translation>日</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="248"/>
+        <location filename="TodoAlarm.cpp" line="88"/>
+        <location filename="TodoAlarm.cpp" line="121"/>
+        <location filename="TodoAlarm.cpp" line="155"/>
+        <location filename="TodoAlarm.cpp" line="237"/>
+        <location filename="TodoAlarm.cpp" line="272"/>
+        <location filename="TodoAlarm.cpp" line="315"/>
+        <location filename="TodoAlarm.cpp" line="324"/>
+        <location filename="TodoAlarm.cpp" line="344"/>
+        <location filename="TodoAlarm.cpp" line="351"/>
+        <location filename="TodoAlarm.cpp" line="364"/>
+        <source>Hour</source>
+        <translation>时</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="261"/>
+        <location filename="TodoAlarm.cpp" line="89"/>
+        <location filename="TodoAlarm.cpp" line="123"/>
+        <location filename="TodoAlarm.cpp" line="155"/>
+        <location filename="TodoAlarm.cpp" line="242"/>
+        <location filename="TodoAlarm.cpp" line="275"/>
+        <location filename="TodoAlarm.cpp" line="321"/>
+        <location filename="TodoAlarm.cpp" line="341"/>
+        <location filename="TodoAlarm.cpp" line="356"/>
+        <location filename="TodoAlarm.cpp" line="369"/>
+        <source>Minute</source>
+        <translation>分</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="304"/>
+        <source>Today</source>
+        <translation>今天</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="317"/>
+        <source>Tomorrow</source>
+        <translation>明天</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="330"/>
+        <source>Next Week</source>
+        <translation>下周</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="369"/>
+        <source>Daily (Sel by week)</source>
+        <translation>每天（按周选择）</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="395"/>
+        <source>6</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="424"/>
+        <source>7</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="444"/>
+        <source>1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="473"/>
+        <source>2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="502"/>
+        <source>3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="531"/>
+        <source>4</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.ui" line="560"/>
+        <source>5</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.cpp" line="166"/>
+        <location filename="TodoAlarm.cpp" line="201"/>
+        <source>Mon</source>
+        <translation>一</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.cpp" line="167"/>
+        <location filename="TodoAlarm.cpp" line="202"/>
+        <source>Tue</source>
+        <translation>二</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.cpp" line="168"/>
+        <location filename="TodoAlarm.cpp" line="203"/>
+        <source>Wed</source>
+        <translation>三</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.cpp" line="169"/>
+        <location filename="TodoAlarm.cpp" line="204"/>
+        <source>Thur</source>
+        <translation>四</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.cpp" line="170"/>
+        <location filename="TodoAlarm.cpp" line="205"/>
+        <source>Fri</source>
+        <translation>五</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.cpp" line="171"/>
+        <location filename="TodoAlarm.cpp" line="206"/>
+        <source>Sat</source>
+        <translation>六</translation>
+    </message>
+    <message>
+        <location filename="TodoAlarm.cpp" line="172"/>
+        <location filename="TodoAlarm.cpp" line="207"/>
+        <source>Sun</source>
+        <translation>日</translation>
     </message>
 </context>
 <context>
@@ -3661,22 +3847,22 @@ in skydrive folder</source>
         <translation>修改待办</translation>
     </message>
     <message>
-        <location filename="Todo.cpp" line="946"/>
+        <location filename="Todo.cpp" line="947"/>
         <source>Editor</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="Todo.cpp" line="967"/>
+        <location filename="Todo.cpp" line="968"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="Todo.cpp" line="968"/>
+        <location filename="Todo.cpp" line="969"/>
         <source>Copy</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="Todo.cpp" line="969"/>
+        <location filename="Todo.cpp" line="970"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
@@ -3719,7 +3905,7 @@ in skydrive folder</source>
         <translation type="vanished">修改</translation>
     </message>
     <message>
-        <location filename="Todo.cpp" line="1030"/>
+        <location filename="Todo.cpp" line="1031"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
@@ -3729,22 +3915,22 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="Todo.cpp" line="231"/>
-        <location filename="Todo.cpp" line="235"/>
-        <location filename="Todo.cpp" line="337"/>
+        <location filename="Todo.cpp" line="236"/>
         <location filename="Todo.cpp" line="338"/>
-        <location filename="Todo.cpp" line="426"/>
-        <location filename="Todo.cpp" line="589"/>
-        <location filename="Todo.cpp" line="591"/>
-        <location filename="Todo.cpp" line="636"/>
-        <location filename="Todo.cpp" line="656"/>
+        <location filename="Todo.cpp" line="339"/>
+        <location filename="Todo.cpp" line="427"/>
+        <location filename="Todo.cpp" line="590"/>
+        <location filename="Todo.cpp" line="592"/>
+        <location filename="Todo.cpp" line="637"/>
         <location filename="Todo.cpp" line="657"/>
-        <location filename="Todo.cpp" line="914"/>
+        <location filename="Todo.cpp" line="658"/>
+        <location filename="Todo.cpp" line="915"/>
         <source>Alarm</source>
         <translation>定时提醒</translation>
     </message>
     <message>
-        <location filename="Todo.cpp" line="413"/>
-        <location filename="Todo.cpp" line="482"/>
+        <location filename="Todo.cpp" line="414"/>
+        <location filename="Todo.cpp" line="483"/>
         <source>Todo</source>
         <translation>待办事项</translation>
     </message>
@@ -3753,8 +3939,8 @@ in skydrive folder</source>
         <translation type="vanished">确定</translation>
     </message>
     <message>
-        <location filename="Todo.cpp" line="599"/>
-        <location filename="Todo.cpp" line="665"/>
+        <location filename="Todo.cpp" line="600"/>
+        <location filename="Todo.cpp" line="666"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -3826,19 +4012,8 @@ in skydrive folder</source>
 <context>
     <name>msgDialog</name>
     <message>
-        <location filename="TodoAlarm.ui" line="14"/>
         <source>Alarm</source>
-        <translation>定时提醒</translation>
-    </message>
-    <message>
-        <location filename="TodoAlarm.ui" line="26"/>
-        <source>TodoText</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="TodoAlarm.ui" line="97"/>
-        <source>yyyy-M-d HH:mm</source>
-        <translation></translation>
+        <translation type="vanished">定时提醒</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -3853,135 +4028,57 @@ in skydrive folder</source>
         <translation type="vanished">设置</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="110"/>
         <source>Back</source>
-        <translation>返回</translation>
+        <translation type="vanished">返回</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="135"/>
         <source>Del Alarm</source>
-        <translation>删除定时</translation>
+        <translation type="vanished">删除定时</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="160"/>
         <source>Set Alarm</source>
-        <translation>设置定时</translation>
+        <translation type="vanished">设置定时</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="209"/>
-        <location filename="TodoAlarm.cpp" line="85"/>
-        <location filename="TodoAlarm.cpp" line="107"/>
-        <location filename="TodoAlarm.cpp" line="222"/>
-        <location filename="TodoAlarm.cpp" line="263"/>
         <source>Year</source>
-        <translation>年</translation>
+        <translation type="vanished">年</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="222"/>
-        <location filename="TodoAlarm.cpp" line="86"/>
-        <location filename="TodoAlarm.cpp" line="110"/>
-        <location filename="TodoAlarm.cpp" line="227"/>
-        <location filename="TodoAlarm.cpp" line="266"/>
         <source>Month</source>
-        <translation>月</translation>
+        <translation type="vanished">月</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="235"/>
-        <location filename="TodoAlarm.cpp" line="87"/>
-        <location filename="TodoAlarm.cpp" line="118"/>
-        <location filename="TodoAlarm.cpp" line="232"/>
-        <location filename="TodoAlarm.cpp" line="269"/>
         <source>Day</source>
-        <translation>日</translation>
+        <translation type="vanished">日</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="248"/>
-        <location filename="TodoAlarm.cpp" line="88"/>
-        <location filename="TodoAlarm.cpp" line="121"/>
-        <location filename="TodoAlarm.cpp" line="155"/>
-        <location filename="TodoAlarm.cpp" line="237"/>
-        <location filename="TodoAlarm.cpp" line="272"/>
-        <location filename="TodoAlarm.cpp" line="315"/>
-        <location filename="TodoAlarm.cpp" line="324"/>
-        <location filename="TodoAlarm.cpp" line="344"/>
-        <location filename="TodoAlarm.cpp" line="351"/>
-        <location filename="TodoAlarm.cpp" line="364"/>
         <source>Hour</source>
-        <translation>时</translation>
+        <translation type="vanished">时</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="261"/>
-        <location filename="TodoAlarm.cpp" line="89"/>
-        <location filename="TodoAlarm.cpp" line="123"/>
-        <location filename="TodoAlarm.cpp" line="155"/>
-        <location filename="TodoAlarm.cpp" line="242"/>
-        <location filename="TodoAlarm.cpp" line="275"/>
-        <location filename="TodoAlarm.cpp" line="321"/>
-        <location filename="TodoAlarm.cpp" line="341"/>
-        <location filename="TodoAlarm.cpp" line="356"/>
-        <location filename="TodoAlarm.cpp" line="369"/>
         <source>Minute</source>
-        <translation>分</translation>
+        <translation type="vanished">分</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="304"/>
         <source>Today</source>
-        <translation>今天</translation>
+        <translation type="vanished">今天</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="317"/>
         <source>Tomorrow</source>
-        <translation>明天</translation>
+        <translation type="vanished">明天</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="330"/>
         <source>Next Week</source>
-        <translation>下周</translation>
+        <translation type="vanished">下周</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.ui" line="369"/>
         <source>Daily (Sel by week)</source>
         <oldsource>Daily (Select by week)</oldsource>
-        <translation>每天（按周选择）</translation>
+        <translation type="vanished">每天（按周选择）</translation>
     </message>
     <message>
         <source>Daily</source>
         <translation type="vanished">每天</translation>
-    </message>
-    <message>
-        <location filename="TodoAlarm.ui" line="444"/>
-        <source>1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="TodoAlarm.ui" line="473"/>
-        <source>2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="TodoAlarm.ui" line="502"/>
-        <source>3</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="TodoAlarm.ui" line="531"/>
-        <source>4</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="TodoAlarm.ui" line="560"/>
-        <source>5</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="TodoAlarm.ui" line="395"/>
-        <source>6</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="TodoAlarm.ui" line="424"/>
-        <source>7</source>
-        <translation></translation>
     </message>
     <message>
         <source>Close</source>
@@ -3996,46 +4093,32 @@ in skydrive folder</source>
         <translation type="vanished">确定</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.cpp" line="166"/>
-        <location filename="TodoAlarm.cpp" line="201"/>
         <source>Mon</source>
-        <translation>一</translation>
+        <translation type="vanished">一</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.cpp" line="167"/>
-        <location filename="TodoAlarm.cpp" line="202"/>
         <source>Tue</source>
-        <translation>二</translation>
+        <translation type="vanished">二</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.cpp" line="168"/>
-        <location filename="TodoAlarm.cpp" line="203"/>
         <source>Wed</source>
-        <translation>三</translation>
+        <translation type="vanished">三</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.cpp" line="169"/>
-        <location filename="TodoAlarm.cpp" line="204"/>
         <source>Thur</source>
-        <translation>四</translation>
+        <translation type="vanished">四</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.cpp" line="170"/>
-        <location filename="TodoAlarm.cpp" line="205"/>
         <source>Fri</source>
-        <translation>五</translation>
+        <translation type="vanished">五</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.cpp" line="171"/>
-        <location filename="TodoAlarm.cpp" line="206"/>
         <source>Sat</source>
-        <translation>六</translation>
+        <translation type="vanished">六</translation>
     </message>
     <message>
-        <location filename="TodoAlarm.cpp" line="172"/>
-        <location filename="TodoAlarm.cpp" line="207"/>
         <source>Sun</source>
-        <translation>日</translation>
+        <translation type="vanished">日</translation>
     </message>
 </context>
 <context>

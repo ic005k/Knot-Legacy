@@ -131,7 +131,7 @@ void dlgRemarks::on_btnHomePage_clicked() {
 void dlgRemarks::on_btnPaste_clicked() { ui->textEdit->paste(); }
 
 void dlgRemarks::CheckUpdate() {
-  mw_one->mydlgReader->setPdfViewVisible(false);
+  mw_one->m_Reader->setPdfViewVisible(false);
   QNetworkRequest quest;
   quest.setUrl(QUrl("https://api.github.com/repos/ic005k/" + appName +
                     "/releases/latest"));
@@ -257,7 +257,7 @@ void dlgRemarks::show_download() {
 void dlgRemarks::on_btnCheckUpdate_clicked() { CheckUpdate(); }
 
 void dlgRemarks::on_btnDownloadUP_clicked() {
-  mw_one->mydlgReader->setPdfViewVisible(false);
+  mw_one->m_Reader->setPdfViewVisible(false);
   if (s_link == "") return;
 
 #ifdef Q_OS_ANDROID

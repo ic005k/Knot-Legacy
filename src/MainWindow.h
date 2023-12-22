@@ -230,13 +230,13 @@ class MainWindow : public QMainWindow {
 
   dlgRemarks *m_Remarks;
   EditRecord *myEditRecord;
-  dlgTodo *mydlgTodo;
+  dlgTodo *m_Todo;
   dlgReport *mydlgReport;
   dlgPreferences *mydlgPre;
   Notes *m_Notes;
-  dlgSteps *mydlgSteps;
-  dlgReader *mydlgReader;
-  msgDialog *mymsgDlg;
+  dlgSteps *m_Steps;
+  dlgReader *m_Reader;
+  TodoAlarm *m_TodoAlarm;
   TestDialog *mydlgOneDrive;
   dlgFloatFun *mydlgFloatFun;
   dlgReaderFun *mydlgReaderFun;

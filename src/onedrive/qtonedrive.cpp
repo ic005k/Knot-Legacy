@@ -233,7 +233,7 @@ void QtOneDrive::uploadFile(const QString& localFilePath,
         if (!id.isEmpty()) {
           state_ = Empty;
           emit successUploadFile(
-              mw_one->mydlgReader->getUriRealPath(localFilePath) + "\n\n" +
+              mw_one->m_Reader->getUriRealPath(localFilePath) + "\n\n" +
                   "SIZE: " +
                   mw_one->getFileSize(QFile(localFilePath).size(), 2),
               id);
@@ -422,7 +422,7 @@ void QtOneDrive::downloadFile(const QUrl& url) {
             if (!mw_one->showMsgBox(
                     "Kont",
                     tr("Import this data?") + "\n" +
-                        mw_one->mydlgReader->getUriRealPath(zipfile),
+                        mw_one->m_Reader->getUriRealPath(zipfile),
                     "", 2)) {
               isZipOK = false;
               return;
