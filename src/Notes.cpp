@@ -1004,8 +1004,10 @@ void Notes::on_btnReference_clicked() {
 void Notes::on_btnShowFind_clicked() {
   if (!ui->frameFind->isHidden())
     ui->frameFind->hide();
-  else
+  else {
     ui->frameFind->show();
+    ui->editFind->setFocus();
+  }
 }
 
 void Notes::show_findText() {
