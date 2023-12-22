@@ -5039,7 +5039,10 @@ void MainWindow::on_btnZoomOut_clicked() {
   QMetaObject::invokeMethod((QObject *)root, "zoomout");
 }
 
-void MainWindow::on_btnReport_clicked() { on_actionReport_triggered(); }
+void MainWindow::on_btnReport_clicked() {
+  on_actionReport_triggered();
+  ui->btnYear->setFixedHeight(ui->btnMonth->height());
+}
 
 void MainWindow::on_btnPasteCode_clicked() {
   QClipboard *clipboard = QApplication::clipboard();
