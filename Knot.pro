@@ -47,6 +47,7 @@ android: {
 SOURCES += \
     src/AutoUpdate.cpp \
     src/CategoryList.cpp \
+    src/CloudBackup.cpp \
     src/DateSelector.cpp \
     src/DocumentHandler.cpp \
     src/EditRecord.cpp \
@@ -59,7 +60,6 @@ SOURCES += \
     src/MyWheel.cpp \
     src/Notes.cpp \
     src/NotesList.cpp \
-    src/OneDrive.cpp \
     src/PageIndicator.cpp \
     src/Preferences.cpp \
     src/QOwnLanguageData.cpp \
@@ -102,6 +102,7 @@ SOURCES += \
 HEADERS += \
     src/AutoUpdate.h \
     src/CategoryList.h \
+    src/CloudBackup.h \
     src/DateSelector.h \
     src/DocumentHandler.h \
     src/EditRecord.h \
@@ -114,7 +115,6 @@ HEADERS += \
     src/MyWheel.h \
     src/Notes.h \
     src/NotesList.h \
-    src/OneDrive.h \
     src/PageIndicator.h \
     src/Preferences.h \
     src/QOwnLanguageData.h \
@@ -165,6 +165,7 @@ HEADERS += \
 FORMS += \
     src/AutoUpdate.ui \
     src/CategoryList.ui \
+    src/CloudBackup.ui \
     src/DateSelector.ui \
     src/EditRecord.ui \
     src/LoadPic.ui \
@@ -172,7 +173,6 @@ FORMS += \
     src/Method.ui \
     src/Notes.ui \
     src/NotesList.ui \
-    src/OneDrive.ui \
     src/PageIndicator.ui \
     src/Preferences.ui \
     src/Reader.ui \

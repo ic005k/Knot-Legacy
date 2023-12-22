@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TestDialog</class>
- <widget class="QDialog" name="TestDialog">
+ <class>CloudBackup</class>
+ <widget class="QDialog" name="CloudBackup">
   <property name="geometry">
    <rect>
     <x>0</x>

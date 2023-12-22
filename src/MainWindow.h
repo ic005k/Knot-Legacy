@@ -74,13 +74,13 @@
 #include "Method.h"
 #include "ReaderFun.h"
 #include "src/CategoryList.h"
+#include "src/CloudBackup.h"
 #include "src/EditRecord.h"
 #include "src/File.h"
 #include "src/FileSystemWatcher.h"
 #include "src/LoadPic.h"
 #include "src/Notes.h"
 #include "src/NotesList.h"
-#include "src/OneDrive.h"
 #include "src/PageIndicator.h"
 #include "src/Preferences.h"
 #include "src/Reader.h"
@@ -95,13 +95,13 @@
 #include "src/components/qtmaterialcircularprogress.h"
 #include "src/components/qtmaterialdialog.h"
 #include "ui_CategoryList.h"
+#include "ui_CloudBackup.h"
 #include "ui_DateSelector.h"
 #include "ui_EditRecord.h"
 #include "ui_LoadPic.h"
 #include "ui_Method.h"
 #include "ui_Notes.h"
 #include "ui_NotesList.h"
-#include "ui_OneDrive.h"
 #include "ui_PageIndicator.h"
 #include "ui_Preferences.h"
 #include "ui_Reader.h"
@@ -231,13 +231,13 @@ class MainWindow : public QMainWindow {
   dlgRemarks *m_Remarks;
   EditRecord *myEditRecord;
   dlgTodo *m_Todo;
-  dlgReport *mydlgReport;
+  dlgReport *m_Report;
   dlgPreferences *mydlgPre;
   Notes *m_Notes;
   dlgSteps *m_Steps;
   dlgReader *m_Reader;
   TodoAlarm *m_TodoAlarm;
-  TestDialog *mydlgOneDrive;
+  CloudBackup *m_CloudBackup;
   dlgFloatFun *mydlgFloatFun;
   dlgReaderFun *mydlgReaderFun;
   dlgSetText *mydlgSetText;

@@ -1,4 +1,4 @@
-#include "OneDrive.h"
+#include "CloudBackup.h"
 
 #include <QFile>
 #include <QFileDialog>
@@ -18,8 +18,8 @@ extern QString iniFile, iniDir, zipfile;
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern bool isUpData;
 
-TestDialog::TestDialog(QWidget *parent)
-    : QDialog(parent), ui(new Ui::TestDialog) {
+CloudBackup::CloudBackup(QWidget *parent)
+    : QDialog(parent), ui(new Ui::CloudBackup) {
   ui->setupUi(this);
 
   this->installEventFilter(this);
@@ -150,7 +150,7 @@ TestDialog::TestDialog(QWidget *parent)
   });
 }
 
-void TestDialog::init() {
+void CloudBackup::init() {
   ui->frame->hide();
   ui->lineEdit_fileID->setFocus();
   this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
@@ -160,9 +160,9 @@ void TestDialog::init() {
   this->setModal(true);
 }
 
-TestDialog::~TestDialog() { delete ui; }
+CloudBackup::~CloudBackup() { delete ui; }
 
-bool TestDialog::eventFilter(QObject *obj, QEvent *evn) {
+bool CloudBackup::eventFilter(QObject *obj, QEvent *evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -174,17 +174,17 @@ bool TestDialog::eventFilter(QObject *obj, QEvent *evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void TestDialog::on_pushButton_SignIn_clicked() { oneDrive->signIn(); }
+void CloudBackup::on_pushButton_SignIn_clicked() { oneDrive->signIn(); }
 
-void TestDialog::on_pushButton_SingOut_clicked() { oneDrive->signOut(); }
+void CloudBackup::on_pushButton_SingOut_clicked() { oneDrive->signOut(); }
 
-void TestDialog::on_pushButton_GetUserInfo_clicked() {
+void CloudBackup::on_pushButton_GetUserInfo_clicked() {
   oneDrive->getUserInfo();
 }
 
-void TestDialog::on_pushButton_clicked() { oneDrive->refreshToken(); }
+void CloudBackup::on_pushButton_clicked() { oneDrive->refreshToken(); }
 
-void TestDialog::on_lineEdit_fileID_textChanged(const QString &arg1) {
+void CloudBackup::on_lineEdit_fileID_textChanged(const QString &arg1) {
   ui->pushButton_deleteFile->setEnabled(!arg1.isEmpty());
   // ui->pushButton_downloadFile->setEnabled(  !arg1.isEmpty() );
   ui->pushButton_traserveFolder->setEnabled(!arg1.isEmpty());
@@ -192,15 +192,15 @@ void TestDialog::on_lineEdit_fileID_textChanged(const QString &arg1) {
   ui->pushButton_createFolder->setEnabled(!arg1.isEmpty());
 }
 
-void TestDialog::on_pushButton_getFiles_clicked() {
+void CloudBackup::on_pushButton_getFiles_clicked() {
   oneDrive->traverseFolder();
 }
 
-void TestDialog::on_pushButton_traserveFolder_clicked() {
+void CloudBackup::on_pushButton_traserveFolder_clicked() {
   oneDrive->traverseFolder(ui->lineEdit_fileID->text().trimmed());
 }
 
-void TestDialog::on_pushButton_getFolders_clicked() {
+void CloudBackup::on_pushButton_getFolders_clicked() {
   QFileDialog fdlg;
   QString filePath = fdlg.getOpenFileName(this, "Select File");
   if (filePath.isEmpty()) return;
@@ -209,7 +209,7 @@ void TestDialog::on_pushButton_getFolders_clicked() {
   mw_one->ui->progressBar->setValue(0);
 }
 
-void TestDialog::on_pushButton_downloadFile_clicked() {
+void CloudBackup::on_pushButton_downloadFile_clicked() {
   QString filePath;  // = QFileDialog::getSaveFileName(this, "Select File");
   filePath = iniDir + "memo.zip";
   if (QFile(filePath).exists()) QFile(filePath).remove();
@@ -226,15 +226,15 @@ void TestDialog::on_pushButton_downloadFile_clicked() {
   mw_one->ui->progressBar->setValue(0);
 }
 
-void TestDialog::on_pushButton_createFolder_clicked() {
+void CloudBackup::on_pushButton_createFolder_clicked() {
   oneDrive->createFolder(ui->lineEdit_fileID->text().trimmed(), "");
 }
 
-void TestDialog::on_pushButton_deleteFile_clicked() {
+void CloudBackup::on_pushButton_deleteFile_clicked() {
   oneDrive->deleteItem(ui->lineEdit_fileID->text().trimmed());
 }
 
-void TestDialog::on_pushButton_upload2_clicked() {
+void CloudBackup::on_pushButton_upload2_clicked() {
   // QFileDialog fdlg;
   zipfile =
       iniDir + "memo.zip";  // = fdlg.getOpenFileName(this, "Select File");
@@ -244,7 +244,7 @@ void TestDialog::on_pushButton_upload2_clicked() {
   mw_one->myBakDataThread->start();
 }
 
-void TestDialog::uploadData() {
+void CloudBackup::uploadData() {
   if (!mw_one->showMsgBox(
           "OneDrive",
           tr("Uploading data?") + "\n\n" +
@@ -259,11 +259,11 @@ void TestDialog::uploadData() {
   mw_one->ui->progressBar->setValue(0);
 }
 
-void TestDialog::on_pushButton_storageInfo_clicked() {
+void CloudBackup::on_pushButton_storageInfo_clicked() {
   oneDrive->getStorageInfo();
 }
 
-void TestDialog::on_btnBack_clicked() {
+void CloudBackup::on_btnBack_clicked() {
   if (ui->frameOne->isHidden()) {
     ui->frameOne->show();
 
@@ -275,18 +275,18 @@ void TestDialog::on_btnBack_clicked() {
   }
 }
 
-void TestDialog::loadLogQML() {
+void CloudBackup::loadLogQML() {
   mw_one->ui->qwOneDriver->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
   loadText(oneDrive->debugInfo());
 }
 
-void TestDialog::loadText(QString str) {
+void CloudBackup::loadText(QString str) {
   QQuickItem *root = mw_one->ui->qwOneDriver->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "loadText", Q_ARG(QVariant, str));
 }
 
-void TestDialog::initQuick() {
+void CloudBackup::initQuick() {
   quickWidget = new QQuickWidget(ui->frameQuick);
   ui->gl->addWidget(quickWidget);
   const QSize size(400, 400);
@@ -294,7 +294,7 @@ void TestDialog::initQuick() {
   quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 }
 
-int TestDialog::getProg() {
+int CloudBackup::getProg() {
   QQuickItem *root = mw_one->ui->qwOneDriver->rootObject();
   QVariant itemCount;
   QMetaObject::invokeMethod((QObject *)root, "getPorg",

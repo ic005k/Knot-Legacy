@@ -8,7 +8,7 @@
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
-#include "ui_OneDrive.h"
+#include "ui_CloudBackup.h"
 
 extern MainWindow *mw_one;
 extern QtOneDriveAuthorizationDialog *dialog_;

@@ -98,7 +98,7 @@ bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!mw_one->mydlgReport->isHidden()) {
+      if (!mw_one->m_Report->isHidden()) {
         on_btnBack_clicked();
         return true;
       }

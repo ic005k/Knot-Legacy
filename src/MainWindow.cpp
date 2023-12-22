@@ -67,7 +67,7 @@ void MainWindow::bakDataDone() {
   closeProgress();
 
   if (isUpData) {
-    mydlgOneDrive->uploadData();
+    m_CloudBackup->uploadData();
   } else {
     if (QFile(infoStr).exists()) {
       QMessageBox msgBox;
@@ -160,7 +160,7 @@ void ReadEBookThread::run() {
   }
 
   if (isReport) {
-    mw_one->mydlgReport->getMonthData();
+    mw_one->m_Report->getMonthData();
   }
 
   emit isDone();
@@ -264,7 +264,7 @@ void MainWindow::readEBookDone() {
   }
 
   if (isReport) {
-    mydlgReport->updateTable();
+    m_Report->updateTable();
     ui->lblTitle->setText(tabData->tabText(tabData->currentIndex()));
 
     ui->btnCategory->hide();
@@ -3398,7 +3398,7 @@ void MainWindow::on_actionReport_triggered() {
   if (isEBook || !isSaveEnd || !isReadEBookEnd) return;
 
   if (isReadEBookEnd) {
-    mydlgReport->init();
+    m_Report->init();
     startInitReport();
   }
 }
@@ -3703,13 +3703,13 @@ void MainWindow::initQW() {
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
   ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
 
-  ui->qwReport->rootContext()->setContextProperty("mydlgReport", mydlgReport);
+  ui->qwReport->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
   ui->qwReportSub->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
 
-  ui->qwOneDriver->rootContext()->setContextProperty("mydlgOneDrive",
-                                                     mydlgOneDrive);
+  ui->qwOneDriver->rootContext()->setContextProperty("m_CloudBackup",
+                                                     m_CloudBackup);
 
   ui->qwSearch->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwSearch->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/search.qml")));
@@ -3717,12 +3717,11 @@ void MainWindow::initQW() {
   ui->qwBakList->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwBakList->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/baklist.qml")));
 
-  ui->qwViewCate->rootContext()->setContextProperty("mydlgReport", mydlgReport);
+  ui->qwViewCate->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwViewCate->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/viewcate.qml")));
 
-  ui->qwTabRecycle->rootContext()->setContextProperty("mydlgReport",
-                                                      mydlgReport);
+  ui->qwTabRecycle->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwTabRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/tabrecycle.qml")));
 
@@ -3868,7 +3867,7 @@ void MainWindow::init_UIWidget() {
   myEditRecord = new EditRecord(this);
   m_Todo = new dlgTodo(this);
   m_Todo->setStyleSheet(vsbarStyleSmall);
-  mydlgReport = new dlgReport(this);
+  m_Report = new dlgReport(this);
   mydlgPre = new dlgPreferences(this);
   m_Notes = new Notes(this);
   m_Steps = new dlgSteps(this);
@@ -3876,7 +3875,7 @@ void MainWindow::init_UIWidget() {
   ui->lblStats->setWordWrap(true);
   m_Reader = new dlgReader(this);
   m_TodoAlarm = new TodoAlarm(this);
-  mydlgOneDrive = new TestDialog;
+  m_CloudBackup = new CloudBackup;
   mydlgFloatFun = new dlgFloatFun(this);
   mydlgFloatFun->close();
   mydlgReaderFun = new dlgReaderFun(this);
@@ -4216,9 +4215,9 @@ void MainWindow::on_actionOneDriveBackupData() {
   ui->frameMain->hide();
   ui->frameReader->hide();
   ui->frameOne->show();
-  delete mydlgOneDrive;
-  mydlgOneDrive = new TestDialog;
-  mydlgOneDrive->loadLogQML();
+  delete m_CloudBackup;
+  m_CloudBackup = new CloudBackup;
+  m_CloudBackup->loadLogQML();
 }
 
 void MainWindow::undo() {
@@ -4403,8 +4402,8 @@ static void JavaNotify_4() {
   return;
 
   if (mw_one->alertWindowsCount == 0) {
-    if (!mw_one->mydlgReport->myDateSelector->isHidden())
-      mw_one->mydlgReport->myDateSelector->close();
+    if (!mw_one->m_Report->myDateSelector->isHidden())
+      mw_one->m_Report->myDateSelector->close();
 
     if (!mw_one->ui->frameViewCate->isHidden()) {
       mw_one->ui->frameViewCate->hide();
@@ -4708,19 +4707,19 @@ void MainWindow::on_btnSelText_clicked() {
 }
 
 void MainWindow::on_btnSignIn_clicked() {
-  mydlgOneDrive->on_pushButton_SignIn_clicked();
+  m_CloudBackup->on_pushButton_SignIn_clicked();
 }
 
 void MainWindow::on_btnSignOut_clicked() {
-  mydlgOneDrive->on_pushButton_SingOut_clicked();
+  m_CloudBackup->on_pushButton_SingOut_clicked();
 }
 
 void MainWindow::on_btnUpload_clicked() {
-  mydlgOneDrive->on_pushButton_upload2_clicked();
+  m_CloudBackup->on_pushButton_upload2_clicked();
 }
 
 void MainWindow::on_btnDownload_clicked() {
-  mydlgOneDrive->on_pushButton_downloadFile_clicked();
+  m_CloudBackup->on_pushButton_downloadFile_clicked();
 }
 
 void MainWindow::on_btnBack_One_clicked() {
@@ -4729,7 +4728,7 @@ void MainWindow::on_btnBack_One_clicked() {
       ui->frameOneFun->show();
       ui->frameFunWeb->hide();
 
-      mydlgOneDrive->loadLogQML();
+      m_CloudBackup->loadLogQML();
     } else {
       ui->frameOne->hide();
       ui->frameMain->show();
@@ -4738,11 +4737,11 @@ void MainWindow::on_btnBack_One_clicked() {
 }
 
 void MainWindow::on_btnRefreshToken_clicked() {
-  mydlgOneDrive->on_pushButton_clicked();
+  m_CloudBackup->on_pushButton_clicked();
 }
 
 void MainWindow::on_btnStorageInfo_clicked() {
-  mydlgOneDrive->on_pushButton_storageInfo_clicked();
+  m_CloudBackup->on_pushButton_storageInfo_clicked();
 }
 
 void MainWindow::on_btnRefreshWeb_clicked() {
@@ -4757,7 +4756,7 @@ void MainWindow::on_btnUserInfo_clicked() {
   qDebug() << manager->supportedSchemes();
   qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
-  mydlgOneDrive->on_pushButton_GetUserInfo_clicked();
+  m_CloudBackup->on_pushButton_GetUserInfo_clicked();
 }
 
 void MainWindow::on_btnBackNotes_clicked() {
@@ -5401,20 +5400,16 @@ void MainWindow::on_btnPauseSteps_clicked() { m_Steps->on_btnPause_clicked(); }
 
 void MainWindow::on_btnReset_clicked() { m_Steps->on_btnReset_clicked(); }
 
-void MainWindow::on_btnBack_Report_clicked() {
-  mydlgReport->on_btnBack_clicked();
-}
+void MainWindow::on_btnBack_Report_clicked() { m_Report->on_btnBack_clicked(); }
 
-void MainWindow::on_btnYear_clicked() { mydlgReport->on_btnYear_clicked(); }
+void MainWindow::on_btnYear_clicked() { m_Report->on_btnYear_clicked(); }
 
-void MainWindow::on_btnMonth_clicked() { mydlgReport->on_btnMonth_clicked(); }
+void MainWindow::on_btnMonth_clicked() { m_Report->on_btnMonth_clicked(); }
 
-void MainWindow::on_btnOut2Img_clicked() {
-  mydlgReport->on_btnOut2Img_clicked();
-}
+void MainWindow::on_btnOut2Img_clicked() { m_Report->on_btnOut2Img_clicked(); }
 
 void MainWindow::on_btnCategory_clicked() {
-  mydlgReport->on_btnCategory_clicked();
+  m_Report->on_btnCategory_clicked();
 }
 
 void MainWindow::on_btnSync_clicked() {
@@ -5441,11 +5436,11 @@ int MainWindow::getMaxDay(QString sy, QString sm) {
 }
 
 void MainWindow::on_btnStartDate_clicked() {
-  mydlgReport->myDateSelector->initStartEndDate("start");
+  m_Report->myDateSelector->initStartEndDate("start");
 }
 
 void MainWindow::on_btnEndDate_clicked() {
-  mydlgReport->myDateSelector->initStartEndDate("end");
+  m_Report->myDateSelector->initStartEndDate("end");
 }
 
 void MainWindow::on_btnBackSearch_clicked() {
@@ -5498,7 +5493,7 @@ void MainWindow::on_btnImportBakList_clicked() {
   myImportDataThread->start();
 }
 
-void MainWindow::on_btnOkViewCate_clicked() { mydlgReport->on_CateOk(); }
+void MainWindow::on_btnOkViewCate_clicked() { m_Report->on_CateOk(); }
 
 void MainWindow::on_btnBackTabRecycle_clicked() {
   ui->frameTabRecycle->hide();

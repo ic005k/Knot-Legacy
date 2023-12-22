@@ -18,7 +18,7 @@
 #endif
 
 #include "src/MainWindow.h"
-#include "ui_OneDrive.h"
+#include "ui_CloudBackup.h"
 #include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
@@ -80,7 +80,7 @@ void QtOneDriveAuthorizationDialog::on_timer() {
     timer->stop();
     mw_one->ui->frameOneFun->show();
     mw_one->ui->frameFunWeb->hide();
-    mw_one->mydlgOneDrive->loadLogQML();
+    mw_one->m_CloudBackup->loadLogQML();
   }
 }
 

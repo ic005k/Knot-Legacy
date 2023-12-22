@@ -175,7 +175,7 @@ void DateSelector::on_btnOk_clicked() {
     }
   }
 
-  if (dateFlag == 1 || dateFlag == 2) mw_one->mydlgReport->startReport1();
+  if (dateFlag == 1 || dateFlag == 2) mw_one->m_Report->startReport1();
 
   if (dateFlag == 3) {
     mw_one->ui->btnStartDate->setText(y + "  " + m + "  " + d);
@@ -185,9 +185,9 @@ void DateSelector::on_btnOk_clicked() {
     mw_one->ui->btnEndDate->setText(y + "  " + m + "  " + d);
   }
 
-  if (dateFlag == 3 || dateFlag == 4) mw_one->mydlgReport->startReport2();
+  if (dateFlag == 3 || dateFlag == 4) mw_one->m_Report->startReport2();
 
-  mw_one->mydlgReport->saveYMD();
+  mw_one->m_Report->saveYMD();
   close();
 }
 

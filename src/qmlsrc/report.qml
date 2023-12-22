@@ -150,7 +150,7 @@ Rectangle {
                     tableView.forceActiveFocus()
                     tableView.currentIndex = row
 
-                    mydlgReport.loadDetailsQml()
+                    m_Report.loadDetailsQml()
 
                     console.debug(row)
                     //console.log(tableModel.rows[row].Date)

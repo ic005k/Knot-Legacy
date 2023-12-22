@@ -1,20 +1,20 @@
-#ifndef ONEDRIVE_H
-#define ONEDRIVE_H
+#ifndef CLOUDBACKUP_H
+#define CLOUDBACKUP_H
 
 #include <QDialog>
 #include <QQuickWidget>
 
 namespace Ui {
-class TestDialog;
+class CloudBackup;
 }
 
 class QtOneDrive;
-class TestDialog : public QDialog {
+class CloudBackup : public QDialog {
   Q_OBJECT
  public:
-  explicit TestDialog(QWidget *parent = 0);
-  ~TestDialog();
-  Ui::TestDialog *ui;
+  explicit CloudBackup(QWidget *parent = 0);
+  ~CloudBackup();
+  Ui::CloudBackup *ui;
 
   QQuickWidget *quickWidget;
   void init();
@@ -62,4 +62,4 @@ class TestDialog : public QDialog {
   QtOneDrive *oneDrive = nullptr;
 };
 
-#endif  // ONEDRIVE_H
+#endif  // CLOUDBACKUP_H
