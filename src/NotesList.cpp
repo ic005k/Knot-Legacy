@@ -295,12 +295,16 @@ bool dlgNotesList::on_btnImport_clicked() {
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
 
     QTreeWidgetItem *item1;
+    QFileInfo fi(strInfo);
+    QString name = fi.fileName();
+    QString suffix = fi.suffix();
+    name.replace("." + suffix, "");
     if (item->parent() == NULL) {
       item1 = new QTreeWidgetItem(item);
-      item1->setText(0, tr("Notes Imported"));
+      item1->setText(0, name);
     } else {
       item1 = new QTreeWidgetItem(item->parent());
-      item1->setText(0, tr("Notes Imported"));
+      item1->setText(0, name);
     }
     tw->setCurrentItem(item1);
     QString a = "memo/" + mw_one->m_Notes->getDateTimeStr() + ".md";
@@ -327,9 +331,11 @@ void dlgNotesList::on_btnExport_clicked() {
   QTreeWidgetItem *item = tw->currentItem();
   if (item->parent() == NULL) return;
 
+  QString name = item->text(0);
+  name = name + ".md";
   QString fileName;
   QFileDialog fd;
-  fileName = fd.getSaveFileName(this, "Knot.md", "", tr("MD File(*.*)"));
+  fileName = fd.getSaveFileName(this, name, name, tr("MD File(*.*)"));
 
   if (fileName == "") return;
 
