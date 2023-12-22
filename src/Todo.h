@@ -21,7 +21,7 @@ class dlgTodo : public QDialog {
   Ui::dlgTodo *ui;
   ~dlgTodo();
 
-  bool isSave = false;
+  bool isNeedSave = false;
   bool isToday = false;
   QStringList tableLists;
   void init_Todo();

@@ -118,7 +118,7 @@ void dlgNotesList::on_btnNewNoteBook_clicked() {
   ui->treeWidget->addTopLevelItem(item);
   ui->treeWidget->setCurrentItem(item);
 
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgNotesList::on_btnNewNote_clicked() {
@@ -142,7 +142,7 @@ void dlgNotesList::on_btnNewNote_clicked() {
   ui->treeWidget->setCurrentItem(topitem->child(topitem->childCount() - 1));
   on_treeWidget_itemClicked(item1, 0);
 
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
@@ -200,7 +200,7 @@ void dlgNotesList::on_btnRename_clicked() {
   item->setText(0, ui->editName->text().trimmed());
   if (item->parent() != NULL) setNoteName(item->text(0));
 
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgNotesList::setNoteName(QString name) {
@@ -233,7 +233,7 @@ void dlgNotesList::on_btnDel_clicked() {
   on_treeWidget_itemClicked(tw->currentItem(), 0);
 
   tw->setFocus();
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgNotesList::addItem(QTreeWidget *tw, QTreeWidgetItem *item) {
@@ -321,7 +321,7 @@ bool dlgNotesList::on_btnImport_clicked() {
   } else
     return false;
 
-  isSave = true;
+  isNeedSave = true;
   return true;
 }
 
@@ -352,10 +352,8 @@ void dlgNotesList::on_btnExport_clicked() {
 void dlgNotesList::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
 
-  if (isSave) {
-    saveNotesList();
-    saveRecycle();
-  }
+  saveNotesList();
+  saveRecycle();
 
   mw_one->ui->btnBackNotes->show();
   mw_one->ui->btnEdit->show();
@@ -365,6 +363,8 @@ void dlgNotesList::closeEvent(QCloseEvent *event) {
 }
 
 void dlgNotesList::saveNotesList() {
+  if (!isNeedSave) return;
+
   mw_one->isSelf = true;
 
   mw_one->isNeedAutoBackup = true;
@@ -398,10 +398,17 @@ void dlgNotesList::saveNotesList() {
           strChild1);
     }
   }
+
+  isNeedSave = false;
 }
 
 void dlgNotesList::saveRecycle() {
+  if (!isNeedSave) return;
+
   mw_one->isSelf = true;
+
+  mw_one->isNeedAutoBackup = true;
+  mw_one->strLatestModify = tr("Modi Notes Recycle");
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -431,6 +438,8 @@ void dlgNotesList::saveRecycle() {
           strChild1);
     }
   }
+
+  isNeedSave = false;
 }
 
 void dlgNotesList::initNotesList() {
@@ -559,10 +568,10 @@ void dlgNotesList::on_btnRestore_clicked() {
     curItem->parent()->removeChild(curItem);
   }
 
-  isSave = true;
+  isNeedSave = true;
 }
 
-void dlgNotesList::on_btnDel_2_clicked() {
+void dlgNotesList::on_btnDel_Recycle_clicked() {
   QTreeWidgetItem *curItem = twrb->currentItem();
   if (curItem->parent() == NULL) {
     return;
@@ -572,7 +581,7 @@ void dlgNotesList::on_btnDel_2_clicked() {
     curItem->parent()->removeChild(curItem);
   }
 
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgNotesList::setWinPos() {
@@ -801,7 +810,7 @@ void dlgNotesList::moveBy(int ud) {
         parentItem->insertChild(index - 1, item);
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
-        isSave = true;
+        isNeedSave = true;
       }
     }
     if (ud == 1) {
@@ -810,7 +819,7 @@ void dlgNotesList::moveBy(int ud) {
         parentItem->insertChild(index + 1, item);
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
-        isSave = true;
+        isNeedSave = true;
       }
     }
   } else {
@@ -823,7 +832,7 @@ void dlgNotesList::moveBy(int ud) {
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
         tw->expandAll();
-        isSave = true;
+        isNeedSave = true;
       }
     }
     if (ud == 1) {
@@ -833,7 +842,7 @@ void dlgNotesList::moveBy(int ud) {
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
         tw->expandAll();
-        isSave = true;
+        isNeedSave = true;
       }
     }
   }

@@ -25,7 +25,7 @@ class dlgNotesList : public QDialog {
 
   int findCount;
   QList<QTreeWidgetItem *> findResultList;
-  bool isSave = false;
+  bool isNeedSave = false;
   QTreeWidget *twrb;
   QTreeWidget *tw;
   QString currentMDFile;
@@ -67,7 +67,8 @@ class dlgNotesList : public QDialog {
   QString getNotesListText0(int index);
   void setNoteLabel();
   void loadEmptyNote();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -94,7 +95,7 @@ class dlgNotesList : public QDialog {
 
   void on_btnRestore_clicked();
 
-  void on_btnDel_2_clicked();
+  void on_btnDel_Recycle_clicked();
 
   void on_KVChanged();
 

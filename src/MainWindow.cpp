@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.21";
+QString ver = "1.1.22";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4857,7 +4857,7 @@ void MainWindow::on_btnEdit_clicked() {
   tmpCursor.setPosition(cpos);
   m_Notes->ui->editSource->setTextCursor(tmpCursor);
 
-  m_Notes->isSave = false;
+  m_Notes->isNeedSave = false;
 }
 
 void MainWindow::on_btnCode_clicked() {
@@ -5015,7 +5015,7 @@ void MainWindow::on_btnNotesList_clicked() {
   m_NotesList->show();
   m_NotesList->setWinPos();
   m_NotesList->tw->setFocus();
-  m_NotesList->isSave = false;
+  m_NotesList->isNeedSave = false;
   m_NotesList->tw->scrollToItem(m_NotesList->tw->currentItem());
 }
 
@@ -5611,7 +5611,7 @@ void MainWindow::on_btnDelNoteRecycle_clicked() {
 
   QTreeWidgetItem *topItem = m_NotesList->twrb->topLevelItem(0);
   m_NotesList->twrb->setCurrentItem(topItem->child(index));
-  m_NotesList->ui->btnDel_2->click();
+  m_NotesList->on_btnDel_Recycle_clicked();
 
   m_Method->delItemBakList(ui->qwNoteRecycle, index);
 }

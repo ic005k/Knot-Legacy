@@ -36,7 +36,7 @@ class Notes : public QDialog {
   Ui::Notes *ui;
 
   int px, py, mx, my;
-  bool isSave = true;
+  bool isNeedSave = true;
   QString htmlBuffer;
   QTextEdit *byTextEdit;
   QLineEdit *byLineEdit;

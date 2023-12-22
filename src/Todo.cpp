@@ -61,10 +61,10 @@ dlgTodo::~dlgTodo() { delete ui; }
 void dlgTodo::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
 void dlgTodo::saveTodo() {
-  if (!isSave) return;
+  if (!isNeedSave) return;
 
   mw_one->isSelf = true;
-  isSave = false;
+  isNeedSave = false;
 
   mw_one->isNeedAutoBackup = true;
   mw_one->strLatestModify = tr("Modi Todo");
@@ -148,7 +148,7 @@ void dlgTodo::on_btnAdd_clicked() {
 
   mw_one->ui->editTodo->setText("");
   refreshTableLists();
-  isSave = true;
+  isNeedSave = true;
 }
 
 int dlgTodo::getEditTextHeight(QTextEdit* edit) {
@@ -185,7 +185,7 @@ void dlgTodo::on_btnHigh_clicked() {
   setCurrentIndex(0);
 
   refreshAlarm();
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgTodo::on_btnLow_clicked() {
@@ -199,7 +199,7 @@ void dlgTodo::on_btnLow_clicked() {
   setCurrentIndex(getCount() - 1);
 
   refreshAlarm();
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgTodo::on_btnOK_clicked() {
@@ -245,7 +245,7 @@ void dlgTodo::on_btnOK_clicked() {
 
   refreshTableLists();
   refreshAlarm();
-  isSave = true;
+  isNeedSave = true;
 }
 
 bool dlgTodo::isWeekValid(QString lblDateTime, QString strDate) {
@@ -431,7 +431,7 @@ void dlgTodo::on_btnCancel_clicked() {
 
   refreshTableLists();
   refreshAlarm();
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgTodo::startTimerAlarm(QString text) {
@@ -512,7 +512,7 @@ void dlgTodo::on_btnReturn_clicked() {
 void dlgTodo::on_btnClear_clicked() {
   clearAllRecycle();
 
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgTodo::on_btnRestore_clicked() {
@@ -526,7 +526,7 @@ void dlgTodo::on_btnRestore_clicked() {
 
   on_btnDel_clicked();
 
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgTodo::on_btnDel_clicked() {
@@ -534,7 +534,7 @@ void dlgTodo::on_btnDel_clicked() {
   if (row < 0) return;
   delItemRecycle(row);
 
-  isSave = true;
+  isNeedSave = true;
 }
 
 void dlgTodo::refreshTableLists() {
@@ -1009,7 +1009,7 @@ void dlgTodo::reeditText() {
     delItem(row);
     insertItem(strTime, type, edit->toPlainText().trimmed(), row);
     setCurrentIndex(row);
-    isSave = true;
+    isNeedSave = true;
     dlg->close();
   });
 
@@ -1032,5 +1032,5 @@ void dlgTodo::addToRecycle() {
 
   insertRecycle(doneTime, 0, strTodoText, 0);
 
-  isSave = true;
+  isNeedSave = true;
 }

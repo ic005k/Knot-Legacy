@@ -161,6 +161,8 @@ void Notes::MD2Html(QString mdFile) {
 }
 
 void Notes::saveMainNotes() {
+  if (!isNeedSave) return;
+
   mw_one->isSelf = true;
 
   mw_one->isNeedAutoBackup = true;
@@ -183,6 +185,8 @@ void Notes::saveMainNotes() {
                ui->editSource->verticalScrollBar()->sliderPosition());
   Reg.setValue("/MainNotes/editCPos" + strTag,
                ui->editSource->textCursor().position());
+
+  isNeedSave = false;
 }
 
 void Notes::init_MainNotes() { loadMemoQML(); }
@@ -983,16 +987,14 @@ void Notes::closeEvent(QCloseEvent *event) {
   if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
   mw_one->Sleep(100);
 
-  if (isSave) {
-    saveMainNotes();
-  }
+  saveMainNotes();
 
   loadMemoQML();
 }
 
-void Notes::on_editSource_textChanged() { isSave = true; }
+void Notes::on_editSource_textChanged() { isNeedSave = true; }
 
-void Notes::on_editSource_cursorPositionChanged() { isSave = true; }
+void Notes::on_editSource_cursorPositionChanged() { isNeedSave = true; }
 
 void Notes::on_btnReference_clicked() {
   QString str = ui->editSource->textCursor().selectedText();
