@@ -2336,6 +2336,10 @@ void MainWindow::saveNotes(int tabIndex) {
 void MainWindow::on_btnRemarks_clicked() {
   m_Reader->setPdfViewVisible(false);
 
+  m_Method->reeditMainEventData();
+
+  return;
+
   m_Notes->m_SetEditText->close();
   m_Notes->m_SetEditText = new dlgSetEditText(m_Remarks);
 

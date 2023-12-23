@@ -903,7 +903,7 @@
              <string notr="true">border:none</string>
             </property>
             <property name="text">
-             <string>Remarks</string>
+             <string>Edit</string>
             </property>
             <property name="icon">
              <iconset resource="../res.qrc">
