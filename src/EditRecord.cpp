@@ -186,7 +186,7 @@ void EditRecord::set_Amount(QString Number) {
 }
 
 void EditRecord::on_btnCustom_clicked() {
-  this->close();
+  this->hide();
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameCategory->show();
   init_Desc();
