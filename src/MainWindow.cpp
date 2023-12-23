@@ -5711,10 +5711,7 @@ void MainWindow::on_btnBackEditRecord_clicked() {
   ui->frameMain->show();
 }
 
-void MainWindow::on_btnType_clicked() {
-  ui->frameEditRecord->hide();
-  ui->frameCategory->show();
-}
+void MainWindow::on_btnType_clicked() { myEditRecord->on_btnCustom_clicked(); }
 
 void MainWindow::on_btnOkEditRecord_clicked() {
   myEditRecord->on_btnOk_clicked();

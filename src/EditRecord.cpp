@@ -191,7 +191,7 @@ void EditRecord::set_Amount(QString Number) {
 
 void EditRecord::on_btnCustom_clicked() {
   this->hide();
-  mw_one->ui->frameMain->hide();
+  mw_one->ui->frameEditRecord->hide();
   mw_one->ui->frameCategory->show();
   init_Desc();
   m_List->ui->listWidget->setCurrentRow(0);
