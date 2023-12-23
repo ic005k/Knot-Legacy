@@ -5,7 +5,7 @@
 #include "ui_NotesList.h"
 
 extern MainWindow *mw_one;
-extern QString iniDir, privateDir;
+extern QString iniDir, privateDir, currentMDFile;
 extern bool isAndroid;
 
 dlgNotesList::dlgNotesList(QWidget *parent)
@@ -167,8 +167,6 @@ void dlgNotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item,
   }
 
   ui->editName->setText(item->text(0));
-
-  qDebug() << "currentMDFile " << currentMDFile;
 }
 
 QString dlgNotesList::getCurrentMDFile() {
@@ -177,12 +175,11 @@ QString dlgNotesList::getCurrentMDFile() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  QString curmd =
-      Reg.value("/MainNotes/currentItem", iniDir + "memo/xxx.md").toString();
+  QString curmd = Reg.value("/MainNotes/currentItem", "memo/xxx.md").toString();
   mw_one->ui->lblNoteName->setText(
       Reg.value("/MainNotes/NoteName", tr("Note Name")).toString());
 
-  return curmd;
+  return iniDir + curmd;
 }
 
 void dlgNotesList::on_btnRename_clicked() {

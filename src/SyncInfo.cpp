@@ -4,6 +4,7 @@
 #include "ui_SyncInfo.h"
 
 extern MainWindow* mw_one;
+extern QString currentMDFile;
 
 SyncInfo::SyncInfo(QWidget* parent) : QDialog(parent), ui(new Ui::SyncInfo) {
   ui->setupUi(this);
@@ -30,8 +31,8 @@ void SyncInfo::on_btnClose_clicked() {
   mw_one->m_NotesList->initRecycle();
 
   // load note
-  mw_one->m_NotesList->currentMDFile = mw_one->m_NotesList->getCurrentMDFile();
-  mw_one->m_Notes->MD2Html(mw_one->m_NotesList->currentMDFile);
+  currentMDFile = mw_one->m_NotesList->getCurrentMDFile();
+  mw_one->m_Notes->MD2Html(currentMDFile);
   mw_one->m_Notes->loadMemoQML();
   mw_one->m_Notes->setVPos();
 

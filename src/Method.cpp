@@ -8,7 +8,7 @@
 
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
-extern QString iniDir, searchStr;
+extern QString iniDir, searchStr, currentMDFile;
 extern dlgList* m_List;
 
 QStringList resultsList;
@@ -307,10 +307,9 @@ void Method::clickNoteList() {
   mw_one->m_Notes->saveQMLVPos();
 
   int index = getCurrentIndexBakList(mw_one->ui->qwNoteList);
-  mw_one->m_NotesList->currentMDFile =
-      iniDir + getText3(mw_one->ui->qwNoteList, index);
+  currentMDFile = iniDir + getText3(mw_one->ui->qwNoteList, index);
   QString noteName = getText0(mw_one->ui->qwNoteList, index);
-  mw_one->m_Notes->MD2Html(mw_one->m_NotesList->currentMDFile);
+  mw_one->m_Notes->MD2Html(currentMDFile);
   mw_one->m_Notes->loadMemoQML();
   mw_one->ui->lblNoteName->setText(noteName);
 
@@ -409,11 +408,14 @@ void Method::saveCurNoteIndex() {
   Reg.setIniCodec("utf-8");
 #endif
 
+  QString str = currentMDFile;
+  QString iniName = str.replace(iniDir, "");
+
   Reg.setValue("/MainNotes/notebookIndex",
                getCurrentIndexBakList(mw_one->ui->qwNoteBook));
   Reg.setValue("/MainNotes/noteIndex",
                getCurrentIndexBakList(mw_one->ui->qwNoteList));
-  Reg.setValue("/MainNotes/currentItem", mw_one->m_NotesList->currentMDFile);
+  Reg.setValue("/MainNotes/currentItem", iniName);
   Reg.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
 }
 

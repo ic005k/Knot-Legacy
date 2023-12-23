@@ -28,7 +28,7 @@ class dlgNotesList : public QDialog {
   bool isNeedSave = false;
   QTreeWidget *twrb;
   QTreeWidget *tw;
-  QString currentMDFile;
+
   void delFile(QString file);
 
   void saveNotesList();

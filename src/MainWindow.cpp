@@ -17,7 +17,7 @@ bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isTimeMachine,
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
-    zipfile, txt, infoStr, searchStr;
+    zipfile, txt, infoStr, searchStr, currentMDFile;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -442,8 +442,8 @@ MainWindow::MainWindow(QWidget *parent)
   m_Todo->refreshAlarm();
 
   // load note
-  m_NotesList->currentMDFile = m_NotesList->getCurrentMDFile();
-  mw_one->m_Notes->MD2Html(m_NotesList->currentMDFile);
+  currentMDFile = m_NotesList->getCurrentMDFile();
+  mw_one->m_Notes->MD2Html(currentMDFile);
   mw_one->m_Notes->loadMemoQML();
 }
 
@@ -3644,14 +3644,6 @@ void MainWindow::showNotes() {
   ui->frameSetKey->hide();
   ui->frameNotes->show();
   m_Notes->setVPos();
-
-  return;
-
-  m_NotesList->close();
-  ui->btnNotesList->click();
-  m_NotesList->on_treeWidget_itemClicked(
-      m_NotesList->ui->treeWidget->currentItem(), 0);
-  m_NotesList->ui->btnClose->click();
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -4849,7 +4841,7 @@ void MainWindow::on_btnEdit_clicked() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  QString mdfile = mw_one->loadText(m_NotesList->currentMDFile);
+  QString mdfile = mw_one->loadText(currentMDFile);
 
   m_Notes->init();
   m_Notes->ui->editSource->setPlainText(mdfile);
@@ -4860,7 +4852,7 @@ void MainWindow::on_btnEdit_clicked() {
   m_Notes->show();
   m_Notes->isShow = true;
 
-  QString a = m_NotesList->currentMDFile;
+  QString a = currentMDFile;
   a.replace(iniDir, "");
   int vpos = Reg.value("/MainNotes/editVPos" + a).toInt();
   int cpos = Reg.value("/MainNotes/editCPos" + a).toInt();

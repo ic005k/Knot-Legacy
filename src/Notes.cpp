@@ -6,7 +6,7 @@
 #include "ui_Notes.h"
 
 extern MainWindow *mw_one;
-extern QString iniFile, iniDir, privateDir, fontname;
+extern QString iniFile, iniDir, privateDir, fontname, currentMDFile;
 extern bool isAndroid, isIOS;
 extern int fontSize;
 extern QRegularExpression regxNumber;
@@ -167,12 +167,11 @@ void Notes::saveMainNotes() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  if (QFile(mw_one->m_NotesList->currentMDFile).exists())
-    QFile::remove(mw_one->m_NotesList->currentMDFile);
-  mw_one->TextEditToFile(ui->editSource, mw_one->m_NotesList->currentMDFile);
-  MD2Html(mw_one->m_NotesList->currentMDFile);
+  if (QFile(currentMDFile).exists()) QFile::remove(currentMDFile);
+  mw_one->TextEditToFile(ui->editSource, currentMDFile);
+  MD2Html(currentMDFile);
 
-  QString strTag = mw_one->m_NotesList->currentMDFile;
+  QString strTag = currentMDFile;
   strTag.replace(iniDir, "");
 
   Reg.setValue("/MainNotes/editVPos" + strTag,
@@ -689,10 +688,9 @@ void Notes::saveQMLVPos() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  if (QFile(mw_one->m_NotesList->currentMDFile).exists()) {
+  if (QFile(currentMDFile).exists()) {
     sliderPos = getVPos();
-    Reg.setValue("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile,
-                 sliderPos);
+    Reg.setValue("/MainNotes/SlidePos" + currentMDFile, sliderPos);
   }
 }
 
@@ -702,9 +700,7 @@ void Notes::setVPos() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  sliderPos =
-      Reg.value("/MainNotes/SlidePos" + mw_one->m_NotesList->currentMDFile)
-          .toReal();
+  sliderPos = Reg.value("/MainNotes/SlidePos" + currentMDFile).toReal();
 
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "setVPos",
@@ -717,7 +713,7 @@ qreal Notes::getVPos() {
   QMetaObject::invokeMethod((QObject *)root, "getVPos",
                             Q_RETURN_ARG(QVariant, itemCount));
   sliderPos = itemCount.toReal();
-  qDebug() << "pos=" << sliderPos;
+
   return sliderPos;
 }
 
