@@ -61,14 +61,6 @@ dlgNotesList::dlgNotesList(QWidget *parent)
   QDir dir(path);
   if (!dir.exists()) dir.mkdir(path);
 
-  ui->editBook->setStyleSheet(
-      mw_one->myEditRecord->ui->editAmount->styleSheet());
-  ui->editName->setStyleSheet(
-      mw_one->myEditRecord->ui->editAmount->styleSheet());
-  ui->editNote->setStyleSheet(
-      mw_one->myEditRecord->ui->editAmount->styleSheet());
-  ui->editFind->setStyleSheet(
-      mw_one->myEditRecord->ui->editAmount->styleSheet());
   ui->btnPrev->setEnabled(false);
   ui->btnNext->setEnabled(false);
   QFont font = this->font();

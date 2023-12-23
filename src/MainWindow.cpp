@@ -1024,8 +1024,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
         item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
 
       item11->setText(2, strDesc);
-      item11->setText(3,
-                      myEditRecord->ui->editDetails->toPlainText().trimmed());
+      item11->setText(3, ui->editDetails->toPlainText().trimmed());
 
       int childCount = topItem->childCount();
 
@@ -1069,7 +1068,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
     else
       item11->setText(1, QString("%1").arg(strAmount.toDouble(), 0, 'f', 2));
     item11->setText(2, strDesc);
-    item11->setText(3, myEditRecord->ui->editDetails->toPlainText().trimmed());
+    item11->setText(3, ui->editDetails->toPlainText().trimmed());
 
     topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
     topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
@@ -1273,16 +1272,19 @@ void MainWindow::del_Data(QTreeWidget *tw) {
 void MainWindow::on_AddRecord() {
   isAdd = true;
 
-  myEditRecord->ui->lblTitle->setText(
-      tr("Add") + "  : " + tabData->tabText(tabData->currentIndex()));
-  myEditRecord->ui->editDetails->clear();
+  ui->lblTitleEditRecord->setText(tr("Add") + "  : " +
+                                  tabData->tabText(tabData->currentIndex()));
 
-  myEditRecord->ui->hsH->setValue(QTime::currentTime().hour());
-  myEditRecord->ui->hsM->setValue(QTime::currentTime().minute());
-  myEditRecord->getTime(myEditRecord->ui->hsH->value(),
-                        myEditRecord->ui->hsM->value());
+  ui->hsH->setValue(QTime::currentTime().hour());
+  ui->hsM->setValue(QTime::currentTime().minute());
+  myEditRecord->getTime(ui->hsH->value(), ui->hsM->value());
 
-  myEditRecord->init();
+  ui->editDetails->clear();
+  ui->editCategory->setText("");
+  ui->editAmount->setText("");
+
+  ui->frameMain->hide();
+  ui->frameEditRecord->show();
 }
 
 void MainWindow::on_DelRecord() {
@@ -2099,7 +2101,7 @@ void MainWindow::on_twItemClicked() {
     max_day = getMaxDay(sy, sm);
 
     isShowDetails = false;
-    ui->lblStats->setStyleSheet(myEditRecord->ui->lblTitle->styleSheet());
+    ui->lblStats->setStyleSheet(ui->lblTitleEditRecord->styleSheet());
     ui->lblStats->setText(strStats);
   }
 
@@ -2137,16 +2139,16 @@ void MainWindow::set_Time() {
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
   QTreeWidgetItem *item = tw->currentItem();
   QTreeWidgetItem *topItem = item->parent();
-  QString newtime = myEditRecord->ui->lblTime->text().trimmed();
+  QString newtime = ui->lblTime->text().trimmed();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
     item->setText(0, newtime);
-    QString sa = myEditRecord->ui->editAmount->text().trimmed();
+    QString sa = ui->editAmount->text().trimmed();
     if (sa == "")
       item->setText(1, "");
     else
       item->setText(1, QString("%1").arg(sa.toDouble(), 0, 'f', 2));
-    item->setText(2, myEditRecord->ui->editCategory->text().trimmed());
-    item->setText(3, myEditRecord->ui->editDetails->toPlainText().trimmed());
+    item->setText(2, ui->editCategory->text().trimmed());
+    item->setText(3, ui->editDetails->toPlainText().trimmed());
     // Amount
     int child = item->parent()->childCount();
     double amount = 0;
@@ -2256,26 +2258,27 @@ void MainWindow::on_twItemDoubleClicked() {
       sm = list.at(1);
       ss = list.at(2);
     }
-    myEditRecord->ui->lblTitle->setText(
-        tr("Modify") + "  : " + tabData->tabText(tabData->currentIndex()));
+    ui->lblTitleEditRecord->setText(tr("Modify") + "  : " +
+                                    tabData->tabText(tabData->currentIndex()));
 
-    myEditRecord->ui->hsH->setValue(sh.toInt());
-    myEditRecord->ui->hsM->setValue(sm.toInt());
+    ui->hsH->setValue(sh.toInt());
+    ui->hsM->setValue(sm.toInt());
 
-    myEditRecord->ui->lblTime->setText(t.trimmed());
+    ui->lblTime->setText(t.trimmed());
 
     QString str = item->text(1);
     if (str == "0.00")
-      myEditRecord->ui->editAmount->setText("");
+      ui->editAmount->setText("");
     else
-      myEditRecord->ui->editAmount->setText(str);
+      ui->editAmount->setText(str);
 
-    myEditRecord->ui->editCategory->setText(item->text(2));
-    myEditRecord->ui->editDetails->setText(item->text(3));
-    myEditRecord->ui->frame->setFocus();
+    ui->editCategory->setText(item->text(2));
+    ui->editDetails->setText(item->text(3));
+    ui->f_Number->setFocus();
 
     isAdd = false;
-    myEditRecord->init();
+    ui->frameMain->hide();
+    ui->frameEditRecord->show();
   }
 
   if (item == tw->topLevelItem(tw->topLevelItemCount() - 1)) {
@@ -2707,6 +2710,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
       if (!ui->frameSetTab->isHidden()) {
         on_btnBackSetTab_clicked();
+        return true;
+      }
+
+      if (!ui->frameEditRecord->isHidden()) {
+        on_btnBackEditRecord_clicked();
         return true;
       }
     }
@@ -3415,8 +3423,7 @@ void MainWindow::on_actionPreferences_triggered() {
   mydlgPre->setGeometry(geometry().x(), geometry().y(), mydlgPre->width(),
                         height());
   mydlgPre->setModal(true);
-  mydlgPre->ui->sliderFontSize->setStyleSheet(
-      myEditRecord->ui->hsM->styleSheet());
+  mydlgPre->ui->sliderFontSize->setStyleSheet(ui->hsM->styleSheet());
   mydlgPre->show();
 }
 
@@ -3810,6 +3817,7 @@ void MainWindow::init_UIWidget() {
   ui->qwMain->hide();
   ui->frameCategory->hide();
   ui->frameSetTab->hide();
+  ui->frameEditRecord->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3979,7 +3987,7 @@ void MainWindow::init_UIWidget() {
   ui->btnReader->setFont(f);
   ui->btnNotes->setFont(f);
 
-  QString lblStyle = myEditRecord->ui->lblTitle->styleSheet();
+  QString lblStyle = ui->lblTitleEditRecord->styleSheet();
   ui->lblTotal->setStyleSheet(lblStyle);
   ui->lblDetails->setStyleSheet(lblStyle);
   ui->lblTitle->setStyleSheet(lblStyle);
@@ -5696,4 +5704,70 @@ void MainWindow::on_btnRenameType_clicked() {
 void MainWindow::on_btnBackSetTab_clicked() {
   ui->frameSetTab->hide();
   ui->frameMain->show();
+}
+
+void MainWindow::on_btnBackEditRecord_clicked() {
+  ui->frameEditRecord->hide();
+  ui->frameMain->show();
+}
+
+void MainWindow::on_btnType_clicked() {
+  ui->frameEditRecord->hide();
+  ui->frameCategory->show();
+}
+
+void MainWindow::on_btnOkEditRecord_clicked() {
+  myEditRecord->on_btnOk_clicked();
+}
+
+void MainWindow::on_btnClearType_clicked() { ui->editCategory->setText(""); }
+
+void MainWindow::on_btnClearDetails_clicked() { ui->editDetails->setText(""); }
+
+void MainWindow::on_btnClearAmount_clicked() { ui->editAmount->setText(""); }
+
+void MainWindow::on_editAmount_textChanged(const QString &arg1) {
+  myEditRecord->on_editAmount_textChanged(arg1);
+}
+
+void MainWindow::on_editCategory_textChanged(const QString &arg1) {
+  myEditRecord->on_editCategory_textChanged(arg1);
+}
+
+void MainWindow::on_editDetails_textChanged() {
+  myEditRecord->on_editDetails_textChanged();
+}
+
+void MainWindow::on_hsH_valueChanged(int value) {
+  myEditRecord->on_hsH_valueChanged(value);
+}
+
+void MainWindow::on_hsM_valueChanged(int value) {
+  myEditRecord->on_hsM_valueChanged(value);
+}
+
+void MainWindow::on_btn7_clicked() { myEditRecord->on_btn7_clicked(); }
+
+void MainWindow::on_btn8_clicked() { myEditRecord->on_btn8_clicked(); }
+
+void MainWindow::on_btn9_clicked() { myEditRecord->on_btn9_clicked(); }
+
+void MainWindow::on_btn4_clicked() { myEditRecord->on_btn4_clicked(); }
+
+void MainWindow::on_btn5_clicked() { myEditRecord->on_btn5_clicked(); }
+
+void MainWindow::on_btn6_clicked() { myEditRecord->on_btn6_clicked(); }
+
+void MainWindow::on_btn1_clicked() { myEditRecord->on_btn1_clicked(); }
+
+void MainWindow::on_btn2_clicked() { myEditRecord->on_btn2_clicked(); }
+
+void MainWindow::on_btn3_clicked() { myEditRecord->on_btn3_clicked(); }
+
+void MainWindow::on_btn0_clicked() { myEditRecord->on_btn0_clicked(); }
+
+void MainWindow::on_btnDot_clicked() { myEditRecord->on_btnDot_clicked(); }
+
+void MainWindow::on_btnDel_Number_clicked() {
+  myEditRecord->on_btnDel_clicked();
 }

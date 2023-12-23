@@ -183,8 +183,7 @@ void dlgReport::updateTable() {
   mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " +
                                 tr("Amount") + " 0");
   mw_one->ui->lblDetails->setText(tr("Details"));
-  mw_one->ui->lblDetails->setStyleSheet(
-      mw_one->myEditRecord->ui->lblTitle->styleSheet());
+  mw_one->ui->lblDetails->setStyleSheet(mw_one->ui->lblTitle->styleSheet());
 
   for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = twOut2Img->topLevelItem(i);

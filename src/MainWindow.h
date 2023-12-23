@@ -580,7 +580,7 @@ class MainWindow : public QMainWindow {
   void reeditData();
   void clickData();
  public slots:
-
+  void on_btnBackEditRecord_clicked();
   void on_btnBackNoteList_clicked();
 
   void on_btnBackNoteRecycle_clicked();
@@ -708,6 +708,50 @@ class MainWindow : public QMainWindow {
   void on_btnRenameType_clicked();
 
   void on_btnBackSetTab_clicked();
+
+  void on_btnType_clicked();
+
+  void on_btnOkEditRecord_clicked();
+
+  void on_btnClearType_clicked();
+
+  void on_btnClearDetails_clicked();
+
+  void on_btnClearAmount_clicked();
+
+  void on_editAmount_textChanged(const QString &arg1);
+
+  void on_editCategory_textChanged(const QString &arg1);
+
+  void on_editDetails_textChanged();
+
+  void on_hsH_valueChanged(int value);
+
+  void on_hsM_valueChanged(int value);
+
+  void on_btn7_clicked();
+
+  void on_btn8_clicked();
+
+  void on_btn9_clicked();
+
+  void on_btn4_clicked();
+
+  void on_btn5_clicked();
+
+  void on_btn6_clicked();
+
+  void on_btn1_clicked();
+
+  void on_btn2_clicked();
+
+  void on_btn3_clicked();
+
+  void on_btn0_clicked();
+
+  void on_btnDot_clicked();
+
+  void on_btnDel_Number_clicked();
 
  private:
   bool isShowDetails = false;

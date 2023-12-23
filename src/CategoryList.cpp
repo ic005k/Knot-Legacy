@@ -102,8 +102,7 @@ void dlgList::on_btnOk_clicked() {
 void dlgList::setCategoryText() {
   int row = ui->listWidget->currentRow();
   if (row >= 0) {
-    mw_one->myEditRecord->ui->editCategory->setText(
-        ui->listWidget->currentItem()->text());
+    mw_one->ui->editCategory->setText(ui->listWidget->currentItem()->text());
   }
 
   close();
@@ -158,8 +157,7 @@ void dlgList::on_btnRename_clicked() {
     }
     mw_one->startSave("alltab");
 
-    mw_one->myEditRecord->ui->editCategory->setText(
-        ui->editRename->text().trimmed());
+    mw_one->ui->editCategory->setText(ui->editRename->text().trimmed());
 
     mw_one->reloadMain();
   }
@@ -167,6 +165,5 @@ void dlgList::on_btnRename_clicked() {
 
 void dlgList::on_btnCancel_clicked() {
   mw_one->ui->frameCategory->hide();
-  mw_one->ui->frameMain->show();
-  mw_one->myEditRecord->show();
+  mw_one->ui->frameEditRecord->show();
 }

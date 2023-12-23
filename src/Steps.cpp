@@ -1,8 +1,8 @@
 #include "Steps.h"
 
 #include "MainWindow.h"
-#include "ui_Steps.h"
 #include "ui_MainWindow.h"
+#include "ui_Steps.h"
 
 extern MainWindow* mw_one;
 extern QRegularExpression regxNumber;
@@ -33,11 +33,6 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   mw_one->ui->editTangentLineIntercept->setValidator(validator);
   mw_one->ui->editTangentLineSlope->setValidator(validator);
   mw_one->ui->editStepLength->setValidator(validator);
-
-  QString style = mw_one->myEditRecord->ui->editAmount->styleSheet();
-  mw_one->ui->editStepLength->setStyleSheet(style);
-  mw_one->ui->editTangentLineIntercept->setStyleSheet(style);
-  mw_one->ui->editTangentLineSlope->setStyleSheet(style);
 }
 
 dlgSteps::~dlgSteps() { delete ui; }

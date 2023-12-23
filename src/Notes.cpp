@@ -59,12 +59,6 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->editRow->setPlaceholderText(tr("Row"));
   ui->editCol->setValidator(validator);
   ui->editCol->setPlaceholderText(tr("Column"));
-  ui->editCol->setStyleSheet(
-      mw_one->myEditRecord->ui->editAmount->styleSheet());
-  ui->editRow->setStyleSheet(
-      mw_one->myEditRecord->ui->editAmount->styleSheet());
-  ui->editFind->setStyleSheet(
-      mw_one->myEditRecord->ui->editAmount->styleSheet());
 
   connect(ui->editSource, &QTextEdit::cursorPositionChanged, this,
           &Notes::highlightCurrentLine);

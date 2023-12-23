@@ -27,53 +27,55 @@ EditRecord::EditRecord(QWidget *parent)
   m_List = new dlgList(this);
 
   this->installEventFilter(this);
-  ui->editCategory->installEventFilter(this);
-  ui->editDetails->installEventFilter(this);
-  ui->editDetails->viewport()->installEventFilter(this);
+  mw_one->ui->editCategory->installEventFilter(this);
+  mw_one->ui->editDetails->installEventFilter(this);
+  mw_one->ui->editDetails->viewport()->installEventFilter(this);
 
   QFont font;
   font.setPointSize(23);
   font.setBold(true);
 
-  ui->editAmount->setFont(font);
-  ui->btn0->setFont(font);
-  ui->btn1->setFont(font);
-  ui->btn2->setFont(font);
-  ui->btn3->setFont(font);
-  ui->btn4->setFont(font);
-  ui->btn5->setFont(font);
-  ui->btn6->setFont(font);
-  ui->btn7->setFont(font);
-  ui->btn8->setFont(font);
-  ui->btn9->setFont(font);
-  ui->btn0->setFont(font);
-  ui->btnDot->setFont(font);
-  ui->btnDel->setFont(font);
+  mw_one->ui->editAmount->setFont(font);
+  mw_one->ui->btn0->setFont(font);
+  mw_one->ui->btn1->setFont(font);
+  mw_one->ui->btn2->setFont(font);
+  mw_one->ui->btn3->setFont(font);
+  mw_one->ui->btn4->setFont(font);
+  mw_one->ui->btn5->setFont(font);
+  mw_one->ui->btn6->setFont(font);
+  mw_one->ui->btn7->setFont(font);
+  mw_one->ui->btn8->setFont(font);
+  mw_one->ui->btn9->setFont(font);
+  mw_one->ui->btn0->setFont(font);
+  mw_one->ui->btnDot->setFont(font);
+  mw_one->ui->btnDel_Number->setFont(font);
 
   font.setPointSize(fontSize + 2);
   font.setBold(true);
-  ui->lblTitle->setFont(font);
+  mw_one->ui->lblTitleEditRecord->setFont(font);
 
   QValidator *validator =
-      new QRegularExpressionValidator(regxNumber, ui->editAmount);
-  ui->editAmount->setValidator(validator);
-  ui->editAmount->setAttribute(Qt::WA_InputMethodEnabled, false);
-  ui->editAmount->setReadOnly(true);
+      new QRegularExpressionValidator(regxNumber, mw_one->ui->editAmount);
+  mw_one->ui->editAmount->setValidator(validator);
+  mw_one->ui->editAmount->setAttribute(Qt::WA_InputMethodEnabled, false);
+  mw_one->ui->editAmount->setReadOnly(true);
 
-  ui->editCategory->setPlaceholderText(tr("Please enter a category"));
+  mw_one->ui->editCategory->setPlaceholderText(tr("Please enter a category"));
 
-  lblStyle = ui->lblCategory->styleSheet();
+  lblStyle = mw_one->ui->lblCategory->styleSheet();
 
-  ui->hsM->setStyleSheet(ui->hsH->styleSheet());
+  mw_one->ui->hsM->setStyleSheet(mw_one->ui->hsH->styleSheet());
 
-  mw_one->setLineEditQss(ui->editAmount, 0, 1, "#4169E1", "#4169E1");
-  mw_one->setLineEditQss(ui->editCategory, 0, 1, "#4169E1", "#4169E1");
+  mw_one->setLineEditQss(mw_one->ui->editAmount, 0, 1, "#4169E1", "#4169E1");
+  mw_one->setLineEditQss(mw_one->ui->editCategory, 0, 1, "#4169E1", "#4169E1");
 
-  ui->editDetails->setStyleSheet(
+  mw_one->ui->editDetails->setStyleSheet(
       "border-radius:0px;border: 1px groove #4169E1;");
-  ui->editDetails->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  QScroller::grabGesture(ui->editDetails, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(ui->editDetails);
+  mw_one->ui->editDetails->verticalScrollBar()->setStyleSheet(
+      mw_one->vsbarStyleSmall);
+  QScroller::grabGesture(mw_one->ui->editDetails,
+                         QScroller::LeftMouseButtonGesture);
+  mw_one->setSCrollPro(mw_one->ui->editDetails);
 }
 
 void EditRecord::init() {
@@ -85,8 +87,8 @@ void EditRecord::init() {
               mw_one->height());
 
   if (mw_one->isAdd) {
-    ui->editCategory->setText("");
-    ui->editAmount->setText("");
+    mw_one->ui->editCategory->setText("");
+    mw_one->ui->editAmount->setText("");
   }
 
   show();
@@ -99,7 +101,7 @@ void EditRecord::on_btnBack_clicked() { close(); }
 void EditRecord::keyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event); }
 
 void EditRecord::on_btnOk_clicked() {
-  close();
+  mw_one->on_btnBackEditRecord_clicked();
 
   if (!mw_one->isAdd) {
     mw_one->set_Time();
@@ -112,13 +114,15 @@ void EditRecord::on_btnOk_clicked() {
     if (mw_one->isTesting) {
       for (int i = 0; i < 500; i++)
         mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
-                         ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                         ui->editCategory->text().trimmed());
+                         mw_one->ui->lblTime->text(),
+                         mw_one->ui->editAmount->text().trimmed(),
+                         mw_one->ui->editCategory->text().trimmed());
     } else
 
       mw_one->add_Data(mw_one->get_tw(mw_one->ui->tabWidget->currentIndex()),
-                       ui->lblTime->text(), ui->editAmount->text().trimmed(),
-                       ui->editCategory->text().trimmed());
+                       mw_one->ui->lblTime->text(),
+                       mw_one->ui->editAmount->text().trimmed(),
+                       mw_one->ui->editCategory->text().trimmed());
 
     mw_one->isNeedAutoBackup = true;
     mw_one->strLatestModify =
@@ -128,7 +132,7 @@ void EditRecord::on_btnOk_clicked() {
   mw_one->clickData();
 
   // Save Category Text
-  QString str = ui->editCategory->text().trimmed();
+  QString str = mw_one->ui->editCategory->text().trimmed();
   int count = m_List->ui->listWidget->count();
   for (int i = 0; i < count; i++) {
     QString str1 = m_List->ui->listWidget->item(i)->text().trimmed();
@@ -170,19 +174,19 @@ void EditRecord::on_btn0_clicked() { set_Amount("0"); }
 void EditRecord::on_btnDot_clicked() { set_Amount("."); }
 
 void EditRecord::on_btnDel_clicked() {
-  QString str = ui->editAmount->text().trimmed();
+  QString str = mw_one->ui->editAmount->text().trimmed();
   str = str.mid(0, str.length() - 1);
-  ui->editAmount->setText(str);
+  mw_one->ui->editAmount->setText(str);
 }
 
 void EditRecord::set_Amount(QString Number) {
-  QString str = ui->editAmount->text().trimmed();
-  if (str == "0.00") ui->editAmount->setText("");
+  QString str = mw_one->ui->editAmount->text().trimmed();
+  if (str == "0.00") mw_one->ui->editAmount->setText("");
   if (str.split(".").count() == 2 && str != "0.00") {
     QString str0 = str.split(".").at(1);
     if (str0.length() == 2) return;
   }
-  ui->editAmount->setText(str + Number);
+  mw_one->ui->editAmount->setText(str + Number);
 }
 
 void EditRecord::on_btnCustom_clicked() {
@@ -310,12 +314,12 @@ void EditRecord::getTime(int h, int m) {
     strs = "0" + QString::number(s);
   else
     strs = QString::number(s);
-  ui->lblTime->setText(strh + ":" + strm + ":" + strs);
+  mw_one->ui->lblTime->setText(strh + ":" + strm + ":" + strs);
 }
 
 bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
-  if (watch == ui->editDetails->viewport()) {
-    mw_one->m_Notes->getEditPanel(ui->editDetails, evn);
+  if (watch == mw_one->ui->editDetails->viewport()) {
+    mw_one->m_Notes->getEditPanel(mw_one->ui->editDetails, evn);
   }
 
   if (evn->type() == QEvent::KeyRelease) {
@@ -343,9 +347,13 @@ bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void EditRecord::on_btnClearAmount_clicked() { ui->editAmount->clear(); }
+void EditRecord::on_btnClearAmount_clicked() {
+  mw_one->ui->editAmount->clear();
+}
 
-void EditRecord::on_btnClearDesc_clicked() { ui->editCategory->clear(); }
+void EditRecord::on_btnClearDesc_clicked() {
+  mw_one->ui->editCategory->clear();
+}
 
 void EditRecord::on_editAmount_textChanged(const QString &arg1) {
   int count = 0;
@@ -354,44 +362,46 @@ void EditRecord::on_editAmount_textChanged(const QString &arg1) {
     if (count == 2) {
       QString str0 = arg1;
       QString str = str0.mid(0, str0.length() - 1);
-      ui->editAmount->setText(str);
+      mw_one->ui->editAmount->setText(str);
       break;
     }
   }
 
   if (arg1.length() > 0)
-    ui->lblAmount->setStyleSheet(lblStyleHighLight);
+    mw_one->ui->lblAmount->setStyleSheet(lblStyleHighLight);
   else
-    ui->lblAmount->setStyleSheet(lblStyle);
+    mw_one->ui->lblAmount->setStyleSheet(lblStyle);
 }
 
 void EditRecord::on_hsH_valueChanged(int value) {
-  getTime(value, ui->hsM->value());
+  getTime(value, mw_one->ui->hsM->value());
 }
 
 void EditRecord::on_hsM_valueChanged(int value) {
-  getTime(ui->hsH->value(), value);
+  getTime(mw_one->ui->hsH->value(), value);
 }
 
-void EditRecord::on_btnClearDetails_clicked() { ui->editDetails->clear(); }
+void EditRecord::on_btnClearDetails_clicked() {
+  mw_one->ui->editDetails->clear();
+}
 
 void EditRecord::on_editCategory_textChanged(const QString &arg1) {
   if (arg1.length() > 0)
-    ui->lblCategory->setStyleSheet(lblStyleHighLight);
+    mw_one->ui->lblCategory->setStyleSheet(lblStyleHighLight);
   else
-    ui->lblCategory->setStyleSheet(lblStyle);
+    mw_one->ui->lblCategory->setStyleSheet(lblStyle);
 
   QCompleter *completer = new QCompleter(c_list);
   completer->setFilterMode(Qt::MatchContains);
-  ui->editCategory->setCompleter(completer);
+  mw_one->ui->editCategory->setCompleter(completer);
 }
 
 void EditRecord::on_editDetails_textChanged() {
-  QString arg1 = ui->editDetails->toPlainText();
+  QString arg1 = mw_one->ui->editDetails->toPlainText();
   if (arg1.length() > 0)
-    ui->lblDetails->setStyleSheet(lblStyleHighLight);
+    mw_one->ui->lblDetailsType->setStyleSheet(lblStyleHighLight);
   else
-    ui->lblDetails->setStyleSheet(lblStyle);
+    mw_one->ui->lblDetailsType->setStyleSheet(lblStyle);
 }
 
 void EditRecord::saveOne() {

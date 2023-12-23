@@ -27,8 +27,7 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
 
   ui->dateTimeEdit->hide();
   ui->dateTimeEdit->setReadOnly(true);
-  ui->lblTodoText->setStyleSheet(
-      mw_one->myEditRecord->ui->lblTitle->styleSheet());
+  ui->lblTodoText->setStyleSheet(mw_one->ui->lblTitleEditRecord->styleSheet());
   QFont font = this->font();
   font.setBold(true);
   ui->btnYear->setFont(font);
