@@ -3109,6 +3109,12 @@ QDialog *MainWindow::getProgBar() {
                    dlg->height());
 
   QLabel *lbl = new QLabel(dlg);
+  lbl->setStyleSheet("color:red;");
+  QFont font = this->font();
+  int size = font.pointSize();
+  font.setBold(true);
+  font.setPointSize(size + 2);
+  lbl->setFont(font);
   lbl->setText(tr("Reading, please wait..."));
   lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
   dlg->layout()->addWidget(lbl);
