@@ -51,7 +51,8 @@ class Method : public QDialog {
 
   void gotoEnd(QQuickWidget *qw);
 
- protected:
+  void setSCrollPro(QObject *obj);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

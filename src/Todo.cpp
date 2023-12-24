@@ -960,7 +960,7 @@ void dlgTodo::reeditText() {
   QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
   edit->horizontalScrollBar()->setHidden(true);
   edit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  mw_one->setSCrollPro(edit);
+  mw_one->m_Method->setSCrollPro(edit);
 
   QToolButton* btnCancel = new QToolButton(this);
   QToolButton* btnCopy = new QToolButton(this);

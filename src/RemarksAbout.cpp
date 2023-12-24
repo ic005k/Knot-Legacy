@@ -27,7 +27,7 @@ dlgRemarks::dlgRemarks(QWidget *parent)
   ui->textEdit->setStyleSheet("border-radius:0px;border: 1px groove #4169E1;");
 
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(ui->textEdit);
+  mw_one->m_Method->setSCrollPro(ui->textEdit);
 
   ui->lblAbout->adjustSize();
   ui->lblAbout->setWordWrap(true);

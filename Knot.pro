@@ -64,7 +64,7 @@ SOURCES += \
     src/Preferences.cpp \
     src/QOwnLanguageData.cpp \
     src/Reader.cpp \
-    src/ReaderFun.cpp \
+    src/ReaderSet.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
     src/RollingBox.cpp \
@@ -119,7 +119,7 @@ HEADERS += \
     src/Preferences.h \
     src/QOwnLanguageData.h \
     src/Reader.h \
-    src/ReaderFun.h \
+    src/ReaderSet.h \
     src/RemarksAbout.h \
     src/Report.h \
     src/RollingBox.h \
@@ -176,7 +176,7 @@ FORMS += \
     src/PageIndicator.ui \
     src/Preferences.ui \
     src/Reader.ui \
-    src/ReaderFun.ui \
+    src/ReaderSet.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
     src/SetEditText.ui \

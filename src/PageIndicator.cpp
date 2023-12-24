@@ -1,13 +1,13 @@
 #include "PageIndicator.h"
 
 #include "src/MainWindow.h"
-#include "ui_PageIndicator.h"
 #include "ui_MainWindow.h"
+#include "ui_PageIndicator.h"
 
 extern MainWindow* mw_one;
 
-dlgFloatFun::dlgFloatFun(QWidget* parent)
-    : QDialog(parent), ui(new Ui::dlgFloatFun) {
+PageIndicator::PageIndicator(QWidget* parent)
+    : QDialog(parent), ui(new Ui::PageIndicator) {
   ui->setupUi(this);
   ui->lblPageNumber->setStyleSheet("color:#ff6600;");
   ui->lblPic->setHidden(true);
@@ -27,7 +27,7 @@ dlgFloatFun::dlgFloatFun(QWidget* parent)
   setPicRight();
 }
 
-void dlgFloatFun::setPicLeft() {
+void PageIndicator::setPicLeft() {
   QPixmap* pixmap = new QPixmap(":/res/sleft.svg");
   pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
                  Qt::SmoothTransformation);
@@ -37,7 +37,7 @@ void dlgFloatFun::setPicLeft() {
   showPageNumber("left");
 }
 
-void dlgFloatFun::setPicRight() {
+void PageIndicator::setPicRight() {
   QPixmap* pixmap = new QPixmap(":/res/sright.svg");
   pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
                  Qt::SmoothTransformation);
@@ -47,15 +47,16 @@ void dlgFloatFun::setPicRight() {
   showPageNumber("right");
 }
 
-void dlgFloatFun::init() {
-  this->setGeometry(
-      mw_one->geometry().x() + (mw_one->width() - this->width()) / 2,
-      mw_one->geometry().y() + 5, this->width(), this->height());
+void PageIndicator::init() {
+  int w = mw_one->geometry().width() - 20;
+  setFixedWidth(w);
+  this->setGeometry(mw_one->geometry().x() + (mw_one->width() - w) / 2,
+                    mw_one->geometry().y() + 5, this->width(), this->height());
 
   this->show();
 }
 
-void dlgFloatFun::showPageNumber(QString page) {
+void PageIndicator::showPageNumber(QString page) {
   sn = 0;
   cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
   tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
@@ -80,13 +81,13 @@ void dlgFloatFun::showPageNumber(QString page) {
   }
 }
 
-void dlgFloatFun::setY(int y) {
+void PageIndicator::setY(int y) {
   this->setGeometry(
       mw_one->geometry().x() + mw_one->width() - this->width() - 10, y,
       this->width(), this->height());
 }
 
-bool dlgFloatFun::eventFilter(QObject* watch, QEvent* evn) {
+bool PageIndicator::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -97,9 +98,9 @@ bool dlgFloatFun::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgFloatFun::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
+void PageIndicator::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
 
-void dlgFloatFun::paintEvent(QPaintEvent* event) {
+void PageIndicator::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
   return;
 
@@ -108,4 +109,4 @@ void dlgFloatFun::paintEvent(QPaintEvent* event) {
   QWidget::paintEvent(event);
 }
 
-dlgFloatFun::~dlgFloatFun() { delete ui; }
+PageIndicator::~PageIndicator() { delete ui; }

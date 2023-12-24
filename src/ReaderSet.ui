@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>dlgReaderFun</class>
- <widget class="QDialog" name="dlgReaderFun">
+ <class>ReaderSet</class>
+ <widget class="QDialog" name="ReaderSet">
   <property name="geometry">
    <rect>
     <x>0</x>

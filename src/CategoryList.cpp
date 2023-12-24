@@ -30,7 +30,7 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->listWidget->setMovement(QListView::Static);
   ui->listWidget->setStyleSheet(mw_one->listStyleMain);
   ui->listWidget->setSpacing(12);
-  mw_one->setSCrollPro(ui->listWidget);
+  mw_one->m_Method->setSCrollPro(ui->listWidget);
   QFont font;
   font.setPointSize(fontSize + 3);
   ui->listWidget->setFont(font);

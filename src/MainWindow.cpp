@@ -2068,7 +2068,7 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
   tw->setStyleSheet(treeStyle);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
-  setSCrollPro(tw);
+  m_Method->setSCrollPro(tw);
   return tw;
 }
 
@@ -2598,8 +2598,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           listSelFont->close();
           return true;
 
-        } else if (!mydlgReaderFun->isHidden()) {
-          mydlgReaderFun->close();
+        } else if (!m_ReaderSet->isHidden()) {
+          m_ReaderSet->close();
           return true;
 
         } else if (!mydlgSetText->isHidden()) {
@@ -2756,8 +2756,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
             // qDebug() << "book right...";
             int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
             if (cn != 1) {
-              mydlgFloatFun->setPicRight();
-              mydlgFloatFun->init();
+              m_PageIndicator->setPicRight();
+              m_PageIndicator->init();
             }
           } else if ((press_x - relea_x) > length &&
                      qAbs(relea_y - press_y) < 35) {
@@ -2765,11 +2765,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
             int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
             int tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
             if (cn != tn) {
-              mydlgFloatFun->setPicLeft();
-              mydlgFloatFun->init();
+              m_PageIndicator->setPicLeft();
+              m_PageIndicator->init();
             }
           } else
-            mydlgFloatFun->close();
+            m_PageIndicator->close();
         }
       }
     }
@@ -2817,7 +2817,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         isTurnThePage = true;
 
         on_btnPageUp_clicked();
-        mydlgFloatFun->close();
+        m_PageIndicator->close();
       }
 
       // Left Slide
@@ -2842,7 +2842,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         isTurnThePage = true;
 
         on_btnPageNext_clicked();
-        mydlgFloatFun->close();
+        m_PageIndicator->close();
       }
 
       if (isText || isEpub)
@@ -3647,7 +3647,7 @@ void MainWindow::on_btnNotes_clicked() {
 }
 
 void MainWindow::showNotes() {
-  mydlgFloatFun->close();
+  m_PageIndicator->close();
   isMemoVisible = true;
   isReaderVisible = false;
 
@@ -3905,9 +3905,9 @@ void MainWindow::init_UIWidget() {
   m_Reader = new dlgReader(this);
   m_TodoAlarm = new TodoAlarm(this);
   m_CloudBackup = new CloudBackup;
-  mydlgFloatFun = new dlgFloatFun(this);
-  mydlgFloatFun->close();
-  mydlgReaderFun = new dlgReaderFun(this);
+  m_PageIndicator = new PageIndicator(this);
+  m_PageIndicator->close();
+  m_ReaderSet = new ReaderSet(this);
   mydlgSetText = new dlgSetText(this);
   m_widget = new QWidget(this);
   m_widget->close();
@@ -4050,7 +4050,7 @@ void MainWindow::on_btnSelTab_clicked() {
 
   return;
 
-  mydlgFloatFun->close();
+  m_PageIndicator->close();
   m_widget = new QWidget(this);
 
   QDialog *dlg = new QDialog(this);
@@ -4081,7 +4081,7 @@ void MainWindow::on_btnSelTab_clicked() {
   list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
-  setSCrollPro(list);
+  m_Method->setSCrollPro(list);
   QFont font;
   font.setPointSize(fontSize + 3);
   list->setFont(font);
@@ -4239,7 +4239,7 @@ void MainWindow::on_openKnotBakDir() {
 
 void MainWindow::on_actionOneDriveBackupData() {
   floatfun = false;
-  mydlgFloatFun->close();
+  m_PageIndicator->close();
 
   ui->frameMain->hide();
   ui->frameReader->hide();
@@ -4373,7 +4373,7 @@ void MainWindow::on_btnZoom_clicked() {
     ui->frame_tab->hide();
     ui->frame_charts->setMaximumHeight(this->height());
     floatfun = false;
-    mydlgFloatFun->close();
+    m_PageIndicator->close();
   } else {
     axisY->setTickCount(yScale);
     axisY2->setTickCount(yScale);
@@ -4535,7 +4535,7 @@ QString MainWindow::getYMD(QString date) {
 
 void MainWindow::on_btnReader_clicked() {
   floatfun = false;
-  mydlgFloatFun->close();
+  m_PageIndicator->close();
   isReaderVisible = true;
   isMemoVisible = false;
 
@@ -4559,16 +4559,8 @@ void MainWindow::on_btnReader_clicked() {
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
-void MainWindow::setSCrollPro(QObject *obj) {
-  QScrollerProperties sp;
-  sp.setScrollMetric(QScrollerProperties::DragStartDistance, 0.001);
-  sp.setScrollMetric(QScrollerProperties::ScrollingCurve, QEasingCurve::Linear);
-  QScroller *qs = QScroller::scroller(obj);
-  qs->setScrollerProperties(sp);
-}
-
 void MainWindow::on_btnBack_clicked() {
-  mydlgReaderFun->close();
+  m_ReaderSet->close();
   m_Reader->setPdfViewVisible(false);
 
   if (isSelText) on_btnSelText_clicked();
@@ -4581,7 +4573,7 @@ void MainWindow::on_btnBack_clicked() {
 }
 
 void MainWindow::on_btnOpen_clicked() {
-  mw_one->mydlgReaderFun->close();
+  mw_one->m_ReaderSet->close();
   m_Reader->on_btnOpen_clicked();
 }
 
@@ -4592,10 +4584,10 @@ void MainWindow::on_btnPageNext_clicked() {
 }
 
 void MainWindow::on_btnPages_clicked() {
-  if (!mydlgReaderFun->isHidden()) {
-    mydlgReaderFun->close();
+  if (!m_ReaderSet->isHidden()) {
+    m_ReaderSet->close();
   } else
-    mydlgReaderFun->init();
+    m_ReaderSet->init();
 }
 
 void MainWindow::on_hSlider_sliderMoved(int position) {
@@ -4618,7 +4610,7 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 }
 
 void MainWindow::on_btnReadList_clicked() {
-  mydlgReaderFun->close();
+  m_ReaderSet->close();
   ui->frameReader->hide();
   ui->frameBookList->show();
   m_Reader->getReadList();
@@ -4691,7 +4683,7 @@ bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
 }
 
 void MainWindow::on_btnSelText_clicked() {
-  mydlgReaderFun->close();
+  m_ReaderSet->close();
 
   if (!isSelText) {
     ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
@@ -4982,7 +4974,7 @@ void MainWindow::on_SetReaderFunVisible() {
       ui->frameReaderFun->show();
     else {
       ui->frameReaderFun->hide();
-      mydlgReaderFun->hide();
+      m_ReaderSet->hide();
     }
   }
 }
@@ -4993,7 +4985,7 @@ void MainWindow::on_timerMousePress() {
 }
 
 void MainWindow::showGrayWindows() {
-  mydlgFloatFun->close();
+  m_PageIndicator->close();
 
   m_widget->resize(this->width(), this->height());
   m_widget->move(0, 0);

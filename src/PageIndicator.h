@@ -5,16 +5,16 @@
 #include <QGraphicsOpacityEffect>
 
 namespace Ui {
-class dlgFloatFun;
+class PageIndicator;
 }
 
-class dlgFloatFun : public QDialog {
+class PageIndicator : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgFloatFun(QWidget *parent = nullptr);
-  ~dlgFloatFun();
-  Ui::dlgFloatFun *ui;
+  explicit PageIndicator(QWidget *parent = nullptr);
+  ~PageIndicator();
+  Ui::PageIndicator *ui;
 
   void init();
 

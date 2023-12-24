@@ -39,7 +39,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
   ui->editSource->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  mw_one->setSCrollPro(ui->editSource);
+  mw_one->m_Method->setSCrollPro(ui->editSource);
 
   ui->editSource->setContentsMargins(15, 15, 15, 15);
   ui->editSource->setStyleSheet("border:none");

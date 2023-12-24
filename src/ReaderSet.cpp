@@ -1,15 +1,14 @@
-#include "ReaderFun.h"
+#include "ReaderSet.h"
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "ui_ReaderFun.h"
+#include "ui_ReaderSet.h"
 
 extern int fontSize;
 extern MainWindow* mw_one;
 extern QString iniDir, privateDir;
 
-dlgReaderFun::dlgReaderFun(QWidget* parent)
-    : QDialog(parent), ui(new Ui::dlgReaderFun) {
+ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   QPalette pal = palette();
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -33,9 +32,9 @@ dlgReaderFun::dlgReaderFun(QWidget* parent)
   ui->btnStyle3->setFont(f);
 }
 
-dlgReaderFun::~dlgReaderFun() { delete ui; }
+ReaderSet::~ReaderSet() { delete ui; }
 
-void dlgReaderFun::init() {
+void ReaderSet::init() {
   setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
               mw_one->ui->qwReader->height());
   // setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -45,7 +44,7 @@ void dlgReaderFun::init() {
   show();
 }
 
-bool dlgReaderFun::eventFilter(QObject* watch, QEvent* evn) {
+bool ReaderSet::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -57,31 +56,31 @@ bool dlgReaderFun::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgReaderFun::on_hSlider_sliderReleased() {
+void ReaderSet::on_hSlider_sliderReleased() {
   mw_one->m_Reader->on_hSlider_sliderReleased(ui->hSlider->value());
 }
 
-void dlgReaderFun::on_btnFontPlus_clicked() {
+void ReaderSet::on_btnFontPlus_clicked() {
   mw_one->textFontSize++;
   mw_one->m_Reader->setFontSize(mw_one->textFontSize);
 }
 
-void dlgReaderFun::on_btnFontLess_clicked() {
+void ReaderSet::on_btnFontLess_clicked() {
   if (mw_one->textFontSize <= 8) return;
   mw_one->textFontSize--;
   mw_one->m_Reader->setFontSize(mw_one->textFontSize);
 }
 
-void dlgReaderFun::on_btnFont_clicked() {
+void ReaderSet::on_btnFont_clicked() {
   close();
   mw_one->m_Reader->selectFont();
 }
 
-void dlgReaderFun::on_hSlider_sliderMoved(int position) {
+void ReaderSet::on_hSlider_sliderMoved(int position) {
   mw_one->on_hSlider_sliderMoved(position);
 }
 
-void dlgReaderFun::on_btnStyle1_clicked() {
+void ReaderSet::on_btnStyle1_clicked() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -91,7 +90,7 @@ void dlgReaderFun::on_btnStyle1_clicked() {
   mw_one->m_Reader->setReaderStyle();
 }
 
-void dlgReaderFun::on_btnStyle2_clicked() {
+void ReaderSet::on_btnStyle2_clicked() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -101,7 +100,7 @@ void dlgReaderFun::on_btnStyle2_clicked() {
   mw_one->m_Reader->setReaderStyle();
 }
 
-void dlgReaderFun::on_btnStyle3_clicked() {
+void ReaderSet::on_btnStyle3_clicked() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");

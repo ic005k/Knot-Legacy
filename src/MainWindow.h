@@ -72,7 +72,7 @@
 
 #include "MarkdownHighlighter.h"
 #include "Method.h"
-#include "ReaderFun.h"
+#include "ReaderSet.h"
 #include "src/CategoryList.h"
 #include "src/CloudBackup.h"
 #include "src/EditRecord.h"
@@ -105,7 +105,7 @@
 #include "ui_PageIndicator.h"
 #include "ui_Preferences.h"
 #include "ui_Reader.h"
-#include "ui_ReaderFun.h"
+#include "ui_ReaderSet.h"
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
 #include "ui_SetReaderText.h"
@@ -238,8 +238,8 @@ class MainWindow : public QMainWindow {
   dlgReader *m_Reader;
   TodoAlarm *m_TodoAlarm;
   CloudBackup *m_CloudBackup;
-  dlgFloatFun *mydlgFloatFun;
-  dlgReaderFun *mydlgReaderFun;
+  PageIndicator *m_PageIndicator;
+  ReaderSet *m_ReaderSet;
   dlgSetText *mydlgSetText;
   dlgNotesList *m_NotesList;
   SyncInfo *m_SyncInfo;
@@ -377,7 +377,6 @@ class MainWindow : public QMainWindow {
   QString getYMD(QString date);
   QString bakData(QString fileName, bool msgbox);
   bool importBakData(QString fileName, bool msg, bool book, bool unre);
-  void setSCrollPro(QObject *obj);
 
   void addUndo(QString log);
   QString getTabText();

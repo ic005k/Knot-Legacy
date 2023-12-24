@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>dlgFloatFun</class>
- <widget class="QDialog" name="dlgFloatFun">
+ <class>PageIndicator</class>
+ <widget class="QDialog" name="PageIndicator">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>377</width>
+    <width>484</width>
     <height>240</height>
    </rect>
   </property>

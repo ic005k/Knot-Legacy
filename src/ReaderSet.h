@@ -1,19 +1,19 @@
-#ifndef READERFUN_H
-#define READERFUN_H
+#ifndef READERSET_H
+#define READERSET_H
 
 #include <QDialog>
 
 namespace Ui {
-class dlgReaderFun;
+class ReaderSet;
 }
 
-class dlgReaderFun : public QDialog {
+class ReaderSet : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgReaderFun(QWidget *parent = nullptr);
-  ~dlgReaderFun();
-  Ui::dlgReaderFun *ui;
+  explicit ReaderSet(QWidget *parent = nullptr);
+  ~ReaderSet();
+  Ui::ReaderSet *ui;
 
   void init();
 
@@ -39,4 +39,4 @@ class dlgReaderFun : public QDialog {
  private:
 };
 
-#endif  // READERFUN_H
+#endif  // READERSET_H

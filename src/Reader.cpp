@@ -99,15 +99,15 @@ void dlgReader::setReaderStyle() {
     mw_one->ui->qwReader->rootContext()->setContextProperty("myTextColor",
                                                             "#664E30");
 
-    mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
+    mw_one->m_ReaderSet->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
         "rgb(0,0,255);border-radius: 4px;");
 
-    mw_one->mydlgReaderFun->ui->btnStyle1->setStyleSheet(
+    mw_one->m_ReaderSet->ui->btnStyle1->setStyleSheet(
         "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
         "2px solid "
         "rgb(255,0,0);border-radius: 4px;");
-    mw_one->mydlgReaderFun->ui->btnStyle2->setStyleSheet(
+    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(
         "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
         "solid "
         "rgb(0,0,255);border-radius: 4px;");
@@ -121,15 +121,15 @@ void dlgReader::setReaderStyle() {
     mw_one->ui->qwReader->rootContext()->setContextProperty("myTextColor",
                                                             "#000000");
 
-    mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
+    mw_one->m_ReaderSet->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
         "rgb(0,0,255);border-radius: 4px;");
 
-    mw_one->mydlgReaderFun->ui->btnStyle1->setStyleSheet(
+    mw_one->m_ReaderSet->ui->btnStyle1->setStyleSheet(
         "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
         "2px solid "
         "rgb(0,0,255);border-radius: 4px;");
-    mw_one->mydlgReaderFun->ui->btnStyle2->setStyleSheet(
+    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(
         "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
         "solid "
         "rgb(255,0,0);border-radius: 4px;");
@@ -144,15 +144,15 @@ void dlgReader::setReaderStyle() {
     mw_one->ui->qwReader->rootContext()->setContextProperty("myTextColor",
                                                             "#2E8B57");
 
-    mw_one->mydlgReaderFun->ui->btnStyle3->setStyleSheet(
+    mw_one->m_ReaderSet->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
         "rgb(255,0,0);border-radius: 4px;");
 
-    mw_one->mydlgReaderFun->ui->btnStyle1->setStyleSheet(
+    mw_one->m_ReaderSet->ui->btnStyle1->setStyleSheet(
         "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
         "2px solid "
         "rgb(0,0,255);border-radius: 4px;");
-    mw_one->mydlgReaderFun->ui->btnStyle2->setStyleSheet(
+    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(
         "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
         "solid "
         "rgb(0,0,255);border-radius: 4px;");
@@ -558,19 +558,18 @@ void dlgReader::getBookList() {
 void dlgReader::getLines() {
   QString qsShow;
 
-  mw_one->mydlgReaderFun->ui->hSlider->setTickInterval(1);
-  mw_one->mydlgReaderFun->ui->hSlider->setMinimum(0);
-  mw_one->mydlgReaderFun->ui->hSlider->setValue(sPos);
+  mw_one->m_ReaderSet->ui->hSlider->setTickInterval(1);
+  mw_one->m_ReaderSet->ui->hSlider->setMinimum(0);
+  mw_one->m_ReaderSet->ui->hSlider->setValue(sPos);
 
   if (isText) {
-    mw_one->mydlgReaderFun->ui->hSlider->setMaximum(totallines / baseLines - 1);
+    mw_one->m_ReaderSet->ui->hSlider->setMaximum(totallines / baseLines - 1);
     mw_one->ui->btnPages->setText(
         tr("Pages") + "\n" +
-        QString::number(mw_one->mydlgReaderFun->ui->hSlider->value() + 1) +
-        "\n" + QString::number(totallines / baseLines));
-    iPage = mw_one->mydlgReaderFun->ui->hSlider->value() * baseLines;
-    qDebug() << "iPage" << iPage
-             << mw_one->mydlgReaderFun->ui->hSlider->value();
+        QString::number(mw_one->m_ReaderSet->ui->hSlider->value() + 1) + "\n" +
+        QString::number(totallines / baseLines));
+    iPage = mw_one->m_ReaderSet->ui->hSlider->value() * baseLines;
+    qDebug() << "iPage" << iPage << mw_one->m_ReaderSet->ui->hSlider->value();
 
     int count = iPage + baseLines;
     QString txt1;
@@ -589,7 +588,7 @@ void dlgReader::getLines() {
   }
 
   if (isEpub) {
-    mw_one->mydlgReaderFun->ui->hSlider->setMaximum(htmlFiles.count());
+    mw_one->m_ReaderSet->ui->hSlider->setMaximum(htmlFiles.count());
     htmlIndex = sPos - 1;
     if (htmlIndex < 0) htmlIndex = 0;
     setQMLHtml();
@@ -640,7 +639,7 @@ void dlgReader::selectFont() {
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(list);
+  mw_one->m_Method->setSCrollPro(list);
   QFont font0;
   font0.setPointSize(fontSize);
   list->setFont(font0);
@@ -663,7 +662,7 @@ void dlgReader::selectFont() {
 
     list->close();
     setPageVPos();
-    mw_one->mydlgReaderFun->init();
+    mw_one->m_ReaderSet->init();
   });
 
   list->setGeometry(0, 0, mw_one->width(), mw_one->height());
@@ -1135,13 +1134,13 @@ qreal dlgReader::getNewVPos(qreal pos1, qreal h1, qreal h2) {
 }
 
 void dlgReader::showInfo() {
-  mw_one->mydlgReaderFun->ui->hSlider->setTickInterval(1);
+  mw_one->m_ReaderSet->ui->hSlider->setTickInterval(1);
 
   if (isText) {
     if (totallines > baseLines) {
-      mw_one->mydlgReaderFun->ui->hSlider->setMinimum(0);
-      mw_one->mydlgReaderFun->ui->hSlider->setValue(iPage / baseLines);
-      mw_one->mydlgReaderFun->ui->hSlider->setMaximum(totallines / baseLines);
+      mw_one->m_ReaderSet->ui->hSlider->setMinimum(0);
+      mw_one->m_ReaderSet->ui->hSlider->setValue(iPage / baseLines);
+      mw_one->m_ReaderSet->ui->hSlider->setMaximum(totallines / baseLines);
       mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
                                     QString::number(iPage / baseLines) + "\n" +
                                     QString::number(totallines / baseLines));
@@ -1154,9 +1153,9 @@ void dlgReader::showInfo() {
   }
 
   if (isEpub) {
-    mw_one->mydlgReaderFun->ui->hSlider->setMinimum(1);
-    mw_one->mydlgReaderFun->ui->hSlider->setValue(htmlIndex);
-    mw_one->mydlgReaderFun->ui->hSlider->setMaximum(htmlFiles.count());
+    mw_one->m_ReaderSet->ui->hSlider->setMinimum(1);
+    mw_one->m_ReaderSet->ui->hSlider->setValue(htmlIndex);
+    mw_one->m_ReaderSet->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
                                   QString::number(htmlIndex + 1) + "\n" +
                                   QString::number(htmlFiles.count()));

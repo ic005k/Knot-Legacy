@@ -464,3 +464,15 @@ void Method::okType() {
   m_List->on_listWidget_itemDoubleClicked(item);
   m_List->on_btnCancel_clicked();
 }
+
+void Method::setSCrollPro(QObject* obj) {
+  QScrollerProperties sp;
+  sp.setScrollMetric(QScrollerProperties::DragStartDistance, 0.001);
+  sp.setScrollMetric(QScrollerProperties::ScrollingCurve,
+                     QEasingCurve::OutQuad);
+  sp.setScrollMetric(QScrollerProperties::DragVelocitySmoothingFactor, 0.001);
+  sp.setScrollMetric(QScrollerProperties::FrameRate,
+                     QScrollerProperties::FrameRates::Fps60);
+  QScroller* qs = QScroller::scroller(obj);
+  qs->setScrollerProperties(sp);
+}

@@ -44,12 +44,12 @@ dlgNotesList::dlgNotesList(QWidget *parent)
   tw->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(tw);
+  mw_one->m_Method->setSCrollPro(tw);
 
   twrb->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   twrb->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(twrb, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(twrb);
+  mw_one->m_Method->setSCrollPro(twrb);
 
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
   ui->treeWidget->setColumnHidden(1, true);
