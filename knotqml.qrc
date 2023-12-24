@@ -26,5 +26,6 @@
         <file>src/qmlsrc/mainevent.qml</file>
         <file>src/qmlsrc/type.qml</file>
         <file>src/qmlsrc/seltab.qml</file>
+        <file>src/qmlsrc/booklist.qml</file>
     </qresource>
 </RCC>

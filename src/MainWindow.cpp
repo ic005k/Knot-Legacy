@@ -2721,6 +2721,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         on_btnBackEditRecord_clicked();
         return true;
       }
+
+      if (!ui->frameBookList->isHidden()) {
+        on_btnBackBookList_clicked();
+        return true;
+      }
     }
   }
 
@@ -3754,6 +3759,10 @@ void MainWindow::initQW() {
   ui->qwSelTab->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwSelTab->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/seltab.qml")));
 
+  ui->qwBookList->rootContext()->setContextProperty("m_Reader", m_Reader);
+  ui->qwBookList->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/booklist.qml")));
+
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3814,6 +3823,7 @@ void MainWindow::init_UIWidget() {
   ui->frameCategory->hide();
   ui->frameSetTab->hide();
   ui->frameEditRecord->hide();
+  ui->frameBookList->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -4594,6 +4604,8 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 
 void MainWindow::on_btnReadList_clicked() {
   mydlgReaderFun->close();
+  ui->frameReader->hide();
+  ui->frameBookList->show();
   m_Reader->getReadList();
 }
 
@@ -5763,4 +5775,15 @@ void MainWindow::on_btnDot_clicked() { myEditRecord->on_btnDot_clicked(); }
 
 void MainWindow::on_btnDel_Number_clicked() {
   myEditRecord->on_btnDel_clicked();
+}
+
+void MainWindow::on_btnBackBookList_clicked() {
+  ui->frameBookList->hide();
+  ui->frameReader->show();
+}
+
+void MainWindow::on_btnOkBookList_clicked() { m_Reader->openBookListItem(); }
+
+void MainWindow::on_btnClearAllRecords_clicked() {
+  m_Reader->clearAllReaderRecords();
 }

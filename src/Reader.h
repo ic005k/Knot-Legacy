@@ -103,9 +103,11 @@ class dlgReader : public QDialog {
   qreal getScale();
   void setPdfScale(qreal scale);
 
- public slots:
+  void clearAllReaderRecords();
+  public slots:
 
- protected:
+  void openBookListItem();
+  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;

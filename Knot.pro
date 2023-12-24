@@ -638,6 +638,7 @@ DISTFILES += \
     src/qmlsrc/MainModel.qml \
     src/qmlsrc/TodoModel.qml \
     src/qmlsrc/baklist.qml \
+    src/qmlsrc/booklist.qml \
     src/qmlsrc/details.qml \
     src/qmlsrc/imgview.qml \
     src/qmlsrc/main.qml \

@@ -3,8 +3,8 @@
 #include <QKeyEvent>
 
 #include "MainWindow.h"
-#include "ui_Reader.h"
 #include "ui_MainWindow.h"
+#include "ui_Reader.h"
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, privateDir;
@@ -1377,109 +1377,57 @@ void dlgReader::getReadList() {
   if (bookList.count() == 0) return;
 
   setPdfViewVisible(false);
-
-  frame = new QDialog();
-  QVBoxLayout* vbox = new QVBoxLayout();
-  QHBoxLayout* hbox = new QHBoxLayout();
-  QToolButton* btnClear = new QToolButton();
-  btnClear->setText(tr("Clear All Records"));
-  QToolButton* btnBack = new QToolButton();
-  btnBack->setText(tr("Back"));
-  btnBack->setMaximumWidth(150);
-  btnBack->setFixedHeight(35);
-  btnClear->setFixedHeight(35);
-  hbox->addWidget(btnBack);
-  hbox->addWidget(btnClear);
-
-  frame->setLayout(vbox);
-  frame->layout()->setContentsMargins(10, 10, 10, 10);
-  frame->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                     mw_one->geometry().width(), mw_one->geometry().height());
-
-  QListWidget* list = new QListWidget(mw_one);
-  list->setStyleSheet(mw_one->listWidgetStyle);
-  list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
-  list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
-  QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
-  mw_one->setSCrollPro(list);
-  QFont font0 = this->font();
-  QFontMetrics fm(font0);
-  int size = fm.height() * 2;
-  list->setIconSize(QSize(size, size));
-  list->setWordWrap(true);
-
+  mw_one->m_Method->clearAllBakList(mw_one->ui->qwBookList);
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);
     QStringList listBooks = str.split("|");
     QString bookName = listBooks.at(0);
-    QListWidgetItem* item;
+    QString suffix;
     if (bookName.toLower().contains(".txt")) {
-      item = new QListWidgetItem(QIcon(":/res/txt.png"), "txt");
+      suffix = "txt";
     } else if (bookName.toLower().contains(".epub")) {
-      item = new QListWidgetItem(QIcon(":/res/epub.png"), "epub");
+      suffix = "epub";
     } else if (bookName.toLower().contains(".pdf")) {
-      item = new QListWidgetItem(QIcon(":/res/pdf.png"), "pdf");
+      suffix = "pdf";
     } else
-      item = new QListWidgetItem(QIcon(":/res/none.png"), "none");
-    item->setSizeHint(QSize(130, fm.height() * 4));  // item->sizeHint().width()
-    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    item->setText(QString::number(i + 1) + " .  " + bookName);
-    list->addItem(item);
+      suffix = "none";
+
+    mw_one->m_Method->addItemBakList(mw_one->ui->qwBookList, bookName, "", "",
+                                     suffix, 0);
   }
 
-  connect(list, &QListWidget::itemClicked, [=]() {
-    int index = list->currentRow();
-    QString str = bookList.at(index);
+  for (int i = 0; i < bookList.count(); i++) {
+    QString str = bookList.at(i);
     QStringList listBooks = str.split("|");
-    QString bookfile = listBooks.at(1);
-    if (bookfile != fileName)
-      startOpenFile(bookfile);
-    else {
-      if (isPDF) setPdfViewVisible(true);
-    }
-    frame->close();
-  });
-
-  list->setGeometry(0, 0, mw_one->width(), mw_one->height());
-
-  if (list->count() > 0) {
-    for (int i = 0; i < list->count(); i++) {
-      QString str = bookList.at(i);
-      QStringList listBooks = str.split("|");
-      if (listBooks.at(1) == fileName) {
-        list->setCurrentRow(i);
-        break;
-      }
+    if (listBooks.at(1) == fileName) {
+      mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwBookList, i);
+      break;
     }
   }
+}
 
-  connect(btnBack, &QToolButton::clicked, [=]() {
-    frame->close();
-    delete frame;
-  });
+void dlgReader::clearAllReaderRecords() {
+  mw_one->m_Method->clearAllBakList(mw_one->ui->qwBookList);
+  bookList.clear();
+  QFile file(privateDir + "reader.ini");
+  if (file.exists()) file.remove();
+}
 
-  connect(frame, &QDialog::rejected, [=]() mutable {
+void dlgReader::openBookListItem() {
+  int index = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwBookList);
+
+  if (index < 0) return;
+
+  QString str = bookList.at(index);
+  QStringList listBooks = str.split("|");
+  QString bookfile = listBooks.at(1);
+  if (bookfile != fileName)
+    startOpenFile(bookfile);
+  else {
     if (isPDF) setPdfViewVisible(true);
-  });
+  }
 
-  connect(btnClear, &QToolButton::clicked, [=]() {
-    list->clear();
-    bookList.clear();
-    QFile file(privateDir + "reader.ini");
-    if (file.exists()) file.remove();
-
-#ifdef Q_OS_ANDROID
-
-#else
-
-#endif
-  });
-
-  vbox->addWidget(list);
-  vbox->addLayout(hbox);
-  mw_one->set_btnStyle(frame);
-  frame->show();
-  list->setFocus();
+  mw_one->on_btnBackBookList_clicked();
 }
 
 void dlgReader::backDir() {
