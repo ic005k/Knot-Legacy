@@ -12,7 +12,6 @@
         <file>res/done1.png</file>
         <file>res/down.png</file>
         <file>res/edit.png</file>
-        <file>res/epub.png</file>
         <file>res/find.png</file>
         <file>res/font.png</file>
         <file>res/high.png</file>
@@ -23,7 +22,6 @@
         <file>res/main.css</file>
         <file>res/menu.png</file>
         <file>res/modi.png</file>
-        <file>res/none.png</file>
         <file>res/nosel.png</file>
         <file>res/one.png</file>
         <file>res/open.png</file>
@@ -43,7 +41,6 @@
         <file>res/time.png</file>
         <file>res/todo.png</file>
         <file>res/todo1.png</file>
-        <file>res/txt.png</file>
         <file>res/up.png</file>
         <file>res/zoom.png</file>
         <file>res/onebak.png</file>
@@ -74,7 +71,6 @@
         <file>res/left.png</file>
         <file>res/right.png</file>
         <file>res/apk.png</file>
-        <file>res/pdf.png</file>
         <file>res/icon.ico</file>
         <file>res/sync0.png</file>
         <file>res/sync1.png</file>
@@ -90,5 +86,9 @@
         <file>res/cright.png</file>
         <file>res/sleft.svg</file>
         <file>res/sright.svg</file>
+        <file>res/epub.svg</file>
+        <file>res/none.svg</file>
+        <file>res/pdf.svg</file>
+        <file>res/txt.svg</file>
     </qresource>
 </RCC>

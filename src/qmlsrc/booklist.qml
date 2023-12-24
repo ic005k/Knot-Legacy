@@ -173,21 +173,19 @@ Rectangle {
 
             function getListPic() {
                 if (item3.text == "txt")
-                    return "/res/txt.png"
+                    return "/res/txt.svg"
 
                 if (item3.text == "epub")
-                    return "/res/epub.png"
+                    return "/res/epub.svg"
 
                 if (item3.text == "pdf")
-                    return "/res/pdf.png"
+                    return "/res/pdf.svg"
 
                 if (item3.text == "none")
-                    return "/res/none.png"
+                    return "/res/none.svg"
             }
 
-
             RowLayout {
-
 
                 id: idlistElemnet
                 height: parent.height
@@ -207,7 +205,6 @@ Rectangle {
                     }
                 }
 
-
                 Image {
                     id: myimg
                     width: 32
@@ -217,10 +214,10 @@ Rectangle {
                     verticalAlignment: Image.AlignVCenter
 
                     smooth: true
+                    sourceSize.height: 32
+                    sourceSize.width: 32
                     source: listItem.getListPic()
                 }
-
-
 
                 ColumnLayout {
                     id: colLayout
@@ -231,14 +228,11 @@ Rectangle {
                     anchors.leftMargin: 0
                     anchors.rightMargin: 0
 
-
-
-
                     Text {
                         id: item0
 
                         width: parent.width
-                        Layout.preferredWidth: listItem.width
+                        Layout.preferredWidth: listItem.width - myimg.width
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
@@ -428,6 +422,4 @@ Rectangle {
             policy: ScrollBar.AsNeeded
         }
     }
-
-
 }

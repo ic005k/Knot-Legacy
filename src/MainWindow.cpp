@@ -3091,6 +3091,15 @@ QDialog *MainWindow::getProgBar() {
   QDialog *dlg;
   dlg = new QDialog(this);
   dlg->setModal(true);
+
+  dlg->setWindowFlags(Qt::WindowStaysOnTopHint);
+
+#ifdef Q_OS_ANDROID
+#else
+  dlg->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool |
+                      Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
+#endif
+
   dlg->setFixedHeight(200);
   dlg->setFixedWidth(geometry().width() - 50);
   QVBoxLayout *vbox = new QVBoxLayout;
