@@ -3109,7 +3109,7 @@ QDialog *MainWindow::getProgBar() {
                    dlg->height());
 
   QLabel *lbl = new QLabel(dlg);
-  lbl->setStyleSheet("color:red;");
+  lbl->setStyleSheet("color:#00CED1;");
   QFont font = this->font();
   int size = font.pointSize();
   font.setBold(true);

@@ -1407,6 +1407,13 @@ void dlgReader::getReadList() {
 }
 
 void dlgReader::clearAllReaderRecords() {
+  int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwBookList);
+  if (count == 0) return;
+
+  if (!mw_one->showMsgBox("Knot", tr("Clear all reading history") + " ? ", "",
+                          2))
+    return;
+
   mw_one->m_Method->clearAllBakList(mw_one->ui->qwBookList);
   bookList.clear();
   QFile file(privateDir + "reader.ini");
