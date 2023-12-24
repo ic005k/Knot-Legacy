@@ -2757,7 +2757,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
             int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
             if (cn != 1) {
               m_PageIndicator->setPicRight();
-              m_PageIndicator->init();
             }
           } else if ((press_x - relea_x) > length &&
                      qAbs(relea_y - press_y) < 35) {
@@ -2766,7 +2765,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
             int tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
             if (cn != tn) {
               m_PageIndicator->setPicLeft();
-              m_PageIndicator->init();
             }
           } else
             m_PageIndicator->close();

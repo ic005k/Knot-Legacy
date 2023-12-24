@@ -11,7 +11,6 @@ PageIndicator::PageIndicator(QWidget* parent)
   ui->setupUi(this);
   ui->lblPageNumber->setStyleSheet("color:#ff6600;");
   ui->lblPic->setHidden(true);
-  ui->lblPic->setFixedSize(100, 100);
 
   this->setContentsMargins(1, 1, 1, 1);
   this->layout()->setContentsMargins(1, 1, 1, 1);
@@ -35,6 +34,8 @@ void PageIndicator::setPicLeft() {
   ui->lblPic->setPixmap(*pixmap);
 
   showPageNumber("left");
+
+  init();
 }
 
 void PageIndicator::setPicRight() {
@@ -45,11 +46,16 @@ void PageIndicator::setPicRight() {
   ui->lblPic->setPixmap(*pixmap);
 
   showPageNumber("right");
+
+  init();
 }
 
 void PageIndicator::init() {
   int w = mw_one->geometry().width() - 20;
+  QFontMetrics fontMetrics(ui->lblPageNumber->font());
+  int nFontHeight = fontMetrics.height();
   setFixedWidth(w);
+  setFixedHeight(nFontHeight + 10);
   this->setGeometry(mw_one->geometry().x() + (mw_one->width() - w) / 2,
                     mw_one->geometry().y() + 5, this->width(), this->height());
 
