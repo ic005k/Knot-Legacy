@@ -205,12 +205,16 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
       px = event->globalX();
       py = event->globalY();
 
-      int a = 50;
-      int hy = py - a - m_SetEditText->height() - 50;
+      int a = 100;
+      int hy = py - a - m_SetEditText->height();
       if (hy >= 0)
         y1 = hy;
       else
         y1 = py + a;
+
+#ifdef Q_OS_ANDROID
+      y1 = 2;
+#endif
 
       m_SetEditText->setFixedWidth(mw_one->width() - 20);
 
@@ -1218,4 +1222,12 @@ void Notes::on_btnGetShare_clicked() {
 #endif
   on_btnPaste_clicked();
 #endif
+}
+
+void Notes::on_btnHideKey_clicked() {
+  if (pAndroidKeyboard->isVisible()) {
+    pAndroidKeyboard->hide();
+    setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
+                mw_one->mainHeight);
+  }
 }

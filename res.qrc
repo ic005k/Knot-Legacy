@@ -90,5 +90,6 @@
         <file>res/none.svg</file>
         <file>res/pdf.svg</file>
         <file>res/txt.svg</file>
+        <file>res/hidekey.svg</file>
     </qresource>
 </RCC>

@@ -181,6 +181,8 @@ class Notes : public QDialog {
 
   void on_btnGetShare_clicked();
 
+  void on_btnHideKey_clicked();
+
  private:
   int x_left, x_right, y_left, y_right;
   int y1;
