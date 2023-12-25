@@ -27,14 +27,7 @@ SyncInfo::SyncInfo(QWidget* parent) : QDialog(parent), ui(new Ui::SyncInfo) {
 SyncInfo::~SyncInfo() { delete ui; }
 
 void SyncInfo::on_btnClose_clicked() {
-  mw_one->m_NotesList->initNotesList();
-  mw_one->m_NotesList->initRecycle();
-
-  // load note
-  currentMDFile = mw_one->m_NotesList->getCurrentMDFile();
-  mw_one->m_Notes->MD2Html(currentMDFile);
-  mw_one->m_Notes->loadMemoQML();
-  mw_one->m_Notes->setVPos();
+  mw_one->m_Method->init_all_notes();
 
   close();
   ui->textBrowser->clear();

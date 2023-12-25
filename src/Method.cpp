@@ -476,3 +476,14 @@ void Method::setSCrollPro(QObject* obj) {
   QScroller* qs = QScroller::scroller(obj);
   qs->setScrollerProperties(sp);
 }
+
+void Method::init_all_notes() {
+  mw_one->m_NotesList->initNotesList();
+  mw_one->m_NotesList->initRecycle();
+
+  // load note
+  currentMDFile = mw_one->m_NotesList->getCurrentMDFile();
+  mw_one->m_Notes->MD2Html(currentMDFile);
+  mw_one->m_Notes->loadMemoQML();
+  mw_one->m_Notes->setVPos();
+}

@@ -116,6 +116,8 @@ void MainWindow::importDataDone() {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     on_tabWidget_currentChanged(tabData->currentIndex());
+
+    mw_one->m_Method->init_all_notes();
   }
 
   closeProgress();

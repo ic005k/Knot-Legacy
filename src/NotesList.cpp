@@ -1036,6 +1036,7 @@ void dlgNotesList::on_actionMoveDown_NoteBook_triggered() {
   loadAllNoteBook();
 
   setNoteBookCurrentIndex(oldIndex + 1);
+  mw_one->m_Method->clickNoteBook();
 }
 
 void dlgNotesList::loadAllNoteBook() {

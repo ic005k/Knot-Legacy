@@ -52,6 +52,7 @@ class Method : public QDialog {
   void gotoEnd(QQuickWidget *qw);
 
   void setSCrollPro(QObject *obj);
+  void init_all_notes();
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
