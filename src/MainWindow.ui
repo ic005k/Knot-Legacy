@@ -4124,7 +4124,17 @@ QRadioButton::indicator:checked {
              <item>
               <widget class="QToolButton" name="btnNoteBookMenu">
                <property name="text">
-                <string>...</string>
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../res.qrc">
+                 <normaloff>:/res/menu.svg</normaloff>:/res/menu.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -4159,7 +4169,17 @@ QRadioButton::indicator:checked {
              <item>
               <widget class="QToolButton" name="btnNoteMenu">
                <property name="text">
-                <string>...</string>
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../res.qrc">
+                 <normaloff>:/res/menu.svg</normaloff>:/res/menu.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -5420,7 +5440,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">
