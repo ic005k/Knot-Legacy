@@ -100,6 +100,8 @@ void ImportDataThread::run() {
 }
 
 void MainWindow::importDataDone() {
+  mw_one->isSelf = true;
+
   if (!zipfile.isNull() && isZipOK) {
     m_NotesList->initNotesList();
     m_NotesList->initRecycle();
@@ -697,7 +699,7 @@ void MainWindow::init_Options() {
     timeLines.append(
         RegTime.value("/TimeLines/Files" + QString::number(i)).toString());
 
-  mydlgPre->initValues();
+  mydlgPre->initOptions();
   mydlgPre->ui->btnReStart->hide();
   QString style =
       "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "
@@ -1703,6 +1705,18 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
   if (!ui->frameTodo->isHidden()) {
     on_btnBackTodo_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (!ui->frameBakList->isHidden()) {
+    on_btnBackBakList_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (!ui->frameOne->isHidden()) {
+    on_btnBack_One_clicked();
     event->ignore();
     return;
   }
@@ -4205,10 +4219,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
     actAddTab->setVisible(false);
     actDelTab->setVisible(false);
     actRenameTab->setVisible(false);
-    actBakFileList->setVisible(false);
-    actExportData->setVisible(false);
-    actImportData->setVisible(false);
-    actOneDrive->setVisible(false);
     actTabRecycle->setVisible(false);
   }
 #endif
@@ -5588,6 +5598,11 @@ void MainWindow::on_btnDelBakFile_clicked() {
   QFile file(bak_file);
   file.remove();
   m_Method->delItemBakList(ui->qwBakList, index);
+
+  int newIndex = index - 1;
+  if (newIndex < 0) newIndex = 0;
+
+  m_Method->setCurrentIndexBakList(ui->qwBakList, newIndex);
 
   ui->lblBakListTitle->setText(
       tr("Backup File List") + "    " + tr("Total") + " : " +

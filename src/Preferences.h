@@ -22,7 +22,7 @@ class dlgPreferences : public QDialog {
 
   void setFontDemo(QString customFontPath);
 
-  void initValues();
+  void initOptions();
   void autoBakData();
 
   void setBakStatus(bool status);

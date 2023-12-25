@@ -194,7 +194,7 @@ void dlgPreferences::on_sliderFontSize_valueChanged(int value) {
   on_sliderFontSize_sliderMoved(value);
 }
 
-void dlgPreferences::initValues() {
+void dlgPreferences::initOptions() {
   QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -225,11 +225,9 @@ void dlgPreferences::initValues() {
     mw_one->ui->btnReader->hide();
     mw_one->ui->btnAdd->hide();
     mw_one->ui->btnDel->hide();
-    mw_one->ui->btnSync->hide();
     mw_one->ui->btnFind->hide();
     mw_one->ui->btnRemarks->hide();
     mw_one->ui->btnReport->hide();
-    mw_one->ui->btnSync->hide();
 
     ui->chkAutoTime->hide();
     ui->chkReaderFont->hide();
