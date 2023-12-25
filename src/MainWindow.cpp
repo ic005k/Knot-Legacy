@@ -2628,7 +2628,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         }
 
         else {
-          on_btnBack_clicked();
+          on_btnBackReader_clicked();
           return true;
         }
       }
@@ -4452,7 +4452,8 @@ static void JavaNotify_4() {
     if (!mw_one->ui->frameReport->isHidden())
       mw_one->ui->btnBack_Report->click();
 
-    if (!mw_one->ui->frameReader->isHidden()) mw_one->ui->btnBack->click();
+    if (!mw_one->ui->frameReader->isHidden())
+      mw_one->on_btnBackReader_clicked();
 
     if (!mw_one->ui->frameNoteRecycle->isHidden())
       mw_one->on_btnBackNoteRecycle_clicked();
@@ -4569,7 +4570,7 @@ void MainWindow::on_btnReader_clicked() {
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
-void MainWindow::on_btnBack_clicked() {
+void MainWindow::on_btnBackReader_clicked() {
   m_ReaderSet->close();
   m_Reader->setPdfViewVisible(false);
 

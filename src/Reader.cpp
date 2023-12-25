@@ -31,10 +31,6 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   this->setStyleSheet(
       "background-image: url(:/res/b.png);border-width:0;border-style:outset;");
 
-#ifdef Q_OS_ANDROID
-  mw_one->ui->btnBack->hide();
-#endif
-
   mw_one->ui->lblTitle->hide();
   mw_one->ui->frameReaderFun2->hide();
   mw_one->ui->btnBackward->hide();
@@ -50,9 +46,11 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->textBrowser->setPalette(pt);
 
   mw_one->ui->btnOpen->setStyleSheet("border:none");
-  mw_one->ui->btnBack->setStyleSheet("border:none");
+  mw_one->ui->btnBackReader->setStyleSheet("border:none");
   mw_one->ui->btnPageNext->setStyleSheet("border:none");
   mw_one->ui->btnPageUp->setStyleSheet("border:none");
+  mw_one->ui->btnPageNext->hide();
+  mw_one->ui->btnPageUp->hide();
   mw_one->ui->btnPages->setStyleSheet(
       "color: rgb(0, 0, 0);background-color: rgb(254, 234, 112);border: "
       "0px solid "

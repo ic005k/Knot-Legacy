@@ -524,7 +524,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnReader_clicked();
 
-  void on_btnBack_clicked();
+  void on_btnBackReader_clicked();
 
   void on_btnOpen_clicked();
 
