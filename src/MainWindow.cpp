@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.22";
+QString ver = "1.1.23";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;

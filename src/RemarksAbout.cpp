@@ -210,6 +210,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
       // int ret = QMessageBox::warning(this, "", warningStr, tr("Download"),
       //                                tr("Cancel"));
       // for Android ret = 3 Mac ret = 0 or 1(Cancel)
+
       int ret = QMessageBox::warning(this, "", warningStr, tr("Download"));
 
       if (ret >= 0) {
@@ -218,8 +219,10 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
 #else
         // const QUrl url("https://github.com/ic005k/" + appName +
         //                "/releases/latest");
+
         QDesktopServices::openUrl(QUrl(s_link));
-        QApplication::exit(0);
+
+        // QApplication::exit(0);
 #endif
       }
     } else {
