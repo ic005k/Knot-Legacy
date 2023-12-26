@@ -162,6 +162,8 @@ void Notes::saveMainNotes() {
   mw_one->isNeedAutoBackup = true;
   mw_one->strLatestModify = tr("Modi Notes");
 
+  saveQMLVPos();
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
