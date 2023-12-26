@@ -35,16 +35,10 @@ dlgRemarks::dlgRemarks(QWidget *parent)
   ui->lblLogo->setText("");
   ui->lblLogo->setFixedHeight(185);
   ui->lblLogo->setFixedWidth(185);
-  if (zh_cn)
-    ui->lblLogo->setStyleSheet(
-        "QLabel{"
-        "border-image:url(:/res/apk.png) 4 4 4 4 stretch stretch;"
-        "}");
-  else
-    ui->lblLogo->setStyleSheet(
-        "QLabel{"
-        "border-image:url(:/res/apk_en.png) 4 4 4 4 stretch stretch;"
-        "}");
+  ui->lblLogo->setStyleSheet(
+      "QLabel{"
+      "border-image:url(:/res/apk.png) 4 4 4 4 stretch stretch;"
+      "}");
 
   manager = new QNetworkAccessManager(this);
   connect(manager, SIGNAL(finished(QNetworkReply *)), this,
@@ -189,14 +183,24 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
 
     QVariantList list = root_Obj.value("assets").toArray().toVariantList();
     QString Url = getUrl(list);
-    if (zh_cn)
-      // "https://ghproxy.com/"
-      s_link = "https://gh.flyinbug.top/gh/" + Url;
-    else
+    if (zh_cn) {
+#ifdef Q_OS_ANDROID
+      // gitee
+      s_link =
+          "https://gitee.com/ic005k/Knot/releases/download/Latest/"
+          "android-build-release-signed.apk";
+#else
+      // github
+      QString mirror1 = "https://ghproxy.com/";
+      QString mirror2 = "https://gh.flyinbug.top/gh/";
+
+      s_link = mirror2 + Url;
+#endif
+    } else
       s_link = Url;
+
     qDebug() << "s_link" << s_link << Url;
 
-    QJsonObject PulseValue = root_Obj.value("assets").toObject();
     QString Verison = root_Obj.value("tag_name").toString();
     QString UpdateTime = root_Obj.value("published_at").toString();
     QString ReleaseNote = root_Obj.value("body").toString();
