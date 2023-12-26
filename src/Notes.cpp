@@ -19,8 +19,13 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->f_Find->hide();
   ui->btnFind->hide();
   ui->lblCount->hide();
-  ui->f_Fun->hide();
+  ui->f_ToolBar->hide();
   ui->btnGetShare->hide();
+
+#ifdef Q_OS_ANDROID
+#else
+  ui->btnHideKey->hide();
+#endif
 
   m_SetEditText = new dlgSetEditText(this);
 
@@ -48,7 +53,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   QFont f = this->font();
   f.setPointSize(fontSize - 1);
   ui->lblInfo->setFont(f);
-  ui->f_Fun->setFont(f);
+  ui->f_ToolBar->setFont(f);
 
   connect(ui->editSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
           SLOT(editVSBarValueChanged()));
@@ -998,7 +1003,7 @@ void Notes::on_btnReference_clicked() {
 }
 
 void Notes::on_btnShowFind_clicked() {
-  ui->f_Fun->hide();
+  ui->f_ToolBar->hide();
   if (!ui->f_Find->isHidden())
     ui->f_Find->hide();
   else {
@@ -1237,8 +1242,15 @@ void Notes::on_btnHideKey_clicked() {
 
 void Notes::on_btnShowTools_clicked() {
   ui->f_Find->hide();
-  if (ui->f_Fun->isHidden())
-    ui->f_Fun->show();
-  else
-    ui->f_Fun->hide();
+  if (ui->f_ToolBar->isHidden()) {
+    ui->f_ToolBar->show();
+
+  } else {
+    ui->f_ToolBar->hide();
+  }
+
+  if (ui->editSource->textCursor().position() > 0) {
+    on_btnLeft_clicked();
+    on_btnRight_clicked();
+  }
 }
