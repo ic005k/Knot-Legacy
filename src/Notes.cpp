@@ -220,7 +220,14 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
         y1 = py + a;
 
 #ifdef Q_OS_ANDROID
-      y1 = 2;
+      if (textEdit == ui->editSource) y1 = 2;
+
+      if (textEdit == mw_one->ui->editTodo)
+        y1 = mw_one->ui->editTodo->y() + mw_one->ui->editTodo->height() + 2;
+
+      if (textEdit == mw_one->ui->editDetails)
+        y1 = mw_one->ui->editDetails->y() + mw_one->ui->editDetails->height() +
+             2;
 #endif
 
       m_SetEditText->setFixedWidth(mw_one->width() - 20);

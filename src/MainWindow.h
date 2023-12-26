@@ -108,6 +108,7 @@
 #include "ui_ReaderSet.h"
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
+#include "ui_SetEditText.h"
 #include "ui_SetReaderText.h"
 #include "ui_Steps.h"
 #include "ui_SyncInfo.h"
