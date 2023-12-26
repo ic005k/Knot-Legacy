@@ -79,6 +79,9 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   timerEditPanel = new QTimer(this);
   connect(timerEditPanel, SIGNAL(timeout()), this, SLOT(on_showEditPanel()));
 
+  timerEditNote = new QTimer(this);
+  connect(timerEditNote, SIGNAL(timeout()), this, SLOT(on_editNote()));
+
   bCursorVisible = true;
   timerCur = new QTimer(this);
   connect(this, SIGNAL(sendUpdate()), this, SLOT(update()));
@@ -319,6 +322,16 @@ bool Notes::eventFilter(QObject *obj, QEvent *evn) {
       return true;
     }
   }
+
+#ifdef Q_OS_ANDROID
+  if (obj == ui->editSource->viewport()) {
+    if (evn->type() == QEvent::MouseButtonDblClick) {
+      y1 = 2;
+      isMousePress = true;
+      on_showEditPanel();
+    }
+  }
+#endif
 
   return QWidget::eventFilter(obj, evn);
 }
@@ -1260,4 +1273,13 @@ void Notes::on_btnShowTools_clicked() {
     on_btnLeft_clicked();
     on_btnRight_clicked();
   }
+}
+
+void Notes::editNote() { mw_one->on_btnEdit_clicked(); }
+
+void Notes::showNoteList() { mw_one->on_btnNotesList_clicked(); }
+
+void Notes::on_editNote() {
+  timerEditNote->stop();
+  mw_one->on_btnEdit_clicked();
 }

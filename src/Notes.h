@@ -35,6 +35,7 @@ class Notes : public QDialog {
   ~Notes();
   Ui::Notes *ui;
 
+  QTimer *timerEditNote;
   int px, py, mx, my;
   bool isNeedSave = true;
   QString htmlBuffer;
@@ -156,6 +157,9 @@ class Notes : public QDialog {
 
   void on_btnS10_clicked();
 
+  void editNote();
+  void showNoteList();
+  void on_editNote();
  signals:
   void sendUpdate();
 
@@ -195,6 +199,7 @@ class Notes : public QDialog {
 
   bool isFunShow;
   QTimer *timerEditPanel;
+
   bool isMouseRelease = false;
   bool isMousePress = false;
   bool isMouseMove = false;

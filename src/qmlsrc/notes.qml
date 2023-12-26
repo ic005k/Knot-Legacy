@@ -103,6 +103,7 @@ Item {
             MouseArea {
                 acceptedButtons: Qt.RightButton
                 anchors.fill: parent
+
                 //onClicked: contextMenu.open()
             }
 

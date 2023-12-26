@@ -2880,6 +2880,33 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
+  if (watch == ui->qwNotes) {
+    if (event->type() == QEvent::MouseMove) {
+      isMouseMove = true;
+    }
+
+    if (event->type() == QEvent::MouseButtonPress) {
+      isMousePress = true;
+      isMouseMove = false;
+      if (event->button() == Qt::LeftButton) {
+        if (!isMouseMove) {
+          m_Notes->timerEditNote->start(1600);
+        }
+      }
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      isMousePress = false;
+      isMouseMove = false;
+
+      m_Notes->timerEditNote->stop();
+    }
+
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      on_btnNotesList_clicked();
+    }
+  }
+
   return QWidget::eventFilter(watch, evn);
 }
 
@@ -3902,6 +3929,7 @@ void MainWindow::init_UIWidget() {
   ui->lblStats->installEventFilter(this);
   ui->editSearchText->installEventFilter(this);
   ui->editFindNote->installEventFilter(this);
+  ui->qwNotes->installEventFilter(this);
 
   myfile = new File();
   m_Remarks = new dlgRemarks(this);

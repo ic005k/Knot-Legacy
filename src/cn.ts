@@ -1639,7 +1639,7 @@ in skydrive folder</source>
     <message>
         <location filename="Notes.ui" line="260"/>
         <source>Tool Bar</source>
-        <translation>工具棒</translation>
+        <translation>工具栏</translation>
     </message>
     <message>
         <location filename="Notes.ui" line="310"/>
