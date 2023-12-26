@@ -16,10 +16,10 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 
   mw_one->set_btnStyle(this);
 
-  ui->btnTest->hide();
+  ui->f_Find->hide();
   ui->btnFind->hide();
   ui->lblCount->hide();
-  ui->frameFind->hide();
+  ui->f_Fun->hide();
   ui->btnGetShare->hide();
 
   m_SetEditText = new dlgSetEditText(this);
@@ -48,7 +48,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   QFont f = this->font();
   f.setPointSize(fontSize - 1);
   ui->lblInfo->setFont(f);
-  ui->frameFun->setFont(f);
+  ui->f_Fun->setFont(f);
 
   connect(ui->editSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
           SLOT(editVSBarValueChanged()));
@@ -998,10 +998,11 @@ void Notes::on_btnReference_clicked() {
 }
 
 void Notes::on_btnShowFind_clicked() {
-  if (!ui->frameFind->isHidden())
-    ui->frameFind->hide();
+  ui->f_Fun->hide();
+  if (!ui->f_Find->isHidden())
+    ui->f_Find->hide();
   else {
-    ui->frameFind->show();
+    ui->f_Find->show();
     ui->editFind->setFocus();
   }
 }
@@ -1232,4 +1233,12 @@ void Notes::on_btnHideKey_clicked() {
     setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
                 mw_one->mainHeight);
   }
+}
+
+void Notes::on_btnShowTools_clicked() {
+  ui->f_Find->hide();
+  if (ui->f_Fun->isHidden())
+    ui->f_Fun->show();
+  else
+    ui->f_Fun->hide();
 }
