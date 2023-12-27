@@ -233,8 +233,6 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
              2;
 #endif
 
-      m_SetEditText->setFixedWidth(mw_one->width() - 20);
-
       textEdit->cursor().setPos(event->globalPos());
 
       if (m_SetEditText->isHidden()) {

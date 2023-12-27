@@ -55,6 +55,7 @@ void dlgSetEditText::on_btnClose_clicked() {
 }
 
 void dlgSetEditText::init(int y) {
+  setFixedWidth(mw_one->width() - 6);
   setGeometry(mw_one->geometry().x() + (mw_one->width() - this->width()) / 2, y,
               this->width(), this->height());
   setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
