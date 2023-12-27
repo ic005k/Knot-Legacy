@@ -1994,6 +1994,9 @@ QTabBar::scroller {width:0}
          <property name="text">
           <string>Back</string>
          </property>
+         <property name="shortcut">
+          <string>Esc</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -3682,6 +3685,9 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Back</string>
            </property>
+           <property name="shortcut">
+            <string>Esc</string>
+           </property>
           </widget>
          </item>
          <item>
@@ -4228,6 +4234,9 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Back</string>
            </property>
+           <property name="shortcut">
+            <string>Esc</string>
+           </property>
           </widget>
          </item>
          <item>
@@ -4326,6 +4335,9 @@ QRadioButton::indicator:checked {
            </property>
            <property name="text">
             <string>Back</string>
+           </property>
+           <property name="shortcut">
+            <string>Esc</string>
            </property>
           </widget>
          </item>
@@ -5440,7 +5452,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">
