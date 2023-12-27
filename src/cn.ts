@@ -1811,134 +1811,134 @@ in skydrive folder</source>
         <translation>修改笔记</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="428"/>
+        <location filename="Notes.cpp" line="439"/>
         <source>Load Ds File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="474"/>
+        <location filename="Notes.cpp" line="485"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="475"/>
+        <location filename="Notes.cpp" line="486"/>
         <source>Picture Files (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="764"/>
+        <location filename="Notes.cpp" line="775"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="807"/>
+        <location filename="Notes.cpp" line="818"/>
         <source>Bold Italic</source>
         <translation>粗斜体</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="813"/>
+        <location filename="Notes.cpp" line="824"/>
         <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="819"/>
+        <location filename="Notes.cpp" line="830"/>
         <source>Underline</source>
         <translation>下划线</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="825"/>
+        <location filename="Notes.cpp" line="836"/>
         <source>Strickout</source>
         <translation>删除线</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="831"/>
+        <location filename="Notes.cpp" line="842"/>
         <source>Red</source>
         <translation>红色</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="837"/>
+        <location filename="Notes.cpp" line="848"/>
         <source>Bold</source>
         <translation>粗体</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1047"/>
+        <location filename="Notes.cpp" line="1058"/>
         <source>The end of the document has been reached.</source>
         <translation>已到达文档的结尾</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1066"/>
+        <location filename="Notes.cpp" line="1077"/>
         <source>The beginning of the document has been reached.</source>
         <translation>已到达文档的开头</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1096"/>
+        <location filename="Notes.cpp" line="1107"/>
         <source>Word not found</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1097"/>
+        <location filename="Notes.cpp" line="1108"/>
         <source>Sorry,the word cannot be found.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1125"/>
+        <location filename="Notes.cpp" line="1136"/>
         <source>Letter</source>
         <translation>信函</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1133"/>
-        <location filename="Notes.cpp" line="1162"/>
+        <location filename="Notes.cpp" line="1144"/>
+        <location filename="Notes.cpp" line="1173"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1134"/>
-        <location filename="Notes.cpp" line="1163"/>
+        <location filename="Notes.cpp" line="1145"/>
+        <location filename="Notes.cpp" line="1174"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1136"/>
+        <location filename="Notes.cpp" line="1147"/>
         <source>Page size</source>
         <translation>页面尺寸</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1136"/>
+        <location filename="Notes.cpp" line="1147"/>
         <source>Page size:</source>
         <translation>页面尺寸：</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1157"/>
+        <location filename="Notes.cpp" line="1168"/>
         <source>Portrait</source>
         <translation>纵向</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1157"/>
+        <location filename="Notes.cpp" line="1168"/>
         <source>Landscape</source>
         <translation>横向</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1165"/>
+        <location filename="Notes.cpp" line="1176"/>
         <source>Orientation</source>
         <translation>方向</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1165"/>
+        <location filename="Notes.cpp" line="1176"/>
         <source>Orientation:</source>
         <translation>方向：</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1188"/>
+        <location filename="Notes.cpp" line="1199"/>
         <source>The PDF file is successfully exported.</source>
         <translation>PDF文件导出成功</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1194"/>
+        <location filename="Notes.cpp" line="1205"/>
         <source>PDF files</source>
         <translation>PDF文件</translation>
     </message>
     <message>
-        <location filename="Notes.cpp" line="1195"/>
+        <location filename="Notes.cpp" line="1206"/>
         <source>Export current note as PDF</source>
         <translation>输出当前笔记到PDF</translation>
     </message>
@@ -2265,6 +2265,61 @@ F</source>
     <message>
         <source>Ok</source>
         <translation type="vanished">确定</translation>
+    </message>
+</context>
+<context>
+    <name>TextSelector</name>
+    <message>
+        <location filename="TextSelector.ui" line="14"/>
+        <source>Dialog</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TextSelector.ui" line="103"/>
+        <source>Bing</source>
+        <translation>必应</translation>
+    </message>
+    <message>
+        <location filename="TextSelector.ui" line="116"/>
+        <source>Copy</source>
+        <translation>拷贝</translation>
+    </message>
+    <message>
+        <location filename="TextSelector.ui" line="129"/>
+        <source>Paste</source>
+        <translation>粘贴</translation>
+    </message>
+    <message>
+        <location filename="TextSelector.ui" line="142"/>
+        <source>Cut</source>
+        <translation>剪切</translation>
+    </message>
+    <message>
+        <location filename="TextSelector.ui" line="155"/>
+        <source>Del</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <location filename="TextSelector.ui" line="168"/>
+        <source>Sel All</source>
+        <translation>全选</translation>
+    </message>
+    <message>
+        <location filename="TextSelector.ui" line="185"/>
+        <location filename="TextSelector.ui" line="237"/>
+        <source>+</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TextSelector.ui" line="198"/>
+        <location filename="TextSelector.ui" line="224"/>
+        <source>-</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="TextSelector.ui" line="211"/>
+        <source>Close</source>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
@@ -3683,56 +3738,32 @@ F</source>
 <context>
     <name>dlgSetEditText</name>
     <message>
-        <location filename="SetEditText.ui" line="14"/>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="SetEditText.ui" line="147"/>
         <source>Sel All</source>
-        <translation>全选</translation>
+        <translation type="vanished">全选</translation>
     </message>
     <message>
-        <location filename="SetEditText.ui" line="164"/>
-        <location filename="SetEditText.ui" line="216"/>
-        <source>+</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="SetEditText.ui" line="177"/>
-        <location filename="SetEditText.ui" line="203"/>
-        <source>-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="SetEditText.ui" line="190"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="SetEditText.ui" line="101"/>
         <source>Copy</source>
-        <translation>拷贝</translation>
+        <translation type="vanished">拷贝</translation>
     </message>
     <message>
-        <location filename="SetEditText.ui" line="127"/>
         <source>Cut</source>
-        <translation>剪切</translation>
+        <translation type="vanished">剪切</translation>
     </message>
     <message>
-        <location filename="SetEditText.ui" line="134"/>
         <source>Del</source>
-        <translation>删除</translation>
+        <translation type="vanished">删除</translation>
     </message>
     <message>
-        <location filename="SetEditText.ui" line="114"/>
         <source>Paste</source>
-        <translation>粘贴</translation>
+        <translation type="vanished">粘贴</translation>
     </message>
     <message>
-        <location filename="SetEditText.ui" line="88"/>
         <source>Bing</source>
-        <translation>必应</translation>
+        <translation type="vanished">必应</translation>
     </message>
     <message>
         <source>Select All</source>

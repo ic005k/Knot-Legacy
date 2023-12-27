@@ -1,13 +1,13 @@
-#include "SetEditText.h"
+#include "TextSelector.h"
 
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
-#include "ui_SetEditText.h"
+#include "ui_TextSelector.h"
 
 extern MainWindow *mw_one;
 
-dlgSetEditText::dlgSetEditText(QWidget *parent)
-    : QDialog(parent), ui(new Ui::dlgSetEditText) {
+TextSelector::TextSelector(QWidget *parent)
+    : QDialog(parent), ui(new Ui::TextSelector) {
   ui->setupUi(this);
 
   mw_one->set_btnStyle(this);
@@ -15,17 +15,6 @@ dlgSetEditText::dlgSetEditText(QWidget *parent)
   ui->lineEdit->setReadOnly(true);
 
   this->installEventFilter(this);
-  ui->btnLeft0->installEventFilter(this);
-  ui->btnLeft1->installEventFilter(this);
-  ui->btnRight0->installEventFilter(this);
-  ui->btnRight1->installEventFilter(this);
-  ui->btnClose->installEventFilter(this);
-  ui->btnCopy->installEventFilter(this);
-  ui->btnCut->installEventFilter(this);
-  ui->btnPaste->installEventFilter(this);
-  ui->btnSetAll->installEventFilter(this);
-  ui->btnDel->installEventFilter(this);
-  ui->btnBing->installEventFilter(this);
   ui->lineEdit->installEventFilter(this);
 
   int a = 500;
@@ -45,17 +34,18 @@ dlgSetEditText::dlgSetEditText(QWidget *parent)
   ui->btnRight1->setAutoRepeat(true);
   ui->btnRight1->setAutoRepeatDelay(a);
   ui->btnRight1->setAutoRepeatInterval(b);
+
+  oriHeight = height();
 }
 
-dlgSetEditText::~dlgSetEditText() { delete ui; }
+TextSelector::~TextSelector() { delete ui; }
 
-void dlgSetEditText::on_btnClose_clicked() {
+void TextSelector::on_btnClose_clicked() {
   ui->lineEdit->clear();
   close();
 }
 
-void dlgSetEditText::init(int y) {
-  setFixedWidth(mw_one->width() - 6);
+void TextSelector::init(int y) {
   setGeometry(mw_one->geometry().x() + (mw_one->width() - this->width()) / 2, y,
               this->width(), this->height());
   setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
@@ -63,7 +53,7 @@ void dlgSetEditText::init(int y) {
   show();
 }
 
-bool dlgSetEditText::eventFilter(QObject *watch, QEvent *evn) {
+bool TextSelector::eventFilter(QObject *watch, QEvent *evn) {
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);
   if (event->type() == QEvent::MouseButtonPress) {
     isMousePress = true;
@@ -97,10 +87,20 @@ bool dlgSetEditText::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
+  if (watch == ui->lineEdit) {
+    if (event->type() == QEvent::MouseMove) {
+      return true;
+    }
+
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      return true;
+    }
+  }
+
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgSetEditText::on_btnCopy_clicked() {
+void TextSelector::on_btnCopy_clicked() {
   mw_one->m_Notes->byTextEdit->copy();
 
   ui->lineEdit->clear();
@@ -108,23 +108,23 @@ void dlgSetEditText::on_btnCopy_clicked() {
   close();
 }
 
-void dlgSetEditText::on_btnCut_clicked() {
+void TextSelector::on_btnCut_clicked() {
   mw_one->m_Notes->byTextEdit->cut();
 
   close();
 }
 
-void dlgSetEditText::on_btnPaste_clicked() {
+void TextSelector::on_btnPaste_clicked() {
   mw_one->m_Notes->byTextEdit->paste();
 
   close();
 }
 
-void dlgSetEditText::on_btnSetAll_clicked() {
+void TextSelector::on_btnSetAll_clicked() {
   mw_one->m_Notes->byTextEdit->selectAll();
 }
 
-void dlgSetEditText::on_btnLeft1_clicked() {
+void TextSelector::on_btnLeft1_clicked() {
   mw_one->m_Notes->start--;
   if (mw_one->m_Notes->start < 0) mw_one->m_Notes->start = 0;
 
@@ -132,7 +132,7 @@ void dlgSetEditText::on_btnLeft1_clicked() {
   ui->lineEdit->setCursorPosition(0);
 }
 
-void dlgSetEditText::on_btnLeft0_clicked() {
+void TextSelector::on_btnLeft0_clicked() {
   mw_one->m_Notes->start++;
   if (mw_one->m_Notes->start >= mw_one->m_Notes->end)
     mw_one->m_Notes->start = mw_one->m_Notes->end - 1;
@@ -141,7 +141,7 @@ void dlgSetEditText::on_btnLeft0_clicked() {
   ui->lineEdit->setCursorPosition(0);
 }
 
-void dlgSetEditText::on_btnRight1_clicked() {
+void TextSelector::on_btnRight1_clicked() {
   mw_one->m_Notes->end++;
 
   mw_one->m_Notes->selectText(mw_one->m_Notes->start, mw_one->m_Notes->end);
@@ -152,7 +152,7 @@ void dlgSetEditText::on_btnRight1_clicked() {
   }
 }
 
-void dlgSetEditText::on_btnRight0_clicked() {
+void TextSelector::on_btnRight0_clicked() {
   mw_one->m_Notes->end--;
   if (mw_one->m_Notes->end <= mw_one->m_Notes->start)
     mw_one->m_Notes->end = mw_one->m_Notes->start + 1;
@@ -160,7 +160,7 @@ void dlgSetEditText::on_btnRight0_clicked() {
   mw_one->m_Notes->selectText(mw_one->m_Notes->start, mw_one->m_Notes->end);
 }
 
-void dlgSetEditText::on_btnBing_clicked() {
+void TextSelector::on_btnBing_clicked() {
   QString str = ui->lineEdit->text().trimmed();
   if (str.length() > 0) {
     QString strurl = "https://bing.com/search?q=" + str;
@@ -170,7 +170,7 @@ void dlgSetEditText::on_btnBing_clicked() {
   }
 }
 
-void dlgSetEditText::on_btnDel_clicked() {
+void TextSelector::on_btnDel_clicked() {
   if (ui->lineEdit->text().length() > 0)
     mw_one->m_Notes->byTextEdit->textCursor().removeSelectedText();
   on_btnClose_clicked();

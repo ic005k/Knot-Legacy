@@ -50,7 +50,7 @@ dlgRemarks::dlgRemarks(QWidget *parent)
 dlgRemarks::~dlgRemarks() { delete ui; }
 
 void dlgRemarks::on_btnBack_clicked() {
-  mw_one->m_Notes->m_SetEditText->close();
+  mw_one->m_Notes->m_TextSelector->close();
 
   noteText = ui->textEdit->toPlainText();
   curPos = ui->textEdit->textCursor().position();
@@ -78,8 +78,8 @@ bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!mw_one->m_Notes->m_SetEditText->isHidden()) {
-        mw_one->m_Notes->m_SetEditText->close();
+      if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
+        mw_one->m_Notes->m_TextSelector->close();
         return true;
       } else {
         on_btnBack_clicked();

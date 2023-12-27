@@ -2356,8 +2356,8 @@ void MainWindow::on_btnRemarks_clicked() {
 
   return;
 
-  m_Notes->m_SetEditText->close();
-  m_Notes->m_SetEditText = new dlgSetEditText(m_Remarks);
+  m_Notes->m_TextSelector->close();
+  m_Notes->m_TextSelector = new TextSelector(m_Remarks);
 
   m_Remarks->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
                          this->width(), this->height() / 2);
@@ -2678,8 +2678,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameTodo->isHidden()) {
-        if (!mw_one->m_Notes->m_SetEditText->isHidden()) {
-          mw_one->m_Notes->m_SetEditText->close();
+        if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
+          mw_one->m_Notes->m_TextSelector->close();
           return true;
         } else {
           on_btnBackTodo_clicked();
@@ -3397,8 +3397,8 @@ void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 void MainWindow::on_btnTodo_clicked() {
   removeFilesWatch();
   isSelf = true;
-  m_Notes->m_SetEditText->close();
-  m_Notes->m_SetEditText = new dlgSetEditText(m_Todo);
+  m_Notes->m_TextSelector->close();
+  m_Notes->m_TextSelector = new TextSelector(m_Todo);
 
   m_Todo->setGeometry(this->geometry().x(), this->geometry().y(), this->width(),
                       this->height());
@@ -4889,10 +4889,10 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 void MainWindow::on_btnEdit_clicked() {
   isSelf = true;
 
-  m_Notes->m_SetEditText->close();
-  delete m_Notes->m_SetEditText;
-  m_Notes->m_SetEditText = new dlgSetEditText(m_Notes);
-  m_Notes->m_SetEditText->close();
+  m_Notes->m_TextSelector->close();
+  delete m_Notes->m_TextSelector;
+  m_Notes->m_TextSelector = new TextSelector(m_Notes);
+  m_Notes->m_TextSelector->close();
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

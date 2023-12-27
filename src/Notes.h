@@ -20,8 +20,8 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
-#include "src/SetEditText.h"
-#include "ui_SetEditText.h"
+#include "src/TextSelector.h"
+#include "ui_TextSelector.h"
 
 namespace Ui {
 class Notes;
@@ -44,7 +44,7 @@ class Notes : public QDialog {
   int androidKeyH;
   int start;
   int end;
-  dlgSetEditText *m_SetEditText;
+  TextSelector *m_TextSelector;
   qreal textHeight;
   bool isShow = false;
   QString textMemo;

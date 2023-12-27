@@ -1,28 +1,29 @@
-#ifndef SETEDITTEXT_H
-#define SETEDITTEXT_H
+#ifndef TEXTSELECTOR_H
+#define TEXTSELECTOR_H
 
 #include <QClipboard>
 #include <QDialog>
 #include <QKeyEvent>
 
 namespace Ui {
-class dlgSetEditText;
+class TextSelector;
 }
 
-class dlgSetEditText : public QDialog {
+class TextSelector : public QDialog {
   Q_OBJECT
 
-public:
-  explicit dlgSetEditText(QWidget *parent = nullptr);
-  ~dlgSetEditText();
-  Ui::dlgSetEditText *ui;
+ public:
+  explicit TextSelector(QWidget *parent = nullptr);
+  ~TextSelector();
+  Ui::TextSelector *ui;
 
   void init(int y);
+  int oriHeight;
 
-protected:
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
-public slots:
+ public slots:
   void on_btnLeft1_clicked();
 
   void on_btnLeft0_clicked();
@@ -33,7 +34,7 @@ public slots:
 
   void on_btnClose_clicked();
 
-private slots:
+ private slots:
 
   void on_btnCopy_clicked();
 
@@ -47,10 +48,10 @@ private slots:
 
   void on_btnDel_clicked();
 
-private:
+ private:
   bool isMouseRelease = false;
   bool isMousePress = false;
   bool isMouseMove = false;
 };
 
-#endif // SETEDITTEXT_H
+#endif  // TEXTSELECTOR_H

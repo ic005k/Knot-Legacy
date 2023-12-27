@@ -68,11 +68,11 @@ SOURCES += \
     src/RemarksAbout.cpp \
     src/Report.cpp \
     src/RollingBox.cpp \
-    src/SetEditText.cpp \
     src/SetReaderText.cpp \
     src/SpecialAccelerometerPedometer.cpp \
     src/Steps.cpp \
     src/SyncInfo.cpp \
+    src/TextSelector.cpp \
     src/Todo.cpp \
     src/TodoAlarm.cpp \
     src/components/lib/qtmaterialoverlaywidget.cpp \
@@ -123,11 +123,11 @@ HEADERS += \
     src/RemarksAbout.h \
     src/Report.h \
     src/RollingBox.h \
-    src/SetEditText.h \
     src/SetReaderText.h \
     src/SpecialAccelerometerPedometer.h \
     src/Steps.h \
     src/SyncInfo.h \
+    src/TextSelector.h \
     src/Todo.h \
     src/TodoAlarm.h \
     src/components/lib/qtmaterialoverlaywidget.h \
@@ -179,10 +179,10 @@ FORMS += \
     src/ReaderSet.ui \
     src/RemarksAbout.ui \
     src/Report.ui \
-    src/SetEditText.ui \
     src/SetReaderText.ui \
     src/Steps.ui \
     src/SyncInfo.ui \
+    src/TextSelector.ui \
     src/Todo.ui \
     src/TodoAlarm.ui
 
