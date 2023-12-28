@@ -203,15 +203,16 @@ void dlgReader::startOpenFile(QString openfile) {
     name = getUriRealPath(openfile);
     QStringList lista = name.split("/");
     bookName = lista.at(lista.count() - 1);
+
 #else
     QFileInfo fi(openfile);
     bookName = fi.fileName();
+
 #endif
 
-    strTitle =
-        bookName + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-
     ebookFile = openfile;
+    strTitle =
+        bookName + "    " + mw_one->getFileSize(QFile(ebookFile).size(), 2);
 
 #ifdef Q_OS_LINUX
 #endif
