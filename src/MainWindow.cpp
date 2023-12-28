@@ -5839,8 +5839,4 @@ void MainWindow::on_btnClearAllRecords_clicked() {
   m_Reader->clearAllReaderRecords();
 }
 
-void MainWindow::on_btnAnd_clicked() {
-  QString str = ui->editSearchText->text().trimmed();
-  str = str + "&";
-  ui->editSearchText->setText(str);
-}
+void MainWindow::on_btnAnd_clicked() { ui->editSearchText->insert("&"); }

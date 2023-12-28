@@ -226,19 +226,13 @@ void Method::startSearch() {
             }
           }
 
-          if (txt2.length() == 0 && txt3.length() == 0) {
-            if (is1) isYes = true;
-          }
-
-          if (txt2.length() > 0 && txt3.length() == 0) {
+          if (list.count() == 2) {
             if (is1 && is2) isYes = true;
-          }
-
-          if (txt2.length() == 0 && txt3.length() > 0) {
             if (is1 && is3) isYes = true;
+            if (is2 && is3) isYes = true;
           }
 
-          if (txt2.length() > 0 && txt3.length() > 0) {
+          if (list.count() >= 3) {
             if (is1 && is2 && is3) isYes = true;
           }
 
