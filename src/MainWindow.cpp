@@ -187,6 +187,7 @@ void MainWindow::readEBookDone() {
       ui->frameReaderFun->show();
       ui->lblBookName->show();
       ui->progReader->show();
+
       mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
                                                               false);
       mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
@@ -213,8 +214,9 @@ void MainWindow::readEBookDone() {
 
       QString PDFJS, str;
 
-// https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf
-// "https://mozilla.github.io/pdf.js/web/viewer.html";
+      // https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf
+      // "https://mozilla.github.io/pdf.js/web/viewer.html";
+
 #ifdef Q_OS_ANDROID
       PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
       PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";

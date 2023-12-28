@@ -197,40 +197,29 @@ void dlgReader::startOpenFile(QString openfile) {
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
 
-    QString strfilepath;
-#ifdef Q_OS_LINUX
-    QFileInfo fi(openfile);
-    strTitle =
-        fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-    strfilepath =
-        openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-#endif
-
+    QString bookName;
 #ifdef Q_OS_ANDROID
-    QString name, name1;
+    QString name;
     name = getUriRealPath(openfile);
     QStringList lista = name.split("/");
-    name1 = lista.at(lista.count() - 1);
-    strTitle = name1 + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-    strfilepath =
-        name + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+    bookName = lista.at(lista.count() - 1);
+#else
+    QFileInfo fi(openfile);
+    bookName = fi.fileName();
+#endif
+
+    strTitle =
+        bookName + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
+
+    ebookFile = openfile;
+
+#ifdef Q_OS_LINUX
 #endif
 
 #ifdef Q_OS_MACOS
-    QFileInfo fi(openfile);
-    strTitle =
-        fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-    strfilepath =
-        openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
 #endif
 
 #ifdef Q_OS_WIN
-    QFileInfo fi(openfile);
-    strTitle =
-        fi.fileName() + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-    strfilepath =
-        openfile + "    " + mw_one->getFileSize(QFile(openfile).size(), 2);
-
     QString strZip, strExec, strUnzip, tagDir;
     tagDir = privateDir + "temp/";
     strZip = privateDir + "temp.zip";
@@ -246,13 +235,7 @@ void dlgReader::startOpenFile(QString openfile) {
     txtEdit->append(strCommand1);
     QString fileName = privateDir + "unbook.bat";
     mw_one->TextEditToFile(txtEdit, fileName);
-#endif
 
-    loadQMLText(tr("Book Info : ") + "\n" + strfilepath);
-
-    ebookFile = openfile;
-
-#ifdef Q_OS_WIN
     openFile(ebookFile);
     mw_one->readEBookDone();
 #else
@@ -270,6 +253,7 @@ void dlgReader::startOpenFile(QString openfile) {
 
 void dlgReader::openFile(QString openfile) {
   isOpen = false;
+  qDebug() << "Starting to open files...";
 
   if (QFile(openfile).exists()) {
     readTextList.clear();
@@ -598,6 +582,7 @@ void dlgReader::setQMLText(QString txt1) {
 
   // white-space: pre-wrap;
   // text-indent:40px;
+
   QStringList list = txt1.split("\n");
   QString str1 = "<html>\n<body>\n";
   QString str2 = "</body>\n</html>";
@@ -993,7 +978,6 @@ void dlgReader::goPostion() {
     }
 
     if (isPDF) {
-      // #ifdef Q_OS_ANDROID
       if (!mw_one->isPdfNewMothod) {
         int page = Reg.value("/Reader/PdfPage" + fileName, 1).toInt();
         setPdfPage(page);
@@ -1001,7 +985,6 @@ void dlgReader::goPostion() {
         qreal scale = Reg.value("/Reader/PdfScale" + fileName, 1).toReal();
         setPdfScale(scale);
       }
-      // #endif
     }
   }
 }
