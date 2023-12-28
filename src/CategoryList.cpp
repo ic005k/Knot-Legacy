@@ -63,6 +63,9 @@ void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
 }
 
 void dlgList::on_btnDel_clicked() {
+  int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwCategory);
+  if (count == 0) return;
+
   int row = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwCategory);
 
   if (row < 0) return;
@@ -85,7 +88,7 @@ void dlgList::on_btnDel_clicked() {
   else
     ui->editRename->clear();
 
-  int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwCategory);
+  count = mw_one->m_Method->getCountBakList(mw_one->ui->qwCategory);
   mw_one->ui->lblTypeInfo->setText(tr("Total") + " : " +
                                    QString::number(count));
 }
