@@ -148,7 +148,7 @@ class MainWindow : public QMainWindow {
   QString strLatestModify = tr("None");
 
   QDialog *dlgProg;
-  QDialog *getProgBar();
+
   void setMini();
   bool isSelf = false;
   bool isPdfNewMothod = false;
@@ -788,7 +788,6 @@ class MainWindow : public QMainWindow {
   void showNotes();
   void resetWinPos();
 
-  int nProgressBarType = 2;
   void initQW();
 };
 

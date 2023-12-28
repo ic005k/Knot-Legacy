@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.27";
+QString ver = "1.1.28";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3128,69 +3128,9 @@ bool MainWindow::copyFileToPath(QString sourceDir, QString toDir,
   return true;
 }
 
-QDialog *MainWindow::getProgBar() {
-  QDialog *dlg;
-  dlg = new QDialog(this);
-  dlg->setModal(true);
-
-  dlg->setWindowFlags(Qt::WindowStaysOnTopHint);
-
-#ifdef Q_OS_ANDROID
-#else
-  dlg->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool |
-                      Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
-#endif
-
-  dlg->setFixedHeight(200);
-  dlg->setFixedWidth(geometry().width() - 50);
-  QVBoxLayout *vbox = new QVBoxLayout;
-  dlg->setLayout(vbox);
-  dlg->setGeometry(geometry().x() + (width() - dlg->width()) / 2,
-                   (height() - dlg->height()) / 2 + 0, dlg->width(),
-                   dlg->height());
-
-  QLabel *lbl = new QLabel(dlg);
-  lbl->setStyleSheet("color:#00CED1;");
-  QFont font = this->font();
-  int size = font.pointSize();
-  font.setBold(true);
-  font.setPointSize(size + 2);
-  lbl->setFont(font);
-  lbl->setText(tr("Reading, please wait..."));
-  lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  dlg->layout()->addWidget(lbl);
-
-  if (nProgressBarType == 1) {
-    QProgressBar *prog = new QProgressBar(this);
-    prog->setStyleSheet(
-        "QProgressBar{border:0px solid #FFFFFF;"
-        "height:25;"
-        "background:rgb(25,255,25);"
-        "text-align:right;"
-        "color:rgb(255,255,255);"
-        "border-radius:0px;}"
-
-        "QProgressBar:chunk{"
-        "border-radius:0px;"
-        "background-color:rgba(18,150,219,255);"
-        "}");
-    prog->setMaximum(0);
-    prog->setMinimum(0);
-    dlg->layout()->addWidget(prog);
-  }
-
-  if (nProgressBarType == 2) {
-    QtMaterialCircularProgress *qmProgress =
-        new QtMaterialCircularProgress(this);
-    dlg->layout()->addWidget(qmProgress);
-  }
-
-  return dlg;
-}
-
 void MainWindow::showProgress() {
   dlgProg = new QDialog();
-  dlgProg = getProgBar();
+  dlgProg = m_Method->getProgBar();
 
   if (!initMain) dlgProg->show();
 }

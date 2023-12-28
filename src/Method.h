@@ -17,6 +17,7 @@ class Method : public QDialog {
   ~Method();
   Ui::Method *ui;
 
+  QDialog *getProgBar();
   void startSearch();
   void initSearchResults();
 
@@ -53,7 +54,8 @@ class Method : public QDialog {
 
   void setSCrollPro(QObject *obj);
   void init_all_notes();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
@@ -75,6 +77,7 @@ class Method : public QDialog {
  private:
   void setCellText(int row, int column, QString str, QTableWidget *table);
   void generateData(int count);
+  int nProgressBarType = 2;
 };
 
 #endif  // METHOD_H

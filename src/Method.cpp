@@ -528,3 +528,68 @@ void Method::init_all_notes() {
   mw_one->m_Notes->loadMemoQML();
   mw_one->m_Notes->setVPos();
 }
+
+QDialog* Method::getProgBar() {
+  QDialog* dlg;
+  dlg = new QDialog(this);
+  dlg->setModal(true);
+
+  QFrame* frame = new QFrame(this);
+
+  dlg->setWindowFlag(Qt::FramelessWindowHint);
+  dlg->setAttribute(Qt::WA_TranslucentBackground);
+  frame->setStyleSheet(
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "border:0px solid red;}");
+
+  QGridLayout* grid = new QGridLayout();
+  dlg->setLayout(grid);
+  grid->addWidget(frame);
+
+  dlg->setFixedHeight(200);
+  dlg->setFixedWidth(mw_one->geometry().width() - 50);
+  QVBoxLayout* vbox = new QVBoxLayout;
+  frame->setLayout(vbox);
+  dlg->setGeometry(
+      mw_one->geometry().x() + (mw_one->width() - dlg->width()) / 2,
+      mw_one->geometry().y() + (mw_one->height() - dlg->height()) / 2,
+      dlg->width(), dlg->height());
+
+  QLabel* lbl = new QLabel(dlg);
+  lbl->setStyleSheet("color:#000000;");
+  QFont font = this->font();
+  int size = font.pointSize();
+  font.setBold(true);
+  font.setPointSize(size + 2);
+  lbl->setFont(font);
+  lbl->setText(tr("Reading, please wait..."));
+  lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  vbox->addWidget(lbl);
+
+  if (nProgressBarType == 1) {
+    QProgressBar* prog = new QProgressBar(this);
+    prog->setStyleSheet(
+        "QProgressBar{border:0px solid #FFFFFF;"
+        "height:25;"
+        "background:rgb(25,255,25);"
+        "text-align:right;"
+        "color:rgb(255,255,255);"
+        "border-radius:0px;}"
+
+        "QProgressBar:chunk{"
+        "border-radius:0px;"
+        "background-color:rgba(18,150,219,255);"
+        "}");
+    prog->setMaximum(0);
+    prog->setMinimum(0);
+    vbox->addWidget(prog);
+  }
+
+  if (nProgressBarType == 2) {
+    QtMaterialCircularProgress* qmProgress =
+        new QtMaterialCircularProgress(this);
+    vbox->addWidget(qmProgress);
+  }
+
+  return dlg;
+}
