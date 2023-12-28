@@ -108,10 +108,10 @@
 #include "ui_ReaderSet.h"
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
-#include "ui_TextSelector.h"
 #include "ui_SetReaderText.h"
 #include "ui_Steps.h"
 #include "ui_SyncInfo.h"
+#include "ui_TextSelector.h"
 #include "ui_Todo.h"
 #include "ui_TodoAlarm.h"
 
@@ -757,6 +757,8 @@ class MainWindow : public QMainWindow {
   void on_btnOkBookList_clicked();
 
   void on_btnClearAllRecords_clicked();
+
+  void on_btnAnd_clicked();
 
  private:
   bool isShowDetails = false;

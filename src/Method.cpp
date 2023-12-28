@@ -169,6 +169,13 @@ bool Method::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
 void Method::startSearch() {
   resultsList.clear();
   int tabCount = tabData->count();
+
+  // QString a0("<span style=\"color: white;background: red;\">");
+  // QString a1("</span>");
+
+  QString a0 = "<font color=\" red \"><b>";
+  QString a1 = "</b></font>";
+
   for (int j = 0; j < tabCount; j++) {
     QTreeWidget* tw = mw_one->get_tw(j);
     QString tabStr = tabData->tabText(j);
@@ -185,21 +192,79 @@ void Method::startSearch() {
       topItem = tw->topLevelItem(i);
       int childCount = topItem->childCount();
       for (int j = 0; j < childCount; j++) {
-        QString txt1, txt2, txt3;
+        QString txt0, txt1, txt2, txt3;
         QTreeWidgetItem* childItem = topItem->child(j);
+
         txt1 = childItem->text(1);
         txt2 = childItem->text(2);
         txt3 = childItem->text(3);
-        if (txt1.contains(searchStr) || txt2.contains(searchStr) ||
-            txt3.contains(searchStr)) {
-          QString str0, str1, str2, str3;
-          str0 = tabStr + "\n\n" + strYear + " " + day + " " + weeks + " " +
-                 childItem->text(0).split(".").at(1).trimmed();
-          str1 = childItem->text(1);
-          str2 = childItem->text(2);
-          str3 = childItem->text(3);
 
-          resultsList.append(str0 + "=|=" + str1 + "=|=" + str2 + "=|=" + str3);
+        bool isYes = false;
+        if (searchStr.contains("&")) {
+          QStringList list = searchStr.split("&");
+          bool is1, is2, is3;
+          is1 = false;
+          is2 = false;
+          is3 = false;
+          for (int n = 0; n < list.count(); n++) {
+            QString str = list.at(n);
+            str = str.trimmed();
+
+            if (str.length() > 0) {
+              if (txt1.contains(str)) {
+                is1 = true;
+                txt1 = txt1.replace(str, a0 + str + a1);
+              }
+              if (txt2.contains(str)) {
+                is2 = true;
+                txt2 = txt2.replace(str, a0 + str + a1);
+              }
+              if (txt3.contains(str)) {
+                is3 = true;
+                txt3 = txt3.replace(str, a0 + str + a1);
+              }
+            }
+          }
+
+          if (txt2.length() == 0 && txt3.length() == 0) {
+            if (is1) isYes = true;
+          }
+
+          if (txt2.length() > 0 && txt3.length() == 0) {
+            if (is1 && is2) isYes = true;
+          }
+
+          if (txt2.length() == 0 && txt3.length() > 0) {
+            if (is1 && is3) isYes = true;
+          }
+
+          if (txt2.length() > 0 && txt3.length() > 0) {
+            if (is1 && is2 && is3) isYes = true;
+          }
+
+        } else {
+          if (txt1.contains(searchStr) || txt2.contains(searchStr) ||
+              txt3.contains(searchStr)) {
+            isYes = true;
+
+            if (txt1.contains(searchStr)) {
+              txt1 = txt1.replace(searchStr, a0 + searchStr + a1);
+            }
+
+            if (txt2.contains(searchStr)) {
+              txt2 = txt2.replace(searchStr, a0 + searchStr + a1);
+            }
+
+            if (txt3.contains(searchStr)) {
+              txt3 = txt3.replace(searchStr, a0 + searchStr + a1);
+            }
+          }
+        }
+
+        if (isYes) {
+          txt0 = tabStr + "\n\n" + strYear + " " + day + " " + weeks + " " +
+                 childItem->text(0).split(".").at(1).trimmed();
+          resultsList.append(txt0 + "=|=" + txt1 + "=|=" + txt2 + "=|=" + txt3);
         }
       }
     }
@@ -233,24 +298,6 @@ void Method::generateData(int count) {
     str1 = list.at(1);
     str2 = list.at(2);
     str3 = list.at(3);
-
-    // QString a0("<span style=\"color: white;background: red;\">");
-    // QString a1("</span>");
-
-    QString a0 = "<font color=\" red \"><b>";
-    QString a1 = "</b></font>";
-
-    if (str1.contains(searchStr)) {
-      str1 = str1.replace(searchStr, a0 + searchStr + a1);
-    }
-
-    if (str2.contains(searchStr)) {
-      str2 = str2.replace(searchStr, a0 + searchStr + a1);
-    }
-
-    if (str3.contains(searchStr)) {
-      str3 = str3.replace(searchStr, a0 + searchStr + a1);
-    }
 
     line_count = 4;
     QString text1, text2, text3;

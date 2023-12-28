@@ -5838,3 +5838,9 @@ void MainWindow::on_btnOkBookList_clicked() { m_Reader->openBookListItem(); }
 void MainWindow::on_btnClearAllRecords_clicked() {
   m_Reader->clearAllReaderRecords();
 }
+
+void MainWindow::on_btnAnd_clicked() {
+  QString str = ui->editSearchText->text().trimmed();
+  str = str + "&";
+  ui->editSearchText->setText(str);
+}
