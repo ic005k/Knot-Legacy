@@ -39,7 +39,7 @@ class EditRecord : public QDialog {
   void keyReleaseEvent(QKeyEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
- public slots:
+ public:
   void on_btnBack_clicked();
   void on_btnOk_clicked();
 

@@ -4,8 +4,8 @@
 #include <QDialog>
 #include <QKeyEvent>
 
-#include "RollingBox.h"
 #include "MyWheel.h"
+#include "RollingBox.h"
 
 namespace Ui {
 class DateSelector;
@@ -35,11 +35,6 @@ class DateSelector : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  private slots:
-  void on_hsYear_valueChanged(int value);
-
-  void on_hsMonth_valueChanged(int value);
-
-  void on_hsDay_valueChanged(int value);
 
   void on_btnOk_clicked();
 
@@ -47,6 +42,12 @@ class DateSelector : public QDialog {
 
  private:
   void initRBox(RollingBox *rbox, int w);
+
+  void on_hsYear_valueChanged(int value);
+
+  void on_hsMonth_valueChanged(int value);
+
+  void on_hsDay_valueChanged(int value);
 };
 
 #endif  // DATESELECTOR_H

@@ -115,6 +115,13 @@ class dlgNotesList : public QDialog {
 
   void on_btnDown_clicked();
 
+ private:
+  QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
+  QStringList files;
+  void clearMD_Pic(QTreeWidget *tw);
+  void removePicFromMD(QString mdfile);
+  void removeFromFiles(QString str);
+
   void on_actionAdd_NoteBook_triggered();
   void on_actionDel_NoteBook_triggered();
   void on_actionRename_NoteBook_triggered();
@@ -128,13 +135,6 @@ class dlgNotesList : public QDialog {
   void on_actionMoveDown_Note_triggered();
   void on_actionImport_Note_triggered();
   void on_actionExport_Note_triggered();
-
- private:
-  QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
-  QStringList files;
-  void clearMD_Pic(QTreeWidget *tw);
-  void removePicFromMD(QString mdfile);
-  void removeFromFiles(QString str);
 };
 
 #endif  // NOTESLIST_H
