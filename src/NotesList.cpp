@@ -897,11 +897,12 @@ void dlgNotesList::on_actionDel_NoteBook_triggered() {
   int index = getNoteBookCurrentIndex();
   if (index < 0) return;
 
-  if (!mw_one->showMsgBox(
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg(
           "Knot",
           tr("Whether to remove") + "  " +
               mw_one->m_Method->getText0(mw_one->ui->qwNoteBook, index) + " ? ",
-          "", 2))
+          2))
     return;
 
   tw->setCurrentItem(tw->topLevelItem(index));
@@ -1159,12 +1160,13 @@ void dlgNotesList::on_actionDel_Note_triggered() {
   if (notebookIndex < 0) return;
   if (notelistIndex < 0) return;
 
-  if (!mw_one->showMsgBox("Knot",
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg("Knot",
                           tr("Whether to remove") + "  " +
                               mw_one->m_Method->getText0(mw_one->ui->qwNoteList,
                                                          notelistIndex) +
                               " ? ",
-                          "", 2))
+                          2))
     return;
 
   tw->setCurrentItem(tw->topLevelItem(notebookIndex)->child(notelistIndex));

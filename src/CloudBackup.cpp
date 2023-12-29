@@ -37,25 +37,29 @@ CloudBackup::CloudBackup(QWidget *parent)
   connect(oneDrive, &QtOneDrive::error, [this](const QString error) {
     Q_UNUSED(this);
     // QMessageBox::critical(this, "OneDrive Error", error);
-    mw_one->showMsgBox("OneDrive", error, "", 1);
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg("OneDrive", error, 1);
   });
 
   connect(oneDrive, &QtOneDrive::successSignIn, [this]() {
     Q_UNUSED(this);
     // QMessageBox::information(this, "OneDrive", tr("Success Sign In"));
-    mw_one->showMsgBox("OneDrive", tr("Success Sign In"), "", 1);
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg("OneDrive", tr("Success Sign In"), 1);
   });
 
   connect(oneDrive, &QtOneDrive::successSingOut, [this]() {
     Q_UNUSED(this);
     // QMessageBox::information(this, "OneDrive", tr("Success Sing Out"));
-    mw_one->showMsgBox("OneDrive", tr("Success Sing Out"), "", 1);
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg("OneDrive", tr("Success Sing Out"), 1);
   });
 
   connect(oneDrive, &QtOneDrive::successRefreshToken, [this]() {
     Q_UNUSED(this);
     // QMessageBox::information(this, "OneDrive", tr("Success Refresh Token"));
-    mw_one->showMsgBox("OneDrive", tr("Success Refresh Token"), "", 1);
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg("OneDrive", tr("Success Refresh Token"), 1);
   });
 
   connect(oneDrive, &QtOneDrive::successDeleteItem, [this](const QString id) {
@@ -78,10 +82,11 @@ CloudBackup::CloudBackup(QWidget *parent)
                 this, "OneDrive",
                 QString(tr("Success Get User Info") + "\n" +
                         QJsonDocument(object).toJson()));*/
-            mw_one->showMsgBox("OneDrive",
+            ShowMessage *m_ShowMsg = new ShowMessage(this);
+            m_ShowMsg->showMsg("OneDrive",
                                QString(tr("Success Get User Info") + "\n" +
                                        QJsonDocument(object).toJson()),
-                               "", 1);
+                               1);
           });
 
   connect(oneDrive, &QtOneDrive::successGetStorageInfo,
@@ -98,22 +103,26 @@ CloudBackup::CloudBackup(QWidget *parent)
                 this, "OneDrive",
                 QString(tr("Success Upload File:") + "\n\nPATH: %1\n\nID: %2")
                     .arg(filePath, fileID));*/
-            mw_one->showMsgBox(
+
+            ShowMessage *m_ShowMsg = new ShowMessage(this);
+            m_ShowMsg->showMsg(
                 "OneDrive",
                 QString(tr("Success Upload File:") + "\n\nPATH: %1\n\nID: %2")
                     .arg(filePath, fileID),
-                "", 1);
+                1);
           });
 
-  connect(
-      oneDrive, &QtOneDrive::successDownloadFile, [this](const QString fileID) {
-        Q_UNUSED(this);
-        /*QMessageBox::information(
-             this, "OneDrive", QString(tr("Success Download File: ")) +
-             fileID);*/
-        mw_one->showMsgBox(
-            "OneDrive", QString(tr("Success Download File: ")) + fileID, "", 1);
-      });
+  connect(oneDrive, &QtOneDrive::successDownloadFile,
+          [this](const QString fileID) {
+            Q_UNUSED(this);
+            /*QMessageBox::information(
+                 this, "OneDrive", QString(tr("Success Download File: ")) +
+                 fileID);*/
+
+            ShowMessage *m_ShowMsg = new ShowMessage(this);
+            m_ShowMsg->showMsg(
+                "OneDrive", QString(tr("Success Download File: ")) + fileID, 1);
+          });
 
   connect(oneDrive, &QtOneDrive::progressUploadFile,
           [this](const QString, int percent) {
@@ -215,11 +224,12 @@ void CloudBackup::on_pushButton_downloadFile_clicked() {
   if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
 
-  if (!mw_one->showMsgBox("OneDrive",
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg("OneDrive",
                           tr("Downloading data?") + "\n\n" +
                               tr("This operation will overwrite the local data "
                                  "with the data on OneDrive."),
-                          "", 2))
+                          2))
     return;
 
   oneDrive->downloadFile(filePath, ui->lineEdit_fileID->text().trimmed());
@@ -245,13 +255,14 @@ void CloudBackup::on_pushButton_upload2_clicked() {
 }
 
 void CloudBackup::uploadData() {
-  if (!mw_one->showMsgBox(
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg(
           "OneDrive",
           tr("Uploading data?") + "\n\n" +
               tr("This operation will overwrite the data on OneDrive.") +
               "\n\n" + mw_one->m_Reader->getUriRealPath(zipfile) +
               "\n\nSIZE: " + mw_one->getFileSize(QFile(zipfile).size(), 2),
-          "", 2))
+          2))
     return;
 
   oneDrive->uploadFile(zipfile, "memo.zip",

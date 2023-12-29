@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
+#include "ShowMessage.h"
+
 namespace Ui {
 class dlgList;
 }

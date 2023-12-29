@@ -39,10 +39,10 @@ bool ShowMessage::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      isValue = false;
-      close();
-      return true;
+      on_btnCancel_clicked();
     }
+
+    return true;
   }
 
   return QWidget::eventFilter(watch, evn);

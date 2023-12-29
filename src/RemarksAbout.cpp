@@ -173,8 +173,10 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
   QJsonDocument root_Doc = QJsonDocument::fromJson(str.toUtf8(), &err_rpt);
 
   if (err_rpt.error != QJsonParseError::NoError) {
-    if (!blAutoCheckUpdate)
-      mw_one->showMsgBox(appName, tr("Network error!"), "", 1);
+    if (!blAutoCheckUpdate) {
+      ShowMessage *m_ShowMsg = new ShowMessage(this);
+      m_ShowMsg->showMsg(appName, tr("Network error!"), 1);
+    }
     blAutoCheckUpdate = false;
     return -1;
   }
@@ -230,10 +232,12 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
 #endif
       }
     } else {
-      if (!blAutoCheckUpdate)
-        mw_one->showMsgBox(tr("Upgrade Check"),
+      if (!blAutoCheckUpdate) {
+        ShowMessage *m_ShowMsg = new ShowMessage(this);
+        m_ShowMsg->showMsg(tr("Upgrade Check"),
                            tr("You are currently using the latest version!"),
-                           "", 1);
+                           1);
+      }
     }
   }
   blAutoCheckUpdate = false;

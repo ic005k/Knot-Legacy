@@ -419,11 +419,12 @@ void QtOneDrive::downloadFile(const QUrl& url) {
 
         if (QFile(zipfile).exists()) {
           if (!zipfile.isNull()) {
-            if (!mw_one->showMsgBox(
+            ShowMessage* m_ShowMsg = new ShowMessage(mw_one);
+            if (!m_ShowMsg->showMsg(
                     "Kont",
                     tr("Import this data?") + "\n" +
                         mw_one->m_Reader->getUriRealPath(zipfile),
-                    "", 2)) {
+                    2)) {
               isZipOK = false;
               return;
             }

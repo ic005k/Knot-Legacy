@@ -70,14 +70,10 @@ void MainWindow::bakDataDone() {
     m_CloudBackup->uploadData();
   } else {
     if (QFile(infoStr).exists()) {
-      QMessageBox msgBox;
-      msgBox.setText(appName);
-      msgBox.setInformativeText(tr("The data was exported successfully.") +
-                                +"\n\n" + infoStr);
-      QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-      btnOk->setFocus();
-
-      msgBox.exec();
+      ShowMessage *m_ShowMsg = new ShowMessage(this);
+      m_ShowMsg->showMsg(
+          "Knot", tr("The data was exported successfully.") + +"\n\n" + infoStr,
+          1);
 
       mydlgPre->appendBakFile(
           QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss") + "\n" +
@@ -1105,94 +1101,6 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   reloadMain();
 }
 
-void MainWindow::showDelMsgBox(QString title, QString info) {
-  m_widget = new QWidget(this);
-
-  QDialog *dlg = new QDialog(this);
-  QVBoxLayout *vbox0 = new QVBoxLayout;
-  dlg->setLayout(vbox0);
-  dlg->setModal(true);
-  dlg->setWindowFlag(Qt::FramelessWindowHint);
-  dlg->setAttribute(Qt::WA_TranslucentBackground);
-
-  QFrame *frame = new QFrame(this);
-  vbox0->addWidget(frame);
-  frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:0px solid gray;}");
-
-  QVBoxLayout *vbox = new QVBoxLayout;
-  vbox->setContentsMargins(12, 12, 12, 12);
-  vbox->setSpacing(12);
-  frame->setLayout(vbox);
-
-  QLabel *lblTitle = new QLabel(this);
-  lblTitle->adjustSize();
-  lblTitle->setWordWrap(true);
-  lblTitle->setText(title);
-  vbox->addWidget(lblTitle);
-
-  QFrame *hframe = new QFrame(this);
-  hframe->setFrameShape(QFrame::HLine);
-  hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
-  vbox->addWidget(hframe);
-
-  QLabel *lbl = new QLabel(this);
-  lbl->adjustSize();
-  lbl->setWordWrap(true);
-  lbl->setText(info);
-  vbox->addWidget(lbl);
-
-  QToolButton *btnCancel = new QToolButton(this);
-  QToolButton *btnOk = new QToolButton(this);
-  btnCancel->setText(tr("Cancel"));
-  btnOk->setText(tr("Delete"));
-  btnOk->setStyleSheet(
-      "QToolButton {background-color: rgb(255, 0, 0);color: rgb(255, "
-      "255, 255);border-radius:10px;border:0px solid gray;} "
-      "QToolButton:pressed "
-      "{ background-color: "
-      "rgb(220,220,230);color: black}");
-
-  btnCancel->setStyleSheet(btnStyle);
-  btnOk->setFixedHeight(35);
-  btnCancel->setFixedHeight(35);
-
-  QHBoxLayout *hbox = new QHBoxLayout;
-  hbox->addWidget(btnCancel);
-  hbox->addWidget(btnOk);
-  btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-  btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-  QSpacerItem *sparcer_item =
-      new QSpacerItem(0, 160, QSizePolicy::Fixed, QSizePolicy::Expanding);
-  vbox->addItem(sparcer_item);
-
-  vbox->addLayout(hbox, 0);
-
-  isOK = false;
-  connect(btnCancel, &QToolButton::clicked, [=]() mutable {
-    isOK = false;
-    dlg->close();
-  });
-  connect(dlg, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
-  connect(btnOk, &QToolButton::clicked, [=]() mutable {
-    isOK = true;
-    dlg->close();
-  });
-
-  int x, y, w, h;
-  w = mw_one->width() - 40;
-  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  h = calcStringPixelHeight(this->font(), fontSize) * 15;
-  y = geometry().y() + (height() - h) / 2;
-  dlg->setGeometry(x, y, w, h);
-
-  showGrayWindows();
-
-  dlg->exec();
-}
-
 int MainWindow::calcStringPixelWidth(QString s_str, QFont font,
                                      int n_font_size) {
   font.setPointSize(n_font_size);
@@ -1226,12 +1134,7 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        // showDelMsgBox(
-        //     str + " : ",
-        //     tr("The last record added today will be deleted!") + "\n\n" +
-        //     str1);
-        // if (!isOK) return;
-
+        ShowMessage *m_ShowMsg = new ShowMessage(this);
         if (!m_ShowMsg->showMsg(
                 str,
                 tr("The last record added today will be deleted!") + "\n\n" +
@@ -1268,8 +1171,10 @@ void MainWindow::del_Data(QTreeWidget *tw) {
 
   if (isNo) {
     QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-    showMsgBox(str, tr("Only the reduction of the day's records is allowed."),
-               "", 1);
+
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg(
+        str, tr("Only the reduction of the day's records is allowed."), 1);
     return;
   }
 
@@ -2011,8 +1916,9 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
   QString tab_name = ui->tabWidget->tabText(index);
 
-  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + tab_name + " ? ", "",
-                  2))
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg("Knot",
+                          tr("Whether to remove") + "  " + tab_name + " ? ", 2))
     return;
 
   isNeedAutoBackup = true;
@@ -2902,10 +2808,11 @@ void MainWindow::on_actionImport_Data_triggered() {
   if (QFile(zipfile).exists()) addUndo(tr("Import Data"));
 
   if (!zipfile.isNull()) {
-    if (!mw_one->showMsgBox("Kont",
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    if (!m_ShowMsg->showMsg("Kont",
                             tr("Import this data?") + "\n" +
                                 mw_one->m_Reader->getUriRealPath(zipfile),
-                            "", 2)) {
+                            2)) {
       isZipOK = false;
       return;
     }
@@ -3774,7 +3681,6 @@ void MainWindow::init_UIWidget() {
   dlgTimeMachine = new QFrame();
   dlgTimeMachine->close();
   m_Method = new Method(this);
-  m_ShowMsg = new ShowMessage(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -5356,10 +5262,11 @@ void MainWindow::on_btnImportBakList_clicked() {
   zipfile = str.trimmed();
 
   if (!zipfile.isNull()) {
-    if (!mw_one->showMsgBox("Kont",
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    if (!m_ShowMsg->showMsg("Kont",
                             tr("Import this data?") + "\n" +
                                 mw_one->m_Reader->getUriRealPath(zipfile),
-                            "", 2)) {
+                            2)) {
       isZipOK = false;
       return;
     }
@@ -5386,8 +5293,10 @@ void MainWindow::on_btnDelTabRecycle_clicked() {
   if (m_Method->getCountBakList(ui->qwTabRecycle) == 0) return;
   int index = m_Method->getCurrentIndexBakList(ui->qwTabRecycle);
   QString tab_file = m_Method->getText3(ui->qwTabRecycle, index);
-  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + tab_file + " ? ", "",
-                  2))
+
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg("Knot",
+                          tr("Whether to remove") + "  " + tab_file + " ? ", 2))
     return;
 
   QFile file(tab_file);
@@ -5437,8 +5346,10 @@ void MainWindow::on_btnDelBakFile_clicked() {
 
   int index = m_Method->getCurrentIndexBakList(ui->qwBakList);
   QString bak_file = m_Method->getText3(ui->qwBakList, index);
-  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + bak_file + " ? ", "",
-                  2))
+
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg("Knot",
+                          tr("Whether to remove") + "  " + bak_file + " ? ", 2))
     return;
 
   QFile file(bak_file);
@@ -5490,7 +5401,9 @@ void MainWindow::on_btnDelNoteRecycle_clicked() {
   int index = m_Method->getCurrentIndexBakList(ui->qwNoteRecycle);
   QString file = m_Method->getText0(ui->qwNoteRecycle, index);
 
-  if (!showMsgBox("Knot", tr("Whether to remove") + "  " + file + " ? ", "", 2))
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg("Knot", tr("Whether to remove") + "  " + file + " ? ",
+                          2))
     return;
 
   QTreeWidgetItem *topItem = m_NotesList->twrb->topLevelItem(0);

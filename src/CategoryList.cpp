@@ -72,10 +72,11 @@ void dlgList::on_btnDel_clicked() {
 
   ui->listWidget->setCurrentRow(row);
   if (row >= 0) {
-    if (!mw_one->showMsgBox("Kont",
+    ShowMessage* m_ShowMsg = new ShowMessage(this);
+    if (!m_ShowMsg->showMsg("Kont",
                             tr("Delete this category?") + "\n\n" +
                                 ui->listWidget->currentItem()->text(),
-                            "", 2))
+                            2))
       return;
 
     ui->listWidget->takeItem(row);

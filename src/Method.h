@@ -57,7 +57,8 @@ class Method : public QDialog {
 
   bool eventFilterReader(QObject *watch, QEvent *evn);
 
- protected:
+  void showDelMsgBox(QString title, QString info);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

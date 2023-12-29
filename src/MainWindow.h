@@ -247,7 +247,6 @@ class MainWindow : public QMainWindow {
   dlgNotesList *m_NotesList;
   SyncInfo *m_SyncInfo;
   Method *m_Method;
-  ShowMessage *m_ShowMsg;
 
   File *myfile;
 
@@ -399,7 +398,7 @@ class MainWindow : public QMainWindow {
   void closeGrayWindows();
   void bakIniData(QString unredoFile, bool unre);
   bool isOK = false;
-  void showDelMsgBox(QString title, QString info);
+
   void set_btnStyle(QObject *parent);
   int calcStringPixelWidth(QString s_str, QFont font, int n_font_size);
   int calcStringPixelHeight(QFont font, int n_font_size);
