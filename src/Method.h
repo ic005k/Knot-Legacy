@@ -55,6 +55,8 @@ class Method : public QDialog {
   void setSCrollPro(QObject *obj);
   void init_all_notes();
 
+  bool eventFilterReader(QObject *watch, QEvent *evn);
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
@@ -78,6 +80,8 @@ class Method : public QDialog {
   void setCellText(int row, int column, QString str, QTableWidget *table);
   void generateData(int count);
   int nProgressBarType = 2;
+
+  int x, y, w, h;
 };
 
 #endif  // METHOD_H

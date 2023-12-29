@@ -2400,11 +2400,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
-  if (watch == ui->qwReader) {
-    if (event->type() == QEvent::MouseButtonDblClick) {
-      on_SetReaderFunVisible();
-    }
-  }
+  m_Method->eventFilterReader(watch, evn);
 
   if (watch == tw->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
@@ -2743,136 +2739,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       if (!ui->frameBookList->isHidden()) {
         on_btnBackBookList_clicked();
         return true;
-      }
-    }
-  }
-
-  if (watch == ui->qwReader) {
-    static int press_x;
-    static int press_y;
-    static int relea_x;
-    static int relea_y;
-    int length = 75;
-
-    if (ui->textBrowser->isHidden()) {
-      if (event->type() == QEvent::MouseButtonPress) {
-        isMousePress = true;
-        isMouseMove = false;
-        if (!isMouseMove) timerMousePress->start(1300);
-      }
-
-      if (event->type() == QEvent::MouseButtonRelease) {
-        isMousePress = false;
-        isMouseMove = false;
-      }
-
-      if (event->type() == QEvent::MouseMove) {
-        isMouseMove = true;
-
-        if (isMousePress) {
-          if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
-            // qDebug() << "book right...";
-            int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
-            if (cn != 1) {
-              m_PageIndicator->setPicRight();
-            }
-          } else if ((press_x - relea_x) > length &&
-                     qAbs(relea_y - press_y) < 35) {
-            // qDebug() << "book left...";
-            int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
-            int tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
-            if (cn != tn) {
-              m_PageIndicator->setPicLeft();
-            }
-          } else
-            m_PageIndicator->close();
-        }
-      }
-    }
-
-    if (event->type() == QEvent::MouseButtonPress) {
-      isMousePress = true;
-
-      press_x = event->globalX();
-      press_y = event->globalY();
-      x = 0;
-      y = 0;
-      w = ui->qwReader->width();
-      h = ui->qwReader->height();
-    }
-
-    if (event->type() == QEvent::MouseButtonRelease) {
-      relea_x = event->globalX();
-      relea_y = event->globalY();
-      ui->lblTitle->hide();
-      QQuickItem *root = ui->qwReader->rootObject();
-
-      isTurnThePage = false;
-      isMousePress = false;
-      isMouseMove = false;
-
-      // Right Slide
-      if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
-        if (isText) {
-          if (iPage - baseLines <= 0) {
-            if (isText || isEpub) {
-              QMetaObject::invokeMethod((QObject *)root, "setX",
-                                        Q_ARG(QVariant, 0));
-              return QWidget::eventFilter(watch, evn);
-            }
-          }
-        } else if (isEpub) {
-          if (htmlIndex <= 0) {
-            if (isText || isEpub) {
-              QMetaObject::invokeMethod((QObject *)root, "setX",
-                                        Q_ARG(QVariant, 0));
-              return QWidget::eventFilter(watch, evn);
-            }
-          }
-        }
-        isTurnThePage = true;
-
-        on_btnPageUp_clicked();
-        m_PageIndicator->close();
-      }
-
-      // Left Slide
-      if ((press_x - relea_x) > length && qAbs(relea_y - press_y) < 35) {
-        if (isText) {
-          if (iPage + baseLines > totallines) {
-            if (isText || isEpub) {
-              QMetaObject::invokeMethod((QObject *)root, "setX",
-                                        Q_ARG(QVariant, 0));
-              return QWidget::eventFilter(watch, evn);
-            }
-          }
-        } else if (isEpub) {
-          if (htmlIndex + 1 >= htmlFiles.count()) {
-            if (isText || isEpub) {
-              QMetaObject::invokeMethod((QObject *)root, "setX",
-                                        Q_ARG(QVariant, 0));
-              return QWidget::eventFilter(watch, evn);
-            }
-          }
-        }
-        isTurnThePage = true;
-
-        on_btnPageNext_clicked();
-        m_PageIndicator->close();
-      }
-
-      if (isText || isEpub)
-        QMetaObject::invokeMethod((QObject *)root, "setX", Q_ARG(QVariant, 0));
-
-      curx = 0;
-    }
-
-    if (event->type() == QEvent::MouseMove) {
-      relea_x = event->globalX();
-      relea_y = event->globalY();
-      if (isMousePress && qAbs(relea_x - press_x) > 20 &&
-          qAbs(relea_y - press_y) < 20) {
-        isMouseMove = true;
       }
     }
   }
