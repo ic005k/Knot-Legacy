@@ -28,6 +28,8 @@ class ShowMessage : public QDialog {
 
   void on_btnOk_clicked();
 
+  void on_btnCopy_clicked();
+
  private:
   void init();
 };

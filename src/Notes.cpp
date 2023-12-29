@@ -1054,9 +1054,9 @@ void Notes::show_findText() {
                      palette.color(QPalette::Active, QPalette::Highlight));
     ui->editSource->setPalette(palette);
   } else {
-    QMessageBox box;
-    box.setText(tr("The end of the document has been reached."));
-    box.exec();
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg("Knot", tr("The end of the document has been reached."),
+                       0);
   }
 }
 
@@ -1073,9 +1073,9 @@ void Notes::show_findTextBack() {
                      palette.color(QPalette::Active, QPalette::Highlight));
     ui->editSource->setPalette(palette);
   } else {
-    QMessageBox box;
-    box.setText(tr("The beginning of the document has been reached."));
-    box.exec();
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg(
+        "Knot", tr("The beginning of the document has been reached."), 0);
   }
 }
 

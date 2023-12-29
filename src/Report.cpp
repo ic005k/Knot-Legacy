@@ -592,13 +592,13 @@ void dlgReport::on_btnOut2Img_clicked() {
     folder->mkdir(path);
     QString filename = path + strFile;
     pixmap.save(filename, "PNG");
-    QMessageBox box;
+    ShowMessage* m_ShowMsg = new ShowMessage(this);
     if (!QFile(filename).exists()) {
-      box.setText(tr("Please turn on the storage permission of the app."));
-      box.exec();
+      m_ShowMsg->showMsg(
+          "Knot", tr("Please turn on the storage permission of the app."), 1);
+
     } else {
-      box.setText(tr("Picture output successful!") + "\n\n" + filename);
-      box.exec();
+      m_ShowMsg->showMsg("Knot", tr("Picture output successful!"), 1);
     }
 #else
     QString fileName;

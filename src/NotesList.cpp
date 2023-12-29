@@ -274,9 +274,10 @@ bool dlgNotesList::on_btnImport_clicked() {
 #endif
 
   if (!isMD) {
-    QMessageBox box;
-    box.setText(tr("Invalid Markdown file.") + "\n\n" + strInfo);
-    box.exec();
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg("Knot", tr("Invalid Markdown file.") + "\n\n" + strInfo,
+                       1);
+
     return false;
   }
 

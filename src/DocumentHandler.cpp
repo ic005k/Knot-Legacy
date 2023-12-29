@@ -69,7 +69,7 @@
 extern MainWindow *mw_one;
 extern QStringList readTextList, htmlFiles;
 extern int htmlIndex;
-extern QString strOpfPath, appName;
+extern QString strOpfPath, appName, copyText;
 QString picfile;
 
 DocumentHandler::DocumentHandler(QObject *parent)
@@ -244,8 +244,11 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
   qDebug() << "file : " << htmlFile;
   if (htmlFile.contains("http")) {
     QUrl url = htmlFile;
-    bool ok = mw_one->showMsgBox(
-        appName, tr("Open this URL?") + "\n\n" + htmlFile + "\n", htmlFile, 3);
+
+    ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+    copyText = htmlFile;
+    bool ok = m_ShowMsg->showMsg(
+        appName, tr("Open this URL?") + "\n\n" + htmlFile + "\n", 3);
     if (ok) QDesktopServices::openUrl(url);
     mw_one->clearSelectBox();
   }
@@ -253,8 +256,11 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
   else if (htmlFile.contains("@")) {
     QString str = htmlFile;
     str.replace("mailto:", "");
-    bool ok = mw_one->showMsgBox(
-        appName, tr("Writing an email?") + "\n\n" + htmlFile + "\n", str, 3);
+
+    ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+    copyText = str;
+    bool ok = m_ShowMsg->showMsg(
+        appName, tr("Writing an email?") + "\n\n" + htmlFile + "\n", 3);
     if (ok) QDesktopServices::openUrl(QUrl(htmlFile));
 
     mw_one->clearSelectBox();
@@ -339,7 +345,8 @@ void DocumentHandler::load(const QUrl &fileUrl) {
         } else {
           // QTextCodec *codec = QTextCodec::codecForHtml(data);
 
-          QTextCodec *codec = QTextCodec::codecForName("utf-8");  // 解决中文乱码
+          QTextCodec *codec =
+              QTextCodec::codecForName("utf-8");  // 解决中文乱码
           emit loaded(codec->toUnicode(data), Qt::AutoText);
         }
         doc->setModified(false);

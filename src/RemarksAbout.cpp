@@ -217,7 +217,8 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
       //                                tr("Cancel"));
       // for Android ret = 3 Mac ret = 0 or 1(Cancel)
 
-      int ret = QMessageBox::warning(this, "", warningStr, tr("Download"));
+      ShowMessage *m_ShowMsg = new ShowMessage(this);
+      int ret = m_ShowMsg->showMsg("Knot", warningStr, 1);
 
       if (ret >= 0) {
 #ifdef Q_OS_ANDROID

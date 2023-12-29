@@ -4,10 +4,12 @@
 #include "ui_ShowMessage.h"
 
 extern MainWindow* mw_one;
+extern QString copyText;
 
 ShowMessage::ShowMessage(QWidget* parent)
     : QDialog(parent), ui(new Ui::ShowMessage) {
   ui->setupUi(this);
+  this->installEventFilter(this);
 
   this->layout()->setMargin(0);
   setWindowFlag(Qt::FramelessWindowHint);
@@ -45,6 +47,15 @@ bool ShowMessage::eventFilter(QObject* watch, QEvent* evn) {
     return true;
   }
 
+  if (evn->type() == QEvent::MouseButtonPress) {
+    if (ui->btnCancel->isHidden() && ui->btnCopy->isHidden() &&
+        ui->btnOk->isHidden()) {
+      on_btnCancel_clicked();
+    }
+
+    return true;
+  }
+
   return QWidget::eventFilter(watch, evn);
 }
 
@@ -62,13 +73,26 @@ bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
 
   ui->lblTitle->setText(title);
   ui->lblMsgTxt->setText(msgtxt);
+  if (btnCount == 0) {
+    ui->btnCancel->hide();
+    ui->btnCopy->hide();
+    ui->btnOk->hide();
+  }
   if (btnCount == 1) {
     ui->btnCancel->hide();
     ui->btnOk->show();
+    ui->btnCopy->hide();
   }
   if (btnCount == 2) {
     ui->btnCancel->show();
     ui->btnOk->show();
+    ui->btnCopy->hide();
+  }
+
+  if (btnCount == 3) {
+    ui->btnCancel->show();
+    ui->btnOk->show();
+    ui->btnCopy->show();
   }
 
   init();
@@ -85,5 +109,12 @@ void ShowMessage::on_btnCancel_clicked() {
 
 void ShowMessage::on_btnOk_clicked() {
   isValue = true;
+  close();
+}
+
+void ShowMessage::on_btnCopy_clicked() {
+  QClipboard* clipboard = QApplication::clipboard();
+  clipboard->setText(copyText);
+  isValue = false;
   close();
 }

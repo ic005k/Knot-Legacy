@@ -17,7 +17,7 @@ bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isTimeMachine,
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
-    zipfile, txt, infoStr, searchStr, currentMDFile;
+    zipfile, txt, infoStr, searchStr, currentMDFile, copyText;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -125,14 +125,8 @@ void MainWindow::importDataDone() {
 
   if (isMenuImport) {
     if (!isZipOK) {
-      QMessageBox msgBox;
-      msgBox.setText(appName);
-      msgBox.setInformativeText(tr("Invalid data file."));
-
-      QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-      btnOk->setFocus();
-
-      msgBox.exec();
+      ShowMessage *m_ShowMsg = new ShowMessage(this);
+      m_ShowMsg->showMsg("Knot", tr("Invalid data file."), 1);
     }
   }
 }
@@ -4570,12 +4564,9 @@ void MainWindow::on_btnSetKeyOK_clicked() {
   if (ui->edit1->text().trimmed() == "" && ui->edit2->text().trimmed() == "") {
     Reg.remove("/MainNotes/UserKey");
     ui->frameSetKey->hide();
-    QMessageBox msgBox;
-    msgBox.setText("Knot");
-    msgBox.setInformativeText(tr("The password is removed."));
-    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    msgBox.exec();
+
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg("Knot", tr("The password is removed."), 1);
 
     return;
   }
@@ -4589,23 +4580,16 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     strPw = baPw;
     Reg.setValue("/MainNotes/UserKey", strPw);
 
-    QMessageBox msgBox;
-    msgBox.setText("Knot");
-    msgBox.setInformativeText(tr("The password is set successfully."));
-    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    msgBox.exec();
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg("Knot", tr("The password is set successfully."), 1);
+
     ui->frameSetKey->hide();
     ui->edit1->clear();
     ui->edit2->clear();
 
   } else {
-    QMessageBox msgBox;
-    msgBox.setText("Knot");
-    msgBox.setInformativeText(tr("The entered password does not match."));
-    QPushButton *btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFocus();
-    msgBox.exec();
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    m_ShowMsg->showMsg("Knot", tr("The entered password does not match."), 1);
   }
 }
 
