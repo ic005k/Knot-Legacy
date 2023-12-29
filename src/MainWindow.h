@@ -73,6 +73,7 @@
 #include "MarkdownHighlighter.h"
 #include "Method.h"
 #include "ReaderSet.h"
+#include "ShowMessage.h"
 #include "src/CategoryList.h"
 #include "src/CloudBackup.h"
 #include "src/EditRecord.h"
@@ -109,6 +110,7 @@
 #include "ui_RemarksAbout.h"
 #include "ui_Report.h"
 #include "ui_SetReaderText.h"
+#include "ui_ShowMessage.h"
 #include "ui_Steps.h"
 #include "ui_SyncInfo.h"
 #include "ui_TextSelector.h"
@@ -245,6 +247,7 @@ class MainWindow : public QMainWindow {
   dlgNotesList *m_NotesList;
   SyncInfo *m_SyncInfo;
   Method *m_Method;
+  ShowMessage *m_ShowMsg;
 
   File *myfile;
 

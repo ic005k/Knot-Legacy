@@ -3766,6 +3766,7 @@ void MainWindow::init_UIWidget() {
   dlgTimeMachine = new QFrame();
   dlgTimeMachine->close();
   m_Method = new Method(this);
+  m_ShowMsg = new ShowMessage(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -4927,6 +4928,9 @@ void MainWindow::on_btnAdd_clicked() {
 
 void MainWindow::on_btnDel_clicked() {
   m_Reader->setPdfViewVisible(false);
+
+  qDebug() << m_ShowMsg->showMsg("test", "txt", 2);
+  return;
 
   on_DelRecord();
 }

@@ -69,6 +69,7 @@ SOURCES += \
     src/Report.cpp \
     src/RollingBox.cpp \
     src/SetReaderText.cpp \
+    src/ShowMessage.cpp \
     src/SpecialAccelerometerPedometer.cpp \
     src/Steps.cpp \
     src/SyncInfo.cpp \
@@ -124,6 +125,7 @@ HEADERS += \
     src/Report.h \
     src/RollingBox.h \
     src/SetReaderText.h \
+    src/ShowMessage.h \
     src/SpecialAccelerometerPedometer.h \
     src/Steps.h \
     src/SyncInfo.h \
@@ -180,6 +182,7 @@ FORMS += \
     src/RemarksAbout.ui \
     src/Report.ui \
     src/SetReaderText.ui \
+    src/ShowMessage.ui \
     src/Steps.ui \
     src/SyncInfo.ui \
     src/TextSelector.ui \
