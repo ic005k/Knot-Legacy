@@ -17,11 +17,16 @@ class ShowMessage : public QDialog {
   ~ShowMessage();
   Ui::ShowMessage *ui;
 
-  void showMsg(QString title, QString msgtxt, int btnCount);
+  bool isValue;
+  bool showMsg(QString title, QString msgtxt, int btnCount);
  protected slots:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  private slots:
+
+  void on_btnCancel_clicked();
+
+  void on_btnOk_clicked();
 
  private:
   void init();

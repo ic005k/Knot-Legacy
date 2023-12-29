@@ -8,6 +8,15 @@ extern MainWindow* mw_one;
 ShowMessage::ShowMessage(QWidget* parent)
     : QDialog(parent), ui(new Ui::ShowMessage) {
   ui->setupUi(this);
+
+  this->layout()->setMargin(0);
+  setWindowFlag(Qt::FramelessWindowHint);
+  setAttribute(Qt::WA_TranslucentBackground);
+  ui->widget->setStyleSheet("background-color:rgba(0, 0, 0,25%);");
+  ui->frame->setStyleSheet(
+      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+      "border:0px solid gray;}");
+
   setModal(true);
   QFont font = this->font();
   font.setBold(true);
@@ -18,6 +27,9 @@ ShowMessage::ShowMessage(QWidget* parent)
   ui->lblMsgTxt->adjustSize();
   ui->lblMsgTxt->setWordWrap(true);
 
+  ui->hframe->setFrameShape(QFrame::HLine);
+  ui->hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
+
   mw_one->set_btnStyle(this);
 }
 
@@ -27,6 +39,7 @@ bool ShowMessage::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
+      isValue = false;
       close();
       return true;
     }
@@ -36,6 +49,7 @@ bool ShowMessage::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void ShowMessage::init() {
+  isValue = false;
   setFixedHeight(mw_one->height());
   setFixedWidth(mw_one->width());
   setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
@@ -43,7 +57,7 @@ void ShowMessage::init() {
   show();
 }
 
-void ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
+bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
   // btnCount 1:Ok 2:Cancel + Ok
 
   ui->lblTitle->setText(title);
@@ -58,4 +72,18 @@ void ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
   }
 
   init();
+
+  while (!isHidden()) QCoreApplication::processEvents();
+
+  return isValue;
+}
+
+void ShowMessage::on_btnCancel_clicked() {
+  isValue = false;
+  close();
+}
+
+void ShowMessage::on_btnOk_clicked() {
+  isValue = true;
+  close();
 }

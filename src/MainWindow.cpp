@@ -1226,10 +1226,18 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
-        showDelMsgBox(
-            str + " : ",
-            tr("The last record added today will be deleted!") + "\n\n" + str1);
-        if (!isOK) return;
+        // showDelMsgBox(
+        //     str + " : ",
+        //     tr("The last record added today will be deleted!") + "\n\n" +
+        //     str1);
+        // if (!isOK) return;
+
+        if (!m_ShowMsg->showMsg(
+                str,
+                tr("The last record added today will be deleted!") + "\n\n" +
+                    str1,
+                2))
+          return;
 
         isNeedAutoBackup = true;
         strLatestModify = tr("Del Item") + " ( " + getTabText() + " ) ";
@@ -4928,9 +4936,6 @@ void MainWindow::on_btnAdd_clicked() {
 
 void MainWindow::on_btnDel_clicked() {
   m_Reader->setPdfViewVisible(false);
-
-  qDebug() << m_ShowMsg->showMsg("test", "txt", 2);
-  return;
 
   on_DelRecord();
 }
