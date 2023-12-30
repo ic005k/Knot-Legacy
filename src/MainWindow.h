@@ -390,14 +390,12 @@ class MainWindow : public QMainWindow {
   void refreshMainUI();
 
   void clearSelectBox();
-  bool showMsgBox(QString title, QString info, QString copyText,
-                  int buttonCount);
+
   QString getSelectedText();
 
   void showGrayWindows();
   void closeGrayWindows();
   void bakIniData(QString unredoFile, bool unre);
-  bool isOK = false;
 
   void set_btnStyle(QObject *parent);
   int calcStringPixelWidth(QString s_str, QFont font, int n_font_size);

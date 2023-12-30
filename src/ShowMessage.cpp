@@ -71,6 +71,12 @@ void ShowMessage::init() {
 bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
   // btnCount 1:Ok 2:Cancel + Ok
 
+  if (btnCount == 2 || btnCount == 3) {
+    msgtxt = msgtxt + "\n\n";
+  }
+
+  if (btnCount == 1) btnCount = 0;
+
   ui->lblTitle->setText(title);
   ui->lblMsgTxt->setText(msgtxt);
   if (btnCount == 0) {

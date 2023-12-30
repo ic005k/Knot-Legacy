@@ -2762,9 +2762,9 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       infoStr = path + str + "_Knot.zip";
       m_Notes->androidCopyFile(zipfile, infoStr);
       if (!QFile(infoStr).exists()) {
-        QMessageBox box;
-        box.setText(tr("Please turn on the storage permission of the app."));
-        box.exec();
+        ShowMessage *msg = new ShowMessage(this);
+        msg->showMsg(
+            "Knot", tr("Please turn on the storage permission of the app."), 1);
       }
 
 #else
@@ -3386,13 +3386,9 @@ void MainWindow::on_btnNotes_clicked() {
         showNotes();
 
       } else {
-        QMessageBox msgBox;
-        msgBox.setText("Knot");
-        msgBox.setInformativeText(tr("The entered password does not match."));
-        QPushButton *btnOk =
-            msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-        btnOk->setFocus();
-        msgBox.exec();
+        ShowMessage *msg = new ShowMessage(this);
+        msg->showMsg("Knot", tr("The entered password does not match."), 0);
+
         return;
       }
     }
@@ -4382,60 +4378,6 @@ void MainWindow::refreshMainUI() {
   this->update();
   this->repaint();
   qApp->processEvents();
-}
-
-bool MainWindow::showMsgBox(QString title, QString info, QString copyText,
-                            int buttonCount) {
-  QMessageBox msgBox;
-  QPushButton *btnCopy = NULL;
-  QPushButton *btnCancel = NULL;
-  QPushButton *btnOk = NULL;
-
-  msgBox.setText(title);
-  msgBox.setInformativeText(info);
-
-  QPixmap pix(":/res/info.png");
-  pix.setDevicePixelRatio(8);
-  msgBox.setIconPixmap(pix);
-
-  if (buttonCount >= 1) {
-    btnOk = msgBox.addButton(tr("Ok"), QMessageBox::AcceptRole);
-    btnOk->setFixedHeight(35);
-    btnOk->setFixedWidth(100);
-    btnOk->setStyleSheet(pushbtnStyle);
-  }
-
-  if (buttonCount >= 2) {
-    btnCancel = msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-
-    btnCancel->setFixedHeight(35);
-    btnCancel->setFixedWidth(100);
-    btnCancel->setStyleSheet(pushbtnStyle);
-  }
-
-  if (buttonCount == 3) {
-    btnCopy = msgBox.addButton(tr("Copy"), QMessageBox::AcceptRole);
-    btnCopy->setFixedHeight(35);
-    btnCopy->setFixedWidth(100);
-    btnCopy->setStyleSheet(pushbtnStyle);
-  }
-
-  if (buttonCount >= 1) btnOk->setFocus();
-
-  msgBox.exec();
-  if (buttonCount >= 2) {
-    if (msgBox.clickedButton() == btnCancel) {
-      return false;
-    }
-  }
-
-  if (msgBox.clickedButton() == btnCopy && buttonCount == 3) {
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setText(copyText);
-    return false;
-  }
-
-  return true;
 }
 
 void MainWindow::on_btnSelText_clicked() {

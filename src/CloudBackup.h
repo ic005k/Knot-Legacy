@@ -60,6 +60,7 @@ class CloudBackup : public QDialog {
 
  private:
   QtOneDrive *oneDrive = nullptr;
+  QString initUserInfo(QString info);
 };
 
 #endif  // CLOUDBACKUP_H

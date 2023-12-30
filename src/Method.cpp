@@ -737,7 +737,6 @@ bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
 }
 
 void Method::showDelMsgBox(QString title, QString info) {
-  QWidget* m_widget = new QWidget(this);
   bool isOK;
 
   QDialog* dlg = new QDialog(this);

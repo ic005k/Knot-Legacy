@@ -82,11 +82,12 @@ CloudBackup::CloudBackup(QWidget *parent)
                 this, "OneDrive",
                 QString(tr("Success Get User Info") + "\n" +
                         QJsonDocument(object).toJson()));*/
+
+            QString userInfo = initUserInfo(QJsonDocument(object).toJson());
             ShowMessage *m_ShowMsg = new ShowMessage(this);
-            m_ShowMsg->showMsg("OneDrive",
-                               QString(tr("Success Get User Info") + "\n" +
-                                       QJsonDocument(object).toJson()),
-                               1);
+            m_ShowMsg->showMsg(
+                "OneDrive",
+                QString(tr("Success Get User Info") + "\n" + userInfo), 1);
           });
 
   connect(oneDrive, &QtOneDrive::successGetStorageInfo,
@@ -157,6 +158,26 @@ CloudBackup::CloudBackup(QWidget *parent)
 
     this->setEnabled(!oneDrive->isBusy());
   });
+}
+
+QString CloudBackup::initUserInfo(QString info) {
+  QTextEdit *edit = new QTextEdit;
+  edit->setPlainText(info);
+  int lineCount = edit->document()->lineCount();
+
+  QString str1;
+  for (int i = 0; i < lineCount; i++) {
+    QString str = edit->document()->findBlockByLineNumber(i).text().trimmed();
+    if (str.contains(":")) {
+      str = str.replace(",", "");
+      str = str.replace("[", "");
+      str = str.replace("{", "");
+      str = str.replace("\"", "");
+      str1 = str1 + "\n" + str;
+    }
+  }
+
+  return str1;
 }
 
 void CloudBackup::init() {
