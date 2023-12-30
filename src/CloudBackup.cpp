@@ -173,11 +173,20 @@ QString CloudBackup::initUserInfo(QString info) {
       str = str.replace("[", "");
       str = str.replace("{", "");
       str = str.replace("\"", "");
+
+      if (str.toLower().contains("remaining") || str.contains("total") ||
+          str.contains("used")) {
+        QStringList list = str.split(":");
+        QString s_size = list.at(1);
+        qint64 size = s_size.toLongLong();
+        str = list.at(0) + ": " + mw_one->getFileSize(size, 2);
+      }
+
       str1 = str1 + "\n" + str;
     }
   }
 
-  return str1;
+  return str1.trimmed();
 }
 
 void CloudBackup::init() {

@@ -77,8 +77,6 @@ bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
 
   if (btnCount == 1) btnCount = 0;
 
-  ui->lblTitle->setText(title);
-  ui->lblMsgTxt->setText(msgtxt);
   if (btnCount == 0) {
     ui->btnCancel->hide();
     ui->btnCopy->hide();
@@ -100,6 +98,9 @@ bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
     ui->btnOk->show();
     ui->btnCopy->show();
   }
+
+  ui->lblTitle->setText(title);
+  ui->lblMsgTxt->setText(msgtxt);
 
   init();
 
