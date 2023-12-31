@@ -16,7 +16,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 
   mw_one->set_btnStyle(this);
 
-  ui->f_Find->hide();
+  ui->lblInfo->hide();
   ui->btnFind->hide();
   ui->lblCount->hide();
   ui->f_ToolBar->hide();
@@ -228,8 +228,7 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
       if (textEdit == ui->editSource) {
         y1 = 2;
         if (!ui->f_ToolBar->isHidden()) {
-          m_TextSelector->setFixedHeight(ui->btnShowTools->height() +
-                                         ui->f_ToolBar->height());
+          m_TextSelector->setFixedHeight(ui->f_ToolBar->height());
         } else
           m_TextSelector->setFixedHeight(m_TextSelector->oriHeight);
       }
@@ -1031,16 +1030,6 @@ void Notes::on_btnReference_clicked() {
   ui->editSource->insertPlainText("> " + str);
 }
 
-void Notes::on_btnShowFind_clicked() {
-  ui->f_ToolBar->hide();
-  if (!ui->f_Find->isHidden())
-    ui->f_Find->hide();
-  else {
-    ui->f_Find->show();
-    ui->editFind->setFocus();
-  }
-}
-
 void Notes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
   if (findtext == "") return;
@@ -1270,7 +1259,6 @@ void Notes::on_btnHideKey_clicked() {
 }
 
 void Notes::on_btnShowTools_clicked() {
-  ui->f_Find->hide();
   if (ui->f_ToolBar->isHidden()) {
     ui->f_ToolBar->show();
 

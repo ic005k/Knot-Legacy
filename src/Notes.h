@@ -171,8 +171,6 @@ class Notes : public QDialog {
 
   void on_btnReference_clicked();
 
-  void on_btnShowFind_clicked();
-
   void on_btnFind_clicked();
 
   void on_btnPrev_clicked();
