@@ -65,6 +65,14 @@ void ShowMessage::init() {
   setFixedWidth(mw_one->width());
   setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
               height());
+
+  int x, y, w, h;
+
+  w = ui->frame->width();
+  h = ui->frame->height();
+  x = ui->frame->x();
+  y = this->y() + (this->height() - h) / 2;
+  ui->frame->setGeometry(x, y, w, h);
   show();
 }
 

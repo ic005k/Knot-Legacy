@@ -23,7 +23,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(222, 222, 222);</string>
+      <string notr="true">/*background-color: rgb(222, 222, 222);*/</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -127,6 +127,38 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QToolButton" name="btnPaste">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 25, 25);
+color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="text">
+           <string>Paste</string>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QToolButton" name="btnInsertTable">
           <property name="sizePolicy">
@@ -258,38 +290,6 @@
           </property>
           <property name="clearButtonEnabled">
            <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="btnPaste">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 25, 25);
-color: rgb(255, 255, 255);</string>
-          </property>
-          <property name="text">
-           <string>Paste</string>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextOnly</enum>
           </property>
          </widget>
         </item>
