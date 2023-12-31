@@ -765,7 +765,7 @@ class MainWindow : public QMainWindow {
   QString strShowDetails;
   bool isTabChanged = false;
   bool isAndroidKeyShow = false;
-  int memoHeight;
+
   int frameChartHeight;
   int yScale = 3;
   int x, y, w, h;

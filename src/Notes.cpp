@@ -149,7 +149,7 @@ void Notes::resizeEvent(QResizeEvent *event) {
 void Notes::on_btnDone_clicked() { close(); }
 
 void Notes::MD2Html(QString mdFile) {
-  QString htmlFileName = iniDir + "memo.html";
+  QString htmlFileName = privateDir + "memo.html";
   QFile memofile1(htmlFileName);
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
@@ -177,9 +177,13 @@ void Notes::saveMainNotes() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  if (QFile(currentMDFile).exists()) QFile::remove(currentMDFile);
-  mw_one->TextEditToFile(ui->editSource, currentMDFile);
-  MD2Html(currentMDFile);
+  if (isTextChanges) {
+    mw_one->TextEditToFile(ui->editSource, currentMDFile);
+    MD2Html(currentMDFile);
+    isTextChanges = false;
+
+    qDebug() << "Save Note: " << currentMDFile;
+  }
 
   QString strTag = currentMDFile;
   strTag.replace(iniDir, "");
@@ -670,7 +674,7 @@ void Notes::unzip(QString zipfile) {
 }
 
 void Notes::loadMemoQML() {
-  QString htmlFileName = iniDir + "memo.html";
+  QString htmlFileName = privateDir + "memo.html";
   QTextEdit *edit = new QTextEdit;
   QPlainTextEdit *edit1 = new QPlainTextEdit;
   QString strhtml = mw_one->loadText(htmlFileName);
@@ -1021,7 +1025,10 @@ void Notes::closeEvent(QCloseEvent *event) {
   loadMemoQML();
 }
 
-void Notes::on_editSource_textChanged() { isNeedSave = true; }
+void Notes::on_editSource_textChanged() {
+  isNeedSave = true;
+  isTextChanges = true;
+}
 
 void Notes::on_editSource_cursorPositionChanged() { isNeedSave = true; }
 

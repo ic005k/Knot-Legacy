@@ -365,6 +365,8 @@ void dlgNotesList::saveNotesList() {
   Reg.setIniCodec("utf-8");
 #endif
 
+  Reg.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
+
   int count = tw->topLevelItemCount();
   Reg.setValue("/MainNotes/topItemCount", count);
   for (int i = 0; i < count; i++) {

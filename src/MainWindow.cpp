@@ -436,11 +436,6 @@ MainWindow::MainWindow(QWidget *parent)
 
   m_Todo->refreshTableListsFromIni();
   m_Todo->refreshAlarm();
-
-  // load note
-  currentMDFile = m_NotesList->getCurrentMDFile();
-  mw_one->m_Notes->MD2Html(currentMDFile);
-  mw_one->m_Notes->loadMemoQML();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -3334,6 +3329,8 @@ void MainWindow::on_btnNotes_clicked() {
   removeFilesWatch();
   isSelf = true;
 
+  m_Method->init_all_notes();
+
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -3404,12 +3401,6 @@ void MainWindow::showNotes() {
   m_PageIndicator->close();
   isMemoVisible = true;
   isReaderVisible = false;
-
-  QFont f(this->font());
-  f.setPointSize(fontSize);
-  m_Notes->ui->editSource->setFont(f);
-
-  memoHeight = ui->qwNotes->height();
 
   m_Notes->ui->btnUndo->setEnabled(false);
   m_Notes->ui->btnRedo->setEnabled(false);
@@ -4569,6 +4560,7 @@ void MainWindow::on_btnEdit_clicked() {
   m_Notes->ui->editSource->setTextCursor(tmpCursor);
 
   m_Notes->isNeedSave = false;
+  m_Notes->isTextChanges = false;
 }
 
 void MainWindow::on_btnCode_clicked() {

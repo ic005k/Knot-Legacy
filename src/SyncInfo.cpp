@@ -53,6 +53,9 @@ bool SyncInfo::eventFilter(QObject* watch, QEvent* evn) {
 void SyncInfo::runSync(QString path) {
   qDebug() << QTime::currentTime().toString() + "  Start Sync..." << path
            << "isSelf=" << mw_one->isSelf;
+
+  return;
+
   if (!mw_one->isSelf && !mw_one->initMain) {
     QString info = QDateTime::currentDateTime().toString() + "\n" +
                    tr("The data update is complete.") + "\n";
@@ -61,6 +64,9 @@ void SyncInfo::runSync(QString path) {
       ui->textBrowser->append(info);
     }
     init();
-    show();
+
+    ShowMessage* msg = new ShowMessage(this);
+    msg->showMsg("Knot", ui->textBrowser->toPlainText(), 1);
+    on_btnClose_clicked();
   }
 }
