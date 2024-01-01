@@ -68,11 +68,20 @@ void ShowMessage::init() {
 
   int x, y, w, h;
 
-  w = ui->frame->width();
+#ifdef Q_OS_ANDROID
+  w = this->width() - 20;
+
+#else
+  w = 350;
+#endif
+
+  ui->frame->setFixedWidth(w);
+
   h = ui->frame->height();
-  x = ui->frame->x();
+  x = this->x() + (this->width() - w) / 2;
   y = this->y() + (this->height() - h) / 2;
   ui->frame->setGeometry(x, y, w, h);
+
   show();
 }
 
