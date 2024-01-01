@@ -365,8 +365,6 @@ void dlgNotesList::saveNotesList() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  Reg.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
-
   int count = tw->topLevelItemCount();
   Reg.setValue("/MainNotes/topItemCount", count);
   for (int i = 0; i < count; i++) {
@@ -390,6 +388,14 @@ void dlgNotesList::saveNotesList() {
           strChild1);
     }
   }
+
+  // Save Note Name
+  QSettings Reg1(iniDir + "curmd.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg1.setIniCodec("utf-8");
+#endif
+
+  Reg1.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
 
   isNeedSave = false;
 }
