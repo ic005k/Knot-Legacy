@@ -38,8 +38,8 @@ class Notes : public QDialog {
   QTimer *timerEditNote;
   int px, py, mx, my;
 
-  bool isNeedSave;
-  bool isTextChanges;
+  bool isNeedSave = false;
+  bool isTextChanges = false;
 
   QString htmlBuffer;
   QTextEdit *byTextEdit;

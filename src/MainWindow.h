@@ -265,7 +265,7 @@ class MainWindow : public QMainWindow {
   static void TextEditToFile(QTextEdit *txtEdit, QString fileName);
   void initChartMonth();
   void initChartDay();
-  static void saveNotes(int);
+  static void saveRemarks(int);
 
   static void saveTab();
   bool isSlide = false;

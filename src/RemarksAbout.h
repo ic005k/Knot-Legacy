@@ -18,7 +18,7 @@ class dlgRemarks;
 class dlgRemarks : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit dlgRemarks(QWidget *parent = nullptr);
   ~dlgRemarks();
   Ui::dlgRemarks *ui;
@@ -29,17 +29,17 @@ public:
   bool blAutoCheckUpdate;
 
   int sliderPos;
-  void init_Notes();
+  void init_Remarks();
   void CheckUpdate();
   void show_download();
   int getAndroidVer();
-public slots:
+ public slots:
   bool eventFilter(QObject *obj, QEvent *evn) override;
 
-protected:
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
-private slots:
+ private slots:
   void on_btnBack_clicked();
 
   void on_btnHomePage_clicked();
@@ -52,9 +52,9 @@ private slots:
 
   void on_btnDownloadUP_clicked();
 
-private:
+ private:
   QString getUrl(QVariantList list);
   QString s_link;
 };
 
-#endif // REMARKSABOUT_H
+#endif  // REMARKSABOUT_H

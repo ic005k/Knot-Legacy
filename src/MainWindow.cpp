@@ -380,7 +380,7 @@ void MainWindow::SaveFile(QString SaveType) {
       if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
       saveData(tw, i);
-      saveNotes(i);
+      saveRemarks(i);
     }
 
     saveTab();
@@ -391,7 +391,7 @@ void MainWindow::SaveFile(QString SaveType) {
   }
 
   if (SaveType == "notes") {
-    saveNotes(tabData->currentIndex());
+    saveRemarks(tabData->currentIndex());
   }
 }
 
@@ -2243,7 +2243,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   m_Method->clickMainDateData();
 }
 
-void MainWindow::saveNotes(int tabIndex) {
+void MainWindow::saveRemarks(int tabIndex) {
   if (loading) return;
   QSettings Reg(iniDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -2276,7 +2276,7 @@ void MainWindow::on_btnRemarks_clicked() {
   m_Remarks->ui->lblTitle->setText(tr("Remarks") + " : " +
                                    tabData->tabText(tabData->currentIndex()));
 
-  m_Remarks->init_Notes();
+  m_Remarks->init_Remarks();
 
   m_Remarks->show();
 }
@@ -2947,7 +2947,7 @@ QTreeWidget *MainWindow::get_tw(int tabIndex) {
 }
 
 void MainWindow::on_about() {
-  m_Remarks->init_Notes();
+  m_Remarks->init_Remarks();
 
   QTextBrowser *textBrowser = new QTextBrowser;
   textBrowser->append("");

@@ -98,7 +98,7 @@ void dlgRemarks::resizeEvent(QResizeEvent *event) {
   qDebug() << "resize" << ui->textEdit->height();
 }
 
-void dlgRemarks::init_Notes() {
+void dlgRemarks::init_Remarks() {
   int index = mw_one->ui->tabWidget->currentIndex();
   QString str = mw_one->ui->tabWidget->tabToolTip(index);
   QStringList list = str.split("|");
