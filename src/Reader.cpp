@@ -1277,7 +1277,8 @@ void dlgReader::proceImg() {
     if (fileInfo->at(i).exists()) {
       QString file = fileInfo->at(i).filePath();
       QFileInfo fi(file);
-      QFile::copy(file, fi.path() + "/org-" + fi.fileName());
+      QString picFile = fi.path() + "/org-" + fi.fileName();
+      QFile::copy(file, picFile);
 
       QImage img(file);
       double w, h;

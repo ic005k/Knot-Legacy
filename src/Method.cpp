@@ -38,10 +38,11 @@ void Method::init() {
 
 Method::~Method() { delete ui; }
 
-void Method::addItem(QString text0, QString text1, QString text2, QString text3,
-                     int itemH) {
+void Method::addItem(QString text_tab, QString text0, QString text1,
+                     QString text2, QString text3, int itemH) {
   QQuickItem* root = mw_one->ui->qwSearch->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, text0),
+  QMetaObject::invokeMethod((QObject*)root, "addItem",
+                            Q_ARG(QVariant, text_tab), Q_ARG(QVariant, text0),
                             Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
                             Q_ARG(QVariant, text3), Q_ARG(QVariant, itemH));
 }
@@ -199,6 +200,12 @@ void Method::startSearch() {
         QString txt0, txt1, txt2, txt3;
         QTreeWidgetItem* childItem = topItem->child(j);
 
+        QString strTime = childItem->text(0);
+        if (strTime.split(".").count() == 2) {
+          txt0 = strYear + " " + day + " " + weeks + " " +
+                 strTime.split(".").at(1).trimmed();
+        }
+
         txt1 = childItem->text(1);
         txt2 = childItem->text(2);
         txt3 = childItem->text(3);
@@ -206,7 +213,8 @@ void Method::startSearch() {
         bool isYes = false;
         if (searchStr.contains("&")) {
           QStringList list = searchStr.split("&");
-          bool is1, is2, is3;
+          bool is0, is1, is2, is3;
+          is0 = false;
           is1 = false;
           is2 = false;
           is3 = false;
@@ -215,6 +223,12 @@ void Method::startSearch() {
             str = str.trimmed();
 
             if (str.length() > 0) {
+              if (strYear.contains(str) || day.contains(str) ||
+                  weeks.contains(str)) {
+                is0 = true;
+                txt0 = txt0.replace(str, a0 + str + a1);
+              }
+
               if (txt1.contains(str)) {
                 is1 = true;
                 txt1 = txt1.replace(str, a0 + str + a1);
@@ -231,12 +245,19 @@ void Method::startSearch() {
           }
 
           if (list.count() == 2) {
+            if (is0 && is1) isYes = true;
+            if (is0 && is2) isYes = true;
+            if (is0 && is3) isYes = true;
             if (is1 && is2) isYes = true;
             if (is1 && is3) isYes = true;
             if (is2 && is3) isYes = true;
           }
 
           if (list.count() >= 3) {
+            if (is0 && is1 && is2 && is3) isYes = true;
+            if (is0 && is1 && is2) isYes = true;
+            if (is0 && is1 && is3) isYes = true;
+            if (is0 && is2 && is3) isYes = true;
             if (is1 && is2 && is3) isYes = true;
           }
 
@@ -260,9 +281,8 @@ void Method::startSearch() {
         }
 
         if (isYes) {
-          txt0 = tabStr + "\n\n" + strYear + " " + day + " " + weeks + " " +
-                 childItem->text(0).split(".").at(1).trimmed();
-          resultsList.append(txt0 + "=|=" + txt1 + "=|=" + txt2 + "=|=" + txt3);
+          resultsList.append(tabStr + "=|=" + txt0 + "=|=" + txt1 +
+                             "=|=" + txt2 + "=|=" + txt3);
         }
       }
     }
@@ -291,11 +311,12 @@ void Method::generateData(int count) {
 
   for (int i = 0; i < count; i++) {
     QStringList list = resultsList.at(i).split("=|=");
-    QString str0, str1, str2, str3;
-    str0 = list.at(0);
-    str1 = list.at(1);
-    str2 = list.at(2);
-    str3 = list.at(3);
+    QString str_tab, str0, str1, str2, str3;
+    str_tab = list.at(0);
+    str0 = list.at(1);
+    str1 = list.at(2);
+    str2 = list.at(3);
+    str3 = list.at(4);
 
     line_count = 4;
     QString text1, text2, text3;
@@ -312,7 +333,7 @@ void Method::generateData(int count) {
       line_count++;
     }
 
-    addItem(str0, text1, text2, text3, nFontHeight * (0));
+    addItem(str_tab, str0, text1, text2, text3, nFontHeight * (0));
   }
 }
 

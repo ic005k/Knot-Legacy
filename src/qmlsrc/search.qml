@@ -75,8 +75,9 @@ Rectangle {
         return data.type
     }
 
-    function addItem(t0, t1, t2, t3, height) {
+    function addItem(t_tab, t0, t1, t2, t3, height) {
         view.model.append({
+                              "text_tab": t_tab,
                               "text0": t0,
                               "text1": t1,
                               "text2": t2,
@@ -132,10 +133,16 @@ Rectangle {
             radius: 0
 
             function getItemHeight() {
+                var item_tabH
                 var item0H
                 var item1H
                 var item2H
                 var item3H
+
+                if (item_tab.text.length == 0)
+                    item_tabH = 0
+                else
+                    item_tabH = item_tab.contentHeight
 
                 if (item0.text.length == 0)
                     item0H = 0
@@ -157,7 +164,7 @@ Rectangle {
                 else
                     item3H = item3.contentHeight
 
-                return item0H + item1H + item2H + item3H
+                return item_tabH + item0H + item1H + item2H + item3H
             }
 
             RowLayout {
@@ -178,6 +185,22 @@ Rectangle {
                     anchors.rightMargin: 0
 
                     Text {
+                        id: item_tab
+
+                        width: parent.width
+                        Layout.preferredWidth: listItem.width
+                        Layout.alignment: Qt.AlignHCenter
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: TextArea.WordWrap
+                        font.bold: true
+                        text: text_tab
+
+                        leftPadding: 5
+                        rightPadding: 5
+                    }
+
+                    Text {
                         id: item0
 
                         width: parent.width
@@ -185,7 +208,7 @@ Rectangle {
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
-                        wrapMode: TextArea.NoWrap
+                        wrapMode: TextArea.WordWrap
                         font.bold: true
                         text: text0
 
@@ -351,6 +374,7 @@ Rectangle {
             id: listmain
 
             // debug
+
 
             /* ListElement {
                 text0: '<span style="background-color: #ff6600;">Hello</span>'

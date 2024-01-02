@@ -28,8 +28,8 @@ class Method : public QDialog {
   int getCount();
   void delItem(int index);
 
-  void addItem(QString text0, QString text1, QString text2, QString text3,
-               int itemH);
+  void addItem(QString text_tab, QString text0, QString text1, QString text2,
+               QString text3, int itemH);
 
   void setCurrentIndexBakList(QQuickWidget *qw, int index);
   void clearAllBakList(QQuickWidget *qw);
@@ -58,7 +58,8 @@ class Method : public QDialog {
   bool eventFilterReader(QObject *watch, QEvent *evn);
 
   void showDelMsgBox(QString title, QString info);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
