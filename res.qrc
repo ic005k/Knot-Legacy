@@ -91,5 +91,9 @@
         <file>res/hidekey.svg</file>
         <file>res/menu.svg</file>
         <file>res/tools.svg</file>
+        <file>res/je.svg</file>
+        <file>res/xq.svg</file>
+        <file>res/fl.svg</file>
+        <file>res/time.svg</file>
     </qresource>
 </RCC>

@@ -10,6 +10,7 @@ Rectangle {
     width: 500
     height: 400
 
+    property int iconW: 20
     property int i: 0
     property int itemCount: 0
     property bool isHighPriority: false
@@ -134,7 +135,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: getItemHeight() + 16
+            height: getItemHeight() + 4
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
@@ -168,7 +169,8 @@ Rectangle {
                 else
                     item3H = item3.contentHeight
 
-                return item0H + item1H + item2H + item3H
+                //return item0H + item1H + item2H + item3H
+                return row0.height+row1.height+row2.height+row3.height
             }
 
             RowLayout {
@@ -200,75 +202,160 @@ Rectangle {
                     anchors.leftMargin: 0
                     anchors.rightMargin: 0
 
-                    Text {
-                        id: item0
+                    RowLayout {
 
-                        width: parent.width
-                        Layout.preferredWidth: listItem.width
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
-                        wrapMode: TextArea.WordWrap
-                        font.bold: false
-                        text: text0
+                        id:row0
 
-                        leftPadding: 5
-                        rightPadding: 5
+                        Image {
+                            id: item0Img
+
+                            width: iconW
+                            height: item0.contentHeight
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/time.svg"
+
+                            visible: item0.text.length ? true : false
+                        }
+
+                        Text {
+                            id: item0
+
+                            width: parent.width
+                            Layout.preferredWidth: listItem.width
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: TextArea.WordWrap
+                            font.bold: false
+                            text: text0
+
+                            leftPadding: 5
+                            rightPadding: 5
+                        }
                     }
 
-                    Text {
-                        id: item1
-                        Layout.preferredWidth: listItem.width
+                    RowLayout {
 
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
+                        id:row1
+                        Image {
+                            id: item1Img
 
-                        width: parent.width
-                        wrapMode: TextArea.WordWrap
-                        color: isHighPriority ? "#EF5B98" : "#000000"
-                        font.bold: false
-                        text: text1
+                            width: iconW
+                            height: parent.height - 2
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
 
-                        leftPadding: 5
-                        rightPadding: 5
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/je.svg"
 
-                        visible: item1.text.length ? true : false
+                            visible: item1.text.length ? true : false
+                        }
+
+                        Text {
+                            id: item1
+                            Layout.preferredWidth: listItem.width - iconW
+
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+
+                            width: parent.width
+                            wrapMode: TextArea.WordWrap
+                            color: isHighPriority ? "#EF5B98" : "#000000"
+                            font.bold: false
+                            text: text1
+
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item1.text.length ? true : false
+                        }
                     }
 
-                    Text {
-                        id: item2
-                        anchors.rightMargin: 0
-                        Layout.preferredWidth: listItem.width
-                        Layout.alignment: Qt.AlignHCenter
+                    RowLayout {
 
-                        horizontalAlignment: Text.AlignLeft
-                        width: parent.width
-                        wrapMode: TextArea.WordWrap
-                        font.bold: false
-                        text: text2
+                        id:row2
+                        Image {
+                            id: item2Img
 
-                        leftPadding: 5
-                        rightPadding: 5
+                            width: iconW
+                            height: parent.height - 2
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
 
-                        visible: item2.text.length ? true : false
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/fl.svg"
+
+                            visible: item2.text.length ? true : false
+                        }
+
+                        Text {
+                            id: item2
+                            anchors.rightMargin: 0
+                            Layout.preferredWidth: listItem.width - iconW
+                            Layout.alignment: Qt.AlignHCenter
+
+                            horizontalAlignment: Text.AlignLeft
+                            width: parent.width
+                            wrapMode: TextArea.WordWrap
+                            font.bold: false
+                            text: text2
+
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item2.text.length ? true : false
+                        }
                     }
 
-                    Text {
-                        id: item3
-                        anchors.rightMargin: 0
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        elide: Text.ElideRight
-                        //Layout.maximumWidth: listItem.width
-                        Layout.preferredWidth: listItem.width
-                        font.bold: false
-                        text: text3
+                    RowLayout {
 
-                        leftPadding: 5
-                        rightPadding: 5
+                        id:row3
+                        Image {
+                            id: item3Img
 
-                        visible: item3.text.length ? true : false
+                            width: iconW
+                            height: parent.height - 2
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/xq.svg"
+
+                            visible: item3.text.length ? true : false
+                        }
+
+                        Text {
+                            id: item3
+                            anchors.rightMargin: 0
+                            width: parent.width
+                            wrapMode: Text.WordWrap
+                            elide: Text.ElideRight
+                            //Layout.maximumWidth: listItem.width
+                            Layout.preferredWidth: listItem.width - iconW
+                            font.bold: false
+                            text: text3
+
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item3.text.length ? true : false
+                        }
                     }
                 }
             }
