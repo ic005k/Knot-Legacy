@@ -172,7 +172,7 @@ void dlgReader::startOpenFile(QString openfile) {
 
   setPdfViewVisible(false);
 
-  if (!mw_one->ui->frameReader->isHidden()) {
+  if (!mw_one->initMain) {
     saveReader();
     if (isText || isEpub) {
       savePageVPos();
