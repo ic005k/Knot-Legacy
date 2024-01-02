@@ -210,9 +210,10 @@ void Method::startSearch() {
         txt2 = childItem->text(2);
         txt3 = childItem->text(3);
 
+        QStringList list;
         bool isYes = false;
         if (searchStr.contains("&")) {
-          QStringList list = searchStr.split("&");
+          list = searchStr.split("&");
           bool is0, is1, is2, is3;
           is0 = false;
           is1 = false;
@@ -262,6 +263,21 @@ void Method::startSearch() {
 
           if (list.count() >= 4) {
             if (is0 && is1 && is2 && is3) isYes = true;
+          }
+
+          QString s_total = txt0 + txt1 + txt2 + txt3;
+          int n_count = 0;
+          for (int x = 0; x < list.count(); x++) {
+            QString str = list.at(x);
+            if (str.length() > 0) {
+              if (s_total.contains(str)) {
+                n_count++;
+              }
+            }
+          }
+
+          if (isYes) {
+            if (n_count < list.count()) isYes = false;
           }
 
         } else {
