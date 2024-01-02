@@ -177,13 +177,10 @@ void Notes::saveMainNotes() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  if (isTextChanges) {
-    mw_one->TextEditToFile(ui->editSource, currentMDFile);
-    MD2Html(currentMDFile);
-    isTextChanges = false;
+  mw_one->TextEditToFile(ui->editSource, currentMDFile);
+  MD2Html(currentMDFile);
 
-    qDebug() << "Save Note: " << currentMDFile;
-  }
+  qDebug() << "Save Note: " << currentMDFile;
 
   QString strTag = currentMDFile;
   strTag.replace(iniDir, "");
@@ -332,6 +329,12 @@ bool Notes::eventFilter(QObject *obj, QEvent *evn) {
         on_btnDone_clicked();
       }
       return true;
+    }
+  }
+
+  if (obj == ui->editSource->viewport()) {
+    if (evn->type() == QEvent::MouseButtonPress) {
+      isNeedSave = true;
     }
   }
 
@@ -1025,12 +1028,9 @@ void Notes::closeEvent(QCloseEvent *event) {
   loadMemoQML();
 }
 
-void Notes::on_editSource_textChanged() {
-  isNeedSave = true;
-  isTextChanges = true;
-}
+void Notes::on_editSource_textChanged() {}
 
-void Notes::on_editSource_cursorPositionChanged() { isNeedSave = true; }
+void Notes::on_editSource_cursorPositionChanged() {}
 
 void Notes::on_btnReference_clicked() {
   QString str = ui->editSource->textCursor().selectedText();

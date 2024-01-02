@@ -59,6 +59,9 @@ class Method : public QDialog {
 
   void showDelMsgBox(QString title, QString info);
 
+  void saveRecycleTabName(QString keyStr, QString tabName);
+  QString getRecycleTabName(QString keyStr);
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

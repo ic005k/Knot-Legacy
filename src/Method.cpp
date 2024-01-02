@@ -776,6 +776,26 @@ bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
+void Method::saveRecycleTabName(QString keyStr, QString tabName) {
+  QSettings Reg(iniDir + "del_tabname.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue(keyStr, tabName);
+}
+
+QString Method::getRecycleTabName(QString keyStr) {
+  QSettings Reg(iniDir + "del_tabname.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  QString tabName = Reg.value(keyStr).toString();
+  if (tabName.trimmed().length() == 0) tabName = "None";
+  return tabName;
+}
+
 void Method::showDelMsgBox(QString title, QString info) {
   bool isOK;
 

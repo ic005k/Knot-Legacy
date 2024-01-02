@@ -39,7 +39,6 @@ class Notes : public QDialog {
   int px, py, mx, my;
 
   bool isNeedSave = false;
-  bool isTextChanges = false;
 
   QString htmlBuffer;
   QTextEdit *byTextEdit;

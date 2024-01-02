@@ -1917,8 +1917,8 @@ void MainWindow::on_actionDel_Tab_triggered() {
   QString twName = tw->objectName();
   QString tab_file = iniDir + twName + ".ini";
   QString date_time = m_Notes->getDateTimeStr();
-  QFile::copy(tab_file,
-              iniDir + "recycle_" + tab_name + "_" + date_time + ".ini");
+  QFile::copy(tab_file, iniDir + "recycle_name" + "_" + date_time + ".ini");
+  m_Method->saveRecycleTabName(date_time, tab_name);
 
   QFile file(tab_file);
   file.remove();
@@ -4047,15 +4047,20 @@ void MainWindow::on_actionTabRecycle() {
   QStringList fmt;
   fmt.append("ini");
   m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
+
   for (int i = 0; i < iniFiles.count(); i++) {
     QString ini_file = iniFiles.at(i);
-    if (ini_file.contains("recycle_")) {
+    if (ini_file.contains("recycle_name_")) {
       QFileInfo fi(ini_file);
       QString ini_filename = fi.fileName();
       ini_filename = ini_filename.replace(".ini", "");
       tab_name = ini_filename.split("_").at(1);
-      tab_time =
-          ini_filename.split("_").at(2) + "  " + ini_filename.split("_").at(3);
+      QString t1, t2;
+      t1 = ini_filename.split("_").at(2);
+      t2 = ini_filename.split("_").at(3);
+      tab_time = t1 + "  " + t2;
+
+      tab_name = m_Method->getRecycleTabName(t1 + "_" + t2);
 
       m_Method->addItemBakList(ui->qwTabRecycle, tab_name, tab_time, "",
                                ini_file, 0);
@@ -4560,7 +4565,6 @@ void MainWindow::on_btnEdit_clicked() {
   m_Notes->ui->editSource->setTextCursor(tmpCursor);
 
   m_Notes->isNeedSave = false;
-  m_Notes->isTextChanges = false;
 }
 
 void MainWindow::on_btnCode_clicked() {
@@ -5242,8 +5246,6 @@ void MainWindow::on_btnRestoreTab_clicked() {
   QTreeWidget *tw = init_TreeWidget(twName);
   ui->tabWidget->addTab(tw, tab_name);
 
-  ui->tabWidget->setCurrentIndex(count);
-
   readData(tw);
 
   QFile recycle_file(recycle);
@@ -5254,6 +5256,8 @@ void MainWindow::on_btnRestoreTab_clicked() {
 
   reloadMain();
   clickData();
+
+  tabData->setCurrentIndex(count);
 
   isNeedAutoBackup = true;
   strLatestModify = tr("Restore Tab") + "(" + tab_name + ")";
