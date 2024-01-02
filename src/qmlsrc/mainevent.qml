@@ -135,13 +135,13 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: getItemHeight() + 4
+            height: getItemHeight() + 10
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
             border.color: "lightgray" //"lightsteelblue"
 
-            radius: 0
+            radius: 6
 
             function getItemHeight() {
                 var item0H
@@ -170,7 +170,7 @@ Rectangle {
                     item3H = item3.contentHeight
 
                 //return item0H + item1H + item2H + item3H
-                return row0.height+row1.height+row2.height+row3.height
+                return row0.height + row1.height + row2.height + row3.height
             }
 
             RowLayout {
@@ -204,7 +204,8 @@ Rectangle {
 
                     RowLayout {
 
-                        id:row0
+                        id: row0
+
 
                         Image {
                             id: item0Img
@@ -220,14 +221,14 @@ Rectangle {
                             sourceSize.width: iconW
                             source: "/res/time.svg"
 
-                            visible: item0.text.length ? true : false
+                            visible: false
                         }
 
                         Text {
                             id: item0
 
                             width: parent.width
-                            Layout.preferredWidth: listItem.width
+                            Layout.preferredWidth: listItem.width - iconW
                             Layout.alignment: Qt.AlignHCenter
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignVCenter
@@ -240,9 +241,12 @@ Rectangle {
                         }
                     }
 
+
+
                     RowLayout {
 
-                        id:row1
+                        id: row1
+
                         Image {
                             id: item1Img
 
@@ -258,6 +262,15 @@ Rectangle {
                             source: "/res/je.svg"
 
                             visible: item1.text.length ? true : false
+                        }
+
+                        Rectangle {
+                            height: item1.contentHeight
+                            width: 6
+                            radius: 2
+                            anchors.leftMargin: 1
+                            color: "red"
+                            visible: false // item1.text.length ? true : false
                         }
 
                         Text {
@@ -281,9 +294,12 @@ Rectangle {
                         }
                     }
 
+
+
                     RowLayout {
 
-                        id:row2
+                        id: row2
+
                         Image {
                             id: item2Img
 
@@ -299,6 +315,15 @@ Rectangle {
                             source: "/res/fl.svg"
 
                             visible: item2.text.length ? true : false
+                        }
+
+                        Rectangle {
+                            height: item2.contentHeight
+                            width: 6
+                            radius: 2
+                            anchors.leftMargin: 1
+                            color: "green"
+                            visible: false // item2.text.length ? true : false
                         }
 
                         Text {
@@ -320,9 +345,12 @@ Rectangle {
                         }
                     }
 
+
+
                     RowLayout {
 
-                        id:row3
+                        id: row3
+
                         Image {
                             id: item3Img
 
@@ -340,14 +368,26 @@ Rectangle {
                             visible: item3.text.length ? true : false
                         }
 
+                        Rectangle {
+                            height: item3.height
+                            width: 6
+                            radius: 2
+                            anchors.leftMargin: 1
+                            color: "blue"
+                            visible: false // item3.text.length ? true : false
+                        }
+
                         Text {
                             id: item3
-                            anchors.rightMargin: 0
-                            width: parent.width
-                            wrapMode: Text.WordWrap
-                            elide: Text.ElideRight
-                            //Layout.maximumWidth: listItem.width
                             Layout.preferredWidth: listItem.width - iconW
+
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+
+                            width: parent.width
+                            wrapMode: TextArea.WordWrap
+                            color: isHighPriority ? "#EF5B98" : "#000000"
                             font.bold: false
                             text: text3
 
