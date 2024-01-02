@@ -253,12 +253,15 @@ void Method::startSearch() {
             if (is2 && is3) isYes = true;
           }
 
-          if (list.count() >= 3) {
-            if (is0 && is1 && is2 && is3) isYes = true;
+          if (list.count() == 3) {
             if (is0 && is1 && is2) isYes = true;
             if (is0 && is1 && is3) isYes = true;
             if (is0 && is2 && is3) isYes = true;
             if (is1 && is2 && is3) isYes = true;
+          }
+
+          if (list.count() >= 4) {
+            if (is0 && is1 && is2 && is3) isYes = true;
           }
 
         } else {
