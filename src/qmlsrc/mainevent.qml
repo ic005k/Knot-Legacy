@@ -10,7 +10,8 @@ Rectangle {
     width: 500
     height: 400
 
-    property int iconW: 22
+    property int iconW: 20
+    property int rowSpace: 3
     property int i: 0
     property int itemCount: 0
     property bool isHighPriority: false
@@ -149,30 +150,27 @@ Rectangle {
                 var item2H
                 var item3H
 
-
-
                 if (item0.text.length == 0)
                     item0H = 0
                 else
-                    item0H = item0.contentHeight + 1
+                    item0H = item0.contentHeight + 2
 
                 if (item1.text.length == 0)
                     item1H = 0
                 else
-                    item1H = item1.contentHeight + 3
+                    item1H = item1.contentHeight + 10
 
                 if (item2.text.length == 0)
                     item2H = 0
                 else
-                    item2H = item2.contentHeight + 3
+                    item2H = item2.contentHeight + 15
 
                 if (item3.text.length == 0)
                     item3H = 0
                 else
-                    item3H = item3.contentHeight + 3
+                    item3H = item3.contentHeight + 30
 
                 return item0H + item1H + item2H + item3H
-
             }
 
             RowLayout {
@@ -208,7 +206,6 @@ Rectangle {
 
                         id: row0
 
-
                         Image {
                             id: item0Img
 
@@ -243,11 +240,11 @@ Rectangle {
                         }
                     }
 
-
-
                     RowLayout {
 
                         id: row1
+                        Layout.margins: rowSpace
+                        visible: item1.text.length ? true : false
 
                         Image {
                             id: item1Img
@@ -261,6 +258,7 @@ Rectangle {
                             smooth: true
                             sourceSize.height: iconW
                             sourceSize.width: iconW
+
                             source: "/res/je.svg"
 
                             visible: item1.text.length ? true : false
@@ -277,14 +275,14 @@ Rectangle {
 
                         Text {
                             id: item1
-                            Layout.preferredWidth: listItem.width - iconW
+                            Layout.preferredWidth: listItem.width - iconW - rowSpace
 
                             Layout.alignment: Qt.AlignHCenter
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignVCenter
 
                             width: parent.width
-                            wrapMode: TextArea.WordWrap
+                            wrapMode: TextArea.WrapAnywhere
                             color: "#13227a"
                             font.bold: false
                             text: text1
@@ -296,11 +294,11 @@ Rectangle {
                         }
                     }
 
-
-
                     RowLayout {
 
                         id: row2
+                        Layout.margins: rowSpace
+                        visible: item2.text.length ? true : false
 
                         Image {
                             id: item2Img
@@ -331,7 +329,7 @@ Rectangle {
                         Text {
                             id: item2
                             anchors.rightMargin: 0
-                            Layout.preferredWidth: listItem.width - iconW
+                            Layout.preferredWidth: listItem.width - iconW - rowSpace
                             Layout.alignment: Qt.AlignHCenter
 
                             horizontalAlignment: Text.AlignLeft
@@ -348,11 +346,11 @@ Rectangle {
                         }
                     }
 
-
-
                     RowLayout {
 
                         id: row3
+                        Layout.margins: rowSpace
+                        visible: item3.text.length ? true : false
 
                         Image {
                             id: item3Img
@@ -382,7 +380,7 @@ Rectangle {
 
                         Text {
                             id: item3
-                            Layout.preferredWidth: listItem.width - iconW
+                            Layout.preferredWidth: listItem.width - iconW - rowSpace
 
                             Layout.alignment: Qt.AlignHCenter
                             horizontalAlignment: Text.AlignLeft

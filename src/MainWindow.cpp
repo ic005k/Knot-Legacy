@@ -804,6 +804,7 @@ void MainWindow::init_ChartWidget() {
   QPalette pal = this->palette();
   QBrush brush = pal.window();
   red = brush.color().red();
+
   if (red < 55) {
     chartMonth->setTheme(QChart::ChartThemeDark);
     chartDay->setTheme(QChart::ChartThemeDark);
