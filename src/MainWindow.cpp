@@ -427,15 +427,17 @@ MainWindow::MainWindow(QWidget *parent)
 
   initHardStepSensor();
 
-  reloadMain();
-  clickData();
   resetWinPos();
   initMain = false;
+
   addFilesWatch();
   m_Reader->setPdfViewVisible(false);
 
   m_Todo->refreshTableListsFromIni();
   m_Todo->refreshAlarm();
+
+  reloadMain();
+  clickData();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -5036,7 +5038,8 @@ void MainWindow::reloadMain() {
     }
 
     if (text2.length() > 0) {
-      text2 = tr("Amount") + " : " + text2;
+      // text2 = tr("Amount") + " : " + text2;
+      text2 = "$ : " + text2;
       nullrows++;
     }
 

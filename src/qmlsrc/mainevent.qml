@@ -235,7 +235,7 @@ Rectangle {
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignVCenter
                             wrapMode: TextArea.WordWrap
-                            font.bold: false
+                            font.bold: true
                             text: text0
 
                             leftPadding: 5
@@ -337,6 +337,7 @@ Rectangle {
                             horizontalAlignment: Text.AlignLeft
                             width: parent.width
                             wrapMode: TextArea.WordWrap
+                            color: "#020202"
                             font.bold: false
                             text: text2
 
