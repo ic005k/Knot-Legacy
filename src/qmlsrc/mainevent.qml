@@ -136,7 +136,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: getItemHeight()
+            height: getItemHeight() + 25
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
@@ -153,22 +153,22 @@ Rectangle {
                 if (item0.text.length == 0)
                     item0H = 0
                 else
-                    item0H = item0.contentHeight + 2
+                    item0H = item0.contentHeight
 
                 if (item1.text.length == 0)
                     item1H = 0
                 else
-                    item1H = item1.contentHeight + 10
+                    item1H = item1.contentHeight
 
                 if (item2.text.length == 0)
                     item2H = 0
                 else
-                    item2H = item2.contentHeight + 15
+                    item2H = item2.contentHeight
 
                 if (item3.text.length == 0)
                     item3H = 0
                 else
-                    item3H = item3.contentHeight + 30
+                    item3H = item3.contentHeight
 
                 return item0H + item1H + item2H + item3H
             }
