@@ -10,6 +10,7 @@ Rectangle {
     width: 500
     height: 400
 
+    property int iconW: 22
     property int i: 0
     property int itemCount: 0
     property bool isHighPriority: false
@@ -134,7 +135,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: getItemHeight() + 16
+            height: getItemHeight()
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
@@ -151,22 +152,22 @@ Rectangle {
                 if (item0.text.length == 0)
                     item0H = 0
                 else
-                    item0H = item0.contentHeight
+                    item0H = item0.contentHeight + 2
 
                 if (item1.text.length == 0)
                     item1H = 0
                 else
-                    item1H = item1.contentHeight
+                    item1H = item1.contentHeight + 2
 
                 if (item2.text.length == 0)
                     item2H = 0
                 else
-                    item2H = item2.contentHeight
+                    item2H = item2.contentHeight + 2
 
                 if (item3.text.length == 0)
                     item3H = 0
                 else
-                    item3H = item3.contentHeight
+                    item3H = item3.contentHeight + 2
 
                 return item0H + item1H + item2H + item3H
             }
@@ -216,42 +217,86 @@ Rectangle {
                         rightPadding: 5
                     }
 
-                    Text {
-                        id: item1
-                        Layout.preferredWidth: listItem.width
+                    RowLayout {
 
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
+                        id: row1
 
-                        width: parent.width
-                        wrapMode: TextArea.WordWrap
-                        color: isHighPriority ? "#EF5B98" : "#000000"
-                        font.bold: false
-                        text: text1
+                        Image {
+                            id: item1Img
 
-                        leftPadding: 5
-                        rightPadding: 5
+                            width: iconW
+                            height: parent.height - 2
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
 
-                        visible: item1.text.length ? true : false
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/sum.svg"
+
+                            visible: item1.text.length ? true : false
+                        }
+
+                        Text {
+                            id: item1
+                            Layout.preferredWidth: listItem.width
+
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+
+                            width: parent.width
+                            wrapMode: TextArea.WordWrap
+                            color: isHighPriority ? "#EF5B98" : "#000000"
+                            font.bold: false
+                            text: text1
+
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item1.text.length ? true : false
+                        }
                     }
 
-                    Text {
-                        id: item2
-                        anchors.rightMargin: 0
-                        Layout.preferredWidth: listItem.width
-                        Layout.alignment: Qt.AlignHCenter
+                    RowLayout {
 
-                        horizontalAlignment: Text.AlignLeft
-                        width: parent.width
-                        wrapMode: TextArea.WordWrap
-                        font.bold: false
-                        text: text2
+                        id: row2
 
-                        leftPadding: 5
-                        rightPadding: 5
+                        Image {
+                            id: item2Img
 
-                        visible: item2.text.length ? true : false
+                            width: iconW
+                            height: parent.height - 2
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/je.svg"
+
+                            visible: item2.text.length ? true : false
+                        }
+
+                        Text {
+                            id: item2
+                            anchors.rightMargin: 0
+                            Layout.preferredWidth: listItem.width
+                            Layout.alignment: Qt.AlignHCenter
+
+                            horizontalAlignment: Text.AlignLeft
+                            width: parent.width
+                            wrapMode: TextArea.WordWrap
+                            font.bold: false
+                            text: text2
+
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item2.text.length ? true : false
+                        }
                     }
 
                     Text {

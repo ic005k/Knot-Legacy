@@ -95,5 +95,6 @@
         <file>res/xq.svg</file>
         <file>res/fl.svg</file>
         <file>res/time.svg</file>
+        <file>res/sum.svg</file>
     </qresource>
 </RCC>

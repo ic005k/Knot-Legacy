@@ -5033,13 +5033,12 @@ void MainWindow::reloadMain() {
 
     nullrows = 1;
     if (text1.length() > 0) {
-      text1 = tr("Freq") + " : " + text1;
+      // text1 = tr("Freq") + " : " + text1;
       nullrows++;
     }
 
     if (text2.length() > 0) {
       // text2 = tr("Amount") + " : " + text2;
-      text2 = "$ : " + text2;
       nullrows++;
     }
 
