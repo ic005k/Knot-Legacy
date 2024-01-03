@@ -201,20 +201,42 @@ Rectangle {
                     anchors.leftMargin: 0
                     anchors.rightMargin: 0
 
-                    Text {
-                        id: item0
+                    RowLayout {
 
-                        width: parent.width
-                        Layout.preferredWidth: listItem.width
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
-                        wrapMode: TextArea.WordWrap
-                        font.bold: true
-                        text: text0
+                        id: row0
 
-                        leftPadding: 5
-                        rightPadding: 5
+                        Image {
+                            id: item0Img
+
+                            width: iconW
+                            height: item0.contentHeight
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/time.svg"
+
+                            visible: false
+                        }
+
+                        Text {
+                            id: item0
+
+                            width: parent.width
+                            Layout.preferredWidth: listItem.width - 0
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: TextArea.WordWrap
+                            font.bold: true
+                            text: text0
+
+                            leftPadding: 5
+                            rightPadding: 5
+                        }
                     }
 
                     RowLayout {
@@ -240,7 +262,7 @@ Rectangle {
 
                         Text {
                             id: item1
-                            Layout.preferredWidth: listItem.width
+                            Layout.preferredWidth: listItem.width - iconW
 
                             Layout.alignment: Qt.AlignHCenter
                             horizontalAlignment: Text.AlignLeft
@@ -283,7 +305,7 @@ Rectangle {
                         Text {
                             id: item2
                             anchors.rightMargin: 0
-                            Layout.preferredWidth: listItem.width
+                            Layout.preferredWidth: listItem.width - iconW
                             Layout.alignment: Qt.AlignHCenter
 
                             horizontalAlignment: Text.AlignLeft
