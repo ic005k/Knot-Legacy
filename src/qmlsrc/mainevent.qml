@@ -10,7 +10,7 @@ Rectangle {
     width: 500
     height: 400
 
-    property int iconW: 20
+    property int iconW: 22
     property int i: 0
     property int itemCount: 0
     property bool isHighPriority: false
@@ -135,7 +135,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: getItemHeight() + 10
+            height: getItemHeight()
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
@@ -149,28 +149,30 @@ Rectangle {
                 var item2H
                 var item3H
 
+
+
                 if (item0.text.length == 0)
                     item0H = 0
                 else
-                    item0H = item0.contentHeight
+                    item0H = item0.contentHeight + 1
 
                 if (item1.text.length == 0)
                     item1H = 0
                 else
-                    item1H = item1.contentHeight
+                    item1H = item1.contentHeight + 3
 
                 if (item2.text.length == 0)
                     item2H = 0
                 else
-                    item2H = item2.contentHeight
+                    item2H = item2.contentHeight + 3
 
                 if (item3.text.length == 0)
                     item3H = 0
                 else
-                    item3H = item3.contentHeight
+                    item3H = item3.contentHeight + 3
 
-                //return item0H + item1H + item2H + item3H
-                return row0.height + row1.height + row2.height + row3.height
+                return item0H + item1H + item2H + item3H
+
             }
 
             RowLayout {
@@ -283,7 +285,7 @@ Rectangle {
 
                             width: parent.width
                             wrapMode: TextArea.WordWrap
-                            color: isHighPriority ? "#EF5B98" : "#000000"
+                            color: "#13227a"
                             font.bold: false
                             text: text1
 
@@ -387,7 +389,7 @@ Rectangle {
 
                             width: parent.width
                             wrapMode: TextArea.WordWrap
-                            color: isHighPriority ? "#EF5B98" : "#000000"
+                            color: "#515151"
                             font.bold: false
                             text: text3
 

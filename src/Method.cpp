@@ -424,17 +424,17 @@ void Method::clickMainDate() {
     nullrows = 1;
 
     if (text1.length() > 0) {
-      text1 = tr("Amount") + " : " + text1;
+      // text1 = tr("Amount") + " : " + text1;
       nullrows++;
     }
 
     if (text2.length() > 0) {
-      text2 = tr("Category") + " : " + text2;
+      // text2 = tr("Category") + " : " + text2;
       nullrows++;
     }
 
     if (text3.length() > 0) {
-      text3 = tr("Details") + " : " + text3;
+      // text3 = tr("Details") + " : " + text3;
       nullrows++;
     }
 

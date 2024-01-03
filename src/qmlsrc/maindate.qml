@@ -140,7 +140,7 @@ Rectangle {
             border.width: 1
             border.color: "lightgray" //"lightsteelblue"
 
-            radius: 0
+            radius: 6
 
             function getItemHeight() {
                 var item0H
