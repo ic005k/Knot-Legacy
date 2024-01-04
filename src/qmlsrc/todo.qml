@@ -198,6 +198,8 @@ Rectangle {
 
                             id: row1
 
+
+
                             function showImg() {
 
                                 var str1 = text1.text.substring(0, 5)
@@ -206,6 +208,12 @@ Rectangle {
                                     return true
                                 else
                                     return false
+                            }
+
+                            Rectangle{
+                                height: parent.height
+                                width: 5
+                                visible: text1Img.visible
                             }
 
                             Image {
