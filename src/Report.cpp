@@ -65,6 +65,20 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   mw_one->ui->lblDetails->adjustSize();
 
   mw_one->set_btnStyle(this);
+
+  lblTotal->adjustSize();
+  lblTotal->setWordWrap(true);
+  lblDetails->adjustSize();
+  lblDetails->setWordWrap(true);
+
+  mw_one->ui->lblViewCate1->adjustSize();
+  mw_one->ui->lblViewCate1->setWordWrap(true);
+
+  mw_one->ui->lblViewCate2->adjustSize();
+  mw_one->ui->lblViewCate2->setWordWrap(true);
+
+  mw_one->ui->lblViewCate3->adjustSize();
+  mw_one->ui->lblViewCate3->setWordWrap(true);
 }
 
 void dlgReport::init() {

@@ -190,7 +190,7 @@ Rectangle {
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
-                        wrapMode: TextArea.NoWrap
+                        wrapMode: TextArea.WordWrap
                         font.bold: true
                         text: text0
 
@@ -207,7 +207,7 @@ Rectangle {
                         verticalAlignment: Text.AlignVCenter
 
                         width: parent.width
-                        wrapMode: TextArea.WordWrap
+                        wrapMode: TextArea.WrapAnywhere
                         color: isHighPriority ? "#EF5B98" : "#000000"
                         font.bold: false
                         text: text1
@@ -226,7 +226,7 @@ Rectangle {
 
                         horizontalAlignment: Text.AlignLeft
                         width: parent.width
-                        wrapMode: TextArea.WordWrap
+                        wrapMode: TextArea.WrapAnywhere
                         font.bold: false
                         text: text2
 
