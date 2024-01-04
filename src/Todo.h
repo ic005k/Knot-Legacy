@@ -115,7 +115,8 @@ class dlgTodo : public QDialog {
 
   void refreshTableListsFromIni();
 
- private:
+  QString getTimeStr(QString str);
+  private:
   QListWidgetItem *editItem;
 
   QString todotxt;

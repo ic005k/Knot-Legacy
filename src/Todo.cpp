@@ -335,19 +335,9 @@ void dlgTodo::on_btnSetTime_clicked() {
   mw_one->m_TodoAlarm->ui->chk7->setChecked(false);
   mw_one->m_TodoAlarm->ui->chkDaily->setChecked(false);
 
-  bool isTime = false;
+  str = getTimeStr(str);
 
-  if (str.contains("定时提醒")) {
-    str = str.replace("定时提醒", "").trimmed();
-    isTime = true;
-  }
-
-  if (str.contains("Alarm")) {
-    str = str.replace("Alarm", "").trimmed();
-    isTime = true;
-  }
-
-  if (isTime) {
+  if (str != "") {
     QStringList list = str.split(" ");
     if (str.contains("-")) {
       date = QDate::fromString(list.at(0), "yyyy-M-d");
@@ -435,8 +425,10 @@ void dlgTodo::on_btnCancel_clicked() {
   if (row < 0) return;
 
   QString str = getItemTime(row);
-  if (str.contains(tr("Alarm"))) str = str.replace(tr("Alarm"), "");
-  modifyTime(row, str);
+  QString str1 = str;
+  str = getTimeStr(str);
+  if (str != "") str1 = str;
+  modifyTime(row, str1);
   ui->frameSetTime->hide();
   mw_one->m_TodoAlarm->close();
 
@@ -577,6 +569,23 @@ void dlgTodo::refreshTableListsFromIni() {
   }
 }
 
+QString dlgTodo::getTimeStr(QString str) {
+  bool isTime = false;
+  if (str.contains("定时提醒")) {
+    str = str.replace("定时提醒", "").trimmed();
+    isTime = true;
+  }
+
+  if (str.contains("Alarm")) {
+    str = str.replace("Alarm", "").trimmed();
+    isTime = true;
+  }
+
+  if (isTime) return str;
+
+  return "";
+}
+
 void dlgTodo::refreshAlarm() {
   stopTimerAlarm();
   int count = 0;
@@ -598,9 +607,11 @@ void dlgTodo::refreshAlarm() {
     for (int i = 0; i < count_items; i++) {
       str = getItemTime(i);
 
-      if (str.contains(tr("Alarm"))) {
+      str = getTimeStr(str);
+
+      if (str != "") {
         modifyType(i, 3);
-        str = str.replace(tr("Alarm"), "").trimmed();
+
         qlonglong totals = getSecond(str);
 
         if (totals > 0) {
@@ -665,8 +676,9 @@ void dlgTodo::refreshAlarm() {
       QStringList list = strList.split("|=|");
       QString strTime = list.at(0);
 
-      if (strTime.contains(tr("Alarm"))) {
-        strTime = strTime.replace(tr("Alarm"), "").trimmed();
+      strTime = getTimeStr(strTime);
+
+      if (strTime != "") {
         qlonglong totals = getSecond(strTime);
 
         if (totals > 0) {
@@ -926,7 +938,9 @@ void dlgTodo::clearAllRecycle() {
 void dlgTodo::isAlarm(int index) {
   bool a = false;
   QString strTime = getItemTime(index);
-  if (strTime.contains(tr("Alarm"))) a = true;
+
+  strTime = getTimeStr(strTime);
+  if (strTime != "") a = true;
   qDebug() << "aabb" << a;
   setHighPriority(a);
 }
