@@ -265,7 +265,7 @@ Rectangle {
 
                         Text {
                             id: item1
-                            Layout.preferredWidth: listItem.width - iconW - rowSpace
+                            Layout.preferredWidth: listItem.width - iconW - rowSpace - 3
 
                             Layout.alignment: Qt.AlignHCenter
                             horizontalAlignment: Text.AlignLeft
@@ -310,7 +310,7 @@ Rectangle {
                         Text {
                             id: item2
                             anchors.rightMargin: 0
-                            Layout.preferredWidth: listItem.width - iconW - rowSpace
+                            Layout.preferredWidth: listItem.width - iconW - rowSpace - 3
                             Layout.alignment: Qt.AlignHCenter
 
                             horizontalAlignment: Text.AlignLeft
