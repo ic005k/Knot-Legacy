@@ -207,17 +207,6 @@ void dlgReport::updateTable() {
     freq = freq + text1.toInt();
     if (text2.length() > 0) t_amount = t_amount + text2.toDouble();
 
-    bool isDetails = false;
-    for (int j = 0; j < topItem->childCount(); j++) {
-      QTreeWidgetItem* child = topItem->child(j);
-      if (child->text(0).contains(tr("Details"))) {
-        isDetails = true;
-        break;
-      }
-    }
-
-    if (isDetails) text0 = "*" + text0;
-
     appendSteps(text0, text1, text2);
   }
 

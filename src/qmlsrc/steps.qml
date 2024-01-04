@@ -16,8 +16,8 @@ Rectangle {
 
     function setScrollBarPos(pos) {
         //vbar.setPosition(pos)
-        if(tableView.contentHeight>tableView.height)
-        tableView.contentY = tableView.contentHeight - tableView.height
+        if (tableView.contentHeight > tableView.height)
+            tableView.contentY = tableView.contentHeight - tableView.height
         console.log("contentH=" + tableView.contentHeight + "  h=" + tableView.height)
     }
 
@@ -97,11 +97,12 @@ Rectangle {
             anchors.rightMargin: 0
             policy: ScrollBar.AsNeeded
             width: 8
-            visible: tableView.contentHeight>tableView.height //tableModel.rowCount > 15
+            visible: tableView.contentHeight > tableView.height //tableModel.rowCount > 15
             background: Rectangle {
                 color: "#666666"
             }
             // Always show
+
             /*onActiveChanged: {
                 active = true;
             }
@@ -130,11 +131,12 @@ Rectangle {
         delegate: Rectangle {
             color: "#666666"
             implicitWidth: header.width / 3
-            implicitHeight: 32
+            implicitHeight: mytext.contentHeight + 6
             border.width: 1
             border.color: "#848484"
 
             Text {
+                id: mytext
                 text: display
                 anchors.centerIn: parent
                 //font.pointSize: 12

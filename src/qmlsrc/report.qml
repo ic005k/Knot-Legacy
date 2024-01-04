@@ -86,6 +86,7 @@ Rectangle {
             }
         }
     }
+
     TableView {
         property int hoverIndex: -1
         property int currentIndex: -1
@@ -131,15 +132,21 @@ Rectangle {
             }
 
             implicitWidth: tableView.width / 3
-            implicitHeight: 32
+            implicitHeight: mytext.contentHeight + 6
             border.width: 1
             border.color: "#848484"
 
             Text {
+                id: mytext
+                width: tableView.width / 3 - 15
                 text: display
                 anchors.centerIn: parent
 
                 color: "white"
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: TextArea.WrapAnywhere
             }
 
             MouseArea {
