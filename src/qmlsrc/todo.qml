@@ -10,6 +10,7 @@ Rectangle {
     width: 400
     height: 500
 
+    property int iconW: 12
     property int itemCount: 0
     property bool isHighPriority: false
 
@@ -120,21 +121,50 @@ Rectangle {
             id: flack
             property int myw: m_width - 8
             width: myw
-            height: itemheight
+            height: rectan.getItemHeight()
             contentWidth: myw + donebtn.width + 5
-            contentHeight: itemheight
+            contentHeight: rectan.getItemHeight()
             boundsBehavior: Flickable.StopAtBounds //该属性设置过后，边界不会被拉出
 
             Rectangle {
                 id: rectan
                 anchors.fill: parent
                 width: parent.width
-                height: itemheight
+                height: getItemHeight()
                 border.width: 1
                 border.color: "lightgray"
                 radius: 0
                 //color: ListView.isCurrentItem ? "#DCDCDC" : "#ffffff" //选中颜色设置
                 color: view.currentIndex === index ? "#DCDCDC" : "#ffffff"
+
+                function getItemHeight() {
+                    var item0H
+                    var item1H
+                    var item2H
+                    var item3H
+
+                    if (text1.visible == false)
+                        item0H = 0
+                    else
+                        item0H = text1.contentHeight
+
+                    if (text2.visible == false)
+                        item1H = 0
+                    else
+                        item1H = text2.contentHeight
+
+                    if (text3.visible == false)
+                        item2H = 0
+                    else
+                        item2H = text3.contentHeight
+
+                    if (text4.visible == false)
+                        item3H = 0
+                    else
+                        item3H = text4.contentHeight
+
+                    return item0H + item1H + item2H + item3H + text2.height + 5
+                }
 
                 RowLayout {
                     id: idlistElemnet
@@ -145,11 +175,11 @@ Rectangle {
 
                     Rectangle {
                         id: flagColor
-                        height: itemheight - 6
+                        height: rectan.getItemHeight() - 6
                         width: 6
                         radius: 2
                         anchors.leftMargin: 1
-                        color: getListEleHeadColor(type)
+                        color: getColor(type)
                         Text {
                             anchors.centerIn: parent
                         }
@@ -164,23 +194,60 @@ Rectangle {
                         anchors.leftMargin: 0
                         anchors.rightMargin: 0
 
-                        TextArea {
-                            id: text1
-                            color: "gray"
-                            font.pointSize: FontSize - 2
-                            font.bold: true
-                            width: parent.width
-                            wrapMode: Text.Wrap
-                            readOnly: true
-                            text: time
+                        RowLayout {
+
+                            id: row1
+
+                            function showImg() {
+
+                                var str1 = text1.text.substring(0, 5)
+                                var str2 = text1.text.substring(0, 4)
+                                if (str1 === "Alarm" || str2 === "定时提醒")
+                                    return true
+                                else
+                                    return false
+                            }
+
+                            Image {
+                                id: text1Img
+
+                                width: itemheight - 4
+                                height: text1.contentHeight
+                                fillMode: Image.NoOption
+                                horizontalAlignment: Image.AlignHCenter
+                                verticalAlignment: Image.AlignVCenter
+
+                                smooth: true
+                                sourceSize.height: itemheight - 4
+                                sourceSize.width: itemheight - 4
+                                source: "/res/time.svg"
+
+                                visible: row1.showImg()
+                            }
+                            TextArea {
+                                id: text1
+                                color: "gray"
+                                font.pointSize: FontSize - 2
+                                font.bold: true
+                                width: parent.width
+                                wrapMode: Text.Wrap
+                                readOnly: true
+                                text: time
+
+                                visible: true
+                            }
                         }
+
                         Text {
                             id: text2
-                            visible: false
+
                             width: parent.width
                             wrapMode: Text.Wrap
                             text: type
+
+                            visible: false
                         }
+
                         TextArea {
                             id: text3
                             font.pointSize: FontSize
@@ -190,13 +257,18 @@ Rectangle {
                             wrapMode: Text.Wrap
                             color: isHighPriority ? "#EF5B98" : "#000000"
                             text: dototext
+
+                            visible: true
                         }
+
                         Text {
                             id: text4
-                            visible: false
+
                             width: parent.width
                             wrapMode: Text.Wrap
                             text: itemheight
+
+                            visible: false
                         }
                     }
                 }
@@ -244,7 +316,7 @@ Rectangle {
         }
     }
 
-    function getListEleHeadColor(ntype) {
+    function getColor(ntype) {
         switch (ntype) {
         case 0:
             return "lightgray"

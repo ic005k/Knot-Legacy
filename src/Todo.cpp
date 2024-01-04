@@ -10,7 +10,7 @@ QString orgLblStyle;
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
-extern bool loading, isBreak;
+extern bool loading, isBreak, zh_cn;
 extern int fontSize;
 
 dlgTodo::dlgTodo(QWidget* parent) : QDialog(parent), ui(new Ui::dlgTodo) {
@@ -335,8 +335,19 @@ void dlgTodo::on_btnSetTime_clicked() {
   mw_one->m_TodoAlarm->ui->chk7->setChecked(false);
   mw_one->m_TodoAlarm->ui->chkDaily->setChecked(false);
 
-  if (str.contains(tr("Alarm"))) {
-    str = str.replace(tr("Alarm"), "").trimmed();
+  bool isTime = false;
+
+  if (str.contains("定时提醒")) {
+    str = str.replace("定时提醒", "").trimmed();
+    isTime = true;
+  }
+
+  if (str.contains("Alarm")) {
+    str = str.replace("Alarm", "").trimmed();
+    isTime = true;
+  }
+
+  if (isTime) {
     QStringList list = str.split(" ");
     if (str.contains("-")) {
       date = QDate::fromString(list.at(0), "yyyy-M-d");
@@ -849,9 +860,12 @@ void dlgTodo::setHighPriority(bool isBool) {
 
 int dlgTodo::setItemHeight(QString strTodoText) {
   QFont font = this->font();
-  font.setPointSize(fontSize);
+  font.setPointSize(fontSize - 2);
+
   QFontMetrics fm(font);
   int fontHeight = fm.height();
+
+  return fontHeight;
 
   QTextEdit* edit = new QTextEdit;
   edit->append(strTodoText);

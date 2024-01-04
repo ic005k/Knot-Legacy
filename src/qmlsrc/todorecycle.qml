@@ -104,13 +104,43 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: itemheight
+            height: getItemHeight()
             color: ListView.isCurrentItem ? "#DCDCDC" : "#ffffff" //选中颜色设置
 
             border.width: 1
             border.color: "lightgray"
 
             radius: 0
+
+            function getItemHeight() {
+                var item0H
+                var item1H
+                var item2H
+                var item3H
+
+                if (text1.visible == false)
+                    item0H = 0
+                else
+                    item0H = text1.contentHeight
+
+                if (text2.visible == false)
+                    item1H = 0
+                else
+                    item1H = text2.contentHeight
+
+                if (text3.visible == false)
+                    item2H = 0
+                else
+                    item2H = text3.contentHeight
+
+                if (text4.visible == false)
+                    item3H = 0
+                else
+                    item3H = text4.contentHeight
+
+                return item0H + item1H + item2H + item3H + text2.height + 5
+            }
+
 
             RowLayout {
 
@@ -121,7 +151,7 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Rectangle {
-                    height: itemheight - 6
+                    height: listItem.getItemHeight() - 6
                     width: 6
                     radius: 2
                     anchors.leftMargin: 1
@@ -151,6 +181,7 @@ Rectangle {
                         readOnly: true
                         text: time
                     }
+
                     Text {
                         id: text2
                         visible: false
@@ -158,6 +189,7 @@ Rectangle {
                         wrapMode: Text.Wrap
                         text: type
                     }
+
                     TextArea {
                         id: text3
                         font.pointSize: FontSize
@@ -240,19 +272,7 @@ Rectangle {
                 }
 
 
-                /*Image {
-                    id: delBtn00
-                    anchors.centerIn: parent
 
-                    width: 0
-                    height: 40
-                    fillMode: Image.scale
-                    horizontalAlignment: Image.AlignLeft
-                    verticalAlignment: Image.AlignTop
-
-                    smooth: true
-                    source: "/tab.png"
-                }*/
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
