@@ -219,15 +219,15 @@ Rectangle {
                             Image {
                                 id: text1Img
 
-                                width: itemheight - 4
+                                width: itemheight - 2
                                 height: text1.contentHeight
                                 fillMode: Image.NoOption
                                 horizontalAlignment: Image.AlignHCenter
                                 verticalAlignment: Image.AlignVCenter
 
                                 smooth: true
-                                sourceSize.height: itemheight - 4
-                                sourceSize.width: itemheight - 4
+                                sourceSize.height: itemheight - 2
+                                sourceSize.width: itemheight - 2
                                 source: "/res/time.svg"
 
                                 visible: row1.showImg()
