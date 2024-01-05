@@ -884,3 +884,13 @@ void Method::showDelMsgBox(QString title, QString info) {
 
   dlg->exec();
 }
+
+QFont Method::getNewFont() {
+  QFont font0 = this->font();
+  if (fontSize > 16)
+    font0.setPointSize(16);
+  else
+    font0.setPointSize(fontSize);
+
+  return font0;
+}

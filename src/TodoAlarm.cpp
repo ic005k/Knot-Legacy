@@ -10,11 +10,7 @@ extern int fontSize;
 TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->setupUi(this);
 
-  font0 = this->font();
-  if (fontSize > 16)
-    font0.setPointSize(16);
-  else
-    font0.setPointSize(fontSize);
+  font0 = mw_one->m_Method->getNewFont();
 
   this->setFont(font0);
   ui->btnBack->setFont(font0);
@@ -150,9 +146,6 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
 
   qDeleteAll(ui->frameSel->findChildren<QObject*>());
 
-  QFont font = mw_one->font();
-  int fontSize = font.pointSize();
-
   int row = 0;
   int count = 0;
 
@@ -195,8 +188,7 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
 
       if (flag == tr("Day")) {
         if (fontSize > 16) {
-          font.setPointSize(16);
-          btn->setFont(font);
+          btn->setFont(font0);
         }
       }
 
@@ -237,8 +229,7 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
 
     if (flag == tr("Day")) {
       if (fontSize > 16) {
-        font.setPointSize(16);
-        btn->setFont(font);
+        btn->setFont(font0);
       }
     }
 

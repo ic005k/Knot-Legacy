@@ -38,7 +38,7 @@ class dlgReport : public QDialog {
   void clearAll();
   void delItem(int index);
   int getCount();
-  void appendSteps(QString date, QString steps, QString km);
+  void appendTable(QString date, QString steps, QString km);
   void appendSteps_xx(QString date, QString steps, QString km);
   int getCount_xx();
   void delItem_xx(int index);

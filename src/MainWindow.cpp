@@ -3641,7 +3641,7 @@ void MainWindow::init_UIWidget() {
   myfile = new File();
   m_Remarks = new dlgRemarks(this);
   m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
-
+  m_Method = new Method(this);
   myEditRecord = new EditRecord(this);
   m_Todo = new Todo(this);
   m_Todo->setStyleSheet(vsbarStyleSmall);
@@ -3664,7 +3664,6 @@ void MainWindow::init_UIWidget() {
   m_SyncInfo = new SyncInfo(this);
   dlgTimeMachine = new QFrame();
   dlgTimeMachine->close();
-  m_Method = new Method(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));

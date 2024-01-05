@@ -10,6 +10,16 @@ TextSelector::TextSelector(QWidget *parent)
     : QDialog(parent), ui(new Ui::TextSelector) {
   ui->setupUi(this);
 
+  QFont font0 = mw_one->m_Method->getNewFont();
+
+  QObjectList btnList =
+      mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frame));
+  for (int i = 0; i < btnList.count(); i++) {
+    QToolButton *btn = (QToolButton *)btnList.at(i);
+
+    btn->setFont(font0);
+  }
+
   mw_one->set_btnStyle(this);
 
   ui->lineEdit->setReadOnly(true);

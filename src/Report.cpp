@@ -207,7 +207,7 @@ void dlgReport::updateTable() {
     freq = freq + text1.toInt();
     if (text2.length() > 0) t_amount = t_amount + text2.toDouble();
 
-    appendSteps(text0, text1, text2);
+    appendTable(text0, text1, text2);
   }
 
   mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") +
@@ -617,7 +617,7 @@ void dlgReport::on_btnOut2Img_clicked() {
   }
 }
 
-void dlgReport::appendSteps(QString date, QString steps, QString km) {
+void dlgReport::appendTable(QString date, QString steps, QString km) {
   QQuickItem* root = mw_one->ui->qwReport->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
                             Q_ARG(QVariant, date), Q_ARG(QVariant, steps),

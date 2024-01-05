@@ -14,20 +14,21 @@ extern QRegularExpression regxNumber;
 Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
 
-  QFont font0 = this->font();
-  if (fontSize > 16)
-    font0.setPointSize(16);
-  else
-    font0.setPointSize(fontSize);
+  QFont font0 = mw_one->m_Method->getNewFont();
+
+  QObjectList btnList =
+      mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_ToolBar));
+  for (int i = 0; i < btnList.count(); i++) {
+    QToolButton *btn = (QToolButton *)btnList.at(i);
+
+    btn->setFont(font0);
+  }
 
   ui->editFind->setFont(font0);
   ui->editCol->setFont(font0);
   ui->editRow->setFont(font0);
   ui->lblCol->setFont(font0);
   ui->lblRow->setFont(font0);
-  ui->btnPaste->setFont(font0);
-  ui->btnInsertTable->setFont(font0);
-  ui->btnLink->setFont(font0);
 
   mw_one->set_btnStyle(this);
 
