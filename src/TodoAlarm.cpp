@@ -15,7 +15,23 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
     font0.setPointSize(16);
   else
     font0.setPointSize(fontSize);
+
   this->setFont(font0);
+  ui->btnBack->setFont(font0);
+  ui->btnDelDT->setFont(font0);
+  ui->btnSetDT->setFont(font0);
+  ui->btnToday->setFont(font0);
+  ui->btnTomorrow->setFont(font0);
+  ui->btnNextWeek->setFont(font0);
+
+  ui->chk1->setFont(font0);
+  ui->chk2->setFont(font0);
+  ui->chk3->setFont(font0);
+  ui->chk4->setFont(font0);
+  ui->chk5->setFont(font0);
+  ui->chk6->setFont(font0);
+  ui->chk7->setFont(font0);
+  ui->chkDaily->setFont(font0);
 
   this->layout()->setContentsMargins(1, 1, 1, 1);
   ui->frameDaily->setContentsMargins(1, 1, 1, 1);
@@ -92,7 +108,7 @@ bool TodoAlarm::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      on_btnOK_clicked();
+      on_btnBack_clicked();
       return true;
     }
   }
@@ -100,7 +116,7 @@ bool TodoAlarm::eventFilter(QObject* obj, QEvent* evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void TodoAlarm::on_btnOK_clicked() { close(); }
+void TodoAlarm::on_btnBack_clicked() { close(); }
 
 void TodoAlarm::on_btnYear_clicked() {
   addBtn(QDate::currentDate().year(), 9, 3, tr("Year"), false);
@@ -133,6 +149,9 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
   }
 
   qDeleteAll(ui->frameSel->findChildren<QObject*>());
+
+  QFont font = mw_one->font();
+  int fontSize = font.pointSize();
 
   int row = 0;
   int count = 0;
@@ -174,6 +193,13 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
       }
       btn->setText(str);
 
+      if (flag == tr("Day")) {
+        if (fontSize > 16) {
+          font.setPointSize(16);
+          btn->setFont(font);
+        }
+      }
+
       connect(btn, &QToolButton::clicked, [=]() { onBtnClick(btn, flag); });
 
       gl->addWidget(btn, row, j, 1, 1);
@@ -208,6 +234,14 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
       str = str + "\n" + strWeek;
     }
     btn->setText(str);
+
+    if (flag == tr("Day")) {
+      if (fontSize > 16) {
+        font.setPointSize(16);
+        btn->setFont(font);
+      }
+    }
+
     connect(btn, &QToolButton::clicked, [=]() { onBtnClick(btn, flag); });
     gl->addWidget(btn, row + 1, i, 1, 1);
   }
@@ -278,7 +312,7 @@ void TodoAlarm::onBtnClick(QToolButton* btn, QString flag) {
   setBtnTitle();
 }
 
-void TodoAlarm::on_btnCancelDT_clicked() {
+void TodoAlarm::on_btnDelDT_clicked() {
   mw_one->m_Todo->on_btnCancel_clicked();
 }
 
