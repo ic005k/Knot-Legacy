@@ -23,7 +23,7 @@ class dlgRemarks : public QDialog {
   ~dlgRemarks();
   Ui::dlgRemarks *ui;
 
-  AutoUpdateDialog *m_AutoUpdate;
+  AutoUpdate *m_AutoUpdate;
   QNetworkAccessManager *manager;
   int parse_UpdateJSON(QString str);
   bool blAutoCheckUpdate;

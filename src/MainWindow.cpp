@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.30";
+QString ver = "1.1.31";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -41,7 +41,7 @@ extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
 extern QStringList readTextList, htmlFiles, listCategory;
 extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern QtOneDriveAuthorizationDialog *dialog_;
-extern dlgList *m_List;
+extern CategoryList *m_CategoryList;
 
 void RegJni(const char *myClassName);
 
@@ -75,7 +75,7 @@ void MainWindow::bakDataDone() {
           "Knot", tr("The data was exported successfully.") + +"\n\n" + infoStr,
           1);
 
-      mydlgPre->appendBakFile(
+      m_Preferences->appendBakFile(
           QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss") + "\n" +
               tr("Manual Backup") + "\n" + strLatestModify,
           infoStr);
@@ -465,9 +465,9 @@ void MainWindow::initHardStepSensor() {
     ui->lblSteps->hide();
     ui->btnPauseSteps->hide();
     ui->lblTotalRunTime->hide();
-    mydlgPre->ui->chkDebug->setChecked(false);
-    mydlgPre->on_chkDebug_clicked();
-    mydlgPre->ui->chkDebug->hide();
+    m_Preferences->ui->chkDebug->setChecked(false);
+    m_Preferences->on_chkDebug_clicked();
+    m_Preferences->ui->chkDebug->hide();
     ui->btnPause->hide();
     initTodayInitSteps();
     resetSteps = tc;
@@ -541,7 +541,7 @@ void MainWindow::newDatas() {
 }
 
 void MainWindow::showSensorValues() {
-  if (mydlgPre->ui->chkDebug->isChecked()) {
+  if (m_Preferences->ui->chkDebug->isChecked()) {
     ui->lblX->setText("AX:" + QString::number(ax) + "\n" +
                       "GX:" + QString::number(gx));
     ui->lblY->setText("AY:" + QString::number(ay) + "\n" +
@@ -688,14 +688,14 @@ void MainWindow::init_Options() {
     timeLines.append(
         RegTime.value("/TimeLines/Files" + QString::number(i)).toString());
 
-  mydlgPre->initOptions();
-  mydlgPre->ui->btnReStart->hide();
+  m_Preferences->initOptions();
+  m_Preferences->ui->btnReStart->hide();
   QString style =
       "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "
       "border-radius:10px; "
       "border:0px solid gray; } QToolButton:pressed { background-color: "
       "rgb(220,220,230);}";
-  mydlgPre->ui->btnReStart->setStyleSheet(style);
+  m_Preferences->ui->btnReStart->setStyleSheet(style);
 }
 
 void MainWindow::init_ChartWidget() {
@@ -905,7 +905,7 @@ void MainWindow::timerUpdate() {
   ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
                                secondsToTime(timeTest++));
   if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00") {
-    mydlgPre->isFontChange = true;
+    m_Preferences->isFontChange = true;
     this->close();
   }
 }
@@ -1629,7 +1629,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   }
 
 #ifdef Q_OS_ANDROID
-  if (mydlgPre->isFontChange) {
+  if (m_Preferences->isFontChange) {
     stopJavaTimer();
     event->accept();
     return;
@@ -1717,7 +1717,7 @@ void MainWindow::initChartMonth() {
     if (PointList.at(i).y() != 1) isOne = false;
   }
 
-  if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
+  if (isOne && m_Preferences->ui->chkAutoTime->isChecked()) {
     series->clear();
     m_scatterSeries->clear();
     QList<QPointF> tempPointList;
@@ -1787,7 +1787,7 @@ void MainWindow::initChartMonth() {
   axisX->append(categories);
   axisY->setRange(0, yMaxMonth);
 
-  if (isOne && mydlgPre->ui->chkAutoTime->isChecked()) {
+  if (isOne && m_Preferences->ui->chkAutoTime->isChecked()) {
     axisY->setRange(0, 24);
     chartMonth->setTitle(CurrentYear + "  Y:" + tr("Time") +
                          "    X:" + tr("Days"));
@@ -2556,7 +2556,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
       if (!ui->frameMain->isHidden()) {
         setMini();
-        mydlgPre->autoBakData();
+        m_Preferences->autoBakData();
 
         return true;
       }
@@ -3199,12 +3199,12 @@ void MainWindow::startInitReport() {
 }
 
 void MainWindow::on_actionPreferences_triggered() {
-  mydlgPre->setFixedWidth(this->width());
-  mydlgPre->setGeometry(geometry().x(), geometry().y(), mydlgPre->width(),
-                        height());
-  mydlgPre->setModal(true);
-  mydlgPre->ui->sliderFontSize->setStyleSheet(ui->hsM->styleSheet());
-  mydlgPre->show();
+  m_Preferences->setFixedWidth(this->width());
+  m_Preferences->setGeometry(geometry().x(), geometry().y(),
+                             m_Preferences->width(), height());
+  m_Preferences->setModal(true);
+  m_Preferences->ui->sliderFontSize->setStyleSheet(ui->hsM->styleSheet());
+  m_Preferences->show();
 }
 
 void MainWindow::on_tabCharts_currentChanged(int index) {
@@ -3643,12 +3643,12 @@ void MainWindow::init_UIWidget() {
   m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
 
   myEditRecord = new EditRecord(this);
-  m_Todo = new dlgTodo(this);
+  m_Todo = new Todo(this);
   m_Todo->setStyleSheet(vsbarStyleSmall);
   m_Report = new dlgReport(this);
-  mydlgPre = new dlgPreferences(this);
+  m_Preferences = new Preferences(this);
   m_Notes = new Notes(this);
-  m_Steps = new dlgSteps(this);
+  m_Steps = new Steps(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
   m_Reader = new dlgReader(this);
@@ -3660,7 +3660,7 @@ void MainWindow::init_UIWidget() {
   mydlgSetText = new dlgSetText(this);
   m_widget = new QWidget(this);
   m_widget->close();
-  m_NotesList = new dlgNotesList(this);
+  m_NotesList = new NotesList(this);
   m_SyncInfo = new SyncInfo(this);
   dlgTimeMachine = new QFrame();
   dlgTimeMachine->close();
@@ -3950,7 +3950,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   mainMenu->addAction(actOpenKnotBakDir);
   actOpenKnotBakDir->setVisible(false);
 #else
-  if (!mydlgPre->devMode) {
+  if (!m_Preferences->devMode) {
     actAddTab->setVisible(false);
     actDelTab->setVisible(false);
     actRenameTab->setVisible(false);
@@ -4085,7 +4085,7 @@ void MainWindow::on_actionBakFileList() {
 
   m_Method->clearAllBakList(ui->qwBakList);
 
-  QStringList bakFileList = mydlgPre->getBakFilesList();
+  QStringList bakFileList = m_Preferences->getBakFilesList();
   int bakCount = bakFileList.count();
 
   for (int i = 0; i < bakCount; i++) {
@@ -5404,15 +5404,19 @@ void MainWindow::on_btnNoteMenu_clicked() {
   m_Method->showNotsListMenu(ui->qwNoteList->x(), ui->qwNoteList->y());
 }
 
-void MainWindow::on_btnCancelType_clicked() { m_List->on_btnCancel_clicked(); }
+void MainWindow::on_btnCancelType_clicked() {
+  m_CategoryList->on_btnCancel_clicked();
+}
 
-void MainWindow::on_btnOkType_clicked() { m_List->on_btnOk_clicked(); }
+void MainWindow::on_btnOkType_clicked() { m_CategoryList->on_btnOk_clicked(); }
 
-void MainWindow::on_btnDelType_clicked() { m_List->on_btnDel_clicked(); }
+void MainWindow::on_btnDelType_clicked() {
+  m_CategoryList->on_btnDel_clicked();
+}
 
 void MainWindow::on_btnRenameType_clicked() {
-  m_List->ui->editRename->setText(ui->editRenameType->text().trimmed());
-  m_List->on_btnRename_clicked();
+  m_CategoryList->ui->editRename->setText(ui->editRenameType->text().trimmed());
+  m_CategoryList->on_btnRename_clicked();
 }
 
 void MainWindow::on_btnBackSetTab_clicked() {

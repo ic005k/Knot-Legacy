@@ -5,16 +5,16 @@
 #include <QKeyEvent>
 
 namespace Ui {
-class dlgLoadPic;
+class LoadPic;
 }
 
-class dlgLoadPic : public QDialog {
+class LoadPic : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgLoadPic(QWidget *parent = nullptr);
-  ~dlgLoadPic();
-  Ui::dlgLoadPic *ui;
+  explicit LoadPic(QWidget *parent = nullptr);
+  ~LoadPic();
+  Ui::LoadPic *ui;
 
   void initMain(QString imgFile);
 

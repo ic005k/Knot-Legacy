@@ -298,8 +298,8 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     qDebug() << "Pic File2 : " << picfile;
 
     if (QFile(picfile).exists()) {
-      dlgLoadPic *dlp = new dlgLoadPic(mw_one);
-      dlp->initMain(picfile);
+      LoadPic *m_LoadPic = new LoadPic(mw_one);
+      m_LoadPic->initMain(picfile);
 
     } else {
       QString memoPicFile = picfile;
@@ -311,8 +311,8 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
 
       if (QFile(memoPicFile).exists()) {
         picfile = memoPicFile;
-        dlgLoadPic *dlp = new dlgLoadPic(mw_one);
-        dlp->initMain(memoPicFile);
+        LoadPic *m_LoadPic = new LoadPic(mw_one);
+        m_LoadPic->initMain(memoPicFile);
       }
     }
   }

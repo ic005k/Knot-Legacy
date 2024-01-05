@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>dlgLoadPic</class>
- <widget class="QDialog" name="dlgLoadPic">
+ <class>LoadPic</class>
+ <widget class="QDialog" name="LoadPic">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -12,7 +12,7 @@ extern bool loading;
 extern QString iniFile, iniDir;
 extern void setTableNoItemFlags(QTableWidget* t, int row);
 
-dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
+Steps::Steps(QWidget* parent) : QDialog(parent), ui(new Ui::Steps) {
   ui->setupUi(this);
   mw_one->set_btnStyle(this);
   this->installEventFilter(this);
@@ -35,11 +35,11 @@ dlgSteps::dlgSteps(QWidget* parent) : QDialog(parent), ui(new Ui::dlgSteps) {
   mw_one->ui->editStepLength->setValidator(validator);
 }
 
-dlgSteps::~dlgSteps() { delete ui; }
+Steps::~Steps() { delete ui; }
 
-void dlgSteps::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
+void Steps::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
 
-bool dlgSteps::eventFilter(QObject* watch, QEvent* evn) {
+bool Steps::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -51,13 +51,13 @@ bool dlgSteps::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgSteps::on_btnBack_clicked() {
+void Steps::on_btnBack_clicked() {
   saveSteps();
   mw_one->ui->frameSteps->hide();
   mw_one->ui->frameMain->show();
 }
 
-void dlgSteps::on_btnPause_clicked() {
+void Steps::on_btnPause_clicked() {
   if (mw_one->ui->btnPauseSteps->text() == tr("Pause")) {
     mw_one->ui->btnPauseSteps->setText(tr("Start"));
     mw_one->stopJavaTimer();
@@ -80,7 +80,7 @@ void dlgSteps::on_btnPause_clicked() {
   }
 }
 
-void dlgSteps::on_btnReset_clicked() {
+void Steps::on_btnReset_clicked() {
   mw_one->accel_pedometer->resetStepCount();
 
   mw_one->CurrentSteps = 0;
@@ -90,7 +90,7 @@ void dlgSteps::on_btnReset_clicked() {
   if (mw_one->isHardStepSensor == 1) mw_one->resetSteps = mw_one->tc;
 }
 
-void dlgSteps::saveSteps() {
+void Steps::saveSteps() {
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -120,7 +120,7 @@ void dlgSteps::saveSteps() {
   Reg1.setValue("TodaySteps", getCurrentSteps());
 }
 
-void dlgSteps::init_Steps() {
+void Steps::init_Steps() {
   bool isRun = false;
   if (mw_one->ui->btnPauseSteps->text() == tr("Pause")) {
     mw_one->ui->btnPauseSteps->click();
@@ -176,15 +176,15 @@ void dlgSteps::init_Steps() {
   }
 }
 
-void dlgSteps::on_editTangentLineIntercept_textChanged(const QString& arg1) {
+void Steps::on_editTangentLineIntercept_textChanged(const QString& arg1) {
   mw_one->accel_pedometer->setTangentLineIntercept(arg1.toFloat());
 }
 
-void dlgSteps::on_editTangentLineSlope_textChanged(const QString& arg1) {
+void Steps::on_editTangentLineSlope_textChanged(const QString& arg1) {
   mw_one->accel_pedometer->setTangentLineSlope(arg1.toFloat());
 }
 
-void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
+void Steps::addRecord(QString date, qlonglong steps, QString km) {
   QString str0;
   QString strD0 = date;
   int m = strD0.split(" ").at(1).toInt();
@@ -214,7 +214,7 @@ void dlgSteps::addRecord(QString date, qlonglong steps, QString km) {
   }
 }
 
-qlonglong dlgSteps::getCurrentSteps() {
+qlonglong Steps::getCurrentSteps() {
   int count = getCount();
   if (count == 0) return 0;
 
@@ -224,7 +224,7 @@ qlonglong dlgSteps::getCurrentSteps() {
   return 0;
 }
 
-void dlgSteps::setTableSteps(qlonglong steps) {
+void Steps::setTableSteps(qlonglong steps) {
   // int count = getCount();
 
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
@@ -274,17 +274,18 @@ void dlgSteps::setTableSteps(qlonglong steps) {
   }
 }
 
-void dlgSteps::on_btnDefaultIntercept_clicked() {
+void Steps::on_btnDefaultIntercept_clicked() {
   mw_one->ui->editTangentLineIntercept->setText(QString::number(dleInter));
 }
 
-void dlgSteps::on_btnDefaultSlope_clicked() {
+void Steps::on_btnDefaultSlope_clicked() {
   mw_one->ui->editTangentLineSlope->setText(QString::number(dleSlope));
 }
 
-void dlgSteps::on_rbAlg1_clicked() {
+void Steps::on_rbAlg1_clicked() {
   if (mw_one->ui->btnPauseSteps->text() == tr("Start")) return;
-  // if (mw_one->mydlgPre->ui->chkDebug->isChecked()) ui->frameWay1->show();
+  // if (mw_one->m_Preferences->ui->chkDebug->isChecked())
+  // ui->frameWay1->show();
   mw_one->ui->lblSteps->setText("");
 
   mw_one->accel_pedometer->start();
@@ -305,9 +306,9 @@ void dlgSteps::on_rbAlg1_clicked() {
 #endif
 }
 
-void dlgSteps::on_rbAlg2_clicked() {}
+void Steps::on_rbAlg2_clicked() {}
 
-void dlgSteps::releaseWakeLock() {
+void Steps::releaseWakeLock() {
 #ifdef Q_OS_ANDROID
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("releaseWakeLock");
@@ -319,7 +320,7 @@ void dlgSteps::releaseWakeLock() {
 #endif
 }
 
-void dlgSteps::acquireWakeLock() {
+void Steps::acquireWakeLock() {
 #ifdef Q_OS_ANDROID
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
@@ -331,7 +332,7 @@ void dlgSteps::acquireWakeLock() {
 #endif
 }
 
-void dlgSteps::setMaxMark() {
+void Steps::setMaxMark() {
   if (getCount() > 1) {
     QList<int> list;
 
@@ -349,14 +350,14 @@ void dlgSteps::setMaxMark() {
   }
 }
 
-void dlgSteps::appendSteps(QString date, int steps, QString km) {
+void Steps::appendSteps(QString date, int steps, QString km) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
                             Q_ARG(QVariant, date), Q_ARG(QVariant, steps),
                             Q_ARG(QVariant, km));
 }
 
-int dlgSteps::getCount() {
+int Steps::getCount() {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QVariant itemCount;
   QMetaObject::invokeMethod((QObject*)root, "getItemCount",
@@ -364,7 +365,7 @@ int dlgSteps::getCount() {
   return itemCount.toInt();
 }
 
-QString dlgSteps::getDate(int row) {
+QString Steps::getDate(int row) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QVariant item;
   QMetaObject::invokeMethod((QObject*)root, "getDate",
@@ -372,7 +373,7 @@ QString dlgSteps::getDate(int row) {
   return item.toString();
 }
 
-int dlgSteps::getSteps(int row) {
+int Steps::getSteps(int row) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QVariant item;
   QMetaObject::invokeMethod((QObject*)root, "getSteps",
@@ -380,7 +381,7 @@ int dlgSteps::getSteps(int row) {
   return item.toInt();
 }
 
-QString dlgSteps::getKM(int row) {
+QString Steps::getKM(int row) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QVariant item;
   QMetaObject::invokeMethod((QObject*)root, "getKM",
@@ -388,24 +389,24 @@ QString dlgSteps::getKM(int row) {
   return item.toString();
 }
 
-void dlgSteps::delItem(int index) {
+void Steps::delItem(int index) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
-void dlgSteps::setTableData(int index, QString date, int steps, QString km) {
+void Steps::setTableData(int index, QString date, int steps, QString km) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setTableData",
                             Q_ARG(QVariant, index), Q_ARG(QVariant, date),
                             Q_ARG(QVariant, steps), Q_ARG(QVariant, km));
 }
 
-void dlgSteps::clearAll() {
+void Steps::clearAll() {
   int count = getCount();
   for (int i = 0; i < count; i++) delItem(0);
 }
 
-void dlgSteps::setScrollBarPos(double pos) {
+void Steps::setScrollBarPos(double pos) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
                             Q_ARG(QVariant, pos));

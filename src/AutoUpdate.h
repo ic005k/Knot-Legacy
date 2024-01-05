@@ -15,16 +15,16 @@
 #include <QtMath>
 
 namespace Ui {
-class AutoUpdateDialog;
+class AutoUpdate;
 }
 
-class AutoUpdateDialog : public QDialog {
+class AutoUpdate : public QDialog {
   Q_OBJECT
 
  public:
-  explicit AutoUpdateDialog(QWidget* parent = nullptr);
-  ~AutoUpdateDialog();
-  Ui::AutoUpdateDialog* ui;
+  explicit AutoUpdate(QWidget* parent = nullptr);
+  ~AutoUpdate();
+  Ui::AutoUpdate* ui;
 
   QString strLinuxTargetFile;
   QString tempDir;

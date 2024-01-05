@@ -6,16 +6,16 @@
 #include <QRegularExpressionValidator>
 
 namespace Ui {
-class dlgSteps;
+class Steps;
 }
 
-class dlgSteps : public QDialog {
+class Steps : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgSteps(QWidget *parent = nullptr);
-  ~dlgSteps();
-  Ui::dlgSteps *ui;
+  explicit Steps(QWidget *parent = nullptr);
+  ~Steps();
+  Ui::Steps *ui;
 
   int toDayInitSteps = 0;
   double dleInter = 5;

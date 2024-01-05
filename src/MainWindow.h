@@ -233,18 +233,18 @@ class MainWindow : public QMainWindow {
 
   dlgRemarks *m_Remarks;
   EditRecord *myEditRecord;
-  dlgTodo *m_Todo;
+  Todo *m_Todo;
   dlgReport *m_Report;
-  dlgPreferences *mydlgPre;
+  Preferences *m_Preferences;
   Notes *m_Notes;
-  dlgSteps *m_Steps;
+  Steps *m_Steps;
   dlgReader *m_Reader;
   TodoAlarm *m_TodoAlarm;
   CloudBackup *m_CloudBackup;
   PageIndicator *m_PageIndicator;
   ReaderSet *m_ReaderSet;
   dlgSetText *mydlgSetText;
-  dlgNotesList *m_NotesList;
+  NotesList *m_NotesList;
   SyncInfo *m_SyncInfo;
   Method *m_Method;
 

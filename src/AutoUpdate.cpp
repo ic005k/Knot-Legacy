@@ -6,8 +6,8 @@
 extern MainWindow* mw_one;
 extern QString iniDir, privateDir;
 
-AutoUpdateDialog::AutoUpdateDialog(QWidget* parent)
-    : QDialog(parent), ui(new Ui::AutoUpdateDialog) {
+AutoUpdate::AutoUpdate(QWidget* parent)
+    : QDialog(parent), ui(new Ui::AutoUpdate) {
   ui->setupUi(this);
 
   setWindowFlag(Qt::FramelessWindowHint);
@@ -25,7 +25,7 @@ AutoUpdateDialog::AutoUpdateDialog(QWidget* parent)
   manager = new QNetworkAccessManager(this);
 }
 
-bool AutoUpdateDialog::eventFilter(QObject* watch, QEvent* evn) {
+bool AutoUpdate::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -36,9 +36,9 @@ bool AutoUpdateDialog::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-AutoUpdateDialog::~AutoUpdateDialog() { delete ui; }
+AutoUpdate::~AutoUpdate() { delete ui; }
 
-void AutoUpdateDialog::doProcessReadyRead()  // 读取并写入
+void AutoUpdate::doProcessReadyRead()  // 读取并写入
 {
   while (!reply->atEnd()) {
     QByteArray ba = reply->readAll();
@@ -46,7 +46,7 @@ void AutoUpdateDialog::doProcessReadyRead()  // 读取并写入
   }
 }
 
-void AutoUpdateDialog::doProcessFinished() {
+void AutoUpdate::doProcessFinished() {
   myfile->close();
   this->close();
   mw_one->closeGrayWindows();
@@ -75,8 +75,8 @@ void AutoUpdateDialog::doProcessFinished() {
 #endif
 }
 
-void AutoUpdateDialog::doProcessDownloadProgress(qint64 recv_total,
-                                                 qint64 all_total) {
+void AutoUpdate::doProcessDownloadProgress(qint64 recv_total,
+                                           qint64 all_total) {
   ui->progressBar->setMaximum(all_total);
   ui->progressBar->setValue(recv_total);
   ui->lblTxt->setText(tr("Download Progress") + " : \n" +
@@ -92,7 +92,7 @@ void AutoUpdateDialog::doProcessDownloadProgress(qint64 recv_total,
   }
 }
 
-void AutoUpdateDialog::startDownload(QString strLink) {
+void AutoUpdate::startDownload(QString strLink) {
   isCancel = false;
 
   QNetworkRequest request;
@@ -106,11 +106,11 @@ void AutoUpdateDialog::startDownload(QString strLink) {
 
   reply = manager->get(request);  // 发送请求
   connect(reply, &QNetworkReply::readyRead, this,
-          &AutoUpdateDialog::doProcessReadyRead);  // 可读
+          &AutoUpdate::doProcessReadyRead);  // 可读
   connect(reply, &QNetworkReply::finished, this,
-          &AutoUpdateDialog::doProcessFinished);
+          &AutoUpdate::doProcessFinished);
   connect(reply, &QNetworkReply::downloadProgress, this,
-          &AutoUpdateDialog::doProcessDownloadProgress);  // 大小
+          &AutoUpdate::doProcessDownloadProgress);  // 大小
 
   filename = "Knot.apk";
 
@@ -136,7 +136,7 @@ void AutoUpdateDialog::startDownload(QString strLink) {
   ui->progressBar->setMinimum(0);
 }
 
-void AutoUpdateDialog::startUpdate() {
+void AutoUpdate::startUpdate() {
   QString strZip, strPath, strExec;
   QFileInfo appInfo(qApp->applicationDirPath());
   strZip = privateDir + filename;
@@ -213,13 +213,13 @@ void AutoUpdateDialog::startUpdate() {
 #endif
 }
 
-void AutoUpdateDialog::closeEvent(QCloseEvent* event) {
+void AutoUpdate::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   reply->close();
   myfile->close();
 }
 
-QString AutoUpdateDialog::GetFileSize(qint64 size) {
+QString AutoUpdate::GetFileSize(qint64 size) {
   if (size < 0) return "0";
   if (!size) {
     return "0 Bytes";
@@ -242,7 +242,7 @@ QString AutoUpdateDialog::GetFileSize(qint64 size) {
          SizeNames.at(i);
 }
 
-QString AutoUpdateDialog::GetFileSize(const qint64& size, int precision) {
+QString AutoUpdate::GetFileSize(const qint64& size, int precision) {
   double sizeAsDouble = size;
   static QStringList measures;
   if (measures.isEmpty())
@@ -266,7 +266,7 @@ QString AutoUpdateDialog::GetFileSize(const qint64& size, int precision) {
       .arg(measure);
 }
 
-void AutoUpdateDialog::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
+void AutoUpdate::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
   QFile* file;
   file = new QFile;
   file->setFileName(fileName);
@@ -279,7 +279,7 @@ void AutoUpdateDialog::TextEditToFile(QTextEdit* txtEdit, QString fileName) {
   }
 }
 
-void AutoUpdateDialog::keyPressEvent(QKeyEvent* event) {
+void AutoUpdate::keyPressEvent(QKeyEvent* event) {
   switch (event->key()) {
     case Qt::Key_Escape:
       // reply->close();
@@ -310,7 +310,7 @@ void AutoUpdateDialog::keyPressEvent(QKeyEvent* event) {
   }
 }
 
-void AutoUpdateDialog::on_btnCancel_clicked() {
+void AutoUpdate::on_btnCancel_clicked() {
   isCancel = true;
   close();
 }

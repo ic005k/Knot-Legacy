@@ -16,7 +16,7 @@ bool del = false;
 
 QStringList c_list;
 
-dlgList *m_List;
+CategoryList *m_CategoryList;
 
 EditRecord::EditRecord(QWidget *parent)
     : QDialog(parent), ui(new Ui::EditRecord) {
@@ -24,7 +24,7 @@ EditRecord::EditRecord(QWidget *parent)
 
   mw_one->set_btnStyle(this);
 
-  m_List = new dlgList(this);
+  m_CategoryList = new CategoryList(this);
 
   this->installEventFilter(this);
   mw_one->ui->editCategory->installEventFilter(this);
@@ -133,18 +133,18 @@ void EditRecord::on_btnOk_clicked() {
 
   // Save Category Text
   QString str = mw_one->ui->editCategory->text().trimmed();
-  int count = m_List->ui->listWidget->count();
+  int count = m_CategoryList->ui->listWidget->count();
   for (int i = 0; i < count; i++) {
-    QString str1 = m_List->ui->listWidget->item(i)->text().trimmed();
+    QString str1 = m_CategoryList->ui->listWidget->item(i)->text().trimmed();
     if (str == str1) {
-      m_List->ui->listWidget->takeItem(i);
+      m_CategoryList->ui->listWidget->takeItem(i);
       break;
     }
   }
 
   if (str.length() > 0) {
     QListWidgetItem *item = new QListWidgetItem(str);
-    m_List->ui->listWidget->insertItem(0, item);
+    m_CategoryList->ui->listWidget->insertItem(0, item);
   }
 
   del = false;
@@ -194,7 +194,7 @@ void EditRecord::on_btnCustom_clicked() {
   mw_one->ui->frameEditRecord->hide();
   mw_one->ui->frameCategory->show();
   init_Desc();
-  m_List->ui->listWidget->setCurrentRow(0);
+  m_CategoryList->ui->listWidget->setCurrentRow(0);
   mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwCategory, 0);
   mw_one->m_Method->setTypeRenameText();
 
@@ -204,20 +204,21 @@ void EditRecord::on_btnCustom_clicked() {
 
   return;
 
-  m_List->close();
-  m_List = new dlgList(mw_one->myEditRecord);
+  m_CategoryList->close();
+  m_CategoryList = new CategoryList(mw_one->myEditRecord);
 
   int h = mw_one->height();
   int w = mw_one->width();
-  m_List->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), w, h);
+  m_CategoryList->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), w,
+                              h);
 
   init_Desc();
-  m_List->ui->listWidget->setFocus();
-  if (m_List->ui->listWidget->count() > 0)
-    m_List->ui->listWidget->setCurrentRow(0);
-  m_List->ui->editRename->clear();
+  m_CategoryList->ui->listWidget->setFocus();
+  if (m_CategoryList->ui->listWidget->count() > 0)
+    m_CategoryList->ui->listWidget->setCurrentRow(0);
+  m_CategoryList->ui->editRename->clear();
 
-  m_List->show();
+  m_CategoryList->show();
 }
 
 void EditRecord::saveCustomDesc() {
@@ -225,12 +226,12 @@ void EditRecord::saveCustomDesc() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  int count = m_List->ui->listWidget->count();
+  int count = m_CategoryList->ui->listWidget->count();
 
   c_list.clear();
   for (int i = 0; i < count; i++) {
     if (isBreak) break;
-    c_list.append(m_List->ui->listWidget->item(i)->text().trimmed());
+    c_list.append(m_CategoryList->ui->listWidget->item(i)->text().trimmed());
   }
   // list = QSet<QString>(list.begin(), list.end()).values(); //IOS无法编译通过
   removeDuplicates(&c_list);
@@ -283,15 +284,15 @@ void EditRecord::init_Desc() {
   mw_one->m_Method->clearAllBakList(mw_one->ui->qwCategory);
 
   c_list.clear();
-  m_List->ui->listWidget->clear();
-  m_List->ui->listWidget->setViewMode(QListView::IconMode);
+  m_CategoryList->ui->listWidget->clear();
+  m_CategoryList->ui->listWidget->setViewMode(QListView::IconMode);
   int descCount = RegDesc.value("/CustomDesc/Count").toInt();
   for (int i = 0; i < descCount; i++) {
     QString str =
         RegDesc.value("/CustomDesc/Item" + QString::number(i)).toString();
     QListWidgetItem *item = new QListWidgetItem(str);
 
-    m_List->ui->listWidget->addItem(item);
+    m_CategoryList->ui->listWidget->addItem(item);
     c_list.append(str);
 
     mw_one->m_Method->addItemBakList(mw_one->ui->qwCategory, str, "", "", "",
@@ -328,8 +329,8 @@ bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
       if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
         mw_one->m_Notes->m_TextSelector->close();
         return true;
-      } else if (!m_List->isHidden()) {
-        m_List->close();
+      } else if (!m_CategoryList->isHidden()) {
+        m_CategoryList->close();
         mw_one->closeGrayWindows();
 
         return true;

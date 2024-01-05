@@ -9,7 +9,7 @@
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
 extern QString iniDir, searchStr, currentMDFile;
-extern dlgList* m_List;
+extern CategoryList* m_CategoryList;
 extern bool isEpub, isText, isPDF, loading;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2, fontSize;
@@ -544,10 +544,10 @@ void Method::setTypeRenameText() {
 
 void Method::okType() {
   int index = getCurrentIndexBakList(mw_one->ui->qwCategory);
-  m_List->ui->listWidget->setCurrentRow(index);
-  QListWidgetItem* item = m_List->ui->listWidget->currentItem();
-  m_List->on_listWidget_itemDoubleClicked(item);
-  m_List->on_btnCancel_clicked();
+  m_CategoryList->ui->listWidget->setCurrentRow(index);
+  QListWidgetItem* item = m_CategoryList->ui->listWidget->currentItem();
+  m_CategoryList->on_listWidget_itemDoubleClicked(item);
+  m_CategoryList->on_btnCancel_clicked();
 }
 
 void Method::setSCrollPro(QObject* obj) {

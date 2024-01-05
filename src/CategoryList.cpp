@@ -7,7 +7,8 @@ extern MainWindow* mw_one;
 extern int fontSize, red;
 extern QTabWidget *tabData, *tabChart;
 
-dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
+CategoryList::CategoryList(QWidget* parent)
+    : QDialog(parent), ui(new Ui::CategoryList) {
   ui->setupUi(this);
   mw_one->set_btnStyle(this);
   setWindowFlag(Qt::FramelessWindowHint);
@@ -38,13 +39,13 @@ dlgList::dlgList(QWidget* parent) : QDialog(parent), ui(new Ui::dlgList) {
   ui->btnRename->setFixedHeight(ui->editRename->height() + 2);
 }
 
-dlgList::~dlgList() { delete ui; }
+CategoryList::~CategoryList() { delete ui; }
 
-void dlgList::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
+void CategoryList::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
 
-void dlgList::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
+void CategoryList::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
 
-bool dlgList::eventFilter(QObject* watch, QEvent* evn) {
+bool CategoryList::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -56,13 +57,13 @@ bool dlgList::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgList::on_listWidget_itemClicked(QListWidgetItem* item) {
+void CategoryList::on_listWidget_itemClicked(QListWidgetItem* item) {
   Q_UNUSED(item);
   QString txt = item->text();
   ui->editRename->setText(txt);
 }
 
-void dlgList::on_btnDel_clicked() {
+void CategoryList::on_btnDel_clicked() {
   int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwCategory);
   if (count == 0) return;
 
@@ -94,7 +95,7 @@ void dlgList::on_btnDel_clicked() {
                                    QString::number(count));
 }
 
-void dlgList::on_btnOk_clicked() {
+void CategoryList::on_btnOk_clicked() {
   int index = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwCategory);
   ui->listWidget->setCurrentRow(index);
 
@@ -103,7 +104,7 @@ void dlgList::on_btnOk_clicked() {
   on_btnCancel_clicked();
 }
 
-void dlgList::setCategoryText() {
+void CategoryList::setCategoryText() {
   int row = ui->listWidget->currentRow();
   if (row >= 0) {
     mw_one->ui->editCategory->setText(ui->listWidget->currentItem()->text());
@@ -112,12 +113,12 @@ void dlgList::setCategoryText() {
   close();
 }
 
-void dlgList::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
+void CategoryList::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
   Q_UNUSED(item);
   setCategoryText();
 }
 
-void dlgList::on_btnRename_clicked() {
+void CategoryList::on_btnRename_clicked() {
   if (ui->listWidget->count() == 0) return;
 
   int row = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwCategory);
@@ -167,7 +168,7 @@ void dlgList::on_btnRename_clicked() {
   }
 }
 
-void dlgList::on_btnCancel_clicked() {
+void CategoryList::on_btnCancel_clicked() {
   mw_one->ui->frameCategory->hide();
   mw_one->ui->frameEditRecord->show();
 }

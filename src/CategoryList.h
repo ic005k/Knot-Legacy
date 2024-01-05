@@ -7,16 +7,16 @@
 #include "ShowMessage.h"
 
 namespace Ui {
-class dlgList;
+class CategoryList;
 }
 
-class dlgList : public QDialog {
+class CategoryList : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgList(QWidget *parent = nullptr);
-  ~dlgList();
-  Ui::dlgList *ui;
+  explicit CategoryList(QWidget *parent = nullptr);
+  ~CategoryList();
+  Ui::CategoryList *ui;
 
   QFrame *frame;
 

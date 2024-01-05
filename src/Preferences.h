@@ -4,16 +4,16 @@
 #include <QDialog>
 
 namespace Ui {
-class dlgPreferences;
+class Preferences;
 }
 
-class dlgPreferences : public QDialog {
+class Preferences : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgPreferences(QWidget *parent = nullptr);
-  ~dlgPreferences();
-  Ui::dlgPreferences *ui;
+  explicit Preferences(QWidget *parent = nullptr);
+  ~Preferences();
+  Ui::Preferences *ui;
 
   bool devMode = false;
   QString chkStyle;

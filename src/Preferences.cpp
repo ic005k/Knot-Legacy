@@ -10,8 +10,8 @@ extern MainWindow* mw_one;
 extern bool isBreak;
 extern int fontSize;
 
-dlgPreferences::dlgPreferences(QWidget* parent)
-    : QDialog(parent), ui(new Ui::dlgPreferences) {
+Preferences::Preferences(QWidget* parent)
+    : QDialog(parent), ui(new Ui::Preferences) {
   ui->setupUi(this);
 
   mw_one->set_btnStyle(this);
@@ -47,11 +47,11 @@ dlgPreferences::dlgPreferences(QWidget* parent)
       "background-color: rgb(255, 255, 255);color:black;");
 }
 
-dlgPreferences::~dlgPreferences() { delete ui; }
+Preferences::~Preferences() { delete ui; }
 
-void dlgPreferences::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
+void Preferences::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
-bool dlgPreferences::eventFilter(QObject* watch, QEvent* evn) {
+bool Preferences::eventFilter(QObject* watch, QEvent* evn) {
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
@@ -80,12 +80,12 @@ bool dlgPreferences::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgPreferences::on_btnBack_clicked() {
+void Preferences::on_btnBack_clicked() {
   saveOptions();
   close();
 }
 
-void dlgPreferences::saveOptions() {
+void Preferences::saveOptions() {
   QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -100,7 +100,7 @@ void dlgPreferences::saveOptions() {
   Reg.setValue("/Options/chkUIFont", ui->chkUIFont->isChecked());
 }
 
-void dlgPreferences::on_chkDebug_clicked() {
+void Preferences::on_chkDebug_clicked() {
   if (ui->chkDebug->isChecked()) {
     mw_one->ui->frameDebug->show();
 
@@ -109,7 +109,7 @@ void dlgPreferences::on_chkDebug_clicked() {
   }
 }
 
-void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
+void Preferences::on_sliderFontSize_sliderMoved(int position) {
   QFont font;
   font.setPointSize(position);
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(position));
@@ -119,13 +119,13 @@ void dlgPreferences::on_sliderFontSize_sliderMoved(int position) {
   ui->btnReStart->show();
 }
 
-void dlgPreferences::on_chkReaderFont_clicked() {
+void Preferences::on_chkReaderFont_clicked() {
   isFontChange = true;
 
   ui->btnReStart->show();
 }
 
-void dlgPreferences::on_btnCustomFont_clicked() {
+void Preferences::on_btnCustomFont_clicked() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("Font"), "",
                                           tr("Font Files (*.*)"));
@@ -142,7 +142,7 @@ void dlgPreferences::on_btnCustomFont_clicked() {
   ui->btnReStart->show();
 }
 
-void dlgPreferences::setFontDemo(QString customFontPath) {
+void Preferences::setFontDemo(QString customFontPath) {
   QString fontName;
   int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
   QStringList loadedFontFamilies =
@@ -184,17 +184,17 @@ void dlgPreferences::setFontDemo(QString customFontPath) {
         "background-color: rgb(255, 255, 255);color:red;");
 }
 
-void dlgPreferences::on_chkUIFont_clicked() {
+void Preferences::on_chkUIFont_clicked() {
   isFontChange = true;
 
   ui->btnReStart->show();
 }
 
-void dlgPreferences::on_sliderFontSize_valueChanged(int value) {
+void Preferences::on_sliderFontSize_valueChanged(int value) {
   on_sliderFontSize_sliderMoved(value);
 }
 
-void dlgPreferences::initOptions() {
+void Preferences::initOptions() {
   QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -247,7 +247,7 @@ void dlgPreferences::initOptions() {
   setFontDemo(strf);
 }
 
-void dlgPreferences::on_btnReStart_clicked() {
+void Preferences::on_btnReStart_clicked() {
   saveOptions();
 
 #ifdef Q_OS_ANDROID
@@ -269,7 +269,7 @@ void dlgPreferences::on_btnReStart_clicked() {
 #endif
 }
 
-void dlgPreferences::autoBakData() {
+void Preferences::autoBakData() {
   if (!mw_one->isNeedAutoBackup) return;
 
   QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
@@ -304,7 +304,7 @@ void dlgPreferences::autoBakData() {
   mw_one->isNeedAutoBackup = false;
 }
 
-void dlgPreferences::setBakStatus(bool status) {
+void Preferences::setBakStatus(bool status) {
   QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -313,7 +313,7 @@ void dlgPreferences::setBakStatus(bool status) {
   Reg.setValue("/BakFiles/BakStatus", status);
 }
 
-bool dlgPreferences::getBakStatus() {
+bool Preferences::getBakStatus() {
   QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -322,7 +322,7 @@ bool dlgPreferences::getBakStatus() {
   return Reg.value("/BakFiles/BakStatus", 0).toBool();
 }
 
-void dlgPreferences::setLatestAction(QString action) {
+void Preferences::setLatestAction(QString action) {
   QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -333,7 +333,7 @@ void dlgPreferences::setLatestAction(QString action) {
   setBakStatus(false);
 }
 
-QString dlgPreferences::getLatestAction() {
+QString Preferences::getLatestAction() {
   QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -342,7 +342,7 @@ QString dlgPreferences::getLatestAction() {
   return Reg.value("/BakFiles/BakAction").toString();
 }
 
-void dlgPreferences::appendBakFile(QString action, QString bakfile) {
+void Preferences::appendBakFile(QString action, QString bakfile) {
   QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -355,7 +355,7 @@ void dlgPreferences::appendBakFile(QString action, QString bakfile) {
   Reg.setValue("/BakFiles/File" + QString::number(count - 1), bakfile);
 }
 
-QStringList dlgPreferences::getBakFilesList() {
+QStringList Preferences::getBakFilesList() {
   QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");

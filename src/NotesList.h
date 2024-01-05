@@ -12,16 +12,16 @@
 #include <QTreeWidgetItem>
 
 namespace Ui {
-class dlgNotesList;
+class NotesList;
 }
 
-class dlgNotesList : public QDialog {
+class NotesList : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgNotesList(QWidget *parent = nullptr);
-  ~dlgNotesList();
-  Ui::dlgNotesList *ui;
+  explicit NotesList(QWidget *parent = nullptr);
+  ~NotesList();
+  Ui::NotesList *ui;
 
   int findCount;
   QList<QTreeWidgetItem *> findResultList;

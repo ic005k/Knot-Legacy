@@ -36,7 +36,7 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->btnHour->setFont(font);
   ui->btnMinute->setFont(font);
 
-  QString strStyleChk = mw_one->mydlgPre->chkStyle;
+  QString strStyleChk = mw_one->m_Preferences->chkStyle;
   ui->chk1->setStyleSheet(strStyleChk);
   ui->chk2->setStyleSheet(strStyleChk);
   ui->chk3->setStyleSheet(strStyleChk);

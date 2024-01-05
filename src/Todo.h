@@ -10,16 +10,16 @@
 #include <QToolButton>
 
 namespace Ui {
-class dlgTodo;
+class Todo;
 }
 
-class dlgTodo : public QDialog {
+class Todo : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgTodo(QWidget *parent = nullptr);
-  Ui::dlgTodo *ui;
-  ~dlgTodo();
+  explicit Todo(QWidget *parent = nullptr);
+  Ui::Todo *ui;
+  ~Todo();
 
   bool isNeedSave = false;
   bool isToday = false;
@@ -116,7 +116,8 @@ class dlgTodo : public QDialog {
   void refreshTableListsFromIni();
 
   QString getTimeStr(QString str);
-  private:
+
+ private:
   QListWidgetItem *editItem;
 
   QString todotxt;

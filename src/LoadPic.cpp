@@ -6,8 +6,7 @@
 extern MainWindow* mw_one;
 extern QString picfile;
 
-dlgLoadPic::dlgLoadPic(QWidget* parent)
-    : QDialog(parent), ui(new Ui::dlgLoadPic) {
+LoadPic::LoadPic(QWidget* parent) : QDialog(parent), ui(new Ui::LoadPic) {
   ui->setupUi(this);
 
   mw_one->ui->f_ImgFun->setObjectName("myframe");
@@ -22,9 +21,9 @@ dlgLoadPic::dlgLoadPic(QWidget* parent)
   setModal(true);
 }
 
-dlgLoadPic::~dlgLoadPic() { delete ui; }
+LoadPic::~LoadPic() { delete ui; }
 
-void dlgLoadPic::initMain(QString imgFile) {
+void LoadPic::initMain(QString imgFile) {
   if (mw_one->isReaderVisible) mw_one->ui->frameReader->hide();
   if (mw_one->isMemoVisible) mw_one->ui->frameNotes->hide();
 
@@ -45,7 +44,7 @@ void dlgLoadPic::initMain(QString imgFile) {
       QUrl(QStringLiteral("qrc:/src/qmlsrc/imgview.qml")));
 }
 
-bool dlgLoadPic::eventFilter(QObject* watch, QEvent* evn) {
+bool LoadPic::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {

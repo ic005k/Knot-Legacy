@@ -249,7 +249,7 @@ void dlgRemarks::show_download() {
   int aver = getAndroidVer();
   // Android7.0及以上
   if (aver >= 24) {
-    m_AutoUpdate = new AutoUpdateDialog(this);
+    m_AutoUpdate = new AutoUpdate(this);
     int y = (mw_one->height() - m_AutoUpdate->height()) / 2;
     m_AutoUpdate->setGeometry(mw_one->geometry().x(), y, mw_one->width(),
                               m_AutoUpdate->height());
