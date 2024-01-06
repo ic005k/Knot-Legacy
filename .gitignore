@@ -18,3 +18,6 @@ bin/release/Knot
 .directory
 Knot.pro.user.56d248e
 Knot.pro.user.bd08410
+bin/debug/Knot.exe
+bin/debug/Knot.ilk
+bin/debug/Knot.pdb
