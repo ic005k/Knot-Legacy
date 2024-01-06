@@ -3431,8 +3431,10 @@ QString MainWindow::decMemos(QString strDec, QString file) {
 
 void MainWindow::init_Sensors() {
   accel_pedometer = new SpecialAccelerometerPedometer(this);
+
   // connect(accel_pedometer, SIGNAL(readingChanged()), this,
   // SLOT(newDatas()));
+
   connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
           SLOT(updateSteps()));
 

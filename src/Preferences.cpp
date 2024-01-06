@@ -14,7 +14,7 @@ Preferences::Preferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::Preferences) {
   ui->setupUi(this);
 
-  QFont font0 = mw_one->m_Method->getNewFont(17);
+  QFont font0 = mw_one->m_Method->getNewFont(16);
   ui->btnCustomFont->setFont(font0);
   ui->chkUIFont->setFont(font0);
   ui->chkReaderFont->setFont(font0);
