@@ -60,10 +60,10 @@
          <string notr="true"/>
         </property>
         <property name="minimum">
-         <number>12</number>
+         <number>9</number>
         </property>
         <property name="maximum">
-         <number>25</number>
+         <number>23</number>
         </property>
         <property name="pageStep">
          <number>1</number>

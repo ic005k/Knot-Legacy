@@ -89,12 +89,11 @@ int main(int argc, char* argv[]) {
   isAndroid = true;
   isIOS = false;
 
-  // privateDir = path + "/";
   iniDir = "/storage/emulated/0/KnotData/";
   privateDir = "/storage/emulated/0/.Knot/";
 
 #else
-  defaultFontSize = 12;
+  defaultFontSize = QApplication::font().pointSize();
 
   isAndroid = false;
   iniDir = QDir::homePath() + "/" + appName + "Data/";

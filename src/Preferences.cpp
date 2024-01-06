@@ -23,6 +23,12 @@ Preferences::Preferences(QWidget* parent)
   ui->btnReStart->setFont(font0);
   ui->lblTip->setFont(font0);
 
+#ifdef Q_OS_ANDROID
+  ui->sliderFontSize->setMinimum(15);
+#else
+  ui->sliderFontSize->setMinimum(9);
+#endif
+
   mw_one->set_btnStyle(this);
 
   this->installEventFilter(this);
