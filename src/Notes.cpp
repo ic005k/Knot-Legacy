@@ -15,12 +15,10 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
 
   QFont font0 = mw_one->m_Method->getNewFont(16);
-
   QObjectList btnList =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_ToolBar));
   for (int i = 0; i < btnList.count(); i++) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
-
     btn->setFont(font0);
 
 #ifdef Q_OS_ANDROID
@@ -38,6 +36,14 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->editRow->setFont(font0);
   ui->lblCol->setFont(font0);
   ui->lblRow->setFont(font0);
+
+  QFont font1 = mw_one->m_Method->getNewFont(19);
+  QObjectList btnList1 =
+      mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_Panel));
+  for (int i = 0; i < btnList1.count(); i++) {
+    QToolButton *btn = (QToolButton *)btnList1.at(i);
+    btn->setFont(font1);
+  }
 
   mw_one->set_btnStyle(this);
 
