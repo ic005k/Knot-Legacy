@@ -988,31 +988,31 @@ void NotesList::on_actionRename_NoteBook_triggered() {
 }
 
 int NotesList::getNoteBookCount() {
-  int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwNoteBook);
+  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwNoteBook);
   return count;
 }
 
 int NotesList::getNotesListCount() {
-  int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwNoteList);
+  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwNoteList);
   return count;
 }
 
 int NotesList::getNoteBookCurrentIndex() {
-  int index = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwNoteBook);
+  int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteBook);
   return index;
 }
 
 int NotesList::getNotesListCurrentIndex() {
-  int index = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwNoteList);
+  int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteList);
   return index;
 }
 
 void NotesList::setNoteBookCurrentIndex(int index) {
-  mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwNoteBook, index);
+  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteBook, index);
 }
 
 void NotesList::setNotesListCurrentIndex(int index) {
-  mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwNoteList, index);
+  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteList, index);
 }
 
 void NotesList::on_actionMoveUp_NoteBook_triggered() {

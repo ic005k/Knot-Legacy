@@ -228,7 +228,7 @@ void dlgReport::updateTable() {
   mw_one->ui->btnCategory->setText(tr("View Category"));
 
   setScrollBarPos(0);
-  mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwReport, 0);
+  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwReport, 0);
   loadDetailsQml();
 }
 
@@ -426,12 +426,12 @@ void dlgReport::on_btnCategory_clicked() {
       }
     }
 
-    int cate_count = mw_one->m_Method->getCountBakList(mw_one->ui->qwViewCate);
+    int cate_count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwViewCate);
     if (cate_count > 0) {
       mw_one->ui->lblViewCate3->setText(tr("View Category") + "  " +
                                         QString::number(cate_count));
-      mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwViewCate,
-                                               indexCategory);
+      mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwViewCate,
+                                              indexCategory);
     }
 
     // qDebug() << "listCategorySort=" << listCategorySort.count()
@@ -441,7 +441,7 @@ void dlgReport::on_btnCategory_clicked() {
 }
 
 void dlgReport::on_CateOk() {
-  int index = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwViewCate);
+  int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwViewCate);
   QString str0 = mw_one->m_Method->getText0(mw_one->ui->qwViewCate, index);
   str0 = str0.replace(tr("Category") + " : ", "").trimmed();
 
@@ -521,8 +521,8 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
     listD.append(bfb);
   }
 
-  if (mw_one->m_Method->getCountBakList(mw_one->ui->qwReportSub) > 0)
-    mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwReportSub, 0);
+  if (mw_one->m_Method->getCountFromQW(mw_one->ui->qwReportSub) > 0)
+    mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwReportSub, 0);
 }
 
 void setTableNoItemFlags(QTableWidget* t, int row) {

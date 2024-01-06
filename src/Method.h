@@ -31,15 +31,15 @@ class Method : public QDialog {
   void addItem(QString text_tab, QString text0, QString text1, QString text2,
                QString text3, int itemH);
 
-  void setCurrentIndexBakList(QQuickWidget *qw, int index);
+  void setCurrentIndexFromQW(QQuickWidget *qw, int index);
   void clearAllBakList(QQuickWidget *qw);
-  int getCountBakList(QQuickWidget *qw);
+  int getCountFromQW(QQuickWidget *qw);
   void delItemBakList(QQuickWidget *qw, int index);
   void addItemBakList(QQuickWidget *qw, QString text0, QString text1,
                       QString text2, QString text3, int itemH);
 
   QString getText3(QQuickWidget *qw, int index);
-  int getCurrentIndexBakList(QQuickWidget *qw);
+  int getCurrentIndexFromQW(QQuickWidget *qw);
   QString getText0(QQuickWidget *qw, int index);
 
   void saveCurNoteIndex();
@@ -65,7 +65,8 @@ class Method : public QDialog {
   QFont getNewFont(int maxSize);
 
   int getFontHeight();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

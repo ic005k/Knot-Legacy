@@ -2105,16 +2105,16 @@ void MainWindow::set_Time() {
     }
 
     int newrow;
-    int row = m_Method->getCurrentIndexBakList(ui->qwMainEvent);
+    int row = m_Method->getCurrentIndexFromQW(ui->qwMainEvent);
     if (childRow0 - childRow1 == 0) newrow = row;
     if (childRow0 - childRow1 < 0) newrow = row + childRow1 - childRow0;
     if (childRow0 - childRow1 > 0) newrow = row - (childRow0 - childRow1);
 
-    int maindateIndex = m_Method->getCurrentIndexBakList(ui->qwMainDate);
+    int maindateIndex = m_Method->getCurrentIndexFromQW(ui->qwMainDate);
     reloadMain();
-    m_Method->setCurrentIndexBakList(ui->qwMainDate, maindateIndex);
+    m_Method->setCurrentIndexFromQW(ui->qwMainDate, maindateIndex);
     m_Method->clickMainDate();
-    m_Method->setCurrentIndexBakList(ui->qwMainEvent, newrow);
+    m_Method->setCurrentIndexFromQW(ui->qwMainEvent, newrow);
   }
 }
 
@@ -3777,7 +3777,7 @@ void MainWindow::init_UIWidget() {
 }
 
 void MainWindow::selTab() {
-  int index = m_Method->getCurrentIndexBakList(ui->qwSelTab);
+  int index = m_Method->getCurrentIndexFromQW(ui->qwSelTab);
   tabData->setCurrentIndex(index);
   on_btnBackSetTab_clicked();
 }
@@ -3793,7 +3793,7 @@ void MainWindow::on_btnSelTab_clicked() {
   }
 
   int index = ui->tabWidget->currentIndex();
-  m_Method->setCurrentIndexBakList(ui->qwSelTab, index);
+  m_Method->setCurrentIndexFromQW(ui->qwSelTab, index);
 
   ui->lblSelTabInfo->setText(tr("Total") + " : " + QString::number(tab_count) +
                              " ( " + QString::number(index + 1) + " ) ");
@@ -4071,9 +4071,9 @@ void MainWindow::on_actionTabRecycle() {
     }
   }
 
-  int t_count = m_Method->getCountBakList(ui->qwTabRecycle);
+  int t_count = m_Method->getCountFromQW(ui->qwTabRecycle);
   if (t_count > 0) {
-    m_Method->setCurrentIndexBakList(ui->qwTabRecycle, 0);
+    m_Method->setCurrentIndexFromQW(ui->qwTabRecycle, 0);
   }
 
   ui->lblTitleTabRecycle->setText(tr("Tab Recycle") + "    " + tr("Total") +
@@ -4100,12 +4100,12 @@ void MainWindow::on_actionBakFileList() {
     m_Method->addItemBakList(ui->qwBakList, item, "", "", bakfile, 0);
   }
 
-  if (m_Method->getCountBakList(ui->qwBakList) > 0)
-    m_Method->setCurrentIndexBakList(ui->qwBakList, 0);
+  if (m_Method->getCountFromQW(ui->qwBakList) > 0)
+    m_Method->setCurrentIndexFromQW(ui->qwBakList, 0);
 
   ui->lblBakListTitle->setText(
       tr("Backup File List") + "    " + tr("Total") + " : " +
-      QString::number(m_Method->getCountBakList(ui->qwBakList)));
+      QString::number(m_Method->getCountFromQW(ui->qwBakList)));
 }
 
 void MainWindow::on_btnMenu_clicked() {
@@ -4710,13 +4710,13 @@ void MainWindow::on_btnNotesList_clicked() {
     if (notebookIndex + 1 >= notebookCount) notebookIndex = notebookCount - 1;
     if (notebookIndex < 0) notebookIndex = 0;
 
-    m_Method->setCurrentIndexBakList(mw_one->ui->qwNoteBook, notebookIndex);
+    m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteBook, notebookIndex);
     m_Method->clickNoteBook();
 
     int noteCount = m_NotesList->getNotesListCount();
     if (noteIndex + 1 >= noteCount) noteIndex = noteCount - 1;
     if (noteIndex < 0) noteIndex = 0;
-    m_Method->setCurrentIndexBakList(mw_one->ui->qwNoteList, noteIndex);
+    m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteList, noteIndex);
   }
 
   m_NotesList->setNoteLabel();
@@ -5050,8 +5050,8 @@ void MainWindow::reloadMain() {
   }
 
   m_Method->gotoEnd(ui->qwMainDate);
-  int count = m_Method->getCountBakList(ui->qwMainDate);
-  m_Method->setCurrentIndexBakList(ui->qwMainDate, count - 1);
+  int count = m_Method->getCountFromQW(ui->qwMainDate);
+  m_Method->setCurrentIndexFromQW(ui->qwMainDate, count - 1);
 
   m_Method->clickMainDate();
 }
@@ -5181,9 +5181,9 @@ void MainWindow::on_btnBackBakList_clicked() {
 }
 
 void MainWindow::on_btnImportBakList_clicked() {
-  if (m_Method->getCountBakList(ui->qwBakList) == 0) return;
+  if (m_Method->getCountFromQW(ui->qwBakList) == 0) return;
 
-  int cur_index = m_Method->getCurrentIndexBakList(ui->qwBakList);
+  int cur_index = m_Method->getCurrentIndexFromQW(ui->qwBakList);
   QString str = m_Method->getText3(ui->qwBakList, cur_index);
   zipfile = str.trimmed();
 
@@ -5216,8 +5216,8 @@ void MainWindow::on_btnBackTabRecycle_clicked() {
 }
 
 void MainWindow::on_btnDelTabRecycle_clicked() {
-  if (m_Method->getCountBakList(ui->qwTabRecycle) == 0) return;
-  int index = m_Method->getCurrentIndexBakList(ui->qwTabRecycle);
+  if (m_Method->getCountFromQW(ui->qwTabRecycle) == 0) return;
+  int index = m_Method->getCurrentIndexFromQW(ui->qwTabRecycle);
   QString tab_file = m_Method->getText3(ui->qwTabRecycle, index);
 
   ShowMessage *m_ShowMsg = new ShowMessage(this);
@@ -5231,18 +5231,18 @@ void MainWindow::on_btnDelTabRecycle_clicked() {
 
   ui->lblTitleTabRecycle->setText(
       tr("Tab Recycle") + "    " + tr("Total") + " : " +
-      QString::number(m_Method->getCountBakList(ui->qwTabRecycle)));
+      QString::number(m_Method->getCountFromQW(ui->qwTabRecycle)));
 }
 
 void MainWindow::on_btnRestoreTab_clicked() {
-  if (m_Method->getCountBakList(ui->qwTabRecycle) == 0) return;
+  if (m_Method->getCountFromQW(ui->qwTabRecycle) == 0) return;
 
   int count = ui->tabWidget->tabBar()->count();
   QString twName = m_Notes->getDateTimeStr() + "_" + QString::number(count + 1);
   QString ini_file = iniDir + twName + ".ini";
   if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
-  int index = m_Method->getCurrentIndexBakList(ui->qwTabRecycle);
+  int index = m_Method->getCurrentIndexFromQW(ui->qwTabRecycle);
   QString recycle = m_Method->getText3(ui->qwTabRecycle, index);
   QFile::copy(recycle, ini_file);
 
@@ -5268,9 +5268,9 @@ void MainWindow::on_btnRestoreTab_clicked() {
 }
 
 void MainWindow::on_btnDelBakFile_clicked() {
-  if (m_Method->getCountBakList(ui->qwBakList) == 0) return;
+  if (m_Method->getCountFromQW(ui->qwBakList) == 0) return;
 
-  int index = m_Method->getCurrentIndexBakList(ui->qwBakList);
+  int index = m_Method->getCurrentIndexFromQW(ui->qwBakList);
   QString bak_file = m_Method->getText3(ui->qwBakList, index);
 
   ShowMessage *m_ShowMsg = new ShowMessage(this);
@@ -5285,11 +5285,11 @@ void MainWindow::on_btnDelBakFile_clicked() {
   int newIndex = index - 1;
   if (newIndex < 0) newIndex = 0;
 
-  m_Method->setCurrentIndexBakList(ui->qwBakList, newIndex);
+  m_Method->setCurrentIndexFromQW(ui->qwBakList, newIndex);
 
   ui->lblBakListTitle->setText(
       tr("Backup File List") + "    " + tr("Total") + " : " +
-      QString::number(m_Method->getCountBakList(ui->qwBakList)));
+      QString::number(m_Method->getCountFromQW(ui->qwBakList)));
 }
 
 void MainWindow::on_btnBackNoteList_clicked() {
@@ -5321,10 +5321,10 @@ void MainWindow::on_btnNoteRecycle_clicked() {
 }
 
 void MainWindow::on_btnDelNoteRecycle_clicked() {
-  int count = m_Method->getCountBakList(ui->qwNoteRecycle);
+  int count = m_Method->getCountFromQW(ui->qwNoteRecycle);
   if (count == 0) return;
 
-  int index = m_Method->getCurrentIndexBakList(ui->qwNoteRecycle);
+  int index = m_Method->getCurrentIndexFromQW(ui->qwNoteRecycle);
   QString file = m_Method->getText0(ui->qwNoteRecycle, index);
 
   ShowMessage *m_ShowMsg = new ShowMessage(this);
@@ -5340,16 +5340,16 @@ void MainWindow::on_btnDelNoteRecycle_clicked() {
 }
 
 void MainWindow::on_btnRestoreNoteRecycle_clicked() {
-  int count = m_Method->getCountBakList(ui->qwNoteRecycle);
+  int count = m_Method->getCountFromQW(ui->qwNoteRecycle);
   if (count == 0) return;
 
   if (m_NotesList->getNoteBookCount() == 0) return;
 
-  int indexRecycle = m_Method->getCurrentIndexBakList(ui->qwNoteRecycle);
+  int indexRecycle = m_Method->getCurrentIndexFromQW(ui->qwNoteRecycle);
   m_NotesList->twrb->setCurrentItem(
       m_NotesList->twrb->topLevelItem(0)->child(indexRecycle));
 
-  int indexTop = m_Method->getCurrentIndexBakList(ui->qwNoteBook);
+  int indexTop = m_Method->getCurrentIndexFromQW(ui->qwNoteBook);
 
   m_NotesList->tw->setCurrentItem(m_NotesList->tw->topLevelItem(indexTop));
 
@@ -5357,8 +5357,8 @@ void MainWindow::on_btnRestoreNoteRecycle_clicked() {
 
   m_Method->delItemBakList(ui->qwNoteRecycle, indexRecycle);
 
-  int noteCount = m_Method->getCountBakList(ui->qwNoteList);
-  m_Method->setCurrentIndexBakList(ui->qwNoteList, noteCount - 1);
+  int noteCount = m_Method->getCountFromQW(ui->qwNoteList);
+  m_Method->setCurrentIndexFromQW(ui->qwNoteList, noteCount - 1);
   m_Method->clickNoteList();
 
   on_btnBackNoteRecycle_clicked();

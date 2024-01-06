@@ -126,5 +126,6 @@ class Todo : public QDialog {
   bool isModi = false;
   bool isWeekValid(QString lblDateTime, QString strDate);
   bool isTomorrow = false;
+  void changeTodoIcon(bool isToday);
 };
 #endif  // TODO_H

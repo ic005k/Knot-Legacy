@@ -1382,14 +1382,14 @@ void dlgReader::getReadList() {
     QString str = bookList.at(i);
     QStringList listBooks = str.split("|");
     if (listBooks.at(1) == fileName) {
-      mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwBookList, i);
+      mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwBookList, i);
       break;
     }
   }
 }
 
 void dlgReader::clearAllReaderRecords() {
-  int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwBookList);
+  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwBookList);
   if (count == 0) return;
 
   ShowMessage* m_ShowMsg = new ShowMessage(this);
@@ -1403,7 +1403,7 @@ void dlgReader::clearAllReaderRecords() {
 }
 
 void dlgReader::openBookListItem() {
-  int index = mw_one->m_Method->getCurrentIndexBakList(mw_one->ui->qwBookList);
+  int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwBookList);
 
   if (index < 0) return;
 

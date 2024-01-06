@@ -101,7 +101,7 @@ void Method::delItemBakList(QQuickWidget* qw, int index) {
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
-int Method::getCountBakList(QQuickWidget* qw) {
+int Method::getCountFromQW(QQuickWidget* qw) {
   QQuickItem* root = qw->rootObject();
   QVariant itemCount;
   QMetaObject::invokeMethod((QObject*)root, "getItemCount",
@@ -110,7 +110,7 @@ int Method::getCountBakList(QQuickWidget* qw) {
 }
 
 void Method::clearAllBakList(QQuickWidget* qw) {
-  int count = getCountBakList(qw);
+  int count = getCountFromQW(qw);
   for (int i = 0; i < count; i++) {
     delItemBakList(qw, 0);
   }
@@ -121,13 +121,13 @@ void Method::gotoEnd(QQuickWidget* qw) {
   QMetaObject::invokeMethod((QObject*)root, "gotoEnd");
 }
 
-void Method::setCurrentIndexBakList(QQuickWidget* qw, int index) {
+void Method::setCurrentIndexFromQW(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
                             Q_ARG(QVariant, index));
 }
 
-int Method::getCurrentIndexBakList(QQuickWidget* qw) {
+int Method::getCurrentIndexFromQW(QQuickWidget* qw) {
   QQuickItem* root = qw->rootObject();
   QVariant itemIndex;
   QMetaObject::invokeMethod((QObject*)root, "getCurrentIndex",
@@ -381,7 +381,7 @@ void Method::setCellText(int row, int column, QString str,
 
 void Method::clickNoteBook() {
   clearAllBakList(mw_one->ui->qwNoteList);
-  int index = getCurrentIndexBakList(mw_one->ui->qwNoteBook);
+  int index = getCurrentIndexFromQW(mw_one->ui->qwNoteBook);
   QTreeWidgetItem* topItem = mw_one->m_NotesList->tw->topLevelItem(index);
   int child_count = topItem->childCount();
   for (int i = 0; i < child_count; i++) {
@@ -397,7 +397,7 @@ void Method::clickNoteBook() {
 void Method::clickNoteList() {
   mw_one->m_Notes->saveQMLVPos();
 
-  int index = getCurrentIndexBakList(mw_one->ui->qwNoteList);
+  int index = getCurrentIndexFromQW(mw_one->ui->qwNoteList);
   currentMDFile = iniDir + getText3(mw_one->ui->qwNoteList, index);
   QString noteName = getText0(mw_one->ui->qwNoteList, index);
   mw_one->m_Notes->MD2Html(currentMDFile);
@@ -409,8 +409,8 @@ void Method::clickNoteList() {
 
 void Method::clickMainDate() {
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
-  int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
-  int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
+  int maindateIndex = getCurrentIndexFromQW(mw_one->ui->qwMainDate);
+  int maindateCount = getCountFromQW(mw_one->ui->qwMainDate);
   int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
 
   if (topIndex < 0) return;
@@ -448,14 +448,14 @@ void Method::clickMainDate() {
   }
 
   gotoEnd(mw_one->ui->qwMainEvent);
-  int count = getCountBakList(mw_one->ui->qwMainEvent);
-  setCurrentIndexBakList(mw_one->ui->qwMainEvent, count - 1);
+  int count = getCountFromQW(mw_one->ui->qwMainEvent);
+  setCurrentIndexFromQW(mw_one->ui->qwMainEvent, count - 1);
 }
 
 void Method::clickMainDateData() {
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
-  int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
-  int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
+  int maindateIndex = getCurrentIndexFromQW(mw_one->ui->qwMainDate);
+  int maindateCount = getCountFromQW(mw_one->ui->qwMainDate);
   int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
 
   if (topIndex < 0) return;
@@ -467,10 +467,10 @@ void Method::clickMainDateData() {
 
 void Method::clickMainEventData() {
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
-  int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
-  int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
+  int maindateIndex = getCurrentIndexFromQW(mw_one->ui->qwMainDate);
+  int maindateCount = getCountFromQW(mw_one->ui->qwMainDate);
   int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
-  int childIndex = getCurrentIndexBakList(mw_one->ui->qwMainEvent);
+  int childIndex = getCurrentIndexFromQW(mw_one->ui->qwMainEvent);
   tw->setCurrentItem(tw->topLevelItem(topIndex)->child(childIndex));
 
   if (topIndex < 0) return;
@@ -481,10 +481,10 @@ void Method::clickMainEventData() {
 
 void Method::reeditMainEventData() {
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
-  int maindateIndex = getCurrentIndexBakList(mw_one->ui->qwMainDate);
-  int maindateCount = getCountBakList(mw_one->ui->qwMainDate);
+  int maindateIndex = getCurrentIndexFromQW(mw_one->ui->qwMainDate);
+  int maindateCount = getCountFromQW(mw_one->ui->qwMainDate);
   int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
-  int childIndex = getCurrentIndexBakList(mw_one->ui->qwMainEvent);
+  int childIndex = getCurrentIndexFromQW(mw_one->ui->qwMainEvent);
 
   if (topIndex < 0) return;
   if (childIndex < 0) return;
@@ -503,9 +503,9 @@ void Method::saveCurNoteIndex() {
   QString iniName = str.replace(iniDir, "");
 
   Reg.setValue("/MainNotes/notebookIndex",
-               getCurrentIndexBakList(mw_one->ui->qwNoteBook));
+               getCurrentIndexFromQW(mw_one->ui->qwNoteBook));
   Reg.setValue("/MainNotes/noteIndex",
-               getCurrentIndexBakList(mw_one->ui->qwNoteList));
+               getCurrentIndexFromQW(mw_one->ui->qwNoteList));
   Reg.setValue("/MainNotes/currentItem", iniName);
   Reg.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
 }
@@ -543,13 +543,13 @@ void Method::showNotsListMenu(int x, int y) {
 }
 
 void Method::setTypeRenameText() {
-  int index = getCurrentIndexBakList(mw_one->ui->qwCategory);
+  int index = getCurrentIndexFromQW(mw_one->ui->qwCategory);
   QString str = getText0(mw_one->ui->qwCategory, index);
   mw_one->ui->editRenameType->setText(str);
 }
 
 void Method::okType() {
-  int index = getCurrentIndexBakList(mw_one->ui->qwCategory);
+  int index = getCurrentIndexFromQW(mw_one->ui->qwCategory);
   m_CategoryList->ui->listWidget->setCurrentRow(index);
   QListWidgetItem* item = m_CategoryList->ui->listWidget->currentItem();
   m_CategoryList->on_listWidget_itemDoubleClicked(item);

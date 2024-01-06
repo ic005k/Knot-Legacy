@@ -197,10 +197,10 @@ void EditRecord::on_btnCustom_clicked() {
   mw_one->ui->frameCategory->show();
   init_Desc();
   m_CategoryList->ui->listWidget->setCurrentRow(0);
-  mw_one->m_Method->setCurrentIndexBakList(mw_one->ui->qwCategory, 0);
+  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwCategory, 0);
   mw_one->m_Method->setTypeRenameText();
 
-  int count = mw_one->m_Method->getCountBakList(mw_one->ui->qwCategory);
+  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwCategory);
   mw_one->ui->lblTypeInfo->setText(tr("Total") + " : " +
                                    QString::number(count));
 

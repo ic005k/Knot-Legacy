@@ -199,6 +199,10 @@ void Todo::on_btnLow_clicked() {
   setCurrentIndex(getCount() - 1);
 
   refreshAlarm();
+
+  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwTodo);
+  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwTodo, count - 1);
+
   isNeedSave = true;
 }
 
@@ -529,6 +533,9 @@ void Todo::on_btnRestore_clicked() {
 
   on_btnDel_clicked();
 
+  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwTodo);
+  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwTodo, count - 1);
+
   isNeedSave = true;
 }
 
@@ -717,6 +724,7 @@ void Todo::refreshAlarm() {
           if (str1.contains(text)) {
             delItem(m);
             insertItem(date, type, text, 0);
+            mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwTodo, 0);
             break;
           }
         }
@@ -726,11 +734,7 @@ void Todo::refreshAlarm() {
     }
   }
 
-  if (!isToday) {
-    mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
-  } else {
-    mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo1.png"));
-  }
+  changeTodoIcon(isToday);
 
   Reg.setValue("count", count);
   QString strMute = "true";
@@ -740,6 +744,14 @@ void Todo::refreshAlarm() {
     qDebug() << "ini no exists";
   else
     qDebug() << "ini ok";
+}
+
+void Todo::changeTodoIcon(bool isToday) {
+  if (!isToday) {
+    mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
+  } else {
+    mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo1.png"));
+  }
 }
 
 void Todo::on_editTodo_textChanged() {
