@@ -46,11 +46,11 @@ Rectangle {
         tableView.currentIndex = currentIndex
     }
 
-    function setTableData(currentIndex, date, steps, km) {
+    function setTableData(currentIndex, date, freq, amount) {
         tableModel.setRow(currentIndex, {
                               "Date": date,
-                              "Freq": steps,
-                              "Amount": km
+                              "Freq": freq,
+                              "Amount": amount
                           })
     }
 
@@ -61,7 +61,11 @@ Rectangle {
     Rectangle {
         id: header
         width: parent.width
-        height: 30
+        height: fontMetrics.height + 4
+
+        FontMetrics {
+            id: fontMetrics
+        }
 
         Row {
             spacing: 0
@@ -73,10 +77,12 @@ Rectangle {
                 Rectangle {
                     width: header.width / 3
                     height: header.height
+
                     color: "#666666"
                     border.width: 1
                     border.color: "#848484"
                     Text {
+                        id: m_text
                         text: modelData
                         anchors.centerIn: parent
                         //font.pointSize: 12
@@ -143,6 +149,7 @@ Rectangle {
                 anchors.centerIn: parent
 
                 color: "white"
+                font.pointSize: maxFontSize
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

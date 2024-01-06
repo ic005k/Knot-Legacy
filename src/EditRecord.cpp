@@ -61,6 +61,8 @@ EditRecord::EditRecord(QWidget *parent)
   mw_one->ui->editAmount->setReadOnly(true);
 
   mw_one->ui->editCategory->setPlaceholderText(tr("Please enter a category"));
+  mw_one->ui->editCategory->setFixedHeight(mw_one->m_Method->getFontHeight() +
+                                           4);
 
   lblStyle = mw_one->ui->lblCategory->styleSheet();
 

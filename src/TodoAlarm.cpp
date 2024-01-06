@@ -10,7 +10,7 @@ extern int fontSize;
 TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->setupUi(this);
 
-  font0 = mw_one->m_Method->getNewFont();
+  font0 = mw_one->m_Method->getNewFont(16);
 
   this->setFont(font0);
   ui->btnBack->setFont(font0);

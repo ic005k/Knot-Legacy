@@ -3177,7 +3177,7 @@ QRadioButton::indicator:checked {
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>30</height>
+           <height>16777215</height>
           </size>
          </property>
          <property name="frameShape">
@@ -3210,6 +3210,12 @@ QRadioButton::indicator:checked {
             </item>
             <item>
              <widget class="QLineEdit" name="editStepLength">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>35</string>
               </property>
@@ -4654,7 +4660,7 @@ selection-background-color: lightblue;
          <item>
           <widget class="QToolButton" name="btnBackEditRecord">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -4673,7 +4679,7 @@ selection-background-color: lightblue;
          <item>
           <widget class="QToolButton" name="btnType">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -4698,7 +4704,7 @@ selection-background-color: lightblue;
          <item>
           <widget class="QToolButton" name="btnOkEditRecord">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -4732,7 +4738,7 @@ selection-background-color: lightblue;
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>26</height>
+             <height>16777215</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -4745,6 +4751,12 @@ selection-background-color: lightblue;
          </item>
          <item>
           <widget class="QLineEdit" name="editCategory">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -4754,7 +4766,7 @@ selection-background-color: lightblue;
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>35</height>
+             <height>16777215</height>
             </size>
            </property>
           </widget>
@@ -4812,7 +4824,7 @@ selection-background-color: lightblue;
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>26</height>
+             <height>16777215</height>
             </size>
            </property>
            <property name="text">
@@ -4876,7 +4888,7 @@ border:1px solid #4169E1
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>35</height>
+             <height>16777215</height>
             </size>
            </property>
            <property name="text">

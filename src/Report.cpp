@@ -35,6 +35,10 @@ void setTableNoItemFlags(QTableWidget* t, int row);
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
 
+  if (fontSize > 17) {
+    mw_one->ui->qwReport->rootContext()->setContextProperty("maxFontSize", 17);
+  }
+
   this->installEventFilter(this);
   this->setModal(true);
 
@@ -204,8 +208,15 @@ void dlgReport::updateTable() {
     QString text0 = topItem->text(0);
     QString text1 = topItem->text(1);
     QString text2 = topItem->text(2);
+    QString text3 = topItem->text(3);
     freq = freq + text1.toInt();
     if (text2.length() > 0) t_amount = t_amount + text2.toDouble();
+
+    QStringList list = text0.split(" ");
+    QString str_t0;
+    if (list.count() == 3) {
+      str_t0 = text3 + " " + list.at(1) + " " + list.at(2);
+    }
 
     appendTable(text0, text1, text2);
   }
@@ -617,11 +628,11 @@ void dlgReport::on_btnOut2Img_clicked() {
   }
 }
 
-void dlgReport::appendTable(QString date, QString steps, QString km) {
+void dlgReport::appendTable(QString date, QString freq, QString amount) {
   QQuickItem* root = mw_one->ui->qwReport->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
-                            Q_ARG(QVariant, date), Q_ARG(QVariant, steps),
-                            Q_ARG(QVariant, km));
+                            Q_ARG(QVariant, date), Q_ARG(QVariant, freq),
+                            Q_ARG(QVariant, amount));
 }
 
 int dlgReport::getCount() {

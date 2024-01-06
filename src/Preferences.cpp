@@ -14,13 +14,21 @@ Preferences::Preferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::Preferences) {
   ui->setupUi(this);
 
+  QFont font0 = mw_one->m_Method->getNewFont(17);
+  ui->btnCustomFont->setFont(font0);
+  ui->chkUIFont->setFont(font0);
+  ui->chkReaderFont->setFont(font0);
+  ui->chkAutoTime->setFont(font0);
+  ui->chkDebug->setFont(font0);
+  ui->btnReStart->setFont(font0);
+  ui->lblTip->setFont(font0);
+
   mw_one->set_btnStyle(this);
 
   this->installEventFilter(this);
   ui->lblFontSize->installEventFilter(this);
 
   ui->chkClose->hide();
-  ui->chkShowCY->hide();
   ui->lblTip->hide();
 
   ui->sliderFontSize->setValue(fontSize);
@@ -30,7 +38,6 @@ Preferences::Preferences(QWidget* parent)
   chkStyle = ui->chkAutoTime->styleSheet();
   ui->chkClose->setStyleSheet(chkStyle);
   ui->chkDebug->setStyleSheet(chkStyle);
-  ui->chkShowCY->setStyleSheet(chkStyle);
   ui->chkReaderFont->setStyleSheet(chkStyle);
   ui->chkUIFont->setStyleSheet(chkStyle);
   ui->lblTip->setStyleSheet("color:red;");
@@ -96,7 +103,6 @@ void Preferences::saveOptions() {
   Reg.setValue("/Options/Close", ui->chkClose->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
-  Reg.setValue("/Options/ShowCurrentYear", ui->chkShowCY->isChecked());
   Reg.setValue("/Options/chkUIFont", ui->chkUIFont->isChecked());
 }
 
@@ -206,8 +212,6 @@ void Preferences::initOptions() {
       Reg.value("/Options/chkReaderFont", false).toBool());
   ui->chkClose->setChecked(Reg.value("/Options/Close", false).toBool());
   ui->chkAutoTime->setChecked(Reg.value("/Options/AutoTimeY", true).toBool());
-  ui->chkShowCY->setChecked(
-      Reg.value("/Options/ShowCurrentYear", true).toBool());
 
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   ui->chkDebug->setChecked(debugmode);

@@ -38,6 +38,12 @@ void Method::init() {
 
 Method::~Method() { delete ui; }
 
+int Method::getFontHeight() {
+  QFontMetrics fontMetrics(font());
+  int nFontHeight = fontMetrics.height();
+  return nFontHeight;
+}
+
 void Method::addItem(QString text_tab, QString text0, QString text1,
                      QString text2, QString text3, int itemH) {
   QQuickItem* root = mw_one->ui->qwSearch->rootObject();
@@ -885,10 +891,10 @@ void Method::showDelMsgBox(QString title, QString info) {
   dlg->exec();
 }
 
-QFont Method::getNewFont() {
+QFont Method::getNewFont(int maxSize) {
   QFont font0 = this->font();
-  if (fontSize > 16)
-    font0.setPointSize(16);
+  if (fontSize > maxSize)
+    font0.setPointSize(maxSize);
   else
     font0.setPointSize(fontSize);
 

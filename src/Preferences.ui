@@ -205,16 +205,6 @@ QCheckBox::indicator:checked{
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QCheckBox" name="chkShowCY">
-        <property name="text">
-         <string>Only current year data is displayed</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>

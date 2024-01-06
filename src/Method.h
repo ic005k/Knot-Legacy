@@ -62,7 +62,9 @@ class Method : public QDialog {
   void saveRecycleTabName(QString keyStr, QString tabName);
   QString getRecycleTabName(QString keyStr);
 
-  QFont getNewFont();
+  QFont getNewFont(int maxSize);
+
+  int getFontHeight();
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

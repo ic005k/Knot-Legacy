@@ -56,7 +56,11 @@ Rectangle {
     Rectangle {
         id: header
         width: parent.width
-        height: 30
+        height: fontMetrics.height + 4
+
+        FontMetrics {
+            id: fontMetrics
+        }
 
         Row {
             spacing: 0
@@ -102,6 +106,7 @@ Rectangle {
                 color: "#666666"
             }
             // Always show
+
 
             /*onActiveChanged: {
                 active = true;

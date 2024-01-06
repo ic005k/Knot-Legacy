@@ -38,7 +38,7 @@ class dlgReport : public QDialog {
   void clearAll();
   void delItem(int index);
   int getCount();
-  void appendTable(QString date, QString steps, QString km);
+
   void appendSteps_xx(QString date, QString steps, QString km);
   int getCount_xx();
   void delItem_xx(int index);
@@ -61,6 +61,8 @@ class dlgReport : public QDialog {
   void startReport1();
   void startReport2();
   void on_CateOk();
+
+  void appendTable(QString date, QString freq, QString amount);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
