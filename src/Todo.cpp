@@ -178,6 +178,9 @@ void Todo::on_btnHigh_clicked() {
   if (row < 0) return;
 
   QString strTime = getItemTime(row);
+
+  if (getTimeStr(strTime) != "") return;
+
   QString strText = getItemTodoText(row);
 
   delItem(row);
@@ -193,15 +196,16 @@ void Todo::on_btnLow_clicked() {
   if (row < 0) return;
 
   QString strTime = getItemTime(row);
+
+  if (getTimeStr(strTime) != "") return;
+
   QString strTodoText = getItemTodoText(row);
   delItem(row);
   addItem(strTime, 0, strTodoText);
-  setCurrentIndex(getCount() - 1);
 
   refreshAlarm();
 
-  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwTodo);
-  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwTodo, count - 1);
+  setCurrentIndex(getCount() - 1);
 
   isNeedSave = true;
 }
@@ -374,6 +378,7 @@ void Todo::on_btnSetTime_clicked() {
     mw_one->m_TodoAlarm->ui->dateTimeEdit->setTime(time);
 
   } else {
+    str = getItemTime(row);
     QStringList list = str.split(" ");
     if (str.mid(0, 2) == "20" && str.contains("-")) {
       date = QDate::fromString(list.at(0), "yyyy-M-d");
@@ -533,8 +538,7 @@ void Todo::on_btnRestore_clicked() {
 
   on_btnDel_clicked();
 
-  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwTodo);
-  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwTodo, count - 1);
+  setCurrentIndex(getCount() - 1);
 
   isNeedSave = true;
 }
@@ -724,7 +728,7 @@ void Todo::refreshAlarm() {
           if (str1.contains(text)) {
             delItem(m);
             insertItem(date, type, text, 0);
-            mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwTodo, 0);
+
             break;
           }
         }

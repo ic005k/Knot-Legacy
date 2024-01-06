@@ -3127,6 +3127,7 @@ void MainWindow::on_btnTodo_clicked() {
   m_Todo->init_Todo();
 
   m_Todo->refreshAlarm();
+  m_Todo->setCurrentIndex(0);
 }
 
 void MainWindow::on_rbFreq_clicked() {
