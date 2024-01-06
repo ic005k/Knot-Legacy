@@ -2503,15 +2503,15 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>30</width>
+                <height>30</height>
                </size>
               </property>
               <property name="shortcut">
                <string>Esc</string>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -2544,12 +2544,12 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>23</width>
-                <height>23</height>
+                <width>30</width>
+                <height>30</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -2582,15 +2582,15 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>30</width>
+                <height>30</height>
                </size>
               </property>
               <property name="shortcut">
                <string>Ctrl+Return</string>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -2623,12 +2623,12 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>23</width>
-                <height>23</height>
+                <width>30</width>
+                <height>30</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -2661,12 +2661,12 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>30</width>
+                <height>30</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -2699,12 +2699,12 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>30</width>
+                <height>30</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -2737,12 +2737,12 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>30</width>
+                <height>30</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -5477,7 +5477,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">
