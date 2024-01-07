@@ -66,7 +66,8 @@ class Method : public QDialog {
 
   int getFontHeight();
 
- protected:
+  void closeKeyboard();
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

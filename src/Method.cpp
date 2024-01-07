@@ -38,6 +38,16 @@ void Method::init() {
 
 Method::~Method() { delete ui; }
 
+void Method::closeKeyboard() {
+  if (mw_one->pAndroidKeyboard->isVisible()) {
+    mw_one->pAndroidKeyboard->hide();
+  }
+
+  if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
+    mw_one->m_Notes->m_TextSelector->on_btnClose_clicked();
+  }
+}
+
 int Method::getFontHeight() {
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();

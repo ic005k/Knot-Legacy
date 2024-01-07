@@ -2639,8 +2639,13 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameEditRecord->isHidden()) {
-        on_btnBackEditRecord_clicked();
-        return true;
+        if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
+          mw_one->m_Notes->m_TextSelector->close();
+          return true;
+        } else {
+          on_btnBackEditRecord_clicked();
+          return true;
+        }
       }
 
       if (!ui->frameBookList->isHidden()) {
@@ -4791,6 +4796,8 @@ void MainWindow::on_KVChanged() {}
 void MainWindow::on_btnAddTodo_clicked() { m_Todo->on_btnAdd_clicked(); }
 
 void MainWindow::on_btnBackTodo_clicked() {
+  m_Method->closeKeyboard();
+
   m_Todo->saveTodo();
   ui->frameTodo->hide();
   ui->frameMain->show();
@@ -4801,13 +4808,25 @@ void MainWindow::on_btnBackTodo_clicked() {
   addFilesWatch();
 }
 
-void MainWindow::on_btnHigh_clicked() { m_Todo->on_btnHigh_clicked(); }
+void MainWindow::on_btnHigh_clicked() {
+  m_Method->closeKeyboard();
+  m_Todo->on_btnHigh_clicked();
+}
 
-void MainWindow::on_btnLow_clicked() { m_Todo->on_btnLow_clicked(); }
+void MainWindow::on_btnLow_clicked() {
+  m_Method->closeKeyboard();
+  m_Todo->on_btnLow_clicked();
+}
 
-void MainWindow::on_btnSetTime_clicked() { m_Todo->on_btnSetTime_clicked(); }
+void MainWindow::on_btnSetTime_clicked() {
+  m_Method->closeKeyboard();
+  m_Todo->on_btnSetTime_clicked();
+}
 
-void MainWindow::on_btnRecycle_clicked() { m_Todo->on_btnRecycle_clicked(); }
+void MainWindow::on_btnRecycle_clicked() {
+  m_Method->closeKeyboard();
+  m_Todo->on_btnRecycle_clicked();
+}
 
 void MainWindow::on_btnReturnRecycle_clicked() {
   m_Todo->on_btnReturn_clicked();
@@ -5432,11 +5451,17 @@ void MainWindow::on_btnBackSetTab_clicked() {
 }
 
 void MainWindow::on_btnBackEditRecord_clicked() {
+  m_Method->closeKeyboard();
+
   ui->frameEditRecord->hide();
   ui->frameMain->show();
 }
 
-void MainWindow::on_btnType_clicked() { m_EditRecord->on_btnCustom_clicked(); }
+void MainWindow::on_btnType_clicked() {
+  m_Method->closeKeyboard();
+
+  m_EditRecord->on_btnCustom_clicked();
+}
 
 void MainWindow::on_btnOkEditRecord_clicked() {
   m_EditRecord->on_btnOk_clicked();
@@ -5509,4 +5534,7 @@ void MainWindow::on_btnAnd_clicked() { ui->editSearchText->insert("&"); }
 
 void MainWindow::on_btnClear_clicked() { ui->editTodo->clear(); }
 
-void MainWindow::on_btnModify_clicked() { m_Todo->reeditText(); }
+void MainWindow::on_btnModify_clicked() {
+  m_Method->closeKeyboard();
+  m_Todo->reeditText();
+}
