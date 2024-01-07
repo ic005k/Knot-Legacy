@@ -103,5 +103,6 @@
         <file>res/paste.svg</file>
         <file>res/selall.svg</file>
         <file>res/plus.svg</file>
+        <file>res/clear.svg</file>
     </qresource>
 </RCC>

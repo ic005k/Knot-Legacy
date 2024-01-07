@@ -2715,7 +2715,7 @@ QTabBar::scroller {width:0}
          <item>
           <widget class="QToolButton" name="btnAddTodo">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -2782,6 +2782,12 @@ border:1px solid #4169E1
          </item>
          <item>
           <widget class="QToolButton" name="btnClear">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
