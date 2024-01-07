@@ -26,7 +26,7 @@ class dlgReport : public QDialog {
 
   DateSelector *myDateSelector;
   static void saveYMD();
-  QString str_xx;
+
   void getCategoryData(QString strCategory, bool appendTable);
   QStringList listCategorySort;
   QList<double> listD;

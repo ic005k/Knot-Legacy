@@ -717,11 +717,11 @@ void dlgReport::setScrollBarPos_xx(double pos) {
 }
 
 void dlgReport::loadDetailsQml() {
+  if (getCount() == 0) return;
+
   btnCategory->setText(tr("View Category"));
   mw_one->ui->lblDetails->setText(tr("Details"));
   clearAll_xx();
-  setCurrentHeader(1);
-  str_xx.clear();
 
   int row = getCurrentIndex();
   QString date = getDate(row);
@@ -730,7 +730,6 @@ void dlgReport::loadDetailsQml() {
   QString year;
   QStringList list = listTableSync.at(row).split("===");
   if (list.count() == 2) {
-    date = list.at(0).trimmed();
     year = list.at(1).trimmed();
   }
 
@@ -738,8 +737,9 @@ void dlgReport::loadDetailsQml() {
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
     QString str_year = topItem->text(3);
+    QString str_date = topItem->text(0);
 
-    if (topItem->text(0) == date && str_year == year) {
+    if (str_date.contains(date) && str_year == year) {
       mw_one->ui->lblDetails->setText(tr("Details") + "    " + date + "    " +
                                       str_year);
 
