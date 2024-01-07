@@ -32,7 +32,6 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   mw_one->ui->frameTodo->layout()->setContentsMargins(1, 1, 1, 1);
   mw_one->ui->frameTodo->layout()->setSpacing(2);
   mw_one->ui->editTodo->setContentsMargins(12, 0, 12, 0);
-  mw_one->ui->btnAddTodo->setStyleSheet("border:none");
   mw_one->ui->btnBackTodo->setStyleSheet("border:none");
   mw_one->ui->btnHigh->setStyleSheet("border:none");
   mw_one->ui->btnLow->setStyleSheet("border:none");
@@ -50,7 +49,6 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   mw_one->ui->btnSetTime->setFont(f);
   mw_one->ui->btnRecycle->setFont(f);
 
-  mw_one->ui->btnModify->hide();
   mw_one->ui->btnPasteTodo->hide();
 
   mw_one->ui->editTodo->setFixedHeight(getEditTextHeight(mw_one->ui->editTodo) +

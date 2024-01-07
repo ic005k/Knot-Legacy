@@ -5506,3 +5506,5 @@ void MainWindow::on_btnClearAllRecords_clicked() {
 void MainWindow::on_btnAnd_clicked() { ui->editSearchText->insert("&"); }
 
 void MainWindow::on_btnClear_clicked() { ui->editTodo->clear(); }
+
+void MainWindow::on_btnModify_clicked() { m_Todo->reeditText(); }

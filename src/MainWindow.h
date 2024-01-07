@@ -763,6 +763,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnClear_clicked();
 
+  void on_btnModify_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

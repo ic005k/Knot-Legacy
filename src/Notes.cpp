@@ -242,8 +242,9 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
       isMousePress = true;
       isMouseMove = false;
 
-      timerEditPanel->stop();
-      m_TextSelector->on_btnClose_clicked();
+      if (!isAndroid) {
+        m_TextSelector->on_btnClose_clicked();
+      }
 
       px = event->globalX();
       py = event->globalY();
