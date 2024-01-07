@@ -28,8 +28,7 @@ EditRecord::EditRecord(QWidget *parent)
 
   this->installEventFilter(this);
   mw_one->ui->editCategory->installEventFilter(this);
-  mw_one->ui->editDetails->installEventFilter(this);
-  mw_one->ui->editDetails->viewport()->installEventFilter(this);
+  mw_one->ui->editDetails->viewport()->installEventFilter(mw_one);
 
   QFont font;
   font.setPointSize(23);
@@ -207,7 +206,7 @@ void EditRecord::on_btnCustom_clicked() {
   return;
 
   m_CategoryList->close();
-  m_CategoryList = new CategoryList(mw_one->myEditRecord);
+  m_CategoryList = new CategoryList(mw_one->m_EditRecord);
 
   int h = mw_one->height();
   int w = mw_one->width();
@@ -321,10 +320,6 @@ void EditRecord::getTime(int h, int m) {
 }
 
 bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
-  if (watch == mw_one->ui->editDetails->viewport()) {
-    mw_one->m_Notes->getEditPanel(mw_one->ui->editDetails, evn);
-  }
-
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -336,7 +331,7 @@ bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
         mw_one->closeGrayWindows();
 
         return true;
-      } else if (!mw_one->myEditRecord->isHidden()) {
+      } else if (!mw_one->m_EditRecord->isHidden()) {
         on_btnBack_clicked();
         return true;
       }

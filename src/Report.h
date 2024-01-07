@@ -76,6 +76,7 @@ class dlgReport : public QDialog {
   double t_amount = 0;
   int freq = 0;
   int indexCategory = 0;
+  QStringList listTableSync;
 };
 
 #endif  // REPORT_H

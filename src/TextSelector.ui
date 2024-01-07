@@ -94,13 +94,23 @@
         <item>
          <widget class="QToolButton" name="btnBing">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="text">
            <string>Bing</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/res/bing.svg</normaloff>:/res/bing.svg</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -115,6 +125,16 @@
           <property name="text">
            <string>Copy</string>
           </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/res/copy.svg</normaloff>:/res/copy.svg</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
          </widget>
         </item>
         <item>
@@ -127,6 +147,16 @@
           </property>
           <property name="text">
            <string>Paste</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/res/paste.svg</normaloff>:/res/paste.svg</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -141,18 +171,38 @@
           <property name="text">
            <string>Cut</string>
           </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/res/cut.svg</normaloff>:/res/cut.svg</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="btnDel">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="text">
            <string>Del</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/res/del.svg</normaloff>:/res/del.svg</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -166,6 +216,16 @@
           </property>
           <property name="text">
            <string>Sel All</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../res.qrc">
+            <normaloff>:/res/selall.svg</normaloff>:/res/selall.svg</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -245,6 +305,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
 </ui>

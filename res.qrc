@@ -96,5 +96,11 @@
         <file>res/fl.svg</file>
         <file>res/time.svg</file>
         <file>res/sum.svg</file>
+        <file>res/bing.svg</file>
+        <file>res/copy.svg</file>
+        <file>res/cut.svg</file>
+        <file>res/del.svg</file>
+        <file>res/paste.svg</file>
+        <file>res/selall.svg</file>
     </qresource>
 </RCC>

@@ -242,6 +242,7 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
       isMousePress = true;
       isMouseMove = false;
 
+      timerEditPanel->stop();
       m_TextSelector->on_btnClose_clicked();
 
       px = event->globalX();
@@ -266,11 +267,12 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
       }
 
       if (textEdit == mw_one->ui->editTodo)
-        y1 = mw_one->ui->editTodo->y() + mw_one->ui->editTodo->height() + 2;
+        y1 = mw_one->geometry().y() + mw_one->ui->editTodo->y() +
+             mw_one->ui->editTodo->height() + 2;
 
       if (textEdit == mw_one->ui->editDetails)
-        y1 = mw_one->ui->editDetails->y() + mw_one->ui->editDetails->height() +
-             2;
+        y1 = mw_one->geometry().y() + mw_one->ui->editDetails->y() +
+             mw_one->ui->editDetails->height() + 2;
 #else
 
 #endif
@@ -951,6 +953,36 @@ void Notes::highlightCurrentLine() {
 void Notes::onTextChange() {}
 
 void Notes::on_btnPaste_clicked() { ui->editSource->paste(); }
+
+bool Notes::eventFilterTodo(QObject *watch, QEvent *evn) {
+  if (watch == mw_one->ui->editTodo->viewport()) {
+    mw_one->m_Notes->getEditPanel(mw_one->ui->editTodo, evn);
+
+    if (evn->type() == QEvent::MouseButtonDblClick) {
+      y1 = mw_one->geometry().y() + mw_one->ui->editTodo->y() +
+           mw_one->ui->editTodo->height() + 2;
+      isMousePress = true;
+      on_showEditPanel();
+    }
+  }
+
+  return QWidget::eventFilter(watch, evn);
+}
+
+bool Notes::eventFilterEditRecord(QObject *watch, QEvent *evn) {
+  if (watch == mw_one->ui->editDetails->viewport()) {
+    mw_one->m_Notes->getEditPanel(mw_one->ui->editDetails, evn);
+
+    if (evn->type() == QEvent::MouseButtonDblClick) {
+      y1 = mw_one->geometry().y() + mw_one->ui->editDetails->y() +
+           mw_one->ui->editDetails->height() + 2;
+      isMousePress = true;
+      on_showEditPanel();
+    }
+  }
+
+  return QWidget::eventFilter(watch, evn);
+}
 
 void Notes::on_showEditPanel() {
   timerEditPanel->stop();

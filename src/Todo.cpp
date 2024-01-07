@@ -51,6 +51,7 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   mw_one->ui->btnRecycle->setFont(f);
 
   mw_one->ui->btnModify->hide();
+  mw_one->ui->btnPasteTodo->hide();
 
   mw_one->ui->editTodo->setFixedHeight(getEditTextHeight(mw_one->ui->editTodo) +
                                        2);

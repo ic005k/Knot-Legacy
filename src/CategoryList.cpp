@@ -84,7 +84,7 @@ void CategoryList::on_btnDel_clicked() {
 
     mw_one->m_Method->delItemBakList(mw_one->ui->qwCategory, row);
   }
-  mw_one->myEditRecord->saveCustomDesc();
+  mw_one->m_EditRecord->saveCustomDesc();
   if (ui->listWidget->count() > 0)
     on_listWidget_itemClicked(ui->listWidget->currentItem());
   else
@@ -139,7 +139,7 @@ void CategoryList::on_btnRename_clicked() {
     for (int i = 0; i < ui->listWidget->count(); i++) {
       list.append(ui->listWidget->item(i)->text().trimmed());
     }
-    mw_one->myEditRecord->removeDuplicates(&list);
+    mw_one->m_EditRecord->removeDuplicates(&list);
     ui->listWidget->clear();
     for (int i = 0; i < list.count(); i++) {
       QListWidgetItem* item = new QListWidgetItem(list.at(i));
@@ -147,7 +147,7 @@ void CategoryList::on_btnRename_clicked() {
       ui->listWidget->addItem(item);
     }
     if (index >= 0) ui->listWidget->setCurrentRow(index);
-    mw_one->myEditRecord->saveCustomDesc();
+    mw_one->m_EditRecord->saveCustomDesc();
 
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
       QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);

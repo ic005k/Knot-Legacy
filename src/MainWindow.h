@@ -232,7 +232,7 @@ class MainWindow : public QMainWindow {
   void init_Options();
 
   dlgRemarks *m_Remarks;
-  EditRecord *myEditRecord;
+  EditRecord *m_EditRecord;
   Todo *m_Todo;
   dlgReport *m_Report;
   Preferences *m_Preferences;
@@ -343,6 +343,7 @@ class MainWindow : public QMainWindow {
   //"QListWidget::item:hover{background-color:#e6e6e6;margin:1px,1px,1px,"
   //"1px;border-radius:6;"
   //"color:black}"
+
   QString listStyleMain =
       "QListWidget{outline:0px;}"
       "QListWidget::item:selected{background:rgb(255,0,0); border:0px "
@@ -759,6 +760,8 @@ class MainWindow : public QMainWindow {
   void on_btnClearAllRecords_clicked();
 
   void on_btnAnd_clicked();
+
+  void on_btnClear_clicked();
 
  private:
   bool isShowDetails = false;

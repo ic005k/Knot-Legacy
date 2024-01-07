@@ -89,7 +89,10 @@ class Notes : public QDialog {
   bool selectPDFFormat(QPrinter *printer);
   void on_btnPDF_clicked();
 
- protected:
+  bool eventFilterTodo(QObject *watch, QEvent *evn);
+
+  bool eventFilterEditRecord(QObject *watch, QEvent *evn);
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -191,7 +194,12 @@ class Notes : public QDialog {
 
  private:
   int x_left, x_right, y_left, y_right;
+
   int y1;
+
+  bool isMouseRelease = false;
+  bool isMousePress = false;
+  bool isMouseMove = false;
 
   QTimer *timerCur;
   QPainter *pPainter;
@@ -200,9 +208,6 @@ class Notes : public QDialog {
   bool isFunShow;
   QTimer *timerEditPanel;
 
-  bool isMouseRelease = false;
-  bool isMousePress = false;
-  bool isMouseMove = false;
   QWidget *lineNumberArea;
   int newHeight = 0;
 

@@ -874,7 +874,7 @@ void MainWindow::init_TotalData() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
-  myEditRecord->init_Desc();
+  m_EditRecord->init_Desc();
 
   m_Steps->init_Steps();
   m_Steps->saveSteps();
@@ -1188,7 +1188,7 @@ void MainWindow::on_AddRecord() {
 
   ui->hsH->setValue(QTime::currentTime().hour());
   ui->hsM->setValue(QTime::currentTime().minute());
-  myEditRecord->getTime(ui->hsH->value(), ui->hsM->value());
+  m_EditRecord->getTime(ui->hsH->value(), ui->hsM->value());
 
   ui->editDetails->clear();
   ui->editCategory->setText("");
@@ -2260,6 +2260,9 @@ void MainWindow::saveRemarks(int tabIndex) {
 void MainWindow::on_btnRemarks_clicked() {
   m_Reader->setPdfViewVisible(false);
 
+  m_Notes->m_TextSelector->close();
+  m_Notes->m_TextSelector = new TextSelector(mw_one);
+
   m_Method->reeditMainEventData();
 
   return;
@@ -2287,10 +2290,6 @@ void MainWindow::on_btnRemarks_clicked() {
 bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   if (loading) return QWidget::eventFilter(watch, evn);
 
-  if (watch == ui->editTodo->viewport()) {
-    mw_one->m_Notes->getEditPanel(ui->editTodo, evn);
-  }
-
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);  // 将之转换为鼠标事件
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
 
@@ -2307,6 +2306,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   }
 
   m_Method->eventFilterReader(watch, evn);
+  m_Notes->eventFilterTodo(watch, evn);
+  m_Notes->eventFilterEditRecord(watch, evn);
 
   if (watch == tw->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
@@ -3113,7 +3114,7 @@ void MainWindow::on_btnTodo_clicked() {
   removeFilesWatch();
   isSelf = true;
   m_Notes->m_TextSelector->close();
-  m_Notes->m_TextSelector = new TextSelector(m_Todo);
+  m_Notes->m_TextSelector = new TextSelector(mw_one);
 
   m_Todo->setGeometry(this->geometry().x(), this->geometry().y(), this->width(),
                       this->height());
@@ -3645,7 +3646,7 @@ void MainWindow::init_UIWidget() {
   m_Remarks = new dlgRemarks(this);
   m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
   m_Method = new Method(this);
-  myEditRecord = new EditRecord(this);
+  m_EditRecord = new EditRecord(this);
   m_Todo = new Todo(this);
   m_Todo->setStyleSheet(vsbarStyleSmall);
   m_Report = new dlgReport(this);
@@ -4542,7 +4543,6 @@ void MainWindow::on_btnEdit_clicked() {
   m_Notes->m_TextSelector->close();
   delete m_Notes->m_TextSelector;
   m_Notes->m_TextSelector = new TextSelector(m_Notes);
-  m_Notes->m_TextSelector->close();
 
   QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -4763,6 +4763,9 @@ void MainWindow::on_btnPasteCode_clicked() {
 }
 
 void MainWindow::on_btnAdd_clicked() {
+  m_Notes->m_TextSelector->close();
+  m_Notes->m_TextSelector = new TextSelector(mw_one);
+
   on_AddRecord();
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
@@ -5431,10 +5434,10 @@ void MainWindow::on_btnBackEditRecord_clicked() {
   ui->frameMain->show();
 }
 
-void MainWindow::on_btnType_clicked() { myEditRecord->on_btnCustom_clicked(); }
+void MainWindow::on_btnType_clicked() { m_EditRecord->on_btnCustom_clicked(); }
 
 void MainWindow::on_btnOkEditRecord_clicked() {
-  myEditRecord->on_btnOk_clicked();
+  m_EditRecord->on_btnOk_clicked();
 }
 
 void MainWindow::on_btnClearType_clicked() { ui->editCategory->setText(""); }
@@ -5444,49 +5447,49 @@ void MainWindow::on_btnClearDetails_clicked() { ui->editDetails->setText(""); }
 void MainWindow::on_btnClearAmount_clicked() { ui->editAmount->setText(""); }
 
 void MainWindow::on_editAmount_textChanged(const QString &arg1) {
-  myEditRecord->on_editAmount_textChanged(arg1);
+  m_EditRecord->on_editAmount_textChanged(arg1);
 }
 
 void MainWindow::on_editCategory_textChanged(const QString &arg1) {
-  myEditRecord->on_editCategory_textChanged(arg1);
+  m_EditRecord->on_editCategory_textChanged(arg1);
 }
 
 void MainWindow::on_editDetails_textChanged() {
-  myEditRecord->on_editDetails_textChanged();
+  m_EditRecord->on_editDetails_textChanged();
 }
 
 void MainWindow::on_hsH_valueChanged(int value) {
-  myEditRecord->on_hsH_valueChanged(value);
+  m_EditRecord->on_hsH_valueChanged(value);
 }
 
 void MainWindow::on_hsM_valueChanged(int value) {
-  myEditRecord->on_hsM_valueChanged(value);
+  m_EditRecord->on_hsM_valueChanged(value);
 }
 
-void MainWindow::on_btn7_clicked() { myEditRecord->on_btn7_clicked(); }
+void MainWindow::on_btn7_clicked() { m_EditRecord->on_btn7_clicked(); }
 
-void MainWindow::on_btn8_clicked() { myEditRecord->on_btn8_clicked(); }
+void MainWindow::on_btn8_clicked() { m_EditRecord->on_btn8_clicked(); }
 
-void MainWindow::on_btn9_clicked() { myEditRecord->on_btn9_clicked(); }
+void MainWindow::on_btn9_clicked() { m_EditRecord->on_btn9_clicked(); }
 
-void MainWindow::on_btn4_clicked() { myEditRecord->on_btn4_clicked(); }
+void MainWindow::on_btn4_clicked() { m_EditRecord->on_btn4_clicked(); }
 
-void MainWindow::on_btn5_clicked() { myEditRecord->on_btn5_clicked(); }
+void MainWindow::on_btn5_clicked() { m_EditRecord->on_btn5_clicked(); }
 
-void MainWindow::on_btn6_clicked() { myEditRecord->on_btn6_clicked(); }
+void MainWindow::on_btn6_clicked() { m_EditRecord->on_btn6_clicked(); }
 
-void MainWindow::on_btn1_clicked() { myEditRecord->on_btn1_clicked(); }
+void MainWindow::on_btn1_clicked() { m_EditRecord->on_btn1_clicked(); }
 
-void MainWindow::on_btn2_clicked() { myEditRecord->on_btn2_clicked(); }
+void MainWindow::on_btn2_clicked() { m_EditRecord->on_btn2_clicked(); }
 
-void MainWindow::on_btn3_clicked() { myEditRecord->on_btn3_clicked(); }
+void MainWindow::on_btn3_clicked() { m_EditRecord->on_btn3_clicked(); }
 
-void MainWindow::on_btn0_clicked() { myEditRecord->on_btn0_clicked(); }
+void MainWindow::on_btn0_clicked() { m_EditRecord->on_btn0_clicked(); }
 
-void MainWindow::on_btnDot_clicked() { myEditRecord->on_btnDot_clicked(); }
+void MainWindow::on_btnDot_clicked() { m_EditRecord->on_btnDot_clicked(); }
 
 void MainWindow::on_btnDel_Number_clicked() {
-  myEditRecord->on_btnDel_clicked();
+  m_EditRecord->on_btnDel_clicked();
 }
 
 void MainWindow::on_btnBackBookList_clicked() {
@@ -5501,3 +5504,5 @@ void MainWindow::on_btnClearAllRecords_clicked() {
 }
 
 void MainWindow::on_btnAnd_clicked() { ui->editSearchText->insert("&"); }
+
+void MainWindow::on_btnClear_clicked() { ui->editTodo->clear(); }

@@ -198,6 +198,8 @@ void dlgReport::updateTable() {
   t_amount = 0;
   clearAll();
   clearAll_xx();
+  listTableSync.clear();
+
   mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " 0    " +
                                 tr("Amount") + " 0");
   mw_one->ui->lblDetails->setText(tr("Details"));
@@ -215,10 +217,11 @@ void dlgReport::updateTable() {
     QStringList list = text0.split(" ");
     QString str_t0;
     if (list.count() == 3) {
-      str_t0 = text3 + " " + list.at(1) + " " + list.at(2);
+      str_t0 = list.at(1) + " " + list.at(2);
     }
 
-    appendTable(text0, text1, text2);
+    appendTable(str_t0, text1, text2);
+    listTableSync.append(text0 + "===" + text3);
   }
 
   mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") +
@@ -722,13 +725,21 @@ void dlgReport::loadDetailsQml() {
   QString date = getDate(row);
   date.replace("*", "");
   date = date.trimmed();
+  QString year;
+  QStringList list = listTableSync.at(row).split("===");
+  if (list.count() == 2) {
+    date = list.at(0).trimmed();
+    year = list.at(1).trimmed();
+  }
 
   QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
   for (int i = 0; i < tw->topLevelItemCount(); i++) {
     QTreeWidgetItem* topItem = tw->topLevelItem(i);
-    if (topItem->text(0) == date) {
+    QString str_year = topItem->text(3);
+
+    if (topItem->text(0) == date && str_year == year) {
       mw_one->ui->lblDetails->setText(tr("Details") + "    " + date + "    " +
-                                      topItem->text(3));
+                                      str_year);
 
       int childCount = topItem->childCount();
 
