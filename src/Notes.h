@@ -39,6 +39,7 @@ class Notes : public QDialog {
   int px, py, mx, my;
 
   bool isNeedSave = false;
+  bool isDone;
 
   QString htmlBuffer;
   QTextEdit *byTextEdit;
@@ -92,7 +93,8 @@ class Notes : public QDialog {
   bool eventFilterTodo(QObject *watch, QEvent *evn);
 
   bool eventFilterEditRecord(QObject *watch, QEvent *evn);
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

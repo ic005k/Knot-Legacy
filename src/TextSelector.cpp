@@ -179,7 +179,6 @@ void TextSelector::on_btnBing_clicked() {
 }
 
 void TextSelector::on_btnDel_clicked() {
-  if (ui->lineEdit->text().length() > 0)
-    mw_one->m_Notes->byTextEdit->textCursor().removeSelectedText();
+  mw_one->m_Notes->byTextEdit->textCursor().removeSelectedText();
   on_btnClose_clicked();
 }

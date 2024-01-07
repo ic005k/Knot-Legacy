@@ -4568,8 +4568,10 @@ void MainWindow::on_btnEdit_clicked() {
   QTextCursor tmpCursor = m_Notes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);
   m_Notes->ui->editSource->setTextCursor(tmpCursor);
+  m_Notes->ui->editSource->setFocus();
 
   m_Notes->isNeedSave = false;
+  m_Notes->isDone = false;
 }
 
 void MainWindow::on_btnCode_clicked() {

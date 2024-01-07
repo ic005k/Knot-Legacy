@@ -177,7 +177,10 @@ void Notes::resizeEvent(QResizeEvent *event) {
   qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
 }
 
-void Notes::on_btnDone_clicked() { close(); }
+void Notes::on_btnDone_clicked() {
+  isDone = true;
+  close();
+}
 
 void Notes::MD2Html(QString mdFile) {
   QString htmlFileName = privateDir + "memo.html";
@@ -354,14 +357,18 @@ bool Notes::eventFilter(QObject *obj, QEvent *evn) {
     if (keyEvent->key() == Qt::Key_Back) {
       if (!m_TextSelector->isHidden()) {
         m_TextSelector->close();
+        return true;
+      }
 
-      } else if (pAndroidKeyboard->isVisible()) {
+      if (pAndroidKeyboard->isVisible()) {
         pAndroidKeyboard->hide();
         setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
                     mw_one->mainHeight);
-      } else {
-        on_btnDone_clicked();
+        return true;
       }
+
+      close();
+
       return true;
     }
   }
@@ -1087,9 +1094,18 @@ void Notes::closeEvent(QCloseEvent *event) {
   if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
   mw_one->Sleep(100);
 
-  saveMainNotes();
-
-  loadMemoQML();
+  if (isNeedSave) {
+    if (isDone) {
+      saveMainNotes();
+      loadMemoQML();
+    } else {
+      ShowMessage *msg = new ShowMessage(this);
+      if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"), 2)) {
+        saveMainNotes();
+        loadMemoQML();
+      }
+    }
+  }
 }
 
 void Notes::on_editSource_textChanged() {}
