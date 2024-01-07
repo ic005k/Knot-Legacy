@@ -35,8 +35,10 @@ void setTableNoItemFlags(QTableWidget* t, int row);
 dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   ui->setupUi(this);
 
-  if (fontSize > 18) {
-    mw_one->ui->qwReport->rootContext()->setContextProperty("maxFontSize", 18);
+  int f_size = 20;
+  if (fontSize > f_size) {
+    mw_one->ui->qwReport->rootContext()->setContextProperty("maxFontSize",
+                                                            f_size);
   }
 
   this->installEventFilter(this);
