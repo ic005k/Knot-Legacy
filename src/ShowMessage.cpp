@@ -73,6 +73,9 @@ void ShowMessage::init() {
 
 #else
   w = 350;
+  if (w >= mw_one->width()) {
+    w = mw_one->width() - 20;
+  }
 #endif
 
   ui->frame->setFixedWidth(w);
