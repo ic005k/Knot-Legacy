@@ -193,15 +193,16 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
           "android-build-release-signed.apk";
 #else
       // github
+      QString mirror0 = "";
       QString mirror1 = "https://ghproxy.com/";
       QString mirror2 = "https://gh.flyinbug.top/gh/";
 
-      s_link = mirror2 + Url;
+      s_link = mirror0 + Url;
 #endif
     } else
       s_link = Url;
 
-    qDebug() << "s_link" << s_link << Url;
+    qDebug() << "s_link = " << s_link << Url;
 
     QString Verison = root_Obj.value("tag_name").toString();
     QString UpdateTime = root_Obj.value("published_at").toString();
