@@ -273,7 +273,7 @@ Rectangle {
 
                             width: parent.width
                             wrapMode: TextArea.WrapAnywhere
-                            color: isHighPriority ? "#EF5B98" : "#000000"
+                            color: "#515151"
                             font.bold: false
                             text: text1
 

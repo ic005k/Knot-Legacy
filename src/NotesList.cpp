@@ -1056,7 +1056,7 @@ void NotesList::loadAllNoteBook() {
   for (int i = 0; i < count; i++) {
     QString str = tw->topLevelItem(i)->text(0);
     int sum = tw->topLevelItem(i)->childCount();
-    QString strSum = tr("Sum") + " : " + QString::number(sum);
+    QString strSum = QString::number(sum);
     mw_one->m_Method->addItemToQW(mw_one->ui->qwNoteBook, str, "", "", strSum,
                                   fontSize);
   }
@@ -1372,6 +1372,5 @@ void NotesList::setNoteLabel() {
   QString notesSum = QString::number(getNotesListCount());
   mw_one->ui->lblNoteList->setText(tr("Note List") + " : " + notesSum);
   int index = getNoteBookCurrentIndex();
-  mw_one->m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index,
-                                    tr("Sum") + " : " + notesSum);
+  mw_one->m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index, notesSum);
 }

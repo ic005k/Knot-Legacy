@@ -10,6 +10,8 @@ Rectangle {
     width: 500
     height: 400
 
+    property int iconW: 20
+    property int rowSpace: 3
     property int i: 0
     property int itemCount: 0
     property bool isHighPriority: false
@@ -179,20 +181,42 @@ Rectangle {
                     anchors.leftMargin: 0
                     anchors.rightMargin: 0
 
-                    Text {
-                        id: item0
+                    RowLayout {
 
-                        width: parent.width
-                        Layout.preferredWidth: listItem.width
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
-                        wrapMode: TextArea.WordWrap
-                        font.bold: true
-                        text: text0
+                        id: row0
 
-                        leftPadding: 5
-                        rightPadding: 5
+                        Image {
+                            id: item0Img
+
+                            width: iconW
+                            height: item0.contentHeight
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/time.svg"
+
+                            visible: false
+                        }
+
+                        Text {
+                            id: item0
+
+                            width: parent.width
+                            Layout.preferredWidth: listItem.width - 0
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: TextArea.WordWrap
+                            font.bold: true
+                            text: text0
+
+                            leftPadding: 5
+                            rightPadding: 5
+                        }
                     }
 
                     Text {
@@ -233,22 +257,54 @@ Rectangle {
                         visible: false // item2.text.length ? true : false
                     }
 
-                    Text {
-                        id: item3
-                        anchors.rightMargin: 0
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        elide: Text.ElideRight
-                        //Layout.maximumWidth: listItem.width
-                        Layout.preferredWidth: listItem.width
-                        font.bold: false
-                        font.pointSize: font_size - 2
-                        text: text3
+                    RowLayout {
 
-                        leftPadding: 5
-                        rightPadding: 5
-
+                        id: row3
+                        Layout.margins: rowSpace
                         visible: item3.text.length ? true : false
+
+
+
+                        Image {
+                            id: item3Img
+
+                            width: item3.contentHeight - 5
+                            height: parent.height - 2
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+
+                            smooth: true
+                            sourceSize.height: item3.contentHeight-5
+                            sourceSize.width: item3.contentHeight-5
+                            source: "/res/sum.svg"
+
+                            visible: item3.text.length ? true : false
+                        }
+
+                        Text {
+                            id: item3
+                            anchors.rightMargin: 0
+                            width: parent.width
+                            wrapMode: Text.WordWrap
+                            elide: Text.ElideRight
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+
+                            //Layout.maximumWidth: listItem.width
+                            Layout.preferredWidth: listItem.width
+
+                            font.bold: false
+                            font.pointSize: font_size - 2
+                            color: "#515151"
+                            text: text3
+
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item3.text.length ? true : false
+                        }
                     }
                 }
             }
