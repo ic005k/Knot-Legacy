@@ -740,8 +740,8 @@ void dlgReport::loadDetailsQml() {
     QString str_date = topItem->text(0);
 
     if (str_date.contains(date) && str_year == year) {
-      mw_one->ui->lblDetails->setText(tr("Details") + "    " + date + "    " +
-                                      str_year);
+      mw_one->ui->lblDetails->setText(tr("Details") + "    " + str_date +
+                                      "    " + str_year);
 
       int childCount = topItem->childCount();
 
