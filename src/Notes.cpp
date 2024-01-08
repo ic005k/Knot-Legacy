@@ -376,14 +376,14 @@ bool Notes::eventFilter(QObject *obj, QEvent *evn) {
   // Keyboard
   if (obj == ui->editSource) {
     if (evn->type() == QEvent::KeyPress) {
-      if (keyEvent->key() != Qt::Key_Back) isNeedSave = true;
+      if (keyEvent->key() != Qt::Key_Back) {
+      }
     }
   }
 
   // Mouse
   if (obj == ui->editSource->viewport()) {
     if (evn->type() == QEvent::MouseButtonPress) {
-      isNeedSave = true;
     }
   }
 
@@ -1116,9 +1116,9 @@ void Notes::closeEvent(QCloseEvent *event) {
   }
 }
 
-void Notes::on_editSource_textChanged() {}
+void Notes::on_editSource_textChanged() { isNeedSave = true; }
 
-void Notes::on_editSource_cursorPositionChanged() {}
+void Notes::on_editSource_cursorPositionChanged() { isNeedSave = true; }
 
 void Notes::on_btnReference_clicked() {
   QString str = ui->editSource->textCursor().selectedText();

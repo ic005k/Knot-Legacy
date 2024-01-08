@@ -4575,6 +4575,7 @@ void MainWindow::on_btnEdit_clicked() {
   m_Notes->ui->editSource->setTextCursor(tmpCursor);
   m_Notes->ui->editSource->setFocus();
 
+  Sleep(200);
   m_Notes->isNeedSave = false;
   m_Notes->isDone = false;
 }
