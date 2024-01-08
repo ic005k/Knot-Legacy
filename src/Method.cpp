@@ -89,8 +89,8 @@ void Method::setCurrentIndex(int index) {
                             Q_ARG(QVariant, index));
 }
 
-void Method::addItemBakList(QQuickWidget* qw, QString text0, QString text1,
-                            QString text2, QString text3, int itemH) {
+void Method::addItemToQW(QQuickWidget* qw, QString text0, QString text1,
+                         QString text2, QString text3, int itemH) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, text0),
                             Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
@@ -154,6 +154,12 @@ void Method::modifyItemText0(QQuickWidget* qw, int index, QString strText) {
 void Method::modifyItemText2(QQuickWidget* qw, int index, QString strText) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "modifyItemText2",
+                            Q_ARG(QVariant, index), Q_ARG(QVariant, strText));
+}
+
+void Method::modifyItemText3(QQuickWidget* qw, int index, QString strText) {
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "modifyItemText3",
                             Q_ARG(QVariant, index), Q_ARG(QVariant, strText));
 }
 
@@ -397,7 +403,7 @@ void Method::clickNoteBook() {
   for (int i = 0; i < child_count; i++) {
     QString text0 = topItem->child(i)->text(0);
     QString text3 = topItem->child(i)->text(1);
-    addItemBakList(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
+    addItemToQW(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
   }
 
   mw_one->m_NotesList->setNotesListCurrentIndex(-1);
@@ -454,7 +460,7 @@ void Method::clickMainDate() {
       nullrows++;
     }
 
-    addItemBakList(mw_one->ui->qwMainEvent, text0, text1, text2, text3, 0);
+    addItemToQW(mw_one->ui->qwMainEvent, text0, text1, text2, text3, 0);
   }
 
   gotoEnd(mw_one->ui->qwMainEvent);

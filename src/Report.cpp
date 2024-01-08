@@ -418,10 +418,10 @@ void dlgReport::on_btnCategory_clicked() {
 
             QString item1 = str2.split("===").at(0).split("|").at(1);
 
-            mw_one->m_Method->addItemBakList(
-                mw_one->ui->qwViewCate, tr("Category") + " : " + item0,
-                tr("Percent") + " : " + pre, tr("Amount") + " : " + item1, "",
-                0);
+            mw_one->m_Method->addItemToQW(mw_one->ui->qwViewCate,
+                                          tr("Category") + " : " + item0,
+                                          tr("Percent") + " : " + pre,
+                                          tr("Amount") + " : " + item1, "", 0);
 
             listCategorySort.removeOne(str1);
 
@@ -499,8 +499,8 @@ void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
           text0 = tr("Date") + " : " + date + "  " + time;
           text1 = tr("Amount") + " : " + amount;
           text2 = str;
-          mw_one->m_Method->addItemBakList(mw_one->ui->qwReportSub, text0,
-                                           text1, text2, text3, 0);
+          mw_one->m_Method->addItemToQW(mw_one->ui->qwReportSub, text0, text1,
+                                        text2, text3, 0);
         }
 
         if (amount.length() > 0) {
@@ -763,8 +763,8 @@ void dlgReport::loadDetailsQml() {
         if (text3.trimmed().length() > 0) str3 = tr("Details") + " : " + text3;
 
         // appendSteps_xx(text0, text1, text2);
-        mw_one->m_Method->addItemBakList(mw_one->ui->qwReportSub, text0, str1,
-                                         str2, str3, 0);
+        mw_one->m_Method->addItemToQW(mw_one->ui->qwReportSub, text0, str1,
+                                      str2, str3, 0);
       }
     }
   }

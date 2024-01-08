@@ -35,8 +35,8 @@ class Method : public QDialog {
   void clearAllBakList(QQuickWidget *qw);
   int getCountFromQW(QQuickWidget *qw);
   void delItemBakList(QQuickWidget *qw, int index);
-  void addItemBakList(QQuickWidget *qw, QString text0, QString text1,
-                      QString text2, QString text3, int itemH);
+  void addItemToQW(QQuickWidget *qw, QString text0, QString text1,
+                   QString text2, QString text3, int itemH);
 
   QString getText3(QQuickWidget *qw, int index);
   int getCurrentIndexFromQW(QQuickWidget *qw);
@@ -67,6 +67,8 @@ class Method : public QDialog {
   int getFontHeight();
 
   void closeKeyboard();
+
+  void modifyItemText3(QQuickWidget *qw, int index, QString strText);
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

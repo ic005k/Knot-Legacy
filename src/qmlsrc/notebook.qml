@@ -81,13 +81,13 @@ Rectangle {
         return data.type
     }
 
-    function addItem(t0, t1, t2, t3, height) {
+    function addItem(t0, t1, t2, t3, f_size) {
         view.model.append({
                               "text0": t0,
                               "text1": t1,
                               "text2": t2,
                               "text3": t3,
-                              "myh": height
+                              "font_size": f_size
                           })
     }
 
@@ -124,8 +124,16 @@ Rectangle {
         view.model.setProperty(currentIndex, "text0", strText)
     }
 
+    function modifyItemText1(currentIndex, strText) {
+        view.model.setProperty(currentIndex, "text1", strText)
+    }
+
     function modifyItemText2(currentIndex, strText) {
         view.model.setProperty(currentIndex, "text2", strText)
+    }
+
+    function modifyItemText3(currentIndex, strText) {
+        view.model.setProperty(currentIndex, "text3", strText)
     }
 
     Component {
@@ -134,7 +142,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: item0.contentHeight + 16
+            height: item0.contentHeight + item2.contentHeight + 16
             color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
 
             border.width: 1
@@ -234,6 +242,7 @@ Rectangle {
                         //Layout.maximumWidth: listItem.width
                         Layout.preferredWidth: listItem.width
                         font.bold: false
+                        font.pointSize: font_size - 2
                         text: text3
 
                         leftPadding: 5
@@ -356,6 +365,8 @@ Rectangle {
             id: listmain
 
             // debug
+
+
             /*ListElement {
                 text0: '<span style="background-color: #ff6600;">Hello</span>'
                 text1: "123456  <b>Hello</b> <i>World!</i>  123456"

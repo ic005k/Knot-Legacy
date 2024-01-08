@@ -1374,8 +1374,8 @@ void dlgReader::getReadList() {
     } else
       suffix = "none";
 
-    mw_one->m_Method->addItemBakList(mw_one->ui->qwBookList, bookName, "", "",
-                                     suffix, 0);
+    mw_one->m_Method->addItemToQW(mw_one->ui->qwBookList, bookName, "", "",
+                                  suffix, 0);
   }
 
   for (int i = 0; i < bookList.count(); i++) {

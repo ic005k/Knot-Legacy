@@ -296,8 +296,7 @@ void EditRecord::init_Desc() {
     m_CategoryList->ui->listWidget->addItem(item);
     c_list.append(str);
 
-    mw_one->m_Method->addItemBakList(mw_one->ui->qwCategory, str, "", "", "",
-                                     0);
+    mw_one->m_Method->addItemToQW(mw_one->ui->qwCategory, str, "", "", "", 0);
   }
 }
 

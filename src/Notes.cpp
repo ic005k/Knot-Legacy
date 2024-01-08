@@ -373,6 +373,14 @@ bool Notes::eventFilter(QObject *obj, QEvent *evn) {
     }
   }
 
+  // Keyboard
+  if (obj == ui->editSource) {
+    if (evn->type() == QEvent::KeyPress) {
+      isNeedSave = true;
+    }
+  }
+
+  // Mouse
   if (obj == ui->editSource->viewport()) {
     if (evn->type() == QEvent::MouseButtonPress) {
       isNeedSave = true;

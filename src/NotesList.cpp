@@ -7,6 +7,7 @@
 extern MainWindow *mw_one;
 extern QString iniDir, privateDir, currentMDFile;
 extern bool isAndroid;
+extern int fontSize;
 
 NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->setupUi(this);
@@ -558,8 +559,8 @@ void NotesList::on_btnRestore_clicked() {
     item->setText(1, str1);
     addItem(tw, item);
 
-    mw_one->m_Method->addItemBakList(mw_one->ui->qwNoteList, str0, "", "", str1,
-                                     0);
+    mw_one->m_Method->addItemToQW(mw_one->ui->qwNoteList, str0, "", "", str1,
+                                  0);
 
     curItem->parent()->removeChild(curItem);
   }
@@ -889,8 +890,8 @@ void NotesList::on_actionAdd_NoteBook_triggered() {
   if (ok && !text.isEmpty()) {
     ui->editBook->setText(text);
     on_btnNewNoteBook_clicked();
-    mw_one->m_Method->addItemBakList(mw_one->ui->qwNoteBook, text, "", "", "",
-                                     0);
+    mw_one->m_Method->addItemToQW(mw_one->ui->qwNoteBook, text, "", "", "",
+                                  fontSize);
 
     int count = getNoteBookCount();
     setNoteBookCurrentIndex(count - 1);
@@ -1020,11 +1021,12 @@ void NotesList::on_actionMoveUp_NoteBook_triggered() {
   if (index <= 0) return;
 
   QString text0 = mw_one->m_Method->getText0(mw_one->ui->qwNoteBook, index);
+  QString text3 = mw_one->m_Method->getText3(mw_one->ui->qwNoteBook, index);
   int oldIndex = index;
   tw->setCurrentItem(tw->topLevelItem(index));
   on_btnUp_clicked();
 
-  mw_one->m_Method->insertItem(mw_one->ui->qwNoteBook, text0, "", "", "",
+  mw_one->m_Method->insertItem(mw_one->ui->qwNoteBook, text0, "", "", text3,
                                index - 1);
   mw_one->m_Method->delItemBakList(mw_one->ui->qwNoteBook, oldIndex + 1);
   setNoteBookCurrentIndex(oldIndex - 1);
@@ -1050,11 +1052,13 @@ void NotesList::on_actionMoveDown_NoteBook_triggered() {
 void NotesList::loadAllNoteBook() {
   mw_one->m_Method->clearAllBakList(mw_one->ui->qwNoteBook);
   mw_one->m_Method->clearAllBakList(mw_one->ui->qwNoteList);
-  int count = mw_one->m_NotesList->tw->topLevelItemCount();
+  int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
-    QString str = mw_one->m_NotesList->tw->topLevelItem(i)->text(0);
-    mw_one->m_Method->addItemBakList(mw_one->ui->qwNoteBook, str, "", "", "",
-                                     0);
+    QString str = tw->topLevelItem(i)->text(0);
+    int sum = tw->topLevelItem(i)->childCount();
+    QString strSum = tr("Sum") + " : " + QString::number(sum);
+    mw_one->m_Method->addItemToQW(mw_one->ui->qwNoteBook, str, "", "", strSum,
+                                  fontSize);
   }
 }
 
@@ -1147,8 +1151,8 @@ void NotesList::on_actionAdd_Note_triggered() {
     QTreeWidgetItem *childItem = tw->currentItem();
     int childCount = childItem->parent()->childCount();
     QString text3 = childItem->parent()->child(childCount - 1)->text(1);
-    mw_one->m_Method->addItemBakList(mw_one->ui->qwNoteList, text, "", "",
-                                     text3, 0);
+    mw_one->m_Method->addItemToQW(mw_one->ui->qwNoteList, text, "", "", text3,
+                                  0);
 
     int count = getNotesListCount();
     setNotesListCurrentIndex(count - 1);
@@ -1365,6 +1369,9 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
 void NotesList::setNoteLabel() {
   mw_one->ui->lblNoteBook->setText(tr("Note Book") + " : " +
                                    QString::number(getNoteBookCount()));
-  mw_one->ui->lblNoteList->setText(tr("Note List") + " : " +
-                                   QString::number(getNotesListCount()));
+  QString notesSum = QString::number(getNotesListCount());
+  mw_one->ui->lblNoteList->setText(tr("Note List") + " : " + notesSum);
+  int index = getNoteBookCurrentIndex();
+  mw_one->m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index,
+                                    tr("Sum") + " : " + notesSum);
 }

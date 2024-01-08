@@ -3796,7 +3796,7 @@ void MainWindow::on_btnSelTab_clicked() {
   int tab_count = tabData->tabBar()->count();
   for (int i = 0; i < tab_count; i++) {
     QString text0 = tabData->tabText(i);
-    m_Method->addItemBakList(ui->qwSelTab, text0, "", "", "", 0);
+    m_Method->addItemToQW(ui->qwSelTab, text0, "", "", "", 0);
   }
 
   int index = ui->tabWidget->currentIndex();
@@ -4073,8 +4073,8 @@ void MainWindow::on_actionTabRecycle() {
 
       tab_name = m_Method->getRecycleTabName(t1 + "_" + t2);
 
-      m_Method->addItemBakList(ui->qwTabRecycle, tab_name, tab_time, "",
-                               ini_file, 0);
+      m_Method->addItemToQW(ui->qwTabRecycle, tab_name, tab_time, "", ini_file,
+                            0);
     }
   }
 
@@ -4104,7 +4104,7 @@ void MainWindow::on_actionBakFileList() {
 
     QString item = action + "\n" + getFileSize(QFile(bakfile).size(), 2);
 
-    m_Method->addItemBakList(ui->qwBakList, item, "", "", bakfile, 0);
+    m_Method->addItemToQW(ui->qwBakList, item, "", "", bakfile, 0);
   }
 
   if (m_Method->getCountFromQW(ui->qwBakList) > 0)
@@ -5071,7 +5071,7 @@ void MainWindow::reloadMain() {
 
     topitem = text0;
 
-    m_Method->addItemBakList(ui->qwMainDate, text0, text1, text2, text3, 0);
+    m_Method->addItemToQW(ui->qwMainDate, text0, text1, text2, text3, 0);
   }
 
   m_Method->gotoEnd(ui->qwMainDate);
@@ -5341,7 +5341,7 @@ void MainWindow::on_btnNoteRecycle_clicked() {
     QString text0 = childItem->text(0);
     QString text3 = childItem->text(1);
 
-    m_Method->addItemBakList(ui->qwNoteRecycle, text0, "", "", text3, 0);
+    m_Method->addItemToQW(ui->qwNoteRecycle, text0, "", "", text3, 0);
   }
 }
 
