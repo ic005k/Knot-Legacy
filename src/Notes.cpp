@@ -352,8 +352,8 @@ bool Notes::eventFilter(QObject *obj, QEvent *evn) {
     getEditPanel(ui->editSource, evn);
   }
 
+  QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
   if (evn->type() == QEvent::KeyRelease) {
-    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       if (!m_TextSelector->isHidden()) {
         m_TextSelector->close();
@@ -376,7 +376,7 @@ bool Notes::eventFilter(QObject *obj, QEvent *evn) {
   // Keyboard
   if (obj == ui->editSource) {
     if (evn->type() == QEvent::KeyPress) {
-      isNeedSave = true;
+      if (keyEvent->key() != Qt::Key_Back) isNeedSave = true;
     }
   }
 
