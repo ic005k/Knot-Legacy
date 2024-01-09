@@ -935,7 +935,12 @@ void Notes::highlightCurrentLine() {
 
   QTextEdit::ExtraSelection selection;
 
-  QColor lineColor = QColor(Qt::yellow).lighter(160);
+  QColor lineColor;
+
+  if (mw_one->isDark)
+    lineColor = QColor(Qt::blue).lighter(100);
+  else
+    lineColor = QColor(Qt::yellow).lighter(160);
 
   selection.format.setBackground(lineColor);
   selection.format.setProperty(QTextFormat::FullWidthSelection, true);

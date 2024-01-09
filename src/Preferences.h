@@ -56,6 +56,8 @@ class Preferences : public QDialog {
 
   void on_btnReStart_clicked();
 
+  void on_chkDark_clicked(bool checked);
+
  private:
   QString iniBakFiles = "BakFiles.ini";
 };

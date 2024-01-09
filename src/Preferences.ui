@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
+    <width>417</width>
     <height>623</height>
    </rect>
   </property>
@@ -152,7 +152,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QCheckBox" name="chkClose">
+       <widget class="QCheckBox" name="chkDark">
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
@@ -161,7 +161,7 @@
 }</string>
         </property>
         <property name="text">
-         <string>Normal Close</string>
+         <string>Dark Theme</string>
         </property>
        </widget>
       </item>

@@ -34,15 +34,16 @@ Preferences::Preferences(QWidget* parent)
   this->installEventFilter(this);
   ui->lblFontSize->installEventFilter(this);
 
-  ui->chkClose->hide();
   ui->lblTip->hide();
+  ui->chkAutoTime->hide();
+  ui->chkDebug->hide();
 
   ui->sliderFontSize->setValue(fontSize);
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
 
   chkStyle = ui->chkAutoTime->styleSheet();
-  ui->chkClose->setStyleSheet(chkStyle);
+  ui->chkDark->setStyleSheet(chkStyle);
   ui->chkDebug->setStyleSheet(chkStyle);
   ui->chkReaderFont->setStyleSheet(chkStyle);
   ui->chkUIFont->setStyleSheet(chkStyle);
@@ -106,7 +107,7 @@ void Preferences::saveOptions() {
 
   Reg.setValue("/Options/FontSize", ui->sliderFontSize->value());
   Reg.setValue("/Options/chkReaderFont", ui->chkReaderFont->isChecked());
-  Reg.setValue("/Options/Close", ui->chkClose->isChecked());
+  Reg.setValue("/Options/Dark", ui->chkDark->isChecked());
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
   Reg.setValue("/Options/chkUIFont", ui->chkUIFont->isChecked());
@@ -216,7 +217,8 @@ void Preferences::initOptions() {
   ui->chkUIFont->setChecked(chkUIFont);
   ui->chkReaderFont->setChecked(
       Reg.value("/Options/chkReaderFont", false).toBool());
-  ui->chkClose->setChecked(Reg.value("/Options/Close", false).toBool());
+  ui->chkDark->setChecked(Reg.value("/Options/Dark", false).toBool());
+  mw_one->isDark = ui->chkDark->isChecked();
   ui->chkAutoTime->setChecked(Reg.value("/Options/AutoTimeY", true).toBool());
 
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
@@ -226,7 +228,7 @@ void Preferences::initOptions() {
   devMode = Reg.value("/Options/DevMode", false).toBool();
 #ifdef Q_OS_ANDROID
 #else
-  ui->gboxAdditional->hide();
+
   if (!devMode) {
     mw_one->ui->frame_charts->hide();
     mw_one->ui->frame_tab->hide();
@@ -239,7 +241,6 @@ void Preferences::initOptions() {
     mw_one->ui->btnRemarks->hide();
     mw_one->ui->btnReport->hide();
 
-    ui->chkAutoTime->hide();
     ui->chkReaderFont->hide();
 
     int s = 120;
@@ -391,4 +392,10 @@ QStringList Preferences::getBakFilesList() {
   }
 
   return fileList;
+}
+
+void Preferences::on_chkDark_clicked(bool checked) {
+  mw_one->isDark = checked;
+
+  ui->btnReStart->show();
 }

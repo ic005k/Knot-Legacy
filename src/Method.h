@@ -2,6 +2,7 @@
 #define METHOD_H
 
 #include <QDialog>
+#include <QInputDialog>
 #include <QQuickWidget>
 #include <QTableWidget>
 
@@ -69,7 +70,10 @@ class Method : public QDialog {
   void closeKeyboard();
 
   void modifyItemText3(QQuickWidget *qw, int index, QString strText);
-  protected:
+  QInputDialog *inputDialog(QString windowsTitle, QString lblEdit,
+                            QString defaultValue);
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

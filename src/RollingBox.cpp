@@ -1,5 +1,9 @@
 #include "RollingBox.h"
 
+#include "MainWindow.h"
+
+extern MainWindow *mw_one;
+
 RollingBox::RollingBox(QWidget *parent)
     : QWidget(parent),
       m_minRange(0),
@@ -98,9 +102,13 @@ void RollingBox::paintEvent(QPaintEvent *) {
   }
 
   // 中间数字
+  if (mw_one->isDark) painter.setPen(QPen(QColor(255, 255, 255, 225), 2));
+
   paintNum(painter, m_currentValue, m_deviation);
 
   // 两侧数字1
+  if (mw_one->isDark) painter.setPen(QPen(QColor(255, 255, 255, 225), 2));
+
   if (m_currentValue != m_minRange)
     paintNum(painter, m_currentValue - 1, m_deviation - Width / 4);
   if (m_currentValue != m_maxRange)

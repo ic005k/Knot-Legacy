@@ -415,6 +415,7 @@ MainWindow::MainWindow(QWidget *parent)
   init_UIWidget();
   init_ChartWidget();
   init_Options();
+  init_Theme();
   init_Sensors();
   init_TotalData();
   m_Reader->initReader();
@@ -1837,42 +1838,19 @@ void MainWindow::initChartDay() {
 void MainWindow::on_actionRename_triggered() {
   int index = ui->tabWidget->currentIndex();
   bool ok = false;
+
   QString text;
-  QWidget *frame = new QWidget(this);
-  frame->setStyleSheet("#frame{background-color:rgba(0, 0, 0,25%);}");
-  QVBoxLayout *vbox = new QVBoxLayout;
-  frame->setLayout(vbox);
 
-  QInputDialog *idlg = new QInputDialog(this);
-  idlg->hide();
-  // vbox->addWidget(idlg);
-
-  idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style =
-      "QDialog{background: "
-      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
-
-  QString style1 = "QDialog{border-radius:0px;border:2px solid red;}";
-
-  idlg->setStyleSheet(style1);
-  idlg->setOkButtonText(tr("Ok"));
-  idlg->setCancelButtonText(tr("Cancel"));
-  idlg->setContentsMargins(10, 10, 10, 10);
-
-  idlg->setWindowTitle(tr("Rename tab name : "));
-  idlg->setTextValue(ui->tabWidget->tabText(index));
-  idlg->setLabelText(tr("Tab name : "));
-
-  frame->setGeometry(0, 0, mw_one->width(), mw_one->height());
-  idlg->show();
-  // frame->show();
+  QInputDialog *idlg =
+      m_Method->inputDialog(tr("Rename tab name : "), tr("Tab name : "),
+                            ui->tabWidget->tabText(index));
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
     text = idlg->textValue();
-    frame->close();
+    idlg->close();
   } else {
-    frame->close();
+    idlg->close();
     return;
   }
 
@@ -3362,35 +3340,16 @@ void MainWindow::on_btnNotes_clicked() {
 
     bool ok = false;
     QString text;
-    QFrame *frame = new QFrame(this);
-    QVBoxLayout *vbox = new QVBoxLayout;
-    frame->setLayout(vbox);
-    QInputDialog *idlg = new QInputDialog(this);
-    vbox->addWidget(idlg);
 
-    idlg->setWindowFlag(Qt::FramelessWindowHint);
-    QString style =
-        "QDialog{background: "
-        "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
-    idlg->setStyleSheet(style);
-    idlg->setOkButtonText(tr("Ok"));
-    idlg->setCancelButtonText(tr("Cancel"));
-    idlg->setContentsMargins(10, 10, 10, 10);
-    idlg->setWindowTitle(tr("Please enter your password : "));
-    idlg->setTextValue("");
-    idlg->setLabelText(tr("Password : "));
-    QLineEdit::EchoMode echoMode = QLineEdit::Password;
-    idlg->setTextEchoMode(echoMode);
-
-    frame->setGeometry(50, -100, mw_one->width() - 100, this->height());
-    frame->show();
+    QInputDialog *idlg = mw_one->m_Method->inputDialog(
+        tr("Please enter your password : "), tr("Password : "), "");
 
     if (QDialog::Accepted == idlg->exec()) {
       ok = true;
       text = idlg->textValue();
-      frame->close();
+      idlg->close();
     } else {
-      frame->close();
+      idlg->close();
       return;
     }
 
@@ -3549,7 +3508,10 @@ void MainWindow::initQW() {
     ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
 }
 
-void MainWindow::init_UIWidget() {
+void MainWindow::init_Theme() {
+  if (!isDark)
+    ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
+
   QString fileTheme;
   if (isDark)
     fileTheme = ":/theme/dark/darkstyle.qss";
@@ -3563,7 +3525,9 @@ void MainWindow::init_UIWidget() {
     QTextStream ts(&f_theme);
     qApp->setStyleSheet(ts.readAll());
   }
+}
 
+void MainWindow::init_UIWidget() {
   set_btnStyle(this);
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
@@ -3752,9 +3716,6 @@ void MainWindow::init_UIWidget() {
   }
 
   ui->frame_tab->setMaximumHeight(this->height());
-
-  if (!isDark)
-    ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
 
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");

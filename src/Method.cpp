@@ -38,6 +38,26 @@ void Method::init() {
 
 Method::~Method() { delete ui; }
 
+QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
+                                  QString defaultValue) {
+  QInputDialog* idlg = new QInputDialog(this);
+  idlg->hide();
+  idlg->setWindowFlag(Qt::FramelessWindowHint);
+  QString style1 = "QDialog{border-radius:0px;border:2px solid red;}";
+  idlg->setStyleSheet(style1);
+  idlg->setOkButtonText(tr("Ok"));
+  idlg->setCancelButtonText(tr("Cancel"));
+  idlg->setContentsMargins(10, 10, 10, 10);
+  idlg->setWindowTitle(windowsTitle);
+  idlg->setTextValue(defaultValue);
+  idlg->setLabelText(lblEdit);
+  idlg->show();
+  idlg->setGeometry(
+      mw_one->geometry().x() + (mw_one->geometry().width() - idlg->width()) / 2,
+      150, idlg->width(), idlg->height());
+  return idlg;
+}
+
 void Method::closeKeyboard() {
   if (mw_one->pAndroidKeyboard->isVisible()) {
     mw_one->pAndroidKeyboard->hide();

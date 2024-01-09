@@ -943,39 +943,18 @@ void NotesList::on_actionRename_NoteBook_triggered() {
 
   bool ok = false;
   QString text;
-  QFrame *frame = new QFrame(mw_one);
-  QVBoxLayout *vbox = new QVBoxLayout;
-  frame->setLayout(vbox);
-  QInputDialog *idlg = new QInputDialog(mw_one);
-  idlg->hide();
-  vbox->addWidget(idlg);
 
-  idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style =
-      "QDialog{background: "
-      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
-
-  idlg->setStyleSheet(style);
-  idlg->setOkButtonText(tr("Ok"));
-  idlg->setCancelButtonText(tr("Cancel"));
-  idlg->setContentsMargins(10, 10, 10, 10);
-
-  idlg->setWindowTitle(tr("Rename NoteBook"));
-  idlg->setTextValue(mw_one->m_Method->getText0(mw_one->ui->qwNoteBook,
-                                                getNoteBookCurrentIndex()));
-  idlg->setLabelText(tr("NoteBook Name"));
-
-  frame->setGeometry(25, -100, mw_one->width() - 50, this->height());
-  idlg->show();
-
-  frame->show();
+  QInputDialog *idlg = mw_one->m_Method->inputDialog(
+      tr("Rename NoteBook"), tr("NoteBook Name"),
+      mw_one->m_Method->getText0(mw_one->ui->qwNoteBook,
+                                 getNoteBookCurrentIndex()));
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
     text = idlg->textValue();
-    frame->close();
+    idlg->close();
   } else {
-    frame->close();
+    idlg->close();
     return;
   }
 
@@ -1217,39 +1196,17 @@ void NotesList::on_actionRename_Note_triggered() {
 
   bool ok = false;
   QString text;
-  QFrame *frame = new QFrame(mw_one);
-  QVBoxLayout *vbox = new QVBoxLayout;
-  frame->setLayout(vbox);
-  QInputDialog *idlg = new QInputDialog(mw_one);
-  idlg->hide();
-  vbox->addWidget(idlg);
 
-  idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style =
-      "QDialog{background: "
-      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
-
-  idlg->setStyleSheet(style);
-  idlg->setOkButtonText(tr("Ok"));
-  idlg->setCancelButtonText(tr("Cancel"));
-  idlg->setContentsMargins(10, 10, 10, 10);
-
-  idlg->setWindowTitle(tr("Rename Note"));
-  idlg->setTextValue(mw_one->m_Method->getText0(mw_one->ui->qwNoteList,
-                                                getNotesListCurrentIndex()));
-  idlg->setLabelText(tr("Note Name"));
-
-  frame->setGeometry(25, -100, mw_one->width() - 50, this->height());
-  idlg->show();
-
-  frame->show();
-
+  QInputDialog *idlg = mw_one->m_Method->inputDialog(
+      tr("Rename Note"), tr("Note Name"),
+      mw_one->m_Method->getText0(mw_one->ui->qwNoteList,
+                                 getNotesListCurrentIndex()));
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
     text = idlg->textValue();
-    frame->close();
+    idlg->close();
   } else {
-    frame->close();
+    idlg->close();
     return;
   }
 

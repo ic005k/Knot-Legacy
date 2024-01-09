@@ -146,7 +146,7 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
-  bool isDark = true;
+  bool isDark = false;
   bool isNeedAutoBackup = false;
   QString strLatestModify = tr("None");
 
@@ -795,6 +795,7 @@ class MainWindow : public QMainWindow {
   void resetWinPos();
 
   void initQW();
+  void init_Theme();
 };
 
 class SaveThread : public QThread {
