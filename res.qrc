@@ -104,5 +104,8 @@
         <file>res/selall.svg</file>
         <file>res/plus.svg</file>
         <file>res/clear.svg</file>
+        <file>res/count.svg</file>
+        <file>res/coin.svg</file>
+        <file>res/coin.png</file>
     </qresource>
 </RCC>

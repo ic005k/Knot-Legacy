@@ -194,7 +194,7 @@ Rectangle {
                 }
 
                 ColumnLayout {
-                    id: idlistElemnet4
+                    id: listCol
                     height: parent.height
                     width: parent.width
                     spacing: 2
@@ -302,7 +302,7 @@ Rectangle {
                             smooth: true
                             sourceSize.height: iconW
                             sourceSize.width: iconW
-                            source: "/res/je.svg"
+                            source: "/res/coin.png"
 
                             visible: item2.text.length ? true : false
                         }
