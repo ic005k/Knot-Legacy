@@ -9,11 +9,7 @@ extern MainWindow* mw_one;
 PageIndicator::PageIndicator(QWidget* parent)
     : QDialog(parent), ui(new Ui::PageIndicator) {
   ui->setupUi(this);
-  ui->lblPageNumber->setStyleSheet("color:#ff6600;");
-  ui->lblPic->setHidden(true);
-
-  this->setContentsMargins(1, 1, 1, 1);
-  this->layout()->setContentsMargins(1, 1, 1, 1);
+  setGeometry(0, 0, 1, 1);
 
   setWindowFlags(Qt::WindowStaysOnTopHint);
 
@@ -23,7 +19,11 @@ PageIndicator::PageIndicator(QWidget* parent)
                  Qt::WindowDoesNotAcceptFocus);
 #endif
 
-  setPicRight();
+  ui->lblPageNumber->setStyleSheet("color:#ff6600;");
+  ui->lblPic->setHidden(true);
+
+  this->setContentsMargins(1, 1, 1, 1);
+  this->layout()->setContentsMargins(1, 1, 1, 1);
 }
 
 void PageIndicator::setPicLeft() {
@@ -51,6 +51,8 @@ void PageIndicator::setPicRight() {
 }
 
 void PageIndicator::init() {
+  if (mw_one->ui->frameReader->isHidden()) return;
+
   int w = mw_one->geometry().width() - 20;
   QFontMetrics fontMetrics(ui->lblPageNumber->font());
   int nFontHeight = fontMetrics.height();

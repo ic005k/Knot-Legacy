@@ -10,7 +10,7 @@ Rectangle {
     width: 500
     height: 400
 
-    property int iconW: 20
+    property int iconW: 18
     property int rowSpace: 3
     property int i: 0
     property int itemCount: 0

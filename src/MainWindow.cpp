@@ -3408,7 +3408,6 @@ void MainWindow::on_btnNotes_clicked() {
 }
 
 void MainWindow::showNotes() {
-  m_PageIndicator->close();
   isMemoVisible = true;
   isReaderVisible = false;
 
@@ -3807,7 +3806,6 @@ void MainWindow::on_btnSelTab_clicked() {
 
   return;
 
-  m_PageIndicator->close();
   m_widget = new QWidget(this);
 
   QDialog *dlg = new QDialog(this);
@@ -3992,7 +3990,6 @@ void MainWindow::on_openKnotBakDir() {
 
 void MainWindow::on_actionOneDriveBackupData() {
   floatfun = false;
-  m_PageIndicator->close();
 
   ui->frameMain->hide();
   ui->frameReader->hide();
@@ -4131,7 +4128,7 @@ void MainWindow::on_btnZoom_clicked() {
     ui->frame_tab->hide();
     ui->frame_charts->setMaximumHeight(this->height());
     floatfun = false;
-    m_PageIndicator->close();
+
   } else {
     axisY->setTickCount(yScale);
     axisY2->setTickCount(yScale);
@@ -4294,7 +4291,7 @@ QString MainWindow::getYMD(QString date) {
 
 void MainWindow::on_btnReader_clicked() {
   floatfun = false;
-  m_PageIndicator->close();
+
   isReaderVisible = true;
   isMemoVisible = false;
 
@@ -4682,8 +4679,6 @@ void MainWindow::on_timerMousePress() {
 }
 
 void MainWindow::showGrayWindows() {
-  m_PageIndicator->close();
-
   m_widget->resize(this->width(), this->height());
   m_widget->move(0, 0);
   m_widget->setStyleSheet("background-color:rgba(0, 0, 0,25%);");

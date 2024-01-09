@@ -1354,6 +1354,8 @@ void Notes::on_btnHideKey_clicked() {
 }
 
 void Notes::on_btnShowTools_clicked() {
+  bool old = isNeedSave;
+
   if (ui->f_ToolBar->isHidden()) {
     ui->f_ToolBar->show();
 
@@ -1365,6 +1367,8 @@ void Notes::on_btnShowTools_clicked() {
     on_btnLeft_clicked();
     on_btnRight_clicked();
   }
+
+  isNeedSave = old;
 }
 
 void Notes::editNote() { mw_one->on_btnEdit_clicked(); }
