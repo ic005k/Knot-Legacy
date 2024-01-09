@@ -751,7 +751,10 @@ void Todo::refreshAlarm() {
 
 void Todo::changeTodoIcon(bool isToday) {
   if (!isToday) {
-    mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
+    if (mw_one->isDark)
+      mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo_l.png"));
+    else
+      mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
   } else {
     mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo1.png"));
   }

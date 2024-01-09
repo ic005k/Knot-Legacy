@@ -3509,8 +3509,21 @@ void MainWindow::initQW() {
 }
 
 void MainWindow::init_Theme() {
-  if (!isDark)
+  if (!isDark) {
     ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
+    ui->frameBtn->setStyleSheet("background-color: rgb(243,243,243);");
+
+  } else {
+    ui->btnReport->setIcon(QIcon(":/res/report_l.png"));
+    ui->btnFind->setIcon(QIcon(":/res/find_l.png"));
+    ui->btnRemarks->setIcon(QIcon(":/res/edit_l.png"));
+
+    ui->btnReader->setIcon(QIcon(":/res/reader_l.png"));
+    ui->btnTodo->setIcon(QIcon(":/res/todo_l.png"));
+    ui->btnSteps->setIcon(QIcon(":/res/steps_l.png"));
+    ui->btnNotes->setIcon(QIcon(":/res/note_l.png"));
+    ui->btnMax->setIcon(QIcon(":/res/max_l.png"));
+  }
 
   QString fileTheme;
   if (isDark)

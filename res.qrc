@@ -109,5 +109,13 @@
         <file>res/coin.png</file>
         <file>theme/dark/darkstyle.qss</file>
         <file>theme/light/lightstyle.qss</file>
+        <file>res/reader_l.png</file>
+        <file>res/max_l.png</file>
+        <file>res/note_l.png</file>
+        <file>res/steps_l.png</file>
+        <file>res/todo_l.png</file>
+        <file>res/edit_l.png</file>
+        <file>res/find_l.png</file>
+        <file>res/report_l.png</file>
     </qresource>
 </RCC>
