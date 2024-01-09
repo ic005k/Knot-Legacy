@@ -6,7 +6,7 @@
     <message>
         <location filename="widgets/qtabbar.cpp" line="2766"/>
         <source>Close Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭标签页</translation>
     </message>
 </context>
 <context>
