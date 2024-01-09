@@ -15,9 +15,15 @@ ShowMessage::ShowMessage(QWidget* parent)
   setWindowFlag(Qt::FramelessWindowHint);
   setAttribute(Qt::WA_TranslucentBackground);
   ui->widget->setStyleSheet("background-color:rgba(0, 0, 0,25%);");
-  ui->frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:0px solid gray;}");
+
+  if (mw_one->isDark)
+    ui->frame->setStyleSheet(
+        "QFrame{background-color: #455364;color: #FFFFFF;border-radius:10px; "
+        "border:0px solid gray;}");
+  else
+    ui->frame->setStyleSheet(
+        "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+        "border:0px solid gray;}");
 
   setModal(true);
   QFont font = this->font();

@@ -1100,7 +1100,7 @@
 </string>
             </property>
             <property name="tabShape">
-             <enum>QTabWidget::Triangular</enum>
+             <enum>QTabWidget::Rounded</enum>
             </property>
             <property name="currentIndex">
              <number>-1</number>

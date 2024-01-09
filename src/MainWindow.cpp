@@ -805,7 +805,9 @@ void MainWindow::init_ChartWidget() {
   QBrush brush = pal.window();
   red = brush.color().red();
 
-  if (red < 55) {
+  qDebug() << "red=" << red;
+
+  if (isDark) {
     chartMonth->setTheme(QChart::ChartThemeDark);
     chartDay->setTheme(QChart::ChartThemeDark);
   } else {
@@ -1836,19 +1838,23 @@ void MainWindow::on_actionRename_triggered() {
   int index = ui->tabWidget->currentIndex();
   bool ok = false;
   QString text;
-  QFrame *frame = new QFrame(this);
+  QWidget *frame = new QWidget(this);
+  frame->setStyleSheet("#frame{background-color:rgba(0, 0, 0,25%);}");
   QVBoxLayout *vbox = new QVBoxLayout;
   frame->setLayout(vbox);
+
   QInputDialog *idlg = new QInputDialog(this);
   idlg->hide();
-  vbox->addWidget(idlg);
+  // vbox->addWidget(idlg);
 
   idlg->setWindowFlag(Qt::FramelessWindowHint);
   QString style =
       "QDialog{background: "
       "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
 
-  idlg->setStyleSheet(style);
+  QString style1 = "QDialog{border-radius:0px;border:2px solid red;}";
+
+  idlg->setStyleSheet(style1);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
   idlg->setContentsMargins(10, 10, 10, 10);
@@ -1857,9 +1863,9 @@ void MainWindow::on_actionRename_triggered() {
   idlg->setTextValue(ui->tabWidget->tabText(index));
   idlg->setLabelText(tr("Tab name : "));
 
-  frame->setGeometry(50, -100, mw_one->width() - 100, this->height());
+  frame->setGeometry(0, 0, mw_one->width(), mw_one->height());
   idlg->show();
-  frame->show();
+  // frame->show();
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
@@ -3544,6 +3550,20 @@ void MainWindow::initQW() {
 }
 
 void MainWindow::init_UIWidget() {
+  QString fileTheme;
+  if (isDark)
+    fileTheme = ":/theme/dark/darkstyle.qss";
+  else
+    fileTheme = ":/theme/light/lightstyle.qss";
+  QFile f_theme(fileTheme);
+  if (!f_theme.exists()) {
+    qDebug() << "Unable to set stylesheet, file not found";
+  } else {
+    f_theme.open(QFile::ReadOnly | QFile::Text);
+    QTextStream ts(&f_theme);
+    qApp->setStyleSheet(ts.readAll());
+  }
+
   set_btnStyle(this);
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
@@ -3733,7 +3753,9 @@ void MainWindow::init_UIWidget() {
 
   ui->frame_tab->setMaximumHeight(this->height());
 
-  ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
+  if (!isDark)
+    ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
+
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
   ui->btnRemarks->setStyleSheet("border:none");
