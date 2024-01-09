@@ -1210,10 +1210,8 @@ void MainWindow::set_btnStyle(QObject *parent) {
   for (int i = 0; i < btnList.count(); i++) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
 
-    if (btn != ui->btnBackNotes && btn != ui->btnEdit &&
-        btn != ui->btnNotesList && btn != ui->btnSetKey && btn != ui->btnPDF)
-      setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB", "#FFFFFF",
-                       "#2483C7", "#A0DAFB");  // #5DACE4 #E5FEFF
+    setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB", "#FFFFFF",
+                     "#2483C7", "#A0DAFB");  // #5DACE4 #E5FEFF
   }
 }
 

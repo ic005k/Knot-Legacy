@@ -270,7 +270,7 @@
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/back.png</normaloff>:/res/back.png</iconset>
+                <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -307,7 +307,7 @@
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/open.png</normaloff>:/res/open.png</iconset>
+                <normaloff>:/res/open_l.png</normaloff>:/res/open_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -338,7 +338,7 @@
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/ReadList.png</normaloff>:/res/ReadList.png</iconset>
+                <normaloff>:/res/notebook_l.png</normaloff>:/res/notebook_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -477,7 +477,7 @@
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/dir.png</normaloff>:/res/dir.png</iconset>
+                <normaloff>:/res/list_l.png</normaloff>:/res/list_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -709,19 +709,6 @@
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
            <widget class="QToolButton" name="btnSync">
             <property name="minimumSize">
              <size>
@@ -756,19 +743,6 @@
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_7">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
            <widget class="QToolButton" name="btnPause">
             <property name="minimumSize">
              <size>
@@ -801,19 +775,6 @@
              <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
           <item>
            <widget class="QToolButton" name="btnReport">
@@ -2142,7 +2103,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/back.png</normaloff>:/res/back.png</iconset>
+             <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -2183,7 +2144,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/edit.png</normaloff>:/res/edit.png</iconset>
+             <normaloff>:/res/edit_l.png</normaloff>:/res/edit_l.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -2218,7 +2179,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/ReadList.png</normaloff>:/res/ReadList.png</iconset>
+             <normaloff>:/res/notebook_l.png</normaloff>:/res/notebook_l.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -2253,7 +2214,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/setpass.png</normaloff>:/res/setpass.png</iconset>
+             <normaloff>:/res/lock_l.png</normaloff>:/res/lock_l.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -2288,7 +2249,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/topdf.png</normaloff>:/res/topdf.png</iconset>
+             <normaloff>:/res/pdf_l.png</normaloff>:/res/pdf_l.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -2499,7 +2460,7 @@ QTabBar::scroller {width:0}
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/back.png</normaloff>:/res/back.png</iconset>
+                <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -2616,7 +2577,7 @@ QTabBar::scroller {width:0}
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/remarks.png</normaloff>:/res/remarks.png</iconset>
+                <normaloff>:/res/edit_l.png</normaloff>:/res/edit_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -2654,7 +2615,7 @@ QTabBar::scroller {width:0}
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/time.png</normaloff>:/res/time.png</iconset>
+                <normaloff>:/res/time_l.png</normaloff>:/res/time_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -2692,7 +2653,7 @@ QTabBar::scroller {width:0}
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/recycle.png</normaloff>:/res/recycle.png</iconset>
+                <normaloff>:/res/rebin_l.png</normaloff>:/res/rebin_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -5511,7 +5472,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">

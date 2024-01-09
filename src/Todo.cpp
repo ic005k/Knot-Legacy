@@ -32,12 +32,6 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   mw_one->ui->frameTodo->layout()->setContentsMargins(1, 1, 1, 1);
   mw_one->ui->frameTodo->layout()->setSpacing(2);
   mw_one->ui->editTodo->setContentsMargins(12, 0, 12, 0);
-  mw_one->ui->btnBackTodo->setStyleSheet("border:none");
-  mw_one->ui->btnHigh->setStyleSheet("border:none");
-  mw_one->ui->btnLow->setStyleSheet("border:none");
-  mw_one->ui->btnModify->setStyleSheet("border:none");
-  mw_one->ui->btnSetTime->setStyleSheet("border:none");
-  mw_one->ui->btnRecycle->setStyleSheet("border:none");
 
   QFont f = this->font();
   f.setPointSize(12);

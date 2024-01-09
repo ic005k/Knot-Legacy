@@ -45,20 +45,19 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   pt.setBrush(QPalette::HighlightedText, Qt::white);
   mw_one->ui->textBrowser->setPalette(pt);
 
-  mw_one->ui->btnOpen->setStyleSheet("border:none");
-  mw_one->ui->btnBackReader->setStyleSheet("border:none");
   mw_one->ui->btnPageNext->setStyleSheet("border:none");
   mw_one->ui->btnPageUp->setStyleSheet("border:none");
+  mw_one->ui->btnSelText->setStyleSheet("border:none");
+
   mw_one->ui->btnPageNext->hide();
   mw_one->ui->btnPageUp->hide();
+  mw_one->ui->btnSelText->hide();
   mw_one->ui->btnPages->setStyleSheet(
       "color: rgb(0, 0, 0);background-color: rgb(254, 234, 112);border: "
       "0px solid "
       "rgb(255,0,0);border-radius: 4px;"
       "font-weight: bold;");
-  mw_one->ui->btnReadList->setStyleSheet("border:none");
-  mw_one->ui->btnBackDir->setStyleSheet("border:none");
-  mw_one->ui->btnSelText->setStyleSheet("border:none");
+
   QFont f = this->font();
   f.setPointSize(11);
   f.setBold(true);

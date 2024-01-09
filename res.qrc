@@ -117,5 +117,13 @@
         <file>res/edit_l.png</file>
         <file>res/find_l.png</file>
         <file>res/report_l.png</file>
+        <file>res/rebin_l.png</file>
+        <file>res/time_l.png</file>
+        <file>res/back_l.png</file>
+        <file>res/pdf_l.png</file>
+        <file>res/lock_l.png</file>
+        <file>res/notebook_l.png</file>
+        <file>res/list_l.png</file>
+        <file>res/open_l.png</file>
     </qresource>
 </RCC>
