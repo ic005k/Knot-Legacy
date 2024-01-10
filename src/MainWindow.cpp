@@ -413,8 +413,8 @@ MainWindow::MainWindow(QWidget *parent)
   qRegisterMetaType<QVector<int>>("QVector<int>");
   loading = true;
   init_UIWidget();
-  init_ChartWidget();
   init_Options();
+  init_ChartWidget();
   init_Theme();
   init_Sensors();
   init_TotalData();
@@ -463,6 +463,7 @@ void MainWindow::initHardStepSensor() {
   if (isHardStepSensor == 1) {
     ui->btnPause->click();
     ui->gboxAlg->hide();
+    ui->lblAlg->hide();
     ui->lblSteps->hide();
     ui->btnPauseSteps->hide();
     ui->lblTotalRunTime->hide();
@@ -788,33 +789,6 @@ void MainWindow::init_ChartWidget() {
   m_scatterSeries2->attachAxis(axisY2);
   m_scatterSeries2_1->attachAxis(axisX2);
   m_scatterSeries2_1->attachAxis(axisY2);
-
-  QFont font1;
-  font1.setPointSize(12);
-  font1.setBold(true);
-  chartMonth->setTitleFont(font1);
-  chartDay->setTitleFont(font1);
-  axisX->setLabelsFont(font1);
-  axisY->setLabelsFont(font1);
-  axisY->setTickCount(yScale);
-  axisX2->setLabelsFont(font1);
-  axisY2->setLabelsFont(font1);
-  axisY2->setTickCount(yScale);
-
-  // Get the background color to fit the dark mode
-  QPalette pal = this->palette();
-  QBrush brush = pal.window();
-  red = brush.color().red();
-
-  qDebug() << "red=" << red;
-
-  if (isDark) {
-    chartMonth->setTheme(QChart::ChartThemeDark);
-    chartDay->setTheme(QChart::ChartThemeDark);
-  } else {
-    chartMonth->setTheme(QChart::ChartThemeLight);
-    chartDay->setTheme(QChart::ChartThemeLight);
-  }
 }
 
 void MainWindow::slotPointHoverd(const QPointF &point, bool state) {
@@ -3507,11 +3481,31 @@ void MainWindow::initQW() {
 }
 
 void MainWindow::init_Theme() {
+  // Get the background color to fit the dark mode
+  QPalette pal = this->palette();
+  QBrush brush = pal.window();
+  red = brush.color().red();
+
+  qDebug() << "red=" << red;
+
   if (!isDark) {
     ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
     ui->frameBtn->setStyleSheet("background-color: rgb(243,243,243);");
+    ui->frame_cw->setStyleSheet("background-color: rgb(243,243,243);");
+    ui->frame_charts->setStyleSheet("background-color: rgb(243,243,243);");
+
+    chartMonth->setTheme(QChart::ChartThemeLight);
+    chartDay->setTheme(QChart::ChartThemeLight);
 
   } else {
+    ui->frameMenu->setStyleSheet("background-color: #19232D;");
+    ui->frameBtn->setStyleSheet("background-color: #19232D;");
+    ui->frame_cw->setStyleSheet("background-color: #19232D;");
+    ui->frame_charts->setStyleSheet("background-color: #19232D;");
+
+    chartMonth->setTheme(QChart::ChartThemeDark);
+    chartDay->setTheme(QChart::ChartThemeDark);
+
     ui->btnReport->setIcon(QIcon(":/res/report_l.png"));
     ui->btnFind->setIcon(QIcon(":/res/find_l.png"));
     ui->btnRemarks->setIcon(QIcon(":/res/edit_l.png"));
@@ -3536,6 +3530,18 @@ void MainWindow::init_Theme() {
     QTextStream ts(&f_theme);
     qApp->setStyleSheet(ts.readAll());
   }
+
+  QFont font1;
+  font1.setPointSize(12);
+  font1.setBold(true);
+  chartMonth->setTitleFont(font1);
+  chartDay->setTitleFont(font1);
+  axisX->setLabelsFont(font1);
+  axisY->setLabelsFont(font1);
+  axisY->setTickCount(yScale);
+  axisX2->setLabelsFont(font1);
+  axisY2->setLabelsFont(font1);
+  axisY2->setTickCount(yScale);
 }
 
 void MainWindow::init_UIWidget() {

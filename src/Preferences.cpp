@@ -21,7 +21,6 @@ Preferences::Preferences(QWidget* parent)
   ui->chkAutoTime->setFont(font0);
   ui->chkDebug->setFont(font0);
   ui->btnReStart->setFont(font0);
-  ui->lblTip->setFont(font0);
 
 #ifdef Q_OS_ANDROID
   ui->sliderFontSize->setMinimum(15);
@@ -34,7 +33,6 @@ Preferences::Preferences(QWidget* parent)
   this->installEventFilter(this);
   ui->lblFontSize->installEventFilter(this);
 
-  ui->lblTip->hide();
   ui->chkAutoTime->hide();
   ui->chkDebug->hide();
 
@@ -47,14 +45,11 @@ Preferences::Preferences(QWidget* parent)
   ui->chkDebug->setStyleSheet(chkStyle);
   ui->chkReaderFont->setStyleSheet(chkStyle);
   ui->chkUIFont->setStyleSheet(chkStyle);
-  ui->lblTip->setStyleSheet("color:red;");
   ui->lblFontSize->setFixedHeight(40);
   ui->lblFontPath->setWordWrap(true);
   ui->lblFontPath->adjustSize();
   ui->lblFontPath->setFixedHeight(100);
   ui->lblFontPath->hide();
-  ui->lblTip->setWordWrap(true);
-  ui->lblTip->adjustSize();
   ui->btnCustomFont->setFixedHeight(130);
   ui->btnCustomFont->adjustSize();
   ui->btnCustomFont->setStyleSheet(

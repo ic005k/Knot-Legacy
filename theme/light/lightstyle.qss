@@ -1070,6 +1070,7 @@ QDialogButtonBox QPushButton {
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtoolbutton
 
 --------------------------------------------------------------------------- */
+
 QToolButton {
   background-color: #C0C4C8;
   color: #19232D;
@@ -1192,6 +1193,8 @@ QToolButton::menu-arrow {
 QToolButton::menu-arrow:hover {
   image: url(":/qss_icons/light/rc/arrow_down_focus.png");
 }
+
+
 
 /* QCommandLinkButton -----------------------------------------------------
 

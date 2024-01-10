@@ -36,7 +36,10 @@ ShowMessage::ShowMessage(QWidget* parent)
   ui->lblMsgTxt->setWordWrap(true);
 
   ui->hframe->setFrameShape(QFrame::HLine);
-  ui->hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
+  if (mw_one->isDark)
+    ui->hframe->setStyleSheet("QFrame{background:green;min-height:2px}");
+  else
+    ui->hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
 
   mw_one->set_btnStyle(this);
 }

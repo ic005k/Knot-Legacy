@@ -1073,6 +1073,7 @@ QDialogButtonBox QPushButton {
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtoolbutton
 
 --------------------------------------------------------------------------- */
+
 QToolButton {
   background-color: #455364;
   color: #DFE1E2;

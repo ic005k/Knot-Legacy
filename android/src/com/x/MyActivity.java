@@ -500,7 +500,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         //状态栏
         context = getApplicationContext();  // 获取程序句柄
         // 设置状态栏颜色,需要安卓版本大于5.0
-        this.setStatusBarColor("#F3F3F3");  //灰
+         this.setStatusBarColor("#F3F3F3");  //灰
+        // this.setStatusBarColor("#19232D");  //深色
         // 设置状态栏全透明
         // this.setStatusBarFullTransparent();
         //状态栏文字自适应

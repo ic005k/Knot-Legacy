@@ -9,6 +9,9 @@ extern MainWindow* mw_one;
 PageIndicator::PageIndicator(QWidget* parent)
     : QDialog(parent), ui(new Ui::PageIndicator) {
   ui->setupUi(this);
+
+  setWindowOpacity(0.8);
+
   setGeometry(0, 0, 1, 1);
 
   setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -20,31 +23,19 @@ PageIndicator::PageIndicator(QWidget* parent)
 #endif
 
   ui->lblPageNumber->setStyleSheet("color:#ff6600;");
-  ui->lblPic->setHidden(true);
+  ui->lblPageNumber->adjustSize();
 
   this->setContentsMargins(1, 1, 1, 1);
   this->layout()->setContentsMargins(1, 1, 1, 1);
 }
 
 void PageIndicator::setPicLeft() {
-  QPixmap* pixmap = new QPixmap(":/res/sleft.svg");
-  pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
-                 Qt::SmoothTransformation);
-  ui->lblPic->setScaledContents(true);
-  ui->lblPic->setPixmap(*pixmap);
-
   showPageNumber("left");
 
   init();
 }
 
 void PageIndicator::setPicRight() {
-  QPixmap* pixmap = new QPixmap(":/res/sright.svg");
-  pixmap->scaled(ui->lblPic->size(), Qt::KeepAspectRatio,
-                 Qt::SmoothTransformation);
-  ui->lblPic->setScaledContents(true);
-  ui->lblPic->setPixmap(*pixmap);
-
   showPageNumber("right");
 
   init();
@@ -53,13 +44,13 @@ void PageIndicator::setPicRight() {
 void PageIndicator::init() {
   if (mw_one->ui->frameReader->isHidden()) return;
 
-  int w = mw_one->geometry().width() - 20;
+  int w = mw_one->width() - 20;
   QFontMetrics fontMetrics(ui->lblPageNumber->font());
   int nFontHeight = fontMetrics.height();
   setFixedWidth(w);
   setFixedHeight(nFontHeight + 10);
   this->setGeometry(mw_one->geometry().x() + (mw_one->width() - w) / 2,
-                    mw_one->geometry().y() + 5, this->width(), this->height());
+                    mw_one->geometry().y() + 15, this->width(), this->height());
 
   this->show();
 }
