@@ -10,17 +10,16 @@ PageIndicator::PageIndicator(QWidget* parent)
     : QDialog(parent), ui(new Ui::PageIndicator) {
   ui->setupUi(this);
 
-  setWindowOpacity(0.8);
-
-  setGeometry(0, 0, 1, 1);
-
-  setWindowFlags(Qt::WindowStaysOnTopHint);
-
 #ifdef Q_OS_ANDROID
 #else
+  setAttribute(Qt::WA_TranslucentBackground);
+#endif
+
+  this->setStyleSheet("background-color:rgba(0, 0, 0,25%);");
   setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint |
                  Qt::WindowDoesNotAcceptFocus);
-#endif
+
+  setGeometry(0, 0, 1, 1);
 
   ui->lblPageNumber->setStyleSheet("color:#ff6600;");
   ui->lblPageNumber->adjustSize();

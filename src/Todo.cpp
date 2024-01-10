@@ -46,7 +46,7 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   mw_one->ui->btnPasteTodo->hide();
 
   mw_one->ui->editTodo->setFixedHeight(getEditTextHeight(mw_one->ui->editTodo) +
-                                       2);
+                                       4);
 }
 
 Todo::~Todo() { delete ui; }
@@ -148,6 +148,7 @@ int Todo::getEditTextHeight(QTextEdit* edit) {
   QTextDocument* doc = edit->document();
   doc->adjustSize();
   int mainHeight = doc->size().rheight() * 1.10;
+
   return mainHeight;
 }
 
@@ -755,7 +756,7 @@ void Todo::changeTodoIcon(bool isToday) {
 }
 
 void Todo::on_editTodo_textChanged() {
-  int h = getEditTextHeight(mw_one->ui->editTodo) + 2;
+  int h = getEditTextHeight(mw_one->ui->editTodo) + 4;
   mw_one->ui->editTodo->setFixedHeight(h);
 }
 

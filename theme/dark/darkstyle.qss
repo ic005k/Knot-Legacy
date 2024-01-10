@@ -697,6 +697,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-specific-widgets
 
 --------------------------------------------------------------------------- */
+
 QTextEdit {
   background-color: #19232D;
   color: #DFE1E2;

@@ -705,7 +705,7 @@ void MainWindow::init_ChartWidget() {
 
   ui->glMonth->layout()->setContentsMargins(0, 0, 0, 0);
   ui->glMonth->layout()->setSpacing(0);
-  ui->glDay->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->glDay->layout()->setContentsMargins(0, 0, 0, 5);
   ui->glDay->layout()->setSpacing(0);
 
   int a0 = 0;
@@ -3521,6 +3521,11 @@ void MainWindow::init_Theme() {
     ui->btnSteps->setIcon(QIcon(":/res/steps_l.png"));
     ui->btnNotes->setIcon(QIcon(":/res/note_l.png"));
     ui->btnMax->setIcon(QIcon(":/res/max_l.png"));
+
+    ui->editTodo->setStyleSheet("background-color: #19232D;");
+    QPalette palette = ui->editTodo->palette();
+    palette.setColor(QPalette::Normal, QPalette::PlaceholderText, Qt::red);
+    ui->editTodo->setPalette(palette);
   }
 
   QString fileTheme;
