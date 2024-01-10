@@ -702,7 +702,7 @@ void MainWindow::init_Options() {
 
 void MainWindow::init_ChartWidget() {
   CurrentYear = QString::number(QDate::currentDate().year());
-  ui->tabCharts->setCornerWidget(ui->frame_cw);
+
   ui->glMonth->layout()->setContentsMargins(0, 0, 0, 0);
   ui->glMonth->layout()->setSpacing(0);
   ui->glDay->layout()->setContentsMargins(0, 0, 0, 0);
@@ -1849,6 +1849,9 @@ void MainWindow::on_actionAdd_Tab_triggered() {
   ui->tabCharts->setTabText(0, tr("Month"));
   ui->tabCharts->setTabText(1, tr("Day"));
 
+  ui->btnChartMonth->setText(tabChart->tabText(0));
+  ui->btnChartDay->setText(tabChart->tabText(1));
+
   on_actionRename_triggered();
   reloadMain();
 
@@ -1972,6 +1975,9 @@ void MainWindow::on_twItemClicked() {
   tw->headerItem()->setText(0, "" + tr("Date") + "  " + CurrentYear);
   ui->tabCharts->setTabText(0, stra.split(" ").at(1));
   ui->tabCharts->setTabText(1, stra.split(" ").at(2));
+
+  ui->btnChartMonth->setText(tabChart->tabText(0));
+  ui->btnChartDay->setText(tabChart->tabText(1));
 
   // top item
   if (item->childCount() > 0) {
@@ -3744,7 +3750,15 @@ void MainWindow::init_UIWidget() {
   ui->btnPause->hide();
 #endif
 
-  ui->btnSelTab->setStyleSheet("border:none");
+  // ui->tabCharts->setCornerWidget(ui->frame_cw);
+  ui->tabCharts->tabBar()->hide();
+  ui->frame_cw->setFixedHeight(tabChart->tabBar()->height());
+  setPushButtonQss(ui->btnSelTab, 5, 3, "#FF0000", "#FFFFFF", "#FF0000",
+                   "#FFFFFF", "#FF5555", "#FFFFFF");
+  ui->btnChartMonth->setStyleSheet(ui->btnSelTab->styleSheet());
+  setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF", "#455364",
+                   "#FFFFFF", "#555364", "#FFFFFF");
+
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnMax->setStyleSheet("border:none");
@@ -5533,4 +5547,18 @@ void MainWindow::on_btnClear_clicked() { ui->editTodo->clear(); }
 void MainWindow::on_btnModify_clicked() {
   m_Method->closeKeyboard();
   m_Todo->reeditText();
+}
+
+void MainWindow::on_btnChartMonth_clicked() {
+  tabChart->setCurrentIndex(0);
+  ui->btnChartMonth->setStyleSheet(ui->btnSelTab->styleSheet());
+  setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF", "#455364",
+                   "#FFFFFF", "#555364", "#FFFFFF");
+}
+
+void MainWindow::on_btnChartDay_clicked() {
+  tabChart->setCurrentIndex(1);
+  ui->btnChartDay->setStyleSheet(ui->btnSelTab->styleSheet());
+  setPushButtonQss(ui->btnChartMonth, 5, 3, "#455364", "#FFFFFF", "#455364",
+                   "#FFFFFF", "#555364", "#FFFFFF");
 }

@@ -774,6 +774,10 @@ class MainWindow : public QMainWindow {
 
   void on_btnModify_clicked();
 
+  void on_btnChartMonth_clicked();
+
+  void on_btnChartDay_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
