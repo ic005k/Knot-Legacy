@@ -102,12 +102,10 @@ void RollingBox::paintEvent(QPaintEvent *) {
   }
 
   // 中间数字
-  if (mw_one->isDark) painter.setPen(QPen(QColor(255, 255, 255, 225), 2));
 
   paintNum(painter, m_currentValue, m_deviation);
 
   // 两侧数字1
-  if (mw_one->isDark) painter.setPen(QPen(QColor(255, 255, 255, 225), 2));
 
   if (m_currentValue != m_minRange)
     paintNum(painter, m_currentValue - 1, m_deviation - Width / 4);
@@ -121,7 +119,11 @@ void RollingBox::paintEvent(QPaintEvent *) {
     paintNum(painter, m_currentValue + 2, m_deviation + Width / 2);
 
   // 边框
-  painter.setPen(QPen(QColor(0, 0, 255, 225), 2));
+  if (mw_one->isDark)
+    painter.setPen(QPen(QColor(0, 255, 255, 225), 2));
+  else
+    painter.setPen(QPen(QColor(0, 0, 255, 225), 2));
+
   painter.drawLine(Width / 8 * 3, 0, Width / 8 * 3, Height);
   painter.drawLine(Width / 8 * 5, 0, Width / 8 * 5, Height);
 }
@@ -138,7 +140,11 @@ void RollingBox::paintNum(QPainter &painter, int num, int deviation) {
   QFont font;
   font.setPixelSize(size);
   painter.setFont(font);
-  painter.setPen(QColor(0, 0, 0, transparency));
+
+  if (!mw_one->isDark)
+    painter.setPen(QColor(0, 0, 0, transparency));
+  else
+    painter.setPen(QColor(255, 255, 255, transparency));
   painter.drawText(QRectF(x, 0, width, Height), Qt::AlignCenter,
                    QString::number(num));
 }

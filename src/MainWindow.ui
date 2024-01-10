@@ -5272,7 +5272,7 @@ selection-background-color: lightblue;
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">/*QSlider::groove:horizontal {
+               <string notr="true">QSlider::groove:horizontal {
   border: 0px solid #bbb;
 }
  
@@ -5294,6 +5294,7 @@ QSlider::add-page:horizontal {
 QSlider::handle:horizontal { 
   background: rgb(255,255,255); 
   border: 1px solid rgba(10,10,10,255); 
+border-image: url(&quot;:/res/qslider_btn.png&quot;);	
   width: 25px; 
   height: 15px; 
   border-radius: 0px; 
@@ -5321,7 +5322,7 @@ QSlider::handle:horizontal:disabled {
   background: #eee; 
   border: 1px solid #aaa; 
   border-radius: 4px; 
-}*/</string>
+}</string>
               </property>
               <property name="maximum">
                <number>23</number>

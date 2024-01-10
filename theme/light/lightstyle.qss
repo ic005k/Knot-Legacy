@@ -1324,6 +1324,7 @@ QComboBox::down-arrow:on, QComboBox::down-arrow:hover, QComboBox::down-arrow:foc
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qslider
 
 --------------------------------------------------------------------------- */
+/*
 QSlider:disabled {
   background: #FAFAFA;
 }
@@ -1407,6 +1408,8 @@ QSlider::handle:vertical:hover {
 QSlider::handle:vertical:focus {
   border: 1px solid #73C7FF;
 }
+
+*/
 
 /* QLineEdit --------------------------------------------------------------
 
