@@ -22,12 +22,12 @@ class TodoAlarm : public QDialog {
   Ui::TodoAlarm *ui;
 
   void initDlg();
-  // QString btnSelStyle = "QToolButton {background-color: blue;color: white;}";
+
   QString btnSelStyle =
       "QToolButton {background-color: rgb(30, 144, 255);color: "
       "white;border-radius:10px; "
       "border:1px solid gray; } QToolButton:pressed { background-color: "
-      "rgb(220,220,230);}";
+      "rgb(220,220,230);color:black;}";
 
   void addBtn(int start, int total, int col, QString flag, bool week);
 

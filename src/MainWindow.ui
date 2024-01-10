@@ -2959,21 +2959,6 @@ border:1px solid #4169E1
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_17">
-       <property name="spacing">
-        <number>5</number>
-       </property>
-       <property name="leftMargin">
-        <number>5</number>
-       </property>
-       <property name="topMargin">
-        <number>5</number>
-       </property>
-       <property name="rightMargin">
-        <number>5</number>
-       </property>
-       <property name="bottomMargin">
-        <number>5</number>
-       </property>
        <item>
         <widget class="QQuickWidget" name="qwSteps">
          <property name="sizePolicy">
@@ -3093,9 +3078,22 @@ border:1px solid #4169E1
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="label_7">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Algorithms</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="gboxAlg">
          <property name="title">
-          <string>Algorithms</string>
+          <string/>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_18">
           <item>
@@ -3182,18 +3180,6 @@ QRadioButton::indicator:checked {
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_16">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_19">
             <item>
@@ -3219,7 +3205,18 @@ QRadioButton::indicator:checked {
             <item>
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>cm        Current : </string>
+               <string>cm  </string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_49">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Current : </string>
               </property>
              </widget>
             </item>
@@ -3248,7 +3245,7 @@ QRadioButton::indicator:checked {
             <item>
              <widget class="QToolButton" name="btnReset">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>

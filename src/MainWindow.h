@@ -276,9 +276,17 @@ class MainWindow : public QMainWindow {
   void del_Data(QTreeWidget *);
   static QTreeWidget *get_tw(int tabIndex);
   QString btnStyle =
-      "QToolButton {background-color: rgb(236, 236, 236);border-radius:10px; "
+      "QToolButton {background-color: rgb(236, 236, 236);color: black; "
+      "border-radius:10px; "
       "border:1px solid gray; } QToolButton:pressed { background-color: "
       "rgb(220,220,230);}";
+
+  QString btnStyleDark =
+      "QToolButton {background-color: rgb(51, 51, 51);color: white; "
+      "border-radius:10px; "
+      "border:1px solid gray; } QToolButton:pressed { background-color: "
+      "rgb(22,22,23);}";
+
   QString pushbtnStyle =
       "QPushButton {background-color: rgb(236, 236, 236);border-radius:10px; "
       "border:1px solid gray; } QPushButton:pressed { background-color: "
