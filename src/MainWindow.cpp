@@ -190,8 +190,14 @@ void MainWindow::readEBookDone() {
       mw_one->ui->qwReader->setSource(
           QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
 
-      if (isEpub)
+      if (isEpub) {
         ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
+        ui->btnBackDir->show();
+      }
+
+      if (isText) {
+        ui->btnBackDir->hide();
+      }
     }
 
     if (isPDF) {
@@ -5177,7 +5183,7 @@ void MainWindow::on_btnCategory_clicked() {
 
 void MainWindow::on_btnSync_clicked() {
   m_Reader->setPdfViewVisible(false);
-  ui->btnUpload->click();
+  on_btnUpload_clicked();
 }
 
 void MainWindow::on_btnPDF_clicked() { m_Notes->on_btnPDF_clicked(); }

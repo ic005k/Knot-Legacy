@@ -289,8 +289,8 @@ void CloudBackup::uploadData() {
   if (!m_ShowMsg->showMsg(
           "OneDrive",
           tr("Uploading data?") + "\n\n" +
-              tr("This operation will overwrite the data on OneDrive.") +
-              "\n\n" + mw_one->m_Reader->getUriRealPath(zipfile) +
+              tr("This action will update the data on OneDrive.") + "\n\n" +
+              mw_one->m_Reader->getUriRealPath(zipfile) +
               "\n\nSIZE: " + mw_one->getFileSize(QFile(zipfile).size(), 2),
           2))
     return;
