@@ -100,6 +100,28 @@ Rectangle {
         view.model.setProperty(currentIndex, "dototext", strText)
     }
 
+    function getColor() {
+           var strColor
+
+           if (isDark)
+               strColor = "#455364"
+           else
+               strColor = "#ffffff"
+
+           return strColor
+       }
+
+       function getFontColor() {
+
+           if (isDark)
+               return "white"
+           else
+               return "black"
+       }
+
+
+
+
     Component {
         id: dragDelegate
 
@@ -107,7 +129,7 @@ Rectangle {
             id: listItem
             width: ListView.view.width
             height: getItemHeight()
-            color: ListView.isCurrentItem ? "#DCDCDC" : "#ffffff" //选中颜色设置
+            color: ListView.isCurrentItem ? "lightblue" : getColor()
 
             border.width: 1
             border.color: "lightgray"
@@ -173,7 +195,7 @@ Rectangle {
 
                     TextArea {
                         id: text1
-                        color: "gray"
+                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         font.pointSize: FontSize - 2
                         font.bold: true
                         width: parent.width
@@ -197,7 +219,7 @@ Rectangle {
                         wrapMode: Text.Wrap
                         //background: Qt.rgba(0,0,0,0)
                         readOnly: true
-                        color: isHighPriority ? "#EF5B98" : "#000000"
+                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         text: dototext
                     }
 

@@ -140,6 +140,25 @@ Rectangle {
         view.model.setProperty(currentIndex, "text3", strText)
     }
 
+    function getColor() {
+        var strColor
+
+        if (isDark)
+            strColor = "#455364"
+        else
+            strColor = "#ffffff"
+
+        return strColor
+    }
+
+    function getFontColor() {
+
+        if (isDark)
+            return "white"
+        else
+            return "black"
+    }
+
     Component {
         id: dragDelegate
 
@@ -147,7 +166,7 @@ Rectangle {
             id: listItem
             width: ListView.view.width
             height: item0.contentHeight + item2.contentHeight + 16
-            color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
+            color: ListView.isCurrentItem ? "lightblue" : getColor()
 
             border.width: 1
             border.color: "lightgray" //"lightsteelblue"
@@ -215,6 +234,7 @@ Rectangle {
                             wrapMode: TextArea.WordWrap
                             font.bold: true
                             text: text0
+                            color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                             leftPadding: 5
                             rightPadding: 5
@@ -231,7 +251,7 @@ Rectangle {
 
                         width: parent.width
                         wrapMode: TextArea.WordWrap
-                        color: isHighPriority ? "#EF5B98" : "#000000"
+                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         font.bold: false
                         text: text1
 
@@ -252,6 +272,7 @@ Rectangle {
                         wrapMode: TextArea.WordWrap
                         font.bold: false
                         text: text2
+                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                         leftPadding: 5
                         rightPadding: 5
@@ -265,8 +286,6 @@ Rectangle {
                         Layout.margins: rowSpace
                         visible: item3.text.length ? true : false
 
-
-
                         Image {
                             id: item3Img
 
@@ -277,8 +296,8 @@ Rectangle {
                             verticalAlignment: Image.AlignVCenter
 
                             smooth: true
-                            sourceSize.height: item3.contentHeight-5
-                            sourceSize.width: item3.contentHeight-5
+                            sourceSize.height: item3.contentHeight - 5
+                            sourceSize.width: item3.contentHeight - 5
                             source: "/res/sum.svg"
 
                             visible: item3.text.length ? true : false
@@ -299,7 +318,7 @@ Rectangle {
 
                             font.bold: false
                             font.pointSize: font_size - 2
-                            color: "#515151"
+                            color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                             text: text3
 
                             leftPadding: 5

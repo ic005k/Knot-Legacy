@@ -101,6 +101,25 @@ Rectangle {
         view.model.setProperty(currentIndex, "dototext", strText)
     }
 
+    function getColor() {
+        var strColor
+
+        if (isDark)
+            strColor = "#455364"
+        else
+            strColor = "#ffffff"
+
+        return strColor
+    }
+
+    function getFontColor() {
+
+        if (isDark)
+            return "white"
+        else
+            return "black"
+    }
+
     ListView {
         id: view
         width: parent.width
@@ -136,9 +155,10 @@ Rectangle {
                 border.width: 1
                 border.color: "lightgray"
                 radius: 0
-                //color: ListView.isCurrentItem ? "#DCDCDC" : "#ffffff" //选中颜色设置
-                color: view.currentIndex === index ? "#DCDCDC" : "#ffffff"
+                //选中颜色设置
+                color: view.currentIndex === index ? "lightblue" : getColor()
 
+                //color: view.currentIndex === index ? "#DCDCDC" : "#ffffff"
                 function getItemHeight() {
                     var item0H
                     var item1H
@@ -181,7 +201,7 @@ Rectangle {
                         width: 6
                         radius: 2
                         anchors.leftMargin: 1
-                        color: getColor(type)
+                        color: getPriorityColor(type)
                         Text {
                             anchors.centerIn: parent
                         }
@@ -234,7 +254,7 @@ Rectangle {
                             }
                             TextArea {
                                 id: text1
-                                color: "gray"
+                                color: view.currentIndex === index ? "black" : getFontColor()
                                 font.pointSize: FontSize - 2
                                 font.bold: true
                                 width: parent.width
@@ -263,7 +283,7 @@ Rectangle {
                             //background: Qt.rgba(0, 0, 0, 0)
                             readOnly: true
                             wrapMode: Text.Wrap
-                            color: isHighPriority ? "#EF5B98" : "#000000"
+                            color: view.currentIndex === index ? "black" : getFontColor()
                             text: dototext
 
                             visible: true
@@ -324,7 +344,7 @@ Rectangle {
         }
     }
 
-    function getColor(ntype) {
+    function getPriorityColor(ntype) {
         switch (ntype) {
         case 0:
             return "lightgray"

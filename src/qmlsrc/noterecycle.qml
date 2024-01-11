@@ -124,6 +124,25 @@ Rectangle {
         view.model.setProperty(currentIndex, "dototext", strText)
     }
 
+    function getColor() {
+        var strColor
+
+        if (isDark)
+            strColor = "#455364"
+        else
+            strColor = "#ffffff"
+
+        return strColor
+    }
+
+    function getFontColor() {
+
+        if (isDark)
+            return "white"
+        else
+            return "black"
+    }
+
     Component {
         id: dragDelegate
 
@@ -131,7 +150,7 @@ Rectangle {
             id: listItem
             width: ListView.view.width
             height: item0.contentHeight + 16
-            color: ListView.isCurrentItem ? "lightblue" : "#ffffff" //选中颜色设置 #94caf7
+            color: ListView.isCurrentItem ? "lightblue" : getColor()
 
             border.width: 1
             border.color: "lightgray" //"lightsteelblue"
@@ -166,6 +185,7 @@ Rectangle {
                         wrapMode: TextArea.WordWrap
                         font.bold: false
                         text: text0
+                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                         leftPadding: 5
                         rightPadding: 5
@@ -181,7 +201,7 @@ Rectangle {
 
                         width: parent.width
                         wrapMode: TextArea.WordWrap
-                        color: isHighPriority ? "#EF5B98" : "#000000"
+                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         font.bold: false
                         text: text1
 
@@ -202,6 +222,7 @@ Rectangle {
                         wrapMode: TextArea.WordWrap
                         font.bold: false
                         text: text2
+                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                         leftPadding: 5
                         rightPadding: 5
@@ -219,6 +240,7 @@ Rectangle {
                         Layout.preferredWidth: listItem.width
                         font.bold: false
                         text: text3
+                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                         leftPadding: 5
                         rightPadding: 5
