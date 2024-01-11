@@ -131,7 +131,7 @@ Rectangle {
             height: getItemHeight()
             color: ListView.isCurrentItem ? "lightblue" : getColor()
 
-            border.width: 1
+            border.width: isDark ? 0 : 1
             border.color: "lightgray"
 
             radius: 0

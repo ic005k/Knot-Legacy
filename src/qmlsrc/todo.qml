@@ -152,7 +152,7 @@ Rectangle {
                 anchors.fill: parent
                 width: parent.width
                 height: getItemHeight()
-                border.width: 1
+                border.width: isDark ? 0 : 1
                 border.color: "lightgray"
                 radius: 0
                 //选中颜色设置
