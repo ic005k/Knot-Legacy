@@ -971,15 +971,16 @@ void Todo::reeditText() {
 
   QFrame* frame = new QFrame(this);
   vbox0->addWidget(frame);
-  frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:1px solid gray;}");
+
+  /*frame->setStyleSheet(
+      "QFrame{background-color: rgb(255, 255, 255);color: black; "
+      "border-radius:10px; "
+      "border:1px solid gray;}");*/
 
   QVBoxLayout* vbox = new QVBoxLayout;
-  vbox->setContentsMargins(12, 12, 12, 12);
-  vbox->setSpacing(12);
+
   frame->setLayout(vbox);
-  vbox->setContentsMargins(3, 3, 3, 3);
+  vbox->setContentsMargins(6, 6, 6, 10);
   vbox->setSpacing(3);
 
   QLabel* lblTitle = new QLabel(this);
@@ -1009,16 +1010,7 @@ void Todo::reeditText() {
   btnCancel->setText(tr("Cancel"));
   btnCopy->setText(tr("Copy"));
   btnOk->setText(tr("OK"));
-  btnOk->setStyleSheet(
-      "QToolButton {background-color: rgb(0, 0, 255);color: rgb(255, "
-      "255, 255);border-radius:10px;border:1px solid gray;} "
-      "QToolButton:pressed "
-      "{ background-color: "
-      "rgb(220,220,230);color: black}");
 
-  btnCancel->setStyleSheet(mw_one->btnStyle);
-  btnCopy->setStyleSheet(mw_one->btnStyle);
-  btnOk->setStyleSheet(mw_one->btnStyle);
   btnOk->setFixedHeight(35);
   btnCancel->setFixedHeight(35);
   btnCopy->setFixedHeight(35);
@@ -1060,7 +1052,6 @@ void Todo::reeditText() {
   h = mw_one->height() / 3;
   y = geometry().y() + (height() - h) / 4;
   dlg->setGeometry(x, y, w, h);
-
   dlg->setModal(true);
   dlg->show();
 }

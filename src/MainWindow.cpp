@@ -3528,6 +3528,9 @@ void MainWindow::init_Theme() {
     ui->editTodo->setPalette(palette);
   }
 
+  ui->qwMainDate->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwMainEvent->rootContext()->setContextProperty("isDark", isDark);
+
   QString fileTheme;
   if (isDark)
     fileTheme = ":/theme/dark/darkstyle.qss";
