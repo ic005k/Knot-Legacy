@@ -12,8 +12,10 @@ extern QString iniFile, txtFile, appName, iniDir, privateDir, fontname;
 extern int fontSize;
 extern void RegJni(const char* myClassName);
 void loadLocal();
+
 bool zh_cn = false;
 bool isAndroid, isIOS;
+extern MainWindow* mw_one;
 
 int main(int argc, char* argv[]) {
   LTDev::QtPdfViewerInitializer::initialize();
@@ -125,6 +127,7 @@ int main(int argc, char* argv[]) {
 
 #ifdef Q_OS_ANDROID
   font.setFamily("DroidSansFallback");
+
 #endif
 
   if (QFile(customFontPath).exists()) {

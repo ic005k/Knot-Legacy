@@ -84,6 +84,8 @@ class Method : public QDialog {
   QInputDialog *inputDialog(QString windowsTitle, QString lblEdit,
                             QString defaultValue);
 
+  void setDark(QString strDark);
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
