@@ -125,5 +125,6 @@
         <file>res/notebook_l.png</file>
         <file>res/list_l.png</file>
         <file>res/open_l.png</file>
+        <file>res/sum.png</file>
     </qresource>
 </RCC>

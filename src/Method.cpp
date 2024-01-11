@@ -624,9 +624,15 @@ QDialog* Method::getProgBar() {
 
   dlg->setWindowFlag(Qt::FramelessWindowHint);
   dlg->setAttribute(Qt::WA_TranslucentBackground);
-  frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:0px solid red;}");
+
+  if (mw_one->isDark)
+    frame->setStyleSheet(
+        "QFrame{background-color: #455364; border-radius:10px; "
+        "border:0px solid red;}");
+  else
+    frame->setStyleSheet(
+        "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+        "border:0px solid red;}");
 
   QGridLayout* grid = new QGridLayout();
   dlg->setLayout(grid);
@@ -642,7 +648,10 @@ QDialog* Method::getProgBar() {
       dlg->width(), dlg->height());
 
   QLabel* lbl = new QLabel(dlg);
-  lbl->setStyleSheet("color:#000000;");
+  if (mw_one->isDark)
+    lbl->setStyleSheet("color:#ffffff;");
+  else
+    lbl->setStyleSheet("color:#000000;");
   QFont font = this->font();
   int size = font.pointSize();
   font.setBold(true);

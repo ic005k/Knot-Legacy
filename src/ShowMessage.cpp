@@ -37,7 +37,8 @@ ShowMessage::ShowMessage(QWidget* parent)
 
   ui->hframe->setFrameShape(QFrame::HLine);
   if (mw_one->isDark)
-    ui->hframe->setStyleSheet("QFrame{background:green;min-height:2px}");
+    ui->hframe->setStyleSheet(
+        "QFrame{background:rgb(0,205,205);min-height:2px}");
   else
     ui->hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
 

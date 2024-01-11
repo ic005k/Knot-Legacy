@@ -282,7 +282,7 @@ Rectangle {
                             smooth: true
                             sourceSize.height: iconW
                             sourceSize.width: iconW
-                            source: "/res/sum.svg"
+                            source: "/res/sum.png"
 
                             visible: item1.text.length ? true : false
                         }
