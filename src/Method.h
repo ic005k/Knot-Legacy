@@ -18,6 +18,17 @@ class Method : public QDialog {
   ~Method();
   Ui::Method *ui;
 
+  QString qssMenu =
+      "QMenu {"
+      "border: 1px solid rgb(172, 172, 172);"
+      "border-radius: 3px; }"
+      "QMenu::item {"
+      "border-bottom: 1px solid rgb(172, 172, 172);"
+      "padding:10px 10px;"
+      "margin:0px 0px; }"
+      "QMenu::item:selected {"
+      "background-color: rgb(62, 186, 231); }";
+
   QDialog *getProgBar();
   void startSearch();
   void initSearchResults();

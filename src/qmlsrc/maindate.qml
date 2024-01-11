@@ -10,7 +10,7 @@ Rectangle {
     width: 500
     height: 400
 
-    color: isDark ? "black" : "white"
+    color: isDark ? "#19232D" : "white"
 
     property int iconW: 18
     property int rowSpace: 3

@@ -10,6 +10,8 @@ Rectangle {
     width: 500
     height: 400
 
+    color: isDark ? "#19232D" : "white"
+
     property int itemCount: 0
     property bool isHighPriority: false
 

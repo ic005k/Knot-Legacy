@@ -3530,6 +3530,20 @@ void MainWindow::init_Theme() {
 
   ui->qwMainDate->rootContext()->setContextProperty("isDark", isDark);
   ui->qwMainEvent->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwTodo->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwRecycle->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNoteBook->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNoteList->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNotes->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwSearch->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwBakList->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwViewCate->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwTabRecycle->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNoteRecycle->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwCategory->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwSelTab->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwBookList->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwReportSub->rootContext()->setContextProperty("isDark", isDark);
 
   QString fileTheme;
   if (isDark)
@@ -3951,17 +3965,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
           &MainWindow::on_actionOneDriveBackupData);
   connect(actAbout, &QAction::triggered, this, &MainWindow::on_about);
 
-  QString qss =
-      "QMenu {"
-      "border: 1px solid rgb(172, 172, 172);"
-      "border-radius: 3px; }"
-      "QMenu::item {"
-      "border-bottom: 1px solid rgb(172, 172, 172);"
-      "padding:10px 10px;"
-      "margin:0px 0px; }"
-      "QMenu::item:selected {"
-      "background-color: rgb(62, 186, 231); }";
-
   mainMenu->addAction(actAddTab);
   mainMenu->addAction(actDelTab);
   mainMenu->addAction(actRenameTab);
@@ -3993,7 +3996,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   mainMenu->addAction(actTabRecycle);
   mainMenu->addAction(actAbout);
 
-  mainMenu->setStyleSheet(qss);
+  mainMenu->setStyleSheet(m_Method->qssMenu);
 }
 
 void MainWindow::on_openKnotBakDir() {

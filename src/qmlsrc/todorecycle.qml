@@ -10,6 +10,8 @@ Rectangle {
     width: 500
     height: 400
 
+    color: isDark ? "#19232D" : "white"
+
     property int itemCount: 0
     property bool isHighPriority: false
 
@@ -141,7 +143,6 @@ Rectangle {
                 return item0H + item1H + item2H + item3H + text2.height + 5
             }
 
-
             RowLayout {
 
                 id: idlistElemnet
@@ -169,7 +170,6 @@ Rectangle {
                     Layout.fillWidth: true
                     anchors.leftMargin: 0
                     anchors.rightMargin: 0
-
 
                     TextArea {
                         id: text1
@@ -270,8 +270,6 @@ Rectangle {
                     text: qsTr("Done")
                     color: "#ffffff"
                 }
-
-
 
                 MouseArea {
                     anchors.fill: parent

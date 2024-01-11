@@ -852,38 +852,16 @@ void NotesList::on_btnDown_clicked() { moveBy(1); }
 void NotesList::on_actionAdd_NoteBook_triggered() {
   bool ok = false;
   QString text;
-  QFrame *frame = new QFrame(mw_one);
-  QVBoxLayout *vbox = new QVBoxLayout;
-  frame->setLayout(vbox);
-  QInputDialog *idlg = new QInputDialog(mw_one);
-  idlg->hide();
-  vbox->addWidget(idlg);
 
-  idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style =
-      "QDialog{background: "
-      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
-
-  idlg->setStyleSheet(style);
-  idlg->setOkButtonText(tr("Ok"));
-  idlg->setCancelButtonText(tr("Cancel"));
-  idlg->setContentsMargins(10, 10, 10, 10);
-
-  idlg->setWindowTitle(tr("New NoteBook"));
-  idlg->setTextValue("");
-  idlg->setLabelText(tr("NoteBook Name"));
-
-  frame->setGeometry(25, -100, mw_one->width() - 50, this->height());
-  idlg->show();
-
-  frame->show();
+  QInputDialog *idlg = mw_one->m_Method->inputDialog(
+      tr("New NoteBook"), tr("New NoteBook Name"), "");
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
     text = idlg->textValue();
-    frame->close();
+    idlg->close();
   } else {
-    frame->close();
+    idlg->close();
     return;
   }
 
@@ -1060,17 +1038,6 @@ void NotesList::init_NoteBookMenu(QMenu *mainMenu) {
   connect(actMoveDown, &QAction::triggered, this,
           &NotesList::on_actionMoveDown_NoteBook_triggered);
 
-  QString qss =
-      "QMenu {"
-      "border: 1px solid rgb(172, 172, 172);"
-      "border-radius: 3px; }"
-      "QMenu::item {"
-      "border-bottom: 1px solid rgb(172, 172, 172);"
-      "padding:10px 10px;"
-      "margin:0px 0px; }"
-      "QMenu::item:selected {"
-      "background-color: rgb(62, 186, 231); }";
-
   mainMenu->addAction(actNew);
   mainMenu->addAction(actRename);
   mainMenu->addAction(actDel);
@@ -1078,7 +1045,7 @@ void NotesList::init_NoteBookMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
-  mainMenu->setStyleSheet(qss);
+  mainMenu->setStyleSheet(mw_one->m_Method->qssMenu);
 }
 
 void NotesList::on_actionAdd_Note_triggered() {
@@ -1087,38 +1054,16 @@ void NotesList::on_actionAdd_Note_triggered() {
 
   bool ok = false;
   QString text;
-  QFrame *frame = new QFrame(mw_one);
-  QVBoxLayout *vbox = new QVBoxLayout;
-  frame->setLayout(vbox);
-  QInputDialog *idlg = new QInputDialog(mw_one);
-  idlg->hide();
-  vbox->addWidget(idlg);
 
-  idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style =
-      "QDialog{background: "
-      "rgb(244,237,241);border-radius:10px;border:2px solid red;}";
-
-  idlg->setStyleSheet(style);
-  idlg->setOkButtonText(tr("Ok"));
-  idlg->setCancelButtonText(tr("Cancel"));
-  idlg->setContentsMargins(10, 10, 10, 10);
-
-  idlg->setWindowTitle(tr("New Note"));
-  idlg->setTextValue("");
-  idlg->setLabelText(tr("New Note Name"));
-
-  frame->setGeometry(25, -100, mw_one->width() - 50, this->height());
-  idlg->show();
-
-  frame->show();
+  QInputDialog *idlg =
+      mw_one->m_Method->inputDialog(tr("New Note"), tr("New Note Name"), "");
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
     text = idlg->textValue();
-    frame->close();
+    idlg->close();
   } else {
-    frame->close();
+    idlg->close();
     return;
   }
 
@@ -1299,17 +1244,6 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
   connect(actExport, &QAction::triggered, this,
           &NotesList::on_actionExport_Note_triggered);
 
-  QString qss =
-      "QMenu {"
-      "border: 1px solid rgb(172, 172, 172);"
-      "border-radius: 3px; }"
-      "QMenu::item {"
-      "border-bottom: 1px solid rgb(172, 172, 172);"
-      "padding:10px 10px;"
-      "margin:0px 0px; }"
-      "QMenu::item:selected {"
-      "background-color: rgb(62, 186, 231); }";
-
   mainMenu->addAction(actNew);
   mainMenu->addAction(actRename);
   mainMenu->addAction(actDel);
@@ -1320,7 +1254,7 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
-  mainMenu->setStyleSheet(qss);
+  mainMenu->setStyleSheet(mw_one->m_Method->qssMenu);
 }
 
 void NotesList::setNoteLabel() {

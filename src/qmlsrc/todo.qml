@@ -10,6 +10,8 @@ Rectangle {
     width: 400
     height: 500
 
+    color: isDark ? "#19232D" : "white"
+
     property int iconW: 12
     property int itemCount: 0
     property bool isHighPriority: false
@@ -198,8 +200,6 @@ Rectangle {
 
                             id: row1
 
-
-
                             function showImg() {
 
                                 var str1 = text1.text.substring(0, 5)
@@ -210,7 +210,7 @@ Rectangle {
                                     return false
                             }
 
-                            Rectangle{
+                            Rectangle {
                                 height: parent.height
                                 width: 5
                                 visible: text1Img.visible
