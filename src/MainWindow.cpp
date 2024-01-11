@@ -3522,9 +3522,12 @@ void MainWindow::init_Theme() {
     ui->btnNotes->setIcon(QIcon(":/res/note_l.png"));
     ui->btnMax->setIcon(QIcon(":/res/max_l.png"));
 
-    ui->editTodo->setStyleSheet("background-color: #19232D;");
+    ui->editTodo->setPlaceholderText("");
+    ui->editTodo->setStyleSheet(
+        "QTextEdit{background-color: #19232D; color: white; border:1px solid "
+        "#4169E1;}");
     QPalette palette = ui->editTodo->palette();
-    palette.setColor(QPalette::Normal, QPalette::PlaceholderText, Qt::red);
+    palette.setColor(QPalette::Normal, QPalette::PlaceholderText, Qt::white);
     ui->editTodo->setPalette(palette);
   }
 

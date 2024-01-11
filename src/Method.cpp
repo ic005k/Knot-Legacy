@@ -43,7 +43,7 @@ QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
   QInputDialog* idlg = new QInputDialog(this);
   idlg->hide();
   idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style1 = "QDialog{border-radius:0px;border:2px solid red;}";
+  QString style1 = "QDialog{border-radius:px;border:2px solid red;}";
   idlg->setStyleSheet(style1);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
