@@ -711,11 +711,11 @@ void MainWindow::init_ChartWidget() {
 
   ui->glMonth->layout()->setContentsMargins(0, 0, 0, 0);
   ui->glMonth->layout()->setSpacing(0);
-  ui->glDay->layout()->setContentsMargins(0, 0, 0, 5);
+  ui->glDay->layout()->setContentsMargins(0, 0, 0, 0);
   ui->glDay->layout()->setSpacing(0);
 
   int a0 = 0;
-  int a1 = -6;
+  int a1 = -2;
   // Month
   chartMonth = new QChart();
   chartview = new QChartView(chartMonth);
