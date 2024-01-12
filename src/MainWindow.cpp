@@ -418,10 +418,14 @@ MainWindow::MainWindow(QWidget *parent)
 
   qRegisterMetaType<QVector<int>>("QVector<int>");
   loading = true;
-  init_UIWidget();
+  init_Instance();
   init_Options();
+
+  init_UIWidget();
   init_ChartWidget();
   init_Theme();
+  initQW();
+
   init_Sensors();
   init_TotalData();
   m_Reader->initReader();
@@ -2483,11 +2487,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
-        if (!listSelFont->isHidden()) {
-          listSelFont->close();
-          return true;
-
-        } else if (!m_ReaderSet->isHidden()) {
+        if (!m_ReaderSet->isHidden()) {
           m_ReaderSet->close();
           return true;
 
@@ -2516,11 +2516,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           ui->frameNotes->show();
           return true;
         }
-      }
-
-      if (!dlgTimeMachine->isHidden()) {
-        dlgTimeMachine->close();
-        return true;
       }
 
       if (!ui->frameMain->isHidden()) {
@@ -3405,6 +3400,23 @@ void MainWindow::init_Sensors() {
 }
 
 void MainWindow::initQW() {
+  ui->qwMainDate->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwMainEvent->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwTodo->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwRecycle->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNoteBook->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNoteList->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNotes->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwSearch->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwBakList->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwViewCate->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwTabRecycle->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNoteRecycle->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwCategory->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwSelTab->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwBookList->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwReportSub->rootContext()->setContextProperty("isDark", isDark);
+
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
   ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3537,23 +3549,6 @@ void MainWindow::init_Theme() {
     ui->editTodo->setPalette(palette);
   }
 
-  ui->qwMainDate->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwMainEvent->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwTodo->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwRecycle->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwNoteBook->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwNoteList->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwNotes->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwSearch->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwBakList->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwViewCate->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwTabRecycle->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwNoteRecycle->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwCategory->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwSelTab->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwBookList->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwReportSub->rootContext()->setContextProperty("isDark", isDark);
-
   QString fileTheme;
   if (isDark)
     fileTheme = ":/theme/dark/darkstyle.qss";
@@ -3581,13 +3576,39 @@ void MainWindow::init_Theme() {
   axisY2->setTickCount(yScale);
 }
 
-void MainWindow::init_UIWidget() {
-  set_btnStyle(this);
+void MainWindow::init_Instance() {
+  mw_one = this;
+
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
 
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
+
+  myfile = new File();
+  m_Remarks = new dlgRemarks(this);
+  m_Method = new Method(this);
+  m_EditRecord = new EditRecord(this);
+  m_Todo = new Todo(this);
+  m_Report = new Report(this);
+  m_Preferences = new Preferences(this);
+  m_Notes = new Notes(this);
+  m_Steps = new Steps(this);
+  m_Reader = new dlgReader(this);
+  m_TodoAlarm = new TodoAlarm(this);
+  m_CloudBackup = new CloudBackup;
+  m_PageIndicator = new PageIndicator(this);
+  m_PageIndicator->close();
+  m_ReaderSet = new ReaderSet(this);
+  mydlgSetText = new dlgSetText(this);
+  m_widget = new QWidget(this);
+  m_widget->close();
+  m_NotesList = new NotesList(this);
+  m_SyncInfo = new SyncInfo(this);
+}
+
+void MainWindow::init_UIWidget() {
+  set_btnStyle(this);
 
   if (fontname == "") fontname = this->font().family();
 
@@ -3600,13 +3621,9 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
   ui->tabWidget->setFixedHeight(ui->tabWidget->tabBar()->height() + 0);
 
-  connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
-          &MainWindow::on_KVChanged);
+  m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
 
-  mw_one = this;
-  listSelFont = new QListWidget();
   loginTime = QDateTime::currentDateTime().toString();
-
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   isReadEnd = true;
 
@@ -3633,6 +3650,7 @@ void MainWindow::init_UIWidget() {
   ui->frameSetTab->hide();
   ui->frameEditRecord->hide();
   ui->frameBookList->hide();
+  ui->statusbar->setHidden(true);
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -3651,8 +3669,8 @@ void MainWindow::init_UIWidget() {
   ui->frameNotes->hide();
   ui->frameNotes->layout()->setContentsMargins(1, 1, 1, 1);
 
-  ui->edit1->setEchoMode(QLineEdit::EchoMode::Password);
-  ui->edit2->setEchoMode(QLineEdit::EchoMode::Password);
+  ui->editPassword1->setEchoMode(QLineEdit::EchoMode::Password);
+  ui->editPassword2->setEchoMode(QLineEdit::EchoMode::Password);
 
   ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 2);
   ui->centralwidget->layout()->setSpacing(1);
@@ -3684,32 +3702,8 @@ void MainWindow::init_UIWidget() {
   ui->editFindNote->installEventFilter(this);
   ui->qwNotes->installEventFilter(this);
 
-  myfile = new File();
-  m_Remarks = new dlgRemarks(this);
-  m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
-  m_Method = new Method(this);
-  m_EditRecord = new EditRecord(this);
-  m_Todo = new Todo(this);
-  m_Todo->setStyleSheet(vsbarStyleSmall);
-  m_Report = new dlgReport(this);
-  m_Preferences = new Preferences(this);
-  m_Notes = new Notes(this);
-  m_Steps = new Steps(this);
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
-  m_Reader = new dlgReader(this);
-  m_TodoAlarm = new TodoAlarm(this);
-  m_CloudBackup = new CloudBackup;
-  m_PageIndicator = new PageIndicator(this);
-  m_PageIndicator->close();
-  m_ReaderSet = new ReaderSet(this);
-  mydlgSetText = new dlgSetText(this);
-  m_widget = new QWidget(this);
-  m_widget->close();
-  m_NotesList = new NotesList(this);
-  m_SyncInfo = new SyncInfo(this);
-  dlgTimeMachine = new QFrame();
-  dlgTimeMachine->close();
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -3719,8 +3713,6 @@ void MainWindow::init_UIWidget() {
   connect(timerSyncData, SIGNAL(timeout()), this, SLOT(on_timerSyncData()));
   timerMousePress = new QTimer(this);
   connect(timerMousePress, SIGNAL(timeout()), this, SLOT(on_timerMousePress()));
-
-  ui->statusbar->setHidden(true);
 
   myReadEBookThread = new ReadEBookThread();
   connect(myReadEBookThread, &ReadEBookThread::isDone, this,
@@ -3746,6 +3738,9 @@ void MainWindow::init_UIWidget() {
   mySearchThread = new SearchThread();
   connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::searchDone);
 
+  connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
+          &MainWindow::on_KVChanged);
+
   ui->progBar->setMaximumHeight(4);
   ui->progBar->hide();
   ui->progBar->setStyleSheet(
@@ -3763,8 +3758,8 @@ void MainWindow::init_UIWidget() {
   ui->progReader->setStyleSheet(ui->progBar->styleSheet());
   ui->progReader->setFixedHeight(4);
 
-  setLineEditQss(ui->edit1, 0, 1, "#4169E1", "#4169E1");
-  ui->edit2->setStyleSheet(ui->edit1->styleSheet());
+  setLineEditQss(ui->editPassword1, 0, 1, "#4169E1", "#4169E1");
+  ui->editPassword2->setStyleSheet(ui->editPassword1->styleSheet());
 
   if (isIOS) {
   }
@@ -3774,7 +3769,6 @@ void MainWindow::init_UIWidget() {
   ui->btnFind->setStyleSheet("border:none");
   ui->btnMenu->setStyleSheet("border:none");
   ui->btnRemarks->setStyleSheet("border:none");
-
   ui->btnPause->setStyleSheet("border:none");
 #ifdef Q_OS_ANDROID
 #else
@@ -3823,8 +3817,6 @@ void MainWindow::init_UIWidget() {
       "QLabel{"
       "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
       "}");
-
-  initQW();
 }
 
 void MainWindow::selTab() {
@@ -4541,7 +4533,8 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  if (ui->edit1->text().trimmed() == "" && ui->edit2->text().trimmed() == "") {
+  if (ui->editPassword1->text().trimmed() == "" &&
+      ui->editPassword2->text().trimmed() == "") {
     Reg.remove("/MainNotes/UserKey");
     ui->frameSetKey->hide();
 
@@ -4551,8 +4544,9 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     return;
   }
 
-  if (ui->edit1->text().trimmed() == ui->edit2->text().trimmed()) {
-    QString strPw = ui->edit1->text().trimmed();
+  if (ui->editPassword1->text().trimmed() ==
+      ui->editPassword2->text().trimmed()) {
+    QString strPw = ui->editPassword1->text().trimmed();
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
       baPw[i] = baPw[i] + 66;  // 加密User的密码
@@ -4564,8 +4558,8 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     m_ShowMsg->showMsg("Knot", tr("The password is set successfully."), 1);
 
     ui->frameSetKey->hide();
-    ui->edit1->clear();
-    ui->edit2->clear();
+    ui->editPassword1->clear();
+    ui->editPassword2->clear();
 
   } else {
     ShowMessage *m_ShowMsg = new ShowMessage(this);

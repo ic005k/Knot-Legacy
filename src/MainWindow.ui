@@ -2067,10 +2067,10 @@ QTabBar::scroller {width:0}
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
-             <widget class="QLineEdit" name="edit1"/>
+             <widget class="QLineEdit" name="editPassword1"/>
             </item>
             <item>
-             <widget class="QLineEdit" name="edit2"/>
+             <widget class="QLineEdit" name="editPassword2"/>
             </item>
             <item>
              <widget class="QToolButton" name="btnSetKeyOK">

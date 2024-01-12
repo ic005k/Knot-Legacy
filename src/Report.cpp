@@ -32,7 +32,7 @@ int s_d2 = 0;
 
 void setTableNoItemFlags(QTableWidget* t, int row);
 
-dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
+Report::Report(QWidget* parent) : QDialog(parent), ui(new Ui::Report) {
   ui->setupUi(this);
 
   int f_size = 20;
@@ -87,7 +87,7 @@ dlgReport::dlgReport(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReport) {
   mw_one->ui->lblViewCate3->setWordWrap(true);
 }
 
-void dlgReport::init() {
+void Report::init() {
   mw_one->ui->frameReport->setGeometry(
       mw_one->geometry().x(), mw_one->geometry().y(),
       mw_one->geometry().width(), mw_one->geometry().height());
@@ -110,11 +110,11 @@ void dlgReport::init() {
   }
 }
 
-dlgReport::~dlgReport() { delete ui; }
+Report::~Report() { delete ui; }
 
-void dlgReport::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
+void Report::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
 
-bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
+bool Report::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -128,7 +128,7 @@ bool dlgReport::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void dlgReport::on_btnBack_clicked() {
+void Report::on_btnBack_clicked() {
   saveYMD();
 
   listCategory.clear();
@@ -138,13 +138,13 @@ void dlgReport::on_btnBack_clicked() {
   mw_one->ui->frameMain->show();
 }
 
-void dlgReport::closeEvent(QCloseEvent* event) {
+void Report::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   mw_one->closeGrayWindows();
   mw_one->m_widget = new QWidget(mw_one);
 }
 
-void dlgReport::on_btnYear_clicked() {
+void Report::on_btnYear_clicked() {
   myDateSelector->dateFlag = 1;
   mw_one->ui->lblDetails->setText(tr("Details"));
 
@@ -156,7 +156,7 @@ void dlgReport::on_btnYear_clicked() {
   myDateSelector->init();
 }
 
-void dlgReport::startReport1() {
+void Report::startReport1() {
   btnYearText = mw_one->ui->btnYear->text();
   btnMonthText = mw_one->ui->btnMonth->text();
 
@@ -170,7 +170,7 @@ void dlgReport::startReport1() {
   mw_one->startInitReport();
 }
 
-void dlgReport::startReport2() {
+void Report::startReport2() {
   isWholeMonth = false;
   isDateSection = true;
   listCategory.clear();
@@ -195,7 +195,7 @@ void dlgReport::startReport2() {
   mw_one->startInitReport();
 }
 
-void dlgReport::updateTable() {
+void Report::updateTable() {
   freq = 0;
   t_amount = 0;
   clearAll();
@@ -237,7 +237,7 @@ void dlgReport::updateTable() {
   loadDetailsQml();
 }
 
-void dlgReport::getMonthData() {
+void Report::getMonthData() {
   QTreeWidget* tw = mw_one->get_tw(tabData->currentIndex());
 
   twOut2Img->clear();
@@ -292,7 +292,7 @@ void dlgReport::getMonthData() {
   }
 }
 
-void dlgReport::setTWImgData(QTreeWidgetItem* item) {
+void Report::setTWImgData(QTreeWidgetItem* item) {
   QTreeWidgetItem* newtop = new QTreeWidgetItem;
   QFont f = newtop->font(0);
   f.setBold(true);
@@ -334,7 +334,7 @@ void dlgReport::setTWImgData(QTreeWidgetItem* item) {
   twTotalRow = twTotalRow + newtop->childCount();
 }
 
-void dlgReport::on_btnMonth_clicked() {
+void Report::on_btnMonth_clicked() {
   myDateSelector->dateFlag = 2;
   mw_one->ui->lblDetails->setText(tr("Details"));
 
@@ -347,7 +347,7 @@ void dlgReport::on_btnMonth_clicked() {
   myDateSelector->init();
 }
 
-void dlgReport::saveYMD() {
+void Report::saveYMD() {
   QSettings Reg(iniDir + "ymd.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -372,9 +372,9 @@ void dlgReport::saveYMD() {
   Reg.setValue("/YMD/isDateSection", isDateSection);
 }
 
-int dlgReport::cmp(const void* a, const void* b) { return *(int*)a < *(int*)b; }
+int Report::cmp(const void* a, const void* b) { return *(int*)a < *(int*)b; }
 
-void dlgReport::on_btnCategory_clicked() {
+void Report::on_btnCategory_clicked() {
   mw_one->ui->frameReport->hide();
   mw_one->ui->frameViewCate->show();
 
@@ -445,7 +445,7 @@ void dlgReport::on_btnCategory_clicked() {
   }
 }
 
-void dlgReport::on_CateOk() {
+void Report::on_CateOk() {
   int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwViewCate);
   QString str0 = mw_one->m_Method->getText0(mw_one->ui->qwViewCate, index);
   str0 = str0.replace(tr("Category") + " : ", "").trimmed();
@@ -457,7 +457,7 @@ void dlgReport::on_CateOk() {
   mw_one->ui->frameReport->show();
 }
 
-void dlgReport::getCategoryData(QString strCategory, bool appendTable) {
+void Report::getCategoryData(QString strCategory, bool appendTable) {
   if (appendTable) {
     mw_one->m_Method->clearAllBakList(mw_one->ui->qwReportSub);
   }
@@ -536,7 +536,7 @@ void setTableNoItemFlags(QTableWidget* t, int row) {
   }
 }
 
-void dlgReport::on_btnOut2Img_clicked() {
+void Report::on_btnOut2Img_clicked() {
   if (twOut2Img->topLevelItemCount() == 0) return;
 
   if (twOut2Img->topLevelItem(0)->text(0) != mw_one->ui->btnYear->text()) {
@@ -633,14 +633,14 @@ void dlgReport::on_btnOut2Img_clicked() {
   }
 }
 
-void dlgReport::appendTable(QString date, QString freq, QString amount) {
+void Report::appendTable(QString date, QString freq, QString amount) {
   QQuickItem* root = mw_one->ui->qwReport->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
                             Q_ARG(QVariant, date), Q_ARG(QVariant, freq),
                             Q_ARG(QVariant, amount));
 }
 
-int dlgReport::getCount() {
+int Report::getCount() {
   QQuickItem* root = mw_one->ui->qwReport->rootObject();
   QVariant itemCount;
   QMetaObject::invokeMethod((QObject*)root, "getItemCount",
@@ -648,24 +648,24 @@ int dlgReport::getCount() {
   return itemCount.toInt();
 }
 
-void dlgReport::delItem(int index) {
+void Report::delItem(int index) {
   QQuickItem* root = mw_one->ui->qwReport->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
-void dlgReport::clearAll() {
+void Report::clearAll() {
   int count = getCount();
   for (int i = 0; i < count; i++) delItem(0);
 }
 
-void dlgReport::appendSteps_xx(QString date, QString steps, QString km) {
+void Report::appendSteps_xx(QString date, QString steps, QString km) {
   QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
                             Q_ARG(QVariant, date), Q_ARG(QVariant, steps),
                             Q_ARG(QVariant, km));
 }
 
-int dlgReport::getCount_xx() {
+int Report::getCount_xx() {
   QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
   QVariant itemCount;
   QMetaObject::invokeMethod((QObject*)root, "getItemCount",
@@ -673,17 +673,17 @@ int dlgReport::getCount_xx() {
   return itemCount.toInt();
 }
 
-void dlgReport::delItem_xx(int index) {
+void Report::delItem_xx(int index) {
   QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
 
-void dlgReport::clearAll_xx() {
+void Report::clearAll_xx() {
   int count = getCount_xx();
   for (int i = 0; i < count; i++) delItem_xx(0);
 }
 
-int dlgReport::getCurrentIndex() {
+int Report::getCurrentIndex() {
   QQuickItem* root = mw_one->ui->qwReport->rootObject();
   QVariant itemIndex;
   QMetaObject::invokeMethod((QObject*)root, "getCurrentIndex",
@@ -691,7 +691,7 @@ int dlgReport::getCurrentIndex() {
   return itemIndex.toInt();
 }
 
-QString dlgReport::getDate(int row) {
+QString Report::getDate(int row) {
   QQuickItem* root = mw_one->ui->qwReport->rootObject();
   QVariant item;
   QMetaObject::invokeMethod((QObject*)root, "getDate",
@@ -699,24 +699,24 @@ QString dlgReport::getDate(int row) {
   return item.toString();
 }
 
-void dlgReport::setCurrentHeader(int sn) {
+void Report::setCurrentHeader(int sn) {
   QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setHeader", Q_ARG(QVariant, sn));
 }
 
-void dlgReport::setScrollBarPos(double pos) {
+void Report::setScrollBarPos(double pos) {
   QQuickItem* root = mw_one->ui->qwReport->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
                             Q_ARG(QVariant, pos));
 }
 
-void dlgReport::setScrollBarPos_xx(double pos) {
+void Report::setScrollBarPos_xx(double pos) {
   QQuickItem* root = mw_one->ui->qwReportSub->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
                             Q_ARG(QVariant, pos));
 }
 
-void dlgReport::loadDetailsQml() {
+void Report::loadDetailsQml() {
   if (getCount() == 0) return;
 
   btnCategory->setText(tr("View Category"));

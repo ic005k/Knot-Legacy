@@ -617,7 +617,7 @@ void dlgReader::selectFont() {
   }
 
   QListWidget* list = new QListWidget(mw_one);
-  mw_one->listSelFont = list;
+
   list->setStyleSheet(mw_one->listStyle);
   list->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);

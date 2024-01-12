@@ -180,8 +180,7 @@ class MainWindow : public QMainWindow {
   QString LatestTime = tr("Latest Time");
   QStringList timeLines;
   QString loginTime;
-  QListWidget *listSelFont;
-  QFrame *dlgTimeMachine;
+
   int mwh;
   int textFontSize;
   bool isOne = false;
@@ -235,7 +234,7 @@ class MainWindow : public QMainWindow {
   dlgRemarks *m_Remarks;
   EditRecord *m_EditRecord;
   Todo *m_Todo;
-  dlgReport *m_Report;
+  Report *m_Report;
   Preferences *m_Preferences;
   Notes *m_Notes;
   Steps *m_Steps;
@@ -808,6 +807,7 @@ class MainWindow : public QMainWindow {
 
   void initQW();
   void init_Theme();
+  void init_Instance();
 };
 
 class SaveThread : public QThread {

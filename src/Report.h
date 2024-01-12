@@ -13,16 +13,16 @@
 #include "DateSelector.h"
 
 namespace Ui {
-class dlgReport;
+class Report;
 }
 
-class dlgReport : public QDialog {
+class Report : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgReport(QWidget *parent = nullptr);
-  ~dlgReport();
-  Ui::dlgReport *ui;
+  explicit Report(QWidget *parent = nullptr);
+  ~Report();
+  Ui::Report *ui;
 
   DateSelector *myDateSelector;
   static void saveYMD();
