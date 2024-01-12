@@ -18,6 +18,8 @@ class Method : public QDialog {
   ~Method();
   Ui::Method *ui;
 
+  QString qssSlider;
+
   QString qssMenu =
       "QMenu {"
       "border: 1px solid rgb(172, 172, 172);"

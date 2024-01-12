@@ -563,8 +563,8 @@ QScrollBar:horizontal {
 
 QScrollBar:vertical {
   background-color: #FAFAFA;
-  width: 8px;
-  margin: 1px 2px 1px 2px;
+  width: 16px;
+  margin: 16px 2px 16px 2px;
   border: 1px solid #C0C4C8;
   border-radius: 4px;
 }
@@ -1070,7 +1070,6 @@ QDialogButtonBox QPushButton {
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtoolbutton
 
 --------------------------------------------------------------------------- */
-
 QToolButton {
   background-color: #C0C4C8;
   color: #19232D;
@@ -1193,8 +1192,6 @@ QToolButton::menu-arrow {
 QToolButton::menu-arrow:hover {
   image: url(":/qss_icons/light/rc/arrow_down_focus.png");
 }
-
-
 
 /* QCommandLinkButton -----------------------------------------------------
 
@@ -1327,7 +1324,6 @@ QComboBox::down-arrow:on, QComboBox::down-arrow:hover, QComboBox::down-arrow:foc
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qslider
 
 --------------------------------------------------------------------------- */
-/*
 QSlider:disabled {
   background: #FAFAFA;
 }
@@ -1411,8 +1407,6 @@ QSlider::handle:vertical:hover {
 QSlider::handle:vertical:focus {
   border: 1px solid #73C7FF;
 }
-
-*/
 
 /* QLineEdit --------------------------------------------------------------
 

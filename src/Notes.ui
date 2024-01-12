@@ -885,7 +885,11 @@ color: rgb(255, 255, 255);</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="1">
-       <widget class="QTextEdit" name="editSource"/>
+       <widget class="QTextEdit" name="editSource">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

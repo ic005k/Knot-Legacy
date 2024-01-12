@@ -3574,6 +3574,28 @@ void MainWindow::init_Theme() {
   axisX2->setLabelsFont(font1);
   axisY2->setLabelsFont(font1);
   axisY2->setTickCount(yScale);
+
+  // Reset Style
+  ui->hsH->setStyleSheet(m_Method->qssSlider);
+  ui->hsM->setStyleSheet(m_Method->qssSlider);
+  m_Preferences->ui->sliderFontSize->setStyleSheet(m_Method->qssSlider);
+
+  QString file_sbar;
+  if (isDark)
+    file_sbar = ":/theme/scrollbar_dark.qss";
+  else
+    file_sbar = ":/theme/scrollbar_light.qss";
+  QFile sbar_theme(file_sbar);
+  if (!sbar_theme.exists()) {
+    qDebug() << "Unable to set stylesheet, sbar file not found";
+  } else {
+    sbar_theme.open(QFile::ReadOnly | QFile::Text);
+    QTextStream ts(&sbar_theme);
+    QString sbarQss = ts.readAll();
+    m_Notes->ui->editSource->verticalScrollBar()->setStyleSheet(sbarQss);
+    ui->editDetails->verticalScrollBar()->setStyleSheet(sbarQss);
+    ui->editDetails->setStyleSheet("QTextEdit {border:1px solid #4169E1;}");
+  }
 }
 
 void MainWindow::init_Instance() {

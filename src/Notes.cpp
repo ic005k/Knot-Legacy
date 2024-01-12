@@ -74,7 +74,6 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   this->layout()->setContentsMargins(5, 5, 5, 5);
 
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
-
   mw_one->m_Method->setSCrollPro(ui->editSource);
 
   ui->editSource->setContentsMargins(15, 15, 15, 15);
