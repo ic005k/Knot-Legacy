@@ -328,6 +328,7 @@ class MainWindow : public QMainWindow {
       "background:url(:/src/down.png) bottom no-repeat;}"
       "QScrollBar::sub-line:vertical{"  // 向上箭头样式
       "background:url(:/src/up.png) top no-repeat;}";
+
   QString vsbarStyleSmall =
       "QScrollBar:vertical{"  // 垂直滑块整体
       "width:6px;"

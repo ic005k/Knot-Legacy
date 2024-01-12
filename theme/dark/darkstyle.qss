@@ -566,8 +566,8 @@ QScrollBar:horizontal {
 
 QScrollBar:vertical {
   background-color: #19232D;
-  width: 16px;
-  margin: 16px 2px 16px 2px;
+  width: 8px;
+  margin: 1px 2px 1px 2px;
   border: 1px solid #455364;
   border-radius: 4px;
 }

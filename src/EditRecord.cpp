@@ -72,8 +72,7 @@ EditRecord::EditRecord(QWidget *parent)
 
   mw_one->ui->editDetails->setStyleSheet(
       "border-radius:0px;border: 1px groove #4169E1;");
-  mw_one->ui->editDetails->verticalScrollBar()->setStyleSheet(
-      mw_one->vsbarStyleSmall);
+
   QScroller::grabGesture(mw_one->ui->editDetails,
                          QScroller::LeftMouseButtonGesture);
   mw_one->m_Method->setSCrollPro(mw_one->ui->editDetails);
