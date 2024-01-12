@@ -46,7 +46,7 @@ Rectangle {
 
     function getItemCount() {
         itemCount = view.count
-        console.log("count=" + itemCount)
+
         return itemCount
     }
 
@@ -381,7 +381,8 @@ Rectangle {
                 onReleased: {
                     var delta = Qt.point(mouse.x - clickPos.x,
                                          mouse.y - clickPos.y)
-                    console.debug("delta.x: " + delta.x)
+
+                    //console.debug("delta.x: " + delta.x)
                     if ((delta.x < 0) && (aBtnShow.running === false)
                             && (delBtn.width == 0)) {
                         aBtnShow.start()

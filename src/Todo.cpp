@@ -1002,7 +1002,8 @@ void Todo::reeditText() {
   edit->setPlainText(getItemTodoText(row));
   QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
   edit->horizontalScrollBar()->setHidden(true);
-  edit->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  edit->verticalScrollBar()->setStyleSheet(
+      mw_one->ui->editDetails->verticalScrollBar()->styleSheet());
   mw_one->m_Method->setSCrollPro(edit);
 
   QToolButton* btnCancel = new QToolButton(this);

@@ -5,6 +5,8 @@ import Qt.labs.qmlmodels 1.0
 Rectangle {
     width: myW
 
+    color: isDark ? "#455364" : "#666666"
+
     function appendTableRow(Date, Steps, KM) {
 
         tableModel.appendRow({
@@ -58,6 +60,8 @@ Rectangle {
         width: parent.width
         height: fontMetrics.height + 4
 
+
+
         FontMetrics {
             id: fontMetrics
         }
@@ -72,9 +76,9 @@ Rectangle {
                 Rectangle {
                     width: header.width / 3
                     height: header.height
-                    color: "#3498DB" //isDark ?  "#333333" : "#777777"
+                    color:  isDark ?  "#3498DB" : "#3498DB"
                     border.width: 1
-                    border.color: "#848484"
+                    border.color: isDark ? "#19232D" : "#848484"
                     Text {
                         text: modelData
                         anchors.centerIn: parent
@@ -104,7 +108,7 @@ Rectangle {
 
             visible: tableView.contentHeight > tableView.height //tableModel.rowCount > 15
             background: Rectangle {
-                color: isDark ? "#252525" : "#dddddd"
+                color: isDark ? "#455364" : "#666666"
             }
 
             // Always show
@@ -116,7 +120,7 @@ Rectangle {
                 implicitWidth: 6
                 implicitHeight: 30
                 radius: 3
-                color: "#848484"
+                color: isDark ? "#455364" : "#848484"
             }*/
         }
 
@@ -134,18 +138,18 @@ Rectangle {
             }
         }
         delegate: Rectangle {
-            color: isDark ? "#252525" : "#dddddd"
+            color: isDark ? "#455364" : "#666666"
             implicitWidth: header.width / 3
             implicitHeight: mytext.contentHeight + 6
             border.width: 1
-            border.color: "#848484"
+            border.color: isDark ? "#19232D" : "#848484"
 
             Text {
                 id: mytext
                 text: display
                 anchors.centerIn: parent
                 //font.pointSize: 12
-                color: isDark ? "white" : "black"
+                color: isDark ? "white" : "white"
             }
         }
     }

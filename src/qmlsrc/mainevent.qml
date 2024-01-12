@@ -46,7 +46,7 @@ Rectangle {
 
     function getItemCount() {
         itemCount = view.count
-        console.log("count=" + itemCount)
+
         return itemCount
     }
 
@@ -425,23 +425,14 @@ Rectangle {
 
             MouseArea {
 
-                property point clickPos: "0,0"
+
 
                 anchors.fill: parent
                 onPressed: {
-                    clickPos = Qt.point(mouse.x, mouse.y)
+
                 }
                 onReleased: {
-                    var delta = Qt.point(mouse.x - clickPos.x,
-                                         mouse.y - clickPos.y)
-                    console.debug("delta.x: " + delta.x)
-                    if ((delta.x < 0) && (aBtnShow.running === false)
-                            && (delBtn.width == 0)) {
-                        aBtnShow.start()
-                    } else if (aBtnHide.running === false
-                               && (delBtn.width > 0)) {
-                        aBtnHide.start()
-                    }
+
                 }
 
                 onClicked: {
@@ -453,68 +444,11 @@ Rectangle {
 
                 onPressAndHold: {
 
-                    //m_Method.showNotsListMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {
                     m_Method.reeditMainEventData()
-
-                    //mw_one.reeditData()
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
                 }
-            }
-
-            Rectangle {
-                color: "#AAAAAA"
-                height: 0
-                width: parent.width
-                anchors.bottom: parent.bottom
-            }
-
-            Rectangle {
-                id: delBtn
-                visible: false
-                height: parent.height
-                width: 0
-                color: "#FF0000"
-
-                anchors.right: parent.right
-                anchors.rightMargin: -30
-                radius: 0
-
-                Text {
-                    width: 56
-                    anchors.centerIn: parent
-
-                    text: qsTr("Done")
-                    color: "#ffffff"
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        m_Todo.addToRecycle()
-                        view.model.remove(index)
-                    }
-                }
-            }
-
-            PropertyAnimation {
-                id: aBtnShow
-                target: delBtn
-                property: "width"
-                duration: 100
-                from: 0
-                to: 80
-            }
-            PropertyAnimation {
-                id: aBtnHide
-                target: delBtn
-                property: "width"
-                duration: 100
-                from: 80
-                to: 0
             }
         }
     }
@@ -547,21 +481,6 @@ Rectangle {
         ScrollBar.vertical: ScrollBar {
             width: 8
             policy: ScrollBar.AsNeeded
-        }
-    }
-
-    function getListEleHeadColor(ntype) {
-        switch (ntype) {
-        case 0:
-            return "lightgray"
-        case 1:
-            return "red"
-        case 2:
-            return "yellow"
-        case 3:
-            return "lightblue"
-        default:
-            return "black"
         }
     }
 }

@@ -3439,6 +3439,9 @@ void MainWindow::initQW() {
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
   ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
 
+  int f_size = 20;
+  if (fontSize <= f_size) f_size = fontSize;
+  ui->qwReport->rootContext()->setContextProperty("maxFontSize", f_size);
   ui->qwReport->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
   ui->qwReportSub->setSource(
@@ -3536,12 +3539,12 @@ void MainWindow::init_Theme() {
     ui->btnNotes->setIcon(QIcon(":/res/note_l.png"));
     ui->btnMax->setIcon(QIcon(":/res/max_l.png"));
 
-    ui->editTodo->setPlaceholderText("");
     ui->editTodo->setStyleSheet(
-        "QTextEdit{background-color: #19232D; color: white; border:1px solid "
+        "QTextEdit{background-color: #455364; color: white; border:1px solid "
         "#4169E1;}");
     QPalette palette = ui->editTodo->palette();
-    palette.setColor(QPalette::Normal, QPalette::PlaceholderText, Qt::white);
+    palette.setColor(QPalette::Normal, QPalette::PlaceholderText,
+                     QColor(255, 255, 255, 125));
     ui->editTodo->setPalette(palette);
   }
 

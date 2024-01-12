@@ -43,7 +43,7 @@ Rectangle {
 
     function getItemCount() {
         itemCount = view.count
-        console.log("count=" + itemCount)
+
         return itemCount
     }
 

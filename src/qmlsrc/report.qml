@@ -4,6 +4,8 @@ import Qt.labs.qmlmodels 1.0
 
 Rectangle {
 
+    color: isDark ? "#666666" : "#666666"
+
     function appendTableRow(Date, Steps, KM) {
 
         tableModel.appendRow({
@@ -166,7 +168,7 @@ Rectangle {
 
                     m_Report.loadDetailsQml()
 
-                    console.debug(row)
+                    //console.debug(row)
                     //console.log(tableModel.rows[row].Date)
                 }
                 onDoubleClicked: {

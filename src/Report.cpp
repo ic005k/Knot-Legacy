@@ -35,12 +35,6 @@ void setTableNoItemFlags(QTableWidget* t, int row);
 Report::Report(QWidget* parent) : QDialog(parent), ui(new Ui::Report) {
   ui->setupUi(this);
 
-  int f_size = 20;
-  if (fontSize > f_size) {
-    mw_one->ui->qwReport->rootContext()->setContextProperty("maxFontSize",
-                                                            f_size);
-  }
-
   this->installEventFilter(this);
   this->setModal(true);
 
