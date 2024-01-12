@@ -126,7 +126,5 @@
         <file>res/list_l.png</file>
         <file>res/open_l.png</file>
         <file>res/sum.png</file>
-        <file>theme/scrollbar_light.qss</file>
-        <file>theme/scrollbar_dark.qss</file>
     </qresource>
 </RCC>

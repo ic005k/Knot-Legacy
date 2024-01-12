@@ -4910,7 +4910,7 @@ selection-background-color: lightblue;
          <item>
           <widget class="QTextEdit" name="editDetails">
            <property name="styleSheet">
-            <string notr="true"/>
+            <string notr="true">QTextEdit {border:1px solid #4169E1;}</string>
            </property>
           </widget>
          </item>
