@@ -1188,8 +1188,9 @@ void MainWindow::set_btnStyle(QObject *parent) {
   for (int i = 0; i < btnList.count(); i++) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
 
-    setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB", "#FFFFFF",
-                     "#2483C7", "#A0DAFB");  // #5DACE4 #E5FEFF
+    if (btn != ui->btnAddTodo && btn != ui->btnClear)
+      setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB", "#FFFFFF",
+                       "#2483C7", "#A0DAFB");  // #5DACE4 #E5FEFF
   }
 }
 
@@ -3519,6 +3520,9 @@ void MainWindow::init_Theme() {
 
     chartMonth->setTheme(QChart::ChartThemeLight);
     chartDay->setTheme(QChart::ChartThemeLight);
+
+    ui->btnAddTodo->setIcon(QIcon(":/res/add.png"));
+    ui->btnClear->setIcon(QIcon(":/res/clear.svg"));
 
   } else {
     ui->frameMenu->setStyleSheet("background-color: #19232D;");

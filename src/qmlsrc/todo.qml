@@ -112,6 +112,14 @@ Rectangle {
         return strColor
     }
 
+    function getText1FontColor() {
+
+        if (isDark)
+            return "#bbbbbb"
+        else
+            return "#777777"
+    }
+
     function getFontColor() {
 
         if (isDark)
@@ -254,7 +262,7 @@ Rectangle {
                             }
                             TextArea {
                                 id: text1
-                                color: view.currentIndex === index ? "black" : getFontColor()
+                                color: view.currentIndex === index ?  "black" : getText1FontColor()
                                 font.pointSize: FontSize - 2
                                 font.bold: true
                                 width: parent.width
