@@ -938,7 +938,7 @@ void Notes::highlightCurrentLine() {
   QColor lineColor;
 
   if (mw_one->isDark)
-    lineColor = QColor(Qt::blue).lighter(100);
+    lineColor = QColor(QColor(25, 125, 25, 25));
   else
     lineColor = QColor(Qt::yellow).lighter(160);
 

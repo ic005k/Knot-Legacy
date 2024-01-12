@@ -25,7 +25,9 @@
 #include <QTimer>
 #include <utility>
 
+#include "MainWindow.h"
 #include "QOwnLanguageData.h"
+extern MainWindow *mw_one;
 
 // We enable QStringView with Qt 5.15.1
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 1)
@@ -323,7 +325,12 @@ void MarkdownHighlighter::initTextFormats(int defaultFontSize) {
   // set character format for code blocks
   format = QTextCharFormat();
   // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-  format.setBackground(QColor(220, 220, 220));
+
+  if (mw_one->isDark)
+    format.setBackground(QColor(122, 122, 122));
+  else
+    format.setBackground(QColor(220, 220, 220));
+
   _formats[CodeBlock] = format;
   _formats[InlineCodeBlock] = format;
 
@@ -361,7 +368,12 @@ void MarkdownHighlighter::initTextFormats(int defaultFontSize) {
 
   // set character format for block quotes
   format = QTextCharFormat();
-  format.setForeground(Qt::darkRed);
+
+  if (mw_one->isDark)
+    format.setForeground(QColor(0, 255, 255));
+  else
+    format.setForeground(Qt::darkRed);
+
   _formats[BlockQuote] = std::move(format);
 
   format = QTextCharFormat();

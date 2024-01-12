@@ -235,6 +235,7 @@ void Preferences::initOptions() {
     mw_one->ui->btnFind->hide();
     mw_one->ui->btnRemarks->hide();
     mw_one->ui->btnReport->hide();
+    mw_one->ui->frame_cw->hide();
 
     ui->chkReaderFont->hide();
 
