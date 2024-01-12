@@ -702,12 +702,6 @@ void MainWindow::init_Options() {
 
   m_Preferences->initOptions();
   m_Preferences->ui->btnReStart->hide();
-  QString style =
-      "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "
-      "border-radius:10px; "
-      "border:0px solid gray; } QToolButton:pressed { background-color: "
-      "rgb(220,220,230);}";
-  m_Preferences->ui->btnReStart->setStyleSheet(style);
 }
 
 void MainWindow::init_ChartWidget() {
@@ -3416,6 +3410,8 @@ void MainWindow::initQW() {
   ui->qwSelTab->rootContext()->setContextProperty("isDark", isDark);
   ui->qwBookList->rootContext()->setContextProperty("isDark", isDark);
   ui->qwReportSub->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwSteps->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwReport->rootContext()->setContextProperty("isDark", isDark);
 
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
@@ -3579,6 +3575,20 @@ void MainWindow::init_Theme() {
   axisX2->setLabelsFont(font1);
   axisY2->setLabelsFont(font1);
   axisY2->setTickCount(yScale);
+
+  // Reset Style
+  mw_one->ui->btnPages->setStyleSheet(
+      "color: rgb(0, 0, 0);background-color: rgb(254, 234, 112);border: "
+      "0px solid "
+      "rgb(255,0,0);border-radius: 4px;"
+      "font-weight: bold;");
+
+  QString style =
+      "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "
+      "border-radius:10px; "
+      "border:0px solid gray; } QToolButton:pressed { background-color: "
+      "rgb(220,220,230);}";
+  m_Preferences->ui->btnReStart->setStyleSheet(style);
 }
 
 void MainWindow::init_Instance() {

@@ -72,7 +72,7 @@ Rectangle {
                 Rectangle {
                     width: header.width / 3
                     height: header.height
-                    color: "#666666"
+                    color: "#3498DB" //isDark ?  "#333333" : "#777777"
                     border.width: 1
                     border.color: "#848484"
                     Text {
@@ -101,22 +101,22 @@ Rectangle {
             anchors.rightMargin: 0
             policy: ScrollBar.AsNeeded
             width: 8
+
             visible: tableView.contentHeight > tableView.height //tableModel.rowCount > 15
             background: Rectangle {
-                color: "#666666"
+                color: isDark ? "#252525" : "#dddddd"
             }
+
             // Always show
 
-
             /*onActiveChanged: {
-                active = true;
+                active = true
             }
-            contentItem: Rectangle
-            {
-                implicitWidth  : 6
-                implicitHeight : 30
-                radius : 3
-                color  : "#848484"
+            contentItem: Rectangle {
+                implicitWidth: 6
+                implicitHeight: 30
+                radius: 3
+                color: "#848484"
             }*/
         }
 
@@ -134,7 +134,7 @@ Rectangle {
             }
         }
         delegate: Rectangle {
-            color: "#666666"
+            color: isDark ? "#252525" : "#dddddd"
             implicitWidth: header.width / 3
             implicitHeight: mytext.contentHeight + 6
             border.width: 1
@@ -145,7 +145,7 @@ Rectangle {
                 text: display
                 anchors.centerIn: parent
                 //font.pointSize: 12
-                color: "white"
+                color: isDark ? "white" : "black"
             }
         }
     }
