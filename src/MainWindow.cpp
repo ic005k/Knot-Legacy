@@ -4625,6 +4625,7 @@ void MainWindow::on_btnEdit_clicked() {
   Sleep(200);
   m_Notes->isNeedSave = false;
   m_Notes->isDone = false;
+  m_Notes->isTextChange = false;
 }
 
 void MainWindow::on_btnCode_clicked() {

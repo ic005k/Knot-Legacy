@@ -210,10 +210,12 @@ void Notes::saveMainNotes() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  mw_one->TextEditToFile(ui->editSource, currentMDFile);
-  MD2Html(currentMDFile);
+  if (isTextChange) {
+    mw_one->TextEditToFile(ui->editSource, currentMDFile);
+    MD2Html(currentMDFile);
 
-  qDebug() << "Save Note: " << currentMDFile;
+    qDebug() << "Save Note: " << currentMDFile;
+  }
 
   QString strTag = currentMDFile;
   strTag.replace(iniDir, "");
@@ -224,6 +226,7 @@ void Notes::saveMainNotes() {
                ui->editSource->textCursor().position());
 
   isNeedSave = false;
+  isTextChange = false;
 }
 
 void Notes::init_MainNotes() { loadMemoQML(); }
@@ -1111,8 +1114,14 @@ void Notes::closeEvent(QCloseEvent *event) {
       saveMainNotes();
       loadMemoQML();
     } else {
-      ShowMessage *msg = new ShowMessage(this);
-      if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"), 2)) {
+      if (isTextChange) {
+        ShowMessage *msg = new ShowMessage(this);
+        if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"),
+                         2)) {
+          saveMainNotes();
+          loadMemoQML();
+        }
+      } else {
         saveMainNotes();
         loadMemoQML();
       }
@@ -1120,7 +1129,10 @@ void Notes::closeEvent(QCloseEvent *event) {
   }
 }
 
-void Notes::on_editSource_textChanged() { isNeedSave = true; }
+void Notes::on_editSource_textChanged() {
+  isNeedSave = true;
+  isTextChange = true;
+}
 
 void Notes::on_editSource_cursorPositionChanged() { isNeedSave = true; }
 
