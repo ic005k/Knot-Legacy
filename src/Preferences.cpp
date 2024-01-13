@@ -124,13 +124,13 @@ void Preferences::on_sliderFontSize_sliderMoved(int position) {
   ui->lblFontSize->setFont(font);
   isFontChange = true;
 
-  ui->btnReStart->show();
+  getCheckStatusChange();
 }
 
 void Preferences::on_chkReaderFont_clicked() {
   isFontChange = true;
 
-  ui->btnReStart->show();
+  getCheckStatusChange();
 }
 
 void Preferences::on_btnCustomFont_clicked() {
@@ -147,7 +147,7 @@ void Preferences::on_btnCustomFont_clicked() {
 #endif
   Reg.setValue("/Options/CustomFont", fileName);
 
-  ui->btnReStart->show();
+  getCheckStatusChange();
 }
 
 void Preferences::setFontDemo(QString customFontPath) {
@@ -194,7 +194,7 @@ void Preferences::setFontDemo(QString customFontPath) {
 void Preferences::on_chkUIFont_clicked() {
   isFontChange = true;
 
-  ui->btnReStart->show();
+  getCheckStatusChange();
 }
 
 void Preferences::on_sliderFontSize_valueChanged(int value) {
@@ -392,5 +392,34 @@ QStringList Preferences::getBakFilesList() {
 void Preferences::on_chkDark_clicked(bool checked) {
   mw_one->isDark = checked;
 
-  ui->btnReStart->show();
+  getCheckStatusChange();
+}
+
+void Preferences::initCheckStatus() {
+  listCheckStatus.clear();
+  listCheckStatus.append(ui->chkUIFont->isChecked());
+  listCheckStatus.append(ui->chkReaderFont->isChecked());
+  listCheckStatus.append(ui->chkDark->isChecked());
+  listCheckStatus.append(ui->sliderFontSize->value());
+
+  orgCustomFontText = ui->btnCustomFont->text().trimmed();
+}
+
+void Preferences::getCheckStatusChange() {
+  bool isChanged = false;
+  if (ui->chkUIFont->isChecked() != listCheckStatus.at(0)) isChanged = true;
+
+  if (ui->chkReaderFont->isChecked() != listCheckStatus.at(1)) isChanged = true;
+
+  if (ui->chkDark->isChecked() != listCheckStatus.at(2)) isChanged = true;
+
+  if (ui->sliderFontSize->value() != listCheckStatus.at(3)) isChanged = true;
+
+  if (orgCustomFontText != ui->btnCustomFont->text().trimmed())
+    isChanged = true;
+
+  if (isChanged)
+    ui->btnReStart->show();
+  else
+    ui->btnReStart->hide();
 }

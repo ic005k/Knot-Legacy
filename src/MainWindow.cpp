@@ -3170,6 +3170,7 @@ void MainWindow::on_actionPreferences_triggered() {
   m_Preferences->setModal(true);
   m_Preferences->ui->sliderFontSize->setStyleSheet(ui->hsM->styleSheet());
   m_Preferences->show();
+  m_Preferences->initCheckStatus();
 }
 
 void MainWindow::on_tabCharts_currentChanged(int index) {

@@ -34,6 +34,8 @@ class Preferences : public QDialog {
 
   QStringList getBakFilesList();
 
+  void initCheckStatus();
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
@@ -60,6 +62,9 @@ class Preferences : public QDialog {
 
  private:
   QString iniBakFiles = "BakFiles.ini";
+  void getCheckStatusChange();
+  QString orgCustomFontText;
+  QList<int> listCheckStatus;
 };
 
 #endif  // PREFERENCES_H
