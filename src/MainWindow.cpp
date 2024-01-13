@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.34";
+QString ver = "1.1.35";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3824,6 +3824,16 @@ void MainWindow::init_UIWidget() {
   ui->btnMax->setFont(f);
   ui->btnReader->setFont(f);
   ui->btnNotes->setFont(f);
+
+  f.setPointSize(9);
+  ui->btnMenu->setFont(f);
+  ui->btnAdd->setFont(f);
+  ui->btnDel->setFont(f);
+  ui->btnSync->setFont(f);
+  ui->btnPause->setFont(f);
+  ui->btnReport->setFont(f);
+  ui->btnFind->setFont(f);
+  ui->btnRemarks->setFont(f);
 
   QString lblStyle = ui->lblTitleEditRecord->styleSheet();
   ui->lblTotal->setStyleSheet(lblStyle);

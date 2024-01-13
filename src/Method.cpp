@@ -947,6 +947,7 @@ QFont Method::getNewFont(int maxSize) {
 }
 
 void Method::setDark(QString strDark) {
+  Q_UNUSED(strDark);
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

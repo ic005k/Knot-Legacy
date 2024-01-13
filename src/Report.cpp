@@ -220,7 +220,7 @@ void Report::updateTable() {
     listTableSync.append(text0 + "===" + text3);
   }
 
-  mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") +
+  mw_one->ui->lblTotal->setText(tr("Total") + " : " + tr("Freq") + " " +
                                 QString::number(freq) + "    " + tr("Amount") +
                                 " " + QString("%1").arg(t_amount, 0, 'f', 2));
 
