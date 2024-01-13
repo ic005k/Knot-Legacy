@@ -172,8 +172,7 @@ void Preferences::setFontDemo(QString customFontPath) {
 
     QStringList list = str.split("/");
     QString str1 = list.at(list.count() - 1);
-    ui->btnCustomFont->setText(tr("Custom Font (Select External Fonts)") +
-                               "\n\n" + str1);
+    ui->btnCustomFont->setText(tr("Custom Font") + "\n\n" + str1);
 
     if (ui->chkReaderFont->isChecked()) {
       fontname = fontName;
