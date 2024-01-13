@@ -42,7 +42,7 @@ Method::~Method() { delete ui; }
 void Method::showGrayWindows() {
   m_widget->resize(mw_one->width(), mw_one->height());
   m_widget->move(0, 0);
-  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,50%);");
+  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,35%);");
 
   /*QPropertyAnimation *m_pAnimation = new QPropertyAnimation();
   m_pAnimation->setTargetObject(m_widget);

@@ -9,12 +9,13 @@ extern QString copyText;
 ShowMessage::ShowMessage(QWidget* parent)
     : QDialog(parent), ui(new Ui::ShowMessage) {
   ui->setupUi(this);
+
   this->installEventFilter(this);
 
   this->layout()->setMargin(0);
   setWindowFlag(Qt::FramelessWindowHint);
   setAttribute(Qt::WA_TranslucentBackground);
-  ui->widget->setStyleSheet("background-color:rgba(0, 0, 0,30%);");
+  ui->widget->setStyleSheet("background-color:rgba(0, 0, 0,0%);");
 
   if (mw_one->isDark)
     ui->frame->setStyleSheet(
@@ -26,6 +27,7 @@ ShowMessage::ShowMessage(QWidget* parent)
         "border:0px solid gray;}");
 
   setModal(true);
+
   QFont font = this->font();
   font.setBold(true);
   ui->lblTitle->setFont(font);
@@ -46,6 +48,11 @@ ShowMessage::ShowMessage(QWidget* parent)
 }
 
 ShowMessage::~ShowMessage() { delete ui; }
+
+void ShowMessage::closeEvent(QCloseEvent* event) {
+  Q_UNUSED(event)
+  mw_one->m_Method->closeGrayWindows();
+}
 
 bool ShowMessage::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
@@ -95,6 +102,7 @@ void ShowMessage::init() {
   y = this->y() + (this->height() - h) / 2;
   ui->frame->setGeometry(x, y, w, h);
 
+  mw_one->m_Method->showGrayWindows();
   show();
 }
 
