@@ -769,6 +769,19 @@
            </widget>
           </item>
           <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QToolButton" name="btnPause">
             <property name="minimumSize">
              <size>
@@ -5551,7 +5564,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">

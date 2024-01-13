@@ -599,28 +599,30 @@ void Report::on_btnOut2Img_clicked() {
     QString strFile;
     strFile = mw_one->ui->lblTitle_Report->text() + ".png";
 
+    QString picFile;
 #ifdef Q_OS_ANDROID
     QDir* folder = new QDir;
     QString path = "/storage/emulated/0/KnotBak/";
     folder->mkdir(path);
-    QString filename = path + strFile;
-    pixmap.save(filename, "PNG");
+    picFile = path + strFile;
+    pixmap.save(picFile, "PNG");
     ShowMessage* m_ShowMsg = new ShowMessage(this);
-    if (!QFile(filename).exists()) {
+    if (!QFile(picFile).exists()) {
       m_ShowMsg->showMsg(
           "Knot", tr("Please turn on the storage permission of the app."), 1);
 
     } else {
-      m_ShowMsg->showMsg("Knot", tr("Picture output successful!"), 1);
+      m_ShowMsg->showMsg(
+          "Knot", tr("Picture output successful!") + "\n\n" + picFile, 1);
     }
 #else
-    QString fileName;
-    fileName = QFileDialog::getSaveFileName(this, tr("Save Config"),
-                                            QDir::homePath() + "/" + strFile,
-                                            tr("PNG files(*.png)"));
 
-    if (!fileName.isNull()) {
-      pixmap.save(fileName, "PNG");
+    picFile = QFileDialog::getSaveFileName(this, tr("Save Config"),
+                                           QDir::homePath() + "/" + strFile,
+                                           tr("PNG files(*.png)"));
+
+    if (!picFile.isNull()) {
+      pixmap.save(picFile, "PNG");
     }
 
 #endif
