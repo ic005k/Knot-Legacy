@@ -4,7 +4,7 @@ import Qt.labs.qmlmodels 1.0
 
 Rectangle {
 
-    color: isDark ? "#666666" : "#666666"
+    color: isDark ? "#455364" : "#666666"
 
     function appendTableRow(Date, Steps, KM) {
 
@@ -80,9 +80,10 @@ Rectangle {
                     width: header.width / 3
                     height: header.height
 
-                    color: "#666666"
+                    //color:  isDark ?  "#3498DB" : "#3498DB"
+                    color: isDark ? "#455364" : "#666666"
                     border.width: 1
-                    border.color: "#848484"
+                    border.color: isDark ? "#19232D" : "#848484"
                     Text {
                         id: m_text
                         text: modelData
@@ -115,7 +116,7 @@ Rectangle {
             width: 8
             visible: tableModel.rowCount > 5
             background: Rectangle {
-                color: "#666666"
+                color: isDark ? "#455364" : "#666666"
             }
         }
 
@@ -136,13 +137,13 @@ Rectangle {
             //color: "#666666"
             color: {
                 //tableView.currentIndex === row ? "#3298FE" : (tableView.hoverIndex === row ? "#97CBFF" : (row % 2 ? "#666666" : "#666666"))
-                tableView.currentIndex === row ? "#3298FE" : (row % 2 ? "#666666" : "#666666")
+                tableView.currentIndex === row ? "#3298FE" : (isDark ? "#455364" : (row % 2 ? "#666666" : "#666666"))
             }
 
             implicitWidth: tableView.width / 3
             implicitHeight: mytext.contentHeight + 6
             border.width: 1
-            border.color: "#848484"
+            border.color: isDark ? "#19232D" : "#848484"
 
             Text {
                 id: mytext

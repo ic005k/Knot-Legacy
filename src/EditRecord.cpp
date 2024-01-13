@@ -29,6 +29,7 @@ EditRecord::EditRecord(QWidget *parent)
   this->installEventFilter(this);
   mw_one->ui->editCategory->installEventFilter(this);
   mw_one->ui->editDetails->viewport()->installEventFilter(mw_one);
+  mw_one->ui->editCategory->setFocus();
 
   QFont font;
   font.setPointSize(23);
@@ -67,11 +68,10 @@ EditRecord::EditRecord(QWidget *parent)
 
   mw_one->ui->hsM->setStyleSheet(mw_one->ui->hsH->styleSheet());
 
-  mw_one->setLineEditQss(mw_one->ui->editAmount, 0, 1, "#4169E1", "#4169E1");
-  mw_one->setLineEditQss(mw_one->ui->editCategory, 0, 1, "#4169E1", "#4169E1");
-
-  mw_one->ui->editDetails->setStyleSheet(
-      "border-radius:0px;border: 1px groove #4169E1;");
+  // mw_one->setLineEditQss(mw_one->ui->editAmount, 0, 1, "#4169E1", "#4169E1");
+  // mw_one->setLineEditQss(mw_one->ui->editCategory, 0, 1, "#4169E1",
+  // "#4169E1"); mw_one->ui->editDetails->setStyleSheet(
+  //    "border-radius:0px;border: 1px groove #4169E1;");
 
   mw_one->m_Method->qssSlider = mw_one->ui->hsH->styleSheet();
 
