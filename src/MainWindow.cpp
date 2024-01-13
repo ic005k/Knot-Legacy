@@ -3624,8 +3624,6 @@ void MainWindow::init_Instance() {
   m_PageIndicator->close();
   m_ReaderSet = new ReaderSet(this);
   mydlgSetText = new dlgSetText(this);
-  m_widget = new QWidget(this);
-  m_widget->close();
   m_NotesList = new NotesList(this);
   m_SyncInfo = new SyncInfo(this);
 }
@@ -3875,8 +3873,6 @@ void MainWindow::on_btnSelTab_clicked() {
                              " ( " + QString::number(index + 1) + " ) ");
 
   return;
-
-  m_widget = new QWidget(this);
 
   QDialog *dlg = new QDialog(this);
   QVBoxLayout *vbox0 = new QVBoxLayout;
@@ -4245,8 +4241,8 @@ static void JavaNotify_4() {
   return;
 
   if (mw_one->alertWindowsCount == 0) {
-    if (!mw_one->m_Report->myDateSelector->isHidden())
-      mw_one->m_Report->myDateSelector->close();
+    if (!mw_one->m_Report->m_DateSelector->isHidden())
+      mw_one->m_Report->m_DateSelector->close();
 
     if (!mw_one->ui->frameViewCate->isHidden()) {
       mw_one->ui->frameViewCate->hide();
@@ -4740,28 +4736,6 @@ void MainWindow::on_timerMousePress() {
   if (!isMouseMove && isMousePress) on_btnSelText_clicked();
 }
 
-void MainWindow::showGrayWindows() {
-  m_widget->resize(this->width(), this->height());
-  m_widget->move(0, 0);
-  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,25%);");
-
-  QPropertyAnimation *m_pAnimation = new QPropertyAnimation();
-  m_pAnimation->setTargetObject(m_widget);
-  m_pAnimation->setDuration(50);
-  QGraphicsOpacityEffect *m_pOpacity = new QGraphicsOpacityEffect();
-  m_widget->setGraphicsEffect(m_pOpacity);
-  m_pOpacity->setOpacity(1);
-  m_pAnimation->setTargetObject(m_pOpacity);
-  m_pAnimation->setPropertyName("opacity");
-  m_pAnimation->setStartValue(0);
-  m_pAnimation->setEndValue(1);
-  m_pAnimation->start();
-
-  m_widget->show();
-}
-
-void MainWindow::closeGrayWindows() { m_widget->close(); }
-
 void MainWindow::on_btnNotesList_clicked() {
   ui->frameNotes->hide();
   ui->frameNoteList->show();
@@ -5233,11 +5207,11 @@ int MainWindow::getMaxDay(QString sy, QString sm) {
 }
 
 void MainWindow::on_btnStartDate_clicked() {
-  m_Report->myDateSelector->initStartEndDate("start");
+  m_Report->m_DateSelector->initStartEndDate("start");
 }
 
 void MainWindow::on_btnEndDate_clicked() {
-  m_Report->myDateSelector->initStartEndDate("end");
+  m_Report->m_DateSelector->initStartEndDate("end");
 }
 
 void MainWindow::on_btnBackSearch_clicked() {

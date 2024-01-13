@@ -24,7 +24,7 @@ class Report : public QDialog {
   ~Report();
   Ui::Report *ui;
 
-  DateSelector *myDateSelector;
+  DateSelector *m_DateSelector;
   static void saveYMD();
 
   void getCategoryData(QString strCategory, bool appendTable);

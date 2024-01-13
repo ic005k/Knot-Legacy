@@ -255,7 +255,7 @@ void dlgRemarks::show_download() {
     m_AutoUpdate->setGeometry(mw_one->geometry().x(), y, mw_one->width(),
                               m_AutoUpdate->height());
 
-    mw_one->showGrayWindows();
+    mw_one->m_Method->showGrayWindows();
     m_AutoUpdate->show();
     m_AutoUpdate->startDownload(s_link);
     qDebug() << "start dl..... " << s_link;

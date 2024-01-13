@@ -328,7 +328,6 @@ bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
         return true;
       } else if (!m_CategoryList->isHidden()) {
         m_CategoryList->close();
-        mw_one->closeGrayWindows();
 
         return true;
       } else if (!mw_one->m_EditRecord->isHidden()) {

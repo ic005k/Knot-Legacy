@@ -34,6 +34,7 @@ class DateSelector : public QDialog {
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
+  void closeEvent(QCloseEvent *event) override;
  private slots:
 
   void on_btnOk_clicked();

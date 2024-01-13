@@ -73,6 +73,11 @@ bool DateSelector::eventFilter(QObject *watch, QEvent *evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
+void DateSelector::closeEvent(QCloseEvent *event) {
+  Q_UNUSED(event)
+  mw_one->m_Method->closeGrayWindows();
+}
+
 void DateSelector::init() {
   int cy = QDate::currentDate().year();
   if (nWidgetType == 1) rboxYear->setRange(2022, cy);
@@ -134,6 +139,8 @@ void DateSelector::init() {
   w = width();
   h = height();
   setGeometry(x, y, w, h);
+
+  mw_one->m_Method->showGrayWindows();
   show();
 }
 

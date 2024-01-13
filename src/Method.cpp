@@ -23,7 +23,8 @@ Method::Method(QWidget* parent) : QDialog(parent), ui(new Ui::Method) {
   setModal(true);
   this->installEventFilter(this);
 
-  setWindowTitle(tr("Search"));
+  m_widget = new QWidget(mw_one);
+  m_widget->close();
 }
 
 void Method::init() {
@@ -38,6 +39,28 @@ void Method::init() {
 
 Method::~Method() { delete ui; }
 
+void Method::showGrayWindows() {
+  m_widget->resize(mw_one->width(), mw_one->height());
+  m_widget->move(0, 0);
+  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,50%);");
+
+  /*QPropertyAnimation *m_pAnimation = new QPropertyAnimation();
+  m_pAnimation->setTargetObject(m_widget);
+  m_pAnimation->setDuration(50);
+  QGraphicsOpacityEffect *m_pOpacity = new QGraphicsOpacityEffect();
+  m_widget->setGraphicsEffect(m_pOpacity);
+  m_pOpacity->setOpacity(1);
+  m_pAnimation->setTargetObject(m_pOpacity);
+  m_pAnimation->setPropertyName("opacity");
+  m_pAnimation->setStartValue(0);
+  m_pAnimation->setEndValue(1);
+  m_pAnimation->start();*/
+
+  m_widget->show();
+}
+
+void Method::closeGrayWindows() { m_widget->close(); }
+
 QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
                                   QString defaultValue) {
   QInputDialog* idlg = new QInputDialog(this);
@@ -51,10 +74,15 @@ QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
   idlg->setWindowTitle(windowsTitle);
   idlg->setTextValue(defaultValue);
   idlg->setLabelText(lblEdit);
+  showGrayWindows();
   idlg->show();
   idlg->setGeometry(
       mw_one->geometry().x() + (mw_one->geometry().width() - idlg->width()) / 2,
       150, idlg->width(), idlg->height());
+
+  connect(idlg, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
+  connect(idlg, &QDialog::accepted, [=]() mutable { closeGrayWindows(); });
+
   return idlg;
 }
 
@@ -917,8 +945,7 @@ void Method::showDelMsgBox(QString title, QString info) {
     isOK = false;
     dlg->close();
   });
-  connect(dlg, &QDialog::rejected,
-          [=]() mutable { mw_one->closeGrayWindows(); });
+  connect(dlg, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
     isOK = true;
     dlg->close();
@@ -931,7 +958,7 @@ void Method::showDelMsgBox(QString title, QString info) {
   y = geometry().y() + (height() - h) / 2;
   dlg->setGeometry(x, y, w, h);
 
-  mw_one->showGrayWindows();
+  showGrayWindows();
 
   dlg->exec();
 }

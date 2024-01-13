@@ -31,7 +31,6 @@ class EditRecord : public QDialog {
   void getTime(int h, int m);
 
   void init();
-  void showGrayWindows();
 
   static void saveOne();
 

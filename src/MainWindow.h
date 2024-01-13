@@ -163,7 +163,7 @@ class MainWindow : public QMainWindow {
   bool isReaderVisible;
   int imgSize = 5000;
   QString treeStyle = "QTreeWidget::item {height: 28;}";
-  QWidget *m_widget;
+
   int mainHeight = 0;
   bool floatfun = true;
   int alertWindowsCount = 0;
@@ -403,8 +403,6 @@ class MainWindow : public QMainWindow {
 
   QString getSelectedText();
 
-  void showGrayWindows();
-  void closeGrayWindows();
   void bakIniData(QString unredoFile, bool unre);
 
   void set_btnStyle(QObject *parent);

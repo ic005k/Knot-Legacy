@@ -88,6 +88,9 @@ class Method : public QDialog {
 
   void setDark(QString strDark);
 
+  void showGrayWindows();
+  void closeGrayWindows();
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
@@ -113,6 +116,8 @@ class Method : public QDialog {
   int nProgressBarType = 2;
 
   int x, y, w, h;
+
+  QWidget *m_widget;
 };
 
 #endif  // METHOD_H

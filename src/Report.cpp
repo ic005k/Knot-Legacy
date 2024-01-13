@@ -38,7 +38,7 @@ Report::Report(QWidget* parent) : QDialog(parent), ui(new Ui::Report) {
   this->installEventFilter(this);
   this->setModal(true);
 
-  myDateSelector = new DateSelector(this);
+  m_DateSelector = new DateSelector(this);
 
   twOut2Img = new QTreeWidget;
   twOut2Img->setColumnCount(3);
@@ -132,22 +132,18 @@ void Report::on_btnBack_clicked() {
   mw_one->ui->frameMain->show();
 }
 
-void Report::closeEvent(QCloseEvent* event) {
-  Q_UNUSED(event);
-  mw_one->closeGrayWindows();
-  mw_one->m_widget = new QWidget(mw_one);
-}
+void Report::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
 
 void Report::on_btnYear_clicked() {
-  myDateSelector->dateFlag = 1;
+  m_DateSelector->dateFlag = 1;
   mw_one->ui->lblDetails->setText(tr("Details"));
 
-  if (myDateSelector->nWidgetType == 1)
-    myDateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
-  if (myDateSelector->nWidgetType == 2)
-    myDateSelector->wheelYear->setValue(mw_one->ui->btnYear->text().toInt());
+  if (m_DateSelector->nWidgetType == 1)
+    m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
+  if (m_DateSelector->nWidgetType == 2)
+    m_DateSelector->wheelYear->setValue(mw_one->ui->btnYear->text().toInt());
 
-  myDateSelector->init();
+  m_DateSelector->init();
 }
 
 void Report::startReport1() {
@@ -329,16 +325,16 @@ void Report::setTWImgData(QTreeWidgetItem* item) {
 }
 
 void Report::on_btnMonth_clicked() {
-  myDateSelector->dateFlag = 2;
+  m_DateSelector->dateFlag = 2;
   mw_one->ui->lblDetails->setText(tr("Details"));
 
-  myDateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
+  m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
   if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
-    myDateSelector->rboxMonth->setValue(13);
+    m_DateSelector->rboxMonth->setValue(13);
   else
-    myDateSelector->rboxMonth->setValue(mw_one->ui->btnMonth->text().toInt());
+    m_DateSelector->rboxMonth->setValue(mw_one->ui->btnMonth->text().toInt());
 
-  myDateSelector->init();
+  m_DateSelector->init();
 }
 
 void Report::saveYMD() {

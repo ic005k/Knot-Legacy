@@ -49,7 +49,7 @@ void AutoUpdate::doProcessReadyRead()  // 读取并写入
 void AutoUpdate::doProcessFinished() {
   myfile->close();
   this->close();
-  mw_one->closeGrayWindows();
+  mw_one->m_Method->closeGrayWindows();
   if (isCancel) return;
 
     // install apk
