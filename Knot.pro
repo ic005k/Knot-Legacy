@@ -62,6 +62,7 @@ SOURCES += \
     src/NotesList.cpp \
     src/PageIndicator.cpp \
     src/Preferences.cpp \
+    src/PrintPDF.cpp \
     src/QOwnLanguageData.cpp \
     src/Reader.cpp \
     src/ReaderSet.cpp \
@@ -118,6 +119,7 @@ HEADERS += \
     src/NotesList.h \
     src/PageIndicator.h \
     src/Preferences.h \
+    src/PrintPDF.h \
     src/QOwnLanguageData.h \
     src/Reader.h \
     src/ReaderSet.h \
@@ -177,6 +179,7 @@ FORMS += \
     src/NotesList.ui \
     src/PageIndicator.ui \
     src/Preferences.ui \
+    src/PrintPDF.ui \
     src/Reader.ui \
     src/ReaderSet.ui \
     src/RemarksAbout.ui \

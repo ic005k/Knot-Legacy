@@ -20,7 +20,10 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
-#include "src/TextSelector.h"
+#include "PrintPDF.h"
+#include "ShowMessage.h"
+#include "TextSelector.h"
+#include "ui_PrintPDF.h"
 #include "ui_TextSelector.h"
 
 namespace Ui {

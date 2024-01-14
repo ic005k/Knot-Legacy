@@ -1239,17 +1239,17 @@ bool Notes::selectPDFFormat(QPrinter *printer) {
             << QPageSize::A4 << QPageSize::A5 << QPageSize::A6 << QPageSize::A7
             << QPageSize::A8 << QPageSize::A9 << QPageSize::Letter;
 
-  bool ok;
-  QInputDialog *idlg = new QInputDialog(this);
-  idlg->setOkButtonText(tr("Ok"));
-  idlg->setCancelButtonText(tr("Cancel"));
-  QString pageSizeString = idlg->getItem(
+  PrintPDF *idlg1 = new PrintPDF(this);
+  QString pageSizeString =
+      idlg1->getItem(tr("Page size"), tr("Page size"), pageSizeStrings, 4);
+
+  /*QString pageSizeString = QInputDialog::getItem(
       this, tr("Page size"), tr("Page size:"), pageSizeStrings,
       settings.value(QStringLiteral("Printer/NotePDFExportPageSize"), 4)
           .toInt(),
-      false, &ok);
+      false, &ok);*/
 
-  if (!ok || pageSizeString.isEmpty()) {
+  if (pageSizeString.isEmpty()) {
     return false;
   }
 
@@ -1269,16 +1269,17 @@ bool Notes::selectPDFFormat(QPrinter *printer) {
   QList<QPageLayout::Orientation> orientations;
   orientations << QPageLayout::Portrait << QPageLayout::Landscape;
 
-  QInputDialog *idlg2 = new QInputDialog(this);
-  idlg2->setOkButtonText(tr("Ok"));
-  idlg2->setCancelButtonText(tr("Cancel"));
+  PrintPDF *idlg2 = new PrintPDF(this);
   QString orientationString = idlg2->getItem(
+      tr("Orientation"), tr("Orientation"), orientationStrings, 0);
+
+  /*QString orientationString = QInputDialog::getItem(
       this, tr("Orientation"), tr("Orientation:"), orientationStrings,
       settings.value(QStringLiteral("Printer/NotePDFExportOrientation"), 0)
           .toInt(),
-      false, &ok);
+      false, &ok);*/
 
-  if (!ok || orientationString.isEmpty()) {
+  if (orientationString.isEmpty()) {
     return false;
   }
 
@@ -1295,9 +1296,11 @@ bool Notes::selectPDFFormat(QPrinter *printer) {
 #ifdef Q_OS_ANDROID
   fileName = "/storage/emulated/0/KnotBak/" + mw_one->ui->lblNoteName->text() +
              QStringLiteral(".pdf");
-  QMessageBox box;
-  box.setText(tr("The PDF file is successfully exported.") + "\n\n" + fileName);
-  box.exec();
+  ShowMessage *msg = new ShowMessage(this);
+  msg->showMsg("PDF",
+               tr("The PDF file is successfully exported.") + "\n\n" + fileName,
+               0);
+
 #else
   QFileDialog dialog(NULL, QStringLiteral("NotePDFExport"));
   dialog.setFileMode(QFileDialog::AnyFile);
