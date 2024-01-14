@@ -1032,7 +1032,10 @@ void Todo::reeditText() {
   vbox->addLayout(hbox, 0);
 
   connect(btnCancel, &QToolButton::clicked, [=]() mutable { dlg->close(); });
-  connect(dlg, &QDialog::rejected, [=]() mutable {});
+  connect(dlg, &QDialog::rejected,
+          [=]() mutable { mw_one->m_Method->closeGrayWindows(); });
+  connect(dlg, &QDialog::accepted,
+          [=]() mutable { mw_one->m_Method->closeGrayWindows(); });
   connect(btnCopy, &QToolButton::clicked, [=]() mutable {
     edit->selectAll();
     edit->copy();
@@ -1055,6 +1058,7 @@ void Todo::reeditText() {
   y = geometry().y() + (height() - h) / 4;
   dlg->setGeometry(x, y, w, h);
   dlg->setModal(true);
+  mw_one->m_Method->showGrayWindows();
   dlg->show();
 }
 
