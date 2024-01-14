@@ -857,6 +857,7 @@ This method can parse out the real local file path from a file URI.
         Log.i(TAG, "UriString  " + uripath);
         Log.i(TAG, "RealPath  " + str);
         return str;
+        //return getUriRealPathAboveKitkat(context, Uri.parse((String) str));
 
     }
 

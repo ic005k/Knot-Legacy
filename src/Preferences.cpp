@@ -139,6 +139,10 @@ void Preferences::on_btnCustomFont_clicked() {
                                           tr("Font Files (*.*)"));
   if (fileName == "") return;
 
+  // QString realPath = mw_one->m_Reader->getUriRealPath(fileName);
+  // qDebug() << "font file=" << fileName << realPath;
+  // fileName = realPath;
+
   setFontDemo(fileName);
   isFontChange = true;
   QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
@@ -159,7 +163,7 @@ void Preferences::setFontDemo(QString customFontPath) {
     fontName = loadedFontFamilies.at(0);
     QFont f;
     f.setFamily(fontName);
-    f.setPointSize(20);
+    f.setPointSize(ui->sliderFontSize->value());
 
     ui->lblFontPath->setFont(f);
     ui->btnCustomFont->setFont(f);
