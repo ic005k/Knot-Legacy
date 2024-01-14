@@ -3396,25 +3396,6 @@ void MainWindow::init_Sensors() {
 }
 
 void MainWindow::initQW() {
-  ui->qwMainDate->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwMainEvent->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwTodo->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwRecycle->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwNoteBook->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwNoteList->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwNotes->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwSearch->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwBakList->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwViewCate->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwTabRecycle->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwNoteRecycle->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwCategory->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwSelTab->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwBookList->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwReportSub->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwSteps->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwReport->rootContext()->setContextProperty("isDark", isDark);
-
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
   ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3513,6 +3494,25 @@ void MainWindow::init_Theme() {
 
   qDebug() << "red=" << red;
 
+  ui->qwMainDate->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwMainEvent->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwTodo->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwRecycle->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNoteBook->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNoteList->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNotes->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwSearch->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwBakList->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwViewCate->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwTabRecycle->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNoteRecycle->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwCategory->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwSelTab->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwBookList->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwReportSub->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwSteps->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwReport->rootContext()->setContextProperty("isDark", isDark);
+
   if (!isDark) {
     ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
     ui->frameBtn->setStyleSheet("background-color: rgb(243,243,243);");
@@ -3525,6 +3525,16 @@ void MainWindow::init_Theme() {
     ui->btnAddTodo->setIcon(QIcon(":/res/add.png"));
     ui->btnClear->setIcon(QIcon(":/res/clear.svg"));
 
+    ui->btnReport->setIcon(QIcon(":/res/report.png"));
+    ui->btnFind->setIcon(QIcon(":/res/find.png"));
+    ui->btnRemarks->setIcon(QIcon(":/res/edit.png"));
+
+    ui->btnReader->setIcon(QIcon(":/res/reader.png"));
+    ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
+    ui->btnSteps->setIcon(QIcon(":/res/steps.png"));
+    ui->btnNotes->setIcon(QIcon(":/res/note.png"));
+    ui->btnMax->setIcon(QIcon(":/res/max.png"));
+
   } else {
     ui->frameMenu->setStyleSheet("background-color: #19232D;");
     ui->frameBtn->setStyleSheet("background-color: #19232D;");
@@ -3533,6 +3543,9 @@ void MainWindow::init_Theme() {
 
     chartMonth->setTheme(QChart::ChartThemeDark);
     chartDay->setTheme(QChart::ChartThemeDark);
+
+    ui->btnAddTodo->setIcon(QIcon(":/res/plus.svg"));
+    ui->btnClear->setIcon(QIcon(":/res/clear.png"));
 
     ui->btnReport->setIcon(QIcon(":/res/report_l.png"));
     ui->btnFind->setIcon(QIcon(":/res/find_l.png"));

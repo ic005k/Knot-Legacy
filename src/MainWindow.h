@@ -441,6 +441,7 @@ class MainWindow : public QMainWindow {
 
   void setScrollBarPos(double pos);
   void reloadMainOld();
+  void init_Theme();
 
  protected:
   void closeEvent(QCloseEvent *event) override;
@@ -805,7 +806,7 @@ class MainWindow : public QMainWindow {
   void resetWinPos();
 
   void initQW();
-  void init_Theme();
+
   void init_Instance();
 };
 

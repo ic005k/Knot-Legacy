@@ -22,7 +22,7 @@
         <file>res/main.css</file>
         <file>res/modi.png</file>
         <file>res/nosel.png</file>
-        <file>res/one.png</file>
+        <file>res/reader.png</file>
         <file>res/open.png</file>
         <file>res/pause.png</file>
         <file>res/qslider.png</file>
@@ -34,14 +34,14 @@
         <file>res/report.png</file>
         <file>res/run.png</file>
         <file>res/sel.png</file>
-        <file>res/step.png</file>
+        <file>res/steps.png</file>
         <file>res/tab.png</file>
         <file>res/test.txt</file>
         <file>res/time.png</file>
         <file>res/todo.png</file>
         <file>res/todo1.png</file>
         <file>res/up.png</file>
-        <file>res/zoom.png</file>
+        <file>res/max.png</file>
         <file>res/onebak.png</file>
         <file>res/timemachine.png</file>
         <file>res/msg.mp3</file>
@@ -56,7 +56,7 @@
         <file>res/pic.png</file>
         <file>res/additem.png</file>
         <file>res/delitem.png</file>
-        <file>res/memos.png</file>
+        <file>res/note.png</file>
         <file>res/info.png</file>
         <file>src/texteditor.html</file>
         <file>res/b3.png</file>
