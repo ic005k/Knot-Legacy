@@ -8,7 +8,8 @@
 #include "MainWindow.h"
 #include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 
-extern QString iniFile, txtFile, appName, iniDir, privateDir, customFontFamily;
+extern QString iniFile, txtFile, appName, iniDir, privateDir, customFontFamily,
+    defaultFontFamily;
 extern int fontSize;
 extern void RegJni(const char* myClassName);
 void loadLocal();
@@ -120,11 +121,13 @@ int main(int argc, char* argv[]) {
   QFont font;
 
 #ifdef Q_OS_WIN
-  font.setFamily("Microsoft YaHei UI");
+  defaultFontFamily = "Microsoft YaHei UI";
+  font.setFamily(defaultFontFamily);
 #endif
 
 #ifdef Q_OS_ANDROID
-  font.setFamily("DroidSansFallback");
+  defaultFontFamily = "DroidSansFallback";
+  font.setFamily(defaultFontFamily);
 
 #endif
 

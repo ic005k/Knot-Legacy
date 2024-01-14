@@ -14,7 +14,7 @@ extern int fontSize;
 bool isOpen = false;
 bool isEpub, isText, isPDF;
 QStringList readTextList, htmlFiles;
-QString strOpfPath, fileName, ebookFile, strTitle, customFontFamily;
+QString strOpfPath, fileName, ebookFile, strTitle;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;

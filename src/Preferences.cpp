@@ -179,16 +179,17 @@ void Preferences::setFontDemo(QString customFontPath) {
     QString str1 = list.at(list.count() - 1);
     ui->btnCustomFont->setText(tr("Custom Font") + "\n\n" + str1);
 
+    QString readerFont;
     if (ui->chkReaderFont->isChecked()) {
-      defaultFontFamily = customFontFamily;
+      readerFont = customFontFamily;
       mw_one->m_Reader->savePageVPos();
 
-      mw_one->m_Reader->setPageVPos();
     } else {
-      defaultFontFamily = "DroidSansFallback";
+      readerFont = defaultFontFamily;
     }
     mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
-                                                            defaultFontFamily);
+                                                            readerFont);
+    mw_one->m_Reader->setPageVPos();
   }
 }
 

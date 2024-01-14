@@ -18,7 +18,7 @@ QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
     zipfile, txt, infoStr, searchStr, currentMDFile, copyText,
-    defaultFontFamily;
+    defaultFontFamily, customFontFamily;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -3616,11 +3616,6 @@ void MainWindow::init_Theme() {
 void MainWindow::init_Instance() {
   mw_one = this;
 
-  if (defaultFontFamily == "")
-    defaultFontFamily = this->font().family();
-  else {
-  }
-
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
 
@@ -4466,7 +4461,12 @@ void MainWindow::on_btnSelText_clicked() {
     ui->textBrowser->setReadOnly(true);
     QFont font = ui->qwReader->font();
     font.setPixelSize(textFontSize);
-    font.setFamily(defaultFontFamily);
+
+    if (m_Preferences->isOverReaderFont())
+      font.setFamily(customFontFamily);
+    else
+      font.setFamily(defaultFontFamily);
+
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     ui->textBrowser->setFont(font);
 
