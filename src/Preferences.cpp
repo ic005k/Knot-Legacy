@@ -139,9 +139,9 @@ void Preferences::on_btnCustomFont_clicked() {
                                           tr("Font Files (*.*)"));
   if (fileName == "") return;
 
-  // QString realPath = mw_one->m_Reader->getUriRealPath(fileName);
-  // qDebug() << "font file=" << fileName << realPath;
-  // fileName = realPath;
+#ifdef Q_OS_ANDROID
+  fileName = mw_one->m_Method->getRealPathFile(fileName);
+#endif
 
   setFontDemo(fileName);
   isFontChange = true;

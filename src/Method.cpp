@@ -39,6 +39,25 @@ void Method::init() {
 
 Method::~Method() { delete ui; }
 
+QString Method::getRealPathFile(QString strFile) {
+  strFile = mw_one->m_Reader->getUriRealPath(strFile);
+  QString realFile;
+
+  int aver = mw_one->m_Remarks->getAndroidVer();
+  // Android7.0及以上
+  if (aver >= 24) {
+  } else {
+    // Android6.0
+    QStringList list = strFile.split(":");
+    int count = list.count();
+    QString r_file = list.at(count - 1);
+    QString driver = "/storage/emulated/0/";
+    realFile = driver + r_file;
+  }
+
+  return realFile;
+}
+
 void Method::showGrayWindows() {
   m_widget->resize(mw_one->width(), mw_one->height());
   m_widget->move(0, 0);

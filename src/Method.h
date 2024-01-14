@@ -91,7 +91,8 @@ class Method : public QDialog {
   void showGrayWindows();
   void closeGrayWindows();
 
- protected:
+  QString getRealPathFile(QString strFile);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

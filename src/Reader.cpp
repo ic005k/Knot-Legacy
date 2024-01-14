@@ -84,6 +84,10 @@ void dlgReader::on_btnOpen_clicked() {
 
   if (!QFileInfo(openfile).exists()) return;
 
+#ifdef Q_OS_ANDROID
+  openfile = mw_one->m_Method->getRealPathFile(openfile);
+#endif
+
   startOpenFile(openfile);
 }
 
