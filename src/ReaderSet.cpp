@@ -20,9 +20,7 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   setPalette(pal);
 
   ui->setupUi(this);
-  ui->btnFont->hide();
 
-  ui->btnFont->setStyleSheet("border:none");
   ui->btnFontLess->setStyleSheet("border:none");
   ui->btnFontPlus->setStyleSheet("border:none");
   QFont f(this->font());
@@ -69,11 +67,6 @@ void ReaderSet::on_btnFontLess_clicked() {
   if (mw_one->textFontSize <= 8) return;
   mw_one->textFontSize--;
   mw_one->m_Reader->setFontSize(mw_one->textFontSize);
-}
-
-void ReaderSet::on_btnFont_clicked() {
-  close();
-  mw_one->m_Reader->selectFont();
 }
 
 void ReaderSet::on_hSlider_sliderMoved(int position) {

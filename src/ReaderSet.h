@@ -26,8 +26,6 @@ class ReaderSet : public QDialog {
 
   void on_btnFontLess_clicked();
 
-  void on_btnFont_clicked();
-
   void on_hSlider_sliderMoved(int position);
 
   void on_btnStyle1_clicked();

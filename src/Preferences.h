@@ -36,7 +36,9 @@ class Preferences : public QDialog {
 
   void initCheckStatus();
 
- protected:
+  bool isOverUIFont();
+  bool isOverReaderFont();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;

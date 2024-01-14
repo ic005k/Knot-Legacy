@@ -41,7 +41,7 @@ Method::~Method() { delete ui; }
 
 QString Method::getRealPathFile(QString strFile) {
   strFile = mw_one->m_Reader->getUriRealPath(strFile);
-  QString realFile;
+  QString realFile = strFile;
 
   int aver = mw_one->m_Remarks->getAndroidVer();
   // Android7.0及以上

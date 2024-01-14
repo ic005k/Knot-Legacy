@@ -6,7 +6,7 @@
 #include "ui_Notes.h"
 
 extern MainWindow *mw_one;
-extern QString iniFile, iniDir, privateDir, fontname, currentMDFile;
+extern QString iniFile, iniDir, privateDir, currentMDFile;
 extern bool isAndroid, isIOS;
 extern int fontSize;
 extern QRegularExpression regxNumber;

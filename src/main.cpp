@@ -8,7 +8,7 @@
 #include "MainWindow.h"
 #include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 
-extern QString iniFile, txtFile, appName, iniDir, privateDir, fontname;
+extern QString iniFile, txtFile, appName, iniDir, privateDir, customFontFamily;
 extern int fontSize;
 extern void RegJni(const char* myClassName);
 void loadLocal();
@@ -114,11 +114,9 @@ int main(int argc, char* argv[]) {
 #endif
 
   fontSize = Reg.value("/Options/FontSize", defaultFontSize).toInt();
-  bool isReaderFont = Reg.value("/Options/chkReaderFont", false).toBool();
-  bool isUIFont = Reg.value("/Options/chkUIFont", false).toBool();
+  bool isOverUIFont = Reg.value("/Options/chkUIFont", false).toBool();
   QString customFontPath = Reg.value("/Options/CustomFont").toString();
 
-  QString fontName;
   QFont font;
 
 #ifdef Q_OS_WIN
@@ -135,12 +133,8 @@ int main(int argc, char* argv[]) {
     QStringList loadedFontFamilies =
         QFontDatabase::applicationFontFamilies(loadedFontID);
     if (!loadedFontFamilies.empty()) {
-      fontName = loadedFontFamilies.at(0);
-      if (isUIFont) font.setFamily(fontName);
-      if (isReaderFont)
-        fontname = fontName;
-      else
-        fontname = "DroidSansFallback";
+      customFontFamily = loadedFontFamilies.at(0);
+      if (isOverUIFont) font.setFamily(customFontFamily);
     }
   }
 

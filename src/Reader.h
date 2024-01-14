@@ -57,7 +57,7 @@ class dlgReader : public QDialog {
   static QStringList readText(QString textFile);
   void goPostion();
   void setQMLText(QString);
-  QFont get_Font();
+
   static int deleteDirfile(QString dirName);
   void setQMLHtml();
   void setFontSize(int textFontSize);
@@ -88,7 +88,6 @@ class dlgReader : public QDialog {
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
   void on_btnOpen_clicked();
-  void selectFont();
 
   void on_hSlider_sliderReleased(int position);
 
@@ -104,10 +103,11 @@ class dlgReader : public QDialog {
   void setPdfScale(qreal scale);
 
   void clearAllReaderRecords();
-  public slots:
+ public slots:
 
   void openBookListItem();
-  protected:
+
+ protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;

@@ -17,7 +17,8 @@ bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isTimeMachine,
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
-    zipfile, txt, infoStr, searchStr, currentMDFile, copyText;
+    zipfile, txt, infoStr, searchStr, currentMDFile, copyText,
+    defaultFontFamily;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -35,7 +36,7 @@ QRegularExpression regxNumber("^-?\[0-9.]*$");
 extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del, isWholeMonth,
     isDateSection;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
-    fileName, strOpfPath, fontname;
+    fileName, strOpfPath;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2;
 extern QStringList readTextList, htmlFiles, listCategory;
@@ -420,9 +421,9 @@ MainWindow::MainWindow(QWidget *parent)
   loading = true;
   init_Instance();
   init_Options();
-
   init_UIWidget();
   init_ChartWidget();
+
   init_Theme();
   initQW();
 
@@ -3615,6 +3616,11 @@ void MainWindow::init_Theme() {
 void MainWindow::init_Instance() {
   mw_one = this;
 
+  if (defaultFontFamily == "")
+    defaultFontFamily = this->font().family();
+  else {
+  }
+
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
 
@@ -3643,8 +3649,6 @@ void MainWindow::init_Instance() {
 
 void MainWindow::init_UIWidget() {
   set_btnStyle(this);
-
-  if (fontname == "") fontname = this->font().family();
 
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
@@ -4462,7 +4466,7 @@ void MainWindow::on_btnSelText_clicked() {
     ui->textBrowser->setReadOnly(true);
     QFont font = ui->qwReader->font();
     font.setPixelSize(textFontSize);
-    font.setFamily(fontname);
+    font.setFamily(defaultFontFamily);
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     ui->textBrowser->setFont(font);
 

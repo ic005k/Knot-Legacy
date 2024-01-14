@@ -5,7 +5,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "ui_Preferences.h"
-extern QString iniFile, iniDir, privateDir, fontname, infoStr;
+extern QString iniFile, iniDir, privateDir, defaultFontFamily, customFontFamily,
+    infoStr;
 extern MainWindow* mw_one;
 extern bool isBreak;
 extern int fontSize;
@@ -179,20 +180,16 @@ void Preferences::setFontDemo(QString customFontPath) {
     ui->btnCustomFont->setText(tr("Custom Font") + "\n\n" + str1);
 
     if (ui->chkReaderFont->isChecked()) {
-      fontname = fontName;
+      defaultFontFamily = customFontFamily;
       mw_one->m_Reader->savePageVPos();
-      mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
-                                                              fontname);
-      mw_one->m_Reader->setPageVPos();
-    }
-  }
 
-  if (QFile(customFontPath).exists())
-    ui->btnCustomFont->setStyleSheet(
-        "background-color: rgb(75, 75, 75);color:white;");
-  else
-    ui->btnCustomFont->setStyleSheet(
-        "background-color: rgb(255, 255, 255);color:red;");
+      mw_one->m_Reader->setPageVPos();
+    } else {
+      defaultFontFamily = "DroidSansFallback";
+    }
+    mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
+                                                            defaultFontFamily);
+  }
 }
 
 void Preferences::on_chkUIFont_clicked() {
@@ -203,6 +200,26 @@ void Preferences::on_chkUIFont_clicked() {
 
 void Preferences::on_sliderFontSize_valueChanged(int value) {
   on_sliderFontSize_sliderMoved(value);
+}
+
+bool Preferences::isOverUIFont() {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  bool chkUIFont = Reg.value("/Options/chkUIFont", false).toBool();
+  return chkUIFont;
+}
+
+bool Preferences::isOverReaderFont() {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  bool chkReaderFont = Reg.value("/Options/chkReaderFont", false).toBool();
+  return chkReaderFont;
 }
 
 void Preferences::initOptions() {
