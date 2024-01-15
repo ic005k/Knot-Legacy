@@ -261,7 +261,7 @@ QCheckBox::indicator:checked{
       </size>
      </property>
      <property name="text">
-      <string>Restart the App</string>
+      <string>Restart the App to take effect</string>
      </property>
     </widget>
    </item>

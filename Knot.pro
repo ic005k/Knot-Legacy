@@ -171,22 +171,16 @@ FORMS += \
     src/CategoryList.ui \
     src/CloudBackup.ui \
     src/DateSelector.ui \
-    src/EditRecord.ui \
-    src/LoadPic.ui \
     src/MainWindow.ui \
-    src/Method.ui \
     src/Notes.ui \
     src/NotesList.ui \
     src/PageIndicator.ui \
     src/Preferences.ui \
     src/PrintPDF.ui \
-    src/Reader.ui \
     src/ReaderSet.ui \
     src/RemarksAbout.ui \
-    src/Report.ui \
     src/SetReaderText.ui \
     src/ShowMessage.ui \
-    src/Steps.ui \
     src/SyncInfo.ui \
     src/TextSelector.ui \
     src/Todo.ui \
