@@ -8,7 +8,6 @@ Rectangle {
     color: isDark ? "#455364" : "#666666"
 
     function appendTableRow(Date, Steps, KM) {
-
         tableModel.appendRow({
                                  "Date": Date,
                                  "Steps": Steps,
@@ -24,7 +23,6 @@ Rectangle {
     }
 
     function getItemCount() {
-
         return tableModel.rowCount
     }
 
@@ -60,8 +58,6 @@ Rectangle {
         width: parent.width
         height: fontMetrics.height + 4
 
-
-
         FontMetrics {
             id: fontMetrics
         }
@@ -76,7 +72,7 @@ Rectangle {
                 Rectangle {
                     width: header.width / 3
                     height: header.height
-                    color:  isDark ?  "#3498DB" : "#3498DB"
+                    color: isDark ? "#3498DB" : "#3498DB"
                     border.width: 1
                     border.color: isDark ? "#19232D" : "#848484"
                     Text {
@@ -112,7 +108,6 @@ Rectangle {
             }
 
             // Always show
-
             /*onActiveChanged: {
                 active = true
             }
@@ -138,7 +133,8 @@ Rectangle {
             }
         }
         delegate: Rectangle {
-            color: isDark ? "#455364" : "#666666"
+            color: getSteps(
+                       row) >= 5000 ? "red" : (isDark ? "#455364" : "#666666")
             implicitWidth: header.width / 3
             implicitHeight: mytext.contentHeight + 6
             border.width: 1
