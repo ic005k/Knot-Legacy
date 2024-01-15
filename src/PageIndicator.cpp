@@ -15,7 +15,7 @@ PageIndicator::PageIndicator(QWidget* parent)
   setAttribute(Qt::WA_TranslucentBackground);
 #endif
 
-  this->setStyleSheet("background-color:rgba(0, 0, 0,15%);");
+  this->setStyleSheet("background-color:rgba(0, 0, 0,25%);");
   setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint |
                  Qt::WindowDoesNotAcceptFocus);
 

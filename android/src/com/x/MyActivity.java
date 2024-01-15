@@ -129,7 +129,6 @@ import android.content.pm.PackageManager;
 
 import android.os.FileObserver;
 
-
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
     public static boolean isDark = false;
@@ -164,11 +163,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     public native static void CallJavaNotify_4();
 
+    private InternalConfigure internalConfigure;
+
     public MyActivity() {
 
     }
-
-    private InternalConfigure internalConfigure;
 
     //------------------------------------------------------------------------
 
@@ -857,7 +856,6 @@ This method can parse out the real local file path from a file URI.
         Log.i(TAG, "UriString  " + uripath);
         Log.i(TAG, "RealPath  " + str);
         return str;
-        //return getUriRealPathAboveKitkat(context, Uri.parse((String) str));
 
     }
 
