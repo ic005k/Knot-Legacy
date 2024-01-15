@@ -30,6 +30,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->editTangentLineIntercept->setValidator(validator);
   mw_one->ui->editTangentLineSlope->setValidator(validator);
   mw_one->ui->editStepLength->setValidator(validator);
+  mw_one->ui->editStepsThreshold->setValidator(validator);
 }
 
 Steps::~Steps() {}
@@ -98,6 +99,8 @@ void Steps::saveSteps() {
                mw_one->ui->editTangentLineSlope->text().trimmed());
   Reg.setValue("/Steps/Length", mw_one->ui->editStepLength->text().trimmed());
   Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
+  Reg.setValue("/Steps/Threshold",
+               mw_one->ui->editStepsThreshold->text().trimmed());
 
   if (getCount() > maxCount) {
     delItem(0);
@@ -138,6 +141,8 @@ void Steps::init_Steps() {
       Reg.value("/Steps/Slope", dleSlope).toString());
   mw_one->ui->editStepLength->setText(
       Reg.value("/Steps/Length", "35").toString());
+  mw_one->ui->editStepsThreshold->setText(
+      Reg.value("/Steps/Threshold", "5000").toString());
   mw_one->ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
 
   int count = Reg.value("/Steps/Count").toInt();

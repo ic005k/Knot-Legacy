@@ -134,7 +134,7 @@ Rectangle {
         }
         delegate: Rectangle {
             color: getSteps(
-                       row) >= 5000 ? "red" : (isDark ? "#455364" : "#666666")
+                       row) >= nStepsThreshold ? "red" : (isDark ? "#455364" : "#666666")
             implicitWidth: header.width / 3
             implicitHeight: mytext.contentHeight + 6
             border.width: 1

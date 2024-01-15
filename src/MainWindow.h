@@ -770,6 +770,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnChartDay_clicked();
 
+  void on_editStepsThreshold_textChanged(const QString &arg1);
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

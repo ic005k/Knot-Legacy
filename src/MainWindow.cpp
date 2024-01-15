@@ -3421,6 +3421,8 @@ void MainWindow::initQW() {
   ui->qwMain->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwMain->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/main.qml")));
 
+  ui->qwSteps->rootContext()->setContextProperty(
+      "nStepsThreshold", ui->editStepsThreshold->text().toInt());
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
   ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
 
@@ -5585,4 +5587,9 @@ void MainWindow::on_btnChartDay_clicked() {
   ui->btnChartDay->setStyleSheet(ui->btnSelTab->styleSheet());
   setPushButtonQss(ui->btnChartMonth, 5, 3, "#455364", "#FFFFFF", "#455364",
                    "#FFFFFF", "#555364", "#FFFFFF");
+}
+
+void MainWindow::on_editStepsThreshold_textChanged(const QString &arg1) {
+  ui->qwSteps->rootContext()->setContextProperty("nStepsThreshold",
+                                                 arg1.toInt());
 }

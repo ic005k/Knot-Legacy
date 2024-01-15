@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>654</width>
-    <height>6935</height>
+    <height>7063</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1580,7 +1580,7 @@ QTabBar::scroller {width:0}
                <string>Reader</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/one.png</normaloff>:/res/one.png</iconset>
               </property>
               <property name="iconSize">
@@ -1638,7 +1638,7 @@ QTabBar::scroller {width:0}
                <string>Steps</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/step.png</normaloff>:/res/step.png</iconset>
               </property>
               <property name="iconSize">
@@ -1667,7 +1667,7 @@ QTabBar::scroller {width:0}
                <string>Notes</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/memos.png</normaloff>:/res/memos.png</iconset>
               </property>
               <property name="iconSize">
@@ -1696,7 +1696,7 @@ QTabBar::scroller {width:0}
                <string>Max</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/zoom.png</normaloff>:/res/zoom.png</iconset>
               </property>
               <property name="iconSize">
@@ -3288,9 +3288,39 @@ QRadioButton::indicator:checked {
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_16">
           <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_50">
+            <item>
+             <widget class="QLabel" name="lblThreshold">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Marker Steps Threshold</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="editStepsThreshold">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_19">
             <item>
              <widget class="QLabel" name="lblStepLength">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>Step Length</string>
               </property>
@@ -3299,7 +3329,7 @@ QRadioButton::indicator:checked {
             <item>
              <widget class="QLineEdit" name="editStepLength">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -3311,6 +3341,12 @@ QRadioButton::indicator:checked {
             </item>
             <item>
              <widget class="QLabel" name="label_3">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>cm  </string>
               </property>
@@ -3318,6 +3354,12 @@ QRadioButton::indicator:checked {
             </item>
             <item>
              <widget class="QLabel" name="label_6">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>Current : </string>
               </property>
@@ -3326,7 +3368,7 @@ QRadioButton::indicator:checked {
             <item>
              <widget class="QLabel" name="lblSingle">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -5571,7 +5613,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">
