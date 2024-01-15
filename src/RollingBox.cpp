@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 
 extern MainWindow *mw_one;
+extern bool isDark;
 
 RollingBox::RollingBox(QWidget *parent)
     : QWidget(parent),
@@ -119,7 +120,7 @@ void RollingBox::paintEvent(QPaintEvent *) {
     paintNum(painter, m_currentValue + 2, m_deviation + Width / 2);
 
   // 边框
-  if (mw_one->isDark)
+  if (isDark)
     painter.setPen(QPen(QColor(0, 255, 255, 225), 2));
   else
     painter.setPen(QPen(QColor(0, 0, 255, 225), 2));
@@ -141,7 +142,7 @@ void RollingBox::paintNum(QPainter &painter, int num, int deviation) {
   font.setPixelSize(size);
   painter.setFont(font);
 
-  if (!mw_one->isDark)
+  if (!isDark)
     painter.setPen(QColor(0, 0, 0, transparency));
   else
     painter.setPen(QColor(255, 255, 255, transparency));

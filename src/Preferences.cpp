@@ -8,7 +8,7 @@
 extern QString iniFile, iniDir, privateDir, defaultFontFamily, customFontFamily,
     infoStr;
 extern MainWindow* mw_one;
-extern bool isBreak;
+extern bool isBreak, isDark;
 extern int fontSize;
 
 Preferences::Preferences(QWidget* parent)
@@ -203,6 +203,24 @@ void Preferences::on_sliderFontSize_valueChanged(int value) {
   on_sliderFontSize_sliderMoved(value);
 }
 
+void Preferences::setDefaultFont(QString fontFamily) {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue("/Options/DefaultFont", fontFamily);
+}
+
+QString Preferences::getDefaultFont() {
+  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  return Reg.value("/Options/DefaultFont", "None").toString();
+}
+
 bool Preferences::isOverUIFont() {
   QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -234,7 +252,7 @@ void Preferences::initOptions() {
   ui->chkReaderFont->setChecked(
       Reg.value("/Options/chkReaderFont", false).toBool());
   ui->chkDark->setChecked(Reg.value("/Options/Dark", false).toBool());
-  mw_one->isDark = ui->chkDark->isChecked();
+  isDark = ui->chkDark->isChecked();
   ui->chkAutoTime->setChecked(Reg.value("/Options/AutoTimeY", true).toBool());
 
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
@@ -412,7 +430,7 @@ QStringList Preferences::getBakFilesList() {
 }
 
 void Preferences::on_chkDark_clicked(bool checked) {
-  mw_one->isDark = checked;
+  isDark = checked;
 
   getCheckStatusChange();
 }

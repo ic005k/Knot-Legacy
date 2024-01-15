@@ -12,6 +12,7 @@ extern QString iniFile, txtFile, appName, iniDir, privateDir, customFontFamily,
     defaultFontFamily;
 extern int fontSize;
 extern void RegJni(const char* myClassName);
+extern bool isDark;
 void loadLocal();
 
 bool zh_cn = false;
@@ -117,17 +118,20 @@ int main(int argc, char* argv[]) {
   fontSize = Reg.value("/Options/FontSize", defaultFontSize).toInt();
   bool isOverUIFont = Reg.value("/Options/chkUIFont", false).toBool();
   QString customFontPath = Reg.value("/Options/CustomFont").toString();
-
-  QFont font;
+  isDark = Reg.value("/Options/Dark", false).toBool();
 
 #ifdef Q_OS_WIN
   defaultFontFamily = "Microsoft YaHei UI";
-  font.setFamily(defaultFontFamily);
+
 #endif
 
 #ifdef Q_OS_ANDROID
   defaultFontFamily = "DroidSansFallback";
-  font.setFamily(defaultFontFamily);
+
+#endif
+
+#ifdef Q_OS_LINUX
+  defaultFontFamily = "Sans";
 
 #endif
 
@@ -137,12 +141,40 @@ int main(int argc, char* argv[]) {
         QFontDatabase::applicationFontFamilies(loadedFontID);
     if (!loadedFontFamilies.empty()) {
       customFontFamily = loadedFontFamilies.at(0);
-      if (isOverUIFont) font.setFamily(customFontFamily);
     }
+  } else
+    customFontFamily = defaultFontFamily;
+
+  // Set Theme
+  QString fileTheme;
+  if (isDark)
+    fileTheme = ":/theme/dark/darkstyle.qss";
+  else
+    fileTheme = ":/theme/light/lightstyle.qss";
+  QFile f_theme(fileTheme);
+  if (!f_theme.exists()) {
+    qDebug() << "Unable to set stylesheet, file not found";
+  } else {
+    f_theme.open(QFile::ReadOnly | QFile::Text);
+    QTextStream ts(&f_theme);
+    QString qssAll = ts.readAll();
+    qssAll = qssAll.replace("QSlider", "CancelQSlider");
+    qssAll = qssAll.replace("width: 16px;", "width: 8px;");
+    qssAll = qssAll.replace("margin: 16px 2px 16px 2px;",
+                            "margin: 1px 2px 1px 2px;");
+    app.setStyleSheet(qssAll);
   }
+
+  // Set Font
+  QFont font;
+  if (isOverUIFont)
+    font.setFamily(customFontFamily);
+  else
+    font.setFamily(defaultFontFamily);
 
   font.setPointSize(fontSize);
   app.setFont(font);
+
   loadLocal();
 
   MainWindow w;

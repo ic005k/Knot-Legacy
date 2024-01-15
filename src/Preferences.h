@@ -38,6 +38,8 @@ class Preferences : public QDialog {
 
   bool isOverUIFont();
   bool isOverReaderFont();
+  void setDefaultFont(QString fontFamily);
+  QString getDefaultFont();
   protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 

@@ -10,7 +10,7 @@ QString orgLblStyle;
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir;
-extern bool loading, isBreak, zh_cn;
+extern bool loading, isBreak, zh_cn, isDark;
 extern int fontSize;
 
 Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
@@ -746,7 +746,7 @@ void Todo::refreshAlarm() {
 
 void Todo::changeTodoIcon(bool isToday) {
   if (!isToday) {
-    if (mw_one->isDark)
+    if (isDark)
       mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo_l.png"));
     else
       mw_one->ui->btnTodo->setIcon(QIcon(":/res/todo.png"));

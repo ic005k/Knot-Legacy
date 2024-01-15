@@ -28,6 +28,7 @@
 #include "MainWindow.h"
 #include "QOwnLanguageData.h"
 extern MainWindow *mw_one;
+extern bool isDark;
 
 // We enable QStringView with Qt 5.15.1
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 1)
@@ -326,7 +327,7 @@ void MarkdownHighlighter::initTextFormats(int defaultFontSize) {
   format = QTextCharFormat();
   // format.setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
-  if (mw_one->isDark)
+  if (isDark)
     format.setBackground(QColor(122, 122, 122));
   else
     format.setBackground(QColor(220, 220, 220));
@@ -369,7 +370,7 @@ void MarkdownHighlighter::initTextFormats(int defaultFontSize) {
   // set character format for block quotes
   format = QTextCharFormat();
 
-  if (mw_one->isDark)
+  if (isDark)
     format.setForeground(QColor(0, 255, 255));
   else
     format.setForeground(Qt::darkRed);

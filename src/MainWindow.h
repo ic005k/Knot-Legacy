@@ -146,7 +146,6 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
-  bool isDark = false;
   bool isNeedAutoBackup = false;
   QString strLatestModify = tr("None");
 

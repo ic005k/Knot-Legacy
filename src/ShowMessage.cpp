@@ -5,6 +5,7 @@
 
 extern MainWindow* mw_one;
 extern QString copyText;
+extern bool isDark;
 
 ShowMessage::ShowMessage(QWidget* parent)
     : QDialog(parent), ui(new Ui::ShowMessage) {
@@ -17,7 +18,7 @@ ShowMessage::ShowMessage(QWidget* parent)
   setAttribute(Qt::WA_TranslucentBackground);
   ui->widget->setStyleSheet("background-color:rgba(0, 0, 0,0%);");
 
-  if (mw_one->isDark)
+  if (isDark)
     ui->frame->setStyleSheet(
         "QFrame{background-color: #455364;color: #FFFFFF;border-radius:10px; "
         "border:0px solid gray;}");
@@ -38,7 +39,7 @@ ShowMessage::ShowMessage(QWidget* parent)
   ui->lblMsgTxt->setWordWrap(true);
 
   ui->hframe->setFrameShape(QFrame::HLine);
-  if (mw_one->isDark)
+  if (isDark)
     ui->hframe->setStyleSheet(
         "QFrame{background:rgb(0,205,205);min-height:2px}");
   else

@@ -30,6 +30,7 @@ bool loading, isReadEnd, isReadTWEnd;
 bool isReadEBookEnd = true;
 bool isSaveEnd = true;
 bool isBreak = false;
+bool isDark = false;
 
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
@@ -3567,25 +3568,6 @@ void MainWindow::init_Theme() {
     ui->editTodo->setPalette(palette);
   }
 
-  QString fileTheme;
-  if (isDark)
-    fileTheme = ":/theme/dark/darkstyle.qss";
-  else
-    fileTheme = ":/theme/light/lightstyle.qss";
-  QFile f_theme(fileTheme);
-  if (!f_theme.exists()) {
-    qDebug() << "Unable to set stylesheet, file not found";
-  } else {
-    f_theme.open(QFile::ReadOnly | QFile::Text);
-    QTextStream ts(&f_theme);
-    QString qssAll = ts.readAll();
-    qssAll = qssAll.replace("QSlider", "CancelQSlider");
-    qssAll = qssAll.replace("width: 16px;", "width: 8px;");
-    qssAll = qssAll.replace("margin: 16px 2px 16px 2px;",
-                            "margin: 1px 2px 1px 2px;");
-    qApp->setStyleSheet(qssAll);
-  }
-
   QFont font1;
   font1.setPointSize(12);
   font1.setBold(true);
@@ -3640,6 +3622,9 @@ void MainWindow::init_Instance() {
   mydlgSetText = new dlgSetText(this);
   m_NotesList = new NotesList(this);
   m_SyncInfo = new SyncInfo(this);
+
+  if (m_Preferences->getDefaultFont() == "None")
+    m_Preferences->setDefaultFont(this->font().family());
 }
 
 void MainWindow::init_UIWidget() {

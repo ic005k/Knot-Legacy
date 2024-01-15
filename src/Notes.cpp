@@ -7,7 +7,7 @@
 
 extern MainWindow *mw_one;
 extern QString iniFile, iniDir, privateDir, currentMDFile;
-extern bool isAndroid, isIOS;
+extern bool isAndroid, isIOS, isDark;
 extern int fontSize;
 extern QRegularExpression regxNumber;
 
@@ -939,7 +939,7 @@ void Notes::highlightCurrentLine() {
 
   QColor lineColor;
 
-  if (mw_one->isDark)
+  if (isDark)
     lineColor = QColor(QColor(25, 125, 25, 25));
   else
     lineColor = QColor(Qt::yellow).lighter(160);

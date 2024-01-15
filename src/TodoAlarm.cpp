@@ -6,6 +6,7 @@
 
 extern MainWindow* mw_one;
 extern int fontSize;
+extern bool isDark;
 
 TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->setupUi(this);
@@ -140,7 +141,7 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
   for (int i = 0; i < lstOfChildren0.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
-    if (mw_one->isDark)
+    if (isDark)
       w->setStyleSheet(mw_one->btnStyleDark);
     else
       w->setStyleSheet(mw_one->btnStyle);
@@ -164,7 +165,7 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
     for (int j = 0; j < col; j++) {
       QToolButton* btn = new QToolButton(ui->frameSel);
 
-      if (mw_one->isDark)
+      if (isDark)
         btn->setStyleSheet(mw_one->btnStyleDark);
       else
         btn->setStyleSheet(mw_one->btnStyle);
@@ -212,7 +213,7 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
   for (int i = 0; i < total; i++) {
     QToolButton* btn = new QToolButton(ui->frameSel);
 
-    if (mw_one->isDark)
+    if (isDark)
       btn->setStyleSheet(mw_one->btnStyleDark);
     else
       btn->setStyleSheet(mw_one->btnStyle);
@@ -253,7 +254,7 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
   for (int i = 0; i < lstOfChildren.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren.at(i);
 
-    if (!mw_one->isDark)
+    if (!isDark)
       w->setStyleSheet(mw_one->btnStyle);
     else
       w->setStyleSheet(mw_one->btnStyleDark);
@@ -291,7 +292,7 @@ void TodoAlarm::onBtnClick(QToolButton* btn, QString flag) {
   for (int i = 0; i < lstOfChildren.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren.at(i);
 
-    if (mw_one->isDark)
+    if (isDark)
       w->setStyleSheet(mw_one->btnStyleDark);
     else
       w->setStyleSheet(mw_one->btnStyle);
@@ -335,7 +336,7 @@ void TodoAlarm::addDial(int min, int max, QString flag) {
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
   for (int i = 0; i < lstOfChildren0.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
-    if (mw_one->isDark)
+    if (isDark)
       w->setStyleSheet(mw_one->btnStyleDark);
     else
       w->setStyleSheet(mw_one->btnStyle);

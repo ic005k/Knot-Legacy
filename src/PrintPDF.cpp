@@ -7,6 +7,9 @@ extern MainWindow* mw_one;
 
 PrintPDF::PrintPDF(QWidget* parent) : QDialog(parent), ui(new Ui::PrintPDF) {
   ui->setupUi(this);
+  setWindowFlag(Qt::FramelessWindowHint);
+  QString style = "QDialog{border-radius:0px;border:2px solid gray;}";
+  this->setStyleSheet(style);
 }
 
 PrintPDF::~PrintPDF() { delete ui; }

@@ -10,7 +10,7 @@ extern MainWindow* mw_one;
 extern QTabWidget* tabData;
 extern QString iniDir, searchStr, currentMDFile;
 extern CategoryList* m_CategoryList;
-extern bool isEpub, isText, isPDF, loading;
+extern bool isEpub, isText, isPDF, loading, isDark;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2, fontSize;
 extern QStringList readTextList, htmlFiles, listCategory;
@@ -85,7 +85,7 @@ QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
   QInputDialog* idlg = new QInputDialog(this);
   idlg->hide();
   idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style1 = "QDialog{border-radius:px;border:2px solid red;}";
+  QString style1 = "QDialog{border-radius:px;border:2px solid gray;}";
   idlg->setStyleSheet(style1);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
@@ -672,7 +672,7 @@ QDialog* Method::getProgBar() {
   dlg->setWindowFlag(Qt::FramelessWindowHint);
   dlg->setAttribute(Qt::WA_TranslucentBackground);
 
-  if (mw_one->isDark)
+  if (isDark)
     frame->setStyleSheet(
         "QFrame{background-color: #455364; border-radius:10px; "
         "border:0px solid red;}");
@@ -695,7 +695,7 @@ QDialog* Method::getProgBar() {
       dlg->width(), dlg->height());
 
   QLabel* lbl = new QLabel(dlg);
-  if (mw_one->isDark)
+  if (isDark)
     lbl->setStyleSheet("color:#ffffff;");
   else
     lbl->setStyleSheet("color:#000000;");
