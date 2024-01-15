@@ -5,7 +5,6 @@
 #include "MainWindow.h"
 #include "ui_DateSelector.h"
 #include "ui_MainWindow.h"
-#include "ui_Report.h"
 
 extern int fontSize;
 extern MainWindow* mw_one;
@@ -32,11 +31,8 @@ int s_d2 = 0;
 
 void setTableNoItemFlags(QTableWidget* t, int row);
 
-Report::Report(QWidget* parent) : QDialog(parent), ui(new Ui::Report) {
-  ui->setupUi(this);
-
+Report::Report(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
-  this->setModal(true);
 
   m_DateSelector = new DateSelector(this);
 
@@ -104,7 +100,7 @@ void Report::init() {
   }
 }
 
-Report::~Report() { delete ui; }
+Report::~Report() {}
 
 void Report::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
 

@@ -2,7 +2,6 @@
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "ui_Steps.h"
 
 extern MainWindow* mw_one;
 extern QRegularExpression regxNumber;
@@ -12,11 +11,9 @@ extern bool loading;
 extern QString iniFile, iniDir;
 extern void setTableNoItemFlags(QTableWidget* t, int row);
 
-Steps::Steps(QWidget* parent) : QDialog(parent), ui(new Ui::Steps) {
-  ui->setupUi(this);
-  mw_one->set_btnStyle(this);
+Steps::Steps(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
-  setModal(true);
+
   mw_one->ui->lblSingle->adjustSize();
 
   QFont font1;
@@ -35,7 +32,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent), ui(new Ui::Steps) {
   mw_one->ui->editStepLength->setValidator(validator);
 }
 
-Steps::~Steps() { delete ui; }
+Steps::~Steps() {}
 
 void Steps::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event) }
 

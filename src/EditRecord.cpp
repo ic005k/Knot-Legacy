@@ -1,9 +1,8 @@
-#include "src/EditRecord.h"
+#include "EditRecord.h"
 
 #include <QKeyEvent>
 
 #include "MainWindow.h"
-#include "ui_EditRecord.h"
 #include "ui_MainWindow.h"
 extern MainWindow *mw_one;
 extern QTabWidget *tabData;
@@ -18,10 +17,7 @@ QStringList c_list;
 
 CategoryList *m_CategoryList;
 
-EditRecord::EditRecord(QWidget *parent)
-    : QDialog(parent), ui(new Ui::EditRecord) {
-  ui->setupUi(this);
-
+EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
   mw_one->set_btnStyle(this);
 
   m_CategoryList = new CategoryList(this);
@@ -68,8 +64,9 @@ EditRecord::EditRecord(QWidget *parent)
 
   mw_one->ui->hsM->setStyleSheet(mw_one->ui->hsH->styleSheet());
 
-  // mw_one->setLineEditQss(mw_one->ui->editAmount, 0, 1, "#4169E1", "#4169E1");
-  // mw_one->setLineEditQss(mw_one->ui->editCategory, 0, 1, "#4169E1",
+  // mw_one->setLineEditQss(mw_one->ui->editAmount, 0, 1, "#4169E1",
+  // "#4169E1"); mw_one->setLineEditQss(mw_one->ui->editCategory, 0, 1,
+  // "#4169E1",
   // "#4169E1"); mw_one->ui->editDetails->setStyleSheet(
   //    "border-radius:0px;border: 1px groove #4169E1;");
 
@@ -96,7 +93,7 @@ void EditRecord::init() {
   show();
 }
 
-EditRecord::~EditRecord() { delete ui; }
+EditRecord::~EditRecord() {}
 
 void EditRecord::on_btnBack_clicked() { close(); }
 
@@ -235,7 +232,8 @@ void EditRecord::saveCustomDesc() {
     if (isBreak) break;
     c_list.append(m_CategoryList->ui->listWidget->item(i)->text().trimmed());
   }
-  // list = QSet<QString>(list.begin(), list.end()).values(); //IOS无法编译通过
+  // list = QSet<QString>(list.begin(), list.end()).values();
+  // //IOS无法编译通过
   removeDuplicates(&c_list);
 
   for (int i = 0; i < c_list.count(); i++) {

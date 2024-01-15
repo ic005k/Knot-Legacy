@@ -1,27 +1,19 @@
 #include "LoadPic.h"
 
-#include "src/MainWindow.h"
-#include "ui_LoadPic.h"
+#include "MainWindow.h"
 #include "ui_MainWindow.h"
 extern MainWindow* mw_one;
 extern QString picfile;
 
-LoadPic::LoadPic(QWidget* parent) : QDialog(parent), ui(new Ui::LoadPic) {
-  ui->setupUi(this);
-
+LoadPic::LoadPic(QWidget* parent) : QDialog(parent) {
   mw_one->ui->f_ImgFun->setObjectName("myframe");
   mw_one->ui->f_ImgFun->setStyleSheet(
       "QFrame#myframe{border-image:url(:/res/b.png)}");
 
   this->installEventFilter(this);
-
-  this->layout()->setContentsMargins(1, 1, 1, 1);
-  this->layout()->setSpacing(3);
-
-  setModal(true);
 }
 
-LoadPic::~LoadPic() { delete ui; }
+LoadPic::~LoadPic() {}
 
 void LoadPic::initMain(QString imgFile) {
   if (mw_one->isReaderVisible) mw_one->ui->frameReader->hide();

@@ -4,7 +4,6 @@
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "ui_Method.h"
 
 extern MainWindow* mw_one;
 extern QTabWidget* tabData;
@@ -17,10 +16,9 @@ extern QStringList readTextList, htmlFiles, listCategory;
 
 QStringList resultsList;
 
-Method::Method(QWidget* parent) : QDialog(parent), ui(new Ui::Method) {
-  ui->setupUi(this);
+Method::Method(QWidget* parent) : QDialog(parent) {
   mw_one->set_btnStyle(this);
-  setModal(true);
+
   this->installEventFilter(this);
 
   m_widget = new QWidget(mw_one);
@@ -37,7 +35,7 @@ void Method::init() {
   show();
 }
 
-Method::~Method() { delete ui; }
+Method::~Method() {}
 
 QString Method::getRealPathFile(QString strFile) {
   strFile = mw_one->m_Reader->getUriRealPath(strFile);

@@ -4,7 +4,6 @@
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "ui_Reader.h"
 
 extern MainWindow* mw_one;
 extern QString iniFile, iniDir, privateDir;
@@ -19,17 +18,8 @@ int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
 
-dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
-  ui->setupUi(this);
-  this->hide();
-
+dlgReader::dlgReader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
-
-  this->setContentsMargins(0, 0, 0, 0);
-  this->layout()->setContentsMargins(0, 0, 0, 0);
-
-  this->setStyleSheet(
-      "background-image: url(:/res/b.png);border-width:0;border-style:outset;");
 
   mw_one->ui->lblTitle->hide();
   mw_one->ui->frameReaderFun2->hide();
@@ -64,7 +54,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent), ui(new Ui::dlgReader) {
   mw_one->ui->btnPages->setFont(f);
 }
 
-dlgReader::~dlgReader() { delete ui; }
+dlgReader::~dlgReader() {}
 
 bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
