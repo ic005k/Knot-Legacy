@@ -976,7 +976,8 @@ void Todo::reeditText() {
       "QFrame{background-color: rgb(255, 255, 255);color: black; "
       "border-radius:10px; "
       "border:1px solid gray;}");*/
-  frame->setStyleSheet(".QFrame{border:2px solid red;}");
+
+  frame->setStyleSheet(".QFrame{border:2px solid darkred;}");
 
   QVBoxLayout* vbox = new QVBoxLayout;
 

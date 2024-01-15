@@ -3591,7 +3591,7 @@ void MainWindow::init_Theme() {
       "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "
       "border-radius:10px; "
       "border:0px solid gray; } QToolButton:pressed { background-color: "
-      "rgb(220,220,230);}";
+      "rgb(220,220,230); color: black}";
   m_Preferences->ui->btnReStart->setStyleSheet(style);
 }
 
