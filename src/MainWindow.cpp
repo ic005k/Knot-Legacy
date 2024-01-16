@@ -3423,9 +3423,6 @@ void MainWindow::initQW() {
   ui->qwRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/todorecycle.qml")));
 
-  ui->qwMainTab->rootContext()->setContextProperty("mw_one", mw_one);
-  ui->qwMainTab->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/maintab.qml")));
-
   ui->qwSteps->rootContext()->setContextProperty(
       "nStepsThreshold", ui->editStepsThreshold->text().toInt());
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
@@ -3467,6 +3464,11 @@ void MainWindow::initQW() {
   ui->qwNoteRecycle->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwNoteRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/noterecycle.qml")));
+
+  ui->qwMainTab->rootContext()->setContextProperty("maintabHeight",
+                                                   ui->qwMainTab->height());
+  ui->qwMainTab->rootContext()->setContextProperty("mw_one", mw_one);
+  ui->qwMainTab->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/maintab.qml")));
 
   ui->qwMainDate->rootContext()->setContextProperty(
       "isAniEffects", m_Preferences->ui->chkAniEffects->isChecked());
@@ -3656,6 +3658,7 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
   ui->tabWidget->setFixedHeight(ui->tabWidget->tabBar()->height() + 0);
   ui->qwMainTab->setFixedHeight(tabData->tabBar()->height());
+  tabData->hide();
 
   m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(
       m_Method->vsbarStyleSmall);

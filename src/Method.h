@@ -202,6 +202,7 @@ class Method : public QDialog {
   int x, y, w, h;
 
   QWidget *m_widget;
+  void setMainTabCurrentIndex();
 };
 
 #endif  // METHOD_H

@@ -549,6 +549,20 @@ void Method::clickMainDate() {
   gotoEnd(mw_one->ui->qwMainEvent);
   int count = getCountFromQW(mw_one->ui->qwMainEvent);
   setCurrentIndexFromQW(mw_one->ui->qwMainEvent, count - 1);
+
+  setMainTabCurrentIndex();
+}
+
+void Method::setMainTabCurrentIndex() {
+  int tabIndex = tabData->currentIndex();
+  if (tabIndex > 0) {
+    mw_one->setCurrentIndex(tabIndex - 1);
+    mw_one->setCurrentIndex(tabIndex);
+  }
+  if (tabIndex == 0 && mw_one->getCount() > 1) {
+    mw_one->setCurrentIndex(tabIndex + 1);
+    mw_one->setCurrentIndex(tabIndex);
+  }
 }
 
 void Method::clickMainDateData() {
@@ -576,6 +590,8 @@ void Method::clickMainEventData() {
   if (childIndex < 0) return;
 
   mw_one->on_twItemClicked();
+
+  setMainTabCurrentIndex();
 }
 
 void Method::reeditMainEventData() {

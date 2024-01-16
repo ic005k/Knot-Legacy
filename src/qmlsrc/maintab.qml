@@ -155,13 +155,13 @@ Rectangle {
         Rectangle {
             id: listItem
             width: item0.contentWidth + 16
-            height: item0.contentHeight
+            height: maintabHeight - 4
             color: ListView.isCurrentItem ? "lightblue" : getColor()
 
             border.width: isDark ? 0 : 1
             border.color: "lightgray" //"lightsteelblue"
 
-            radius: 0
+            radius: 6
 
             function getItemHeight() {
                 var item0H
@@ -194,19 +194,19 @@ Rectangle {
 
             RowLayout {
 
-                id: idlistElemnet
+                id: myrow
                 height: parent.height
                 width: parent.width
                 spacing: 2
                 Layout.fillWidth: true
 
                 Rectangle {
-                    height: parent.height - 2
+                    height: parent.height
                     width: 6
-                    radius: 2
+                    radius: 6
                     anchors.leftMargin: 1
                     color: "red"
-                    visible: true // item2.text.length ? true : false
+                    visible: true
                     Text {
                         anchors.centerIn: parent
                     }
