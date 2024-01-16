@@ -140,6 +140,9 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  bool isEditItem = false;
+  bool isDelItem = false;
+
   bool isNeedAutoBackup = false;
   QString strLatestModify = tr("None");
 
@@ -263,94 +266,10 @@ class MainWindow : public QMainWindow {
   static void saveTab();
   bool isSlide = false;
   void init_TotalData();
-  void set_Time();
+  void modify_Data();
   void add_Data(QTreeWidget *, QString, QString, QString);
   void del_Data(QTreeWidget *);
   static QTreeWidget *get_tw(int tabIndex);
-  QString btnStyle =
-      "QToolButton {background-color: rgb(236, 236, 236);color: black; "
-      "border-radius:10px; "
-      "border:1px solid gray; } QToolButton:pressed { background-color: "
-      "rgb(220,220,230);}";
-
-  QString btnStyleDark =
-      "QToolButton {background-color: rgb(51, 51, 51);color: white; "
-      "border-radius:10px; "
-      "border:1px solid gray; } QToolButton:pressed { background-color: "
-      "rgb(22,22,23);}";
-
-  QString pushbtnStyle =
-      "QPushButton {background-color: rgb(236, 236, 236);border-radius:10px; "
-      "border:1px solid gray; } QPushButton:pressed { background-color: "
-      "rgb(220,220,230);}";
-  QString listWidgetStyle =
-      "QListWidget::indicator{width:25;height:25;right: 5px;}"
-      "QListView {outline: none;}"
-      "#listWidget::item {background-color: #ffffff;color: #000000;border: "
-      "transparent;border-bottom: 1px solid #dbdbdb;padding: 8px;height: 85;}"
-      "#listWidget::item:hover {background-color: #f5f5f5;}"
-      "#listWidget::item:selected {border-left: 5px solid #777777;}";
-
-  QString setPushButtonQss(
-      QToolButton *btn,                              // 按钮对象
-      int radius = 5,                                // 圆角半径
-      int padding = 8,                               // 间距
-      const QString &normalColor = "#34495E",        // 正常颜色
-      const QString &normalTextColor = "#FFFFFF",    // 文字颜色
-      const QString &hoverColor = "#4E6D8C",         // 悬停颜色
-      const QString &hoverTextColor = "#F0F0F0",     // 悬停文字颜色
-      const QString &pressedColor = "#2D3E50",       // 按下颜色
-      const QString &pressedTextColor = "#B8C6D1");  // 按下文字颜色
-
-  QString vsbarStyle =
-      "QScrollBar:vertical{"  // 垂直滑块整体
-      "width:30px;"
-      "background:#FFFFFF;"   // 背景色
-      "padding-top:25px;"     // 上预留位置（放置向上箭头）
-      "padding-bottom:25px;"  // 下预留位置（放置向下箭头）
-      "padding-left:3px;"     // 左预留位置（美观）
-      "padding-right:3px;"    // 右预留位置（美观）
-      "border-left:1px solid #d7d7d7;}"     // 左分割线
-      "QScrollBar::handle:vertical{"        // 滑块样式
-      "background:#dbdbdb;"                 // 滑块颜色
-      "border-radius:6px;"                  // 边角圆润
-      "min-height:60px;}"                   // 滑块最小高度
-      "QScrollBar::handle:vertical:hover{"  // 鼠标触及滑块样式
-      "background:#d0d0d0;}"                // 滑块颜色
-      "QScrollBar::add-line:vertical{"      // 向下箭头样式
-      "background:url(:/src/down.png) bottom no-repeat;}"
-      "QScrollBar::sub-line:vertical{"  // 向上箭头样式
-      "background:url(:/src/up.png) top no-repeat;}";
-
-  QString vsbarStyleSmall =
-      "QScrollBar:vertical{"  // 垂直滑块整体
-      "width:6px;"
-      "background:rgb(255,255,255);"  // 背景色
-      "padding-top:0px;"              // 上预留位置（放置向上箭头）
-      "padding-bottom:0px;"           // 下预留位置（放置向下箭头）
-      "padding-left:1px;"             // 左预留位置（美观）
-      "padding-right:1px;"            // 右预留位置（美观）
-      "border-left:0px solid #d7d7d7;}"     // 左分割线
-      "QScrollBar::handle:vertical{"        // 滑块样式
-      "background:rgb(202,197,191);"        // 滑块颜色
-      "border-radius:6px;"                  // 边角圆润
-      "min-height:60px;}"                   // 滑块最小高度
-      "QScrollBar::handle:vertical:hover{"  // 鼠标触及滑块样式
-      "background:#d0d0d0;}"                // 滑块颜色
-      "QScrollBar::add-line:vertical{"      // 向下箭头样式
-      "background:url() center no-repeat;}"
-      "QScrollBar::sub-line:vertical{"  // 向上箭头样式
-      "background:url() center no-repeat;}";
-
-  //"QListWidget::item:hover{background-color:#e6e6e6;margin:1px,1px,1px,"
-  //"1px;border-radius:6;"
-  //"color:black}"
-
-  QString listStyleMain =
-      "QListWidget{outline:0px;}"
-      "QListWidget::item:selected{background:rgb(255,0,0); border:0px "
-      "blue;margin:0px,0px,0px,0px;border-radius:5;"
-      "color:white}";
 
   void sort_childItem(QTreeWidgetItem *);
   static QString getFileSize(const qint64 &size, int precision);
@@ -456,7 +375,6 @@ class MainWindow : public QMainWindow {
   void on_actionOneDriveBackupData();
   void on_AddRecord();
   void on_actionReport_triggered();
-  void on_DelRecord();
 
   void on_btnCopy_clicked();
 

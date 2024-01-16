@@ -40,7 +40,8 @@ class Preferences : public QDialog {
   bool isOverReaderFont();
   void setDefaultFont(QString fontFamily);
   QString getDefaultFont();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -63,6 +64,8 @@ class Preferences : public QDialog {
   void on_btnReStart_clicked();
 
   void on_chkDark_clicked(bool checked);
+
+  void on_chkAniEffects_clicked(bool checked);
 
  private:
   QString iniBakFiles = "BakFiles.ini";

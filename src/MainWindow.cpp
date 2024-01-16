@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.35";
+QString ver = "1.1.36";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -1073,6 +1073,7 @@ void MainWindow::add_Data(QTreeWidget *tw, QString strTime, QString strAmount,
   sort_childItem(topItem->child(0));
   tw->setCurrentItem(topItem->child(topItem->childCount() - 1));
 
+  isEditItem = true;
   reloadMain();
 }
 
@@ -1137,6 +1138,7 @@ void MainWindow::del_Data(QTreeWidget *tw) {
         if (topItem->childCount() == 0)
           tw->takeTopLevelItem(tw->topLevelItemCount() - 1);
 
+        isDelItem = true;
         reloadMain();
 
         break;
@@ -1181,18 +1183,15 @@ void MainWindow::on_AddRecord() {
   ui->frameEditRecord->show();
 }
 
-void MainWindow::on_DelRecord() {
-  del_Data((QTreeWidget *)ui->tabWidget->currentWidget());
-}
-
 void MainWindow::set_btnStyle(QObject *parent) {
   QObjectList btnList = getAllToolButton(getAllUIControls(parent));
   for (int i = 0; i < btnList.count(); i++) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
 
     if (btn != ui->btnAddTodo && btn != ui->btnClear)
-      setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB", "#FFFFFF",
-                       "#2483C7", "#A0DAFB");  // #5DACE4 #E5FEFF
+      m_Method->setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB",
+                                 "#FFFFFF", "#2483C7",
+                                 "#A0DAFB");  // #5DACE4 #E5FEFF
   }
 }
 
@@ -1954,7 +1953,7 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
 
   // tw->setUniformRowHeights(false); //对速度可能有影响，数据量大时
   QScrollBar *SB = tw->verticalScrollBar();
-  SB->setStyleSheet(vsbarStyleSmall);
+  SB->setStyleSheet(m_Method->vsbarStyleSmall);
   tw->setStyleSheet(treeStyle);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
@@ -2028,7 +2027,7 @@ void MainWindow::on_twItemClicked() {
   }
 }
 
-void MainWindow::set_Time() {
+void MainWindow::modify_Data() {
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
   QTreeWidgetItem *item = tw->currentItem();
   QTreeWidgetItem *topItem = item->parent();
@@ -2080,8 +2079,12 @@ void MainWindow::set_Time() {
     if (childRow0 - childRow1 > 0) newrow = row - (childRow0 - childRow1);
 
     int maindateIndex = m_Method->getCurrentIndexFromQW(ui->qwMainDate);
+
+    isEditItem = true;
     reloadMain();
+
     m_Method->setCurrentIndexFromQW(ui->qwMainDate, maindateIndex);
+    isEditItem = true;
     m_Method->clickMainDate();
     m_Method->setCurrentIndexFromQW(ui->qwMainEvent, newrow);
   }
@@ -3018,32 +3021,6 @@ QString MainWindow::setLineEditQss(QLineEdit *txt, int radius, int borderWidth,
   return qss;
 }
 
-QString MainWindow::setPushButtonQss(QToolButton *btn, int radius, int padding,
-                                     const QString &normalColor,
-                                     const QString &normalTextColor,
-                                     const QString &hoverColor,
-                                     const QString &hoverTextColor,
-                                     const QString &pressedColor,
-                                     const QString &pressedTextColor) {
-  QStringList list;
-  list.append(QString("QToolButton{border-style:none;padding:%1px;border-"
-                      "radius:%2px;color:%3;background:%4;}")
-                  .arg(padding)
-                  .arg(radius)
-                  .arg(normalTextColor)
-                  .arg(normalColor));
-  list.append(QString("QToolButton:hover{color:%1;background:%2;}")
-                  .arg(hoverTextColor)
-                  .arg(hoverColor));
-  list.append(QString("QToolButton:pressed{color:%1;background:%2;}")
-                  .arg(pressedTextColor)
-                  .arg(pressedColor));
-
-  QString qss = list.join("");
-  btn->setStyleSheet(qss);
-  return qss;
-}
-
 QString MainWindow::setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
                                    const QString &normalColor,
                                    const QString &focusColor) {
@@ -3463,10 +3440,18 @@ void MainWindow::initQW() {
   ui->qwNoteRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/noterecycle.qml")));
 
+  ui->qwMainDate->rootContext()->setContextProperty(
+      "isAniEffects", m_Preferences->ui->chkAniEffects->isChecked());
+  ui->qwMainDate->rootContext()->setContextProperty("maindateWidth",
+                                                    ui->qwMainDate->width());
   ui->qwMainDate->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwMainDate->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/maindate.qml")));
 
+  ui->qwMainEvent->rootContext()->setContextProperty(
+      "isAniEffects", m_Preferences->ui->chkAniEffects->isChecked());
+  ui->qwMainEvent->rootContext()->setContextProperty("maineventWidth",
+                                                     ui->qwMainEvent->width());
   ui->qwMainEvent->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwMainEvent->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/mainevent.qml")));
@@ -3642,7 +3627,8 @@ void MainWindow::init_UIWidget() {
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
   ui->tabWidget->setFixedHeight(ui->tabWidget->tabBar()->height() + 0);
 
-  m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
+  m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(
+      m_Method->vsbarStyleSmall);
 
   loginTime = QDateTime::currentDateTime().toString();
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
@@ -3799,11 +3785,11 @@ void MainWindow::init_UIWidget() {
   // ui->tabCharts->setCornerWidget(ui->frame_cw);
   ui->tabCharts->tabBar()->hide();
   ui->frame_cw->setFixedHeight(tabChart->tabBar()->height());
-  setPushButtonQss(ui->btnSelTab, 5, 3, "#FF0000", "#FFFFFF", "#FF0000",
-                   "#FFFFFF", "#FF5555", "#FFFFFF");
+  m_Method->setPushButtonQss(ui->btnSelTab, 5, 3, "#FF0000", "#FFFFFF",
+                             "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");
   ui->btnChartMonth->setStyleSheet(ui->btnSelTab->styleSheet());
-  setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF", "#455364",
-                   "#FFFFFF", "#555364", "#FFFFFF");
+  m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
+                             "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
@@ -3898,8 +3884,8 @@ void MainWindow::on_btnSelTab_clicked() {
   list->setAlternatingRowColors(false);
   list->setViewMode(QListView::IconMode);
   list->setMovement(QListView::Static);
-  list->setStyleSheet(listStyleMain);
-  list->verticalScrollBar()->setStyleSheet(vsbarStyleSmall);
+  list->setStyleSheet(m_Method->listStyleMain);
+  list->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
   list->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(list, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(list);
@@ -4817,7 +4803,7 @@ void MainWindow::on_btnAdd_clicked() {
 void MainWindow::on_btnDel_clicked() {
   m_Reader->setPdfViewVisible(false);
 
-  on_DelRecord();
+  del_Data((QTreeWidget *)ui->tabWidget->currentWidget());
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
@@ -5065,6 +5051,16 @@ void MainWindow::reloadMainOld() {
 }
 
 void MainWindow::reloadMain() {
+  bool isAniEffects;
+  if (isDelItem || isEditItem)
+    isAniEffects = false;
+  else
+    isAniEffects = m_Preferences->ui->chkAniEffects->isChecked();
+
+  ui->qwMainDate->rootContext()->setContextProperty("isAniEffects",
+                                                    isAniEffects);
+  ui->qwMainDate->rootContext()->setContextProperty("maindateWidth",
+                                                    ui->qwMainDate->width());
   m_Method->clearAllBakList(ui->qwMainDate);
 
   // QFontMetrics fontMetrics(font());
@@ -5579,15 +5575,15 @@ void MainWindow::on_btnModify_clicked() {
 void MainWindow::on_btnChartMonth_clicked() {
   tabChart->setCurrentIndex(0);
   ui->btnChartMonth->setStyleSheet(ui->btnSelTab->styleSheet());
-  setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF", "#455364",
-                   "#FFFFFF", "#555364", "#FFFFFF");
+  m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
+                             "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 }
 
 void MainWindow::on_btnChartDay_clicked() {
   tabChart->setCurrentIndex(1);
   ui->btnChartDay->setStyleSheet(ui->btnSelTab->styleSheet());
-  setPushButtonQss(ui->btnChartMonth, 5, 3, "#455364", "#FFFFFF", "#455364",
-                   "#FFFFFF", "#555364", "#FFFFFF");
+  m_Method->setPushButtonQss(ui->btnChartMonth, 5, 3, "#455364", "#FFFFFF",
+                             "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 }
 
 void MainWindow::on_editStepsThreshold_textChanged(const QString &arg1) {

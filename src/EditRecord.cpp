@@ -103,7 +103,7 @@ void EditRecord::on_btnOk_clicked() {
   mw_one->on_btnBackEditRecord_clicked();
 
   if (!mw_one->isAdd) {
-    mw_one->set_Time();
+    mw_one->modify_Data();
 
     mw_one->isNeedAutoBackup = true;
     mw_one->strLatestModify =

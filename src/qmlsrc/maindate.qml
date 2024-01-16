@@ -464,7 +464,32 @@ Rectangle {
                 from: 80
                 to: 0
             }
+
+            PropertyAnimation on x {
+                easing.type: Easing.Linear
+                running: false
+                from: maindateWidth / 2
+                to: 0
+                duration: 200
+                loops: 1 //Animation.Infinite
+            }
+
+            SequentialAnimation on opacity {
+                //应用于透明度上的序列动画
+                running: isAniEffects
+                loops: 1 //Animation.Infinite //无限循环
+                NumberAnimation {
+                    from: 0
+                    to: 1
+                    duration: 500
+                } //淡出效果
+                PauseAnimation {
+                    duration: 0
+                } //暂停400ms
+            }
         }
+
+
     }
 
     ListView {

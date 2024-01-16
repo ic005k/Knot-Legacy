@@ -19,7 +19,8 @@ SyncInfo::SyncInfo(QWidget* parent) : QDialog(parent), ui(new Ui::SyncInfo) {
 
   setModal(true);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
-  ui->textBrowser->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  ui->textBrowser->verticalScrollBar()->setStyleSheet(
+      mw_one->m_Method->vsbarStyleSmall);
   mw_one->m_Method->setSCrollPro(ui->textBrowser);
   mw_one->set_btnStyle(this);
 }

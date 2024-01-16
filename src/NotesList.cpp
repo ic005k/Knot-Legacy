@@ -41,12 +41,12 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   this->layout()->setContentsMargins(2, 2, 2, 2);
   ui->frame1->hide();
 
-  tw->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  tw->verticalScrollBar()->setStyleSheet(mw_one->m_Method->vsbarStyleSmall);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
   mw_one->m_Method->setSCrollPro(tw);
 
-  twrb->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  twrb->verticalScrollBar()->setStyleSheet(mw_one->m_Method->vsbarStyleSmall);
   twrb->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(twrb, QScroller::LeftMouseButtonGesture);
   mw_one->m_Method->setSCrollPro(twrb);

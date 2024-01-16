@@ -23,13 +23,14 @@ CategoryList::CategoryList(QWidget* parent)
   this->installEventFilter(this);
 
   ui->listWidget->setStyleSheet("#listWidget{ border:None;}");
-  ui->listWidget->verticalScrollBar()->setStyleSheet(mw_one->vsbarStyleSmall);
+  ui->listWidget->verticalScrollBar()->setStyleSheet(
+      mw_one->m_Method->vsbarStyleSmall);
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
   ui->listWidget->setViewMode(QListView::IconMode);
   ui->listWidget->setMovement(QListView::Static);
-  ui->listWidget->setStyleSheet(mw_one->listStyleMain);
+  ui->listWidget->setStyleSheet(mw_one->m_Method->listStyleMain);
   ui->listWidget->setSpacing(12);
   mw_one->m_Method->setSCrollPro(ui->listWidget);
   QFont font;

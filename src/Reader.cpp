@@ -27,7 +27,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->btnForward->hide();
   mw_one->ui->textBrowser->hide();
   mw_one->ui->textBrowser->verticalScrollBar()->setStyleSheet(
-      mw_one->vsbarStyleSmall);
+      mw_one->m_Method->vsbarStyleSmall);
   QPalette pt = palette();
   pt.setBrush(QPalette::Text, Qt::black);
   pt.setBrush(QPalette::Base, QColor(235, 235, 235));

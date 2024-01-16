@@ -493,6 +493,20 @@ void Method::clickNoteList() {
 }
 
 void Method::clickMainDate() {
+  bool isAniEffects;
+  if (mw_one->isDelItem || mw_one->isEditItem)
+    isAniEffects = false;
+  else
+    isAniEffects = mw_one->m_Preferences->ui->chkAniEffects->isChecked();
+  mw_one->isDelItem = false;
+  mw_one->isEditItem = false;
+
+  mw_one->ui->qwMainEvent->rootContext()->setContextProperty("isAniEffects",
+                                                             isAniEffects);
+
+  mw_one->ui->qwMainEvent->rootContext()->setContextProperty(
+      "maineventWidth", mw_one->ui->qwMainEvent->width());
+
   QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   int maindateIndex = getCurrentIndexFromQW(mw_one->ui->qwMainDate);
   int maindateCount = getCountFromQW(mw_one->ui->qwMainDate);
@@ -945,7 +959,7 @@ void Method::showDelMsgBox(QString title, QString info) {
       "{ background-color: "
       "rgb(220,220,230);color: black}");
 
-  btnCancel->setStyleSheet(mw_one->btnStyle);
+  btnCancel->setStyleSheet(mw_one->m_Method->btnStyle);
   btnOk->setFixedHeight(35);
   btnCancel->setFixedHeight(35);
 
@@ -1013,4 +1027,30 @@ void Method::setDark(QString strDark) {
 #endif
 
 #endif
+}
+
+QString Method::setPushButtonQss(QToolButton* btn, int radius, int padding,
+                                 const QString& normalColor,
+                                 const QString& normalTextColor,
+                                 const QString& hoverColor,
+                                 const QString& hoverTextColor,
+                                 const QString& pressedColor,
+                                 const QString& pressedTextColor) {
+  QStringList list;
+  list.append(QString("QToolButton{border-style:none;padding:%1px;border-"
+                      "radius:%2px;color:%3;background:%4;}")
+                  .arg(padding)
+                  .arg(radius)
+                  .arg(normalTextColor)
+                  .arg(normalColor));
+  list.append(QString("QToolButton:hover{color:%1;background:%2;}")
+                  .arg(hoverTextColor)
+                  .arg(hoverColor));
+  list.append(QString("QToolButton:pressed{color:%1;background:%2;}")
+                  .arg(pressedTextColor)
+                  .arg(pressedColor));
+
+  QString qss = list.join("");
+  btn->setStyleSheet(qss);
+  return qss;
 }

@@ -107,6 +107,7 @@ void Preferences::saveOptions() {
   Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
   Reg.setValue("/Options/chkUIFont", ui->chkUIFont->isChecked());
+  Reg.setValue("/Options/chkAniEffects", ui->chkAniEffects->isChecked());
 }
 
 void Preferences::on_chkDebug_clicked() {
@@ -254,6 +255,8 @@ void Preferences::initOptions() {
   ui->chkDark->setChecked(Reg.value("/Options/Dark", false).toBool());
   isDark = ui->chkDark->isChecked();
   ui->chkAutoTime->setChecked(Reg.value("/Options/AutoTimeY", true).toBool());
+  ui->chkAniEffects->setChecked(
+      Reg.value("/Options/chkAniEffects", false).toBool());
 
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   ui->chkDebug->setChecked(debugmode);
@@ -277,6 +280,7 @@ void Preferences::initOptions() {
     mw_one->ui->frame_cw->hide();
 
     ui->chkReaderFont->hide();
+    ui->chkAniEffects->hide();
 
     int s = 120;
     int qs = s - 40;
@@ -463,3 +467,5 @@ void Preferences::getCheckStatusChange() {
   else
     ui->btnReStart->hide();
 }
+
+void Preferences::on_chkAniEffects_clicked(bool checked) {}

@@ -325,7 +325,7 @@ Rectangle {
 
                 Rectangle {
                     id: donebtn
-                    height: parent.height - 2
+                    height: parent.height - 0
                     width: 50
                     color: "red"
                     anchors.right: parent.right

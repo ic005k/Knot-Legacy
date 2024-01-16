@@ -190,6 +190,29 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
+       <widget class="QCheckBox" name="chkAniEffects">
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
+    /* 选择框尺寸 */
+    width:40px;
+    height:40px;
+}
+
+QCheckBox::indicator:unchecked{
+    image:url(:/res/chk0.png);
+}
+
+QCheckBox::indicator:checked{
+    image:url(:/res/chk1.png);
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Animation Effects</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="chkDark">
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
