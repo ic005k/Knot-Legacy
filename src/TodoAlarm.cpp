@@ -5,13 +5,14 @@
 #include "ui_TodoAlarm.h"
 
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern int fontSize;
 extern bool isDark;
 
 TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->setupUi(this);
 
-  QFont font1 = mw_one->m_Method->getNewFont(19);
+  QFont font1 = m_Method->getNewFont(19);
 
   ui->btnBack->setFont(font1);
   ui->btnDelDT->setFont(font1);
@@ -20,7 +21,7 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->btnTomorrow->setFont(font1);
   ui->btnNextWeek->setFont(font1);
 
-  font0 = mw_one->m_Method->getNewFont(16);
+  font0 = m_Method->getNewFont(16);
 
   this->setFont(font0);
   ui->chk1->setFont(font0);
@@ -142,9 +143,9 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
   for (int i = 0; i < lstOfChildren0.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
     if (isDark)
-      w->setStyleSheet(mw_one->m_Method->btnStyleDark);
+      w->setStyleSheet(m_Method->btnStyleDark);
     else
-      w->setStyleSheet(mw_one->m_Method->btnStyle);
+      w->setStyleSheet(m_Method->btnStyle);
 
     QStringList list = w->text().split("\n");
     if (list.at(1) == flag) w->setStyleSheet(btnSelStyle);
@@ -166,9 +167,9 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
       QToolButton* btn = new QToolButton(ui->frameSel);
 
       if (isDark)
-        btn->setStyleSheet(mw_one->m_Method->btnStyleDark);
+        btn->setStyleSheet(m_Method->btnStyleDark);
       else
-        btn->setStyleSheet(mw_one->m_Method->btnStyle);
+        btn->setStyleSheet(m_Method->btnStyle);
       btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
       btn->setObjectName("btn" + QString::number(count));
       QString str = QString::number(count + start);
@@ -214,9 +215,9 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
     QToolButton* btn = new QToolButton(ui->frameSel);
 
     if (isDark)
-      btn->setStyleSheet(mw_one->m_Method->btnStyleDark);
+      btn->setStyleSheet(m_Method->btnStyleDark);
     else
-      btn->setStyleSheet(mw_one->m_Method->btnStyle);
+      btn->setStyleSheet(m_Method->btnStyle);
     btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     btn->setObjectName("btn" + QString::number(count + i));
     QString str = QString::number(count + i + start);
@@ -255,9 +256,9 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
     QToolButton* w = (QToolButton*)lstOfChildren.at(i);
 
     if (!isDark)
-      w->setStyleSheet(mw_one->m_Method->btnStyle);
+      w->setStyleSheet(m_Method->btnStyle);
     else
-      w->setStyleSheet(mw_one->m_Method->btnStyleDark);
+      w->setStyleSheet(m_Method->btnStyleDark);
     if (flag == tr("Year")) {
       if (w->text() == y) {
         w->setStyleSheet(btnSelStyle);
@@ -293,9 +294,9 @@ void TodoAlarm::onBtnClick(QToolButton* btn, QString flag) {
     QToolButton* w = (QToolButton*)lstOfChildren.at(i);
 
     if (isDark)
-      w->setStyleSheet(mw_one->m_Method->btnStyleDark);
+      w->setStyleSheet(m_Method->btnStyleDark);
     else
-      w->setStyleSheet(mw_one->m_Method->btnStyle);
+      w->setStyleSheet(m_Method->btnStyle);
 
     w->setFont(font0);
   }
@@ -337,9 +338,9 @@ void TodoAlarm::addDial(int min, int max, QString flag) {
   for (int i = 0; i < lstOfChildren0.count(); i++) {
     QToolButton* w = (QToolButton*)lstOfChildren0.at(i);
     if (isDark)
-      w->setStyleSheet(mw_one->m_Method->btnStyleDark);
+      w->setStyleSheet(m_Method->btnStyleDark);
     else
-      w->setStyleSheet(mw_one->m_Method->btnStyle);
+      w->setStyleSheet(m_Method->btnStyle);
     QStringList list = w->text().split("\n");
     if (list.at(1) == flag) w->setStyleSheet(btnSelStyle);
   }

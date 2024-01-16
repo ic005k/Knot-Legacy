@@ -4,6 +4,7 @@
 #include "ui_SyncInfo.h"
 
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QString currentMDFile;
 
 SyncInfo::SyncInfo(QWidget* parent) : QDialog(parent), ui(new Ui::SyncInfo) {
@@ -20,15 +21,15 @@ SyncInfo::SyncInfo(QWidget* parent) : QDialog(parent), ui(new Ui::SyncInfo) {
   setModal(true);
   QScroller::grabGesture(ui->textBrowser, QScroller::LeftMouseButtonGesture);
   ui->textBrowser->verticalScrollBar()->setStyleSheet(
-      mw_one->m_Method->vsbarStyleSmall);
-  mw_one->m_Method->setSCrollPro(ui->textBrowser);
+      m_Method->vsbarStyleSmall);
+  m_Method->setSCrollPro(ui->textBrowser);
   mw_one->set_btnStyle(this);
 }
 
 SyncInfo::~SyncInfo() { delete ui; }
 
 void SyncInfo::on_btnClose_clicked() {
-  mw_one->m_Method->init_all_notes();
+  m_Method->init_all_notes();
 
   close();
   ui->textBrowser->clear();

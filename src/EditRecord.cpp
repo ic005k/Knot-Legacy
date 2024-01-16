@@ -5,6 +5,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 extern MainWindow *mw_one;
+extern Method *m_Method;
 extern QTabWidget *tabData;
 extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
@@ -57,8 +58,7 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
   mw_one->ui->editAmount->setReadOnly(true);
 
   mw_one->ui->editCategory->setPlaceholderText(tr("Please enter a category"));
-  mw_one->ui->editCategory->setFixedHeight(mw_one->m_Method->getFontHeight() +
-                                           8);
+  mw_one->ui->editCategory->setFixedHeight(m_Method->getFontHeight() + 8);
 
   lblStyle = mw_one->ui->lblCategory->styleSheet();
 
@@ -70,11 +70,11 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
   // "#4169E1"); mw_one->ui->editDetails->setStyleSheet(
   //    "border-radius:0px;border: 1px groove #4169E1;");
 
-  mw_one->m_Method->qssSlider = mw_one->ui->hsH->styleSheet();
+  m_Method->qssSlider = mw_one->ui->hsH->styleSheet();
 
   QScroller::grabGesture(mw_one->ui->editDetails,
                          QScroller::LeftMouseButtonGesture);
-  mw_one->m_Method->setSCrollPro(mw_one->ui->editDetails);
+  m_Method->setSCrollPro(mw_one->ui->editDetails);
 }
 
 void EditRecord::init() {
@@ -194,10 +194,10 @@ void EditRecord::on_btnCustom_clicked() {
   mw_one->ui->frameCategory->show();
   init_Desc();
   m_CategoryList->ui->listWidget->setCurrentRow(0);
-  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwCategory, 0);
-  mw_one->m_Method->setTypeRenameText();
+  m_Method->setCurrentIndexFromQW(mw_one->ui->qwCategory, 0);
+  m_Method->setTypeRenameText();
 
-  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwCategory);
+  int count = m_Method->getCountFromQW(mw_one->ui->qwCategory);
   mw_one->ui->lblTypeInfo->setText(tr("Total") + " : " +
                                    QString::number(count));
 
@@ -281,7 +281,7 @@ void EditRecord::init_Desc() {
   RegDesc.setIniCodec("utf-8");
 #endif
 
-  mw_one->m_Method->clearAllBakList(mw_one->ui->qwCategory);
+  m_Method->clearAllBakList(mw_one->ui->qwCategory);
 
   c_list.clear();
   m_CategoryList->ui->listWidget->clear();
@@ -295,7 +295,7 @@ void EditRecord::init_Desc() {
     m_CategoryList->ui->listWidget->addItem(item);
     c_list.append(str);
 
-    mw_one->m_Method->addItemToQW(mw_one->ui->qwCategory, str, "", "", "", 0);
+    m_Method->addItemToQW(mw_one->ui->qwCategory, str, "", "", "", 0);
   }
 }
 

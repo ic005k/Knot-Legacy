@@ -25,6 +25,7 @@ int curPos, today, fontSize, red, currentTabIndex;
 int chartMax = 5;
 double yMaxMonth, yMaxDay;
 MainWindow *mw_one;
+Method *m_Method;
 QTabWidget *tabData, *tabChart;
 bool loading, isReadEnd, isReadTWEnd;
 bool isReadEBookEnd = true;
@@ -117,7 +118,7 @@ void MainWindow::importDataDone() {
 
     on_tabWidget_currentChanged(tabData->currentIndex());
 
-    mw_one->m_Method->init_all_notes();
+    m_Method->init_all_notes();
   }
 
   closeProgress();
@@ -135,13 +136,13 @@ void MainWindow::importDataDone() {
 
 SearchThread::SearchThread(QObject *parent) : QThread{parent} {}
 void SearchThread::run() {
-  mw_one->m_Method->startSearch();
+  m_Method->startSearch();
 
   emit isDone();
 }
 
 void MainWindow::searchDone() {
-  mw_one->m_Method->initSearchResults();
+  m_Method->initSearchResults();
   closeProgress();
 }
 
@@ -3295,7 +3296,7 @@ void MainWindow::on_btnNotes_clicked() {
     bool ok = false;
     QString text;
 
-    QInputDialog *idlg = mw_one->m_Method->inputDialog(
+    QInputDialog *idlg = m_Method->inputDialog(
         tr("Please enter your password : "), tr("Password : "), "");
 
     if (QDialog::Accepted == idlg->exec()) {

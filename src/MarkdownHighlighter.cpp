@@ -28,6 +28,7 @@
 #include "MainWindow.h"
 #include "QOwnLanguageData.h"
 extern MainWindow *mw_one;
+extern Method *m_Method;
 extern bool isDark;
 
 // We enable QStringView with Qt 5.15.1

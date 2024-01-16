@@ -5,6 +5,7 @@
 #include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
+extern Method *m_Method;
 
 DateSelector::DateSelector(QWidget *parent)
     : QDialog(parent), ui(new Ui::DateSelector) {
@@ -75,7 +76,7 @@ bool DateSelector::eventFilter(QObject *watch, QEvent *evn) {
 
 void DateSelector::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event)
-  mw_one->m_Method->closeGrayWindows();
+  m_Method->closeGrayWindows();
 }
 
 void DateSelector::init() {
@@ -140,7 +141,7 @@ void DateSelector::init() {
   h = height();
   setGeometry(x, y, w, h);
 
-  mw_one->m_Method->showGrayWindows();
+  m_Method->showGrayWindows();
   show();
 }
 

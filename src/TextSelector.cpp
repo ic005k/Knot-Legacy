@@ -5,12 +5,13 @@
 #include "ui_TextSelector.h"
 
 extern MainWindow *mw_one;
+extern Method *m_Method;
 
 TextSelector::TextSelector(QWidget *parent)
     : QDialog(parent), ui(new Ui::TextSelector) {
   ui->setupUi(this);
 
-  QFont font0 = mw_one->m_Method->getNewFont(19);
+  QFont font0 = m_Method->getNewFont(19);
   QObjectList btnList =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frame));
   for (int i = 0; i < btnList.count(); i++) {

@@ -4,6 +4,7 @@
 #include "ui_MainWindow.h"
 
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QRegularExpression regxNumber;
 extern QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 extern unsigned int num_steps_walk, num_steps_run, num_steps_hop;

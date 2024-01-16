@@ -9,6 +9,7 @@ int highCount;
 QString orgLblStyle;
 
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QString iniFile, iniDir;
 extern bool loading, isBreak, zh_cn, isDark;
 extern int fontSize;
@@ -1005,7 +1006,7 @@ void Todo::reeditText() {
   edit->horizontalScrollBar()->setHidden(true);
   edit->verticalScrollBar()->setStyleSheet(
       mw_one->ui->editDetails->verticalScrollBar()->styleSheet());
-  mw_one->m_Method->setSCrollPro(edit);
+  m_Method->setSCrollPro(edit);
 
   QToolButton* btnCancel = new QToolButton(this);
   QToolButton* btnCopy = new QToolButton(this);
@@ -1034,9 +1035,9 @@ void Todo::reeditText() {
 
   connect(btnCancel, &QToolButton::clicked, [=]() mutable { dlg->close(); });
   connect(dlg, &QDialog::rejected,
-          [=]() mutable { mw_one->m_Method->closeGrayWindows(); });
+          [=]() mutable { m_Method->closeGrayWindows(); });
   connect(dlg, &QDialog::accepted,
-          [=]() mutable { mw_one->m_Method->closeGrayWindows(); });
+          [=]() mutable { m_Method->closeGrayWindows(); });
   connect(btnCopy, &QToolButton::clicked, [=]() mutable {
     edit->selectAll();
     edit->copy();
@@ -1059,7 +1060,7 @@ void Todo::reeditText() {
   y = geometry().y() + (height() - h) / 4;
   dlg->setGeometry(x, y, w, h);
   dlg->setModal(true);
-  mw_one->m_Method->showGrayWindows();
+  m_Method->showGrayWindows();
   dlg->show();
 }
 

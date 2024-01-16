@@ -8,6 +8,7 @@
 
 extern int fontSize;
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
 extern QTabWidget *tabData, *tabChart;
 extern bool isEBook, isReport;
@@ -219,7 +220,7 @@ void Report::updateTable() {
   mw_one->ui->btnCategory->setText(tr("View Category"));
 
   setScrollBarPos(0);
-  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwReport, 0);
+  m_Method->setCurrentIndexFromQW(mw_one->ui->qwReport, 0);
   loadDetailsQml();
 }
 
@@ -371,7 +372,7 @@ void Report::on_btnCategory_clicked() {
     return;
   }
 
-  mw_one->m_Method->clearAllBakList(mw_one->ui->qwViewCate);
+  m_Method->clearAllBakList(mw_one->ui->qwViewCate);
   mw_one->ui->lblViewCate1->setText(mw_one->ui->lblTitle_Report->text());
   mw_one->ui->lblViewCate2->setText(mw_one->ui->lblTotal->text());
 
@@ -404,10 +405,10 @@ void Report::on_btnCategory_clicked() {
 
             QString item1 = str2.split("===").at(0).split("|").at(1);
 
-            mw_one->m_Method->addItemToQW(mw_one->ui->qwViewCate,
-                                          tr("Category") + " : " + item0,
-                                          tr("Percent") + " : " + pre,
-                                          tr("Amount") + " : " + item1, "", 0);
+            m_Method->addItemToQW(mw_one->ui->qwViewCate,
+                                  tr("Category") + " : " + item0,
+                                  tr("Percent") + " : " + pre,
+                                  tr("Amount") + " : " + item1, "", 0);
 
             listCategorySort.removeOne(str1);
 
@@ -417,12 +418,11 @@ void Report::on_btnCategory_clicked() {
       }
     }
 
-    int cate_count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwViewCate);
+    int cate_count = m_Method->getCountFromQW(mw_one->ui->qwViewCate);
     if (cate_count > 0) {
       mw_one->ui->lblViewCate3->setText(tr("View Category") + "  " +
                                         QString::number(cate_count));
-      mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwViewCate,
-                                              indexCategory);
+      m_Method->setCurrentIndexFromQW(mw_one->ui->qwViewCate, indexCategory);
     }
 
     // qDebug() << "listCategorySort=" << listCategorySort.count()
@@ -432,8 +432,8 @@ void Report::on_btnCategory_clicked() {
 }
 
 void Report::on_CateOk() {
-  int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwViewCate);
-  QString str0 = mw_one->m_Method->getText0(mw_one->ui->qwViewCate, index);
+  int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwViewCate);
+  QString str0 = m_Method->getText0(mw_one->ui->qwViewCate, index);
   str0 = str0.replace(tr("Category") + " : ", "").trimmed();
 
   getCategoryData(str0, true);
@@ -445,7 +445,7 @@ void Report::on_CateOk() {
 
 void Report::getCategoryData(QString strCategory, bool appendTable) {
   if (appendTable) {
-    mw_one->m_Method->clearAllBakList(mw_one->ui->qwReportSub);
+    m_Method->clearAllBakList(mw_one->ui->qwReportSub);
   }
 
   int freq = 0;
@@ -485,8 +485,8 @@ void Report::getCategoryData(QString strCategory, bool appendTable) {
           text0 = tr("Date") + " : " + date + "  " + time;
           text1 = tr("Amount") + " : " + amount;
           text2 = str;
-          mw_one->m_Method->addItemToQW(mw_one->ui->qwReportSub, text0, text1,
-                                        text2, text3, 0);
+          m_Method->addItemToQW(mw_one->ui->qwReportSub, text0, text1, text2,
+                                text3, 0);
         }
 
         if (amount.length() > 0) {
@@ -512,8 +512,8 @@ void Report::getCategoryData(QString strCategory, bool appendTable) {
     listD.append(bfb);
   }
 
-  if (mw_one->m_Method->getCountFromQW(mw_one->ui->qwReportSub) > 0)
-    mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwReportSub, 0);
+  if (m_Method->getCountFromQW(mw_one->ui->qwReportSub) > 0)
+    m_Method->setCurrentIndexFromQW(mw_one->ui->qwReportSub, 0);
 }
 
 void setTableNoItemFlags(QTableWidget* t, int row) {
@@ -751,8 +751,8 @@ void Report::loadDetailsQml() {
         if (text3.trimmed().length() > 0) str3 = tr("Details") + " : " + text3;
 
         // appendSteps_xx(text0, text1, text2);
-        mw_one->m_Method->addItemToQW(mw_one->ui->qwReportSub, text0, str1,
-                                      str2, str3, 0);
+        m_Method->addItemToQW(mw_one->ui->qwReportSub, text0, str1, str2, str3,
+                              0);
       }
     }
   }

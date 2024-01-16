@@ -6,6 +6,7 @@
 #include "ui_Notes.h"
 
 extern MainWindow *mw_one;
+extern Method *m_Method;
 extern QString iniFile, iniDir, privateDir, currentMDFile;
 extern bool isAndroid, isIOS, isDark;
 extern int fontSize;
@@ -14,7 +15,7 @@ extern QRegularExpression regxNumber;
 Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
 
-  QFont font0 = mw_one->m_Method->getNewFont(16);
+  QFont font0 = m_Method->getNewFont(16);
   QObjectList btnList =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_ToolBar));
   for (int i = 0; i < btnList.count(); i++) {
@@ -37,7 +38,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->lblCol->setFont(font0);
   ui->lblRow->setFont(font0);
 
-  QFont font1 = mw_one->m_Method->getNewFont(19);
+  QFont font1 = m_Method->getNewFont(19);
   QObjectList btnList1 =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_Panel));
   for (int i = 0; i < btnList1.count(); i++) {
@@ -74,7 +75,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   this->layout()->setContentsMargins(5, 5, 5, 5);
 
   QScroller::grabGesture(ui->editSource, QScroller::LeftMouseButtonGesture);
-  mw_one->m_Method->setSCrollPro(ui->editSource);
+  m_Method->setSCrollPro(ui->editSource);
 
   ui->editSource->setContentsMargins(15, 15, 15, 15);
   ui->editSource->setStyleSheet("border:none");

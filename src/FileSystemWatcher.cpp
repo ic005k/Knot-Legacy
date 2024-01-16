@@ -10,6 +10,7 @@
 
 extern bool ReLoad;
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QVector<QString> openFileList;
 
 FileSystemWatcher* FileSystemWatcher::m_pInstance = NULL;
@@ -62,25 +63,25 @@ void FileSystemWatcher::directoryUpdated(const QString& path) {
   QSet<QString> currentDirSet;
 #if (QT_VERSION <= QT_VERSION_CHECK(5, 9, 9))
   {
-    newDirSet = QSet<QString>::fromList(newEntryList);  //旧
+    newDirSet = QSet<QString>::fromList(newEntryList);  // 旧
   }
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
     newDirSet = QSet<QString>(newEntryList.begin(),
-                              newEntryList.end());  //新
+                              newEntryList.end());  // 新
   }
 #endif
 
 #if (QT_VERSION <= QT_VERSION_CHECK(5, 9, 9))
   {
-    currentDirSet = QSet<QString>::fromList(currEntryList);  //旧
+    currentDirSet = QSet<QString>::fromList(currEntryList);  // 旧
   }
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
     currentDirSet = QSet<QString>(currEntryList.begin(),
-                                  currEntryList.end());  //新
+                                  currEntryList.end());  // 新
   }
 #endif
 

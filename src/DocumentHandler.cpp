@@ -66,6 +66,7 @@
 #include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
+extern Method *m_Method;
 extern QStringList readTextList, htmlFiles;
 extern int htmlIndex;
 extern QString strOpfPath, appName, copyText;

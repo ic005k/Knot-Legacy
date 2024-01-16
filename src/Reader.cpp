@@ -6,6 +6,7 @@
 #include "ui_MainWindow.h"
 
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QString iniFile, iniDir, privateDir;
 extern bool zh_cn, isAndroid, isIOS, isEBook, isReport;
 extern int fontSize;
@@ -27,7 +28,7 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->btnForward->hide();
   mw_one->ui->textBrowser->hide();
   mw_one->ui->textBrowser->verticalScrollBar()->setStyleSheet(
-      mw_one->m_Method->vsbarStyleSmall);
+      m_Method->vsbarStyleSmall);
   QPalette pt = palette();
   pt.setBrush(QPalette::Text, Qt::black);
   pt.setBrush(QPalette::Base, QColor(235, 235, 235));
@@ -75,7 +76,7 @@ void dlgReader::on_btnOpen_clicked() {
   if (!QFileInfo(openfile).exists()) return;
 
 #ifdef Q_OS_ANDROID
-  openfile = mw_one->m_Method->getRealPathFile(openfile);
+  openfile = m_Method->getRealPathFile(openfile);
 #endif
 
   startOpenFile(openfile);
@@ -1264,7 +1265,7 @@ void dlgReader::getReadList() {
   if (bookList.count() == 0) return;
 
   setPdfViewVisible(false);
-  mw_one->m_Method->clearAllBakList(mw_one->ui->qwBookList);
+  m_Method->clearAllBakList(mw_one->ui->qwBookList);
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);
     QStringList listBooks = str.split("|");
@@ -1280,36 +1281,36 @@ void dlgReader::getReadList() {
     } else
       suffix = "none";
 
-    mw_one->m_Method->addItemToQW(mw_one->ui->qwBookList, bookName, bookPath,
-                                  "", suffix, 0);
+    m_Method->addItemToQW(mw_one->ui->qwBookList, bookName, bookPath, "",
+                          suffix, 0);
   }
 
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);
     QStringList listBooks = str.split("|");
     if (listBooks.at(1) == fileName) {
-      mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwBookList, i);
+      m_Method->setCurrentIndexFromQW(mw_one->ui->qwBookList, i);
       break;
     }
   }
 }
 
 void dlgReader::clearAllReaderRecords() {
-  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwBookList);
+  int count = m_Method->getCountFromQW(mw_one->ui->qwBookList);
   if (count == 0) return;
 
   ShowMessage* m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg("Knot", tr("Clear all reading history") + " ? ", 2))
     return;
 
-  mw_one->m_Method->clearAllBakList(mw_one->ui->qwBookList);
+  m_Method->clearAllBakList(mw_one->ui->qwBookList);
   bookList.clear();
   QFile file(privateDir + "reader.ini");
   if (file.exists()) file.remove();
 }
 
 void dlgReader::openBookListItem() {
-  int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwBookList);
+  int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwBookList);
 
   if (index < 0) return;
 

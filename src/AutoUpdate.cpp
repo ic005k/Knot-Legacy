@@ -4,6 +4,7 @@
 #include "ui_AutoUpdate.h"
 
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QString iniDir, privateDir;
 
 AutoUpdate::AutoUpdate(QWidget* parent)
@@ -49,7 +50,7 @@ void AutoUpdate::doProcessReadyRead()  // 读取并写入
 void AutoUpdate::doProcessFinished() {
   myfile->close();
   this->close();
-  mw_one->m_Method->closeGrayWindows();
+  m_Method->closeGrayWindows();
   if (isCancel) return;
 
     // install apk

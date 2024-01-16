@@ -8,6 +8,7 @@
 extern QString iniFile, iniDir, privateDir, defaultFontFamily, customFontFamily,
     infoStr;
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern bool isBreak, isDark;
 extern int fontSize;
 
@@ -15,7 +16,7 @@ Preferences::Preferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::Preferences) {
   ui->setupUi(this);
 
-  QFont font0 = mw_one->m_Method->getNewFont(20);
+  QFont font0 = m_Method->getNewFont(20);
   ui->btnCustomFont->setFont(font0);
   ui->chkUIFont->setFont(font0);
   ui->chkReaderFont->setFont(font0);
@@ -142,7 +143,7 @@ void Preferences::on_btnCustomFont_clicked() {
   if (fileName == "") return;
 
 #ifdef Q_OS_ANDROID
-  fileName = mw_one->m_Method->getRealPathFile(fileName);
+  fileName = m_Method->getRealPathFile(fileName);
 #endif
 
   setFontDemo(fileName);

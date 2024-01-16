@@ -4,6 +4,7 @@
 #include "ui_MainWindow.h"
 #include "ui_RemarksAbout.h"
 extern MainWindow *mw_one;
+extern Method *m_Method;
 extern bool loading, zh_cn;
 extern QString noteText, appName, ver;
 extern int curPos;
@@ -27,7 +28,7 @@ dlgRemarks::dlgRemarks(QWidget *parent)
   ui->textEdit->setStyleSheet("border-radius:0px;border: 1px groove #4169E1;");
 
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
-  mw_one->m_Method->setSCrollPro(ui->textEdit);
+  m_Method->setSCrollPro(ui->textEdit);
 
   ui->lblAbout->adjustSize();
   ui->lblAbout->setWordWrap(true);
@@ -255,7 +256,7 @@ void dlgRemarks::show_download() {
     m_AutoUpdate->setGeometry(mw_one->geometry().x(), y, mw_one->width(),
                               m_AutoUpdate->height());
 
-    mw_one->m_Method->showGrayWindows();
+    m_Method->showGrayWindows();
     m_AutoUpdate->show();
     m_AutoUpdate->startDownload(s_link);
     qDebug() << "start dl..... " << s_link;

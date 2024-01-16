@@ -242,7 +242,6 @@ class MainWindow : public QMainWindow {
   dlgSetText *mydlgSetText;
   NotesList *m_NotesList;
   SyncInfo *m_SyncInfo;
-  Method *m_Method;
 
   File *myfile;
 

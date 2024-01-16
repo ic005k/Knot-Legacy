@@ -4,6 +4,7 @@
 #include "ui_ShowMessage.h"
 
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QString copyText;
 extern bool isDark;
 
@@ -52,7 +53,7 @@ ShowMessage::~ShowMessage() { delete ui; }
 
 void ShowMessage::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event)
-  mw_one->m_Method->closeGrayWindows();
+  m_Method->closeGrayWindows();
 }
 
 bool ShowMessage::eventFilter(QObject* watch, QEvent* evn) {
@@ -103,7 +104,7 @@ void ShowMessage::init() {
   y = this->y() + (this->height() - h) / 2;
   ui->frame->setGeometry(x, y, w, h);
 
-  mw_one->m_Method->showGrayWindows();
+  m_Method->showGrayWindows();
   show();
 }
 

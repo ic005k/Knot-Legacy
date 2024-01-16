@@ -4,6 +4,7 @@
 #include "ui_CategoryList.h"
 #include "ui_MainWindow.h"
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern int fontSize, red;
 extern QTabWidget *tabData, *tabChart;
 
@@ -23,16 +24,15 @@ CategoryList::CategoryList(QWidget* parent)
   this->installEventFilter(this);
 
   ui->listWidget->setStyleSheet("#listWidget{ border:None;}");
-  ui->listWidget->verticalScrollBar()->setStyleSheet(
-      mw_one->m_Method->vsbarStyleSmall);
+  ui->listWidget->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
   ui->listWidget->horizontalScrollBar()->setHidden(true);
   ui->listWidget->setViewMode(QListView::IconMode);
   ui->listWidget->setMovement(QListView::Static);
-  ui->listWidget->setStyleSheet(mw_one->m_Method->listStyleMain);
+  ui->listWidget->setStyleSheet(m_Method->listStyleMain);
   ui->listWidget->setSpacing(12);
-  mw_one->m_Method->setSCrollPro(ui->listWidget);
+  m_Method->setSCrollPro(ui->listWidget);
   QFont font;
   font.setPointSize(fontSize + 3);
   ui->listWidget->setFont(font);
@@ -65,10 +65,10 @@ void CategoryList::on_listWidget_itemClicked(QListWidgetItem* item) {
 }
 
 void CategoryList::on_btnDel_clicked() {
-  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwCategory);
+  int count = m_Method->getCountFromQW(mw_one->ui->qwCategory);
   if (count == 0) return;
 
-  int row = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwCategory);
+  int row = m_Method->getCurrentIndexFromQW(mw_one->ui->qwCategory);
 
   if (row < 0) return;
 
@@ -83,7 +83,7 @@ void CategoryList::on_btnDel_clicked() {
 
     ui->listWidget->takeItem(row);
 
-    mw_one->m_Method->delItemBakList(mw_one->ui->qwCategory, row);
+    m_Method->delItemBakList(mw_one->ui->qwCategory, row);
   }
   mw_one->m_EditRecord->saveCustomDesc();
   if (ui->listWidget->count() > 0)
@@ -91,13 +91,13 @@ void CategoryList::on_btnDel_clicked() {
   else
     ui->editRename->clear();
 
-  count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwCategory);
+  count = m_Method->getCountFromQW(mw_one->ui->qwCategory);
   mw_one->ui->lblTypeInfo->setText(tr("Total") + " : " +
                                    QString::number(count));
 }
 
 void CategoryList::on_btnOk_clicked() {
-  int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwCategory);
+  int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwCategory);
   ui->listWidget->setCurrentRow(index);
 
   setCategoryText();
@@ -122,7 +122,7 @@ void CategoryList::on_listWidget_itemDoubleClicked(QListWidgetItem* item) {
 void CategoryList::on_btnRename_clicked() {
   if (ui->listWidget->count() == 0) return;
 
-  int row = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwCategory);
+  int row = m_Method->getCurrentIndexFromQW(mw_one->ui->qwCategory);
   ui->listWidget->setCurrentRow(row);
 
   QString text = ui->editRename->text().trimmed();
@@ -134,7 +134,7 @@ void CategoryList::on_btnRename_clicked() {
 
     ui->listWidget->insertItem(index, item);
 
-    mw_one->m_Method->modifyItemText0(mw_one->ui->qwCategory, row, text);
+    m_Method->modifyItemText0(mw_one->ui->qwCategory, row, text);
 
     QStringList list;
     for (int i = 0; i < ui->listWidget->count(); i++) {

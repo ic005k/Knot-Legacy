@@ -5,6 +5,7 @@
 #include "ui_NotesList.h"
 
 extern MainWindow *mw_one;
+extern Method *m_Method;
 extern QString iniDir, privateDir, currentMDFile;
 extern bool isAndroid;
 extern int fontSize;
@@ -41,15 +42,15 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   this->layout()->setContentsMargins(2, 2, 2, 2);
   ui->frame1->hide();
 
-  tw->verticalScrollBar()->setStyleSheet(mw_one->m_Method->vsbarStyleSmall);
+  tw->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
-  mw_one->m_Method->setSCrollPro(tw);
+  m_Method->setSCrollPro(tw);
 
-  twrb->verticalScrollBar()->setStyleSheet(mw_one->m_Method->vsbarStyleSmall);
+  twrb->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
   twrb->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(twrb, QScroller::LeftMouseButtonGesture);
-  mw_one->m_Method->setSCrollPro(twrb);
+  m_Method->setSCrollPro(twrb);
 
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
   ui->treeWidget->setColumnHidden(1, true);
@@ -559,8 +560,7 @@ void NotesList::on_btnRestore_clicked() {
     item->setText(1, str1);
     addItem(tw, item);
 
-    mw_one->m_Method->addItemToQW(mw_one->ui->qwNoteList, str0, "", "", str1,
-                                  0);
+    m_Method->addItemToQW(mw_one->ui->qwNoteList, str0, "", "", str1, 0);
 
     curItem->parent()->removeChild(curItem);
   }
@@ -714,31 +714,31 @@ void NotesList::localItem() {
     int topIndex = tw->indexOfTopLevelItem(item);
     setNoteBookCurrentIndex(topIndex);
 
-    mw_one->m_Method->clickNoteBook();
+    m_Method->clickNoteBook();
     setNotesListCurrentIndex(-1);
   } else {
     int topIndex = tw->indexOfTopLevelItem(item->parent());
     int childIndex = tw->currentIndex().row();
     setNoteBookCurrentIndex(topIndex);
-    mw_one->m_Method->clickNoteBook();
+    m_Method->clickNoteBook();
     setNotesListCurrentIndex(childIndex);
   }
 }
 
 QString NotesList::getNoteBookText0(int index) {
-  return mw_one->m_Method->getText0(mw_one->ui->qwNoteBook, index);
+  return m_Method->getText0(mw_one->ui->qwNoteBook, index);
 }
 
 QString NotesList::getNotesListText0(int index) {
-  return mw_one->m_Method->getText0(mw_one->ui->qwNoteList, index);
+  return m_Method->getText0(mw_one->ui->qwNoteList, index);
 }
 
 void NotesList::modifyNoteBookText0(QString text0, int index) {
-  mw_one->m_Method->modifyItemText0(mw_one->ui->qwNoteBook, index, text0);
+  m_Method->modifyItemText0(mw_one->ui->qwNoteBook, index, text0);
 }
 
 void NotesList::modifyNotesListText0(QString text0, int index) {
-  mw_one->m_Method->modifyItemText0(mw_one->ui->qwNoteList, index, text0);
+  m_Method->modifyItemText0(mw_one->ui->qwNoteList, index, text0);
 }
 
 void NotesList::on_btnPrev_clicked() {
@@ -853,8 +853,8 @@ void NotesList::on_actionAdd_NoteBook_triggered() {
   bool ok = false;
   QString text;
 
-  QInputDialog *idlg = mw_one->m_Method->inputDialog(
-      tr("New NoteBook"), tr("New NoteBook Name"), "");
+  QInputDialog *idlg =
+      m_Method->inputDialog(tr("New NoteBook"), tr("New NoteBook Name"), "");
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
@@ -868,14 +868,13 @@ void NotesList::on_actionAdd_NoteBook_triggered() {
   if (ok && !text.isEmpty()) {
     ui->editBook->setText(text);
     on_btnNewNoteBook_clicked();
-    mw_one->m_Method->addItemToQW(mw_one->ui->qwNoteBook, text, "", "", "",
-                                  fontSize);
+    m_Method->addItemToQW(mw_one->ui->qwNoteBook, text, "", "", "", fontSize);
 
     int count = getNoteBookCount();
     setNoteBookCurrentIndex(count - 1);
-    mw_one->m_Method->clickNoteBook();
+    m_Method->clickNoteBook();
     setNotesListCurrentIndex(0);
-    mw_one->m_Method->clickNoteList();
+    m_Method->clickNoteList();
   }
 }
 
@@ -887,7 +886,7 @@ void NotesList::on_actionDel_NoteBook_triggered() {
   if (!m_ShowMsg->showMsg(
           "Knot",
           tr("Whether to remove") + "  " +
-              mw_one->m_Method->getText0(mw_one->ui->qwNoteBook, index) + " ? ",
+              m_Method->getText0(mw_one->ui->qwNoteBook, index) + " ? ",
           2))
     return;
 
@@ -898,10 +897,10 @@ void NotesList::on_actionDel_NoteBook_triggered() {
 
   if (index - 1 >= 0) {
     setNoteBookCurrentIndex(index - 1);
-    mw_one->m_Method->clickNoteBook();
+    m_Method->clickNoteBook();
     if (getNotesListCount() > 0) {
       setNotesListCurrentIndex(0);
-      mw_one->m_Method->clickNoteList();
+      m_Method->clickNoteList();
     }
   }
 
@@ -922,10 +921,9 @@ void NotesList::on_actionRename_NoteBook_triggered() {
   bool ok = false;
   QString text;
 
-  QInputDialog *idlg = mw_one->m_Method->inputDialog(
+  QInputDialog *idlg = m_Method->inputDialog(
       tr("Rename NoteBook"), tr("NoteBook Name"),
-      mw_one->m_Method->getText0(mw_one->ui->qwNoteBook,
-                                 getNoteBookCurrentIndex()));
+      m_Method->getText0(mw_one->ui->qwNoteBook, getNoteBookCurrentIndex()));
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
@@ -941,51 +939,50 @@ void NotesList::on_actionRename_NoteBook_triggered() {
     ui->editName->setText(text);
     on_btnRename_clicked();
 
-    mw_one->m_Method->modifyItemText0(mw_one->ui->qwNoteBook, index, text);
+    m_Method->modifyItemText0(mw_one->ui->qwNoteBook, index, text);
   }
 }
 
 int NotesList::getNoteBookCount() {
-  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwNoteBook);
+  int count = m_Method->getCountFromQW(mw_one->ui->qwNoteBook);
   return count;
 }
 
 int NotesList::getNotesListCount() {
-  int count = mw_one->m_Method->getCountFromQW(mw_one->ui->qwNoteList);
+  int count = m_Method->getCountFromQW(mw_one->ui->qwNoteList);
   return count;
 }
 
 int NotesList::getNoteBookCurrentIndex() {
-  int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteBook);
+  int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteBook);
   return index;
 }
 
 int NotesList::getNotesListCurrentIndex() {
-  int index = mw_one->m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteList);
+  int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteList);
   return index;
 }
 
 void NotesList::setNoteBookCurrentIndex(int index) {
-  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteBook, index);
+  m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteBook, index);
 }
 
 void NotesList::setNotesListCurrentIndex(int index) {
-  mw_one->m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteList, index);
+  m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteList, index);
 }
 
 void NotesList::on_actionMoveUp_NoteBook_triggered() {
   int index = getNoteBookCurrentIndex();
   if (index <= 0) return;
 
-  QString text0 = mw_one->m_Method->getText0(mw_one->ui->qwNoteBook, index);
-  QString text3 = mw_one->m_Method->getText3(mw_one->ui->qwNoteBook, index);
+  QString text0 = m_Method->getText0(mw_one->ui->qwNoteBook, index);
+  QString text3 = m_Method->getText3(mw_one->ui->qwNoteBook, index);
   int oldIndex = index;
   tw->setCurrentItem(tw->topLevelItem(index));
   on_btnUp_clicked();
 
-  mw_one->m_Method->insertItem(mw_one->ui->qwNoteBook, text0, "", "", text3,
-                               index - 1);
-  mw_one->m_Method->delItemBakList(mw_one->ui->qwNoteBook, oldIndex + 1);
+  m_Method->insertItem(mw_one->ui->qwNoteBook, text0, "", "", text3, index - 1);
+  m_Method->delItemBakList(mw_one->ui->qwNoteBook, oldIndex + 1);
   setNoteBookCurrentIndex(oldIndex - 1);
 }
 
@@ -1003,19 +1000,19 @@ void NotesList::on_actionMoveDown_NoteBook_triggered() {
   loadAllNoteBook();
 
   setNoteBookCurrentIndex(oldIndex + 1);
-  mw_one->m_Method->clickNoteBook();
+  m_Method->clickNoteBook();
 }
 
 void NotesList::loadAllNoteBook() {
-  mw_one->m_Method->clearAllBakList(mw_one->ui->qwNoteBook);
-  mw_one->m_Method->clearAllBakList(mw_one->ui->qwNoteList);
+  m_Method->clearAllBakList(mw_one->ui->qwNoteBook);
+  m_Method->clearAllBakList(mw_one->ui->qwNoteList);
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
     QString str = tw->topLevelItem(i)->text(0);
     int sum = tw->topLevelItem(i)->childCount();
     QString strSum = QString::number(sum);
-    mw_one->m_Method->addItemToQW(mw_one->ui->qwNoteBook, str, "", "", strSum,
-                                  fontSize);
+    m_Method->addItemToQW(mw_one->ui->qwNoteBook, str, "", "", strSum,
+                          fontSize);
   }
 }
 
@@ -1045,7 +1042,7 @@ void NotesList::init_NoteBookMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
-  mainMenu->setStyleSheet(mw_one->m_Method->qssMenu);
+  mainMenu->setStyleSheet(m_Method->qssMenu);
 }
 
 void NotesList::on_actionAdd_Note_triggered() {
@@ -1056,7 +1053,7 @@ void NotesList::on_actionAdd_Note_triggered() {
   QString text;
 
   QInputDialog *idlg =
-      mw_one->m_Method->inputDialog(tr("New Note"), tr("New Note Name"), "");
+      m_Method->inputDialog(tr("New Note"), tr("New Note Name"), "");
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
@@ -1075,12 +1072,11 @@ void NotesList::on_actionAdd_Note_triggered() {
     QTreeWidgetItem *childItem = tw->currentItem();
     int childCount = childItem->parent()->childCount();
     QString text3 = childItem->parent()->child(childCount - 1)->text(1);
-    mw_one->m_Method->addItemToQW(mw_one->ui->qwNoteList, text, "", "", text3,
-                                  0);
+    m_Method->addItemToQW(mw_one->ui->qwNoteList, text, "", "", text3, 0);
 
     int count = getNotesListCount();
     setNotesListCurrentIndex(count - 1);
-    mw_one->m_Method->clickNoteList();
+    m_Method->clickNoteList();
   }
 
   setNoteLabel();
@@ -1096,21 +1092,20 @@ void NotesList::on_actionDel_Note_triggered() {
   if (notelistIndex < 0) return;
 
   ShowMessage *m_ShowMsg = new ShowMessage(this);
-  if (!m_ShowMsg->showMsg("Knot",
-                          tr("Whether to remove") + "  " +
-                              mw_one->m_Method->getText0(mw_one->ui->qwNoteList,
-                                                         notelistIndex) +
-                              " ? ",
-                          2))
+  if (!m_ShowMsg->showMsg(
+          "Knot",
+          tr("Whether to remove") + "  " +
+              m_Method->getText0(mw_one->ui->qwNoteList, notelistIndex) + " ? ",
+          2))
     return;
 
   tw->setCurrentItem(tw->topLevelItem(notebookIndex)->child(notelistIndex));
   on_btnDel_clicked();
 
-  mw_one->m_Method->delItemBakList(mw_one->ui->qwNoteList, notelistIndex);
+  m_Method->delItemBakList(mw_one->ui->qwNoteList, notelistIndex);
   if (getNotesListCount() > 0) {
     setNotesListCurrentIndex(notelistIndex - 1);
-    mw_one->m_Method->clickNoteList();
+    m_Method->clickNoteList();
   } else {
   }
 
@@ -1130,7 +1125,7 @@ void NotesList::loadEmptyNote() {
   mw_one->m_Notes->loadMemoQML();
   mw_one->ui->lblNoteName->setText("");
 
-  mw_one->m_Method->saveCurNoteIndex();
+  m_Method->saveCurNoteIndex();
 }
 
 void NotesList::on_actionRename_Note_triggered() {
@@ -1142,10 +1137,9 @@ void NotesList::on_actionRename_Note_triggered() {
   bool ok = false;
   QString text;
 
-  QInputDialog *idlg = mw_one->m_Method->inputDialog(
+  QInputDialog *idlg = m_Method->inputDialog(
       tr("Rename Note"), tr("Note Name"),
-      mw_one->m_Method->getText0(mw_one->ui->qwNoteList,
-                                 getNotesListCurrentIndex()));
+      m_Method->getText0(mw_one->ui->qwNoteList, getNotesListCurrentIndex()));
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
     text = idlg->textValue();
@@ -1160,7 +1154,7 @@ void NotesList::on_actionRename_Note_triggered() {
     ui->editName->setText(text);
     on_btnRename_clicked();
 
-    mw_one->m_Method->modifyItemText0(mw_one->ui->qwNoteList, noteIndex, text);
+    m_Method->modifyItemText0(mw_one->ui->qwNoteList, noteIndex, text);
   }
 }
 
@@ -1173,9 +1167,9 @@ void NotesList::on_actionMoveUp_Note_triggered() {
   tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
   on_btnUp_clicked();
 
-  mw_one->m_Method->clickNoteBook();
+  m_Method->clickNoteBook();
   setNotesListCurrentIndex(indexNote - 1);
-  mw_one->m_Method->saveCurNoteIndex();
+  m_Method->saveCurNoteIndex();
 }
 
 void NotesList::on_actionMoveDown_Note_triggered() {
@@ -1188,9 +1182,9 @@ void NotesList::on_actionMoveDown_Note_triggered() {
   tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
   on_btnDown_clicked();
 
-  mw_one->m_Method->clickNoteBook();
+  m_Method->clickNoteBook();
   setNotesListCurrentIndex(indexNote + 1);
-  mw_one->m_Method->saveCurNoteIndex();
+  m_Method->saveCurNoteIndex();
 }
 
 void NotesList::on_actionImport_Note_triggered() {
@@ -1200,10 +1194,10 @@ void NotesList::on_actionImport_Note_triggered() {
   bool isOk = on_btnImport_clicked();
 
   if (isOk) {
-    mw_one->m_Method->clickNoteBook();
+    m_Method->clickNoteBook();
     setNotesListCurrentIndex(getNotesListCount() - 1);
-    mw_one->m_Method->clickNoteList();
-    mw_one->m_Method->saveCurNoteIndex();
+    m_Method->clickNoteList();
+    m_Method->saveCurNoteIndex();
   }
 }
 
@@ -1254,7 +1248,7 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
-  mainMenu->setStyleSheet(mw_one->m_Method->qssMenu);
+  mainMenu->setStyleSheet(m_Method->qssMenu);
 }
 
 void NotesList::setNoteLabel() {
@@ -1263,5 +1257,5 @@ void NotesList::setNoteLabel() {
   QString notesSum = QString::number(getNotesListCount());
   mw_one->ui->lblNoteList->setText(tr("Note List") + " : " + notesSum);
   int index = getNoteBookCurrentIndex();
-  mw_one->m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index, notesSum);
+  m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index, notesSum);
 }

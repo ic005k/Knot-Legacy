@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 
 extern MainWindow *mw_one;
+extern Method *m_Method;
 extern bool isDark;
 
 RollingBox::RollingBox(QWidget *parent)

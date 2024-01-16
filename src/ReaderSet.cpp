@@ -6,6 +6,7 @@
 
 extern int fontSize;
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QString iniDir, privateDir;
 
 ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {

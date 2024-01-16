@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 extern MainWindow* mw_one;
+extern Method* m_Method;
 extern QString picfile;
 
 LoadPic::LoadPic(QWidget* parent) : QDialog(parent) {

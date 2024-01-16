@@ -14,6 +14,7 @@
 #include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
+extern Method *m_Method;
 extern QString iniFile, iniDir, zipfile;
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern bool isUpData;

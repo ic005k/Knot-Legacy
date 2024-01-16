@@ -959,7 +959,7 @@ void Method::showDelMsgBox(QString title, QString info) {
       "{ background-color: "
       "rgb(220,220,230);color: black}");
 
-  btnCancel->setStyleSheet(mw_one->m_Method->btnStyle);
+  btnCancel->setStyleSheet(btnStyle);
   btnOk->setFixedHeight(35);
   btnCancel->setFixedHeight(35);
 

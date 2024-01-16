@@ -4,6 +4,7 @@
 #include "ui_PrintPDF.h"
 
 extern MainWindow* mw_one;
+extern Method* m_Method;
 
 PrintPDF::PrintPDF(QWidget* parent) : QDialog(parent), ui(new Ui::PrintPDF) {
   ui->setupUi(this);
@@ -16,7 +17,7 @@ PrintPDF::~PrintPDF() { delete ui; }
 
 void PrintPDF::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event)
-  mw_one->m_Method->closeGrayWindows();
+  m_Method->closeGrayWindows();
 }
 
 bool PrintPDF::eventFilter(QObject* watch, QEvent* evn) {
@@ -52,7 +53,7 @@ QString PrintPDF::getItem(QString title, QString lblText, QStringList valueList,
   y = mw_one->geometry().y() + (mw_one->geometry().height() - h) / 2;
   setGeometry(x, y, w, h);
 
-  mw_one->m_Method->showGrayWindows();
+  m_Method->showGrayWindows();
   show();
   while (!isHidden()) QCoreApplication::processEvents();
 

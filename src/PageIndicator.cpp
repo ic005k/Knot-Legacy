@@ -5,6 +5,7 @@
 #include "ui_PageIndicator.h"
 
 extern MainWindow* mw_one;
+extern Method* m_Method;
 
 PageIndicator::PageIndicator(QWidget* parent)
     : QDialog(parent), ui(new Ui::PageIndicator) {

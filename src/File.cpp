@@ -7,10 +7,11 @@
 #include "MainWindow.h"
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
-#include "ui_MainWindow.h"
 #include "ui_CloudBackup.h"
+#include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
+extern Method *m_Method;
 extern QtOneDriveAuthorizationDialog *dialog_;
 
 File::File() { connect(this, SIGNAL(sourceChanged()), this, SLOT(readFile())); }
