@@ -644,6 +644,7 @@ DISTFILES += \
     src/qmlsrc/main.qml \
     src/qmlsrc/maindate.qml \
     src/qmlsrc/mainevent.qml \
+    src/qmlsrc/maintab.qml \
     src/qmlsrc/memo.qml \
     src/qmlsrc/notebook.qml \
     src/qmlsrc/notelist.qml \

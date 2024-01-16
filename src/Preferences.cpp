@@ -52,7 +52,7 @@ Preferences::Preferences(QWidget* parent)
   ui->lblFontPath->adjustSize();
   ui->lblFontPath->setFixedHeight(100);
   ui->lblFontPath->hide();
-  ui->btnCustomFont->setFixedHeight(130);
+
   ui->btnCustomFont->adjustSize();
   ui->btnCustomFont->setStyleSheet(
       "background-color: rgb(255, 255, 255);color:black;");
@@ -469,4 +469,4 @@ void Preferences::getCheckStatusChange() {
     ui->btnReStart->hide();
 }
 
-void Preferences::on_chkAniEffects_clicked(bool checked) {}
+void Preferences::on_chkAniEffects_clicked(bool checked) { Q_UNUSED(checked); }

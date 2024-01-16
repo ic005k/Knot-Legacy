@@ -329,8 +329,7 @@ class MainWindow : public QMainWindow {
   void gotoEnd();
   void gotoIndex(int index);
   void setItemHeight(int h);
-  void addItem(QString text0, QString text1, QString text2, int type,
-               QString topitem, int itemH);
+
   QString getTop(int index);
   QString getText0(int index);
   int getItemType(int index);
@@ -351,8 +350,11 @@ class MainWindow : public QMainWindow {
   bool copyFileToPath(QString sourceDir, QString toDir, bool coverFileIfExist);
 
   void setScrollBarPos(double pos);
-  void reloadMainOld();
+
   void init_Theme();
+
+  void addItem(QString text0, QString text1, QString text2, QString text3,
+               int itemH);
 
  protected:
   void closeEvent(QCloseEvent *event) override;
@@ -362,6 +364,7 @@ class MainWindow : public QMainWindow {
   void resizeEvent(QResizeEvent *event) override;
 
  public slots:
+  void clickMainTab();
   void on_SetReaderFunVisible();
   void updateSteps();
   void newDatas();
