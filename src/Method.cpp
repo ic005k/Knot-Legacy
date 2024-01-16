@@ -49,8 +49,12 @@ QString Method::getRealPathFile(QString strFile) {
     QStringList list = strFile.split(":");
     int count = list.count();
     QString r_file = list.at(count - 1);
-    QString driver = "/storage/emulated/0/";
-    realFile = driver + r_file;
+    QString driver;
+    for (int i = 0; i < 5; i++) {
+      driver = "/storage/emulated/" + QString::number(i) + "/";
+      realFile = driver + r_file;
+      if (QFile(realFile).exists()) break;
+    }
   }
 
   return realFile;

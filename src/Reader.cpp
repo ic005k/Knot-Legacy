@@ -1269,6 +1269,7 @@ void dlgReader::getReadList() {
     QString str = bookList.at(i);
     QStringList listBooks = str.split("|");
     QString bookName = listBooks.at(0);
+    QString bookPath = listBooks.at(1);
     QString suffix;
     if (bookName.toLower().contains(".txt")) {
       suffix = "txt";
@@ -1279,8 +1280,8 @@ void dlgReader::getReadList() {
     } else
       suffix = "none";
 
-    mw_one->m_Method->addItemToQW(mw_one->ui->qwBookList, bookName, "", "",
-                                  suffix, 0);
+    mw_one->m_Method->addItemToQW(mw_one->ui->qwBookList, bookName, bookPath,
+                                  "", suffix, 0);
   }
 
   for (int i = 0; i < bookList.count(); i++) {

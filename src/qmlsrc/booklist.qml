@@ -268,16 +268,17 @@ Rectangle {
 
                     Text {
                         id: item1
-                        Layout.preferredWidth: listItem.width
+                        Layout.preferredWidth: listItem.width - myimg.width
 
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
 
                         width: parent.width
-                        wrapMode: TextArea.WordWrap
+                        wrapMode: TextArea.WrapAnywhere
                         color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         font.bold: false
+                        font.pointSize: fontSize * 0.85
                         text: text1
 
                         leftPadding: 5

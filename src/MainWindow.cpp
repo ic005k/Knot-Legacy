@@ -3477,6 +3477,7 @@ void MainWindow::initQW() {
   ui->qwSelTab->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwSelTab->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/seltab.qml")));
 
+  ui->qwBookList->rootContext()->setContextProperty("fontSize", fontSize);
   ui->qwBookList->rootContext()->setContextProperty("m_Reader", m_Reader);
   ui->qwBookList->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/booklist.qml")));
