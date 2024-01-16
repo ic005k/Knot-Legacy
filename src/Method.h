@@ -175,6 +175,8 @@ class Method : public QDialog {
 
   QString getRealPathFile(QString strFile);
 
+  int getStrWidth(const QString str);
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

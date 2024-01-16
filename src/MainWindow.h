@@ -692,6 +692,10 @@ class MainWindow : public QMainWindow {
 
   void on_editStepsThreshold_textChanged(const QString &arg1);
 
+  void on_btnTabMoveUp_clicked();
+
+  void on_btnTabMoveDown_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
@@ -723,6 +727,8 @@ class MainWindow : public QMainWindow {
   void initQW();
 
   void init_Instance();
+  void updateMainTab();
+  void getMainTabs();
 };
 
 class SaveThread : public QThread {

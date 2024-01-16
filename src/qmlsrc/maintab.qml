@@ -154,7 +154,7 @@ Rectangle {
 
         Rectangle {
             id: listItem
-            width: item0.contentWidth + 16
+            width: item0.contentWidth + 16 < 60 ? 60 : item0.contentWidth + 16
             height: maintabHeight - 4
             color: ListView.isCurrentItem ? "lightblue" : getColor()
 

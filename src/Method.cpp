@@ -123,6 +123,12 @@ int Method::getFontHeight() {
   return nFontHeight;
 }
 
+int Method::getStrWidth(const QString str) {
+  QFontMetrics fontMetrics(font());
+  int nFontWidth = fontMetrics.horizontalAdvance(str, -1);
+  return nFontWidth;
+}
+
 void Method::addItem(QString text_tab, QString text0, QString text1,
                      QString text2, QString text3, int itemH) {
   QQuickItem* root = mw_one->ui->qwSearch->rootObject();

@@ -1844,7 +1844,10 @@ void MainWindow::on_actionRename_triggered() {
 
   if (ok && !text.isEmpty()) {
     ui->tabWidget->setTabText(index, text);
+
     m_Method->modifyItemText0(mw_one->ui->qwMainTab, index, text);
+
+    updateMainTab();
 
     saveTab();
   }
@@ -1916,6 +1919,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
   if (TabCount == 1) {
     QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
     tw->clear();
+    tabData->setTabText(0, tr("Tab") + " 1");
 
     clearAll();
     addItem(tabData->tabText(0), "", "", "", 0);
@@ -3875,9 +3879,7 @@ void MainWindow::selTab() {
   on_btnBackSetTab_clicked();
 }
 
-void MainWindow::on_btnSelTab_clicked() {
-  ui->frameMain->hide();
-  ui->frameSetTab->show();
+void MainWindow::getMainTabs() {
   m_Method->clearAllBakList(ui->qwSelTab);
   int tab_count = tabData->tabBar()->count();
   for (int i = 0; i < tab_count; i++) {
@@ -3890,6 +3892,12 @@ void MainWindow::on_btnSelTab_clicked() {
 
   ui->lblSelTabInfo->setText(tr("Total") + " : " + QString::number(tab_count) +
                              " ( " + QString::number(index + 1) + " ) ");
+}
+
+void MainWindow::on_btnSelTab_clicked() {
+  ui->frameMain->hide();
+  ui->frameSetTab->show();
+  getMainTabs();
 
   return;
 
@@ -5549,4 +5557,35 @@ void MainWindow::on_btnChartDay_clicked() {
 void MainWindow::on_editStepsThreshold_textChanged(const QString &arg1) {
   ui->qwSteps->rootContext()->setContextProperty("nStepsThreshold",
                                                  arg1.toInt());
+}
+
+void MainWindow::on_btnTabMoveUp_clicked() {
+  if (tabData->count() == 0) return;
+  int curIndex = tabData->currentIndex();
+  if (curIndex > 0) {
+    tabData->tabBar()->moveTab(curIndex, curIndex - 1);
+    updateMainTab();
+    saveTab();
+    getMainTabs();
+  }
+}
+
+void MainWindow::on_btnTabMoveDown_clicked() {
+  if (tabData->count() == 0) return;
+  int curIndex = tabData->currentIndex();
+  if (curIndex <= tabData->count() - 2) {
+    tabData->tabBar()->moveTab(curIndex, curIndex + 1);
+    updateMainTab();
+    saveTab();
+    getMainTabs();
+  }
+}
+
+void MainWindow::updateMainTab() {
+  clearAll();
+  for (int i = 0; i < tabData->count(); i++) {
+    QString tabText = tabData->tabText(i);
+    addItem(tabText, "", "", "", 0);
+  }
+  setCurrentIndex(tabData->currentIndex());
 }
