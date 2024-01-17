@@ -734,6 +734,7 @@ void MainWindow::init_ChartWidget() {
   int a1 = -2;
   // Month
   chartMonth = new QChart();
+  ui->qwChartMonth->hide();
   chartview = new QChartView(chartMonth);
   chartview->installEventFilter(this);
   ui->glMonth->addWidget(chartview);
@@ -2565,6 +2566,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameMain->isHidden()) {
+        if (!ui->frame_charts->isHidden()) {
+          on_btnChart_clicked();
+          return true;
+        }
+
         setMini();
         m_Preferences->autoBakData();
 
@@ -3421,6 +3427,9 @@ void MainWindow::init_Sensors() {
 }
 
 void MainWindow::initQW() {
+  ui->qwChartMonth->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/chart_month.qml")));
+
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
   ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3532,6 +3541,7 @@ void MainWindow::init_Theme() {
 
   qDebug() << "red=" << red;
 
+  ui->qwChartMonth->rootContext()->setContextProperty("isDark", isDark);
   ui->qwMainTab->rootContext()->setContextProperty("isDark", isDark);
   ui->qwMainDate->rootContext()->setContextProperty("isDark", isDark);
   ui->qwMainEvent->rootContext()->setContextProperty("isDark", isDark);
@@ -3605,7 +3615,7 @@ void MainWindow::init_Theme() {
 
   QFont font1;
 #ifdef Q_OS_ANDROID
-  font1.setPointSize(12);
+  font1.setPointSize(11);
 #else
   font1.setPointSize(9);
 #endif
