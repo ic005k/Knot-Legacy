@@ -934,7 +934,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>25</height>
+           <height>30</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -4676,6 +4676,9 @@ QRadioButton::indicator:checked {
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_30">
+       <property name="spacing">
+        <number>12</number>
+       </property>
        <item>
         <widget class="QLabel" name="lblSelTabTitle">
          <property name="sizePolicy">

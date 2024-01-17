@@ -388,6 +388,21 @@ Rectangle {
                 from: 80
                 to: 0
             }
+
+            SequentialAnimation on opacity {
+                //应用于透明度上的序列动画
+                running: true // isAniEffects
+                loops: 1 //Animation.Infinite //无限循环
+                NumberAnimation {
+                    from: 0
+                    to: 1
+                    duration: 500
+                } //淡出效果
+                PauseAnimation {
+                    //暂停400ms
+                    duration: 0
+                }
+            }
         }
     }
 

@@ -3658,10 +3658,12 @@ void MainWindow::init_UIWidget() {
 
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();
-  ui->tabWidget->tabBar()->setFixedHeight(nFontHeight * 1.5);
+  int nHeight = nFontHeight * 1.5;
+  ui->tabWidget->tabBar()->setFixedHeight(nHeight);
   ui->tabWidget->setStyleSheet(ui->tabCharts->styleSheet());
   ui->tabWidget->setFixedHeight(ui->tabWidget->tabBar()->height() + 0);
-  ui->qwMainTab->setFixedHeight(tabData->tabBar()->height());
+  if (nHeight <= 36) nHeight = 36;
+  ui->qwMainTab->setFixedHeight(nHeight);
   tabData->hide();
 
   m_Remarks->ui->textEdit->verticalScrollBar()->setStyleSheet(
