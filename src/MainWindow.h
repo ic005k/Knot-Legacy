@@ -696,6 +696,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnTabMoveDown_clicked();
 
+  void on_btnChart_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

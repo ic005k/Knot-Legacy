@@ -708,12 +708,27 @@ void MainWindow::init_Options() {
 }
 
 void MainWindow::init_ChartWidget() {
-  CurrentYear = QString::number(QDate::currentDate().year());
+  ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 2);
+  ui->centralwidget->layout()->setSpacing(1);
+  ui->frame_charts->setContentsMargins(0, 0, 0, 0);
+
+  ui->frame_charts->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->frame_charts->layout()->setSpacing(0);
+  frameChartHeight = 105;
+  ui->frame_charts->setFixedHeight(frameChartHeight);
+  tabChart->setCurrentIndex(0);
 
   ui->glMonth->layout()->setContentsMargins(0, 0, 0, 0);
   ui->glMonth->layout()->setSpacing(0);
   ui->glDay->layout()->setContentsMargins(0, 0, 0, 0);
   ui->glDay->layout()->setSpacing(0);
+
+  ui->frame_charts->hide();
+  ui->btnChartDay->hide();
+  ui->btnChartMonth->hide();
+  ui->rbAmount->hide();
+  ui->rbFreq->hide();
+  ui->rbSteps->hide();
 
   int a0 = 0;
   int a1 = -2;
@@ -2379,7 +2394,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
   if (watch == chartview || watch == chartview1) {
     if (event->type() == QEvent::MouseButtonDblClick) {
-      on_btnZoom_clicked();
+      on_btnChart_clicked();
     }
   }
 
@@ -3147,14 +3162,14 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 
 void MainWindow::on_btnMax_clicked() {
   if (ui->frame_tab->isHidden()) return;
-  if (ui->btnMax->text() == tr("Max")) {
+  if (ui->btnChart->text() == tr("Max")) {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(true);
-    ui->btnMax->setText(tr("Normal"));
-  } else if (ui->btnMax->text() == tr("Normal")) {
+    ui->btnChart->setText(tr("Normal"));
+  } else if (ui->btnChart->text() == tr("Normal")) {
     ui->frame_tab->setMaximumHeight(this->height());
     ui->frame_charts->setHidden(false);
-    ui->btnMax->setText(tr("Max"));
+    ui->btnChart->setText(tr("Max"));
   }
 }
 
@@ -3558,7 +3573,7 @@ void MainWindow::init_Theme() {
     ui->btnTodo->setIcon(QIcon(":/res/todo.png"));
     ui->btnSteps->setIcon(QIcon(":/res/steps.png"));
     ui->btnNotes->setIcon(QIcon(":/res/note.png"));
-    ui->btnMax->setIcon(QIcon(":/res/max.png"));
+    ui->btnChart->setIcon(QIcon(":/res/chart.png"));
 
   } else {
     ui->frameMenu->setStyleSheet("background-color: #19232D;");
@@ -3580,7 +3595,7 @@ void MainWindow::init_Theme() {
     ui->btnTodo->setIcon(QIcon(":/res/todo_l.png"));
     ui->btnSteps->setIcon(QIcon(":/res/steps_l.png"));
     ui->btnNotes->setIcon(QIcon(":/res/note_l.png"));
-    ui->btnMax->setIcon(QIcon(":/res/max_l.png"));
+    ui->btnChart->setIcon(QIcon(":/res/chart_l.png"));
 
     ui->editTodo->setStyleSheet(
         "QTextEdit{background-color: #455364; color: white; border:1px solid "
@@ -3592,7 +3607,11 @@ void MainWindow::init_Theme() {
   }
 
   QFont font1;
+#ifdef Q_OS_ANDROID
   font1.setPointSize(12);
+#else
+  font1.setPointSize(9);
+#endif
   font1.setBold(true);
   chartMonth->setTitleFont(font1);
   chartDay->setTitleFont(font1);
@@ -3620,6 +3639,7 @@ void MainWindow::init_Theme() {
 
 void MainWindow::init_Instance() {
   mw_one = this;
+  CurrentYear = QString::number(QDate::currentDate().year());
 
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
@@ -3717,16 +3737,6 @@ void MainWindow::init_UIWidget() {
 
   ui->editPassword1->setEchoMode(QLineEdit::EchoMode::Password);
   ui->editPassword2->setEchoMode(QLineEdit::EchoMode::Password);
-
-  ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 2);
-  ui->centralwidget->layout()->setSpacing(1);
-  ui->frame_charts->setContentsMargins(0, 0, 0, 0);
-
-  ui->frame_charts->layout()->setContentsMargins(0, 0, 0, 0);
-  ui->frame_charts->layout()->setSpacing(0);
-  frameChartHeight = 150;
-  ui->frame_charts->setFixedHeight(frameChartHeight);
-  tabChart->setCurrentIndex(0);
 
   ui->frame_tab->layout()->setContentsMargins(0, 0, 0, 0);
   ui->frame_tab->setContentsMargins(0, 0, 0, 0);
@@ -3832,7 +3842,7 @@ void MainWindow::init_UIWidget() {
 
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
-  ui->btnMax->setStyleSheet("border:none");
+  ui->btnChart->setStyleSheet("border:none");
   ui->btnReader->setStyleSheet("border:none");
   ui->btnNotes->setStyleSheet("border:none");
   ui->btnAdd->setStyleSheet("border:none");
@@ -3845,7 +3855,7 @@ void MainWindow::init_UIWidget() {
   f.setPointSize(11);
   ui->btnTodo->setFont(f);
   ui->btnSteps->setFont(f);
-  ui->btnMax->setFont(f);
+  ui->btnChart->setFont(f);
   ui->btnReader->setFont(f);
   ui->btnNotes->setFont(f);
 
@@ -5593,4 +5603,29 @@ void MainWindow::updateMainTab() {
     addItem(tabText, "", "", "", 0);
   }
   setCurrentIndex(tabData->currentIndex());
+}
+
+void MainWindow::on_btnChart_clicked() {
+  axisY->setTickCount(13);
+  axisY2->setTickCount(13);
+
+  if (ui->frame_charts->isHidden()) {
+    ui->frame_charts->setMaximumHeight(this->height());
+    ui->frame_tab->hide();
+    ui->frame_charts->show();
+    ui->btnChartDay->show();
+    ui->btnChartMonth->show();
+    ui->rbAmount->show();
+    ui->rbFreq->show();
+    ui->rbSteps->show();
+  } else {
+    ui->frame_charts->setMaximumHeight(0);
+    ui->frame_charts->hide();
+    ui->rbAmount->hide();
+    ui->rbFreq->hide();
+    ui->rbSteps->hide();
+    ui->btnChartDay->hide();
+    ui->btnChartMonth->hide();
+    ui->frame_tab->show();
+  }
 }

@@ -271,7 +271,7 @@ void Preferences::initOptions() {
     mw_one->ui->frame_charts->hide();
     mw_one->ui->frame_tab->hide();
     mw_one->ui->btnSteps->hide();
-    mw_one->ui->btnMax->hide();
+    mw_one->ui->btnChart->hide();
     mw_one->ui->btnReader->hide();
     mw_one->ui->btnAdd->hide();
     mw_one->ui->btnDel->hide();

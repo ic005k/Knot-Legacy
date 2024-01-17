@@ -126,5 +126,7 @@
         <file>res/list_l.png</file>
         <file>res/open_l.png</file>
         <file>res/sum.png</file>
+        <file>res/chart_l.png</file>
+        <file>res/chart.png</file>
     </qresource>
 </RCC>

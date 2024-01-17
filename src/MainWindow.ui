@@ -1687,7 +1687,7 @@ QTabBar::scroller {width:0}
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="btnMax">
+             <widget class="QToolButton" name="btnChart">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1695,7 +1695,7 @@ QTabBar::scroller {width:0}
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Max</string>
+               <string>Chart</string>
               </property>
               <property name="icon">
                <iconset>
