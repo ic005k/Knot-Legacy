@@ -5276,6 +5276,9 @@ void MainWindow::on_btnRestoreTab_clicked() {
   QTreeWidget *tw = init_TreeWidget(twName);
   ui->tabWidget->addTab(tw, tab_name);
 
+  addItem(tab_name, "", "", "", 0);
+  setCurrentIndex(count);
+
   readData(tw);
 
   QFile recycle_file(recycle);

@@ -205,7 +205,7 @@ Rectangle {
                     width: 6
                     radius: 6
                     anchors.leftMargin: 1
-                    color: "red"
+                    color: listItem.ListView.isCurrentItem ? "red" : "gray"
                     visible: true
                     Text {
                         anchors.centerIn: parent
