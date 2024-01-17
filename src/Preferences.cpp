@@ -279,6 +279,7 @@ void Preferences::initOptions() {
     mw_one->ui->btnRemarks->hide();
     mw_one->ui->btnReport->hide();
     mw_one->ui->frame_cw->hide();
+    mw_one->ui->qwMainTab->hide();
 
     ui->chkReaderFont->hide();
     ui->chkAniEffects->hide();

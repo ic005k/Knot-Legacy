@@ -1969,7 +1969,6 @@ QTreeWidget *MainWindow::init_TreeWidget(QString name) {
   tw->header()->setFont(font);
 
   font.setPointSize(fontSize + 1);
-  ui->lblKnot->setFont(font);
 
   tw->setColumnCount(4);
   tw->headerItem()->setText(0, "  " + tr("Date") + "  ");
@@ -3565,8 +3564,6 @@ void MainWindow::init_Theme() {
     ui->btnAddTodo->setIcon(QIcon(":/res/add.png"));
     ui->btnClear->setIcon(QIcon(":/res/clear.svg"));
 
-    ui->btnReport->setIcon(QIcon(":/res/report.png"));
-    ui->btnFind->setIcon(QIcon(":/res/find.png"));
     ui->btnRemarks->setIcon(QIcon(":/res/edit.png"));
 
     ui->btnReader->setIcon(QIcon(":/res/reader.png"));
@@ -3693,8 +3690,6 @@ void MainWindow::init_UIWidget() {
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   isReadEnd = true;
 
-  ui->lblIcon->hide();
-  ui->lblKnot->hide();
   ui->frameReader->hide();
   ui->frameTodo->hide();
   ui->frameTodoRecycle->hide();
@@ -3822,24 +3817,23 @@ void MainWindow::init_UIWidget() {
 
   ui->frame_tab->setMaximumHeight(this->height());
 
-  ui->btnFind->setStyleSheet("border:none");
-  ui->btnMenu->setStyleSheet("border:none");
-  ui->btnRemarks->setStyleSheet("border:none");
-  ui->btnPause->setStyleSheet("border:none");
 #ifdef Q_OS_ANDROID
 #else
   ui->btnPause->hide();
 #endif
 
   // ui->tabCharts->setCornerWidget(ui->frame_cw);
+
   ui->tabCharts->tabBar()->hide();
-  ui->frame_cw->setFixedHeight(tabChart->tabBar()->height());
   m_Method->setPushButtonQss(ui->btnSelTab, 5, 3, "#FF0000", "#FFFFFF",
                              "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");
   ui->btnChartMonth->setStyleSheet(ui->btnSelTab->styleSheet());
   m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
                              "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 
+  ui->btnMenu->setStyleSheet("border:none");
+  ui->btnRemarks->setStyleSheet("border:none");
+  ui->btnPause->setStyleSheet("border:none");
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnChart->setStyleSheet("border:none");
@@ -3847,19 +3841,24 @@ void MainWindow::init_UIWidget() {
   ui->btnNotes->setStyleSheet("border:none");
   ui->btnAdd->setStyleSheet("border:none");
   ui->btnDel->setStyleSheet("border:none");
-  ui->btnReport->setStyleSheet("border:none");
   ui->btnPasteTodo->setStyleSheet("border:none");
   ui->btnSync->setStyleSheet("border:none");
 
+  int nIConFontSize;
+#ifdef Q_OS_ANDROID
+  nIConFontSize = 12;
+#else
+  nIConFontSize = 9;
+#endif
   QFont f = this->font();
-  f.setPointSize(11);
+  f.setPointSize(nIConFontSize);
   ui->btnTodo->setFont(f);
   ui->btnSteps->setFont(f);
   ui->btnChart->setFont(f);
   ui->btnReader->setFont(f);
   ui->btnNotes->setFont(f);
 
-  f.setPointSize(9);
+  f.setPointSize(nIConFontSize + 0);
   ui->btnMenu->setFont(f);
   ui->btnAdd->setFont(f);
   ui->btnDel->setFont(f);
@@ -3875,14 +3874,6 @@ void MainWindow::init_UIWidget() {
   ui->lblTitle->setStyleSheet(lblStyle);
   ui->lblTitle_Report->setStyleSheet(lblStyle);
   ui->lblStats->setStyleSheet(lblStyle);
-
-  ui->lblIcon->setText("");
-  ui->lblIcon->setFixedHeight(22);
-  ui->lblIcon->setFixedWidth(22);
-  ui->lblIcon->setStyleSheet(
-      "QLabel{"
-      "border-image:url(:/res/icon.png) 4 4 4 4 stretch stretch;"
-      "}");
 }
 
 void MainWindow::selTab() {
@@ -5618,6 +5609,9 @@ void MainWindow::on_btnChart_clicked() {
     ui->rbAmount->show();
     ui->rbFreq->show();
     ui->rbSteps->show();
+
+    ui->btnReport->hide();
+    ui->btnFind->hide();
   } else {
     ui->frame_charts->setMaximumHeight(0);
     ui->frame_charts->hide();
@@ -5627,5 +5621,8 @@ void MainWindow::on_btnChart_clicked() {
     ui->btnChartDay->hide();
     ui->btnChartMonth->hide();
     ui->frame_tab->show();
+
+    ui->btnReport->show();
+    ui->btnFind->show();
   }
 }
