@@ -3583,6 +3583,7 @@ void MainWindow::init_Theme() {
     ui->btnChart->setIcon(QIcon(":/res/chart.png"));
     ui->btnFind->setIcon(QIcon(":/res/find.png"));
     ui->btnReport->setIcon(QIcon(":/res/report.png"));
+    ui->btnSelTab->setIcon(QIcon(":/res/tab.png"));
 
   } else {
     ui->frameMenu->setStyleSheet("background-color: #19232D;");
@@ -3605,6 +3606,7 @@ void MainWindow::init_Theme() {
     ui->btnSteps->setIcon(QIcon(":/res/steps_l.png"));
     ui->btnNotes->setIcon(QIcon(":/res/note_l.png"));
     ui->btnChart->setIcon(QIcon(":/res/chart_l.png"));
+    ui->btnSelTab->setIcon(QIcon(":/res/tab_l.png"));
 
     ui->editTodo->setStyleSheet(
         "QTextEdit{background-color: #455364; color: white; border:1px solid "
@@ -3837,9 +3839,8 @@ void MainWindow::init_UIWidget() {
   // ui->tabCharts->setCornerWidget(ui->frame_cw);
 
   ui->tabCharts->tabBar()->hide();
-  m_Method->setPushButtonQss(ui->btnSelTab, 5, 3, "#FF0000", "#FFFFFF",
+  m_Method->setPushButtonQss(ui->btnChartMonth, 5, 3, "#FF0000", "#FFFFFF",
                              "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");
-  ui->btnChartMonth->setStyleSheet(ui->btnSelTab->styleSheet());
   m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
                              "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 
@@ -3857,6 +3858,7 @@ void MainWindow::init_UIWidget() {
   ui->btnSync->setStyleSheet("border:none");
   ui->btnFind->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
+  ui->btnSelTab->setStyleSheet("border:none");
 
   int nIConFontSize;
 #ifdef Q_OS_ANDROID
@@ -5563,14 +5565,16 @@ void MainWindow::on_btnModify_clicked() {
 
 void MainWindow::on_btnChartMonth_clicked() {
   tabChart->setCurrentIndex(0);
-  ui->btnChartMonth->setStyleSheet(ui->btnSelTab->styleSheet());
+  m_Method->setPushButtonQss(ui->btnChartMonth, 5, 3, "#FF0000", "#FFFFFF",
+                             "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");
   m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
                              "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 }
 
 void MainWindow::on_btnChartDay_clicked() {
   tabChart->setCurrentIndex(1);
-  ui->btnChartDay->setStyleSheet(ui->btnSelTab->styleSheet());
+  m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#FF0000", "#FFFFFF",
+                             "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");
   m_Method->setPushButtonQss(ui->btnChartMonth, 5, 3, "#455364", "#FFFFFF",
                              "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 }
@@ -5627,6 +5631,7 @@ void MainWindow::on_btnChart_clicked() {
 
     ui->btnReport->hide();
     ui->btnFind->hide();
+    ui->btnRemarks->hide();
   } else {
     ui->frame_charts->setMaximumHeight(0);
     ui->frame_charts->hide();
@@ -5639,5 +5644,6 @@ void MainWindow::on_btnChart_clicked() {
 
     ui->btnReport->show();
     ui->btnFind->show();
+    ui->btnRemarks->show();
   }
 }
