@@ -234,8 +234,8 @@ void dlgReader::startOpenFile(QString openfile) {
     openFile(ebookFile);
     mw_one->readEBookDone();
 #else
-    mw_one->myReadTWThread->quit();
-    mw_one->myReadTWThread->wait();
+    mw_one->m_ReadTWThread->quit();
+    mw_one->m_ReadTWThread->wait();
 
     mw_one->showProgress();
 

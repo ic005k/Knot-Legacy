@@ -828,9 +828,6 @@ void MainWindow::slotPointHoverd(const QPointF &point, bool state) {
 }
 
 void MainWindow::init_TotalData() {
-  ui->progBar->setHidden(false);
-  ui->progBar->setMaximum(0);
-
   int count = ui->tabWidget->tabBar()->count();
   for (int i = 0; i < count; i++) {
     ui->tabWidget->removeTab(0);
@@ -897,7 +894,13 @@ void MainWindow::init_TotalData() {
   ui->actionDel_Tab->setEnabled(false);
   ui->actionAdd_Tab->setEnabled(false);
   ui->actionView_App_Data->setEnabled(false);
-  myReadTWThread->start();
+
+  if (!initMain) {
+    ui->progBar->setHidden(false);
+    ui->progBar->setMaximum(0);
+  }
+
+  m_ReadTWThread->start();
 }
 
 void MainWindow::readDataInThread(int ExceptIndex) {
@@ -958,8 +961,8 @@ MainWindow::~MainWindow() {
   myReadThread->quit();
   myReadThread->wait();
 
-  myReadTWThread->quit();
-  myReadTWThread->wait();
+  m_ReadTWThread->quit();
+  m_ReadTWThread->wait();
 
   myReadEBookThread->quit();
   myReadEBookThread->wait();
@@ -3783,8 +3786,8 @@ void MainWindow::init_UIWidget() {
   connect(myReadEBookThread, &ReadEBookThread::isDone, this,
           &MainWindow::readEBookDone);
 
-  myReadTWThread = new ReadTWThread();
-  connect(myReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
+  m_ReadTWThread = new ReadTWThread();
+  connect(m_ReadTWThread, &ReadTWThread::isDone, this, &MainWindow::readTWDone);
 
   myReadThread = new ReadThread();
   connect(myReadThread, &ReadThread::isDone, this, &MainWindow::readChartDone);

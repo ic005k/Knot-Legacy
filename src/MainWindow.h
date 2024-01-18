@@ -216,7 +216,7 @@ class MainWindow : public QMainWindow {
   static void get_Today(QTreeWidget *);
   SaveThread *mySaveThread;
   ReadThread *myReadThread;
-  ReadTWThread *myReadTWThread;
+  ReadTWThread *m_ReadTWThread;
   ReadEBookThread *myReadEBookThread;
   BakDataThread *myBakDataThread;
   ImportDataThread *myImportDataThread;
