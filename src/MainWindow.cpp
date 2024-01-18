@@ -3581,6 +3581,8 @@ void MainWindow::init_Theme() {
     ui->btnSteps->setIcon(QIcon(":/res/steps.png"));
     ui->btnNotes->setIcon(QIcon(":/res/note.png"));
     ui->btnChart->setIcon(QIcon(":/res/chart.png"));
+    ui->btnFind->setIcon(QIcon(":/res/find.png"));
+    ui->btnReport->setIcon(QIcon(":/res/report.png"));
 
   } else {
     ui->frameMenu->setStyleSheet("background-color: #19232D;");
@@ -3853,6 +3855,8 @@ void MainWindow::init_UIWidget() {
   ui->btnDel->setStyleSheet("border:none");
   ui->btnPasteTodo->setStyleSheet("border:none");
   ui->btnSync->setStyleSheet("border:none");
+  ui->btnFind->setStyleSheet("border:none");
+  ui->btnReport->setStyleSheet("border:none");
 
   int nIConFontSize;
 #ifdef Q_OS_ANDROID
@@ -3867,6 +3871,7 @@ void MainWindow::init_UIWidget() {
   ui->btnChart->setFont(f);
   ui->btnReader->setFont(f);
   ui->btnNotes->setFont(f);
+  ui->btnSelTab->setFont(f);
 
   f.setPointSize(nIConFontSize + 0);
   ui->btnMenu->setFont(f);
