@@ -1218,9 +1218,20 @@ void MainWindow::set_btnStyle(QObject *parent) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
 
     if (btn != ui->btnAddTodo && btn != ui->btnClear)
-      m_Method->setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB",
+      m_Method->setToolButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB",
                                  "#FFFFFF", "#2483C7",
                                  "#A0DAFB");  // #5DACE4 #E5FEFF
+  }
+}
+
+void MainWindow::set_PushButtonStyle(QObject *parent) {
+  QObjectList btnList = getAllPushButton(getAllUIControls(parent));
+  for (int i = 0; i < btnList.count(); i++) {
+    QPushButton *btn = (QPushButton *)btnList.at(i);
+
+    m_Method->setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB",
+                               "#FFFFFF", "#2483C7",
+                               "#A0DAFB");  // #5DACE4 #E5FEFF
   }
 }
 
@@ -1244,6 +1255,16 @@ QObjectList MainWindow::getAllToolButton(QObjectList lstUIControls) {
   return lst;
 }
 
+QObjectList MainWindow::getAllPushButton(QObjectList lstUIControls) {
+  QObjectList lst;
+  foreach (QObject *obj, lstUIControls) {
+    if (obj->metaObject()->className() == QStringLiteral("QPushButton")) {
+      lst.append(obj);
+    }
+  }
+  return lst;
+}
+
 QObjectList MainWindow::getAllUIControls(QObject *parent) {
   QObjectList lstOfChildren, lstTemp;
   if (parent) {
@@ -1261,6 +1282,7 @@ QObjectList MainWindow::getAllUIControls(QObject *parent) {
       lstOfChildren.append(lst);
     }
   }
+
   return lstOfChildren;
 }
 
@@ -3842,9 +3864,9 @@ void MainWindow::init_UIWidget() {
   // ui->tabCharts->setCornerWidget(ui->frame_cw);
 
   ui->tabCharts->tabBar()->hide();
-  m_Method->setPushButtonQss(ui->btnChartMonth, 5, 3, "#FF0000", "#FFFFFF",
+  m_Method->setToolButtonQss(ui->btnChartMonth, 5, 3, "#FF0000", "#FFFFFF",
                              "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");
-  m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
+  m_Method->setToolButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
                              "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 
   ui->btnMenu->setStyleSheet("border:none");
@@ -5569,18 +5591,18 @@ void MainWindow::on_btnModify_clicked() {
 void MainWindow::on_btnChartMonth_clicked() {
   isTabChanged = true;
   tabChart->setCurrentIndex(0);
-  m_Method->setPushButtonQss(ui->btnChartMonth, 5, 3, "#FF0000", "#FFFFFF",
+  m_Method->setToolButtonQss(ui->btnChartMonth, 5, 3, "#FF0000", "#FFFFFF",
                              "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");
-  m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
+  m_Method->setToolButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
                              "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 }
 
 void MainWindow::on_btnChartDay_clicked() {
   isTabChanged = true;
   tabChart->setCurrentIndex(1);
-  m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#FF0000", "#FFFFFF",
+  m_Method->setToolButtonQss(ui->btnChartDay, 5, 3, "#FF0000", "#FFFFFF",
                              "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");
-  m_Method->setPushButtonQss(ui->btnChartMonth, 5, 3, "#455364", "#FFFFFF",
+  m_Method->setToolButtonQss(ui->btnChartMonth, 5, 3, "#455364", "#FFFFFF",
                              "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 }
 

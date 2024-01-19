@@ -9,8 +9,10 @@ extern Method* m_Method;
 PrintPDF::PrintPDF(QWidget* parent) : QDialog(parent), ui(new Ui::PrintPDF) {
   ui->setupUi(this);
   setWindowFlag(Qt::FramelessWindowHint);
-  QString style = "QDialog{border-radius:0px;border:2px solid darkred;}";
+  QString style = "QDialog{border-radius:0px;border:0px solid darkred;}";
   this->setStyleSheet(style);
+
+  mw_one->set_btnStyle(this);
 }
 
 PrintPDF::~PrintPDF() { delete ui; }

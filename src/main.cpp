@@ -155,14 +155,16 @@ int main(int argc, char* argv[]) {
   if (!f_theme.exists()) {
     qDebug() << "Unable to set stylesheet, file not found";
   } else {
-    f_theme.open(QFile::ReadOnly | QFile::Text);
-    QTextStream ts(&f_theme);
-    QString qssAll = ts.readAll();
-    qssAll = qssAll.replace("QSlider", "CancelQSlider");
-    qssAll = qssAll.replace("width: 16px;", "width: 8px;");
-    qssAll = qssAll.replace("margin: 16px 2px 16px 2px;",
-                            "margin: 1px 2px 1px 2px;");
-    app.setStyleSheet(qssAll);
+    if (isDark) {
+      f_theme.open(QFile::ReadOnly | QFile::Text);
+      QTextStream ts(&f_theme);
+      QString qssAll = ts.readAll();
+      qssAll = qssAll.replace("QSlider", "CancelQSlider");
+      qssAll = qssAll.replace("width: 16px;", "width: 8px;");
+      qssAll = qssAll.replace("margin: 16px 2px 16px 2px;",
+                              "margin: 1px 2px 1px 2px;");
+      app.setStyleSheet(qssAll);
+    }
   }
 
   // Set Font

@@ -356,7 +356,8 @@ class MainWindow : public QMainWindow {
   void addItem(QString text0, QString text1, QString text2, QString text3,
                int itemH);
 
- protected:
+  void set_PushButtonStyle(QObject *parent);
+  protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;
@@ -731,6 +732,7 @@ class MainWindow : public QMainWindow {
   void init_Instance();
   void updateMainTab();
   void getMainTabs();
+  QObjectList getAllPushButton(QObjectList lstUIControls);
 };
 
 class SaveThread : public QThread {

@@ -75,6 +75,8 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
   QScroller::grabGesture(mw_one->ui->editDetails,
                          QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(mw_one->ui->editDetails);
+  mw_one->ui->editDetails->verticalScrollBar()->setStyleSheet(
+      m_Method->vsbarStyleSmall);
 }
 
 void EditRecord::init() {

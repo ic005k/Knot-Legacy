@@ -87,7 +87,7 @@ QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
   QInputDialog* idlg = new QInputDialog(this);
   idlg->hide();
   idlg->setWindowFlag(Qt::FramelessWindowHint);
-  QString style1 = "QDialog{border-radius:px;border:2px solid darkred;}";
+  QString style1 = "QDialog{border-radius:px;border:0px solid darkred;}";
   idlg->setStyleSheet(style1);
   idlg->setOkButtonText(tr("Ok"));
   idlg->setCancelButtonText(tr("Cancel"));
@@ -96,6 +96,7 @@ QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
   idlg->setTextValue(defaultValue);
   idlg->setLabelText(lblEdit);
   showGrayWindows();
+
   idlg->show();
   idlg->setGeometry(
       mw_one->geometry().x() + (mw_one->geometry().width() - idlg->width()) / 2,
@@ -1051,7 +1052,33 @@ void Method::setDark(QString strDark) {
 #endif
 }
 
-QString Method::setPushButtonQss(QToolButton* btn, int radius, int padding,
+QString Method::setToolButtonQss(QToolButton* btn, int radius, int padding,
+                                 const QString& normalColor,
+                                 const QString& normalTextColor,
+                                 const QString& hoverColor,
+                                 const QString& hoverTextColor,
+                                 const QString& pressedColor,
+                                 const QString& pressedTextColor) {
+  QStringList list;
+  list.append(QString("QToolButton{border-style:none;padding:%1px;border-"
+                      "radius:%2px;color:%3;background:%4;}")
+                  .arg(padding)
+                  .arg(radius)
+                  .arg(normalTextColor)
+                  .arg(normalColor));
+  list.append(QString("QToolButton:hover{color:%1;background:%2;}")
+                  .arg(hoverTextColor)
+                  .arg(hoverColor));
+  list.append(QString("QToolButton:pressed{color:%1;background:%2;}")
+                  .arg(pressedTextColor)
+                  .arg(pressedColor));
+
+  QString qss = list.join("");
+  btn->setStyleSheet(qss);
+  return qss;
+}
+
+QString Method::setPushButtonQss(QPushButton* btn, int radius, int padding,
                                  const QString& normalColor,
                                  const QString& normalTextColor,
                                  const QString& hoverColor,

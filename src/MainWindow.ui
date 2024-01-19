@@ -547,6 +547,9 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_34">
        <item>
         <widget class="QFrame" name="frameMenu">
@@ -1063,6 +1066,9 @@
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
@@ -5682,7 +5688,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">

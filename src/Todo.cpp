@@ -974,19 +974,12 @@ void Todo::reeditText() {
   QDialog* dlg = new QDialog(this);
   QVBoxLayout* vbox0 = new QVBoxLayout;
   dlg->setLayout(vbox0);
+  vbox0->setContentsMargins(5, 5, 5, 5);
   dlg->setModal(true);
   dlg->setWindowFlag(Qt::FramelessWindowHint);
-  dlg->setAttribute(Qt::WA_TranslucentBackground);
 
   QFrame* frame = new QFrame(this);
   vbox0->addWidget(frame);
-
-  /*frame->setStyleSheet(
-      "QFrame{background-color: rgb(255, 255, 255);color: black; "
-      "border-radius:10px; "
-      "border:1px solid gray;}");*/
-
-  frame->setStyleSheet(".QFrame{border:2px solid darkred;}");
 
   QVBoxLayout* vbox = new QVBoxLayout;
 
@@ -1070,6 +1063,7 @@ void Todo::reeditText() {
   dlg->setGeometry(x, y, w, h);
   dlg->setModal(true);
   m_Method->showGrayWindows();
+  mw_one->set_btnStyle(dlg);
   dlg->show();
 }
 

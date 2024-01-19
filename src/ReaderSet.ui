@@ -96,7 +96,7 @@ QSlider::sub-page:vertical
 }
 QSlider::add-page:vertical
 {
-	background-color: rgb(155,155,155);
+	background-color: rgb(255,255,255);
 	width: 10px; 
 	border-radius: 2px; 
 }
