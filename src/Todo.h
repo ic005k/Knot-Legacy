@@ -83,8 +83,8 @@ class Todo : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  public:
-  void on_btnOK_clicked();
-  void on_btnCancel_clicked();
+  void on_SetAlarm();
+  void on_DelAlarm();
   void on_btnAdd_clicked();
 
   void on_btnHigh_clicked();

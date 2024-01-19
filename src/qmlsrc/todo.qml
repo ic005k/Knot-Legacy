@@ -344,7 +344,7 @@ Rectangle {
                             view.model.remove(index)
                             m_Todo.refreshTableLists()
                             m_Todo.refreshAlarm()
-                            console.log("mouse isclick")
+                            console.log("Done isclick")
                         }
                     }
                 }

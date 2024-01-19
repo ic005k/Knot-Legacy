@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.37";
+QString ver = "1.1.38";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -5567,6 +5567,7 @@ void MainWindow::on_btnModify_clicked() {
 }
 
 void MainWindow::on_btnChartMonth_clicked() {
+  isTabChanged = true;
   tabChart->setCurrentIndex(0);
   m_Method->setPushButtonQss(ui->btnChartMonth, 5, 3, "#FF0000", "#FFFFFF",
                              "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");
@@ -5575,6 +5576,7 @@ void MainWindow::on_btnChartMonth_clicked() {
 }
 
 void MainWindow::on_btnChartDay_clicked() {
+  isTabChanged = true;
   tabChart->setCurrentIndex(1);
   m_Method->setPushButtonQss(ui->btnChartDay, 5, 3, "#FF0000", "#FFFFFF",
                              "#FF0000", "#FFFFFF", "#FF5555", "#FFFFFF");

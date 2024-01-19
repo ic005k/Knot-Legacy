@@ -143,6 +143,7 @@ void Todo::on_btnAdd_clicked() {
   mw_one->ui->editTodo->setText("");
   refreshTableLists();
   isNeedSave = true;
+  saveTodo();
 }
 
 int Todo::getEditTextHeight(QTextEdit* edit) {
@@ -184,6 +185,7 @@ void Todo::on_btnHigh_clicked() {
 
   refreshAlarm();
   isNeedSave = true;
+  saveTodo();
 }
 
 void Todo::on_btnLow_clicked() {
@@ -203,9 +205,10 @@ void Todo::on_btnLow_clicked() {
   setCurrentIndex(getCount() - 1);
 
   isNeedSave = true;
+  saveTodo();
 }
 
-void Todo::on_btnOK_clicked() {
+void Todo::on_SetAlarm() {
   int row = getCurrentIndex();
   if (row < 0) return;
   QString strTodoText = getItemTodoText(row);
@@ -249,6 +252,7 @@ void Todo::on_btnOK_clicked() {
   refreshTableLists();
   refreshAlarm();
   isNeedSave = true;
+  saveTodo();
 }
 
 bool Todo::isWeekValid(QString lblDateTime, QString strDate) {
@@ -424,7 +428,7 @@ void Todo::on_btnSetTime_clicked() {
   mw_one->m_TodoAlarm->show();
 }
 
-void Todo::on_btnCancel_clicked() {
+void Todo::on_DelAlarm() {
   int row = getCurrentIndex();
   if (row < 0) return;
 
@@ -439,6 +443,7 @@ void Todo::on_btnCancel_clicked() {
   refreshTableLists();
   refreshAlarm();
   isNeedSave = true;
+  saveTodo();
 }
 
 void Todo::startTimerAlarm(QString text) {
@@ -520,6 +525,7 @@ void Todo::on_btnClear_clicked() {
   clearAllRecycle();
 
   isNeedSave = true;
+  saveTodo();
 }
 
 void Todo::on_btnRestore_clicked() {
@@ -536,6 +542,7 @@ void Todo::on_btnRestore_clicked() {
   setCurrentIndex(getCount() - 1);
 
   isNeedSave = true;
+  saveTodo();
 }
 
 void Todo::on_btnDel_clicked() {
@@ -544,6 +551,7 @@ void Todo::on_btnDel_clicked() {
   delItemRecycle(row);
 
   isNeedSave = true;
+  saveTodo();
 }
 
 void Todo::refreshTableLists() {
@@ -1050,6 +1058,7 @@ void Todo::reeditText() {
     insertItem(strTime, type, edit->toPlainText().trimmed(), row);
     setCurrentIndex(row);
     isNeedSave = true;
+    saveTodo();
     dlg->close();
   });
 
@@ -1073,4 +1082,5 @@ void Todo::addToRecycle() {
   insertRecycle(doneTime, 0, strTodoText, 0);
 
   isNeedSave = true;
+  saveTodo();
 }
