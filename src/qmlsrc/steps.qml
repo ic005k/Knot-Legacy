@@ -5,7 +5,7 @@ import Qt.labs.qmlmodels 1.0
 Rectangle {
     width: myW
 
-    color: isDark ? "#455364" : "#666666"
+    color: isDark ? "#455364" : "white"
 
     function appendTableRow(Date, Steps, KM) {
         tableModel.appendRow({
@@ -74,7 +74,7 @@ Rectangle {
                     height: header.height
                     color: isDark ? "#3498DB" : "#3498DB"
                     border.width: 1
-                    border.color: isDark ? "#19232D" : "#848484"
+                    border.color: isDark ? "#19232D" : "#F3F3F3"
                     Text {
                         text: modelData
                         anchors.centerIn: parent
@@ -104,7 +104,7 @@ Rectangle {
 
             visible: tableView.contentHeight > tableView.height //tableModel.rowCount > 15
             background: Rectangle {
-                color: isDark ? "#455364" : "#666666"
+                color: isDark ? "#455364" : "lightgray"
             }
 
             // Always show
@@ -134,18 +134,18 @@ Rectangle {
         }
         delegate: Rectangle {
             color: getSteps(
-                       row) >= nStepsThreshold ? "#FF6A6A" : (isDark ? "#455364" : "#666666")
+                       row) >= nStepsThreshold ? "#FF6A6A" : (isDark ? "#455364" : "lightgray")
             implicitWidth: header.width / 3
             implicitHeight: mytext.contentHeight + 6
             border.width: 1
-            border.color: isDark ? "#19232D" : "#848484"
+            border.color: isDark ? "#19232D" : "#F3F3F3"
 
             Text {
                 id: mytext
                 text: display
                 anchors.centerIn: parent
                 //font.pointSize: 12
-                color: isDark ? "white" : "white"
+                color: isDark ? "white" : "black"
             }
         }
     }
