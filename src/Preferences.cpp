@@ -257,8 +257,7 @@ void Preferences::initOptions() {
   isDark = ui->chkDark->isChecked();
   ui->chkAutoTime->setChecked(Reg.value("/Options/AutoTimeY", true).toBool());
   ui->chkAniEffects->setChecked(
-      Reg.value("/Options/chkAniEffects", false).toBool());
-
+      Reg.value("/Options/chkAniEffects", true).toBool());
   bool debugmode = Reg.value("/Options/Debug", false).toBool();
   ui->chkDebug->setChecked(debugmode);
   on_chkDebug_clicked();
