@@ -4285,11 +4285,13 @@ void MainWindow::stopJavaTimer() {
 #ifdef Q_OS_ANDROID
 static void JavaNotify_0() {
   mw_one->m_SyncInfo->runSync("");
+
   // qDebug() << "C++ JavaNotify_0";
 }
 
 static void JavaNotify_1() {
-  mw_one->newDatas();
+  mw_one->m_Preferences->autoBakData();
+
   // qDebug() << "C++ JavaNotify_1";
 }
 
@@ -4298,12 +4300,14 @@ static void JavaNotify_2() {
     // When the screen lights up.
     mw_one->updateHardSensorSteps();
   }
+
   qDebug() << "C++ JavaNotify_2";
 }
 
 static void JavaNotify_3() {
   mw_one->alertWindowsCount++;
   mw_one->m_Todo->refreshAlarm();
+
   qDebug() << "C++ JavaNotify_3";
 }
 

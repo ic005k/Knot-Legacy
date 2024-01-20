@@ -1677,7 +1677,7 @@ QTabBar::scroller {width:0}
                </size>
               </property>
               <property name="text">
-               <string>Sel Tab</string>
+               <string>Tabs</string>
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">

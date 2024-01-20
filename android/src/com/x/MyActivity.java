@@ -513,6 +513,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         //唤醒锁（手机上不推荐使用，其它插电安卓系统可考虑，比如广告机等）
         //acquireWakeLock();
+
         mySerivece = new PersistService();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         countSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -1087,8 +1088,8 @@ This method can parse out the real local file path from a file URI.
                 String reason = intent.getStringExtra(SYSTEM_REASON);
                 if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     // 表示按了home键,程序直接进入到后台
-
                     System.out.println("MyActivity HOME键被按下...");
+                    CallJavaNotify_1();
                 } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
                     // 表示长按home键,显示最近使用的程序
                     System.out.println("MyActivity 长按HOME键...");
