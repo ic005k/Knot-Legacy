@@ -1076,5 +1076,4 @@ void Todo::addToRecycle() {
   insertRecycle(doneTime, 0, strTodoText, 0);
 
   isNeedSave = true;
-  saveTodo();
 }

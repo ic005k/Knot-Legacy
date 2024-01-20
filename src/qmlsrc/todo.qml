@@ -344,6 +344,7 @@ Rectangle {
                             view.model.remove(index)
                             m_Todo.refreshTableLists()
                             m_Todo.refreshAlarm()
+                            m_Todo.saveTodo()
                             console.log("Done isclick")
                         }
                     }

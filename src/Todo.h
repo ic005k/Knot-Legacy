@@ -35,7 +35,6 @@ class Todo : public QDialog {
       "QLabel{background:rgb(245,245,25);color:black;border:2px;"
       "border-radius:4px;padding:2px 4px;}";
 
-  void saveTodo();
   QString styleDark =
       "#listWidget::item {background-color: #393d49;color: #ffffff;border: "
       "transparent;padding: 8px; height: 65;}"
@@ -69,7 +68,9 @@ class Todo : public QDialog {
   void modifyType(int index, int type);
 
   int setItemHeight(QString strTodoText);
+
  public slots:
+  void saveTodo();
   void refreshTableLists();
   void refreshAlarm();
   void reeditText();
