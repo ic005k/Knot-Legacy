@@ -106,6 +106,7 @@ class Notes : public QDialog {
   void closeEvent(QCloseEvent *event) override;
 
  public slots:
+  void on_btnShowTools_clicked();
   void editVSBarValueChanged();
   void timerSlot();
   void on_showEditPanel();
@@ -195,8 +196,6 @@ class Notes : public QDialog {
   void on_btnGetShare_clicked();
 
   void on_btnHideKey_clicked();
-
-  void on_btnShowTools_clicked();
 
  private:
   int x_left, x_right, y_left, y_right;

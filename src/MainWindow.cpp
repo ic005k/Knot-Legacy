@@ -4704,11 +4704,18 @@ void MainWindow::on_btnEdit_clicked() {
   a.replace(iniDir, "");
   int vpos = Reg.value("/MainNotes/editVPos" + a).toInt();
   int cpos = Reg.value("/MainNotes/editCPos" + a).toInt();
+  bool isToolBarVisible =
+      Reg.value("/MainNotes/toolBarVisible", false).toBool();
   m_Notes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
   QTextCursor tmpCursor = m_Notes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);
   m_Notes->ui->editSource->setTextCursor(tmpCursor);
   m_Notes->ui->editSource->setFocus();
+  if (isToolBarVisible) {
+    if (m_Notes->ui->f_ToolBar->isHidden()) m_Notes->on_btnShowTools_clicked();
+  } else {
+    if (!m_Notes->ui->f_ToolBar->isHidden()) m_Notes->on_btnShowTools_clicked();
+  }
 
   Sleep(200);
   m_Notes->isNeedSave = false;

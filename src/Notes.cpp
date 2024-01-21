@@ -226,6 +226,7 @@ void Notes::saveMainNotes() {
                ui->editSource->verticalScrollBar()->sliderPosition());
   Reg.setValue("/MainNotes/editCPos" + strTag,
                ui->editSource->textCursor().position());
+  Reg.setValue("/MainNotes/toolBarVisible", ui->f_ToolBar->isVisible());
 
   isNeedSave = false;
   isTextChange = false;
