@@ -357,7 +357,8 @@ class MainWindow : public QMainWindow {
                int itemH);
 
   void set_PushButtonStyle(QObject *parent);
-  protected:
+
+ protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;

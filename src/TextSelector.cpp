@@ -19,7 +19,7 @@ TextSelector::TextSelector(QWidget *parent)
     btn->setFont(font0);
   }
 
-  mw_one->set_btnStyle(this);
+  m_Method->set_ToolButtonStyle2(this);
 
   ui->lineEdit->setReadOnly(true);
 
@@ -27,7 +27,7 @@ TextSelector::TextSelector(QWidget *parent)
   ui->lineEdit->installEventFilter(this);
 
   int a = 500;
-  int b = 50;
+  int b = 25;
   ui->btnLeft0->setAutoRepeat(true);       // 启用长按
   ui->btnLeft0->setAutoRepeatDelay(a);     // 触发长按的时间
   ui->btnLeft0->setAutoRepeatInterval(b);  // 长按时click信号间隔

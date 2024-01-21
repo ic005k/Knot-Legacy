@@ -1052,6 +1052,16 @@ void Method::setDark(QString strDark) {
 #endif
 }
 
+void Method::set_ToolButtonStyle2(QObject* parent) {
+  QObjectList btnList =
+      mw_one->getAllToolButton(mw_one->getAllUIControls(parent));
+  for (int i = 0; i < btnList.count(); i++) {
+    QToolButton* btn = (QToolButton*)btnList.at(i);
+    setToolButtonQss(btn, 5, 3, "#009999", "#FFFFFF", "#009999", "#FFFFFF",
+                     "#009090", "#EEEEEE");
+  }
+}
+
 QString Method::setToolButtonQss(QToolButton* btn, int radius, int padding,
                                  const QString& normalColor,
                                  const QString& normalTextColor,

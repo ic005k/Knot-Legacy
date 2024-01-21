@@ -188,7 +188,8 @@ class Method : public QDialog {
 
   int getStrWidth(const QString str);
 
- protected:
+  void set_ToolButtonStyle2(QObject *parent);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

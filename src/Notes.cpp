@@ -241,7 +241,7 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
   QPalette pt = palette();
   pt.setBrush(QPalette::Text, Qt::black);
   pt.setBrush(QPalette::Base, QColor(255, 255, 255));
-  pt.setBrush(QPalette::Highlight, Qt::red);
+  pt.setBrush(QPalette::Highlight, QColor(90, 90, 255));
   pt.setBrush(QPalette::HighlightedText, Qt::white);
   textEdit->setPalette(pt);
 

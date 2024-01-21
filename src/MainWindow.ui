@@ -1265,7 +1265,7 @@
                <string>Edit</string>
               </property>
               <property name="icon">
-               <iconset resource="../res.qrc">
+               <iconset>
                 <normaloff>:/res/remarks.png</normaloff>:/res/remarks.png</iconset>
               </property>
               <property name="iconSize">
