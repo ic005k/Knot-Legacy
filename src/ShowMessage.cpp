@@ -88,7 +88,7 @@ void ShowMessage::init() {
   int x, y, w, h;
 
 #ifdef Q_OS_ANDROID
-  w = this->width() - 20;
+  w = this->width();
 
 #else
   w = 360;

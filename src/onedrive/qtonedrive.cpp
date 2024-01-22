@@ -16,7 +16,7 @@
 #include "ui_MainWindow.h"
 
 extern MainWindow* mw_one;
-extern QString iniFile, iniDir, zipfile;
+extern QString iniFile, iniDir, zipfile, privateDir;
 extern bool isZipOK, isMenuImport, isTimeMachine, isDownData;
 
 QtOneDriveAuthorizationDialog* dialog_ = nullptr;
@@ -64,9 +64,13 @@ QtOneDrive::QtOneDrive(const QString& clientID, const QString& secret,
              Q_FUNC_INFO, "You can not use ident QtOneDrive instances");
 
   networkManager_ = new QNetworkAccessManager(this);
-  properties_ = new QSettings(QSettings::IniFormat, QSettings::UserScope,
-                              QCoreApplication::organizationName(),
-                              QCoreApplication::applicationName(), this);
+
+  // properties_ = new QSettings(QSettings::IniFormat, QSettings::UserScope,
+  //                             QCoreApplication::organizationName(),
+  //                            QCoreApplication::applicationName(), this);
+
+  properties_ =
+      new QSettings(privateDir + "onedrive.ini", QSettings::IniFormat, this);
 
   properties_->beginGroup(hash_);
   loadProperties();
