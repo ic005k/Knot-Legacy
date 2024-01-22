@@ -3452,6 +3452,9 @@ void MainWindow::init_Sensors() {
 }
 
 void MainWindow::initQW() {
+  qmlRegisterType<File>("MyModel1", 1, 0, "File");
+  qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
+
   ui->qwChartMonth->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/chart_month.qml")));
 
@@ -3708,9 +3711,6 @@ void MainWindow::init_Instance() {
 
 void MainWindow::init_UIWidget() {
   set_btnStyle(this);
-
-  qmlRegisterType<File>("MyModel1", 1, 0, "File");
-  qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
 
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();

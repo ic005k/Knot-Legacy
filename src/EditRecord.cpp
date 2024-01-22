@@ -9,7 +9,7 @@ extern Method *m_Method;
 extern QTabWidget *tabData;
 extern QString iniFile, iniDir;
 extern QRegularExpression regxNumber;
-extern bool isBreak;
+extern bool isBreak, isDark;
 extern int fontSize;
 
 bool del = false;
@@ -75,8 +75,10 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
   QScroller::grabGesture(mw_one->ui->editDetails,
                          QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(mw_one->ui->editDetails);
-  mw_one->ui->editDetails->verticalScrollBar()->setStyleSheet(
-      m_Method->vsbarStyleSmall);
+
+  if (!isDark)
+    mw_one->ui->editDetails->verticalScrollBar()->setStyleSheet(
+        m_Method->vsbarStyleSmall);
 }
 
 void EditRecord::init() {

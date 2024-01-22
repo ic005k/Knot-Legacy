@@ -98,7 +98,7 @@ class Method : public QDialog {
       "border-left:0px solid #d7d7d7;}"     // 左分割线
       "QScrollBar::handle:vertical{"        // 滑块样式
       "background:rgb(202,197,191);"        // 滑块颜色
-      "border-radius:6px;"                  // 边角圆润
+      "border-radius:2px;"                  // 边角圆润
       "min-height:60px;}"                   // 滑块最小高度
       "QScrollBar::handle:vertical:hover{"  // 鼠标触及滑块样式
       "background:#d0d0d0;}"                // 滑块颜色
@@ -189,7 +189,8 @@ class Method : public QDialog {
   int getStrWidth(const QString str);
 
   void set_ToolButtonStyle2(QObject *parent);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

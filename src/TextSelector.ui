@@ -15,14 +15,13 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QDialog{	
-	/*background-color: rgb(255, 25, 25);*/	
+	/*background-color: rgb(160,160,160);*/
 	
 	/*border-image:url(:/res/b.png);	*/
 
 	border-style:solid;						
 	border-width:2px;						
-	border-color:rgb(255,0,0);		
-
+	border-color:rgb(255,0,0);	
 	
 }</string>
   </property>

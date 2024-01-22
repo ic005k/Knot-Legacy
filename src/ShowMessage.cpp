@@ -91,13 +91,14 @@ void ShowMessage::init() {
   w = this->width() - 20;
 
 #else
-  w = 350;
-  if (w >= mw_one->width()) {
-    w = mw_one->width() - 20;
+  w = 360;
+  if (w >= mw_one->geometry().width()) {
+    w = mw_one->geometry().width();
   }
+
 #endif
 
-  ui->frame->setFixedWidth(w);
+  ui->frame->setFixedWidth(w - 20);
 
   h = ui->frame->height();
   x = this->x() + (this->width() - w) / 2;
