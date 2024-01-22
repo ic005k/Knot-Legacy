@@ -128,5 +128,7 @@
         <file>res/chart_l.png</file>
         <file>res/chart.png</file>
         <file>res/tab_l.png</file>
+        <file>res/p1.png</file>
+        <file>res/p0.png</file>
     </qresource>
 </RCC>
