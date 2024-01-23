@@ -149,6 +149,7 @@ void Preferences::on_btnCustomFont_clicked() {
 
 void Preferences::setFontDemo(QString customFontPath) {
   QString fontName;
+  QString readerFont;
   int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
   QStringList loadedFontFamilies =
       QFontDatabase::applicationFontFamilies(loadedFontID);
@@ -171,7 +172,6 @@ void Preferences::setFontDemo(QString customFontPath) {
     QString str1 = list.at(list.count() - 1);
     ui->btnCustomFont->setText(tr("Custom Font") + "\n\n" + str1);
 
-    QString readerFont;
     if (ui->chkReaderFont->isChecked()) {
       readerFont = customFontFamily;
       mw_one->m_Reader->savePageVPos();
@@ -179,10 +179,13 @@ void Preferences::setFontDemo(QString customFontPath) {
     } else {
       readerFont = defaultFontFamily;
     }
-    mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
-                                                            readerFont);
-    mw_one->m_Reader->setPageVPos();
-  }
+
+  } else
+    readerFont = defaultFontFamily;
+
+  mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
+                                                          readerFont);
+  mw_one->m_Reader->setPageVPos();
 }
 
 void Preferences::on_chkUIFont_clicked() {
