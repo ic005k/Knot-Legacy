@@ -35,6 +35,8 @@ bool isDark = false;
 
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
+QSettings *iniNotes, *iniPreferences;
+
 extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del, isWholeMonth,
     isDateSection;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
@@ -644,20 +646,16 @@ void MainWindow::sendMsg(int CurTableCount) {
 }
 
 void MainWindow::init_Options() {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
 #ifdef Q_OS_UNIX
-  Reg.setValue("/Options/macIniDir", iniDir);
+  iniPreferences->setValue("/Options/macIniDir", iniDir);
 #endif
 
 #ifdef Q_OS_ANDROID
-  Reg.setValue("/Options/androidIniDir", iniDir);
+  iniPreferences->setValue("/Options/androidIniDir", iniDir);
 #endif
-  androidIniDir = Reg.value("/Options/androidIniDir", "").toString();
-  macIniDir = Reg.value("/Options/macIniDir", "").toString();
+  androidIniDir =
+      iniPreferences->value("/Options/androidIniDir", "").toString();
+  macIniDir = iniPreferences->value("/Options/macIniDir", "").toString();
 
   QSettings Reg2(iniDir + "ymd.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -3356,12 +3354,7 @@ void MainWindow::on_btnNotes_clicked() {
 
   m_Method->init_all_notes();
 
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  QString strPw = Reg.value("/MainNotes/UserKey").toString();
+  QString strPw = iniNotes->value("/MainNotes/UserKey").toString();
   if (strPw != "") {
     QByteArray baPw = strPw.toUtf8();
     for (int i = 0; i < baPw.size(); i++) {
@@ -3679,6 +3672,12 @@ void MainWindow::init_Theme() {
 void MainWindow::init_Instance() {
   mw_one = this;
   CurrentYear = QString::number(QDate::currentDate().year());
+
+  iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
 
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
@@ -4639,13 +4638,9 @@ void MainWindow::on_btnSetKey_clicked() {
 void MainWindow::on_btnSetKeyOK_clicked() {
   isSelf = true;
 
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
   if (ui->editPassword1->text().trimmed() == "" &&
       ui->editPassword2->text().trimmed() == "") {
-    Reg.remove("/MainNotes/UserKey");
+    iniNotes->remove("/MainNotes/UserKey");
     ui->frameSetKey->hide();
 
     ShowMessage *m_ShowMsg = new ShowMessage(this);
@@ -4662,7 +4657,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
       baPw[i] = baPw[i] + 66;  // 加密User的密码
     }
     strPw = baPw;
-    Reg.setValue("/MainNotes/UserKey", strPw);
+    iniNotes->setValue("/MainNotes/UserKey", strPw);
 
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("Knot", tr("The password is set successfully."), 1);
@@ -4684,11 +4679,6 @@ void MainWindow::on_btnEdit_clicked() {
   delete m_Notes->m_TextSelector;
   m_Notes->m_TextSelector = new TextSelector(m_Notes);
 
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
   QString mdfile = mw_one->loadText(currentMDFile);
 
   m_Notes->init();
@@ -4702,10 +4692,10 @@ void MainWindow::on_btnEdit_clicked() {
 
   QString a = currentMDFile;
   a.replace(iniDir, "");
-  int vpos = Reg.value("/MainNotes/editVPos" + a).toInt();
-  int cpos = Reg.value("/MainNotes/editCPos" + a).toInt();
+  int vpos = iniNotes->value("/MainNotes/editVPos" + a).toInt();
+  int cpos = iniNotes->value("/MainNotes/editCPos" + a).toInt();
   bool isToolBarVisible =
-      Reg.value("/MainNotes/toolBarVisible", false).toBool();
+      iniNotes->value("/MainNotes/toolBarVisible", false).toBool();
   m_Notes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
   QTextCursor tmpCursor = m_Notes->ui->editSource->textCursor();
   tmpCursor.setPosition(cpos);

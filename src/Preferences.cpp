@@ -11,6 +11,7 @@ extern MainWindow* mw_one;
 extern Method* m_Method;
 extern bool isBreak, isDark;
 extern int fontSize;
+extern QSettings* iniPreferences;
 
 Preferences::Preferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::Preferences) {
@@ -74,16 +75,11 @@ bool Preferences::eventFilter(QObject* watch, QEvent* evn) {
 
   if (watch == ui->lblFontSize) {
     if (event->type() == QEvent::MouseButtonDblClick) {
-      QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      Reg.setIniCodec("utf-8");
-#endif
-
       if (devMode)
         devMode = false;
       else
         devMode = true;
-      Reg.setValue("/Options/DevMode", devMode);
+      iniPreferences->setValue("/Options/DevMode", devMode);
       qDebug() << "devMode=" << devMode;
     }
   }
@@ -97,18 +93,15 @@ void Preferences::on_btnBack_clicked() {
 }
 
 void Preferences::saveOptions() {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  Reg.setValue("/Options/FontSize", ui->sliderFontSize->value());
-  Reg.setValue("/Options/chkReaderFont", ui->chkReaderFont->isChecked());
-  Reg.setValue("/Options/Dark", ui->chkDark->isChecked());
-  Reg.setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
-  Reg.setValue("/Options/Debug", ui->chkDebug->isChecked());
-  Reg.setValue("/Options/chkUIFont", ui->chkUIFont->isChecked());
-  Reg.setValue("/Options/chkAniEffects", ui->chkAniEffects->isChecked());
+  iniPreferences->setValue("/Options/FontSize", ui->sliderFontSize->value());
+  iniPreferences->setValue("/Options/chkReaderFont",
+                           ui->chkReaderFont->isChecked());
+  iniPreferences->setValue("/Options/Dark", ui->chkDark->isChecked());
+  iniPreferences->setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
+  iniPreferences->setValue("/Options/Debug", ui->chkDebug->isChecked());
+  iniPreferences->setValue("/Options/chkUIFont", ui->chkUIFont->isChecked());
+  iniPreferences->setValue("/Options/chkAniEffects",
+                           ui->chkAniEffects->isChecked());
 }
 
 void Preferences::on_chkDebug_clicked() {
@@ -148,11 +141,8 @@ void Preferences::on_btnCustomFont_clicked() {
 
   setFontDemo(fileName);
   isFontChange = true;
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  Reg.setValue("/Options/CustomFont", fileName);
+
+  iniPreferences->setValue("/Options/CustomFont", fileName);
 
   getCheckStatusChange();
 }
@@ -206,63 +196,41 @@ void Preferences::on_sliderFontSize_valueChanged(int value) {
 }
 
 void Preferences::setDefaultFont(QString fontFamily) {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  Reg.setValue("/Options/DefaultFont", fontFamily);
+  iniPreferences->setValue("/Options/DefaultFont", fontFamily);
 }
 
 QString Preferences::getDefaultFont() {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  return Reg.value("/Options/DefaultFont", "None").toString();
+  return iniPreferences->value("/Options/DefaultFont", "None").toString();
 }
 
 bool Preferences::isOverUIFont() {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  bool chkUIFont = Reg.value("/Options/chkUIFont", false).toBool();
+  bool chkUIFont = iniPreferences->value("/Options/chkUIFont", false).toBool();
   return chkUIFont;
 }
 
 bool Preferences::isOverReaderFont() {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  bool chkReaderFont = Reg.value("/Options/chkReaderFont", false).toBool();
+  bool chkReaderFont =
+      iniPreferences->value("/Options/chkReaderFont", false).toBool();
   return chkReaderFont;
 }
 
 void Preferences::initOptions() {
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  bool chkUIFont = Reg.value("/Options/chkUIFont", false).toBool();
+  bool chkUIFont = iniPreferences->value("/Options/chkUIFont", false).toBool();
   ui->chkUIFont->setChecked(chkUIFont);
   ui->chkReaderFont->setChecked(
-      Reg.value("/Options/chkReaderFont", false).toBool());
-  ui->chkDark->setChecked(Reg.value("/Options/Dark", false).toBool());
+      iniPreferences->value("/Options/chkReaderFont", false).toBool());
+  ui->chkDark->setChecked(
+      iniPreferences->value("/Options/Dark", false).toBool());
   isDark = ui->chkDark->isChecked();
-  ui->chkAutoTime->setChecked(Reg.value("/Options/AutoTimeY", true).toBool());
+  ui->chkAutoTime->setChecked(
+      iniPreferences->value("/Options/AutoTimeY", true).toBool());
   ui->chkAniEffects->setChecked(
-      Reg.value("/Options/chkAniEffects", true).toBool());
-  bool debugmode = Reg.value("/Options/Debug", false).toBool();
+      iniPreferences->value("/Options/chkAniEffects", true).toBool());
+  bool debugmode = iniPreferences->value("/Options/Debug", false).toBool();
   ui->chkDebug->setChecked(debugmode);
   on_chkDebug_clicked();
 
-  devMode = Reg.value("/Options/DevMode", false).toBool();
+  devMode = iniPreferences->value("/Options/DevMode", false).toBool();
 #ifdef Q_OS_ANDROID
 #else
 
@@ -296,7 +264,7 @@ void Preferences::initOptions() {
   }
 #endif
 
-  QString strf = Reg.value("/Options/CustomFont").toString();
+  QString strf = iniPreferences->value("/Options/CustomFont").toString();
   setFontDemo(strf);
 }
 
@@ -325,30 +293,28 @@ void Preferences::on_btnReStart_clicked() {
 void Preferences::autoBakData() {
   if (!mw_one->isNeedAutoBackup) return;
 
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  int bakCount = Reg.value("/AutoBak/BakCount").toInt();
+  int bakCount = iniPreferences->value("/AutoBak/BakCount").toInt();
   if (bakCount > 100000) {
     bakCount = 0;
-    Reg.setValue("/AutoBak/BakCount", 0);
-    Reg.setValue("/AutoBak/NextDel", 0);
+    iniPreferences->setValue("/AutoBak/BakCount", 0);
+    iniPreferences->setValue("/AutoBak/NextDel", 0);
   }
-  int nextDel = Reg.value("/AutoBak/NextDel").toInt();
+  int nextDel = iniPreferences->value("/AutoBak/NextDel").toInt();
   bakCount++;
   QString fileName = mw_one->bakData("android", false);
-  Reg.setValue("/AutoBak/File" + QString::number(bakCount), fileName);
+  iniPreferences->setValue("/AutoBak/File" + QString::number(bakCount),
+                           fileName);
   if (bakCount - nextDel > 15) {
     nextDel++;
     QString oldBakFile =
-        Reg.value("/AutoBak/File" + QString::number(nextDel)).toString();
+        iniPreferences->value("/AutoBak/File" + QString::number(nextDel))
+            .toString();
     QFile file(oldBakFile);
     file.remove(oldBakFile);
-    Reg.remove("/AutoBak/File" + QString::number(nextDel));
-    Reg.setValue("/AutoBak/NextDel", nextDel);
+    iniPreferences->remove("/AutoBak/File" + QString::number(nextDel));
+    iniPreferences->setValue("/AutoBak/NextDel", nextDel);
   }
-  Reg.setValue("/AutoBak/BakCount", bakCount);
+  iniPreferences->setValue("/AutoBak/BakCount", bakCount);
 
   appendBakFile(QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss") +
                     "\n" + tr("Auto Backup") + "\n" + mw_one->strLatestModify,

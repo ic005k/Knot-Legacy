@@ -17,6 +17,11 @@ extern int fontSize;
 Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   ui->setupUi(this);
 
+  iniTodo = new QSettings(iniDir + "todo.ini", QSettings::IniFormat, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniTodo->setIniCodec("utf-8");
+#endif
+
   mw_one->set_btnStyle(this);
 
   this->installEventFilter(this);
@@ -64,56 +69,52 @@ void Todo::saveTodo() {
   mw_one->strLatestModify = tr("Modi Todo");
 
   highCount = 0;
-  QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
 
   int count_items = getCount();
 
-  Reg.setValue("/Todo/Count", count_items);
+  iniTodo->setValue("/Todo/Count", count_items);
   for (int i = 0; i < count_items; i++) {
     QString strText = getItemTodoText(i);
     QString strTime = getItemTime(i);
     int type = getItemType(i);
-    Reg.setValue("/Todo/Item" + QString::number(i), strText);
-    Reg.setValue("/Todo/Time" + QString::number(i), strTime);
-    Reg.setValue("/Todo/Type" + QString::number(i), type);
+    iniTodo->setValue("/Todo/Item" + QString::number(i), strText);
+    iniTodo->setValue("/Todo/Time" + QString::number(i), strTime);
+    iniTodo->setValue("/Todo/Type" + QString::number(i), type);
   }
 
   int count1 = getCountRecycle();
-  Reg.setValue("/Todo/Count1", count1);
+  iniTodo->setValue("/Todo/Count1", count1);
   for (int i = 0; i < count1; i++) {
     QString doneTime = getItemTimeRecycle(i);
     QString str = getItemTodoTextRecycle(i);
-    Reg.setValue("/Todo/ItemRecycle" + QString::number(i), str);
-    Reg.setValue("/Todo/ItemRecycleDoneTime" + QString::number(i), doneTime);
+    iniTodo->setValue("/Todo/ItemRecycle" + QString::number(i), str);
+    iniTodo->setValue("/Todo/ItemRecycleDoneTime" + QString::number(i),
+                      doneTime);
   }
 }
 
 void Todo::init_Todo() {
   mw_one->isSelf = true;
   clearAll();
-  QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  int count = Reg.value("/Todo/Count").toInt();
+
+  int count = iniTodo->value("/Todo/Count").toInt();
   for (int i = 0; i < count; i++) {
-    QString str = Reg.value("/Todo/Item" + QString::number(i)).toString();
-    QString strTime = Reg.value("/Todo/Time" + QString::number(i)).toString();
-    int type = Reg.value("/Todo/Type" + QString::number(i)).toInt();
+    QString str = iniTodo->value("/Todo/Item" + QString::number(i)).toString();
+    QString strTime =
+        iniTodo->value("/Todo/Time" + QString::number(i)).toString();
+    int type = iniTodo->value("/Todo/Type" + QString::number(i)).toInt();
 
     addItem(strTime, type, str);
   }
 
   clearAllRecycle();
-  int count1 = Reg.value("/Todo/Count1").toInt();
+  int count1 = iniTodo->value("/Todo/Count1").toInt();
   for (int i = 0; i < count1; i++) {
     QString doneTime =
-        Reg.value("/Todo/ItemRecycleDoneTime" + QString::number(i)).toString();
+        iniTodo->value("/Todo/ItemRecycleDoneTime" + QString::number(i))
+            .toString();
     QString str =
-        Reg.value("/Todo/ItemRecycle" + QString::number(i)).toString();
+        iniTodo->value("/Todo/ItemRecycle" + QString::number(i)).toString();
     addItemRecycle(doneTime, 0, str);
   }
 
@@ -567,17 +568,14 @@ void Todo::refreshTableLists() {
 }
 
 void Todo::refreshTableListsFromIni() {
-  QSettings Reg(iniDir + "todo.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
   tableLists.clear();
-  int count_items = Reg.value("/Todo/Count", 0).toInt();
+  int count_items = iniTodo->value("/Todo/Count", 0).toInt();
 
   for (int i = 0; i < count_items; i++) {
-    QString strTime = Reg.value("/Todo/Time" + QString::number(i)).toString();
-    QString strText = Reg.value("/Todo/Item" + QString::number(i)).toString();
+    QString strTime =
+        iniTodo->value("/Todo/Time" + QString::number(i)).toString();
+    QString strText =
+        iniTodo->value("/Todo/Item" + QString::number(i)).toString();
 
     tableLists.append(strTime + "|=|" + strText);
   }

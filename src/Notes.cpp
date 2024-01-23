@@ -5,6 +5,8 @@
 #include "ui_MainWindow.h"
 #include "ui_Notes.h"
 
+extern QSettings *iniNotes;
+
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QString iniFile, iniDir, privateDir, currentMDFile;
@@ -210,11 +212,6 @@ void Notes::saveMainNotes() {
 
   saveQMLVPos();
 
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
   if (isTextChange) {
     mw_one->TextEditToFile(ui->editSource, currentMDFile);
     MD2Html(currentMDFile);
@@ -225,11 +222,11 @@ void Notes::saveMainNotes() {
   QString strTag = currentMDFile;
   strTag.replace(iniDir, "");
 
-  Reg.setValue("/MainNotes/editVPos" + strTag,
-               ui->editSource->verticalScrollBar()->sliderPosition());
-  Reg.setValue("/MainNotes/editCPos" + strTag,
-               ui->editSource->textCursor().position());
-  Reg.setValue("/MainNotes/toolBarVisible", ui->f_ToolBar->isVisible());
+  iniNotes->setValue("/MainNotes/editVPos" + strTag,
+                     ui->editSource->verticalScrollBar()->sliderPosition());
+  iniNotes->setValue("/MainNotes/editCPos" + strTag,
+                     ui->editSource->textCursor().position());
+  iniNotes->setValue("/MainNotes/toolBarVisible", ui->f_ToolBar->isVisible());
 
   isNeedSave = false;
   isTextChange = false;

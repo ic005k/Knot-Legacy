@@ -9,6 +9,7 @@ extern Method *m_Method;
 extern QString iniDir, privateDir, currentMDFile;
 extern bool isAndroid;
 extern int fontSize;
+extern QSettings *iniNotes;
 
 NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->setupUi(this);
@@ -360,30 +361,26 @@ void NotesList::saveNotesList() {
   mw_one->isNeedAutoBackup = true;
   mw_one->strLatestModify = tr("Modi Notes List");
 
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
   int count = tw->topLevelItemCount();
-  Reg.setValue("/MainNotes/topItemCount", count);
+  iniNotes->setValue("/MainNotes/topItemCount", count);
   for (int i = 0; i < count; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
     QString strtop = topItem->text(0);
-    Reg.setValue("/MainNotes/strTopItem" + QString::number(i), strtop);
+    iniNotes->setValue("/MainNotes/strTopItem" + QString::number(i), strtop);
 
     int childCount = topItem->childCount();
-    Reg.setValue("/MainNotes/childCount" + QString::number(i), childCount);
+    iniNotes->setValue("/MainNotes/childCount" + QString::number(i),
+                       childCount);
 
     for (int j = 0; j < childCount; j++) {
       QTreeWidgetItem *childItem = tw->topLevelItem(i)->child(j);
       QString strChild0 = childItem->text(0);
       QString strChild1 = childItem->text(1);
 
-      Reg.setValue(
+      iniNotes->setValue(
           "/MainNotes/childItem0" + QString::number(i) + QString::number(j),
           strChild0);
-      Reg.setValue(
+      iniNotes->setValue(
           "/MainNotes/childItem1" + QString::number(i) + QString::number(j),
           strChild1);
     }
@@ -408,30 +405,26 @@ void NotesList::saveRecycle() {
   mw_one->isNeedAutoBackup = true;
   mw_one->strLatestModify = tr("Modi Notes Recycle");
 
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
   int count = twrb->topLevelItemCount();
-  Reg.setValue("/MainNotes/rbtopItemCount", count);
+  iniNotes->setValue("/MainNotes/rbtopItemCount", count);
   for (int i = 0; i < count; i++) {
     QTreeWidgetItem *topItem = twrb->topLevelItem(i);
     QString strtop = topItem->text(0);
-    Reg.setValue("/MainNotes/rbstrTopItem" + QString::number(i), strtop);
+    iniNotes->setValue("/MainNotes/rbstrTopItem" + QString::number(i), strtop);
 
     int childCount = topItem->childCount();
-    Reg.setValue("/MainNotes/rbchildCount" + QString::number(i), childCount);
+    iniNotes->setValue("/MainNotes/rbchildCount" + QString::number(i),
+                       childCount);
 
     for (int j = 0; j < childCount; j++) {
       QTreeWidgetItem *childItem = twrb->topLevelItem(i)->child(j);
       QString strChild0 = childItem->text(0);
       QString strChild1 = childItem->text(1);
 
-      Reg.setValue(
+      iniNotes->setValue(
           "/MainNotes/rbchildItem0" + QString::number(i) + QString::number(j),
           strChild0);
-      Reg.setValue(
+      iniNotes->setValue(
           "/MainNotes/rbchildItem1" + QString::number(i) + QString::number(j),
           strChild1);
     }
@@ -443,19 +436,16 @@ void NotesList::saveRecycle() {
 void NotesList::initNotesList() {
   mw_one->isSelf = true;
   tw->clear();
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
 
-  int topCount = Reg.value("/MainNotes/topItemCount").toInt();
+  int topCount = iniNotes->value("/MainNotes/topItemCount").toInt();
 
   int notesTotal = 0;
   for (int i = 0; i < topCount; i++) {
     QString strTop =
-        Reg.value("/MainNotes/strTopItem" + QString::number(i)).toString();
+        iniNotes->value("/MainNotes/strTopItem" + QString::number(i))
+            .toString();
     int childCount =
-        Reg.value("/MainNotes/childCount" + QString::number(i)).toInt();
+        iniNotes->value("/MainNotes/childCount" + QString::number(i)).toInt();
     notesTotal = notesTotal + childCount;
 
     QTreeWidgetItem *topItem = new QTreeWidgetItem;
@@ -467,11 +457,13 @@ void NotesList::initNotesList() {
 
     for (int j = 0; j < childCount; j++) {
       QString str0, str1;
-      str0 = Reg.value("/MainNotes/childItem0" + QString::number(i) +
-                       QString::number(j))
+      str0 = iniNotes
+                 ->value("/MainNotes/childItem0" + QString::number(i) +
+                         QString::number(j))
                  .toString();
-      str1 = Reg.value("/MainNotes/childItem1" + QString::number(i) +
-                       QString::number(j))
+      str1 = iniNotes
+                 ->value("/MainNotes/childItem1" + QString::number(i) +
+                         QString::number(j))
                  .toString();
 
       QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
@@ -490,27 +482,26 @@ void NotesList::initNotesList() {
 void NotesList::initRecycle() {
   mw_one->isSelf = true;
   twrb->clear();
-  QSettings Reg(iniDir + "mainnotes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
 
-  int topCount = Reg.value("/MainNotes/rbtopItemCount").toInt();
+  int topCount = iniNotes->value("/MainNotes/rbtopItemCount").toInt();
   for (int i = 0; i < topCount; i++) {
     QString strTop =
-        Reg.value("/MainNotes/rbstrTopItem" + QString::number(i)).toString();
+        iniNotes->value("/MainNotes/rbstrTopItem" + QString::number(i))
+            .toString();
     QTreeWidgetItem *topItem = new QTreeWidgetItem;
     topItem->setText(0, strTop);
 
     int childCount =
-        Reg.value("/MainNotes/rbchildCount" + QString::number(i)).toInt();
+        iniNotes->value("/MainNotes/rbchildCount" + QString::number(i)).toInt();
     for (int j = 0; j < childCount; j++) {
       QString str0, str1;
-      str0 = Reg.value("/MainNotes/rbchildItem0" + QString::number(i) +
-                       QString::number(j))
+      str0 = iniNotes
+                 ->value("/MainNotes/rbchildItem0" + QString::number(i) +
+                         QString::number(j))
                  .toString();
-      str1 = Reg.value("/MainNotes/rbchildItem1" + QString::number(i) +
-                       QString::number(j))
+      str1 = iniNotes
+                 ->value("/MainNotes/rbchildItem1" + QString::number(i) +
+                         QString::number(j))
                  .toString();
 
       QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);

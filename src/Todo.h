@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QListWidgetItem>
+#include <QSettings>
 #include <QTextEdit>
 #include <QToolButton>
 
@@ -128,5 +129,6 @@ class Todo : public QDialog {
   bool isWeekValid(QString lblDateTime, QString strDate);
   bool isTomorrow = false;
   void changeTodoIcon(bool isToday);
+  QSettings *iniTodo;
 };
 #endif  // TODO_H

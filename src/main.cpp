@@ -17,7 +17,9 @@ void loadLocal();
 
 bool zh_cn = false;
 bool isAndroid, isIOS;
+
 extern MainWindow* mw_one;
+extern QSettings* iniPreferences;
 
 int main(int argc, char* argv[]) {
   LTDev::QtPdfViewerInitializer::initialize();
@@ -110,15 +112,18 @@ int main(int argc, char* argv[]) {
   QDir dir0;
   dir0.mkpath(iniDir);
 
-  QSettings Reg(privateDir + "options.ini", QSettings::IniFormat);
+  iniPreferences =
+      new QSettings(privateDir + "options.ini", QSettings::IniFormat, NULL);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
+  iniPreferences->setIniCodec("utf-8");
 #endif
-
-  fontSize = Reg.value("/Options/FontSize", defaultFontSize).toInt();
-  bool isOverUIFont = Reg.value("/Options/chkUIFont", false).toBool();
-  QString customFontPath = Reg.value("/Options/CustomFont").toString();
-  isDark = Reg.value("/Options/Dark", false).toBool();
+  fontSize =
+      iniPreferences->value("/Options/FontSize", defaultFontSize).toInt();
+  bool isOverUIFont =
+      iniPreferences->value("/Options/chkUIFont", false).toBool();
+  QString customFontPath =
+      iniPreferences->value("/Options/CustomFont").toString();
+  isDark = iniPreferences->value("/Options/Dark", false).toBool();
 
 #ifdef Q_OS_WIN
   defaultFontFamily = "Microsoft YaHei UI";
