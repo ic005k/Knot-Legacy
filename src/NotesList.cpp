@@ -842,25 +842,11 @@ void NotesList::on_btnUp_clicked() { moveBy(-1); }
 void NotesList::on_btnDown_clicked() { moveBy(1); }
 
 void NotesList::on_actionAdd_NoteBook_triggered() {
-  bool ok = false;
   QString text;
 
-  /*QInputDialog *idlg =
-      m_Method->inputDialog(tr("New NoteBook"), tr("New NoteBook Name"), "");
-
-  if (QDialog::Accepted == idlg->exec()) {
-    ok = true;
-    text = idlg->textValue();
-    idlg->close();
-  } else {
-    idlg->close();
-    return;
-  }*/
-
-  NewNoteBook *m_NewNotebook = new NewNoteBook(this);
-  QStringList list = m_NewNotebook->getValue();
-
-  if (ok && !text.isEmpty()) {
+  NewNoteBook *m_new = new NewNoteBook(mw_one);
+  text = m_new->notebookName;
+  if (m_new->isOk && !text.isEmpty()) {
     ui->editBook->setText(text);
     on_btnNewNoteBook_clicked();
     m_Method->addItemToQW(mw_one->ui->qwNoteBook, text, "", "", "", fontSize);

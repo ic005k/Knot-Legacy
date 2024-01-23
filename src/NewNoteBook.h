@@ -16,8 +16,11 @@ class NewNoteBook : public QDialog {
   ~NewNoteBook();
   Ui::NewNoteBook *ui;
 
-  QStringList getValue();
-  protected:
+  QString notebookName;
+  QString notebookRoot;
+  bool isOk = false;
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -27,7 +30,6 @@ class NewNoteBook : public QDialog {
   void on_btnOk_clicked();
 
  private:
-  QString strValue;
 };
 
 #endif  // NEWNOTEBOOK_H

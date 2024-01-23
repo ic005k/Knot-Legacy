@@ -95,9 +95,11 @@ QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
   idlg->setWindowTitle(windowsTitle);
   idlg->setTextValue(defaultValue);
   idlg->setLabelText(lblEdit);
+
   showGrayWindows();
 
   idlg->show();
+  idlg->setFixedWidth(mw_one->width() - 20);
   idlg->setGeometry(
       mw_one->geometry().x() + (mw_one->geometry().width() - idlg->width()) / 2,
       150, idlg->width(), idlg->height());
