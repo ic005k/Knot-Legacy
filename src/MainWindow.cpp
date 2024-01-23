@@ -4688,7 +4688,6 @@ void MainWindow::on_btnEdit_clicked() {
   mainHeight = mw_one->height();
   ui->frameNotes->hide();
   m_Notes->show();
-  m_Notes->isShow = true;
 
   QString a = currentMDFile;
   a.replace(iniDir, "");

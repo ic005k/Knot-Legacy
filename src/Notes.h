@@ -53,7 +53,7 @@ class Notes : public QDialog {
   int end;
   TextSelector *m_TextSelector;
   qreal textHeight;
-  bool isShow = false;
+
   QString textMemo;
   void saveMainNotes();
   QString fileName;

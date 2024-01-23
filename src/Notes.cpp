@@ -153,7 +153,7 @@ void Notes::editVSBarValueChanged() {}
 void Notes::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
 
-  if (isShow) {
+  if (!this->isHidden()) {
     if (this->height() != mw_one->mainHeight) {
       newHeight = this->height();
       androidKeyH = mw_one->mainHeight - newHeight;
@@ -163,18 +163,16 @@ void Notes::resizeEvent(QResizeEvent *event) {
       Reg.setValue("newHeight", newHeight);
     }
 
-    if (!ui->editSource->isHidden()) {
-      if (pAndroidKeyboard->isVisible()) {
-        this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                          mw_one->width(), newHeight);
-      }
+    if (pAndroidKeyboard->isVisible()) {
+      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                        mw_one->width(), newHeight);
+    }
 
-      if (this->height() == newHeight) {
-        int p = ui->editSource->textCursor().position();
-        QTextCursor tmpCursor = ui->editSource->textCursor();
-        tmpCursor.setPosition(p);
-        ui->editSource->setTextCursor(tmpCursor);
-      }
+    if (this->height() == newHeight) {
+      int p = ui->editSource->textCursor().position();
+      QTextCursor tmpCursor = ui->editSource->textCursor();
+      tmpCursor.setPosition(p);
+      ui->editSource->setTextCursor(tmpCursor);
     }
   }
 
