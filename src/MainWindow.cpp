@@ -3367,6 +3367,7 @@ void MainWindow::on_btnNotes_clicked() {
 
     QInputDialog *idlg = m_Method->inputDialog(
         tr("Please enter your password : "), tr("Password : "), "");
+    idlg->setTextEchoMode(QLineEdit::Password);
 
     if (QDialog::Accepted == idlg->exec()) {
       ok = true;
