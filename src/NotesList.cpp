@@ -887,7 +887,9 @@ void NotesList::on_actionDel_NoteBook_triggered() {
 
   setNoteLabel();
 
+  bool save = isNeedSave;
   saveRecycle();
+  isNeedSave = save;
   saveNotesList();
 
   if (getNoteBookCount() == 0) {
