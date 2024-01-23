@@ -58,6 +58,7 @@ SOURCES += \
     src/MarkdownHighlighter.cpp \
     src/Method.cpp \
     src/MyWheel.cpp \
+    src/NewNoteBook.cpp \
     src/Notes.cpp \
     src/NotesList.cpp \
     src/PageIndicator.cpp \
@@ -115,6 +116,7 @@ HEADERS += \
     src/MarkdownHighlighter.h \
     src/Method.h \
     src/MyWheel.h \
+    src/NewNoteBook.h \
     src/Notes.h \
     src/NotesList.h \
     src/PageIndicator.h \
@@ -172,6 +174,7 @@ FORMS += \
     src/CloudBackup.ui \
     src/DateSelector.ui \
     src/MainWindow.ui \
+    src/NewNoteBook.ui \
     src/Notes.ui \
     src/NotesList.ui \
     src/PageIndicator.ui \

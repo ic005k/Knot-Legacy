@@ -11,6 +11,8 @@
 #include <QRandomGenerator>
 #include <QTreeWidgetItem>
 
+#include "NewNoteBook.h"
+
 namespace Ui {
 class NotesList;
 }

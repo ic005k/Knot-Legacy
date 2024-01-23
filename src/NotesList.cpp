@@ -2,6 +2,7 @@
 
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
+#include "ui_NewNoteBook.h"
 #include "ui_NotesList.h"
 
 extern MainWindow *mw_one;
@@ -844,7 +845,7 @@ void NotesList::on_actionAdd_NoteBook_triggered() {
   bool ok = false;
   QString text;
 
-  QInputDialog *idlg =
+  /*QInputDialog *idlg =
       m_Method->inputDialog(tr("New NoteBook"), tr("New NoteBook Name"), "");
 
   if (QDialog::Accepted == idlg->exec()) {
@@ -854,7 +855,10 @@ void NotesList::on_actionAdd_NoteBook_triggered() {
   } else {
     idlg->close();
     return;
-  }
+  }*/
+
+  NewNoteBook *m_NewNotebook = new NewNoteBook(this);
+  QStringList list = m_NewNotebook->getValue();
 
   if (ok && !text.isEmpty()) {
     ui->editBook->setText(text);
