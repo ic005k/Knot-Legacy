@@ -558,10 +558,10 @@ void Notes::on_btnPic_clicked() {
     int new_w, new_h;
     w = img.width();
     h = img.height();
-    int w0 = ui->editSource->width();
+    int w0 = mw_one->width();
     double r = (double)w / h;
-    if (w > w0 - 26) {
-      new_w = w0 - 26;
+    if (w > w0 - 10) {
+      new_w = w0 - 10;
       new_h = new_w / r;
 
     } else {
@@ -577,9 +577,6 @@ void Notes::on_btnPic_clicked() {
 
     ui->editSource->insertPlainText("![image](file://" + strTar + ")\n");
 
-    QMessageBox box;
-    box.setText(strTar);
-    box.exec();
     qDebug() << "pic=" << strTar;
   }
 }
