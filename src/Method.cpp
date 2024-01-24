@@ -250,6 +250,15 @@ QString Method::getText0(QQuickWidget* qw, int index) {
   return item.toString();
 }
 
+QString Method::getText1(QQuickWidget* qw, int index) {
+  QQuickItem* root = qw->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject*)root, "getText1",
+                            Q_RETURN_ARG(QVariant, item),
+                            Q_ARG(QVariant, index));
+  return item.toString();
+}
+
 QString Method::getText2(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QVariant item;
@@ -485,10 +494,11 @@ void Method::setCellText(int row, int column, QString str,
 void Method::clickNoteBook() {
   clearAllBakList(mw_one->ui->qwNoteList);
   int index = getCurrentIndexFromQW(mw_one->ui->qwNoteBook);
-
+  QString text1 = getText1(mw_one->ui->qwNoteBook, index);
   QString text2 = getText2(mw_one->ui->qwNoteBook, index);
   if (text2.isEmpty()) {
-    QTreeWidgetItem* topItem = mw_one->m_NotesList->tw->topLevelItem(index);
+    int index_top = text1.toInt();
+    QTreeWidgetItem* topItem = mw_one->m_NotesList->tw->topLevelItem(index_top);
     int child_count = topItem->childCount();
     for (int i = 0; i < child_count; i++) {
       QString text0 = topItem->child(i)->text(0);
@@ -497,7 +507,7 @@ void Method::clickNoteBook() {
         addItemToQW(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
     }
   } else {
-    QStringList list = text2.split("===");
+    QStringList list = text1.split("===");
     int indexMain, indexChild;
     if (list.count() == 2) {
       indexMain = list.at(0).toInt();

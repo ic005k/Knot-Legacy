@@ -70,7 +70,8 @@ class NotesList : public QDialog {
   void setNoteLabel();
   void loadEmptyNote();
 
- protected:
+  void setTWCurrentItem();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

@@ -187,7 +187,7 @@ Rectangle {
                     radius: 2
                     anchors.leftMargin: 1
                     color: "red"
-                    visible:  item2.text.length ? false : true
+                    visible: item2.text.length ? false : true
                     Text {
                         anchors.centerIn: parent
                     }
@@ -258,7 +258,7 @@ Rectangle {
                         leftPadding: 5
                         rightPadding: 5
 
-                        visible: item1.text.length ? true : false
+                        visible: false // item1.text.length ? true : false
                     }
 
                     Text {
@@ -355,11 +355,11 @@ Rectangle {
 
                     view.currentIndex = index //实现item切换
 
+
                     /*for (i = 0; i < view.count; i++) {
                         view.model.setProperty(i, "text2", "")
                     }
                     view.model.setProperty(index, "text2", "ShowRect")*/
-
                     m_Method.clickNoteBook()
                 }
 
