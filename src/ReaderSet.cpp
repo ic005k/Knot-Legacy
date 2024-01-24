@@ -26,7 +26,7 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   ui->btnFontLess->setStyleSheet("border:none");
   ui->btnFontPlus->setStyleSheet("border:none");
   QFont f(this->font());
-  f.setPointSize(10);
+  f.setPointSize(13);
   ui->btnStyle1->setFont(f);
   ui->btnStyle2->setFont(f);
   ui->btnStyle3->setFont(f);
@@ -117,8 +117,8 @@ void ReaderSet::on_btnFont_clicked() {
   fileName = m_Method->getRealPathFile(fileName);
 #endif
 
-  QString readerFont =
-      mw_one->m_Preferences->setFontDemo(fileName, ui->btnFont, 10);
+  QString readerFont = mw_one->m_Preferences->setFontDemo(
+      fileName, ui->btnFont, ui->btnFont->font().pointSize());
   iniPreferences->setValue("/Options/ReaderFont", fileName);
 
   mw_one->m_Reader->savePageVPos();

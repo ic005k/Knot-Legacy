@@ -64,11 +64,13 @@ void NewNoteBook::closeEvent(QCloseEvent* event) {
 
 void NewNoteBook::on_btnCancel_clicked() {
   isOk = false;
+  rootIndex = 0;
   close();
 }
 
 void NewNoteBook::on_btnOk_clicked() {
   isOk = true;
+  rootIndex = ui->cboxRoot->currentIndex();
   notebookName = ui->editName->text().trimmed();
   notebookRoot = ui->cboxRoot->currentText().trimmed();
   close();

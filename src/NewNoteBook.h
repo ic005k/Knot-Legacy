@@ -19,6 +19,7 @@ class NewNoteBook : public QDialog {
   QString notebookName;
   QString notebookRoot;
   bool isOk = false;
+  int rootIndex;
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;

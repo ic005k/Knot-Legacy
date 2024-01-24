@@ -110,8 +110,16 @@ void NotesList::on_btnNewNoteBook_clicked() {
   QTreeWidgetItem *item = new QTreeWidgetItem();
   item->setText(0, ui->editBook->text().trimmed());
   item->setForeground(0, Qt::red);
-  ui->treeWidget->addTopLevelItem(item);
-  ui->treeWidget->setCurrentItem(item);
+
+  if (rootIndex == 0) {
+    ui->treeWidget->addTopLevelItem(item);
+    ui->treeWidget->setCurrentItem(item);
+  } else {
+    QTreeWidgetItem *topItem = tw->topLevelItem(rootIndex - 1);
+    tw->setCurrentItem(topItem);
+    topItem->addChild(item);
+    tw->setCurrentItem(item);
+  }
 
   isNeedSave = true;
 }
@@ -847,9 +855,14 @@ void NotesList::on_actionAdd_NoteBook_triggered() {
   NewNoteBook *m_new = new NewNoteBook(mw_one);
   text = m_new->notebookName;
   if (m_new->isOk && !text.isEmpty()) {
+    rootIndex = m_new->rootIndex;
     ui->editBook->setText(text);
     on_btnNewNoteBook_clicked();
-    m_Method->addItemToQW(mw_one->ui->qwNoteBook, text, "", "", "", fontSize);
+
+    loadAllNoteBook();
+
+    // m_Method->addItemToQW(mw_one->ui->qwNoteBook, text, "", "", "",
+    // fontSize);
 
     int count = getNoteBookCount();
     setNoteBookCurrentIndex(count - 1);
@@ -991,11 +1004,29 @@ void NotesList::loadAllNoteBook() {
   m_Method->clearAllBakList(mw_one->ui->qwNoteList);
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
-    QString str = tw->topLevelItem(i)->text(0);
-    int sum = tw->topLevelItem(i)->childCount();
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
+    QString str = topItem->text(0);
+
+    int sum = topItem->childCount();
+    int child_count = sum;
+    for (int n = 0; n < child_count; n++) {
+      if (topItem->child(n)->text(1).isEmpty()) sum--;
+    }
+
     QString strSum = QString::number(sum);
     m_Method->addItemToQW(mw_one->ui->qwNoteBook, str, "", "", strSum,
                           fontSize);
+
+    int childCount = topItem->childCount();
+    for (int j = 0; j < childCount; j++) {
+      QTreeWidgetItem *childItem = topItem->child(j);
+      if (childItem->text(1).isEmpty()) {
+        m_Method->addItemToQW(mw_one->ui->qwNoteBook, childItem->text(0), "",
+                              QString::number(i) + "===" + QString::number(j),
+                              QString::number(childItem->childCount()),
+                              fontSize);
+      }
+    }
   }
 }
 

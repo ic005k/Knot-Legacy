@@ -190,7 +190,8 @@ class Method : public QDialog {
 
   void set_ToolButtonStyle2(QObject *parent);
 
- protected:
+  QString getText2(QQuickWidget *qw, int index);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

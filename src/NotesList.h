@@ -137,6 +137,7 @@ class NotesList : public QDialog {
   void on_actionMoveDown_Note_triggered();
   void on_actionImport_Note_triggered();
   void on_actionExport_Note_triggered();
+  int rootIndex;
 };
 
 #endif  // NOTESLIST_H
