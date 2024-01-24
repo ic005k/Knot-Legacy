@@ -5422,8 +5422,9 @@ void MainWindow::on_btnRestoreNoteRecycle_clicked() {
       m_NotesList->twrb->topLevelItem(0)->child(indexRecycle));
 
   int indexTop = m_Method->getCurrentIndexFromQW(ui->qwNoteBook);
+  if (indexTop < 0) return;
 
-  m_NotesList->tw->setCurrentItem(m_NotesList->tw->topLevelItem(indexTop));
+  m_NotesList->setNoteBookCurrentItem();
 
   m_NotesList->on_btnRestore_clicked();
 

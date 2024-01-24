@@ -279,11 +279,7 @@ void NotesList::addItem(QTreeWidget *tw, QTreeWidgetItem *item) {
     curItem->addChild(item);
   } else {
     QTreeWidgetItem *curItem = tw->currentItem();
-    if (curItem->parent() == NULL) {
-      curItem->addChild(item);
-    } else {
-      curItem->parent()->addChild(item);
-    }
+    curItem->addChild(item);
   }
 
   tw->expandAll();
@@ -335,13 +331,10 @@ bool NotesList::on_btnImport_clicked() {
     QString name = fi.fileName();
     QString suffix = fi.suffix();
     name.replace("." + suffix, "");
-    if (item->parent() == NULL) {
-      item1 = new QTreeWidgetItem(item);
-      item1->setText(0, name);
-    } else {
-      item1 = new QTreeWidgetItem(item->parent());
-      item1->setText(0, name);
-    }
+
+    item1 = new QTreeWidgetItem(item);
+    item1->setText(0, name);
+
     tw->setCurrentItem(item1);
     QString a = "memo/" + mw_one->m_Notes->getDateTimeStr() + ".md";
     currentMDFile = iniDir + a;
@@ -672,9 +665,12 @@ void NotesList::on_btnRestore_clicked() {
     m_Method->addItemToQW(mw_one->ui->qwNoteList, str0, "", "", str1, 0);
 
     curItem->parent()->removeChild(curItem);
+    isNeedSave = true;
+    saveRecycle();
   }
 
   isNeedSave = true;
+  saveNotesList();
 }
 
 void NotesList::on_btnDel_Recycle_clicked() {
@@ -958,7 +954,7 @@ void NotesList::on_btnUp_clicked() { moveBy(-1); }
 
 void NotesList::on_btnDown_clicked() { moveBy(1); }
 
-void NotesList::setTWCurrentItem() {
+void NotesList::setNoteBookCurrentItem() {
   int index = getNoteBookCurrentIndex();
   if (index < 0) return;
 
@@ -1013,7 +1009,7 @@ void NotesList::on_actionDel_NoteBook_triggered() {
           2))
     return;
 
-  setTWCurrentItem();
+  setNoteBookCurrentItem();
   on_btnDel_clicked();
 
   loadAllNoteBook();
@@ -1060,7 +1056,7 @@ void NotesList::on_actionRename_NoteBook_triggered() {
   }
 
   if (ok && !text.isEmpty()) {
-    setTWCurrentItem();
+    setNoteBookCurrentItem();
 
     ui->editName->setText(text);
     on_btnRename_clicked();
@@ -1103,7 +1099,7 @@ void NotesList::on_actionMoveUp_NoteBook_triggered() {
 
   int oldIndex = index;
 
-  setTWCurrentItem();
+  setNoteBookCurrentItem();
   on_btnUp_clicked();
 
   loadAllNoteBook();
@@ -1120,7 +1116,7 @@ void NotesList::on_actionMoveDown_NoteBook_triggered() {
 
   int oldIndex = index;
 
-  setTWCurrentItem();
+  setNoteBookCurrentItem();
   on_btnDown_clicked();
 
   loadAllNoteBook();
@@ -1208,7 +1204,7 @@ void NotesList::on_actionAdd_Note_triggered() {
   }
 
   if (ok && !text.isEmpty()) {
-    setTWCurrentItem();
+    setNoteBookCurrentItem();
     ui->editNote->setText(text);
     on_btnNewNote_clicked();
 
@@ -1242,7 +1238,7 @@ void NotesList::on_actionDel_Note_triggered() {
           2))
     return;
 
-  setTWCurrentItem();
+  setNoteBookCurrentItem();
   QTreeWidgetItem *child = tw->currentItem()->child(notelistIndex);
   tw->setCurrentItem(child);
   on_btnDel_clicked();
@@ -1297,7 +1293,7 @@ void NotesList::on_actionRename_Note_triggered() {
   }
 
   if (ok && !text.isEmpty()) {
-    setTWCurrentItem();
+    setNoteBookCurrentItem();
     QTreeWidgetItem *child = tw->currentItem()->child(noteIndex);
     tw->setCurrentItem(child);
     ui->editName->setText(text);
@@ -1313,7 +1309,8 @@ void NotesList::on_actionMoveUp_Note_triggered() {
   if (indexBook < 0) return;
   if (indexNote <= 0) return;
 
-  tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
+  setNoteBookCurrentItem();
+  tw->setCurrentItem(tw->currentItem()->child(indexNote));
   on_btnUp_clicked();
 
   m_Method->clickNoteBook();
@@ -1328,7 +1325,8 @@ void NotesList::on_actionMoveDown_Note_triggered() {
   if (indexNote < 0) return;
   if (indexNote + 1 == getNotesListCount()) return;
 
-  tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
+  setNoteBookCurrentItem();
+  tw->setCurrentItem(tw->currentItem()->child(indexNote));
   on_btnDown_clicked();
 
   m_Method->clickNoteBook();
@@ -1338,8 +1336,9 @@ void NotesList::on_actionMoveDown_Note_triggered() {
 
 void NotesList::on_actionImport_Note_triggered() {
   int indexBook = getNoteBookCurrentIndex();
+  if (indexBook < 0) return;
 
-  tw->setCurrentItem(tw->topLevelItem(indexBook));
+  setNoteBookCurrentItem();
   bool isOk = on_btnImport_clicked();
 
   if (isOk) {
@@ -1357,7 +1356,9 @@ void NotesList::on_actionExport_Note_triggered() {
   if (indexBook < 0) return;
   if (indexNote < 0) return;
 
-  tw->setCurrentItem(tw->topLevelItem(indexBook)->child(indexNote));
+  setNoteBookCurrentItem();
+  tw->setCurrentItem(tw->currentItem()->child(indexNote));
+
   on_btnExport_clicked();
 }
 
