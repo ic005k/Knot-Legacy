@@ -989,8 +989,22 @@ void NotesList::on_actionAdd_NoteBook_triggered() {
 
     loadAllNoteBook();
 
-    int count = getNoteBookCount();
-    setNoteBookCurrentIndex(count - 1);
+    if (rootIndex == 0) {
+      int count = getNoteBookCount();
+      setNoteBookCurrentIndex(count - 1);
+    } else {
+      setNoteBookCurrentIndex(rootIndex - 1);
+      setNoteBookCurrentItem();
+      QTreeWidgetItem *topItem = tw->currentItem();
+      int count = topItem->childCount();
+      int index = rootIndex - 1;
+      for (int i = 0; i < count; i++) {
+        QString str1 = topItem->child(i)->text(1);
+        if (str1.isEmpty()) index++;
+      }
+      setNoteBookCurrentIndex(index);
+    }
+
     m_Method->clickNoteBook();
     setNotesListCurrentIndex(0);
     m_Method->clickNoteList();
