@@ -104,8 +104,7 @@ void MainWindow::importDataDone() {
   mw_one->isSelf = true;
 
   if (!zipfile.isNull() && isZipOK) {
-    m_NotesList->initNotesList();
-    m_NotesList->initRecycle();
+    m_Method->init_all_notes();
     m_Todo->init_Todo();
 
     loading = true;
@@ -119,8 +118,6 @@ void MainWindow::importDataDone() {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     on_tabWidget_currentChanged(tabData->currentIndex());
-
-    m_Method->init_all_notes();
   }
 
   closeProgress();

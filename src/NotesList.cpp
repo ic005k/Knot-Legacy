@@ -364,6 +364,12 @@ void NotesList::closeEvent(QCloseEvent *event) {
 void NotesList::saveNotesList() {
   if (!isNeedSave) return;
 
+  iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
+
   mw_one->isSelf = true;
 
   mw_one->isNeedAutoBackup = true;
@@ -426,6 +432,12 @@ void NotesList::saveNotesList() {
 void NotesList::saveRecycle() {
   if (!isNeedSave) return;
 
+  iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
+
   mw_one->isSelf = true;
 
   mw_one->isNeedAutoBackup = true;
@@ -462,6 +474,12 @@ void NotesList::saveRecycle() {
 void NotesList::initNotesList() {
   mw_one->isSelf = true;
   tw->clear();
+
+  iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
 
   int topCount = iniNotes->value("/MainNotes/topItemCount").toInt();
 
@@ -532,6 +550,12 @@ void NotesList::initNotesList() {
 void NotesList::initRecycle() {
   mw_one->isSelf = true;
   twrb->clear();
+
+  iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
 
   int topCount = iniNotes->value("/MainNotes/rbtopItemCount").toInt();
   for (int i = 0; i < topCount; i++) {
@@ -1132,7 +1156,7 @@ void NotesList::on_actionAdd_Note_triggered() {
 
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
-    text = idlg->textValue();
+    text = idlg->textValue().trimmed();
     idlg->close();
   } else {
     idlg->close();
@@ -1174,7 +1198,9 @@ void NotesList::on_actionDel_Note_triggered() {
           2))
     return;
 
-  tw->setCurrentItem(tw->topLevelItem(notebookIndex)->child(notelistIndex));
+  setTWCurrentItem();
+  QTreeWidgetItem *child = tw->currentItem()->child(notelistIndex);
+  tw->setCurrentItem(child);
   on_btnDel_clicked();
 
   m_Method->delItemBakList(mw_one->ui->qwNoteList, notelistIndex);
@@ -1186,7 +1212,9 @@ void NotesList::on_actionDel_Note_triggered() {
 
   setNoteLabel();
 
+  bool save = isNeedSave;
   saveRecycle();
+  isNeedSave = save;
   saveNotesList();
 
   if (getNotesListCount() == 0) {
@@ -1217,7 +1245,7 @@ void NotesList::on_actionRename_Note_triggered() {
       m_Method->getText0(mw_one->ui->qwNoteList, getNotesListCurrentIndex()));
   if (QDialog::Accepted == idlg->exec()) {
     ok = true;
-    text = idlg->textValue();
+    text = idlg->textValue().trimmed();
     idlg->close();
   } else {
     idlg->close();
@@ -1225,7 +1253,9 @@ void NotesList::on_actionRename_Note_triggered() {
   }
 
   if (ok && !text.isEmpty()) {
-    tw->setCurrentItem(tw->topLevelItem(notebookIndex)->child(noteIndex));
+    setTWCurrentItem();
+    QTreeWidgetItem *child = tw->currentItem()->child(noteIndex);
+    tw->setCurrentItem(child);
     ui->editName->setText(text);
     on_btnRename_clicked();
 
