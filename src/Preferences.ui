@@ -124,16 +124,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblFontPath">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QCheckBox" name="chkUIFont">
         <property name="styleSheet">
          <string notr="true">QCheckBox::indicator {
@@ -144,23 +134,6 @@
         </property>
         <property name="text">
          <string>Override UI Fonts</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="chkReaderFont">
-        <property name="styleSheet">
-         <string notr="true">QCheckBox::indicator {
-    /* 选择框尺寸 */
-    width:22px;
-    height:22px;
-}</string>
-        </property>
-        <property name="text">
-         <string>Override Reader Fonts</string>
         </property>
         <property name="checked">
          <bool>false</bool>

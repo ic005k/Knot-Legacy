@@ -34,6 +34,8 @@ class ReaderSet : public QDialog {
 
   void on_btnStyle3_clicked();
 
+  void on_btnFont_clicked();
+
  private:
 };
 

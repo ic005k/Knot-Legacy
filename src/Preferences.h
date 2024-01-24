@@ -2,6 +2,7 @@
 #define PREFERENCES_H
 
 #include <QDialog>
+#include <QToolButton>
 
 namespace Ui {
 class Preferences;
@@ -19,8 +20,6 @@ class Preferences : public QDialog {
   QString chkStyle;
   bool isFontChange = false;
   void saveOptions();
-
-  void setFontDemo(QString customFontPath);
 
   void initOptions();
   void autoBakData();
@@ -41,6 +40,8 @@ class Preferences : public QDialog {
   void setDefaultFont(QString fontFamily);
   QString getDefaultFont();
 
+  QString setFontDemo(QString customFontPath, QToolButton *btn, int fontSize);
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
@@ -52,8 +53,6 @@ class Preferences : public QDialog {
   void on_btnBack_clicked();
 
   void on_sliderFontSize_sliderMoved(int position);
-
-  void on_chkReaderFont_clicked();
 
   void on_btnCustomFont_clicked();
 

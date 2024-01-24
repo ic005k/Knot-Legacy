@@ -8,6 +8,7 @@ extern int fontSize;
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniDir, privateDir;
+extern QSettings* iniPreferences;
 
 ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   QPalette pal = palette();
@@ -29,6 +30,8 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   ui->btnStyle1->setFont(f);
   ui->btnStyle2->setFont(f);
   ui->btnStyle3->setFont(f);
+  ui->btnFont->setFont(f);
+  ui->lblProg->setFont(f);
 }
 
 ReaderSet::~ReaderSet() { delete ui; }
@@ -102,4 +105,24 @@ void ReaderSet::on_btnStyle3_clicked() {
   Reg.setValue("/Reader/Style", "3");
   mw_one->m_Reader->readerStyle = "3";
   mw_one->m_Reader->setReaderStyle();
+}
+
+void ReaderSet::on_btnFont_clicked() {
+  QString fileName;
+  fileName = QFileDialog::getOpenFileName(this, tr("Font"), "",
+                                          tr("Font Files (*.*)"));
+  if (fileName == "") return;
+
+#ifdef Q_OS_ANDROID
+  fileName = m_Method->getRealPathFile(fileName);
+#endif
+
+  QString readerFont =
+      mw_one->m_Preferences->setFontDemo(fileName, ui->btnFont, 10);
+  iniPreferences->setValue("/Options/ReaderFont", fileName);
+
+  mw_one->m_Reader->savePageVPos();
+  mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
+                                                          readerFont);
+  mw_one->m_Reader->setPageVPos();
 }

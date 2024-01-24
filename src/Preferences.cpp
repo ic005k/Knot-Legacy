@@ -20,7 +20,6 @@ Preferences::Preferences(QWidget* parent)
   QFont font0 = m_Method->getNewFont(20);
   ui->btnCustomFont->setFont(font0);
   ui->chkUIFont->setFont(font0);
-  ui->chkReaderFont->setFont(font0);
   ui->chkAutoTime->setFont(font0);
   ui->chkDebug->setFont(font0);
   ui->btnReStart->setFont(font0);
@@ -46,13 +45,8 @@ Preferences::Preferences(QWidget* parent)
   chkStyle = ui->chkAutoTime->styleSheet();
   ui->chkDark->setStyleSheet(chkStyle);
   ui->chkDebug->setStyleSheet(chkStyle);
-  ui->chkReaderFont->setStyleSheet(chkStyle);
   ui->chkUIFont->setStyleSheet(chkStyle);
   ui->lblFontSize->setFixedHeight(40);
-  ui->lblFontPath->setWordWrap(true);
-  ui->lblFontPath->adjustSize();
-  ui->lblFontPath->setFixedHeight(100);
-  ui->lblFontPath->hide();
 
   ui->btnCustomFont->adjustSize();
   ui->btnCustomFont->setStyleSheet(
@@ -94,8 +88,6 @@ void Preferences::on_btnBack_clicked() {
 
 void Preferences::saveOptions() {
   iniPreferences->setValue("/Options/FontSize", ui->sliderFontSize->value());
-  iniPreferences->setValue("/Options/chkReaderFont",
-                           ui->chkReaderFont->isChecked());
   iniPreferences->setValue("/Options/Dark", ui->chkDark->isChecked());
   iniPreferences->setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
   iniPreferences->setValue("/Options/Debug", ui->chkDebug->isChecked());
@@ -123,12 +115,6 @@ void Preferences::on_sliderFontSize_sliderMoved(int position) {
   getCheckStatusChange();
 }
 
-void Preferences::on_chkReaderFont_clicked() {
-  isFontChange = true;
-
-  getCheckStatusChange();
-}
-
 void Preferences::on_btnCustomFont_clicked() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("Font"), "",
@@ -139,7 +125,7 @@ void Preferences::on_btnCustomFont_clicked() {
   fileName = m_Method->getRealPathFile(fileName);
 #endif
 
-  setFontDemo(fileName);
+  setFontDemo(fileName, ui->btnCustomFont, ui->sliderFontSize->value());
   isFontChange = true;
 
   iniPreferences->setValue("/Options/CustomFont", fileName);
@@ -147,9 +133,10 @@ void Preferences::on_btnCustomFont_clicked() {
   getCheckStatusChange();
 }
 
-void Preferences::setFontDemo(QString customFontPath) {
+QString Preferences::setFontDemo(QString customFontPath, QToolButton* btn,
+                                 int fontSize) {
   QString fontName;
-  QString readerFont;
+
   int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
   QStringList loadedFontFamilies =
       QFontDatabase::applicationFontFamilies(loadedFontID);
@@ -157,35 +144,21 @@ void Preferences::setFontDemo(QString customFontPath) {
     fontName = loadedFontFamilies.at(0);
     QFont f;
     f.setFamily(fontName);
-    f.setPointSize(ui->sliderFontSize->value());
+    f.setPointSize(fontSize);
 
-    ui->lblFontPath->setFont(f);
-    ui->btnCustomFont->setFont(f);
+    btn->setFont(f);
 
     QString str = customFontPath;
 #ifdef Q_OS_ANDROID
     str = mw_one->m_Reader->getUriRealPath(customFontPath);
 #endif
-    ui->lblFontPath->setText(str);
 
     QStringList list = str.split("/");
     QString str1 = list.at(list.count() - 1);
-    ui->btnCustomFont->setText(tr("Custom Font") + "\n\n" + str1);
+    btn->setText(tr("Custom Font") + "\n\n" + str1);
+  }
 
-    if (ui->chkReaderFont->isChecked()) {
-      readerFont = customFontFamily;
-      mw_one->m_Reader->savePageVPos();
-
-    } else {
-      readerFont = defaultFontFamily;
-    }
-
-  } else
-    readerFont = defaultFontFamily;
-
-  mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
-                                                          readerFont);
-  mw_one->m_Reader->setPageVPos();
+  return fontName;
 }
 
 void Preferences::on_chkUIFont_clicked() {
@@ -220,8 +193,6 @@ bool Preferences::isOverReaderFont() {
 void Preferences::initOptions() {
   bool chkUIFont = iniPreferences->value("/Options/chkUIFont", false).toBool();
   ui->chkUIFont->setChecked(chkUIFont);
-  ui->chkReaderFont->setChecked(
-      iniPreferences->value("/Options/chkReaderFont", false).toBool());
   ui->chkDark->setChecked(
       iniPreferences->value("/Options/Dark", false).toBool());
   isDark = ui->chkDark->isChecked();
@@ -253,7 +224,6 @@ void Preferences::initOptions() {
     mw_one->ui->btnSelTab->hide();
     mw_one->ui->lblStats->hide();
 
-    ui->chkReaderFont->hide();
     ui->chkAniEffects->hide();
 
     int s = 120;
@@ -267,8 +237,16 @@ void Preferences::initOptions() {
   }
 #endif
 
-  QString strf = iniPreferences->value("/Options/CustomFont").toString();
-  setFontDemo(strf);
+  QString customFontFile =
+      iniPreferences->value("/Options/CustomFont").toString();
+  setFontDemo(customFontFile, ui->btnCustomFont, ui->sliderFontSize->value());
+
+  QString readerFontFile =
+      iniPreferences->value("/Options/ReaderFont").toString();
+  QString readerFont =
+      setFontDemo(readerFontFile, mw_one->m_ReaderSet->ui->btnFont, 10);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
+                                                          readerFont);
 }
 
 void Preferences::on_btnReStart_clicked() {
@@ -414,7 +392,6 @@ void Preferences::on_chkDark_clicked(bool checked) {
 void Preferences::initCheckStatus() {
   listCheckStatus.clear();
   listCheckStatus.append(ui->chkUIFont->isChecked());
-  listCheckStatus.append(ui->chkReaderFont->isChecked());
   listCheckStatus.append(ui->chkDark->isChecked());
   listCheckStatus.append(ui->sliderFontSize->value());
 
@@ -425,11 +402,9 @@ void Preferences::getCheckStatusChange() {
   bool isChanged = false;
   if (ui->chkUIFont->isChecked() != listCheckStatus.at(0)) isChanged = true;
 
-  if (ui->chkReaderFont->isChecked() != listCheckStatus.at(1)) isChanged = true;
+  if (ui->chkDark->isChecked() != listCheckStatus.at(1)) isChanged = true;
 
-  if (ui->chkDark->isChecked() != listCheckStatus.at(2)) isChanged = true;
-
-  if (ui->sliderFontSize->value() != listCheckStatus.at(3)) isChanged = true;
+  if (ui->sliderFontSize->value() != listCheckStatus.at(2)) isChanged = true;
 
   if (orgCustomFontText != ui->btnCustomFont->text().trimmed())
     isChanged = true;

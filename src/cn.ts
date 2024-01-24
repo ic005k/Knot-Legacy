@@ -1627,38 +1627,38 @@ in skydrive folder</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="Method.cpp" line="415"/>
+        <location filename="Method.cpp" line="417"/>
         <source>Results</source>
         <translation>结果</translation>
     </message>
     <message>
-        <location filename="Method.cpp" line="441"/>
+        <location filename="Method.cpp" line="443"/>
         <source>Amount</source>
         <translation>金额</translation>
     </message>
     <message>
-        <location filename="Method.cpp" line="445"/>
+        <location filename="Method.cpp" line="447"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
     <message>
-        <location filename="Method.cpp" line="449"/>
+        <location filename="Method.cpp" line="451"/>
         <source>Details</source>
         <translation>详细</translation>
     </message>
     <message>
-        <location filename="Method.cpp" line="746"/>
+        <location filename="Method.cpp" line="748"/>
         <source>Reading, please wait...</source>
         <translation>读取中，请稍候...</translation>
     </message>
     <message>
         <location filename="Method.cpp" line="93"/>
-        <location filename="Method.cpp" line="976"/>
+        <location filename="Method.cpp" line="978"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="Method.cpp" line="977"/>
+        <location filename="Method.cpp" line="979"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -2068,8 +2068,8 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="NotesList.ui" line="83"/>
-        <location filename="NotesList.cpp" line="1050"/>
-        <location filename="NotesList.cpp" line="1210"/>
+        <location filename="NotesList.cpp" line="1039"/>
+        <location filename="NotesList.cpp" line="1199"/>
         <source>New Note</source>
         <translation>新建笔记</translation>
     </message>
@@ -2141,13 +2141,13 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="NotesList.ui" line="224"/>
-        <location filename="NotesList.cpp" line="1215"/>
+        <location filename="NotesList.cpp" line="1204"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
         <location filename="NotesList.ui" line="237"/>
-        <location filename="NotesList.cpp" line="1216"/>
+        <location filename="NotesList.cpp" line="1205"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
@@ -2200,7 +2200,7 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="NotesList.cpp" line="182"/>
-        <location filename="NotesList.cpp" line="1135"/>
+        <location filename="NotesList.cpp" line="1124"/>
         <source>Note Name</source>
         <translation>笔记名称</translation>
     </message>
@@ -2248,7 +2248,7 @@ in skydrive folder</source>
         <translation type="vanished">取消</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1014"/>
+        <location filename="NotesList.cpp" line="1003"/>
         <source>New NoteBook</source>
         <translation>新建笔记本</translation>
     </message>
@@ -2257,19 +2257,19 @@ in skydrive folder</source>
         <translation type="vanished">新建笔记本名称</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="919"/>
+        <location filename="NotesList.cpp" line="908"/>
         <source>NoteBook Name</source>
         <translation>笔记本名称</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="882"/>
-        <location filename="NotesList.cpp" line="1091"/>
+        <location filename="NotesList.cpp" line="869"/>
+        <location filename="NotesList.cpp" line="1080"/>
         <source>Whether to remove</source>
         <translation>是否删除</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="919"/>
-        <location filename="NotesList.cpp" line="1016"/>
+        <location filename="NotesList.cpp" line="908"/>
+        <location filename="NotesList.cpp" line="1005"/>
         <source>Rename NoteBook</source>
         <translation>重命名笔记本</translation>
     </message>
@@ -2278,45 +2278,45 @@ in skydrive folder</source>
         <translation type="vanished">总和</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1015"/>
+        <location filename="NotesList.cpp" line="1004"/>
         <source>Del NoteBook</source>
         <translation>删除笔记本</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1017"/>
-        <location filename="NotesList.cpp" line="1213"/>
+        <location filename="NotesList.cpp" line="1006"/>
+        <location filename="NotesList.cpp" line="1202"/>
         <source>Move Up</source>
         <translation>上移</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1018"/>
-        <location filename="NotesList.cpp" line="1214"/>
+        <location filename="NotesList.cpp" line="1007"/>
+        <location filename="NotesList.cpp" line="1203"/>
         <source>Move Down</source>
         <translation>下移</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1050"/>
+        <location filename="NotesList.cpp" line="1039"/>
         <source>New Note Name</source>
         <translation>新建笔记名称</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1135"/>
-        <location filename="NotesList.cpp" line="1212"/>
+        <location filename="NotesList.cpp" line="1124"/>
+        <location filename="NotesList.cpp" line="1201"/>
         <source>Rename Note</source>
         <translation>重命名笔记</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1211"/>
+        <location filename="NotesList.cpp" line="1200"/>
         <source>Del Note</source>
         <translation>删除笔记</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1249"/>
+        <location filename="NotesList.cpp" line="1238"/>
         <source>Note Book</source>
         <translation>笔记本</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1252"/>
+        <location filename="NotesList.cpp" line="1241"/>
         <source>Note List</source>
         <translation>笔记列表</translation>
     </message>
@@ -2397,14 +2397,14 @@ F</source>
     </message>
     <message>
         <location filename="Preferences.ui" line="41"/>
-        <location filename="Preferences.cpp" line="134"/>
+        <location filename="Preferences.cpp" line="120"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
         <location filename="Preferences.ui" line="66"/>
-        <location filename="Preferences.cpp" line="43"/>
-        <location filename="Preferences.cpp" line="119"/>
+        <location filename="Preferences.cpp" line="42"/>
+        <location filename="Preferences.cpp" line="111"/>
         <source>Font Size</source>
         <translation>字体大小</translation>
     </message>
@@ -2414,39 +2414,38 @@ F</source>
     </message>
     <message>
         <location filename="Preferences.ui" line="122"/>
-        <location filename="Preferences.cpp" line="172"/>
+        <location filename="Preferences.cpp" line="158"/>
         <source>Custom Font</source>
         <translation>自选字体</translation>
     </message>
     <message>
-        <location filename="Preferences.ui" line="146"/>
+        <location filename="Preferences.ui" line="136"/>
         <source>Override UI Fonts</source>
         <oldsource>Override UI fonts with custom fonts</oldsource>
         <translation>覆盖UI字体</translation>
     </message>
     <message>
-        <location filename="Preferences.ui" line="163"/>
         <source>Override Reader Fonts</source>
         <oldsource>Override reader fonts with custom fonts</oldsource>
-        <translation>覆盖阅读器字体</translation>
+        <translation type="vanished">覆盖阅读器字体</translation>
     </message>
     <message>
-        <location filename="Preferences.ui" line="182"/>
+        <location filename="Preferences.ui" line="155"/>
         <source>Additional Options</source>
         <translation>附加选项</translation>
     </message>
     <message>
-        <location filename="Preferences.ui" line="211"/>
+        <location filename="Preferences.ui" line="184"/>
         <source>Animation Effects</source>
         <translation>动画效果</translation>
     </message>
     <message>
-        <location filename="Preferences.ui" line="228"/>
+        <location filename="Preferences.ui" line="201"/>
         <source>Dark Theme</source>
         <translation>深色主题</translation>
     </message>
     <message>
-        <location filename="Preferences.ui" line="290"/>
+        <location filename="Preferences.ui" line="263"/>
         <source>Restart the App to take effect</source>
         <oldsource>Restart the App</oldsource>
         <translation>重启App生效</translation>
@@ -2456,12 +2455,12 @@ F</source>
         <translation type="vanished">正常关闭</translation>
     </message>
     <message>
-        <location filename="Preferences.ui" line="251"/>
+        <location filename="Preferences.ui" line="224"/>
         <source>Auto uses time as the Y-axis</source>
         <translation>自动使用时间作为Y坐标轴</translation>
     </message>
     <message>
-        <location filename="Preferences.ui" line="268"/>
+        <location filename="Preferences.ui" line="241"/>
         <source>Debug Mode</source>
         <translation>调试模式</translation>
     </message>
@@ -2478,17 +2477,17 @@ F</source>
         <translation type="vanished">重启APP使设置生效</translation>
     </message>
     <message>
-        <location filename="Preferences.ui" line="309"/>
+        <location filename="Preferences.ui" line="282"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="Preferences.cpp" line="135"/>
+        <location filename="Preferences.cpp" line="121"/>
         <source>Font Files (*.*)</source>
         <translation>字体文件 (*.*)</translation>
     </message>
     <message>
-        <location filename="Preferences.cpp" line="320"/>
+        <location filename="Preferences.cpp" line="301"/>
         <source>Auto Backup</source>
         <translation>自动备份</translation>
     </message>
@@ -2610,6 +2609,11 @@ F</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="ReaderSet.ui" line="56"/>
+        <source>Reading Progress</source>
+        <translation>阅读进度</translation>
+    </message>
+    <message>
         <location filename="ReaderSet.ui" line="149"/>
         <source>A+</source>
         <translation></translation>
@@ -2620,19 +2624,30 @@ F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ReaderSet.ui" line="226"/>
+        <location filename="ReaderSet.ui" line="230"/>
         <source>Style1</source>
         <translation>风格1</translation>
     </message>
     <message>
-        <location filename="ReaderSet.ui" line="259"/>
+        <location filename="ReaderSet.ui" line="263"/>
         <source>Style2</source>
         <translation>风格2</translation>
     </message>
     <message>
-        <location filename="ReaderSet.ui" line="291"/>
+        <location filename="ReaderSet.ui" line="295"/>
         <source>Style3</source>
         <translation>风格3</translation>
+    </message>
+    <message>
+        <location filename="ReaderSet.ui" line="310"/>
+        <location filename="ReaderSet.cpp" line="111"/>
+        <source>Font</source>
+        <translation>字体</translation>
+    </message>
+    <message>
+        <location filename="ReaderSet.cpp" line="112"/>
+        <source>Font Files (*.*)</source>
+        <translation>字体文件 (*.*)</translation>
     </message>
 </context>
 <context>
