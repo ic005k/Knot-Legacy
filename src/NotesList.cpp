@@ -55,7 +55,7 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   m_Method->setSCrollPro(twrb);
 
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
-  ui->treeWidget->setColumnHidden(1, true);
+  ui->treeWidget->setColumnHidden(1, false);
   twrb->header()->hide();
   twrb->setColumnHidden(1, true);
   twrb->setColumnWidth(0, 180);
@@ -213,19 +213,56 @@ void NotesList::on_btnDel_clicked() {
 
   QTreeWidgetItem *item = ui->treeWidget->currentItem();
 
+  QString str0, str1;
   if (item->parent() == NULL) {
     int count = item->childCount();
+
     for (int i = 0; i < count; i++) {
       QTreeWidgetItem *childItem = new QTreeWidgetItem;
-      childItem->setText(0, item->child(i)->text(0));
-      childItem->setText(1, item->child(i)->text(1));
-      addItem(twrb, childItem);
+
+      str0 = item->child(i)->text(0);
+      str1 = item->child(i)->text(1);
+
+      if (!str1.isEmpty()) {
+        childItem->setText(0, str0);
+        childItem->setText(1, str1);
+        addItem(twrb, childItem);
+      } else {
+        int count = item->child(i)->childCount();
+        for (int j = 0; j < count; j++) {
+          str0 = item->child(i)->child(j)->text(0);
+          str1 = item->child(i)->child(j)->text(1);
+          QTreeWidgetItem *childItem = new QTreeWidgetItem;
+          childItem->setText(0, str0);
+          childItem->setText(1, str1);
+          addItem(twrb, childItem);
+        }
+      }
     }
     ui->treeWidget->takeTopLevelItem(ui->treeWidget->currentIndex().row());
 
   } else {
+    if (!item->text(1).isEmpty()) {
+      str0 = item->text(0);
+      str1 = item->text(1);
+      QTreeWidgetItem *childItem = new QTreeWidgetItem;
+      childItem->setText(0, str0);
+      childItem->setText(1, str1);
+      addItem(twrb, childItem);
+
+    } else {
+      int count = item->childCount();
+      for (int n = 0; n < count; n++) {
+        str0 = item->child(n)->text(0);
+        str1 = item->child(n)->text(1);
+        QTreeWidgetItem *childItem = new QTreeWidgetItem;
+        childItem->setText(0, str0);
+        childItem->setText(1, str1);
+        addItem(twrb, childItem);
+      }
+    }
+
     item->parent()->removeChild(item);
-    addItem(twrb, item);
   }
 
   on_treeWidget_itemClicked(tw->currentItem(), 0);
@@ -387,7 +424,7 @@ void NotesList::saveNotesList() {
                        childCount);
 
     for (int j = 0; j < childCount; j++) {
-      QTreeWidgetItem *childItem = tw->topLevelItem(i)->child(j);
+      QTreeWidgetItem *childItem = topItem->child(j);
       QString strChild0 = childItem->text(0);
       QString strChild1 = childItem->text(1);
 
@@ -403,6 +440,12 @@ void NotesList::saveNotesList() {
         iniNotes->setValue(
             "/MainNotes/childCount" + QString::number(i) + QString::number(j),
             count);
+        iniNotes->setValue(
+            "/MainNotes/childItem0" + QString::number(i) + QString::number(j),
+            strChild0);
+        iniNotes->setValue(
+            "/MainNotes/childItem1" + QString::number(i) + QString::number(j),
+            "");
         for (int n = 0; n < count; n++) {
           QString strChild00 = childItem->child(n)->text(0);
           QString strChild11 = childItem->child(n)->text(1);
@@ -517,6 +560,7 @@ void NotesList::initNotesList() {
       } else {
         QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
         childItem->setText(0, str0);
+        childItem->setText(1, "");
 
         int count = iniNotes
                         ->value("/MainNotes/childCount" + QString::number(i) +
@@ -1109,7 +1153,7 @@ void NotesList::loadAllNoteBook() {
         m_Method->addItemToQW(
             mw_one->ui->qwNoteBook, childItem->text(0),
             QString::number(i) + "===" + QString::number(j), "isNoteBook",
-            QString::number(childItem->childCount()), fontSize);
+            QString::number(childItem->childCount()), fontSize - 1);
       }
     }
   }

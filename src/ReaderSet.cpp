@@ -32,6 +32,8 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   ui->btnStyle3->setFont(f);
   ui->btnFont->setFont(f);
   ui->lblProg->setFont(f);
+
+  ui->lblProg->hide();
 }
 
 ReaderSet::~ReaderSet() { delete ui; }
