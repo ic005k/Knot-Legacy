@@ -15,7 +15,7 @@ extern QSettings *iniNotes;
 NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->setupUi(this);
   this->installEventFilter(this);
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &NotesList::on_KVChanged);

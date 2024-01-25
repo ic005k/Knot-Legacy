@@ -17,7 +17,7 @@ AutoUpdate::AutoUpdate(QWidget* parent)
       "#frame{background-color: rgb(236, 236, 236);border-radius:10px; "
       "border:1px solid gray;}");
 
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
   setModal(true);
   ui->lblTxt->adjustSize();
   ui->lblTxt->setText(tr("Download Progress") + " : \n" + "");

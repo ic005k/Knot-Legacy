@@ -17,7 +17,7 @@ extern QStringList readTextList, htmlFiles, listCategory;
 QStringList resultsList;
 
 Method::Method(QWidget* parent) : QDialog(parent) {
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 
   this->installEventFilter(this);
 
@@ -95,6 +95,7 @@ QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
   idlg->setWindowTitle(windowsTitle);
   idlg->setTextValue(defaultValue);
   idlg->setLabelText(lblEdit);
+  mw_one->set_PushButtonStyle(idlg);
 
   showGrayWindows();
 
@@ -1140,16 +1141,16 @@ QString Method::setPushButtonQss(QPushButton* btn, int radius, int padding,
                                  const QString& pressedColor,
                                  const QString& pressedTextColor) {
   QStringList list;
-  list.append(QString("QToolButton{border-style:none;padding:%1px;border-"
+  list.append(QString("QPushButton{border-style:none;padding:%1px;border-"
                       "radius:%2px;color:%3;background:%4;}")
                   .arg(padding)
                   .arg(radius)
                   .arg(normalTextColor)
                   .arg(normalColor));
-  list.append(QString("QToolButton:hover{color:%1;background:%2;}")
+  list.append(QString("QPushButton:hover{color:%1;background:%2;}")
                   .arg(hoverTextColor)
                   .arg(hoverColor));
-  list.append(QString("QToolButton:pressed{color:%1;background:%2;}")
+  list.append(QString("QPushButton:pressed{color:%1;background:%2;}")
                   .arg(pressedTextColor)
                   .arg(pressedColor));
 

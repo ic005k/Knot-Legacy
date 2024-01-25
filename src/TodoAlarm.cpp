@@ -63,7 +63,7 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->chkDaily->setStyleSheet(strStyleChk);
   ui->frameDaily->setContentsMargins(10, 1, 10, 1);
 
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 }
 
 TodoAlarm::~TodoAlarm() { delete ui; }

@@ -23,7 +23,7 @@ SyncInfo::SyncInfo(QWidget* parent) : QDialog(parent), ui(new Ui::SyncInfo) {
   ui->textBrowser->verticalScrollBar()->setStyleSheet(
       m_Method->vsbarStyleSmall);
   m_Method->setSCrollPro(ui->textBrowser);
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 }
 
 SyncInfo::~SyncInfo() { delete ui; }

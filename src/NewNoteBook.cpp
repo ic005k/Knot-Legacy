@@ -11,6 +11,7 @@ NewNoteBook::NewNoteBook(QWidget* parent)
   ui->setupUi(this);
   setWindowFlag(Qt::FramelessWindowHint);
   ui->editName->installEventFilter(this);
+  mw_one->set_ToolButtonStyle(this);
 
   QStringList list;
   list.append(tr("Main Root"));

@@ -11,7 +11,7 @@ extern QTabWidget *tabData, *tabChart;
 CategoryList::CategoryList(QWidget* parent)
     : QDialog(parent), ui(new Ui::CategoryList) {
   ui->setupUi(this);
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
   setWindowFlag(Qt::FramelessWindowHint);
   // setAttribute(Qt::WA_TranslucentBackground);
   this->layout()->setContentsMargins(5, 5, 5, 5);

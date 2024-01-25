@@ -316,7 +316,7 @@ class MainWindow : public QMainWindow {
 
   void bakIniData(QString unredoFile, bool unre);
 
-  void set_btnStyle(QObject *parent);
+  void set_ToolButtonStyle(QObject *parent);
   int calcStringPixelWidth(QString s_str, QFont font, int n_font_size);
   int calcStringPixelHeight(QFont font, int n_font_size);
   void on_hSlider_sliderMoved(int position);

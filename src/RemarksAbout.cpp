@@ -19,7 +19,7 @@ dlgRemarks::dlgRemarks(QWidget *parent)
       "border:1px solid gray;}");
   this->layout()->setContentsMargins(5, 5, 5, 5);
 
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 
   setModal(true);
   this->installEventFilter(this);

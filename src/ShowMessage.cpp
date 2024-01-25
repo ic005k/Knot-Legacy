@@ -46,7 +46,7 @@ ShowMessage::ShowMessage(QWidget* parent)
   else
     ui->hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
 
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 }
 
 ShowMessage::~ShowMessage() { delete ui; }

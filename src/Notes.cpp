@@ -48,7 +48,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
     btn->setFont(font1);
   }
 
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 
   ui->lblInfo->hide();
   ui->btnFind->hide();

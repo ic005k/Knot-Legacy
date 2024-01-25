@@ -12,7 +12,7 @@ PrintPDF::PrintPDF(QWidget* parent) : QDialog(parent), ui(new Ui::PrintPDF) {
   QString style = "QDialog{border-radius:0px;border:0px solid darkred;}";
   this->setStyleSheet(style);
 
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 }
 
 PrintPDF::~PrintPDF() { delete ui; }

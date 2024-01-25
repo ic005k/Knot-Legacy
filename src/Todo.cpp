@@ -22,7 +22,7 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   iniTodo->setIniCodec("utf-8");
 #endif
 
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 
   this->installEventFilter(this);
   mw_one->ui->editTodo->viewport()->installEventFilter(mw_one);
@@ -1061,7 +1061,7 @@ void Todo::reeditText() {
   dlg->setGeometry(x, y, w, h);
   dlg->setModal(true);
   m_Method->showGrayWindows();
-  mw_one->set_btnStyle(dlg);
+  mw_one->set_ToolButtonStyle(dlg);
   dlg->show();
 }
 

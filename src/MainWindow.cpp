@@ -1207,7 +1207,7 @@ void MainWindow::on_AddRecord() {
   ui->frameEditRecord->show();
 }
 
-void MainWindow::set_btnStyle(QObject *parent) {
+void MainWindow::set_ToolButtonStyle(QObject *parent) {
   QObjectList btnList = getAllToolButton(getAllUIControls(parent));
   for (int i = 0; i < btnList.count(); i++) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
@@ -1225,8 +1225,7 @@ void MainWindow::set_PushButtonStyle(QObject *parent) {
     QPushButton *btn = (QPushButton *)btnList.at(i);
 
     m_Method->setPushButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB",
-                               "#FFFFFF", "#2483C7",
-                               "#A0DAFB");  // #5DACE4 #E5FEFF
+                               "#FFFFFF", "#2483C7", "#A0DAFB");
   }
 }
 
@@ -3351,6 +3350,10 @@ void MainWindow::on_btnNotes_clicked() {
 
   m_Method->init_all_notes();
 
+  if (ui->editFindNote->text().trimmed().length() > 0) {
+    m_NotesList->on_btnFind_clicked();
+  }
+
   QString strPw = iniNotes->value("/MainNotes/UserKey").toString();
   if (strPw != "") {
     QByteArray baPw = strPw.toUtf8();
@@ -3707,7 +3710,7 @@ void MainWindow::init_Instance() {
 }
 
 void MainWindow::init_UIWidget() {
-  set_btnStyle(this);
+  set_ToolButtonStyle(this);
 
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();

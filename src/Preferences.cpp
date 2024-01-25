@@ -30,7 +30,7 @@ Preferences::Preferences(QWidget* parent)
   ui->sliderFontSize->setMinimum(9);
 #endif
 
-  mw_one->set_btnStyle(this);
+  mw_one->set_ToolButtonStyle(this);
 
   this->installEventFilter(this);
   ui->lblFontSize->installEventFilter(this);
