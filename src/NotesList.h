@@ -25,6 +25,7 @@ class NotesList : public QDialog {
   ~NotesList();
   Ui::NotesList *ui;
 
+  QStringList findResult;
   int findCount;
   QList<QTreeWidgetItem *> findResultList;
   bool isNeedSave = false;
@@ -71,6 +72,10 @@ class NotesList : public QDialog {
   void loadEmptyNote();
 
   void setNoteBookCurrentItem();
+
+  void startFind(QString strFind);
+  void goPrevious();
+  void goNext();
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -140,6 +145,8 @@ class NotesList : public QDialog {
   void on_actionImport_Note_triggered();
   void on_actionExport_Note_triggered();
   int rootIndex;
+
+  void goFindResult(int index);
 };
 
 #endif  // NOTESLIST_H

@@ -755,6 +755,81 @@ void NotesList::getAllFiles(const QString &foldPath, QStringList &folds,
   }
 }
 
+void NotesList::startFind(QString strFind) {
+  strFind = strFind.trimmed();
+  strFind = strFind.toLower();
+  findResult.clear();
+  if (strFind.length() == 0) return;
+
+  int count = m_Method->getCountFromQW(mw_one->ui->qwNoteBook);
+  for (int i = 0; i < count; i++) {
+    setNoteBookCurrentIndex(i);
+    QString str0 = m_Method->getText0(mw_one->ui->qwNoteBook, i);
+    if (str0.toLower().contains(strFind)) {
+      findResult.append(QString::number(i) + "===" + "NoteBook");
+    }
+
+    m_Method->clickNoteBook();
+    int count1 = m_Method->getCountFromQW(mw_one->ui->qwNoteList);
+    for (int j = 0; j < count1; j++) {
+      QString str0 = m_Method->getText0(mw_one->ui->qwNoteList, j);
+      if (str0.toLower().contains(strFind)) {
+        findResult.append(QString::number(i) + "===" + QString::number(j));
+      }
+    }
+  }
+
+  if (findResult.count() > 0) {
+    mw_one->ui->btnFindNextNote->setEnabled(true);
+    mw_one->ui->btnFindPreviousNote->setEnabled(true);
+  }
+
+  goFindResult(0);
+}
+
+void NotesList::goPrevious() {
+  findCount = findCount - 1;
+  if (findCount < 0) findCount = findResult.count() - 1;
+
+  goFindResult(findCount);
+
+  if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
+}
+
+void NotesList::goNext() {
+  findCount = findCount + 1;
+  if (findCount > findResult.count() - 1) findCount = 0;
+
+  goFindResult(findCount);
+
+  if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
+}
+
+void NotesList::goFindResult(int index) {
+  if (findResult.count() == 0) return;
+
+  findCount = index;
+  QString str = findResult.at(index);
+  QStringList list = str.split("===");
+  if (list.at(1) == "NoteBook") {
+    int indexNoteBook = list.at(0).toInt();
+    setNoteBookCurrentIndex(indexNoteBook);
+    m_Method->clickNoteBook();
+    setNotesListCurrentIndex(-1);
+  } else {
+    int index0, index1;
+    index0 = list.at(0).toInt();
+    index1 = list.at(1).toInt();
+    setNoteBookCurrentIndex(index0);
+    m_Method->clickNoteBook();
+    setNotesListCurrentIndex(index1);
+  }
+
+  mw_one->ui->lblFindNoteCount->setText(QString::number(findCount + 1) +
+                                        " -> " +
+                                        QString::number(findResult.count()));
+}
+
 void NotesList::on_btnFind_clicked() {
   QString strFind = ui->editFind->text().trimmed().toLower();
   if (strFind == "") {

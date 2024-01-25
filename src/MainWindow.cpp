@@ -3351,7 +3351,7 @@ void MainWindow::on_btnNotes_clicked() {
   m_Method->init_all_notes();
 
   if (ui->editFindNote->text().trimmed().length() > 0) {
-    m_NotesList->on_btnFind_clicked();
+    on_btnFindNotes_clicked();
   }
 
   QString strPw = iniNotes->value("/MainNotes/UserKey").toString();
@@ -5441,23 +5441,23 @@ void MainWindow::on_btnRestoreNoteRecycle_clicked() {
 }
 
 void MainWindow::on_btnFindNotes_clicked() {
-  m_NotesList->on_btnFind_clicked();
+  m_NotesList->startFind(ui->editFindNote->text().trimmed());
 }
 
 void MainWindow::on_editFindNote_textChanged(const QString &arg1) {
-  m_NotesList->ui->editFind->setText(arg1.trimmed());
+  m_NotesList->startFind(arg1.trimmed());
+  if (arg1.trimmed() == "") on_btnClearNoteFindText_clicked();
 }
 
-void MainWindow::on_btnFindPreviousNote_clicked() {
-  m_NotesList->on_btnPrev_clicked();
-}
+void MainWindow::on_btnFindPreviousNote_clicked() { m_NotesList->goPrevious(); }
 
-void MainWindow::on_btnFindNextNote_clicked() {
-  m_NotesList->on_btnNext_clicked();
-}
+void MainWindow::on_btnFindNextNote_clicked() { m_NotesList->goNext(); }
 
 void MainWindow::on_btnClearNoteFindText_clicked() {
   ui->editFindNote->setText("");
+  ui->lblFindNoteCount->setText("0");
+  ui->btnFindNextNote->setEnabled(false);
+  ui->btnFindPreviousNote->setEnabled(false);
 }
 
 void MainWindow::on_btnShowFindNotes_clicked() {
