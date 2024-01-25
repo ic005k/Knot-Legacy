@@ -773,8 +773,20 @@ void NotesList::on_btnFind_clicked() {
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
       QTreeWidgetItem *childItem = topItem->child(j);
-      if (childItem->text(0).toLower().contains(strFind))
+      if (childItem->text(0).toLower().contains(strFind)) {
         findResultList.append(childItem);
+      }
+
+      QString str1 = childItem->text(1);
+      if (str1.isEmpty()) {
+        int count = childItem->childCount();
+        for (int n = 0; n < count; n++) {
+          QTreeWidgetItem *item = childItem->child(n);
+          if (item->text(0).toLower().contains(strFind)) {
+            findResultList.append(item);
+          }
+        }
+      }
     }
   }
 
@@ -815,18 +827,40 @@ void NotesList::on_btnFind_clicked() {
 
 void NotesList::localItem() {
   QTreeWidgetItem *item = tw->currentItem();
+  // NoteBook
+
   if (item->childCount() > 0) {
-    int topIndex = tw->indexOfTopLevelItem(item);
-    setNoteBookCurrentIndex(topIndex);
+    if (item->parent() == NULL) {
+      int topIndex = tw->indexOfTopLevelItem(item);
+      setNoteBookCurrentIndex(topIndex);
+    } else {
+      int index = tw->indexOfTopLevelItem(item->parent());
+      int row = item->parent()->indexOfChild(item);
+      int childCount = item->parent()->childCount();
+      int newRow = childCount - row;
+      setNoteBookCurrentIndex(index + newRow);
+    }
 
     m_Method->clickNoteBook();
     setNotesListCurrentIndex(-1);
+
+    // Notes
   } else {
-    int topIndex = tw->indexOfTopLevelItem(item->parent());
-    int childIndex = tw->currentIndex().row();
-    setNoteBookCurrentIndex(topIndex);
-    m_Method->clickNoteBook();
-    setNotesListCurrentIndex(childIndex);
+    if (item->parent()->parent() == NULL) {
+      int topIndex = tw->indexOfTopLevelItem(item->parent());
+      int childIndex = tw->currentIndex().row();
+      setNoteBookCurrentIndex(topIndex);
+      m_Method->clickNoteBook();
+      setNotesListCurrentIndex(childIndex);
+    } else {
+      int index = tw->indexOfTopLevelItem(item->parent()->parent());
+      int row = tw->indexOfTopLevelItem(item->parent());
+      int childCount = item->parent()->childCount();
+      setNoteBookCurrentIndex(index + childCount - row);
+
+      m_Method->clickNoteBook();
+      setNotesListCurrentIndex(item->parent()->indexOfChild(item));
+    }
   }
 }
 
