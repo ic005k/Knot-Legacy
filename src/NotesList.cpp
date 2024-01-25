@@ -768,13 +768,16 @@ void NotesList::on_btnFind_clicked() {
   int count = tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
-    if (topItem->text(0).toLower().contains(strFind))
+    if (topItem->text(0).toLower().contains(strFind)) {
       findResultList.append(topItem);
+      qDebug() << topItem->text(0);
+    }
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
       QTreeWidgetItem *childItem = topItem->child(j);
       if (childItem->text(0).toLower().contains(strFind)) {
         findResultList.append(childItem);
+        qDebug() << childItem->text(0);
       }
 
       QString str1 = childItem->text(1);
@@ -784,6 +787,7 @@ void NotesList::on_btnFind_clicked() {
           QTreeWidgetItem *item = childItem->child(n);
           if (item->text(0).toLower().contains(strFind)) {
             findResultList.append(item);
+            qDebug() << item->text(0);
           }
         }
       }
@@ -835,10 +839,17 @@ void NotesList::localItem() {
       setNoteBookCurrentIndex(topIndex);
     } else {
       int index = tw->indexOfTopLevelItem(item->parent());
-      int row = item->parent()->indexOfChild(item);
+
       int childCount = item->parent()->childCount();
-      int newRow = childCount - row;
-      setNoteBookCurrentIndex(index + newRow);
+      int newRow = 0;
+      for (int i = 0; i < childCount; i++) {
+        QTreeWidgetItem *item1 = item->parent()->child(i);
+        if (item1 == item) break;
+
+        if (item1->text(1).isEmpty()) newRow++;
+      }
+
+      setNoteBookCurrentIndex(index + newRow + 1);
     }
 
     m_Method->clickNoteBook();
@@ -846,17 +857,26 @@ void NotesList::localItem() {
 
     // Notes
   } else {
-    if (item->parent()->parent() == NULL) {
+    QTreeWidgetItem *top_item = item->parent()->parent();
+    if (top_item == NULL) {
       int topIndex = tw->indexOfTopLevelItem(item->parent());
       int childIndex = tw->currentIndex().row();
       setNoteBookCurrentIndex(topIndex);
       m_Method->clickNoteBook();
       setNotesListCurrentIndex(childIndex);
     } else {
-      int index = tw->indexOfTopLevelItem(item->parent()->parent());
-      int row = tw->indexOfTopLevelItem(item->parent());
-      int childCount = item->parent()->childCount();
-      setNoteBookCurrentIndex(index + childCount - row);
+      int index = tw->indexOfTopLevelItem(top_item);
+
+      int childCount = top_item->childCount();
+      int newRow = 0;
+      for (int i = 0; i < childCount; i++) {
+        QTreeWidgetItem *item1 = top_item->child(i);
+        if (item1 == item->parent()) break;
+
+        if (item1->text(1).isEmpty()) newRow++;
+      }
+
+      setNoteBookCurrentIndex(index + newRow + 1);
 
       m_Method->clickNoteBook();
       setNotesListCurrentIndex(item->parent()->indexOfChild(item));
