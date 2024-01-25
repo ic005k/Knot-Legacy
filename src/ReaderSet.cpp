@@ -14,46 +14,64 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   QPalette pal = palette();
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  pal.setColor(QPalette::Background, QColor(128, 42, 42, 100));
+  pal.setColor(QPalette::Background, QColor(96, 96, 96, 180));
 #else
-  pal.setColor(QPalette::Window, QColor(128, 42, 42, 100));
+  pal.setColor(QPalette::Window, QColor(96, 96, 96, 180));
 #endif
 
   setPalette(pal);
 
   ui->setupUi(this);
+  ui->hSlider->installEventFilter(this);
 
   ui->btnFontLess->setStyleSheet("border:none");
   ui->btnFontPlus->setStyleSheet("border:none");
   QFont f(this->font());
-  f.setPointSize(13);
+  f.setPointSize(fontSize);
   ui->btnStyle1->setFont(f);
   ui->btnStyle2->setFont(f);
   ui->btnStyle3->setFont(f);
   ui->btnFont->setFont(f);
   ui->lblProg->setFont(f);
-
-  ui->lblProg->hide();
+  ui->lblProg->setStyleSheet("color:white;");
 }
 
 ReaderSet::~ReaderSet() { delete ui; }
 
 void ReaderSet::init() {
-  setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
-              mw_one->ui->qwReader->height());
-  // setWindowFlags(Qt::WindowStaysOnTopHint);
+  int x, y, w, h;
+  w = mw_one->width();
+  h = this->height();
+  x = mw_one->geometry().x();
+  y = mw_one->ui->lblBookName->y() - h;
+  setGeometry(x, y, w, h);
 
   setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool | Qt::FramelessWindowHint);
+
+  ui->hSlider->setStyleSheet(mw_one->ui->hsH->styleSheet());
+
+  QStringList list = mw_one->ui->btnPages->text().split("\n");
+  if (list.count() == 3) {
+    ui->hSlider->setValue(list.at(1).toInt());
+  }
 
   show();
 }
 
 bool ReaderSet::eventFilter(QObject* watch, QEvent* evn) {
+  QMouseEvent* event = static_cast<QMouseEvent*>(evn);
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       close();
       return true;
+    }
+  }
+
+  if (watch == ui->hSlider) {
+    if (event->type() == QEvent::MouseButtonRelease) {
+      on_hSlider_sliderReleased();
+      on_hSlider_sliderMoved(ui->hSlider->value());
     }
   }
 
@@ -120,7 +138,7 @@ void ReaderSet::on_btnFont_clicked() {
 #endif
 
   QString readerFont = mw_one->m_Preferences->setFontDemo(
-      fileName, ui->btnFont, ui->btnFont->font().pointSize());
+      fileName, ui->btnFont, this->font().pointSize());
   iniPreferences->setValue("/Options/ReaderFont", fileName);
 
   mw_one->m_Reader->savePageVPos();

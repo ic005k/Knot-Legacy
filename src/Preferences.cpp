@@ -244,7 +244,7 @@ void Preferences::initOptions() {
   QString readerFontFile =
       iniPreferences->value("/Options/ReaderFont").toString();
   QString readerFont =
-      setFontDemo(readerFontFile, mw_one->m_ReaderSet->ui->btnFont, 10);
+      setFontDemo(readerFontFile, mw_one->m_ReaderSet->ui->btnFont, fontSize);
   mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
                                                           readerFont);
 }
