@@ -8,7 +8,7 @@
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QString iniDir, privateDir, currentMDFile;
-extern bool isAndroid;
+extern bool isAndroid, isDark;
 extern int fontSize;
 extern QSettings *iniNotes;
 
@@ -20,42 +20,47 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &NotesList::on_KVChanged);
 
-  setWindowFlag(Qt::FramelessWindowHint);
+  /*setWindowFlag(Qt::FramelessWindowHint);
+
   setAttribute(Qt::WA_TranslucentBackground);
+
   ui->frame0->setStyleSheet(
       "#frame0{background-color: rgb(236, 236, 236);border-radius:10px; "
       "border:1px solid gray;}");
   ui->frame1->setStyleSheet(
       "#frame1{background-color: rgb(236, 236, 236);border-radius:10px; "
-      "border:1px solid gray;}");
+      "border:1px solid gray;}");*/
+
   tw = ui->treeWidget;
   twrb = ui->treeWidgetRecycle;
 
+  if (!isDark) {
 #ifdef Q_OS_ANDROID
-  ui->treeWidget->setStyleSheet("selection-background-color: lightblue");
+    ui->treeWidget->setStyleSheet("selection-background-color: lightblue");
 #else
-  ui->treeWidget->setStyleSheet(mw_one->treeStyle);
+    ui->treeWidget->setStyleSheet(mw_one->treeStyle);
 #endif
-
-  ui->treeWidgetRecycle->setStyleSheet(ui->treeWidget->styleSheet());
+    ui->treeWidgetRecycle->setStyleSheet(ui->treeWidget->styleSheet());
+    ui->editName->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
+    tw->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
+    twrb->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
+  }
 
   setModal(true);
   this->layout()->setSpacing(5);
   this->layout()->setContentsMargins(2, 2, 2, 2);
   ui->frame1->hide();
 
-  tw->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
   tw->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(tw, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(tw);
 
-  twrb->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
   twrb->setVerticalScrollMode(QTreeWidget::ScrollPerPixel);
   QScroller::grabGesture(twrb, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(twrb);
 
   ui->treeWidget->headerItem()->setText(0, tr("Notebook"));
-  ui->treeWidget->setColumnHidden(1, false);
+  ui->treeWidget->setColumnHidden(1, true);
   twrb->header()->hide();
   twrb->setColumnHidden(1, true);
   twrb->setColumnWidth(0, 180);
@@ -72,6 +77,20 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->lblCount->setFont(font);
   ui->btnPrev->hide();
   ui->btnNext->hide();
+  ui->btnFind->hide();
+  ui->editFind->hide();
+  ui->lblCount->hide();
+  ui->btnNewNote->hide();
+  ui->btnNewNoteBook->hide();
+  ui->editBook->hide();
+  ui->editNote->hide();
+  ui->btnImport->hide();
+  ui->btnExport->hide();
+
+  mw_one->ui->btnNoteRecycle->hide();
+
+  QScroller::grabGesture(ui->editName, QScroller::LeftMouseButtonGesture);
+  m_Method->setSCrollPro(ui->editName);
 
   initNotesList();
   initRecycle();
@@ -150,9 +169,11 @@ void NotesList::on_btnNewNote_clicked() {
 void NotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column) {
   Q_UNUSED(column);
 
-  return;
-
   if (ui->treeWidget->topLevelItemCount() == 0) return;
+
+  ui->editName->setText(item->text(0));
+
+  return;
 
   if (item->parent() != NULL) {
     if (tw->currentIndex().row() == 0) {
@@ -174,8 +195,6 @@ void NotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column) {
 
     setNoteName(item->text(0));
   }
-
-  ui->editName->setText(item->text(0));
 }
 
 QString NotesList::getCurrentMDFile() {
@@ -195,7 +214,7 @@ void NotesList::on_btnRename_clicked() {
   if (ui->treeWidget->topLevelItemCount() == 0) return;
 
   QTreeWidgetItem *item = ui->treeWidget->currentItem();
-  item->setText(0, ui->editName->text().trimmed());
+  item->setText(0, ui->editName->toPlainText().trimmed());
   if (item->parent() != NULL) setNoteName(item->text(0));
 
   isNeedSave = true;

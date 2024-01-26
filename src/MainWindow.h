@@ -700,6 +700,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnChart_clicked();
 
+  void on_btnManagement_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

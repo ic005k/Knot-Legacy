@@ -5475,15 +5475,12 @@ void MainWindow::on_btnClearNoteFindText_clicked() {
 }
 
 void MainWindow::on_btnShowFindNotes_clicked() {
-  if (ui->btnShowFindNotes->text() == tr("Show Find")) {
+  if (ui->f_FindNotes->isHidden()) {
     ui->f_FindNotes->show();
     ui->editFindNote->setFocus();
-    ui->btnShowFindNotes->setText(tr("Hide Find"));
+
   } else {
-    if (ui->btnShowFindNotes->text() == tr("Hide Find")) {
-      ui->f_FindNotes->hide();
-      ui->btnShowFindNotes->setText(tr("Show Find"));
-    }
+    ui->f_FindNotes->hide();
   }
 }
 
@@ -5689,4 +5686,14 @@ void MainWindow::on_btnChart_clicked() {
     ui->btnFind->show();
     ui->btnRemarks->show();
   }
+}
+
+void MainWindow::on_btnManagement_clicked() {
+  int x, y, w, h;
+  x = geometry().x();
+  y = geometry().y();
+  w = width();
+  h = height();
+  m_NotesList->setGeometry(x, y, w, h);
+  m_NotesList->show();
 }

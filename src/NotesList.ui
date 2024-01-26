@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>312</width>
+    <width>565</width>
     <height>759</height>
    </rect>
   </property>
@@ -17,9 +17,10 @@
    <string notr="true">QDialog{	
 	/*background-color: rgb(255, 25, 25);*/	
 	/*border-image:url(:/res/b.png);	*/
-	border-style:solid;						
+
+	/*border-style:solid;						
 	border-width:2px;						
-	border-color:rgb(251, 51, 51);		
+	border-color:rgb(251, 51, 51); */		
 
 }</string>
   </property>
@@ -121,9 +122,18 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="editName">
-          <property name="clearButtonEnabled">
-           <bool>false</bool>
+         <widget class="QTextEdit" name="editName">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>65</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>65</height>
+           </size>
           </property>
          </widget>
         </item>

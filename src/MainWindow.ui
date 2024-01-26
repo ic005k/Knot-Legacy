@@ -4438,6 +4438,25 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
          <item>
+          <widget class="QToolButton" name="btnManagement">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Management</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QToolButton" name="btnShowFindNotes">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -4452,7 +4471,7 @@ QRadioButton::indicator:checked {
             </size>
            </property>
            <property name="text">
-            <string>Show Find</string>
+            <string>Find</string>
            </property>
           </widget>
          </item>
