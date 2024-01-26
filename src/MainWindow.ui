@@ -4452,7 +4452,7 @@ QRadioButton::indicator:checked {
             </size>
            </property>
            <property name="text">
-            <string>Management</string>
+            <string>Tree</string>
            </property>
           </widget>
          </item>

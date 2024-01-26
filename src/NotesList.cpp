@@ -86,8 +86,12 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->editNote->hide();
   ui->btnImport->hide();
   ui->btnExport->hide();
-
-  mw_one->ui->btnNoteRecycle->hide();
+  ui->btnRename->hide();
+  ui->editName->hide();
+  ui->btnUp->hide();
+  ui->btnDown->hide();
+  ui->btnDel->hide();
+  ui->btnRecycle->hide();
 
   QScroller::grabGesture(ui->editName, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(ui->editName);
@@ -573,6 +577,11 @@ void NotesList::initNotesList() {
         QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
         childItem->setText(0, str0);
         childItem->setText(1, "");
+        childItem->setForeground(0, Qt::red);
+        childItem->setFont(0, font);
+
+        topCount++;
+        notesTotal--;
 
         int count = iniNotes
                         ->value("/MainNotes/childCount" + QString::number(i) +
@@ -591,6 +600,8 @@ void NotesList::initNotesList() {
           QTreeWidgetItem *item = new QTreeWidgetItem(childItem);
           item->setText(0, str00);
           item->setText(1, str11);
+
+          notesTotal++;
         }
       }
     }
