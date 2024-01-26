@@ -14,14 +14,15 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   QPalette pal = palette();
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  pal.setColor(QPalette::Background, QColor(96, 96, 96, 180));
+  pal.setColor(QPalette::Background, QColor(10, 10, 10, 200));
 #else
-  pal.setColor(QPalette::Window, QColor(96, 96, 96, 180));
+  pal.setColor(QPalette::Window, QColor(10, 10, 10, 200));
 #endif
 
   setPalette(pal);
 
   ui->setupUi(this);
+  setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool | Qt::FramelessWindowHint);
   ui->hSlider->installEventFilter(this);
 
   ui->btnFontLess->setStyleSheet("border:none");
@@ -43,10 +44,9 @@ void ReaderSet::init() {
   w = mw_one->width();
   h = this->height();
   x = mw_one->geometry().x();
-  y = mw_one->ui->lblBookName->y() - h;
+  y = mw_one->geometry().y() + mw_one->ui->qwReader->geometry().y() +
+      (mw_one->ui->qwReader->height() - h) / 2;
   setGeometry(x, y, w, h);
-
-  setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool | Qt::FramelessWindowHint);
 
   ui->hSlider->setStyleSheet(mw_one->ui->hsH->styleSheet());
 
