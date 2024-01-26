@@ -155,7 +155,7 @@ QString Preferences::setFontDemo(QString customFontPath, QToolButton* btn,
 
     QStringList list = str.split("/");
     QString str1 = list.at(list.count() - 1);
-    btn->setText(tr("Custom Font") + "\n\n" + str1);
+    btn->setText(tr("Custom Font") + "\n" + fontName + "\n" + str1);
   }
 
   return fontName;

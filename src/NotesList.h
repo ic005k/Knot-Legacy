@@ -77,7 +77,8 @@ class NotesList : public QDialog {
   void goPrevious();
   void goNext();
 
- protected:
+  int getNoteBookIndex_twToqml();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

@@ -1240,13 +1240,13 @@ void NotesList::on_actionMoveUp_NoteBook_triggered() {
   int index = getNoteBookCurrentIndex();
   if (index <= 0) return;
 
-  int oldIndex = index;
-
   setNoteBookCurrentItem();
   on_btnUp_clicked();
 
+  int newIndex = getNoteBookIndex_twToqml();
+
   loadAllNoteBook();
-  setNoteBookCurrentIndex(oldIndex - 1);
+  setNoteBookCurrentIndex(newIndex);
   m_Method->clickNoteBook();
 }
 
@@ -1257,14 +1257,36 @@ void NotesList::on_actionMoveDown_NoteBook_triggered() {
 
   if (index == getNoteBookCount() - 1) return;
 
-  int oldIndex = index;
-
   setNoteBookCurrentItem();
   on_btnDown_clicked();
 
+  int newIndex = getNoteBookIndex_twToqml();
+
   loadAllNoteBook();
-  setNoteBookCurrentIndex(oldIndex + 1);
+  setNoteBookCurrentIndex(newIndex);
   m_Method->clickNoteBook();
+}
+
+int NotesList::getNoteBookIndex_twToqml() {
+  QTreeWidgetItem *item = tw->currentItem();
+  int index = 0;
+  if (item->parent() == NULL) {
+    index = tw->indexOfTopLevelItem(item);
+  } else {
+    int index0 = tw->indexOfTopLevelItem(item->parent());
+    int index1 = 0;
+    int count = item->parent()->childCount();
+    for (int i = 0; i < count; i++) {
+      QTreeWidgetItem *item0 = item->parent()->child(i);
+      if (item0 == item) break;
+
+      if (item0->text(1).isEmpty()) index1++;
+    }
+
+    index = index0 + index1 + 1;
+  }
+
+  return index;
 }
 
 void NotesList::loadAllNoteBook() {
