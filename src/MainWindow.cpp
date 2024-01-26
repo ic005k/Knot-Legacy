@@ -4475,15 +4475,27 @@ void MainWindow::on_btnPages_clicked() {
     m_ReaderSet->close();
   } else
     m_ReaderSet->init();
+
+  QStringList list = mw_one->ui->btnPages->text().split("\n");
+  if (list.count() == 3) {
+    QString cur = list.at(1);
+    QString total = list.at(2);
+    m_ReaderSet->ui->lblProg->setText(tr("Reading Progress") + " : " + cur +
+                                      " -> " + total);
+
+    mw_one->m_ReaderSet->ui->hSlider->setMaximum(total.toInt());
+    mw_one->m_ReaderSet->ui->hSlider->setMinimum(1);
+    mw_one->m_ReaderSet->ui->hSlider->setValue(cur.toInt());
+  }
 }
 
 void MainWindow::on_hSlider_sliderMoved(int position) {
   if (isText) {
-    ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position + 1) +
+    ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position) +
                           "\n" + QString::number(totallines / baseLines));
-    ui->progReader->setMinimum(0);
+    ui->progReader->setMinimum(1);
     ui->progReader->setMaximum(totallines / baseLines);
-    ui->progReader->setValue(position + 1);
+    ui->progReader->setValue(position);
   }
 
   if (isEpub) {
@@ -4494,6 +4506,8 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
     if (position == 0) position = 1;
     ui->progReader->setValue(position);
   }
+
+  m_ReaderSet->updateProgress();
 }
 
 void MainWindow::on_btnReadList_clicked() {

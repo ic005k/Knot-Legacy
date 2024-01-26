@@ -53,7 +53,7 @@ class dlgReader : public QDialog {
   qulonglong vpos;
 
   static QString getTextEditLineText(QTextEdit *txtEdit, int i);
-  void getLines();
+
   static QStringList readText(QString textFile);
   void goPostion();
   void setQMLText(QString);
@@ -89,8 +89,6 @@ class dlgReader : public QDialog {
   void on_btnPageUp_clicked();
   void on_btnOpen_clicked();
 
-  void on_hSlider_sliderReleased(int position);
-
   void setAni();
   void loadQMLText(QString str);
   void setPdfViewVisible(bool vv);
@@ -103,7 +101,8 @@ class dlgReader : public QDialog {
   void setPdfScale(qreal scale);
 
   void clearAllReaderRecords();
- public slots:
+  void on_hSlider_sliderReleased(int position);
+  public slots:
 
   void openBookListItem();
 
@@ -122,6 +121,7 @@ class dlgReader : public QDialog {
   static void SplitFile(QString qfile);
   static QString get_href(QString idref, QStringList opfList);
   static void proceImg();
+  void getLines();
 };
 
 #endif  // READER_H

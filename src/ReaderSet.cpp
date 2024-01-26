@@ -97,6 +97,17 @@ void ReaderSet::on_hSlider_sliderMoved(int position) {
   mw_one->on_hSlider_sliderMoved(position);
 }
 
+void ReaderSet::updateProgress() {
+  if (this->isHidden()) return;
+
+  QStringList list = mw_one->ui->btnPages->text().split("\n");
+  if (list.count() == 3) {
+    QString cur = list.at(1);
+    QString total = list.at(2);
+    ui->lblProg->setText(tr("Reading Progress") + " : " + cur + " -> " + total);
+  }
+}
+
 void ReaderSet::on_btnStyle1_clicked() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -146,3 +157,5 @@ void ReaderSet::on_btnFont_clicked() {
                                                           readerFont);
   mw_one->m_Reader->setPageVPos();
 }
+
+void ReaderSet::on_hSlider_valueChanged(int value) { Q_UNUSED(value); }

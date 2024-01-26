@@ -17,7 +17,8 @@ class ReaderSet : public QDialog {
 
   void init();
 
- protected:
+  void updateProgress();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:
   void on_hSlider_sliderReleased();
@@ -35,6 +36,8 @@ class ReaderSet : public QDialog {
   void on_btnStyle3_clicked();
 
   void on_btnFont_clicked();
+
+  void on_hSlider_valueChanged(int value);
 
  private:
 };

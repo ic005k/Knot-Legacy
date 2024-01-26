@@ -529,46 +529,6 @@ void dlgReader::getBookList() {
   }
 }
 
-void dlgReader::getLines() {
-  QString qsShow;
-
-  mw_one->m_ReaderSet->ui->hSlider->setTickInterval(1);
-  mw_one->m_ReaderSet->ui->hSlider->setMinimum(0);
-  mw_one->m_ReaderSet->ui->hSlider->setValue(sPos);
-
-  if (isText) {
-    mw_one->m_ReaderSet->ui->hSlider->setMaximum(totallines / baseLines - 1);
-    mw_one->ui->btnPages->setText(
-        tr("Pages") + "\n" +
-        QString::number(mw_one->m_ReaderSet->ui->hSlider->value() + 1) + "\n" +
-        QString::number(totallines / baseLines));
-    iPage = mw_one->m_ReaderSet->ui->hSlider->value() * baseLines;
-    qDebug() << "iPage" << iPage << mw_one->m_ReaderSet->ui->hSlider->value();
-
-    int count = iPage + baseLines;
-    QString txt1;
-    for (int i = iPage; i < count; i++) {
-      iPage++;
-      QString str = readTextList.at(i);
-      if (str.trimmed() != "")
-        txt1 = txt1 + readTextList.at(i).trimmed() + "\n" + strSpace;
-    }
-
-    qsShow =
-        "<p style='line-height:32px; width:100% ; white-space: pre-wrap; "
-        "'>" +
-        txt1 + "</p>";
-    setQMLText(qsShow);
-  }
-
-  if (isEpub) {
-    mw_one->m_ReaderSet->ui->hSlider->setMaximum(htmlFiles.count());
-    htmlIndex = sPos - 1;
-    if (htmlIndex < 0) htmlIndex = 0;
-    setQMLHtml();
-  }
-}
-
 void dlgReader::setQMLText(QString txt1) {
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
 
@@ -599,18 +559,6 @@ void dlgReader::loadQMLText(QString str) {
     QQuickItem* root = mw_one->ui->qwReader->rootObject();
     QMetaObject::invokeMethod((QObject*)root, "loadText", Q_ARG(QVariant, str));
   }
-}
-
-void dlgReader::on_hSlider_sliderReleased(int position) {
-  mw_one->ui->lblTitle->hide();
-
-  int max = 0;
-  if (isText) max = totallines / baseLines;
-  if (isEpub) max = htmlFiles.count();
-  if (position >= max) position = max;
-  sPos = position;
-  getLines();
-  setPageVPos();
 }
 
 void dlgReader::on_btnPageUp_clicked() {
@@ -1022,13 +970,8 @@ qreal dlgReader::getNewVPos(qreal pos1, qreal h1, qreal h2) {
 }
 
 void dlgReader::showInfo() {
-  mw_one->m_ReaderSet->ui->hSlider->setTickInterval(1);
-
   if (isText) {
     if (totallines > baseLines) {
-      mw_one->m_ReaderSet->ui->hSlider->setMinimum(0);
-      mw_one->m_ReaderSet->ui->hSlider->setValue(iPage / baseLines);
-      mw_one->m_ReaderSet->ui->hSlider->setMaximum(totallines / baseLines);
       mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
                                     QString::number(iPage / baseLines) + "\n" +
                                     QString::number(totallines / baseLines));
@@ -1041,15 +984,14 @@ void dlgReader::showInfo() {
   }
 
   if (isEpub) {
-    mw_one->m_ReaderSet->ui->hSlider->setMinimum(1);
-    mw_one->m_ReaderSet->ui->hSlider->setValue(htmlIndex);
-    mw_one->m_ReaderSet->ui->hSlider->setMaximum(htmlFiles.count());
     mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
                                   QString::number(htmlIndex + 1) + "\n" +
                                   QString::number(htmlFiles.count()));
     mw_one->ui->progReader->setMaximum(htmlFiles.count());
     mw_one->ui->progReader->setValue(htmlIndex + 1);
   }
+
+  mw_one->m_ReaderSet->updateProgress();
 }
 
 void dlgReader::SplitFile(QString qfile) {
@@ -1446,4 +1388,55 @@ bool dlgReader::copyDirectoryFiles(const QString& fromDir, const QString& toDir,
     }
   }
   return true;
+}
+
+void dlgReader::on_hSlider_sliderReleased(int position) {
+  mw_one->ui->lblTitle->hide();
+
+  int max = 0;
+  if (isText) max = totallines / baseLines;
+  if (isEpub) max = htmlFiles.count();
+  if (position >= max) position = max;
+  sPos = position;
+  getLines();
+  setPageVPos();
+}
+
+void dlgReader::getLines() {
+  QString qsShow;
+
+  mw_one->m_ReaderSet->ui->hSlider->setMinimum(1);
+  // mw_one->m_ReaderSet->ui->hSlider->setValue(sPos);
+
+  if (isText) {
+    mw_one->m_ReaderSet->ui->hSlider->setMaximum(totallines / baseLines);
+    mw_one->ui->btnPages->setText(
+        tr("Pages") + "\n" +
+        QString::number(mw_one->m_ReaderSet->ui->hSlider->value()) + "\n" +
+        QString::number(totallines / baseLines));
+    iPage = (mw_one->m_ReaderSet->ui->hSlider->value() - 1) * baseLines;
+    qDebug() << "iPage" << iPage << mw_one->m_ReaderSet->ui->hSlider->value();
+
+    int count = iPage + baseLines;
+    QString txt1;
+    for (int i = iPage; i < count; i++) {
+      iPage++;
+      QString str = readTextList.at(i);
+      if (str.trimmed() != "")
+        txt1 = txt1 + readTextList.at(i).trimmed() + "\n" + strSpace;
+    }
+
+    qsShow =
+        "<p style='line-height:32px; width:100% ; white-space: pre-wrap; "
+        "'>" +
+        txt1 + "</p>";
+    setQMLText(qsShow);
+  }
+
+  if (isEpub) {
+    mw_one->m_ReaderSet->ui->hSlider->setMaximum(htmlFiles.count());
+    htmlIndex = sPos - 1;
+    if (htmlIndex < 0) htmlIndex = 0;
+    setQMLHtml();
+  }
 }
