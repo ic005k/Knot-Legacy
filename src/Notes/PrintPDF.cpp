@@ -1,6 +1,6 @@
 #include "PrintPDF.h"
 
-#include "MainWindow.h"
+#include "src/MainWindow.h"
 #include "ui_PrintPDF.h"
 
 extern MainWindow* mw_one;

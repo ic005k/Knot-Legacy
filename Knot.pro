@@ -55,16 +55,17 @@ SOURCES += \
     src/FileSystemWatcher.cpp \
     src/LoadPic.cpp \
     src/MainWindow.cpp \
-    src/MarkdownHighlighter.cpp \
     src/Method.cpp \
     src/MyWheel.cpp \
-    src/NewNoteBook.cpp \
     src/Notes.cpp \
+    src/Notes/MarkdownHighlighter.cpp \
+    src/Notes/MoveTo.cpp \
+    src/Notes/NewNoteBook.cpp \
+    src/Notes/PrintPDF.cpp \
+    src/Notes/QOwnLanguageData.cpp \
     src/NotesList.cpp \
     src/PageIndicator.cpp \
     src/Preferences.cpp \
-    src/PrintPDF.cpp \
-    src/QOwnLanguageData.cpp \
     src/Reader.cpp \
     src/ReaderSet.cpp \
     src/RemarksAbout.cpp \
@@ -113,16 +114,17 @@ HEADERS += \
     src/FileSystemWatcher.h \
     src/LoadPic.h \
     src/MainWindow.h \
-    src/MarkdownHighlighter.h \
     src/Method.h \
     src/MyWheel.h \
-    src/NewNoteBook.h \
     src/Notes.h \
+    src/Notes/MarkdownHighlighter.h \
+    src/Notes/MoveTo.h \
+    src/Notes/NewNoteBook.h \
+    src/Notes/PrintPDF.h \
+    src/Notes/QOwnLanguageData.h \
     src/NotesList.h \
     src/PageIndicator.h \
     src/Preferences.h \
-    src/PrintPDF.h \
-    src/QOwnLanguageData.h \
     src/Reader.h \
     src/ReaderSet.h \
     src/RemarksAbout.h \
@@ -174,12 +176,13 @@ FORMS += \
     src/CloudBackup.ui \
     src/DateSelector.ui \
     src/MainWindow.ui \
-    src/NewNoteBook.ui \
     src/Notes.ui \
+    src/Notes/MoveTo.ui \
+    src/Notes/NewNoteBook.ui \
+    src/Notes/PrintPDF.ui \
     src/NotesList.ui \
     src/PageIndicator.ui \
     src/Preferences.ui \
-    src/PrintPDF.ui \
     src/ReaderSet.ui \
     src/RemarksAbout.ui \
     src/SetReaderText.ui \

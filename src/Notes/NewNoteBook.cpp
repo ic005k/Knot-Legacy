@@ -1,6 +1,6 @@
 #include "NewNoteBook.h"
 
-#include "MainWindow.h"
+#include "src/MainWindow.h"
 #include "ui_NewNoteBook.h"
 
 extern MainWindow* mw_one;

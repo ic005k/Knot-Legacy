@@ -25,8 +25,8 @@
 #include <QTimer>
 #include <utility>
 
-#include "MainWindow.h"
 #include "QOwnLanguageData.h"
+#include "src/MainWindow.h"
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern bool isDark;

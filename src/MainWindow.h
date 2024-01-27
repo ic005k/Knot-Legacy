@@ -70,7 +70,6 @@
 #include <QTreeWidgetItem>
 #include <QValueAxis>
 
-#include "MarkdownHighlighter.h"
 #include "Method.h"
 #include "ReaderSet.h"
 #include "ShowMessage.h"
@@ -81,6 +80,7 @@
 #include "src/FileSystemWatcher.h"
 #include "src/LoadPic.h"
 #include "src/Notes.h"
+#include "src/Notes/MarkdownHighlighter.h"
 #include "src/NotesList.h"
 #include "src/PageIndicator.h"
 #include "src/Preferences.h"

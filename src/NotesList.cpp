@@ -1622,4 +1622,4 @@ void NotesList::setNoteLabel() {
   m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index, notesSum);
 }
 
-void NotesList::on_btnMoveTo_clicked() {}
+void NotesList::on_btnMoveTo_clicked() { MoveTo *m_MoveTo = new MoveTo(this); }
