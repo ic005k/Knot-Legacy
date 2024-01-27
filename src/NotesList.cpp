@@ -688,27 +688,32 @@ void NotesList::on_btnBack_clicked() {
 
 void NotesList::on_btnRestore_clicked() {
   QTreeWidgetItem *curItem = twrb->currentItem();
-  moveItem(twrb, curItem);
+  if (curItem->parent() == NULL) return;
+
+  if (moveItem(twrb))
+    on_btnBack_clicked();
+  else
+    return;
+
+  saveRecycle();
+  isNeedSave = true;
+  saveNotesList();
 
   return;
 
-  if (curItem->parent() == NULL) {
-    return;
-  } else {
-    QTreeWidgetItem *item = new QTreeWidgetItem;
-    QString str0 = curItem->text(0);
-    QString str1 = curItem->text(1);
+  QTreeWidgetItem *item = new QTreeWidgetItem;
+  QString str0 = curItem->text(0);
+  QString str1 = curItem->text(1);
 
-    item->setText(0, str0);
-    item->setText(1, str1);
-    addItem(tw, item);
+  item->setText(0, str0);
+  item->setText(1, str1);
+  addItem(tw, item);
 
-    m_Method->addItemToQW(mw_one->ui->qwNoteList, str0, "", "", str1, 0);
+  m_Method->addItemToQW(mw_one->ui->qwNoteList, str0, "", "", str1, 0);
 
-    curItem->parent()->removeChild(curItem);
-    isNeedSave = true;
-    saveRecycle();
-  }
+  curItem->parent()->removeChild(curItem);
+  isNeedSave = true;
+  saveRecycle();
 
   isNeedSave = true;
   saveNotesList();
@@ -1396,6 +1401,11 @@ void NotesList::init_NoteBookMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
+  actRename->setVisible(false);
+  actDel->setVisible(false);
+  actMoveUp->setVisible(false);
+  actMoveDown->setVisible(false);
+
   mainMenu->setStyleSheet(m_Method->qssMenu);
 }
 
@@ -1613,6 +1623,11 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
+  actRename->setVisible(false);
+  actDel->setVisible(false);
+  actMoveUp->setVisible(false);
+  actMoveDown->setVisible(false);
+
   mainMenu->setStyleSheet(m_Method->qssMenu);
 }
 
@@ -1626,22 +1641,24 @@ void NotesList::setNoteLabel() {
 }
 
 void NotesList::on_btnMoveTo_clicked() {
-  QTreeWidgetItem *item = tw->currentItem();
-  moveItem(tw, item);
+  if (tw->currentItem() == NULL) return;
+
+  moveItem(tw);
 }
 
-void NotesList::moveItem(QTreeWidget *tw, QTreeWidgetItem *item) {
-  if (item == NULL) return;
+bool NotesList::moveItem(QTreeWidget *twMain) {
+  QTreeWidgetItem *item = twMain->currentItem();
+  if (item == NULL) return false;
 
   MoveTo *m_MoveTo = new MoveTo(this);
-  if (!m_MoveTo->isOk) return;
+  if (!m_MoveTo->isOk) return false;
 
   // NoteBook
   if (item->text(1).isEmpty()) {
     QTreeWidgetItem *new_item = item;
 
     if (m_MoveTo->strCurrentItem == tr("Main Root")) {
-      if (item->parent() == NULL) return;
+      if (item->parent() == NULL) return false;
 
       item->parent()->removeChild(item);
       tw->addTopLevelItem(new_item);
@@ -1663,7 +1680,7 @@ void NotesList::moveItem(QTreeWidget *tw, QTreeWidgetItem *item) {
 
   // Notes
   if (!item->text(1).isEmpty()) {
-    if (m_MoveTo->strCurrentItem == tr("Main Root")) return;
+    if (m_MoveTo->strCurrentItem == tr("Main Root")) return false;
 
     QTreeWidgetItem *new_item = item;
     item->parent()->removeChild(item);
@@ -1672,4 +1689,6 @@ void NotesList::moveItem(QTreeWidget *tw, QTreeWidgetItem *item) {
   }
 
   isNeedSave = true;
+
+  return true;
 }

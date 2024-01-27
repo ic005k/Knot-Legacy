@@ -34,6 +34,9 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>9</number>
+      </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
@@ -102,6 +105,9 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <property name="spacing">
+         <number>5</number>
+        </property>
         <item>
          <widget class="QToolButton" name="btnRename">
           <property name="sizePolicy">
@@ -222,6 +228,9 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <property name="spacing">
+         <number>9</number>
+        </property>
         <item>
          <widget class="QToolButton" name="btnImport">
           <property name="sizePolicy">
@@ -291,6 +300,9 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>9</number>
+        </property>
         <item>
          <widget class="QToolButton" name="btnClose">
           <property name="sizePolicy">
@@ -341,6 +353,9 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>9</number>
+      </property>
       <item>
        <widget class="QTreeWidget" name="treeWidgetRecycle">
         <column>
@@ -357,6 +372,9 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <property name="spacing">
+         <number>9</number>
+        </property>
         <item>
          <widget class="QToolButton" name="btnBack">
           <property name="sizePolicy">
