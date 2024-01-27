@@ -270,7 +270,7 @@ void NotesList::on_btnDel_clicked() {
         }
       }
     }
-    ui->treeWidget->takeTopLevelItem(ui->treeWidget->currentIndex().row());
+    tw->takeTopLevelItem(tw->currentIndex().row());
 
   } else {
     if (!item->text(1).isEmpty()) {
@@ -688,6 +688,9 @@ void NotesList::on_btnBack_clicked() {
 
 void NotesList::on_btnRestore_clicked() {
   QTreeWidgetItem *curItem = twrb->currentItem();
+  moveItem(twrb, curItem);
+
+  return;
 
   if (curItem->parent() == NULL) {
     return;
@@ -1622,4 +1625,51 @@ void NotesList::setNoteLabel() {
   m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index, notesSum);
 }
 
-void NotesList::on_btnMoveTo_clicked() { MoveTo *m_MoveTo = new MoveTo(this); }
+void NotesList::on_btnMoveTo_clicked() {
+  QTreeWidgetItem *item = tw->currentItem();
+  moveItem(tw, item);
+}
+
+void NotesList::moveItem(QTreeWidget *tw, QTreeWidgetItem *item) {
+  if (item == NULL) return;
+
+  MoveTo *m_MoveTo = new MoveTo(this);
+  if (!m_MoveTo->isOk) return;
+
+  // NoteBook
+  if (item->text(1).isEmpty()) {
+    QTreeWidgetItem *new_item = item;
+
+    if (m_MoveTo->strCurrentItem == tr("Main Root")) {
+      if (item->parent() == NULL) return;
+
+      item->parent()->removeChild(item);
+      tw->addTopLevelItem(new_item);
+      tw->setCurrentItem(new_item);
+    }
+
+    if (m_MoveTo->strCurrentItem != tr("Main Root")) {
+      if (m_MoveTo->currentItem != item) {
+        if (item->parent() == NULL)
+          tw->takeTopLevelItem(tw->currentIndex().row());
+        else
+          item->parent()->removeChild(item);
+
+        m_MoveTo->currentItem->addChild(new_item);
+        tw->setCurrentItem(new_item);
+      }
+    }
+  }
+
+  // Notes
+  if (!item->text(1).isEmpty()) {
+    if (m_MoveTo->strCurrentItem == tr("Main Root")) return;
+
+    QTreeWidgetItem *new_item = item;
+    item->parent()->removeChild(item);
+    m_MoveTo->currentItem->addChild(new_item);
+    tw->setCurrentItem(new_item);
+  }
+
+  isNeedSave = true;
+}

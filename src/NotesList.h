@@ -153,6 +153,8 @@ class NotesList : public QDialog {
   int rootIndex;
 
   void goFindResult(int index);
+
+  void moveItem(QTreeWidget *tw, QTreeWidgetItem *item);
 };
 
 #endif  // NOTESLIST_H

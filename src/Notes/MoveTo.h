@@ -2,6 +2,7 @@
 #define MOVETO_H
 
 #include <QDialog>
+#include <QTreeWidgetItem>
 
 namespace Ui {
 class MoveTo;
@@ -15,8 +16,11 @@ class MoveTo : public QDialog {
   ~MoveTo();
   Ui::MoveTo *ui;
   QString strCurrentItem;
+  QTreeWidgetItem *currentItem;
+  bool isOk = false;
 
-  QString getCurrentItem();
+  void initTopNoteBook();
+  void initAllNoteBook();
 
  protected:
   void closeEvent(QCloseEvent *event) override;
@@ -26,7 +30,8 @@ class MoveTo : public QDialog {
   void on_btnOk_clicked();
 
  private:
-  bool isOk = false;
+  QList<QTreeWidgetItem *> listItems;
+  void showDialog();
 };
 
 #endif  // MOVETO_H
