@@ -5,8 +5,6 @@
 #include "ui_MainWindow.h"
 #include "ui_Notes.h"
 
-extern QSettings *iniNotes;
-
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QString iniFile, iniDir, privateDir, currentMDFile;
@@ -219,6 +217,12 @@ void Notes::saveMainNotes() {
 
   QString strTag = currentMDFile;
   strTag.replace(iniDir, "");
+
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
 
   iniNotes->setValue("/MainNotes/editVPos" + strTag,
                      ui->editSource->verticalScrollBar()->sliderPosition());

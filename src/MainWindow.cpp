@@ -35,7 +35,7 @@ bool isDark = false;
 
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
-QSettings *iniNotes, *iniPreferences;
+QSettings *iniPreferences;
 
 extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del, isWholeMonth,
     isDateSection;
@@ -3354,6 +3354,12 @@ void MainWindow::on_btnNotes_clicked() {
     on_btnFindNotes_clicked();
   }
 
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
+
   QString strPw = iniNotes->value("/MainNotes/UserKey").toString();
   if (strPw != "") {
     QByteArray baPw = strPw.toUtf8();
@@ -3673,12 +3679,6 @@ void MainWindow::init_Theme() {
 void MainWindow::init_Instance() {
   mw_one = this;
   CurrentYear = QString::number(QDate::currentDate().year());
-
-  iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniNotes->setIniCodec("utf-8");
-#endif
 
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
@@ -4653,6 +4653,12 @@ void MainWindow::on_btnSetKey_clicked() {
 void MainWindow::on_btnSetKeyOK_clicked() {
   isSelf = true;
 
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
+
   if (ui->editPassword1->text().trimmed() == "" &&
       ui->editPassword2->text().trimmed() == "") {
     iniNotes->remove("/MainNotes/UserKey");
@@ -4706,6 +4712,13 @@ void MainWindow::on_btnEdit_clicked() {
 
   QString a = currentMDFile;
   a.replace(iniDir, "");
+
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
+
   int vpos = iniNotes->value("/MainNotes/editVPos" + a).toInt();
   int cpos = iniNotes->value("/MainNotes/editCPos" + a).toInt();
   bool isToolBarVisible =

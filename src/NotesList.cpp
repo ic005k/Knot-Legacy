@@ -10,7 +10,6 @@ extern Method *m_Method;
 extern QString iniDir, privateDir, currentMDFile;
 extern bool isAndroid, isDark;
 extern int fontSize;
-extern QSettings *iniNotes;
 
 NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->setupUi(this);
@@ -300,6 +299,7 @@ void NotesList::on_btnDel_clicked() {
 
   tw->setFocus();
   isNeedSave = true;
+  saveNotesList();
 }
 
 void NotesList::addItem(QTreeWidget *tw, QTreeWidgetItem *item) {
@@ -425,8 +425,8 @@ void NotesList::closeEvent(QCloseEvent *event) {
 void NotesList::saveNotesList() {
   if (!isNeedSave) return;
 
-  iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   iniNotes->setIniCodec("utf-8");
 #endif
@@ -499,8 +499,8 @@ void NotesList::saveNotesList() {
 void NotesList::saveRecycle() {
   if (!isNeedSave) return;
 
-  iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   iniNotes->setIniCodec("utf-8");
 #endif
@@ -542,13 +542,14 @@ void NotesList::initNotesList() {
   mw_one->isSelf = true;
   tw->clear();
 
-  iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   iniNotes->setIniCodec("utf-8");
 #endif
 
   int topCount = iniNotes->value("/MainNotes/topItemCount").toInt();
+  int nNoteBook = topCount;
 
   int notesTotal = 0;
   QString str0, str1;
@@ -588,7 +589,7 @@ void NotesList::initNotesList() {
         childItem->setForeground(0, Qt::red);
         childItem->setFont(0, font);
 
-        topCount++;
+        nNoteBook++;
         notesTotal--;
 
         int count = iniNotes
@@ -617,7 +618,7 @@ void NotesList::initNotesList() {
   }
 
   tw->headerItem()->setText(0, tr("Notebook") + "(" +
-                                   QString::number(topCount) + "  " +
+                                   QString::number(nNoteBook) + "  " +
                                    QString::number(notesTotal) + ")");
   tw->expandAll();
 }
@@ -626,8 +627,8 @@ void NotesList::initRecycle() {
   mw_one->isSelf = true;
   twrb->clear();
 
-  iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, this);
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   iniNotes->setIniCodec("utf-8");
 #endif
@@ -736,6 +737,7 @@ void NotesList::on_btnDel_Recycle_clicked() {
   }
 
   isNeedSave = true;
+  saveRecycle();
 }
 
 void NotesList::setWinPos() {

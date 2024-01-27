@@ -32,6 +32,7 @@ class MoveTo : public QDialog {
  private:
   QList<QTreeWidgetItem *> listItems;
   void showDialog();
+  QWidget *m_widget;
 };
 
 #endif  // MOVETO_H
