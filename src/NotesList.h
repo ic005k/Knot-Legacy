@@ -78,7 +78,8 @@ class NotesList : public QDialog {
   void goNext();
 
   int getNoteBookIndex_twToqml();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -124,6 +125,8 @@ class NotesList : public QDialog {
   void on_btnUp_clicked();
 
   void on_btnDown_clicked();
+
+  void on_btnMoveTo_clicked();
 
  private:
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();

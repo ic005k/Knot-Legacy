@@ -2068,7 +2068,7 @@ in skydrive folder</source>
     <message>
         <location filename="NotesList.ui" line="61"/>
         <location filename="NotesList.cpp" line="62"/>
-        <location filename="NotesList.cpp" line="606"/>
+        <location filename="NotesList.cpp" line="619"/>
         <source>Notebook</source>
         <translation>笔记本</translation>
     </message>
@@ -2079,8 +2079,8 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="NotesList.ui" line="84"/>
-        <location filename="NotesList.cpp" line="1385"/>
-        <location filename="NotesList.cpp" line="1556"/>
+        <location filename="NotesList.cpp" line="1404"/>
+        <location filename="NotesList.cpp" line="1575"/>
         <source>New Note</source>
         <translation>新建笔记</translation>
     </message>
@@ -2146,19 +2146,19 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="NotesList.ui" line="218"/>
-        <location filename="NotesList.ui" line="340"/>
+        <location filename="NotesList.ui" line="353"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
         <location filename="NotesList.ui" line="234"/>
-        <location filename="NotesList.cpp" line="1561"/>
+        <location filename="NotesList.cpp" line="1580"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
         <location filename="NotesList.ui" line="247"/>
-        <location filename="NotesList.cpp" line="1562"/>
+        <location filename="NotesList.cpp" line="1581"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
@@ -2173,80 +2173,91 @@ in skydrive folder</source>
         <translation>下移</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="290"/>
+        <location filename="NotesList.ui" line="286"/>
+        <source>MoveTo</source>
+        <translation>移动到</translation>
+    </message>
+    <message>
+        <location filename="NotesList.ui" line="303"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="293"/>
-        <location filename="NotesList.ui" line="359"/>
+        <location filename="NotesList.ui" line="306"/>
+        <location filename="NotesList.ui" line="372"/>
         <source>Esc</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="306"/>
-        <location filename="NotesList.ui" line="385"/>
+        <location filename="NotesList.ui" line="319"/>
+        <location filename="NotesList.ui" line="398"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="313"/>
+        <location filename="NotesList.ui" line="326"/>
         <source>Recycle</source>
         <translation>回收箱</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="335"/>
+        <location filename="NotesList.ui" line="348"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="356"/>
+        <location filename="NotesList.ui" line="369"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="NotesList.ui" line="372"/>
-        <source>Restore</source>
-        <translation>恢复</translation>
+        <location filename="NotesList.ui" line="385"/>
+        <source>RestoreTo</source>
+        <oldsource>Restore</oldsource>
+        <translation>恢复到</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="212"/>
-        <location filename="NotesList.cpp" line="1474"/>
+        <location filename="NotesList.cpp" line="213"/>
+        <location filename="NotesList.cpp" line="1493"/>
         <source>Note Name</source>
         <translation>笔记名称</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="322"/>
+        <location filename="NotesList.cpp" line="244"/>
+        <source>Move to the recycle bin?</source>
+        <translation>移到回收箱？</translation>
+    </message>
+    <message>
+        <location filename="NotesList.cpp" line="330"/>
         <source>Knot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="322"/>
+        <location filename="NotesList.cpp" line="330"/>
         <source>MD File (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="343"/>
+        <location filename="NotesList.cpp" line="351"/>
         <source>Invalid Markdown file.</source>
         <translation>无效的Markdown文件</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="390"/>
+        <location filename="NotesList.cpp" line="398"/>
         <source>MD File(*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="429"/>
+        <location filename="NotesList.cpp" line="437"/>
         <source>Modi Notes List</source>
         <translation>修改笔记列表</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="503"/>
+        <location filename="NotesList.cpp" line="511"/>
         <source>Modi Notes Recycle</source>
         <translation>修改笔记回收箱</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="654"/>
+        <location filename="NotesList.cpp" line="667"/>
         <source>Notes Recycle Bin</source>
         <translation>笔记回收箱</translation>
     </message>
@@ -2259,7 +2270,7 @@ in skydrive folder</source>
         <translation type="vanished">取消</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1349"/>
+        <location filename="NotesList.cpp" line="1368"/>
         <source>New NoteBook</source>
         <translation>新建笔记本</translation>
     </message>
@@ -2268,19 +2279,20 @@ in skydrive folder</source>
         <translation type="vanished">新建笔记本名称</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1214"/>
+        <location filename="NotesList.cpp" line="1233"/>
         <source>NoteBook Name</source>
         <translation>笔记本名称</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1175"/>
-        <location filename="NotesList.cpp" line="1426"/>
+        <location filename="NotesList.cpp" line="721"/>
+        <location filename="NotesList.cpp" line="1194"/>
+        <location filename="NotesList.cpp" line="1445"/>
         <source>Whether to remove</source>
         <translation>是否删除</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1214"/>
-        <location filename="NotesList.cpp" line="1351"/>
+        <location filename="NotesList.cpp" line="1233"/>
+        <location filename="NotesList.cpp" line="1370"/>
         <source>Rename NoteBook</source>
         <translation>重命名笔记本</translation>
     </message>
@@ -2289,45 +2301,45 @@ in skydrive folder</source>
         <translation type="vanished">总和</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1350"/>
+        <location filename="NotesList.cpp" line="1369"/>
         <source>Del NoteBook</source>
         <translation>删除笔记本</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1352"/>
-        <location filename="NotesList.cpp" line="1559"/>
+        <location filename="NotesList.cpp" line="1371"/>
+        <location filename="NotesList.cpp" line="1578"/>
         <source>Move Up</source>
         <translation>上移</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1353"/>
-        <location filename="NotesList.cpp" line="1560"/>
+        <location filename="NotesList.cpp" line="1372"/>
+        <location filename="NotesList.cpp" line="1579"/>
         <source>Move Down</source>
         <translation>下移</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1385"/>
+        <location filename="NotesList.cpp" line="1404"/>
         <source>New Note Name</source>
         <translation>新建笔记名称</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1474"/>
-        <location filename="NotesList.cpp" line="1558"/>
+        <location filename="NotesList.cpp" line="1493"/>
+        <location filename="NotesList.cpp" line="1577"/>
         <source>Rename Note</source>
         <translation>重命名笔记</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1557"/>
+        <location filename="NotesList.cpp" line="1576"/>
         <source>Del Note</source>
         <translation>删除笔记</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1595"/>
+        <location filename="NotesList.cpp" line="1614"/>
         <source>Note Book</source>
         <translation>笔记本</translation>
     </message>
     <message>
-        <location filename="NotesList.cpp" line="1598"/>
+        <location filename="NotesList.cpp" line="1617"/>
         <source>Note List</source>
         <translation>笔记列表</translation>
     </message>

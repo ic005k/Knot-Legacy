@@ -86,12 +86,8 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->editNote->hide();
   ui->btnImport->hide();
   ui->btnExport->hide();
-  ui->btnRename->hide();
-  ui->editName->hide();
-  ui->btnUp->hide();
-  ui->btnDown->hide();
-  ui->btnDel->hide();
-  ui->btnRecycle->hide();
+
+  mw_one->ui->btnNoteRecycle->hide();
 
   QScroller::grabGesture(ui->editName, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(ui->editName);
@@ -127,7 +123,12 @@ bool NotesList::eventFilter(QObject *watch, QEvent *evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void NotesList::on_btnClose_clicked() { this->close(); }
+void NotesList::on_btnClose_clicked() {
+  this->close();
+  loadAllNoteBook();
+  setNoteBookCurrentIndex(0);
+  m_Method->clickNoteBook();
+}
 
 void NotesList::on_btnNewNoteBook_clicked() {
   QTreeWidgetItem *item = new QTreeWidgetItem();
@@ -235,6 +236,13 @@ void NotesList::on_btnDel_clicked() {
   if (tw->topLevelItemCount() == 0) return;
 
   QTreeWidgetItem *item = ui->treeWidget->currentItem();
+
+  if (item == NULL) return;
+
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg(
+          "Knot", tr("Move to the recycle bin?") + "\n\n" + item->text(0), 2))
+    return;
 
   QString str0, str1;
   if (item->parent() == NULL) {
@@ -708,6 +716,12 @@ void NotesList::on_btnDel_Recycle_clicked() {
   if (curItem->parent() == NULL) {
     return;
   } else {
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
+    if (!m_ShowMsg->showMsg(
+            "Knot", tr("Whether to remove") + "  " + curItem->text(0) + " ? ",
+            2))
+      return;
+
     QString md = iniDir + curItem->text(1);
     delFile(md);
     curItem->parent()->removeChild(curItem);
@@ -1062,6 +1076,9 @@ void NotesList::on_KVChanged() {
 
 void NotesList::moveBy(int ud) {
   QTreeWidgetItem *item = tw->currentItem();
+
+  if (item == NULL) return;
+
   if (item->parent() != NULL) {
     QTreeWidgetItem *parentItem = item->parent();
     int index = parentItem->indexOfChild(item);
@@ -1604,3 +1621,5 @@ void NotesList::setNoteLabel() {
   int index = getNoteBookCurrentIndex();
   m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index, notesSum);
 }
+
+void NotesList::on_btnMoveTo_clicked() {}
