@@ -122,12 +122,7 @@ bool NotesList::eventFilter(QObject *watch, QEvent *evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void NotesList::on_btnClose_clicked() {
-  this->close();
-  loadAllNoteBook();
-  setNoteBookCurrentIndex(0);
-  m_Method->clickNoteBook();
-}
+void NotesList::on_btnClose_clicked() { this->close(); }
 
 void NotesList::on_btnNewNoteBook_clicked() {
   QTreeWidgetItem *item = new QTreeWidgetItem();
@@ -412,8 +407,39 @@ void NotesList::on_btnExport_clicked() {
 void NotesList::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
 
+  bool save = isNeedSave;
   saveNotesList();
+  isNeedSave = save;
   saveRecycle();
+
+  loadAllNoteBook();
+  int index = 0;
+  QTreeWidgetItem *item = tw->currentItem();
+  if (item == NULL)
+    index = 0;
+  else {
+    // NoteBook
+    if (item->text(1).isEmpty()) {
+      if (item->parent() == NULL)
+        index = tw->indexOfTopLevelItem(item);
+      else
+        index = tw->indexOfTopLevelItem(item->parent());
+    }
+
+    // Notes
+    if (!item->text(1).isEmpty()) {
+      if (item->parent()->parent() == NULL)
+        index = tw->indexOfTopLevelItem(item->parent());
+
+      else {
+        if (item->parent()->parent()->parent() == NULL)
+          index = tw->indexOfTopLevelItem(item->parent()->parent());
+      }
+    }
+  }
+  qDebug() << index;
+  setNoteBookCurrentIndex(index);
+  m_Method->clickNoteBook();
 
   mw_one->ui->btnBackNotes->show();
   mw_one->ui->btnEdit->show();
