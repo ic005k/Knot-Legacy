@@ -415,30 +415,47 @@ void NotesList::closeEvent(QCloseEvent *event) {
   loadAllNoteBook();
   int index = 0;
   QTreeWidgetItem *item = tw->currentItem();
+  QTreeWidgetItem *topItem;
   if (item == NULL)
     index = 0;
   else {
     // NoteBook
     if (item->text(1).isEmpty()) {
-      if (item->parent() == NULL)
+      if (item->parent() == NULL) {
         index = tw->indexOfTopLevelItem(item);
-      else
+        topItem = item;
+      } else {
         index = tw->indexOfTopLevelItem(item->parent());
+        topItem = item->parent();
+      }
     }
 
     // Notes
     if (!item->text(1).isEmpty()) {
-      if (item->parent()->parent() == NULL)
+      if (item->parent()->parent() == NULL) {
         index = tw->indexOfTopLevelItem(item->parent());
+        topItem = item->parent();
+      }
 
       else {
-        if (item->parent()->parent()->parent() == NULL)
+        if (item->parent()->parent()->parent() == NULL) {
           index = tw->indexOfTopLevelItem(item->parent()->parent());
+          topItem = item->parent()->parent();
+        }
       }
     }
   }
-  qDebug() << index;
-  setNoteBookCurrentIndex(index);
+
+  int count = m_Method->getCountFromQW(mw_one->ui->qwNoteBook);
+  int childNoteBook = 0;
+  for (int i = 0; i < count; i++) {
+    QString str2 = m_Method->getText2(mw_one->ui->qwNoteBook, i);
+    if (str2.length() > 0) childNoteBook++;
+
+    if (topItem == pNoteBookItems.at(i)) break;
+  }
+
+  setNoteBookCurrentIndex(index + childNoteBook);
   m_Method->clickNoteBook();
 
   mw_one->ui->btnBackNotes->show();
