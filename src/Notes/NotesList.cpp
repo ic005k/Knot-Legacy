@@ -393,6 +393,7 @@ void NotesList::on_btnDel_clicked() {
 }
 
 void NotesList::addItem(QTreeWidget *tw, QTreeWidgetItem *item) {
+  item->setIcon(0, QIcon(":/res/n.png"));
   tw->setFocus();
   if (tw == twrb) {
     tw->setCurrentItem(tw->topLevelItem(0));
@@ -510,7 +511,7 @@ void NotesList::closeEvent(QCloseEvent *event) {
   loadAllNoteBook();
   int index = 0;
   QTreeWidgetItem *item = tw->currentItem();
-  QTreeWidgetItem *topItem = NULL;
+  QTreeWidgetItem *pNoteBook = NULL;
   if (item == NULL)
     index = 0;
   else {
@@ -518,10 +519,10 @@ void NotesList::closeEvent(QCloseEvent *event) {
     if (item->text(1).isEmpty()) {
       if (item->parent() == NULL) {
         index = tw->indexOfTopLevelItem(item);
-        topItem = item;
+        pNoteBook = item;
       } else {
         index = tw->indexOfTopLevelItem(item->parent());
-        topItem = item->parent();
+        pNoteBook = item;
       }
     }
 
@@ -529,28 +530,28 @@ void NotesList::closeEvent(QCloseEvent *event) {
     if (!item->text(1).isEmpty()) {
       if (item->parent()->parent() == NULL) {
         index = tw->indexOfTopLevelItem(item->parent());
-        topItem = item->parent();
+        pNoteBook = item->parent();
       }
 
       else {
         if (item->parent()->parent()->parent() == NULL) {
           index = tw->indexOfTopLevelItem(item->parent()->parent());
-          topItem = item->parent()->parent();
+          pNoteBook = item->parent();
         }
       }
     }
   }
 
   int count = m_Method->getCountFromQW(mw_one->ui->qwNoteBook);
-  int childNoteBook = 0;
-  for (int i = 0; i < count; i++) {
-    QString str2 = m_Method->getText2(mw_one->ui->qwNoteBook, i);
-    if (str2.length() > 0) childNoteBook++;
 
-    if (topItem == pNoteBookItems.at(i)) break;
+  for (int i = 0; i < count; i++) {
+    if (pNoteBookItems.at(i) == pNoteBook) {
+      index = i;
+      break;
+    }
   }
 
-  setNoteBookCurrentIndex(index + childNoteBook);
+  setNoteBookCurrentIndex(index);
   m_Method->clickNoteBook();
 
   mw_one->ui->btnBackNotes->show();
@@ -799,6 +800,7 @@ void NotesList::initRecycle() {
       QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
       childItem->setText(0, str0);
       childItem->setText(1, str1);
+      childItem->setIcon(0, QIcon(":/res/n.png"));
     }
     twrb->addTopLevelItem(topItem);
   }
