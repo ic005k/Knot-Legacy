@@ -157,6 +157,7 @@ class NotesList : public QDialog {
   void goFindResult(int index);
 
   bool moveItem(QTreeWidget *tw);
+  QWidget *m_widget;
 };
 
 #endif  // NOTESLIST_H

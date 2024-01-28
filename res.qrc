@@ -130,5 +130,7 @@
         <file>res/tab_l.png</file>
         <file>res/p1.png</file>
         <file>res/p0.png</file>
+        <file>res/n.png</file>
+        <file>res/nb.png</file>
     </qresource>
 </RCC>

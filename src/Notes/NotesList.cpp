@@ -85,6 +85,7 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->editNote->hide();
   ui->btnImport->hide();
   ui->btnExport->hide();
+  ui->editName->hide();
 
   mw_one->ui->btnNoteRecycle->hide();
 
@@ -128,6 +129,7 @@ void NotesList::on_btnNewNoteBook_clicked() {
   QTreeWidgetItem *item = new QTreeWidgetItem();
   item->setText(0, ui->editBook->text().trimmed());
   item->setForeground(0, Qt::red);
+  item->setIcon(0, QIcon(":/res/nb.png"));
 
   if (rootIndex == 0) {
     ui->treeWidget->addTopLevelItem(item);
@@ -155,6 +157,7 @@ void NotesList::on_btnNewNote_clicked() {
   QTreeWidgetItem *item1 = new QTreeWidgetItem(topitem);
   item1->setText(0, ui->editNote->text().trimmed());
   item1->setText(1, noteFile);
+  item1->setIcon(0, QIcon(":/res/n.png"));
 
   QTextEdit *edit = new QTextEdit();
   mw_one->TextEditToFile(edit, iniDir + noteFile);
@@ -210,13 +213,105 @@ QString NotesList::getCurrentMDFile() {
 }
 
 void NotesList::on_btnRename_clicked() {
-  if (ui->treeWidget->topLevelItemCount() == 0) return;
-
   QTreeWidgetItem *item = ui->treeWidget->currentItem();
-  item->setText(0, ui->editName->toPlainText().trimmed());
-  if (item->parent() != NULL) setNoteName(item->text(0));
+  if (item == NULL) return;
 
-  isNeedSave = true;
+  QDialog *dlg = new QDialog(this);
+  QVBoxLayout *vbox0 = new QVBoxLayout;
+  dlg->setLayout(vbox0);
+  vbox0->setContentsMargins(5, 5, 5, 5);
+  dlg->setModal(true);
+  dlg->setWindowFlag(Qt::FramelessWindowHint);
+
+  QFrame *frame = new QFrame(this);
+  vbox0->addWidget(frame);
+
+  QVBoxLayout *vbox = new QVBoxLayout;
+
+  frame->setLayout(vbox);
+  vbox->setContentsMargins(6, 6, 6, 10);
+  vbox->setSpacing(3);
+
+  QLabel *lblTitle = new QLabel(this);
+  lblTitle->adjustSize();
+  lblTitle->setWordWrap(true);
+  lblTitle->setText(tr("Editor"));
+  vbox->addWidget(lblTitle);
+  lblTitle->hide();
+
+  QFrame *hframe = new QFrame(this);
+  hframe->setFrameShape(QFrame::HLine);
+  hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
+  vbox->addWidget(hframe);
+  hframe->hide();
+
+  QTextEdit *edit = new QTextEdit(this);
+  vbox->addWidget(edit);
+  edit->setPlainText(item->text(0));
+  QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
+  edit->horizontalScrollBar()->setHidden(true);
+  edit->verticalScrollBar()->setStyleSheet(
+      mw_one->ui->editDetails->verticalScrollBar()->styleSheet());
+  m_Method->setSCrollPro(edit);
+
+  QToolButton *btnCancel = new QToolButton(this);
+  QToolButton *btnCopy = new QToolButton(this);
+  QToolButton *btnOk = new QToolButton(this);
+  btnCancel->setText(tr("Cancel"));
+  btnCopy->setText(tr("Copy"));
+  btnOk->setText(tr("OK"));
+
+  btnOk->setFixedHeight(35);
+  btnCancel->setFixedHeight(35);
+  btnCopy->setFixedHeight(35);
+
+  QHBoxLayout *hbox = new QHBoxLayout;
+  hbox->addWidget(btnCancel);
+  hbox->addWidget(btnCopy);
+  hbox->addWidget(btnOk);
+  btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  btnCopy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+  QSpacerItem *sparcer_item =
+      new QSpacerItem(0, 60, QSizePolicy::Fixed, QSizePolicy::Expanding);
+  vbox->addItem(sparcer_item);
+
+  vbox->addLayout(hbox, 0);
+
+  connect(btnCancel, &QToolButton::clicked, [=]() mutable { dlg->close(); });
+  connect(dlg, &QDialog::rejected, [=]() mutable { m_widget->close(); });
+  connect(dlg, &QDialog::accepted,
+          [=]() mutable { m_Method->closeGrayWindows(); });
+  connect(btnCopy, &QToolButton::clicked, [=]() mutable {
+    edit->selectAll();
+    edit->copy();
+    dlg->close();
+  });
+  connect(btnOk, &QToolButton::clicked, [=]() mutable {
+    item->setText(0, edit->toPlainText().trimmed());
+    if (item->parent() != NULL) setNoteName(item->text(0));
+
+    isNeedSave = true;
+    dlg->close();
+  });
+
+  int x, y, w, h;
+  w = mw_one->width() - 20;
+  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+  h = mw_one->height() / 3;
+  y = geometry().y() + (height() - h) / 4;
+  dlg->setGeometry(x, y, w, h);
+  dlg->setModal(true);
+  mw_one->set_ToolButtonStyle(dlg);
+
+  m_widget = new QWidget(mw_one->m_NotesList);
+  m_widget->resize(mw_one->width(), mw_one->height());
+  m_widget->move(0, 0);
+  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,35%);");
+  m_widget->show();
+
+  dlg->show();
 }
 
 void NotesList::setNoteName(QString name) {
@@ -415,7 +510,7 @@ void NotesList::closeEvent(QCloseEvent *event) {
   loadAllNoteBook();
   int index = 0;
   QTreeWidgetItem *item = tw->currentItem();
-  QTreeWidgetItem *topItem;
+  QTreeWidgetItem *topItem = NULL;
   if (item == NULL)
     index = 0;
   else {
@@ -610,6 +705,7 @@ void NotesList::initNotesList() {
     QFont font = this->font();
     font.setBold(true);
     topItem->setFont(0, font);
+    topItem->setIcon(0, QIcon(":/res/nb.png"));
 
     for (int j = 0; j < childCount; j++) {
       str0 = iniNotes
@@ -625,12 +721,14 @@ void NotesList::initNotesList() {
         QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
         childItem->setText(0, str0);
         childItem->setText(1, str1);
+        childItem->setIcon(0, QIcon(":/res/n.png"));
       } else {
         QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
         childItem->setText(0, str0);
         childItem->setText(1, "");
         childItem->setForeground(0, Qt::red);
         childItem->setFont(0, font);
+        childItem->setIcon(0, QIcon(":/res/nb.png"));
 
         nNoteBook++;
         notesTotal--;
@@ -652,6 +750,7 @@ void NotesList::initNotesList() {
           QTreeWidgetItem *item = new QTreeWidgetItem(childItem);
           item->setText(0, str00);
           item->setText(1, str11);
+          item->setIcon(0, QIcon(":/res/n.png"));
 
           notesTotal++;
         }
