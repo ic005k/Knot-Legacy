@@ -57,13 +57,13 @@ SOURCES += \
     src/MainWindow.cpp \
     src/Method.cpp \
     src/MyWheel.cpp \
-    src/Notes.cpp \
     src/Notes/MarkdownHighlighter.cpp \
     src/Notes/MoveTo.cpp \
     src/Notes/NewNoteBook.cpp \
+    src/Notes/Notes.cpp \
+    src/Notes/NotesList.cpp \
     src/Notes/PrintPDF.cpp \
     src/Notes/QOwnLanguageData.cpp \
-    src/NotesList.cpp \
     src/PageIndicator.cpp \
     src/Preferences.cpp \
     src/Reader.cpp \
@@ -116,13 +116,13 @@ HEADERS += \
     src/MainWindow.h \
     src/Method.h \
     src/MyWheel.h \
-    src/Notes.h \
     src/Notes/MarkdownHighlighter.h \
     src/Notes/MoveTo.h \
     src/Notes/NewNoteBook.h \
+    src/Notes/Notes.h \
+    src/Notes/NotesList.h \
     src/Notes/PrintPDF.h \
     src/Notes/QOwnLanguageData.h \
-    src/NotesList.h \
     src/PageIndicator.h \
     src/Preferences.h \
     src/Reader.h \
@@ -176,11 +176,11 @@ FORMS += \
     src/CloudBackup.ui \
     src/DateSelector.ui \
     src/MainWindow.ui \
-    src/Notes.ui \
     src/Notes/MoveTo.ui \
     src/Notes/NewNoteBook.ui \
+    src/Notes/Notes.ui \
+    src/Notes/NotesList.ui \
     src/Notes/PrintPDF.ui \
-    src/NotesList.ui \
     src/PageIndicator.ui \
     src/Preferences.ui \
     src/ReaderSet.ui \

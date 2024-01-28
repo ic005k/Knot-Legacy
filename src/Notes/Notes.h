@@ -20,9 +20,9 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
-#include "ShowMessage.h"
-#include "TextSelector.h"
 #include "src/Notes/PrintPDF.h"
+#include "src/ShowMessage.h"
+#include "src/TextSelector.h"
 #include "ui_PrintPDF.h"
 #include "ui_TextSelector.h"
 

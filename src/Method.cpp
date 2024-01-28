@@ -493,6 +493,8 @@ void Method::setCellText(int row, int column, QString str,
 }
 
 void Method::clickNoteBook() {
+  mw_one->m_NotesList->pNoteItems.clear();
+
   clearAllBakList(mw_one->ui->qwNoteList);
   int index = getCurrentIndexFromQW(mw_one->ui->qwNoteBook);
   QString text1 = getText1(mw_one->ui->qwNoteBook, index);
@@ -504,8 +506,11 @@ void Method::clickNoteBook() {
     for (int i = 0; i < child_count; i++) {
       QString text0 = topItem->child(i)->text(0);
       QString text3 = topItem->child(i)->text(1);
-      if (!text3.isEmpty())
+      if (!text3.isEmpty()) {
         addItemToQW(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
+
+        mw_one->m_NotesList->pNoteItems.append(topItem->child(i));
+      }
     }
   } else {
     QStringList list = text1.split("===");
@@ -523,12 +528,17 @@ void Method::clickNoteBook() {
         QString text0 = childItem->child(n)->text(0);
         QString text3 = childItem->child(n)->text(1);
         addItemToQW(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
+
+        mw_one->m_NotesList->pNoteItems.append(childItem->child(n));
       }
     }
   }
 
   mw_one->m_NotesList->setNotesListCurrentIndex(-1);
   mw_one->m_NotesList->setNoteLabel();
+
+  mw_one->m_NotesList->tw->setCurrentItem(
+      mw_one->m_NotesList->pNoteBookItems.at(index));
 }
 
 void Method::clickNoteList() {
@@ -542,6 +552,9 @@ void Method::clickNoteList() {
   mw_one->ui->lblNoteName->setText(noteName);
 
   saveCurNoteIndex();
+
+  mw_one->m_NotesList->tw->setCurrentItem(
+      mw_one->m_NotesList->pNoteItems.at(index));
 }
 
 void Method::clickMainDate() {

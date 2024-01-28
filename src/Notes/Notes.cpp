@@ -1,6 +1,6 @@
-#include "src/Notes.h"
+#include "src/Notes/Notes.h"
 
-#include "MainWindow.h"
+#include "src/MainWindow.h"
 #include "src/Notes/MarkdownHighlighter.h"
 #include "ui_MainWindow.h"
 #include "ui_Notes.h"

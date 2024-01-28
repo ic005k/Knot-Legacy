@@ -11,7 +11,7 @@
 #include <QRandomGenerator>
 #include <QTreeWidgetItem>
 
-#include "Notes/MoveTo.h"
+#include "src/Notes/MoveTo.h"
 #include "src/Notes/NewNoteBook.h"
 #include "ui_MoveTo.h"
 
@@ -27,6 +27,8 @@ class NotesList : public QDialog {
   ~NotesList();
   Ui::NotesList *ui;
 
+  QList<QTreeWidgetItem *> pNoteBookItems;
+  QList<QTreeWidgetItem *> pNoteItems;
   QStringList findResult;
   int findCount;
   QList<QTreeWidgetItem *> findResultList;

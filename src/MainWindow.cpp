@@ -5710,6 +5710,5 @@ void MainWindow::on_btnManagement_clicked() {
   m_NotesList->setGeometry(x, y, w, h);
   m_NotesList->show();
   m_NotesList->tw->setFocus();
-  m_NotesList->setNoteBookCurrentItem();
   m_NotesList->tw->scrollToItem(m_NotesList->tw->currentItem());
 }

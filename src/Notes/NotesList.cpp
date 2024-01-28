@@ -1373,6 +1373,8 @@ int NotesList::getNoteBookIndex_twToqml() {
 }
 
 void NotesList::loadAllNoteBook() {
+  pNoteBookItems.clear();
+
   m_Method->clearAllBakList(mw_one->ui->qwNoteBook);
   m_Method->clearAllBakList(mw_one->ui->qwNoteList);
   int count = tw->topLevelItemCount();
@@ -1389,6 +1391,7 @@ void NotesList::loadAllNoteBook() {
     QString strSum = QString::number(sum);
     m_Method->addItemToQW(mw_one->ui->qwNoteBook, str, QString::number(i), "",
                           strSum, fontSize);
+    pNoteBookItems.append(topItem);
 
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
@@ -1398,6 +1401,8 @@ void NotesList::loadAllNoteBook() {
             mw_one->ui->qwNoteBook, childItem->text(0),
             QString::number(i) + "===" + QString::number(j), "isNoteBook",
             QString::number(childItem->childCount()), fontSize - 1);
+
+        pNoteBookItems.append(childItem);
       }
     }
   }
