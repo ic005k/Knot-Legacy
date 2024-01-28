@@ -75,6 +75,7 @@ void MainWindow::bakDataDone() {
     m_CloudBackup->uploadData();
   } else {
     if (QFile(infoStr).exists()) {
+      m_Method->m_widget = new QWidget(mw_one);
       ShowMessage *m_ShowMsg = new ShowMessage(this);
       m_ShowMsg->showMsg(
           "Knot", tr("The data was exported successfully.") + +"\n\n" + infoStr,
@@ -127,6 +128,7 @@ void MainWindow::importDataDone() {
 
   if (isMenuImport) {
     if (!isZipOK) {
+      m_Method->m_widget = new QWidget(mw_one);
       ShowMessage *m_ShowMsg = new ShowMessage(this);
       m_ShowMsg->showMsg("Knot", tr("Invalid data file."), 1);
     }
@@ -1134,6 +1136,7 @@ void MainWindow::del_Data(QTreeWidget *tw) {
             topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
             " : " + topItem->child(childCount - 1)->text(2) + "\n";
 
+        m_Method->m_widget = new QWidget(mw_one);
         ShowMessage *m_ShowMsg = new ShowMessage(this);
         if (!m_ShowMsg->showMsg(
                 str,
@@ -1173,6 +1176,7 @@ void MainWindow::del_Data(QTreeWidget *tw) {
   if (isNo) {
     QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
 
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg(
         str, tr("Only the reduction of the day's records is allowed."), 1);
@@ -1927,6 +1931,7 @@ void MainWindow::on_actionDel_Tab_triggered() {
 
   QString tab_name = ui->tabWidget->tabText(index);
 
+  m_Method->m_widget = new QWidget(mw_one);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg("Knot",
                           tr("Whether to remove") + "  " + tab_name + " ? ", 2))
@@ -2800,6 +2805,7 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
       infoStr = path + str + "_Knot.zip";
       m_Notes->androidCopyFile(zipfile, infoStr);
       if (!QFile(infoStr).exists()) {
+        m_Method->m_widget = new QWidget(mw_one);
         ShowMessage *msg = new ShowMessage(this);
         msg->showMsg(
             "Knot", tr("Please turn on the storage permission of the app."), 1);
@@ -2840,6 +2846,7 @@ void MainWindow::on_actionImport_Data_triggered() {
   if (QFile(zipfile).exists()) addUndo(tr("Import Data"));
 
   if (!zipfile.isNull()) {
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     if (!m_ShowMsg->showMsg("Kont",
                             tr("Import this data?") + "\n" +
@@ -3389,6 +3396,7 @@ void MainWindow::on_btnNotes_clicked() {
         showNotes();
 
       } else {
+        m_Method->m_widget = new QWidget(mw_one);
         ShowMessage *msg = new ShowMessage(this);
         msg->showMsg("Knot", tr("The entered password does not match."), 0);
 
@@ -4664,6 +4672,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     iniNotes->remove("/MainNotes/UserKey");
     ui->frameSetKey->hide();
 
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("Knot", tr("The password is removed."), 1);
 
@@ -4680,6 +4689,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     strPw = baPw;
     iniNotes->setValue("/MainNotes/UserKey", strPw);
 
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("Knot", tr("The password is set successfully."), 1);
 
@@ -4688,6 +4698,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     ui->editPassword2->clear();
 
   } else {
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("Knot", tr("The entered password does not match."), 1);
   }
@@ -5287,6 +5298,7 @@ void MainWindow::on_btnImportBakList_clicked() {
   zipfile = str.trimmed();
 
   if (!zipfile.isNull()) {
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     if (!m_ShowMsg->showMsg("Kont",
                             tr("Import this data?") + "\n" +
@@ -5319,6 +5331,7 @@ void MainWindow::on_btnDelTabRecycle_clicked() {
   int index = m_Method->getCurrentIndexFromQW(ui->qwTabRecycle);
   QString tab_file = m_Method->getText3(ui->qwTabRecycle, index);
 
+  m_Method->m_widget = new QWidget(mw_one);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg("Knot",
                           tr("Whether to remove") + "  " + tab_file + " ? ", 2))
@@ -5375,6 +5388,7 @@ void MainWindow::on_btnDelBakFile_clicked() {
   int index = m_Method->getCurrentIndexFromQW(ui->qwBakList);
   QString bak_file = m_Method->getText3(ui->qwBakList, index);
 
+  m_Method->m_widget = new QWidget(mw_one);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg("Knot",
                           tr("Whether to remove") + "  " + bak_file + " ? ", 2))
@@ -5429,6 +5443,7 @@ void MainWindow::on_btnDelNoteRecycle_clicked() {
   int index = m_Method->getCurrentIndexFromQW(ui->qwNoteRecycle);
   QString file = m_Method->getText0(ui->qwNoteRecycle, index);
 
+  m_Method->m_widget = new QWidget(mw_one);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg("Knot", tr("Whether to remove") + "  " + file + " ? ",
                           2))

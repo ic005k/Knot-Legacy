@@ -18,6 +18,7 @@ class Method : public QDialog {
   ~Method();
   Ui::Method *ui;
 
+  QWidget *m_widget;
   QString qssSlider;
 
   QString btnStyle =
@@ -192,7 +193,8 @@ class Method : public QDialog {
 
   QString getText2(QQuickWidget *qw, int index);
   QString getText1(QQuickWidget *qw, int index);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
@@ -218,7 +220,6 @@ class Method : public QDialog {
 
   int x, y, w, h;
 
-  QWidget *m_widget;
   void setMainTabCurrentIndex();
 };
 

@@ -38,6 +38,8 @@ CloudBackup::CloudBackup(QWidget *parent)
   connect(oneDrive, &QtOneDrive::error, [this](const QString error) {
     Q_UNUSED(this);
     // QMessageBox::critical(this, "OneDrive Error", error);
+
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("OneDrive", error, 1);
   });
@@ -45,6 +47,8 @@ CloudBackup::CloudBackup(QWidget *parent)
   connect(oneDrive, &QtOneDrive::successSignIn, [this]() {
     Q_UNUSED(this);
     // QMessageBox::information(this, "OneDrive", tr("Success Sign In"));
+
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("OneDrive", tr("Success Sign In"), 1);
   });
@@ -52,6 +56,8 @@ CloudBackup::CloudBackup(QWidget *parent)
   connect(oneDrive, &QtOneDrive::successSingOut, [this]() {
     Q_UNUSED(this);
     // QMessageBox::information(this, "OneDrive", tr("Success Sing Out"));
+
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("OneDrive", tr("Success Sing Out"), 1);
   });
@@ -59,6 +65,8 @@ CloudBackup::CloudBackup(QWidget *parent)
   connect(oneDrive, &QtOneDrive::successRefreshToken, [this]() {
     Q_UNUSED(this);
     // QMessageBox::information(this, "OneDrive", tr("Success Refresh Token"));
+
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("OneDrive", tr("Success Refresh Token"), 1);
   });
@@ -85,6 +93,8 @@ CloudBackup::CloudBackup(QWidget *parent)
                         QJsonDocument(object).toJson()));*/
 
             QString userInfo = initUserInfo(QJsonDocument(object).toJson());
+
+            m_Method->m_widget = new QWidget(mw_one);
             ShowMessage *m_ShowMsg = new ShowMessage(this);
             m_ShowMsg->showMsg(
                 "OneDrive",
@@ -106,6 +116,7 @@ CloudBackup::CloudBackup(QWidget *parent)
                 QString(tr("Success Upload File:") + "\n\nPATH: %1\n\nID: %2")
                     .arg(filePath, fileID));*/
 
+            m_Method->m_widget = new QWidget(mw_one);
             ShowMessage *m_ShowMsg = new ShowMessage(this);
             m_ShowMsg->showMsg(
                 "OneDrive",
@@ -121,6 +132,7 @@ CloudBackup::CloudBackup(QWidget *parent)
                  this, "OneDrive", QString(tr("Success Download File: ")) +
                  fileID);*/
 
+            m_Method->m_widget = new QWidget(mw_one);
             ShowMessage *m_ShowMsg = new ShowMessage(this);
             m_ShowMsg->showMsg(
                 "OneDrive", QString(tr("Success Download File: ")) + fileID, 1);
@@ -255,6 +267,7 @@ void CloudBackup::on_pushButton_downloadFile_clicked() {
   if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
 
+  m_Method->m_widget = new QWidget(mw_one);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg("OneDrive",
                           tr("Downloading data?") + "\n\n" +
@@ -286,6 +299,7 @@ void CloudBackup::on_pushButton_upload2_clicked() {
 }
 
 void CloudBackup::uploadData() {
+  m_Method->m_widget = new QWidget(mw_one);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg(
           "OneDrive",

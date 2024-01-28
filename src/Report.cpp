@@ -598,6 +598,7 @@ void Report::on_btnOut2Img_clicked() {
     folder->mkdir(path);
     picFile = path + strFile;
     pixmap.save(picFile, "PNG");
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage* m_ShowMsg = new ShowMessage(this);
     if (!QFile(picFile).exists()) {
       m_ShowMsg->showMsg(

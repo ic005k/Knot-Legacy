@@ -175,6 +175,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
 
   if (err_rpt.error != QJsonParseError::NoError) {
     if (!blAutoCheckUpdate) {
+      m_Method->m_widget = new QWidget(this);
       ShowMessage *m_ShowMsg = new ShowMessage(this);
       m_ShowMsg->showMsg(appName, tr("Network error!"), 1);
     }
@@ -219,6 +220,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
       //                                tr("Cancel"));
       // for Android ret = 3 Mac ret = 0 or 1(Cancel)
 
+      m_Method->m_widget = new QWidget(this);
       ShowMessage *m_ShowMsg = new ShowMessage(this);
       int ret = m_ShowMsg->showMsg("Knot", warningStr, 1);
 
@@ -236,6 +238,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
       }
     } else {
       if (!blAutoCheckUpdate) {
+        m_Method->m_widget = new QWidget(this);
         ShowMessage *m_ShowMsg = new ShowMessage(this);
         m_ShowMsg->showMsg(tr("Upgrade Check"),
                            tr("You are currently using the latest version!"),

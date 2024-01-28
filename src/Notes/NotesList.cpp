@@ -280,7 +280,8 @@ void NotesList::on_btnRename_clicked() {
   vbox->addLayout(hbox, 0);
 
   connect(btnCancel, &QToolButton::clicked, [=]() mutable { dlg->close(); });
-  connect(dlg, &QDialog::rejected, [=]() mutable { m_widget->close(); });
+  connect(dlg, &QDialog::rejected,
+          [=]() mutable { m_Method->closeGrayWindows(); });
   connect(dlg, &QDialog::accepted,
           [=]() mutable { m_Method->closeGrayWindows(); });
   connect(btnCopy, &QToolButton::clicked, [=]() mutable {
@@ -305,11 +306,8 @@ void NotesList::on_btnRename_clicked() {
   dlg->setModal(true);
   mw_one->set_ToolButtonStyle(dlg);
 
-  m_widget = new QWidget(mw_one->m_NotesList);
-  m_widget->resize(mw_one->width(), mw_one->height());
-  m_widget->move(0, 0);
-  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,35%);");
-  m_widget->show();
+  m_Method->m_widget = new QWidget(this);
+  m_Method->showGrayWindows();
 
   dlg->show();
 }
@@ -328,10 +326,12 @@ void NotesList::on_btnDel_clicked() {
 
   if (item == NULL) return;
 
+  m_Method->m_widget = new QWidget(this);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg(
-          "Knot", tr("Move to the recycle bin?") + "\n\n" + item->text(0), 2))
+          "Knot", tr("Move to the recycle bin?") + "\n\n" + item->text(0), 2)) {
     return;
+  }
 
   QString str0, str1;
   if (item->parent() == NULL) {
@@ -438,6 +438,7 @@ bool NotesList::on_btnImport_clicked() {
 #endif
 
   if (!isMD) {
+    m_Method->m_widget = new QWidget(this);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("Knot", tr("Invalid Markdown file.") + "\n\n" + strInfo,
                        1);
@@ -502,6 +503,12 @@ void NotesList::on_btnExport_clicked() {
 
 void NotesList::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
+
+  if (!ui->frame1->isHidden()) {
+    on_btnBack_clicked();
+    event->ignore();
+    return;
+  }
 
   bool save = isNeedSave;
   saveNotesList();
@@ -869,11 +876,13 @@ void NotesList::on_btnDel_Recycle_clicked() {
   if (curItem->parent() == NULL) {
     return;
   } else {
+    m_Method->m_widget = new QWidget(this);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     if (!m_ShowMsg->showMsg(
             "Knot", tr("Whether to remove") + "  " + curItem->text(0) + " ? ",
-            2))
+            2)) {
       return;
+    }
 
     QString md = iniDir + curItem->text(1);
     delFile(md);
@@ -1345,6 +1354,7 @@ void NotesList::on_actionDel_NoteBook_triggered() {
   int index = getNoteBookCurrentIndex();
   if (index < 0) return;
 
+  m_Method->m_widget = new QWidget(this);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg(
           "Knot",
@@ -1606,6 +1616,7 @@ void NotesList::on_actionDel_Note_triggered() {
   if (notebookIndex < 0) return;
   if (notelistIndex < 0) return;
 
+  m_Method->m_widget = new QWidget(this);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg(
           "Knot",

@@ -245,6 +245,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
   if (htmlFile.contains("http")) {
     QUrl url = htmlFile;
 
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
     copyText = htmlFile;
     bool ok = m_ShowMsg->showMsg(
@@ -257,6 +258,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     QString str = htmlFile;
     str.replace("mailto:", "");
 
+    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
     copyText = str;
     bool ok = m_ShowMsg->showMsg(

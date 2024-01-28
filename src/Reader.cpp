@@ -1241,6 +1241,7 @@ void dlgReader::clearAllReaderRecords() {
   int count = m_Method->getCountFromQW(mw_one->ui->qwBookList);
   if (count == 0) return;
 
+  m_Method->m_widget = new QWidget(mw_one);
   ShowMessage* m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg("Knot", tr("Clear all reading history") + " ? ", 2))
     return;

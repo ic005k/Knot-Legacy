@@ -67,6 +67,7 @@ void SyncInfo::runSync(QString path) {
     }
     init();
 
+    m_Method->m_widget = new QWidget(this);
     ShowMessage* msg = new ShowMessage(this);
     msg->showMsg("Knot", ui->textBrowser->toPlainText(), 1);
     on_btnClose_clicked();
