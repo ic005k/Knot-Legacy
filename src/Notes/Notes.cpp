@@ -1117,12 +1117,15 @@ void Notes::closeEvent(QCloseEvent *event) {
       loadMemoQML();
     } else {
       if (isTextChange) {
+        showGrayWin();
         ShowMessage *msg = new ShowMessage(this);
         if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"),
                          2)) {
           saveMainNotes();
           loadMemoQML();
         }
+        m_widget->close();
+        delete m_widget;
       } else {
         saveMainNotes();
         loadMemoQML();
@@ -1156,9 +1159,14 @@ void Notes::show_findText() {
                      palette.color(QPalette::Active, QPalette::Highlight));
     ui->editSource->setPalette(palette);
   } else {
-    ShowMessage *m_ShowMsg = new ShowMessage(mw_one->m_Notes);
+    showGrayWin();
+
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("Knot", tr("The end of the document has been reached."),
                        0);
+
+    m_widget->close();
+    delete m_widget;
   }
 }
 
@@ -1175,10 +1183,23 @@ void Notes::show_findTextBack() {
                      palette.color(QPalette::Active, QPalette::Highlight));
     ui->editSource->setPalette(palette);
   } else {
-    ShowMessage *m_ShowMsg = new ShowMessage(mw_one->m_Notes);
+    showGrayWin();
+
+    ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg(
         "Knot", tr("The beginning of the document has been reached."), 0);
+
+    m_widget->close();
+    delete m_widget;
   }
+}
+
+void Notes::showGrayWin() {
+  m_widget = new QWidget(mw_one->m_Notes);
+  m_widget->resize(mw_one->width(), mw_one->height());
+  m_widget->move(0, 0);
+  m_widget->setStyleSheet("background-color:rgba(0, 0, 0,35%);");
+  m_widget->show();
 }
 
 void Notes::findText() {

@@ -218,6 +218,8 @@ class Notes : public QDialog {
 
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   void wheelEvent(QWheelEvent *e) override;
+  QWidget *m_widget;
+  void showGrayWin();
 };
 
 #endif  // NOTES_H
