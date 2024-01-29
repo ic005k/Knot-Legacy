@@ -238,7 +238,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
       }
     } else {
       if (!blAutoCheckUpdate) {
-        m_Method->m_widget = new QWidget(mw_one->m_Remarks);
+        m_Method->m_widget = new QWidget(this);
         ShowMessage *m_ShowMsg = new ShowMessage(this);
         m_ShowMsg->showMsg(tr("Upgrade Check"),
                            tr("You are currently using the latest version!"),
