@@ -97,6 +97,7 @@ QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
   idlg->setLabelText(lblEdit);
   mw_one->set_PushButtonStyle(idlg);
 
+  m_widget = new QWidget(mw_one);
   showGrayWindows();
 
   idlg->show();

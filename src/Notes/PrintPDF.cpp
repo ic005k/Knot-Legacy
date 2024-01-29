@@ -55,6 +55,7 @@ QString PrintPDF::getItem(QString title, QString lblText, QStringList valueList,
   y = mw_one->geometry().y() + (mw_one->geometry().height() - h) / 2;
   setGeometry(x, y, w, h);
 
+  m_Method->m_widget = new QWidget(mw_one);
   m_Method->showGrayWindows();
   show();
   while (!isHidden()) QCoreApplication::processEvents();

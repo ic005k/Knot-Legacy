@@ -1803,7 +1803,13 @@ void NotesList::setNoteLabel() {
 }
 
 void NotesList::on_btnMoveTo_clicked() {
-  if (tw->currentItem() == NULL) return;
+  QTreeWidgetItem *item = tw->currentItem();
+  if (item == NULL) return;
+
+  int count = item->childCount();
+  for (int i = 0; i < count; i++) {
+    if (item->child(i)->text(1).isEmpty()) return;
+  }
 
   moveItem(tw);
 }
