@@ -3015,7 +3015,7 @@ void MainWindow::on_about() {
   m_Remarks->ui->frameAbout->show();
   m_Remarks->setGeometry(this->geometry().x(), this->geometry().y(),
                          this->width(), this->height());
-  m_Remarks->setModal(true);
+
   m_Remarks->show();
 }
 
