@@ -86,6 +86,7 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->btnImport->hide();
   ui->btnExport->hide();
   ui->editName->hide();
+  ui->btnRename->hide();
 
   mw_one->ui->btnNoteRecycle->hide();
 
@@ -152,9 +153,9 @@ void NotesList::on_btnNewNote_clicked() {
 
   QString noteFile = "memo/" + mw_one->m_Notes->getDateTimeStr() + "_" +
                      QString::number(rand) + ".md";
-  QTreeWidgetItem *topitem = ui->treeWidget->currentItem();
+  QTreeWidgetItem *parentitem = ui->treeWidget->currentItem();
 
-  QTreeWidgetItem *item1 = new QTreeWidgetItem(topitem);
+  QTreeWidgetItem *item1 = new QTreeWidgetItem(parentitem);
   item1->setText(0, ui->editNote->text().trimmed());
   item1->setText(1, noteFile);
   item1->setIcon(0, QIcon(":/res/n.png"));
@@ -162,8 +163,14 @@ void NotesList::on_btnNewNote_clicked() {
   QTextEdit *edit = new QTextEdit();
   mw_one->TextEditToFile(edit, iniDir + noteFile);
 
-  ui->treeWidget->setCurrentItem(topitem->child(topitem->childCount() - 1));
+  ui->treeWidget->setCurrentItem(item1);
   on_treeWidget_itemClicked(item1, 0);
+
+  pNoteItems.clear();
+  int count = parentitem->childCount();
+  for (int i = 0; i < count; i++) {
+    pNoteItems.append(parentitem->child(i));
+  }
 
   isNeedSave = true;
 }
@@ -290,8 +297,17 @@ void NotesList::on_btnRename_clicked() {
     dlg->close();
   });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
+    int index0 = getNoteBookCurrentIndex();
+    int index1 = getNotesListCurrentIndex();
+
     item->setText(0, edit->toPlainText().trimmed());
     if (item->parent() != NULL) setNoteName(item->text(0));
+
+    loadAllNoteBook();
+
+    setNoteBookCurrentIndex(index0);
+    m_Method->clickNoteBook();
+    setNotesListCurrentIndex(index1);
 
     isNeedSave = true;
     dlg->close();
@@ -306,7 +322,7 @@ void NotesList::on_btnRename_clicked() {
   dlg->setModal(true);
   mw_one->set_ToolButtonStyle(dlg);
 
-  m_Method->m_widget = new QWidget(this);
+  m_Method->m_widget = new QWidget(mw_one);
   m_Method->showGrayWindows();
 
   dlg->show();
@@ -386,6 +402,10 @@ void NotesList::on_btnDel_clicked() {
   }
 
   on_treeWidget_itemClicked(tw->currentItem(), 0);
+
+  if (tw->currentItem()->childCount() == 0) {
+    loadEmptyNote();
+  }
 
   tw->setFocus();
   isNeedSave = true;
@@ -1328,25 +1348,16 @@ void NotesList::on_actionAdd_NoteBook_triggered() {
 
     loadAllNoteBook();
 
-    if (rootIndex == 0) {
-      int count = getNoteBookCount();
-      setNoteBookCurrentIndex(count - 1);
-    } else {
-      setNoteBookCurrentIndex(rootIndex - 1);
-      setNoteBookCurrentItem();
-      QTreeWidgetItem *topItem = tw->currentItem();
-      int count = topItem->childCount();
-      int index = rootIndex - 1;
-      for (int i = 0; i < count; i++) {
-        QString str1 = topItem->child(i)->text(1);
-        if (str1.isEmpty()) index++;
+    int count = m_Method->getCountFromQW(mw_one->ui->qwNoteBook);
+    int index = 0;
+    for (int i = 0; i < count; i++) {
+      if (pNoteBookItems.at(i) == tw->currentItem()) {
+        index = i;
+        break;
       }
-      setNoteBookCurrentIndex(index);
     }
-
+    setNoteBookCurrentIndex(index);
     m_Method->clickNoteBook();
-    setNotesListCurrentIndex(0);
-    m_Method->clickNoteList();
   }
 }
 
@@ -1393,30 +1404,7 @@ void NotesList::on_actionRename_NoteBook_triggered() {
   int index = getNoteBookCurrentIndex();
   if (index < 0) return;
 
-  bool ok = false;
-  QString text;
-
-  QInputDialog *idlg =
-      m_Method->inputDialog(tr("Rename NoteBook"), tr("NoteBook Name"),
-                            m_Method->getText0(mw_one->ui->qwNoteBook, index));
-
-  if (QDialog::Accepted == idlg->exec()) {
-    ok = true;
-    text = idlg->textValue();
-    idlg->close();
-  } else {
-    idlg->close();
-    return;
-  }
-
-  if (ok && !text.isEmpty()) {
-    setNoteBookCurrentItem();
-
-    ui->editName->setText(text);
-    on_btnRename_clicked();
-
-    m_Method->modifyItemText0(mw_one->ui->qwNoteBook, index, text);
-  }
+  on_btnRename_clicked();
 }
 
 int NotesList::getNoteBookCount() {
@@ -1562,7 +1550,7 @@ void NotesList::init_NoteBookMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
-  actRename->setVisible(false);
+  actRename->setVisible(true);
   actDel->setVisible(false);
   actMoveUp->setVisible(false);
   actMoveDown->setVisible(false);
@@ -1590,13 +1578,12 @@ void NotesList::on_actionAdd_Note_triggered() {
   }
 
   if (ok && !text.isEmpty()) {
-    setNoteBookCurrentItem();
+    tw->setCurrentItem(pNoteBookItems.at(notebookIndex));
     ui->editNote->setText(text);
     on_btnNewNote_clicked();
 
     QTreeWidgetItem *childItem = tw->currentItem();
-    int childCount = childItem->parent()->childCount();
-    QString text3 = childItem->parent()->child(childCount - 1)->text(1);
+    QString text3 = childItem->text(1);
     m_Method->addItemToQW(mw_one->ui->qwNoteList, text, "", "", text3, 0);
 
     int count = getNotesListCount();
@@ -1664,30 +1651,7 @@ void NotesList::on_actionRename_Note_triggered() {
   if (notebookIndex < 0) return;
   if (noteIndex < 0) return;
 
-  bool ok = false;
-  QString text;
-
-  QInputDialog *idlg = m_Method->inputDialog(
-      tr("Rename Note"), tr("Note Name"),
-      m_Method->getText0(mw_one->ui->qwNoteList, getNotesListCurrentIndex()));
-  if (QDialog::Accepted == idlg->exec()) {
-    ok = true;
-    text = idlg->textValue().trimmed();
-    idlg->close();
-  } else {
-    idlg->close();
-    return;
-  }
-
-  if (ok && !text.isEmpty()) {
-    setNoteBookCurrentItem();
-    QTreeWidgetItem *child = tw->currentItem()->child(noteIndex);
-    tw->setCurrentItem(child);
-    ui->editName->setText(text);
-    on_btnRename_clicked();
-
-    m_Method->modifyItemText0(mw_one->ui->qwNoteList, noteIndex, text);
-  }
+  on_btnRename_clicked();
 }
 
 void NotesList::on_actionMoveUp_Note_triggered() {
@@ -1785,7 +1749,7 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
-  actRename->setVisible(false);
+  actRename->setVisible(true);
   actDel->setVisible(false);
   actMoveUp->setVisible(false);
   actMoveDown->setVisible(false);
