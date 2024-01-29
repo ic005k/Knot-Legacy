@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QEvent>
 #include <QKeyEvent>
+#include <QMainWindow>
+#include <QMessageBox>
 
 namespace Ui {
 class ShowMessage;

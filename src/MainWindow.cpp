@@ -3695,13 +3695,13 @@ void MainWindow::init_Instance() {
   tabChart = ui->tabCharts;
 
   myfile = new File();
-  m_Remarks = new dlgRemarks();
+  m_Remarks = new dlgRemarks(this);
   m_Method = new Method(this);
   m_EditRecord = new EditRecord(this);
   m_Todo = new Todo(this);
   m_Report = new Report(this);
   m_Preferences = new Preferences(this);
-  m_Notes = new Notes();
+  m_Notes = new Notes(this);
   m_Steps = new Steps(this);
   m_Reader = new dlgReader(this);
   m_TodoAlarm = new TodoAlarm(this);
@@ -3710,7 +3710,7 @@ void MainWindow::init_Instance() {
   m_PageIndicator->close();
   m_ReaderSet = new ReaderSet(this);
   mydlgSetText = new dlgSetText(this);
-  m_NotesList = new NotesList();
+  m_NotesList = new NotesList(this);
   m_SyncInfo = new SyncInfo(this);
 
   if (m_Preferences->getDefaultFont() == "None")

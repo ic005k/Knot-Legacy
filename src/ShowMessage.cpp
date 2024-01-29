@@ -17,7 +17,7 @@ ShowMessage::ShowMessage(QWidget* parent)
   this->layout()->setMargin(0);
   setWindowFlag(Qt::FramelessWindowHint);
   setAttribute(Qt::WA_TranslucentBackground);
-  ui->widget->setStyleSheet("background-color:rgba(0, 0, 0, 0%);");
+  ui->widget->setStyleSheet("background-color:rgba(0, 0, 0, 35%);");
 
   if (isDark)
     ui->frame->setStyleSheet(
@@ -108,7 +108,8 @@ void ShowMessage::init() {
   if (!m_Method->m_widget->isHidden()) {
     m_Method->m_widget->close();
   }
-  m_Method->showGrayWindows();
+
+  // m_Method->showGrayWindows();
 
   show();
 }
