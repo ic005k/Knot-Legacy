@@ -5425,15 +5425,7 @@ void MainWindow::on_btnNoteRecycle_clicked() {
   ui->frameNoteList->hide();
   ui->frameNoteRecycle->show();
 
-  m_Method->clearAllBakList(ui->qwNoteRecycle);
-  int childCount = m_NotesList->twrb->topLevelItem(0)->childCount();
-  for (int i = 0; i < childCount; i++) {
-    QTreeWidgetItem *childItem = m_NotesList->twrb->topLevelItem(0)->child(i);
-    QString text0 = childItem->text(0);
-    QString text3 = childItem->text(1);
-
-    m_Method->addItemToQW(ui->qwNoteRecycle, text0, "", "", text3, 0);
-  }
+  m_NotesList->loadAllRecycle();
 }
 
 void MainWindow::on_btnDelNoteRecycle_clicked() {
@@ -5441,14 +5433,6 @@ void MainWindow::on_btnDelNoteRecycle_clicked() {
   if (count == 0) return;
 
   int index = m_Method->getCurrentIndexFromQW(ui->qwNoteRecycle);
-  QString file = m_Method->getText0(ui->qwNoteRecycle, index);
-
-  m_Method->m_widget = new QWidget(mw_one);
-  ShowMessage *m_ShowMsg = new ShowMessage(this);
-  if (!m_ShowMsg->showMsg("Knot", tr("Whether to remove") + "  " + file + " ? ",
-                          2))
-    return;
-
   QTreeWidgetItem *topItem = m_NotesList->twrb->topLevelItem(0);
   m_NotesList->twrb->setCurrentItem(topItem->child(index));
   m_NotesList->on_btnDel_Recycle_clicked();
@@ -5466,18 +5450,9 @@ void MainWindow::on_btnRestoreNoteRecycle_clicked() {
   m_NotesList->twrb->setCurrentItem(
       m_NotesList->twrb->topLevelItem(0)->child(indexRecycle));
 
-  int indexTop = m_Method->getCurrentIndexFromQW(ui->qwNoteBook);
-  if (indexTop < 0) return;
-
-  m_NotesList->setNoteBookCurrentItem();
-
   m_NotesList->on_btnRestore_clicked();
 
   m_Method->delItemBakList(ui->qwNoteRecycle, indexRecycle);
-
-  int noteCount = m_Method->getCountFromQW(ui->qwNoteList);
-  m_Method->setCurrentIndexFromQW(ui->qwNoteList, noteCount - 1);
-  m_Method->clickNoteList();
 
   on_btnBackNoteRecycle_clicked();
 }

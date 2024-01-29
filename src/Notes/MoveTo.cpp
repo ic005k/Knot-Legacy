@@ -14,8 +14,6 @@ MoveTo::MoveTo(QWidget* parent) : QDialog(parent), ui(new Ui::MoveTo) {
   setWindowFlag(Qt::FramelessWindowHint);
   QString style = "QDialog{border-radius:0px;border:0px solid darkred;}";
   this->setStyleSheet(style);
-  ui->lblItem->adjustSize();
-  ui->lblItem->setWordWrap(true);
 
   mw_one->set_ToolButtonStyle(this);
 
@@ -25,12 +23,15 @@ MoveTo::MoveTo(QWidget* parent) : QDialog(parent), ui(new Ui::MoveTo) {
   if (!mw_one->m_NotesList->ui->frame1->isHidden())
     item = mw_one->m_NotesList->twrb->currentItem();
   if (item == NULL) close();
-  ui->lblItem->setText(item->text(0));
+
   if (item->text(1).isEmpty())
     initTopNoteBook();
   else
     initAllNoteBook();
 
+  ui->lblItem->setText(item->text(0));
+  ui->lblItem->adjustSize();
+  ui->lblItem->setWordWrap(true);
   showDialog();
 }
 

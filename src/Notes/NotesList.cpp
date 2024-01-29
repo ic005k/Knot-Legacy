@@ -1365,28 +1365,19 @@ void NotesList::on_actionDel_NoteBook_triggered() {
   int index = getNoteBookCurrentIndex();
   if (index < 0) return;
 
-  m_Method->m_widget = new QWidget(this);
-  ShowMessage *m_ShowMsg = new ShowMessage(this);
-  if (!m_ShowMsg->showMsg(
-          "Knot",
-          tr("Whether to remove") + "  " +
-              m_Method->getText0(mw_one->ui->qwNoteBook, index) + " ? ",
-          2))
-    return;
-
-  setNoteBookCurrentItem();
+  tw->setCurrentItem(pNoteBookItems.at(index));
   on_btnDel_clicked();
 
   loadAllNoteBook();
 
-  if (index - 1 >= 0) {
-    setNoteBookCurrentIndex(index - 1);
-    m_Method->clickNoteBook();
-    if (getNotesListCount() > 0) {
-      setNotesListCurrentIndex(0);
-      m_Method->clickNoteList();
+  int count = getNoteBookCount();
+  for (int i = 0; i < count; i++) {
+    if (tw->currentItem() == pNoteBookItems.at(i)) {
+      index = i;
+      break;
     }
   }
+  setNoteBookCurrentIndex(index);
 
   setNoteLabel();
 
@@ -1395,7 +1386,7 @@ void NotesList::on_actionDel_NoteBook_triggered() {
   isNeedSave = save;
   saveNotesList();
 
-  if (getNoteBookCount() == 0) {
+  if (count == 0) {
     loadEmptyNote();
   }
 }
@@ -1603,26 +1594,9 @@ void NotesList::on_actionDel_Note_triggered() {
   if (notebookIndex < 0) return;
   if (notelistIndex < 0) return;
 
-  m_Method->m_widget = new QWidget(this);
-  ShowMessage *m_ShowMsg = new ShowMessage(this);
-  if (!m_ShowMsg->showMsg(
-          "Knot",
-          tr("Whether to remove") + "  " +
-              m_Method->getText0(mw_one->ui->qwNoteList, notelistIndex) + " ? ",
-          2))
-    return;
-
-  setNoteBookCurrentItem();
-  QTreeWidgetItem *child = tw->currentItem()->child(notelistIndex);
-  tw->setCurrentItem(child);
   on_btnDel_clicked();
 
-  m_Method->delItemBakList(mw_one->ui->qwNoteList, notelistIndex);
-  if (getNotesListCount() > 0) {
-    setNotesListCurrentIndex(notelistIndex - 1);
-    m_Method->clickNoteList();
-  } else {
-  }
+  int count = getNotesListCount();
 
   setNoteLabel();
 
@@ -1631,7 +1605,7 @@ void NotesList::on_actionDel_Note_triggered() {
   isNeedSave = save;
   saveNotesList();
 
-  if (getNotesListCount() == 0) {
+  if (count == 0) {
     loadEmptyNote();
   }
 }
@@ -1823,4 +1797,16 @@ bool NotesList::moveItem(QTreeWidget *twMain) {
   isNeedSave = true;
 
   return true;
+}
+
+void NotesList::loadAllRecycle() {
+  m_Method->clearAllBakList(mw_one->ui->qwNoteRecycle);
+  int childCount = twrb->topLevelItem(0)->childCount();
+  for (int i = 0; i < childCount; i++) {
+    QTreeWidgetItem *childItem = twrb->topLevelItem(0)->child(i);
+    QString text0 = childItem->text(0);
+    QString text3 = childItem->text(1);
+
+    m_Method->addItemToQW(mw_one->ui->qwNoteRecycle, text0, "", "", text3, 0);
+  }
 }

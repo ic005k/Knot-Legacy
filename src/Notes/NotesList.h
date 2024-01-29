@@ -83,7 +83,8 @@ class NotesList : public QDialog {
 
   int getNoteBookIndex_twToqml();
 
- protected:
+  void loadAllRecycle();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
