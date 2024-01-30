@@ -1,6 +1,6 @@
 #include "ReaderSet.h"
 
-#include "MainWindow.h"
+#include "src/MainWindow.h"
 #include "ui_MainWindow.h"
 #include "ui_ReaderSet.h"
 

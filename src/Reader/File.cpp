@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QFile>
 
-#include "MainWindow.h"
+#include "src/MainWindow.h"
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_CloudBackup.h"

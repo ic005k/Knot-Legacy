@@ -18,8 +18,8 @@
 #include <QVBoxLayout>
 #include <QXmlStreamReader>
 
-#include "src/DocumentHandler.h"
-#include "src/File.h"
+#include "src/Reader/DocumentHandler.h"
+#include "src/Reader/File.h"
 
 namespace Ui {
 class dlgReader;
@@ -102,7 +102,7 @@ class dlgReader : public QDialog {
 
   void clearAllReaderRecords();
   void on_hSlider_sliderReleased(int position);
-  public slots:
+ public slots:
 
   void openBookListItem();
 

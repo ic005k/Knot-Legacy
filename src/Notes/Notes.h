@@ -21,8 +21,8 @@
 #include <QTextDocumentFragment>
 
 #include "src/Notes/PrintPDF.h"
+#include "src/Notes/TextSelector.h"
 #include "src/ShowMessage.h"
-#include "src/TextSelector.h"
 #include "ui_PrintPDF.h"
 #include "ui_TextSelector.h"
 

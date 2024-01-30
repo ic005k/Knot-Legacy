@@ -7,7 +7,7 @@
 #include <QObjectList>
 #include <QToolButton>
 
-#include "RollingBox.h"
+#include "src/RollingBox.h"
 
 namespace Ui {
 class TodoAlarm;

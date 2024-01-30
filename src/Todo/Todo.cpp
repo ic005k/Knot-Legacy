@@ -1,6 +1,6 @@
 #include "Todo.h"
 
-#include "MainWindow.h"
+#include "src/MainWindow.h"
 #include "ui_MainWindow.h"
 #include "ui_Todo.h"
 

@@ -49,9 +49,7 @@ SOURCES += \
     src/CategoryList.cpp \
     src/CloudBackup.cpp \
     src/DateSelector.cpp \
-    src/DocumentHandler.cpp \
     src/EditRecord.cpp \
-    src/File.cpp \
     src/FileSystemWatcher.cpp \
     src/LoadPic.cpp \
     src/MainWindow.cpp \
@@ -64,21 +62,23 @@ SOURCES += \
     src/Notes/NotesList.cpp \
     src/Notes/PrintPDF.cpp \
     src/Notes/QOwnLanguageData.cpp \
-    src/PageIndicator.cpp \
+    src/Notes/TextSelector.cpp \
     src/Preferences.cpp \
-    src/Reader.cpp \
-    src/ReaderSet.cpp \
+    src/Reader/DocumentHandler.cpp \
+    src/Reader/File.cpp \
+    src/Reader/PageIndicator.cpp \
+    src/Reader/Reader.cpp \
+    src/Reader/ReaderSet.cpp \
+    src/Reader/SetReaderText.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
     src/RollingBox.cpp \
-    src/SetReaderText.cpp \
     src/ShowMessage.cpp \
-    src/SpecialAccelerometerPedometer.cpp \
-    src/Steps.cpp \
+    src/Steps/SpecialAccelerometerPedometer.cpp \
+    src/Steps/Steps.cpp \
     src/SyncInfo.cpp \
-    src/TextSelector.cpp \
-    src/Todo.cpp \
-    src/TodoAlarm.cpp \
+    src/Todo/Todo.cpp \
+    src/Todo/TodoAlarm.cpp \
     src/components/lib/qtmaterialoverlaywidget.cpp \
     src/components/lib/qtmaterialripple.cpp \
     src/components/lib/qtmaterialrippleoverlay.cpp \
@@ -108,9 +108,7 @@ HEADERS += \
     src/CategoryList.h \
     src/CloudBackup.h \
     src/DateSelector.h \
-    src/DocumentHandler.h \
     src/EditRecord.h \
-    src/File.h \
     src/FileSystemWatcher.h \
     src/LoadPic.h \
     src/MainWindow.h \
@@ -123,21 +121,23 @@ HEADERS += \
     src/Notes/NotesList.h \
     src/Notes/PrintPDF.h \
     src/Notes/QOwnLanguageData.h \
-    src/PageIndicator.h \
+    src/Notes/TextSelector.h \
     src/Preferences.h \
-    src/Reader.h \
-    src/ReaderSet.h \
+    src/Reader/DocumentHandler.h \
+    src/Reader/File.h \
+    src/Reader/PageIndicator.h \
+    src/Reader/Reader.h \
+    src/Reader/ReaderSet.h \
+    src/Reader/SetReaderText.h \
     src/RemarksAbout.h \
     src/Report.h \
     src/RollingBox.h \
-    src/SetReaderText.h \
     src/ShowMessage.h \
-    src/SpecialAccelerometerPedometer.h \
-    src/Steps.h \
+    src/Steps/SpecialAccelerometerPedometer.h \
+    src/Steps/Steps.h \
     src/SyncInfo.h \
-    src/TextSelector.h \
-    src/Todo.h \
-    src/TodoAlarm.h \
+    src/Todo/Todo.h \
+    src/Todo/TodoAlarm.h \
     src/components/lib/qtmaterialoverlaywidget.h \
     src/components/lib/qtmaterialripple.h \
     src/components/lib/qtmaterialrippleoverlay.h \
@@ -181,16 +181,16 @@ FORMS += \
     src/Notes/Notes.ui \
     src/Notes/NotesList.ui \
     src/Notes/PrintPDF.ui \
-    src/PageIndicator.ui \
+    src/Notes/TextSelector.ui \
     src/Preferences.ui \
-    src/ReaderSet.ui \
+    src/Reader/PageIndicator.ui \
+    src/Reader/ReaderSet.ui \
+    src/Reader/SetReaderText.ui \
     src/RemarksAbout.ui \
-    src/SetReaderText.ui \
     src/ShowMessage.ui \
     src/SyncInfo.ui \
-    src/TextSelector.ui \
-    src/Todo.ui \
-    src/TodoAlarm.ui
+    src/Todo/Todo.ui \
+    src/Todo/TodoAlarm.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

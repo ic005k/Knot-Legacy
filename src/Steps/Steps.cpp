@@ -1,6 +1,6 @@
 #include "Steps.h"
 
-#include "MainWindow.h"
+#include "src/MainWindow.h"
 #include "ui_MainWindow.h"
 
 extern MainWindow* mw_one;
