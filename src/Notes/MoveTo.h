@@ -24,6 +24,7 @@ class MoveTo : public QDialog {
 
  protected:
   void closeEvent(QCloseEvent *event) override;
+  bool eventFilter(QObject *watch, QEvent *evn) override;
  private slots:
   void on_btnCancel_clicked();
 

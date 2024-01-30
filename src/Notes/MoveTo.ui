@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>305</width>
-    <height>183</height>
+    <height>369</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -58,7 +58,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="cboxMoveTo"/>
+    <widget class="QListWidget" name="listWidget"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

@@ -10,10 +10,16 @@ extern Method* m_Method;
 MoveTo::MoveTo(QWidget* parent) : QDialog(parent), ui(new Ui::MoveTo) {
   ui->setupUi(this);
   setModal(true);
+  this->installEventFilter(this);
+  ui->listWidget->installEventFilter(this);
 
   setWindowFlag(Qt::FramelessWindowHint);
   QString style = "QDialog{border-radius:0px;border:0px solid darkred;}";
   this->setStyleSheet(style);
+
+  ui->listWidget->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
+  ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
+  QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
 
   mw_one->set_ToolButtonStyle(this);
 
@@ -37,12 +43,25 @@ MoveTo::MoveTo(QWidget* parent) : QDialog(parent), ui(new Ui::MoveTo) {
 
 MoveTo::~MoveTo() { delete ui; }
 
+bool MoveTo::eventFilter(QObject* watch, QEvent* evn) {
+  if (evn->type() == QEvent::KeyRelease) {
+    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+
+    if (keyEvent->key() == Qt::Key_Back) {
+      on_btnCancel_clicked();
+    }
+    return true;
+  }
+
+  return QWidget::eventFilter(watch, evn);
+}
+
 void MoveTo::showDialog() {
   int x, y, w, h;
   w = mw_one->width() - 20;
-  h = this->height();
+  h = mw_one->height() - 40;
   x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  y = 150;
+  y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
   setGeometry(x, y, w, h);
 
   m_widget = new QWidget(mw_one->m_NotesList);
@@ -69,13 +88,13 @@ void MoveTo::on_btnCancel_clicked() {
 
 void MoveTo::on_btnOk_clicked() {
   isOk = true;
-  strCurrentItem = ui->cboxMoveTo->currentText();
-  currentItem = listItems.at(ui->cboxMoveTo->currentIndex() - 1);
+  strCurrentItem = ui->listWidget->currentItem()->text();
+  currentItem = listItems.at(ui->listWidget->currentRow() - 1);
   close();
 }
 
 void MoveTo::initTopNoteBook() {
-  ui->cboxMoveTo->clear();
+  ui->listWidget->clear();
   listItems.clear();
   QStringList itemList;
   itemList.append(tr("Main Root"));
@@ -87,11 +106,11 @@ void MoveTo::initTopNoteBook() {
     listItems.append(topItem);
   }
 
-  ui->cboxMoveTo->addItems(itemList);
+  ui->listWidget->addItems(itemList);
 }
 
 void MoveTo::initAllNoteBook() {
-  ui->cboxMoveTo->clear();
+  ui->listWidget->clear();
   listItems.clear();
   QStringList itemList;
   itemList.append(tr("Main Root"));
@@ -111,5 +130,5 @@ void MoveTo::initAllNoteBook() {
     }
   }
 
-  ui->cboxMoveTo->addItems(itemList);
+  ui->listWidget->addItems(itemList);
 }
