@@ -34,6 +34,8 @@ class MoveTo : public QDialog {
   QList<QTreeWidgetItem *> listItems;
   void showDialog();
   QWidget *m_widget;
+  bool isNoteBook = false;
+  bool isNote = false;
 };
 
 #endif  // MOVETO_H

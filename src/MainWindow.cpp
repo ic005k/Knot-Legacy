@@ -1616,6 +1616,12 @@ void MainWindow::TextEditToFile(QTextEdit *txtEdit, QString fileName) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+  if (!ui->f_ImgView->isHidden()) {
+    on_btnBackImg_clicked();
+    event->ignore();
+    return;
+  }
+
   if (!ui->frameNoteRecycle->isHidden()) {
     on_btnBackNoteRecycle_clicked();
     event->ignore();

@@ -38,10 +38,13 @@ MoveTo::MoveTo(QWidget* parent) : QDialog(parent), ui(new Ui::MoveTo) {
     item = mw_one->m_NotesList->twrb->currentItem();
   if (item == NULL) close();
 
-  if (item->text(1).isEmpty())
+  if (item->text(1).isEmpty()) {
+    isNoteBook = true;
     initTopNoteBook();
-  else
+  } else {
+    isNote = true;
     initAllNoteBook();
+  }
 
   ui->lblItem->setText(item->text(0));
   ui->lblItem->adjustSize();
@@ -101,7 +104,9 @@ void MoveTo::on_btnCancel_clicked() {
 void MoveTo::on_btnOk_clicked() {
   isOk = true;
   strCurrentItem = ui->listWidget->currentItem()->text();
-  currentItem = listItems.at(ui->listWidget->currentRow() - 1);
+  if (isNoteBook) currentItem = listItems.at(ui->listWidget->currentRow() - 1);
+  if (isNote) currentItem = listItems.at(ui->listWidget->currentRow());
+
   close();
 }
 
@@ -125,7 +130,7 @@ void MoveTo::initAllNoteBook() {
   ui->listWidget->clear();
   listItems.clear();
   QStringList itemList;
-  itemList.append(tr("Main Root"));
+
   int count = mw_one->m_NotesList->tw->topLevelItemCount();
   for (int i = 0; i < count; i++) {
     QTreeWidgetItem* topItem = mw_one->m_NotesList->tw->topLevelItem(i);
