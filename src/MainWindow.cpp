@@ -4547,12 +4547,7 @@ void MainWindow::on_btnSelText_clicked() {
     ui->textBrowser->setReadOnly(true);
     QFont font = ui->qwReader->font();
     font.setPixelSize(textFontSize);
-
-    if (m_Preferences->isOverReaderFont())
-      font.setFamily(customFontFamily);
-    else
-      font.setFamily(defaultFontFamily);
-
+    font.setFamily(m_ReaderSet->ui->btnFont->font().family());
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     ui->textBrowser->setFont(font);
 
