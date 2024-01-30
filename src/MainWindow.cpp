@@ -3659,6 +3659,7 @@ void MainWindow::init_Theme() {
     ui->editTodo->setPalette(palette);
   }
 
+  // Chart
   QFont font1;
 #ifdef Q_OS_ANDROID
   font1.setPointSize(11);

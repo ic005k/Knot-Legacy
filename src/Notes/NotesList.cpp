@@ -19,27 +19,16 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &NotesList::on_KVChanged);
 
-  /*setWindowFlag(Qt::FramelessWindowHint);
-
-  setAttribute(Qt::WA_TranslucentBackground);
-
-  ui->frame0->setStyleSheet(
-      "#frame0{background-color: rgb(236, 236, 236);border-radius:10px; "
-      "border:1px solid gray;}");
-  ui->frame1->setStyleSheet(
-      "#frame1{background-color: rgb(236, 236, 236);border-radius:10px; "
-      "border:1px solid gray;}");*/
-
   tw = ui->treeWidget;
   twrb = ui->treeWidgetRecycle;
 
   if (!isDark) {
 #ifdef Q_OS_ANDROID
-    ui->treeWidget->setStyleSheet("selection-background-color: lightblue");
+    // tw->setStyleSheet("selection-background-color: lightblue");
 #else
-    ui->treeWidget->setStyleSheet(mw_one->treeStyle);
+    // tw->setStyleSheet(mw_one->treeStyle);
 #endif
-    ui->treeWidgetRecycle->setStyleSheet(ui->treeWidget->styleSheet());
+    // twrb->setStyleSheet(tw->styleSheet());
     ui->editName->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
     // tw->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
     // twrb->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
@@ -70,10 +59,12 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
 
   ui->btnPrev->setEnabled(false);
   ui->btnNext->setEnabled(false);
+
   QFont font = this->font();
-  font.setPointSize(font.pointSize() - 1);
+  font.setPointSize(fontSize - 1);
   font.setBold(true);
   ui->lblCount->setFont(font);
+
   ui->btnPrev->hide();
   ui->btnNext->hide();
   ui->btnFind->hide();
@@ -787,9 +778,9 @@ void NotesList::initNotesList() {
     tw->addTopLevelItem(topItem);
   }
 
-  tw->headerItem()->setText(0, tr("Notebook") + "(" +
-                                   QString::number(nNoteBook) + "  " +
-                                   QString::number(notesTotal) + ")");
+  tw->headerItem()->setText(
+      0, tr("Notebook") + " : " + QString::number(nNoteBook) + "  " +
+             tr("Notes") + " : " + QString::number(notesTotal));
   tw->expandAll();
 }
 
