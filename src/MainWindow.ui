@@ -551,6 +551,9 @@
        <number>0</number>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_34">
+       <property name="topMargin">
+        <number>9</number>
+       </property>
        <item>
         <widget class="QFrame" name="frameMenu">
          <property name="minimumSize">

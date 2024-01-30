@@ -76,9 +76,10 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
                          QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(mw_one->ui->editDetails);
 
-  if (!isDark)
-    mw_one->ui->editDetails->verticalScrollBar()->setStyleSheet(
-        m_Method->vsbarStyleSmall);
+  if (!isDark) {
+    // mw_one->ui->editDetails->verticalScrollBar()->setStyleSheet(
+    //     m_Method->vsbarStyleSmall);
+  }
 }
 
 void EditRecord::init() {

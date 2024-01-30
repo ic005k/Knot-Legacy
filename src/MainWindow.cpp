@@ -3583,6 +3583,26 @@ void MainWindow::init_Theme() {
 
   qDebug() << "red=" << red;
 
+  // Set Theme
+  QString fileTheme;
+  if (isDark)
+    fileTheme = ":/theme/dark/darkstyle.qss";
+  else
+    fileTheme = ":/theme/light/lightstyle.qss";
+  QFile f_theme(fileTheme);
+  if (!f_theme.exists()) {
+    qDebug() << "Unable to set stylesheet, file not found";
+  } else {
+    f_theme.open(QFile::ReadOnly | QFile::Text);
+    QTextStream ts(&f_theme);
+    QString qssAll = ts.readAll();
+    qssAll = qssAll.replace("QSlider", "CancelQSlider");
+    qssAll = qssAll.replace("width: 16px;", "width: 8px;");
+    qssAll = qssAll.replace("margin: 16px 2px 16px 2px;",
+                            "margin: 1px 2px 1px 2px;");
+    qApp->setStyleSheet(qssAll);
+  }
+
   ui->qwChartMonth->rootContext()->setContextProperty("isDark", isDark);
   ui->qwMainTab->rootContext()->setContextProperty("isDark", isDark);
   ui->qwMainDate->rootContext()->setContextProperty("isDark", isDark);
@@ -3743,6 +3763,8 @@ void MainWindow::init_UIWidget() {
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
   isReadEnd = true;
 
+  ui->menubar->hide();
+  ui->statusbar->hide();
   ui->frameReader->hide();
   ui->frameTodo->hide();
   ui->frameTodoRecycle->hide();

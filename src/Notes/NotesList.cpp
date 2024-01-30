@@ -41,8 +41,8 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
 #endif
     ui->treeWidgetRecycle->setStyleSheet(ui->treeWidget->styleSheet());
     ui->editName->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
-    tw->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
-    twrb->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
+    // tw->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
+    // twrb->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
   }
 
   setModal(true);

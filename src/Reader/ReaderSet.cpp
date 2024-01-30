@@ -12,17 +12,17 @@ extern QSettings* iniPreferences;
 
 ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   QPalette pal = palette();
-
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   pal.setColor(QPalette::Background, QColor(10, 10, 10, 200));
 #else
   pal.setColor(QPalette::Window, QColor(10, 10, 10, 200));
 #endif
-
   setPalette(pal);
 
   ui->setupUi(this);
+
   setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool | Qt::FramelessWindowHint);
+
   ui->hSlider->installEventFilter(this);
 
   ui->btnFontLess->setStyleSheet("border:none");
@@ -34,7 +34,8 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   ui->btnStyle3->setFont(f);
   ui->btnFont->setFont(f);
   ui->lblProg->setFont(f);
-  ui->lblProg->setStyleSheet("color:white;");
+
+  // ui->lblProg->setStyleSheet("color:white;");
 }
 
 ReaderSet::~ReaderSet() { delete ui; }
