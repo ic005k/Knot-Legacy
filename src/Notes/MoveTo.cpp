@@ -6,6 +6,7 @@
 
 extern MainWindow* mw_one;
 extern Method* m_Method;
+extern bool isDark;
 
 MoveTo::MoveTo(QWidget* parent) : QDialog(parent), ui(new Ui::MoveTo) {
   ui->setupUi(this);
@@ -20,6 +21,13 @@ MoveTo::MoveTo(QWidget* parent) : QDialog(parent), ui(new Ui::MoveTo) {
   ui->listWidget->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
   ui->listWidget->setVerticalScrollMode(QListWidget::ScrollPerPixel);
   QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
+  if (!isDark) {
+#ifdef Q_OS_ANDROID
+    ui->listWidget->setStyleSheet("selection-background-color: lightblue");
+#else
+
+#endif
+  }
 
   mw_one->set_ToolButtonStyle(this);
 
@@ -70,7 +78,11 @@ void MoveTo::showDialog() {
   m_widget->setStyleSheet("background-color:rgba(0, 0, 0,35%);");
   m_widget->show();
 
+  ui->listWidget->setFocus();
+  if (ui->listWidget->count() > 0) ui->listWidget->setCurrentRow(0);
+
   show();
+
   while (!isHidden()) QCoreApplication::processEvents();
 }
 
