@@ -98,7 +98,12 @@ Item {
             selectByMouse: false
             smooth: true
 
-            color: "#664E30"
+            color: isDark ? "#FFFFFF" : "#664E30"
+
+            background: Rectangle {
+                color: isDark ? "#455364" : "#FFFFFF"
+                radius: 0
+            }
 
             MouseArea {
                 acceptedButtons: Qt.RightButton
@@ -124,14 +129,14 @@ Item {
             }
 
             SequentialAnimation on opacity {
-                //应用于透明度上的序列动画
+                // 应用于透明度上的序列动画
                 running: true
-                loops: 1 //Animation.Infinite //无限循环
+                loops: 1 //Animation.Infinite // 无限循环
                 NumberAnimation {
                     from: 0
                     to: 1
                     duration: 500
-                } //淡出效果
+                } // 淡出效果
                 PauseAnimation {
                     duration: 0
                 }
