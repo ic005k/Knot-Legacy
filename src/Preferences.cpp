@@ -385,12 +385,15 @@ QStringList Preferences::getBakFilesList() {
 
 void Preferences::on_chkDark_clicked(bool checked) {
   isDark = checked;
-  mw_one->init_Theme();
+  getCheckStatusChange();
 }
 
 void Preferences::initCheckStatus() {
   listCheckStatus.clear();
   listCheckStatus.append(ui->chkUIFont->isChecked());
+
+  listCheckStatus.append(ui->chkDark->isChecked());
+
   listCheckStatus.append(ui->sliderFontSize->value());
 
   orgCustomFontText = ui->btnCustomFont->text().trimmed();
@@ -400,7 +403,9 @@ void Preferences::getCheckStatusChange() {
   bool isChanged = false;
   if (ui->chkUIFont->isChecked() != listCheckStatus.at(0)) isChanged = true;
 
-  if (ui->sliderFontSize->value() != listCheckStatus.at(1)) isChanged = true;
+  if (ui->chkDark->isChecked() != listCheckStatus.at(1)) isChanged = true;
+
+  if (ui->sliderFontSize->value() != listCheckStatus.at(2)) isChanged = true;
 
   if (orgCustomFontText != ui->btnCustomFont->text().trimmed())
     isChanged = true;

@@ -5,12 +5,20 @@
 
 extern MainWindow* mw_one;
 extern Method* m_Method;
+extern int fontSize;
 
 PrintPDF::PrintPDF(QWidget* parent) : QDialog(parent), ui(new Ui::PrintPDF) {
   ui->setupUi(this);
   setWindowFlag(Qt::FramelessWindowHint);
   QString style = "QDialog{border-radius:0px;border:0px solid darkred;}";
   this->setStyleSheet(style);
+
+  QFont font = this->font();
+  font.setPointSize(fontSize);
+  ui->listWidget->setFont(font);
+  ui->listWidget->setFocus();
+  QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
+  m_Method->setSCrollPro(ui->listWidget);
 
   mw_one->set_ToolButtonStyle(this);
 }
@@ -44,13 +52,15 @@ QString PrintPDF::getItem(QString title, QString lblText, QStringList valueList,
                           int valueIndex) {
   this->setWindowTitle(title);
   ui->lblText->setText(lblText);
-  ui->cbox->clear();
-  ui->cbox->addItems(valueList);
-  ui->cbox->setCurrentIndex(valueIndex);
+  ui->listWidget->clear();
+  ui->listWidget->addItems(valueList);
+  ui->listWidget->setCurrentRow(valueIndex);
 
   int x, y, w, h;
   w = mw_one->width() - 40;
-  h = this->height();
+  h = valueList.count() * m_Method->getFontHeight() * 1.5;
+  if (h > mw_one->height()) h = mw_one->height() - 50;
+
   x = mw_one->geometry().x() + (mw_one->geometry().width() - w) / 2;
   y = mw_one->geometry().y() + (mw_one->geometry().height() - h) / 2;
   setGeometry(x, y, w, h);
@@ -64,6 +74,6 @@ QString PrintPDF::getItem(QString title, QString lblText, QStringList valueList,
 }
 
 void PrintPDF::on_btnOk_clicked() {
-  strValue = ui->cbox->currentText();
+  strValue = ui->listWidget->currentItem()->text();
   close();
 }
