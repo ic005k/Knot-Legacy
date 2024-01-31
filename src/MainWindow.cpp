@@ -3497,9 +3497,13 @@ void MainWindow::initQW() {
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
   ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
 
-  int f_size = 20;
+  int f_size = 19;
   if (fontSize <= f_size) f_size = fontSize;
   ui->qwReport->rootContext()->setContextProperty("maxFontSize", f_size);
+  ui->qwReportSub->rootContext()->setContextProperty("maxFontSize", f_size);
+  ui->qwSteps->rootContext()->setContextProperty("maxFontSize", f_size);
+  ui->qwTodo->rootContext()->setContextProperty("maxFontSize", f_size);
+
   ui->qwReport->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
   ui->qwReportSub->setSource(
@@ -3649,8 +3653,6 @@ void MainWindow::init_Theme() {
     ui->btnNotes->setIcon(QIcon(":/res/note_l.png"));
     ui->btnChart->setIcon(QIcon(":/res/chart_l.png"));
     ui->btnSelTab->setIcon(QIcon(":/res/tab_l.png"));
-    ui->btnNoteBookIcon->setIcon(QIcon(":/res/note_l.png"));
-    ui->btnNotesIcon->setIcon(QIcon(":/res/notes_l.png"));
 
     ui->editTodo->setStyleSheet(
         "QTextEdit{background-color: #455364; color: white; border:1px solid "
@@ -3903,8 +3905,6 @@ void MainWindow::init_UIWidget() {
   ui->btnFind->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
   ui->btnSelTab->setStyleSheet("border:none");
-  ui->btnNoteBookIcon->setStyleSheet("border:none");
-  ui->btnNotesIcon->setStyleSheet("border:none");
 
   int nIConFontSize;
 #ifdef Q_OS_ANDROID

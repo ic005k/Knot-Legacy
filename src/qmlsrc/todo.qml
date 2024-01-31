@@ -263,7 +263,7 @@ Rectangle {
                             TextArea {
                                 id: text1
                                 color: view.currentIndex === index ?  "black" : getText1FontColor()
-                                font.pointSize: FontSize - 2
+                                font.pointSize: FontSize - 2 > maxFontSize? maxFontSize : FontSize - 2
                                 font.bold: true
                                 width: parent.width
                                 wrapMode: Text.Wrap

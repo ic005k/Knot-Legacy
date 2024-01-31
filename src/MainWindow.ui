@@ -2607,8 +2607,8 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>30</width>
-                <height>30</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="shortcut">
@@ -2648,8 +2648,8 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>30</width>
-                <height>30</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
@@ -2686,8 +2686,8 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>30</width>
-                <height>30</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
@@ -2724,8 +2724,8 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>30</width>
-                <height>30</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
@@ -2762,8 +2762,8 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>30</width>
-                <height>30</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
@@ -2800,8 +2800,8 @@ QTabBar::scroller {width:0}
               </property>
               <property name="iconSize">
                <size>
-                <width>30</width>
-                <height>30</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
@@ -3005,17 +3005,27 @@ border:1px solid #4169E1
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>35</height>
+             <height>16777215</height>
             </size>
            </property>
            <property name="text">
             <string>Back</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
            <property name="shortcut">
             <string>Esc</string>
@@ -3033,17 +3043,27 @@ border:1px solid #4169E1
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>35</height>
+             <height>16777215</height>
             </size>
            </property>
            <property name="text">
             <string>Clear All</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/clear.png</normaloff>:/res/clear.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -3058,17 +3078,27 @@ border:1px solid #4169E1
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>35</height>
+             <height>16777215</height>
             </size>
            </property>
            <property name="text">
             <string>Delete</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/del.png</normaloff>:/res/del.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -3083,17 +3113,27 @@ border:1px solid #4169E1
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>35</height>
+             <height>16777215</height>
             </size>
            </property>
            <property name="text">
             <string>Restore</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/moveto.png</normaloff>:/res/moveto.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -3303,7 +3343,7 @@ QRadioButton::indicator:checked {
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>105</height>
+           <height>80</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -3385,7 +3425,7 @@ QRadioButton::indicator:checked {
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_3">
+             <widget class="QLabel" name="lblCM">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -3398,7 +3438,7 @@ QRadioButton::indicator:checked {
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="lblCurrent">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -3457,11 +3497,21 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
             <string>Back</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -3476,11 +3526,21 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
             <string>Pause</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/pause.png</normaloff>:/res/pause.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -3495,11 +3555,21 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
             <string>Reset</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/reset.png</normaloff>:/res/reset.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -3592,7 +3662,7 @@ QRadioButton::indicator:checked {
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="lblTo">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -4335,29 +4405,12 @@ QRadioButton::indicator:checked {
                </property>
                <property name="icon">
                 <iconset resource="../res.qrc">
-                 <normaloff>:/res/menu.svg</normaloff>:/res/menu.svg</iconset>
+                 <normaloff>:/res/notebook_l.png</normaloff>:/res/notebook_l.png</iconset>
                </property>
                <property name="iconSize">
                 <size>
                  <width>20</width>
                  <height>20</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="btnNoteBookIcon">
-               <property name="text">
-                <string>...</string>
-               </property>
-               <property name="icon">
-                <iconset resource="../res.qrc">
-                 <normaloff>:/res/note.png</normaloff>:/res/note.png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>25</width>
-                 <height>25</height>
                 </size>
                </property>
               </widget>
@@ -4397,29 +4450,12 @@ QRadioButton::indicator:checked {
                </property>
                <property name="icon">
                 <iconset resource="../res.qrc">
-                 <normaloff>:/res/menu.svg</normaloff>:/res/menu.svg</iconset>
+                 <normaloff>:/res/notes_l.png</normaloff>:/res/notes_l.png</iconset>
                </property>
                <property name="iconSize">
                 <size>
                  <width>20</width>
                  <height>20</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="btnNotesIcon">
-               <property name="text">
-                <string>...</string>
-               </property>
-               <property name="icon">
-                <iconset resource="../res.qrc">
-                 <normaloff>:/res/notes.png</normaloff>:/res/notes.png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>25</width>
-                 <height>25</height>
                 </size>
                </property>
               </widget>

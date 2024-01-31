@@ -17,12 +17,21 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
 
   mw_one->ui->lblSingle->adjustSize();
 
-  QFont font1;
-  font1.setPointSize(15);
-  mw_one->ui->lblX->setFont(font1);
-  mw_one->ui->lblY->setFont(font1);
-  mw_one->ui->lblZ->setFont(font1);
-  mw_one->ui->lblSteps->setFont(font1);
+  QFont font0;
+  font0.setPointSize(15);
+  mw_one->ui->lblX->setFont(font0);
+  mw_one->ui->lblY->setFont(font0);
+  mw_one->ui->lblZ->setFont(font0);
+  mw_one->ui->lblSteps->setFont(font0);
+
+  QFont font1 = m_Method->getNewFont(19);
+  mw_one->ui->lblThreshold->setFont(font1);
+  mw_one->ui->editStepsThreshold->setFont(font1);
+  mw_one->ui->lblStepLength->setFont(font1);
+  mw_one->ui->editStepLength->setFont(font1);
+  mw_one->ui->lblCM->setFont(font1);
+  mw_one->ui->lblCurrent->setFont(font1);
+  mw_one->ui->lblSingle->setFont(font1);
 
   lblStyleNormal = mw_one->ui->lblX->styleSheet();
 

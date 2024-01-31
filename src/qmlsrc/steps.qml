@@ -108,6 +108,7 @@ Rectangle {
             }
 
             // Always show
+
             /*onActiveChanged: {
                 active = true
             }
@@ -144,8 +145,9 @@ Rectangle {
                 id: mytext
                 text: display
                 anchors.centerIn: parent
-                //font.pointSize: 12
+
                 color: isDark ? "white" : "black"
+                font.pointSize: maxFontSize
             }
         }
     }

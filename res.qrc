@@ -137,5 +137,7 @@
         <file>res/moveto.png</file>
         <file>res/notes_l.png</file>
         <file>res/notes.png</file>
+        <file>res/delall_l.png</file>
+        <file>res/reset.png</file>
     </qresource>
 </RCC>

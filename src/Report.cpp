@@ -53,6 +53,17 @@ Report::Report(QWidget* parent) : QDialog(parent) {
   btnMonth = mw_one->ui->btnMonth;
   btnYear = mw_one->ui->btnYear;
 
+  QFont font1 = m_Method->getNewFont(18);
+  mw_one->ui->lblTotal->setFont(font1);
+  mw_one->ui->lblTo->setFont(font1);
+  mw_one->ui->btnYear->setFont(font1);
+  mw_one->ui->btnMonth->setFont(font1);
+  mw_one->ui->btnOut2Img->setFont(font1);
+  mw_one->ui->btnStartDate->setFont(font1);
+  mw_one->ui->btnEndDate->setFont(font1);
+  mw_one->ui->btnBack_Report->setFont(font1);
+  mw_one->ui->btnCategory->setFont(font1);
+
   QFont font = mw_one->ui->lblTotal->font();
   font.setBold(true);
   mw_one->ui->lblTotal->setFont(font);

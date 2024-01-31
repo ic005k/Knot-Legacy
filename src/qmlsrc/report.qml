@@ -88,7 +88,7 @@ Rectangle {
                         id: m_text
                         text: modelData
                         anchors.centerIn: parent
-                        //font.pointSize: 12
+                        font.pointSize: maxFontSize
                         color: "white"
                     }
                 }

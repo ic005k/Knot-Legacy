@@ -15,7 +15,7 @@ extern QRegularExpression regxNumber;
 Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
 
-  QFont font0 = m_Method->getNewFont(16);
+  QFont font0 = m_Method->getNewFont(15);
   QObjectList btnList =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_ToolBar));
   for (int i = 0; i < btnList.count(); i++) {
@@ -38,7 +38,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->lblCol->setFont(font0);
   ui->lblRow->setFont(font0);
 
-  QFont font1 = m_Method->getNewFont(19);
+  QFont font1 = m_Method->getNewFont(13);
   QObjectList btnList1 =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_Panel));
   for (int i = 0; i < btnList1.count(); i++) {

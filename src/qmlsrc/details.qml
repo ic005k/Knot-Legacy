@@ -213,6 +213,8 @@ Rectangle {
 
                         leftPadding: 5
                         rightPadding: 5
+
+                        font.pointSize: maxFontSize
                     }
 
                     Text {
@@ -231,6 +233,8 @@ Rectangle {
 
                         leftPadding: 5
                         rightPadding: 5
+
+                        font.pointSize: maxFontSize
 
                         visible: item1.text.length ? true : false
                     }
@@ -251,6 +255,8 @@ Rectangle {
                         leftPadding: 5
                         rightPadding: 5
 
+                        font.pointSize: maxFontSize
+
                         visible: item2.text.length ? true : false
                     }
 
@@ -268,6 +274,8 @@ Rectangle {
 
                         leftPadding: 5
                         rightPadding: 5
+
+                        font.pointSize: maxFontSize
 
                         visible: item3.text.length ? true : false
                     }
