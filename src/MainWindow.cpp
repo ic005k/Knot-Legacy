@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.39";
+QString ver = "1.1.40";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3649,6 +3649,8 @@ void MainWindow::init_Theme() {
     ui->btnNotes->setIcon(QIcon(":/res/note_l.png"));
     ui->btnChart->setIcon(QIcon(":/res/chart_l.png"));
     ui->btnSelTab->setIcon(QIcon(":/res/tab_l.png"));
+    ui->btnNoteBookIcon->setIcon(QIcon(":/res/note_l.png"));
+    ui->btnNotesIcon->setIcon(QIcon(":/res/notes_l.png"));
 
     ui->editTodo->setStyleSheet(
         "QTextEdit{background-color: #455364; color: white; border:1px solid "
@@ -3901,6 +3903,8 @@ void MainWindow::init_UIWidget() {
   ui->btnFind->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
   ui->btnSelTab->setStyleSheet("border:none");
+  ui->btnNoteBookIcon->setStyleSheet("border:none");
+  ui->btnNotesIcon->setStyleSheet("border:none");
 
   int nIConFontSize;
 #ifdef Q_OS_ANDROID
@@ -5714,3 +5718,19 @@ void MainWindow::on_btnManagement_clicked() {
 
   m_NotesList->tw->scrollToItem(m_NotesList->tw->currentItem());
 }
+
+void MainWindow::on_btnUpMove_clicked() {
+  m_NotesList->on_btnUp_clicked();
+  m_NotesList->resetQML_List();
+}
+
+void MainWindow::on_btnDownMove_clicked() {
+  m_NotesList->on_btnDown_clicked();
+  m_NotesList->resetQML_List();
+}
+
+void MainWindow::on_btnDelNote_NoteBook_clicked() {
+  m_NotesList->on_btnDel_clicked();
+}
+
+void MainWindow::on_btnMoveTo_clicked() { m_NotesList->on_btnMoveTo_clicked(); }

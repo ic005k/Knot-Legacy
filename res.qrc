@@ -132,5 +132,10 @@
         <file>res/p0.png</file>
         <file>res/n.png</file>
         <file>res/nb.png</file>
+        <file>res/tree.png</file>
+        <file>res/del.png</file>
+        <file>res/moveto.png</file>
+        <file>res/notes_l.png</file>
+        <file>res/notes.png</file>
     </qresource>
 </RCC>

@@ -506,7 +506,7 @@ color: rgb(255, 255, 255);</string>
            <string>P</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/pic.png</normaloff>:/res/pic.png</iconset>
           </property>
           <property name="iconSize">
@@ -544,7 +544,7 @@ color: rgb(255, 255, 255);</string>
            <string>C</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/color.png</normaloff>:/res/color.png</iconset>
           </property>
           <property name="iconSize">
@@ -584,7 +584,7 @@ color: rgb(255, 255, 255);</string>
            <string>U</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/font4.png</normaloff>:/res/font4.png</iconset>
           </property>
           <property name="iconSize">
@@ -619,7 +619,7 @@ color: rgb(255, 255, 255);</string>
            <string>S</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/font5.png</normaloff>:/res/font5.png</iconset>
           </property>
           <property name="iconSize">
@@ -769,7 +769,7 @@ color: rgb(255, 255, 255);</string>
            <string>B</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/font1.png</normaloff>:/res/font1.png</iconset>
           </property>
           <property name="iconSize">
@@ -810,7 +810,7 @@ color: rgb(255, 255, 255);</string>
            <string>I</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/font2.png</normaloff>:/res/font2.png</iconset>
           </property>
           <property name="iconSize">
@@ -850,7 +850,7 @@ color: rgb(255, 255, 255);</string>
            <string>I</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/font3.png</normaloff>:/res/font3.png</iconset>
           </property>
           <property name="iconSize">
@@ -949,6 +949,10 @@ color: rgb(255, 255, 255);</string>
           <property name="text">
            <string>Done</string>
           </property>
+          <property name="icon">
+           <iconset resource="../../res.qrc">
+            <normaloff>:/res/done.png</normaloff>:/res/done.png</iconset>
+          </property>
           <property name="iconSize">
            <size>
             <width>25</width>
@@ -959,7 +963,7 @@ color: rgb(255, 255, 255);</string>
            <string>Esc</string>
           </property>
           <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextOnly</enum>
+           <enum>Qt::ToolButtonIconOnly</enum>
           </property>
          </widget>
         </item>
@@ -987,7 +991,7 @@ color: rgb(255, 255, 255);</string>
            <string>&lt;-|</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/cleft.png</normaloff>:/res/cleft.png</iconset>
           </property>
           <property name="iconSize">
@@ -1022,7 +1026,7 @@ color: rgb(255, 255, 255);</string>
            <string>|-&gt;</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/cright.png</normaloff>:/res/cright.png</iconset>
           </property>
           <property name="iconSize">
@@ -1062,7 +1066,7 @@ color: rgb(255, 255, 255);</string>
            <string>Undo</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/undo.png</normaloff>:/res/undo.png</iconset>
           </property>
           <property name="iconSize">
@@ -1105,7 +1109,7 @@ color: rgb(255, 255, 255);</string>
            <string>Redo</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/redo.png</normaloff>:/res/redo.png</iconset>
           </property>
           <property name="iconSize">
@@ -1162,7 +1166,7 @@ color: rgb(255, 255, 255);</string>
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/hidekey.svg</normaloff>:/res/hidekey.svg</iconset>
           </property>
           <property name="iconSize">
@@ -1208,7 +1212,7 @@ color: rgb(2, 2, 2);</string>
            <string>Tool Bar</string>
           </property>
           <property name="icon">
-           <iconset resource="../res.qrc">
+           <iconset resource="../../res.qrc">
             <normaloff>:/res/tools.svg</normaloff>:/res/tools.svg</iconset>
           </property>
           <property name="iconSize">
@@ -1227,7 +1231,7 @@ color: rgb(2, 2, 2);</string>
   </layout>
  </widget>
  <resources>
-  <include location="../res.qrc"/>
+  <include location="../../res.qrc"/>
  </resources>
  <connections/>
 </ui>

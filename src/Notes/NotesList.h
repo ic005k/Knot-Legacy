@@ -84,10 +84,14 @@ class NotesList : public QDialog {
   int getNoteBookIndex_twToqml();
 
   void loadAllRecycle();
-  protected:
+
+  void resetQML_List();
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
+
  public slots:
   void on_btnClose_clicked();
 
@@ -121,17 +125,17 @@ class NotesList : public QDialog {
 
   void on_btnNext_clicked();
 
- private slots:
-
-  void on_editFind_textChanged(const QString &arg1);
-
-  void on_editFind_returnPressed();
-
   void on_btnUp_clicked();
 
   void on_btnDown_clicked();
 
   void on_btnMoveTo_clicked();
+
+ private slots:
+
+  void on_editFind_textChanged(const QString &arg1);
+
+  void on_editFind_returnPressed();
 
  private:
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();

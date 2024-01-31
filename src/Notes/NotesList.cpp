@@ -80,6 +80,10 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->btnRename->hide();
 
   mw_one->ui->btnNoteRecycle->hide();
+  mw_one->ui->btnUpMove->hide();
+  mw_one->ui->btnDownMove->hide();
+  mw_one->ui->btnMoveTo->hide();
+  mw_one->ui->btnDelNote_NoteBook->hide();
 
   QScroller::grabGesture(ui->editName, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(ui->editName);
@@ -526,6 +530,16 @@ void NotesList::closeEvent(QCloseEvent *event) {
   isNeedSave = save;
   saveRecycle();
 
+  resetQML_List();
+
+  mw_one->ui->btnBackNotes->show();
+  mw_one->ui->btnEdit->show();
+  mw_one->ui->btnNotesList->show();
+  mw_one->ui->btnSetKey->show();
+  mw_one->ui->btnPDF->show();
+}
+
+void NotesList::resetQML_List() {
   loadAllNoteBook();
   int index = 0;
   QTreeWidgetItem *item = tw->currentItem();
@@ -572,11 +586,13 @@ void NotesList::closeEvent(QCloseEvent *event) {
   setNoteBookCurrentIndex(index);
   m_Method->clickNoteBook();
 
-  mw_one->ui->btnBackNotes->show();
-  mw_one->ui->btnEdit->show();
-  mw_one->ui->btnNotesList->show();
-  mw_one->ui->btnSetKey->show();
-  mw_one->ui->btnPDF->show();
+  setNotesListCurrentIndex(-1);
+  int countNotes = pNoteItems.count();
+  for (int i = 0; i < countNotes; i++) {
+    if (tw->currentItem() == pNoteItems.at(i)) {
+      setNotesListCurrentIndex(i);
+    }
+  }
 }
 
 void NotesList::saveNotesList() {
@@ -1723,10 +1739,9 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
 }
 
 void NotesList::setNoteLabel() {
-  mw_one->ui->lblNoteBook->setText(tr("Note Book") + " : " +
-                                   QString::number(getNoteBookCount()));
+  mw_one->ui->lblNoteBook->setText("  " + QString::number(getNoteBookCount()));
   QString notesSum = QString::number(getNotesListCount());
-  mw_one->ui->lblNoteList->setText(tr("Note List") + " : " + notesSum);
+  mw_one->ui->lblNoteList->setText("  " + notesSum);
   int index = getNoteBookCurrentIndex();
   m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index, notesSum);
 }

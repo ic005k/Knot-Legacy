@@ -4346,6 +4346,23 @@ QRadioButton::indicator:checked {
               </widget>
              </item>
              <item>
+              <widget class="QToolButton" name="btnNoteBookIcon">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../res.qrc">
+                 <normaloff>:/res/note.png</normaloff>:/res/note.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>25</width>
+                 <height>25</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QLabel" name="lblNoteBook">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -4391,6 +4408,23 @@ QRadioButton::indicator:checked {
               </widget>
              </item>
              <item>
+              <widget class="QToolButton" name="btnNotesIcon">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../res.qrc">
+                 <normaloff>:/res/notes.png</normaloff>:/res/notes.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>25</width>
+                 <height>25</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QLabel" name="lblNoteList">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -4417,6 +4451,62 @@ QRadioButton::indicator:checked {
         </layout>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_53">
+         <item>
+          <widget class="QToolButton" name="btnUpMove">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Up</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnDownMove">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Down</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnDelNote_NoteBook">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Del</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnMoveTo">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>MoveTo</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_29">
          <item>
           <widget class="QToolButton" name="btnBackNoteList">
@@ -4429,11 +4519,21 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
             <string>Back</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
            <property name="shortcut">
             <string>Esc</string>
@@ -4451,11 +4551,21 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
             <string>Tree</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/tree.png</normaloff>:/res/tree.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -4470,11 +4580,21 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
             <string>Find</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/find_l.png</normaloff>:/res/find_l.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -4489,11 +4609,17 @@ QRadioButton::indicator:checked {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>0</height>
             </size>
            </property>
            <property name="text">
             <string>Recycle</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -4595,7 +4721,7 @@ QRadioButton::indicator:checked {
             </size>
            </property>
            <property name="text">
-            <string>Delete</string>
+            <string>Del</string>
            </property>
           </widget>
          </item>

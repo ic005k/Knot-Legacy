@@ -702,6 +702,14 @@ class MainWindow : public QMainWindow {
 
   void on_btnManagement_clicked();
 
+  void on_btnUpMove_clicked();
+
+  void on_btnDownMove_clicked();
+
+  void on_btnDelNote_NoteBook_clicked();
+
+  void on_btnMoveTo_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
