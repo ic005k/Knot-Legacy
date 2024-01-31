@@ -3662,7 +3662,7 @@ void MainWindow::init_Theme() {
   // Chart
   QFont font1;
 #ifdef Q_OS_ANDROID
-  font1.setPointSize(11);
+  font1.setPointSize(9);
 #else
   font1.setPointSize(9);
 #endif
