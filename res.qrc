@@ -139,5 +139,8 @@
         <file>res/notes.png</file>
         <file>res/delall_l.png</file>
         <file>res/reset.png</file>
+        <file>res/s2.png</file>
+        <file>res/s1.png</file>
+        <file>res/s0.png</file>
     </qresource>
 </RCC>

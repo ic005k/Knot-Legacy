@@ -366,11 +366,14 @@ void Steps::setMaxMark() {
 }
 
 void Steps::appendSteps(QString date, int steps, QString km) {
+  QString strSteps = QString::number(steps);
+  double dCalorie = steps * 0.04;
+  QString strCalorie = QString("%1").arg(dCalorie, 0, 'f', 2);
+
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, date),
-                            Q_ARG(QVariant, QString::number(steps)),
-                            Q_ARG(QVariant, km), Q_ARG(QVariant, ""),
-                            Q_ARG(QVariant, 0));
+                            Q_ARG(QVariant, strSteps), Q_ARG(QVariant, km),
+                            Q_ARG(QVariant, strCalorie), Q_ARG(QVariant, 0));
 }
 
 int Steps::getCount() {

@@ -12,6 +12,7 @@ Rectangle {
 
     color: isDark ? "#19232D" : "white"
 
+    property int iconW: 18
     property int i: 0
     property int itemCount: 0
     property bool isHighPriority: false
@@ -232,78 +233,166 @@ Rectangle {
                     anchors.leftMargin: 0
                     anchors.rightMargin: 0
 
-                    Text {
-                        id: item0
+                    RowLayout {
 
-                        width: parent.width
-                        Layout.preferredWidth: listItem.width
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
-                        wrapMode: TextArea.WordWrap
-                        font.bold: false
-                        text: text0
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        id: row0
 
-                        leftPadding: 5
-                        rightPadding: 5
+                        Image {
+                            id: item0Img
+
+                            width: iconW
+                            height: item0.contentHeight
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/time.svg"
+
+                            visible: false
+                        }
+
+                        Text {
+                            id: item0
+
+                            width: parent.width
+                            Layout.preferredWidth: listItem.width
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: TextArea.WordWrap
+                            font.bold: false
+                            text: text0
+                            color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+
+                            leftPadding: 5
+                            rightPadding: 5
+                        }
                     }
 
-                    Text {
-                        id: item1
-                        Layout.preferredWidth: listItem.width
+                    RowLayout {
 
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
+                        id: row1
 
-                        width: parent.width
-                        wrapMode: TextArea.WordWrap
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
-                        font.bold: false
-                        text: text1
+                        Image {
+                            id: item1Img
 
-                        leftPadding: 5
-                        rightPadding: 5
+                            width: iconW
+                            height: item0.contentHeight
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
 
-                        visible: item1.text.length ? true : false
+                            smooth: true
+                            sourceSize.height: iconW-3
+                            sourceSize.width: iconW-3
+                            source: "/res/s0.png"
+
+                            visible: true
+                        }
+
+                        Text {
+                            id: item1
+                            Layout.preferredWidth: listItem.width
+
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+
+                            width: parent.width
+                            wrapMode: TextArea.WordWrap
+                            color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                            font.bold: false
+                            text: text1
+
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item1.text.length ? true : false
+                        }
                     }
 
-                    Text {
-                        id: item2
-                        anchors.rightMargin: 0
-                        Layout.preferredWidth: listItem.width
-                        Layout.alignment: Qt.AlignHCenter
+                    RowLayout {
 
-                        horizontalAlignment: Text.AlignLeft
-                        width: parent.width
-                        wrapMode: TextArea.WordWrap
-                        font.bold: false
-                        text: text2
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        id: row2
 
-                        leftPadding: 5
-                        rightPadding: 5
+                        Image {
+                            id: item2Img
 
-                        visible: item2.text.length ? true : false
+                            width: iconW
+                            height: item0.contentHeight
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/s1.png"
+
+                            visible: true
+                        }
+
+                        Text {
+                            id: item2
+                            anchors.rightMargin: 0
+                            Layout.preferredWidth: listItem.width
+                            Layout.alignment: Qt.AlignHCenter
+
+                            horizontalAlignment: Text.AlignLeft
+                            width: parent.width
+                            wrapMode: TextArea.WordWrap
+                            font.bold: false
+                            text: text2
+                            color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item2.text.length ? true : false
+                        }
                     }
 
-                    Text {
-                        id: item3
-                        anchors.rightMargin: 0
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        elide: Text.ElideRight
-                        //Layout.maximumWidth: listItem.width
-                        Layout.preferredWidth: listItem.width
-                        font.bold: false
-                        text: text3
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                    RowLayout {
 
-                        leftPadding: 5
-                        rightPadding: 5
+                        id: row3
 
-                        visible: item3.text.length ? true : false
+                        Image {
+                            id: item3Img
+
+                            width: iconW
+                            height: item0.contentHeight
+                            fillMode: Image.NoOption
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+
+                            smooth: true
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
+                            source: "/res/s2.png"
+
+                            visible: true
+                        }
+
+                        Text {
+                            id: item3
+                            anchors.rightMargin: 0
+                            width: parent.width
+                            wrapMode: Text.WordWrap
+                            elide: Text.ElideRight
+                            //Layout.maximumWidth: listItem.width
+                            Layout.preferredWidth: listItem.width
+                            font.bold: false
+                            text: text3
+                            color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item3.text.length ? true : false
+                        }
                     }
                 }
             }
