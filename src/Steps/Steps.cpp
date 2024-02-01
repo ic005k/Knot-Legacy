@@ -16,6 +16,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
   mw_one->ui->lblSingle->adjustSize();
+  mw_one->ui->lblCurrent->hide();
 
   QFont font0;
   font0.setPointSize(15);
@@ -154,7 +155,7 @@ void Steps::init_Steps() {
   mw_one->ui->editStepLength->setText(
       Reg.value("/Steps/Length", "35").toString());
   mw_one->ui->editStepsThreshold->setText(
-      Reg.value("/Steps/Threshold", "5000").toString());
+      Reg.value("/Steps/Threshold", "10000").toString());
   mw_one->ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
 
   int count = Reg.value("/Steps/Count").toInt();

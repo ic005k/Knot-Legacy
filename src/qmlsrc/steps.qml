@@ -13,6 +13,7 @@ Rectangle {
     color: isDark ? "#19232D" : "white"
 
     property int iconW: 18
+    property int rowSpace: 3
     property int i: 0
     property int itemCount: 0
     property bool isHighPriority: false
@@ -165,7 +166,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: getItemHeight() + 16
+            height: getItemHeight() + 28
             //color: ListView.isCurrentItem ? "lightblue" : getColor()
             color: ListView.isCurrentItem ? "lightblue" : (getText1(
                                                                index) >= nStepsThreshold ? "#FF6A6A" : getColor())
@@ -275,6 +276,7 @@ Rectangle {
                     RowLayout {
 
                         id: row1
+                        Layout.margins: rowSpace
 
                         Image {
                             id: item1Img
@@ -286,8 +288,8 @@ Rectangle {
                             verticalAlignment: Image.AlignVCenter
 
                             smooth: true
-                            sourceSize.height: iconW-3
-                            sourceSize.width: iconW-3
+                            sourceSize.height: item1.contentHeight -3
+                            sourceSize.width: item1.contentHeight -3
                             source: "/res/s0.png"
 
                             visible: true
@@ -317,6 +319,7 @@ Rectangle {
                     RowLayout {
 
                         id: row2
+                        Layout.margins: rowSpace
 
                         Image {
                             id: item2Img
@@ -328,8 +331,8 @@ Rectangle {
                             verticalAlignment: Image.AlignVCenter
 
                             smooth: true
-                            sourceSize.height: iconW
-                            sourceSize.width: iconW
+                            sourceSize.height: item1.contentHeight -3
+                            sourceSize.width: item1.contentHeight -3
                             source: "/res/s1.png"
 
                             visible: true
@@ -358,6 +361,7 @@ Rectangle {
                     RowLayout {
 
                         id: row3
+                        Layout.margins: rowSpace
 
                         Image {
                             id: item3Img
@@ -369,8 +373,8 @@ Rectangle {
                             verticalAlignment: Image.AlignVCenter
 
                             smooth: true
-                            sourceSize.height: iconW
-                            sourceSize.width: iconW
+                            sourceSize.height: item1.contentHeight -3
+                            sourceSize.width: item1.contentHeight -3
                             source: "/res/s2.png"
 
                             visible: true
