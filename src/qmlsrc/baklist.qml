@@ -263,7 +263,7 @@ Rectangle {
                         id: item3
                         anchors.rightMargin: 0
                         width: parent.width
-                        wrapMode: Text.WordWrap
+                        wrapMode: Text.WrapAnywhere
                         elide: Text.ElideRight
                         //Layout.maximumWidth: listItem.width
                         Layout.preferredWidth: listItem.width

@@ -131,6 +131,8 @@ void Steps::saveSteps() {
 }
 
 void Steps::init_Steps() {
+  clearAll();
+
   bool isRun = false;
   if (mw_one->ui->btnPauseSteps->text() == tr("Pause")) {
     mw_one->ui->btnPauseSteps->click();
@@ -158,7 +160,7 @@ void Steps::init_Steps() {
   int count = Reg.value("/Steps/Count").toInt();
   int start = 0;
   if (count > maxCount) start = 1;
-  clearAll();
+
   for (int i = start; i < count; i++) {
     QString str0 =
         Reg.value("/Steps/Table-" + QString::number(i) + "-0").toString();
@@ -171,6 +173,7 @@ void Steps::init_Steps() {
                   steps / 100 / 1000;
       str2 = QString("%1").arg(km, 0, 'f', 2);
     }
+
     addRecord(str0, steps, str2);
   }
 
@@ -364,9 +367,10 @@ void Steps::setMaxMark() {
 
 void Steps::appendSteps(QString date, int steps, QString km) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "appendTableRow",
-                            Q_ARG(QVariant, date), Q_ARG(QVariant, steps),
-                            Q_ARG(QVariant, km));
+  QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, date),
+                            Q_ARG(QVariant, QString::number(steps)),
+                            Q_ARG(QVariant, km), Q_ARG(QVariant, ""),
+                            Q_ARG(QVariant, 0));
 }
 
 int Steps::getCount() {
@@ -380,7 +384,7 @@ int Steps::getCount() {
 QString Steps::getDate(int row) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QVariant item;
-  QMetaObject::invokeMethod((QObject*)root, "getDate",
+  QMetaObject::invokeMethod((QObject*)root, "getText0",
                             Q_RETURN_ARG(QVariant, item), Q_ARG(QVariant, row));
   return item.toString();
 }
@@ -388,7 +392,7 @@ QString Steps::getDate(int row) {
 int Steps::getSteps(int row) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QVariant item;
-  QMetaObject::invokeMethod((QObject*)root, "getSteps",
+  QMetaObject::invokeMethod((QObject*)root, "getText1",
                             Q_RETURN_ARG(QVariant, item), Q_ARG(QVariant, row));
   return item.toInt();
 }
@@ -396,7 +400,7 @@ int Steps::getSteps(int row) {
 QString Steps::getKM(int row) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QVariant item;
-  QMetaObject::invokeMethod((QObject*)root, "getKM",
+  QMetaObject::invokeMethod((QObject*)root, "getText2",
                             Q_RETURN_ARG(QVariant, item), Q_ARG(QVariant, row));
   return item.toString();
 }
@@ -408,9 +412,10 @@ void Steps::delItem(int index) {
 
 void Steps::setTableData(int index, QString date, int steps, QString km) {
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "setTableData",
+  QMetaObject::invokeMethod((QObject*)root, "modifyItem",
                             Q_ARG(QVariant, index), Q_ARG(QVariant, date),
-                            Q_ARG(QVariant, steps), Q_ARG(QVariant, km));
+                            Q_ARG(QVariant, QString::number(steps)),
+                            Q_ARG(QVariant, km));
 }
 
 void Steps::clearAll() {
