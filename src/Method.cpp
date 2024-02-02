@@ -523,7 +523,7 @@ void Method::clickNoteBook() {
       QTreeWidgetItem* topItem =
           mw_one->m_NotesList->tw->topLevelItem(indexMain);
       QTreeWidgetItem* childItem = topItem->child(indexChild);
-      mw_one->m_NotesList->tw->setCurrentItem(childItem);
+      // mw_one->m_NotesList->tw->setCurrentItem(childItem);
       int count = childItem->childCount();
       for (int n = 0; n < count; n++) {
         QString text0 = childItem->child(n)->text(0);
@@ -538,8 +538,8 @@ void Method::clickNoteBook() {
   mw_one->m_NotesList->setNotesListCurrentIndex(-1);
   mw_one->m_NotesList->setNoteLabel();
 
-  mw_one->m_NotesList->tw->setCurrentItem(
-      mw_one->m_NotesList->pNoteBookItems.at(index));
+  // mw_one->m_NotesList->tw->setCurrentItem(
+  //     mw_one->m_NotesList->pNoteBookItems.at(index));
 }
 
 void Method::clickNoteList() {

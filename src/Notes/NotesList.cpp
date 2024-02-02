@@ -295,6 +295,8 @@ void NotesList::on_btnRename_clicked() {
 
     isNeedSave = true;
     dlg->close();
+
+    resetQML_List();
   });
 
   int x, y, w, h;
@@ -394,6 +396,8 @@ void NotesList::on_btnDel_clicked() {
   tw->setFocus();
   isNeedSave = true;
   saveNotesList();
+
+  resetQML_List();
 }
 
 void NotesList::addItem(QTreeWidget *tw, QTreeWidgetItem *item) {
@@ -519,7 +523,7 @@ void NotesList::closeEvent(QCloseEvent *event) {
   isNeedSave = save;
   saveRecycle();
 
-  resetQML_List();
+  // resetQML_List();
 
   mw_one->ui->btnBackNotes->show();
   mw_one->ui->btnEdit->show();
@@ -530,9 +534,11 @@ void NotesList::closeEvent(QCloseEvent *event) {
 
 void NotesList::resetQML_List() {
   loadAllNoteBook();
+
   int index = 0;
   QTreeWidgetItem *item = tw->currentItem();
   QTreeWidgetItem *pNoteBook = NULL;
+  QTreeWidgetItem *pNote = NULL;
   if (item == NULL)
     index = 0;
   else {
@@ -552,12 +558,14 @@ void NotesList::resetQML_List() {
       if (item->parent()->parent() == NULL) {
         index = tw->indexOfTopLevelItem(item->parent());
         pNoteBook = item->parent();
+        pNote = item;
       }
 
       else {
         if (item->parent()->parent()->parent() == NULL) {
           index = tw->indexOfTopLevelItem(item->parent()->parent());
           pNoteBook = item->parent();
+          pNote = item;
         }
       }
     }
@@ -575,11 +583,15 @@ void NotesList::resetQML_List() {
   setNoteBookCurrentIndex(index);
   m_Method->clickNoteBook();
 
-  setNotesListCurrentIndex(-1);
-  int countNotes = pNoteItems.count();
-  for (int i = 0; i < countNotes; i++) {
-    if (tw->currentItem() == pNoteItems.at(i)) {
-      setNotesListCurrentIndex(i);
+  if (pNote == NULL) {
+    setNotesListCurrentIndex(-1);
+  } else {
+    int countNotes = pNoteItems.count();
+    for (int i = 0; i < countNotes; i++) {
+      if (pNote == pNoteItems.at(i)) {
+        setNotesListCurrentIndex(i);
+        break;
+      }
     }
   }
 }
@@ -1303,6 +1315,8 @@ void NotesList::moveBy(int ud) {
       }
     }
   }
+
+  resetQML_List();
 }
 
 void NotesList::on_btnUp_clicked() { moveBy(-1); }

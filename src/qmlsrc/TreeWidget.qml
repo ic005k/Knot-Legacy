@@ -22,10 +22,13 @@ Rectangle{
     // Stylesheet
     // The backgroud color of the whole tree view panel. By default, this color is set to black
     readonly property color backgroundFill: Qt.rgba(33/255, 37/255, 43/255)
+
     // The background color of tree nodes. By default, this color is set to transparent(which means showing the background of the tree view).
     readonly property color backgroundNormal: Qt.rgba(0.0, 0.0, 0.0, 0.0)
+
     // The foreground color of tree node text. By default, this color is set to pale.
     readonly property color foregroundNormal: Qt.rgba(151/255, 165/255, 180/255)
+
     // The background color of hovered tree nodes. By default, this color is set to dark black.
     readonly property color backgroundHovered: Qt.rgba(44/255, 49/255, 58/255)
     // The foreground color of hovered tree node text. By default, this color is set to white.

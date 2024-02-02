@@ -5696,12 +5696,6 @@ void MainWindow::on_btnChart_clicked() {
 }
 
 void MainWindow::on_btnManagement_clicked() {
-  ui->frameNoteList->hide();
-  ui->frameNotesTree->show();
-  m_NotesList->initQmlTree();
-
-  return;
-
   int x, y, w, h;
   x = geometry().x();
   y = geometry().y();

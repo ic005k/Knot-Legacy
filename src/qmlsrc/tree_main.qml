@@ -8,12 +8,13 @@ Item {
     id: window
     visible: true
 
-    property int i: 0
+
 
     function addTopItem(strItem) {
         var topItem1 = tree.createItem(strItem, "/res/nb.png")
         topItem1.setSelectionFlag(tree.selectionCurrent)
         tree.addTopLevelItem(topItem1)
+
         return topItem1
     }
 
@@ -45,7 +46,8 @@ Item {
             iconSize = (Qt.size(25, 25))
             font.pointSize = fontSize
 
-            /*var topItem1 = createItem("Item 1", "/res/nb.png")
+
+            var topItem1 = createItem("Item 1", "/res/nb.png")
             topItem1.setSelectionFlag(selectionCurrent)
             addTopLevelItem(topItem1)
 
@@ -57,9 +59,7 @@ Item {
             addTopItem("Item 3")
             addTopItem("Item 4")
 
-            for (i = 0; i < 100; i++) {
-                addTopItem("Item " + i)
-            }*/
+
         }
 
         onCurrentItemChanged: {
