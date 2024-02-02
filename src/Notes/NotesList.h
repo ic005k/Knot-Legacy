@@ -87,7 +87,8 @@ class NotesList : public QDialog {
 
   void resetQML_List();
 
- protected:
+  void localNotesItem();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

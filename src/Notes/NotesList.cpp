@@ -290,17 +290,8 @@ void NotesList::on_btnRename_clicked() {
     dlg->close();
   });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
-    int index0 = getNoteBookCurrentIndex();
-    int index1 = getNotesListCurrentIndex();
-
     item->setText(0, edit->toPlainText().trimmed());
     if (item->parent() != NULL) setNoteName(item->text(0));
-
-    loadAllNoteBook();
-
-    setNoteBookCurrentIndex(index0);
-    m_Method->clickNoteBook();
-    setNotesListCurrentIndex(index1);
 
     isNeedSave = true;
     dlg->close();
@@ -315,7 +306,7 @@ void NotesList::on_btnRename_clicked() {
   dlg->setModal(true);
   mw_one->set_ToolButtonStyle(dlg);
 
-  m_Method->m_widget = new QWidget(mw_one);
+  m_Method->m_widget = new QWidget(this);
   m_Method->showGrayWindows();
 
   dlg->show();
@@ -1812,5 +1803,56 @@ void NotesList::loadAllRecycle() {
     QString text3 = childItem->text(1);
 
     m_Method->addItemToQW(mw_one->ui->qwNoteRecycle, text0, "", "", text3, 0);
+  }
+}
+
+void NotesList::localNotesItem() {
+  int topcount = tw->topLevelItemCount();
+  QString mdfile;
+  QTreeWidgetItem *curChildItem = NULL;
+  QTreeWidgetItem *curParentItem = NULL;
+  for (int i = 0; i < topcount; i++) {
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
+    int count = topItem->childCount();
+    for (int j = 0; j < count; j++) {
+      QTreeWidgetItem *childItem = topItem->child(j);
+      mdfile = childItem->text(1);
+      if (mdfile.isEmpty()) {
+        int count1 = childItem->childCount();
+        for (int n = 0; n < count1; n++) {
+          mdfile = childItem->child(n)->text(1);
+          if (iniDir + mdfile == currentMDFile) {
+            curChildItem = childItem->child(n);
+            curParentItem = childItem;
+            break;
+          }
+        }
+      } else {
+        mdfile = childItem->text(1);
+        if (iniDir + mdfile == currentMDFile) {
+          curChildItem = childItem;
+          curParentItem = topItem;
+          break;
+        }
+      }
+    }
+  }
+
+  int count0 = pNoteBookItems.count();
+  for (int i = 0; i < count0; i++) {
+    if (pNoteBookItems.at(i) == curParentItem) {
+      setNoteBookCurrentIndex(i);
+      break;
+    }
+  }
+
+  m_Method->clickNoteBook();
+
+  int count1 = pNoteItems.count();
+  for (int i = 0; i < count1; i++) {
+    if (pNoteItems.at(i) == curChildItem) {
+      setNotesListCurrentIndex(i);
+      break;
+    }
   }
 }

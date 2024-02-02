@@ -4872,24 +4872,7 @@ void MainWindow::on_btnNotesList_clicked() {
   ui->frameNoteList->show();
 
   m_NotesList->loadAllNoteBook();
-
-  int notebookCount = m_NotesList->getNoteBookCount();
-  if (notebookCount > 0) {
-    int notebookIndex = m_Method->getCurNoteIndex().at(0);
-    int noteIndex = m_Method->getCurNoteIndex().at(1);
-
-    if (notebookIndex + 1 >= notebookCount) notebookIndex = notebookCount - 1;
-    if (notebookIndex < 0) notebookIndex = 0;
-
-    m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteBook, notebookIndex);
-    m_Method->clickNoteBook();
-
-    int noteCount = m_NotesList->getNotesListCount();
-    if (noteIndex + 1 >= noteCount) noteIndex = noteCount - 1;
-    if (noteIndex < 0) noteIndex = 0;
-    m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteList, noteIndex);
-  }
-
+  m_NotesList->localNotesItem();
   m_NotesList->setNoteLabel();
 
   return;
