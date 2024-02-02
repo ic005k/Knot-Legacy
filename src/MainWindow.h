@@ -710,6 +710,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnMoveTo_clicked();
 
+  void on_btnBack_Tree_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

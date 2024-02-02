@@ -644,6 +644,8 @@ DISTFILES += \
     src/onedrive/web.qml \
     src/qmlsrc/MainModel.qml \
     src/qmlsrc/TodoModel.qml \
+    src/qmlsrc/TreeItem.js \
+    src/qmlsrc/TreeWidget.qml \
     src/qmlsrc/baklist.qml \
     src/qmlsrc/booklist.qml \
     src/qmlsrc/chart_month.qml \

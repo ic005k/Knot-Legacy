@@ -143,5 +143,7 @@
         <file>res/s1.png</file>
         <file>res/s0.png</file>
         <file>res/rename.png</file>
+        <file>res/btn_expand.png</file>
+        <file>res/btn_collapse.png</file>
     </qresource>
 </RCC>

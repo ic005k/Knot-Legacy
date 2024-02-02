@@ -2697,6 +2697,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         on_btnBackBookList_clicked();
         return true;
       }
+
+      if (!ui->frameNotesTree->isHidden()) {
+        on_btnBack_Tree_clicked();
+        return true;
+      }
     }
   }
 
@@ -3474,6 +3479,7 @@ void MainWindow::initQW() {
   ui->qwReportSub->rootContext()->setContextProperty("maxFontSize", f_size);
   ui->qwSteps->rootContext()->setContextProperty("maxFontSize", f_size);
   ui->qwTodo->rootContext()->setContextProperty("maxFontSize", f_size);
+  ui->qwNotesTree->rootContext()->setContextProperty("fontSize", fontSize);
 
   ui->qwNotesTree->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/tree_main.qml")));
@@ -5690,6 +5696,12 @@ void MainWindow::on_btnChart_clicked() {
 }
 
 void MainWindow::on_btnManagement_clicked() {
+  ui->frameNoteList->hide();
+  ui->frameNotesTree->show();
+  m_NotesList->initQmlTree();
+
+  return;
+
   int x, y, w, h;
   x = geometry().x();
   y = geometry().y();
@@ -5724,3 +5736,8 @@ void MainWindow::on_btnDelNote_NoteBook_clicked() {
 }
 
 void MainWindow::on_btnMoveTo_clicked() { m_NotesList->on_btnMoveTo_clicked(); }
+
+void MainWindow::on_btnBack_Tree_clicked() {
+  ui->frameNotesTree->hide();
+  ui->frameNoteList->show();
+}

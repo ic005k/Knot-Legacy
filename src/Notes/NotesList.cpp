@@ -1856,3 +1856,57 @@ void NotesList::localNotesItem() {
     }
   }
 }
+
+QVariant NotesList::addQmlTreeTopItem(QString strItem) {
+  QQuickItem *root = mw_one->ui->qwNotesTree->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject *)root, "addTopItem",
+                            Q_RETURN_ARG(QVariant, item),
+                            Q_ARG(QVariant, strItem));
+  return item;
+}
+
+QVariant NotesList::addQmlTreeChildItem(QVariant parentItem,
+                                        QString strChildItem,
+                                        QString iconFile) {
+  QQuickItem *root = mw_one->ui->qwNotesTree->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod(
+      (QObject *)root, "addChildItem", Q_RETURN_ARG(QVariant, item),
+      Q_ARG(QVariant, parentItem), Q_ARG(QVariant, strChildItem),
+      Q_ARG(QVariant, iconFile));
+  return item;
+}
+
+void NotesList::clearQmlTree() {
+  QQuickItem *root = mw_one->ui->qwNotesTree->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "clearAll");
+}
+
+void NotesList::initQmlTree() {
+  clearQmlTree();
+
+  QString strItem, strChildItem;
+  int topcount = tw->topLevelItemCount();
+  for (int i = 0; i < topcount; i++) {
+    QTreeWidgetItem *topItem = tw->topLevelItem(i);
+    strItem = topItem->text(0);
+    auto parentItem = addQmlTreeTopItem(strItem);
+    int childcount = topItem->childCount();
+    for (int j = 0; j < childcount; j++) {
+      QTreeWidgetItem *childItem = topItem->child(j);
+      strChildItem = childItem->text(0);
+      if (childItem->text(1).isEmpty()) {
+        auto parentItem2 =
+            addQmlTreeChildItem(parentItem, strChildItem, "/res/nb.png");
+        int count2 = childItem->childCount();
+        for (int n = 0; n < count2; n++) {
+          QString str = childItem->child(n)->text(0);
+          addQmlTreeChildItem(parentItem2, str, "/res/n.png");
+        }
+      } else {
+        addQmlTreeChildItem(parentItem, strChildItem, "/res/n.png");
+      }
+    }
+  }
+}

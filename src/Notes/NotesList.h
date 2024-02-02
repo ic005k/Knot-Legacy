@@ -88,6 +88,12 @@ class NotesList : public QDialog {
   void resetQML_List();
 
   void localNotesItem();
+  QVariant addQmlTreeTopItem(QString strItem);
+  QVariant addQmlTreeChildItem(QVariant parentItem, QString strChildItem,
+                               QString iconFile);
+  void initQmlTree();
+
+  void clearQmlTree();
   protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
