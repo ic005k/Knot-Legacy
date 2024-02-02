@@ -77,7 +77,6 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->btnImport->hide();
   ui->btnExport->hide();
   ui->editName->hide();
-  ui->btnRename->hide();
 
   mw_one->ui->btnNoteRecycle->hide();
   mw_one->ui->btnUpMove->hide();
@@ -237,9 +236,8 @@ void NotesList::on_btnRename_clicked() {
   QLabel *lblTitle = new QLabel(this);
   lblTitle->adjustSize();
   lblTitle->setWordWrap(true);
-  lblTitle->setText(tr("Editor"));
+  lblTitle->setText(tr("Rename"));
   vbox->addWidget(lblTitle);
-  lblTitle->hide();
 
   QFrame *hframe = new QFrame(this);
   hframe->setFrameShape(QFrame::HLine);
@@ -1548,7 +1546,7 @@ void NotesList::init_NoteBookMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
-  actRename->setVisible(true);
+  actRename->setVisible(false);
   actDel->setVisible(false);
   actMoveUp->setVisible(false);
   actMoveDown->setVisible(false);
@@ -1730,7 +1728,7 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
 
-  actRename->setVisible(true);
+  actRename->setVisible(false);
   actDel->setVisible(false);
   actMoveUp->setVisible(false);
   actMoveDown->setVisible(false);
@@ -1739,9 +1737,9 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
 }
 
 void NotesList::setNoteLabel() {
-  mw_one->ui->lblNoteBook->setText("  " + QString::number(getNoteBookCount()));
+  mw_one->ui->lblNoteBook->setText("" + QString::number(getNoteBookCount()));
   QString notesSum = QString::number(getNotesListCount());
-  mw_one->ui->lblNoteList->setText("  " + notesSum);
+  mw_one->ui->lblNoteList->setText("" + notesSum);
   int index = getNoteBookCurrentIndex();
   m_Method->modifyItemText3(mw_one->ui->qwNoteBook, index, notesSum);
 }

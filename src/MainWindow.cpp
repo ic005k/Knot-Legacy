@@ -3468,6 +3468,16 @@ void MainWindow::initQW() {
   qmlRegisterType<File>("MyModel1", 1, 0, "File");
   qmlRegisterType<DocumentHandler>("MyModel2", 1, 0, "DocumentHandler");
 
+  int f_size = 19;
+  if (fontSize <= f_size) f_size = fontSize;
+  ui->qwReport->rootContext()->setContextProperty("maxFontSize", f_size);
+  ui->qwReportSub->rootContext()->setContextProperty("maxFontSize", f_size);
+  ui->qwSteps->rootContext()->setContextProperty("maxFontSize", f_size);
+  ui->qwTodo->rootContext()->setContextProperty("maxFontSize", f_size);
+
+  ui->qwNotesTree->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/tree_main.qml")));
+
   ui->qwChartMonth->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/chart_month.qml")));
 
@@ -3494,14 +3504,11 @@ void MainWindow::initQW() {
   ui->qwSteps->rootContext()->setContextProperty(
       "nStepsThreshold", ui->editStepsThreshold->text().toInt());
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
+  ui->qwSteps->rootContext()->setContextProperty("text0", "");
+  ui->qwSteps->rootContext()->setContextProperty("text1", "");
+  ui->qwSteps->rootContext()->setContextProperty("text2", "");
+  ui->qwSteps->rootContext()->setContextProperty("text3", "");
   ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
-
-  int f_size = 19;
-  if (fontSize <= f_size) f_size = fontSize;
-  ui->qwReport->rootContext()->setContextProperty("maxFontSize", f_size);
-  ui->qwReportSub->rootContext()->setContextProperty("maxFontSize", f_size);
-  ui->qwSteps->rootContext()->setContextProperty("maxFontSize", f_size);
-  ui->qwTodo->rootContext()->setContextProperty("maxFontSize", f_size);
 
   ui->qwReport->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
@@ -3765,6 +3772,7 @@ void MainWindow::init_UIWidget() {
   ui->f_FindNotes->hide();
   ui->btnFindNextNote->setEnabled(false);
   ui->btnFindPreviousNote->setEnabled(false);
+  ui->frameNotesTree->hide();
 
   ui->frameCategory->hide();
   ui->frameSetTab->hide();

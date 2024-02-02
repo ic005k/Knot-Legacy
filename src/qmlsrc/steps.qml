@@ -263,9 +263,9 @@ Rectangle {
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignVCenter
                             wrapMode: TextArea.WordWrap
-                            font.bold: false
+                            font.bold: true
                             text: text0
-                            color: listItem.ListView.isCurrentItem ? "black" :(getText1(index) >= nStepsThreshold? "black" : getFontColor())
+                            color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
 
                             leftPadding: 5
                             rightPadding: 5
@@ -304,7 +304,7 @@ Rectangle {
 
                             width: parent.width
                             wrapMode: TextArea.WordWrap
-                            color: listItem.ListView.isCurrentItem ? "black" :(getText1(index) >= nStepsThreshold? "black" : getFontColor())
+                            color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
 
                             font.bold: false
                             text: text1
@@ -349,8 +349,7 @@ Rectangle {
                             wrapMode: TextArea.WordWrap
                             font.bold: false
                             text: text2
-                            color: listItem.ListView.isCurrentItem ? "black" :(getText1(index) >= nStepsThreshold? "black" : getFontColor())
-
+                            color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
 
                             leftPadding: 5
                             rightPadding: 5
@@ -391,8 +390,7 @@ Rectangle {
                             Layout.preferredWidth: listItem.width
                             font.bold: false
                             text: text3
-                            color: listItem.ListView.isCurrentItem ? "black" :(getText1(index) >= nStepsThreshold? "black" : getFontColor())
-
+                            color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
 
                             leftPadding: 5
                             rightPadding: 5

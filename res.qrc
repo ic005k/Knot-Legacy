@@ -142,5 +142,6 @@
         <file>res/s2.png</file>
         <file>res/s1.png</file>
         <file>res/s0.png</file>
+        <file>res/rename.png</file>
     </qresource>
 </RCC>

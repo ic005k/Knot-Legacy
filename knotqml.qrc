@@ -29,5 +29,6 @@
         <file>src/qmlsrc/maintab.qml</file>
         <file>src/qmlsrc/chart_month.qml</file>
         <file>src/qmlsrc/steps.qml</file>
+        <file>src/qmlsrc/tree_main.qml</file>
     </qresource>
 </RCC>

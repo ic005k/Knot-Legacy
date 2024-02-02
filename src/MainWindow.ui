@@ -4434,8 +4434,8 @@ QRadioButton::indicator:checked {
                </property>
                <property name="iconSize">
                 <size>
-                 <width>20</width>
-                 <height>20</height>
+                 <width>25</width>
+                 <height>25</height>
                 </size>
                </property>
               </widget>
@@ -4479,8 +4479,8 @@ QRadioButton::indicator:checked {
                </property>
                <property name="iconSize">
                 <size>
-                 <width>20</width>
-                 <height>20</height>
+                 <width>25</width>
+                 <height>25</height>
                 </size>
                </property>
               </widget>
@@ -5881,6 +5881,186 @@ QSlider::handle:horizontal:disabled {
            </property>
            <property name="text">
             <string>Clear All Records</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frameNotesTree">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>300</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_36">
+       <item>
+        <widget class="QQuickWidget" name="qwNotesTree">
+         <property name="resizeMode">
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_56">
+         <property name="spacing">
+          <number>9</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="btnUp_Tree">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Up</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/up.png</normaloff>:/res/up.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnDown_Tree">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Down</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/down.png</normaloff>:/res/down.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnMoveTo_Tree">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>MoveTo</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/moveto.png</normaloff>:/res/moveto.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_57">
+         <property name="spacing">
+          <number>9</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="btnBack_Tree">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Close</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="shortcut">
+            <string>Esc</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnDel_Tree">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Delete</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/del.png</normaloff>:/res/del.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnRecycle_Tree">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Recycle</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/del.svg</normaloff>:/res/del.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>

@@ -201,7 +201,8 @@ RESOURCES += \
     icons.qrc \
     knotqml.qrc \
     pdfqml.qrc \
-    res.qrc
+    res.qrc \
+
 
 CONFIG(debug,debug|release) {
     DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/debug)
@@ -665,10 +666,13 @@ DISTFILES += \
     src/qmlsrc/tabrecycle.qml \
     src/qmlsrc/todo.qml \
     src/qmlsrc/todorecycle.qml \
+    src/qmlsrc/tree_main.qml \
     src/qmlsrc/type.qml \
     src/qmlsrc/viewcate.qml \
     src/reader.qml \
     src/steps.qml
+
+
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

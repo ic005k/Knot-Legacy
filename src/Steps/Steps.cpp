@@ -117,7 +117,9 @@ void Steps::saveSteps() {
     delItem(0);
   }
   int count = getCount();
-  Reg.setValue("/Steps/Count", count);
+  if (count > 0) {
+    Reg.setValue("/Steps/Count", count);
+  }
   for (int i = 0; i < count; i++) {
     Reg.setValue("/Steps/Table-" + QString::number(i) + "-0", getDate(i));
     Reg.setValue("/Steps/Table-" + QString::number(i) + "-1", getSteps(i));
@@ -141,7 +143,6 @@ void Steps::init_Steps() {
   }
 
   QString ini_file;
-
   ini_file = iniDir + "steps.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
