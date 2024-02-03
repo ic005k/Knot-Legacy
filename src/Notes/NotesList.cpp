@@ -78,6 +78,8 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->btnExport->hide();
   ui->editName->hide();
 
+  mw_one->ui->btnManagement->setHidden(true);
+
   QScroller::grabGesture(ui->editName, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(ui->editName);
 
@@ -1289,17 +1291,58 @@ void NotesList::moveBy(int ud) {
     int index = parentItem->indexOfChild(item);
     if (ud == -1) {
       if (index - 1 >= 0) {
+        int n = 0;
+        // NoteBook
+        if (item->text(1).isEmpty()) {
+          for (int i = index - 1; i >= 0; i--) {
+            n++;
+            if (parentItem->child(i)->text(1).isEmpty()) {
+              break;
+            }
+          }
+        }
+        // Note
+        if (!item->text(1).isEmpty()) {
+          for (int i = index - 1; i >= 0; i--) {
+            n++;
+            if (!parentItem->child(i)->text(1).isEmpty()) {
+              break;
+            }
+          }
+        }
+
         parentItem->removeChild(item);
-        parentItem->insertChild(index - 1, item);
+        parentItem->insertChild(index - n, item);
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
         isNeedSave = true;
       }
     }
     if (ud == 1) {
-      if (index + 1 <= parentItem->childCount() - 1) {
+      int count = parentItem->childCount() - 1;
+      int n = 0;
+      // NoteBook
+      if (item->text(1).isEmpty()) {
+        for (int i = index + 1; i <= count; i++) {
+          n++;
+          if (parentItem->child(i)->text(1).isEmpty()) {
+            break;
+          }
+        }
+      }
+      // Note
+      if (!item->text(1).isEmpty()) {
+        for (int i = index + 1; i <= count; i++) {
+          n++;
+          if (!parentItem->child(i)->text(1).isEmpty()) {
+            break;
+          }
+        }
+      }
+
+      if (index + n <= count) {
         parentItem->removeChild(item);
-        parentItem->insertChild(index + 1, item);
+        parentItem->insertChild(index + n, item);
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
         isNeedSave = true;
