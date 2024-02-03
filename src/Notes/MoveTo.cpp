@@ -80,7 +80,7 @@ void MoveTo::showDialog() {
   y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
   setGeometry(x, y, w, h);
 
-  m_widget = new QWidget(mw_one->m_NotesList);
+  m_widget = new QWidget(mw_one);
   m_widget->resize(mw_one->width(), mw_one->height());
   m_widget->move(0, 0);
   m_widget->setStyleSheet("background-color:rgba(0, 0, 0,35%);");

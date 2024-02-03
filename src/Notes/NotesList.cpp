@@ -287,7 +287,8 @@ void NotesList::on_btnRename_clicked() {
   });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
     item->setText(0, edit->toPlainText().trimmed());
-    if (item->parent() != NULL) setNoteName(item->text(0));
+    if (item->parent() != NULL && !item->text(1).isEmpty())
+      setNoteName(item->text(0));
 
     isNeedSave = true;
     dlg->close();
@@ -304,7 +305,7 @@ void NotesList::on_btnRename_clicked() {
   dlg->setModal(true);
   mw_one->set_ToolButtonStyle(dlg);
 
-  m_Method->m_widget = new QWidget(this);
+  m_Method->m_widget = new QWidget(mw_one);
   m_Method->showGrayWindows();
 
   dlg->show();
