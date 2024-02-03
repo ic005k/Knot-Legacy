@@ -712,6 +712,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnBack_Tree_clicked();
 
+  void on_btnRename_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

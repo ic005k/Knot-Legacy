@@ -2,6 +2,7 @@
 
 #include "src/MainWindow.h"
 #include "src/Method.h"
+#include "ui_MainWindow.h"
 #include "ui_MoveTo.h"
 
 extern MainWindow* mw_one;
@@ -32,10 +33,14 @@ MoveTo::MoveTo(QWidget* parent) : QDialog(parent), ui(new Ui::MoveTo) {
   mw_one->set_ToolButtonStyle(this);
 
   QTreeWidgetItem* item = NULL;
-  if (!mw_one->m_NotesList->ui->frame0->isHidden())
+  if (!mw_one->m_NotesList->ui->frame0->isHidden() ||
+      !mw_one->ui->frameNoteList->isHidden())
     item = mw_one->m_NotesList->tw->currentItem();
-  if (!mw_one->m_NotesList->ui->frame1->isHidden())
+
+  if (!mw_one->m_NotesList->ui->frame1->isHidden() ||
+      !mw_one->ui->frameNoteRecycle->isHidden())
     item = mw_one->m_NotesList->twrb->currentItem();
+
   if (item == NULL) close();
 
   if (item->text(1).isEmpty()) {

@@ -4524,6 +4524,16 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Up</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/up.png</normaloff>:/res/up.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -4536,6 +4546,16 @@ QRadioButton::indicator:checked {
            </property>
            <property name="text">
             <string>Down</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/down.png</normaloff>:/res/down.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -4550,6 +4570,16 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Del</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/del.png</normaloff>:/res/del.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -4562,6 +4592,16 @@ QRadioButton::indicator:checked {
            </property>
            <property name="text">
             <string>MoveTo</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/moveto.png</normaloff>:/res/moveto.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -4598,6 +4638,29 @@ QRadioButton::indicator:checked {
            </property>
            <property name="shortcut">
             <string>Esc</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnRename">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/rename.png</normaloff>:/res/rename.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -4676,6 +4739,10 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Recycle</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/rebin_l.png</normaloff>:/res/rebin_l.png</iconset>
+           </property>
            <property name="iconSize">
             <size>
              <width>28</width>
@@ -4743,6 +4810,16 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Back</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
            <property name="shortcut">
             <string>Esc</string>
            </property>
@@ -4765,6 +4842,16 @@ QRadioButton::indicator:checked {
            <property name="text">
             <string>Restore</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/moveto.png</normaloff>:/res/moveto.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -4783,6 +4870,16 @@ QRadioButton::indicator:checked {
            </property>
            <property name="text">
             <string>Del</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/del.png</normaloff>:/res/del.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>

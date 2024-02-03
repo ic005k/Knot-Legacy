@@ -94,6 +94,9 @@ class NotesList : public QDialog {
   void initQmlTree();
 
   void clearQmlTree();
+  void resetQML_Recycle();
+  void setTWCurrentItem();
+  void setTWRBCurrentItem();
   protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 

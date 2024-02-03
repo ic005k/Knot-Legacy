@@ -78,12 +78,6 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->btnExport->hide();
   ui->editName->hide();
 
-  mw_one->ui->btnNoteRecycle->hide();
-  mw_one->ui->btnUpMove->hide();
-  mw_one->ui->btnDownMove->hide();
-  mw_one->ui->btnMoveTo->hide();
-  mw_one->ui->btnDelNote_NoteBook->hide();
-
   QScroller::grabGesture(ui->editName, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(ui->editName);
 
@@ -523,8 +517,6 @@ void NotesList::closeEvent(QCloseEvent *event) {
   isNeedSave = save;
   saveRecycle();
 
-  // resetQML_List();
-
   mw_one->ui->btnBackNotes->show();
   mw_one->ui->btnEdit->show();
   mw_one->ui->btnNotesList->show();
@@ -594,6 +586,20 @@ void NotesList::resetQML_List() {
       }
     }
   }
+}
+
+void NotesList::resetQML_Recycle() {
+  loadAllRecycle();
+
+  int index = 0;
+  QTreeWidgetItem *item = twrb->currentItem();
+  if (item->parent() == NULL) {
+    index = -1;
+  } else {
+    index = tw->indexOfTopLevelItem(item->parent());
+  }
+
+  m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteRecycle, index);
 }
 
 void NotesList::saveNotesList() {
@@ -870,9 +876,15 @@ void NotesList::on_btnRestore_clicked() {
   QTreeWidgetItem *curItem = twrb->currentItem();
   if (curItem->parent() == NULL) return;
 
-  if (moveItem(twrb))
-    on_btnBack_clicked();
-  else
+  if (moveItem(twrb)) {
+    resetQML_List();
+    if (!ui->frame1->isHidden()) {
+      on_btnBack_clicked();
+    }
+    if (!mw_one->ui->frameNoteRecycle->isHidden()) {
+      mw_one->on_btnBackNoteRecycle_clicked();
+    }
+  } else
     return;
 
   saveRecycle();
@@ -919,6 +931,8 @@ void NotesList::on_btnDel_Recycle_clicked() {
 
   isNeedSave = true;
   saveRecycle();
+
+  resetQML_Recycle();
 }
 
 void NotesList::setWinPos() {
@@ -1322,6 +1336,22 @@ void NotesList::moveBy(int ud) {
 void NotesList::on_btnUp_clicked() { moveBy(-1); }
 
 void NotesList::on_btnDown_clicked() { moveBy(1); }
+
+void NotesList::setTWRBCurrentItem() {
+  int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteRecycle);
+  QTreeWidgetItem *topItem = twrb->topLevelItem(0);
+  twrb->setCurrentItem(topItem->child(index));
+}
+
+void NotesList::setTWCurrentItem() {
+  int index0, index1;
+  index0 = getNoteBookCurrentIndex();
+  index1 = getNotesListCurrentIndex();
+  if (index0 >= 0) tw->setCurrentItem(pNoteBookItems.at(index0));
+  if (index1 >= 0) tw->setCurrentItem(pNoteItems.at(index1));
+
+  tw->scrollToItem(tw->currentItem());
+}
 
 void NotesList::setNoteBookCurrentItem() {
   int index = getNoteBookCurrentIndex();
@@ -1758,7 +1788,9 @@ void NotesList::on_btnMoveTo_clicked() {
     if (item->child(i)->text(1).isEmpty()) return;
   }
 
-  moveItem(tw);
+  if (moveItem(tw)) {
+    resetQML_List();
+  }
 }
 
 bool NotesList::moveItem(QTreeWidget *twMain) {

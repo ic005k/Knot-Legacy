@@ -5436,12 +5436,8 @@ void MainWindow::on_btnDelNoteRecycle_clicked() {
   int count = m_Method->getCountFromQW(ui->qwNoteRecycle);
   if (count == 0) return;
 
-  int index = m_Method->getCurrentIndexFromQW(ui->qwNoteRecycle);
-  QTreeWidgetItem *topItem = m_NotesList->twrb->topLevelItem(0);
-  m_NotesList->twrb->setCurrentItem(topItem->child(index));
+  m_NotesList->setTWRBCurrentItem();
   m_NotesList->on_btnDel_Recycle_clicked();
-
-  m_Method->delItemBakList(ui->qwNoteRecycle, index);
 }
 
 void MainWindow::on_btnRestoreNoteRecycle_clicked() {
@@ -5450,15 +5446,8 @@ void MainWindow::on_btnRestoreNoteRecycle_clicked() {
 
   if (m_NotesList->getNoteBookCount() == 0) return;
 
-  int indexRecycle = m_Method->getCurrentIndexFromQW(ui->qwNoteRecycle);
-  m_NotesList->twrb->setCurrentItem(
-      m_NotesList->twrb->topLevelItem(0)->child(indexRecycle));
-
+  m_NotesList->setTWRBCurrentItem();
   m_NotesList->on_btnRestore_clicked();
-
-  m_Method->delItemBakList(ui->qwNoteRecycle, indexRecycle);
-
-  on_btnBackNoteRecycle_clicked();
 }
 
 void MainWindow::on_btnFindNotes_clicked() {
@@ -5704,34 +5693,34 @@ void MainWindow::on_btnManagement_clicked() {
   m_NotesList->setGeometry(x, y, w, h);
   m_NotesList->show();
   m_NotesList->tw->setFocus();
-  int index0, index1;
-  index0 = m_NotesList->getNoteBookCurrentIndex();
-  index1 = m_NotesList->getNotesListCurrentIndex();
-  if (index0 >= 0)
-    m_NotesList->tw->setCurrentItem(m_NotesList->pNoteBookItems.at(index0));
-  if (index1 >= 0)
-    m_NotesList->tw->setCurrentItem(m_NotesList->pNoteItems.at(index1));
-
-  m_NotesList->tw->scrollToItem(m_NotesList->tw->currentItem());
 }
 
 void MainWindow::on_btnUpMove_clicked() {
+  m_NotesList->setTWCurrentItem();
   m_NotesList->on_btnUp_clicked();
-  m_NotesList->resetQML_List();
 }
 
 void MainWindow::on_btnDownMove_clicked() {
+  m_NotesList->setTWCurrentItem();
   m_NotesList->on_btnDown_clicked();
-  m_NotesList->resetQML_List();
 }
 
 void MainWindow::on_btnDelNote_NoteBook_clicked() {
+  m_NotesList->setTWCurrentItem();
   m_NotesList->on_btnDel_clicked();
 }
 
-void MainWindow::on_btnMoveTo_clicked() { m_NotesList->on_btnMoveTo_clicked(); }
+void MainWindow::on_btnMoveTo_clicked() {
+  m_NotesList->setTWCurrentItem();
+  m_NotesList->on_btnMoveTo_clicked();
+}
 
 void MainWindow::on_btnBack_Tree_clicked() {
   ui->frameNotesTree->hide();
   ui->frameNoteList->show();
+}
+
+void MainWindow::on_btnRename_clicked() {
+  m_NotesList->setTWCurrentItem();
+  m_NotesList->on_btnRename_clicked();
 }
