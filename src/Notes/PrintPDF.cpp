@@ -58,7 +58,7 @@ QString PrintPDF::getItem(QString title, QString lblText, QStringList valueList,
 
   int x, y, w, h;
   w = mw_one->width() - 40;
-  h = valueList.count() * m_Method->getFontHeight() * 1.5;
+  h = valueList.count() * m_Method->getFontHeight() * 1.8;
   if (h > mw_one->height()) h = mw_one->height() - 50;
 
   x = mw_one->geometry().x() + (mw_one->geometry().width() - w) / 2;

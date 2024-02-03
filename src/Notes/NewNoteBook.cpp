@@ -13,6 +13,9 @@ NewNoteBook::NewNoteBook(QWidget* parent)
   ui->editName->installEventFilter(this);
   mw_one->set_ToolButtonStyle(this);
 
+  QScroller::grabGesture(ui->listWidget, QScroller::LeftMouseButtonGesture);
+  m_Method->setSCrollPro(ui->listWidget);
+
   QStringList list;
   list.append(tr("Main Root"));
   int count = mw_one->m_NotesList->ui->treeWidget->topLevelItemCount();
@@ -21,13 +24,14 @@ NewNoteBook::NewNoteBook(QWidget* parent)
                     ->text(0)
                     .trimmed());
   }
-  ui->cboxRoot->addItems(list);
+  ui->listWidget->addItems(list);
+  ui->listWidget->setCurrentRow(0);
 
   int x, y, w, h;
   w = mw_one->width() - 20;
-  h = this->height();
+  h = mw_one->height() - 50;
   x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  y = 150;
+  y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
   setGeometry(x, y, w, h);
 
   ui->editName->setFocus();
@@ -71,8 +75,8 @@ void NewNoteBook::on_btnCancel_clicked() {
 
 void NewNoteBook::on_btnOk_clicked() {
   isOk = true;
-  rootIndex = ui->cboxRoot->currentIndex();
+  rootIndex = ui->listWidget->currentRow();
   notebookName = ui->editName->text().trimmed();
-  notebookRoot = ui->cboxRoot->currentText().trimmed();
+  notebookRoot = ui->listWidget->currentItem()->text().trimmed();
   close();
 }

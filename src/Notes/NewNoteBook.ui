@@ -7,23 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>232</width>
-    <height>152</height>
+    <height>303</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QLabel" name="lblRoot">
-     <property name="text">
-      <string>Root</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QComboBox" name="cboxRoot"/>
-   </item>
    <item>
     <widget class="QLabel" name="lblName">
      <property name="text">
@@ -33,6 +23,16 @@
    </item>
    <item>
     <widget class="QLineEdit" name="editName"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblRoot">
+     <property name="text">
+      <string>Root</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="listWidget"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
