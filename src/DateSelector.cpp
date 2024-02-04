@@ -12,6 +12,10 @@ DateSelector::DateSelector(QWidget *parent)
   ui->setupUi(this);
   this->installEventFilter(this);
 
+  ui->sliderDay->hide();
+  ui->sliderMonth->hide();
+  ui->sliderYear->hide();
+
   if (nWidgetType == 1) {
     rboxYear = new RollingBox(this);
     rboxMonth = new RollingBox(this);
@@ -44,6 +48,23 @@ DateSelector::DateSelector(QWidget *parent)
     ui->gboxDay->layout()->addWidget(wheelDay);
 
     connect(wheelYear, SIGNAL(valueChanged(double)), this, SLOT(setNum()));
+  }
+
+  if (nWidgetType == 3) {
+    ui->sliderDay->setStyleSheet(ui->sliderYear->styleSheet());
+    ui->sliderMonth->setStyleSheet(ui->sliderYear->styleSheet());
+
+    ui->sliderDay->setMinimum(1);
+    ui->sliderDay->setMaximum(31);
+
+    ui->sliderMonth->setMinimum(1);
+    ui->sliderMonth->setMaximum(12);
+
+    ui->sliderYear->setMinimum(2022);
+
+    ui->sliderDay->show();
+    ui->sliderMonth->show();
+    ui->sliderYear->show();
   }
 
   setModal(true);

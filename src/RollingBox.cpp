@@ -114,6 +114,11 @@ void RollingBox::paintEvent(QPaintEvent *) {
   if (m_currentValue != m_maxRange)
     paintNum(painter, m_currentValue + 1, m_deviation + Width / 4);
 
+  if (m_currentValue == m_minRange)
+    paintNum(painter, m_maxRange, m_deviation - Width / 4);
+  if (m_currentValue == m_maxRange)
+    paintNum(painter, m_minRange, m_deviation + Width / 4);
+
   // 两侧数字2,超出则不显示
   if (m_deviation >= 0 && m_currentValue - 2 >= m_minRange)
     paintNum(painter, m_currentValue - 2, m_deviation - Width / 2);

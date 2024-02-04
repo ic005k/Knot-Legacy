@@ -29,7 +29,7 @@ class DateSelector : public QDialog {
 
   void initStartEndDate(QString flag);
 
-  int nWidgetType = 1; /*1 rbox  2 whell*/
+  int nWidgetType = 1; /*1 rbox  2 whell 3 slider*/
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;

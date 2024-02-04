@@ -150,6 +150,9 @@ void Report::on_btnYear_clicked() {
     m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
   if (m_DateSelector->nWidgetType == 2)
     m_DateSelector->wheelYear->setValue(mw_one->ui->btnYear->text().toInt());
+  if (m_DateSelector->nWidgetType == 3)
+    m_DateSelector->ui->sliderYear->setValue(
+        mw_one->ui->btnYear->text().toInt());
 
   m_DateSelector->init();
 }
@@ -336,11 +339,26 @@ void Report::on_btnMonth_clicked() {
   m_DateSelector->dateFlag = 2;
   mw_one->ui->lblDetails->setText(tr("Details"));
 
-  m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
-  if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
-    m_DateSelector->rboxMonth->setValue(13);
-  else
-    m_DateSelector->rboxMonth->setValue(mw_one->ui->btnMonth->text().toInt());
+  if (m_DateSelector->nWidgetType == 1) {
+    m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
+    if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
+      m_DateSelector->rboxMonth->setValue(13);
+    else
+      m_DateSelector->rboxMonth->setValue(mw_one->ui->btnMonth->text().toInt());
+  }
+
+  if (m_DateSelector->nWidgetType == 3) {
+    m_DateSelector->ui->sliderYear->setValue(
+        mw_one->ui->btnYear->text().toInt());
+    if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round")) {
+      m_DateSelector->ui->sliderYear->setMaximum(13);
+      m_DateSelector->ui->sliderMonth->setValue(13);
+    } else {
+      m_DateSelector->ui->sliderYear->setMaximum(12);
+      m_DateSelector->ui->sliderMonth->setValue(
+          mw_one->ui->btnMonth->text().toInt());
+    }
+  }
 
   m_DateSelector->init();
 }
