@@ -79,6 +79,7 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->editName->hide();
 
   mw_one->ui->btnManagement->setHidden(true);
+  mw_one->ui->btnFindNotes->hide();
 
   QScroller::grabGesture(ui->editName, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(ui->editName);

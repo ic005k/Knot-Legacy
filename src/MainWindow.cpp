@@ -5724,3 +5724,5 @@ void MainWindow::on_btnRename_clicked() {
   m_NotesList->setTWCurrentItem();
   m_NotesList->on_btnRename_clicked();
 }
+
+void MainWindow::on_btnHideFind_clicked() { ui->f_FindNotes->hide(); }

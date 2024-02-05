@@ -714,6 +714,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnRename_clicked();
 
+  void on_btnHideFind_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;
