@@ -28,11 +28,19 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
 #else
     // tw->setStyleSheet(mw_one->treeStyle);
 #endif
-    // twrb->setStyleSheet(tw->styleSheet());
+
     ui->editName->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
+
+    // twrb->setStyleSheet(tw->styleSheet());
     // tw->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
     // twrb->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
+
+  } else {
   }
+
+  mw_one->ui->f_FindNotes->setStyleSheet(
+      "QFrame{background-color: #455364;color: #FFFFFF;border-radius:10px; "
+      "border:0px solid gray;}");
 
   setModal(true);
   this->layout()->setSpacing(5);
