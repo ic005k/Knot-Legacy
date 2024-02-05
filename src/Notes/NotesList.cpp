@@ -330,20 +330,30 @@ void NotesList::setNoteName(QString name) {
 void NotesList::on_btnDel_clicked() {
   if (tw->topLevelItemCount() == 0) return;
 
-  QTreeWidgetItem *item = ui->treeWidget->currentItem();
+  QTreeWidgetItem *item = tw->currentItem();
 
   if (item == NULL) return;
 
+  QString strFlag;
+  if (item->text(1).isEmpty())
+    strFlag = tr("NoteBook");
+  else
+    strFlag = tr("Note");
+
   m_Method->m_widget = new QWidget(this);
   ShowMessage *m_ShowMsg = new ShowMessage(this);
-  if (!m_ShowMsg->showMsg(
-          "Knot", tr("Move to the recycle bin?") + "\n\n" + item->text(0), 2)) {
+  if (!m_ShowMsg->showMsg("Knot",
+                          tr("Move to the recycle bin?") + "\n\n" + strFlag +
+                              " : " + item->text(0),
+                          2)) {
     return;
   }
 
   QString str0, str1;
+  // Top Item
   if (item->parent() == NULL) {
     int count = item->childCount();
+    int index = tw->currentIndex().row();
 
     for (int i = 0; i < count; i++) {
       QTreeWidgetItem *childItem = new QTreeWidgetItem;
@@ -351,13 +361,16 @@ void NotesList::on_btnDel_clicked() {
       str0 = item->child(i)->text(0);
       str1 = item->child(i)->text(1);
 
+      // Child Notes
       if (!str1.isEmpty()) {
         childItem->setText(0, str0);
         childItem->setText(1, str1);
         addItem(twrb, childItem);
+
+        // Child NoteBook
       } else {
-        int count = item->child(i)->childCount();
-        for (int j = 0; j < count; j++) {
+        int count1 = item->child(i)->childCount();
+        for (int j = 0; j < count1; j++) {
           str0 = item->child(i)->child(j)->text(0);
           str1 = item->child(i)->child(j)->text(1);
           QTreeWidgetItem *childItem = new QTreeWidgetItem;
@@ -367,9 +380,12 @@ void NotesList::on_btnDel_clicked() {
         }
       }
     }
-    tw->takeTopLevelItem(tw->currentIndex().row());
 
+    tw->takeTopLevelItem(index);
+
+    // Child Item
   } else {
+    // Notes
     if (!item->text(1).isEmpty()) {
       str0 = item->text(0);
       str1 = item->text(1);
@@ -378,6 +394,7 @@ void NotesList::on_btnDel_clicked() {
       childItem->setText(1, str1);
       addItem(twrb, childItem);
 
+      // Child NoteBook
     } else {
       int count = item->childCount();
       for (int n = 0; n < count; n++) {
@@ -393,9 +410,11 @@ void NotesList::on_btnDel_clicked() {
     item->parent()->removeChild(item);
   }
 
-  on_treeWidget_itemClicked(tw->currentItem(), 0);
-
-  if (tw->currentItem()->childCount() == 0) {
+  if (tw->topLevelItemCount() > 0) {
+    if (tw->currentItem()->childCount() == 0) {
+      loadEmptyNote();
+    }
+  } else {
     loadEmptyNote();
   }
 
@@ -537,6 +556,12 @@ void NotesList::closeEvent(QCloseEvent *event) {
 }
 
 void NotesList::resetQML_List() {
+  if (tw->topLevelItemCount() == 0) {
+    m_Method->clearAllBakList(mw_one->ui->qwNoteBook);
+    m_Method->clearAllBakList(mw_one->ui->qwNoteList);
+    return;
+  }
+
   loadAllNoteBook();
 
   int index = 0;
@@ -608,7 +633,7 @@ void NotesList::resetQML_Recycle() {
   if (item->parent() == NULL) {
     index = -1;
   } else {
-    index = tw->indexOfTopLevelItem(item->parent());
+    index = twrb->currentIndex().row();
   }
 
   m_Method->setCurrentIndexFromQW(mw_one->ui->qwNoteRecycle, index);

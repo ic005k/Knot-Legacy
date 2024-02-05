@@ -4877,6 +4877,8 @@ void MainWindow::on_btnNotesList_clicked() {
   ui->frameNotes->hide();
   ui->frameNoteList->show();
 
+  if (m_NotesList->tw->topLevelItemCount() == 0) return;
+
   m_NotesList->loadAllNoteBook();
   m_NotesList->localNotesItem();
   m_NotesList->setNoteLabel();
@@ -5436,6 +5438,9 @@ void MainWindow::on_btnDelNoteRecycle_clicked() {
   int count = m_Method->getCountFromQW(ui->qwNoteRecycle);
   if (count == 0) return;
 
+  int index = m_Method->getCurrentIndexFromQW(ui->qwNoteRecycle);
+  if (index < 0) return;
+
   m_NotesList->setTWRBCurrentItem();
   m_NotesList->on_btnDel_Recycle_clicked();
 }
@@ -5443,6 +5448,9 @@ void MainWindow::on_btnDelNoteRecycle_clicked() {
 void MainWindow::on_btnRestoreNoteRecycle_clicked() {
   int count = m_Method->getCountFromQW(ui->qwNoteRecycle);
   if (count == 0) return;
+
+  int index = m_Method->getCurrentIndexFromQW(ui->qwNoteRecycle);
+  if (index < 0) return;
 
   if (m_NotesList->getNoteBookCount() == 0) return;
 
@@ -5721,6 +5729,8 @@ void MainWindow::on_btnBack_Tree_clicked() {
 }
 
 void MainWindow::on_btnRename_clicked() {
+  if (m_NotesList->getNoteBookCurrentIndex() < 0) return;
+
   m_NotesList->setTWCurrentItem();
   m_NotesList->on_btnRename_clicked();
 }
