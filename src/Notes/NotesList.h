@@ -36,6 +36,8 @@ class NotesList : public QDialog {
   QTreeWidget *twrb;
   QTreeWidget *tw;
 
+  void set_memo_dir();
+
   void delFile(QString file);
 
   void saveNotesList();
@@ -97,7 +99,8 @@ class NotesList : public QDialog {
   void resetQML_Recycle();
   void setTWCurrentItem();
   void setTWRBCurrentItem();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

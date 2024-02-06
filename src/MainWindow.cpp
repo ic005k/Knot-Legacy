@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.41";
+QString ver = "1.1.42";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4876,8 +4876,13 @@ void MainWindow::on_timerMousePress() {
 void MainWindow::on_btnNotesList_clicked() {
   ui->frameNotes->hide();
   ui->frameNoteList->show();
+  m_NotesList->set_memo_dir();
 
-  if (m_NotesList->tw->topLevelItemCount() == 0) return;
+  if (m_NotesList->tw->topLevelItemCount() == 0) {
+    ui->lblNoteBook->setText(tr("Note Book"));
+    ui->lblNoteList->setText(tr("Note List"));
+    return;
+  }
 
   m_NotesList->loadAllNoteBook();
   m_NotesList->localNotesItem();

@@ -61,9 +61,7 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   twrb->setColumnHidden(1, true);
   twrb->setColumnWidth(0, 180);
 
-  QString path = iniDir + "memo/";
-  QDir dir(path);
-  if (!dir.exists()) dir.mkdir(path);
+  set_memo_dir();
 
   ui->btnPrev->setEnabled(false);
   ui->btnNext->setEnabled(false);
@@ -97,6 +95,12 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
 }
 
 NotesList::~NotesList() { delete ui; }
+
+void NotesList::set_memo_dir() {
+  QString path = iniDir + "memo/";
+  QDir dir(path);
+  if (!dir.exists()) dir.mkdir(path);
+}
 
 bool NotesList::eventFilter(QObject *watch, QEvent *evn) {
   if (evn->type() == QEvent::KeyRelease) {
@@ -416,11 +420,15 @@ void NotesList::on_btnDel_clicked() {
     }
   } else {
     loadEmptyNote();
+    mw_one->ui->lblNoteBook->setText(tr("Note Book"));
+    mw_one->ui->lblNoteList->setText(tr("Note List"));
   }
 
   tw->setFocus();
   isNeedSave = true;
   saveNotesList();
+  isNeedSave = true;
+  saveRecycle();
 
   resetQML_List();
 }
@@ -642,10 +650,9 @@ void NotesList::resetQML_Recycle() {
 void NotesList::saveNotesList() {
   if (!isNeedSave) return;
 
-  QSettings *iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+  QSettings iniNotes(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniNotes->setIniCodec("utf-8");
+  iniNotes.setIniCodec("utf-8");
 #endif
 
   mw_one->isSelf = true;
@@ -654,15 +661,14 @@ void NotesList::saveNotesList() {
   mw_one->strLatestModify = tr("Modi Notes List");
 
   int count = tw->topLevelItemCount();
-  iniNotes->setValue("/MainNotes/topItemCount", count);
+  iniNotes.setValue("/MainNotes/topItemCount", count);
   for (int i = 0; i < count; i++) {
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
     QString strtop = topItem->text(0);
-    iniNotes->setValue("/MainNotes/strTopItem" + QString::number(i), strtop);
+    iniNotes.setValue("/MainNotes/strTopItem" + QString::number(i), strtop);
 
     int childCount = topItem->childCount();
-    iniNotes->setValue("/MainNotes/childCount" + QString::number(i),
-                       childCount);
+    iniNotes.setValue("/MainNotes/childCount" + QString::number(i), childCount);
 
     for (int j = 0; j < childCount; j++) {
       QTreeWidgetItem *childItem = topItem->child(j);
@@ -670,33 +676,33 @@ void NotesList::saveNotesList() {
       QString strChild1 = childItem->text(1);
 
       if (!strChild1.isEmpty()) {
-        iniNotes->setValue(
+        iniNotes.setValue(
             "/MainNotes/childItem0" + QString::number(i) + QString::number(j),
             strChild0);
-        iniNotes->setValue(
+        iniNotes.setValue(
             "/MainNotes/childItem1" + QString::number(i) + QString::number(j),
             strChild1);
       } else {
         int count = childItem->childCount();
-        iniNotes->setValue(
+        iniNotes.setValue(
             "/MainNotes/childCount" + QString::number(i) + QString::number(j),
             count);
-        iniNotes->setValue(
+        iniNotes.setValue(
             "/MainNotes/childItem0" + QString::number(i) + QString::number(j),
             strChild0);
-        iniNotes->setValue(
+        iniNotes.setValue(
             "/MainNotes/childItem1" + QString::number(i) + QString::number(j),
             "");
         for (int n = 0; n < count; n++) {
           QString strChild00 = childItem->child(n)->text(0);
           QString strChild11 = childItem->child(n)->text(1);
 
-          iniNotes->setValue("/MainNotes/childItem0" + QString::number(i) +
-                                 QString::number(j) + QString::number(n),
-                             strChild00);
-          iniNotes->setValue("/MainNotes/childItem1" + QString::number(i) +
-                                 QString::number(j) + QString::number(n),
-                             strChild11);
+          iniNotes.setValue("/MainNotes/childItem0" + QString::number(i) +
+                                QString::number(j) + QString::number(n),
+                            strChild00);
+          iniNotes.setValue("/MainNotes/childItem1" + QString::number(i) +
+                                QString::number(j) + QString::number(n),
+                            strChild11);
         }
       }
     }
@@ -716,10 +722,9 @@ void NotesList::saveNotesList() {
 void NotesList::saveRecycle() {
   if (!isNeedSave) return;
 
-  QSettings *iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+  QSettings iniNotes(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniNotes->setIniCodec("utf-8");
+  iniNotes.setIniCodec("utf-8");
 #endif
 
   mw_one->isSelf = true;
@@ -727,29 +732,22 @@ void NotesList::saveRecycle() {
   mw_one->isNeedAutoBackup = true;
   mw_one->strLatestModify = tr("Modi Notes Recycle");
 
-  int count = twrb->topLevelItemCount();
-  iniNotes->setValue("/MainNotes/rbtopItemCount", count);
-  for (int i = 0; i < count; i++) {
-    QTreeWidgetItem *topItem = twrb->topLevelItem(i);
-    QString strtop = topItem->text(0);
-    iniNotes->setValue("/MainNotes/rbstrTopItem" + QString::number(i), strtop);
+  int i = 0;
+  QTreeWidgetItem *topItem = twrb->topLevelItem(i);
+  int childCount = topItem->childCount();
+  iniNotes.setValue("/MainNotes/rbchildCount" + QString::number(i), childCount);
 
-    int childCount = topItem->childCount();
-    iniNotes->setValue("/MainNotes/rbchildCount" + QString::number(i),
-                       childCount);
+  for (int j = 0; j < childCount; j++) {
+    QTreeWidgetItem *childItem = twrb->topLevelItem(i)->child(j);
+    QString strChild0 = childItem->text(0);
+    QString strChild1 = childItem->text(1);
 
-    for (int j = 0; j < childCount; j++) {
-      QTreeWidgetItem *childItem = twrb->topLevelItem(i)->child(j);
-      QString strChild0 = childItem->text(0);
-      QString strChild1 = childItem->text(1);
-
-      iniNotes->setValue(
-          "/MainNotes/rbchildItem0" + QString::number(i) + QString::number(j),
-          strChild0);
-      iniNotes->setValue(
-          "/MainNotes/rbchildItem1" + QString::number(i) + QString::number(j),
-          strChild1);
-    }
+    iniNotes.setValue(
+        "/MainNotes/rbchildItem0" + QString::number(i) + QString::number(j),
+        strChild0);
+    iniNotes.setValue(
+        "/MainNotes/rbchildItem1" + QString::number(i) + QString::number(j),
+        strChild1);
   }
 
   isNeedSave = false;
@@ -848,50 +846,36 @@ void NotesList::initRecycle() {
   mw_one->isSelf = true;
   twrb->clear();
 
-  QSettings *iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+  QSettings iniNotes(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniNotes->setIniCodec("utf-8");
+  iniNotes.setIniCodec("utf-8");
 #endif
 
-  int topCount = iniNotes->value("/MainNotes/rbtopItemCount").toInt();
-  for (int i = 0; i < topCount; i++) {
-    QString strTop =
-        iniNotes->value("/MainNotes/rbstrTopItem" + QString::number(i))
-            .toString();
-    QTreeWidgetItem *topItem = new QTreeWidgetItem;
-    topItem->setText(0, strTop);
+  int i = 0;
+  QTreeWidgetItem *topItem = new QTreeWidgetItem;
+  topItem->setText(0, tr("Notes Recycle Bin"));
 
-    int childCount =
-        iniNotes->value("/MainNotes/rbchildCount" + QString::number(i)).toInt();
-    for (int j = 0; j < childCount; j++) {
-      QString str0, str1;
-      str0 = iniNotes
-                 ->value("/MainNotes/rbchildItem0" + QString::number(i) +
-                         QString::number(j))
-                 .toString();
-      str1 = iniNotes
-                 ->value("/MainNotes/rbchildItem1" + QString::number(i) +
-                         QString::number(j))
-                 .toString();
+  int childCount =
+      iniNotes.value("/MainNotes/rbchildCount" + QString::number(i)).toInt();
+  for (int j = 0; j < childCount; j++) {
+    QString str0, str1;
+    str0 = iniNotes
+               .value("/MainNotes/rbchildItem0" + QString::number(i) +
+                      QString::number(j))
+               .toString();
+    str1 = iniNotes
+               .value("/MainNotes/rbchildItem1" + QString::number(i) +
+                      QString::number(j))
+               .toString();
 
-      QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
-      childItem->setText(0, str0);
-      childItem->setText(1, str1);
-      childItem->setIcon(0, QIcon(":/res/n.png"));
-    }
-    twrb->addTopLevelItem(topItem);
+    QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
+    childItem->setText(0, str0);
+    childItem->setText(1, str1);
+    childItem->setIcon(0, QIcon(":/res/n.png"));
   }
+  twrb->addTopLevelItem(topItem);
 
   twrb->expandAll();
-
-  if (twrb->topLevelItemCount() == 0) {
-    QTreeWidgetItem *topItem = new QTreeWidgetItem;
-    topItem->setText(0, tr("Notes Recycle Bin"));
-    twrb->addTopLevelItem(topItem);
-    twrb->setCurrentItem(topItem);
-    saveRecycle();
-  }
 }
 
 void NotesList::on_btnRecycle_clicked() {
@@ -994,10 +978,10 @@ void NotesList::clearFiles() {
 
   int count = files.count();
   for (int i = 0; i < count; i++) {
-    QString a = files.at(i);
+    QString filePath = files.at(i);
 
-    QFile file(a);
-    if (a.contains(".sync-conflict-")) {
+    QFile file(filePath);
+    if (filePath.contains(".sync-conflict-") || filePath.contains(".png")) {
       file.remove();
     }
   }
@@ -1008,8 +992,17 @@ void NotesList::clearMD_Pic(QTreeWidget *tw) {
     QTreeWidgetItem *topItem = tw->topLevelItem(i);
     int childCount = topItem->childCount();
     for (int j = 0; j < childCount; j++) {
-      QString str = topItem->child(j)->text(1);
-      removePicFromMD(iniDir + str);
+      QTreeWidgetItem *childItem = topItem->child(j);
+      if (!childItem->text(1).isEmpty()) {
+        QString str = childItem->text(1);
+        removePicFromMD(iniDir + str);
+      } else {
+        int count1 = childItem->childCount();
+        for (int n = 0; n < count1; n++) {
+          QString str = childItem->child(n)->text(1);
+          removePicFromMD(iniDir + str);
+        }
+      }
     }
   }
 }
