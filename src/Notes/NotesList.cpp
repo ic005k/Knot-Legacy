@@ -1016,7 +1016,7 @@ void NotesList::removePicFromMD(QString mdfile) {
 
     if (txt.contains(str0)) {
       files.removeAt(i);
-      break;
+      i = 0;
     }
   }
 }
