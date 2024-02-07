@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.42";
+QString ver = "1.1.43";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3147,14 +3147,8 @@ void MainWindow::on_btnTodo_clicked() {
   m_Notes->m_TextSelector->close();
   m_Notes->m_TextSelector = new TextSelector(mw_one);
 
-  m_Todo->setGeometry(this->geometry().x(), this->geometry().y(), this->width(),
-                      this->height());
-  mw_one->ui->qwTodo->rootContext()->setContextProperty("m_width",
-                                                        mw_one->width());
-
+  ui->qwTodo->rootContext()->setContextProperty("m_width", mw_one->width());
   ui->frameMain->hide();
-  ui->frameTodo->setGeometry(this->geometry().x(), this->geometry().y(),
-                             this->width(), this->height());
   ui->frameTodo->show();
   m_Todo->init_Todo();
 
@@ -4948,6 +4942,14 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
 
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
+
+#ifdef Q_OS_ANDROID
+#else
+  if (!ui->frameTodo->isHidden()) {
+    ui->qwTodo->rootContext()->setContextProperty("m_width", mw_one->width());
+    m_Todo->init_Todo();
+  }
+#endif
 }
 
 void MainWindow::on_KVChanged() {}
