@@ -162,7 +162,7 @@ void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
   gl->setContentsMargins(5, 5, 5, 5);
   ui->frameSel->setLayout(gl);
 
-  for (int i = 0; i < total; i++) {
+  for (int i = 0; i < total - 1; i++) {
     for (int j = 0; j < col; j++) {
       QToolButton* btn = new QToolButton(ui->frameSel);
 
