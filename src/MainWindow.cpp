@@ -794,6 +794,7 @@ void MainWindow::init_ChartWidget() {
   axisX = new QBarCategoryAxis();
   chartMonth->addAxis(axisX, Qt::AlignBottom);
   barSeries->attachAxis(axisX);
+
   axisY = new QValueAxis();
   chartMonth->addAxis(axisY, Qt::AlignLeft);
   barSeries->attachAxis(axisY);
@@ -801,10 +802,12 @@ void MainWindow::init_ChartWidget() {
   // chartDay->createDefaultAxes();
   axisX2 = new QValueAxis();
   chartDay->addAxis(axisX2, Qt::AlignBottom);
+  series2->attachAxis(axisX2);
+
   axisY2 = new QValueAxis();
   chartDay->addAxis(axisY2, Qt::AlignLeft);
-  series2->attachAxis(axisX2);
   series2->attachAxis(axisY2);
+
   m_scatterSeries2->attachAxis(axisX2);
   m_scatterSeries2->attachAxis(axisY2);
   m_scatterSeries2_1->attachAxis(axisX2);
@@ -3672,9 +3675,9 @@ void MainWindow::init_Theme() {
   // Chart
   QFont font1;
 #ifdef Q_OS_ANDROID
-  font1.setPointSize(9);
+  font1.setPointSize(10);
 #else
-  font1.setPointSize(9);
+  font1.setPointSize(10);
 #endif
   font1.setBold(true);
   chartMonth->setTitleFont(font1);
@@ -4278,8 +4281,8 @@ void MainWindow::on_btnMenu_clicked() {
 
 void MainWindow::on_btnZoom_clicked() {
   if (!ui->frame_tab->isHidden()) {
-    axisY->setTickCount(13);
-    axisY2->setTickCount(13);
+    axisY->setTickCount(7);
+    axisY2->setTickCount(7);
     ui->frame_tab->hide();
     ui->frame_charts->setMaximumHeight(this->height());
     floatfun = false;
@@ -5667,8 +5670,8 @@ void MainWindow::updateMainTab() {
 }
 
 void MainWindow::on_btnChart_clicked() {
-  axisY->setTickCount(13);
-  axisY2->setTickCount(13);
+  axisY->setTickCount(7);
+  axisY2->setTickCount(7);
 
   if (ui->frame_charts->isHidden()) {
     ui->frame_charts->setMaximumHeight(this->height());
