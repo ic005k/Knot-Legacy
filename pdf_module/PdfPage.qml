@@ -134,7 +134,7 @@ Rectangle {
                     Text {
                         visible: true
                         text: qsTr("P\nD\nF")
-                        font.pixelSize: 8
+                        font.pixelSize: 6
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         horizontalAlignment: Text.AlignLeft
@@ -153,7 +153,7 @@ Rectangle {
                             image.source: "qrc:/icons/back.svg"
 
                             onClicked: {
-                                mw_one.on_btnBack_clicked()
+                                mw_one.on_btnBackReader_clicked()
                             }
                         }
 

@@ -16,9 +16,9 @@
  *  limitations under the License.
  *
  */
-import QtQuick 2.0
+import QtQuick 2.15
 import QtWebView 1.1
-import QtWebSockets 1.1
+import QtWebSockets 1.15
 import QtWebChannel 1.0
 
 import it.ltdev.qt.cpp.components 1.0

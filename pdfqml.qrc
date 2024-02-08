@@ -13,6 +13,5 @@
         <file>pdf_module/components/ContainerInfo.qml</file>
         <file>pdf_module/components/TextField.qml</file>
         <file>pdf_module/PdfPage.qml</file>
-        
     </qresource>
 </RCC>
