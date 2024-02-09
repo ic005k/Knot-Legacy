@@ -172,10 +172,15 @@ int main(int argc, char* argv[]) {
 
   // Set Font
   QFont font;
-  if (isOverUIFont)
-    font.setFamily(customFontFamily);
-  else
-    font.setFamily(defaultFontFamily);
+  if (isOverUIFont) {
+    if (customFontFamily.length() > 0) {
+      font.setFamily(customFontFamily);
+    }
+  } else {
+    if (defaultFontFamily.length() > 0) {
+      font.setFamily(defaultFontFamily);
+    }
+  }
 
   font.setPointSize(fontSize);
   app.setFont(font);
