@@ -55,6 +55,7 @@ SOURCES += \
     src/MainWindow.cpp \
     src/Method.cpp \
     src/MyWheel.cpp \
+    src/Notes/LineNumberArea.cpp \
     src/Notes/MarkdownHighlighter.cpp \
     src/Notes/MoveTo.cpp \
     src/Notes/NewNoteBook.cpp \
@@ -62,6 +63,7 @@ SOURCES += \
     src/Notes/NotesList.cpp \
     src/Notes/PrintPDF.cpp \
     src/Notes/QOwnLanguageData.cpp \
+    src/Notes/QTextEditHighlighter.cpp \
     src/Notes/TextSelector.cpp \
     src/Preferences.cpp \
     src/Reader/DocumentHandler.cpp \
@@ -114,6 +116,7 @@ HEADERS += \
     src/MainWindow.h \
     src/Method.h \
     src/MyWheel.h \
+    src/Notes/LineNumberArea.h \
     src/Notes/MarkdownHighlighter.h \
     src/Notes/MoveTo.h \
     src/Notes/NewNoteBook.h \
@@ -121,6 +124,7 @@ HEADERS += \
     src/Notes/NotesList.h \
     src/Notes/PrintPDF.h \
     src/Notes/QOwnLanguageData.h \
+    src/Notes/QTextEditHighlighter.h \
     src/Notes/TextSelector.h \
     src/Preferences.h \
     src/Reader/DocumentHandler.h \

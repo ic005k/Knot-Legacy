@@ -20,7 +20,9 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
+#include "src/Notes/LineNumberArea.h"
 #include "src/Notes/PrintPDF.h"
+#include "src/Notes/QTextEditHighlighter.h"
 #include "src/Notes/TextSelector.h"
 #include "src/ShowMessage.h"
 #include "ui_PrintPDF.h"
@@ -38,6 +40,7 @@ class Notes : public QDialog {
   ~Notes();
   Ui::Notes *ui;
 
+  QTextEditHighlighter *m_EditSource;
   QTimer *timerEditNote;
   int px, py, mx, my;
 
@@ -172,6 +175,7 @@ class Notes : public QDialog {
   void editNote();
   void showNoteList();
   void on_editNote();
+
  signals:
   void sendUpdate();
 
@@ -213,7 +217,6 @@ class Notes : public QDialog {
   bool isFunShow;
   QTimer *timerEditPanel;
 
-  QWidget *lineNumberArea;
   int newHeight = 0;
 
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();

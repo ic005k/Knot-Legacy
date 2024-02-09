@@ -4732,8 +4732,8 @@ void MainWindow::on_btnEdit_clicked() {
   QString mdfile = mw_one->loadText(currentMDFile);
 
   m_Notes->init();
-  m_Notes->ui->editSource->setPlainText(mdfile);
-  new MarkdownHighlighter(m_Notes->ui->editSource->document());
+  m_Notes->m_EditSource->setPlainText(mdfile);
+  new MarkdownHighlighter(m_Notes->m_EditSource->document());
 
   mainHeight = mw_one->height();
   ui->frameNotes->hide();
@@ -4752,11 +4752,11 @@ void MainWindow::on_btnEdit_clicked() {
   int cpos = iniNotes->value("/MainNotes/editCPos" + a).toInt();
   bool isToolBarVisible =
       iniNotes->value("/MainNotes/toolBarVisible", false).toBool();
-  m_Notes->ui->editSource->verticalScrollBar()->setSliderPosition(vpos);
-  QTextCursor tmpCursor = m_Notes->ui->editSource->textCursor();
+  m_Notes->m_EditSource->verticalScrollBar()->setSliderPosition(vpos);
+  QTextCursor tmpCursor = m_Notes->m_EditSource->textCursor();
   tmpCursor.setPosition(cpos);
-  m_Notes->ui->editSource->setTextCursor(tmpCursor);
-  m_Notes->ui->editSource->setFocus();
+  m_Notes->m_EditSource->setTextCursor(tmpCursor);
+  m_Notes->m_EditSource->setFocus();
   if (isToolBarVisible) {
     if (m_Notes->ui->f_ToolBar->isHidden()) m_Notes->on_btnShowTools_clicked();
   } else {
