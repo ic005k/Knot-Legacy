@@ -17,6 +17,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 
   m_EditSource = new QTextEditHighlighter();
   ui->frameEdit->layout()->addWidget(m_EditSource);
+
   ui->editSource->hide();
 
   QFont font0 = m_Method->getNewFont(15);
@@ -86,7 +87,8 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
     //     m_Method->vsbarStyleSmall);
   }
 
-  m_EditSource->setContentsMargins(15, 15, 15, 15);
+  ui->frameEdit->layout()->setMargin(0);
+  m_EditSource->setContentsMargins(1, 1, 1, 1);
   m_EditSource->setStyleSheet("border:none");
   m_EditSource->setCursorWidth(2);
 

@@ -2,6 +2,8 @@
 
 #include "src/Notes/LineNumberArea.h"
 
+extern bool isDark;
+
 QTextEditHighlighter::QTextEditHighlighter(QWidget *parent)
     : QTextEdit(parent) {
   // Line numbers
@@ -26,7 +28,7 @@ int QTextEditHighlighter::lineNumberAreaWidth() {
     ++digits;
   }
 
-  int space = 13 + fontMetrics().width(QLatin1Char('9')) * (digits);
+  int space = 0 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * (digits);
 
   return space;
 }
@@ -136,7 +138,18 @@ void QTextEditHighlighter::lineNumberAreaPaintEvent(QPaintEvent *event) {
   //     this->verticalScrollBar()->sliderPosition());
 
   QPainter painter(lineNumberArea);
-  painter.fillRect(event->rect(), Qt::lightGray);
+
+  if (isDark)
+    painter.fillRect(event->rect(), QColor(69, 83, 100));
+  else
+    painter.fillRect(event->rect(), Qt::lightGray);
+
+#ifdef Q_OS_ANDROID
+  QFont font = this->font();
+  font.setPointSize(15);
+  painter.setFont(font);
+#endif
+
   int blockNumber = this->getFirstVisibleBlockId();
 
   QTextBlock block = this->document()->findBlockByNumber(blockNumber);
@@ -173,8 +186,17 @@ void QTextEditHighlighter::lineNumberAreaPaintEvent(QPaintEvent *event) {
                          ->blockBoundingRect(block)
                          .height();
 
-  QColor col_1(255, 0, 0);      // Current line (custom green)
-  QColor col_0(120, 120, 120);  // Other lines  (custom darkgrey)
+  QColor col_1;  // Current line (custom green)
+  if (isDark)
+    col_1.setRgb(50, 205, 50);
+  else
+    col_1.setRgb(255, 0, 0);
+
+  QColor col_0;
+  if (isDark)
+    col_0.setRgb(255, 255, 255);  // Other lines  (custom darkgrey)
+  else
+    col_0.setRgb(0, 0, 0);
 
   // Draw the numbers (displaying the current line number in green)
   while (block.isValid() && top <= event->rect().bottom()) {
@@ -183,7 +205,7 @@ void QTextEditHighlighter::lineNumberAreaPaintEvent(QPaintEvent *event) {
       painter.setPen(QColor(120, 120, 120));
       painter.setPen((this->textCursor().blockNumber() == blockNumber) ? col_1
                                                                        : col_0);
-      painter.drawText(-5, top, lineNumberArea->width(), fontMetrics().height(),
+      painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
                        Qt::AlignRight, number);
     }
 
