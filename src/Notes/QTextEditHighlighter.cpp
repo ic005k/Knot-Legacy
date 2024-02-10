@@ -146,8 +146,8 @@ void QTextEditHighlighter::lineNumberAreaPaintEvent(QPaintEvent *event) {
 
 #ifdef Q_OS_ANDROID
   QFont font = this->font();
-  font.setPointSize(15);
-  painter.setFont(font);
+  font.setPointSize(13);
+  // painter.setFont(font);
 #endif
 
   int blockNumber = this->getFirstVisibleBlockId();

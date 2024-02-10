@@ -27,8 +27,8 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
 
   ui->btnFontLess->setStyleSheet("border:none");
   ui->btnFontPlus->setStyleSheet("border:none");
-  QFont f(this->font());
-  f.setPointSize(fontSize);
+
+  QFont f = m_Method->getNewFont(fontSize);
   ui->btnStyle1->setFont(f);
   ui->btnStyle2->setFont(f);
   ui->btnStyle3->setFont(f);
@@ -47,6 +47,7 @@ void ReaderSet::init() {
   x = mw_one->geometry().x();
   y = mw_one->geometry().y() + mw_one->ui->qwReader->geometry().y() +
       (mw_one->ui->qwReader->height() - h) / 2;
+  setFixedWidth(w);
   setGeometry(x, y, w, h);
 
   ui->hSlider->setStyleSheet(mw_one->ui->hsH->styleSheet());
