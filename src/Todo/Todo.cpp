@@ -424,7 +424,7 @@ void Todo::on_btnSetTime_clicked() {
   QString txt = tr("Todo") + " : " + getItemTodoText(row);
   txt = txt.replace("\n", " ");
   QFontMetrics fm(this->font());
-  QString qsLine = fm.elidedText(txt, Qt::ElideRight, this->width() - 10);
+  QString qsLine = fm.elidedText(txt, Qt::ElideRight, mw_one->width() - 10);
   mw_one->m_TodoAlarm->ui->lblTodoText->setText(qsLine);
   mw_one->m_TodoAlarm->show();
 }
