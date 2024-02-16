@@ -164,6 +164,8 @@ void Notes::editVSBarValueChanged() {}
 void Notes::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
 
+#ifdef Q_OS_ANDROID
+
   if (!this->isHidden()) {
     if (this->height() != mw_one->mainHeight) {
       newHeight = this->height();
@@ -190,6 +192,8 @@ void Notes::resizeEvent(QResizeEvent *event) {
   qDebug() << pAndroidKeyboard->keyboardRectangle().height()
            << "this height=" << this->height();
   qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
+
+#endif
 }
 
 void Notes::on_btnDone_clicked() {
