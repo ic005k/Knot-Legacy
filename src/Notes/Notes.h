@@ -109,11 +109,18 @@ class Notes : public QDialog {
   void closeEvent(QCloseEvent *event) override;
 
  public slots:
+  void on_btnHideKey_clicked();
+
   void on_btnShowTools_clicked();
+
   void editVSBarValueChanged();
+
   void timerSlot();
+
   void on_showEditPanel();
+
   void setVPos();
+
   void highlightCurrentLine();
 
   void on_btnDone_clicked();
@@ -198,8 +205,6 @@ class Notes : public QDialog {
   void on_editFind_textChanged(const QString &arg1);
 
   void on_btnGetShare_clicked();
-
-  void on_btnHideKey_clicked();
 
  private:
   int x_left, x_right, y_left, y_right;

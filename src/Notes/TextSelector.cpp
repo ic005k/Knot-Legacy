@@ -172,6 +172,7 @@ void TextSelector::on_btnRight0_clicked() {
 void TextSelector::on_btnBing_clicked() {
   QString str = ui->lineEdit->text().trimmed();
   if (str.length() > 0) {
+    mw_one->m_Notes->on_btnHideKey_clicked();
     QString strurl = "https://bing.com/search?q=" + str;
     QUrl url(strurl);
     QDesktopServices::openUrl(url);
