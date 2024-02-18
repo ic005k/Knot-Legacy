@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.48";
+QString ver = "1.1.49";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4327,10 +4327,8 @@ static void JavaNotify_1() {
 }
 
 static void JavaNotify_2() {
-  if (!mw_one->ui->frameMain->isHidden()) {
-    // When the screen lights up.
-    mw_one->updateHardSensorSteps();
-  }
+  // When the screen lights up.
+  mw_one->updateHardSensorSteps();
 
   qDebug() << "C++ JavaNotify_2";
 }
