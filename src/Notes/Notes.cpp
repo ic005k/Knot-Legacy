@@ -208,6 +208,10 @@ void Notes::MD2Html(QString mdFile) {
     QTextStream stream(&memofile1);
     QTextEdit *edit = new QTextEdit();
     QString strmd = mw_one->loadText(mdFile);
+    if (strmd.contains("===KnotData Dir===")) {
+      strmd = strmd.replace("===KnotData Dir===", iniDir);
+    }
+
     edit->setPlainText(strmd);
     edit->document()->setMarkdown(strmd, QTextDocument::MarkdownDialectGitHub);
     stream << edit->toHtml().toUtf8();
@@ -599,6 +603,7 @@ void Notes::insertImage(QString fileName) {
         pix.scaled(new_w, new_h, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pix.save(strTar);
 
+    strTar = strTar.replace(iniDir, "===KnotData Dir===");
     m_EditSource->insertPlainText("![image](file://" + strTar + ")\n");
 
     qDebug() << "pic=" << strTar;
