@@ -3,6 +3,8 @@
 
 #include <QApplication>
 #include <QChar>
+#include <QClipboard>
+#include <QMimeData>
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QCharRef>
@@ -101,7 +103,8 @@ class Notes : public QDialog {
 
   bool eventFilterEditRecord(QObject *watch, QEvent *evn);
 
- protected:
+  void insertImage(QString fileName);
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

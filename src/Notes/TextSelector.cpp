@@ -124,7 +124,11 @@ void TextSelector::on_btnCut_clicked() {
 }
 
 void TextSelector::on_btnPaste_clicked() {
-  mw_one->m_Notes->byTextEdit->paste();
+  if (mw_one->m_Notes->byTextEdit == mw_one->m_Notes->m_EditSource) {
+    mw_one->m_Notes->on_btnPaste_clicked();
+  } else {
+    mw_one->m_Notes->byTextEdit->paste();
+  }
 
   close();
 }

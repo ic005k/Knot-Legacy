@@ -564,7 +564,12 @@ void Notes::on_btnPic_clicked() {
   fileName = QFileDialog::getOpenFileName(this, tr("Knot"), "",
                                           tr("Picture Files (*.*)"));
 
-  if (QFileInfo(fileName).exists()) {
+  insertImage(fileName);
+}
+
+void Notes::insertImage(QString fileName) {
+  QFileInfo fi(fileName);
+  if (fi.exists()) {
     QDir dir;
     dir.mkpath(iniDir + "memo/images/");
 
@@ -996,7 +1001,23 @@ void Notes::highlightCurrentLine() {
 
 void Notes::onTextChange() {}
 
-void Notes::on_btnPaste_clicked() { m_EditSource->paste(); }
+void Notes::on_btnPaste_clicked() {
+  const QClipboard *clipboard = QApplication::clipboard();
+  const QMimeData *mimeData = clipboard->mimeData();
+  if (mimeData->hasImage()) {
+    QImage img = qvariant_cast<QImage>(mimeData->imageData());
+    if (!img.isNull()) {
+      QPixmap pix;
+      QString strTar = privateDir + "temppic.png";
+      pix = QPixmap::fromImage(img);
+      pix = pix.scaled(img.width(), img.height(), Qt::KeepAspectRatio,
+                       Qt::SmoothTransformation);
+      pix.save(strTar);
+      insertImage(strTar);
+    }
+  } else
+    m_EditSource->paste();
+}
 
 bool Notes::eventFilterTodo(QObject *watch, QEvent *evn) {
   if (watch == mw_one->ui->editTodo->viewport()) {
