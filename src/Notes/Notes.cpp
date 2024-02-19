@@ -924,9 +924,40 @@ void Notes::on_btnS4_clicked() {
 }
 
 void Notes::on_btnColor_clicked() {
+  QString strColor;
+
+#ifdef Q_OS_ANDROID
+  strColor = "#ff0000";
+#else
+
+  QColorDialog *colorDlg = new QColorDialog(this);
+  QFont f = m_Method->getNewFont(17);
+  colorDlg->setFont(f);
+  if (colorDlg->exec()) {
+    QColor color = colorDlg->selectedColor();
+    strColor = ColorToString(color);
+    qDebug() << color << strColor;
+  }
+#endif
+
+  if (strColor.isEmpty()) return;
+
   QString str = m_EditSource->textCursor().selectedText();
-  if (str == "") str = tr("Red");
-  m_EditSource->insertPlainText("<font color=#FF0000 >" + str + "</font>");
+  if (str == "") str = tr("Color");
+  m_EditSource->insertPlainText("<font color=" + strColor + ">" + str +
+                                "</font>");
+}
+
+QString Notes::ColorToString(QColor v_color) {
+  QRgb mRgb = qRgb(v_color.red(), v_color.green(), v_color.blue());
+  QString mRgbStr = QString::number(mRgb, 16);
+  mRgbStr = mRgbStr.replace(0, 2, "#");
+  return mRgbStr;
+}
+
+QColor Notes::StringToColor(QString mRgbStr) {
+  QColor color(mRgbStr.toUInt(NULL, 16));
+  return color;
 }
 
 void Notes::on_btnS5_clicked() {

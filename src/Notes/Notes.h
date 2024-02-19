@@ -10,6 +10,7 @@
 #include <QCharRef>
 #endif
 
+#include <QColorDialog>
 #include <QDialog>
 #include <QFileDialog>
 #include <QImageReader>
@@ -231,6 +232,8 @@ class Notes : public QDialog {
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   void wheelEvent(QWheelEvent *e) override;
   QString imgDir = "===KnotData===";
+  QString ColorToString(QColor v_color);
+  QColor StringToColor(QString mRgbStr);
 };
 
 #endif  // NOTES_H
