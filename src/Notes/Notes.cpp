@@ -932,6 +932,7 @@ void Notes::on_btnColor_clicked() {
 
   QColorDialog *colorDlg = new QColorDialog(this);
   QFont f = m_Method->getNewFont(17);
+
   colorDlg->setFont(f);
   if (colorDlg->exec()) {
     QColor color = colorDlg->selectedColor();
