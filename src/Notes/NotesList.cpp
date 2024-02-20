@@ -457,62 +457,64 @@ void NotesList::delFile(QString file) {
 bool NotesList::on_btnImport_clicked() {
   if (ui->treeWidget->topLevelItemCount() == 0) return false;
 
-  QString fileName;
-  fileName =
-      QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("MD File (*.*)"));
+  QStringList fileNames;
+  fileNames =
+      QFileDialog::getOpenFileNames(this, tr("Knot"), "", tr("MD File (*.*)"));
 
-  if (fileName.isNull()) return false;
+  if (fileNames.at(0).isNull()) return false;
 
-  bool isMD = false;
-  QString strInfo;
-  isMD = fileName.contains(".md");
-  strInfo = fileName;
+  QTreeWidgetItem *item = ui->treeWidget->currentItem();
+  for (int i = 0; i < fileNames.count(); i++) {
+    QString fileName = fileNames.at(i);
+
+    bool isMD = false;
+    QString strInfo;
+    isMD = fileName.contains(".md");
+    strInfo = fileName;
 #ifdef Q_OS_ANDROID
-  QString fileAndroid = mw_one->m_Reader->getUriRealPath(fileName);
-  isMD = fileAndroid.contains(".md");
+    QString fileAndroid = mw_one->m_Reader->getUriRealPath(fileName);
+    isMD = fileAndroid.contains(".md");
 
-  QStringList list = fileAndroid.split("/");
-  QString str = list.at(list.count() - 1);
-  if (str.toInt() > 0) isMD = true;
-  strInfo = fileAndroid;
+    QStringList list = fileAndroid.split("/");
+    QString str = list.at(list.count() - 1);
+    if (str.toInt() > 0) isMD = true;
+    strInfo = fileAndroid;
 
 #endif
 
-  if (!isMD) {
-    m_Method->m_widget = new QWidget(this);
-    ShowMessage *m_ShowMsg = new ShowMessage(this);
-    m_ShowMsg->showMsg("Knot", tr("Invalid Markdown file.") + "\n\n" + strInfo,
-                       1);
+    if (!isMD) {
+      m_Method->m_widget = new QWidget(this);
+      ShowMessage *m_ShowMsg = new ShowMessage(this);
+      m_ShowMsg->showMsg("Knot",
+                         tr("Invalid Markdown file.") + "\n\n" + strInfo, 1);
+    }
 
-    return false;
+    if (QFile(fileName).exists() && isMD) {
+      QTreeWidgetItem *item1;
+      QFileInfo fi(strInfo);
+      QString name = fi.fileName();
+      QString suffix = fi.suffix();
+      name.replace("." + suffix, "");
+
+      item1 = new QTreeWidgetItem(item);
+      item1->setText(0, name);
+
+      tw->setCurrentItem(item1);
+
+      QString a = "memo/" + mw_one->m_Notes->getDateTimeStr() + "_" +
+                  QString::number(i) + ".md";
+      currentMDFile = iniDir + a;
+      QString str = mw_one->loadText(fileName);
+      QTextEdit *edit = new QTextEdit();
+      edit->setAcceptRichText(false);
+      edit->setPlainText(str);
+      mw_one->TextEditToFile(edit, currentMDFile);
+
+      item1->setText(1, a);
+
+      qDebug() << fileName << a;
+    }
   }
-
-  if (QFile(fileName).exists()) {
-    QTreeWidgetItem *item = ui->treeWidget->currentItem();
-
-    QTreeWidgetItem *item1;
-    QFileInfo fi(strInfo);
-    QString name = fi.fileName();
-    QString suffix = fi.suffix();
-    name.replace("." + suffix, "");
-
-    item1 = new QTreeWidgetItem(item);
-    item1->setText(0, name);
-
-    tw->setCurrentItem(item1);
-    QString a = "memo/" + mw_one->m_Notes->getDateTimeStr() + ".md";
-    currentMDFile = iniDir + a;
-    QString str = mw_one->loadText(fileName);
-    QTextEdit *edit = new QTextEdit();
-    edit->setAcceptRichText(false);
-    edit->setPlainText(str);
-    mw_one->TextEditToFile(edit, currentMDFile);
-
-    item1->setText(1, a);
-
-    on_treeWidget_itemClicked(item1, 0);
-  } else
-    return false;
 
   isNeedSave = true;
   return true;
