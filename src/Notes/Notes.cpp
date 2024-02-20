@@ -927,7 +927,12 @@ void Notes::on_btnColor_clicked() {
   QString strColor;
 
 #ifdef Q_OS_ANDROID
+  m_Method->m_widget = new QWidget(this);
+  m_Method->showGrayWindows();
+
   ColorDialog *colorDlg = new ColorDialog(this);
+  connect(colorDlg, &QDialog::rejected,
+          [=]() mutable { m_Method->closeGrayWindows(); });
   int x, y, w, h;
   x = mw_one->geometry().x();
   y = mw_one->geometry().y();
@@ -938,6 +943,7 @@ void Notes::on_btnColor_clicked() {
   colorDlg->setGeometry(x + (mw_one->width() - w) / 2, y, w, h);
   if (colorDlg->exec() == QDialog::Accepted) {
     strColor = ColorToString(colorDlg->getColor());
+    m_Method->closeGrayWindows();
   }
 #else
 
