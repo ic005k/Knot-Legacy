@@ -5176,6 +5176,7 @@ void MainWindow::reloadMain() {
   m_Method->gotoEnd(ui->qwMainDate);
   int count = m_Method->getCountFromQW(ui->qwMainDate);
   m_Method->setCurrentIndexFromQW(ui->qwMainDate, count - 1);
+  m_Method->setScrollBarPos(ui->qwMainDate, 1.0);
 
   m_Method->clickMainDate();
 }

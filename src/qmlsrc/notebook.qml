@@ -18,6 +18,10 @@ Rectangle {
     property int itemCount: 0
     property bool isHighPriority: false
 
+    function setScrollBarPos(pos) {
+        view.ScrollBar.vertical.position = 1.0 - view.ScrollBar.vertical.size
+    }
+
     function setItemHeight(h) {}
 
     function gotoEnd() {

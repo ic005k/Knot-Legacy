@@ -194,7 +194,8 @@ class Method : public QDialog {
   QString getText2(QQuickWidget *qw, int index);
   QString getText1(QQuickWidget *qw, int index);
 
- protected:
+  void setScrollBarPos(QQuickWidget *qw, double pos);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

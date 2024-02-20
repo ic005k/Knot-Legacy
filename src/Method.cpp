@@ -211,6 +211,12 @@ void Method::gotoEnd(QQuickWidget* qw) {
   QMetaObject::invokeMethod((QObject*)root, "gotoEnd");
 }
 
+void Method::setScrollBarPos(QQuickWidget* qw, double pos) {
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
+                            Q_ARG(QVariant, pos));
+}
+
 void Method::setCurrentIndexFromQW(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
@@ -615,6 +621,7 @@ void Method::clickMainDate() {
   gotoEnd(mw_one->ui->qwMainEvent);
   int count = getCountFromQW(mw_one->ui->qwMainEvent);
   setCurrentIndexFromQW(mw_one->ui->qwMainEvent, count - 1);
+  setScrollBarPos(mw_one->ui->qwMainEvent, 1.0);
 
   setMainTabCurrentIndex();
 }
