@@ -927,7 +927,18 @@ void Notes::on_btnColor_clicked() {
   QString strColor;
 
 #ifdef Q_OS_ANDROID
-  strColor = "#ff0000";
+  ColorDialog *colorDlg = new ColorDialog(this);
+  int x, y, w, h;
+  x = mw_one->geometry().x();
+  y = mw_one->geometry().y();
+  w = mw_one->width();
+  h = mw_one->ui->frameMain->height() - 50;
+  colorDlg->setFixedWidth(w);
+  colorDlg->setFixedHeight(h);
+  colorDlg->setGeometry(x + (mw_one->width() - w) / 2, y, w, h);
+  if (colorDlg->exec() == QDialog::Accepted) {
+    strColor = ColorToString(colorDlg->getColor());
+  }
 #else
 
   QColorDialog *colorDlg = new QColorDialog(this);

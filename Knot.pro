@@ -55,6 +55,7 @@ SOURCES += \
     src/MainWindow.cpp \
     src/Method.cpp \
     src/MyWheel.cpp \
+    src/Notes/ColorDialog.cpp \
     src/Notes/LineNumberArea.cpp \
     src/Notes/MarkdownHighlighter.cpp \
     src/Notes/MoveTo.cpp \
@@ -116,6 +117,7 @@ HEADERS += \
     src/MainWindow.h \
     src/Method.h \
     src/MyWheel.h \
+    src/Notes/ColorDialog.h \
     src/Notes/LineNumberArea.h \
     src/Notes/MarkdownHighlighter.h \
     src/Notes/MoveTo.h \

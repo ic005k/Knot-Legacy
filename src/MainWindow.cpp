@@ -3255,7 +3255,7 @@ void MainWindow::on_btnSteps_clicked() {
 
   m_Steps->init_Steps();
   m_Method->setCurrentIndexFromQW(ui->qwSteps, m_Steps->getCount() - 1);
-  m_Steps->setScrollBarPos(1.0);
+  m_Method->setScrollBarPos(ui->qwSteps, 1.0);
 }
 
 void MainWindow::changeEvent(QEvent *event) {
