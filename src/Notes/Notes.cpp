@@ -1429,7 +1429,7 @@ bool Notes::selectPDFFormat(QPrinter *printer) {
 }
 
 void Notes::on_btnPDF_clicked() {
-  QString html = mw_one->loadText(iniDir + "memo.html");
+  QString html = mw_one->loadText(privateDir + "memo.html");
   auto doc = new QTextDocument(this);
   doc->setHtml(html);
 
