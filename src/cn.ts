@@ -1787,7 +1787,7 @@ in skydrive folder</source>
     <name>Notes</name>
     <message>
         <location filename="Notes/Notes.ui" line="14"/>
-        <location filename="Notes/Notes.cpp" line="1208"/>
+        <location filename="Notes/Notes.cpp" line="1213"/>
         <source>Notes</source>
         <translation>笔记</translation>
     </message>
@@ -2028,7 +2028,7 @@ in skydrive folder</source>
         <translation>删除线</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="959"/>
+        <location filename="Notes/Notes.cpp" line="964"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
@@ -2037,37 +2037,37 @@ in skydrive folder</source>
         <translation type="vanished">红色</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="978"/>
+        <location filename="Notes/Notes.cpp" line="983"/>
         <source>Bold</source>
         <translation>粗体</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1208"/>
+        <location filename="Notes/Notes.cpp" line="1213"/>
         <source>Do you want to save the notes?</source>
         <translation>您想保存笔记吗？</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1249"/>
+        <location filename="Notes/Notes.cpp" line="1254"/>
         <source>The end of the document has been reached.</source>
         <translation>已到达文档的结尾</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1270"/>
+        <location filename="Notes/Notes.cpp" line="1275"/>
         <source>The beginning of the document has been reached.</source>
         <translation>已到达文档的开头</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1299"/>
+        <location filename="Notes/Notes.cpp" line="1304"/>
         <source>Word not found</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1300"/>
+        <location filename="Notes/Notes.cpp" line="1305"/>
         <source>Sorry,the word cannot be found.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1328"/>
+        <location filename="Notes/Notes.cpp" line="1333"/>
         <source>Letter</source>
         <translation>信函</translation>
     </message>
@@ -2080,7 +2080,7 @@ in skydrive folder</source>
         <translation type="vanished">取消</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1336"/>
+        <location filename="Notes/Notes.cpp" line="1341"/>
         <source>Page size</source>
         <translation>页面尺寸</translation>
     </message>
@@ -2089,17 +2089,17 @@ in skydrive folder</source>
         <translation type="vanished">页面尺寸：</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1360"/>
+        <location filename="Notes/Notes.cpp" line="1365"/>
         <source>Portrait</source>
         <translation>纵向</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1360"/>
+        <location filename="Notes/Notes.cpp" line="1365"/>
         <source>Landscape</source>
         <translation>横向</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1366"/>
+        <location filename="Notes/Notes.cpp" line="1371"/>
         <source>Orientation</source>
         <translation>方向</translation>
     </message>
@@ -2108,17 +2108,17 @@ in skydrive folder</source>
         <translation type="vanished">方向：</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1394"/>
+        <location filename="Notes/Notes.cpp" line="1399"/>
         <source>The PDF file is successfully exported.</source>
         <translation>PDF文件导出成功</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1401"/>
+        <location filename="Notes/Notes.cpp" line="1406"/>
         <source>PDF files</source>
         <translation>PDF文件</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1402"/>
+        <location filename="Notes/Notes.cpp" line="1407"/>
         <source>Export current note as PDF</source>
         <translation>输出当前笔记到PDF</translation>
     </message>
@@ -2969,6 +2969,16 @@ F</source>
         <location filename="Steps/Steps.cpp" line="97"/>
         <source>Steps</source>
         <translation>步数</translation>
+    </message>
+    <message>
+        <location filename="Steps/Steps.cpp" line="374"/>
+        <source>Calorie</source>
+        <translation>卡路里</translation>
+    </message>
+    <message>
+        <location filename="Steps/Steps.cpp" line="378"/>
+        <source>KM</source>
+        <translation>公里</translation>
     </message>
 </context>
 <context>

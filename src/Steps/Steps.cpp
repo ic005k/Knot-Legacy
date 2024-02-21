@@ -370,7 +370,12 @@ void Steps::setMaxMark() {
 void Steps::appendSteps(QString date, int steps, QString km) {
   QString strSteps = QString::number(steps);
   double dCalorie = steps * 0.04;
-  QString strCalorie = QString("%1").arg(dCalorie, 0, 'f', 2);
+  QString strCalorie =
+      QString("%1").arg(dCalorie, 0, 'f', 2) + "  " + tr("Calorie");
+
+  double d_km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
+                steps / 100 / 1000;
+  km = QString("%1").arg(d_km, 0, 'f', 2) + "  " + tr("KM");
 
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, date),
