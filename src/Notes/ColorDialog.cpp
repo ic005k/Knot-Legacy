@@ -1,3 +1,5 @@
+/*https://github.com/agafon0ff/SimpleColorDialog*/
+
 #include "src/Notes/ColorDialog.h"
 
 #include <QPainter>
