@@ -604,7 +604,7 @@ void Notes::insertImage(QString fileName) {
     pix.save(strTar);
 
     strTar = strTar.replace(iniDir, imgDir);
-    m_EditSource->insertPlainText("![image](file://" + strTar + ")\n");
+    m_EditSource->insertPlainText("![image](file:/" + strTar + ")\n");
 
     qDebug() << "pic=" << strTar;
   }
