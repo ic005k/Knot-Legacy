@@ -262,19 +262,18 @@ Rectangle {
                             }
                             TextArea {
                                 id: text1
-                                color: view.currentIndex === index ?  "black" : getText1FontColor()
-                                font.pointSize: FontSize - 2 > maxFontSize? maxFontSize : FontSize - 2
+                                color: view.currentIndex === index ? "black" : getText1FontColor()
+                                font.pointSize: FontSize - 2
+                                                > maxFontSize ? maxFontSize : FontSize - 2
                                 font.bold: true
                                 width: parent.width
                                 wrapMode: Text.Wrap
-                                readOnly: true
                                 text: time
-
                                 visible: true
                             }
                         }
 
-                        Text {
+                        TextArea {
                             id: text2
 
                             width: parent.width
@@ -289,7 +288,6 @@ Rectangle {
                             font.pointSize: FontSize
                             width: parent.width
                             //background: Qt.rgba(0, 0, 0, 0)
-                            readOnly: true
                             wrapMode: Text.Wrap
                             color: view.currentIndex === index ? "black" : getFontColor()
                             text: dototext
@@ -297,7 +295,7 @@ Rectangle {
                             visible: true
                         }
 
-                        Text {
+                        TextArea {
                             id: text4
 
                             width: parent.width

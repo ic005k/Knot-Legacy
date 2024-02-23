@@ -17,11 +17,6 @@ extern int fontSize;
 Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   ui->setupUi(this);
 
-  iniTodo = new QSettings(iniDir + "todo.ini", QSettings::IniFormat, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniTodo->setIniCodec("utf-8");
-#endif
-
   mw_one->set_ToolButtonStyle(this);
 
   this->installEventFilter(this);
@@ -72,6 +67,11 @@ void Todo::saveTodo() {
 
   int count_items = getCount();
 
+  iniTodo = new QSettings(iniDir + "todo.ini", QSettings::IniFormat, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniTodo->setIniCodec("utf-8");
+#endif
+
   iniTodo->setValue("/Todo/Count", count_items);
   for (int i = 0; i < count_items; i++) {
     QString strText = getItemTodoText(i);
@@ -96,6 +96,11 @@ void Todo::saveTodo() {
 void Todo::init_Todo() {
   mw_one->isSelf = true;
   clearAll();
+
+  iniTodo = new QSettings(iniDir + "todo.ini", QSettings::IniFormat, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniTodo->setIniCodec("utf-8");
+#endif
 
   int count = iniTodo->value("/Todo/Count").toInt();
   for (int i = 0; i < count; i++) {
@@ -569,6 +574,12 @@ void Todo::refreshTableLists() {
 
 void Todo::refreshTableListsFromIni() {
   tableLists.clear();
+
+  iniTodo = new QSettings(iniDir + "todo.ini", QSettings::IniFormat, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniTodo->setIniCodec("utf-8");
+#endif
+
   int count_items = iniTodo->value("/Todo/Count", 0).toInt();
 
   for (int i = 0; i < count_items; i++) {
