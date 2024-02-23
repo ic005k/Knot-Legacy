@@ -268,6 +268,8 @@ Rectangle {
                                 font.bold: true
                                 width: parent.width
                                 wrapMode: Text.Wrap
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
                                 text: time
                                 visible: true
                             }
@@ -287,9 +289,10 @@ Rectangle {
                             id: text3
                             font.pointSize: FontSize
                             width: parent.width
-                            //background: Qt.rgba(0, 0, 0, 0)
                             wrapMode: Text.Wrap
                             color: view.currentIndex === index ? "black" : getFontColor()
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
                             text: dototext
 
                             visible: true
