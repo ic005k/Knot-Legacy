@@ -1717,7 +1717,7 @@ void MainWindow::resetWinPos() {
   if (x < 0) x = 0;
   if (y < 0) y = 0;
 
-  if (x > 0 && y > 0 && w > 0 && h > 0) this->setGeometry(x, y, w, h);
+  if (x >= 0 && y >= 0 && w > 0 && h > 0) this->setGeometry(x, y, w, h);
 }
 
 void MainWindow::init_Stats(QTreeWidget *tw) {
