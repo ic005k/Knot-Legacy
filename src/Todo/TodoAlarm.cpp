@@ -376,7 +376,7 @@ void TodoAlarm::addDial(int min, int max, QString flag) {
 
   if (WidgetType == 2) {
     RollingBox* btn = new RollingBox(ui->frameSel);
-    btn->setFixedHeight(100);
+    btn->setFixedHeight(150);
     btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     btn->setObjectName("btn");
     btn->setRange(min, max);
