@@ -205,14 +205,15 @@ Rectangle {
 
                     Rectangle {
                         id: flagColor
-                        height: rectan.getItemHeight() - 6
+                        height: rectan.getItemHeight() - 0
                         width: 6
-                        radius: 2
+                        radius: 0
                         anchors.leftMargin: 1
                         color: getPriorityColor(type)
                         Text {
                             anchors.centerIn: parent
                         }
+                        visible: true
                     }
 
                     ColumnLayout {
@@ -220,7 +221,6 @@ Rectangle {
                         width: parent.width - flagColor.width - donebtn.width - 4
                         spacing: 2
                         Layout.fillWidth: false
-
                         anchors.leftMargin: 0
                         anchors.rightMargin: 0
 
@@ -262,11 +262,11 @@ Rectangle {
                             }
                             TextArea {
                                 id: text1
+                                width: parent.width
                                 color: view.currentIndex === index ? "black" : getText1FontColor()
                                 font.pointSize: FontSize - 2
                                                 > maxFontSize ? maxFontSize : FontSize - 2
                                 font.bold: true
-                                width: parent.width
                                 wrapMode: Text.Wrap
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
@@ -277,7 +277,6 @@ Rectangle {
 
                         TextArea {
                             id: text2
-
                             width: parent.width
                             wrapMode: Text.Wrap
                             text: type
@@ -287,8 +286,8 @@ Rectangle {
 
                         TextArea {
                             id: text3
-                            font.pointSize: FontSize
                             width: parent.width
+                            font.pointSize: FontSize
                             wrapMode: Text.Wrap
                             color: view.currentIndex === index ? "black" : getFontColor()
                             horizontalAlignment: Text.AlignLeft
@@ -300,7 +299,6 @@ Rectangle {
 
                         TextArea {
                             id: text4
-
                             width: parent.width
                             wrapMode: Text.Wrap
                             text: itemheight
@@ -330,6 +328,7 @@ Rectangle {
                     width: 50
                     color: "red"
                     anchors.right: parent.right
+                    visible: true
 
                     Text {
                         anchors.centerIn: parent
@@ -357,13 +356,13 @@ Rectangle {
     function getPriorityColor(ntype) {
         switch (ntype) {
         case 0:
-            return "lightgray"
+            return "gray"
         case 1:
             return "red"
         case 2:
             return "orange"
         case 3:
-            return "lightblue"
+            return "blue"
         default:
             return "black"
         }
