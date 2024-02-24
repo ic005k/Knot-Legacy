@@ -145,5 +145,6 @@
         <file>res/rename.png</file>
         <file>res/btn_expand.png</file>
         <file>res/btn_collapse.png</file>
+        <file>res/todo_done.png</file>
     </qresource>
 </RCC>

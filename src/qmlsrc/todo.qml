@@ -148,10 +148,10 @@ Rectangle {
 
         delegate: Flickable {
             id: flack
-            property int myw: m_width - 8
+            property int myw: m_width - 0
             width: myw
             height: rectan.getItemHeight()
-            contentWidth: myw + donebtn.width + 5
+            contentWidth: myw + donebtn.width + flagColor.width
             contentHeight: rectan.getItemHeight()
             boundsBehavior: Flickable.StopAtBounds //该属性设置过后，边界不会被拉出
 
@@ -200,8 +200,8 @@ Rectangle {
                 Rectangle {
                     id: flagColor
                     height: rectan.getItemHeight() - 0
-                    width: 8
-                    radius: 0
+                    width: 6
+                    radius: 2
                     anchors.leftMargin: 1
                     color: getPriorityColor(type)
                     Text {
@@ -331,9 +331,28 @@ Rectangle {
                     anchors.right: parent.right
                     visible: true
 
+                    Image {
+                        id: doneImg
+
+                        width: donebtn.width
+                        height: donebtn.width
+                        x:-2
+                        y:(donebtn.height-donebtn.width)/2
+                        fillMode: Image.NoOption
+                        horizontalAlignment: Image.AlignHCenter
+                        verticalAlignment: Image.AlignVCenter
+
+                        smooth: true
+                        sourceSize.height: donebtn.width
+                        sourceSize.width: donebtn.width
+                        source: "/res/todo_done.png"
+
+                        visible: true
+                    }
+
                     Text {
                         anchors.centerIn: parent
-                        text: qsTr("Done")
+                        //text: qsTr("Done")
                         color: "#ffffff"
                     }
                     MouseArea {
