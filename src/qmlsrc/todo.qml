@@ -157,6 +157,7 @@ Rectangle {
 
             Rectangle {
                 id: rectan
+
                 anchors.fill: parent
                 width: parent.width
                 height: getItemHeight()
@@ -196,25 +197,25 @@ Rectangle {
                     return item0H + item1H + item2H + item3H + text2.height + 5
                 }
 
+                Rectangle {
+                    id: flagColor
+                    height: rectan.getItemHeight() - 0
+                    width: 8
+                    radius: 0
+                    anchors.leftMargin: 1
+                    color: getPriorityColor(type)
+                    Text {
+                        anchors.centerIn: parent
+                    }
+                    visible: true
+                }
+
                 RowLayout {
                     id: idlistElemnet
                     height: parent.height
                     width: parent.width
                     spacing: 2
                     Layout.fillWidth: true
-
-                    Rectangle {
-                        id: flagColor
-                        height: rectan.getItemHeight() - 0
-                        width: 6
-                        radius: 0
-                        anchors.leftMargin: 1
-                        color: getPriorityColor(type)
-                        Text {
-                            anchors.centerIn: parent
-                        }
-                        visible: true
-                    }
 
                     ColumnLayout {
                         height: parent.height
