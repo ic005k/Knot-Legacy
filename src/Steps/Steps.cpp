@@ -16,7 +16,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
   mw_one->ui->lblSingle->adjustSize();
-  mw_one->ui->lblCurrent->hide();
+  mw_one->ui->lblCurrent->setText(QTime::currentTime().toString());
 
   QFont font0;
   font0.setPointSize(15);
@@ -25,14 +25,19 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblZ->setFont(font0);
   mw_one->ui->lblSteps->setFont(font0);
 
+  mw_one->ui->lblCurrent->setFont(font0);
+  mw_one->ui->lblToNow->setFont(font0);
+  mw_one->ui->lblNow->setFont(font0);
+  mw_one->ui->lblKM->setFont(font0);
+  font0.setBold(true);
+  mw_one->ui->lblSingle->setFont(font0);
+
   QFont font1 = m_Method->getNewFont(19);
   mw_one->ui->lblThreshold->setFont(font1);
   mw_one->ui->editStepsThreshold->setFont(font1);
   mw_one->ui->lblStepLength->setFont(font1);
   mw_one->ui->editStepLength->setFont(font1);
   mw_one->ui->lblCM->setFont(font1);
-  mw_one->ui->lblCurrent->setFont(font1);
-  mw_one->ui->lblSingle->setFont(font1);
 
   lblStyleNormal = mw_one->ui->lblX->styleSheet();
 
@@ -97,6 +102,8 @@ void Steps::on_btnReset_clicked() {
   mw_one->ui->btnSteps->setText(tr("Steps"));
   toDayInitSteps = getCurrentSteps();
   if (mw_one->isHardStepSensor == 1) mw_one->resetSteps = mw_one->tc;
+  mw_one->ui->lblCurrent->setText(QTime::currentTime().toString());
+  mw_one->ui->lblNow->setText(QTime::currentTime().toString());
 }
 
 void Steps::saveSteps() {

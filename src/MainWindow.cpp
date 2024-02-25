@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.55";
+QString ver = "1.1.56";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3256,6 +3256,11 @@ void MainWindow::on_btnSteps_clicked() {
   m_Steps->init_Steps();
   m_Method->setCurrentIndexFromQW(ui->qwSteps, m_Steps->getCount() - 1);
   m_Method->setScrollBarPos(ui->qwSteps, 1.0);
+  ui->lblNow->setText(QTime::currentTime().toString());
+  double d_km = ui->editStepLength->text().trimmed().toDouble() *
+                ui->lblSingle->text().toInt() / 100 / 1000;
+  QString km = QString("%1").arg(d_km, 0, 'f', 2) + "  " + tr("KM");
+  ui->lblKM->setText(km);
 }
 
 void MainWindow::changeEvent(QEvent *event) {
