@@ -321,23 +321,28 @@ Rectangle {
                         var data = view.model.get(view.currentIndex)
                         console.log(data.time + "," + data.dototext + ", count=" + view.count)
                     }
+
+                    onPressed: {
+                        donebtn.visible = true
+                        //console.log("mouse pressed")
+                    }
                 }
 
                 Rectangle {
                     id: donebtn
                     height: parent.height - 0
-                    width: 50
+                    width: 45
                     color: "red"
                     anchors.right: parent.right
-                    visible: true
+                    visible: isBtnVisible
 
                     Image {
                         id: doneImg
 
                         width: donebtn.width
                         height: donebtn.width
-                        x:-2
-                        y:(donebtn.height-donebtn.width)/2
+                        x: -2
+                        y: (donebtn.height - donebtn.width) / 2
                         fillMode: Image.NoOption
                         horizontalAlignment: Image.AlignHCenter
                         verticalAlignment: Image.AlignVCenter

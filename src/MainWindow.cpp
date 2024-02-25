@@ -3482,6 +3482,7 @@ void MainWindow::initQW() {
   ui->qwReportSub->rootContext()->setContextProperty("maxFontSize", f_size);
   ui->qwSteps->rootContext()->setContextProperty("maxFontSize", f_size);
   ui->qwTodo->rootContext()->setContextProperty("maxFontSize", f_size);
+  ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
   ui->qwNotesTree->rootContext()->setContextProperty("fontSize", fontSize);
 
   ui->qwNotesTree->setSource(
@@ -4947,7 +4948,7 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
-
+  ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
 
 #ifdef Q_OS_ANDROID
@@ -4972,6 +4973,7 @@ void MainWindow::on_btnBackTodo_clicked() {
 
   m_Todo->refreshTableLists();
   m_Todo->refreshAlarm();
+  ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
   isSelf = false;
   addFilesWatch();
 }
