@@ -104,6 +104,7 @@ void Steps::on_btnReset_clicked() {
   if (mw_one->isHardStepSensor == 1) mw_one->resetSteps = mw_one->tc;
   mw_one->ui->lblCurrent->setText(QTime::currentTime().toString());
   mw_one->ui->lblNow->setText(QTime::currentTime().toString());
+  mw_one->ui->lblKM->setText("0.00  " + tr("KM"));
 }
 
 void Steps::saveSteps() {
