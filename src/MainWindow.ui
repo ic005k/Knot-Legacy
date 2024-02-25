@@ -3291,6 +3291,19 @@ QRadioButton::indicator:checked {
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_54">
          <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QLCDNumber" name="lcdNumber">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -3300,7 +3313,7 @@ QRadioButton::indicator:checked {
            </property>
            <property name="minimumSize">
             <size>
-             <width>0</width>
+             <width>200</width>
              <height>60</height>
             </size>
            </property>
@@ -3317,10 +3330,10 @@ QRadioButton::indicator:checked {
             <number>6</number>
            </property>
            <property name="value" stdset="0">
-            <double>0.000000000000000</double>
+            <double>123456.000000000000000</double>
            </property>
            <property name="intValue" stdset="0">
-            <number>0</number>
+            <number>123456</number>
            </property>
           </widget>
          </item>
