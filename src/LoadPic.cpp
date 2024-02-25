@@ -7,9 +7,9 @@ extern Method* m_Method;
 extern QString picfile;
 
 LoadPic::LoadPic(QWidget* parent) : QDialog(parent) {
-  mw_one->ui->f_ImgFun->setObjectName("myframe");
-  mw_one->ui->f_ImgFun->setStyleSheet(
-      "QFrame#myframe{border-image:url(:/res/b.png)}");
+  // mw_one->ui->f_ImgFun->setObjectName("myframe");
+  // mw_one->ui->f_ImgFun->setStyleSheet(
+  //     "QFrame#myframe{border-image:url(:/res/b.png)}");
 
   this->installEventFilter(this);
 }
