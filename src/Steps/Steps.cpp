@@ -18,8 +18,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblSingle->adjustSize();
   mw_one->ui->lblCurrent->setText(QTime::currentTime().toString());
 
-  QFont font0;
-  font0.setPointSize(15);
+  QFont font0 = m_Method->getNewFont(16);
   mw_one->ui->lblX->setFont(font0);
   mw_one->ui->lblY->setFont(font0);
   mw_one->ui->lblZ->setFont(font0);
