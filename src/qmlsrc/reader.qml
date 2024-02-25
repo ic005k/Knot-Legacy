@@ -111,6 +111,7 @@ Rectangle {
         id: flickable
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
+        boundsBehavior: Flickable.StopAtBounds
 
         states: State {
             name: "autoscroll"
