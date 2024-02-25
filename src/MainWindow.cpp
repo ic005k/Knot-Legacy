@@ -3037,6 +3037,7 @@ void MainWindow::on_btnFind_clicked() {
   ui->frameMain->hide();
   ui->frameSearch->show();
   ui->editSearchText->setFocus();
+  ui->btnClearSearchText->setFixedHeight(ui->btnStartSearch->height());
 }
 
 QStringList MainWindow::get_MonthList(QString strY, QString strM) {
