@@ -17,19 +17,19 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
 
   mw_one->ui->lblSingle->adjustSize();
   mw_one->ui->lblCurrent->setText(QTime::currentTime().toString());
+  mw_one->ui->lblToNow->hide();
 
-  QFont font0 = m_Method->getNewFont(16);
+  QFont font0 = m_Method->getNewFont(15);
   mw_one->ui->lblX->setFont(font0);
   mw_one->ui->lblY->setFont(font0);
   mw_one->ui->lblZ->setFont(font0);
   mw_one->ui->lblSteps->setFont(font0);
 
+  font0.setBold(true);
+  font0.setPointSize(12);
   mw_one->ui->lblCurrent->setFont(font0);
   mw_one->ui->lblToNow->setFont(font0);
   mw_one->ui->lblNow->setFont(font0);
-  mw_one->ui->lblKM->setFont(font0);
-  font0.setBold(true);
-  mw_one->ui->lblSingle->setFont(font0);
 
   QFont font1 = m_Method->getNewFont(19);
   mw_one->ui->lblThreshold->setFont(font1);
@@ -37,6 +37,9 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblStepLength->setFont(font1);
   mw_one->ui->editStepLength->setFont(font1);
   mw_one->ui->lblCM->setFont(font1);
+  font1.setBold(true);
+  mw_one->ui->lblKM->setFont(font1);
+  mw_one->ui->lblSingle->setFont(font1);
 
   lblStyleNormal = mw_one->ui->lblX->styleSheet();
 
