@@ -16,8 +16,9 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
   mw_one->ui->lblSingle->adjustSize();
-  mw_one->ui->lblCurrent->setText(QTime::currentTime().toString());
-  mw_one->ui->lblToNow->hide();
+  QString date = QString::number(QDate::currentDate().month()) + "-" +
+                 QString::number(QDate::currentDate().day());
+  mw_one->ui->lblCurrent->setText(date + " " + QTime::currentTime().toString());
 
   QFont font0 = m_Method->getNewFont(15);
   mw_one->ui->lblX->setFont(font0);
@@ -104,8 +105,11 @@ void Steps::on_btnReset_clicked() {
   mw_one->ui->btnSteps->setText(tr("Steps"));
   toDayInitSteps = getCurrentSteps();
   if (mw_one->isHardStepSensor == 1) mw_one->resetSteps = mw_one->tc;
-  mw_one->ui->lblCurrent->setText(QTime::currentTime().toString());
-  mw_one->ui->lblNow->setText(QTime::currentTime().toString());
+
+  QString date = QString::number(QDate::currentDate().month()) + "-" +
+                 QString::number(QDate::currentDate().day());
+  mw_one->ui->lblCurrent->setText(date + " " + QTime::currentTime().toString());
+  mw_one->ui->lblNow->setText(date + " " + QTime::currentTime().toString());
   mw_one->ui->lblKM->setText("0.00  " + tr("KM"));
 }
 

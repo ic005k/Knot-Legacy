@@ -3257,7 +3257,10 @@ void MainWindow::on_btnSteps_clicked() {
   m_Steps->init_Steps();
   m_Method->setCurrentIndexFromQW(ui->qwSteps, m_Steps->getCount() - 1);
   m_Method->setScrollBarPos(ui->qwSteps, 1.0);
-  ui->lblNow->setText(QTime::currentTime().toString());
+
+  QString date = QString::number(QDate::currentDate().month()) + "-" +
+                 QString::number(QDate::currentDate().day());
+  ui->lblNow->setText(date + " " + QTime::currentTime().toString());
   double d_km = ui->editStepLength->text().trimmed().toDouble() *
                 ui->lblSingle->text().toInt() / 100 / 1000;
   QString km = QString("%1").arg(d_km, 0, 'f', 2) + "  " + tr("KM");
