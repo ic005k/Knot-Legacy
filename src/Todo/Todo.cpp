@@ -154,10 +154,10 @@ void Todo::on_btnAdd_clicked() {
 
 int Todo::getEditTextHeight(QTextEdit* edit) {
   QTextDocument* doc = edit->document();
-  doc->adjustSize();
-  int textHeight = doc->size().rheight() * 1.10;
-
-  return textHeight;
+  int height = doc->size().height() * 1.10;
+  int width = doc->size().width();
+  doc->setTextWidth(width);
+  return height;
 }
 
 void Todo::closeEvent(QCloseEvent* event) {
