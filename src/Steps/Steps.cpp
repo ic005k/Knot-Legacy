@@ -15,7 +15,6 @@ extern void setTableNoItemFlags(QTableWidget* t, int row);
 
 Steps::Steps(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
-  m_StepsOptions = new StepsOptions(this);
 
   mw_one->ui->lblSingle->adjustSize();
   QString date = QString::number(QDate::currentDate().month()) + "-" +
@@ -45,8 +44,8 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
       regxNumber, mw_one->ui->editTangentLineIntercept);
   mw_one->ui->editTangentLineIntercept->setValidator(validator);
   mw_one->ui->editTangentLineSlope->setValidator(validator);
-  m_StepsOptions->ui->editStepLength->setValidator(validator);
-  m_StepsOptions->ui->editStepsThreshold->setValidator(validator);
+  mw_one->m_StepsOptions->ui->editStepLength->setValidator(validator);
+  mw_one->m_StepsOptions->ui->editStepsThreshold->setValidator(validator);
 }
 
 Steps::~Steps() {}
@@ -120,10 +119,11 @@ void Steps::saveSteps() {
   Reg.setValue("/Steps/Slope",
                mw_one->ui->editTangentLineSlope->text().trimmed());
   Reg.setValue("/Steps/Length",
-               m_StepsOptions->ui->editStepLength->text().trimmed());
+               mw_one->m_StepsOptions->ui->editStepLength->text().trimmed());
   Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
-  Reg.setValue("/Steps/Threshold",
-               m_StepsOptions->ui->editStepsThreshold->text().trimmed());
+  Reg.setValue(
+      "/Steps/Threshold",
+      mw_one->m_StepsOptions->ui->editStepsThreshold->text().trimmed());
 
   if (getCount() > maxCount) {
     delItem(0);
@@ -165,9 +165,9 @@ void Steps::init_Steps() {
       Reg.value("/Steps/Intercept", dleInter).toString());
   mw_one->ui->editTangentLineSlope->setText(
       Reg.value("/Steps/Slope", dleSlope).toString());
-  m_StepsOptions->ui->editStepLength->setText(
+  mw_one->m_StepsOptions->ui->editStepLength->setText(
       Reg.value("/Steps/Length", "35").toString());
-  m_StepsOptions->ui->editStepsThreshold->setText(
+  mw_one->m_StepsOptions->ui->editStepsThreshold->setText(
       Reg.value("/Steps/Threshold", "10000").toString());
   mw_one->ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
 
@@ -183,9 +183,10 @@ void Steps::init_Steps() {
     QString str2 =
         Reg.value("/Steps/Table-" + QString::number(i) + "-2").toString();
     if (str2 == "") {
-      double km =
-          m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() *
-          steps / 100 / 1000;
+      double km = mw_one->m_StepsOptions->ui->editStepLength->text()
+                      .trimmed()
+                      .toDouble() *
+                  steps / 100 / 1000;
       str2 = QString("%1").arg(km, 0, 'f', 2);
     }
 
@@ -270,9 +271,10 @@ void Steps::setTableSteps(qlonglong steps) {
                .toString();
 
     if (date == QDate::currentDate().toString("ddd MM dd ")) {
-      double km =
-          m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() *
-          steps / 100 / 1000;
+      double km = mw_one->m_StepsOptions->ui->editStepLength->text()
+                      .trimmed()
+                      .toDouble() *
+                  steps / 100 / 1000;
       QString strKM = QString("%1").arg(km, 0, 'f', 2);
 
       // setTableData(count - 1, date, steps, strKM);
@@ -388,8 +390,8 @@ void Steps::appendSteps(QString date, int steps, QString km) {
       QString("%1").arg(dCalorie, 0, 'f', 2) + "  " + tr("Calorie");
 
   double d_km =
-      m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() * steps /
-      100 / 1000;
+      mw_one->m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() *
+      steps / 100 / 1000;
   km = QString("%1").arg(d_km, 0, 'f', 2) + "  " + tr("KM");
 
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();

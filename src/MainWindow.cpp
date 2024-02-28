@@ -619,7 +619,7 @@ void MainWindow::updateSteps() {
 void MainWindow::sendMsg(int CurTableCount) {
   Q_UNUSED(CurTableCount);
 #ifdef Q_OS_ANDROID
-  double sl = m_Steps->m_StepsOptions->ui->editStepLength->text().toDouble();
+  double sl = m_StepsOptions->ui->editStepLength->text().toDouble();
   double d0 = sl / 100;
   double x = CurTableCount * d0;
   double gl = x / 1000;
@@ -3246,6 +3246,9 @@ void MainWindow::on_tabCharts_currentChanged(int index) {
 }
 
 void MainWindow::on_btnSteps_clicked() {
+  ui->qwSteps->rootContext()->setContextProperty(
+      "nStepsThreshold",
+      m_StepsOptions->ui->editStepsThreshold->text().toInt());
   m_Steps->setGeometry(this->geometry().x(), this->geometry().y(),
                        this->width(), this->height());
 
@@ -3262,7 +3265,7 @@ void MainWindow::on_btnSteps_clicked() {
                  QString::number(QDate::currentDate().day());
   ui->lblNow->setText(date + " " + QTime::currentTime().toString());
   double d_km =
-      m_Steps->m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() *
+      mw_one->m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() *
       ui->lblSingle->text().toInt() / 100 / 1000;
   QString km = QString("%1").arg(d_km, 0, 'f', 2) + "  " + tr("KM");
   ui->lblKM->setText(km);
@@ -3515,9 +3518,6 @@ void MainWindow::initQW() {
   ui->qwRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/todorecycle.qml")));
 
-  ui->qwSteps->rootContext()->setContextProperty(
-      "nStepsThreshold",
-      m_Steps->m_StepsOptions->ui->editStepsThreshold->text().toInt());
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
   ui->qwSteps->rootContext()->setContextProperty("text0", "");
   ui->qwSteps->rootContext()->setContextProperty("text1", "");
@@ -3734,6 +3734,7 @@ void MainWindow::init_Instance() {
   m_Report = new Report(this);
   m_Preferences = new Preferences(this);
   m_Notes = new Notes(this);
+  m_StepsOptions = new StepsOptions(this);
   m_Steps = new Steps(this);
   m_Reader = new dlgReader(this);
   m_TodoAlarm = new TodoAlarm(this);
@@ -5760,5 +5761,5 @@ void MainWindow::on_btnRename_clicked() {
 void MainWindow::on_btnHideFind_clicked() { ui->f_FindNotes->hide(); }
 
 void MainWindow::on_btnStepsOptions_clicked() {
-  mw_one->m_Steps->m_StepsOptions->init();
+  mw_one->m_StepsOptions->init();
 }

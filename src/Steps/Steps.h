@@ -19,7 +19,6 @@ class Steps : public QDialog {
   ~Steps();
   Ui::Steps *ui;
 
-  StepsOptions *m_StepsOptions;
   int toDayInitSteps = 0;
   double dleInter = 5;
   double dleSlope = 5;
