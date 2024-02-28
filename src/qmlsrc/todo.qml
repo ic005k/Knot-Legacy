@@ -331,7 +331,7 @@ Rectangle {
                 Rectangle {
                     id: donebtn
                     height: parent.height - 0
-                    width: 45
+                    width: 40
                     color: "red"
                     anchors.right: parent.right
                     visible: isBtnVisible
