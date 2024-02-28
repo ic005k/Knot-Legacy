@@ -21,8 +21,13 @@ dlgRemarks::dlgRemarks(QWidget *parent)
 
   mw_one->set_ToolButtonStyle(this);
 
+  QFont font = this->font();
+  font.setPointSize(13);
+  ui->lblTip->setFont(font);
+
   setModal(true);
   this->installEventFilter(this);
+  ui->lblLogo->installEventFilter(this);
   ui->textEdit->installEventFilter(this);
   ui->textEdit->viewport()->installEventFilter(this);
   ui->textEdit->setStyleSheet("border-radius:0px;border: 1px groove #4169E1;");
@@ -74,6 +79,16 @@ void dlgRemarks::on_btnBack_clicked() {
 bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
   if (obj == ui->textEdit->viewport()) {
     mw_one->m_Notes->getEditPanel(ui->textEdit, evn);
+  }
+
+  QMouseEvent *event = static_cast<QMouseEvent *>(evn);
+  if (obj == ui->lblLogo) {
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      QClipboard *pClip = QApplication::clipboard();
+      pClip->setText(s_link);
+      ShowMessage *msg = new ShowMessage(this);
+      msg->showMsg("Knot", tr("Download link copied.") + "\n\n" + s_link, 1);
+    }
   }
 
   if (evn->type() == QEvent::KeyRelease) {

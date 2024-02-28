@@ -107,6 +107,16 @@ selection-background-color: lightblue;
           </spacer>
          </item>
          <item>
+          <widget class="QLabel" name="lblTip">
+           <property name="text">
+            <string>(Double click to copy the download link)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <spacer name="horizontalSpacer">
