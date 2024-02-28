@@ -398,16 +398,7 @@ Rectangle {
                     clickPos = Qt.point(mouse.x, mouse.y)
                 }
                 onReleased: {
-                    var delta = Qt.point(mouse.x - clickPos.x,
-                                         mouse.y - clickPos.y)
-                    console.debug("delta.x: " + delta.x)
-                    if ((delta.x < 0) && (aBtnShow.running === false)
-                            && (delBtn.width == 0)) {
-                        aBtnShow.start()
-                    } else if (aBtnHide.running === false
-                               && (delBtn.width > 0)) {
-                        aBtnHide.start()
-                    }
+
                 }
 
                 onClicked: {

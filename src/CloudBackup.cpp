@@ -116,7 +116,6 @@ CloudBackup::CloudBackup(QWidget *parent)
                 QString(tr("Success Upload File:") + "\n\nPATH: %1\n\nID: %2")
                     .arg(filePath, fileID));*/
 
-            m_Method->m_widget = new QWidget(mw_one);
             ShowMessage *m_ShowMsg = new ShowMessage(this);
             m_ShowMsg->showMsg(
                 "OneDrive",

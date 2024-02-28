@@ -109,8 +109,6 @@ void ShowMessage::init() {
     m_Method->m_widget->close();
   }
 
-  // m_Method->showGrayWindows();
-
   show();
 }
 
