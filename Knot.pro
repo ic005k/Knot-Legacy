@@ -79,6 +79,7 @@ SOURCES += \
     src/ShowMessage.cpp \
     src/Steps/SpecialAccelerometerPedometer.cpp \
     src/Steps/Steps.cpp \
+    src/Steps/StepsOptions.cpp \
     src/SyncInfo.cpp \
     src/Todo/Todo.cpp \
     src/Todo/TodoAlarm.cpp \
@@ -141,6 +142,7 @@ HEADERS += \
     src/ShowMessage.h \
     src/Steps/SpecialAccelerometerPedometer.h \
     src/Steps/Steps.h \
+    src/Steps/StepsOptions.h \
     src/SyncInfo.h \
     src/Todo/Todo.h \
     src/Todo/TodoAlarm.h \
@@ -194,6 +196,7 @@ FORMS += \
     src/Reader/SetReaderText.ui \
     src/RemarksAbout.ui \
     src/ShowMessage.ui \
+    src/Steps/StepsOptions.ui \
     src/SyncInfo.ui \
     src/Todo/Todo.ui \
     src/Todo/TodoAlarm.ui

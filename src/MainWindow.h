@@ -90,6 +90,7 @@
 #include "src/Report.h"
 #include "src/Steps/SpecialAccelerometerPedometer.h"
 #include "src/Steps/Steps.h"
+#include "src/Steps/StepsOptions.h"
 #include "src/SyncInfo.h"
 #include "src/Todo/Todo.h"
 #include "src/Todo/TodoAlarm.h"
@@ -106,6 +107,7 @@
 #include "ui_RemarksAbout.h"
 #include "ui_SetReaderText.h"
 #include "ui_ShowMessage.h"
+#include "ui_StepsOptions.h"
 #include "ui_SyncInfo.h"
 #include "ui_TextSelector.h"
 #include "ui_Todo.h"
@@ -715,6 +717,8 @@ class MainWindow : public QMainWindow {
   void on_btnRename_clicked();
 
   void on_btnHideFind_clicked();
+
+  void on_btnStepsOptions_clicked();
 
  private:
   bool isShowDetails = false;

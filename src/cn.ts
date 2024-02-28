@@ -370,11 +370,12 @@ in skydrive folder</source>
     <message>
         <location filename="MainWindow.ui" line="2867"/>
         <location filename="MainWindow.ui" line="2890"/>
-        <location filename="MainWindow.ui" line="4384"/>
-        <location filename="MainWindow.ui" line="4700"/>
-        <location filename="MainWindow.ui" line="5360"/>
-        <location filename="MainWindow.ui" line="5428"/>
-        <location filename="MainWindow.ui" line="5510"/>
+        <location filename="MainWindow.ui" line="3524"/>
+        <location filename="MainWindow.ui" line="4334"/>
+        <location filename="MainWindow.ui" line="4650"/>
+        <location filename="MainWindow.ui" line="5310"/>
+        <location filename="MainWindow.ui" line="5378"/>
+        <location filename="MainWindow.ui" line="5460"/>
         <source>...</source>
         <translation></translation>
     </message>
@@ -414,9 +415,9 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="693"/>
-        <location filename="MainWindow.ui" line="4618"/>
-        <location filename="MainWindow.ui" line="4919"/>
-        <location filename="MainWindow.ui" line="5029"/>
+        <location filename="MainWindow.ui" line="4568"/>
+        <location filename="MainWindow.ui" line="4869"/>
+        <location filename="MainWindow.ui" line="4979"/>
         <source>Del</source>
         <translation>删除</translation>
     </message>
@@ -431,7 +432,7 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="40"/>
-        <location filename="MainWindow.ui" line="3640"/>
+        <location filename="MainWindow.ui" line="3590"/>
         <source>Title</source>
         <translation></translation>
     </message>
@@ -448,15 +449,15 @@ in skydrive folder</source>
         <location filename="MainWindow.ui" line="2452"/>
         <location filename="MainWindow.ui" line="2558"/>
         <location filename="MainWindow.ui" line="2974"/>
-        <location filename="MainWindow.ui" line="3545"/>
-        <location filename="MainWindow.ui" line="3802"/>
-        <location filename="MainWindow.ui" line="3954"/>
-        <location filename="MainWindow.ui" line="4016"/>
-        <location filename="MainWindow.ui" line="4254"/>
-        <location filename="MainWindow.ui" line="4674"/>
-        <location filename="MainWindow.ui" line="4858"/>
-        <location filename="MainWindow.ui" line="5159"/>
-        <location filename="MainWindow.ui" line="5989"/>
+        <location filename="MainWindow.ui" line="3472"/>
+        <location filename="MainWindow.ui" line="3752"/>
+        <location filename="MainWindow.ui" line="3904"/>
+        <location filename="MainWindow.ui" line="3966"/>
+        <location filename="MainWindow.ui" line="4204"/>
+        <location filename="MainWindow.ui" line="4624"/>
+        <location filename="MainWindow.ui" line="4808"/>
+        <location filename="MainWindow.ui" line="5109"/>
+        <location filename="MainWindow.ui" line="5939"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
@@ -467,7 +468,7 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="129"/>
-        <location filename="MainWindow.ui" line="3910"/>
+        <location filename="MainWindow.ui" line="3860"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
@@ -486,7 +487,7 @@ in skydrive folder</source>
         <translation type="vanished">输入待办文本  [Ctrl+Enter]</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3658"/>
+        <location filename="MainWindow.ui" line="3608"/>
         <location filename="MainWindow.cpp" line="2011"/>
         <source>Year</source>
         <translation>年</translation>
@@ -565,10 +566,10 @@ in skydrive folder</source>
         <location filename="MainWindow.ui" line="2258"/>
         <location filename="MainWindow.ui" line="2571"/>
         <location filename="MainWindow.ui" line="2987"/>
-        <location filename="MainWindow.ui" line="4019"/>
-        <location filename="MainWindow.ui" line="4687"/>
-        <location filename="MainWindow.ui" line="4871"/>
-        <location filename="MainWindow.ui" line="6161"/>
+        <location filename="MainWindow.ui" line="3969"/>
+        <location filename="MainWindow.ui" line="4637"/>
+        <location filename="MainWindow.ui" line="4821"/>
+        <location filename="MainWindow.ui" line="6111"/>
         <source>Esc</source>
         <translation></translation>
     </message>
@@ -598,7 +599,7 @@ in skydrive folder</source>
         <translation>注销</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4342"/>
+        <location filename="MainWindow.ui" line="4292"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
@@ -608,9 +609,9 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="1228"/>
-        <location filename="MainWindow.ui" line="4361"/>
-        <location filename="MainWindow.ui" line="4758"/>
-        <location filename="MainWindow.ui" line="6274"/>
+        <location filename="MainWindow.ui" line="4311"/>
+        <location filename="MainWindow.ui" line="4708"/>
+        <location filename="MainWindow.ui" line="6224"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
@@ -630,31 +631,31 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4572"/>
-        <location filename="MainWindow.ui" line="6072"/>
+        <location filename="MainWindow.ui" line="4522"/>
+        <location filename="MainWindow.ui" line="6022"/>
         <source>Up</source>
         <translation>上移</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4595"/>
-        <location filename="MainWindow.ui" line="6095"/>
+        <location filename="MainWindow.ui" line="4545"/>
+        <location filename="MainWindow.ui" line="6045"/>
         <source>Down</source>
         <translation>下移</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4641"/>
-        <location filename="MainWindow.ui" line="6118"/>
+        <location filename="MainWindow.ui" line="4591"/>
+        <location filename="MainWindow.ui" line="6068"/>
         <source>MoveTo</source>
         <translation>移动到</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4729"/>
+        <location filename="MainWindow.ui" line="4679"/>
         <source>Tree</source>
         <oldsource>View Tree</oldsource>
         <translation>树</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6249"/>
+        <location filename="MainWindow.ui" line="6199"/>
         <location filename="MainWindow.cpp" line="2334"/>
         <source>Remarks</source>
         <translation>备注</translation>
@@ -747,8 +748,8 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="2751"/>
-        <location filename="MainWindow.ui" line="4787"/>
-        <location filename="MainWindow.ui" line="6197"/>
+        <location filename="MainWindow.ui" line="4737"/>
+        <location filename="MainWindow.ui" line="6147"/>
         <source>Recycle</source>
         <translation>回收箱</translation>
     </message>
@@ -774,8 +775,8 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="3082"/>
-        <location filename="MainWindow.ui" line="4292"/>
-        <location filename="MainWindow.ui" line="4890"/>
+        <location filename="MainWindow.ui" line="4242"/>
+        <location filename="MainWindow.ui" line="4840"/>
         <source>Restore</source>
         <translation>恢复</translation>
     </message>
@@ -835,14 +836,8 @@ in skydrive folder</source>
         <translation type="vanished">方法 2</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3489"/>
         <source>Step Length</source>
-        <translation>步长</translation>
-    </message>
-    <message>
-        <location filename="MainWindow.ui" line="3502"/>
-        <source>35</source>
-        <translation></translation>
+        <translation type="vanished">步长</translation>
     </message>
     <message>
         <source>cm        Current : </source>
@@ -850,48 +845,48 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="3420"/>
-        <location filename="MainWindow.ui" line="4436"/>
-        <location filename="MainWindow.ui" line="5613"/>
+        <location filename="MainWindow.ui" line="4386"/>
+        <location filename="MainWindow.ui" line="5563"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3524"/>
+        <location filename="MainWindow.ui" line="3451"/>
         <source>RunTime</source>
         <translation>运行时间</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3603"/>
+        <location filename="MainWindow.ui" line="3553"/>
         <source>Reset</source>
         <translation>复位</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3684"/>
+        <location filename="MainWindow.ui" line="3634"/>
         <source>Out to Pic</source>
         <oldsource>Out to Image</oldsource>
         <translation>输出到图像</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3701"/>
-        <location filename="MainWindow.ui" line="3727"/>
+        <location filename="MainWindow.ui" line="3651"/>
+        <location filename="MainWindow.ui" line="3677"/>
         <source>2022  01  01</source>
         <oldsource>2022</oldsource>
         <translation></translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="3381"/>
-        <location filename="MainWindow.ui" line="3714"/>
+        <location filename="MainWindow.ui" line="3664"/>
         <source>to</source>
         <translation>到</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3821"/>
+        <location filename="MainWindow.ui" line="3771"/>
         <source>View Category</source>
         <translation>查看分类</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3771"/>
-        <location filename="MainWindow.ui" line="5396"/>
+        <location filename="MainWindow.ui" line="3721"/>
+        <location filename="MainWindow.ui" line="5346"/>
         <source>Details</source>
         <translation>详细</translation>
     </message>
@@ -904,44 +899,44 @@ in skydrive folder</source>
         <translation type="vanished">到</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3925"/>
+        <location filename="MainWindow.ui" line="3875"/>
         <source>Results</source>
         <translation>结果</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4101"/>
+        <location filename="MainWindow.ui" line="4051"/>
         <source>View1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4126"/>
+        <location filename="MainWindow.ui" line="4076"/>
         <source>View2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4151"/>
+        <location filename="MainWindow.ui" line="4101"/>
         <source>View3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4417"/>
+        <location filename="MainWindow.ui" line="4367"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4458"/>
+        <location filename="MainWindow.ui" line="4408"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4499"/>
-        <location filename="MainWindow.cpp" line="4887"/>
+        <location filename="MainWindow.ui" line="4449"/>
+        <location filename="MainWindow.cpp" line="4889"/>
         <source>Note Book</source>
         <translation>笔记本</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4544"/>
-        <location filename="MainWindow.cpp" line="4888"/>
+        <location filename="MainWindow.ui" line="4494"/>
+        <location filename="MainWindow.cpp" line="4890"/>
         <source>Note List</source>
         <translation>笔记列表</translation>
     </message>
@@ -950,23 +945,23 @@ in skydrive folder</source>
         <translation type="vanished">显示查找</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4830"/>
+        <location filename="MainWindow.ui" line="4780"/>
         <source>Note Recycle</source>
         <translation>笔记回收箱</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4984"/>
+        <location filename="MainWindow.ui" line="4934"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5084"/>
+        <location filename="MainWindow.ui" line="5034"/>
         <source>Sel Tab</source>
         <translation>选择标签页</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4969"/>
-        <location filename="MainWindow.ui" line="5110"/>
+        <location filename="MainWindow.ui" line="4919"/>
+        <location filename="MainWindow.ui" line="5060"/>
         <source>Info</source>
         <translation>信息</translation>
     </message>
@@ -981,21 +976,15 @@ in skydrive folder</source>
         <translation>标签页</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3462"/>
         <source>Marker Steps Threshold</source>
-        <translation>标记步数阀值</translation>
-    </message>
-    <message>
-        <location filename="MainWindow.ui" line="3515"/>
-        <source>cm  </source>
-        <translation></translation>
+        <translation type="vanished">标记步数阀值</translation>
     </message>
     <message>
         <source>Current : </source>
         <translation type="vanished">当前 ：</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3888"/>
+        <location filename="MainWindow.ui" line="3838"/>
         <source>&amp;&amp;</source>
         <translation></translation>
     </message>
@@ -1004,105 +993,105 @@ in skydrive folder</source>
         <translation type="vanished">管理</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5125"/>
+        <location filename="MainWindow.ui" line="5075"/>
         <source>Move Up</source>
         <translation>上移</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5138"/>
+        <location filename="MainWindow.ui" line="5088"/>
         <source>Move Down</source>
         <translation>下移</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5552"/>
+        <location filename="MainWindow.ui" line="5502"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5571"/>
+        <location filename="MainWindow.ui" line="5521"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5590"/>
+        <location filename="MainWindow.ui" line="5540"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5632"/>
+        <location filename="MainWindow.ui" line="5582"/>
         <source>.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5651"/>
+        <location filename="MainWindow.ui" line="5601"/>
         <source>&lt;-</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5674"/>
+        <location filename="MainWindow.ui" line="5624"/>
         <source>4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5693"/>
+        <location filename="MainWindow.ui" line="5643"/>
         <source>5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5712"/>
+        <location filename="MainWindow.ui" line="5662"/>
         <source>6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5735"/>
+        <location filename="MainWindow.ui" line="5685"/>
         <source>7</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5754"/>
+        <location filename="MainWindow.ui" line="5704"/>
         <source>8</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5773"/>
+        <location filename="MainWindow.ui" line="5723"/>
         <source>9</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5812"/>
+        <location filename="MainWindow.ui" line="5762"/>
         <source>00:00:00</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5824"/>
+        <location filename="MainWindow.ui" line="5774"/>
         <source>Hour</source>
         <translation>时</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5916"/>
+        <location filename="MainWindow.ui" line="5866"/>
         <source>Minute</source>
         <translation>分</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6027"/>
+        <location filename="MainWindow.ui" line="5977"/>
         <source>Clear All Records</source>
         <translation>清除所有的记录</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6148"/>
+        <location filename="MainWindow.ui" line="6098"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6234"/>
+        <location filename="MainWindow.ui" line="6184"/>
         <location filename="MainWindow.cpp" line="1904"/>
-        <location filename="MainWindow.cpp" line="4055"/>
+        <location filename="MainWindow.cpp" line="4057"/>
         <source>Rename Tab</source>
         <translation>重命名标签页</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6284"/>
-        <location filename="MainWindow.cpp" line="4065"/>
+        <location filename="MainWindow.ui" line="6234"/>
+        <location filename="MainWindow.cpp" line="4067"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
@@ -1116,7 +1105,7 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="1375"/>
-        <location filename="MainWindow.ui" line="5458"/>
+        <location filename="MainWindow.ui" line="5408"/>
         <location filename="MainWindow.cpp" line="1138"/>
         <location filename="MainWindow.cpp" line="1840"/>
         <location filename="MainWindow.cpp" line="1870"/>
@@ -1131,7 +1120,7 @@ in skydrive folder</source>
     <message>
         <location filename="MainWindow.ui" line="653"/>
         <location filename="MainWindow.ui" line="2799"/>
-        <location filename="MainWindow.ui" line="5213"/>
+        <location filename="MainWindow.ui" line="5163"/>
         <location filename="MainWindow.cpp" line="1202"/>
         <source>Add</source>
         <translation>增加</translation>
@@ -1156,7 +1145,7 @@ in skydrive folder</source>
     <message>
         <location filename="MainWindow.ui" line="1094"/>
         <location filename="MainWindow.ui" line="1513"/>
-        <location filename="MainWindow.ui" line="3671"/>
+        <location filename="MainWindow.ui" line="3621"/>
         <location filename="MainWindow.cpp" line="665"/>
         <location filename="MainWindow.cpp" line="1922"/>
         <source>Month</source>
@@ -1185,52 +1174,52 @@ in skydrive folder</source>
         <translation type="vanished">重命名标签页</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6239"/>
+        <location filename="MainWindow.ui" line="6189"/>
         <location filename="MainWindow.cpp" line="1934"/>
-        <location filename="MainWindow.cpp" line="4053"/>
+        <location filename="MainWindow.cpp" line="4055"/>
         <source>Add Tab</source>
         <translation>增加标签页</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6244"/>
+        <location filename="MainWindow.ui" line="6194"/>
         <location filename="MainWindow.cpp" line="1950"/>
-        <location filename="MainWindow.cpp" line="4054"/>
+        <location filename="MainWindow.cpp" line="4056"/>
         <source>Del Tab</source>
         <translation>删除标签页</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6254"/>
-        <location filename="MainWindow.cpp" line="4067"/>
+        <location filename="MainWindow.ui" line="6204"/>
+        <location filename="MainWindow.cpp" line="4069"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6259"/>
-        <location filename="MainWindow.cpp" line="4062"/>
+        <location filename="MainWindow.ui" line="6209"/>
+        <location filename="MainWindow.cpp" line="4064"/>
         <source>Export Data</source>
         <translation>导出数据</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6264"/>
+        <location filename="MainWindow.ui" line="6214"/>
         <location filename="MainWindow.cpp" line="2860"/>
-        <location filename="MainWindow.cpp" line="4063"/>
+        <location filename="MainWindow.cpp" line="4065"/>
         <source>Import Data</source>
         <translation>导入数据</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6269"/>
+        <location filename="MainWindow.ui" line="6219"/>
         <source>View App Data</source>
         <translation>查看App数据</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="6289"/>
+        <location filename="MainWindow.ui" line="6239"/>
         <source>Memos</source>
         <translation>备忘录</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="1153"/>
-        <location filename="MainWindow.ui" line="6279"/>
-        <location filename="MainWindow.cpp" line="4059"/>
+        <location filename="MainWindow.ui" line="6229"/>
+        <location filename="MainWindow.cpp" line="4061"/>
         <source>Report</source>
         <translation>报表</translation>
     </message>
@@ -1247,16 +1236,16 @@ in skydrive folder</source>
         <translation type="vanished">描述</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5010"/>
-        <location filename="MainWindow.ui" line="5240"/>
+        <location filename="MainWindow.ui" line="4960"/>
+        <location filename="MainWindow.ui" line="5190"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4195"/>
-        <location filename="MainWindow.ui" line="5048"/>
-        <location filename="MainWindow.ui" line="5284"/>
-        <location filename="MainWindow.ui" line="6008"/>
+        <location filename="MainWindow.ui" line="4145"/>
+        <location filename="MainWindow.ui" line="4998"/>
+        <location filename="MainWindow.ui" line="5234"/>
+        <location filename="MainWindow.ui" line="5958"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -1269,15 +1258,15 @@ in skydrive folder</source>
         <location filename="MainWindow.cpp" line="1832"/>
         <location filename="MainWindow.cpp" line="1837"/>
         <location filename="MainWindow.cpp" line="1841"/>
-        <location filename="MainWindow.cpp" line="3297"/>
+        <location filename="MainWindow.cpp" line="3298"/>
         <source>Days</source>
         <translation>天数</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="3047"/>
-        <location filename="MainWindow.ui" line="4038"/>
-        <location filename="MainWindow.ui" line="4273"/>
-        <location filename="MainWindow.ui" line="6174"/>
+        <location filename="MainWindow.ui" line="3988"/>
+        <location filename="MainWindow.ui" line="4223"/>
+        <location filename="MainWindow.ui" line="6124"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -1293,14 +1282,14 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3742"/>
+        <location filename="MainWindow.ui" line="3692"/>
         <location filename="MainWindow.cpp" line="1736"/>
-        <location filename="MainWindow.cpp" line="3979"/>
-        <location filename="MainWindow.cpp" line="4045"/>
-        <location filename="MainWindow.cpp" line="4251"/>
-        <location filename="MainWindow.cpp" line="4279"/>
-        <location filename="MainWindow.cpp" line="5371"/>
-        <location filename="MainWindow.cpp" line="5433"/>
+        <location filename="MainWindow.cpp" line="3981"/>
+        <location filename="MainWindow.cpp" line="4047"/>
+        <location filename="MainWindow.cpp" line="4253"/>
+        <location filename="MainWindow.cpp" line="4281"/>
+        <location filename="MainWindow.cpp" line="5373"/>
+        <location filename="MainWindow.cpp" line="5435"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
@@ -1339,8 +1328,8 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="1946"/>
-        <location filename="MainWindow.cpp" line="5363"/>
-        <location filename="MainWindow.cpp" line="5420"/>
+        <location filename="MainWindow.cpp" line="5365"/>
+        <location filename="MainWindow.cpp" line="5422"/>
         <source>Whether to remove</source>
         <translation>是否删除</translation>
     </message>
@@ -1359,7 +1348,7 @@ in skydrive folder</source>
         <location filename="MainWindow.ui" line="1412"/>
         <location filename="MainWindow.ui" line="1709"/>
         <location filename="MainWindow.ui" line="3287"/>
-        <location filename="MainWindow.cpp" line="3297"/>
+        <location filename="MainWindow.cpp" line="3298"/>
         <source>Steps</source>
         <translation>步数</translation>
     </message>
@@ -1390,12 +1379,12 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="552"/>
-        <location filename="MainWindow.cpp" line="3332"/>
+        <location filename="MainWindow.cpp" line="3333"/>
         <source>Number of Operations</source>
         <translation>运算次数</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3574"/>
+        <location filename="MainWindow.ui" line="3501"/>
         <location filename="MainWindow.cpp" line="598"/>
         <source>Pause</source>
         <translation>暂停</translation>
@@ -1413,8 +1402,8 @@ in skydrive folder</source>
         <translation>标签页</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="5265"/>
-        <location filename="MainWindow.ui" line="5313"/>
+        <location filename="MainWindow.ui" line="5215"/>
+        <location filename="MainWindow.ui" line="5263"/>
         <location filename="MainWindow.cpp" line="1139"/>
         <source>Category</source>
         <translation>分类</translation>
@@ -1489,17 +1478,17 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="2866"/>
-        <location filename="MainWindow.cpp" line="5330"/>
+        <location filename="MainWindow.cpp" line="5332"/>
         <source>Import this data?</source>
         <translation>是否导入这个数据？</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="3266"/>
+        <location filename="MainWindow.cpp" line="3267"/>
         <source>KM</source>
         <translation>公里</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4522"/>
+        <location filename="MainWindow.cpp" line="4524"/>
         <source>Reading Progress</source>
         <translation>阅读进度</translation>
     </message>
@@ -1508,28 +1497,28 @@ in skydrive folder</source>
         <translation type="vanished">隐藏查找</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="3985"/>
-        <location filename="MainWindow.cpp" line="4075"/>
-        <location filename="MainWindow.cpp" line="4279"/>
-        <location filename="MainWindow.cpp" line="5433"/>
+        <location filename="MainWindow.ui" line="3935"/>
+        <location filename="MainWindow.cpp" line="4077"/>
+        <location filename="MainWindow.cpp" line="4281"/>
+        <location filename="MainWindow.cpp" line="5435"/>
         <source>Backup File List</source>
         <translation>备份文件列表</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4226"/>
-        <location filename="MainWindow.cpp" line="4076"/>
-        <location filename="MainWindow.cpp" line="4251"/>
-        <location filename="MainWindow.cpp" line="5371"/>
+        <location filename="MainWindow.ui" line="4176"/>
+        <location filename="MainWindow.cpp" line="4078"/>
+        <location filename="MainWindow.cpp" line="4253"/>
+        <location filename="MainWindow.cpp" line="5373"/>
         <source>Tab Recycle</source>
         <translation>标签页回收箱</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="5408"/>
+        <location filename="MainWindow.cpp" line="5410"/>
         <source>Restore Tab</source>
         <translation>恢复标签页</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="4057"/>
+        <location filename="MainWindow.ui" line="4007"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
@@ -1555,7 +1544,7 @@ in skydrive folder</source>
         <translation type="vanished">请输入密码</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4057"/>
+        <location filename="MainWindow.cpp" line="4059"/>
         <source>Open KnotBak Dir</source>
         <translation>打开KnotBak目录</translation>
     </message>
@@ -1568,17 +1557,17 @@ in skydrive folder</source>
         <translation type="vanished">读取中，请稍候...</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4068"/>
+        <location filename="MainWindow.cpp" line="4070"/>
         <source>OneDrive Backup Data</source>
         <translation>OneDrive 备份数据</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4070"/>
+        <location filename="MainWindow.cpp" line="4072"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4071"/>
+        <location filename="MainWindow.cpp" line="4073"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
@@ -1591,8 +1580,8 @@ in skydrive folder</source>
         <translation type="vanished">标签页时光机</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4533"/>
-        <location filename="MainWindow.cpp" line="4541"/>
+        <location filename="MainWindow.cpp" line="4535"/>
+        <location filename="MainWindow.cpp" line="4543"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
@@ -1602,12 +1591,12 @@ in skydrive folder</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4703"/>
+        <location filename="MainWindow.cpp" line="4705"/>
         <source>The password is removed.</source>
         <translation>密码被删除</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4720"/>
+        <location filename="MainWindow.cpp" line="4722"/>
         <source>The password is set successfully.</source>
         <translation>密码设置成功</translation>
     </message>
@@ -1625,18 +1614,18 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="2154"/>
-        <location filename="MainWindow.cpp" line="3398"/>
+        <location filename="MainWindow.cpp" line="3399"/>
         <source>Please enter your password : </source>
         <translation>请输入密码：</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="3398"/>
+        <location filename="MainWindow.cpp" line="3399"/>
         <source>Password : </source>
         <translation>密码：</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="3417"/>
-        <location filename="MainWindow.cpp" line="4729"/>
+        <location filename="MainWindow.cpp" line="3418"/>
+        <location filename="MainWindow.cpp" line="4731"/>
         <source>The entered password does not match.</source>
         <translation>输入的密码不匹配</translation>
     </message>
@@ -1679,12 +1668,12 @@ in skydrive folder</source>
         <translation type="vanished">跳</translation>
     </message>
     <message>
-        <location filename="MainWindow.h" line="147"/>
+        <location filename="MainWindow.h" line="149"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="MainWindow.h" line="176"/>
+        <location filename="MainWindow.h" line="178"/>
         <source>Latest Time</source>
         <translation>最新的时间</translation>
     </message>
@@ -2971,35 +2960,63 @@ F</source>
 <context>
     <name>Steps</name>
     <message>
-        <location filename="Steps/Steps.cpp" line="78"/>
-        <location filename="Steps/Steps.cpp" line="90"/>
-        <location filename="Steps/Steps.cpp" line="154"/>
+        <location filename="Steps/Steps.cpp" line="80"/>
+        <location filename="Steps/Steps.cpp" line="92"/>
+        <location filename="Steps/Steps.cpp" line="157"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="Steps/Steps.cpp" line="79"/>
-        <location filename="Steps/Steps.cpp" line="89"/>
-        <location filename="Steps/Steps.cpp" line="205"/>
-        <location filename="Steps/Steps.cpp" line="317"/>
+        <location filename="Steps/Steps.cpp" line="81"/>
+        <location filename="Steps/Steps.cpp" line="91"/>
+        <location filename="Steps/Steps.cpp" line="209"/>
+        <location filename="Steps/Steps.cpp" line="322"/>
         <source>Start</source>
         <translation>启动</translation>
     </message>
     <message>
-        <location filename="Steps/Steps.cpp" line="105"/>
+        <location filename="Steps/Steps.cpp" line="107"/>
         <source>Steps</source>
         <translation>步数</translation>
     </message>
     <message>
-        <location filename="Steps/Steps.cpp" line="388"/>
+        <location filename="Steps/Steps.cpp" line="393"/>
         <source>Calorie</source>
         <translation>卡路里</translation>
     </message>
     <message>
-        <location filename="Steps/Steps.cpp" line="113"/>
-        <location filename="Steps/Steps.cpp" line="392"/>
+        <location filename="Steps/Steps.cpp" line="115"/>
+        <location filename="Steps/Steps.cpp" line="398"/>
         <source>KM</source>
         <translation>公里</translation>
+    </message>
+</context>
+<context>
+    <name>StepsOptions</name>
+    <message>
+        <location filename="Steps/StepsOptions.ui" line="31"/>
+        <source>Marker Steps Threshold</source>
+        <translation>标记步数阀值</translation>
+    </message>
+    <message>
+        <location filename="Steps/StepsOptions.ui" line="58"/>
+        <source>Step Length</source>
+        <translation>步长</translation>
+    </message>
+    <message>
+        <location filename="Steps/StepsOptions.ui" line="71"/>
+        <source>35</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="Steps/StepsOptions.ui" line="84"/>
+        <source>cm  </source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="Steps/StepsOptions.ui" line="99"/>
+        <source>Back</source>
+        <translation>返回</translation>
     </message>
 </context>
 <context>

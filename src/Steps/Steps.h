@@ -5,6 +5,8 @@
 #include <QDialog>
 #include <QRegularExpressionValidator>
 
+#include "src/Steps/StepsOptions.h"
+
 namespace Ui {
 class Steps;
 }
@@ -17,6 +19,7 @@ class Steps : public QDialog {
   ~Steps();
   Ui::Steps *ui;
 
+  StepsOptions *m_StepsOptions;
   int toDayInitSteps = 0;
   double dleInter = 5;
   double dleSlope = 5;

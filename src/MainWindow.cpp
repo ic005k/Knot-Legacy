@@ -619,7 +619,7 @@ void MainWindow::updateSteps() {
 void MainWindow::sendMsg(int CurTableCount) {
   Q_UNUSED(CurTableCount);
 #ifdef Q_OS_ANDROID
-  double sl = ui->editStepLength->text().toDouble();
+  double sl = m_Steps->m_StepsOptions->ui->editStepLength->text().toDouble();
   double d0 = sl / 100;
   double x = CurTableCount * d0;
   double gl = x / 1000;
@@ -3261,8 +3261,9 @@ void MainWindow::on_btnSteps_clicked() {
   QString date = QString::number(QDate::currentDate().month()) + "-" +
                  QString::number(QDate::currentDate().day());
   ui->lblNow->setText(date + " " + QTime::currentTime().toString());
-  double d_km = ui->editStepLength->text().trimmed().toDouble() *
-                ui->lblSingle->text().toInt() / 100 / 1000;
+  double d_km =
+      m_Steps->m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() *
+      ui->lblSingle->text().toInt() / 100 / 1000;
   QString km = QString("%1").arg(d_km, 0, 'f', 2) + "  " + tr("KM");
   ui->lblKM->setText(km);
 }
@@ -3515,7 +3516,8 @@ void MainWindow::initQW() {
       QUrl(QStringLiteral("qrc:/src/qmlsrc/todorecycle.qml")));
 
   ui->qwSteps->rootContext()->setContextProperty(
-      "nStepsThreshold", ui->editStepsThreshold->text().toInt());
+      "nStepsThreshold",
+      m_Steps->m_StepsOptions->ui->editStepsThreshold->text().toInt());
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
   ui->qwSteps->rootContext()->setContextProperty("text0", "");
   ui->qwSteps->rootContext()->setContextProperty("text1", "");
@@ -5756,3 +5758,7 @@ void MainWindow::on_btnRename_clicked() {
 }
 
 void MainWindow::on_btnHideFind_clicked() { ui->f_FindNotes->hide(); }
+
+void MainWindow::on_btnStepsOptions_clicked() {
+  mw_one->m_Steps->m_StepsOptions->init();
+}

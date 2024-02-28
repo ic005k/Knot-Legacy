@@ -2,6 +2,7 @@
 
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
+#include "ui_StepsOptions.h"
 
 extern MainWindow* mw_one;
 extern Method* m_Method;
@@ -14,6 +15,7 @@ extern void setTableNoItemFlags(QTableWidget* t, int row);
 
 Steps::Steps(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
+  m_StepsOptions = new StepsOptions(this);
 
   mw_one->ui->lblSingle->adjustSize();
   QString date = QString::number(QDate::currentDate().month()) + "-" +
@@ -27,17 +29,12 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblSteps->setFont(font0);
 
   font0.setBold(true);
-  font0.setPointSize(12);
+  font0.setPointSize(13);
   mw_one->ui->lblCurrent->setFont(font0);
   mw_one->ui->lblToNow->setFont(font0);
   mw_one->ui->lblNow->setFont(font0);
 
   QFont font1 = m_Method->getNewFont(19);
-  mw_one->ui->lblThreshold->setFont(font1);
-  mw_one->ui->editStepsThreshold->setFont(font1);
-  mw_one->ui->lblStepLength->setFont(font1);
-  mw_one->ui->editStepLength->setFont(font1);
-  mw_one->ui->lblCM->setFont(font1);
   font1.setBold(true);
   mw_one->ui->lblKM->setFont(font1);
   mw_one->ui->lblSingle->setFont(font1);
@@ -48,8 +45,8 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
       regxNumber, mw_one->ui->editTangentLineIntercept);
   mw_one->ui->editTangentLineIntercept->setValidator(validator);
   mw_one->ui->editTangentLineSlope->setValidator(validator);
-  mw_one->ui->editStepLength->setValidator(validator);
-  mw_one->ui->editStepsThreshold->setValidator(validator);
+  m_StepsOptions->ui->editStepLength->setValidator(validator);
+  m_StepsOptions->ui->editStepsThreshold->setValidator(validator);
 }
 
 Steps::~Steps() {}
@@ -122,10 +119,11 @@ void Steps::saveSteps() {
                mw_one->ui->editTangentLineIntercept->text().trimmed());
   Reg.setValue("/Steps/Slope",
                mw_one->ui->editTangentLineSlope->text().trimmed());
-  Reg.setValue("/Steps/Length", mw_one->ui->editStepLength->text().trimmed());
+  Reg.setValue("/Steps/Length",
+               m_StepsOptions->ui->editStepLength->text().trimmed());
   Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
   Reg.setValue("/Steps/Threshold",
-               mw_one->ui->editStepsThreshold->text().trimmed());
+               m_StepsOptions->ui->editStepsThreshold->text().trimmed());
 
   if (getCount() > maxCount) {
     delItem(0);
@@ -167,9 +165,9 @@ void Steps::init_Steps() {
       Reg.value("/Steps/Intercept", dleInter).toString());
   mw_one->ui->editTangentLineSlope->setText(
       Reg.value("/Steps/Slope", dleSlope).toString());
-  mw_one->ui->editStepLength->setText(
+  m_StepsOptions->ui->editStepLength->setText(
       Reg.value("/Steps/Length", "35").toString());
-  mw_one->ui->editStepsThreshold->setText(
+  m_StepsOptions->ui->editStepsThreshold->setText(
       Reg.value("/Steps/Threshold", "10000").toString());
   mw_one->ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
 
@@ -185,8 +183,9 @@ void Steps::init_Steps() {
     QString str2 =
         Reg.value("/Steps/Table-" + QString::number(i) + "-2").toString();
     if (str2 == "") {
-      double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
-                  steps / 100 / 1000;
+      double km =
+          m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() *
+          steps / 100 / 1000;
       str2 = QString("%1").arg(km, 0, 'f', 2);
     }
 
@@ -271,8 +270,9 @@ void Steps::setTableSteps(qlonglong steps) {
                .toString();
 
     if (date == QDate::currentDate().toString("ddd MM dd ")) {
-      double km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
-                  steps / 100 / 1000;
+      double km =
+          m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() *
+          steps / 100 / 1000;
       QString strKM = QString("%1").arg(km, 0, 'f', 2);
 
       // setTableData(count - 1, date, steps, strKM);
@@ -387,8 +387,9 @@ void Steps::appendSteps(QString date, int steps, QString km) {
   QString strCalorie =
       QString("%1").arg(dCalorie, 0, 'f', 2) + "  " + tr("Calorie");
 
-  double d_km = mw_one->ui->editStepLength->text().trimmed().toDouble() *
-                steps / 100 / 1000;
+  double d_km =
+      m_StepsOptions->ui->editStepLength->text().trimmed().toDouble() * steps /
+      100 / 1000;
   km = QString("%1").arg(d_km, 0, 'f', 2) + "  " + tr("KM");
 
   QQuickItem* root = mw_one->ui->qwSteps->rootObject();
