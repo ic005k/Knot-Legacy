@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.60";
+QString ver = "1.1.61";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3487,11 +3487,8 @@ void MainWindow::initQW() {
   if (fontSize <= f_size) f_size = fontSize;
   ui->qwReport->rootContext()->setContextProperty("maxFontSize", f_size);
   ui->qwReportSub->rootContext()->setContextProperty("maxFontSize", f_size);
-  ui->qwSteps->rootContext()->setContextProperty("maxFontSize", f_size);
-  ui->qwTodo->rootContext()->setContextProperty("maxFontSize", f_size);
-  ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
-  ui->qwNotesTree->rootContext()->setContextProperty("fontSize", fontSize);
 
+  ui->qwNotesTree->rootContext()->setContextProperty("fontSize", fontSize);
   ui->qwNotesTree->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/tree_main.qml")));
 
@@ -3510,6 +3507,8 @@ void MainWindow::initQW() {
   ui->qwNotes->rootContext()->setContextProperty("strText", "");
   ui->qwNotes->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
 
+  ui->qwTodo->rootContext()->setContextProperty("maxFontSize", f_size);
+  ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
   ui->qwTodo->rootContext()->setContextProperty("m_Todo", m_Todo);
   ui->qwTodo->rootContext()->setContextProperty("FontSize", fontSize);
   ui->qwTodo->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/todo.qml")));
@@ -3518,12 +3517,13 @@ void MainWindow::initQW() {
   ui->qwRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/todorecycle.qml")));
 
+  ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
+  ui->qwSteps->rootContext()->setContextProperty("maxFontSize", f_size);
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
   ui->qwSteps->rootContext()->setContextProperty("text0", "");
   ui->qwSteps->rootContext()->setContextProperty("text1", "");
   ui->qwSteps->rootContext()->setContextProperty("text2", "");
   ui->qwSteps->rootContext()->setContextProperty("text3", "");
-  ui->qwSteps->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/steps.qml")));
 
   ui->qwReport->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));

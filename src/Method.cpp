@@ -61,6 +61,8 @@ QString Method::getRealPathFile(QString strFile) {
 }
 
 void Method::showGrayWindows() {
+  closeGrayWindows();
+
   m_widget->resize(mw_one->width(), mw_one->height());
   m_widget->move(0, 0);
   m_widget->setStyleSheet("background-color:rgba(0, 0, 0,35%);");

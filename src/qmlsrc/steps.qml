@@ -212,18 +212,6 @@ Rectangle {
                 spacing: 2
                 Layout.fillWidth: true
 
-                Rectangle {
-                    height: parent.height - 2
-                    width: 6
-                    radius: 2
-                    anchors.leftMargin: 1
-                    color: "red"
-                    visible: false // item2.text.length ? true : false
-                    Text {
-                        anchors.centerIn: parent
-                    }
-                }
-
                 ColumnLayout {
                     id: colLayout
                     height: parent.height
@@ -425,74 +413,15 @@ Rectangle {
                 onClicked: {
 
                     view.currentIndex = index //实现item切换
-
-                    //mw_one.selTab()
                 }
 
                 onPressAndHold: {
 
-                    // m_Method.showNotsListMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {
 
-                    // m_Method.okType()
-
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
                 }
-            }
-
-            Rectangle {
-                color: "#AAAAAA"
-                height: 0
-                width: parent.width
-                anchors.bottom: parent.bottom
-            }
-
-            Rectangle {
-                id: delBtn
-                visible: false
-                height: parent.height
-                width: 0
-                color: "#FF0000"
-
-                anchors.right: parent.right
-                anchors.rightMargin: -30
-                radius: 0
-
-                Text {
-                    width: 56
-                    anchors.centerIn: parent
-
-                    text: qsTr("Done")
-                    color: "#ffffff"
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        m_Todo.addToRecycle()
-                        view.model.remove(index)
-                    }
-                }
-            }
-
-            PropertyAnimation {
-                id: aBtnShow
-                target: delBtn
-                property: "width"
-                duration: 100
-                from: 0
-                to: 80
-            }
-            PropertyAnimation {
-                id: aBtnHide
-                target: delBtn
-                property: "width"
-                duration: 100
-                from: 80
-                to: 0
             }
         }
     }
@@ -509,13 +438,15 @@ Rectangle {
             id: listmain
 
             // debug
-            ListElement {
+
+
+            /*ListElement {
                 text0: '<span style="background-color: #ff6600;">Hello</span>'
                 text1: "123456  <b>Hello</b> <i>World!</i>  123456"
                 text2: '123456 <font color="red"><b>TEST</b></font>  123456'
                 text3: "str3 1234567890 1234567890  1234567890 1234567890"
                 myh: 0
-            }
+            }*/
         }
         delegate: dragDelegate
 
@@ -525,21 +456,6 @@ Rectangle {
         ScrollBar.vertical: ScrollBar {
             width: 8
             policy: ScrollBar.AsNeeded
-        }
-    }
-
-    function getListEleHeadColor(ntype) {
-        switch (ntype) {
-        case 0:
-            return "lightgray"
-        case 1:
-            return "red"
-        case 2:
-            return "yellow"
-        case 3:
-            return "lightblue"
-        default:
-            return "black"
         }
     }
 }
