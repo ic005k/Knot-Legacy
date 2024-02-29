@@ -331,7 +331,7 @@ Rectangle {
                 Rectangle {
                     id: donebtn
                     height: parent.height - 0
-                    width: 40
+                    width: 55
                     color: "red"
                     anchors.right: parent.right
                     visible: isBtnVisible
@@ -339,17 +339,17 @@ Rectangle {
                     Image {
                         id: doneImg
 
-                        width: donebtn.width
-                        height: donebtn.width
-                        x: -2
-                        y: (donebtn.height - donebtn.width) / 2
+                        width: 35
+                        height: 35
+                        x: (donebtn.width - doneImg.width) / 2 - 1
+                        y: (donebtn.height - doneImg.height) / 2
                         fillMode: Image.NoOption
                         horizontalAlignment: Image.AlignHCenter
                         verticalAlignment: Image.AlignVCenter
 
                         smooth: true
-                        sourceSize.height: donebtn.width
-                        sourceSize.width: donebtn.width
+                        sourceSize.height: 35
+                        sourceSize.width: 35
                         source: "/res/todo_done.png"
 
                         visible: true
