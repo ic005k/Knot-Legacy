@@ -265,7 +265,7 @@ void Steps::setTableSteps(qlonglong steps) {
   int count = Reg.value("/Steps/Count", 0).toInt();
 
   if (count > 0) {
-    QString date;  // = getDate(count - 1);
+    QString date;
 
     date = Reg.value("/Steps/Table-" + QString::number(count - 1) + "-0")
                .toString();
@@ -277,15 +277,11 @@ void Steps::setTableSteps(qlonglong steps) {
                   steps / 100 / 1000;
       QString strKM = QString("%1").arg(km, 0, 'f', 2);
 
-      // setTableData(count - 1, date, steps, strKM);
-
       Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-0", date);
       Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-1", steps);
       Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-2", strKM);
 
     } else {
-      // addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 0, "0");
-
       count = count + 1;
       Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-0",
                    QDate::currentDate().toString("ddd MM dd "));
@@ -295,8 +291,6 @@ void Steps::setTableSteps(qlonglong steps) {
       Reg.setValue("/Steps/Count", count);
     }
   } else {
-    // addRecord(QDate::currentDate().toString("ddd MM dd yyyy"), 0, "0");
-
     count = count + 1;
     Reg.setValue("/Steps/Table-" + QString::number(count - 1) + "-0",
                  QDate::currentDate().toString("ddd MM dd "));
