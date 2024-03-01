@@ -282,6 +282,7 @@ void dlgReader::openFile(QString openfile) {
       QProcess* pro = new QProcess;
       pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
       pro->waitForFinished();
+
 #endif
 
 #ifdef Q_OS_WIN

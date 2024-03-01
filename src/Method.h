@@ -2,9 +2,13 @@
 #define METHOD_H
 
 #include <QDialog>
+#include <QFileInfoList>
 #include <QInputDialog>
 #include <QQuickWidget>
 #include <QTableWidget>
+
+#include "QtGui/private/qzipreader_p.h"
+#include "QtGui/private/qzipwriter_p.h"
 
 namespace Ui {
 class Method;
@@ -195,7 +199,11 @@ class Method : public QDialog {
   QString getText1(QQuickWidget *qw, int index);
 
   void setScrollBarPos(QQuickWidget *qw, double pos);
-  protected:
+
+  bool zipReader(QString zipPath, QString zipDir);
+  void zipWriter(QString zipPath, QFileInfoList fileList);
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

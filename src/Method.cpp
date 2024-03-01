@@ -1181,3 +1181,28 @@ QString Method::setPushButtonQss(QPushButton* btn, int radius, int padding,
   btn->setStyleSheet(qss);
   return qss;
 }
+
+bool Method::zipReader(QString zipPath, QString zipDir) {
+  QDir tempDir;
+  if (!tempDir.exists(zipDir)) tempDir.mkpath(zipDir);
+  QZipReader reader(zipPath);
+  return reader.extractAll(zipDir);
+}
+
+void Method::zipWriter(QString zipPath = "test.zip",
+                       QFileInfoList fileList = QFileInfoList()) {
+  QZipWriter* writer = new QZipWriter(zipPath);
+
+  foreach (QFileInfo fileInfo, fileList) {
+    QFile file(fileInfo.filePath());
+    if (!file.exists()) continue;
+    file.open(QIODevice::ReadOnly);
+    writer->addFile(fileInfo.fileName(), file.readAll());
+    file.close();
+  }
+  writer->close();
+  if (writer) {
+    delete writer;
+    writer = nullptr;
+  }
+}
