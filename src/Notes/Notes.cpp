@@ -209,7 +209,11 @@ void Notes::MD2Html(QString mdFile) {
     QTextEdit *edit = new QTextEdit();
     QString strmd = mw_one->loadText(mdFile);
     if (strmd.contains(imgDir)) {
+#ifdef Q_OS_WIN
       strmd = strmd.replace(imgDir, iniDir);
+#else
+      strmd = strmd.replace(imgDir, "/" + iniDir);
+#endif
     }
 
     edit->setPlainText(strmd);
