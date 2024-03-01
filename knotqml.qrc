@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>src/texteditor.html</file>
         <file>src/onedrive/log.qml</file>
         <file>src/onedrive/web.qml</file>
         <file>src/qmlsrc/todo.qml</file>
