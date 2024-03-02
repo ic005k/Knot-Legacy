@@ -11,8 +11,7 @@ Item {
 
     property string strText: ""
 
-    function loadText(str)
-    {
+    function loadText(str) {
         strText = str
     }
 
@@ -77,7 +76,6 @@ Item {
 
         onMovementEnded: {
             state = "autoscroll"
-
         }
 
         TextArea.flickable: TextArea {
@@ -95,7 +93,12 @@ Item {
             selectByMouse: false
             smooth: true
 
-            color: "#664E30"
+            color: isDark ? "#FFFFFF" : "#664E30"
+
+            background: Rectangle {
+                color: isDark ? "#455364" : "#FFFFFF"
+                radius: 0
+            }
 
             text: strText
             visible: true
@@ -120,20 +123,6 @@ Item {
                 to: 0
                 duration: 200
                 loops: 1 //Animation.Infinite
-            }
-
-            SequentialAnimation on opacity {
-                //应用于透明度上的序列动画
-                running: false
-                loops: 1 //Animation.Infinite //无限循环
-                NumberAnimation {
-                    from: 0
-                    to: 1
-                    duration: 1000
-                } //淡出效果
-                PauseAnimation {
-                    duration: 0
-                } //暂停400ms
             }
         }
 

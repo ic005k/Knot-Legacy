@@ -3628,6 +3628,7 @@ void MainWindow::init_Theme() {
   ui->qwReportSub->rootContext()->setContextProperty("isDark", isDark);
   ui->qwSteps->rootContext()->setContextProperty("isDark", isDark);
   ui->qwReport->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwOneDriver->rootContext()->setContextProperty("isDark", isDark);
 
   if (!isDark) {
     ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
