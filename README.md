@@ -28,6 +28,7 @@ QR code for downloading:
 * [qt-pdf-viewer-library](https://github.com/develtar/qt-pdf-viewer-library)
 * [pdf.js](https://github.com/mozilla/pdf.js)
 * [syncthing](https://github.com/syncthing/syncthing)
+* [syncthing-android](https://github.com/Catfriend1/syncthing-android)
 * [QOwnNotes](https://github.com/pbek/QOwnNotes)
 * [iconfinder](https://www.iconfinder.com/)
 * [Qwt](https://qwt.sourceforge.io/index.html)
