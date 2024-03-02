@@ -3200,19 +3200,6 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   }
 }
 
-void MainWindow::on_btnMax_clicked() {
-  if (ui->frame_tab->isHidden()) return;
-  if (ui->btnChart->text() == tr("Max")) {
-    ui->frame_tab->setMaximumHeight(this->height());
-    ui->frame_charts->setHidden(true);
-    ui->btnChart->setText(tr("Normal"));
-  } else if (ui->btnChart->text() == tr("Normal")) {
-    ui->frame_tab->setMaximumHeight(this->height());
-    ui->frame_charts->setHidden(false);
-    ui->btnChart->setText(tr("Max"));
-  }
-}
-
 void MainWindow::on_actionReport_triggered() {
   if (isEBook || !isSaveEnd || !isReadEBookEnd) return;
 
@@ -3817,10 +3804,6 @@ void MainWindow::init_UIWidget() {
   ui->editPassword1->setEchoMode(QLineEdit::EchoMode::Password);
   ui->editPassword2->setEchoMode(QLineEdit::EchoMode::Password);
 
-  ui->frame_tab->layout()->setContentsMargins(0, 0, 0, 0);
-  ui->frame_tab->setContentsMargins(0, 0, 0, 0);
-  ui->frame_tab->layout()->setSpacing(1);
-
   this->installEventFilter(this);
   ui->textBrowser->installEventFilter(this);
   ui->textBrowser->setMouseTracking(true);
@@ -3830,7 +3813,6 @@ void MainWindow::init_UIWidget() {
   ui->qwPdf->installEventFilter(this);
   ui->tabWidget->tabBar()->installEventFilter(this);
   ui->tabWidget->installEventFilter(this);
-  ui->frame_tab->setMouseTracking(true);
   ui->tabWidget->setMouseTracking(true);
   ui->lblStats->installEventFilter(this);
   ui->editSearchText->installEventFilter(this);
@@ -3898,8 +3880,6 @@ void MainWindow::init_UIWidget() {
 
   if (isIOS) {
   }
-
-  ui->frame_tab->setMaximumHeight(this->height());
 
 #ifdef Q_OS_ANDROID
 #else
@@ -4291,22 +4271,6 @@ void MainWindow::on_btnMenu_clicked() {
   int y = geometry().y() + ui->frameMenu->height() + 2;
   QPoint pos(x, y);
   mainMenu->exec(pos);
-}
-
-void MainWindow::on_btnZoom_clicked() {
-  if (!ui->frame_tab->isHidden()) {
-    axisY->setTickCount(7);
-    axisY2->setTickCount(7);
-    ui->frame_tab->hide();
-    ui->frame_charts->setMaximumHeight(this->height());
-    floatfun = false;
-
-  } else {
-    axisY->setTickCount(yScale);
-    axisY2->setTickCount(yScale);
-    ui->frame_tab->show();
-    ui->frame_charts->setFixedHeight(frameChartHeight);
-  }
 }
 
 void MainWindow::stopJavaTimer() {
@@ -5688,8 +5652,10 @@ void MainWindow::on_btnChart_clicked() {
   axisY2->setTickCount(7);
 
   if (ui->frame_charts->isHidden()) {
+    ui->qwMainDate->hide();
+    ui->qwMainEvent->hide();
+
     ui->frame_charts->setMaximumHeight(this->height());
-    ui->frame_tab->hide();
     ui->frame_charts->show();
     ui->btnChartDay->show();
     ui->btnChartMonth->show();
@@ -5708,8 +5674,9 @@ void MainWindow::on_btnChart_clicked() {
     ui->rbSteps->hide();
     ui->btnChartDay->hide();
     ui->btnChartMonth->hide();
-    ui->frame_tab->show();
 
+    ui->qwMainDate->show();
+    ui->qwMainEvent->show();
     ui->btnReport->show();
     ui->btnFind->show();
     ui->btnRemarks->show();

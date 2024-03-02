@@ -210,7 +210,8 @@ void Preferences::initOptions() {
 
   if (!devMode) {
     mw_one->ui->frame_charts->hide();
-    mw_one->ui->frame_tab->hide();
+    mw_one->ui->qwMainDate->hide();
+    mw_one->ui->qwMainEvent->hide();
     mw_one->ui->btnSteps->hide();
     mw_one->ui->btnChart->hide();
     mw_one->ui->btnReader->hide();

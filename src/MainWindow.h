@@ -420,8 +420,6 @@ class MainWindow : public QMainWindow {
 
   void on_rbAmount_clicked();
 
-  void on_btnMax_clicked();
-
   void saveDone();
 
   void bakDataDone();
@@ -740,7 +738,6 @@ class MainWindow : public QMainWindow {
   void init_Sensors();
   void init_UIWidget();
   void init_Menu(QMenu *);
-  void on_btnZoom_clicked();
 
   void updateRunTime();
   void showSensorValues();
