@@ -266,7 +266,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Back</string>
+               <string>Exit</string>
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
@@ -473,11 +473,11 @@
                </font>
               </property>
               <property name="text">
-               <string>List</string>
+               <string>Return</string>
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/list_l.png</normaloff>:/res/list_l.png</iconset>
+                <normaloff>:/res/return_l.png</normaloff>:/res/return_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -6144,7 +6144,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">

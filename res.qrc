@@ -146,5 +146,6 @@
         <file>res/btn_collapse.png</file>
         <file>res/todo_done.png</file>
         <file>res/options.png</file>
+        <file>res/return_l.png</file>
     </qresource>
 </RCC>
