@@ -170,7 +170,7 @@ void MainWindow::readEBookDone() {
 
     ui->btnReader->setEnabled(true);
     ui->frameReaderFun->setEnabled(true);
-    ui->btnBackDir->setEnabled(false);
+    ui->btnBackDir->hide();
     this->repaint();
 
     if (isText || isEpub) {
@@ -196,7 +196,6 @@ void MainWindow::readEBookDone() {
 
       if (isEpub) {
         ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
-        ui->btnBackDir->show();
       }
 
       if (isText) {

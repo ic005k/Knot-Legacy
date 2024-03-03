@@ -253,7 +253,6 @@ void Notes::saveMainNotes() {
                      m_EditSource->verticalScrollBar()->sliderPosition());
   iniNotes->setValue("/MainNotes/editCPos" + strTag,
                      m_EditSource->textCursor().position());
-  iniNotes->setValue("/MainNotes/toolBarVisible", ui->f_ToolBar->isVisible());
 
   isNeedSave = false;
   isTextChange = false;
@@ -1490,6 +1489,13 @@ void Notes::on_btnShowTools_clicked() {
   }
 
   isNeedSave = old;
+
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
+  iniNotes->setValue("/MainNotes/toolBarVisible", ui->f_ToolBar->isVisible());
 }
 
 void Notes::editNote() { mw_one->on_btnEdit_clicked(); }

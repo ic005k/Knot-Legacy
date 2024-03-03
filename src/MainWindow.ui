@@ -270,16 +270,16 @@
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
+                <normaloff>:/res/exit_l.png</normaloff>:/res/exit_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -345,12 +345,12 @@
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -376,12 +376,12 @@
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -413,12 +413,12 @@
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -450,12 +450,12 @@
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -473,7 +473,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Return</string>
+               <string>Back</string>
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
@@ -481,12 +481,12 @@
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -512,12 +512,12 @@
               </property>
               <property name="iconSize">
                <size>
-                <width>25</width>
-                <height>25</height>
+                <width>28</width>
+                <height>28</height>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonTextUnderIcon</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>

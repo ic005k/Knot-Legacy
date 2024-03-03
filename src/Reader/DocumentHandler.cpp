@@ -433,7 +433,7 @@ void DocumentHandler::setModified(bool m) {
 void DocumentHandler::setBackDir(QString link) {
   if (link.contains(".html") || link.contains(".xhtml")) {
     mw_one->m_Reader->mainDirIndex = htmlIndex;
-    mw_one->ui->btnBackDir->setEnabled(true);
+    mw_one->ui->btnBackDir->show();
     mw_one->repaint();
     qDebug() << "mainDirIndex: " << mw_one->m_Reader->mainDirIndex;
   }
