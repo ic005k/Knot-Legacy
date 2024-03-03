@@ -118,12 +118,7 @@ void Steps::saveSteps() {
                mw_one->ui->editTangentLineIntercept->text().trimmed());
   Reg.setValue("/Steps/Slope",
                mw_one->ui->editTangentLineSlope->text().trimmed());
-  Reg.setValue("/Steps/Length",
-               mw_one->m_StepsOptions->ui->editStepLength->text().trimmed());
   Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
-  Reg.setValue(
-      "/Steps/Threshold",
-      mw_one->m_StepsOptions->ui->editStepsThreshold->text().trimmed());
 
   if (getCount() > maxCount) {
     delItem(0);

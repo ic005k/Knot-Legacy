@@ -18,12 +18,17 @@ class StepsOptions : public QDialog {
   Ui::StepsOptions *ui;
 
   void init();
+  bool isTextChange;
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;
  private slots:
   void on_btnBack_clicked();
+
+  void on_editStepsThreshold_textChanged(const QString &arg1);
+
+  void on_editStepLength_textChanged(const QString &arg1);
 
  private:
 };
