@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.62";
+QString ver = "1.1.63";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4266,7 +4266,12 @@ void MainWindow::on_actionBakFileList() {
 void MainWindow::on_btnMenu_clicked() {
   QMenu *mainMenu = new QMenu(this);
   init_Menu(mainMenu);
-  int x = mw_one->geometry().x() + 2;
+  int x = 0;
+#ifdef Q_OS_ANDROID
+  x = mw_one->geometry().x() + 2;
+#else
+  x = mw_one->geometry().x() + (ui->btnMenu->width() - 28) / 2 + 2;
+#endif
   int y = geometry().y() + ui->frameMenu->height() + 2;
   QPoint pos(x, y);
   mainMenu->exec(pos);
