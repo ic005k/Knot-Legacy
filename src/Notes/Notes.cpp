@@ -584,15 +584,18 @@ void Notes::insertImage(QString fileName) {
                      ".png";  // + list.at(list.count() - 1);
     if (QFile(strTar).exists()) QFile(strTar).remove();
 
+    int nLeftMargin = 9 + 9 + 6;
+
     QImage img(fileName);
     double w, h;
     int new_w, new_h;
     w = img.width();
     h = img.height();
+
     int w0 = mw_one->width();
     double r = (double)w / h;
-    if (w > w0 - 10) {
-      new_w = w0 - 10;
+    if (w > w0 - nLeftMargin) {
+      new_w = w0 - nLeftMargin;
       new_h = new_w / r;
 
     } else {
@@ -609,7 +612,7 @@ void Notes::insertImage(QString fileName) {
     strTar = strTar.replace(iniDir, imgDir);
     m_EditSource->insertPlainText("![image](file:/" + strTar + ")\n");
 
-    qDebug() << "pic=" << strTar;
+    qDebug() << "pic=" << strTar << nLeftMargin;
   }
 }
 
