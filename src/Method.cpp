@@ -516,7 +516,9 @@ void Method::clickNoteBook() {
       QString text0 = topItem->child(i)->text(0);
       QString text3 = topItem->child(i)->text(1);
       if (!text3.isEmpty()) {
-        addItemToQW(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
+        QString file = iniDir + text3;
+        QString item1 = getLastModified(file);
+        addItemToQW(mw_one->ui->qwNoteList, text0, item1, "", text3, 0);
 
         mw_one->m_NotesList->pNoteItems.append(topItem->child(i));
       }
@@ -531,12 +533,13 @@ void Method::clickNoteBook() {
       QTreeWidgetItem* topItem =
           mw_one->m_NotesList->tw->topLevelItem(indexMain);
       QTreeWidgetItem* childItem = topItem->child(indexChild);
-      // mw_one->m_NotesList->tw->setCurrentItem(childItem);
       int count = childItem->childCount();
       for (int n = 0; n < count; n++) {
         QString text0 = childItem->child(n)->text(0);
         QString text3 = childItem->child(n)->text(1);
-        addItemToQW(mw_one->ui->qwNoteList, text0, "", "", text3, 0);
+        QString file = iniDir + text3;
+        QString item1 = getLastModified(file);
+        addItemToQW(mw_one->ui->qwNoteList, text0, item1, "", text3, 0);
 
         mw_one->m_NotesList->pNoteItems.append(childItem->child(n));
       }
@@ -545,9 +548,13 @@ void Method::clickNoteBook() {
 
   mw_one->m_NotesList->setNotesListCurrentIndex(-1);
   mw_one->m_NotesList->setNoteLabel();
+}
 
-  // mw_one->m_NotesList->tw->setCurrentItem(
-  //     mw_one->m_NotesList->pNoteBookItems.at(index));
+QString Method::getLastModified(QString file) {
+  QFileInfo info(file);
+  QDateTime lastModified = info.lastModified();
+  QString item1 = lastModified.toString();
+  return item1;
 }
 
 void Method::clickNoteList() {

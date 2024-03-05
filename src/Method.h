@@ -203,7 +203,8 @@ class Method : public QDialog {
   bool zipReader(QString zipPath, QString zipDir);
   void zipWriter(QString zipPath, QFileInfoList fileList);
 
- protected:
+  QString getLastModified(QString file);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

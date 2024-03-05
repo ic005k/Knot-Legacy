@@ -159,7 +159,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: item0.contentHeight + 16
+            height: item0.contentHeight + item1.contentHeight + 16
             color: ListView.isCurrentItem ? "lightblue" : getColor()
 
             border.width: isDark ? 0 : 1
@@ -205,7 +205,7 @@ Rectangle {
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: TextArea.WordWrap
-                        font.bold: false
+                        font.bold: true
                         text: text0
                         color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
@@ -225,6 +225,7 @@ Rectangle {
                         wrapMode: TextArea.WordWrap
                         color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         font.bold: false
+                        font.pointSize: 12
                         text: text1
 
                         leftPadding: 5
