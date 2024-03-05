@@ -212,6 +212,10 @@ class Notes : public QDialog {
 
   void on_btnGetShare_clicked();
 
+  void on_btnDate_clicked();
+
+  void on_btnTime_clicked();
+
  private:
   int x_left, x_right, y_left, y_right;
 

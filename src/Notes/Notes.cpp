@@ -1509,3 +1509,11 @@ void Notes::on_editNote() {
   timerEditNote->stop();
   mw_one->on_btnEdit_clicked();
 }
+
+void Notes::on_btnDate_clicked() {
+  m_EditSource->insertPlainText(QDate::currentDate().toString());
+}
+
+void Notes::on_btnTime_clicked() {
+  m_EditSource->insertPlainText(QTime::currentTime().toString());
+}
