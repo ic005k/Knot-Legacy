@@ -4881,10 +4881,6 @@ void MainWindow::on_btnBackImg_clicked() {
 }
 
 void MainWindow::on_btnZoomIn_clicked() {
-  imgSize = imgSize + 1000;
-  mw_one->ui->qw_Img->rootContext()->setContextProperty("imgW", imgSize);
-  mw_one->ui->qw_Img->rootContext()->setContextProperty("imgH", imgSize);
-
   QQuickItem *root = ui->qw_Img->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "zoomin");
 }

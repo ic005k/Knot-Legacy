@@ -159,9 +159,7 @@ class MainWindow : public QMainWindow {
   QString androidIniDir, macIniDir;
   bool isMemoVisible;
   bool isReaderVisible;
-  int imgSize = 5000;
   QString treeStyle = "QTreeWidget::item {height: 28;}";
-
   int mainHeight = 0;
   bool floatfun = true;
   int alertWindowsCount = 0;

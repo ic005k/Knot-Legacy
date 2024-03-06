@@ -26,12 +26,10 @@ void LoadPic::initMain(QString imgFile) {
 
   mw_one->ui->f_ImgView->show();
 
-  QImage img(imgFile);
-
-  mw_one->ui->qw_Img->rootContext()->setContextProperty("imgW",
-                                                        img.width() * 2);
-  mw_one->ui->qw_Img->rootContext()->setContextProperty("imgH",
-                                                        img.height() * 2);
+  mw_one->ui->qw_Img->rootContext()->setContextProperty(
+      "imgW", mw_one->ui->qw_Img->width() * 10);
+  mw_one->ui->qw_Img->rootContext()->setContextProperty(
+      "imgH", mw_one->ui->qw_Img->height() * 10);
   mw_one->ui->qw_Img->rootContext()->setContextProperty("imgFile", imgFile);
   mw_one->ui->qw_Img->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/imgview.qml")));

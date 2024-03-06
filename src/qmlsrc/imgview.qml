@@ -7,12 +7,10 @@ Item {
     height: 720
 
     function zoomin() {
-
         mapImg.scale = mapImg.scale / 0.9
     }
 
     function zoomout() {
-
         mapImg.scale = mapImg.scale * 0.9
     }
 
@@ -34,7 +32,6 @@ Item {
         anchors.centerIn: parent
         clip: true
 
-
         Image {
             id: mapImg
             //这里使图片居中显示
@@ -44,9 +41,10 @@ Item {
             //图像异步加载，只对本地图像有用
             asynchronous: true
         }
+
         MouseArea {
             id: mapDragArea
-            anchors.fill: mapImg
+            anchors.fill: parent
             drag.target: mapImg
             //这里使图片不管是比显示框大还是比显示框小都不会被拖拽出显示区域
             drag.minimumX: (mapImg.width > mapItemArea.width) ? (mapItemArea.width
@@ -58,6 +56,11 @@ Item {
             drag.maximumY: (mapImg.height
                             > mapItemArea.height) ? 0 : (mapItemArea.height - mapImg.height)
 
+            onClicked: {
+
+                // console.log(mouse.x + "  " + mouse.y)
+            }
+
             //使用鼠标滚轮缩放
             onWheel: {
                 //每次滚动都是120的倍数
@@ -68,6 +71,14 @@ Item {
                     mapImg.scale = mapImg.scale * 0.9
                 }
             }
+        }
+
+        PinchArea {
+            anchors.fill: parent
+            pinch.target: mapImg
+            pinch.maximumScale: 10
+            pinch.minimumScale: 0.2
+            pinch.dragAxis: Pinch.XAndYAxis
         }
     }
 }
