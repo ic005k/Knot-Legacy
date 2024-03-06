@@ -764,14 +764,49 @@ void Notes::unzip(QString zipfile) {
 
 void Notes::loadMemoQML() {
   QString htmlFileName = privateDir + "memo.html";
+  QTextEdit *edit = new QTextEdit;
+  QPlainTextEdit *edit1 = new QPlainTextEdit;
   QString strhtml = mw_one->loadText(htmlFileName);
+  strhtml = strhtml.replace("><", ">\n<");
+  edit->setPlainText(strhtml);
+  QString str;
+  for (int i = 0; i < edit->document()->lineCount(); i++) {
+    str = mw_one->m_Reader->getTextEditLineText(edit, i);
+    str = str.trimmed();
+    if (str.mid(0, 4) == "<img" && str.contains("file:/")) {
+      QString str1 = str;
+
+      QStringList list = str1.split(" ");
+      QString strSrc;
+      for (int k = 0; k < list.count(); k++) {
+        QString s1 = list.at(k);
+        if (s1.contains("src=")) {
+          strSrc = s1;
+          break;
+        }
+      }
+
+      QStringList list1 = strSrc.split("/memo/");
+      strSrc = "\"file://" + iniDir + "memo/" + list1.at(1);
+
+      QStringList list2 = str1.split("/memo/");
+      str = "<img src=\"file://" + iniDir + "memo/" + list2.at(1);
+
+      str = "<a href=" + strSrc + ">" + str + "</a>";
+    }
+
+    edit1->appendPlainText(str);
+  }
+
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
 
-  // QMetaObject::invokeMethod((QObject *)root, "loadHtml",
-  //                           Q_ARG(QVariant, htmlFileName));
+  mw_one->m_Reader->TextEditToFile(edit1, htmlFileName);
+  QMetaObject::invokeMethod((QObject *)root, "loadHtml",
+                            Q_ARG(QVariant, htmlFileName));
 
-  QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
-                            Q_ARG(QVariant, strhtml));
+  // htmlBuffer = edit1->toPlainText();
+  // QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
+  //                           Q_ARG(QVariant, htmlBuffer));
 
   setVPos();
 }
