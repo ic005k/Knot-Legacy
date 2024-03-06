@@ -210,9 +210,9 @@ void Notes::MD2Html(QString mdFile) {
     QString strmd = mw_one->loadText(mdFile);
     if (strmd.contains(imgDir)) {
 #ifdef Q_OS_WIN
-      strmd = strmd.replace(imgDir, iniDir);
-#else
       strmd = strmd.replace(imgDir, "/" + iniDir);
+#else
+      strmd = strmd.replace(imgDir, iniDir);
 #endif
     }
 
@@ -610,7 +610,7 @@ void Notes::insertImage(QString fileName) {
     pix.save(strTar);
 
     strTar = strTar.replace(iniDir, imgDir);
-    m_EditSource->insertPlainText("![image](file:/" + strTar + ")\n");
+    m_EditSource->insertPlainText("![image](file://" + strTar + ")\n");
 
     qDebug() << "pic=" << strTar << nLeftMargin;
   }
@@ -773,7 +773,7 @@ void Notes::loadMemoQML() {
   for (int i = 0; i < edit->document()->lineCount(); i++) {
     str = mw_one->m_Reader->getTextEditLineText(edit, i);
     str = str.trimmed();
-    if (str.mid(0, 4) == "<img" && str.contains("file:/")) {
+    if (str.mid(0, 4) == "<img" && str.contains("file://")) {
       QString str1 = str;
 
       QStringList list = str1.split(" ");
@@ -790,7 +790,7 @@ void Notes::loadMemoQML() {
       strSrc = "\"file://" + iniDir + "memo/" + list1.at(1);
 
       QStringList list2 = str1.split("/memo/");
-      str = "<img src=\"file:/" + iniDir + "memo/" + list2.at(1);
+      str = "<img src=\"file:///" + iniDir + "memo/" + list2.at(1);
 
       str = "<a href=" + strSrc + ">" + str + "</a>";
     }
