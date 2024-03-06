@@ -216,6 +216,8 @@ class Notes : public QDialog {
 
   void on_btnTime_clicked();
 
+  void on_btnS11_clicked();
+
  private:
   int x_left, x_right, y_left, y_right;
 

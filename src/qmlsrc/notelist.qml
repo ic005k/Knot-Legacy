@@ -262,6 +262,7 @@ Rectangle {
                         //Layout.maximumWidth: listItem.width
                         Layout.preferredWidth: listItem.width
                         font.bold: false
+                        font.pointSize: 12
                         text: text3
                         color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
@@ -385,6 +386,7 @@ Rectangle {
             id: listmain
 
             // debug
+
 
             /*ListElement {
                 text0: '<span style="background-color: #ff6600;">Hello</span>'
