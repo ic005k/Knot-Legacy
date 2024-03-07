@@ -1065,10 +1065,10 @@ void Todo::reeditText() {
   });
 
   int x, y, w, h;
-  w = mw_one->width() - 20;
+  w = mw_one->width();
   x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   h = mw_one->height() / 3;
-  y = geometry().y() + (height() - h) / 4;
+  y = mw_one->geometry().y();
   dlg->setGeometry(x, y, w, h);
   dlg->setModal(true);
   m_Method->showGrayWindows();
