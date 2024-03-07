@@ -300,8 +300,21 @@ void NotesList::on_btnRename_clicked() {
   });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
     item->setText(0, edit->toPlainText().trimmed());
-    if (item->parent() != NULL && !item->text(1).isEmpty())
+
+    if (item->parent() != NULL && !item->text(1).isEmpty()) {
       setNoteName(item->text(0));
+
+      for (int i = 0; i < listRecentOpen.count(); i++) {
+        QString str = listRecentOpen.at(i);
+        if (str.split("===").at(1) == item->text(1)) {
+          QString newStr = item->text(0) + "===" + item->text(1);
+          listRecentOpen.removeAt(i);
+          listRecentOpen.insert(i, newStr);
+          saveRecentOpen();
+          break;
+        }
+      }
+    }
 
     isNeedSave = true;
     dlg->close();
@@ -659,8 +672,13 @@ void NotesList::initRecentOpen() {
   for (int i = 0; i < count; i++) {
     QString list =
         iniFile.value("/RecentOpen/list" + QString::number(i)).toString();
-    listRecentOpen.append(list);
+    QFile file(iniDir + list.split("===").at(1));
+    if (file.exists()) {
+      listRecentOpen.append(list);
+    }
   }
+
+  saveRecentOpen();
 }
 
 void NotesList::saveRecentOpen() {
@@ -2162,6 +2180,7 @@ void NotesList::genRecentOpenMenu() {
     QAction *act = new QAction(QString::number(i + 1) + " . " + name);
     menuRecentOpen->addAction(act);
     connect(act, &QAction::triggered, this, [=]() {
+      currentMDFile = file;
       mw_one->m_Notes->MD2Html(file);
       mw_one->m_Notes->loadMemoQML();
       mw_one->ui->lblNoteName->setText(name);
