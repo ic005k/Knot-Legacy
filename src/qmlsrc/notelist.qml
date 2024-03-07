@@ -304,7 +304,7 @@ Rectangle {
                     }
                     view.model.setProperty(index, "text2", "ShowRect")
 
-                    m_Method.clickNoteList()
+                    m_NotesList.clickNoteList()
                 }
 
                 onPressAndHold: {

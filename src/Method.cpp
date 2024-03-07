@@ -501,76 +501,11 @@ void Method::setCellText(int row, int column, QString str,
     table->setItem(row, column, new QTableWidgetItem(str));
 }
 
-void Method::clickNoteBook() {
-  mw_one->m_NotesList->pNoteItems.clear();
-
-  clearAllBakList(mw_one->ui->qwNoteList);
-  int index = getCurrentIndexFromQW(mw_one->ui->qwNoteBook);
-  QString text1 = getText1(mw_one->ui->qwNoteBook, index);
-  QString text2 = getText2(mw_one->ui->qwNoteBook, index);
-  if (text2.isEmpty()) {
-    int index_top = text1.toInt();
-    QTreeWidgetItem* topItem = mw_one->m_NotesList->tw->topLevelItem(index_top);
-    int child_count = topItem->childCount();
-    for (int i = 0; i < child_count; i++) {
-      QString text0 = topItem->child(i)->text(0);
-      QString text3 = topItem->child(i)->text(1);
-      if (!text3.isEmpty()) {
-        QString file = iniDir + text3;
-        QString item1 = getLastModified(file);
-        addItemToQW(mw_one->ui->qwNoteList, text0, item1, "", text3, 0);
-
-        mw_one->m_NotesList->pNoteItems.append(topItem->child(i));
-      }
-    }
-  } else {
-    QStringList list = text1.split("===");
-    int indexMain, indexChild;
-    if (list.count() == 2) {
-      indexMain = list.at(0).toInt();
-      indexChild = list.at(1).toInt();
-
-      QTreeWidgetItem* topItem =
-          mw_one->m_NotesList->tw->topLevelItem(indexMain);
-      QTreeWidgetItem* childItem = topItem->child(indexChild);
-      int count = childItem->childCount();
-      for (int n = 0; n < count; n++) {
-        QString text0 = childItem->child(n)->text(0);
-        QString text3 = childItem->child(n)->text(1);
-        QString file = iniDir + text3;
-        QString item1 = getLastModified(file);
-        addItemToQW(mw_one->ui->qwNoteList, text0, item1, "", text3, 0);
-
-        mw_one->m_NotesList->pNoteItems.append(childItem->child(n));
-      }
-    }
-  }
-
-  mw_one->m_NotesList->setNotesListCurrentIndex(-1);
-  mw_one->m_NotesList->setNoteLabel();
-}
-
 QString Method::getLastModified(QString file) {
   QFileInfo info(file);
   QDateTime lastModified = info.lastModified();
   QString item1 = lastModified.toString();
   return item1;
-}
-
-void Method::clickNoteList() {
-  mw_one->m_Notes->saveQMLVPos();
-
-  int index = getCurrentIndexFromQW(mw_one->ui->qwNoteList);
-  currentMDFile = iniDir + getText3(mw_one->ui->qwNoteList, index);
-  QString noteName = getText0(mw_one->ui->qwNoteList, index);
-  mw_one->m_Notes->MD2Html(currentMDFile);
-  mw_one->m_Notes->loadMemoQML();
-  mw_one->ui->lblNoteName->setText(noteName);
-
-  saveCurNoteIndex();
-
-  mw_one->m_NotesList->tw->setCurrentItem(
-      mw_one->m_NotesList->pNoteItems.at(index));
 }
 
 void Method::clickMainDate() {
@@ -688,39 +623,6 @@ void Method::reeditMainEventData() {
 
   tw->setCurrentItem(tw->topLevelItem(topIndex)->child(childIndex));
   mw_one->on_twItemDoubleClicked();
-}
-
-void Method::saveCurNoteIndex() {
-  QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  QString str = currentMDFile;
-  QString iniName = str.replace(iniDir, "");
-
-  Reg.setValue("/MainNotes/notebookIndex",
-               getCurrentIndexFromQW(mw_one->ui->qwNoteBook));
-  Reg.setValue("/MainNotes/noteIndex",
-               getCurrentIndexFromQW(mw_one->ui->qwNoteList));
-  Reg.setValue("/MainNotes/currentItem", iniName);
-  Reg.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
-}
-
-QList<int> Method::getCurNoteIndex() {
-  QList<int> indexList;
-  QSettings Reg(iniDir + "curmd.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  int notebookIndex = Reg.value("/MainNotes/notebookIndex", 0).toInt();
-  int noteIndex = Reg.value("/MainNotes/noteIndex", 0).toInt();
-
-  indexList.append(notebookIndex);
-  indexList.append(noteIndex);
-
-  return indexList;
 }
 
 void Method::showNoteBookMenu(int x, int y) {

@@ -3533,11 +3533,11 @@ void MainWindow::initQW() {
   ui->qwTabRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/tabrecycle.qml")));
 
-  ui->qwNoteBook->rootContext()->setContextProperty("m_Method", m_Method);
+  ui->qwNoteBook->rootContext()->setContextProperty("m_NotesList", m_NotesList);
   ui->qwNoteBook->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notebook.qml")));
 
-  ui->qwNoteList->rootContext()->setContextProperty("m_Method", m_Method);
+  ui->qwNoteList->rootContext()->setContextProperty("m_NotesList", m_NotesList);
   ui->qwNoteList->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notelist.qml")));
 
@@ -5730,4 +5730,8 @@ void MainWindow::on_btnHideFind_clicked() { ui->f_FindNotes->hide(); }
 
 void MainWindow::on_btnStepsOptions_clicked() {
   mw_one->m_StepsOptions->init();
+}
+
+void MainWindow::on_btnRecentOpen_clicked() {
+  m_NotesList->genRecentOpenMenu();
 }

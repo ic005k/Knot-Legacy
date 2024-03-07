@@ -27,6 +27,7 @@ class NotesList : public QDialog {
   ~NotesList();
   Ui::NotesList *ui;
 
+  QStringList listRecentOpen;
   QList<QTreeWidgetItem *> pNoteBookItems;
   QList<QTreeWidgetItem *> pNoteItems;
   QStringList findResult;
@@ -100,12 +101,20 @@ class NotesList : public QDialog {
   void setTWCurrentItem();
   void setTWRBCurrentItem();
 
+  void saveRecentOpen();
+  void initRecentOpen();
+  void saveCurrentNoteInfo();
+  void genRecentOpenMenu();
+
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
 
  public slots:
+  void clickNoteList();
+  void clickNoteBook();
+
   void on_btnClose_clicked();
 
   void on_btnNewNoteBook_clicked();

@@ -28,9 +28,12 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
     btn->setFont(font0);
 
 #ifdef Q_OS_ANDROID
+    btn->setFixedHeight(25);
+    ui->editCol->setFixedHeight(25);
+    ui->editRow->setFixedHeight(25);
+    ui->editFind->setFixedHeight(25);
 #else
     btn->setFixedHeight(30);
-
     ui->editCol->setFixedHeight(30);
     ui->editRow->setFixedHeight(30);
     ui->editFind->setFixedHeight(30);

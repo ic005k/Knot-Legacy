@@ -154,8 +154,6 @@ class Method : public QDialog {
   int getCurrentIndexFromQW(QQuickWidget *qw);
   QString getText0(QQuickWidget *qw, int index);
 
-  void saveCurNoteIndex();
-  QList<int> getCurNoteIndex();
   void modifyItemText2(QQuickWidget *qw, int index, QString strText);
 
   void modifyItemText0(QQuickWidget *qw, int index, QString strText);
@@ -204,13 +202,11 @@ class Method : public QDialog {
   void zipWriter(QString zipPath, QFileInfoList fileList);
 
   QString getLastModified(QString file);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
-
-  void clickNoteBook();
-  void clickNoteList();
 
   void showNoteBookMenu(int x, int y);
   void showNotsListMenu(int x, int y);

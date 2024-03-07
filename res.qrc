@@ -149,5 +149,6 @@
         <file>res/return_l.png</file>
         <file>res/exit_l.png</file>
         <file>res/url_l.png</file>
+        <file>res/recent_l.png</file>
     </qresource>
 </RCC>

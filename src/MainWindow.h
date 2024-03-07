@@ -717,6 +717,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnStepsOptions_clicked();
 
+  void on_btnRecentOpen_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

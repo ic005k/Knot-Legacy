@@ -364,7 +364,8 @@ Rectangle {
                         view.model.setProperty(i, "text2", "")
                     }
                     view.model.setProperty(index, "text2", "ShowRect")*/
-                    m_Method.clickNoteBook()
+
+                    m_NotesList.clickNoteBook()
                 }
 
                 onPressAndHold: {
