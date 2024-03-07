@@ -2169,6 +2169,7 @@ void NotesList::clickNoteList() {
 
 void NotesList::genRecentOpenMenu() {
   QMenu *menuRecentOpen = new QMenu(this);
+  menuRecentOpen->setMaximumWidth(mw_one->width());
   int count = listRecentOpen.count();
   for (int i = 0; i < count; i++) {
     QString name, file, item;
@@ -2177,7 +2178,10 @@ void NotesList::genRecentOpenMenu() {
     name = list.at(0);
     file = iniDir + list.at(1);
 
-    QAction *act = new QAction(QString::number(i + 1) + " . " + name);
+    QFontMetrics fm(mw_one->font());
+    QString txt = QString::number(i + 1) + " . " + name;
+    QString qsLine = fm.elidedText(txt, Qt::ElideRight, mw_one->width() - 30);
+    QAction *act = new QAction(qsLine);
     menuRecentOpen->addAction(act);
     connect(act, &QAction::triggered, this, [=]() {
       currentMDFile = file;
