@@ -263,13 +263,11 @@ void Preferences::on_btnReStart_clicked() {
   jo.callStaticMethod<int>("com.x/MyActivity", "setReOpen", "()I");
 #endif
 
+#else
+  QProcess::startDetached(qApp->applicationFilePath(), QStringList());
 #endif
 
   mw_one->close();
-
-#ifdef Q_OS_MACX
-  QProcess::startDetached(qApp->applicationFilePath(), QStringList());
-#endif
 }
 
 void Preferences::autoBakData() {
