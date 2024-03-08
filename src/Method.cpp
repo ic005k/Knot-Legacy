@@ -103,10 +103,10 @@ QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
   showGrayWindows();
 
   idlg->show();
-  idlg->setFixedWidth(mw_one->width() - 20);
+  idlg->setFixedWidth(mw_one->width() - 2);
   idlg->setGeometry(
       mw_one->geometry().x() + (mw_one->geometry().width() - idlg->width()) / 2,
-      150, idlg->width(), idlg->height());
+      mw_one->geometry().y(), idlg->width(), idlg->height());
 
   connect(idlg, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
   connect(idlg, &QDialog::accepted, [=]() mutable { closeGrayWindows(); });

@@ -994,7 +994,7 @@ void Todo::reeditText() {
 
   frame->setLayout(vbox);
   vbox->setContentsMargins(6, 6, 6, 10);
-  vbox->setSpacing(3);
+  vbox->setSpacing(10);
 
   QLabel* lblTitle = new QLabel(this);
   lblTitle->adjustSize();
@@ -1065,7 +1065,7 @@ void Todo::reeditText() {
   });
 
   int x, y, w, h;
-  w = mw_one->width();
+  w = mw_one->width() - 2;
   x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   h = mw_one->height() / 3;
   y = mw_one->geometry().y();

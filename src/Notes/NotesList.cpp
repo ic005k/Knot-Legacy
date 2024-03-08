@@ -240,7 +240,7 @@ void NotesList::on_btnRename_clicked() {
 
   frame->setLayout(vbox);
   vbox->setContentsMargins(6, 6, 6, 10);
-  vbox->setSpacing(3);
+  vbox->setSpacing(10);
 
   QLabel *lblTitle = new QLabel(this);
   lblTitle->adjustSize();
@@ -323,10 +323,10 @@ void NotesList::on_btnRename_clicked() {
   });
 
   int x, y, w, h;
-  w = mw_one->width() - 20;
+  w = mw_one->width() - 2;
   x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   h = mw_one->height() / 3;
-  y = geometry().y() + (height() - h) / 4;
+  y = mw_one->geometry().y();
   dlg->setGeometry(x, y, w, h);
   dlg->setModal(true);
   mw_one->set_ToolButtonStyle(dlg);
