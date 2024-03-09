@@ -11,7 +11,7 @@ extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
 extern QTabWidget *tabData, *tabChart;
-extern bool isEBook, isReport;
+extern bool isEBook, isReport, isDark;
 
 QString btnYearText, btnMonthText;
 QStringList listCategory;
@@ -564,23 +564,21 @@ void Report::on_btnOut2Img_clicked() {
     QString st1 = st_list.at(0);
     QString st2 = "(" + st_list.at(1);
     item0->setText(0, st2);
-    twOut2Img->insertTopLevelItem(0, item0);
     item1->setText(0, st1);
-    twOut2Img->insertTopLevelItem(0, item1);
 
     QTreeWidgetItem* item = new QTreeWidgetItem;
     item->setText(0, tr("Total") + " : ");
     item->setText(1, tr("Freq") + " " + QString::number(freq));
     item->setText(2,
                   tr("Amount") + " " + QString("%1").arg(t_amount, 0, 'f', 2));
-    twOut2Img->addTopLevelItem(item);
 
-    twTotalRow = twTotalRow + 4;
-    qreal h = twTotalRow * 28;
+    qreal h = twTotalRow * 28 + 4 * 28;
     twOut2Img->setGeometry(0, 0, mw_one->width(), h);
 
     // The column merge is implemented
-    QTreeWidget* m_t = new QTreeWidget(this);
+    QTreeWidget* m_t = new QTreeWidget();
+    m_t->setStyleSheet(mw_one->treeStyle);
+    m_t->verticalScrollBar()->hide();
     QFont f = twOut2Img->font();
     f.setPointSize(13);
     m_t->setFont(f);
@@ -589,16 +587,26 @@ void Report::on_btnOut2Img_clicked() {
     m_t->headerItem()->setText(1, tr("Freq"));
     m_t->headerItem()->setText(2, tr("Amount"));
     m_t->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    m_t->header()->setDefaultAlignment(Qt::AlignVCenter);
+    m_t->header()->setDefaultAlignment(Qt::AlignCenter);
     m_t->headerItem()->setTextAlignment(0, Qt::AlignHCenter);
     m_t->headerItem()->setTextAlignment(1, Qt::AlignLeft);
     m_t->headerItem()->setTextAlignment(2, Qt::AlignRight);
+    m_t->header()->hide();
     m_t->setAlternatingRowColors(true);
     m_t->setUniformRowHeights(true);
     for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
       QTreeWidgetItem* top = twOut2Img->topLevelItem(i)->clone();
+      if (isDark) {
+        top->setForeground(0, Qt::red);
+        top->setForeground(1, Qt::red);
+        top->setForeground(2, Qt::red);
+      }
       m_t->addTopLevelItem(top);
     }
+
+    m_t->insertTopLevelItem(0, item0);
+    m_t->insertTopLevelItem(0, item1);
+    m_t->addTopLevelItem(item);
 
     for (int i = 0; i < m_t->topLevelItemCount(); i++) {
       QTreeWidgetItem* top = m_t->topLevelItem(i);
