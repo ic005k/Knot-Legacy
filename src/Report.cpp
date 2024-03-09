@@ -58,11 +58,11 @@ Report::Report(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblTo->setFont(font1);
   mw_one->ui->btnYear->setFont(font1);
   mw_one->ui->btnMonth->setFont(font1);
-  mw_one->ui->btnOut2Img->setFont(font1);
   mw_one->ui->btnStartDate->setFont(font1);
   mw_one->ui->btnEndDate->setFont(font1);
   mw_one->ui->btnBack_Report->setFont(font1);
   mw_one->ui->btnCategory->setFont(font1);
+  twOut2Img->setFont(font1);
 
   QFont font = mw_one->ui->lblTotal->font();
   font.setBold(true);
@@ -577,23 +577,23 @@ void Report::on_btnOut2Img_clicked() {
 
     twTotalRow = twTotalRow + 4;
     qreal h = twTotalRow * 28;
-    twOut2Img->setGeometry(0, 0, this->width(), h);
+    twOut2Img->setGeometry(0, 0, mw_one->width(), h);
 
     // The column merge is implemented
     QTreeWidget* m_t = new QTreeWidget(this);
-    QFont f = this->font();
-    f.setPointSize(f.pointSize() - 2);
+    QFont f = twOut2Img->font();
+    f.setPointSize(13);
     m_t->setFont(f);
     m_t->setColumnCount(3);
     m_t->headerItem()->setText(0, "  " + tr("Date") + "  ");
     m_t->headerItem()->setText(1, tr("Freq"));
     m_t->headerItem()->setText(2, tr("Amount"));
     m_t->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    m_t->header()->setDefaultAlignment(Qt::AlignCenter);
+    m_t->header()->setDefaultAlignment(Qt::AlignVCenter);
+    m_t->headerItem()->setTextAlignment(0, Qt::AlignHCenter);
     m_t->headerItem()->setTextAlignment(1, Qt::AlignLeft);
     m_t->headerItem()->setTextAlignment(2, Qt::AlignRight);
     m_t->setAlternatingRowColors(true);
-    m_t->setStyleSheet(mw_one->treeStyle);
     m_t->setUniformRowHeights(true);
     for (int i = 0; i < twOut2Img->topLevelItemCount(); i++) {
       QTreeWidgetItem* top = twOut2Img->topLevelItem(i)->clone();
@@ -608,7 +608,7 @@ void Report::on_btnOut2Img_clicked() {
       }
     }
     m_t->expandAll();
-    m_t->setGeometry(0, 0, this->width(), h + m_t->header()->height());
+    m_t->setGeometry(0, 0, mw_one->width(), h + m_t->header()->height());
 
     // Method1
     QPixmap pixmap(m_t->size());
@@ -786,4 +786,19 @@ void Report::loadDetailsQml() {
       }
     }
   }
+}
+
+void Report::genReportMenu() {
+  QMenu* m_Menu = new QMenu(this);
+
+  QAction* actOuttoPic = new QAction(tr("Output to Image"));
+  m_Menu->addAction(actOuttoPic);
+  connect(actOuttoPic, &QAction::triggered, this,
+          [=]() { on_btnOut2Img_clicked(); });
+
+  int x = 0;
+  x = mw_one->geometry().x() + 2;
+  int y = mw_one->geometry().y() + mw_one->ui->btnMenuReport->height() + 12;
+  QPoint pos(x, y);
+  m_Menu->exec(pos);
 }

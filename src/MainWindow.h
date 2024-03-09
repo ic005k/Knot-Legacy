@@ -719,6 +719,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnRecentOpen_clicked();
 
+  void on_btnMenuReport_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.65";
+QString ver = "1.1.66";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -5735,3 +5735,5 @@ void MainWindow::on_btnStepsOptions_clicked() {
 void MainWindow::on_btnRecentOpen_clicked() {
   m_NotesList->genRecentOpenMenu();
 }
+
+void MainWindow::on_btnMenuReport_clicked() { m_Report->genReportMenu(); }
