@@ -788,7 +788,6 @@ void Report::loadDetailsQml() {
         if (text2.trimmed().length() > 0) str2 = tr("Category") + " : " + text2;
         if (text3.trimmed().length() > 0) str3 = tr("Details") + " : " + text3;
 
-        // appendSteps_xx(text0, text1, text2);
         m_Method->addItemToQW(mw_one->ui->qwReportSub, text0, str1, str2, str3,
                               0);
       }
@@ -798,6 +797,7 @@ void Report::loadDetailsQml() {
 
 void Report::genReportMenu() {
   QMenu* m_Menu = new QMenu(this);
+  m_Menu->setStyleSheet(m_Method->qssMenu);
 
   QAction* actOuttoPic = new QAction(tr("Output to Image"));
   m_Menu->addAction(actOuttoPic);
