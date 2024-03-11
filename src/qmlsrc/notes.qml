@@ -101,7 +101,7 @@ Item {
             color: isDark ? "#FFFFFF" : "#664E30"
 
             background: Rectangle {
-                color: isDark ? "#455364" : "#FFFFFF"
+                color: isDark ? "#19232d" : "#FFFFFF"
                 radius: 0
             }
 
