@@ -797,13 +797,18 @@ void Notes::loadMemoQML() {
         }
       }
 
+      // QString strWidth = "\"" + "100 %" + "\"";
       QStringList list1 = strSrc.split("/memo/");
-      strSrc = "\"file://" + iniDir + "memo/" + list1.at(1);
+      strSrc = "\"file://" + iniDir + "memo/" + list1.at(1) + " ";
 
       QStringList list2 = str1.split("/memo/");
       str = "<img src=\"file:///" + iniDir + "memo/" + list2.at(1);
 
       str = "<a href=" + strSrc + ">" + str + "</a>";
+      QString strW = QString::number(mw_one->width() - 25);
+      QString a1 = "width = ";
+
+      str = str.replace("/>", a1 + "\"" + strW + "\"" + " />");
     }
 
     edit1->appendPlainText(str);
@@ -811,7 +816,7 @@ void Notes::loadMemoQML() {
 
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
 
-  // mw_one->m_Reader->TextEditToFile(edit1, htmlFileName);
+  mw_one->m_Reader->TextEditToFile(edit1, htmlFileName);
   // QMetaObject::invokeMethod((QObject *)root, "loadHtml",
   //                           Q_ARG(QVariant, htmlFileName));
 
