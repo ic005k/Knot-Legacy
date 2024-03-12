@@ -606,6 +606,14 @@ void Notes::insertImage(QString fileName) {
       new_h = h;
     }
 
+    ShowMessage *msg = new ShowMessage(this);
+    bool isYes =
+        msg->showMsg("Knot", tr("Is the original size of the image used?"), 2);
+    if (isYes) {
+      new_w = w;
+      new_h = h;
+    }
+
     QPixmap pix;
     pix = QPixmap::fromImage(img);
     pix =
