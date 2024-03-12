@@ -583,8 +583,7 @@ void Notes::insertImage(QString fileName) {
     QDir dir;
     dir.mkpath(iniDir + "memo/images/");
 
-    QString strTar = iniDir + "memo/images/" + getDateTimeStr() +
-                     ".png";  // + list.at(list.count() - 1);
+    QString strTar = iniDir + "memo/images/" + getDateTimeStr() + ".png";
     if (QFile(strTar).exists()) QFile(strTar).remove();
 
     int nLeftMargin = 9 + 9 + 6;
@@ -612,6 +611,18 @@ void Notes::insertImage(QString fileName) {
     if (isYes) {
       new_w = w;
       new_h = h;
+
+      QSettings Reg(iniDir + "origimage.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+      Reg.setIniCodec("utf-8");
+#endif
+      int count = Reg.value("OrigImage/count", 0).toInt();
+      count++;
+      Reg.setValue("OrigImage/count", count);
+      QString imgFile = strTar;
+      imgFile = imgFile.replace(iniDir, "");
+      count--;
+      Reg.setValue("OrigImage/img" + QString::number(count), imgFile);
     }
 
     QPixmap pix;
@@ -797,18 +808,32 @@ void Notes::loadMemoQML() {
         }
       }
 
-      // QString strWidth = "\"" + "100 %" + "\"";
       QStringList list1 = strSrc.split("/memo/");
       strSrc = "\"file://" + iniDir + "memo/" + list1.at(1) + " ";
 
       QStringList list2 = str1.split("/memo/");
-      str = "<img src=\"file:///" + iniDir + "memo/" + list2.at(1);
-
+      QString str_2 = list2.at(1);
+      str = "<img src=\"file:///" + iniDir + "memo/" + str_2;
       str = "<a href=" + strSrc + ">" + str + "</a>";
-      QString strW = QString::number(mw_one->width() - 25);
-      QString a1 = "width = ";
 
-      str = str.replace("/>", a1 + "\"" + strW + "\"" + " />");
+      QSettings Reg(iniDir + "origimage.ini", QSettings::IniFormat);
+      int count = Reg.value("OrigImage/count", 0).toInt();
+      bool isOrigImage = false;
+      for (int j = 0; j < count; j++) {
+        QString imgFile =
+            Reg.value("OrigImage/img" + QString::number(j)).toString();
+
+        if (("memo/" + str_2).contains(imgFile) && imgFile != "") {
+          isOrigImage = true;
+          break;
+        }
+      }
+
+      if (isOrigImage) {
+        QString strW = QString::number(mw_one->width() - 25);
+        QString a1 = "width = ";
+        str = str.replace("/>", a1 + "\"" + strW + "\"" + " />");
+      }
     }
 
     edit1->appendPlainText(str);

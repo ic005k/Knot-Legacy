@@ -37,7 +37,7 @@ Item {
             //这里使图片居中显示
             x: mapItemArea.width / 2 - mapImg.width / 2
             y: mapItemArea.height / 2 - mapImg.height / 2
-            source:  "file:///" + imgFile
+            source: "file:///" + imgFile
             //图像异步加载，只对本地图像有用
             asynchronous: true
         }
@@ -46,16 +46,17 @@ Item {
             id: mapDragArea
             anchors.fill: parent
             drag.target: mapImg
+
             //这里使图片不管是比显示框大还是比显示框小都不会被拖拽出显示区域
-            drag.minimumX: (mapImg.width > mapItemArea.width) ? (mapItemArea.width
+
+            /*drag.minimumX: (mapImg.width > mapItemArea.width) ? (mapItemArea.width
                                                                  - mapImg.width) : 0
             drag.minimumY: (mapImg.height
                             > mapItemArea.height) ? (mapItemArea.height - mapImg.height) : 0
             drag.maximumX: (mapImg.width
                             > mapItemArea.width) ? 0 : (mapItemArea.width - mapImg.width)
             drag.maximumY: (mapImg.height
-                            > mapItemArea.height) ? 0 : (mapItemArea.height - mapImg.height)
-
+                            > mapItemArea.height) ? 0 : (mapItemArea.height - mapImg.height)*/
             onClicked: {
 
                 // console.log(mouse.x + "  " + mouse.y)
@@ -76,8 +77,8 @@ Item {
         PinchArea {
             anchors.fill: parent
             pinch.target: mapImg
-            pinch.maximumScale: 10
-            pinch.minimumScale: 0.2
+            pinch.maximumScale: 1000
+            pinch.minimumScale: 0.00001
             pinch.dragAxis: Pinch.XAndYAxis
         }
     }
