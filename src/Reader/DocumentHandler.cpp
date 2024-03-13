@@ -294,10 +294,11 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     str = str.replace("../", "");
     picfile = strOpfPath + str;
     qDebug() << "Pic File1 : " << picfile;
-    QFileInfo fi(picfile);
-    QString strBase = fi.fileName();
-    picfile = fi.path() + "/org-" + strBase;
-    qDebug() << "Pic File2 : " << picfile;
+
+    // QFileInfo fi(picfile);
+    // QString strBase = fi.fileName();
+    // picfile = fi.path() + "/org-" + strBase;
+    // qDebug() << "Pic File2 : " << picfile;
 
     if (QFile(picfile).exists()) {
       LoadPic *m_LoadPic = new LoadPic(mw_one);

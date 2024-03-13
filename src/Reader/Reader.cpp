@@ -383,7 +383,7 @@ void dlgReader::openFile(QString openfile) {
         deleteDirfile(dirpathbak);
         QFile(strOpfPath + "main.css").remove();
         QFile::copy(":/res/main.css", strOpfPath + "main.css");
-        proceImg();
+        // proceImg();
       }
 
     } else if (strHead.trimmed().toLower().contains("pdf")) {
@@ -714,7 +714,23 @@ void dlgReader::processHtml(int index) {
           }
           strSrc = strSrc.replace("src=", "");
           strSrc = strSrc.replace("/>", "");
-          str = "<a href=" + strSrc + ">" + str + "</a>";
+
+          QString strimg = strSrc;
+          strimg = strimg.replace("\"", "");
+          QString imgFile = strOpfPath + strimg;
+          qDebug() << "imgFile=" << imgFile;
+          QImage img(imgFile);
+
+          int nw = mw_one->width() - 104;
+          QString strw = " width = " + QString::number(nw);
+          if (img.width() >= nw) {
+            str = str.replace(" width = ", " width1 = ");
+            str = str.replace("/>", strw + " />");
+            str = "<a href=" + strSrc + ">" + str + " </a>";
+          } else {
+            str = "<a href=" + strSrc + ">" + str + "</a>";
+          }
+
           qDebug() << "strSrc=" << strSrc << str;
 
           str = str.replace("width=", "width1=");
