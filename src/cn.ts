@@ -1805,7 +1805,7 @@ in skydrive folder</source>
     <name>Notes</name>
     <message>
         <location filename="Notes/Notes.ui" line="14"/>
-        <location filename="Notes/Notes.cpp" line="1227"/>
+        <location filename="Notes/Notes.cpp" line="1236"/>
         <source>Notes</source>
         <translation>笔记</translation>
     </message>
@@ -2036,37 +2036,47 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="611"/>
+        <location filename="Notes/Notes.cpp" line="609"/>
+        <source>No</source>
+        <translation>否</translation>
+    </message>
+    <message>
+        <location filename="Notes/Notes.cpp" line="610"/>
+        <source>Yes</source>
+        <translation>是</translation>
+    </message>
+    <message>
+        <location filename="Notes/Notes.cpp" line="612"/>
         <source>Is the original size of the image used?</source>
         <translation>是否使用图像的原始尺寸？</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="875"/>
+        <location filename="Notes/Notes.cpp" line="884"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="918"/>
+        <location filename="Notes/Notes.cpp" line="927"/>
         <source>Bold Italic</source>
         <translation>粗斜体</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="924"/>
+        <location filename="Notes/Notes.cpp" line="933"/>
         <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="930"/>
+        <location filename="Notes/Notes.cpp" line="939"/>
         <source>Underline</source>
         <translation>下划线</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="936"/>
+        <location filename="Notes/Notes.cpp" line="945"/>
         <source>Strickout</source>
         <translation>删除线</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="978"/>
+        <location filename="Notes/Notes.cpp" line="987"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
@@ -2075,37 +2085,37 @@ in skydrive folder</source>
         <translation type="vanished">红色</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="997"/>
+        <location filename="Notes/Notes.cpp" line="1006"/>
         <source>Bold</source>
         <translation>粗体</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1227"/>
+        <location filename="Notes/Notes.cpp" line="1236"/>
         <source>Do you want to save the notes?</source>
         <translation>您想保存笔记吗？</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1268"/>
+        <location filename="Notes/Notes.cpp" line="1277"/>
         <source>The end of the document has been reached.</source>
         <translation>已到达文档的结尾</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1289"/>
+        <location filename="Notes/Notes.cpp" line="1298"/>
         <source>The beginning of the document has been reached.</source>
         <translation>已到达文档的开头</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1318"/>
+        <location filename="Notes/Notes.cpp" line="1327"/>
         <source>Word not found</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1319"/>
+        <location filename="Notes/Notes.cpp" line="1328"/>
         <source>Sorry,the word cannot be found.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1347"/>
+        <location filename="Notes/Notes.cpp" line="1356"/>
         <source>Letter</source>
         <translation>信函</translation>
     </message>
@@ -2118,7 +2128,7 @@ in skydrive folder</source>
         <translation type="vanished">取消</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1355"/>
+        <location filename="Notes/Notes.cpp" line="1364"/>
         <source>Page size</source>
         <translation>页面尺寸</translation>
     </message>
@@ -2127,17 +2137,17 @@ in skydrive folder</source>
         <translation type="vanished">页面尺寸：</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1379"/>
+        <location filename="Notes/Notes.cpp" line="1388"/>
         <source>Portrait</source>
         <translation>纵向</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1379"/>
+        <location filename="Notes/Notes.cpp" line="1388"/>
         <source>Landscape</source>
         <translation>横向</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1385"/>
+        <location filename="Notes/Notes.cpp" line="1394"/>
         <source>Orientation</source>
         <translation>方向</translation>
     </message>
@@ -2146,17 +2156,17 @@ in skydrive folder</source>
         <translation type="vanished">方向：</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1413"/>
+        <location filename="Notes/Notes.cpp" line="1422"/>
         <source>The PDF file is successfully exported.</source>
         <translation>PDF文件导出成功</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1420"/>
+        <location filename="Notes/Notes.cpp" line="1429"/>
         <source>PDF files</source>
         <translation>PDF文件</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1421"/>
+        <location filename="Notes/Notes.cpp" line="1430"/>
         <source>Export current note as PDF</source>
         <translation>输出当前笔记到PDF</translation>
     </message>

@@ -606,23 +606,13 @@ void Notes::insertImage(QString fileName) {
     }
 
     ShowMessage *msg = new ShowMessage(this);
+    msg->ui->btnCancel->setText(tr("No"));
+    msg->ui->btnOk->setText(tr("Yes"));
     bool isYes =
         msg->showMsg("Knot", tr("Is the original size of the image used?"), 2);
     if (isYes) {
       new_w = w;
       new_h = h;
-
-      QSettings Reg(iniDir + "origimage.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      Reg.setIniCodec("utf-8");
-#endif
-      int count = Reg.value("OrigImage/count", 0).toInt();
-      count++;
-      Reg.setValue("OrigImage/count", count);
-      QString imgFile = strTar;
-      imgFile = imgFile.replace(iniDir, "");
-      count--;
-      Reg.setValue("OrigImage/img" + QString::number(count), imgFile);
     }
 
     QPixmap pix;
@@ -816,20 +806,9 @@ void Notes::loadMemoQML() {
       str = "<img src=\"file:///" + iniDir + "memo/" + str_2;
       str = "<a href=" + strSrc + ">" + str + "</a>";
 
-      QSettings Reg(iniDir + "origimage.ini", QSettings::IniFormat);
-      int count = Reg.value("OrigImage/count", 0).toInt();
-      bool isOrigImage = false;
-      for (int j = 0; j < count; j++) {
-        QString imgFile =
-            Reg.value("OrigImage/img" + QString::number(j)).toString();
-
-        if (("memo/" + str_2).contains(imgFile) && imgFile != "") {
-          isOrigImage = true;
-          break;
-        }
-      }
-
-      if (isOrigImage) {
+      QString imgFile = iniDir + "memo/" + str_2.split("\"").at(0);
+      QImage img(imgFile);
+      if (img.width() >= mw_one->width() - 25) {
         QString strW = QString::number(mw_one->width() - 25);
         QString a1 = "width = ";
         str = str.replace("/>", a1 + "\"" + strW + "\"" + " />");
