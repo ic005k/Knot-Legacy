@@ -24,12 +24,12 @@ p {
 }
 
 img {
-	margin:0px;
+        margin:0px;
 	padding:0px;
 	line-height:35px;
 	border-radius: 5px;
 	width: 100%;
-    height: auto;
+        height: auto;
 	text-align:center
     
 }

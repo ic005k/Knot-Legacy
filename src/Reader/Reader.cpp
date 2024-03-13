@@ -262,12 +262,9 @@ void Reader::openFile(QString openfile) {
     QString strHead = readTextList.at(0);
 
     if (strHead.trimmed().mid(0, 2) == "PK") {
-      QString dirpath, dirpathbak;
+      QString dirpath;
       dirpath = privateDir + "temp/";
-      dirpathbak = privateDir + "tempbak/";
-
-      QDir dir;
-      dir.rename(dirpath, dirpathbak);
+      deleteDirfile(dirpath);
 
       QString temp = privateDir + "temp.zip";
       QFile::remove(temp);
@@ -383,10 +380,8 @@ void Reader::openFile(QString openfile) {
         qDebug() << "====== htmlFiles Count== 0 ======";
         return;
       } else {
-        deleteDirfile(dirpathbak);
         QFile(strOpfPath + "main.css").remove();
         QFile::copy(":/res/main.css", strOpfPath + "main.css");
-        // proceImg();
       }
 
     } else if (strHead.trimmed().toLower().contains("pdf")) {
