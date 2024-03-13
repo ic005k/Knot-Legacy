@@ -653,6 +653,7 @@ void Reader::refreshEpubPage() {
 void Reader::setEpubPagePosition(int index) {
   savePageVPos();
   htmlIndex = index;
+  processHtml(index);
   setQMLHtml();
   setPageVPos();
   showInfo();
