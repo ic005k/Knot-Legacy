@@ -2404,6 +2404,22 @@ QTabBar::scroller {width:0}
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
+        <widget class="QLabel" name="lblImgInfo">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>ImgInfo</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QQuickWidget" name="qw_Img">
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>

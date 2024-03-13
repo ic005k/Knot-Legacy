@@ -47,6 +47,11 @@ Item {
             anchors.fill: parent
             drag.target: mapImg
 
+            onDoubleClicked: {
+                zoomin()
+                zoomin()
+            }
+
             //这里使图片不管是比显示框大还是比显示框小都不会被拖拽出显示区域
 
             /*drag.minimumX: (mapImg.width > mapItemArea.width) ? (mapItemArea.width

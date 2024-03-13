@@ -11,12 +11,22 @@ LoadPic::LoadPic(QWidget* parent) : QDialog(parent) {
   // mw_one->ui->f_ImgFun->setStyleSheet(
   //     "QFrame#myframe{border-image:url(:/res/b.png)}");
 
+  QFont font = this->font();
+  font.setPointSize(13);
+  mw_one->ui->lblImgInfo->setFont(font);
+  mw_one->ui->lblImgInfo->adjustSize();
+  mw_one->ui->lblImgInfo->setWordWrap(true);
+  mw_one->ui->lblImgInfo->setText("");
+
   this->installEventFilter(this);
 }
 
 LoadPic::~LoadPic() {}
 
 void LoadPic::initMain(QString imgFile) {
+  mw_one->ui->lblImgInfo->setText(
+      imgFile + "  " + mw_one->getFileSize(QFile(imgFile).size(), 2));
+
   if (mw_one->isReaderVisible) mw_one->ui->frameReader->hide();
   if (mw_one->isMemoVisible) mw_one->ui->frameNotes->hide();
 
