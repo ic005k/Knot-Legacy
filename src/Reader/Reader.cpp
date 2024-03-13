@@ -722,9 +722,9 @@ void Reader::processHtml(int index) {
           QString strimg = strSrc;
           strimg = strimg.replace("\"", "");
           QString imgFile = strOpfPath + strimg;
+          imgFile = imgFile.replace("../", "");
           qDebug() << "imgFile=" << imgFile;
           QImage img(imgFile);
-
           int nw = mw_one->width() - 104;
           QString strw = " width = " + QString::number(nw);
           if (img.width() >= nw) {
@@ -740,9 +740,6 @@ void Reader::processHtml(int index) {
           str = str.replace("width=", "width1=");
           str = str.replace("height=", "height1=");
         }
-
-        // if (!str.contains("stylesheet") && !str.contains("<style") &&
-        //     !str.contains("/style>"))
 
         plain_edit->appendPlainText(str);
       }
