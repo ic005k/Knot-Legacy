@@ -3723,7 +3723,7 @@ void MainWindow::init_Instance() {
   m_Notes = new Notes(this);
   m_StepsOptions = new StepsOptions(this);
   m_Steps = new Steps(this);
-  m_Reader = new dlgReader(this);
+  m_Reader = new Reader(this);
   m_TodoAlarm = new TodoAlarm(this);
   m_CloudBackup = new CloudBackup;
   m_PageIndicator = new PageIndicator(this);

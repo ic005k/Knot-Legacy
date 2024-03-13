@@ -19,7 +19,7 @@ int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
 
-dlgReader::dlgReader(QWidget* parent) : QDialog(parent) {
+Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
   mw_one->ui->lblTitle->hide();
@@ -30,6 +30,9 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent) {
 
   // mw_one->ui->textBrowser->verticalScrollBar()->setStyleSheet(
   //     m_Method->vsbarStyleSmall);
+
+  mw_one->ui->textBrowser->horizontalScrollBar()->hide();
+  mw_one->ui->textBrowser->verticalScrollBar()->hide();
 
   QPalette pt = palette();
   pt.setBrush(QPalette::Text, Qt::black);
@@ -57,9 +60,9 @@ dlgReader::dlgReader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->btnPages->setFont(f);
 }
 
-dlgReader::~dlgReader() {}
+Reader::~Reader() {}
 
-bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
+bool Reader::eventFilter(QObject* obj, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
@@ -69,9 +72,9 @@ bool dlgReader::eventFilter(QObject* obj, QEvent* evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void dlgReader::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
+void Reader::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
-void dlgReader::on_btnOpen_clicked() {
+void Reader::on_btnOpen_clicked() {
   openfile =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
 
@@ -84,7 +87,7 @@ void dlgReader::on_btnOpen_clicked() {
   startOpenFile(openfile);
 }
 
-void dlgReader::setReaderStyle() {
+void Reader::setReaderStyle() {
   QColor textColor, baseColor;
 
   if (readerStyle == "1") {
@@ -163,7 +166,7 @@ void dlgReader::setReaderStyle() {
   mw_one->ui->textBrowser->setPalette(pt);
 }
 
-void dlgReader::startOpenFile(QString openfile) {
+void Reader::startOpenFile(QString openfile) {
   if (isReport) return;
 
   setPdfViewVisible(false);
@@ -248,7 +251,7 @@ void dlgReader::startOpenFile(QString openfile) {
     return;
 }
 
-void dlgReader::openFile(QString openfile) {
+void Reader::openFile(QString openfile) {
   isOpen = false;
   qDebug() << "Starting to open files...";
 
@@ -404,7 +407,7 @@ void dlgReader::openFile(QString openfile) {
   }  // end file exists
 }
 
-QString dlgReader::get_idref(QString str0) {
+QString Reader::get_idref(QString str0) {
   QString idref;
   str0 = str0.trimmed();
   if (str0.contains("idref=") && str0.mid(0, 8) == "<itemref") {
@@ -428,7 +431,7 @@ QString dlgReader::get_idref(QString str0) {
   return idref;
 }
 
-QString dlgReader::get_href(QString idref, QStringList opfList) {
+QString Reader::get_href(QString idref, QStringList opfList) {
   for (int i = 0; i < opfList.count(); i++) {
     QString str0 = opfList.at(i);
     str0 = str0.trimmed();
@@ -454,14 +457,14 @@ QString dlgReader::get_href(QString idref, QStringList opfList) {
   return "";
 }
 
-QString dlgReader::getTextEditLineText(QTextEdit* txtEdit, int i) {
+QString Reader::getTextEditLineText(QTextEdit* txtEdit, int i) {
   QTextBlock block = txtEdit->document()->findBlockByNumber(i);
   txtEdit->setTextCursor(QTextCursor(block));
   QString lineText = txtEdit->document()->findBlockByNumber(i).text();
   return lineText;
 }
 
-void dlgReader::saveReader() {
+void Reader::saveReader() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -494,7 +497,7 @@ void dlgReader::saveReader() {
   }
 }
 
-void dlgReader::initReader() {
+void Reader::initReader() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -517,7 +520,7 @@ void dlgReader::initReader() {
   getBookList();
 }
 
-void dlgReader::getBookList() {
+void Reader::getBookList() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -532,7 +535,7 @@ void dlgReader::getBookList() {
   }
 }
 
-void dlgReader::setQMLText(QString txt1) {
+void Reader::setQMLText(QString txt1) {
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
 
   // white-space: pre-wrap;
@@ -557,14 +560,14 @@ void dlgReader::setQMLText(QString txt1) {
   setAni();
 }
 
-void dlgReader::loadQMLText(QString str) {
+void Reader::loadQMLText(QString str) {
   if (isText || isEpub) {
     QQuickItem* root = mw_one->ui->qwReader->rootObject();
     QMetaObject::invokeMethod((QObject*)root, "loadText", Q_ARG(QVariant, str));
   }
 }
 
-void dlgReader::on_btnPageUp_clicked() {
+void Reader::on_btnPageUp_clicked() {
   if (mw_one->isSelText) return;
   mw_one->ui->lblTitle->hide();
 
@@ -598,7 +601,7 @@ void dlgReader::on_btnPageUp_clicked() {
   showInfo();
 }
 
-void dlgReader::on_btnPageNext_clicked() {
+void Reader::on_btnPageNext_clicked() {
   if (mw_one->isSelText) return;
   mw_one->ui->lblTitle->hide();
 
@@ -638,7 +641,7 @@ void dlgReader::on_btnPageNext_clicked() {
   showInfo();
 }
 
-void dlgReader::refreshEpubPage() {
+void Reader::refreshEpubPage() {
   if (isEpub) {
     savePageVPos();
     setQMLHtml();
@@ -647,7 +650,7 @@ void dlgReader::refreshEpubPage() {
   }
 }
 
-void dlgReader::setEpubPagePosition(int index) {
+void Reader::setEpubPagePosition(int index) {
   savePageVPos();
   htmlIndex = index;
   setQMLHtml();
@@ -655,7 +658,7 @@ void dlgReader::setEpubPagePosition(int index) {
   showInfo();
 }
 
-void dlgReader::processHtml(int index) {
+void Reader::processHtml(int index) {
   if (!isEpub) return;
 
   QString hf = htmlFiles.at(index);
@@ -749,7 +752,7 @@ void dlgReader::processHtml(int index) {
   delete plain_edit;
 }
 
-void dlgReader::setQMLHtml() {
+void Reader::setQMLHtml() {
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
 
   currentHtmlFile = htmlFiles.at(htmlIndex);
@@ -771,7 +774,7 @@ void dlgReader::setQMLHtml() {
   setAni();
 }
 
-void dlgReader::setAni() {
+void Reader::setAni() {
   if (isPageNext)
     mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
                                                             mw_one->width());
@@ -782,7 +785,7 @@ void dlgReader::setAni() {
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
 }
 
-QStringList dlgReader::readText(QString textFile) {
+QStringList Reader::readText(QString textFile) {
   QStringList list, list1;
 
   if (QFile(textFile).exists()) {
@@ -810,7 +813,7 @@ QStringList dlgReader::readText(QString textFile) {
   return list1;
 }
 
-QString dlgReader::GetCorrectUnicode(const QByteArray& text) {
+QString Reader::GetCorrectUnicode(const QByteArray& text) {
   QTextCodec::ConverterState state;
   QTextCodec* codec = QTextCodec::codecForName("UTF-8");
   QString strtext = codec->toUnicode(text.constData(), text.size(), &state);
@@ -822,15 +825,15 @@ QString dlgReader::GetCorrectUnicode(const QByteArray& text) {
   return strtext;
 }
 
-void dlgReader::closeEvent(QCloseEvent* event) {
+void Reader::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   saveReader();
   savePageVPos();
 }
 
-void dlgReader::paintEvent(QPaintEvent* event) { Q_UNUSED(event); }
+void Reader::paintEvent(QPaintEvent* event) { Q_UNUSED(event); }
 
-void dlgReader::goPostion() {
+void Reader::goPostion() {
   if (isOpen) {
     QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -863,7 +866,7 @@ void dlgReader::goPostion() {
   }
 }
 
-int dlgReader::deleteDirfile(QString dirName) {
+int Reader::deleteDirfile(QString dirName) {
   QDir directory(dirName);
   if (!directory.exists()) {
     return true;
@@ -896,7 +899,7 @@ int dlgReader::deleteDirfile(QString dirName) {
   return !error;
 }
 
-void dlgReader::setFontSize(int textFontSize) {
+void Reader::setFontSize(int textFontSize) {
   qreal pos1 = getVPos();
   qreal h1 = getVHeight();
 
@@ -909,7 +912,7 @@ void dlgReader::setFontSize(int textFontSize) {
   textPos = pos2;
 }
 
-void dlgReader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
+void Reader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
   QFile* file;
   file = new QFile;
   file->setFileName(fileName);
@@ -923,7 +926,7 @@ void dlgReader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
     qDebug() << "Write failure!" << fileName;
 }
 
-void dlgReader::savePageVPos() {
+void Reader::savePageVPos() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -938,7 +941,7 @@ void dlgReader::savePageVPos() {
   }
 }
 
-void dlgReader::setPageVPos() {
+void Reader::setPageVPos() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -959,12 +962,12 @@ void dlgReader::setPageVPos() {
   }
 }
 
-void dlgReader::setVPos(qreal pos) {
+void Reader::setVPos(qreal pos) {
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
 }
 
-qreal dlgReader::getVPos() {
+qreal Reader::getVPos() {
   QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getVPos",
@@ -973,7 +976,7 @@ qreal dlgReader::getVPos() {
   return textPos;
 }
 
-qreal dlgReader::getVHeight() {
+qreal Reader::getVHeight() {
   QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getVHeight",
@@ -982,13 +985,13 @@ qreal dlgReader::getVHeight() {
   return textHeight;
 }
 
-qreal dlgReader::getNewVPos(qreal pos1, qreal h1, qreal h2) {
+qreal Reader::getNewVPos(qreal pos1, qreal h1, qreal h2) {
   qreal pos2;
   pos2 = pos1 * h2 / h1;
   return pos2;
 }
 
-void dlgReader::showInfo() {
+void Reader::showInfo() {
   if (isText) {
     if (totallines > baseLines) {
       mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
@@ -1013,7 +1016,7 @@ void dlgReader::showInfo() {
   mw_one->m_ReaderSet->updateProgress();
 }
 
-void dlgReader::SplitFile(QString qfile) {
+void Reader::SplitFile(QString qfile) {
   QTextEdit* text_edit = new QTextEdit;
   QPlainTextEdit* plain_edit = new QPlainTextEdit;
   QPlainTextEdit* plain_editHead = new QPlainTextEdit;
@@ -1106,7 +1109,7 @@ void dlgReader::SplitFile(QString qfile) {
   delete plain_editHead;
 }
 
-QString dlgReader::getNCX_File(QString path) {
+QString Reader::getNCX_File(QString path) {
   QDir* dir = new QDir(path);
   QStringList filter;
   filter << "*.ncx";
@@ -1121,7 +1124,7 @@ QString dlgReader::getNCX_File(QString path) {
   return "";
 }
 
-void dlgReader::proceImg() {
+void Reader::proceImg() {
   QString imgdir = strOpfPath + "Images";
   QDir dir0(imgdir);
   if (!dir0.exists()) imgdir = strOpfPath + "images";
@@ -1187,7 +1190,7 @@ void dlgReader::proceImg() {
   }
 }
 
-QString dlgReader::getUriRealPath(QString uripath) {
+QString Reader::getUriRealPath(QString uripath) {
 #ifdef Q_OS_ANDROID
   QString realpath;
 
@@ -1213,7 +1216,7 @@ QString dlgReader::getUriRealPath(QString uripath) {
   return uripath;
 }
 
-void dlgReader::getReadList() {
+void Reader::getReadList() {
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);
     QStringList list = str.split("|");
@@ -1256,7 +1259,7 @@ void dlgReader::getReadList() {
   }
 }
 
-void dlgReader::clearAllReaderRecords() {
+void Reader::clearAllReaderRecords() {
   int count = m_Method->getCountFromQW(mw_one->ui->qwBookList);
   if (count == 0) return;
 
@@ -1271,7 +1274,7 @@ void dlgReader::clearAllReaderRecords() {
   if (file.exists()) file.remove();
 }
 
-void dlgReader::openBookListItem() {
+void Reader::openBookListItem() {
   int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwBookList);
 
   if (index < 0) return;
@@ -1288,7 +1291,7 @@ void dlgReader::openBookListItem() {
   mw_one->on_btnBackBookList_clicked();
 }
 
-void dlgReader::backDir() {
+void Reader::backDir() {
   if (!QFile(fileName).exists()) return;
 
   setEpubPagePosition(mainDirIndex);
@@ -1303,7 +1306,7 @@ void dlgReader::backDir() {
   }
 }
 
-QString dlgReader::getCoverPicFile(QString htmlFile) {
+QString Reader::getCoverPicFile(QString htmlFile) {
   QStringList list = readText(htmlFile);
   QString str0, str1;
   for (int i = 0; i < list.count(); i++) {
@@ -1333,7 +1336,7 @@ QString dlgReader::getCoverPicFile(QString htmlFile) {
   return "";
 }
 
-void dlgReader::setPdfViewVisible(bool vv) {
+void Reader::setPdfViewVisible(bool vv) {
   if (mw_one->isPdfNewMothod) return;
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   if (!mw_one->isPdfNewMothod)
@@ -1344,7 +1347,7 @@ void dlgReader::setPdfViewVisible(bool vv) {
                               Q_ARG(QVariant, vv));
 }
 
-int dlgReader::getPdfCurrentPage() {
+int Reader::getPdfCurrentPage() {
   QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getCurrentPage",
@@ -1352,7 +1355,7 @@ int dlgReader::getPdfCurrentPage() {
   return itemCount.toInt();
 }
 
-qreal dlgReader::getScale() {
+qreal Reader::getScale() {
   QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "getScale",
@@ -1360,26 +1363,26 @@ qreal dlgReader::getScale() {
   return itemCount.toReal();
 }
 
-void dlgReader::setPdfPage(int page) {
+void Reader::setPdfPage(int page) {
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setPdfPage",
                             Q_ARG(QVariant, page));
 }
 
-void dlgReader::setPdfScale(qreal scale) {
+void Reader::setPdfScale(qreal scale) {
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setPdfScale",
                             Q_ARG(QVariant, scale));
 }
 
-void dlgReader::setHideShowTopBar() {
+void Reader::setHideShowTopBar() {
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "setHideShowTopBar");
 }
 
 // 拷贝文件夹：
-bool dlgReader::copyDirectoryFiles(const QString& fromDir, const QString& toDir,
-                                   bool coverFileIfExist) {
+bool Reader::copyDirectoryFiles(const QString& fromDir, const QString& toDir,
+                                bool coverFileIfExist) {
   QDir sourceDir(fromDir);
   QDir targetDir(toDir);
   if (!targetDir.exists()) { /**< 如果目标目录不存在，则进行创建 */
@@ -1410,7 +1413,7 @@ bool dlgReader::copyDirectoryFiles(const QString& fromDir, const QString& toDir,
   return true;
 }
 
-void dlgReader::on_hSlider_sliderReleased(int position) {
+void Reader::on_hSlider_sliderReleased(int position) {
   mw_one->ui->lblTitle->hide();
 
   int max = 0;
@@ -1422,7 +1425,7 @@ void dlgReader::on_hSlider_sliderReleased(int position) {
   setPageVPos();
 }
 
-void dlgReader::getLines() {
+void Reader::getLines() {
   QString qsShow;
 
   mw_one->m_ReaderSet->ui->hSlider->setMinimum(1);

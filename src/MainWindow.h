@@ -234,7 +234,7 @@ class MainWindow : public QMainWindow {
   Preferences *m_Preferences;
   Notes *m_Notes;
   Steps *m_Steps;
-  dlgReader *m_Reader;
+  Reader *m_Reader;
   TodoAlarm *m_TodoAlarm;
   CloudBackup *m_CloudBackup;
   PageIndicator *m_PageIndicator;

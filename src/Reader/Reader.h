@@ -22,16 +22,16 @@
 #include "src/Reader/File.h"
 
 namespace Ui {
-class dlgReader;
+class Reader;
 }
 
-class dlgReader : public QDialog {
+class Reader : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgReader(QWidget *parent = nullptr);
-  ~dlgReader();
-  Ui::dlgReader *ui;
+  explicit Reader(QWidget *parent = nullptr);
+  ~Reader();
+  Ui::Reader *ui;
 
   QDialog *frame;
   QString openfile;
