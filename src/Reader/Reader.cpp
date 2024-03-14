@@ -1422,7 +1422,6 @@ void Reader::getLines() {
   QString qsShow;
 
   mw_one->m_ReaderSet->ui->hSlider->setMinimum(1);
-  // mw_one->m_ReaderSet->ui->hSlider->setValue(sPos);
 
   if (isText) {
     mw_one->m_ReaderSet->ui->hSlider->setMaximum(totallines / baseLines);
@@ -1453,6 +1452,7 @@ void Reader::getLines() {
     mw_one->m_ReaderSet->ui->hSlider->setMaximum(htmlFiles.count());
     htmlIndex = sPos - 1;
     if (htmlIndex < 0) htmlIndex = 0;
+    processHtml(htmlIndex);
     setQMLHtml();
   }
 }

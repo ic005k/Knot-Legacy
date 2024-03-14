@@ -242,7 +242,10 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
   if (mw_one->curx != 0) return;
 
   qDebug() << "file : " << htmlFile;
-  if (htmlFile.contains("http")) {
+  if (htmlFile.mid(0, 4) == "http" || htmlFile.mid(0, 4) == "www.") {
+    if (htmlFile.mid(0, 4) != "http") {
+      htmlFile = "http://" + htmlFile;
+    }
     QUrl url = htmlFile;
 
     m_Method->m_widget = new QWidget(mw_one);
