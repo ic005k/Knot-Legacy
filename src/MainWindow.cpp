@@ -40,7 +40,7 @@ QSettings *iniPreferences;
 extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del, isWholeMonth,
     isDateSection;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
-    fileName, strOpfPath;
+    fileName, strOpfPath, catalogueFile;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2;
 extern QStringList readTextList, htmlFiles, listCategory;
@@ -196,6 +196,9 @@ void MainWindow::readEBookDone() {
 
       if (isEpub) {
         ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
+        if (QFile(catalogueFile).exists()) {
+          mw_one->ui->btnCatalogue->show();
+        }
       }
 
       if (isText) {
@@ -5737,3 +5740,5 @@ void MainWindow::on_btnRecentOpen_clicked() {
 }
 
 void MainWindow::on_btnMenuReport_clicked() { m_Report->genReportMenu(); }
+
+void MainWindow::on_btnCatalogue_clicked() { m_Reader->showCatalogue(); }

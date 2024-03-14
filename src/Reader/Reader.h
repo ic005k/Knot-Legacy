@@ -59,7 +59,7 @@ class Reader : public QDialog {
   void setQMLText(QString);
 
   static int deleteDirfile(QString dirName);
-  void setQMLHtml();
+  void setQMLHtml(QString htmlFile);
   void setFontSize(int textFontSize);
   static void TextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
   void savePageVPos();
@@ -102,7 +102,8 @@ class Reader : public QDialog {
 
   void clearAllReaderRecords();
   void on_hSlider_sliderReleased(int position);
- public slots:
+  void showCatalogue();
+  public slots:
 
   void openBookListItem();
 

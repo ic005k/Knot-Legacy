@@ -14,7 +14,7 @@ extern int fontSize;
 bool isOpen = false;
 bool isEpub, isText, isPDF;
 QStringList readTextList, htmlFiles;
-QString strOpfPath, fileName, ebookFile, strTitle;
+QString strOpfPath, fileName, ebookFile, strTitle, catalogueFile;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
@@ -187,6 +187,7 @@ void Reader::startOpenFile(QString openfile) {
   if (QFile(openfile).exists()) {
     isEBook = true;
     strTitle = "";
+    catalogueFile = "";
     mw_one->ui->btnPages->setText(tr("Pages") + "\n1\n1");
     mw_one->ui->progReader->setValue(0);
     mw_one->ui->btnReader->setEnabled(false);
@@ -195,6 +196,7 @@ void Reader::startOpenFile(QString openfile) {
     mw_one->ui->lblTitle->hide();
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
+    mw_one->ui->btnCatalogue->hide();
 
     QString bookName;
 #ifdef Q_OS_ANDROID
@@ -253,6 +255,7 @@ void Reader::startOpenFile(QString openfile) {
 
 void Reader::openFile(QString openfile) {
   isOpen = false;
+
   qDebug() << "Starting to open files...";
 
   if (QFile(openfile).exists()) {
@@ -589,7 +592,8 @@ void Reader::on_btnPageUp_clicked() {
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
     processHtml(htmlIndex);
-    setQMLHtml();
+    currentHtmlFile = htmlFiles.at(htmlIndex);
+    setQMLHtml(currentHtmlFile);
   }
 
   setPageVPos();
@@ -630,7 +634,8 @@ void Reader::on_btnPageNext_clicked() {
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
     processHtml(htmlIndex);
-    setQMLHtml();
+    currentHtmlFile = htmlFiles.at(htmlIndex);
+    setQMLHtml(currentHtmlFile);
   }
   setPageVPos();
   showInfo();
@@ -639,7 +644,8 @@ void Reader::on_btnPageNext_clicked() {
 void Reader::refreshEpubPage() {
   if (isEpub) {
     savePageVPos();
-    setQMLHtml();
+    currentHtmlFile = htmlFiles.at(htmlIndex);
+    setQMLHtml(currentHtmlFile);
     setPageVPos();
     showInfo();
   }
@@ -649,7 +655,8 @@ void Reader::setEpubPagePosition(int index) {
   savePageVPos();
   htmlIndex = index;
   processHtml(index);
-  setQMLHtml();
+  currentHtmlFile = htmlFiles.at(index);
+  setQMLHtml(currentHtmlFile);
   setPageVPos();
   showInfo();
 }
@@ -745,24 +752,20 @@ void Reader::processHtml(int index) {
   delete plain_edit;
 }
 
-void Reader::setQMLHtml() {
+void Reader::setQMLHtml(QString htmlFile) {
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
-
-  currentHtmlFile = htmlFiles.at(htmlIndex);
-
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
-
 #ifdef Q_OS_WIN
-  QString htmlBuffer = mw_one->loadText(currentHtmlFile);
+  QString htmlBuffer = mw_one->loadText(htmlFile);
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
 #else
   QVariant msg;
-  msg = currentHtmlFile;
+  msg = htmlFile;
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 #endif
 
-  qDebug() << "Html File : " << currentHtmlFile;
+  qDebug() << "Html File : " << htmlFile;
 
   setAni();
 }
@@ -842,7 +845,8 @@ void Reader::goPostion() {
       htmlIndex = Reg.value("/Reader/htmlIndex" + fileName, 0).toInt();
 
       processHtml(htmlIndex);
-      setQMLHtml();
+      currentHtmlFile = htmlFiles.at(htmlIndex);
+      setQMLHtml(currentHtmlFile);
       setPageVPos();
       showInfo();
     }
@@ -1453,6 +1457,12 @@ void Reader::getLines() {
     htmlIndex = sPos - 1;
     if (htmlIndex < 0) htmlIndex = 0;
     processHtml(htmlIndex);
-    setQMLHtml();
+    currentHtmlFile = htmlFiles.at(htmlIndex);
+    setQMLHtml(currentHtmlFile);
   }
+}
+
+void Reader::showCatalogue() {
+  savePageVPos();
+  setQMLHtml(catalogueFile);
 }
