@@ -33,6 +33,7 @@ class Reader : public QDialog {
   ~Reader();
   Ui::Reader *ui;
 
+  bool isShowed;
   QDialog *frame;
   QString openfile;
   QString readerStyle;
@@ -103,7 +104,7 @@ class Reader : public QDialog {
   void clearAllReaderRecords();
   void on_hSlider_sliderReleased(int position);
   void showCatalogue();
-  public slots:
+ public slots:
 
   void openBookListItem();
 
@@ -123,6 +124,7 @@ class Reader : public QDialog {
   static QString get_href(QString idref, QStringList opfList);
   static void proceImg();
   void getLines();
+  static void ncx2html();
 };
 
 #endif  // READER_H

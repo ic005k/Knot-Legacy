@@ -198,6 +198,7 @@ void MainWindow::readEBookDone() {
         ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
         if (QFile(catalogueFile).exists()) {
           mw_one->ui->btnCatalogue->show();
+          mw_one->m_Reader->isShowed = false;
         }
       }
 

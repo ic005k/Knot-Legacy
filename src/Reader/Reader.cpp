@@ -385,6 +385,7 @@ void Reader::openFile(QString openfile) {
       } else {
         QFile(strOpfPath + "main.css").remove();
         QFile::copy(":/res/main.css", strOpfPath + "main.css");
+        ncx2html();
       }
 
     } else if (strHead.trimmed().toLower().contains("pdf")) {
@@ -1463,6 +1464,52 @@ void Reader::getLines() {
 }
 
 void Reader::showCatalogue() {
-  savePageVPos();
+  if (!isShowed) {
+    savePageVPos();
+    isShowed = true;
+  }
+
   setQMLHtml(catalogueFile);
+}
+
+void Reader::ncx2html() {
+  QString ncxFile = strOpfPath + "toc.ncx";
+  if (!QFile(ncxFile).exists()) {
+    return;
+  }
+
+  QPlainTextEdit* plain_edit = new QPlainTextEdit;
+  plain_edit->appendPlainText("<html>");
+  plain_edit->appendPlainText("<body>");
+
+  QTextEdit* text_edit = new QTextEdit;
+  QString strHtml = mw_one->loadText(ncxFile);
+  text_edit->setPlainText(strHtml);
+  for (int i = 0; i < text_edit->document()->lineCount(); i++) {
+    QString str = getTextEditLineText(text_edit, i);
+    str = str.trimmed();
+    if (str == "<navLabel>") {
+      QString str1 = getTextEditLineText(text_edit, i + 1);
+      str1.replace("<text>", "");
+      str1.replace("</text>", "");
+      str1 = str1.trimmed();
+
+      QString str2 = getTextEditLineText(text_edit, i + 3);
+      str2.replace("<content src=", "");
+      str2.replace("/>", "");
+      str2.replace("\"", "");
+      str2 = str2.trimmed();
+
+      qDebug() << str1 << str2;
+      plain_edit->appendPlainText("<div>");
+      plain_edit->appendPlainText("<a href=" + strOpfPath + str2 + ">" + str1 +
+                                  "</a>");
+      plain_edit->appendPlainText("</div>");
+    }
+  }
+
+  plain_edit->appendPlainText("</body>");
+  plain_edit->appendPlainText("</html>");
+  catalogueFile = strOpfPath + "catalogue.html";
+  TextEditToFile(plain_edit, catalogueFile);
 }
