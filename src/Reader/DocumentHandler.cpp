@@ -69,7 +69,7 @@ extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QStringList readTextList, htmlFiles;
 extern int htmlIndex;
-extern QString strOpfPath, appName, copyText;
+extern QString strOpfPath, appName, copyText, catalogueFile;
 QString picfile;
 
 DocumentHandler::DocumentHandler(QObject *parent)
@@ -281,6 +281,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
       if (list2.count() > 0) {
         str1 = list2.at(list2.count() - 1);
       }
+
       if (str.contains(str1)) {
         mw_one->m_Reader->setEpubPagePosition(i);
         break;
@@ -297,11 +298,6 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     str = str.replace("../", "");
     picfile = strOpfPath + str;
     qDebug() << "Pic File1 : " << picfile;
-
-    // QFileInfo fi(picfile);
-    // QString strBase = fi.fileName();
-    // picfile = fi.path() + "/org-" + strBase;
-    // qDebug() << "Pic File2 : " << picfile;
 
     if (QFile(picfile).exists()) {
       LoadPic *m_LoadPic = new LoadPic(mw_one);
@@ -436,9 +432,11 @@ void DocumentHandler::setModified(bool m) {
 
 void DocumentHandler::setBackDir(QString link) {
   if (link.contains(".html") || link.contains(".xhtml")) {
-    mw_one->m_Reader->mainDirIndex = htmlIndex;
-    mw_one->ui->btnBackDir->show();
-    mw_one->repaint();
-    qDebug() << "mainDirIndex: " << mw_one->m_Reader->mainDirIndex;
+    if (catalogueFile != mw_one->m_Reader->currentHtmlFile) {
+      mw_one->m_Reader->mainDirIndex = htmlIndex;
+      mw_one->ui->btnBackDir->show();
+      mw_one->repaint();
+      qDebug() << "mainDirIndex: " << mw_one->m_Reader->mainDirIndex;
+    }
   }
 }

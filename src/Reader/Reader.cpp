@@ -1057,7 +1057,8 @@ void Reader::SplitFile(QString qfile) {
         }
       }
 
-      QString file1 = fi.path() + "/" + fi.baseName() + "." + fi.suffix();
+      QString file1 =
+          qfile;  // fi.path() + "/" + fi.baseName() + "." + fi.suffix();
       TextEditToFile(plain_edit, file1);
       htmlFiles.append(file1);
     }
@@ -1479,7 +1480,15 @@ void Reader::showCatalogue() {
 }
 
 void Reader::ncx2html() {
-  QString ncxFile = strOpfPath + "toc.ncx";
+  QString ncxFile;
+  QStringList fileList;
+  QStringList fmt;
+  fmt.append("ncx");
+  mw_one->m_NotesList->getAllFiles(strOpfPath, fileList, fmt);
+  if (fileList.count() >= 1) {
+    ncxFile = fileList.at(0);
+  }
+
   if (!QFile(ncxFile).exists()) {
     return;
   }
@@ -1494,17 +1503,43 @@ void Reader::ncx2html() {
   for (int i = 0; i < text_edit->document()->lineCount(); i++) {
     QString str = getTextEditLineText(text_edit, i);
     str = str.trimmed();
+    QString str1, str2;
+    bool isAdd = false;
     if (str == "<navLabel>") {
-      QString str1 = getTextEditLineText(text_edit, i + 1);
+      str1 = getTextEditLineText(text_edit, i + 1);
       str1.replace("<text>", "");
       str1.replace("</text>", "");
       str1 = str1.trimmed();
 
-      QString str2 = getTextEditLineText(text_edit, i + 3);
+      str2 = getTextEditLineText(text_edit, i + 3);
       str2.replace("<content src=", "");
       str2.replace("/>", "");
       str2.replace("\"", "");
       str2 = str2.trimmed();
+
+      isAdd = true;
+    }
+
+    if (str.contains("<navLabel><text>")) {
+      str1 = str;
+      str1.replace("<navLabel><text>", "");
+      str1.replace("</text></navLabel>", "");
+      str1 = str1.trimmed();
+
+      str2 = getTextEditLineText(text_edit, i + 1);
+      str2.replace("<content src=", "");
+      str2.replace("/>", "");
+      str2.replace("\"", "");
+      str2 = str2.trimmed();
+
+      isAdd = true;
+    }
+
+    if (isAdd) {
+      if (str2.contains("#")) {
+        str2 = str2.split("#").at(0);
+        str2 = str2.trimmed();
+      }
 
       qDebug() << str1 << str2;
       plain_edit->appendPlainText("<div>");
