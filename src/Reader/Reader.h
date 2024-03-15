@@ -33,7 +33,6 @@ class Reader : public QDialog {
   ~Reader();
   Ui::Reader *ui;
 
-  bool isShowed;
   QDialog *frame;
   QString openfile;
   QString readerStyle;

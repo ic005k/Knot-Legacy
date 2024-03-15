@@ -932,8 +932,7 @@ void Reader::savePageVPos() {
   textPos = getVPos();
   if (isEpub) {
     if (htmlIndex >= 0)
-      Reg.setValue("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex),
-                   textPos);
+      Reg.setValue("/Reader/vpos" + fileName + currentHtmlFile, textPos);
   } else {
     Reg.setValue("/Reader/vpos" + fileName + QString::number(iPage), textPos);
   }
@@ -947,8 +946,7 @@ void Reader::setPageVPos() {
   if (isEpub) {
     if (htmlIndex >= 0)
       textPos =
-          Reg.value("/Reader/vpos" + fileName + htmlFiles.at(htmlIndex), 0)
-              .toReal();
+          Reg.value("/Reader/vpos" + fileName + currentHtmlFile, 0).toReal();
 
   } else {
     textPos = Reg.value("/Reader/vpos" + fileName + QString::number(iPage), 0)
@@ -1464,12 +1462,20 @@ void Reader::getLines() {
 }
 
 void Reader::showCatalogue() {
-  if (!isShowed) {
-    savePageVPos();
-    isShowed = true;
+  savePageVPos();
+  if (catalogueFile != currentHtmlFile) {
+    setQMLHtml(catalogueFile);
+    currentHtmlFile = catalogueFile;
+  } else {
+    if (catalogueFile == currentHtmlFile) {
+      processHtml(htmlIndex);
+      currentHtmlFile = htmlFiles.at(htmlIndex);
+      setQMLHtml(currentHtmlFile);
+    }
   }
 
-  setQMLHtml(catalogueFile);
+  setPageVPos();
+  showInfo();
 }
 
 void Reader::ncx2html() {
