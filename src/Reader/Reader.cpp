@@ -1492,6 +1492,8 @@ void Reader::ncx2html() {
   plain_edit->appendPlainText("<html>");
   plain_edit->appendPlainText("<body>");
 
+  plain_edit->appendPlainText("<style>.my-link {color: #336699;} </style>");
+
   QTextEdit* text_edit = new QTextEdit;
   QString strHtml = mw_one->loadText(ncxFile);
   text_edit->setPlainText(strHtml);
@@ -1561,8 +1563,8 @@ void Reader::ncx2html() {
       qDebug() << str1 << str2;
 
       plain_edit->appendPlainText("<div>");
-      plain_edit->appendPlainText("<li><a href=" + strOpfPath + str2 + ">" +
-                                  str1 + "</a></li>");
+      plain_edit->appendPlainText("<li><a href=" + strOpfPath + str2 +
+                                  " class=my-link >" + str1 + "</a></li>");
       plain_edit->appendPlainText("</div>");
     }
   }
