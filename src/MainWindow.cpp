@@ -2569,7 +2569,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
-        if (!m_ReaderSet->isHidden()) {
+        if (catalogueFile == m_Reader->currentHtmlFile) {
+          on_btnCatalogue_clicked();
+          return true;
+
+        } else if (!m_ReaderSet->isHidden()) {
           m_ReaderSet->close();
           return true;
 

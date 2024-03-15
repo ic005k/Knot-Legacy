@@ -283,7 +283,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
       }
 
       if (str.contains(str1)) {
-        mw_one->m_Reader->setEpubPagePosition(i);
+        mw_one->m_Reader->setEpubPagePosition(i, htmlFile);
         break;
       }
     }
@@ -432,7 +432,8 @@ void DocumentHandler::setModified(bool m) {
 
 void DocumentHandler::setBackDir(QString link) {
   if (link.contains(".html") || link.contains(".xhtml")) {
-    if (catalogueFile != mw_one->m_Reader->currentHtmlFile) {
+    if (catalogueFile != mw_one->m_Reader->currentHtmlFile &&
+        !link.contains("#")) {
       mw_one->m_Reader->mainDirIndex = htmlIndex;
       mw_one->ui->btnBackDir->show();
       mw_one->repaint();

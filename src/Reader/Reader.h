@@ -72,12 +72,11 @@ class Reader : public QDialog {
   static QString GetCorrectUnicode(const QByteArray &text);
   void getReadList();
   void getBookList();
-  void setEpubPagePosition(int index);
+  void setEpubPagePosition(int index, QString htmlFile);
   void backDir();
   static QString get_idref(QString str0);
   void setVPos(qreal pos);
 
-  void refreshEpubPage();
   static QString getCoverPicFile(QString htmlFile);
   qreal getVPos();
   void setReaderStyle();

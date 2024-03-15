@@ -46,6 +46,7 @@ Rectangle {
     function loadHtmlBuffer(strhtml) {
 
         document.loadBuffer(strhtml)
+        isEPUBText = true
     }
 
     function setVPos(vpos) {

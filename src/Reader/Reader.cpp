@@ -642,22 +642,17 @@ void Reader::on_btnPageNext_clicked() {
   showInfo();
 }
 
-void Reader::refreshEpubPage() {
-  if (isEpub) {
-    savePageVPos();
-    currentHtmlFile = htmlFiles.at(htmlIndex);
-    setQMLHtml(currentHtmlFile);
-    setPageVPos();
-    showInfo();
-  }
-}
-
-void Reader::setEpubPagePosition(int index) {
+void Reader::setEpubPagePosition(int index, QString htmlFile) {
   savePageVPos();
   htmlIndex = index;
   processHtml(index);
   currentHtmlFile = htmlFiles.at(index);
-  setQMLHtml(currentHtmlFile);
+
+  if (htmlFile.contains("#")) {
+    setQMLHtml(htmlFile);
+  } else {
+    setQMLHtml(currentHtmlFile);
+  }
   setPageVPos();
   showInfo();
 }
@@ -726,7 +721,7 @@ void Reader::processHtml(int index) {
           strimg = strimg.replace("\"", "");
           QString imgFile = strOpfPath + strimg;
           imgFile = imgFile.replace("../", "");
-          qDebug() << "imgFile=" << imgFile;
+          // qDebug() << "imgFile=" << imgFile;
           QImage img(imgFile);
           int nw = mw_one->width() - 104;
           QString strw = " width = " + QString::number(nw);
@@ -738,7 +733,7 @@ void Reader::processHtml(int index) {
             str = "<a href=" + strSrc + ">" + str + "</a>";
           }
 
-          qDebug() << "strSrc=" << strSrc << str;
+          // qDebug() << "strSrc=" << strSrc << str;
 
           str = str.replace("width=", "width1=");
           str = str.replace("height=", "height1=");
@@ -766,7 +761,7 @@ void Reader::setQMLHtml(QString htmlFile) {
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 #endif
 
-  qDebug() << "Html File : " << htmlFile;
+  qDebug() << "setQMLHtml : Html File = " << htmlFile;
 
   setAni();
 }
@@ -1291,7 +1286,7 @@ void Reader::openBookListItem() {
 void Reader::backDir() {
   if (!QFile(fileName).exists()) return;
 
-  setEpubPagePosition(mainDirIndex);
+  setEpubPagePosition(mainDirIndex, "");
   qDebug() << "mainDirIndex: " << mainDirIndex;
   if (mainDirIndex == 0) {
     on_btnPageNext_clicked();
@@ -1503,8 +1498,35 @@ void Reader::ncx2html() {
   for (int i = 0; i < text_edit->document()->lineCount(); i++) {
     QString str = getTextEditLineText(text_edit, i);
     str = str.trimmed();
-    QString str1, str2;
+    QString str0, str1, str2;
     bool isAdd = false;
+    bool isAddTitle = false;
+
+    if (str == "<docTitle>") {
+      str0 = getTextEditLineText(text_edit, i + 1);
+      str0.replace("<text>", "");
+      str0.replace("</text>", "");
+      str0 = str0.trimmed();
+      isAddTitle = true;
+    }
+
+    if (str.contains("<docTitle><text>")) {
+      str0 = str;
+      str0.replace("<docTitle><text>", "");
+      str0.replace("</text></docTitle>", "");
+      str0 = str0.trimmed();
+      isAddTitle = true;
+    }
+
+    if (isAddTitle) {
+      qDebug() << str0;
+      plain_edit->appendPlainText("<div>");
+      plain_edit->appendPlainText("<h3>" + str0 + "</h3>");
+      plain_edit->appendPlainText("</div>");
+
+      plain_edit->appendPlainText("<ul>");
+    }
+
     if (str == "<navLabel>") {
       str1 = getTextEditLineText(text_edit, i + 1);
       str1.replace("<text>", "");
@@ -1536,18 +1558,16 @@ void Reader::ncx2html() {
     }
 
     if (isAdd) {
-      if (str2.contains("#")) {
-        str2 = str2.split("#").at(0);
-        str2 = str2.trimmed();
-      }
-
       qDebug() << str1 << str2;
+
       plain_edit->appendPlainText("<div>");
-      plain_edit->appendPlainText("<a href=" + strOpfPath + str2 + ">" + str1 +
-                                  "</a>");
+      plain_edit->appendPlainText("<li><a href=" + strOpfPath + str2 + ">" +
+                                  str1 + "</a></li>");
       plain_edit->appendPlainText("</div>");
     }
   }
+
+  plain_edit->appendPlainText("</ul>");
 
   plain_edit->appendPlainText("</body>");
   plain_edit->appendPlainText("</html>");
