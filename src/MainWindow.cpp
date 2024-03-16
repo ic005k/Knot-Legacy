@@ -182,16 +182,14 @@ void MainWindow::readEBookDone() {
       ui->lblBookName->show();
       ui->progReader->show();
 
-      mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
-                                                              false);
-      mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
-      mw_one->ui->qwReader->rootContext()->setContextProperty(
-          "isSelText", mw_one->isSelText);
-      mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
-      mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
-                                                              mw_one->width());
-      mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
-      mw_one->ui->qwReader->setSource(
+      ui->qwReader->rootContext()->setContextProperty("isWebViewShow", false);
+      ui->qwReader->rootContext()->setContextProperty("strText", "");
+      ui->qwReader->rootContext()->setContextProperty("isSelText",
+                                                      mw_one->isSelText);
+      ui->qwReader->rootContext()->setContextProperty("isAni", true);
+      ui->qwReader->rootContext()->setContextProperty("aniW", mw_one->width());
+      ui->qwReader->rootContext()->setContextProperty("toW", 0);
+      ui->qwReader->setSource(
           QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
 
       if (isEpub) {

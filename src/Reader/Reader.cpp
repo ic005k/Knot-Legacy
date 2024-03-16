@@ -18,6 +18,8 @@ QString strOpfPath, fileName, ebookFile, strTitle, catalogueFile;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
+int minBytes = 100000;
+int maxBytes = 200000;
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -368,11 +370,11 @@ void Reader::openFile(QString openfile) {
             qfile = strOpfPath + get_href(idref, opfList);
             QFileInfo fi(qfile);
             if (fi.exists() && !htmlFiles.contains(qfile)) {
-              // if (fi.size() <= 20000) {
-              htmlFiles.append(qfile);
-              //} else {
-              //  SplitFile(qfile);
-              //}
+              if (fi.size() <= minBytes) {
+                htmlFiles.append(qfile);
+              } else {
+                SplitFile(qfile);
+              }
             }
           }
         }
@@ -840,6 +842,9 @@ void Reader::goPostion() {
     if (isEpub) {
       htmlIndex = Reg.value("/Reader/htmlIndex" + fileName, 0).toInt();
 
+      if (htmlIndex >= htmlFiles.count()) {
+        htmlIndex = 0;
+      }
       processHtml(htmlIndex);
       currentHtmlFile = htmlFiles.at(htmlIndex);
       setQMLHtml(currentHtmlFile);
@@ -1029,10 +1034,10 @@ void Reader::SplitFile(QString qfile) {
   int countBody = count - countHead;
   int n;
   qint64 bb = fi.size();
-  if (bb > 20000 && bb < 40000)
+  if (bb > minBytes && bb < maxBytes)
     n = 2;
   else
-    n = bb / 20000;
+    n = bb / minBytes;
 
   qDebug() << "size======" << bb << n;
 
