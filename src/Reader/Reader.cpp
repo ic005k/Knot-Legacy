@@ -18,8 +18,8 @@ QString strOpfPath, fileName, ebookFile, strTitle, catalogueFile;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
-int minBytes = 100000;
-int maxBytes = 200000;
+int minBytes = 50000;
+int maxBytes = 100000;
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -1496,12 +1496,28 @@ void Reader::ncx2html() {
   QPlainTextEdit* plain_edit = new QPlainTextEdit;
   plain_edit->appendPlainText("<html>");
   plain_edit->appendPlainText("<body>");
-
   plain_edit->appendPlainText("<style>.my-link {color: #336699;} </style>");
 
   QTextEdit* text_edit = new QTextEdit;
-  QString strHtml = mw_one->loadText(ncxFile);
-  text_edit->setPlainText(strHtml);
+  QTextEdit* text_edit0 = new QTextEdit;
+  QString strHtml0 = mw_one->loadText(ncxFile);
+  strHtml0 = strHtml0.replace("<docTitle>", "\n<docTitle>\n");
+  strHtml0 = strHtml0.replace("</docTitle>", "\n</docTitle>\n");
+  strHtml0 = strHtml0.replace("<navMap>", "\n<navMap>\n");
+  strHtml0 = strHtml0.replace("</navMap>", "\n</navMap>\n");
+  strHtml0 = strHtml0.replace("<navLabel>", "\n<navLabel>\n");
+  strHtml0 = strHtml0.replace("</navLabel>", "\n</navLabel>\n");
+  strHtml0 = strHtml0.replace("<navPoint", "\n<navPoint");
+  strHtml0 = strHtml0.replace("</navPoint>", "\n</navPoint>\n");
+  text_edit0->setPlainText(strHtml0);
+  for (int i = 0; i < text_edit0->document()->lineCount(); i++) {
+    QString str = getTextEditLineText(text_edit0, i);
+    str = str.trimmed();
+    if (str != "") {
+      text_edit->append(str);
+    }
+  }
+
   for (int i = 0; i < text_edit->document()->lineCount(); i++) {
     QString str = getTextEditLineText(text_edit, i);
     str = str.trimmed();
