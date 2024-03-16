@@ -57,8 +57,8 @@ void PageIndicator::init() {
 
 void PageIndicator::showPageNumber(QString page) {
   sn = 0;
-  cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
-  tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
+  cn = mw_one->ui->btnPages->text().split("\n").at(0).toInt();
+  tn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
   if (page == "left") {
     if (cn + 1 < tn) {
       sn = cn + 1;

@@ -30,9 +30,6 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->btnForward->hide();
   mw_one->ui->textBrowser->hide();
 
-  // mw_one->ui->textBrowser->verticalScrollBar()->setStyleSheet(
-  //     m_Method->vsbarStyleSmall);
-
   mw_one->ui->textBrowser->horizontalScrollBar()->hide();
   mw_one->ui->textBrowser->verticalScrollBar()->hide();
 
@@ -57,7 +54,7 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
       "font-weight: bold;");
 
   QFont f = this->font();
-  f.setPointSize(11);
+  f.setPointSize(10);
   f.setBold(true);
   mw_one->ui->btnPages->setFont(f);
 }
@@ -190,7 +187,7 @@ void Reader::startOpenFile(QString openfile) {
     isEBook = true;
     strTitle = "";
     catalogueFile = "";
-    mw_one->ui->btnPages->setText(tr("Pages") + "\n1\n1");
+    mw_one->ui->btnPages->setText("1\n1");
     mw_one->ui->progReader->setValue(0);
     mw_one->ui->btnReader->setEnabled(false);
     mw_one->ui->frameReaderFun->setEnabled(false);
@@ -795,10 +792,12 @@ QStringList Reader::readText(QString textFile) {
       text = GetCorrectUnicode(buff);
 
       text.replace("/>", "/>\n");
+      text.replace("<", "\n<");
       list = text.split("\n");
       for (int i = 0; i < list.count(); i++) {
         QString str = list.at(i);
-        if (str.trimmed() != "") list1.append(str);
+        str = str.trimmed();
+        if (str != "") list1.append(str);
       }
     }
     file.close();
@@ -990,8 +989,7 @@ qreal Reader::getNewVPos(qreal pos1, qreal h1, qreal h2) {
 void Reader::showInfo() {
   if (isText) {
     if (totallines > baseLines) {
-      mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
-                                    QString::number(iPage / baseLines) + "\n" +
+      mw_one->ui->btnPages->setText(QString::number(iPage / baseLines) + "\n" +
                                     QString::number(totallines / baseLines));
       mw_one->ui->progReader->setMaximum(totallines / baseLines);
       mw_one->ui->progReader->setValue(iPage / baseLines);
@@ -1002,8 +1000,7 @@ void Reader::showInfo() {
   }
 
   if (isEpub) {
-    mw_one->ui->btnPages->setText(tr("Pages") + "\n" +
-                                  QString::number(htmlIndex + 1) + "\n" +
+    mw_one->ui->btnPages->setText(QString::number(htmlIndex + 1) + "\n" +
                                   QString::number(htmlFiles.count()));
     mw_one->ui->progReader->setMaximum(htmlFiles.count());
     mw_one->ui->progReader->setValue(htmlIndex + 1);
@@ -1430,7 +1427,6 @@ void Reader::getLines() {
   if (isText) {
     mw_one->m_ReaderSet->ui->hSlider->setMaximum(totallines / baseLines);
     mw_one->ui->btnPages->setText(
-        tr("Pages") + "\n" +
         QString::number(mw_one->m_ReaderSet->ui->hSlider->value()) + "\n" +
         QString::number(totallines / baseLines));
     iPage = (mw_one->m_ReaderSet->ui->hSlider->value() - 1) * baseLines;

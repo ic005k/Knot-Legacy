@@ -4493,9 +4493,9 @@ void MainWindow::on_btnPages_clicked() {
     m_ReaderSet->init();
 
   QStringList list = mw_one->ui->btnPages->text().split("\n");
-  if (list.count() == 3) {
-    QString cur = list.at(1);
-    QString total = list.at(2);
+  if (list.count() == 2) {
+    QString cur = list.at(0);
+    QString total = list.at(1);
     m_ReaderSet->ui->lblProg->setText(tr("Reading Progress") + " : " + cur +
                                       " -> " + total);
 
@@ -4507,16 +4507,16 @@ void MainWindow::on_btnPages_clicked() {
 
 void MainWindow::on_hSlider_sliderMoved(int position) {
   if (isText) {
-    ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position) +
-                          "\n" + QString::number(totallines / baseLines));
+    ui->btnPages->setText(QString::number(position) + "\n" +
+                          QString::number(totallines / baseLines));
     ui->progReader->setMinimum(1);
     ui->progReader->setMaximum(totallines / baseLines);
     ui->progReader->setValue(position);
   }
 
   if (isEpub) {
-    ui->btnPages->setText(tr("Pages") + "\n" + QString::number(position) +
-                          "\n" + QString::number(htmlFiles.count()));
+    ui->btnPages->setText(QString::number(position) + "\n" +
+                          QString::number(htmlFiles.count()));
     ui->progReader->setMinimum(1);
     ui->progReader->setMaximum(htmlFiles.count());
     if (position == 0) position = 1;

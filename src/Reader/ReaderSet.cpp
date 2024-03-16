@@ -53,8 +53,8 @@ void ReaderSet::init() {
   ui->hSlider->setStyleSheet(mw_one->ui->hsH->styleSheet());
 
   QStringList list = mw_one->ui->btnPages->text().split("\n");
-  if (list.count() == 3) {
-    ui->hSlider->setValue(list.at(1).toInt());
+  if (list.count() == 2) {
+    ui->hSlider->setValue(list.at(0).toInt());
   }
 
   show();
@@ -103,9 +103,9 @@ void ReaderSet::updateProgress() {
   if (this->isHidden()) return;
 
   QStringList list = mw_one->ui->btnPages->text().split("\n");
-  if (list.count() == 3) {
-    QString cur = list.at(1);
-    QString total = list.at(2);
+  if (list.count() == 2) {
+    QString cur = list.at(0);
+    QString total = list.at(1);
     ui->lblProg->setText(tr("Reading Progress") + " : " + cur + " -> " + total);
   }
 }

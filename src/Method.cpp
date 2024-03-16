@@ -783,15 +783,15 @@ bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
         if (mw_one->isMousePress) {
           if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
             // qDebug() << "book right...";
-            int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
+            int cn = mw_one->ui->btnPages->text().split("\n").at(0).toInt();
             if (cn != 1) {
               mw_one->m_PageIndicator->setPicRight();
             }
           } else if ((press_x - relea_x) > length &&
                      qAbs(relea_y - press_y) < 35) {
             // qDebug() << "book left...";
-            int cn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
-            int tn = mw_one->ui->btnPages->text().split("\n").at(2).toInt();
+            int cn = mw_one->ui->btnPages->text().split("\n").at(0).toInt();
+            int tn = mw_one->ui->btnPages->text().split("\n").at(1).toInt();
             if (cn != tn) {
               mw_one->m_PageIndicator->setPicLeft();
             }
