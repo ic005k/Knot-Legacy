@@ -271,7 +271,8 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
     mw_one->clearSelectBox();
   }
 
-  else if (htmlFile.contains(".html") || htmlFile.contains(".xhtml")) {
+  else if (htmlFile.contains(".html") || htmlFile.contains(".xhtml") ||
+           htmlFile.contains(".xml")) {
     for (int i = 0; i < htmlFiles.count(); i++) {
       QString str = htmlFiles.at(i);
       QString str1 = htmlFile;

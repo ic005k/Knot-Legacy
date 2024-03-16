@@ -719,16 +719,36 @@ void Reader::processHtml(int index) {
           strimg = strimg.replace("\"", "");
           QString imgFile = strOpfPath + strimg;
           imgFile = imgFile.replace("../", "");
+
           // qDebug() << "imgFile=" << imgFile;
-          QImage img(imgFile);
-          int nw = mw_one->width() - 104;
+
+          bool isCover = false;
+          if (imgFile.toLower().contains("cover")) {
+            isCover = true;
+          }
+          int nw = 0;
+          if (isCover) {
+            nw = mw_one->ui->qwReader->width() - 25;
+          } else {
+            nw = mw_one->ui->qwReader->width() - 104;
+          }
           QString strw = " width = " + QString::number(nw);
-          if (img.width() >= nw) {
+          QImage img(imgFile);
+
+          if (!isCover) {
+            if (img.width() >= nw) {
+              str = str.replace(" width = ", " width1 = ");
+              str = str.replace("/>", strw + " />");
+              str = "<a href=" + strSrc + ">" + str + " </a>";
+            } else {
+              str = "<a href=" + strSrc + ">" + str + "</a>";
+            }
+          }
+
+          if (isCover) {
             str = str.replace(" width = ", " width1 = ");
             str = str.replace("/>", strw + " />");
-            str = "<a href=" + strSrc + ">" + str + " </a>";
-          } else {
-            str = "<a href=" + strSrc + ">" + str + "</a>";
+            str = str + " </a>";
           }
 
           // qDebug() << "strSrc=" << strSrc << str;
