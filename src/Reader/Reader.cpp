@@ -368,11 +368,11 @@ void Reader::openFile(QString openfile) {
             qfile = strOpfPath + get_href(idref, opfList);
             QFileInfo fi(qfile);
             if (fi.exists() && !htmlFiles.contains(qfile)) {
-              if (fi.size() <= 20000) {
-                htmlFiles.append(qfile);
-              } else {
-                SplitFile(qfile);
-              }
+              // if (fi.size() <= 20000) {
+              htmlFiles.append(qfile);
+              //} else {
+              //  SplitFile(qfile);
+              //}
             }
           }
         }
@@ -649,7 +649,7 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
   currentHtmlFile = htmlFiles.at(index);
 
   if (htmlFile.contains("#")) {
-    setQMLHtml(htmlFile);
+    setQMLHtml(currentHtmlFile);
   } else {
     setQMLHtml(currentHtmlFile);
   }
