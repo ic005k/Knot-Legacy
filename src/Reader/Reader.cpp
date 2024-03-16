@@ -198,16 +198,15 @@ void Reader::startOpenFile(QString openfile) {
     mw_one->ui->btnCatalogue->hide();
 
     QString bookName;
+
 #ifdef Q_OS_ANDROID
     QString name;
     name = getUriRealPath(openfile);
     QStringList lista = name.split("/");
     bookName = lista.at(lista.count() - 1);
-
 #else
     QFileInfo fi(openfile);
     bookName = fi.fileName();
-
 #endif
 
     ebookFile = openfile;

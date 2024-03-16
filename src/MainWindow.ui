@@ -6016,7 +6016,7 @@ QSlider::handle:horizontal:disabled {
             </size>
            </property>
            <property name="text">
-            <string>Clear All Records</string>
+            <string>Clear All</string>
            </property>
           </widget>
          </item>

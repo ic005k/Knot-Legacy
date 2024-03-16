@@ -34,6 +34,9 @@ Item {
 
         Image {
             id: mapImg
+            fillMode: Image.PreserveAspectFit // 自适应并保持纵横比
+            width: imgW / 10
+
             //这里使图片居中显示
             x: mapItemArea.width / 2 - mapImg.width / 2
             y: mapItemArea.height / 2 - mapImg.height / 2
@@ -53,6 +56,7 @@ Item {
             }
 
             //这里使图片不管是比显示框大还是比显示框小都不会被拖拽出显示区域
+
 
             /*drag.minimumX: (mapImg.width > mapItemArea.width) ? (mapItemArea.width
                                                                  - mapImg.width) : 0
