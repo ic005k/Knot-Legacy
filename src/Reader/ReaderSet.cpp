@@ -35,6 +35,11 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   ui->btnFont->setFont(f);
   ui->lblProg->setFont(f);
 
+  f.setPointSize(12);
+  ui->lblInfo->setFont(f);
+  ui->lblInfo->adjustSize();
+  ui->lblInfo->setWordWrap(true);
+
   // ui->lblProg->setStyleSheet("color:white;");
 }
 

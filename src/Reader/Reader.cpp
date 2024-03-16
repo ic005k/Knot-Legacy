@@ -779,6 +779,10 @@ void Reader::setQMLHtml(QString htmlFile) {
   QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
 #endif
 
+  mw_one->m_ReaderSet->ui->lblInfo->setText(
+      tr("Info") + " : " + htmlFile + "  " +
+      mw_one->getFileSize(QFile(htmlFile).size(), 2));
+
   qDebug() << "setQMLHtml : Html File = " << htmlFile;
 
   setAni();

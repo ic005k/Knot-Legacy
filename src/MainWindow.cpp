@@ -193,6 +193,7 @@ void MainWindow::readEBookDone() {
           QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
 
       if (isEpub) {
+        m_ReaderSet->ui->lblInfo->show();
         ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
         if (QFile(catalogueFile).exists()) {
           mw_one->ui->btnCatalogue->show();
@@ -201,6 +202,7 @@ void MainWindow::readEBookDone() {
 
       if (isText) {
         ui->btnBackDir->hide();
+        m_ReaderSet->ui->lblInfo->hide();
       }
     }
 
