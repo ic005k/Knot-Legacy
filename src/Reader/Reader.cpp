@@ -683,6 +683,8 @@ void Reader::processHtml(int index) {
   QTextEdit* text_edit = new QTextEdit;
 
   QString strHtml = mw_one->loadText(hf);
+  strHtml = strHtml.replace("　", " ");
+
   strHtml = strHtml.replace("</p>", "</p>\n");
   strHtml = strHtml.replace("/>", "/>\n");
 
@@ -1662,8 +1664,11 @@ void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
   QString str = getSkipText(htmlFile, skipID);
   QStringList l0 = str.split("===");
   QString strFind = l0.at(0);
+  strFind = strFind.trimmed();
 
-  while (!textBrowser->textCursor().atEnd()) {
+  qDebug() << "strFind=" << strFind;
+
+  for (int i = 0; i < 100; i++) {
     if (textBrowser->find(strFind)) {
       int curpos = textBrowser->textCursor().position();
 
@@ -1679,9 +1684,11 @@ void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
       if (s0.trimmed().length() < 2) {
         mw_one->ui->qwReader->rootContext()->setContextProperty("nCursorPos",
                                                                 curpos);
-        qreal scrollPos = getVPos();
-        scrollPos = scrollPos + textBrowser->height() / 2;
-        setVPos(scrollPos);
+        if (curpos > 50) {
+          qreal scrollPos = getVPos();
+          scrollPos = scrollPos + textBrowser->height() / 2;
+          setVPos(scrollPos);
+        }
         break;
       }
     }
