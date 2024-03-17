@@ -167,11 +167,11 @@ Rectangle {
             text: strText
 
             onLinkActivated: {
+                console.log("reader htmlPath=" + htmlPath)
+                console.log("reader Link=" + link)
 
                 document.setBackDir(link)
                 document.setReadPosition(link)
-                console.log("reader htmlPath=" + htmlPath)
-                console.log("reader Link=" + link)
             }
 
             onReleased: {

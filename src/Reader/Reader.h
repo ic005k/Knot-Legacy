@@ -125,6 +125,7 @@ class Reader : public QDialog {
   void getLines();
   static void ncx2html();
   QString getSkipText(QString htmlFile, QString skipID);
+  QString strFind;
 };
 
 #endif  // READER_H

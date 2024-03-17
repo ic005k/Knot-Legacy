@@ -13,13 +13,13 @@ extern int fontSize;
 
 bool isOpen = false;
 bool isEpub, isText, isPDF;
-QStringList readTextList, htmlFiles;
+QStringList readTextList, htmlFiles, ncxList;
 QString strOpfPath, fileName, ebookFile, strTitle, catalogueFile;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
-int minBytes = 50000;
-int maxBytes = 100000;
+int minBytes = 20000;
+int maxBytes = 40000;
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -652,9 +652,8 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
     QString skipid = list.at(1);
     QString strfile;
     int count0 = 0;
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 500; i++) {
       strfile = htmlFiles.at(index + i);
-      qDebug() << "strfile=" << strfile;
       QString buffers = mw_one->loadText(strfile);
       if (buffers.contains(skipid)) {
         html = strfile;
@@ -665,6 +664,18 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
     }
     htmlIndex = index + count0;
     processHtml(htmlIndex);
+
+    for (int i = 0; i < ncxList.count(); i++) {
+      QString str = ncxList.at(i);
+      QStringList l0 = str.split("===");
+      QString strfile = l0.at(1);
+      if (strfile.trimmed() == htmlFile) {
+        strFind = l0.at(0);
+        strFind = strFind.trimmed();
+        break;
+      }
+    }
+
     setQMLHtml(html, skipid);
 
   } else {
@@ -1525,6 +1536,7 @@ void Reader::showCatalogue() {
 }
 
 void Reader::ncx2html() {
+  ncxList.clear();
   QString ncxFile;
   QStringList fileList;
   QStringList fmt;
@@ -1546,6 +1558,7 @@ void Reader::ncx2html() {
   QTextEdit* text_edit = new QTextEdit;
   QTextEdit* text_edit0 = new QTextEdit;
   QString strHtml0 = mw_one->loadText(ncxFile);
+  strHtml0 = strHtml0.replace("　", " ");
   strHtml0 = strHtml0.replace("<docTitle>", "\n<docTitle>\n");
   strHtml0 = strHtml0.replace("</docTitle>", "\n</docTitle>\n");
   strHtml0 = strHtml0.replace("<navMap>", "\n<navMap>\n");
@@ -1632,6 +1645,8 @@ void Reader::ncx2html() {
       plain_edit->appendPlainText("<li><a href=" + strOpfPath + str2 +
                                   " class=my-link >" + str1 + "</a></li>");
       plain_edit->appendPlainText("</div>");
+
+      ncxList.append(str1 + "===" + strOpfPath + str2);
     }
   }
 
@@ -1661,12 +1676,7 @@ void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
     textBrowser->setHtml(str);
   }
 
-  QString str = getSkipText(htmlFile, skipID);
-  QStringList l0 = str.split("===");
-  QString strFind = l0.at(0);
-  strFind = strFind.trimmed();
-
-  qDebug() << "strFind=" << strFind;
+  qDebug() << "strFind=" << strFind << "skipID=" << skipID;
 
   for (int i = 0; i < 100; i++) {
     if (textBrowser->find(strFind)) {
