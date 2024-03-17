@@ -59,7 +59,7 @@ class Reader : public QDialog {
   void setQMLText(QString);
 
   static int deleteDirfile(QString dirName);
-  void setQMLHtml(QString htmlFile);
+  void setQMLHtml(QString htmlFile, QString skipID);
   void setFontSize(int textFontSize);
   static void TextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
   void savePageVPos();
@@ -102,6 +102,7 @@ class Reader : public QDialog {
   void clearAllReaderRecords();
   void on_hSlider_sliderReleased(int position);
   void showCatalogue();
+  void setHtmlSkip(QString htmlFile, QString skipID);
  public slots:
 
   void openBookListItem();
@@ -123,6 +124,7 @@ class Reader : public QDialog {
   static void proceImg();
   void getLines();
   static void ncx2html();
+  QString getSkipText(QString htmlFile, QString skipID);
 };
 
 #endif  // READER_H

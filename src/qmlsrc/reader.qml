@@ -22,11 +22,14 @@ Rectangle {
         isEPUBText = true
     }
 
-    function loadHtml(msg) {
+    function loadHtml(htmlFile, skipID) {
 
-        document.load("file://" + msg)
+        document.load("file://" + htmlFile)
         isPDF = false
         isEPUBText = true
+        if (skipID !== "") {
+
+        }
     }
 
     function loadHtmlStr(str) {
@@ -152,6 +155,7 @@ Rectangle {
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting
             textFormat: Qt.AutoText
+            cursorPosition: nCursorPos
 
             wrapMode: TextArea.Wrap
             readOnly: true
@@ -166,9 +170,8 @@ Rectangle {
 
                 document.setBackDir(link)
                 document.setReadPosition(link)
-                console.log(htmlPath + link)
-                console.log(htmlPath)
-                console.log("isLink=" + link)
+                console.log("reader htmlPath=" + htmlPath)
+                console.log("reader Link=" + link)
             }
 
             onReleased: {

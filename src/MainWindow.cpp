@@ -3491,6 +3491,7 @@ void MainWindow::initQW() {
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
   ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
+  ui->qwReader->rootContext()->setContextProperty("nCursorPos", 0);
 
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());

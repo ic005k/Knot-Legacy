@@ -592,7 +592,7 @@ void Reader::on_btnPageUp_clicked() {
     if (htmlIndex < 0) htmlIndex = 0;
     processHtml(htmlIndex);
     currentHtmlFile = htmlFiles.at(htmlIndex);
-    setQMLHtml(currentHtmlFile);
+    setQMLHtml(currentHtmlFile, "");
   }
 
   setPageVPos();
@@ -634,7 +634,7 @@ void Reader::on_btnPageNext_clicked() {
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
     processHtml(htmlIndex);
     currentHtmlFile = htmlFiles.at(htmlIndex);
-    setQMLHtml(currentHtmlFile);
+    setQMLHtml(currentHtmlFile, "");
   }
   setPageVPos();
   showInfo();
@@ -647,11 +647,31 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
   currentHtmlFile = htmlFiles.at(index);
 
   if (htmlFile.contains("#")) {
-    setQMLHtml(currentHtmlFile);
+    QStringList list = htmlFile.split("#");
+    QString html = list.at(0);
+    QString skipid = list.at(1);
+    QString strfile;
+    int count0 = 0;
+    for (int i = 0; i < 100; i++) {
+      strfile = htmlFiles.at(index + i);
+      qDebug() << "strfile=" << strfile;
+      QString buffers = mw_one->loadText(strfile);
+      if (buffers.contains(skipid)) {
+        html = strfile;
+        count0 = i;
+        qDebug() << "html=" << html << "count0=" << count0;
+        break;
+      }
+    }
+    htmlIndex = index + count0;
+    processHtml(htmlIndex);
+    setQMLHtml(html, skipid);
+
   } else {
-    setQMLHtml(currentHtmlFile);
+    setQMLHtml(currentHtmlFile, "");
+    setPageVPos();
   }
-  setPageVPos();
+
   showInfo();
 }
 
@@ -766,7 +786,7 @@ void Reader::processHtml(int index) {
   delete plain_edit;
 }
 
-void Reader::setQMLHtml(QString htmlFile) {
+void Reader::setQMLHtml(QString htmlFile, QString skipID) {
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
 #ifdef Q_OS_WIN
@@ -774,16 +794,20 @@ void Reader::setQMLHtml(QString htmlFile) {
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
 #else
-  QVariant msg;
-  msg = htmlFile;
-  QMetaObject::invokeMethod((QObject*)root, "loadHtml", Q_ARG(QVariant, msg));
+
+  QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+                            Q_ARG(QVariant, htmlFile), Q_ARG(QVariant, skipID));
 #endif
 
   mw_one->m_ReaderSet->ui->lblInfo->setText(
       tr("Info") + " : " + htmlFile + "  " +
       mw_one->getFileSize(QFile(htmlFile).size(), 2));
 
-  qDebug() << "setQMLHtml : Html File = " << htmlFile;
+  qDebug() << "setQMLHtml:Html File=" << htmlFile;
+
+  if (skipID != "") {
+    setHtmlSkip(htmlFile, skipID);
+  }
 
   setAni();
 }
@@ -869,7 +893,7 @@ void Reader::goPostion() {
       }
       processHtml(htmlIndex);
       currentHtmlFile = htmlFiles.at(htmlIndex);
-      setQMLHtml(currentHtmlFile);
+      setQMLHtml(currentHtmlFile, "");
       setPageVPos();
       showInfo();
     }
@@ -1477,20 +1501,20 @@ void Reader::getLines() {
     if (htmlIndex < 0) htmlIndex = 0;
     processHtml(htmlIndex);
     currentHtmlFile = htmlFiles.at(htmlIndex);
-    setQMLHtml(currentHtmlFile);
+    setQMLHtml(currentHtmlFile, "");
   }
 }
 
 void Reader::showCatalogue() {
   savePageVPos();
   if (catalogueFile != currentHtmlFile) {
-    setQMLHtml(catalogueFile);
+    setQMLHtml(catalogueFile, "");
     currentHtmlFile = catalogueFile;
   } else {
     if (catalogueFile == currentHtmlFile) {
       processHtml(htmlIndex);
       currentHtmlFile = htmlFiles.at(htmlIndex);
-      setQMLHtml(currentHtmlFile);
+      setQMLHtml(currentHtmlFile, "");
     }
   }
 
@@ -1615,4 +1639,86 @@ void Reader::ncx2html() {
   plain_edit->appendPlainText("</html>");
   catalogueFile = strOpfPath + "catalogue.html";
   TextEditToFile(plain_edit, catalogueFile);
+}
+
+void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
+  QTextBrowser* textBrowser = new QTextBrowser();
+  textBrowser->setFixedHeight(mw_one->ui->qwReader->height());
+  textBrowser->setFixedWidth(mw_one->ui->qwReader->width());
+  QFont font = mw_one->ui->qwReader->font();
+  font.setPixelSize(mw_one->textFontSize);
+  font.setFamily(mw_one->m_ReaderSet->ui->btnFont->font().family());
+  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
+  textBrowser->setFont(font);
+
+  if (isEpub) {
+    QString str = mw_one->loadText(htmlFile);
+    str.replace("..", strOpfPath);
+    QDir dir;
+    dir.setCurrent(strOpfPath);
+    textBrowser->setHtml(str);
+  }
+
+  QString str = getSkipText(htmlFile, skipID);
+  QStringList l0 = str.split("===");
+  QString strFind = l0.at(0);
+
+  while (!textBrowser->textCursor().atEnd()) {
+    if (textBrowser->find(strFind)) {
+      int curpos = textBrowser->textCursor().position();
+
+      QTextCursor cursor;
+      cursor = textBrowser->textCursor();
+      cursor.setPosition(curpos);
+      cursor.setPosition(curpos + 2, QTextCursor::KeepAnchor);
+      textBrowser->setTextCursor(cursor);
+      QString s0 = cursor.selectedText();
+
+      qDebug() << "cursor pos=" << curpos << "s0=" << s0 << s0.trimmed();
+
+      if (s0.trimmed().length() < 2) {
+        mw_one->ui->qwReader->rootContext()->setContextProperty("nCursorPos",
+                                                                curpos);
+        qreal scrollPos = getVPos();
+        scrollPos = scrollPos + textBrowser->height() / 2;
+        setVPos(scrollPos);
+        break;
+      }
+    }
+  }
+}
+
+QString Reader::getSkipText(QString htmlFile, QString skipID) {
+  QStringList list = readText(htmlFile);
+  QString hxHeight = "24";
+  for (int i = 0; i < list.count(); i++) {
+    QString item = list.at(i);
+    if (item.contains(skipID)) {
+      if (item.contains("h1")) hxHeight = "32";
+      if (item.contains("h2")) hxHeight = "24";
+      if (item.contains("h3")) hxHeight = "18";
+      if (item.contains("h4")) hxHeight = "16";
+      if (item.contains("h5")) hxHeight = "13";
+      if (item.contains("h6")) hxHeight = "12";
+
+      QStringList l0 = item.split(">");
+      QString txt = l0.at(1);
+      txt = txt.split(">").at(0);
+      txt = txt.trimmed();
+
+      if (txt == "") {
+        item = list.at(i + 1);
+        l0 = item.split(">");
+        txt = l0.at(1);
+        txt = txt.split("<").at(0);
+        txt = txt.trimmed();
+      }
+
+      qDebug() << "skipID=" << skipID << "txt=" << txt << hxHeight;
+      return txt + "===" + hxHeight;
+      break;
+    }
+  }
+
+  return "";
 }
