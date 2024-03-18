@@ -31,5 +31,6 @@
         <file>src/qmlsrc/tree_main.qml</file>
         <file>src/qmlsrc/TreeWidget.qml</file>
         <file>src/qmlsrc/TreeItem.js</file>
+        <file>src/qmlsrc/epub_cata.qml</file>
     </qresource>
 </RCC>

@@ -273,21 +273,7 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
 
   else if (htmlFile.contains(".html") || htmlFile.contains(".xhtml") ||
            htmlFile.contains(".xml")) {
-    for (int i = 0; i < htmlFiles.count(); i++) {
-      QString str = htmlFiles.at(i);
-      QString str1 = htmlFile;
-      QStringList list = htmlFile.split("#");
-      if (list.count() == 2) str1 = list.at(0);
-      QStringList list2 = str1.split("/");
-      if (list2.count() > 0) {
-        str1 = list2.at(list2.count() - 1);
-      }
-
-      if (str.contains(str1)) {
-        mw_one->m_Reader->setEpubPagePosition(i, htmlFile);
-        break;
-      }
-    }
+    mw_one->m_Reader->initLink(htmlFile);
   } else {
     // open picture
     if (htmlIndex == 0 && !mw_one->m_Reader->isHidden()) {

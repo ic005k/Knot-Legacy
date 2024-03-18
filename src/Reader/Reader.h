@@ -72,7 +72,7 @@ class Reader : public QDialog {
   static QString GetCorrectUnicode(const QByteArray &text);
   void getReadList();
   void getBookList();
-  void setEpubPagePosition(int index, QString htmlFile);
+
   void backDir();
   static QString get_idref(QString str0);
   void setVPos(qreal pos);
@@ -101,11 +101,15 @@ class Reader : public QDialog {
 
   void clearAllReaderRecords();
   void on_hSlider_sliderReleased(int position);
-  void showCatalogue();
   void setHtmlSkip(QString htmlFile, QString skipID);
- public slots:
 
+ public slots:
+  void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
+  void showCatalogue();
+  void initLink(QString htmlFile);
+
+  void openCataList(QString htmlFile);
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;

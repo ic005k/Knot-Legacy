@@ -8,7 +8,7 @@
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniFile, iniDir, privateDir;
-extern bool zh_cn, isAndroid, isIOS, isEBook, isReport;
+extern bool zh_cn, isAndroid, isIOS, isEBook, isReport, isDark;
 extern int fontSize;
 
 bool isOpen = false;
@@ -29,6 +29,9 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->btnBackward->hide();
   mw_one->ui->btnForward->hide();
   mw_one->ui->textBrowser->hide();
+  mw_one->ui->lblCataInfo->hide();
+  mw_one->ui->lblCataInfo->adjustSize();
+  mw_one->ui->lblCataInfo->setWordWrap(true);
 
   mw_one->ui->textBrowser->horizontalScrollBar()->hide();
   mw_one->ui->textBrowser->verticalScrollBar()->hide();
@@ -196,6 +199,8 @@ void Reader::startOpenFile(QString openfile) {
     mw_one->ui->lblBookName->setText("");
     mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->btnCatalogue->hide();
+    mw_one->ui->qwCata->hide();
+    mw_one->ui->qwReader->show();
 
     QString bookName;
 
@@ -640,6 +645,33 @@ void Reader::on_btnPageNext_clicked() {
   showInfo();
 }
 
+void Reader::openCataList(QString htmlFile) {
+  savePageVPos();
+  mw_one->ui->lblCataInfo->hide();
+  mw_one->ui->qwCata->hide();
+  mw_one->ui->qwReader->show();
+
+  initLink(htmlFile);
+}
+
+void Reader::initLink(QString htmlFile) {
+  for (int i = 0; i < htmlFiles.count(); i++) {
+    QString str = htmlFiles.at(i);
+    QString str1 = htmlFile;
+    QStringList list = htmlFile.split("#");
+    if (list.count() == 2) str1 = list.at(0);
+    QStringList list2 = str1.split("/");
+    if (list2.count() > 0) {
+      str1 = list2.at(list2.count() - 1);
+    }
+
+    if (str.contains(str1)) {
+      setEpubPagePosition(i, htmlFile);
+      break;
+    }
+  }
+}
+
 void Reader::setEpubPagePosition(int index, QString htmlFile) {
   savePageVPos();
   htmlIndex = index;
@@ -990,8 +1022,14 @@ void Reader::savePageVPos() {
 #endif
   textPos = getVPos();
   if (isEpub) {
-    if (htmlIndex >= 0)
-      Reg.setValue("/Reader/vpos" + fileName + currentHtmlFile, textPos);
+    if (mw_one->ui->qwCata->isVisible()) {
+      Reg.setValue("/Reader/vpos" + fileName + "  CataVPos", textPos);
+      int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwCata);
+      Reg.setValue("/Reader/vpos" + fileName + "  CataIndex", index);
+    } else {
+      if (htmlIndex >= 0)
+        Reg.setValue("/Reader/vpos" + fileName + currentHtmlFile, textPos);
+    }
   } else {
     Reg.setValue("/Reader/vpos" + fileName + QString::number(iPage), textPos);
   }
@@ -1003,9 +1041,16 @@ void Reader::setPageVPos() {
   Reg.setIniCodec("utf-8");
 #endif
   if (isEpub) {
-    if (htmlIndex >= 0)
-      textPos =
-          Reg.value("/Reader/vpos" + fileName + currentHtmlFile, 0).toReal();
+    if (mw_one->ui->qwCata->isVisible()) {
+      textPos = Reg.value("/Reader/vpos" + fileName + "  CataVPos", 0).toReal();
+      int index =
+          Reg.value("/Reader/vpos" + fileName + "  CataIndex", 0).toReal();
+      m_Method->setCurrentIndexFromQW(mw_one->ui->qwCata, index);
+    } else {
+      if (htmlIndex >= 0)
+        textPos =
+            Reg.value("/Reader/vpos" + fileName + currentHtmlFile, 0).toReal();
+    }
 
   } else {
     textPos = Reg.value("/Reader/vpos" + fileName + QString::number(iPage), 0)
@@ -1018,13 +1063,25 @@ void Reader::setPageVPos() {
 }
 
 void Reader::setVPos(qreal pos) {
-  QQuickItem* root = mw_one->ui->qwReader->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
+  QQuickItem* root;
+  if (mw_one->ui->qwCata->isVisible())
+    root = mw_one->ui->qwCata->rootObject();
+  else
+    root = mw_one->ui->qwReader->rootObject();
+
+  if (!mw_one->ui->qwCata->isVisible())
+    QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
 }
 
 qreal Reader::getVPos() {
   QVariant itemCount;
-  QQuickItem* root = mw_one->ui->qwReader->rootObject();
+
+  QQuickItem* root;
+  if (mw_one->ui->qwCata->isVisible())
+    root = mw_one->ui->qwCata->rootObject();
+  else
+    root = mw_one->ui->qwReader->rootObject();
+
   QMetaObject::invokeMethod((QObject*)root, "getVPos",
                             Q_RETURN_ARG(QVariant, itemCount));
   textPos = itemCount.toDouble();
@@ -1520,14 +1577,27 @@ void Reader::getLines() {
 
 void Reader::showCatalogue() {
   savePageVPos();
-  if (catalogueFile != currentHtmlFile) {
-    setQMLHtml(catalogueFile, "");
-    currentHtmlFile = catalogueFile;
+
+  if (mw_one->ui->qwCata->isVisible()) {
+    mw_one->ui->lblCataInfo->hide();
+    mw_one->ui->qwCata->hide();
+    mw_one->ui->qwReader->show();
+
+    processHtml(htmlIndex);
+    currentHtmlFile = htmlFiles.at(htmlIndex);
+    setQMLHtml(currentHtmlFile, "");
   } else {
-    if (catalogueFile == currentHtmlFile) {
-      processHtml(htmlIndex);
-      currentHtmlFile = htmlFiles.at(htmlIndex);
-      setQMLHtml(currentHtmlFile, "");
+    mw_one->ui->qwReader->hide();
+    mw_one->ui->lblCataInfo->show();
+    mw_one->ui->qwCata->show();
+
+    m_Method->clearAllBakList(mw_one->ui->qwCata);
+    for (int i = 0; i < ncxList.count(); i++) {
+      QString item = ncxList.at(i);
+      QString str0, str1;
+      str0 = item.split("===").at(0);
+      str1 = item.split("===").at(1);
+      m_Method->addItemToQW(mw_one->ui->qwCata, str0, str1, "", "", 0);
     }
   }
 
@@ -1600,6 +1670,7 @@ void Reader::ncx2html() {
     }
 
     if (isAddTitle) {
+      mw_one->ui->lblCataInfo->setText(str0);
       qDebug() << str0;
       plain_edit->appendPlainText("<div>");
       plain_edit->appendPlainText("<h3>" + str0 + "</h3>");

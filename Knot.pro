@@ -659,6 +659,7 @@ DISTFILES += \
     src/qmlsrc/booklist.qml \
     src/qmlsrc/chart_month.qml \
     src/qmlsrc/details.qml \
+    src/qmlsrc/epub_cata.qml \
     src/qmlsrc/imgview.qml \
     src/qmlsrc/main.qml \
     src/qmlsrc/maindate.qml \

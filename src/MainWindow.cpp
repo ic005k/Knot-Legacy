@@ -3493,6 +3493,9 @@ void MainWindow::initQW() {
   ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwReader->rootContext()->setContextProperty("nCursorPos", 0);
 
+  ui->qwCata->rootContext()->setContextProperty("m_Reader", m_Reader);
+  ui->qwCata->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/epub_cata.qml")));
+
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
@@ -3623,6 +3626,7 @@ void MainWindow::init_Theme() {
   ui->qwSteps->rootContext()->setContextProperty("isDark", isDark);
   ui->qwReport->rootContext()->setContextProperty("isDark", isDark);
   ui->qwOneDriver->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwCata->rootContext()->setContextProperty("isDark", isDark);
 
   if (!isDark) {
     ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
@@ -3784,6 +3788,7 @@ void MainWindow::init_UIWidget() {
   ui->btnFindNextNote->setEnabled(false);
   ui->btnFindPreviousNote->setEnabled(false);
   ui->frameNotesTree->hide();
+  ui->qwCata->hide();
 
   ui->frameCategory->hide();
   ui->frameSetTab->hide();

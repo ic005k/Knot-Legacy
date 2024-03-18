@@ -162,6 +162,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="lblCataInfo">
+         <property name="text">
+          <string>CataInfo</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QQuickWidget" name="qwReader">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -182,6 +189,19 @@
        </item>
        <item>
         <widget class="QQuickWidget" name="qwPdf">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="resizeMode">
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QQuickWidget" name="qwCata">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
