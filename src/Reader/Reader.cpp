@@ -653,6 +653,7 @@ void Reader::openCataList(QString htmlFile) {
   mw_one->ui->qwReader->show();
 
   initLink(htmlFile);
+  m_Method->clearAllBakList(mw_one->ui->qwCata);
 }
 
 void Reader::initLink(QString htmlFile) {

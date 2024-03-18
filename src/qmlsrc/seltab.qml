@@ -328,6 +328,11 @@ Rectangle {
                     mw_one.selTab()
                 }
 
+                onPositionChanged: {
+                    item0.color = listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                    listItem.color = ListView.isCurrentItem ? "lightblue" : getColor()
+                }
+
                 onPressAndHold: {
 
                 }

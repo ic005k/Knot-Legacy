@@ -137,7 +137,7 @@ Rectangle {
     }
 
     function getVPos() {
-        var vpos = vscrollbar.position;
+        var vpos = vscrollbar.position
         console.log("qwCata:get " + vpos)
         return vpos
     }
@@ -318,10 +318,10 @@ Rectangle {
                     clickPos = Qt.point(mouse.x, mouse.y)
                     item0.color = "white"
                     listItem.color = "red"
-
                 }
 
                 onReleased: {
+
                     var delta = Qt.point(mouse.x - clickPos.x,
                                          mouse.y - clickPos.y)
                     console.debug("delta.x: " + delta.x)
@@ -339,6 +339,11 @@ Rectangle {
                     view.currentIndex = index //实现item切换
 
                     m_Reader.openCataList(item1.text)
+                }
+
+                onPositionChanged: {
+                    item0.color = listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                    listItem.color = ListView.isCurrentItem ? "lightblue" : getColor()
                 }
 
                 onPressAndHold: {
@@ -430,7 +435,7 @@ Rectangle {
         cacheBuffer: 50
 
         ScrollBar.vertical: ScrollBar {
-            id:vscrollbar
+            id: vscrollbar
             width: 8
             policy: ScrollBar.AsNeeded
         }
