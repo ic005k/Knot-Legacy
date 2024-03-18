@@ -144,6 +144,17 @@ Rectangle {
         view.model.setProperty(currentIndex, "text3", strText)
     }
 
+    function setVPos(vpos) {
+        vscrollbar.position = vpos
+        console.log("qwNoteBook:set " + vpos)
+    }
+
+    function getVPos() {
+        var vpos = vscrollbar.position
+        console.log("qwNoteBook:get " + vpos)
+        return vpos
+    }
+
     function getColor() {
         var strColor
 
@@ -345,7 +356,7 @@ Rectangle {
                 onReleased: {
                     var delta = Qt.point(mouse.x - clickPos.x,
                                          mouse.y - clickPos.y)
-                    console.debug("delta.x: " + delta.x)
+
                     if ((delta.x < 0) && (aBtnShow.running === false)
                             && (delBtn.width == 0)) {
                         aBtnShow.start()
@@ -364,7 +375,6 @@ Rectangle {
                         view.model.setProperty(i, "text2", "")
                     }
                     view.model.setProperty(index, "text2", "ShowRect")*/
-
                     m_NotesList.clickNoteBook()
                 }
 
@@ -463,6 +473,7 @@ Rectangle {
         cacheBuffer: 50
 
         ScrollBar.vertical: ScrollBar {
+            id: vscrollbar
             width: 8
             policy: ScrollBar.AsNeeded
         }

@@ -136,6 +136,18 @@ Rectangle {
         view.model.setProperty(currentIndex, "text2", strText)
     }
 
+    function setVPos(vpos) {
+
+        vscrollbar.position = vpos
+        console.log("qwMainDate:set " + vpos)
+    }
+
+    function getVPos() {
+        var vpos = vscrollbar.position
+        console.log("qwMainDate:get " + vpos)
+        return vpos
+    }
+
     function getColor() {
         var strColor
 
@@ -492,8 +504,6 @@ Rectangle {
                 } //暂停400ms
             }
         }
-
-
     }
 
     ListView {
@@ -522,6 +532,7 @@ Rectangle {
         cacheBuffer: 50
 
         ScrollBar.vertical: ScrollBar {
+            id: vscrollbar
             width: 8
             policy: ScrollBar.AsNeeded
         }

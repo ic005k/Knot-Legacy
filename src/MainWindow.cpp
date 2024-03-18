@@ -4879,6 +4879,8 @@ void MainWindow::on_btnNotesList_clicked() {
   m_NotesList->localNotesItem();
   m_NotesList->setNoteLabel();
 
+  m_NotesList->setNoteBookVPos();
+
   return;
 
   m_NotesList->show();
@@ -5419,7 +5421,7 @@ void MainWindow::on_btnDelBakFile_clicked() {
 void MainWindow::on_btnBackNoteList_clicked() {
   ui->frameNoteList->hide();
   ui->frameNotes->show();
-
+  m_NotesList->saveNoteBookVPos();
   m_NotesList->saveNotesList();
 }
 

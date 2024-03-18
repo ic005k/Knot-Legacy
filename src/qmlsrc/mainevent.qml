@@ -136,6 +136,17 @@ Rectangle {
         view.model.setProperty(currentIndex, "text2", strText)
     }
 
+    function setVPos(vpos) {
+        vscrollbar.position = vpos
+        console.log("qwMainEvent:set " + vpos)
+    }
+
+    function getVPos() {
+        var vpos = vscrollbar.position
+        console.log("qwMainEvent:get " + vpos)
+        return vpos
+    }
+
     function getColor() {
         var strColor
 
@@ -429,8 +440,6 @@ Rectangle {
 
             MouseArea {
 
-
-
                 anchors.fill: parent
                 onPressed: {
 
@@ -506,6 +515,7 @@ Rectangle {
         cacheBuffer: 50
 
         ScrollBar.vertical: ScrollBar {
+            id: vscrollbar
             width: 8
             policy: ScrollBar.AsNeeded
         }

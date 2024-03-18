@@ -707,6 +707,18 @@ void NotesList::saveCurrentNoteInfo() {
   Reg.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
 }
 
+void NotesList::saveNoteBookVPos() {
+  QSettings iniFile(privateDir + "notes.ini", QSettings::IniFormat);
+  iniFile.setValue("/NoteBook/VPos",
+                   m_Method->getVPosForQW(mw_one->ui->qwNoteBook));
+}
+
+void NotesList::setNoteBookVPos() {
+  QSettings iniFile(privateDir + "notes.ini", QSettings::IniFormat);
+  qreal txtPos = iniFile.value("/NoteBook/VPos", 0).toReal();
+  m_Method->setVPosForQW(mw_one->ui->qwNoteBook, txtPos);
+}
+
 void NotesList::saveNotesList() {
   if (!isNeedSave) return;
 

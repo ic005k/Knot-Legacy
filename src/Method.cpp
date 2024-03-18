@@ -1115,3 +1115,17 @@ void Method::zipWriter(QString zipPath = "test.zip",
     writer = nullptr;
   }
 }
+
+void Method::setVPosForQW(QQuickWidget* qw, qreal pos) {
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
+}
+
+qreal Method::getVPosForQW(QQuickWidget* qw) {
+  QVariant itemCount;
+  QQuickItem* root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getVPos",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  qreal textPos = itemCount.toDouble();
+  return textPos;
+}

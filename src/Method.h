@@ -203,7 +203,9 @@ class Method : public QDialog {
 
   QString getLastModified(QString file);
 
- protected:
+  void setVPosForQW(QQuickWidget *qw, qreal pos);
+  qreal getVPosForQW(QQuickWidget *qw);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

@@ -106,7 +106,9 @@ class NotesList : public QDialog {
   void saveCurrentNoteInfo();
   void genRecentOpenMenu();
 
- protected:
+  void saveNoteBookVPos();
+  void setNoteBookVPos();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
