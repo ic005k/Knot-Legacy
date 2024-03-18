@@ -2574,9 +2574,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           return true;
 
         } else if (ui->qwCata->isVisible()) {
-          ui->lblCataInfo->hide();
-          ui->qwCata->hide();
-          ui->qwReader->show();
+          m_Reader->showCatalogue();
           return true;
 
         } else if (!mydlgSetText->isHidden()) {
@@ -3961,6 +3959,7 @@ void MainWindow::selTab() {
   int index = m_Method->getCurrentIndexFromQW(ui->qwSelTab);
   tabData->setCurrentIndex(index);
   on_btnBackSetTab_clicked();
+  m_Method->clearAllBakList(ui->qwSelTab);
 }
 
 void MainWindow::getMainTabs() {

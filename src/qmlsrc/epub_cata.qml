@@ -217,7 +217,7 @@ Rectangle {
                     width: 6
                     radius: 2
                     anchors.leftMargin: 1
-                    color: "yellow"
+                    color: "#3498DB"
                     visible: true // item2.text.length ? true : false
                     Text {
                         anchors.centerIn: parent
@@ -316,7 +316,11 @@ Rectangle {
                 anchors.fill: parent
                 onPressed: {
                     clickPos = Qt.point(mouse.x, mouse.y)
+                    item0.color = "white"
+                    listItem.color = "red"
+
                 }
+
                 onReleased: {
                     var delta = Qt.point(mouse.x - clickPos.x,
                                          mouse.y - clickPos.y)

@@ -304,7 +304,10 @@ Rectangle {
                 anchors.fill: parent
                 onPressed: {
                     clickPos = Qt.point(mouse.x, mouse.y)
+                    item0.color = "white"
+                    listItem.color = "red"
                 }
+
                 onReleased: {
                     var delta = Qt.point(mouse.x - clickPos.x,
                                          mouse.y - clickPos.y)
@@ -327,15 +330,10 @@ Rectangle {
 
                 onPressAndHold: {
 
-                    // m_Method.showNotsListMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {
 
-                    // m_Method.okType()
-
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
                 }
             }
 

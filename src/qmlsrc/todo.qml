@@ -387,7 +387,7 @@ Rectangle {
         case 2:
             return "orange"
         case 3:
-            return "blue"
+            return "#3498DB"
         default:
             return "black"
         }

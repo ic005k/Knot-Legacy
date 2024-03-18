@@ -1021,6 +1021,7 @@ void Reader::savePageVPos() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
+
   textPos = getVPos();
   if (isEpub) {
     if (mw_one->ui->qwCata->isVisible()) {
@@ -1041,6 +1042,7 @@ void Reader::setPageVPos() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
+
   if (isEpub) {
     if (mw_one->ui->qwCata->isVisible()) {
       textPos = Reg.value("/Reader/vpos" + fileName + "  CataVPos", 0).toReal();

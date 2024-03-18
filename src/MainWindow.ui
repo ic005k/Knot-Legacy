@@ -163,6 +163,11 @@
        </item>
        <item>
         <widget class="QLabel" name="lblCataInfo">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>CataInfo</string>
          </property>
