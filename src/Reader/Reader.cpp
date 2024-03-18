@@ -200,6 +200,7 @@ void Reader::startOpenFile(QString openfile) {
     mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->btnCatalogue->hide();
     mw_one->ui->qwCata->hide();
+    mw_one->ui->lblCataInfo->hide();
     mw_one->ui->qwReader->show();
 
     QString bookName;
@@ -1057,9 +1058,7 @@ void Reader::setPageVPos() {
                   .toReal();
   }
 
-  if (textPos > 10) {
-    setVPos(textPos);
-  }
+  setVPos(textPos);
 }
 
 void Reader::setVPos(qreal pos) {
@@ -1069,8 +1068,7 @@ void Reader::setVPos(qreal pos) {
   else
     root = mw_one->ui->qwReader->rootObject();
 
-  if (!mw_one->ui->qwCata->isVisible())
-    QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
+  QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
 }
 
 qreal Reader::getVPos() {
@@ -1583,9 +1581,6 @@ void Reader::showCatalogue() {
     mw_one->ui->qwCata->hide();
     mw_one->ui->qwReader->show();
 
-    processHtml(htmlIndex);
-    currentHtmlFile = htmlFiles.at(htmlIndex);
-    setQMLHtml(currentHtmlFile, "");
   } else {
     mw_one->ui->qwReader->hide();
     mw_one->ui->lblCataInfo->show();

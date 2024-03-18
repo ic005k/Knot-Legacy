@@ -131,13 +131,15 @@ Rectangle {
     }
 
     function setVPos(vpos) {
-        view.contentY = vpos
+        //view.contentY = vpos
+        vscrollbar.position = vpos
         console.log("qwCata:set " + vpos)
     }
 
     function getVPos() {
-        console.log("qwCata:get " + view.contentY)
-        return view.contentY
+        var vpos = vscrollbar.position;
+        console.log("qwCata:get " + vpos)
+        return vpos
     }
 
     function getColor() {
@@ -424,6 +426,7 @@ Rectangle {
         cacheBuffer: 50
 
         ScrollBar.vertical: ScrollBar {
+            id:vscrollbar
             width: 8
             policy: ScrollBar.AsNeeded
         }

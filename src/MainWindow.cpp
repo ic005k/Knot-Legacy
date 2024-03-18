@@ -2569,12 +2569,14 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
-        if (catalogueFile == m_Reader->currentHtmlFile) {
-          on_btnCatalogue_clicked();
+        if (!m_ReaderSet->isHidden()) {
+          m_ReaderSet->close();
           return true;
 
-        } else if (!m_ReaderSet->isHidden()) {
-          m_ReaderSet->close();
+        } else if (ui->qwCata->isVisible()) {
+          ui->lblCataInfo->hide();
+          ui->qwCata->hide();
+          ui->qwReader->show();
           return true;
 
         } else if (!mydlgSetText->isHidden()) {
