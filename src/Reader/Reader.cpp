@@ -1627,14 +1627,9 @@ void Reader::ncx2html() {
   QTextEdit* text_edit0 = new QTextEdit;
   QString strHtml0 = mw_one->loadText(ncxFile);
   strHtml0 = strHtml0.replace("　", " ");
-  strHtml0 = strHtml0.replace("<docTitle>", "\n<docTitle>\n");
-  strHtml0 = strHtml0.replace("</docTitle>", "\n</docTitle>\n");
-  strHtml0 = strHtml0.replace("<navMap>", "\n<navMap>\n");
-  strHtml0 = strHtml0.replace("</navMap>", "\n</navMap>\n");
-  strHtml0 = strHtml0.replace("<navLabel>", "\n<navLabel>\n");
-  strHtml0 = strHtml0.replace("</navLabel>", "\n</navLabel>\n");
-  strHtml0 = strHtml0.replace("<navPoint", "\n<navPoint");
-  strHtml0 = strHtml0.replace("</navPoint>", "\n</navPoint>\n");
+  strHtml0 = strHtml0.replace("<", "\n<");
+  strHtml0 = strHtml0.replace(">", ">\n");
+
   text_edit0->setPlainText(strHtml0);
   for (int i = 0; i < text_edit0->document()->lineCount(); i++) {
     QString str = getTextEditLineText(text_edit0, i);
@@ -1644,6 +1639,8 @@ void Reader::ncx2html() {
     }
   }
 
+  // mw_one->TextEditToFile(text_edit, privateDir + "ncx_test.txt");
+
   for (int i = 0; i < text_edit->document()->lineCount(); i++) {
     QString str = getTextEditLineText(text_edit, i);
     str = str.trimmed();
@@ -1652,17 +1649,7 @@ void Reader::ncx2html() {
     bool isAddTitle = false;
 
     if (str == "<docTitle>") {
-      str0 = getTextEditLineText(text_edit, i + 1);
-      str0.replace("<text>", "");
-      str0.replace("</text>", "");
-      str0 = str0.trimmed();
-      isAddTitle = true;
-    }
-
-    if (str.contains("<docTitle><text>")) {
-      str0 = str;
-      str0.replace("<docTitle><text>", "");
-      str0.replace("</text></docTitle>", "");
+      str0 = getTextEditLineText(text_edit, i + 2);
       str0 = str0.trimmed();
       isAddTitle = true;
     }
@@ -1678,33 +1665,18 @@ void Reader::ncx2html() {
     }
 
     if (str == "<navLabel>") {
-      str1 = getTextEditLineText(text_edit, i + 1);
-      str1.replace("<text>", "");
-      str1.replace("</text>", "");
+      str1 = getTextEditLineText(text_edit, i + 2);
       str1 = str1.trimmed();
 
-      str2 = getTextEditLineText(text_edit, i + 3);
+      str2 = getTextEditLineText(text_edit, i + 5);
       str2.replace("<content src=", "");
       str2.replace("/>", "");
       str2.replace("\"", "");
       str2 = str2.trimmed();
 
-      isAdd = true;
-    }
-
-    if (str.contains("<navLabel><text>")) {
-      str1 = str;
-      str1.replace("<navLabel><text>", "");
-      str1.replace("</text></navLabel>", "");
-      str1 = str1.trimmed();
-
-      str2 = getTextEditLineText(text_edit, i + 1);
-      str2.replace("<content src=", "");
-      str2.replace("/>", "");
-      str2.replace("\"", "");
-      str2 = str2.trimmed();
-
-      isAdd = true;
+      if (!str1.contains("</")) {
+        isAdd = true;
+      }
     }
 
     if (isAdd) {
