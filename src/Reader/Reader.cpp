@@ -439,21 +439,39 @@ QString Reader::get_href(QString idref, QStringList opfList) {
   for (int i = 0; i < opfList.count(); i++) {
     QString str0 = opfList.at(i);
     str0 = str0.trimmed();
-    if (str0.contains("href=") && str0.contains(idref) &&
+    if (str0.contains("href") && str0.contains(idref) &&
         str0.mid(0, 5) == "<item" && str0.contains("htm")) {
       QString str1;
+
+      /* Method 1 */
       for (int j = 0; j < str0.length(); j++) {
         if (str0.mid(j, 6) == "href=\"") {
           for (int m = j + 6; m < str0.length(); m++) {
             if (str0.mid(m, 1) == "\"") {
               str1 = str0.mid(j + 6, m - j - 6);
-              // qDebug() << "href=" << str1;
+              // qDebug() <<"id="<<idref<< "href=" << str1;
               return str1;
               break;
             }
           }
         }
       }
+
+      /* Method 2 */
+      /*QStringList l0 = str0.split(" ");
+      for (int j = 0; j < l0.count(); j++) {
+        QString s0 = l0.at(j);
+        if (s0.contains("href") && s0.contains("=")) {
+          QString s1 = s0.split("=").at(1);
+          s1 = s1.trimmed();
+          s1.replace("\"", "");
+          str1 = s1.trimmed();
+          // qDebug() << "id=" << idref << "href=" << str1;
+          return str1;
+          break;
+        }
+      }*/
+
       break;
     }
   }
@@ -1166,7 +1184,7 @@ void Reader::SplitFile(QString qfile) {
   else
     n = bb / minBytes;
 
-  // qDebug() << "size======" << bb << n;
+  qDebug() << "SplitFile: size=" << bb << n << qfile;
 
   int split = countBody / n;
   int breakLine = 0;
