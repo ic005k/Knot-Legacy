@@ -171,6 +171,7 @@ void Reader::setReaderStyle() {
 void Reader::startOpenFile(QString openfile) {
   if (isReport) return;
 
+  mw_one->ui->qwPdf->hide();
   setPdfViewVisible(false);
 
   if (!mw_one->initMain) {
@@ -324,7 +325,7 @@ void Reader::openFile(QString openfile) {
 
 #endif
 
-      qDebug() << openfile << dirpath;
+      qDebug() << "openFile:" << openfile << "dirpath=" << dirpath;
 
       QString strFullPath;
       QString str0 = dirpath + "META-INF/container.xml";
@@ -382,7 +383,7 @@ void Reader::openFile(QString openfile) {
         }
       }
 
-      qDebug() << strFullPath << htmlFiles;
+      // qDebug() <<"opf file="<< strFullPath << htmlFiles;
       if (htmlFiles.count() == 0) {
         qDebug() << "====== htmlFiles Count== 0 ======";
         return;
@@ -446,7 +447,7 @@ QString Reader::get_href(QString idref, QStringList opfList) {
           for (int m = j + 6; m < str0.length(); m++) {
             if (str0.mid(m, 1) == "\"") {
               str1 = str0.mid(j + 6, m - j - 6);
-              qDebug() << "href=" << str1;
+              // qDebug() << "href=" << str1;
               return str1;
               break;
             }
@@ -740,21 +741,13 @@ void Reader::processHtml(int index) {
   QTextEdit* text_edit = new QTextEdit;
 
   QString strHtml = mw_one->loadText(hf);
-  strHtml = strHtml.replace("　", " ");
+  strHtml.replace("　", " ");
+  strHtml.replace("<", "\n<");
+  strHtml.replace(">", ">\n");
 
-  strHtml = strHtml.replace("</p>", "</p>\n");
-  strHtml = strHtml.replace("/>", "/>\n");
-
-  strHtml = strHtml.replace("><", ">\n<");
-
-  strHtml = strHtml.replace("<img", "\n<img");
-
-  strHtml = strHtml.replace(".css", "");
-  strHtml = strHtml.replace("font-family:", "font0-family:");
-
-  // QString space0, mystyle;
-  // space0 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-  // mystyle = " style='line-height:35px; width:100% ; text-indent:40px; ' ";
+  strHtml.replace(".css", "");
+  strHtml.replace("font-family:", "font0-family:");
+  strHtml = strHtml.trimmed();
 
   text_edit->setPlainText(strHtml);
 
@@ -802,7 +795,8 @@ void Reader::processHtml(int index) {
           // qDebug() << "imgFile=" << imgFile;
 
           bool isCover = false;
-          if (imgFile.toLower().contains("cover")) {
+          QString imgFile_l = imgFile.toLower();
+          if (imgFile_l.contains("cover")) {
             isCover = true;
           }
           int nw = 0;
@@ -858,8 +852,9 @@ void Reader::setQMLHtml(QString htmlFile, QString skipID) {
                             Q_ARG(QVariant, htmlFile), Q_ARG(QVariant, skipID));
 #endif
 
+  QFileInfo fi(htmlFile);
   mw_one->m_ReaderSet->ui->lblInfo->setText(
-      tr("Info") + " : " + htmlFile + "  " +
+      tr("Info") + " : " + fi.baseName() + "  " +
       mw_one->getFileSize(QFile(htmlFile).size(), 2));
 
   qDebug() << "setQMLHtml:Html File=" << htmlFile;
@@ -899,7 +894,7 @@ QStringList Reader::readText(QString textFile) {
       QByteArray buff = file.readAll();
       text = GetCorrectUnicode(buff);
 
-      text.replace("/>", "/>\n");
+      text.replace(">", ">\n");
       text.replace("<", "\n<");
       list = text.split("\n");
       for (int i = 0; i < list.count(); i++) {
@@ -1150,14 +1145,16 @@ void Reader::SplitFile(QString qfile) {
   QFileInfo fi(qfile);
 
   QString text = mw_one->loadText(qfile);
-  text = text.replace("><", ">\n<");
-  text = text.replace("</head>", "</head>\n");
+  text.replace("<", "\n<");
+  text.replace(">", ">\n");
+  text = text.trimmed();
   text_edit->setPlainText(text);
   int count = text_edit->document()->lineCount();
   for (int i = 0; i < count; i++) {
     QString str = getTextEditLineText(text_edit, i);
+    str = str.trimmed();
     plain_editHead->appendPlainText(str);
-    if (str.trimmed() == "</head>") break;
+    if (str == "</head>") break;
   }
 
   int countHead = plain_editHead->document()->lineCount();
@@ -1169,7 +1166,7 @@ void Reader::SplitFile(QString qfile) {
   else
     n = bb / minBytes;
 
-  qDebug() << "size======" << bb << n;
+  // qDebug() << "size======" << bb << n;
 
   int split = countBody / n;
   int breakLine = 0;
@@ -1465,6 +1462,7 @@ QString Reader::getCoverPicFile(QString htmlFile) {
 
 void Reader::setPdfViewVisible(bool vv) {
   if (mw_one->isPdfNewMothod) return;
+
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   if (!mw_one->isPdfNewMothod)
     QMetaObject::invokeMethod((QObject*)root, "setViewVisible",
@@ -1671,7 +1669,7 @@ void Reader::ncx2html() {
 
     if (isAddTitle) {
       mw_one->ui->lblCataInfo->setText(str0);
-      qDebug() << str0;
+      qDebug() << "ncx title=" << str0;
       plain_edit->appendPlainText("<div>");
       plain_edit->appendPlainText("<h3>" + str0 + "</h3>");
       plain_edit->appendPlainText("</div>");
@@ -1695,7 +1693,7 @@ void Reader::ncx2html() {
     }
 
     if (isAdd) {
-      qDebug() << str1 << str2;
+      // qDebug() << "ncx2html:" << str1 << str2;
 
       plain_edit->appendPlainText("<div>");
       plain_edit->appendPlainText("<li><a href=" + strOpfPath + str2 +

@@ -303,6 +303,9 @@ border-radius: 4px;</string>
    </item>
    <item>
     <widget class="QLabel" name="lblInfo">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
      <property name="text">
       <string>Info</string>
      </property>
