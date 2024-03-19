@@ -130,6 +130,8 @@ class Reader : public QDialog {
   static void ncx2html();
   QString getSkipText(QString htmlFile, QString skipID);
   QString strFind;
+  void gotoCataList(QString htmlFile);
+  int currentCataIndex = 0;
 };
 
 #endif  // READER_H

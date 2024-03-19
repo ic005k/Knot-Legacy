@@ -646,6 +646,18 @@ void Reader::on_btnPageNext_clicked() {
   showInfo();
 }
 
+void Reader::gotoCataList(QString htmlFile) {
+  for (int i = 0; i < ncxList.count(); i++) {
+    QString item = ncxList.at(i);
+    QString str1 = item.split("===").at(1);
+    // qDebug() << "gotoCataList:" << str1 << htmlFile;
+    if (str1.contains(htmlFile)) {
+      currentCataIndex = i;
+      break;
+    }
+  }
+}
+
 void Reader::openCataList(QString htmlFile) {
   savePageVPos();
   mw_one->ui->lblCataInfo->hide();
@@ -856,6 +868,8 @@ void Reader::setQMLHtml(QString htmlFile, QString skipID) {
     setHtmlSkip(htmlFile, skipID);
   }
 
+  gotoCataList(htmlFile);
+
   setAni();
 }
 
@@ -1049,6 +1063,7 @@ void Reader::setPageVPos() {
       textPos = Reg.value("/Reader/vpos" + fileName + "  CataVPos", 0).toReal();
       int index =
           Reg.value("/Reader/vpos" + fileName + "  CataIndex", 0).toReal();
+      if (currentCataIndex > 0) index = currentCataIndex;
       m_Method->setCurrentIndexFromQW(mw_one->ui->qwCata, index);
     } else {
       if (htmlIndex >= 0)
