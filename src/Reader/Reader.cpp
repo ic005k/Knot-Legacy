@@ -18,8 +18,8 @@ QString strOpfPath, fileName, ebookFile, strTitle, catalogueFile;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
-int minBytes = 20000;
-int maxBytes = 40000;
+int minBytes = 50000;
+int maxBytes = 100000;
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -717,7 +717,7 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
     QString skipid = list.at(1);
     QString strfile;
     int count0 = 0;
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < 2000; i++) {
       strfile = htmlFiles.at(index + i);
       QString buffers = mw_one->loadText(strfile);
       if (buffers.contains(skipid)) {
@@ -1044,6 +1044,20 @@ void Reader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
     qDebug() << "Write failure!" << fileName;
 }
 
+void Reader::StringToFile(QString buffers, QString fileName) {
+  QFile* file;
+  file = new QFile;
+  file->setFileName(fileName);
+  bool ok = file->open(QIODevice::WriteOnly | QIODevice::Text);
+  if (ok) {
+    QTextStream out(file);
+    out << buffers;
+    file->close();
+    delete file;
+  } else
+    qDebug() << "Write failure!" << fileName;
+}
+
 void Reader::savePageVPos() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -1202,8 +1216,8 @@ void Reader::SplitFile(QString qfile) {
         }
       }
 
-      QString file1 =
-          qfile;  // fi.path() + "/" + fi.baseName() + "." + fi.suffix();
+      QString file1 = qfile;
+
       TextEditToFile(plain_edit, file1);
       htmlFiles.append(file1);
     }
@@ -1226,6 +1240,7 @@ void Reader::SplitFile(QString qfile) {
 
       QString file2 = fi.path() + "/" + fi.baseName() + "_" +
                       QString::number(x - 1) + "." + fi.suffix();
+
       TextEditToFile(plain_edit, file2);
       htmlFiles.append(file2);
     }
@@ -1242,11 +1257,13 @@ void Reader::SplitFile(QString qfile) {
 
       QString filen = fi.path() + "/" + fi.baseName() + "_" +
                       QString::number(x - 1) + "." + fi.suffix();
+
       TextEditToFile(plain_edit, filen);
       htmlFiles.append(filen);
     }
   }
 
+  delete text_edit;
   delete plain_edit;
   delete plain_editHead;
 }
@@ -1672,6 +1689,7 @@ void Reader::ncx2html() {
 
   // mw_one->TextEditToFile(text_edit, privateDir + "ncx_test.txt");
 
+  QString strAuthor, strTitle;
   for (int i = 0; i < text_edit->document()->lineCount(); i++) {
     QString str = getTextEditLineText(text_edit, i);
     str = str.trimmed();
@@ -1682,12 +1700,16 @@ void Reader::ncx2html() {
     if (str == "<docTitle>") {
       str0 = getTextEditLineText(text_edit, i + 2);
       str0 = str0.trimmed();
+      strTitle = str0;
       isAddTitle = true;
     }
 
+    if (str == "<docAuthor>") {
+      strAuthor = getTextEditLineText(text_edit, i + 2);
+      strAuthor = strAuthor.trimmed();
+    }
+
     if (isAddTitle) {
-      mw_one->ui->lblCataInfo->setText(str0);
-      qDebug() << "ncx title=" << str0;
       plain_edit->appendPlainText("<div>");
       plain_edit->appendPlainText("<h3>" + str0 + "</h3>");
       plain_edit->appendPlainText("</div>");
@@ -1728,6 +1750,16 @@ void Reader::ncx2html() {
   plain_edit->appendPlainText("</html>");
   catalogueFile = strOpfPath + "catalogue.html";
   TextEditToFile(plain_edit, catalogueFile);
+
+  if (strTitle != "") {
+    if (strAuthor != "") strTitle = strTitle + " ( " + strAuthor + " ) ";
+    mw_one->ui->lblCataInfo->setText(strTitle);
+    qDebug() << "ncx title=" << strTitle << "author=" << strAuthor;
+  }
+
+  delete plain_edit;
+  delete text_edit;
+  delete text_edit0;
 }
 
 void Reader::setHtmlSkip(QString htmlFile, QString skipID) {

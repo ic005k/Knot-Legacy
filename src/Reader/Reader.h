@@ -103,7 +103,8 @@ class Reader : public QDialog {
   void on_hSlider_sliderReleased(int position);
   void setHtmlSkip(QString htmlFile, QString skipID);
 
- public slots:
+  void StringToFile(QString buffers, QString fileName);
+  public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
   void showCatalogue();

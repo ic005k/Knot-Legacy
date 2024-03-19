@@ -168,11 +168,6 @@ void MainWindow::readEBookDone() {
   if (isEBook) {
     ui->lblBookName->setText(strTitle);
 
-    ui->btnReader->setEnabled(true);
-    ui->frameReaderFun->setEnabled(true);
-    ui->btnBackDir->hide();
-    this->repaint();
-
     if (isText || isEpub) {
       qDebug() << "Read  Text or Epub End... ...";
 
@@ -205,6 +200,10 @@ void MainWindow::readEBookDone() {
         m_ReaderSet->ui->lblInfo->hide();
       }
     }
+
+    ui->btnReader->setEnabled(true);
+    ui->frameReaderFun->setEnabled(true);
+    ui->btnBackDir->hide();
 
     if (isPDF) {
       qDebug() << "Read Pdf... ..." << fileName;
