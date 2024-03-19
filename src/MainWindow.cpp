@@ -153,8 +153,6 @@ void ReadEBookThread::run() {
 
   if (isEBook) {
     mw_one->m_Reader->openFile(ebookFile);
-    // for (int i = 0; i < htmlFiles.count(); i++)
-    //   mw_one->m_Reader->processHtml(i);
   }
 
   if (isReport) {
@@ -3707,7 +3705,8 @@ void MainWindow::init_Theme() {
       "font-weight: bold;");
 
   QString style =
-      "QToolButton {background-color: rgb(255, 0, 0); color: rgb(255,255,255); "
+      "QToolButton {background-color: rgb(255, 0, 0); color: "
+      "rgb(255,255,255); "
       "border-radius:10px; "
       "border:0px solid gray; } QToolButton:pressed { background-color: "
       "rgb(220,220,230); color: black}";

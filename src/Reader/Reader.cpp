@@ -615,7 +615,6 @@ void Reader::on_btnPageUp_clicked() {
   if (isEpub) {
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
-    processHtml(htmlIndex);
     currentHtmlFile = htmlFiles.at(htmlIndex);
     setQMLHtml(currentHtmlFile, "");
   }
@@ -657,7 +656,6 @@ void Reader::on_btnPageNext_clicked() {
   if (isEpub) {
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
-    processHtml(htmlIndex);
     currentHtmlFile = htmlFiles.at(htmlIndex);
     setQMLHtml(currentHtmlFile, "");
   }
@@ -708,7 +706,6 @@ void Reader::initLink(QString htmlFile) {
 void Reader::setEpubPagePosition(int index, QString htmlFile) {
   savePageVPos();
   htmlIndex = index;
-  processHtml(index);
   currentHtmlFile = htmlFiles.at(index);
 
   if (htmlFile.contains("#")) {
@@ -728,7 +725,6 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
       }
     }
     htmlIndex = index + count0;
-    processHtml(htmlIndex);
 
     for (int i = 0; i < ncxList.count(); i++) {
       QString str = ncxList.at(i);
@@ -751,14 +747,11 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
   showInfo();
 }
 
-void Reader::processHtml(int index) {
+void Reader::processHtml(QString htmlFile) {
   if (!isEpub) return;
 
-  QString hf = htmlFiles.at(index);
-
   QTextEdit* text_edit = new QTextEdit;
-
-  QString strHtml = mw_one->loadText(hf);
+  QString strHtml = mw_one->loadText(htmlFile);
   strHtml.replace("　", " ");
   strHtml.replace("<", "\n<");
   strHtml.replace(">", ">\n");
@@ -853,13 +846,18 @@ void Reader::processHtml(int index) {
     }
   }
 
-  TextEditToFile(plain_edit, hf);
+  TextEditToFile(plain_edit, htmlFile);
+
   delete plain_edit;
+  delete text_edit;
 }
 
 void Reader::setQMLHtml(QString htmlFile, QString skipID) {
+  processHtml(htmlFile);
+
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
+
 #ifdef Q_OS_WIN
   QString htmlBuffer = mw_one->loadText(htmlFile);
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
@@ -965,7 +963,7 @@ void Reader::goPostion() {
       if (htmlIndex >= htmlFiles.count()) {
         htmlIndex = 0;
       }
-      processHtml(htmlIndex);
+
       currentHtmlFile = htmlFiles.at(htmlIndex);
       setQMLHtml(currentHtmlFile, "");
       setPageVPos();
@@ -1618,7 +1616,6 @@ void Reader::getLines() {
     mw_one->m_ReaderSet->ui->hSlider->setMaximum(htmlFiles.count());
     htmlIndex = sPos - 1;
     if (htmlIndex < 0) htmlIndex = 0;
-    processHtml(htmlIndex);
     currentHtmlFile = htmlFiles.at(htmlIndex);
     setQMLHtml(currentHtmlFile, "");
   }

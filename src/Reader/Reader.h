@@ -82,7 +82,7 @@ class Reader : public QDialog {
   void setReaderStyle();
   qreal getVHeight();
   qreal getNewVPos(qreal pos1, qreal h1, qreal h2);
-  static void processHtml(int index);
+  static void processHtml(QString htmlFile);
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
@@ -104,7 +104,7 @@ class Reader : public QDialog {
   void setHtmlSkip(QString htmlFile, QString skipID);
 
   void StringToFile(QString buffers, QString fileName);
-  public slots:
+ public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
   void showCatalogue();
