@@ -2568,11 +2568,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
-        if (!m_ReaderSet->isHidden()) {
-          m_ReaderSet->close();
-          return true;
-
-        } else if (ui->qwCata->isVisible()) {
+        if (ui->qwCata->isVisible()) {
           m_Reader->showCatalogue();
           return true;
 
@@ -4494,10 +4490,9 @@ void MainWindow::on_btnPageNext_clicked() {
 }
 
 void MainWindow::on_btnPages_clicked() {
-  if (!m_ReaderSet->isHidden()) {
-    m_ReaderSet->close();
-  } else
-    m_ReaderSet->init();
+  if (ui->qwCata->isVisible()) return;
+
+  m_ReaderSet->init();
 
   QStringList list = mw_one->ui->btnPages->text().split("\n");
   if (list.count() == 2) {

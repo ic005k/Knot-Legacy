@@ -15,7 +15,7 @@ bool isOpen = false;
 bool isEpub, isText, isPDF;
 QStringList readTextList, htmlFiles, ncxList;
 QString strOpfPath, fileName, ebookFile, strTitle, catalogueFile, strShowMsg,
-    strPercent;
+    strEpubTitle, strPercent;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
@@ -508,24 +508,29 @@ void Reader::saveReader() {
   Reg.setIniCodec("utf-8");
 #endif
 
+  QFileInfo fi(fileName);
+  QString epubName = strEpubTitle;
+  if (epubName == "") epubName = fi.baseName();
+
   Reg.setValue("/Reader/FileName", fileName);
 
   if (isText || isEpub) {
     Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
 
     if (isText) {
-      Reg.setValue("/Reader/iPage" + fileName, iPage - baseLines);
+      Reg.setValue("/Reader/iPage" + fi.baseName(), iPage - baseLines);
     }
 
-    if (isEpub) Reg.setValue("/Reader/htmlIndex" + fileName, htmlIndex);
-
-    // dir
-    Reg.setValue("/Reader/" + fileName + "MainDirIndex", mainDirIndex);
+    if (isEpub) {
+      Reg.setValue("/Reader/htmlIndex" + epubName, htmlIndex);
+      // dir
+      Reg.setValue("/Reader/" + epubName + "MainDirIndex", mainDirIndex);
+    }
   }
 
   if (isPDF) {
-    Reg.setValue("/Reader/PdfPage" + fileName, getPdfCurrentPage());
-    Reg.setValue("/Reader/PdfScale" + fileName, getScale());
+    Reg.setValue("/Reader/PdfPage" + fi.baseName(), getPdfCurrentPage());
+    Reg.setValue("/Reader/PdfScale" + fi.baseName(), getScale());
   }
 
   // book list
@@ -775,6 +780,7 @@ void Reader::processHtml(QString htmlFile) {
 
   strHtml.replace(".css", "");
   strHtml.replace("font-family:", "font0-family:");
+  strHtml.replace("font-size:", "font0-size:");
   strHtml = strHtml.trimmed();
 
   text_edit->setPlainText(strHtml);
@@ -964,13 +970,17 @@ void Reader::goPostion() {
     Reg.setIniCodec("utf-8");
 #endif
 
+    QFileInfo fi(fileName);
+    QString epubName = strEpubTitle;
+    if (epubName == "") epubName = fi.baseName();
+
     if (isText) {
-      iPage = Reg.value("/Reader/iPage" + fileName, 0).toULongLong();
+      iPage = Reg.value("/Reader/iPage" + fi.baseName(), 0).toULongLong();
       on_btnPageNext_clicked();
     }
 
     if (isEpub) {
-      htmlIndex = Reg.value("/Reader/htmlIndex" + fileName, 0).toInt();
+      htmlIndex = Reg.value("/Reader/htmlIndex" + epubName, 0).toInt();
 
       if (htmlIndex >= htmlFiles.count()) {
         htmlIndex = 0;
@@ -984,10 +994,10 @@ void Reader::goPostion() {
 
     if (isPDF) {
       if (!mw_one->isPdfNewMothod) {
-        int page = Reg.value("/Reader/PdfPage" + fileName, 1).toInt();
+        int page = Reg.value("/Reader/PdfPage" + fi.baseName(), 1).toInt();
         setPdfPage(page);
 
-        qreal scale = Reg.value("/Reader/PdfScale" + fileName, 1).toReal();
+        qreal scale = Reg.value("/Reader/PdfScale" + fi.baseName(), 1).toReal();
         setPdfScale(scale);
       }
     }
@@ -1074,18 +1084,26 @@ void Reader::savePageVPos() {
   Reg.setIniCodec("utf-8");
 #endif
 
+  QFileInfo fi(fileName);
+  QString epubName = strEpubTitle;
+  if (epubName == "") epubName = fi.baseName();
+  QFileInfo fiHtml(currentHtmlFile);
+
   textPos = getVPos();
   if (isEpub) {
     if (mw_one->ui->qwCata->isVisible()) {
-      Reg.setValue("/Reader/vpos" + fileName + "  CataVPos", textPos);
+      Reg.setValue("/Reader/vpos" + epubName + "  CataVPos", textPos);
       int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwCata);
-      Reg.setValue("/Reader/vpos" + fileName + "  CataIndex", index);
+      Reg.setValue("/Reader/vpos" + epubName + "  CataIndex", index);
     } else {
       if (htmlIndex >= 0)
-        Reg.setValue("/Reader/vpos" + fileName + currentHtmlFile, textPos);
+        Reg.setValue("/Reader/vpos" + epubName + fiHtml.baseName(), textPos);
     }
-  } else {
-    Reg.setValue("/Reader/vpos" + fileName + QString::number(iPage), textPos);
+  }
+
+  if (isText) {
+    Reg.setValue("/Reader/vpos" + fi.baseName() + QString::number(iPage),
+                 textPos);
   }
 }
 
@@ -1095,22 +1113,29 @@ void Reader::setPageVPos() {
   Reg.setIniCodec("utf-8");
 #endif
 
+  QFileInfo fi(fileName);
+  QString epubName = strEpubTitle;
+  if (epubName == "") epubName = fi.baseName();
+  QFileInfo fiHtml(currentHtmlFile);
+
   if (isEpub) {
     if (mw_one->ui->qwCata->isVisible()) {
-      textPos = Reg.value("/Reader/vpos" + fileName + "  CataVPos", 0).toReal();
+      textPos = Reg.value("/Reader/vpos" + epubName + "  CataVPos", 0).toReal();
       int index =
-          Reg.value("/Reader/vpos" + fileName + "  CataIndex", 0).toReal();
+          Reg.value("/Reader/vpos" + epubName + "  CataIndex", 0).toReal();
       if (currentCataIndex > 0) index = currentCataIndex;
       m_Method->setCurrentIndexFromQW(mw_one->ui->qwCata, index);
     } else {
       if (htmlIndex >= 0)
-        textPos =
-            Reg.value("/Reader/vpos" + fileName + currentHtmlFile, 0).toReal();
+        textPos = Reg.value("/Reader/vpos" + epubName + fiHtml.baseName(), 0)
+                      .toReal();
     }
+  }
 
-  } else {
-    textPos = Reg.value("/Reader/vpos" + fileName + QString::number(iPage), 0)
-                  .toReal();
+  if (isText) {
+    textPos =
+        Reg.value("/Reader/vpos" + fi.baseName() + QString::number(iPage), 0)
+            .toReal();
   }
 
   setVPos(textPos);
@@ -1695,7 +1720,7 @@ void Reader::ncx2html() {
 
   // mw_one->TextEditToFile(text_edit, privateDir + "ncx_test.txt");
 
-  QString strAuthor, strTitle;
+  QString strAuthor;
   for (int i = 0; i < text_edit->document()->lineCount(); i++) {
     QString str = getTextEditLineText(text_edit, i);
     str = str.trimmed();
@@ -1706,7 +1731,7 @@ void Reader::ncx2html() {
     if (str == "<docTitle>") {
       str0 = getTextEditLineText(text_edit, i + 2);
       str0 = str0.trimmed();
-      strTitle = str0;
+      strEpubTitle = str0;
       isAddTitle = true;
     }
 
@@ -1757,10 +1782,11 @@ void Reader::ncx2html() {
   catalogueFile = strOpfPath + "catalogue.html";
   TextEditToFile(plain_edit, catalogueFile);
 
-  if (strTitle != "") {
-    if (strAuthor != "") strTitle = strTitle + " ( " + strAuthor + " ) ";
-    mw_one->ui->lblCataInfo->setText(strTitle);
-    qDebug() << "ncx title=" << strTitle << "author=" << strAuthor;
+  if (strEpubTitle != "") {
+    if (strAuthor != "")
+      strEpubTitle = strEpubTitle + " ( " + strAuthor + " ) ";
+    mw_one->ui->lblCataInfo->setText(strEpubTitle);
+    qDebug() << "ncx title=" << strEpubTitle << "author=" << strAuthor;
   }
 }
 

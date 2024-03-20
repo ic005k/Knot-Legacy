@@ -9,6 +9,7 @@ extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniDir, privateDir;
 extern QSettings* iniPreferences;
+extern QRegularExpression regxNumber;
 
 ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   QPalette pal = palette();
@@ -20,9 +21,12 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   setPalette(pal);
 
   ui->setupUi(this);
+  setModal(true);
 
-  setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool | Qt::FramelessWindowHint);
+  // setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool |
+  // Qt::FramelessWindowHint);
 
+  this->installEventFilter(this);
   ui->hSlider->installEventFilter(this);
 
   ui->btnFontLess->setStyleSheet("border:none");
@@ -40,7 +44,9 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   ui->lblInfo->adjustSize();
   ui->lblInfo->setWordWrap(true);
 
-  // ui->lblProg->setStyleSheet("color:white;");
+  QValidator* validator =
+      new QRegularExpressionValidator(regxNumber, ui->editPage);
+  ui->editPage->setValidator(validator);
 }
 
 ReaderSet::~ReaderSet() { delete ui; }
@@ -70,7 +76,7 @@ bool ReaderSet::eventFilter(QObject* watch, QEvent* evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      close();
+      on_btnBack_clicked();
       return true;
     }
   }
@@ -166,3 +172,16 @@ void ReaderSet::on_btnFont_clicked() {
 }
 
 void ReaderSet::on_hSlider_valueChanged(int value) { Q_UNUSED(value); }
+
+void ReaderSet::on_btnGoPage_clicked() {
+  if (ui->editPage->text().trimmed() == "") return;
+
+  int nPage = ui->editPage->text().toInt();
+  if (nPage <= 0) nPage = 1;
+  if (nPage > ui->hSlider->maximum()) nPage = ui->hSlider->maximum();
+  ui->hSlider->setValue(nPage);
+  on_hSlider_sliderMoved(nPage);
+  on_hSlider_sliderReleased();
+}
+
+void ReaderSet::on_btnBack_clicked() { close(); }
