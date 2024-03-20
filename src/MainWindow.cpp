@@ -202,6 +202,8 @@ void MainWindow::readEBookDone() {
     ui->btnReader->setEnabled(true);
     ui->frameReaderFun->setEnabled(true);
     ui->btnBackDir->hide();
+    mw_one->m_Reader->tmeShowEpubMsg->stop();
+    ui->statusbar->hide();
 
     if (isPDF) {
       qDebug() << "Read Pdf... ..." << fileName;
@@ -3768,7 +3770,6 @@ void MainWindow::init_UIWidget() {
   isReadEnd = true;
 
   ui->menubar->hide();
-  ui->statusbar->hide();
   ui->frameReader->hide();
   ui->frameTodo->hide();
   ui->frameTodoRecycle->hide();
@@ -3792,7 +3793,6 @@ void MainWindow::init_UIWidget() {
   ui->frameSetTab->hide();
   ui->frameEditRecord->hide();
   ui->frameBookList->hide();
-  ui->statusbar->setHidden(true);
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);

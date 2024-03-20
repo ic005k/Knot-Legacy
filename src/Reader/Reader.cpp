@@ -14,12 +14,13 @@ extern int fontSize;
 bool isOpen = false;
 bool isEpub, isText, isPDF;
 QStringList readTextList, htmlFiles, ncxList;
-QString strOpfPath, fileName, ebookFile, strTitle, catalogueFile;
+QString strOpfPath, fileName, ebookFile, strTitle, catalogueFile, strShowMsg,
+    strPercent;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
-int minBytes = 50000;
-int maxBytes = 100000;
+int minBytes = 30000;
+int maxBytes = 60000;
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -32,6 +33,7 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblCataInfo->hide();
   mw_one->ui->lblCataInfo->adjustSize();
   mw_one->ui->lblCataInfo->setWordWrap(true);
+  mw_one->ui->lblBookName->setWordWrap(true);
 
   mw_one->ui->textBrowser->horizontalScrollBar()->hide();
   mw_one->ui->textBrowser->verticalScrollBar()->hide();
@@ -60,6 +62,19 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   f.setPointSize(10);
   f.setBold(true);
   mw_one->ui->btnPages->setFont(f);
+
+  tmeShowEpubMsg = new QTimer(this);
+  connect(tmeShowEpubMsg, SIGNAL(timeout()), this, SLOT(showEpubMsg()));
+
+  pProgressBar = new QProgressBar();
+  pProgressBar->setRange(0, 100);
+  pProgressBar->setValue(0);
+  pProgressBar->setFixedWidth(50);
+  f.setPointSize(10);
+  pProgressBar->setFont(f);
+  mw_one->ui->statusbar->addPermanentWidget(pProgressBar);
+  mw_one->ui->statusbar->hide();
+  mw_one->ui->statusbar->setFont(f);
 }
 
 Reader::~Reader() {}
@@ -184,6 +199,7 @@ void Reader::startOpenFile(QString openfile) {
   isEpub = false;
   isText = false;
   isPDF = false;
+  strShowMsg = "";
 
   setReaderStyle();
 
@@ -191,14 +207,10 @@ void Reader::startOpenFile(QString openfile) {
     isEBook = true;
     strTitle = "";
     catalogueFile = "";
-    mw_one->ui->btnPages->setText("1\n1");
-    mw_one->ui->progReader->setValue(0);
+
     mw_one->ui->btnReader->setEnabled(false);
     mw_one->ui->frameReaderFun->setEnabled(false);
-
     mw_one->ui->lblTitle->hide();
-    mw_one->ui->lblBookName->setText("");
-    mw_one->ui->lblBookName->setWordWrap(true);
     mw_one->ui->btnCatalogue->hide();
     mw_one->ui->qwCata->hide();
     mw_one->ui->lblCataInfo->hide();
@@ -250,6 +262,7 @@ void Reader::startOpenFile(QString openfile) {
     mw_one->m_ReadTWThread->wait();
 
     mw_one->showProgress();
+    tmeShowEpubMsg->start(100);
 
     mw_one->myReadEBookThread->start();
 #endif
@@ -361,8 +374,9 @@ void Reader::openFile(QString openfile) {
       QStringList opfList = readText(strOpfFile);
       htmlFiles.clear();
 
-      if (opfList.count() > 1) {
-        for (int i = 0; i < opfList.count(); i++) {
+      int opfCount = opfList.count();
+      if (opfCount > 1) {
+        for (int i = 0; i < opfCount; i++) {
           QString str0 = opfList.at(i);
           str0 = str0.trimmed();
 
@@ -380,6 +394,8 @@ void Reader::openFile(QString openfile) {
               }
             }
           }
+          double percent = (double)i / (double)opfCount;
+          strPercent = QString::number(percent * 100, 'f', 0);
         }
       }
 
@@ -750,6 +766,7 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
 void Reader::processHtml(QString htmlFile) {
   if (!isEpub) return;
 
+  QPlainTextEdit* plain_edit = new QPlainTextEdit;
   QTextEdit* text_edit = new QTextEdit;
   QString strHtml = mw_one->loadText(htmlFile);
   strHtml.replace("　", " ");
@@ -761,8 +778,6 @@ void Reader::processHtml(QString htmlFile) {
   strHtml = strHtml.trimmed();
 
   text_edit->setPlainText(strHtml);
-
-  QPlainTextEdit* plain_edit = new QPlainTextEdit;
 
   for (int i = 0; i < text_edit->document()->lineCount(); i++) {
     QString str = getTextEditLineText(text_edit, i);
@@ -847,9 +862,6 @@ void Reader::processHtml(QString htmlFile) {
   }
 
   TextEditToFile(plain_edit, htmlFile);
-
-  delete plain_edit;
-  delete text_edit;
 }
 
 void Reader::setQMLHtml(QString htmlFile, QString skipID) {
@@ -1196,7 +1208,8 @@ void Reader::SplitFile(QString qfile) {
   else
     n = bb / minBytes;
 
-  qDebug() << "SplitFile: size=" << bb << n << qfile;
+  strShowMsg = "SplitFile: size=" + QString::number(bb) + "  " +
+               QString::number(n) + "  " + fi.baseName();
 
   int split = countBody / n;
   int breakLine = 0;
@@ -1260,10 +1273,6 @@ void Reader::SplitFile(QString qfile) {
       htmlFiles.append(filen);
     }
   }
-
-  delete text_edit;
-  delete plain_edit;
-  delete plain_editHead;
 }
 
 QString Reader::getNCX_File(QString path) {
@@ -1753,10 +1762,6 @@ void Reader::ncx2html() {
     mw_one->ui->lblCataInfo->setText(strTitle);
     qDebug() << "ncx title=" << strTitle << "author=" << strAuthor;
   }
-
-  delete plain_edit;
-  delete text_edit;
-  delete text_edit0;
 }
 
 void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
@@ -1839,4 +1844,12 @@ QString Reader::getSkipText(QString htmlFile, QString skipID) {
   }
 
   return "";
+}
+
+void Reader::showEpubMsg() {
+  if (strShowMsg != "") {
+    mw_one->ui->statusbar->show();
+    mw_one->ui->statusbar->showMessage(strShowMsg);
+    pProgressBar->setValue(strPercent.toInt());
+  }
 }

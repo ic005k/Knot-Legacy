@@ -9,6 +9,7 @@
 #include <QFontDialog>
 #include <QPlainTextEdit>
 #include <QProcess>
+#include <QProgressBar>
 #include <QQmlEngine>
 #include <QQuickView>
 #include <QQuickWidget>
@@ -33,6 +34,7 @@ class Reader : public QDialog {
   ~Reader();
   Ui::Reader *ui;
 
+  QTimer *tmeShowEpubMsg;
   QDialog *frame;
   QString openfile;
   QString readerStyle;
@@ -119,6 +121,8 @@ class Reader : public QDialog {
   void paintEvent(QPaintEvent *event) override;
  private slots:
 
+  void showEpubMsg();
+
  private:
   int x, y, w, h;
 
@@ -133,6 +137,7 @@ class Reader : public QDialog {
   QString strFind;
   void gotoCataList(QString htmlFile);
   int currentCataIndex = 0;
+  QProgressBar *pProgressBar;
 };
 
 #endif  // READER_H

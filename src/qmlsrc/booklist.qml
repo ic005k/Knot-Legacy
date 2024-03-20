@@ -348,7 +348,7 @@ Rectangle {
 
                 onClicked: {
 
-                    view.currentIndex = index //实现item切换
+                    view.currentIndex = index
                 }
 
                 onPressAndHold: {
@@ -357,8 +357,7 @@ Rectangle {
 
                 onDoubleClicked: {
 
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
+
                 }
             }
 
