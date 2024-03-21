@@ -1073,11 +1073,63 @@ QString Method::setPushButtonQss(QPushButton* btn, int radius, int padding,
   return qss;
 }
 
-bool Method::zipReader(QString zipPath, QString zipDir) {
+bool Method::zipReader(QString zipFile, QString unzipDir) {
   QDir tempDir;
-  if (!tempDir.exists(zipDir)) tempDir.mkpath(zipDir);
-  QZipReader reader(zipPath);
-  return reader.extractAll(zipDir);
+  if (!tempDir.exists(unzipDir)) tempDir.mkpath(unzipDir);
+  QZipReader reader(zipFile);
+  return reader.extractAll(unzipDir);
+}
+
+bool Method::decompressionZipFile(const QString& zipfile, const QString& path) {
+  bool result = true;
+  if (zipfile.isEmpty() || path.isEmpty()) {
+    return false;
+  }
+  QString zipDir = path;
+  QString zipPath = zipfile;
+
+  QZipReader zipReader(zipPath);
+  QDir baseDir(zipDir);
+  if (!baseDir.exists()) {
+    baseDir.mkpath(zipDir);
+  }
+
+  const QVector<QZipReader::FileInfo> allFiles = zipReader.fileInfoList();
+
+  for (QZipReader::FileInfo fi : allFiles) {
+    const QString absPath =
+        QDir::toNativeSeparators(QString("%1/%2").arg(zipDir, fi.filePath));
+    baseDir.mkpath(QFileInfo(absPath).absoluteDir().path());
+
+    if (fi.isSymLink) {
+      QString destination = QFile::decodeName(zipReader.fileData(fi.filePath));
+      if (destination.isEmpty()) {
+        result = false;
+        break;
+      }
+
+      QFileInfo linkFi(absPath);
+      if (!QFile::exists(linkFi.absolutePath()))
+        QDir::root().mkpath(linkFi.absolutePath());
+      if (!QFile::link(destination, absPath)) {
+        result = false;
+        break;
+      }
+    } else if (fi.isFile) {
+      QFile f(absPath);
+
+      if (!f.isOpen()) {
+        f.open(QIODevice::WriteOnly);
+      }
+
+      f.write(zipReader.fileData(fi.filePath));
+      f.setPermissions(fi.permissions);
+      f.close();
+    }
+  }
+
+  zipReader.close();
+  return result;
 }
 
 void Method::zipWriter(QString zipPath = "test.zip",

@@ -198,13 +198,15 @@ class Method : public QDialog {
 
   void setScrollBarPos(QQuickWidget *qw, double pos);
 
-  bool zipReader(QString zipPath, QString zipDir);
-  void zipWriter(QString zipPath, QFileInfoList fileList);
+  static bool zipReader(QString zipFile, QString unzipDir);
+  static void zipWriter(QString zipPath, QFileInfoList fileList);
 
   QString getLastModified(QString file);
 
   void setVPosForQW(QQuickWidget *qw, qreal pos);
   qreal getVPosForQW(QQuickWidget *qw);
+
+  static bool decompressionZipFile(const QString &zipfile, const QString &path);
 
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;

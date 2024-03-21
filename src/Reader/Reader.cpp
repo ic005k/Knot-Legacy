@@ -21,6 +21,7 @@ int baseLines = 20;
 int htmlIndex = 0;
 int minBytes = 30000;
 int maxBytes = 60000;
+int unzipMethod = 1; /* 1 system  2 QZipReader */
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -89,7 +90,8 @@ void Reader::on_btnOpen_clicked() {
   openfile =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
 
-  if (!QFileInfo(openfile).exists()) return;
+  QFileInfo fi(openfile);
+  if (!fi.exists()) return;
 
 #ifdef Q_OS_ANDROID
   openfile = m_Method->getRealPathFile(openfile);
@@ -289,48 +291,59 @@ void Reader::openFile(QString openfile) {
         box.exec();
       }
 
+#ifdef Q_OS_WIN
+      unzipMethod = 2;
+#endif
+
+      if (unzipMethod == 1) {
 #ifdef Q_OS_MACOS
-      QProcess* pro = new QProcess;
-      pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
-      pro->waitForFinished();
+        QProcess* pro = new QProcess;
+        pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
+        pro->waitForFinished();
 #endif
 
 #ifdef Q_OS_LINUX
-      QProcess* pro = new QProcess;
-      pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
-      pro->waitForFinished();
+        QProcess* pro = new QProcess;
+        pro->execute("unzip", QStringList() << "-o" << temp << "-d" << dirpath);
+        pro->waitForFinished();
 
 #endif
 
 #ifdef Q_OS_WIN
-      QString fileName = privateDir + "unbook.bat";
-      QProcess* pro = new QProcess;
-      pro->execute("cmd.exe", QStringList() << "/c" << fileName);
-      pro->waitForFinished();
+        QString fileName = privateDir + "unbook.bat";
+        QProcess* pro = new QProcess;
+        pro->execute("cmd.exe", QStringList() << "/c" << fileName);
+        pro->waitForFinished();
 
 #endif
 
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      QAndroidJniObject javaZipFile = QAndroidJniObject::fromString(temp);
-      QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(dirpath);
-      QAndroidJniObject m_activity = QAndroidJniObject::fromString("Unzip");
-      m_activity.callStaticMethod<void>(
-          "com.x/MyActivity", "Unzip",
-          "(Ljava/lang/String;Ljava/lang/String;)V",
-          javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
+        QAndroidJniObject javaZipFile = QAndroidJniObject::fromString(temp);
+        QAndroidJniObject javaZipDir = QAndroidJniObject::fromString(dirpath);
+        QAndroidJniObject m_activity = QAndroidJniObject::fromString("Unzip");
+        m_activity.callStaticMethod<void>(
+            "com.x/MyActivity", "Unzip",
+            "(Ljava/lang/String;Ljava/lang/String;)V",
+            javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
 #else
-      QJniObject javaZipFile = QJniObject::fromString(temp);
-      QJniObject javaZipDir = QJniObject::fromString(dirpath);
-      QJniObject m_activity = QJniObject::fromString("Unzip");
-      m_activity.callStaticMethod<void>(
-          "com.x/MyActivity", "Unzip",
-          "(Ljava/lang/String;Ljava/lang/String;)V",
-          javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
+        QJniObject javaZipFile = QJniObject::fromString(temp);
+        QJniObject javaZipDir = QJniObject::fromString(dirpath);
+        QJniObject m_activity = QJniObject::fromString("Unzip");
+        m_activity.callStaticMethod<void>(
+            "com.x/MyActivity", "Unzip",
+            "(Ljava/lang/String;Ljava/lang/String;)V",
+            javaZipFile.object<jstring>(), javaZipDir.object<jstring>());
 #endif
 
 #endif
+      }
+
+      if (unzipMethod == 2) {
+        bool ok = m_Method->decompressionZipFile(temp, dirpath);
+        qDebug() << "unzip epub=" << ok;
+      }
 
       qDebug() << "openFile:" << openfile << "dirpath=" << dirpath;
 
@@ -504,7 +517,8 @@ void Reader::saveReader() {
 
   QFileInfo fi(fileName);
   QString epubName = strEpubTitle;
-  if (epubName == "") epubName = fi.baseName();
+  QString name_l = epubName.toLower();
+  if (epubName == "" || name_l.contains("unknown")) epubName = fi.baseName();
 
   Reg.setValue("/Reader/FileName", fileName);
 
@@ -966,7 +980,8 @@ void Reader::goPostion() {
 
     QFileInfo fi(fileName);
     QString epubName = strEpubTitle;
-    if (epubName == "") epubName = fi.baseName();
+    QString name_l = epubName.toLower();
+    if (epubName == "" || name_l.contains("unknown")) epubName = fi.baseName();
 
     if (isText) {
       iPage = Reg.value("/Reader/iPage" + fi.baseName(), 0).toULongLong();
@@ -1080,7 +1095,8 @@ void Reader::savePageVPos() {
 
   QFileInfo fi(fileName);
   QString epubName = strEpubTitle;
-  if (epubName == "") epubName = fi.baseName();
+  QString name_l = epubName.toLower();
+  if (epubName == "" || name_l.contains("unknown")) epubName = fi.baseName();
   QFileInfo fiHtml(currentHtmlFile);
 
   textPos = getVPos();
@@ -1109,7 +1125,8 @@ void Reader::setPageVPos() {
 
   QFileInfo fi(fileName);
   QString epubName = strEpubTitle;
-  if (epubName == "") epubName = fi.baseName();
+  QString name_l = epubName.toLower();
+  if (epubName == "" || name_l.contains("unknown")) epubName = fi.baseName();
   QFileInfo fiHtml(currentHtmlFile);
 
   if (isEpub) {
