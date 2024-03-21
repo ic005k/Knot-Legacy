@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>654</width>
-    <height>7611</height>
+    <height>7703</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -6229,6 +6229,30 @@ QSlider::handle:horizontal:disabled {
        </item>
       </layout>
      </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_50">
+      <item>
+       <widget class="QLabel" name="lblEpubInfo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>20% </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="pEpubProg">
+        <property name="value">
+         <number>24</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

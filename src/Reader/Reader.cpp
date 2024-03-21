@@ -66,15 +66,9 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   tmeShowEpubMsg = new QTimer(this);
   connect(tmeShowEpubMsg, SIGNAL(timeout()), this, SLOT(showEpubMsg()));
 
-  pProgressBar = new QProgressBar();
-  pProgressBar->setRange(0, 100);
-  pProgressBar->setValue(0);
-  pProgressBar->setFixedWidth(50);
   f.setPointSize(10);
-  pProgressBar->setFont(f);
-  mw_one->ui->statusbar->addPermanentWidget(pProgressBar);
-  mw_one->ui->statusbar->hide();
-  mw_one->ui->statusbar->setFont(f);
+  mw_one->ui->lblEpubInfo->setFont(f);
+  mw_one->ui->pEpubProg->setFont(f);
 }
 
 Reader::~Reader() {}
@@ -1233,9 +1227,6 @@ void Reader::SplitFile(QString qfile) {
   else
     n = bb / minBytes;
 
-  strShowMsg = "SplitFile: size=" + QString::number(bb) + "  " +
-               QString::number(n) + "  " + fi.baseName();
-
   int split = countBody / n;
   int breakLine = 0;
   for (int x = 1; x < n + 1; x++) {
@@ -1297,6 +1288,10 @@ void Reader::SplitFile(QString qfile) {
       TextEditToFile(plain_edit, filen);
       htmlFiles.append(filen);
     }
+
+    strShowMsg = "SplitFile: " + mw_one->getFileSize(bb, 2) + "  " +
+                 QString::number(x) + "->" + QString::number(n) + "  " +
+                 fi.baseName();
   }
 }
 
@@ -1874,8 +1869,10 @@ QString Reader::getSkipText(QString htmlFile, QString skipID) {
 
 void Reader::showEpubMsg() {
   if (strShowMsg != "") {
-    mw_one->ui->statusbar->show();
-    mw_one->ui->statusbar->showMessage(strShowMsg);
-    pProgressBar->setValue(strPercent.toInt());
+    mw_one->ui->lblEpubInfo->show();
+    mw_one->ui->pEpubProg->show();
+    mw_one->ui->lblEpubInfo->setText(strPercent + "% ");
+    mw_one->ui->pEpubProg->setValue(strPercent.toInt());
+    mw_one->ui->pEpubProg->setFormat(strShowMsg);
   }
 }

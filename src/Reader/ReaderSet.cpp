@@ -39,6 +39,9 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   ui->btnFont->setFont(f);
   ui->lblProg->setFont(f);
 
+  int nHeight = m_Method->getFontHeight();
+  ui->btnFont->setFixedHeight(nHeight * 3.5);
+
   f.setPointSize(12);
   ui->lblInfo->setFont(f);
   ui->lblInfo->adjustSize();

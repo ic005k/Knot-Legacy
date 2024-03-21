@@ -137,7 +137,6 @@ class Reader : public QDialog {
   QString strFind;
   void gotoCataList(QString htmlFile);
   int currentCataIndex = 0;
-  QProgressBar *pProgressBar;
 };
 
 #endif  // READER_H

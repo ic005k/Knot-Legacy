@@ -40,7 +40,7 @@ QSettings *iniPreferences;
 extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del, isWholeMonth,
     isDateSection;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
-    fileName, strOpfPath, catalogueFile;
+    fileName, strOpfPath, catalogueFile, strShowMsg;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2;
 extern QStringList readTextList, htmlFiles, listCategory;
@@ -167,7 +167,7 @@ void MainWindow::readEBookDone() {
     ui->lblBookName->setText(strTitle);
 
     if (isText || isEpub) {
-      qDebug() << "Read  Text or Epub End... ...";
+      strShowMsg = "Read  EBook End...";
 
       ui->qwPdf->hide();
       ui->qwReader->show();
@@ -203,7 +203,8 @@ void MainWindow::readEBookDone() {
     ui->frameReaderFun->setEnabled(true);
     ui->btnBackDir->hide();
     mw_one->m_Reader->tmeShowEpubMsg->stop();
-    ui->statusbar->hide();
+    ui->lblEpubInfo->hide();
+    ui->pEpubProg->hide();
 
     if (isPDF) {
       qDebug() << "Read Pdf... ..." << fileName;
@@ -1718,7 +1719,9 @@ void MainWindow::resetWinPos() {
   if (x < 0) x = 0;
   if (y < 0) y = 0;
 
-  if (x >= 0 && y >= 0 && w > 0 && h > 0) this->setGeometry(x, y, w, h);
+  if (x >= 0 && y >= 0 && w > 0 && h > 0) {
+    this->setGeometry(x, y, w, h);
+  }
 }
 
 void MainWindow::init_Stats(QTreeWidget *tw) {
@@ -3766,6 +3769,7 @@ void MainWindow::init_UIWidget() {
   isReadEnd = true;
 
   ui->menubar->hide();
+  ui->statusbar->hide();
   ui->frameReader->hide();
   ui->frameTodo->hide();
   ui->frameTodoRecycle->hide();
@@ -3803,6 +3807,8 @@ void MainWindow::init_UIWidget() {
   ui->frameFunWeb->hide();
   ui->btnStorageInfo->hide();
   ui->editCode->setLineWrapMode(QTextEdit::NoWrap);
+  ui->lblEpubInfo->hide();
+  ui->pEpubProg->hide();
 
   ui->frameNotes->hide();
   ui->frameNotes->layout()->setContentsMargins(1, 1, 1, 1);
