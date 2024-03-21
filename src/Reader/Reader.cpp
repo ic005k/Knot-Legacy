@@ -3,6 +3,7 @@
 #include <QKeyEvent>
 
 #include "src/MainWindow.h"
+#include "src/qzipfile.h"
 #include "ui_MainWindow.h"
 
 extern MainWindow* mw_one;
@@ -21,7 +22,7 @@ int baseLines = 20;
 int htmlIndex = 0;
 int minBytes = 30000;
 int maxBytes = 60000;
-int unzipMethod = 1; /* 1 system  2 QZipReader */
+int unzipMethod = 2; /* 1 system  2 QZipReader */
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -291,6 +292,9 @@ void Reader::openFile(QString openfile) {
         box.exec();
       }
 
+      QDir dir;
+      dir.mkdir(dirpath);
+
 #ifdef Q_OS_WIN
       unzipMethod = 2;
 #endif
@@ -341,8 +345,37 @@ void Reader::openFile(QString openfile) {
       }
 
       if (unzipMethod == 2) {
-        bool ok = m_Method->decompressionZipFile(temp, dirpath);
-        qDebug() << "unzip epub=" << ok;
+        // bool ok = m_Method->decompressionZipFile(temp, dirpath);
+        // qDebug() << "unzip epub=" << ok;
+
+        qompress::QZipFile zf(temp);
+        if (!zf.open(qompress::QZipFile::ReadOnly)) {
+          qDebug() << "Failed to open " << temp << ": " << zf.errorString();
+          return;
+        }
+
+        do {
+          qompress::QZipFileEntry file = zf.currentEntry();
+          QString strFile = file.name();
+          qDebug() << file.name() << ":\t\t" << file.uncompressedSize()
+                   << "bytes (uncompressed)";
+
+          QFileInfo fi(strFile);
+          QDir dir;
+          QString path = dirpath + fi.path();
+          QDir dir0(path);
+          if (!dir0.exists()) dir.mkdir(path);
+          qDebug() << "=====" << path << fi.path();
+
+          QFile myfile(dirpath + strFile);
+          myfile.open(QIODevice::WriteOnly);
+          zf.extractCurrentEntry(myfile, "");
+
+          strShowMsg = strFile;
+
+        } while (zf.nextEntry());
+
+        zf.close();
       }
 
       qDebug() << "openFile:" << openfile << "dirpath=" << dirpath;

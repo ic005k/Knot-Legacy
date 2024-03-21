@@ -28,6 +28,8 @@ QML_DESIGNER_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/
 QML_DESIGNER_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/it/ltdev/qt/qml/components/
 include($$PWD/libs/qt-pdf-viewer-library/qtpdfviewer.pri)
 
+include($$PWD/src/3rdparty/zlib.pri)
+
 unix:!macx:{
 
 }
@@ -105,7 +107,10 @@ SOURCES += \
     src/qwt/qwt_clipper.cpp \
     src/qwt/qwt_math.cpp \
     src/qwt/qwt_painter.cpp \
-    src/qwt/qwt_scale_map.cpp
+    src/qwt/qwt_scale_map.cpp \
+    src/qzipfile.cpp \
+    src/qzipfileentry.cpp
+
 
 HEADERS += \
     src/AutoUpdate.h \
@@ -176,6 +181,8 @@ HEADERS += \
     src/qwt/qwt_math.h \
     src/qwt/qwt_painter.h \
     src/qwt/qwt_scale_map.h \
+    src/qzipfile.h \
+    src/qzipfileentry.h \
     win.rc
 
 FORMS += \
@@ -645,6 +652,7 @@ DISTFILES += \
     android/gradlew.bat \
     android/res/values/libs.xml \
     android/res/values/libs.xml \
+    src/3rdparty/zlib.pri \
     src/cn.qm \
     src/cn.ts \
     src/imgview.qml \
@@ -681,6 +689,7 @@ DISTFILES += \
     src/qmlsrc/tree_main.qml \
     src/qmlsrc/type.qml \
     src/qmlsrc/viewcate.qml \
+    src/qzip/zlib.pri \
     src/reader.qml \
     src/steps.qml
 
