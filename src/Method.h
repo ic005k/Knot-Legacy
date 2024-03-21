@@ -205,7 +205,8 @@ class Method : public QDialog {
 
   void setVPosForQW(QQuickWidget *qw, qreal pos);
   qreal getVPosForQW(QQuickWidget *qw);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

@@ -681,36 +681,18 @@ void Method::init_all_notes() {
 QDialog* Method::getProgBar() {
   QDialog* dlg;
   dlg = new QDialog(this);
-  dlg->setModal(true);
-
-  QFrame* frame = new QFrame(this);
-
   dlg->setWindowFlag(Qt::FramelessWindowHint);
-  dlg->setAttribute(Qt::WA_TranslucentBackground);
-
-  if (isDark)
-    frame->setStyleSheet(
-        "QFrame{background-color: #455364; border-radius:10px; "
-        "border:0px solid red;}");
-  else
-    frame->setStyleSheet(
-        "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
-        "border:0px solid red;}");
-
-  QGridLayout* grid = new QGridLayout();
-  dlg->setLayout(grid);
-  grid->addWidget(frame);
-
+  dlg->setModal(true);
   dlg->setFixedHeight(200);
   dlg->setFixedWidth(mw_one->geometry().width() - 50);
   QVBoxLayout* vbox = new QVBoxLayout;
-  frame->setLayout(vbox);
+  dlg->setLayout(vbox);
   dlg->setGeometry(
       mw_one->geometry().x() + (mw_one->width() - dlg->width()) / 2,
       mw_one->geometry().y() + (mw_one->height() - dlg->height()) / 2,
       dlg->width(), dlg->height());
 
-  QLabel* lbl = new QLabel(dlg);
+  QLabel* lbl = new QLabel();
   if (isDark)
     lbl->setStyleSheet("color:#ffffff;");
   else
