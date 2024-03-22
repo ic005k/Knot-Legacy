@@ -254,7 +254,7 @@ void Reader::startOpenFile(QString openfile) {
       openFile(ebookFile);
       mw_one->readEBookDone();
     }
-#else
+#endif
 
     mw_one->m_ReadTWThread->quit();
     mw_one->m_ReadTWThread->wait();
@@ -263,7 +263,6 @@ void Reader::startOpenFile(QString openfile) {
     tmeShowEpubMsg->start(100);
 
     mw_one->myReadEBookThread->start();
-#endif
 
   } else
     return;
@@ -875,7 +874,7 @@ void Reader::processHtml(QString htmlFile) {
       QString css =
           "<link href=\"../main.css\" rel=\"stylesheet\" type=\"text/css\" "
           "/>";
-      css.replace("../", "file://" + strOpfPath);
+      css.replace("../", "file:///" + strOpfPath);
       plain_edit->appendPlainText(css);
       plain_edit->appendPlainText("</head>");
     } else {
