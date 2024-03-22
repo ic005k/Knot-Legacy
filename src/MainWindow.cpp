@@ -37,8 +37,8 @@ QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 QSettings *iniPreferences;
 
-extern bool isAndroid, isIOS, zh_cn, isEpub, isText, isPDF, del, isWholeMonth,
-    isDateSection;
+extern bool isAndroid, isIOS, zh_cn, isEpub, isEpubError, isText, isPDF, del,
+    isWholeMonth, isDateSection;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
     fileName, strOpfPath, catalogueFile, strShowMsg;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
@@ -164,7 +164,22 @@ void ReadEBookThread::run() {
 
 void MainWindow::readEBookDone() {
   if (isEBook) {
-    ui->lblBookName->setText(strTitle);
+    if (isEpubError) {
+      mw_one->m_Reader->tmeShowEpubMsg->stop();
+      ui->lblEpubInfo->hide();
+      ui->pEpubProg->hide();
+      ui->btnReader->setEnabled(true);
+      ui->frameReaderFun->setEnabled(true);
+      closeProgress();
+      isReadEBookEnd = true;
+      ShowMessage *msg = new ShowMessage(mw_one);
+      msg->showMsg("Knot", tr("The EPUB file was opened with an error."), 1);
+
+      if (!isText) {
+        if (htmlFiles.count() > 0) isEpub = true;
+      }
+      return;
+    }
 
     if (isText || isEpub) {
       strShowMsg = "Read  EBook End...";
@@ -189,16 +204,19 @@ void MainWindow::readEBookDone() {
         m_ReaderSet->ui->lblInfo->show();
         ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
         if (QFile(catalogueFile).exists()) {
-          mw_one->ui->btnCatalogue->show();
-        }
+          ui->btnCatalogue->show();
+        } else
+          ui->btnCatalogue->hide();
       }
 
       if (isText) {
         ui->btnBackDir->hide();
+        mw_one->ui->btnCatalogue->hide();
         m_ReaderSet->ui->lblInfo->hide();
       }
     }
 
+    ui->lblBookName->setText(strTitle);
     ui->btnReader->setEnabled(true);
     ui->frameReaderFun->setEnabled(true);
     ui->btnBackDir->hide();

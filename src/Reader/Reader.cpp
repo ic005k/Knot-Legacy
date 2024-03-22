@@ -13,16 +13,16 @@ extern bool zh_cn, isAndroid, isIOS, isEBook, isReport, isDark;
 extern int fontSize;
 
 bool isOpen = false;
-bool isEpub, isText, isPDF;
-QStringList readTextList, htmlFiles, ncxList;
-QString strOpfPath, fileName, ebookFile, strTitle, catalogueFile, strShowMsg,
-    strEpubTitle, strPercent;
+bool isEpub, isText, isPDF, isEpubError;
+QStringList readTextList, htmlFiles, tempHtmlList, ncxList;
+QString strOpfPath, oldOpfPath, fileName, ebookFile, strTitle, catalogueFile,
+    strShowMsg, strEpubTitle, strPercent;
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
 int minBytes = 30000;
 int maxBytes = 60000;
-int unzipMethod = 2; /* 1 system  2 QZipReader */
+int unzipMethod = 3; /* 1 system  2 QZipReader 3 ziplib */
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -193,9 +193,7 @@ void Reader::startOpenFile(QString openfile) {
     }
   }
 
-  isEpub = false;
-  isText = false;
-  isPDF = false;
+  isEpubError = false;
   strShowMsg = "";
 
   setReaderStyle();
@@ -208,7 +206,6 @@ void Reader::startOpenFile(QString openfile) {
     mw_one->ui->btnReader->setEnabled(false);
     mw_one->ui->frameReaderFun->setEnabled(false);
     mw_one->ui->lblTitle->hide();
-    mw_one->ui->btnCatalogue->hide();
     mw_one->ui->qwCata->hide();
     mw_one->ui->lblCataInfo->hide();
     mw_one->ui->qwReader->show();
@@ -236,25 +233,28 @@ void Reader::startOpenFile(QString openfile) {
 #endif
 
 #ifdef Q_OS_WIN
-    QString strZip, strExec, strUnzip, tagDir;
-    tagDir = privateDir + "temp/";
-    strZip = privateDir + "temp.zip";
-    QTextEdit* txtEdit = new QTextEdit();
-    strUnzip = qApp->applicationDirPath() + "/unzip.exe";
-    strUnzip = "\"" + strUnzip + "\"";
-    strZip = "\"" + strZip + "\"";
-    strExec = privateDir;
-    strExec = "\"" + strExec + "\"";
-    QString strCommand1;
-    QString strx = "\"" + tagDir + "\"";
-    strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
-    txtEdit->append(strCommand1);
-    QString fileName = privateDir + "unbook.bat";
-    mw_one->TextEditToFile(txtEdit, fileName);
+    if (unzipMethod == -1) {
+      QString strZip, strExec, strUnzip, tagDir;
+      tagDir = privateDir + "temp/";
+      strZip = privateDir + "temp.zip";
+      QTextEdit* txtEdit = new QTextEdit();
+      strUnzip = qApp->applicationDirPath() + "/unzip.exe";
+      strUnzip = "\"" + strUnzip + "\"";
+      strZip = "\"" + strZip + "\"";
+      strExec = privateDir;
+      strExec = "\"" + strExec + "\"";
+      QString strCommand1;
+      QString strx = "\"" + tagDir + "\"";
+      strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
+      txtEdit->append(strCommand1);
+      QString fileName = privateDir + "unbook.bat";
+      mw_one->TextEditToFile(txtEdit, fileName);
 
-    openFile(ebookFile);
-    mw_one->readEBookDone();
+      openFile(ebookFile);
+      mw_one->readEBookDone();
+    }
 #else
+
     mw_one->m_ReadTWThread->quit();
     mw_one->m_ReadTWThread->wait();
 
@@ -269,9 +269,10 @@ void Reader::startOpenFile(QString openfile) {
 }
 
 void Reader::openFile(QString openfile) {
-  isOpen = false;
-
   qDebug() << "Starting to open files...";
+
+  isOpen = false;
+  oldOpfPath = strOpfPath;
 
   if (QFile(openfile).exists()) {
     readTextList.clear();
@@ -280,9 +281,9 @@ void Reader::openFile(QString openfile) {
     QString strHead = readTextList.at(0);
 
     if (strHead.trimmed().mid(0, 2) == "PK") {
-      QString dirpath;
-      dirpath = privateDir + "temp/";
-      deleteDirfile(dirpath);
+      QString dirpath, dirpath1;
+      dirpath = privateDir + "temp0/";
+      dirpath1 = privateDir + "temp/";
 
       QString temp = privateDir + "temp.zip";
       QFile::remove(temp);
@@ -292,11 +293,12 @@ void Reader::openFile(QString openfile) {
         box.exec();
       }
 
+      deleteDirfile(dirpath);
       QDir dir;
       dir.mkdir(dirpath);
 
 #ifdef Q_OS_WIN
-      unzipMethod = 2;
+      unzipMethod = 3;
 #endif
 
       if (unzipMethod == 1) {
@@ -345,12 +347,15 @@ void Reader::openFile(QString openfile) {
       }
 
       if (unzipMethod == 2) {
-        // bool ok = m_Method->decompressionZipFile(temp, dirpath);
-        // qDebug() << "unzip epub=" << ok;
+        bool ok = m_Method->decompressionZipFile(temp, dirpath);
+        qDebug() << "unzip epub=" << ok;
+      }
 
+      if (unzipMethod == 3) {
         qompress::QZipFile zf(temp);
         if (!zf.open(qompress::QZipFile::ReadOnly)) {
           qDebug() << "Failed to open " << temp << ": " << zf.errorString();
+          isEpubError = true;
           return;
         }
 
@@ -361,11 +366,9 @@ void Reader::openFile(QString openfile) {
                    << "bytes (uncompressed)";
 
           QFileInfo fi(strFile);
-          QDir dir;
           QString path = dirpath + fi.path();
           QDir dir0(path);
-          if (!dir0.exists()) dir.mkdir(path);
-          qDebug() << "=====" << path << fi.path();
+          if (!dir0.exists()) dir0.mkpath(path);
 
           QFile myfile(dirpath + strFile);
           myfile.open(QIODevice::WriteOnly);
@@ -381,15 +384,15 @@ void Reader::openFile(QString openfile) {
       qDebug() << "openFile:" << openfile << "dirpath=" << dirpath;
 
       QString strFullPath;
-      QString str0 = dirpath + "META-INF/container.xml";
-      if (!QFile(str0).exists()) {
+      QString strContainer = dirpath + "META-INF/container.xml";
+      if (!QFile(strContainer).exists()) {
+        isEpub = false;
+        isEpubError = true;
         qDebug() << "====== isEpub == false ======";
         return;
-      } else {
-        isEpub = true;
       }
 
-      QStringList conList = readText(str0);
+      QStringList conList = readText(strContainer);
       for (int i = 0; i < conList.count(); i++) {
         QString str = conList.at(i);
         if (str.contains("full-path")) {
@@ -412,7 +415,9 @@ void Reader::openFile(QString openfile) {
       QFileInfo fi(strOpfFile);
       strOpfPath = fi.path() + "/";
       QStringList opfList = readText(strOpfFile);
-      htmlFiles.clear();
+      tempHtmlList.clear();
+
+      qDebug() << "strOpfFile=" << strOpfFile;
 
       int opfCount = opfList.count();
       if (opfCount > 1) {
@@ -425,10 +430,11 @@ void Reader::openFile(QString openfile) {
 
             QString qfile;
             qfile = strOpfPath + get_href(idref, opfList);
+            qDebug() << "-----" << qfile;
             QFileInfo fi(qfile);
-            if (fi.exists() && !htmlFiles.contains(qfile)) {
+            if (fi.exists() && !tempHtmlList.contains(qfile)) {
               if (fi.size() <= minBytes) {
-                htmlFiles.append(qfile);
+                tempHtmlList.append(qfile);
               } else {
                 SplitFile(qfile);
               }
@@ -439,11 +445,27 @@ void Reader::openFile(QString openfile) {
         }
       }
 
-      // qDebug() <<"opf file="<< strFullPath << htmlFiles;
-      if (htmlFiles.count() == 0) {
-        qDebug() << "====== htmlFiles Count== 0 ======";
+      if (tempHtmlList.count() == 0) {
+        isEpub = false;
+        isEpubError = true;
+        strOpfPath = oldOpfPath;
+        qDebug() << "====== tempHtmlList Count== 0 ======";
         return;
       } else {
+        isEpub = true;
+        isText = false;
+        isPDF = false;
+
+        deleteDirfile(dirpath1);
+        copyDirectoryFiles(dirpath, dirpath1, true);
+        deleteDirfile(dirpath);
+        htmlFiles.clear();
+        strOpfPath.replace(dirpath, dirpath1);
+        for (int i = 0; i < tempHtmlList.count(); i++) {
+          QString str = tempHtmlList.at(i);
+          str.replace(dirpath, dirpath1);
+          htmlFiles.append(str);
+        }
         QFile(strOpfPath + "main.css").remove();
         QFile::copy(":/res/main.css", strOpfPath + "main.css");
         ncx2html();
@@ -451,9 +473,13 @@ void Reader::openFile(QString openfile) {
 
     } else if (strHead.trimmed().toLower().contains("pdf")) {
       isPDF = true;
+      isText = false;
+      isEpub = false;
 
     } else {  // txt file
       isText = true;
+      isEpub = false;
+      isPDF = false;
       iPage = 0;
       sPos = 0;
 
@@ -1296,7 +1322,7 @@ void Reader::SplitFile(QString qfile) {
       QString file1 = qfile;
 
       TextEditToFile(plain_edit, file1);
-      htmlFiles.append(file1);
+      tempHtmlList.append(file1);
     }
 
     // 2...n-1
@@ -1319,7 +1345,7 @@ void Reader::SplitFile(QString qfile) {
                       QString::number(x - 1) + "." + fi.suffix();
 
       TextEditToFile(plain_edit, file2);
-      htmlFiles.append(file2);
+      tempHtmlList.append(file2);
     }
 
     if (x == n) {
@@ -1336,7 +1362,7 @@ void Reader::SplitFile(QString qfile) {
                       QString::number(x - 1) + "." + fi.suffix();
 
       TextEditToFile(plain_edit, filen);
-      htmlFiles.append(filen);
+      tempHtmlList.append(filen);
     }
 
     strShowMsg = "SplitFile: " + mw_one->getFileSize(bb, 2) + "  " +
