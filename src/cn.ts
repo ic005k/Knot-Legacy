@@ -2827,6 +2827,11 @@ F</source>
         <translation>信息</translation>
     </message>
     <message>
+        <location filename="Reader/Reader.cpp" line="1987"/>
+        <source>Remove from list?</source>
+        <translation>从列表中移除？</translation>
+    </message>
+    <message>
         <source>Pages</source>
         <translation type="vanished">页</translation>
     </message>

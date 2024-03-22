@@ -195,6 +195,7 @@ void Reader::startOpenFile(QString openfile) {
 
   isEpubError = false;
   strShowMsg = "";
+  strPercent = "";
 
   setReaderStyle();
 
@@ -455,7 +456,7 @@ void Reader::openFile(QString openfile) {
         }
 
         if (count_1 > 0) {
-          double percent = (double)i / (double)opfCount;
+          double percent = (double)i / (double)count_1;
           strPercent = QString::number(percent * 100, 'f', 0);
         }
       }
@@ -1973,7 +1974,9 @@ void Reader::showEpubMsg() {
   if (strShowMsg != "") {
     mw_one->ui->lblEpubInfo->show();
     mw_one->ui->pEpubProg->show();
-    mw_one->ui->lblEpubInfo->setText(strPercent + "% ");
+    if (strPercent != "") {
+      mw_one->ui->lblEpubInfo->setText(strPercent + "% ");
+    }
     mw_one->ui->pEpubProg->setValue(strPercent.toInt());
     mw_one->ui->pEpubProg->setFormat(strShowMsg);
   }
@@ -1981,7 +1984,10 @@ void Reader::showEpubMsg() {
 
 void Reader::removeBookList() {
   int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwBookList);
-  if (index < 0) return;
+  if (index <= 0) return;
+
+  ShowMessage* msg = new ShowMessage(mw_one);
+  if (!msg->showMsg("Knot", tr("Remove from list?"), 2)) return;
 
   bookList.removeAt(index);
   m_Method->delItemFromQW(mw_one->ui->qwBookList, index);
