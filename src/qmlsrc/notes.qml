@@ -107,7 +107,7 @@ Item {
 
             onLinkActivated: {
                 document.setBackDir(link)
-                document.setReadPosition(link)
+                document.parsingLink(link)
 
                 console.debug(link)
             }

@@ -238,42 +238,42 @@ QString DocumentHandler::fileType() const {
 
 QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
 
-void DocumentHandler::setReadPosition(QString htmlFile) {
+void DocumentHandler::parsingLink(QString linkFile) {
   if (mw_one->curx != 0) return;
 
-  qDebug() << "file : " << htmlFile;
-  if (htmlFile.mid(0, 4) == "http" || htmlFile.mid(0, 4) == "www.") {
-    if (htmlFile.mid(0, 4) != "http") {
-      htmlFile = "http://" + htmlFile;
+  qDebug() << "file : " << linkFile;
+  if (linkFile.mid(0, 4) == "http" || linkFile.mid(0, 4) == "www.") {
+    if (linkFile.mid(0, 4) != "http") {
+      linkFile = "http://" + linkFile;
     }
-    QUrl url = htmlFile;
+    QUrl url = linkFile;
 
     m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
-    copyText = htmlFile;
+    copyText = linkFile;
     bool ok = m_ShowMsg->showMsg(
-        appName, tr("Open this URL?") + "\n\n" + htmlFile + "\n", 3);
+        appName, tr("Open this URL?") + "\n\n" + linkFile + "\n", 3);
     if (ok) QDesktopServices::openUrl(url);
     mw_one->clearSelectBox();
   }
 
-  else if (htmlFile.contains("@")) {
-    QString str = htmlFile;
+  else if (linkFile.contains("@")) {
+    QString str = linkFile;
     str.replace("mailto:", "");
 
     m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
     copyText = str;
     bool ok = m_ShowMsg->showMsg(
-        appName, tr("Writing an email?") + "\n\n" + htmlFile + "\n", 3);
-    if (ok) QDesktopServices::openUrl(QUrl(htmlFile));
+        appName, tr("Writing an email?") + "\n\n" + linkFile + "\n", 3);
+    if (ok) QDesktopServices::openUrl(QUrl(linkFile));
 
     mw_one->clearSelectBox();
   }
 
-  else if (htmlFile.contains(".html") || htmlFile.contains(".xhtml") ||
-           htmlFile.contains(".xml")) {
-    mw_one->m_Reader->initLink(htmlFile);
+  else if (linkFile.contains(".html") || linkFile.contains(".xhtml") ||
+           linkFile.contains(".xml")) {
+    mw_one->m_Reader->initLink(linkFile);
   } else {
     // open picture
     if (htmlIndex == 0 && !mw_one->m_Reader->isHidden()) {
@@ -281,9 +281,10 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
 
       return;
     }
-    QString str = htmlFile;
+    QString str = linkFile;
     str = str.replace("../", "");
-    picfile = strOpfPath + str;
+    str.replace("file:///", "");
+    picfile = str;
     qDebug() << "Pic File1 : " << picfile;
 
     if (QFile(picfile).exists()) {
@@ -291,9 +292,8 @@ void DocumentHandler::setReadPosition(QString htmlFile) {
       m_LoadPic->initMain(picfile);
 
     } else {
-      QString memoPicFile = picfile;
+      QString memoPicFile = linkFile;
       memoPicFile.replace(strOpfPath, "");
-      memoPicFile.replace("org-", "");
       memoPicFile.replace("file://", "");
       qDebug() << "memoPicFile : " << memoPicFile
                << QFile(memoPicFile).exists();

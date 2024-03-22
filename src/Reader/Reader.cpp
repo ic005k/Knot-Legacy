@@ -849,8 +849,8 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
   showInfo();
 }
 
-void Reader::processHtml(QString htmlFile) {
-  if (!isEpub) return;
+QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
+  if (!isEpub) return "";
 
   QPlainTextEdit* plain_edit = new QPlainTextEdit;
   QTextEdit* text_edit = new QTextEdit;
@@ -858,6 +858,8 @@ void Reader::processHtml(QString htmlFile) {
   strHtml.replace("　", " ");
   strHtml.replace("<", "\n<");
   strHtml.replace(">", ">\n");
+
+  strHtml.replace("file:///" + strOpfPath, "");
 
   strHtml.replace(".css", "");
   strHtml.replace("font-family:", "font0-family:");
@@ -907,6 +909,10 @@ void Reader::processHtml(QString htmlFile) {
 
           // qDebug() << "imgFile=" << imgFile;
 
+          strSrc = "file:///" + imgFile;
+          str.replace(strimg, strSrc);
+          strSrc = "\"" + strSrc + "\"";
+
           bool isCover = false;
           QString imgFile_l = imgFile.toLower();
           if (imgFile_l.contains("cover")) {
@@ -948,24 +954,23 @@ void Reader::processHtml(QString htmlFile) {
     }
   }
 
-  TextEditToFile(plain_edit, htmlFile);
+  if (isWriteFile) TextEditToFile(plain_edit, htmlFile);
+
+  return plain_edit->toPlainText();
 }
 
 void Reader::setQMLHtml(QString htmlFile, QString skipID) {
-  processHtml(htmlFile);
+  QString htmlBuffer = processHtml(htmlFile, false);
 
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
 
-#ifdef Q_OS_WIN
-  QString htmlBuffer = mw_one->loadText(htmlFile);
   QMetaObject::invokeMethod((QObject*)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
-#else
 
-  QMetaObject::invokeMethod((QObject*)root, "loadHtml",
-                            Q_ARG(QVariant, htmlFile), Q_ARG(QVariant, skipID));
-#endif
+  //  QMetaObject::invokeMethod((QObject*)root, "loadHtml",
+  //                          Q_ARG(QVariant, htmlFile), Q_ARG(QVariant,
+  //                          skipID));
 
   QFileInfo fi(htmlFile);
   mw_one->m_ReaderSet->ui->lblInfo->setText(

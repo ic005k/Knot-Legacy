@@ -146,7 +146,7 @@ class DocumentHandler : public QObject {
   void load(const QUrl &fileUrl);
   void loadBuffer(QString str);
   void saveAs(const QUrl &fileUrl);
-  void setReadPosition(QString htmlFile);
+  void parsingLink(QString linkFile);
   void setBackDir(QString link);
 
  Q_SIGNALS:

@@ -171,12 +171,11 @@ Rectangle {
                 console.log("reader Link=" + link)
 
                 document.setBackDir(link)
-                document.setReadPosition(link)
+                document.parsingLink(link)
             }
 
             onReleased: {
 
-                // mw_one.on_SetReaderFunVisible()
             }
 
             onActiveFocusOnPressChanged: {
