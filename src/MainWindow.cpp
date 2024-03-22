@@ -203,6 +203,7 @@ void MainWindow::readEBookDone() {
       if (isEpub) {
         m_ReaderSet->ui->lblInfo->show();
         ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
+        catalogueFile.replace("/temp0/", "/temp/");
         if (QFile(catalogueFile).exists()) {
           ui->btnCatalogue->show();
         } else

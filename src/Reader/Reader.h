@@ -132,7 +132,7 @@ class Reader : public QDialog {
   static QString get_href(QString idref, QStringList opfList);
   static void proceImg();
   void getLines();
-  static void ncx2html();
+  static QStringList ncx2html();
   QString getSkipText(QString htmlFile, QString skipID);
   QString strFind;
   void gotoCataList(QString htmlFile);

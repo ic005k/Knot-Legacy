@@ -430,7 +430,6 @@ void Reader::openFile(QString openfile) {
 
             QString qfile;
             qfile = strOpfPath + get_href(idref, opfList);
-            qDebug() << "-----" << qfile;
             QFileInfo fi(qfile);
             if (fi.exists() && !tempHtmlList.contains(qfile)) {
               if (fi.size() <= minBytes) {
@@ -443,6 +442,12 @@ void Reader::openFile(QString openfile) {
           double percent = (double)i / (double)opfCount;
           strPercent = QString::number(percent * 100, 'f', 0);
         }
+      }
+
+      QStringList htmlList = ncx2html();
+
+      if (tempHtmlList.count() == 0) {
+        tempHtmlList = htmlList;
       }
 
       if (tempHtmlList.count() == 0) {
@@ -468,7 +473,6 @@ void Reader::openFile(QString openfile) {
         }
         QFile(strOpfPath + "main.css").remove();
         QFile::copy(":/res/main.css", strOpfPath + "main.css");
-        ncx2html();
       }
 
     } else if (strHead.trimmed().toLower().contains("pdf")) {
@@ -1753,7 +1757,8 @@ void Reader::showCatalogue() {
   showInfo();
 }
 
-void Reader::ncx2html() {
+QStringList Reader::ncx2html() {
+  QStringList htmlList;
   ncxList.clear();
   QString ncxFile;
   QStringList fileList;
@@ -1765,7 +1770,7 @@ void Reader::ncx2html() {
   }
 
   if (!QFile(ncxFile).exists()) {
-    return;
+    return htmlList;
   }
 
   QPlainTextEdit* plain_edit = new QPlainTextEdit;
@@ -1843,6 +1848,15 @@ void Reader::ncx2html() {
       plain_edit->appendPlainText("</div>");
 
       ncxList.append(str1 + "===" + strOpfPath + str2);
+
+      QString str3 = str2;
+      QStringList list3 = str3.split("#");
+      if (list3.count() == 2) {
+        str3 = list3.at(0);
+      }
+      if (!htmlList.contains(strOpfPath + str3)) {
+        htmlList.append(strOpfPath + str3);
+      }
     }
   }
 
@@ -1859,6 +1873,8 @@ void Reader::ncx2html() {
     mw_one->ui->lblCataInfo->setText(strEpubTitle);
     qDebug() << "ncx title=" << strEpubTitle << "author=" << strAuthor;
   }
+
+  return htmlList;
 }
 
 void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
