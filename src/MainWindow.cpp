@@ -5367,7 +5367,7 @@ void MainWindow::on_btnDelTabRecycle_clicked() {
 
   QFile file(tab_file);
   file.remove();
-  m_Method->delItemBakList(ui->qwTabRecycle, index);
+  m_Method->delItemFromQW(ui->qwTabRecycle, index);
 
   ui->lblTitleTabRecycle->setText(
       tr("Tab Recycle") + "    " + tr("Total") + " : " +
@@ -5424,7 +5424,7 @@ void MainWindow::on_btnDelBakFile_clicked() {
 
   QFile file(bak_file);
   file.remove();
-  m_Method->delItemBakList(ui->qwBakList, index);
+  m_Method->delItemFromQW(ui->qwBakList, index);
 
   int newIndex = index - 1;
   if (newIndex < 0) newIndex = 0;
@@ -5773,3 +5773,5 @@ void MainWindow::on_btnRecentOpen_clicked() {
 void MainWindow::on_btnMenuReport_clicked() { m_Report->genReportMenu(); }
 
 void MainWindow::on_btnCatalogue_clicked() { m_Reader->showCatalogue(); }
+
+void MainWindow::on_btnRemoveBookList_clicked() { m_Reader->removeBookList(); }

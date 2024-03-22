@@ -723,6 +723,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnCatalogue_clicked();
 
+  void on_btnRemoveBookList_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

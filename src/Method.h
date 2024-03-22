@@ -146,7 +146,7 @@ class Method : public QDialog {
   void setCurrentIndexFromQW(QQuickWidget *qw, int index);
   void clearAllBakList(QQuickWidget *qw);
   int getCountFromQW(QQuickWidget *qw);
-  void delItemBakList(QQuickWidget *qw, int index);
+  void delItemFromQW(QQuickWidget *qw, int index);
   void addItemToQW(QQuickWidget *qw, QString text0, QString text1,
                    QString text2, QString text3, int itemH);
 

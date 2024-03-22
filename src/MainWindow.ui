@@ -5981,6 +5981,12 @@ QSlider::handle:horizontal:disabled {
       <layout class="QVBoxLayout" name="verticalLayout_33">
        <item>
         <widget class="QQuickWidget" name="qwBookList">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
@@ -6023,6 +6029,19 @@ QSlider::handle:horizontal:disabled {
            </property>
            <property name="text">
             <string>Ok</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnRemoveBookList">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Remove</string>
            </property>
           </widget>
          </item>

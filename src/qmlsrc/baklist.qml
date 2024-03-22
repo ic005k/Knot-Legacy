@@ -301,16 +301,12 @@ Rectangle {
                 }
 
                 onClicked: {
-
                     view.currentIndex = index //实现item切换
-                    //mw_one.clickData()
+
                 }
 
                 onDoubleClicked: {
 
-                    //mw_one.reeditData()
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
                 }
             }
 

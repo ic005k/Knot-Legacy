@@ -188,7 +188,7 @@ void Method::insertItem(QQuickWidget* qw, QString text0, QString text1,
                             Q_ARG(QVariant, curIndex));
 }
 
-void Method::delItemBakList(QQuickWidget* qw, int index) {
+void Method::delItemFromQW(QQuickWidget* qw, int index) {
   QQuickItem* root = qw->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
 }
@@ -204,7 +204,7 @@ int Method::getCountFromQW(QQuickWidget* qw) {
 void Method::clearAllBakList(QQuickWidget* qw) {
   int count = getCountFromQW(qw);
   for (int i = 0; i < count; i++) {
-    delItemBakList(qw, 0);
+    delItemFromQW(qw, 0);
   }
 }
 
@@ -680,17 +680,13 @@ void Method::init_all_notes() {
 
 QDialog* Method::getProgBar() {
   QDialog* dlg;
-  dlg = new QDialog(this);
+  dlg = new QDialog();
   dlg->setWindowFlag(Qt::FramelessWindowHint);
   dlg->setModal(true);
   dlg->setFixedHeight(200);
   dlg->setFixedWidth(mw_one->geometry().width() - 50);
   QVBoxLayout* vbox = new QVBoxLayout;
   dlg->setLayout(vbox);
-  dlg->setGeometry(
-      mw_one->geometry().x() + (mw_one->width() - dlg->width()) / 2,
-      mw_one->geometry().y() + (mw_one->height() - dlg->height()) / 2,
-      dlg->width(), dlg->height());
 
   QLabel* lbl = new QLabel();
   if (isDark)
@@ -730,6 +726,11 @@ QDialog* Method::getProgBar() {
         new QtMaterialCircularProgress(this);
     vbox->addWidget(qmProgress);
   }
+
+  dlg->setGeometry(
+      mw_one->geometry().x() + (mw_one->width() - dlg->width()) / 2,
+      mw_one->geometry().y() + (mw_one->height() - dlg->height()) / 2,
+      dlg->width(), dlg->height());
 
   return dlg;
 }

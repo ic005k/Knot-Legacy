@@ -416,6 +416,7 @@ void Reader::openFile(QString openfile) {
       strOpfPath = fi.path() + "/";
       QStringList opfList = readText(strOpfFile);
       tempHtmlList.clear();
+      QStringList tempList;
 
       qDebug() << "strOpfFile=" << strOpfFile;
 
@@ -430,24 +431,33 @@ void Reader::openFile(QString openfile) {
 
             QString qfile;
             qfile = strOpfPath + get_href(idref, opfList);
-            QFileInfo fi(qfile);
-            if (fi.exists() && !tempHtmlList.contains(qfile)) {
-              if (fi.size() <= minBytes) {
-                tempHtmlList.append(qfile);
-              } else {
-                SplitFile(qfile);
-              }
-            }
+            tempList.append(qfile);
           }
-          double percent = (double)i / (double)opfCount;
-          strPercent = QString::number(percent * 100, 'f', 0);
         }
       }
 
       QStringList htmlList = ncx2html();
 
-      if (tempHtmlList.count() == 0) {
-        tempHtmlList = htmlList;
+      if (tempList.count() == 0) {
+        tempList = htmlList;
+      }
+
+      int count_1 = tempList.count();
+      for (int i = 0; i < count_1; i++) {
+        QString qfile = tempList.at(i);
+        QFileInfo fi(qfile);
+        if (fi.exists() && !tempHtmlList.contains(qfile)) {
+          if (fi.size() <= minBytes) {
+            tempHtmlList.append(qfile);
+          } else {
+            SplitFile(qfile);
+          }
+        }
+
+        if (count_1 > 0) {
+          double percent = (double)i / (double)opfCount;
+          strPercent = QString::number(percent * 100, 'f', 0);
+        }
       }
 
       if (tempHtmlList.count() == 0) {
@@ -1967,4 +1977,13 @@ void Reader::showEpubMsg() {
     mw_one->ui->pEpubProg->setValue(strPercent.toInt());
     mw_one->ui->pEpubProg->setFormat(strShowMsg);
   }
+}
+
+void Reader::removeBookList() {
+  int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwBookList);
+  if (index < 0) return;
+
+  bookList.removeAt(index);
+  m_Method->delItemFromQW(mw_one->ui->qwBookList, index);
+  saveReader();
 }

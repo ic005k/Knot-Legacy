@@ -84,7 +84,7 @@ void CategoryList::on_btnDel_clicked() {
 
     ui->listWidget->takeItem(row);
 
-    m_Method->delItemBakList(mw_one->ui->qwCategory, row);
+    m_Method->delItemFromQW(mw_one->ui->qwCategory, row);
   }
   mw_one->m_EditRecord->saveCustomDesc();
   if (ui->listWidget->count() > 0)
