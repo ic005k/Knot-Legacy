@@ -2987,7 +2987,7 @@ bool MainWindow::copyFileToPath(QString sourceDir, QString toDir,
 }
 
 void MainWindow::showProgress() {
-  dlgProg = new QDialog();
+  dlgProg = new QDialog(this);
   dlgProg = m_Method->getProgBar();
 
   if (!initMain) dlgProg->show();

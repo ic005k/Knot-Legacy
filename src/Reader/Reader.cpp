@@ -459,6 +459,8 @@ void Reader::openFile(QString openfile) {
             QString qfile;
             qfile = strOpfPath + get_href(idref, opfList);
             tempList.append(qfile);
+
+            strShowMsg = QFileInfo(qfile).baseName();
           }
 
           if (opfCount > 0) {

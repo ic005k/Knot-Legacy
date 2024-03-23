@@ -680,7 +680,7 @@ void Method::init_all_notes() {
 
 QDialog* Method::getProgBar() {
   QDialog* dlg;
-  dlg = new QDialog();
+  dlg = new QDialog(this);
   dlg->setWindowFlag(Qt::FramelessWindowHint);
   dlg->setModal(true);
   dlg->setFixedHeight(200);
