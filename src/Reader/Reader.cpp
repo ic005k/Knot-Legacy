@@ -483,6 +483,14 @@ void Reader::openFile(QString openfile) {
         }
         QFile(strOpfPath + "main.css").remove();
         QFile::copy(":/res/main.css", strOpfPath + "main.css");
+
+        QStringList temp_l0 = ncxList;
+        ncxList.clear();
+        for (int i = 0; i < temp_l0.count(); i++) {
+          QString item = temp_l0.at(i);
+          item.replace(dirpath, dirpath1);
+          ncxList.append(item);
+        }
       }
 
     } else if (strHead.trimmed().toLower().contains("pdf")) {
@@ -769,7 +777,7 @@ void Reader::gotoCataList(QString htmlFile) {
   for (int i = 0; i < ncxList.count(); i++) {
     QString item = ncxList.at(i);
     QString str1 = item.split("===").at(1);
-    // qDebug() << "gotoCataList:" << str1 << htmlFile;
+    // qDebug() << "gotoCataList:" << str1 << htmlFile ;
     if (str1.contains(htmlFile)) {
       currentCataIndex = i;
       break;
