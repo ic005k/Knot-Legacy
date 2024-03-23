@@ -20,9 +20,10 @@ QString strOpfPath, oldOpfPath, fileName, ebookFile, strTitle, catalogueFile,
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
-int minBytes = 30000;
-int maxBytes = 60000;
+int minBytes = 15000;
+int maxBytes = 30000;
 int unzipMethod = 3; /* 1 system  2 QZipReader 3 ziplib */
+int zlibMethod = 1;
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -359,24 +360,50 @@ void Reader::openFile(QString openfile) {
           return;
         }
 
-        do {
-          qompress::QZipFileEntry file = zf.currentEntry();
-          QString strFile = file.name();
-          qDebug() << file.name() << ":\t\t" << file.uncompressedSize()
-                   << "bytes (uncompressed)";
+        if (zlibMethod == 1) {
+          QStringList files = zf.filenames();
+          int count = files.count();
+          for (int i = 0; i < count; i++) {
+            QString strFile = files.at(i);
+            QFileInfo fi(dirpath + strFile);
+            QString path = fi.path();
+            QDir dir0(path);
+            if (!dir0.exists()) dir0.mkpath(path);
 
-          QFileInfo fi(strFile);
-          QString path = dirpath + fi.path();
-          QDir dir0(path);
-          if (!dir0.exists()) dir0.mkpath(path);
+            QFile myfile(dirpath + strFile);
+            myfile.open(QIODevice::WriteOnly);
+            zf.extractEntry(myfile, strFile, "");
 
-          QFile myfile(dirpath + strFile);
-          myfile.open(QIODevice::WriteOnly);
-          zf.extractCurrentEntry(myfile, "");
+            strShowMsg = strFile;
+            if (count > 0) {
+              double percent = (double)i / (double)count;
+              strPercent = QString::number(percent * 100, 'f', 0);
+            }
+          }
+        }
 
-          strShowMsg = strFile;
+        if (zlibMethod == 2) {
+          int i = 0;
+          do {
+            qompress::QZipFileEntry file = zf.currentEntry();
+            QString strFile = file.name();
+            qDebug() << strFile << ":\t\t" << file.uncompressedSize()
+                     << "bytes (uncompressed)";
 
-        } while (zf.nextEntry());
+            QFileInfo fi(strFile);
+            QString path = dirpath + fi.path();
+            QDir dir0(path);
+            if (!dir0.exists()) dir0.mkpath(path);
+
+            QFile myfile(dirpath + strFile);
+            myfile.open(QIODevice::WriteOnly);
+            zf.extractCurrentEntry(myfile, "");
+
+            i = i + 1;
+            strShowMsg = QString::number(i) + " " + strFile;
+
+          } while (zf.nextEntry());
+        }
 
         zf.close();
       }
@@ -433,6 +460,11 @@ void Reader::openFile(QString openfile) {
             qfile = strOpfPath + get_href(idref, opfList);
             tempList.append(qfile);
           }
+
+          if (opfCount > 0) {
+            double percent = (double)i / (double)opfCount;
+            strPercent = QString::number(percent * 100, 'f', 0);
+          }
         }
       }
 
@@ -471,8 +503,11 @@ void Reader::openFile(QString openfile) {
         isText = false;
         isPDF = false;
 
+        strShowMsg = "Del temp ...";
         deleteDirfile(dirpath1);
+        strShowMsg = "Copy temp0 to temp ...";
         copyDirectoryFiles(dirpath, dirpath1, true);
+        strShowMsg = "Del temp0 ...";
         deleteDirfile(dirpath);
         htmlFiles.clear();
         strOpfPath.replace(dirpath, dirpath1);
@@ -491,6 +526,11 @@ void Reader::openFile(QString openfile) {
           item.replace(dirpath, dirpath1);
           ncxList.append(item);
         }
+
+        catalogueFile.replace(dirpath, dirpath1);
+        QString str_cate = mw_one->loadText(catalogueFile);
+        str_cate.replace(dirpath, dirpath1);
+        StringToFile(str_cate, catalogueFile);
       }
 
     } else if (strHead.trimmed().toLower().contains("pdf")) {

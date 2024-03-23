@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>artistName</key>
+	<string>梁羽生</string>
+	<key>book-info</key>
+	<dict>
+		<key>cover-image-hash</key>
+		<string>7F74DB73CB1A300C1673247978F97CDF</string>
+		<key>cover-image-path</key>
+		<string>OPS/images/cover.jpg</string>
+		<key>package-file-hash</key>
+		<string>502368B3B268101B366664F5B60E99FA</string>
+		<key>unique-id</key>
+		<integer>5774574268220706843</integer>
+	</dict>
+	<key>itemName</key>
+	<string>梁羽生武侠全集</string>
+	<key>playlistName</key>
+	<string>梁羽生武侠全集</string>
+	<key>releaseDate</key>
+	<string>2011-01-03</string>
+</dict>
+</plist>
