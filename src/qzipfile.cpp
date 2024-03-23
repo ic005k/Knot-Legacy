@@ -98,9 +98,12 @@ bool QZipFile::nextEntry() {
   return (err == UNZ_OK);
 }
 
-bool QZipFile::extractCurrentEntry(QIODevice &out, const QString &password) {
+bool QZipFile::extractCurrentEntry(QIODevice &out, const QString &password,
+                                   const qint64 &bufSize) {
   int err;
-  char buf[512 * 512];
+  char buf[8192];
+  qint64 totalBytes = bufSize;
+
   bool result = true;
 
   if (!password.isEmpty())
@@ -125,11 +128,13 @@ bool QZipFile::extractCurrentEntry(QIODevice &out, const QString &password) {
         written = out.write(buf, err);
         if (written < 0) break;
         err -= written;
+        totalBytes = totalBytes - written;
       } while (err > 0);
 
       if (written < 0) err = -1;
     }
-  } while (err > 0);
+
+  } while (totalBytes > 0);
 
   if (err < 0) result = false;
 
@@ -141,13 +146,13 @@ bool QZipFile::extractCurrentEntry(QIODevice &out, const QString &password) {
 }
 
 bool QZipFile::extractEntry(QIODevice &out, const QString &file,
-                            const QString &password) {
+                            const QString &password, const qint64 &bufSize) {
   if (unzLocateFile(m_unzFile, file.toUtf8(), 1) != UNZ_OK) {
     setErrorString("File '" + file + "' not found in archive");
     return false;
   }
 
-  return extractCurrentEntry(out, password);
+  return extractCurrentEntry(out, password, bufSize);
 }
 
 QStringList QZipFile::filenames() {

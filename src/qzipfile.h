@@ -27,84 +27,89 @@
 #ifndef QZIPFILE_H
 #define QZIPFILE_H
 
-#include "unzip.h"
-#include "zip.h"
+#include <QDebug>
 #include <QIODevice>
 #include <QStringList>
 
 #include "qzipfileentry.h"
+#include "unzip.h"
+#include "zip.h"
 
 namespace qompress {
 
 /**
- * \brief Interface to ZIP file. Instance of this class provides interface to 
- * archive entries. 
+ * \brief Interface to ZIP file. Instance of this class provides interface to
+ * archive entries.
  *
  * QZipFile represents archive as a list of entries and maintain
- * "pointer" to one of them, this entry is called current. It's possible to 
+ * "pointer" to one of them, this entry is called current. It's possible to
  * navigate through list using gotoFirstEntry() and nextEntry() methods
  */
-class QZipFile : public QObject
-{
-public:
-    enum OpenMode {
-        NotOpened,          /// archive is not opened
-        ReadOnly,           /// open archive for read
-        WriteOnlyAppend,    /// open archive for appending files
-        WriteOnlyTruncate,  /// recreate archive
-    };
+class QZipFile : public QObject {
+ public:
+  enum OpenMode {
+    NotOpened,          /// archive is not opened
+    ReadOnly,           /// open archive for read
+    WriteOnlyAppend,    /// open archive for appending files
+    WriteOnlyTruncate,  /// recreate archive
+  };
 
-    /// constructor
-    QZipFile(const QString &name, QObject *parent = 0);
-    ~QZipFile();
+  /// constructor
+  QZipFile(const QString &name, QObject *parent = 0);
+  ~QZipFile();
 
-    /// open archive in specified \a mode
-    bool open(OpenMode mode);
-    /// close archive
-    void close();
+  /// open archive in specified \a mode
+  bool open(OpenMode mode);
+  /// close archive
+  void close();
 
-    /// get human-readable description of last error
-    QString errorString() const { return m_error; };
-    /// returns mode archive has been opened in
-    OpenMode openMode() { return m_mode; };
-    
-    // **
-    // Unarchive API
-    // **
+  /// get human-readable description of last error
+  QString errorString() const { return m_error; };
+  /// returns mode archive has been opened in
+  OpenMode openMode() { return m_mode; };
 
-    /// returns info for current entry
-    QZipFileEntry currentEntry();
-    /// set pointer to first archive entry, returns true if succeded, false otherwise
-    bool gotoFirstEntry();
-    /// move pointer to the next archive entry. True if succeded, false if pointer is at the last entry
-    bool nextEntry();
-    /// Exctract current entry and write it to \a out
-    bool extractCurrentEntry(QIODevice &out, const QString &password = "");
-    /// Exctract entry named \a file and write it to \a out
-    bool extractEntry(QIODevice &out, const QString &file, const QString &password = "");
-    /// returns list with entry names
-    QStringList filenames();
+  // **
+  // Unarchive API
+  // **
 
-    // **
-    // Archive API
-    // **
-    bool addEntry(QIODevice &in, const QString &file, const QString &password = "");
-    void setCompressionLevel(int level) { m_compressionLevel = level; };
-    int compressionLevel() const { return m_compressionLevel; }
-    
+  /// returns info for current entry
+  QZipFileEntry currentEntry();
+  /// set pointer to first archive entry, returns true if succeded, false
+  /// otherwise
+  bool gotoFirstEntry();
+  /// move pointer to the next archive entry. True if succeded, false if pointer
+  /// is at the last entry
+  bool nextEntry();
+  /// Exctract current entry and write it to \a out
+  bool extractCurrentEntry(QIODevice &out, const QString &password = "",
+                           const qint64 &bufSize = 512 * 512);
+  /// Exctract entry named \a file and write it to \a out
+  bool extractEntry(QIODevice &out, const QString &file,
+                    const QString &password = "",
+                    const qint64 &bufSize = 512 * 512);
+  /// returns list with entry names
+  QStringList filenames();
 
-private:
-    void setErrorString(const QString &s) { m_error = s; };
+  // **
+  // Archive API
+  // **
+  bool addEntry(QIODevice &in, const QString &file,
+                const QString &password = "");
+  void setCompressionLevel(int level) { m_compressionLevel = level; };
+  int compressionLevel() const { return m_compressionLevel; }
 
-    QString m_fileName;
-    QString m_error;
-    OpenMode m_mode;
-    int m_compressionLevel;
+ private:
+  void setErrorString(const QString &s) { m_error = s; };
 
-    unzFile m_unzFile;
-    zipFile m_zipFile;
+  QString m_fileName;
+  QString m_error;
+  OpenMode m_mode;
+  int m_compressionLevel;
+
+  unzFile m_unzFile;
+  zipFile m_zipFile;
 };
 
-} // namespace
+}  // namespace qompress
 
-#endif // QZIPFILE_H
+#endif  // QZIPFILE_H

@@ -71,6 +71,7 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
 
   f.setPointSize(10);
   mw_one->ui->lblEpubInfo->setFont(f);
+  mw_one->ui->lblEpubInfo->setFixedWidth(36);
   mw_one->ui->pEpubProg->setFont(f);
 }
 
@@ -361,6 +362,14 @@ void Reader::openFile(QString openfile) {
         }
 
         if (zlibMethod == 1) {
+          QStringList bufList;
+          do {
+            qompress::QZipFileEntry file = zf.currentEntry();
+            bufList.append(file.name() + "|===|" +
+                           QString::number(file.uncompressedSize()));
+
+          } while (zf.nextEntry());
+
           QStringList files = zf.filenames();
           int count = files.count();
           for (int i = 0; i < count; i++) {
@@ -370,9 +379,23 @@ void Reader::openFile(QString openfile) {
             QDir dir0(path);
             if (!dir0.exists()) dir0.mkpath(path);
 
+            int bufSize = 512 * 512;
+            for (int j = 0; j < bufList.count(); j++) {
+              QString item = bufList.at(j);
+              QStringList list0 = item.split("|===|");
+              QString s0, s1;
+              s0 = list0.at(0);
+              if (s0 == strFile) {
+                s1 = list0.at(1);
+                bufSize = s1.toInt();
+                break;
+              }
+            }
+
             QFile myfile(dirpath + strFile);
             myfile.open(QIODevice::WriteOnly);
-            zf.extractEntry(myfile, strFile, "");
+            zf.extractEntry(myfile, strFile, "", bufSize);
+            myfile.close();
 
             strShowMsg = strFile;
             if (count > 0) {
@@ -397,7 +420,8 @@ void Reader::openFile(QString openfile) {
 
             QFile myfile(dirpath + strFile);
             myfile.open(QIODevice::WriteOnly);
-            zf.extractCurrentEntry(myfile, "");
+            zf.extractCurrentEntry(myfile, "", file.uncompressedSize());
+            myfile.close();
 
             i = i + 1;
             strShowMsg = QString::number(i) + " " + strFile;

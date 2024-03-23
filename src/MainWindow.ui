@@ -6262,6 +6262,9 @@ QSlider::handle:horizontal:disabled {
         <property name="text">
          <string>20% </string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
        </widget>
       </item>
       <item>
