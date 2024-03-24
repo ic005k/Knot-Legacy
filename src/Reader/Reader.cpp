@@ -897,7 +897,8 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
         if (buffers.contains(skipid)) {
           html = strfile;
           count0 = i;
-          qDebug() << "html=" << html << "count0=" << count0;
+          qDebug() << "setEpubPagePosition: html=" << html
+                   << "count0=" << count0;
           break;
         }
       }

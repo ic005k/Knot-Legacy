@@ -1241,8 +1241,7 @@ void MainWindow::set_ToolButtonStyle(QObject *parent) {
 
     if (btn != ui->btnAddTodo && btn != ui->btnClear)
       m_Method->setToolButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB",
-                                 "#FFFFFF", "#2483C7",
-                                 "#A0DAFB");  // #5DACE4 #E5FEFF
+                                 "#FFFFFF", "#FF0000", "#FFFFFF");
   }
 }
 

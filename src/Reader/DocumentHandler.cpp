@@ -241,7 +241,7 @@ QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
 void DocumentHandler::parsingLink(QString linkFile) {
   if (mw_one->curx != 0) return;
 
-  qDebug() << "file : " << linkFile;
+  qDebug() << "link : " << linkFile;
   if (linkFile.mid(0, 4) == "http" || linkFile.mid(0, 4) == "www.") {
     if (linkFile.mid(0, 4) != "http") {
       linkFile = "http://" + linkFile;
@@ -273,6 +273,51 @@ void DocumentHandler::parsingLink(QString linkFile) {
 
   else if (linkFile.contains(".html") || linkFile.contains(".xhtml") ||
            linkFile.contains(".xml")) {
+    bool is_sup = false;
+    bool isBreak = false;
+    int current_i = 0;
+    if (linkFile.contains("#")) {
+      QString str_file = linkFile.split("#").at(0);
+      QString str_id = linkFile.split("#").at(1);
+      QString html_file;
+      for (int i = 0; i < htmlFiles.count(); i++) {
+        QString item = htmlFiles.at(i);
+        if (item.contains(str_file)) {
+          html_file = item;
+          current_i = i;
+          break;
+        }
+      }
+
+      for (int n = current_i; n < htmlFiles.count(); n++) {
+        QStringList buf_lists = mw_one->m_Reader->readText(htmlFiles.at(n));
+        for (int i = 0; i < buf_lists.count(); i++) {
+          QString item = buf_lists.at(i);
+          if (item.contains(str_id)) {
+            if (buf_lists.at(i + 1) == "<sup>") {
+              is_sup = true;
+              item = buf_lists.at(i + 1);
+              i++;
+            }
+          }
+
+          if (item.contains(str_id)) {
+            QString s1 = buf_lists.at(i + 1);
+            QString s2 = buf_lists.at(i + 3);
+            s1 = s1.trimmed();
+            s2 = s2.trimmed();
+            ShowMessage *msg = new ShowMessage(mw_one);
+            msg->showMsg(str_id, s1 + " " + s2, 1);
+            isBreak = true;
+            break;
+          }
+        }
+        if (isBreak) break;
+      }
+    }
+
+    if (is_sup) return;
+
     mw_one->m_Reader->initLink(linkFile);
   } else {
     // open picture
