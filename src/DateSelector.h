@@ -4,8 +4,8 @@
 #include <QDialog>
 #include <QKeyEvent>
 
-#include "MyWheel.h"
-#include "RollingBox.h"
+#include "src/Comm/MyWheel.h"
+#include "src/Comm/RollingBox.h"
 
 namespace Ui {
 class DateSelector;

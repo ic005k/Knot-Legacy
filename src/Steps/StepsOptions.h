@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "src/Method.h"
+#include "src/Comm/Method.h"
 
 namespace Ui {
 class StepsOptions;

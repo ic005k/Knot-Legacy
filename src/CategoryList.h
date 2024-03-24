@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
-#include "ShowMessage.h"
+#include "src/Comm/ShowMessage.h"
 
 namespace Ui {
 class CategoryList;

@@ -1,7 +1,7 @@
 #include "MoveTo.h"
 
+#include "src/Comm/Method.h"
 #include "src/MainWindow.h"
-#include "src/Method.h"
 #include "ui_MainWindow.h"
 #include "ui_MoveTo.h"
 

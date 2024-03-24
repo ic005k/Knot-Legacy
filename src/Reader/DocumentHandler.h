@@ -58,7 +58,7 @@
 #include <QTextDocument>
 #include <QUrl>
 
-#include "src/ShowMessage.h"
+#include "src/Comm/ShowMessage.h"
 
 QT_BEGIN_NAMESPACE
 // class QTextDocument;

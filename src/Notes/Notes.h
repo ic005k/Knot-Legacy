@@ -23,12 +23,12 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
+#include "src/Comm/ShowMessage.h"
 #include "src/Notes/ColorDialog.h"
 #include "src/Notes/LineNumberArea.h"
 #include "src/Notes/PrintPDF.h"
 #include "src/Notes/QTextEditHighlighter.h"
 #include "src/Notes/TextSelector.h"
-#include "src/ShowMessage.h"
 #include "ui_PrintPDF.h"
 #include "ui_TextSelector.h"
 

@@ -70,12 +70,12 @@
 #include <QTreeWidgetItem>
 #include <QValueAxis>
 
-#include "Method.h"
-#include "ShowMessage.h"
 #include "src/CategoryList.h"
 #include "src/CloudBackup.h"
+#include "src/Comm/FileSystemWatcher.h"
+#include "src/Comm/Method.h"
+#include "src/Comm/ShowMessage.h"
 #include "src/EditRecord.h"
-#include "src/FileSystemWatcher.h"
 #include "src/LoadPic.h"
 #include "src/Notes/MarkdownHighlighter.h"
 #include "src/Notes/Notes.h"

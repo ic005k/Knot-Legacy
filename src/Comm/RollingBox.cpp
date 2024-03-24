@@ -1,6 +1,6 @@
 #include "RollingBox.h"
 
-#include "MainWindow.h"
+#include "src/MainWindow.h"
 
 extern MainWindow *mw_one;
 extern Method *m_Method;

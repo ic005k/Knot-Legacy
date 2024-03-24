@@ -2,8 +2,8 @@
 
 #include <QKeyEvent>
 
+#include "src/Comm/qzipfile.h"
 #include "src/MainWindow.h"
-#include "src/qzipfile.h"
 #include "ui_MainWindow.h"
 
 extern MainWindow* mw_one;
@@ -941,6 +941,7 @@ QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
   strHtml.replace(".css", "");
   strHtml.replace("font-family:", "font0-family:");
   strHtml.replace("font-size:", "font0-size:");
+  strHtml.replace("font color", "font color0");
   strHtml = strHtml.trimmed();
 
   text_edit->setPlainText(strHtml);

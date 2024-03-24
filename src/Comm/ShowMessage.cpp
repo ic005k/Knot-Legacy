@@ -1,6 +1,6 @@
 #include "ShowMessage.h"
 
-#include "MainWindow.h"
+#include "src/MainWindow.h"
 #include "ui_ShowMessage.h"
 
 extern MainWindow* mw_one;

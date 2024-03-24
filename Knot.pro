@@ -50,13 +50,17 @@ SOURCES += \
     src/AutoUpdate.cpp \
     src/CategoryList.cpp \
     src/CloudBackup.cpp \
+    src/Comm/FileSystemWatcher.cpp \
+    src/Comm/Method.cpp \
+    src/Comm/MyWheel.cpp \
+    src/Comm/RollingBox.cpp \
+    src/Comm/ShowMessage.cpp \
+    src/Comm/qzipfile.cpp \
+    src/Comm/qzipfileentry.cpp \
     src/DateSelector.cpp \
     src/EditRecord.cpp \
-    src/FileSystemWatcher.cpp \
     src/LoadPic.cpp \
     src/MainWindow.cpp \
-    src/Method.cpp \
-    src/MyWheel.cpp \
     src/Notes/ColorDialog.cpp \
     src/Notes/LineNumberArea.cpp \
     src/Notes/MarkdownHighlighter.cpp \
@@ -77,8 +81,6 @@ SOURCES += \
     src/Reader/SetReaderText.cpp \
     src/RemarksAbout.cpp \
     src/Report.cpp \
-    src/RollingBox.cpp \
-    src/ShowMessage.cpp \
     src/Steps/SpecialAccelerometerPedometer.cpp \
     src/Steps/Steps.cpp \
     src/Steps/StepsOptions.cpp \
@@ -107,22 +109,24 @@ SOURCES += \
     src/qwt/qwt_clipper.cpp \
     src/qwt/qwt_math.cpp \
     src/qwt/qwt_painter.cpp \
-    src/qwt/qwt_scale_map.cpp \
-    src/qzipfile.cpp \
-    src/qzipfileentry.cpp
+    src/qwt/qwt_scale_map.cpp
 
 
 HEADERS += \
     src/AutoUpdate.h \
     src/CategoryList.h \
     src/CloudBackup.h \
+    src/Comm/FileSystemWatcher.h \
+    src/Comm/Method.h \
+    src/Comm/MyWheel.h \
+    src/Comm/RollingBox.h \
+    src/Comm/ShowMessage.h \
+    src/Comm/qzipfile.h \
+    src/Comm/qzipfileentry.h \
     src/DateSelector.h \
     src/EditRecord.h \
-    src/FileSystemWatcher.h \
     src/LoadPic.h \
     src/MainWindow.h \
-    src/Method.h \
-    src/MyWheel.h \
     src/Notes/ColorDialog.h \
     src/Notes/LineNumberArea.h \
     src/Notes/MarkdownHighlighter.h \
@@ -143,8 +147,6 @@ HEADERS += \
     src/Reader/SetReaderText.h \
     src/RemarksAbout.h \
     src/Report.h \
-    src/RollingBox.h \
-    src/ShowMessage.h \
     src/Steps/SpecialAccelerometerPedometer.h \
     src/Steps/Steps.h \
     src/Steps/StepsOptions.h \
@@ -181,14 +183,13 @@ HEADERS += \
     src/qwt/qwt_math.h \
     src/qwt/qwt_painter.h \
     src/qwt/qwt_scale_map.h \
-    src/qzipfile.h \
-    src/qzipfileentry.h \
     win.rc
 
 FORMS += \
     src/AutoUpdate.ui \
     src/CategoryList.ui \
     src/CloudBackup.ui \
+    src/Comm/ShowMessage.ui \
     src/DateSelector.ui \
     src/MainWindow.ui \
     src/Notes/MoveTo.ui \
@@ -202,7 +203,6 @@ FORMS += \
     src/Reader/ReaderSet.ui \
     src/Reader/SetReaderText.ui \
     src/RemarksAbout.ui \
-    src/ShowMessage.ui \
     src/Steps/StepsOptions.ui \
     src/SyncInfo.ui \
     src/Todo/Todo.ui \

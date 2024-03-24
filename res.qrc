@@ -150,5 +150,6 @@
         <file>res/exit_l.png</file>
         <file>res/url_l.png</file>
         <file>res/recent_l.png</file>
+        <file>res/ok_l.png</file>
     </qresource>
 </RCC>
