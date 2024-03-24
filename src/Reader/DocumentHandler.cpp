@@ -274,11 +274,12 @@ void DocumentHandler::parsingLink(QString linkFile) {
   else if (linkFile.contains(".html") || linkFile.contains(".xhtml") ||
            linkFile.contains(".xml")) {
     bool is_sup = false;
-    bool isBreak = false;
+    bool isOk = false;
+    QString s1, s2, str_file, str_id;
     int current_i = 0;
     if (linkFile.contains("#")) {
-      QString str_file = linkFile.split("#").at(0);
-      QString str_id = linkFile.split("#").at(1);
+      str_file = linkFile.split("#").at(0);
+      str_id = linkFile.split("#").at(1);
       QString html_file;
       for (int i = 0; i < htmlFiles.count(); i++) {
         QString item = htmlFiles.at(i);
@@ -294,26 +295,30 @@ void DocumentHandler::parsingLink(QString linkFile) {
         for (int i = 0; i < buf_lists.count(); i++) {
           QString item = buf_lists.at(i);
           if (item.contains(str_id)) {
-            if (buf_lists.at(i + 1) == "<sup>") {
+            if (buf_lists.at(i + 1) == "<sup>" ||
+                buf_lists.at(i - 1) == "<sup>") {
               is_sup = true;
               item = buf_lists.at(i + 1);
               i++;
             }
           }
 
-          if (item.contains(str_id)) {
-            QString s1 = buf_lists.at(i + 1);
-            QString s2 = buf_lists.at(i + 3);
+          if (item.contains(str_id) && is_sup) {
+            s1 = buf_lists.at(i + 1);
+            s2 = buf_lists.at(i + 3);
             s1 = s1.trimmed();
             s2 = s2.trimmed();
-            ShowMessage *msg = new ShowMessage(mw_one);
-            msg->showMsg(str_id, s1 + " " + s2, 1);
-            isBreak = true;
+            isOk = true;
             break;
           }
         }
-        if (isBreak) break;
+        if (isOk) break;
       }
+    }
+
+    if (isOk) {
+      ShowMessage *msg = new ShowMessage(mw_one);
+      msg->showMsg(str_id, s1 + " " + s2, 1);
     }
 
     if (is_sup) return;
