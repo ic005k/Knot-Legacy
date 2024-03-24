@@ -316,6 +316,7 @@ Rectangle {
                 anchors.fill: parent
                 onPressed: {
                     clickPos = Qt.point(mouse.x, mouse.y)
+
                     item0.color = "white"
                     listItem.color = "red"
                 }
@@ -336,14 +337,15 @@ Rectangle {
 
                 onClicked: {
 
-                    view.currentIndex = index //实现item切换
+                    view.currentIndex = index
 
                     m_Reader.openCataList(item1.text)
                 }
 
                 onPositionChanged: {
-                    item0.color = listItem.ListView.isCurrentItem ? "black" : getFontColor()
-                    listItem.color = ListView.isCurrentItem ? "lightblue" : getColor()
+
+                    item0.color = getFontColor()
+                    listItem.color = getColor()
                 }
 
                 onPressAndHold: {

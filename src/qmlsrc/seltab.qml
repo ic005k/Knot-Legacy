@@ -329,8 +329,8 @@ Rectangle {
                 }
 
                 onPositionChanged: {
-                    item0.color = listItem.ListView.isCurrentItem ? "black" : getFontColor()
-                    listItem.color = ListView.isCurrentItem ? "lightblue" : getColor()
+                    item0.color =  getFontColor()
+                    listItem.color = getColor()
                 }
 
                 onPressAndHold: {

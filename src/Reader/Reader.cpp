@@ -379,7 +379,7 @@ void Reader::openFile(QString openfile) {
             QDir dir0(path);
             if (!dir0.exists()) dir0.mkpath(path);
 
-            int bufSize = 512 * 512;
+            qint64 bufSize = 512 * 512;
             for (int j = 0; j < bufList.count(); j++) {
               QString item = bufList.at(j);
               QStringList list0 = item.split("|===|");
@@ -890,16 +890,19 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
     QString skipid = list.at(1);
     QString strfile;
     int count0 = 0;
-    for (int i = 0; i < 2000; i++) {
-      strfile = htmlFiles.at(index + i);
-      QString buffers = mw_one->loadText(strfile);
-      if (buffers.contains(skipid)) {
-        html = strfile;
-        count0 = i;
-        qDebug() << "html=" << html << "count0=" << count0;
-        break;
+    for (int i = 0; i < htmlFiles.count(); i++) {
+      if (index + i < htmlFiles.count()) {
+        strfile = htmlFiles.at(index + i);
+        QString buffers = mw_one->loadText(strfile);
+        if (buffers.contains(skipid)) {
+          html = strfile;
+          count0 = i;
+          qDebug() << "html=" << html << "count0=" << count0;
+          break;
+        }
       }
     }
+
     htmlIndex = index + count0;
 
     for (int i = 0; i < ncxList.count(); i++) {
