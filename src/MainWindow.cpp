@@ -249,25 +249,27 @@ void MainWindow::readEBookDone() {
 #else
       PDFJS = "file://" + privateDir + "pdfjs/web/viewer.html";
       str = PDFJS + "?file=file://" + fileName;
+
 #endif
       QUrl url;
       url.setUrl(str);
 
       if (isPdfNewMothod) {
+        ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
         QQuickItem *root = ui->qwPdf->rootObject();
         QMetaObject::invokeMethod((QObject *)root, "setPdfPath",
                                   Q_ARG(QVariant, url));
 
       } else {
+        ui->qwPdf->setSource(
+            QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
         QQuickItem *root = ui->qwPdf->rootObject();
+
 #ifdef Q_OS_WIN
+
         QMetaObject::invokeMethod((QObject *)root, "setViewEnd",
                                   Q_ARG(QVariant, true));
 #endif
-
-        // QMetaObject::invokeMethod((QObject *)root, "loadPDFWin",
-        //                          Q_ARG(QVariant, PDFJS + "?file="),
-        //                          Q_ARG(QVariant, fileName));
 
         QMetaObject::invokeMethod((QObject *)root, "loadPDF",
                                   Q_ARG(QVariant, fileName));
@@ -3606,10 +3608,6 @@ void MainWindow::initQW() {
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
-  if (!isPdfNewMothod)
-    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
-  else
-    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
 }
 
 void MainWindow::init_Theme() {
@@ -5608,6 +5606,7 @@ void MainWindow::on_btnDel_Number_clicked() {
 void MainWindow::on_btnBackBookList_clicked() {
   ui->frameBookList->hide();
   ui->frameReader->show();
+  if (isPDF) m_Reader->setPdfViewVisible(true);
 }
 
 void MainWindow::on_btnOkBookList_clicked() { m_Reader->openBookListItem(); }

@@ -84,10 +84,6 @@ Rectangle {
             console.debug("pdfFile is open ...... " + pdfView.webView.url
                           + "  isViewEnd=" + isViewEnd)
         }
-
-        //var url = pdfView.geturl()
-        //pdfView.webView.url ="file://" + url + "?file=file://" + encodeURIComponent(pdfPath)
-        //pdfView.webView.url = "https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf" //+  pdfPath
     }
 
     property int closedTopbarHeight: 30

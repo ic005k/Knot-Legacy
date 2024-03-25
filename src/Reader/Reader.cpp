@@ -74,10 +74,7 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblEpubInfo->setFixedWidth(36);
   mw_one->ui->pEpubProg->setFont(f);
 
-  if (!zh_cn)
-    strEndFlag = "<p align=center>-----bottom-----</p>";
-  else
-    strEndFlag = "<p align=center>-----底部-----</p>";
+  strEndFlag = "<p align=center>-----" + tr("bottom") + "-----</p>";
 }
 
 Reader::~Reader() {}

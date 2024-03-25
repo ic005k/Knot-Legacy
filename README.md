@@ -9,11 +9,11 @@
 * Pedometer
 * Statistical charts
 * Statistical reports
-* Reader(txt,epub,pdf)
+* Reader(txt,epub)
 * Notes(Markdown)
 * Data export and import
 * Backup data to OneDrive
-* **Clients(Win,Mac,Linux) can use [Syncthing](https://github.com/syncthing/syncthing) to seamlessly synchronize data.**
+* **Clients(Win,Mac,Linux) can use [Syncthing](https://github.com/syncthing/syncthing) to seamlessly synchronize data.(KnotData folder)**
 
 
 QR code for downloading:
