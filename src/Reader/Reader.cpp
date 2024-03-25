@@ -187,7 +187,6 @@ void Reader::setReaderStyle() {
 void Reader::startOpenFile(QString openfile) {
   if (isReport) return;
 
-  mw_one->ui->qwPdf->hide();
   setPdfViewVisible(false);
 
   if (!mw_one->initMain) {
@@ -213,7 +212,6 @@ void Reader::startOpenFile(QString openfile) {
     mw_one->ui->lblTitle->hide();
     mw_one->ui->qwCata->hide();
     mw_one->ui->lblCataInfo->hide();
-    mw_one->ui->qwReader->show();
 
     QString bookName;
 

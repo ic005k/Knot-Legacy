@@ -184,6 +184,8 @@ void MainWindow::readEBookDone() {
     if (isText || isEpub) {
       strShowMsg = "Read  EBook End...";
 
+      m_Reader->setPdfViewVisible(false);
+
       ui->qwPdf->hide();
       ui->qwReader->show();
       ui->frameReaderFun->show();
@@ -226,6 +228,7 @@ void MainWindow::readEBookDone() {
 
     if (isPDF) {
       qDebug() << "Read Pdf... ..." << fileName;
+      m_Reader->setPdfViewVisible(true);
       ui->lblBookName->hide();
       ui->progReader->hide();
       ui->qwReader->hide();
