@@ -73,6 +73,11 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblEpubInfo->setFont(f);
   mw_one->ui->lblEpubInfo->setFixedWidth(36);
   mw_one->ui->pEpubProg->setFont(f);
+
+  if (!zh_cn)
+    strEndFlag = "<p align=center>-----bottom-----</p>";
+  else
+    strEndFlag = "<p align=center>-----底部-----</p>";
 }
 
 Reader::~Reader() {}
@@ -736,9 +741,6 @@ void Reader::getBookList() {
 void Reader::setQMLText(QString txt1) {
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
 
-  // white-space: pre-wrap;
-  // text-indent:40px;
-
   QStringList list = txt1.split("\n");
   QString str1 = "<html>\n<body>\n";
   QString str2 = "</body>\n</html>";
@@ -749,10 +751,9 @@ void Reader::setQMLText(QString txt1) {
              "<p style='line-height:35px; width:100% ; text-indent:40px; '>" +
              list.at(i) + "</p>";
   }
-  qsShow = str1 + qsShow + str2;
 
+  qsShow = str1 + qsShow + strEndFlag + str2;
   currentTxt = qsShow;
-
   loadQMLText(currentTxt);
 
   setAni();
@@ -1040,6 +1041,7 @@ QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
 
 void Reader::setQMLHtml(QString htmlFile, QString skipID) {
   QString htmlBuffer = processHtml(htmlFile, false);
+  htmlBuffer.append(strEndFlag);
 
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
   QQuickItem* root = mw_one->ui->qwReader->rootObject();

@@ -188,7 +188,7 @@ Rectangle {
                 from: aniW
                 to: 0
                 duration: 200
-                loops: 1 //Animation.Infinite
+                loops: 1
             }
 
             SequentialAnimation on opacity {
@@ -209,7 +209,7 @@ Rectangle {
         ScrollBar.vertical: ScrollBar {
             id: vbar
             position: 0.2
-            policy: ScrollBar.AlwaysOn
+            policy: ScrollBar.AsNeeded
             width: 8
             hoverEnabled: true
             active: hovered || pressed
@@ -218,22 +218,10 @@ Rectangle {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            contentItem: Rectangle {
-                color: "#1E90FF"
-            }
 
-            //自定义滚动条样式
-
-
-            /*contentItem: Rectangle {
-                id: slider
-                implicitWidth: 4
-                implicitHeight: 76
-                radius: width / 2
-                color: vbar.pressed ? "#e7e7e7" : "#1296db"
-                opacity: (vbar.policy === ScrollBar.AlwaysOn
-                          || vbar.size < 1.0) ? 1.0 : 0.0
-            }*/
+            //contentItem: Rectangle {
+            //    color: "#1E90FF"
+            //}
         }
 
         Component.onCompleted: {
