@@ -232,37 +232,7 @@ void MainWindow::readEBookDone() {
       ui->frameReaderFun->hide();
       ui->qwPdf->show();
 
-      QString PDFJS, str;
-
-      // https://mozilla.github.io/pdf.js/web/viewer.html?file=compressed.tracemonkey-pldi-09.pdf
-      // "https://mozilla.github.io/pdf.js/web/viewer.html";
-
-#ifdef Q_OS_ANDROID
-      PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
-      PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";
-      str =
-          "https://mozilla.github.io/pdf.js/web/"
-          "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
-      str = PDFJS + "?file=" + fileName;
-      if (QFile("assets:/web/viewer.html").exists())
-        qDebug() << "viewer.html exists......";
-#else
-      PDFJS = "file://" + privateDir + "pdfjs/web/viewer.html";
-      str = PDFJS + "?file=file://" + fileName;
-
-#endif
-      QUrl url;
-      url.setUrl(str);
-
-      if (isPdfNewMothod) {
-        ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
-        QQuickItem *root = ui->qwPdf->rootObject();
-        QMetaObject::invokeMethod((QObject *)root, "setPdfPath",
-                                  Q_ARG(QVariant, url));
-
-      } else {
-        ui->qwPdf->setSource(
-            QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
+      if (pdfMethod == 1) {
         QQuickItem *root = ui->qwPdf->rootObject();
 
 #ifdef Q_OS_WIN
@@ -273,6 +243,33 @@ void MainWindow::readEBookDone() {
 
         QMetaObject::invokeMethod((QObject *)root, "loadPDF",
                                   Q_ARG(QVariant, fileName));
+      }
+
+      if (pdfMethod == 2) {
+        ui->frameReaderFun->show();
+        QString PDFJS, str;
+
+#ifdef Q_OS_ANDROID
+        PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
+        PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";
+        str =
+            "https://mozilla.github.io/pdf.js/web/"
+            "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
+        str = PDFJS + "?file=" + fileName;
+        if (QFile("assets:/web/viewer.html").exists())
+          qDebug() << "viewer.html exists......";
+#else
+
+        PDFJS = "file://" + privateDir + "pdfjs/web/viewer.html";
+        str = PDFJS + "?file=file://" + fileName;
+
+#endif
+        QUrl url;
+        url.setUrl(str);
+
+        QQuickItem *root = ui->qwPdf->rootObject();
+        QMetaObject::invokeMethod((QObject *)root, "setPdfPath",
+                                  Q_ARG(QVariant, url));
       }
     }
 
@@ -3608,6 +3605,10 @@ void MainWindow::initQW() {
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
+  if (pdfMethod == 1)
+    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
+  if (pdfMethod == 2)
+    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
 }
 
 void MainWindow::init_Theme() {

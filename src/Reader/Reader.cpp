@@ -1158,7 +1158,7 @@ void Reader::goPostion() {
     }
 
     if (isPDF) {
-      if (!mw_one->isPdfNewMothod) {
+      if (mw_one->pdfMethod == 1) {
         int page = Reg.value("/Reader/PdfPage" + fi.baseName(), 1).toInt();
         setPdfPage(page);
 
@@ -1696,14 +1696,11 @@ QString Reader::getCoverPicFile(QString htmlFile) {
 }
 
 void Reader::setPdfViewVisible(bool vv) {
-  if (mw_one->isPdfNewMothod) return;
+  if (mw_one->pdfMethod == 2) return;
 
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
-  if (!mw_one->isPdfNewMothod)
+  if (mw_one->pdfMethod == 1)
     QMetaObject::invokeMethod((QObject*)root, "setViewVisible",
-                              Q_ARG(QVariant, vv));
-  else
-    QMetaObject::invokeMethod((QObject*)root, "setPdfVisible",
                               Q_ARG(QVariant, vv));
 }
 
