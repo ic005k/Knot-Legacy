@@ -1046,6 +1046,7 @@ QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
 void Reader::setQMLHtml(QString htmlFile, QString skipID) {
   QString htmlBuffer = processHtml(htmlFile, false);
   htmlBuffer.append(strEndFlag);
+  currentTxt = htmlBuffer;
 
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
   QQuickItem* root = mw_one->ui->qwReader->rootObject();

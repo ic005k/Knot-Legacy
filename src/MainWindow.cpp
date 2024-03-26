@@ -4586,21 +4586,13 @@ void MainWindow::on_btnSelText_clicked() {
     isSelText = true;
 
     ui->textBrowser->setReadOnly(true);
-    QFont font = ui->qwReader->font();
+    QFont font;
     font.setPixelSize(textFontSize);
     font.setFamily(m_ReaderSet->ui->btnFont->font().family());
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     ui->textBrowser->setFont(font);
 
-    if (isText) ui->textBrowser->setHtml(m_Reader->currentTxt);
-
-    if (isEpub) {
-      QString str = loadText(m_Reader->currentHtmlFile);
-      str.replace("..", strOpfPath);
-      QDir dir;
-      dir.setCurrent(strOpfPath);
-      ui->textBrowser->setHtml(str);
-    }
+    ui->textBrowser->setHtml(m_Reader->currentTxt);
 
     ui->qwReader->hide();
     ui->textBrowser->show();
