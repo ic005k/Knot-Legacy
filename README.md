@@ -36,6 +36,7 @@ QR code for downloading:
 * [md4c](https://github.com/mity/md4c)
 * [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet)
 * [qompress](https://github.com/gonzoua/qompress)
+* [zlib](https://zlib.net/)
 
 ---
 

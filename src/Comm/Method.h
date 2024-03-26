@@ -208,7 +208,8 @@ class Method : public QDialog {
 
   static bool decompressionZipFile(const QString &zipfile, const QString &path);
 
- protected:
+  void unzip(QString zipFile, QString unzipDir);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

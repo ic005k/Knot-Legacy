@@ -1,3 +1,4 @@
+
 /*
  *
  *  Copyright 2022 Leonardo Tarollo (LTDev) <develtar@gmail.com>
@@ -17,25 +18,22 @@
  */
 
 // The QtObject from QML side
-var backend;
+var backend
 
-window.onload = function()
-{
+window.onload = function () {
     // @note: Since Android 9, socket connections using clear text communication are disabled by default,
     // (so, those type of connections are refused) emitting the following error:
     // "WebSocket connection to 'ws://127.0.0.1:55222/' failed: Error in connection
     // establishment: net::ERR_CONNECTION_REFUSED" (or net::ERR_CLEARTEXT_NOT_PERMITTED)
-    //
     // To solve it, add in the application tag in the manifest this property -> android:usesCleartextTraffic="true"
     // @see: https://stackoverflow.com/questions/54752716/why-am-i-seeing-neterr-cleartext-not-permitted-errors-after-upgrading-to-cordo
-    var socket = new WebSocket("ws://127.0.0.1:55222");
+    var socket = new WebSocket("ws://127.0.0.1:55222")
 
     // The JavaScript QWebChannel object should be constructed once the transport object
     // is fully operational. In case of a WebSocket, that means you should create the QWebChannel
     // in the socket's onopen handler.
     // @see: https://doc.qt.io/qt-5/qtwebchannel-javascript.html
-    socket.onopen = function()
-    {
+    socket.onopen = function () {
         // @note: On older browsers (EcmaScript <6) lamdas and other methods are not defined, so this
         // could cause an error on finding QWebChannel. For this reason, qwebchannel.js has been
         // modified to support older versions of javascript, and it has been included
@@ -43,59 +41,61 @@ window.onload = function()
         // Android devices QWebChannel is not found if included in the html file
         // with <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>.
         // For this reason, qtwebchannel.js must be included from a local path or inside this file.
-        //
         // The original qwebchannel.js file (without modifications) can be retrieved here:
         // @see: https://github.com/qt/qtwebchannel/blob/5.15.2/examples/webchannel/shared/qwebchannel.js
-        //
-        var webChannel = new QWebChannel(socket, function(channel) {
+        var webChannel = new QWebChannel(socket, function (channel) {
             // Once the callback passed to the QWebChannel object is invoked, the channel has finished
             // initialization and all published objects are accessible to the HTML client via
             // the channel.objects property
-            backend = channel.objects.backend;
+            backend = channel.objects.backend
 
             // Connect signals emitted by the pdf viewer
             connectPdfViewerSignals()
-        });
-    };
+        })
+    }
 
-    socket.onerror = function(error) {
-//        alert("web channel error: " + error);
-    };
+    socket.onerror = function (error) {//        alert("web channel error: " + error);
+    }
 }
+
 
 /*
     Connects the signals of the pdf viewer
 */
-function connectPdfViewerSignals(){
+function connectPdfViewerSignals() {
     // Connect signals emitted by the pdf viewer
-    PDFViewerApplication.pdfViewer.eventBus.on('pagerendered', function(evt){
+    PDFViewerApplication.pdfViewer.eventBus.on('pagerendered', function (evt) {
         backend.pdfLoaded(PDFViewerApplication.pagesCount)
 
         // Extract pdf pages as base64 images
-        extractThumbnails(0.3, function(thumbnails){
+        extractThumbnails(0.3, function (thumbnails) {
             backend.updateThumbnails(thumbnails)
         })
-    });
+    })
 
-    PDFViewerApplication.pdfViewer.eventBus.on('pagechanging', function(evt){
+    PDFViewerApplication.pdfViewer.eventBus.on('pagechanging', function (evt) {
         backend.updatePage(evt.pageNumber)
-    });
+    })
 
-    PDFViewerApplication.pdfViewer.eventBus.on('scalechanging', function(evt){
+    PDFViewerApplication.pdfViewer.eventBus.on('scalechanging', function (evt) {
         backend.updateScale(evt.scale)
-    });
+    })
 
-    PDFViewerApplication.pdfViewer.eventBus.on('scrollmodechanged', function(evt){
-        backend.updateScrollMode(evt.mode)
-    });
+    PDFViewerApplication.pdfViewer.eventBus.on('scrollmodechanged',
+                                               function (evt) {
+                                                   backend.updateScrollMode(
+                                                               evt.mode)
+                                               })
 
-    PDFViewerApplication.pdfCursorTools.eventBus.on('switchcursortool', function(evt){
-        backend.updateToolMode(evt.tool)
-    });
+    PDFViewerApplication.pdfCursorTools.eventBus.on('switchcursortool',
+                                                    function (evt) {
+                                                        backend.updateToolMode(
+                                                                    evt.tool)
+                                                    })
 
-    PDFViewerApplication.pdfViewer.eventBus.on('erroroccurred', function(evt){
+    PDFViewerApplication.pdfViewer.eventBus.on('erroroccurred', function (evt) {
         backend.error(evt.msg)
-    });
+    })
 
     // Signal that html viewer page has been loaded
     backend.viewerLoaded()
@@ -107,70 +107,80 @@ function connectPdfViewerSignals(){
 
     @param base64 {string}: the base64 document to load
 */
-function loadDocument(base64){
+function loadDocument_pdf(base64) {
+
+
     // Delay load to allow the javascript
     // environment to be ready
-    sleep(200).then(function() {
+    sleep(200).then(function () {
+
+        console.warn("Start load array......")
         var array = base64ToUint8Array(base64)
         //var array = convertDataURIToBinary(base64)
-        // Load pdf document as an Uint8Array
-        PDFViewerApplication.open(array);
 
-    });
+        // Load pdf document as an Uint8Array
+        PDFViewerApplication.open(array)
+    })
 }
+
 
 /*
     Sets the pdf viewer page to the given one.
 
     @param page {int}: the page to set
 */
-function setPage(page){
-    PDFViewerApplication.page=page;
+function setPage(page) {
+    PDFViewerApplication.page = page
 }
+
 
 /*
     Rotates the pdf by the given angle.
 
     @param angle {float}: the rotation angle
 */
-function rotate(angle){
-    PDFViewerApplication.rotatePages(angle);
+function rotate(angle) {
+    PDFViewerApplication.rotatePages(angle)
 }
+
 
 /*
     Zooms the pdf in.
 */
-function zoomIn(){
-    PDFViewerApplication.zoomIn();
+function zoomIn() {
+    PDFViewerApplication.zoomIn()
 }
+
 
 /*
     Zooms the pdf out.
 */
-function zoomOut(){
-    PDFViewerApplication.zoomOut();
+function zoomOut() {
+    PDFViewerApplication.zoomOut()
 }
+
 
 /*
     Scales the pdf with the given mode.
 
     @param scaleMode {string}: the scaling mode to apply
 */
-function setScaleMode(scaleMode){
-    PDFViewerApplication.pdfViewer.currentScaleValue=scaleMode;
+function setScaleMode(scaleMode) {
+    PDFViewerApplication.pdfViewer.currentScaleValue = scaleMode
 }
 
-function setScale(value){
-    PDFViewerApplication.pdfViewer._setScale(value);
+function setScale(value) {
+    PDFViewerApplication.pdfViewer._setScale(value)
 }
+
 
 /*
     Sets the pdf viewer scroll mode with the given value.
 
     @param scrollMode {int}: the scroll mode to apply
 */
-function setScrollMode(scrollMode){
-     PDFViewerApplication.pdfViewer.setScrollMode(scrollMode);
+function setScrollMode(scrollMode) {
+    PDFViewerApplication.pdfViewer.setScrollMode(scrollMode)
 }
 
 
@@ -179,7 +189,7 @@ function setScrollMode(scrollMode){
 
     @param toolMode {int}: the toolMode mode to apply
 */
-function setToolMode(toolMode){
+function setToolMode(toolMode) {
     PDFViewerApplication.pdfCursorTools.switchTool(toolMode)
 }
 
@@ -193,23 +203,27 @@ function setToolMode(toolMode){
     @param highlightAll {boolean}: true if matches found must be highlighted, false otherwise
     @param findPrevious {boolean}: true if previous matches must be considered, false otherwise
 */
-function searchText(query, phraseSearch, caseSensitive, highlightAll, findPrevious, command){
-    if(query===undefined) query = ""
-    if(phraseSearch===undefined) phraseSearch = true
-    if(caseSensitive===undefined) caseSensitive = false
-    if(highlightAll===undefined) highlightAll = true
-    if(findPrevious===undefined) findPrevious = false
-    if(command===undefined) command = "find"
+function searchText(query, phraseSearch, caseSensitive, highlightAll, findPrevious, command) {
+    if (query === undefined)
+        query = ""
+    if (phraseSearch === undefined)
+        phraseSearch = true
+    if (caseSensitive === undefined)
+        caseSensitive = false
+    if (highlightAll === undefined)
+        highlightAll = true
+    if (findPrevious === undefined)
+        findPrevious = false
+    if (command === undefined)
+        command = "find"
 
-    PDFViewerApplication.findController.executeCommand(
-                command, {
-                    query: query,
-                    phraseSearch: phraseSearch,
-                    caseSensitive: caseSensitive,
-                    highlightAll: highlightAll,
-                    findPrevious: findPrevious
-                });
-
+    PDFViewerApplication.findController.executeCommand(command, {
+                                                           "query": query,
+                                                           "phraseSearch": phraseSearch,
+                                                           "caseSensitive": caseSensitive,
+                                                           "highlightAll": highlightAll,
+                                                           "findPrevious": findPrevious
+                                                       })
 }
 
 
@@ -219,52 +233,53 @@ function searchText(query, phraseSearch, caseSensitive, highlightAll, findPrevio
     @param scale {float}: the scaling value
     @param callbackOnExtractionCompleted {function}: the callback called when extraction is completed
 */
-function extractThumbnails(scale, callbackOnExtractionCompleted){
+function extractThumbnails(scale, callbackOnExtractionCompleted) {
     var thumbnails = []
-    var pagesCount = PDFViewerApplication.pagesCount;
+    var pagesCount = PDFViewerApplication.pagesCount
 
     // Create an off-screen canvas that will be used to
     // create images of the pdf pages
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
+    var canvas = document.createElement('canvas')
+    var ctx = canvas.getContext('2d')
 
     // The recursive function that will extract pdf pages starting from page 1
     function extractThumbnail(pageIndex, scale, callback) {
         // Promise to retrieve first page
-        PDFViewerApplication.pdfDocument.getPage(pageIndex).then(function(page) {
-            var viewport = page.getViewport(scale);
+        PDFViewerApplication.pdfDocument.getPage(pageIndex).then(
+                    function (page) {
+                        var viewport = page.getViewport(scale)
 
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+                        canvas.height = viewport.height
+                        canvas.width = viewport.width
 
-            var renderContext = {
-                canvasContext: ctx,
-                viewport: viewport
-            };
+                        var renderContext = {
+                            "canvasContext": ctx,
+                            "viewport": viewport
+                        }
 
-            // Render page in the created canvas context
-            page.render(renderContext).then(function() {
-                // Store compressed image data in a base64 string
-                thumbnails.push(canvas.toDataURL());
+                        // Render page in the created canvas context
+                        page.render(renderContext).then(function () {
+                            // Store compressed image data in a base64 string
+                            thumbnails.push(canvas.toDataURL())
 
+                            if (pageIndex < pagesCount) {
+                                pageIndex++
 
-                if (pageIndex < pagesCount) {
-                    pageIndex++;
-
-                    // Extract next page
-                    extractThumbnail(pageIndex, scale, callback);
-                } else {
-                    // All pages has been extracted, call the callback function
-                    callback(thumbnails);
-                }
-            });
-        });
+                                // Extract next page
+                                extractThumbnail(pageIndex, scale, callback)
+                            } else {
+                                // All pages has been extracted, call the callback function
+                                callback(thumbnails)
+                            }
+                        })
+                    })
     }
 
     // Start page extraction from page 1
     //if (pagesCount>=1) {// Normal condition
-    if (pagesCount<0) {// Block preview
-        extractThumbnail(1, scale, callbackOnExtractionCompleted);
+    if (pagesCount < 0) {
+        // Block preview
+        extractThumbnail(1, scale, callbackOnExtractionCompleted)
     }
 }
 
@@ -276,32 +291,37 @@ function extractThumbnails(scale, callbackOnExtractionCompleted){
 
     @return {Uint8Array}
 */
-function base64ToUint8Array(base64){
-    var raw = atob(base64);
-    var rawLength = raw.length;
-    var array = new Uint8Array(new ArrayBuffer(rawLength));
 
+function base64ToUint8Array(base64) {
+    const binaryString = atob(base64)
+    const uint8Array = Uint8Array.from(binaryString, char => char.charCodeAt(0))
+    return uint8Array
+}
 
-    for(var i = 0; i < rawLength; i++) {
-        array[i] = raw.charCodeAt(i);
+function base64ToUint8Array_0(base64) {
+    var raw = atob(base64)
+    var rawLength = raw.length
+    var array = new Uint8Array(new ArrayBuffer(rawLength))
+
+    for (var i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i)
     }
 
     return array
 }
 
 function convertDataURIToBinary(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-                        .replace(/-/g, '+')
-                        .replace(/_/g, '/');
+    const padding = '='.repeat((4 - base64String.length % 4) % 4)
+    const base64 = (base64String + padding).replace(/-/g,
+                                                    '+').replace(/_/g, '/')
 
-    const rawData = atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
+    const rawData = atob(base64)
+    const outputArray = new Uint8Array(rawData.length)
 
-           for (let i = 0; i < rawData.length; ++i) {
-                outputArray[i] = rawData.charCodeAt(i);
-           }
-           return outputArray;
+    for (var i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i)
+    }
+    return outputArray
 }
 
 
@@ -313,13 +333,8 @@ function convertDataURIToBinary(base64String) {
 
     @return {Promise}
 */
-function sleep(ms){
-    return new Promise(function(resolve) {
+function sleep(ms) {
+    return new Promise(function (resolve) {
         setTimeout(resolve, ms)
-    });
+    })
 }
-
-
-
-
-

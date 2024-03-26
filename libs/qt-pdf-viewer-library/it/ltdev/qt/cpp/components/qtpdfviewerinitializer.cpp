@@ -44,10 +44,10 @@ void QtPdfViewerInitializer::initialize() {
  */
 bool QtPdfViewerInitializer::initializeViewer(bool force) {
   if (!this->_initialized || force) {
-    //#ifdef Q_OS_ANDROID
-    //    _initialized = true;
-    //   emit viewerChanged();
-    //#else
+    // #ifdef Q_OS_ANDROID
+    //     _initialized = true;
+    //    emit viewerChanged();
+    // #else
     FileUtils::removeDir(this->_root);
 
     // Copy pdf js folder in the application path (it depends on platform)
@@ -63,7 +63,7 @@ bool QtPdfViewerInitializer::initializeViewer(bool force) {
         emit viewerChanged();
       }
     }
-    //#endif
+    // #endif
   }
 
   return this->_initialized;
@@ -83,6 +83,7 @@ QByteArray QtPdfViewerInitializer::pdfToBase64(const QString &path) {
     QFile input(path);
     if (input.open(QIODevice::ReadOnly)) {
       QByteArray base64 = input.readAll().toBase64();
+      qDebug() << "base64 path=" << path << "ok";
       return base64;
     }
   }

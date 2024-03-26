@@ -713,6 +713,15 @@ void Reader::initReader() {
   fileName = Reg.value("/Reader/FileName").toString();
   if (!QFile(fileName).exists() && zh_cn) fileName = ":/res/test.txt";
 
+  QString resFile = ":/res/pdfjs.zip";
+  if (QFile::exists(resFile)) {
+    deleteDirfile(privateDir + "pdfjs");
+    QString zipFile = privateDir + "pdfjs.zip";
+    QFile::remove(zipFile);
+    QFile::copy(resFile, zipFile);
+    m_Method->unzip(zipFile, privateDir + "pdfjs/");
+  }
+
   startOpenFile(fileName);
 
   getBookList();
@@ -1156,13 +1165,11 @@ void Reader::goPostion() {
     }
 
     if (isPDF) {
-      if (mw_one->pdfMethod == 1) {
-        int page = Reg.value("/Reader/PdfPage" + fi.baseName(), 1).toInt();
-        setPdfPage(page);
+      int page = Reg.value("/Reader/PdfPage" + fi.baseName(), 1).toInt();
+      setPdfPage(page);
 
-        qreal scale = Reg.value("/Reader/PdfScale" + fi.baseName(), 1).toReal();
-        setPdfScale(scale);
-      }
+      qreal scale = Reg.value("/Reader/PdfScale" + fi.baseName(), 1).toReal();
+      setPdfScale(scale);
     }
   }
 }
@@ -1694,12 +1701,9 @@ QString Reader::getCoverPicFile(QString htmlFile) {
 }
 
 void Reader::setPdfViewVisible(bool vv) {
-  if (mw_one->pdfMethod == 2) return;
-
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
-  if (mw_one->pdfMethod == 1)
-    QMetaObject::invokeMethod((QObject*)root, "setViewVisible",
-                              Q_ARG(QVariant, vv));
+  QMetaObject::invokeMethod((QObject*)root, "setViewVisible",
+                            Q_ARG(QVariant, vv));
 }
 
 int Reader::getPdfCurrentPage() {

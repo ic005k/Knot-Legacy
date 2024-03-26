@@ -23,6 +23,7 @@ QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
 int chartMax = 5;
+
 double yMaxMonth, yMaxDay;
 MainWindow *mw_one;
 Method *m_Method;
@@ -191,6 +192,7 @@ void MainWindow::readEBookDone() {
       ui->frameReaderFun->show();
       ui->lblBookName->show();
       ui->progReader->show();
+      ui->btnPages->show();
 
       ui->qwReader->rootContext()->setContextProperty("isWebViewShow", false);
       ui->qwReader->rootContext()->setContextProperty("strText", "");
@@ -228,14 +230,17 @@ void MainWindow::readEBookDone() {
 
     if (isPDF) {
       qDebug() << "Read Pdf... ..." << fileName;
-      m_Reader->setPdfViewVisible(true);
+
       ui->lblBookName->hide();
       ui->progReader->hide();
       ui->qwReader->hide();
       ui->frameReaderFun->hide();
+      ui->btnPages->hide();
+      ui->btnCatalogue->hide();
       ui->qwPdf->show();
 
       if (pdfMethod == 1) {
+        m_Reader->setPdfViewVisible(true);
         QQuickItem *root = ui->qwPdf->rootObject();
 
 #ifdef Q_OS_WIN
@@ -267,6 +272,7 @@ void MainWindow::readEBookDone() {
         str = PDFJS + "?file=file://" + fileName;
 
 #endif
+
         QUrl url;
         url.setUrl(str);
 

@@ -89,9 +89,10 @@ Item {
     function load(path) {
         // Convert pdf to base64
         var base64 = QtPdfViewerInitializer.pdfToBase64(path)
+        console.log("Read base64 done =" + path)
 
         // Load pdf
-        webView.runJavaScript("loadDocument(\"%1\");".arg(base64))
+        webView.runJavaScript("loadDocument_pdf(\"%1\");".arg(base64))
     }
 
     function geturl() {
@@ -381,6 +382,7 @@ Item {
             pdfView.opacity = 1
         }
     }
+
 
     /*
         The channel through which data is exchanged between qml and browser environment
