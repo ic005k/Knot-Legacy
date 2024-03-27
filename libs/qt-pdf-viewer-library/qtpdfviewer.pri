@@ -1,8 +1,7 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
-RESOURCES += \
-    $$PWD/pdfjs.qrc
+RESOURCES +=
 
 include($$PWD/it/ltdev/qt/qtpdfviewercomponents.pri)
 

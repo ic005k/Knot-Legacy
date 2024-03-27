@@ -109,7 +109,6 @@ function connectPdfViewerSignals() {
 */
 function loadDocument_pdf(base64) {
 
-
     // Delay load to allow the javascript
     // environment to be ready
     sleep(200).then(function () {
@@ -291,7 +290,6 @@ function extractThumbnails(scale, callbackOnExtractionCompleted) {
 
     @return {Uint8Array}
 */
-
 function base64ToUint8Array(base64) {
     const binaryString = atob(base64)
     const uint8Array = Uint8Array.from(binaryString, char => char.charCodeAt(0))

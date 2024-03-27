@@ -48,6 +48,7 @@ extern QStringList readTextList, htmlFiles, listCategory;
 extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern CategoryList *m_CategoryList;
+extern int deleteDirfile(QString dirName);
 
 void RegJni(const char *myClassName);
 
@@ -2939,7 +2940,7 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     }
 
     isZipOK = true;
-    mw_one->m_Reader->deleteDirfile(iniDir + "memo_bak");
+    deleteDirfile(iniDir + "memo_bak");
 
     // Remove old ini files
     QStringList iniFiles;
@@ -3742,6 +3743,8 @@ void MainWindow::init_Theme() {
 void MainWindow::init_Instance() {
   mw_one = this;
   CurrentYear = QString::number(QDate::currentDate().year());
+
+  LTDev::QtPdfViewerInitializer::initialize(privateDir);
 
   tabData = new QTabWidget;
   tabData = ui->tabWidget;

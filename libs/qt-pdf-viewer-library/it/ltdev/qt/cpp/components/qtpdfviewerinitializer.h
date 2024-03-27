@@ -50,7 +50,7 @@ class QtPdfViewerInitializer : public QObject,
   /**
    * @brief Initializes the library
    */
-  static void initialize();
+  static void initialize(QString p_dir);
 
   /**
    * @brief Initializes the viewer creating the folders needed for the pdf view.
@@ -80,11 +80,6 @@ class QtPdfViewerInitializer : public QObject,
   QString _root;
 
   /**
-   * @brief the path of the html viewer
-   */
-  QString _viewer;
-
-  /**
    * @brief flag to know if library has been already exported
    */
   bool _initialized;
@@ -93,6 +88,11 @@ class QtPdfViewerInitializer : public QObject,
    * @brief Constructor
    */
   QtPdfViewerInitializer();
+
+  /**
+   * @brief the path of the html viewer
+   */
+  QString _viewer;
 
  signals:
   void viewerChanged();

@@ -16,17 +16,22 @@
  *
  */
 #include "qtpdfviewerinitializer.h"
+
+#include "src/MainWindow.h"
+QString pDir;
 QString url;
 namespace LTDev {
 
 /**
  * Initializes the library
  */
-void QtPdfViewerInitializer::initialize() {
+void QtPdfViewerInitializer::initialize(QString p_dir) {
   // To make the Qt WebView module function correctly across all platforms,
   // it is necessary to call QtWebView::initialize() before in Qt>= 5.15.0, or
   // after in Qt<5.15.0, creating the QGuiApplication instance
   QtWebView::initialize();
+
+  pDir = p_dir;
 
   // Expose classes to qml
   qmlRegisterType<LTDev::WebSocketTransport>("it.ltdev.qt.cpp.components", 1, 0,
@@ -54,7 +59,9 @@ bool QtPdfViewerInitializer::initializeViewer(bool force) {
     // @note: the copy of the folder is necessary for Android devices
     // because webview cannot access files from qrc directly, so
     // we create a local folder from which files will be loaded.
-    bool copied = FileUtils::copyDirs(":/pdfjs", this->_root);
+
+    bool copied = true;  // FileUtils::copyDirs(":/pdfjs", this->_root);
+
     bool notify = _initialized != copied;
     if (notify) {
       _initialized = copied;
@@ -105,6 +112,16 @@ QObject *QtPdfViewerInitializer::getQmlInstance(QQmlEngine *engine,
  * @brief Constructor
  */
 QtPdfViewerInitializer::QtPdfViewerInitializer() {
+#ifdef Q_OS_ANDROID
+
+  pDir = "/storage/emulated/0/.Knot/";
+
+#else
+
+  pDir = QDir::homePath() + "/.Knot/";
+
+#endif
+
   QString appDir =
       QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
   QString dir = FileUtils::joinPaths(QStringList() << appDir << DIR::path);
@@ -120,8 +137,10 @@ QtPdfViewerInitializer::QtPdfViewerInitializer() {
   else
     this->_viewer = FileUtils::joinPaths(QStringList() << dir << "viewer.html");
 
+  this->_viewer = pDir + "pdfjs/web/viewer.html";
+
   url = this->_viewer;
-  qDebug() << "this viewer.html..." << this->_viewer;
+  qDebug() << "this viewer.html=" << this->_viewer;
 
   this->_initialized = false;
 }

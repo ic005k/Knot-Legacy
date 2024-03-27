@@ -7,23 +7,24 @@
 
 #include "MainWindow.h"
 #include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
+#include "src/Comm/qzipfile.h"
 
 extern QString iniFile, txtFile, appName, iniDir, privateDir, customFontFamily,
     defaultFontFamily;
 extern int fontSize;
 extern void RegJni(const char* myClassName);
 extern bool isDark;
+extern MainWindow* mw_one;
+extern QSettings* iniPreferences;
+
 void loadLocal();
+void unzip(QString zipFile, QString unzipDir);
+int deleteDirfile(QString dirName);
 
 bool zh_cn = false;
 bool isAndroid, isIOS;
 
-extern MainWindow* mw_one;
-extern QSettings* iniPreferences;
-
 int main(int argc, char* argv[]) {
-  LTDev::QtPdfViewerInitializer::initialize();
-
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
 #ifdef Q_OS_ANDROID
@@ -107,6 +108,15 @@ int main(int argc, char* argv[]) {
   privateDir = QDir::homePath() + "/." + appName + "/";
 
 #endif
+
+  QString resFile = ":/res/pdfjs.zip";
+  if (QFile::exists(resFile)) {
+    deleteDirfile(privateDir + "pdfjs");
+    QString zipFile = privateDir + "pdfjs.zip";
+    QFile::remove(zipFile);
+    QFile::copy(resFile, zipFile);
+    unzip(zipFile, privateDir);
+  }
 
   iniFile = iniDir + appName + ".ini";
 
@@ -225,4 +235,64 @@ void loadLocal() {
       zh_cn = true;
     }
   }
+}
+
+void unzip(QString zipFile, QString unzipDir) {
+  qompress::QZipFile zf(zipFile);
+  if (!zf.open(qompress::QZipFile::ReadOnly)) {
+    qDebug() << "Failed to open " << zipFile << ": " << zf.errorString();
+
+    return;
+  }
+  do {
+    qompress::QZipFileEntry file = zf.currentEntry();
+    QString strFile = file.name();
+    qDebug() << strFile << ":\t\t" << file.uncompressedSize()
+             << "bytes (uncompressed)";
+
+    QFileInfo fi(strFile);
+    QString path = unzipDir + fi.path();
+    QDir dir0(path);
+    if (!dir0.exists()) dir0.mkpath(path);
+
+    QFile myfile(unzipDir + strFile);
+    myfile.open(QIODevice::WriteOnly);
+    zf.extractCurrentEntry(myfile, "", file.uncompressedSize());
+    myfile.close();
+
+  } while (zf.nextEntry());
+  zf.close();
+}
+
+int deleteDirfile(QString dirName) {
+  QDir directory(dirName);
+  if (!directory.exists()) {
+    return true;
+  }
+
+  QString srcPath = QDir::toNativeSeparators(dirName);
+  if (!srcPath.endsWith(QDir::separator())) srcPath += QDir::separator();
+
+  QStringList fileNames = directory.entryList(
+      QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
+  bool error = false;
+  for (QStringList::size_type i = 0; i != fileNames.size(); ++i) {
+    QString filePath = srcPath + fileNames.at(i);
+    QFileInfo fileInfo(filePath);
+    if (fileInfo.isFile() || fileInfo.isSymLink()) {
+      QFile::setPermissions(filePath, QFile::WriteOwner);
+      if (!QFile::remove(filePath)) {
+        error = true;
+      }
+    } else if (fileInfo.isDir()) {
+      if (!deleteDirfile(filePath)) {
+        error = true;
+      }
+    }
+  }
+
+  if (!directory.rmdir(QDir::toNativeSeparators(directory.path()))) {
+    error = true;
+  }
+  return !error;
 }

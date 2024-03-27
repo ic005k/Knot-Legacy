@@ -1165,30 +1165,3 @@ qreal Method::getVPosForQW(QQuickWidget* qw) {
   qreal textPos = itemCount.toDouble();
   return textPos;
 }
-
-void Method::unzip(QString zipFile, QString unzipDir) {
-  qompress::QZipFile zf(zipFile);
-  if (!zf.open(qompress::QZipFile::ReadOnly)) {
-    qDebug() << "Failed to open " << zipFile << ": " << zf.errorString();
-
-    return;
-  }
-  do {
-    qompress::QZipFileEntry file = zf.currentEntry();
-    QString strFile = file.name();
-    qDebug() << strFile << ":\t\t" << file.uncompressedSize()
-             << "bytes (uncompressed)";
-
-    QFileInfo fi(strFile);
-    QString path = unzipDir + fi.path();
-    QDir dir0(path);
-    if (!dir0.exists()) dir0.mkpath(path);
-
-    QFile myfile(unzipDir + strFile);
-    myfile.open(QIODevice::WriteOnly);
-    zf.extractCurrentEntry(myfile, "", file.uncompressedSize());
-    myfile.close();
-
-  } while (zf.nextEntry());
-  zf.close();
-}

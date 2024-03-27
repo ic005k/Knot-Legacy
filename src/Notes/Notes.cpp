@@ -11,6 +11,7 @@ extern QString iniFile, iniDir, privateDir, currentMDFile;
 extern bool isAndroid, isIOS, isDark;
 extern int fontSize;
 extern QRegularExpression regxNumber;
+extern int deleteDirfile(QString dirName);
 
 Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
@@ -717,7 +718,7 @@ void Notes::zipMemo() {
 }
 
 void Notes::unzip(QString zipfile) {
-  mw_one->m_Reader->deleteDirfile(iniDir + "memo");
+  deleteDirfile(iniDir + "memo");
   QDir::setCurrent(iniDir);
 #ifdef Q_OS_MACOS
   QProcess *pro = new QProcess;

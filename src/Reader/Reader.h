@@ -60,7 +60,6 @@ class Reader : public QDialog {
   void goPostion();
   void setQMLText(QString);
 
-  static int deleteDirfile(QString dirName);
   void setQMLHtml(QString htmlFile, QString skipID);
   void setFontSize(int textFontSize);
   static void TextEditToFile(QPlainTextEdit *txtEdit, QString fileName);

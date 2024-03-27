@@ -2,6 +2,7 @@
 
 #include <QKeyEvent>
 
+#include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 #include "src/Comm/qzipfile.h"
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
@@ -11,6 +12,7 @@ extern Method* m_Method;
 extern QString iniFile, iniDir, privateDir;
 extern bool zh_cn, isAndroid, isIOS, isEBook, isReport, isDark;
 extern int fontSize;
+extern int deleteDirfile(QString dirName);
 
 bool isOpen = false;
 bool isEpub, isText, isPDF, isEpubError;
@@ -713,15 +715,6 @@ void Reader::initReader() {
   fileName = Reg.value("/Reader/FileName").toString();
   if (!QFile(fileName).exists() && zh_cn) fileName = ":/res/test.txt";
 
-  QString resFile = ":/res/pdfjs.zip";
-  if (QFile::exists(resFile)) {
-    deleteDirfile(privateDir + "pdfjs");
-    QString zipFile = privateDir + "pdfjs.zip";
-    QFile::remove(zipFile);
-    QFile::copy(resFile, zipFile);
-    m_Method->unzip(zipFile, privateDir + "pdfjs/");
-  }
-
   startOpenFile(fileName);
 
   getBookList();
@@ -1173,39 +1166,6 @@ void Reader::goPostion() {
       setPdfScale(scale);
     }
   }
-}
-
-int Reader::deleteDirfile(QString dirName) {
-  QDir directory(dirName);
-  if (!directory.exists()) {
-    return true;
-  }
-
-  QString srcPath = QDir::toNativeSeparators(dirName);
-  if (!srcPath.endsWith(QDir::separator())) srcPath += QDir::separator();
-
-  QStringList fileNames = directory.entryList(
-      QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
-  bool error = false;
-  for (QStringList::size_type i = 0; i != fileNames.size(); ++i) {
-    QString filePath = srcPath + fileNames.at(i);
-    QFileInfo fileInfo(filePath);
-    if (fileInfo.isFile() || fileInfo.isSymLink()) {
-      QFile::setPermissions(filePath, QFile::WriteOwner);
-      if (!QFile::remove(filePath)) {
-        error = true;
-      }
-    } else if (fileInfo.isDir()) {
-      if (!deleteDirfile(filePath)) {
-        error = true;
-      }
-    }
-  }
-
-  if (!directory.rmdir(QDir::toNativeSeparators(directory.path()))) {
-    error = true;
-  }
-  return !error;
 }
 
 void Reader::setFontSize(int textFontSize) {
