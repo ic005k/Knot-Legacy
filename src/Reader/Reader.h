@@ -34,6 +34,7 @@ class Reader : public QDialog {
   ~Reader();
   Ui::Reader *ui;
 
+  int pdfMethod = 1;
   QTimer *tmeShowEpubMsg;
   QDialog *frame;
   QString openfile;
@@ -106,6 +107,10 @@ class Reader : public QDialog {
 
   static void StringToFile(QString buffers, QString fileName);
   void removeBookList();
+  void readBookDone();
+  void setStatusBarHide();
+  void setStatusBarShow();
+  bool isStatusBarShow;
  public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();

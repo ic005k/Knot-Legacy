@@ -18,7 +18,7 @@
          Remove the comment if you do not require these default features. -->
 
 
-    <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
+    <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true" android:windowFullscreen="true"/>
     <application android:usesCleartextTraffic="true" android:hardwareAccelerated="true" android:requestLegacyExternalStorage="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Knot" android:extractNativeLibs="true" android:icon="@drawable/icon">
         <!-- android:windowSoftInputMode="adjustResize" -->
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.x.MyActivity" android:label="Knot" android:screenOrientation="portrait" android:launchMode="singleTop" android:theme="@style/splashScreenTheme" android:windowSoftInputMode="stateUnspecified">

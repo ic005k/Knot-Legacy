@@ -166,135 +166,7 @@ void ReadEBookThread::run() {
 
 void MainWindow::readEBookDone() {
   if (isEBook) {
-    if (isEpubError) {
-      mw_one->m_Reader->tmeShowEpubMsg->stop();
-      ui->lblEpubInfo->hide();
-      ui->pEpubProg->hide();
-      ui->btnReader->setEnabled(true);
-      ui->frameReaderFun->setEnabled(true);
-      closeProgress();
-      isReadEBookEnd = true;
-      ShowMessage *msg = new ShowMessage(mw_one);
-      msg->showMsg("Knot", tr("The EPUB file was opened with an error."), 1);
-
-      if (!isText) {
-        if (htmlFiles.count() > 0) isEpub = true;
-      }
-      return;
-    }
-
-    if (isText || isEpub) {
-      strShowMsg = "Read  EBook End...";
-
-      m_Reader->setPdfViewVisible(false);
-
-      ui->qwPdf->hide();
-      ui->qwReader->show();
-      ui->frameReaderFun->show();
-      ui->lblBookName->show();
-      ui->progReader->show();
-      ui->btnPages->show();
-
-      ui->qwReader->rootContext()->setContextProperty("isWebViewShow", false);
-      ui->qwReader->rootContext()->setContextProperty("strText", "");
-      ui->qwReader->rootContext()->setContextProperty("isSelText",
-                                                      mw_one->isSelText);
-      ui->qwReader->rootContext()->setContextProperty("isAni", true);
-      ui->qwReader->rootContext()->setContextProperty("aniW", mw_one->width());
-      ui->qwReader->rootContext()->setContextProperty("toW", 0);
-      ui->qwReader->setSource(
-          QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
-
-      if (isEpub) {
-        m_ReaderSet->ui->lblInfo->show();
-        ui->qwReader->rootContext()->setContextProperty("htmlPath", strOpfPath);
-        if (QFile(catalogueFile).exists()) {
-          ui->btnCatalogue->show();
-        } else
-          ui->btnCatalogue->hide();
-      }
-
-      if (isText) {
-        ui->btnBackDir->hide();
-        mw_one->ui->btnCatalogue->hide();
-        m_ReaderSet->ui->lblInfo->hide();
-      }
-    }
-
-    ui->lblBookName->setText(strTitle);
-    ui->btnReader->setEnabled(true);
-    ui->frameReaderFun->setEnabled(true);
-    ui->btnBackDir->hide();
-    mw_one->m_Reader->tmeShowEpubMsg->stop();
-    ui->lblEpubInfo->hide();
-    ui->pEpubProg->hide();
-
-    if (isPDF) {
-      qDebug() << "Read Pdf... ..." << fileName;
-
-      ui->lblBookName->hide();
-      ui->progReader->hide();
-      ui->qwReader->hide();
-      ui->frameReaderFun->hide();
-      ui->btnPages->hide();
-      ui->btnCatalogue->hide();
-      ui->qwPdf->show();
-
-      if (pdfMethod == 1) {
-        m_Reader->setPdfViewVisible(true);
-        QQuickItem *root = ui->qwPdf->rootObject();
-
-#ifdef Q_OS_WIN
-
-        QMetaObject::invokeMethod((QObject *)root, "setViewEnd",
-                                  Q_ARG(QVariant, true));
-#endif
-
-        QMetaObject::invokeMethod((QObject *)root, "loadPDF",
-                                  Q_ARG(QVariant, fileName));
-      }
-
-      if (pdfMethod == 2) {
-        ui->frameReaderFun->show();
-        QString PDFJS, str;
-
-#ifdef Q_OS_ANDROID
-        PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
-        PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";
-        str =
-            "https://mozilla.github.io/pdf.js/web/"
-            "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
-        str = PDFJS + "?file=" + fileName;
-        if (QFile("assets:/web/viewer.html").exists())
-          qDebug() << "viewer.html exists......";
-#else
-
-        PDFJS = "file://" + privateDir + "pdfjs/web/viewer.html";
-        str = PDFJS + "?file=file://" + fileName;
-
-#endif
-
-        QUrl url;
-        url.setUrl(str);
-
-        QQuickItem *root = ui->qwPdf->rootObject();
-        QMetaObject::invokeMethod((QObject *)root, "setPdfPath",
-                                  Q_ARG(QVariant, url));
-      }
-    }
-
-    m_Reader->goPostion();
-
-    for (int i = 0; i < m_Reader->bookList.count(); i++) {
-      QString str = m_Reader->bookList.at(i);
-      if (str.contains(fileName)) {
-        m_Reader->bookList.removeAt(i);
-        break;
-      }
-    }
-
-    m_Reader->bookList.insert(0, strTitle + "|" + fileName);
-
+    m_Reader->readBookDone();
     isEBook = false;
   }
 
@@ -3615,9 +3487,9 @@ void MainWindow::initQW() {
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
-  if (pdfMethod == 1)
+  if (m_Reader->pdfMethod == 1)
     ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
-  if (pdfMethod == 2)
+  if (m_Reader->pdfMethod == 2)
     ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
 }
 
@@ -5777,3 +5649,10 @@ void MainWindow::on_btnMenuReport_clicked() { m_Report->genReportMenu(); }
 void MainWindow::on_btnCatalogue_clicked() { m_Reader->showCatalogue(); }
 
 void MainWindow::on_btnRemoveBookList_clicked() { m_Reader->removeBookList(); }
+
+void MainWindow::on_btnStatusBar_clicked() {
+  if (m_Reader->isStatusBarShow)
+    m_Reader->setStatusBarHide();
+  else
+    m_Reader->setStatusBarShow();
+}

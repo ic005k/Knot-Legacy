@@ -86,7 +86,7 @@ Rectangle {
         }
     }
 
-    property int closedTopbarHeight: 30
+    property int closedTopbarHeight: 0 //30
     property int topbarHeight: {
         var h = closedTopbarHeight
         var optionsHeight = containerOptions.visible ? divider.height + containerOptions.height : 0
@@ -105,7 +105,7 @@ Rectangle {
             id: topbar
             width: parent.width
             height: topbarHeight
-            visible: isHeaderVisible
+            visible: false // isHeaderVisible
 
             Behavior on height {
                 SmoothedAnimation {
@@ -415,13 +415,21 @@ Rectangle {
                 }
             }
 
+            PinchArea {
+                anchors.fill: parent
+                pinch.target: pdfView
+                pinch.maximumScale: 1000
+                pinch.minimumScale: 0.00001
+                pinch.dragAxis: Pinch.XAndYAxis
+            }
+
 
             /*
                 Error info
             */
             CustomComponents.ContainerInfo {
                 id: containerError
-                visible: !pdfView.visible && textView.text.length > 0
+                visible:  !pdfView.visible && textView.text.length > 0
 
                 width: Math.min(parent.width / 2, 400)
                 height: 65

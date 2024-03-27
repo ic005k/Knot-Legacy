@@ -142,7 +142,6 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
-  int pdfMethod = 1;
   bool isEditItem = false;
   bool isDelItem = false;
 
@@ -724,6 +723,8 @@ class MainWindow : public QMainWindow {
   void on_btnCatalogue_clicked();
 
   void on_btnRemoveBookList_clicked();
+
+  void on_btnStatusBar_clicked();
 
  private:
   bool isShowDetails = false;

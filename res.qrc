@@ -152,5 +152,6 @@
         <file>res/recent_l.png</file>
         <file>res/ok_l.png</file>
         <file>res/pdfjs.zip</file>
+        <file>res/status.png</file>
     </qresource>
 </RCC>

@@ -10,7 +10,7 @@
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniFile, iniDir, privateDir;
-extern bool zh_cn, isAndroid, isIOS, isEBook, isReport, isDark;
+extern bool zh_cn, isAndroid, isIOS, isEBook, isReadEBookEnd, isReport, isDark;
 extern int fontSize;
 extern int deleteDirfile(QString dirName);
 
@@ -30,6 +30,7 @@ int zlibMethod = 1;
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
+  mw_one->ui->btnStatusBar->hide();
   mw_one->ui->lblTitle->hide();
   mw_one->ui->frameReaderFun2->hide();
   mw_one->ui->btnBackward->hide();
@@ -2034,4 +2035,172 @@ void Reader::removeBookList() {
   bookList.removeAt(index);
   m_Method->delItemFromQW(mw_one->ui->qwBookList, index);
   saveReader();
+}
+
+void Reader::readBookDone() {
+  if (isEpubError) {
+    tmeShowEpubMsg->stop();
+    mw_one->ui->lblEpubInfo->hide();
+    mw_one->ui->pEpubProg->hide();
+    mw_one->ui->btnReader->setEnabled(true);
+    mw_one->ui->frameReaderFun->setEnabled(true);
+    mw_one->closeProgress();
+    isReadEBookEnd = true;
+    ShowMessage* msg = new ShowMessage(mw_one);
+    msg->showMsg("Knot", tr("The EPUB file was opened with an error."), 1);
+
+    if (!isText) {
+      if (htmlFiles.count() > 0) isEpub = true;
+    }
+    return;
+  }
+
+  if (isText || isEpub) {
+    strShowMsg = "Read  EBook End...";
+
+    setPdfViewVisible(false);
+
+    mw_one->ui->qwPdf->hide();
+    mw_one->ui->qwReader->show();
+    mw_one->ui->frameReaderFun->show();
+    mw_one->ui->lblBookName->show();
+    mw_one->ui->progReader->show();
+    mw_one->ui->btnPages->show();
+
+    mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
+                                                            false);
+    mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
+    mw_one->ui->qwReader->rootContext()->setContextProperty("isSelText",
+                                                            mw_one->isSelText);
+    mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
+    mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
+                                                            mw_one->width());
+    mw_one->ui->qwReader->rootContext()->setContextProperty("toW", 0);
+    mw_one->ui->qwReader->setSource(
+        QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
+
+    if (isEpub) {
+      mw_one->m_ReaderSet->ui->lblInfo->show();
+      mw_one->ui->qwReader->rootContext()->setContextProperty("htmlPath",
+                                                              strOpfPath);
+      if (QFile(catalogueFile).exists()) {
+        mw_one->ui->btnCatalogue->show();
+      } else
+        mw_one->ui->btnCatalogue->hide();
+    }
+
+    if (isText) {
+      mw_one->ui->btnBackDir->hide();
+      mw_one->ui->btnCatalogue->hide();
+      mw_one->m_ReaderSet->ui->lblInfo->hide();
+    }
+  }
+
+  mw_one->ui->lblBookName->setText(strTitle);
+  mw_one->ui->btnReader->setEnabled(true);
+  mw_one->ui->frameReaderFun->setEnabled(true);
+  mw_one->ui->btnBackDir->hide();
+  tmeShowEpubMsg->stop();
+  mw_one->ui->lblEpubInfo->hide();
+  mw_one->ui->pEpubProg->hide();
+
+  if (isPDF) {
+    qDebug() << "Read Pdf... ..." << fileName;
+
+    mw_one->ui->lblBookName->hide();
+    mw_one->ui->progReader->hide();
+    mw_one->ui->qwReader->hide();
+    mw_one->ui->frameReaderFun->hide();
+    mw_one->ui->btnPages->hide();
+    mw_one->ui->btnCatalogue->hide();
+    mw_one->ui->qwPdf->show();
+
+    if (pdfMethod == 1) {
+      mw_one->ui->frameReaderFun->show();
+      setPdfViewVisible(true);
+      QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+
+#ifdef Q_OS_WIN
+
+      QMetaObject::invokeMethod((QObject*)root, "setViewEnd",
+                                Q_ARG(QVariant, true));
+#endif
+
+      QMetaObject::invokeMethod((QObject*)root, "loadPDF",
+                                Q_ARG(QVariant, fileName));
+    }
+
+    if (pdfMethod == 2) {
+      mw_one->ui->frameReaderFun->show();
+      QString PDFJS, str;
+
+#ifdef Q_OS_ANDROID
+      PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
+      PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";
+      str =
+          "https://mozilla.github.io/pdf.js/web/"
+          "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
+      str = PDFJS + "?file=" + fileName;
+      if (QFile("assets:/web/viewer.html").exists())
+        qDebug() << "viewer.html exists......";
+#else
+
+      PDFJS = "file://" + privateDir + "pdfjs/web/viewer.html";
+      str = PDFJS + "?file=file://" + fileName;
+
+#endif
+
+      QUrl url;
+      url.setUrl(str);
+
+      QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+      QMetaObject::invokeMethod((QObject*)root, "setPdfPath",
+                                Q_ARG(QVariant, url));
+    }
+  }
+
+  goPostion();
+
+  for (int i = 0; i < bookList.count(); i++) {
+    QString str = bookList.at(i);
+    if (str.contains(fileName)) {
+      bookList.removeAt(i);
+      break;
+    }
+  }
+  bookList.insert(0, strTitle + "|" + fileName);
+}
+
+void Reader::setStatusBarHide() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  m_activity.callMethod<void>("setStatusBarHide");
+
+#else
+  QJniObject m_activity = QNativeInterface::QAndroidApplication::context();
+  m_activity.callMethod<void>("setStatusBarHide");
+
+#endif
+
+#endif
+  isStatusBarShow = false;
+}
+
+void Reader::setStatusBarShow() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  m_activity.callMethod<void>("setStatusBarShow");
+
+#else
+  QJniObject m_activity = QNativeInterface::QAndroidApplication::context();
+  m_activity.callMethod<void>("setStatusBarShow");
+
+#endif
+
+#endif
+  isStatusBarShow = true;
 }

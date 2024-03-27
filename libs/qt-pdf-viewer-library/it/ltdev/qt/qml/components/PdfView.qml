@@ -383,6 +383,14 @@ Item {
         }
     }
 
+    PinchArea {
+        anchors.fill: parent
+        pinch.target: webView
+        pinch.maximumScale: 1000
+        pinch.minimumScale: 0.00001
+        pinch.dragAxis: Pinch.XAndYAxis
+    }
+
 
     /*
         The channel through which data is exchanged between qml and browser environment
