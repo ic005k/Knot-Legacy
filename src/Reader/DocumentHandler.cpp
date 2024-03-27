@@ -295,8 +295,8 @@ void DocumentHandler::parsingLink(QString linkFile) {
         for (int i = 0; i < buf_lists.count(); i++) {
           QString item = buf_lists.at(i);
           if (item.contains(str_id)) {
-            if (buf_lists.at(i + 1) == "<sup>" ||
-                buf_lists.at(i - 1) == "<sup>") {
+            if (buf_lists.at(i + 1).mid(0, 4) == "<sup" ||
+                buf_lists.at(i - 1).mid(0, 4) == "<sup") {
               is_sup = true;
               item = buf_lists.at(i + 1);
               i++;
