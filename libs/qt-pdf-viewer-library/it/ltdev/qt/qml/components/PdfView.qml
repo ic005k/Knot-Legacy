@@ -373,7 +373,7 @@ Item {
 
         Component.onCompleted: {
             QtPdfViewerInitializer.viewerChanged.connect(function () {
-                webView.url = "file://" + QtPdfViewerInitializer.viewer
+                webView.url = "file:///" + QtPdfViewerInitializer.viewer
             })
 
             QtPdfViewerInitializer.initializeViewer()
