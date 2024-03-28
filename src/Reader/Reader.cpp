@@ -1664,6 +1664,11 @@ void Reader::setPdfViewVisible(bool vv) {
                             Q_ARG(QVariant, vv));
 }
 
+void Reader::rotatePdfPage() {
+  QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "rotatePage");
+}
+
 int Reader::getPdfCurrentPage() {
   QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
@@ -2056,6 +2061,7 @@ void Reader::readBookDone() {
 
     setPdfViewVisible(false);
 
+    mw_one->ui->btnRotatePage->hide();
     mw_one->ui->btnStatusBar->hide();
     mw_one->ui->qwPdf->hide();
     mw_one->ui->qwReader->show();
@@ -2112,9 +2118,22 @@ void Reader::readBookDone() {
     mw_one->ui->btnPages->hide();
     mw_one->ui->btnCatalogue->hide();
     mw_one->ui->qwPdf->show();
+    mw_one->ui->btnRotatePage->show();
+
+#ifdef Q_OS_ANDROID
+    /*
+        // "/android_assets/" = "/data/user/0/com.x/files/"
+        QString mypdf = "/android_assets/mypdf.pdf";
+        // mypdf = "/data/user/0/com.x/files/mypdf.pdf";
+        QFile::remove(mypdf);
+        QFile::copy(fileName, mypdf);
+        if (QFile::exists(mypdf)) fileName = mypdf;*/
+
+#endif
 
     if (pdfMethod == 1) {
       setPdfViewVisible(true);
+
       QQuickItem* root = mw_one->ui->qwPdf->rootObject();
 
 #ifdef Q_OS_WIN
@@ -2130,21 +2149,8 @@ void Reader::readBookDone() {
     if (pdfMethod == 2) {
       QString PDFJS, str;
 
-#ifdef Q_OS_ANDROID
-      PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
-      PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";
-      str =
-          "https://mozilla.github.io/pdf.js/web/"
-          "viewer.html?file=compressed.tracemonkey-pldi-09.pdf";
-      str = PDFJS + "?file=" + fileName;
-      if (QFile("assets:/web/viewer.html").exists())
-        qDebug() << "viewer.html exists......";
-#else
-
-      PDFJS = "file://" + privateDir + "pdfjs/web/viewer.html";
-      str = PDFJS + "?file=file://" + fileName;
-
-#endif
+      PDFJS = "file:///" + privateDir + "pdfjs/web/viewer.html";
+      str = PDFJS + "?file=file:///" + fileName;
 
       QUrl url;
       url.setUrl(str);

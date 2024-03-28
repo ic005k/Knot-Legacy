@@ -725,6 +725,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnStatusBar_clicked();
 
+  void on_btnRotatePage_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

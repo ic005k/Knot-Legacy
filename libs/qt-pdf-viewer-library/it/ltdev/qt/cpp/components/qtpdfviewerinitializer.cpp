@@ -127,6 +127,11 @@ QtPdfViewerInitializer::QtPdfViewerInitializer() {
   QString dir = FileUtils::joinPaths(QStringList() << appDir << DIR::path);
   this->_root = dir;
 
+  // dir = "/data/user/0/com.x/files/libs/pdfjs/"
+  // appDir = "/data/user/0/com.x/files"
+  qDebug() << "=============="
+           << "this->_root =" << dir << appDir;
+
   bool isCN = false;
   QLocale locale;
   if (locale.language() == QLocale::Chinese) isCN = true;

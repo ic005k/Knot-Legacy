@@ -89,10 +89,12 @@ Item {
     function load(path) {
         // Convert pdf to base64
         var base64 = QtPdfViewerInitializer.pdfToBase64(path)
-        console.log("Read base64 done =" + path)
+        console.log("======read base64 done =" + path)
 
         // Load pdf
+        //webView.runJavaScript("loadDocument_pdf(\"%1\");".arg("file:///" + path))
         webView.runJavaScript("loadDocument_pdf(\"%1\");".arg(base64))
+        console.log("======load pdf done =" + path)
     }
 
     function geturl() {
@@ -145,6 +147,11 @@ Item {
         if (validMode) {
             webView.runJavaScript("setScrollMode(%1);".arg(scrollMode))
         }
+    }
+
+    function setViewerModes(scroll, spread) {
+        console.log("===PdfView.qml: setViewerModes...")
+        webView.runJavaScript("setViewerModes(%1,%2);".arg(scroll).arg(spread))
     }
 
 

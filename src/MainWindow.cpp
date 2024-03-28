@@ -5627,3 +5627,5 @@ void MainWindow::on_btnCatalogue_clicked() { m_Reader->showCatalogue(); }
 void MainWindow::on_btnRemoveBookList_clicked() { m_Reader->removeBookList(); }
 
 void MainWindow::on_btnStatusBar_clicked() { ui->frameReaderFun->hide(); }
+
+void MainWindow::on_btnRotatePage_clicked() { m_Reader->rotatePdfPage(); }

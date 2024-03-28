@@ -57,6 +57,11 @@ Rectangle {
     }
 
     function setViewVisible(vv) {
+        if(vv===true)
+            pdfView.opacity = 1
+        if(vv===false)
+            pdfView.opacity = 0
+
         pdfView.visible = vv
     }
 
@@ -81,9 +86,15 @@ Rectangle {
             pdfView.visible = true
             pdfView.opacity = 1
             pdfView.load(pdfPath)
-            console.debug("pdfFile is open ...... " + pdfView.webView.url
+            console.debug("======pdfFile is open: " + pdfView.webView.url
                           + "  isViewEnd=" + isViewEnd)
         }
+    }
+
+    function rotatePage() {
+        pdfView.rotate(-90)
+        //pdfView.setScrollMode(pdfView._SCROLL_MODE_HORIZONTAL)
+        pdfView.setViewerModes(pdfView._SCROLL_MODE_HORIZONTAL, 0)
     }
 
     property int closedTopbarHeight: 0 //30
@@ -160,9 +171,7 @@ Rectangle {
                             image.source: "qrc:/icons/r.png"
 
                             onClicked: {
-                                pdfView.rotate(-90)
-                                pdfView.setScrollMode(
-                                            pdfView._SCROLL_MODE_HORIZONTAL)
+                                rotatePage()
                             }
                         }
 
