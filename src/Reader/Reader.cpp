@@ -2056,6 +2056,7 @@ void Reader::readBookDone() {
 
     setPdfViewVisible(false);
 
+    mw_one->ui->btnStatusBar->hide();
     mw_one->ui->qwPdf->hide();
     mw_one->ui->qwReader->show();
     mw_one->ui->frameReaderFun->show();
@@ -2106,13 +2107,13 @@ void Reader::readBookDone() {
     mw_one->ui->lblBookName->hide();
     mw_one->ui->progReader->hide();
     mw_one->ui->qwReader->hide();
-    mw_one->ui->frameReaderFun->hide();
+    mw_one->ui->frameReaderFun->show();
+    mw_one->ui->btnStatusBar->show();
     mw_one->ui->btnPages->hide();
     mw_one->ui->btnCatalogue->hide();
     mw_one->ui->qwPdf->show();
 
     if (pdfMethod == 1) {
-      mw_one->ui->frameReaderFun->show();
       setPdfViewVisible(true);
       QQuickItem* root = mw_one->ui->qwPdf->rootObject();
 
@@ -2127,7 +2128,6 @@ void Reader::readBookDone() {
     }
 
     if (pdfMethod == 2) {
-      mw_one->ui->frameReaderFun->show();
       QString PDFJS, str;
 
 #ifdef Q_OS_ANDROID

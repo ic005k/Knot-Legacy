@@ -392,7 +392,6 @@ Rectangle {
 
                     pdfView.visible = true
                     pdfView.opacity = 1
-
                     pdfView.load(pdfPath)
                     isViewEnd = true
 
@@ -429,7 +428,7 @@ Rectangle {
             */
             CustomComponents.ContainerInfo {
                 id: containerError
-                visible:  !pdfView.visible && textView.text.length > 0
+                visible: !pdfView.visible && textView.text.length > 0
 
                 width: Math.min(parent.width / 2, 400)
                 height: 65

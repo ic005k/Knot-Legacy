@@ -2432,6 +2432,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       return true;
     }
 
+    if (keyEvent->key() == Qt::Key_Escape) {
+      if (ui->frameReader->isVisible()) on_btnBackReader_clicked();
+      return true;
+    }
+
     if (keyEvent->key() == Qt::Key_Back) {
       if (!ui->frameReader->isHidden()) {
         if (ui->qwCata->isVisible()) {
@@ -4323,10 +4328,16 @@ void MainWindow::on_btnReader_clicked() {
     ui->qwReader->rootContext()->setContextProperty("myH", mwh);
   }
 
-  if (isPDF) m_Reader->setPdfViewVisible(true);
+  if (isPDF) {
+    ui->btnStatusBar->show();
+    m_Reader->setPdfViewVisible(true);
+  } else {
+    ui->btnStatusBar->hide();
+  }
 
   ui->frameMain->hide();
   ui->frameReader->show();
+  ui->frameReaderFun->show();
 
   if (!isOne) {
     isOne = true;
@@ -5615,9 +5626,4 @@ void MainWindow::on_btnCatalogue_clicked() { m_Reader->showCatalogue(); }
 
 void MainWindow::on_btnRemoveBookList_clicked() { m_Reader->removeBookList(); }
 
-void MainWindow::on_btnStatusBar_clicked() {
-  if (m_Reader->isStatusBarShow)
-    m_Reader->setStatusBarHide();
-  else
-    m_Reader->setStatusBarShow();
-}
+void MainWindow::on_btnStatusBar_clicked() { ui->frameReaderFun->hide(); }

@@ -155,5 +155,6 @@
         <file>res/pdf/qwebchannel.js</file>
         <file>res/pdf/pdf.viewer.bridge.js</file>
         <file>res/pdf/pdfjs.zip</file>
+        <file>res/hide_l.png</file>
     </qresource>
 </RCC>
