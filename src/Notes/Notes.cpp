@@ -12,6 +12,9 @@ extern bool isAndroid, isIOS, isDark;
 extern int fontSize;
 extern QRegularExpression regxNumber;
 extern int deleteDirfile(QString dirName);
+extern QString loadText(QString textFile);
+extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
+extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 
 Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
@@ -211,7 +214,7 @@ void Notes::MD2Html(QString mdFile) {
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
     QTextEdit *edit = new QTextEdit();
-    QString strmd = mw_one->loadText(mdFile);
+    QString strmd = loadText(mdFile);
     if (strmd.contains(imgDir)) {
 #ifdef Q_OS_WIN
       strmd = strmd.replace(imgDir, "/" + iniDir);
@@ -238,7 +241,7 @@ void Notes::saveMainNotes() {
   saveQMLVPos();
 
   if (isTextChange) {
-    mw_one->TextEditToFile(m_EditSource, currentMDFile);
+    TextEditToFile(m_EditSource, currentMDFile);
     MD2Html(currentMDFile);
 
     qDebug() << "Save Note: " << currentMDFile;
@@ -631,12 +634,12 @@ void Notes::insertImage(QString fileName) {
 
 QStringList Notes::getImgFileFromHtml(QString htmlfile) {
   QStringList list;
-  QString strHtml = mw_one->loadText(htmlfile);
+  QString strHtml = loadText(htmlfile);
   strHtml = strHtml.replace("><", ">\n<");
   QTextEdit *edit = new QTextEdit;
   edit->setPlainText(strHtml);
   for (int i = 0; i < edit->document()->lineCount(); i++) {
-    QString str = mw_one->m_Reader->getTextEditLineText(edit, i).trimmed();
+    QString str = getTextEditLineText(edit, i).trimmed();
     if (str.contains("<img src=")) {
       str = str.replace("<img src=", "");
       str = str.replace("/>", "");
@@ -779,12 +782,12 @@ void Notes::loadMemoQML() {
   QString htmlFileName = privateDir + "memo.html";
   QTextEdit *edit = new QTextEdit;
   QPlainTextEdit *edit1 = new QPlainTextEdit;
-  QString strhtml = mw_one->loadText(htmlFileName);
+  QString strhtml = loadText(htmlFileName);
   strhtml = strhtml.replace("><", ">\n<");
   edit->setPlainText(strhtml);
   QString str;
   for (int i = 0; i < edit->document()->lineCount(); i++) {
-    str = mw_one->m_Reader->getTextEditLineText(edit, i);
+    str = getTextEditLineText(edit, i);
     str = str.trimmed();
     if (str.mid(0, 4) == "<img" && str.contains("file://")) {
       QString str1 = str;
@@ -1453,7 +1456,7 @@ bool Notes::selectPDFFormat(QPrinter *printer) {
 }
 
 void Notes::on_btnPDF_clicked() {
-  QString html = mw_one->loadText(privateDir + "memo.html");
+  QString html = loadText(privateDir + "memo.html");
   auto doc = new QTextDocument(this);
   doc->setHtml(html);
 

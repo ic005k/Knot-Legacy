@@ -40,7 +40,7 @@ Rectangle {
     }
 
     function loadPDF(pdffile) {
-        pdfFile = "file://" + pdffile
+        pdfFile = "file:///" + pdffile
         isPDF = true
         isEPUBText = false
         console.debug(pdfFile)

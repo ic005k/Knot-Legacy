@@ -45,10 +45,14 @@ extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2;
 extern QStringList readTextList, htmlFiles, listCategory;
-extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern CategoryList *m_CategoryList;
+
+extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern int deleteDirfile(QString dirName);
+extern QString loadText(QString textFile);
+extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
+extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 
 void RegJni(const char *myClassName);
 
@@ -1477,45 +1481,6 @@ void MainWindow::get_Today(QTreeWidget *tw) {
 
   } else
     today = 0;
-}
-
-QString MainWindow::loadText(QString textFile) {
-  bool isExists = QFile(textFile).exists();
-  if (isExists) {
-    QFile file(textFile);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-      qDebug() << tr("Cannot read file %1:\n%2.")
-                      .arg(QDir::toNativeSeparators(textFile),
-                           file.errorString());
-
-    } else {
-      QTextStream in(&file);
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      in.setCodec("UTF-8");
-#endif
-
-      QString text = in.readAll();
-      return text;
-    }
-    file.close();
-  }
-
-  return "";
-}
-
-void MainWindow::TextEditToFile(QTextEdit *txtEdit, QString fileName) {
-  QFile *file;
-  file = new QFile;
-  file->setFileName(fileName);
-  bool ok = file->open(QIODevice::WriteOnly | QIODevice::Text);
-  if (ok) {
-    QTextStream out(file);
-    out << txtEdit->toPlainText();
-    file->close();
-    delete file;
-  } else
-    qDebug() << "Write failure!" << fileName;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -4614,7 +4579,7 @@ void MainWindow::on_btnEdit_clicked() {
   delete m_Notes->m_TextSelector;
   m_Notes->m_TextSelector = new TextSelector(m_Notes);
 
-  QString mdfile = mw_one->loadText(currentMDFile);
+  QString mdfile = loadText(currentMDFile);
 
   m_Notes->init();
   m_Notes->m_EditSource->setPlainText(mdfile);

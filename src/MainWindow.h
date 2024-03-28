@@ -256,8 +256,7 @@ class MainWindow : public QMainWindow {
 
   static void saveData(QTreeWidget *, int);
   static void readData(QTreeWidget *);
-  static QString loadText(QString textFile);
-  static void TextEditToFile(QTextEdit *txtEdit, QString fileName);
+
   void initChartMonth();
   void initChartDay();
   static void saveRemarks(int);

@@ -11,6 +11,10 @@ extern QString iniDir, privateDir, currentMDFile;
 extern bool isAndroid, isDark;
 extern int fontSize;
 
+extern QString loadText(QString textFile);
+extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
+extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
+
 NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->setupUi(this);
   this->installEventFilter(this);
@@ -164,7 +168,7 @@ void NotesList::on_btnNewNote_clicked() {
   item1->setIcon(0, QIcon(":/res/n.png"));
 
   QTextEdit *edit = new QTextEdit();
-  mw_one->TextEditToFile(edit, iniDir + noteFile);
+  TextEditToFile(edit, iniDir + noteFile);
 
   ui->treeWidget->setCurrentItem(item1);
   on_treeWidget_itemClicked(item1, 0);
@@ -517,11 +521,11 @@ bool NotesList::on_btnImport_clicked() {
       QString a = "memo/" + mw_one->m_Notes->getDateTimeStr() + "_" +
                   QString::number(i) + ".md";
       currentMDFile = iniDir + a;
-      QString str = mw_one->loadText(fileName);
+      QString str = loadText(fileName);
       QTextEdit *edit = new QTextEdit();
       edit->setAcceptRichText(false);
       edit->setPlainText(str);
-      mw_one->TextEditToFile(edit, currentMDFile);
+      TextEditToFile(edit, currentMDFile);
 
       item1->setText(1, a);
 
@@ -549,12 +553,12 @@ void NotesList::on_btnExport_clicked() {
 
   QString mdfile = iniDir + item->text(1);
 
-  QString str = mw_one->loadText(mdfile);
+  QString str = loadText(mdfile);
   QTextEdit *edit = new QTextEdit();
   edit->setAcceptRichText(false);
   edit->setPlainText(str);
 
-  mw_one->TextEditToFile(edit, fileName);
+  TextEditToFile(edit, fileName);
 }
 
 void NotesList::closeEvent(QCloseEvent *event) {
@@ -1082,7 +1086,7 @@ void NotesList::clearMD_Pic(QTreeWidget *tw) {
 }
 
 void NotesList::removePicFromMD(QString mdfile) {
-  QString txt = mw_one->loadText(mdfile);
+  QString txt = loadText(mdfile);
 
   for (int i = 0; i < files.count(); i++) {
     QString str0 = files.at(i);

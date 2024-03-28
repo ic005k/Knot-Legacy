@@ -13,6 +13,9 @@ extern QString iniFile, iniDir, privateDir;
 extern bool zh_cn, isAndroid, isIOS, isEBook, isReadEBookEnd, isReport, isDark;
 extern int fontSize;
 extern int deleteDirfile(QString dirName);
+extern QString loadText(QString textFile);
+extern QString getTextEditLineText(QTextEdit* txtEdit, int i);
+extern void TextEditToFile(QTextEdit* txtEdit, QString fileName);
 
 bool isOpen = false;
 bool isEpub, isText, isPDF, isEpubError;
@@ -557,7 +560,7 @@ void Reader::openFile(QString openfile) {
         }
 
         catalogueFile.replace(dirpath, dirpath1);
-        QString str_cate = mw_one->loadText(catalogueFile);
+        QString str_cate = loadText(catalogueFile);
         str_cate.replace(dirpath, dirpath1);
         StringToFile(str_cate, catalogueFile);
       }
@@ -650,13 +653,6 @@ QString Reader::get_href(QString idref, QStringList opfList) {
   }
 
   return "";
-}
-
-QString Reader::getTextEditLineText(QTextEdit* txtEdit, int i) {
-  QTextBlock block = txtEdit->document()->findBlockByNumber(i);
-  txtEdit->setTextCursor(QTextCursor(block));
-  QString lineText = txtEdit->document()->findBlockByNumber(i).text();
-  return lineText;
 }
 
 void Reader::saveReader() {
@@ -892,7 +888,7 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
     for (int i = 0; i < htmlFiles.count(); i++) {
       if (index + i < htmlFiles.count()) {
         strfile = htmlFiles.at(index + i);
-        QString buffers = mw_one->loadText(strfile);
+        QString buffers = loadText(strfile);
         if (buffers.contains(skipid)) {
           html = strfile;
           count0 = i;
@@ -931,7 +927,7 @@ QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
 
   QPlainTextEdit* plain_edit = new QPlainTextEdit;
   QTextEdit* text_edit = new QTextEdit;
-  QString strHtml = mw_one->loadText(htmlFile);
+  QString strHtml = loadText(htmlFile);
   strHtml.replace("　", " ");
   strHtml.replace("<", "\n<");
   strHtml.replace(">", ">\n");
@@ -1345,7 +1341,7 @@ void Reader::SplitFile(QString qfile) {
 
   QFileInfo fi(qfile);
 
-  QString text = mw_one->loadText(qfile);
+  QString text = loadText(qfile);
   text.replace("<", "\n<");
   text.replace(">", ">\n");
   text = text.trimmed();
@@ -1834,7 +1830,7 @@ QStringList Reader::ncx2html() {
 
   QTextEdit* text_edit = new QTextEdit;
   QTextEdit* text_edit0 = new QTextEdit;
-  QString strHtml0 = mw_one->loadText(ncxFile);
+  QString strHtml0 = loadText(ncxFile);
   strHtml0 = strHtml0.replace("　", " ");
   strHtml0 = strHtml0.replace("<", "\n<");
   strHtml0 = strHtml0.replace(">", ">\n");
@@ -1942,7 +1938,7 @@ void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
   textBrowser->setFont(font);
 
   if (isEpub) {
-    QString str = mw_one->loadText(htmlFile);
+    QString str = loadText(htmlFile);
     str.replace("..", strOpfPath);
     QDir dir;
     dir.setCurrent(strOpfPath);

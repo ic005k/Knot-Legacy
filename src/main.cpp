@@ -20,6 +20,9 @@ extern QSettings* iniPreferences;
 void loadLocal();
 void unzip(QString zipFile, QString unzipDir);
 int deleteDirfile(QString dirName);
+QString loadText(QString textFile);
+QString getTextEditLineText(QTextEdit* txtEdit, int i);
+void TextEditToFile(QTextEdit* txtEdit, QString fileName);
 
 bool zh_cn = false;
 bool isAndroid, isIOS;
@@ -109,13 +112,36 @@ int main(int argc, char* argv[]) {
 
 #endif
 
-  QString resFile = ":/res/pdfjs.zip";
+  QString resFile = ":/res/pdf/pdfjs.zip";
   if (QFile::exists(resFile)) {
     deleteDirfile(privateDir + "pdfjs");
     QString zipFile = privateDir + "pdfjs.zip";
     QFile::remove(zipFile);
     QFile::copy(resFile, zipFile);
     unzip(zipFile, privateDir);
+
+    QFile::copy(":/res/pdf/pdf.viewer.bridge.js",
+                privateDir + "pdfjs/web/pdf.viewer.bridge.js");
+    QFile::copy(":/res/pdf/qwebchannel.js",
+                privateDir + "pdfjs/web/qwebchannel.js");
+
+    QTextEdit* text_edit = new QTextEdit();
+    QString view_html = privateDir + "pdfjs/web/viewer.html";
+    text_edit->setPlainText(loadText(view_html));
+    for (int i = 0; i < text_edit->document()->lineCount(); i++) {
+      QString str = getTextEditLineText(text_edit, i);
+      str = str.trimmed();
+      if (str.contains("</head>")) {
+        QString s1, s2;
+        s1 = "<script type=\"text/javascript\" "
+             "src=\"qwebchannel.js\"></script>\n";
+        s2 = "<script src=\"pdf.viewer.bridge.js\"></script>\n";
+        text_edit->insertPlainText(s1);
+        text_edit->insertPlainText(s2);
+        break;
+      }
+    }
+    TextEditToFile(text_edit, view_html);
   }
 
   iniFile = iniDir + appName + ".ini";
@@ -295,4 +321,48 @@ int deleteDirfile(QString dirName) {
     error = true;
   }
   return !error;
+}
+
+QString loadText(QString textFile) {
+  bool isExists = QFile(textFile).exists();
+  if (isExists) {
+    QFile file(textFile);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+      qDebug() << "Cannot read file";
+
+    } else {
+      QTextStream in(&file);
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+      in.setCodec("UTF-8");
+#endif
+
+      QString text = in.readAll();
+      return text;
+    }
+    file.close();
+  }
+
+  return "";
+}
+
+QString getTextEditLineText(QTextEdit* txtEdit, int i) {
+  QTextBlock block = txtEdit->document()->findBlockByNumber(i);
+  txtEdit->setTextCursor(QTextCursor(block));
+  QString lineText = txtEdit->document()->findBlockByNumber(i).text();
+  return lineText;
+}
+
+void TextEditToFile(QTextEdit* txtEdit, QString fileName) {
+  QFile* file;
+  file = new QFile;
+  file->setFileName(fileName);
+  bool ok = file->open(QIODevice::WriteOnly | QIODevice::Text);
+  if (ok) {
+    QTextStream out(file);
+    out << txtEdit->toPlainText();
+    file->close();
+    delete file;
+  } else
+    qDebug() << "Write failure!" << fileName;
 }

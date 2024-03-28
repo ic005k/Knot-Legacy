@@ -55,8 +55,6 @@ class Reader : public QDialog {
   static void openFile(QString fileName);
   qulonglong vpos;
 
-  static QString getTextEditLineText(QTextEdit *txtEdit, int i);
-
   static QStringList readText(QString textFile);
   void goPostion();
   void setQMLText(QString);
