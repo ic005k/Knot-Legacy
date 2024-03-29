@@ -108,17 +108,27 @@ function connectPdfViewerSignals() {
     @param base64 {string}: the base64 document to load
 */
 function loadDocument_pdf(base64) {
-
     // Delay load to allow the javascript
     // environment to be ready
     sleep(200).then(function () {
 
         console.warn("Start load array......")
         var array = base64ToUint8Array(base64)
-        //var array = convertDataURIToBinary(base64)
-
         // Load pdf document as an Uint8Array
         PDFViewerApplication.open(array)
+    })
+}
+
+function loadDocument_pdf_file(file) {
+
+    // Delay load to allow the javascript
+    // environment to be ready
+    sleep(200).then(function () {
+
+        console.warn("======start load file=" + file)
+
+        // Load pdf document as an file
+        PDFViewerApplication.open(file)
     })
 }
 

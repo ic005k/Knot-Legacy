@@ -103,7 +103,6 @@ class Reader : public QDialog {
   void on_hSlider_sliderReleased(int position);
   void setHtmlSkip(QString htmlFile, QString skipID);
 
-  static void StringToFile(QString buffers, QString fileName);
   void removeBookList();
   void readBookDone();
   void setStatusBarHide();

@@ -90,12 +90,16 @@ QByteArray QtPdfViewerInitializer::pdfToBase64(const QString &path) {
     QFile input(path);
     if (input.open(QIODevice::ReadOnly)) {
       QByteArray base64 = input.readAll().toBase64();
-      qDebug() << "base64 path=" << path << "ok";
       return base64;
     }
   }
 
   return QByteArray();
+}
+
+const uint8_t *QtPdfViewerInitializer::ByteArrayToUnit8Array(
+    QByteArray base64) {
+  return reinterpret_cast<const uint8_t *>(base64.data());
 }
 
 /**

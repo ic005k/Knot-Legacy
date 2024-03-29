@@ -87,14 +87,20 @@ Item {
         @param path {string}: the path of the pdf to load
     */
     function load(path) {
-        // Convert pdf to base64
-        var base64 = QtPdfViewerInitializer.pdfToBase64(path)
-        console.log("======read base64 done =" + path)
+        var method = 1
+        if (method === 1) {
+            // Convert pdf to base64
+            var base64 = QtPdfViewerInitializer.pdfToBase64(path)
+            webView.runJavaScript("loadDocument_pdf(\"%1\");".arg(base64))
+            console.log("======read base64 done =" + path)
+        }
 
-        // Load pdf
-        //webView.runJavaScript("loadDocument_pdf(\"%1\");".arg("file:///" + path))
-        webView.runJavaScript("loadDocument_pdf(\"%1\");".arg(base64))
-        console.log("======load pdf done =" + path)
+        if (method === 2) {
+            webView.runJavaScript("loadDocument_pdf_file(\"%1\");".arg(
+                                      "file:///" + path))
+
+            console.log("======load pdf file done =" + path)
+        }
     }
 
     function geturl() {

@@ -63,6 +63,8 @@ class QtPdfViewerInitializer : public QObject,
    **/
   Q_INVOKABLE static QByteArray pdfToBase64(const QString &path);
 
+  Q_INVOKABLE const uint8_t *ByteArrayToUnit8Array(QByteArray base64);
+
   Q_INVOKABLE QString root() { return this->_root; }
   QString viewer() { return this->_viewer; }
 

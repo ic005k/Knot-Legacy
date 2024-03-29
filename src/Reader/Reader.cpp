@@ -16,6 +16,7 @@ extern int deleteDirfile(QString dirName);
 extern QString loadText(QString textFile);
 extern QString getTextEditLineText(QTextEdit* txtEdit, int i);
 extern void TextEditToFile(QTextEdit* txtEdit, QString fileName);
+extern void StringToFile(QString buffers, QString fileName);
 
 bool isOpen = false;
 bool isEpub, isText, isPDF, isEpubError;
@@ -1192,20 +1193,6 @@ void Reader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
     qDebug() << "Write failure!" << fileName;
 }
 
-void Reader::StringToFile(QString buffers, QString fileName) {
-  QFile* file;
-  file = new QFile;
-  file->setFileName(fileName);
-  bool ok = file->open(QIODevice::WriteOnly | QIODevice::Text);
-  if (ok) {
-    QTextStream out(file);
-    out << buffers;
-    file->close();
-    delete file;
-  } else
-    qDebug() << "Write failure!" << fileName;
-}
-
 void Reader::savePageVPos() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -2121,13 +2108,14 @@ void Reader::readBookDone() {
     mw_one->ui->btnRotatePage->show();
 
 #ifdef Q_OS_ANDROID
-    /*
-        // "/android_assets/" = "/data/user/0/com.x/files/"
-        QString mypdf = "/android_assets/mypdf.pdf";
-        // mypdf = "/data/user/0/com.x/files/mypdf.pdf";
-        QFile::remove(mypdf);
-        QFile::copy(fileName, mypdf);
-        if (QFile::exists(mypdf)) fileName = mypdf;*/
+
+    // "/android_assets/" = "/data/user/0/com.x/files/"
+    QString mypdf = "/android_assets/mypdf.pdf";
+    mypdf = "/data/user/0/com.x/files/mypdf.pdf";
+
+    QFile::remove(mypdf);
+    QFile::copy(fileName, mypdf);
+    if (QFile::exists(mypdf)) fileName = mypdf;
 
 #endif
 

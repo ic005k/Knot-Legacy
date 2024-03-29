@@ -23,6 +23,7 @@ int deleteDirfile(QString dirName);
 QString loadText(QString textFile);
 QString getTextEditLineText(QTextEdit* txtEdit, int i);
 void TextEditToFile(QTextEdit* txtEdit, QString fileName);
+void StringToFile(QString buffers, QString fileName);
 
 bool zh_cn = false;
 bool isAndroid, isIOS;
@@ -142,6 +143,12 @@ int main(int argc, char* argv[]) {
       }
     }
     TextEditToFile(text_edit, view_html);
+
+    QString v_js = privateDir + "pdfjs/web/viewer.js";
+    QString v_jsBuffers = loadText(v_js);
+    v_jsBuffers.replace("value: \"compressed.tracemonkey-pldi-09.pdf\",",
+                        "// value: \"compressed.tracemonkey-pldi-09.pdf\",");
+    StringToFile(v_jsBuffers, v_js);
   }
 
   iniFile = iniDir + appName + ".ini";
@@ -361,6 +368,20 @@ void TextEditToFile(QTextEdit* txtEdit, QString fileName) {
   if (ok) {
     QTextStream out(file);
     out << txtEdit->toPlainText();
+    file->close();
+    delete file;
+  } else
+    qDebug() << "Write failure!" << fileName;
+}
+
+void StringToFile(QString buffers, QString fileName) {
+  QFile* file;
+  file = new QFile;
+  file->setFileName(fileName);
+  bool ok = file->open(QIODevice::WriteOnly | QIODevice::Text);
+  if (ok) {
+    QTextStream out(file);
+    out << buffers;
     file->close();
     delete file;
   } else
