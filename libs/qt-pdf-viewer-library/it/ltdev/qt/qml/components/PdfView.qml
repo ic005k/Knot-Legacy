@@ -402,13 +402,15 @@ Item {
         PinchArea {
             anchors.fill: parent
             pinch.target: webView
-            pinch.maximumScale: setScale(500)
-            pinch.minimumScale: setScale(10)
+            pinch.maximumScale: 1000
+            pinch.minimumScale: 10
             pinch.dragAxis: Pinch.XAndYAxis
+
+            onPinchStarted: {
+
+            }
         }
     }
-
-
 
 
     /*

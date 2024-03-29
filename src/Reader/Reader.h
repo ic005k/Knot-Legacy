@@ -110,6 +110,7 @@ class Reader : public QDialog {
   bool isStatusBarShow;
   void rotatePdfPage();
   int getLoadProgress();
+  void goWebViewBack();
   public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();

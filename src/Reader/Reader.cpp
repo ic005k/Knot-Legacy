@@ -1291,6 +1291,11 @@ int Reader::getLoadProgress() {
   return nProgress.toInt();
 }
 
+void Reader::goWebViewBack() {
+  QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "goWebViewBack");
+}
+
 qreal Reader::getVHeight() {
   QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
@@ -2056,6 +2061,7 @@ void Reader::readBookDone() {
 
     setPdfViewVisible(false);
 
+    mw_one->ui->btnGoBack->hide();
     mw_one->ui->btnRotatePage->hide();
     mw_one->ui->btnStatusBar->hide();
     mw_one->ui->qwPdf->hide();
@@ -2114,6 +2120,7 @@ void Reader::readBookDone() {
     mw_one->ui->btnCatalogue->hide();
     mw_one->ui->qwPdf->show();
     mw_one->ui->btnRotatePage->show();
+    mw_one->ui->btnGoBack->show();
 
 #ifdef Q_OS_ANDROID
     if (pdfMethod == -1) {

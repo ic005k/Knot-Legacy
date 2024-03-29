@@ -28,8 +28,12 @@ Rectangle {
     property bool isOne: true
     property bool isHeaderVisible: true
 
-    function getLoadProgress()
+    function goWebViewBack()
     {
+        pdfView.webView.goBack();
+    }
+
+    function getLoadProgress() {
         return pdfView.webView.loadProgress
     }
 
@@ -427,14 +431,6 @@ Rectangle {
                                 "===onPdfLoaded=  " + currentPage + "  "
                                 + currentScale + " " + pdfView.webView.loadProgress)
                 }
-            }
-
-            PinchArea {
-                anchors.fill: parent
-                pinch.target: pdfView
-                pinch.maximumScale: pdfView.setScale(500)
-                pinch.minimumScale: pdfView.setScale(10)
-                pinch.dragAxis: Pinch.XAndYAxis
             }
 
 
