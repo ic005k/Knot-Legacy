@@ -1283,6 +1283,14 @@ qreal Reader::getVPos() {
   return textPos;
 }
 
+int Reader::getLoadProgress() {
+  QVariant nProgress;
+  QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getLoadProgress",
+                            Q_RETURN_ARG(QVariant, nProgress));
+  return nProgress.toInt();
+}
+
 qreal Reader::getVHeight() {
   QVariant itemCount;
   QQuickItem* root = mw_one->ui->qwReader->rootObject();
@@ -2002,6 +2010,17 @@ QString Reader::getSkipText(QString htmlFile, QString skipID) {
 }
 
 void Reader::showEpubMsg() {
+  if (isPDF) {
+    int prog = getLoadProgress();
+    strPercent = QString::number(prog);
+    strShowMsg = "Load PDF ......";
+    if (prog == 100) {
+      tmeShowEpubMsg->stop();
+      mw_one->ui->lblEpubInfo->hide();
+      mw_one->ui->pEpubProg->hide();
+    }
+  }
+
   if (strShowMsg != "") {
     mw_one->ui->lblEpubInfo->show();
     mw_one->ui->pEpubProg->show();
@@ -2095,7 +2114,7 @@ void Reader::readBookDone() {
   mw_one->ui->pEpubProg->hide();
 
   if (isPDF) {
-    qDebug() << "Read Pdf... ..." << fileName;
+    qDebug() << "===Read Pdf... ..." << fileName;
 
     mw_one->ui->lblBookName->hide();
     mw_one->ui->progReader->hide();
@@ -2108,15 +2127,15 @@ void Reader::readBookDone() {
     mw_one->ui->btnRotatePage->show();
 
 #ifdef Q_OS_ANDROID
+    if (pdfMethod == -1) {
+      // "/android_assets/" = "/data/user/0/com.x/files/"
+      QString mypdf = "/android_assets/mypdf.pdf";
+      mypdf = "/data/user/0/com.x/files/mypdf.pdf";
 
-    // "/android_assets/" = "/data/user/0/com.x/files/"
-    QString mypdf = "/android_assets/mypdf.pdf";
-    mypdf = "/data/user/0/com.x/files/mypdf.pdf";
-
-    QFile::remove(mypdf);
-    QFile::copy(fileName, mypdf);
-    if (QFile::exists(mypdf)) fileName = mypdf;
-
+      QFile::remove(mypdf);
+      QFile::copy(fileName, mypdf);
+      if (QFile::exists(mypdf)) fileName = mypdf;
+    }
 #endif
 
     if (pdfMethod == 1) {

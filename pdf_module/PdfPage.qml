@@ -28,6 +28,11 @@ Rectangle {
     property bool isOne: true
     property bool isHeaderVisible: true
 
+    function getLoadProgress()
+    {
+        return pdfView.webView.loadProgress
+    }
+
     function setHideShowTopBar() {
         if (isHeaderVisible) {
             closedTopbarHeight = 0
@@ -57,9 +62,9 @@ Rectangle {
     }
 
     function setViewVisible(vv) {
-        if(vv===true)
+        if (vv === true)
             pdfView.opacity = 1
-        if(vv===false)
+        if (vv === false)
             pdfView.opacity = 0
 
         pdfView.visible = vv
@@ -404,7 +409,7 @@ Rectangle {
                     pdfView.load(pdfPath)
                     isViewEnd = true
 
-                    console.debug("onViewerLoaded......")
+                    console.debug("===onViewerLoaded= ")
                 }
 
                 onPdfLoaded: {
@@ -419,15 +424,16 @@ Rectangle {
                     }
 
                     console.debug(
-                                "onPdfLoaded......  " + currentPage + "  " + currentScale)
+                                "===onPdfLoaded=  " + currentPage + "  "
+                                + currentScale + " " + pdfView.webView.loadProgress)
                 }
             }
 
             PinchArea {
                 anchors.fill: parent
                 pinch.target: pdfView
-                pinch.maximumScale: 1000
-                pinch.minimumScale: 0.00001
+                pinch.maximumScale: pdfView.setScale(500)
+                pinch.minimumScale: pdfView.setScale(10)
                 pinch.dragAxis: Pinch.XAndYAxis
             }
 

@@ -394,15 +394,21 @@ Item {
             pdfView.visible = true
             pdfView.opacity = 1
         }
+
+        onLoadProgressChanged: {
+            console.debug("===load progress= " + webView.loadProgress)
+        }
+
+        PinchArea {
+            anchors.fill: parent
+            pinch.target: webView
+            pinch.maximumScale: setScale(500)
+            pinch.minimumScale: setScale(10)
+            pinch.dragAxis: Pinch.XAndYAxis
+        }
     }
 
-    PinchArea {
-        anchors.fill: parent
-        pinch.target: webView
-        pinch.maximumScale: 1000
-        pinch.minimumScale: 0.00001
-        pinch.dragAxis: Pinch.XAndYAxis
-    }
+
 
 
     /*
