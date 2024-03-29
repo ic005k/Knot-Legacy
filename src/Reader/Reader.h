@@ -61,7 +61,7 @@ class Reader : public QDialog {
 
   void setQMLHtml(QString htmlFile, QString skipID);
   void setFontSize(int textFontSize);
-  static void TextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
+  static void PlainTextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
   void savePageVPos();
   void setPageVPos();
   void showInfo();
@@ -111,7 +111,7 @@ class Reader : public QDialog {
   void rotatePdfPage();
   int getLoadProgress();
   void goWebViewBack();
-  public slots:
+ public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
   void showCatalogue();

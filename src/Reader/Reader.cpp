@@ -258,7 +258,7 @@ void Reader::startOpenFile(QString openfile) {
       strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
       txtEdit->append(strCommand1);
       QString fileName = privateDir + "unbook.bat";
-      mw_one->TextEditToFile(txtEdit, fileName);
+      TextEditToFile(txtEdit, fileName);
 
       openFile(ebookFile);
       mw_one->readEBookDone();
@@ -1029,7 +1029,7 @@ QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
     }
   }
 
-  if (isWriteFile) TextEditToFile(plain_edit, htmlFile);
+  if (isWriteFile) PlainTextEditToFile(plain_edit, htmlFile);
 
   return plain_edit->toPlainText();
 }
@@ -1179,7 +1179,7 @@ void Reader::setFontSize(int textFontSize) {
   textPos = pos2;
 }
 
-void Reader::TextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
+void Reader::PlainTextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
   QFile* file;
   file = new QFile;
   file->setFileName(fileName);
@@ -1381,7 +1381,7 @@ void Reader::SplitFile(QString qfile) {
 
       QString file1 = qfile;
 
-      TextEditToFile(plain_edit, file1);
+      PlainTextEditToFile(plain_edit, file1);
       tempHtmlList.append(file1);
     }
 
@@ -1404,7 +1404,7 @@ void Reader::SplitFile(QString qfile) {
       QString file2 = fi.path() + "/" + fi.baseName() + "_" +
                       QString::number(x - 1) + "." + fi.suffix();
 
-      TextEditToFile(plain_edit, file2);
+      PlainTextEditToFile(plain_edit, file2);
       tempHtmlList.append(file2);
     }
 
@@ -1421,7 +1421,7 @@ void Reader::SplitFile(QString qfile) {
       QString filen = fi.path() + "/" + fi.baseName() + "_" +
                       QString::number(x - 1) + "." + fi.suffix();
 
-      TextEditToFile(plain_edit, filen);
+      PlainTextEditToFile(plain_edit, filen);
       tempHtmlList.append(filen);
     }
 
@@ -1849,7 +1849,7 @@ QStringList Reader::ncx2html() {
     }
   }
 
-  // mw_one->TextEditToFile(text_edit, privateDir + "ncx_test.txt");
+  // TextEditToFile(text_edit, privateDir + "ncx_test.txt");
 
   QString strAuthor;
   for (int i = 0; i < text_edit->document()->lineCount(); i++) {
@@ -1920,7 +1920,7 @@ QStringList Reader::ncx2html() {
   plain_edit->appendPlainText("</body>");
   plain_edit->appendPlainText("</html>");
   catalogueFile = strOpfPath + "catalogue.html";
-  TextEditToFile(plain_edit, catalogueFile);
+  PlainTextEditToFile(plain_edit, catalogueFile);
 
   if (strEpubTitle != "") {
     if (strAuthor != "")

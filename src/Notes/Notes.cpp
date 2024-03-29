@@ -687,7 +687,7 @@ void Notes::zipMemo() {
   strCommand1 = strzip + " -r " + strZip + " " + strx;
   txtEdit->append(strCommand1);
   QString fileName = iniDir + "zip.bat";
-  mw_one->TextEditToFile(txtEdit, fileName);
+  TextEditToFile(txtEdit, fileName);
 
   QString exefile = iniDir + "zip.bat";
   QProcess *pro = new QProcess;
@@ -751,7 +751,7 @@ void Notes::unzip(QString zipfile) {
   strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
   txtEdit->append(strCommand1);
   QString fileName = iniDir + "un.bat";
-  mw_one->TextEditToFile(txtEdit, fileName);
+  TextEditToFile(txtEdit, fileName);
 
   QProcess::execute("cmd.exe", QStringList() << "/c" << fileName);
 
@@ -824,7 +824,7 @@ void Notes::loadMemoQML() {
 
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
 
-  mw_one->m_Reader->TextEditToFile(edit1, htmlFileName);
+  mw_one->m_Reader->PlainTextEditToFile(edit1, htmlFileName);
   // QMetaObject::invokeMethod((QObject *)root, "loadHtml",
   //                           Q_ARG(QVariant, htmlFileName));
 
