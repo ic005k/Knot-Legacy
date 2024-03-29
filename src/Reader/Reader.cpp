@@ -2010,17 +2010,6 @@ QString Reader::getSkipText(QString htmlFile, QString skipID) {
 }
 
 void Reader::showEpubMsg() {
-  if (isPDF) {
-    int prog = getLoadProgress();
-    strPercent = QString::number(prog);
-    strShowMsg = "Load PDF ......";
-    if (prog == 100) {
-      tmeShowEpubMsg->stop();
-      mw_one->ui->lblEpubInfo->hide();
-      mw_one->ui->pEpubProg->hide();
-    }
-  }
-
   if (strShowMsg != "") {
     mw_one->ui->lblEpubInfo->show();
     mw_one->ui->pEpubProg->show();
