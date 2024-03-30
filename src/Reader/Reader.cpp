@@ -47,6 +47,7 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblCataInfo->hide();
   mw_one->ui->lblCataInfo->adjustSize();
   mw_one->ui->lblCataInfo->setWordWrap(true);
+  mw_one->ui->lblBookName->hide();
   mw_one->ui->lblBookName->setWordWrap(true);
 
   mw_one->ui->textBrowser->horizontalScrollBar()->hide();
@@ -2071,7 +2072,6 @@ void Reader::readBookDone() {
     mw_one->ui->qwPdf->hide();
     mw_one->ui->qwReader->show();
     mw_one->ui->frameReaderFun->show();
-    mw_one->ui->lblBookName->show();
     mw_one->ui->progReader->show();
     mw_one->ui->btnPages->show();
 
@@ -2115,7 +2115,6 @@ void Reader::readBookDone() {
   if (isPDF) {
     qDebug() << "===Read Pdf... ..." << fileName;
 
-    mw_one->ui->lblBookName->hide();
     mw_one->ui->progReader->hide();
     mw_one->ui->qwReader->hide();
     mw_one->ui->frameReaderFun->show();

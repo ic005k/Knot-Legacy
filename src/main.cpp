@@ -28,6 +28,8 @@ void StringToFile(QString buffers, QString fileName);
 bool zh_cn = false;
 bool isAndroid, isIOS;
 
+#define Cross_Origin
+
 int main(int argc, char* argv[]) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
@@ -113,21 +115,29 @@ int main(int argc, char* argv[]) {
 
 #endif
 
+  QString pdfjsDir;
+#ifdef Q_OS_ANDROID
+  pdfjsDir = "/data/user/0/com.x/files/";
+
+#else
+  pdfjsDir = privateDir;
+#endif
+  pdfjsDir = privateDir;
   QString resFile = ":/res/pdf/pdfjs.zip";
   if (QFile::exists(resFile)) {
     deleteDirfile(privateDir + "pdfjs");
-    QString zipFile = privateDir + "pdfjs.zip";
+    QString zipFile = pdfjsDir + "pdfjs.zip";
     QFile::remove(zipFile);
     QFile::copy(resFile, zipFile);
-    unzip(zipFile, privateDir);
+    unzip(zipFile, pdfjsDir);
 
     QFile::copy(":/res/pdf/pdf.viewer.bridge.js",
-                privateDir + "pdfjs/web/pdf.viewer.bridge.js");
+                pdfjsDir + "pdfjs/web/pdf.viewer.bridge.js");
     QFile::copy(":/res/pdf/qwebchannel.js",
-                privateDir + "pdfjs/web/qwebchannel.js");
+                pdfjsDir + "pdfjs/web/qwebchannel.js");
 
     QTextEdit* text_edit = new QTextEdit();
-    QString view_html = privateDir + "pdfjs/web/viewer.html";
+    QString view_html = pdfjsDir + "pdfjs/web/viewer.html";
     text_edit->setPlainText(loadText(view_html));
     for (int i = 0; i < text_edit->document()->lineCount(); i++) {
       QString str = getTextEditLineText(text_edit, i);
@@ -144,7 +154,7 @@ int main(int argc, char* argv[]) {
     }
     TextEditToFile(text_edit, view_html);
 
-    QString v_js = privateDir + "pdfjs/web/viewer.js";
+    QString v_js = pdfjsDir + "pdfjs/web/viewer.js";
     QString v_jsBuffers = loadText(v_js);
     v_jsBuffers.replace("value: \"compressed.tracemonkey-pldi-09.pdf\",",
                         "// value: \"compressed.tracemonkey-pldi-09.pdf\",");

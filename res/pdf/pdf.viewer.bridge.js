@@ -108,6 +108,7 @@ function connectPdfViewerSignals() {
     @param base64 {string}: the base64 document to load
 */
 function loadDocument_pdf(base64) {
+
     // Delay load to allow the javascript
     // environment to be ready
     sleep(200).then(function () {

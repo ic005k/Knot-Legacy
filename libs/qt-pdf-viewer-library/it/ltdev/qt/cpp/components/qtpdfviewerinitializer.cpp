@@ -118,6 +118,7 @@ QObject *QtPdfViewerInitializer::getQmlInstance(QQmlEngine *engine,
 QtPdfViewerInitializer::QtPdfViewerInitializer() {
 #ifdef Q_OS_ANDROID
 
+  pDir = "/data/user/0/com.x/files/";
   pDir = "/storage/emulated/0/.Knot/";
 
 #else
@@ -133,7 +134,7 @@ QtPdfViewerInitializer::QtPdfViewerInitializer() {
 
   // dir = "/data/user/0/com.x/files/libs/pdfjs/"
   // appDir = "/data/user/0/com.x/files"
-  qDebug() << "=============="
+  qDebug() << "===="
            << "this->_root =" << dir << appDir;
 
   bool isCN = false;
