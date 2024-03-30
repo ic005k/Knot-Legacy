@@ -149,7 +149,7 @@ Rectangle {
         TextArea.flickable: TextArea {
             id: textArea
             visible: isEPUBText
-            font.pixelSize: FontSize
+            font.pixelSize:  FontSize
             font.family: FontName
             font.letterSpacing: 2
             renderType: Text.NativeRendering

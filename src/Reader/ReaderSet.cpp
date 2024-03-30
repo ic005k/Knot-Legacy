@@ -4,7 +4,7 @@
 #include "ui_MainWindow.h"
 #include "ui_ReaderSet.h"
 
-extern int fontSize;
+extern int fontSize, readerFontSize;
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniDir, privateDir;
@@ -99,14 +99,14 @@ void ReaderSet::on_hSlider_sliderReleased() {
 }
 
 void ReaderSet::on_btnFontPlus_clicked() {
-  mw_one->textFontSize++;
-  mw_one->m_Reader->setFontSize(mw_one->textFontSize);
+  readerFontSize++;
+  mw_one->m_Reader->setFontSize(readerFontSize);
 }
 
 void ReaderSet::on_btnFontLess_clicked() {
-  if (mw_one->textFontSize <= 8) return;
-  mw_one->textFontSize--;
-  mw_one->m_Reader->setFontSize(mw_one->textFontSize);
+  if (readerFontSize <= 8) return;
+  readerFontSize--;
+  mw_one->m_Reader->setFontSize(readerFontSize);
 }
 
 void ReaderSet::on_hSlider_sliderMoved(int position) {

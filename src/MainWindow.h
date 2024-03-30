@@ -169,7 +169,7 @@ class MainWindow : public QMainWindow {
   bool isMousePress = false;
   bool isMouseMove = false;
   bool isTurnThePage = false;
-  bool isSelText = false;
+
   bool initMain = false;
   QObjectList getAllUIControls(QObject *parent);
   QString LatestTime = tr("Latest Time");
@@ -177,7 +177,6 @@ class MainWindow : public QMainWindow {
   QString loginTime;
 
   int mwh;
-  int textFontSize;
   bool isOne = false;
   int isHardStepSensor = -1;
   qlonglong initTodaySteps, resetSteps, tc;

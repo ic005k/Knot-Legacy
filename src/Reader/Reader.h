@@ -34,6 +34,7 @@ class Reader : public QDialog {
   ~Reader();
   Ui::Reader *ui;
 
+  bool isSelText = false;
   int pdfMethod = 1;
   QTimer *tmeShowEpubMsg;
   QDialog *frame;
@@ -60,7 +61,7 @@ class Reader : public QDialog {
   void setQMLText(QString);
 
   void setQMLHtml(QString htmlFile, QString skipID);
-  void setFontSize(int textFontSize);
+  void setFontSize(int fontSize);
   static void PlainTextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
   void savePageVPos();
   void setPageVPos();
@@ -111,7 +112,9 @@ class Reader : public QDialog {
   void rotatePdfPage();
   int getLoadProgress();
   void goWebViewBack();
- public slots:
+  void selectText();
+  void closeSelText();
+  public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
   void showCatalogue();

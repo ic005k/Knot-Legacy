@@ -12,6 +12,7 @@ extern Method* m_Method;
 extern QString iniFile, iniDir, privateDir;
 extern bool zh_cn, isAndroid, isIOS, isEBook, isReadEBookEnd, isReport, isDark;
 extern int fontSize;
+
 extern int deleteDirfile(QString dirName);
 extern QString loadText(QString textFile);
 extern QString getTextEditLineText(QTextEdit* txtEdit, int i);
@@ -20,9 +21,11 @@ extern void StringToFile(QString buffers, QString fileName);
 
 bool isOpen = false;
 bool isEpub, isText, isPDF, isEpubError;
+
 QStringList readTextList, htmlFiles, tempHtmlList, ncxList;
 QString strOpfPath, oldOpfPath, fileName, ebookFile, strTitle, catalogueFile,
     strShowMsg, strEpubTitle, strPercent;
+
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
@@ -30,6 +33,7 @@ int minBytes = 15000;
 int maxBytes = 30000;
 int unzipMethod = 3; /* 1 system  2 QZipReader 3 ziplib */
 int zlibMethod = 1;
+int readerFontSize;
 
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
@@ -670,7 +674,7 @@ void Reader::saveReader() {
   Reg.setValue("/Reader/FileName", fileName);
 
   if (isText || isEpub) {
-    Reg.setValue("/Reader/FontSize", mw_one->textFontSize);
+    Reg.setValue("/Reader/FontSize", readerFontSize);
 
     if (isText) {
       Reg.setValue("/Reader/iPage" + fi.baseName(), iPage - baseLines);
@@ -705,7 +709,7 @@ void Reader::initReader() {
 
   QFont font;
   int fsize = Reg.value("/Reader/FontSize", 18).toInt();
-  mw_one->textFontSize = fsize;
+  readerFontSize = fsize;
   mw_one->ui->qwReader->rootContext()->setContextProperty("FontSize", fsize);
   font.setPointSize(fsize);
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  // 字间距
@@ -762,7 +766,7 @@ void Reader::loadQMLText(QString str) {
 }
 
 void Reader::on_btnPageUp_clicked() {
-  if (mw_one->isSelText) return;
+  if (isSelText) return;
   mw_one->ui->lblTitle->hide();
 
   isPageNext = false;
@@ -796,7 +800,7 @@ void Reader::on_btnPageUp_clicked() {
 }
 
 void Reader::on_btnPageNext_clicked() {
-  if (mw_one->isSelText) return;
+  if (isSelText) return;
   mw_one->ui->lblTitle->hide();
 
   isPageNext = true;
@@ -1166,12 +1170,11 @@ void Reader::goPostion() {
   }
 }
 
-void Reader::setFontSize(int textFontSize) {
+void Reader::setFontSize(int fontSize) {
   qreal pos1 = getVPos();
   qreal h1 = getVHeight();
 
-  mw_one->ui->qwReader->rootContext()->setContextProperty("FontSize",
-                                                          textFontSize);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("FontSize", fontSize);
 
   qreal h2 = getVHeight();
   qreal pos2 = getNewVPos(pos1, h1, h2);
@@ -1786,6 +1789,7 @@ void Reader::getLines() {
 }
 
 void Reader::showCatalogue() {
+  closeSelText();
   savePageVPos();
 
   if (mw_one->ui->qwCata->isVisible()) {
@@ -1937,7 +1941,7 @@ void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
   textBrowser->setFixedHeight(mw_one->ui->qwReader->height());
   textBrowser->setFixedWidth(mw_one->ui->qwReader->width());
   QFont font = mw_one->ui->qwReader->font();
-  font.setPixelSize(mw_one->textFontSize);
+  font.setPixelSize(readerFontSize);
   font.setFamily(mw_one->m_ReaderSet->ui->btnFont->font().family());
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
   textBrowser->setFont(font);
@@ -2075,7 +2079,7 @@ void Reader::readBookDone() {
                                                             false);
     mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
     mw_one->ui->qwReader->rootContext()->setContextProperty("isSelText",
-                                                            mw_one->isSelText);
+                                                            isSelText);
     mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", true);
     mw_one->ui->qwReader->rootContext()->setContextProperty("aniW",
                                                             mw_one->width());
@@ -2208,4 +2212,52 @@ void Reader::setStatusBarShow() {
 
 #endif
   isStatusBarShow = true;
+}
+
+void Reader::selectText() {
+  mw_one->m_ReaderSet->close();
+
+  if (!isSelText) {
+    mw_one->ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
+    isSelText = true;
+
+    mw_one->ui->textBrowser->setReadOnly(true);
+    QFont font;
+    font.setPixelSize(readerFontSize);
+    font.setFamily(mw_one->m_ReaderSet->ui->btnFont->font().family());
+    font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
+    mw_one->ui->textBrowser->setFont(font);
+
+    mw_one->ui->textBrowser->setHtml(currentTxt);
+
+    mw_one->ui->qwReader->hide();
+    mw_one->ui->textBrowser->show();
+
+    qreal h0 = getVHeight();
+    qreal h1 = mw_one->ui->textBrowser->document()->size().height();
+    qreal s0 = getVPos();
+    qreal s1 = (s0 * h1) / h0;
+    mw_one->ui->textBrowser->verticalScrollBar()->setSliderPosition(s1);
+    qDebug() << "s0=" << s0 << "h0=" << h0 << "s1=" << s1 << "h1=" << h1;
+
+    mw_one->mydlgSetText->setFixedWidth(mw_one->width() * 2 / 3);
+    mw_one->mydlgSetText->init(
+        mw_one->geometry().x() +
+            (mw_one->width() - mw_one->mydlgSetText->width()) / 2,
+        mw_one->geometry().y(), mw_one->mydlgSetText->width(),
+        mw_one->mydlgSetText->height());
+
+  } else {
+    closeSelText();
+  }
+}
+
+void Reader::closeSelText() {
+  if (isSelText) {
+    isSelText = false;
+    mw_one->ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));
+    mw_one->ui->textBrowser->hide();
+    mw_one->ui->qwReader->show();
+    mw_one->mydlgSetText->close();
+  }
 }

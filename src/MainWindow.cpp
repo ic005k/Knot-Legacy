@@ -4351,7 +4351,7 @@ void MainWindow::on_btnBackReader_clicked() {
   m_ReaderSet->close();
   m_Reader->setPdfViewVisible(false);
 
-  if (isSelText) on_btnSelText_clicked();
+  if (m_Reader->isSelText) on_btnSelText_clicked();
 
   m_Reader->saveReader();
   m_Reader->savePageVPos();
@@ -4361,7 +4361,8 @@ void MainWindow::on_btnBackReader_clicked() {
 }
 
 void MainWindow::on_btnOpen_clicked() {
-  mw_one->m_ReaderSet->close();
+  m_ReaderSet->close();
+  m_Reader->closeSelText();
   m_Reader->on_btnOpen_clicked();
 }
 
@@ -4373,6 +4374,7 @@ void MainWindow::on_btnPageNext_clicked() {
 
 void MainWindow::on_btnPages_clicked() {
   if (ui->qwCata->isVisible()) return;
+  m_Reader->closeSelText();
 
   m_ReaderSet->init();
 
@@ -4412,6 +4414,7 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 
 void MainWindow::on_btnReadList_clicked() {
   m_ReaderSet->close();
+  m_Reader->closeSelText();
   ui->frameReader->hide();
   ui->frameBookList->show();
   m_Reader->getReadList();
@@ -4429,44 +4432,7 @@ void MainWindow::refreshMainUI() {
   qApp->processEvents();
 }
 
-void MainWindow::on_btnSelText_clicked() {
-  m_ReaderSet->close();
-
-  if (!isSelText) {
-    ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
-    isSelText = true;
-
-    ui->textBrowser->setReadOnly(true);
-    QFont font;
-    font.setPixelSize(textFontSize);
-    font.setFamily(m_ReaderSet->ui->btnFont->font().family());
-    font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
-    ui->textBrowser->setFont(font);
-
-    ui->textBrowser->setHtml(m_Reader->currentTxt);
-
-    ui->qwReader->hide();
-    ui->textBrowser->show();
-
-    m_Reader->getVPos();
-    ui->textBrowser->verticalScrollBar()->setSliderPosition(m_Reader->textPos);
-
-    mydlgSetText->setFixedWidth(width() * 2 / 3);
-    mydlgSetText->init(geometry().x() + (width() - mydlgSetText->width()) / 2,
-                       geometry().y(), mydlgSetText->width(),
-                       mydlgSetText->height());
-
-  } else {
-    ui->btnSelText->setIcon(QIcon(":/res/choice0.png"));
-
-    isSelText = false;
-
-    ui->textBrowser->hide();
-    ui->qwReader->show();
-
-    mydlgSetText->close();
-  }
-}
+void MainWindow::on_btnSelText_clicked() { m_Reader->selectText(); }
 
 void MainWindow::on_btnSignIn_clicked() {
   m_CloudBackup->on_pushButton_SignIn_clicked();
