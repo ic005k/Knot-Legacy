@@ -4,6 +4,8 @@
     <style name="WindowAnim" parent="android:Animation" mce_bogus="1">
         <item name="android:windowEnterAnimation">@anim/enter_anim</item>
         <item name="android:windowExitAnimation">@anim/exit_anim</item>
+        <item name="android:windowFullscreen">true</item>
+
     </style>
 </resources>
 

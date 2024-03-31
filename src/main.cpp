@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
     QString v_js = pdfjsDir + "pdfjs/web/viewer.js";
     QString v_jsBuffers = loadText(v_js);
     v_jsBuffers.replace("value: \"compressed.tracemonkey-pldi-09.pdf\",",
-                        "// value: \"compressed.tracemonkey-pldi-09.pdf\",");
+                        "value: \"\",");
     v_jsBuffers.replace("scale = pageWidthScale",
                         "scale = pageWidthScale * 1.05");
     StringToFile(v_jsBuffers, v_js);
