@@ -2087,6 +2087,12 @@ QTabBar::scroller {width:0}
            <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
              <widget class="QToolButton" name="btnPasteCode">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>Paste</string>
               </property>
@@ -2094,6 +2100,12 @@ QTabBar::scroller {width:0}
             </item>
             <item>
              <widget class="QTextEdit" name="editCode">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -2103,7 +2115,7 @@ QTabBar::scroller {width:0}
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>32</height>
+                <height>16777215</height>
                </size>
               </property>
               <property name="verticalScrollBarPolicy">
@@ -2147,7 +2159,7 @@ QTabBar::scroller {width:0}
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>35</height>
+              <height>0</height>
              </size>
             </property>
             <property name="text">
@@ -2169,7 +2181,7 @@ QTabBar::scroller {width:0}
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>35</height>
+           <height>0</height>
           </size>
          </property>
          <property name="text">

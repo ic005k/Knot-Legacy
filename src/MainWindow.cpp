@@ -269,8 +269,6 @@ void MainWindow::saveDone() {
     return;
   }
 
-  addRedo();
-
   isSaveEnd = true;
 
   ui->progBar->setMaximum(100);
@@ -2746,8 +2744,6 @@ void MainWindow::on_actionImport_Data_triggered() {
   zipfile = QFileDialog::getOpenFileName(this, tr("KnotBak"), "",
                                          tr("Zip File (*.zip);;All(*.*)"));
 #endif
-
-  if (QFile(zipfile).exists()) addUndo(tr("Import Data"));
 
   if (!zipfile.isNull()) {
     m_Method->m_widget = new QWidget(mw_one);
