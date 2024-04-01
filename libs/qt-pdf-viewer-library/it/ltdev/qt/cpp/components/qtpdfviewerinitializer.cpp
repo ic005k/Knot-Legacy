@@ -20,6 +20,8 @@
 #include "src/MainWindow.h"
 QString pDir;
 QString url;
+extern QByteArray bookFileData;
+
 namespace LTDev {
 
 /**
@@ -87,6 +89,12 @@ bool QtPdfViewerInitializer::initializeViewer(bool force) {
  **/
 QByteArray QtPdfViewerInitializer::pdfToBase64(const QString &path) {
   if (FileUtils::exists(path)) {
+    if (bookFileData.length() > 0) {
+      qDebug() << "QtPdfViewerInitializer::bookFileData="
+               << bookFileData.mid(0, 20);
+      return bookFileData;
+    }
+
     QFile input(path);
     if (input.open(QIODevice::ReadOnly)) {
       QByteArray base64 = input.readAll().toBase64();

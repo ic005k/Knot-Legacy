@@ -35,6 +35,8 @@ int unzipMethod = 3; /* 1 system  2 QZipReader 3 ziplib */
 int zlibMethod = 1;
 int readerFontSize;
 
+QByteArray bookFileData;
+
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
@@ -289,10 +291,14 @@ void Reader::openFile(QString openfile) {
   oldOpfPath = strOpfPath;
 
   if (QFile(openfile).exists()) {
-    readTextList.clear();
-    readTextList = readText(openfile);
-    if (readTextList.count() <= 0) return;
-    QString strHead = readTextList.at(0);
+    QString strHead;
+
+    QFile input(openfile);
+    if (input.open(QIODevice::ReadOnly)) {
+      bookFileData = input.readAll();
+      strHead = bookFileData.mid(0, 20);
+      qDebug() << "strHead=" << strHead;
+    }
 
     if (strHead.trimmed().mid(0, 2) == "PK") {
       QString dirpath, dirpath1;
@@ -572,11 +578,14 @@ void Reader::openFile(QString openfile) {
       }
 
     } else if (strHead.trimmed().toLower().contains("pdf")) {
+      bookFileData = bookFileData.toBase64();
       isPDF = true;
       isText = false;
       isEpub = false;
 
     } else {  // txt file
+      readTextList.clear();
+      readTextList = readText(openfile);
       isText = true;
       isEpub = false;
       isPDF = false;

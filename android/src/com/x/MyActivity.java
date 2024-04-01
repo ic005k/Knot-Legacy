@@ -111,6 +111,8 @@ import java.lang.reflect.Field;
 import android.widget.LinearLayout;
 
 //import javax.swing.text.View;
+
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebViewClient;

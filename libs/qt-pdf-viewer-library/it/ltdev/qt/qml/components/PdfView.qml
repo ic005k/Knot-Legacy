@@ -88,6 +88,9 @@ Item {
     */
     function load(path) {
         var method = 1
+        if(Qt.platform.os==="android")
+            method = 1
+
         if (method === 1) {
             // Convert pdf to base64
             var base64 = QtPdfViewerInitializer.pdfToBase64(path)

@@ -1484,6 +1484,24 @@ void MainWindow::get_Today(QTreeWidget *tw) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+  if (ui->qwCata->isVisible()) {
+    on_btnCatalogue_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (ui->qwBookList->isVisible()) {
+    on_btnBackBookList_clicked();
+    event->ignore();
+    return;
+  }
+
+  if (ui->frameReader->isVisible()) {
+    on_btnBackReader_clicked();
+    event->ignore();
+    return;
+  }
+
   if (!ui->f_ImgView->isHidden()) {
     on_btnBackImg_clicked();
     event->ignore();
