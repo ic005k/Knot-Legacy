@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>634</width>
-    <height>285</height>
+    <width>401</width>
+    <height>349</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QLabel" name="lblProg">
      <property name="font">
@@ -212,6 +212,50 @@ border-radius: 4px;</string>
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QFrame" name="f_CustomColor">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QToolButton" name="btnBackgroundColor">
+          <property name="text">
+           <string>BG</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="editBackgroundColor">
+          <property name="text">
+           <string>#FFFFFF</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnForegroundColor">
+          <property name="text">
+           <string>FG</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="editForegroundColor">
+          <property name="text">
+           <string>#000000</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <widget class="QToolButton" name="btnFont">

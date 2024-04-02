@@ -136,10 +136,7 @@ void Reader::setReaderStyle() {
         "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
         "2px solid "
         "rgb(255,0,0);border-radius: 4px;");
-    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(
-        "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
-        "solid "
-        "rgb(0,0,255);border-radius: 4px;");
+    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(strStyle2_0);
 
     textColor = QColor(102, 78, 48);
     baseColor = QColor(240, 222, 198);
@@ -147,8 +144,11 @@ void Reader::setReaderStyle() {
 
   if (readerStyle == "2") {
     mw_one->ui->qwReader->rootContext()->setContextProperty("backImgFile", "");
-    mw_one->ui->qwReader->rootContext()->setContextProperty("myTextColor",
-                                                            "#000000");
+    mw_one->ui->qwReader->rootContext()->setContextProperty(
+        "myBackgroundColor",
+        mw_one->m_ReaderSet->ui->editBackgroundColor->text());
+    mw_one->ui->qwReader->rootContext()->setContextProperty(
+        "myTextColor", mw_one->m_ReaderSet->ui->editForegroundColor->text());
 
     mw_one->m_ReaderSet->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
@@ -158,10 +158,7 @@ void Reader::setReaderStyle() {
         "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
         "2px solid "
         "rgb(0,0,255);border-radius: 4px;");
-    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(
-        "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
-        "solid "
-        "rgb(255,0,0);border-radius: 4px;");
+    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(strStyle2_1);
 
     textColor = QColor(0, 0, 0);
     baseColor = QColor(255, 255, 255);
@@ -181,10 +178,7 @@ void Reader::setReaderStyle() {
         "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
         "2px solid "
         "rgb(0,0,255);border-radius: 4px;");
-    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(
-        "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
-        "solid "
-        "rgb(0,0,255);border-radius: 4px;");
+    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(strStyle2_0);
 
     textColor = QColor(46, 139, 87);
     baseColor = QColor(0, 0, 0);
@@ -2111,6 +2105,8 @@ void Reader::readBookDone() {
       mw_one->ui->btnCatalogue->hide();
       mw_one->m_ReaderSet->ui->lblInfo->hide();
     }
+
+    mw_one->closeProgress();
   }
 
   mw_one->ui->lblBookName->setText(strTitle);
@@ -2173,6 +2169,7 @@ void Reader::readBookDone() {
       QQuickItem* root = mw_one->ui->qwPdf->rootObject();
       QMetaObject::invokeMethod((QObject*)root, "setPdfPath",
                                 Q_ARG(QVariant, url));
+      mw_one->closeProgress();
     }
   }
 
@@ -2268,4 +2265,27 @@ void Reader::closeSelText() {
     mw_one->ui->qwReader->show();
     mw_one->mydlgSetText->close();
   }
+}
+
+void Reader::setPageScroll0() {
+  qreal cpos = getVPos();
+  int readerHeight = mw_one->ui->qwReader->height();
+  int fontHeight = m_Method->getFontHeight();
+  qreal newpos = cpos - readerHeight + fontHeight;
+
+  if (newpos < readerHeight + fontHeight) newpos = -fontHeight;
+
+  setVPos(newpos);
+}
+
+void Reader::setPageScroll1() {
+  qreal cpos = getVPos();
+  qreal th = getVHeight();
+  int readerHeight = mw_one->ui->qwReader->height();
+  int fontHeight = m_Method->getFontHeight();
+  qreal newpos = cpos + readerHeight - fontHeight;
+  if (newpos + readerHeight - fontHeight > th) {
+    newpos = th - readerHeight + fontHeight;
+  }
+  setVPos(newpos);
 }

@@ -40,6 +40,14 @@ class Reader : public QDialog {
   QDialog *frame;
   QString openfile;
   QString readerStyle;
+  QString strStyle2_0 =
+      "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
+      "solid "
+      "rgb(0,0,255);border-radius: 4px;";
+  QString strStyle2_1 =
+      "color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 2px "
+      "solid "
+      "rgb(255,0,0);border-radius: 4px;";
   QString currentTxt;
   QString currentHtmlFile;
   bool isPageNext = false;
@@ -114,7 +122,9 @@ class Reader : public QDialog {
   void goWebViewBack();
   void selectText();
   void closeSelText();
-  public slots:
+  void setPageScroll0();
+  void setPageScroll1();
+ public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
   void showCatalogue();

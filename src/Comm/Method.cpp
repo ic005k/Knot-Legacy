@@ -739,10 +739,6 @@ QDialog* Method::getProgBar() {
 bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
   if (watch == mw_one->ui->qwReader) {
-    if (event->type() == QEvent::MouseButtonDblClick) {
-      mw_one->on_SetReaderFunVisible();
-    }
-
     static int press_x;
     static int press_y;
     static int relea_x;
@@ -868,6 +864,23 @@ bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
       if (mw_one->isMousePress && qAbs(relea_x - press_x) > 20 &&
           qAbs(relea_y - press_y) < 20) {
         mw_one->isMouseMove = true;
+      }
+    }
+
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      if ((press_y > mw_one->geometry().y() + mw_one->height() / 3) &&
+          (press_y < mw_one->geometry().y() + mw_one->height() * 2 / 3)) {
+        mw_one->on_SetReaderFunVisible();
+      }
+
+      if ((press_y > mw_one->geometry().y()) &&
+          (press_y < mw_one->geometry().y() + mw_one->height() / 3)) {
+        mw_one->m_Reader->setPageScroll0();
+      }
+
+      if ((press_y > mw_one->geometry().y() + mw_one->height() * 2 / 3) &&
+          (press_y < mw_one->geometry().y() + mw_one->height())) {
+        mw_one->m_Reader->setPageScroll1();
       }
     }
   }
@@ -1164,4 +1177,48 @@ qreal Method::getVPosForQW(QQuickWidget* qw) {
                             Q_RETURN_ARG(QVariant, itemCount));
   qreal textPos = itemCount.toDouble();
   return textPos;
+}
+
+QString Method::getCustomColor() {
+  QString strColor;
+
+#ifdef Q_OS_ANDROID
+  m_widget = new QWidget(this);
+  showGrayWindows();
+
+  ColorDialog* colorDlg = new ColorDialog(this);
+  connect(colorDlg, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
+  int x, y, w, h;
+  x = mw_one->geometry().x();
+  y = mw_one->geometry().y();
+  w = mw_one->width();
+  h = mw_one->ui->frameMain->height() - 50;
+  colorDlg->setFixedWidth(w);
+  colorDlg->setFixedHeight(h);
+  colorDlg->setGeometry(x + (mw_one->width() - w) / 2, y, w, h);
+  if (colorDlg->exec() == QDialog::Accepted) {
+    strColor = ColorToString(colorDlg->getColor());
+    closeGrayWindows();
+  }
+#else
+
+  QColorDialog* colorDlg = new QColorDialog(this);
+  QFont f = getNewFont(17);
+
+  colorDlg->setFont(f);
+  if (colorDlg->exec()) {
+    QColor color = colorDlg->selectedColor();
+    strColor = ColorToString(color);
+    qDebug() << color << strColor;
+  }
+#endif
+
+  return strColor.toUpper();
+}
+
+QString Method::ColorToString(QColor v_color) {
+  QRgb mRgb = qRgb(v_color.red(), v_color.green(), v_color.blue());
+  QString mRgbStr = QString::number(mRgb, 16);
+  mRgbStr = mRgbStr.replace(0, 2, "#");
+  return mRgbStr;
 }

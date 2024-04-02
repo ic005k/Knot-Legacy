@@ -46,6 +46,10 @@ class ReaderSet : public QDialog {
 
   void on_btnGoPage_clicked();
 
+  void on_btnBackgroundColor_clicked();
+
+  void on_btnForegroundColor_clicked();
+
  private:
 };
 

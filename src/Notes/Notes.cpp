@@ -951,53 +951,13 @@ void Notes::on_btnS4_clicked() {
 }
 
 void Notes::on_btnColor_clicked() {
-  QString strColor;
-
-#ifdef Q_OS_ANDROID
-  m_Method->m_widget = new QWidget(this);
-  m_Method->showGrayWindows();
-
-  ColorDialog *colorDlg = new ColorDialog(this);
-  connect(colorDlg, &QDialog::rejected,
-          [=]() mutable { m_Method->closeGrayWindows(); });
-  int x, y, w, h;
-  x = mw_one->geometry().x();
-  y = mw_one->geometry().y();
-  w = mw_one->width();
-  h = mw_one->ui->frameMain->height() - 50;
-  colorDlg->setFixedWidth(w);
-  colorDlg->setFixedHeight(h);
-  colorDlg->setGeometry(x + (mw_one->width() - w) / 2, y, w, h);
-  if (colorDlg->exec() == QDialog::Accepted) {
-    strColor = ColorToString(colorDlg->getColor());
-    m_Method->closeGrayWindows();
-  }
-#else
-
-  QColorDialog *colorDlg = new QColorDialog(this);
-  QFont f = m_Method->getNewFont(17);
-
-  colorDlg->setFont(f);
-  if (colorDlg->exec()) {
-    QColor color = colorDlg->selectedColor();
-    strColor = ColorToString(color);
-    qDebug() << color << strColor;
-  }
-#endif
-
+  QString strColor = m_Method->getCustomColor();
   if (strColor.isEmpty()) return;
 
   QString str = m_EditSource->textCursor().selectedText();
   if (str == "") str = tr("Color");
   m_EditSource->insertPlainText("<font color=" + strColor + ">" + str +
                                 "</font>");
-}
-
-QString Notes::ColorToString(QColor v_color) {
-  QRgb mRgb = qRgb(v_color.red(), v_color.green(), v_color.blue());
-  QString mRgbStr = QString::number(mRgb, 16);
-  mRgbStr = mRgbStr.replace(0, 2, "#");
-  return mRgbStr;
 }
 
 QColor Notes::StringToColor(QString mRgbStr) {

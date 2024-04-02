@@ -430,6 +430,7 @@ Rectangle {
                     console.debug(
                                 "===onPdfLoaded=  " + currentPage + "  "
                                 + currentScale + " " + pdfView.webView.loadProgress)
+                    mw_one.closeProgress()
                 }
             }
 

@@ -109,6 +109,16 @@ Rectangle {
 
         smooth: true
         source: backImgFile
+        visible: backImgFile==="" ? false : true
+
+    }
+
+    Rectangle{
+        id: m_Rect
+        width: myW
+        height: myH
+        color: myBackgroundColor
+        visible: backImgFile==="" ? true : false
     }
 
     Flickable {

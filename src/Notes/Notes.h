@@ -239,7 +239,6 @@ class Notes : public QDialog {
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   void wheelEvent(QWheelEvent *e) override;
   QString imgDir = "===KnotData===";
-  QString ColorToString(QColor v_color);
   QColor StringToColor(QString mRgbStr);
 };
 

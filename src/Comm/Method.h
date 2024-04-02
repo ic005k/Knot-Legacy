@@ -24,6 +24,7 @@ class Method : public QDialog {
 
   QWidget *m_widget;
   QString qssSlider;
+  QString ColorToString(QColor v_color);
 
   QString btnStyle =
       "QToolButton {background-color: rgb(236, 236, 236);color: black; "
@@ -207,6 +208,8 @@ class Method : public QDialog {
   qreal getVPosForQW(QQuickWidget *qw);
 
   static bool decompressionZipFile(const QString &zipfile, const QString &path);
+
+  QString getCustomColor();
 
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;

@@ -22,6 +22,7 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
 
   ui->setupUi(this);
   setModal(true);
+  ui->f_CustomColor->hide();
 
   // setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool |
   // Qt::FramelessWindowHint);
@@ -50,6 +51,24 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editPage);
   ui->editPage->setValidator(validator);
+
+  QString color_0, color_1;
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+  color_0 = Reg.value("/Reader/BackgroundColor", "#FFFFFF").toString();
+  color_1 = Reg.value("/Reader/ForegroundColor", "#000000").toString();
+  ui->editBackgroundColor->setText(color_0);
+  ui->editForegroundColor->setText(color_1);
+
+  mw_one->m_Reader->strStyle2_0 = "color:" + color_1 +
+                                  ";background-color:" + color_0 +
+                                  ";border: 2px "
+                                  "solid "
+                                  "rgb(0,0,255);border-radius: 4px;";
+  mw_one->m_Reader->strStyle2_1 = "color:" + color_1 +
+                                  ";background-color:" + color_0 +
+                                  ";border: 2px "
+                                  "solid "
+                                  "rgb(255,0,0);border-radius: 4px;";
 }
 
 ReaderSet::~ReaderSet() { delete ui; }
@@ -132,6 +151,7 @@ void ReaderSet::on_btnStyle1_clicked() {
   Reg.setValue("/Reader/Style", "1");
   mw_one->m_Reader->readerStyle = "1";
   mw_one->m_Reader->setReaderStyle();
+  ui->f_CustomColor->hide();
 }
 
 void ReaderSet::on_btnStyle2_clicked() {
@@ -142,6 +162,7 @@ void ReaderSet::on_btnStyle2_clicked() {
   Reg.setValue("/Reader/Style", "2");
   mw_one->m_Reader->readerStyle = "2";
   mw_one->m_Reader->setReaderStyle();
+  ui->f_CustomColor->show();
 }
 
 void ReaderSet::on_btnStyle3_clicked() {
@@ -152,6 +173,7 @@ void ReaderSet::on_btnStyle3_clicked() {
   Reg.setValue("/Reader/Style", "3");
   mw_one->m_Reader->readerStyle = "3";
   mw_one->m_Reader->setReaderStyle();
+  ui->f_CustomColor->hide();
 }
 
 void ReaderSet::on_btnFont_clicked() {
@@ -188,3 +210,52 @@ void ReaderSet::on_btnGoPage_clicked() {
 }
 
 void ReaderSet::on_btnBack_clicked() { close(); }
+
+void ReaderSet::on_btnBackgroundColor_clicked() {
+  QString color_0;
+  color_0 = m_Method->getCustomColor();
+  if (color_0.isNull()) return;
+
+  ui->editBackgroundColor->setText(color_0);
+  QString color_1 = ui->editForegroundColor->text();
+
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+  Reg.setValue("/Reader/BackgroundColor", ui->editBackgroundColor->text());
+  Reg.setValue("/Reader/ForegroundColor", ui->editForegroundColor->text());
+
+  mw_one->m_Reader->strStyle2_0 = "color:" + color_1 +
+                                  ";background-color:" + color_0 +
+                                  ";border: 2px "
+                                  "solid "
+                                  "rgb(0,0,255);border-radius: 4px;";
+  mw_one->m_Reader->strStyle2_1 = "color:" + color_1 +
+                                  ";background-color:" + color_0 +
+                                  ";border: 2px "
+                                  "solid "
+                                  "rgb(255,0,0);border-radius: 4px;";
+  mw_one->m_Reader->setReaderStyle();
+}
+
+void ReaderSet::on_btnForegroundColor_clicked() {
+  QString color_1 = m_Method->getCustomColor();
+  if (color_1.isNull()) return;
+
+  ui->editForegroundColor->setText(color_1);
+  QString color_0 = ui->editBackgroundColor->text();
+
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+  Reg.setValue("/Reader/BackgroundColor", ui->editBackgroundColor->text());
+  Reg.setValue("/Reader/ForegroundColor", ui->editForegroundColor->text());
+
+  mw_one->m_Reader->strStyle2_0 = "color:" + color_1 +
+                                  ";background-color:" + color_0 +
+                                  ";border: 2px "
+                                  "solid "
+                                  "rgb(0,0,255);border-radius: 4px;";
+  mw_one->m_Reader->strStyle2_1 = "color:" + color_1 +
+                                  ";background-color:" + color_0 +
+                                  ";border: 2px "
+                                  "solid "
+                                  "rgb(255,0,0);border-radius: 4px;";
+  mw_one->m_Reader->setReaderStyle();
+}
