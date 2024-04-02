@@ -127,7 +127,7 @@ class Reader : public QDialog {
   QString getBookmarkText();
   QStringList getCurrentBookmarkList();
   void showBookmarkList();
-  public slots:
+ public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
   void showCatalogue();
@@ -135,8 +135,9 @@ class Reader : public QDialog {
 
   void openCataList(QString htmlFile);
 
-  void clickBookmarkList(int index);
-  protected:
+  void clickBookmarkList(int i);
+
+ protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;

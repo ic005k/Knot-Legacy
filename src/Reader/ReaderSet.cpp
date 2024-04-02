@@ -277,6 +277,8 @@ void ReaderSet::on_editForegroundColor_textChanged(const QString& arg1) {
 }
 
 void ReaderSet::on_btnSetBookmark_clicked() {
-  mw_one->m_Reader->saveReader(mw_one->m_Reader->getBookmarkText(), true);
+  QString txt = mw_one->m_Reader->getBookmarkText() + "\n" +
+                QDateTime::currentDateTime().toString();
+  mw_one->m_Reader->saveReader(txt, true);
   close();
 }

@@ -2458,6 +2458,10 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           m_Reader->showCatalogue();
           return true;
 
+        } else if (ui->qwBookmark->isVisible()) {
+          on_btnShowBookmark_clicked();
+          return true;
+
         } else if (!mydlgSetText->isHidden()) {
           mydlgSetText->close();
           return true;
@@ -4381,6 +4385,9 @@ void MainWindow::on_btnBackReader_clicked() {
 }
 
 void MainWindow::on_btnOpen_clicked() {
+  if (ui->qwBookmark->isVisible()) {
+    on_btnShowBookmark_clicked();
+  }
   m_ReaderSet->close();
   m_Reader->closeSelText();
   m_Reader->on_btnOpen_clicked();
@@ -4395,6 +4402,9 @@ void MainWindow::on_btnPageNext_clicked() {
 void MainWindow::on_btnPages_clicked() {
   if (ui->qwCata->isVisible()) return;
   m_Reader->closeSelText();
+  if (ui->qwBookmark->isVisible()) {
+    on_btnShowBookmark_clicked();
+  }
 
   m_ReaderSet->init();
 
@@ -4433,6 +4443,9 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 }
 
 void MainWindow::on_btnReadList_clicked() {
+  if (mw_one->ui->qwBookmark->isVisible()) {
+    mw_one->on_btnShowBookmark_clicked();
+  }
   m_ReaderSet->close();
   m_Reader->closeSelText();
   ui->frameReader->hide();
@@ -5623,8 +5636,10 @@ void MainWindow::on_btnShowBookmark_clicked() {
     ui->qwReader->hide();
     ui->qwBookmark->show();
     m_Reader->showBookmarkList();
+    ui->btnCatalogue->setEnabled(false);
   } else {
     ui->qwBookmark->hide();
     ui->qwReader->show();
+    ui->btnCatalogue->setEnabled(true);
   }
 }

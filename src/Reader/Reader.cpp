@@ -1815,11 +1815,13 @@ void Reader::showCatalogue() {
     mw_one->ui->lblCataInfo->hide();
     mw_one->ui->qwCata->hide();
     mw_one->ui->qwReader->show();
+    mw_one->ui->btnShowBookmark->setEnabled(true);
 
   } else {
     mw_one->ui->qwReader->hide();
     mw_one->ui->lblCataInfo->show();
     mw_one->ui->qwCata->show();
+    mw_one->ui->btnShowBookmark->setEnabled(false);
 
     m_Method->clearAllBakList(mw_one->ui->qwCata);
     for (int i = 0; i < ncxList.count(); i++) {
@@ -2329,16 +2331,18 @@ QStringList Reader::getCurrentBookmarkList() {
   return list;
 }
 
-void Reader::clickBookmarkList(int index) {
+void Reader::clickBookmarkList(int i) {
+  int count = m_Method->getCountFromQW(mw_one->ui->qwBookmark);
+  int index = count - 1 - i;
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
   if (isText) {
     iPage = Reg.value("/" + currentBookName + "_Bookmark/iPage" +
                       QString::number(index))
                 .toInt();
+    on_btnPageNext_clicked();
     textPos = Reg.value("/" + currentBookName + "_Bookmark/VPos" +
                         QString::number(index))
                   .toReal();
-    on_btnPageNext_clicked();
   }
 
   if (isEpub) {

@@ -500,6 +500,7 @@ class MainWindow : public QMainWindow {
   void reeditData();
   void clickData();
  public slots:
+  void on_btnShowBookmark_clicked();
   void on_btnBackBookList_clicked();
   void on_btnBackEditRecord_clicked();
   void on_btnBackNoteList_clicked();
@@ -727,8 +728,6 @@ class MainWindow : public QMainWindow {
   void on_btnRotatePage_clicked();
 
   void on_btnGoBack_clicked();
-
-  void on_btnShowBookmark_clicked();
 
  private:
   bool isShowDetails = false;
