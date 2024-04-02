@@ -275,3 +275,8 @@ void ReaderSet::on_editForegroundColor_textChanged(const QString& arg1) {
   Q_UNUSED(arg1);
   if (!mw_one->initMain) on_btnStyle2_clicked();
 }
+
+void ReaderSet::on_btnSetBookmark_clicked() {
+  mw_one->m_Reader->saveReader(mw_one->m_Reader->getBookmarkText(), true);
+  close();
+}

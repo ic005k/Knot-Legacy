@@ -199,7 +199,7 @@ void Reader::startOpenFile(QString openfile) {
   setPdfViewVisible(false);
 
   if (!mw_one->initMain) {
-    saveReader();
+    saveReader("", false);
     if (isText || isEpub) {
       savePageVPos();
     }
@@ -665,42 +665,68 @@ QString Reader::get_href(QString idref, QStringList opfList) {
   return "";
 }
 
-void Reader::saveReader() {
+void Reader::saveReader(QString BookmarkText, bool isSetBookmark) {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  QFileInfo fi(fileName);
-  QString epubName = strEpubTitle;
-  QString name_l = epubName.toLower();
-  if (epubName == "" || name_l.contains("unknown")) epubName = fi.baseName();
-
   Reg.setValue("/Reader/FileName", fileName);
+
+  QString bookmarkSn;
+  if (isSetBookmark) {
+    int countBookmark =
+        Reg.value("/" + currentBookName + "_Bookmark/count", 0).toInt();
+    countBookmark = countBookmark + 1;
+    Reg.setValue("/" + currentBookName + "_Bookmark/count", countBookmark);
+    bookmarkSn = QString::number(countBookmark - 1);
+  }
 
   if (isText || isEpub) {
     Reg.setValue("/Reader/FontSize", readerFontSize);
 
     if (isText) {
-      Reg.setValue("/Reader/iPage" + fi.baseName(), iPage - baseLines);
+      if (isSetBookmark) {
+        Reg.setValue("/" + currentBookName + "_Bookmark/iPage" + bookmarkSn,
+                     iPage - baseLines);
+        Reg.setValue("/" + currentBookName + "_Bookmark/Name" + bookmarkSn,
+                     BookmarkText);
+        Reg.setValue("/" + currentBookName + "_Bookmark/VPos" + bookmarkSn,
+                     getVPos());
+
+      } else {
+        Reg.setValue("/Reader/iPage" + currentBookName, iPage - baseLines);
+      }
     }
 
     if (isEpub) {
-      Reg.setValue("/Reader/htmlIndex" + epubName, htmlIndex);
-      // dir
-      Reg.setValue("/Reader/" + epubName + "MainDirIndex", mainDirIndex);
+      if (isSetBookmark) {
+        Reg.setValue("/" + currentBookName + "_Bookmark/htmlIndex" + bookmarkSn,
+                     htmlIndex);
+        Reg.setValue("/" + currentBookName + "_Bookmark/Name" + bookmarkSn,
+                     BookmarkText);
+        Reg.setValue("/" + currentBookName + "_Bookmark/VPos" + bookmarkSn,
+                     getVPos());
+      } else {
+        Reg.setValue("/Reader/htmlIndex" + currentBookName, htmlIndex);
+        // dir
+        Reg.setValue("/Reader/" + currentBookName + "MainDirIndex",
+                     mainDirIndex);
+      }
     }
   }
 
   if (isPDF) {
-    Reg.setValue("/Reader/PdfPage" + fi.baseName(), getPdfCurrentPage());
-    Reg.setValue("/Reader/PdfScale" + fi.baseName(), getScale());
+    if (isSetBookmark) {
+    } else {
+      Reg.setValue("/Reader/PdfPage" + currentBookName, getPdfCurrentPage());
+      Reg.setValue("/Reader/PdfScale" + currentBookName, getScale());
+    }
   }
 
-  // book list
-  Reg.setValue("/Reader/BookCount", bookList.count());
-  for (int i = 0; i < bookList.count(); i++) {
-    Reg.setValue("/Reader/BookSn" + QString::number(i), bookList.at(i));
+  if (isSetBookmark) {
+  } else {
+    // book list
+    Reg.setValue("/Reader/BookCount", bookList.count());
+    for (int i = 0; i < bookList.count(); i++) {
+      Reg.setValue("/Reader/BookSn" + QString::number(i), bookList.at(i));
+    }
   }
 }
 
@@ -1129,7 +1155,7 @@ QString Reader::GetCorrectUnicode(const QByteArray& text) {
 
 void Reader::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
-  saveReader();
+  saveReader("", false);
   savePageVPos();
 }
 
@@ -1142,18 +1168,13 @@ void Reader::goPostion() {
     Reg.setIniCodec("utf-8");
 #endif
 
-    QFileInfo fi(fileName);
-    QString epubName = strEpubTitle;
-    QString name_l = epubName.toLower();
-    if (epubName == "" || name_l.contains("unknown")) epubName = fi.baseName();
-
     if (isText) {
-      iPage = Reg.value("/Reader/iPage" + fi.baseName(), 0).toULongLong();
+      iPage = Reg.value("/Reader/iPage" + currentBookName, 0).toULongLong();
       on_btnPageNext_clicked();
     }
 
     if (isEpub) {
-      htmlIndex = Reg.value("/Reader/htmlIndex" + epubName, 0).toInt();
+      htmlIndex = Reg.value("/Reader/htmlIndex" + currentBookName, 0).toInt();
 
       if (htmlIndex >= htmlFiles.count()) {
         htmlIndex = 0;
@@ -1166,10 +1187,10 @@ void Reader::goPostion() {
     }
 
     if (isPDF) {
-      int page = Reg.value("/Reader/PdfPage" + fi.baseName(), 1).toInt();
+      int page = Reg.value("/Reader/PdfPage" + currentBookName, 1).toInt();
       setPdfPage(page);
 
-      qreal scale = Reg.value("/Reader/PdfScale" + fi.baseName(), 1).toReal();
+      qreal scale = Reg.value("/Reader/PdfScale" + currentBookName, 1).toReal();
       setPdfScale(scale);
     }
   }
@@ -1203,63 +1224,48 @@ void Reader::PlainTextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
 
 void Reader::savePageVPos() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  QFileInfo fi(fileName);
-  QString epubName = strEpubTitle;
-  QString name_l = epubName.toLower();
-  if (epubName == "" || name_l.contains("unknown")) epubName = fi.baseName();
   QFileInfo fiHtml(currentHtmlFile);
-
   textPos = getVPos();
   if (isEpub) {
     if (mw_one->ui->qwCata->isVisible()) {
-      Reg.setValue("/Reader/vpos" + epubName + "  CataVPos", textPos);
+      Reg.setValue("/Reader/vpos" + currentBookName + "  CataVPos", textPos);
       int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwCata);
-      Reg.setValue("/Reader/vpos" + epubName + "  CataIndex", index);
+      Reg.setValue("/Reader/vpos" + currentBookName + "  CataIndex", index);
     } else {
       if (htmlIndex >= 0)
-        Reg.setValue("/Reader/vpos" + epubName + fiHtml.baseName(), textPos);
+        Reg.setValue("/Reader/vpos" + currentBookName + fiHtml.baseName(),
+                     textPos);
     }
   }
 
   if (isText) {
-    Reg.setValue("/Reader/vpos" + fi.baseName() + QString::number(iPage),
+    Reg.setValue("/Reader/vpos" + currentBookName + QString::number(iPage),
                  textPos);
   }
 }
 
 void Reader::setPageVPos() {
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  QFileInfo fi(fileName);
-  QString epubName = strEpubTitle;
-  QString name_l = epubName.toLower();
-  if (epubName == "" || name_l.contains("unknown")) epubName = fi.baseName();
   QFileInfo fiHtml(currentHtmlFile);
-
   if (isEpub) {
     if (mw_one->ui->qwCata->isVisible()) {
-      textPos = Reg.value("/Reader/vpos" + epubName + "  CataVPos", 0).toReal();
-      int index =
-          Reg.value("/Reader/vpos" + epubName + "  CataIndex", 0).toReal();
+      textPos = Reg.value("/Reader/vpos" + currentBookName + "  CataVPos", 0)
+                    .toReal();
+      int index = Reg.value("/Reader/vpos" + currentBookName + "  CataIndex", 0)
+                      .toReal();
       if (currentCataIndex > 0) index = currentCataIndex;
       m_Method->setCurrentIndexFromQW(mw_one->ui->qwCata, index);
     } else {
       if (htmlIndex >= 0)
-        textPos = Reg.value("/Reader/vpos" + epubName + fiHtml.baseName(), 0)
-                      .toReal();
+        textPos =
+            Reg.value("/Reader/vpos" + currentBookName + fiHtml.baseName(), 0)
+                .toReal();
     }
   }
 
   if (isText) {
     textPos =
-        Reg.value("/Reader/vpos" + fi.baseName() + QString::number(iPage), 0)
+        Reg.value("/Reader/vpos" + currentBookName + QString::number(iPage), 0)
             .toReal();
   }
 
@@ -1302,6 +1308,14 @@ int Reader::getLoadProgress() {
 void Reader::goWebViewBack() {
   QQuickItem* root = mw_one->ui->qwPdf->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "goWebViewBack");
+}
+
+QString Reader::getBookmarkText() {
+  QVariant item;
+  QQuickItem* root = mw_one->ui->qwReader->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getBookmarkText",
+                            Q_RETURN_ARG(QVariant, item));
+  return item.toString();
 }
 
 qreal Reader::getVHeight() {
@@ -2044,7 +2058,7 @@ void Reader::removeBookList() {
 
   bookList.removeAt(index);
   m_Method->delItemFromQW(mw_one->ui->qwBookList, index);
-  saveReader();
+  saveReader("", false);
 }
 
 void Reader::readBookDone() {
@@ -2065,6 +2079,15 @@ void Reader::readBookDone() {
     return;
   }
 
+  QFileInfo fi(fileName);
+  QString epubName = strEpubTitle;
+  QString name_l = epubName.toLower();
+  if (epubName == "" || name_l.contains("unknown")) epubName = fi.baseName();
+  if (isEpub)
+    currentBookName = epubName;
+  else
+    currentBookName = fi.baseName();
+
   if (isText || isEpub) {
     strShowMsg = "Read  EBook End...";
 
@@ -2078,6 +2101,7 @@ void Reader::readBookDone() {
     mw_one->ui->frameReaderFun->show();
     mw_one->ui->progReader->show();
     mw_one->ui->btnPages->show();
+    mw_one->ui->btnShowBookmark->show();
 
     mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
                                                             false);
@@ -2121,6 +2145,7 @@ void Reader::readBookDone() {
   if (isPDF) {
     qDebug() << "===Read Pdf... ..." << fileName;
 
+    mw_one->ui->btnShowBookmark->hide();
     mw_one->ui->progReader->hide();
     mw_one->ui->qwReader->hide();
     mw_one->ui->frameReaderFun->show();
@@ -2289,4 +2314,58 @@ void Reader::setPageScroll1() {
     newpos = th - readerHeight + fontHeight;
   }
   setVPos(newpos);
+}
+
+QStringList Reader::getCurrentBookmarkList() {
+  QStringList list;
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+  int count = Reg.value("/" + currentBookName + "_Bookmark/count", 0).toInt();
+  for (int i = 0; i < count; i++) {
+    QString txt =
+        Reg.value("/" + currentBookName + "_Bookmark/Name" + QString::number(i))
+            .toString();
+    list.insert(0, txt);
+  }
+  return list;
+}
+
+void Reader::clickBookmarkList(int index) {
+  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+  if (isText) {
+    iPage = Reg.value("/" + currentBookName + "_Bookmark/iPage" +
+                      QString::number(index))
+                .toInt();
+    textPos = Reg.value("/" + currentBookName + "_Bookmark/VPos" +
+                        QString::number(index))
+                  .toReal();
+    on_btnPageNext_clicked();
+  }
+
+  if (isEpub) {
+    htmlIndex = Reg.value("/" + currentBookName + "_Bookmark/htmlIndex" +
+                          QString::number(index))
+                    .toInt();
+    textPos = Reg.value("/" + currentBookName + "_Bookmark/VPos" +
+                        QString::number(index))
+                  .toReal();
+    if (htmlIndex >= htmlFiles.count()) {
+      htmlIndex = 0;
+    }
+
+    currentHtmlFile = htmlFiles.at(htmlIndex);
+    setQMLHtml(currentHtmlFile, "");
+    showInfo();
+  }
+  setVPos(textPos);
+
+  mw_one->ui->qwBookmark->hide();
+  mw_one->ui->qwReader->show();
+}
+
+void Reader::showBookmarkList() {
+  QStringList list = getCurrentBookmarkList();
+  m_Method->clearAllBakList(mw_one->ui->qwBookmark);
+  for (int i = 0; i < list.count(); i++) {
+    m_Method->addItemToQW(mw_one->ui->qwBookmark, list.at(i), "", "", "", 0);
+  }
 }

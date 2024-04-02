@@ -82,6 +82,27 @@ Rectangle {
         x = 0
     }
 
+    function getBookmarkText() {
+        var x = 0
+        var y = flickable.contentY
+
+        for (var i = 1; i < 20; i++) {
+            var start = textArea.positionAt(x, y + FontSize * i)
+            var end = textArea.positionAt(x + textArea.width, y + FontSize * i)
+            var txt = textArea.getText(start, end)
+            if (txt.length > 0) {
+                break
+            }
+        }
+        if (txt === "") {
+            txt = "Bookmark"
+        }
+
+        console.log("bookmark txt=" + txt + "  x=" + x + "  start=" + start + "  end=" + end)
+
+        return txt
+    }
+
     DocumentHandler {
         id: document
         objectName: "dochandler"
@@ -109,16 +130,15 @@ Rectangle {
 
         smooth: true
         source: backImgFile
-        visible: backImgFile==="" ? false : true
-
+        visible: backImgFile === "" ? false : true
     }
 
-    Rectangle{
+    Rectangle {
         id: m_Rect
         width: myW
         height: myH
         color: myBackgroundColor
-        visible: backImgFile==="" ? true : false
+        visible: backImgFile === "" ? true : false
     }
 
     Flickable {
@@ -159,7 +179,7 @@ Rectangle {
         TextArea.flickable: TextArea {
             id: textArea
             visible: isEPUBText
-            font.pixelSize:  FontSize
+            font.pixelSize: FontSize
             font.family: FontName
             font.letterSpacing: 2
             renderType: Text.NativeRendering
@@ -185,6 +205,7 @@ Rectangle {
             }
 
             onReleased: {
+
 
             }
 

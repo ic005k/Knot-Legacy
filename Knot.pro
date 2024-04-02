@@ -255,6 +255,7 @@ DISTFILES += \
     src/qmlsrc/TreeWidget.qml \
     src/qmlsrc/baklist.qml \
     src/qmlsrc/booklist.qml \
+    src/qmlsrc/bookmark.qml \
     src/qmlsrc/chart_month.qml \
     src/qmlsrc/details.qml \
     src/qmlsrc/epub_cata.qml \

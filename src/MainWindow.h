@@ -728,6 +728,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnGoBack_clicked();
 
+  void on_btnShowBookmark_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

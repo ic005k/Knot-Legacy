@@ -3374,6 +3374,10 @@ void MainWindow::initQW() {
   ui->qwCata->rootContext()->setContextProperty("m_Reader", m_Reader);
   ui->qwCata->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/epub_cata.qml")));
 
+  ui->qwBookmark->rootContext()->setContextProperty("m_Reader", m_Reader);
+  ui->qwBookmark->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/bookmark.qml")));
+
   ui->qw_Img->rootContext()->setContextProperty("myW", this->width());
   ui->qw_Img->rootContext()->setContextProperty("myH", this->height());
 
@@ -3507,6 +3511,7 @@ void MainWindow::init_Theme() {
   ui->qwReport->rootContext()->setContextProperty("isDark", isDark);
   ui->qwOneDriver->rootContext()->setContextProperty("isDark", isDark);
   ui->qwCata->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwBookmark->rootContext()->setContextProperty("isDark", isDark);
 
   if (!isDark) {
     ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
@@ -3672,6 +3677,7 @@ void MainWindow::init_UIWidget() {
   ui->btnFindPreviousNote->setEnabled(false);
   ui->frameNotesTree->hide();
   ui->qwCata->hide();
+  ui->qwBookmark->hide();
 
   ui->frameCategory->hide();
   ui->frameSetTab->hide();
@@ -4367,7 +4373,7 @@ void MainWindow::on_btnBackReader_clicked() {
 
   if (m_Reader->isSelText) on_btnSelText_clicked();
 
-  m_Reader->saveReader();
+  m_Reader->saveReader("", false);
   m_Reader->savePageVPos();
 
   ui->frameReader->hide();
@@ -5611,3 +5617,14 @@ void MainWindow::on_btnStatusBar_clicked() { ui->frameReaderFun->hide(); }
 void MainWindow::on_btnRotatePage_clicked() { m_Reader->rotatePdfPage(); }
 
 void MainWindow::on_btnGoBack_clicked() { m_Reader->goWebViewBack(); }
+
+void MainWindow::on_btnShowBookmark_clicked() {
+  if (ui->qwBookmark->isHidden()) {
+    ui->qwReader->hide();
+    ui->qwBookmark->show();
+    m_Reader->showBookmarkList();
+  } else {
+    ui->qwBookmark->hide();
+    ui->qwReader->show();
+  }
+}

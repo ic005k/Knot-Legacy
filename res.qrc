@@ -156,5 +156,7 @@
         <file>res/hide_l.png</file>
         <file>res/pdf/pdf.viewer.bridge.js</file>
         <file>res/pdf/qwebchannel.js</file>
+        <file>res/bookmark_l.png</file>
+        <file>res/set_bookmark_l.png</file>
     </qresource>
 </RCC>

@@ -58,7 +58,7 @@ class Reader : public QDialog {
   qreal textPos;
   qreal textHeight;
 
-  void saveReader();
+  void saveReader(QString BookmarkText, bool isSetBookmark);
   void initReader();
 
   static void openFile(QString fileName);
@@ -124,7 +124,10 @@ class Reader : public QDialog {
   void closeSelText();
   void setPageScroll0();
   void setPageScroll1();
- public slots:
+  QString getBookmarkText();
+  QStringList getCurrentBookmarkList();
+  void showBookmarkList();
+  public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
   void showCatalogue();
@@ -132,7 +135,8 @@ class Reader : public QDialog {
 
   void openCataList(QString htmlFile);
 
- protected:
+  void clickBookmarkList(int index);
+  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
@@ -155,6 +159,7 @@ class Reader : public QDialog {
   QString strFind;
   void gotoCataList(QString htmlFile);
   int currentCataIndex = 0;
+  QString currentBookName;
 };
 
 #endif  // READER_H

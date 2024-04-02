@@ -54,6 +54,8 @@ class ReaderSet : public QDialog {
 
   void on_editForegroundColor_textChanged(const QString &arg1);
 
+  void on_btnSetBookmark_clicked();
+
  private:
 };
 
