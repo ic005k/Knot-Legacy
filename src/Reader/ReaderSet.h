@@ -50,6 +50,10 @@ class ReaderSet : public QDialog {
 
   void on_btnForegroundColor_clicked();
 
+  void on_editBackgroundColor_textChanged(const QString &arg1);
+
+  void on_editForegroundColor_textChanged(const QString &arg1);
+
  private:
 };
 

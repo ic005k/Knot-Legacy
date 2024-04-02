@@ -162,6 +162,7 @@ void Reader::setReaderStyle() {
 
     textColor = QColor(0, 0, 0);
     baseColor = QColor(255, 255, 255);
+    mw_one->m_ReaderSet->ui->f_CustomColor->show();
   }
 
   if (readerStyle == "3") {

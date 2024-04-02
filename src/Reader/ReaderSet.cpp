@@ -52,6 +52,9 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
       new QRegularExpressionValidator(regxNumber, ui->editPage);
   ui->editPage->setValidator(validator);
 
+  f = m_Method->getNewFont(15);
+  ui->editBackgroundColor->setFont(f);
+  ui->editForegroundColor->setFont(f);
   QString color_0, color_1;
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
   color_0 = Reg.value("/Reader/BackgroundColor", "#FFFFFF").toString();
@@ -163,6 +166,9 @@ void ReaderSet::on_btnStyle2_clicked() {
   mw_one->m_Reader->readerStyle = "2";
   mw_one->m_Reader->setReaderStyle();
   ui->f_CustomColor->show();
+
+  Reg.setValue("/Reader/BackgroundColor", ui->editBackgroundColor->text());
+  Reg.setValue("/Reader/ForegroundColor", ui->editForegroundColor->text());
 }
 
 void ReaderSet::on_btnStyle3_clicked() {
@@ -258,4 +264,14 @@ void ReaderSet::on_btnForegroundColor_clicked() {
                                   "solid "
                                   "rgb(255,0,0);border-radius: 4px;";
   mw_one->m_Reader->setReaderStyle();
+}
+
+void ReaderSet::on_editBackgroundColor_textChanged(const QString& arg1) {
+  Q_UNUSED(arg1);
+  if (!mw_one->initMain) on_btnStyle2_clicked();
+}
+
+void ReaderSet::on_editForegroundColor_textChanged(const QString& arg1) {
+  Q_UNUSED(arg1);
+  if (!mw_one->initMain) on_btnStyle2_clicked();
 }
