@@ -895,6 +895,7 @@ void Reader::openCataList(QString htmlFile) {
   mw_one->ui->lblCataInfo->hide();
   mw_one->ui->qwCata->hide();
   mw_one->ui->qwReader->show();
+  mw_one->ui->btnShowBookmark->setEnabled(true);
 
   initLink(htmlFile);
   m_Method->clearAllBakList(mw_one->ui->qwCata);
@@ -2392,6 +2393,7 @@ void Reader::clickBookmarkList(int i) {
 
   mw_one->ui->qwBookmark->hide();
   mw_one->ui->qwReader->show();
+  mw_one->ui->btnCatalogue->setEnabled(true);
 }
 
 void Reader::showBookmarkList() {

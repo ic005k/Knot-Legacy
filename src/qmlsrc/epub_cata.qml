@@ -213,6 +213,7 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Rectangle {
+                    id: m_rect
                     height: parent.height - 2
                     width: 6
                     radius: 2
@@ -237,7 +238,7 @@ Rectangle {
                         id: item0
 
                         width: parent.width
-                        Layout.preferredWidth: listItem.width
+                        Layout.preferredWidth: listItem.width - m_rect.width
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
