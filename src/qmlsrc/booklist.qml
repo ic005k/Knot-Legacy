@@ -203,7 +203,7 @@ Rectangle {
                     return "/res/pdf.svg"
 
                 if (item3.text == "none")
-                    return "/res/none.svg"
+                    return "/res/none.png"
             }
 
             RowLayout {

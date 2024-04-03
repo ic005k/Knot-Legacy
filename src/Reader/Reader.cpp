@@ -674,41 +674,33 @@ void Reader::saveReader(QString BookmarkText, bool isSetBookmark) {
 
   QString bookmarkSn;
   if (isSetBookmark) {
-    int countBookmark =
-        Reg.value("/" + currentBookName + "_Bookmark/count", 0).toInt();
+    int countBookmark = Reg.value("/Bookmark/count", 0).toInt();
     countBookmark = countBookmark + 1;
-    Reg.setValue("/" + currentBookName + "_Bookmark/count", countBookmark);
+    Reg.setValue("/Bookmark/count", countBookmark);
     bookmarkSn = QString::number(countBookmark - 1);
   }
 
   if (isText || isEpub) {
     if (isText) {
       if (isSetBookmark) {
-        Reg.setValue("/" + currentBookName + "_Bookmark/iPage" + bookmarkSn,
-                     iPage - baseLines);
-        Reg.setValue("/" + currentBookName + "_Bookmark/Name" + bookmarkSn,
-                     BookmarkText);
-        Reg.setValue("/" + currentBookName + "_Bookmark/VPos" + bookmarkSn,
-                     getVPos());
+        Reg.setValue("/Bookmark/iPage" + bookmarkSn, iPage - baseLines);
+        Reg.setValue("/Bookmark/Name" + bookmarkSn, BookmarkText);
+        Reg.setValue("/Bookmark/VPos" + bookmarkSn, getVPos());
 
       } else {
-        Reg.setValue("/Reader/iPage" + currentBookName, iPage - baseLines);
+        Reg.setValue("/Reader/iPage", iPage - baseLines);
       }
     }
 
     if (isEpub) {
       if (isSetBookmark) {
-        Reg.setValue("/" + currentBookName + "_Bookmark/htmlIndex" + bookmarkSn,
-                     htmlIndex);
-        Reg.setValue("/" + currentBookName + "_Bookmark/Name" + bookmarkSn,
-                     BookmarkText);
-        Reg.setValue("/" + currentBookName + "_Bookmark/VPos" + bookmarkSn,
-                     getVPos());
+        Reg.setValue("/Bookmark/htmlIndex" + bookmarkSn, htmlIndex);
+        Reg.setValue("/Bookmark/Name" + bookmarkSn, BookmarkText);
+        Reg.setValue("/Bookmark/VPos" + bookmarkSn, getVPos());
       } else {
-        Reg.setValue("/Reader/htmlIndex" + currentBookName, htmlIndex);
+        Reg.setValue("/Reader/htmlIndex", htmlIndex);
         // dir
-        Reg.setValue("/Reader/" + currentBookName + "MainDirIndex",
-                     mainDirIndex);
+        Reg.setValue("/Reader/MainDirIndex", mainDirIndex);
       }
     }
   }
@@ -716,8 +708,8 @@ void Reader::saveReader(QString BookmarkText, bool isSetBookmark) {
   if (isPDF) {
     if (isSetBookmark) {
     } else {
-      Reg.setValue("/Reader/PdfPage" + currentBookName, getPdfCurrentPage());
-      Reg.setValue("/Reader/PdfScale" + currentBookName, getScale());
+      Reg.setValue("/Reader/PdfPage", getPdfCurrentPage());
+      Reg.setValue("/Reader/PdfScale", getScale());
     }
   }
 
@@ -1179,12 +1171,12 @@ void Reader::goPostion() {
 #endif
 
     if (isText) {
-      iPage = Reg.value("/Reader/iPage" + currentBookName, 0).toULongLong();
+      iPage = Reg.value("/Reader/iPage", 0).toULongLong();
       on_btnPageNext_clicked();
     }
 
     if (isEpub) {
-      htmlIndex = Reg.value("/Reader/htmlIndex" + currentBookName, 0).toInt();
+      htmlIndex = Reg.value("/Reader/htmlIndex", 0).toInt();
 
       if (htmlIndex >= htmlFiles.count()) {
         htmlIndex = 0;
@@ -1197,10 +1189,10 @@ void Reader::goPostion() {
     }
 
     if (isPDF) {
-      int page = Reg.value("/Reader/PdfPage" + currentBookName, 1).toInt();
+      int page = Reg.value("/Reader/PdfPage", 1).toInt();
       setPdfPage(page);
 
-      qreal scale = Reg.value("/Reader/PdfScale" + currentBookName, 1).toReal();
+      qreal scale = Reg.value("/Reader/PdfScale", 1).toReal();
       setPdfScale(scale);
     }
   }
@@ -1242,19 +1234,17 @@ void Reader::savePageVPos() {
   textPos = getVPos();
   if (isEpub) {
     if (mw_one->ui->qwCata->isVisible()) {
-      Reg.setValue("/Reader/vpos" + currentBookName + "  CataVPos", textPos);
+      Reg.setValue("/Reader/vpos  CataVPos", textPos);
       int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwCata);
-      Reg.setValue("/Reader/vpos" + currentBookName + "  CataIndex", index);
+      Reg.setValue("/Reader/vpos  CataIndex", index);
     } else {
       if (htmlIndex >= 0)
-        Reg.setValue("/Reader/vpos" + currentBookName + fiHtml.baseName(),
-                     textPos);
+        Reg.setValue("/Reader/vpos" + fiHtml.baseName(), textPos);
     }
   }
 
   if (isText) {
-    Reg.setValue("/Reader/vpos" + currentBookName + QString::number(iPage),
-                 textPos);
+    Reg.setValue("/Reader/vpos" + QString::number(iPage), textPos);
   }
 }
 
@@ -1267,24 +1257,18 @@ void Reader::setPageVPos() {
   QFileInfo fiHtml(currentHtmlFile);
   if (isEpub) {
     if (mw_one->ui->qwCata->isVisible()) {
-      textPos = Reg.value("/Reader/vpos" + currentBookName + "  CataVPos", 0)
-                    .toReal();
-      int index = Reg.value("/Reader/vpos" + currentBookName + "  CataIndex", 0)
-                      .toReal();
+      textPos = Reg.value("/Reader/vpos  CataVPos", 0).toReal();
+      int index = Reg.value("/Reader/vpos  CataIndex", 0).toReal();
       if (currentCataIndex > 0) index = currentCataIndex;
       m_Method->setCurrentIndexFromQW(mw_one->ui->qwCata, index);
     } else {
       if (htmlIndex >= 0)
-        textPos =
-            Reg.value("/Reader/vpos" + currentBookName + fiHtml.baseName(), 0)
-                .toReal();
+        textPos = Reg.value("/Reader/vpos" + fiHtml.baseName(), 0).toReal();
     }
   }
 
   if (isText) {
-    textPos =
-        Reg.value("/Reader/vpos" + currentBookName + QString::number(iPage), 0)
-            .toReal();
+    textPos = Reg.value("/Reader/vpos" + QString::number(iPage), 0).toReal();
   }
 
   setVPos(textPos);
@@ -2346,11 +2330,9 @@ QStringList Reader::getCurrentBookmarkList() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  int count = Reg.value("/" + currentBookName + "_Bookmark/count", 0).toInt();
+  int count = Reg.value("/Bookmark/count", 0).toInt();
   for (int i = 0; i < count; i++) {
-    QString txt =
-        Reg.value("/" + currentBookName + "_Bookmark/Name" + QString::number(i))
-            .toString();
+    QString txt = Reg.value("/Bookmark/Name" + QString::number(i)).toString();
     list.insert(0, txt);
   }
   return list;
@@ -2365,22 +2347,15 @@ void Reader::clickBookmarkList(int i) {
   Reg.setIniCodec("utf-8");
 #endif
   if (isText) {
-    iPage = Reg.value("/" + currentBookName + "_Bookmark/iPage" +
-                      QString::number(index))
-                .toInt();
+    iPage = Reg.value("/Bookmark/iPage" + QString::number(index)).toInt();
     on_btnPageNext_clicked();
-    textPos = Reg.value("/" + currentBookName + "_Bookmark/VPos" +
-                        QString::number(index))
-                  .toReal();
+    textPos = Reg.value("/Bookmark/VPos" + QString::number(index)).toReal();
   }
 
   if (isEpub) {
-    htmlIndex = Reg.value("/" + currentBookName + "_Bookmark/htmlIndex" +
-                          QString::number(index))
-                    .toInt();
-    textPos = Reg.value("/" + currentBookName + "_Bookmark/VPos" +
-                        QString::number(index))
-                  .toReal();
+    htmlIndex =
+        Reg.value("/Bookmark/htmlIndex" + QString::number(index)).toInt();
+    textPos = Reg.value("/Bookmark/VPos" + QString::number(index)).toReal();
     if (htmlIndex >= htmlFiles.count()) {
       htmlIndex = 0;
     }

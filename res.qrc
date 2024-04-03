@@ -83,7 +83,6 @@
         <file>res/sleft.svg</file>
         <file>res/sright.svg</file>
         <file>res/epub.svg</file>
-        <file>res/none.svg</file>
         <file>res/pdf.svg</file>
         <file>res/txt.svg</file>
         <file>res/hidekey.svg</file>
@@ -158,5 +157,6 @@
         <file>res/pdf/qwebchannel.js</file>
         <file>res/bookmark_l.png</file>
         <file>res/set_bookmark_l.png</file>
+        <file>res/none.png</file>
     </qresource>
 </RCC>
