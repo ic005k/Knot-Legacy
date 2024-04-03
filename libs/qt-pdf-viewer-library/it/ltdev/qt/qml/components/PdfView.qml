@@ -87,7 +87,7 @@ Item {
         @param path {string}: the path of the pdf to load
     */
     function load(path) {
-        var method = 1
+        var method = 2
         if(Qt.platform.os==="android")
             method = 1
 

@@ -158,6 +158,8 @@ int main(int argc, char* argv[]) {
     QString v_jsBuffers = loadText(v_js);
     v_jsBuffers.replace("value: \"compressed.tracemonkey-pldi-09.pdf\",",
                         "value: \"\",");
+    v_jsBuffers.replace("loadingErrorMessage = _this7.l10n.get",
+                        "// loadingErrorMessage = _this7.l10n.get");
     v_jsBuffers.replace("scale = pageWidthScale",
                         "scale = pageWidthScale * 1.05");
     StringToFile(v_jsBuffers, v_js);
