@@ -57,6 +57,9 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   ui->editForegroundColor->setFont(f);
   QString color_0, color_1;
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   color_0 = Reg.value("/Reader/BackgroundColor", "#FFFFFF").toString();
   color_1 = Reg.value("/Reader/ForegroundColor", "#000000").toString();
   ui->editBackgroundColor->setText(color_0);
@@ -226,6 +229,9 @@ void ReaderSet::on_btnBackgroundColor_clicked() {
   QString color_1 = ui->editForegroundColor->text();
 
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   Reg.setValue("/Reader/BackgroundColor", ui->editBackgroundColor->text());
   Reg.setValue("/Reader/ForegroundColor", ui->editForegroundColor->text());
 
@@ -250,6 +256,9 @@ void ReaderSet::on_btnForegroundColor_clicked() {
   QString color_0 = ui->editBackgroundColor->text();
 
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   Reg.setValue("/Reader/BackgroundColor", ui->editBackgroundColor->text());
   Reg.setValue("/Reader/ForegroundColor", ui->editForegroundColor->text());
 

@@ -3374,6 +3374,8 @@ void MainWindow::initQW() {
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
   ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwReader->rootContext()->setContextProperty("nCursorPos", 0);
+  ui->qwReader->rootContext()->setContextProperty("myBackgroundColor",
+                                                  "#FFFFFF");
 
   ui->qwCata->rootContext()->setContextProperty("m_Reader", m_Reader);
   ui->qwCata->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/epub_cata.qml")));

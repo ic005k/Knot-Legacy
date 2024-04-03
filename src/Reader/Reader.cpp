@@ -666,8 +666,11 @@ QString Reader::get_href(QString idref, QStringList opfList) {
 }
 
 void Reader::saveReader(QString BookmarkText, bool isSetBookmark) {
-  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
-  Reg.setValue("/Reader/FileName", fileName);
+  QSettings Reg(privateDir + "bookini/" + currentBookName + ".ini",
+                QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
 
   QString bookmarkSn;
   if (isSetBookmark) {
@@ -679,8 +682,6 @@ void Reader::saveReader(QString BookmarkText, bool isSetBookmark) {
   }
 
   if (isText || isEpub) {
-    Reg.setValue("/Reader/FontSize", readerFontSize);
-
     if (isText) {
       if (isSetBookmark) {
         Reg.setValue("/" + currentBookName + "_Bookmark/iPage" + bookmarkSn,
@@ -723,9 +724,16 @@ void Reader::saveReader(QString BookmarkText, bool isSetBookmark) {
   if (isSetBookmark) {
   } else {
     // book list
-    Reg.setValue("/Reader/BookCount", bookList.count());
+    QSettings Reg1(privateDir + "reader.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    Reg1.setIniCodec("utf-8");
+#endif
+
+    Reg1.setValue("/Reader/FileName", fileName);
+    Reg1.setValue("/Reader/FontSize", readerFontSize);
+    Reg1.setValue("/Reader/BookCount", bookList.count());
     for (int i = 0; i < bookList.count(); i++) {
-      Reg.setValue("/Reader/BookSn" + QString::number(i), bookList.at(i));
+      Reg1.setValue("/Reader/BookSn" + QString::number(i), bookList.at(i));
     }
   }
 }
@@ -1163,7 +1171,8 @@ void Reader::paintEvent(QPaintEvent* event) { Q_UNUSED(event); }
 
 void Reader::goPostion() {
   if (isOpen) {
-    QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+    QSettings Reg(privateDir + "bookini/" + currentBookName + ".ini",
+                  QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
 #endif
@@ -1223,7 +1232,11 @@ void Reader::PlainTextEditToFile(QPlainTextEdit* txtEdit, QString fileName) {
 }
 
 void Reader::savePageVPos() {
-  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "bookini/" + currentBookName + ".ini",
+                QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   QFileInfo fiHtml(currentHtmlFile);
   textPos = getVPos();
   if (isEpub) {
@@ -1245,7 +1258,11 @@ void Reader::savePageVPos() {
 }
 
 void Reader::setPageVPos() {
-  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "bookini/" + currentBookName + ".ini",
+                QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   QFileInfo fiHtml(currentHtmlFile);
   if (isEpub) {
     if (mw_one->ui->qwCata->isVisible()) {
@@ -2297,7 +2314,9 @@ void Reader::closeSelText() {
 
 void Reader::setPageScroll0() {
   qreal cpos = getVPos();
+  qreal th = getVHeight();
   int readerHeight = mw_one->ui->qwReader->height();
+  if (th < readerHeight) return;
   int fontHeight = m_Method->getFontHeight();
   qreal newpos = cpos - readerHeight + fontHeight;
 
@@ -2310,6 +2329,7 @@ void Reader::setPageScroll1() {
   qreal cpos = getVPos();
   qreal th = getVHeight();
   int readerHeight = mw_one->ui->qwReader->height();
+  if (th < readerHeight) return;
   int fontHeight = m_Method->getFontHeight();
   qreal newpos = cpos + readerHeight - fontHeight;
   if (newpos + readerHeight - fontHeight > th) {
@@ -2320,7 +2340,11 @@ void Reader::setPageScroll1() {
 
 QStringList Reader::getCurrentBookmarkList() {
   QStringList list;
-  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "bookini/" + currentBookName + ".ini",
+                QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   int count = Reg.value("/" + currentBookName + "_Bookmark/count", 0).toInt();
   for (int i = 0; i < count; i++) {
     QString txt =
@@ -2334,7 +2358,11 @@ QStringList Reader::getCurrentBookmarkList() {
 void Reader::clickBookmarkList(int i) {
   int count = m_Method->getCountFromQW(mw_one->ui->qwBookmark);
   int index = count - 1 - i;
-  QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
+  QSettings Reg(privateDir + "bookini/" + currentBookName + ".ini",
+                QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
   if (isText) {
     iPage = Reg.value("/" + currentBookName + "_Bookmark/iPage" +
                       QString::number(index))

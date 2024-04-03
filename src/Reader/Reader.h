@@ -13,6 +13,7 @@
 #include <QQmlEngine>
 #include <QQuickView>
 #include <QQuickWidget>
+#include <QString>
 #include <QTextBlock>
 #include <QTextBrowser>
 #include <QTextCodec>
@@ -55,6 +56,7 @@ class Reader : public QDialog {
   DocumentHandler *myDocHandler;
   QStringList bookList;
 
+  QString currentBookName;
   qreal textPos;
   qreal textHeight;
 
@@ -127,6 +129,7 @@ class Reader : public QDialog {
   QString getBookmarkText();
   QStringList getCurrentBookmarkList();
   void showBookmarkList();
+
  public slots:
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
@@ -160,7 +163,6 @@ class Reader : public QDialog {
   QString strFind;
   void gotoCataList(QString htmlFile);
   int currentCataIndex = 0;
-  QString currentBookName;
 };
 
 #endif  // READER_H

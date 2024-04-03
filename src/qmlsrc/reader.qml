@@ -88,8 +88,9 @@ Rectangle {
 
         for (var i = 1; i < 20; i++) {
             var start = textArea.positionAt(x, y + FontSize * i)
-            var end = textArea.positionAt(x + textArea.width, y + FontSize * i)
+            var end = textArea.positionAt(x + textArea.width, y + FontSize*4 * i)
             var txt = textArea.getText(start, end)
+            txt = txt.trim()
             if (txt.length > 0) {
                 break
             }
