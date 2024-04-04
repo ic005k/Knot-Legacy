@@ -1,8 +1,10 @@
 package com.x;
 
 //Qt5
+//import org.qtproject.qt5.android.bindings.QtActivity;
 
-import org.qtproject.qt5.android.bindings.QtActivity;
+//Qt6
+import org.qtproject.qt.android.bindings.QtActivity;
 
 import com.x.MyService;
 

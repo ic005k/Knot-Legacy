@@ -8,6 +8,8 @@
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QCharRef>
+#else
+#include <QtCore/private/qandroidextras_p.h>
 #endif
 
 #include <QColorDialog>

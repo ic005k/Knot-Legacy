@@ -1,7 +1,8 @@
-QT += core gui network printsupport gui-private
+QT += core gui network printsupport gui-private core-private
 QT += charts sensors
 QT += qml quick quickwidgets webview
 QT += xml svg
+QT += statemachine
 
 !android: {
     QT += webenginewidgets

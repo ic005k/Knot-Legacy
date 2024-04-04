@@ -2175,13 +2175,15 @@ void Reader::readBookDone() {
     if (pdfMethod == 1) {
       setPdfViewVisible(true);
 
+      mw_one->ui->qwPdf->setSource(
+          QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
       QQuickItem* root = mw_one->ui->qwPdf->rootObject();
 
-#ifdef Q_OS_WIN
+      // #ifdef Q_OS_WIN
 
       QMetaObject::invokeMethod((QObject*)root, "setViewEnd",
                                 Q_ARG(QVariant, true));
-#endif
+      // #endif
 
       QMetaObject::invokeMethod((QObject*)root, "loadPDF",
                                 Q_ARG(QVariant, fileName));

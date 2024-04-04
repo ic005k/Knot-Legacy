@@ -551,7 +551,7 @@ void setTableNoItemFlags(QTableWidget* t, int row) {
   }
 }
 
-void Report::on_btnOut2Img_clicked() {
+void Report::Out2Img() {
   if (twOut2Img->topLevelItemCount() == 0) return;
 
   if (twOut2Img->topLevelItem(0)->text(0) != mw_one->ui->btnYear->text()) {
@@ -801,8 +801,7 @@ void Report::genReportMenu() {
 
   QAction* actOuttoPic = new QAction(tr("Output to Image"));
   m_Menu->addAction(actOuttoPic);
-  connect(actOuttoPic, &QAction::triggered, this,
-          [=]() { on_btnOut2Img_clicked(); });
+  connect(actOuttoPic, &QAction::triggered, this, [=]() { Out2Img(); });
 
   int x = 0;
   x = mw_one->geometry().x() + 2;

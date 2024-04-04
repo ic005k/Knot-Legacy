@@ -324,7 +324,9 @@ MainWindow::MainWindow(QWidget *parent)
 
   qRegisterMetaType<QVector<int>>("QVector<int>");
   loading = true;
+
   init_Instance();
+
   init_Options();
   init_UIWidget();
   init_ChartWidget();
@@ -3110,6 +3112,7 @@ void MainWindow::on_actionPreferences_triggered() {
                              m_Preferences->width(), height());
   m_Preferences->setModal(true);
   m_Preferences->ui->sliderFontSize->setStyleSheet(ui->hsM->styleSheet());
+  m_Preferences->ui->sliderFontSize->setValue(fontSize);
   m_Preferences->show();
   m_Preferences->initCheckStatus();
 }
@@ -3611,21 +3614,19 @@ void MainWindow::init_Instance() {
   mw_one = this;
   CurrentYear = QString::number(QDate::currentDate().year());
 
-  LTDev::QtPdfViewerInitializer::initialize(privateDir);
-
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
 
   tabChart = new QTabWidget;
   tabChart = ui->tabCharts;
 
+  m_Method = new Method(this);
   myfile = new File();
   m_Remarks = new dlgRemarks(this);
-  m_Method = new Method(this);
+  m_Preferences = new Preferences(this);
   m_EditRecord = new EditRecord(this);
   m_Todo = new Todo(this);
   m_Report = new Report(this);
-  m_Preferences = new Preferences(this);
   m_Notes = new Notes(this);
   m_StepsOptions = new StepsOptions(this);
   m_Steps = new Steps(this);
@@ -3960,11 +3961,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   QAction *actAbout = new QAction(tr("About") + " (" + ver + ")");
   QAction *actOneDrive = new QAction(tr("OneDrive Backup Data"));
 
-  QAction *actUndo = new QAction(tr("Undo"));
-  QAction *actRedo = new QAction(tr("Redo"));
-  actUndo->setVisible(false);
-  actRedo->setVisible(false);
-
   QAction *actBakFileList = new QAction(tr("Backup File List"));
   QAction *actTabRecycle = new QAction(tr("Tab Recycle"));
 
@@ -3974,9 +3970,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
           &MainWindow::on_actionDel_Tab_triggered);
   connect(actRenameTab, &QAction::triggered, this,
           &MainWindow::on_actionRename_triggered);
-
-  connect(actUndo, &QAction::triggered, this, &MainWindow::undo);
-  connect(actRedo, &QAction::triggered, this, &MainWindow::redo);
 
   connect(actBakFileList, &QAction::triggered, this,
           &MainWindow::on_actionBakFileList);
@@ -4006,9 +3999,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   mainMenu->addAction(actRenameTab);
 
   mainMenu->addAction(actReport);
-
-  mainMenu->addAction(actUndo);
-  mainMenu->addAction(actRedo);
 
   mainMenu->addAction(actExportData);
   mainMenu->addAction(actImportData);
@@ -5108,7 +5098,7 @@ void MainWindow::on_btnYear_clicked() { m_Report->on_btnYear_clicked(); }
 
 void MainWindow::on_btnMonth_clicked() { m_Report->on_btnMonth_clicked(); }
 
-void MainWindow::on_btnOut2Img_clicked() { m_Report->on_btnOut2Img_clicked(); }
+// void MainWindow::on_btnOut2Img_clicked() { m_Report->Out2Img(); }
 
 void MainWindow::on_btnCategory_clicked() {
   m_Report->on_btnCategory_clicked();
@@ -5496,10 +5486,10 @@ void MainWindow::on_btnChartDay_clicked() {
                              "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 }
 
-void MainWindow::on_editStepsThreshold_textChanged(const QString &arg1) {
-  ui->qwSteps->rootContext()->setContextProperty("nStepsThreshold",
-                                                 arg1.toInt());
-}
+// void MainWindow::on_editStepsThreshold_textChanged(const QString &arg1) {
+//   ui->qwSteps->rootContext()->setContextProperty("nStepsThreshold",
+//                                                arg1.toInt());
+//}
 
 void MainWindow::on_btnTabMoveUp_clicked() {
   if (tabData->count() == 0) return;

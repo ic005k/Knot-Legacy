@@ -1016,7 +1016,7 @@ void Method::setDark(QString strDark) {
                       javaDark.object<jstring>());
 
 #else
-  QAndroidJniObject javaDark = QAndroidJniObject::fromString(strDark);
+  QJniObject javaDark = QJniObject::fromString(strDark);
   QJniObject jo = QJniObject::fromString("dark");
   jo.callMethod<void>("com.x/MyActivity", "setDark", "(Ljava/lang/String;)V",
                       javaDark.object<jstring>());

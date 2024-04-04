@@ -11,6 +11,7 @@ import android.os.HandlerThread;
 import android.content.ClipboardManager;
 import android.content.ClipData;
 
+import java.util.Properties;
 import java.util.Stack;
 
 import android.view.inputmethod.InputMethodSession.EventCallback;
@@ -110,6 +111,8 @@ import java.lang.reflect.Field;
 import android.widget.LinearLayout;
 
 //import javax.swing.text.View;
+
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebViewClient;
@@ -128,9 +131,11 @@ import android.content.pm.PackageManager;
 
 import android.os.FileObserver;
 
+import android.view.Window;
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
+    public static boolean isDark = false;
     private static MyActivity m_instance = null;
     private static SensorManager mSensorManager;
     public static int isStepCounter = -1;
@@ -162,11 +167,40 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     public native static void CallJavaNotify_4();
 
+    private InternalConfigure internalConfigure;
+
     public MyActivity() {
 
     }
 
     //------------------------------------------------------------------------
+    public void setStatusBarHide() {
+
+    }
+
+    public void setStatusBarShow() {
+
+    }
+
+    //------------------------------------------------------------------------
+
+
+    public void setDark(String strDark) {
+        if (strDark.equals("dark_yes"))
+            isDark = true;
+        if (strDark.equals("dark_no"))
+            isDark = false;
+        if (isDark) {
+            this.setStatusBarColor("#19232D");  //深色
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); //白色文字
+        } else {
+            this.setStatusBarColor("#F3F3F3");  //灰
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //黑色文字
+        }
+
+        System.out.println("strDark=" + strDark + "    isDark=" + isDark);
+    }
+
     public static int startAlarm(String str) {
         // 特殊转义字符，必须加"\\"（“.”和“|”都是转义字符）
         String[] array = str.split("\\|");
@@ -247,6 +281,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     // 非全透,带颜色的状态栏,需要指定颜色（目前采用）
     private void setStatusBarColor(String color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+
             // 需要安卓版本大于5.0以上
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(Color.parseColor(color));
@@ -490,6 +526,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         //唤醒锁（手机上不推荐使用，其它插电安卓系统可考虑，比如广告机等）
         //acquireWakeLock();
+
         mySerivece = new PersistService();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         countSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -500,11 +537,33 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         //状态栏
         context = getApplicationContext();  // 获取程序句柄
         // 设置状态栏颜色,需要安卓版本大于5.0
-        this.setStatusBarColor("#F3F3F3");  //灰
+        String filename = "/storage/emulated/0/.Knot/options.ini";
+        internalConfigure = new InternalConfigure(this);
+        try {
+            internalConfigure.readFrom(filename);
+        } catch (Exception e) {
+            System.err.println("Error : reading msg.ini");
+            e.printStackTrace();
+
+        }
+
+        String strDark = internalConfigure.getIniKey("Dark");
+        isDark = Boolean.parseBoolean(strDark);
+        System.out.println("strDark=" + strDark + "    isDark=" + isDark);
+
+        if (isDark) {
+            this.setStatusBarColor("#19232D");  //深色
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); //白色文字
+        } else {
+            this.setStatusBarColor("#F3F3F3");  //灰
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //黑色文字
+        }
+
         // 设置状态栏全透明
-        // this.setStatusBarFullTransparent();
-        //状态栏文字自适应
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        //this.setStatusBarFullTransparent();
+
+        // 控制状态栏显示，在setContentView之前设置全屏的flag
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
@@ -1045,8 +1104,8 @@ This method can parse out the real local file path from a file URI.
                 String reason = intent.getStringExtra(SYSTEM_REASON);
                 if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     // 表示按了home键,程序直接进入到后台
-
                     System.out.println("MyActivity HOME键被按下...");
+                    CallJavaNotify_1();
                 } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
                     // 表示长按home键,显示最近使用的程序
                     System.out.println("MyActivity 长按HOME键...");
@@ -1208,6 +1267,71 @@ This method can parse out the real local file path from a file URI.
             e.printStackTrace();
         }
     }
+
+    //==============================================================================================
+    public class InternalConfigure {
+        private final Context context;
+        private Properties properties;
+
+        public InternalConfigure(Context context) {
+            super();
+            this.context = context;
+        }
+
+        /**
+         * 保存文件filename为文件名，filecontent为存入的文件内容
+         * 例:configureActivity.saveFiletoSD("text.ini","");
+         */
+        public void saveFile(String filename, Properties properties) throws Exception {
+            //设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
+            FileOutputStream fileOutputStream;// = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            File file = new File(filename);
+            fileOutputStream = new FileOutputStream(file);
+            //通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
+            for (String key : properties.stringPropertyNames()) {
+                String s = key + " = " + properties.getProperty(key) + "\n";
+                System.out.println(s);
+                fileOutputStream.write(s.getBytes());
+            }
+            fileOutputStream.close();
+        }
+
+        /**
+         * 读取文件
+         */
+        public void readFrom(String filename) throws Exception {
+            properties = new Properties();
+
+            FileInputStream fileInputStream;// = context.openFileInput(filename);
+
+            File file = new File(filename);
+            fileInputStream = new FileInputStream(file);
+
+            InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
+            BufferedReader br = new BufferedReader(reader);
+            //String line;
+            //while ((line = br.readLine()) != null) {
+            //    System.out.println(line);
+            //}
+
+            properties.load(br);
+
+            br.close();
+            reader.close();
+            fileInputStream.close();
+        }
+
+        /**
+         * 返回指定key对应的value
+         */
+        public String getIniKey(String key) {
+            if (properties.containsKey(key) == false) {
+                return null;
+            }
+            return String.valueOf(properties.get(key));
+        }
+    }
+
 
     //==============================================================================================
 

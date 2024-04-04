@@ -94,7 +94,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
     //     m_Method->vsbarStyleSmall);
   }
 
-  ui->frameEdit->layout()->setMargin(0);
+  ui->frameEdit->layout()->setContentsMargins(0, 0, 0, 0);
   m_EditSource->setContentsMargins(1, 1, 1, 1);
   m_EditSource->setStyleSheet("border:none");
   m_EditSource->setCursorWidth(2);
@@ -1442,8 +1442,8 @@ void Notes::on_btnGetShare_clicked() {
       javaUriPath.object<jstring>());
 
 #else
-  QJniObject javaUriPath = QAndroidJniObject::fromString("uripath");
-  QJniObject m_activity = QtAndroid::androidActivity();
+  QJniObject javaUriPath = QJniObject::fromString("uripath");
+  QJniObject m_activity = QtAndroidPrivate::activity();
   QJniObject s = m_activity.callObjectMethod(
       "getShare", "(Ljava/lang/String;)Ljava/lang/String;",
       javaUriPath.object<jstring>());

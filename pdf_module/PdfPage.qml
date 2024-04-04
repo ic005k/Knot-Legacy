@@ -90,6 +90,7 @@ Rectangle {
     function loadPDF(pdffile) {
         pdfPath = pdffile
         isOne = false
+        console.log("isViewEnd=" + isViewEnd)
 
         if (isViewEnd) {
             pdfView.visible = true

@@ -26,11 +26,14 @@ dlgRemarks::dlgRemarks(QWidget *parent)
   ui->lblTip->setFont(font);
 
   setModal(true);
+
   this->installEventFilter(this);
   ui->lblLogo->installEventFilter(this);
   ui->textEdit->installEventFilter(this);
   ui->textEdit->viewport()->installEventFilter(this);
-  ui->textEdit->setStyleSheet("border-radius:0px;border: 1px groove #4169E1;");
+
+  // ui->textEdit->setStyleSheet("border-radius:0px;border: 1px groove
+  // #4169E1;");
 
   QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(ui->textEdit);

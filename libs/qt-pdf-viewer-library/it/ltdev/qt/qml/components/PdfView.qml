@@ -18,7 +18,7 @@
  */
 import QtQuick 2.15
 import QtWebView 1.1
-import QtWebSockets 1.15
+import QtWebSockets 1.7
 import QtWebChannel 1.0
 
 import it.ltdev.qt.cpp.components 1.0
@@ -87,7 +87,7 @@ Item {
         @param path {string}: the path of the pdf to load
     */
     function load(path) {
-        var method = 2
+        var method = 1
         if(Qt.platform.os==="android")
             method = 1
 

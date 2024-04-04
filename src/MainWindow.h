@@ -559,7 +559,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnMonth_clicked();
 
-  void on_btnOut2Img_clicked();
+  // void on_btnOut2Img_clicked();
 
   void on_btnCategory_clicked();
 
@@ -689,7 +689,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnChartDay_clicked();
 
-  void on_editStepsThreshold_textChanged(const QString &arg1);
+  // void on_editStepsThreshold_textChanged(const QString &arg1);
 
   void on_btnTabMoveUp_clicked();
 

@@ -38,7 +38,6 @@ Preferences::Preferences(QWidget* parent)
   ui->chkAutoTime->hide();
   ui->chkDebug->hide();
 
-  ui->sliderFontSize->setValue(fontSize);
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
 
@@ -106,13 +105,16 @@ void Preferences::on_chkDebug_clicked() {
 }
 
 void Preferences::on_sliderFontSize_sliderMoved(int position) {
-  QFont font;
-  font.setPointSize(position);
-  ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(position));
-  ui->lblFontSize->setFont(font);
-  isFontChange = true;
+  if (isVisible()) {
+    QFont font;
+    font.setPointSize(position);
+    ui->lblFontSize->setText(tr("Font Size") + " : " +
+                             QString::number(position));
+    ui->lblFontSize->setFont(font);
+    isFontChange = true;
 
-  getCheckStatusChange();
+    getCheckStatusChange();
+  }
 }
 
 void Preferences::on_btnCustomFont_clicked() {
@@ -388,14 +390,16 @@ void Preferences::on_chkDark_clicked(bool checked) {
 }
 
 void Preferences::initCheckStatus() {
-  listCheckStatus.clear();
-  listCheckStatus.append(ui->chkUIFont->isChecked());
+  if (isVisible()) {
+    listCheckStatus.clear();
+    listCheckStatus.append(ui->chkUIFont->isChecked());
 
-  listCheckStatus.append(ui->chkDark->isChecked());
+    listCheckStatus.append(ui->chkDark->isChecked());
 
-  listCheckStatus.append(ui->sliderFontSize->value());
+    listCheckStatus.append(ui->sliderFontSize->value());
 
-  orgCustomFontText = ui->btnCustomFont->text().trimmed();
+    orgCustomFontText = ui->btnCustomFont->text().trimmed();
+  }
 }
 
 void Preferences::getCheckStatusChange() {
