@@ -3614,6 +3614,8 @@ void MainWindow::init_Instance() {
   mw_one = this;
   CurrentYear = QString::number(QDate::currentDate().year());
 
+  LTDev::QtPdfViewerInitializer::initialize(privateDir);
+
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
 

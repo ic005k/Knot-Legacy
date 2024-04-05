@@ -23,10 +23,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.graphics.Color;
 import android.app.NotificationChannel;
-
 import android.support.v4.app.NotificationCompat;
-//import androidx.core.app.NotificationCompat;
-
 import android.annotation.TargetApi;
 
 import java.sql.Time;

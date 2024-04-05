@@ -1,10 +1,8 @@
 package com.x;
 
 //Qt5
-//import org.qtproject.qt5.android.bindings.QtActivity;
 
-//Qt6
-import org.qtproject.qt.android.bindings.QtActivity;
+import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
 
@@ -102,12 +100,8 @@ import java.util.Calendar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-//qt6.7
-//import androidx.core.content.FileProvider;
-//import androidx.core.app.ActivityCompat;
-//import androidx.core.content.FileProvider;
-
 import android.support.v4.content.FileProvider;
+//import androidx.core.content.FileProvider;
 
 import android.graphics.Rect;
 import android.view.ViewTreeObserver;
@@ -133,7 +127,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PackageInfo;
 
 import android.support.v4.app.ActivityCompat;
-
 import android.content.pm.PackageManager;
 
 import android.os.FileObserver;

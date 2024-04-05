@@ -361,11 +361,6 @@ void Reader::openFile(QString openfile) {
 #endif
       }
 
-      if (unzipMethod == 2) {
-        bool ok = m_Method->decompressionZipFile(temp, dirpath);
-        qDebug() << "unzip epub=" << ok;
-      }
-
       if (unzipMethod == 3) {
         qompress::QZipFile zf(temp);
         if (!zf.open(qompress::QZipFile::ReadOnly)) {

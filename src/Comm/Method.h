@@ -7,9 +7,6 @@
 #include <QQuickWidget>
 #include <QTableWidget>
 
-#include "QtCore/private/qzipreader_p.h"
-#include "QtCore/private/qzipwriter_p.h"
-
 namespace Ui {
 class Method;
 }
@@ -199,15 +196,10 @@ class Method : public QDialog {
 
   void setScrollBarPos(QQuickWidget *qw, double pos);
 
-  static bool zipReader(QString zipFile, QString unzipDir);
-  static void zipWriter(QString zipPath, QFileInfoList fileList);
-
   QString getLastModified(QString file);
 
   void setVPosForQW(QQuickWidget *qw, qreal pos);
   qreal getVPosForQW(QQuickWidget *qw);
-
-  static bool decompressionZipFile(const QString &zipfile, const QString &path);
 
   QString getCustomColor();
 

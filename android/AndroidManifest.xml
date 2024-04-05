@@ -19,9 +19,9 @@
 
 
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
-    <application android:usesCleartextTraffic="true" android:hardwareAccelerated="true" android:requestLegacyExternalStorage="true" android:name="org.qtproject.qt.android.bindings.QtApplication" android:label="Knot" android:extractNativeLibs="true" android:icon="@drawable/icon">
+    <application android:usesCleartextTraffic="true" android:hardwareAccelerated="true" android:requestLegacyExternalStorage="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Knot" android:extractNativeLibs="true" android:icon="@drawable/icon">
         <!-- android:windowSoftInputMode="adjustResize" -->
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.x.MyActivity" android:exported="false" android:label="Knot" android:screenOrientation="portrait" android:launchMode="singleTop" android:theme="@style/splashScreenTheme" android:windowSoftInputMode="stateUnspecified">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:name="com.x.MyActivity" android:label="Knot" android:screenOrientation="portrait" android:launchMode="singleTop" android:theme="@style/splashScreenTheme" android:windowSoftInputMode="stateUnspecified">
             <intent-filter>
         <action android:name="android.intent.action.SEND"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -100,7 +100,7 @@
 
         </activity>
         <receiver android:name="com.x.AlarmReceiver"/>
-        <provider android:name="android.support.v4.content.FileProvider" android:authorities="com.x" android:grantUriPermissions="true" android:exported="false">
+        <provider android:name="android.support.v4.content.FileProvider" android:authorities="com.x" android:grantUriPermissions="true">
   <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"/>
 </provider>
     </application>

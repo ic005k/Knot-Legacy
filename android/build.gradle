@@ -1,30 +1,31 @@
 buildscript {
     repositories {
         google()
-        mavenCentral()
+        jcenter()
+        //mavenCentral()
+
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'com.android.tools.build:gradle:3.6.0'
+        //classpath 'com.android.tools.build:gradle:7.2.1'
     }
+		
 }
 
 repositories {
     google()
-    mavenCentral()
+    jcenter()
+    //mavenCentral()
+
 }
 
 apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-
-    //implementation 'androidx.core:core:1.10.1'
-    //implementation 'com.android.support:appcompat-v7:28.0.0'
-
-    implementation 'com.android.support:support-v4:23.0.+'
-    implementation 'com.android.support:appcompat-v7:24.2.1'
-
+    compile "com.android.support:support-v4:23.0.+"
+    compile 'com.android.support:appcompat-v7:24.2.1'
 }
 
 android {
@@ -32,7 +33,7 @@ android {
      * The following variables:
      * - androidBuildToolsVersion,
      * - androidCompileSdkVersion
-     * - qtAndroidDir - holds the path to qt android files
+     * - qt5AndroidDir - holds the path to qt android files
      *                   needed to build any Qt application
      *                   on Android.
      *
@@ -41,19 +42,19 @@ android {
      * Changing them manually might break the compilation!
      *******************************************************/
 
-    compileSdkVersion androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
-    ndkVersion androidNdkVersion
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+    buildToolsVersion '28.0.3'
 
-    // Extract native libraries from the APK
-    packagingOptions.jniLibs.useLegacyPackaging true
+    //compileSdkVersion 25
+    //buildToolsVersion "25.0.1"
+
 
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = [qtAndroidDir + '/src', 'src', 'java']
-            aidl.srcDirs = [qtAndroidDir + '/src', 'src', 'aidl']
-            res.srcDirs = [qtAndroidDir + '/res', 'res']
+            java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
+            aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
+            res.srcDirs = [qt5AndroidDir + '/res', 'res']
             resources.srcDirs = ['resources']
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
@@ -81,8 +82,19 @@ android {
 
     defaultConfig {
         resConfig "en"
-        minSdkVersion qtMinSdkVersion
-        targetSdkVersion qtTargetSdkVersion
-        ndk.abiFilters = qtTargetAbiList.split(",")
+        minSdkVersion = qtMinSdkVersion
+        targetSdkVersion = qtTargetSdkVersion
+    }
+
+}
+
+
+
+// 显示所有已过时的警告详细信息
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
     }
 }
