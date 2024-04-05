@@ -2,14 +2,14 @@ QT += core gui network printsupport gui-private core-private
 QT += charts sensors
 QT += qml quick quickwidgets webview
 QT += xml svg
-QT += statemachine
+
 
 !android: {
     QT += webenginewidgets
 }
 
 # Qt > 5 (Qt6)
-greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat
+greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat statemachine
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
