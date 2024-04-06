@@ -754,7 +754,7 @@ bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
 
       if (event->type() == QEvent::MouseButtonRelease) {
         mw_one->isMousePress = false;
-        mw_one->isMouseMove = false;
+        // mw_one->isMouseMove = false;
       }
 
       if (event->type() == QEvent::MouseMove) {
@@ -800,7 +800,7 @@ bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
 
       mw_one->isTurnThePage = false;
       mw_one->isMousePress = false;
-      mw_one->isMouseMove = false;
+      // mw_one->isMouseMove = false;
 
       // Right Slide
       if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
@@ -865,22 +865,26 @@ bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
           qAbs(relea_y - press_y) < 20) {
         mw_one->isMouseMove = true;
       }
+
+      mw_one->isMouseMove = true;
     }
 
-    if (event->type() == QEvent::MouseButtonDblClick) {
-      if ((press_y > mw_one->geometry().y() + mw_one->height() / 3) &&
-          (press_y < mw_one->geometry().y() + mw_one->height() * 2 / 3)) {
-        mw_one->on_SetReaderFunVisible();
-      }
+    if (event->type() == QEvent::MouseButtonRelease) {
+      if (!mw_one->isMouseMove) {
+        if ((press_y > mw_one->geometry().y() + mw_one->height() / 3) &&
+            (press_y < mw_one->geometry().y() + mw_one->height() * 2 / 3)) {
+          mw_one->on_SetReaderFunVisible();
+        }
 
-      if ((press_y > mw_one->geometry().y()) &&
-          (press_y < mw_one->geometry().y() + mw_one->height() / 3)) {
-        mw_one->m_Reader->setPageScroll0();
-      }
+        if ((press_y > mw_one->geometry().y()) &&
+            (press_y < mw_one->geometry().y() + mw_one->height() / 3)) {
+          mw_one->m_Reader->setPageScroll0();
+        }
 
-      if ((press_y > mw_one->geometry().y() + mw_one->height() * 2 / 3) &&
-          (press_y < mw_one->geometry().y() + mw_one->height())) {
-        mw_one->m_Reader->setPageScroll1();
+        if ((press_y > mw_one->geometry().y() + mw_one->height() * 2 / 3) &&
+            (press_y < mw_one->geometry().y() + mw_one->height())) {
+          mw_one->m_Reader->setPageScroll1();
+        }
       }
     }
   }

@@ -88,7 +88,8 @@ Rectangle {
 
         for (var i = 1; i < 20; i++) {
             var start = textArea.positionAt(x, y + FontSize * i)
-            var end = textArea.positionAt(x + textArea.width, y + FontSize*4 * i)
+            var end = textArea.positionAt(x + textArea.width,
+                                          y + FontSize * 4 * i)
             var txt = textArea.getText(start, end)
             txt = txt.trim()
             if (txt.length > 0) {
@@ -122,7 +123,7 @@ Rectangle {
     }
 
     Image {
-        id: rocket
+        id: m_Image
         width: myW
         height: myH
         fillMode: Image.Tile
@@ -132,6 +133,38 @@ Rectangle {
         smooth: true
         source: backImgFile
         visible: backImgFile === "" ? false : true
+
+        MouseArea {
+            id: mouse_area
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.LeftButton
+            propagateComposedEvents: false
+            onClicked: {
+
+                var my = mouseY - flickable.contentY
+                console.log("clicked..." + mouseY + " " + my + myH)
+
+                if (my < myH / 3) {
+                    m_Reader.setPageScroll0()
+                }
+
+                if (my > myH / 3 && my < (myH * 2) / 3) {
+                    m_Reader.setPanelVisible()
+                }
+
+                if (my > (myH * 2) / 3) {
+                    m_Reader.setPageScroll1()
+                }
+            }
+            onDoubleClicked: {
+                console.log("double...")
+                m_Reader.selectText()
+            }
+            onPressAndHold: {
+                console.log("press and hold...")
+            }
+        }
     }
 
     Rectangle {
@@ -159,24 +192,6 @@ Rectangle {
             state = "autoscroll"
         }
 
-        MouseArea {
-            id: mouse_area
-            anchors.fill: parent
-            hoverEnabled: true
-            acceptedButtons: Qt.LeftButton
-            propagateComposedEvents: false
-
-            onClicked: {
-
-            }
-            onDoubleClicked: {
-
-            }
-            onPressAndHold: {
-
-            }
-        }
-
         TextArea.flickable: TextArea {
             id: textArea
             visible: isEPUBText
@@ -200,13 +215,11 @@ Rectangle {
             onLinkActivated: {
                 console.log("reader htmlPath=" + htmlPath)
                 console.log("reader Link=" + link)
-
                 document.setBackDir(link)
                 document.parsingLink(link)
             }
 
             onReleased: {
-
 
             }
 

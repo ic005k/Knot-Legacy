@@ -3375,7 +3375,7 @@ void MainWindow::initQW() {
 
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
-  ui->qwReader->rootContext()->setContextProperty("mw_one", mw_one);
+  ui->qwReader->rootContext()->setContextProperty("m_Reader", m_Reader);
   ui->qwReader->rootContext()->setContextProperty("nCursorPos", 0);
   ui->qwReader->rootContext()->setContextProperty("myBackgroundColor",
                                                   "#FFFFFF");
@@ -3642,6 +3642,9 @@ void MainWindow::init_Instance() {
 
   if (m_Preferences->getDefaultFont() == "None")
     m_Preferences->setDefaultFont(this->font().family());
+
+  LTDev::QtPdfViewerInitializer::initialize();
+  m_Reader->setPdfViewVisible(false);
 }
 
 void MainWindow::init_UIWidget() {
@@ -5634,4 +5637,10 @@ void MainWindow::on_btnShowBookmark_clicked() {
     ui->qwReader->show();
     ui->btnCatalogue->setEnabled(true);
   }
+}
+
+void MainWindow::stopTimerForPdf() {
+  m_Reader->tmeShowEpubMsg->stop();
+  ui->pEpubProg->hide();
+  ui->lblEpubInfo->hide();
 }

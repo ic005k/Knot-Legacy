@@ -40,6 +40,8 @@ QByteArray bookFileData;
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
+  mw_one->ui->btnGoBack->hide();
+  mw_one->ui->btnBackDir->hide();
   mw_one->ui->btnStatusBar->hide();
   mw_one->ui->lblTitle->hide();
   mw_one->ui->frameReaderFun2->hide();
@@ -85,7 +87,6 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
 
   f.setPointSize(10);
   mw_one->ui->lblEpubInfo->setFont(f);
-  mw_one->ui->lblEpubInfo->setFixedWidth(36);
   mw_one->ui->pEpubProg->setFont(f);
 
   strEndFlag = "<p align=center>-----" + tr("bottom") + "-----</p>";
@@ -208,6 +209,7 @@ void Reader::startOpenFile(QString openfile) {
   isEpubError = false;
   strShowMsg = "";
   strPercent = "";
+  mw_one->ui->lblEpubInfo->setFixedWidth(36);
 
   setReaderStyle();
 
@@ -2171,6 +2173,14 @@ void Reader::readBookDone() {
 
     if (pdfMethod == 1) {
       setPdfViewVisible(true);
+      if (mw_one->ui->frameReader->isVisible()) {
+        tmeShowEpubMsg->start(1000);
+        mw_one->ui->lblEpubInfo->setText("Read pdf...");
+        mw_one->ui->lblEpubInfo->setFixedWidth(150);
+        mw_one->ui->pEpubProg->setMaximum(0);
+        mw_one->ui->pEpubProg->show();
+        mw_one->ui->lblEpubInfo->show();
+      }
 
       mw_one->ui->qwPdf->setSource(
           QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
@@ -2377,3 +2387,5 @@ void Reader::showBookmarkList() {
     m_Method->addItemToQW(mw_one->ui->qwBookmark, list.at(i), "", "", "", 0);
   }
 }
+
+void Reader::setPanelVisible() { mw_one->on_SetReaderFunVisible(); }

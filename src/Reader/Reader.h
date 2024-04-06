@@ -122,23 +122,26 @@ class Reader : public QDialog {
   void rotatePdfPage();
   int getLoadProgress();
   void goWebViewBack();
-  void selectText();
+
   void closeSelText();
-  void setPageScroll0();
-  void setPageScroll1();
+
   QString getBookmarkText();
   QStringList getCurrentBookmarkList();
   void showBookmarkList();
 
  public slots:
+  void setPageScroll0();
+  void setPageScroll1();
   void setEpubPagePosition(int index, QString htmlFile);
   void openBookListItem();
   void showCatalogue();
   void initLink(QString htmlFile);
-
+  void selectText();
   void openCataList(QString htmlFile);
 
   void clickBookmarkList(int i);
+
+  void setPanelVisible();
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;

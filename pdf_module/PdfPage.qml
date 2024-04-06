@@ -28,9 +28,8 @@ Rectangle {
     property bool isOne: true
     property bool isHeaderVisible: true
 
-    function goWebViewBack()
-    {
-        pdfView.webView.goBack();
+    function goWebViewBack() {
+        pdfView.webView.goBack()
     }
 
     function getLoadProgress() {
@@ -432,6 +431,7 @@ Rectangle {
                                 "===onPdfLoaded=  " + currentPage + "  "
                                 + currentScale + " " + pdfView.webView.loadProgress)
                     mw_one.closeProgress()
+                    mw_one.stopTimerForPdf()
                 }
             }
 

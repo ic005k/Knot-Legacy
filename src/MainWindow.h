@@ -566,7 +566,8 @@ class MainWindow : public QMainWindow {
   void closeProgress();
 
   void selTab();
- private slots:
+  void stopTimerForPdf();
+  private slots:
   void on_btnSync_clicked();
 
   void on_btnPDF_clicked();
