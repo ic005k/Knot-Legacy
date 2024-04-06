@@ -210,6 +210,7 @@ void Reader::startOpenFile(QString openfile) {
   strShowMsg = "";
   strPercent = "";
   mw_one->ui->lblEpubInfo->setFixedWidth(36);
+  mw_one->ui->pEpubProg->setMaximum(100);
 
   setReaderStyle();
 
@@ -833,7 +834,8 @@ void Reader::on_btnPageNext_clicked() {
 
   isPageNext = true;
 
-  savePageVPos();
+  if (iPage > 1) savePageVPos();
+
   if (isText) {
     QString txt1;
     if (totallines > baseLines) {
@@ -1170,6 +1172,7 @@ void Reader::goPostion() {
     if (isText) {
       iPage = Reg.value("/Reader/iPage", 0).toULongLong();
       on_btnPageNext_clicked();
+      showInfo();
     }
 
     if (isEpub) {
@@ -1334,15 +1337,14 @@ qreal Reader::getNewVPos(qreal pos1, qreal h1, qreal h2) {
 
 void Reader::showInfo() {
   if (isText) {
-    if (totallines > baseLines) {
-      mw_one->ui->btnPages->setText(QString::number(iPage / baseLines) + "\n" +
-                                    QString::number(totallines / baseLines));
-      mw_one->ui->progReader->setMaximum(totallines / baseLines);
-      mw_one->ui->progReader->setValue(iPage / baseLines);
-    } else {
-      mw_one->ui->progReader->setMaximum(100);
-      mw_one->ui->progReader->setValue(0);
-    }
+    int nCurrentPage = iPage / baseLines;
+    int nPages = totallines / baseLines;
+    if (nCurrentPage <= 0) nCurrentPage = 1;
+    if (nPages <= 0) nPages = 1;
+    mw_one->ui->btnPages->setText(QString::number(nCurrentPage) + "\n" +
+                                  QString::number(nPages));
+    mw_one->ui->progReader->setMaximum(nPages);
+    mw_one->ui->progReader->setValue(nCurrentPage);
   }
 
   if (isEpub) {

@@ -263,10 +263,11 @@ Rectangle {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.bottom: parent.bottom
+            visible: textArea.contentHeight > myH ? true : false
 
-            //contentItem: Rectangle {
-            //    color: "#1E90FF"
-            //}
+            contentItem: Rectangle {
+                color: "#1E90FF"
+            }
         }
 
         Component.onCompleted: {
