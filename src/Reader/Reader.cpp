@@ -2086,6 +2086,8 @@ void Reader::readBookDone() {
     currentBookName = epubName;
   else
     currentBookName = fi.baseName();
+  QString extName = fi.suffix();
+  currentBookName = currentBookName + "_" + extName;
 
   if (isText || isEpub) {
     strShowMsg = "Read  EBook End...";

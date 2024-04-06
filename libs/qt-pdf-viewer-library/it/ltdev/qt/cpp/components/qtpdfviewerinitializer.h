@@ -50,7 +50,7 @@ class QtPdfViewerInitializer : public QObject,
   /**
    * @brief Initializes the library
    */
-  static void initialize(QString p_dir);
+  static void initialize();
 
   /**
    * @brief Initializes the viewer creating the folders needed for the pdf view.

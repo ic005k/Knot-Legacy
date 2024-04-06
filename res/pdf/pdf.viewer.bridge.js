@@ -101,31 +101,7 @@ function connectPdfViewerSignals() {
     backend.viewerLoaded()
 }
 
-function b64toBlob(b64Data, contentType, sliceSize) {
-    console.log('Loading PDF data');
-    contentType = contentType || '';
-    sliceSize = sliceSize || 512;
 
-    var byteCharacters = atob(b64Data);
-    var byteArrays = [];
-
-    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-        var byteNumbers = new Array(slice.length);
-        for (var i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        var byteArray = new Uint8Array(byteNumbers);
-
-        byteArrays.push(byteArray);
-    }
-
-    var blob = new Blob(byteArrays, {type: contentType});
-
-    return blob;
-}
 
 
 /*
@@ -137,26 +113,26 @@ function loadDocument_pdf(base64) {
 
     // Delay load to allow the javascript
     // environment to be ready
-    //sleep(200).then(function () {
+    sleep(200).then(function () {
 
         console.warn("===Start load array......")
+
         //var array = base64ToUint8Array(base64)
         // Load pdf document as an Uint8Array
         //PDFViewerApplication.open(array)
-    //})
+        var blob = b64toBlob(base64)
+        var fileReader = new FileReader()
 
-    var blob = b64toBlob(base64);
-    var fileReader = new FileReader();
+        fileReader.onload = function (evt) {
+            var buffer = evt.target.result
+            var uint8Array = new Uint8Array(buffer)
+            PDFViewerApplication.open(uint8Array).then(function () {
+                qpdfBridge.jsLoaded()
+            })
+        }
 
-    fileReader.onload = function(evt) {
-        var buffer = evt.target.result;
-        var uint8Array = new Uint8Array(buffer);
-        PDFViewerApplication.open(uint8Array).then(function() {
-            qpdfBridge.jsLoaded();
-        });
-    };
-
-    fileReader.readAsArrayBuffer(blob);
+        fileReader.readAsArrayBuffer(blob)
+    })
 }
 
 function loadDocument_pdf_file(file) {
@@ -347,6 +323,35 @@ function extractThumbnails(scale, callbackOnExtractionCompleted) {
 
     @return {Uint8Array}
 */
+
+function b64toBlob(b64Data, contentType, sliceSize) {
+    console.log('Loading PDF data')
+    contentType = contentType || ''
+    sliceSize = sliceSize || 512
+
+    var byteCharacters = atob(b64Data)
+    var byteArrays = []
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize)
+
+        var byteNumbers = new Array(slice.length)
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i)
+        }
+
+        var byteArray = new Uint8Array(byteNumbers)
+
+        byteArrays.push(byteArray)
+    }
+
+    var blob = new Blob(byteArrays, {
+                            "type": contentType
+                        })
+
+    return blob
+}
+
 function base64ToUint8Array(base64) {
     const binaryString = atob(base64)
     const uint8Array = Uint8Array.from(binaryString, char => char.charCodeAt(0))

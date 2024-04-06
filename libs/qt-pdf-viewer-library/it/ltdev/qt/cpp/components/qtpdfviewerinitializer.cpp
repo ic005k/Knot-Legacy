@@ -18,7 +18,7 @@
 #include "qtpdfviewerinitializer.h"
 
 #include "src/MainWindow.h"
-QString pDir;
+
 QString url;
 extern QByteArray bookFileData;
 
@@ -27,13 +27,11 @@ namespace LTDev {
 /**
  * Initializes the library
  */
-void QtPdfViewerInitializer::initialize(QString p_dir) {
+void QtPdfViewerInitializer::initialize() {
   // To make the Qt WebView module function correctly across all platforms,
   // it is necessary to call QtWebView::initialize() before in Qt>= 5.15.0, or
   // after in Qt<5.15.0, creating the QGuiApplication instance
   QtWebView::initialize();
-
-  pDir = p_dir;
 
   // Expose classes to qml
   qmlRegisterType<LTDev::WebSocketTransport>("it.ltdev.qt.cpp.components", 1, 0,
@@ -124,6 +122,7 @@ QObject *QtPdfViewerInitializer::getQmlInstance(QQmlEngine *engine,
  * @brief Constructor
  */
 QtPdfViewerInitializer::QtPdfViewerInitializer() {
+  QString pDir;
 #ifdef Q_OS_ANDROID
 
   pDir = "/data/user/0/com.x/files/";
@@ -158,7 +157,7 @@ QtPdfViewerInitializer::QtPdfViewerInitializer() {
   this->_viewer = pDir + "pdfjs/web/viewer.html";
 
   url = this->_viewer;
-  qDebug() << "this viewer.html=" << this->_viewer;
+  qDebug() << "===this viewer.html=" << this->_viewer;
 
   this->_initialized = false;
 }

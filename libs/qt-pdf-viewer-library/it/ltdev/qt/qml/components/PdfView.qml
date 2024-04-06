@@ -18,7 +18,7 @@
  */
 import QtQuick 2.15
 import QtWebView 1.1
-import QtWebSockets 1.15
+import QtWebSockets 1.7
 import QtWebChannel 1.0
 
 import it.ltdev.qt.cpp.components 1.0
@@ -88,21 +88,21 @@ Item {
     */
     function load(path) {
         var method = 1
-        if(Qt.platform.os==="android")
+        if (Qt.platform.os === "android")
             method = 1
 
         if (method === 1) {
             // Convert pdf to base64
             var base64 = QtPdfViewerInitializer.pdfToBase64(path)
             webView.runJavaScript("loadDocument_pdf(\"%1\");".arg(base64))
-            console.log("======read base64 done =" + path)
+            console.log("====read base64 done =" + path)
         }
 
         if (method === 2) {
             webView.runJavaScript("loadDocument_pdf_file(\"%1\");".arg(
                                       "file:///" + path))
 
-            console.log("======load pdf file done =" + path)
+            console.log("====load pdf file done =" + path)
         }
     }
 
@@ -388,9 +388,9 @@ Item {
         anchors.fill: parent
 
         Component.onCompleted: {
-            QtPdfViewerInitializer.viewerChanged.connect(function () {
+            //QtPdfViewerInitializer.viewerChanged.connect(function () {
                 webView.url = "file:///" + QtPdfViewerInitializer.viewer
-            })
+            //})
 
             QtPdfViewerInitializer.initializeViewer()
 

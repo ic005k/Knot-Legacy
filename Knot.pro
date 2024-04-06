@@ -270,6 +270,7 @@ DISTFILES += \
     src/qmlsrc/notelist.qml \
     src/qmlsrc/noterecycle.qml \
     src/qmlsrc/notes.qml \
+    src/qmlsrc/pdf.qml \
     src/qmlsrc/reader.qml \
     src/qmlsrc/report.qml \
     src/qmlsrc/search.qml \
