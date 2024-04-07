@@ -133,6 +133,7 @@ import android.content.pm.PackageManager;
 import android.os.FileObserver;
 
 import android.view.Window;
+import android.app.ActivityManager;
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
 
@@ -175,6 +176,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public MyActivity() {
 
     }
+
 
     //------------------------------------------------------------------------
     public void setStatusBarHide() {
@@ -257,6 +259,10 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public static int setReOpen() {
         ReOpen = true;
         return 1;
+    }
+
+    public static void setMax() {
+        context.startActivity(new Intent(context, MyActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     //------------------------------------------------------------------------
@@ -1579,7 +1585,7 @@ This method can parse out the real local file path from a file URI.
             }
         }
     }
-
+    //----------------------------------------------------------------------------------------------
+    
 }
-
 

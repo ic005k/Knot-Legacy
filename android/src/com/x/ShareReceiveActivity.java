@@ -65,10 +65,15 @@ public class ShareReceiveActivity extends Activity {
     static public String strData;
 
     public native static void CallJavaNotify_0();
+
     public native static void CallJavaNotify_1();
+
     public native static void CallJavaNotify_2();
+
     public native static void CallJavaNotify_3();
+
     public native static void CallJavaNotify_4();
+
     public native static void CallJavaNotify_5();
 
     @Override
@@ -101,6 +106,7 @@ public class ShareReceiveActivity extends Activity {
 
         System.out.println("strData=" + strData);
         CallJavaNotify_5();
+        MyActivity.setMax();
         ShareReceiveActivity.this.finish();
 
     }
@@ -175,4 +181,6 @@ public class ShareReceiveActivity extends Activity {
 
         System.out.println("过程完成...");
     }
+
+
 }
