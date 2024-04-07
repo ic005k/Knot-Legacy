@@ -3640,6 +3640,7 @@ void MainWindow::init_Instance() {
   mydlgSetText = new dlgSetText(this);
   m_NotesList = new NotesList(this);
   m_SyncInfo = new SyncInfo(this);
+  m_ReceiveShare = new ReceiveShare(this);
 
   if (m_Preferences->getDefaultFont() == "None")
     m_Preferences->setDefaultFont(this->font().family());
@@ -4273,6 +4274,7 @@ static void JavaNotify_4() {
 
 static void JavaNotify_5() {
   m_Method->getShareReceiveData("str_data");
+  mw_one->m_ReceiveShare->init();
 
   qDebug() << "C++ JavaNotify_5";
 }
@@ -4343,6 +4345,9 @@ QString MainWindow::getYMD(QString date) {
 }
 
 void MainWindow::on_btnReader_clicked() {
+  // m_ReceiveShare->init();
+  // return;
+
   floatfun = false;
 
   isReaderVisible = true;

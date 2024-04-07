@@ -74,6 +74,7 @@
 #include "src/CloudBackup.h"
 #include "src/Comm/FileSystemWatcher.h"
 #include "src/Comm/Method.h"
+#include "src/Comm/ReceiveShare.h"
 #include "src/Comm/ShowMessage.h"
 #include "src/EditRecord.h"
 #include "src/LoadPic.h"
@@ -104,6 +105,7 @@
 #include "ui_PageIndicator.h"
 #include "ui_Preferences.h"
 #include "ui_ReaderSet.h"
+#include "ui_ReceiveShare.h"
 #include "ui_RemarksAbout.h"
 #include "ui_SetReaderText.h"
 #include "ui_ShowMessage.h"
@@ -241,6 +243,7 @@ class MainWindow : public QMainWindow {
   NotesList *m_NotesList;
   SyncInfo *m_SyncInfo;
   StepsOptions *m_StepsOptions;
+  ReceiveShare *m_ReceiveShare;
 
   File *myfile;
 
@@ -567,7 +570,7 @@ class MainWindow : public QMainWindow {
 
   void selTab();
   void stopTimerForPdf();
-  private slots:
+ private slots:
   void on_btnSync_clicked();
 
   void on_btnPDF_clicked();

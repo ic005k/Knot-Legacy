@@ -19,6 +19,7 @@ class Method : public QDialog {
   ~Method();
   Ui::Method *ui;
 
+  QString strReceiveShareData = "test data...";
   bool isClickLink = false;
   QWidget *m_widget;
   QString qssSlider;
@@ -205,7 +206,8 @@ class Method : public QDialog {
   QString getCustomColor();
 
   QString getShareReceiveData(QString str_data);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

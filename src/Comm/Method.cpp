@@ -1161,7 +1161,6 @@ QString Method::ColorToString(QColor v_color) {
 
 QString Method::getShareReceiveData(QString str_data) {
 #ifdef Q_OS_ANDROID
-  QString strData;
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject javaUriPath = QAndroidJniObject::fromString(str_data);
@@ -1177,9 +1176,9 @@ QString Method::getShareReceiveData(QString str_data) {
       javaUriPath.object<jstring>());
 #endif
 
-  strData = s.toString();
-  qDebug() << "strData=" << strData;
-  return strData;
+  strReceiveShareData = s.toString();
+  qDebug() << "strReceiveShareData=" << strReceiveShareData;
+  return strReceiveShareData;
 #endif
 
   return str_data;

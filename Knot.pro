@@ -54,6 +54,7 @@ SOURCES += \
     src/Comm/FileSystemWatcher.cpp \
     src/Comm/Method.cpp \
     src/Comm/MyWheel.cpp \
+    src/Comm/ReceiveShare.cpp \
     src/Comm/RollingBox.cpp \
     src/Comm/ShowMessage.cpp \
     src/Comm/qzipfile.cpp \
@@ -120,6 +121,7 @@ HEADERS += \
     src/Comm/FileSystemWatcher.h \
     src/Comm/Method.h \
     src/Comm/MyWheel.h \
+    src/Comm/ReceiveShare.h \
     src/Comm/RollingBox.h \
     src/Comm/ShowMessage.h \
     src/Comm/qzipfile.h \
@@ -190,6 +192,7 @@ FORMS += \
     src/AutoUpdate.ui \
     src/CategoryList.ui \
     src/CloudBackup.ui \
+    src/Comm/ReceiveShare.ui \
     src/Comm/ShowMessage.ui \
     src/DateSelector.ui \
     src/MainWindow.ui \
