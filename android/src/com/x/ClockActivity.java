@@ -78,6 +78,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
     public native static void CallJavaNotify_4();
 
+    public native static void CallJavaNotify_5();
+
     public static boolean isZh(Context context) {
         Locale locale = context.getResources().getConfiguration().locale;
         String language = locale.getLanguage();
@@ -232,7 +234,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
                 }).show();*/
 
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_clock);
         bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT);
 
         if (isRefreshAlarm) {

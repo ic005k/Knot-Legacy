@@ -12,7 +12,7 @@ QT += xml svg
 greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat statemachine
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++17
 CONFIG+=sdk_no_version_check
 
 TRANSLATIONS += src/cn.ts

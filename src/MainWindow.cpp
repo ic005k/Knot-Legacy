@@ -62,6 +62,7 @@ static void JavaNotify_1();
 static void JavaNotify_2();
 static void JavaNotify_3();
 static void JavaNotify_4();
+static void JavaNotify_5();
 #endif
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
@@ -4270,12 +4271,19 @@ static void JavaNotify_4() {
   qDebug() << "C++ JavaNotify_4";
 }
 
+static void JavaNotify_5() {
+  m_Method->getShareReceiveData("str_data");
+
+  qDebug() << "C++ JavaNotify_5";
+}
+
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},
     {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
     {"CallJavaNotify_2", "()V", (void *)JavaNotify_2},
     {"CallJavaNotify_3", "()V", (void *)JavaNotify_3},
-    {"CallJavaNotify_4", "()V", (void *)JavaNotify_4}};
+    {"CallJavaNotify_4", "()V", (void *)JavaNotify_4},
+    {"CallJavaNotify_5", "()V", (void *)JavaNotify_5}};
 
 void RegJni(const char *myClassName) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

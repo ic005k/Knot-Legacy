@@ -239,6 +239,8 @@ QString DocumentHandler::fileType() const {
 QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
 
 void DocumentHandler::parsingLink(QString linkFile) {
+  m_Method->isClickLink = true;
+
   if (mw_one->curx != 0) return;
 
   qDebug() << "link : " << linkFile;

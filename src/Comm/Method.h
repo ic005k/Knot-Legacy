@@ -19,6 +19,7 @@ class Method : public QDialog {
   ~Method();
   Ui::Method *ui;
 
+  bool isClickLink = false;
   QWidget *m_widget;
   QString qssSlider;
   QString ColorToString(QColor v_color);
@@ -203,7 +204,8 @@ class Method : public QDialog {
 
   QString getCustomColor();
 
- protected:
+  QString getShareReceiveData(QString str_data);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

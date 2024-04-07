@@ -5,6 +5,7 @@ package com.x;
 import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
+import com.x.ShareReceiveActivity;
 
 import android.os.Process;
 import android.os.HandlerThread;
@@ -166,6 +167,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public native static void CallJavaNotify_3();
 
     public native static void CallJavaNotify_4();
+
+    public native static void CallJavaNotify_5();
 
     private InternalConfigure internalConfigure;
 
@@ -593,33 +596,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
-        getShare("Knot");
-
     }
-
-    public String getShare(String uripath) {
-        //获取分享的数据
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        String type = intent.getType();
-        //设置接收类型为文本
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type)) {
-                handlerText(intent);
-                return "1";
-            }
-        }
-        return "0";
-    }
-
-    //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
-    private void handlerText(Intent intent) {
-        String data = intent.getStringExtra(Intent.EXTRA_TEXT);
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Knot", data);
-        clipboard.setPrimaryClip(clip);
-    }
-
 
     private static ServiceConnection mCon = new ServiceConnection() {
         @Override
@@ -872,7 +849,13 @@ This method can parse out the real local file path from a file URI.
 
         Log.i(TAG, "UriString  " + uripath);
         Log.i(TAG, "RealPath  " + str);
+
         return str;
+
+    }
+
+    public String getShareReceiveData(String str_data) {
+        return ShareReceiveActivity.strData;
 
     }
 

@@ -871,18 +871,27 @@ bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
 
     if (event->type() == QEvent::MouseButtonRelease) {
       if (!mw_one->isMouseMove) {
-        if ((press_y > mw_one->geometry().y() + mw_one->height() / 3) &&
-            (press_y < mw_one->geometry().y() + mw_one->height() * 2 / 3)) {
+        if (isClickLink) {
+          isClickLink = false;
+          return true;
+        }
+        if ((press_y >
+             mw_one->geometry().y() + mw_one->ui->qwReader->height() / 3) &&
+            (press_y <
+             mw_one->geometry().y() + mw_one->ui->qwReader->height() * 2 / 3)) {
           mw_one->on_SetReaderFunVisible();
         }
 
         if ((press_y > mw_one->geometry().y()) &&
-            (press_y < mw_one->geometry().y() + mw_one->height() / 3)) {
+            (press_y <
+             mw_one->geometry().y() + mw_one->ui->qwReader->height() / 3)) {
           mw_one->m_Reader->setPageScroll0();
         }
 
-        if ((press_y > mw_one->geometry().y() + mw_one->height() * 2 / 3) &&
-            (press_y < mw_one->geometry().y() + mw_one->height())) {
+        if ((press_y >
+             mw_one->geometry().y() + mw_one->ui->qwReader->height() * 2 / 3) &&
+            (press_y <
+             mw_one->geometry().y() + mw_one->ui->qwReader->height())) {
           mw_one->m_Reader->setPageScroll1();
         }
       }
@@ -1148,4 +1157,30 @@ QString Method::ColorToString(QColor v_color) {
   QString mRgbStr = QString::number(mRgb, 16);
   mRgbStr = mRgbStr.replace(0, 2, "#");
   return mRgbStr;
+}
+
+QString Method::getShareReceiveData(QString str_data) {
+#ifdef Q_OS_ANDROID
+  QString strData;
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject javaUriPath = QAndroidJniObject::fromString(str_data);
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  QAndroidJniObject s = m_activity.callObjectMethod(
+      "getShareReceiveData", "(Ljava/lang/String;)Ljava/lang/String;",
+      javaUriPath.object<jstring>());
+#else
+  QJniObject javaUriPath = QJniObject::fromString(str_data);
+  QJniObject m_activity = QNativeInterface::QAndroidApplication::context();
+  QJniObject s = m_activity.callObjectMethod(
+      "getShareReceiveData", "(Ljava/lang/String;)Ljava/lang/String;",
+      javaUriPath.object<jstring>());
+#endif
+
+  strData = s.toString();
+  qDebug() << "strData=" << strData;
+  return strData;
+#endif
+
+  return str_data;
 }
