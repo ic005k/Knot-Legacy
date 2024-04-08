@@ -1063,9 +1063,39 @@ void Notes::on_btnPaste_clicked() {
     m_EditSource->paste();
 }
 
-bool Notes::eventFilterTodo(QObject *watch, QEvent *evn) {
+bool Notes::eventFilterQwNote(QObject *watch, QEvent *event) {
+  if (watch == mw_one->ui->qwNotes) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      isMousePress = true;
+      isMouseMove = false;
+
+      if (!isMouseMove) {
+        timerEditNote->start(1600);
+      }
+    }
+
+    if (event->type() == QEvent::MouseMove) {
+      isMouseMove = true;
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      isMousePress = false;
+      isMouseMove = false;
+
+      timerEditNote->stop();
+    }
+
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      mw_one->on_btnNotesList_clicked();
+    }
+  }
+
+  return QWidget::eventFilter(watch, event);
+}
+
+bool Notes::eventFilterEditTodo(QObject *watch, QEvent *evn) {
   if (watch == mw_one->ui->editTodo->viewport()) {
-    mw_one->m_Notes->getEditPanel(mw_one->ui->editTodo, evn);
+    getEditPanel(mw_one->ui->editTodo, evn);
 
     if (evn->type() == QEvent::MouseButtonDblClick) {
       y1 = mw_one->geometry().y() + mw_one->ui->editTodo->y() +

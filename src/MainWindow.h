@@ -304,9 +304,7 @@ class MainWindow : public QMainWindow {
   QString bakData(QString fileName, bool msgbox);
   bool importBakData(QString fileName, bool msg, bool book, bool unre);
 
-  void addUndo(QString log);
   QString getTabText();
-  void addRedo();
 
   QObjectList getAllToolButton(QObjectList lstUIControls);
 
@@ -458,9 +456,6 @@ class MainWindow : public QMainWindow {
   void on_btnReadList_clicked();
 
   void on_btnBackDir_clicked();
-
-  void undo();
-  void redo();
 
   void on_actionBakFileList();
 

@@ -114,26 +114,11 @@ public class ShareReceiveActivity extends Activity {
 
         System.out.println("strData=" + strData);
 
-        String filename = "/storage/emulated/0/.Knot/myclose.ini";
-        internalConfigure = new InternalConfigure(this);
-        try {
-            internalConfigure.readFrom(filename);
-        } catch (Exception e) {
-            System.err.println("Error : reading myclose.ini");
-            e.printStackTrace();
-        }
-        String mainClose = "true";
-        mainClose = internalConfigure.getIniKey("mainClose");
-        if (mainClose.equals("")) {
-            mainClose = "true";
-        }
-
         // Save receive data
         String file2 = "/storage/emulated/0/.Knot/myshare.ini";
         internalConfigure = new InternalConfigure(this);
         Properties myPro = new Properties();
         myPro.setProperty("receiveData", strData);
-
 
         Context context = MyActivity.context;
         String pName = "com.x";
@@ -142,7 +127,7 @@ public class ShareReceiveActivity extends Activity {
         if (uid > 0) {
             boolean rstA = isAppRunning(context, pName);
             boolean rstB = isProcessRunning(context, uid);
-            //if (rstA) || rstB) {
+            //if (rstA || rstB) {
             if (rstB) {
                 //指定包名的程序正在运行中
                 isRun = true;
@@ -164,7 +149,7 @@ public class ShareReceiveActivity extends Activity {
                 e.printStackTrace();
             }
 
-            Toast.makeText(this, "Knot, The Knot is not open, it will be opened for you at this time, please wait...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...", Toast.LENGTH_LONG).show();
             // reopen app
             PackageManager packageManager = getPackageManager();
             Intent it = packageManager.getLaunchIntentForPackage("com.x");

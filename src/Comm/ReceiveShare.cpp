@@ -62,10 +62,12 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
   if (mw_one->ui->frameTodo->isHidden()) {
     mw_one->ui->btnTodo->click();
     mw_one->ui->editTodo->setText(m_Method->strReceiveShareData);
+    mw_one->Sleep(500);
     mw_one->ui->btnAddTodo->click();
 
   } else {
     mw_one->ui->editTodo->setText(m_Method->strReceiveShareData);
+    mw_one->Sleep(500);
     mw_one->ui->btnAddTodo->click();
   }
 }

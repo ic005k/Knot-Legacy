@@ -107,11 +107,13 @@ class Notes : public QDialog {
   bool selectPDFFormat(QPrinter *printer);
   void on_btnPDF_clicked();
 
-  bool eventFilterTodo(QObject *watch, QEvent *evn);
+  bool eventFilterEditTodo(QObject *watch, QEvent *evn);
 
   bool eventFilterEditRecord(QObject *watch, QEvent *evn);
 
   void insertImage(QString fileName);
+
+  bool eventFilterQwNote(QObject *watch, QEvent *event);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;

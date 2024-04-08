@@ -2264,8 +2264,9 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   }
 
   m_Method->eventFilterReader(watch, evn);
-  m_Notes->eventFilterTodo(watch, evn);
+  m_Notes->eventFilterEditTodo(watch, evn);
   m_Notes->eventFilterEditRecord(watch, evn);
+  m_Notes->eventFilterQwNote(watch, evn);
 
   if (watch == tw->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
@@ -2625,33 +2626,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
   if (watch == ui->qwPdf) {
     if (event->type() == QEvent::MouseButtonPress) {
-    }
-  }
-
-  if (watch == ui->qwNotes) {
-    if (event->type() == QEvent::MouseMove) {
-      isMouseMove = true;
-    }
-
-    if (event->type() == QEvent::MouseButtonPress) {
-      isMousePress = true;
-      isMouseMove = false;
-      if (event->button() == Qt::LeftButton) {
-        if (!isMouseMove) {
-          m_Notes->timerEditNote->start(1600);
-        }
-      }
-    }
-
-    if (event->type() == QEvent::MouseButtonRelease) {
-      isMousePress = false;
-      isMouseMove = false;
-
-      m_Notes->timerEditNote->stop();
-    }
-
-    if (event->type() == QEvent::MouseButtonDblClick) {
-      on_btnNotesList_clicked();
     }
   }
 
@@ -4074,51 +4048,6 @@ void MainWindow::on_actionOneDriveBackupData() {
   delete m_CloudBackup;
   m_CloudBackup = new CloudBackup;
   m_CloudBackup->loadLogQML();
-}
-
-void MainWindow::undo() {
-  importBakData(iniDir + "undoFile", true, false, true);
-}
-
-void MainWindow::redo() {
-  importBakData(iniDir + "redoFile", true, false, true);
-}
-
-void MainWindow::addUndo(QString log) {
-  QString undoFile = privateDir + m_Notes->getDateTimeStr();
-  bakIniData(undoFile, true);
-
-  for (int i = 0; i < timeLines.count(); i++) {
-    QString str = timeLines.at(i);
-    if (str.contains(LatestTime)) {
-      timeLines.removeAt(i);
-      break;
-    }
-  }
-
-  timeLines.insert(0, undoFile + "\n" + log);
-  timeLines.insert(0, privateDir + LatestTime);
-  int count = timeLines.count();
-  if (count > 50) {
-    count = 50;
-    QString str = timeLines.at(count);
-    QString oldFile = str.split("\n").at(0);
-    if (QFile().remove(oldFile))
-      qDebug() << oldFile << "addUndo del oldFile...";
-    timeLines.removeAt(count);
-  }
-  QSettings Reg(privateDir + "timemachine.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  Reg.setValue("/TimeLines/Count", count);
-  for (int i = 0; i < count; i++)
-    Reg.setValue("/TimeLines/Files" + QString::number(i), timeLines.at(i));
-}
-
-void MainWindow::addRedo() {
-  QString redoFile = privateDir + LatestTime;
-  bakIniData(redoFile, true);
 }
 
 void MainWindow::on_actionTabRecycle() {
