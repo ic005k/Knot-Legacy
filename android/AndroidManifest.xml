@@ -169,7 +169,7 @@
         <activity
             android:name="com.x.ShareReceiveActivity"
             android:exported="true"
-            android:label="Add to Todo or Note"
+            android:label="Todo or Note"
             android:screenOrientation="unspecified"
             android:theme="@style/splashScreenTheme">
 

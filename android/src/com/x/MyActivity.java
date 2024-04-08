@@ -136,7 +136,6 @@ import android.view.Window;
 import android.app.ActivityManager;
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
-
     public static boolean isDark = false;
     private static MyActivity m_instance = null;
     private static SensorManager mSensorManager;
@@ -156,7 +155,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     private final static String TAG = "QtKnot";
     public static Context context;
-    public static boolean ReOpen = false;
     private FileWatcher mFileWatcher;
 
     public native static void CallJavaNotify_0();
@@ -178,7 +176,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-
     //------------------------------------------------------------------------
     public void setStatusBarHide() {
 
@@ -189,7 +186,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     }
 
     //------------------------------------------------------------------------
-
 
     public void setDark(String strDark) {
         if (strDark.equals("dark_yes"))
@@ -254,11 +250,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
 
-        return 1;
-    }
-
-    public static int setReOpen() {
-        ReOpen = true;
         return 1;
     }
 
@@ -589,7 +580,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             startService(new Intent(bindIntent));
         }
 
-        //Test
+        //debug
         //MyService.notify(getApplicationContext(), "Hello!");
 
         // 定时闹钟
@@ -600,17 +591,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-
-        String file_share = "/storage/emulated/0/.Knot/myclose.ini";
-        internalConfigure = new InternalConfigure(this);
-        Properties myPro = new Properties();
-        myPro.setProperty("mainClose", "false");
-        try {
-            internalConfigure.saveFile(file_share, myPro);
-        } catch (Exception e) {
-            System.err.println("Error : save myclose.ini");
-            e.printStackTrace();
-        }
 
     }
 
@@ -644,17 +624,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     @Override
     protected void onDestroy() {
-        String file_share = "/storage/emulated/0/.Knot/myclose.ini";
-        internalConfigure = new InternalConfigure(this);
-        Properties myPro = new Properties();
-        myPro.setProperty("mainClose", "true");
-        try {
-            internalConfigure.saveFile(file_share, myPro);
-        } catch (Exception e) {
-            System.err.println("Error : save myclose.ini");
-            e.printStackTrace();
-        }
-
         Log.i(TAG, "Main onDestroy...");
 
         releaseWakeLock();
@@ -667,10 +636,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         //if(mScreenStatusReceiver!=null)
         //unregisterReceiver(mScreenStatusReceiver);
 
-
-        if (ReOpen) {
-            doStartApplicationWithPackageName("com.x");
-        }
 
         android.os.Process.killProcess(android.os.Process.myPid());
 

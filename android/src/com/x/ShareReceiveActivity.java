@@ -64,6 +64,8 @@ import android.content.pm.ApplicationInfo;
 
 import java.util.logging.Logger;
 
+import android.widget.Toast;
+
 public class ShareReceiveActivity extends Activity {
     private TextView tv;
     public static String strData;
@@ -141,7 +143,7 @@ public class ShareReceiveActivity extends Activity {
             boolean rstA = isAppRunning(context, pName);
             boolean rstB = isProcessRunning(context, uid);
             //if (rstA) || rstB) {
-            if(rstB){
+            if (rstB) {
                 //指定包名的程序正在运行中
                 isRun = true;
             } else {
@@ -161,13 +163,15 @@ public class ShareReceiveActivity extends Activity {
                 System.err.println("Error : save myshare.ini");
                 e.printStackTrace();
             }
+
+            Toast.makeText(this, "Knot, The Knot is not open, it will be opened for you at this time, please wait...", Toast.LENGTH_SHORT).show();
             // reopen app
-            startLocalApp("com.x");
+            PackageManager packageManager = getPackageManager();
+            Intent it = packageManager.getLaunchIntentForPackage("com.x");
+            startActivity(it);
 
         } else {
-
             myPro.setProperty("shareDone", "true");
-
             try {
                 internalConfigure.saveFile(file2, myPro);
             } catch (Exception e) {
@@ -184,7 +188,7 @@ public class ShareReceiveActivity extends Activity {
     public void handlerText(Intent intent) {
         strData = intent.getStringExtra(Intent.EXTRA_TEXT);
         tv.setText(strData);
-        //MyActivity.ReOpen = true;
+
     }
 
     @Override
@@ -197,7 +201,7 @@ public class ShareReceiveActivity extends Activity {
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
-        //doStartApplicationWithPackageName("com.x");
+
         //android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
 
@@ -307,6 +311,8 @@ public class ShareReceiveActivity extends Activity {
 
             InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
             BufferedReader br = new BufferedReader(reader);
+
+            //debug:
             //String line;
             //while ((line = br.readLine()) != null) {
             //    System.out.println(line);
@@ -372,7 +378,7 @@ public class ShareReceiveActivity extends Activity {
         try {
             ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(packageName, 0);
             if (applicationInfo != null) {
-                //Logger(applicationInfo.uid);
+                Log.e("share", String.valueOf(applicationInfo.uid));
                 return applicationInfo.uid;
             }
         } catch (Exception e) {
@@ -401,6 +407,4 @@ public class ShareReceiveActivity extends Activity {
         }
         return false;
     }
-
-
 }

@@ -58,20 +58,28 @@ void ReceiveShare::Close() {
 }
 
 void ReceiveShare::on_btnAddToTodo_clicked() {
+  Close();
   if (mw_one->ui->frameTodo->isHidden()) {
-    mw_one->on_btnTodo_clicked();
+    mw_one->ui->btnTodo->click();
     mw_one->ui->editTodo->setText(m_Method->strReceiveShareData);
-    mw_one->on_btnAddTodo_clicked();
-    Close();
+    mw_one->ui->btnAddTodo->click();
+
+  } else {
+    mw_one->ui->editTodo->setText(m_Method->strReceiveShareData);
+    mw_one->ui->btnAddTodo->click();
   }
 }
 
 void ReceiveShare::on_btnAddToNote_clicked() {
+  Close();
   if (mw_one->ui->frameNotes->isHidden()) {
-    mw_one->on_btnNotes_clicked();
-    mw_one->on_btnEdit_clicked();
+    mw_one->ui->btnNotes->click();
+    mw_one->ui->btnEdit->click();
     mw_one->m_Notes->m_EditSource->insertPlainText(
         m_Method->strReceiveShareData);
-    Close();
+
+  } else {
+    mw_one->m_Notes->m_EditSource->insertPlainText(
+        m_Method->strReceiveShareData);
   }
 }

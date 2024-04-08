@@ -4251,44 +4251,6 @@ static void JavaNotify_3() {
 static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
 
-  return;
-
-  if (mw_one->alertWindowsCount == 0) {
-    if (!mw_one->m_Report->m_DateSelector->isHidden())
-      mw_one->m_Report->m_DateSelector->close();
-
-    if (!mw_one->ui->frameViewCate->isHidden()) {
-      mw_one->ui->frameViewCate->hide();
-      mw_one->ui->frameReport->show();
-    }
-
-    if (!mw_one->ui->frameReport->isHidden())
-      mw_one->ui->btnBack_Report->click();
-
-    if (!mw_one->ui->frameReader->isHidden())
-      mw_one->on_btnBackReader_clicked();
-
-    if (!mw_one->ui->frameNoteRecycle->isHidden())
-      mw_one->on_btnBackNoteRecycle_clicked();
-
-    if (!mw_one->ui->frameNoteList->isHidden())
-      mw_one->on_btnBackNoteList_clicked();
-
-    if (!mw_one->ui->frameNotes->isHidden()) mw_one->on_btnNotes_clicked();
-
-    if (!mw_one->ui->frameOne->isHidden()) mw_one->ui->btnBack_One->click();
-
-    if (!mw_one->ui->frameSteps->isHidden()) mw_one->ui->btnBackSteps->click();
-
-    if (!mw_one->ui->frameBakList->isHidden())
-      mw_one->ui->btnBackBakList->click();
-
-    if (!mw_one->ui->frameTabRecycle->isHidden())
-      mw_one->ui->btnBackTabRecycle->click();
-
-    mw_one->ui->btnTodo->click();
-  }
-
   qDebug() << "alertWindowsCount=" << mw_one->alertWindowsCount;
   qDebug() << "C++ JavaNotify_4";
 }

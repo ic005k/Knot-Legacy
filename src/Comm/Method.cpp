@@ -800,7 +800,6 @@ bool Method::eventFilterReader(QObject* watch, QEvent* evn) {
 
       mw_one->isTurnThePage = false;
       mw_one->isMousePress = false;
-      // mw_one->isMouseMove = false;
 
       // Right Slide
       if ((relea_x - press_x) > length && qAbs(relea_y - press_y) < 35) {
