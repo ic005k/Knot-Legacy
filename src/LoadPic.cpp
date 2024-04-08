@@ -34,7 +34,7 @@ void LoadPic::initMain(QString imgFile) {
   mw_one->ui->qw_Img->rootContext()->setContextProperty("myH",
                                                         mw_one->height());
 
-  mw_one->ui->f_ImgView->show();
+  mw_one->ui->frameImgView->show();
 
   mw_one->ui->qw_Img->rootContext()->setContextProperty(
       "imgW", mw_one->ui->qw_Img->width() * 10);

@@ -42,7 +42,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frameReaderFun2">
+        <widget class="QFrame" name="f_ReaderFun2">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -247,7 +247,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frameReaderFun">
+        <widget class="QFrame" name="f_ReaderFun">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -704,7 +704,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_15">
        <item>
-        <widget class="QFrame" name="frameMenu">
+        <widget class="QFrame" name="f_Menu">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -1170,7 +1170,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QFrame" name="frame_cw">
+        <widget class="QFrame" name="f_cw">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -1557,7 +1557,7 @@ QRadioButton::indicator:checked {
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame_charts">
+        <widget class="QFrame" name="f_charts">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -1692,7 +1692,7 @@ QTabBar::scroller {width:0}
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frameBtn">
+        <widget class="QFrame" name="f_Btn">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -1892,7 +1892,7 @@ QTabBar::scroller {width:0}
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>
-        <widget class="QFrame" name="frameOneFun">
+        <widget class="QFrame" name="f_OneFun">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2093,7 +2093,7 @@ QTabBar::scroller {width:0}
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frameFunWeb">
+        <widget class="QFrame" name="f_FunWeb">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -2241,7 +2241,7 @@ QTabBar::scroller {width:0}
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
-        <widget class="QFrame" name="frameSetKey">
+        <widget class="QFrame" name="f_SetKey">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -2553,7 +2553,7 @@ QTabBar::scroller {width:0}
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="f_ImgView">
+     <widget class="QFrame" name="frameImgView">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -2664,7 +2664,7 @@ QTabBar::scroller {width:0}
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_11">
        <item>
-        <widget class="QFrame" name="frameToolBar">
+        <widget class="QFrame" name="f_ToolBar">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -2962,8 +2962,8 @@ QTabBar::scroller {width:0}
            </property>
            <property name="iconSize">
             <size>
-             <width>23</width>
-             <height>23</height>
+             <width>28</width>
+             <height>28</height>
             </size>
            </property>
            <property name="shortcut">
@@ -3030,8 +3030,8 @@ border:1px solid #4169E1
            </property>
            <property name="iconSize">
             <size>
-             <width>23</width>
-             <height>23</height>
+             <width>28</width>
+             <height>28</height>
             </size>
            </property>
           </widget>
@@ -3053,8 +3053,8 @@ border:1px solid #4169E1
            </property>
            <property name="iconSize">
             <size>
-             <width>20</width>
-             <height>20</height>
+             <width>28</width>
+             <height>28</height>
             </size>
            </property>
           </widget>
@@ -3285,7 +3285,7 @@ border:1px solid #4169E1
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frameDebug">
+        <widget class="QFrame" name="f_Debug">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -3498,7 +3498,7 @@ QRadioButton::indicator:checked {
         </layout>
        </item>
        <item>
-        <widget class="QFrame" name="frameStepLength">
+        <widget class="QFrame" name="f_StepLength">
          <property name="maximumSize">
           <size>
            <width>16777215</width>

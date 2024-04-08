@@ -31,8 +31,8 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   isExists_ = true;
 
 #ifdef Q_OS_ANDROID
-  mw_one->ui->frameOneFun->hide();
-  mw_one->ui->frameFunWeb->show();
+  mw_one->ui->f_OneFun->hide();
+  mw_one->ui->f_FunWeb->show();
 
   mw_one->ui->qwOneDriver->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
@@ -78,8 +78,8 @@ void QtOneDriveAuthorizationDialog::on_timer() {
   if (isNeedToClose_) {
     close();
     timer->stop();
-    mw_one->ui->frameOneFun->show();
-    mw_one->ui->frameFunWeb->hide();
+    mw_one->ui->f_OneFun->show();
+    mw_one->ui->f_FunWeb->hide();
     mw_one->m_CloudBackup->loadLogQML();
   }
 }

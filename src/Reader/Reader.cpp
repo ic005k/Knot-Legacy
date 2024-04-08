@@ -44,7 +44,7 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   mw_one->ui->btnBackDir->hide();
   mw_one->ui->btnStatusBar->hide();
   mw_one->ui->lblTitle->hide();
-  mw_one->ui->frameReaderFun2->hide();
+  mw_one->ui->f_ReaderFun2->hide();
   mw_one->ui->btnBackward->hide();
   mw_one->ui->btnForward->hide();
   mw_one->ui->textBrowser->hide();
@@ -220,7 +220,7 @@ void Reader::startOpenFile(QString openfile) {
     catalogueFile = "";
 
     mw_one->ui->btnReader->setEnabled(false);
-    mw_one->ui->frameReaderFun->setEnabled(false);
+    mw_one->ui->f_ReaderFun->setEnabled(false);
     mw_one->ui->lblTitle->hide();
     mw_one->ui->qwCata->hide();
     mw_one->ui->lblCataInfo->hide();
@@ -2070,7 +2070,7 @@ void Reader::readBookDone() {
     mw_one->ui->lblEpubInfo->hide();
     mw_one->ui->pEpubProg->hide();
     mw_one->ui->btnReader->setEnabled(true);
-    mw_one->ui->frameReaderFun->setEnabled(true);
+    mw_one->ui->f_ReaderFun->setEnabled(true);
     mw_one->closeProgress();
     isReadEBookEnd = true;
     ShowMessage* msg = new ShowMessage(mw_one);
@@ -2103,7 +2103,7 @@ void Reader::readBookDone() {
     mw_one->ui->btnStatusBar->hide();
     mw_one->ui->qwPdf->hide();
     mw_one->ui->qwReader->show();
-    mw_one->ui->frameReaderFun->show();
+    mw_one->ui->f_ReaderFun->show();
     mw_one->ui->progReader->show();
     mw_one->ui->btnPages->show();
     mw_one->ui->btnShowBookmark->show();
@@ -2141,7 +2141,7 @@ void Reader::readBookDone() {
 
   mw_one->ui->lblBookName->setText(strTitle);
   mw_one->ui->btnReader->setEnabled(true);
-  mw_one->ui->frameReaderFun->setEnabled(true);
+  mw_one->ui->f_ReaderFun->setEnabled(true);
   mw_one->ui->btnBackDir->hide();
   tmeShowEpubMsg->stop();
   mw_one->ui->lblEpubInfo->hide();
@@ -2153,7 +2153,7 @@ void Reader::readBookDone() {
     mw_one->ui->btnShowBookmark->hide();
     mw_one->ui->progReader->hide();
     mw_one->ui->qwReader->hide();
-    mw_one->ui->frameReaderFun->show();
+    mw_one->ui->f_ReaderFun->show();
     mw_one->ui->btnStatusBar->show();
     mw_one->ui->btnPages->hide();
     mw_one->ui->btnCatalogue->hide();

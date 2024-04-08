@@ -21,6 +21,9 @@ class ReceiveShare : public QDialog {
 
   void init();
 
+  void closeAllActiveWindows();
+  QObjectList getAllFrame(QObjectList lstUIControls);
+
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
@@ -30,6 +33,10 @@ class ReceiveShare : public QDialog {
   void on_btnAddToTodo_clicked();
 
   void on_btnAddToNote_clicked();
+
+  void on_btnTest_clicked();
+
+  void on_btnInsertToNote_clicked();
 
  private:
   void Close();

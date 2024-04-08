@@ -619,12 +619,12 @@ void MainWindow::init_Options() {
 void MainWindow::init_ChartWidget() {
   ui->centralwidget->layout()->setContentsMargins(1, 0, 1, 2);
   ui->centralwidget->layout()->setSpacing(1);
-  ui->frame_charts->setContentsMargins(0, 0, 0, 0);
+  ui->f_charts->setContentsMargins(0, 0, 0, 0);
 
-  ui->frame_charts->layout()->setContentsMargins(0, 0, 0, 0);
-  ui->frame_charts->layout()->setSpacing(0);
+  ui->f_charts->layout()->setContentsMargins(0, 0, 0, 0);
+  ui->f_charts->layout()->setSpacing(0);
   frameChartHeight = 105;
-  ui->frame_charts->setFixedHeight(frameChartHeight);
+  ui->f_charts->setFixedHeight(frameChartHeight);
   tabChart->setCurrentIndex(0);
 
   ui->glMonth->layout()->setContentsMargins(0, 0, 0, 0);
@@ -632,7 +632,7 @@ void MainWindow::init_ChartWidget() {
   ui->glDay->layout()->setContentsMargins(0, 0, 0, 0);
   ui->glDay->layout()->setSpacing(0);
 
-  ui->frame_charts->hide();
+  ui->f_charts->hide();
   ui->btnChartDay->hide();
   ui->btnChartMonth->hide();
   ui->rbAmount->hide();
@@ -1523,7 +1523,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     return;
   }
 
-  if (!ui->f_ImgView->isHidden()) {
+  if (!ui->frameImgView->isHidden()) {
     on_btnBackImg_clicked();
     event->ignore();
     return;
@@ -2502,20 +2502,20 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         }
       }
 
-      if (!ui->f_ImgView->isHidden()) {
+      if (!ui->frameImgView->isHidden()) {
         if (isReaderVisible) {
-          ui->f_ImgView->hide();
+          ui->frameImgView->hide();
           ui->frameReader->show();
           return true;
         } else if (isMemoVisible) {
-          ui->f_ImgView->hide();
+          ui->frameImgView->hide();
           ui->frameNotes->show();
           return true;
         }
       }
 
       if (!ui->frameMain->isHidden()) {
-        if (!ui->frame_charts->isHidden()) {
+        if (!ui->f_charts->isHidden()) {
           on_btnChart_clicked();
           return true;
         }
@@ -3313,7 +3313,7 @@ void MainWindow::showNotes() {
   m_Notes->ui->btnRedo->setEnabled(false);
 
   ui->frameMain->hide();
-  ui->frameSetKey->hide();
+  ui->f_SetKey->hide();
   ui->frameNotes->show();
   m_Notes->setVPos();
 }
@@ -3519,10 +3519,10 @@ void MainWindow::init_Theme() {
   ui->qwBookmark->rootContext()->setContextProperty("isDark", isDark);
 
   if (!isDark) {
-    ui->frameMenu->setStyleSheet("background-color: rgb(243,243,243);");
-    ui->frameBtn->setStyleSheet("background-color: rgb(243,243,243);");
-    ui->frame_cw->setStyleSheet("background-color: rgb(243,243,243);");
-    ui->frame_charts->setStyleSheet("background-color: rgb(243,243,243);");
+    ui->f_Menu->setStyleSheet("background-color: rgb(243,243,243);");
+    ui->f_Btn->setStyleSheet("background-color: rgb(243,243,243);");
+    ui->f_cw->setStyleSheet("background-color: rgb(243,243,243);");
+    ui->f_charts->setStyleSheet("background-color: rgb(243,243,243);");
 
     chartMonth->setTheme(QChart::ChartThemeLight);
     chartDay->setTheme(QChart::ChartThemeLight);
@@ -3542,10 +3542,10 @@ void MainWindow::init_Theme() {
     ui->btnSelTab->setIcon(QIcon(":/res/tab.png"));
 
   } else {
-    ui->frameMenu->setStyleSheet("background-color: #19232D;");
-    ui->frameBtn->setStyleSheet("background-color: #19232D;");
-    ui->frame_cw->setStyleSheet("background-color: #19232D;");
-    ui->frame_charts->setStyleSheet("background-color: #19232D;");
+    ui->f_Menu->setStyleSheet("background-color: #19232D;");
+    ui->f_Btn->setStyleSheet("background-color: #19232D;");
+    ui->f_cw->setStyleSheet("background-color: #19232D;");
+    ui->f_charts->setStyleSheet("background-color: #19232D;");
 
     chartMonth->setTheme(QChart::ChartThemeDark);
     chartDay->setTheme(QChart::ChartThemeDark);
@@ -3670,7 +3670,7 @@ void MainWindow::init_UIWidget() {
   ui->frameTodo->hide();
   ui->frameTodoRecycle->hide();
   ui->frameSteps->hide();
-  ui->frameDebug->hide();
+  ui->f_Debug->hide();
   ui->frameReport->hide();
   ui->frameSearch->hide();
   ui->frameBakList->hide();
@@ -3694,14 +3694,14 @@ void MainWindow::init_UIWidget() {
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->layout()->setSpacing(1);
-  ui->f_ImgView->hide();
+  ui->frameImgView->hide();
 
   ui->frameMain->layout()->setContentsMargins(1, 0, 1, 0);
   ui->frameMain->setContentsMargins(1, 0, 1, 0);
   ui->frameMain->layout()->setSpacing(1);
 
   ui->frameOne->hide();
-  ui->frameFunWeb->hide();
+  ui->f_FunWeb->hide();
   ui->btnStorageInfo->hide();
   ui->editCode->setLineWrapMode(QTextEdit::NoWrap);
   ui->lblEpubInfo->hide();
@@ -4127,7 +4127,7 @@ void MainWindow::on_btnMenu_clicked() {
 #else
   x = mw_one->geometry().x() + (ui->btnMenu->width() - 28) / 2 + 2;
 #endif
-  int y = geometry().y() + ui->frameMenu->height() + 2;
+  int y = geometry().y() + ui->f_Menu->height() + 2;
   QPoint pos(x, y);
   mainMenu->exec(pos);
 }
@@ -4281,7 +4281,7 @@ void MainWindow::on_btnReader_clicked() {
 
   ui->frameMain->hide();
   ui->frameReader->show();
-  ui->frameReaderFun->show();
+  ui->f_ReaderFun->show();
 
   if (!isOne) {
     isOne = true;
@@ -4405,9 +4405,9 @@ void MainWindow::on_btnDownload_clicked() {
 
 void MainWindow::on_btnBack_One_clicked() {
   if (!ui->frameOne->isHidden()) {
-    if (ui->frameOneFun->isHidden()) {
-      ui->frameOneFun->show();
-      ui->frameFunWeb->hide();
+    if (ui->f_OneFun->isHidden()) {
+      ui->f_OneFun->show();
+      ui->f_FunWeb->hide();
 
       m_CloudBackup->loadLogQML();
     } else {
@@ -4450,10 +4450,10 @@ void MainWindow::on_btnBackNotes_clicked() {
 }
 
 void MainWindow::on_btnSetKey_clicked() {
-  if (ui->frameSetKey->isHidden())
-    ui->frameSetKey->show();
+  if (ui->f_SetKey->isHidden())
+    ui->f_SetKey->show();
   else
-    ui->frameSetKey->hide();
+    ui->f_SetKey->hide();
 }
 
 void MainWindow::on_btnSetKeyOK_clicked() {
@@ -4468,7 +4468,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
   if (ui->editPassword1->text().trimmed() == "" &&
       ui->editPassword2->text().trimmed() == "") {
     iniNotes->remove("/MainNotes/UserKey");
-    ui->frameSetKey->hide();
+    ui->f_SetKey->hide();
 
     m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
@@ -4491,7 +4491,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg("Knot", tr("The password is set successfully."), 1);
 
-    ui->frameSetKey->hide();
+    ui->f_SetKey->hide();
     ui->editPassword1->clear();
     ui->editPassword2->clear();
 
@@ -4636,10 +4636,10 @@ void MainWindow::on_textBrowser_selectionChanged() {
 
 void MainWindow::on_SetReaderFunVisible() {
   if (!isTurnThePage) {
-    if (ui->frameReaderFun->isHidden())
-      ui->frameReaderFun->show();
+    if (ui->f_ReaderFun->isHidden())
+      ui->f_ReaderFun->show();
     else {
-      ui->frameReaderFun->hide();
+      ui->f_ReaderFun->hide();
       m_ReaderSet->hide();
     }
   }
@@ -4677,7 +4677,7 @@ void MainWindow::on_btnNotesList_clicked() {
 }
 
 void MainWindow::on_btnBackImg_clicked() {
-  ui->f_ImgView->hide();
+  ui->frameImgView->hide();
   if (isReaderVisible) ui->frameReader->show();
   if (isMemoVisible) ui->frameNotes->show();
 }
@@ -5454,12 +5454,12 @@ void MainWindow::on_btnChart_clicked() {
   axisY->setTickCount(7);
   axisY2->setTickCount(7);
 
-  if (ui->frame_charts->isHidden()) {
+  if (ui->f_charts->isHidden()) {
     ui->qwMainDate->hide();
     ui->qwMainEvent->hide();
 
-    ui->frame_charts->setMaximumHeight(this->height());
-    ui->frame_charts->show();
+    ui->f_charts->setMaximumHeight(this->height());
+    ui->f_charts->show();
     ui->btnChartDay->show();
     ui->btnChartMonth->show();
     ui->rbAmount->show();
@@ -5470,8 +5470,8 @@ void MainWindow::on_btnChart_clicked() {
     ui->btnFind->hide();
     ui->btnRemarks->hide();
   } else {
-    ui->frame_charts->setMaximumHeight(0);
-    ui->frame_charts->hide();
+    ui->f_charts->setMaximumHeight(0);
+    ui->f_charts->hide();
     ui->rbAmount->hide();
     ui->rbFreq->hide();
     ui->rbSteps->hide();
@@ -5545,7 +5545,7 @@ void MainWindow::on_btnCatalogue_clicked() { m_Reader->showCatalogue(); }
 
 void MainWindow::on_btnRemoveBookList_clicked() { m_Reader->removeBookList(); }
 
-void MainWindow::on_btnStatusBar_clicked() { ui->frameReaderFun->hide(); }
+void MainWindow::on_btnStatusBar_clicked() { ui->f_ReaderFun->hide(); }
 
 void MainWindow::on_btnRotatePage_clicked() { m_Reader->rotatePdfPage(); }
 

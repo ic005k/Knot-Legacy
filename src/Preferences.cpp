@@ -97,10 +97,10 @@ void Preferences::saveOptions() {
 
 void Preferences::on_chkDebug_clicked() {
   if (ui->chkDebug->isChecked()) {
-    mw_one->ui->frameDebug->show();
+    mw_one->ui->f_Debug->show();
 
   } else if (!ui->chkDebug->isChecked()) {
-    mw_one->ui->frameDebug->hide();
+    mw_one->ui->f_Debug->hide();
   }
 }
 
@@ -211,7 +211,7 @@ void Preferences::initOptions() {
 #else
 
   if (!devMode) {
-    mw_one->ui->frame_charts->hide();
+    mw_one->ui->f_charts->hide();
     mw_one->ui->qwMainDate->hide();
     mw_one->ui->qwMainEvent->hide();
     mw_one->ui->btnSteps->hide();
@@ -222,7 +222,7 @@ void Preferences::initOptions() {
     mw_one->ui->btnFind->hide();
     mw_one->ui->btnRemarks->hide();
     mw_one->ui->btnReport->hide();
-    mw_one->ui->frame_cw->hide();
+    mw_one->ui->f_cw->hide();
     mw_one->ui->qwMainTab->hide();
     mw_one->ui->btnSelTab->hide();
     mw_one->ui->lblStats->hide();
