@@ -155,7 +155,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public static int keyBoardHeight;
 
     private final static String TAG = "QtKnot";
-    private static Context context;
+    public static Context context;
     public static boolean ReOpen = false;
     private FileWatcher mFileWatcher;
 
@@ -172,6 +172,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public native static void CallJavaNotify_5();
 
     private InternalConfigure internalConfigure;
+    public static boolean isReadShareData = false;
 
     public MyActivity() {
 
@@ -551,11 +552,9 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         try {
             internalConfigure.readFrom(filename);
         } catch (Exception e) {
-            System.err.println("Error : reading msg.ini");
+            System.err.println("Error : reading options.ini");
             e.printStackTrace();
-
         }
-
         String strDark = internalConfigure.getIniKey("Dark");
         isDark = Boolean.parseBoolean(strDark);
         System.out.println("strDark=" + strDark + "    isDark=" + isDark);
@@ -602,6 +601,17 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
+        String file_share = "/storage/emulated/0/.Knot/myclose.ini";
+        internalConfigure = new InternalConfigure(this);
+        Properties myPro = new Properties();
+        myPro.setProperty("mainClose", "false");
+        try {
+            internalConfigure.saveFile(file_share, myPro);
+        } catch (Exception e) {
+            System.err.println("Error : save myclose.ini");
+            e.printStackTrace();
+        }
+
     }
 
     private static ServiceConnection mCon = new ServiceConnection() {
@@ -634,7 +644,19 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "onDestroy...");
+        String file_share = "/storage/emulated/0/.Knot/myclose.ini";
+        internalConfigure = new InternalConfigure(this);
+        Properties myPro = new Properties();
+        myPro.setProperty("mainClose", "true");
+        try {
+            internalConfigure.saveFile(file_share, myPro);
+        } catch (Exception e) {
+            System.err.println("Error : save myclose.ini");
+            e.printStackTrace();
+        }
+
+        Log.i(TAG, "Main onDestroy...");
+
         releaseWakeLock();
         if (null != mFileWatcher) mFileWatcher.stopWatching(); //停止监听
 
@@ -861,6 +883,7 @@ This method can parse out the real local file path from a file URI.
     }
 
     public String getShareReceiveData(String str_data) {
+        isReadShareData = true;
         return ShareReceiveActivity.strData;
 
     }
@@ -1586,6 +1609,6 @@ This method can parse out the real local file path from a file URI.
         }
     }
     //----------------------------------------------------------------------------------------------
-    
+
 }
 

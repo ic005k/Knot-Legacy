@@ -59,10 +59,16 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import android.app.Application;
+import android.app.ActivityManager;
+import android.content.pm.ApplicationInfo;
+
+import java.util.logging.Logger;
 
 public class ShareReceiveActivity extends Activity {
     private TextView tv;
-    static public String strData;
+    public static String strData;
+
+    private InternalConfigure internalConfigure;
 
     public native static void CallJavaNotify_0();
 
@@ -94,8 +100,8 @@ public class ShareReceiveActivity extends Activity {
             }
         }
 
-        //显示一个警报框，目前已弃用，采用全屏幕显示
-       /* new AlertDialog.Builder(ShareReceiveActivity.this).setTitle("Knot").setMessage(strData)
+        //显示一个警报框，目前仅供测试，已采用全屏幕显示
+        /*new AlertDialog.Builder(ShareReceiveActivity.this).setTitle("Knot").setMessage(strData)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -105,10 +111,73 @@ public class ShareReceiveActivity extends Activity {
                 }).show();*/
 
         System.out.println("strData=" + strData);
-        CallJavaNotify_5();
-        MyActivity.setMax();
-        ShareReceiveActivity.this.finish();
 
+        String filename = "/storage/emulated/0/.Knot/myclose.ini";
+        internalConfigure = new InternalConfigure(this);
+        try {
+            internalConfigure.readFrom(filename);
+        } catch (Exception e) {
+            System.err.println("Error : reading myclose.ini");
+            e.printStackTrace();
+        }
+        String mainClose = "true";
+        mainClose = internalConfigure.getIniKey("mainClose");
+        if (mainClose.equals("")) {
+            mainClose = "true";
+        }
+
+        // Save receive data
+        String file2 = "/storage/emulated/0/.Knot/myshare.ini";
+        internalConfigure = new InternalConfigure(this);
+        Properties myPro = new Properties();
+        myPro.setProperty("receiveData", strData);
+
+
+        Context context = MyActivity.context;
+        String pName = "com.x";
+        boolean isRun = false;
+        int uid = getPackageUid(context, pName);
+        if (uid > 0) {
+            boolean rstA = isAppRunning(context, pName);
+            boolean rstB = isProcessRunning(context, uid);
+            //if (rstA) || rstB) {
+            if(rstB){
+                //指定包名的程序正在运行中
+                isRun = true;
+            } else {
+                //指定包名的程序未在运行中
+                isRun = false;
+            }
+        } else {
+            //应用未安装
+        }
+
+        if (!isRun) {
+            //if (mainClose.equals("true")) {
+            myPro.setProperty("shareDone", "false");
+            try {
+                internalConfigure.saveFile(file2, myPro);
+            } catch (Exception e) {
+                System.err.println("Error : save myshare.ini");
+                e.printStackTrace();
+            }
+            // reopen app
+            startLocalApp("com.x");
+
+        } else {
+
+            myPro.setProperty("shareDone", "true");
+
+            try {
+                internalConfigure.saveFile(file2, myPro);
+            } catch (Exception e) {
+                System.err.println("Error : save myshare.ini");
+                e.printStackTrace();
+            }
+            CallJavaNotify_5();
+            MyActivity.setMax();
+        }
+        ShareReceiveActivity.this.finish();
     }
 
     //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
@@ -133,10 +202,6 @@ public class ShareReceiveActivity extends Activity {
         super.onDestroy();
 
     }
-
-    //@Override
-    //public void onActivityDestroyed(Activity activity) {
-    //    }
 
     private void doStartApplicationWithPackageName(String packagename) {
         System.out.println("自启动开始...");
@@ -180,6 +245,161 @@ public class ShareReceiveActivity extends Activity {
         }
 
         System.out.println("过程完成...");
+    }
+
+    private void startLocalApp(String packageNameTarget) {
+        Log.i("Wmx logs::", "-----------------------开始启动第三方 APP=" + packageNameTarget);
+
+        PackageManager packageManager = getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(packageNameTarget);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        /**android.intent.action.MAIN：打开另一程序
+         */
+        intent.setAction("android.intent.action.MAIN");
+        /**
+         * FLAG_ACTIVITY_SINGLE_TOP:
+         * 如果当前栈顶的activity就是要启动的activity,则不会再启动一个新的activity
+         */
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+
+    }
+
+    public class InternalConfigure {
+        private final Context context;
+        private Properties properties;
+
+        public InternalConfigure(Context context) {
+            super();
+            this.context = context;
+        }
+
+        /**
+         * 保存文件filename为文件名，filecontent为存入的文件内容
+         * 例:configureActivity.saveFiletoSD("text.ini","");
+         */
+        public void saveFile(String filename, Properties properties) throws Exception {
+            //设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
+            FileOutputStream fileOutputStream;// = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            File file = new File(filename);
+            fileOutputStream = new FileOutputStream(file);
+            //通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
+            for (String key : properties.stringPropertyNames()) {
+                String s = key + " = " + properties.getProperty(key) + "\n";
+                System.out.println(s);
+                fileOutputStream.write(s.getBytes());
+            }
+            fileOutputStream.close();
+        }
+
+        /**
+         * 读取文件
+         */
+        public void readFrom(String filename) throws Exception {
+            properties = new Properties();
+
+            FileInputStream fileInputStream;// = context.openFileInput(filename);
+
+            File file = new File(filename);
+            fileInputStream = new FileInputStream(file);
+
+            InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
+            BufferedReader br = new BufferedReader(reader);
+            //String line;
+            //while ((line = br.readLine()) != null) {
+            //    System.out.println(line);
+            //}
+
+            properties.load(br);
+
+            br.close();
+            reader.close();
+            fileInputStream.close();
+        }
+
+        /**
+         * 返回指定key对应的value
+         */
+        public String getIniKey(String key) {
+            if (properties.containsKey(key) == false) {
+                return null;
+            }
+            return String.valueOf(properties.get(key));
+        }
+    }
+
+    public boolean isAppRun(String packName) {
+        boolean isRun = false;
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo processInfo : runningAppProcesses) {
+            if (processInfo.processName.equals(packName)) {
+                // APP运行中
+                isRun = true;
+                break;
+            }
+        }
+        return isRun;
+    }
+
+
+    /**
+     * 方法描述：判断某一应用是否正在运行
+     * Created by cafeting on 2017/2/4.
+     *
+     * @param context     上下文
+     * @param packageName 应用的包名
+     * @return true 表示正在运行，false 表示没有运行
+     */
+    public static boolean isAppRunning(Context context, String packageName) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(100);
+        if (list.size() <= 0) {
+            return false;
+        }
+        for (ActivityManager.RunningTaskInfo info : list) {
+            if (info.baseActivity.getPackageName().equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //获取已安装应用的 uid，-1 表示未安装此应用或程序异常
+    public static int getPackageUid(Context context, String packageName) {
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(packageName, 0);
+            if (applicationInfo != null) {
+                //Logger(applicationInfo.uid);
+                return applicationInfo.uid;
+            }
+        } catch (Exception e) {
+            return -1;
+        }
+        return -1;
+    }
+
+    /**
+     * 判断某一 uid 的程序是否有正在运行的进程，即是否存活
+     * Created by cafeting on 2017/2/4.
+     *
+     * @param context 上下文
+     * @param uid     已安装应用的 uid
+     * @return true 表示正在运行，false 表示没有运行
+     */
+    public static boolean isProcessRunning(Context context, int uid) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> runningServiceInfos = am.getRunningServices(200);
+        if (runningServiceInfos.size() > 0) {
+            for (ActivityManager.RunningServiceInfo appProcess : runningServiceInfos) {
+                if (uid == appProcess.uid) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

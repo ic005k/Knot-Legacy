@@ -358,6 +358,13 @@ MainWindow::MainWindow(QWidget *parent)
 
   reloadMain();
   clickData();
+
+  if (isAndroid) {
+    timerReceiveShare = new QTimer(this);
+    connect(timerReceiveShare, SIGNAL(timeout()), this,
+            SLOT(on_ReceiveShare()));
+    timerReceiveShare->start(2000);
+  }
 }
 
 void MainWindow::initHardStepSensor() {
@@ -824,6 +831,20 @@ void MainWindow::timerUpdate() {
   if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00") {
     m_Preferences->isFontChange = true;
     this->close();
+  }
+}
+
+void MainWindow::on_ReceiveShare() {
+  timerReceiveShare->stop();
+  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  QString shareDone = Reg.value("shareDone", "true").toString();
+  m_Method->strReceiveShareData = Reg.value("receiveData", "test").toString();
+  if (shareDone == "false") {
+    Reg.setValue("shareDone", "true");
+    m_ReceiveShare->init();
   }
 }
 
