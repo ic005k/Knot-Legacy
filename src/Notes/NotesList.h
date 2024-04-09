@@ -161,7 +161,8 @@ class NotesList : public QDialog {
 
   void on_editFind_returnPressed();
 
- private:
+  void on_actionShareNoteFile();
+  private:
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   QStringList files;
   void clearMD_Pic(QTreeWidget *tw);

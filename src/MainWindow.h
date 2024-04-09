@@ -731,6 +731,8 @@ class MainWindow : public QMainWindow {
 
   void on_ReceiveShare();
 
+  void on_btnShareImage_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

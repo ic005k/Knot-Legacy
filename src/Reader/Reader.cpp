@@ -2286,7 +2286,7 @@ void Reader::selectText() {
     mw_one->ui->textBrowser->verticalScrollBar()->setSliderPosition(s1);
     qDebug() << "s0=" << s0 << "h0=" << h0 << "s1=" << s1 << "h1=" << h1;
 
-    mw_one->mydlgSetText->setFixedWidth(mw_one->width() * 2 / 3);
+    mw_one->mydlgSetText->setFixedWidth(mw_one->width() - 4);
     mw_one->mydlgSetText->init(
         mw_one->geometry().x() +
             (mw_one->width() - mw_one->mydlgSetText->width()) / 2,

@@ -4,13 +4,9 @@
 #include "ui_MainWindow.h"
 extern MainWindow* mw_one;
 extern Method* m_Method;
-extern QString picfile;
+extern QString picfile, imgFileName;
 
 LoadPic::LoadPic(QWidget* parent) : QDialog(parent) {
-  // mw_one->ui->f_ImgFun->setObjectName("myframe");
-  // mw_one->ui->f_ImgFun->setStyleSheet(
-  //     "QFrame#myframe{border-image:url(:/res/b.png)}");
-
   QFont font = this->font();
   font.setPointSize(13);
   mw_one->ui->lblImgInfo->setFont(font);
@@ -18,12 +14,19 @@ LoadPic::LoadPic(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblImgInfo->setWordWrap(true);
   mw_one->ui->lblImgInfo->setText("");
 
+#ifdef Q_OS_ANDROID
+  mw_one->ui->btnShareImage->show();
+#else
+  mw_one->ui->btnShareImage->hide();
+#endif
+
   this->installEventFilter(this);
 }
 
 LoadPic::~LoadPic() {}
 
 void LoadPic::initMain(QString imgFile) {
+  imgFileName = imgFile;
   mw_one->ui->lblImgInfo->setText(
       imgFile + "  " + mw_one->getFileSize(QFile(imgFile).size(), 2));
 

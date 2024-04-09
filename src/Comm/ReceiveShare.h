@@ -24,9 +24,11 @@ class ReceiveShare : public QDialog {
   void closeAllActiveWindows();
   QObjectList getAllFrame(QObjectList lstUIControls);
 
-  void shareImage(const QString &title, const QString &path);
   void shareImages(const QString &title, const QStringList &imagesPathList);
   void shareString(const QString &title, const QString &content);
+
+  void shareImage(const QString &title, const QString &path,
+                  const QString &fileType);
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;

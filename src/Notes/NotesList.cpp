@@ -1879,6 +1879,7 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
   QAction *actMoveDown = new QAction(tr("Move Down"));
   QAction *actImport = new QAction(tr("Import"));
   QAction *actExport = new QAction(tr("Export"));
+  QAction *actShare = new QAction(tr("Share"));
 
   connect(actNew, &QAction::triggered, this,
           &NotesList::on_actionAdd_Note_triggered);
@@ -1896,6 +1897,8 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
           &NotesList::on_actionImport_Note_triggered);
   connect(actExport, &QAction::triggered, this,
           &NotesList::on_actionExport_Note_triggered);
+  connect(actShare, &QAction::triggered, this,
+          &NotesList::on_actionShareNoteFile);
 
   mainMenu->addAction(actNew);
   mainMenu->addAction(actRename);
@@ -1903,6 +1906,7 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
 
   mainMenu->addAction(actImport);
   mainMenu->addAction(actExport);
+  mainMenu->addAction(actShare);
 
   mainMenu->addAction(actMoveUp);
   mainMenu->addAction(actMoveDown);
@@ -1912,7 +1916,20 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
   actMoveUp->setVisible(false);
   actMoveDown->setVisible(false);
 
+#ifdef Q_OS_ANDROID
+  actShare->setVisible(true);
+#else
+  actShare->setVisible(false);
+#endif
+
   mainMenu->setStyleSheet(m_Method->qssMenu);
+}
+
+void NotesList::on_actionShareNoteFile() {
+  if (QFile::exists(currentMDFile)) {
+    mw_one->m_ReceiveShare->shareImage(tr("Share to"), currentMDFile,
+                                       "text/plain");
+  }
 }
 
 void NotesList::setNoteLabel() {

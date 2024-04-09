@@ -1601,13 +1601,62 @@ This method can parse out the real local file path from a file URI.
      * 分享功能
      */
     //分享单张图片
-    public static void shareImage(String title,
-                                  String path, QtActivity activity) {
+    public void shareImage(String title,
+                           String path, String fileType, QtActivity activity) {
         Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("image/png");
-        File file = new File(path);
-        share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-        activity.startActivity(Intent.createChooser(share, title));
+        share.setType(fileType); // "image/png"
+        //File file = new File(path);
+        //share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+
+        Uri photoUri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            photoUri = FileProvider.getUriForFile(
+                    context, context.getPackageName(), new File(path));
+        } else {
+            photoUri = Uri.fromFile(new File(path));
+        }
+        //share.putExtra(Intent.EXTRA_STREAM, photoUri);
+        //activity.startActivity(Intent.createChooser(share, title));
+
+
+        String contentDetails = "";
+        String contentBrief = "";
+        String shareUrl = "";
+
+        List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(share, 0);
+        if (!resInfo.isEmpty()) {
+            List<Intent> targetedShareIntents = new ArrayList<Intent>();
+            for (ResolveInfo info : resInfo) {
+                Intent targeted = new Intent(Intent.ACTION_SEND);
+                targeted.setType(fileType);
+                ActivityInfo activityInfo = info.activityInfo;
+
+                // judgments : activityInfo.packageName, activityInfo.name, etc.
+                if (activityInfo.packageName.contains("com.x")) {
+                    continue;
+                }
+
+                targeted.putExtra(Intent.EXTRA_STREAM, photoUri);
+                targeted.setPackage(activityInfo.packageName);
+                targetedShareIntents.add(targeted);
+            }
+            Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), title);
+            if (chooserIntent == null) {
+                return;
+            }
+            // A Parcelable[] of Intent or LabeledIntent objects as set with
+            // putExtra(String, Parcelable[]) of additional activities to place
+            // a the front of the list of choices, when shown to the user with a
+            // ACTION_CHOOSER.
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+            try {
+                startActivity(chooserIntent);
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(this, "Can't find share component to share", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
     }
 
     //分享多张图片

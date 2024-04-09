@@ -101,15 +101,6 @@ public class ShareReceiveActivity extends Activity {
             }
         }
 
-        //显示一个警报框，目前仅供测试，已采用全屏幕显示
-        /*new AlertDialog.Builder(ShareReceiveActivity.this).setTitle("Knot").setMessage(strData)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        ShareReceiveActivity.this.finish();
-                    }
-                }).show();*/
 
         System.out.println("strData=" + strData);
 

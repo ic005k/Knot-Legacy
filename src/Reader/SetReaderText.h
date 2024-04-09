@@ -30,6 +30,8 @@ class dlgSetText : public QDialog {
 
   void on_lineEdit_textChanged(const QString &arg1);
 
+  void on_btnShare_clicked();
+
  private:
 };
 

@@ -17,7 +17,7 @@ bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isTimeMachine,
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
-    zipfile, txt, infoStr, searchStr, currentMDFile, copyText,
+    zipfile, txt, infoStr, searchStr, currentMDFile, copyText, imgFileName,
     defaultFontFamily, customFontFamily;
 QStringList listM;
 
@@ -2288,8 +2288,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       if (str == "") {
         mydlgSetText->close();
       } else {
-        mydlgSetText->setFixedWidth(width() * 2 / 3);
-
         int y1;
         int a = 30;
         if (event->globalY() - a - mydlgSetText->height() >= 0)
@@ -2297,8 +2295,9 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         else
           y1 = event->globalY() + a;
 
+        mydlgSetText->setFixedWidth(mw_one->width() - 4);
         mydlgSetText->init(
-            geometry().x() + (width() - mydlgSetText->width()) / 2, y1,
+            geometry().x() + (mw_one->width() - mydlgSetText->width()) / 2, y1,
             mydlgSetText->width(), mydlgSetText->height());
       }
     }
@@ -2307,8 +2306,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       if (isMousePress) {
         QString str = ui->textBrowser->textCursor().selectedText().trimmed();
         if (str != "") {
-          mydlgSetText->setFixedWidth(width() * 2 / 3);
-
           int y1;
           int a = 30;
           if (event->globalY() - a - mydlgSetText->height() >= 0)
@@ -2316,9 +2313,10 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
           else
             y1 = event->globalY() + a;
 
+          mydlgSetText->setFixedWidth(mw_one->width() - 4);
           mydlgSetText->init(
-              geometry().x() + (width() - mydlgSetText->width()) / 2, y1,
-              mydlgSetText->width(), mydlgSetText->height());
+              geometry().x() + (mw_one->width() - mydlgSetText->width()) / 2,
+              y1, mydlgSetText->width(), mydlgSetText->height());
         }
       }
     }
@@ -5568,4 +5566,8 @@ void MainWindow::stopTimerForPdf() {
   m_Reader->tmeShowEpubMsg->stop();
   ui->pEpubProg->hide();
   ui->lblEpubInfo->hide();
+}
+
+void MainWindow::on_btnShareImage_clicked() {
+  m_ReceiveShare->shareImage(tr("Share to"), imgFileName, "image/png");
 }

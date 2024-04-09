@@ -140,6 +140,8 @@ void ReceiveShare::on_btnInsertToNote_clicked() {
 }
 
 void ReceiveShare::shareString(const QString& title, const QString& content) {
+#ifdef Q_OS_ANDROID
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jTitle = QAndroidJniObject::fromString(title);
   QAndroidJniObject jPath = QAndroidJniObject::fromString(content);
@@ -164,35 +166,48 @@ void ReceiveShare::shareString(const QString& title, const QString& content) {
       activity.object<jobject>());
 
 #endif
+
+#endif
 }
 
-void ReceiveShare::shareImage(const QString& title, const QString& path) {
+void ReceiveShare::shareImage(const QString& title, const QString& path,
+                              const QString& fileType) {
+#ifdef Q_OS_ANDROID
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jTitle = QAndroidJniObject::fromString(title);
   QAndroidJniObject jPath = QAndroidJniObject::fromString(path);
+  QAndroidJniObject jType = QAndroidJniObject::fromString(fileType);
   QAndroidJniObject activity = QtAndroid::androidActivity();
-  QAndroidJniObject::callStaticMethod<void>(
-      "com.x/MyActivity", "shareImage",
-      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt5/android/"
-      "bindings/QtActivity;)V",
-      jTitle.object<jstring>(), jPath.object<jstring>(),
-      activity.object<jobject>());
+  activity.callMethod<void>("shareImage",
+                            "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/"
+                            "String;Lorg/qtproject/qt5/android/"
+                            "bindings/QtActivity;)V",
+                            jTitle.object<jstring>(), jPath.object<jstring>(),
+                            jType.object<jstring>(),
+                            activity.object<jobject>());
 #else
   QJniObject jTitle = QJniObject::fromString(title);
   QJniObject jPath = QJniObject::fromString(path);
+  QAndroidJniObject jType = QAndroidJniObject::fromString(fileType);
   QJniObject activity = QtAndroid::androidActivity();
   QJniObject::callStaticMethod<void>(
       "com.x/MyActivity", "shareImage",
-      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt/android/"
+      "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/"
+      "String;Lorg/qtproject/qt5/android/"
       "bindings/QtActivity;)V",
       jTitle.object<jstring>(), jPath.object<jstring>(),
-      activity.object<jobject>());
+      jType.object<jstring>(), activity.object<jobject>());
+
+#endif
 
 #endif
 }
 
 void ReceiveShare::shareImages(const QString& title,
                                const QStringList& imagesPathList) {
+#ifdef Q_OS_ANDROID
+
   QString imagesPath;
   foreach (QString str, imagesPathList) {
     imagesPath += str + "|";
@@ -219,6 +234,8 @@ void ReceiveShare::shareImages(const QString& title,
       "bindings/QtActivity;)V",
       jTitle.object<jstring>(), jPathList.object<jstring>(),
       activity.object<jobject>());
+
+#endif
 
 #endif
 }
