@@ -48,6 +48,8 @@ class TextSelector : public QDialog {
 
   void on_btnDel_clicked();
 
+  void on_btnShareTxt_clicked();
+
  private:
   bool isMouseRelease = false;
   bool isMousePress = false;

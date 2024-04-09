@@ -103,6 +103,10 @@ QObjectList ReceiveShare::getAllFrame(QObjectList lstUIControls) {
 }
 
 void ReceiveShare::closeAllActiveWindows() {
+  if (mw_one->m_Notes->isVisible()) {
+    mw_one->m_Notes->on_btnDone_clicked();
+  }
+
   QObjectList frameList;
   frameList = getAllFrame(mw_one->getAllUIControls(mw_one));
   for (int i = 0; i < frameList.count(); i++) {
@@ -115,10 +119,6 @@ void ReceiveShare::closeAllActiveWindows() {
         mw_one->ui->frameMain->show();
       }
     }
-  }
-
-  if (mw_one->m_Notes->isVisible()) {
-    mw_one->m_Notes->on_btnDone_clicked();
   }
 }
 
@@ -137,4 +137,88 @@ void ReceiveShare::on_btnInsertToNote_clicked() {
     mw_one->m_Notes->m_EditSource->insertPlainText(
         m_Method->strReceiveShareData);
   }
+}
+
+void ReceiveShare::shareString(const QString& title, const QString& content) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jTitle = QAndroidJniObject::fromString(title);
+  QAndroidJniObject jPath = QAndroidJniObject::fromString(content);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  QAndroidJniObject m_activity = QAndroidJniObject::fromString("shareString");
+  activity.callMethod<void>(
+      "shareString",
+      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt5/android/"
+      "bindings/QtActivity;)V",
+      jTitle.object<jstring>(), jPath.object<jstring>(),
+      activity.object<jobject>());
+
+#else
+  QJniObject jTitle = QJniObject::fromString(title);
+  QJniObject jPath = QJniObject::fromString(content);
+  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject::callStaticMethod<void>(
+      "com.x/MyActivity", "shareString",
+      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt/android/"
+      "bindings/QtActivity;)V",
+      jTitle.object<jstring>(), jPath.object<jstring>(),
+      activity.object<jobject>());
+
+#endif
+}
+
+void ReceiveShare::shareImage(const QString& title, const QString& path) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jTitle = QAndroidJniObject::fromString(title);
+  QAndroidJniObject jPath = QAndroidJniObject::fromString(path);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  QAndroidJniObject::callStaticMethod<void>(
+      "com.x/MyActivity", "shareImage",
+      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt5/android/"
+      "bindings/QtActivity;)V",
+      jTitle.object<jstring>(), jPath.object<jstring>(),
+      activity.object<jobject>());
+#else
+  QJniObject jTitle = QJniObject::fromString(title);
+  QJniObject jPath = QJniObject::fromString(path);
+  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject::callStaticMethod<void>(
+      "com.x/MyActivity", "shareImage",
+      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt/android/"
+      "bindings/QtActivity;)V",
+      jTitle.object<jstring>(), jPath.object<jstring>(),
+      activity.object<jobject>());
+
+#endif
+}
+
+void ReceiveShare::shareImages(const QString& title,
+                               const QStringList& imagesPathList) {
+  QString imagesPath;
+  foreach (QString str, imagesPathList) {
+    imagesPath += str + "|";
+  }
+  imagesPath = imagesPath.remove(imagesPath.size() - 1, 1).trimmed();
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jTitle = QAndroidJniObject::fromString(title);
+  QAndroidJniObject jPathList = QAndroidJniObject::fromString(imagesPath);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  QAndroidJniObject::callStaticMethod<void>(
+      "com.x/MyActivity", "shareImages",
+      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt5/android/"
+      "bindings/QtActivity;)V",
+      jTitle.object<jstring>(), jPathList.object<jstring>(),
+      activity.object<jobject>());
+#else
+  QJniObject jTitle = QJniObject::fromString(title);
+  QJniObject jPathList = QJniObject::fromString(imagesPath);
+  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject::callStaticMethod<void>(
+      "com.x/MyActivity", "shareImages",
+      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt/android/"
+      "bindings/QtActivity;)V",
+      jTitle.object<jstring>(), jPathList.object<jstring>(),
+      activity.object<jobject>());
+
+#endif
 }

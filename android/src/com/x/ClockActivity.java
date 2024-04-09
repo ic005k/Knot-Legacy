@@ -1,5 +1,7 @@
 package com.x;
 
+import com.x.MyActivity;
+
 import android.content.IntentFilter;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
@@ -80,6 +82,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
     public native static void CallJavaNotify_5();
 
+    private static boolean isGoBackKnot = false;
+
     public static boolean isZh(Context context) {
         Locale locale = context.getResources().getConfiguration().locale;
         String language = locale.getLanguage();
@@ -103,9 +107,9 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         if (zh_cn)
-            btn_cancel.setText("关闭");
+            btn_cancel.setText("返回 Knot");
         else
-            btn_cancel.setText("Close");
+            btn_cancel.setText("Go Back Knot");
         btn_cancel.setOnClickListener(this);
 
     }
@@ -117,6 +121,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
                 // ClockActivity.this.finish();
                 // btn_cancel.setVisibility(View.GONE);
 
+                isGoBackKnot = true;
                 onBackPressed();
                 break;
         }
@@ -310,10 +315,20 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         MyService.clearNotify();
 
         if (!isRefreshAlarm) {
+            if (!isGoBackKnot) {
+                MyActivity.mini();
+            }
+            isGoBackKnot = false;
             android.os.Process.killProcess(android.os.Process.myPid());
         } else {
             CallJavaNotify_4();
         }
+
+        if (!isGoBackKnot) {
+            MyActivity.mini();
+        }
+
+        isGoBackKnot = false;
 
         super.onDestroy();
 
@@ -322,8 +337,10 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     }
 
     public static void close() {
-        if (m_instance != null)
+
+        if (m_instance != null) {
             m_instance.finish();
+        }
     }
 
     public class InternalConfigure {

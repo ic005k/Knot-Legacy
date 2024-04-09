@@ -90,7 +90,6 @@ public class ShareReceiveActivity extends Activity {
         setContentView(R.layout.activity_share_receive);
         tv = (TextView) findViewById(R.id.text_info);
 
-
         //获取intent
         Intent intent = getIntent();
         String action = intent.getAction();

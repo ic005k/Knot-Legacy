@@ -45,6 +45,12 @@ TextSelector::TextSelector(QWidget *parent)
   ui->btnRight1->setAutoRepeatInterval(b);
 
   oriHeight = height();
+
+#ifdef Q_OS_ANDROID
+  ui->btnShareTxt->show();
+#else
+  ui->btnShareTxt->hide();
+#endif
 }
 
 TextSelector::~TextSelector() { delete ui; }
@@ -187,4 +193,12 @@ void TextSelector::on_btnBing_clicked() {
 void TextSelector::on_btnDel_clicked() {
   mw_one->m_Notes->byTextEdit->textCursor().removeSelectedText();
   on_btnClose_clicked();
+}
+
+void TextSelector::on_btnShareTxt_clicked() {
+  QString txt = ui->lineEdit->text();
+  txt = txt.trimmed();
+  if (txt != "") {
+    mw_one->m_ReceiveShare->shareString(tr("Share to"), txt);
+  }
 }

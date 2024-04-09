@@ -3343,13 +3343,13 @@ F</source>
     </message>
     <message>
         <location filename="Notes/TextSelector.ui" line="245"/>
-        <location filename="Notes/TextSelector.ui" line="327"/>
+        <location filename="Notes/TextSelector.ui" line="340"/>
         <source>+</source>
         <translation></translation>
     </message>
     <message>
         <location filename="Notes/TextSelector.ui" line="268"/>
-        <location filename="Notes/TextSelector.ui" line="304"/>
+        <location filename="Notes/TextSelector.ui" line="317"/>
         <source>-</source>
         <translation></translation>
     </message>
@@ -3357,6 +3357,16 @@ F</source>
         <location filename="Notes/TextSelector.ui" line="291"/>
         <source>Close</source>
         <translation>关闭</translation>
+    </message>
+    <message>
+        <location filename="Notes/TextSelector.ui" line="304"/>
+        <source>Share</source>
+        <translation>分享</translation>
+    </message>
+    <message>
+        <location filename="Notes/TextSelector.cpp" line="202"/>
+        <source>Share to</source>
+        <translation>分享到</translation>
     </message>
 </context>
 <context>

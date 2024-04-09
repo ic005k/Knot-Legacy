@@ -134,6 +134,10 @@ import android.os.FileObserver;
 
 import android.view.Window;
 import android.app.ActivityManager;
+import android.os.StrictMode;
+import android.content.pm.ActivityInfo;
+import android.os.Parcelable;
+
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
     public static boolean isDark = false;
@@ -591,6 +595,12 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
+        // 解除对file域访问的限制
+        if (Build.VERSION.SDK_INT >= 24) {
+            // Builder builder = new Builder();
+            // StrictMode.setVmPolicy(builder.build());
+        }
 
     }
 
@@ -1573,7 +1583,52 @@ This method can parse out the real local file path from a file URI.
             }
         }
     }
+
     //----------------------------------------------------------------------------------------------
+
+
+    public void shareString(String title,
+                            String content, QtActivity activity) {
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");//分享字符串
+        share.putExtra(Intent.EXTRA_TEXT, content);
+        activity.startActivity(Intent.createChooser(share, title));
+
+    }
+
+    /**
+     * 分享功能
+     */
+    //分享单张图片
+    public static void shareImage(String title,
+                                  String path, QtActivity activity) {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/png");
+        File file = new File(path);
+        share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        activity.startActivity(Intent.createChooser(share, title));
+    }
+
+    //分享多张图片
+    public static void shareImages(String title,
+                                   String imagesPath, QtActivity activity) {
+        String[] pathList = imagesPath.split("\\|"); //由于"|"是转义字符，所以不能直接写 "|"做分割
+        ArrayList<Uri> imagesUriList = new ArrayList<Uri>();
+        for (int i = 0; i < pathList.length; ++i) {
+            File file = new File(pathList[i]);
+            if (file.isFile()) {
+                imagesUriList.add(Uri.fromFile(file));
+            }
+        }
+
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        intent.setType("image/*");
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imagesUriList);
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        activity.startActivity(Intent.createChooser(intent, title));
+    }
+
 
 }
 
