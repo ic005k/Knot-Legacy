@@ -104,18 +104,17 @@ public class ShareReceiveActivity extends Activity {
                 goReceiveString();
             } else if (type.startsWith("image/")) {
                 readFileFromShare("/storage/emulated/0/.Knot/receive_share_pic.png");
-                CallJavaNotify_5();
-                MyActivity.setMax();
+                goReceiveImage();
             } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+                Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
                 if (type.startsWith("image/")) {
                     dealMultiplePicStream(intent);
-                    CallJavaNotify_5();
-                    MyActivity.setMax();
+
                 }
             } else if (type.startsWith("*/*")) {
                 readFileFromShare("/storage/emulated/0/.Knot/receive_share_file.txt");
-                CallJavaNotify_5();
-                MyActivity.setMax();
+                Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
+
             }
         }
 
@@ -142,23 +141,10 @@ public class ShareReceiveActivity extends Activity {
     void goReceiveString() {
         System.out.println("strData=" + strData);
 
-        // Save receive data
-        String file2 = "/storage/emulated/0/.Knot/myshare.ini";
-        internalConfigure = new InternalConfigure(this);
-        Properties myPro = new Properties();
-        myPro.setProperty("receiveData", strData);
-
         boolean isRun = isAppRun("com.x");
 
         if (!isRun) {
-
-            myPro.setProperty("shareDone", "false");
-            try {
-                internalConfigure.saveFile(file2, myPro);
-            } catch (Exception e) {
-                System.err.println("Error : save myshare.ini");
-                e.printStackTrace();
-            }
+            saveReceiveShare("text/plain", strData, "false");
 
             Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...", Toast.LENGTH_LONG).show();
             // reopen app
@@ -167,15 +153,46 @@ public class ShareReceiveActivity extends Activity {
             startActivity(it);
 
         } else {
-            myPro.setProperty("shareDone", "true");
-            try {
-                internalConfigure.saveFile(file2, myPro);
-            } catch (Exception e) {
-                System.err.println("Error : save myshare.ini");
-                e.printStackTrace();
-            }
+            saveReceiveShare("text/plain", strData, "true");
             CallJavaNotify_5();
             MyActivity.setMax();
+        }
+
+    }
+
+    void goReceiveImage()
+    {
+        boolean isRun = isAppRun("com.x");
+
+        if (!isRun) {
+            saveReceiveShare("image/*", "", "false");
+
+            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...", Toast.LENGTH_LONG).show();
+            // reopen app
+            PackageManager packageManager = getPackageManager();
+            Intent it = packageManager.getLaunchIntentForPackage("com.x");
+            startActivity(it);
+
+        } else {
+            saveReceiveShare("image/*", "", "true");
+            CallJavaNotify_5();
+            MyActivity.setMax();
+        }
+    }
+
+    void saveReceiveShare(String shareType, String strData, String shareDone) {
+        String file2 = "/storage/emulated/0/.Knot/myshare.ini";
+        internalConfigure = new InternalConfigure(this);
+        Properties myPro = new Properties();
+        myPro.setProperty("shareType", shareType);
+        myPro.setProperty("receiveData", strData);
+        myPro.setProperty("shareDone", shareDone);
+
+        try {
+            internalConfigure.saveFile(file2, myPro);
+        } catch (Exception e) {
+            System.err.println("Error : save myshare.ini");
+            e.printStackTrace();
         }
 
     }

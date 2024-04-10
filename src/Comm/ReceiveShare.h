@@ -20,6 +20,7 @@ class ReceiveShare : public QDialog {
   Ui::ReceiveShare *ui;
 
   void init();
+  QString shareType;
 
   void closeAllActiveWindows();
   QObjectList getAllFrame(QObjectList lstUIControls);
@@ -38,7 +39,7 @@ class ReceiveShare : public QDialog {
  private slots:
   void on_btnAddToTodo_clicked();
 
-  void on_btnAddToNote_clicked();
+  void on_btnAppendToNote_clicked();
 
   void on_btnTest_clicked();
 
@@ -46,6 +47,7 @@ class ReceiveShare : public QDialog {
 
  private:
   void Close();
+  void addToNote(bool isInsert);
 };
 
 #endif  // RECEIVESHARE_H

@@ -44,6 +44,26 @@ bool ReceiveShare::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void ReceiveShare::init() {
+  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  shareType = Reg.value("shareType", "text/plain").toString();
+
+  if (shareType == "text/plain") {
+    ui->btnAddToTodo->show();
+    ui->btnInsertToNote->show();
+    ui->btnAppendToNote->show();
+    ui->lblTip->show();
+    ui->lblDataType->setText(tr("Data Type : Text"));
+  }
+
+  if (shareType == "image/*") {
+    ui->btnAddToTodo->hide();
+    ui->lblTip->hide();
+    ui->lblDataType->setText(tr("Data Type : Image"));
+  }
+
   int x, y, w, h;
   x = mw_one->geometry().x();
   y = mw_one->geometry().y();
@@ -75,21 +95,59 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
   }
 }
 
-void ReceiveShare::on_btnAddToNote_clicked() {
+void ReceiveShare::addToNote(bool isInsert) {
+  QString imgFile = "/storage/emulated/0/.Knot/receive_share_pic.png";
+  if (isInsert) {
+    if (shareType == "text/plain") {
+      mw_one->m_Notes->m_EditSource->insertPlainText(
+          m_Method->strReceiveShareData);
+    }
+    if (shareType == "image/*") {
+      mw_one->m_Notes->m_EditSource->insertPlainText("\n");
+      mw_one->m_Notes->insertImage(imgFile);
+      mw_one->m_Notes->m_EditSource->insertPlainText("\n");
+    }
+  } else {
+    // append
+    if (shareType == "text/plain") {
+      mw_one->m_Notes->m_EditSource->append("\n" +
+                                            m_Method->strReceiveShareData);
+    }
+    if (shareType == "image/*") {
+      mw_one->m_Notes->m_EditSource->append("\n");
+      mw_one->m_Notes->insertImage(imgFile);
+    }
+  }
+}
+
+void ReceiveShare::on_btnAppendToNote_clicked() {
   Close();
   if (mw_one->m_Notes->isHidden()) {
     closeAllActiveWindows();
     mw_one->on_btnNotes_clicked();
     mw_one->on_btnEdit_clicked();
-    mw_one->m_Notes->m_EditSource->append("\n" + m_Method->strReceiveShareData);
+    addToNote(false);
 
   } else {
-    mw_one->m_Notes->m_EditSource->append("\n" + m_Method->strReceiveShareData);
+    addToNote(false);
   }
 
   QTextCursor cursor = mw_one->m_Notes->m_EditSource->textCursor();
   cursor.movePosition(QTextCursor::End);
   mw_one->m_Notes->m_EditSource->setTextCursor(cursor);
+}
+
+void ReceiveShare::on_btnInsertToNote_clicked() {
+  Close();
+  if (mw_one->m_Notes->isHidden()) {
+    closeAllActiveWindows();
+    mw_one->on_btnNotes_clicked();
+    mw_one->on_btnEdit_clicked();
+    addToNote(true);
+
+  } else {
+    addToNote(true);
+  }
 }
 
 QObjectList ReceiveShare::getAllFrame(QObjectList lstUIControls) {
@@ -123,21 +181,6 @@ void ReceiveShare::closeAllActiveWindows() {
 }
 
 void ReceiveShare::on_btnTest_clicked() { closeAllActiveWindows(); }
-
-void ReceiveShare::on_btnInsertToNote_clicked() {
-  Close();
-  if (mw_one->m_Notes->isHidden()) {
-    closeAllActiveWindows();
-    mw_one->on_btnNotes_clicked();
-    mw_one->on_btnEdit_clicked();
-    mw_one->m_Notes->m_EditSource->insertPlainText(
-        m_Method->strReceiveShareData);
-
-  } else {
-    mw_one->m_Notes->m_EditSource->insertPlainText(
-        m_Method->strReceiveShareData);
-  }
-}
 
 void ReceiveShare::shareString(const QString& title, const QString& content) {
 #ifdef Q_OS_ANDROID
