@@ -407,7 +407,7 @@ class MainWindow : public QMainWindow {
 
   void on_twItemDoubleClicked();
 
-  void on_about();
+  void on_actionAbout();
 
   void on_btnFind_clicked();
 
@@ -732,6 +732,8 @@ class MainWindow : public QMainWindow {
   void on_ReceiveShare();
 
   void on_btnShareImage_clicked();
+
+  void on_actionShareFile();
 
  private:
   bool isShowDetails = false;

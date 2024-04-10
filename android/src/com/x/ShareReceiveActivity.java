@@ -11,8 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.net.Uri;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import android.content.IntentFilter;
 import android.content.Intent;
@@ -94,14 +96,50 @@ public class ShareReceiveActivity extends Activity {
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
+        System.out.println("type=" + type);
         //设置接收类型为文本
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
                 handlerText(intent);
+                goReceiveString();
+            } else if (type.startsWith("image/")) {
+                readFileFromShare("/storage/emulated/0/.Knot/receive_share_pic.png");
+                CallJavaNotify_5();
+                MyActivity.setMax();
+            } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+                if (type.startsWith("image/")) {
+                    dealMultiplePicStream(intent);
+                    CallJavaNotify_5();
+                    MyActivity.setMax();
+                }
+            } else if (type.startsWith("*/*")) {
+                readFileFromShare("/storage/emulated/0/.Knot/receive_share_file.txt");
+                CallJavaNotify_5();
+                MyActivity.setMax();
             }
         }
 
 
+        ShareReceiveActivity.this.finish();
+    }
+
+    //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
+    public void handlerText(Intent intent) {
+        strData = intent.getStringExtra(Intent.EXTRA_TEXT);
+        String title = intent.getStringExtra(Intent.EXTRA_TITLE);
+        tv.setText(strData);
+
+    }
+
+    void dealPicStream(Intent intent) {
+        Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+    }
+
+    void dealMultiplePicStream(Intent intent) {
+        ArrayList<Uri> arrayList = intent.getParcelableArrayListExtra(intent.EXTRA_STREAM);
+    }
+
+    void goReceiveString() {
         System.out.println("strData=" + strData);
 
         // Save receive data
@@ -110,27 +148,10 @@ public class ShareReceiveActivity extends Activity {
         Properties myPro = new Properties();
         myPro.setProperty("receiveData", strData);
 
-        Context context = MyActivity.context;
-        String pName = "com.x";
-        boolean isRun = false;
-        int uid = getPackageUid(context, pName);
-        if (uid > 0) {
-            boolean rstA = isAppRunning(context, pName);
-            boolean rstB = isProcessRunning(context, uid);
-            //if (rstA || rstB) {
-            if (rstB) {
-                //指定包名的程序正在运行中
-                isRun = true;
-            } else {
-                //指定包名的程序未在运行中
-                isRun = false;
-            }
-        } else {
-            //应用未安装
-        }
+        boolean isRun = isAppRun("com.x");
 
         if (!isRun) {
-            //if (mainClose.equals("true")) {
+
             myPro.setProperty("shareDone", "false");
             try {
                 internalConfigure.saveFile(file2, myPro);
@@ -156,13 +177,6 @@ public class ShareReceiveActivity extends Activity {
             CallJavaNotify_5();
             MyActivity.setMax();
         }
-        ShareReceiveActivity.this.finish();
-    }
-
-    //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
-    public void handlerText(Intent intent) {
-        strData = intent.getStringExtra(Intent.EXTRA_TEXT);
-        tv.setText(strData);
 
     }
 
@@ -311,16 +325,24 @@ public class ShareReceiveActivity extends Activity {
         }
     }
 
-    public boolean isAppRun(String packName) {
+    public boolean isAppRun(String pName) {
+        Context context = MyActivity.context;
+
         boolean isRun = false;
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
-        for (ActivityManager.RunningAppProcessInfo processInfo : runningAppProcesses) {
-            if (processInfo.processName.equals(packName)) {
-                // APP运行中
+        int uid = getPackageUid(context, pName);
+        if (uid > 0) {
+            boolean rstA = isAppRunning(context, pName);
+            boolean rstB = isProcessRunning(context, uid);
+            //if (rstA || rstB) {
+            if (rstB) {
+                //指定包名的程序正在运行中
                 isRun = true;
-                break;
+            } else {
+                //指定包名的程序未在运行中
+                isRun = false;
             }
+        } else {
+            //应用未安装
         }
         return isRun;
     }
@@ -382,4 +404,34 @@ public class ShareReceiveActivity extends Activity {
         }
         return false;
     }
+
+    //读取分享的文件并把文件导入到私有目录
+    public boolean readFileFromShare(String fileName) {
+        Intent intent = getIntent();
+        String type = intent.getType();
+        if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
+            Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (uri != null) {
+                try {
+                    // 之前的目录存储位置备注：getExternalFilesDir(null).getPath() + File.separator = /storage/emulated/0/Android/data/com.x/files
+                    File outFile = new File(fileName);
+                    InputStream inputStream = getContentResolver().openInputStream(uri);
+                    FileOutputStream fos = new FileOutputStream(outFile);
+                    byte[] buf = new byte[1024];
+                    int readCount = 0;
+                    while ((readCount = inputStream.read(buf)) != -1) {
+                        fos.write(buf, 0, readCount);
+                    }
+                    fos.flush();
+                    inputStream.close();
+                    fos.close();
+                    return true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
 }

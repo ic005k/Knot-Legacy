@@ -48,7 +48,7 @@ void ReceiveShare::init() {
   x = mw_one->geometry().x();
   y = mw_one->geometry().y();
   w = mw_one->width();
-  h = mw_one->height() / 3;
+  h = this->height();
   setGeometry(x, y, w, h);
   m_Method->showGrayWindows();
   show();

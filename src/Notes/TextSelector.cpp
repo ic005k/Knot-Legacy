@@ -199,6 +199,7 @@ void TextSelector::on_btnShareTxt_clicked() {
   QString txt = ui->lineEdit->text();
   txt = txt.trimmed();
   if (txt != "") {
+    m_Method->closeKeyboard();
     mw_one->m_ReceiveShare->shareString(tr("Share to"), txt);
   }
 }

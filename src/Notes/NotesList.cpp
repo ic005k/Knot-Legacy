@@ -1927,8 +1927,7 @@ void NotesList::init_NotesListMenu(QMenu *mainMenu) {
 
 void NotesList::on_actionShareNoteFile() {
   if (QFile::exists(currentMDFile)) {
-    mw_one->m_ReceiveShare->shareImage(tr("Share to"), currentMDFile,
-                                       "text/plain");
+    mw_one->m_ReceiveShare->shareImage(tr("Share to"), currentMDFile, "*/*");
   }
 }
 

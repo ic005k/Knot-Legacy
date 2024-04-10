@@ -1020,9 +1020,11 @@ void Todo::reeditText() {
 
   QToolButton* btnCancel = new QToolButton(this);
   QToolButton* btnCopy = new QToolButton(this);
+  QToolButton* btnShare = new QToolButton(this);
   QToolButton* btnOk = new QToolButton(this);
   btnCancel->setText(tr("Cancel"));
   btnCopy->setText(tr("Copy"));
+  btnShare->setText(tr("Share"));
   btnOk->setText(tr("OK"));
 
   btnOk->setFixedHeight(35);
@@ -1032,9 +1034,11 @@ void Todo::reeditText() {
   QHBoxLayout* hbox = new QHBoxLayout;
   hbox->addWidget(btnCancel);
   hbox->addWidget(btnCopy);
+  hbox->addWidget(btnShare);
   hbox->addWidget(btnOk);
   btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   btnCopy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  btnShare->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
   QSpacerItem* sparcer_item =
@@ -1042,6 +1046,12 @@ void Todo::reeditText() {
   vbox->addItem(sparcer_item);
 
   vbox->addLayout(hbox, 0);
+
+#ifdef Q_OS_ANDROID
+  btnShare->show();
+#else
+  btnShare->hide();
+#endif
 
   connect(btnCancel, &QToolButton::clicked, [=]() mutable { dlg->close(); });
   connect(dlg, &QDialog::rejected,
@@ -1052,6 +1062,12 @@ void Todo::reeditText() {
     edit->selectAll();
     edit->copy();
     dlg->close();
+  });
+  connect(btnShare, &QToolButton::clicked, [=]() mutable {
+    QString txt = edit->toPlainText().trimmed();
+    if (txt.length() > 0) {
+      mw_one->m_ReceiveShare->shareString(tr("Share to"), txt);
+    }
   });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
     QString strTime = getItemTime(row);

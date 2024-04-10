@@ -2731,6 +2731,16 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
   return "";
 }
 
+void MainWindow::on_actionShareFile() {
+  QString path = "/storage/emulated/0/";
+  QString file =
+      QFileDialog::getOpenFileName(this, tr("KnotBak"), path, tr("File (*.*)"));
+
+  if (QFile::exists(file)) {
+    m_ReceiveShare->shareImage(tr("Share to"), file, "*/*");
+  }
+}
+
 void MainWindow::on_actionImport_Data_triggered() {
   if (!isSaveEnd) return;
 
@@ -2894,7 +2904,7 @@ QTreeWidget *MainWindow::get_tw(int tabIndex) {
   return tw;
 }
 
-void MainWindow::on_about() {
+void MainWindow::on_actionAbout() {
   m_Remarks->init_Remarks();
 
   QTextBrowser *textBrowser = new QTextBrowser;
@@ -3961,6 +3971,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   QAction *actBakFileList = new QAction(tr("Backup File List"));
   QAction *actTabRecycle = new QAction(tr("Tab Recycle"));
+  QAction *actShareFile = new QAction(tr("Share File"));
 
   connect(actAddTab, &QAction::triggered, this,
           &MainWindow::on_actionAdd_Tab_triggered);
@@ -3990,7 +4001,9 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   connect(actOneDrive, &QAction::triggered, this,
           &MainWindow::on_actionOneDriveBackupData);
-  connect(actAbout, &QAction::triggered, this, &MainWindow::on_about);
+  connect(actAbout, &QAction::triggered, this, &MainWindow::on_actionAbout);
+  connect(actShareFile, &QAction::triggered, this,
+          &MainWindow::on_actionShareFile);
 
   mainMenu->addAction(actAddTab);
   mainMenu->addAction(actDelTab);
@@ -4004,7 +4017,9 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 #ifdef Q_OS_ANDROID
   mainMenu->addAction(actOpenKnotBakDir);
   actOpenKnotBakDir->setVisible(false);
+  actShareFile->setVisible(true);
 #else
+  actShareFile->setVisible(false);
   if (!m_Preferences->devMode) {
     actAddTab->setVisible(false);
     actDelTab->setVisible(false);
@@ -4018,6 +4033,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   mainMenu->addAction(actOneDrive);
   mainMenu->addAction(actBakFileList);
   mainMenu->addAction(actTabRecycle);
+  mainMenu->addAction(actShareFile);
   mainMenu->addAction(actAbout);
 
   mainMenu->setStyleSheet(m_Method->qssMenu);
