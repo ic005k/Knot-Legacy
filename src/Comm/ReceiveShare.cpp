@@ -68,7 +68,7 @@ void ReceiveShare::init() {
   x = mw_one->geometry().x();
   y = mw_one->geometry().y();
   w = mw_one->width();
-  h = this->height();
+  h = mw_one->height() / 2;
   setGeometry(x, y, w, h);
   m_Method->showGrayWindows();
   show();
@@ -103,9 +103,9 @@ void ReceiveShare::addToNote(bool isInsert) {
           m_Method->strReceiveShareData);
     }
     if (shareType == "image/*") {
-      mw_one->m_Notes->m_EditSource->insertPlainText("\n");
+      mw_one->m_Notes->m_EditSource->insertPlainText("\n\n");
       mw_one->m_Notes->insertImage(imgFile);
-      mw_one->m_Notes->m_EditSource->insertPlainText("\n");
+      mw_one->m_Notes->m_EditSource->insertPlainText("\n\n");
     }
   } else {
     // append

@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.net.Uri;
+import android.os.FileObserver;
+import android.os.AsyncTask;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -86,16 +88,20 @@ public class ShareReceiveActivity extends Activity {
 
     public native static void CallJavaNotify_5();
 
+    private MyFileObserver fileObserver;
+    private String type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_receive);
         tv = (TextView) findViewById(R.id.text_info);
+        tv.setText("Data processing, please wait...");
 
         //获取intent
         Intent intent = getIntent();
         String action = intent.getAction();
-        String type = intent.getType();
+         type = intent.getType();
         System.out.println("type=" + type);
         //设置接收类型为文本
         if (Intent.ACTION_SEND.equals(action) && type != null) {
@@ -103,30 +109,36 @@ public class ShareReceiveActivity extends Activity {
                 handlerText(intent);
                 goReceiveString();
             } else if (type.startsWith("image/")) {
-                readFileFromShare("/storage/emulated/0/.Knot/receive_share_pic.png");
-                goReceiveImage();
+                MyAsyncTask myAsyncTask = new MyAsyncTask();
+                myAsyncTask.execute();
+
+                String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
+                fileObserver = new MyFileObserver(filePath);
+                fileObserver.startWatching();
+
             } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
                 Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
                 if (type.startsWith("image/")) {
                     dealMultiplePicStream(intent);
 
                 }
+                ShareReceiveActivity.this.finish();
             } else if (type.startsWith("*/*")) {
                 readFileFromShare("/storage/emulated/0/.Knot/receive_share_file.txt");
                 Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
 
+                ShareReceiveActivity.this.finish();
             }
         }
 
 
-        ShareReceiveActivity.this.finish();
     }
 
     //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
     public void handlerText(Intent intent) {
         strData = intent.getStringExtra(Intent.EXTRA_TEXT);
         String title = intent.getStringExtra(Intent.EXTRA_TITLE);
-        tv.setText(strData);
+
 
     }
 
@@ -148,9 +160,7 @@ public class ShareReceiveActivity extends Activity {
 
             Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...", Toast.LENGTH_LONG).show();
             // reopen app
-            PackageManager packageManager = getPackageManager();
-            Intent it = packageManager.getLaunchIntentForPackage("com.x");
-            startActivity(it);
+            openAppFromPackageName("com.x");
 
         } else {
             saveReceiveShare("text/plain", strData, "true");
@@ -158,10 +168,10 @@ public class ShareReceiveActivity extends Activity {
             MyActivity.setMax();
         }
 
+        ShareReceiveActivity.this.finish();
     }
 
-    void goReceiveImage()
-    {
+    void goReceiveImage() {
         boolean isRun = isAppRun("com.x");
 
         if (!isRun) {
@@ -169,15 +179,14 @@ public class ShareReceiveActivity extends Activity {
 
             Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...", Toast.LENGTH_LONG).show();
             // reopen app
-            PackageManager packageManager = getPackageManager();
-            Intent it = packageManager.getLaunchIntentForPackage("com.x");
-            startActivity(it);
+            openAppFromPackageName("com.x");
 
         } else {
             saveReceiveShare("image/*", "", "true");
             CallJavaNotify_5();
             MyActivity.setMax();
         }
+        ShareReceiveActivity.this.finish();
     }
 
     void saveReceiveShare(String shareType, String strData, String shareDone) {
@@ -211,6 +220,33 @@ public class ShareReceiveActivity extends Activity {
         //android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
 
+        if(type.equals("image/"))
+        fileObserver.stopWatching();
+
+    }
+
+    public class MyFileObserver extends FileObserver {
+
+        public MyFileObserver(String path) {
+            super(path);
+        }
+
+        @Override
+        public void onEvent(int event, String path) {
+            if (event == FileObserver.CLOSE_WRITE) {
+                // 文件写入完成
+                Log.d("FileObserver", "File write completed: " + path);
+                // TODO: 处理文件读取完成的逻辑
+
+            }
+        }
+    }
+
+
+    public void openAppFromPackageName(String pname) {
+        PackageManager packageManager = getPackageManager();
+        Intent it = packageManager.getLaunchIntentForPackage(pname);
+        startActivity(it);
     }
 
     private void doStartApplicationWithPackageName(String packagename) {
@@ -442,6 +478,8 @@ public class ShareReceiveActivity extends Activity {
                     fos.flush();
                     inputStream.close();
                     fos.close();
+
+
                     return true;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -450,5 +488,27 @@ public class ShareReceiveActivity extends Activity {
         }
         return false;
     }
+
+    public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // 在这里执行需要等待的操作
+            String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
+            readFileFromShare(filePath);
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            // 在这里执行完成后的操作
+            goReceiveImage();
+        }
+    }
+
+    // 在需要执行的地方调用
+
 
 }

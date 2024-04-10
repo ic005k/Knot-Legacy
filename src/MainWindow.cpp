@@ -2737,6 +2737,9 @@ void MainWindow::on_actionShareFile() {
       QFileDialog::getOpenFileName(this, tr("KnotBak"), path, tr("File (*.*)"));
 
   if (QFile::exists(file)) {
+#ifdef Q_OS_ANDROID
+    file = m_Method->getRealPathFile(file);
+#endif
     m_ReceiveShare->shareImage(tr("Share to"), file, "*/*");
   }
 }
@@ -4017,7 +4020,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 #ifdef Q_OS_ANDROID
   mainMenu->addAction(actOpenKnotBakDir);
   actOpenKnotBakDir->setVisible(false);
-  actShareFile->setVisible(true);
+  actShareFile->setVisible(false);
 #else
   actShareFile->setVisible(false);
   if (!m_Preferences->devMode) {

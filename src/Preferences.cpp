@@ -258,15 +258,16 @@ void Preferences::on_btnReStart_clicked() {
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  QAndroidJniObject jo = QAndroidJniObject::fromString("setReOpen");
-  jo.callStaticMethod<int>("com.x/MyActivity", "setReOpen", "()I");
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<int>("setReOpen", "()I");
 #else
-  QJniObject jo = QJniObject::fromString("setReOpen");
-  jo.callStaticMethod<int>("com.x/MyActivity", "setReOpen", "()I");
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<int>("setReOpen", "()I");
 #endif
 
 #else
   QProcess::startDetached(qApp->applicationFilePath(), QStringList());
+
 #endif
 
   mw_one->close();
