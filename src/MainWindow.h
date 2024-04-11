@@ -739,6 +739,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnShowTools_clicked();
 
+  void on_btnHideKey_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

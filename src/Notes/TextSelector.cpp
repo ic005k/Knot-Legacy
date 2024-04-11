@@ -58,6 +58,10 @@ TextSelector::~TextSelector() { delete ui; }
 void TextSelector::on_btnClose_clicked() {
   ui->lineEdit->clear();
   close();
+  if (mw_one->ui->frameNoteEditor->isVisible()) {
+    mw_one->ui->qwNoteEditor->rootContext()->setContextProperty(
+        "isByMouseSelect", false);
+  }
 }
 
 void TextSelector::init(int y) {
@@ -97,7 +101,7 @@ bool TextSelector::eventFilter(QObject *watch, QEvent *evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      close();
+      on_btnClose_clicked();
       return true;
     }
   }

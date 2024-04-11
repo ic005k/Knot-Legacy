@@ -25,10 +25,10 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->editSource->hide();
 
   QFont font0 = m_Method->getNewFont(15);
-  QObjectList btnList =
+  QObjectList btnList0 =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_ToolBar));
-  for (int i = 0; i < btnList.count(); i++) {
-    QToolButton *btn = (QToolButton *)btnList.at(i);
+  for (int i = 0; i < btnList0.count(); i++) {
+    QToolButton *btn = (QToolButton *)btnList0.at(i);
     btn->setFont(font0);
 
 #ifdef Q_OS_ANDROID
@@ -44,11 +44,36 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 #endif
   }
 
+  QObjectList btnList = mw_one->getAllToolButton(
+      mw_one->getAllUIControls(mw_one->ui->f_ToolBar_Note));
+  for (int i = 0; i < btnList.count(); i++) {
+    QToolButton *btn = (QToolButton *)btnList.at(i);
+    btn->setFont(font0);
+
+#ifdef Q_OS_ANDROID
+    btn->setFixedHeight(25);
+    mw_one->ui->editCol->setFixedHeight(25);
+    mw_one->ui->editRow->setFixedHeight(25);
+    mw_one->ui->editFind->setFixedHeight(25);
+#else
+    btn->setFixedHeight(30);
+    mw_one->ui->editCol->setFixedHeight(30);
+    mw_one->ui->editRow->setFixedHeight(30);
+    mw_one->ui->editFind->setFixedHeight(30);
+#endif
+  }
+
   ui->editFind->setFont(font0);
   ui->editCol->setFont(font0);
   ui->editRow->setFont(font0);
   ui->lblCol->setFont(font0);
   ui->lblRow->setFont(font0);
+
+  mw_one->ui->editFind->setFont(font0);
+  mw_one->ui->editCol->setFont(font0);
+  mw_one->ui->editRow->setFont(font0);
+  mw_one->ui->lblCol->setFont(font0);
+  mw_one->ui->lblRow->setFont(font0);
 
   QFont font1 = m_Method->getNewFont(13);
   QObjectList btnList1 =
@@ -58,11 +83,19 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
     btn->setFont(font1);
   }
 
+  QObjectList btnList2 = mw_one->getAllToolButton(
+      mw_one->getAllUIControls(mw_one->ui->f_Panel_Note));
+  for (int i = 0; i < btnList2.count(); i++) {
+    QToolButton *btn = (QToolButton *)btnList2.at(i);
+    btn->setFont(font1);
+  }
+
   mw_one->set_ToolButtonStyle(this);
 
   ui->lblInfo->hide();
   ui->btnFind->hide();
   ui->lblCount->hide();
+  mw_one->ui->lblCount->hide();
   ui->f_ToolBar->hide();
   ui->btnGetShare->hide();
 
@@ -86,8 +119,10 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   this->setModal(true);
   this->layout()->setContentsMargins(5, 5, 5, 5);
 
-  QScroller::grabGesture(m_EditSource, QScroller::LeftMouseButtonGesture);
-  m_Method->setSCrollPro(m_EditSource);
+  if (isAndroid) {
+    QScroller::grabGesture(m_EditSource, QScroller::LeftMouseButtonGesture);
+    m_Method->setSCrollPro(m_EditSource);
+  }
 
   if (!isDark) {
     // m_EditSource->verticalScrollBar()->setStyleSheet(
@@ -1569,4 +1604,23 @@ QString Notes::getEditorText() {
   QMetaObject::invokeMethod((QObject *)root, "getText",
                             Q_RETURN_ARG(QVariant, itemCount));
   return itemCount.toString();
+}
+
+void Notes::showTextSelector() {
+  m_TextSelector->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                              mw_one->width(), m_TextSelector->height());
+}
+
+void Notes::openNoteEditor() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("openNoteEditor", "()V");
+#else
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("openNoteEditor", "()V");
+#endif
+
+#endif
 }

@@ -2629,6 +2629,35 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
+  if (watch == ui->qwNoteEditor) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      mw_one->isMousePress = true;
+      mw_one->isMouseMove = false;
+      if (!mw_one->isMouseMove) {
+        if (m_Notes->m_TextSelector->isHidden()) {
+          if (isAndroid) {
+            if (!pAndroidKeyboard->isVisible()) {
+              pAndroidKeyboard->setVisible(true);
+            }
+            m_Notes->timerEditPanel->start(1000);
+          }
+        }
+      }
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      mw_one->isMousePress = false;
+    }
+
+    if (event->type() == QEvent::MouseMove) {
+      mw_one->isMouseMove = true;
+    }
+
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      m_Notes->m_TextSelector->init(0);
+    }
+  }
+
   return QWidget::eventFilter(watch, evn);
 }
 
@@ -3404,12 +3433,15 @@ void MainWindow::initQW() {
   ui->qwNotes->rootContext()->setContextProperty("strText", "");
   ui->qwNotes->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
 
-  if (isAndroid)
+  if (isAndroid) {
     ui->qwNoteEditor->rootContext()->setContextProperty("isByMouseSelect",
                                                         false);
-  else
+    ui->qwNoteEditor->rootContext()->setContextProperty("isAndroid", true);
+  } else {
     ui->qwNoteEditor->rootContext()->setContextProperty("isByMouseSelect",
                                                         true);
+    ui->qwNoteEditor->rootContext()->setContextProperty("isAndroid", false);
+  }
   ui->qwNoteEditor->rootContext()->setContextProperty("myEditText", "");
   ui->qwNoteEditor->rootContext()->setContextProperty("m_Notes", m_Notes);
   ui->qwNoteEditor->setSource(
@@ -3752,6 +3784,7 @@ void MainWindow::init_UIWidget() {
   ui->editSearchText->installEventFilter(this);
   ui->editFindNote->installEventFilter(this);
   ui->qwNotes->installEventFilter(this);
+  ui->qwNoteEditor->installEventFilter(this);
 
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
@@ -4533,6 +4566,11 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
+  if (isAndroid) {
+    m_Notes->openNoteEditor();
+    return;
+  }
+
   isSelf = true;
 
   m_Notes->m_TextSelector->close();
@@ -4541,14 +4579,11 @@ void MainWindow::on_btnEdit_clicked() {
 
   QString mdString = loadText(currentMDFile);
 
-  ui->qwNoteEditor->rootContext()->setContextProperty("myEditText", mdString);
-  ui->frameNotes->hide();
-  ui->frameNoteEditor->show();
-  m_Notes->setEditorVPos();
+  // ui->qwNoteEditor->rootContext()->setContextProperty("myEditText",
+  // mdString); ui->frameNotes->hide(); ui->frameNoteEditor->show();
+  // m_Notes->setEditorVPos();
 
   mainHeight = mw_one->height();
-
-  return;
 
   m_Notes->init();
   m_Notes->m_EditSource->setPlainText(mdString);
@@ -4803,19 +4838,21 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 }
 
 void MainWindow::on_KVChanged() {
-  if (!pAndroidKeyboard->isVisible()) {
-    this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                      mw_one->width(), mw_one->mainHeight);
-  } else {
-    if (newHeight > 0) {
+  if (ui->frameNoteEditor->isVisible()) {
+    if (!pAndroidKeyboard->isVisible()) {
       this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), newHeight);
+                        mw_one->width(), mw_one->mainHeight);
+    } else {
+      if (newHeight > 0) {
+        this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                          mw_one->width(), newHeight);
 
-      if (!m_Notes->m_TextSelector->isHidden()) {
-        m_Notes->m_TextSelector->setGeometry(
-            m_Notes->m_TextSelector->geometry().x(), 10,
-            m_Notes->m_TextSelector->width(),
-            m_Notes->m_TextSelector->height());
+        if (!m_Notes->m_TextSelector->isHidden()) {
+          m_Notes->m_TextSelector->setGeometry(
+              m_Notes->m_TextSelector->geometry().x(), 10,
+              m_Notes->m_TextSelector->width(),
+              m_Notes->m_TextSelector->height());
+        }
       }
     }
   }
@@ -5661,6 +5698,7 @@ void MainWindow::on_btnShareImage_clicked() {
 }
 
 void MainWindow::on_btnDone_clicked() {
+  pAndroidKeyboard->hide();
   QString txt = m_Notes->getEditorText();
   m_Notes->m_EditSource->setPlainText(txt);
   m_Notes->saveMainNotes();
@@ -5675,3 +5713,5 @@ void MainWindow::on_btnShowTools_clicked() {
     if (ui->f_ToolBar_Note->isHidden()) ui->f_ToolBar_Note->show();
   }
 }
+
+void MainWindow::on_btnHideKey_clicked() { pAndroidKeyboard->hide(); }

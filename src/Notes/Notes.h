@@ -57,7 +57,7 @@ class Notes : public QDialog {
   bool isTextChange;
   bool isNeedSave;
   bool isDone;
-
+  QTimer *timerEditPanel;
   QString htmlBuffer;
   QTextEdit *byTextEdit;
   QLineEdit *byLineEdit;
@@ -120,6 +120,8 @@ class Notes : public QDialog {
   qreal getEditorVPos();
 
   QString getEditorText();
+
+  void openNoteEditor();
   protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
@@ -202,6 +204,7 @@ class Notes : public QDialog {
   void showNoteList();
   void on_editNote();
 
+  void showTextSelector();
  signals:
   void sendUpdate();
 
@@ -245,7 +248,6 @@ class Notes : public QDialog {
   bool bCursorVisible;
 
   bool isFunShow;
-  QTimer *timerEditPanel;
 
   int newHeight = 0;
 

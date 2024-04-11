@@ -1437,6 +1437,13 @@ This method can parse out the real local file path from a file URI.
         activity.startActivity(Intent.createChooser(intent, title));
     }
 
+    public void openNoteEditor() {
+        Intent i = new Intent(context, NoteEditor.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+
+    }
+
 
 }
 

@@ -64,6 +64,8 @@ Rectangle {
     height: 600
     visible: true
 
+    //property bool isAndroid: true
+
     function setVPos(vpos) {
         flickable.contentY = vpos
         console.log(vpos)
@@ -86,6 +88,50 @@ Rectangle {
 
     function getText(){
         return textArea.text
+    }
+
+    function insertStr(str){
+        var pos = textArea.cursorPosition
+        textArea.insert(pos,str)
+    }
+
+    function appendStr(str)
+    {
+        textArea.append(str)
+    }
+
+    function getCursorPos()
+    {
+        return textArea.cursorPosition
+    }
+
+    function setCursorPos(pos)
+    {
+        textArea.moveCursorSelection(pos)
+    }
+
+    function redo(){
+        textArea.redo()
+    }
+
+    function undo(){
+        textArea.undo()
+    }
+
+    function copy()
+    {
+        textArea.copy()
+    }
+
+    function cut()
+    {
+        textArea.cut()
+
+    }
+
+    function paste()
+    {
+        textArea.paste()
     }
 
 
@@ -241,15 +287,11 @@ Rectangle {
         selectionEnd: textArea.selectionEnd
         textColor: colorDialog.color
         Component.onCompleted: {
-            //if (Qt.application.arguments.length === 2)
-                //document.load("file:" + Qt.application.arguments[1]);
 
-            //else
-            //    document.load("qrc:/test.txt")
         }
         onLoaded: {
-            //textArea.textFormat = format
-            //textArea.text = text
+            textArea.textFormat = format
+            textArea.text = text
         }
         onError: {
             errorDialog.text = message
@@ -279,10 +321,25 @@ Rectangle {
             text: myEditText
 
             MouseArea {
+
                 propagateComposedEvents: false
-                acceptedButtons: Qt.RightButton
+                acceptedButtons:Qt.RightButton//  isAndroid? Qt.LeftButton : Qt.RightButton
                 anchors.fill: parent
-                onClicked: contextMenu.open()
+
+
+                onClicked:{
+                    console.log("isAndroid=" + isAndroid)
+                    if(!isAndroid)
+                    contextMenu.open()
+                }
+
+
+                onPressAndHold: {
+                    if(isAndroid){
+                    textArea.selectByMouse = true;
+                    m_Notes.showTextSelector()
+                    }
+                }
             }
 
 
