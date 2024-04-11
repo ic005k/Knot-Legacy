@@ -1624,3 +1624,21 @@ void Notes::openNoteEditor() {
 
 #endif
 }
+
+QString Notes::getAndroidNoteText() {
+  QSettings Reg(privateDir + "note_text.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  return Reg.value("text").toString();
+}
+
+void Notes::setAndroidNoteText(QString txt) {
+  QSettings Reg(privateDir + "note_text.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue("text", txt);
+}

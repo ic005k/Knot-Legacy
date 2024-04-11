@@ -88,6 +88,8 @@ public class ShareReceiveActivity extends Activity {
 
     public native static void CallJavaNotify_5();
 
+    public native static void CallJavaNotify_6();
+
     private MyFileObserver fileObserver;
     private String type;
 

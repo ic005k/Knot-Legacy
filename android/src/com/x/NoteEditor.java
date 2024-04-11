@@ -24,7 +24,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.view.WindowManager;
 import android.view.Window;
+import android.widget.EditText;
 
+import java.io.OutputStreamWriter;
+import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -48,6 +51,10 @@ import java.util.Locale;
 
 import android.app.Application;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
     private MediaPlayer mediaPlayer;
@@ -60,7 +67,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private InternalConfigure internalConfigure;
 
     private Button btn_cancel;
-    private TextView text_info;
+    private EditText text_info;
     private static boolean zh_cn;
 
     private static Context context;
@@ -82,6 +89,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     public native static void CallJavaNotify_5();
 
+    public native static void CallJavaNotify_6();
+
     private static boolean isGoBackKnot = false;
 
     public static boolean isZh(Context context) {
@@ -101,15 +110,17 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         return 1;
     }
 
+
     private void bindViews(String str) {
-        text_info = (TextView) findViewById(R.id.text_info);
+        text_info = (EditText) findViewById(R.id.text_info);
         text_info.setText(str);
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
+        
         if (zh_cn)
-            btn_cancel.setText("返回 Knot");
+            btn_cancel.setText("保存");
         else
-            btn_cancel.setText("Go Back Knot");
+            btn_cancel.setText("Save");
         btn_cancel.setOnClickListener(this);
 
     }
@@ -122,6 +133,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 // btn_cancel.setVisibility(View.GONE);
 
 
+                String mContent = text_info.getText().toString();
+                String mPath = "/storage/emulated/0/.Knot/";
+                writeTxtToFile(mContent, mPath, "note_text.txt");
+
+
+                CallJavaNotify_6();
                 onBackPressed();
                 break;
         }
@@ -147,18 +164,20 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
-        mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
-        curVol = getMediaVolume();
 
-        String filename = "/data/data/com.x/files/msg.ini";
+
+        String filename = "/storage/emulated/0/.Knot/note_text.ini";
         internalConfigure = new InternalConfigure(this);
         try {
-
             internalConfigure.readFrom(filename);
         } catch (Exception e) {
-            System.err.println("Error : reading msg.ini");
+            System.err.println("Error : reading note_text.ini");
             e.printStackTrace();
         }
+        if (fileIsExists(filename)) {
+            strInfo = internalConfigure.getIniKey("text");
+        }
+        System.out.println("Info Text: " + strInfo);
 
         //去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -167,69 +186,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         this.setStatusBarColor("#F3F3F3");  //灰
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-        //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(System.currentTimeMillis());
-        String strCurDT0 = formatter.format(date);
-        String strCurDT = " ( " + strCurDT0 + " ) ";
-
-        int maxVol = getMediaMaxVolume();
-        strMute = internalConfigure.getIniKey("mute");
-        System.out.println("Mute: " + strMute);
-        double vol = 0;
-        mediaPlayer = new MediaPlayer();
-        if (strMute.equals("false")) {
-            vol = maxVol * 0.75;
-            setMediaVolume((int) Math.round(vol));
-
-            try {
-                mediaPlayer.setDataSource("/data/data/com.x/files/msg.mp3");
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("maxVol:  " + maxVol + "    setvol:  " + vol);
-
-        if (!fileIsExists(filename)) {
-            String strCount = internalConfigure.getIniKey("count");
-            int count = Integer.parseInt(strCount);
-            for (int i = 0; i < count; i++) {
-                String str = internalConfigure.getIniKey("msg" + String.valueOf(i + 1));
-                String[] arr1 = str.split("\\|");
-                String str1 = arr1[0];
-                if (str.contains(strCurDT0)) {
-                    strInfo = str;
-                    break;
-                }
-
-                System.out.println("Read Ini: " + str);
-                System.out.println(str1 + "    " + strCurDT0);
-            }
-        }
-
-        if (strEnInfo.equals(strInfo)) {
-            isRefreshAlarm = false;
-            strInfo = internalConfigure.getIniKey("msg");
-
-        }
-
-        System.out.println("Info Text: " + strInfo);
-
-        String[] array = strInfo.split("\\|");
-        String str1 = array[0];
-        String str2 = array[1];
-        String str3 = array[3];
-        String strTodo;
-        if (zh_cn)
-            strTodo = "待办事项：";
-        else
-            strTodo = "Todo: ";
-
 
         setContentView(R.layout.noteeditor);
-        bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT);
+        bindViews(strInfo);
 
 
         // HomeKey
@@ -344,10 +303,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
             BufferedReader br = new BufferedReader(reader);
-            //String line;
-            //while ((line = br.readLine()) != null) {
-            //    System.out.println(line);
-            //}
 
             properties.load(br);
 
@@ -404,23 +359,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         return line;
     }
 
-    //获取最大多媒体音量
-    public int getMediaMaxVolume() {
-        return mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-    }
-
-    //获取当前多媒体音量
-    public int getMediaVolume() {
-        return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-    }
-
-    // 设置多媒体音量
-    public void setMediaVolume(int volume) {
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, //音量类型
-                volume,
-                AudioManager.FLAG_PLAY_SOUND
-                        | AudioManager.FLAG_SHOW_UI);
-    }
 
     private void setStatusBarColor(String color) {
         // 需要安卓版本大于5.0以上
@@ -464,5 +402,79 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public void onActivityDestroyed(Activity activity) {
 
     }
+
+    private void save(String s, String file) {
+        OutputStream out = null;
+        BufferedWriter writer = null;
+        try {
+            out = openFileOutput(file, MODE_PRIVATE);
+            writer = new BufferedWriter(new OutputStreamWriter(out));
+            writer.write(s);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+
+    // 将字符串写入到文本文件中
+    public void writeTxtToFile(String content, String filePath, String fileName) {
+        //生成文件夹之后，再生成文件，不然会出错
+        makeFile(filePath, fileName);
+        String mFilePath = filePath + fileName;
+        // 每次写入时，都换行写
+        String mContent = content + "\r\n";
+        try {
+            File file = new File(mFilePath);
+            if (!file.exists()) {
+                System.out.println("创建文件: " + mFilePath);
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            RandomAccessFile mRandomAccessFile = new RandomAccessFile(file, "rwd");
+            mRandomAccessFile.seek(file.length());
+            mRandomAccessFile.write(mContent.getBytes());
+            mRandomAccessFile.close();
+        } catch (IOException e) {
+            System.out.println("写入错误: " + e.toString());
+        }
+    }
+
+    //生成文件
+    public File makeFile(String filePath, String fileName) {
+        File file = null;
+        makeDirectory(filePath);
+        try {
+            file = new File(filePath + fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (IOException e) {
+            System.out.println("生成文件错误: " + e.toString());
+        }
+        return file;
+    }
+
+    //生成文件夹
+    public void makeDirectory(String filePath) {
+        File file = null;
+        try {
+            file = new File(filePath);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+        } catch (Exception e) {
+            System.out.println("生成文件夹错误: " + e.toString());
+        }
+    }
+
 
 }

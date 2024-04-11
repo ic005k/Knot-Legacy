@@ -53,6 +53,7 @@ extern int deleteDirfile(QString dirName);
 extern QString loadText(QString textFile);
 extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
+extern void StringToFile(QString buffers, QString fileName);
 
 void RegJni(const char *myClassName);
 
@@ -63,6 +64,7 @@ static void JavaNotify_2();
 static void JavaNotify_3();
 static void JavaNotify_4();
 static void JavaNotify_5();
+static void JavaNotify_6();
 #endif
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
@@ -4254,13 +4256,25 @@ static void JavaNotify_5() {
   qDebug() << "C++ JavaNotify_5";
 }
 
+static void JavaNotify_6() {
+  QString mdString;  // = mw_one->m_Notes->getAndroidNoteText();
+  mdString = loadText(privateDir + "note_text.txt");
+  StringToFile(mdString, currentMDFile);
+  mw_one->m_Notes->MD2Html(currentMDFile);
+  mw_one->m_Notes->loadMemoQML();
+
+  qDebug() << "C++ JavaNotify_6"
+           << "    mdString=" + mdString;
+}
+
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},
     {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
     {"CallJavaNotify_2", "()V", (void *)JavaNotify_2},
     {"CallJavaNotify_3", "()V", (void *)JavaNotify_3},
     {"CallJavaNotify_4", "()V", (void *)JavaNotify_4},
-    {"CallJavaNotify_5", "()V", (void *)JavaNotify_5}};
+    {"CallJavaNotify_5", "()V", (void *)JavaNotify_5},
+    {"CallJavaNotify_6", "()V", (void *)JavaNotify_6}};
 
 void RegJni(const char *myClassName) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -4566,7 +4580,10 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
+  QString mdString = loadText(currentMDFile);
+
   if (isAndroid) {
+    m_Notes->setAndroidNoteText(mdString);
     m_Notes->openNoteEditor();
     return;
   }
@@ -4576,8 +4593,6 @@ void MainWindow::on_btnEdit_clicked() {
   m_Notes->m_TextSelector->close();
   delete m_Notes->m_TextSelector;
   m_Notes->m_TextSelector = new TextSelector(m_Notes);
-
-  QString mdString = loadText(currentMDFile);
 
   // ui->qwNoteEditor->rootContext()->setContextProperty("myEditText",
   // mdString); ui->frameNotes->hide(); ui->frameNoteEditor->show();

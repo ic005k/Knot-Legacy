@@ -100,6 +100,7 @@ int main(int argc, char* argv[]) {
   RegJni("com/x/MyActivity");
   RegJni("com/x/ClockActivity");
   RegJni("com/x/ShareReceiveActivity");
+  RegJni("com/x/NoteEditor");
 
   isAndroid = true;
   isIOS = false;
