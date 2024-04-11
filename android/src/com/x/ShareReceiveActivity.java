@@ -101,29 +101,37 @@ public class ShareReceiveActivity extends Activity {
         //获取intent
         Intent intent = getIntent();
         String action = intent.getAction();
-         type = intent.getType();
+        type = intent.getType();
         System.out.println("type=" + type);
         //设置接收类型为文本
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
                 handlerText(intent);
+                System.out.println("strData=" + strData);
                 goReceiveString();
-            } else if (type.startsWith("image/")) {
+            }
+
+            if (type.startsWith("image/")) {
                 MyAsyncTask myAsyncTask = new MyAsyncTask();
                 myAsyncTask.execute();
 
-                String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
-                fileObserver = new MyFileObserver(filePath);
-                fileObserver.startWatching();
+                //String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
+                //fileObserver = new MyFileObserver(filePath);
+                //fileObserver.startWatching();
 
-            } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+            }
+
+
+            if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
                 Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
                 if (type.startsWith("image/")) {
                     dealMultiplePicStream(intent);
 
                 }
                 ShareReceiveActivity.this.finish();
-            } else if (type.startsWith("*/*")) {
+            }
+
+            if (type.startsWith("*/*")) {
                 readFileFromShare("/storage/emulated/0/.Knot/receive_share_file.txt");
                 Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
 
@@ -136,8 +144,12 @@ public class ShareReceiveActivity extends Activity {
 
     //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
     public void handlerText(Intent intent) {
-        strData = intent.getStringExtra(Intent.EXTRA_TEXT);
-        String title = intent.getStringExtra(Intent.EXTRA_TITLE);
+        String mainTxt = intent.getStringExtra(Intent.EXTRA_TEXT);
+        String title = "";// = intent.getStringExtra(Intent.EXTRA_TITLE);
+        if (title.length() > 0)
+            strData = title + "\n\n" + mainTxt;
+        else
+            strData = mainTxt;
 
 
     }
@@ -164,8 +176,10 @@ public class ShareReceiveActivity extends Activity {
 
         } else {
             saveReceiveShare("text/plain", strData, "true");
+
             CallJavaNotify_5();
             MyActivity.setMax();
+
         }
 
         ShareReceiveActivity.this.finish();
@@ -183,8 +197,10 @@ public class ShareReceiveActivity extends Activity {
 
         } else {
             saveReceiveShare("image/*", "", "true");
+
             CallJavaNotify_5();
             MyActivity.setMax();
+
         }
         ShareReceiveActivity.this.finish();
     }
@@ -220,8 +236,8 @@ public class ShareReceiveActivity extends Activity {
         //android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
 
-        if(type.equals("image/"))
-        fileObserver.stopWatching();
+        //if (type.equals("image/"))
+        //    fileObserver.stopWatching();
 
     }
 

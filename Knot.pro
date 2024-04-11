@@ -270,6 +270,7 @@ DISTFILES += \
     src/qmlsrc/maintab.qml \
     src/qmlsrc/memo.qml \
     src/qmlsrc/notebook.qml \
+    src/qmlsrc/noteeditor.qml \
     src/qmlsrc/notelist.qml \
     src/qmlsrc/noterecycle.qml \
     src/qmlsrc/notes.qml \

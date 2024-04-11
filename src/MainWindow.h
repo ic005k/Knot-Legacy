@@ -735,6 +735,10 @@ class MainWindow : public QMainWindow {
 
   void on_actionShareFile();
 
+  void on_btnDone_clicked();
+
+  void on_btnShowTools_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

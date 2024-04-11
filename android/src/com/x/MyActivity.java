@@ -862,12 +862,6 @@ This method can parse out the real local file path from a file URI.
 
     }
 
-    public String getShareReceiveData(String str_data) {
-        isReadShareData = true;
-        return ShareReceiveActivity.strData;
-
-    }
-
 
     private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
         String SYSTEM_REASON = "reason";
@@ -987,8 +981,7 @@ This method can parse out the real local file path from a file URI.
         return 1;
     }
 
-    public void openAppFromPackageName(String pname)
-    {
+    public void openAppFromPackageName(String pname) {
         PackageManager packageManager = getPackageManager();
         Intent it = packageManager.getLaunchIntentForPackage(pname);
         startActivity(it);

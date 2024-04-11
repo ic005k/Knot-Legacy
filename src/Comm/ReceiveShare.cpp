@@ -25,7 +25,7 @@ ReceiveShare::~ReceiveShare() { delete ui; }
 void ReceiveShare::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event)
   QClipboard* m_Clip = QApplication::clipboard();
-  m_Clip->setText(m_Method->strReceiveShareData);
+  m_Clip->setText(strReceiveShareData);
 
   m_Method->closeGrayWindows();
 }
@@ -43,12 +43,40 @@ bool ReceiveShare::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void ReceiveShare::init() {
+void ReceiveShare::setShareDone(QString strDone) {
   QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  shareType = Reg.value("shareType", "text/plain").toString();
+  Reg.setValue("shareDone", strDone);
+}
+
+QString ReceiveShare::getShareDone() {
+  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  return Reg.value("shareDone", "true").toString();
+}
+
+QString ReceiveShare::getShareType() {
+  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  return Reg.value("shareType", "text/plain").toString();
+}
+
+QString ReceiveShare::getShareString() {
+  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  return Reg.value("receiveData", "").toString();
+}
+
+void ReceiveShare::init() {
+  shareType = getShareType();
 
   if (shareType == "text/plain") {
     ui->btnAddToTodo->show();
@@ -84,12 +112,12 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
   if (mw_one->ui->frameTodo->isHidden()) {
     closeAllActiveWindows();
     mw_one->on_btnTodo_clicked();
-    mw_one->ui->editTodo->setText(m_Method->strReceiveShareData);
+    mw_one->ui->editTodo->setText(strReceiveShareData);
     mw_one->Sleep(500);
     mw_one->on_btnAddTodo_clicked();
 
   } else {
-    mw_one->ui->editTodo->setText(m_Method->strReceiveShareData);
+    mw_one->ui->editTodo->setText(strReceiveShareData);
     mw_one->Sleep(500);
     mw_one->on_btnAddTodo_clicked();
   }
@@ -99,8 +127,8 @@ void ReceiveShare::addToNote(bool isInsert) {
   QString imgFile = "/storage/emulated/0/.Knot/receive_share_pic.png";
   if (isInsert) {
     if (shareType == "text/plain") {
-      mw_one->m_Notes->m_EditSource->insertPlainText(
-          m_Method->strReceiveShareData);
+      strReceiveShareData = getShareString();
+      mw_one->m_Notes->m_EditSource->insertPlainText(strReceiveShareData);
     }
     if (shareType == "image/*") {
       mw_one->m_Notes->m_EditSource->insertPlainText("\n\n");
@@ -110,14 +138,21 @@ void ReceiveShare::addToNote(bool isInsert) {
   } else {
     // append
     if (shareType == "text/plain") {
-      mw_one->m_Notes->m_EditSource->append("\n" +
-                                            m_Method->strReceiveShareData);
+      strReceiveShareData = getShareString();
+      mw_one->m_Notes->m_EditSource->append("\n" + strReceiveShareData);
     }
     if (shareType == "image/*") {
       mw_one->m_Notes->m_EditSource->append("\n");
+
+      QTextCursor cursor = mw_one->m_Notes->m_EditSource->textCursor();
+      cursor.movePosition(QTextCursor::End);
+      mw_one->m_Notes->m_EditSource->setTextCursor(cursor);
+
       mw_one->m_Notes->insertImage(imgFile);
     }
   }
+
+  qDebug() << "strReceiveShareData=" << strReceiveShareData;
 }
 
 void ReceiveShare::on_btnAppendToNote_clicked() {

@@ -115,7 +115,12 @@ class Notes : public QDialog {
 
   bool eventFilterQwNote(QObject *watch, QEvent *event);
 
- protected:
+  void setVPos(qreal pos);
+  void setEditorVPos();
+  qreal getEditorVPos();
+
+  QString getEditorText();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

@@ -836,14 +836,9 @@ void MainWindow::timerUpdate() {
 
 void MainWindow::on_ReceiveShare() {
   timerReceiveShare->stop();
-  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  QString shareDone = Reg.value("shareDone", "true").toString();
-  m_Method->strReceiveShareData = Reg.value("receiveData", "test").toString();
+  QString shareDone = m_ReceiveShare->getShareDone();
   if (shareDone == "false") {
-    Reg.setValue("shareDone", "true");
+    m_ReceiveShare->setShareDone("true");
     m_ReceiveShare->init();
   }
 }
@@ -1505,6 +1500,13 @@ void MainWindow::get_Today(QTreeWidget *tw) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+  if (ui->frameNoteEditor->isVisible()) {
+    ui->frameNoteEditor->hide();
+    ui->frameNotes->show();
+    event->ignore();
+    return;
+  }
+
   if (ui->qwCata->isVisible()) {
     on_btnCatalogue_clicked();
     event->ignore();
@@ -3402,6 +3404,17 @@ void MainWindow::initQW() {
   ui->qwNotes->rootContext()->setContextProperty("strText", "");
   ui->qwNotes->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
 
+  if (isAndroid)
+    ui->qwNoteEditor->rootContext()->setContextProperty("isByMouseSelect",
+                                                        false);
+  else
+    ui->qwNoteEditor->rootContext()->setContextProperty("isByMouseSelect",
+                                                        true);
+  ui->qwNoteEditor->rootContext()->setContextProperty("myEditText", "");
+  ui->qwNoteEditor->rootContext()->setContextProperty("m_Notes", m_Notes);
+  ui->qwNoteEditor->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/noteeditor.qml")));
+
   ui->qwTodo->rootContext()->setContextProperty("maxFontSize", f_size);
   ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
   ui->qwTodo->rootContext()->setContextProperty("m_Todo", m_Todo);
@@ -3696,6 +3709,7 @@ void MainWindow::init_UIWidget() {
   ui->frameNotesTree->hide();
   ui->qwCata->hide();
   ui->qwBookmark->hide();
+  ui->frameNoteEditor->hide();
 
   ui->frameCategory->hide();
   ui->frameSetTab->hide();
@@ -4202,7 +4216,6 @@ static void JavaNotify_4() {
 }
 
 static void JavaNotify_5() {
-  m_Method->getShareReceiveData("str_data");
   mw_one->m_ReceiveShare->init();
 
   qDebug() << "C++ JavaNotify_5";
@@ -4526,13 +4539,21 @@ void MainWindow::on_btnEdit_clicked() {
   delete m_Notes->m_TextSelector;
   m_Notes->m_TextSelector = new TextSelector(m_Notes);
 
-  QString mdfile = loadText(currentMDFile);
+  QString mdString = loadText(currentMDFile);
 
-  m_Notes->init();
-  m_Notes->m_EditSource->setPlainText(mdfile);
-  new MarkdownHighlighter(m_Notes->m_EditSource->document());
+  ui->qwNoteEditor->rootContext()->setContextProperty("myEditText", mdString);
+  ui->frameNotes->hide();
+  ui->frameNoteEditor->show();
+  m_Notes->setEditorVPos();
 
   mainHeight = mw_one->height();
+
+  return;
+
+  m_Notes->init();
+  m_Notes->m_EditSource->setPlainText(mdString);
+  new MarkdownHighlighter(m_Notes->m_EditSource->document());
+
   ui->frameNotes->hide();
   m_Notes->show();
 
@@ -4742,6 +4763,37 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
   ui->qwSteps->rootContext()->setContextProperty("myW", this->width());
 
 #ifdef Q_OS_ANDROID
+
+  if (ui->frameNoteEditor->isVisible()) {
+    if (this->height() != mw_one->mainHeight) {
+      newHeight = this->height();
+      m_Notes->androidKeyH = mw_one->mainHeight - newHeight;
+
+      QSettings Reg(privateDir + "android.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+      Reg.setIniCodec("utf-8");
+#endif
+      Reg.setValue("KeyHeight", m_Notes->androidKeyH);
+      Reg.setValue("newHeight", newHeight);
+    }
+
+    if (pAndroidKeyboard->isVisible()) {
+      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                        mw_one->width(), newHeight);
+    }
+
+    if (this->height() == newHeight) {
+      // int p = m_EditSource->textCursor().position();
+      // QTextCursor tmpCursor = m_EditSource->textCursor();
+      // tmpCursor.setPosition(p);
+      // m_EditSource->setTextCursor(tmpCursor);
+    }
+  }
+
+  qDebug() << pAndroidKeyboard->keyboardRectangle().height()
+           << "this height=" << this->height();
+  qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
+
 #else
   if (!ui->frameTodo->isHidden()) {
     ui->qwTodo->rootContext()->setContextProperty("m_width", mw_one->width());
@@ -4750,7 +4802,24 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 #endif
 }
 
-void MainWindow::on_KVChanged() {}
+void MainWindow::on_KVChanged() {
+  if (!pAndroidKeyboard->isVisible()) {
+    this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                      mw_one->width(), mw_one->mainHeight);
+  } else {
+    if (newHeight > 0) {
+      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
+                        mw_one->width(), newHeight);
+
+      if (!m_Notes->m_TextSelector->isHidden()) {
+        m_Notes->m_TextSelector->setGeometry(
+            m_Notes->m_TextSelector->geometry().x(), 10,
+            m_Notes->m_TextSelector->width(),
+            m_Notes->m_TextSelector->height());
+      }
+    }
+  }
+}
 
 void MainWindow::on_btnAddTodo_clicked() { m_Todo->on_btnAdd_clicked(); }
 
@@ -5589,4 +5658,20 @@ void MainWindow::stopTimerForPdf() {
 
 void MainWindow::on_btnShareImage_clicked() {
   m_ReceiveShare->shareImage(tr("Share to"), imgFileName, "image/png");
+}
+
+void MainWindow::on_btnDone_clicked() {
+  QString txt = m_Notes->getEditorText();
+  m_Notes->m_EditSource->setPlainText(txt);
+  m_Notes->saveMainNotes();
+  ui->frameNoteEditor->hide();
+  ui->frameNotes->show();
+}
+
+void MainWindow::on_btnShowTools_clicked() {
+  if (ui->f_ToolBar_Note->isVisible())
+    ui->f_ToolBar_Note->hide();
+  else {
+    if (ui->f_ToolBar_Note->isHidden()) ui->f_ToolBar_Note->show();
+  }
 }

@@ -847,6 +847,7 @@ void Notes::saveQMLVPos() {
   if (QFile(currentMDFile).exists()) {
     sliderPos = getVPos();
     Reg.setValue("/MainNotes/SlidePos" + currentMDFile, sliderPos);
+    Reg.setValue("/MainNotes/Editor" + currentMDFile, getEditorVPos());
   }
 }
 
@@ -1533,3 +1534,39 @@ void Notes::on_btnTime_clicked() {
 }
 
 void Notes::on_btnS11_clicked() { m_EditSource->insertPlainText("!"); }
+
+void Notes::setEditorVPos() {
+  QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  qreal pos = 0;
+  if (QFile(currentMDFile).exists()) {
+    pos = Reg.value("/MainNotes/Editor" + currentMDFile, 0).toReal();
+  }
+
+  QQuickItem *root;
+  root = mw_one->ui->qwNoteEditor->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setVPos", Q_ARG(QVariant, pos));
+}
+
+qreal Notes::getEditorVPos() {
+  QVariant itemCount;
+  QQuickItem *root;
+  root = mw_one->ui->qwNoteEditor->rootObject();
+
+  QMetaObject::invokeMethod((QObject *)root, "getVPos",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  qreal textPos = itemCount.toDouble();
+  return textPos;
+}
+
+QString Notes::getEditorText() {
+  QVariant itemCount;
+  QQuickItem *root;
+  root = mw_one->ui->qwNoteEditor->rootObject();
+
+  QMetaObject::invokeMethod((QObject *)root, "getText",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toString();
+}

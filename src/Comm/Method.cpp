@@ -1157,28 +1157,3 @@ QString Method::ColorToString(QColor v_color) {
   mRgbStr = mRgbStr.replace(0, 2, "#");
   return mRgbStr;
 }
-
-QString Method::getShareReceiveData(QString str_data) {
-#ifdef Q_OS_ANDROID
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  QAndroidJniObject javaUriPath = QAndroidJniObject::fromString(str_data);
-  QAndroidJniObject m_activity = QtAndroid::androidActivity();
-  QAndroidJniObject s = m_activity.callObjectMethod(
-      "getShareReceiveData", "(Ljava/lang/String;)Ljava/lang/String;",
-      javaUriPath.object<jstring>());
-#else
-  QJniObject javaUriPath = QJniObject::fromString(str_data);
-  QJniObject m_activity = QNativeInterface::QAndroidApplication::context();
-  QJniObject s = m_activity.callObjectMethod(
-      "getShareReceiveData", "(Ljava/lang/String;)Ljava/lang/String;",
-      javaUriPath.object<jstring>());
-#endif
-
-  strReceiveShareData = s.toString();
-  qDebug() << "strReceiveShareData=" << strReceiveShareData;
-  return strReceiveShareData;
-#endif
-
-  return str_data;
-}

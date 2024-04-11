@@ -21,6 +21,7 @@ class ReceiveShare : public QDialog {
 
   void init();
   QString shareType;
+  QString strReceiveShareData = "test data...";
 
   void closeAllActiveWindows();
   QObjectList getAllFrame(QObjectList lstUIControls);
@@ -31,7 +32,11 @@ class ReceiveShare : public QDialog {
   void shareImage(const QString &title, const QString &path,
                   const QString &fileType);
 
- protected:
+  QString getShareType();
+  QString getShareString();
+  QString getShareDone();
+  void setShareDone(QString strDone);
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
