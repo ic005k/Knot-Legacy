@@ -4,17 +4,55 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#F3F3F3"
+    android:layout_weight="1"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#3498DB"
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:text="OK"
+            />
+
+         <Button
+        android:id="@+id/btnInsertImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#3498DB"
+        android:textColor="#FFFFFF"
+        android:layout_weight="1"
+        android:text="Insert Img" />
+
+        <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#3498DB"
+        android:textColor="#FFFFFF"
+        android:layout_weight="1"
+        android:text="Button" />
+
+    </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="top"
+        
         android:orientation="vertical">
                  
         <EditText
-            android:id="@+id/text_info"
+            android:id="@+id/editNote"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
@@ -25,19 +63,9 @@
              android:scrollbars="vertical"
             android:fadeScrollbars="false"
             android:inputType="textMultiLine"
-            android:textSize="23dp" />
+            android:layout_weight="1"
+             />
        
-        
-         <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/text_info"
-        android:layout_alignParentTop="true"
-        android:layout_alignTop="@id/text_info"
-        android:text="Button" />
-
-
     </LinearLayout>
 
     <!-- LinearLayout
@@ -61,23 +89,5 @@
     </LinearLayout -->
 
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:gravity="bottom"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="#454CEE"
-            android:textColor="#FFFFFF"
-            android:text="OK"
-            android:textSize="22dp" />
-
-    </LinearLayout>
+    
 </LinearLayout>

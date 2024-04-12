@@ -124,6 +124,8 @@ class Notes : public QDialog {
   void openNoteEditor();
   QString getAndroidNoteText();
   void setAndroidNoteText(QString txt);
+  void appendNote(QString str);
+  void insertNote(QString str);
   protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;

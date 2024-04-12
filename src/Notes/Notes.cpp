@@ -1625,6 +1625,42 @@ void Notes::openNoteEditor() {
 #endif
 }
 
+void Notes::appendNote(QString str) {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jTitle = QAndroidJniObject::fromString(str);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("appendNote", "(Ljava/lang/String;)V",
+                            jTitle.object<jstring>());
+#else
+  QJniObject jTitle = QJniObject::fromString(str);
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("appendNote", "(Ljava/lang/String;)V",
+                            jTitle.object<jstring>());
+#endif
+
+#endif
+}
+
+void Notes::insertNote(QString str) {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jTitle = QAndroidJniObject::fromString(str);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("insertNote", "(Ljava/lang/String;)V",
+                            jTitle.object<jstring>());
+#else
+  QJniObject jTitle = QJniObject::fromString(str);
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("insertNote", "(Ljava/lang/String;)V",
+                            jTitle.object<jstring>());
+#endif
+
+#endif
+}
+
 QString Notes::getAndroidNoteText() {
   QSettings Reg(privateDir + "note_text.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

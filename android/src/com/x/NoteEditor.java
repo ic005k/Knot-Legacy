@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.view.WindowManager;
 import android.view.Window;
 import android.widget.EditText;
-
+import android.text.Editable;
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
@@ -67,7 +67,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private InternalConfigure internalConfigure;
 
     private Button btn_cancel;
-    private EditText text_info;
+    public EditText editNote;
     private static boolean zh_cn;
 
     private static Context context;
@@ -112,11 +112,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
 
     private void bindViews(String str) {
-        text_info = (EditText) findViewById(R.id.text_info);
-        text_info.setText(str);
+        editNote = (EditText) findViewById(R.id.editNote);
+        editNote.setText(str);
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
-        
+
         if (zh_cn)
             btn_cancel.setText("保存");
         else
@@ -133,7 +133,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 // btn_cancel.setVisibility(View.GONE);
 
 
-                String mContent = text_info.getText().toString();
+                String mContent = editNote.getText().toString();
                 String mPath = "/storage/emulated/0/.Knot/";
                 writeTxtToFile(mContent, mPath, "note_text.txt");
 
@@ -166,7 +166,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         application.registerActivityLifecycleCallbacks(this);
 
 
-        String filename = "/storage/emulated/0/.Knot/note_text.ini";
+        /*String filename = "/storage/emulated/0/.Knot/note_text.ini";
         internalConfigure = new InternalConfigure(this);
         try {
             internalConfigure.readFrom(filename);
@@ -177,7 +177,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         if (fileIsExists(filename)) {
             strInfo = internalConfigure.getIniKey("text");
         }
-        System.out.println("Info Text: " + strInfo);
+        System.out.println("Info Text: " + strInfo);*/
+
+        String filename = "/storage/emulated/0/.Knot/mymd.txt";
+        strInfo = readFile(filename);
+
 
         //去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -403,26 +407,29 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
-    private void save(String s, String file) {
-        OutputStream out = null;
-        BufferedWriter writer = null;
+    public String readFile(String fileName){
+        StringBuilder sb = new StringBuilder("");
         try {
-            out = openFileOutput(file, MODE_PRIVATE);
-            writer = new BufferedWriter(new OutputStreamWriter(out));
-            writer.write(s);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            File file = new File(fileName);
+            //打开文件输入流
+            FileInputStream inputStream = new FileInputStream(file);
+            byte[] buffer = new byte[1024];
+            int len = inputStream.read(buffer);
+            //读取文件内容
+            while (len > 0) {
+                sb.append(new String(buffer, 0, len));
+                //继续将数据放到buffer中
+                len = inputStream.read(buffer);
             }
-
+            //关闭输入流
+            inputStream.close();
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
+        return sb.toString();
     }
+
+
 
 
     // 将字符串写入到文本文件中
@@ -473,6 +480,21 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             }
         } catch (Exception e) {
             System.out.println("生成文件夹错误: " + e.toString());
+        }
+    }
+
+    public void appendNote(String str) {
+        editNote.append(str);
+    }
+
+    public void insertNote(String str) {
+
+        int index = editNote.getSelectionStart();//获取光标所在位置
+        Editable edit = editNote.getEditableText();//获取EditText的文字
+        if (index < 0 || index >= edit.length()) {
+            edit.append(str);
+        } else {
+            edit.insert(index, str);//光标所在位置插入文字
         }
     }
 

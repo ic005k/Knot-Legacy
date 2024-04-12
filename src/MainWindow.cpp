@@ -4583,7 +4583,12 @@ void MainWindow::on_btnEdit_clicked() {
   QString mdString = loadText(currentMDFile);
 
   if (isAndroid) {
-    m_Notes->setAndroidNoteText(mdString);
+    QFile file1(privateDir + "note_text.txt");
+    file1.remove();
+    QString mymd = privateDir + "mymd.txt";
+    QFile file2(mymd);
+    file2.remove();
+    file2.copy(currentMDFile, mymd);
     m_Notes->openNoteEditor();
     return;
   }
