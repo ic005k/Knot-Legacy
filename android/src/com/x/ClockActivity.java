@@ -83,6 +83,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public native static void CallJavaNotify_5();
 
     public native static void CallJavaNotify_6();
+    public native static void CallJavaNotify_7();
 
     private static boolean isGoBackKnot = false;
 

@@ -111,7 +111,7 @@ class Notes : public QDialog {
 
   bool eventFilterEditRecord(QObject *watch, QEvent *evn);
 
-  void insertImage(QString fileName);
+  QString insertImage(QString fileName);
 
   bool eventFilterQwNote(QObject *watch, QEvent *event);
 
@@ -122,11 +122,13 @@ class Notes : public QDialog {
   QString getEditorText();
 
   void openNoteEditor();
-  QString getAndroidNoteText();
-  void setAndroidNoteText(QString txt);
+
   void appendNote(QString str);
   void insertNote(QString str);
-  protected:
+  auto getAndroidNoteConfig(QString key);
+  void setAndroidNoteConfig(QString key, QString value);
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

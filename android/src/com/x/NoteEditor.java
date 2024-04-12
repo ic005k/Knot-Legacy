@@ -2,6 +2,9 @@ package com.x;
 
 import com.x.MyActivity;
 
+// 读写ini文件的三方开源库
+import org.ini4j.Wini;
+
 import android.content.IntentFilter;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
@@ -26,7 +29,6 @@ import android.view.WindowManager;
 import android.view.Window;
 import android.widget.EditText;
 import android.text.Editable;
-
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
@@ -68,9 +70,10 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private InternalConfigure internalConfigure;
 
     private Button btn_cancel;
+    private Button btnInsertImg;
     public EditText editNote;
     private static boolean zh_cn;
-
+    private String currentMDFile;
     private static Context context;
     private static NoteEditor m_instance;
 
@@ -91,6 +94,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public native static void CallJavaNotify_5();
 
     public native static void CallJavaNotify_6();
+    public native static void CallJavaNotify_7();
 
     private static boolean isGoBackKnot = false;
 
@@ -117,12 +121,18 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         editNote.setText(str);
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
+        btnInsertImg = (Button) findViewById(R.id.btnInsertImg);
 
-        if (zh_cn)
+        if (zh_cn) {
             btn_cancel.setText("保存");
-        else
+            btnInsertImg.setText("插入图片");
+        }
+        else {
             btn_cancel.setText("Save");
+            btnInsertImg.setText("Insert Img");
+        }
         btn_cancel.setOnClickListener(this);
+        btnInsertImg.setOnClickListener(this);
 
     }
 
@@ -134,27 +144,44 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 // btn_cancel.setVisibility(View.GONE);
 
 
+                // save current text
                 String mContent = editNote.getText().toString();
                 String mPath = "/storage/emulated/0/.Knot/";
                 writeTxtToFile(mContent, mPath, "note_text.txt");
 
                 //save cursor pos
                 String file2 = "/storage/emulated/0/.Knot/note_text.ini";
-                internalConfigure = new InternalConfigure(this);
-                Properties myPro = new Properties();
                 int cpos = editNote.getSelectionStart();
-                myPro.setProperty("cpos", String.valueOf(cpos));
 
+                /*internalConfigure = new InternalConfigure(this);
+                Properties myPro = new Properties();
+                myPro.put(currentMDFile, String.valueOf(cpos));
                 try {
                     internalConfigure.saveFile(file2, myPro);
                 } catch (Exception e) {
                     System.err.println("Error : save note_text.ini");
                     e.printStackTrace();
-                }
+                }*/
 
+                try {
+                    Wini ini = new Wini(new File(file2));
+
+                    ini.put("cpos", currentMDFile, String.valueOf(cpos));
+
+                    ini.store();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 CallJavaNotify_6();
                 onBackPressed();
+                break;
+
+            case R.id.btnInsertImg:
+
+                CallJavaNotify_7();
+                onBackPressed();
+
                 break;
         }
     }
@@ -198,20 +225,36 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         //set cursor pos
         filename = "/storage/emulated/0/.Knot/note_text.ini";
-        internalConfigure = new InternalConfigure(this);
+        String s_cpos = null;
+
+        /*internalConfigure = new InternalConfigure(this);
         try {
             internalConfigure.readFrom(filename);
         } catch (Exception e) {
             System.err.println("Error : reading note_text.ini");
             e.printStackTrace();
         }
+         s_cpos = internalConfigure.getIniKey(currentMDFile);
+         currentMDFile = internalConfigure.getIniKey("currentMDFile");
+        */
+
+        try {
+            Wini ini = new Wini(new File(filename));
+            currentMDFile = ini.get("cpos", "currentMDFile");
+            s_cpos = ini.get("cpos", currentMDFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (fileIsExists(filename)) {
-            String s_cpos = internalConfigure.getIniKey("cpos");
             int cpos;
             if (s_cpos == null)
                 cpos = 0;
             else
                 cpos = Integer.parseInt(s_cpos);
+            if (cpos > strInfo.length())
+                cpos = strInfo.length();
             editNote.setSelection(cpos);
         }
 
@@ -304,8 +347,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         public void saveFile(String filename, Properties properties) throws Exception {
             //设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
             FileOutputStream fileOutputStream;// = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            File file = new File(filename);
-            fileOutputStream = new FileOutputStream(file);
+
+            // 每次都会生成一个新文件并抹掉除本次key之外的其他key数据
+            //File file = new File(filename);
+            fileOutputStream = new FileOutputStream(filename);
+
             //通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
             for (String key : properties.stringPropertyNames()) {
                 String s = key + " = " + properties.getProperty(key) + "\n";

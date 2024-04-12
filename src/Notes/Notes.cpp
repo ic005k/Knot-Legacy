@@ -610,17 +610,16 @@ QString Notes::getDateTimeStr() {
 }
 
 void Notes::on_btnPic_clicked() {
-  pAndroidKeyboard->hide();
-
   QString fileName;
-  fileName = QFileDialog::getOpenFileName(this, tr("Knot"), "",
+  fileName = QFileDialog::getOpenFileName(NULL, tr("Knot"), "",
                                           tr("Picture Files (*.*)"));
 
   insertImage(fileName);
 }
 
-void Notes::insertImage(QString fileName) {
+QString Notes::insertImage(QString fileName) {
   QFileInfo fi(fileName);
+  QString strImage;
   if (fi.exists()) {
     QDir dir;
     dir.mkpath(iniDir + "memo/images/");
@@ -647,7 +646,8 @@ void Notes::insertImage(QString fileName) {
       new_h = h;
     }
 
-    ShowMessage *msg = new ShowMessage(this);
+    // if (!isAndroid) {
+    ShowMessage *msg = new ShowMessage();
     msg->ui->btnCancel->setText(tr("No"));
     msg->ui->btnOk->setText(tr("Yes"));
     bool isYes =
@@ -656,6 +656,7 @@ void Notes::insertImage(QString fileName) {
       new_w = w;
       new_h = h;
     }
+    //}
 
     QPixmap pix;
     pix = QPixmap::fromImage(img);
@@ -664,10 +665,19 @@ void Notes::insertImage(QString fileName) {
     pix.save(strTar);
 
     strTar = strTar.replace(iniDir, imgDir);
-    m_EditSource->insertPlainText("![image](file://" + strTar + ")\n");
+    strImage = "\n![image](file://" + strTar + ")\n";
+
+    if (!isAndroid) {
+      m_EditSource->insertPlainText(strImage);
+    } else {
+      mw_one->on_btnEdit_clicked();
+      insertNote(strImage);
+    }
 
     qDebug() << "pic=" << strTar << nLeftMargin;
   }
+
+  return strImage;
 }
 
 QStringList Notes::getImgFileFromHtml(QString htmlfile) {
@@ -1645,6 +1655,8 @@ void Notes::appendNote(QString str) {
 
 void Notes::insertNote(QString str) {
 #ifdef Q_OS_ANDROID
+  qDebug() << "==="
+           << "start insert";
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jTitle = QAndroidJniObject::fromString(str);
@@ -1661,20 +1673,20 @@ void Notes::insertNote(QString str) {
 #endif
 }
 
-QString Notes::getAndroidNoteText() {
+auto Notes::getAndroidNoteConfig(QString key) {
   QSettings Reg(privateDir + "note_text.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-
-  return Reg.value("text").toString();
+  auto value = Reg.value(key);
+  return value;
 }
 
-void Notes::setAndroidNoteText(QString txt) {
+void Notes::setAndroidNoteConfig(QString key, QString value) {
   QSettings Reg(privateDir + "note_text.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
 
-  Reg.setValue("text", txt);
+  Reg.setValue(key, value);
 }

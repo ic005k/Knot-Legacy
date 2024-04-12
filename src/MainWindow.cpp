@@ -65,6 +65,7 @@ static void JavaNotify_3();
 static void JavaNotify_4();
 static void JavaNotify_5();
 static void JavaNotify_6();
+static void JavaNotify_7();
 #endif
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
@@ -4257,7 +4258,7 @@ static void JavaNotify_5() {
 }
 
 static void JavaNotify_6() {
-  QString mdString;  // = mw_one->m_Notes->getAndroidNoteText();
+  QString mdString;
   mdString = loadText(privateDir + "note_text.txt");
   StringToFile(mdString, currentMDFile);
   mw_one->m_Notes->MD2Html(currentMDFile);
@@ -4267,6 +4268,12 @@ static void JavaNotify_6() {
            << "    mdString=" + mdString;
 }
 
+static void JavaNotify_7() {
+  mw_one->m_Notes->on_btnPic_clicked();
+
+  qDebug() << "C++ JavaNotify_7";
+}
+
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},
     {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
@@ -4274,7 +4281,8 @@ static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_3", "()V", (void *)JavaNotify_3},
     {"CallJavaNotify_4", "()V", (void *)JavaNotify_4},
     {"CallJavaNotify_5", "()V", (void *)JavaNotify_5},
-    {"CallJavaNotify_6", "()V", (void *)JavaNotify_6}};
+    {"CallJavaNotify_6", "()V", (void *)JavaNotify_6},
+    {"CallJavaNotify_7", "()V", (void *)JavaNotify_7}};
 
 void RegJni(const char *myClassName) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -4583,6 +4591,8 @@ void MainWindow::on_btnEdit_clicked() {
   QString mdString = loadText(currentMDFile);
 
   if (isAndroid) {
+    m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",
+                                  QFileInfo(currentMDFile).baseName());
     QFile file1(privateDir + "note_text.txt");
     file1.remove();
     QString mymd = privateDir + "mymd.txt";

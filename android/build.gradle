@@ -24,6 +24,8 @@ apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    // read and write inifile
+    implementation 'org.ini4j:ini4j:0.5.4'
     compile "com.android.support:support-v4:23.0.+"
     compile 'com.android.support:appcompat-v7:24.2.1'
 }
