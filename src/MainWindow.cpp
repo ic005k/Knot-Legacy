@@ -4590,6 +4590,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
+  m_Notes->saveQMLVPos();
   QString mdString = loadText(currentMDFile);
 
   if (isAndroid) {

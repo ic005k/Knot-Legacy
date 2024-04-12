@@ -63,6 +63,11 @@ import android.database.Cursor;
 import android.content.ContentUris;
 import android.os.Environment;
 import android.os.Message;
+import android.view.Menu;
+import android.widget.Toast;
+import java.lang.reflect.Method;
+import android.view.MenuItem;
+import android.widget.PopupMenu;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -159,9 +164,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             case R.id.btnInsertImg:
                 openFilePicker();
-
                 // onBackPressed();
+                break;
 
+            case R.id.btnMenu:
+                showPopupMenu(btnMenu);
                 break;
         }
     }
@@ -191,9 +198,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         // 去掉Activity上面的状态栏(Show Time...)
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         // WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         this.setStatusBarColor("#F3F3F3"); // 灰
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
@@ -591,8 +600,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == 1) {
             Uri selectedFileUri = data.getData();
-            String filePath;// = selectedFileUri.getPath();
-            filePath = getPath(this, selectedFileUri);
+            String filePath;
+            if (Build.VERSION.SDK_INT >= 24)
+                filePath = selectedFileUri.getPath();
+            else // Android 6.0及以下
+                filePath = getPath(this, selectedFileUri);
             // 处理文件路径
             handleFilePath(filePath);
         }
@@ -802,6 +814,78 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // 显示
         normalDialog.show();
 
+    }
+
+    // 该方法用于创建显示Menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_optionmenu, menu);
+        return true;
+    }
+
+    // 在选项菜单打开以后会调用这个方法，设置menu图标显示（icon）
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        if (menu != null) {
+            if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
+                try {
+                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    method.setAccessible(true);
+                    method.invoke(menu, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return super.onMenuOpened(featureId, menu);
+    }
+
+    // 该方法对菜单的item进行监听
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // mTextView.setText(item.getTitle());
+        switch (item.getItemId()) {
+            case R.id.menu1:
+                Toast.makeText(this, "点击了第" + 1 + "个", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu2:
+                Toast.makeText(this, "点击了第" + 2 + "个", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu3:
+                Toast.makeText(this, "点击了第" + 3 + "个", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu4:
+                Toast.makeText(this, "点击了第" + 4 + "个", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu5:
+                Toast.makeText(this, "点击了第" + 5 + "个", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showPopupMenu(View view) {
+        // View当前PopupMenu显示的相对View的位置
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        // menu布局
+        popupMenu.getMenuInflater().inflate(R.menu.main, popupMenu.getMenu());
+        // menu的item点击事件
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        // PopupMenu关闭事件
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                Toast.makeText(getApplicationContext(), "关闭PopupMenu", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        popupMenu.show();
     }
 
 }
