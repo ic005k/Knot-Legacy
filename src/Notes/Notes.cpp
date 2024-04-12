@@ -646,17 +646,17 @@ QString Notes::insertImage(QString fileName) {
       new_h = h;
     }
 
-    // if (!isAndroid) {
-    ShowMessage *msg = new ShowMessage();
-    msg->ui->btnCancel->setText(tr("No"));
-    msg->ui->btnOk->setText(tr("Yes"));
-    bool isYes =
-        msg->showMsg("Knot", tr("Is the original size of the image used?"), 2);
-    if (isYes) {
-      new_w = w;
-      new_h = h;
+    if (!isAndroid) {
+      ShowMessage *msg = new ShowMessage();
+      msg->ui->btnCancel->setText(tr("No"));
+      msg->ui->btnOk->setText(tr("Yes"));
+      bool isYes = msg->showMsg(
+          "Knot", tr("Is the original size of the image used?"), 2);
+      if (isYes) {
+        new_w = w;
+        new_h = h;
+      }
     }
-    //}
 
     QPixmap pix;
     pix = QPixmap::fromImage(img);
@@ -665,12 +665,11 @@ QString Notes::insertImage(QString fileName) {
     pix.save(strTar);
 
     strTar = strTar.replace(iniDir, imgDir);
-    strImage = "\n![image](file://" + strTar + ")\n";
+    strImage = "\n\n![image](file://" + strTar + ")\n\n";
 
     if (!isAndroid) {
       m_EditSource->insertPlainText(strImage);
     } else {
-      mw_one->on_btnEdit_clicked();
       insertNote(strImage);
     }
 
@@ -1641,13 +1640,17 @@ void Notes::appendNote(QString str) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jTitle = QAndroidJniObject::fromString(str);
   QAndroidJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("appendNote", "(Ljava/lang/String;)V",
-                            jTitle.object<jstring>());
+  QAndroidJniObject m_activity =
+      QAndroidJniObject::fromString("com.x/NoteEditor");
+  m_activity.callStaticMethod<void>("com.x/NoteEditor", "appendNote",
+                                    "(Ljava/lang/String;)V",
+                                    jTitle.object<jstring>());
 #else
   QJniObject jTitle = QJniObject::fromString(str);
-  QJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("appendNote", "(Ljava/lang/String;)V",
-                            jTitle.object<jstring>());
+  QJniObject m_activity = QJniObject::fromString("com.x/NoteEditor");
+  m_activity.callStaticMethod<void>("com.x/NoteEditor", "appendNote",
+                                    "(Ljava/lang/String;)V",
+                                    jTitle.object<jstring>());
 #endif
 
 #endif
@@ -1661,13 +1664,18 @@ void Notes::insertNote(QString str) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jTitle = QAndroidJniObject::fromString(str);
   QAndroidJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("insertNote", "(Ljava/lang/String;)V",
-                            jTitle.object<jstring>());
+  QAndroidJniObject m_activity =
+      QAndroidJniObject::fromString("com.x/NoteEditor");
+  m_activity.callStaticMethod<void>("com.x/NoteEditor", "insertNote",
+                                    "(Ljava/lang/String;)V",
+                                    jTitle.object<jstring>());
 #else
   QJniObject jTitle = QJniObject::fromString(str);
-  QJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("insertNote", "(Ljava/lang/String;)V",
-                            jTitle.object<jstring>());
+  QAndroidJniObject m_activity =
+      QAndroidJniObject::fromString("com.x/NoteEditor");
+  m_activity.callStaticMethod<void>("com.x/NoteEditor", "insertNote",
+                                    "(Ljava/lang/String;)V",
+                                    jTitle.object<jstring>());
 #endif
 
 #endif
