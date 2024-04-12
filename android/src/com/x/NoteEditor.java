@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.view.Window;
 import android.widget.EditText;
 import android.text.Editable;
+
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
@@ -137,6 +138,20 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 String mPath = "/storage/emulated/0/.Knot/";
                 writeTxtToFile(mContent, mPath, "note_text.txt");
 
+                //save cursor pos
+                String file2 = "/storage/emulated/0/.Knot/note_text.ini";
+                internalConfigure = new InternalConfigure(this);
+                Properties myPro = new Properties();
+                int cpos = editNote.getSelectionStart();
+                myPro.setProperty("cpos", String.valueOf(cpos));
+
+                try {
+                    internalConfigure.saveFile(file2, myPro);
+                } catch (Exception e) {
+                    System.err.println("Error : save note_text.ini");
+                    e.printStackTrace();
+                }
+
 
                 CallJavaNotify_6();
                 onBackPressed();
@@ -166,19 +181,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         application.registerActivityLifecycleCallbacks(this);
 
 
-        /*String filename = "/storage/emulated/0/.Knot/note_text.ini";
-        internalConfigure = new InternalConfigure(this);
-        try {
-            internalConfigure.readFrom(filename);
-        } catch (Exception e) {
-            System.err.println("Error : reading note_text.ini");
-            e.printStackTrace();
-        }
-        if (fileIsExists(filename)) {
-            strInfo = internalConfigure.getIniKey("text");
-        }
-        System.out.println("Info Text: " + strInfo);*/
-
         String filename = "/storage/emulated/0/.Knot/mymd.txt";
         strInfo = readFile(filename);
 
@@ -193,6 +195,25 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         setContentView(R.layout.noteeditor);
         bindViews(strInfo);
+
+        //set cursor pos
+        filename = "/storage/emulated/0/.Knot/note_text.ini";
+        internalConfigure = new InternalConfigure(this);
+        try {
+            internalConfigure.readFrom(filename);
+        } catch (Exception e) {
+            System.err.println("Error : reading note_text.ini");
+            e.printStackTrace();
+        }
+        if (fileIsExists(filename)) {
+            String s_cpos = internalConfigure.getIniKey("cpos");
+            int cpos;
+            if (s_cpos == null)
+                cpos = 0;
+            else
+                cpos = Integer.parseInt(s_cpos);
+            editNote.setSelection(cpos);
+        }
 
 
         // HomeKey
@@ -214,11 +235,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     // 表示按了home键,程序直接进入到后台
 
                     System.out.println("NoteEditor HOME键被按下...");
-                    onBackPressed();
+                    //onBackPressed();
                 } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
                     // 表示长按home键,显示最近使用的程序
                     System.out.println("NoteEditor 长按HOME键...");
-                    onBackPressed();
+                    //onBackPressed();
                 }
             }
         }
@@ -407,7 +428,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
-    public String readFile(String fileName){
+    public String readFile(String fileName) {
         StringBuilder sb = new StringBuilder("");
         try {
             File file = new File(fileName);
@@ -423,13 +444,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             }
             //关闭输入流
             inputStream.close();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return sb.toString();
     }
-
-
 
 
     // 将字符串写入到文本文件中
