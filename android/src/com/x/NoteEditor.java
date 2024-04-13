@@ -66,6 +66,9 @@ import android.os.Message;
 import android.view.Menu;
 import android.widget.Toast;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.sql.Time;
+
 import android.view.MenuItem;
 import android.widget.PopupMenu;
 
@@ -138,13 +141,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         btnMenu = (Button) findViewById(R.id.btnMenu);
 
         if (zh_cn) {
-            btn_cancel.setText("保存");
+            btn_cancel.setText("关闭");
             btnInsertImg.setText("插入图片");
-            btnMenu.setText("菜单");
+            btnMenu.setText("快捷输入");
         } else {
-            btn_cancel.setText("Save");
+            btn_cancel.setText("Close");
             btnInsertImg.setText("Insert Img");
-            btnMenu.setText("Menu");
+            btnMenu.setText("Quick Input");
         }
         btn_cancel.setOnClickListener(this);
         btnInsertImg.setOnClickListener(this);
@@ -158,7 +161,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             case R.id.btn_cancel:
                 // NoteEditor.this.finish();
                 // btn_cancel.setVisibility(View.GONE);
-                saveNote();
+
                 onBackPressed();
                 break;
 
@@ -541,6 +544,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     public static void appendNote(String str) {
+        editNote.append("\n\n");
         editNote.append(str);
     }
 
@@ -600,11 +604,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == 1) {
             Uri selectedFileUri = data.getData();
-            String filePath;
-            if (Build.VERSION.SDK_INT >= 24)
-                filePath = selectedFileUri.getPath();
-            else // Android 6.0及以下
-                filePath = getPath(this, selectedFileUri);
+            String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
+            readFileFromUriToLocal(selectedFileUri, filePath);
+
+            // if (Build.VERSION.SDK_INT >= 24)
+            // filePath = selectedFileUri.getPath();
+            // else // Android 6.0及以下
+            // filePath = getPath(this, selectedFileUri);
+
             // 处理文件路径
             handleFilePath(filePath);
         }
@@ -614,8 +621,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // 处理文件路径的逻辑
 
         System.out.println("open image file=" + filePath);
-        MyActivity.copyFile(filePath, "/storage/emulated/0/.Knot/receive_share_pic.png");
-        CallJavaNotify_7();
+        // MyActivity.copyFile(filePath,
+
+        // "/storage/emulated/0/.Knot/receive_share_pic.png");
+        if (fileIsExists(filePath))
+            CallJavaNotify_7();
+        else
+            Toast.makeText(this, filePath + "  The file does not exist.", 12000).show();
     }
 
     /**
@@ -816,7 +828,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
+    /* 创建选项菜单，目前暂不使用，它显示在菜单栏上 */
     // 该方法用于创建显示Menu
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_optionmenu, menu);
@@ -824,12 +838,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     // 在选项菜单打开以后会调用这个方法，设置menu图标显示（icon）
+
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
         if (menu != null) {
             if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
                 try {
-                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible",
+                            Boolean.TYPE);
                     method.setAccessible(true);
                     method.invoke(menu, true);
                 } catch (Exception e) {
@@ -841,6 +857,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     // 该方法对菜单的item进行监听
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // mTextView.setText(item.getTitle());
@@ -873,7 +890,78 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+
+                // test
+                switch (item.getItemId()) {
+                    case R.id.s1:
+
+                        break;
+
+                }
+
+                if (item.getTitle().equals("Table")) {
+
+                    String str1 = "|Title1|Title2|Title3|\n";
+                    String str2 = "|------|------|----- |\n";
+                    String str3 = "|        |        |        |\n";
+                    String str4 = "|        |        |        |\n";
+
+                    insertNote(str1 + str2 + str3 + str4);
+
+                }
+
+                if (item.getTitle().equals("Bold")) {
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("**" + sel + "**");
+                    } else
+                        insertNote("**Bold**");
+                }
+
+                if (item.getTitle().equals("Italic")) {
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("_" + sel + "_");
+                    } else
+                        insertNote("_Italic_");
+                }
+
+                if (item.getTitle().equals("Font Color")) {
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("<font color=#E01B24>" + sel + "</font>");
+                    } else
+                        insertNote("<font color=#E01B24>Color</font>");
+                }
+
+                if (item.getTitle().equals("#")) {
+                    insertNote("#");
+                }
+
+                if (item.getTitle().equals(">"))
+                    insertNote("> ");
+
+                if (item.getTitle().equals("Date")) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String dateString = sdf.format(new Date());
+                    insertNote(dateString);
+                }
+
+                if (item.getTitle().equals("Time")) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                    String timeString = sdf.format(new Date());
+                    insertNote(timeString);
+                }
+
+                if (item.getTitle().equals("Link")) {
+                    insertNote("[]()");
+                }
+
+                // Toast.makeText(getApplicationContext(), item.getTitle(),
+                // Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -881,11 +969,54 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
             @Override
             public void onDismiss(PopupMenu menu) {
-                Toast.makeText(getApplicationContext(), "关闭PopupMenu", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), "关闭PopupMenu",
+                // Toast.LENGTH_SHORT).show();
             }
         });
 
         popupMenu.show();
+    }
+
+    public boolean readFileFromUriToLocal(Uri uri, String localfile) {
+
+        try {
+            // 之前的目录存储位置备注：getExternalFilesDir(null).getPath() + File.separator =
+            // /storage/emulated/0/Android/data/com.x/files
+            File outFile = new File(localfile);
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            FileOutputStream fos = new FileOutputStream(outFile);
+            byte[] buf = new byte[1024];
+            int readCount = 0;
+            while ((readCount = inputStream.read(buf)) != -1) {
+                fos.write(buf, 0, readCount);
+            }
+            fos.flush();
+            inputStream.close();
+            fos.close();
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public String getEditSelectText() {
+        Editable editable = editNote.getText();
+        int beg = editNote.getSelectionStart();
+        int end = editNote.getSelectionEnd();
+        String sel = editable.toString().substring(beg, end);
+
+        return sel;
+
+    }
+
+    public void delEditSelectText() {
+        int beg = editNote.getSelectionStart();
+        int end = editNote.getSelectionEnd();
+        Editable editable = editNote.getText();
+        editable.delete(beg, end);
     }
 
 }

@@ -109,6 +109,7 @@ void ReceiveShare::Close() {
 
 void ReceiveShare::on_btnAddToTodo_clicked() {
   Close();
+  strReceiveShareData = getShareString();
   if (mw_one->ui->frameTodo->isHidden()) {
     closeAllActiveWindows();
     mw_one->on_btnTodo_clicked();
@@ -128,27 +129,21 @@ void ReceiveShare::addToNote(bool isInsert) {
   if (isInsert) {
     if (shareType == "text/plain") {
       strReceiveShareData = getShareString();
-      mw_one->m_Notes->m_EditSource->insertPlainText(strReceiveShareData);
+      mw_one->m_Notes->insertNote(strReceiveShareData);
     }
     if (shareType == "image/*") {
-      mw_one->m_Notes->m_EditSource->insertPlainText("\n\n");
-      mw_one->m_Notes->insertImage(imgFile);
-      mw_one->m_Notes->m_EditSource->insertPlainText("\n\n");
+      QString strImg = mw_one->m_Notes->insertImage(imgFile);
+      mw_one->m_Notes->insertNote(strImg);
     }
   } else {
     // append
     if (shareType == "text/plain") {
       strReceiveShareData = getShareString();
-      mw_one->m_Notes->m_EditSource->append("\n" + strReceiveShareData);
+      mw_one->m_Notes->appendNote(strReceiveShareData);
     }
     if (shareType == "image/*") {
-      mw_one->m_Notes->m_EditSource->append("\n");
-
-      QTextCursor cursor = mw_one->m_Notes->m_EditSource->textCursor();
-      cursor.movePosition(QTextCursor::End);
-      mw_one->m_Notes->m_EditSource->setTextCursor(cursor);
-
-      mw_one->m_Notes->insertImage(imgFile);
+      QString strImg = mw_one->m_Notes->insertImage(imgFile);
+      mw_one->m_Notes->appendNote(strImg);
     }
   }
 
@@ -157,32 +152,18 @@ void ReceiveShare::addToNote(bool isInsert) {
 
 void ReceiveShare::on_btnAppendToNote_clicked() {
   Close();
-  if (mw_one->m_Notes->isHidden()) {
-    closeAllActiveWindows();
-    mw_one->on_btnNotes_clicked();
-    mw_one->on_btnEdit_clicked();
-    addToNote(false);
-
-  } else {
-    addToNote(false);
-  }
-
-  QTextCursor cursor = mw_one->m_Notes->m_EditSource->textCursor();
-  cursor.movePosition(QTextCursor::End);
-  mw_one->m_Notes->m_EditSource->setTextCursor(cursor);
+  closeAllActiveWindows();
+  mw_one->on_btnNotes_clicked();
+  mw_one->on_btnEdit_clicked();
+  addToNote(false);
 }
 
 void ReceiveShare::on_btnInsertToNote_clicked() {
   Close();
-  if (mw_one->m_Notes->isHidden()) {
-    closeAllActiveWindows();
-    mw_one->on_btnNotes_clicked();
-    mw_one->on_btnEdit_clicked();
-    addToNote(true);
-
-  } else {
-    addToNote(true);
-  }
+  closeAllActiveWindows();
+  mw_one->on_btnNotes_clicked();
+  mw_one->on_btnEdit_clicked();
+  addToNote(true);
 }
 
 QObjectList ReceiveShare::getAllFrame(QObjectList lstUIControls) {

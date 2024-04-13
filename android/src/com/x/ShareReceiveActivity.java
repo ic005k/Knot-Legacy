@@ -89,6 +89,7 @@ public class ShareReceiveActivity extends Activity {
     public native static void CallJavaNotify_5();
 
     public native static void CallJavaNotify_6();
+
     public native static void CallJavaNotify_7();
 
     private MyFileObserver fileObserver;
@@ -101,12 +102,12 @@ public class ShareReceiveActivity extends Activity {
         tv = (TextView) findViewById(R.id.text_info);
         tv.setText("Data processing, please wait...");
 
-        //获取intent
+        // 获取intent
         Intent intent = getIntent();
         String action = intent.getAction();
         type = intent.getType();
         System.out.println("type=" + type);
-        //设置接收类型为文本
+        // 设置接收类型为文本
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
                 handlerText(intent);
@@ -118,12 +119,11 @@ public class ShareReceiveActivity extends Activity {
                 MyAsyncTask myAsyncTask = new MyAsyncTask();
                 myAsyncTask.execute();
 
-                //String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
-                //fileObserver = new MyFileObserver(filePath);
-                //fileObserver.startWatching();
+                // String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
+                // fileObserver = new MyFileObserver(filePath);
+                // fileObserver.startWatching();
 
             }
-
 
             if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
                 Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
@@ -142,10 +142,9 @@ public class ShareReceiveActivity extends Activity {
             }
         }
 
-
     }
 
-    //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
+    // 该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
     public void handlerText(Intent intent) {
         String mainTxt = intent.getStringExtra(Intent.EXTRA_TEXT);
         String title = "";// = intent.getStringExtra(Intent.EXTRA_TITLE);
@@ -153,7 +152,6 @@ public class ShareReceiveActivity extends Activity {
             strData = title + "\n\n" + mainTxt;
         else
             strData = mainTxt;
-
 
     }
 
@@ -173,15 +171,15 @@ public class ShareReceiveActivity extends Activity {
         if (!isRun) {
             saveReceiveShare("text/plain", strData, "false");
 
-            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
+                    Toast.LENGTH_LONG).show();
             // reopen app
             openAppFromPackageName("com.x");
 
         } else {
             saveReceiveShare("text/plain", strData, "true");
-
-            CallJavaNotify_5();
             MyActivity.setMax();
+            CallJavaNotify_5();
 
         }
 
@@ -194,15 +192,15 @@ public class ShareReceiveActivity extends Activity {
         if (!isRun) {
             saveReceiveShare("image/*", "", "false");
 
-            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
+                    Toast.LENGTH_LONG).show();
             // reopen app
             openAppFromPackageName("com.x");
 
         } else {
             saveReceiveShare("image/*", "", "true");
-
-            CallJavaNotify_5();
             MyActivity.setMax();
+            CallJavaNotify_5();
 
         }
         ShareReceiveActivity.this.finish();
@@ -236,11 +234,11 @@ public class ShareReceiveActivity extends Activity {
     protected void onDestroy() {
         System.out.println("onDestroy...");
 
-        //android.os.Process.killProcess(android.os.Process.myPid());
+        // android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
 
-        //if (type.equals("image/"))
-        //    fileObserver.stopWatching();
+        // if (type.equals("image/"))
+        // fileObserver.stopWatching();
 
     }
 
@@ -260,7 +258,6 @@ public class ShareReceiveActivity extends Activity {
             }
         }
     }
-
 
     public void openAppFromPackageName(String pname) {
         PackageManager packageManager = getPackageManager();
@@ -320,7 +317,8 @@ public class ShareReceiveActivity extends Activity {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        /**android.intent.action.MAIN：打开另一程序
+        /**
+         * android.intent.action.MAIN：打开另一程序
          */
         intent.setAction("android.intent.action.MAIN");
         /**
@@ -346,11 +344,11 @@ public class ShareReceiveActivity extends Activity {
          * 例:configureActivity.saveFiletoSD("text.ini","");
          */
         public void saveFile(String filename, Properties properties) throws Exception {
-            //设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
+            // 设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
             FileOutputStream fileOutputStream;// = context.openFileOutput(filename, Context.MODE_PRIVATE);
             File file = new File(filename);
             fileOutputStream = new FileOutputStream(file);
-            //通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
+            // 通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
             for (String key : properties.stringPropertyNames()) {
                 String s = key + " = " + properties.getProperty(key) + "\n";
                 System.out.println(s);
@@ -373,11 +371,11 @@ public class ShareReceiveActivity extends Activity {
             InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
             BufferedReader br = new BufferedReader(reader);
 
-            //debug:
-            //String line;
-            //while ((line = br.readLine()) != null) {
-            //    System.out.println(line);
-            //}
+            // debug:
+            // String line;
+            // while ((line = br.readLine()) != null) {
+            // System.out.println(line);
+            // }
 
             properties.load(br);
 
@@ -405,20 +403,19 @@ public class ShareReceiveActivity extends Activity {
         if (uid > 0) {
             boolean rstA = isAppRunning(context, pName);
             boolean rstB = isProcessRunning(context, uid);
-            //if (rstA || rstB) {
+            // if (rstA || rstB) {
             if (rstB) {
-                //指定包名的程序正在运行中
+                // 指定包名的程序正在运行中
                 isRun = true;
             } else {
-                //指定包名的程序未在运行中
+                // 指定包名的程序未在运行中
                 isRun = false;
             }
         } else {
-            //应用未安装
+            // 应用未安装
         }
         return isRun;
     }
-
 
     /**
      * 方法描述：判断某一应用是否正在运行
@@ -442,7 +439,7 @@ public class ShareReceiveActivity extends Activity {
         return false;
     }
 
-    //获取已安装应用的 uid，-1 表示未安装此应用或程序异常
+    // 获取已安装应用的 uid，-1 表示未安装此应用或程序异常
     public static int getPackageUid(Context context, String packageName) {
         try {
             ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(packageName, 0);
@@ -477,7 +474,7 @@ public class ShareReceiveActivity extends Activity {
         return false;
     }
 
-    //读取分享的文件并把文件导入到私有目录
+    // 读取分享的文件并把文件导入到私有目录
     public boolean readFileFromShare(String fileName) {
         Intent intent = getIntent();
         String type = intent.getType();
@@ -485,7 +482,8 @@ public class ShareReceiveActivity extends Activity {
             Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             if (uri != null) {
                 try {
-                    // 之前的目录存储位置备注：getExternalFilesDir(null).getPath() + File.separator = /storage/emulated/0/Android/data/com.x/files
+                    // 之前的目录存储位置备注：getExternalFilesDir(null).getPath() + File.separator =
+                    // /storage/emulated/0/Android/data/com.x/files
                     File outFile = new File(fileName);
                     InputStream inputStream = getContentResolver().openInputStream(uri);
                     FileOutputStream fos = new FileOutputStream(outFile);
@@ -497,7 +495,6 @@ public class ShareReceiveActivity extends Activity {
                     fos.flush();
                     inputStream.close();
                     fos.close();
-
 
                     return true;
                 } catch (IOException e) {
@@ -516,7 +513,6 @@ public class ShareReceiveActivity extends Activity {
             String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
             readFileFromShare(filePath);
 
-
             return null;
         }
 
@@ -528,6 +524,5 @@ public class ShareReceiveActivity extends Activity {
     }
 
     // 在需要执行的地方调用
-
 
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/add"
-        android:title="添加" />
-    <item
-        android:id="@+id/remove"
-        android:title="删除" />
-    <item
-        android:id="@+id/share"
-        android:title="分享" />
+    <item android:id="@+id/table" android:title="Table" />
+    <item android:id="@+id/bold" android:title="Bold" />
+    <item android:id="@+id/italic" android:title="Italic" />
+    <item android:id="@+id/fontcolor" android:title="Font Color" />
+    <item android:id="@+id/s1" android:title="#" />
+    <item android:id="@+id/s2" android:title=">" />
+    <item android:id="@+id/date" android:title="Date" />
+    <item android:id="@+id/time" android:title="Time" />
+    <item android:id="@+id/link" android:title="Link" />
 </menu>
