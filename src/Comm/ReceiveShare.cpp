@@ -56,7 +56,7 @@ void ReceiveShare::setShareDone(QString strDone) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  Reg.setValue("shareDone", strDone);
+  Reg.setValue("/share/shareDone", strDone);
 }
 
 QString ReceiveShare::getShareDone() {

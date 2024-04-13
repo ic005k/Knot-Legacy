@@ -295,6 +295,22 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     @Override
     public void onBackPressed() {
 
+        // save cursor pos
+        String file2 = "/storage/emulated/0/.Knot/note_text.ini";
+        int cpos = editNote.getSelectionStart();
+        try {
+            File file = new File(file2);
+            if (!file.exists())
+                file.createNewFile();
+            Wini ini = new Wini(file);
+
+            ini.put("cpos", currentMDFile, String.valueOf(cpos));
+
+            ini.store();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (isTextChanged) {
             // showNormalDialog();
             saveNote();
@@ -563,10 +579,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         String mPath = "/storage/emulated/0/.Knot/";
         writeTxtToFile(mContent, mPath, "note_text.txt");
 
-        // save cursor pos
-        String file2 = "/storage/emulated/0/.Knot/note_text.ini";
-        int cpos = editNote.getSelectionStart();
-
         /*
          * internalConfigure = new InternalConfigure(this);
          * Properties myPro = new Properties();
@@ -578,16 +590,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
          * e.printStackTrace();
          * }
          */
-
-        try {
-            Wini ini = new Wini(new File(file2));
-
-            ini.put("cpos", currentMDFile, String.valueOf(cpos));
-
-            ini.store();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         CallJavaNotify_6();
     }

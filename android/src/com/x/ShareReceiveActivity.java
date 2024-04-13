@@ -139,16 +139,12 @@ public class ShareReceiveActivity extends Activity
                 handlerText(intent);
                 System.out.println("strData=" + strData);
                 tv.setText(type + ":\n\n" + strData);
-                goReceiveString();
+
             }
 
             if (type.startsWith("image/")) {
                 MyAsyncTask myAsyncTask = new MyAsyncTask();
                 myAsyncTask.execute();
-
-                // String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
-                // fileObserver = new MyFileObserver(filePath);
-                // fileObserver.startWatching();
 
             }
 
@@ -175,42 +171,74 @@ public class ShareReceiveActivity extends Activity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnAddToTodo:
-
+                btnAddToTodo.setBackgroundColor(getResources().getColor(R.color.red));
                 try {
-                    Wini ini = new Wini(new File(share_ini));
+                    File file = new File(share_ini);
+                    if (!file.exists())
+                        file.createNewFile();
+                    Wini ini = new Wini(file);
                     ini.put("share", "method", "todo");
                     ini.store();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                CallJavaNotify_5();
+                if (type.startsWith("text/")) {
+                    goReceiveString();
+                }
+
+                if (type.startsWith("image/")) {
+                    goReceiveImage();
+                }
+
                 onBackPressed();
                 break;
 
             case R.id.btnAppendNote:
-
+                btnAppendNote.setBackgroundColor(getResources().getColor(R.color.red));
                 try {
-                    Wini ini = new Wini(new File(share_ini));
+                    File file = new File(share_ini);
+                    if (!file.exists())
+                        file.createNewFile();
+                    Wini ini = new Wini(file);
                     ini.put("share", "method", "appendNote");
                     ini.store();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                CallJavaNotify_5();
+
+                if (type.startsWith("text/")) {
+                    goReceiveString();
+                }
+
+                if (type.startsWith("image/")) {
+                    goReceiveImage();
+                }
+
                 onBackPressed();
                 break;
 
             case R.id.btnInsertNote:
-
+                btnInsertNote.setBackgroundColor(getResources().getColor(R.color.red));
                 try {
-                    Wini ini = new Wini(new File(share_ini));
+                    File file = new File(share_ini);
+                    if (!file.exists())
+                        file.createNewFile();
+                    Wini ini = new Wini(file);
                     ini.put("share", "method", "insertNote");
                     ini.store();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                CallJavaNotify_5();
+
+                if (type.startsWith("text/")) {
+                    goReceiveString();
+                }
+
+                if (type.startsWith("image/")) {
+                    goReceiveImage();
+                }
+
                 onBackPressed();
                 break;
         }
@@ -287,12 +315,9 @@ public class ShareReceiveActivity extends Activity
 
         } else {
             saveReceiveShare("text/plain", strData, "true");
-
-            // CallJavaNotify_5();
-
+            CallJavaNotify_5();
         }
 
-        // ShareReceiveActivity.this.finish();
     }
 
     void goReceiveImage() {
@@ -308,16 +333,18 @@ public class ShareReceiveActivity extends Activity
 
         } else {
             saveReceiveShare("image/*", "", "true");
-
-            // CallJavaNotify_5();
+            CallJavaNotify_5();
 
         }
-        // ShareReceiveActivity.this.finish();
+
     }
 
     void saveReceiveShare(String shareType, String strData, String shareDone) {
         try {
-            Wini ini = new Wini(new File(share_ini));
+            File file = new File(share_ini);
+            if (!file.exists())
+                file.createNewFile();
+            Wini ini = new Wini(file);
 
             ini.put("share", "shareType", shareType);
             ini.put("share", "shareDone", shareDone);
@@ -644,7 +671,7 @@ public class ShareReceiveActivity extends Activity
             // 在这里执行完成后的操作
             btnAppendNote.setEnabled(true);
             btnInsertNote.setEnabled(true);
-            goReceiveImage();
+
         }
     }
 

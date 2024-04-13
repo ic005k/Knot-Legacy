@@ -362,6 +362,7 @@ MainWindow::MainWindow(QWidget *parent)
   reloadMain();
   clickData();
 
+  currentMDFile = m_NotesList->getCurrentMDFile();
   if (isAndroid) {
     QTimer::singleShot(2000, this, SLOT(on_ReceiveShare()));
   }
@@ -838,7 +839,7 @@ void MainWindow::on_ReceiveShare() {
   QString shareDone = m_ReceiveShare->getShareDone();
   if (shareDone == "false") {
     m_ReceiveShare->setShareDone("true");
-    mw_one->m_ReceiveShare->goReceiveShare();
+    m_ReceiveShare->goReceiveShare();
   }
 }
 

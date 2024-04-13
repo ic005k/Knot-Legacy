@@ -5,7 +5,7 @@
         <item name="android:windowEnterAnimation">@anim/enter_anim</item>
         <item name="android:windowExitAnimation">@anim/exit_anim</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="textAllCaps">false</item>
 
     </style>
 </resources>
-

@@ -15,31 +15,34 @@
 
         <Button
             android:id="@+id/btn_cancel"
+            android:textAllCaps="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#3498DB"
             android:textColor="#FFFFFF"
             android:layout_weight="1"
             android:text="OK"
-            />
-
-         <Button
-        android:id="@+id/btnInsertImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#3498DB"
-        android:textColor="#FFFFFF"
-        android:layout_weight="1"
-        android:text="Insert Img" />
+        />
 
         <Button
-        android:id="@+id/btnMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#3498DB"
-        android:textColor="#FFFFFF"
-        android:layout_weight="1"
-        android:text="Menu" />
+            android:id="@+id/btnInsertImg"
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#3498DB"
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:text="Insert Img" />
+
+        <Button
+            android:id="@+id/btnMenu"
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#3498DB"
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:text="Menu" />
 
     </LinearLayout>
 
@@ -48,9 +51,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="top"
-        
         android:orientation="vertical">
-                 
+
         <EditText
             android:id="@+id/editNote"
             android:layout_width="fill_parent"
@@ -60,12 +62,12 @@
             android:layout_marginLeft="10dp"
             android:text="TextView"
             android:textColor="#000000"
-             android:scrollbars="vertical"
-            android:fadeScrollbars="false"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="true"
             android:inputType="textMultiLine"
             android:layout_weight="1"
-             />
-       
+        />
+
     </LinearLayout>
 
     <!-- LinearLayout
@@ -89,5 +91,4 @@
     </LinearLayout -->
 
 
-    
 </LinearLayout>
