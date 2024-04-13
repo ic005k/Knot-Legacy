@@ -91,7 +91,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private String currentMDFile;
     private static Context context;
     private static NoteEditor m_instance;
-    private boolean isTextChanged = false;
+    private static boolean isTextChanged = false;
 
     public static Context getContext() {
         return context;
@@ -159,15 +159,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_cancel:
-                // NoteEditor.this.finish();
-                // btn_cancel.setVisibility(View.GONE);
-
                 onBackPressed();
                 break;
 
             case R.id.btnInsertImg:
                 openFilePicker();
-                // onBackPressed();
                 break;
 
             case R.id.btnMenu:
@@ -546,6 +542,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public static void appendNote(String str) {
         editNote.append("\n\n");
         editNote.append(str);
+
     }
 
     public static void insertNote(String str) {
@@ -557,6 +554,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         } else {
             edit.insert(index, str);// 光标所在位置插入文字
         }
+
     }
 
     private void saveNote() {

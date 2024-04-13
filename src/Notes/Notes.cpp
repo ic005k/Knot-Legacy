@@ -1658,8 +1658,6 @@ void Notes::appendNote(QString str) {
 
 void Notes::insertNote(QString str) {
 #ifdef Q_OS_ANDROID
-  qDebug() << "==="
-           << "start insert";
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jTitle = QAndroidJniObject::fromString(str);

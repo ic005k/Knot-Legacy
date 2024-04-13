@@ -36,23 +36,30 @@ class ReceiveShare : public QDialog {
   QString getShareString();
   QString getShareDone();
   void setShareDone(QString strDone);
-  protected:
+
+  void moveTaskToFront();
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
 
- private slots:
+ public slots:
   void on_btnAddToTodo_clicked();
-
+  void on_btnInsertToNote_clicked();
   void on_btnAppendToNote_clicked();
+
+ private slots:
 
   void on_btnTest_clicked();
 
-  void on_btnInsertToNote_clicked();
+  void on_setReceiveShareData();
 
  private:
   void Close();
   void addToNote(bool isInsert);
+
+  bool isInsertToNote;
 };
 
 #endif  // RECEIVESHARE_H

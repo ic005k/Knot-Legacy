@@ -363,10 +363,7 @@ MainWindow::MainWindow(QWidget *parent)
   clickData();
 
   if (isAndroid) {
-    timerReceiveShare = new QTimer(this);
-    connect(timerReceiveShare, SIGNAL(timeout()), this,
-            SLOT(on_ReceiveShare()));
-    timerReceiveShare->start(2000);
+    QTimer::singleShot(2000, this, SLOT(on_ReceiveShare()));
   }
 }
 
@@ -838,7 +835,6 @@ void MainWindow::timerUpdate() {
 }
 
 void MainWindow::on_ReceiveShare() {
-  timerReceiveShare->stop();
   QString shareDone = m_ReceiveShare->getShareDone();
   if (shareDone == "false") {
     m_ReceiveShare->setShareDone("true");
@@ -4252,7 +4248,23 @@ static void JavaNotify_4() {
 }
 
 static void JavaNotify_5() {
-  mw_one->m_ReceiveShare->init();
+  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  QString method = Reg.value("/share/method", "").toString();
+  if (method == "todo") {
+    mw_one->m_ReceiveShare->moveTaskToFront();
+    mw_one->m_ReceiveShare->ui->btnAddToTodo->click();
+  }
+
+  if (method == "appendNote") {
+    mw_one->m_ReceiveShare->ui->btnAppendToNote->click();
+  }
+
+  if (method == "insertNote") {
+    mw_one->m_ReceiveShare->ui->btnInsertToNote->click();
+  }
 
   qDebug() << "C++ JavaNotify_5";
 }

@@ -22,6 +22,8 @@ ReceiveShare::ReceiveShare(QWidget* parent)
 
 ReceiveShare::~ReceiveShare() { delete ui; }
 
+void ReceiveShare::on_setReceiveShareData() { addToNote(isInsertToNote); }
+
 void ReceiveShare::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event)
   QClipboard* m_Clip = QApplication::clipboard();
@@ -56,7 +58,7 @@ QString ReceiveShare::getShareDone() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  return Reg.value("shareDone", "true").toString();
+  return Reg.value("/share/shareDone", "true").toString();
 }
 
 QString ReceiveShare::getShareType() {
@@ -64,7 +66,7 @@ QString ReceiveShare::getShareType() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  return Reg.value("shareType", "text/plain").toString();
+  return Reg.value("/share/shareType", "text/plain").toString();
 }
 
 QString ReceiveShare::getShareString() {
@@ -72,7 +74,7 @@ QString ReceiveShare::getShareString() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  return Reg.value("receiveData", "").toString();
+  return Reg.value("/share/receiveData", "").toString();
 }
 
 void ReceiveShare::init() {
@@ -91,6 +93,8 @@ void ReceiveShare::init() {
     ui->lblTip->hide();
     ui->lblDataType->setText(tr("Data Type : Image"));
   }
+
+  moveTaskToFront();
 
   int x, y, w, h;
   x = mw_one->geometry().x();
@@ -126,9 +130,9 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
 
 void ReceiveShare::addToNote(bool isInsert) {
   QString imgFile = "/storage/emulated/0/.Knot/receive_share_pic.png";
+  strReceiveShareData = getShareString();
   if (isInsert) {
     if (shareType == "text/plain") {
-      strReceiveShareData = getShareString();
       mw_one->m_Notes->insertNote(strReceiveShareData);
     }
     if (shareType == "image/*") {
@@ -138,7 +142,6 @@ void ReceiveShare::addToNote(bool isInsert) {
   } else {
     // append
     if (shareType == "text/plain") {
-      strReceiveShareData = getShareString();
       mw_one->m_Notes->appendNote(strReceiveShareData);
     }
     if (shareType == "image/*") {
@@ -155,7 +158,9 @@ void ReceiveShare::on_btnAppendToNote_clicked() {
   closeAllActiveWindows();
   mw_one->on_btnNotes_clicked();
   mw_one->on_btnEdit_clicked();
-  addToNote(false);
+
+  isInsertToNote = false;
+  QTimer::singleShot(100, this, SLOT(on_setReceiveShareData()));
 }
 
 void ReceiveShare::on_btnInsertToNote_clicked() {
@@ -163,7 +168,9 @@ void ReceiveShare::on_btnInsertToNote_clicked() {
   closeAllActiveWindows();
   mw_one->on_btnNotes_clicked();
   mw_one->on_btnEdit_clicked();
-  addToNote(true);
+
+  isInsertToNote = true;
+  QTimer::singleShot(100, this, SLOT(on_setReceiveShareData()));
 }
 
 QObjectList ReceiveShare::getAllFrame(QObjectList lstUIControls) {
@@ -294,6 +301,22 @@ void ReceiveShare::shareImages(const QString& title,
       jTitle.object<jstring>(), jPathList.object<jstring>(),
       activity.object<jobject>());
 
+#endif
+
+#endif
+}
+
+void ReceiveShare::moveTaskToFront() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
+  QAndroidJniObject m_activity =
+      QAndroidJniObject::fromString("com.x/MyActivity");
+  m_activity.callStaticMethod<void>("com.x/MyActivity", "setMax", "()V");
+#else
+  QJniObject m_activity = QJniObject::fromString("com.x/MyActivity");
+  m_activity.callStaticMethod<void>("com.x/MyActivity", "setMax", "()V");
 #endif
 
 #endif

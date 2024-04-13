@@ -1,6 +1,9 @@
 package com.x;
 
+import org.ini4j.Wini;
+
 import com.x.MyActivity;
+import com.x.NoteEditor;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -70,9 +73,14 @@ import java.util.logging.Logger;
 
 import android.widget.Toast;
 
-public class ShareReceiveActivity extends Activity {
+public class ShareReceiveActivity extends Activity
+        implements View.OnClickListener {
     private TextView tv;
+    private Button btnAddToTodo;
+    private Button btnAppendNote;
+    private Button btnInsertNote;
     public static String strData;
+    private String share_ini = "/storage/emulated/0/.Knot/myshare.ini";
 
     private InternalConfigure internalConfigure;
 
@@ -98,15 +106,33 @@ public class ShareReceiveActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 去除title(App Name)
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_share_receive);
         tv = (TextView) findViewById(R.id.text_info);
         tv.setText("Data processing, please wait...");
+
+        btnAddToTodo = (Button) findViewById(R.id.btnAddToTodo);
+        btnAppendNote = (Button) findViewById(R.id.btnAppendNote);
+        btnInsertNote = (Button) findViewById(R.id.btnInsertNote);
+
+        btnAddToTodo.setOnClickListener(this);
+        btnAppendNote.setOnClickListener(this);
+        btnInsertNote.setOnClickListener(this);
 
         // 获取intent
         Intent intent = getIntent();
         String action = intent.getAction();
         type = intent.getType();
         System.out.println("type=" + type);
+        tv.setText("type=" + type);
+
+        if (type.startsWith("image/")) {
+            btnAddToTodo.setVisibility(View.GONE);
+        }
+
         // 设置接收类型为文本
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
@@ -144,6 +170,88 @@ public class ShareReceiveActivity extends Activity {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnAddToTodo:
+
+                try {
+                    Wini ini = new Wini(new File(share_ini));
+                    ini.put("share", "method", "todo");
+                    ini.store();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                CallJavaNotify_5();
+                onBackPressed();
+                break;
+
+            case R.id.btnAppendNote:
+
+                try {
+                    Wini ini = new Wini(new File(share_ini));
+                    ini.put("share", "method", "appendNote");
+                    ini.store();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                CallJavaNotify_5();
+                onBackPressed();
+                break;
+
+            case R.id.btnInsertNote:
+
+                try {
+                    Wini ini = new Wini(new File(share_ini));
+                    ini.put("share", "method", "insertNote");
+                    ini.store();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                CallJavaNotify_5();
+                onBackPressed();
+                break;
+        }
+    }
+
+    /*
+     * @Override
+     * public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+     * 
+     * }
+     * 
+     * @Override
+     * public void onActivityStarted(Activity activity) {
+     * 
+     * }
+     * 
+     * @Override
+     * public void onActivityResumed(Activity activity) {
+     * 
+     * }
+     * 
+     * @Override
+     * public void onActivityPaused(Activity activity) {
+     * 
+     * }
+     * 
+     * @Override
+     * public void onActivityStopped(Activity activity) {
+     * System.out.println("NoteEditor onActivityStopped...");
+     * }
+     * 
+     * @Override
+     * public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+     * 
+     * }
+     * 
+     * @Override
+     * public void onActivityDestroyed(Activity activity) {
+     * 
+     * }
+     */
+
     // 该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
     public void handlerText(Intent intent) {
         String mainTxt = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -178,12 +286,12 @@ public class ShareReceiveActivity extends Activity {
 
         } else {
             saveReceiveShare("text/plain", strData, "true");
-            MyActivity.setMax();
-            CallJavaNotify_5();
+
+            // CallJavaNotify_5();
 
         }
 
-        ShareReceiveActivity.this.finish();
+        // ShareReceiveActivity.this.finish();
     }
 
     void goReceiveImage() {
@@ -199,27 +307,40 @@ public class ShareReceiveActivity extends Activity {
 
         } else {
             saveReceiveShare("image/*", "", "true");
-            MyActivity.setMax();
-            CallJavaNotify_5();
+
+            // CallJavaNotify_5();
 
         }
-        ShareReceiveActivity.this.finish();
+        // ShareReceiveActivity.this.finish();
     }
 
     void saveReceiveShare(String shareType, String strData, String shareDone) {
-        String file2 = "/storage/emulated/0/.Knot/myshare.ini";
-        internalConfigure = new InternalConfigure(this);
-        Properties myPro = new Properties();
-        myPro.setProperty("shareType", shareType);
-        myPro.setProperty("receiveData", strData);
-        myPro.setProperty("shareDone", shareDone);
-
         try {
-            internalConfigure.saveFile(file2, myPro);
-        } catch (Exception e) {
-            System.err.println("Error : save myshare.ini");
+            Wini ini = new Wini(new File(share_ini));
+
+            ini.put("share", "shareType", shareType);
+            ini.put("share", "shareDone", shareDone);
+            ini.put("share", "receiveData", strData);
+
+            ini.store();
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
+        /*
+         * internalConfigure = new InternalConfigure(this);
+         * Properties myPro = new Properties();
+         * myPro.setProperty("shareType", shareType);
+         * myPro.setProperty("receiveData", strData);
+         * myPro.setProperty("shareDone", shareDone);
+         * 
+         * try {
+         * internalConfigure.saveFile(file2, myPro);
+         * } catch (Exception e) {
+         * System.err.println("Error : save myshare.ini");
+         * e.printStackTrace();
+         * }
+         */
 
     }
 

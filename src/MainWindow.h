@@ -255,7 +255,6 @@ class MainWindow : public QMainWindow {
   QTimer *timerStep;
   QTimer *timerMousePress;
   QTimer *timerSyncData;
-  QTimer *timerReceiveShare;
 
   static void saveData(QTreeWidget *, int);
   static void readData(QTreeWidget *);

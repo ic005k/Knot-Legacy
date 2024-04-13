@@ -138,7 +138,6 @@ import android.os.StrictMode;
 import android.content.pm.ActivityInfo;
 import android.os.Parcelable;
 
-
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
     public static boolean isDark = false;
     private static MyActivity m_instance = null;
@@ -174,6 +173,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public native static void CallJavaNotify_5();
 
     public native static void CallJavaNotify_6();
+
     public native static void CallJavaNotify_7();
 
     private InternalConfigure internalConfigure;
@@ -183,7 +183,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    //------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     public void setStatusBarHide() {
 
     }
@@ -192,7 +192,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    //------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     public void setDark(String strDark) {
         if (strDark.equals("dark_yes"))
@@ -200,11 +200,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         if (strDark.equals("dark_no"))
             isDark = false;
         if (isDark) {
-            this.setStatusBarColor("#19232D");  //深色
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); //白色文字
+            this.setStatusBarColor("#19232D"); // 深色
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); // 白色文字
         } else {
-            this.setStatusBarColor("#F3F3F3");  //灰
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //黑色文字
+            this.setStatusBarColor("#F3F3F3"); // 灰
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 黑色文字
         }
 
         System.out.println("strDark=" + strDark + "    isDark=" + isDark);
@@ -228,8 +228,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
 
-        //定时精度不够
-        //alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+        // 定时精度不够
+        // alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
 
         Log.e("Alarm Manager", c.getTimeInMillis() + "");
         Log.e("Alarm Manager", str);
@@ -252,7 +252,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         return 1;
     }
 
-    //------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     public static int mini() {
         System.out.println("Mini+++++++++++++++++++++++");
         m_instance.moveTaskToBack(true);
@@ -261,24 +261,26 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     }
 
     public static void setMax() {
-        context.startActivity(new Intent(context, MyActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        context.startActivity(new Intent(context,
+                MyActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
     }
 
-    //------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
-
-    //全局获取Context
+    // 全局获取Context
     public static Context getContext() {
         return context;
     }
 
-    //全透状态栏
+    // 全透状态栏
     private void setStatusBarFullTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            //透明状态栏
+            // 透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             // 状态栏字体设置为深色，SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 为SDK23增加
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             // 部分机型的statusbar会有半透明的黑色背景
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -290,14 +292,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     private void setStatusBarColor(String color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-
             // 需要安卓版本大于5.0以上
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(Color.parseColor(color));
         }
     }
 
-    //----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
 
     private Sensor countSensor;
 
@@ -346,7 +347,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             if (SCREEN_ON.equals(intent.getAction())) {
                 if (isStepCounter == 1) {
 
-
                 }
                 isScreenOff = false;
                 CallJavaNotify_2();
@@ -358,7 +358,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                         mSensorManager.unregisterListener(mySerivece);
                     }
 
-
                 }
                 isScreenOff = true;
                 Log.w("Knot", "屏幕熄了");
@@ -366,7 +365,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         }
     }
 
-    //----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
     public void acquireWakeLock() {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mySerivece = new PersistService();
@@ -396,19 +395,19 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    //--------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------
     // 目前正在使用，经过改良，目前能解压所有的epub文件
     public static void Unzip(String zipFile, String targetDir) {
         Log.i(TAG, zipFile);
         Log.i(TAG, targetDir);
 
-        int BUFFER = 1024 * 1024; //这里缓冲区我们使用4KB，
-        String strEntry; //保存每个zip的条目名称
+        int BUFFER = 1024 * 1024; // 这里缓冲区我们使用4KB，
+        String strEntry; // 保存每个zip的条目名称
         try {
-            BufferedOutputStream dest = null; //缓冲输出流
+            BufferedOutputStream dest = null; // 缓冲输出流
             InputStream fis = new FileInputStream(zipFile);
             ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
-            ZipEntry entry; //每个zip条目的实例
+            ZipEntry entry; // 每个zip条目的实例
             while ((entry = zis.getNextEntry()) != null) {
                 try {
                     // 先创建目录，否则有些文件没法解压，比如根目录里面的文件
@@ -452,11 +451,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
      * @param filePath 文件路径
      */
     private static void compressFileToZip(String filePath,
-                                          String zipFilePath) {
+            String zipFilePath) {
         try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFilePath))) {
-            //递归的压缩文件夹和文件
+            // 递归的压缩文件夹和文件
             doCompress("", filePath, zos);
-            //必须
+            // 必须
             zos.finish();
         } catch (Exception e) {
             e.printStackTrace();
@@ -498,18 +497,18 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         return intent.getDataString();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //在onCreate方法这里调用来动态获取权限
+        // 在onCreate方法这里调用来动态获取权限
         verifyStoragePermissions(this);
 
-        //File Watch FileWatcher
+        // File Watch FileWatcher
         if (null == mFileWatcher) {
             mFileWatcher = new FileWatcher("/storage/emulated/0/KnotData/");
-            mFileWatcher.startWatching(); //开始监听
+            mFileWatcher.startWatching(); // 开始监听
         }
 
         if (m_instance != null) {
@@ -532,8 +531,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         m_instance = this;
         Log.d(TAG, "Android activity created");
 
-        //唤醒锁（手机上不推荐使用，其它插电安卓系统可考虑，比如广告机等）
-        //acquireWakeLock();
+        // 唤醒锁（手机上不推荐使用，其它插电安卓系统可考虑，比如广告机等）
+        // acquireWakeLock();
 
         mySerivece = new PersistService();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -542,8 +541,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         registSreenStatusReceiver();
 
-        //状态栏
-        context = getApplicationContext();  // 获取程序句柄
+        // 状态栏
+        context = getApplicationContext(); // 获取程序句柄
         // 设置状态栏颜色,需要安卓版本大于5.0
         String filename = "/storage/emulated/0/.Knot/options.ini";
         internalConfigure = new InternalConfigure(this);
@@ -558,18 +557,19 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         System.out.println("strDark=" + strDark + "    isDark=" + isDark);
 
         if (isDark) {
-            this.setStatusBarColor("#19232D");  //深色
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); //白色文字
+            this.setStatusBarColor("#19232D"); // 深色
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); // 白色文字
         } else {
-            this.setStatusBarColor("#F3F3F3");  //灰
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //黑色文字
+            this.setStatusBarColor("#F3F3F3"); // 灰
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 黑色文字
         }
 
         // 设置状态栏全透明
-        //this.setStatusBarFullTransparent();
+        // this.setStatusBarFullTransparent();
 
         // 控制状态栏显示，在setContentView之前设置全屏的flag
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        // WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
@@ -587,8 +587,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             startService(new Intent(bindIntent));
         }
 
-        //debug
-        //MyService.notify(getApplicationContext(), "Hello!");
+        // debug
+        // MyService.notify(getApplicationContext(), "Hello!");
 
         // 定时闹钟
         alarmCount = 0;
@@ -631,8 +631,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         System.out.println("onStop...");
         super.onStop();
 
-        //目前暂不需要，已采用新方法
-        //QtApplication.invokeDelegate();
+        // 目前暂不需要，已采用新方法
+        // QtApplication.invokeDelegate();
     }
 
     @Override
@@ -640,27 +640,27 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         Log.i(TAG, "Main onDestroy...");
 
         releaseWakeLock();
-        if (null != mFileWatcher) mFileWatcher.stopWatching(); //停止监听
+        if (null != mFileWatcher)
+            mFileWatcher.stopWatching(); // 停止监听
 
-        //让系统自行处理，否则退出时有可能出现崩溃
-        //if(mHomeKeyEvent!=null)
-        //unregisterReceiver(mHomeKeyEvent);
+        // 让系统自行处理，否则退出时有可能出现崩溃
+        // if(mHomeKeyEvent!=null)
+        // unregisterReceiver(mHomeKeyEvent);
 
-        //if(mScreenStatusReceiver!=null)
-        //unregisterReceiver(mScreenStatusReceiver);
+        // if(mScreenStatusReceiver!=null)
+        // unregisterReceiver(mScreenStatusReceiver);
 
         if (ReOpen) {
             openAppFromPackageName("com.x");
             Log.i(TAG, "reopen = done...");
         }
 
-
         android.os.Process.killProcess(android.os.Process.myPid());
 
         super.onDestroy();
 
-        //目前暂不需要，已采用新方法
-        //QtApplication.invokeDelegate();
+        // 目前暂不需要，已采用新方法
+        // QtApplication.invokeDelegate();
     }
 
     @Override
@@ -685,7 +685,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     @Override
     public void onActivityStopped(Activity activity) {
-        //转至后台
+        // 转至后台
         System.out.println("MyActivity onActivityStopped...");
 
     }
@@ -700,12 +700,12 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    //---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
     class PersistService extends Service implements SensorEventListener {
         public BroadcastReceiver mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (mSensorManager != null) {//取消监听后重写监听，以保持后台运行
+                if (mSensorManager != null) {// 取消监听后重写监听，以保持后台运行
                     mSensorManager.unregisterListener(PersistService.this);
                     mSensorManager
                             .registerListener(
@@ -726,7 +726,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         public void onSensorChanged(SensorEvent sensorEvent) {
             // 做个判断传感器类型很重要，这可以过滤掉杂音（比如可能来自其它传感器的值）
             if (sensorEvent.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-                //float[] values = sensorEvent.values;
+                // float[] values = sensorEvent.values;
                 stepCounts = (long) sensorEvent.values[0];
             }
         }
@@ -739,11 +739,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    //--------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
 
     public class PDFView extends WebView {
 
-        public boolean isTop = true, isBottom = false;//用于判断滑动位置
+        public boolean isTop = true, isBottom = false;// 用于判断滑动位置
 
         private final static String PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
 
@@ -780,7 +780,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                 @Override
                 public void onPageFinished(WebView webView, String s) {
                     super.onPageFinished(webView, s);
-                    //滑动监听
+                    // 滑动监听
                     String startSave = "\n" +
                             "document.getElementById(\"viewerContainer\").addEventListener('scroll',function () {\n" +
                             "if(this.scrollHeight-this.scrollTop - this.clientHeight < 50){\n" +
@@ -830,29 +830,28 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             return super.startActionMode(callback);
         }
 
-        //加载本地的pdf
+        // 加载本地的pdf
         public void loadLocalPDF(String path) {
             loadUrl(PDFJS + "file://" + path);
         }
 
-        //加载url的pdf
+        // 加载url的pdf
         public void loadOnlinePDF(String url) {
             loadUrl(PDFJS + url);
         }
     }
 
-
-    //----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
     /*
-This method can parse out the real local file path from a file URI.
-*/
+     * This method can parse out the real local file path from a file URI.
+     */
     public String getUriPath(String uripath) {
         String URL = uripath;
         String str = "None";
         try {
-            //if (Build.VERSION.SDK_INT >= 26) {
+            // if (Build.VERSION.SDK_INT >= 26) {
             str = URLDecoder.decode(URL, "UTF-8");
-            //}
+            // }
         } catch (Exception e) {
             System.err.println("Error : URLDecoder.decode");
             e.printStackTrace();
@@ -864,7 +863,6 @@ This method can parse out the real local file path from a file URI.
         return str;
 
     }
-
 
     private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
         String SYSTEM_REASON = "reason";
@@ -888,7 +886,7 @@ This method can parse out the real local file path from a file URI.
         }
     };
 
-    //---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     static public int copyFile(String srcPath, String FileName) {
 
         Log.i(TAG, "src  " + srcPath);
@@ -899,7 +897,7 @@ This method can parse out the real local file path from a file URI.
             return result;
         }
         File src = new File(srcPath);
-        //File dest = new File("/storage/emulated/0/Download/ " + FileName);
+        // File dest = new File("/storage/emulated/0/Download/ " + FileName);
         File dest = new File(FileName);
         if (dest != null && dest.exists()) {
             dest.delete(); // delete file
@@ -934,7 +932,7 @@ This method can parse out the real local file path from a file URI.
         return result;
     }
 
-    //----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
     public void openKnotBakDir() {
         Uri dir = Uri.parse("/storage/emulated/0/KnotBak/");
         int PICKFILE_RESULT_CODE = 1;
@@ -945,7 +943,7 @@ This method can parse out the real local file path from a file URI.
         startActivityForResult(i, PICKFILE_RESULT_CODE);
     }
 
-    //----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
     public static int getAndroidVer() {
         int a = Build.VERSION.SDK_INT;
 
@@ -1034,17 +1032,17 @@ This method can parse out the real local file path from a file URI.
         Log.i(TAG, "过程完成...");
     }
 
-    //==============================================================================================
-    //动态获取权限需要添加的常量
+    // ==============================================================================================
+    // 动态获取权限需要添加的常量
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             "android.permission.READ_EXTERNAL_STORAGE",
-            "android.permission.WRITE_EXTERNAL_STORAGE"};
+            "android.permission.WRITE_EXTERNAL_STORAGE" };
 
-    //被调用的方法
+    // 被调用的方法
     public static void verifyStoragePermissions(Activity activity) {
         try {
-            //检测是否有写的权限
+            // 检测是否有写的权限
             int permission = ActivityCompat.checkSelfPermission(activity,
                     "android.permission.WRITE_EXTERNAL_STORAGE");
             if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -1056,7 +1054,7 @@ This method can parse out the real local file path from a file URI.
         }
     }
 
-    //==============================================================================================
+    // ==============================================================================================
     public class InternalConfigure {
         private final Context context;
         private Properties properties;
@@ -1071,11 +1069,11 @@ This method can parse out the real local file path from a file URI.
          * 例:configureActivity.saveFiletoSD("text.ini","");
          */
         public void saveFile(String filename, Properties properties) throws Exception {
-            //设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
+            // 设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
             FileOutputStream fileOutputStream;// = context.openFileOutput(filename, Context.MODE_PRIVATE);
             File file = new File(filename);
             fileOutputStream = new FileOutputStream(file);
-            //通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
+            // 通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
             for (String key : properties.stringPropertyNames()) {
                 String s = key + " = " + properties.getProperty(key) + "\n";
                 System.out.println(s);
@@ -1097,10 +1095,10 @@ This method can parse out the real local file path from a file URI.
 
             InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
             BufferedReader br = new BufferedReader(reader);
-            //String line;
-            //while ((line = br.readLine()) != null) {
-            //    System.out.println(line);
-            //}
+            // String line;
+            // while ((line = br.readLine()) != null) {
+            // System.out.println(line);
+            // }
 
             properties.load(br);
 
@@ -1120,8 +1118,7 @@ This method can parse out the real local file path from a file URI.
         }
     }
 
-
-    //==============================================================================================
+    // ==============================================================================================
 
     public class FileWatcher extends FileObserver {
         static final String TAG = "FileWatcher";
@@ -1179,7 +1176,8 @@ This method can parse out the real local file path from a file URI.
             switch (event) {
                 case FileObserver.ACCESS:
                     // Log.i("FileWatcher", "ACCESS: " + path);
-                    if (path.contains("/storage/emulated/0/KnotData//todo.ini") || path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
+                    if (path.contains("/storage/emulated/0/KnotData//todo.ini")
+                            || path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
                         CallJavaNotify_0();
                     break;
                 case FileObserver.ATTRIB:
@@ -1189,7 +1187,7 @@ This method can parse out the real local file path from a file URI.
                     // Log.i("FileWatcher", "CLOSE_NOWRITE: " + path);
                     break;
                 case FileObserver.CLOSE_WRITE:
-                    //Log.i("FileWatcher", "CLOSE_WRITE: " + path);
+                    // Log.i("FileWatcher", "CLOSE_WRITE: " + path);
                     // 文件写入完毕后会回调，可以在这对新写入的文件做操作
 
                     mThreadHandler.post(new Runnable() {
@@ -1201,7 +1199,7 @@ This method can parse out the real local file path from a file URI.
                     });
                     break;
                 case FileObserver.CREATE:
-                    //Log.i(TAG, "CREATE: " + path);
+                    // Log.i(TAG, "CREATE: " + path);
 
                     mThreadHandler.post(new Runnable() {
                         @Override
@@ -1385,14 +1383,13 @@ This method can parse out the real local file path from a file URI.
         }
     }
 
-    //----------------------------------------------------------------------------------------------
-
+    // ----------------------------------------------------------------------------------------------
 
     public void shareString(String title,
-                            String content, QtActivity activity) {
+            String content, QtActivity activity) {
 
         Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("text/plain");//分享字符串
+        share.setType("text/plain");// 分享字符串
         share.putExtra(Intent.EXTRA_TEXT, content);
         activity.startActivity(Intent.createChooser(share, title));
 
@@ -1401,12 +1398,11 @@ This method can parse out the real local file path from a file URI.
     /**
      * 分享功能
      */
-    //分享单张图片
+    // 分享单张图片
     public void shareImage(String title,
-                           String path, String fileType, QtActivity activity) {
+            String path, String fileType, QtActivity activity) {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType(fileType); // "image/png"
-
 
         Uri photoUri;
         if (Build.VERSION.SDK_INT >= 24) {
@@ -1421,10 +1417,10 @@ This method can parse out the real local file path from a file URI.
 
     }
 
-    //分享多张图片
+    // 分享多张图片
     public static void shareImages(String title,
-                                   String imagesPath, QtActivity activity) {
-        String[] pathList = imagesPath.split("\\|"); //由于"|"是转义字符，所以不能直接写 "|"做分割
+            String imagesPath, QtActivity activity) {
+        String[] pathList = imagesPath.split("\\|"); // 由于"|"是转义字符，所以不能直接写 "|"做分割
         ArrayList<Uri> imagesUriList = new ArrayList<Uri>();
         for (int i = 0; i < pathList.length; ++i) {
             File file = new File(pathList[i]);
@@ -1447,6 +1443,4 @@ This method can parse out the real local file path from a file URI.
 
     }
 
-
 }
-
