@@ -112,7 +112,6 @@ public class ShareReceiveActivity extends Activity
 
         setContentView(R.layout.activity_share_receive);
         tv = (TextView) findViewById(R.id.text_info);
-        tv.setText("Data processing, please wait...");
 
         btnAddToTodo = (Button) findViewById(R.id.btnAddToTodo);
         btnAppendNote = (Button) findViewById(R.id.btnAppendNote);
@@ -127,17 +126,19 @@ public class ShareReceiveActivity extends Activity
         String action = intent.getAction();
         type = intent.getType();
         System.out.println("type=" + type);
-        tv.setText("type=" + type);
 
         if (type.startsWith("image/")) {
             btnAddToTodo.setVisibility(View.GONE);
+            btnAppendNote.setEnabled(false);
+            btnInsertNote.setEnabled(false);
         }
 
-        // 设置接收类型为文本
+        // 按接收的内容进行处理
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
                 handlerText(intent);
                 System.out.println("strData=" + strData);
+                tv.setText(type + ":\n\n" + strData);
                 goReceiveString();
             }
 
@@ -601,6 +602,7 @@ public class ShareReceiveActivity extends Activity
         String type = intent.getType();
         if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
             Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            tv.setText(type + ":\n\n" + uri);
             if (uri != null) {
                 try {
                     // 之前的目录存储位置备注：getExternalFilesDir(null).getPath() + File.separator =
@@ -640,6 +642,8 @@ public class ShareReceiveActivity extends Activity
         @Override
         protected void onPostExecute(Void aVoid) {
             // 在这里执行完成后的操作
+            btnAppendNote.setEnabled(true);
+            btnInsertNote.setEnabled(true);
             goReceiveImage();
         }
     }

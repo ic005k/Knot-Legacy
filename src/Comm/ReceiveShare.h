@@ -39,6 +39,11 @@ class ReceiveShare : public QDialog {
 
   void moveTaskToFront();
 
+  int getCursorPos();
+  void setCursorPos(int pos);
+  QString getShareMethod();
+  void goReceiveShare();
+
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
@@ -52,8 +57,6 @@ class ReceiveShare : public QDialog {
  private slots:
 
   void on_btnTest_clicked();
-
-  void on_setReceiveShareData();
 
  private:
   void Close();

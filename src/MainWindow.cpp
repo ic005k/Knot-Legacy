@@ -838,7 +838,7 @@ void MainWindow::on_ReceiveShare() {
   QString shareDone = m_ReceiveShare->getShareDone();
   if (shareDone == "false") {
     m_ReceiveShare->setShareDone("true");
-    m_ReceiveShare->init();
+    mw_one->m_ReceiveShare->goReceiveShare();
   }
 }
 
@@ -4248,23 +4248,7 @@ static void JavaNotify_4() {
 }
 
 static void JavaNotify_5() {
-  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  QString method = Reg.value("/share/method", "").toString();
-  if (method == "todo") {
-    mw_one->m_ReceiveShare->moveTaskToFront();
-    mw_one->m_ReceiveShare->ui->btnAddToTodo->click();
-  }
-
-  if (method == "appendNote") {
-    mw_one->m_ReceiveShare->ui->btnAppendToNote->click();
-  }
-
-  if (method == "insertNote") {
-    mw_one->m_ReceiveShare->ui->btnInsertToNote->click();
-  }
+  mw_one->m_ReceiveShare->goReceiveShare();
 
   qDebug() << "C++ JavaNotify_5";
 }

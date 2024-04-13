@@ -7,6 +7,14 @@
 extern MainWindow* mw_one;
 extern Method* m_Method;
 
+extern QString currentMDFile;
+
+extern int deleteDirfile(QString dirName);
+extern QString loadText(QString textFile);
+extern QString getTextEditLineText(QTextEdit* txtEdit, int i);
+extern void TextEditToFile(QTextEdit* txtEdit, QString fileName);
+extern void StringToFile(QString buffers, QString fileName);
+
 ReceiveShare::ReceiveShare(QWidget* parent)
     : QDialog(parent), ui(new Ui::ReceiveShare) {
   ui->setupUi(this);
@@ -21,8 +29,6 @@ ReceiveShare::ReceiveShare(QWidget* parent)
 }
 
 ReceiveShare::~ReceiveShare() { delete ui; }
-
-void ReceiveShare::on_setReceiveShareData() { addToNote(isInsertToNote); }
 
 void ReceiveShare::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event)
@@ -75,6 +81,33 @@ QString ReceiveShare::getShareString() {
   Reg.setIniCodec("utf-8");
 #endif
   return Reg.value("/share/receiveData", "").toString();
+}
+
+QString ReceiveShare::getShareMethod() {
+  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  QString method = Reg.value("/share/method", "").toString();
+  return method;
+}
+
+int ReceiveShare::getCursorPos() {
+  QSettings Reg("/storage/emulated/0/.Knot/note_text.ini",
+                QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  return Reg.value("/cpos/" + QFileInfo(currentMDFile).baseName(), "").toInt();
+}
+
+void ReceiveShare::setCursorPos(int pos) {
+  QSettings Reg("/storage/emulated/0/.Knot/note_text.ini",
+                QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  Reg.setValue("/cpos/" + QFileInfo(currentMDFile).baseName(), pos);
 }
 
 void ReceiveShare::init() {
@@ -131,46 +164,64 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
 void ReceiveShare::addToNote(bool isInsert) {
   QString imgFile = "/storage/emulated/0/.Knot/receive_share_pic.png";
   strReceiveShareData = getShareString();
+  shareType = getShareType();
+
+  QTextEdit* edit = new QTextEdit;
+  QString strBuffer = loadText(currentMDFile);
+  edit->setPlainText(strBuffer);
+  int curPos = getCursorPos();
+  if (curPos < 0) curPos = 0;
+  if (curPos > strBuffer.length()) curPos = strBuffer.length();
+  QTextCursor tmpCursor = edit->textCursor();
+  tmpCursor.setPosition(curPos);
+  edit->setTextCursor(tmpCursor);
+
   if (isInsert) {
     if (shareType == "text/plain") {
-      mw_one->m_Notes->insertNote(strReceiveShareData);
+      edit->insertPlainText(strReceiveShareData);
     }
     if (shareType == "image/*") {
       QString strImg = mw_one->m_Notes->insertImage(imgFile);
-      mw_one->m_Notes->insertNote(strImg);
+      edit->insertPlainText(strImg);
     }
   } else {
     // append
     if (shareType == "text/plain") {
-      mw_one->m_Notes->appendNote(strReceiveShareData);
+      edit->append(strReceiveShareData);
+      int newPos = strBuffer.length() + strReceiveShareData.length();
+      setCursorPos(newPos);
     }
     if (shareType == "image/*") {
       QString strImg = mw_one->m_Notes->insertImage(imgFile);
-      mw_one->m_Notes->appendNote(strImg);
+      edit->append(strImg);
+      int newPos = strBuffer.length() + strImg.length();
+      setCursorPos(newPos);
     }
   }
+
+  TextEditToFile(edit, currentMDFile);
 
   qDebug() << "strReceiveShareData=" << strReceiveShareData;
 }
 
 void ReceiveShare::on_btnAppendToNote_clicked() {
+  isInsertToNote = false;
+  addToNote(isInsertToNote);
+
   Close();
   closeAllActiveWindows();
   mw_one->on_btnNotes_clicked();
   mw_one->on_btnEdit_clicked();
-
-  isInsertToNote = false;
-  QTimer::singleShot(100, this, SLOT(on_setReceiveShareData()));
 }
 
 void ReceiveShare::on_btnInsertToNote_clicked() {
+  isInsertToNote = true;
+  addToNote(isInsertToNote);
+
   Close();
   closeAllActiveWindows();
   mw_one->on_btnNotes_clicked();
   mw_one->on_btnEdit_clicked();
-
-  isInsertToNote = true;
-  QTimer::singleShot(100, this, SLOT(on_setReceiveShareData()));
 }
 
 QObjectList ReceiveShare::getAllFrame(QObjectList lstUIControls) {
@@ -320,4 +371,20 @@ void ReceiveShare::moveTaskToFront() {
 #endif
 
 #endif
+}
+
+void ReceiveShare::goReceiveShare() {
+  QString method = mw_one->m_ReceiveShare->getShareMethod();
+  if (method == "todo") {
+    moveTaskToFront();
+    ui->btnAddToTodo->click();
+  }
+
+  if (method == "appendNote") {
+    ui->btnAppendToNote->click();
+  }
+
+  if (method == "insertNote") {
+    ui->btnInsertToNote->click();
+  }
 }
