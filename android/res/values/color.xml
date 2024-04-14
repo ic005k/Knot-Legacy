@@ -2,4 +2,5 @@
     <color name="clr_normal">#ff6eff2d</color>
     <color name="clr_pressed">#669966</color>
     <color name="red">#ff0000</color>
+    <color name="normal">#3498DB</color>
 </resources>

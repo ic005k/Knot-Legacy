@@ -117,6 +117,17 @@ public class ShareReceiveActivity extends Activity
         btnAppendNote = (Button) findViewById(R.id.btnAppendNote);
         btnInsertNote = (Button) findViewById(R.id.btnInsertNote);
 
+        if (NoteEditor.zh_cn) {
+            btnAddToTodo.setText("增加到待办事项");
+            btnAppendNote.setText("追加到当前笔记");
+            btnInsertNote.setText("插入到当前笔记");
+        } else {
+            btnAddToTodo.setText("Add to Todo");
+            btnAppendNote.setText("Append to Current Note");
+            btnInsertNote.setText("Insert to Current Note");
+
+        }
+
         btnAddToTodo.setOnClickListener(this);
         btnAppendNote.setOnClickListener(this);
         btnInsertNote.setOnClickListener(this);

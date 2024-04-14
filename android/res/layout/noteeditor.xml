@@ -25,14 +25,24 @@
         />
 
         <Button
-            android:id="@+id/btnInsertImg"
+            android:id="@+id/btnUndo"
             android:textAllCaps="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#3498DB"
             android:textColor="#FFFFFF"
             android:layout_weight="1"
-            android:text="Insert Img" />
+            android:text="Undo" />
+
+        <Button
+            android:id="@+id/btnRedo"
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#3498DB"
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:text="Redo" />
 
         <Button
             android:id="@+id/btnMenu"

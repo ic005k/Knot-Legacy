@@ -84,10 +84,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private InternalConfigure internalConfigure;
 
     private Button btn_cancel;
-    private Button btnInsertImg;
+    private Button btnUndo;
+    private Button btnRedo;
     private Button btnMenu;
     public static EditText editNote;
-    private static boolean zh_cn;
+
+    public static boolean zh_cn;
     private String currentMDFile;
     private static Context context;
     private static NoteEditor m_instance;
@@ -137,20 +139,24 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         editNote.setText(str);
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
-        btnInsertImg = (Button) findViewById(R.id.btnInsertImg);
+        btnUndo = (Button) findViewById(R.id.btnUndo);
+        btnRedo = (Button) findViewById(R.id.btnRedo);
         btnMenu = (Button) findViewById(R.id.btnMenu);
 
         if (zh_cn) {
             btn_cancel.setText("关闭");
-            btnInsertImg.setText("插入图片");
+            btnUndo.setText("撤销");
+            btnRedo.setText("恢复");
             btnMenu.setText("快捷输入");
         } else {
             btn_cancel.setText("Close");
-            btnInsertImg.setText("Insert Img");
+            btnUndo.setText("Undo");
+            btnRedo.setText("Redo");
             btnMenu.setText("Quick Input");
         }
         btn_cancel.setOnClickListener(this);
-        btnInsertImg.setOnClickListener(this);
+        btnUndo.setOnClickListener(this);
+        btnRedo.setOnClickListener(this);
         btnMenu.setOnClickListener(this);
 
     }
@@ -159,14 +165,25 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_cancel:
+                btn_cancel.setBackgroundColor(getResources().getColor(R.color.red));
                 onBackPressed();
                 break;
 
-            case R.id.btnInsertImg:
-                openFilePicker();
+            case R.id.btnUndo:
+                btnUndo.setBackgroundColor(getResources().getColor(R.color.red));
+
+                btnUndo.setBackgroundColor(getResources().getColor(R.color.normal));
+                break;
+
+            case R.id.btnRedo:
+                btnRedo.setBackgroundColor(getResources().getColor(R.color.red));
+
+                btnUndo.setBackgroundColor(getResources().getColor(R.color.normal));
+
                 break;
 
             case R.id.btnMenu:
+                btnMenu.setBackgroundColor(getResources().getColor(R.color.red));
                 showPopupMenu(btnMenu);
                 break;
         }
@@ -198,7 +215,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        // 去掉Activity上面的状态栏(Show Time...)
+        // 去掉Activity上面的状态栏(全屏显示)
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         // WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -579,18 +596,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         String mPath = "/storage/emulated/0/.Knot/";
         writeTxtToFile(mContent, mPath, "note_text.txt");
 
-        /*
-         * internalConfigure = new InternalConfigure(this);
-         * Properties myPro = new Properties();
-         * myPro.put(currentMDFile, String.valueOf(cpos));
-         * try {
-         * internalConfigure.saveFile(file2, myPro);
-         * } catch (Exception e) {
-         * System.err.println("Error : save note_text.ini");
-         * e.printStackTrace();
-         * }
-         */
-
         CallJavaNotify_6();
     }
 
@@ -898,6 +903,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         break;
 
                 }
+                if (item.getTitle().equals("Image"))
+                    openFilePicker();
 
                 if (item.getTitle().equals("Table")) {
 
@@ -969,6 +976,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
             @Override
             public void onDismiss(PopupMenu menu) {
+                btnMenu.setBackgroundColor(getResources().getColor(R.color.normal));
+
                 // Toast.makeText(getApplicationContext(), "关闭PopupMenu",
                 // Toast.LENGTH_SHORT).show();
             }
