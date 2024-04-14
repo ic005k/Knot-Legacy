@@ -1,6 +1,7 @@
 package com.x;
 
 import com.x.MyActivity;
+import com.x.TextViewUndoRedo;
 
 // 读写ini文件的三方开源库
 import org.ini4j.Wini;
@@ -94,6 +95,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private static Context context;
     private static NoteEditor m_instance;
     private static boolean isTextChanged = false;
+    private TextViewUndoRedo helper;
 
     public static Context getContext() {
         return context;
@@ -137,6 +139,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private void bindViews(String str) {
         editNote = (EditText) findViewById(R.id.editNote);
         editNote.setText(str);
+        // pass edittext object to TextViewUndoRedo class
+        helper = new TextViewUndoRedo(editNote);
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         btnUndo = (Button) findViewById(R.id.btnUndo);
@@ -171,13 +175,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             case R.id.btnUndo:
                 btnUndo.setBackgroundColor(getResources().getColor(R.color.red));
-
+                helper.undo(); // perform undo
                 btnUndo.setBackgroundColor(getResources().getColor(R.color.normal));
                 break;
 
             case R.id.btnRedo:
                 btnRedo.setBackgroundColor(getResources().getColor(R.color.red));
-
+                helper.redo(); // perform redo
                 btnRedo.setBackgroundColor(getResources().getColor(R.color.normal));
 
                 break;
@@ -205,7 +209,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // this.getWindow().setWindowAnimations(R.style.WindowAnim);
         isZh(context);
         m_instance = this;
-       
+
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
 
@@ -319,8 +323,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         int index = editNote.getSelectionStart();
         String strLeft = getCursorPositionText(index, -5);
         String strRight = getCursorPositionText(index, 5);
-        String cursorText = String.valueOf(cpos) + "   " + "\"" + strLeft +
-                "|" + strRight + "\"";
+        String cursorText = String.valueOf(cpos) + "   (" + "\"" + strLeft +
+                "|" + strRight + "\"" + ")";
 
         String mPath = "/storage/emulated/0/.Knot/";
         writeTxtToFile(cursorText, mPath, "cursor_text.txt");
@@ -445,25 +449,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             e.printStackTrace();
             return false;
         }
-    }
-
-    public String readText(String filename) throws Exception {
-        FileInputStream fileInputStream;
-        File file = new File(filename);
-        fileInputStream = new FileInputStream(file);
-
-        InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
-        BufferedReader br = new BufferedReader(reader);
-        String line = br.readLine();
-        // while ((line = br.readLine()) != null) {
-        // System.out.println(line);
-        // }
-
-        br.close();
-        reader.close();
-        fileInputStream.close();
-
-        return line;
     }
 
     private void setStatusBarColor(String color) {

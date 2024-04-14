@@ -4,7 +4,8 @@
     android:installLocation="auto"
     android:versionCode="1"
     android:versionName="1.1.68">
-    <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
+    <!-- The following comment will be replaced upon deployment with default permissions based on
+    the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
@@ -26,7 +27,8 @@
     <uses-permission android:name="android.permission.DEVICE_POWER" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-    <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
+    <!-- The following comment will be replaced upon deployment with default features based on the
+    dependencies of the application.
          Remove the comment if you do not require these default features. -->
 
 
@@ -64,7 +66,8 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="Knot" />
-            <!-- meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/ -->
+            <!-- meta-data android:name="android.app.qt_sources_resource_id"
+            android:resource="@array/qt_sources"/ -->
             <meta-data
                 android:name="android.app.repository"
                 android:value="default" />
@@ -95,7 +98,8 @@
                 android:name="android.app.static_init_classes"
                 android:value="" />
             <!-- Used to specify custom system library path to run with local system libs -->
-            <!-- <meta-data android:name="android.app.system_libs_prefix" android:value="/system/lib/"/> -->
+            <!-- <meta-data android:name="android.app.system_libs_prefix"
+            android:value="/system/lib/"/> -->
             <!--  Messages maps -->
             <meta-data
                 android:name="android.app.fatal_error_msg"
@@ -120,7 +124,8 @@
             <!-- auto screen scale factor -->
             <!-- extract android style -->
             <!-- available android:values :
-                * default - In most cases this will be the same as "full", but it can also be something else if needed, e.g., for compatibility reasons
+                * default - In most cases this will be the same as "full", but it can also be something else if
+            needed, e.g., for compatibility reasons
                 * full - useful QWidget & Quick Controls 1 apps
                 * minimal - useful for Quick Controls 2 apps, it is much faster than "full"
                 * none - useful for apps that don't use any of the above Qt modules

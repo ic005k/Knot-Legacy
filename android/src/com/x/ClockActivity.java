@@ -433,25 +433,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         }
     }
 
-    public String readText(String filename) throws Exception {
-        FileInputStream fileInputStream;
-        File file = new File(filename);
-        fileInputStream = new FileInputStream(file);
-
-        InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
-        BufferedReader br = new BufferedReader(reader);
-        String line = br.readLine();
-        // while ((line = br.readLine()) != null) {
-        // System.out.println(line);
-        // }
-
-        br.close();
-        reader.close();
-        fileInputStream.close();
-
-        return line;
-    }
-
     // 获取最大多媒体音量
     public int getMediaMaxVolume() {
         return mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);

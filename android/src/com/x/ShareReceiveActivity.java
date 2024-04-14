@@ -139,7 +139,7 @@ public class ShareReceiveActivity extends Activity
         btnInsertNote.setOnClickListener(this);
 
         String file2 = "/storage/emulated/0/.Knot/cursor_text.txt";
-        cursorText = readText(file2);
+        cursorText = readFile(file2);
 
         // 获取intent
         Intent intent = getIntent();
@@ -731,28 +731,26 @@ public class ShareReceiveActivity extends Activity
         return zh_cn;
     }
 
-    public String readText(String filename) {
+    public String readFile(String fileName) {
+        StringBuilder sb = new StringBuilder("");
         try {
-            FileInputStream fileInputStream;
-            File file = new File(filename);
-            fileInputStream = new FileInputStream(file);
-
-            InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
-            BufferedReader br = new BufferedReader(reader);
-            String line = br.readLine();
-            // while ((line = br.readLine()) != null) {
-            // System.out.println(line);
-            // }
-
-            br.close();
-            reader.close();
-            fileInputStream.close();
-
-            return line;
-        } catch (IOException e) {
-            e.printStackTrace();
+            File file = new File(fileName);
+            // 打开文件输入流
+            FileInputStream inputStream = new FileInputStream(file);
+            byte[] buffer = new byte[1024];
+            int len = inputStream.read(buffer);
+            // 读取文件内容
+            while (len > 0) {
+                sb.append(new String(buffer, 0, len));
+                // 继续将数据放到buffer中
+                len = inputStream.read(buffer);
+            }
+            // 关闭输入流
+            inputStream.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        return null;
+        return sb.toString();
     }
 
 }
