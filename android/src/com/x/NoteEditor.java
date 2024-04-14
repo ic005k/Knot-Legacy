@@ -178,7 +178,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             case R.id.btnRedo:
                 btnRedo.setBackgroundColor(getResources().getColor(R.color.red));
 
-                btnUndo.setBackgroundColor(getResources().getColor(R.color.normal));
+                btnRedo.setBackgroundColor(getResources().getColor(R.color.normal));
 
                 break;
 
@@ -205,7 +205,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // this.getWindow().setWindowAnimations(R.style.WindowAnim);
         isZh(context);
         m_instance = this;
-        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+       
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
 
@@ -315,6 +315,16 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // save cursor pos
         String file2 = "/storage/emulated/0/.Knot/note_text.ini";
         int cpos = editNote.getSelectionStart();
+
+        int index = editNote.getSelectionStart();
+        String strLeft = getCursorPositionText(index, -5);
+        String strRight = getCursorPositionText(index, 5);
+        String cursorText = String.valueOf(cpos) + "   " + "\"" + strLeft +
+                "|" + strRight + "\"";
+
+        String mPath = "/storage/emulated/0/.Knot/";
+        writeTxtToFile(cursorText, mPath, "cursor_text.txt");
+
         try {
             File file = new File(file2);
             if (!file.exists())
@@ -530,11 +540,17 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         String mContent = content + "\r\n";
         try {
             File file = new File(mFilePath);
-            if (!file.exists()) {
-                System.out.println("创建文件: " + mFilePath);
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-            }
+
+            // 每次都按新文本写
+            if (file.exists())
+                file.delete();
+
+            // if (!file.exists()) {
+            System.out.println("创建文件: " + mFilePath);
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+            // }
+
             RandomAccessFile mRandomAccessFile = new RandomAccessFile(file, "rwd");
             mRandomAccessFile.seek(file.length());
             mRandomAccessFile.write(mContent.getBytes());
@@ -573,8 +589,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     public static void appendNote(String str) {
-        editNote.append("\n\n");
-        editNote.append(str);
+        Editable edit = editNote.getEditableText();
+        edit.append("\n\n");
+        edit.append(str);
 
     }
 
@@ -1026,6 +1043,40 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         int end = editNote.getSelectionEnd();
         Editable editable = editNote.getText();
         editable.delete(beg, end);
+    }
+
+    public String getCursorPositionText(int index, int count) {
+        String sel = null;
+        String mContent = editNote.getText().toString();
+        int nLength = mContent.length();
+        int beg = 0;
+        int end = 0;
+        if (mContent != null) {
+
+            // left
+            if (count < 0) {
+                beg = index + count;
+                end = index;
+            } else {
+                // right
+                beg = index;
+                end = index + count;
+            }
+
+            if (end < 0) {
+                end = 0;
+            }
+
+            if (end >= nLength)
+                end = nLength - 1;
+
+            System.out.println("beg=" + beg + "  end=" + end);
+            editNote.setSelection(beg, end);
+
+            return getEditSelectText();
+        }
+        return sel;
+
     }
 
 }

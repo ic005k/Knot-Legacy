@@ -83,6 +83,7 @@ public class ShareReceiveActivity extends Activity
     private String share_ini = "/storage/emulated/0/.Knot/myshare.ini";
 
     private InternalConfigure internalConfigure;
+    private static Context context;
 
     public native static void CallJavaNotify_0();
 
@@ -102,10 +103,14 @@ public class ShareReceiveActivity extends Activity
 
     private MyFileObserver fileObserver;
     private String type;
+    private static boolean zh_cn;
+    private String cursorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = getApplicationContext();
 
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -117,6 +122,7 @@ public class ShareReceiveActivity extends Activity
         btnAppendNote = (Button) findViewById(R.id.btnAppendNote);
         btnInsertNote = (Button) findViewById(R.id.btnInsertNote);
 
+        zh_cn = isZh(context);
         if (NoteEditor.zh_cn) {
             btnAddToTodo.setText("增加到待办事项");
             btnAppendNote.setText("追加到当前笔记");
@@ -131,6 +137,9 @@ public class ShareReceiveActivity extends Activity
         btnAddToTodo.setOnClickListener(this);
         btnAppendNote.setOnClickListener(this);
         btnInsertNote.setOnClickListener(this);
+
+        String file2 = "/storage/emulated/0/.Knot/cursor_text.txt";
+        cursorText = readText(file2);
 
         // 获取intent
         Intent intent = getIntent();
@@ -149,7 +158,7 @@ public class ShareReceiveActivity extends Activity
             if ("text/plain".equals(type)) {
                 handlerText(intent);
                 System.out.println("strData=" + strData);
-                tv.setText(type + ":\n\n" + strData);
+                tv.setText(type + ":\n\n" + "cursor pos: " + cursorText + "\n\n" + strData);
 
             }
 
@@ -176,7 +185,35 @@ public class ShareReceiveActivity extends Activity
             }
         }
 
+        // HomeKey
+        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
     }
+
+    private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
+        String SYSTEM_REASON = "reason";
+        String SYSTEM_HOME_KEY = "homekey";
+        String SYSTEM_HOME_KEY_LONG = "recentapps";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_REASON);
+                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
+                    // 表示按了home键,程序直接进入到后台
+                    System.out.println("NoteEditor HOME键被按下...");
+
+                    onBackPressed();
+                } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
+                    // 表示长按home键,显示最近使用的程序
+                    System.out.println("NoteEditor 长按HOME键...");
+
+                    onBackPressed();
+                }
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -393,12 +430,9 @@ public class ShareReceiveActivity extends Activity
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
-
+        unregisterReceiver(mHomeKeyEvent);
         // android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
-
-        // if (type.equals("image/"))
-        // fileObserver.stopWatching();
 
     }
 
@@ -640,7 +674,7 @@ public class ShareReceiveActivity extends Activity
         String type = intent.getType();
         if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
             Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-            tv.setText(type + ":\n\n" + uri);
+            tv.setText(type + ":\n\n" + "cursor pos: " + cursorText + "\n\n" + uri);
             if (uri != null) {
                 try {
                     // 之前的目录存储位置备注：getExternalFilesDir(null).getPath() + File.separator =
@@ -686,6 +720,39 @@ public class ShareReceiveActivity extends Activity
         }
     }
 
-    // 在需要执行的地方调用
+    public static boolean isZh(Context context) {
+        Locale locale = context.getResources().getConfiguration().locale;
+        String language = locale.getLanguage();
+        if (language.endsWith("zh"))
+            zh_cn = true;
+        else
+            zh_cn = false;
+
+        return zh_cn;
+    }
+
+    public String readText(String filename) {
+        try {
+            FileInputStream fileInputStream;
+            File file = new File(filename);
+            fileInputStream = new FileInputStream(file);
+
+            InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
+            BufferedReader br = new BufferedReader(reader);
+            String line = br.readLine();
+            // while ((line = br.readLine()) != null) {
+            // System.out.println(line);
+            // }
+
+            br.close();
+            reader.close();
+            fileInputStream.close();
+
+            return line;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

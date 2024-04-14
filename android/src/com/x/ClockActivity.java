@@ -83,6 +83,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public native static void CallJavaNotify_5();
 
     public native static void CallJavaNotify_6();
+
     public native static void CallJavaNotify_7();
 
     private static boolean isGoBackKnot = false;
@@ -132,7 +133,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
     private void AnimationWhenClosed() {
         // 淡出效果
-        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        // overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         // 或者使用底部滑出效果(自定义文件exit_anim.xml)
         overridePendingTransition(0, R.anim.exit_anim);
@@ -142,10 +143,10 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
-        //this.getWindow().setWindowAnimations(R.style.WindowAnim);
+        // this.getWindow().setWindowAnimations(R.style.WindowAnim);
         isZh(context);
         m_instance = this;
-        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
         mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
@@ -161,14 +162,16 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
             e.printStackTrace();
         }
 
-        //去除title(App Name)
+        // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //去掉Activity上面的状态栏(Show Time...)
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        this.setStatusBarColor("#F3F3F3");  //灰
+        // 去掉Activity上面的状态栏(Show Time...)
+        // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        // WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.setStatusBarColor("#F3F3F3"); // 灰
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-        //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        // SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss
+        // z");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         String strCurDT0 = formatter.format(date);
@@ -228,19 +231,22 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         else
             strTodo = "Todo: ";
 
-        //显示一个警报框，目前已弃用，采用全屏幕显示
-        /*new AlertDialog.Builder(ClockActivity.this).setTitle(str1).setMessage(str2 + "\n\n\n" + strCurDT)
-                .setPositiveButton(str3, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (strMute.equals("false")) {
-                            mediaPlayer.stop();
-                        }
-
-                        ClockActivity.this.finish();
-                    }
-                }).show();*/
-
+        // 显示一个警报框，目前已弃用，采用全屏幕显示
+        /*
+         * new AlertDialog.Builder(ClockActivity.this).setTitle(str1).setMessage(str2 +
+         * "\n\n\n" + strCurDT)
+         * .setPositiveButton(str3, new DialogInterface.OnClickListener() {
+         * 
+         * @Override
+         * public void onClick(DialogInterface dialog, int which) {
+         * if (strMute.equals("false")) {
+         * mediaPlayer.stop();
+         * }
+         * 
+         * ClockActivity.this.finish();
+         * }
+         * }).show();
+         */
 
         setContentView(R.layout.activity_clock);
         bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT);
@@ -360,11 +366,11 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
          * 例:configureActivity.saveFiletoSD("text.ini","");
          */
         public void saveFile(String filename, Properties properties) throws Exception {
-            //设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
+            // 设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
             FileOutputStream fileOutputStream;// = context.openFileOutput(filename, Context.MODE_PRIVATE);
             File file = new File(filename);
             fileOutputStream = new FileOutputStream(file);
-            //通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
+            // 通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
             for (String key : properties.stringPropertyNames()) {
                 String s = key + " = " + properties.getProperty(key) + "\n";
                 System.out.println(s);
@@ -386,10 +392,10 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
             InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
             BufferedReader br = new BufferedReader(reader);
-            //String line;
-            //while ((line = br.readLine()) != null) {
-            //    System.out.println(line);
-            //}
+            // String line;
+            // while ((line = br.readLine()) != null) {
+            // System.out.println(line);
+            // }
 
             properties.load(br);
 
@@ -409,7 +415,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         }
     }
 
-    //fileName 为文件名称 返回true为存在
+    // fileName 为文件名称 返回true为存在
     public boolean fileIsExists(String fileName) {
         try {
             File f = new File(fileName);
@@ -435,9 +441,9 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
         BufferedReader br = new BufferedReader(reader);
         String line = br.readLine();
-        //while ((line = br.readLine()) != null) {
-        //    System.out.println(line);
-        //}
+        // while ((line = br.readLine()) != null) {
+        // System.out.println(line);
+        // }
 
         br.close();
         reader.close();
@@ -446,19 +452,19 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         return line;
     }
 
-    //获取最大多媒体音量
+    // 获取最大多媒体音量
     public int getMediaMaxVolume() {
         return mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 
-    //获取当前多媒体音量
+    // 获取当前多媒体音量
     public int getMediaVolume() {
         return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
     // 设置多媒体音量
     public void setMediaVolume(int volume) {
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, //音量类型
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, // 音量类型
                 volume,
                 AudioManager.FLAG_PLAY_SOUND
                         | AudioManager.FLAG_SHOW_UI);
