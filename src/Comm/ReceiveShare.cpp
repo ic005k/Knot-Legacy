@@ -7,7 +7,7 @@
 extern MainWindow* mw_one;
 extern Method* m_Method;
 
-extern QString currentMDFile;
+extern QString currentMDFile, privateDir;
 
 extern int deleteDirfile(QString dirName);
 extern QString loadText(QString textFile);
@@ -161,31 +161,34 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
   }
 }
 
-void ReceiveShare::addToNote_Java(bool isInsert) {
+QString ReceiveShare::addToNote_Java() {
   QString imgFile = "/storage/emulated/0/.Knot/receive_share_pic.png";
   strReceiveShareData = getShareString();
   shareType = getShareType();
+  QString strData;
 
-  if (isInsert) {
-    if (shareType == "text/plain") {
-      mw_one->m_Notes->insertNote(strReceiveShareData);
-    }
-    if (shareType == "image/*") {
-      QString strImg = mw_one->m_Notes->insertImage(imgFile);
-      mw_one->m_Notes->insertNote(strImg);
-    }
-  } else {
-    // append
-    if (shareType == "text/plain") {
-      mw_one->m_Notes->appendNote(strReceiveShareData);
-    }
-    if (shareType == "image/*") {
-      QString strImg = mw_one->m_Notes->insertImage(imgFile);
-      mw_one->m_Notes->appendNote(strImg);
-    }
+  if (shareType == "text/plain") {
+    strData = strReceiveShareData;
+  }
+
+  if (shareType == "image/*") {
+    QString strImg = mw_one->m_Notes->insertImage(imgFile);
+    strData = strImg;
   }
 
   qDebug() << "strReceiveShareData=" << strReceiveShareData;
+  StringToFile(strData, privateDir + "share_text.txt");
+
+  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  if (isInsertToNote)
+    Reg.setValue("/share/on_create", "insert");
+  else
+    Reg.setValue("/share/on_create", "append");
+
+  return strData;
 }
 
 void ReceiveShare::addToNote(bool isInsert) {
@@ -243,13 +246,13 @@ void ReceiveShare::on_btnAppendToNote_clicked() {
   }
 
   if (nMethod == 2) {
+    isInsertToNote = false;
+    addToNote_Java();
+
     Close();
     closeAllActiveWindows();
     mw_one->on_btnNotes_clicked();
     mw_one->on_btnEdit_clicked();
-
-    isInsertToNote = false;
-    addToNote_Java(isInsertToNote);
   }
 }
 
@@ -265,13 +268,13 @@ void ReceiveShare::on_btnInsertToNote_clicked() {
   }
 
   if (nMethod == 2) {
+    isInsertToNote = true;
+    addToNote_Java();
+
     Close();
     closeAllActiveWindows();
     mw_one->on_btnNotes_clicked();
     mw_one->on_btnEdit_clicked();
-
-    isInsertToNote = true;
-    addToNote_Java(isInsertToNote);
   }
 }
 

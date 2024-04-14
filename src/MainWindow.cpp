@@ -4261,8 +4261,7 @@ static void JavaNotify_6() {
   mw_one->m_Notes->MD2Html(currentMDFile);
   mw_one->m_Notes->loadMemoQML();
 
-  qDebug() << "C++ JavaNotify_6"
-           << "    mdString=" + mdString;
+  qDebug() << "C++ JavaNotify_6";
 }
 
 static void JavaNotify_7() {

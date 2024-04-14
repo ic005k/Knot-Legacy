@@ -59,12 +59,12 @@ class ReceiveShare : public QDialog {
   void on_btnTest_clicked();
 
  private:
-  int nMethod = 1;
+  int nMethod = 2;
   void Close();
   void addToNote(bool isInsert);
 
   bool isInsertToNote;
-  void addToNote_Java(bool isInsert);
+  QString addToNote_Java();
 };
 
 #endif  // RECEIVESHARE_H

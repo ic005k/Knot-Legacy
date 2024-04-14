@@ -1120,7 +1120,7 @@ bool Notes::eventFilterQwNote(QObject *watch, QEvent *event) {
     }
 
     if (event->type() == QEvent::MouseMove) {
-      isMouseMove = true;
+      if (isMousePress) isMouseMove = true;
     }
 
     if (event->type() == QEvent::MouseButtonRelease) {
@@ -1657,6 +1657,7 @@ void Notes::appendNote(QString str) {
 }
 
 void Notes::insertNote(QString str) {
+  Q_UNUSED(str);
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

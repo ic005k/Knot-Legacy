@@ -267,6 +267,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         isTextChanged = false;
         initEditNote();
+        writeReceiveData();
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
@@ -564,6 +565,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         Editable edit = editNote.getEditableText();
         edit.append("\n\n");
         edit.append(str);
+        int cpos = editNote.getText().length();
+        editNote.setSelection(cpos);
 
     }
 
@@ -1047,6 +1050,39 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         editNote.setSelection(beg, end);
 
         return getEditSelectText();
+
+    }
+
+    private void writeReceiveData() {
+        String strFlag = null;
+        String filename = "/storage/emulated/0/.Knot/myshare.ini";
+        try {
+            Wini ini = new Wini(new File(filename));
+            strFlag = ini.get("share", "on_create");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (strFlag.length() > 0) {
+            try {
+                Wini ini = new Wini(new File(filename));
+                ini.put("share", "on_create", "");
+                ini.store();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            filename = "/storage/emulated/0/.Knot/share_text.txt";
+            String str_receive = readTextFile(filename);
+            if (strFlag.equals("insert")) {
+                insertNote(str_receive);
+            }
+
+            if (strFlag.equals("append")) {
+                appendNote(str_receive);
+            }
+        }
 
     }
 
