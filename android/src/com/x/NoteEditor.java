@@ -214,7 +214,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         application.registerActivityLifecycleCallbacks(this);
 
         String filename = "/storage/emulated/0/.Knot/mymd.txt";
-        strInfo = readFile(filename);
+        strInfo = readTextFile(filename);
 
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -326,8 +326,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         String cursorText = String.valueOf(cpos) + "   (" + "\"" + strLeft +
                 "|" + strRight + "\"" + ")";
 
-        String mPath = "/storage/emulated/0/.Knot/";
-        writeTxtToFile(cursorText, mPath, "cursor_text.txt");
+        String mPath = "/storage/emulated/0/.Knot/cursor_text.txt";
+        writeTextFile(cursorText, mPath);
 
         try {
             File file = new File(file2);
@@ -494,54 +494,41 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
-    public String readFile(String fileName) {
-        StringBuilder sb = new StringBuilder("");
+    public String readTextFile(String filename) {
         try {
-            File file = new File(fileName);
-            // 打开文件输入流
-            FileInputStream inputStream = new FileInputStream(file);
-            byte[] buffer = new byte[1024];
-            int len = inputStream.read(buffer);
-            // 读取文件内容
-            while (len > 0) {
-                sb.append(new String(buffer, 0, len));
-                // 继续将数据放到buffer中
-                len = inputStream.read(buffer);
+            File file = new File(filename);
+            StringBuffer strBuf = new StringBuffer();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            int tempchar;
+            while ((tempchar = bufferedReader.read()) != -1) {
+                strBuf.append((char) tempchar);
             }
-            // 关闭输入流
-            inputStream.close();
+            bufferedReader.close();
+            return strBuf.toString();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return sb.toString();
+        return null;
     }
 
-    // 将字符串写入到文本文件中
-    public void writeTxtToFile(String content, String filePath, String fileName) {
-        // 生成文件夹之后，再生成文件，不然会出错
-        makeFile(filePath, fileName);
-        String mFilePath = filePath + fileName;
-        // 每次写入时，都换行写
-        String mContent = content + "\r\n";
+    public void writeTextFile(String content, String filename) {
         try {
-            File file = new File(mFilePath);
+            File file = new File(filename);
 
-            // 每次都按新文本写
-            if (file.exists())
+            if (file.exists()) {
                 file.delete();
-
-            // if (!file.exists()) {
-            System.out.println("创建文件: " + mFilePath);
-            file.getParentFile().mkdirs();
+            }
             file.createNewFile();
-            // }
-
-            RandomAccessFile mRandomAccessFile = new RandomAccessFile(file, "rwd");
-            mRandomAccessFile.seek(file.length());
-            mRandomAccessFile.write(mContent.getBytes());
-            mRandomAccessFile.close();
-        } catch (IOException e) {
-            System.out.println("写入错误: " + e.toString());
+            // 获取该文件的缓冲输出流
+            BufferedWriter bufferedWriter = new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+            // 写入信息
+            bufferedWriter.write(content);
+            bufferedWriter.flush();// 清空缓冲区
+            bufferedWriter.close();// 关闭输出流
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -596,7 +583,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // save current text
         String mContent = editNote.getText().toString();
         String mPath = "/storage/emulated/0/.Knot/";
-        writeTxtToFile(mContent, mPath, "note_text.txt");
+        String filename = mPath + "note_text.txt";
+        writeTextFile(mContent, filename);
 
         CallJavaNotify_6();
     }
@@ -1031,36 +1019,34 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     public String getCursorPositionText(int index, int count) {
-        String sel = null;
-        String mContent = editNote.getText().toString();
-        int nLength = mContent.length();
+        int nLength = editNote.getText().length();
         int beg = 0;
         int end = 0;
-        if (mContent != null) {
 
-            // left
-            if (count < 0) {
-                beg = index + count;
-                end = index;
-            } else {
-                // right
-                beg = index;
-                end = index + count;
-            }
-
-            if (end < 0) {
-                end = 0;
-            }
-
-            if (end >= nLength)
-                end = nLength - 1;
-
-            System.out.println("beg=" + beg + "  end=" + end);
-            editNote.setSelection(beg, end);
-
-            return getEditSelectText();
+        // left
+        if (count < 0) {
+            beg = index + count;
+            end = index;
+        } else {
+            // right
+            beg = index;
+            end = index + count;
         }
-        return sel;
+
+        if (beg < 0)
+            beg = 0;
+
+        if (end < 0) {
+            end = 0;
+        }
+
+        if (end > nLength)
+            end = nLength;
+
+        System.out.println("beg=" + beg + "  end=" + end);
+        editNote.setSelection(beg, end);
+
+        return getEditSelectText();
 
     }
 

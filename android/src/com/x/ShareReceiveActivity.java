@@ -147,6 +147,8 @@ public class ShareReceiveActivity extends Activity
         type = intent.getType();
         System.out.println("type=" + type);
 
+        tv.setText(type + " :\n\n Sorry, this feature is not currently supported.");
+
         if (type.startsWith("image/")) {
             btnAddToTodo.setVisibility(View.GONE);
             btnAppendNote.setEnabled(false);
@@ -160,22 +162,23 @@ public class ShareReceiveActivity extends Activity
                 System.out.println("strData=" + strData);
                 tv.setText(type + ":\n\n" + "cursor pos: " + cursorText + "\n\n" + strData);
 
-            }
+            } else
+
+            if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+                Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
+                if (type.startsWith("image/")) {
+                    tv.setText("image/* : multiple");
+                    dealMultiplePicStream(intent);
+
+                }
+                ShareReceiveActivity.this.finish();
+            } else
 
             if (type.startsWith("image/")) {
                 MyAsyncTask myAsyncTask = new MyAsyncTask();
                 myAsyncTask.execute();
 
-            }
-
-            if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
-                Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
-                if (type.startsWith("image/")) {
-                    dealMultiplePicStream(intent);
-
-                }
-                ShareReceiveActivity.this.finish();
-            }
+            } else
 
             if (type.startsWith("*/*")) {
                 readFileFromShare("/storage/emulated/0/.Knot/receive_share_file.txt");

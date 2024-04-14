@@ -161,6 +161,33 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
   }
 }
 
+void ReceiveShare::addToNote_Java(bool isInsert) {
+  QString imgFile = "/storage/emulated/0/.Knot/receive_share_pic.png";
+  strReceiveShareData = getShareString();
+  shareType = getShareType();
+
+  if (isInsert) {
+    if (shareType == "text/plain") {
+      mw_one->m_Notes->insertNote(strReceiveShareData);
+    }
+    if (shareType == "image/*") {
+      QString strImg = mw_one->m_Notes->insertImage(imgFile);
+      mw_one->m_Notes->insertNote(strImg);
+    }
+  } else {
+    // append
+    if (shareType == "text/plain") {
+      mw_one->m_Notes->appendNote(strReceiveShareData);
+    }
+    if (shareType == "image/*") {
+      QString strImg = mw_one->m_Notes->insertImage(imgFile);
+      mw_one->m_Notes->appendNote(strImg);
+    }
+  }
+
+  qDebug() << "strReceiveShareData=" << strReceiveShareData;
+}
+
 void ReceiveShare::addToNote(bool isInsert) {
   QString imgFile = "/storage/emulated/0/.Knot/receive_share_pic.png";
   strReceiveShareData = getShareString();
@@ -205,23 +232,47 @@ void ReceiveShare::addToNote(bool isInsert) {
 }
 
 void ReceiveShare::on_btnAppendToNote_clicked() {
-  isInsertToNote = false;
-  addToNote(isInsertToNote);
+  if (nMethod == 1) {
+    isInsertToNote = false;
+    addToNote(isInsertToNote);
 
-  Close();
-  closeAllActiveWindows();
-  mw_one->on_btnNotes_clicked();
-  mw_one->on_btnEdit_clicked();
+    Close();
+    closeAllActiveWindows();
+    mw_one->on_btnNotes_clicked();
+    mw_one->on_btnEdit_clicked();
+  }
+
+  if (nMethod == 2) {
+    Close();
+    closeAllActiveWindows();
+    mw_one->on_btnNotes_clicked();
+    mw_one->on_btnEdit_clicked();
+
+    isInsertToNote = false;
+    addToNote_Java(isInsertToNote);
+  }
 }
 
 void ReceiveShare::on_btnInsertToNote_clicked() {
-  isInsertToNote = true;
-  addToNote(isInsertToNote);
+  if (nMethod == 1) {
+    isInsertToNote = true;
+    addToNote(isInsertToNote);
 
-  Close();
-  closeAllActiveWindows();
-  mw_one->on_btnNotes_clicked();
-  mw_one->on_btnEdit_clicked();
+    Close();
+    closeAllActiveWindows();
+    mw_one->on_btnNotes_clicked();
+    mw_one->on_btnEdit_clicked();
+  }
+
+  if (nMethod == 2) {
+    Close();
+    closeAllActiveWindows();
+    mw_one->on_btnNotes_clicked();
+    mw_one->on_btnEdit_clicked();
+
+    isInsertToNote = true;
+    addToNote_Java(isInsertToNote);
+  }
 }
 
 QObjectList ReceiveShare::getAllFrame(QObjectList lstUIControls) {
