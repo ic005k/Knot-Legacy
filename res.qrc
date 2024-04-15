@@ -158,5 +158,6 @@
         <file>res/bookmark_l.png</file>
         <file>res/set_bookmark_l.png</file>
         <file>res/none.png</file>
+        <file>res/share.png</file>
     </qresource>
 </RCC>

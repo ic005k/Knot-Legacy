@@ -740,6 +740,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnHideKey_clicked();
 
+  void on_btnDelImage_clicked();
+
  private:
   bool isShowDetails = false;
   QString strShowDetails;

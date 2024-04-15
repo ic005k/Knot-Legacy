@@ -333,12 +333,14 @@ void DocumentHandler::parsingLink(QString linkFile) {
 
       return;
     }
+
     QString str = linkFile;
     str = str.replace("../", "");
     str.replace("file:///", "");
     picfile = str;
     qDebug() << "Pic File1 : " << picfile;
 
+    mw_one->ui->btnDelImage->hide();
     if (QFile(picfile).exists()) {
       LoadPic *m_LoadPic = new LoadPic(mw_one);
       m_LoadPic->initMain(picfile);
@@ -354,6 +356,7 @@ void DocumentHandler::parsingLink(QString linkFile) {
         picfile = memoPicFile;
         LoadPic *m_LoadPic = new LoadPic(mw_one);
         m_LoadPic->initMain(memoPicFile);
+        mw_one->ui->btnDelImage->show();
       }
     }
   }

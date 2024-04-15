@@ -2609,6 +2609,16 @@ QTabBar::scroller {width:0}
            <property name="text">
             <string>Back</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/back_l.png</normaloff>:/res/back_l.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -2621,6 +2631,45 @@ QTabBar::scroller {width:0}
            </property>
            <property name="text">
             <string>Share</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/share.png</normaloff>:/res/share.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnZoomOut">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Zoom -</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/a2.png</normaloff>:/res/a2.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -2641,24 +2690,38 @@ QTabBar::scroller {width:0}
            <property name="text">
             <string>Zoom +</string>
            </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/a1.png</normaloff>:/res/a1.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="btnZoomOut">
+          <widget class="QToolButton" name="btnDelImage">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>35</height>
-            </size>
-           </property>
            <property name="text">
-            <string>Zoom -</string>
+            <string>Del</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/del.png</normaloff>:/res/del.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>28</width>
+             <height>28</height>
+            </size>
            </property>
           </widget>
          </item>

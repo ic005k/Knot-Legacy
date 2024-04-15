@@ -76,11 +76,8 @@ QString ReceiveShare::getShareType() {
 }
 
 QString ReceiveShare::getShareString() {
-  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  return Reg.value("/share/receiveData", "").toString();
+  QString file = privateDir + "share_text.txt";
+  return loadText(file);
 }
 
 QString ReceiveShare::getShareMethod() {
@@ -311,6 +308,8 @@ void ReceiveShare::closeAllActiveWindows() {
 void ReceiveShare::on_btnTest_clicked() { closeAllActiveWindows(); }
 
 void ReceiveShare::shareString(const QString& title, const QString& content) {
+  Q_UNUSED(title);
+  Q_UNUSED(content);
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -343,6 +342,9 @@ void ReceiveShare::shareString(const QString& title, const QString& content) {
 
 void ReceiveShare::shareImage(const QString& title, const QString& path,
                               const QString& fileType) {
+  Q_UNUSED(title);
+  Q_UNUSED(path);
+  Q_UNUSED(fileType);
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -377,6 +379,8 @@ void ReceiveShare::shareImage(const QString& title, const QString& path,
 
 void ReceiveShare::shareImages(const QString& title,
                                const QStringList& imagesPathList) {
+  Q_UNUSED(title);
+  Q_UNUSED(imagesPathList);
 #ifdef Q_OS_ANDROID
 
   QString imagesPath;

@@ -3357,7 +3357,7 @@ void MainWindow::showNotes() {
   ui->frameMain->hide();
   ui->f_SetKey->hide();
   ui->frameNotes->show();
-  m_Notes->setVPos();
+  m_Notes->setVPos(-0.01);
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -4255,11 +4255,7 @@ static void JavaNotify_5() {
 }
 
 static void JavaNotify_6() {
-  QString mdString;
-  mdString = loadText(privateDir + "note_text.txt");
-  StringToFile(mdString, currentMDFile);
-  mw_one->m_Notes->MD2Html(currentMDFile);
-  mw_one->m_Notes->loadMemoQML();
+  mw_one->m_Notes->javaNoteToQMLNote();
 
   qDebug() << "C++ JavaNotify_6";
 }
@@ -5744,3 +5740,5 @@ void MainWindow::on_btnShowTools_clicked() {
 }
 
 void MainWindow::on_btnHideKey_clicked() { pAndroidKeyboard->hide(); }
+
+void MainWindow::on_btnDelImage_clicked() { m_Notes->delImage(); }

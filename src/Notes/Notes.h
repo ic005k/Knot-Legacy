@@ -73,7 +73,7 @@ class Notes : public QDialog {
   void init_MainNotes();
   qlonglong curPos;
   qreal sliderPos;
-  void loadMemoQML();
+  void loadNoteToQML();
   void decode(QString filename);
   void encode(QString filename);
 
@@ -128,7 +128,10 @@ class Notes : public QDialog {
   auto getAndroidNoteConfig(QString key);
   void setAndroidNoteConfig(QString key, QString value);
 
- protected:
+  void delImage();
+
+  void javaNoteToQMLNote();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -145,8 +148,6 @@ class Notes : public QDialog {
   void timerSlot();
 
   void on_showEditPanel();
-
-  void setVPos();
 
   void highlightCurrentLine();
 

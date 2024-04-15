@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.net.Uri;
 import android.os.FileObserver;
 import android.os.AsyncTask;
-
+import android.text.method.ScrollingMovementMethod;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -44,12 +44,15 @@ import android.widget.TextView;
 import android.view.WindowManager;
 import android.view.Window;
 
+import java.io.OutputStreamWriter;
+import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -117,6 +120,7 @@ public class ShareReceiveActivity extends Activity
 
         setContentView(R.layout.activity_share_receive);
         tv = (TextView) findViewById(R.id.text_info);
+        tv.setMovementMethod(ScrollingMovementMethod.getInstance());
 
         btnAddToTodo = (Button) findViewById(R.id.btnAddToTodo);
         btnAppendNote = (Button) findViewById(R.id.btnAppendNote);
@@ -139,7 +143,7 @@ public class ShareReceiveActivity extends Activity
         btnInsertNote.setOnClickListener(this);
 
         String file2 = "/storage/emulated/0/.Knot/cursor_text.txt";
-        cursorText = readFile(file2);
+        cursorText = readTextFile(file2);
 
         // 获取intent
         Intent intent = getIntent();
@@ -399,27 +403,14 @@ public class ShareReceiveActivity extends Activity
 
             ini.put("share", "shareType", shareType);
             ini.put("share", "shareDone", shareDone);
-            ini.put("share", "receiveData", strData);
 
             ini.store();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        /*
-         * internalConfigure = new InternalConfigure(this);
-         * Properties myPro = new Properties();
-         * myPro.setProperty("shareType", shareType);
-         * myPro.setProperty("receiveData", strData);
-         * myPro.setProperty("shareDone", shareDone);
-         * 
-         * try {
-         * internalConfigure.saveFile(file2, myPro);
-         * } catch (Exception e) {
-         * System.err.println("Error : save myshare.ini");
-         * e.printStackTrace();
-         * }
-         */
+        String filename = "/storage/emulated/0/.Knot/share_text.txt";
+        writeTextFile(strData, filename);
 
     }
 
@@ -734,26 +725,42 @@ public class ShareReceiveActivity extends Activity
         return zh_cn;
     }
 
-    public String readFile(String fileName) {
-        StringBuilder sb = new StringBuilder("");
+    public String readTextFile(String filename) {
         try {
-            File file = new File(fileName);
-            // 打开文件输入流
-            FileInputStream inputStream = new FileInputStream(file);
-            byte[] buffer = new byte[1024];
-            int len = inputStream.read(buffer);
-            // 读取文件内容
-            while (len > 0) {
-                sb.append(new String(buffer, 0, len));
-                // 继续将数据放到buffer中
-                len = inputStream.read(buffer);
+            File file = new File(filename);
+            StringBuffer strBuf = new StringBuffer();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            int tempchar;
+            while ((tempchar = bufferedReader.read()) != -1) {
+                strBuf.append((char) tempchar);
             }
-            // 关闭输入流
-            inputStream.close();
+            bufferedReader.close();
+            return strBuf.toString();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return sb.toString();
+        return null;
+    }
+
+    public void writeTextFile(String content, String filename) {
+        try {
+            File file = new File(filename);
+
+            if (file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+            // 获取该文件的缓冲输出流
+            BufferedWriter bufferedWriter = new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+            // 写入信息
+            bufferedWriter.write(content);
+            bufferedWriter.flush();// 清空缓冲区
+            bufferedWriter.close();// 关闭输出流
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

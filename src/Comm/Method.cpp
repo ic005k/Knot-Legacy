@@ -675,8 +675,8 @@ void Method::init_all_notes() {
   // load note
   currentMDFile = mw_one->m_NotesList->getCurrentMDFile();
   mw_one->m_Notes->MD2Html(currentMDFile);
-  mw_one->m_Notes->loadMemoQML();
-  mw_one->m_Notes->setVPos();
+  mw_one->m_Notes->loadNoteToQML();
+  mw_one->m_Notes->setVPos(-0.01);
 }
 
 QDialog* Method::getProgBar() {

@@ -7,14 +7,16 @@
 
 extern MainWindow *mw_one;
 extern Method *m_Method;
-extern QString iniFile, iniDir, privateDir, currentMDFile;
+extern QString iniFile, iniDir, privateDir, currentMDFile, imgFileName;
 extern bool isAndroid, isIOS, isDark;
 extern int fontSize;
 extern QRegularExpression regxNumber;
+
 extern int deleteDirfile(QString dirName);
 extern QString loadText(QString textFile);
 extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
+extern void StringToFile(QString buffers, QString fileName);
 
 Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
@@ -303,7 +305,7 @@ void Notes::saveMainNotes() {
   isTextChange = false;
 }
 
-void Notes::init_MainNotes() { loadMemoQML(); }
+void Notes::init_MainNotes() { loadNoteToQML(); }
 
 void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);
@@ -825,7 +827,7 @@ void Notes::unzip(QString zipfile) {
 #endif
 }
 
-void Notes::loadMemoQML() {
+void Notes::loadNoteToQML() {
   QString htmlFileName = privateDir + "memo.html";
   QTextEdit *edit = new QTextEdit;
   QPlainTextEdit *edit1 = new QPlainTextEdit;
@@ -879,7 +881,7 @@ void Notes::loadMemoQML() {
   QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
 
-  setVPos();
+  setVPos(-0.01);
 }
 
 void Notes::saveQMLVPos() {
@@ -895,17 +897,22 @@ void Notes::saveQMLVPos() {
   }
 }
 
-void Notes::setVPos() {
-  QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
+void Notes::setVPos(qreal pos) {
+  qreal m_pos;
+  if (pos < 0) {
+    QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
+    Reg.setIniCodec("utf-8");
 #endif
 
-  sliderPos = Reg.value("/MainNotes/SlidePos" + currentMDFile).toReal();
+    sliderPos = Reg.value("/MainNotes/SlidePos" + currentMDFile).toReal();
+    m_pos = sliderPos;
+  } else {
+    m_pos = pos;
+  }
 
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
-  QMetaObject::invokeMethod((QObject *)root, "setVPos",
-                            Q_ARG(QVariant, sliderPos));
+  QMetaObject::invokeMethod((QObject *)root, "setVPos", Q_ARG(QVariant, m_pos));
 }
 
 qreal Notes::getVPos() {
@@ -1270,7 +1277,7 @@ void Notes::closeEvent(QCloseEvent *event) {
   if (isNeedSave) {
     if (isDone) {
       saveMainNotes();
-      loadMemoQML();
+      loadNoteToQML();
     } else {
       if (isTextChange) {
         m_Method->m_widget = new QWidget(this);
@@ -1278,12 +1285,12 @@ void Notes::closeEvent(QCloseEvent *event) {
         if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"),
                          2)) {
           saveMainNotes();
-          loadMemoQML();
+          loadNoteToQML();
         }
 
       } else {
         saveMainNotes();
-        loadMemoQML();
+        loadNoteToQML();
       }
     }
   }
@@ -1635,6 +1642,7 @@ void Notes::openNoteEditor() {
 }
 
 void Notes::appendNote(QString str) {
+  Q_UNUSED(str);
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -1696,4 +1704,33 @@ void Notes::setAndroidNoteConfig(QString key, QString value) {
 #endif
 
   Reg.setValue(key, value);
+}
+
+void Notes::delImage() {
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg("Knot", tr("Delete this image?"), 2)) return;
+
+  QFileInfo fi(imgFileName);
+  QString name = fi.fileName();
+  QString strImg = "![image](file://===KnotData===memo/images/" + name + ")";
+  QString buffers = loadText(currentMDFile);
+  buffers.replace(strImg, "");
+  for (int i = 0; i < 10; i++) buffers.replace("\n\n\n", "\n\n");
+
+  StringToFile(buffers, currentMDFile);
+  MD2Html(currentMDFile);
+  loadNoteToQML();
+  mw_one->on_btnBackImg_clicked();
+  setVPos(0.00);
+}
+
+void Notes::javaNoteToQMLNote() {
+  QString mdString;
+  mdString = loadText(privateDir + "note_text.txt");
+  for (int i = 0; i < 10; i++) {
+    mdString.replace("\n\n\n", "\n\n");
+  }
+  StringToFile(mdString, currentMDFile);
+  mw_one->m_Notes->MD2Html(currentMDFile);
+  mw_one->m_Notes->loadNoteToQML();
 }
