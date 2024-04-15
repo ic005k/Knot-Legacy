@@ -1712,6 +1712,10 @@ void Notes::delImage() {
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg("Knot", tr("Delete this image?"), 2)) return;
 
+  qreal oldPos = getVPos();
+  QImage img(imgFileName);
+  int nImagHeight = img.height();
+  qreal newPos = oldPos - nImagHeight;
   QFileInfo fi(imgFileName);
   QString name = fi.fileName();
   QString strImg = "![image](file://===KnotData===memo/images/" + name + ")";
@@ -1723,7 +1727,18 @@ void Notes::delImage() {
   MD2Html(currentMDFile);
   loadNoteToQML();
   mw_one->on_btnBackImg_clicked();
-  setVPos(0.00);
+  setVPos(newPos);
+}
+
+void Notes::delLink(QString link) {
+  qreal oldPos = getVPos();
+  QString mdBurrers = loadText(currentMDFile);
+  mdBurrers.replace(link, "");
+  mdBurrers = formatMDText(mdBurrers);
+  StringToFile(mdBurrers, currentMDFile);
+  MD2Html(currentMDFile);
+  loadNoteToQML();
+  setVPos(oldPos);
 }
 
 void Notes::javaNoteToQMLNote() {
@@ -1733,15 +1748,6 @@ void Notes::javaNoteToQMLNote() {
   StringToFile(mdString, currentMDFile);
   mw_one->m_Notes->MD2Html(currentMDFile);
   mw_one->m_Notes->loadNoteToQML();
-}
-
-void Notes::delLink(QString link) {
-  QString mdBurrers = loadText(currentMDFile);
-  mdBurrers.replace(link, "");
-  mdBurrers = formatMDText(mdBurrers);
-  StringToFile(mdBurrers, currentMDFile);
-  MD2Html(currentMDFile);
-  loadNoteToQML();
 }
 
 QString Notes::formatMDText(QString text) {

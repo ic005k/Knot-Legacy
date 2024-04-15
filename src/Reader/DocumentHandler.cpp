@@ -245,13 +245,14 @@ void DocumentHandler::parsingLink(QString linkFile, QString qwName) {
 
   qDebug() << "link : " << linkFile;
   if (linkFile.mid(0, 4) == "http" || linkFile.mid(0, 4) == "www.") {
+    copyText = linkFile;
+
     if (linkFile.mid(0, 4) != "http") {
       linkFile = "http://" + linkFile;
     }
     QUrl url = linkFile;
 
     bool ok = false;
-    copyText = linkFile;
     if (qwName == "reader") {
       ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
       ok = m_ShowMsg->showMsg(

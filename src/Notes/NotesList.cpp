@@ -2210,22 +2210,25 @@ void NotesList::genRecentOpenMenu() {
     name = list.at(0);
     file = iniDir + list.at(1);
 
-    QFontMetrics fm(mw_one->font());
-    QString txt = QString::number(i + 1) + " . " + name;
-    QString qsLine = fm.elidedText(txt, Qt::ElideRight, mw_one->width() - 30);
-    QAction *act = new QAction(qsLine);
-    menuRecentOpen->addAction(act);
-    connect(act, &QAction::triggered, this, [=]() {
-      currentMDFile = file;
-      mw_one->m_Notes->MD2Html(file);
-      mw_one->m_Notes->loadNoteToQML();
-      mw_one->ui->lblNoteName->setText(name);
+    if (QFile::exists(file)) {
+      QFontMetrics fm(mw_one->font());
+      QString txt = QString::number(i + 1) + " . " + name;
+      QString qsLine = fm.elidedText(txt, Qt::ElideRight, mw_one->width() - 30);
+      QAction *act = new QAction(qsLine);
+      menuRecentOpen->addAction(act);
 
-      listRecentOpen.removeAt(i);
-      listRecentOpen.insert(0, item);
-      saveRecentOpen();
-      saveCurrentNoteInfo();
-    });
+      connect(act, &QAction::triggered, this, [=]() {
+        currentMDFile = file;
+        mw_one->m_Notes->MD2Html(file);
+        mw_one->m_Notes->loadNoteToQML();
+        mw_one->ui->lblNoteName->setText(name);
+
+        listRecentOpen.removeAt(i);
+        listRecentOpen.insert(0, item);
+        saveRecentOpen();
+        saveCurrentNoteInfo();
+      });
+    }
   }
 
   int x = 0;

@@ -46,6 +46,7 @@ import java.util.Properties;
 import java.io.IOException;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import android.text.TextWatcher;
 import android.os.Handler;
@@ -88,7 +89,15 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private Button btnUndo;
     private Button btnRedo;
     private Button btnMenu;
+
+    private Button btnFind;
+    private Button btnPrev;
+    private Button btnNext;
+
     public static EditText editNote;
+    public static EditText editFind;
+    private ArrayList<Integer> arrayFindResult;
+    private int curIndexForResult = 0;
 
     public static boolean zh_cn;
     private String currentMDFile;
@@ -143,25 +152,47 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         helper = new TextViewUndoRedo(editNote);
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
+        btnFind = (Button) findViewById(R.id.btnFind);
         btnUndo = (Button) findViewById(R.id.btnUndo);
         btnRedo = (Button) findViewById(R.id.btnRedo);
         btnMenu = (Button) findViewById(R.id.btnMenu);
 
+        editFind = (EditText) findViewById(R.id.editFind);
+        btnPrev = (Button) findViewById(R.id.btnPrev);
+        btnNext = (Button) findViewById(R.id.btnNext);
+
         if (zh_cn) {
             btn_cancel.setText("关闭");
+            btnFind.setText("查找");
             btnUndo.setText("撤销");
             btnRedo.setText("恢复");
-            btnMenu.setText("快捷菜单");
+            btnMenu.setText("菜单");
+
+            btnPrev.setText("上一个");
+            btnNext.setText("下一个");
         } else {
             btn_cancel.setText("Close");
+            btnUndo.setText("Find");
             btnUndo.setText("Undo");
             btnRedo.setText("Redo");
-            btnMenu.setText("Quick Menu");
+            btnMenu.setText("Menu");
+
+            btnPrev.setText("Prev");
+            btnNext.setText("Next");
         }
+
+        editFind.setVisibility(View.GONE);
+        btnPrev.setVisibility(View.GONE);
+        btnNext.setVisibility(View.GONE);
+
         btn_cancel.setOnClickListener(this);
         btnUndo.setOnClickListener(this);
         btnRedo.setOnClickListener(this);
         btnMenu.setOnClickListener(this);
+
+        btnFind.setOnClickListener(this);
+        btnPrev.setOnClickListener(this);
+        btnNext.setOnClickListener(this);
 
     }
 
@@ -189,6 +220,62 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             case R.id.btnMenu:
                 btnMenu.setBackgroundColor(getResources().getColor(R.color.red));
                 showPopupMenu(btnMenu);
+                break;
+
+            case R.id.btnFind:
+                btnRedo.setBackgroundColor(getResources().getColor(R.color.red));
+                if (btnPrev.getVisibility() == View.VISIBLE) {
+                    editFind.setVisibility(View.GONE);
+                    btnPrev.setVisibility(View.GONE);
+                    btnNext.setVisibility(View.GONE);
+
+                } else {
+                    editFind.setVisibility(View.VISIBLE);
+                    btnPrev.setVisibility(View.VISIBLE);
+                    btnNext.setVisibility(View.VISIBLE);
+                    editFind.requestFocus();
+                }
+                btnRedo.setBackgroundColor(getResources().getColor(R.color.normal));
+
+                break;
+
+            case R.id.btnPrev:
+                btnRedo.setBackgroundColor(getResources().getColor(R.color.red));
+
+                String subString = editFind.getText().toString();
+                if (arrayFindResult.size() > 0) {
+                    curIndexForResult--;
+                    if (curIndexForResult < 0)
+                        curIndexForResult = arrayFindResult.size() - 1;
+
+                    editNote.setSelection(curIndexForResult, curIndexForResult + subString.length());
+                    editNote.requestFocus();
+
+                } else {
+                    Toast.makeText(this, "Not found.", 9000).show();
+                }
+
+                btnRedo.setBackgroundColor(getResources().getColor(R.color.normal));
+
+                break;
+
+            case R.id.btnNext:
+                btnRedo.setBackgroundColor(getResources().getColor(R.color.red));
+
+                subString = editFind.getText().toString();
+                if (arrayFindResult.size() > 0) {
+                    curIndexForResult++;
+                    if (curIndexForResult >= arrayFindResult.size())
+                        curIndexForResult = 0;
+
+                    editNote.setSelection(curIndexForResult, curIndexForResult + subString.length());
+                    editNote.requestFocus();
+
+                } else {
+                    Toast.makeText(this, "Not found.", 9000).show();
+                }
+                btnRedo.setBackgroundColor(getResources().getColor(R.color.normal));
+
                 break;
         }
     }
@@ -254,7 +341,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         isTextChanged = false;
-        initEditNote();
+        initEditTextChangedListener();
         writeReceiveData();
 
         // HomeKey
@@ -759,7 +846,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 
-    private void initEditNote() {
+    private void initEditTextChangedListener() {
 
         editNote.addTextChangedListener(new TextWatcher() {
             @Override
@@ -775,6 +862,24 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             @Override
             public void afterTextChanged(Editable editable) {
                 isTextChanged = true;
+            }
+        });
+
+        editFind.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                arrayFindResult.clear();
+                arrayFindResult = findStr();
             }
         });
     }
@@ -1071,6 +1176,106 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 appendNote(str_receive);
             }
         }
+
+    }
+
+    private static int rabinKarpSearch(String desString, String subString) {
+        if (desString == null || subString == null) {
+            return -1;
+        }
+        // 1、主串长度
+        int m = desString.length();
+        // 2、模式串长度
+        int n = subString.length();
+        if (n > m) {
+            throw new RuntimeException("主串长度不能小于模式串的长度");
+        }
+        // 3、获取模式串的hash值
+        int patternCode = hash(subString);
+        // 4、计算主串中与模式串长度相同第一个子串的hash值
+        int strCode = hash(desString.substring(0, n));
+        // 5、逐位比较hash值
+        for (int i = 0; i < m - n + 1; i++) {
+            // 如果hash值相等，为了防止hash碰撞产生的误差，故还需对字符串进行比较，以保证确实相等
+            if (patternCode == strCode && compareString(i, desString, subString)) {
+                return i;
+            }
+            // 判断是否为最后一轮，如果是最后一轮，则不再进行hash计算
+            if (i < m - n) {
+                strCode = nextHash(desString, strCode, i, n);
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 下一位的hash值计算
+     *
+     * @param desString 目标串
+     * @param strCode   当前的hash值
+     * @param index     当前hash值的所计算的字符串在目标串起始位置
+     * @param offset    hash值计算的串长度
+     * @return int
+     * @Author muyi
+     * @Date 14:03 2020/12/7
+     */
+    private static int nextHash(String desString, int strCode, int index, int offset) {
+        /**
+         * 比如 计算 ABCD 中 CD 的hash值，
+         * 已知 BC的hash值为3，index = 1,offset = 2
+         * 所以 CD的hash值等于 BC - B + D
+         */
+        // 1、减去起始位置字符的hash值
+        strCode -= desString.charAt(index) - 'A';
+        // 2、加上新增为字符的hash值
+        strCode += desString.charAt(index + offset) - 'A';
+        return strCode;
+    }
+
+    private static boolean compareString(int index, String desString, String subString) {
+        String temp = desString.substring(index, index + subString.length());
+        return temp.equals(subString);
+    }
+
+    /**
+     * @param subString 字符串
+     * @return int 约定计算模式的hash值
+     * @Author muyi
+     * @Date 14:00 2020/12/7
+     */
+    private static int hash(String subString) {
+        int hashCode = 0;
+        int length = subString.length();
+        int i = 0;
+        /**
+         * 这里采用最简单的hashcode计算方式：
+         * 把A当做0，把B当中1，把C当中2.....然后按位相加
+         */
+        while (i < length) {
+            hashCode += subString.charAt(i) - 'A';
+            i++;
+        }
+        return hashCode;
+    }
+
+    private ArrayList<Integer> findStr() {
+        ArrayList<Integer> arrayList = new ArrayList<Integer>();
+        String desString = editNote.getText().toString();
+        String subString = editFind.getText().toString();
+        editNote.setSelection(0);
+        int index = 0;
+        while (index >= 0) {
+            index = rabinKarpSearch(desString, subString);
+            if (index > 0) {
+                arrayList.add(index);
+                if (index + 1 <= editNote.getText().length()) {
+                    editNote.setSelection(index + 1);
+                }
+            } else
+                break;
+        }
+
+        return arrayList;
 
     }
 
