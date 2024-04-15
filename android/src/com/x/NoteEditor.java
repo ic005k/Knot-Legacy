@@ -151,12 +151,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             btn_cancel.setText("关闭");
             btnUndo.setText("撤销");
             btnRedo.setText("恢复");
-            btnMenu.setText("快捷输入");
+            btnMenu.setText("快捷菜单");
         } else {
             btn_cancel.setText("Close");
             btnUndo.setText("Undo");
             btnRedo.setText("Redo");
-            btnMenu.setText("Quick Input");
+            btnMenu.setText("Quick Menu");
         }
         btn_cancel.setOnClickListener(this);
         btnUndo.setOnClickListener(this);
@@ -232,18 +232,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // set cursor pos
         filename = "/storage/emulated/0/.Knot/note_text.ini";
         String s_cpos = null;
-
-        /*
-         * internalConfigure = new InternalConfigure(this);
-         * try {
-         * internalConfigure.readFrom(filename);
-         * } catch (Exception e) {
-         * System.err.println("Error : reading note_text.ini");
-         * e.printStackTrace();
-         * }
-         * s_cpos = internalConfigure.getIniKey(currentMDFile);
-         * currentMDFile = internalConfigure.getIniKey("currentMDFile");
-         */
 
         try {
             Wini ini = new Wini(new File(filename));

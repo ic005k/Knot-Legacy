@@ -131,7 +131,9 @@ class Notes : public QDialog {
   void delImage();
 
   void javaNoteToQMLNote();
-  protected:
+  QString formatMDText(QString text);
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -212,6 +214,7 @@ class Notes : public QDialog {
   void on_editNote();
 
   void showTextSelector();
+  void delLink(QString link);
  signals:
   void sendUpdate();
 

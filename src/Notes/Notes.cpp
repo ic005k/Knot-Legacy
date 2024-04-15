@@ -281,7 +281,9 @@ void Notes::saveMainNotes() {
   saveQMLVPos();
 
   if (isTextChange) {
-    TextEditToFile(m_EditSource, currentMDFile);
+    QString text = m_EditSource->toPlainText();
+    text = formatMDText(text);
+    StringToFile(text, currentMDFile);
     MD2Html(currentMDFile);
 
     qDebug() << "Save Note: " << currentMDFile;
@@ -1715,7 +1717,7 @@ void Notes::delImage() {
   QString strImg = "![image](file://===KnotData===memo/images/" + name + ")";
   QString buffers = loadText(currentMDFile);
   buffers.replace(strImg, "");
-  for (int i = 0; i < 10; i++) buffers.replace("\n\n\n", "\n\n");
+  buffers = formatMDText(buffers);
 
   StringToFile(buffers, currentMDFile);
   MD2Html(currentMDFile);
@@ -1727,10 +1729,23 @@ void Notes::delImage() {
 void Notes::javaNoteToQMLNote() {
   QString mdString;
   mdString = loadText(privateDir + "note_text.txt");
-  for (int i = 0; i < 10; i++) {
-    mdString.replace("\n\n\n", "\n\n");
-  }
+  mdString = formatMDText(mdString);
   StringToFile(mdString, currentMDFile);
   mw_one->m_Notes->MD2Html(currentMDFile);
   mw_one->m_Notes->loadNoteToQML();
+}
+
+void Notes::delLink(QString link) {
+  QString mdBurrers = loadText(currentMDFile);
+  mdBurrers.replace(link, "");
+  mdBurrers = formatMDText(mdBurrers);
+  StringToFile(mdBurrers, currentMDFile);
+  MD2Html(currentMDFile);
+  loadNoteToQML();
+}
+
+QString Notes::formatMDText(QString text) {
+  for (int i = 0; i < 10; i++) text.replace("\n\n\n", "\n\n");
+
+  return text;
 }

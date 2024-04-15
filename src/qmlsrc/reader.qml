@@ -216,7 +216,7 @@ Rectangle {
                 console.log("reader htmlPath=" + htmlPath)
                 console.log("reader Link=" + link)
                 document.setBackDir(link)
-                document.parsingLink(link)
+                document.parsingLink(link, "reader")
             }
 
             onReleased: {

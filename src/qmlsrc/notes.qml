@@ -106,8 +106,8 @@ Item {
             }
 
             onLinkActivated: {
-                document.setBackDir(link)
-                document.parsingLink(link)
+
+                document.parsingLink(link, "note")
 
                 console.debug(link)
             }

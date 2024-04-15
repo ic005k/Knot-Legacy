@@ -238,7 +238,7 @@ QString DocumentHandler::fileType() const {
 
 QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
 
-void DocumentHandler::parsingLink(QString linkFile) {
+void DocumentHandler::parsingLink(QString linkFile, QString qwName) {
   m_Method->isClickLink = true;
 
   if (mw_one->curx != 0) return;
@@ -250,11 +250,20 @@ void DocumentHandler::parsingLink(QString linkFile) {
     }
     QUrl url = linkFile;
 
-    m_Method->m_widget = new QWidget(mw_one);
-    ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+    bool ok = false;
     copyText = linkFile;
-    bool ok = m_ShowMsg->showMsg(
-        appName, tr("Open this URL?") + "\n\n" + linkFile + "\n", 3);
+    if (qwName == "reader") {
+      ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+      ok = m_ShowMsg->showMsg(
+          appName, tr("Open this URL?") + "\n\n" + linkFile + "\n", 3);
+    }
+
+    if (qwName == "note") {
+      ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+      ok = m_ShowMsg->showMsg(
+          appName, tr("Open this URL?") + "\n\n" + linkFile + "\n", 4);
+    }
+
     if (ok) QDesktopServices::openUrl(url);
     mw_one->clearSelectBox();
   }

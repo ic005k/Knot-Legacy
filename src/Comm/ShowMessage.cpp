@@ -125,22 +125,33 @@ bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
     ui->btnCancel->hide();
     ui->btnCopy->hide();
     ui->btnOk->hide();
+    ui->btnDel->hide();
   }
   if (btnCount == 1) {
     ui->btnCancel->hide();
     ui->btnOk->show();
     ui->btnCopy->hide();
+    ui->btnDel->hide();
   }
   if (btnCount == 2) {
     ui->btnCancel->show();
     ui->btnOk->show();
     ui->btnCopy->hide();
+    ui->btnDel->hide();
   }
 
   if (btnCount == 3) {
     ui->btnCancel->show();
     ui->btnOk->show();
     ui->btnCopy->show();
+    ui->btnDel->hide();
+  }
+
+  if (btnCount == 4) {
+    ui->btnCancel->show();
+    ui->btnOk->show();
+    ui->btnCopy->show();
+    ui->btnDel->show();
   }
 
   ui->lblTitle->setText(title);
@@ -168,4 +179,12 @@ void ShowMessage::on_btnCopy_clicked() {
   clipboard->setText(copyText);
   isValue = false;
   close();
+}
+
+void ShowMessage::on_btnDel_clicked() {
+  close();
+  ShowMessage* msg = new ShowMessage(mw_one);
+  if (msg->showMsg("Knot", tr("Delete this link?"), 2)) {
+    mw_one->m_Notes->delLink(copyText);
+  }
 }
