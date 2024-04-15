@@ -96,7 +96,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     public static EditText editNote;
     public static EditText editFind;
-    private ArrayList<Integer> arrayFindResult;
+    private ArrayList<Integer> arrayFindResult = new ArrayList<Integer>();
     private int curIndexForResult = 0;
 
     public static boolean zh_cn;
@@ -240,41 +240,18 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 break;
 
             case R.id.btnPrev:
-                btnRedo.setBackgroundColor(getResources().getColor(R.color.red));
-
-                String subString = editFind.getText().toString();
-                if (arrayFindResult.size() > 0) {
-                    curIndexForResult--;
-                    if (curIndexForResult < 0)
-                        curIndexForResult = arrayFindResult.size() - 1;
-
-                    editNote.setSelection(curIndexForResult, curIndexForResult + subString.length());
-                    editNote.requestFocus();
-
-                } else {
-                    Toast.makeText(this, "Not found.", 9000).show();
-                }
-
-                btnRedo.setBackgroundColor(getResources().getColor(R.color.normal));
+                btnPrev.setBackgroundColor(getResources().getColor(R.color.red));
+                goFindResult(-1);
+                editNote.requestFocus();
+                btnPrev.setBackgroundColor(getResources().getColor(R.color.normal));
 
                 break;
 
             case R.id.btnNext:
-                btnRedo.setBackgroundColor(getResources().getColor(R.color.red));
-
-                subString = editFind.getText().toString();
-                if (arrayFindResult.size() > 0) {
-                    curIndexForResult++;
-                    if (curIndexForResult >= arrayFindResult.size())
-                        curIndexForResult = 0;
-
-                    editNote.setSelection(curIndexForResult, curIndexForResult + subString.length());
-                    editNote.requestFocus();
-
-                } else {
-                    Toast.makeText(this, "Not found.", 9000).show();
-                }
-                btnRedo.setBackgroundColor(getResources().getColor(R.color.normal));
+                btnNext.setBackgroundColor(getResources().getColor(R.color.red));
+                goFindResult(1);
+                editNote.requestFocus();
+                btnNext.setBackgroundColor(getResources().getColor(R.color.normal));
 
                 break;
         }
@@ -878,8 +855,18 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             @Override
             public void afterTextChanged(Editable editable) {
-                arrayFindResult.clear();
-                arrayFindResult = findStr();
+
+                
+                String str = editFind.getText().toString();
+                System.out.println("afterTextChanged=" + str);
+                if (str.length() > 0) {
+                    arrayFindResult.clear();
+                    arrayFindResult = findStr();
+
+                    if (arrayFindResult.size() > 0) {
+                        goFindResult(0);
+                    }
+                }
             }
         });
     }
@@ -1258,24 +1245,126 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         return hashCode;
     }
 
+    /**
+     * 采用KMP算法，查找字符串子串的位置
+     * 
+     * @param source    源字符串
+     * @param target    目标(子)字符串
+     * @param pos       源字符串的起始索引
+     * @param nextArray 函数式接口，传入获取next数组的方法(因为next数组上面定义了两种获取方式)
+     * @return 目标字符串在源字符串中第一次出现的索引位置
+     */
+    public int indexOfToKMP(String source, String target, int pos, NextArray nextArray) {
+        if (source == null || target == null) {
+            return -1;
+        }
+
+        int i, j;
+        // 调用接口中的方法，获取next数组
+        int[] next = nextArray.getNext(target);
+        // 初始化遍历
+        i = pos;
+        j = 0;
+        // 判断i和j的索引都不能大于等于字符串长度，否则说明比较完成
+        while (i < source.length() && j < target.length()) {
+            // 如果j==-1，说明需要从头开始比较；或者由公共元素相等，继续比较
+            if (j == -1 || source.charAt(i) == target.charAt(j)) {
+                i++;
+                j++;
+            } else {
+                // 需要按照数组回溯j
+                j = next[j];
+            }
+        }
+        // 判断子字符的索引是否大于等于子字符串，如果为true说明查找成功，返回源字符串当前位置-子字符串长度
+        return j >= target.length() ? i - target.length() : -1;
+    }
+
+    // 函数式接口，获取next数组
+    @FunctionalInterface
+    public interface NextArray {
+        int[] getNext(String target);
+    }
+
+    // 使用方法获取接口实例，接口中的getNext方法可以获取next数组
+    public NextArray getNextInstance() {
+
+        return target -> {
+            // 初始化数组大小
+            int[] next = new int[target.length()];
+            // 0 位置默认为-1
+            next[0] = -1;
+            // 遍历字符串每一位，计算每个位置上的值
+            for (int i = 0, k = -1; i < target.length() - 1;) {
+                // k还不可比较说明是第一次进入或者回溯后可能产生的结果，k++，此位置的next[i]应为0
+                // 如果前缀和后缀相等，说明可以计算权值
+                if (k == -1 || target.charAt(i) == target.charAt(k)) {
+                    i++;
+                    k++;
+                    next[i] = k;
+                } else {
+                    // 回溯
+                    k = next[k];
+                }
+            }
+            return next;
+        };
+
+    }
+
     private ArrayList<Integer> findStr() {
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
         String desString = editNote.getText().toString();
         String subString = editFind.getText().toString();
+
+        if (desString == null || subString == null) {
+            return arrayList;
+        }
+
         editNote.setSelection(0);
         int index = 0;
-        while (index >= 0) {
-            index = rabinKarpSearch(desString, subString);
+        while (index != -1) {
+            // index = rabinKarpSearch(desString, subString);
+            index = indexOfToKMP(desString, subString, index, getNextInstance());
+            System.out.println("find index=" + index);
             if (index > 0) {
                 arrayList.add(index);
-                if (index + 1 <= editNote.getText().length()) {
-                    editNote.setSelection(index + 1);
+                index++;
+                int nLength = editNote.getText().length();
+                if (index > nLength) {
+                    index = -1;
                 }
-            } else
-                break;
+                // editNote.setSelection(index);
+            }
         }
 
         return arrayList;
+
+    }
+
+    private void goFindResult(int nDirection) {
+        String subString = editFind.getText().toString();
+        if (arrayFindResult.size() > 0) {
+            if (nDirection == -1) {
+                curIndexForResult--;
+            }
+            if (nDirection == 0) {
+                curIndexForResult = 0;
+            }
+            if (nDirection == 1) {
+                curIndexForResult++;
+            }
+            if (curIndexForResult < 0)
+                curIndexForResult = arrayFindResult.size() - 1;
+            if (curIndexForResult >= arrayFindResult.size())
+                curIndexForResult = 0;
+
+            int pos = arrayFindResult.get(curIndexForResult);
+            editNote.setSelection(pos, pos + subString.length());
+
+        } else {
+            Toast.makeText(this, "Not found.", 9000).show();
+        }
 
     }
 
