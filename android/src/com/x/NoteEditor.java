@@ -78,6 +78,9 @@ import android.text.Spanned;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
 import android.text.method.ScrollingMovementMethod;
+import android.view.inputmethod.EditorInfo;
+import android.view.KeyEvent;
+import android.widget.TextView.OnEditorActionListener;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -166,6 +169,19 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         btnMenu = (Button) findViewById(R.id.btnMenu);
 
         editFind = (EditText) findViewById(R.id.editFind);
+        editFind.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+
+                    btnNext.performClick();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
         lblResult = (TextView) findViewById(R.id.lblResult);
         lblResult.setText("0");
         btnPrev = (Button) findViewById(R.id.btnPrev);
