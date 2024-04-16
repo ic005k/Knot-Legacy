@@ -76,7 +76,6 @@ class NotesList : public QDialog {
   QString getNoteBookText0(int index);
   QString getNotesListText0(int index);
   void setNoteLabel();
-  void loadEmptyNote();
 
   void setNoteBookCurrentItem();
 
@@ -108,7 +107,8 @@ class NotesList : public QDialog {
 
   void saveNoteBookVPos();
   void setNoteBookVPos();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -162,7 +162,8 @@ class NotesList : public QDialog {
   void on_editFind_returnPressed();
 
   void on_actionShareNoteFile();
-  private:
+
+ private:
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   QStringList files;
   void clearMD_Pic(QTreeWidget *tw);

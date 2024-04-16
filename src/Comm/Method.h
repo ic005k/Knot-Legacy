@@ -162,7 +162,6 @@ class Method : public QDialog {
   void gotoEnd(QQuickWidget *qw);
 
   void setSCrollPro(QObject *obj);
-  void init_all_notes();
 
   bool eventFilterReader(QObject *watch, QEvent *evn);
 

@@ -29,7 +29,7 @@ SyncInfo::SyncInfo(QWidget* parent) : QDialog(parent), ui(new Ui::SyncInfo) {
 SyncInfo::~SyncInfo() { delete ui; }
 
 void SyncInfo::on_btnClose_clicked() {
-  m_Method->init_all_notes();
+  mw_one->m_Notes->init_all_notes();
 
   close();
   ui->textBrowser->clear();

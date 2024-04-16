@@ -115,7 +115,7 @@ void MainWindow::importDataDone() {
   mw_one->isSelf = true;
 
   if (!zipfile.isNull() && isZipOK) {
-    m_Method->init_all_notes();
+    m_Notes->init_all_notes();
     m_Todo->init_Todo();
 
     loading = true;
@@ -3291,7 +3291,7 @@ void MainWindow::on_btnNotes_clicked() {
   removeFilesWatch();
   isSelf = true;
 
-  m_Method->init_all_notes();
+  m_Notes->init_all_notes();
 
   if (ui->editFindNote->text().trimmed().length() > 0) {
     on_btnFindNotes_clicked();

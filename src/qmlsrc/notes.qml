@@ -109,7 +109,7 @@ Item {
 
                 document.parsingLink(link, "note")
 
-                console.debug(link)
+                console.debug("qml link=" +  link)
             }
 
             Component.onCompleted: {

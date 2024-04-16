@@ -296,8 +296,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        context = getApplicationContext();
         // this.getWindow().setWindowAnimations(R.style.WindowAnim);
+
+        context = getApplicationContext();
         isZh(context);
         m_instance = this;
 
@@ -322,25 +323,28 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         // set cursor pos
         filename = "/storage/emulated/0/.Knot/note_text.ini";
-        String s_cpos = null;
-
-        try {
-            Wini ini = new Wini(new File(filename));
-            currentMDFile = ini.get("cpos", "currentMDFile");
-            s_cpos = ini.get("cpos", currentMDFile);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         if (fileIsExists(filename)) {
+            String s_cpos = null;
+
+            try {
+                Wini ini = new Wini(new File(filename));
+                currentMDFile = ini.get("cpos", "currentMDFile");
+                s_cpos = ini.get("cpos", currentMDFile);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             int cpos;
             if (s_cpos == null)
                 cpos = 0;
             else
                 cpos = Integer.parseInt(s_cpos);
-            if (cpos > strInfo.length())
-                cpos = strInfo.length();
+            int nLength = editNote.getText().length();
+            if (cpos > nLength)
+                cpos = nLength;
+
+            editNote.requestFocus();
             editNote.setSelection(cpos);
         }
 
@@ -414,9 +418,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             if (!file.exists())
                 file.createNewFile();
             Wini ini = new Wini(file);
-
             ini.put("cpos", currentMDFile, String.valueOf(cpos));
-
             ini.store();
         } catch (IOException e) {
             e.printStackTrace();
@@ -1190,33 +1192,36 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void writeReceiveData() {
-        String strFlag = null;
+
         String filename = "/storage/emulated/0/.Knot/myshare.ini";
-        try {
-            Wini ini = new Wini(new File(filename));
-            strFlag = ini.get("share", "on_create");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (strFlag.length() > 0) {
+        if (fileIsExists(filename)) {
+            String strFlag = null;
             try {
                 Wini ini = new Wini(new File(filename));
-                ini.put("share", "on_create", "");
-                ini.store();
+                strFlag = ini.get("share", "on_create");
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            filename = "/storage/emulated/0/.Knot/share_text.txt";
-            String str_receive = readTextFile(filename);
-            if (strFlag.equals("insert")) {
-                insertNote(str_receive);
-            }
+            if (strFlag.length() > 0) {
+                try {
+                    Wini ini = new Wini(new File(filename));
+                    ini.put("share", "on_create", "");
+                    ini.store();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-            if (strFlag.equals("append")) {
-                appendNote(str_receive);
+                filename = "/storage/emulated/0/.Knot/share_text.txt";
+                String str_receive = readTextFile(filename);
+                if (strFlag.equals("insert")) {
+                    insertNote(str_receive);
+                }
+
+                if (strFlag.equals("append")) {
+                    appendNote(str_receive);
+                }
             }
         }
 

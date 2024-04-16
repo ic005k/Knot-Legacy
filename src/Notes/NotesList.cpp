@@ -433,10 +433,10 @@ void NotesList::on_btnDel_clicked() {
 
   if (tw->topLevelItemCount() > 0) {
     if (tw->currentItem()->childCount() == 0) {
-      loadEmptyNote();
+      mw_one->m_Notes->loadEmptyNote();
     }
   } else {
-    loadEmptyNote();
+    mw_one->m_Notes->loadEmptyNote();
     mw_one->ui->lblNoteBook->setText(tr("Note Book"));
     mw_one->ui->lblNoteList->setText(tr("Note List"));
   }
@@ -1576,7 +1576,7 @@ void NotesList::on_actionDel_NoteBook_triggered() {
   saveNotesList();
 
   if (count == 0) {
-    loadEmptyNote();
+    mw_one->m_Notes->loadEmptyNote();
   }
 }
 
@@ -1795,15 +1795,8 @@ void NotesList::on_actionDel_Note_triggered() {
   saveNotesList();
 
   if (count == 0) {
-    loadEmptyNote();
+    mw_one->m_Notes->loadEmptyNote();
   }
-}
-
-void NotesList::loadEmptyNote() {
-  currentMDFile = "";
-  mw_one->m_Notes->MD2Html(currentMDFile);
-  mw_one->m_Notes->loadNoteToQML();
-  mw_one->ui->lblNoteName->setText("");
 }
 
 void NotesList::on_actionRename_Note_triggered() {

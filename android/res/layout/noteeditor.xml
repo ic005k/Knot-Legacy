@@ -133,35 +133,30 @@
     </LinearLayout>
 
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none">
-        <!-- ScorllView解决上下滑动-->
+        android:orientation="vertical"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true"
+    >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="top"
-            android:orientation="vertical">
+        <EditText
+            android:id="@+id/editNote"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:inputType="textMultiLine"
+            android:layout_weight="1"
+        />
 
-            <EditText
-                android:id="@+id/editNote"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:text="TextView"
-                android:textColor="#000000"
-                android:scrollbars="vertical"
-                android:fadeScrollbars="true"
-                android:inputType="textMultiLine"
-                android:layout_weight="1"
-            />
 
-        </LinearLayout>
     </ScrollView>
+
 
     <!-- LinearLayout
         android:id="@+id/content"

@@ -1733,6 +1733,11 @@ void Notes::delImage() {
 void Notes::delLink(QString link) {
   qreal oldPos = getVPos();
   QString mdBurrers = loadText(currentMDFile);
+
+  if (!mdBurrers.contains(link)) {
+    link.replace("http://", "");
+  }
+
   mdBurrers.replace(link, "");
   mdBurrers = formatMDText(mdBurrers);
   StringToFile(mdBurrers, currentMDFile);
@@ -1754,4 +1759,27 @@ QString Notes::formatMDText(QString text) {
   for (int i = 0; i < 10; i++) text.replace("\n\n\n", "\n\n");
 
   return text;
+}
+
+void Notes::init_all_notes() {
+  mw_one->m_NotesList->initNotesList();
+  mw_one->m_NotesList->initRecycle();
+
+  // load note
+  currentMDFile = mw_one->m_NotesList->getCurrentMDFile();
+  if (QFile::exists(currentMDFile)) {
+    MD2Html(currentMDFile);
+    loadNoteToQML();
+  } else {
+    loadEmptyNote();
+  }
+
+  mw_one->m_Notes->setVPos(-0.01);
+}
+
+void Notes::loadEmptyNote() {
+  currentMDFile = "";
+  MD2Html(currentMDFile);
+  loadNoteToQML();
+  mw_one->ui->lblNoteName->setText("");
 }
