@@ -103,6 +103,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public static TextView lblResult;
     private ArrayList<Integer> arrayFindResult = new ArrayList<Integer>();
     private int curIndexForResult = 0;
+    private boolean isSetHighlight = false;
 
     public static boolean zh_cn;
     private String currentMDFile;
@@ -156,7 +157,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // pass edittext object to TextViewUndoRedo class
         helper = new TextViewUndoRedo(editNote);
 
-        hightKeyword("![image]");
+        hightKeyword(str, "![image]");
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         btnFind = (Button) findViewById(R.id.btnFind);
@@ -866,8 +867,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             public void afterTextChanged(Editable editable) {
                 isTextChanged = true;
 
-               
-
             }
         });
 
@@ -886,11 +885,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             public void afterTextChanged(Editable editable) {
                 arrayFindResult.clear();
 
+                String desString = editNote.getText().toString();
                 String str = editFind.getText().toString();
                 System.out.println("afterTextChanged=" + str);
                 if (str.length() > 0) {
 
-                    arrayFindResult = findStr(str);
+                    arrayFindResult = findStr(desString, str);
 
                     if (arrayFindResult.size() > 0) {
                         goFindResult(0);
@@ -1007,6 +1007,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         break;
 
                 }
+
+                if (item.getTitle().equals("Format")) {
+                    formatText();
+                }
+
                 if (item.getTitle().equals("Image"))
                     openFilePicker();
 
@@ -1343,9 +1348,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
-    private ArrayList<Integer> findStr(String subString) {
+    private ArrayList<Integer> findStr(String desString, String subString) {
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
-        String desString = editNote.getText().toString();
 
         if (desString == null || subString == null) {
             return arrayList;
@@ -1424,11 +1428,10 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
     }
 
-    private void hightKeyword(String strKey) {
+    private void hightKeyword(String strOrg, String strKey) {
 
-        String strOrg = editNote.getText().toString();
         arrayFindResult.clear();
-        arrayFindResult = findStr(strKey);
+        arrayFindResult = findStr(strOrg, strKey);
         int count = arrayFindResult.size();
         if (count > 0) {
             SpannableStringBuilder style = new SpannableStringBuilder(strOrg);
@@ -1441,10 +1444,24 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 style.setSpan(new ForegroundColorSpan(Color.WHITE), start, end,
                         Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                editNote.setText(style);
 
             }
+            editNote.setText(style);
+            isSetHighlight = true;
         }
 
+    }
+
+    private void formatText() {
+        int curIndex = editNote.getSelectionStart();
+        String strOrg = editNote.getText().toString();
+        for (int i = 0; i < 10; i++)
+            strOrg = strOrg.replace("\n\n\n", "\n\n");
+        hightKeyword(strOrg, "![image]");
+        int nLength = editNote.getText().length();
+        if (curIndex > nLength)
+            curIndex = nLength;
+
+        editNote.setSelection(curIndex);
     }
 }

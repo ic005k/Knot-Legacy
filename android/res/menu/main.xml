@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/format" android:title="Format" />
     <item android:id="@+id/image" android:title="Image" />
     <item android:id="@+id/table" android:title="Table" />
     <item android:id="@+id/bold" android:title="Bold" />
