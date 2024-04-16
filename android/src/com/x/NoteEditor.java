@@ -70,7 +70,11 @@ import android.widget.Toast;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.sql.Time;
-
+import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
 
@@ -96,6 +100,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     public static EditText editNote;
     public static EditText editFind;
+    public static TextView lblResult;
     private ArrayList<Integer> arrayFindResult = new ArrayList<Integer>();
     private int curIndexForResult = 0;
 
@@ -151,6 +156,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // pass edittext object to TextViewUndoRedo class
         helper = new TextViewUndoRedo(editNote);
 
+        hightKeyword("![image]");
+
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         btnFind = (Button) findViewById(R.id.btnFind);
         btnUndo = (Button) findViewById(R.id.btnUndo);
@@ -158,6 +165,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         btnMenu = (Button) findViewById(R.id.btnMenu);
 
         editFind = (EditText) findViewById(R.id.editFind);
+        lblResult = (TextView) findViewById(R.id.lblResult);
+        lblResult.setText("0");
         btnPrev = (Button) findViewById(R.id.btnPrev);
         btnNext = (Button) findViewById(R.id.btnNext);
 
@@ -184,6 +193,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         editFind.setVisibility(View.GONE);
         btnPrev.setVisibility(View.GONE);
         btnNext.setVisibility(View.GONE);
+        lblResult.setVisibility(View.GONE);
 
         btn_cancel.setOnClickListener(this);
         btnUndo.setOnClickListener(this);
@@ -228,11 +238,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     editFind.setVisibility(View.GONE);
                     btnPrev.setVisibility(View.GONE);
                     btnNext.setVisibility(View.GONE);
+                    lblResult.setVisibility(View.GONE);
 
                 } else {
                     editFind.setVisibility(View.VISIBLE);
                     btnPrev.setVisibility(View.VISIBLE);
                     btnNext.setVisibility(View.VISIBLE);
+                    lblResult.setVisibility(View.VISIBLE);
                     editFind.requestFocus();
                 }
                 btnRedo.setBackgroundColor(getResources().getColor(R.color.normal));
@@ -242,7 +254,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             case R.id.btnPrev:
                 btnPrev.setBackgroundColor(getResources().getColor(R.color.red));
                 goFindResult(-1);
-                editNote.requestFocus();
+                int count = arrayFindResult.size();
+                if (count > 0) {
+                    String strInfo = String.valueOf(curIndexForResult + 1) + " -> " + String.valueOf(count);
+                    lblResult.setText(strInfo);
+
+                    editNote.requestFocus();
+                }
+
                 btnPrev.setBackgroundColor(getResources().getColor(R.color.normal));
 
                 break;
@@ -250,7 +269,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             case R.id.btnNext:
                 btnNext.setBackgroundColor(getResources().getColor(R.color.red));
                 goFindResult(1);
-                editNote.requestFocus();
+                count = arrayFindResult.size();
+                if (count > 0) {
+                    String strInfo = String.valueOf(curIndexForResult + 1) + " -> " + String.valueOf(count);
+                    lblResult.setText(strInfo);
+
+                    editNote.requestFocus();
+                }
+
                 btnNext.setBackgroundColor(getResources().getColor(R.color.normal));
 
                 break;
@@ -839,6 +865,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             @Override
             public void afterTextChanged(Editable editable) {
                 isTextChanged = true;
+
+               
+
             }
         });
 
@@ -855,18 +884,20 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             @Override
             public void afterTextChanged(Editable editable) {
+                arrayFindResult.clear();
 
-                
                 String str = editFind.getText().toString();
                 System.out.println("afterTextChanged=" + str);
                 if (str.length() > 0) {
-                    arrayFindResult.clear();
-                    arrayFindResult = findStr();
+
+                    arrayFindResult = findStr(str);
 
                     if (arrayFindResult.size() > 0) {
                         goFindResult(0);
                     }
                 }
+
+                lblResult.setText(String.valueOf(arrayFindResult.size()));
             }
         });
     }
@@ -1312,10 +1343,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
-    private ArrayList<Integer> findStr() {
+    private ArrayList<Integer> findStr(String subString) {
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
         String desString = editNote.getText().toString();
-        String subString = editFind.getText().toString();
 
         if (desString == null || subString == null) {
             return arrayList;
@@ -1368,4 +1398,53 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
+    /**
+     * 设置文本关键字高亮处理
+     * 
+     * @param text     文本内容
+     * @param keyword  关键字
+     * @param textView 控件
+     */
+    private void setHighLineText(String text, String keyword, EditText textView) {
+        if (!TextUtils.isEmpty(keyword) && !TextUtils.isEmpty(text)) {
+            if (text.toLowerCase().contains(keyword.toLowerCase())) {
+                int start = 0;
+                if (text.contains(keyword)) {
+                    start = text.indexOf(keyword);
+                } else {
+                    start = text.toLowerCase().indexOf(keyword.toLowerCase());
+                }
+                SpannableStringBuilder styled = new SpannableStringBuilder(text);
+                styled.setSpan(new ForegroundColorSpan(Color.RED), start, start + keyword.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                textView.setText(styled);
+            } else {
+                textView.setText(text);
+            }
+        }
+    }
+
+    private void hightKeyword(String strKey) {
+
+        String strOrg = editNote.getText().toString();
+        arrayFindResult.clear();
+        arrayFindResult = findStr(strKey);
+        int count = arrayFindResult.size();
+        if (count > 0) {
+            SpannableStringBuilder style = new SpannableStringBuilder(strOrg);
+            for (int i = 0; i < count; i++) {
+                int start = arrayFindResult.get(i);
+                int end = start + strKey.length();
+                System.out.print("start=" + start + "  end=" + end);
+
+                style.setSpan(new BackgroundColorSpan(Color.RED), start, end,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                style.setSpan(new ForegroundColorSpan(Color.WHITE), start, end,
+                        Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                editNote.setText(style);
+
+            }
+        }
+
+    }
 }

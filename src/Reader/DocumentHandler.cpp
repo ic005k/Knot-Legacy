@@ -244,9 +244,8 @@ void DocumentHandler::parsingLink(QString linkFile, QString qwName) {
   if (mw_one->curx != 0) return;
 
   qDebug() << "link : " << linkFile;
+  copyText = linkFile;
   if (linkFile.mid(0, 4) == "http" || linkFile.mid(0, 4) == "www.") {
-    copyText = linkFile;
-
     if (linkFile.mid(0, 4) != "http") {
       linkFile = "http://" + linkFile;
     }
@@ -256,13 +255,13 @@ void DocumentHandler::parsingLink(QString linkFile, QString qwName) {
     if (qwName == "reader") {
       ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
       ok = m_ShowMsg->showMsg(
-          appName, tr("Open this URL?") + "\n\n" + linkFile + "\n", 3);
+          appName, tr("Open this URL?") + "\n\n" + copyText + "\n", 3);
     }
 
     if (qwName == "note") {
       ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
       ok = m_ShowMsg->showMsg(
-          appName, tr("Open this URL?") + "\n\n" + linkFile + "\n", 4);
+          appName, tr("Open this URL?") + "\n\n" + copyText + "\n", 4);
     }
 
     if (ok) QDesktopServices::openUrl(url);
