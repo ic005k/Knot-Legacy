@@ -2459,7 +2459,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
-  if (evn->type() == QEvent::KeyRelease) {
+  if (evn->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
 
     if (watch == ui->editSearchText && keyEvent->key() == Qt::Key_Return) {
@@ -2478,6 +2478,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
 
     if (keyEvent->key() == Qt::Key_Back) {
+      if (pAndroidKeyboard->isVisible()) {
+        pAndroidKeyboard->hide();
+        return true;
+      }
+
       if (!ui->frameReader->isHidden()) {
         if (ui->qwCata->isVisible()) {
           m_Reader->showCatalogue();
@@ -4582,6 +4587,17 @@ void MainWindow::on_btnSetKeyOK_clicked() {
 }
 
 void MainWindow::on_btnEdit_clicked() {
+  qDebug() << "currentMDFile=" << currentMDFile;
+  if (!QFile::exists(currentMDFile)) {
+    ShowMessage *msg = new ShowMessage(mw_one);
+    msg->showMsg(appName,
+                 tr("The current note does not exist. Please select another "
+                    "note or create a new note."),
+                 0);
+    on_btnNotesList_clicked();
+    return;
+  }
+
   m_Notes->saveQMLVPos();
   QString mdString = loadText(currentMDFile);
 

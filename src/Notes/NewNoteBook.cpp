@@ -44,7 +44,7 @@ NewNoteBook::NewNoteBook(QWidget* parent)
 NewNoteBook::~NewNoteBook() { delete ui; }
 
 bool NewNoteBook::eventFilter(QObject* watch, QEvent* evn) {
-  if (evn->type() == QEvent::KeyRelease) {
+  if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnCancel_clicked();

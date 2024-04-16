@@ -1523,11 +1523,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         hightKeyword(strOrg, "_**");
         hightKeyword(strOrg, "**_");
 
+        editNote.setText(style);
+
         int nLength = editNote.getText().length();
         if (curIndex > nLength)
             curIndex = nLength;
 
-        editNote.setText(style);
         editNote.setSelection(curIndex);
     }
 }

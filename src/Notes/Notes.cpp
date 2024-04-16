@@ -1124,7 +1124,7 @@ bool Notes::eventFilterQwNote(QObject *watch, QEvent *event) {
       isMouseMove = false;
 
       if (!isMouseMove) {
-        timerEditNote->start(1600);
+        // timerEditNote->start(1600);
       }
     }
 
@@ -1140,7 +1140,7 @@ bool Notes::eventFilterQwNote(QObject *watch, QEvent *event) {
     }
 
     if (event->type() == QEvent::MouseButtonDblClick) {
-      mw_one->on_btnNotesList_clicked();
+      mw_one->on_btnEdit_clicked();
     }
   }
 
@@ -1767,6 +1767,7 @@ void Notes::init_all_notes() {
 
   // load note
   currentMDFile = mw_one->m_NotesList->getCurrentMDFile();
+  qDebug() << "currentMDFile=" << currentMDFile;
   if (QFile::exists(currentMDFile)) {
     MD2Html(currentMDFile);
     loadNoteToQML();

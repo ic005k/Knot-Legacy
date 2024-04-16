@@ -101,7 +101,7 @@ void ReaderSet::init() {
 
 bool ReaderSet::eventFilter(QObject* watch, QEvent* evn) {
   QMouseEvent* event = static_cast<QMouseEvent*>(evn);
-  if (evn->type() == QEvent::KeyRelease) {
+  if (evn->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnBack_clicked();

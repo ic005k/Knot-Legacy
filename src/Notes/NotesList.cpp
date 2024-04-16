@@ -7,7 +7,7 @@
 
 extern MainWindow *mw_one;
 extern Method *m_Method;
-extern QString iniDir, privateDir, currentMDFile;
+extern QString iniDir, privateDir, currentMDFile, appName;
 extern bool isAndroid, isDark;
 extern int fontSize;
 
@@ -2167,6 +2167,17 @@ void NotesList::clickNoteList() {
   int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteList);
   QString strMD = m_Method->getText3(mw_one->ui->qwNoteList, index);
   currentMDFile = iniDir + strMD;
+
+  if (!QFile::exists(currentMDFile)) {
+    ShowMessage *msg = new ShowMessage(mw_one);
+    msg->showMsg(appName,
+                 tr("The current note does not exist. Please select another "
+                    "note or create a new note."),
+                 0);
+
+    return;
+  }
+
   QString noteName = m_Method->getText0(mw_one->ui->qwNoteList, index);
   mw_one->m_Notes->MD2Html(currentMDFile);
   mw_one->m_Notes->loadNoteToQML();
