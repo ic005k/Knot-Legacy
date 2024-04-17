@@ -5,6 +5,7 @@ import com.x.TextViewUndoRedo;
 
 // 读写ini文件的三方开源库
 import org.ini4j.Wini;
+import top.defaults.colorpicker.ColorPickerPopup;
 
 import android.content.IntentFilter;
 import android.content.Intent;
@@ -108,6 +109,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public static TextView lblResult;
     private ArrayList<Integer> arrayFindResult = new ArrayList<Integer>();
     private int curIndexForResult = 0;
+    private View mColorPreview;
 
     public static boolean zh_cn;
     private String currentMDFile;
@@ -168,6 +170,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         btnUndo = (Button) findViewById(R.id.btnUndo);
         btnRedo = (Button) findViewById(R.id.btnRedo);
         btnMenu = (Button) findViewById(R.id.btnMenu);
+        mColorPreview = (View) findViewById(R.id.preview_selected_color);
 
         editFind = (EditText) findViewById(R.id.editFind);
         editFind.setOnEditorActionListener(new OnEditorActionListener() {
@@ -208,6 +211,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             btnNext.setText(">");
         }
 
+        mColorPreview.setVisibility(View.GONE);
         editFind.setVisibility(View.GONE);
         btnPrev.setVisibility(View.GONE);
         btnNext.setVisibility(View.GONE);
@@ -1111,13 +1115,67 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 }
 
                 if (item.getTitle().equals("Font Color")) {
+                    int start = editNote.getSelectionStart();
+                    int end = editNote.getSelectionEnd();
+                    editNote.setSelection(start);
+                    editNote.setSelection(start, end);
 
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("<font color=#E01B24>" + sel + "</font>");
-                    } else
-                        insertNote("<font color=#E01B24>Color</font>");
+                    new ColorPickerPopup.Builder(context)
+                            .initialColor(Color.RED) // Set initial color
+                            .enableBrightness(true) // Enable brightness slider or not
+                            .enableAlpha(true) // Enable alpha slider or not
+                            .okTitle("Ok")
+                            .cancelTitle("Cancel")
+                            .showIndicator(true)
+                            .showValue(true)
+                            .build()
+                            .show(mColorPreview, new ColorPickerPopup.ColorPickerObserver() {
+                                @Override
+                                public void onColorPicked(int color) {
+                                    mColorPreview.setBackgroundColor(color);
+
+                                    String hexColor = "#" + Integer.toHexString(color).substring(2).toUpperCase();
+                                    String sel = getEditSelectText();
+                                    int len = sel.length();
+
+                                    if (len == 7) {
+                                        String subString = sel.substring(0, 1);
+                                        if (subString.equals("#") && isHexString(sel.substring(1))) {
+                                            delEditSelectText();
+                                            insertNote(hexColor);
+                                        } else {
+                                            delEditSelectText();
+                                            insertNote("<font color=" + hexColor + ">" + sel + "</font>");
+                                        }
+                                    } else if (len == 6) {
+                                        editNote.setSelection(start - 1, start);
+                                        if (getEditSelectText().equals("#") && isHexString(sel)) {
+                                            editNote.setSelection(start - 1, end);
+                                            delEditSelectText();
+                                            insertNote(hexColor);
+
+                                        } else {
+                                            delEditSelectText();
+                                            insertNote("<font color=" + hexColor + ">" + sel + "</font>");
+                                        }
+
+                                    } else {
+                                        delEditSelectText();
+                                        insertNote("<font color=" + hexColor + ">" + sel + "</font>");
+                                    }
+
+                                    if (len == 0) {
+                                        // old #E01B24
+                                        insertNote("<font color=" + hexColor + ">Color</font>");
+                                    }
+
+                                }
+
+                                public void onColor(int color, boolean fromUser) {
+
+                                }
+                            });
+
                 }
 
                 if (item.getTitle().equals("#")) {
@@ -1125,11 +1183,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 }
 
                 if (item.getTitle().equals(">"))
+
                     insertNote("> ");
 
                 if (item.getTitle().equals("Date")) {
+
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String dateString = sdf.format(new Date());
+
                     insertNote(dateString);
                 }
 
@@ -1576,6 +1637,23 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
+    }
+
+    private boolean isHexString(String hexString) {
+        if (hexString.length() % 2 != 0) {
+            return false;
+        }
+
+        String hexChars = "0123456789ABCDEF"; // 16进制字符集
+        for (int i = 0; i < hexString.length(); i++) {
+            char c = hexString.charAt(i);
+            if (!hexChars.contains(Character.toUpperCase(c) + "")) {
+                // 字符不是有效的16进制字符
+                System.out.println("字符串包含非16进制字符");
+                return false;
+            }
+        }
+        return true;
     }
 
 }

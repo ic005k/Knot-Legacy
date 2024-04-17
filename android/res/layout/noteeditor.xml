@@ -55,6 +55,14 @@
             android:layout_weight="1"
             android:text="Redo" />
 
+        <View
+            android:id="@+id/preview_selected_color"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@android:color/darker_gray"
+        />
+
         <Button
             android:id="@+id/btnMenu"
             android:textAllCaps="false"
