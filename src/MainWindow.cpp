@@ -1598,11 +1598,11 @@ void MainWindow::setMini() {
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString("MiniWin");
-  jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
+  jo.callStaticMethod<void>("com.x/MyActivity", "setMini", "()V");
 
 #else
   QJniObject jo = QJniObject::fromString("MiniWin");
-  jo.callStaticMethod<int>("com.x/MyActivity", "mini", "()I");
+  jo.callStaticMethod<void>("com.x/MyActivity", "setMini", "()V");
 
 #endif
 

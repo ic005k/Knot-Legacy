@@ -114,7 +114,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public static boolean zh_cn;
     private String currentMDFile;
     private static Context context;
-    private static NoteEditor m_instance;
+    public static NoteEditor m_instance;
     private static boolean isTextChanged = false;
     private TextViewUndoRedo helper;
 
@@ -423,6 +423,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     @Override
     public void onBackPressed() {
 
+        super.onBackPressed();
+        AnimationWhenClosed();
+    }
+
+    @Override
+    protected void onDestroy() {
         // save cursor pos
         String file2 = "/storage/emulated/0/.Knot/note_text.ini";
         int cpos = editNote.getSelectionStart();
@@ -448,17 +454,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         if (isTextChanged) {
-            // showNormalDialog();
             saveNote();
 
         }
-
-        super.onBackPressed();
-        AnimationWhenClosed();
-    }
-
-    @Override
-    protected void onDestroy() {
 
         unregisterReceiver(mHomeKeyEvent);
         MyService.clearNotify();
@@ -1155,16 +1153,15 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                                             insertNote(hexColor);
 
                                         } else {
+                                            editNote.setSelection(start, end);
                                             delEditSelectText();
                                             insertNote("<font color=" + hexColor + ">" + sel + "</font>");
                                         }
 
-                                    } else {
+                                    } else if (len > 0) {
                                         delEditSelectText();
                                         insertNote("<font color=" + hexColor + ">" + sel + "</font>");
-                                    }
-
-                                    if (len == 0) {
+                                    } else {
                                         // old #E01B24
                                         insertNote("<font color=" + hexColor + ">Color</font>");
                                     }
@@ -1172,6 +1169,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                                 }
 
                                 public void onColor(int color, boolean fromUser) {
+                                    // Cancel event
 
                                 }
                             });
@@ -1654,6 +1652,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             }
         }
         return true;
+    }
+
+    public static void closeView() {
+        m_instance.finish();
+
     }
 
 }

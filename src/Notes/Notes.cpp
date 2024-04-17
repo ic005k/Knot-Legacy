@@ -840,7 +840,8 @@ void Notes::loadNoteToQML() {
   for (int i = 0; i < edit->document()->lineCount(); i++) {
     str = getTextEditLineText(edit, i);
     str = str.trimmed();
-    if (str.mid(0, 4) == "<img" && str.contains("file://")) {
+    if (str.mid(0, 4) == "<img" && str.contains("file://") &&
+        str.contains(imgDir)) {
       QString str1 = str;
 
       QStringList list = str1.split(" ");

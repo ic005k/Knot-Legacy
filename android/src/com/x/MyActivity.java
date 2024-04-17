@@ -253,11 +253,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     }
 
     // ------------------------------------------------------------------------
-    public static int mini() {
-        System.out.println("Mini+++++++++++++++++++++++");
+    public static void setMini() {
         m_instance.moveTaskToBack(true);
-
-        return 1;
     }
 
     public static void setMax() {

@@ -1,6 +1,7 @@
 package com.x;
 
 import com.x.MyActivity;
+import com.x.NoteEditor;
 
 import android.content.IntentFilter;
 import android.content.Intent;
@@ -142,6 +143,10 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 先关闭笔记编辑器
+        NoteEditor.closeView();
+
         context = getApplicationContext();
         // this.getWindow().setWindowAnimations(R.style.WindowAnim);
         isZh(context);
@@ -164,9 +169,11 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // 去掉Activity上面的状态栏(Show Time...)
+
+        // 去掉Activity上面的状态栏(全屏)
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         // WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         this.setStatusBarColor("#F3F3F3"); // 灰
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
@@ -325,7 +332,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
         if (!isRefreshAlarm) {
             if (!isGoBackKnot) {
-                MyActivity.mini();
+
+                MyActivity.setMini();
             }
             isGoBackKnot = false;
             android.os.Process.killProcess(android.os.Process.myPid());
@@ -334,7 +342,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         }
 
         if (!isGoBackKnot) {
-            MyActivity.mini();
+
+            MyActivity.setMini();
         }
 
         isGoBackKnot = false;
