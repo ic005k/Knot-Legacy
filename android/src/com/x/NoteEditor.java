@@ -83,6 +83,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.KeyEvent;
 import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.InputMethodManager;
+import java.util.regex.*;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -1596,6 +1597,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             strOrg = strOrg.replace("\n\n\n", "\n\n");
 
         style = new SpannableStringBuilder(strOrg);
+
         hightKeyword(strOrg, "![image]");
         hightKeyword(strOrg, "# ");
         hightKeyword(strOrg, "## ");
@@ -1655,7 +1657,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     public static void closeView() {
-        m_instance.finish();
+        if (m_instance != null)
+            m_instance.finish();
 
     }
 

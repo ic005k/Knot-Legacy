@@ -277,9 +277,9 @@ Rectangle {
                             smooth: true
                             sourceSize.height: item1.contentHeight - 3
                             sourceSize.width: item1.contentHeight - 3
-                            source: "/res/s0.png"
+                            source: "/res/s0.svg"
 
-                            visible: true
+                            visible: false
                         }
 
                         Text {
@@ -321,9 +321,9 @@ Rectangle {
                             smooth: true
                             sourceSize.height: item1.contentHeight - 3
                             sourceSize.width: item1.contentHeight - 3
-                            source: "/res/s1.png"
+                            source: "/res/s1.svg"
 
-                            visible: true
+                            visible: false
                         }
 
                         Text {
@@ -363,9 +363,9 @@ Rectangle {
                             smooth: true
                             sourceSize.height: item1.contentHeight - 3
                             sourceSize.width: item1.contentHeight - 3
-                            source: "/res/s2.png"
+                            source: "/res/s2.svg"
 
-                            visible: true
+                            visible: false
                         }
 
                         Text {

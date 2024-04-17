@@ -13,14 +13,12 @@
         <file>res/down.png</file>
         <file>res/edit.png</file>
         <file>res/find.png</file>
-        <file>res/font.png</file>
         <file>res/high.png</file>
         <file>res/icon.icns</file>
         <file>res/icon.png</file>
         <file>res/lasttxt.png</file>
         <file>res/low.png</file>
         <file>res/main.css</file>
-        <file>res/modi.png</file>
         <file>res/nosel.png</file>
         <file>res/reader.png</file>
         <file>res/open.png</file>
@@ -40,7 +38,6 @@
         <file>res/todo.png</file>
         <file>res/todo1.png</file>
         <file>res/up.png</file>
-        <file>res/max.png</file>
         <file>res/onebak.png</file>
         <file>res/timemachine.png</file>
         <file>res/msg.mp3</file>
@@ -55,7 +52,6 @@
         <file>res/pic.png</file>
         <file>res/additem.png</file>
         <file>res/delitem.png</file>
-        <file>res/note.png</file>
         <file>res/info.png</file>
         <file>res/b3.png</file>
         <file>res/font1.png</file>
@@ -65,8 +61,6 @@
         <file>res/font5.png</file>
         <file>res/link.png</file>
         <file>res/color.png</file>
-        <file>res/left.png</file>
-        <file>res/right.png</file>
         <file>res/apk.png</file>
         <file>res/icon.ico</file>
         <file>res/sync0.png</file>
@@ -107,8 +101,6 @@
         <file>theme/dark/darkstyle.qss</file>
         <file>theme/light/lightstyle.qss</file>
         <file>res/reader_l.png</file>
-        <file>res/max_l.png</file>
-        <file>res/note_l.png</file>
         <file>res/steps_l.png</file>
         <file>res/todo_l.png</file>
         <file>res/edit_l.png</file>
@@ -137,9 +129,6 @@
         <file>res/notes.png</file>
         <file>res/delall_l.png</file>
         <file>res/reset.png</file>
-        <file>res/s2.png</file>
-        <file>res/s1.png</file>
-        <file>res/s0.png</file>
         <file>res/rename.png</file>
         <file>res/btn_expand.png</file>
         <file>res/btn_collapse.png</file>
@@ -159,5 +148,10 @@
         <file>res/set_bookmark_l.png</file>
         <file>res/none.png</file>
         <file>res/share.png</file>
+        <file>res/note_l.svg</file>
+        <file>res/note.svg</file>
+        <file>res/s2.svg</file>
+        <file>res/s1.svg</file>
+        <file>res/s0.svg</file>
     </qresource>
 </RCC>

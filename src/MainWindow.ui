@@ -1729,8 +1729,8 @@ QTabBar::scroller {width:0}
             </property>
             <property name="iconSize">
              <size>
-              <width>26</width>
-              <height>26</height>
+              <width>28</width>
+              <height>28</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -1816,8 +1816,8 @@ QTabBar::scroller {width:0}
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="shortcut">
@@ -7832,8 +7832,8 @@ color: rgb(255, 255, 255);</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../icons.qrc"/>
   <include location="../res.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections/>
 </ui>
