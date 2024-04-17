@@ -160,25 +160,4 @@
     </ScrollView>
 
 
-    <!-- LinearLayout
-        android:id="@+id/content"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="90dp"
-            android:layout_marginBottom="90dp"
-            android:layout_marginRight="90dp"
-            android:layout_marginLeft="90dp"
-            android:src="@drawable/alarm"
-            />
-
-    </LinearLayout -->
-
-
 </LinearLayout>

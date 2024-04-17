@@ -23,7 +23,7 @@ void StepsOptions::closeEvent(QCloseEvent *event) {
 }
 
 bool StepsOptions::eventFilter(QObject *obj, QEvent *evn) {
-  if (evn->type() == QEvent::KeyRelease) {
+  if (evn->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       on_btnBack_clicked();

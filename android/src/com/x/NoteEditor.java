@@ -81,6 +81,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.inputmethod.EditorInfo;
 import android.view.KeyEvent;
 import android.widget.TextView.OnEditorActionListener;
+import android.view.inputmethod.InputMethodManager;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -228,7 +229,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         switch (v.getId()) {
             case R.id.btn_cancel:
                 btn_cancel.setBackgroundColor(getResources().getColor(R.color.red));
+                hideKeyBoard(m_instance);
                 onBackPressed();
+                btn_cancel.setBackgroundColor(getResources().getColor(R.color.normal));
                 break;
 
             case R.id.btnUndo:
@@ -1045,23 +1048,48 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 }
 
                 if (item.getTitle().equals("h1")) {
-                    insertNote("# ");
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("# " + sel);
+                    } else
+                        insertNote("# ");
                 }
 
                 if (item.getTitle().equals("h2")) {
-                    insertNote("## ");
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("## " + sel);
+                    } else
+                        insertNote("## ");
                 }
 
                 if (item.getTitle().equals("h3")) {
-                    insertNote("### ");
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("### " + sel);
+                    } else
+                        insertNote("### ");
                 }
 
                 if (item.getTitle().equals("h4")) {
-                    insertNote("#### ");
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("#### " + sel);
+                    } else
+                        insertNote("#### ");
                 }
 
                 if (item.getTitle().equals("h5")) {
-                    insertNote("##### ");
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("##### " + sel);
+                    } else
+                        insertNote("##### ");
                 }
 
                 if (item.getTitle().equals("Bold")) {
@@ -1083,6 +1111,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 }
 
                 if (item.getTitle().equals("Font Color")) {
+
                     String sel = getEditSelectText();
                     if (sel.length() > 0) {
                         delEditSelectText();
@@ -1531,4 +1560,22 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         editNote.setSelection(curIndex);
     }
+
+    /**
+     * 隐藏软键盘，要防止报空指针
+     */
+    public static void hideKeyBoard(Activity activity) {
+        // 拿到InputMethodManager
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        // 如果window上view获取焦点 && view不为空
+        if (imm.isActive() && activity.getCurrentFocus() != null) {
+            // 拿到view的token 不为空
+            if (activity.getCurrentFocus().getWindowToken() != null) {
+                // 表示软键盘窗口总是隐藏，除非开始时以SHOW_FORCED显示。
+                imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
+
 }
