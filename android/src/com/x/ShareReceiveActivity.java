@@ -76,6 +76,12 @@ import java.util.logging.Logger;
 
 import android.widget.Toast;
 
+import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.Spannable;
+import android.text.Spanned;
+
 public class ShareReceiveActivity extends Activity
         implements View.OnClickListener {
     private TextView tv;
@@ -112,8 +118,8 @@ public class ShareReceiveActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         context = getApplicationContext();
+        zh_cn = isZh(context);
 
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -126,7 +132,6 @@ public class ShareReceiveActivity extends Activity
         btnAppendNote = (Button) findViewById(R.id.btnAppendNote);
         btnInsertNote = (Button) findViewById(R.id.btnInsertNote);
 
-        zh_cn = isZh(context);
         if (NoteEditor.zh_cn) {
             btnAddToTodo.setText("增加到待办事项");
             btnAppendNote.setText("追加到当前笔记");
@@ -165,6 +170,7 @@ public class ShareReceiveActivity extends Activity
                 handlerText(intent);
                 System.out.println("strData=" + strData);
                 tv.setText(type + ":\n\n" + "cursor pos: " + cursorText + "\n\n" + strData);
+                setInsertFlag();
 
             } else
 
@@ -669,10 +675,9 @@ public class ShareReceiveActivity extends Activity
         if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
             Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             tv.setText(type + ":\n\n" + "cursor pos: " + cursorText + "\n\n" + uri);
+            setInsertFlag();
             if (uri != null) {
                 try {
-                    // 之前的目录存储位置备注：getExternalFilesDir(null).getPath() + File.separator =
-                    // /storage/emulated/0/Android/data/com.x/files
                     File outFile = new File(fileName);
                     InputStream inputStream = getContentResolver().openInputStream(uri);
                     FileOutputStream fos = new FileOutputStream(outFile);
@@ -760,6 +765,32 @@ public class ShareReceiveActivity extends Activity
             bufferedWriter.close();// 关闭输出流
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void setInsertFlag() {
+        // Set insert flag
+        String strTV = tv.getText().toString();
+        int indexTV = strTV.indexOf(cursorText);
+        System.out.println("strTV=" + strTV + " cursorText=" + cursorText + "  indexTV=" + String.valueOf(indexTV));
+        if (indexTV >= 0) {
+            int start = indexTV;
+            int end = indexTV + cursorText.length();
+            SpannableStringBuilder style = new SpannableStringBuilder(strTV);
+            style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFE4C4")), start, end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+
+            indexTV = strTV.indexOf("|");
+            start = indexTV;
+            end = indexTV + 1;
+            style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFE4C4")), start, end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(new ForegroundColorSpan(Color.parseColor("#FF0000")), start, end,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+
+            tv.setText(style);
         }
     }
 

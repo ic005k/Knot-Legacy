@@ -1036,8 +1036,10 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     initTextFormat();
                 }
 
-                if (item.getTitle().equals("Image"))
+                if (item.getTitle().equals("Image")) {
                     openFilePicker();
+                    initTextFormat();
+                }
 
                 if (item.getTitle().equals("Table")) {
 
@@ -1047,6 +1049,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     String str4 = "|        |        |        |\n";
 
                     insertNote(str1 + str2 + str3 + str4);
+                    initTextFormat();
 
                 }
 
@@ -1057,6 +1060,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         insertNote("# " + sel);
                     } else
                         insertNote("# ");
+
+                    initTextFormat();
                 }
 
                 if (item.getTitle().equals("h2")) {
@@ -1066,6 +1071,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         insertNote("## " + sel);
                     } else
                         insertNote("## ");
+
+                    initTextFormat();
                 }
 
                 if (item.getTitle().equals("h3")) {
@@ -1075,6 +1082,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         insertNote("### " + sel);
                     } else
                         insertNote("### ");
+
+                    initTextFormat();
                 }
 
                 if (item.getTitle().equals("h4")) {
@@ -1084,6 +1093,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         insertNote("#### " + sel);
                     } else
                         insertNote("#### ");
+
+                    initTextFormat();
                 }
 
                 if (item.getTitle().equals("h5")) {
@@ -1093,6 +1104,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         insertNote("##### " + sel);
                     } else
                         insertNote("##### ");
+
+                    initTextFormat();
                 }
 
                 if (item.getTitle().equals("Bold")) {
@@ -1102,6 +1115,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         insertNote("**" + sel + "**");
                     } else
                         insertNote("**Bold**");
+
+                    initTextFormat();
                 }
 
                 if (item.getTitle().equals("Italic")) {
@@ -1111,6 +1126,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         insertNote("_" + sel + "_");
                     } else
                         insertNote("_Italic_");
+
+                    initTextFormat();
                 }
 
                 if (item.getTitle().equals("Font Color")) {
@@ -1167,6 +1184,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                                         insertNote("<font color=" + hexColor + ">Color</font>");
                                     }
 
+                                    initTextFormat();
+
                                 }
 
                                 public void onColor(int color, boolean fromUser) {
@@ -1179,6 +1198,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
                 if (item.getTitle().equals("#")) {
                     insertNote("#");
+                    initTextFormat();
                 }
 
                 if (item.getTitle().equals(">"))
@@ -1572,15 +1592,16 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 int end = start + strKey.length();
                 System.out.print("start=" + start + "  end=" + end);
 
-                if (strKey.equals("![image]") || strKey.equals("<font ")) {
-                    style.setSpan(new BackgroundColorSpan(Color.RED), start, end,
+                if (strKey.equals("![image]") || strKey.equals("<font ") || strKey.equals("https://")
+                        || strKey.equals("http://")) {
+                    style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFE4C4")), start, end,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    style.setSpan(new ForegroundColorSpan(Color.WHITE), start, end,
+                    style.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end,
                             Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                 } else {
-                    style.setSpan(new BackgroundColorSpan(Color.WHITE), start, end,
+                    style.setSpan(new BackgroundColorSpan(Color.GRAY), start, end,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    style.setSpan(new ForegroundColorSpan(Color.BLUE), start, end,
+                    style.setSpan(new ForegroundColorSpan(Color.BLACK), start, end,
                             Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                 }
 
@@ -1598,6 +1619,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         style = new SpannableStringBuilder(strOrg);
 
+        hightKeyword(strOrg, "https://");
+        hightKeyword(strOrg, "http://");
         hightKeyword(strOrg, "![image]");
         hightKeyword(strOrg, "# ");
         hightKeyword(strOrg, "## ");

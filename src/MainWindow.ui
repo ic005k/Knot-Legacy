@@ -767,8 +767,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>23</width>
+              <height>23</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -807,8 +807,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>23</width>
+              <height>23</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -847,8 +847,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>23</width>
+              <height>23</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -887,8 +887,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>23</width>
+              <height>23</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -927,8 +927,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>23</width>
+              <height>23</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -1724,13 +1724,13 @@ QTabBar::scroller {width:0}
              <string>Tabs</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/tab.png</normaloff>:/res/tab.png</iconset>
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -1755,8 +1755,8 @@ QTabBar::scroller {width:0}
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -1779,13 +1779,13 @@ QTabBar::scroller {width:0}
              <string>ToDo</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/todo.png</normaloff>:/res/todo.png</iconset>
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="shortcut">
@@ -1845,8 +1845,8 @@ QTabBar::scroller {width:0}
             </property>
             <property name="iconSize">
              <size>
-              <width>28</width>
-              <height>28</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
             <property name="toolButtonStyle">

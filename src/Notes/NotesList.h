@@ -108,7 +108,8 @@ class NotesList : public QDialog {
   void saveNoteBookVPos();
   void setNoteBookVPos();
 
- protected:
+  void genCursorText();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

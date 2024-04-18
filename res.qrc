@@ -1,10 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/1.png</file>
-        <file>res/2.png</file>
         <file>res/a1.png</file>
         <file>res/a2.png</file>
-        <file>res/add.png</file>
         <file>res/b.png</file>
         <file>res/back.png</file>
         <file>res/dir.png</file>
@@ -20,7 +17,6 @@
         <file>res/low.png</file>
         <file>res/main.css</file>
         <file>res/nosel.png</file>
-        <file>res/reader.png</file>
         <file>res/open.png</file>
         <file>res/pause.png</file>
         <file>res/qslider.png</file>
@@ -32,11 +28,8 @@
         <file>res/run.png</file>
         <file>res/sel.png</file>
         <file>res/steps.png</file>
-        <file>res/tab.png</file>
         <file>res/test.txt</file>
         <file>res/time.png</file>
-        <file>res/todo.png</file>
-        <file>res/todo1.png</file>
         <file>res/up.png</file>
         <file>res/onebak.png</file>
         <file>res/timemachine.png</file>
@@ -100,9 +93,7 @@
         <file>res/coin.png</file>
         <file>theme/dark/darkstyle.qss</file>
         <file>theme/light/lightstyle.qss</file>
-        <file>res/reader_l.png</file>
         <file>res/steps_l.png</file>
-        <file>res/todo_l.png</file>
         <file>res/edit_l.png</file>
         <file>res/find_l.png</file>
         <file>res/report_l.png</file>
@@ -117,7 +108,6 @@
         <file>res/sum.png</file>
         <file>res/chart_l.png</file>
         <file>res/chart.png</file>
-        <file>res/tab_l.png</file>
         <file>res/p1.png</file>
         <file>res/p0.png</file>
         <file>res/n.png</file>
@@ -153,5 +143,12 @@
         <file>res/s2.svg</file>
         <file>res/s1.svg</file>
         <file>res/s0.svg</file>
+        <file>res/todo1.svg</file>
+        <file>res/todo_l.svg</file>
+        <file>res/todo.svg</file>
+        <file>res/reader_l.svg</file>
+        <file>res/reader.svg</file>
+        <file>res/tab_l.svg</file>
+        <file>res/tab.svg</file>
     </qresource>
 </RCC>

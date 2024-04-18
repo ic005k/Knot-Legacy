@@ -836,12 +836,11 @@ void Notes::loadNoteToQML() {
   QString strhtml = loadText(htmlFileName);
   strhtml = strhtml.replace("><", ">\n<");
   edit->setPlainText(strhtml);
-  QString str;
+  QString str, str_2, str_3;
   for (int i = 0; i < edit->document()->lineCount(); i++) {
     str = getTextEditLineText(edit, i);
     str = str.trimmed();
-    if (str.mid(0, 4) == "<img" && str.contains("file://") &&
-        str.contains(imgDir)) {
+    if (str.mid(0, 4) == "<img" && str.contains("file://")) {
       QString str1 = str;
 
       QStringList list = str1.split(" ");
@@ -855,14 +854,18 @@ void Notes::loadNoteToQML() {
       }
 
       QStringList list1 = strSrc.split("/memo/");
-      strSrc = "\"file://" + iniDir + "memo/" + list1.at(1) + " ";
+      if (list1.count() > 1)
+        strSrc = "\"file://" + iniDir + "memo/" + list1.at(1) + " ";
 
       QStringList list2 = str1.split("/memo/");
-      QString str_2 = list2.at(1);
+      if (list2.count() > 1) str_2 = list2.at(1);
       str = "<img src=\"file:///" + iniDir + "memo/" + str_2;
       str = "<a href=" + strSrc + ">" + str + "</a>";
 
-      QString imgFile = iniDir + "memo/" + str_2.split("\"").at(0);
+      QStringList list3 = str_2.split("\"");
+      if (list3.count() > 0) str_3 = list3.at(0);
+
+      QString imgFile = iniDir + "memo/" + str_3;
       QImage img(imgFile);
       if (img.width() >= mw_one->width() - 25) {
         QString strW = QString::number(mw_one->width() - 25);

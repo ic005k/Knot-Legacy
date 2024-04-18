@@ -14,6 +14,7 @@ extern int fontSize;
 extern QString loadText(QString textFile);
 extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
+extern void StringToFile(QString buffers, QString fileName);
 
 NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->setupUi(this);
@@ -2201,6 +2202,7 @@ void NotesList::clickNoteList() {
     listRecentOpen.removeAt(count - 1);
   }
   saveRecentOpen();
+  genCursorText();
 }
 
 void NotesList::genRecentOpenMenu() {
@@ -2240,4 +2242,34 @@ void NotesList::genRecentOpenMenu() {
   int y = mw_one->geometry().y() + mw_one->ui->btnRecentOpen->height() + 4;
   QPoint pos(x, y);
   menuRecentOpen->exec(pos);
+}
+
+void NotesList::genCursorText() {
+  QTextEdit *edit = new QTextEdit;
+  QString strBuffer = loadText(currentMDFile);
+  edit->setPlainText(strBuffer);
+  int curPos = mw_one->m_ReceiveShare->getCursorPos();
+  if (curPos < 0) curPos = 0;
+  if (curPos > strBuffer.length()) curPos = strBuffer.length();
+  QTextCursor tmpCursor = edit->textCursor();
+
+  int start = curPos - 5;
+  int end = curPos;
+  if (start < 0) start = 0;
+  tmpCursor.setPosition(start, QTextCursor::MoveAnchor);
+  tmpCursor.setPosition(end, QTextCursor::KeepAnchor);
+  QString str0 = tmpCursor.selectedText();
+
+  start = curPos;
+  end = curPos + 5;
+  int nLength = strBuffer.length();
+  if (end > nLength) end = nLength;
+  tmpCursor.setPosition(start, QTextCursor::MoveAnchor);
+  tmpCursor.setPosition(end, QTextCursor::KeepAnchor);
+  QString str1 = tmpCursor.selectedText();
+
+  QString curText =
+      QString::number(curPos) + "  (\"" + str0 + "|" + str1 + "\"" + ")";
+  StringToFile(curText, privateDir + "cursor_text.txt");
+  qDebug() << "cursor_text=" << curText;
 }
