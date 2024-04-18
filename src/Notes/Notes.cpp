@@ -255,6 +255,12 @@ void Notes::MD2Html(QString mdFile) {
     QTextStream stream(&memofile1);
     QTextEdit *edit = new QTextEdit();
     QString strmd = loadText(mdFile);
+
+    if (strmd.contains("===KnotData===")) {
+      strmd.replace("===KnotData===", imgDir);
+      StringToFile(strmd, currentMDFile);
+    }
+
     if (strmd.contains(imgDir)) {
 #ifdef Q_OS_WIN
       strmd = strmd.replace(imgDir, "/" + iniDir);

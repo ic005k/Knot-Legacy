@@ -891,6 +891,16 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             public void afterTextChanged(Editable editable) {
                 isTextChanged = true;
 
+                int undoCount = helper.getUndoCount();
+                int redoCount = helper.getRedoCount();
+                if (zh_cn) {
+                    btnUndo.setText("撤销-" + String.valueOf(undoCount));
+                    btnRedo.setText("恢复-" + String.valueOf(redoCount));
+                } else {
+                    btnUndo.setText("Undo-" + String.valueOf(undoCount));
+                    btnRedo.setText("Redo-" + String.valueOf(redoCount));
+                }
+
             }
         });
 
@@ -1592,14 +1602,15 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 int end = start + strKey.length();
                 System.out.print("start=" + start + "  end=" + end);
 
-                if (strKey.equals("![image]") || strKey.equals("<font ") || strKey.equals("https://")
+                if (strKey.equals("==Image==") || strKey.equals("<font ") || strKey.equals("</font>")
+                        || strKey.equals("https://")
                         || strKey.equals("http://")) {
-                    style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFE4C4")), start, end,
+                    style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFC1C1")), start, end,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     style.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end,
                             Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                 } else {
-                    style.setSpan(new BackgroundColorSpan(Color.GRAY), start, end,
+                    style.setSpan(new BackgroundColorSpan(Color.parseColor("#CFCFCF")), start, end,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     style.setSpan(new ForegroundColorSpan(Color.BLACK), start, end,
                             Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -1621,12 +1632,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         hightKeyword(strOrg, "https://");
         hightKeyword(strOrg, "http://");
-        hightKeyword(strOrg, "![image]");
+        hightKeyword(strOrg, "==Image==");
         hightKeyword(strOrg, "# ");
         hightKeyword(strOrg, "## ");
         hightKeyword(strOrg, "### ");
         hightKeyword(strOrg, "#### ");
         hightKeyword(strOrg, "<font ");
+        hightKeyword(strOrg, "</font>");
         hightKeyword(strOrg, "* ");
         hightKeyword(strOrg, "---");
         hightKeyword(strOrg, "**");

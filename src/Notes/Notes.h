@@ -135,7 +135,8 @@ class Notes : public QDialog {
 
   void init_all_notes();
   void loadEmptyNote();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -265,7 +266,7 @@ class Notes : public QDialog {
 
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   void wheelEvent(QWheelEvent *e) override;
-  QString imgDir = "===KnotData===";
+  QString imgDir = "==Image==";
   QColor StringToColor(QString mRgbStr);
 };
 

@@ -3595,7 +3595,7 @@ void MainWindow::init_Theme() {
 
     ui->btnReader->setIcon(QIcon(":/res/reader.svg"));
     ui->btnTodo->setIcon(QIcon(":/res/todo.svg"));
-    ui->btnSteps->setIcon(QIcon(":/res/steps.png"));
+    ui->btnSteps->setIcon(QIcon(":/res/steps.svg"));
     ui->btnNotes->setIcon(QIcon(":/res/note.svg"));
     ui->btnChart->setIcon(QIcon(":/res/chart.png"));
     ui->btnFind->setIcon(QIcon(":/res/find.png"));
@@ -3620,7 +3620,7 @@ void MainWindow::init_Theme() {
 
     ui->btnReader->setIcon(QIcon(":/res/reader_l.svg"));
     ui->btnTodo->setIcon(QIcon(":/res/todo_l.png"));
-    ui->btnSteps->setIcon(QIcon(":/res/steps_l.png"));
+    ui->btnSteps->setIcon(QIcon(":/res/steps_l.svg"));
     ui->btnNotes->setIcon(QIcon(":/res/note_l.svg"));
     ui->btnChart->setIcon(QIcon(":/res/chart_l.png"));
     ui->btnSelTab->setIcon(QIcon(":/res/tab_l.svg"));

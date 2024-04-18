@@ -27,7 +27,6 @@
         <file>res/report.png</file>
         <file>res/run.png</file>
         <file>res/sel.png</file>
-        <file>res/steps.png</file>
         <file>res/test.txt</file>
         <file>res/time.png</file>
         <file>res/up.png</file>
@@ -93,7 +92,6 @@
         <file>res/coin.png</file>
         <file>theme/dark/darkstyle.qss</file>
         <file>theme/light/lightstyle.qss</file>
-        <file>res/steps_l.png</file>
         <file>res/edit_l.png</file>
         <file>res/find_l.png</file>
         <file>res/report_l.png</file>
@@ -150,5 +148,7 @@
         <file>res/reader.svg</file>
         <file>res/tab_l.svg</file>
         <file>res/tab.svg</file>
+        <file>res/steps_l.svg</file>
+        <file>res/steps.svg</file>
     </qresource>
 </RCC>
