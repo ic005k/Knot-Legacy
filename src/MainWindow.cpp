@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.68";
+QString ver = "1.1.69";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3588,7 +3588,7 @@ void MainWindow::init_Theme() {
     chartMonth->setTheme(QChart::ChartThemeLight);
     chartDay->setTheme(QChart::ChartThemeLight);
 
-    ui->btnAddTodo->setIcon(QIcon(":/res/add.png"));
+    ui->btnAddTodo->setIcon(QIcon(":/res/plus.svg"));
     ui->btnClear->setIcon(QIcon(":/res/clear.svg"));
 
     ui->btnRemarks->setIcon(QIcon(":/res/edit.png"));
@@ -3611,7 +3611,7 @@ void MainWindow::init_Theme() {
     chartMonth->setTheme(QChart::ChartThemeDark);
     chartDay->setTheme(QChart::ChartThemeDark);
 
-    ui->btnAddTodo->setIcon(QIcon(":/res/plus.svg"));
+    ui->btnAddTodo->setIcon(QIcon(":/res/plus_l.svg"));
     ui->btnClear->setIcon(QIcon(":/res/clear.png"));
 
     ui->btnReport->setIcon(QIcon(":/res/report_l.png"));

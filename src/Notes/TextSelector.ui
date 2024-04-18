@@ -246,7 +246,7 @@
           </property>
           <property name="icon">
            <iconset resource="../../res.qrc">
-            <normaloff>:/res/p1.png</normaloff>:/res/p1.png</iconset>
+            <normaloff>:/res/p1.svg</normaloff>:/res/p1.svg</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -341,7 +341,7 @@
           </property>
           <property name="icon">
            <iconset resource="../../res.qrc">
-            <normaloff>:/res/p1.png</normaloff>:/res/p1.png</iconset>
+            <normaloff>:/res/p1.svg</normaloff>:/res/p1.svg</iconset>
           </property>
           <property name="iconSize">
            <size>
