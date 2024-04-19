@@ -4266,9 +4266,7 @@ static void JavaNotify_6() {
 }
 
 static void JavaNotify_7() {
-  // mw_one->m_Notes->on_btnPic_clicked();
-
-  mw_one->m_Notes->insertImage(privateDir + "receive_share_pic.png");
+  mw_one->m_Notes->insertImage(privateDir + "receive_share_pic.png", true);
 
   qDebug() << "C++ JavaNotify_7";
 }

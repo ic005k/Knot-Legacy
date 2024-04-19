@@ -45,6 +45,7 @@ import android.view.WindowManager;
 import android.view.Window;
 
 import java.io.OutputStreamWriter;
+import java.net.URI;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -112,6 +113,7 @@ public class ShareReceiveActivity extends Activity
 
     private MyFileObserver fileObserver;
     private String type;
+    private String action;
     private static boolean zh_cn;
     private String cursorText;
 
@@ -152,11 +154,11 @@ public class ShareReceiveActivity extends Activity
 
         // 获取intent
         Intent intent = getIntent();
-        String action = intent.getAction();
+        action = intent.getAction();
         type = intent.getType();
-        System.out.println("type=" + type);
+        System.out.println("type=" + type + "  action=" + action);
 
-        tv.setText(type + " :\n\n Sorry, this feature is not currently supported.");
+        tv.setText(type + "\n\n" + action + "\n\nSorry, this feature is not currently supported.");
 
         if (type.startsWith("image/")) {
             btnAddToTodo.setVisibility(View.GONE);
@@ -169,19 +171,9 @@ public class ShareReceiveActivity extends Activity
             if ("text/plain".equals(type)) {
                 handlerText(intent);
                 System.out.println("strData=" + strData);
-                tv.setText(type + ":\n\n" + "cursor pos: " + cursorText + "\n\n" + strData);
+                tv.setText(type + "\n\n" + action + "\n\ncursor pos: " + cursorText + "\n\n" + strData);
                 setInsertFlag();
 
-            } else
-
-            if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
-                Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
-                if (type.startsWith("image/")) {
-                    tv.setText("image/* : multiple");
-                    dealMultiplePicStream(intent);
-
-                }
-                ShareReceiveActivity.this.finish();
             } else
 
             if (type.startsWith("image/")) {
@@ -191,9 +183,20 @@ public class ShareReceiveActivity extends Activity
             } else
 
             if (type.startsWith("*/*")) {
-                readFileFromShare("/storage/emulated/0/.Knot/receive_share_file.txt");
                 Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
+                ShareReceiveActivity.this.finish();
+            }
+        }
 
+        if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+            if (type.startsWith("image/")) {
+                MyAsyncTask myAsyncTask = new MyAsyncTask();
+                myAsyncTask.execute();
+
+            } else
+
+            if (type.startsWith("*/*")) {
+                Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
                 ShareReceiveActivity.this.finish();
             }
         }
@@ -246,10 +249,6 @@ public class ShareReceiveActivity extends Activity
 
                 if (type.startsWith("text/")) {
                     goReceiveString();
-                }
-
-                if (type.startsWith("image/")) {
-                    goReceiveImage();
                 }
 
                 onBackPressed();
@@ -669,16 +668,29 @@ public class ShareReceiveActivity extends Activity
     }
 
     // 读取分享的文件并把文件导入到私有目录
-    public boolean readFileFromShare(String fileName) {
+    public boolean readFileFromShare() {
         Intent intent = getIntent();
         String type = intent.getType();
+        ArrayList<Uri> uris = new ArrayList<Uri>();
         if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
-            Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-            tv.setText(type + ":\n\n" + "cursor pos: " + cursorText + "\n\n" + uri);
-            setInsertFlag();
+            Uri uri0 = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            uris.add(uri0);
+        }
+
+        if (Intent.ACTION_SEND_MULTIPLE.equals(action)) {
+            uris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+        }
+
+        String strUri = "";
+        String filename = null;
+        for (int i = 0; i < uris.size(); i++) {
+            Uri uri = uris.get(i);
+            strUri = strUri + "\n\n" + uri;
+            filename = "/storage/emulated/0/.Knot/img" + String.valueOf(i) + ".png";
+
             if (uri != null) {
                 try {
-                    File outFile = new File(fileName);
+                    File outFile = new File(filename);
                     InputStream inputStream = getContentResolver().openInputStream(uri);
                     FileOutputStream fos = new FileOutputStream(outFile);
                     byte[] buf = new byte[1024];
@@ -690,13 +702,29 @@ public class ShareReceiveActivity extends Activity
                     inputStream.close();
                     fos.close();
 
-                    return true;
                 } catch (IOException e) {
                     e.printStackTrace();
+                    return false;
                 }
             }
         }
-        return false;
+
+        try {
+            File file = new File(share_ini);
+            if (!file.exists())
+                file.createNewFile();
+            Wini ini = new Wini(file);
+            ini.put("share", "imgCount", uris.size());
+            ini.store();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        tv.setText(type + "\n\n" + action + "\n\ncursor pos: " + cursorText + "\n\n" + strUri);
+        setInsertFlag();
+
+        return true;
     }
 
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -704,8 +732,7 @@ public class ShareReceiveActivity extends Activity
         @Override
         protected Void doInBackground(Void... voids) {
             // 在这里执行需要等待的操作
-            String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
-            readFileFromShare(filePath);
+            readFileFromShare();
 
             return null;
         }

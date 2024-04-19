@@ -708,11 +708,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
             readFileFromUriToLocal(selectedFileUri, filePath);
 
-            // if (Build.VERSION.SDK_INT >= 24)
-            // filePath = selectedFileUri.getPath();
-            // else // Android 6.0及以下
-            // filePath = getPath(this, selectedFileUri);
-
             // 处理文件路径
             handleFilePath(filePath);
         }
@@ -720,10 +715,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     private void handleFilePath(String filePath) {
         // 处理文件路径的逻辑
-
         System.out.println("open image file=" + filePath);
-        // MyActivity.copyFile(filePath,
-
         // "/storage/emulated/0/.Knot/receive_share_pic.png");
         if (fileIsExists(filePath))
             CallJavaNotify_7();
@@ -1632,7 +1624,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         hightKeyword(strOrg, "https://");
         hightKeyword(strOrg, "http://");
-        hightKeyword(strOrg, "==Image==");
         hightKeyword(strOrg, "# ");
         hightKeyword(strOrg, "## ");
         hightKeyword(strOrg, "### ");
@@ -1647,6 +1638,41 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         hightKeyword(strOrg, "</u>");
         hightKeyword(strOrg, "_**");
         hightKeyword(strOrg, "**_");
+
+        // Get "![" and "]"
+        Pattern patt = Pattern.compile("(?<=!\\[).*(?=\\])");
+        Matcher matcher = patt.matcher(strOrg);
+        while (matcher.find()) {
+            // 返回匹配结果
+            String result = matcher.group();
+
+            // 返回起始位置
+            int start = matcher.start();
+            // 返回结束位置
+            int end = matcher.end();
+
+            style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFC1C1")), start, end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+
+            System.out.println("matcher result=" + result + "  start=" + start + "  end=" + end);
+
+        }
+
+        patt = Pattern.compile("(?<=\\[).*(?=\\]\\()");
+        matcher = patt.matcher(strOrg);
+        while (matcher.find()) {
+            String result = matcher.group();
+            int start = matcher.start();
+            int end = matcher.end();
+            style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFC1C1")), start, end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+            System.out.println("matcher result=" + result + "  start=" + start + "  end=" + end);
+
+        }
 
         editNote.setText(style);
 

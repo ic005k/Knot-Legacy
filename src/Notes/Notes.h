@@ -111,7 +111,7 @@ class Notes : public QDialog {
 
   bool eventFilterEditRecord(QObject *watch, QEvent *evn);
 
-  QString insertImage(QString fileName);
+  QString insertImage(QString fileName, bool isToAndroidView);
 
   bool eventFilterQwNote(QObject *watch, QEvent *event);
 

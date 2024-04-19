@@ -624,17 +624,20 @@ void Notes::on_btnPic_clicked() {
   fileName = QFileDialog::getOpenFileName(NULL, tr("Knot"), "",
                                           tr("Picture Files (*.*)"));
 
-  insertImage(fileName);
+  insertImage(fileName, false);
 }
 
-QString Notes::insertImage(QString fileName) {
+QString Notes::insertImage(QString fileName, bool isToAndroidView) {
   QFileInfo fi(fileName);
   QString strImage;
   if (fi.exists()) {
     QDir dir;
     dir.mkpath(iniDir + "memo/images/");
 
-    QString strTar = iniDir + "memo/images/" + getDateTimeStr() + ".png";
+    int rand = QRandomGenerator::global()->generate();
+    if (rand < 0) rand = 0 - rand;
+    QString strTar = iniDir + "memo/images/" + getDateTimeStr() + "_" +
+                     QString::number(rand) + ".png";
     if (QFile(strTar).exists()) QFile(strTar).remove();
 
     int nLeftMargin = 9 + 9 + 6;
@@ -680,7 +683,7 @@ QString Notes::insertImage(QString fileName) {
     if (!isAndroid) {
       m_EditSource->insertPlainText(strImage);
     } else {
-      insertNote(strImage);
+      if (isToAndroidView) insertNote(strImage);
     }
 
     qDebug() << "pic=" << strTar << nLeftMargin;
@@ -1121,7 +1124,7 @@ void Notes::on_btnPaste_clicked() {
       pix = pix.scaled(img.width(), img.height(), Qt::KeepAspectRatio,
                        Qt::SmoothTransformation);
       pix.save(strTar);
-      insertImage(strTar);
+      insertImage(strTar, false);
     }
   } else
     m_EditSource->paste();
@@ -1728,7 +1731,7 @@ void Notes::delImage() {
   qreal newPos = oldPos - nImagHeight;
   QFileInfo fi(imgFileName);
   QString name = fi.fileName();
-  QString strImg = "![image](file://===KnotData===memo/images/" + name + ")";
+  QString strImg = "![image](file://" + imgDir + "memo/images/" + name + ")";
   QString buffers = loadText(currentMDFile);
   buffers.replace(strImg, "");
   buffers = formatMDText(buffers);

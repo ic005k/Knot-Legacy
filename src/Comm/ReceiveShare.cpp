@@ -89,6 +89,14 @@ QString ReceiveShare::getShareMethod() {
   return method;
 }
 
+int ReceiveShare::getImgCount() {
+  QSettings Reg("/storage/emulated/0/.Knot/myshare.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  return Reg.value("/share/imgCount", 0).toInt();
+}
+
 int ReceiveShare::getCursorPos() {
   QSettings Reg("/storage/emulated/0/.Knot/note_text.ini",
                 QSettings::IniFormat);
@@ -159,7 +167,6 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
 }
 
 QString ReceiveShare::addToNote_Java() {
-  QString imgFile = "/storage/emulated/0/.Knot/receive_share_pic.png";
   strReceiveShareData = getShareString();
   shareType = getShareType();
   QString strData;
@@ -169,8 +176,13 @@ QString ReceiveShare::addToNote_Java() {
   }
 
   if (shareType == "image/*") {
-    QString strImg = mw_one->m_Notes->insertImage(imgFile);
-    strData = strImg;
+    int imgCount = getImgCount();
+    for (int i = 0; i < imgCount; i++) {
+      QString imgFile =
+          "/storage/emulated/0/.Knot/img" + QString::number(i) + ".png";
+      QString strImg = mw_one->m_Notes->insertImage(imgFile, false);
+      strData = strData + "\n\n" + strImg;
+    }
   }
 
   qDebug() << "strReceiveShareData=" << strReceiveShareData;
@@ -208,7 +220,7 @@ void ReceiveShare::addToNote(bool isInsert) {
       edit->insertPlainText(strReceiveShareData);
     }
     if (shareType == "image/*") {
-      QString strImg = mw_one->m_Notes->insertImage(imgFile);
+      QString strImg = mw_one->m_Notes->insertImage(imgFile, false);
       edit->insertPlainText(strImg);
     }
   } else {
@@ -219,7 +231,7 @@ void ReceiveShare::addToNote(bool isInsert) {
       setCursorPos(newPos);
     }
     if (shareType == "image/*") {
-      QString strImg = mw_one->m_Notes->insertImage(imgFile);
+      QString strImg = mw_one->m_Notes->insertImage(imgFile, false);
       edit->append(strImg);
       int newPos = strBuffer.length() + strImg.length();
       setCursorPos(newPos);
