@@ -164,8 +164,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // pass edittext object to TextViewUndoRedo class
         helper = new TextViewUndoRedo(editNote);
 
-        initTextFormat();
-
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         btnFind = (Button) findViewById(R.id.btnFind);
         btnUndo = (Button) findViewById(R.id.btnUndo);
@@ -375,6 +373,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         isTextChanged = false;
         initEditTextChangedListener();
         writeReceiveData();
+        initTextFormat();
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
@@ -1349,6 +1348,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 if (strFlag.equals("append")) {
                     appendNote(str_receive);
                 }
+
             }
         }
 

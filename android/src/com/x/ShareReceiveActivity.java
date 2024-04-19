@@ -111,11 +111,12 @@ public class ShareReceiveActivity extends Activity
 
     public native static void CallJavaNotify_7();
 
-    private MyFileObserver fileObserver;
+    
     private String type;
     private String action;
     private static boolean zh_cn;
     private String cursorText;
+    private String strUri = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +167,7 @@ public class ShareReceiveActivity extends Activity
             btnInsertNote.setEnabled(false);
         }
 
-        // 按接收的内容进行处理
+        // 接收单个文件
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
                 handlerText(intent);
@@ -182,12 +183,13 @@ public class ShareReceiveActivity extends Activity
 
             } else
 
-            if (type.startsWith("*/*")) {
+            if (type.startsWith("*/*") || type.startsWith("application/")) {
                 Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
                 ShareReceiveActivity.this.finish();
             }
         }
 
+        // 接收多个文件
         if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
             if (type.startsWith("image/")) {
                 MyAsyncTask myAsyncTask = new MyAsyncTask();
@@ -195,7 +197,7 @@ public class ShareReceiveActivity extends Activity
 
             } else
 
-            if (type.startsWith("*/*")) {
+            if (type.startsWith("*/*") || type.startsWith("application/")) {
                 Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
                 ShareReceiveActivity.this.finish();
             }
@@ -435,23 +437,6 @@ public class ShareReceiveActivity extends Activity
 
     }
 
-    public class MyFileObserver extends FileObserver {
-
-        public MyFileObserver(String path) {
-            super(path);
-        }
-
-        @Override
-        public void onEvent(int event, String path) {
-            if (event == FileObserver.CLOSE_WRITE) {
-                // 文件写入完成
-                Log.d("FileObserver", "File write completed: " + path);
-                // TODO: 处理文件读取完成的逻辑
-
-            }
-        }
-    }
-
     public void openAppFromPackageName(String pname) {
         PackageManager packageManager = getPackageManager();
         Intent it = packageManager.getLaunchIntentForPackage(pname);
@@ -681,7 +666,6 @@ public class ShareReceiveActivity extends Activity
             uris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         }
 
-        String strUri = "";
         String filename = null;
         for (int i = 0; i < uris.size(); i++) {
             Uri uri = uris.get(i);
@@ -721,9 +705,6 @@ public class ShareReceiveActivity extends Activity
             return false;
         }
 
-        tv.setText(type + "\n\n" + action + "\n\ncursor pos: " + cursorText + "\n\n" + strUri);
-        setInsertFlag();
-
         return true;
     }
 
@@ -740,6 +721,8 @@ public class ShareReceiveActivity extends Activity
         @Override
         protected void onPostExecute(Void aVoid) {
             // 在这里执行完成后的操作
+            tv.setText(type + "\n\n" + action + "\n\ncursor pos: " + cursorText + "\n\n" + strUri);
+            setInsertFlag();
             btnAppendNote.setEnabled(true);
             btnInsertNote.setEnabled(true);
 
