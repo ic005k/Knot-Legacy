@@ -1775,7 +1775,7 @@ void Notes::delLink(QString link) {
   int startPos, endPos, length;
   int index = 0;
   QStringList titleList;
-  while (mdBuffers.indexOf("[", index) != -1) {
+  while (mdBuffers.indexOf("]()", index) != -1) {
     startPos = mdBuffers.indexOf("[", index) + 1;
     if (startPos - 2 >= 0) {
       endPos = mdBuffers.indexOf("]()", startPos + 1);

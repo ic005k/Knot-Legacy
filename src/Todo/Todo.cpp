@@ -1102,3 +1102,8 @@ void Todo::addToRecycle() {
 
   isNeedSave = true;
 }
+
+void Todo::NewTodo() {
+  mw_one->m_ReceiveShare->closeAllActiveWindows();
+  mw_one->ui->btnTodo->click();
+}

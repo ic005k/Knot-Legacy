@@ -124,20 +124,15 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     public native static void CallJavaNotify_0();
-
     public native static void CallJavaNotify_1();
-
     public native static void CallJavaNotify_2();
-
     public native static void CallJavaNotify_3();
-
     public native static void CallJavaNotify_4();
-
     public native static void CallJavaNotify_5();
-
     public native static void CallJavaNotify_6();
-
     public native static void CallJavaNotify_7();
+    public native static void CallJavaNotify_8();
+    public native static void CallJavaNotify_9();
 
     private static boolean isGoBackKnot = false;
 

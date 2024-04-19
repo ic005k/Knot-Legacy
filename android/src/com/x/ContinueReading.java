@@ -83,7 +83,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.Spannable;
 import android.text.Spanned;
 
-public class ShareReceiveActivity extends Activity
+public class ContinueReading extends Activity
         implements View.OnClickListener {
     private TextView tv;
     private Button btnAddToTodo;
@@ -110,12 +110,11 @@ public class ShareReceiveActivity extends Activity
     public native static void CallJavaNotify_6();
 
     public native static void CallJavaNotify_7();
-    
+
     public native static void CallJavaNotify_8();
 
     public native static void CallJavaNotify_9();
 
-    
     private String type;
     private String action;
     private static boolean zh_cn;
@@ -125,6 +124,9 @@ public class ShareReceiveActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+       
+
         context = getApplicationContext();
         zh_cn = isZh(context);
 
@@ -154,61 +156,11 @@ public class ShareReceiveActivity extends Activity
         btnAppendNote.setOnClickListener(this);
         btnInsertNote.setOnClickListener(this);
 
-        String file2 = "/storage/emulated/0/.Knot/cursor_text.txt";
-        cursorText = readTextFile(file2);
-
-        // 获取intent
-        Intent intent = getIntent();
-        action = intent.getAction();
-        type = intent.getType();
-        System.out.println("type=" + type + "  action=" + action);
-
-        tv.setText(type + "\n\n" + action + "\n\nSorry, this feature is not currently supported.");
-
-        if (type.startsWith("image/")) {
-            btnAddToTodo.setVisibility(View.GONE);
-            btnAppendNote.setEnabled(false);
-            btnInsertNote.setEnabled(false);
-        }
-
-        // 接收单个文件
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type)) {
-                handlerText(intent);
-                System.out.println("strData=" + strData);
-                tv.setText(type + "\n\n" + action + "\n\ncursor pos: " + cursorText + "\n\n" + strData);
-                setInsertFlag();
-
-            } else
-
-            if (type.startsWith("image/")) {
-                MyAsyncTask myAsyncTask = new MyAsyncTask();
-                myAsyncTask.execute();
-
-            } else
-
-            if (type.startsWith("*/*") || type.startsWith("application/")) {
-                Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
-                ShareReceiveActivity.this.finish();
-            }
-        }
-
-        // 接收多个文件
-        if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
-            if (type.startsWith("image/")) {
-                MyAsyncTask myAsyncTask = new MyAsyncTask();
-                myAsyncTask.execute();
-
-            } else
-
-            if (type.startsWith("*/*") || type.startsWith("application/")) {
-                Toast.makeText(this, "Sorry, this feature is not currently supported.", 9000).show();
-                ShareReceiveActivity.this.finish();
-            }
-        }
-
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
+        
+        ContinueReading.this.finish();
 
     }
 
@@ -429,13 +381,14 @@ public class ShareReceiveActivity extends Activity
     public void onBackPressed() {
         super.onBackPressed();
 
-        ShareReceiveActivity.this.finish();
+        ContinueReading.this.finish();
     }
 
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
         unregisterReceiver(mHomeKeyEvent);
+        CallJavaNotify_9();
         // android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
 

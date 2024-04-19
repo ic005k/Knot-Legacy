@@ -87,6 +87,10 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
     public native static void CallJavaNotify_7();
 
+    public native static void CallJavaNotify_8();
+
+    public native static void CallJavaNotify_9();
+
     private static boolean isGoBackKnot = false;
 
     public static boolean isZh(Context context) {

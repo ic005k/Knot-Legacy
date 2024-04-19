@@ -1,0 +1,31 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+  <shortcut
+    android:shortcutId="newTodo"
+    android:enabled="true"
+    android:icon="@drawable/newtodo"
+    android:shortcutShortLabel="@string/newTodo_shortcut_short_label">
+
+    <intent
+      android:action="android.intent.action.VIEW"
+      android:targetPackage="com.x"
+      android:targetClass="com.x.NewTodo" />
+
+    <categories android:name="android.shortcut.conversation" />
+  </shortcut>
+
+  <shortcut
+    android:shortcutId="continueReading"
+    android:enabled="true"
+    android:icon="@drawable/continuereading"
+    android:shortcutShortLabel="@string/continueReading_shortcut_short_label">
+
+    <intent
+      android:action="android.intent.action.VIEW"
+      android:targetPackage="com.x"
+      android:targetClass="com.x.MyActivity" />
+
+    <categories android:name="android.shortcut.conversation" />
+  </shortcut>
+
+  <!-- Specify more shortcuts here. -->
+</shortcuts>

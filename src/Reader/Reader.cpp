@@ -2391,3 +2391,8 @@ void Reader::showBookmarkList() {
 }
 
 void Reader::setPanelVisible() { mw_one->on_SetReaderFunVisible(); }
+
+void Reader::ContinueReading() {
+  mw_one->m_ReceiveShare->closeAllActiveWindows();
+  mw_one->ui->btnReader->click();
+}

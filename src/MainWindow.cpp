@@ -66,6 +66,8 @@ static void JavaNotify_4();
 static void JavaNotify_5();
 static void JavaNotify_6();
 static void JavaNotify_7();
+static void JavaNotify_8();
+static void JavaNotify_9();
 #endif
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
@@ -4271,6 +4273,20 @@ static void JavaNotify_7() {
   qDebug() << "C++ JavaNotify_7";
 }
 
+static void JavaNotify_8() {
+  // New Todo
+  mw_one->m_Todo->NewTodo();
+
+  qDebug() << "C++ JavaNotify_8";
+}
+
+static void JavaNotify_9() {
+  // ContinueReading
+  mw_one->m_Reader->ContinueReading();
+
+  qDebug() << "C++ JavaNotify_9";
+}
+
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},
     {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
@@ -4279,7 +4295,9 @@ static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_4", "()V", (void *)JavaNotify_4},
     {"CallJavaNotify_5", "()V", (void *)JavaNotify_5},
     {"CallJavaNotify_6", "()V", (void *)JavaNotify_6},
-    {"CallJavaNotify_7", "()V", (void *)JavaNotify_7}};
+    {"CallJavaNotify_7", "()V", (void *)JavaNotify_7},
+    {"CallJavaNotify_8", "()V", (void *)JavaNotify_8},
+    {"CallJavaNotify_9", "()V", (void *)JavaNotify_9}};
 
 void RegJni(const char *myClassName) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

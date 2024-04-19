@@ -119,7 +119,8 @@ class Todo : public QDialog {
 
   QString getTimeStr(QString str);
 
- private:
+  void NewTodo();
+  private:
   QListWidgetItem *editItem;
 
   QString todotxt;
