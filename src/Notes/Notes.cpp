@@ -1731,11 +1731,31 @@ void Notes::delImage() {
   qreal newPos = oldPos - nImagHeight;
   QFileInfo fi(imgFileName);
   QString name = fi.fileName();
-  QString strImg = "![image](file://" + imgDir + "memo/images/" + name + ")";
   QString buffers = loadText(currentMDFile);
-  buffers.replace(strImg, "");
-  buffers = formatMDText(buffers);
 
+  int startPos, endPos, length;
+  int index = 0;
+  QStringList imgTitleList;
+  while (buffers.indexOf("![", index) != -1) {
+    startPos = buffers.indexOf("![", index) + 2;
+    if (startPos - 2 >= 0) {
+      endPos = buffers.indexOf("]", startPos + 1);
+      length = endPos - startPos;
+      QString subStr = buffers.mid(startPos, length);
+      imgTitleList.append(subStr);
+      qDebug() << "delImage():" << startPos << length << subStr;
+      index = endPos + 1;
+    }
+  }
+
+  for (int i = 0; i < imgTitleList.count(); i++) {
+    QString title = imgTitleList.at(i);
+    QString strImg =
+        "![" + title + "](file://" + imgDir + "memo/images/" + name + ")";
+    buffers.replace(strImg, "");
+  }
+
+  buffers = formatMDText(buffers);
   StringToFile(buffers, currentMDFile);
   MD2Html(currentMDFile);
   loadNoteToQML();
@@ -1745,15 +1765,36 @@ void Notes::delImage() {
 
 void Notes::delLink(QString link) {
   qreal oldPos = getVPos();
-  QString mdBurrers = loadText(currentMDFile);
+  QString mdBuffers = loadText(currentMDFile);
 
-  if (!mdBurrers.contains(link)) {
+  if (!mdBuffers.contains(link)) {
     link.replace("http://", "");
   }
+  mdBuffers.replace(link, "");
 
-  mdBurrers.replace(link, "");
-  mdBurrers = formatMDText(mdBurrers);
-  StringToFile(mdBurrers, currentMDFile);
+  int startPos, endPos, length;
+  int index = 0;
+  QStringList titleList;
+  while (mdBuffers.indexOf("[", index) != -1) {
+    startPos = mdBuffers.indexOf("[", index) + 1;
+    if (startPos - 2 >= 0) {
+      endPos = mdBuffers.indexOf("]()", startPos + 1);
+      length = endPos - startPos;
+      QString subStr = mdBuffers.mid(startPos, length);
+      titleList.append(subStr);
+      qDebug() << "delLink():" << startPos << length << subStr;
+      index = endPos + 1;
+    }
+  }
+
+  for (int i = 0; i < titleList.count(); i++) {
+    QString title = titleList.at(i);
+    QString str = "[" + title + "]()";
+    mdBuffers.replace(str, "");
+  }
+
+  mdBuffers = formatMDText(mdBuffers);
+  StringToFile(mdBuffers, currentMDFile);
   MD2Html(currentMDFile);
   loadNoteToQML();
   setVPos(oldPos);
