@@ -7,7 +7,7 @@
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QTabWidget *tabData;
-extern QString iniFile, iniDir;
+extern QString iniFile, iniDir, privateDir;
 extern QRegularExpression regxNumber;
 extern bool isBreak, isDark;
 extern int fontSize;
@@ -466,4 +466,30 @@ void EditRecord::saveOne() {
   }
 
   Reg.setValue(flag + QString::number(i + 1) + "-childCount", childCount);
+}
+
+void EditRecord::AddRecord() { mw_one->ui->btnAdd->click(); }
+
+void EditRecord::saveCurrentValue() {
+  QString ini_file = privateDir + "editrecord_value.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue("value1", mw_one->ui->editCategory->text());
+  Reg.setValue("value2", mw_one->ui->editDetails->toPlainText());
+  Reg.setValue("value3", mw_one->ui->editAmount->text());
+}
+
+void EditRecord::setCurrentValue() {
+  QString ini_file = privateDir + "editrecord_value.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  mw_one->ui->editCategory->setText(Reg.value("value1").toString());
+  mw_one->ui->editDetails->setText(Reg.value("value2").toString());
+  mw_one->ui->editAmount->setText(Reg.value("value3").toString());
 }

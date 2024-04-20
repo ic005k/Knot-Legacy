@@ -83,7 +83,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.Spannable;
 import android.text.Spanned;
 
-public class NewNote extends Activity {
+public class AddRecord extends Activity {
 
     private String shortcut_ini = "/storage/emulated/0/.Knot/shortcut.ini";
 
@@ -115,7 +115,7 @@ public class NewNote extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        NewNote.this.finish();
+        AddRecord.this.finish();
 
     }
 
@@ -130,7 +130,7 @@ public class NewNote extends Activity {
         System.out.println("onDestroy...");
 
         super.onDestroy();
-        goNewNote();
+        goAddRecord();
 
     }
 
@@ -333,7 +333,7 @@ public class NewNote extends Activity {
         }
     }
 
-    private void goNewNote() {
+    private void goAddRecord() {
         boolean isRun = isAppRun("com.x");
 
         if (!isRun) {
@@ -343,7 +343,7 @@ public class NewNote extends Activity {
                     file.createNewFile();
                 Wini ini = new Wini(file);
 
-                ini.put("desk", "keyType", "note");
+                ini.put("desk", "keyType", "add");
                 ini.put("desk", "execDone", "false");
 
                 ini.store();
@@ -363,7 +363,7 @@ public class NewNote extends Activity {
                     file.createNewFile();
                 Wini ini = new Wini(file);
 
-                ini.put("desk", "keyType", "note");
+                ini.put("desk", "keyType", "add");
                 ini.put("desk", "execDone", "true");
 
                 ini.store();

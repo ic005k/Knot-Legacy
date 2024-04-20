@@ -73,7 +73,10 @@ class EditRecord : public QDialog {
 
   void on_editDetails_textChanged();
 
- private:
+  void saveCurrentValue();
+  void setCurrentValue();
+  void AddRecord();
+  private:
   void set_Amount(QString Number);
 
   QString lblStyle;

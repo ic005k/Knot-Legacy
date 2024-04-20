@@ -357,7 +357,8 @@ class MainWindow : public QMainWindow {
 
   void set_PushButtonStyle(QObject *parent);
 
- protected:
+  void execDeskShortcut();
+  protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;
@@ -497,7 +498,9 @@ class MainWindow : public QMainWindow {
   void on_openKnotBakDir();
   void reeditData();
   void clickData();
+
  public slots:
+  void on_ExecShortcut();
   void on_btnShowBookmark_clicked();
   void on_btnBackBookList_clicked();
   void on_btnBackEditRecord_clicked();
@@ -556,8 +559,6 @@ class MainWindow : public QMainWindow {
   void on_btnYear_clicked();
 
   void on_btnMonth_clicked();
-
-  // void on_btnOut2Img_clicked();
 
   void on_btnCategory_clicked();
 
@@ -688,8 +689,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnChartDay_clicked();
 
-  // void on_editStepsThreshold_textChanged(const QString &arg1);
-
   void on_btnTabMoveUp_clicked();
 
   void on_btnTabMoveDown_clicked();
@@ -742,8 +741,7 @@ class MainWindow : public QMainWindow {
 
   void on_btnDelImage_clicked();
 
-  void on_ExecShortcut();
-  private:
+ private:
   bool isShowDetails = false;
   QString strShowDetails;
   bool isTabChanged = false;

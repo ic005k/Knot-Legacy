@@ -1146,3 +1146,12 @@ QString Method::ColorToString(QColor v_color) {
   mRgbStr = mRgbStr.replace(0, 2, "#");
   return mRgbStr;
 }
+
+QString Method::getExecDone() {
+  QSettings Reg("/storage/emulated/0/.Knot/shortcut.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  return Reg.value("/desk/execDone", "true").toString();
+}

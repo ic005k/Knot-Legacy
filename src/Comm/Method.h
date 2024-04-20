@@ -203,6 +203,8 @@ class Method : public QDialog {
 
   QString getCustomColor();
 
+  QString getExecDone();
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

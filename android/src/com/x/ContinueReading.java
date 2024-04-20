@@ -157,9 +157,8 @@ public class ContinueReading extends Activity {
     protected void onDestroy() {
         System.out.println("onDestroy...");
         unregisterReceiver(mHomeKeyEvent);
-        goContinueReading();
-
         super.onDestroy();
+        goContinueReading();
 
     }
 

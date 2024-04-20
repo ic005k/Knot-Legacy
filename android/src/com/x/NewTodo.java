@@ -128,9 +128,9 @@ public class NewTodo extends Activity {
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
-        goNewTodo();
 
         super.onDestroy();
+        goNewTodo();
 
     }
 

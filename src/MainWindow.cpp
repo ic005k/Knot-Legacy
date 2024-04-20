@@ -367,7 +367,8 @@ MainWindow::MainWindow(QWidget *parent)
   currentMDFile = m_NotesList->getCurrentMDFile();
   if (isAndroid) {
     QTimer::singleShot(2000, this, SLOT(on_ReceiveShare()));
-    QTimer::singleShot(2000, this, SLOT(on_ExecShortcut()));
+    if (m_Method->getExecDone() == "false")
+      QTimer::singleShot(2000, this, SLOT(on_ExecShortcut()));
   }
 }
 
@@ -838,20 +839,23 @@ void MainWindow::timerUpdate() {
   }
 }
 
+void MainWindow::execDeskShortcut() {
+  m_ReceiveShare->closeAllActiveWindows();
+
+  on_ExecShortcut();
+}
+
 void MainWindow::on_ExecShortcut() {
   QSettings Reg("/storage/emulated/0/.Knot/shortcut.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
 
-  QString execDone = Reg.value("/desk/execDone", "true").toString();
   QString keyType = Reg.value("/desk/keyType", "todo").toString();
-  if (execDone == "false") {
-    Reg.setValue("/desk/execDone", "true");
-    if (keyType == "todo") m_Todo->NewTodo();
-    if (keyType == "note") m_Notes->NewNote();
-    if (keyType == "reader") m_Reader->ContinueReading();
-  }
+  if (keyType == "todo") m_Todo->NewTodo();
+  if (keyType == "note") m_Notes->NewNote();
+  if (keyType == "reader") m_Reader->ContinueReading();
+  if (keyType == "add") m_EditRecord->AddRecord();
 }
 
 void MainWindow::on_ReceiveShare() {
@@ -2280,6 +2284,17 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
   if (watch == ui->lblStats) {
     if (event->type() == QEvent::MouseButtonDblClick) {
+      on_btnSelTab_clicked();
+    }
+  }
+
+  if (watch == ui->lblTitleEditRecord) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      ui->btnTabMoveDown->hide();
+      ui->btnTabMoveUp->hide();
+
+      m_EditRecord->saveCurrentValue();
+      on_btnBackEditRecord_clicked();
       on_btnSelTab_clicked();
     }
   }
@@ -3809,6 +3824,7 @@ void MainWindow::init_UIWidget() {
   ui->editFindNote->installEventFilter(this);
   ui->qwNotes->installEventFilter(this);
   ui->qwNoteEditor->installEventFilter(this);
+  ui->lblTitleEditRecord->installEventFilter(this);
 
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
@@ -3939,6 +3955,13 @@ void MainWindow::selTab() {
   tabData->setCurrentIndex(index);
   on_btnBackSetTab_clicked();
   m_Method->clearAllBakList(ui->qwSelTab);
+
+  if (ui->btnTabMoveDown->isHidden()) {
+    ui->btnTabMoveDown->show();
+    ui->btnTabMoveUp->show();
+    on_btnAdd_clicked();
+    m_EditRecord->setCurrentValue();
+  }
 }
 
 void MainWindow::getMainTabs() {
@@ -4291,14 +4314,7 @@ static void JavaNotify_7() {
 }
 
 static void JavaNotify_8() {
-  QSettings Reg(privateDir + "shortcut.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  QString keyType = Reg.value("/desk/keyType", "todo").toString();
-  if (keyType == "todo") mw_one->m_Todo->NewTodo();
-  if (keyType == "note") mw_one->m_Notes->NewNote();
-  if (keyType == "reader") mw_one->m_Reader->ContinueReading();
+  mw_one->execDeskShortcut();
 
   qDebug() << "C++ JavaNotify_8";
 }
@@ -5502,6 +5518,13 @@ void MainWindow::on_btnRenameType_clicked() {
 void MainWindow::on_btnBackSetTab_clicked() {
   ui->frameSetTab->hide();
   ui->frameMain->show();
+
+  if (ui->btnTabMoveDown->isHidden()) {
+    ui->btnTabMoveDown->show();
+    ui->btnTabMoveUp->show();
+    on_btnAdd_clicked();
+    m_EditRecord->setCurrentValue();
+  }
 }
 
 void MainWindow::on_btnBackEditRecord_clicked() {
