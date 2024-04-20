@@ -1,6 +1,7 @@
 <resources>
     <string name="welcome_message">Hello, %s!</string>
     <string name="newTodo_shortcut_short_label">"New Todo"</string>
+    <string name="newNote_shortcut_short_label">"New Note"</string>
     <string name="continueReading_shortcut_short_label">"Continue Reading"</string>
 </resources>
 

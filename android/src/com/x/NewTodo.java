@@ -84,11 +84,7 @@ import android.text.Spannable;
 import android.text.Spanned;
 
 public class NewTodo extends Activity {
-    private TextView tv;
-    private Button btnAddToTodo;
-    private Button btnAppendNote;
-    private Button btnInsertNote;
-    public static String strData;
+
     private String shortcut_ini = "/storage/emulated/0/.Knot/shortcut.ini";
 
     private static Context context;
@@ -113,11 +109,7 @@ public class NewTodo extends Activity {
 
     public native static void CallJavaNotify_9();
 
-    private String type;
-    private String action;
     private static boolean zh_cn;
-    private String cursorText;
-    private String strUri = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -365,6 +357,20 @@ public class NewTodo extends Activity {
             openAppFromPackageName("com.x");
 
         } else {
+            try {
+                File file = new File(shortcut_ini);
+                if (!file.exists())
+                    file.createNewFile();
+                Wini ini = new Wini(file);
+
+                ini.put("desk", "keyType", "todo");
+                ini.put("desk", "execDone", "true");
+
+                ini.store();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             CallJavaNotify_8();
         }
     }

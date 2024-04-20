@@ -1838,3 +1838,9 @@ void Notes::loadEmptyNote() {
   loadNoteToQML();
   mw_one->ui->lblNoteName->setText("");
 }
+
+void Notes::NewNote() {
+  mw_one->m_ReceiveShare->closeAllActiveWindows();
+  mw_one->ui->btnNotes->click();
+  mw_one->ui->btnNotesList->click();
+}

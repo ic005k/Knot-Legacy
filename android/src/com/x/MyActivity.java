@@ -156,6 +156,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     private final static String TAG = "QtKnot";
     public static Context context;
     private FileWatcher mFileWatcher;
+    private ShortcutManager shortcutManager;
 
     public native static void CallJavaNotify_0();
 
@@ -603,7 +604,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             // StrictMode.setVmPolicy(builder.build());
         }
 
-        addDeskShortcut();
+        addDeskShortcuts();
 
     }
 
@@ -1443,13 +1444,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    private void addDeskShortcut() {
+    private void addDeskShortcuts() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             // 获取ShortcutManager对象
-            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+            shortcutManager = getSystemService(ShortcutManager.class);
 
             // ShortcutInfo.Builder构建快捷方式
-            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "New Todo")
+            ShortcutInfo shortcut0 = new ShortcutInfo.Builder(this, "New Todo")
                     .setShortLabel(getString(R.string.newTodo_shortcut_short_label))
                     .setIcon(Icon.createWithResource(this, R.drawable.newtodo))
 
@@ -1460,16 +1461,65 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                     // 跳转的目标，定义Activity
                     .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewTodo.class))
                     .build();
-            // setDynamicShortcuts()方法来设置快捷方式
 
-            ShortcutInfo shortcut1 = new ShortcutInfo.Builder(this, "Continue Reading")
+            ShortcutInfo shortcut1 = new ShortcutInfo.Builder(this, "New Note")
+                    .setShortLabel(getString(R.string.newNote_shortcut_short_label))
+                    .setIcon(Icon.createWithResource(this, R.drawable.newnote))
+                    .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewNote.class))
+                    .build();
+
+            ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "Continue Reading")
                     .setShortLabel(getString(R.string.continueReading_shortcut_short_label))
                     .setIcon(Icon.createWithResource(this, R.drawable.continuereading))
                     .setIntent(new Intent(Intent.ACTION_MAIN, null, this, ContinueReading.class))
                     .build();
-            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcut1));
+            // setDynamicShortcuts()方法来设置快捷方式
+            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut0, shortcut1, shortcut2));
 
             // Toast.makeText(MyActivity.this, "已添加", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void updateDeskShortcuts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            Intent intent2 = new Intent();
+            intent2.setAction("android.intent.action.MAIN");
+            intent2.setClassName(getPackageName(), getPackageName() + ".MainActivity.java");
+
+            /**
+             * 构建ShortcutInfo时指定相同的id，根据id去找到要更新的快捷方式
+             *
+             * 注意：唯一的id标识不可传入一个静态快捷方式的id
+             * 否则会抛出异常 应用会抛出错误：Manifest shortcut ID=XX may not be manipulated via APIs
+             */
+            ShortcutInfo info = new ShortcutInfo.Builder(this, "test_add")
+                    .setIntent(intent2)
+                    .setLongLabel("动态更新的长名")
+                    .setShortLabel("动态更新的短名")
+                    .build();
+            shortcutManager = getSystemService(ShortcutManager.class);
+            List<ShortcutInfo> dynamicShortcuts = shortcutManager.getDynamicShortcuts();
+
+            // updateShortcuts(List<ShortcutInfo> shortcutInfoList)方法更新现有的快捷方式
+            shortcutManager.updateShortcuts(Arrays.asList(info));
+
+            Toast.makeText(MyActivity.this, "已更新", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void removeDeskShortcuts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+
+            /**
+             * removeDynamicShortcuts(List<String> shortcutIds)方法可以删除动态快捷方式
+             *
+             * 同理，在唯一标识id和动态更新处理一样，需传入动态快捷方式的id，要不然会报同样的错误
+             */
+            shortcutManager.removeDynamicShortcuts(Arrays.asList("test_add"));// 唯一的id标识
+
+            Toast.makeText(MyActivity.this, "已移除", Toast.LENGTH_SHORT).show();
         }
 
     }

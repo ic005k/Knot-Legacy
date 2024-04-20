@@ -849,6 +849,7 @@ void MainWindow::on_ExecShortcut() {
   if (execDone == "false") {
     Reg.setValue("/desk/execDone", "true");
     if (keyType == "todo") m_Todo->NewTodo();
+    if (keyType == "note") m_Notes->NewNote();
     if (keyType == "reader") m_Reader->ContinueReading();
   }
 }
@@ -4290,18 +4291,19 @@ static void JavaNotify_7() {
 }
 
 static void JavaNotify_8() {
-  // New Todo
-  mw_one->m_Todo->NewTodo();
+  QSettings Reg(privateDir + "shortcut.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  QString keyType = Reg.value("/desk/keyType", "todo").toString();
+  if (keyType == "todo") mw_one->m_Todo->NewTodo();
+  if (keyType == "note") mw_one->m_Notes->NewNote();
+  if (keyType == "reader") mw_one->m_Reader->ContinueReading();
 
   qDebug() << "C++ JavaNotify_8";
 }
 
-static void JavaNotify_9() {
-  // ContinueReading
-  mw_one->m_Reader->ContinueReading();
-
-  qDebug() << "C++ JavaNotify_9";
-}
+static void JavaNotify_9() { qDebug() << "C++ JavaNotify_9"; }
 
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},

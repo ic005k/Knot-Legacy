@@ -83,8 +83,12 @@ import android.text.style.ForegroundColorSpan;
 import android.text.Spannable;
 import android.text.Spanned;
 
-public class ContinueReading extends Activity {
-
+public class NewNote extends Activity {
+    private TextView tv;
+    private Button btnAddToTodo;
+    private Button btnAppendNote;
+    private Button btnInsertNote;
+    public static String strData;
     private String shortcut_ini = "/storage/emulated/0/.Knot/shortcut.ini";
 
     private static Context context;
@@ -109,55 +113,30 @@ public class ContinueReading extends Activity {
 
     public native static void CallJavaNotify_9();
 
+    private String type;
+    private String action;
     private static boolean zh_cn;
+    private String cursorText;
+    private String strUri = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // HomeKey
-        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-        ContinueReading.this.finish();
+        NewNote.this.finish();
 
     }
-
-    private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
-        String SYSTEM_REASON = "reason";
-        String SYSTEM_HOME_KEY = "homekey";
-        String SYSTEM_HOME_KEY_LONG = "recentapps";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
-                String reason = intent.getStringExtra(SYSTEM_REASON);
-                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
-                    // 表示按了home键,程序直接进入到后台
-                    System.out.println("NoteEditor HOME键被按下...");
-
-                    onBackPressed();
-                } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
-                    // 表示长按home键,显示最近使用的程序
-                    System.out.println("NoteEditor 长按HOME键...");
-
-                    onBackPressed();
-                }
-            }
-        }
-    };
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
-        ContinueReading.this.finish();
     }
 
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
-        unregisterReceiver(mHomeKeyEvent);
-        goContinueReading();
+        goNewNote();
 
         super.onDestroy();
 
@@ -362,7 +341,7 @@ public class ContinueReading extends Activity {
         }
     }
 
-    private void goContinueReading() {
+    private void goNewNote() {
         boolean isRun = isAppRun("com.x");
 
         if (!isRun) {
@@ -372,7 +351,7 @@ public class ContinueReading extends Activity {
                     file.createNewFile();
                 Wini ini = new Wini(file);
 
-                ini.put("desk", "keyType", "reader");
+                ini.put("desk", "keyType", "note");
                 ini.put("desk", "execDone", "false");
 
                 ini.store();
@@ -386,14 +365,13 @@ public class ContinueReading extends Activity {
             openAppFromPackageName("com.x");
 
         } else {
-
             try {
                 File file = new File(shortcut_ini);
                 if (!file.exists())
                     file.createNewFile();
                 Wini ini = new Wini(file);
 
-                ini.put("desk", "keyType", "reader");
+                ini.put("desk", "keyType", "note");
                 ini.put("desk", "execDone", "true");
 
                 ini.store();
