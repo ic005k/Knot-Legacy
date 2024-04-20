@@ -2569,6 +2569,12 @@ QTabBar::scroller {width:0}
        </item>
        <item>
         <widget class="QQuickWidget" name="qw_Img">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
@@ -3123,6 +3129,12 @@ border:1px solid #4169E1
        </item>
        <item>
         <widget class="QQuickWidget" name="qwTodo">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -4185,6 +4197,12 @@ QRadioButton::indicator:checked {
        </item>
        <item>
         <widget class="QQuickWidget" name="qwBakList">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
@@ -4423,6 +4441,12 @@ QRadioButton::indicator:checked {
        </item>
        <item>
         <widget class="QQuickWidget" name="qwTabRecycle">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
@@ -5027,6 +5051,12 @@ QRadioButton::indicator:checked {
        </item>
        <item>
         <widget class="QQuickWidget" name="qwNoteRecycle">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
@@ -7832,8 +7862,8 @@ color: rgb(255, 255, 255);</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../res.qrc"/>
   <include location="../icons.qrc"/>
+  <include location="../res.qrc"/>
  </resources>
  <connections/>
 </ui>

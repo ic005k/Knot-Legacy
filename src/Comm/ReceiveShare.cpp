@@ -298,9 +298,11 @@ QObjectList ReceiveShare::getAllFrame(QObjectList lstUIControls) {
 }
 
 void ReceiveShare::closeAllActiveWindows() {
-  if (mw_one->m_Notes->isVisible()) {
-    mw_one->m_Notes->on_btnDone_clicked();
+  if (mw_one->m_TodoAlarm->isVisible()) {
+    mw_one->m_TodoAlarm->on_btnBack_clicked();
   }
+
+  if (mw_one->ui->frameMain->isVisible()) return;
 
   QObjectList frameList;
   frameList = getAllFrame(mw_one->getAllUIControls(mw_one));
@@ -311,10 +313,10 @@ void ReceiveShare::closeAllActiveWindows() {
       qDebug() << frame->objectName();
       if (frame->isVisible()) {
         frame->hide();
-        mw_one->ui->frameMain->show();
       }
     }
   }
+  mw_one->ui->frameMain->show();
 }
 
 void ReceiveShare::on_btnTest_clicked() { closeAllActiveWindows(); }

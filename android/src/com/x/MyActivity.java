@@ -1444,9 +1444,10 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     }
 
     private void addDeskShortcut() {
-        // 获取ShortcutManager对象
-        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            // 获取ShortcutManager对象
+            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+
             // ShortcutInfo.Builder构建快捷方式
             ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "New Todo")
                     .setShortLabel(getString(R.string.newTodo_shortcut_short_label))

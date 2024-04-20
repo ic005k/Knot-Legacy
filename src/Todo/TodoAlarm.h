@@ -33,8 +33,9 @@ class TodoAlarm : public QDialog {
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
- private slots:
+ public slots:
   void on_btnBack_clicked();
+ private slots:
 
   void on_btnMinute_clicked();
 

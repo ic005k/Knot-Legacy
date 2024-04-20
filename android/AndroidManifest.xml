@@ -252,13 +252,35 @@
         <activity
             android:name="com.x.NewTodo"
             android:exported="true"
-            android:label="NewTodo">
+            android:label="NewTodo"
+            android:theme="@style/splashScreenTheme">
+
+            <meta-data
+                android:name="android.app.splash_screen_drawable"
+                android:resource="@drawable/splashscreen" />
+            <meta-data
+                android:name="android.app.splash_screen_drawable_portrait"
+                android:resource="@drawable/splashscreen_port" />
+            <meta-data
+                android:name="android.app.splash_screen_drawable_landscape"
+                android:resource="@drawable/splashscreen_land" />
         </activity>
 
         <activity
             android:name="com.x.ContinueReading"
             android:exported="true"
-            android:label="ContinueReading">
+            android:label="ContinueReading"
+            android:theme="@style/splashScreenTheme">
+
+            <meta-data
+                android:name="android.app.splash_screen_drawable"
+                android:resource="@drawable/splashscreen" />
+            <meta-data
+                android:name="android.app.splash_screen_drawable_portrait"
+                android:resource="@drawable/splashscreen_port" />
+            <meta-data
+                android:name="android.app.splash_screen_drawable_landscape"
+                android:resource="@drawable/splashscreen_land" />
         </activity>
 
         <receiver android:name="com.x.AlarmReceiver" />

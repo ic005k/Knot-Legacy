@@ -114,10 +114,10 @@ public class ContinueReading extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ContinueReading.this.finish();
-
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+        ContinueReading.this.finish();
 
     }
 
@@ -157,32 +157,7 @@ public class ContinueReading extends Activity {
     protected void onDestroy() {
         System.out.println("onDestroy...");
         unregisterReceiver(mHomeKeyEvent);
-
-        boolean isRun = isAppRun("com.x");
-
-        if (!isRun) {
-            try {
-                File file = new File(shortcut_ini);
-                if (!file.exists())
-                    file.createNewFile();
-                Wini ini = new Wini(file);
-
-                ini.put("desk", "keyType", "reader");
-                ini.put("desk", "execDone", "false");
-
-                ini.store();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
-                    Toast.LENGTH_LONG).show();
-            // reopen app
-            openAppFromPackageName("com.x");
-
-        } else {
-            CallJavaNotify_9();
-        }
+        goContinueReading();
 
         super.onDestroy();
 
@@ -384,6 +359,34 @@ public class ContinueReading extends Activity {
             bufferedWriter.close();// 关闭输出流
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void goContinueReading() {
+        boolean isRun = isAppRun("com.x");
+
+        if (!isRun) {
+            try {
+                File file = new File(shortcut_ini);
+                if (!file.exists())
+                    file.createNewFile();
+                Wini ini = new Wini(file);
+
+                ini.put("desk", "keyType", "reader");
+                ini.put("desk", "execDone", "false");
+
+                ini.store();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
+                    Toast.LENGTH_LONG).show();
+            // reopen app
+            openAppFromPackageName("com.x");
+
+        } else {
+            CallJavaNotify_9();
         }
     }
 

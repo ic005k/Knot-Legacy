@@ -1105,5 +1105,6 @@ void Todo::addToRecycle() {
 
 void Todo::NewTodo() {
   mw_one->m_ReceiveShare->closeAllActiveWindows();
+  mw_one->Sleep(500);
   mw_one->ui->btnTodo->click();
 }

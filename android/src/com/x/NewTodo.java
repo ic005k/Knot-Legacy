@@ -122,6 +122,7 @@ public class NewTodo extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         NewTodo.this.finish();
 
     }
@@ -135,32 +136,7 @@ public class NewTodo extends Activity {
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
-
-        boolean isRun = isAppRun("com.x");
-
-        if (!isRun) {
-            try {
-                File file = new File(shortcut_ini);
-                if (!file.exists())
-                    file.createNewFile();
-                Wini ini = new Wini(file);
-
-                ini.put("desk", "keyType", "todo");
-                ini.put("desk", "execDone", "false");
-
-                ini.store();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
-                    Toast.LENGTH_LONG).show();
-            // reopen app
-            openAppFromPackageName("com.x");
-
-        } else {
-            CallJavaNotify_8();
-        }
+        goNewTodo();
 
         super.onDestroy();
 
@@ -362,6 +338,34 @@ public class NewTodo extends Activity {
             bufferedWriter.close();// 关闭输出流
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void goNewTodo() {
+        boolean isRun = isAppRun("com.x");
+
+        if (!isRun) {
+            try {
+                File file = new File(shortcut_ini);
+                if (!file.exists())
+                    file.createNewFile();
+                Wini ini = new Wini(file);
+
+                ini.put("desk", "keyType", "todo");
+                ini.put("desk", "execDone", "false");
+
+                ini.store();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
+                    Toast.LENGTH_LONG).show();
+            // reopen app
+            openAppFromPackageName("com.x");
+
+        } else {
+            CallJavaNotify_8();
         }
     }
 
