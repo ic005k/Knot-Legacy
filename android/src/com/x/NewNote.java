@@ -128,9 +128,9 @@ public class NewNote extends Activity {
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
-
-        super.onDestroy();
         goNewNote();
+        super.onDestroy();
+        
 
     }
 

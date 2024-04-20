@@ -128,9 +128,8 @@ public class AddRecord extends Activity {
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
-
-        super.onDestroy();
         goAddRecord();
+        super.onDestroy();
 
     }
 

@@ -1449,14 +1449,14 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             // 获取ShortcutManager对象
             shortcutManager = getSystemService(ShortcutManager.class);
 
-            ShortcutInfo shortcut0 = new ShortcutInfo.Builder(this, "Add Record")
+            ShortcutInfo shortcut0 = new ShortcutInfo.Builder(this, "Add_Record")
                     .setShortLabel(getString(R.string.addRecord_shortcut_short_label))
                     .setIcon(Icon.createWithResource(this, R.drawable.addrecord))
                     .setIntent(new Intent(Intent.ACTION_MAIN, null, this, AddRecord.class))
                     .build();
 
             // ShortcutInfo.Builder构建快捷方式
-            ShortcutInfo shortcut1 = new ShortcutInfo.Builder(this, "New Todo")
+            ShortcutInfo shortcut1 = new ShortcutInfo.Builder(this, "New_Todo")
                     .setShortLabel(getString(R.string.newTodo_shortcut_short_label))
                     .setIcon(Icon.createWithResource(this, R.drawable.newtodo))
 
@@ -1468,13 +1468,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                     .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewTodo.class))
                     .build();
 
-            ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "New Note")
+            ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "New_Note")
                     .setShortLabel(getString(R.string.newNote_shortcut_short_label))
                     .setIcon(Icon.createWithResource(this, R.drawable.newnote))
                     .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewNote.class))
                     .build();
 
-            ShortcutInfo shortcut3 = new ShortcutInfo.Builder(this, "Continue Reading")
+            ShortcutInfo shortcut3 = new ShortcutInfo.Builder(this, "Continue_Reading")
                     .setShortLabel(getString(R.string.continueReading_shortcut_short_label))
                     .setIcon(Icon.createWithResource(this, R.drawable.continuereading))
                     .setIntent(new Intent(Intent.ACTION_MAIN, null, this, ContinueReading.class))

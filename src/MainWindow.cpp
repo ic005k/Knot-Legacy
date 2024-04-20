@@ -840,8 +840,7 @@ void MainWindow::timerUpdate() {
 }
 
 void MainWindow::execDeskShortcut() {
-  m_ReceiveShare->closeAllActiveWindows();
-
+  m_ReceiveShare->moveTaskToFront();
   on_ExecShortcut();
 }
 
@@ -3382,8 +3381,6 @@ void MainWindow::on_btnNotes_clicked() {
   } else {
     showNotes();
   }
-
-  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::showNotes() {
@@ -4872,7 +4869,6 @@ void MainWindow::on_btnAdd_clicked() {
   m_Notes->m_TextSelector = new TextSelector(mw_one);
 
   on_AddRecord();
-  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::on_btnDel_clicked() {

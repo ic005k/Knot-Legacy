@@ -468,7 +468,10 @@ void EditRecord::saveOne() {
   Reg.setValue(flag + QString::number(i + 1) + "-childCount", childCount);
 }
 
-void EditRecord::AddRecord() { mw_one->ui->btnAdd->click(); }
+void EditRecord::AddRecord() {
+  mw_one->m_ReceiveShare->closeAllActiveWindows();
+  mw_one->ui->btnAdd->click();
+}
 
 void EditRecord::saveCurrentValue() {
   QString ini_file = privateDir + "editrecord_value.ini";
