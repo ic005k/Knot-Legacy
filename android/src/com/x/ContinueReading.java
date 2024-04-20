@@ -83,16 +83,10 @@ import android.text.style.ForegroundColorSpan;
 import android.text.Spannable;
 import android.text.Spanned;
 
-public class ContinueReading extends Activity
-        implements View.OnClickListener {
-    private TextView tv;
-    private Button btnAddToTodo;
-    private Button btnAppendNote;
-    private Button btnInsertNote;
-    public static String strData;
-    private String share_ini = "/storage/emulated/0/.Knot/myshare.ini";
+public class ContinueReading extends Activity {
 
-    private InternalConfigure internalConfigure;
+    private String shortcut_ini = "/storage/emulated/0/.Knot/shortcut.ini";
+
     private static Context context;
 
     public native static void CallJavaNotify_0();
@@ -115,52 +109,15 @@ public class ContinueReading extends Activity
 
     public native static void CallJavaNotify_9();
 
-    private String type;
-    private String action;
     private static boolean zh_cn;
-    private String cursorText;
-    private String strUri = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-       
-
-        context = getApplicationContext();
-        zh_cn = isZh(context);
-
-        // 去除title(App Name)
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        setContentView(R.layout.activity_share_receive);
-        tv = (TextView) findViewById(R.id.text_info);
-        tv.setMovementMethod(ScrollingMovementMethod.getInstance());
-
-        btnAddToTodo = (Button) findViewById(R.id.btnAddToTodo);
-        btnAppendNote = (Button) findViewById(R.id.btnAppendNote);
-        btnInsertNote = (Button) findViewById(R.id.btnInsertNote);
-
-        if (NoteEditor.zh_cn) {
-            btnAddToTodo.setText("增加到待办事项");
-            btnAppendNote.setText("追加到当前笔记");
-            btnInsertNote.setText("插入到当前笔记");
-        } else {
-            btnAddToTodo.setText("Add to Todo");
-            btnAppendNote.setText("Append to Current Note");
-            btnInsertNote.setText("Insert to Current Note");
-
-        }
-
-        btnAddToTodo.setOnClickListener(this);
-        btnAppendNote.setOnClickListener(this);
-        btnInsertNote.setOnClickListener(this);
+        ContinueReading.this.finish();
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-
-        
-        ContinueReading.this.finish();
 
     }
 
@@ -190,194 +147,6 @@ public class ContinueReading extends Activity
     };
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnAddToTodo:
-                btnAddToTodo.setBackgroundColor(getResources().getColor(R.color.red));
-                try {
-                    File file = new File(share_ini);
-                    if (!file.exists())
-                        file.createNewFile();
-                    Wini ini = new Wini(file);
-                    ini.put("share", "method", "todo");
-                    ini.store();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (type.startsWith("text/")) {
-                    goReceiveString();
-                }
-
-                onBackPressed();
-                break;
-
-            case R.id.btnAppendNote:
-                btnAppendNote.setBackgroundColor(getResources().getColor(R.color.red));
-                try {
-                    File file = new File(share_ini);
-                    if (!file.exists())
-                        file.createNewFile();
-                    Wini ini = new Wini(file);
-                    ini.put("share", "method", "appendNote");
-                    ini.store();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (type.startsWith("text/")) {
-                    goReceiveString();
-                }
-
-                if (type.startsWith("image/")) {
-                    goReceiveImage();
-                }
-
-                onBackPressed();
-                break;
-
-            case R.id.btnInsertNote:
-                btnInsertNote.setBackgroundColor(getResources().getColor(R.color.red));
-                try {
-                    File file = new File(share_ini);
-                    if (!file.exists())
-                        file.createNewFile();
-                    Wini ini = new Wini(file);
-                    ini.put("share", "method", "insertNote");
-                    ini.store();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (type.startsWith("text/")) {
-                    goReceiveString();
-                }
-
-                if (type.startsWith("image/")) {
-                    goReceiveImage();
-                }
-
-                onBackPressed();
-                break;
-        }
-    }
-
-    /*
-     * @Override
-     * public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityStarted(Activity activity) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityResumed(Activity activity) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityPaused(Activity activity) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityStopped(Activity activity) {
-     * System.out.println("NoteEditor onActivityStopped...");
-     * }
-     * 
-     * @Override
-     * public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityDestroyed(Activity activity) {
-     * 
-     * }
-     */
-
-    // 该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
-    public void handlerText(Intent intent) {
-        String mainTxt = intent.getStringExtra(Intent.EXTRA_TEXT);
-        String title = "";// = intent.getStringExtra(Intent.EXTRA_TITLE);
-        if (title.length() > 0)
-            strData = title + "\n\n" + mainTxt;
-        else
-            strData = mainTxt;
-
-    }
-
-    void dealPicStream(Intent intent) {
-        Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-    }
-
-    void dealMultiplePicStream(Intent intent) {
-        ArrayList<Uri> arrayList = intent.getParcelableArrayListExtra(intent.EXTRA_STREAM);
-    }
-
-    void goReceiveString() {
-        System.out.println("strData=" + strData);
-
-        boolean isRun = isAppRun("com.x");
-
-        if (!isRun) {
-            saveReceiveShare("text/plain", strData, "false");
-
-            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
-                    Toast.LENGTH_LONG).show();
-            // reopen app
-            openAppFromPackageName("com.x");
-
-        } else {
-            saveReceiveShare("text/plain", strData, "true");
-            CallJavaNotify_5();
-        }
-
-    }
-
-    void goReceiveImage() {
-        boolean isRun = isAppRun("com.x");
-
-        if (!isRun) {
-            saveReceiveShare("image/*", "", "false");
-
-            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
-                    Toast.LENGTH_LONG).show();
-            // reopen app
-            openAppFromPackageName("com.x");
-
-        } else {
-            saveReceiveShare("image/*", "", "true");
-            CallJavaNotify_5();
-
-        }
-
-    }
-
-    void saveReceiveShare(String shareType, String strData, String shareDone) {
-        try {
-            File file = new File(share_ini);
-            if (!file.exists())
-                file.createNewFile();
-            Wini ini = new Wini(file);
-
-            ini.put("share", "shareType", shareType);
-            ini.put("share", "shareDone", shareDone);
-
-            ini.store();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        String filename = "/storage/emulated/0/.Knot/share_text.txt";
-        writeTextFile(strData, filename);
-
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
 
@@ -388,8 +157,33 @@ public class ContinueReading extends Activity
     protected void onDestroy() {
         System.out.println("onDestroy...");
         unregisterReceiver(mHomeKeyEvent);
-        CallJavaNotify_9();
-        // android.os.Process.killProcess(android.os.Process.myPid());
+
+        boolean isRun = isAppRun("com.x");
+
+        if (!isRun) {
+            try {
+                File file = new File(shortcut_ini);
+                if (!file.exists())
+                    file.createNewFile();
+                Wini ini = new Wini(file);
+
+                ini.put("desk", "keyType", "reader");
+                ini.put("desk", "execDone", "false");
+
+                ini.store();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
+                    Toast.LENGTH_LONG).show();
+            // reopen app
+            openAppFromPackageName("com.x");
+
+        } else {
+            CallJavaNotify_9();
+        }
+
         super.onDestroy();
 
     }
@@ -463,71 +257,6 @@ public class ContinueReading extends Activity
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
 
-    }
-
-    public class InternalConfigure {
-        private final Context context;
-        private Properties properties;
-
-        public InternalConfigure(Context context) {
-            super();
-            this.context = context;
-        }
-
-        /**
-         * 保存文件filename为文件名，filecontent为存入的文件内容
-         * 例:configureActivity.saveFiletoSD("text.ini","");
-         */
-        public void saveFile(String filename, Properties properties) throws Exception {
-            // 设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
-            FileOutputStream fileOutputStream;// = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            File file = new File(filename);
-            fileOutputStream = new FileOutputStream(file);
-            // 通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
-            for (String key : properties.stringPropertyNames()) {
-                String s = key + " = " + properties.getProperty(key) + "\n";
-                System.out.println(s);
-                fileOutputStream.write(s.getBytes());
-            }
-            fileOutputStream.close();
-        }
-
-        /**
-         * 读取文件
-         */
-        public void readFrom(String filename) throws Exception {
-            properties = new Properties();
-
-            FileInputStream fileInputStream;// = context.openFileInput(filename);
-
-            File file = new File(filename);
-            fileInputStream = new FileInputStream(file);
-
-            InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
-            BufferedReader br = new BufferedReader(reader);
-
-            // debug:
-            // String line;
-            // while ((line = br.readLine()) != null) {
-            // System.out.println(line);
-            // }
-
-            properties.load(br);
-
-            br.close();
-            reader.close();
-            fileInputStream.close();
-        }
-
-        /**
-         * 返回指定key对应的value
-         */
-        public String getIniKey(String key) {
-            if (properties.containsKey(key) == false) {
-                return null;
-            }
-            return String.valueOf(properties.get(key));
-        }
     }
 
     public boolean isAppRun(String pName) {
@@ -609,83 +338,6 @@ public class ContinueReading extends Activity
         return false;
     }
 
-    // 读取分享的文件并把文件导入到私有目录
-    public boolean readFileFromShare() {
-        Intent intent = getIntent();
-        String type = intent.getType();
-        ArrayList<Uri> uris = new ArrayList<Uri>();
-        if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
-            Uri uri0 = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-            uris.add(uri0);
-        }
-
-        if (Intent.ACTION_SEND_MULTIPLE.equals(action)) {
-            uris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-        }
-
-        String filename = null;
-        for (int i = 0; i < uris.size(); i++) {
-            Uri uri = uris.get(i);
-            strUri = strUri + "\n\n" + uri;
-            filename = "/storage/emulated/0/.Knot/img" + String.valueOf(i) + ".png";
-
-            if (uri != null) {
-                try {
-                    File outFile = new File(filename);
-                    InputStream inputStream = getContentResolver().openInputStream(uri);
-                    FileOutputStream fos = new FileOutputStream(outFile);
-                    byte[] buf = new byte[1024];
-                    int readCount = 0;
-                    while ((readCount = inputStream.read(buf)) != -1) {
-                        fos.write(buf, 0, readCount);
-                    }
-                    fos.flush();
-                    inputStream.close();
-                    fos.close();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
-        }
-
-        try {
-            File file = new File(share_ini);
-            if (!file.exists())
-                file.createNewFile();
-            Wini ini = new Wini(file);
-            ini.put("share", "imgCount", uris.size());
-            ini.store();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
-
-    public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            // 在这里执行需要等待的操作
-            readFileFromShare();
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            // 在这里执行完成后的操作
-            tv.setText(type + "\n\n" + action + "\n\ncursor pos: " + cursorText + "\n\n" + strUri);
-            setInsertFlag();
-            btnAppendNote.setEnabled(true);
-            btnInsertNote.setEnabled(true);
-
-        }
-    }
-
     public static boolean isZh(Context context) {
         Locale locale = context.getResources().getConfiguration().locale;
         String language = locale.getLanguage();
@@ -732,32 +384,6 @@ public class ContinueReading extends Activity
             bufferedWriter.close();// 关闭输出流
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-    }
-
-    private void setInsertFlag() {
-        // Set insert flag
-        String strTV = tv.getText().toString();
-        int indexTV = strTV.indexOf(cursorText);
-        System.out.println("strTV=" + strTV + " cursorText=" + cursorText + "  indexTV=" + String.valueOf(indexTV));
-        if (indexTV >= 0) {
-            int start = indexTV;
-            int end = indexTV + cursorText.length();
-            SpannableStringBuilder style = new SpannableStringBuilder(strTV);
-            style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFE4C4")), start, end,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            style.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end,
-                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-
-            indexTV = strTV.indexOf("|");
-            start = indexTV;
-            end = indexTV + 1;
-            style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFE4C4")), start, end,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            style.setSpan(new ForegroundColorSpan(Color.parseColor("#FF0000")), start, end,
-                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-
-            tv.setText(style);
         }
     }
 

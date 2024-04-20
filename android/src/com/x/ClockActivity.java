@@ -127,8 +127,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_cancel:
-                // ClockActivity.this.finish();
-                // btn_cancel.setVisibility(View.GONE);
 
                 isGoBackKnot = true;
                 onBackPressed();
@@ -173,10 +171,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        // 去掉Activity上面的状态栏(全屏)
-        // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        // WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         this.setStatusBarColor("#F3F3F3"); // 灰
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -242,23 +236,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         else
             strTodo = "Todo: ";
 
-        // 显示一个警报框，目前已弃用，采用全屏幕显示
-        /*
-         * new AlertDialog.Builder(ClockActivity.this).setTitle(str1).setMessage(str2 +
-         * "\n\n\n" + strCurDT)
-         * .setPositiveButton(str3, new DialogInterface.OnClickListener() {
-         * 
-         * @Override
-         * public void onClick(DialogInterface dialog, int which) {
-         * if (strMute.equals("false")) {
-         * mediaPlayer.stop();
-         * }
-         * 
-         * ClockActivity.this.finish();
-         * }
-         * }).show();
-         */
-
         setContentView(R.layout.activity_clock);
         bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT);
 
@@ -269,6 +246,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         MyService.notifyTodoAlarm(context, str2);
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
+
+        MyActivity.alarmCount = MyActivity.alarmCount + 1;
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
@@ -334,10 +313,13 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         unregisterReceiver(mHomeKeyEvent);
         MyService.clearNotify();
 
+        MyActivity.alarmCount = MyActivity.alarmCount - 1;
+
         if (!isRefreshAlarm) {
             if (!isGoBackKnot) {
 
-                MyActivity.setMini();
+                if (MyActivity.alarmCount == 0)
+                    MyActivity.setMini();
             }
             isGoBackKnot = false;
             android.os.Process.killProcess(android.os.Process.myPid());
@@ -347,7 +329,8 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
         if (!isGoBackKnot) {
 
-            MyActivity.setMini();
+            if (MyActivity.alarmCount == 0)
+                MyActivity.setMini();
         }
 
         isGoBackKnot = false;

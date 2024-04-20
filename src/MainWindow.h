@@ -742,7 +742,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnDelImage_clicked();
 
- private:
+  void on_ExecShortcut();
+  private:
   bool isShowDetails = false;
   QString strShowDetails;
   bool isTabChanged = false;

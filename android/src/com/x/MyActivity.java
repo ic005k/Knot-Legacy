@@ -91,27 +91,24 @@ import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-
+import android.content.pm.ShortcutManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.widget.Toast;
-
+import android.graphics.drawable.Icon;
 import java.util.Calendar;
-
+import android.content.pm.ShortcutInfo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import android.support.v4.content.FileProvider;
-//import androidx.core.content.FileProvider;
 
 import android.graphics.Rect;
 import android.view.ViewTreeObserver;
-
+import java.util.Arrays;
 import java.lang.reflect.Field;
 
 import android.widget.LinearLayout;
-
-//import javax.swing.text.View;
 
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -605,6 +602,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             // Builder builder = new Builder();
             // StrictMode.setVmPolicy(builder.build());
         }
+
+        addDeskShortcut();
 
     }
 
@@ -1441,6 +1440,36 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         Intent i = new Intent(context, NoteEditor.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
+
+    }
+
+    private void addDeskShortcut() {
+        // 获取ShortcutManager对象
+        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            // ShortcutInfo.Builder构建快捷方式
+            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "New Todo")
+                    .setShortLabel(getString(R.string.newTodo_shortcut_short_label))
+                    .setIcon(Icon.createWithResource(this, R.drawable.newtodo))
+
+                    // 跳转到某个网页
+                    // .setIntent(new Intent(Intent.ACTION_VIEW,
+                    // Uri.parse("https://www.baidu.com/")))
+
+                    // 跳转的目标，定义Activity
+                    .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewTodo.class))
+                    .build();
+            // setDynamicShortcuts()方法来设置快捷方式
+
+            ShortcutInfo shortcut1 = new ShortcutInfo.Builder(this, "Continue Reading")
+                    .setShortLabel(getString(R.string.continueReading_shortcut_short_label))
+                    .setIcon(Icon.createWithResource(this, R.drawable.continuereading))
+                    .setIntent(new Intent(Intent.ACTION_MAIN, null, this, ContinueReading.class))
+                    .build();
+            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcut1));
+
+            // Toast.makeText(MyActivity.this, "已添加", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

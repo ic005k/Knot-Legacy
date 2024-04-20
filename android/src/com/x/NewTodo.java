@@ -89,7 +89,7 @@ public class NewTodo extends Activity {
     private Button btnAppendNote;
     private Button btnInsertNote;
     public static String strData;
-    private String share_ini = "/storage/emulated/0/.Knot/myshare.ini";
+    private String shortcut_ini = "/storage/emulated/0/.Knot/shortcut.ini";
 
     private static Context context;
 
@@ -122,6 +122,7 @@ public class NewTodo extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        NewTodo.this.finish();
 
     }
 
@@ -129,14 +130,37 @@ public class NewTodo extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        // NewTodo.this.finish();
     }
 
     @Override
     protected void onDestroy() {
         System.out.println("onDestroy...");
 
-        // CallJavaNotify_8();
+        boolean isRun = isAppRun("com.x");
+
+        if (!isRun) {
+            try {
+                File file = new File(shortcut_ini);
+                if (!file.exists())
+                    file.createNewFile();
+                Wini ini = new Wini(file);
+
+                ini.put("desk", "keyType", "todo");
+                ini.put("desk", "execDone", "false");
+
+                ini.store();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
+                    Toast.LENGTH_LONG).show();
+            // reopen app
+            openAppFromPackageName("com.x");
+
+        } else {
+            CallJavaNotify_8();
+        }
 
         super.onDestroy();
 

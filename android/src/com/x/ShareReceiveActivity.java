@@ -110,12 +110,11 @@ public class ShareReceiveActivity extends Activity
     public native static void CallJavaNotify_6();
 
     public native static void CallJavaNotify_7();
-    
+
     public native static void CallJavaNotify_8();
 
     public native static void CallJavaNotify_9();
 
-    
     private String type;
     private String action;
     private static boolean zh_cn;
@@ -139,7 +138,7 @@ public class ShareReceiveActivity extends Activity
         btnAppendNote = (Button) findViewById(R.id.btnAppendNote);
         btnInsertNote = (Button) findViewById(R.id.btnInsertNote);
 
-        if (NoteEditor.zh_cn) {
+        if (zh_cn) {
             btnAddToTodo.setText("增加到待办事项");
             btnAppendNote.setText("追加到当前笔记");
             btnInsertNote.setText("插入到当前笔记");

@@ -367,6 +367,7 @@ MainWindow::MainWindow(QWidget *parent)
   currentMDFile = m_NotesList->getCurrentMDFile();
   if (isAndroid) {
     QTimer::singleShot(2000, this, SLOT(on_ReceiveShare()));
+    QTimer::singleShot(2000, this, SLOT(on_ExecShortcut()));
   }
 }
 
@@ -834,6 +835,21 @@ void MainWindow::timerUpdate() {
   if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00") {
     m_Preferences->isFontChange = true;
     this->close();
+  }
+}
+
+void MainWindow::on_ExecShortcut() {
+  QSettings Reg("/storage/emulated/0/.Knot/shortcut.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  QString execDone = Reg.value("/desk/execDone", "true").toString();
+  QString keyType = Reg.value("/desk/keyType", "todo").toString();
+  if (execDone == "false") {
+    Reg.setValue("/desk/execDone", "true");
+    if (keyType == "todo") m_Todo->NewTodo();
+    if (keyType == "reader") m_Reader->ContinueReading();
   }
 }
 
