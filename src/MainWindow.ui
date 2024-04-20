@@ -1365,8 +1365,8 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
-                <height>28</height>
+                <width>0</width>
+                <height>0</height>
                </size>
               </property>
               <property name="font">
@@ -2413,7 +2413,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/edit_l.png</normaloff>:/res/edit_l.png</iconset>
+             <normaloff>:/res/edit_l.svg</normaloff>:/res/edit_l.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -2900,7 +2900,7 @@ QTabBar::scroller {width:0}
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/edit_l.png</normaloff>:/res/edit_l.png</iconset>
+                <normaloff>:/res/edit_l.svg</normaloff>:/res/edit_l.svg</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -7862,8 +7862,8 @@ color: rgb(255, 255, 255);</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../icons.qrc"/>
   <include location="../res.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections/>
 </ui>

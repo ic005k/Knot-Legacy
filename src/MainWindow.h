@@ -358,6 +358,7 @@ class MainWindow : public QMainWindow {
   void set_PushButtonStyle(QObject *parent);
 
   void execDeskShortcut();
+  void gobackMainWindows();
   protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;

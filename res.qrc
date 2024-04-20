@@ -8,7 +8,6 @@
         <file>res/done.png</file>
         <file>res/done1.png</file>
         <file>res/down.png</file>
-        <file>res/edit.png</file>
         <file>res/find.png</file>
         <file>res/high.png</file>
         <file>res/icon.icns</file>
@@ -84,7 +83,6 @@
         <file>res/coin.png</file>
         <file>theme/dark/darkstyle.qss</file>
         <file>theme/light/lightstyle.qss</file>
-        <file>res/edit_l.png</file>
         <file>res/find_l.png</file>
         <file>res/report_l.png</file>
         <file>res/time_l.png</file>
@@ -142,5 +140,7 @@
         <file>res/notes_l.svg</file>
         <file>res/chk1.svg</file>
         <file>res/chk0.svg</file>
+        <file>res/edit_l.svg</file>
+        <file>res/edit.svg</file>
     </qresource>
 </RCC>

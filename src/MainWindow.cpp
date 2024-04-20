@@ -841,6 +841,7 @@ void MainWindow::timerUpdate() {
 
 void MainWindow::execDeskShortcut() {
   m_ReceiveShare->moveTaskToFront();
+  gobackMainWindows();
   on_ExecShortcut();
 }
 
@@ -2289,6 +2290,10 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
   if (watch == ui->lblTitleEditRecord) {
     if (event->type() == QEvent::MouseButtonPress) {
+      QString title = ui->lblTitleEditRecord->text();
+      title = title.mid(0, 4);
+      if (!title.contains(tr("Add"))) return true;
+
       ui->btnTabMoveDown->hide();
       ui->btnTabMoveUp->hide();
 
@@ -3622,7 +3627,7 @@ void MainWindow::init_Theme() {
     ui->btnAddTodo->setIcon(QIcon(":/res/plus.svg"));
     ui->btnClear->setIcon(QIcon(":/res/clear.svg"));
 
-    ui->btnRemarks->setIcon(QIcon(":/res/edit.png"));
+    ui->btnRemarks->setIcon(QIcon(":/res/edit.svg"));
 
     ui->btnReader->setIcon(QIcon(":/res/reader.svg"));
     ui->btnTodo->setIcon(QIcon(":/res/todo.svg"));
@@ -3647,7 +3652,7 @@ void MainWindow::init_Theme() {
 
     ui->btnReport->setIcon(QIcon(":/res/report_l.png"));
     ui->btnFind->setIcon(QIcon(":/res/find_l.png"));
-    ui->btnRemarks->setIcon(QIcon(":/res/edit_l.png"));
+    ui->btnRemarks->setIcon(QIcon(":/res/edit_l.svg"));
 
     ui->btnReader->setIcon(QIcon(":/res/reader_l.svg"));
     ui->btnTodo->setIcon(QIcon(":/res/todo_l.png"));
@@ -5811,3 +5816,77 @@ void MainWindow::on_btnShowTools_clicked() {
 void MainWindow::on_btnHideKey_clicked() { pAndroidKeyboard->hide(); }
 
 void MainWindow::on_btnDelImage_clicked() { m_Notes->delImage(); }
+
+void MainWindow::gobackMainWindows() {
+  if (ui->frameSetTab->isVisible()) ui->btnBackSetTab->click();
+
+  if (m_ReaderSet->isVisible()) {
+    m_ReaderSet->ui->btnBack->click();
+    ui->btnBackReader->click();
+  }
+
+  if (ui->frameReader->isVisible()) ui->btnBackReader->click();
+
+  if (ui->frameBookList->isVisible()) {
+    ui->btnBackBookList->click();
+    ui->btnBackReader->click();
+  }
+
+  if (m_TodoAlarm->isVisible()) {
+    m_TodoAlarm->ui->btnBack->click();
+    ui->btnBackTodo->click();
+  }
+
+  if (ui->frameTodoRecycle->isVisible()) {
+    ui->btnReturnRecycle->click();
+    ui->btnBackTodo->click();
+  }
+
+  if (ui->frameTodo->isVisible()) ui->btnBackTodo->click();
+
+  if (ui->frameNoteRecycle->isVisible()) {
+    ui->btnBackNoteRecycle->click();
+    ui->btnBackNoteList->click();
+    ui->btnBackNotes->click();
+  }
+
+  if (ui->frameNoteList->isVisible()) {
+    ui->btnBackNoteList->click();
+    ui->btnBackNotes->click();
+  }
+
+  if (ui->frameNotes->isVisible()) ui->btnBackNotes->click();
+
+  if (m_StepsOptions->isVisible()) {
+    m_StepsOptions->ui->btnBack->click();
+    ui->btnBackSteps->click();
+  }
+
+  if (ui->frameSteps->isVisible()) ui->btnBackSteps->click();
+
+  if (ui->frameBakList->isVisible()) ui->btnBackBakList->click();
+
+  if (ui->frameCategory->isVisible()) {
+    ui->btnCancelType->click();
+    ui->btnBackEditRecord->click();
+  }
+
+  if (ui->frameEditRecord->isVisible()) ui->btnBackEditRecord->click();
+
+  if (ui->frameViewCate->isVisible()) {
+    ui->btnOkViewCate->click();
+    ui->btnBack_Report->click();
+  }
+
+  if (ui->frameTabRecycle->isVisible()) ui->btnBackTabRecycle->click();
+
+  if (ui->frameReport->isVisible()) ui->btnBack_Report->click();
+
+  if (ui->frameOne->isVisible()) ui->btnBack_One->click();
+
+  if (m_Preferences->isVisible()) m_Preferences->ui->btnBack->click();
+
+  if (m_Remarks->isVisible()) m_Remarks->ui->btnBack->click();
+
+  if (ui->frameSearch->isVisible()) ui->btnBackSearch->click();
+}
