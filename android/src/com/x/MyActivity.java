@@ -11,7 +11,7 @@ import android.os.Process;
 import android.os.HandlerThread;
 import android.content.ClipboardManager;
 import android.content.ClipData;
-
+import android.view.KeyEvent;
 import java.util.Properties;
 import java.util.Stack;
 
@@ -632,9 +632,22 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         System.out.println("onStop...");
         super.onStop();
 
-        // 目前暂不需要，已采用新方法
-        // QtApplication.invokeDelegate();
     }
+
+    /*
+     * @Override
+     * public boolean onKeyDown(int keyCode, KeyEvent event) {
+     * if (keyCode == KeyEvent.KEYCODE_BACK) {
+     * Log.e(TAG, "onBackPressed  2 : 按下了返回键");
+     * CallJavaNotify_9();
+     * 
+     * return true;
+     * } else {
+     * Log.e(TAG, "onBackPressed  2 : " + keyCode + "  " + event);
+     * return super.onKeyDown(keyCode, event);
+     * }
+     * }
+     */
 
     @Override
     protected void onDestroy() {
@@ -642,7 +655,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         releaseWakeLock();
         if (null != mFileWatcher)
-            mFileWatcher.stopWatching(); // 停止监听
+            // 停止监听
+            mFileWatcher.stopWatching();
 
         // 让系统自行处理，否则退出时有可能出现崩溃
         // if(mHomeKeyEvent!=null)
@@ -660,8 +674,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         super.onDestroy();
 
-        // 目前暂不需要，已采用新方法
-        // QtApplication.invokeDelegate();
     }
 
     @Override

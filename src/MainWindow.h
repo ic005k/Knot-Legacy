@@ -359,7 +359,8 @@ class MainWindow : public QMainWindow {
 
   void execDeskShortcut();
   void gobackMainWindows();
-  protected:
+
+ protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;

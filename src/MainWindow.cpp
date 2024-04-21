@@ -5900,4 +5900,11 @@ void MainWindow::gobackMainWindows() {
   if (m_Remarks->isVisible()) m_Remarks->ui->btnBack->click();
 
   if (ui->frameSearch->isVisible()) ui->btnBackSearch->click();
+
+  if (ui->frameImgView->isVisible()) {
+    ui->btnBackImg->click();
+    Sleep(500);
+    if (ui->frameNotes->isVisible()) ui->btnBackNotes->click();
+    if (ui->frameReader->isVisible()) ui->btnBackReader->click();
+  }
 }
