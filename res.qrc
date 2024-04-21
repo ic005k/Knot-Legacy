@@ -21,7 +21,6 @@
         <file>res/qslider_bg.png</file>
         <file>res/qslider_btn.png</file>
         <file>res/ReadList.png</file>
-        <file>res/report.png</file>
         <file>res/run.png</file>
         <file>res/sel.png</file>
         <file>res/test.txt</file>
@@ -81,7 +80,6 @@
         <file>theme/dark/darkstyle.qss</file>
         <file>theme/light/lightstyle.qss</file>
         <file>res/find_l.png</file>
-        <file>res/report_l.png</file>
         <file>res/time_l.png</file>
         <file>res/back_l.png</file>
         <file>res/pdf_l.png</file>
@@ -147,5 +145,7 @@
         <file>res/mainmenu.svg</file>
         <file>res/bookmark_l.svg</file>
         <file>res/set_bookmark_l.svg</file>
+        <file>res/report_l.svg</file>
+        <file>res/report.svg</file>
     </qresource>
 </RCC>

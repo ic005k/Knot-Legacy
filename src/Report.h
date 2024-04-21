@@ -48,7 +48,6 @@ class Report : public QDialog {
   void setCurrentHeader(int sn);
   void setScrollBarPos(double pos);
 
-  void Out2Img();
   void on_btnBack_clicked();
   void on_btnYear_clicked();
   void on_btnCategory_clicked();
@@ -65,6 +64,8 @@ class Report : public QDialog {
   void appendTable(QString date, QString freq, QString amount);
 
   void genReportMenu();
+
+  QString Out2Img(bool isShowMessage);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;

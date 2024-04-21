@@ -551,8 +551,10 @@ void setTableNoItemFlags(QTableWidget* t, int row) {
   }
 }
 
-void Report::Out2Img() {
-  if (twOut2Img->topLevelItemCount() == 0) return;
+QString Report::Out2Img(bool isShowMessage) {
+  Q_UNUSED(isShowMessage);
+  QString picFile = "";
+  if (twOut2Img->topLevelItemCount() == 0) return picFile;
 
   if (twOut2Img->topLevelItem(0)->text(0) != mw_one->ui->btnYear->text()) {
     twOut2Img->expandAll();
@@ -628,7 +630,6 @@ void Report::Out2Img() {
     QString strFile;
     strFile = mw_one->ui->lblTitle_Report->text() + ".png";
 
-    QString picFile;
 #ifdef Q_OS_ANDROID
     QDir* folder = new QDir;
     QString path = "/storage/emulated/0/KnotBak/";
@@ -642,8 +643,9 @@ void Report::Out2Img() {
           "Knot", tr("Please turn on the storage permission of the app."), 1);
 
     } else {
-      m_ShowMsg->showMsg(
-          "Knot", tr("Picture output successful!") + "\n\n" + picFile, 1);
+      if (isShowMessage)
+        m_ShowMsg->showMsg(
+            "Knot", tr("Picture output successful!") + "\n\n" + picFile, 1);
     }
 #else
 
@@ -657,6 +659,8 @@ void Report::Out2Img() {
 
 #endif
   }
+
+  return picFile;
 }
 
 void Report::appendTable(QString date, QString freq, QString amount) {
@@ -801,7 +805,17 @@ void Report::genReportMenu() {
 
   QAction* actOuttoPic = new QAction(tr("Output to Image"));
   m_Menu->addAction(actOuttoPic);
-  connect(actOuttoPic, &QAction::triggered, this, [=]() { Out2Img(); });
+  connect(actOuttoPic, &QAction::triggered, this, [=]() { Out2Img(true); });
+
+#ifdef Q_OS_ANDROID
+  QAction* actSharePic = new QAction(tr("Create Image and Share"));
+  m_Menu->addAction(actSharePic);
+  connect(actSharePic, &QAction::triggered, this, [=]() {
+    QString picFile = Out2Img(false);
+    if (QFile::exists(picFile))
+      mw_one->m_ReceiveShare->shareImage(tr("Share to"), picFile, "image/png");
+  });
+#endif
 
   int x = 0;
   x = mw_one->geometry().x() + 2;

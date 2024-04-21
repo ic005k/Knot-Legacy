@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.69";
+QString ver = "1.1.70";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3635,7 +3635,7 @@ void MainWindow::init_Theme() {
     ui->btnNotes->setIcon(QIcon(":/res/note.svg"));
     ui->btnChart->setIcon(QIcon(":/res/chart.png"));
     ui->btnFind->setIcon(QIcon(":/res/find.png"));
-    ui->btnReport->setIcon(QIcon(":/res/report.png"));
+    ui->btnReport->setIcon(QIcon(":/res/report.svg"));
     ui->btnSelTab->setIcon(QIcon(":/res/tab.svg"));
 
     ui->btnMenu->setIcon(QIcon(":/res/mainmenu.svg"));
@@ -3655,7 +3655,7 @@ void MainWindow::init_Theme() {
     ui->btnAddTodo->setIcon(QIcon(":/res/plus_l.svg"));
     ui->btnClear->setIcon(QIcon(":/res/clear.png"));
 
-    ui->btnReport->setIcon(QIcon(":/res/report_l.png"));
+    ui->btnReport->setIcon(QIcon(":/res/report_l.svg"));
     ui->btnFind->setIcon(QIcon(":/res/find_l.png"));
     ui->btnRemarks->setIcon(QIcon(":/res/edit_l.svg"));
 
