@@ -324,7 +324,7 @@ border-radius: 4px;</string>
        </property>
        <property name="icon">
         <iconset resource="../../res.qrc">
-         <normaloff>:/res/set_bookmark_l.png</normaloff>:/res/set_bookmark_l.png</iconset>
+         <normaloff>:/res/set_bookmark_l.svg</normaloff>:/res/set_bookmark_l.svg</iconset>
        </property>
        <property name="iconSize">
         <size>

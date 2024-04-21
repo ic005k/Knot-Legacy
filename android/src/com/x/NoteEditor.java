@@ -112,6 +112,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private int curIndexForResult = 0;
     private View mColorPreview;
 
+    private boolean isAddImage = false;
     public static boolean zh_cn;
     private String currentMDFile;
     private static Context context;
@@ -124,14 +125,23 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     public native static void CallJavaNotify_0();
+
     public native static void CallJavaNotify_1();
+
     public native static void CallJavaNotify_2();
+
     public native static void CallJavaNotify_3();
+
     public native static void CallJavaNotify_4();
+
     public native static void CallJavaNotify_5();
+
     public native static void CallJavaNotify_6();
+
     public native static void CallJavaNotify_7();
+
     public native static void CallJavaNotify_8();
+
     public native static void CallJavaNotify_9();
 
     private static boolean isGoBackKnot = false;
@@ -711,9 +721,10 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // 处理文件路径的逻辑
         System.out.println("open image file=" + filePath);
         // "/storage/emulated/0/.Knot/receive_share_pic.png");
-        if (fileIsExists(filePath))
+        if (fileIsExists(filePath)) {
             CallJavaNotify_7();
-        else
+
+        } else
             Toast.makeText(this, filePath + "  The file does not exist.", 12000).show();
     }
 
@@ -887,6 +898,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     btnRedo.setText("Redo-" + String.valueOf(redoCount));
                 }
 
+                if (isAddImage) {
+                    isAddImage = false;
+                    initTextFormat();
+                }
+
             }
         });
 
@@ -1034,7 +1050,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
                 if (item.getTitle().equals("Image")) {
                     openFilePicker();
-                    initTextFormat();
+                    isAddImage = true;
+
                 }
 
                 if (item.getTitle().equals("Table")) {

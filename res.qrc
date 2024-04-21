@@ -27,7 +27,6 @@
         <file>res/test.txt</file>
         <file>res/time.png</file>
         <file>res/up.png</file>
-        <file>res/onebak.png</file>
         <file>res/msg.mp3</file>
         <file>src/cn.qm</file>
         <file>res/clear.png</file>
@@ -36,8 +35,6 @@
         <file>res/redo.png</file>
         <file>res/undo.png</file>
         <file>res/pic.png</file>
-        <file>res/additem.png</file>
-        <file>res/delitem.png</file>
         <file>res/info.png</file>
         <file>res/b3.png</file>
         <file>res/font1.png</file>
@@ -117,8 +114,6 @@
         <file>res/hide_l.png</file>
         <file>res/pdf/pdf.viewer.bridge.js</file>
         <file>res/pdf/qwebchannel.js</file>
-        <file>res/bookmark_l.png</file>
-        <file>res/set_bookmark_l.png</file>
         <file>res/none.png</file>
         <file>res/share.png</file>
         <file>res/note_l.svg</file>
@@ -142,5 +137,15 @@
         <file>res/chk0.svg</file>
         <file>res/edit_l.svg</file>
         <file>res/edit.svg</file>
+        <file>res/delitem_l.svg</file>
+        <file>res/delitem.svg</file>
+        <file>res/additem_l.svg</file>
+        <file>res/additem.svg</file>
+        <file>res/upload_l.svg</file>
+        <file>res/upload.svg</file>
+        <file>res/mainmenu_l.svg</file>
+        <file>res/mainmenu.svg</file>
+        <file>res/bookmark_l.svg</file>
+        <file>res/set_bookmark_l.svg</file>
     </qresource>
 </RCC>

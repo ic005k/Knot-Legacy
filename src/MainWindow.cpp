@@ -3638,6 +3638,11 @@ void MainWindow::init_Theme() {
     ui->btnReport->setIcon(QIcon(":/res/report.png"));
     ui->btnSelTab->setIcon(QIcon(":/res/tab.svg"));
 
+    ui->btnMenu->setIcon(QIcon(":/res/mainmenu.svg"));
+    ui->btnAdd->setIcon(QIcon(":/res/additem.svg"));
+    ui->btnDel->setIcon(QIcon(":/res/delitem.svg"));
+    ui->btnSync->setIcon(QIcon(":/res/upload.svg"));
+
   } else {
     ui->f_Menu->setStyleSheet("background-color: #19232D;");
     ui->f_Btn->setStyleSheet("background-color: #19232D;");
@@ -3660,6 +3665,11 @@ void MainWindow::init_Theme() {
     ui->btnNotes->setIcon(QIcon(":/res/note_l.svg"));
     ui->btnChart->setIcon(QIcon(":/res/chart_l.png"));
     ui->btnSelTab->setIcon(QIcon(":/res/tab_l.svg"));
+
+    ui->btnMenu->setIcon(QIcon(":/res/mainmenu_l.svg"));
+    ui->btnAdd->setIcon(QIcon(":/res/additem_l.svg"));
+    ui->btnDel->setIcon(QIcon(":/res/delitem_l.svg"));
+    ui->btnSync->setIcon(QIcon(":/res/upload_l.svg"));
 
     ui->editTodo->setStyleSheet(
         "QTextEdit{background-color: #455364; color: white; border:1px solid "

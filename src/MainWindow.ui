@@ -403,7 +403,7 @@
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/bookmark_l.png</normaloff>:/res/bookmark_l.png</iconset>
+                <normaloff>:/res/bookmark_l.svg</normaloff>:/res/bookmark_l.svg</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -802,7 +802,7 @@
              <string>Add</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/additem.png</normaloff>:/res/additem.png</iconset>
             </property>
             <property name="iconSize">
@@ -842,7 +842,7 @@
              <string>Del</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/delitem.png</normaloff>:/res/delitem.png</iconset>
             </property>
             <property name="iconSize">
@@ -882,7 +882,7 @@
              <string>Upload</string>
             </property>
             <property name="icon">
-             <iconset resource="../res.qrc">
+             <iconset>
               <normaloff>:/res/onebak.png</normaloff>:/res/onebak.png</iconset>
             </property>
             <property name="iconSize">

@@ -37,6 +37,8 @@ QR code for downloading:
 * [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet)
 * [qompress](https://github.com/gonzoua/qompress)
 * [zlib](https://zlib.net/)
+* [ColorPicker](https://github.com/duanhong169/ColorPicker)
+* [ini4j](https://ini4j.sourceforge.net/)
 
 ---
 
