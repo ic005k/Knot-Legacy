@@ -246,8 +246,12 @@ void Preferences::initOptions() {
 
   QString readerFontFile =
       iniPreferences->value("/Options/ReaderFont").toString();
-  QString readerFont =
-      setFontDemo(readerFontFile, mw_one->m_ReaderSet->ui->btnFont, fontSize);
+  QString readerFont;
+  if (QFile::exists(readerFontFile))
+    readerFont =
+        setFontDemo(readerFontFile, mw_one->m_ReaderSet->ui->btnFont, fontSize);
+  else
+    readerFont = defaultFontFamily;
   mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
                                                           readerFont);
 }

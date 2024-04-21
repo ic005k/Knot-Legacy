@@ -1449,15 +1449,32 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             // 获取ShortcutManager对象
             shortcutManager = getSystemService(ShortcutManager.class);
 
+            String lblAddRecoed = null;
+            String lblNewTodo = null;
+            String lblNewNote = null;
+            String lblContinueReading = null;
+            if (MyService.zh_cn) {
+                lblAddRecoed = getString(R.string.addRecord_shortcut_short_label_zh);
+                lblNewTodo = getString(R.string.newTodo_shortcut_short_label_zh);
+                lblNewNote = getString(R.string.newNote_shortcut_short_label_zh);
+                lblContinueReading = getString(R.string.continueReading_shortcut_short_label_zh);
+
+            } else {
+                lblAddRecoed = getString(R.string.addRecord_shortcut_short_label);
+                lblNewTodo = getString(R.string.newTodo_shortcut_short_label);
+                lblNewNote = getString(R.string.newNote_shortcut_short_label);
+                lblContinueReading = getString(R.string.continueReading_shortcut_short_label);
+            }
+
+            // ShortcutInfo.Builder构建快捷方式
             ShortcutInfo shortcut0 = new ShortcutInfo.Builder(this, "Add_Record")
-                    .setShortLabel(getString(R.string.addRecord_shortcut_short_label))
+                    .setShortLabel(lblAddRecoed)
                     .setIcon(Icon.createWithResource(this, R.drawable.addrecord))
                     .setIntent(new Intent(Intent.ACTION_MAIN, null, this, AddRecord.class))
                     .build();
 
-            // ShortcutInfo.Builder构建快捷方式
             ShortcutInfo shortcut1 = new ShortcutInfo.Builder(this, "New_Todo")
-                    .setShortLabel(getString(R.string.newTodo_shortcut_short_label))
+                    .setShortLabel(lblNewTodo)
                     .setIcon(Icon.createWithResource(this, R.drawable.newtodo))
 
                     // 跳转到某个网页
@@ -1469,13 +1486,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                     .build();
 
             ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "New_Note")
-                    .setShortLabel(getString(R.string.newNote_shortcut_short_label))
+                    .setShortLabel(lblNewNote)
                     .setIcon(Icon.createWithResource(this, R.drawable.newnote))
                     .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewNote.class))
                     .build();
 
             ShortcutInfo shortcut3 = new ShortcutInfo.Builder(this, "Continue_Reading")
-                    .setShortLabel(getString(R.string.continueReading_shortcut_short_label))
+                    .setShortLabel(lblContinueReading)
                     .setIcon(Icon.createWithResource(this, R.drawable.continuereading))
                     .setIntent(new Intent(Intent.ACTION_MAIN, null, this, ContinueReading.class))
                     .build();

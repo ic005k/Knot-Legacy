@@ -3716,6 +3716,7 @@ void MainWindow::init_Theme() {
 void MainWindow::init_Instance() {
   mw_one = this;
   CurrentYear = QString::number(QDate::currentDate().year());
+  if (defaultFontFamily == "") defaultFontFamily = this->font().family();
 
   tabData = new QTabWidget;
   tabData = ui->tabWidget;
