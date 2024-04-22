@@ -728,6 +728,22 @@ void Todo::refreshAlarm() {
         startTimerAlarm(str1);
         Reg.setValue("msg", str1);
 
+        // isToDay?
+        QDate todayDate = QDate::currentDate();
+        QDate tomoDate = todayDate.addDays(1);
+        QDateTime tomoDateTime =
+            QDateTime::fromString(tomoDate.toString() + " 00:00:00");
+        qint64 current_s = QDateTime::currentDateTimeUtc().toTime_t();
+        qint64 tomo_s = tomoDateTime.toTime_t();
+        if (minValue + current_s < tomo_s)
+          isToday = true;
+        else
+          isToday = false;
+
+        qDebug() << "current_s=" << current_s << "tomo_s=" << tomo_s
+                 << "tomoDateTime=" << tomoDateTime.toString()
+                 << "tomoDate=" << tomoDate.toString();
+
         qDebug() << "Min Time: " << listTotalS << minValue << str1
                  << "curVol: ";
 
