@@ -46,36 +46,11 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 #endif
   }
 
-  QObjectList btnList = mw_one->getAllToolButton(
-      mw_one->getAllUIControls(mw_one->ui->f_ToolBar_Note));
-  for (int i = 0; i < btnList.count(); i++) {
-    QToolButton *btn = (QToolButton *)btnList.at(i);
-    btn->setFont(font0);
-
-#ifdef Q_OS_ANDROID
-    btn->setFixedHeight(25);
-    mw_one->ui->editCol->setFixedHeight(25);
-    mw_one->ui->editRow->setFixedHeight(25);
-    mw_one->ui->editFind->setFixedHeight(25);
-#else
-    btn->setFixedHeight(30);
-    mw_one->ui->editCol->setFixedHeight(30);
-    mw_one->ui->editRow->setFixedHeight(30);
-    mw_one->ui->editFind->setFixedHeight(30);
-#endif
-  }
-
   ui->editFind->setFont(font0);
   ui->editCol->setFont(font0);
   ui->editRow->setFont(font0);
   ui->lblCol->setFont(font0);
   ui->lblRow->setFont(font0);
-
-  mw_one->ui->editFind->setFont(font0);
-  mw_one->ui->editCol->setFont(font0);
-  mw_one->ui->editRow->setFont(font0);
-  mw_one->ui->lblCol->setFont(font0);
-  mw_one->ui->lblRow->setFont(font0);
 
   QFont font1 = m_Method->getNewFont(13);
   QObjectList btnList1 =
@@ -85,19 +60,11 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
     btn->setFont(font1);
   }
 
-  QObjectList btnList2 = mw_one->getAllToolButton(
-      mw_one->getAllUIControls(mw_one->ui->f_Panel_Note));
-  for (int i = 0; i < btnList2.count(); i++) {
-    QToolButton *btn = (QToolButton *)btnList2.at(i);
-    btn->setFont(font1);
-  }
-
   mw_one->set_ToolButtonStyle(this);
 
   ui->lblInfo->hide();
   ui->btnFind->hide();
   ui->lblCount->hide();
-  mw_one->ui->lblCount->hide();
   ui->f_ToolBar->hide();
   ui->btnGetShare->hide();
 
@@ -908,7 +875,6 @@ void Notes::saveQMLVPos() {
   if (QFile(currentMDFile).exists()) {
     sliderPos = getVPos();
     Reg.setValue("/MainNotes/SlidePos" + currentMDFile, sliderPos);
-    Reg.setValue("/MainNotes/Editor" + currentMDFile, getEditorVPos());
   }
 }
 
@@ -1610,31 +1576,6 @@ void Notes::setEditorVPos() {
   if (QFile(currentMDFile).exists()) {
     pos = Reg.value("/MainNotes/Editor" + currentMDFile, 0).toReal();
   }
-
-  QQuickItem *root;
-  root = mw_one->ui->qwNoteEditor->rootObject();
-  QMetaObject::invokeMethod((QObject *)root, "setVPos", Q_ARG(QVariant, pos));
-}
-
-qreal Notes::getEditorVPos() {
-  QVariant itemCount;
-  QQuickItem *root;
-  root = mw_one->ui->qwNoteEditor->rootObject();
-
-  QMetaObject::invokeMethod((QObject *)root, "getVPos",
-                            Q_RETURN_ARG(QVariant, itemCount));
-  qreal textPos = itemCount.toDouble();
-  return textPos;
-}
-
-QString Notes::getEditorText() {
-  QVariant itemCount;
-  QQuickItem *root;
-  root = mw_one->ui->qwNoteEditor->rootObject();
-
-  QMetaObject::invokeMethod((QObject *)root, "getText",
-                            Q_RETURN_ARG(QVariant, itemCount));
-  return itemCount.toString();
 }
 
 void Notes::showTextSelector() {

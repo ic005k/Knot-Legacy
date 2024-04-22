@@ -1532,13 +1532,6 @@ void MainWindow::get_Today(QTreeWidget *tw) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  if (ui->frameNoteEditor->isVisible()) {
-    ui->frameNoteEditor->hide();
-    ui->frameNotes->show();
-    event->ignore();
-    return;
-  }
-
   if (ui->qwCata->isVisible()) {
     on_btnCatalogue_clicked();
     event->ignore();
@@ -2681,35 +2674,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
-  if (watch == ui->qwNoteEditor) {
-    if (event->type() == QEvent::MouseButtonPress) {
-      mw_one->isMousePress = true;
-      mw_one->isMouseMove = false;
-      if (!mw_one->isMouseMove) {
-        if (m_Notes->m_TextSelector->isHidden()) {
-          if (isAndroid) {
-            if (!pAndroidKeyboard->isVisible()) {
-              pAndroidKeyboard->setVisible(true);
-            }
-            m_Notes->timerEditPanel->start(1000);
-          }
-        }
-      }
-    }
-
-    if (event->type() == QEvent::MouseButtonRelease) {
-      mw_one->isMousePress = false;
-    }
-
-    if (event->type() == QEvent::MouseMove) {
-      mw_one->isMouseMove = true;
-    }
-
-    if (event->type() == QEvent::MouseButtonDblClick) {
-      m_Notes->m_TextSelector->init(0);
-    }
-  }
-
   return QWidget::eventFilter(watch, evn);
 }
 
@@ -3483,20 +3447,6 @@ void MainWindow::initQW() {
   ui->qwNotes->rootContext()->setContextProperty("strText", "");
   ui->qwNotes->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/notes.qml")));
 
-  if (isAndroid) {
-    ui->qwNoteEditor->rootContext()->setContextProperty("isByMouseSelect",
-                                                        false);
-    ui->qwNoteEditor->rootContext()->setContextProperty("isAndroid", true);
-  } else {
-    ui->qwNoteEditor->rootContext()->setContextProperty("isByMouseSelect",
-                                                        true);
-    ui->qwNoteEditor->rootContext()->setContextProperty("isAndroid", false);
-  }
-  ui->qwNoteEditor->rootContext()->setContextProperty("myEditText", "");
-  ui->qwNoteEditor->rootContext()->setContextProperty("m_Notes", m_Notes);
-  ui->qwNoteEditor->setSource(
-      QUrl(QStringLiteral("qrc:/src/qmlsrc/noteeditor.qml")));
-
   ui->qwTodo->rootContext()->setContextProperty("maxFontSize", f_size);
   ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
   ui->qwTodo->rootContext()->setContextProperty("m_Todo", m_Todo);
@@ -3802,7 +3752,6 @@ void MainWindow::init_UIWidget() {
   ui->frameNotesTree->hide();
   ui->qwCata->hide();
   ui->qwBookmark->hide();
-  ui->frameNoteEditor->hide();
 
   ui->frameCategory->hide();
   ui->frameSetTab->hide();
@@ -3845,7 +3794,6 @@ void MainWindow::init_UIWidget() {
   ui->editSearchText->installEventFilter(this);
   ui->editFindNote->installEventFilter(this);
   ui->qwNotes->installEventFilter(this);
-  ui->qwNoteEditor->installEventFilter(this);
   ui->lblTitleEditRecord->installEventFilter(this);
 
   ui->lblStats->adjustSize();
@@ -4911,36 +4859,6 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 
 #ifdef Q_OS_ANDROID
 
-  if (ui->frameNoteEditor->isVisible()) {
-    if (this->height() != mw_one->mainHeight) {
-      newHeight = this->height();
-      m_Notes->androidKeyH = mw_one->mainHeight - newHeight;
-
-      QSettings Reg(privateDir + "android.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      Reg.setIniCodec("utf-8");
-#endif
-      Reg.setValue("KeyHeight", m_Notes->androidKeyH);
-      Reg.setValue("newHeight", newHeight);
-    }
-
-    if (pAndroidKeyboard->isVisible()) {
-      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), newHeight);
-    }
-
-    if (this->height() == newHeight) {
-      // int p = m_EditSource->textCursor().position();
-      // QTextCursor tmpCursor = m_EditSource->textCursor();
-      // tmpCursor.setPosition(p);
-      // m_EditSource->setTextCursor(tmpCursor);
-    }
-  }
-
-  qDebug() << pAndroidKeyboard->keyboardRectangle().height()
-           << "this height=" << this->height();
-  qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
-
 #else
   if (!ui->frameTodo->isHidden()) {
     ui->qwTodo->rootContext()->setContextProperty("m_width", mw_one->width());
@@ -4949,26 +4867,7 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 #endif
 }
 
-void MainWindow::on_KVChanged() {
-  if (ui->frameNoteEditor->isVisible()) {
-    if (!pAndroidKeyboard->isVisible()) {
-      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), mw_one->mainHeight);
-    } else {
-      if (newHeight > 0) {
-        this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                          mw_one->width(), newHeight);
-
-        if (!m_Notes->m_TextSelector->isHidden()) {
-          m_Notes->m_TextSelector->setGeometry(
-              m_Notes->m_TextSelector->geometry().x(), 10,
-              m_Notes->m_TextSelector->width(),
-              m_Notes->m_TextSelector->height());
-        }
-      }
-    }
-  }
-}
+void MainWindow::on_KVChanged() {}
 
 void MainWindow::on_btnAddTodo_clicked() { m_Todo->on_btnAdd_clicked(); }
 
@@ -5814,23 +5713,6 @@ void MainWindow::stopTimerForPdf() {
 
 void MainWindow::on_btnShareImage_clicked() {
   m_ReceiveShare->shareImage(tr("Share to"), imgFileName, "image/png");
-}
-
-void MainWindow::on_btnDone_clicked() {
-  pAndroidKeyboard->hide();
-  QString txt = m_Notes->getEditorText();
-  m_Notes->m_EditSource->setPlainText(txt);
-  m_Notes->saveMainNotes();
-  ui->frameNoteEditor->hide();
-  ui->frameNotes->show();
-}
-
-void MainWindow::on_btnShowTools_clicked() {
-  if (ui->f_ToolBar_Note->isVisible())
-    ui->f_ToolBar_Note->hide();
-  else {
-    if (ui->f_ToolBar_Note->isHidden()) ui->f_ToolBar_Note->show();
-  }
 }
 
 void MainWindow::on_btnHideKey_clicked() { pAndroidKeyboard->hide(); }

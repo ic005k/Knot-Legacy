@@ -58,10 +58,6 @@ TextSelector::~TextSelector() { delete ui; }
 void TextSelector::on_btnClose_clicked() {
   ui->lineEdit->clear();
   close();
-  if (mw_one->ui->frameNoteEditor->isVisible()) {
-    mw_one->ui->qwNoteEditor->rootContext()->setContextProperty(
-        "isByMouseSelect", false);
-  }
 }
 
 void TextSelector::init(int y) {

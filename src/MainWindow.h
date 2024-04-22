@@ -734,10 +734,6 @@ class MainWindow : public QMainWindow {
 
   void on_actionShareFile();
 
-  void on_btnDone_clicked();
-
-  void on_btnShowTools_clicked();
-
   void on_btnHideKey_clicked();
 
   void on_btnDelImage_clicked();

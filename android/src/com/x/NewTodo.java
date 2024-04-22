@@ -16,7 +16,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.net.Uri;
 import android.os.FileObserver;
-import android.os.AsyncTask;
+
 import android.text.method.ScrollingMovementMethod;
 import java.util.List;
 import java.util.ArrayList;

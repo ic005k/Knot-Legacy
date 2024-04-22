@@ -320,6 +320,8 @@ void ReceiveShare::closeAllActiveWindows() {
 }
 
 void ReceiveShare::closeAllActiveWindowsKeep(QString frameName) {
+  if (mw_one->ui->frameMain->isVisible()) return;
+
   if (mw_one->m_TodoAlarm->isVisible()) {
     mw_one->m_TodoAlarm->on_btnBack_clicked();
   }

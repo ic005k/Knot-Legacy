@@ -117,9 +117,6 @@ class Notes : public QDialog {
 
   void setVPos(qreal pos);
   void setEditorVPos();
-  qreal getEditorVPos();
-
-  QString getEditorText();
 
   void openNoteEditor();
 
@@ -137,7 +134,8 @@ class Notes : public QDialog {
   void loadEmptyNote();
 
   void NewNote();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
