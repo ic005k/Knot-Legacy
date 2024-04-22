@@ -44,6 +44,8 @@ class ReceiveShare : public QDialog {
   QString getShareMethod();
   void goReceiveShare();
 
+  void closeAllActiveWindowsKeep(QString frameName);
+
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 

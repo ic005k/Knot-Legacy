@@ -358,7 +358,6 @@ class MainWindow : public QMainWindow {
   void set_PushButtonStyle(QObject *parent);
 
   void execDeskShortcut();
-  void gobackMainWindows();
 
  protected:
   void closeEvent(QCloseEvent *event) override;
@@ -744,6 +743,7 @@ class MainWindow : public QMainWindow {
   void on_btnDelImage_clicked();
 
  private:
+  QString keyType;
   bool isShowDetails = false;
   QString strShowDetails;
   bool isTabChanged = false;

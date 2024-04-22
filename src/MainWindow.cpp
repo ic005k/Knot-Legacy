@@ -841,8 +841,17 @@ void MainWindow::timerUpdate() {
 
 void MainWindow::execDeskShortcut() {
   m_ReceiveShare->moveTaskToFront();
-  gobackMainWindows();
+
   on_ExecShortcut();
+  if (keyType == "todo")
+    m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameTodo->objectName());
+  if (keyType == "note")
+    m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameNoteList->objectName());
+  if (keyType == "reader")
+    m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameReader->objectName());
+  if (keyType == "add")
+    m_ReceiveShare->closeAllActiveWindowsKeep(
+        ui->frameEditRecord->objectName());
 }
 
 void MainWindow::on_ExecShortcut() {
@@ -851,7 +860,7 @@ void MainWindow::on_ExecShortcut() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  QString keyType = Reg.value("/desk/keyType", "todo").toString();
+  keyType = Reg.value("/desk/keyType", "todo").toString();
   if (keyType == "todo") m_Todo->NewTodo();
   if (keyType == "note") m_Notes->NewNote();
   if (keyType == "reader") m_Reader->ContinueReading();
@@ -5827,84 +5836,3 @@ void MainWindow::on_btnShowTools_clicked() {
 void MainWindow::on_btnHideKey_clicked() { pAndroidKeyboard->hide(); }
 
 void MainWindow::on_btnDelImage_clicked() { m_Notes->delImage(); }
-
-void MainWindow::gobackMainWindows() {
-  if (ui->frameSetTab->isVisible()) ui->btnBackSetTab->click();
-
-  if (m_ReaderSet->isVisible()) {
-    m_ReaderSet->ui->btnBack->click();
-    ui->btnBackReader->click();
-  }
-
-  if (ui->frameReader->isVisible()) ui->btnBackReader->click();
-
-  if (ui->frameBookList->isVisible()) {
-    ui->btnBackBookList->click();
-    ui->btnBackReader->click();
-  }
-
-  if (m_TodoAlarm->isVisible()) {
-    m_TodoAlarm->ui->btnBack->click();
-    ui->btnBackTodo->click();
-  }
-
-  if (ui->frameTodoRecycle->isVisible()) {
-    ui->btnReturnRecycle->click();
-    ui->btnBackTodo->click();
-  }
-
-  if (ui->frameTodo->isVisible()) ui->btnBackTodo->click();
-
-  if (ui->frameNoteRecycle->isVisible()) {
-    ui->btnBackNoteRecycle->click();
-    ui->btnBackNoteList->click();
-    ui->btnBackNotes->click();
-  }
-
-  if (ui->frameNoteList->isVisible()) {
-    ui->btnBackNoteList->click();
-    ui->btnBackNotes->click();
-  }
-
-  if (ui->frameNotes->isVisible()) ui->btnBackNotes->click();
-
-  if (m_StepsOptions->isVisible()) {
-    m_StepsOptions->ui->btnBack->click();
-    ui->btnBackSteps->click();
-  }
-
-  if (ui->frameSteps->isVisible()) ui->btnBackSteps->click();
-
-  if (ui->frameBakList->isVisible()) ui->btnBackBakList->click();
-
-  if (ui->frameCategory->isVisible()) {
-    ui->btnCancelType->click();
-    ui->btnBackEditRecord->click();
-  }
-
-  if (ui->frameEditRecord->isVisible()) ui->btnBackEditRecord->click();
-
-  if (ui->frameViewCate->isVisible()) {
-    ui->btnOkViewCate->click();
-    ui->btnBack_Report->click();
-  }
-
-  if (ui->frameTabRecycle->isVisible()) ui->btnBackTabRecycle->click();
-
-  if (ui->frameReport->isVisible()) ui->btnBack_Report->click();
-
-  if (ui->frameOne->isVisible()) ui->btnBack_One->click();
-
-  if (m_Preferences->isVisible()) m_Preferences->ui->btnBack->click();
-
-  if (m_Remarks->isVisible()) m_Remarks->ui->btnBack->click();
-
-  if (ui->frameSearch->isVisible()) ui->btnBackSearch->click();
-
-  if (ui->frameImgView->isVisible()) {
-    ui->btnBackImg->click();
-    Sleep(500);
-    if (ui->frameNotes->isVisible()) ui->btnBackNotes->click();
-    if (ui->frameReader->isVisible()) ui->btnBackReader->click();
-  }
-}

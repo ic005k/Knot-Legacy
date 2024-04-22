@@ -319,6 +319,25 @@ void ReceiveShare::closeAllActiveWindows() {
   mw_one->ui->frameMain->show();
 }
 
+void ReceiveShare::closeAllActiveWindowsKeep(QString frameName) {
+  if (mw_one->m_TodoAlarm->isVisible()) {
+    mw_one->m_TodoAlarm->on_btnBack_clicked();
+  }
+
+  QObjectList frameList;
+  frameList = getAllFrame(mw_one->getAllUIControls(mw_one));
+  for (int i = 0; i < frameList.count(); i++) {
+    QFrame* frame = (QFrame*)frameList.at(i);
+    if (frame->parent() == mw_one->ui->centralwidget &&
+        frame->objectName() != frameName) {
+      qDebug() << frame->objectName();
+      if (frame->isVisible()) {
+        frame->hide();
+      }
+    }
+  }
+}
+
 void ReceiveShare::on_btnTest_clicked() { closeAllActiveWindows(); }
 
 void ReceiveShare::shareString(const QString& title, const QString& content) {
