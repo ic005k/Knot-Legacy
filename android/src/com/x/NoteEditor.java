@@ -89,8 +89,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     private MediaPlayer mediaPlayer;
     private static int curVol;
-    private static String strInfo = "Todo|There are currently timed tasks pending.|0|Close";
-    private static String strEnInfo = "Todo|There are currently timed tasks pending.|0|Close";
+    private static String strInfo = "";
     private String strMute = "false";
     private boolean isRefreshAlarm = true;
     private AudioManager mAudioManager;
@@ -319,11 +318,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         overridePendingTransition(0, R.anim.exit_anim);
     }
 
+    private void AnimationWhenOpen() {
+        overridePendingTransition(0, R.anim.enter_anim);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // this.getWindow().setWindowAnimations(R.style.WindowAnim);
 
         context = getApplicationContext();
         isZh(context);
@@ -332,18 +333,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
 
-        String filename = "/storage/emulated/0/.Knot/mymd.txt";
-        strInfo = readTextFile(filename);
-
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        // 去掉Activity上面的状态栏(全屏显示)
-        // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        // WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         this.setStatusBarColor("#F3F3F3"); // 灰
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
+        String filename = "/storage/emulated/0/.Knot/mymd.txt";
+        strInfo = readTextFile(filename);
 
         setContentView(R.layout.noteeditor);
         bindViews(strInfo);
@@ -351,7 +348,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // set cursor pos
         filename = "/storage/emulated/0/.Knot/note_text.ini";
         if (fileIsExists(filename)) {
-            String s_cpos = null;
+            String s_cpos = "";
 
             try {
                 Wini ini = new Wini(new File(filename));
@@ -362,10 +359,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 e.printStackTrace();
             }
 
-            int cpos;
-            if (s_cpos == null)
-                cpos = 0;
-            else
+            int cpos = 0;
+            if (s_cpos != null)
                 cpos = Integer.parseInt(s_cpos);
             int nLength = editNote.getText().length();
             if (cpos > nLength)
@@ -617,7 +612,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return null;
+        return "";
     }
 
     public void writeTextFile(String content, String filename) {
@@ -1333,7 +1328,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         String filename = "/storage/emulated/0/.Knot/myshare.ini";
         if (fileIsExists(filename)) {
-            String strFlag = null;
+            String strFlag = "";
             try {
                 Wini ini = new Wini(new File(filename));
                 strFlag = ini.get("share", "on_create");
@@ -1342,7 +1337,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 e.printStackTrace();
             }
 
-            if (strFlag.length() > 0) {
+            if (strFlag != null) {
                 try {
                     Wini ini = new Wini(new File(filename));
                     ini.put("share", "on_create", "");
@@ -1627,8 +1622,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void initTextFormat() {
-        int curIndex = editNote.getSelectionStart();
         String strOrg = editNote.getText().toString();
+        if (strOrg == null || strOrg.equals(""))
+            return;
+
+        int curIndex = editNote.getSelectionStart();
+
         for (int i = 0; i < 10; i++)
             strOrg = strOrg.replace("\n\n\n", "\n\n");
 

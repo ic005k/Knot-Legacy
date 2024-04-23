@@ -849,9 +849,10 @@ void MainWindow::execDeskShortcut() {
     m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameNoteList->objectName());
   if (keyType == "reader")
     m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameReader->objectName());
-  if (keyType == "add")
+  if (keyType == "add") {
     m_ReceiveShare->closeAllActiveWindowsKeep(
         ui->frameEditRecord->objectName());
+  }
 }
 
 void MainWindow::on_ExecShortcut() {
@@ -864,7 +865,10 @@ void MainWindow::on_ExecShortcut() {
   if (keyType == "todo") m_Todo->NewTodo();
   if (keyType == "note") m_Notes->NewNote();
   if (keyType == "reader") m_Reader->ContinueReading();
-  if (keyType == "add") m_EditRecord->AddRecord();
+  if (keyType == "add") {
+    if (ui->frameEditRecord->isVisible()) return;
+    m_EditRecord->AddRecord();
+  }
 }
 
 void MainWindow::on_ReceiveShare() {

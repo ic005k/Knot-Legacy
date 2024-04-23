@@ -9,5 +9,8 @@
     <string name="newTodo_shortcut_short_label_zh">"新建待办"</string>
     <string name="newNote_shortcut_short_label_zh">"新建笔记"</string>
     <string name="continueReading_shortcut_short_label_zh">"继续阅读"</string>
+    
+    <string name="strTip_zh">"Knot没有开启，正在开启中，请稍等..."</string>
+    <string name="strTip">"The Knot is not open, it will be opened for you at this time, please wait..."</string>
 </resources>
 

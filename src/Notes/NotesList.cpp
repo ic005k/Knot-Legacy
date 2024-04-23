@@ -169,6 +169,7 @@ void NotesList::on_btnNewNote_clicked() {
   item1->setIcon(0, QIcon(":/res/n.png"));
 
   QTextEdit *edit = new QTextEdit();
+  edit->append("");
   TextEditToFile(edit, iniDir + noteFile);
 
   ui->treeWidget->setCurrentItem(item1);

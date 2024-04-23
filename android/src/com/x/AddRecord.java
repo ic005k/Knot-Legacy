@@ -350,8 +350,11 @@ public class AddRecord extends Activity {
                 e.printStackTrace();
             }
 
-            Toast.makeText(this, "The Knot is not open, it will be opened for you at this time, please wait...",
-                    Toast.LENGTH_LONG).show();
+            if (isZh(this))
+                Toast.makeText(this, getString(R.string.strTip_zh), Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this, getString(R.string.strTip), Toast.LENGTH_LONG).show();
+
             // reopen app
             openAppFromPackageName("com.x");
 
