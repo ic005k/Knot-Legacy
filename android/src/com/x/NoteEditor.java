@@ -84,6 +84,8 @@ import android.view.KeyEvent;
 import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.InputMethodManager;
 import java.util.regex.*;
+import android.widget.LinearLayout;
+import android.view.LayoutInflater;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -1024,6 +1026,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private void showPopupMenu(View view) {
         // View当前PopupMenu显示的相对View的位置
         PopupMenu popupMenu = new PopupMenu(this, view);
+
         // menu布局
         popupMenu.getMenuInflater().inflate(R.menu.main, popupMenu.getMenu());
         // menu的item点击事件
@@ -1144,12 +1147,20 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     editNote.setSelection(start);
                     editNote.setSelection(start, end);
 
+                    String strOk = "Ok";
+                    String strCancel = "Cancel";
+                    if (zh_cn) {
+                        strOk = "确定";
+                        strCancel = "取消";
+
+                    }
+
                     new ColorPickerPopup.Builder(context)
                             .initialColor(Color.RED) // Set initial color
                             .enableBrightness(true) // Enable brightness slider or not
                             .enableAlpha(true) // Enable alpha slider or not
-                            .okTitle("Ok")
-                            .cancelTitle("Cancel")
+                            .okTitle(strOk)
+                            .cancelTitle(strCancel)
                             .showIndicator(true)
                             .showValue(true)
                             .build()
@@ -1248,6 +1259,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         });
 
         popupMenu.show();
+
     }
 
     public boolean readFileFromUriToLocal(Uri uri, String localfile) {

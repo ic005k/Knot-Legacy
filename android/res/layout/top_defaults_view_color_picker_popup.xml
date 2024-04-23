@@ -13,7 +13,7 @@
         app:enableAlpha="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- android:background="?android:selectableItemBackground" -->
     <TextView
@@ -21,26 +21,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="64dp"
-        android:textSize="13sp"
+        android:textSize="11sp"
         android:gravity="center"
         android:padding="8dp"
         android:background="#3498DB"
         android:textColor="#FFFFFF"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="64dp"
-        android:textSize="13sp"
+        android:textSize="11sp"
         android:gravity="center"
         android:padding="8dp"
         android:background="#3498DB"
         android:textColor="#FFFFFF"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <View
         android:id="@+id/colorIndicator"
@@ -49,7 +50,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="@+id/cancel"
         app:layout_constraintRight_toRightOf="@+id/cancel"
-        app:layout_constraintTop_toBottomOf="@+id/cancel"/>
+        app:layout_constraintTop_toBottomOf="@+id/cancel"
+    />
 
     <TextView
         android:id="@+id/colorHex"
@@ -60,9 +62,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:textColor="#1E90FF"
-        android:textSize="8sp"
+        android:textSize="7sp"
         app:layout_constraintLeft_toLeftOf="@+id/ok"
         app:layout_constraintRight_toRightOf="@+id/ok"
-        app:layout_constraintTop_toBottomOf="@+id/ok"/>
+        app:layout_constraintTop_toBottomOf="@+id/ok"
+    />
+
 
 </android.support.constraint.ConstraintLayout>
