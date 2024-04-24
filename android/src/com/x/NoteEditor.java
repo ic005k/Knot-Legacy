@@ -2,11 +2,14 @@ package com.x;
 
 import com.x.MyActivity;
 import com.x.TextViewUndoRedo;
+import com.x.PopupMenuCustomLayout;
 
 // 读写ini文件的三方开源库
 import org.ini4j.Wini;
 import top.defaults.colorpicker.ColorPickerPopup;
 
+import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.content.IntentFilter;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
@@ -86,6 +89,7 @@ import android.view.inputmethod.InputMethodManager;
 import java.util.regex.*;
 import android.widget.LinearLayout;
 import android.view.LayoutInflater;
+import android.widget.PopupWindow;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -259,6 +263,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             case R.id.btnMenu:
                 btnMenu.setBackgroundColor(getResources().getColor(R.color.red));
                 showPopupMenu(btnMenu);
+                btnMenu.setBackgroundColor(getResources().getColor(R.color.normal));
                 break;
 
             case R.id.btnFind:
@@ -1021,6 +1026,26 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showCustomPopupMenu() {
+        PopupMenuCustomLayout popupMenu = new PopupMenuCustomLayout(
+                this, R.layout.popup_menu_custom_layout,
+                new PopupMenuCustomLayout.PopupMenuCustomOnClickListener() {
+                    @Override
+                    public void onClick(int itemId) {
+                        // log statement: "Clicked on: " + itemId
+                        switch (itemId) {
+                            case R.id.format:
+                                System.out.println("Item A was clicked!");
+                                break;
+                        }
+                    }
+                });
+        // Method 1:
+        popupMenu.show();
+        // Method 2: via an anchor view:
+        // popupMenu.show(anchorView, Gravity.CENTER, 0, 0);
     }
 
     private void showPopupMenu(View view) {

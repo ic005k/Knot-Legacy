@@ -72,8 +72,6 @@ Report::Report(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblDetails->setWordWrap(true);
   mw_one->ui->lblDetails->adjustSize();
 
-  mw_one->set_ToolButtonStyle(this);
-
   lblTotal->adjustSize();
   lblTotal->setWordWrap(true);
   lblDetails->adjustSize();

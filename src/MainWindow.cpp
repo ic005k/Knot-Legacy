@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.70";
+QString ver = "1.1.71";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4264,6 +4264,18 @@ static void JavaNotify_3() {
 
 static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
+
+  if (mw_one->alertWindowsCount == 0) {
+    QSettings Reg("/storage/emulated/0/.Knot/alarm.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    Reg.setIniCodec("utf-8");
+#endif
+    QString backMain = Reg.value("/action/backMain", "false").toString();
+    Reg.setValue("/action/backMain", "false");
+    if (backMain == "false") {
+      mw_one->setMini();
+    }
+  }
 
   qDebug() << "alertWindowsCount=" << mw_one->alertWindowsCount;
   qDebug() << "C++ JavaNotify_4";

@@ -1,5 +1,7 @@
 package com.x;
 
+import org.ini4j.Wini;
+
 import com.x.MyActivity;
 import com.x.NoteEditor;
 
@@ -91,8 +93,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
     public native static void CallJavaNotify_9();
 
-    private static boolean isGoBackKnot = false;
-
     public static boolean isZh(Context context) {
         Locale locale = context.getResources().getConfiguration().locale;
         String language = locale.getLanguage();
@@ -128,7 +128,18 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         switch (v.getId()) {
             case R.id.btn_cancel:
 
-                isGoBackKnot = true;
+                String iniFile = "/storage/emulated/0/.Knot/alarm.ini";
+                try {
+                    File file = new File(iniFile);
+                    if (!file.exists())
+                        file.createNewFile();
+                    Wini ini = new Wini(file);
+                    ini.put("action", "backMain", "true");
+                    ini.store();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 onBackPressed();
                 break;
         }
@@ -247,8 +258,6 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
 
         System.out.println("闹钟已开始+++++++++++++++++++++++");
 
-        MyActivity.alarmCount = MyActivity.alarmCount + 1;
-
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
@@ -313,27 +322,11 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         unregisterReceiver(mHomeKeyEvent);
         MyService.clearNotify();
 
-        MyActivity.alarmCount = MyActivity.alarmCount - 1;
-
         if (!isRefreshAlarm) {
-            if (!isGoBackKnot) {
-
-                if (MyActivity.alarmCount == 0)
-                    MyActivity.setMini();
-            }
-            isGoBackKnot = false;
             android.os.Process.killProcess(android.os.Process.myPid());
         } else {
             CallJavaNotify_4();
         }
-
-        if (!isGoBackKnot) {
-
-            if (MyActivity.alarmCount == 0)
-                MyActivity.setMini();
-        }
-
-        isGoBackKnot = false;
 
         super.onDestroy();
 

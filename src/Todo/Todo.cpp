@@ -17,8 +17,6 @@ extern int fontSize;
 Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   ui->setupUi(this);
 
-  mw_one->set_ToolButtonStyle(this);
-
   this->installEventFilter(this);
   mw_one->ui->editTodo->viewport()->installEventFilter(mw_one);
 

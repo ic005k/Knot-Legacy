@@ -19,8 +19,6 @@ QStringList c_list;
 CategoryList *m_CategoryList;
 
 EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
-  mw_one->set_ToolButtonStyle(this);
-
   m_CategoryList = new CategoryList(this);
 
   this->installEventFilter(this);
