@@ -6,6 +6,18 @@
         <item name="android:windowExitAnimation">@anim/exit_anim</item>
         <item name="android:windowFullscreen">true</item>
         <item name="textAllCaps">false</item>
-
     </style>
+
+    <style name="popup_menu_style" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:itemBackground">@android:color/white</item>
+        
+    </style>
+
+    <style name="popup_menu_style_dark" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:itemBackground">@android:color/black</item>
+       
+    </style>
+
 </resources>

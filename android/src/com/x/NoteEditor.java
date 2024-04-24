@@ -8,6 +8,7 @@ import com.x.PopupMenuCustomLayout;
 import org.ini4j.Wini;
 import top.defaults.colorpicker.ColorPickerPopup;
 
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Gravity;
 import android.content.IntentFilter;
@@ -349,7 +350,15 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         String filename = "/storage/emulated/0/.Knot/mymd.txt";
         strInfo = readTextFile(filename);
 
-        setContentView(R.layout.noteeditor);
+        if (MyActivity.isDark) {
+            this.setStatusBarColor("#19232D"); // 深色
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            setContentView(R.layout.noteeditor_dark);
+        } else {
+            this.setStatusBarColor("#F3F3F3"); // 灰
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            setContentView(R.layout.noteeditor);
+        }
         bindViews(strInfo);
 
         // set cursor pos
@@ -1050,10 +1059,19 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     private void showPopupMenu(View view) {
         // View当前PopupMenu显示的相对View的位置
-        PopupMenu popupMenu = new PopupMenu(this, view);
+        // PopupMenu popupMenu = new PopupMenu(this, view);
+
+        Context wrapper;
+        if (MyActivity.isDark)
+            wrapper = new ContextThemeWrapper(this, R.style.popup_menu_style_dark);
+        else
+            wrapper = new ContextThemeWrapper(this, R.style.popup_menu_style);
+
+        PopupMenu popupMenu = new PopupMenu(wrapper, view);
 
         // menu布局
         popupMenu.getMenuInflater().inflate(R.menu.main, popupMenu.getMenu());
+
         // menu的item点击事件
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -1769,6 +1787,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         if (m_instance != null)
             m_instance.finish();
 
+    }
+
+    private void hideInputMethod() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        boolean isOpen = imm.isActive();
+        if (isOpen) {
+            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
 }

@@ -3661,21 +3661,6 @@ void MainWindow::init_Theme() {
   axisX2->setLabelsFont(font1);
   axisY2->setLabelsFont(font1);
   axisY2->setTickCount(yScale);
-
-  // Reset Style
-  mw_one->ui->btnPages->setStyleSheet(
-      "color: rgb(0, 0, 0);background-color: rgb(254, 234, 112);border: "
-      "0px solid "
-      "rgb(255,0,0);border-radius: 4px;"
-      "font-weight: bold;");
-
-  QString style =
-      "QToolButton {background-color: rgb(255, 0, 0); color: "
-      "rgb(255,255,255); "
-      "border-radius:10px; "
-      "border:0px solid gray; } QToolButton:pressed { background-color: "
-      "rgb(220,220,230); color: black}";
-  m_Preferences->ui->btnReStart->setStyleSheet(style);
 }
 
 void MainWindow::init_Instance() {
@@ -3925,6 +3910,21 @@ void MainWindow::init_ButtonStyle() {
   ui->btnFind->setStyleSheet("border:none");
   ui->btnReport->setStyleSheet("border:none");
   ui->btnSelTab->setStyleSheet("border:none");
+
+  // Reset Style
+  mw_one->ui->btnPages->setStyleSheet(
+      "color: rgb(0, 0, 0);background-color: rgb(254, 234, 112);border: "
+      "0px solid "
+      "rgb(255,0,0);border-radius: 4px;"
+      "font-weight: bold;");
+
+  QString style =
+      "QToolButton {background-color: rgb(255, 0, 0); color: "
+      "rgb(255,255,255); "
+      "border-radius:10px; "
+      "border:0px solid gray; } QToolButton:pressed { background-color: "
+      "rgb(220,220,230); color: black}";
+  m_Preferences->ui->btnReStart->setStyleSheet(style);
 }
 
 void MainWindow::selTab() {

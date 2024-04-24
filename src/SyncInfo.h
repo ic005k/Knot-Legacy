@@ -21,6 +21,7 @@ class SyncInfo : public QDialog {
 
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
+
  private slots:
   void on_btnClose_clicked();
 
