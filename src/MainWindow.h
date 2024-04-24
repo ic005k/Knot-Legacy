@@ -772,6 +772,7 @@ class MainWindow : public QMainWindow {
   void updateMainTab();
   void getMainTabs();
   QObjectList getAllPushButton(QObjectList lstUIControls);
+  void init_ButtonStyle();
 };
 
 class SaveThread : public QThread {

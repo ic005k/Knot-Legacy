@@ -370,6 +370,8 @@ MainWindow::MainWindow(QWidget *parent)
     if (m_Method->getExecDone() == "false")
       QTimer::singleShot(2000, this, SLOT(on_ExecShortcut()));
   }
+
+  init_ButtonStyle();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -3716,8 +3718,6 @@ void MainWindow::init_Instance() {
 }
 
 void MainWindow::init_UIWidget() {
-  set_ToolButtonStyle(this);
-
   QFontMetrics fontMetrics(font());
   int nFontHeight = fontMetrics.height();
   int nHeight = nFontHeight * 1.5;
@@ -3875,22 +3875,6 @@ void MainWindow::init_UIWidget() {
   m_Method->setToolButtonQss(ui->btnChartDay, 5, 3, "#455364", "#FFFFFF",
                              "#455364", "#FFFFFF", "#555364", "#FFFFFF");
 
-  ui->btnMenu->setStyleSheet("border:none");
-  ui->btnRemarks->setStyleSheet("border:none");
-  ui->btnPause->setStyleSheet("border:none");
-  ui->btnTodo->setStyleSheet("border:none");
-  ui->btnSteps->setStyleSheet("border:none");
-  ui->btnChart->setStyleSheet("border:none");
-  ui->btnReader->setStyleSheet("border:none");
-  ui->btnNotes->setStyleSheet("border:none");
-  ui->btnAdd->setStyleSheet("border:none");
-  ui->btnDel->setStyleSheet("border:none");
-  ui->btnPasteTodo->setStyleSheet("border:none");
-  ui->btnSync->setStyleSheet("border:none");
-  ui->btnFind->setStyleSheet("border:none");
-  ui->btnReport->setStyleSheet("border:none");
-  ui->btnSelTab->setStyleSheet("border:none");
-
   int nIConFontSize;
 #ifdef Q_OS_ANDROID
   nIConFontSize = 12;
@@ -3922,6 +3906,25 @@ void MainWindow::init_UIWidget() {
   ui->lblTitle->setStyleSheet(lblStyle);
   ui->lblTitle_Report->setStyleSheet(lblStyle);
   ui->lblStats->setStyleSheet(lblStyle);
+}
+
+void MainWindow::init_ButtonStyle() {
+  set_ToolButtonStyle(this);
+  ui->btnMenu->setStyleSheet("border:none");
+  ui->btnRemarks->setStyleSheet("border:none");
+  ui->btnPause->setStyleSheet("border:none");
+  ui->btnTodo->setStyleSheet("border:none");
+  ui->btnSteps->setStyleSheet("border:none");
+  ui->btnChart->setStyleSheet("border:none");
+  ui->btnReader->setStyleSheet("border:none");
+  ui->btnNotes->setStyleSheet("border:none");
+  ui->btnAdd->setStyleSheet("border:none");
+  ui->btnDel->setStyleSheet("border:none");
+  ui->btnPasteTodo->setStyleSheet("border:none");
+  ui->btnSync->setStyleSheet("border:none");
+  ui->btnFind->setStyleSheet("border:none");
+  ui->btnReport->setStyleSheet("border:none");
+  ui->btnSelTab->setStyleSheet("border:none");
 }
 
 void MainWindow::selTab() {
