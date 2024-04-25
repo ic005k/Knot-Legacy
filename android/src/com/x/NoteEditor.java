@@ -438,7 +438,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
         AnimationWhenClosed();
     }
@@ -1258,14 +1257,28 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
                 }
 
-                if (item.getTitle().equals("#")) {
-                    insertNote("#");
+                if (item.getTitle().equals("Strickout")) {
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("~~" + sel + "~~");
+                    } else
+                        insertNote("~~Strickout~~");
+
                     initTextFormat();
                 }
 
-                if (item.getTitle().equals(">"))
+                if (item.getTitle().equals("Underline")) {
+                    String sel = getEditSelectText();
+                    if (sel.length() > 0) {
+                        delEditSelectText();
+                        insertNote("<u>" + sel + "</u>");
+                    } else
+                        insertNote("<u>Underline</u>");
 
-                    insertNote("> ");
+                    initTextFormat();
+
+                }
 
                 if (item.getTitle().equals("Date")) {
 

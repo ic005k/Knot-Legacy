@@ -30,20 +30,20 @@
     <item android:id="@+id/h5"
         android:title="h5" />
 
+    <item android:id="@+id/fontcolor"
+        android:title="Font Color" />
+
     <item android:id="@+id/bold"
         android:title="Bold" />
 
     <item android:id="@+id/italic"
         android:title="Italic" />
 
-    <item android:id="@+id/fontcolor"
-        android:title="Font Color" />
-
     <item android:id="@+id/s1"
-        android:title="#" />
+        android:title="Strickout" />
 
     <item android:id="@+id/s2"
-        android:title=">" />
+        android:title="Underline" />
 
     <item android:id="@+id/date"
         android:title="Date" />
