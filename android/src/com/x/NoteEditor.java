@@ -3,6 +3,7 @@ package com.x;
 import com.x.MyActivity;
 import com.x.TextViewUndoRedo;
 import com.x.PopupMenuCustomLayout;
+import com.x.LineNumberedEditText;
 
 // 读写ini文件的三方开源库
 import org.ini4j.Wini;
@@ -111,7 +112,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private Button btnPrev;
     private Button btnNext;
 
-    public static EditText editNote;
+    public static LineNumberedEditText editNote;
     public static EditText editFind;
     public static TextView lblResult;
     private ArrayList<Integer> arrayFindResult = new ArrayList<Integer>();
@@ -170,7 +171,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void bindViews(String str) {
-        editNote = (EditText) findViewById(R.id.editNote);
+        editNote = (LineNumberedEditText) findViewById(R.id.editNote);
         editNote.setText(str);
         // pass edittext object to TextViewUndoRedo class
         helper = new TextViewUndoRedo(editNote);
