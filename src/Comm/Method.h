@@ -205,7 +205,8 @@ class Method : public QDialog {
 
   QString getExecDone();
 
- protected:
+  void setExecDone(QString execDone);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

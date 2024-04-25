@@ -344,9 +344,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        this.setStatusBarColor("#F3F3F3"); // 灰
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
         String filename = "/storage/emulated/0/.Knot/mymd.txt";
         strInfo = readTextFile(filename);
 
@@ -359,6 +356,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             setContentView(R.layout.noteeditor);
         }
+
         bindViews(strInfo);
 
         // set cursor pos

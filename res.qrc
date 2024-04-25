@@ -9,7 +9,6 @@
         <file>res/done1.png</file>
         <file>res/down.png</file>
         <file>res/find.png</file>
-        <file>res/high.png</file>
         <file>res/icon.icns</file>
         <file>res/icon.png</file>
         <file>res/low.png</file>
@@ -49,8 +48,6 @@
         <file>tr/qt_zh_CN.ts</file>
         <file>tr/widgets_zh_cn.qm</file>
         <file>tr/widgets_zh_cn.ts</file>
-        <file>res/setpass.png</file>
-        <file>res/topdf.png</file>
         <file>res/paste.png</file>
         <file>res/cleft.png</file>
         <file>res/cright.png</file>
@@ -82,8 +79,6 @@
         <file>res/find_l.png</file>
         <file>res/time_l.png</file>
         <file>res/back_l.png</file>
-        <file>res/pdf_l.png</file>
-        <file>res/lock_l.png</file>
         <file>res/notebook_l.png</file>
         <file>res/list_l.png</file>
         <file>res/open_l.png</file>
@@ -147,5 +142,12 @@
         <file>res/set_bookmark_l.svg</file>
         <file>res/report_l.svg</file>
         <file>res/report.svg</file>
+        <file>res/lock_l.svg</file>
+        <file>res/lock.svg</file>
+        <file>res/topdf_l.svg</file>
+        <file>res/topdf.svg</file>
+        <file>res/notebook_l.svg</file>
+        <file>res/notebook.svg</file>
+        <file>res/high_l.svg</file>
     </qresource>
 </RCC>

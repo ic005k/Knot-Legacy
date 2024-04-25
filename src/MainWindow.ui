@@ -2448,7 +2448,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/notebook_l.png</normaloff>:/res/notebook_l.png</iconset>
+             <normaloff>:/res/notebook_l.svg</normaloff>:/res/notebook_l.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -2483,7 +2483,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/lock_l.png</normaloff>:/res/lock_l.png</iconset>
+             <normaloff>:/res/lock_l.svg</normaloff>:/res/lock_l.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -2518,7 +2518,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/pdf_l.png</normaloff>:/res/pdf_l.png</iconset>
+             <normaloff>:/res/topdf_l.svg</normaloff>:/res/topdf_l.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -2824,7 +2824,7 @@ QTabBar::scroller {width:0}
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/high.png</normaloff>:/res/high.png</iconset>
+                <normaloff>:/res/high_l.svg</normaloff>:/res/high_l.svg</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -4695,7 +4695,7 @@ QRadioButton::indicator:checked {
                </property>
                <property name="icon">
                 <iconset resource="../res.qrc">
-                 <normaloff>:/res/notebook_l.png</normaloff>:/res/notebook_l.png</iconset>
+                 <normaloff>:/res/notebook_l.svg</normaloff>:/res/notebook_l.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -6614,8 +6614,8 @@ QSlider::handle:horizontal:disabled {
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../icons.qrc"/>
   <include location="../res.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections/>
 </ui>

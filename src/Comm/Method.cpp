@@ -1155,3 +1155,12 @@ QString Method::getExecDone() {
 
   return Reg.value("/desk/execDone", "true").toString();
 }
+
+void Method::setExecDone(QString execDone) {
+  QSettings Reg("/storage/emulated/0/.Knot/shortcut.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue("/desk/execDone", execDone);
+}

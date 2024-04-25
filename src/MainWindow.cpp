@@ -367,8 +367,11 @@ MainWindow::MainWindow(QWidget *parent)
   currentMDFile = m_NotesList->getCurrentMDFile();
   if (isAndroid) {
     QTimer::singleShot(2000, this, SLOT(on_ReceiveShare()));
-    if (m_Method->getExecDone() == "false")
+
+    if (m_Method->getExecDone() == "false") {
+      m_Method->setExecDone("true");
       QTimer::singleShot(2000, this, SLOT(on_ExecShortcut()));
+    }
   }
 
   init_ButtonStyle();
