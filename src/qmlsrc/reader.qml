@@ -16,6 +16,14 @@ Rectangle {
     property bool isPDF: false
     property bool isEPUBText: false
 
+    function getText() {
+        return textArea.text
+    }
+
+    function setText(str) {
+        textArea.text = str
+    }
+
     function loadText(str) {
         strText = str
         isPDF = false

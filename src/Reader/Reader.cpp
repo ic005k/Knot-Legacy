@@ -795,6 +795,15 @@ void Reader::loadQMLText(QString str) {
   }
 }
 
+QString Reader::getQMLText() {
+  QVariant str;
+  QQuickItem* root = mw_one->ui->qwReader->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "getText",
+                            Q_RETURN_ARG(QVariant, str));
+
+  return str.toString();
+}
+
 void Reader::on_btnPageUp_clicked() {
   if (isSelText) return;
   mw_one->ui->lblTitle->hide();

@@ -130,7 +130,9 @@ class Reader : public QDialog {
   void showBookmarkList();
 
   void ContinueReading();
-  public slots:
+  QString getQMLText();
+
+ public slots:
   void setPageScroll0();
   void setPageScroll1();
   void setEpubPagePosition(int index, QString htmlFile);

@@ -4428,11 +4428,13 @@ void MainWindow::on_btnBackReader_clicked() {
   m_Reader->saveReader("", false);
   m_Reader->savePageVPos();
 
+  ui->f_ReaderSet->hide();
   ui->frameReader->hide();
   ui->frameMain->show();
 }
 
 void MainWindow::on_btnOpen_clicked() {
+  ui->f_ReaderSet->hide();
   if (ui->qwBookmark->isVisible()) {
     on_btnShowBookmark_clicked();
   }
@@ -4449,23 +4451,28 @@ void MainWindow::on_btnPageNext_clicked() {
 
 void MainWindow::on_btnPages_clicked() {
   if (ui->qwCata->isVisible()) return;
-  m_Reader->closeSelText();
-  if (ui->qwBookmark->isVisible()) {
-    on_btnShowBookmark_clicked();
-  }
 
-  ui->f_ReaderSet->show();
+  if (ui->f_ReaderSet->isHidden()) {
+    ui->f_ReaderSet->show();
 
-  QStringList list = ui->btnPages->text().split("\n");
-  if (list.count() == 2) {
-    QString cur = list.at(0);
-    QString total = list.at(1);
-    ui->lblProg->setText(tr("Reading Progress") + " : " + cur + " -> " + total);
+    m_Reader->closeSelText();
+    if (ui->qwBookmark->isVisible()) {
+      on_btnShowBookmark_clicked();
+    }
 
-    ui->hSlider->setMaximum(total.toInt());
-    ui->hSlider->setMinimum(1);
-    ui->hSlider->setValue(cur.toInt());
-  }
+    QStringList list = ui->btnPages->text().split("\n");
+    if (list.count() == 2) {
+      QString cur = list.at(0);
+      QString total = list.at(1);
+      ui->lblProg->setText(tr("Reading Progress") + " : " + cur + " -> " +
+                           total);
+
+      ui->hSlider->setMaximum(total.toInt());
+      ui->hSlider->setMinimum(1);
+      ui->hSlider->setValue(cur.toInt());
+    }
+  } else
+    on_btnBackReaderSet_clicked();
 }
 
 void MainWindow::on_hSlider_sliderMoved(int position) {
@@ -4490,6 +4497,8 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 }
 
 void MainWindow::on_btnReadList_clicked() {
+  ui->f_ReaderSet->hide();
+
   if (mw_one->ui->qwBookmark->isVisible()) {
     mw_one->on_btnShowBookmark_clicked();
   }
@@ -4512,7 +4521,10 @@ void MainWindow::refreshMainUI() {
   qApp->processEvents();
 }
 
-void MainWindow::on_btnSelText_clicked() { m_Reader->selectText(); }
+void MainWindow::on_btnSelText_clicked() {
+  ui->f_ReaderSet->hide();
+  m_Reader->selectText();
+}
 
 void MainWindow::on_btnSignIn_clicked() {
   m_CloudBackup->on_pushButton_SignIn_clicked();
@@ -5705,7 +5717,10 @@ void MainWindow::on_btnRecentOpen_clicked() {
 
 void MainWindow::on_btnMenuReport_clicked() { m_Report->genReportMenu(); }
 
-void MainWindow::on_btnCatalogue_clicked() { m_Reader->showCatalogue(); }
+void MainWindow::on_btnCatalogue_clicked() {
+  ui->f_ReaderSet->hide();
+  m_Reader->showCatalogue();
+}
 
 void MainWindow::on_btnRemoveBookList_clicked() { m_Reader->removeBookList(); }
 
@@ -5716,6 +5731,7 @@ void MainWindow::on_btnRotatePage_clicked() { m_Reader->rotatePdfPage(); }
 void MainWindow::on_btnGoBack_clicked() { m_Reader->goWebViewBack(); }
 
 void MainWindow::on_btnShowBookmark_clicked() {
+  ui->f_ReaderSet->hide();
   if (ui->qwBookmark->isHidden()) {
     ui->qwReader->hide();
     ui->qwBookmark->show();
@@ -5742,7 +5758,11 @@ void MainWindow::on_btnHideKey_clicked() { pAndroidKeyboard->hide(); }
 
 void MainWindow::on_btnDelImage_clicked() { m_Notes->delImage(); }
 
-void MainWindow::on_btnBackReaderSet_clicked() { ui->f_ReaderSet->hide(); }
+void MainWindow::on_btnBackReaderSet_clicked() {
+  ui->f_ReaderSet->hide();
+  qreal pos = m_Reader->getVPos();
+  m_Reader->setVPos(pos + 0.01);
+}
 
 void MainWindow::on_btnSetBookmark_clicked() {
   m_ReaderSet->on_btnSetBookmark_clicked();
