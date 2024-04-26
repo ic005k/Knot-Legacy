@@ -10,7 +10,7 @@ extern MainWindow* mw_one;
 extern QTabWidget* tabData;
 extern QString iniDir, searchStr, currentMDFile;
 extern CategoryList* m_CategoryList;
-extern bool isEpub, isText, isPDF, loading, isDark;
+extern bool isEpub, isText, isPDF, loading, isDark, isAndroid;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2, fontSize;
 extern QStringList readTextList, htmlFiles, listCategory;
@@ -1178,6 +1178,9 @@ void Method::Sleep(int msec) {
 }
 
 void Method::showToastMessage(QString msg) {
+  Q_UNUSED(msg);
+#ifdef Q_OS_ANDROID
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject msgObject = QAndroidJniObject::fromString(msg);
   QAndroidJniObject m_activity = QtAndroid::androidActivity();
@@ -1188,5 +1191,7 @@ void Method::showToastMessage(QString msg) {
   QJniObject m_activity = QtAndroid::androidActivity();
   m_activity.callMethod<void>("showToastMessage", "(Ljava/lang/String;)V",
                               msgObject.object<jstring>());
+#endif
+
 #endif
 }

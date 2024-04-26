@@ -4,6 +4,8 @@
 #include "ui_MainWindow.h"
 #include "ui_ReaderSet.h"
 
+ReaderSet* m_ReaderSet;
+
 extern int fontSize, readerFontSize;
 extern MainWindow* mw_one;
 extern Method* m_Method;
@@ -22,40 +24,39 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   setPalette(pal);
 
   ui->setupUi(this);
+
   setModal(true);
   ui->f_CustomColor->hide();
-
-  // setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Tool |
-  // Qt::FramelessWindowHint);
 
   this->installEventFilter(this);
   ui->hSlider->installEventFilter(this);
 
-  ui->btnFontLess->setStyleSheet("border:none");
-  ui->btnFontPlus->setStyleSheet("border:none");
+  mw_one->ui->hSlider->setStyleSheet(mw_one->ui->hsH->styleSheet());
+  mw_one->ui->btnFontLess->setStyleSheet("border:none");
+  mw_one->ui->btnFontPlus->setStyleSheet("border:none");
 
   QFont f = m_Method->getNewFont(fontSize);
-  ui->btnStyle1->setFont(f);
-  ui->btnStyle2->setFont(f);
-  ui->btnStyle3->setFont(f);
-  ui->btnFont->setFont(f);
-  ui->lblProg->setFont(f);
+  mw_one->ui->btnStyle1->setFont(f);
+  mw_one->ui->btnStyle2->setFont(f);
+  mw_one->ui->btnStyle3->setFont(f);
+  mw_one->ui->btnFont->setFont(f);
+  mw_one->ui->lblProg->setFont(f);
 
   int nHeight = m_Method->getFontHeight();
-  ui->btnFont->setFixedHeight(nHeight * 3.5);
+  mw_one->ui->btnFont->setFixedHeight(nHeight * 3.5);
 
   f.setPointSize(12);
-  ui->lblInfo->setFont(f);
-  ui->lblInfo->adjustSize();
-  ui->lblInfo->setWordWrap(true);
+  mw_one->ui->lblInfo->setFont(f);
+  mw_one->ui->lblInfo->adjustSize();
+  mw_one->ui->lblInfo->setWordWrap(true);
 
   QValidator* validator =
       new QRegularExpressionValidator(regxNumber, ui->editPage);
-  ui->editPage->setValidator(validator);
+  mw_one->ui->editPage->setValidator(validator);
 
   f = m_Method->getNewFont(15);
-  ui->editBackgroundColor->setFont(f);
-  ui->editForegroundColor->setFont(f);
+  mw_one->ui->editBackgroundColor->setFont(f);
+  mw_one->ui->editForegroundColor->setFont(f);
   QString color_0, color_1;
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -63,8 +64,8 @@ ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
 #endif
   color_0 = Reg.value("/Reader/BackgroundColor", "#FFFFFF").toString();
   color_1 = Reg.value("/Reader/ForegroundColor", "#000000").toString();
-  ui->editBackgroundColor->setText(color_0);
-  ui->editForegroundColor->setText(color_1);
+  mw_one->ui->editBackgroundColor->setText(color_0);
+  mw_one->ui->editForegroundColor->setText(color_1);
 
   mw_one->m_Reader->strStyle2_0 = "color:" + color_1 +
                                   ";background-color:" + color_0 +
@@ -89,8 +90,6 @@ void ReaderSet::init() {
       (mw_one->ui->qwReader->height() - h) / 2;
   setFixedWidth(w);
   setGeometry(x, y, w, h);
-
-  ui->hSlider->setStyleSheet(mw_one->ui->hsH->styleSheet());
 
   QStringList list = mw_one->ui->btnPages->text().split("\n");
   if (list.count() == 2) {
@@ -121,7 +120,7 @@ bool ReaderSet::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void ReaderSet::on_hSlider_sliderReleased() {
-  mw_one->m_Reader->on_hSlider_sliderReleased(ui->hSlider->value());
+  mw_one->m_Reader->on_hSlider_sliderReleased(mw_one->ui->hSlider->value());
 }
 
 void ReaderSet::on_btnFontPlus_clicked() {
@@ -140,13 +139,12 @@ void ReaderSet::on_hSlider_sliderMoved(int position) {
 }
 
 void ReaderSet::updateProgress() {
-  if (this->isHidden()) return;
-
   QStringList list = mw_one->ui->btnPages->text().split("\n");
   if (list.count() == 2) {
     QString cur = list.at(0);
     QString total = list.at(1);
-    ui->lblProg->setText(tr("Reading Progress") + " : " + cur + " -> " + total);
+    mw_one->ui->lblProg->setText(tr("Reading Progress") + " : " + cur + " -> " +
+                                 total);
   }
 }
 
@@ -158,7 +156,7 @@ void ReaderSet::on_btnStyle1_clicked() {
   Reg.setValue("/Reader/Style", "1");
   mw_one->m_Reader->readerStyle = "1";
   mw_one->m_Reader->setReaderStyle();
-  ui->f_CustomColor->hide();
+  mw_one->ui->f_CustomColor->hide();
 }
 
 void ReaderSet::on_btnStyle2_clicked() {
@@ -169,10 +167,12 @@ void ReaderSet::on_btnStyle2_clicked() {
   Reg.setValue("/Reader/Style", "2");
   mw_one->m_Reader->readerStyle = "2";
   mw_one->m_Reader->setReaderStyle();
-  ui->f_CustomColor->show();
+  mw_one->ui->f_CustomColor->show();
 
-  Reg.setValue("/Reader/BackgroundColor", ui->editBackgroundColor->text());
-  Reg.setValue("/Reader/ForegroundColor", ui->editForegroundColor->text());
+  Reg.setValue("/Reader/BackgroundColor",
+               mw_one->ui->editBackgroundColor->text());
+  Reg.setValue("/Reader/ForegroundColor",
+               mw_one->ui->editForegroundColor->text());
 }
 
 void ReaderSet::on_btnStyle3_clicked() {
@@ -183,7 +183,7 @@ void ReaderSet::on_btnStyle3_clicked() {
   Reg.setValue("/Reader/Style", "3");
   mw_one->m_Reader->readerStyle = "3";
   mw_one->m_Reader->setReaderStyle();
-  ui->f_CustomColor->hide();
+  mw_one->ui->f_CustomColor->hide();
 }
 
 void ReaderSet::on_btnFont_clicked() {
@@ -197,7 +197,7 @@ void ReaderSet::on_btnFont_clicked() {
 #endif
 
   QString readerFont = mw_one->m_Preferences->setFontDemo(
-      fileName, ui->btnFont, this->font().pointSize());
+      fileName, mw_one->ui->btnFont, this->font().pointSize());
   iniPreferences->setValue("/Options/ReaderFont", fileName);
 
   mw_one->m_Reader->savePageVPos();
@@ -209,32 +209,35 @@ void ReaderSet::on_btnFont_clicked() {
 void ReaderSet::on_hSlider_valueChanged(int value) { Q_UNUSED(value); }
 
 void ReaderSet::on_btnGoPage_clicked() {
-  if (ui->editPage->text().trimmed() == "") return;
+  if (mw_one->ui->editPage->text().trimmed() == "") return;
 
-  int nPage = ui->editPage->text().toInt();
+  int nPage = mw_one->ui->editPage->text().toInt();
   if (nPage <= 0) nPage = 1;
-  if (nPage > ui->hSlider->maximum()) nPage = ui->hSlider->maximum();
-  ui->hSlider->setValue(nPage);
+  if (nPage > mw_one->ui->hSlider->maximum())
+    nPage = mw_one->ui->hSlider->maximum();
+  mw_one->ui->hSlider->setValue(nPage);
   on_hSlider_sliderMoved(nPage);
   on_hSlider_sliderReleased();
 }
 
-void ReaderSet::on_btnBack_clicked() { close(); }
+void ReaderSet::on_btnBack_clicked() { this->close(); }
 
 void ReaderSet::on_btnBackgroundColor_clicked() {
   QString color_0;
   color_0 = m_Method->getCustomColor();
   if (color_0.isNull()) return;
 
-  ui->editBackgroundColor->setText(color_0);
-  QString color_1 = ui->editForegroundColor->text();
+  mw_one->ui->editBackgroundColor->setText(color_0);
+  QString color_1 = mw_one->ui->editForegroundColor->text();
 
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  Reg.setValue("/Reader/BackgroundColor", ui->editBackgroundColor->text());
-  Reg.setValue("/Reader/ForegroundColor", ui->editForegroundColor->text());
+  Reg.setValue("/Reader/BackgroundColor",
+               mw_one->ui->editBackgroundColor->text());
+  Reg.setValue("/Reader/ForegroundColor",
+               mw_one->ui->editForegroundColor->text());
 
   mw_one->m_Reader->strStyle2_0 = "color:" + color_1 +
                                   ";background-color:" + color_0 +
@@ -253,15 +256,17 @@ void ReaderSet::on_btnForegroundColor_clicked() {
   QString color_1 = m_Method->getCustomColor();
   if (color_1.isNull()) return;
 
-  ui->editForegroundColor->setText(color_1);
-  QString color_0 = ui->editBackgroundColor->text();
+  mw_one->ui->editForegroundColor->setText(color_1);
+  QString color_0 = mw_one->ui->editBackgroundColor->text();
 
   QSettings Reg(privateDir + "reader.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  Reg.setValue("/Reader/BackgroundColor", ui->editBackgroundColor->text());
-  Reg.setValue("/Reader/ForegroundColor", ui->editForegroundColor->text());
+  Reg.setValue("/Reader/BackgroundColor",
+               mw_one->ui->editBackgroundColor->text());
+  Reg.setValue("/Reader/ForegroundColor",
+               mw_one->ui->editForegroundColor->text());
 
   mw_one->m_Reader->strStyle2_0 = "color:" + color_1 +
                                   ";background-color:" + color_0 +
@@ -292,5 +297,5 @@ void ReaderSet::on_btnSetBookmark_clicked() {
                 "\n" + QDateTime::currentDateTime().toString();
   mw_one->m_Reader->saveReader(txt, true);
   if (isAndroid) m_Method->showToastMessage(tr("Bookmark setup is complete."));
-  close();
+  mw_one->ui->f_ReaderSet->hide();
 }

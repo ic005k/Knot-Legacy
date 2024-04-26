@@ -231,6 +231,7 @@ int main(int argc, char* argv[]) {
     qssAll = qssAll.replace("width: 16px;", "width: 8px;");
     qssAll = qssAll.replace("margin: 16px 2px 16px 2px;",
                             "margin: 1px 2px 1px 2px;");
+    qssAll = qssAll.replace("QToolButton", "QToolButton_1");
     app.setStyleSheet(qssAll);
   }
 

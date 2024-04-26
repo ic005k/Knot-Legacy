@@ -47,6 +47,7 @@ extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
 extern QStringList readTextList, htmlFiles, listCategory;
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern CategoryList *m_CategoryList;
+extern ReaderSet *m_ReaderSet;
 
 extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern int deleteDirfile(QString dirName);
@@ -1181,7 +1182,8 @@ void MainWindow::set_ToolButtonStyle(QObject *parent) {
   for (int i = 0; i < btnList.count(); i++) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
 
-    if (btn != ui->btnAddTodo && btn != ui->btnClear)
+    if (btn != ui->btnAddTodo && btn != ui->btnClear && btn != ui->btnStyle1 &&
+        btn != ui->btnStyle2 && btn != ui->btnStyle3)
       m_Method->setToolButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB",
                                  "#FFFFFF", "#FF0000", "#FFFFFF");
   }
@@ -2532,6 +2534,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         return true;
       }
 
+      if (ui->f_ReaderSet->isVisible()) {
+        ui->f_ReaderSet->hide();
+        return true;
+      }
+
       if (!ui->frameReader->isHidden()) {
         if (ui->qwCata->isVisible()) {
           m_Reader->showCatalogue();
@@ -3743,6 +3750,7 @@ void MainWindow::init_UIWidget() {
   ui->frameSetTab->hide();
   ui->frameEditRecord->hide();
   ui->frameBookList->hide();
+  ui->f_ReaderSet->hide();
 
   ui->frameReader->layout()->setContentsMargins(0, 0, 0, 1);
   ui->frameReader->setContentsMargins(0, 0, 0, 1);
@@ -4446,18 +4454,17 @@ void MainWindow::on_btnPages_clicked() {
     on_btnShowBookmark_clicked();
   }
 
-  m_ReaderSet->init();
+  ui->f_ReaderSet->show();
 
-  QStringList list = mw_one->ui->btnPages->text().split("\n");
+  QStringList list = ui->btnPages->text().split("\n");
   if (list.count() == 2) {
     QString cur = list.at(0);
     QString total = list.at(1);
-    m_ReaderSet->ui->lblProg->setText(tr("Reading Progress") + " : " + cur +
-                                      " -> " + total);
+    ui->lblProg->setText(tr("Reading Progress") + " : " + cur + " -> " + total);
 
-    mw_one->m_ReaderSet->ui->hSlider->setMaximum(total.toInt());
-    mw_one->m_ReaderSet->ui->hSlider->setMinimum(1);
-    mw_one->m_ReaderSet->ui->hSlider->setValue(cur.toInt());
+    ui->hSlider->setMaximum(total.toInt());
+    ui->hSlider->setMinimum(1);
+    ui->hSlider->setValue(cur.toInt());
   }
 }
 
@@ -5734,3 +5741,47 @@ void MainWindow::on_btnShareImage_clicked() {
 void MainWindow::on_btnHideKey_clicked() { pAndroidKeyboard->hide(); }
 
 void MainWindow::on_btnDelImage_clicked() { m_Notes->delImage(); }
+
+void MainWindow::on_btnBackReaderSet_clicked() { ui->f_ReaderSet->hide(); }
+
+void MainWindow::on_btnSetBookmark_clicked() {
+  m_ReaderSet->on_btnSetBookmark_clicked();
+}
+
+void MainWindow::on_btnFontLess_clicked() {
+  m_ReaderSet->on_btnFontLess_clicked();
+}
+
+void MainWindow::on_btnFontPlus_clicked() {
+  m_ReaderSet->on_btnFontPlus_clicked();
+}
+
+void MainWindow::on_btnFont_clicked() { m_ReaderSet->on_btnFont_clicked(); }
+
+void MainWindow::on_btnBackgroundColor_clicked() {
+  m_ReaderSet->on_btnBackgroundColor_clicked();
+}
+
+void MainWindow::on_btnForegroundColor_clicked() {
+  m_ReaderSet->on_btnForegroundColor_clicked();
+}
+
+void MainWindow::on_editBackgroundColor_textChanged(const QString &arg1) {
+  m_ReaderSet->on_editBackgroundColor_textChanged(arg1);
+}
+
+void MainWindow::on_editForegroundColor_textChanged(const QString &arg1) {
+  m_ReaderSet->on_editForegroundColor_textChanged(arg1);
+}
+
+void MainWindow::on_btnStyle1_clicked() { m_ReaderSet->on_btnStyle1_clicked(); }
+
+void MainWindow::on_btnStyle2_clicked() { m_ReaderSet->on_btnStyle2_clicked(); }
+
+void MainWindow::on_btnStyle3_clicked() { m_ReaderSet->on_btnStyle3_clicked(); }
+
+void MainWindow::on_btnGoPage_clicked() { m_ReaderSet->on_btnGoPage_clicked(); }
+
+void MainWindow::on_hSlider_sliderReleased() {
+  m_ReaderSet->on_hSlider_sliderReleased();
+}

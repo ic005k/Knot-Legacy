@@ -12,6 +12,7 @@ extern Method* m_Method;
 extern bool isBreak, isDark;
 extern int fontSize;
 extern QSettings* iniPreferences;
+extern ReaderSet* m_ReaderSet;
 
 Preferences::Preferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::Preferences) {
@@ -249,7 +250,7 @@ void Preferences::initOptions() {
   QString readerFont;
   if (QFile::exists(readerFontFile))
     readerFont =
-        setFontDemo(readerFontFile, mw_one->m_ReaderSet->ui->btnFont, fontSize);
+        setFontDemo(readerFontFile, m_ReaderSet->ui->btnFont, fontSize);
   else
     readerFont = defaultFontFamily;
   mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",

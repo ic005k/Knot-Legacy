@@ -25,7 +25,7 @@ class ReaderSet : public QDialog {
  public slots:
   void on_btnBack_clicked();
 
- private slots:
+ public slots:
   void on_hSlider_sliderReleased();
 
   void on_btnFontPlus_clicked();

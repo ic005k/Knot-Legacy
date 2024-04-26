@@ -238,7 +238,7 @@ class MainWindow : public QMainWindow {
   TodoAlarm *m_TodoAlarm;
   CloudBackup *m_CloudBackup;
   PageIndicator *m_PageIndicator;
-  ReaderSet *m_ReaderSet;
+
   dlgSetText *mydlgSetText;
   NotesList *m_NotesList;
   SyncInfo *m_SyncInfo;
@@ -316,7 +316,6 @@ class MainWindow : public QMainWindow {
   void set_ToolButtonStyle(QObject *parent);
   int calcStringPixelWidth(QString s_str, QFont font, int n_font_size);
   int calcStringPixelHeight(QFont font, int n_font_size);
-  void on_hSlider_sliderMoved(int position);
 
   void delItem(int index);
   int getCount();
@@ -365,6 +364,7 @@ class MainWindow : public QMainWindow {
   void resizeEvent(QResizeEvent *event) override;
 
  public slots:
+  void on_hSlider_sliderMoved(int position);
   void clickMainTab();
   void on_SetReaderFunVisible();
   void updateSteps();
@@ -736,6 +736,34 @@ class MainWindow : public QMainWindow {
   void on_btnHideKey_clicked();
 
   void on_btnDelImage_clicked();
+
+  void on_btnBackReaderSet_clicked();
+
+  void on_btnSetBookmark_clicked();
+
+  void on_btnFontLess_clicked();
+
+  void on_btnFontPlus_clicked();
+
+  void on_btnFont_clicked();
+
+  void on_btnBackgroundColor_clicked();
+
+  void on_btnForegroundColor_clicked();
+
+  void on_editBackgroundColor_textChanged(const QString &arg1);
+
+  void on_editForegroundColor_textChanged(const QString &arg1);
+
+  void on_btnStyle1_clicked();
+
+  void on_btnStyle2_clicked();
+
+  void on_btnStyle3_clicked();
+
+  void on_btnGoPage_clicked();
+
+  void on_hSlider_sliderReleased();
 
  private:
   QString keyType;

@@ -9,6 +9,8 @@
 
 extern MainWindow* mw_one;
 extern Method* m_Method;
+extern ReaderSet* m_ReaderSet;
+
 extern QString iniFile, iniDir, privateDir;
 extern bool zh_cn, isAndroid, isIOS, isEBook, isReadEBookEnd, isReport, isDark;
 extern int fontSize;
@@ -129,15 +131,15 @@ void Reader::setReaderStyle() {
     mw_one->ui->qwReader->rootContext()->setContextProperty("myTextColor",
                                                             "#664E30");
 
-    mw_one->m_ReaderSet->ui->btnStyle3->setStyleSheet(
+    mw_one->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
         "rgb(0,0,255);border-radius: 4px;");
 
-    mw_one->m_ReaderSet->ui->btnStyle1->setStyleSheet(
+    mw_one->ui->btnStyle1->setStyleSheet(
         "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
         "2px solid "
         "rgb(255,0,0);border-radius: 4px;");
-    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(strStyle2_0);
+    mw_one->ui->btnStyle2->setStyleSheet(strStyle2_0);
 
     textColor = QColor(102, 78, 48);
     baseColor = QColor(240, 222, 198);
@@ -146,24 +148,23 @@ void Reader::setReaderStyle() {
   if (readerStyle == "2") {
     mw_one->ui->qwReader->rootContext()->setContextProperty("backImgFile", "");
     mw_one->ui->qwReader->rootContext()->setContextProperty(
-        "myBackgroundColor",
-        mw_one->m_ReaderSet->ui->editBackgroundColor->text());
+        "myBackgroundColor", mw_one->ui->editBackgroundColor->text());
     mw_one->ui->qwReader->rootContext()->setContextProperty(
-        "myTextColor", mw_one->m_ReaderSet->ui->editForegroundColor->text());
+        "myTextColor", mw_one->ui->editForegroundColor->text());
 
-    mw_one->m_ReaderSet->ui->btnStyle3->setStyleSheet(
+    mw_one->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
         "rgb(0,0,255);border-radius: 4px;");
 
-    mw_one->m_ReaderSet->ui->btnStyle1->setStyleSheet(
+    mw_one->ui->btnStyle1->setStyleSheet(
         "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
         "2px solid "
         "rgb(0,0,255);border-radius: 4px;");
-    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(strStyle2_1);
+    mw_one->ui->btnStyle2->setStyleSheet(strStyle2_1);
 
     textColor = QColor(0, 0, 0);
     baseColor = QColor(255, 255, 255);
-    mw_one->m_ReaderSet->ui->f_CustomColor->show();
+    m_ReaderSet->ui->f_CustomColor->show();
   }
 
   if (readerStyle == "3") {
@@ -172,15 +173,15 @@ void Reader::setReaderStyle() {
     mw_one->ui->qwReader->rootContext()->setContextProperty("myTextColor",
                                                             "#2E8B57");
 
-    mw_one->m_ReaderSet->ui->btnStyle3->setStyleSheet(
+    mw_one->ui->btnStyle3->setStyleSheet(
         "color: #00C78C;background-color: rgb(0, 0, 0);border: 2px solid "
         "rgb(255,0,0);border-radius: 4px;");
 
-    mw_one->m_ReaderSet->ui->btnStyle1->setStyleSheet(
+    mw_one->ui->btnStyle1->setStyleSheet(
         "color: rgb(102, 78, 48);background-color: rgb(240, 222, 198);border: "
         "2px solid "
         "rgb(0,0,255);border-radius: 4px;");
-    mw_one->m_ReaderSet->ui->btnStyle2->setStyleSheet(strStyle2_0);
+    mw_one->ui->btnStyle2->setStyleSheet(strStyle2_0);
 
     textColor = QColor(46, 139, 87);
     baseColor = QColor(0, 0, 0);
@@ -1085,7 +1086,7 @@ void Reader::setQMLHtml(QString htmlFile, QString skipID) {
   //                          skipID));
 
   QFileInfo fi(htmlFile);
-  mw_one->m_ReaderSet->ui->lblInfo->setText(
+  m_ReaderSet->ui->lblInfo->setText(
       tr("Info") + " : " + fi.baseName() + "  " +
       mw_one->getFileSize(QFile(htmlFile).size(), 2));
 
@@ -1354,7 +1355,7 @@ void Reader::showInfo() {
     mw_one->ui->progReader->setValue(htmlIndex + 1);
   }
 
-  mw_one->m_ReaderSet->updateProgress();
+  m_ReaderSet->updateProgress();
 }
 
 void Reader::SplitFile(QString qfile) {
@@ -1773,15 +1774,15 @@ void Reader::on_hSlider_sliderReleased(int position) {
 void Reader::getLines() {
   QString qsShow;
 
-  mw_one->m_ReaderSet->ui->hSlider->setMinimum(1);
+  mw_one->ui->hSlider->setMinimum(1);
 
   if (isText) {
-    mw_one->m_ReaderSet->ui->hSlider->setMaximum(totallines / baseLines);
+    mw_one->ui->hSlider->setMaximum(totallines / baseLines);
     mw_one->ui->btnPages->setText(
-        QString::number(mw_one->m_ReaderSet->ui->hSlider->value()) + "\n" +
+        QString::number(mw_one->ui->hSlider->value()) + "\n" +
         QString::number(totallines / baseLines));
-    iPage = (mw_one->m_ReaderSet->ui->hSlider->value() - 1) * baseLines;
-    qDebug() << "iPage" << iPage << mw_one->m_ReaderSet->ui->hSlider->value();
+    iPage = (mw_one->ui->hSlider->value() - 1) * baseLines;
+    qDebug() << "iPage" << iPage << mw_one->ui->hSlider->value();
 
     int count = iPage + baseLines;
     QString txt1;
@@ -1800,7 +1801,7 @@ void Reader::getLines() {
   }
 
   if (isEpub) {
-    mw_one->m_ReaderSet->ui->hSlider->setMaximum(htmlFiles.count());
+    mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     htmlIndex = sPos - 1;
     if (htmlIndex < 0) htmlIndex = 0;
     currentHtmlFile = htmlFiles.at(htmlIndex);
@@ -1964,7 +1965,7 @@ void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
   textBrowser->setFixedWidth(mw_one->ui->qwReader->width());
   QFont font = mw_one->ui->qwReader->font();
   font.setPixelSize(readerFontSize);
-  font.setFamily(mw_one->m_ReaderSet->ui->btnFont->font().family());
+  font.setFamily(m_ReaderSet->ui->btnFont->font().family());
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
   textBrowser->setFont(font);
 
@@ -2121,7 +2122,7 @@ void Reader::readBookDone() {
         QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
 
     if (isEpub) {
-      mw_one->m_ReaderSet->ui->lblInfo->show();
+      m_ReaderSet->ui->lblInfo->show();
       mw_one->ui->qwReader->rootContext()->setContextProperty("htmlPath",
                                                               strOpfPath);
       if (QFile(catalogueFile).exists()) {
@@ -2133,7 +2134,7 @@ void Reader::readBookDone() {
     if (isText) {
       mw_one->ui->btnBackDir->hide();
       mw_one->ui->btnCatalogue->hide();
-      mw_one->m_ReaderSet->ui->lblInfo->hide();
+      m_ReaderSet->ui->lblInfo->hide();
     }
 
     mw_one->closeProgress();
@@ -2261,7 +2262,7 @@ void Reader::setStatusBarShow() {
 }
 
 void Reader::selectText() {
-  mw_one->m_ReaderSet->close();
+  m_ReaderSet->close();
 
   if (!isSelText) {
     mw_one->ui->btnSelText->setIcon(QIcon(":/res/choice1.png"));
@@ -2270,7 +2271,7 @@ void Reader::selectText() {
     mw_one->ui->textBrowser->setReadOnly(true);
     QFont font;
     font.setPixelSize(readerFontSize);
-    font.setFamily(mw_one->m_ReaderSet->ui->btnFont->font().family());
+    font.setFamily(m_ReaderSet->ui->btnFont->font().family());
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     mw_one->ui->textBrowser->setFont(font);
 
