@@ -57,6 +57,8 @@ Item {
 
         onLoaded: {
             textArea.text = text
+            console.debug("Load Notes Done...")
+            m_Notes.setVPos();
         }
         onError: {
             errorDialog.text = message
@@ -109,11 +111,11 @@ Item {
 
                 document.parsingLink(link, "note")
 
-                console.debug("qml link=" +  link)
+                console.debug("qml link=" + link)
             }
 
             Component.onCompleted: {
-                console.debug("Load Notes Completed...")
+                console.debug("Load Notes Component Completed...")
             }
         }
 

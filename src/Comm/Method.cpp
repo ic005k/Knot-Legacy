@@ -1164,3 +1164,15 @@ void Method::setExecDone(QString execDone) {
 
   Reg.setValue("/desk/execDone", execDone);
 }
+
+void Method::Delay_MSec(unsigned int msec) {
+  QEventLoop loop;
+  QTimer::singleShot(msec, &loop, SLOT(quit()));
+  loop.exec();
+}
+
+void Method::Sleep(int msec) {
+  QTime dieTime = QTime::currentTime().addMSecs(msec);
+  while (QTime::currentTime() < dieTime)
+    QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}

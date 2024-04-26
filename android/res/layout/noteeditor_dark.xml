@@ -102,7 +102,7 @@
             android:layout_marginLeft="10dp"
             android:text=""
             android:imeOptions="actionGo"
-            android:background="#000000"
+            android:theme="@style/MyEditText"
             android:textColor="#FFFFFF"
             android:scrollbars="vertical"
             android:fadeScrollbars="true"
@@ -159,12 +159,10 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="0dp"
-            android:text="TextView"
-            android:background="#000000"
             android:textColor="#FFFFFF"
+            android:text="TextView"
+            android:theme="@style/MyEditText"
             android:textColorHighlight="#FF0000"
-            android:colorControlActivated="#CC0000"
-            android:textCursorDrawable="@drawable/shape_edit_cursor"
             android:inputType="textMultiLine"
             android:layout_weight="1"
         />
@@ -174,3 +172,5 @@
 
 
 </LinearLayout>
+
+<!-- android:textCursorDrawable="@drawable/shape_edit_cursor"-->

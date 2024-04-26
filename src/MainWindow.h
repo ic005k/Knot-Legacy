@@ -291,8 +291,6 @@ class MainWindow : public QMainWindow {
   static void drawDayChart();
   static void readDataInThread(int ExceptIndex);
 
-  void Sleep(int msec);
-
   QString secondsToTime(ulong ulSeconds);
   void stopJavaTimer();
   void pausePedometer();
@@ -567,6 +565,7 @@ class MainWindow : public QMainWindow {
 
   void selTab();
   void stopTimerForPdf();
+
  private slots:
   void on_btnSync_clicked();
 

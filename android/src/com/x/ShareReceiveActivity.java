@@ -241,6 +241,7 @@ public class ShareReceiveActivity extends Activity
         switch (v.getId()) {
             case R.id.btnAddToTodo:
                 btnAddToTodo.setBackgroundColor(getResources().getColor(R.color.red));
+                NoteEditor.closeNoteEditorView();
                 try {
                     File file = new File(share_ini);
                     if (!file.exists())
@@ -261,6 +262,7 @@ public class ShareReceiveActivity extends Activity
 
             case R.id.btnAppendNote:
                 btnAppendNote.setBackgroundColor(getResources().getColor(R.color.red));
+                NoteEditor.closeNoteEditorView();
                 try {
                     File file = new File(share_ini);
                     if (!file.exists())
@@ -285,6 +287,7 @@ public class ShareReceiveActivity extends Activity
 
             case R.id.btnInsertNote:
                 btnInsertNote.setBackgroundColor(getResources().getColor(R.color.red));
+                NoteEditor.closeNoteEditorView();
                 try {
                     File file = new File(share_ini);
                     if (!file.exists())

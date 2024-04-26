@@ -115,7 +115,6 @@ class Notes : public QDialog {
 
   bool eventFilterQwNote(QObject *watch, QEvent *event);
 
-  void setVPos(qreal pos);
   void setEditorVPos();
 
   void openNoteEditor();
@@ -143,6 +142,7 @@ class Notes : public QDialog {
   void closeEvent(QCloseEvent *event) override;
 
  public slots:
+  void setVPos();
   void on_btnHideKey_clicked();
 
   void on_btnShowTools_clicked();

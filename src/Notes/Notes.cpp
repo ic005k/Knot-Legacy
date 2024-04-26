@@ -861,8 +861,6 @@ void Notes::loadNoteToQML() {
   htmlBuffer = edit1->toPlainText();
   QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
                             Q_ARG(QVariant, htmlBuffer));
-
-  setVPos(-0.01);
 }
 
 void Notes::saveQMLVPos() {
@@ -877,19 +875,19 @@ void Notes::saveQMLVPos() {
   }
 }
 
-void Notes::setVPos(qreal pos) {
-  qreal m_pos;
-  if (pos < 0) {
-    QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
+void Notes::setVPos() {
+  QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    Reg.setIniCodec("utf-8");
+  Reg.setIniCodec("utf-8");
 #endif
 
-    sliderPos = Reg.value("/MainNotes/SlidePos" + currentMDFile).toReal();
-    m_pos = sliderPos;
-  } else {
-    m_pos = pos;
-  }
+  sliderPos = Reg.value("/MainNotes/SlidePos" + currentMDFile).toReal();
+  qreal m_pos = sliderPos;
+
+  qreal textHeight = getVHeight();
+  qDebug() << "textHeight=" << textHeight << "m_pos=" << m_pos;
+
+  if (textHeight < mw_one->ui->qwNotes->height()) m_pos = 0;
 
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "setVPos", Q_ARG(QVariant, m_pos));
@@ -1252,7 +1250,7 @@ void Notes::closeEvent(QCloseEvent *event) {
     m_TextSelector->close();
   }
   if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
-  mw_one->Sleep(100);
+  m_Method->Sleep(100);
 
   if (isNeedSave) {
     if (isDone) {
@@ -1665,10 +1663,6 @@ void Notes::delImage() {
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg("Knot", tr("Delete this image?"), 2)) return;
 
-  qreal oldPos = getVPos();
-  QImage img(imgFileName);
-  int nImagHeight = img.height();
-  qreal newPos = oldPos - nImagHeight;
   QFileInfo fi(imgFileName);
   QString name = fi.fileName();
   QString buffers = loadText(currentMDFile);
@@ -1700,7 +1694,6 @@ void Notes::delImage() {
   MD2Html(currentMDFile);
   loadNoteToQML();
   mw_one->on_btnBackImg_clicked();
-  setVPos(newPos);
 }
 
 void Notes::delLink(QString link) {
@@ -1737,7 +1730,6 @@ void Notes::delLink(QString link) {
   StringToFile(mdBuffers, currentMDFile);
   MD2Html(currentMDFile);
   loadNoteToQML();
-  setVPos(oldPos);
 }
 
 void Notes::javaNoteToQMLNote() {
@@ -1745,8 +1737,8 @@ void Notes::javaNoteToQMLNote() {
   mdString = loadText(privateDir + "note_text.txt");
   mdString = formatMDText(mdString);
   StringToFile(mdString, currentMDFile);
-  mw_one->m_Notes->MD2Html(currentMDFile);
-  mw_one->m_Notes->loadNoteToQML();
+  MD2Html(currentMDFile);
+  loadNoteToQML();
 }
 
 QString Notes::formatMDText(QString text) {
@@ -1769,7 +1761,7 @@ void Notes::init_all_notes() {
     loadEmptyNote();
   }
 
-  mw_one->m_Notes->setVPos(-0.01);
+  mw_one->m_Notes->setVPos();
 }
 
 void Notes::loadEmptyNote() {

@@ -3242,12 +3242,6 @@ void MainWindow::on_rbSteps_clicked() {
   chartMonth->setTitle("Y:" + tr("Steps") + "    X:" + tr("Days"));
 }
 
-void MainWindow::Sleep(int msec) {
-  QTime dieTime = QTime::currentTime().addMSecs(msec);
-  while (QTime::currentTime() < dieTime)
-    QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-}
-
 QString MainWindow::secondsToTime(ulong totalTime) {
   // 输入为秒数则ss=1，输入为毫秒数则ss=1000
   qint64 ss = 1;
@@ -3380,7 +3374,7 @@ void MainWindow::showNotes() {
   ui->frameMain->hide();
   ui->f_SetKey->hide();
   ui->frameNotes->show();
-  m_Notes->setVPos(-0.01);
+  m_Notes->setVPos();
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -4699,7 +4693,7 @@ void MainWindow::on_btnEdit_clicked() {
     if (!m_Notes->ui->f_ToolBar->isHidden()) m_Notes->on_btnShowTools_clicked();
   }
 
-  Sleep(200);
+  m_Method->Sleep(200);
   m_Notes->isNeedSave = false;
   m_Notes->isDone = false;
   m_Notes->isTextChange = false;
@@ -4721,7 +4715,7 @@ void MainWindow::clearSelectBox() {
     QQuickItem *root = mw_one->ui->qwReader->rootObject();
     QMetaObject::invokeMethod((QObject *)root, "loadHtml",
                               Q_ARG(QVariant, tempFile));
-    Sleep(50);
+    m_Method->Sleep(50);
     if (isEpub) {
       QMetaObject::invokeMethod(
           (QObject *)root, "loadHtml",

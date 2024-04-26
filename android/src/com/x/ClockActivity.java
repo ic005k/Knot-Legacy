@@ -158,7 +158,7 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
         super.onCreate(savedInstanceState);
 
         // 先关闭笔记编辑器
-        NoteEditor.closeView();
+        NoteEditor.closeNoteEditorView();
 
         context = getApplicationContext();
         // this.getWindow().setWindowAnimations(R.style.WindowAnim);

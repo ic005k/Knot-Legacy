@@ -156,12 +156,12 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
     closeAllActiveWindows();
     mw_one->on_btnTodo_clicked();
     mw_one->ui->editTodo->setText(strReceiveShareData);
-    mw_one->Sleep(500);
+    m_Method->Sleep(500);
     mw_one->on_btnAddTodo_clicked();
 
   } else {
     mw_one->ui->editTodo->setText(strReceiveShareData);
-    mw_one->Sleep(500);
+    m_Method->Sleep(500);
     mw_one->on_btnAddTodo_clicked();
   }
 }
