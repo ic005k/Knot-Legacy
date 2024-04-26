@@ -100,7 +100,7 @@ import java.util.Calendar;
 import android.content.pm.ShortcutInfo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-
+import android.os.Message;
 import android.support.v4.content.FileProvider;
 
 import android.graphics.Rect;
@@ -1558,6 +1558,26 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             Toast.makeText(MyActivity.this, "已移除", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private static Handler m_handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    Toast toast = Toast.makeText(m_instance, (String) msg.obj, Toast.LENGTH_LONG);
+                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    // v.setTextColor(Color.RED);
+                    // v.setTextSize(20);
+                    toast.show();
+                    break;
+            }
+            ;
+        }
+    };
+
+    public void showToastMessage(String msg) {
+        m_handler.sendMessage(m_handler.obtainMessage(1, msg));
     }
 
 }

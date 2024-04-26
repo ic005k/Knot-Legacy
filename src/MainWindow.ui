@@ -501,7 +501,7 @@
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/notebook_l.png</normaloff>:/res/notebook_l.png</iconset>
+                <normaloff>:/res/books_l.png</normaloff>:/res/books_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -2448,7 +2448,7 @@ QTabBar::scroller {width:0}
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/notebook_l.svg</normaloff>:/res/notebook_l.svg</iconset>
+             <normaloff>:/res/nb_l.svg</normaloff>:/res/nb_l.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -4695,7 +4695,7 @@ QRadioButton::indicator:checked {
                </property>
                <property name="icon">
                 <iconset resource="../res.qrc">
-                 <normaloff>:/res/notebook_l.svg</normaloff>:/res/notebook_l.svg</iconset>
+                 <normaloff>:/res/nb_l.svg</normaloff>:/res/nb_l.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -6614,8 +6614,8 @@ QSlider::handle:horizontal:disabled {
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../res.qrc"/>
   <include location="../icons.qrc"/>
+  <include location="../res.qrc"/>
  </resources>
  <connections/>
 </ui>

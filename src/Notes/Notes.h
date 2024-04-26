@@ -134,7 +134,8 @@ class Notes : public QDialog {
 
   void NewNote();
 
- protected:
+  void refreshQMLVPos(qreal newPos);
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

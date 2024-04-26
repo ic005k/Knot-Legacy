@@ -10,6 +10,7 @@ extern Method* m_Method;
 extern QString iniDir, privateDir;
 extern QSettings* iniPreferences;
 extern QRegularExpression regxNumber;
+extern bool isAndroid;
 
 ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   QPalette pal = palette();
@@ -290,5 +291,6 @@ void ReaderSet::on_btnSetBookmark_clicked() {
   QString txt = "( " + page + " ) " + mw_one->m_Reader->getBookmarkText() +
                 "\n" + QDateTime::currentDateTime().toString();
   mw_one->m_Reader->saveReader(txt, true);
+  if (isAndroid) m_Method->showToastMessage(tr("Bookmark setup is complete."));
   close();
 }

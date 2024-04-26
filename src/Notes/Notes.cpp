@@ -863,6 +863,17 @@ void Notes::loadNoteToQML() {
                             Q_ARG(QVariant, htmlBuffer));
 }
 
+void Notes::refreshQMLVPos(qreal newPos) {
+  QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  if (QFile(currentMDFile).exists()) {
+    Reg.setValue("/MainNotes/SlidePos" + currentMDFile, newPos);
+  }
+}
+
 void Notes::saveQMLVPos() {
   QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -1689,6 +1700,12 @@ void Notes::delImage() {
     buffers.replace(strImg, "");
   }
 
+  qreal oldPos = getVPos();
+  QImage img(imgFileName);
+  int nImagHeight = img.height();
+  qreal newPos = oldPos - nImagHeight;
+  refreshQMLVPos(newPos);
+
   buffers = formatMDText(buffers);
   StringToFile(buffers, currentMDFile);
   MD2Html(currentMDFile);
@@ -1697,7 +1714,6 @@ void Notes::delImage() {
 }
 
 void Notes::delLink(QString link) {
-  qreal oldPos = getVPos();
   QString mdBuffers = loadText(currentMDFile);
 
   if (!mdBuffers.contains(link)) {

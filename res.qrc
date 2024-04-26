@@ -79,7 +79,7 @@
         <file>res/find_l.png</file>
         <file>res/time_l.png</file>
         <file>res/back_l.png</file>
-        <file>res/notebook_l.png</file>
+        <file>res/books_l.png</file>
         <file>res/list_l.png</file>
         <file>res/open_l.png</file>
         <file>res/sum.png</file>
@@ -146,8 +146,8 @@
         <file>res/lock.svg</file>
         <file>res/topdf_l.svg</file>
         <file>res/topdf.svg</file>
-        <file>res/notebook_l.svg</file>
-        <file>res/notebook.svg</file>
+        <file>res/nb_l.svg</file>
+        <file>res/nb.svg</file>
         <file>res/high_l.svg</file>
     </qresource>
 </RCC>

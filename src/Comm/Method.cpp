@@ -1176,3 +1176,17 @@ void Method::Sleep(int msec) {
   while (QTime::currentTime() < dieTime)
     QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
+
+void Method::showToastMessage(QString msg) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject msgObject = QAndroidJniObject::fromString(msg);
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  m_activity.callMethod<void>("showToastMessage", "(Ljava/lang/String;)V",
+                              msgObject.object<jstring>());
+#else
+  QJniObject msgObject = QJniObject::fromString(msg);
+  QJniObject m_activity = QtAndroid::androidActivity();
+  m_activity.callMethod<void>("showToastMessage", "(Ljava/lang/String;)V",
+                              msgObject.object<jstring>());
+#endif
+}

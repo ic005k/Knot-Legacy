@@ -312,43 +312,6 @@ public class ShareReceiveActivity extends Activity
         }
     }
 
-    /*
-     * @Override
-     * public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityStarted(Activity activity) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityResumed(Activity activity) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityPaused(Activity activity) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityStopped(Activity activity) {
-     * System.out.println("NoteEditor onActivityStopped...");
-     * }
-     * 
-     * @Override
-     * public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-     * 
-     * }
-     * 
-     * @Override
-     * public void onActivityDestroyed(Activity activity) {
-     * 
-     * }
-     */
-
     // 该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
     public void handlerText(Intent intent) {
         String mainTxt = intent.getStringExtra(Intent.EXTRA_TEXT);
