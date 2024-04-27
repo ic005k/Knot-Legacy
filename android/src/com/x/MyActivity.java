@@ -103,7 +103,9 @@ import android.content.pm.ShortcutInfo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Message;
-import android.support.v4.content.FileProvider;
+
+//import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 import android.graphics.Rect;
 import android.view.ViewTreeObserver;
@@ -126,8 +128,8 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PackageInfo;
 
-import android.support.v4.app.ActivityCompat;
-//import androidx.core.app.ActivityCompat;
+//import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 
 import android.content.pm.PackageManager;
 

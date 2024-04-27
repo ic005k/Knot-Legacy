@@ -37,6 +37,7 @@ unix:!macx:{
 
 android: {
     lessThan(QT_MAJOR_VERSION, 6):QT += androidextras
+
 }
 
 

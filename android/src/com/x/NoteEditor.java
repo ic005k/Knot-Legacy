@@ -9,6 +9,14 @@ import com.x.LineNumberedEditText;
 import org.ini4j.Wini;
 import top.defaults.colorpicker.ColorPickerPopup;
 
+//import com.flask.colorpicker.ColorPickerView;
+//import com.flask.colorpicker.OnColorChangedListener;
+//import com.flask.colorpicker.OnColorSelectedListener;
+//import com.flask.colorpicker.builder.ColorPickerClickListener;
+//import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+
+import androidx.appcompat.app.AlertDialog;
+
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Gravity;
@@ -17,7 +25,7 @@ import android.content.Intent;
 import android.content.BroadcastReceiver;
 import android.app.PendingIntent;
 import android.text.TextUtils;
-import android.app.AlertDialog;
+
 import android.app.Service;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -95,8 +103,7 @@ import android.widget.PopupWindow;
 import android.graphics.drawable.ColorDrawable;
 import java.lang.reflect.Field;
 import android.annotation.SuppressLint;
-import android.support.v7.view.menu.MenuPopupHelper;
-import android.support.v7.widget.MenuPopupWindow;
+
 import android.widget.PopupMenu;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
@@ -1188,6 +1195,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         insertNote("_Italic_");
 
                     initTextFormat();
+
                 }
 
                 if (item.getTitle().equals("Font Color")) {
