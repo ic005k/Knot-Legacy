@@ -91,6 +91,8 @@ import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+
 import android.content.pm.ShortcutManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -128,7 +130,8 @@ import android.support.v4.app.ActivityCompat;
 import android.content.pm.PackageManager;
 
 import android.os.FileObserver;
-
+import android.util.Log;
+import java.util.Locale;
 import android.view.Window;
 import android.app.ActivityManager;
 import android.os.StrictMode;

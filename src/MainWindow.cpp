@@ -2535,7 +2535,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (ui->f_ReaderSet->isVisible()) {
-        ui->f_ReaderSet->hide();
+        on_btnBackReaderSet_clicked();
         return true;
       }
 
@@ -4428,13 +4428,17 @@ void MainWindow::on_btnBackReader_clicked() {
   m_Reader->saveReader("", false);
   m_Reader->savePageVPos();
 
-  ui->f_ReaderSet->hide();
+  if (ui->f_ReaderSet->isVisible()) {
+    on_btnBackReaderSet_clicked();
+  }
   ui->frameReader->hide();
   ui->frameMain->show();
 }
 
 void MainWindow::on_btnOpen_clicked() {
-  ui->f_ReaderSet->hide();
+  if (ui->f_ReaderSet->isVisible()) {
+    on_btnBackReaderSet_clicked();
+  }
   if (ui->qwBookmark->isVisible()) {
     on_btnShowBookmark_clicked();
   }
@@ -4497,7 +4501,9 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 }
 
 void MainWindow::on_btnReadList_clicked() {
-  ui->f_ReaderSet->hide();
+  if (ui->f_ReaderSet->isVisible()) {
+    on_btnBackReaderSet_clicked();
+  }
 
   if (mw_one->ui->qwBookmark->isVisible()) {
     mw_one->on_btnShowBookmark_clicked();
@@ -4522,7 +4528,9 @@ void MainWindow::refreshMainUI() {
 }
 
 void MainWindow::on_btnSelText_clicked() {
-  ui->f_ReaderSet->hide();
+  if (ui->f_ReaderSet->isVisible()) {
+    on_btnBackReaderSet_clicked();
+  }
   m_Reader->selectText();
 }
 
@@ -5718,7 +5726,9 @@ void MainWindow::on_btnRecentOpen_clicked() {
 void MainWindow::on_btnMenuReport_clicked() { m_Report->genReportMenu(); }
 
 void MainWindow::on_btnCatalogue_clicked() {
-  ui->f_ReaderSet->hide();
+  if (ui->f_ReaderSet->isVisible()) {
+    on_btnBackReaderSet_clicked();
+  }
   m_Reader->showCatalogue();
 }
 
@@ -5731,7 +5741,9 @@ void MainWindow::on_btnRotatePage_clicked() { m_Reader->rotatePdfPage(); }
 void MainWindow::on_btnGoBack_clicked() { m_Reader->goWebViewBack(); }
 
 void MainWindow::on_btnShowBookmark_clicked() {
-  ui->f_ReaderSet->hide();
+  if (ui->f_ReaderSet->isVisible()) {
+    on_btnBackReaderSet_clicked();
+  }
   if (ui->qwBookmark->isHidden()) {
     ui->qwReader->hide();
     ui->qwBookmark->show();

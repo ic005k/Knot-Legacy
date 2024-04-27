@@ -82,7 +82,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.view.MenuItem;
-import android.widget.PopupMenu;
+
 import android.text.method.ScrollingMovementMethod;
 import android.view.inputmethod.EditorInfo;
 import android.view.KeyEvent;
@@ -92,6 +92,12 @@ import java.util.regex.*;
 import android.widget.LinearLayout;
 import android.view.LayoutInflater;
 import android.widget.PopupWindow;
+import android.graphics.drawable.ColorDrawable;
+import java.lang.reflect.Field;
+import android.annotation.SuppressLint;
+import android.support.v7.view.menu.MenuPopupHelper;
+import android.support.v7.widget.MenuPopupWindow;
+import android.widget.PopupMenu;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 

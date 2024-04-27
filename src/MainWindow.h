@@ -495,15 +495,23 @@ class MainWindow : public QMainWindow {
   void on_btnZoomOut_clicked();
 
   void on_openKnotBakDir();
+
   void reeditData();
+
   void clickData();
 
  public slots:
   void on_ExecShortcut();
+
   void on_btnShowBookmark_clicked();
+
   void on_btnBackBookList_clicked();
+
   void on_btnBackEditRecord_clicked();
+
   void on_btnBackNoteList_clicked();
+
+  void on_btnBackReaderSet_clicked();
 
   void on_btnBackNoteRecycle_clicked();
 
@@ -736,8 +744,6 @@ class MainWindow : public QMainWindow {
   void on_btnHideKey_clicked();
 
   void on_btnDelImage_clicked();
-
-  void on_btnBackReaderSet_clicked();
 
   void on_btnSetBookmark_clicked();
 
