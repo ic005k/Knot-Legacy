@@ -37,6 +37,8 @@ dependencies {
     // https://github.com/duanhong169/ColorPicker
     implementation 'com.github.duanhong169:colorpicker:1.1.6'
 
+    //implementation "com.github.skydoves:colorpickerview:2.3.0"
+
 }
 
 android {

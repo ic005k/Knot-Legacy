@@ -127,6 +127,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PackageInfo;
 
 import android.support.v4.app.ActivityCompat;
+//import androidx.core.app.ActivityCompat;
+
 import android.content.pm.PackageManager;
 
 import android.os.FileObserver;

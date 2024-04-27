@@ -2280,7 +2280,7 @@ void Reader::selectText() {
     mw_one->ui->textBrowser->setReadOnly(true);
     QFont font;
     font.setPixelSize(readerFontSize);
-    font.setFamily(m_ReaderSet->ui->btnFont->font().family());
+    font.setFamily(mw_one->ui->btnFont->font().family());
     font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
     mw_one->ui->textBrowser->setFont(font);
 
