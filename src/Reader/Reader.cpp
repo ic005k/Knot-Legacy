@@ -1171,7 +1171,7 @@ void Reader::closeEvent(QCloseEvent* event) {
 
 void Reader::paintEvent(QPaintEvent* event) { Q_UNUSED(event); }
 
-void Reader::goPostion() {
+void Reader::goBookReadPosition() {
   if (isOpen) {
     QSettings Reg(privateDir + "bookini/" + currentBookName + ".ini",
                   QSettings::IniFormat);
@@ -1196,6 +1196,9 @@ void Reader::goPostion() {
       setQMLHtml(currentHtmlFile, "");
       setPageVPos();
       showInfo();
+
+      qreal pos = getVPos();
+      setVPos(pos + 0.01);
     }
 
     if (isPDF) {
@@ -2224,7 +2227,7 @@ void Reader::readBookDone() {
     }
   }
 
-  goPostion();
+  goBookReadPosition();
 
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);

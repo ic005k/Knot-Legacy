@@ -3354,7 +3354,7 @@ QTabBar::scroller {width:0}
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/time_l.png</normaloff>:/res/time_l.png</iconset>
+                <normaloff>:/res/alarm_l.svg</normaloff>:/res/alarm_l.svg</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -3392,7 +3392,7 @@ QTabBar::scroller {width:0}
               </property>
               <property name="icon">
                <iconset resource="../res.qrc">
-                <normaloff>:/res/del.svg</normaloff>:/res/del.svg</iconset>
+                <normaloff>:/res/recycle_l.svg</normaloff>:/res/recycle_l.svg</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -5422,7 +5422,7 @@ QRadioButton::indicator:checked {
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/del.svg</normaloff>:/res/del.svg</iconset>
+             <normaloff>:/res/recycle_l.svg</normaloff>:/res/recycle_l.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -6902,7 +6902,7 @@ QSlider::handle:horizontal:disabled {
             <string>Recycle</string>
            </property>
            <property name="icon">
-            <iconset resource="../res.qrc">
+            <iconset>
              <normaloff>:/res/del.svg</normaloff>:/res/del.svg</iconset>
            </property>
            <property name="iconSize">
@@ -7030,8 +7030,8 @@ QSlider::handle:horizontal:disabled {
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../res.qrc"/>
   <include location="../icons.qrc"/>
+  <include location="../res.qrc"/>
  </resources>
  <connections/>
 </ui>

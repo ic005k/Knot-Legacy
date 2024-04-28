@@ -23,7 +23,6 @@
         <file>res/run.png</file>
         <file>res/sel.png</file>
         <file>res/test.txt</file>
-        <file>res/time.png</file>
         <file>res/up.png</file>
         <file>res/msg.mp3</file>
         <file>src/cn.qm</file>
@@ -67,7 +66,6 @@
         <file>res/bing.svg</file>
         <file>res/copy.svg</file>
         <file>res/cut.svg</file>
-        <file>res/del.svg</file>
         <file>res/paste.svg</file>
         <file>res/selall.svg</file>
         <file>res/plus_l.svg</file>
@@ -77,7 +75,6 @@
         <file>theme/dark/darkstyle.qss</file>
         <file>theme/light/lightstyle.qss</file>
         <file>res/find_l.png</file>
-        <file>res/time_l.png</file>
         <file>res/back_l.png</file>
         <file>res/books_l.png</file>
         <file>res/list_l.png</file>
@@ -149,5 +146,9 @@
         <file>res/nb_l.svg</file>
         <file>res/nb.svg</file>
         <file>res/high_l.svg</file>
+        <file>res/alarm_l.svg</file>
+        <file>res/alarm.svg</file>
+        <file>res/recycle_l.svg</file>
+        <file>res/recycle.svg</file>
     </qresource>
 </RCC>

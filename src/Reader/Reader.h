@@ -67,7 +67,7 @@ class Reader : public QDialog {
   qulonglong vpos;
 
   static QStringList readText(QString textFile);
-  void goPostion();
+  void goBookReadPosition();
   void setQMLText(QString);
 
   void setQMLHtml(QString htmlFile, QString skipID);
