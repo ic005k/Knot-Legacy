@@ -10,3 +10,5 @@ bin/debug/Knot.exe
 bin/debug/Knot.ilk
 bin/debug/Knot.pdb
 build/
+android/.vscode/
+android/.gradle/

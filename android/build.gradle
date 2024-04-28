@@ -7,8 +7,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.0'
+        // jdk11
+        //classpath 'com.android.tools.build:gradle:3.6.0'
+
         //classpath 'com.android.tools.build:gradle:7.2.1'
+
+        classpath 'com.android.tools.build:gradle:7.4.1'
 
 
     }
@@ -20,7 +24,7 @@ repositories {
     jcenter()
     //mavenCentral()
 
-    //maven { url "https://jitpack.io" }
+   // maven { url "https://jitpack.io" }
 
     //flatDir {
     //    dirs 'libs'
@@ -34,6 +38,8 @@ apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+
     // read and write inifile
     implementation 'org.ini4j:ini4j:0.5.4'
 
@@ -43,9 +49,12 @@ dependencies {
     implementation 'androidx.core:core:1.10.1'
     implementation 'com.android.support:appcompat-v7:28.0.0'
 
+    implementation 'com.android.support:design:25.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
+
 
     // https://github.com/duanhong169/ColorPicker
-    implementation 'com.github.duanhong169:colorpicker:1.1.6'
+    //implementation 'com.github.duanhong169:colorpicker:1.1.6'
 
     //implementation "com.github.skydoves:colorpickerview:2.3.0"
     //implementation 'com.github.QuadFlask:colorpicker:0.0.15'
@@ -53,6 +62,11 @@ dependencies {
     //compile(name:'libcolorpicker', ext:'aar')
 
     // implementation (fileTree("libs"))
+
+    //implementation 'org.ow2.asm:asm:7.0'
+
+    //implementation "dev.sasikanth:colorsheet:1.0.1"
+
 
 }
 
@@ -117,8 +131,6 @@ android {
     }
 
 }
-
-
 
 // 显示所有已过时的警告详细信息
 /*allprojects {

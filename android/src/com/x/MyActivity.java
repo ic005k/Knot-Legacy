@@ -495,7 +495,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+         }
         }
     }
 
