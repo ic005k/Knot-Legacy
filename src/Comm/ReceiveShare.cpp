@@ -362,10 +362,10 @@ void ReceiveShare::shareString(const QString& title, const QString& content) {
 #else
   QJniObject jTitle = QJniObject::fromString(title);
   QJniObject jPath = QJniObject::fromString(content);
-  QJniObject activity = QtAndroid::androidActivity();
-  QJniObject::callStaticMethod<void>(
-      "com.x/MyActivity", "shareString",
-      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt/android/"
+  QJniObject activity = QJniObject::fromString("shareString");
+  activity.callMethod<void>(
+      "shareString",
+      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt5/android/"
       "bindings/QtActivity;)V",
       jTitle.object<jstring>(), jPath.object<jstring>(),
       activity.object<jobject>());
@@ -397,15 +397,15 @@ void ReceiveShare::shareImage(const QString& title, const QString& path,
 #else
   QJniObject jTitle = QJniObject::fromString(title);
   QJniObject jPath = QJniObject::fromString(path);
-  QAndroidJniObject jType = QAndroidJniObject::fromString(fileType);
-  QJniObject activity = QtAndroid::androidActivity();
-  QJniObject::callStaticMethod<void>(
-      "com.x/MyActivity", "shareImage",
-      "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/"
-      "String;Lorg/qtproject/qt5/android/"
-      "bindings/QtActivity;)V",
-      jTitle.object<jstring>(), jPath.object<jstring>(),
-      jType.object<jstring>(), activity.object<jobject>());
+  QJniObject jType = QJniObject::fromString(fileType);
+  QJniObject activity = QJniObject::fromString("shareImage");
+  activity.callMethod<void>("shareImage",
+                            "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/"
+                            "String;Lorg/qtproject/qt5/android/"
+                            "bindings/QtActivity;)V",
+                            jTitle.object<jstring>(), jPath.object<jstring>(),
+                            jType.object<jstring>(),
+                            activity.object<jobject>());
 
 #endif
 
@@ -437,7 +437,7 @@ void ReceiveShare::shareImages(const QString& title,
 #else
   QJniObject jTitle = QJniObject::fromString(title);
   QJniObject jPathList = QJniObject::fromString(imagesPath);
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity = QJniObject::fromString("shareImages");
   QJniObject::callStaticMethod<void>(
       "com.x/MyActivity", "shareImages",
       "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt/android/"

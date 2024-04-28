@@ -1,65 +1,28 @@
 buildscript {
     repositories {
         google()
-        jcenter()
-        //mavenCentral()
-
+        mavenCentral()
     }
 
     dependencies {
-        // jdk11
-        //classpath 'com.android.tools.build:gradle:3.6.0'
-
-        //classpath 'com.android.tools.build:gradle:7.2.1'
-
         classpath 'com.android.tools.build:gradle:7.4.1'
-
-
     }
-		
 }
 
 repositories {
     google()
-    jcenter()
-    //mavenCentral()
-
-   // maven { url "https://jitpack.io" }
-
-    //flatDir {
-    //    dirs 'libs'
-    //}
+    mavenCentral()
 }
-
-
-
 
 apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-
-    // read and write inifile
-    implementation 'org.ini4j:ini4j:0.5.4'
-
-    // old
-    // implementation "com.android.support:support-v4:23.0.+"
-    // implementation 'com.android.support:appcompat-v7:24.2.1'
-
     implementation 'androidx.core:core:1.10.1'
     implementation 'com.android.support:appcompat-v7:28.0.0'
 
-    implementation 'com.android.support:design:25.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
-
-    // implementation "com.github.skydoves:colorpickerview:2.3.0"
-    // implementation 'com.github.QuadFlask:colorpicker:0.0.15'
-
-    // compile(name:'libcolorpicker', ext:'aar')
-
-    // implementation (fileTree("libs"))
-
-    // implementation 'org.ow2.asm:asm:7.0'
+    // read and write inifile
+   implementation 'org.ini4j:ini4j:0.5.4'
 
 
 }
@@ -69,7 +32,7 @@ android {
      * The following variables:
      * - androidBuildToolsVersion,
      * - androidCompileSdkVersion
-     * - qt5AndroidDir - holds the path to qt android files
+     * - qtAndroidDir - holds the path to qt android files
      *                   needed to build any Qt application
      *                   on Android.
      *
@@ -78,14 +41,14 @@ android {
      * Changing them manually might break the compilation!
      *******************************************************/
 
+    //qt6.7
+    //buildToolsVersion androidBuildToolsVersion
+    //ndkVersion androidNdkVersion
+
     compileSdkVersion androidCompileSdkVersion.toInteger()
-    buildToolsVersion '28.0.3'
 
-    // buildToolsVersion '33.0.1'
-
-    //compileSdkVersion 25
-    //buildToolsVersion "25.0.1"
-
+    // Extract native libraries from the APK
+    packagingOptions.jniLibs.useLegacyPackaging true
 
     sourceSets {
         main {
@@ -120,17 +83,19 @@ android {
 
     defaultConfig {
         resConfig "en"
-        minSdkVersion = qtMinSdkVersion
-        targetSdkVersion = qtTargetSdkVersion
+        minSdkVersion qtMinSdkVersion
+        targetSdkVersion qtTargetSdkVersion
+
+        //qt6.7
+        //ndk.abiFilters = qtTargetAbiList.split(",")
     }
 
-}
-
-// 显示所有已过时的警告详细信息
-/*allprojects {
+    // 显示所有已过时的警告详细信息
+    /*allprojects {
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
-}*/
+    }*/
+}

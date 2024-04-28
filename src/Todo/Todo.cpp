@@ -731,8 +731,8 @@ void Todo::refreshAlarm() {
         QDate tomoDate = todayDate.addDays(1);
         QDateTime tomoDateTime =
             QDateTime::fromString(tomoDate.toString() + " 00:00:00");
-        qint64 current_s = QDateTime::currentDateTimeUtc().toTime_t();
-        qint64 tomo_s = tomoDateTime.toTime_t();
+        qint64 current_s = QDateTime::currentDateTimeUtc().toSecsSinceEpoch();
+        qint64 tomo_s = tomoDateTime.toSecsSinceEpoch();
         if (minValue + current_s < tomo_s)
           isToday = true;
         else

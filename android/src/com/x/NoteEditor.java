@@ -149,6 +149,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public static NoteEditor m_instance;
     private static boolean isTextChanged = false;
     private TextViewUndoRedo helper;
+    private String strBack1 = "#FFC1C1";
+    private String strBack2 = "#CFCFCF";
+    private String strFore = "#000000";
 
     public static Context getContext() {
         return context;
@@ -407,6 +410,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             editNote.setSelection(cpos);
         }
 
+        initColorValue();
         initTextFormat();
 
         // pass edittext object to TextViewUndoRedo class
@@ -1701,14 +1705,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 if (strKey.equals("==Image==") || strKey.equals("<font ") || strKey.equals("</font>")
                         || strKey.equals("https://")
                         || strKey.equals("http://")) {
-                    style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFC1C1")), start, end,
+                    style.setSpan(new BackgroundColorSpan(Color.parseColor(strBack1)), start, end,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    style.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end,
+                    style.setSpan(new ForegroundColorSpan(Color.parseColor(strFore)), start, end,
                             Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                 } else {
-                    style.setSpan(new BackgroundColorSpan(Color.parseColor("#CFCFCF")), start, end,
+                    style.setSpan(new BackgroundColorSpan(Color.parseColor(strBack2)), start, end,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    style.setSpan(new ForegroundColorSpan(Color.BLACK), start, end,
+                    style.setSpan(new ForegroundColorSpan(Color.parseColor(strFore)), start, end,
                             Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                 }
 
@@ -1759,9 +1763,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             // 返回结束位置
             int end = matcher.end();
 
-            style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFC1C1")), start, end,
+            style.setSpan(new BackgroundColorSpan(Color.parseColor(strBack1)), start, end,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            style.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end,
+            style.setSpan(new ForegroundColorSpan(Color.parseColor(strFore)), start, end,
                     Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
             System.out.println("matcher result=" + result + "  start=" + start + "  end=" + end);
@@ -1774,9 +1778,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             String result = matcher.group();
             int start = matcher.start();
             int end = matcher.end();
-            style.setSpan(new BackgroundColorSpan(Color.parseColor("#FFC1C1")), start, end,
+            style.setSpan(new BackgroundColorSpan(Color.parseColor(strBack1)), start, end,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            style.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end,
+            style.setSpan(new ForegroundColorSpan(Color.parseColor(strFore)), start, end,
                     Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             System.out.println("matcher result=" + result + "  start=" + start + "  end=" + end);
 
@@ -1837,6 +1841,20 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         if (isOpen) {
             imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    private void initColorValue() {
+        if (MyActivity.isDark) {
+            strBack1 = "#A52A2A";
+            strBack2 = "#8B7E66";
+            strFore = "#FFFFFF";
+
+        } else {
+            strBack1 = "#FFC1C1";
+            strBack2 = "#CFCFCF";
+            strFore = "#000000";
+        }
+
     }
 
 }

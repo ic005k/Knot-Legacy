@@ -5,12 +5,13 @@ package com.x;
 import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
+import com.x.ShareReceiveActivity;
 
 import android.os.Process;
 import android.os.HandlerThread;
 import android.content.ClipboardManager;
 import android.content.ClipData;
-
+import android.view.KeyEvent;
 import java.util.Properties;
 import java.util.Stack;
 
@@ -90,27 +91,28 @@ import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 
+import android.content.pm.ShortcutManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.widget.Toast;
-
+import android.graphics.drawable.Icon;
 import java.util.Calendar;
-
+import android.content.pm.ShortcutInfo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Message;
 
-import android.support.v4.content.FileProvider;
-//import androidx.core.content.FileProvider;
+//import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 import android.graphics.Rect;
 import android.view.ViewTreeObserver;
-
+import java.util.Arrays;
 import java.lang.reflect.Field;
 
 import android.widget.LinearLayout;
-
-//import javax.swing.text.View;
 
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -126,15 +128,21 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PackageInfo;
 
-import android.support.v4.app.ActivityCompat;
+//import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
+
 import android.content.pm.PackageManager;
 
 import android.os.FileObserver;
-
+import android.util.Log;
+import java.util.Locale;
 import android.view.Window;
+import android.app.ActivityManager;
+import android.os.StrictMode;
+import android.content.pm.ActivityInfo;
+import android.os.Parcelable;
 
 public class MyActivity extends QtActivity implements Application.ActivityLifecycleCallbacks {
-
     public static boolean isDark = false;
     private static MyActivity m_instance = null;
     private static SensorManager mSensorManager;
@@ -153,9 +161,9 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public static int keyBoardHeight;
 
     private final static String TAG = "QtKnot";
-    private static Context context;
-    public static boolean ReOpen = false;
+    public static Context context;
     private FileWatcher mFileWatcher;
+    private ShortcutManager shortcutManager;
 
     public native static void CallJavaNotify_0();
 
@@ -167,13 +175,24 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     public native static void CallJavaNotify_4();
 
+    public native static void CallJavaNotify_5();
+
+    public native static void CallJavaNotify_6();
+
+    public native static void CallJavaNotify_7();
+
+    public native static void CallJavaNotify_8();
+
+    public native static void CallJavaNotify_9();
+
     private InternalConfigure internalConfigure;
+    public static boolean isReadShareData = false;
 
     public MyActivity() {
 
     }
 
-    //------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     public void setStatusBarHide() {
 
     }
@@ -182,8 +201,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    //------------------------------------------------------------------------
-
+    // ------------------------------------------------------------------------
 
     public void setDark(String strDark) {
         if (strDark.equals("dark_yes"))
@@ -191,11 +209,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         if (strDark.equals("dark_no"))
             isDark = false;
         if (isDark) {
-            this.setStatusBarColor("#19232D");  //深色
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); //白色文字
+            this.setStatusBarColor("#19232D"); // 深色
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); // 白色文字
         } else {
-            this.setStatusBarColor("#F3F3F3");  //灰
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //黑色文字
+            this.setStatusBarColor("#F3F3F3"); // 灰
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 黑色文字
         }
 
         System.out.println("strDark=" + strDark + "    isDark=" + isDark);
@@ -219,8 +237,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
 
-        //定时精度不够
-        //alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+        // 定时精度不够
+        // alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
 
         Log.e("Alarm Manager", c.getTimeInMillis() + "");
         Log.e("Alarm Manager", str);
@@ -243,34 +261,32 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         return 1;
     }
 
-    //------------------------------------------------------------------------
-    public static int mini() {
-        System.out.println("Mini+++++++++++++++++++++++");
+    // ------------------------------------------------------------------------
+    public static void setMini() {
         m_instance.moveTaskToBack(true);
-
-        return 1;
     }
 
-    public static int setReOpen() {
-        ReOpen = true;
-        return 1;
+    public static void setMax() {
+        context.startActivity(new Intent(context,
+                MyActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
     }
 
-    //------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
-
-    //全局获取Context
+    // 全局获取Context
     public static Context getContext() {
         return context;
     }
 
-    //全透状态栏
+    // 全透状态栏
     private void setStatusBarFullTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            //透明状态栏
+            // 透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             // 状态栏字体设置为深色，SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 为SDK23增加
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             // 部分机型的statusbar会有半透明的黑色背景
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -282,14 +298,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     private void setStatusBarColor(String color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-
             // 需要安卓版本大于5.0以上
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(Color.parseColor(color));
         }
     }
 
-    //----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
 
     private Sensor countSensor;
 
@@ -338,7 +353,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             if (SCREEN_ON.equals(intent.getAction())) {
                 if (isStepCounter == 1) {
 
-
                 }
                 isScreenOff = false;
                 CallJavaNotify_2();
@@ -350,7 +364,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                         mSensorManager.unregisterListener(mySerivece);
                     }
 
-
                 }
                 isScreenOff = true;
                 Log.w("Knot", "屏幕熄了");
@@ -358,7 +371,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         }
     }
 
-    //----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
     public void acquireWakeLock() {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mySerivece = new PersistService();
@@ -388,19 +401,19 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    //--------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------
     // 目前正在使用，经过改良，目前能解压所有的epub文件
     public static void Unzip(String zipFile, String targetDir) {
         Log.i(TAG, zipFile);
         Log.i(TAG, targetDir);
 
-        int BUFFER = 1024 * 1024; //这里缓冲区我们使用4KB，
-        String strEntry; //保存每个zip的条目名称
+        int BUFFER = 1024 * 1024; // 这里缓冲区我们使用4KB，
+        String strEntry; // 保存每个zip的条目名称
         try {
-            BufferedOutputStream dest = null; //缓冲输出流
+            BufferedOutputStream dest = null; // 缓冲输出流
             InputStream fis = new FileInputStream(zipFile);
             ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
-            ZipEntry entry; //每个zip条目的实例
+            ZipEntry entry; // 每个zip条目的实例
             while ((entry = zis.getNextEntry()) != null) {
                 try {
                     // 先创建目录，否则有些文件没法解压，比如根目录里面的文件
@@ -444,11 +457,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
      * @param filePath 文件路径
      */
     private static void compressFileToZip(String filePath,
-                                          String zipFilePath) {
+            String zipFilePath) {
         try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFilePath))) {
-            //递归的压缩文件夹和文件
+            // 递归的压缩文件夹和文件
             doCompress("", filePath, zos);
-            //必须
+            // 必须
             zos.finish();
         } catch (Exception e) {
             e.printStackTrace();
@@ -482,7 +495,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+         }
         }
     }
 
@@ -490,18 +503,18 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         return intent.getDataString();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //在onCreate方法这里调用来动态获取权限
+        // 在onCreate方法这里调用来动态获取权限
         verifyStoragePermissions(this);
 
-        //File Watch FileWatcher
+        // File Watch FileWatcher
         if (null == mFileWatcher) {
             mFileWatcher = new FileWatcher("/storage/emulated/0/KnotData/");
-            mFileWatcher.startWatching(); //开始监听
+            mFileWatcher.startWatching(); // 开始监听
         }
 
         if (m_instance != null) {
@@ -524,8 +537,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         m_instance = this;
         Log.d(TAG, "Android activity created");
 
-        //唤醒锁（手机上不推荐使用，其它插电安卓系统可考虑，比如广告机等）
-        //acquireWakeLock();
+        // 唤醒锁（手机上不推荐使用，其它插电安卓系统可考虑，比如广告机等）
+        // acquireWakeLock();
 
         mySerivece = new PersistService();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -534,36 +547,35 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
         registSreenStatusReceiver();
 
-        //状态栏
-        context = getApplicationContext();  // 获取程序句柄
+        // 状态栏
+        context = getApplicationContext(); // 获取程序句柄
         // 设置状态栏颜色,需要安卓版本大于5.0
         String filename = "/storage/emulated/0/.Knot/options.ini";
         internalConfigure = new InternalConfigure(this);
         try {
             internalConfigure.readFrom(filename);
         } catch (Exception e) {
-            System.err.println("Error : reading msg.ini");
+            System.err.println("Error : reading options.ini");
             e.printStackTrace();
-
         }
-
         String strDark = internalConfigure.getIniKey("Dark");
         isDark = Boolean.parseBoolean(strDark);
         System.out.println("strDark=" + strDark + "    isDark=" + isDark);
 
         if (isDark) {
-            this.setStatusBarColor("#19232D");  //深色
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); //白色文字
+            this.setStatusBarColor("#19232D"); // 深色
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); // 白色文字
         } else {
-            this.setStatusBarColor("#F3F3F3");  //灰
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); //黑色文字
+            this.setStatusBarColor("#F3F3F3"); // 灰
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 黑色文字
         }
 
         // 设置状态栏全透明
-        //this.setStatusBarFullTransparent();
+        // this.setStatusBarFullTransparent();
 
         // 控制状态栏显示，在setContentView之前设置全屏的flag
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        // WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
@@ -581,8 +593,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             startService(new Intent(bindIntent));
         }
 
-        //Test
-        //MyService.notify(getApplicationContext(), "Hello!");
+        // debug
+        // MyService.notify(getApplicationContext(), "Hello!");
 
         // 定时闹钟
         alarmCount = 0;
@@ -593,33 +605,15 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
-        getShare("Knot");
-
-    }
-
-    public String getShare(String uripath) {
-        //获取分享的数据
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        String type = intent.getType();
-        //设置接收类型为文本
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type)) {
-                handlerText(intent);
-                return "1";
-            }
+        // 解除对file域访问的限制
+        if (Build.VERSION.SDK_INT >= 24) {
+            // Builder builder = new Builder();
+            // StrictMode.setVmPolicy(builder.build());
         }
-        return "0";
-    }
 
-    //该方法用于获取intent所包含的文本信息，并显示到APP的Activity界面上
-    private void handlerText(Intent intent) {
-        String data = intent.getStringExtra(Intent.EXTRA_TEXT);
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Knot", data);
-        clipboard.setPrimaryClip(clip);
-    }
+        addDeskShortcuts();
 
+    }
 
     private static ServiceConnection mCon = new ServiceConnection() {
         @Override
@@ -645,34 +639,48 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         System.out.println("onStop...");
         super.onStop();
 
-        //目前暂不需要，已采用新方法
-        //QtApplication.invokeDelegate();
     }
+
+    /*
+     * @Override
+     * public boolean onKeyDown(int keyCode, KeyEvent event) {
+     * if (keyCode == KeyEvent.KEYCODE_BACK) {
+     * Log.e(TAG, "onBackPressed  2 : 按下了返回键");
+     * CallJavaNotify_9();
+     * 
+     * return true;
+     * } else {
+     * Log.e(TAG, "onBackPressed  2 : " + keyCode + "  " + event);
+     * return super.onKeyDown(keyCode, event);
+     * }
+     * }
+     */
 
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "onDestroy...");
+        Log.i(TAG, "Main onDestroy...");
+
         releaseWakeLock();
-        if (null != mFileWatcher) mFileWatcher.stopWatching(); //停止监听
+        if (null != mFileWatcher)
+            // 停止监听
+            mFileWatcher.stopWatching();
 
-        //让系统自行处理，否则退出时有可能出现崩溃
-        //if(mHomeKeyEvent!=null)
-        //unregisterReceiver(mHomeKeyEvent);
+        // 让系统自行处理，否则退出时有可能出现崩溃
+        // if(mHomeKeyEvent!=null)
+        // unregisterReceiver(mHomeKeyEvent);
 
-        //if(mScreenStatusReceiver!=null)
-        //unregisterReceiver(mScreenStatusReceiver);
-
+        // if(mScreenStatusReceiver!=null)
+        // unregisterReceiver(mScreenStatusReceiver);
 
         if (ReOpen) {
-            doStartApplicationWithPackageName("com.x");
+            openAppFromPackageName("com.x");
+            Log.i(TAG, "reopen = done...");
         }
 
         android.os.Process.killProcess(android.os.Process.myPid());
 
         super.onDestroy();
 
-        //目前暂不需要，已采用新方法
-        //QtApplication.invokeDelegate();
     }
 
     @Override
@@ -697,7 +705,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     @Override
     public void onActivityStopped(Activity activity) {
-        //转至后台
+        // 转至后台
         System.out.println("MyActivity onActivityStopped...");
 
     }
@@ -712,12 +720,12 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    //---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
     class PersistService extends Service implements SensorEventListener {
         public BroadcastReceiver mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (mSensorManager != null) {//取消监听后重写监听，以保持后台运行
+                if (mSensorManager != null) {// 取消监听后重写监听，以保持后台运行
                     mSensorManager.unregisterListener(PersistService.this);
                     mSensorManager
                             .registerListener(
@@ -738,7 +746,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         public void onSensorChanged(SensorEvent sensorEvent) {
             // 做个判断传感器类型很重要，这可以过滤掉杂音（比如可能来自其它传感器的值）
             if (sensorEvent.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-                //float[] values = sensorEvent.values;
+                // float[] values = sensorEvent.values;
                 stepCounts = (long) sensorEvent.values[0];
             }
         }
@@ -751,11 +759,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    //--------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
 
     public class PDFView extends WebView {
 
-        public boolean isTop = true, isBottom = false;//用于判断滑动位置
+        public boolean isTop = true, isBottom = false;// 用于判断滑动位置
 
         private final static String PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
 
@@ -792,7 +800,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                 @Override
                 public void onPageFinished(WebView webView, String s) {
                     super.onPageFinished(webView, s);
-                    //滑动监听
+                    // 滑动监听
                     String startSave = "\n" +
                             "document.getElementById(\"viewerContainer\").addEventListener('scroll',function () {\n" +
                             "if(this.scrollHeight-this.scrollTop - this.clientHeight < 50){\n" +
@@ -842,29 +850,28 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             return super.startActionMode(callback);
         }
 
-        //加载本地的pdf
+        // 加载本地的pdf
         public void loadLocalPDF(String path) {
             loadUrl(PDFJS + "file://" + path);
         }
 
-        //加载url的pdf
+        // 加载url的pdf
         public void loadOnlinePDF(String url) {
             loadUrl(PDFJS + url);
         }
     }
 
-
-    //----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
     /*
-This method can parse out the real local file path from a file URI.
-*/
+     * This method can parse out the real local file path from a file URI.
+     */
     public String getUriPath(String uripath) {
         String URL = uripath;
         String str = "None";
         try {
-            //if (Build.VERSION.SDK_INT >= 26) {
+            // if (Build.VERSION.SDK_INT >= 26) {
             str = URLDecoder.decode(URL, "UTF-8");
-            //}
+            // }
         } catch (Exception e) {
             System.err.println("Error : URLDecoder.decode");
             e.printStackTrace();
@@ -872,224 +879,9 @@ This method can parse out the real local file path from a file URI.
 
         Log.i(TAG, "UriString  " + uripath);
         Log.i(TAG, "RealPath  " + str);
+
         return str;
 
-    }
-
-    private String getUriRealPath(Context ctx, Uri uri) {
-        String ret = "";
-
-        if (isAboveKitKat()) {
-            // Android sdk version number bigger than 19.
-            ret = getUriRealPathAboveKitkat(ctx, uri);
-        } else {
-            // Android sdk version number smaller than 19.
-            ret = getImageRealPath(getContentResolver(), uri, null);
-        }
-
-        return ret;
-    }
-
-    /*
-    This method will parse out the real local file path from the file content URI.
-    The method is only applied to the android SDK version number that is bigger than 19.
-    */
-    private String getUriRealPathAboveKitkat(Context ctx, Uri uri) {
-        String ret = "";
-
-        if (ctx != null && uri != null) {
-
-            if (isContentUri(uri)) {
-                if (isGooglePhotoDoc(uri.getAuthority())) {
-                    ret = uri.getLastPathSegment();
-                } else {
-                    ret = getImageRealPath(getContentResolver(), uri, null);
-                }
-            } else if (isFileUri(uri)) {
-                ret = uri.getPath();
-            } else if (isDocumentUri(ctx, uri)) {
-
-                // Get uri related document id.
-                String documentId = DocumentsContract.getDocumentId(uri);
-
-                // Get uri authority.
-                String uriAuthority = uri.getAuthority();
-
-                if (isMediaDoc(uriAuthority)) {
-                    String idArr[] = documentId.split(":");
-                    if (idArr.length == 2) {
-                        // First item is document type.
-                        String docType = idArr[0];
-
-                        // Second item is document real id.
-                        String realDocId = idArr[1];
-
-                        // Get content uri by document type.
-                        Uri mediaContentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                        if ("image".equals(docType)) {
-                            mediaContentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                        } else if ("video".equals(docType)) {
-                            mediaContentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                        } else if ("audio".equals(docType)) {
-                            mediaContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                        }
-
-                        // Get where clause with real document id.
-                        String whereClause = MediaStore.Images.Media._ID + " = " + realDocId;
-
-                        ret = getImageRealPath(getContentResolver(), mediaContentUri, whereClause);
-                    }
-
-                } else if (isDownloadDoc(uriAuthority)) {
-                    // Build download URI.
-                    Uri downloadUri = Uri.parse("content://downloads/public_downloads");
-
-                    // Append download document id at URI end.
-                    Uri downloadUriAppendId = ContentUris.withAppendedId(downloadUri, Long.valueOf(documentId));
-
-                    ret = getImageRealPath(getContentResolver(), downloadUriAppendId, null);
-
-                } else if (isExternalStoreDoc(uriAuthority)) {
-                    String idArr[] = documentId.split(":");
-                    if (idArr.length == 2) {
-                        String type = idArr[0];
-                        String realDocId = idArr[1];
-
-                        if ("primary".equalsIgnoreCase(type)) {
-                            ret = Environment.getExternalStorageDirectory() + "/" + realDocId;
-                        }
-                    }
-                }
-            }
-        }
-
-        return ret;
-    }
-
-    /* Check whether the current android os version is bigger than KitKat or not. */
-    private boolean isAboveKitKat() {
-        boolean ret = false;
-        ret = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-        return ret;
-    }
-
-    /* Check whether this uri represent a document or not. */
-    private boolean isDocumentUri(Context ctx, Uri uri) {
-        boolean ret = false;
-        if (ctx != null && uri != null) {
-            ret = DocumentsContract.isDocumentUri(ctx, uri);
-        }
-        return ret;
-    }
-
-    /* Check whether this URI is a content URI or not.
-     *  content uri like content://media/external/images/media/1302716
-     *  */
-    private boolean isContentUri(Uri uri) {
-        boolean ret = false;
-        if (uri != null) {
-            String uriSchema = uri.getScheme();
-            if ("content".equalsIgnoreCase(uriSchema)) {
-                ret = true;
-            }
-        }
-        return ret;
-    }
-
-    /* Check whether this URI is a file URI or not.
-     *  file URI like file:///storage/41B7-12F1/DCIM/Camera/IMG_20180211_095139.jpg
-     * */
-    private boolean isFileUri(Uri uri) {
-        boolean ret = false;
-        if (uri != null) {
-            String uriSchema = uri.getScheme();
-            if ("file".equalsIgnoreCase(uriSchema)) {
-                ret = true;
-            }
-        }
-        return ret;
-    }
-
-
-    /* Check whether this document is provided by ExternalStorageProvider. Return true means the file is saved in external storage. */
-    private boolean isExternalStoreDoc(String uriAuthority) {
-        boolean ret = false;
-
-        if ("com.android.externalstorage.documents".equals(uriAuthority)) {
-            ret = true;
-        }
-
-        return ret;
-    }
-
-    /* Check whether this document is provided by DownloadsProvider. return true means this file is a downloaded file. */
-    private boolean isDownloadDoc(String uriAuthority) {
-        boolean ret = false;
-
-        if ("com.android.providers.downloads.documents".equals(uriAuthority)) {
-            ret = true;
-        }
-
-        return ret;
-    }
-
-    /*
-    Check if MediaProvider provides this document, if true means this image is created in the android media app.
-    */
-    private boolean isMediaDoc(String uriAuthority) {
-        boolean ret = false;
-
-        if ("com.android.providers.media.documents".equals(uriAuthority)) {
-            ret = true;
-        }
-
-        return ret;
-    }
-
-    /*
-    Check whether google photos provide this document, if true means this image is created in the google photos app.
-    */
-    private boolean isGooglePhotoDoc(String uriAuthority) {
-        boolean ret = false;
-
-        if ("com.google.android.apps.photos.content".equals(uriAuthority)) {
-            ret = true;
-        }
-
-        return ret;
-    }
-
-    /* Return uri represented document file real local path.*/
-    private String getImageRealPath(ContentResolver contentResolver, Uri uri, String whereClause) {
-        String ret = "";
-
-        // Query the URI with the condition.
-        Cursor cursor = contentResolver.query(uri, null, whereClause, null, null);
-
-        if (cursor != null) {
-            boolean moveToFirst = cursor.moveToFirst();
-            if (moveToFirst) {
-
-                // Get columns name by URI type.
-                String columnName = MediaStore.Images.Media.DATA;
-
-                if (uri == MediaStore.Images.Media.EXTERNAL_CONTENT_URI) {
-                    columnName = MediaStore.Images.Media.DATA;
-                } else if (uri == MediaStore.Audio.Media.EXTERNAL_CONTENT_URI) {
-                    columnName = MediaStore.Audio.Media.DATA;
-                } else if (uri == MediaStore.Video.Media.EXTERNAL_CONTENT_URI) {
-                    columnName = MediaStore.Video.Media.DATA;
-                }
-
-                // Get column index.
-                int imageColumnIndex = cursor.getColumnIndex(columnName);
-
-                // Get column value which is the uri related file local path.
-                ret = cursor.getString(imageColumnIndex);
-            }
-        }
-
-        return ret;
     }
 
     private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
@@ -1114,7 +906,7 @@ This method can parse out the real local file path from a file URI.
         }
     };
 
-    //---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     static public int copyFile(String srcPath, String FileName) {
 
         Log.i(TAG, "src  " + srcPath);
@@ -1125,7 +917,7 @@ This method can parse out the real local file path from a file URI.
             return result;
         }
         File src = new File(srcPath);
-        //File dest = new File("/storage/emulated/0/Download/ " + FileName);
+        // File dest = new File("/storage/emulated/0/Download/ " + FileName);
         File dest = new File(FileName);
         if (dest != null && dest.exists()) {
             dest.delete(); // delete file
@@ -1160,7 +952,7 @@ This method can parse out the real local file path from a file URI.
         return result;
     }
 
-    //----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
     public void openKnotBakDir() {
         Uri dir = Uri.parse("/storage/emulated/0/KnotBak/");
         int PICKFILE_RESULT_CODE = 1;
@@ -1171,7 +963,7 @@ This method can parse out the real local file path from a file URI.
         startActivityForResult(i, PICKFILE_RESULT_CODE);
     }
 
-    //----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
     public static int getAndroidVer() {
         int a = Build.VERSION.SDK_INT;
 
@@ -1200,6 +992,20 @@ This method can parse out the real local file path from a file URI.
         }
         intent.setDataAndType(uri, type);
         context.startActivity(intent);
+    }
+
+    private boolean ReOpen = false;
+
+    public int setReOpen() {
+        ReOpen = true;
+
+        return 1;
+    }
+
+    public void openAppFromPackageName(String pname) {
+        PackageManager packageManager = getPackageManager();
+        Intent it = packageManager.getLaunchIntentForPackage(pname);
+        startActivity(it);
     }
 
     private void doStartApplicationWithPackageName(String packagename) {
@@ -1246,17 +1052,17 @@ This method can parse out the real local file path from a file URI.
         Log.i(TAG, "过程完成...");
     }
 
-    //==============================================================================================
-    //动态获取权限需要添加的常量
+    // ==============================================================================================
+    // 动态获取权限需要添加的常量
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             "android.permission.READ_EXTERNAL_STORAGE",
-            "android.permission.WRITE_EXTERNAL_STORAGE"};
+            "android.permission.WRITE_EXTERNAL_STORAGE" };
 
-    //被调用的方法
+    // 被调用的方法
     public static void verifyStoragePermissions(Activity activity) {
         try {
-            //检测是否有写的权限
+            // 检测是否有写的权限
             int permission = ActivityCompat.checkSelfPermission(activity,
                     "android.permission.WRITE_EXTERNAL_STORAGE");
             if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -1268,7 +1074,7 @@ This method can parse out the real local file path from a file URI.
         }
     }
 
-    //==============================================================================================
+    // ==============================================================================================
     public class InternalConfigure {
         private final Context context;
         private Properties properties;
@@ -1283,11 +1089,11 @@ This method can parse out the real local file path from a file URI.
          * 例:configureActivity.saveFiletoSD("text.ini","");
          */
         public void saveFile(String filename, Properties properties) throws Exception {
-            //设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
+            // 设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
             FileOutputStream fileOutputStream;// = context.openFileOutput(filename, Context.MODE_PRIVATE);
             File file = new File(filename);
             fileOutputStream = new FileOutputStream(file);
-            //通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
+            // 通过properties.stringPropertyNames()获得所有key的集合Set，里面是String对象
             for (String key : properties.stringPropertyNames()) {
                 String s = key + " = " + properties.getProperty(key) + "\n";
                 System.out.println(s);
@@ -1309,10 +1115,10 @@ This method can parse out the real local file path from a file URI.
 
             InputStreamReader reader = new InputStreamReader(fileInputStream, "UTF-8");
             BufferedReader br = new BufferedReader(reader);
-            //String line;
-            //while ((line = br.readLine()) != null) {
-            //    System.out.println(line);
-            //}
+            // String line;
+            // while ((line = br.readLine()) != null) {
+            // System.out.println(line);
+            // }
 
             properties.load(br);
 
@@ -1332,8 +1138,7 @@ This method can parse out the real local file path from a file URI.
         }
     }
 
-
-    //==============================================================================================
+    // ==============================================================================================
 
     public class FileWatcher extends FileObserver {
         static final String TAG = "FileWatcher";
@@ -1391,7 +1196,8 @@ This method can parse out the real local file path from a file URI.
             switch (event) {
                 case FileObserver.ACCESS:
                     // Log.i("FileWatcher", "ACCESS: " + path);
-                    if (path.contains("/storage/emulated/0/KnotData//todo.ini") || path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
+                    if (path.contains("/storage/emulated/0/KnotData//todo.ini")
+                            || path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
                         CallJavaNotify_0();
                     break;
                 case FileObserver.ATTRIB:
@@ -1401,7 +1207,7 @@ This method can parse out the real local file path from a file URI.
                     // Log.i("FileWatcher", "CLOSE_NOWRITE: " + path);
                     break;
                 case FileObserver.CLOSE_WRITE:
-                    //Log.i("FileWatcher", "CLOSE_WRITE: " + path);
+                    // Log.i("FileWatcher", "CLOSE_WRITE: " + path);
                     // 文件写入完毕后会回调，可以在这对新写入的文件做操作
 
                     mThreadHandler.post(new Runnable() {
@@ -1413,7 +1219,7 @@ This method can parse out the real local file path from a file URI.
                     });
                     break;
                 case FileObserver.CREATE:
-                    //Log.i(TAG, "CREATE: " + path);
+                    // Log.i(TAG, "CREATE: " + path);
 
                     mThreadHandler.post(new Runnable() {
                         @Override
@@ -1597,6 +1403,188 @@ This method can parse out the real local file path from a file URI.
         }
     }
 
+    // ----------------------------------------------------------------------------------------------
+
+    public void shareString(String title,
+            String content, QtActivity activity) {
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");// 分享字符串
+        share.putExtra(Intent.EXTRA_TEXT, content);
+        activity.startActivity(Intent.createChooser(share, title));
+
+    }
+
+    /**
+     * 分享功能
+     */
+    // 分享单张图片
+    public void shareImage(String title,
+            String path, String fileType, QtActivity activity) {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType(fileType); // "image/png"
+
+        Uri photoUri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            photoUri = FileProvider.getUriForFile(
+                    context, context.getPackageName(), new File(path));
+        } else {
+            photoUri = Uri.fromFile(new File(path));
+        }
+        System.out.println("path=" + path + "  pathUri=" + photoUri);
+        share.putExtra(Intent.EXTRA_STREAM, photoUri);
+        activity.startActivity(Intent.createChooser(share, title));
+
+    }
+
+    // 分享多张图片
+    public static void shareImages(String title,
+            String imagesPath, QtActivity activity) {
+        String[] pathList = imagesPath.split("\\|"); // 由于"|"是转义字符，所以不能直接写 "|"做分割
+        ArrayList<Uri> imagesUriList = new ArrayList<Uri>();
+        for (int i = 0; i < pathList.length; ++i) {
+            File file = new File(pathList[i]);
+            if (file.isFile()) {
+                imagesUriList.add(Uri.fromFile(file));
+            }
+        }
+
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        intent.setType("image/*");
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imagesUriList);
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        activity.startActivity(Intent.createChooser(intent, title));
+    }
+
+    public void openNoteEditor() {
+        Intent i = new Intent(context, NoteEditor.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+
+    }
+
+    private void addDeskShortcuts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            // 获取ShortcutManager对象
+            shortcutManager = getSystemService(ShortcutManager.class);
+
+            String lblAddRecoed = null;
+            String lblNewTodo = null;
+            String lblNewNote = null;
+            String lblContinueReading = null;
+            if (MyService.zh_cn) {
+                lblAddRecoed = getString(R.string.addRecord_shortcut_short_label_zh);
+                lblNewTodo = getString(R.string.newTodo_shortcut_short_label_zh);
+                lblNewNote = getString(R.string.newNote_shortcut_short_label_zh);
+                lblContinueReading = getString(R.string.continueReading_shortcut_short_label_zh);
+
+            } else {
+                lblAddRecoed = getString(R.string.addRecord_shortcut_short_label);
+                lblNewTodo = getString(R.string.newTodo_shortcut_short_label);
+                lblNewNote = getString(R.string.newNote_shortcut_short_label);
+                lblContinueReading = getString(R.string.continueReading_shortcut_short_label);
+            }
+
+            // ShortcutInfo.Builder构建快捷方式
+            ShortcutInfo shortcut0 = new ShortcutInfo.Builder(this, "Add_Record")
+                    .setShortLabel(lblAddRecoed)
+                    .setIcon(Icon.createWithResource(this, R.drawable.addrecord))
+                    .setIntent(new Intent(Intent.ACTION_MAIN, null, this, AddRecord.class))
+                    .build();
+
+            ShortcutInfo shortcut1 = new ShortcutInfo.Builder(this, "New_Todo")
+                    .setShortLabel(lblNewTodo)
+                    .setIcon(Icon.createWithResource(this, R.drawable.newtodo))
+
+                    // 跳转到某个网页
+                    // .setIntent(new Intent(Intent.ACTION_VIEW,
+                    // Uri.parse("https://www.baidu.com/")))
+
+                    // 跳转的目标，定义Activity
+                    .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewTodo.class))
+                    .build();
+
+            ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "New_Note")
+                    .setShortLabel(lblNewNote)
+                    .setIcon(Icon.createWithResource(this, R.drawable.newnote))
+                    .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewNote.class))
+                    .build();
+
+            ShortcutInfo shortcut3 = new ShortcutInfo.Builder(this, "Continue_Reading")
+                    .setShortLabel(lblContinueReading)
+                    .setIcon(Icon.createWithResource(this, R.drawable.continuereading))
+                    .setIntent(new Intent(Intent.ACTION_MAIN, null, this, ContinueReading.class))
+                    .build();
+
+            // setDynamicShortcuts()方法来设置快捷方式
+            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut0, shortcut1, shortcut2, shortcut3));
+
+            // Toast.makeText(MyActivity.this, "已添加", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void updateDeskShortcuts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            Intent intent2 = new Intent();
+            intent2.setAction("android.intent.action.MAIN");
+            intent2.setClassName(getPackageName(), getPackageName() + ".MainActivity.java");
+
+            /**
+             * 构建ShortcutInfo时指定相同的id，根据id去找到要更新的快捷方式
+             *
+             * 注意：唯一的id标识不可传入一个静态快捷方式的id
+             * 否则会抛出异常 应用会抛出错误：Manifest shortcut ID=XX may not be manipulated via APIs
+             */
+            ShortcutInfo info = new ShortcutInfo.Builder(this, "test_add")
+                    .setIntent(intent2)
+                    .setLongLabel("动态更新的长名")
+                    .setShortLabel("动态更新的短名")
+                    .build();
+            shortcutManager = getSystemService(ShortcutManager.class);
+            List<ShortcutInfo> dynamicShortcuts = shortcutManager.getDynamicShortcuts();
+
+            // updateShortcuts(List<ShortcutInfo> shortcutInfoList)方法更新现有的快捷方式
+            shortcutManager.updateShortcuts(Arrays.asList(info));
+
+            Toast.makeText(MyActivity.this, "已更新", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void removeDeskShortcuts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+
+            /**
+             * removeDynamicShortcuts(List<String> shortcutIds)方法可以删除动态快捷方式
+             *
+             * 同理，在唯一标识id和动态更新处理一样，需传入动态快捷方式的id，要不然会报同样的错误
+             */
+            shortcutManager.removeDynamicShortcuts(Arrays.asList("test_add"));// 唯一的id标识
+
+            Toast.makeText(MyActivity.this, "已移除", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private static Handler m_handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    Toast toast = Toast.makeText(m_instance, (String) msg.obj, Toast.LENGTH_LONG);
+                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    // v.setTextColor(Color.RED);
+                    // v.setTextSize(20);
+                    toast.show();
+                    break;
+            }
+            ;
+        }
+    };
+
+    public void showToastMessage(String msg) {
+        m_handler.sendMessage(m_handler.obtainMessage(1, msg));
+    }
+
 }
-
-

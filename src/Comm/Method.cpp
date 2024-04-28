@@ -1188,7 +1188,7 @@ void Method::showToastMessage(QString msg) {
                               msgObject.object<jstring>());
 #else
   QJniObject msgObject = QJniObject::fromString(msg);
-  QJniObject m_activity = QtAndroid::androidActivity();
+  QJniObject m_activity = QJniObject::fromString("showToastMessage");
   m_activity.callMethod<void>("showToastMessage", "(Ljava/lang/String;)V",
                               msgObject.object<jstring>());
 #endif

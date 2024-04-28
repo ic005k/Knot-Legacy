@@ -209,7 +209,8 @@ class Method : public QDialog {
   void Delay_MSec(unsigned int msec);
   void Sleep(int msec);
   void showToastMessage(QString msg);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

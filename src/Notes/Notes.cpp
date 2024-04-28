@@ -1598,7 +1598,7 @@ void Notes::openNoteEditor() {
   QAndroidJniObject activity = QtAndroid::androidActivity();
   activity.callMethod<void>("openNoteEditor", "()V");
 #else
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity = QJniObject::fromString("openNoteEditor");
   activity.callMethod<void>("openNoteEditor", "()V");
 #endif
 
@@ -1642,8 +1642,7 @@ void Notes::insertNote(QString str) {
                                     jTitle.object<jstring>());
 #else
   QJniObject jTitle = QJniObject::fromString(str);
-  QAndroidJniObject m_activity =
-      QAndroidJniObject::fromString("com.x/NoteEditor");
+  QJniObject m_activity = QJniObject::fromString("com.x/NoteEditor");
   m_activity.callStaticMethod<void>("com.x/NoteEditor", "insertNote",
                                     "(Ljava/lang/String;)V",
                                     jTitle.object<jstring>());

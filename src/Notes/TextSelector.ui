@@ -196,7 +196,7 @@
           </property>
           <property name="icon">
            <iconset resource="../../res.qrc">
-            <normaloff>:/res/del.svg</normaloff>:/res/del.svg</iconset>
+            <normaloff>:/res/delitem_l.svg</normaloff>:/res/delitem_l.svg</iconset>
           </property>
           <property name="iconSize">
            <size>

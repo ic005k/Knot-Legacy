@@ -265,7 +265,7 @@ void Preferences::on_btnReStart_clicked() {
   QAndroidJniObject activity = QtAndroid::androidActivity();
   activity.callMethod<int>("setReOpen", "()I");
 #else
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity = QJniObject::fromString("setReOpen");
   activity.callMethod<int>("setReOpen", "()I");
 #endif
 
