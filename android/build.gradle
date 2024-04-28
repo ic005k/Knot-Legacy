@@ -39,12 +39,12 @@ apply plugin: 'com.android.application'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 
-
     // read and write inifile
     implementation 'org.ini4j:ini4j:0.5.4'
 
-    //implementation "com.android.support:support-v4:23.0.+"
-    //implementation 'com.android.support:appcompat-v7:24.2.1'
+    // old
+    // implementation "com.android.support:support-v4:23.0.+"
+    // implementation 'com.android.support:appcompat-v7:24.2.1'
 
     implementation 'androidx.core:core:1.10.1'
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -52,20 +52,14 @@ dependencies {
     implementation 'com.android.support:design:25.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
 
+    // implementation "com.github.skydoves:colorpickerview:2.3.0"
+    // implementation 'com.github.QuadFlask:colorpicker:0.0.15'
 
-    // https://github.com/duanhong169/ColorPicker
-    //implementation 'com.github.duanhong169:colorpicker:1.1.6'
-
-    //implementation "com.github.skydoves:colorpickerview:2.3.0"
-    //implementation 'com.github.QuadFlask:colorpicker:0.0.15'
-
-    //compile(name:'libcolorpicker', ext:'aar')
+    // compile(name:'libcolorpicker', ext:'aar')
 
     // implementation (fileTree("libs"))
 
-    //implementation 'org.ow2.asm:asm:7.0'
-
-    //implementation "dev.sasikanth:colorsheet:1.0.1"
+    // implementation 'org.ow2.asm:asm:7.0'
 
 
 }

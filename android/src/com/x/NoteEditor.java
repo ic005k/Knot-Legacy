@@ -7,7 +7,6 @@ import com.x.LineNumberedEditText;
 
 // 读写ini文件的三方开源库
 import org.ini4j.Wini;
-//import top.defaults.colorpicker.ColorPickerPopup;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorChangedListener;
@@ -358,7 +357,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         setTheme(R.style.AppThemeprice);
         super.onCreate(savedInstanceState);
 
-        context =  NoteEditor.this; //getApplicationContext();
+        context = NoteEditor.this;
         isZh(context);
         m_instance = this;
 
@@ -1216,17 +1215,19 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     editNote.setSelection(start);
                     editNote.setSelection(start, end);
 
+                    String strChoose = "Choose Color";
                     String strOk = "Ok";
                     String strCancel = "Cancel";
                     if (zh_cn) {
                         strOk = "确定";
                         strCancel = "取消";
+                        strChoose = "选择颜色";
 
                     }
 
                     ColorPickerDialogBuilder
                             .with(context)
-                            .setTitle("Choose color")
+                            .setTitle(strChoose)
                             .initialColor(Color.RED)
                             .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                             .density(12)
@@ -1239,7 +1240,40 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                             .setPositiveButton(strOk, new ColorPickerClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                                    // changeBackgroundColor(selectedColor);
+                                    String hexColor = "#"
+                                            + Integer.toHexString(selectedColor).substring(2).toUpperCase();
+                                    String sel = getEditSelectText();
+                                    int len = sel.length();
+
+                                    if (len == 7) {
+                                        String subString = sel.substring(0, 1);
+                                        if (subString.equals("#") && isHexString(sel.substring(1))) {
+                                            delEditSelectText();
+                                            insertNote(hexColor);
+                                        } else {
+                                            delEditSelectText();
+                                            insertNote("<font color=" + hexColor + ">" + sel + "</font>");
+                                        }
+                                    } else if (len == 6) {
+                                        editNote.setSelection(start - 1, start);
+                                        if (getEditSelectText().equals("#") && isHexString(sel)) {
+                                            editNote.setSelection(start - 1, end);
+                                            delEditSelectText();
+                                            insertNote(hexColor);
+
+                                        } else {
+                                            editNote.setSelection(start, end);
+                                            delEditSelectText();
+                                            insertNote("<font color=" + hexColor + ">" + sel + "</font>");
+                                        }
+
+                                    } else if (len > 0) {
+                                        delEditSelectText();
+                                        insertNote("<font color=" + hexColor + ">" + sel + "</font>");
+                                    } else {
+                                        // old #E01B24
+                                        insertNote("<font color=" + hexColor + ">Color</font>");
+                                    }
                                 }
                             })
                             .setNegativeButton(strCancel, new DialogInterface.OnClickListener() {
@@ -1249,68 +1283,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                             })
                             .build()
                             .show();
-
-                    /*
-                     * new ColorPickerPopup.Builder(context)
-                     * .initialColor(Color.RED) // Set initial color
-                     * .enableBrightness(true) // Enable brightness slider or not
-                     * .enableAlpha(true) // Enable alpha slider or not
-                     * .okTitle(strOk)
-                     * .cancelTitle(strCancel)
-                     * .showIndicator(true)
-                     * .showValue(true)
-                     * .build()
-                     * .show(mColorPreview, new ColorPickerPopup.ColorPickerObserver() {
-                     * 
-                     * @Override
-                     * public void onColorPicked(int color) {
-                     * mColorPreview.setBackgroundColor(color);
-                     * 
-                     * String hexColor = "#" +
-                     * Integer.toHexString(color).substring(2).toUpperCase();
-                     * String sel = getEditSelectText();
-                     * int len = sel.length();
-                     * 
-                     * if (len == 7) {
-                     * String subString = sel.substring(0, 1);
-                     * if (subString.equals("#") && isHexString(sel.substring(1))) {
-                     * delEditSelectText();
-                     * insertNote(hexColor);
-                     * } else {
-                     * delEditSelectText();
-                     * insertNote("<font color=" + hexColor + ">" + sel + "</font>");
-                     * }
-                     * } else if (len == 6) {
-                     * editNote.setSelection(start - 1, start);
-                     * if (getEditSelectText().equals("#") && isHexString(sel)) {
-                     * editNote.setSelection(start - 1, end);
-                     * delEditSelectText();
-                     * insertNote(hexColor);
-                     * 
-                     * } else {
-                     * editNote.setSelection(start, end);
-                     * delEditSelectText();
-                     * insertNote("<font color=" + hexColor + ">" + sel + "</font>");
-                     * }
-                     * 
-                     * } else if (len > 0) {
-                     * delEditSelectText();
-                     * insertNote("<font color=" + hexColor + ">" + sel + "</font>");
-                     * } else {
-                     * // old #E01B24
-                     * insertNote("<font color=" + hexColor + ">Color</font>");
-                     * }
-                     * 
-                     * initTextFormat();
-                     * 
-                     * }
-                     * 
-                     * public void onColor(int color, boolean fromUser) {
-                     * // Cancel event
-                     * 
-                     * }
-                     * });
-                     */
 
                 }
 
