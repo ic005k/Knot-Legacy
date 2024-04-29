@@ -49,6 +49,7 @@ android: {
 #           QT_ANGLE_PLATFORM
 
 SOURCES += \
+    src/AboutThis.cpp \
     src/AutoUpdate.cpp \
     src/CategoryList.cpp \
     src/CloudBackup.cpp \
@@ -82,7 +83,6 @@ SOURCES += \
     src/Reader/Reader.cpp \
     src/Reader/ReaderSet.cpp \
     src/Reader/SetReaderText.cpp \
-    src/RemarksAbout.cpp \
     src/Report.cpp \
     src/Steps/SpecialAccelerometerPedometer.cpp \
     src/Steps/Steps.cpp \
@@ -116,6 +116,7 @@ SOURCES += \
 
 
 HEADERS += \
+    src/AboutThis.h \
     src/AutoUpdate.h \
     src/CategoryList.h \
     src/CloudBackup.h \
@@ -149,7 +150,6 @@ HEADERS += \
     src/Reader/Reader.h \
     src/Reader/ReaderSet.h \
     src/Reader/SetReaderText.h \
-    src/RemarksAbout.h \
     src/Report.h \
     src/Steps/SpecialAccelerometerPedometer.h \
     src/Steps/Steps.h \
@@ -190,6 +190,7 @@ HEADERS += \
     win.rc
 
 FORMS += \
+    src/AboutThis.ui \
     src/AutoUpdate.ui \
     src/CategoryList.ui \
     src/CloudBackup.ui \
@@ -207,7 +208,6 @@ FORMS += \
     src/Reader/PageIndicator.ui \
     src/Reader/ReaderSet.ui \
     src/Reader/SetReaderText.ui \
-    src/RemarksAbout.ui \
     src/Steps/StepsOptions.ui \
     src/SyncInfo.ui \
     src/Todo/Todo.ui \

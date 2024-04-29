@@ -1,5 +1,5 @@
-#ifndef REMARKSABOUT_H
-#define REMARKSABOUT_H
+#ifndef ABOUTTHIS_H
+#define ABOUTTHIS_H
 
 #include <QDialog>
 #include <QJsonArray>
@@ -12,16 +12,16 @@
 #include "src/AutoUpdate.h"
 
 namespace Ui {
-class dlgRemarks;
+class AboutThis;
 }
 
-class dlgRemarks : public QDialog {
+class AboutThis : public QDialog {
   Q_OBJECT
 
  public:
-  explicit dlgRemarks(QWidget *parent = nullptr);
-  ~dlgRemarks();
-  Ui::dlgRemarks *ui;
+  explicit AboutThis(QWidget *parent = nullptr);
+  ~AboutThis();
+  Ui::AboutThis *ui;
 
   AutoUpdate *m_AutoUpdate;
   QNetworkAccessManager *manager;
@@ -34,13 +34,14 @@ class dlgRemarks : public QDialog {
   void show_download();
   int getAndroidVer();
  public slots:
-  bool eventFilter(QObject *obj, QEvent *evn) override;
+  void on_btnBack_clicked();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
+  bool eventFilter(QObject *obj, QEvent *evn) override;
+
  private slots:
-  void on_btnBack_clicked();
 
   void on_btnHomePage_clicked();
 
@@ -57,4 +58,4 @@ class dlgRemarks : public QDialog {
   QString s_link;
 };
 
-#endif  // REMARKSABOUT_H
+#endif  // ABOUTTHIS_H

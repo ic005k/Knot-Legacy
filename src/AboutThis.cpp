@@ -1,16 +1,15 @@
-#include "src/RemarksAbout.h"
+#include "src/AboutThis.h".h "
 
 #include "MainWindow.h"
+#include "ui_AboutThis.h"
 #include "ui_MainWindow.h"
-#include "ui_RemarksAbout.h"
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern bool loading, zh_cn;
 extern QString noteText, appName, ver;
 extern int curPos;
 
-dlgRemarks::dlgRemarks(QWidget *parent)
-    : QDialog(parent), ui(new Ui::dlgRemarks) {
+AboutThis::AboutThis(QWidget *parent) : QDialog(parent), ui(new Ui::AboutThis) {
   ui->setupUi(this);
   setWindowFlag(Qt::FramelessWindowHint);
   setAttribute(Qt::WA_TranslucentBackground);
@@ -56,9 +55,9 @@ dlgRemarks::dlgRemarks(QWidget *parent)
   CheckUpdate();
 }
 
-dlgRemarks::~dlgRemarks() { delete ui; }
+AboutThis::~AboutThis() { delete ui; }
 
-void dlgRemarks::on_btnBack_clicked() {
+void AboutThis::on_btnBack_clicked() {
   mw_one->m_Notes->m_TextSelector->close();
 
   noteText = ui->textEdit->toPlainText();
@@ -79,7 +78,7 @@ void dlgRemarks::on_btnBack_clicked() {
   close();
 }
 
-bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
+bool AboutThis::eventFilter(QObject *obj, QEvent *evn) {
   if (obj == ui->textEdit->viewport()) {
     mw_one->m_Notes->getEditPanel(ui->textEdit, evn);
   }
@@ -110,14 +109,14 @@ bool dlgRemarks::eventFilter(QObject *obj, QEvent *evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void dlgRemarks::keyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event); }
+void AboutThis::keyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event); }
 
-void dlgRemarks::resizeEvent(QResizeEvent *event) {
+void AboutThis::resizeEvent(QResizeEvent *event) {
   Q_UNUSED(event);
   qDebug() << "resize" << ui->textEdit->height();
 }
 
-void dlgRemarks::init_Remarks() {
+void AboutThis::init_Remarks() {
   int index = mw_one->ui->tabWidget->currentIndex();
   QString str = mw_one->ui->tabWidget->tabToolTip(index);
   QStringList list = str.split("|");
@@ -134,16 +133,16 @@ void dlgRemarks::init_Remarks() {
     ui->textEdit->setPlainText(str);
 }
 
-void dlgRemarks::on_btnHomePage_clicked() {
+void AboutThis::on_btnHomePage_clicked() {
   QString str;
   str = "https://github.com/ic005k/Knot/issues";
   QUrl url(str);
   QDesktopServices::openUrl(url);
 }
 
-void dlgRemarks::on_btnPaste_clicked() { ui->textEdit->paste(); }
+void AboutThis::on_btnPaste_clicked() { ui->textEdit->paste(); }
 
-void dlgRemarks::CheckUpdate() {
+void AboutThis::CheckUpdate() {
   mw_one->m_Reader->setPdfViewVisible(false);
   QNetworkRequest quest;
   quest.setUrl(QUrl("https://api.github.com/repos/ic005k/" + appName +
@@ -152,13 +151,13 @@ void dlgRemarks::CheckUpdate() {
   manager->get(quest);
 }
 
-void dlgRemarks::replyFinished(QNetworkReply *reply) {
+void AboutThis::replyFinished(QNetworkReply *reply) {
   QString str = reply->readAll();
   parse_UpdateJSON(str);
   reply->deleteLater();
 }
 
-QString dlgRemarks::getUrl(QVariantList list) {
+QString AboutThis::getUrl(QVariantList list) {
   QString androidUrl, macUrl, winUrl, linuxUrl;
   for (int i = 0; i < list.count(); i++) {
     QVariantMap map = list[i].toMap();
@@ -187,7 +186,7 @@ QString dlgRemarks::getUrl(QVariantList list) {
   return linuxUrl;
 }
 
-int dlgRemarks::parse_UpdateJSON(QString str) {
+int AboutThis::parse_UpdateJSON(QString str) {
   QJsonParseError err_rpt;
   QJsonDocument root_Doc = QJsonDocument::fromJson(str.toUtf8(), &err_rpt);
 
@@ -265,7 +264,7 @@ int dlgRemarks::parse_UpdateJSON(QString str) {
   return 0;
 }
 
-void dlgRemarks::show_download() {
+void AboutThis::show_download() {
   int aver = getAndroidVer();
   // Android7.0及以上
   if (aver >= 24) {
@@ -286,9 +285,9 @@ void dlgRemarks::show_download() {
   }
 }
 
-void dlgRemarks::on_btnCheckUpdate_clicked() { CheckUpdate(); }
+void AboutThis::on_btnCheckUpdate_clicked() { CheckUpdate(); }
 
-void dlgRemarks::on_btnDownloadUP_clicked() {
+void AboutThis::on_btnDownloadUP_clicked() {
   mw_one->m_Reader->setPdfViewVisible(false);
   if (s_link == "") return;
 
@@ -301,7 +300,7 @@ void dlgRemarks::on_btnDownloadUP_clicked() {
 #endif
 }
 
-int dlgRemarks::getAndroidVer() {
+int AboutThis::getAndroidVer() {
   int a = 0;
 #ifdef Q_OS_UNIX
   a = 24;

@@ -42,7 +42,7 @@ QString Method::getRealPathFile(QString strFile) {
   strFile = mw_one->m_Reader->getUriRealPath(strFile);
   QString realFile = strFile;
 
-  int aver = mw_one->m_Remarks->getAndroidVer();
+  int aver = mw_one->m_AboutThis->getAndroidVer();
   // Android7.0及以上
   if (aver >= 24) {
   } else {

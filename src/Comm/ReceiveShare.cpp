@@ -302,6 +302,10 @@ void ReceiveShare::closeAllActiveWindows() {
     mw_one->m_TodoAlarm->on_btnBack_clicked();
   }
 
+  if (mw_one->m_AboutThis->isVisible()) {
+    mw_one->m_AboutThis->on_btnBack_clicked();
+  }
+
   if (mw_one->ui->frameMain->isVisible()) return;
 
   QObjectList frameList;
@@ -324,6 +328,10 @@ void ReceiveShare::closeAllActiveWindowsKeep(QString frameName) {
 
   if (mw_one->m_TodoAlarm->isVisible()) {
     mw_one->m_TodoAlarm->on_btnBack_clicked();
+  }
+
+  if (mw_one->m_AboutThis->isVisible()) {
+    mw_one->m_AboutThis->on_btnBack_clicked();
   }
 
   QObjectList frameList;

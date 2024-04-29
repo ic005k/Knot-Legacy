@@ -2,6 +2,100 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>AboutThis</name>
+    <message>
+        <location filename="AboutThis.ui" line="14"/>
+        <source>About</source>
+        <translation>关于</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.ui" line="37"/>
+        <source>Paste</source>
+        <translation>粘贴</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.ui" line="62"/>
+        <source>TextLabel</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="AboutThis.ui" line="112"/>
+        <source>(Double click to copy the download link)</source>
+        <translation>（双击拷贝下载链接）</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.ui" line="149"/>
+        <source>Logo</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="AboutThis.ui" line="193"/>
+        <source>Show App Info</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="AboutThis.ui" line="209"/>
+        <source>Reporting Issues</source>
+        <translation>报告问题</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.ui" line="222"/>
+        <source>Download the latest version</source>
+        <translation>下载最新版</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.ui" line="235"/>
+        <location filename="AboutThis.cpp" line="257"/>
+        <source>Upgrade Check</source>
+        <translation>检查更新</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.ui" line="270"/>
+        <source>Back</source>
+        <translation>返回</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.cpp" line="75"/>
+        <source>Modi Remarks</source>
+        <translation>修改备注</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.cpp" line="92"/>
+        <source>Download link copied.</source>
+        <translation>下载链接已拷贝</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.cpp" line="196"/>
+        <source>Network error!</source>
+        <translation>网络错误！</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.cpp" line="230"/>
+        <source>New version detected!</source>
+        <translation>有新版本！</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.cpp" line="231"/>
+        <source>Version: </source>
+        <translation>版本：</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.cpp" line="232"/>
+        <source>Published at: </source>
+        <translation>发布时间：</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.cpp" line="233"/>
+        <source>Release Notes: </source>
+        <translation>发布说明：</translation>
+    </message>
+    <message>
+        <location filename="AboutThis.cpp" line="258"/>
+        <source>You are currently using the latest version!</source>
+        <translation>目前使用的是最新版！</translation>
+    </message>
+</context>
+<context>
     <name>AutoUpdate</name>
     <message>
         <location filename="AutoUpdate.ui" line="55"/>
@@ -2217,7 +2311,7 @@ in skydrive folder</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="1675"/>
+        <location filename="Notes/Notes.cpp" line="1674"/>
         <source>Delete this image?</source>
         <translation>删除这个图片？</translation>
     </message>
@@ -2960,12 +3054,12 @@ F</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="Reader/Reader.cpp" line="2070"/>
+        <location filename="Reader/Reader.cpp" line="2073"/>
         <source>Remove from list?</source>
         <translation>从列表中移除？</translation>
     </message>
     <message>
-        <location filename="Reader/Reader.cpp" line="2087"/>
+        <location filename="Reader/Reader.cpp" line="2090"/>
         <source>The EPUB file was opened with an error.</source>
         <translation>EPUB文件打开出错</translation>
     </message>
@@ -2980,7 +3074,7 @@ F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Reader/Reader.cpp" line="1623"/>
+        <location filename="Reader/Reader.cpp" line="1626"/>
         <source>Clear all reading history</source>
         <translation>清除所有的阅读记录</translation>
     </message>
@@ -4558,95 +4652,65 @@ F</source>
 <context>
     <name>dlgRemarks</name>
     <message>
-        <location filename="RemarksAbout.ui" line="37"/>
         <source>Paste</source>
-        <translation>粘贴</translation>
+        <translation type="vanished">粘贴</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="62"/>
-        <source>TextLabel</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="RemarksAbout.ui" line="149"/>
-        <source>Logo</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="RemarksAbout.ui" line="112"/>
         <source>(Double click to copy the download link)</source>
-        <translation>（双击拷贝下载链接）</translation>
+        <translation type="vanished">（双击拷贝下载链接）</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="193"/>
-        <source>Show App Info</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="RemarksAbout.ui" line="209"/>
         <source>Reporting Issues</source>
-        <translation>报告问题</translation>
+        <translation type="vanished">报告问题</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="235"/>
-        <location filename="RemarksAbout.cpp" line="258"/>
         <source>Upgrade Check</source>
-        <translation>检查更新</translation>
+        <translation type="vanished">检查更新</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="222"/>
         <source>Download the latest version</source>
         <oldsource>Download Upgrade Packages</oldsource>
-        <translation>下载最新版</translation>
+        <translation type="vanished">下载最新版</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="14"/>
         <source>About</source>
-        <translation>关于</translation>
+        <translation type="vanished">关于</translation>
     </message>
     <message>
         <source>Download (mirror site)</source>
         <translation type="vanished">下载（镜像网址  速度快）</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.ui" line="270"/>
         <source>Back</source>
-        <translation>返回</translation>
+        <translation type="vanished">返回</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="76"/>
         <source>Modi Remarks</source>
-        <translation>修改备注</translation>
+        <translation type="vanished">修改备注</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="93"/>
         <source>Download link copied.</source>
-        <translation>下载链接已拷贝</translation>
+        <translation type="vanished">下载链接已拷贝</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="197"/>
         <source>Network error!</source>
-        <translation>网络错误！</translation>
+        <translation type="vanished">网络错误！</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="231"/>
         <source>New version detected!</source>
-        <translation>有新版本！</translation>
+        <translation type="vanished">有新版本！</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="232"/>
         <source>Version: </source>
-        <translation>版本：</translation>
+        <translation type="vanished">版本：</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="233"/>
         <source>Published at: </source>
-        <translation>发布时间：</translation>
+        <translation type="vanished">发布时间：</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="234"/>
         <source>Release Notes: </source>
-        <translation>发布说明：</translation>
+        <translation type="vanished">发布说明：</translation>
     </message>
     <message>
         <source>Download</source>
@@ -4657,9 +4721,8 @@ F</source>
         <translation type="vanished">取消</translation>
     </message>
     <message>
-        <location filename="RemarksAbout.cpp" line="259"/>
         <source>You are currently using the latest version!</source>
-        <translation>目前使用的是最新版！</translation>
+        <translation type="vanished">目前使用的是最新版！</translation>
     </message>
 </context>
 <context>

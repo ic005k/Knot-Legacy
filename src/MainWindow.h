@@ -70,6 +70,7 @@
 #include <QTreeWidgetItem>
 #include <QValueAxis>
 
+#include "src/AboutThis.h"
 #include "src/CategoryList.h"
 #include "src/CloudBackup.h"
 #include "src/Comm/FileSystemWatcher.h"
@@ -87,7 +88,6 @@
 #include "src/Reader/Reader.h"
 #include "src/Reader/ReaderSet.h"
 #include "src/Reader/SetReaderText.h"
-#include "src/RemarksAbout.h"
 #include "src/Report.h"
 #include "src/Steps/SpecialAccelerometerPedometer.h"
 #include "src/Steps/Steps.h"
@@ -97,6 +97,7 @@
 #include "src/Todo/TodoAlarm.h"
 #include "src/components/qtmaterialcircularprogress.h"
 #include "src/components/qtmaterialdialog.h"
+#include "ui_AboutThis.h"
 #include "ui_CategoryList.h"
 #include "ui_CloudBackup.h"
 #include "ui_DateSelector.h"
@@ -106,7 +107,6 @@
 #include "ui_Preferences.h"
 #include "ui_ReaderSet.h"
 #include "ui_ReceiveShare.h"
-#include "ui_RemarksAbout.h"
 #include "ui_SetReaderText.h"
 #include "ui_ShowMessage.h"
 #include "ui_StepsOptions.h"
@@ -227,7 +227,7 @@ class MainWindow : public QMainWindow {
   static QString get_Month(QString date);
   void init_Options();
 
-  dlgRemarks *m_Remarks;
+  AboutThis *m_AboutThis;
   EditRecord *m_EditRecord;
   Todo *m_Todo;
   Report *m_Report;

@@ -14,6 +14,17 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
+import com.skydoves.powermenu.CustomPowerMenu;
+import com.skydoves.powermenu.OnDismissedListener;
+import com.skydoves.powermenu.OnMenuItemClickListener;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
+import com.skydoves.powermenu.MenuAnimation;
+
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.content.ContextCompat;
+import android.graphics.Typeface;
+
 //import com.skydoves.colorpickerview.AlphaTileView;
 //import com.skydoves.colorpickerview.ColorEnvelope;
 //import com.skydoves.colorpickerview.ColorPickerDialog;
@@ -27,7 +38,8 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import androidx.appcompat.app.AlertDialog;
 //import android.app.AlertDialog;
 
-import android.view.ContextThemeWrapper;
+//import android.view.ContextThemeWrapper;
+
 import android.view.LayoutInflater;
 import android.view.Gravity;
 import android.content.IntentFilter;
@@ -35,7 +47,7 @@ import android.content.Intent;
 import android.content.BroadcastReceiver;
 import android.app.PendingIntent;
 import android.text.TextUtils;
-
+import java.lang.CharSequence;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -152,6 +164,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private String strBack1 = "#FFC1C1";
     private String strBack2 = "#CFCFCF";
     private String strFore = "#000000";
+    private int start = 0;
+    private int end = 0;
+    private ArrayList<String> listMenuTitle = new ArrayList<>();
 
     public static Context getContext() {
         return context;
@@ -288,7 +303,17 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             case R.id.btnMenu:
                 btnMenu.setBackgroundColor(getResources().getColor(R.color.red));
-                showPopupMenu(btnMenu);
+
+                start = editNote.getSelectionStart();
+                end = editNote.getSelectionEnd();
+                editNote.clearFocus();
+                editNote.setSelection(start);
+                editNote.setSelection(start, end);
+
+                // showPopupMenu(btnMenu);
+                showPowerMenu(btnMenu);
+
+                editNote.requestFocus();
                 btnMenu.setBackgroundColor(getResources().getColor(R.color.normal));
                 break;
 
@@ -1113,223 +1138,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
                 }
 
-                if (item.getTitle().equals("Format")) {
-                    initTextFormat();
-                }
-
-                if (item.getTitle().equals("Image")) {
-                    openFilePicker();
-                    isAddImage = true;
-
-                }
-
-                if (item.getTitle().equals("Table")) {
-
-                    String str1 = "|Title1|Title2|Title3|\n";
-                    String str2 = "|------|------|----- |\n";
-                    String str3 = "|        |        |        |\n";
-                    String str4 = "|        |        |        |\n";
-
-                    insertNote(str1 + str2 + str3 + str4);
-                    initTextFormat();
-
-                }
-
-                if (item.getTitle().equals("h1")) {
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("# " + sel);
-                    } else
-                        insertNote("# ");
-
-                    initTextFormat();
-                }
-
-                if (item.getTitle().equals("h2")) {
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("## " + sel);
-                    } else
-                        insertNote("## ");
-
-                    initTextFormat();
-                }
-
-                if (item.getTitle().equals("h3")) {
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("### " + sel);
-                    } else
-                        insertNote("### ");
-
-                    initTextFormat();
-                }
-
-                if (item.getTitle().equals("h4")) {
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("#### " + sel);
-                    } else
-                        insertNote("#### ");
-
-                    initTextFormat();
-                }
-
-                if (item.getTitle().equals("h5")) {
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("##### " + sel);
-                    } else
-                        insertNote("##### ");
-
-                    initTextFormat();
-                }
-
-                if (item.getTitle().equals("Bold")) {
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("**" + sel + "**");
-                    } else
-                        insertNote("**Bold**");
-
-                    initTextFormat();
-                }
-
-                if (item.getTitle().equals("Italic")) {
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("_" + sel + "_");
-                    } else
-                        insertNote("_Italic_");
-
-                    initTextFormat();
-
-                }
-
-                if (item.getTitle().equals("Font Color")) {
-                    int start = editNote.getSelectionStart();
-                    int end = editNote.getSelectionEnd();
-                    editNote.setSelection(start);
-                    editNote.setSelection(start, end);
-
-                    String strChoose = "Choose Color";
-                    String strOk = "Ok";
-                    String strCancel = "Cancel";
-                    if (zh_cn) {
-                        strOk = "确定";
-                        strCancel = "取消";
-                        strChoose = "选择颜色";
-
-                    }
-
-                    ColorPickerDialogBuilder
-                            .with(context)
-                            .setTitle(strChoose)
-                            .initialColor(Color.RED)
-                            .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                            .density(12)
-                            .setOnColorSelectedListener(new OnColorSelectedListener() {
-                                @Override
-                                public void onColorSelected(int selectedColor) {
-                                    // toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
-                                }
-                            })
-                            .setPositiveButton(strOk, new ColorPickerClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                                    String hexColor = "#"
-                                            + Integer.toHexString(selectedColor).substring(2).toUpperCase();
-                                    String sel = getEditSelectText();
-                                    int len = sel.length();
-
-                                    if (len == 7) {
-                                        String subString = sel.substring(0, 1);
-                                        if (subString.equals("#") && isHexString(sel.substring(1))) {
-                                            delEditSelectText();
-                                            insertNote(hexColor);
-                                        } else {
-                                            delEditSelectText();
-                                            insertNote("<font color=" + hexColor + ">" + sel + "</font>");
-                                        }
-                                    } else if (len == 6) {
-                                        editNote.setSelection(start - 1, start);
-                                        if (getEditSelectText().equals("#") && isHexString(sel)) {
-                                            editNote.setSelection(start - 1, end);
-                                            delEditSelectText();
-                                            insertNote(hexColor);
-
-                                        } else {
-                                            editNote.setSelection(start, end);
-                                            delEditSelectText();
-                                            insertNote("<font color=" + hexColor + ">" + sel + "</font>");
-                                        }
-
-                                    } else if (len > 0) {
-                                        delEditSelectText();
-                                        insertNote("<font color=" + hexColor + ">" + sel + "</font>");
-                                    } else {
-                                        // old #E01B24
-                                        insertNote("<font color=" + hexColor + ">Color</font>");
-                                    }
-                                }
-                            })
-                            .setNegativeButton(strCancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .build()
-                            .show();
-
-                }
-
-                if (item.getTitle().equals("Strickout")) {
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("~~" + sel + "~~");
-                    } else
-                        insertNote("~~Strickout~~");
-
-                    initTextFormat();
-                }
-
-                if (item.getTitle().equals("Underline")) {
-                    String sel = getEditSelectText();
-                    if (sel.length() > 0) {
-                        delEditSelectText();
-                        insertNote("<u>" + sel + "</u>");
-                    } else
-                        insertNote("<u>Underline</u>");
-
-                    initTextFormat();
-
-                }
-
-                if (item.getTitle().equals("Date")) {
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String dateString = sdf.format(new Date());
-
-                    insertNote(dateString);
-                }
-
-                if (item.getTitle().equals("Time")) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                    String timeString = sdf.format(new Date());
-                    insertNote(timeString);
-                }
-
-                if (item.getTitle().equals("Link")) {
-                    insertNote("[]()");
-                }
+                onClickMenuTitle(item.getTitle());
 
                 // Toast.makeText(getApplicationContext(), item.getTitle(),
                 // Toast.LENGTH_SHORT).show();
@@ -1350,6 +1159,321 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         popupMenu.show();
 
     }
+
+    private void onClickMenuTitle(CharSequence strTitle) {
+
+        // Format
+        if (strTitle.equals(listMenuTitle.get(0))) {
+            initTextFormat();
+        }
+
+        // Image
+        if (strTitle.equals(listMenuTitle.get(1))) {
+            openFilePicker();
+            isAddImage = true;
+
+        }
+
+        // Table
+        if (strTitle.equals(listMenuTitle.get(2))) {
+
+            String str1 = "|Title1|Title2|Title3|\n";
+            String str2 = "|------|------|----- |\n";
+            String str3 = "|        |        |        |\n";
+            String str4 = "|        |        |        |\n";
+
+            insertNote(str1 + str2 + str3 + str4);
+            initTextFormat();
+
+        }
+
+        // h1
+        if (strTitle.equals(listMenuTitle.get(3))) {
+            String sel = getEditSelectText();
+            if (sel.length() > 0) {
+                delEditSelectText();
+                insertNote("# " + sel);
+            } else
+                insertNote("# ");
+
+            initTextFormat();
+        }
+
+        // h2
+        if (strTitle.equals(listMenuTitle.get(4))) {
+            String sel = getEditSelectText();
+            if (sel.length() > 0) {
+                delEditSelectText();
+                insertNote("## " + sel);
+            } else
+                insertNote("## ");
+
+            initTextFormat();
+        }
+
+        // h3
+        if (strTitle.equals(listMenuTitle.get(5))) {
+            String sel = getEditSelectText();
+            if (sel.length() > 0) {
+                delEditSelectText();
+                insertNote("### " + sel);
+            } else
+                insertNote("### ");
+
+            initTextFormat();
+        }
+
+        // h4
+        if (strTitle.equals(listMenuTitle.get(6))) {
+            String sel = getEditSelectText();
+            if (sel.length() > 0) {
+                delEditSelectText();
+                insertNote("#### " + sel);
+            } else
+                insertNote("#### ");
+
+            initTextFormat();
+        }
+
+        // h5
+        if (strTitle.equals(listMenuTitle.get(7))) {
+            String sel = getEditSelectText();
+            if (sel.length() > 0) {
+                delEditSelectText();
+                insertNote("##### " + sel);
+            } else
+                insertNote("##### ");
+
+            initTextFormat();
+        }
+
+        // Font Color
+        if (strTitle.equals(listMenuTitle.get(8))) {
+
+            String strChoose = "Choose Color";
+            String strOk = "Ok";
+            String strCancel = "Cancel";
+            if (zh_cn) {
+                strOk = "确定";
+                strCancel = "取消";
+                strChoose = "选择颜色";
+
+            }
+
+            ColorPickerDialogBuilder
+                    .with(context)
+                    .setTitle(strChoose)
+                    .initialColor(Color.RED)
+                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                    .density(12)
+                    .setOnColorSelectedListener(new OnColorSelectedListener() {
+                        @Override
+                        public void onColorSelected(int selectedColor) {
+                            // toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
+                        }
+                    })
+                    .setPositiveButton(strOk, new ColorPickerClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                            String hexColor = "#"
+                                    + Integer.toHexString(selectedColor).substring(2).toUpperCase();
+                            String sel = getEditSelectText();
+                            int len = sel.length();
+
+                            if (len == 7) {
+                                String subString = sel.substring(0, 1);
+                                if (subString.equals("#") && isHexString(sel.substring(1))) {
+                                    delEditSelectText();
+                                    insertNote(hexColor);
+                                } else {
+                                    delEditSelectText();
+                                    insertNote("<font color=" + hexColor + ">" + sel + "</font>");
+                                }
+                            } else if (len == 6) {
+                                editNote.setSelection(start - 1, start);
+                                if (getEditSelectText().equals("#") && isHexString(sel)) {
+                                    editNote.setSelection(start - 1, end);
+                                    delEditSelectText();
+                                    insertNote(hexColor);
+
+                                } else {
+                                    editNote.setSelection(start, end);
+                                    delEditSelectText();
+                                    insertNote("<font color=" + hexColor + ">" + sel + "</font>");
+                                }
+
+                            } else if (len > 0) {
+                                delEditSelectText();
+                                insertNote("<font color=" + hexColor + ">" + sel + "</font>");
+                            } else {
+                                // old #E01B24
+                                insertNote("<font color=" + hexColor + ">Color</font>");
+                            }
+                            initTextFormat();
+                        }
+                    })
+                    .setNegativeButton(strCancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .build()
+                    .show();
+
+        }
+
+        // Bold
+        if (strTitle.equals(listMenuTitle.get(9))) {
+            String sel = getEditSelectText();
+            if (sel.length() > 0) {
+                delEditSelectText();
+                insertNote("**" + sel + "**");
+            } else
+                insertNote("**Bold**");
+
+            initTextFormat();
+        }
+
+        // Italic
+        if (strTitle.equals(listMenuTitle.get(10))) {
+            String sel = getEditSelectText();
+            if (sel.length() > 0) {
+                delEditSelectText();
+                insertNote("_" + sel + "_");
+            } else
+                insertNote("_Italic_");
+
+            initTextFormat();
+
+        }
+
+        // Strickout
+        if (strTitle.equals(listMenuTitle.get(11))) {
+            String sel = getEditSelectText();
+            if (sel.length() > 0) {
+                delEditSelectText();
+                insertNote("~~" + sel + "~~");
+            } else
+                insertNote("~~Strickout~~");
+
+            initTextFormat();
+        }
+
+        // Underline
+        if (strTitle.equals(listMenuTitle.get(12))) {
+            String sel = getEditSelectText();
+            if (sel.length() > 0) {
+                delEditSelectText();
+                insertNote("<u>" + sel + "</u>");
+            } else
+                insertNote("<u>Underline</u>");
+
+            initTextFormat();
+
+        }
+
+        // Date
+        if (strTitle.equals(listMenuTitle.get(13))) {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = sdf.format(new Date());
+
+            insertNote(dateString);
+        }
+
+        // Time
+        if (strTitle.equals(listMenuTitle.get(14))) {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            String timeString = sdf.format(new Date());
+            insertNote(timeString);
+        }
+
+        // Link
+        if (strTitle.equals(listMenuTitle.get(15))) {
+            insertNote("[]()");
+        }
+
+    }
+
+    private ArrayList<String> initMenuTitle() {
+        listMenuTitle.clear();
+        if (zh_cn) {
+            listMenuTitle.add("格式化");
+            listMenuTitle.add("图片");
+            listMenuTitle.add("表格");
+            listMenuTitle.add("h1 标题");
+            listMenuTitle.add("h2 标题");
+            listMenuTitle.add("h3 标题");
+            listMenuTitle.add("h4 标题");
+            listMenuTitle.add("h5 标题");
+            listMenuTitle.add("字色");
+            listMenuTitle.add("粗体");
+            listMenuTitle.add("斜体");
+            listMenuTitle.add("删除线");
+            listMenuTitle.add("下划线");
+            listMenuTitle.add("日期");
+            listMenuTitle.add("时间");
+            listMenuTitle.add("链接");
+        } else {
+            listMenuTitle.add("Format");
+            listMenuTitle.add("Image");
+            listMenuTitle.add("Table");
+            listMenuTitle.add("h1");
+            listMenuTitle.add("h2");
+            listMenuTitle.add("h3");
+            listMenuTitle.add("h4");
+            listMenuTitle.add("h5");
+            listMenuTitle.add("Font Color");
+            listMenuTitle.add("Bold");
+            listMenuTitle.add("Italic");
+            listMenuTitle.add("Strickout");
+            listMenuTitle.add("Underline");
+            listMenuTitle.add("Date");
+            listMenuTitle.add("Time");
+            listMenuTitle.add("Link");
+        }
+
+        return listMenuTitle;
+
+    }
+
+    private void showPowerMenu(View view) {
+        ArrayList<PowerMenuItem> list = new ArrayList<>();
+        initMenuTitle();
+        int count = listMenuTitle.size();
+        for (int i = 0; i < count; i++) {
+            String strTitle = listMenuTitle.get(i);
+            list.add(new PowerMenuItem(strTitle));
+        }
+
+        powerMenu = new PowerMenu.Builder(context)
+                .addItemList(list) // list has "Novel", "Poetry", "Art"
+                .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT) // Animation start point (TOP | LEFT).
+                .setMenuRadius(10f) // sets the corner radius.
+                .setMenuShadow(10f) // sets the shadow.
+                .setTextColor(ContextCompat.getColor(context, R.color.md_grey_700))
+                .setTextGravity(Gravity.CENTER)
+                .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+                .setSelectedTextColor(Color.WHITE)
+                .setMenuColor(Color.WHITE)
+                .setSelectedMenuColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                .setOnMenuItemClickListener(onMenuItemClickListener)
+                .build();
+
+        powerMenu.showAsDropDown(view); // view is an anchor
+
+    }
+
+    private PowerMenu powerMenu;
+    private OnMenuItemClickListener<PowerMenuItem> onMenuItemClickListener = new OnMenuItemClickListener<PowerMenuItem>() {
+        @Override
+        public void onItemClick(int position, PowerMenuItem item) {
+            onClickMenuTitle(item.title);
+            // Toast.makeText(getBaseContext(), item.title, Toast.LENGTH_SHORT).show();
+            powerMenu.setSelectedPosition(position); // change selected item
+            powerMenu.dismiss();
+        }
+    };
 
     public boolean readFileFromUriToLocal(Uri uri, String localfile) {
 
@@ -1740,6 +1864,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         hightKeyword(strOrg, "## ");
         hightKeyword(strOrg, "### ");
         hightKeyword(strOrg, "#### ");
+        hightKeyword(strOrg, "##### ");
         hightKeyword(strOrg, "<font ");
         hightKeyword(strOrg, "</font>");
         hightKeyword(strOrg, "* ");

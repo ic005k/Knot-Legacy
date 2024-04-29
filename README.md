@@ -39,6 +39,7 @@ QR code for downloading:
 * [zlib](https://zlib.net/)
 * [ColorPicker](https://github.com/QuadFlask/colorpicker)
 * [ini4j](https://ini4j.sourceforge.net/)
+* [PowerMenu](https://github.com/skydoves/PowerMenu)
 
 ---
 
