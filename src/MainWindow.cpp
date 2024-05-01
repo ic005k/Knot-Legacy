@@ -4315,7 +4315,19 @@ static void JavaNotify_8() {
   qDebug() << "C++ JavaNotify_8";
 }
 
-static void JavaNotify_9() { qDebug() << "C++ JavaNotify_9"; }
+static void JavaNotify_9() {
+  QSettings Reg(privateDir + "choice_book.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  QString file = Reg.value("book/file", "").toString();
+  if (QFile::exists(file)) {
+    mw_one->m_Reader->startOpenFile(file);
+  }
+
+  qDebug() << "C++ JavaNotify_9";
+}
 
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},

@@ -211,6 +211,7 @@ class Method : public QDialog {
   void showToastMessage(QString msg);
 
   void openFilePicker();
+  void closeFilePicker();
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

@@ -37,19 +37,6 @@
         <item name="colorPrimary">@color/green</item>
         <item name="windowActionBar">true</item>
     </style>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-     <style name="FilePickerTheme" parent="LibAppTheme">
-        <!-- Customize your theme here. set LibAppTheme.Dark for dark themes-->
-
-    </style>
-
+   
 
 </resources>

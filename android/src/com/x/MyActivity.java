@@ -5,6 +5,7 @@ import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
 import com.x.ShareReceiveActivity;
+import com.x.FilePicker;
 
 import android.os.Process;
 import android.os.HandlerThread;
@@ -1467,6 +1468,10 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
 
+    }
+
+    public void closeFilePicker() {
+        FilePicker.MyFilepicker.finish();
     }
 
     private void addDeskShortcuts() {

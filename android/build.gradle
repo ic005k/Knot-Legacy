@@ -37,7 +37,7 @@ dependencies {
    implementation 'org.ini4j:ini4j:0.5.4'
    implementation "com.github.skydoves:powermenu:2.2.4"
 
-   implementation 'com.droidninja:filepicker:2.2.5'
+   implementation 'com.github.manuelpeinado.multichoiceadapter:multichoiceadapter:3.0.0'
 
 }
 
@@ -54,6 +54,8 @@ android {
      * updated by QtCreator and androiddeployqt tools.
      * Changing them manually might break the compilation!
      *******************************************************/
+
+    useLibrary 'org.apache.http.legacy'
 
     //qt6.7
     //buildToolsVersion androidBuildToolsVersion

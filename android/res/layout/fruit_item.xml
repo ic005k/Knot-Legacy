@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+     android:orientation="horizontal"
+     android:layout_height="wrap_content">
+     <ImageView
+         android:id="@+id/fruit_image"
+         android:src="@drawable/epub"
+         android:layout_width="25dp"
+         android:layout_height="25dp"/>
+     <TextView
+         android:id="@+id/fruit_name"
+         android:layout_gravity="center_vertical"
+         android:textSize="15sp"
+         android:textColor="#000000"
+         android:text="name"
+         android:layout_marginLeft="10dp"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"/>
+     <TextView
+         android:id="@+id/fruit_price"
+         android:layout_gravity="center_vertical"
+         android:textColor="#ff0000"
+         android:text="price"
+         android:textSize="15sp"
+         android:layout_marginLeft="10dp"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"/>
+</LinearLayout>

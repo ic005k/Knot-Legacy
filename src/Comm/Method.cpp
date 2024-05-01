@@ -1209,3 +1209,17 @@ void Method::openFilePicker() {
 
 #endif
 }
+
+void Method::closeFilePicker() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("closeFilePicker", "()V");
+#else
+  QJniObject activity = QJniObject::fromString("openNoteEditor");
+  activity.callMethod<void>("closeFilePicker", "()V");
+#endif
+
+#endif
+}
