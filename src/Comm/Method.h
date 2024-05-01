@@ -210,7 +210,8 @@ class Method : public QDialog {
   void Sleep(int msec);
   void showToastMessage(QString msg);
 
- protected:
+  void openFilePicker();
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

@@ -1195,3 +1195,17 @@ void Method::showToastMessage(QString msg) {
 
 #endif
 }
+
+void Method::openFilePicker() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("openFilePicker", "()V");
+#else
+  QJniObject activity = QJniObject::fromString("openNoteEditor");
+  activity.callMethod<void>("openFilePicker", "()V");
+#endif
+
+#endif
+}

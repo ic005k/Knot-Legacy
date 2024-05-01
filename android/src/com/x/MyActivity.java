@@ -494,7 +494,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-         }
+            }
         }
     }
 
@@ -1457,6 +1457,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     public void openNoteEditor() {
         Intent i = new Intent(context, NoteEditor.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+
+    }
+
+    public void openFilePicker() {
+        Intent i = new Intent(context, FilePicker.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
 

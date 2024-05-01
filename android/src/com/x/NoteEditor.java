@@ -25,20 +25,7 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
 import android.graphics.Typeface;
 
-//import com.skydoves.colorpickerview.AlphaTileView;
-//import com.skydoves.colorpickerview.ColorEnvelope;
-//import com.skydoves.colorpickerview.ColorPickerDialog;
-//import com.skydoves.colorpickerview.ColorPickerView;
-//import com.skydoves.colorpickerview.flag.BubbleFlag;
-//import com.skydoves.colorpickerview.flag.FlagMode;
-//import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
-//import com.skydoves.colorpickerview.sliders.AlphaSlideBar;
-//import com.skydoves.colorpickerview.sliders.BrightnessSlideBar;
-
 import androidx.appcompat.app.AlertDialog;
-//import android.app.AlertDialog;
-
-//import android.view.ContextThemeWrapper;
 
 import android.view.LayoutInflater;
 import android.view.Gravity;
@@ -105,6 +92,7 @@ import android.view.Menu;
 import android.widget.Toast;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Time;
 import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
@@ -112,7 +100,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.view.MenuItem;
-
+import android.net.Uri;
 import android.text.method.ScrollingMovementMethod;
 import android.view.inputmethod.EditorInfo;
 import android.view.KeyEvent;
@@ -447,7 +435,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-
+        initMenuTitle();
     }
 
     private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
@@ -766,6 +754,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private void openFilePicker() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("image/*"); // "text/plain" 只显示 txt 文件
+        // intent.setType("application/epub+zip");
         startActivityForResult(intent, 1);
     }
 
@@ -779,6 +768,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             // 处理文件路径
             handleFilePath(filePath);
         }
+
     }
 
     private void handleFilePath(String filePath) {
@@ -1111,6 +1101,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void showPopupMenu(View view) {
+
         // View当前PopupMenu显示的相对View的位置
         // PopupMenu popupMenu = new PopupMenu(this, view);
 
@@ -1165,6 +1156,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // Format
         if (strTitle.equals(listMenuTitle.get(0))) {
             initTextFormat();
+
         }
 
         // Image
@@ -1438,8 +1430,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void showPowerMenu(View view) {
+
         ArrayList<PowerMenuItem> list = new ArrayList<>();
-        initMenuTitle();
         int count = listMenuTitle.size();
         for (int i = 0; i < count; i++) {
             String strTitle = listMenuTitle.get(i);

@@ -2298,6 +2298,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   if (watch == ui->lblStats) {
     if (event->type() == QEvent::MouseButtonDblClick) {
       on_btnSelTab_clicked();
+      return true;
     }
   }
 
@@ -2313,6 +2314,14 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       m_EditRecord->saveCurrentValue();
       on_btnBackEditRecord_clicked();
       on_btnSelTab_clicked();
+      return true;
+    }
+  }
+
+  if (watch == ui->lblNoteName) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      on_btnNotesList_clicked();
+      return true;
     }
   }
 
@@ -2320,14 +2329,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
   m_Notes->eventFilterEditTodo(watch, evn);
   m_Notes->eventFilterEditRecord(watch, evn);
   m_Notes->eventFilterQwNote(watch, evn);
-
-  if (watch == tw->viewport()) {
-    if (event->type() == QEvent::MouseButtonPress) {
-    }
-
-    if (event->type() == QEvent::MouseButtonRelease) {
-    }
-  }
 
   if (watch == ui->textBrowser->viewport()) {
     if (event->type() == QEvent::MouseButtonPress) {
@@ -3789,6 +3790,7 @@ void MainWindow::init_UIWidget() {
   ui->editFindNote->installEventFilter(this);
   ui->qwNotes->installEventFilter(this);
   ui->lblTitleEditRecord->installEventFilter(this);
+  ui->lblNoteName->installEventFilter(this);
 
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
