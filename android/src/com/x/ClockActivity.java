@@ -157,8 +157,9 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 先关闭笔记编辑器
+        // 先关闭笔记编辑器和文件选择器
         NoteEditor.closeNoteEditorView();
+        FilePicker.closeFilePickerView();
 
         context = getApplicationContext();
         // this.getWindow().setWindowAnimations(R.style.WindowAnim);

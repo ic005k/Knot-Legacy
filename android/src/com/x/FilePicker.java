@@ -283,17 +283,18 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
                  * files.add(info);
                  */
 
-                System.out.println("FileManager" + " path:" + path + "  size:" + ShowLongFileSzie(size));
+                String strFileSize = ShowLongFileSzie(size);
+                System.out.println("FileManager" + " path:" + path + "  size:" + strFileSize);
 
                 if (path.endsWith(".epub")) {
                     files.add(path);
-                    filesInfo.add(ShowLongFileSzie(size));
-                } else if (path.endsWith(".txt")) {
+                    filesInfo.add(strFileSize);
+                } else if (path.endsWith(".txt") && size > 0) {
                     files.add(path);
-                    filesInfo.add(ShowLongFileSzie(size));
+                    filesInfo.add(strFileSize);
                 } else if (path.endsWith(".pdf")) {
                     files.add(path);
-                    filesInfo.add(ShowLongFileSzie(size));
+                    filesInfo.add(strFileSize);
                 }
 
             }
@@ -357,7 +358,7 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
             fruitlist = new ArrayList<>();
             for (int i = 0; i < files.size(); i++) {
                 String filePath = files.get(i);
-                String fileInfo = "";// filesInfo.get(i);
+                String fileInfo = filesInfo.get(i);
                 if (filePath.endsWith(".epub")) {
                     Fruit epubBook = new Fruit(R.drawable.epub, filePath, fileInfo);
                     fruitlist.add(epubBook);
@@ -386,6 +387,7 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
                     Fruit fruit = fruitlist.get(position);
 
                     filePath = fruit.getName();
+                    String strFileSize = fruit.getPrice();
 
                     File file_path = new File(filePath);
                     if (file_path.exists()) {
@@ -400,7 +402,7 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(MyContex, filePath, Toast.LENGTH_LONG).show();
+                        Toast.makeText(MyContex, filePath + "   Size:" + strFileSize, Toast.LENGTH_LONG).show();
                         CallJavaNotify_9();
                     }
 
@@ -422,6 +424,11 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
         } else {
             return "0KB";
         }
+    }
+
+    public static void closeFilePickerView() {
+        if (MyFilepicker != null)
+            MyFilepicker.finish();
     }
 
 }

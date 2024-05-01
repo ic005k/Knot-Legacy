@@ -6,6 +6,7 @@
      <ImageView
          android:id="@+id/fruit_image"
          android:src="@drawable/epub"
+         android:layout_gravity="center_vertical"
          android:layout_width="25dp"
          android:layout_height="25dp"/>
      <TextView

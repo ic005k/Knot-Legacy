@@ -1471,7 +1471,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     }
 
     public void closeFilePicker() {
-        FilePicker.MyFilepicker.finish();
+        if (FilePicker.MyFilepicker != null)
+            FilePicker.MyFilepicker.finish();
     }
 
     private void addDeskShortcuts() {
