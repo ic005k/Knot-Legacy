@@ -278,7 +278,10 @@ void Reader::startOpenFile(QString openfile) {
     mw_one->m_ReadTWThread->quit();
     mw_one->m_ReadTWThread->wait();
 
-    mw_one->showProgress();
+    if (isAndroid)
+      m_Method->showAndroidProgressBar();
+    else
+      mw_one->showProgress();
     tmeShowEpubMsg->start(100);
 
     mw_one->myReadEBookThread->start();
@@ -2153,7 +2156,10 @@ void Reader::readBookDone() {
       m_ReaderSet->ui->lblInfo->hide();
     }
 
-    mw_one->closeProgress();
+    if (isAndroid)
+      m_Method->closeAndroidProgressBar();
+    else
+      mw_one->closeProgress();
   }
 
   mw_one->ui->lblBookName->setText(strTitle);

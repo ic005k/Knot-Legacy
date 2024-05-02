@@ -104,6 +104,9 @@ import android.view.KeyEvent;
 import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.InputMethodManager;
 import java.util.regex.*;
+
+import android.widget.ImageView;
+
 import android.widget.LinearLayout;
 import android.view.LayoutInflater;
 import android.widget.PopupWindow;
@@ -127,10 +130,11 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
     private List<String> filesInfo;
     private List<Fruit> fruitlist;
     private ListView m_ListView;
-
+    private TextView lblResult;
     private Button btnFind;
+    private ImageView imgFind;
     private EditText editFind;
-    private ProgressBar mProgressBar;
+    public ProgressBar mProgressBar;
     private String filePath;
     public static FilePicker MyFilepicker;
 
@@ -164,7 +168,7 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
         if (MyActivity.isDark) {
             this.setStatusBarColor("#19232D"); // 深色
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-            setContentView(R.layout.myfilepicker_dark);
+            setContentView(R.layout.myfilepicker);
         } else {
             this.setStatusBarColor("#F3F3F3"); // 灰
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -173,9 +177,12 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
 
         btnFind = (Button) findViewById(R.id.btnFind);
         btnFind.setOnClickListener(this);
+        imgFind = (ImageView) findViewById(R.id.imgFind);
+        lblResult = (TextView) findViewById(R.id.lblResult);
         editFind = (EditText) findViewById(R.id.editFind);
 
         m_ListView = (ListView) findViewById(R.id.listView);
+
         mProgressBar = (ProgressBar) findViewById(R.id.progBar);
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -358,9 +365,12 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            // 在这里执行完成后的操作
-            addToListView(files);
 
+            // 在这里执行完成后的操作
+            addToListView(files, filesInfo);
+
+            editFind.clearFocus();// 取消焦点
+            hideKeyBoard(MyFilepicker);
         }
     }
 
@@ -410,28 +420,34 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (files.size() == 0)
+                    return;
+
                 List<String> findResult = new ArrayList<>();
+                List<String> findResultInfo = new ArrayList<>();
                 String strFind = editFind.getText().toString();
                 for (int i = 0; i < files.size(); i++) {
                     String strItem = files.get(i);
+                    String strInfo = filesInfo.get(i);
                     if (strItem.contains(strFind)) {
                         findResult.add(strItem);
-                        System.out.println("findResult:" + strItem);
+                        findResultInfo.add(strInfo);
+
                     }
 
                 }
 
-                addToListView(findResult);
+                addToListView(findResult, findResultInfo);
 
                 if (strFind == "") {
-                    addToListView(files);
+                    addToListView(files, filesInfo);
                 }
 
             }
         });
     }
 
-    private void addToListView(List<String> files) {
+    private void addToListView(List<String> files, List<String> filesInfo) {
         fruitlist = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             String filePath = files.get(i);
@@ -488,6 +504,25 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
             }
         });
 
+        lblResult.setText(String.valueOf(files.size()));
+
+    }
+
+    /**
+     * 隐藏软键盘，要防止报空指针
+     */
+    public static void hideKeyBoard(Activity activity) {
+        // 拿到InputMethodManager
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        // 如果window上view获取焦点 && view不为空
+        if (imm.isActive() && activity.getCurrentFocus() != null) {
+            // 拿到view的token 不为空
+            if (activity.getCurrentFocus().getWindowToken() != null) {
+                // 表示软键盘窗口总是隐藏，除非开始时以SHOW_FORCED显示。
+                imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
     }
 
 }

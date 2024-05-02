@@ -212,6 +212,8 @@ class Method : public QDialog {
 
   void openFilePicker();
   void closeFilePicker();
+  void showAndroidProgressBar();
+  void closeAndroidProgressBar();
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

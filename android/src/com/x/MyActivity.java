@@ -92,7 +92,7 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
-
+import android.widget.ProgressBar;
 import android.content.pm.ShortcutManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -1597,6 +1597,17 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     public void showToastMessage(String msg) {
         m_handler.sendMessage(m_handler.obtainMessage(1, msg));
+    }
+
+    public void showAndroidProgressBar() {
+        Intent i = new Intent(context, MyProgBar.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
+
+    public void closeAndroidProgressBar() {
+        if (MyProgBar.m_MyProgBar != null)
+            MyProgBar.m_MyProgBar.finish();
     }
 
 }

@@ -325,17 +325,14 @@
             android:name="com.x.FilePicker"
             android:exported="true"
             android:label="FilePicker"
-            android:theme="@style/splashScreenTheme">
+        >
+        </activity>
 
-            <meta-data
-                android:name="android.app.splash_screen_drawable"
-                android:resource="@drawable/splashscreen" />
-            <meta-data
-                android:name="android.app.splash_screen_drawable_portrait"
-                android:resource="@drawable/splashscreen_port" />
-            <meta-data
-                android:name="android.app.splash_screen_drawable_landscape"
-                android:resource="@drawable/splashscreen_land" />
+        <activity
+            android:name="com.x.MyProgBar"
+            android:exported="true"
+            android:label="MyProgBar"
+        >
         </activity>
 
         <receiver android:name="com.x.AlarmReceiver" />

@@ -1223,3 +1223,35 @@ void Method::closeFilePicker() {
 
 #endif
 }
+
+void Method::showAndroidProgressBar() {
+  if (mw_one->initMain) return;
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("showAndroidProgressBar", "()V");
+#else
+  QJniObject activity = QJniObject::fromString("showAndroidProgressBar");
+  activity.callMethod<void>("showAndroidProgressBar", "()V");
+#endif
+
+#endif
+}
+
+void Method::closeAndroidProgressBar() {
+  if (mw_one->initMain) return;
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("closeAndroidProgressBar", "()V");
+#else
+  QJniObject activity = QJniObject::fromString("closeAndroidProgressBar");
+  activity.callMethod<void>("closeAndroidProgressBar", "()V");
+#endif
+
+#endif
+}
