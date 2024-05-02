@@ -119,7 +119,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FilePicker extends Activity implements Application.ActivityLifecycleCallbacks {
+public class FilePicker extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
     public static Context MyContex;
     private ContentResolver mContentResolver;
@@ -127,8 +127,9 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
     private List<String> filesInfo;
     private List<Fruit> fruitlist;
     private ListView m_ListView;
-    private Button btnCancel;
-    private Button btnOk;
+
+    private Button btnFind;
+    private EditText editFind;
     private ProgressBar mProgressBar;
     private String filePath;
     public static FilePicker MyFilepicker;
@@ -170,17 +171,19 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
             setContentView(R.layout.myfilepicker);
         }
 
-        btnCancel = (Button) findViewById(R.id.btnCancel);
-        btnOk = (Button) findViewById(R.id.btnOk);
+        btnFind = (Button) findViewById(R.id.btnFind);
+        btnFind.setOnClickListener(this);
+        editFind = (EditText) findViewById(R.id.editFind);
+
         m_ListView = (ListView) findViewById(R.id.listView);
         mProgressBar = (ProgressBar) findViewById(R.id.progBar);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        btnCancel.setVisibility(View.GONE);
-        btnOk.setVisibility(View.GONE);
+        btnFind.setVisibility(View.GONE);
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+        initEditTextChangedListener();
 
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute();
@@ -271,7 +274,9 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
                 long size = c.getLong(columnIndexOrThrow_SIZE);
                 long modified_date = c.getLong(columnIndexOrThrow_DATE_MODIFIED);
                 File file = new File(path);
+                String strFileSize = ShowLongFileSzie(size);
                 String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(file.lastModified()));
+                String fileInfo = time + "  " + strFileSize;
 
                 /*
                  * FileEntity info = new FileEntity(file);
@@ -283,18 +288,17 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
                  * files.add(info);
                  */
 
-                String strFileSize = ShowLongFileSzie(size);
                 System.out.println("FileManager" + " path:" + path + "  size:" + strFileSize);
 
                 if (path.endsWith(".epub")) {
                     files.add(path);
-                    filesInfo.add(strFileSize);
+                    filesInfo.add(fileInfo);
                 } else if (path.endsWith(".txt") && size > 0) {
                     files.add(path);
-                    filesInfo.add(strFileSize);
+                    filesInfo.add(fileInfo);
                 } else if (path.endsWith(".pdf")) {
                     files.add(path);
-                    filesInfo.add(strFileSize);
+                    filesInfo.add(fileInfo);
                 }
 
             }
@@ -355,61 +359,7 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
         @Override
         protected void onPostExecute(Void aVoid) {
             // 在这里执行完成后的操作
-            fruitlist = new ArrayList<>();
-            for (int i = 0; i < files.size(); i++) {
-                String filePath = files.get(i);
-                String fileInfo = filesInfo.get(i);
-                if (filePath.endsWith(".epub")) {
-                    Fruit epubBook = new Fruit(R.drawable.epub, filePath, fileInfo);
-                    fruitlist.add(epubBook);
-                }
-
-                if (filePath.endsWith(".txt")) {
-                    Fruit txtBook = new Fruit(R.drawable.text, filePath, fileInfo);
-                    fruitlist.add(txtBook);
-                }
-
-                if (filePath.endsWith(".pdf")) {
-                    Fruit pdfBook = new Fruit(R.drawable.pdf, filePath, fileInfo);
-                    fruitlist.add(pdfBook);
-                }
-            }
-
-            FruitAdapter adapter = new FruitAdapter(MyContex, R.layout.fruit_item, fruitlist);
-            m_ListView.setAdapter(adapter);
-
-            mProgressBar.setVisibility(View.GONE);
-
-            // listview 的点击事件
-            m_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                // @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    Fruit fruit = fruitlist.get(position);
-
-                    filePath = fruit.getName();
-                    String strFileSize = fruit.getPrice();
-
-                    File file_path = new File(filePath);
-                    if (file_path.exists()) {
-                        String filename = "/storage/emulated/0/.Knot/choice_book.ini";
-                        try {
-                            File file = new File(filename);
-                            if (!file.exists())
-                                file.createNewFile();
-                            Wini ini = new Wini(file);
-                            ini.put("book", "file", filePath);
-                            ini.store();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(MyContex, filePath + "   Size:" + strFileSize, Toast.LENGTH_LONG).show();
-                        CallJavaNotify_9();
-                    }
-
-                    FilePicker.this.finish();
-
-                }
-            });
+            addToListView(files);
 
         }
     }
@@ -429,6 +379,115 @@ public class FilePicker extends Activity implements Application.ActivityLifecycl
     public static void closeFilePickerView() {
         if (MyFilepicker != null)
             MyFilepicker.finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.btnFind:
+                btnFind.setBackgroundColor(getResources().getColor(R.color.red));
+
+                btnFind.setBackgroundColor(getResources().getColor(R.color.normal));
+
+                break;
+
+        }
+    }
+
+    private void initEditTextChangedListener() {
+
+        editFind.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                List<String> findResult = new ArrayList<>();
+                String strFind = editFind.getText().toString();
+                for (int i = 0; i < files.size(); i++) {
+                    String strItem = files.get(i);
+                    if (strItem.contains(strFind)) {
+                        findResult.add(strItem);
+                        System.out.println("findResult:" + strItem);
+                    }
+
+                }
+
+                addToListView(findResult);
+
+                if (strFind == "") {
+                    addToListView(files);
+                }
+
+            }
+        });
+    }
+
+    private void addToListView(List<String> files) {
+        fruitlist = new ArrayList<>();
+        for (int i = 0; i < files.size(); i++) {
+            String filePath = files.get(i);
+            String fileInfo = filesInfo.get(i);
+            if (filePath.endsWith(".epub")) {
+                Fruit epubBook = new Fruit(R.drawable.epub, filePath, fileInfo);
+                fruitlist.add(epubBook);
+            }
+
+            if (filePath.endsWith(".txt")) {
+                Fruit txtBook = new Fruit(R.drawable.text, filePath, fileInfo);
+                fruitlist.add(txtBook);
+            }
+
+            if (filePath.endsWith(".pdf")) {
+                Fruit pdfBook = new Fruit(R.drawable.pdf, filePath, fileInfo);
+                fruitlist.add(pdfBook);
+            }
+        }
+
+        FruitAdapter adapter = new FruitAdapter(MyContex, R.layout.fruit_item, fruitlist);
+        m_ListView.setAdapter(adapter);
+
+        mProgressBar.setVisibility(View.GONE);
+
+        // listview 的点击事件
+        m_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Fruit fruit = fruitlist.get(position);
+
+                filePath = fruit.getName();
+                String strFileSize = fruit.getPrice();
+
+                File file_path = new File(filePath);
+                if (file_path.exists()) {
+                    String filename = "/storage/emulated/0/.Knot/choice_book.ini";
+                    try {
+                        File file = new File(filename);
+                        if (!file.exists())
+                            file.createNewFile();
+                        Wini ini = new Wini(file);
+                        ini.put("book", "file", filePath);
+                        ini.store();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(MyContex, filePath + "   Size:" + strFileSize, Toast.LENGTH_LONG).show();
+                    CallJavaNotify_9();
+                }
+
+                FilePicker.this.finish();
+
+            }
+        });
+
     }
 
 }
