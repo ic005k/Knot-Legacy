@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+
 buildscript {
     ext.kotlin_version = '1.8.20'
 
@@ -37,7 +38,10 @@ dependencies {
    implementation 'org.ini4j:ini4j:0.5.4'
    implementation "com.github.skydoves:powermenu:2.2.4"
 
-   implementation 'com.github.manuelpeinado.multichoiceadapter:multichoiceadapter:3.0.0'
+
+   implementation 'androidx.recyclerview:recyclerview:1.1.0'
+   implementation 'com.android.support:recyclerview-v7:29+'
+   implementation 'com.github.barteksc:pdfium-android:1.9.0'
 
 }
 

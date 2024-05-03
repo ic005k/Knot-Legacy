@@ -3703,8 +3703,10 @@ void MainWindow::init_Instance() {
   if (m_Preferences->getDefaultFont() == "None")
     m_Preferences->setDefaultFont(this->font().family());
 
-  LTDev::QtPdfViewerInitializer::initialize();
-  m_Reader->setPdfViewVisible(false);
+  if (!isAndroid) {
+    LTDev::QtPdfViewerInitializer::initialize();
+    m_Reader->setPdfViewVisible(false);
+  }
 }
 
 void MainWindow::init_UIWidget() {

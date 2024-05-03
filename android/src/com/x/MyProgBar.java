@@ -111,6 +111,7 @@ public class MyProgBar extends Activity {
     protected void onDestroy() {
         System.out.println("onDestroy...");
         super.onDestroy();
+        mProgressBar.setVisibility(View.GONE);
 
     }
 

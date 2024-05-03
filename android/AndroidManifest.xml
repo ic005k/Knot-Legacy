@@ -335,6 +335,34 @@
         >
         </activity>
 
+        <activity
+            android:name="com.x.MyPDF"
+            android:exported="true"
+            android:label="MyPDF"
+        >
+        </activity>
+
+        <activity
+            android:name="com.xhh.pdfui.PDFActivity"
+            android:exported="true"
+            android:label="PDFActivity"
+        >
+        </activity>
+
+        <activity
+            android:name="com.xhh.pdfui.PDFPreviewActivity"
+            android:exported="true"
+            android:label="PDFPreviewActivity"
+        >
+        </activity>
+
+        <activity
+            android:name="com.xhh.pdfui.PDFCatelogueActivity"
+            android:exported="true"
+            android:label="PDFCatelogueActivity"
+        >
+</activity>
+
         <receiver android:name="com.x.AlarmReceiver" />
 
         <!-- android:name="androidx.core.content.FileProvider" -->

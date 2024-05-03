@@ -2194,7 +2194,9 @@ void Reader::readBookDone() {
       QFile::copy(fileName, mypdf);
       if (QFile::exists(mypdf)) fileName = mypdf;
     }
-#endif
+
+    openMyPDF();
+#else
 
     if (pdfMethod == 1) {
       setPdfViewVisible(true);
@@ -2235,6 +2237,7 @@ void Reader::readBookDone() {
                                 Q_ARG(QVariant, url));
       mw_one->closeProgress();
     }
+#endif
   }
 
   goBookReadPosition();
@@ -2420,4 +2423,18 @@ void Reader::ContinueReading() {
     QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
   mw_one->ui->btnReader->click();
+}
+
+void Reader::openMyPDF() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("openMyPDF", "()V");
+#else
+  QJniObject activity = QJniObject::fromString("openNoteEditor");
+  activity.callMethod<void>("openMyPDF", "()V");
+#endif
+
+#endif
 }

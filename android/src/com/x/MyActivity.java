@@ -1463,6 +1463,13 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
+    public void openMyPDF() {
+        Intent i = new Intent(context, MyPDF.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+
+    }
+
     public void openFilePicker() {
         Intent i = new Intent(context, FilePicker.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
