@@ -69,6 +69,8 @@ static void JavaNotify_6();
 static void JavaNotify_7();
 static void JavaNotify_8();
 static void JavaNotify_9();
+static void JavaNotify_10();
+static void JavaNotify_11();
 #endif
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
@@ -4331,6 +4333,19 @@ static void JavaNotify_9() {
   qDebug() << "C++ JavaNotify_9";
 }
 
+static void JavaNotify_10() {
+  // Open Book
+  mw_one->on_btnOpen_clicked();
+
+  qDebug() << "C++ JavaNotify_10";
+}
+
+static void JavaNotify_11() {
+  // Books List
+  mw_one->ui->btnReadList->click();
+  qDebug() << "C++ JavaNotify_11";
+}
+
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},
     {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
@@ -4341,7 +4356,9 @@ static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_6", "()V", (void *)JavaNotify_6},
     {"CallJavaNotify_7", "()V", (void *)JavaNotify_7},
     {"CallJavaNotify_8", "()V", (void *)JavaNotify_8},
-    {"CallJavaNotify_9", "()V", (void *)JavaNotify_9}};
+    {"CallJavaNotify_9", "()V", (void *)JavaNotify_9},
+    {"CallJavaNotify_10", "()V", (void *)JavaNotify_10},
+    {"CallJavaNotify_11", "()V", (void *)JavaNotify_11}};
 
 void RegJni(const char *myClassName) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -4401,8 +4418,17 @@ QString MainWindow::getYMD(QString date) {
 }
 
 void MainWindow::on_btnReader_clicked() {
-  // m_ReceiveShare->init();
-  // return;
+  if (isPDF) {
+    if (isAndroid) {
+      m_Reader->openMyPDF(fileName);
+      return;
+    }
+
+    ui->btnStatusBar->show();
+    m_Reader->setPdfViewVisible(true);
+  } else {
+    ui->btnStatusBar->hide();
+  }
 
   floatfun = false;
 
@@ -4414,13 +4440,6 @@ void MainWindow::on_btnReader_clicked() {
     setFixedHeight(mwh);
     ui->qwReader->rootContext()->setContextProperty("myW", this->width());
     ui->qwReader->rootContext()->setContextProperty("myH", mwh);
-  }
-
-  if (isPDF) {
-    ui->btnStatusBar->show();
-    m_Reader->setPdfViewVisible(true);
-  } else {
-    ui->btnStatusBar->hide();
   }
 
   ui->frameMain->hide();
@@ -4526,6 +4545,8 @@ void MainWindow::on_btnReadList_clicked() {
   }
   m_ReaderSet->close();
   m_Reader->closeSelText();
+
+  if (ui->frameMain->isVisible()) ui->frameMain->hide();
   ui->frameReader->hide();
   ui->frameBookList->show();
   m_Reader->getReadList();
@@ -5576,9 +5597,20 @@ void MainWindow::on_btnDel_Number_clicked() {
 }
 
 void MainWindow::on_btnBackBookList_clicked() {
-  ui->frameBookList->hide();
-  ui->frameReader->show();
-  if (isPDF) m_Reader->setPdfViewVisible(true);
+  if (isPDF) {
+    if (isAndroid) {
+      ui->frameBookList->hide();
+      ui->frameMain->show();
+      m_Reader->openMyPDF(fileName);
+    } else {
+      m_Reader->setPdfViewVisible(true);
+      ui->frameBookList->hide();
+      ui->frameReader->show();
+    }
+  } else {
+    ui->frameBookList->hide();
+    ui->frameReader->show();
+  }
 }
 
 void MainWindow::on_btnOkBookList_clicked() { m_Reader->openBookListItem(); }

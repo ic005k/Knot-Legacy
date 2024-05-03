@@ -754,7 +754,11 @@ void Reader::initReader() {
   fileName = Reg.value("/Reader/FileName").toString();
   if (!QFile(fileName).exists() && zh_cn) fileName = ":/res/test.txt";
 
-  startOpenFile(fileName);
+  QFileInfo fi(fileName);
+  if (fi.suffix().toLower() != "pdf")
+    startOpenFile(fileName);
+  else
+    isPDF = true;
 
   getBookList();
 }
@@ -1650,7 +1654,12 @@ void Reader::openBookListItem() {
   if (bookfile != fileName)
     startOpenFile(bookfile);
   else {
-    if (isPDF) setPdfViewVisible(true);
+    if (isPDF) {
+      setPdfViewVisible(true);
+      if (isAndroid) {
+        openMyPDF(fileName);
+      }
+    }
   }
 
   mw_one->on_btnBackBookList_clicked();
@@ -2195,7 +2204,7 @@ void Reader::readBookDone() {
       if (QFile::exists(mypdf)) fileName = mypdf;
     }
 
-    openMyPDF(fileName);
+    if (!mw_one->initMain) openMyPDF(fileName);
 #else
 
     if (pdfMethod == 1) {

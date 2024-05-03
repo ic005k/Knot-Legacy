@@ -1,5 +1,6 @@
 package com.xhh.pdfui;
 
+import com.x.MyPDF;
 import com.x.R;
 
 import android.content.Intent;
@@ -49,7 +50,7 @@ public class PDFActivity extends AppCompatActivity implements
     // PDF控件
     PDFView pdfView;
     // 按钮控件：返回、目录、缩略图
-    Button btn_back, btn_catalogue, btn_preview;
+    Button btn_back, btn_catalogue, btn_preview, btn_open, btn_books;
     // 页码
     Integer pageNumber = 0;
     // PDF目录集合
@@ -59,6 +60,30 @@ public class PDFActivity extends AppCompatActivity implements
     String assetsFileName;
     // pdf文件uri
     Uri uri;
+
+    public native static void CallJavaNotify_0();
+
+    public native static void CallJavaNotify_1();
+
+    public native static void CallJavaNotify_2();
+
+    public native static void CallJavaNotify_3();
+
+    public native static void CallJavaNotify_4();
+
+    public native static void CallJavaNotify_5();
+
+    public native static void CallJavaNotify_6();
+
+    public native static void CallJavaNotify_7();
+
+    public native static void CallJavaNotify_8();
+
+    public native static void CallJavaNotify_9();
+
+    public native static void CallJavaNotify_10();
+
+    public native static void CallJavaNotify_11();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +134,8 @@ public class PDFActivity extends AppCompatActivity implements
         btn_back = findViewById(R.id.btn_back);
         btn_catalogue = findViewById(R.id.btn_catalogue);
         btn_preview = findViewById(R.id.btn_preview);
+        btn_open = findViewById(R.id.btn_open);
+        btn_books = findViewById(R.id.btn_books);
     }
 
     /**
@@ -139,6 +166,24 @@ public class PDFActivity extends AppCompatActivity implements
                 intent.putExtra("AssetsPdf", assetsFileName);
                 intent.setData(uri);
                 PDFActivity.this.startActivityForResult(intent, 201);
+            }
+        });
+
+        btn_open.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PDFActivity.this.finish();
+                CallJavaNotify_10();
+
+            }
+        });
+
+        btn_books.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PDFActivity.this.finish();
+                CallJavaNotify_11();
+
             }
         });
     }

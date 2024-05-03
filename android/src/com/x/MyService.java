@@ -66,6 +66,8 @@ public class MyService extends Service {
     public native static void CallJavaNotify_8();
 
     public native static void CallJavaNotify_9();
+    public native static void CallJavaNotify_10();
+    public native static void CallJavaNotify_11();
 
     // private static SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd
     // HH:mm:ss");

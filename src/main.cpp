@@ -105,7 +105,8 @@ int main(int argc, char* argv[]) {
   RegJni("com/x/NewNote");
   RegJni("com/x/AddRecord");
   RegJni("com/x/ContinueReading");
-  RegJni("com.x.FilePicker");
+  RegJni("com/x/FilePicker");
+  RegJni("com/xhh/pdfui/PDFActivity");
 
   isAndroid = true;
   isIOS = false;

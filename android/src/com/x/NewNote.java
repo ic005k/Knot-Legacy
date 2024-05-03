@@ -108,6 +108,8 @@ public class NewNote extends Activity {
     public native static void CallJavaNotify_8();
 
     public native static void CallJavaNotify_9();
+    public native static void CallJavaNotify_10();
+    public native static void CallJavaNotify_11();
 
     private static boolean zh_cn;
 
