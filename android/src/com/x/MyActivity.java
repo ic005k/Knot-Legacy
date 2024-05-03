@@ -5,6 +5,7 @@ import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
 import com.x.ShareReceiveActivity;
+import com.xhh.pdfui.PDFActivity;
 import com.x.FilePicker;
 
 import android.os.Process;
@@ -1463,9 +1464,18 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
-    public void openMyPDF() {
-        Intent i = new Intent(context, MyPDF.class);
+    public void openMyPDF(String path) {
+        Uri fileUri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            fileUri = FileProvider.getUriForFile(
+                    context, context.getPackageName(), new File(path));
+        } else {
+            fileUri = Uri.fromFile(new File(path));
+        }
+
+        Intent i = new Intent(context, PDFActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.setData(fileUri);
         context.startActivity(i);
 
     }

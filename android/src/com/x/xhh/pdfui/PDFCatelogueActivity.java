@@ -20,6 +20,12 @@ import com.xhh.pdfui.tree.TreeNodeData;
 
 import java.util.List;
 
+import android.text.TextUtils;
+import android.content.IntentFilter;
+import android.content.Intent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+
 /**
  * UI页面：PDF目录
  * <p>
@@ -38,14 +44,42 @@ public class PDFCatelogueActivity extends AppCompatActivity implements TreeAdapt
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppThemeprice);
         super.onCreate(savedInstanceState);
-        //UIUtils.initWindowStyle(getWindow(), getSupportActionBar());
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // UIUtils.initWindowStyle(getWindow(), getSupportActionBar());
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_catelogue);
 
         initView();// 初始化控件
         setEvent();// 设置事件
         loadData();// 加载数据
+
+        // HomeKey
+        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }
+
+    private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
+        String SYSTEM_REASON = "reason";
+        String SYSTEM_HOME_KEY = "homekey";
+        String SYSTEM_HOME_KEY_LONG = "recentapps";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_REASON);
+                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
+                    // 表示按了home键,程序直接进入到后台
+                    System.out.println("NoteEditor HOME键被按下...");
+
+                    onBackPressed();
+                } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
+                    // 表示长按home键,显示最近使用的程序
+                    System.out.println("NoteEditor 长按HOME键...");
+
+                    onBackPressed();
+                }
+            }
+        }
+    };
 
     /**
      * 初始化控件
@@ -95,5 +129,12 @@ public class PDFCatelogueActivity extends AppCompatActivity implements TreeAdapt
         intent.putExtra("pageNum", data.getPageNum());
         setResult(Activity.RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mHomeKeyEvent);
+
     }
 }

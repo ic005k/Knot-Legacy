@@ -25,6 +25,12 @@ import java.util.List;
 import android.view.WindowManager;
 import android.view.Window;
 
+import android.text.TextUtils;
+import android.content.IntentFilter;
+import android.content.Intent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+
 /**
  * UI页面：PDF阅读
  * <p>
@@ -40,33 +46,60 @@ public class PDFActivity extends AppCompatActivity implements
         OnPageChangeListener,
         OnLoadCompleteListener,
         OnPageErrorListener {
-    //PDF控件
+    // PDF控件
     PDFView pdfView;
-    //按钮控件：返回、目录、缩略图
+    // 按钮控件：返回、目录、缩略图
     Button btn_back, btn_catalogue, btn_preview;
-    //页码
+    // 页码
     Integer pageNumber = 0;
-    //PDF目录集合
+    // PDF目录集合
     List<TreeNodeData> catelogues;
 
-    //pdf文件名（限：assets里的文件）
+    // pdf文件名（限：assets里的文件）
     String assetsFileName;
-    //pdf文件uri
+    // pdf文件uri
     Uri uri;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppThemeprice);
         super.onCreate(savedInstanceState);
-        //UIUtils.initWindowStyle(getWindow(), getSupportActionBar());//设置沉浸式
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // UIUtils.initWindowStyle(getWindow(), getSupportActionBar());//设置沉浸式
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_pdf);
 
-        initView();//初始化view
-        setEvent();//设置事件
-        loadPdf();//加载PDF文件
+        initView();// 初始化view
+        setEvent();// 设置事件
+        loadPdf();// 加载PDF文件
+
+        // HomeKey
+        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }
+
+    private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
+        String SYSTEM_REASON = "reason";
+        String SYSTEM_HOME_KEY = "homekey";
+        String SYSTEM_HOME_KEY_LONG = "recentapps";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_REASON);
+                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
+                    // 表示按了home键,程序直接进入到后台
+                    System.out.println("NoteEditor HOME键被按下...");
+
+                    onBackPressed();
+                } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
+                    // 表示长按home键,显示最近使用的程序
+                    System.out.println("NoteEditor 长按HOME键...");
+
+                    onBackPressed();
+                }
+            }
+        }
+    };
 
     /**
      * 初始化view
@@ -82,14 +115,14 @@ public class PDFActivity extends AppCompatActivity implements
      * 设置事件
      */
     private void setEvent() {
-        //返回
+        // 返回
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PDFActivity.this.finish();
             }
         });
-        //跳转目录页面
+        // 跳转目录页面
         btn_catalogue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +131,7 @@ public class PDFActivity extends AppCompatActivity implements
                 PDFActivity.this.startActivityForResult(intent, 200);
             }
         });
-        //跳转缩略图页面
+        // 跳转缩略图页面
         btn_preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +154,7 @@ public class PDFActivity extends AppCompatActivity implements
                 displayFromAssets(assetsFileName);
             } else {
                 uri = intent.getData();
+                System.out.println("PDFActivity uri:" + uri);
                 if (uri != null) {
                     displayFromUri(uri);
                 }
@@ -171,14 +205,14 @@ public class PDFActivity extends AppCompatActivity implements
      */
     @Override
     public void loadComplete(int nbPages) {
-        //获得文档书签信息
+        // 获得文档书签信息
         List<PdfDocument.Bookmark> bookmarks = pdfView.getTableOfContents();
         if (catelogues != null) {
             catelogues.clear();
         } else {
             catelogues = new ArrayList<>();
         }
-        //将bookmark转为目录数据集合
+        // 将bookmark转为目录数据集合
         bookmarkToCatelogues(catelogues, bookmarks, 1);
     }
 
@@ -235,7 +269,8 @@ public class PDFActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //是否内存
+        unregisterReceiver(mHomeKeyEvent);
+        // 是否内存
         if (pdfView != null) {
             pdfView.recycle();
         }

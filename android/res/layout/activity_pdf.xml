@@ -6,7 +6,7 @@
     <RelativeLayout
         android:id="@+id/rl_top"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:background="#03a9f5">
 
@@ -15,21 +15,23 @@
             android:layout_width="60dp"
             android:layout_height="30dp"
             android:background="@drawable/shape_button"
-            android:text="返回"
+            android:text="Back"
+            android:textAllCaps="false"
             android:textColor="#ffffff"
-            android:textSize="18sp"
+            android:textSize="13sp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"/>
 
         <Button
             android:id="@+id/btn_catalogue"
-            android:layout_width="60dp"
+            android:layout_width="100dp"
             android:layout_height="30dp"
             android:background="@drawable/shape_button"
-            android:text="目录"
+            android:text="Catalogue"
+            android:textAllCaps="false"
             android:textColor="#ffffff"
-            android:textSize="18sp"
+            android:textSize="13sp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
@@ -37,12 +39,13 @@
 
         <Button
             android:id="@+id/btn_preview"
-            android:layout_width="60dp"
+            android:layout_width="100dp"
             android:layout_height="30dp"
             android:background="@drawable/shape_button"
-            android:text="预览"
+            android:text="Thumbnails"
+            android:textAllCaps="false"
             android:textColor="#ffffff"
-            android:textSize="18sp"
+            android:textSize="13sp"
             android:layout_toLeftOf="@+id/btn_catalogue"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"

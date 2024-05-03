@@ -2155,12 +2155,12 @@ void Reader::readBookDone() {
       mw_one->ui->btnCatalogue->hide();
       m_ReaderSet->ui->lblInfo->hide();
     }
-
-    if (isAndroid)
-      m_Method->closeAndroidProgressBar();
-    else
-      mw_one->closeProgress();
   }
+
+  if (isAndroid)
+    m_Method->closeAndroidProgressBar();
+  else
+    mw_one->closeProgress();
 
   mw_one->ui->lblBookName->setText(strTitle);
   mw_one->ui->btnReader->setEnabled(true);
@@ -2195,7 +2195,7 @@ void Reader::readBookDone() {
       if (QFile::exists(mypdf)) fileName = mypdf;
     }
 
-    openMyPDF();
+    openMyPDF(fileName);
 #else
 
     if (pdfMethod == 1) {
@@ -2425,15 +2425,19 @@ void Reader::ContinueReading() {
   mw_one->ui->btnReader->click();
 }
 
-void Reader::openMyPDF() {
+void Reader::openMyPDF(QString uri) {
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jPath = QAndroidJniObject::fromString(uri);
   QAndroidJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("openMyPDF", "()V");
+  activity.callMethod<void>("openMyPDF", "(Ljava/lang/String;)V",
+                            jPath.object<jstring>());
 #else
-  QJniObject activity = QJniObject::fromString("openNoteEditor");
-  activity.callMethod<void>("openMyPDF", "()V");
+  QJniObject jPath = QJniObject::fromString(uri);
+  QJniObject activity = QJniObject::fromString("openMyPDF");
+  activity.callMethod<void>("openMyPDF", "(Ljava/lang/String;)V",
+                            jPath.object<jstring>());
 #endif
 
 #endif
