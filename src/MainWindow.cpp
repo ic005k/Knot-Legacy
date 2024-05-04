@@ -4327,6 +4327,9 @@ static void JavaNotify_9() {
 
   QString file = Reg.value("book/file", "").toString();
   if (QFile::exists(file)) {
+    if (isAndroid) {
+      mw_one->m_Reader->closeMyPDF();
+    }
     mw_one->m_Reader->startOpenFile(file);
   }
 

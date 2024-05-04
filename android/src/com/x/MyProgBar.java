@@ -164,4 +164,9 @@ public class MyProgBar extends Activity {
         }
     }
 
+    public static void closeAndroidProgressBar() {
+        if (m_MyProgBar != null)
+            m_MyProgBar.finish();
+    }
+
 }

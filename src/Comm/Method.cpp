@@ -1247,10 +1247,12 @@ void Method::closeAndroidProgressBar() {
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("closeAndroidProgressBar", "()V");
+  activity.callStaticMethod<void>("com.x/MyProgBar", "closeAndroidProgressBar",
+                                  "()V");
 #else
   QJniObject activity = QJniObject::fromString("closeAndroidProgressBar");
-  activity.callMethod<void>("closeAndroidProgressBar", "()V");
+  activity.callStaticMethod<void>("com.x/MyProgBar", "closeAndroidProgressBar",
+                                  "()V");
 #endif
 
 #endif

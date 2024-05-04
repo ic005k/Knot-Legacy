@@ -1,5 +1,7 @@
 package com.xhh.pdfui;
 
+import org.ini4j.Wini;
+
 import com.x.MyPDF;
 import com.x.R;
 
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
@@ -19,6 +22,8 @@ import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.shockwave.pdfium.PdfDocument;
 import com.xhh.pdfui.tree.TreeNodeData;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +36,7 @@ import android.content.IntentFilter;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.net.Uri;
 
 /**
  * UI页面：PDF阅读
@@ -50,7 +56,8 @@ public class PDFActivity extends AppCompatActivity implements
     // PDF控件
     PDFView pdfView;
     // 按钮控件：返回、目录、缩略图
-    Button btn_back, btn_catalogue, btn_preview, btn_open, btn_books;
+    ImageButton btn_catalogue, btn_preview, btn_open, btn_books;
+    ImageButton btn_back;
     // 页码
     Integer pageNumber = 0;
     // PDF目录集合
@@ -85,12 +92,17 @@ public class PDFActivity extends AppCompatActivity implements
 
     public native static void CallJavaNotify_11();
 
+    public static PDFActivity mPdfActivity;
+    public static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppThemeprice);
         super.onCreate(savedInstanceState);
         // UIUtils.initWindowStyle(getWindow(), getSupportActionBar());//设置沉浸式
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        mPdfActivity = this;
+        context = PDFActivity.this;
         setContentView(R.layout.activity_pdf);
 
         initView();// 初始化view
@@ -200,7 +212,29 @@ public class PDFActivity extends AppCompatActivity implements
             } else {
                 uri = intent.getData();
                 System.out.println("PDFActivity uri:" + uri);
+
                 if (uri != null) {
+                    String filename = "/storage/emulated/0/.Knot/mypdf.ini";
+                    try {
+                        File file = new File(filename);
+                        if (file.exists()) {
+                            Wini ini = new Wini(file);
+                            String name = uri.toString();
+                            name = name.replace(":", "");
+                            name = name.replace(".", "");
+                            name = name.replace("/", "");
+                            String strPage = ini.get("pdf", name);
+                            System.out.print("strPage:" + strPage);
+
+                            if (strPage != null)
+                                pageNumber = Integer.parseInt(strPage);
+                            else
+                                pageNumber = 0;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     displayFromUri(uri);
                 }
             }
@@ -315,9 +349,32 @@ public class PDFActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mHomeKeyEvent);
+
+        String filename = "/storage/emulated/0/.Knot/mypdf.ini";
+        try {
+            File file = new File(filename);
+            if (!file.exists())
+                file.createNewFile();
+            Wini ini = new Wini(file);
+            String name = uri.toString();
+            name = name.replace(":", "");
+            name = name.replace(".", "");
+            name = name.replace("/", "");
+            ini.put("pdf", name, String.valueOf(pageNumber));
+            ini.store();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         // 是否内存
         if (pdfView != null) {
             pdfView.recycle();
         }
     }
+
+    public static void closeMyPDF() {
+        if (mPdfActivity != null)
+            mPdfActivity.finish();
+    }
+
 }

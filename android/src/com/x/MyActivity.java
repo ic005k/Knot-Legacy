@@ -185,7 +185,9 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public native static void CallJavaNotify_8();
 
     public native static void CallJavaNotify_9();
+
     public native static void CallJavaNotify_10();
+
     public native static void CallJavaNotify_11();
 
     private InternalConfigure internalConfigure;
@@ -1480,6 +1482,11 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
         i.setData(fileUri);
         context.startActivity(i);
 
+    }
+
+    public void closeMyPDF() {
+        if (PDFActivity.mPdfActivity != null)
+            PDFActivity.mPdfActivity.finish();
     }
 
     public void openFilePicker() {

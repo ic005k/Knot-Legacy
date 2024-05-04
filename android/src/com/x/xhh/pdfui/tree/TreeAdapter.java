@@ -93,9 +93,9 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeNodeViewHo
         if (data.getSubset() != null) {
             holder.img.setVisibility(View.VISIBLE);
             if (data.isExpanded()) {
-                holder.img.setImageResource(R.drawable.arrow_h);
-            } else {
                 holder.img.setImageResource(R.drawable.arrow_v);
+            } else {
+                holder.img.setImageResource(R.drawable.arrow_h);
             }
         } else {
             holder.img.setVisibility(View.INVISIBLE);

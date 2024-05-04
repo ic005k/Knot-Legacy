@@ -1651,9 +1651,10 @@ void Reader::openBookListItem() {
   QString str = bookList.at(index);
   QStringList listBooks = str.split("|");
   QString bookfile = listBooks.at(1);
-  if (bookfile != fileName)
+  if (bookfile != fileName) {
+    if (isAndroid) closeMyPDF();
     startOpenFile(bookfile);
-  else {
+  } else {
     if (isPDF) {
       setPdfViewVisible(true);
       if (isAndroid) {
@@ -2166,11 +2167,6 @@ void Reader::readBookDone() {
     }
   }
 
-  if (isAndroid)
-    m_Method->closeAndroidProgressBar();
-  else
-    mw_one->closeProgress();
-
   mw_one->ui->lblBookName->setText(strTitle);
   mw_one->ui->btnReader->setEnabled(true);
   mw_one->ui->f_ReaderFun->setEnabled(true);
@@ -2244,7 +2240,6 @@ void Reader::readBookDone() {
       QQuickItem* root = mw_one->ui->qwPdf->rootObject();
       QMetaObject::invokeMethod((QObject*)root, "setPdfPath",
                                 Q_ARG(QVariant, url));
-      mw_one->closeProgress();
     }
 #endif
   }
@@ -2259,6 +2254,15 @@ void Reader::readBookDone() {
     }
   }
   bookList.insert(0, strTitle + "|" + fileName);
+
+  if (isAndroid) {
+    m_Method->closeAndroidProgressBar();
+    qDebug() << "close android progressbar...";
+  } else {
+    mw_one->closeProgress();
+  }
+
+  qDebug() << "read book done...";
 }
 
 void Reader::setStatusBarHide() {
@@ -2447,6 +2451,22 @@ void Reader::openMyPDF(QString uri) {
   QJniObject activity = QJniObject::fromString("openMyPDF");
   activity.callMethod<void>("openMyPDF", "(Ljava/lang/String;)V",
                             jPath.object<jstring>());
+#endif
+
+#endif
+}
+
+void Reader::closeMyPDF() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QAndroidJniObject::fromString("closeMyPDF");
+  activity.callStaticMethod<void>("com.xhh.pdfui/PDFActivity", "closeMyPDF",
+                                  "()V");
+#else
+  QJniObject activity = QJniObject::fromString("closeMyPDF");
+  activity.callStaticMethod<void>("com.xhh.pdfui/PDFActivity", "closeMyPDF",
+                                  "()V");
 #endif
 
 #endif
