@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) {
 #endif
   pdfjsDir = privateDir;
   QString resFile = ":/res/pdf/pdfjs.zip";
-  if (QFile::exists(resFile)) {
+  if (QFile::exists(resFile) && !isAndroid) {
     deleteDirfile(privateDir + "pdfjs");
     QString zipFile = pdfjsDir + "pdfjs.zip";
     QFile::remove(zipFile);

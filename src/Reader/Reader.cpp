@@ -203,6 +203,7 @@ void Reader::startOpenFile(QString openfile) {
   if (isReport) return;
 
   setPdfViewVisible(false);
+  if (isAndroid) closeMyPDF();
 
   if (!mw_one->initMain) {
     saveReader("", false);
@@ -755,9 +756,10 @@ void Reader::initReader() {
   if (!QFile(fileName).exists() && zh_cn) fileName = ":/res/test.txt";
 
   QFileInfo fi(fileName);
-  if (fi.suffix().toLower() != "pdf")
+  if (fi.suffix().toLower() != "pdf") {
+    isInitReader = true;
     startOpenFile(fileName);
-  else
+  } else
     isPDF = true;
 
   getBookList();
@@ -1652,7 +1654,6 @@ void Reader::openBookListItem() {
   QStringList listBooks = str.split("|");
   QString bookfile = listBooks.at(1);
   if (bookfile != fileName) {
-    if (isAndroid) closeMyPDF();
     startOpenFile(bookfile);
   } else {
     if (isPDF) {
@@ -1663,7 +1664,7 @@ void Reader::openBookListItem() {
     }
   }
 
-  mw_one->on_btnBackBookList_clicked();
+  isOpenBookListClick = true;
 }
 
 void Reader::backDir() {
@@ -2095,6 +2096,13 @@ void Reader::removeBookList() {
 }
 
 void Reader::readBookDone() {
+  if (isOpenBookListClick) {
+    mw_one->on_btnBackBookList_clicked();
+    isOpenBookListClick = false;
+  }
+
+  if (isPDF && isAndroid) saveReader("", false);
+
   if (isEpubError) {
     tmeShowEpubMsg->stop();
     mw_one->ui->lblEpubInfo->hide();
@@ -2137,6 +2145,15 @@ void Reader::readBookDone() {
     mw_one->ui->progReader->show();
     mw_one->ui->btnPages->show();
     mw_one->ui->btnShowBookmark->show();
+
+    if (!isInitReader) {
+      if (mw_one->ui->frameMain->isVisible()) {
+        mw_one->ui->frameMain->hide();
+        mw_one->ui->frameReader->show();
+      }
+    } else {
+      isInitReader = false;
+    }
 
     mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
                                                             false);
@@ -2255,12 +2272,7 @@ void Reader::readBookDone() {
   }
   bookList.insert(0, strTitle + "|" + fileName);
 
-  if (isAndroid) {
-    m_Method->closeAndroidProgressBar();
-    qDebug() << "close android progressbar...";
-  } else {
-    mw_one->closeProgress();
-  }
+  mw_one->on_DelayCloseProgressBar();
 
   qDebug() << "read book done...";
 }

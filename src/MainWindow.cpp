@@ -4539,6 +4539,8 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 }
 
 void MainWindow::on_btnReadList_clicked() {
+  if (isAndroid) m_Reader->closeMyPDF();
+
   if (ui->f_ReaderSet->isVisible()) {
     on_btnBackReaderSet_clicked();
   }
@@ -4546,6 +4548,7 @@ void MainWindow::on_btnReadList_clicked() {
   if (mw_one->ui->qwBookmark->isVisible()) {
     mw_one->on_btnShowBookmark_clicked();
   }
+
   m_ReaderSet->close();
   m_Reader->closeSelText();
 
@@ -5604,7 +5607,10 @@ void MainWindow::on_btnBackBookList_clicked() {
     if (isAndroid) {
       ui->frameBookList->hide();
       ui->frameMain->show();
-      m_Reader->openMyPDF(fileName);
+      if (!m_Reader->isOpenBookListClick)
+        m_Reader->openMyPDF(fileName);
+      else
+        m_Reader->isOpenBookListClick = false;
     } else {
       m_Reader->setPdfViewVisible(true);
       ui->frameBookList->hide();
@@ -5867,4 +5873,17 @@ void MainWindow::on_btnGoPage_clicked() { m_ReaderSet->on_btnGoPage_clicked(); }
 
 void MainWindow::on_hSlider_sliderReleased() {
   m_ReaderSet->on_hSlider_sliderReleased();
+}
+
+void MainWindow::on_DelayCloseProgressBar() {
+  QTimer::singleShot(200, this, SLOT(on_CloseProgressBar()));
+}
+
+void MainWindow::on_CloseProgressBar() {
+  if (isAndroid) {
+    m_Method->closeAndroidProgressBar();
+    qDebug() << "close android progressbar...";
+  } else {
+    mw_one->closeProgress();
+  }
 }

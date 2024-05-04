@@ -35,6 +35,7 @@ class Reader : public QDialog {
   ~Reader();
   Ui::Reader *ui;
 
+  bool isOpenBookListClick = false;
   bool isSelText = false;
   int pdfMethod = 1;
   QTimer *tmeShowEpubMsg;
@@ -134,7 +135,7 @@ class Reader : public QDialog {
 
   void openMyPDF(QString uri);
   void closeMyPDF();
-  public slots:
+ public slots:
   void setPageScroll0();
   void setPageScroll1();
   void setEpubPagePosition(int index, QString htmlFile);
@@ -159,7 +160,7 @@ class Reader : public QDialog {
 
  private:
   int x, y, w, h;
-
+  bool isInitReader = false;
   QString strSpace = "";
   QString strEndFlag;
   static void SplitFile(QString qfile);

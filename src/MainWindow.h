@@ -356,7 +356,8 @@ class MainWindow : public QMainWindow {
 
   void execDeskShortcut();
 
- protected:
+  void on_DelayCloseProgressBar();
+  protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;
@@ -771,7 +772,8 @@ class MainWindow : public QMainWindow {
 
   void on_hSlider_sliderReleased();
 
- private:
+  void on_CloseProgressBar();
+  private:
   QString keyType;
   bool isShowDetails = false;
   QString strShowDetails;
