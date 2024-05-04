@@ -150,6 +150,7 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
     public native static void CallJavaNotify_9();
     public native static void CallJavaNotify_10();
     public native static void CallJavaNotify_11();
+    public native static void CallJavaNotify_12();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,12 +194,13 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        CallJavaNotify_12();
 
     }
 
     @Override
     protected void onDestroy() {
-        System.out.println("onDestroy...");
+        System.out.println("FilePicker onDestroy...");
         super.onDestroy();
         unregisterReceiver(mHomeKeyEvent);
 

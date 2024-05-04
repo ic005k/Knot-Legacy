@@ -179,8 +179,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public native static void CallJavaNotify_8();
 
     public native static void CallJavaNotify_9();
+
     public native static void CallJavaNotify_10();
+
     public native static void CallJavaNotify_11();
+
+    public native static void CallJavaNotify_12();
 
     private static boolean isGoBackKnot = false;
 
@@ -300,8 +304,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 editNote.setSelection(start);
                 editNote.setSelection(start, end);
 
-                // showPopupMenu(btnMenu);
-                showPowerMenu(btnMenu);
+                showPopupMenu(btnMenu);
+                // showPowerMenu(btnMenu);
 
                 editNote.requestFocus();
                 btnMenu.setBackgroundColor(getResources().getColor(R.color.normal));
@@ -1116,7 +1120,10 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         PopupMenu popupMenu = new PopupMenu(wrapper, view);
 
         // menu布局
-        popupMenu.getMenuInflater().inflate(R.menu.main, popupMenu.getMenu());
+        if (zh_cn)
+            popupMenu.getMenuInflater().inflate(R.menu.main_cn, popupMenu.getMenu());
+        else
+            popupMenu.getMenuInflater().inflate(R.menu.main, popupMenu.getMenu());
 
         // menu的item点击事件
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

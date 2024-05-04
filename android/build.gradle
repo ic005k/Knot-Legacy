@@ -86,11 +86,6 @@ android {
         options.incremental = true
     }
 
-    //compileOptions {
-    //    sourceCompatibility JavaVersion.VERSION_1_8
-    //    targetCompatibility JavaVersion.VERSION_1_8
-    //}
-
     lintOptions {
         abortOnError false
     }
@@ -113,12 +108,25 @@ android {
         viewBinding true
     }
 
+    //compileOptions {
+    //    sourceCompatibility JavaVersion.VERSION_1_8
+    //    targetCompatibility JavaVersion.VERSION_1_8
+    //}
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
         kotlinOptions {
         jvmTarget = '17'
+    }
+
+    splits {
+       abi {
+           enable true
+           reset()
+           include 'armeabi-v8a' //如果想包含其他cpu平台使用的so，修改这里即可
+       }
     }
 
     // 显示所有已过时的警告详细信息

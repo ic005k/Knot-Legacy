@@ -71,6 +71,7 @@ static void JavaNotify_8();
 static void JavaNotify_9();
 static void JavaNotify_10();
 static void JavaNotify_11();
+static void JavaNotify_12();
 #endif
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
@@ -4349,6 +4350,12 @@ static void JavaNotify_11() {
   qDebug() << "C++ JavaNotify_11";
 }
 
+static void JavaNotify_12() {
+  if (isPDF && isAndroid) mw_one->m_Reader->openMyPDF(fileName);
+
+  qDebug() << "C++ JavaNotify_12";
+}
+
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},
     {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
@@ -4361,7 +4368,10 @@ static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_8", "()V", (void *)JavaNotify_8},
     {"CallJavaNotify_9", "()V", (void *)JavaNotify_9},
     {"CallJavaNotify_10", "()V", (void *)JavaNotify_10},
-    {"CallJavaNotify_11", "()V", (void *)JavaNotify_11}};
+    {"CallJavaNotify_11", "()V", (void *)JavaNotify_11},
+    {"CallJavaNotify_12", "()V", (void *)JavaNotify_12}
+
+};
 
 void RegJni(const char *myClassName) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

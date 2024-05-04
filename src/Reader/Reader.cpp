@@ -2206,6 +2206,11 @@ void Reader::readBookDone() {
     mw_one->ui->btnRotatePage->show();
     mw_one->ui->btnGoBack->show();
 
+    if (isAndroid) {
+      mw_one->ui->frameReader->hide();
+      mw_one->ui->frameMain->show();
+    }
+
 #ifdef Q_OS_ANDROID
     if (pdfMethod == -1) {
       // "/android_assets/" = "/data/user/0/com.x/files/"
