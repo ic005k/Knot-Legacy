@@ -325,6 +325,7 @@
             android:name="com.x.FilePicker"
             android:exported="true"
             android:label="FilePicker"
+            android:screenOrientation="portrait"
         >
         </activity>
 
