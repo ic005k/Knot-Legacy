@@ -4,7 +4,6 @@ import com.x.R;
 
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
-//import androidx.recyclerview.widget;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,7 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeNodeViewHo
         this.context = context;
         this.data = data;
         maginLeft = UIUtils.dip2px(context, 20);
-        displayData = new ArrayList<>();
+        displayData = new ArrayList<TreeNodeData>();
 
         // 数据转为展示数据
         dataToDiaplayData(data);
@@ -72,7 +71,7 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeNodeViewHo
             return;
         }
         if (displayData == null) {
-            displayData = new ArrayList<>();
+            displayData = new ArrayList<TreeNodeData>();
         } else {
             displayData.clear();
         }

@@ -35,6 +35,9 @@ import android.content.Context;
  * 作者：齐行超
  * 日期：2019.08.07
  */
+
+@SuppressWarnings("unchecked")
+
 public class PDFCatelogueActivity extends AppCompatActivity implements TreeAdapter.TreeEvent {
 
     RecyclerView recyclerView;

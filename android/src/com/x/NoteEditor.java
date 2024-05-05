@@ -14,12 +14,14 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
+/* 
 import com.skydoves.powermenu.CustomPowerMenu;
 import com.skydoves.powermenu.OnDismissedListener;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 import com.skydoves.powermenu.MenuAnimation;
+*/
 
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
@@ -1438,6 +1440,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
+    /* 
     private void showPowerMenu(View view) {
 
         ArrayList<PowerMenuItem> list = new ArrayList<>();
@@ -1474,7 +1477,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             powerMenu.setSelectedPosition(position); // change selected item
             powerMenu.dismiss();
         }
-    };
+    };*/
 
     public boolean readFileFromUriToLocal(Uri uri, String localfile) {
 
