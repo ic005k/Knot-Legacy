@@ -2101,8 +2101,6 @@ void Reader::readBookDone() {
     isOpenBookListClick = false;
   }
 
-  if (isPDF && isAndroid) saveReader("", false);
-
   if (isEpubError) {
     tmeShowEpubMsg->stop();
     mw_one->ui->lblEpubInfo->hide();
@@ -2276,6 +2274,8 @@ void Reader::readBookDone() {
     }
   }
   bookList.insert(0, strTitle + "|" + fileName);
+
+  saveReader("", false);
 
   mw_one->on_DelayCloseProgressBar();
 

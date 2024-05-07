@@ -7,7 +7,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.72";
+QString ver = "1.1.73";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -4473,7 +4473,6 @@ void MainWindow::on_btnBackReader_clicked() {
 
   if (m_Reader->isSelText) on_btnSelText_clicked();
 
-  m_Reader->saveReader("", false);
   m_Reader->savePageVPos();
 
   if (ui->f_ReaderSet->isVisible()) {

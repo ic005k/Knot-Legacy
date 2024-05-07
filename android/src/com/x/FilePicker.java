@@ -139,17 +139,29 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
     public static FilePicker MyFilepicker;
 
     public native static void CallJavaNotify_0();
+
     public native static void CallJavaNotify_1();
+
     public native static void CallJavaNotify_2();
+
     public native static void CallJavaNotify_3();
+
     public native static void CallJavaNotify_4();
+
     public native static void CallJavaNotify_5();
+
     public native static void CallJavaNotify_6();
+
     public native static void CallJavaNotify_7();
+
     public native static void CallJavaNotify_8();
+
     public native static void CallJavaNotify_9();
+
     public native static void CallJavaNotify_10();
+
     public native static void CallJavaNotify_11();
+
     public native static void CallJavaNotify_12();
 
     @Override
@@ -424,7 +436,10 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
                 for (int i = 0; i < files.size(); i++) {
                     String strItem = files.get(i);
                     String strInfo = filesInfo.get(i);
-                    if (strItem.contains(strFind)) {
+                    String a, b;
+                    a = strItem.toLowerCase();
+                    b = strFind.toLowerCase();
+                    if (a.contains(b)) {
                         findResult.add(strItem);
                         findResultInfo.add(strInfo);
 
