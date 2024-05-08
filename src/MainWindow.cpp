@@ -4331,6 +4331,7 @@ static void JavaNotify_9() {
     if (isAndroid) {
       mw_one->m_Reader->closeMyPDF();
     }
+
     mw_one->m_Reader->startOpenFile(file);
   }
 
@@ -4473,16 +4474,21 @@ void MainWindow::on_btnBackReader_clicked() {
 
   if (m_Reader->isSelText) on_btnSelText_clicked();
 
-  m_Reader->savePageVPos();
-
   if (ui->f_ReaderSet->isVisible()) {
     on_btnBackReaderSet_clicked();
   }
+
+  m_Reader->saveReader("", false);
+  m_Reader->savePageVPos();
+
   ui->frameReader->hide();
   ui->frameMain->show();
 }
 
 void MainWindow::on_btnOpen_clicked() {
+  m_Reader->saveReader("", false);
+  m_Reader->savePageVPos();
+
   if (ui->f_ReaderSet->isVisible()) {
     on_btnBackReaderSet_clicked();
   }
@@ -4548,6 +4554,9 @@ void MainWindow::on_hSlider_sliderMoved(int position) {
 }
 
 void MainWindow::on_btnReadList_clicked() {
+  m_Reader->saveReader("", false);
+  m_Reader->savePageVPos();
+
   if (isAndroid) m_Reader->closeMyPDF();
 
   if (ui->f_ReaderSet->isVisible()) {

@@ -205,13 +205,6 @@ void Reader::startOpenFile(QString openfile) {
   setPdfViewVisible(false);
   if (isAndroid) closeMyPDF();
 
-  if (!mw_one->initMain) {
-    saveReader("", false);
-    if (isText || isEpub) {
-      savePageVPos();
-    }
-  }
-
   isEpubError = false;
   strShowMsg = "";
   strPercent = "";
@@ -1272,6 +1265,8 @@ void Reader::savePageVPos() {
   if (isText) {
     Reg.setValue("/Reader/vpos" + QString::number(iPage), textPos);
   }
+
+  qDebug() << "savePageVPos:" << textPos;
 }
 
 void Reader::setPageVPos() {
@@ -1298,6 +1293,8 @@ void Reader::setPageVPos() {
   }
 
   setVPos(textPos);
+
+  qDebug() << "setPageVPos:" << textPos;
 }
 
 void Reader::setVPos(qreal pos) {

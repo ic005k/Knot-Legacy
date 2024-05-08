@@ -9,7 +9,7 @@
 * Pedometer
 * Statistical charts
 * Statistical reports
-* Reader(txt,epub)
+* Reader(txt,epub,pdf)
 * Notes(Markdown)
 * Data export and import
 * Backup data to OneDrive
