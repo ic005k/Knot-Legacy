@@ -357,7 +357,8 @@ class MainWindow : public QMainWindow {
   void execDeskShortcut();
 
   void on_DelayCloseProgressBar();
-  protected:
+
+ protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;
@@ -502,6 +503,8 @@ class MainWindow : public QMainWindow {
   void clickData();
 
  public slots:
+  void on_btnStartDate_clicked();
+  void on_btnEndDate_clicked();
   void on_ExecShortcut();
 
   void on_btnShowBookmark_clicked();
@@ -581,10 +584,6 @@ class MainWindow : public QMainWindow {
   void on_btnPDF_clicked();
 
   void on_btnPasteTodo_clicked();
-
-  void on_btnStartDate_clicked();
-
-  void on_btnEndDate_clicked();
 
   void on_actionTabRecycle();
 
@@ -773,7 +772,8 @@ class MainWindow : public QMainWindow {
   void on_hSlider_sliderReleased();
 
   void on_CloseProgressBar();
-  private:
+
+ private:
   QString keyType;
   bool isShowDetails = false;
   QString strShowDetails;

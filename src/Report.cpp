@@ -35,6 +35,12 @@ void setTableNoItemFlags(QTableWidget* t, int row);
 Report::Report(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
+  mw_one->ui->btnYear->hide();
+  mw_one->ui->btnMonth->hide();
+  mw_one->ui->btnStartDate->hide();
+  mw_one->ui->btnEndDate->hide();
+  mw_one->ui->lblTo->hide();
+
   m_DateSelector = new DateSelector(this);
 
   twOut2Img = new QTreeWidget;
@@ -814,6 +820,26 @@ void Report::genReportMenu() {
       mw_one->m_ReceiveShare->shareImage(tr("Share to"), picFile, "image/png");
   });
 #endif
+
+  QAction* actSetYear = new QAction(tr("Year"));
+  m_Menu->addAction(actSetYear);
+  connect(actSetYear, &QAction::triggered, this,
+          [=]() { mw_one->on_btnYear_clicked(); });
+
+  QAction* actSetMonth = new QAction(tr("Month"));
+  m_Menu->addAction(actSetMonth);
+  connect(actSetMonth, &QAction::triggered, this,
+          [=]() { mw_one->on_btnMonth_clicked(); });
+
+  QAction* actStartDate = new QAction(tr("Start Date"));
+  m_Menu->addAction(actStartDate);
+  connect(actStartDate, &QAction::triggered, this,
+          [=]() { mw_one->on_btnStartDate_clicked(); });
+
+  QAction* actEndDate = new QAction(tr("End Date"));
+  m_Menu->addAction(actEndDate);
+  connect(actEndDate, &QAction::triggered, this,
+          [=]() { mw_one->on_btnEndDate_clicked(); });
 
   int x = 0;
   x = mw_one->geometry().x() + 2;
