@@ -22,6 +22,8 @@ class ShowMessage : public QDialog {
   bool isValue;
   bool showMsg(QString title, QString msgtxt, int btnCount);
 
+  QString AutoFeed(QString text, int nCharCount);
+
  protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;

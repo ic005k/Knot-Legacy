@@ -99,7 +99,6 @@ void ShowMessage::init() {
 #endif
 
   ui->frame->setFixedWidth(w - 20);
-
   h = ui->frame->height();
   x = this->x() + (this->width() - w) / 2;
   y = this->y() + (this->height() - h) / 2;
@@ -187,4 +186,19 @@ void ShowMessage::on_btnDel_clicked() {
   if (msg->showMsg("Knot", tr("Delete this link?"), 2)) {
     mw_one->m_Notes->delLink(copyText);
   }
+}
+
+QString ShowMessage::AutoFeed(QString text, int nCharCount) {
+  QString strText = text;
+  int AntoIndex = 1;
+  if (!strText.isEmpty()) {
+    for (int i = 1; i < strText.size() + 1; i++)  // 25个字符换一行
+    {
+      if (i == nCharCount * AntoIndex + AntoIndex - 1) {
+        strText.insert(i, "\n");
+        AntoIndex++;
+      }
+    }
+  }
+  return strText;
 }
