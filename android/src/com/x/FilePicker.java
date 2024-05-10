@@ -106,7 +106,7 @@ import android.view.inputmethod.InputMethodManager;
 import java.util.regex.*;
 
 import android.widget.ImageView;
-
+import android.media.MediaScannerConnection;
 import android.widget.LinearLayout;
 import android.view.LayoutInflater;
 import android.widget.PopupWindow;
@@ -365,6 +365,20 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
         @Override
         protected Void doInBackground(Void... voids) {
             // 在这里执行需要等待的操作
+            // 刷新媒体库
+            MediaScannerConnection.scanFile(
+                    MyContex,
+                    new String[] { "/storage/emulated/0/" },
+                    new String[] { "text/plain", "application/epub+zip", "application/pdf" },
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onMediaScannerConnected() {
+                        }
+
+                        public void onScanCompleted(String path, Uri uri) {
+                            System.out.println("Scan done...");
+
+                        }
+                    });
             getFilesByType();
 
             return null;
