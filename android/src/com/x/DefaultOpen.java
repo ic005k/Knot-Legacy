@@ -282,7 +282,13 @@ public class DefaultOpen extends Activity {
         uri = intent.getData();
 
         if (uri != null) {
-            String filePath = Uri.decode(uri.toString());
+            String filePath = "";
+            String strUri = Uri.decode(uri.toString());
+            if (strUri.contains("file://"))
+                filePath = strUri;
+            else
+                filePath = getFilePathForNonMediaUri(context, uri);
+
             filePath = filePath.replace("file://", "");
 
             System.err.println(uri + "    path:" + filePath);

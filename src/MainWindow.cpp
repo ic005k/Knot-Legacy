@@ -346,7 +346,13 @@ MainWindow::MainWindow(QWidget *parent)
 
   init_Sensors();
   init_TotalData();
-  m_Reader->initReader();
+
+  if (m_Method->getExecDone() == "true") {
+    m_Reader->initReader();
+  } else {
+    if (m_Method->getKeyType() != "defaultopen") m_Reader->initReader();
+  }
+
   loading = false;
 
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
@@ -865,12 +871,7 @@ void MainWindow::execDeskShortcut() {
 }
 
 void MainWindow::on_ExecShortcut() {
-  QSettings Reg("/storage/emulated/0/.Knot/shortcut.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  keyType = Reg.value("/desk/keyType", "todo").toString();
+  keyType = m_Method->getKeyType();
   if (keyType == "todo") m_Todo->NewTodo();
   if (keyType == "note") m_Notes->NewNote();
   if (keyType == "reader") m_Reader->ContinueReading();
@@ -878,7 +879,13 @@ void MainWindow::on_ExecShortcut() {
     if (ui->frameEditRecord->isVisible()) return;
     m_EditRecord->AddRecord();
   }
-  if (keyType == "defaultopen") JavaNotify_9();
+  if (keyType == "defaultopen") {
+#ifdef Q_OS_ANDROID
+
+    JavaNotify_9();
+
+#endif
+  }
 }
 
 void MainWindow::on_ReceiveShare() {

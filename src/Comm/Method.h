@@ -215,7 +215,8 @@ class Method : public QDialog {
   void showAndroidProgressBar();
   void closeAndroidProgressBar();
 
- protected:
+  QString getKeyType();
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
