@@ -254,6 +254,25 @@
         </activity>
 
         <activity
+            android:name="com.x.DefaultOpen"
+            android:exported="true"
+            android:label="Reader"
+            android:theme="@style/splashScreenTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/epub+zip" />
+                <data android:mimeType="application/pdf" />
+
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="com.x.AddRecord"
             android:exported="true"
             android:label="AddRecord"

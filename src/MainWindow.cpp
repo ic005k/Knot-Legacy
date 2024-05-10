@@ -878,6 +878,7 @@ void MainWindow::on_ExecShortcut() {
     if (ui->frameEditRecord->isVisible()) return;
     m_EditRecord->AddRecord();
   }
+  if (keyType == "defaultopen") JavaNotify_9();
 }
 
 void MainWindow::on_ReceiveShare() {
