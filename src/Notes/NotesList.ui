@@ -403,10 +403,6 @@
           <property name="text">
            <string>Recycle</string>
           </property>
-          <property name="icon">
-           <iconset resource="../../res.qrc">
-            <normaloff>:/res/del.svg</normaloff>:/res/del.svg</iconset>
-          </property>
           <property name="iconSize">
            <size>
             <width>28</width>

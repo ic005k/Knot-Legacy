@@ -772,7 +772,7 @@ border-radius: 4px;</string>
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="../icons.qrc">
+               <iconset>
                 <normaloff>:/icons/r.png</normaloff>:/icons/r.png</iconset>
               </property>
               <property name="iconSize">
@@ -6902,8 +6902,8 @@ QSlider::handle:horizontal:disabled {
             <string>Recycle</string>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/res/del.svg</normaloff>:/res/del.svg</iconset>
+            <iconset resource="../res.qrc">
+             <normaloff>:/res/recycle_l.svg</normaloff>:/res/recycle_l.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -7030,7 +7030,6 @@ QSlider::handle:horizontal:disabled {
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../icons.qrc"/>
   <include location="../res.qrc"/>
  </resources>
  <connections/>

@@ -2223,44 +2223,19 @@ void Reader::readBookDone() {
 #else
 
     mw_one->ui->qwPdf->show();
-    if (pdfMethod == 1) {
-      setPdfViewVisible(true);
-      if (mw_one->ui->frameReader->isVisible()) {
-        tmeShowEpubMsg->start(1000);
-        mw_one->ui->lblEpubInfo->setText("Read pdf...");
-        mw_one->ui->lblEpubInfo->setFixedWidth(150);
-        mw_one->ui->pEpubProg->setMaximum(0);
-        mw_one->ui->pEpubProg->show();
-        mw_one->ui->lblEpubInfo->show();
-      }
 
-      mw_one->ui->qwPdf->setSource(
-          QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
-      QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+    QString PDFJS, str;
 
-      // #ifdef Q_OS_WIN
+    PDFJS = "file:///" + privateDir + "pdfjs/web/viewer.html";
+    str = PDFJS + "?file=file:///" + fileName;
 
-      QMetaObject::invokeMethod((QObject*)root, "setViewEnd",
-                                Q_ARG(QVariant, true));
-      // #endif
+    QUrl url;
+    url.setUrl(str);
 
-      QMetaObject::invokeMethod((QObject*)root, "loadPDF",
-                                Q_ARG(QVariant, fileName));
-    }
+    QQuickItem* root = mw_one->ui->qwPdf->rootObject();
+    QMetaObject::invokeMethod((QObject*)root, "setPdfPath",
+                              Q_ARG(QVariant, url));
 
-    if (pdfMethod == 2) {
-      QString PDFJS, str;
-
-      PDFJS = "file:///" + privateDir + "pdfjs/web/viewer.html";
-      str = PDFJS + "?file=file:///" + fileName;
-
-      QUrl url;
-      url.setUrl(str);
-
-      QQuickItem* root = mw_one->ui->qwPdf->rootObject();
-      QMetaObject::invokeMethod((QObject*)root, "setPdfPath",
-                                Q_ARG(QVariant, url));
-    }
 #endif
   }
 
@@ -2456,6 +2431,7 @@ void Reader::ContinueReading() {
 }
 
 void Reader::openMyPDF(QString uri) {
+  Q_UNUSED(uri);
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

@@ -3551,12 +3551,7 @@ void MainWindow::initQW() {
   ui->qwPdf->engine()->addImportPath("qrc:/");
   ui->qwPdf->engine()->addImportPath(":/");
   ui->qwPdf->rootContext()->setContextProperty("mw_one", mw_one);
-  if (m_Reader->pdfMethod == 1) {
-    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/pdf_module/PdfPage.qml")));
-  }
-  if (m_Reader->pdfMethod == 2) {
-    ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
-  }
+  ui->qwPdf->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/pdf.qml")));
 }
 
 void MainWindow::init_Theme() {
@@ -4453,7 +4448,7 @@ void MainWindow::on_btnReader_clicked() {
     }
 
     ui->btnStatusBar->show();
-    m_Reader->setPdfViewVisible(true);
+
   } else {
     ui->btnStatusBar->hide();
   }
@@ -4478,8 +4473,6 @@ void MainWindow::on_btnReader_clicked() {
     isOne = true;
     m_Reader->setPageVPos();
   }
-
-  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
 }
 
 void MainWindow::on_btnBackReader_clicked() {
