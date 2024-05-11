@@ -37,6 +37,6 @@
         <item name="colorPrimary">@color/green</item>
         <item name="windowActionBar">true</item>
     </style>
-
+   
 
 </resources>

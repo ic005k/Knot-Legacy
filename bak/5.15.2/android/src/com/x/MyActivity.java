@@ -1,11 +1,12 @@
 package com.x;
 
 //Qt5
-
 import org.qtproject.qt5.android.bindings.QtActivity;
 
 import com.x.MyService;
 import com.x.ShareReceiveActivity;
+import com.xhh.pdfui.PDFActivity;
+import com.x.FilePicker;
 
 import android.os.Process;
 import android.os.HandlerThread;
@@ -92,7 +93,7 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
-
+import android.widget.ProgressBar;
 import android.content.pm.ShortcutManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -184,6 +185,12 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
     public native static void CallJavaNotify_8();
 
     public native static void CallJavaNotify_9();
+
+    public native static void CallJavaNotify_10();
+
+    public native static void CallJavaNotify_11();
+
+    public native static void CallJavaNotify_12();
 
     private InternalConfigure internalConfigure;
     public static boolean isReadShareData = false;
@@ -495,7 +502,7 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-         }
+            }
         }
     }
 
@@ -757,108 +764,6 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
             return null;
         }
 
-    }
-
-    // --------------------------------------------------------------------------------
-
-    public class PDFView extends WebView {
-
-        public boolean isTop = true, isBottom = false;// 用于判断滑动位置
-
-        private final static String PDFJS = "file:///android_asset/pdfjs/web/viewer.html?file=";
-
-        public PDFView(Context context) {
-            super(context);
-            init();
-        }
-
-        public PDFView(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            init();
-        }
-
-        public PDFView(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-            init();
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(MotionEvent ev) {
-            return false;
-        }
-
-        private void init() {
-            WebSettings settings = getSettings();
-            settings.setJavaScriptEnabled(true);
-            settings.setAllowUniversalAccessFromFileURLs(true);
-            settings.setSupportZoom(true);
-            settings.setUseWideViewPort(true);
-            settings.setBuiltInZoomControls(true);
-            settings.setDisplayZoomControls(false);
-
-            setWebViewClient(new WebViewClient() {// 注册滑动监听方法viewerContainer为加载pdf的viewid
-                @Override
-                public void onPageFinished(WebView webView, String s) {
-                    super.onPageFinished(webView, s);
-                    // 滑动监听
-                    String startSave = "\n" +
-                            "document.getElementById(\"viewerContainer\").addEventListener('scroll',function () {\n" +
-                            "if(this.scrollHeight-this.scrollTop - this.clientHeight < 50){\n" +
-                            "window.java.bottom(); \n" +
-                            "}\n" +
-                            "else if(this.scrollTop==0){\n" +
-                            "window.java.top(); \n" +
-                            "}\n" +
-                            "else {\n" +
-                            "window.java.scrolling(); \n" +
-                            "}\n" +
-                            "});";
-                    webView.loadUrl("javascript:" + startSave);
-                }
-            });
-            addJavascriptInterface(new Object() {
-                @JavascriptInterface
-                public void bottom() {
-                    Log.e("msg+++++++", "到了低端");
-                    isBottom = true;
-                    isTop = false;
-                }
-
-                @JavascriptInterface
-                public void scrolling() {
-                    Log.e("msg+++++++", "滑动中");
-                    isBottom = false;
-                    isTop = false;
-                }
-
-                @JavascriptInterface
-                public void top() {
-                    Log.e("msg+++++++", "到了顶端");
-                    isBottom = false;
-                    isTop = true;
-                }
-            }, "java");
-        }
-
-        @Override
-        protected void onCreateContextMenu(ContextMenu menu) {
-            super.onCreateContextMenu(menu);
-        }
-
-        @Override
-        public ActionMode startActionMode(ActionMode.Callback callback) {
-            return super.startActionMode(callback);
-        }
-
-        // 加载本地的pdf
-        public void loadLocalPDF(String path) {
-            loadUrl(PDFJS + "file://" + path);
-        }
-
-        // 加载url的pdf
-        public void loadOnlinePDF(String url) {
-            loadUrl(PDFJS + url);
-        }
     }
 
     // ----------------------------------------------------------------------------------------------
@@ -1463,6 +1368,39 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     }
 
+    public void openMyPDF(String path) {
+        Uri fileUri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            fileUri = FileProvider.getUriForFile(
+                    context, context.getPackageName(), new File(path));
+        } else {
+            fileUri = Uri.fromFile(new File(path));
+        }
+
+        Intent i = new Intent(context, PDFActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.setData(fileUri);
+        context.startActivity(i);
+
+    }
+
+    public void closeMyPDF() {
+        if (PDFActivity.mPdfActivity != null)
+            PDFActivity.mPdfActivity.finish();
+    }
+
+    public void openFilePicker() {
+        Intent i = new Intent(context, FilePicker.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+
+    }
+
+    public void closeFilePicker() {
+        if (FilePicker.MyFilepicker != null)
+            FilePicker.MyFilepicker.finish();
+    }
+
     private void addDeskShortcuts() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             // 获取ShortcutManager对象
@@ -1585,6 +1523,17 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     public void showToastMessage(String msg) {
         m_handler.sendMessage(m_handler.obtainMessage(1, msg));
+    }
+
+    public void showAndroidProgressBar() {
+        Intent i = new Intent(context, MyProgBar.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
+
+    public void closeAndroidProgressBar() {
+        if (MyProgBar.m_MyProgBar != null)
+            MyProgBar.m_MyProgBar.finish();
     }
 
 }

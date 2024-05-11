@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/it/ltdev/qt/qml/components">
-        <file>PdfView.qml</file>
-        <file>qmldir</file>
-    </qresource>
-</RCC>

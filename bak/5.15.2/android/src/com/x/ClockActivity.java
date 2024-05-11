@@ -92,6 +92,9 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public native static void CallJavaNotify_8();
 
     public native static void CallJavaNotify_9();
+    public native static void CallJavaNotify_10();
+    public native static void CallJavaNotify_11();
+    public native static void CallJavaNotify_12();
 
     public static boolean isZh(Context context) {
         Locale locale = context.getResources().getConfiguration().locale;
@@ -157,8 +160,9 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 先关闭笔记编辑器
+        // 先关闭笔记编辑器和文件选择器
         NoteEditor.closeNoteEditorView();
+        FilePicker.closeFilePickerView();
 
         context = getApplicationContext();
         // this.getWindow().setWindowAnimations(R.style.WindowAnim);

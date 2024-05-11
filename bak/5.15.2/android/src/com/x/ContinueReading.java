@@ -109,6 +109,12 @@ public class ContinueReading extends Activity {
 
     public native static void CallJavaNotify_9();
 
+    public native static void CallJavaNotify_10();
+
+    public native static void CallJavaNotify_11();
+
+    public native static void CallJavaNotify_12();
+
     private static boolean zh_cn;
 
     @Override

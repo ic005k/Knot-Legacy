@@ -162,7 +162,7 @@
             android:textColor="#FFFFFF"
             android:text="TextView"
             android:theme="@style/MyEditText"
-            android:textColorHighlight="#FF0000"
+            android:textColorHighlight="#0000EE"
             android:inputType="textMultiLine"
             android:layout_weight="1"
         />

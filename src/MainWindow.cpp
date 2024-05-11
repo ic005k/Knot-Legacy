@@ -1,13 +1,12 @@
 ﻿#include "MainWindow.h"
 
-#include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.74";
+QString ver = "1.1.75";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3709,11 +3708,6 @@ void MainWindow::init_Instance() {
 
   if (m_Preferences->getDefaultFont() == "None")
     m_Preferences->setDefaultFont(this->font().family());
-
-  if (!isAndroid) {
-    LTDev::QtPdfViewerInitializer::initialize();
-    m_Reader->setPdfViewVisible(false);
-  }
 }
 
 void MainWindow::init_UIWidget() {

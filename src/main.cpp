@@ -6,7 +6,6 @@
 #include <QtWebView/QtWebView>
 
 #include "MainWindow.h"
-#include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 #include "src/Comm/qzipfile.h"
 
 extern QString iniFile, txtFile, appName, iniDir, privateDir, customFontFamily,
@@ -74,11 +73,6 @@ int main(int argc, char* argv[]) {
 #else
   QApplication app(argc, argv);
 #endif
-
-  // Delete QtPdfViewerInitializer instance on app close
-  QObject::connect(&app, &QGuiApplication::aboutToQuit,
-                   LTDev::QtPdfViewerInitializer::getInstance(),
-                   LTDev::QtPdfViewerInitializer::deleteInstance);
 
   QTextCodec* codec = QTextCodec::codecForName("UTF-8");
   QTextCodec::setCodecForLocale(codec);

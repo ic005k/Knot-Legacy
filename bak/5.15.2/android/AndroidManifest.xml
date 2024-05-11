@@ -4,7 +4,7 @@
     package="com.x"
     android:installLocation="auto"
     android:versionCode="1"
-    android:versionName="1.1.71">
+    android:versionName="1.1.75">
     <!-- The following comment will be replaced upon deployment with default permissions based on
     the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -254,6 +254,25 @@
         </activity>
 
         <activity
+            android:name="com.x.DefaultOpen"
+            android:exported="true"
+            android:label="Reader"
+            android:theme="@style/splashScreenTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/epub+zip" />
+                <data android:mimeType="application/pdf" />
+
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="com.x.AddRecord"
             android:exported="true"
             android:label="AddRecord"
@@ -320,6 +339,49 @@
                 android:name="android.app.splash_screen_drawable_landscape"
                 android:resource="@drawable/splashscreen_land" />
         </activity>
+
+        <activity
+            android:name="com.x.FilePicker"
+            android:exported="true"
+            android:label="FilePicker"
+            android:screenOrientation="portrait"
+        >
+        </activity>
+
+        <activity
+            android:name="com.x.MyProgBar"
+            android:exported="true"
+            android:label="MyProgBar"
+        >
+        </activity>
+
+        <activity
+            android:name="com.x.MyPDF"
+            android:exported="true"
+            android:label="MyPDF"
+        >
+        </activity>
+
+        <activity
+            android:name="com.xhh.pdfui.PDFActivity"
+            android:exported="true"
+            android:label="PDFActivity"
+        >
+        </activity>
+
+        <activity
+            android:name="com.xhh.pdfui.PDFPreviewActivity"
+            android:exported="true"
+            android:label="PDFPreviewActivity"
+        >
+        </activity>
+
+        <activity
+            android:name="com.xhh.pdfui.PDFCatelogueActivity"
+            android:exported="true"
+            android:label="PDFCatelogueActivity"
+        >
+</activity>
 
         <receiver android:name="com.x.AlarmReceiver" />
 

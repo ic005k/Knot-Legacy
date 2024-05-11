@@ -20,15 +20,6 @@ TRANSLATIONS += src/cn.ts
 ICON = res/icon.icns
 RC_FILE +=win.rc
 
-# Pdf View library
-QML_IMPORT_PATH += $$PWD/
-QML_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/
-QML_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/it/ltdev/qt/qml/components/
-QML_DESIGNER_IMPORT_PATH += $$PWD/
-QML_DESIGNER_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/
-QML_DESIGNER_IMPORT_PATH += $$PWD/libs/qt-pdf-viewer-library/it/ltdev/qt/qml/components/
-include($$PWD/libs/qt-pdf-viewer-library/qtpdfviewer.pri)
-
 include($$PWD/src/3rdparty/zlib.pri)
 
 unix:!macx:{
@@ -219,9 +210,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    icons.qrc \
     knotqml.qrc \
-    pdfqml.qrc \
     res.qrc \
 
 

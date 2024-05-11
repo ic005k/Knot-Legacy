@@ -2,7 +2,6 @@
 
 #include <QKeyEvent>
 
-#include "it/ltdev/qt/cpp/components/qtpdfviewerinitializer.h"
 #include "src/Comm/qzipfile.h"
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
@@ -109,9 +108,10 @@ bool Reader::eventFilter(QObject* obj, QEvent* evn) {
 void Reader::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 
 void Reader::on_btnOpen_clicked() {
-  m_Method->openFilePicker();
-
-  return;
+  if (isAndroid) {
+    m_Method->openFilePicker();
+    return;
+  }
 
   openfile =
       QFileDialog::getOpenFileName(this, tr("Knot"), "", tr("Txt Files (*.*)"));
@@ -2203,14 +2203,8 @@ void Reader::readBookDone() {
     mw_one->ui->btnStatusBar->show();
     mw_one->ui->btnPages->hide();
     mw_one->ui->btnCatalogue->hide();
-    mw_one->ui->qwPdf->show();
     mw_one->ui->btnRotatePage->show();
     mw_one->ui->btnGoBack->show();
-
-    if (isAndroid) {
-      mw_one->ui->frameReader->hide();
-      mw_one->ui->frameMain->show();
-    }
 
 #ifdef Q_OS_ANDROID
     if (pdfMethod == -1) {
@@ -2223,9 +2217,12 @@ void Reader::readBookDone() {
       if (QFile::exists(mypdf)) fileName = mypdf;
     }
 
+    mw_one->ui->frameReader->hide();
+    mw_one->ui->frameMain->show();
     if (!mw_one->initMain) openMyPDF(fileName);
 #else
 
+    mw_one->ui->qwPdf->show();
     if (pdfMethod == 1) {
       setPdfViewVisible(true);
       if (mw_one->ui->frameReader->isVisible()) {
