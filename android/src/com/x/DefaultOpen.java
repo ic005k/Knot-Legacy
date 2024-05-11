@@ -292,21 +292,29 @@ public class DefaultOpen extends Activity {
             filePath = filePath.replace("file://", "");
 
             System.err.println(uri + "    path:" + filePath);
-            Toast.makeText(context, filePath, Toast.LENGTH_LONG).show();
 
-            String filename = "/storage/emulated/0/.Knot/choice_book.ini";
-            try {
-                File file = new File(filename);
-                if (!file.exists())
-                    file.createNewFile();
-                Wini ini = new Wini(file);
-                ini.put("book", "file", filePath);
-                ini.store();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            File file_path = new File(filePath);
+            if (file_path.exists()) {
 
-        }
+                Toast.makeText(context, filePath, Toast.LENGTH_LONG).show();
+
+                String filename = "/storage/emulated/0/.Knot/choice_book.ini";
+                try {
+                    File file = new File(filename);
+                    if (!file.exists())
+                        file.createNewFile();
+                    Wini ini = new Wini(file);
+                    ini.put("book", "file", filePath);
+                    ini.put("book", "type", "defaultopen");
+                    ini.store();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else
+                DefaultOpen.this.finish();
+
+        } else
+            DefaultOpen.this.finish();
 
         boolean isRun = isAppRun("com.x");
 

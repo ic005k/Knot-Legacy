@@ -751,7 +751,13 @@ void Reader::initReader() {
   QFileInfo fi(fileName);
   if (fi.suffix().toLower() != "pdf") {
     isInitReader = true;
-    startOpenFile(fileName);
+
+    if (m_Method->getExecDone() == "true") {
+      startOpenFile(fileName);
+    } else {
+      if (m_Method->getKeyType() != "defaultopen") startOpenFile(fileName);
+    }
+
   } else
     isPDF = true;
 

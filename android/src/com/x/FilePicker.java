@@ -262,8 +262,10 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
         // 扫描files文件库
         Cursor c = null;
         try {
-
-            c = mContentResolver.query(MediaStore.Files.getContentUri("external"), null, null, null, null);
+            String select = "(" + MediaStore.Files.FileColumns.DATA + " LIKE '%.txt'" + " or "
+                    + MediaStore.Files.FileColumns.DATA + " LIKE '%.epub'" + " or " + MediaStore.Files.FileColumns.DATA
+                    + " LIKE '%.pdf'" + ")";
+            c = mContentResolver.query(MediaStore.Files.getContentUri("external"), null, select, null, null);
             int columnIndexOrThrow_ID = c.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID);
             int columnIndexOrThrow_MIME_TYPE = c.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MIME_TYPE);
             int columnIndexOrThrow_DATA = c.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
@@ -515,6 +517,7 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
                             file.createNewFile();
                         Wini ini = new Wini(file);
                         ini.put("book", "file", filePath);
+                        ini.put("book", "type", "filepicker");
                         ini.store();
                     } catch (IOException e) {
                         e.printStackTrace();

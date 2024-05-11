@@ -347,11 +347,7 @@ MainWindow::MainWindow(QWidget *parent)
   init_Sensors();
   init_TotalData();
 
-  if (m_Method->getExecDone() == "true") {
-    m_Reader->initReader();
-  } else {
-    if (m_Method->getKeyType() != "defaultopen") m_Reader->initReader();
-  }
+  m_Reader->initReader();
 
   loading = false;
 
@@ -4335,9 +4331,25 @@ static void JavaNotify_9() {
 #endif
 
   QString file = Reg.value("book/file", "").toString();
+  QString type = Reg.value("book/type", "filepicker").toString();
   if (QFile::exists(file)) {
     if (isAndroid) {
       mw_one->m_Reader->closeMyPDF();
+    }
+
+    if (type == "defaultopen") {
+      if (!isPDF) {
+        if (mw_one->ui->frameReader->isHidden()) {
+          mw_one->ui->btnReader->click();
+          mw_one->m_ReceiveShare->closeAllActiveWindowsKeep(
+              mw_one->ui->frameReader->objectName());
+        }
+      } else {
+        if (mw_one->ui->frameMain->isHidden()) {
+          mw_one->m_ReceiveShare->closeAllActiveWindowsKeep(
+              mw_one->ui->frameMain->objectName());
+        }
+      }
     }
 
     mw_one->m_Reader->startOpenFile(file);
