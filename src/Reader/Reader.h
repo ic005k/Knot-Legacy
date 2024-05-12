@@ -135,7 +135,8 @@ class Reader : public QDialog {
 
   void openMyPDF(QString uri);
   void closeMyPDF();
- public slots:
+  void shareBook();
+  public slots:
   void setPageScroll0();
   void setPageScroll1();
   void setEpubPagePosition(int index, QString htmlFile);

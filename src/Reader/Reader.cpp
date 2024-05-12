@@ -41,9 +41,10 @@ QByteArray bookFileData;
 Reader::Reader(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
+  if (!isAndroid) mw_one->ui->btnShareBook->hide();
+
   mw_one->ui->btnGoBack->hide();
   mw_one->ui->btnBackDir->hide();
-  mw_one->ui->btnStatusBar->hide();
   mw_one->ui->lblTitle->hide();
   mw_one->ui->f_ReaderFun2->hide();
   mw_one->ui->btnBackward->hide();
@@ -748,18 +749,22 @@ void Reader::initReader() {
   fileName = Reg.value("/Reader/FileName").toString();
   if (!QFile(fileName).exists() && zh_cn) fileName = ":/res/test.txt";
 
-  QFileInfo fi(fileName);
-  if (fi.suffix().toLower() != "pdf") {
-    isInitReader = true;
+  if (isAndroid) {
+    QFileInfo fi(fileName);
+    if (fi.suffix().toLower() != "pdf") {
+      isInitReader = true;
 
-    if (m_Method->getExecDone() == "true") {
-      startOpenFile(fileName);
-    } else {
-      if (m_Method->getKeyType() != "defaultopen") startOpenFile(fileName);
-    }
+      if (m_Method->getExecDone() == "true") {
+        startOpenFile(fileName);
+      } else {
+        if (m_Method->getKeyType() != "defaultopen") startOpenFile(fileName);
+      }
 
-  } else
-    isPDF = true;
+    } else
+      isPDF = true;
+  } else {
+    startOpenFile(fileName);
+  }
 
   getBookList();
 }
@@ -2138,8 +2143,6 @@ void Reader::readBookDone() {
     setPdfViewVisible(false);
 
     mw_one->ui->btnGoBack->hide();
-    mw_one->ui->btnRotatePage->hide();
-    mw_one->ui->btnStatusBar->hide();
     mw_one->ui->qwPdf->hide();
     mw_one->ui->qwReader->show();
     mw_one->ui->f_ReaderFun->show();
@@ -2200,10 +2203,8 @@ void Reader::readBookDone() {
     mw_one->ui->progReader->hide();
     mw_one->ui->qwReader->hide();
     mw_one->ui->f_ReaderFun->show();
-    mw_one->ui->btnStatusBar->show();
     mw_one->ui->btnPages->hide();
     mw_one->ui->btnCatalogue->hide();
-    mw_one->ui->btnRotatePage->show();
     mw_one->ui->btnGoBack->show();
 
 #ifdef Q_OS_ANDROID
@@ -2463,4 +2464,17 @@ void Reader::closeMyPDF() {
 #endif
 
 #endif
+}
+
+void Reader::shareBook() {
+  int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwBookList);
+
+  if (index < 0) return;
+
+  QString str = bookList.at(index);
+  QStringList listBooks = str.split("|");
+  QString bookfile = listBooks.at(1);
+  if (QFile::exists(bookfile)) {
+    mw_one->m_ReceiveShare->shareImage(tr("Share to"), bookfile, "*/*");
+  }
 }

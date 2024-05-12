@@ -3647,7 +3647,7 @@ void MainWindow::init_Theme() {
         "#4169E1;}");
     QPalette palette = ui->editTodo->palette();
     palette.setColor(QPalette::Normal, QPalette::PlaceholderText,
-                     QColor(255, 255, 255, 125));
+                     QColor(255, 255, 255, 255));
     ui->editTodo->setPalette(palette);
   }
 
@@ -4342,6 +4342,11 @@ static void JavaNotify_9() {
     }
 
     mw_one->m_Reader->startOpenFile(file);
+
+    if (isText || isEpub) {
+      mw_one->ui->btnBackReader->click();
+      mw_one->ui->btnReader->click();
+    }
   }
 
   qDebug() << "C++ JavaNotify_9";
@@ -4446,11 +4451,6 @@ void MainWindow::on_btnReader_clicked() {
       m_Reader->openMyPDF(fileName);
       return;
     }
-
-    ui->btnStatusBar->show();
-
-  } else {
-    ui->btnStatusBar->hide();
   }
 
   floatfun = false;
@@ -5816,10 +5816,6 @@ void MainWindow::on_btnCatalogue_clicked() {
 
 void MainWindow::on_btnRemoveBookList_clicked() { m_Reader->removeBookList(); }
 
-void MainWindow::on_btnStatusBar_clicked() { ui->f_ReaderFun->hide(); }
-
-void MainWindow::on_btnRotatePage_clicked() { m_Reader->rotatePdfPage(); }
-
 void MainWindow::on_btnGoBack_clicked() { m_Reader->goWebViewBack(); }
 
 void MainWindow::on_btnShowBookmark_clicked() {
@@ -5912,3 +5908,5 @@ void MainWindow::on_CloseProgressBar() {
     mw_one->closeProgress();
   }
 }
+
+void MainWindow::on_btnShareBook_clicked() { m_Reader->shareBook(); }

@@ -729,10 +729,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnRemoveBookList_clicked();
 
-  void on_btnStatusBar_clicked();
-
-  void on_btnRotatePage_clicked();
-
   void on_btnGoBack_clicked();
 
   void on_ReceiveShare();
@@ -772,6 +768,8 @@ class MainWindow : public QMainWindow {
   void on_hSlider_sliderReleased();
 
   void on_CloseProgressBar();
+
+  void on_btnShareBook_clicked();
 
  private:
   QString keyType;
