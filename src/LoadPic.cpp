@@ -30,8 +30,8 @@ void LoadPic::initMain(QString imgFile) {
   mw_one->ui->lblImgInfo->setText(
       imgFile + "  " + mw_one->getFileSize(QFile(imgFile).size(), 2));
 
-  if (mw_one->isReaderVisible) mw_one->ui->frameReader->hide();
-  if (mw_one->isMemoVisible) mw_one->ui->frameNotes->hide();
+  if (mw_one->ui->frameReader->isVisible()) mw_one->ui->frameReader->hide();
+  if (mw_one->ui->frameNotes->isVisible()) mw_one->ui->frameNotes->hide();
 
   mw_one->ui->qw_Img->rootContext()->setContextProperty("myW", mw_one->width());
   mw_one->ui->qw_Img->rootContext()->setContextProperty("myH",

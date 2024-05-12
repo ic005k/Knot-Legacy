@@ -748,12 +748,11 @@ void Reader::initReader() {
 
   fileName = Reg.value("/Reader/FileName").toString();
   if (!QFile(fileName).exists() && zh_cn) fileName = ":/res/test.txt";
+  isInitReader = true;
 
   if (isAndroid) {
     QFileInfo fi(fileName);
     if (fi.suffix().toLower() != "pdf") {
-      isInitReader = true;
-
       if (m_Method->getExecDone() == "true") {
         startOpenFile(fileName);
       } else {

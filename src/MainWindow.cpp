@@ -4342,11 +4342,6 @@ static void JavaNotify_9() {
     }
 
     mw_one->m_Reader->startOpenFile(file);
-
-    if (isText || isEpub) {
-      mw_one->ui->btnBackReader->click();
-      mw_one->ui->btnReader->click();
-    }
   }
 
   qDebug() << "C++ JavaNotify_9";

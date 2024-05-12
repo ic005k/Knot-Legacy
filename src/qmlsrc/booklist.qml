@@ -149,13 +149,21 @@ Rectangle {
             return "black"
     }
 
+    function getFontColorGray() {
+
+        if (isDark)
+            return "lightgray"
+        else
+            return "gray"
+    }
+
     Component {
         id: dragDelegate
 
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: getItemHeight() + 16
+            height: getItemHeight() + 8
             color: ListView.isCurrentItem ? "lightblue" : getColor()
 
             border.width: isDark ? 0 : 1
@@ -169,22 +177,22 @@ Rectangle {
                 var item2H
                 var item3H
 
-                if (item0.text.length == 0)
+                if (item0.text.length == 0 || item0.visible == false)
                     item0H = 0
                 else
                     item0H = item0.contentHeight
 
-                if (item1.text.length == 0)
+                if (item1.text.length == 0 || item0.visible == false)
                     item1H = 0
                 else
                     item1H = item1.contentHeight
 
-                if (item2.text.length == 0)
+                if (item2.text.length == 0 || item0.visible == false)
                     item2H = 0
                 else
                     item2H = item2.contentHeight
 
-                if (item3.text.length == 0)
+                if (item3.text.length == 0 || item0.visible == false)
                     item3H = 0
                 else
                     item3H = item3.contentHeight
@@ -276,7 +284,7 @@ Rectangle {
 
                         width: parent.width
                         wrapMode: TextArea.WrapAnywhere
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        color: listItem.ListView.isCurrentItem ? "gray" : getFontColorGray()
                         font.bold: false
                         font.pointSize: fontSize * 0.85
                         text: text1
@@ -356,7 +364,6 @@ Rectangle {
                 }
 
                 onDoubleClicked: {
-
 
                 }
             }
