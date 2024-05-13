@@ -14,7 +14,7 @@ import android.content.Context;
 import android.content.ContentUris;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.provider.MediaStore;
+
 import android.widget.AdapterView;
 import org.apache.http.entity.FileEntity;
 

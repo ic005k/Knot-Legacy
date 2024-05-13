@@ -1719,26 +1719,29 @@ void Notes::delLink(QString link) {
     link.replace("http://", "");
   }
   mdBuffers.replace(link, "");
+  mdBuffers.replace("[]()", "");
 
-  int startPos, endPos, length;
-  int index = 0;
-  QStringList titleList;
-  while (mdBuffers.indexOf("]()", index) != -1) {
-    startPos = mdBuffers.indexOf("[", index) + 1;
-    if (startPos - 2 >= 0) {
-      endPos = mdBuffers.indexOf("]()", startPos + 1);
-      length = endPos - startPos;
-      QString subStr = mdBuffers.mid(startPos, length);
-      titleList.append(subStr);
-      qDebug() << "delLink():" << startPos << length << subStr;
-      index = endPos + 1;
+  if (mdBuffers.contains("]()")) {
+    int startPos, endPos, length;
+    int index = 0;
+    QStringList titleList;
+    while (mdBuffers.indexOf("]()", index) != -1) {
+      startPos = mdBuffers.indexOf("[", index) + 1;
+      if (startPos - 2 >= 0) {
+        endPos = mdBuffers.indexOf("]()", startPos + 1);
+        length = endPos - startPos;
+        QString subStr = mdBuffers.mid(startPos, length);
+        titleList.append(subStr);
+        qDebug() << "delLink():" << startPos << length << subStr;
+        index = endPos + 1;
+      }
     }
-  }
 
-  for (int i = 0; i < titleList.count(); i++) {
-    QString title = titleList.at(i);
-    QString str = "[" + title + "]()";
-    mdBuffers.replace(str, "");
+    for (int i = 0; i < titleList.count(); i++) {
+      QString title = titleList.at(i);
+      QString str = "[" + title + "]()";
+      mdBuffers.replace(str, "");
+    }
   }
 
   mdBuffers = formatMDText(mdBuffers);

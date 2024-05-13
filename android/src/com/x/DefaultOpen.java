@@ -2,14 +2,22 @@ package com.x;
 
 import org.ini4j.Wini;
 
+import com.x.FileUtils;
 import com.x.MyActivity;
 import com.x.NoteEditor;
 
+import java.nio.file.Files;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+
+import android.provider.DocumentsContract;
+import android.os.Environment;
+import android.webkit.MimeTypeMap;
+import android.content.ContentUris;
+import android.provider.OpenableColumns;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +28,7 @@ import android.database.Cursor;
 import android.text.method.ScrollingMovementMethod;
 import java.util.List;
 import java.util.ArrayList;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.Media;
 import android.content.ContentResolver;
@@ -287,7 +296,7 @@ public class DefaultOpen extends Activity {
             if (strUri.contains("file://"))
                 filePath = strUri;
             else
-                filePath = getFilePathForNonMediaUri(context, uri);
+                filePath = getFileFromContentUri(context, uri); // getFilePathForNonMediaUri(context, uri);
 
             filePath = filePath.replace("file://", "");
 
@@ -374,6 +383,37 @@ public class DefaultOpen extends Activity {
             cursor.close();
         }
         return filePath;
+    }
+
+    /**
+     * Android 10 以上适配 另一种写法
+     * 
+     * @param context
+     * @param uri
+     * @return
+     */
+    private static String getFileFromContentUri(Context context, Uri uri) {
+        if (uri == null) {
+            return null;
+        }
+        String filePath;
+        String[] filePathColumn = { MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME };
+        // String[] filePathColumn = { MediaStore.DownloadColumns.DATA,
+        // MediaStore.DownloadColumns.DISPLAY_NAME };
+        ContentResolver contentResolver = context.getContentResolver();
+        Cursor cursor = contentResolver.query(uri, filePathColumn, null,
+                null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            try {
+                filePath = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
+                return filePath;
+            } catch (Exception e) {
+            } finally {
+                cursor.close();
+            }
+        }
+        return "";
     }
 
 }
