@@ -329,7 +329,7 @@ Rectangle {
                 }
 
                 onPositionChanged: {
-                    item0.color =  getFontColor()
+                    item0.color = getFontColor()
                     listItem.color = getColor()
                 }
 

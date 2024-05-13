@@ -2185,6 +2185,10 @@ void Reader::readBookDone() {
       mw_one->ui->btnCatalogue->hide();
       m_ReaderSet->ui->lblInfo->hide();
     }
+
+    if (mw_one->ui->frameMain->isVisible()) {
+      mw_one->ui->btnReader->click();
+    }
   }
 
   mw_one->ui->lblBookName->setText(strTitle);

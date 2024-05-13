@@ -158,7 +158,7 @@ Rectangle {
     }
 
     Component {
-        id: dragDelegate
+        id: mComponent
 
         Rectangle {
             id: listItem
@@ -211,7 +211,21 @@ Rectangle {
                     return "/res/pdf.svg"
 
                 if (item3.text == "none")
-                    return "/res/none.png"
+                    return "/res/none.svg"
+            }
+
+            function getListColor() {
+                if (item3.text == "txt")
+                    return "#1E90FF"
+
+                if (item3.text == "epub")
+                    return "green"
+
+                if (item3.text == "pdf")
+                    return "red"
+
+                if (item3.text == "none")
+                    return "#FFD700"
             }
 
             RowLayout {
@@ -223,12 +237,13 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Rectangle {
-                    height: parent.height - 2
+                    id: myRect
+                    height: parent.height
                     width: 6
-                    radius: 2
+                    radius: 0
                     anchors.leftMargin: 1
-                    color: "red"
-                    visible: false
+                    color: listItem.getListColor()
+                    visible: true
                     Text {
                         anchors.centerIn: parent
                     }
@@ -241,7 +256,7 @@ Rectangle {
                     fillMode: Image.NoOption
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
-
+                    visible: false
                     smooth: true
                     sourceSize.height: 32
                     sourceSize.width: 32
@@ -261,7 +276,7 @@ Rectangle {
                         id: item0
 
                         width: parent.width
-                        Layout.preferredWidth: listItem.width - myimg.width
+                        Layout.preferredWidth: listItem.width - myRect.width
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
@@ -276,7 +291,7 @@ Rectangle {
 
                     Text {
                         id: item1
-                        Layout.preferredWidth: listItem.width - myimg.width
+                        Layout.preferredWidth: listItem.width - myRect.width
 
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
@@ -284,7 +299,7 @@ Rectangle {
 
                         width: parent.width
                         wrapMode: TextArea.WrapAnywhere
-                        color: listItem.ListView.isCurrentItem ? "gray" : getFontColorGray()
+                        color: listItem.ListView.isCurrentItem ? "#4F4F4F" : getFontColorGray()
                         font.bold: false
                         font.pointSize: fontSize * 0.85
                         text: text1
@@ -444,7 +459,7 @@ Rectangle {
                 myh: 0
             }*/
         }
-        delegate: dragDelegate
+        delegate: mComponent
 
         spacing: 4
         cacheBuffer: 50

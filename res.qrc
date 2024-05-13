@@ -104,7 +104,6 @@
         <file>res/hide_l.png</file>
         <file>res/pdf/pdf.viewer.bridge.js</file>
         <file>res/pdf/qwebchannel.js</file>
-        <file>res/none.png</file>
         <file>res/share.png</file>
         <file>res/note_l.svg</file>
         <file>res/note.svg</file>
@@ -150,5 +149,6 @@
         <file>res/alarm.svg</file>
         <file>res/recycle_l.svg</file>
         <file>res/recycle.svg</file>
+        <file>res/none.svg</file>
     </qresource>
 </RCC>
