@@ -751,6 +751,7 @@ void Reader::initReader() {
   isInitReader = true;
 
   if (isAndroid) {
+    if (m_Method->getKeyType() == "defaultopen") isInitReader = false;
     QFileInfo fi(fileName);
     if (fi.suffix().toLower() != "pdf") {
       if (m_Method->getExecDone() == "true") {
@@ -2149,15 +2150,6 @@ void Reader::readBookDone() {
     mw_one->ui->btnPages->show();
     mw_one->ui->btnShowBookmark->show();
 
-    if (!isInitReader) {
-      if (mw_one->ui->frameMain->isVisible()) {
-        mw_one->ui->frameMain->hide();
-        mw_one->ui->frameReader->show();
-      }
-    } else {
-      isInitReader = false;
-    }
-
     mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
                                                             false);
     mw_one->ui->qwReader->rootContext()->setContextProperty("strText", "");
@@ -2184,10 +2176,6 @@ void Reader::readBookDone() {
       mw_one->ui->btnBackDir->hide();
       mw_one->ui->btnCatalogue->hide();
       m_ReaderSet->ui->lblInfo->hide();
-    }
-
-    if (mw_one->ui->frameMain->isVisible()) {
-      mw_one->ui->btnReader->click();
     }
   }
 
@@ -2255,6 +2243,16 @@ void Reader::readBookDone() {
   bookList.insert(0, strTitle + "|" + fileName);
 
   saveReader("", false);
+
+  if (!isInitReader) {
+    if (isEpub || isText) {
+      if (mw_one->ui->frameMain->isVisible()) {
+        mw_one->ui->btnReader->click();
+      }
+    }
+  } else {
+    isInitReader = false;
+  }
 
   mw_one->on_DelayCloseProgressBar();
 

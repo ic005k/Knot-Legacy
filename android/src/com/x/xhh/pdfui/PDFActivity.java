@@ -38,6 +38,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.net.Uri;
 
+import android.view.MotionEvent;
+
 /**
  * UI页面：PDF阅读
  * <p>
@@ -56,8 +58,8 @@ public class PDFActivity extends AppCompatActivity implements
     // PDF控件
     PDFView pdfView;
     // 按钮控件：返回、目录、缩略图
-    ImageButton btn_catalogue, btn_preview, btn_open, btn_books;
-    ImageButton btn_back;
+    static ImageButton btn_back, btn_catalogue, btn_preview, btn_open, btn_books;
+
     // 页码
     Integer pageNumber = 0;
     // PDF目录集合
@@ -69,17 +71,29 @@ public class PDFActivity extends AppCompatActivity implements
     Uri uri;
 
     public native static void CallJavaNotify_0();
+
     public native static void CallJavaNotify_1();
+
     public native static void CallJavaNotify_2();
+
     public native static void CallJavaNotify_3();
+
     public native static void CallJavaNotify_4();
+
     public native static void CallJavaNotify_5();
+
     public native static void CallJavaNotify_6();
+
     public native static void CallJavaNotify_7();
+
     public native static void CallJavaNotify_8();
+
     public native static void CallJavaNotify_9();
+
     public native static void CallJavaNotify_10();
+
     public native static void CallJavaNotify_11();
+
     public native static void CallJavaNotify_12();
 
     public static PDFActivity mPdfActivity;
@@ -188,6 +202,7 @@ public class PDFActivity extends AppCompatActivity implements
 
             }
         });
+
     }
 
     /**
@@ -365,6 +380,22 @@ public class PDFActivity extends AppCompatActivity implements
     public static void closeMyPDF() {
         if (mPdfActivity != null)
             mPdfActivity.finish();
+    }
+
+    public static void hideOrShowToolBar() {
+        if (btn_back.getVisibility() == View.VISIBLE) {
+            btn_back.setVisibility(View.GONE);
+            btn_open.setVisibility(View.GONE);
+            btn_books.setVisibility(View.GONE);
+            btn_catalogue.setVisibility(View.GONE);
+            btn_preview.setVisibility(View.GONE);
+        } else {
+            btn_back.setVisibility(View.VISIBLE);
+            btn_open.setVisibility(View.VISIBLE);
+            btn_books.setVisibility(View.VISIBLE);
+            btn_catalogue.setVisibility(View.VISIBLE);
+            btn_preview.setVisibility(View.VISIBLE);
+        }
     }
 
 }
