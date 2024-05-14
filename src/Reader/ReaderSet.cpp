@@ -297,5 +297,4 @@ void ReaderSet::on_btnSetBookmark_clicked() {
                 "\n" + QDateTime::currentDateTime().toString();
   mw_one->m_Reader->saveReader(txt, true);
   if (isAndroid) m_Method->showToastMessage(tr("Bookmark setup is complete."));
-  mw_one->on_btnBackReaderSet_clicked();
 }

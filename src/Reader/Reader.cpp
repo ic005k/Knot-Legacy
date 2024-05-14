@@ -34,7 +34,7 @@ int minBytes = 15000;
 int maxBytes = 30000;
 int unzipMethod = 3; /* 1 system  2 QZipReader 3 ziplib */
 int zlibMethod = 1;
-int readerFontSize;
+int readerFontSize = 18;
 
 QByteArray bookFileData;
 
@@ -751,7 +751,9 @@ void Reader::initReader() {
   isInitReader = true;
 
   if (isAndroid) {
-    if (m_Method->getKeyType() == "defaultopen") isInitReader = false;
+    if (m_Method->getKeyType() == "defaultopen" &&
+        m_Method->getExecDone() == "false")
+      isInitReader = false;
     QFileInfo fi(fileName);
     if (fi.suffix().toLower() != "pdf") {
       if (m_Method->getExecDone() == "true") {

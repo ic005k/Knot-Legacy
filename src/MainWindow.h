@@ -771,7 +771,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnShareBook_clicked();
 
- private:
+  void slotSetBookmark();
+  private:
   QString keyType;
   bool isShowDetails = false;
   QString strShowDetails;

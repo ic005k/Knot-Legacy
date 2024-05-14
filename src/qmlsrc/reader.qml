@@ -94,16 +94,10 @@ Rectangle {
         var x = 0
         var y = flickable.contentY
 
-        for (var i = 1; i < 20; i++) {
-            var start = textArea.positionAt(x, y + FontSize * i)
-            var end = textArea.positionAt(x + textArea.width,
-                                          y + FontSize * 4 * i)
-            var txt = textArea.getText(start, end)
-            txt = txt.trim()
-            if (txt.length > 0) {
-                break
-            }
-        }
+        var start = textArea.positionAt(x, y + FontSize)
+        var end = textArea.positionAt(x + textArea.width, y + FontSize * 6)
+        var txt = textArea.getText(start, end)
+
         if (txt === "") {
             txt = "Bookmark"
         }
@@ -203,7 +197,7 @@ Rectangle {
         TextArea.flickable: TextArea {
             id: textArea
             visible: isEPUBText
-            font.pixelSize: FontSize
+            font.pixelSize:  FontSize
             font.family: FontName
             font.letterSpacing: 2
             renderType: Text.NativeRendering

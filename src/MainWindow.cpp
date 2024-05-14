@@ -5850,8 +5850,11 @@ void MainWindow::on_btnBackReaderSet_clicked() {
 }
 
 void MainWindow::on_btnSetBookmark_clicked() {
-  m_ReaderSet->on_btnSetBookmark_clicked();
+  mw_one->on_btnBackReaderSet_clicked();
+  QTimer::singleShot(200, this, SLOT(slotSetBookmark()));
 }
+
+void MainWindow::slotSetBookmark() { m_ReaderSet->on_btnSetBookmark_clicked(); }
 
 void MainWindow::on_btnFontLess_clicked() {
   m_ReaderSet->on_btnFontLess_clicked();
