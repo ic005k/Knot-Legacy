@@ -5,6 +5,7 @@ import org.ini4j.Wini;
 import com.x.FileUtils;
 import com.x.MyActivity;
 import com.x.NoteEditor;
+import com.x.GetRealPath;
 
 import java.nio.file.Files;
 import android.content.ComponentName;
@@ -296,7 +297,8 @@ public class DefaultOpen extends Activity {
             if (strUri.contains("file://"))
                 filePath = strUri;
             else
-                filePath = getFileFromContentUri(context, uri); // getFilePathForNonMediaUri(context, uri);
+                // filePath = getFileFromContentUri(context, uri);
+                filePath = GetRealPath.getFilePathFromContentUri(context, uri);
 
             filePath = filePath.replace("file://", "");
 
