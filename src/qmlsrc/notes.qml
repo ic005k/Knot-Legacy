@@ -58,7 +58,7 @@ Item {
         onLoaded: {
             textArea.text = text
             console.debug("Load Notes Done...")
-            m_Notes.setVPos();
+            m_Notes.setVPos()
         }
         onError: {
             errorDialog.text = message
@@ -91,7 +91,6 @@ Item {
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting
             textFormat: Qt.AutoText
-
             wrapMode: TextArea.Wrap
             readOnly: true
             focus: true
