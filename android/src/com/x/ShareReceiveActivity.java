@@ -89,6 +89,7 @@ public class ShareReceiveActivity extends Activity
     private Button btnAddToTodo;
     private Button btnAppendNote;
     private Button btnInsertNote;
+    private Button btnFreePaste;
     public static String strData;
     private String share_ini = "/storage/emulated/0/.Knot/myshare.ini";
 
@@ -143,21 +144,24 @@ public class ShareReceiveActivity extends Activity
         btnAddToTodo = (Button) findViewById(R.id.btnAddToTodo);
         btnAppendNote = (Button) findViewById(R.id.btnAppendNote);
         btnInsertNote = (Button) findViewById(R.id.btnInsertNote);
+        btnFreePaste = (Button) findViewById(R.id.btnFreePaste);
 
         if (zh_cn) {
             btnAddToTodo.setText("增加到待办事项");
             btnAppendNote.setText("追加到当前笔记");
             btnInsertNote.setText("插入到当前笔记");
+            btnFreePaste.setText("选择笔记并自由粘贴");
         } else {
             btnAddToTodo.setText("Add to Todo");
             btnAppendNote.setText("Append to Current Note");
             btnInsertNote.setText("Insert to Current Note");
-
+            btnFreePaste.setText("Choose Notes and Paste Freely");
         }
 
         btnAddToTodo.setOnClickListener(this);
         btnAppendNote.setOnClickListener(this);
         btnInsertNote.setOnClickListener(this);
+        btnFreePaste.setOnClickListener(this);
 
         String file2 = "/storage/emulated/0/.Knot/cursor_text.txt";
         cursorText = readTextFile(file2);
@@ -172,6 +176,7 @@ public class ShareReceiveActivity extends Activity
 
         if (type.startsWith("image/")) {
             btnAddToTodo.setVisibility(View.GONE);
+            btnFreePaste.setVisibility(View.GONE);
             btnAppendNote.setEnabled(false);
             btnInsertNote.setEnabled(false);
         }
@@ -300,6 +305,31 @@ public class ShareReceiveActivity extends Activity
                         file.createNewFile();
                     Wini ini = new Wini(file);
                     ini.put("share", "method", "insertNote");
+                    ini.store();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (type.startsWith("text/")) {
+                    goReceiveString();
+                }
+
+                if (type.startsWith("image/")) {
+                    goReceiveImage();
+                }
+
+                onBackPressed();
+                break;
+
+            case R.id.btnFreePaste:
+                btnFreePaste.setBackgroundColor(getResources().getColor(R.color.red));
+                NoteEditor.closeNoteEditorView();
+                try {
+                    File file = new File(share_ini);
+                    if (!file.exists())
+                        file.createNewFile();
+                    Wini ini = new Wini(file);
+                    ini.put("share", "method", "freePaste");
                     ini.store();
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -488,4 +488,31 @@ void ReceiveShare::goReceiveShare() {
   if (method == "insertNote") {
     ui->btnInsertToNote->click();
   }
+
+  if (method == "freePaste") {
+    shareType = getShareType();
+    if (shareType == "text/plain") {
+      strReceiveShareData = getShareString();
+      QClipboard* pClip = QApplication::clipboard();
+      pClip->setText(strReceiveShareData);
+    }
+
+    if (shareType == "image/*") {
+      QClipboard* clip = QApplication::clipboard();
+      int imgCount = getImgCount();
+      for (int i = 0; i < imgCount; i++) {
+        QString imgFile =
+            "/storage/emulated/0/.Knot/img" + QString::number(i) + ".png";
+        QImage* image = new QImage();
+        image->load(imgFile);
+        clip->setPixmap(QPixmap::fromImage(*image));
+        qDebug() << "imgFile=" << imgFile;
+      }
+    }
+
+    mw_one->ui->btnNotes->click();
+    mw_one->ui->btnNotesList->click();
+    closeAllActiveWindowsKeep(mw_one->ui->frameNoteList->objectName());
+    moveTaskToFront();
+  }
 }
