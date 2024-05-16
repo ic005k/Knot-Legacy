@@ -2994,8 +2994,23 @@ void MainWindow::on_actionAbout() {
   m_AboutThis->ui->btnPaste->hide();
   m_AboutThis->ui->lblAbout->setText(textBrowser->toPlainText());
   m_AboutThis->ui->frameAbout->show();
-  m_AboutThis->setGeometry(this->geometry().x(), this->geometry().y(),
-                           this->width(), this->height());
+
+  int x, y;
+  if (!isAndroid) {
+    m_AboutThis->setMaximumWidth(350);
+    m_AboutThis->setFixedHeight(600);
+
+    x = this->geometry().x() +
+        (this->geometry().width() - m_AboutThis->width()) / 2;
+    y = this->geometry().y() +
+        (this->geometry().height() - m_AboutThis->height()) / 2;
+  } else {
+    m_AboutThis->setFixedWidth(this->width());
+    m_AboutThis->setFixedHeight(this->height());
+    x = this->geometry().x();
+    y = this->geometry().y();
+  }
+  m_AboutThis->setGeometry(x, y, this->width(), this->height());
 
   m_AboutThis->show();
 }

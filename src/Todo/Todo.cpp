@@ -29,7 +29,7 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   // ui->listRecycle->setStyleSheet("text-decoration: line-through;");
 
   mw_one->ui->frameTodo->layout()->setContentsMargins(1, 1, 1, 1);
-  mw_one->ui->frameTodo->layout()->setSpacing(2);
+  mw_one->ui->frameTodo->layout()->setSpacing(6);
   mw_one->ui->editTodo->setContentsMargins(12, 0, 12, 0);
 
   QFont f = this->font();
