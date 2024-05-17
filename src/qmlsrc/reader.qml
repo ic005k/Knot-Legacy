@@ -199,6 +199,7 @@ Rectangle {
             visible: isEPUBText
             font.pixelSize:  FontSize
             font.family: FontName
+            font.weight: FontWeight
             font.letterSpacing: 2
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting

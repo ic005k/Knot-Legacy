@@ -2,6 +2,7 @@
 #define PREFERENCES_H
 
 #include <QDialog>
+#include <QFontDatabase>
 #include <QToolButton>
 
 namespace Ui {
@@ -40,7 +41,8 @@ class Preferences : public QDialog {
   void setDefaultFont(QString fontFamily);
   QString getDefaultFont();
 
-  QString setFontDemo(QString customFontPath, QToolButton *btn, int fontSize);
+  QString setFontDemo(QString customFontPath, QToolButton *btn, int fontSize,
+                      bool isReaderFont);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -71,6 +73,9 @@ class Preferences : public QDialog {
   void getCheckStatusChange();
   QString orgCustomFontText;
   QList<int> listCheckStatus;
+  int readerFontID = 0;
+  int uiFontID = 0;
+  QFontDatabase fontDatabase;
 };
 
 #endif  // PREFERENCES_H

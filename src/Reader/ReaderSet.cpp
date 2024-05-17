@@ -14,6 +14,8 @@ extern QSettings* iniPreferences;
 extern QRegularExpression regxNumber;
 extern bool isAndroid;
 
+extern int readerFontWeight;
+
 ReaderSet::ReaderSet(QWidget* parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   QPalette pal = palette();
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -197,12 +199,14 @@ void ReaderSet::on_btnFont_clicked() {
 #endif
 
   QString readerFont = mw_one->m_Preferences->setFontDemo(
-      fileName, mw_one->ui->btnFont, this->font().pointSize());
+      fileName, mw_one->ui->btnFont, this->font().pointSize(), true);
   iniPreferences->setValue("/Options/ReaderFont", fileName);
 
   mw_one->m_Reader->savePageVPos();
   mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
                                                           readerFont);
+  mw_one->ui->qwReader->rootContext()->setContextProperty("FontWeight",
+                                                          readerFontWeight);
   mw_one->m_Reader->setPageVPos();
 }
 
