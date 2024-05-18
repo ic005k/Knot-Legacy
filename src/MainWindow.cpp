@@ -2942,6 +2942,7 @@ void MainWindow::showProgress() {
 void MainWindow::closeProgress() {
   if (!initMain) {
     dlgProg->close();
+    delete dlgProg;
   }
 }
 
@@ -3207,7 +3208,7 @@ void MainWindow::on_actionPreferences_triggered() {
     y = geometry().y();
   } else {
     m_Preferences->setFixedWidth(400);
-    m_Preferences->setMaximumHeight(650);
+    m_Preferences->setMaximumHeight(600);
     x = geometry().x() + (width() - m_Preferences->width()) / 2;
     y = geometry().y() + (height() - m_Preferences->height()) / 2;
   }
