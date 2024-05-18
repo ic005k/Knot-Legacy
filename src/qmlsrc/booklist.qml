@@ -219,7 +219,7 @@ Rectangle {
                     return "#1E90FF"
 
                 if (item3.text == "epub")
-                    return "green"
+                    return "#00CD66"
 
                 if (item3.text == "pdf")
                     return "red"

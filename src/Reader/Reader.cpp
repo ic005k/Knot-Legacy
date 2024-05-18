@@ -1114,9 +1114,8 @@ void Reader::setQMLHtml(QString htmlFile, QString skipID) {
   //                          skipID));
 
   QFileInfo fi(htmlFile);
-  m_ReaderSet->ui->lblInfo->setText(
-      tr("Info") + " : " + fi.baseName() + "  " +
-      mw_one->getFileSize(QFile(htmlFile).size(), 2));
+  mw_one->ui->lblInfo->setText(tr("Info") + " : " + fi.baseName() + "  " +
+                               mw_one->getFileSize(QFile(htmlFile).size(), 2));
 
   qDebug() << "setQMLHtml:Html File=" << htmlFile;
 
@@ -2165,7 +2164,7 @@ void Reader::readBookDone() {
         QUrl(QStringLiteral("qrc:/src/qmlsrc/reader.qml")));
 
     if (isEpub) {
-      m_ReaderSet->ui->lblInfo->show();
+      mw_one->ui->lblInfo->show();
       mw_one->ui->qwReader->rootContext()->setContextProperty("htmlPath",
                                                               strOpfPath);
       if (QFile(catalogueFile).exists()) {
@@ -2177,7 +2176,7 @@ void Reader::readBookDone() {
     if (isText) {
       mw_one->ui->btnBackDir->hide();
       mw_one->ui->btnCatalogue->hide();
-      m_ReaderSet->ui->lblInfo->hide();
+      mw_one->ui->lblInfo->hide();
     }
   }
 

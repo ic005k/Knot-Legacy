@@ -677,7 +677,7 @@ QDialog* Method::getProgBar() {
   if (isAndroid)
     dlg->setFixedWidth(mw_one->geometry().width() - 50);
   else
-    dlg->setMaximumWidth(300);
+    dlg->setFixedWidth(320);
   QVBoxLayout* vbox = new QVBoxLayout;
   dlg->setLayout(vbox);
 
