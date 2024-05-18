@@ -3199,9 +3199,19 @@ void MainWindow::startInitReport() {
 }
 
 void MainWindow::on_actionPreferences_triggered() {
-  m_Preferences->setFixedWidth(this->width());
-  m_Preferences->setGeometry(geometry().x(), geometry().y(),
-                             m_Preferences->width(), height());
+  int x, y;
+  if (isAndroid) {
+    m_Preferences->setFixedWidth(this->width());
+    m_Preferences->setFixedHeight(this->height());
+    x = geometry().x();
+    y = geometry().y();
+  } else {
+    m_Preferences->setFixedWidth(400);
+    m_Preferences->setMaximumHeight(650);
+    x = geometry().x() + (width() - m_Preferences->width()) / 2;
+    y = geometry().y() + (height() - m_Preferences->height()) / 2;
+  }
+  m_Preferences->setGeometry(x, y, m_Preferences->width(), height());
   m_Preferences->setModal(true);
   m_Preferences->ui->sliderFontSize->setStyleSheet(ui->hsM->styleSheet());
   m_Preferences->ui->sliderFontSize->setValue(fontSize);

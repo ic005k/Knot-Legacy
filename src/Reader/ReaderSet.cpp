@@ -199,7 +199,7 @@ void ReaderSet::on_btnFont_clicked() {
 #endif
 
   QString readerFont = mw_one->m_Preferences->setFontDemo(
-      fileName, mw_one->ui->btnFont, this->font().pointSize(), true);
+      fileName, mw_one->ui->btnFont, this->font().pointSize());
   iniPreferences->setValue("/Options/ReaderFont", fileName);
 
   mw_one->m_Reader->savePageVPos();

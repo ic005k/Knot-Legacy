@@ -2291,6 +2291,12 @@ QTabBar::scroller {width:0}
                 <height>35</height>
                </size>
               </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string>Sign In</string>
               </property>
@@ -2308,6 +2314,12 @@ QTabBar::scroller {width:0}
                <size>
                 <width>0</width>
                 <height>35</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
                </size>
               </property>
               <property name="text">
@@ -2333,6 +2345,12 @@ QTabBar::scroller {width:0}
                 <height>35</height>
                </size>
               </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string>Storage Info</string>
               </property>
@@ -2352,6 +2370,12 @@ QTabBar::scroller {width:0}
                 <height>35</height>
                </size>
               </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string>Refresh Token</string>
               </property>
@@ -2369,6 +2393,12 @@ QTabBar::scroller {width:0}
                <size>
                 <width>0</width>
                 <height>35</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
                </size>
               </property>
               <property name="text">
@@ -2394,6 +2424,12 @@ QTabBar::scroller {width:0}
                 <height>35</height>
                </size>
               </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string>Upload</string>
               </property>
@@ -2411,6 +2447,12 @@ QTabBar::scroller {width:0}
                <size>
                 <width>0</width>
                 <height>35</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
                </size>
               </property>
               <property name="text">

@@ -41,8 +41,7 @@ class Preferences : public QDialog {
   void setDefaultFont(QString fontFamily);
   QString getDefaultFont();
 
-  QString setFontDemo(QString customFontPath, QToolButton *btn, int fontSize,
-                      bool isReaderFont);
+  QString setFontDemo(QString customFontPath, QToolButton *btn, int fontSize);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
@@ -76,6 +75,9 @@ class Preferences : public QDialog {
   int readerFontID = 0;
   int uiFontID = 0;
   QFontDatabase fontDatabase;
+  QFontDatabase fontDatabaseUI;
+  int uiFontWeight;
+  QString setFontDemoUI(QString customFontPath, QToolButton *btn, int fontSize);
 };
 
 #endif  // PREFERENCES_H

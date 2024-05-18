@@ -130,7 +130,7 @@ void Preferences::on_btnCustomFont_clicked() {
   fileName = m_Method->getRealPathFile(fileName);
 #endif
 
-  setFontDemo(fileName, ui->btnCustomFont, ui->sliderFontSize->value(), false);
+  setFontDemoUI(fileName, ui->btnCustomFont, ui->sliderFontSize->value());
   isFontChange = true;
 
   iniPreferences->setValue("/Options/CustomFont", fileName);
@@ -138,42 +138,71 @@ void Preferences::on_btnCustomFont_clicked() {
   getCheckStatusChange();
 }
 
-QString Preferences::setFontDemo(QString customFontPath, QToolButton* btn,
-                                 int fontSize, bool isReaderFont) {
+QString Preferences::setFontDemoUI(QString customFontPath, QToolButton* btn,
+                                   int fontSize) {
   QString fontName;
+  int loadedFontID;
+  QStringList loadedFontFamilies;
+  QFont f;
+  QString style;
 
-  if (!mw_one->initMain) {
-    if (isReaderFont) {
-      fontDatabase.removeApplicationFont(readerFontID);
-    } else {
-      fontDatabase.removeApplicationFont(uiFontID);
-    }
-  }
+  if (!mw_one->initMain) fontDatabaseUI.removeAllApplicationFonts();
+  loadedFontID = fontDatabaseUI.addApplicationFont(customFontPath);
+  loadedFontFamilies = fontDatabaseUI.applicationFontFamilies(loadedFontID);
+  uiFontID = loadedFontID;
 
-  int loadedFontID = fontDatabase.addApplicationFont(customFontPath);
-  QStringList loadedFontFamilies =
-      fontDatabase.applicationFontFamilies(loadedFontID);
   if (!loadedFontFamilies.empty()) {
     fontName = loadedFontFamilies.at(0);
 
-    if (isReaderFont) {
-      readerFontID = loadedFontID;
-    } else {
-      uiFontID = loadedFontID;
-    }
+    QStringList styles = fontDatabaseUI.styles(fontName);
+    style = styles.at(0);
+    uiFontWeight = fontDatabaseUI.weight(fontName, style);
+
+    f.setWeight(uiFontWeight);
+    f.setFamily(fontName);
+    f.setPointSize(fontSize);
+
+    btn->setFont(f);
+
+    QString str = customFontPath;
+#ifdef Q_OS_ANDROID
+    str = mw_one->m_Reader->getUriRealPath(customFontPath);
+#endif
+
+    QStringList list = str.split("/");
+    QString str1 = list.at(list.count() - 1);
+    btn->setText(tr("Custom Font") + "\n" + fontName + "\n" + str1);
+  }
+
+  return fontName;
+}
+
+QString Preferences::setFontDemo(QString customFontPath, QToolButton* btn,
+                                 int fontSize) {
+  QString fontName;
+  int loadedFontID;
+  QStringList loadedFontFamilies;
+  QFont f;
+  QString style;
+
+  if (!mw_one->initMain) fontDatabase.removeApplicationFont(readerFontID);
+  loadedFontID = fontDatabase.addApplicationFont(customFontPath);
+  loadedFontFamilies = fontDatabase.applicationFontFamilies(loadedFontID);
+  readerFontID = loadedFontID;
+
+  if (!loadedFontFamilies.empty()) {
+    fontName = loadedFontFamilies.at(0);
 
     QStringList styles = fontDatabase.styles(fontName);
-    QString style = styles.at(0);
+    style = styles.at(0);
     readerFontWeight = fontDatabase.weight(fontName, style);
 
     qDebug() << "readerFontWeight=" << readerFontWeight << loadedFontFamilies
              << loadedFontID << style;
 
-    QFont f;
+    f.setWeight(readerFontWeight);
     f.setFamily(fontName);
     f.setPointSize(fontSize);
-
-    f.setWeight(readerFontWeight);
 
     btn->setFont(f);
 
@@ -269,15 +298,13 @@ void Preferences::initOptions() {
 
   QString customFontFile =
       iniPreferences->value("/Options/CustomFont").toString();
-  setFontDemo(customFontFile, ui->btnCustomFont, ui->sliderFontSize->value(),
-              false);
+  setFontDemoUI(customFontFile, ui->btnCustomFont, ui->sliderFontSize->value());
 
   QString readerFontFile =
       iniPreferences->value("/Options/ReaderFont").toString();
   QString readerFont;
   if (QFile::exists(readerFontFile))
-    readerFont =
-        setFontDemo(readerFontFile, mw_one->ui->btnFont, fontSize, true);
+    readerFont = setFontDemo(readerFontFile, mw_one->ui->btnFont, fontSize);
   else
     readerFont = defaultFontFamily;
   mw_one->ui->qwReader->rootContext()->setContextProperty("FontName",
