@@ -138,6 +138,7 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
     public ProgressBar mProgressBar;
     private String filePath;
     public static FilePicker MyFilepicker;
+    private boolean isDark = false;
 
     public native static void CallJavaNotify_0();
 
@@ -174,10 +175,11 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
         MyFilepicker = this;
         mContentResolver = MyContex.getContentResolver();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if (MyActivity.isDark) {
+        isDark = MyActivity.isDark;
+        if (isDark) {
             this.setStatusBarColor("#19232D"); // 深色
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-            setContentView(R.layout.myfilepicker);
+            setContentView(R.layout.myfilepicker_dark);
         } else {
             this.setStatusBarColor("#F3F3F3"); // 灰
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -398,7 +400,7 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
             // 在这里执行完成后的操作
             addToListView(files, filesInfo);
 
-            editFind.clearFocus();// 取消焦点
+            editFind.requestFocus();
             hideKeyBoard(MyFilepicker);
         }
     }
@@ -433,6 +435,7 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
 
             case R.id.btn_clear:
                 editFind.setText("");
+                editFind.requestFocus();
 
                 break;
 
@@ -505,7 +508,11 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
             }
         }
 
-        FruitAdapter adapter = new FruitAdapter(MyContex, R.layout.fruit_item, fruitlist);
+        FruitAdapter adapter;
+        if (isDark)
+            adapter = new FruitAdapter(MyContex, R.layout.fruit_item_dark, fruitlist);
+        else
+            adapter = new FruitAdapter(MyContex, R.layout.fruit_item, fruitlist);
         m_ListView.setAdapter(adapter);
 
         mProgressBar.setVisibility(View.GONE);
