@@ -103,6 +103,7 @@ public class PDFActivity extends AppCompatActivity implements
 
     public static PDFActivity mPdfActivity;
     public static Context context;
+    private static float f_zoom = 1.25f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,18 +259,34 @@ public class PDFActivity extends AppCompatActivity implements
                             name = name.replace(".", "");
                             name = name.replace("/", "");
                             String strPage = ini.get("pdf", name);
+                            String strZoom = ini.get("zoom", name);
+                            String strNight = ini.get("night", name);
                             System.out.print("strPage:" + strPage);
 
                             if (strPage != null)
                                 pageNumber = Integer.parseInt(strPage);
                             else
                                 pageNumber = 0;
+
+                            if (strZoom != null)
+                                f_zoom = Float.parseFloat(strZoom);
+                            else
+                                f_zoom = 1.0f;
+
+                            boolean isNight;
+                            if (strNight != null)
+                                isNight = Boolean.parseBoolean(strNight);
+                            else
+                                isNight = false;
+                            pdfView.nightMode = isNight;
+                            Configurator.nightMode = isNight;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     displayFromUri(uri);
+
                 }
             }
         }
@@ -308,6 +325,7 @@ public class PDFActivity extends AppCompatActivity implements
                 .spacing(10) // 单位 dp
                 .onPageError(this)
                 .load();
+
     }
 
     /**
@@ -427,6 +445,8 @@ public class PDFActivity extends AppCompatActivity implements
             name = name.replace(".", "");
             name = name.replace("/", "");
             ini.put("pdf", name, String.valueOf(pageNumber));
+            ini.put("zoom", name, String.valueOf(pdfView.getZoom()));
+            ini.put("night", name, String.valueOf(pdfView.nightMode));
             ini.store();
         } catch (IOException e) {
             e.printStackTrace();
