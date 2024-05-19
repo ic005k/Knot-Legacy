@@ -1608,7 +1608,6 @@ void Reader::getReadList() {
 
   if (bookList.count() == 0) return;
 
-  setPdfViewVisible(false);
   m_Method->clearAllBakList(mw_one->ui->qwBookList);
   for (int i = 0; i < bookList.count(); i++) {
     QString str = bookList.at(i);

@@ -2,7 +2,9 @@ package com.xhh.pdfui;
 
 import org.ini4j.Wini;
 
+import com.x.MyActivity;
 import com.x.MyPDF;
+import com.x.MyProgBar;
 import com.x.R;
 
 import android.content.Intent;
@@ -145,6 +147,12 @@ public class PDFActivity extends AppCompatActivity implements
         }
     };
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
+
     /**
      * 初始化view
      */
@@ -180,6 +188,7 @@ public class PDFActivity extends AppCompatActivity implements
                     Configurator.nightMode = false;
                 }
 
+                savePDFInfo();
                 PDFActivity.this.finish();
                 CallJavaNotify_13();
 
@@ -374,22 +383,8 @@ public class PDFActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mHomeKeyEvent);
-
-        String filename = "/storage/emulated/0/.Knot/mypdf.ini";
-        try {
-            File file = new File(filename);
-            if (!file.exists())
-                file.createNewFile();
-            Wini ini = new Wini(file);
-            String name = uri.toString();
-            name = name.replace(":", "");
-            name = name.replace(".", "");
-            name = name.replace("/", "");
-            ini.put("pdf", name, String.valueOf(pageNumber));
-            ini.store();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        savePDFInfo();
+        MyProgBar.closeAndroidProgressBar();
 
         // 是否内存
         if (pdfView != null) {
@@ -417,6 +412,24 @@ public class PDFActivity extends AppCompatActivity implements
             btn_books.setVisibility(View.VISIBLE);
             btn_catalogue.setVisibility(View.VISIBLE);
             btn_preview.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void savePDFInfo() {
+        String filename = "/storage/emulated/0/.Knot/mypdf.ini";
+        try {
+            File file = new File(filename);
+            if (!file.exists())
+                file.createNewFile();
+            Wini ini = new Wini(file);
+            String name = uri.toString();
+            name = name.replace(":", "");
+            name = name.replace(".", "");
+            name = name.replace("/", "");
+            ini.put("pdf", name, String.valueOf(pageNumber));
+            ini.store();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -99,7 +99,34 @@ public class MyProgBar extends Activity {
         mProgressBar = (ProgressBar) findViewById(R.id.progBar);
         mProgressBar.setVisibility(View.VISIBLE);
 
+        // HomeKey
+        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }
+
+    private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
+        String SYSTEM_REASON = "reason";
+        String SYSTEM_HOME_KEY = "homekey";
+        String SYSTEM_HOME_KEY_LONG = "recentapps";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_REASON);
+                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
+                    // 表示按了home键,程序直接进入到后台
+                    System.out.println("NoteEditor HOME键被按下...");
+
+                    onBackPressed();
+                } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
+                    // 表示长按home键,显示最近使用的程序
+                    System.out.println("NoteEditor 长按HOME键...");
+
+                    onBackPressed();
+                }
+            }
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -111,8 +138,8 @@ public class MyProgBar extends Activity {
     protected void onDestroy() {
         System.out.println("onDestroy...");
         super.onDestroy();
+        unregisterReceiver(mHomeKeyEvent);
         mProgressBar.setVisibility(View.GONE);
-
     }
 
     public static boolean isZh(Context context) {

@@ -4394,7 +4394,7 @@ static void JavaNotify_12() {
 }
 
 static void JavaNotify_13() {
-  mw_one->ui->btnReader->click();
+  mw_one->m_Reader->openMyPDF(fileName);
 
   qDebug() << "C++ JavaNotify_13";
 }
@@ -4610,6 +4610,8 @@ void MainWindow::on_btnReadList_clicked() {
   ui->frameReader->hide();
   ui->frameBookList->show();
   m_Reader->getReadList();
+
+  if (isAndroid) m_Method->closeAndroidProgressBar();
 }
 
 void MainWindow::on_btnBackDir_clicked() { m_Reader->backDir(); }
