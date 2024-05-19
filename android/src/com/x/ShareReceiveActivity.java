@@ -122,6 +122,8 @@ public class ShareReceiveActivity extends Activity
 
     public native static void CallJavaNotify_12();
 
+    public native static void CallJavaNotify_13();
+
     private String type;
     private String action;
     private static boolean zh_cn;

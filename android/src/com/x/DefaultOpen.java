@@ -127,6 +127,8 @@ public class DefaultOpen extends Activity {
 
     public native static void CallJavaNotify_12();
 
+    public native static void CallJavaNotify_13();
+
     private static boolean zh_cn;
     private Uri uri;
 

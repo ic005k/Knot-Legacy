@@ -188,6 +188,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     public native static void CallJavaNotify_12();
 
+    public native static void CallJavaNotify_13();
+
     private static boolean isGoBackKnot = false;
 
     public static boolean isZh(Context context) {
@@ -1440,44 +1442,48 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
-    /* 
-    private void showPowerMenu(View view) {
-
-        ArrayList<PowerMenuItem> list = new ArrayList<>();
-        int count = listMenuTitle.size();
-        for (int i = 0; i < count; i++) {
-            String strTitle = listMenuTitle.get(i);
-            list.add(new PowerMenuItem(strTitle));
-        }
-
-        powerMenu = new PowerMenu.Builder(context)
-                .addItemList(list) // list has "Novel", "Poetry", "Art"
-                .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT) // Animation start point (TOP | LEFT).
-                .setMenuRadius(10f) // sets the corner radius.
-                .setMenuShadow(10f) // sets the shadow.
-                .setTextColor(ContextCompat.getColor(context, R.color.md_grey_700))
-                .setTextGravity(Gravity.CENTER)
-                .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
-                .setSelectedTextColor(Color.WHITE)
-                .setMenuColor(Color.WHITE)
-                .setSelectedMenuColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                .setOnMenuItemClickListener(onMenuItemClickListener)
-                .build();
-
-        powerMenu.showAsDropDown(view); // view is an anchor
-
-    }
-
-    private PowerMenu powerMenu;
-    private OnMenuItemClickListener<PowerMenuItem> onMenuItemClickListener = new OnMenuItemClickListener<PowerMenuItem>() {
-        @Override
-        public void onItemClick(int position, PowerMenuItem item) {
-            onClickMenuTitle(item.title);
-            // Toast.makeText(getBaseContext(), item.title, Toast.LENGTH_SHORT).show();
-            powerMenu.setSelectedPosition(position); // change selected item
-            powerMenu.dismiss();
-        }
-    };*/
+    /*
+     * private void showPowerMenu(View view) {
+     * 
+     * ArrayList<PowerMenuItem> list = new ArrayList<>();
+     * int count = listMenuTitle.size();
+     * for (int i = 0; i < count; i++) {
+     * String strTitle = listMenuTitle.get(i);
+     * list.add(new PowerMenuItem(strTitle));
+     * }
+     * 
+     * powerMenu = new PowerMenu.Builder(context)
+     * .addItemList(list) // list has "Novel", "Poetry", "Art"
+     * .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT) // Animation start point (TOP |
+     * LEFT).
+     * .setMenuRadius(10f) // sets the corner radius.
+     * .setMenuShadow(10f) // sets the shadow.
+     * .setTextColor(ContextCompat.getColor(context, R.color.md_grey_700))
+     * .setTextGravity(Gravity.CENTER)
+     * .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+     * .setSelectedTextColor(Color.WHITE)
+     * .setMenuColor(Color.WHITE)
+     * .setSelectedMenuColor(ContextCompat.getColor(context, R.color.colorPrimary))
+     * .setOnMenuItemClickListener(onMenuItemClickListener)
+     * .build();
+     * 
+     * powerMenu.showAsDropDown(view); // view is an anchor
+     * 
+     * }
+     * 
+     * private PowerMenu powerMenu;
+     * private OnMenuItemClickListener<PowerMenuItem> onMenuItemClickListener = new
+     * OnMenuItemClickListener<PowerMenuItem>() {
+     * 
+     * @Override
+     * public void onItemClick(int position, PowerMenuItem item) {
+     * onClickMenuTitle(item.title);
+     * // Toast.makeText(getBaseContext(), item.title, Toast.LENGTH_SHORT).show();
+     * powerMenu.setSelectedPosition(position); // change selected item
+     * powerMenu.dismiss();
+     * }
+     * };
+     */
 
     public boolean readFileFromUriToLocal(Uri uri, String localfile) {
 

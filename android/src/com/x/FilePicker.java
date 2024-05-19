@@ -164,6 +164,8 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
 
     public native static void CallJavaNotify_12();
 
+    public native static void CallJavaNotify_13();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

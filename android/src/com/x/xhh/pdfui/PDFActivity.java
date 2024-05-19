@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.PDFView.Configurator;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
@@ -58,7 +59,7 @@ public class PDFActivity extends AppCompatActivity implements
     // PDF控件
     PDFView pdfView;
     // 按钮控件：返回、目录、缩略图
-    static ImageButton btn_back, btn_catalogue, btn_preview, btn_open, btn_books;
+    static ImageButton btn_back, btn_dark, btn_catalogue, btn_preview, btn_open, btn_books;
 
     // 页码
     Integer pageNumber = 0;
@@ -95,6 +96,8 @@ public class PDFActivity extends AppCompatActivity implements
     public native static void CallJavaNotify_11();
 
     public native static void CallJavaNotify_12();
+
+    public native static void CallJavaNotify_13();
 
     public static PDFActivity mPdfActivity;
     public static Context context;
@@ -148,6 +151,7 @@ public class PDFActivity extends AppCompatActivity implements
     private void initView() {
         pdfView = findViewById(R.id.pdfView);
         btn_back = findViewById(R.id.btn_back);
+        btn_dark = findViewById(R.id.btn_dark);
         btn_catalogue = findViewById(R.id.btn_catalogue);
         btn_preview = findViewById(R.id.btn_preview);
         btn_open = findViewById(R.id.btn_open);
@@ -163,6 +167,22 @@ public class PDFActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 PDFActivity.this.finish();
+            }
+        });
+        btn_dark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (PDFView.nightMode == false) {
+                    PDFView.nightMode = true;
+                    Configurator.nightMode = true;
+                } else {
+                    PDFView.nightMode = false;
+                    Configurator.nightMode = false;
+                }
+
+                PDFActivity.this.finish();
+                CallJavaNotify_13();
+
             }
         });
         // 跳转目录页面
@@ -385,12 +405,14 @@ public class PDFActivity extends AppCompatActivity implements
     public static void hideOrShowToolBar() {
         if (btn_back.getVisibility() == View.VISIBLE) {
             btn_back.setVisibility(View.GONE);
+            btn_dark.setVisibility(View.GONE);
             btn_open.setVisibility(View.GONE);
             btn_books.setVisibility(View.GONE);
             btn_catalogue.setVisibility(View.GONE);
             btn_preview.setVisibility(View.GONE);
         } else {
             btn_back.setVisibility(View.VISIBLE);
+            btn_dark.setVisibility(View.VISIBLE);
             btn_open.setVisibility(View.VISIBLE);
             btn_books.setVisibility(View.VISIBLE);
             btn_catalogue.setVisibility(View.VISIBLE);

@@ -71,6 +71,7 @@ static void JavaNotify_9();
 static void JavaNotify_10();
 static void JavaNotify_11();
 static void JavaNotify_12();
+static void JavaNotify_13();
 #endif
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
@@ -4392,6 +4393,12 @@ static void JavaNotify_12() {
   qDebug() << "C++ JavaNotify_12";
 }
 
+static void JavaNotify_13() {
+  mw_one->ui->btnReader->click();
+
+  qDebug() << "C++ JavaNotify_13";
+}
+
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},
     {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
@@ -4405,7 +4412,8 @@ static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_9", "()V", (void *)JavaNotify_9},
     {"CallJavaNotify_10", "()V", (void *)JavaNotify_10},
     {"CallJavaNotify_11", "()V", (void *)JavaNotify_11},
-    {"CallJavaNotify_12", "()V", (void *)JavaNotify_12}
+    {"CallJavaNotify_12", "()V", (void *)JavaNotify_12},
+    {"CallJavaNotify_13", "()V", (void *)JavaNotify_13}
 
 };
 

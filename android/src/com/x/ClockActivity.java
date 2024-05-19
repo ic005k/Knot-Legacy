@@ -92,9 +92,14 @@ public class ClockActivity extends Activity implements View.OnClickListener, App
     public native static void CallJavaNotify_8();
 
     public native static void CallJavaNotify_9();
+
     public native static void CallJavaNotify_10();
+
     public native static void CallJavaNotify_11();
+
     public native static void CallJavaNotify_12();
+
+    public native static void CallJavaNotify_13();
 
     public static boolean isZh(Context context) {
         Locale locale = context.getResources().getConfiguration().locale;

@@ -192,6 +192,8 @@ public class MyActivity extends QtActivity implements Application.ActivityLifecy
 
     public native static void CallJavaNotify_12();
 
+    public native static void CallJavaNotify_13();
+
     private InternalConfigure internalConfigure;
     public static boolean isReadShareData = false;
 

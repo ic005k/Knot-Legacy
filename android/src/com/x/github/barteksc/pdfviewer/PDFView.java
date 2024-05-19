@@ -78,10 +78,13 @@ import java.util.List;
  * To fully understand this class you must know its principles :
  * - The PDF document is seen as if we always want to draw all the pages.
  * - The thing is that we only draw the visible parts.
- * - All parts are the same size, this is because we can't interrupt a native page rendering,
- * so we need these renderings to be as fast as possible, and be able to interrupt them
+ * - All parts are the same size, this is because we can't interrupt a native
+ * page rendering,
+ * so we need these renderings to be as fast as possible, and be able to
+ * interrupt them
  * as soon as we can.
- * - The parts are loaded when the current offset or the current zoom level changes
+ * - The parts are loaded when the current offset or the current zoom level
+ * changes
  * <p>
  * Important :
  * - DocumentPage = A page of the PDF document.
@@ -180,7 +183,7 @@ public class PDFView extends RelativeLayout {
 
     private boolean doubletapEnabled = true;
 
-    private boolean nightMode = false;
+    public static boolean nightMode = false;
 
     private boolean pageSnap = true;
 
@@ -197,7 +200,8 @@ public class PDFView extends RelativeLayout {
 
     /**
      * True if bitmap should use ARGB_8888 format and take more memory
-     * False if bitmap should be compressed by using RGB_565 format and take less memory
+     * False if bitmap should be compressed by using RGB_565 format and take less
+     * memory
      */
     private boolean bestQuality = false;
 
@@ -209,7 +213,8 @@ public class PDFView extends RelativeLayout {
 
     /**
      * True if the view should render during scaling<br/>
-     * Can not be forced on older API versions (< Build.VERSION_CODES.KITKAT) as the GestureDetector does
+     * Can not be forced on older API versions (< Build.VERSION_CODES.KITKAT) as the
+     * GestureDetector does
      * not detect scrolling while scaling.<br/>
      * False otherwise
      */
@@ -217,8 +222,8 @@ public class PDFView extends RelativeLayout {
 
     /** Antialiasing and bitmap filtering */
     private boolean enableAntialiasing = true;
-    private PaintFlagsDrawFilter antialiasFilter =
-            new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+    private PaintFlagsDrawFilter antialiasFilter = new PaintFlagsDrawFilter(0,
+            Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
 
     /** Spacing between pages, in px */
     private int spacingPx = 0;
@@ -380,12 +385,11 @@ public class PDFView extends RelativeLayout {
     public void setNightMode(boolean nightMode) {
         this.nightMode = nightMode;
         if (nightMode) {
-            ColorMatrix colorMatrixInverted =
-                    new ColorMatrix(new float[]{
-                            -1, 0, 0, 0, 255,
-                            0, -1, 0, 0, 255,
-                            0, 0, -1, 0, 255,
-                            0, 0, 0, 1, 0});
+            ColorMatrix colorMatrixInverted = new ColorMatrix(new float[] {
+                    -1, 0, 0, 0, 255,
+                    0, -1, 0, 0, 255,
+                    0, 0, -1, 0, 255,
+                    0, 0, 0, 1, 0 });
 
             ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrixInverted);
             paint.setColorFilter(filter);
@@ -540,22 +544,23 @@ public class PDFView extends RelativeLayout {
 
         // That's where Canvas.translate(x, y) becomes very helpful.
         // This is the situation :
-        //  _______________________________________________
-        // |   			 |					 			   |
-        // | the actual  |					The big strip  |
-        // |	canvas	 | 								   |
-        // |_____________|								   |
+        // _______________________________________________
+        // | | |
+        // | the actual | The big strip |
+        // | canvas | |
+        // |_____________| |
         // |_______________________________________________|
         //
         // If the rendered part is on the bottom right corner of the strip
         // we can draw it but we won't see it because the canvas is not big enough.
 
-        // But if we call translate(-X, -Y) on the canvas just before drawing the object :
-        //  _______________________________________________
-        // |   			  					  _____________|
-        // |   The big strip     			 |			   |
-        // |		    					 |	the actual |
-        // |								 |	canvas	   |
+        // But if we call translate(-X, -Y) on the canvas just before drawing the object
+        // :
+        // _______________________________________________
+        // | _____________|
+        // | The big strip | |
+        // | | the actual |
+        // | | canvas |
         // |_________________________________|_____________|
         //
         // The object will be on the canvas.
@@ -786,8 +791,10 @@ public class PDFView extends RelativeLayout {
      * Move to the given X and Y offsets, but check them ahead of time
      * to be sure not to go outside the the big strip.
      *
-     * @param offsetX    The big strip X offset to use as the left border of the screen.
-     * @param offsetY    The big strip Y offset to use as the right border of the screen.
+     * @param offsetX    The big strip X offset to use as the left border of the
+     *                   screen.
+     * @param offsetY    The big strip Y offset to use as the right border of the
+     *                   screen.
      * @param moveHandle whether to move scroll handle or not
      */
     public void moveTo(float offsetX, float offsetY, boolean moveHandle) {
@@ -969,7 +976,8 @@ public class PDFView extends RelativeLayout {
     }
 
     /**
-     * @return true if single page fills the entire screen in the scrolling direction
+     * @return true if single page fills the entire screen in the scrolling
+     *         direction
      */
     public boolean pageFillsScreen() {
         float start = -pdfFile.getPageOffset(currentPage, zoom);
@@ -1268,7 +1276,10 @@ public class PDFView extends RelativeLayout {
         return new Configurator(new ByteArraySource(bytes));
     }
 
-    /** Use stream as the pdf source. Stream will be written to bytearray, because native code does not support Java Streams */
+    /**
+     * Use stream as the pdf source. Stream will be written to bytearray, because
+     * native code does not support Java Streams
+     */
     public Configurator fromStream(InputStream stream) {
         return new Configurator(new InputStreamSource(stream));
     }
@@ -1278,7 +1289,9 @@ public class PDFView extends RelativeLayout {
         return new Configurator(docSource);
     }
 
-    private enum State {DEFAULT, LOADED, SHOWN, ERROR}
+    private enum State {
+        DEFAULT, LOADED, SHOWN, ERROR
+    }
 
     public class Configurator {
 
@@ -1334,7 +1347,7 @@ public class PDFView extends RelativeLayout {
 
         private boolean pageSnap = false;
 
-        private boolean nightMode = false;
+        public static boolean nightMode = false;
 
         private Configurator(DocumentSource documentSource) {
             this.documentSource = documentSource;
