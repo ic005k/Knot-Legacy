@@ -45,6 +45,7 @@ import android.appwidget.AppWidgetProvider;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.WindowManager;
 import android.view.Window;
@@ -132,7 +133,7 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
     private ListView m_ListView;
     private TextView lblResult;
     private Button btnFind;
-    private ImageView imgFind;
+    private ImageButton btn_clear;
     private EditText editFind;
     public ProgressBar mProgressBar;
     private String filePath;
@@ -183,9 +184,12 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
             setContentView(R.layout.myfilepicker);
         }
 
+        btn_clear = (ImageButton) findViewById(R.id.btn_clear);
+        btn_clear.setOnClickListener(this);
+
         btnFind = (Button) findViewById(R.id.btnFind);
         btnFind.setOnClickListener(this);
-        imgFind = (ImageView) findViewById(R.id.imgFind);
+
         lblResult = (TextView) findViewById(R.id.lblResult);
         editFind = (EditText) findViewById(R.id.editFind);
 
@@ -424,6 +428,11 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
                 btnFind.setBackgroundColor(getResources().getColor(R.color.red));
 
                 btnFind.setBackgroundColor(getResources().getColor(R.color.normal));
+
+                break;
+
+            case R.id.btn_clear:
+                editFind.setText("");
 
                 break;
 

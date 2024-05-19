@@ -292,16 +292,10 @@ void Reader::openFile(QString openfile) {
   oldOpfPath = strOpfPath;
 
   if (QFile(openfile).exists()) {
-    QString strHead;
+    QFileInfo fi(openfile);
+    QString strSuffix = fi.suffix();
 
-    QFile input(openfile);
-    if (input.open(QIODevice::ReadOnly)) {
-      bookFileData = input.readAll();
-      strHead = bookFileData.mid(0, 20);
-      qDebug() << "strHead=" << strHead;
-    }
-
-    if (strHead.trimmed().mid(0, 2) == "PK") {
+    if (strSuffix == "epub") {
       QString dirpath, dirpath1;
       dirpath = privateDir + "temp0/";
       dirpath1 = privateDir + "temp/";
@@ -573,7 +567,7 @@ void Reader::openFile(QString openfile) {
         StringToFile(str_cate, catalogueFile);
       }
 
-    } else if (strHead.trimmed().toLower().contains("pdf")) {
+    } else if (strSuffix == "pdf") {
       bookFileData = bookFileData.toBase64();
       isPDF = true;
       isText = false;
@@ -2139,8 +2133,6 @@ void Reader::readBookDone() {
 
   if (isText || isEpub) {
     strShowMsg = "Read  EBook End...";
-
-    setPdfViewVisible(false);
 
     mw_one->ui->btnGoBack->hide();
     mw_one->ui->qwPdf->hide();
