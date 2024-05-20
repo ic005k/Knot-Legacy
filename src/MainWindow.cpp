@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.79";
+QString ver = "1.1.80";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -362,7 +362,6 @@ MainWindow::MainWindow(QWidget *parent)
   initMain = false;
 
   addFilesWatch();
-  m_Reader->setPdfViewVisible(false);
 
   m_Todo->refreshTableListsFromIni();
   m_Todo->refreshAlarm();

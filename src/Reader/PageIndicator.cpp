@@ -49,8 +49,13 @@ void PageIndicator::init() {
   int nFontHeight = fontMetrics.height();
   setFixedWidth(w);
   setFixedHeight(nFontHeight + 10);
-  this->setGeometry(mw_one->geometry().x() + (mw_one->width() - w) / 2,
-                    mw_one->geometry().y() + 15, this->width(), this->height());
+  int y;
+  if (mw_one->ui->f_ReaderFun->isVisible())
+    y = mw_one->geometry().y() + mw_one->ui->f_ReaderFun->height() + 5;
+  else
+    y = mw_one->geometry().y() + 5;
+  this->setGeometry(mw_one->geometry().x() + (mw_one->width() - w) / 2, y,
+                    this->width(), this->height());
 
   this->show();
 }
