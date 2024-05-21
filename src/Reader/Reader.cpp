@@ -85,7 +85,7 @@ Reader::Reader(QWidget* parent) : QDialog(parent) {
   f.setBold(true);
   mw_one->ui->btnPages->setFont(f);
 
-  tmeShowEpubMsg = new QTimer(this);
+  tmeShowEpubMsg = new QTimer(mw_one);
   connect(tmeShowEpubMsg, SIGNAL(timeout()), this, SLOT(showEpubMsg()));
 
   f.setPointSize(10);
@@ -837,7 +837,7 @@ void Reader::on_btnPageNext_clicked() {
 
   isPageNext = true;
 
-  if (iPage > 1) savePageVPos();
+  if (iPage > 1 || htmlFiles.count() > 1) savePageVPos();
 
   if (isText) {
     QString txt1;
@@ -1643,7 +1643,6 @@ void Reader::openBookListItem() {
     startOpenFile(bookfile);
   } else {
     if (isPDF) {
-      setPdfViewVisible(true);
       if (isAndroid) {
         openMyPDF(fileName);
       }
