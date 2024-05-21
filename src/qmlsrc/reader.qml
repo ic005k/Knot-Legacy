@@ -16,6 +16,13 @@ Rectangle {
     property bool isPDF: false
     property bool isEPUBText: false
 
+    property variant stringList: null
+
+    function updateText(str) {
+        stringList = str.split('</html>')
+        //idContentListView.positionViewAtEnd()
+    }
+
     function getText() {
         return textArea.text
     }
@@ -117,6 +124,7 @@ Rectangle {
 
         onLoaded: {
             textArea.text = text
+            //updateText(text)
         }
         onError: {
             errorDialog.text = message
@@ -197,7 +205,7 @@ Rectangle {
         TextArea.flickable: TextArea {
             id: textArea
             visible: isEPUBText
-            font.pixelSize:  FontSize
+            font.pixelSize: FontSize
             font.family: FontName
             font.weight: FontWeight
             font.letterSpacing: 2
@@ -276,5 +284,35 @@ Rectangle {
         Component.onCompleted: {
 
         }
+    }
+
+    ListView {
+        id: idContentListView
+        model: stringList
+        visible: false
+
+        anchors {
+            fill: parent
+            margins: 2
+        }
+        delegate: Text {
+
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+
+            Layout.preferredWidth: parent.width
+            textFormat: Qt.AutoText //Text.PlainText
+            wrapMode: Text.Wrap
+            font.pixelSize: FontSize
+            font.family: FontName
+            font.weight: FontWeight
+            font.letterSpacing: 2
+            color: myTextColor
+
+            text: model.modelData
+        }
+        ScrollBar.vertical: ScrollBar {}
     }
 }

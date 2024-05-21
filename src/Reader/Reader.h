@@ -71,7 +71,7 @@ class Reader : public QDialog {
   void goBookReadPosition();
   void setQMLText(QString);
 
-  void setQMLHtml(QString htmlFile, QString skipID);
+  void setQMLHtml(QString htmlFile, QString htmlBuffer, QString skipID);
   void setFontSize(int fontSize);
   static void PlainTextEditToFile(QPlainTextEdit *txtEdit, QString fileName);
   void savePageVPos();
@@ -136,7 +136,7 @@ class Reader : public QDialog {
   void openMyPDF(QString uri);
   void closeMyPDF();
   void shareBook();
-  public slots:
+ public slots:
   void setPageScroll0();
   void setPageScroll1();
   void setEpubPagePosition(int index, QString htmlFile);

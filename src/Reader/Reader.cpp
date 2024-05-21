@@ -30,11 +30,12 @@ QString strOpfPath, oldOpfPath, fileName, ebookFile, strTitle, catalogueFile,
 int iPage, sPos, totallines;
 int baseLines = 20;
 int htmlIndex = 0;
-int minBytes = 15000;
-int maxBytes = 30000;
+int minBytes = 200000;
+int maxBytes = 400000;
 int unzipMethod = 3; /* 1 system  2 QZipReader 3 ziplib */
 int zlibMethod = 1;
 int readerFontSize = 18;
+int epubFileMethod = 1;
 
 QByteArray bookFileData;
 
@@ -203,7 +204,6 @@ void Reader::setReaderStyle() {
 void Reader::startOpenFile(QString openfile) {
   if (isReport) return;
 
-  setPdfViewVisible(false);
   if (isAndroid) closeMyPDF();
 
   isEpubError = false;
@@ -240,35 +240,6 @@ void Reader::startOpenFile(QString openfile) {
     ebookFile = openfile;
     strTitle =
         bookName + "    " + mw_one->getFileSize(QFile(ebookFile).size(), 2);
-
-#ifdef Q_OS_LINUX
-#endif
-
-#ifdef Q_OS_MACOS
-#endif
-
-#ifdef Q_OS_WIN
-    if (unzipMethod == -1) {
-      QString strZip, strExec, strUnzip, tagDir;
-      tagDir = privateDir + "temp/";
-      strZip = privateDir + "temp.zip";
-      QTextEdit* txtEdit = new QTextEdit();
-      strUnzip = qApp->applicationDirPath() + "/unzip.exe";
-      strUnzip = "\"" + strUnzip + "\"";
-      strZip = "\"" + strZip + "\"";
-      strExec = privateDir;
-      strExec = "\"" + strExec + "\"";
-      QString strCommand1;
-      QString strx = "\"" + tagDir + "\"";
-      strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
-      txtEdit->append(strCommand1);
-      QString fileName = privateDir + "unbook.bat";
-      TextEditToFile(txtEdit, fileName);
-
-      openFile(ebookFile);
-      mw_one->readEBookDone();
-    }
-#endif
 
     mw_one->m_ReadTWThread->quit();
     mw_one->m_ReadTWThread->wait();
@@ -513,10 +484,16 @@ void Reader::openFile(QString openfile) {
         QString qfile = tempList.at(i);
         QFileInfo fi(qfile);
         if (fi.exists() && !tempHtmlList.contains(qfile)) {
-          if (fi.size() <= minBytes) {
+          if (epubFileMethod == 1) {
+            if (fi.size() <= minBytes) {
+              tempHtmlList.append(qfile);
+
+            } else {
+              SplitFile(qfile);
+            }
+          }
+          if (epubFileMethod == 2) {
             tempHtmlList.append(qfile);
-          } else {
-            SplitFile(qfile);
           }
         }
 
@@ -544,12 +521,14 @@ void Reader::openFile(QString openfile) {
         strShowMsg = "Del temp0 ...";
         deleteDirfile(dirpath);
         htmlFiles.clear();
+
         strOpfPath.replace(dirpath, dirpath1);
         for (int i = 0; i < tempHtmlList.count(); i++) {
           QString str = tempHtmlList.at(i);
           str.replace(dirpath, dirpath1);
           htmlFiles.append(str);
         }
+
         QFile(strOpfPath + "main.css").remove();
         QFile::copy(":/res/main.css", strOpfPath + "main.css");
 
@@ -843,8 +822,9 @@ void Reader::on_btnPageUp_clicked() {
   if (isEpub) {
     htmlIndex--;
     if (htmlIndex < 0) htmlIndex = 0;
+
     currentHtmlFile = htmlFiles.at(htmlIndex);
-    setQMLHtml(currentHtmlFile, "");
+    setQMLHtml(currentHtmlFile, "", "");
   }
 
   setPageVPos();
@@ -885,8 +865,9 @@ void Reader::on_btnPageNext_clicked() {
   if (isEpub) {
     htmlIndex++;
     if (htmlIndex == htmlFiles.count()) htmlIndex = htmlFiles.count() - 1;
+
     currentHtmlFile = htmlFiles.at(htmlIndex);
-    setQMLHtml(currentHtmlFile, "");
+    setQMLHtml(currentHtmlFile, "", "");
   }
   setPageVPos();
   showInfo();
@@ -971,10 +952,10 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
       }
     }
 
-    setQMLHtml(html, skipid);
+    setQMLHtml(html, "", skipid);
 
   } else {
-    setQMLHtml(currentHtmlFile, "");
+    setQMLHtml(currentHtmlFile, "", "");
     setPageVPos();
   }
 
@@ -1092,8 +1073,10 @@ QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
   return plain_edit->toPlainText();
 }
 
-void Reader::setQMLHtml(QString htmlFile, QString skipID) {
-  QString htmlBuffer = processHtml(htmlFile, false);
+void Reader::setQMLHtml(QString htmlFile, QString htmlBuffer, QString skipID) {
+  if (QFile::exists(htmlFile)) {
+    htmlBuffer = processHtml(htmlFile, false);
+  }
   htmlBuffer.append(strEndFlag);
   currentTxt = htmlBuffer;
 
@@ -1205,7 +1188,8 @@ void Reader::goBookReadPosition() {
       }
 
       currentHtmlFile = htmlFiles.at(htmlIndex);
-      setQMLHtml(currentHtmlFile, "");
+      setQMLHtml(currentHtmlFile, "", "");
+
       setPageVPos();
       showInfo();
 
@@ -1836,8 +1820,9 @@ void Reader::getLines() {
     mw_one->ui->hSlider->setMaximum(htmlFiles.count());
     htmlIndex = sPos - 1;
     if (htmlIndex < 0) htmlIndex = 0;
+
     currentHtmlFile = htmlFiles.at(htmlIndex);
-    setQMLHtml(currentHtmlFile, "");
+    setQMLHtml(currentHtmlFile, "", "");
   }
 }
 
@@ -2191,15 +2176,7 @@ void Reader::readBookDone() {
     mw_one->ui->btnGoBack->show();
 
 #ifdef Q_OS_ANDROID
-    if (pdfMethod == -1) {
-      // "/android_assets/" = "/data/user/0/com.x/files/"
-      QString mypdf = "/android_assets/mypdf.pdf";
-      mypdf = "/data/user/0/com.x/files/mypdf.pdf";
-
-      QFile::remove(mypdf);
-      QFile::copy(fileName, mypdf);
-      if (QFile::exists(mypdf)) fileName = mypdf;
-    }
+    // "/android_assets/" = "/data/user/0/com.x/files/"
 
     mw_one->ui->frameReader->hide();
     mw_one->ui->frameMain->show();
@@ -2238,7 +2215,7 @@ void Reader::readBookDone() {
 
   if (!isInitReader) {
     if (isEpub || isText) {
-      if (mw_one->ui->frameMain->isVisible()) {
+      if (mw_one->ui->frameReader->isHidden()) {
         mw_one->ui->btnReader->click();
       }
     }
@@ -2397,7 +2374,8 @@ void Reader::clickBookmarkList(int i) {
     }
 
     currentHtmlFile = htmlFiles.at(htmlIndex);
-    setQMLHtml(currentHtmlFile, "");
+    setQMLHtml(currentHtmlFile, "", "");
+
     showInfo();
   }
   setVPos(textPos);

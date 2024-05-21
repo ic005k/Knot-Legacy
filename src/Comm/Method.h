@@ -216,6 +216,7 @@ class Method : public QDialog {
   void closeAndroidProgressBar();
 
   QString getKeyType();
+  void setAndroidProgressInfo(QString info);
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

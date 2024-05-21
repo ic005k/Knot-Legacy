@@ -1236,6 +1236,31 @@ void Method::closeFilePicker() {
 #endif
 }
 
+void Method::setAndroidProgressInfo(QString info) {
+  Q_UNUSED(info);
+
+  if (mw_one->initMain) return;
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject strInfo = QAndroidJniObject::fromString(info);
+  QAndroidJniObject m_activity =
+      QAndroidJniObject::fromString("setProgressInfo");
+  m_activity.callStaticMethod<void>("com.x/MyProgBar", "setProgressInfo",
+                                    "(Ljava/lang/String;)V",
+                                    strInfo.object<jstring>());
+#else
+  QJniObject strInfo = QJniObject::fromString(info);
+  QJniObject m_activity = QJniObject::fromString("setProgressInfo");
+  m_activity.callStaticMethod<void>("com.x/MyProgBar", "setProgressInfo",
+                                    "(Ljava/lang/String;)V",
+                                    strInfo.object<jstring>());
+#endif
+
+#endif
+}
+
 void Method::showAndroidProgressBar() {
   if (mw_one->initMain) return;
 

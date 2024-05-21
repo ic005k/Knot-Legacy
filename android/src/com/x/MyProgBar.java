@@ -89,6 +89,7 @@ public class MyProgBar extends Activity {
     public static MyProgBar m_MyProgBar;
     private static boolean zh_cn;
     private ProgressBar mProgressBar;
+    private static TextView lblResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,9 @@ public class MyProgBar extends Activity {
         setContentView(R.layout.myprogbar);
         mProgressBar = (ProgressBar) findViewById(R.id.progBar);
         mProgressBar.setVisibility(View.VISIBLE);
+
+        lblResult = (TextView) findViewById(R.id.lblResult);
+        lblResult.setVisibility(View.GONE);
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
@@ -194,6 +198,12 @@ public class MyProgBar extends Activity {
     public static void closeAndroidProgressBar() {
         if (m_MyProgBar != null)
             m_MyProgBar.finish();
+    }
+
+    public static void setProgressInfo(String info) {
+        if (m_MyProgBar != null) {
+            lblResult.setText(info);
+        }
     }
 
 }
