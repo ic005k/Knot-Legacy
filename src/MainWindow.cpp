@@ -2331,7 +2331,7 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
-  m_Method->eventFilterReader(watch, evn);
+  m_Reader->eventFilterReader(watch, evn);
   m_Notes->eventFilterEditTodo(watch, evn);
   m_Notes->eventFilterEditRecord(watch, evn);
   m_Notes->eventFilterQwNote(watch, evn);

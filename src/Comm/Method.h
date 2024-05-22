@@ -163,8 +163,6 @@ class Method : public QDialog {
 
   void setSCrollPro(QObject *obj);
 
-  bool eventFilterReader(QObject *watch, QEvent *evn);
-
   void showDelMsgBox(QString title, QString info);
 
   void saveRecycleTabName(QString keyStr, QString tabName);
@@ -217,7 +215,8 @@ class Method : public QDialog {
 
   QString getKeyType();
   void setAndroidProgressInfo(QString info);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
