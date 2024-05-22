@@ -2504,36 +2504,33 @@ bool Reader::eventFilterReader(QObject* watch, QEvent* evn) {
       h = mw_one->ui->qwReader->height();
     }
 
+    if (event->type() == QEvent::MouseButtonDblClick) {
+      if (m_Method->isClickLink) {
+        m_Method->isClickLink = false;
+      }
+
+      int h3 = mw_one->ui->qwReader->height() / 3;
+      int mY = event->globalY();
+      int qwY = mw_one->ui->qwReader->y();
+
+      if ((mY > qwY + h3) && (mY < qwY + h3 * 2)) {
+        mw_one->on_SetReaderFunVisible();
+      }
+
+      if ((mY > qwY) && (mY < qwY + h3)) {
+        mw_one->m_Reader->setPageScroll0();
+      }
+
+      if (mY > qwY + h3 * 2) {
+        mw_one->m_Reader->setPageScroll1();
+      }
+    }
+
     if (event->type() == QEvent::MouseButtonRelease) {
       relea_x = event->globalX();
       relea_y = event->globalY();
       mw_one->ui->lblTitle->hide();
       QQuickItem* root = mw_one->ui->qwReader->rootObject();
-
-      if (!mw_one->isMouseMove) {
-        if (m_Method->isClickLink) {
-          m_Method->isClickLink = false;
-          return true;
-        }
-
-        int h3 = mw_one->ui->qwReader->height() / 3;
-        int mY = event->globalY();
-        int qwY = mw_one->ui->qwReader->y();
-
-        // qDebug() << "mouse click..." << mY << h3 * 3 << qwY;
-
-        if ((mY > qwY + h3) && (mY < qwY + h3 * 2)) {
-          mw_one->on_SetReaderFunVisible();
-        }
-
-        if ((mY > qwY) && (mY < qwY + h3)) {
-          mw_one->m_Reader->setPageScroll0();
-        }
-
-        if (mY > qwY + h3 * 2) {
-          mw_one->m_Reader->setPageScroll1();
-        }
-      }
 
       mw_one->isTurnThePage = false;
       mw_one->isMousePress = false;

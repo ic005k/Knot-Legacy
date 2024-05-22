@@ -1,5 +1,7 @@
 package com.xhh.pdfui;
 
+import com.x.MyActivity;
+import com.x.MyService;
 import com.x.R;
 
 import android.app.Activity;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.xhh.pdfui.tree.TreeAdapter;
 import com.xhh.pdfui.tree.TreeNodeData;
@@ -42,6 +45,7 @@ public class PDFCatelogueActivity extends AppCompatActivity implements TreeAdapt
 
     RecyclerView recyclerView;
     Button btn_back;
+    TextView lblTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,12 @@ public class PDFCatelogueActivity extends AppCompatActivity implements TreeAdapt
     private void initView() {
         btn_back = findViewById(R.id.btn_back);
         recyclerView = findViewById(R.id.rv_tree);
+
+        lblTitle = findViewById(R.id.lblTitle);
+        if (MyService.zh_cn)
+            lblTitle.setText("目录");
+        else
+            lblTitle.setText("Catalogue");
     }
 
     /**
