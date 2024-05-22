@@ -80,20 +80,6 @@ h2 {
 	font-size:x-large;
 }
 
-h3 {
-	background-color:#1E90FF;
-	padding-top:23%;
-	padding-bottom:1em;
-	padding-left:0.35em;	
-	padding-right:0.2em;
-	margin-bottom:5%;
-    font-size: 1.1em;
-    color:white;
-	text-shadow:-1px -1px 1px #fff;
-	
-	width:5em;
-}
-
 h4 {
 	line-height:130%;
 	text-align: center;
