@@ -26,6 +26,11 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
   mw_one->ui->editDetails->viewport()->installEventFilter(mw_one);
   mw_one->ui->editCategory->setFocus();
 
+  int nH = mw_one->ui->editCategory->height();
+  m_Method->setQLabelImage(mw_one->ui->lblCategory, nH, nH, ":/res/fl.svg");
+  m_Method->setQLabelImage(mw_one->ui->lblDetailsType, nH, nH, ":/res/xq.svg");
+  m_Method->setQLabelImage(mw_one->ui->lblAmount, nH, nH, ":/res/je.svg");
+
   QFont font;
   font.setPointSize(23);
   font.setBold(true);

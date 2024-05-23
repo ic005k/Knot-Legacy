@@ -654,28 +654,26 @@ void Reader::saveReader(QString BookmarkText, bool isSetBookmark) {
     bookmarkSn = QString::number(countBookmark - 1);
   }
 
-  if (isText || isEpub) {
-    if (isText) {
-      if (isSetBookmark) {
-        Reg.setValue("/Bookmark/iPage" + bookmarkSn, iPage - baseLines);
-        Reg.setValue("/Bookmark/Name" + bookmarkSn, BookmarkText);
-        Reg.setValue("/Bookmark/VPos" + bookmarkSn, getVPos());
+  if (isText) {
+    if (isSetBookmark) {
+      Reg.setValue("/Bookmark/iPage" + bookmarkSn, iPage - baseLines);
+      Reg.setValue("/Bookmark/Name" + bookmarkSn, BookmarkText);
+      Reg.setValue("/Bookmark/VPos" + bookmarkSn, getVPos());
 
-      } else {
-        Reg.setValue("/Reader/iPage", iPage - baseLines);
-      }
+    } else {
+      Reg.setValue("/Reader/iPage", iPage - baseLines);
     }
+  }
 
-    if (isEpub) {
-      if (isSetBookmark) {
-        Reg.setValue("/Bookmark/htmlIndex" + bookmarkSn, htmlIndex);
-        Reg.setValue("/Bookmark/Name" + bookmarkSn, BookmarkText);
-        Reg.setValue("/Bookmark/VPos" + bookmarkSn, getVPos());
-      } else {
-        Reg.setValue("/Reader/htmlIndex", htmlIndex);
-        // dir
-        Reg.setValue("/Reader/MainDirIndex", mainDirIndex);
-      }
+  if (isEpub) {
+    if (isSetBookmark) {
+      Reg.setValue("/Bookmark/htmlIndex" + bookmarkSn, htmlIndex);
+      Reg.setValue("/Bookmark/Name" + bookmarkSn, BookmarkText);
+      Reg.setValue("/Bookmark/VPos" + bookmarkSn, getVPos());
+    } else {
+      Reg.setValue("/Reader/htmlIndex", htmlIndex);
+      // dir
+      Reg.setValue("/Reader/MainDirIndex", mainDirIndex);
     }
   }
 

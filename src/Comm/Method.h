@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QFileInfoList>
 #include <QInputDialog>
+#include <QLabel>
 #include <QQuickWidget>
 #include <QTableWidget>
 
@@ -215,6 +216,8 @@ class Method : public QDialog {
 
   QString getKeyType();
   void setAndroidProgressInfo(QString info);
+
+  void setQLabelImage(QLabel *lbl, int w, int h, QString imgFile);
 
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;

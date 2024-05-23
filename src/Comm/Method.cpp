@@ -1132,3 +1132,12 @@ void Method::closeAndroidProgressBar() {
 
 #endif
 }
+
+void Method::setQLabelImage(QLabel* lbl, int w, int h, QString imgFile) {
+  lbl->setFixedHeight(h);
+  lbl->setFixedWidth(w);
+  QPixmap* pixmap = new QPixmap(imgFile);
+  pixmap->scaled(lbl->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+  lbl->setScaledContents(true);
+  lbl->setPixmap(*pixmap);
+}
