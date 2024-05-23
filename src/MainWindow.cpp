@@ -3942,11 +3942,22 @@ void MainWindow::init_ButtonStyle() {
   ui->btnReport->setStyleSheet("border:none");
   ui->btnSelTab->setStyleSheet("border:none");
 
+  ui->f_ReaderFun->setStyleSheet("QFrame{background-color: #3498DB;}");
+  ui->btnOpen->setStyleSheet("border:none; background-color:#3498DB;");
+  ui->btnBackReader->setStyleSheet("border:none; background-color:#3498DB;");
+  ui->btnCatalogue->setStyleSheet("border:none; background-color:#3498DB;");
+  ui->btnBackDir->setStyleSheet("border:none; background-color:#3498DB;");
+  ui->btnGoBack->setStyleSheet("border:none; background-color:#3498DB;");
+  ui->btnReadList->setStyleSheet("border:none; background-color:#3498DB;");
+  ui->btnShowBookmark->setStyleSheet("border:none; background-color:#3498DB;");
+  ui->btnPages->setStyleSheet("border:none; background-color:#3498DB;");
+
   // Reset Style
   mw_one->ui->btnPages->setStyleSheet(
-      "color: rgb(0, 0, 0);background-color: rgb(254, 234, 112);border: "
+      "color: rgb(255, 255, 255);background-color: #3498DB; "
+      "border: "
       "0px solid "
-      "rgb(255,0,0);border-radius: 4px;"
+      "rgb(255,0,0);border-radius: 0px;"
       "font-weight: bold;");
 
   QString style =
