@@ -13,6 +13,7 @@ ShowMessage::ShowMessage(QWidget* parent)
   ui->setupUi(this);
 
   this->installEventFilter(this);
+  ui->editMsg->viewport()->installEventFilter(this);
 
   this->layout()->setContentsMargins(0, 0, 0, 0);
   setWindowFlag(Qt::FramelessWindowHint);
@@ -38,6 +39,12 @@ ShowMessage::ShowMessage(QWidget* parent)
 
   ui->lblMsgTxt->adjustSize();
   ui->lblMsgTxt->setWordWrap(true);
+  ui->lblMsgTxt->hide();
+
+  ui->editMsg->adjustSize();
+  ui->editMsg->setReadOnly(true);
+  QScroller::grabGesture(ui->editMsg, QScroller::LeftMouseButtonGesture);
+  m_Method->setSCrollPro(ui->editMsg);
 
   ui->hframe->setFrameShape(QFrame::HLine);
   if (isDark)
@@ -98,15 +105,20 @@ void ShowMessage::init() {
 
 #endif
 
+  if (!m_Method->m_widget->isHidden()) {
+    m_Method->m_widget->close();
+  }
+
   ui->frame->setFixedWidth(w - 20);
+
+  int nEditH = mw_one->m_Todo->getEditTextHeight(ui->editMsg);
+  int nH = nEditH + ui->btnCancel->height() * 3;
+  if (nH > this->height()) nH = this->height() - 10;
+  ui->frame->setFixedHeight(nH);
   h = ui->frame->height();
   x = this->x() + (this->width() - w) / 2;
   y = this->y() + (this->height() - h) / 2;
   ui->frame->setGeometry(x, y, w, h);
-
-  if (!m_Method->m_widget->isHidden()) {
-    m_Method->m_widget->close();
-  }
 
   show();
 }
@@ -155,7 +167,10 @@ bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
 
   ui->lblTitle->setText(title);
   ui->lblMsgTxt->setText(msgtxt);
+  ui->editMsg->setText(msgtxt);
 
+  show();
+  on_btnCancel_clicked();
   init();
 
   while (!isHidden()) QCoreApplication::processEvents();
@@ -202,3 +217,5 @@ QString ShowMessage::AutoFeed(QString text, int nCharCount) {
   }
   return strText;
 }
+
+void ShowMessage::on_editMsg_textChanged() {}

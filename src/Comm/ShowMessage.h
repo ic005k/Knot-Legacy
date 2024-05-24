@@ -40,6 +40,8 @@ class ShowMessage : public QDialog {
 
   void on_btnDel_clicked();
 
+  void on_editMsg_textChanged();
+
  private:
   void init();
 };

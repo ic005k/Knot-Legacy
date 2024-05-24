@@ -29,7 +29,8 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
   int nH = mw_one->ui->editCategory->height();
   m_Method->setQLabelImage(mw_one->ui->lblCategory, nH, nH, ":/res/fl.svg");
   m_Method->setQLabelImage(mw_one->ui->lblDetailsType, nH, nH, ":/res/xq.svg");
-  m_Method->setQLabelImage(mw_one->ui->lblAmount, nH, nH, ":/res/je.svg");
+  m_Method->setQLabelImage(mw_one->ui->lblAmount, nH + 1, nH + 1,
+                           ":/res/je.svg");
 
   QFont font;
   font.setPointSize(23);
@@ -67,22 +68,11 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
 
   mw_one->ui->hsM->setStyleSheet(mw_one->ui->hsH->styleSheet());
 
-  // mw_one->setLineEditQss(mw_one->ui->editAmount, 0, 1, "#4169E1",
-  // "#4169E1"); mw_one->setLineEditQss(mw_one->ui->editCategory, 0, 1,
-  // "#4169E1",
-  // "#4169E1"); mw_one->ui->editDetails->setStyleSheet(
-  //    "border-radius:0px;border: 1px groove #4169E1;");
-
   m_Method->qssSlider = mw_one->ui->hsH->styleSheet();
 
   QScroller::grabGesture(mw_one->ui->editDetails,
                          QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(mw_one->ui->editDetails);
-
-  if (!isDark) {
-    // mw_one->ui->editDetails->verticalScrollBar()->setStyleSheet(
-    //     m_Method->vsbarStyleSmall);
-  }
 }
 
 void EditRecord::init() {
