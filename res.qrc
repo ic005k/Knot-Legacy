@@ -150,5 +150,8 @@
         <file>res/recycle_l.svg</file>
         <file>res/recycle.svg</file>
         <file>res/none.svg</file>
+        <file>res/je_l.svg</file>
+        <file>res/fl_l.svg</file>
+        <file>res/xq_l.svg</file>
     </qresource>
 </RCC>

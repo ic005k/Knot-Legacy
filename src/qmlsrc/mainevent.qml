@@ -293,10 +293,10 @@ Rectangle {
                             verticalAlignment: Image.AlignVCenter
 
                             smooth: true
-                            sourceSize.height: iconW + 1
-                            sourceSize.width: iconW + 1
+                            sourceSize.height: iconW
+                            sourceSize.width: iconW
 
-                            source: "/res/je.svg"
+                            source: listItem.ListView.isCurrentItem ? "/res/je.svg" : isDark ? "/res/je_l.svg" : "/res/je.svg"
 
                             visible: item1.text.length ? true : false
                         }
@@ -349,7 +349,7 @@ Rectangle {
                             smooth: true
                             sourceSize.height: iconW
                             sourceSize.width: iconW
-                            source: "/res/fl.svg"
+                            source: listItem.ListView.isCurrentItem ? "/res/fl.svg" : isDark ? "/res/fl_l.svg" : "/res/fl.svg"
 
                             visible: item2.text.length ? true : false
                         }
@@ -401,7 +401,7 @@ Rectangle {
                             smooth: true
                             sourceSize.height: iconW
                             sourceSize.width: iconW
-                            source: "/res/xq.svg"
+                            source: listItem.ListView.isCurrentItem ? "/res/xq.svg" : isDark ? "/res/xq_l.svg" : "/res/xq.svg"
 
                             visible: item3.text.length ? true : false
                         }
