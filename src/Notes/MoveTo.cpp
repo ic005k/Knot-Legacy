@@ -7,7 +7,7 @@
 
 extern MainWindow* mw_one;
 extern Method* m_Method;
-extern bool isDark;
+extern bool isDark, isAndroid;
 
 MoveTo::MoveTo(QWidget* parent) : QDialog(parent), ui(new Ui::MoveTo) {
   ui->setupUi(this);
@@ -74,7 +74,12 @@ bool MoveTo::eventFilter(QObject* watch, QEvent* evn) {
 
 void MoveTo::showDialog() {
   int x, y, w, h;
-  w = mw_one->width() - 20;
+  if (isAndroid)
+    w = mw_one->width() - 20;
+  else {
+    w = width();
+    if (w > 500) w = 500;
+  }
   h = mw_one->height() - 40;
   x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   y = mw_one->geometry().y() + (mw_one->height() - h) / 2;

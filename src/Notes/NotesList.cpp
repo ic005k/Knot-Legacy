@@ -328,10 +328,17 @@ void NotesList::on_btnRename_clicked() {
   });
 
   int x, y, w, h;
-  w = mw_one->width() - 2;
-  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   h = mw_one->height() / 3;
-  y = mw_one->geometry().y();
+  if (isAndroid) {
+    w = mw_one->width() - 2;
+    y = mw_one->geometry().y();
+  } else {
+    w = dlg->width();
+    if (w > 500) w = 500;
+    y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
+  }
+  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+
   dlg->setGeometry(x, y, w, h);
   dlg->setModal(true);
   mw_one->set_ToolButtonStyle(dlg);

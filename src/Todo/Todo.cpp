@@ -11,7 +11,7 @@ QString orgLblStyle;
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniFile, iniDir;
-extern bool loading, isBreak, zh_cn, isDark;
+extern bool loading, isBreak, zh_cn, isDark, isAndroid;
 extern int fontSize;
 
 Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
@@ -1095,10 +1095,18 @@ void Todo::reeditText() {
   });
 
   int x, y, w, h;
-  w = mw_one->width() - 2;
-  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   h = mw_one->height() / 3;
-  y = mw_one->geometry().y();
+  if (isAndroid) {
+    w = mw_one->width() - 2;
+    y = mw_one->geometry().y();
+  } else {
+    w = mw_one->width() / 2;
+    if (w < dlg->width()) w = dlg->width();
+
+    y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
+  }
+  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+
   dlg->setGeometry(x, y, w, h);
   dlg->setModal(true);
   m_Method->showGrayWindows();

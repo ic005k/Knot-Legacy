@@ -7,7 +7,7 @@
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern int fontSize;
-extern bool isDark;
+extern bool isDark, isAndroid;
 
 TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->setupUi(this);
@@ -84,8 +84,23 @@ void TodoAlarm::initDlg() {
 
   setBtnTitle();
 
-  this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                    mw_one->width(), mw_one->height());
+  int x, y, w, h;
+  if (isAndroid) {
+    w = mw_one->width();
+    h = mw_one->height();
+  } else {
+    if (mw_one->width() < 500)
+      w = mw_one->width();
+    else
+      w = 500;
+    h = mw_one->height() - 20;
+  }
+  setFixedWidth(w);
+
+  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+  y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
+
+  this->setGeometry(x, y, w, h);
   this->setModal(true);
   this->installEventFilter(this);
   on_btnYear_clicked();

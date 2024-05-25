@@ -6,6 +6,7 @@
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern int fontSize;
+extern bool isAndroid;
 
 PrintPDF::PrintPDF(QWidget* parent) : QDialog(parent), ui(new Ui::PrintPDF) {
   ui->setupUi(this);
@@ -57,7 +58,10 @@ QString PrintPDF::getItem(QString title, QString lblText, QStringList valueList,
   ui->listWidget->setCurrentRow(valueIndex);
 
   int x, y, w, h;
-  w = mw_one->width() - 40;
+  if (isAndroid)
+    w = mw_one->width() - 40;
+  else
+    w = 230;
   h = valueList.count() * m_Method->getFontHeight() * 1.8;
   if (h > mw_one->height()) h = mw_one->height() - 50;
 

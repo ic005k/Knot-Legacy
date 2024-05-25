@@ -293,8 +293,8 @@ Rectangle {
                             verticalAlignment: Image.AlignVCenter
 
                             smooth: true
-                            sourceSize.height: iconW
-                            sourceSize.width: iconW
+                            sourceSize.height: iconW + 1
+                            sourceSize.width: iconW + 1
 
                             source: "/res/je.svg"
 
