@@ -117,6 +117,7 @@ CloudBackup::CloudBackup(QWidget *parent)
                 QString(tr("Success Upload File:") + "\n\nPATH: %1\n\nID: %2")
                     .arg(filePath, fileID),
                 1);
+            mw_one->ui->progBar->hide();
           });
 
   connect(oneDrive, &QtOneDrive::successDownloadFile,
@@ -135,6 +136,9 @@ CloudBackup::CloudBackup(QWidget *parent)
           [this](const QString, int percent) {
             Q_UNUSED(this);
             mw_one->ui->progressBar->setValue(percent);
+
+            mw_one->ui->progBar->setValue(percent);
+            if (percent == 100) mw_one->ui->progBar->hide();
           });
 
   connect(oneDrive, &QtOneDrive::progressDownloadFile,
@@ -287,6 +291,13 @@ void CloudBackup::on_pushButton_upload2_clicked() {
 
   isUpData = true;
   mw_one->showProgress();
+
+  mw_one->ui->progressBar->setValue(0);
+  mw_one->ui->progBar->show();
+  mw_one->ui->progBar->setMaximum(100);
+  mw_one->ui->progBar->setMinimum(0);
+  mw_one->ui->progBar->setValue(0);
+
   mw_one->myBakDataThread->start();
 }
 
@@ -303,7 +314,6 @@ void CloudBackup::uploadData() {
 
   oneDrive->uploadFile(zipfile, "memo.zip",
                        ui->lineEdit_fileID->text().trimmed());
-  mw_one->ui->progressBar->setValue(0);
 }
 
 void CloudBackup::on_pushButton_storageInfo_clicked() {

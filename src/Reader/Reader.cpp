@@ -2154,8 +2154,6 @@ void Reader::readBookDone() {
   }
 
   mw_one->ui->lblBookName->setText(strTitle);
-  mw_one->ui->btnReader->setEnabled(true);
-  mw_one->ui->f_ReaderFun->setEnabled(true);
   mw_one->ui->btnBackDir->hide();
   tmeShowEpubMsg->stop();
   mw_one->ui->lblEpubInfo->hide();

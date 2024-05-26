@@ -4652,6 +4652,7 @@ void MainWindow::on_btnSignOut_clicked() {
 }
 
 void MainWindow::on_btnUpload_clicked() {
+  if (!ui->btnReader->isEnabled()) return;
   m_CloudBackup->on_pushButton_upload2_clicked();
 }
 
@@ -5318,10 +5319,7 @@ void MainWindow::on_btnCategory_clicked() {
   m_Report->on_btnCategory_clicked();
 }
 
-void MainWindow::on_btnSync_clicked() {
-  m_Reader->setPdfViewVisible(false);
-  on_btnUpload_clicked();
-}
+void MainWindow::on_btnSync_clicked() { on_btnUpload_clicked(); }
 
 void MainWindow::on_btnPDF_clicked() { m_Notes->on_btnPDF_clicked(); }
 
@@ -5951,6 +5949,9 @@ void MainWindow::on_CloseProgressBar() {
   } else {
     mw_one->closeProgress();
   }
+
+  mw_one->ui->btnReader->setEnabled(true);
+  mw_one->ui->f_ReaderFun->setEnabled(true);
 }
 
 void MainWindow::on_btnShareBook_clicked() { m_Reader->shareBook(); }
