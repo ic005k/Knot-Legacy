@@ -80,8 +80,6 @@
         <file>res/list_l.png</file>
         <file>res/open_l.png</file>
         <file>res/sum.png</file>
-        <file>res/chart_l.png</file>
-        <file>res/chart.png</file>
         <file>res/p0.png</file>
         <file>res/n.png</file>
         <file>res/nb.png</file>
@@ -153,5 +151,7 @@
         <file>res/je_l.svg</file>
         <file>res/fl_l.svg</file>
         <file>res/xq_l.svg</file>
+        <file>res/chart_l.svg</file>
+        <file>res/chart.svg</file>
     </qresource>
 </RCC>
