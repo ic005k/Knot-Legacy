@@ -74,15 +74,20 @@ bool MoveTo::eventFilter(QObject* watch, QEvent* evn) {
 
 void MoveTo::showDialog() {
   int x, y, w, h;
-  if (isAndroid)
-    w = mw_one->width() - 20;
+  h = mw_one->height() - 40;
+  if (isAndroid) {
+    w = mw_one->width();
+    x = mw_one->geometry().x();
+    y = mw_one->geometry().y();
+  }
+
   else {
     w = width();
     if (w > 500) w = 500;
+    x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+    y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
   }
-  h = mw_one->height() - 40;
-  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
-  y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
+
   setGeometry(x, y, w, h);
 
   m_widget = new QWidget(mw_one);

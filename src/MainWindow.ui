@@ -1146,8 +1146,8 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>23</width>
-              <height>23</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -1186,8 +1186,8 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>23</width>
-              <height>23</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -1226,8 +1226,8 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>23</width>
-              <height>23</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -1266,8 +1266,8 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>23</width>
-              <height>23</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -1306,8 +1306,8 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>23</width>
-              <height>23</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -2108,8 +2108,8 @@ QTabBar::scroller {width:0}
             </property>
             <property name="iconSize">
              <size>
-              <width>25</width>
-              <height>25</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -2134,8 +2134,8 @@ QTabBar::scroller {width:0}
             </property>
             <property name="iconSize">
              <size>
-              <width>25</width>
-              <height>25</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="toolButtonStyle">
@@ -2163,8 +2163,8 @@ QTabBar::scroller {width:0}
             </property>
             <property name="iconSize">
              <size>
-              <width>25</width>
-              <height>25</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="shortcut">
@@ -2195,8 +2195,8 @@ QTabBar::scroller {width:0}
             </property>
             <property name="iconSize">
              <size>
-              <width>25</width>
-              <height>25</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="shortcut">
@@ -2224,8 +2224,8 @@ QTabBar::scroller {width:0}
             </property>
             <property name="iconSize">
              <size>
-              <width>25</width>
-              <height>25</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="toolButtonStyle">

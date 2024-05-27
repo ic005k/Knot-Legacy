@@ -333,12 +333,15 @@ void NotesList::on_btnRename_clicked() {
     w = mw_one->width() - 2;
     y = mw_one->geometry().y();
   } else {
-    w = dlg->width();
-    if (w > 500) w = 500;
+    w = mw_one->width();
+    if (w > 300)
+      w = 300;
+    else
+      w = mw_one->width() - 20;
     y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
   }
-  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
 
+  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
   dlg->setGeometry(x, y, w, h);
   dlg->setModal(true);
   mw_one->set_ToolButtonStyle(dlg);
