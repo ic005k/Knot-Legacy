@@ -204,7 +204,11 @@ void DateSelector::on_btnOk_clicked() {
     }
   }
 
-  if (dateFlag == 1 || dateFlag == 2) mw_one->m_Report->startReport1();
+  QString strYear, strMonth;
+  strYear = mw_one->ui->btnYear->text();
+  strMonth = mw_one->ui->btnMonth->text();
+  if (dateFlag == 1 || dateFlag == 2)
+    mw_one->m_Report->startReport1(strYear, strMonth);
 
   if (dateFlag == 3) {
     mw_one->ui->btnStartDate->setText(y + "  " + m + "  " + d);

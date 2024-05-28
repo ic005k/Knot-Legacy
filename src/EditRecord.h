@@ -76,6 +76,7 @@ class EditRecord : public QDialog {
   void saveCurrentValue();
   void setCurrentValue();
   void AddRecord();
+  void monthSum();
   private:
   void set_Amount(QString Number);
 

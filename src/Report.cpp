@@ -161,9 +161,9 @@ void Report::on_btnYear_clicked() {
   m_DateSelector->init();
 }
 
-void Report::startReport1() {
-  btnYearText = mw_one->ui->btnYear->text();
-  btnMonthText = mw_one->ui->btnMonth->text();
+void Report::startReport1(QString year, QString month) {
+  btnYearText = year;
+  btnMonthText = month;
 
   isWholeMonth = true;
   isDateSection = false;
@@ -203,6 +203,7 @@ void Report::startReport2() {
 void Report::updateTable() {
   freq = 0;
   t_amount = 0;
+
   clearAll();
   clearAll_xx();
   listTableSync.clear();
@@ -240,6 +241,11 @@ void Report::updateTable() {
   setScrollBarPos(0);
   m_Method->setCurrentIndexFromQW(mw_one->ui->qwReport, 0);
   loadDetailsQml();
+
+  mw_one->ui->lblMonthSum->setText("");
+  mw_one->ui->lblMonthSum->setText(
+      tr("Month Sum") + " : " + tr("Freq") + " " + QString::number(freq) +
+      "    " + tr("Amount") + " " + QString("%1").arg(t_amount, 0, 'f', 2));
 }
 
 void Report::getMonthData() {

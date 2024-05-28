@@ -57,7 +57,7 @@ class Report : public QDialog {
 
   static int cmp(const void *a, const void *b);
 
-  void startReport1();
+  void startReport1(QString year, QString month);
   void startReport2();
   void on_CateOk();
 

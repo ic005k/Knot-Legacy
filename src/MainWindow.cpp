@@ -2166,6 +2166,8 @@ void MainWindow::sort_childItem(QTreeWidgetItem *item) {
 }
 
 void MainWindow::on_twItemDoubleClicked() {
+  m_EditRecord->monthSum();
+
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
   QTreeWidgetItem *item = tw->currentItem();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
@@ -2260,8 +2262,6 @@ void MainWindow::saveRemarks(int tabIndex) {
 }
 
 void MainWindow::on_btnRemarks_clicked() {
-  m_Reader->setPdfViewVisible(false);
-
   m_Notes->m_TextSelector->close();
   m_Notes->m_TextSelector = new TextSelector(mw_one);
 
@@ -4994,6 +4994,8 @@ void MainWindow::on_btnAdd_clicked() {
   m_Notes->m_TextSelector->close();
   m_Notes->m_TextSelector = new TextSelector(mw_one);
 
+  m_EditRecord->monthSum();
+
   on_AddRecord();
 }
 
@@ -5312,8 +5314,6 @@ void MainWindow::on_btnBack_Report_clicked() { m_Report->on_btnBack_clicked(); }
 void MainWindow::on_btnYear_clicked() { m_Report->on_btnYear_clicked(); }
 
 void MainWindow::on_btnMonth_clicked() { m_Report->on_btnMonth_clicked(); }
-
-// void MainWindow::on_btnOut2Img_clicked() { m_Report->Out2Img(); }
 
 void MainWindow::on_btnCategory_clicked() {
   m_Report->on_btnCategory_clicked();

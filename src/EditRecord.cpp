@@ -7,9 +7,9 @@
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QTabWidget *tabData;
-extern QString iniFile, iniDir, privateDir;
+extern QString iniFile, iniDir, privateDir, btnYearText, btnMonthText;
 extern QRegularExpression regxNumber;
-extern bool isBreak, isDark;
+extern bool isBreak, isDark, isReport, isWholeMonth, isDateSection;
 extern int fontSize;
 
 bool del = false;
@@ -492,4 +492,29 @@ void EditRecord::setCurrentValue() {
   mw_one->ui->editCategory->setText(Reg.value("value1").toString());
   mw_one->ui->editDetails->setText(Reg.value("value2").toString());
   mw_one->ui->editAmount->setText(Reg.value("value3").toString());
+}
+
+void EditRecord::monthSum() {
+  QString str1, str2;
+  str1 = btnYearText;
+  str2 = btnMonthText;
+  bool b1, b2;
+  b1 = isWholeMonth;
+  b2 = isDateSection;
+
+  int month = QDate::currentDate().month();
+  QString strMonth;
+  if (month < 10)
+    strMonth = "0" + QString::number(month);
+  else
+    strMonth = QString::number(month);
+  QString strYear = QString::number(QDate::currentDate().year());
+  mw_one->m_Report->startReport1(strYear, strMonth);
+
+  while (isReport) QCoreApplication::processEvents();
+
+  btnYearText = str1;
+  btnMonthText = str2;
+  isWholeMonth = b1;
+  isDateSection = b2;
 }
