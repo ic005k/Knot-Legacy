@@ -174,8 +174,10 @@ bool Todo::eventFilter(QObject* watch, QEvent* evn) {
 }
 
 void Todo::on_btnHigh_clicked() {
+  int count = getCount();
+  if (count == 0) return;
+
   int row = getCurrentIndex();
-  if (row < 0) return;
 
   QString strTime = getItemTime(row);
 
@@ -193,8 +195,10 @@ void Todo::on_btnHigh_clicked() {
 }
 
 void Todo::on_btnLow_clicked() {
+  int count = getCount();
+  if (count == 0) return;
+
   int row = getCurrentIndex();
-  if (row < 0) return;
 
   QString strTime = getItemTime(row);
 
@@ -215,6 +219,7 @@ void Todo::on_btnLow_clicked() {
 void Todo::on_SetAlarm() {
   int row = getCurrentIndex();
   if (row < 0) return;
+
   QString strTodoText = getItemTodoText(row);
   QString strTime;
 
@@ -328,8 +333,10 @@ qlonglong Todo::getSecond(QString strDateTime) {
 }
 
 void Todo::on_btnSetTime_clicked() {
+  int count = getCount();
+  if (count == 0) return;
+
   int row = getCurrentIndex();
-  if (row < 0) return;
 
   delete mw_one->m_TodoAlarm;
   mw_one->m_TodoAlarm = new TodoAlarm(this);
@@ -991,8 +998,10 @@ void Todo::isAlarm(int index) {
 }
 
 void Todo::reeditText() {
+  int count = getCount();
+  if (count == 0) return;
+
   int row = getCurrentIndex();
-  if (row < 0) return;
 
   QDialog* dlg = new QDialog(this);
   QVBoxLayout* vbox0 = new QVBoxLayout;
