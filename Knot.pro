@@ -285,8 +285,6 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 #Linux
-android: include(/home/zh/文档/android_openssl-master/openssl.pri)
-
-ANDROID_EXTRA_LIBS = $$PWD/../../android_openssl-master/ssl_1.1/arm64-v8a/libcrypto_1_1.so
 
 android: include(C:/Users/Administrator/Documents/android_openssl-master/openssl.pri)
+android: include(/home/zh/文档/android_openssl-master/openssl.pri)

@@ -853,12 +853,17 @@ void MainWindow::execDeskShortcut() {
   m_ReceiveShare->moveTaskToFront();
 
   on_ExecShortcut();
+
   if (keyType == "todo")
     m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameTodo->objectName());
+
   if (keyType == "note")
     m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameNoteList->objectName());
-  if (keyType == "reader")
+
+  if (keyType == "reader") {
     m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameReader->objectName());
+  }
+
   if (keyType == "add") {
     m_ReceiveShare->closeAllActiveWindowsKeep(
         ui->frameEditRecord->objectName());
