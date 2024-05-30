@@ -483,79 +483,6 @@ color: rgb(255, 255, 255);</string>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QToolButton" name="btnLink">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Url</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../../res.qrc">
-            <normaloff>:/res/url_l.png</normaloff>:/res/url_l.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="btnPic">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>P</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../../res.qrc">
-            <normaloff>:/res/pic.png</normaloff>:/res/pic.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonIconOnly</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QToolButton" name="btnColor">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -576,7 +503,7 @@ color: rgb(255, 255, 255);</string>
            </size>
           </property>
           <property name="text">
-           <string>C</string>
+           <string>Color</string>
           </property>
           <property name="icon">
            <iconset resource="../../res.qrc">
@@ -587,6 +514,9 @@ color: rgb(255, 255, 255);</string>
             <width>20</width>
             <height>20</height>
            </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
           </property>
          </widget>
         </item>
@@ -616,7 +546,7 @@ color: rgb(255, 255, 255);</string>
            </font>
           </property>
           <property name="text">
-           <string>U</string>
+           <string>Underline</string>
           </property>
           <property name="icon">
            <iconset resource="../../res.qrc">
@@ -627,6 +557,9 @@ color: rgb(255, 255, 255);</string>
             <width>20</width>
             <height>20</height>
            </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
           </property>
          </widget>
         </item>
@@ -650,8 +583,13 @@ color: rgb(255, 255, 255);</string>
             <height>25</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <strikeout>true</strikeout>
+           </font>
+          </property>
           <property name="text">
-           <string>S</string>
+           <string>Strikeout</string>
           </property>
           <property name="icon">
            <iconset resource="../../res.qrc">
@@ -662,6 +600,59 @@ color: rgb(255, 255, 255);</string>
             <width>20</width>
             <height>20</height>
            </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnReference">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnS11">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>!</string>
           </property>
          </widget>
         </item>
@@ -720,7 +711,7 @@ color: rgb(255, 255, 255);</string>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QToolButton" name="btnS11">
+         <widget class="QToolButton" name="btnLink">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -740,7 +731,58 @@ color: rgb(255, 255, 255);</string>
            </size>
           </property>
           <property name="text">
-           <string>!</string>
+           <string>Url</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../../res.qrc">
+            <normaloff>:/res/url_l.png</normaloff>:/res/url_l.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnPic">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Image</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../../res.qrc">
+            <normaloff>:/res/pic.png</normaloff>:/res/pic.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
           </property>
          </widget>
         </item>
@@ -765,7 +807,7 @@ color: rgb(255, 255, 255);</string>
            </size>
           </property>
           <property name="text">
-           <string>D</string>
+           <string>Date</string>
           </property>
          </widget>
         </item>
@@ -790,32 +832,7 @@ color: rgb(255, 255, 255);</string>
            </size>
           </property>
           <property name="text">
-           <string>T</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="btnReference">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>&gt;</string>
+           <string>Time</string>
           </property>
          </widget>
         </item>
@@ -845,7 +862,7 @@ color: rgb(255, 255, 255);</string>
            </font>
           </property>
           <property name="text">
-           <string>B</string>
+           <string>Bold</string>
           </property>
           <property name="icon">
            <iconset resource="../../res.qrc">
@@ -856,6 +873,9 @@ color: rgb(255, 255, 255);</string>
             <width>20</width>
             <height>20</height>
            </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
           </property>
          </widget>
         </item>
@@ -886,7 +906,7 @@ color: rgb(255, 255, 255);</string>
            </font>
           </property>
           <property name="text">
-           <string>I</string>
+           <string>Bold Italic</string>
           </property>
           <property name="icon">
            <iconset resource="../../res.qrc">
@@ -897,6 +917,9 @@ color: rgb(255, 255, 255);</string>
             <width>20</width>
             <height>20</height>
            </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
           </property>
          </widget>
         </item>
@@ -926,7 +949,7 @@ color: rgb(255, 255, 255);</string>
            </font>
           </property>
           <property name="text">
-           <string>I</string>
+           <string> Italic</string>
           </property>
           <property name="icon">
            <iconset resource="../../res.qrc">
@@ -937,6 +960,9 @@ color: rgb(255, 255, 255);</string>
             <width>20</width>
             <height>20</height>
            </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextOnly</enum>
           </property>
          </widget>
         </item>
