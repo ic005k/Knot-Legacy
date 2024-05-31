@@ -851,26 +851,8 @@ void MainWindow::timerUpdate() {
 
 void MainWindow::execDeskShortcut() {
   m_ReceiveShare->moveTaskToFront();
-
+  m_ReceiveShare->closeAllChildWindows();
   on_ExecShortcut();
-
-  if (keyType == "todo")
-    m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameTodo->objectName());
-
-  if (keyType == "note")
-    m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameNoteList->objectName());
-
-  if (keyType == "reader") {
-    if (!isPDF)
-      m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameReader->objectName());
-    else
-      m_ReceiveShare->closeAllChildWindows();
-  }
-
-  if (keyType == "add") {
-    m_ReceiveShare->closeAllActiveWindowsKeep(
-        ui->frameEditRecord->objectName());
-  }
 }
 
 void MainWindow::on_ExecShortcut() {
@@ -3542,6 +3524,10 @@ void MainWindow::initQW() {
   ui->qwNoteBook->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notebook.qml")));
 
+  if (isAndroid)
+    ui->qwNoteList->rootContext()->setContextProperty("noteTimeFontSize", 12);
+  else
+    ui->qwNoteList->rootContext()->setContextProperty("noteTimeFontSize", 8);
   ui->qwNoteList->rootContext()->setContextProperty("m_NotesList", m_NotesList);
   ui->qwNoteList->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notelist.qml")));
@@ -4371,17 +4357,12 @@ static void JavaNotify_9() {
       mw_one->m_Reader->closeMyPDF();
     }
 
+    mw_one->m_ReceiveShare->closeAllChildWindows();
+
     if (type == "defaultopen") {
       if (!isPDF) {
         if (mw_one->ui->frameReader->isHidden()) {
           mw_one->ui->btnReader->click();
-          mw_one->m_ReceiveShare->closeAllActiveWindowsKeep(
-              mw_one->ui->frameReader->objectName());
-        }
-      } else {
-        if (mw_one->ui->frameMain->isHidden()) {
-          mw_one->m_ReceiveShare->closeAllActiveWindowsKeep(
-              mw_one->ui->frameMain->objectName());
         }
       }
     }

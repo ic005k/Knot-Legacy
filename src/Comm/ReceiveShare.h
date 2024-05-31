@@ -47,7 +47,8 @@ class ReceiveShare : public QDialog {
   void closeAllActiveWindowsKeep(QString frameName);
 
   void closeAllChildWindows();
-protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -58,8 +59,6 @@ protected:
   void on_btnAppendToNote_clicked();
 
  private slots:
-
-  void on_btnTest_clicked();
 
  private:
   int nMethod = 2;

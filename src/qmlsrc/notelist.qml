@@ -225,7 +225,7 @@ Rectangle {
                         wrapMode: TextArea.WordWrap
                         color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         font.bold: false
-                        font.pointSize: 12
+                        font.pointSize: noteTimeFontSize
                         text: text1
 
                         leftPadding: 5

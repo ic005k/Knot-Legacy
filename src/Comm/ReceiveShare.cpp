@@ -24,8 +24,6 @@ ReceiveShare::ReceiveShare(QWidget* parent)
   ui->lblTip->adjustSize();
   ui->lblTip->setText(tr("Tip: You can paste this data wherever you need it."));
   mw_one->set_ToolButtonStyle(this);
-
-  ui->btnTest->hide();
 }
 
 ReceiveShare::~ReceiveShare() { delete ui; }
@@ -153,7 +151,7 @@ void ReceiveShare::on_btnAddToTodo_clicked() {
   Close();
   strReceiveShareData = getShareString();
   if (mw_one->ui->frameTodo->isHidden()) {
-    closeAllActiveWindows();
+    closeAllChildWindows();
     mw_one->on_btnTodo_clicked();
     mw_one->ui->editTodo->setText(strReceiveShareData);
     m_Method->Sleep(500);
@@ -249,7 +247,7 @@ void ReceiveShare::on_btnAppendToNote_clicked() {
     addToNote(isInsertToNote);
 
     Close();
-    closeAllActiveWindows();
+    closeAllChildWindows();
     mw_one->on_btnNotes_clicked();
     mw_one->on_btnEdit_clicked();
   }
@@ -259,7 +257,7 @@ void ReceiveShare::on_btnAppendToNote_clicked() {
     addToNote_Java();
 
     Close();
-    closeAllActiveWindows();
+    closeAllChildWindows();
     mw_one->on_btnNotes_clicked();
     mw_one->on_btnEdit_clicked();
   }
@@ -271,7 +269,7 @@ void ReceiveShare::on_btnInsertToNote_clicked() {
     addToNote(isInsertToNote);
 
     Close();
-    closeAllActiveWindows();
+    closeAllChildWindows();
     mw_one->on_btnNotes_clicked();
     mw_one->on_btnEdit_clicked();
   }
@@ -281,7 +279,7 @@ void ReceiveShare::on_btnInsertToNote_clicked() {
     addToNote_Java();
 
     Close();
-    closeAllActiveWindows();
+    closeAllChildWindows();
     mw_one->on_btnNotes_clicked();
     mw_one->on_btnEdit_clicked();
   }
@@ -337,6 +335,34 @@ void ReceiveShare::closeAllChildWindows() {
   }
 
   if (mw_one->ui->frameSteps->isVisible()) mw_one->ui->btnBackSteps->click();
+
+  if (mw_one->ui->frameBookList->isVisible()) {
+    mw_one->ui->btnBackBookList->click();
+    mw_one->ui->btnBackReader->click();
+  }
+
+  if (mw_one->ui->frameReader->isVisible()) {
+    mw_one->ui->btnBackReader->click();
+  }
+
+  if (mw_one->m_Preferences->isVisible())
+    mw_one->m_Preferences->ui->btnBack->click();
+
+  if (mw_one->ui->frameOne->isVisible()) mw_one->ui->btnBack_One->click();
+
+  if (mw_one->ui->frameBakList->isVisible())
+    mw_one->ui->btnBackBakList->click();
+
+  if (mw_one->ui->frameCategory->isVisible()) {
+    mw_one->ui->btnCancelType->click();
+    mw_one->ui->btnBackEditRecord->click();
+  }
+
+  if (mw_one->ui->frameEditRecord->isVisible())
+    mw_one->ui->btnBackEditRecord->click();
+
+  if (mw_one->ui->frameTabRecycle->isVisible())
+    mw_one->ui->btnBackTabRecycle->click();
 }
 
 void ReceiveShare::closeAllActiveWindows() {
@@ -390,8 +416,6 @@ void ReceiveShare::closeAllActiveWindowsKeep(QString frameName) {
     }
   }
 }
-
-void ReceiveShare::on_btnTest_clicked() { closeAllActiveWindows(); }
 
 void ReceiveShare::shareString(const QString& title, const QString& content) {
   Q_UNUSED(title);
@@ -553,9 +577,9 @@ void ReceiveShare::goReceiveShare() {
       }
     }
 
+    closeAllChildWindows();
     mw_one->ui->btnNotes->click();
     mw_one->ui->btnNotesList->click();
-    closeAllActiveWindowsKeep(mw_one->ui->frameNoteList->objectName());
     moveTaskToFront();
   }
 }
