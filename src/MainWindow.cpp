@@ -861,7 +861,10 @@ void MainWindow::execDeskShortcut() {
     m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameNoteList->objectName());
 
   if (keyType == "reader") {
-    m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameReader->objectName());
+    if (!isPDF)
+      m_ReceiveShare->closeAllActiveWindowsKeep(ui->frameReader->objectName());
+    else
+      m_ReceiveShare->closeAllChildWindows();
   }
 
   if (keyType == "add") {

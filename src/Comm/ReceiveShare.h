@@ -46,7 +46,8 @@ class ReceiveShare : public QDialog {
 
   void closeAllActiveWindowsKeep(QString frameName);
 
- protected:
+  void closeAllChildWindows();
+protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

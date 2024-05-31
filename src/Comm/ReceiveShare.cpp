@@ -297,9 +297,52 @@ QObjectList ReceiveShare::getAllFrame(QObjectList lstUIControls) {
   return lst;
 }
 
+void ReceiveShare::closeAllChildWindows() {
+  if (mw_one->m_TodoAlarm->isVisible()) {
+    mw_one->m_TodoAlarm->ui->btnBack->click();
+    while (!mw_one->ui->frameTodo->isVisible())
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    mw_one->ui->btnBackTodo->click();
+  }
+
+  if (mw_one->m_AboutThis->isVisible()) {
+    mw_one->m_AboutThis->on_btnBack_clicked();
+  }
+
+  if (mw_one->ui->frameSetTab->isVisible()) mw_one->ui->btnBackSetTab->click();
+
+  if (mw_one->ui->frameNoteRecycle->isVisible()) {
+    mw_one->ui->btnBackNoteRecycle->click();
+    mw_one->ui->btnBackNoteList->click();
+    mw_one->ui->btnBackNotes->click();
+  }
+
+  if (mw_one->ui->frameNoteList->isVisible()) {
+    mw_one->ui->btnBackNoteList->click();
+    mw_one->ui->btnBackNotes->click();
+  }
+
+  if (mw_one->ui->frameNotes->isVisible()) mw_one->ui->btnBackNotes->click();
+
+  if (mw_one->ui->frameTodoRecycle->isVisible()) {
+    mw_one->ui->btnReturnRecycle->click();
+    mw_one->ui->btnBackTodo->click();
+  }
+
+  if (mw_one->ui->frameTodo->isVisible()) mw_one->ui->btnBackTodo->click();
+
+  if (mw_one->m_StepsOptions->isVisible()) {
+    mw_one->m_StepsOptions->ui->btnBack->click();
+    mw_one->ui->btnBackSteps->click();
+  }
+
+  if (mw_one->ui->frameSteps->isVisible()) mw_one->ui->btnBackSteps->click();
+}
+
 void ReceiveShare::closeAllActiveWindows() {
   if (mw_one->m_TodoAlarm->isVisible()) {
-    mw_one->m_TodoAlarm->on_btnBack_clicked();
+    mw_one->m_TodoAlarm->ui->btnBack->click();
+    mw_one->ui->btnBackTodo->click();
   }
 
   if (mw_one->m_AboutThis->isVisible()) {
@@ -327,7 +370,7 @@ void ReceiveShare::closeAllActiveWindowsKeep(QString frameName) {
   if (mw_one->ui->frameMain->isVisible()) return;
 
   if (mw_one->m_TodoAlarm->isVisible()) {
-    mw_one->m_TodoAlarm->on_btnBack_clicked();
+    mw_one->m_TodoAlarm->ui->btnBack->click();
   }
 
   if (mw_one->m_AboutThis->isVisible()) {
