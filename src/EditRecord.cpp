@@ -468,8 +468,6 @@ void EditRecord::saveOne() {
   Reg.setValue(flag + QString::number(i + 1) + "-childCount", childCount);
 }
 
-void EditRecord::AddRecord() { mw_one->ui->btnAdd->click(); }
-
 void EditRecord::saveCurrentValue() {
   QString ini_file = privateDir + "editrecord_value.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);

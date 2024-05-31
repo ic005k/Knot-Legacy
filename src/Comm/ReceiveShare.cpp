@@ -363,6 +363,15 @@ void ReceiveShare::closeAllChildWindows() {
 
   if (mw_one->ui->frameTabRecycle->isVisible())
     mw_one->ui->btnBackTabRecycle->click();
+
+  if (mw_one->ui->frameViewCate->isVisible()) {
+    mw_one->ui->btnOkViewCate->click();
+    mw_one->ui->btnBack_Report->click();
+  }
+
+  if (mw_one->ui->frameReport->isVisible()) mw_one->ui->btnBack_Report->click();
+
+  if (mw_one->ui->frameSearch->isVisible()) mw_one->ui->btnBackSearch->click();
 }
 
 void ReceiveShare::closeAllActiveWindows() {

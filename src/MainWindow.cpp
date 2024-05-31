@@ -861,8 +861,7 @@ void MainWindow::on_ExecShortcut() {
   if (keyType == "note") m_Notes->NewNote();
   if (keyType == "reader") m_Reader->ContinueReading();
   if (keyType == "add") {
-    if (ui->frameEditRecord->isVisible()) return;
-    m_EditRecord->AddRecord();
+    ui->btnAdd->click();
   }
   if (keyType == "defaultopen") {
 #ifdef Q_OS_ANDROID
