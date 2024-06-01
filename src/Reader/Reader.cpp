@@ -2213,7 +2213,9 @@ void Reader::readBookDone() {
   if (!isInitReader) {
     if (getDefaultOpen()) {
       if (!isPDF) {
-        mw_one->on_btnReader_clicked();
+        while (!mw_one->ui->btnReader->isEnabled())
+          QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+        mw_one->ui->btnReader->click();
       }
     }
   } else
