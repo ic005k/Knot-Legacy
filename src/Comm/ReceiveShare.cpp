@@ -306,7 +306,7 @@ void ReceiveShare::closeAllChildWindows() {
   }
 
   if (mw_one->m_AboutThis->isVisible()) {
-    mw_one->m_AboutThis->on_btnBack_clicked();
+    mw_one->m_AboutThis->ui->btnBack->click();
   }
 
   if (mw_one->ui->frameSetTab->isVisible()) mw_one->ui->btnBackSetTab->click();
