@@ -296,6 +296,8 @@ QObjectList ReceiveShare::getAllFrame(QObjectList lstUIControls) {
 }
 
 void ReceiveShare::closeAllChildWindows() {
+  mw_one->m_Reader->closeMyPDF();
+
   if (mw_one->m_TodoAlarm->isVisible()) {
     mw_one->m_TodoAlarm->ui->btnBack->click();
     while (!mw_one->ui->frameTodo->isVisible())

@@ -2208,17 +2208,16 @@ void Reader::readBookDone() {
 
   saveReader("", false);
 
+  mw_one->on_DelayCloseProgressBar();
+
   if (!isInitReader) {
-    if (isEpub || isText) {
-      if (mw_one->ui->frameReader->isHidden()) {
-        mw_one->ui->btnReader->click();
+    if (getDefaultOpen()) {
+      if (!isPDF) {
+        mw_one->on_btnReader_clicked();
       }
     }
-  } else {
+  } else
     isInitReader = false;
-  }
-
-  mw_one->on_DelayCloseProgressBar();
 
   qDebug() << "read book done...";
 }
@@ -2600,4 +2599,17 @@ bool Reader::eventFilterReader(QObject* watch, QEvent* evn) {
   }
 
   return QWidget::eventFilter(watch, evn);
+}
+
+bool Reader::getDefaultOpen() {
+  QSettings Reg(privateDir + "choice_book.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  QString type = Reg.value("book/type", "filepicker").toString();
+  if (type == "defaultopen")
+    return true;
+  else
+    return false;
 }

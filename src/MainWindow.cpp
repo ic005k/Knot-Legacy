@@ -4352,20 +4352,9 @@ static void JavaNotify_9() {
   QString file = Reg.value("book/file", "").toString();
   QString type = Reg.value("book/type", "filepicker").toString();
   if (QFile::exists(file)) {
-    if (isAndroid) {
-      mw_one->m_Reader->closeMyPDF();
-    }
-
-    mw_one->m_ReceiveShare->closeAllChildWindows();
-
     if (type == "defaultopen") {
-      if (!isPDF) {
-        if (mw_one->ui->frameReader->isHidden()) {
-          mw_one->ui->btnReader->click();
-        }
-      }
+      mw_one->m_ReceiveShare->closeAllChildWindows();
     }
-
     mw_one->m_Reader->startOpenFile(file);
   }
 
