@@ -9,7 +9,7 @@ ReaderSet* m_ReaderSet;
 extern int fontSize, readerFontSize;
 extern MainWindow* mw_one;
 extern Method* m_Method;
-extern QString iniDir, privateDir;
+extern QString iniDir, privateDir, defaultFontFamily, customFontFamily;
 extern QSettings* iniPreferences;
 extern QRegularExpression regxNumber;
 extern bool isAndroid;

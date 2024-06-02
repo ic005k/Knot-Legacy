@@ -185,7 +185,10 @@ QString Preferences::setFontDemo(QString customFontPath, QToolButton* btn,
   QFont f;
   QString style;
 
-  if (!mw_one->initMain) fontDatabase.removeApplicationFont(readerFontID);
+  if (!mw_one->initMain) {
+    if (ui->chkUIFont->isChecked() && customFontFamily.length() > 0)
+      fontDatabase.removeApplicationFont(readerFontID);
+  }
   loadedFontID = fontDatabase.addApplicationFont(customFontPath);
   loadedFontFamilies = fontDatabase.applicationFontFamilies(loadedFontID);
   readerFontID = loadedFontID;

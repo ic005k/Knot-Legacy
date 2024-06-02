@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 #ifdef Q_OS_ANDROID
-  defaultFontFamily = "";  //"DroidSansFallback";
+  defaultFontFamily = "";  // "DroidSansFallback";
 
 #endif
 
