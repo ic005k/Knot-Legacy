@@ -650,6 +650,8 @@ QString Reader::get_href(QString idref, QStringList opfList) {
 }
 
 void Reader::saveReader(QString BookmarkText, bool isSetBookmark) {
+  m_ReaderSet->saveScrollValue();
+
   QSettings Reg(privateDir + "bookini/" + currentBookName + ".ini",
                 QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -719,6 +721,9 @@ void Reader::initReader() {
 #endif
 
   readerStyle = Reg.value("/Reader/Style", "1").toString();
+  scrollValue = Reg.value("/Reader/ScrollValue", "1").toReal();
+  QString value = QString::number(scrollValue, 'f', 1);
+  mw_one->ui->lblSpeed->setText(tr("Scroll Value") + " : " + value);
 
   QFont font;
   int fsize = Reg.value("/Reader/FontSize", 18).toInt();
@@ -2684,6 +2689,6 @@ void Reader::autoRun() {
   if (a + mw_one->ui->qwReader->height() >= h)
     mw_one->ui->btnAutoStop->click();
 
-  a = a + 1;
+  a = a + scrollValue;
   setVPos(a);
 }

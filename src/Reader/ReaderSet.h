@@ -10,7 +10,7 @@ class ReaderSet;
 class ReaderSet : public QDialog {
   Q_OBJECT
 
- public:
+public:
   explicit ReaderSet(QWidget *parent = nullptr);
   ~ReaderSet();
   Ui::ReaderSet *ui;
@@ -19,13 +19,15 @@ class ReaderSet : public QDialog {
 
   void updateProgress();
 
- protected:
+  void saveScrollValue();
+
+protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
- public slots:
+public slots:
   void on_btnBack_clicked();
 
- public slots:
+public slots:
   void on_hSlider_sliderReleased();
 
   void on_btnFontPlus_clicked();
@@ -56,7 +58,15 @@ class ReaderSet : public QDialog {
 
   void on_btnSetBookmark_clicked();
 
- private:
+  void on_btnLessen_clicked();
+
+  void on_btnDefault_clicked();
+
+  void on_btnAdd_clicked();
+
+private slots:
+
+private:
 };
 
-#endif  // READERSET_H
+#endif // READERSET_H

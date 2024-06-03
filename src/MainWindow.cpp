@@ -6055,3 +6055,11 @@ void MainWindow::on_btnAutoStop_clicked() {
   ui->btnAutoStop->hide();
   ui->btnAutoRun->show();
 }
+
+void MainWindow::on_btnLessen_clicked() { m_ReaderSet->on_btnLessen_clicked(); }
+
+void MainWindow::on_btnDefault_clicked() {
+  m_ReaderSet->on_btnDefault_clicked();
+}
+
+void MainWindow::on_btnPlus_clicked() { m_ReaderSet->on_btnAdd_clicked(); }

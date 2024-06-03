@@ -35,6 +35,7 @@ public:
   ~Reader();
   Ui::Reader *ui;
 
+  qreal scrollValue = 1;
   bool isOpenBookListClick = false;
   bool isSelText = false;
   int pdfMethod = 2;
