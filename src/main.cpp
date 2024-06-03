@@ -238,19 +238,19 @@ int main(int argc, char* argv[]) {
   }
 
   // Set Font
-  QFont font;
+  QFont m_font;
   if (isOverUIFont) {
     if (customFontFamily.length() > 0) {
-      font.setFamily(customFontFamily);
+      m_font.setFamily(customFontFamily);
     }
   } else {
     if (defaultFontFamily.length() > 0) {
-      font.setFamily(defaultFontFamily);
+      m_font.setFamily(defaultFontFamily);
     }
   }
 
-  font.setPointSize(fontSize);
-  app.setFont(font);
+  m_font.setPointSize(fontSize);
+  app.setFont(m_font);
 
   loadLocal();
 
