@@ -30,7 +30,7 @@ class Reader;
 class Reader : public QDialog {
   Q_OBJECT
 
- public:
+public:
   explicit Reader(QWidget *parent = nullptr);
   ~Reader();
   Ui::Reader *ui;
@@ -39,6 +39,7 @@ class Reader : public QDialog {
   bool isSelText = false;
   int pdfMethod = 2;
   QTimer *tmeShowEpubMsg;
+  QTimer *tmeAutoRun;
   QDialog *frame;
   QString openfile;
   QString readerStyle;
@@ -138,6 +139,7 @@ class Reader : public QDialog {
   void shareBook();
   bool eventFilterReader(QObject *watch, QEvent *evn);
   bool getDefaultOpen();
+
 public slots:
   void setPageScroll0();
   void setPageScroll1();
@@ -152,16 +154,16 @@ public slots:
 
   void setPanelVisible();
 
- protected:
+protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
   void paintEvent(QPaintEvent *event) override;
- private slots:
-
+private slots:
+  void autoRun();
   void showEpubMsg();
 
- private:
+private:
   int x, y, w, h;
   bool isInitReader = false;
   QString strSpace = "";
@@ -177,4 +179,4 @@ public slots:
   int currentCataIndex = 0;
 };
 
-#endif  // READER_H
+#endif // READER_H

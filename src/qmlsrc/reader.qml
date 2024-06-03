@@ -69,7 +69,7 @@ Rectangle {
 
     function setVPos(vpos) {
         flickable.contentY = vpos
-        console.log(vpos)
+        // console.log(vpos)
     }
 
     function getVPos() {

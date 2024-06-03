@@ -202,12 +202,14 @@ int main(int argc, char* argv[]) {
 
 #endif
 
-  if (QFile(customFontPath).exists()) {
-    int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
-    QStringList loadedFontFamilies =
-        QFontDatabase::applicationFontFamilies(loadedFontID);
-    if (!loadedFontFamilies.empty()) {
-      customFontFamily = loadedFontFamilies.at(0);
+  if (isOverUIFont) {
+    if (QFile(customFontPath).exists()) {
+      int loadedFontID = QFontDatabase::addApplicationFont(customFontPath);
+      QStringList loadedFontFamilies =
+          QFontDatabase::applicationFontFamilies(loadedFontID);
+      if (!loadedFontFamilies.empty()) {
+        customFontFamily = loadedFontFamilies.at(0);
+      }
     }
   } else
     customFontFamily = defaultFontFamily;

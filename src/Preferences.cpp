@@ -223,11 +223,10 @@ QString Preferences::setFontDemo(QString customFontPath, QToolButton* btn,
 }
 
 void Preferences::on_chkUIFont_clicked() {
-    if (ui->btnCustomFont->text()==tr("Custom Font"))
-    {
-        ui->chkUIFont->setChecked(false);
-        return;
-    }
+  if (ui->btnCustomFont->text() == tr("Custom Font")) {
+    ui->chkUIFont->setChecked(false);
+    return;
+  }
 
   isFontChange = true;
 

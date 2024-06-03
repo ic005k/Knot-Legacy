@@ -73,18 +73,17 @@ extern QString strOpfPath, appName, copyText, catalogueFile;
 QString picfile;
 
 DocumentHandler::DocumentHandler(QObject *parent)
-    : QObject(parent),
-      m_document(nullptr),
-      m_cursorPosition(-1),
-      m_selectionStart(0),
-      m_selectionEnd(0) {}
+    : QObject(parent), m_document(nullptr), m_cursorPosition(-1),
+      m_selectionStart(0), m_selectionEnd(0) {}
 
 QQuickTextDocument *DocumentHandler::document() const { return m_document; }
 
 void DocumentHandler::setDocument(QQuickTextDocument *document) {
-  if (document == m_document) return;
+  if (document == m_document)
+    return;
 
-  if (m_document) m_document->textDocument()->disconnect(this);
+  if (m_document)
+    m_document->textDocument()->disconnect(this);
   m_document = document;
   if (m_document)
     connect(m_document->textDocument(), &QTextDocument::modificationChanged,
@@ -95,7 +94,8 @@ void DocumentHandler::setDocument(QQuickTextDocument *document) {
 int DocumentHandler::cursorPosition() const { return m_cursorPosition; }
 
 void DocumentHandler::setCursorPosition(int position) {
-  if (position == m_cursorPosition) return;
+  if (position == m_cursorPosition)
+    return;
 
   m_cursorPosition = position;
   reset();
@@ -105,7 +105,8 @@ void DocumentHandler::setCursorPosition(int position) {
 int DocumentHandler::selectionStart() const { return m_selectionStart; }
 
 void DocumentHandler::setSelectionStart(int position) {
-  if (position == m_selectionStart) return;
+  if (position == m_selectionStart)
+    return;
 
   m_selectionStart = position;
   emit selectionStartChanged();
@@ -114,7 +115,8 @@ void DocumentHandler::setSelectionStart(int position) {
 int DocumentHandler::selectionEnd() const { return m_selectionEnd; }
 
 void DocumentHandler::setSelectionEnd(int position) {
-  if (position == m_selectionEnd) return;
+  if (position == m_selectionEnd)
+    return;
 
   m_selectionEnd = position;
   emit selectionEndChanged();
@@ -122,7 +124,8 @@ void DocumentHandler::setSelectionEnd(int position) {
 
 QString DocumentHandler::fontFamily() const {
   QTextCursor cursor = textCursor();
-  if (cursor.isNull()) return QString();
+  if (cursor.isNull())
+    return QString();
   QTextCharFormat format = cursor.charFormat();
   return format.font().family();
 }
@@ -136,7 +139,8 @@ void DocumentHandler::setFontFamily(const QString &family) {
 
 QColor DocumentHandler::textColor() const {
   QTextCursor cursor = textCursor();
-  if (cursor.isNull()) return QColor(Qt::black);
+  if (cursor.isNull())
+    return QColor(Qt::black);
   QTextCharFormat format = cursor.charFormat();
   return format.foreground().color();
 }
@@ -150,7 +154,8 @@ void DocumentHandler::setTextColor(const QColor &color) {
 
 Qt::Alignment DocumentHandler::alignment() const {
   QTextCursor cursor = textCursor();
-  if (cursor.isNull()) return Qt::AlignLeft;
+  if (cursor.isNull())
+    return Qt::AlignLeft;
   return textCursor().blockFormat().alignment();
 }
 
@@ -164,7 +169,8 @@ void DocumentHandler::setAlignment(Qt::Alignment alignment) {
 
 bool DocumentHandler::bold() const {
   QTextCursor cursor = textCursor();
-  if (cursor.isNull()) return false;
+  if (cursor.isNull())
+    return false;
   return textCursor().charFormat().fontWeight() == QFont::Bold;
 }
 
@@ -177,7 +183,8 @@ void DocumentHandler::setBold(bool bold) {
 
 bool DocumentHandler::italic() const {
   QTextCursor cursor = textCursor();
-  if (cursor.isNull()) return false;
+  if (cursor.isNull())
+    return false;
   return textCursor().charFormat().fontItalic();
 }
 
@@ -190,7 +197,8 @@ void DocumentHandler::setItalic(bool italic) {
 
 bool DocumentHandler::underline() const {
   QTextCursor cursor = textCursor();
-  if (cursor.isNull()) return false;
+  if (cursor.isNull())
+    return false;
   return textCursor().charFormat().fontUnderline();
 }
 
@@ -203,18 +211,22 @@ void DocumentHandler::setUnderline(bool underline) {
 
 int DocumentHandler::fontSize() const {
   QTextCursor cursor = textCursor();
-  if (cursor.isNull()) return 0;
+  if (cursor.isNull())
+    return 0;
   QTextCharFormat format = cursor.charFormat();
   return format.font().pointSize();
 }
 
 void DocumentHandler::setFontSize(int size) {
-  if (size <= 0) return;
+  if (size <= 0)
+    return;
 
   QTextCursor cursor = textCursor();
-  if (cursor.isNull()) return;
+  if (cursor.isNull())
+    return;
 
-  if (!cursor.hasSelection()) cursor.select(QTextCursor::WordUnderCursor);
+  if (!cursor.hasSelection())
+    cursor.select(QTextCursor::WordUnderCursor);
 
   if (cursor.charFormat().property(QTextFormat::FontPointSize).toInt() == size)
     return;
@@ -228,7 +240,8 @@ void DocumentHandler::setFontSize(int size) {
 QString DocumentHandler::fileName() const {
   const QString filePath = QQmlFile::urlToLocalFileOrQrc(m_fileUrl);
   const QString fileName = QFileInfo(filePath).fileName();
-  if (fileName.isEmpty()) return QStringLiteral("untitled.txt");
+  if (fileName.isEmpty())
+    return QStringLiteral("untitled.txt");
   return fileName;
 }
 
@@ -240,8 +253,10 @@ QUrl DocumentHandler::fileUrl() const { return m_fileUrl; }
 
 void DocumentHandler::parsingLink(QString linkFile, QString qwName) {
   m_Method->isClickLink = true;
+  mw_one->ui->btnAutoStop->click();
 
-  if (mw_one->curx != 0) return;
+  if (mw_one->curx != 0)
+    return;
 
   qDebug() << "link : " << linkFile;
   copyText = linkFile;
@@ -264,7 +279,8 @@ void DocumentHandler::parsingLink(QString linkFile, QString qwName) {
           appName, tr("Open this URL?") + "\n\n" + copyText + "\n", 4);
     }
 
-    if (ok) QDesktopServices::openUrl(url);
+    if (ok)
+      QDesktopServices::openUrl(url);
     mw_one->clearSelectBox();
   }
 
@@ -277,7 +293,8 @@ void DocumentHandler::parsingLink(QString linkFile, QString qwName) {
     copyText = str;
     bool ok = m_ShowMsg->showMsg(
         appName, tr("Writing an email?") + "\n\n" + linkFile + "\n", 3);
-    if (ok) QDesktopServices::openUrl(QUrl(linkFile));
+    if (ok)
+      QDesktopServices::openUrl(QUrl(linkFile));
 
     mw_one->clearSelectBox();
   }
@@ -323,7 +340,8 @@ void DocumentHandler::parsingLink(QString linkFile, QString qwName) {
             break;
           }
         }
-        if (isOk) break;
+        if (isOk)
+          break;
       }
     }
 
@@ -332,7 +350,8 @@ void DocumentHandler::parsingLink(QString linkFile, QString qwName) {
       msg->showMsg(str_id, s1 + " " + s2, 1);
     }
 
-    if (is_sup) return;
+    if (is_sup)
+      return;
 
     mw_one->m_Reader->initLink(linkFile);
   } else {
@@ -381,7 +400,8 @@ void DocumentHandler::loadBuffer(QString str) {
 }
 
 void DocumentHandler::load(const QUrl &fileUrl) {
-  if (fileUrl == m_fileUrl) return;
+  if (fileUrl == m_fileUrl)
+    return;
 
   const QUrl path = fileUrl;
   const QString fileName = QQmlFile::urlToLocalFileOrQrc(path);
@@ -398,8 +418,7 @@ void DocumentHandler::load(const QUrl &fileUrl) {
         } else {
           // QTextCodec *codec = QTextCodec::codecForHtml(data);
 
-          QTextCodec *codec =
-              QTextCodec::codecForName("utf-8");  // 解决中文乱码
+          QTextCodec *codec = QTextCodec::codecForName("utf-8"); // 解决中文乱码
           emit loaded(codec->toUnicode(data), Qt::AutoText);
         }
         doc->setModified(false);
@@ -416,7 +435,8 @@ void DocumentHandler::load(const QUrl &fileUrl) {
 
 void DocumentHandler::saveAs(const QUrl &fileUrl) {
   QTextDocument *doc = textDocument();
-  if (!doc) return;
+  if (!doc)
+    return;
 
   const QString filePath = fileUrl.toLocalFile();
   const bool isHtml =
@@ -430,7 +450,8 @@ void DocumentHandler::saveAs(const QUrl &fileUrl) {
   file.write((isHtml ? doc->toHtml() : doc->toPlainText()).toUtf8());
   file.close();
 
-  if (fileUrl == m_fileUrl) return;
+  if (fileUrl == m_fileUrl)
+    return;
 
   m_fileUrl = fileUrl;
   emit fileUrlChanged();
@@ -448,7 +469,8 @@ void DocumentHandler::reset() {
 
 QTextCursor DocumentHandler::textCursor() const {
   QTextDocument *doc = textDocument();
-  if (!doc) return QTextCursor();
+  if (!doc)
+    return QTextCursor();
 
   QTextCursor cursor = QTextCursor(doc);
   if (m_selectionStart != m_selectionEnd) {
@@ -461,7 +483,8 @@ QTextCursor DocumentHandler::textCursor() const {
 }
 
 QTextDocument *DocumentHandler::textDocument() const {
-  if (!m_document) return nullptr;
+  if (!m_document)
+    return nullptr;
 
   return m_document->textDocument();
 }
@@ -469,7 +492,8 @@ QTextDocument *DocumentHandler::textDocument() const {
 void DocumentHandler::mergeFormatOnWordOrSelection(
     const QTextCharFormat &format) {
   QTextCursor cursor = textCursor();
-  if (!cursor.hasSelection()) cursor.select(QTextCursor::WordUnderCursor);
+  if (!cursor.hasSelection())
+    cursor.select(QTextCursor::WordUnderCursor);
   cursor.mergeCharFormat(format);
 }
 
@@ -478,7 +502,8 @@ bool DocumentHandler::modified() const {
 }
 
 void DocumentHandler::setModified(bool m) {
-  if (m_document) m_document->textDocument()->setModified(m);
+  if (m_document)
+    m_document->textDocument()->setModified(m);
 }
 
 void DocumentHandler::setBackDir(QString link) {

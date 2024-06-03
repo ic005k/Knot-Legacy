@@ -292,6 +292,55 @@
              </widget>
             </item>
             <item>
+             <widget class="QToolButton" name="btnAutoRun">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Run</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../res.qrc">
+                <normaloff>:/res/run_l.svg</normaloff>:/res/run_l.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnAutoStop">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Stop</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../res.qrc">
+                <normaloff>:/res/stop_l.svg</normaloff>:/res/stop_l.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonIconOnly</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QToolButton" name="btnPages">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -6994,7 +7043,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>654</width>
-     <height>30</height>
+     <height>29</height>
     </rect>
    </property>
    <property name="styleSheet">
