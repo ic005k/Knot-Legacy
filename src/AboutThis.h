@@ -29,7 +29,7 @@ class AboutThis : public QDialog {
   bool blAutoCheckUpdate;
 
   int sliderPos;
-  void init_Remarks();
+
   void CheckUpdate();
   void show_download();
   int getAndroidVer();
@@ -44,8 +44,6 @@ class AboutThis : public QDialog {
  private slots:
 
   void on_btnHomePage_clicked();
-
-  void on_btnPaste_clicked();
 
   void replyFinished(QNetworkReply *reply);
 

@@ -20,6 +20,7 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->btnToday->setFont(font1);
   ui->btnTomorrow->setFont(font1);
   ui->btnNextWeek->setFont(font1);
+  ui->btnTestSpeech->setFont(font1);
 
   font0 = m_Method->getNewFont(16);
 
@@ -32,6 +33,7 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->chk6->setFont(font0);
   ui->chk7->setFont(font0);
   ui->chkDaily->setFont(font0);
+  ui->chkSpeech->setFont(font0);
 
   this->layout()->setContentsMargins(1, 1, 1, 1);
   ui->frameDaily->setContentsMargins(1, 1, 1, 1);
@@ -61,9 +63,18 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->chk6->setStyleSheet(strStyleChk);
   ui->chk7->setStyleSheet(strStyleChk);
   ui->chkDaily->setStyleSheet(strStyleChk);
+  ui->chkSpeech->setStyleSheet(strStyleChk);
   ui->frameDaily->setContentsMargins(10, 1, 10, 1);
 
   mw_one->set_ToolButtonStyle(this);
+
+  if (!isAndroid) {
+    ui->chkSpeech->hide();
+    ui->btnTestSpeech->hide();
+
+  } else {
+    getChkVoice();
+  }
 }
 
 TodoAlarm::~TodoAlarm() { delete ui; }
@@ -481,4 +492,41 @@ void TodoAlarm::on_chkDaily_clicked() {
   ui->chk5->setChecked(chk);
   ui->chk6->setChecked(chk);
   ui->chk7->setChecked(chk);
+}
+
+void TodoAlarm::on_btnTestSpeech_clicked() {
+  int count = mw_one->m_Todo->getCount();
+  if (count == 0) return;
+  int row = mw_one->m_Todo->getCurrentIndex();
+  if (row < 0) return;
+  QString txt = mw_one->m_Todo->getItemTodoText(row);
+  m_Method->stopPlayMyText();
+  m_Method->playMyText(txt);
+}
+
+void TodoAlarm::on_chkSpeech_clicked() {
+  QString ini_file = "/data/data/com.x/files/msg.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  if (ui->chkSpeech->isChecked())
+    Reg.setValue("voice", "true");
+  else
+    Reg.setValue("voice", "false");
+}
+
+void TodoAlarm::getChkVoice() {
+  QString ini_file = "/data/data/com.x/files/msg.ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  QString strVoice = Reg.value("voice").toString();
+  qDebug() << "strVoice" << strVoice;
+  if (strVoice == "true")
+    ui->chkSpeech->setChecked(true);
+  else
+    ui->chkSpeech->setChecked(false);
 }

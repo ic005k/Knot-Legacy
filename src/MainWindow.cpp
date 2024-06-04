@@ -2255,27 +2255,6 @@ void MainWindow::on_btnRemarks_clicked() {
   m_Notes->m_TextSelector = new TextSelector(mw_one);
 
   m_Method->reeditMainEventData();
-
-  return;
-
-  m_Notes->m_TextSelector->close();
-  m_Notes->m_TextSelector = new TextSelector(m_AboutThis);
-
-  m_AboutThis->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                           this->width(), this->height() / 2);
-
-  m_AboutThis->ui->textEdit->clear();
-
-  m_AboutThis->ui->frameAbout->hide();
-  m_AboutThis->ui->textEdit->setHidden(false);
-  m_AboutThis->ui->lblTitle->show();
-  m_AboutThis->ui->btnPaste->show();
-  m_AboutThis->ui->lblTitle->setText(tr("Remarks") + " : " +
-                                     tabData->tabText(tabData->currentIndex()));
-
-  m_AboutThis->init_Remarks();
-
-  m_AboutThis->show();
 }
 
 bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
@@ -2968,8 +2947,6 @@ QTreeWidget *MainWindow::get_tw(int tabIndex) {
 }
 
 void MainWindow::on_actionAbout() {
-  m_AboutThis->init_Remarks();
-
   QTextBrowser *textBrowser = new QTextBrowser;
   textBrowser->append("");
   textBrowser->append(appName + "  Ver: " + ver);
@@ -2978,10 +2955,7 @@ void MainWindow::on_actionAbout() {
   textBrowser->append("Launched: " + loginTime);
   textBrowser->append("");
   textBrowser->setHidden(true);
-  m_AboutThis->ui->textEdit->setHidden(true);
 
-  m_AboutThis->ui->lblTitle->hide();
-  m_AboutThis->ui->btnPaste->hide();
   m_AboutThis->ui->lblAbout->setText(textBrowser->toPlainText());
   m_AboutThis->ui->frameAbout->show();
 
@@ -3734,9 +3708,6 @@ void MainWindow::init_UIWidget() {
   if (nHeight <= 36) nHeight = 36;
   ui->qwMainTab->setFixedHeight(nHeight);
   tabData->hide();
-
-  m_AboutThis->ui->textEdit->verticalScrollBar()->setStyleSheet(
-      m_Method->vsbarStyleSmall);
 
   loginTime = QDateTime::currentDateTime().toString();
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");

@@ -28,14 +28,6 @@ AboutThis::AboutThis(QWidget *parent) : QDialog(parent), ui(new Ui::AboutThis) {
 
   this->installEventFilter(this);
   ui->lblLogo->installEventFilter(this);
-  ui->textEdit->installEventFilter(this);
-  ui->textEdit->viewport()->installEventFilter(this);
-
-  // ui->textEdit->setStyleSheet("border-radius:0px;border: 1px groove
-  // #4169E1;");
-
-  QScroller::grabGesture(ui->textEdit, QScroller::LeftMouseButtonGesture);
-  m_Method->setSCrollPro(ui->textEdit);
 
   ui->lblAbout->adjustSize();
   ui->lblAbout->setWordWrap(true);
@@ -60,29 +52,10 @@ AboutThis::~AboutThis() { delete ui; }
 void AboutThis::on_btnBack_clicked() {
   mw_one->m_Notes->m_TextSelector->close();
 
-  noteText = ui->textEdit->toPlainText();
-  curPos = ui->textEdit->textCursor().position();
-  sliderPos = ui->textEdit->verticalScrollBar()->sliderPosition();
-  QString text = QString::number(curPos) + "|" + QString::number(sliderPos) +
-                 "|" + noteText;
-  mw_one->ui->tabWidget->setTabToolTip(mw_one->ui->tabWidget->currentIndex(),
-                                       text);
-  if (!ui->textEdit->isHidden()) {
-    mw_one->startSave("notes");
-
-    mw_one->isNeedAutoBackup = true;
-    mw_one->strLatestModify =
-        tr("Modi Remarks") + " ( " + mw_one->getTabText() + " ) ";
-  }
-  ui->textEdit->clear();
   close();
 }
 
 bool AboutThis::eventFilter(QObject *obj, QEvent *evn) {
-  if (obj == ui->textEdit->viewport()) {
-    mw_one->m_Notes->getEditPanel(ui->textEdit, evn);
-  }
-
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);
   if (obj == ui->lblLogo) {
     if (event->type() == QEvent::MouseButtonDblClick) {
@@ -111,27 +84,7 @@ bool AboutThis::eventFilter(QObject *obj, QEvent *evn) {
 
 void AboutThis::keyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event); }
 
-void AboutThis::resizeEvent(QResizeEvent *event) {
-  Q_UNUSED(event);
-  qDebug() << "resize" << ui->textEdit->height();
-}
-
-void AboutThis::init_Remarks() {
-  int index = mw_one->ui->tabWidget->currentIndex();
-  QString str = mw_one->ui->tabWidget->tabToolTip(index);
-  QStringList list = str.split("|");
-  if (list.count() > 2) {
-    ui->textEdit->setPlainText(list.at(2));
-    QTextCursor tmpCursor = ui->textEdit->textCursor();
-    QString curPos = list.at(0);
-    tmpCursor.setPosition(curPos.toInt());
-    ui->textEdit->setTextCursor(tmpCursor);
-    sliderPos = list.at(1).toInt();
-    ui->textEdit->verticalScrollBar()->setSliderPosition(sliderPos);
-
-  } else
-    ui->textEdit->setPlainText(str);
-}
+void AboutThis::resizeEvent(QResizeEvent *event) { Q_UNUSED(event); }
 
 void AboutThis::on_btnHomePage_clicked() {
   QString str;
@@ -139,8 +92,6 @@ void AboutThis::on_btnHomePage_clicked() {
   QUrl url(str);
   QDesktopServices::openUrl(url);
 }
-
-void AboutThis::on_btnPaste_clicked() { ui->textEdit->paste(); }
 
 void AboutThis::CheckUpdate() {
   mw_one->m_Reader->setPdfViewVisible(false);

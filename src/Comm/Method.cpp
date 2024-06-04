@@ -1149,15 +1149,17 @@ void Method::playMyText(QString text) {
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jText = QAndroidJniObject::fromString(text);
-  QAndroidJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("playMyText", "(Ljava/lang/String;)V",
-                            jText.object<jstring>());
+  QAndroidJniObject activity = QAndroidJniObject::fromString("playMyText");
+  activity.callStaticMethod<void>("com.x/MyActivity", "playMyText",
+                                  "(Ljava/lang/String;)V",
+                                  jText.object<jstring>());
 
 #else
   QJniObject jText = QJniObject::fromString(text);
-  QJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("playMyText", "(Ljava/lang/String;)V",
-                            jText.object<jstring>());
+  QJniObject activity = QJniObject::fromString("playMyText");
+  activity.callStaticMethod<void>("com.x/MyActivity", "playMyText",
+                                  "(Ljava/lang/String;)V",
+                                  jText.object<jstring>());
 
 #endif
 
@@ -1169,12 +1171,13 @@ void Method::stopPlayMyText() {
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
-  QAndroidJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("stopPlayMyText", "()V");
+  QAndroidJniObject activity = QAndroidJniObject::fromString("stopPlayMyText");
+  activity.callStaticMethod<void>("com.x/MyActivity", "stopPlayMyText", "()V");
 
 #else
-  QJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("stopPlayMyText", "()V");
+
+  QJniObject activity = QJniObject::fromString("stopPlayMyText");
+  activity.callStaticMethod<void>("com.x/MyActivity", "stopPlayMyText", "()V");
 
 #endif
 

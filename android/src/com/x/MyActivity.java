@@ -154,7 +154,7 @@ public class MyActivity
   public static Context context;
   private FileWatcher mFileWatcher;
   private ShortcutManager shortcutManager;
-  private TTSUtils mytts;
+  private static TTSUtils mytts;
 
   public static native void CallJavaNotify_0();
 
@@ -1584,11 +1584,11 @@ public class MyActivity
     if (MyProgBar.m_MyProgBar != null) MyProgBar.m_MyProgBar.finish();
   }
 
-  public void playMyText(String text) {
+  public static void playMyText(String text) {
     mytts.playText(text);
   }
 
-  public void stopPlayMyText() {
+  public static void stopPlayMyText() {
     mytts.stopSpeak();
   }
 }

@@ -59,6 +59,10 @@ class TodoAlarm : public QDialog {
 
   void on_chkDaily_clicked();
 
+  void on_btnTestSpeech_clicked();
+
+  void on_chkSpeech_clicked();
+
  private:
   QFont font0;
   void onBtnClick(QToolButton *btn, QString flag);
@@ -69,6 +73,7 @@ class TodoAlarm : public QDialog {
   void addDial(int min, int max, QString flag);
 
   int WidgetType = 2; /*1=Dial  2=RollBox*/
+  void getChkVoice();
 };
 
 #endif  // TODOALARM_H

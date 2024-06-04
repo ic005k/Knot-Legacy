@@ -61,8 +61,11 @@ public class TTSUtils extends UtteranceProgressListener {
   public void stopSpeak() {
     if (textToSpeech != null) {
       textToSpeech.stop();
-      textToSpeech.shutdown();
     }
+  }
+
+  public void shutdownSpeak() {
+    textToSpeech.shutdown();
   }
 
   @Override
