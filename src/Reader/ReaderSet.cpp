@@ -131,8 +131,7 @@ void ReaderSet::on_btnFontPlus_clicked() {
 }
 
 void ReaderSet::on_btnFontLess_clicked() {
-  if (readerFontSize <= 8)
-    return;
+  if (readerFontSize <= 8) return;
   readerFontSize--;
   mw_one->m_Reader->setFontSize(readerFontSize);
 }
@@ -193,8 +192,7 @@ void ReaderSet::on_btnFont_clicked() {
   QString fileName;
   fileName = QFileDialog::getOpenFileName(this, tr("Font"), "",
                                           tr("Font Files (*.*)"));
-  if (fileName == "")
-    return;
+  if (fileName == "") return;
 
 #ifdef Q_OS_ANDROID
   fileName = m_Method->getRealPathFile(fileName);
@@ -215,12 +213,10 @@ void ReaderSet::on_btnFont_clicked() {
 void ReaderSet::on_hSlider_valueChanged(int value) { Q_UNUSED(value); }
 
 void ReaderSet::on_btnGoPage_clicked() {
-  if (mw_one->ui->editPage->text().trimmed() == "")
-    return;
+  if (mw_one->ui->editPage->text().trimmed() == "") return;
 
   int nPage = mw_one->ui->editPage->text().toInt();
-  if (nPage <= 0)
-    nPage = 1;
+  if (nPage <= 0) nPage = 1;
   if (nPage > mw_one->ui->hSlider->maximum())
     nPage = mw_one->ui->hSlider->maximum();
   mw_one->ui->hSlider->setValue(nPage);
@@ -236,8 +232,7 @@ void ReaderSet::on_btnBack_clicked() {
 void ReaderSet::on_btnBackgroundColor_clicked() {
   QString color_0;
   color_0 = m_Method->getCustomColor();
-  if (color_0.isNull())
-    return;
+  if (color_0.isNull()) return;
 
   mw_one->ui->editBackgroundColor->setText(color_0);
   QString color_1 = mw_one->ui->editForegroundColor->text();
@@ -266,8 +261,7 @@ void ReaderSet::on_btnBackgroundColor_clicked() {
 
 void ReaderSet::on_btnForegroundColor_clicked() {
   QString color_1 = m_Method->getCustomColor();
-  if (color_1.isNull())
-    return;
+  if (color_1.isNull()) return;
 
   mw_one->ui->editForegroundColor->setText(color_1);
   QString color_0 = mw_one->ui->editBackgroundColor->text();
@@ -296,14 +290,12 @@ void ReaderSet::on_btnForegroundColor_clicked() {
 
 void ReaderSet::on_editBackgroundColor_textChanged(const QString &arg1) {
   Q_UNUSED(arg1);
-  if (!mw_one->initMain)
-    on_btnStyle2_clicked();
+  if (!mw_one->initMain) on_btnStyle2_clicked();
 }
 
 void ReaderSet::on_editForegroundColor_textChanged(const QString &arg1) {
   Q_UNUSED(arg1);
-  if (!mw_one->initMain)
-    on_btnStyle2_clicked();
+  if (!mw_one->initMain) on_btnStyle2_clicked();
 }
 
 void ReaderSet::on_btnSetBookmark_clicked() {
@@ -311,34 +303,31 @@ void ReaderSet::on_btnSetBookmark_clicked() {
   QString txt = "( " + page + " ) " + mw_one->m_Reader->getBookmarkText() +
                 "\n" + QDateTime::currentDateTime().toString();
   mw_one->m_Reader->saveReader(txt, true);
-  if (isAndroid)
-    m_Method->showToastMessage(tr("Bookmark setup is complete."));
+  if (isAndroid) m_Method->showToastMessage(tr("Bookmark setup is complete."));
 }
 
 void ReaderSet::on_btnLessen_clicked() {
   mw_one->m_Reader->scrollValue = mw_one->m_Reader->scrollValue - 0.1;
-  if (mw_one->m_Reader->scrollValue <= 0.1)
-    mw_one->m_Reader->scrollValue = 0.1;
+  if (mw_one->m_Reader->scrollValue <= 0.1) mw_one->m_Reader->scrollValue = 0.1;
 
   QString value = QString::number(mw_one->m_Reader->scrollValue, 'f', 1);
-  mw_one->ui->lblSpeed->setText(tr("Scroll Value") + " : " + value);
+  mw_one->ui->lblSpeed->setText(tr("Scroll Speed") + " : " + value);
 }
 
 void ReaderSet::on_btnDefault_clicked() {
   mw_one->m_Reader->scrollValue = 1.0;
 
   QString value = QString::number(mw_one->m_Reader->scrollValue, 'f', 1);
-  mw_one->ui->lblSpeed->setText(tr("Scroll Value") + " : " + value);
+  mw_one->ui->lblSpeed->setText(tr("Scroll Speed") + " : " + value);
 }
 
 void ReaderSet::on_btnAdd_clicked() {
   mw_one->m_Reader->scrollValue = mw_one->m_Reader->scrollValue + 0.1;
 
-  if (mw_one->m_Reader->scrollValue >= 2.0)
-    mw_one->m_Reader->scrollValue = 2.0;
+  if (mw_one->m_Reader->scrollValue >= 2.0) mw_one->m_Reader->scrollValue = 2.0;
 
   QString value = QString::number(mw_one->m_Reader->scrollValue, 'f', 1);
-  mw_one->ui->lblSpeed->setText(tr("Scroll Value") + " : " + value);
+  mw_one->ui->lblSpeed->setText(tr("Scroll Speed") + " : " + value);
 }
 
 void ReaderSet::saveScrollValue() {

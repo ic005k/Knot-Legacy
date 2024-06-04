@@ -6,10 +6,10 @@
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
 
-extern MainWindow* mw_one;
-extern QTabWidget* tabData;
+extern MainWindow *mw_one;
+extern QTabWidget *tabData;
 extern QString iniDir, searchStr, currentMDFile;
-extern CategoryList* m_CategoryList;
+extern CategoryList *m_CategoryList;
 extern bool isEpub, isText, isPDF, loading, isDark, isAndroid;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2, fontSize;
@@ -17,7 +17,7 @@ extern QStringList readTextList, htmlFiles, listCategory;
 
 QStringList resultsList;
 
-Method::Method(QWidget* parent) : QDialog(parent) {
+Method::Method(QWidget *parent) : QDialog(parent) {
   mw_one->set_ToolButtonStyle(this);
 
   this->installEventFilter(this);
@@ -85,9 +85,9 @@ void Method::showGrayWindows() {
 
 void Method::closeGrayWindows() { m_widget->close(); }
 
-QInputDialog* Method::inputDialog(QString windowsTitle, QString lblEdit,
+QInputDialog *Method::inputDialog(QString windowsTitle, QString lblEdit,
                                   QString defaultValue) {
-  QInputDialog* idlg = new QInputDialog(this);
+  QInputDialog *idlg = new QInputDialog(this);
   idlg->hide();
   idlg->setWindowFlag(Qt::FramelessWindowHint);
   QString style1 = "QDialog{border-radius:px;border:0px solid darkred;}";
@@ -139,22 +139,22 @@ int Method::getStrWidth(const QString str) {
 
 void Method::addItem(QString text_tab, QString text0, QString text1,
                      QString text2, QString text3, int itemH) {
-  QQuickItem* root = mw_one->ui->qwSearch->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "addItem",
+  QQuickItem *root = mw_one->ui->qwSearch->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "addItem",
                             Q_ARG(QVariant, text_tab), Q_ARG(QVariant, text0),
                             Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
                             Q_ARG(QVariant, text3), Q_ARG(QVariant, itemH));
 }
 
 void Method::delItem(int index) {
-  QQuickItem* root = mw_one->ui->qwSearch->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+  QQuickItem *root = mw_one->ui->qwSearch->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "delItem", Q_ARG(QVariant, index));
 }
 
 int Method::getCount() {
-  QQuickItem* root = mw_one->ui->qwSearch->rootObject();
+  QQuickItem *root = mw_one->ui->qwSearch->rootObject();
   QVariant itemCount;
-  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+  QMetaObject::invokeMethod((QObject *)root, "getItemCount",
                             Q_RETURN_ARG(QVariant, itemCount));
   return itemCount.toInt();
 }
@@ -167,130 +167,130 @@ void Method::clearAll() {
 }
 
 void Method::setCurrentIndex(int index) {
-  QQuickItem* root = mw_one->ui->qwSearch->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
+  QQuickItem *root = mw_one->ui->qwSearch->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setCurrentItem",
                             Q_ARG(QVariant, index));
 }
 
-void Method::addItemToQW(QQuickWidget* qw, QString text0, QString text1,
+void Method::addItemToQW(QQuickWidget *qw, QString text0, QString text1,
                          QString text2, QString text3, int itemH) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "addItem", Q_ARG(QVariant, text0),
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "addItem", Q_ARG(QVariant, text0),
                             Q_ARG(QVariant, text1), Q_ARG(QVariant, text2),
                             Q_ARG(QVariant, text3), Q_ARG(QVariant, itemH));
 }
 
-void Method::insertItem(QQuickWidget* qw, QString text0, QString text1,
+void Method::insertItem(QQuickWidget *qw, QString text0, QString text1,
                         QString text2, QString text3, int curIndex) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "insertItem",
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "insertItem",
                             Q_ARG(QVariant, text0), Q_ARG(QVariant, text1),
                             Q_ARG(QVariant, text2), Q_ARG(QVariant, text3),
                             Q_ARG(QVariant, curIndex));
 }
 
-void Method::delItemFromQW(QQuickWidget* qw, int index) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+void Method::delItemFromQW(QQuickWidget *qw, int index) {
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "delItem", Q_ARG(QVariant, index));
 }
 
-int Method::getCountFromQW(QQuickWidget* qw) {
-  QQuickItem* root = qw->rootObject();
+int Method::getCountFromQW(QQuickWidget *qw) {
+  QQuickItem *root = qw->rootObject();
   QVariant itemCount;
-  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+  QMetaObject::invokeMethod((QObject *)root, "getItemCount",
                             Q_RETURN_ARG(QVariant, itemCount));
   return itemCount.toInt();
 }
 
-void Method::clearAllBakList(QQuickWidget* qw) {
+void Method::clearAllBakList(QQuickWidget *qw) {
   int count = getCountFromQW(qw);
   for (int i = 0; i < count; i++) {
     delItemFromQW(qw, 0);
   }
 }
 
-void Method::gotoEnd(QQuickWidget* qw) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "gotoEnd");
+void Method::gotoEnd(QQuickWidget *qw) {
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "gotoEnd");
 }
 
-void Method::setScrollBarPos(QQuickWidget* qw, double pos) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
+void Method::setScrollBarPos(QQuickWidget *qw, double pos) {
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setScrollBarPos",
                             Q_ARG(QVariant, pos));
 }
 
-void Method::setCurrentIndexFromQW(QQuickWidget* qw, int index) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "setCurrentItem",
+void Method::setCurrentIndexFromQW(QQuickWidget *qw, int index) {
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setCurrentItem",
                             Q_ARG(QVariant, index));
 }
 
-int Method::getCurrentIndexFromQW(QQuickWidget* qw) {
-  QQuickItem* root = qw->rootObject();
+int Method::getCurrentIndexFromQW(QQuickWidget *qw) {
+  QQuickItem *root = qw->rootObject();
   QVariant itemIndex;
-  QMetaObject::invokeMethod((QObject*)root, "getCurrentIndex",
+  QMetaObject::invokeMethod((QObject *)root, "getCurrentIndex",
                             Q_RETURN_ARG(QVariant, itemIndex));
   return itemIndex.toInt();
 }
 
-void Method::modifyItemText0(QQuickWidget* qw, int index, QString strText) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "modifyItemText0",
+void Method::modifyItemText0(QQuickWidget *qw, int index, QString strText) {
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "modifyItemText0",
                             Q_ARG(QVariant, index), Q_ARG(QVariant, strText));
 }
 
-void Method::modifyItemText2(QQuickWidget* qw, int index, QString strText) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "modifyItemText2",
+void Method::modifyItemText2(QQuickWidget *qw, int index, QString strText) {
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "modifyItemText2",
                             Q_ARG(QVariant, index), Q_ARG(QVariant, strText));
 }
 
-void Method::modifyItemText3(QQuickWidget* qw, int index, QString strText) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "modifyItemText3",
+void Method::modifyItemText3(QQuickWidget *qw, int index, QString strText) {
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "modifyItemText3",
                             Q_ARG(QVariant, index), Q_ARG(QVariant, strText));
 }
 
-QString Method::getText0(QQuickWidget* qw, int index) {
-  QQuickItem* root = qw->rootObject();
+QString Method::getText0(QQuickWidget *qw, int index) {
+  QQuickItem *root = qw->rootObject();
   QVariant item;
-  QMetaObject::invokeMethod((QObject*)root, "getText0",
+  QMetaObject::invokeMethod((QObject *)root, "getText0",
                             Q_RETURN_ARG(QVariant, item),
                             Q_ARG(QVariant, index));
   return item.toString();
 }
 
-QString Method::getText1(QQuickWidget* qw, int index) {
-  QQuickItem* root = qw->rootObject();
+QString Method::getText1(QQuickWidget *qw, int index) {
+  QQuickItem *root = qw->rootObject();
   QVariant item;
-  QMetaObject::invokeMethod((QObject*)root, "getText1",
+  QMetaObject::invokeMethod((QObject *)root, "getText1",
                             Q_RETURN_ARG(QVariant, item),
                             Q_ARG(QVariant, index));
   return item.toString();
 }
 
-QString Method::getText2(QQuickWidget* qw, int index) {
-  QQuickItem* root = qw->rootObject();
+QString Method::getText2(QQuickWidget *qw, int index) {
+  QQuickItem *root = qw->rootObject();
   QVariant item;
-  QMetaObject::invokeMethod((QObject*)root, "getText2",
+  QMetaObject::invokeMethod((QObject *)root, "getText2",
                             Q_RETURN_ARG(QVariant, item),
                             Q_ARG(QVariant, index));
   return item.toString();
 }
 
-QString Method::getText3(QQuickWidget* qw, int index) {
-  QQuickItem* root = qw->rootObject();
+QString Method::getText3(QQuickWidget *qw, int index) {
+  QQuickItem *root = qw->rootObject();
   QVariant item;
-  QMetaObject::invokeMethod((QObject*)root, "getText3",
+  QMetaObject::invokeMethod((QObject *)root, "getText3",
                             Q_RETURN_ARG(QVariant, item),
                             Q_ARG(QVariant, index));
   return item.toString();
 }
 
-bool Method::eventFilter(QObject* watchDlgSearch, QEvent* evn) {
+bool Method::eventFilter(QObject *watchDlgSearch, QEvent *evn) {
   if (evn->type() == QEvent::KeyRelease) {
-    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(evn);
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
       close();
       return true;
@@ -311,7 +311,7 @@ void Method::startSearch() {
   QString a1 = "</b></font>";
 
   for (int j = 0; j < tabCount; j++) {
-    QTreeWidget* tw = mw_one->get_tw(j);
+    QTreeWidget *tw = mw_one->get_tw(j);
     QString tabStr = tabData->tabText(j);
 
     for (int i = 0; i < tw->topLevelItemCount(); i++) {
@@ -322,12 +322,12 @@ void Method::startSearch() {
       QString day =
           strMonthDay.split(" ").at(1) + " " + strMonthDay.split(" ").at(2);
 
-      QTreeWidgetItem* topItem;
+      QTreeWidgetItem *topItem;
       topItem = tw->topLevelItem(i);
       int childCount = topItem->childCount();
       for (int j = 0; j < childCount; j++) {
         QString txt0, txt1, txt2, txt3;
-        QTreeWidgetItem* childItem = topItem->child(j);
+        QTreeWidgetItem *childItem = topItem->child(j);
 
         QString strTime = childItem->text(0);
         if (strTime.split(".").count() == 2) {
@@ -486,14 +486,14 @@ void Method::generateData(int count) {
 }
 
 void Method::setCellText(int row, int column, QString str,
-                         QTableWidget* table) {
+                         QTableWidget *table) {
   QString a0("<span style=\"color: white;background: red;\">");
   QString a1("</span>");
 
   if (str.contains(searchStr)) {
     str = str.replace(searchStr, a0 + searchStr + a1);
 
-    QLabel* lbl = new QLabel();
+    QLabel *lbl = new QLabel();
     lbl->adjustSize();
     lbl->setWordWrap(true);
     lbl->setText(str);
@@ -524,7 +524,7 @@ void Method::clickMainDate() {
   mw_one->ui->qwMainEvent->rootContext()->setContextProperty(
       "maineventWidth", mw_one->ui->qwMainEvent->width());
 
-  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  QTreeWidget *tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   int maindateIndex = getCurrentIndexFromQW(mw_one->ui->qwMainDate);
   int maindateCount = getCountFromQW(mw_one->ui->qwMainDate);
   int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
@@ -532,12 +532,12 @@ void Method::clickMainDate() {
   if (topIndex < 0) return;
 
   clearAllBakList(mw_one->ui->qwMainEvent);
-  QTreeWidgetItem* topItem = tw->topLevelItem(topIndex);
+  QTreeWidgetItem *topItem = tw->topLevelItem(topIndex);
   int childCount = topItem->childCount();
   QString text0, text1, text2, text3;
   int nullrows;
   for (int j = 0; j < childCount; j++) {
-    QTreeWidgetItem* childItem = topItem->child(j);
+    QTreeWidgetItem *childItem = topItem->child(j);
     text0 = childItem->text(0);
     text1 = childItem->text(1);
     text2 = childItem->text(2);
@@ -584,7 +584,7 @@ void Method::setMainTabCurrentIndex() {
 }
 
 void Method::clickMainDateData() {
-  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  QTreeWidget *tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   int maindateIndex = getCurrentIndexFromQW(mw_one->ui->qwMainDate);
   int maindateCount = getCountFromQW(mw_one->ui->qwMainDate);
   int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
@@ -597,7 +597,7 @@ void Method::clickMainDateData() {
 }
 
 void Method::clickMainEventData() {
-  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  QTreeWidget *tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   int maindateIndex = getCurrentIndexFromQW(mw_one->ui->qwMainDate);
   int maindateCount = getCountFromQW(mw_one->ui->qwMainDate);
   int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
@@ -613,7 +613,7 @@ void Method::clickMainEventData() {
 }
 
 void Method::reeditMainEventData() {
-  QTreeWidget* tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
+  QTreeWidget *tw = mw_one->get_tw(mw_one->ui->tabWidget->currentIndex());
   int maindateIndex = getCurrentIndexFromQW(mw_one->ui->qwMainDate);
   int maindateCount = getCountFromQW(mw_one->ui->qwMainDate);
   int topIndex = tw->topLevelItemCount() - maindateCount + maindateIndex;
@@ -627,7 +627,7 @@ void Method::reeditMainEventData() {
 }
 
 void Method::showNoteBookMenu(int x, int y) {
-  QMenu* mainMenu = new QMenu(this);
+  QMenu *mainMenu = new QMenu(this);
   mw_one->m_NotesList->init_NoteBookMenu(mainMenu);
 
   QPoint pos(mw_one->geometry().x() + x, mw_one->geometry().y() + y);
@@ -635,7 +635,7 @@ void Method::showNoteBookMenu(int x, int y) {
 }
 
 void Method::showNotsListMenu(int x, int y) {
-  QMenu* mainMenu = new QMenu(this);
+  QMenu *mainMenu = new QMenu(this);
   mw_one->m_NotesList->init_NotesListMenu(mainMenu);
 
   QPoint pos(mw_one->geometry().x() + x, mw_one->geometry().y() + y);
@@ -651,12 +651,12 @@ void Method::setTypeRenameText() {
 void Method::okType() {
   int index = getCurrentIndexFromQW(mw_one->ui->qwCategory);
   m_CategoryList->ui->listWidget->setCurrentRow(index);
-  QListWidgetItem* item = m_CategoryList->ui->listWidget->currentItem();
+  QListWidgetItem *item = m_CategoryList->ui->listWidget->currentItem();
   m_CategoryList->on_listWidget_itemDoubleClicked(item);
   m_CategoryList->on_btnCancel_clicked();
 }
 
-void Method::setSCrollPro(QObject* obj) {
+void Method::setSCrollPro(QObject *obj) {
   QScrollerProperties sp;
   sp.setScrollMetric(QScrollerProperties::DragStartDistance, 0.001);
   sp.setScrollMetric(QScrollerProperties::ScrollingCurve,
@@ -664,12 +664,12 @@ void Method::setSCrollPro(QObject* obj) {
   sp.setScrollMetric(QScrollerProperties::DragVelocitySmoothingFactor, 0.001);
   sp.setScrollMetric(QScrollerProperties::FrameRate,
                      QScrollerProperties::FrameRates::Fps60);
-  QScroller* qs = QScroller::scroller(obj);
+  QScroller *qs = QScroller::scroller(obj);
   qs->setScrollerProperties(sp);
 }
 
-QDialog* Method::getProgBar() {
-  QDialog* dlg;
+QDialog *Method::getProgBar() {
+  QDialog *dlg;
   dlg = new QDialog(this);
   dlg->setWindowFlag(Qt::FramelessWindowHint);
   dlg->setModal(true);
@@ -678,10 +678,10 @@ QDialog* Method::getProgBar() {
     dlg->setFixedWidth(mw_one->geometry().width() - 50);
   else
     dlg->setFixedWidth(320);
-  QVBoxLayout* vbox = new QVBoxLayout;
+  QVBoxLayout *vbox = new QVBoxLayout;
   dlg->setLayout(vbox);
 
-  QLabel* lbl = new QLabel();
+  QLabel *lbl = new QLabel();
   if (isDark)
     lbl->setStyleSheet("color:#ffffff;");
   else
@@ -696,7 +696,7 @@ QDialog* Method::getProgBar() {
   vbox->addWidget(lbl);
 
   if (nProgressBarType == 1) {
-    QProgressBar* prog = new QProgressBar(this);
+    QProgressBar *prog = new QProgressBar(this);
     prog->setStyleSheet(
         "QProgressBar{border:0px solid #FFFFFF;"
         "height:25;"
@@ -715,7 +715,7 @@ QDialog* Method::getProgBar() {
   }
 
   if (nProgressBarType == 2) {
-    QtMaterialCircularProgress* qmProgress =
+    QtMaterialCircularProgress *qmProgress =
         new QtMaterialCircularProgress(this);
     vbox->addWidget(qmProgress);
   }
@@ -751,43 +751,43 @@ QString Method::getRecycleTabName(QString keyStr) {
 void Method::showDelMsgBox(QString title, QString info) {
   bool isOK;
 
-  QDialog* dlg = new QDialog(this);
-  QVBoxLayout* vbox0 = new QVBoxLayout;
+  QDialog *dlg = new QDialog(this);
+  QVBoxLayout *vbox0 = new QVBoxLayout;
   dlg->setLayout(vbox0);
   dlg->setModal(true);
   dlg->setWindowFlag(Qt::FramelessWindowHint);
   dlg->setAttribute(Qt::WA_TranslucentBackground);
 
-  QFrame* frame = new QFrame(this);
+  QFrame *frame = new QFrame(this);
   vbox0->addWidget(frame);
   frame->setStyleSheet(
       "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
       "border:0px solid gray;}");
 
-  QVBoxLayout* vbox = new QVBoxLayout;
+  QVBoxLayout *vbox = new QVBoxLayout;
   vbox->setContentsMargins(12, 12, 12, 12);
   vbox->setSpacing(12);
   frame->setLayout(vbox);
 
-  QLabel* lblTitle = new QLabel(this);
+  QLabel *lblTitle = new QLabel(this);
   lblTitle->adjustSize();
   lblTitle->setWordWrap(true);
   lblTitle->setText(title);
   vbox->addWidget(lblTitle);
 
-  QFrame* hframe = new QFrame(this);
+  QFrame *hframe = new QFrame(this);
   hframe->setFrameShape(QFrame::HLine);
   hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
   vbox->addWidget(hframe);
 
-  QLabel* lbl = new QLabel(this);
+  QLabel *lbl = new QLabel(this);
   lbl->adjustSize();
   lbl->setWordWrap(true);
   lbl->setText(info);
   vbox->addWidget(lbl);
 
-  QToolButton* btnCancel = new QToolButton(this);
-  QToolButton* btnOk = new QToolButton(this);
+  QToolButton *btnCancel = new QToolButton(this);
+  QToolButton *btnOk = new QToolButton(this);
   btnCancel->setText(tr("Cancel"));
   btnOk->setText(tr("Delete"));
   btnOk->setStyleSheet(
@@ -801,13 +801,13 @@ void Method::showDelMsgBox(QString title, QString info) {
   btnOk->setFixedHeight(35);
   btnCancel->setFixedHeight(35);
 
-  QHBoxLayout* hbox = new QHBoxLayout;
+  QHBoxLayout *hbox = new QHBoxLayout;
   hbox->addWidget(btnCancel);
   hbox->addWidget(btnOk);
   btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-  QSpacerItem* sparcer_item =
+  QSpacerItem *sparcer_item =
       new QSpacerItem(0, 160, QSizePolicy::Fixed, QSizePolicy::Expanding);
   vbox->addItem(sparcer_item);
 
@@ -867,23 +867,23 @@ void Method::setDark(QString strDark) {
 #endif
 }
 
-void Method::set_ToolButtonStyle2(QObject* parent) {
+void Method::set_ToolButtonStyle2(QObject *parent) {
   QObjectList btnList =
       mw_one->getAllToolButton(mw_one->getAllUIControls(parent));
   for (int i = 0; i < btnList.count(); i++) {
-    QToolButton* btn = (QToolButton*)btnList.at(i);
+    QToolButton *btn = (QToolButton *)btnList.at(i);
     setToolButtonQss(btn, 5, 3, "#009999", "#FFFFFF", "#009999", "#FFFFFF",
                      "#009090", "#EEEEEE");
   }
 }
 
-QString Method::setToolButtonQss(QToolButton* btn, int radius, int padding,
-                                 const QString& normalColor,
-                                 const QString& normalTextColor,
-                                 const QString& hoverColor,
-                                 const QString& hoverTextColor,
-                                 const QString& pressedColor,
-                                 const QString& pressedTextColor) {
+QString Method::setToolButtonQss(QToolButton *btn, int radius, int padding,
+                                 const QString &normalColor,
+                                 const QString &normalTextColor,
+                                 const QString &hoverColor,
+                                 const QString &hoverTextColor,
+                                 const QString &pressedColor,
+                                 const QString &pressedTextColor) {
   QStringList list;
   list.append(QString("QToolButton{border-style:none;padding:%1px;border-"
                       "radius:%2px;color:%3;background:%4;}")
@@ -903,13 +903,13 @@ QString Method::setToolButtonQss(QToolButton* btn, int radius, int padding,
   return qss;
 }
 
-QString Method::setPushButtonQss(QPushButton* btn, int radius, int padding,
-                                 const QString& normalColor,
-                                 const QString& normalTextColor,
-                                 const QString& hoverColor,
-                                 const QString& hoverTextColor,
-                                 const QString& pressedColor,
-                                 const QString& pressedTextColor) {
+QString Method::setPushButtonQss(QPushButton *btn, int radius, int padding,
+                                 const QString &normalColor,
+                                 const QString &normalTextColor,
+                                 const QString &hoverColor,
+                                 const QString &hoverTextColor,
+                                 const QString &pressedColor,
+                                 const QString &pressedTextColor) {
   QStringList list;
   list.append(QString("QPushButton{border-style:none;padding:%1px;border-"
                       "radius:%2px;color:%3;background:%4;}")
@@ -929,15 +929,15 @@ QString Method::setPushButtonQss(QPushButton* btn, int radius, int padding,
   return qss;
 }
 
-void Method::setVPosForQW(QQuickWidget* qw, qreal pos) {
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "setVPos", Q_ARG(QVariant, pos));
+void Method::setVPosForQW(QQuickWidget *qw, qreal pos) {
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setVPos", Q_ARG(QVariant, pos));
 }
 
-qreal Method::getVPosForQW(QQuickWidget* qw) {
+qreal Method::getVPosForQW(QQuickWidget *qw) {
   QVariant itemCount;
-  QQuickItem* root = qw->rootObject();
-  QMetaObject::invokeMethod((QObject*)root, "getVPos",
+  QQuickItem *root = qw->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "getVPos",
                             Q_RETURN_ARG(QVariant, itemCount));
   qreal textPos = itemCount.toDouble();
   return textPos;
@@ -950,7 +950,7 @@ QString Method::getCustomColor() {
   m_widget = new QWidget(this);
   showGrayWindows();
 
-  ColorDialog* colorDlg = new ColorDialog(this);
+  ColorDialog *colorDlg = new ColorDialog(this);
   connect(colorDlg, &QDialog::rejected, [=]() mutable { closeGrayWindows(); });
   int x, y, w, h;
   x = mw_one->geometry().x();
@@ -966,7 +966,7 @@ QString Method::getCustomColor() {
   }
 #else
 
-  QColorDialog* colorDlg = new QColorDialog(this);
+  QColorDialog *colorDlg = new QColorDialog(this);
   QFont f = getNewFont(17);
 
   colorDlg->setFont(f);
@@ -1133,11 +1133,50 @@ void Method::closeAndroidProgressBar() {
 #endif
 }
 
-void Method::setQLabelImage(QLabel* lbl, int w, int h, QString imgFile) {
+void Method::setQLabelImage(QLabel *lbl, int w, int h, QString imgFile) {
   lbl->setFixedHeight(h);
   lbl->setFixedWidth(w);
-  QPixmap* pixmap = new QPixmap(imgFile);
+  QPixmap *pixmap = new QPixmap(imgFile);
   pixmap->scaled(lbl->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
   lbl->setScaledContents(true);
   lbl->setPixmap(*pixmap);
+}
+
+void Method::playMyText(QString text) {
+  Q_UNUSED(text);
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jText = QAndroidJniObject::fromString(text);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("playMyText", "(Ljava/lang/String;)V",
+                            jText.object<jstring>());
+
+#else
+  QJniObject jText = QJniObject::fromString(text);
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("playMyText", "(Ljava/lang/String;)V",
+                            jText.object<jstring>());
+
+#endif
+
+#endif
+}
+
+void Method::stopPlayMyText() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("stopPlayMyText", "()V");
+
+#else
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("stopPlayMyText", "()V");
+
+#endif
+
+#endif
 }

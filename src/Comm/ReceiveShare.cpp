@@ -451,7 +451,7 @@ void ReceiveShare::shareString(const QString& title, const QString& content) {
   QJniObject activity = QJniObject::fromString("shareString");
   activity.callMethod<void>(
       "shareString",
-      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt5/android/"
+      "(Ljava/lang/String;Ljava/lang/String;Lorg/qtproject/qt/android/"
       "bindings/QtActivity;)V",
       jTitle.object<jstring>(), jPath.object<jstring>(),
       activity.object<jobject>());

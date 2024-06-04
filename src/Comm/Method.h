@@ -219,7 +219,9 @@ class Method : public QDialog {
 
   void setQLabelImage(QLabel *lbl, int w, int h, QString imgFile);
 
- protected:
+  void playMyText(QString text);
+  void stopPlayMyText();
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
