@@ -142,7 +142,10 @@ bool TodoAlarm::eventFilter(QObject* obj, QEvent* evn) {
   return QWidget::eventFilter(obj, evn);
 }
 
-void TodoAlarm::on_btnBack_clicked() { close(); }
+void TodoAlarm::on_btnBack_clicked() {
+  m_Method->stopPlayMyText();
+  close();
+}
 
 void TodoAlarm::on_btnYear_clicked() {
   addBtn(QDate::currentDate().year(), 9, 3, tr("Year"), false);
