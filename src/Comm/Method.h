@@ -221,6 +221,10 @@ class Method : public QDialog {
 
   void playMyText(QString text);
   void stopPlayMyText();
+  void startRecord(QString file);
+  void stopRecord();
+  void playRecord(QString file);
+  void stopPlayRecord();
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

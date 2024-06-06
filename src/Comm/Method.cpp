@@ -1183,3 +1183,83 @@ void Method::stopPlayMyText() {
 
 #endif
 }
+
+void Method::startRecord(QString file) {
+  Q_UNUSED(file);
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jFile = QAndroidJniObject::fromString(file);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("startRecord", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#else
+  QJniObject jFile = QJniObject::fromString(file);
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("startRecord", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#endif
+
+#endif
+}
+
+void Method::stopRecord() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("stopRecord", "()V");
+
+#else
+
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("stopRecord", "()V");
+
+#endif
+
+#endif
+}
+
+void Method::playRecord(QString file) {
+  Q_UNUSED(file);
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jFile = QAndroidJniObject::fromString(file);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("playRecord", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#else
+  QJniObject jFile = QJniObject::fromString(file);
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("playRecord", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#endif
+
+#endif
+}
+
+void Method::stopPlayRecord() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("stopPlayRecord", "()V");
+
+#else
+
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("stopPlayRecord", "()V");
+
+#endif
+
+#endif
+}

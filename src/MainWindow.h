@@ -138,7 +138,7 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
-public:
+ public:
   bool isTesting = false;
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
@@ -182,10 +182,11 @@ public:
   bool isOne = false;
   int isHardStepSensor = -1;
   qlonglong initTodaySteps, resetSteps, tc;
-  QString listStyle = "QListWidget{item-background: "
-                      "rgb(244,23,24); item-color:rgb(255,255,255); "
-                      "border-radius:2px;border:2px "
-                      "solid red;}";
+  QString listStyle =
+      "QListWidget{item-background: "
+      "rgb(244,23,24); item-color:rgb(255,255,255); "
+      "border-radius:2px;border:2px "
+      "solid red;}";
   int sRate = 0;
   qreal ax, ay, az, gx, gy, gz;
   int testCount1 = 0;
@@ -357,14 +358,14 @@ public:
 
   void on_DelayCloseProgressBar();
 
-protected:
+ protected:
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void paintEvent(QPaintEvent *event) override;
   void changeEvent(QEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
 
-public slots:
+ public slots:
   void on_hSlider_sliderMoved(int position);
   void clickMainTab();
   void on_SetReaderFunVisible();
@@ -501,7 +502,7 @@ public slots:
 
   void clickData();
 
-public slots:
+ public slots:
   void on_btnStartDate_clicked();
   void on_btnEndDate_clicked();
   void on_ExecShortcut();
@@ -577,7 +578,7 @@ public slots:
   void selTab();
   void stopTimerForPdf();
 
-private slots:
+ private slots:
   void on_btnSync_clicked();
 
   void on_btnPDF_clicked();
@@ -781,7 +782,11 @@ private slots:
 
   void on_btnPlus_clicked();
 
-private:
+  void on_btnAddTodo_pressed();
+
+  void on_btnAddTodo_released();
+
+ private:
   QString keyType;
   bool isShowDetails = false;
   QString strShowDetails;
@@ -820,107 +825,107 @@ private:
 
 class SaveThread : public QThread {
   Q_OBJECT
-public:
+ public:
   explicit SaveThread(QObject *parent = nullptr);
 
-protected:
+ protected:
   void run();
-signals:
+ signals:
   void isDone();
 
-signals:
+ signals:
 
-public slots:
+ public slots:
 };
 
 class ReadThread : public QThread {
   Q_OBJECT
-public:
+ public:
   explicit ReadThread(QObject *parent = nullptr);
 
-protected:
+ protected:
   void run();
-signals:
+ signals:
   void isDone();
 
-signals:
+ signals:
 
-public slots:
+ public slots:
 };
 
 class ReadTWThread : public QThread {
   Q_OBJECT
-public:
+ public:
   explicit ReadTWThread(QObject *parent = nullptr);
 
-protected:
+ protected:
   void run();
-signals:
+ signals:
   void isDone();
 
-signals:
+ signals:
 
-public slots:
+ public slots:
 };
 
 class ReadEBookThread : public QThread {
   Q_OBJECT
-public:
+ public:
   explicit ReadEBookThread(QObject *parent = nullptr);
 
-protected:
+ protected:
   void run();
-signals:
+ signals:
   void isDone();
 
-signals:
+ signals:
 
-public slots:
+ public slots:
 };
 
 class BakDataThread : public QThread {
   Q_OBJECT
-public:
+ public:
   explicit BakDataThread(QObject *parent = nullptr);
 
-protected:
+ protected:
   void run();
-signals:
+ signals:
   void isDone();
 
-signals:
+ signals:
 
-public slots:
+ public slots:
 };
 
 class ImportDataThread : public QThread {
   Q_OBJECT
-public:
+ public:
   explicit ImportDataThread(QObject *parent = nullptr);
 
-protected:
+ protected:
   void run();
-signals:
+ signals:
   void isDone();
 
-signals:
+ signals:
 
-public slots:
+ public slots:
 };
 
 class SearchThread : public QThread {
   Q_OBJECT
-public:
+ public:
   explicit SearchThread(QObject *parent = nullptr);
 
-protected:
+ protected:
   void run();
-signals:
+ signals:
   void isDone();
 
-signals:
+ signals:
 
-public slots:
+ public slots:
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

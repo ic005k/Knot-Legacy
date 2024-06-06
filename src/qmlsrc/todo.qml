@@ -313,6 +313,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         view.currentIndex = index //实现item切换
+                        m_Todo.stopPlayVoice()
                         //console.log("index=" + index + "  c_index=" + ListView.isCurrentItem)
                     }
 
@@ -324,7 +325,6 @@ Rectangle {
 
                     onPressed: {
                         donebtn.visible = true
-                        //console.log("mouse pressed")
                     }
                 }
 

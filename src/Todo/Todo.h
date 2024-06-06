@@ -79,7 +79,8 @@ class Todo : public QDialog {
   void isAlarm(int index);
   void insertRecycle(QString strTime, int type, QString strText, int curIndex);
 
- protected:
+  void stopPlayVoice();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -120,9 +121,15 @@ class Todo : public QDialog {
   QString getTimeStr(QString str);
 
   void NewTodo();
+  void startRecordVoice();
+  void stopRecordVoice();
+
+  void delVoiceFile(int row);
   private:
   QListWidgetItem *editItem;
-
+  QString audioFileName;
+  QString audioFilePath;
+  bool isAudioRecordOne = false;
   QString todotxt;
   QLabel *lblModi;
   QTextEdit *editModi;

@@ -39,6 +39,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -155,6 +159,14 @@ public class MyActivity
   private FileWatcher mFileWatcher;
   private ShortcutManager shortcutManager;
   private static TTSUtils mytts;
+
+  private AudioRecord audioRecord = null;
+  private int recordBufsize = 0;
+  private boolean isRecording = false;
+  private Thread recordingThread;
+
+  private MediaRecorder recorder;
+  private MediaPlayer player;
 
   public static native void CallJavaNotify_0();
 
@@ -517,7 +529,7 @@ public class MyActivity
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // 在onCreate方法这里调用来动态获取权限
+    // 在onCreate方法这里调用来动态获取存储权限
     verifyStoragePermissions(this);
 
     // File Watch FileWatcher
@@ -679,8 +691,7 @@ public class MyActivity
     Log.i(TAG, "Main onDestroy...");
 
     releaseWakeLock();
-    if (null != mFileWatcher) // 停止监听
-    mFileWatcher.stopWatching();
+    if (null != mFileWatcher) mFileWatcher.stopWatching(); // 停止监听
 
     // 让系统自行处理，否则退出时有可能出现崩溃
     // if(mHomeKeyEvent!=null)
@@ -977,6 +988,19 @@ public class MyActivity
           activity,
           PERMISSIONS_STORAGE,
           REQUEST_EXTERNAL_STORAGE
+        );
+      }
+
+      // 申请记录音频的权限，会弹出对话框
+      int permissionRecordAudio = ActivityCompat.checkSelfPermission(
+        activity,
+        "android.permission.RECORD_AUDIO"
+      );
+      if (permissionRecordAudio != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(
+          activity,
+          new String[] { "android.permission.RECORD_AUDIO" },
+          2000
         );
       }
     } catch (Exception e) {
@@ -1590,5 +1614,125 @@ public class MyActivity
 
   public static void stopPlayMyText() {
     mytts.stopSpeak();
+  }
+
+  private void createAudioRecord() {
+    recordBufsize =
+      AudioRecord.getMinBufferSize(
+        44100,
+        AudioFormat.CHANNEL_IN_MONO,
+        AudioFormat.ENCODING_PCM_16BIT
+      );
+    Log.i("audioRecordTest", "size->" + recordBufsize);
+    audioRecord =
+      new AudioRecord(
+        MediaRecorder.AudioSource.MIC,
+        44100,
+        AudioFormat.CHANNEL_IN_MONO,
+        AudioFormat.ENCODING_PCM_16BIT,
+        recordBufsize
+      );
+  }
+
+  public void startRecord1(String FILE_NAME) {
+    createAudioRecord();
+    if (isRecording) {
+      return;
+    }
+    isRecording = true;
+    audioRecord.startRecording();
+    Log.i("audioRecordTest", "开始录音");
+    recordingThread =
+      new Thread(
+        () -> {
+          byte data[] = new byte[recordBufsize];
+          File file = new File(FILE_NAME);
+          FileOutputStream os = null;
+          try {
+            if (!file.exists()) {
+              file.createNewFile();
+              Log.i("audioRecordTest", "创建录音文件->" + FILE_NAME);
+            }
+            os = new FileOutputStream(file);
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+          int read;
+          if (os != null) {
+            while (isRecording) {
+              read = audioRecord.read(data, 0, recordBufsize);
+              if (AudioRecord.ERROR_INVALID_OPERATION != read) {
+                try {
+                  os.write(data);
+                  Log.i("audioRecordTest", "写录音数据->" + read);
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+              }
+            }
+          }
+          try {
+            os.close();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        }
+      );
+    recordingThread.start();
+  }
+
+  public void stopRecord1() {
+    isRecording = false;
+    if (audioRecord != null) {
+      audioRecord.stop();
+      Log.i("audioRecordTest", "停止录音");
+      audioRecord.release();
+      audioRecord = null;
+      recordingThread = null;
+    }
+  }
+
+  public void startRecord(String outputFile) {
+    try {
+      recorder = new MediaRecorder();
+      recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+      recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+      recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+      recorder.setOutputFile(outputFile);
+      recorder.prepare();
+      recorder.start();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+
+    Log.i("audioRecord", "开始录音");
+  }
+
+  public void stopRecord() {
+    if (recorder != null) {
+      recorder.stop();
+      Log.i("audioRecord", "停止录音");
+    }
+  }
+
+  public void playRecord(String outputFile) {
+    if (player != null) {
+      player.stop();
+    }
+
+    try {
+      player = new MediaPlayer();
+      player.setDataSource(outputFile);
+      player.prepare();
+      player.start();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public void stopPlayRecord() {
+    if (player != null) {
+      player.stop();
+    }
   }
 }

@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.83";
+QString ver = "1.1.84";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -5937,3 +5937,7 @@ void MainWindow::on_btnDefault_clicked() {
 }
 
 void MainWindow::on_btnPlus_clicked() { m_ReaderSet->on_btnAdd_clicked(); }
+
+void MainWindow::on_btnAddTodo_pressed() { m_Todo->startRecordVoice(); }
+
+void MainWindow::on_btnAddTodo_released() { m_Todo->stopRecordVoice(); }

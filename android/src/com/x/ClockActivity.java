@@ -49,6 +49,7 @@ public class ClockActivity
   extends Activity
   implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
   private MediaPlayer mediaPlayer;
+  private MediaPlayer player;
   private static int curVol;
   private static String strInfo =
     "Todo|There are currently timed tasks pending.|0|Close";
@@ -60,8 +61,10 @@ public class ClockActivity
   private InternalConfigure internalConfigure;
 
   private Button btn_cancel;
+  private Button btn_play_voice;
   private TextView text_info;
   private static boolean zh_cn;
+  private String voiceFile;
 
   private static Context context;
   private static ClockActivity m_instance;
@@ -121,6 +124,13 @@ public class ClockActivity
       "Go Back Knot"
     );
     btn_cancel.setOnClickListener(this);
+
+    btn_play_voice = (Button) findViewById(R.id.btn_play_voice);
+    if (zh_cn) btn_play_voice.setText("播放语音"); else btn_play_voice.setText(
+      "Play Voice"
+    );
+    btn_play_voice.setOnClickListener(this);
+    btn_play_voice.setVisibility(View.GONE);
   }
 
   @Override
@@ -139,6 +149,9 @@ public class ClockActivity
         }
 
         onBackPressed();
+        break;
+      case R.id.btn_play_voice:
+        playRecord(voiceFile);
         break;
     }
   }
@@ -253,9 +266,30 @@ public class ClockActivity
 
     MyService.notifyTodoAlarm(context, str2);
 
-    String strVoice = internalConfigure.getIniKey("voice");
-    if (strVoice.equals("true")) {
-      MyActivity.playMyText(str2);
+    String mystr = str2;
+    boolean isVoice = false;
+    String[] the_splic = mystr.split(" ");
+    if (zh_cn) {
+      if (the_splic[0].equals("语音")) {
+        isVoice = true;
+      }
+    } else {
+      if (the_splic[0].equals("Voice")) {
+        isVoice = true;
+      }
+    }
+
+    if (isVoice) {
+      mystr = mystr.replace(" ", "");
+      mystr = mystr.replace(":", "");
+      voiceFile = "/storage/emulated/0/KnotData/memo/voice/" + mystr + ".aac";
+      playRecord(voiceFile);
+      btn_play_voice.setVisibility(View.VISIBLE);
+    } else {
+      String strVoice = internalConfigure.getIniKey("voice");
+      if (strVoice.equals("true")) {
+        MyActivity.playMyText(str2);
+      }
     }
 
     System.out.println("闹钟已开始+++++++++++++++++++++++");
@@ -308,6 +342,7 @@ public class ClockActivity
   public void onBackPressed() {
     super.onBackPressed();
     MyActivity.stopPlayMyText();
+    if (player != null) player.stop();
     AnimationWhenClosed();
   }
 
@@ -475,4 +510,19 @@ public class ClockActivity
 
   @Override
   public void onActivityDestroyed(Activity activity) {}
+
+  private void playRecord(String outputFile) {
+    if (player != null) {
+      player.stop();
+    }
+
+    try {
+      player = new MediaPlayer();
+      player.setDataSource(outputFile);
+      player.prepare();
+      player.start();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
 }
