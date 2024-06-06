@@ -80,7 +80,8 @@ class Todo : public QDialog {
   void insertRecycle(QString strTime, int type, QString strText, int curIndex);
 
   void stopPlayVoice();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
   bool eventFilter(QObject *watch, QEvent *evn) override;
@@ -125,7 +126,10 @@ class Todo : public QDialog {
   void stopRecordVoice();
 
   void delVoiceFile(int row);
-  private:
+  bool isVoice(int row);
+  QString getVoiceFile(int row);
+
+ private:
   QListWidgetItem *editItem;
   QString audioFileName;
   QString audioFilePath;

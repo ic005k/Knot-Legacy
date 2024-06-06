@@ -120,9 +120,7 @@ public class ClockActivity
     text_info.setText(str);
 
     btn_cancel = (Button) findViewById(R.id.btn_cancel);
-    if (zh_cn) btn_cancel.setText("返回 Knot"); else btn_cancel.setText(
-      "Go Back Knot"
-    );
+    if (zh_cn) btn_cancel.setText("返回"); else btn_cancel.setText("Go Back");
     btn_cancel.setOnClickListener(this);
 
     btn_play_voice = (Button) findViewById(R.id.btn_play_voice);

@@ -1198,3 +1198,30 @@ void Todo::stopRecordVoice() {
 }
 
 void Todo::stopPlayVoice() { m_Method->stopPlayRecord(); }
+
+bool Todo::isVoice(int row) {
+  QString strItem = getItemTodoText(row).trimmed();
+  QStringList list0 = strItem.split(" ");
+  if (list0.count() > 0) {
+    QString str = list0.at(0);
+    if (str == tr("Voice")) {
+      return true;
+    }
+  }
+  return false;
+}
+
+QString Todo::getVoiceFile(int row) {
+  QString strItem = getItemTodoText(row).trimmed();
+  QStringList list0 = strItem.split(" ");
+  if (list0.count() > 0) {
+    QString str = list0.at(0);
+    if (str == tr("Voice")) {
+      strItem.replace(" ", "");
+      strItem.replace(":", "");
+      QString voiceFile = iniDir + "memo/voice/" + strItem + ".aac";
+      if (QFile::exists(voiceFile)) return voiceFile;
+    }
+  }
+  return "";
+}

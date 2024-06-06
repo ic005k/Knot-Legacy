@@ -144,6 +144,7 @@ bool TodoAlarm::eventFilter(QObject* obj, QEvent* evn) {
 
 void TodoAlarm::on_btnBack_clicked() {
   m_Method->stopPlayMyText();
+  m_Method->stopPlayRecord();
   close();
 }
 
@@ -502,9 +503,17 @@ void TodoAlarm::on_btnTestSpeech_clicked() {
   if (count == 0) return;
   int row = mw_one->m_Todo->getCurrentIndex();
   if (row < 0) return;
-  QString txt = mw_one->m_Todo->getItemTodoText(row);
-  m_Method->stopPlayMyText();
-  m_Method->playMyText(txt);
+
+  bool isVoice = mw_one->m_Todo->isVoice(row);
+
+  if (isVoice) {
+    QString voiceFile = mw_one->m_Todo->getVoiceFile(row);
+    m_Method->playRecord(voiceFile);
+  } else {
+    QString txt = mw_one->m_Todo->getItemTodoText(row);
+    m_Method->stopPlayMyText();
+    m_Method->playMyText(txt);
+  }
 }
 
 void TodoAlarm::on_chkSpeech_clicked() {

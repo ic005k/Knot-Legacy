@@ -1634,7 +1634,7 @@ public class MyActivity
       );
   }
 
-  public void startRecord1(String FILE_NAME) {
+  public void startRecord_pcm(String FILE_NAME) {
     createAudioRecord();
     if (isRecording) {
       return;
@@ -1681,7 +1681,7 @@ public class MyActivity
     recordingThread.start();
   }
 
-  public void stopRecord1() {
+  public void stopRecord_pcm() {
     isRecording = false;
     if (audioRecord != null) {
       audioRecord.stop();
