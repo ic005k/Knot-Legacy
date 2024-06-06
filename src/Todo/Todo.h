@@ -125,7 +125,6 @@ class Todo : public QDialog {
   void startRecordVoice();
   void stopRecordVoice();
 
-  void delVoiceFile(int row);
   bool isVoice(int row);
   QString getVoiceFile(int row);
 
@@ -142,5 +141,8 @@ class Todo : public QDialog {
   bool isTomorrow = false;
   void changeTodoIcon(bool isToday);
   QSettings *iniTodo;
+  void delVoiceFile(int row);
+  QString editStyle;
+  bool isRecordVoice = false;
 };
 #endif  // TODO_H

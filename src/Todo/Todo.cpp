@@ -556,21 +556,6 @@ void Todo::on_btnRestore_clicked() {
   saveTodo();
 }
 
-void Todo::delVoiceFile(int row) {
-  QString strItem = getItemTodoText(row).trimmed();
-  QStringList list0 = strItem.split(" ");
-  if (list0.count() > 0) {
-    QString str = list0.at(0);
-    if (str == tr("Voice")) {
-      strItem.replace(" ", "");
-      strItem.replace(":", "");
-      QString voiceFile = iniDir + "memo/voice/" + strItem + ".aac";
-      QFile file(voiceFile);
-      file.remove();
-    }
-  }
-}
-
 void Todo::on_btnDel_clicked() {
   int row = getCurrentIndexRecycle();
   if (row < 0) return;
@@ -1166,6 +1151,7 @@ void Todo::addToRecycle() {
 void Todo::NewTodo() { mw_one->ui->btnTodo->click(); }
 
 void Todo::startRecordVoice() {
+  isRecordVoice = false;
   if (mw_one->ui->editTodo->toPlainText().trimmed().length() == 0) {
     if (isAudioRecordOne) return;
     isAudioRecordOne = true;
@@ -1178,10 +1164,20 @@ void Todo::startRecordVoice() {
     str.replace(":", "");
     audioFilePath = dir + str + ".aac";
     m_Method->startRecord(audioFilePath);
+
+    editStyle = mw_one->ui->editTodo->styleSheet();
+    mw_one->ui->editTodo->setStyleSheet(
+        "QTextEdit{background-color: #FF0000; color: white; border:1px solid "
+        "#4169E1;}");
+
+    mw_one->ui->editTodo->setText("     " +
+                                  tr("Recording audio in progress..."));
+    isRecordVoice = true;
   }
 }
 
 void Todo::stopRecordVoice() {
+  if (isRecordVoice) mw_one->ui->editTodo->setText("");
   if (mw_one->ui->editTodo->toPlainText().trimmed().length() == 0) {
     m_Method->stopRecord();
     QFile file(audioFilePath);
@@ -1194,10 +1190,21 @@ void Todo::stopRecordVoice() {
       }
     }
     isAudioRecordOne = false;
+    mw_one->ui->editTodo->setStyleSheet(editStyle);
   }
 }
 
-void Todo::stopPlayVoice() { m_Method->stopPlayRecord(); }
+void Todo::stopPlayVoice() {
+  m_Method->stopPlayRecord();
+
+  int row = getCurrentIndex();
+  if (row >= 0) {
+    if (isVoice(row))
+      mw_one->ui->btnModify->setIcon(QIcon(":/res/voice_l.svg"));
+    else
+      mw_one->ui->btnModify->setIcon(QIcon(":/res/edit_l.svg"));
+  }
+}
 
 bool Todo::isVoice(int row) {
   QString strItem = getItemTodoText(row).trimmed();
@@ -1224,4 +1231,18 @@ QString Todo::getVoiceFile(int row) {
     }
   }
   return "";
+}
+
+void Todo::delVoiceFile(int row) {
+  QString strItem = getItemTodoTextRecycle(row).trimmed();
+  QStringList list0 = strItem.split(" ");
+  if (list0.count() > 0) {
+    QString str = list0.at(0);
+    if (str == tr("Voice")) {
+      strItem.replace(" ", "");
+      strItem.replace(":", "");
+      QString voiceFile = iniDir + "memo/voice/" + strItem + ".aac";
+      if (QFile::exists(voiceFile)) QFile::remove(voiceFile);
+    }
+  }
 }

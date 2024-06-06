@@ -3104,6 +3104,7 @@ void MainWindow::on_btnTodo_clicked() {
 
   m_Todo->refreshAlarm();
   m_Todo->setCurrentIndex(0);
+  m_Todo->stopPlayVoice();
 }
 
 void MainWindow::on_rbFreq_clicked() {

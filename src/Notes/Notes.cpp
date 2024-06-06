@@ -766,7 +766,7 @@ void Notes::unzip(QString zipfile) {
   tagDir = iniDir;
   strZip = zipfile;
   QTextEdit *txtEdit = new QTextEdit();
-  strUnzip = qApp->applicationDirPath() + "/unzip.exe";
+  strUnzip = qApp->applicationDirPath() + "/7z.exe";
   qDebug() << qApp->applicationDirPath() << ".....";
   strUnzip = "\"" + strUnzip + "\"";
   strZip = "\"" + strZip + "\"";
@@ -774,7 +774,7 @@ void Notes::unzip(QString zipfile) {
   strExec = "\"" + strExec + "\"";
   QString strCommand1;
   QString strx = "\"" + tagDir + "\"";
-  strCommand1 = strUnzip + " -o " + strZip + " -d " + strx;
+  strCommand1 = strUnzip + " x " + strZip + " -o" + strx + " -y";
   txtEdit->append(strCommand1);
   QString fileName = iniDir + "un.bat";
   TextEditToFile(txtEdit, fileName);
