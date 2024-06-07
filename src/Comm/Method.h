@@ -225,6 +225,7 @@ class Method : public QDialog {
   void stopRecord();
   void playRecord(QString file);
   void stopPlayRecord();
+  void m_unzip(QString zipFile, QString targetDir);
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
