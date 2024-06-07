@@ -548,6 +548,7 @@ void Todo::on_btnRestore_clicked() {
   QString strText = getItemTodoTextRecycle(row);
   addItem(strTime, 0, strText);
 
+  isRestore = true;
   on_btnDel_clicked();
 
   setCurrentIndex(getCount() - 1);
@@ -560,7 +561,11 @@ void Todo::on_btnDel_clicked() {
   int row = getCurrentIndexRecycle();
   if (row < 0) return;
 
-  delVoiceFile(row);
+  if (!isRestore)
+    delVoiceFile(row);
+  else
+    isRestore = false;
+
   delItemRecycle(row);
 
   isNeedSave = true;
@@ -1168,7 +1173,7 @@ void Todo::startRecordVoice() {
     editStyle = mw_one->ui->editTodo->styleSheet();
     mw_one->ui->editTodo->setStyleSheet(
         "QTextEdit{background-color: #FF0000; color: white; border:1px solid "
-        "#4169E1;}");
+        "#FFFFFF;}");
 
     mw_one->ui->editTodo->setText("     " +
                                   tr("Recording audio in progress..."));

@@ -263,12 +263,12 @@ Rectangle {
                             }
                             TextArea {
                                 id: text1
-                                width: parent.width
+                                width: text1Img.visible? parent.width - text1Img.width - 5 : parent.width
                                 color: view.currentIndex === index ? "black" : getText1FontColor()
                                 font.pointSize: FontSize - 2
                                                 > maxFontSize ? maxFontSize : FontSize - 2
                                 font.bold: true
-                                wrapMode: Text.Wrap
+                                wrapMode: Text.WrapAnywhere
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: time
@@ -285,17 +285,57 @@ Rectangle {
                             visible: false
                         }
 
-                        TextArea {
-                            id: text3
-                            width: parent.width
-                            font.pointSize: FontSize
-                            wrapMode: Text.Wrap
-                            color: view.currentIndex === index ? "black" : getFontColor()
-                            horizontalAlignment: Text.AlignLeft
-                            verticalAlignment: Text.AlignVCenter
-                            text: dototext
+                        RowLayout {
 
-                            visible: true
+                            id: row3
+                            height: text3.contentHeight
+                            width: parent.width
+
+                            function showImg3() {
+
+                                var str1 = text3.text.substring(0, 5)
+                                var str2 = text3.text.substring(0, 2)
+                                if (str1 === "Voice" || str2 === "语音")
+                                    return true
+                                else
+                                    return false
+                            }
+
+                            Rectangle {
+                                height: 0
+                                width: 5
+                                visible: text3Img.visible
+                            }
+
+                            Image {
+                                id: text3Img
+
+                                width: text3.contentHeight
+                                height: text3.contentHeight
+                                fillMode: Image.NoOption
+                                horizontalAlignment: Image.AlignHCenter
+                                verticalAlignment: Image.AlignVCenter
+
+                                smooth: true
+                                sourceSize.height: text3.contentHeight - 2
+                                sourceSize.width: text3.contentHeight - 2
+                                source:  "/res/audio.svg"
+
+                                visible:  row3.showImg3()
+                            }
+
+                            TextArea {
+                                id: text3
+                                width: text3Img.visible? parent.width - text3Img.width - 5 : parent.width
+                                font.pointSize: FontSize
+                                wrapMode: Text.Wrap
+                                color: view.currentIndex === index ? "black" : getFontColor()
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                                text: dototext
+
+                                visible: true
+                            }
                         }
 
                         TextArea {

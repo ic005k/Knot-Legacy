@@ -144,5 +144,6 @@ class Todo : public QDialog {
   void delVoiceFile(int row);
   QString editStyle;
   bool isRecordVoice = false;
+  bool isRestore = false;
 };
 #endif  // TODO_H

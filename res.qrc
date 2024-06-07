@@ -156,5 +156,6 @@
         <file>res/stop_l.svg</file>
         <file>res/run_l.svg</file>
         <file>res/voice_l.svg</file>
+        <file>res/audio.svg</file>
     </qresource>
 </RCC>
