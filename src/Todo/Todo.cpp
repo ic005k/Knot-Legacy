@@ -1015,9 +1015,8 @@ void Todo::reeditText() {
   if (list0.count() > 0) {
     QString str = list0.at(0);
     if (str == tr("Voice")) {
-      strItem.replace(" ", "");
-      strItem.replace(":", "");
-      m_Method->playRecord(iniDir + "memo/voice/" + strItem + ".aac");
+      m_Method->playRecord(iniDir + "memo/voice/" + getNumber(strItem) +
+                           ".aac");
       return;
     }
   }
@@ -1167,9 +1166,7 @@ void Todo::startRecordVoice() {
     mdir.mkpath(dir);
     audioFileName = tr("Voice") + " " + QDateTime::currentDateTime().toString();
     QString str = audioFileName;
-    str.replace(" ", "");
-    str.replace(":", "");
-    audioFilePath = dir + str + ".aac";
+    audioFilePath = dir + getNumber(str) + ".aac";
     m_Method->startRecord(audioFilePath);
 
     editStyle = mw_one->ui->editTodo->styleSheet();
@@ -1233,9 +1230,7 @@ QString Todo::getVoiceFile(int row) {
   if (list0.count() > 0) {
     QString str = list0.at(0);
     if (str == tr("Voice")) {
-      strItem.replace(" ", "");
-      strItem.replace(":", "");
-      QString voiceFile = iniDir + "memo/voice/" + strItem + ".aac";
+      QString voiceFile = iniDir + "memo/voice/" + getNumber(strItem) + ".aac";
       if (QFile::exists(voiceFile)) return voiceFile;
     }
   }
@@ -1248,10 +1243,21 @@ void Todo::delVoiceFile(int row) {
   if (list0.count() > 0) {
     QString str = list0.at(0);
     if (str == tr("Voice")) {
-      strItem.replace(" ", "");
-      strItem.replace(":", "");
-      QString voiceFile = iniDir + "memo/voice/" + strItem + ".aac";
+      QString voiceFile = iniDir + "memo/voice/" + getNumber(strItem) + ".aac";
       if (QFile::exists(voiceFile)) QFile::remove(voiceFile);
     }
   }
+}
+
+QString Todo::getNumber(QString str) {
+  QString str0;
+  for (int i = 0; i < str.length(); i++) {
+    QString str1 = str.mid(i, 1);
+    if (str1 != " ") {
+      bool isOk;
+      str1.toInt(&isOk, 10);
+      if (isOk) str0 = str0 + str1;
+    }
+  }
+  return str0;
 }

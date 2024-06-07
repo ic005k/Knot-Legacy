@@ -2834,8 +2834,8 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
       QFile::copy(fileName, iniDir + "memo.zip");
     }
 
-    // mw_one->m_Notes->unzip(iniDir + "memo.zip");
-    m_Method->m_unzip(iniDir + "memo.zip", iniDir);
+    mw_one->m_Notes->unzip(iniDir + "memo.zip");
+    // m_Method->m_unzip(iniDir + "memo.zip", iniDir);
 
     QFile file(iniDir + "memo/tab.ini");
     if (!file.exists()) {

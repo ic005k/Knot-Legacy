@@ -145,5 +145,6 @@ class Todo : public QDialog {
   QString editStyle;
   bool isRecordVoice = false;
   bool isRestore = false;
+  QString getNumber(QString str);
 };
 #endif  // TODO_H

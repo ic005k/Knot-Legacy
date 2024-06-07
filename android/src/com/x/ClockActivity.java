@@ -278,9 +278,17 @@ public class ClockActivity
     }
 
     if (isVoice) {
-      mystr = mystr.replace(" ", "");
-      mystr = mystr.replace(":", "");
-      voiceFile = "/storage/emulated/0/KnotData/memo/voice/" + mystr + ".aac";
+      String strNumber = "";
+      for (int i = 0; i < mystr.length(); i++) {
+        String subStr = mystr.substring(i, i + 1);
+        if (!subStr.equals(" ")) {
+          if (isNumer(subStr)) {
+            strNumber = strNumber + subStr;
+          }
+        }
+      }
+      voiceFile =
+        "/storage/emulated/0/KnotData/memo/voice/" + strNumber + ".aac";
       playRecord(voiceFile);
       btn_play_voice.setVisibility(View.VISIBLE);
     } else {
@@ -522,5 +530,13 @@ public class ClockActivity
     } catch (Exception ex) {
       ex.printStackTrace();
     }
+  }
+
+  private boolean isNumer(String str) {
+    if (str == null) return false;
+    for (char c : str.toCharArray()) {
+      if (!Character.isDigit(c)) return false;
+    }
+    return true;
   }
 }
