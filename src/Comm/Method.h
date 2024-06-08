@@ -25,6 +25,16 @@ class Method : public QDialog {
   QString qssSlider;
   QString ColorToString(QColor v_color);
 
+  QString lblStyle =
+      "QLabel{border: 0px solid gray;border-radius: "
+      "0px;background-color:qlineargradient(spread:pad,x1:1,y1:0,x2:0,y2:0,"
+      "stop:0 #FFAEB9,stop:1 #87CEFF);color:black;selection-background-color: "
+      "lightblue;}";
+  QString lblStyle0 =
+      "QLabel{border: 0px solid gray;border-radius: "
+      "0px;background-color:#FFFFFF;color:blue;selection-background-color: "
+      "lightblue;}";
+
   QString btnStyle =
       "QToolButton {background-color: rgb(236, 236, 236);color: black; "
       "border-radius:10px; "
@@ -226,7 +236,8 @@ class Method : public QDialog {
   void playRecord(QString file);
   void stopPlayRecord();
   void m_unzip(QString zipFile, QString targetDir);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

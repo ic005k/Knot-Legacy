@@ -2133,6 +2133,7 @@ void Reader::readBookDone() {
     mw_one->ui->progReader->show();
     mw_one->ui->btnPages->show();
     mw_one->ui->btnShowBookmark->show();
+    mw_one->ui->btnAutoRun->show();
 
     mw_one->ui->qwReader->rootContext()->setContextProperty("isWebViewShow",
                                                             false);
@@ -2172,6 +2173,7 @@ void Reader::readBookDone() {
   if (isPDF) {
     qDebug() << "===Read Pdf... ..." << fileName;
 
+    mw_one->ui->btnAutoRun->hide();
     mw_one->ui->btnShowBookmark->hide();
     mw_one->ui->progReader->hide();
     mw_one->ui->qwReader->hide();

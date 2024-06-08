@@ -786,7 +786,11 @@ class MainWindow : public QMainWindow {
 
   void on_btnAddTodo_released();
 
+  void on_tmeFlash();
+
  private:
+  QTimer *tmeFlash;
+  int nFlashCount = 0;
   QString keyType;
   bool isShowDetails = false;
   QString strShowDetails;

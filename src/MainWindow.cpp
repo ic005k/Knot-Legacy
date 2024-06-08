@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.84";
+QString ver = "1.1.85";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -1170,6 +1170,20 @@ void MainWindow::on_AddRecord() {
 
   ui->frameMain->hide();
   ui->frameEditRecord->show();
+
+  tmeFlash->start(300);
+}
+
+void MainWindow::on_tmeFlash() {
+  nFlashCount = nFlashCount + 1;
+  if (nFlashCount % 2 == 0)
+    ui->lblTitleEditRecord->setStyleSheet(m_Method->lblStyle0);
+  else
+    ui->lblTitleEditRecord->setStyleSheet(m_Method->lblStyle);
+  if (nFlashCount == 3) {
+    tmeFlash->stop();
+    nFlashCount = 0;
+  }
 }
 
 void MainWindow::set_ToolButtonStyle(QObject *parent) {
@@ -3794,6 +3808,8 @@ void MainWindow::init_UIWidget() {
   connect(timerSyncData, SIGNAL(timeout()), this, SLOT(on_timerSyncData()));
   timerMousePress = new QTimer(this);
   connect(timerMousePress, SIGNAL(timeout()), this, SLOT(on_timerMousePress()));
+  tmeFlash = new QTimer(this);
+  connect(tmeFlash, SIGNAL(timeout()), this, SLOT(on_tmeFlash()));
 
   myReadEBookThread = new ReadEBookThread();
   connect(myReadEBookThread, &ReadEBookThread::isDone, this,
