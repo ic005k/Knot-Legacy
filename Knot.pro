@@ -46,7 +46,6 @@ SOURCES += \
     src/CloudBackup.cpp \
     src/Comm/FileSystemWatcher.cpp \
     src/Comm/Method.cpp \
-    src/Comm/MyWheel.cpp \
     src/Comm/ReceiveShare.cpp \
     src/Comm/RollingBox.cpp \
     src/Comm/ShowMessage.cpp \
@@ -98,12 +97,7 @@ SOURCES += \
     src/md4c/md4c.c \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
-    src/onedrive/qtonedrivewebview.cpp \
-    src/qwt/qwt.cpp \
-    src/qwt/qwt_clipper.cpp \
-    src/qwt/qwt_math.cpp \
-    src/qwt/qwt_painter.cpp \
-    src/qwt/qwt_scale_map.cpp
+    src/onedrive/qtonedrivewebview.cpp
 
 
 HEADERS += \
@@ -113,7 +107,6 @@ HEADERS += \
     src/CloudBackup.h \
     src/Comm/FileSystemWatcher.h \
     src/Comm/Method.h \
-    src/Comm/MyWheel.h \
     src/Comm/ReceiveShare.h \
     src/Comm/RollingBox.h \
     src/Comm/ShowMessage.h \
@@ -172,12 +165,6 @@ HEADERS += \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
     src/onedrive/qtonedrivewebview.h \
-    src/qwt/qwt.h \
-    src/qwt/qwt_clipper.h \
-    src/qwt/qwt_global.h \
-    src/qwt/qwt_math.h \
-    src/qwt/qwt_painter.h \
-    src/qwt/qwt_scale_map.h \
     win.rc
 
 FORMS += \

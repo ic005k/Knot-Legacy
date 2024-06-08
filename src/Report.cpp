@@ -152,8 +152,7 @@ void Report::on_btnYear_clicked() {
 
   if (m_DateSelector->nWidgetType == 1)
     m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
-  if (m_DateSelector->nWidgetType == 2)
-    m_DateSelector->wheelYear->setValue(mw_one->ui->btnYear->text().toInt());
+
   if (m_DateSelector->nWidgetType == 3)
     m_DateSelector->ui->sliderYear->setValue(
         mw_one->ui->btnYear->text().toInt());

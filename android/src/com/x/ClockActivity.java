@@ -46,15 +46,13 @@ import java.util.Properties;
 import org.ini4j.Wini;
 
 public class ClockActivity
-  extends Activity
-  implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
+    extends Activity
+    implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
   private MediaPlayer mediaPlayer;
   private MediaPlayer player;
   private static int curVol;
-  private static String strInfo =
-    "Todo|There are currently timed tasks pending.|0|Close";
-  private static String strEnInfo =
-    "Todo|There are currently timed tasks pending.|0|Close";
+  private static String strInfo = "Todo|There are currently timed tasks pending.|0|Close";
+  private static String strEnInfo = "Todo|There are currently timed tasks pending.|0|Close";
   private String strMute = "false";
   private boolean isRefreshAlarm = true;
   private AudioManager mAudioManager;
@@ -104,7 +102,10 @@ public class ClockActivity
   public static boolean isZh(Context context) {
     Locale locale = context.getResources().getConfiguration().locale;
     String language = locale.getLanguage();
-    if (language.endsWith("zh")) zh_cn = true; else zh_cn = false;
+    if (language.endsWith("zh"))
+      zh_cn = true;
+    else
+      zh_cn = false;
 
     return zh_cn;
   }
@@ -120,13 +121,18 @@ public class ClockActivity
     text_info.setText(str);
 
     btn_cancel = (Button) findViewById(R.id.btn_cancel);
-    if (zh_cn) btn_cancel.setText("返回"); else btn_cancel.setText("Go Back");
+    if (zh_cn)
+      btn_cancel.setText("返回");
+    else
+      btn_cancel.setText("Go Back");
     btn_cancel.setOnClickListener(this);
 
     btn_play_voice = (Button) findViewById(R.id.btn_play_voice);
-    if (zh_cn) btn_play_voice.setText("播放语音"); else btn_play_voice.setText(
-      "Play Voice"
-    );
+    if (zh_cn)
+      btn_play_voice.setText("播放语音");
+    else
+      btn_play_voice.setText(
+          "Play Voice");
     btn_play_voice.setOnClickListener(this);
     btn_play_voice.setVisibility(View.GONE);
   }
@@ -138,7 +144,8 @@ public class ClockActivity
         String iniFile = "/storage/emulated/0/.Knot/alarm.ini";
         try {
           File file = new File(iniFile);
-          if (!file.exists()) file.createNewFile();
+          if (!file.exists())
+            file.createNewFile();
           Wini ini = new Wini(file);
           ini.put("action", "backMain", "true");
           ini.store();
@@ -177,8 +184,7 @@ public class ClockActivity
 
     Application application = this.getApplication();
     application.registerActivityLifecycleCallbacks(this);
-    mAudioManager =
-      (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
+    mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
     curVol = getMediaVolume();
 
     String filename = "/data/data/com.x/files/msg.ini";
@@ -195,8 +201,8 @@ public class ClockActivity
 
     this.setStatusBarColor("#F3F3F3"); // 灰
     getWindow()
-      .getDecorView()
-      .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        .getDecorView()
+        .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
     // SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss
     // z");
@@ -253,7 +259,10 @@ public class ClockActivity
     String str2 = array[1];
     String str3 = array[3];
     String strTodo;
-    if (zh_cn) strTodo = "待办事项："; else strTodo = "Todo: ";
+    if (zh_cn)
+      strTodo = "待办事项：";
+    else
+      strTodo = "Todo: ";
 
     setContentView(R.layout.activity_clock);
     bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT);
@@ -287,8 +296,7 @@ public class ClockActivity
           }
         }
       }
-      voiceFile =
-        "/storage/emulated/0/KnotData/memo/voice/" + strNumber + ".aac";
+      voiceFile = "/storage/emulated/0/KnotData/memo/voice/" + strNumber + ".aac";
       playRecord(voiceFile);
       btn_play_voice.setVisibility(View.VISIBLE);
     } else {
@@ -302,9 +310,8 @@ public class ClockActivity
 
     // HomeKey
     registerReceiver(
-      mHomeKeyEvent,
-      new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-    );
+        mHomeKeyEvent,
+        new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
   }
 
   private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
@@ -348,7 +355,8 @@ public class ClockActivity
   public void onBackPressed() {
     super.onBackPressed();
     MyActivity.stopPlayMyText();
-    if (player != null) player.stop();
+    if (player != null)
+      player.stop();
     AnimationWhenClosed();
   }
 
@@ -395,7 +403,7 @@ public class ClockActivity
      * 例:configureActivity.saveFiletoSD("text.ini","");
      */
     public void saveFile(String filename, Properties properties)
-      throws Exception {
+        throws Exception {
       // 设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
       FileOutputStream fileOutputStream; // = context.openFileOutput(filename, Context.MODE_PRIVATE);
       File file = new File(filename);
@@ -421,9 +429,8 @@ public class ClockActivity
       fileInputStream = new FileInputStream(file);
 
       InputStreamReader reader = new InputStreamReader(
-        fileInputStream,
-        "UTF-8"
-      );
+          fileInputStream,
+          "UTF-8");
       BufferedReader br = new BufferedReader(reader);
       // String line;
       // while ((line = br.readLine()) != null) {
@@ -479,32 +486,35 @@ public class ClockActivity
   // 设置多媒体音量
   public void setMediaVolume(int volume) {
     mAudioManager.setStreamVolume(
-      AudioManager.STREAM_MUSIC, // 音量类型
-      volume,
-      AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI
-    );
+        AudioManager.STREAM_MUSIC, // 音量类型
+        volume,
+        AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
   }
 
   private void setStatusBarColor(String color) {
     // 需要安卓版本大于5.0以上
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       getWindow()
-        .addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+          .addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
       getWindow().setStatusBarColor(Color.parseColor(color));
     }
   }
 
   @Override
-  public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
+  public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+  }
 
   @Override
-  public void onActivityStarted(Activity activity) {}
+  public void onActivityStarted(Activity activity) {
+  }
 
   @Override
-  public void onActivityResumed(Activity activity) {}
+  public void onActivityResumed(Activity activity) {
+  }
 
   @Override
-  public void onActivityPaused(Activity activity) {}
+  public void onActivityPaused(Activity activity) {
+  }
 
   @Override
   public void onActivityStopped(Activity activity) {
@@ -512,10 +522,12 @@ public class ClockActivity
   }
 
   @Override
-  public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
+  public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+  }
 
   @Override
-  public void onActivityDestroyed(Activity activity) {}
+  public void onActivityDestroyed(Activity activity) {
+  }
 
   private void playRecord(String outputFile) {
     if (player != null) {
@@ -533,9 +545,11 @@ public class ClockActivity
   }
 
   private boolean isNumer(String str) {
-    if (str == null) return false;
+    if (str == null)
+      return false;
     for (char c : str.toCharArray()) {
-      if (!Character.isDigit(c)) return false;
+      if (!Character.isDigit(c))
+        return false;
     }
     return true;
   }

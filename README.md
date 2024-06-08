@@ -31,7 +31,6 @@ QR code for downloading:
 * [syncthing-android](https://github.com/Catfriend1/syncthing-android)
 * [QOwnNotes](https://github.com/pbek/QOwnNotes)
 * [iconfinder](https://www.iconfinder.com/)
-* [Qwt](https://qwt.sourceforge.io/index.html)
 * [Qt Material Design Desktop Widgets](https://gitcode.com/mirrors/laserpants/qt-material-widgets/tree/master?utm_source=csdn_github_accelerator&isLogin=1)
 * [md4c](https://github.com/mity/md4c)
 * [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet)

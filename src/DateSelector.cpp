@@ -31,25 +31,6 @@ DateSelector::DateSelector(QWidget *parent)
     ui->gboxDay->layout()->addWidget(rboxDay);
   }
 
-  if (nWidgetType == 2) {
-    wheelYear = new QwtWheel(this);
-    wheelMonth = new QwtWheel(this);
-    wheelDay = new QwtWheel(this);
-
-    wheelYear->setRange(0, 1000);
-    wheelMonth->setRange(1, 12);
-    wheelDay->setRange(1, 31);
-
-    wheelYear->setFixedHeight(60);
-    wheelYear->setFixedWidth(240);
-
-    ui->gboxYear->layout()->addWidget(wheelYear);
-    ui->gboxMonth->layout()->addWidget(wheelMonth);
-    ui->gboxDay->layout()->addWidget(wheelDay);
-
-    connect(wheelYear, SIGNAL(valueChanged(double)), this, SLOT(setNum()));
-  }
-
   if (nWidgetType == 3) {
     ui->sliderDay->setStyleSheet(ui->sliderYear->styleSheet());
     ui->sliderMonth->setStyleSheet(ui->sliderYear->styleSheet());
@@ -68,12 +49,6 @@ DateSelector::DateSelector(QWidget *parent)
   }
 
   setModal(true);
-}
-
-void DateSelector::setNum() {
-  qDebug() << wheelYear->value();
-  ui->lblYear->setText(QString::number(2022 + (int)wheelYear->value() / 100) +
-                       "  " + tr("Year"));
 }
 
 void DateSelector::initRBox(RollingBox *rbox, int w) {
@@ -103,7 +78,6 @@ void DateSelector::closeEvent(QCloseEvent *event) {
 void DateSelector::init() {
   int cy = QDate::currentDate().year();
   if (nWidgetType == 1) rboxYear->setRange(2022, cy);
-  if (nWidgetType == 2) wheelYear->setRange(2022, cy);
 
   if (dateFlag == 1) {
     ui->gboxMonth->hide();
@@ -130,7 +104,6 @@ void DateSelector::init() {
     ui->lblFlag->hide();
 
     if (nWidgetType == 1) rboxMonth->setRange(1, 13);
-    if (nWidgetType == 2) wheelMonth->setRange(1, 13);
 
     setFixedHeight(200);
   }
@@ -147,10 +120,7 @@ void DateSelector::init() {
       rboxMonth->setRange(1, 12);
       rboxDay->setRange(1, 31);
     }
-    if (nWidgetType == 2) {
-      wheelMonth->setRange(1, 12);
-      wheelDay->setRange(1, 31);
-    }
+
     setFixedHeight(490);
   }
 
