@@ -46,6 +46,9 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
 
   mw_one->ui->editTodo->setFixedHeight(getEditTextHeight(mw_one->ui->editTodo) +
                                        4);
+
+  tmeRecordTime = new QTimer(this);
+  connect(tmeRecordTime, SIGNAL(timeout()), this, SLOT(on_ShowRecordTime()));
 }
 
 Todo::~Todo() { delete ui; }
@@ -1174,17 +1177,27 @@ void Todo::startRecordVoice() {
         "QTextEdit{background-color: #FF0000; color: white; border:1px solid "
         "#FFFFFF;}");
 
-    mw_one->ui->editTodo->setText("     " +
-                                  tr("Recording audio in progress..."));
+    mw_one->ui->editTodo->setText(tr("Recording audio in progress..."));
+    nRecordSec = 0;
+    tmeRecordTime->start(1000);
     isRecordVoice = true;
   }
+}
+
+void Todo::on_ShowRecordTime() {
+  nRecordSec = nRecordSec + 1;
+  mw_one->ui->editTodo->setText(tr("Recording audio in progress...") + " " +
+                                m_Method->FormatHHMMSS(nRecordSec));
 }
 
 void Todo::stopRecordVoice() {
   if (!isAndroid) return;
 
-  if (isRecordVoice) mw_one->ui->editTodo->setText("");
-  if (mw_one->ui->editTodo->toPlainText().trimmed().length() == 0) {
+  if (isRecordVoice) {
+    mw_one->ui->editTodo->setText("");
+    tmeRecordTime->stop();
+    nRecordSec = 0;
+
     m_Method->stopRecord();
     QFile file(audioFilePath);
     if (file.exists()) {

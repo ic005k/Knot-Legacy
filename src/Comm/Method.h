@@ -237,6 +237,8 @@ class Method : public QDialog {
   void stopPlayRecord();
   void m_unzip(QString zipFile, QString targetDir);
 
+  QString FormatHHMMSS(qint32 total);
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

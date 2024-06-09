@@ -174,7 +174,7 @@ void Reader::setReaderStyle() {
 
     textColor = QColor(0, 0, 0);
     baseColor = QColor(255, 255, 255);
-    m_ReaderSet->ui->f_CustomColor->show();
+    mw_one->ui->f_CustomColor->show();
   }
 
   if (readerStyle == "3") {
@@ -1989,7 +1989,7 @@ void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
   textBrowser->setFixedWidth(mw_one->ui->qwReader->width());
   QFont font = mw_one->ui->qwReader->font();
   font.setPixelSize(readerFontSize);
-  font.setFamily(m_ReaderSet->ui->btnFont->font().family());
+  font.setFamily(mw_one->ui->btnFont->font().family());
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);
   textBrowser->setFont(font);
 

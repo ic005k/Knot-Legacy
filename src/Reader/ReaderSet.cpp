@@ -28,10 +28,10 @@ ReaderSet::ReaderSet(QWidget *parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   ui->setupUi(this);
 
   setModal(true);
-  ui->f_CustomColor->hide();
+  mw_one->ui->f_CustomColor->hide();
 
   this->installEventFilter(this);
-  ui->hSlider->installEventFilter(this);
+  mw_one->ui->hSlider->installEventFilter(this);
 
   mw_one->ui->hSlider->setStyleSheet(mw_one->ui->hsH->styleSheet());
   mw_one->ui->btnFontLess->setStyleSheet("border:none");
@@ -53,7 +53,7 @@ ReaderSet::ReaderSet(QWidget *parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   mw_one->ui->lblInfo->setWordWrap(true);
 
   QValidator *validator =
-      new QRegularExpressionValidator(regxNumber, ui->editPage);
+      new QRegularExpressionValidator(regxNumber, mw_one->ui->editPage);
   mw_one->ui->editPage->setValidator(validator);
 
   f = m_Method->getNewFont(15);
@@ -95,7 +95,7 @@ void ReaderSet::init() {
 
   QStringList list = mw_one->ui->btnPages->text().split("\n");
   if (list.count() == 2) {
-    ui->hSlider->setValue(list.at(0).toInt());
+    mw_one->ui->hSlider->setValue(list.at(0).toInt());
   }
 
   show();
@@ -111,10 +111,10 @@ bool ReaderSet::eventFilter(QObject *watch, QEvent *evn) {
     }
   }
 
-  if (watch == ui->hSlider) {
+  if (watch == mw_one->ui->hSlider) {
     if (event->type() == QEvent::MouseButtonRelease) {
       on_hSlider_sliderReleased();
-      on_hSlider_sliderMoved(ui->hSlider->value());
+      on_hSlider_sliderMoved(mw_one->ui->hSlider->value());
     }
   }
 
@@ -336,4 +336,9 @@ void ReaderSet::saveScrollValue() {
   Reg.setIniCodec("utf-8");
 #endif
   Reg.setValue("/Reader/ScrollValue", mw_one->m_Reader->scrollValue);
+}
+
+void ReaderSet::on_btnClear_clicked() {
+  iniPreferences->remove("/Options/ReaderFont");
+  mw_one->ui->btnFont->setText(tr("Font"));
 }

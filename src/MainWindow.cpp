@@ -5960,3 +5960,7 @@ void MainWindow::on_btnPlus_clicked() { m_ReaderSet->on_btnAdd_clicked(); }
 void MainWindow::on_btnAddTodo_pressed() { m_Todo->startRecordVoice(); }
 
 void MainWindow::on_btnAddTodo_released() { m_Todo->stopRecordVoice(); }
+
+void MainWindow::on_btnClearReaderFont_clicked() {
+  m_ReaderSet->on_btnClear_clicked();
+}

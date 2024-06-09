@@ -788,6 +788,8 @@ class MainWindow : public QMainWindow {
 
   void on_tmeFlash();
 
+  void on_btnClearReaderFont_clicked();
+
  private:
   QTimer *tmeFlash;
   int nFlashCount = 0;

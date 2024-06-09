@@ -1307,3 +1307,20 @@ void Method::m_unzip(QString zipFile, QString targetDir) {
     myfile.close();
   }
 }
+
+QString Method::FormatHHMMSS(qint32 total) {
+  int hh = total / (60 * 60);
+  int mm = (total - (hh * 60 * 60)) / 60;
+  int ss = (total - (hh * 60 * 60)) - mm * 60;
+
+  QString hour = QString::number(hh, 10);
+  QString min = QString::number(mm, 10);
+  QString sec = QString::number(ss, 10);
+
+  if (hour.length() == 1) hour = "0" + hour;
+  if (min.length() == 1) min = "0" + min;
+  if (sec.length() == 1) sec = "0" + sec;
+
+  QString strTime = hour + ":" + min + ":" + sec;
+  return strTime;
+}

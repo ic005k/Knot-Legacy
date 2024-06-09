@@ -8,6 +8,7 @@
 #include <QListWidgetItem>
 #include <QSettings>
 #include <QTextEdit>
+#include <QTimer>
 #include <QToolButton>
 
 namespace Ui {
@@ -128,6 +129,9 @@ class Todo : public QDialog {
   bool isVoice(int row);
   QString getVoiceFile(int row);
 
+ private slots:
+  void on_ShowRecordTime();
+
  private:
   QListWidgetItem *editItem;
   QString audioFileName;
@@ -146,5 +150,7 @@ class Todo : public QDialog {
   bool isRecordVoice = false;
   bool isRestore = false;
   QString getNumber(QString str);
+  QTimer *tmeRecordTime;
+  int nRecordSec = 0;
 };
 #endif  // TODO_H
