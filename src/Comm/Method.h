@@ -32,7 +32,7 @@ class Method : public QDialog {
       "lightblue;}";
   QString lblStyle0 =
       "QLabel{border: 0px solid gray;border-radius: "
-      "0px;background-color:#FFFFFF;color:blue;selection-background-color: "
+      "0px;background-color:#3498DB;color:white;selection-background-color: "
       "lightblue;}";
 
   QString btnStyle =

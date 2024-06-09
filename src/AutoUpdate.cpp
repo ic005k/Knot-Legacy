@@ -6,6 +6,7 @@
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniDir, privateDir;
+extern bool isDark;
 
 AutoUpdate::AutoUpdate(QWidget* parent)
     : QDialog(parent), ui(new Ui::AutoUpdate) {
@@ -13,9 +14,14 @@ AutoUpdate::AutoUpdate(QWidget* parent)
 
   setWindowFlag(Qt::FramelessWindowHint);
   setAttribute(Qt::WA_TranslucentBackground);
-  ui->frame->setStyleSheet(
-      "#frame{background-color: rgb(236, 236, 236);border-radius:10px; "
-      "border:1px solid gray;}");
+  if (isDark)
+    ui->frame->setStyleSheet(
+        "#frame{background-color: #19232D; border-radius:10px; "
+        "border:1px solid gray;}");
+  else
+    ui->frame->setStyleSheet(
+        "#frame{background-color: rgb(250, 250, 250); border-radius:10px; "
+        "border:1px solid gray;}");
 
   mw_one->set_ToolButtonStyle(this);
   setModal(true);

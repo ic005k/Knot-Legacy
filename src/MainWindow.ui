@@ -5954,7 +5954,7 @@ QRadioButton::indicator:checked {
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>35</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -6586,6 +6586,12 @@ selection-background-color: lightblue;
          <layout class="QVBoxLayout" name="verticalLayout_31">
           <item>
            <widget class="QLabel" name="lblTime">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>30</pointsize>

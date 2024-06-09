@@ -5,7 +5,7 @@
 #include "ui_MainWindow.h"
 extern MainWindow *mw_one;
 extern Method *m_Method;
-extern bool loading, zh_cn;
+extern bool loading, zh_cn, isDark;
 extern QString noteText, appName, ver;
 extern int curPos;
 
@@ -13,9 +13,14 @@ AboutThis::AboutThis(QWidget *parent) : QDialog(parent), ui(new Ui::AboutThis) {
   ui->setupUi(this);
   setWindowFlag(Qt::FramelessWindowHint);
   setAttribute(Qt::WA_TranslucentBackground);
-  ui->frame->setStyleSheet(
-      "#frame{background-color: rgb(255, 255, 255);border-radius:10px; "
-      "border:1px solid gray;}");
+  if (isDark)
+    ui->frame->setStyleSheet(
+        "#frame{background-color:#19232D;border-radius:10px; "
+        "border:1px solid gray;}");
+  else
+    ui->frame->setStyleSheet(
+        "#frame{background-color:rgb(250,250,250);border-radius:10px; "
+        "border:1px solid gray;}");
   this->layout()->setContentsMargins(5, 5, 5, 5);
 
   mw_one->set_ToolButtonStyle(this);
