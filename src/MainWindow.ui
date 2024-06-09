@@ -972,10 +972,16 @@ border-radius: 4px;</string>
                 <item>
                  <widget class="QToolButton" name="btnClearReaderFont">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>24</width>
+                    <height>0</height>
+                   </size>
                   </property>
                   <property name="text">
                    <string>...</string>
