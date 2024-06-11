@@ -237,10 +237,17 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Rectangle {
+                    id: mySpace
+                    width: 2
+                }
+
+                Rectangle {
                     id: myRect
-                    height: parent.height
-                    width: 6
-                    radius: 0
+                    height: 10
+                    width: 10
+                    x: 0
+                    y: parent.height / 2 - width / 2
+                    radius: 5
                     anchors.leftMargin: 1
                     color: listItem.getListColor()
                     visible: true
@@ -276,7 +283,7 @@ Rectangle {
                         id: item0
 
                         width: parent.width
-                        Layout.preferredWidth: listItem.width - myRect.width
+                        Layout.preferredWidth: listItem.width - myRect.width - mySpace.width - 2
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
                         verticalAlignment: Text.AlignVCenter
@@ -291,7 +298,7 @@ Rectangle {
 
                     Text {
                         id: item1
-                        Layout.preferredWidth: listItem.width - myRect.width
+                        Layout.preferredWidth: listItem.width - myRect.width - mySpace.width - 2
 
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignLeft
