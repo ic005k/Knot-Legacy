@@ -1379,3 +1379,11 @@ QStringList Method::getDateTimePickerValue() {
   list.append(Reg.value("/DateTime/mm", 0).toString());
   return list;
 }
+
+QString Method::getDateTimeFlag() {
+  QSettings Reg(privateDir + "datetime.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  return Reg.value("/DateTime/dateFlag", "").toString();
+}

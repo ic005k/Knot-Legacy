@@ -121,7 +121,7 @@ public class DateTimePicker extends Activity {
 
     private static boolean zh_cn;
     private int y, m, d, h, mm;
-    private boolean isDark;
+    private static boolean isDark;
     private String dateFlag = "";
 
     @Override
@@ -147,6 +147,8 @@ public class DateTimePicker extends Activity {
             d = Integer.valueOf(ini.get("DateTime", "d"));
             h = Integer.valueOf(ini.get("DateTime", "h"));
             mm = Integer.valueOf(ini.get("DateTime", "mm"));
+
+            System.out.println("ymd hm  " + y + " " + m + " " + d + " " + h + " " + mm + " isDark " + isDark);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -232,12 +234,20 @@ public class DateTimePicker extends Activity {
                 strTitle = "End Date";
         }
 
+        if (dateFlag.equals("todo")) {
+            if (zh_cn)
+                strTitle = "选择日期";
+            else
+                strTitle = "Select Date";
+        }
+
         BasisTimesUtils.showDatePickerDialog(context, isDark, strTitle, y, m, d,
                 new BasisTimesUtils.OnDatePickerListener() {
 
                     @Override
                     public void onConfirm(int year, int month, int dayOfMonth) {
-                        Toast.makeText(context, year + "-" + month + "-" + dayOfMonth, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(context, year + "-" + month + "-" + dayOfMonth,
+                        // Toast.LENGTH_SHORT).show();
 
                         try {
                             File file = new File(datetime_ini);
@@ -259,7 +269,7 @@ public class DateTimePicker extends Activity {
 
                     @Override
                     public void onCancel() {
-                        Toast.makeText(context, "Cancle", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(context, "Cancle", Toast.LENGTH_SHORT).show();
                         DateTimePicker.this.finish();
                     }
                 });
@@ -303,7 +313,7 @@ public class DateTimePicker extends Activity {
      * 年月选择
      */
     private void showYearMonthPicker() {
-        BasisTimesUtils.showDatePickerDialog(context, isDark, "", y, m, d,
+        BasisTimesUtils.showDatePickerDialog(context, isDark, "", y, m + 1, d,
                 new BasisTimesUtils.OnDatePickerListener() {
 
                     @Override

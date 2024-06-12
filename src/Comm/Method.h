@@ -246,7 +246,8 @@ class Method : public QDialog {
 
   QStringList getDateTimePickerValue();
 
- protected:
+  QString getDateTimeFlag();
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

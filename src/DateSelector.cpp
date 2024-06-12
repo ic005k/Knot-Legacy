@@ -81,18 +81,23 @@ void DateSelector::init() {
   if (nWidgetType == 1) rboxYear->setRange(2022, cy);
   if (nWidgetType == 3) ui->sliderYear->setRange(2022, cy);
 
+  if (nWidgetType == 1) rboxMonth->setRange(1, 13);
+  if (nWidgetType == 3) ui->sliderMonth->setRange(1, 13);
+
   if (dateFlag == 1) {
     ui->gboxMonth->hide();
     ui->gboxDay->hide();
 
     ui->gboxYear->setHidden(false);
+    ui->gboxMonth->show();
 
     ui->lblYear->setHidden(false);
-    ui->lblMonth->hide();
+    ui->lblMonth->show();
+
     ui->lblDay->hide();
     ui->lblFlag->hide();
 
-    setFixedHeight(200);
+    setFixedHeight(400);
   }
 
   if (dateFlag == 2) {

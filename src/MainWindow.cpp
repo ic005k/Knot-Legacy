@@ -4380,7 +4380,11 @@ static void JavaNotify_13() {
 }
 
 static void JavaNotify_14() {
-  mw_one->m_Report->m_DateSelector->ui->btnOk->click();
+  if (m_Method->getDateTimeFlag() == "todo") {
+    mw_one->m_TodoAlarm->setDateTime();
+  } else {
+    mw_one->m_Report->m_DateSelector->ui->btnOk->click();
+  }
   qDebug() << "C++ JavaNotify_14";
 }
 

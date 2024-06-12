@@ -31,7 +31,8 @@ class TodoAlarm : public QDialog {
 
   void addBtn(int start, int total, int col, QString flag, bool week);
 
- protected:
+  void setDateTime();
+  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
  public slots:
   void on_btnBack_clicked();
@@ -74,6 +75,8 @@ class TodoAlarm : public QDialog {
 
   int WidgetType = 2; /*1=Dial  2=RollBox*/
   void getChkVoice();
+  void showTimePicker();
+  void showDatePicker();
 };
 
 #endif  // TODOALARM_H

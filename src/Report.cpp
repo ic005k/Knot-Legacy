@@ -834,13 +834,14 @@ void Report::genReportMenu() {
   });
 #endif
 
-  QAction* actSetYear = new QAction(tr("Year"));
+  QAction* actSetYear = new QAction(tr("Year Month"));
   m_Menu->addAction(actSetYear);
   connect(actSetYear, &QAction::triggered, this,
           [=]() { mw_one->on_btnYear_clicked(); });
 
   QAction* actSetMonth = new QAction(tr("Month"));
   m_Menu->addAction(actSetMonth);
+  actSetMonth->setVisible(false);
   connect(actSetMonth, &QAction::triggered, this,
           [=]() { mw_one->on_btnMonth_clicked(); });
 

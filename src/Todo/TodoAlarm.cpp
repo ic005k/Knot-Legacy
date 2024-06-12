@@ -43,6 +43,7 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
 
   initDlg();
 
+  if (isAndroid) ui->frameSel->hide();
   ui->dateTimeEdit->hide();
   ui->dateTimeEdit->setReadOnly(true);
   ui->lblTodoText->setStyleSheet(mw_one->ui->lblTitleEditRecord->styleSheet());
@@ -114,7 +115,7 @@ void TodoAlarm::initDlg() {
   this->setGeometry(x, y, w, h);
   this->setModal(true);
   this->installEventFilter(this);
-  on_btnYear_clicked();
+  if (!isAndroid) on_btnYear_clicked();
   ui->btnSetDT->setFocus();
 }
 
@@ -149,12 +150,18 @@ void TodoAlarm::on_btnBack_clicked() {
 }
 
 void TodoAlarm::on_btnYear_clicked() {
+  showDatePicker();
   addBtn(QDate::currentDate().year(), 9, 3, tr("Year"), false);
 }
 
-void TodoAlarm::on_btnMonth_clicked() { addBtn(1, 12, 3, tr("Month"), false); }
+void TodoAlarm::on_btnMonth_clicked() {
+  showDatePicker();
+  addBtn(1, 12, 3, tr("Month"), false);
+}
 
 void TodoAlarm::on_btnDay_clicked() {
+  showDatePicker();
+
   int maxDay = 0;
   QString sy = ui->btnYear->text().split("\n").at(0);
   QString sm = ui->btnMonth->text().split("\n").at(0);
@@ -163,9 +170,15 @@ void TodoAlarm::on_btnDay_clicked() {
   addBtn(1, maxDay, 6, tr("Day"), true);
 }
 
-void TodoAlarm::on_btnHour_clicked() { addDial(0, 23, tr("Hour")); }
+void TodoAlarm::on_btnHour_clicked() {
+  showTimePicker();
+  addDial(0, 23, tr("Hour"));
+}
 
-void TodoAlarm::on_btnMinute_clicked() { addDial(0, 59, tr("Minute")); }
+void TodoAlarm::on_btnMinute_clicked() {
+  showTimePicker();
+  addDial(0, 59, tr("Minute"));
+}
 
 void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
   QObjectList lstOfChildren0 =
@@ -458,7 +471,7 @@ void TodoAlarm::on_btnToday_clicked() {
   d = QString::number(day);
 
   setBtnTitle();
-  on_btnDay_clicked();
+  if (!isAndroid) on_btnDay_clicked();
 }
 
 void TodoAlarm::on_btnTomorrow_clicked() {
@@ -469,7 +482,7 @@ void TodoAlarm::on_btnTomorrow_clicked() {
   d = str.split("-").at(2);
 
   setBtnTitle();
-  on_btnDay_clicked();
+  if (!isAndroid) on_btnDay_clicked();
 }
 
 void TodoAlarm::on_btnNextWeek_clicked() {
@@ -484,7 +497,7 @@ void TodoAlarm::on_btnNextWeek_clicked() {
   d = str.split("-").at(2);
 
   setBtnTitle();
-  on_btnDay_clicked();
+  if (!isAndroid) on_btnDay_clicked();
 }
 
 void TodoAlarm::on_chkDaily_clicked() {
@@ -541,4 +554,39 @@ void TodoAlarm::getChkVoice() {
     ui->chkSpeech->setChecked(true);
   else
     ui->chkSpeech->setChecked(false);
+}
+
+void TodoAlarm::setDateTime() {
+  QStringList list = m_Method->getDateTimePickerValue();
+  y = list.at(0);
+  m = list.at(1);
+  d = list.at(2);
+  h = list.at(3);
+  mm = list.at(4);
+
+  if (h.length() == 1) h = "0" + h;
+  if (mm.length() == 1) mm == "0" + mm;
+  setBtnTitle();
+}
+
+void TodoAlarm::showTimePicker() {
+  if (isAndroid && isVisible()) {
+    m_Method->setDateTimePickerFlag("hm", y.toInt(), m.toInt(), d.toInt(),
+                                    h.toInt(), mm.toInt(), "todo");
+    m_Method->openDateTimePicker();
+    ui->frameSel->hide();
+    return;
+  } else
+    ui->frameSel->show();
+}
+
+void TodoAlarm::showDatePicker() {
+  if (isAndroid && isVisible()) {
+    m_Method->setDateTimePickerFlag("ymd", y.toInt(), m.toInt(), d.toInt(),
+                                    h.toInt(), mm.toInt(), "todo");
+    m_Method->openDateTimePicker();
+    ui->frameSel->hide();
+    return;
+  } else
+    ui->frameSel->show();
 }
