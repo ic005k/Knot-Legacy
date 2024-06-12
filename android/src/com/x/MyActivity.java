@@ -135,8 +135,8 @@ import java.util.zip.ZipOutputStream;
 import org.qtproject.qt5.android.bindings.QtActivity;
 
 public class MyActivity
-  extends QtActivity
-  implements Application.ActivityLifecycleCallbacks {
+    extends QtActivity
+    implements Application.ActivityLifecycleCallbacks {
   public static boolean isDark = false;
   private static MyActivity m_instance = null;
   private static SensorManager mSensorManager;
@@ -196,31 +196,38 @@ public class MyActivity
 
   public static native void CallJavaNotify_13();
 
+  public native static void CallJavaNotify_14();
+
   private InternalConfigure internalConfigure;
   public static boolean isReadShareData = false;
 
-  public MyActivity() {}
+  public MyActivity() {
+  }
 
   // ------------------------------------------------------------------------
-  public void setStatusBarHide() {}
+  public void setStatusBarHide() {
+  }
 
-  public void setStatusBarShow() {}
+  public void setStatusBarShow() {
+  }
 
   // ------------------------------------------------------------------------
 
   public void setDark(String strDark) {
-    if (strDark.equals("dark_yes")) isDark = true;
-    if (strDark.equals("dark_no")) isDark = false;
+    if (strDark.equals("dark_yes"))
+      isDark = true;
+    if (strDark.equals("dark_no"))
+      isDark = false;
     if (isDark) {
       this.setStatusBarColor("#19232D"); // 深色
       getWindow()
-        .getDecorView()
-        .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); // 白色文字
+          .getDecorView()
+          .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); // 白色文字
     } else {
       this.setStatusBarColor("#F3F3F3"); // 灰
       getWindow()
-        .getDecorView()
-        .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 黑色文字
+          .getDecorView()
+          .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 黑色文字
     }
 
     System.out.println("strDark=" + strDark + "    isDark=" + isDark);
@@ -229,7 +236,8 @@ public class MyActivity
   public static int startAlarm(String str) {
     // 特殊转义字符，必须加"\\"（“.”和“|”都是转义字符）
     String[] array = str.split("\\|");
-    for (int i = 0; i < array.length; i++) System.out.println(array[i]);
+    for (int i = 0; i < array.length; i++)
+      System.out.println(array[i]);
 
     String strTime = array[0];
     String strText = array[1];
@@ -242,10 +250,9 @@ public class MyActivity
     c.add(Calendar.SECOND, ts);
 
     alarmManager.setExactAndAllowWhileIdle(
-      AlarmManager.RTC_WAKEUP,
-      c.getTimeInMillis(),
-      pi
-    );
+        AlarmManager.RTC_WAKEUP,
+        c.getTimeInMillis(),
+        pi);
 
     // 定时精度不够
     // alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
@@ -278,9 +285,8 @@ public class MyActivity
 
   public static void setMax() {
     context.startActivity(
-      new Intent(context, MyActivity.class)
-      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    );
+        new Intent(context, MyActivity.class)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   }
 
   // ------------------------------------------------------------------------
@@ -297,16 +303,15 @@ public class MyActivity
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
       // 状态栏字体设置为深色，SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 为SDK23增加
       getWindow()
-        .getDecorView()
-        .setSystemUiVisibility(
-          View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-          View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        );
+          .getDecorView()
+          .setSystemUiVisibility(
+              View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                  View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
       // 部分机型的statusbar会有半透明的黑色背景
       getWindow()
-        .addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+          .addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
       getWindow()
-        .clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+          .clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
       getWindow().setStatusBarColor(Color.TRANSPARENT); // SDK21
     }
   }
@@ -316,7 +321,7 @@ public class MyActivity
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       // 需要安卓版本大于5.0以上
       getWindow()
-        .addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+          .addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
       getWindow().setStatusBarColor(Color.parseColor(color));
     }
   }
@@ -330,13 +335,13 @@ public class MyActivity
       if (mSensorManager != null) {
         mSensorManager.unregisterListener(mySerivece);
         mSensorManager.registerListener(
-          mySerivece,
-          mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-          SensorManager.SENSOR_DELAY_NORMAL
-        );
+            mySerivece,
+            mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+            SensorManager.SENSOR_DELAY_NORMAL);
       }
       isStepCounter = 1;
-    } else isStepCounter = 0;
+    } else
+      isStepCounter = 0;
   }
 
   public static int getHardStepCounter() {
@@ -365,7 +370,8 @@ public class MyActivity
     @Override
     public void onReceive(Context context, Intent intent) {
       if (SCREEN_ON.equals(intent.getAction())) {
-        if (isStepCounter == 1) {}
+        if (isStepCounter == 1) {
+        }
         isScreenOff = false;
         CallJavaNotify_2();
         Log.w("Knot", "屏幕亮了");
@@ -386,8 +392,7 @@ public class MyActivity
     mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
     mySerivece = new PersistService();
     PowerManager manager = (PowerManager) getSystemService(
-      Context.POWER_SERVICE
-    );
+        Context.POWER_SERVICE);
     mWakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG); // CPU保存运行
     IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON); // 屏幕熄掉后依然运行
     filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -395,10 +400,9 @@ public class MyActivity
 
     mWakeLock.acquire(); // 屏幕熄后，CPU继续运行
     mSensorManager.registerListener(
-      mySerivece,
-      mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-      DELAY
-    );
+        mySerivece,
+        mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+        DELAY);
 
     Log.i(TAG, "call acquireWakeLock");
   }
@@ -468,10 +472,8 @@ public class MyActivity
    */
   private static void compressFileToZip(String filePath, String zipFilePath) {
     try (
-      ZipOutputStream zos = new ZipOutputStream(
-        new FileOutputStream(zipFilePath)
-      )
-    ) {
+        ZipOutputStream zos = new ZipOutputStream(
+            new FileOutputStream(zipFilePath))) {
       // 递归的压缩文件夹和文件
       doCompress("", filePath, zos);
       // 必须
@@ -482,10 +484,9 @@ public class MyActivity
   }
 
   private static void doCompress(
-    String parentFilePath,
-    String filePath,
-    ZipOutputStream zos
-  ) {
+      String parentFilePath,
+      String filePath,
+      ZipOutputStream zos) {
     File sourceFile = new File(filePath);
     if (!sourceFile.exists()) {
       return;
@@ -506,10 +507,8 @@ public class MyActivity
       int len = -1;
       byte[] buf = new byte[1024];
       try (
-        InputStream input = new BufferedInputStream(
-          new FileInputStream(sourceFile)
-        )
-      ) {
+          InputStream input = new BufferedInputStream(
+              new FileInputStream(sourceFile))) {
         zos.putNextEntry(new ZipEntry(zipEntryName));
         while ((len = input.read(buf)) != -1) {
           zos.write(buf, 0, len);
@@ -547,9 +546,8 @@ public class MyActivity
         if (sharedData != null) {
           Log.d(TAG, "It's a view intent");
           Intent viewIntent = new Intent(
-            getApplicationContext(),
-            MyActivity.class
-          );
+              getApplicationContext(),
+              MyActivity.class);
           viewIntent.setAction(Intent.ACTION_VIEW);
           viewIntent.putExtra("sharedData", sharedData);
           startActivity(viewIntent);
@@ -572,7 +570,7 @@ public class MyActivity
     registSreenStatusReceiver();
 
     // 状态栏
-    context = getApplicationContext(); // 获取程序句柄
+    context = MyActivity.this;// getApplicationContext(); // 获取程序句柄
     // 设置状态栏颜色,需要安卓版本大于5.0
     String filename = "/storage/emulated/0/.Knot/options.ini";
     internalConfigure = new InternalConfigure(this);
@@ -589,13 +587,13 @@ public class MyActivity
     if (isDark) {
       this.setStatusBarColor("#19232D"); // 深色
       getWindow()
-        .getDecorView()
-        .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); // 白色文字
+          .getDecorView()
+          .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); // 白色文字
     } else {
       this.setStatusBarColor("#F3F3F3"); // 灰
       getWindow()
-        .getDecorView()
-        .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 黑色文字
+          .getDecorView()
+          .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 黑色文字
     }
 
     // 设置状态栏全透明
@@ -631,9 +629,8 @@ public class MyActivity
 
     // HomeKey
     registerReceiver(
-      mHomeKeyEvent,
-      new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-    );
+        mHomeKeyEvent,
+        new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
     // 解除对file域访问的限制
     if (Build.VERSION.SDK_INT >= 24) {
@@ -691,7 +688,8 @@ public class MyActivity
     Log.i(TAG, "Main onDestroy...");
 
     releaseWakeLock();
-    if (null != mFileWatcher) mFileWatcher.stopWatching(); // 停止监听
+    if (null != mFileWatcher)
+      mFileWatcher.stopWatching(); // 停止监听
 
     // 让系统自行处理，否则退出时有可能出现崩溃
     // if(mHomeKeyEvent!=null)
@@ -711,16 +709,20 @@ public class MyActivity
   }
 
   @Override
-  public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
+  public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+  }
 
   @Override
-  public void onActivityStarted(Activity activity) {}
+  public void onActivityStarted(Activity activity) {
+  }
 
   @Override
-  public void onActivityResumed(Activity activity) {}
+  public void onActivityResumed(Activity activity) {
+  }
 
   @Override
-  public void onActivityPaused(Activity activity) {}
+  public void onActivityPaused(Activity activity) {
+  }
 
   @Override
   public void onActivityStopped(Activity activity) {
@@ -729,10 +731,12 @@ public class MyActivity
   }
 
   @Override
-  public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
+  public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+  }
 
   @Override
-  public void onActivityDestroyed(Activity activity) {}
+  public void onActivityDestroyed(Activity activity) {
+  }
 
   // ---------------------------------------------------------------------------
   class PersistService extends Service implements SensorEventListener {
@@ -743,10 +747,9 @@ public class MyActivity
         if (mSensorManager != null) { // 取消监听后重写监听，以保持后台运行
           mSensorManager.unregisterListener(PersistService.this);
           mSensorManager.registerListener(
-            PersistService.this,
-            mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-            SensorManager.SENSOR_DELAY_NORMAL
-          );
+              PersistService.this,
+              mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+              SensorManager.SENSOR_DELAY_NORMAL);
         }
       }
     };
@@ -894,12 +897,10 @@ public class MyActivity
     String type = "application/vnd.android.package-archive";
     Uri uri;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      uri =
-        FileProvider.getUriForFile(
+      uri = FileProvider.getUriForFile(
           context,
           context.getPackageName(),
-          newApkFile
-        );
+          newApkFile);
       intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
     } else {
       uri = Uri.fromFile(newApkFile);
@@ -942,7 +943,7 @@ public class MyActivity
 
     // 通过getPackageManager()的queryIntentActivities方法遍历
     List<ResolveInfo> resolveinfoList = getPackageManager()
-      .queryIntentActivities(resolveIntent, 0);
+        .queryIntentActivities(resolveIntent, 0);
 
     ResolveInfo resolveinfo = resolveinfoList.iterator().next();
     if (resolveinfo != null) {
@@ -970,8 +971,8 @@ public class MyActivity
   // 动态获取权限需要添加的常量
   private static final int REQUEST_EXTERNAL_STORAGE = 1;
   private static String[] PERMISSIONS_STORAGE = {
-    "android.permission.READ_EXTERNAL_STORAGE",
-    "android.permission.WRITE_EXTERNAL_STORAGE",
+      "android.permission.READ_EXTERNAL_STORAGE",
+      "android.permission.WRITE_EXTERNAL_STORAGE",
   };
 
   // 被调用的方法
@@ -979,29 +980,25 @@ public class MyActivity
     try {
       // 检测是否有写的权限
       int permission = ActivityCompat.checkSelfPermission(
-        activity,
-        "android.permission.WRITE_EXTERNAL_STORAGE"
-      );
+          activity,
+          "android.permission.WRITE_EXTERNAL_STORAGE");
       if (permission != PackageManager.PERMISSION_GRANTED) {
         // 没有写的权限，去申请写的权限，会弹出对话框
         ActivityCompat.requestPermissions(
-          activity,
-          PERMISSIONS_STORAGE,
-          REQUEST_EXTERNAL_STORAGE
-        );
+            activity,
+            PERMISSIONS_STORAGE,
+            REQUEST_EXTERNAL_STORAGE);
       }
 
       // 申请记录音频的权限，会弹出对话框
       int permissionRecordAudio = ActivityCompat.checkSelfPermission(
-        activity,
-        "android.permission.RECORD_AUDIO"
-      );
+          activity,
+          "android.permission.RECORD_AUDIO");
       if (permissionRecordAudio != PackageManager.PERMISSION_GRANTED) {
         ActivityCompat.requestPermissions(
-          activity,
-          new String[] { "android.permission.RECORD_AUDIO" },
-          2000
-        );
+            activity,
+            new String[] { "android.permission.RECORD_AUDIO" },
+            2000);
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -1023,7 +1020,7 @@ public class MyActivity
      * 例:configureActivity.saveFiletoSD("text.ini","");
      */
     public void saveFile(String filename, Properties properties)
-      throws Exception {
+        throws Exception {
       // 设置Context.MODE_PRIVATE表示每次调用该方法会覆盖原来的文件数据
       FileOutputStream fileOutputStream; // = context.openFileOutput(filename, Context.MODE_PRIVATE);
       File file = new File(filename);
@@ -1049,9 +1046,8 @@ public class MyActivity
       fileInputStream = new FileInputStream(file);
 
       InputStreamReader reader = new InputStreamReader(
-        fileInputStream,
-        "UTF-8"
-      );
+          fileInputStream,
+          "UTF-8");
       BufferedReader br = new BufferedReader(reader);
       // String line;
       // while ((line = br.readLine()) != null) {
@@ -1109,8 +1105,7 @@ public class MyActivity
     public void startWatching() {
       mThreadName = FileWatcher.class.getSimpleName();
       if (mThread == null || !mThread.isAlive()) {
-        mThread =
-          new HandlerThread(mThreadName, Process.THREAD_PRIORITY_BACKGROUND);
+        mThread = new HandlerThread(mThreadName, Process.THREAD_PRIORITY_BACKGROUND);
         mThread.start();
 
         mThreadHandler = new Handler(mThread.getLooper());
@@ -1135,10 +1130,9 @@ public class MyActivity
       switch (event) {
         case FileObserver.ACCESS:
           // Log.i("FileWatcher", "ACCESS: " + path);
-          if (
-            path.contains("/storage/emulated/0/KnotData//todo.ini") ||
-            path.contains("/storage/emulated/0/KnotData//mainnotes.ini")
-          ) CallJavaNotify_0();
+          if (path.contains("/storage/emulated/0/KnotData//todo.ini") ||
+              path.contains("/storage/emulated/0/KnotData//mainnotes.ini"))
+            CallJavaNotify_0();
           break;
         case FileObserver.ATTRIB:
           // Log.i("FileWatcher", "ATTRIB: " + path);
@@ -1151,39 +1145,36 @@ public class MyActivity
           // 文件写入完毕后会回调，可以在这对新写入的文件做操作
 
           mThreadHandler.post(
-            new Runnable() {
+              new Runnable() {
 
-              @Override
-              public void run() {
-                //
-              }
-            }
-          );
+                @Override
+                public void run() {
+                  //
+                }
+              });
           break;
         case FileObserver.CREATE:
           // Log.i(TAG, "CREATE: " + path);
 
           mThreadHandler.post(
-            new Runnable() {
+              new Runnable() {
 
-              @Override
-              public void run() {
-                doCreate(tmpPath);
-              }
-            }
-          );
+                @Override
+                public void run() {
+                  doCreate(tmpPath);
+                }
+              });
           break;
         case FileObserver.DELETE:
           // Log.i(TAG, "DELETE: " + path);
           mThreadHandler.post(
-            new Runnable() {
+              new Runnable() {
 
-              @Override
-              public void run() {
-                doDelete(tmpPath);
-              }
-            }
-          );
+                @Override
+                public void run() {
+                  doDelete(tmpPath);
+                }
+              });
           break;
         case FileObserver.DELETE_SELF:
           // Log.i("FileWatcher", "DELETE_SELF: " + path);
@@ -1237,11 +1228,9 @@ public class MyActivity
             }
 
             for (File f : files) {
-              if (
-                f.isDirectory() &&
-                !f.getName().equals(".") &&
-                !f.getName().equals("..")
-              ) {
+              if (f.isDirectory() &&
+                  !f.getName().equals(".") &&
+                  !f.getName().equals("..")) {
                 stack.push(f.getPath());
               }
             }
@@ -1261,10 +1250,8 @@ public class MyActivity
         while (it.hasNext()) {
           SingleFileObserver sfo = (SingleFileObserver) it.next();
           // 如果删除的是文件夹移除对该文件夹及子目录的监听
-          if (
-            sfo.mPath != null &&
-            (sfo.mPath.equals(path) || sfo.mPath.startsWith(path + "/"))
-          ) {
+          if (sfo.mPath != null &&
+              (sfo.mPath.equals(path) || sfo.mPath.startsWith(path + "/"))) {
             Log.d(TAG, "stop observer " + sfo.mPath);
             sfo.stopWatching();
             it.remove();
@@ -1324,11 +1311,9 @@ public class MyActivity
             }
 
             for (File f : files) {
-              if (
-                f.isDirectory() &&
-                !f.getName().equals(".") &&
-                !f.getName().equals("..")
-              ) {
+              if (f.isDirectory() &&
+                  !f.getName().equals(".") &&
+                  !f.getName().equals("..")) {
                 stack.push(f.getPath());
               }
             }
@@ -1378,22 +1363,19 @@ public class MyActivity
    */
   // 分享单张图片
   public void shareImage(
-    String title,
-    String path,
-    String fileType,
-    QtActivity activity
-  ) {
+      String title,
+      String path,
+      String fileType,
+      QtActivity activity) {
     Intent share = new Intent(Intent.ACTION_SEND);
     share.setType(fileType); // "image/png"
 
     Uri photoUri;
     if (Build.VERSION.SDK_INT >= 24) {
-      photoUri =
-        FileProvider.getUriForFile(
+      photoUri = FileProvider.getUriForFile(
           context,
           context.getPackageName(),
-          new File(path)
-        );
+          new File(path));
     } else {
       photoUri = Uri.fromFile(new File(path));
     }
@@ -1404,10 +1386,9 @@ public class MyActivity
 
   // 分享多张图片
   public static void shareImages(
-    String title,
-    String imagesPath,
-    QtActivity activity
-  ) {
+      String title,
+      String imagesPath,
+      QtActivity activity) {
     String[] pathList = imagesPath.split("\\|"); // 由于"|"是转义字符，所以不能直接写 "|"做分割
     ArrayList<Uri> imagesUriList = new ArrayList<Uri>();
     for (int i = 0; i < pathList.length; ++i) {
@@ -1430,15 +1411,19 @@ public class MyActivity
     context.startActivity(i);
   }
 
+  public void openDateTimePicker() {
+    Intent i = new Intent(context, DateTimePicker.class);
+    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(i);
+  }
+
   public void openMyPDF(String path) {
     Uri fileUri;
     if (Build.VERSION.SDK_INT >= 24) {
-      fileUri =
-        FileProvider.getUriForFile(
+      fileUri = FileProvider.getUriForFile(
           context,
           context.getPackageName(),
-          new File(path)
-        );
+          new File(path));
     } else {
       fileUri = Uri.fromFile(new File(path));
     }
@@ -1450,7 +1435,8 @@ public class MyActivity
   }
 
   public void closeMyPDF() {
-    if (PDFActivity.mPdfActivity != null) PDFActivity.mPdfActivity.finish();
+    if (PDFActivity.mPdfActivity != null)
+      PDFActivity.mPdfActivity.finish();
   }
 
   public void openFilePicker() {
@@ -1460,7 +1446,8 @@ public class MyActivity
   }
 
   public void closeFilePicker() {
-    if (FilePicker.MyFilepicker != null) FilePicker.MyFilepicker.finish();
+    if (FilePicker.MyFilepicker != null)
+      FilePicker.MyFilepicker.finish();
   }
 
   private void addDeskShortcuts() {
@@ -1476,55 +1463,50 @@ public class MyActivity
         lblAddRecoed = getString(R.string.addRecord_shortcut_short_label_zh);
         lblNewTodo = getString(R.string.newTodo_shortcut_short_label_zh);
         lblNewNote = getString(R.string.newNote_shortcut_short_label_zh);
-        lblContinueReading =
-          getString(R.string.continueReading_shortcut_short_label_zh);
+        lblContinueReading = getString(R.string.continueReading_shortcut_short_label_zh);
       } else {
         lblAddRecoed = getString(R.string.addRecord_shortcut_short_label);
         lblNewTodo = getString(R.string.newTodo_shortcut_short_label);
         lblNewNote = getString(R.string.newNote_shortcut_short_label);
-        lblContinueReading =
-          getString(R.string.continueReading_shortcut_short_label);
+        lblContinueReading = getString(R.string.continueReading_shortcut_short_label);
       }
 
       // ShortcutInfo.Builder构建快捷方式
       ShortcutInfo shortcut0 = new ShortcutInfo.Builder(this, "Add_Record")
-        .setShortLabel(lblAddRecoed)
-        .setIcon(Icon.createWithResource(this, R.drawable.addrecord))
-        .setIntent(new Intent(Intent.ACTION_MAIN, null, this, AddRecord.class))
-        .build();
+          .setShortLabel(lblAddRecoed)
+          .setIcon(Icon.createWithResource(this, R.drawable.addrecord))
+          .setIntent(new Intent(Intent.ACTION_MAIN, null, this, AddRecord.class))
+          .build();
 
       ShortcutInfo shortcut1 = new ShortcutInfo.Builder(this, "New_Todo")
-        .setShortLabel(lblNewTodo)
-        .setIcon(Icon.createWithResource(this, R.drawable.newtodo))
-        // 跳转到某个网页
-        // .setIntent(new Intent(Intent.ACTION_VIEW,
-        // Uri.parse("https://www.baidu.com/")))
+          .setShortLabel(lblNewTodo)
+          .setIcon(Icon.createWithResource(this, R.drawable.newtodo))
+          // 跳转到某个网页
+          // .setIntent(new Intent(Intent.ACTION_VIEW,
+          // Uri.parse("https://www.baidu.com/")))
 
-        // 跳转的目标，定义Activity
-        .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewTodo.class))
-        .build();
+          // 跳转的目标，定义Activity
+          .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewTodo.class))
+          .build();
 
       ShortcutInfo shortcut2 = new ShortcutInfo.Builder(this, "New_Note")
-        .setShortLabel(lblNewNote)
-        .setIcon(Icon.createWithResource(this, R.drawable.newnote))
-        .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewNote.class))
-        .build();
+          .setShortLabel(lblNewNote)
+          .setIcon(Icon.createWithResource(this, R.drawable.newnote))
+          .setIntent(new Intent(Intent.ACTION_MAIN, null, this, NewNote.class))
+          .build();
 
       ShortcutInfo shortcut3 = new ShortcutInfo.Builder(
-        this,
-        "Continue_Reading"
-      )
-        .setShortLabel(lblContinueReading)
-        .setIcon(Icon.createWithResource(this, R.drawable.continuereading))
-        .setIntent(
-          new Intent(Intent.ACTION_MAIN, null, this, ContinueReading.class)
-        )
-        .build();
+          this,
+          "Continue_Reading")
+          .setShortLabel(lblContinueReading)
+          .setIcon(Icon.createWithResource(this, R.drawable.continuereading))
+          .setIntent(
+              new Intent(Intent.ACTION_MAIN, null, this, ContinueReading.class))
+          .build();
 
       // setDynamicShortcuts()方法来设置快捷方式
       shortcutManager.setDynamicShortcuts(
-        Arrays.asList(shortcut0, shortcut1, shortcut2, shortcut3)
-      );
+          Arrays.asList(shortcut0, shortcut1, shortcut2, shortcut3));
       // Toast.makeText(MyActivity.this, "已添加", Toast.LENGTH_SHORT).show();
     }
   }
@@ -1534,9 +1516,8 @@ public class MyActivity
       Intent intent2 = new Intent();
       intent2.setAction("android.intent.action.MAIN");
       intent2.setClassName(
-        getPackageName(),
-        getPackageName() + ".MainActivity.java"
-      );
+          getPackageName(),
+          getPackageName() + ".MainActivity.java");
 
       /**
        * 构建ShortcutInfo时指定相同的id，根据id去找到要更新的快捷方式
@@ -1545,10 +1526,10 @@ public class MyActivity
        * 否则会抛出异常 应用会抛出错误：Manifest shortcut ID=XX may not be manipulated via APIs
        */
       ShortcutInfo info = new ShortcutInfo.Builder(this, "test_add")
-        .setIntent(intent2)
-        .setLongLabel("动态更新的长名")
-        .setShortLabel("动态更新的短名")
-        .build();
+          .setIntent(intent2)
+          .setLongLabel("动态更新的长名")
+          .setShortLabel("动态更新的短名")
+          .build();
       shortcutManager = getSystemService(ShortcutManager.class);
       List<ShortcutInfo> dynamicShortcuts = shortcutManager.getDynamicShortcuts();
 
@@ -1579,13 +1560,12 @@ public class MyActivity
       switch (msg.what) {
         case 1:
           Toast toast = Toast.makeText(
-            m_instance,
-            (String) msg.obj,
-            Toast.LENGTH_LONG
-          );
+              m_instance,
+              (String) msg.obj,
+              Toast.LENGTH_LONG);
           TextView v = (TextView) toast
-            .getView()
-            .findViewById(android.R.id.message);
+              .getView()
+              .findViewById(android.R.id.message);
           // v.setTextColor(Color.RED);
           // v.setTextSize(20);
           toast.show();
@@ -1605,7 +1585,8 @@ public class MyActivity
   }
 
   public void closeAndroidProgressBar() {
-    if (MyProgBar.m_MyProgBar != null) MyProgBar.m_MyProgBar.finish();
+    if (MyProgBar.m_MyProgBar != null)
+      MyProgBar.m_MyProgBar.finish();
   }
 
   public static void playMyText(String text) {
@@ -1617,21 +1598,17 @@ public class MyActivity
   }
 
   private void createAudioRecord() {
-    recordBufsize =
-      AudioRecord.getMinBufferSize(
+    recordBufsize = AudioRecord.getMinBufferSize(
         44100,
         AudioFormat.CHANNEL_IN_MONO,
-        AudioFormat.ENCODING_PCM_16BIT
-      );
+        AudioFormat.ENCODING_PCM_16BIT);
     Log.i("audioRecordTest", "size->" + recordBufsize);
-    audioRecord =
-      new AudioRecord(
+    audioRecord = new AudioRecord(
         MediaRecorder.AudioSource.MIC,
         44100,
         AudioFormat.CHANNEL_IN_MONO,
         AudioFormat.ENCODING_PCM_16BIT,
-        recordBufsize
-      );
+        recordBufsize);
   }
 
   public void startRecord_pcm(String FILE_NAME) {
@@ -1642,8 +1619,7 @@ public class MyActivity
     isRecording = true;
     audioRecord.startRecording();
     Log.i("audioRecordTest", "开始录音");
-    recordingThread =
-      new Thread(
+    recordingThread = new Thread(
         () -> {
           byte data[] = new byte[recordBufsize];
           File file = new File(FILE_NAME);
@@ -1676,8 +1652,7 @@ public class MyActivity
           } catch (IOException e) {
             e.printStackTrace();
           }
-        }
-      );
+        });
     recordingThread.start();
   }
 
@@ -1735,4 +1710,5 @@ public class MyActivity
       player.stop();
     }
   }
+
 }

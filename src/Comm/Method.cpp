@@ -8,7 +8,7 @@
 
 extern MainWindow *mw_one;
 extern QTabWidget *tabData;
-extern QString iniDir, searchStr, currentMDFile;
+extern QString iniDir, searchStr, currentMDFile, privateDir;
 extern CategoryList *m_CategoryList;
 extern bool isEpub, isText, isPDF, loading, isDark, isAndroid;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
@@ -1323,4 +1323,59 @@ QString Method::FormatHHMMSS(qint32 total) {
 
   QString strTime = hour + ":" + min + ":" + sec;
   return strTime;
+}
+
+void Method::openDateTimePicker() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("openDateTimePicker", "()V");
+#else
+  QJniObject activity = QJniObject::fromString("openNoteEditor");
+  activity.callMethod<void>("openDateTimePicker", "()V");
+#endif
+
+#endif
+}
+
+void Method::setDateTimePickerFlag(QString flag, int y, int m, int d, int h,
+                                   int mm, QString dateFlag) {
+  QSettings Reg(privateDir + "datetime.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  if (flag == "ymd") {
+    Reg.setValue("/DateTime/flag", "ymd");
+  }
+
+  if (flag == "ym") {
+    Reg.setValue("/DateTime/flag", "ym");
+  }
+
+  if (flag == "hm") {
+    Reg.setValue("/DateTime/flag", "hm");
+  }
+
+  Reg.setValue("/DateTime/y", y);
+  Reg.setValue("/DateTime/m", m);
+  Reg.setValue("/DateTime/d", d);
+  Reg.setValue("/DateTime/h", h);
+  Reg.setValue("/DateTime/mm", mm);
+
+  Reg.setValue("/DateTime/dateFlag", dateFlag);
+}
+
+QStringList Method::getDateTimePickerValue() {
+  QStringList list;
+  QSettings Reg(privateDir + "datetime.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  list.append(Reg.value("/DateTime/y", 2022).toString());
+  list.append(Reg.value("/DateTime/m", 3).toString());
+  list.append(Reg.value("/DateTime/d", 3).toString());
+  list.append(Reg.value("/DateTime/h", 10).toString());
+  list.append(Reg.value("/DateTime/mm", 0).toString());
+  return list;
 }

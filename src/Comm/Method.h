@@ -239,6 +239,13 @@ class Method : public QDialog {
 
   QString FormatHHMMSS(qint32 total);
 
+  void openDateTimePicker();
+
+  void setDateTimePickerFlag(QString flag, int y, int m, int d, int h, int mm,
+                             QString dateFlag);
+
+  QStringList getDateTimePickerValue();
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

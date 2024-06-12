@@ -99,6 +99,8 @@ public class ClockActivity
 
   public static native void CallJavaNotify_13();
 
+  public native static void CallJavaNotify_14();
+
   public static boolean isZh(Context context) {
     Locale locale = context.getResources().getConfiguration().locale;
     String language = locale.getLanguage();

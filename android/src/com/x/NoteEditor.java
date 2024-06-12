@@ -190,6 +190,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     public native static void CallJavaNotify_13();
 
+    public native static void CallJavaNotify_14();
+
     private static boolean isGoBackKnot = false;
 
     public static boolean isZh(Context context) {
@@ -284,6 +286,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 hideKeyBoard(m_instance);
                 onBackPressed();
                 btn_cancel.setBackgroundColor(getResources().getColor(R.color.normal));
+
                 break;
 
             case R.id.btnUndo:

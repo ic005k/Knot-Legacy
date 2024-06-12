@@ -11,7 +11,7 @@ extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniFile, iniDir, btnYText, btnMText, btnDText;
 extern QTabWidget *tabData, *tabChart;
-extern bool isEBook, isReport, isDark;
+extern bool isEBook, isReport, isDark, isAndroid;
 
 QString btnYearText, btnMonthText;
 QStringList listCategory;
@@ -148,6 +148,16 @@ void Report::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
 
 void Report::on_btnYear_clicked() {
   m_DateSelector->dateFlag = 1;
+
+  if (isAndroid) {
+    int y, m;
+    y = mw_one->ui->btnYear->text().toInt();
+    m = mw_one->ui->btnMonth->text().toInt();
+    m_Method->setDateTimePickerFlag("ym", y, m, 0, 0, 0, "");
+    m_Method->openDateTimePicker();
+    return;
+  }
+
   mw_one->ui->lblDetails->setText(tr("Details"));
 
   if (m_DateSelector->nWidgetType == 1)
@@ -156,6 +166,32 @@ void Report::on_btnYear_clicked() {
   if (m_DateSelector->nWidgetType == 3)
     m_DateSelector->ui->sliderYear->setValue(
         mw_one->ui->btnYear->text().toInt());
+
+  m_DateSelector->init();
+}
+
+void Report::on_btnMonth_clicked() {
+  m_DateSelector->dateFlag = 2;
+  mw_one->ui->lblDetails->setText(tr("Details"));
+
+  if (m_DateSelector->nWidgetType == 1) {
+    m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
+    if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
+      m_DateSelector->rboxMonth->setValue(13);
+    else
+      m_DateSelector->rboxMonth->setValue(mw_one->ui->btnMonth->text().toInt());
+  }
+
+  if (m_DateSelector->nWidgetType == 3) {
+    m_DateSelector->ui->sliderYear->setValue(
+        mw_one->ui->btnYear->text().toInt());
+    if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round")) {
+      m_DateSelector->ui->sliderMonth->setValue(13);
+    } else {
+      m_DateSelector->ui->sliderMonth->setValue(
+          mw_one->ui->btnMonth->text().toInt());
+    }
+  }
 
   m_DateSelector->init();
 }
@@ -342,34 +378,6 @@ void Report::setTWImgData(QTreeWidgetItem* item) {
   }
 
   twTotalRow = twTotalRow + newtop->childCount();
-}
-
-void Report::on_btnMonth_clicked() {
-  m_DateSelector->dateFlag = 2;
-  mw_one->ui->lblDetails->setText(tr("Details"));
-
-  if (m_DateSelector->nWidgetType == 1) {
-    m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
-    if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
-      m_DateSelector->rboxMonth->setValue(13);
-    else
-      m_DateSelector->rboxMonth->setValue(mw_one->ui->btnMonth->text().toInt());
-  }
-
-  if (m_DateSelector->nWidgetType == 3) {
-    m_DateSelector->ui->sliderYear->setValue(
-        mw_one->ui->btnYear->text().toInt());
-    if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round")) {
-      m_DateSelector->ui->sliderYear->setMaximum(13);
-      m_DateSelector->ui->sliderMonth->setValue(13);
-    } else {
-      m_DateSelector->ui->sliderYear->setMaximum(12);
-      m_DateSelector->ui->sliderMonth->setValue(
-          mw_one->ui->btnMonth->text().toInt());
-    }
-  }
-
-  m_DateSelector->init();
 }
 
 void Report::saveYMD() {
@@ -838,8 +846,10 @@ void Report::genReportMenu() {
 
   QAction* actStartDate = new QAction(tr("Start Date"));
   m_Menu->addAction(actStartDate);
-  connect(actStartDate, &QAction::triggered, this,
-          [=]() { mw_one->on_btnStartDate_clicked(); });
+  connect(actStartDate, &QAction::triggered, this, [=]() {
+    m_Menu->close();
+    mw_one->on_btnStartDate_clicked();
+  });
 
   QAction* actEndDate = new QAction(tr("End Date"));
   m_Menu->addAction(actEndDate);

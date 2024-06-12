@@ -72,6 +72,7 @@ static void JavaNotify_10();
 static void JavaNotify_11();
 static void JavaNotify_12();
 static void JavaNotify_13();
+static void JavaNotify_14();
 #endif
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
@@ -4378,6 +4379,11 @@ static void JavaNotify_13() {
   qDebug() << "C++ JavaNotify_13";
 }
 
+static void JavaNotify_14() {
+  mw_one->m_Report->m_DateSelector->ui->btnOk->click();
+  qDebug() << "C++ JavaNotify_14";
+}
+
 static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_0", "()V", (void *)JavaNotify_0},
     {"CallJavaNotify_1", "()V", (void *)JavaNotify_1},
@@ -4392,7 +4398,8 @@ static const JNINativeMethod gMethods[] = {
     {"CallJavaNotify_10", "()V", (void *)JavaNotify_10},
     {"CallJavaNotify_11", "()V", (void *)JavaNotify_11},
     {"CallJavaNotify_12", "()V", (void *)JavaNotify_12},
-    {"CallJavaNotify_13", "()V", (void *)JavaNotify_13}
+    {"CallJavaNotify_13", "()V", (void *)JavaNotify_13},
+    {"CallJavaNotify_14", "()V", (void *)JavaNotify_14}
 
 };
 
@@ -4769,10 +4776,6 @@ void MainWindow::on_btnEdit_clicked() {
   m_Notes->m_TextSelector->close();
   delete m_Notes->m_TextSelector;
   m_Notes->m_TextSelector = new TextSelector(m_Notes);
-
-  // ui->qwNoteEditor->rootContext()->setContextProperty("myEditText",
-  // mdString); ui->frameNotes->hide(); ui->frameNoteEditor->show();
-  // m_Notes->setEditorVPos();
 
   mainHeight = mw_one->height();
 

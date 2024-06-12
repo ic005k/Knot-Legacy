@@ -101,6 +101,8 @@ public class PDFActivity extends AppCompatActivity implements
 
     public native static void CallJavaNotify_13();
 
+    public native static void CallJavaNotify_14();
+
     public static PDFActivity mPdfActivity;
     public static Context context;
     private static float f_zoom = 1.25f;

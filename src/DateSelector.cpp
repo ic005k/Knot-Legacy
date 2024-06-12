@@ -6,6 +6,7 @@
 
 extern MainWindow *mw_one;
 extern Method *m_Method;
+extern bool isAndroid;
 
 DateSelector::DateSelector(QWidget *parent)
     : QDialog(parent), ui(new Ui::DateSelector) {
@@ -78,6 +79,7 @@ void DateSelector::closeEvent(QCloseEvent *event) {
 void DateSelector::init() {
   int cy = QDate::currentDate().year();
   if (nWidgetType == 1) rboxYear->setRange(2022, cy);
+  if (nWidgetType == 3) ui->sliderYear->setRange(2022, cy);
 
   if (dateFlag == 1) {
     ui->gboxMonth->hide();
@@ -104,6 +106,7 @@ void DateSelector::init() {
     ui->lblFlag->hide();
 
     if (nWidgetType == 1) rboxMonth->setRange(1, 13);
+    if (nWidgetType == 3) ui->sliderMonth->setRange(1, 13);
 
     setFixedHeight(200);
   }
@@ -157,16 +160,33 @@ void DateSelector::on_hsDay_valueChanged(int value) {
 
 void DateSelector::on_btnOk_clicked() {
   QString y, m, d;
-  y = QString::number(rboxYear->readValue());
-  m = QString::number(rboxMonth->readValue());
-  d = QString::number(rboxDay->readValue());
+
+  if (isAndroid) {
+    QStringList list = m_Method->getDateTimePickerValue();
+    y = list.at(0);
+    m = list.at(1);
+    d = list.at(2);
+  } else {
+    if (nWidgetType == 1) {
+      y = QString::number(rboxYear->readValue());
+      m = QString::number(rboxMonth->readValue());
+      d = QString::number(rboxDay->readValue());
+    }
+
+    if (nWidgetType == 3) {
+      y = QString::number(ui->sliderYear->value());
+      m = QString::number(ui->sliderMonth->value());
+      d = QString::number(ui->sliderDay->value());
+    }
+  }
+
   if (m.length() == 1) m = "0" + m;
   if (d.length() == 1) d = "0" + d;
 
-  if (dateFlag == 1) mw_one->ui->btnYear->setText(y);
+  if (dateFlag == 1 || dateFlag == 2) {
+    mw_one->ui->btnYear->setText(y);
 
-  if (dateFlag == 2) {
-    int value = rboxMonth->readValue();
+    int value = m.toInt();
     if (value == 13)
       mw_one->ui->btnMonth->setText(tr("Year-Round"));
     else {
@@ -211,9 +231,24 @@ void DateSelector::initStartEndDate(QString flag) {
   y = list.at(0).toInt();
   m = list.at(1).toInt();
   d = list.at(2).toInt();
-  rboxYear->setValue(y);
-  rboxMonth->setValue(m);
-  rboxDay->setValue(d);
+
+  if (isAndroid) {
+    m_Method->setDateTimePickerFlag("ymd", y, m, d, 0, 0, flag);
+    m_Method->openDateTimePicker();
+    return;
+  }
+
+  if (nWidgetType == 1) {
+    rboxYear->setValue(y);
+    rboxMonth->setValue(m);
+    rboxDay->setValue(d);
+  }
+
+  if (nWidgetType == 3) {
+    ui->sliderYear->setValue(y);
+    ui->sliderMonth->setValue(m);
+    ui->sliderDay->setValue(d);
+  }
 
   ui->gboxYear->setHidden(false);
   ui->gboxMonth->setHidden(false);

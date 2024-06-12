@@ -103,6 +103,7 @@ int main(int argc, char* argv[]) {
   RegJni("com/x/FilePicker");
   RegJni("com/xhh/pdfui/PDFActivity");
   RegJni("com/x/DefaultOpen");
+  RegJni("com/x/DateTimePicker");
 
   isAndroid = true;
   isIOS = false;
