@@ -265,6 +265,8 @@ void Todo::on_SetAlarm() {
   refreshAlarm();
   isNeedSave = true;
   saveTodo();
+
+  goCurrentTodoItem(currentTodoItem);
 }
 
 bool Todo::isWeekValid(QString lblDateTime, QString strDate) {
@@ -434,7 +436,8 @@ void Todo::on_btnSetTime_clicked() {
   }
 
   mw_one->m_TodoAlarm->initDlg();
-  QString txt = tr("Todo") + " : " + getItemTodoText(row);
+  currentTodoItem = getItemTodoText(row);
+  QString txt = tr("Todo") + " : " + currentTodoItem;
   txt = txt.replace("\n", " ");
   QFontMetrics fm(this->font());
   QString qsLine = fm.elidedText(txt, Qt::ElideRight, mw_one->width() - 10);
@@ -458,6 +461,8 @@ void Todo::on_DelAlarm() {
   refreshAlarm();
   isNeedSave = true;
   saveTodo();
+
+  goCurrentTodoItem(currentTodoItem);
 }
 
 void Todo::startTimerAlarm(QString text) {
@@ -1273,4 +1278,17 @@ QString Todo::getNumber(QString str) {
     }
   }
   return str0;
+}
+
+void Todo::goCurrentTodoItem(QString curItem) {
+  int count = getCount();
+  if (count == 0) return;
+
+  for (int i = 0; i < count; i++) {
+    QString item = getItemTodoText(i);
+    if (item == curItem) {
+      setCurrentIndex(i);
+      break;
+    }
+  }
 }

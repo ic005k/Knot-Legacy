@@ -241,7 +241,7 @@ public class DateTimePicker extends Activity {
                 strTitle = "Select Date";
         }
 
-        BasisTimesUtils.showDatePickerDialog(context, isDark, strTitle, y, m, d,
+        BasisTimesUtils.showDatePickerDialog(context, !isDark, strTitle, y, m, d,
                 new BasisTimesUtils.OnDatePickerListener() {
 
                     @Override
@@ -280,7 +280,13 @@ public class DateTimePicker extends Activity {
      * 时间选择
      */
     public void showTimerPicker() {
-        BasisTimesUtils.showTimerPickerDialog(context, isDark, "", h, mm, true,
+        String strTitle = "";
+        if (zh_cn)
+            strTitle = "设置时间";
+        else
+            strTitle = "Set Time";
+
+        BasisTimesUtils.showTimerPickerDialog(context, !isDark, strTitle, h, mm, true,
                 new BasisTimesUtils.OnTimerPickerListener() {
                     @Override
                     public void onConfirm(int hourOfDay, int minute) {
@@ -313,7 +319,13 @@ public class DateTimePicker extends Activity {
      * 年月选择
      */
     private void showYearMonthPicker() {
-        BasisTimesUtils.showDatePickerDialog(context, isDark, "", y, m + 1, d,
+        String strTitle = "";
+        if (zh_cn)
+            strTitle = "设置年月";
+        else
+            strTitle = "Set Year Month";
+
+        BasisTimesUtils.showDatePickerDialog(context, !isDark, strTitle, y, m + 1, d,
                 new BasisTimesUtils.OnDatePickerListener() {
 
                     @Override

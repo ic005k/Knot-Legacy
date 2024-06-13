@@ -565,7 +565,8 @@ void TodoAlarm::setDateTime() {
   mm = list.at(4);
 
   if (h.length() == 1) h = "0" + h;
-  if (mm.length() == 1) mm == "0" + mm;
+  int n_mm = mm.toInt();
+  if (n_mm < 10) mm = "0" + QString::number(n_mm);
   setBtnTitle();
 }
 
