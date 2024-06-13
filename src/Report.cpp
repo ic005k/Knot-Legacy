@@ -847,10 +847,8 @@ void Report::genReportMenu() {
 
   QAction* actStartDate = new QAction(tr("Start Date"));
   m_Menu->addAction(actStartDate);
-  connect(actStartDate, &QAction::triggered, this, [=]() {
-    m_Menu->close();
-    mw_one->on_btnStartDate_clicked();
-  });
+  connect(actStartDate, &QAction::triggered, this,
+          [=]() { mw_one->on_btnStartDate_clicked(); });
 
   QAction* actEndDate = new QAction(tr("End Date"));
   m_Menu->addAction(actEndDate);

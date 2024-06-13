@@ -166,6 +166,14 @@ Rectangle {
             return "black"
     }
 
+    function getFontColor3() {
+
+        if (isDark)
+            return "lightgray"
+        else
+            return "gray"
+    }
+
     Component {
         id: dragDelegate
 
@@ -425,7 +433,7 @@ Rectangle {
 
                             width: parent.width
                             wrapMode: TextArea.WordWrap
-                            color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                            color: listItem.ListView.isCurrentItem ? "black" : getFontColor3()
                             font.bold: false
                             text: text3
 
