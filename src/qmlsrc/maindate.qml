@@ -12,7 +12,7 @@ Rectangle {
 
     color: isDark ? "#19232D" : "white"
 
-    property int iconW: 18
+    property int iconW: 13
     property int rowSpace: 3
     property int i: 0
     property int itemCount: 0
@@ -300,7 +300,16 @@ Rectangle {
                             sourceSize.width: iconW
                             source: "/res/sum.png"
 
-                            visible: item1.text.length ? true : false
+                            visible:  item1.text.length ? true : false
+                        }
+
+                        Rectangle {
+                            height: 9
+                            width: 9
+                            radius: 0
+                            anchors.leftMargin: 1
+                            color: "gray"
+                            visible: false // item1.text.length ? true : false
                         }
 
                         Text {
@@ -344,7 +353,16 @@ Rectangle {
                             sourceSize.width: iconW
                             source: "/res/coin.png"
 
-                            visible: item2.text.length ? true : false
+                            visible:  item2.text.length ? true : false
+                        }
+
+                        Rectangle {
+                            height: 9
+                            width: 9
+                            radius: 0
+                            anchors.leftMargin: 1
+                            color: "red"
+                            visible:false // item2.text.length ? true : false
                         }
 
                         Text {

@@ -12,7 +12,7 @@ Rectangle {
 
     color: isDark ? "#19232D" : "white"
 
-    property int iconW: 18
+    property int iconW: 13
     property int rowSpace: 3
     property int i: 0
     property int itemCount: 0
@@ -306,16 +306,16 @@ Rectangle {
 
                             source: listItem.ListView.isCurrentItem ? "/res/je.svg" : isDark ? "/res/je_l.svg" : "/res/je.svg"
 
-                            visible: item1.text.length ? true : false
+                            visible:  item1.text.length ? true : false
                         }
 
                         Rectangle {
-                            height: item1.contentHeight
-                            width: 6
-                            radius: 2
+                            height: 10
+                            width: 10
+                            radius: 5
                             anchors.leftMargin: 1
                             color: "red"
-                            visible: false // item1.text.length ? true : false
+                            visible:false // item1.text.length ? true : false
                         }
 
                         Text {
@@ -359,16 +359,16 @@ Rectangle {
                             sourceSize.width: iconW
                             source: listItem.ListView.isCurrentItem ? "/res/fl.svg" : isDark ? "/res/fl_l.svg" : "/res/fl.svg"
 
-                            visible: item2.text.length ? true : false
+                            visible:  item2.text.length ? true : false
                         }
 
                         Rectangle {
-                            height: item2.contentHeight
-                            width: 6
-                            radius: 2
+                            height: 10
+                            width: 10
+                            radius: 5
                             anchors.leftMargin: 1
                             color: "green"
-                            visible: false // item2.text.length ? true : false
+                            visible:false // item2.text.length ? true : false
                         }
 
                         Text {
@@ -411,16 +411,16 @@ Rectangle {
                             sourceSize.width: iconW
                             source: listItem.ListView.isCurrentItem ? "/res/xq.svg" : isDark ? "/res/xq_l.svg" : "/res/xq.svg"
 
-                            visible: item3.text.length ? true : false
+                            visible:  item3.text.length ? true : false
                         }
 
                         Rectangle {
-                            height: item3.height
-                            width: 6
-                            radius: 2
+                            height: 10
+                            width: 10
+                            radius: 5
                             anchors.leftMargin: 1
-                            color: "blue"
-                            visible: false // item3.text.length ? true : false
+                            color: "#1E90FF"
+                            visible:false // item3.text.length ? true : false
                         }
 
                         Text {

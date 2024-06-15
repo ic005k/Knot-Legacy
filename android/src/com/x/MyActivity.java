@@ -131,6 +131,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
 //Qt5
 import org.qtproject.qt5.android.bindings.QtActivity;
 
@@ -167,6 +168,7 @@ public class MyActivity
 
   private MediaRecorder recorder;
   private MediaPlayer player;
+  public static ArrayList<Activity> alarmWindows = new ArrayList<Activity>();
 
   public static native void CallJavaNotify_0();
 
@@ -1709,6 +1711,15 @@ public class MyActivity
     if (player != null) {
       player.stop();
     }
+  }
+
+  public static void closeAllAlarmWindows() {
+    int count = alarmWindows.size();
+    for (int i = 0; i < count; i++) {
+      Activity mActivity = alarmWindows.get(count - 1 - i);
+      mActivity.finish();
+    }
+    alarmWindows.clear();
   }
 
 }

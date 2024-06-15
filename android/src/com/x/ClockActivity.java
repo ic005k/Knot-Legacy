@@ -66,6 +66,7 @@ public class ClockActivity
 
   private static Context context;
   private static ClockActivity m_instance;
+  private boolean isHomeKey = false;
 
   public static Context getContext() {
     return context;
@@ -184,6 +185,8 @@ public class ClockActivity
     isZh(context);
     m_instance = this;
 
+    MyActivity.alarmWindows.add(m_instance);
+
     Application application = this.getApplication();
     application.registerActivityLifecycleCallbacks(this);
     mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
@@ -278,14 +281,9 @@ public class ClockActivity
     String mystr = str2;
     boolean isVoice = false;
     String[] the_splic = mystr.split(" ");
-    if (zh_cn) {
-      if (the_splic[0].equals("语音")) {
-        isVoice = true;
-      }
-    } else {
-      if (the_splic[0].equals("Voice")) {
-        isVoice = true;
-      }
+
+    if (the_splic[0].equals("语音") || the_splic[0].equals("Voice")) {
+      isVoice = true;
     }
 
     if (isVoice) {
@@ -328,13 +326,16 @@ public class ClockActivity
         String reason = intent.getStringExtra(SYSTEM_REASON);
         if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
           // 表示按了home键,程序直接进入到后台
-
+          isHomeKey = true;
+          MyActivity.closeAllAlarmWindows();
           System.out.println("ClockActivity HOME键被按下...");
-          onBackPressed();
+
         } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
           // 表示长按home键,显示最近使用的程序
+          isHomeKey = true;
+          MyActivity.closeAllAlarmWindows();
           System.out.println("ClockActivity 长按HOME键...");
-          onBackPressed();
+
         }
       }
     }
@@ -364,6 +365,9 @@ public class ClockActivity
 
   @Override
   protected void onDestroy() {
+    if (!isHomeKey)
+      MyActivity.alarmWindows.remove(context);
+
     if (strMute.equals("false")) {
       mediaPlayer.stop();
     }
