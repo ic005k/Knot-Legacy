@@ -1387,3 +1387,20 @@ QString Method::getDateTimeFlag() {
 #endif
   return Reg.value("/DateTime/dateFlag", "").toString();
 }
+
+double Method::updateMicStatus() {
+  double a;
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jo = QtAndroid::androidActivity();
+  a = jo.callMethod<double>("updateMicStatus", "()D");
+#else
+  QJniObject jo = QtAndroid::androidActivity();
+  a = jo.callMethod<double>("updateMicStatus", "()D");
+#endif
+
+#endif
+  return a;
+}

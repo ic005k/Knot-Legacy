@@ -1678,11 +1678,25 @@ public class MyActivity
       recorder.setOutputFile(outputFile);
       recorder.prepare();
       recorder.start();
+
+      updateMicStatus();
     } catch (Exception ex) {
       ex.printStackTrace();
     }
 
     Log.i("audioRecord", "开始录音");
+  }
+
+  public double updateMicStatus() {
+    double db = 0;// 分贝
+    if (recorder != null) {
+      double ratio = (double) recorder.getMaxAmplitude() / 1; // 参考振幅为 1
+      if (ratio > 1) {
+        db = 20 * Math.log10(ratio);
+      }
+      // Log.d(TAG, "计算分贝值 = " + db + "dB");
+    }
+    return db;
   }
 
   public void stopRecord() {

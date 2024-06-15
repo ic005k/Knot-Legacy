@@ -131,7 +131,7 @@ class Todo : public QDialog {
   QString getVoiceFile(int row);
 
   void goCurrentTodoItem(QString curItem);
-  private slots:
+ private slots:
   void on_ShowRecordTime();
 
  private:
@@ -154,5 +154,6 @@ class Todo : public QDialog {
   QString getNumber(QString str);
   QTimer *tmeRecordTime;
   int nRecordSec = 0;
+  int nMSec = 0;
 };
 #endif  // TODO_H

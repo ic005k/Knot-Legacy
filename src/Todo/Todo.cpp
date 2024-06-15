@@ -43,6 +43,7 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   mw_one->ui->btnRecycle->setFont(f);
 
   mw_one->ui->btnPasteTodo->hide();
+  mw_one->ui->progMicdb->hide();
 
   mw_one->ui->editTodo->setFixedHeight(getEditTextHeight(mw_one->ui->editTodo) +
                                        4);
@@ -1184,13 +1185,22 @@ void Todo::startRecordVoice() {
 
     mw_one->ui->editTodo->setText(tr("Recording audio in progress..."));
     nRecordSec = 0;
-    tmeRecordTime->start(1000);
+    tmeRecordTime->start(250);
+    mw_one->ui->progMicdb->show();
     isRecordVoice = true;
   }
 }
 
 void Todo::on_ShowRecordTime() {
-  nRecordSec = nRecordSec + 1;
+  double db = m_Method->updateMicStatus();
+  // qDebug() << "db=" << db;
+  mw_one->ui->progMicdb->setValue(db);
+
+  nMSec = nMSec + 1;
+  if (nMSec == 4) {
+    nRecordSec = nRecordSec + 1;
+    nMSec = 0;
+  }
   mw_one->ui->editTodo->setText(tr("Recording audio in progress...") + " " +
                                 m_Method->FormatHHMMSS(nRecordSec));
 }
@@ -1216,6 +1226,8 @@ void Todo::stopRecordVoice() {
     isAudioRecordOne = false;
     mw_one->ui->editTodo->setStyleSheet(editStyle);
   }
+
+  mw_one->ui->progMicdb->hide();
 }
 
 void Todo::stopPlayVoice() {

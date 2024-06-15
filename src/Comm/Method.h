@@ -247,6 +247,7 @@ class Method : public QDialog {
   QStringList getDateTimePickerValue();
 
   QString getDateTimeFlag();
+  double updateMicStatus();
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
