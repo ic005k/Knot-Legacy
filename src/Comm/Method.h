@@ -248,6 +248,8 @@ class Method : public QDialog {
 
   QString getDateTimeFlag();
   double updateMicStatus();
+  int getPlayDuration();
+  int getPlayPosition();
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

@@ -135,6 +135,7 @@ class Todo : public QDialog {
  private slots:
   void on_ShowRecordTime();
 
+     void on_ShowPlayProgress();
  private:
   QListWidgetItem *editItem;
   QString audioFileName;
@@ -154,6 +155,7 @@ class Todo : public QDialog {
   bool isRestore = false;
   QString getNumber(QString str);
   QTimer *tmeRecordTime;
+  QTimer *tmePlayProgress;
   int nRecordSec = 0;
   int nMSec = 0;
 };

@@ -1404,3 +1404,37 @@ double Method::updateMicStatus() {
 #endif
   return a;
 }
+
+int Method::getPlayDuration() {
+  int a;
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jo = QtAndroid::androidActivity();
+  a = jo.callMethod<int>("getPlayDuration", "()I");
+#else
+  QJniObject jo = QtAndroid::androidActivity();
+  a = jo.callMethod<int>("getPlayDuration", "()I");
+#endif
+
+#endif
+  return a;
+}
+
+int Method::getPlayPosition() {
+  int a;
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jo = QtAndroid::androidActivity();
+  a = jo.callMethod<int>("getPlayPosition", "()I");
+#else
+  QJniObject jo = QtAndroid::androidActivity();
+  a = jo.callMethod<int>("getPlayPosition", "()I");
+#endif
+
+#endif
+  return a;
+}

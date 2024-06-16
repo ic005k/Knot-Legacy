@@ -50,6 +50,10 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
 
   tmeRecordTime = new QTimer(this);
   connect(tmeRecordTime, SIGNAL(timeout()), this, SLOT(on_ShowRecordTime()));
+
+  tmePlayProgress = new QTimer(this);
+  connect(tmePlayProgress, SIGNAL(timeout()), this,
+          SLOT(on_ShowPlayProgress()));
 }
 
 Todo::~Todo() { delete ui; }
@@ -1026,6 +1030,9 @@ void Todo::reeditText() {
     if (str == tr("Voice")) {
       m_Method->playRecord(iniDir + "memo/voice/" + getNumber(strItem) +
                            ".aac");
+      mw_one->ui->progMicdb->setMaximum(m_Method->getPlayDuration());
+      mw_one->ui->progMicdb->show();
+      tmePlayProgress->start(1000);
       return;
     }
   }
@@ -1183,6 +1190,7 @@ void Todo::startRecordVoice() {
     mw_one->ui->editTodo->setText(tr("Recording audio in progress..."));
     nRecordSec = 0;
     tmeRecordTime->start(250);
+    mw_one->ui->progMicdb->setMaximum(100);
     mw_one->ui->progMicdb->show();
     isRecordVoice = true;
   }
@@ -1227,6 +1235,8 @@ void Todo::stopRecordVoice() {
 
 void Todo::stopPlayVoice() {
   m_Method->stopPlayRecord();
+  tmePlayProgress->stop();
+  mw_one->ui->progMicdb->hide();
 
   int row = getCurrentIndex();
   if (row >= 0) {
@@ -1298,4 +1308,9 @@ void Todo::goCurrentTodoItem(QString curItem) {
       break;
     }
   }
+}
+
+void Todo::on_ShowPlayProgress() {
+  int prog = m_Method->getPlayPosition();
+  mw_one->ui->progMicdb->setValue(prog);
 }

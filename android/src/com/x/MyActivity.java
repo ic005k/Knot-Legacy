@@ -1727,6 +1727,22 @@ public class MyActivity
     }
   }
 
+  public int getPlayDuration() {
+    int nDuration = 0;
+    if (player != null) {
+      nDuration = player.getDuration();
+    }
+    return nDuration;
+  }
+
+  public int getPlayPosition() {
+    int nPosition = 0;
+    if (player != null) {
+      nPosition = player.getCurrentPosition();
+    }
+    return nPosition;
+  }
+
   public static void closeAllAlarmWindows() {
     int count = alarmWindows.size();
     for (int i = 0; i < count; i++) {
