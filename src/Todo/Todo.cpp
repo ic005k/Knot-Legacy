@@ -1085,10 +1085,6 @@ void Todo::reeditText() {
   btnShare->setText(tr("Share"));
   btnOk->setText(tr("OK"));
 
-  btnOk->setFixedHeight(35);
-  btnCancel->setFixedHeight(35);
-  btnCopy->setFixedHeight(35);
-
   QHBoxLayout* hbox = new QHBoxLayout;
   hbox->addWidget(btnCancel);
   hbox->addWidget(btnCopy);
