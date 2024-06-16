@@ -88,6 +88,7 @@ class Todo : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  public:
+  bool isRecordVoice = false;
   QString currentTodoItem;
   void on_SetAlarm();
   void on_DelAlarm();
@@ -149,7 +150,7 @@ class Todo : public QDialog {
   QSettings *iniTodo;
   void delVoiceFile(int row);
   QString editStyle;
-  bool isRecordVoice = false;
+
   bool isRestore = false;
   QString getNumber(QString str);
   QTimer *tmeRecordTime;

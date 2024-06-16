@@ -1192,8 +1192,7 @@ void MainWindow::set_ToolButtonStyle(QObject *parent) {
   for (int i = 0; i < btnList.count(); i++) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
 
-    if (btn != ui->btnAddTodo && btn != ui->btnClear && btn != ui->btnStyle1 &&
-        btn != ui->btnStyle2 && btn != ui->btnStyle3)
+    if (btn != ui->btnStyle1 && btn != ui->btnStyle2 && btn != ui->btnStyle3)
       m_Method->setToolButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB",
                                  "#FFFFFF", "#FF0000", "#FFFFFF");
   }
@@ -3606,8 +3605,8 @@ void MainWindow::init_Theme() {
     chartMonth->setTheme(QChart::ChartThemeLight);
     chartDay->setTheme(QChart::ChartThemeLight);
 
-    ui->btnAddTodo->setIcon(QIcon(":/res/plus.svg"));
-    ui->btnClear->setIcon(QIcon(":/res/clear.svg"));
+    ui->btnAddTodo->setIcon(QIcon(":/res/plus_l.svg"));
+    ui->btnClear->setIcon(QIcon(":/res/clear.png"));
 
     ui->btnRemarks->setIcon(QIcon(":/res/edit.svg"));
 
@@ -3811,6 +3810,9 @@ void MainWindow::init_UIWidget() {
   connect(timerMousePress, SIGNAL(timeout()), this, SLOT(on_timerMousePress()));
   tmeFlash = new QTimer(this);
   connect(tmeFlash, SIGNAL(timeout()), this, SLOT(on_tmeFlash()));
+  tmeStartRecordAudio = new QTimer(this);
+  connect(tmeStartRecordAudio, SIGNAL(timeout()), this,
+          SLOT(on_StartRecordAudio()));
 
   myReadEBookThread = new ReadEBookThread();
   connect(myReadEBookThread, &ReadEBookThread::isDone, this,
@@ -5964,10 +5966,21 @@ void MainWindow::on_btnDefault_clicked() {
 
 void MainWindow::on_btnPlus_clicked() { m_ReaderSet->on_btnAdd_clicked(); }
 
-void MainWindow::on_btnAddTodo_pressed() { m_Todo->startRecordVoice(); }
+void MainWindow::on_btnAddTodo_pressed() {
+  m_Todo->isRecordVoice = false;
+  tmeStartRecordAudio->start(1000);
+}
 
-void MainWindow::on_btnAddTodo_released() { m_Todo->stopRecordVoice(); }
+void MainWindow::on_btnAddTodo_released() {
+  tmeStartRecordAudio->stop();
+  m_Todo->stopRecordVoice();
+}
 
 void MainWindow::on_btnClearReaderFont_clicked() {
   m_ReaderSet->on_btnClear_clicked();
+}
+
+void MainWindow::on_StartRecordAudio() {
+  tmeStartRecordAudio->stop();
+  m_Todo->startRecordVoice();
 }

@@ -1164,9 +1164,6 @@ void Todo::addToRecycle() {
 void Todo::NewTodo() { mw_one->ui->btnTodo->click(); }
 
 void Todo::startRecordVoice() {
-  if (!isAndroid) return;
-
-  isRecordVoice = false;
   if (mw_one->ui->editTodo->toPlainText().trimmed().length() == 0) {
     if (isAudioRecordOne) return;
     isAudioRecordOne = true;
@@ -1206,8 +1203,6 @@ void Todo::on_ShowRecordTime() {
 }
 
 void Todo::stopRecordVoice() {
-  if (!isAndroid) return;
-
   if (isRecordVoice) {
     mw_one->ui->editTodo->setText("");
     tmeRecordTime->stop();

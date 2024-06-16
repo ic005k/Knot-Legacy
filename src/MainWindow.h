@@ -255,6 +255,7 @@ class MainWindow : public QMainWindow {
   QTimer *timerStep;
   QTimer *timerMousePress;
   QTimer *timerSyncData;
+  QTimer *tmeStartRecordAudio;
 
   static void saveData(QTreeWidget *, int);
   static void readData(QTreeWidget *);
@@ -789,6 +790,8 @@ class MainWindow : public QMainWindow {
   void on_tmeFlash();
 
   void on_btnClearReaderFont_clicked();
+
+  void on_StartRecordAudio();
 
  private:
   QTimer *tmeFlash;
