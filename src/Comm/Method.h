@@ -250,7 +250,9 @@ class Method : public QDialog {
   double updateMicStatus();
   int getPlayDuration();
   int getPlayPosition();
-  protected:
+  bool getPlaying();
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

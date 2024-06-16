@@ -1030,9 +1030,10 @@ void Todo::reeditText() {
     if (str == tr("Voice")) {
       m_Method->playRecord(iniDir + "memo/voice/" + getNumber(strItem) +
                            ".aac");
+      mw_one->ui->progMicdb->setValue(0);
       mw_one->ui->progMicdb->setMaximum(m_Method->getPlayDuration());
       mw_one->ui->progMicdb->show();
-      tmePlayProgress->start(1000);
+      tmePlayProgress->start(500);
       return;
     }
   }
@@ -1313,4 +1314,8 @@ void Todo::goCurrentTodoItem(QString curItem) {
 void Todo::on_ShowPlayProgress() {
   int prog = m_Method->getPlayPosition();
   mw_one->ui->progMicdb->setValue(prog);
+
+  if (!m_Method->getPlaying()) {
+    stopPlayVoice();
+  }
 }

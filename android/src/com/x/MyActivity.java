@@ -1743,6 +1743,15 @@ public class MyActivity
     return nPosition;
   }
 
+  public int isPlaying() {
+    int a = 0;
+    if (player.isPlaying())
+      a = 1;
+    else
+      a = 0;
+    return a;
+  }
+
   public static void closeAllAlarmWindows() {
     int count = alarmWindows.size();
     for (int i = 0; i < count; i++) {

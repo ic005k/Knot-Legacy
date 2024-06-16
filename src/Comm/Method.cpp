@@ -1438,3 +1438,20 @@ int Method::getPlayPosition() {
 #endif
   return a;
 }
+
+bool Method::getPlaying() {
+  bool a;
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jo = QtAndroid::androidActivity();
+  a = jo.callMethod<int>("isPlaying", "()I");
+#else
+  QJniObject jo = QtAndroid::androidActivity();
+  a = jo.callMethod<int>("isPlaying", "()I");
+#endif
+
+#endif
+  return a;
+}
