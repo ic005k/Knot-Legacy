@@ -405,6 +405,7 @@ Rectangle {
                         onClicked: {
                             view.currentIndex = index
 
+                            m_Todo.stopPlayVoice()
                             m_Todo.addToRecycle()
                             view.model.remove(index)
                             m_Todo.refreshTableLists()

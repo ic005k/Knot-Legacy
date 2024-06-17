@@ -71,7 +71,6 @@
         <file>res/plus_l.svg</file>
         <file>res/clear.svg</file>
         <file>res/coin.svg</file>
-        <file>res/coin.png</file>
         <file>theme/dark/darkstyle.qss</file>
         <file>theme/light/lightstyle.qss</file>
         <file>res/find_l.png</file>
@@ -157,5 +156,8 @@
         <file>res/run_l.svg</file>
         <file>res/voice_l.svg</file>
         <file>res/audio.svg</file>
+        <file>res/coin_l.svg</file>
+        <file>res/count_l.svg</file>
+        <file>res/count.svg</file>
     </qresource>
 </RCC>

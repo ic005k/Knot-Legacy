@@ -12,7 +12,7 @@ Rectangle {
 
     color: isDark ? "#19232D" : "white"
 
-    property int iconW: 13
+    property int iconW: 16
     property int rowSpace: 3
     property int i: 0
     property int itemCount: 0
@@ -298,9 +298,9 @@ Rectangle {
                             smooth: true
                             sourceSize.height: iconW
                             sourceSize.width: iconW
-                            source: "/res/sum.png"
+                            source: listItem.ListView.isCurrentItem ? "/res/count.svg" : isDark ? "/res/count_l.svg" : "/res/count.svg"
 
-                            visible:  item1.text.length ? true : false
+                            visible: item1.text.length ? true : false
                         }
 
                         Rectangle {
@@ -351,9 +351,9 @@ Rectangle {
                             smooth: true
                             sourceSize.height: iconW
                             sourceSize.width: iconW
-                            source: "/res/coin.png"
+                            source: listItem.ListView.isCurrentItem ? "/res/coin.svg" : isDark ? "/res/coin_l.svg" : "/res/coin.svg"
 
-                            visible:  item2.text.length ? true : false
+                            visible: item2.text.length ? true : false
                         }
 
                         Rectangle {
@@ -362,7 +362,7 @@ Rectangle {
                             radius: 0
                             anchors.leftMargin: 1
                             color: "red"
-                            visible:false // item2.text.length ? true : false
+                            visible: false // item2.text.length ? true : false
                         }
 
                         Text {
