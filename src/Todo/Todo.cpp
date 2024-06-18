@@ -43,7 +43,7 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   mw_one->ui->btnRecycle->setFont(f);
 
   mw_one->ui->btnPasteTodo->hide();
-  mw_one->ui->progMicdb->hide();
+  mw_one->ui->progAudioBar->hide();
 
   mw_one->ui->editTodo->setFixedHeight(getEditTextHeight(mw_one->ui->editTodo) +
                                        4);
@@ -1030,9 +1030,12 @@ void Todo::reeditText() {
     if (str == tr("Voice")) {
       m_Method->playRecord(iniDir + "memo/voice/" + getNumber(strItem) +
                            ".aac");
-      mw_one->ui->progMicdb->setValue(0);
-      mw_one->ui->progMicdb->setMaximum(m_Method->getPlayDuration());
-      mw_one->ui->progMicdb->show();
+      mw_one->ui->progAudioBar->setStyleSheet(
+          "QProgressBar{background:white;} "
+          "QProgressBar::chunk{background:#1E90FF}");
+      mw_one->ui->progAudioBar->setValue(0);
+      mw_one->ui->progAudioBar->setMaximum(m_Method->getPlayDuration());
+      mw_one->ui->progAudioBar->show();
       tmePlayProgress->start(500);
       return;
     }
@@ -1171,6 +1174,7 @@ void Todo::startRecordVoice() {
   if (mw_one->ui->editTodo->toPlainText().trimmed().length() == 0) {
     if (isAudioRecordOne) return;
     isAudioRecordOne = true;
+    stopPlayVoice();
     QString dir = iniDir + "memo/voice/";
     QDir mdir;
     mdir.mkpath(dir);
@@ -1187,8 +1191,11 @@ void Todo::startRecordVoice() {
     mw_one->ui->editTodo->setText(tr("Recording audio in progress..."));
     nRecordSec = 0;
     tmeRecordTime->start(250);
-    mw_one->ui->progMicdb->setMaximum(100);
-    mw_one->ui->progMicdb->show();
+    mw_one->ui->progAudioBar->setStyleSheet(
+        "QProgressBar{background:white;} "
+        "QProgressBar::chunk{background:#00FF7F}");
+    mw_one->ui->progAudioBar->setMaximum(100);
+    mw_one->ui->progAudioBar->show();
     isRecordVoice = true;
   }
 }
@@ -1196,7 +1203,7 @@ void Todo::startRecordVoice() {
 void Todo::on_ShowRecordTime() {
   double db = m_Method->updateMicStatus();
   // qDebug() << "db=" << db;
-  mw_one->ui->progMicdb->setValue(db);
+  mw_one->ui->progAudioBar->setValue(db);
 
   nMSec = nMSec + 1;
   if (nMSec == 4) {
@@ -1227,13 +1234,13 @@ void Todo::stopRecordVoice() {
     mw_one->ui->editTodo->setStyleSheet(editStyle);
   }
 
-  mw_one->ui->progMicdb->hide();
+  mw_one->ui->progAudioBar->hide();
 }
 
 void Todo::stopPlayVoice() {
   m_Method->stopPlayRecord();
   tmePlayProgress->stop();
-  mw_one->ui->progMicdb->hide();
+  mw_one->ui->progAudioBar->hide();
 
   int row = getCurrentIndex();
   if (row >= 0) {
@@ -1309,7 +1316,7 @@ void Todo::goCurrentTodoItem(QString curItem) {
 
 void Todo::on_ShowPlayProgress() {
   int prog = m_Method->getPlayPosition();
-  mw_one->ui->progMicdb->setValue(prog);
+  mw_one->ui->progAudioBar->setValue(prog);
 
   if (!m_Method->getPlaying()) {
     stopPlayVoice();
