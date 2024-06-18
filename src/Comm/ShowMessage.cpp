@@ -6,7 +6,7 @@
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString copyText;
-extern bool isDark;
+extern bool isDark, isAndroid;
 
 ShowMessage::ShowMessage(QWidget* parent)
     : QDialog(parent), ui(new Ui::ShowMessage) {
@@ -36,10 +36,6 @@ ShowMessage::ShowMessage(QWidget* parent)
   ui->lblTitle->setFont(font);
   ui->lblTitle->adjustSize();
   ui->lblTitle->setWordWrap(true);
-
-  ui->lblMsgTxt->adjustSize();
-  ui->lblMsgTxt->setWordWrap(true);
-  ui->lblMsgTxt->hide();
 
   ui->editMsg->adjustSize();
   ui->editMsg->setReadOnly(true);
@@ -92,6 +88,12 @@ void ShowMessage::init() {
   setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
               height());
 
+  if (!m_Method->m_widget->isHidden()) {
+    m_Method->m_widget->close();
+  }
+
+  if (!isAndroid) show();
+
   int x, y, w, h;
 
 #ifdef Q_OS_ANDROID
@@ -105,22 +107,23 @@ void ShowMessage::init() {
 
 #endif
 
-  if (!m_Method->m_widget->isHidden()) {
-    m_Method->m_widget->close();
-  }
-
   ui->frame->setFixedWidth(w - 20);
 
   int nEditH = mw_one->m_Todo->getEditTextHeight(ui->editMsg);
-  int nH = nEditH + ui->btnCancel->height() * 3;
-  if (nH > this->height()) nH = this->height() - 10;
-  ui->frame->setFixedHeight(nH);
-  h = ui->frame->height();
-  x = this->x() + (this->width() - w) / 2;
-  y = this->y() + (this->height() - h) / 2;
-  ui->frame->setGeometry(x, y, w, h);
+  int nH = 0;
+  if (!ui->btnCancel->isHidden())
+    nH = nEditH + ui->btnCancel->height() + ui->lblTitle->height() +
+         ui->hframe->height() + 40;
+  else
+    nH = nEditH + ui->lblTitle->height() + ui->hframe->height() + 50;
 
-  show();
+  if (nH > mw_one->height()) nH = mw_one->height() - 10;
+  ui->frame->setFixedHeight(nH);
+  h = ui->widget->height();
+  x = mw_one->geometry().x() + (mw_one->width() - w) / 2;
+  y = mw_one->geometry().y() + (mw_one->height() - h) / 2;
+  ui->frame->setGeometry(x, y, w, h);
+  if (isAndroid) show();
 }
 
 bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
@@ -166,7 +169,6 @@ bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
   }
 
   ui->lblTitle->setText(title);
-  ui->lblMsgTxt->setText(msgtxt);
   ui->editMsg->setText(msgtxt);
 
   show();

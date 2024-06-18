@@ -84,19 +84,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="lblMsgTxt">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>MsgTxt</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QTextEdit" name="editMsg"/>
          </item>
          <item>

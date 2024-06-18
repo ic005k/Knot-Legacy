@@ -114,7 +114,8 @@ CloudBackup::CloudBackup(QWidget *parent)
             ShowMessage *m_ShowMsg = new ShowMessage(this);
             m_ShowMsg->showMsg(
                 "OneDrive",
-                QString(tr("Success Upload File:") + "\n\nPATH: %1\n\nID: %2")
+                QString(tr("Success Upload File:") + "\n\nPATH: %1\n\nID: %2" +
+                        "\n\n" + QDateTime::currentDateTime().toString())
                     .arg(filePath, fileID),
                 1);
             mw_one->ui->progBar->hide();
