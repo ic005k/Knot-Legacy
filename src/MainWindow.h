@@ -793,6 +793,10 @@ class MainWindow : public QMainWindow {
 
   void on_StartRecordAudio();
 
+  void on_sliderPlayAudio_sliderPressed();
+
+  void on_sliderPlayAudio_sliderReleased();
+
  private:
   QTimer *tmeFlash;
   int nFlashCount = 0;

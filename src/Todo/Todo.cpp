@@ -44,6 +44,7 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
 
   mw_one->ui->btnPasteTodo->hide();
   mw_one->ui->progAudioBar->hide();
+  mw_one->ui->sliderPlayAudio->hide();
 
   mw_one->ui->editTodo->setFixedHeight(getEditTextHeight(mw_one->ui->editTodo) +
                                        4);
@@ -1033,10 +1034,11 @@ void Todo::reeditText() {
       mw_one->ui->progAudioBar->setStyleSheet(
           "QProgressBar{background:white;} "
           "QProgressBar::chunk{background:#1E90FF}");
-      mw_one->ui->progAudioBar->setValue(0);
-      mw_one->ui->progAudioBar->setMaximum(m_Method->getPlayDuration());
-      mw_one->ui->progAudioBar->show();
-      tmePlayProgress->start(500);
+
+      mw_one->ui->sliderPlayAudio->setValue(0);
+      mw_one->ui->sliderPlayAudio->setMaximum(m_Method->getPlayDuration());
+      mw_one->ui->sliderPlayAudio->show();
+      tmePlayProgress->start(250);
       return;
     }
   }
@@ -1240,7 +1242,7 @@ void Todo::stopRecordVoice() {
 void Todo::stopPlayVoice() {
   m_Method->stopPlayRecord();
   tmePlayProgress->stop();
-  mw_one->ui->progAudioBar->hide();
+  mw_one->ui->sliderPlayAudio->hide();
 
   int row = getCurrentIndex();
   if (row >= 0) {
@@ -1316,7 +1318,7 @@ void Todo::goCurrentTodoItem(QString curItem) {
 
 void Todo::on_ShowPlayProgress() {
   int prog = m_Method->getPlayPosition();
-  mw_one->ui->progAudioBar->setValue(prog);
+  mw_one->ui->sliderPlayAudio->setValue(prog);
 
   if (!m_Method->getPlaying()) {
     stopPlayVoice();

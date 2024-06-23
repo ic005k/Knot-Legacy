@@ -1721,6 +1721,18 @@ public class MyActivity
     }
   }
 
+  public void startPlay() {
+    if (player != null) {
+      player.start();
+    }
+  }
+
+  public void pausePlay() {
+    if (player != null) {
+      player.pause();
+    }
+  }
+
   public void stopPlayRecord() {
     if (player != null) {
       player.stop();
@@ -1750,6 +1762,13 @@ public class MyActivity
     else
       a = 0;
     return a;
+  }
+
+  public void seekTo(String strPos) {
+    if (player != null) {
+      int position = Integer.parseInt(strPos);
+      player.seekTo(position);
+    }
   }
 
   public static void closeAllAlarmWindows() {

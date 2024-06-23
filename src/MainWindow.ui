@@ -3674,6 +3674,75 @@ border:1px solid #4169E1
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QSlider" name="sliderPlayAudio">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QSlider::groove:horizontal {
+  border: 0px solid #bbb;
+}
+ 
+QSlider::sub-page:horizontal {
+  background: #1ABC9C;
+  border-radius: 0px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+ 
+QSlider::add-page:horizontal {
+  background: rgb(100,100,100);
+  border: 0px solid #777; 
+  border-radius: 0px; 
+  margin-top: 16px; 
+  margin-bottom: 16px; 
+}
+ 
+QSlider::handle:horizontal { 
+  background: rgb(255,255,255); 
+  border: 1px solid rgba(10,10,10,255); 
+border-image: url(&quot;:/res/qslider_btn.png&quot;);	
+  width: 18px; 
+  height: 18px; 
+  border-radius: 0px; 
+  margin-top: 1px; 
+  margin-bottom: 1px; 
+}
+ 
+QSlider::handle:horizontal:hover { 
+  background: rgb(0,191,255); 
+  border: 1px solid rgba(25,25,25,255); 
+  border-radius: 0px; 
+}
+ 
+QSlider::sub-page:horizontal:disabled { 
+  background: #bbb; 
+  border-color: #999; 
+}
+ 
+QSlider::add-page:horizontal:disabled { 
+  background: #eee; 
+  border-color: #999; 
+}
+ 
+QSlider::handle:horizontal:disabled { 
+  background: #eee; 
+  border: 1px solid #aaa; 
+  border-radius: 4px; 
+}</string>
+             </property>
+             <property name="value">
+              <number>20</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>

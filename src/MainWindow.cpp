@@ -5984,3 +5984,15 @@ void MainWindow::on_StartRecordAudio() {
   tmeStartRecordAudio->stop();
   m_Todo->startRecordVoice();
 }
+
+void MainWindow::on_sliderPlayAudio_sliderPressed() {
+  m_Todo->tmePlayProgress->stop();
+  m_Method->pausePlay();
+}
+
+void MainWindow::on_sliderPlayAudio_sliderReleased() {
+  QString strPos = QString::number(ui->sliderPlayAudio->value());
+  m_Method->seekTo(strPos);
+  m_Method->startPlay();
+  m_Todo->tmePlayProgress->start(250);
+}

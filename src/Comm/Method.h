@@ -252,7 +252,10 @@ class Method : public QDialog {
   int getPlayPosition();
   bool getPlaying();
 
- protected:
+  void seekTo(QString strPos);
+  void startPlay();
+  void pausePlay();
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

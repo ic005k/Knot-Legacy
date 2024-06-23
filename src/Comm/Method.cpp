@@ -1246,6 +1246,42 @@ void Method::playRecord(QString file) {
 #endif
 }
 
+void Method::startPlay() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("startPlay", "()V");
+
+#else
+
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("startPlay", "()V");
+
+#endif
+
+#endif
+}
+
+void Method::pausePlay() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("pausePlay", "()V");
+
+#else
+
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("pausePlay", "()V");
+
+#endif
+
+#endif
+}
+
 void Method::stopPlayRecord() {
 #ifdef Q_OS_ANDROID
 
@@ -1454,4 +1490,26 @@ bool Method::getPlaying() {
 
 #endif
   return a;
+}
+
+void Method::seekTo(QString strPos) {
+  Q_UNUSED(strPos);
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jFile = QAndroidJniObject::fromString(strPos);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("seekTo", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#else
+  QJniObject jFile = QJniObject::fromString(strPos);
+  QJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("seekTo", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#endif
+
+#endif
 }
