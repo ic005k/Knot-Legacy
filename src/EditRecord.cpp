@@ -9,7 +9,7 @@ extern Method *m_Method;
 extern QTabWidget *tabData;
 extern QString iniFile, iniDir, privateDir, btnYearText, btnMonthText;
 extern QRegularExpression regxNumber;
-extern bool isBreak, isDark, isReport, isWholeMonth, isDateSection;
+extern bool isBreak, isDark, isReport, isWholeMonth, isDateSection, isDark;
 extern int fontSize;
 
 bool del = false;
@@ -26,7 +26,7 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
   mw_one->ui->editDetails->viewport()->installEventFilter(mw_one);
   mw_one->ui->editCategory->setFocus();
 
-  int nH = mw_one->ui->editCategory->height();
+  nH = mw_one->ui->editCategory->height();
   if (isDark) {
     m_Method->setQLabelImage(mw_one->ui->lblCategory, nH, nH, ":/res/fl_l.svg");
     m_Method->setQLabelImage(mw_one->ui->lblDetailsType, nH, nH,
@@ -367,10 +367,17 @@ void EditRecord::on_editAmount_textChanged(const QString &arg1) {
     }
   }
 
-  if (arg1.length() > 0)
+  if (arg1.length() > 0) {
     mw_one->ui->lblAmount->setStyleSheet(lblStyleHighLight);
-  else
+    if (!isDark) {
+      m_Method->setQLabelImage(mw_one->ui->lblAmount, nH, nH, ":/res/je_l.svg");
+    }
+  } else {
     mw_one->ui->lblAmount->setStyleSheet(lblStyle);
+    if (!isDark) {
+      m_Method->setQLabelImage(mw_one->ui->lblAmount, nH, nH, ":/res/je.svg");
+    }
+  }
 }
 
 void EditRecord::on_hsH_valueChanged(int value) {
@@ -386,10 +393,18 @@ void EditRecord::on_btnClearDetails_clicked() {
 }
 
 void EditRecord::on_editCategory_textChanged(const QString &arg1) {
-  if (arg1.length() > 0)
+  if (arg1.length() > 0) {
     mw_one->ui->lblCategory->setStyleSheet(lblStyleHighLight);
-  else
+    if (!isDark) {
+      m_Method->setQLabelImage(mw_one->ui->lblCategory, nH, nH,
+                               ":/res/fl_l.svg");
+    }
+  } else {
     mw_one->ui->lblCategory->setStyleSheet(lblStyle);
+    if (!isDark) {
+      m_Method->setQLabelImage(mw_one->ui->lblCategory, nH, nH, ":/res/fl.svg");
+    }
+  }
 
   QCompleter *completer = new QCompleter(c_list);
   completer->setFilterMode(Qt::MatchContains);
@@ -398,10 +413,19 @@ void EditRecord::on_editCategory_textChanged(const QString &arg1) {
 
 void EditRecord::on_editDetails_textChanged() {
   QString arg1 = mw_one->ui->editDetails->toPlainText();
-  if (arg1.length() > 0)
+  if (arg1.length() > 0) {
     mw_one->ui->lblDetailsType->setStyleSheet(lblStyleHighLight);
-  else
+    if (!isDark) {
+      m_Method->setQLabelImage(mw_one->ui->lblDetailsType, nH, nH,
+                               ":/res/xq_l.svg");
+    }
+  } else {
     mw_one->ui->lblDetailsType->setStyleSheet(lblStyle);
+    if (!isDark) {
+      m_Method->setQLabelImage(mw_one->ui->lblDetailsType, nH, nH,
+                               ":/res/xq.svg");
+    }
+  }
 }
 
 void EditRecord::saveOne() {

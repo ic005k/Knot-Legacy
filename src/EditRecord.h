@@ -82,6 +82,7 @@ class EditRecord : public QDialog {
   void set_Amount(QString Number);
 
   QString lblStyle;
+  int nH;
 };
 
 #endif  // EDITRECORD_H
