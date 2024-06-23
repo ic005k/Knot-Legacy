@@ -2977,7 +2977,7 @@ void MainWindow::on_actionAbout() {
 
   int x, y;
   if (!isAndroid) {
-    m_AboutThis->setMaximumWidth(350);
+    m_AboutThis->setMaximumWidth(320);
     m_AboutThis->setFixedHeight(650);
 
     x = this->geometry().x() +
@@ -3187,7 +3187,7 @@ void MainWindow::on_actionPreferences_triggered() {
     x = geometry().x();
     y = geometry().y();
   } else {
-    m_Preferences->setFixedWidth(400);
+    m_Preferences->setMaximumWidth(320);
     m_Preferences->setMaximumHeight(600);
     x = geometry().x() + (width() - m_Preferences->width()) / 2;
     y = geometry().y() + (height() - m_Preferences->height()) / 2;
@@ -5014,7 +5014,7 @@ void MainWindow::on_btnAddTodo_clicked() { m_Todo->on_btnAdd_clicked(); }
 
 void MainWindow::on_btnBackTodo_clicked() {
   m_Method->closeKeyboard();
-
+  m_Todo->stopPlayVoice();
   m_Todo->saveTodo();
   ui->frameTodo->hide();
   ui->frameMain->show();
@@ -5994,5 +5994,5 @@ void MainWindow::on_sliderPlayAudio_sliderReleased() {
   QString strPos = QString::number(ui->sliderPlayAudio->value());
   m_Method->seekTo(strPos);
   m_Method->startPlay();
-  m_Todo->tmePlayProgress->start(250);
+  m_Todo->tmePlayProgress->start(m_Todo->nInterval);
 }

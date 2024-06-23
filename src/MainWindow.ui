@@ -3733,7 +3733,9 @@ QSlider::handle:horizontal:disabled {
   background: #eee; 
   border: 1px solid #aaa; 
   border-radius: 4px; 
-}</string>
+}
+
+</string>
              </property>
              <property name="value">
               <number>20</number>

@@ -1038,7 +1038,7 @@ void Todo::reeditText() {
       mw_one->ui->sliderPlayAudio->setValue(0);
       mw_one->ui->sliderPlayAudio->setMaximum(m_Method->getPlayDuration());
       mw_one->ui->sliderPlayAudio->show();
-      tmePlayProgress->start(250);
+      tmePlayProgress->start(nInterval);
       return;
     }
   }

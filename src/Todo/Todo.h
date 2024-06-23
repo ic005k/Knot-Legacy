@@ -23,6 +23,7 @@ class Todo : public QDialog {
   Ui::Todo *ui;
   ~Todo();
 
+  int nInterval = 500;
   QTimer *tmePlayProgress;
   bool isNeedSave = false;
   bool isToday = false;
