@@ -1591,6 +1591,12 @@ public class MyActivity
       MyProgBar.m_MyProgBar.finish();
   }
 
+  public void showTempActivity() {
+    Intent i = new Intent(context, TempActivity.class);
+    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(i);
+  }
+
   public static void playMyText(String text) {
     mytts.playText(text);
   }

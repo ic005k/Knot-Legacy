@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.89";
+QString ver = "1.1.90";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3108,6 +3108,7 @@ QString MainWindow::setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
 void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 
 void MainWindow::on_btnTodo_clicked() {
+  m_Todo->isOpenEnd = false;
   removeFilesWatch();
   isSelf = true;
   m_Notes->m_TextSelector->close();
@@ -3121,6 +3122,7 @@ void MainWindow::on_btnTodo_clicked() {
   m_Todo->refreshAlarm();
   m_Todo->setCurrentIndex(0);
   m_Todo->stopPlayVoice();
+  m_Todo->isOpenEnd = true;
 }
 
 void MainWindow::on_rbFreq_clicked() {
@@ -5968,7 +5970,7 @@ void MainWindow::on_btnPlus_clicked() { m_ReaderSet->on_btnAdd_clicked(); }
 
 void MainWindow::on_btnAddTodo_pressed() {
   m_Todo->isRecordVoice = false;
-  tmeStartRecordAudio->start(1000);
+  tmeStartRecordAudio->start(750);
 }
 
 void MainWindow::on_btnAddTodo_released() {

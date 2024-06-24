@@ -2,7 +2,6 @@
 
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
-#include "ui_ReceiveShare.h"
 
 extern MainWindow* mw_one;
 extern Method* m_Method;
@@ -15,18 +14,9 @@ extern QString getTextEditLineText(QTextEdit* txtEdit, int i);
 extern void TextEditToFile(QTextEdit* txtEdit, QString fileName);
 extern void StringToFile(QString buffers, QString fileName);
 
-ReceiveShare::ReceiveShare(QWidget* parent)
-    : QDialog(parent), ui(new Ui::ReceiveShare) {
-  ui->setupUi(this);
-  installEventFilter(this);
-  setModal(true);
-  ui->lblTip->setWordWrap(true);
-  ui->lblTip->adjustSize();
-  ui->lblTip->setText(tr("Tip: You can paste this data wherever you need it."));
-  mw_one->set_ToolButtonStyle(this);
-}
+ReceiveShare::ReceiveShare(QWidget* parent) : QDialog(parent) {}
 
-ReceiveShare::~ReceiveShare() { delete ui; }
+ReceiveShare::~ReceiveShare() {}
 
 void ReceiveShare::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event)
@@ -113,55 +103,9 @@ void ReceiveShare::setCursorPos(int pos) {
   Reg.setValue("/cpos/" + QFileInfo(currentMDFile).baseName(), pos);
 }
 
-void ReceiveShare::init() {
-  shareType = getShareType();
-
-  if (shareType == "text/plain") {
-    ui->btnAddToTodo->show();
-    ui->btnInsertToNote->show();
-    ui->btnAppendToNote->show();
-    ui->lblTip->show();
-    ui->lblDataType->setText(tr("Data Type : Text"));
-  }
-
-  if (shareType == "image/*") {
-    ui->btnAddToTodo->hide();
-    ui->lblTip->hide();
-    ui->lblDataType->setText(tr("Data Type : Image"));
-  }
-
-  moveTaskToFront();
-
-  int x, y, w, h;
-  x = mw_one->geometry().x();
-  y = mw_one->geometry().y();
-  w = mw_one->width();
-  h = mw_one->height() / 2;
-  setGeometry(x, y, w, h);
-  m_Method->showGrayWindows();
-  show();
-}
-
 void ReceiveShare::Close() {
   m_Method->closeGrayWindows();
   close();
-}
-
-void ReceiveShare::on_btnAddToTodo_clicked() {
-  Close();
-  strReceiveShareData = getShareString();
-  if (mw_one->ui->frameTodo->isHidden()) {
-    closeAllChildWindows();
-    mw_one->on_btnTodo_clicked();
-    mw_one->ui->editTodo->setText(strReceiveShareData);
-    m_Method->Sleep(500);
-    mw_one->on_btnAddTodo_clicked();
-
-  } else {
-    mw_one->ui->editTodo->setText(strReceiveShareData);
-    m_Method->Sleep(500);
-    mw_one->on_btnAddTodo_clicked();
-  }
 }
 
 QString ReceiveShare::addToNote_Java() {
@@ -246,20 +190,18 @@ void ReceiveShare::on_btnAppendToNote_clicked() {
     isInsertToNote = false;
     addToNote(isInsertToNote);
 
-    Close();
     closeAllChildWindows();
-    mw_one->on_btnNotes_clicked();
-    mw_one->on_btnEdit_clicked();
+    mw_one->ui->btnNotes->click();
+    mw_one->ui->btnEdit->click();
   }
 
   if (nMethod == 2) {
     isInsertToNote = false;
     addToNote_Java();
 
-    Close();
     closeAllChildWindows();
-    mw_one->on_btnNotes_clicked();
-    mw_one->on_btnEdit_clicked();
+    mw_one->ui->btnNotes->click();
+    mw_one->ui->btnEdit->click();
   }
 }
 
@@ -268,20 +210,18 @@ void ReceiveShare::on_btnInsertToNote_clicked() {
     isInsertToNote = true;
     addToNote(isInsertToNote);
 
-    Close();
     closeAllChildWindows();
-    mw_one->on_btnNotes_clicked();
-    mw_one->on_btnEdit_clicked();
+    mw_one->ui->btnNotes->click();
+    mw_one->ui->btnEdit->click();
   }
 
   if (nMethod == 2) {
     isInsertToNote = true;
     addToNote_Java();
 
-    Close();
     closeAllChildWindows();
-    mw_one->on_btnNotes_clicked();
-    mw_one->on_btnEdit_clicked();
+    mw_one->ui->btnNotes->click();
+    mw_one->ui->btnEdit->click();
   }
 }
 
@@ -555,16 +495,28 @@ void ReceiveShare::moveTaskToFront() {
 void ReceiveShare::goReceiveShare() {
   QString method = mw_one->m_ReceiveShare->getShareMethod();
   if (method == "todo") {
-    moveTaskToFront();
-    ui->btnAddToTodo->click();
+    m_Method->showTempActivity();
+    // moveTaskToFront();
+    strReceiveShareData = getShareString();
+
+    if (mw_one->ui->frameTodo->isHidden() && mw_one->ui->frameMain->isHidden())
+      closeAllChildWindows();
+
+    if (mw_one->ui->frameTodo->isHidden()) {
+      mw_one->ui->btnTodo->click();
+      while (!mw_one->m_Todo->isOpenEnd)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+      m_Method->Sleep(500);
+    }
+    mw_one->m_Todo->addToList(strReceiveShareData);
   }
 
   if (method == "appendNote") {
-    ui->btnAppendToNote->click();
+    on_btnAppendToNote_clicked();
   }
 
   if (method == "insertNote") {
-    ui->btnInsertToNote->click();
+    on_btnInsertToNote_clicked();
   }
 
   if (method == "freePaste") {

@@ -1098,6 +1098,20 @@ void Method::setAndroidProgressInfo(QString info) {
 #endif
 }
 
+void Method::showTempActivity() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("showTempActivity", "()V");
+#else
+  QJniObject activity = QJniObject::fromString("showTempActivity");
+  activity.callMethod<void>("showTempActivity", "()V");
+#endif
+
+#endif
+}
+
 void Method::showAndroidProgressBar() {
   if (mw_one->initMain) return;
 

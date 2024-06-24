@@ -172,7 +172,6 @@ FORMS += \
     src/AutoUpdate.ui \
     src/CategoryList.ui \
     src/CloudBackup.ui \
-    src/Comm/ReceiveShare.ui \
     src/Comm/ShowMessage.ui \
     src/DateSelector.ui \
     src/MainWindow.ui \
@@ -184,7 +183,6 @@ FORMS += \
     src/Notes/TextSelector.ui \
     src/Preferences.ui \
     src/Reader/PageIndicator.ui \
-    src/Reader/ReaderSet.ui \
     src/Reader/SetReaderText.ui \
     src/Steps/StepsOptions.ui \
     src/SyncInfo.ui \

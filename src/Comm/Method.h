@@ -255,6 +255,7 @@ class Method : public QDialog {
   void seekTo(QString strPos);
   void startPlay();
   void pausePlay();
+  void showTempActivity();
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

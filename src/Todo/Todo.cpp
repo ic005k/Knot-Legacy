@@ -134,8 +134,7 @@ void Todo::init_Todo() {
   refreshAlarm();
 }
 
-void Todo::on_btnAdd_clicked() {
-  QString str = mw_one->ui->editTodo->toPlainText().trimmed();
+void Todo::addToList(QString str) {
   if (str == "") return;
 
   int count = getCount();
@@ -152,11 +151,16 @@ void Todo::on_btnAdd_clicked() {
   insertItem(strTime, 0, str, 0);
 
   setCurrentIndex(0);
-
-  mw_one->ui->editTodo->setText("");
   refreshTableLists();
   isNeedSave = true;
   saveTodo();
+}
+
+void Todo::on_btnAdd_clicked() {
+  QString str = mw_one->ui->editTodo->toPlainText().trimmed();
+  if (str == "") return;
+  addToList(str);
+  mw_one->ui->editTodo->setText("");
 }
 
 int Todo::getEditTextHeight(QTextEdit* edit) {

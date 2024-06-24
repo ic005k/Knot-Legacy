@@ -19,7 +19,6 @@ class ReceiveShare : public QDialog {
   ~ReceiveShare();
   Ui::ReceiveShare *ui;
 
-  void init();
   QString shareType;
   QString strReceiveShareData = "test data...";
 
@@ -54,7 +53,7 @@ class ReceiveShare : public QDialog {
   void closeEvent(QCloseEvent *event) override;
 
  public slots:
-  void on_btnAddToTodo_clicked();
+
   void on_btnInsertToNote_clicked();
   void on_btnAppendToNote_clicked();
 

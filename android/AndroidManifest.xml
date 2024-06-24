@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http:// schemas.android.com/ tools" package="com.x" android:installLocation="auto"
-    android:versionCode="1" android:versionName="1.1.89">
+    android:versionCode="1" android:versionName="1.1.90">
     <!-- The following comment will be replaced upon deployment with default permissions based on
     the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -260,6 +260,10 @@
         </activity>
 
         <activity android:name="com.x.MyProgBar" android:exported="true" android:label="MyProgBar">
+        </activity>
+
+        <activity android:name="com.x.TempActivity" android:exported="true"
+            android:label="TempActivity">
         </activity>
 
         <activity android:name="com.x.MyPDF" android:exported="true" android:label="MyPDF">

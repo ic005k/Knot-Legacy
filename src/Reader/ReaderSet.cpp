@@ -2,7 +2,6 @@
 
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
-#include "ui_ReaderSet.h"
 
 ReaderSet *m_ReaderSet;
 
@@ -16,7 +15,7 @@ extern bool isAndroid;
 
 extern int readerFontWeight;
 
-ReaderSet::ReaderSet(QWidget *parent) : QDialog(parent), ui(new Ui::ReaderSet) {
+ReaderSet::ReaderSet(QWidget *parent) : QDialog(parent) {
   QPalette pal = palette();
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   pal.setColor(QPalette::Background, QColor(10, 10, 10, 200));
@@ -24,8 +23,6 @@ ReaderSet::ReaderSet(QWidget *parent) : QDialog(parent), ui(new Ui::ReaderSet) {
   pal.setColor(QPalette::Window, QColor(10, 10, 10, 200));
 #endif
   setPalette(pal);
-
-  ui->setupUi(this);
 
   setModal(true);
   mw_one->ui->f_CustomColor->hide();
@@ -81,7 +78,7 @@ ReaderSet::ReaderSet(QWidget *parent) : QDialog(parent), ui(new Ui::ReaderSet) {
                                   "rgb(255,0,0);border-radius: 4px;";
 }
 
-ReaderSet::~ReaderSet() { delete ui; }
+ReaderSet::~ReaderSet() {}
 
 void ReaderSet::init() {
   int x, y, w, h;

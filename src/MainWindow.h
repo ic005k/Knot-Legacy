@@ -105,8 +105,6 @@
 #include "ui_NotesList.h"
 #include "ui_PageIndicator.h"
 #include "ui_Preferences.h"
-#include "ui_ReaderSet.h"
-#include "ui_ReceiveShare.h"
 #include "ui_SetReaderText.h"
 #include "ui_ShowMessage.h"
 #include "ui_StepsOptions.h"

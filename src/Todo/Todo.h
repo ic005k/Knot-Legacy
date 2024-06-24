@@ -90,6 +90,7 @@ class Todo : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  public:
+  bool isOpenEnd = false;
   bool isRecordVoice = false;
   QString currentTodoItem;
   void on_SetAlarm();
@@ -134,6 +135,7 @@ class Todo : public QDialog {
   QString getVoiceFile(int row);
 
   void goCurrentTodoItem(QString curItem);
+  void addToList(QString str);
  private slots:
   void on_ShowRecordTime();
 
