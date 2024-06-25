@@ -85,8 +85,6 @@ import android.text.Spanned;
 
 public class TempActivity extends Activity {
 
-    private static Context context;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +102,7 @@ public class TempActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        
+
     }
 
 }

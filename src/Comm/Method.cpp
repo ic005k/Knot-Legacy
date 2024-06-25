@@ -1527,3 +1527,9 @@ void Method::seekTo(QString strPos) {
 
 #endif
 }
+
+void Method::delay_MSec(unsigned int msec) {
+  QEventLoop loop;
+  QTimer::singleShot(msec, &loop, SLOT(quit()));
+  loop.exec();
+}

@@ -90,7 +90,6 @@ class Todo : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  public:
-  bool isOpenEnd = false;
   bool isRecordVoice = false;
   QString currentTodoItem;
   void on_SetAlarm();

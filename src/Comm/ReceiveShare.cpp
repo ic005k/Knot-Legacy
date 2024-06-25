@@ -496,7 +496,7 @@ void ReceiveShare::goReceiveShare() {
   QString method = mw_one->m_ReceiveShare->getShareMethod();
   if (method == "todo") {
     m_Method->showTempActivity();
-    // moveTaskToFront();
+
     strReceiveShareData = getShareString();
 
     if (mw_one->ui->frameTodo->isHidden() && mw_one->ui->frameMain->isHidden())
@@ -504,11 +504,11 @@ void ReceiveShare::goReceiveShare() {
 
     if (mw_one->ui->frameTodo->isHidden()) {
       mw_one->ui->btnTodo->click();
-      while (!mw_one->m_Todo->isOpenEnd)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-      m_Method->Sleep(500);
     }
+
+    m_Method->delay_MSec(500);
     mw_one->m_Todo->addToList(strReceiveShareData);
+    mw_one->m_Todo->isNeedSave = true;
   }
 
   if (method == "appendNote") {
@@ -540,9 +540,9 @@ void ReceiveShare::goReceiveShare() {
       }
     }
 
+    m_Method->showTempActivity();
     closeAllChildWindows();
     mw_one->ui->btnNotes->click();
     mw_one->ui->btnNotesList->click();
-    moveTaskToFront();
   }
 }

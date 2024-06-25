@@ -3108,7 +3108,6 @@ QString MainWindow::setComboBoxQss(QComboBox *txt, int radius, int borderWidth,
 void MainWindow::on_actionFind_triggered() { on_btnFind_clicked(); }
 
 void MainWindow::on_btnTodo_clicked() {
-  m_Todo->isOpenEnd = false;
   removeFilesWatch();
   isSelf = true;
   m_Notes->m_TextSelector->close();
@@ -3122,7 +3121,6 @@ void MainWindow::on_btnTodo_clicked() {
   m_Todo->refreshAlarm();
   m_Todo->setCurrentIndex(0);
   m_Todo->stopPlayVoice();
-  m_Todo->isOpenEnd = true;
 }
 
 void MainWindow::on_rbFreq_clicked() {
