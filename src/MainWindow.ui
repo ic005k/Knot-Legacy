@@ -1299,12 +1299,12 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -1339,12 +1339,12 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -1379,12 +1379,12 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -1419,12 +1419,12 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -1459,12 +1459,180 @@ border-radius: 4px;</string>
             </property>
             <property name="iconSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>22</width>
+              <height>22</height>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonIconOnly</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="btnReport">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/*border:none*/</string>
+            </property>
+            <property name="text">
+             <string>Report</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>:/res/report_l.png</normaloff>:/res/report_l.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonIconOnly</enum>
+            </property>
+            <property name="autoRaise">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="btnChart">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Chart</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>:/res/zoom.png</normaloff>:/res/zoom.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonIconOnly</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="btnFind">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/*border:none*/</string>
+            </property>
+            <property name="text">
+             <string>Find</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../res.qrc">
+              <normaloff>:/res/find_l.png</normaloff>:/res/find_l.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonIconOnly</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="btnRemarks">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border:none</string>
+            </property>
+            <property name="text">
+             <string>Edit</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>:/res/remarks.png</normaloff>:/res/remarks.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>22</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -1765,167 +1933,6 @@ border-radius: 4px;</string>
                </size>
               </property>
              </spacer>
-            </item>
-            <item>
-             <widget class="QToolButton" name="btnReport">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>100</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">/*border:none*/</string>
-              </property>
-              <property name="text">
-               <string>Report</string>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>:/res/report_l.png</normaloff>:/res/report_l.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>22</width>
-                <height>22</height>
-               </size>
-              </property>
-              <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonIconOnly</enum>
-              </property>
-              <property name="autoRaise">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="btnChart">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Chart</string>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>:/res/zoom.png</normaloff>:/res/zoom.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>22</width>
-                <height>22</height>
-               </size>
-              </property>
-              <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonIconOnly</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="btnFind">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>100</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">/*border:none*/</string>
-              </property>
-              <property name="text">
-               <string>Find</string>
-              </property>
-              <property name="icon">
-               <iconset resource="../res.qrc">
-                <normaloff>:/res/find_l.png</normaloff>:/res/find_l.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>22</width>
-                <height>22</height>
-               </size>
-              </property>
-              <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonIconOnly</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="btnRemarks">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">border:none</string>
-              </property>
-              <property name="text">
-               <string>Edit</string>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>:/res/remarks.png</normaloff>:/res/remarks.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>22</width>
-                <height>22</height>
-               </size>
-              </property>
-              <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonIconOnly</enum>
-              </property>
-             </widget>
             </item>
             <item>
              <spacer name="horizontalSpacer_2">

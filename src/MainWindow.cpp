@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.90";
+QString ver = "1.1.91";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3677,6 +3677,8 @@ void MainWindow::init_Theme() {
   axisX2->setLabelsFont(font1);
   axisY2->setLabelsFont(font1);
   axisY2->setTickCount(yScale);
+
+  ui->lblNoteName->setStyleSheet("QLabel{background:yellow;color:black;}");
 }
 
 void MainWindow::init_Instance() {
@@ -3751,6 +3753,7 @@ void MainWindow::init_UIWidget() {
   ui->frameNotesTree->hide();
   ui->qwCata->hide();
   ui->qwBookmark->hide();
+  ui->f_cw->hide();
 
   ui->frameCategory->hide();
   ui->frameSetTab->hide();
@@ -5756,6 +5759,7 @@ void MainWindow::on_btnChart_clicked() {
     ui->rbAmount->show();
     ui->rbFreq->show();
     ui->rbSteps->show();
+    ui->f_cw->show();
 
     ui->btnReport->hide();
     ui->btnFind->hide();
@@ -5768,6 +5772,7 @@ void MainWindow::on_btnChart_clicked() {
     ui->rbSteps->hide();
     ui->btnChartDay->hide();
     ui->btnChartMonth->hide();
+    ui->f_cw->hide();
 
     ui->qwMainDate->show();
     ui->qwMainEvent->show();
