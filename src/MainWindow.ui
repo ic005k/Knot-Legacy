@@ -1253,7 +1253,7 @@ border-radius: 4px;</string>
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+          <enum>QFrame::Plain</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <property name="leftMargin">
@@ -1278,7 +1278,7 @@ border-radius: 4px;</string>
             </property>
             <property name="minimumSize">
              <size>
-              <width>45</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>
@@ -1318,7 +1318,7 @@ border-radius: 4px;</string>
             </property>
             <property name="minimumSize">
              <size>
-              <width>40</width>
+              <width>0</width>
               <height>28</height>
              </size>
             </property>
@@ -1358,7 +1358,7 @@ border-radius: 4px;</string>
             </property>
             <property name="minimumSize">
              <size>
-              <width>40</width>
+              <width>0</width>
               <height>28</height>
              </size>
             </property>
@@ -1398,7 +1398,7 @@ border-radius: 4px;</string>
             </property>
             <property name="minimumSize">
              <size>
-              <width>32</width>
+              <width>0</width>
               <height>28</height>
              </size>
             </property>
@@ -1469,9 +1469,15 @@ border-radius: 4px;</string>
            </widget>
           </item>
           <item>
-           <widget class="Line" name="line">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+           <widget class="QLabel" name="lblSpace">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>|</string>
             </property>
            </widget>
           </item>
