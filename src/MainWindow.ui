@@ -2875,6 +2875,12 @@ QTabBar::scroller {width:0}
         <layout class="QHBoxLayout" name="horizontalLayout_23">
          <item>
           <widget class="QToolButton" name="btnRecentOpen">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -2904,7 +2910,7 @@ QTabBar::scroller {width:0}
             </font>
            </property>
            <property name="text">
-            <string>Notes</string>
+            <string>Note Name</string>
            </property>
            <property name="scaledContents">
             <bool>false</bool>
