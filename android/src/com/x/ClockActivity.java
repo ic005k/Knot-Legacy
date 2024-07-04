@@ -125,9 +125,9 @@ public class ClockActivity
 
     btn_cancel = (Button) findViewById(R.id.btn_cancel);
     if (zh_cn)
-      btn_cancel.setText("返回");
+      btn_cancel.setText("关闭");
     else
-      btn_cancel.setText("Go Back");
+      btn_cancel.setText("Close");
     btn_cancel.setOnClickListener(this);
 
     btn_play_voice = (Button) findViewById(R.id.btn_play_voice);
@@ -265,12 +265,12 @@ public class ClockActivity
     String str3 = array[3];
     String strTodo;
     if (zh_cn)
-      strTodo = "待办事项：";
+      strTodo = "待办事项：\n";
     else
-      strTodo = "Todo: ";
+      strTodo = "Todo: \n";
 
     setContentView(R.layout.activity_clock);
-    bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT);
+    bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT + "\n");
 
     if (isRefreshAlarm) {
       CallJavaNotify_3();
