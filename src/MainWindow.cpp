@@ -3678,7 +3678,7 @@ void MainWindow::init_Theme() {
   axisY2->setLabelsFont(font1);
   axisY2->setTickCount(yScale);
 
-  ui->lblNoteName->setStyleSheet("QLabel{background:yellow;color:black;}");
+  ui->lblNoteName->setStyleSheet("QLabel{background:lightyellow;color:black;}");
 }
 
 void MainWindow::init_Instance() {
