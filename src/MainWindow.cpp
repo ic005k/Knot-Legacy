@@ -3753,7 +3753,6 @@ void MainWindow::init_UIWidget() {
   ui->frameNotesTree->hide();
   ui->qwCata->hide();
   ui->qwBookmark->hide();
-  ui->f_cw->hide();
 
   ui->frameCategory->hide();
   ui->frameSetTab->hide();
@@ -5772,7 +5771,6 @@ void MainWindow::on_btnChart_clicked() {
     ui->rbSteps->hide();
     ui->btnChartDay->hide();
     ui->btnChartMonth->hide();
-    ui->f_cw->hide();
 
     ui->qwMainDate->show();
     ui->qwMainEvent->show();
