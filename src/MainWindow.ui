@@ -2803,13 +2803,13 @@ QTabBar::scroller {width:0}
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>50</height>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>55</height>
+           <height>16777215</height>
           </size>
          </property>
          <property name="frameShape">
@@ -2841,13 +2841,33 @@ QTabBar::scroller {width:0}
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
-             <widget class="QLineEdit" name="editPassword1"/>
+             <widget class="QLineEdit" name="editPassword1">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="editPassword2"/>
+             <widget class="QLineEdit" name="editPassword2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="btnSetKeyOK">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>OK</string>
               </property>

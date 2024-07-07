@@ -135,7 +135,8 @@ class Notes : public QDialog {
   void NewNote();
 
   void refreshQMLVPos(qreal newPos);
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -251,7 +252,7 @@ class Notes : public QDialog {
   int x_left, x_right, y_left, y_right;
 
   int y1;
-
+  QString pdfFileName;
   bool isMouseRelease = false;
   bool isMousePress = false;
   bool isMouseMove = false;

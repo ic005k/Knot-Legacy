@@ -1450,16 +1450,9 @@ bool Notes::selectPDFFormat(QPrinter *printer) {
   settings.setValue(QStringLiteral("Printer/NotePDFExportOrientation"),
                     orientationIndex);
 
-  QString fileName;
 #ifdef Q_OS_ANDROID
-  fileName = "/storage/emulated/0/KnotBak/" + mw_one->ui->lblNoteName->text() +
-             QStringLiteral(".pdf");
-  m_Method->m_widget = new QWidget(this);
-  ShowMessage *msg = new ShowMessage(this);
-  msg->showMsg("PDF",
-               tr("The PDF file is successfully exported.") + "\n\n" + fileName,
-               0);
-
+  pdfFileName = "/storage/emulated/0/KnotBak/" +
+                mw_one->ui->lblNoteName->text() + QStringLiteral(".pdf");
 #else
   QFileDialog dialog(NULL, QStringLiteral("NotePDFExport"));
   dialog.setFileMode(QFileDialog::AnyFile);
@@ -1473,19 +1466,20 @@ bool Notes::selectPDFFormat(QPrinter *printer) {
     return false;
   }
 
-  fileName = dialog.selectedFiles().at(0);
+  pdfFileName = dialog.selectedFiles().at(0);
 #endif
 
-  if (fileName.isEmpty()) {
+  if (pdfFileName.isEmpty()) {
     return false;
   }
 
-  if (QFileInfo(fileName).suffix().isEmpty()) {
+  if (QFileInfo(pdfFileName).suffix().isEmpty()) {
     fileName.append(QLatin1String(".pdf"));
   }
 
   printer->setOutputFormat(QPrinter::PdfFormat);
-  printer->setOutputFileName(fileName);
+  printer->setOutputFileName(pdfFileName);
+
   return true;
 }
 
@@ -1498,6 +1492,23 @@ void Notes::on_btnPDF_clicked() {
 
   if (selectPDFFormat(printer)) {
     doc->print(printer);
+
+    if (isAndroid) {
+      m_Method->m_widget = new QWidget(this);
+      ShowMessage *msg1 = new ShowMessage(this);
+      msg1->ui->btnCancel->setText(tr("No"));
+      msg1->ui->btnOk->setText(tr("Yes"));
+      if (msg1->showMsg("PDF",
+                        tr("The PDF file is successfully exported.") + "\n\n" +
+                            tr("Want to share this PDF file?") + "\n\n" +
+                            pdfFileName,
+                        2)) {
+        if (QFile::exists(pdfFileName)) {
+          mw_one->m_ReceiveShare->shareImage(tr("Share to"), pdfFileName,
+                                             "*/*");
+        }
+      }
+    }
   }
 
   delete printer;

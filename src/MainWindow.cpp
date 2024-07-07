@@ -3344,12 +3344,6 @@ void MainWindow::on_btnNotes_clicked() {
 
   QString strPw = iniNotes->value("/MainNotes/UserKey").toString();
   if (strPw != "") {
-    QByteArray baPw = strPw.toUtf8();
-    for (int i = 0; i < baPw.size(); i++) {
-      baPw[i] = baPw[i] - 66;  // 解密User的密码
-    }
-    strPw = baPw;
-
     bool ok = false;
     QString text;
 
@@ -4729,11 +4723,6 @@ void MainWindow::on_btnSetKeyOK_clicked() {
   if (ui->editPassword1->text().trimmed() ==
       ui->editPassword2->text().trimmed()) {
     QString strPw = ui->editPassword1->text().trimmed();
-    QByteArray baPw = strPw.toUtf8();
-    for (int i = 0; i < baPw.size(); i++) {
-      baPw[i] = baPw[i] + 66;  // 加密User的密码
-    }
-    strPw = baPw;
     iniNotes->setValue("/MainNotes/UserKey", strPw);
 
     m_Method->m_widget = new QWidget(mw_one);

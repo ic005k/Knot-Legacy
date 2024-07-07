@@ -257,7 +257,8 @@ class Method : public QDialog {
   void pausePlay();
   void showTempActivity();
   void delay_MSec(unsigned int msec);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
