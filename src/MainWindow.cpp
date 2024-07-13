@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.91";
+QString ver = "1.1.92";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -851,7 +851,6 @@ void MainWindow::timerUpdate() {
 }
 
 void MainWindow::execDeskShortcut() {
-  m_ReceiveShare->moveTaskToFront();
   m_ReceiveShare->closeAllChildWindows();
   on_ExecShortcut();
 }
