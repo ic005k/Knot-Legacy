@@ -2223,14 +2223,17 @@ void Reader::readBookDone() {
   mw_one->on_DelayCloseProgressBar();
 
   if (!isInitReader) {
+  } else
+    isInitReader = false;
+
+  if (getDefaultOpen()) {
     if (!isPDF) {
       while (!mw_one->ui->btnReader->isEnabled())
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
       mw_one->ui->btnReader->click();
+      setDefaultOpen("none");
     }
-
-  } else
-    isInitReader = false;
+  }
 
   qDebug() << "read book done...";
 }
@@ -2625,6 +2628,15 @@ bool Reader::getDefaultOpen() {
     return true;
   else
     return false;
+}
+
+void Reader::setDefaultOpen(QString value) {
+  QSettings Reg(privateDir + "choice_book.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue("book/type", value);
 }
 
 void Reader::autoRun() {
