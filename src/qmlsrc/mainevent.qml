@@ -306,7 +306,7 @@ Rectangle {
 
                             source: listItem.ListView.isCurrentItem ? "/res/je.svg" : isDark ? "/res/je_l.svg" : "/res/je.svg"
 
-                            visible:  item1.text.length ? true : false
+                            visible: item1.text.length ? true : false
                         }
 
                         Rectangle {
@@ -315,7 +315,7 @@ Rectangle {
                             radius: 5
                             anchors.leftMargin: 1
                             color: "red"
-                            visible:false // item1.text.length ? true : false
+                            visible: false // item1.text.length ? true : false
                         }
 
                         Text {
@@ -359,7 +359,7 @@ Rectangle {
                             sourceSize.width: iconW
                             source: listItem.ListView.isCurrentItem ? "/res/fl.svg" : isDark ? "/res/fl_l.svg" : "/res/fl.svg"
 
-                            visible:  item2.text.length ? true : false
+                            visible: item2.text.length ? true : false
                         }
 
                         Rectangle {
@@ -368,7 +368,7 @@ Rectangle {
                             radius: 5
                             anchors.leftMargin: 1
                             color: "green"
-                            visible:false // item2.text.length ? true : false
+                            visible: false // item2.text.length ? true : false
                         }
 
                         Text {
@@ -411,7 +411,7 @@ Rectangle {
                             sourceSize.width: iconW
                             source: listItem.ListView.isCurrentItem ? "/res/xq.svg" : isDark ? "/res/xq_l.svg" : "/res/xq.svg"
 
-                            visible:  item3.text.length ? true : false
+                            visible: item3.text.length ? true : false
                         }
 
                         Rectangle {
@@ -420,7 +420,7 @@ Rectangle {
                             radius: 5
                             anchors.leftMargin: 1
                             color: "#1E90FF"
-                            visible:false // item3.text.length ? true : false
+                            visible: false // item3.text.length ? true : false
                         }
 
                         Text {
@@ -483,7 +483,7 @@ Rectangle {
 
             SequentialAnimation on opacity {
                 //应用于透明度上的序列动画
-                running: isAniEffects
+                running: true // isAniEffects
                 loops: 1 //Animation.Infinite //无限循环
                 NumberAnimation {
                     from: 0

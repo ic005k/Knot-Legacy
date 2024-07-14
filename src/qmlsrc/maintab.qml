@@ -325,15 +325,10 @@ Rectangle {
 
                 onPressAndHold: {
 
-                    // m_Method.showNotsListMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {
 
-                    // m_Method.okType()
-
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
                 }
             }
 
@@ -420,6 +415,7 @@ Rectangle {
             id: listmain
 
             // debug
+
             /*ListElement {
                 text0: "Tab 1"
             }

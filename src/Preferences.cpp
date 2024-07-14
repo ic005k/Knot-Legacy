@@ -40,6 +40,7 @@ Preferences::Preferences(QWidget* parent)
 
   ui->chkAutoTime->hide();
   ui->chkDebug->hide();
+  ui->chkAniEffects->hide();
 
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;

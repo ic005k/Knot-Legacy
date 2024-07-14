@@ -436,14 +436,10 @@ Rectangle {
 
                 onPressAndHold: {
 
-                    //m_Method.showNoteBookMenu(mouse.x, mouse.y)
                 }
 
                 onDoubleClicked: {
 
-                    //mw_one.reeditData()
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
                 }
             }
 
@@ -510,7 +506,7 @@ Rectangle {
 
             SequentialAnimation on opacity {
                 //应用于透明度上的序列动画
-                running: isAniEffects
+                running: true // isAniEffects
                 loops: 1 //Animation.Infinite //无限循环
                 NumberAnimation {
                     from: 0
