@@ -1078,12 +1078,17 @@ void Todo::reeditText() {
 
   QTextEdit* edit = new QTextEdit(this);
   vbox->addWidget(edit);
+  edit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
   edit->setPlainText(strItem);
-  QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
+
+  if (isAndroid) {
+    QScroller::grabGesture(edit, QScroller::LeftMouseButtonGesture);
+    m_Method->setSCrollPro(edit);
+  }
+
   edit->horizontalScrollBar()->setHidden(true);
   edit->verticalScrollBar()->setStyleSheet(
       mw_one->ui->editDetails->verticalScrollBar()->styleSheet());
-  m_Method->setSCrollPro(edit);
 
   QToolButton* btnCancel = new QToolButton(this);
   QToolButton* btnCopy = new QToolButton(this);
@@ -1105,7 +1110,7 @@ void Todo::reeditText() {
   btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
   QSpacerItem* sparcer_item =
-      new QSpacerItem(0, 60, QSizePolicy::Fixed, QSizePolicy::Expanding);
+      new QSpacerItem(0, 2, QSizePolicy::Fixed, QSizePolicy::Fixed);
   vbox->addItem(sparcer_item);
 
   vbox->addLayout(hbox, 0);
@@ -1144,7 +1149,7 @@ void Todo::reeditText() {
   });
 
   int x, y, w, h;
-  h = mw_one->height() / 3;
+  h = mw_one->height() / 2;
   if (isAndroid) {
     w = mw_one->width() - 2;
     y = mw_one->geometry().y();
