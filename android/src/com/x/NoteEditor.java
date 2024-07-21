@@ -160,7 +160,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     // 用于存储拍照后的图片Uri
     private Uri photoUri;
-    
+
     // 拍照请求码
     private static final int REQUEST_TAKE_PHOTO = 1;
 
@@ -1199,6 +1199,16 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         // Photo Shooting
         if (strTitle.equals(listMenuTitle.get(2))) {
+            if (!MyActivity.checkCamera()) {
+                String strInfo = "";
+                if (zh_cn)
+                    strInfo = "请开启摄像头权限！";
+                else
+                    strInfo = "Please enable camera permissions!";
+                Toast.makeText(this, strInfo, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             isImageFile = false;
             dispatchTakePictureIntent();
             isAddImage = true;
@@ -1430,7 +1440,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         if (zh_cn) {
             listMenuTitle.add("格式化");
             listMenuTitle.add("图片文件");
-            listMenuTitle.add("拍摄图片");
+            listMenuTitle.add("拍摄照片");
             listMenuTitle.add("表格");
             listMenuTitle.add("h1 标题");
             listMenuTitle.add("h2 标题");

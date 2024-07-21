@@ -1198,6 +1198,29 @@ void Method::stopPlayMyText() {
 #endif
 }
 
+int Method::checkRecordAudio() {
+#ifdef Q_OS_ANDROID
+  bool isOk;
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
+  QAndroidJniObject activity =
+      QAndroidJniObject::fromString("checkRecordAudio");
+  isOk = activity.callStaticMethod<int>("com.x/MyActivity", "checkRecordAudio",
+                                        "()I");
+
+#else
+
+  QJniObject activity = QJniObject::fromString("checkRecordAudio");
+  isOk = activity.callStaticMethod<int>("com.x/MyActivity", "checkRecordAudio",
+                                        "()I");
+
+#endif
+  return isOk;
+
+#endif
+}
+
 void Method::startRecord(QString file) {
   Q_UNUSED(file);
 

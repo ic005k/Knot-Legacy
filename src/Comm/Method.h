@@ -258,6 +258,8 @@ class Method : public QDialog {
   void showTempActivity();
   void delay_MSec(unsigned int msec);
 
+  int checkRecordAudio();
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

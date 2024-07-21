@@ -203,6 +203,7 @@ public class MyActivity
 
   private InternalConfigure internalConfigure;
   public static boolean isReadShareData = false;
+  public static boolean zh_cn;
 
   public MyActivity() {
   }
@@ -561,6 +562,8 @@ public class MyActivity
     }
     m_instance = this;
     Log.d(TAG, "Android activity created");
+
+    isZh(m_instance);
 
     // 唤醒锁（手机上不推荐使用，其它插电安卓系统可考虑，比如广告机等）
     // acquireWakeLock();
@@ -1013,10 +1016,34 @@ public class MyActivity
             activity,
             new String[] { "android.permission.CAMERA" },
             2000);
+      } else {
+
       }
 
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  public static boolean checkCamera() {
+    int permissionRecordCamera = ActivityCompat.checkSelfPermission(
+        m_instance,
+        "android.permission.CAMERA");
+    if (permissionRecordCamera != PackageManager.PERMISSION_GRANTED) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  public static int checkRecordAudio() {
+    int permissionRecordCamera = ActivityCompat.checkSelfPermission(
+        m_instance,
+        "android.permission.RECORD_AUDIO");
+    if (permissionRecordCamera != PackageManager.PERMISSION_GRANTED) {
+      return 0;
+    } else {
+      return 1;
     }
   }
 
@@ -1797,6 +1824,17 @@ public class MyActivity
       mActivity.finish();
     }
     alarmWindows.clear();
+  }
+
+  public static boolean isZh(Context context) {
+    Locale locale = context.getResources().getConfiguration().locale;
+    String language = locale.getLanguage();
+    if (language.endsWith("zh"))
+      zh_cn = true;
+    else
+      zh_cn = false;
+
+    return zh_cn;
   }
 
 }
