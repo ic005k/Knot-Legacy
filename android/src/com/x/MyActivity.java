@@ -89,6 +89,7 @@ import androidx.core.app.ActivityCompat;
 //import android.support.v4.content.FileProvider;
 import androidx.core.content.FileProvider;
 import com.x.FilePicker;
+import com.x.MyActivity.FileWatcher;
 import com.x.MyService;
 import com.x.ShareReceiveActivity;
 import com.x.TTSUtils;
@@ -1002,6 +1003,18 @@ public class MyActivity
             new String[] { "android.permission.RECORD_AUDIO" },
             2000);
       }
+
+      // 检查摄像头权限
+      int permissionRecordCamera = ActivityCompat.checkSelfPermission(
+          activity,
+          "android.permission.CAMERA");
+      if (permissionRecordCamera != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(
+            activity,
+            new String[] { "android.permission.CAMERA" },
+            2000);
+      }
+
     } catch (Exception e) {
       e.printStackTrace();
     }

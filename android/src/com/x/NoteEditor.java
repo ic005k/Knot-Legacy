@@ -115,7 +115,7 @@ import android.widget.PopupWindow;
 import android.graphics.drawable.ColorDrawable;
 import java.lang.reflect.Field;
 import android.annotation.SuppressLint;
-
+import androidx.core.content.FileProvider;
 import android.widget.PopupMenu;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
@@ -157,6 +157,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private int start = 0;
     private int end = 0;
     private ArrayList<String> listMenuTitle = new ArrayList<>();
+
+    // 用于存储拍照后的图片Uri
+    private Uri photoUri;
+    
+    // 拍照请求码
+    private static final int REQUEST_TAKE_PHOTO = 1;
+
+    boolean isImageFile = true;
 
     public static Context getContext() {
         return context;
@@ -774,14 +782,20 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == 1) {
-            Uri selectedFileUri = data.getData();
+            Uri selectedFileUri;
+            if (isImageFile) {
+                selectedFileUri = data.getData();
+            } else {
+                String photoPath = photoUri.getPath(); // test
+                selectedFileUri = photoUri;
+            }
+
             String filePath = "/storage/emulated/0/.Knot/receive_share_pic.png";
             readFileFromUriToLocal(selectedFileUri, filePath);
 
             // 处理文件路径
             handleFilePath(filePath);
         }
-
     }
 
     private void handleFilePath(String filePath) {
@@ -1177,13 +1191,21 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         // Image
         if (strTitle.equals(listMenuTitle.get(1))) {
+            isImageFile = true;
             openFilePicker();
             isAddImage = true;
 
         }
 
-        // Table
+        // Photo Shooting
         if (strTitle.equals(listMenuTitle.get(2))) {
+            isImageFile = false;
+            dispatchTakePictureIntent();
+            isAddImage = true;
+        }
+
+        // Table
+        if (strTitle.equals(listMenuTitle.get(3))) {
 
             String str1 = "|Title1|Title2|Title3|\n";
             String str2 = "|------|------|----- |\n";
@@ -1196,7 +1218,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // h1
-        if (strTitle.equals(listMenuTitle.get(3))) {
+        if (strTitle.equals(listMenuTitle.get(4))) {
             String sel = getEditSelectText();
             if (sel.length() > 0) {
                 delEditSelectText();
@@ -1208,7 +1230,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // h2
-        if (strTitle.equals(listMenuTitle.get(4))) {
+        if (strTitle.equals(listMenuTitle.get(5))) {
             String sel = getEditSelectText();
             if (sel.length() > 0) {
                 delEditSelectText();
@@ -1220,7 +1242,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // h3
-        if (strTitle.equals(listMenuTitle.get(5))) {
+        if (strTitle.equals(listMenuTitle.get(6))) {
             String sel = getEditSelectText();
             if (sel.length() > 0) {
                 delEditSelectText();
@@ -1232,7 +1254,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // h4
-        if (strTitle.equals(listMenuTitle.get(6))) {
+        if (strTitle.equals(listMenuTitle.get(7))) {
             String sel = getEditSelectText();
             if (sel.length() > 0) {
                 delEditSelectText();
@@ -1244,7 +1266,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // h5
-        if (strTitle.equals(listMenuTitle.get(7))) {
+        if (strTitle.equals(listMenuTitle.get(8))) {
             String sel = getEditSelectText();
             if (sel.length() > 0) {
                 delEditSelectText();
@@ -1256,7 +1278,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // Font Color
-        if (strTitle.equals(listMenuTitle.get(8))) {
+        if (strTitle.equals(listMenuTitle.get(9))) {
 
             String strChoose = "Choose Color";
             String strOk = "Ok";
@@ -1331,7 +1353,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // Bold
-        if (strTitle.equals(listMenuTitle.get(9))) {
+        if (strTitle.equals(listMenuTitle.get(10))) {
             String sel = getEditSelectText();
             if (sel.length() > 0) {
                 delEditSelectText();
@@ -1343,7 +1365,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // Italic
-        if (strTitle.equals(listMenuTitle.get(10))) {
+        if (strTitle.equals(listMenuTitle.get(11))) {
             String sel = getEditSelectText();
             if (sel.length() > 0) {
                 delEditSelectText();
@@ -1356,7 +1378,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // Strickout
-        if (strTitle.equals(listMenuTitle.get(11))) {
+        if (strTitle.equals(listMenuTitle.get(12))) {
             String sel = getEditSelectText();
             if (sel.length() > 0) {
                 delEditSelectText();
@@ -1368,7 +1390,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // Underline
-        if (strTitle.equals(listMenuTitle.get(12))) {
+        if (strTitle.equals(listMenuTitle.get(13))) {
             String sel = getEditSelectText();
             if (sel.length() > 0) {
                 delEditSelectText();
@@ -1381,7 +1403,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // Date
-        if (strTitle.equals(listMenuTitle.get(13))) {
+        if (strTitle.equals(listMenuTitle.get(14))) {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String dateString = sdf.format(new Date());
@@ -1390,14 +1412,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         // Time
-        if (strTitle.equals(listMenuTitle.get(14))) {
+        if (strTitle.equals(listMenuTitle.get(15))) {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             String timeString = sdf.format(new Date());
             insertNote(timeString);
         }
 
         // Link
-        if (strTitle.equals(listMenuTitle.get(15))) {
+        if (strTitle.equals(listMenuTitle.get(16))) {
             insertNote("[]()");
         }
 
@@ -1407,7 +1429,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         listMenuTitle.clear();
         if (zh_cn) {
             listMenuTitle.add("格式化");
-            listMenuTitle.add("图片");
+            listMenuTitle.add("图片文件");
+            listMenuTitle.add("拍摄图片");
             listMenuTitle.add("表格");
             listMenuTitle.add("h1 标题");
             listMenuTitle.add("h2 标题");
@@ -1424,7 +1447,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             listMenuTitle.add("链接");
         } else {
             listMenuTitle.add("Format");
-            listMenuTitle.add("Image");
+            listMenuTitle.add("Image File");
+            listMenuTitle.add("Photo Shooting");
             listMenuTitle.add("Table");
             listMenuTitle.add("h1");
             listMenuTitle.add("h2");
@@ -1993,6 +2017,42 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             strFore = "#000000";
         }
 
+    }
+
+    // 触发拍照的方法
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // 确保有相机应用可以处理该Intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // 创建临时文件用于存储拍摄的照片
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                // 将临时文件的Uri传递给相机应用程序
+                photoUri = FileProvider.getUriForFile(this,
+                        "com.x",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    // 创建保存照片的临时文件
+    private File createImageFile() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = null;
+        try {
+            image = File.createTempFile(
+                    imageFileName, /* prefix */
+                    ".jpg", /* suffix */
+                    storageDir /* directory */
+            );
+        } catch (IOException e) {
+            // 错误处理
+        }
+        return image;
     }
 
 }
