@@ -12,7 +12,7 @@
         android:title="图片文件" />
 
     <item android:id="@+id/shooting"
-        android:title="拍摄图片" />
+        android:title="拍摄照片" />
 
     <item android:id="@+id/table"
         android:title="表格" />

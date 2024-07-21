@@ -1218,6 +1218,9 @@ int Method::checkRecordAudio() {
 #endif
   return isOk;
 
+#else
+  return false;
+
 #endif
 }
 
