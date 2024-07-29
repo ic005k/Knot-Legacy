@@ -76,7 +76,7 @@ class Preferences : public QDialog {
   int uiFontID = 0;
   QFontDatabase fontDatabase;
   QFontDatabase fontDatabaseUI;
-  int uiFontWeight;
+  QFont::Weight uiFontWeight;
   QString setFontDemoUI(QString customFontPath, QToolButton *btn, int fontSize);
 };
 

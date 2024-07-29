@@ -14,7 +14,7 @@ extern int fontSize;
 extern QSettings* iniPreferences;
 extern ReaderSet* m_ReaderSet;
 
-int readerFontWeight;
+QFont::Weight readerFontWeight;
 
 Preferences::Preferences(QWidget* parent)
     : QDialog(parent), ui(new Ui::Preferences) {
@@ -157,7 +157,7 @@ QString Preferences::setFontDemoUI(QString customFontPath, QToolButton* btn,
 
     QStringList styles = fontDatabaseUI.styles(fontName);
     style = styles.at(0);
-    uiFontWeight = fontDatabaseUI.weight(fontName, style);
+    uiFontWeight = (QFont::Weight)fontDatabaseUI.weight(fontName, style);
 
     f.setWeight(uiFontWeight);
     f.setFamily(fontName);
@@ -199,7 +199,7 @@ QString Preferences::setFontDemo(QString customFontPath, QToolButton* btn,
 
     QStringList styles = fontDatabase.styles(fontName);
     style = styles.at(0);
-    readerFontWeight = fontDatabase.weight(fontName, style);
+    readerFontWeight = (QFont::Weight)fontDatabase.weight(fontName, style);
 
     qDebug() << "readerFontWeight=" << readerFontWeight << loadedFontFamilies
              << loadedFontID << style;

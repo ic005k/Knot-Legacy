@@ -1237,7 +1237,10 @@ void Method::startRecord(QString file) {
 
 #else
   QJniObject jFile = QJniObject::fromString(file);
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   activity.callMethod<void>("startRecord", "(Ljava/lang/String;)V",
                             jFile.object<jstring>());
 
@@ -1256,7 +1259,10 @@ void Method::stopRecord() {
 
 #else
 
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   activity.callMethod<void>("stopRecord", "()V");
 
 #endif
@@ -1277,7 +1283,10 @@ void Method::playRecord(QString file) {
 
 #else
   QJniObject jFile = QJniObject::fromString(file);
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   activity.callMethod<void>("playRecord", "(Ljava/lang/String;)V",
                             jFile.object<jstring>());
 
@@ -1296,7 +1305,10 @@ void Method::startPlay() {
 
 #else
 
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   activity.callMethod<void>("startPlay", "()V");
 
 #endif
@@ -1314,7 +1326,10 @@ void Method::pausePlay() {
 
 #else
 
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   activity.callMethod<void>("pausePlay", "()V");
 
 #endif
@@ -1332,7 +1347,10 @@ void Method::stopPlayRecord() {
 
 #else
 
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   activity.callMethod<void>("stopPlayRecord", "()V");
 
 #endif
@@ -1473,7 +1491,10 @@ double Method::updateMicStatus() {
   QAndroidJniObject jo = QtAndroid::androidActivity();
   a = jo.callMethod<double>("updateMicStatus", "()D");
 #else
-  QJniObject jo = QtAndroid::androidActivity();
+  QJniObject jo =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   a = jo.callMethod<double>("updateMicStatus", "()D");
 #endif
 
@@ -1490,7 +1511,10 @@ int Method::getPlayDuration() {
   QAndroidJniObject jo = QtAndroid::androidActivity();
   a = jo.callMethod<int>("getPlayDuration", "()I");
 #else
-  QJniObject jo = QtAndroid::androidActivity();
+  QJniObject jo =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   a = jo.callMethod<int>("getPlayDuration", "()I");
 #endif
 
@@ -1507,7 +1531,10 @@ int Method::getPlayPosition() {
   QAndroidJniObject jo = QtAndroid::androidActivity();
   a = jo.callMethod<int>("getPlayPosition", "()I");
 #else
-  QJniObject jo = QtAndroid::androidActivity();
+  QJniObject jo =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   a = jo.callMethod<int>("getPlayPosition", "()I");
 #endif
 
@@ -1524,7 +1551,10 @@ bool Method::getPlaying() {
   QAndroidJniObject jo = QtAndroid::androidActivity();
   a = jo.callMethod<int>("isPlaying", "()I");
 #else
-  QJniObject jo = QtAndroid::androidActivity();
+  QJniObject jo =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   a = jo.callMethod<int>("isPlaying", "()I");
 #endif
 
@@ -1545,7 +1575,10 @@ void Method::seekTo(QString strPos) {
 
 #else
   QJniObject jFile = QJniObject::fromString(strPos);
-  QJniObject activity = QtAndroid::androidActivity();
+  QJniObject activity =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
   activity.callMethod<void>("seekTo", "(Ljava/lang/String;)V",
                             jFile.object<jstring>());
 
