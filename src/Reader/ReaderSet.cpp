@@ -13,7 +13,7 @@ extern QSettings *iniPreferences;
 extern QRegularExpression regxNumber;
 extern bool isAndroid;
 
-extern int readerFontWeight;
+extern QFont::Weight readerFontWeight;
 
 ReaderSet::ReaderSet(QWidget *parent) : QDialog(parent) {
   QPalette pal = palette();
