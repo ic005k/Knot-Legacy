@@ -39,6 +39,11 @@ int main(int argc, char* argv[]) {
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGLRhi);
+#endif
+
 #else
     qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
