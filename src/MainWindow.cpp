@@ -659,7 +659,6 @@ void MainWindow::init_ChartWidget() {
   int a1 = -2;
   // Month
   chartMonth = new QChart();
-  ui->qwChartMonth->hide();
   chartview = new QChartView(chartMonth);
   chartview->installEventFilter(this);
   ui->glMonth->addWidget(chartview);
@@ -3438,9 +3437,6 @@ void MainWindow::initQW() {
   ui->qwNotesTree->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/tree_main.qml")));
 
-  ui->qwChartMonth->setSource(
-      QUrl(QStringLiteral("qrc:/src/qmlsrc/chart_month.qml")));
-
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
   ui->qwReader->rootContext()->setContextProperty("m_Reader", m_Reader);
@@ -3565,7 +3561,6 @@ void MainWindow::init_Theme() {
 
   qDebug() << "red=" << red;
 
-  ui->qwChartMonth->rootContext()->setContextProperty("isDark", isDark);
   ui->qwMainTab->rootContext()->setContextProperty("isDark", isDark);
   ui->qwMainDate->rootContext()->setContextProperty("isDark", isDark);
   ui->qwMainEvent->rootContext()->setContextProperty("isDark", isDark);

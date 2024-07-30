@@ -2178,13 +2178,6 @@ QTabBar::scroller {width:0}
                 <property name="spacing">
                  <number>0</number>
                 </property>
-                <item row="0" column="0">
-                 <widget class="QQuickWidget" name="qwChartMonth">
-                  <property name="resizeMode">
-                   <enum>QQuickWidget::SizeRootObjectToView</enum>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </item>
              </layout>
