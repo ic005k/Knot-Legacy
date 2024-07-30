@@ -26,7 +26,7 @@ class AboutThis : public QDialog {
   AutoUpdate *m_AutoUpdate;
   QNetworkAccessManager *manager;
   int parse_UpdateJSON(QString str);
-  bool blAutoCheckUpdate;
+  bool blAutoCheckUpdate = false;
 
   int sliderPos;
 

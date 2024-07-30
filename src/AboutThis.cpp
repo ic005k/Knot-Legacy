@@ -48,8 +48,6 @@ AboutThis::AboutThis(QWidget *parent) : QDialog(parent), ui(new Ui::AboutThis) {
   manager = new QNetworkAccessManager(this);
   connect(manager, SIGNAL(finished(QNetworkReply *)), this,
           SLOT(replyFinished(QNetworkReply *)));
-  blAutoCheckUpdate = true;
-  CheckUpdate();
 }
 
 AboutThis::~AboutThis() { delete ui; }
@@ -99,7 +97,6 @@ void AboutThis::on_btnHomePage_clicked() {
 }
 
 void AboutThis::CheckUpdate() {
-  mw_one->m_Reader->setPdfViewVisible(false);
   QNetworkRequest quest;
   quest.setUrl(QUrl("https://api.github.com/repos/ic005k/" + appName +
                     "/releases/latest"));
