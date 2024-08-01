@@ -464,6 +464,7 @@ void Todo::on_DelAlarm() {
   str = getTimeStr(str);
   if (str != "") str1 = str;
   modifyTime(row, str1);
+  modifyType(row, 0);
   ui->frameSetTime->hide();
   mw_one->m_TodoAlarm->close();
 
