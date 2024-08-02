@@ -23,7 +23,7 @@
 
 3. Camera permissions: Take photos and add them to your notes.
 
-QR code for downloading:
+### QR code for downloading:
 
 ![QR code for downloading](https://github.com/ic005k/Knot/blob/main/res/apk.png)
 
