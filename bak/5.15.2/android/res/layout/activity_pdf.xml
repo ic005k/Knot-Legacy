@@ -19,25 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_button"
-            android:src="@drawable/back_l"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-        />
-
-
-        <ImageButton
-            android:id="@+id/btn_open"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_button"
-            android:src="@drawable/open"
-            android:text="Open"
-            android:textAllCaps="false"
-            android:textColor="#ffffff"
-            android:textSize="13sp"
-            android:layout_alignParentBottom="true"
+            android:src="@drawable/back"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
@@ -45,21 +27,17 @@
         />
 
         <ImageButton
-            android:id="@+id/btn_books"
+            android:id="@+id/btn_dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_button"
-            android:src="@drawable/books"
-            android:text="Books"
-            android:textAllCaps="false"
-            android:textColor="#ffffff"
-            android:textSize="13sp"
-            android:layout_alignParentBottom="true"
+            android:src="@drawable/dark"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
         />
+
 
         <ImageButton
             android:id="@+id/btn_catalogue"
@@ -67,12 +45,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_button"
             android:src="@drawable/cata"
-            android:text="Cata"
-            android:textAllCaps="false"
-            android:textColor="#ffffff"
-            android:textSize="13sp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
@@ -85,17 +57,36 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_button"
             android:src="@drawable/thum"
-            android:text="Thum"
-            android:textAllCaps="false"
-            android:textColor="#ffffff"
-            android:textSize="13sp"
-            android:layout_toLeftOf="@+id/btn_catalogue"
-            android:layout_alignParentBottom="true"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
         />
+
+        <ImageButton
+            android:id="@+id/btn_open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_button"
+            android:src="@drawable/open"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+        />
+
+        <ImageButton
+            android:id="@+id/btn_books"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_button"
+            android:src="@drawable/books"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+        />
+
     </LinearLayout>
 
     <com.github.barteksc.pdfviewer.PDFView

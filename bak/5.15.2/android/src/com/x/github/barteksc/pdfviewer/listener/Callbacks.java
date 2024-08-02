@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 
 import com.github.barteksc.pdfviewer.link.LinkHandler;
 import com.github.barteksc.pdfviewer.model.LinkTapEvent;
+import com.xhh.pdfui.PDFActivity;
 
 public class Callbacks {
 
@@ -155,6 +156,9 @@ public class Callbacks {
     }
 
     public boolean callOnTap(MotionEvent event) {
+
+        PDFActivity.hideOrShowToolBar();
+
         return onTapListener != null && onTapListener.onTap(event);
     }
 

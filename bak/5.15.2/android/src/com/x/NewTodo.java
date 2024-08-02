@@ -115,6 +115,10 @@ public class NewTodo extends Activity {
 
     public native static void CallJavaNotify_12();
 
+    public native static void CallJavaNotify_13();
+
+    public native static void CallJavaNotify_14();
+
     private static boolean zh_cn;
 
     @Override

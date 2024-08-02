@@ -14,7 +14,7 @@ import android.content.Context;
 import android.content.ContentUris;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.provider.MediaStore;
+
 import android.widget.AdapterView;
 import org.apache.http.entity.FileEntity;
 
@@ -45,6 +45,7 @@ import android.appwidget.AppWidgetProvider;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.WindowManager;
 import android.view.Window;
@@ -132,11 +133,12 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
     private ListView m_ListView;
     private TextView lblResult;
     private Button btnFind;
-    private ImageView imgFind;
+    private ImageButton btn_clear;
     private EditText editFind;
     public ProgressBar mProgressBar;
     private String filePath;
     public static FilePicker MyFilepicker;
+    private boolean isDark = false;
 
     public native static void CallJavaNotify_0();
 
@@ -164,6 +166,10 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
 
     public native static void CallJavaNotify_12();
 
+    public native static void CallJavaNotify_13();
+
+    public native static void CallJavaNotify_14();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,19 +177,23 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
         MyFilepicker = this;
         mContentResolver = MyContex.getContentResolver();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if (MyActivity.isDark) {
+        isDark = MyActivity.isDark;
+        if (isDark) {
             this.setStatusBarColor("#19232D"); // 深色
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-            setContentView(R.layout.myfilepicker);
+            setContentView(R.layout.myfilepicker_dark);
         } else {
             this.setStatusBarColor("#F3F3F3"); // 灰
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             setContentView(R.layout.myfilepicker);
         }
 
+        btn_clear = (ImageButton) findViewById(R.id.btn_clear);
+        btn_clear.setOnClickListener(this);
+
         btnFind = (Button) findViewById(R.id.btnFind);
         btnFind.setOnClickListener(this);
-        imgFind = (ImageView) findViewById(R.id.imgFind);
+
         lblResult = (TextView) findViewById(R.id.lblResult);
         editFind = (EditText) findViewById(R.id.editFind);
 
@@ -392,7 +402,7 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
             // 在这里执行完成后的操作
             addToListView(files, filesInfo);
 
-            editFind.clearFocus();// 取消焦点
+            editFind.requestFocus();
             hideKeyBoard(MyFilepicker);
         }
     }
@@ -422,6 +432,12 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
                 btnFind.setBackgroundColor(getResources().getColor(R.color.red));
 
                 btnFind.setBackgroundColor(getResources().getColor(R.color.normal));
+
+                break;
+
+            case R.id.btn_clear:
+                editFind.setText("");
+                editFind.requestFocus();
 
                 break;
 
@@ -494,7 +510,11 @@ public class FilePicker extends Activity implements View.OnClickListener, Applic
             }
         }
 
-        FruitAdapter adapter = new FruitAdapter(MyContex, R.layout.fruit_item, fruitlist);
+        FruitAdapter adapter;
+        if (isDark)
+            adapter = new FruitAdapter(MyContex, R.layout.fruit_item_dark, fruitlist);
+        else
+            adapter = new FruitAdapter(MyContex, R.layout.fruit_item, fruitlist);
         m_ListView.setAdapter(adapter);
 
         mProgressBar.setVisibility(View.GONE);

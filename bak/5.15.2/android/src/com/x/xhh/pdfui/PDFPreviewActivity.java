@@ -1,5 +1,7 @@
 package com.xhh.pdfui;
 
+import com.x.MyActivity;
+import com.x.MyService;
 import com.x.R;
 
 import android.app.Activity;
@@ -16,6 +18,7 @@ import android.view.WindowManager;
 import android.view.Window;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.github.barteksc.pdfviewer.util.FileUtils;
 import com.shockwave.pdfium.PdfDocument;
@@ -44,6 +47,7 @@ public class PDFPreviewActivity extends AppCompatActivity implements GridAdapter
 
     RecyclerView recyclerView;
     Button btn_back;
+    TextView lblTitle;
     PdfiumCore pdfiumCore;
     PdfDocument pdfDocument;
     String assetsFileName;
@@ -95,6 +99,12 @@ public class PDFPreviewActivity extends AppCompatActivity implements GridAdapter
     private void initView() {
         btn_back = findViewById(R.id.btn_back);
         recyclerView = findViewById(R.id.rv_grid);
+
+        lblTitle = findViewById(R.id.lblTitle);
+        if (MyService.zh_cn)
+            lblTitle.setText("缩略图");
+        else
+            lblTitle.setText("Thumbnails");
     }
 
     /**

@@ -1,69 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#F3F3F3"
+  android:orientation="vertical"
+>
+
+
+  <LinearLayout
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#F3F3F3"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:gravity="top"
+    android:orientation="vertical"
+  >
 
+    <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="350dp"
+      android:orientation="vertical"
+      android:scrollbars="vertical"
+      android:fadeScrollbars="true"
+    >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+      <TextView
+        android:id="@+id/text_info"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="top"
-        android:orientation="vertical">
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="23dp"
+      />
 
-        <TextView
-            android:id="@+id/text_info"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="TextView"
-            android:textColor="#000000"
-            android:textSize="23dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/content"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="90dp"
-            android:layout_marginBottom="90dp"
-            android:layout_marginRight="90dp"
-            android:layout_marginLeft="90dp"
-            android:src="@drawable/alarm"
-            />
-
-    </LinearLayout>
+    </ScrollView>
 
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:gravity="bottom"
-        android:orientation="vertical">
+  </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_cancel"
-            android:textAllCaps="false"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="#454CEE"
-            android:textColor="#FFFFFF"
-            android:text="OK"
-            android:textSize="22dp" />
+  <LinearLayout
+    android:id="@+id/content"
+    android:layout_width="fill_parent"
+    android:layout_height="25dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+  >
 
-    </LinearLayout>
+    <ImageView
+      android:id="@+id/imageView"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_marginTop="10dp"
+      android:layout_marginBottom="10dp"
+      android:layout_marginRight="10dp"
+      android:layout_marginLeft="10dp"
+      android:src="@drawable/alarm"
+    />
+  </LinearLayout>
+
+
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="60dp"
+    android:gravity="bottom"
+    android:orientation="horizontal"
+  >
+
+    <Button
+      android:id="@+id/btn_play_voice"
+      android:textAllCaps="false"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_marginBottom="10dp"
+      android:layout_marginRight="10dp"
+      android:layout_marginLeft="10dp"
+      android:background="#3498DB"
+      android:textColor="#FFFFFF"
+      android:text="Play Voice"
+      android:textSize="22dp"
+      android:layout_weight="1"
+    />
+
+    <Button
+      android:id="@+id/btn_cancel"
+      android:textAllCaps="false"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_marginBottom="10dp"
+      android:layout_marginRight="10dp"
+      android:layout_marginLeft="10dp"
+      android:background="#3498DB"
+      android:textColor="#FFFFFF"
+      android:text="OK"
+      android:textSize="22dp"
+      android:layout_weight="1"
+    />
+
+  </LinearLayout>
+
 </LinearLayout>

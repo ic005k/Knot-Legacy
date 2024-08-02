@@ -13,14 +13,17 @@
         android:gravity="top"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/imgFind"
-            android:src="@drawable/find"
+        <ImageButton
+            android:id="@+id/btn_clear"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/shape_blue_button"
             android:layout_gravity="center_vertical"
+            android:src="@drawable/find_l"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+        />
+
 
         <EditText
             android:id="@+id/editFind"
