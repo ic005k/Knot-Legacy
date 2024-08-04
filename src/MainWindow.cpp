@@ -2569,7 +2569,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
         }
 
         setMini();
-        m_Preferences->autoBakData();
 
         return true;
       }
@@ -4266,9 +4265,9 @@ static void JavaNotify_0() {
 }
 
 static void JavaNotify_1() {
-  mw_one->m_Preferences->autoBakData();
+  // Press the Home button
 
-  // qDebug() << "C++ JavaNotify_1";
+  qDebug() << "C++ JavaNotify_1";
 }
 
 static void JavaNotify_2() {
