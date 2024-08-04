@@ -4206,6 +4206,15 @@ void MainWindow::on_actionBakFileList() {
   QStringList bakFileList = m_Preferences->getBakFilesList();
   int bakCount = bakFileList.count();
 
+  if (bakCount > 15) {
+    QString str = bakFileList.at(0);
+    QString fn = str.split("-===-").at(1);
+    QFile file(fn);
+    file.remove();
+    bakFileList.removeAt(0);
+    bakCount = bakFileList.count();
+  }
+
   for (int i = 0; i < bakCount; i++) {
     QString action, bakfile;
     QString str = bakFileList.at(bakCount - 1 - i);
