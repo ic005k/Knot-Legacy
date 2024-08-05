@@ -4206,11 +4206,14 @@ void MainWindow::on_actionBakFileList() {
   int bakCount = bakFileList.count();
 
   if (bakCount > 15) {
-    QString str = bakFileList.at(0);
-    QString fn = str.split("-===-").at(1);
-    QFile file(fn);
-    file.remove();
-    bakFileList.removeAt(0);
+    int count_a = bakCount - 15;
+    for (int j = 0; j < count_a; j++) {
+      QString str = bakFileList.at(0);
+      QString fn = str.split("-===-").at(1);
+      QFile file(fn);
+      file.remove();
+      bakFileList.removeAt(0);
+    }
     bakCount = bakFileList.count();
   }
 
