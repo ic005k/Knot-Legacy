@@ -92,16 +92,15 @@ void MainWindow::bakDataDone() {
     m_CloudBackup->uploadData();
   } else {
     if (QFile(infoStr).exists()) {
-      m_Method->m_widget = new QWidget(mw_one);
-      ShowMessage *m_ShowMsg = new ShowMessage(this);
-      m_ShowMsg->showMsg(
-          "Knot", tr("The data was exported successfully.") + +"\n\n" + infoStr,
-          1);
-
       m_Preferences->appendBakFile(
           QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss") + "\n" +
               tr("Manual Backup") + "\n" + strLatestModify,
           infoStr);
+
+      ShowMessage *m_ShowMsg = new ShowMessage(this);
+      m_ShowMsg->showMsg(
+          "Knot", tr("The data was exported successfully.") + +"\n\n" + infoStr,
+          1);
     }
   }
 
