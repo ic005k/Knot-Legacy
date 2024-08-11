@@ -6753,7 +6753,7 @@ selection-background-color: lightblue;
             </property>
             <property name="font">
              <font>
-              <pointsize>30</pointsize>
+              <pointsize>25</pointsize>
               <bold>true</bold>
              </font>
             </property>

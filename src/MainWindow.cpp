@@ -6015,8 +6015,7 @@ void MainWindow::on_btnMove_clicked() {
     ui->editCategory->setText(strCategory);
     ui->editDetails->setText(strDetails);
     ui->editAmount->setText(strAmount);
-    ui->lblTime->setText(strTime.split(".").at(1));
 
-    ui->btnOkEditRecord->click();
+    on_btnOkEditRecord_clicked();
   }
 }
