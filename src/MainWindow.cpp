@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.97";
+QString ver = "1.1.98";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -1075,8 +1075,8 @@ int MainWindow::calcStringPixelHeight(QFont font, int n_font_size) {
   return fm.height();
 }
 
-void MainWindow::del_Data(QTreeWidget *tw) {
-  if (tw->topLevelItemCount() == 0) return;
+bool MainWindow::del_Data(QTreeWidget *tw) {
+  if (tw->topLevelItemCount() == 0) return false;
 
   bool isNo = true;
   strDate = QDate::currentDate().toString("ddd MM dd yyyy");
@@ -1089,20 +1089,22 @@ void MainWindow::del_Data(QTreeWidget *tw) {
       int childCount = topItem->childCount();
       if (childCount > 0) {
         QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-        QString str1 =
-            tr("Time") + " : " + topItem->child(childCount - 1)->text(0) +
-            "\n" + tr("Amount") + " : " +
-            topItem->child(childCount - 1)->text(1) + "\n" + tr("Category") +
-            " : " + topItem->child(childCount - 1)->text(2) + "\n";
+        strTime = topItem->child(childCount - 1)->text(0);
+        strAmount = topItem->child(childCount - 1)->text(1);
+        strCategory = topItem->child(childCount - 1)->text(2);
+        strDetails = topItem->child(childCount - 1)->text(3);
+        QString str1 = tr("Time") + " : " + strTime + "\n" + tr("Amount") +
+                       " : " + strAmount + "\n" + tr("Category") + " : " +
+                       strCategory + "\n" + tr("Details") + " : " + strDetails +
+                       "\n";
 
-        m_Method->m_widget = new QWidget(mw_one);
         ShowMessage *m_ShowMsg = new ShowMessage(this);
         if (!m_ShowMsg->showMsg(
                 str,
                 tr("The last record added today will be deleted!") + "\n\n" +
                     str1,
                 2))
-          return;
+          return false;
 
         isNeedAutoBackup = true;
         strLatestModify = tr("Del Item") + " ( " + getTabText() + " ) ";
@@ -1116,10 +1118,10 @@ void MainWindow::del_Data(QTreeWidget *tw) {
           QString str = topItem->child(m)->text(1);
           amount = amount + str.toDouble();
         }
-        QString strAmount = QString("%1").arg(amount, 0, 'f', 2);
-        if (strAmount == "0.00") strAmount = "";
+        QString str_amount = QString("%1").arg(amount, 0, 'f', 2);
+        if (str_amount == "0.00") str_amount = "";
         topItem->setText(1, QString::number(childCount - 1));
-        topItem->setText(2, strAmount);
+        topItem->setText(2, str_amount);
 
         if (topItem->childCount() == 0)
           tw->takeTopLevelItem(tw->topLevelItemCount() - 1);
@@ -1135,11 +1137,10 @@ void MainWindow::del_Data(QTreeWidget *tw) {
   if (isNo) {
     QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
 
-    m_Method->m_widget = new QWidget(mw_one);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg(
         str, tr("Only the reduction of the day's records is allowed."), 1);
-    return;
+    return false;
   }
 
   int topCount = tw->topLevelItemCount();
@@ -1150,6 +1151,7 @@ void MainWindow::del_Data(QTreeWidget *tw) {
 
   del = true;
   startSave("tab");
+  return true;
 }
 
 void MainWindow::on_AddRecord() {
@@ -2120,16 +2122,17 @@ void MainWindow::sort_childItem(QTreeWidgetItem *item) {
   int childCount = item->parent()->childCount();
 
   for (int i = 0; i < childCount; i++) {
-    QString txt = item->parent()->child(i)->text(0);
-    QStringList list0 = txt.split(".");
+    QString txt0 = item->parent()->child(i)->text(0);
+    QStringList list0 = txt0.split(".");
     if (list0.count() == 2) {
-      txt = list0.at(1);
-      txt = txt.trimmed();
+      txt0 = list0.at(1);
+      txt0 = txt0.trimmed();
     }
     QString txt1 = item->parent()->child(i)->text(1);
     QString txt2 = item->parent()->child(i)->text(2);
-    keys.append(txt + "|" + txt1 + "|" + txt2);
-    keyTime.append(txt);
+    QString txt3 = item->parent()->child(i)->text(3);
+    keys.append(txt0 + "|===|" + txt1 + "|===|" + txt2 + "|===|" + txt3);
+    keyTime.append(txt0);
   }
 
   std::sort(keyTime.begin(), keyTime.end(),
@@ -2139,7 +2142,7 @@ void MainWindow::sort_childItem(QTreeWidgetItem *item) {
     QString time = keyTime.at(i);
     for (int n = 0; n < keys.count(); n++) {
       QString str1 = keys.at(n);
-      QStringList l0 = str1.split("|");
+      QStringList l0 = str1.split("|===|");
       if (time == l0.at(0)) {
         keysNew.append(str1);
         break;
@@ -2151,8 +2154,8 @@ void MainWindow::sort_childItem(QTreeWidgetItem *item) {
     QTreeWidgetItem *childItem = item->parent()->child(i);
     QString str = keysNew.at(i);
     list.clear();
-    list = str.split("|");
-    if (list.count() == 3) {
+    list = str.split("|===|");
+    if (list.count() == 4) {
       int number = i + 1;
       QString strChildCount = QString::number(childCount);
       QString strNum;
@@ -2161,6 +2164,7 @@ void MainWindow::sort_childItem(QTreeWidgetItem *item) {
       childItem->setText(0, strNum + ". " + list.at(0).trimmed());
       childItem->setText(1, list.at(1).trimmed());
       childItem->setText(2, list.at(2).trimmed());
+      childItem->setText(3, list.at(3).trimmed());
     }
   }
 }
@@ -3595,6 +3599,7 @@ void MainWindow::init_Theme() {
     ui->btnClear->setIcon(QIcon(":/res/clear.png"));
 
     ui->btnRemarks->setIcon(QIcon(":/res/edit.svg"));
+    ui->btnMove->setIcon(QIcon(":/res/move.svg"));
 
     ui->btnReader->setIcon(QIcon(":/res/reader.svg"));
     ui->btnTodo->setIcon(QIcon(":/res/todo.svg"));
@@ -3625,6 +3630,7 @@ void MainWindow::init_Theme() {
     ui->btnReport->setIcon(QIcon(":/res/report_l.svg"));
     ui->btnFind->setIcon(QIcon(":/res/find_l.png"));
     ui->btnRemarks->setIcon(QIcon(":/res/edit_l.svg"));
+    ui->btnMove->setIcon(QIcon(":/res/move_l.svg"));
 
     ui->btnReader->setIcon(QIcon(":/res/reader_l.svg"));
     ui->btnTodo->setIcon(QIcon(":/res/todo_l.png"));
@@ -3889,6 +3895,7 @@ void MainWindow::init_UIWidget() {
   ui->btnReport->setFont(f);
   ui->btnFind->setFont(f);
   ui->btnRemarks->setFont(f);
+  ui->btnMove->setFont(f);
 
   QString lblStyle = ui->lblTitleEditRecord->styleSheet();
   ui->lblTotal->setStyleSheet(lblStyle);
@@ -3902,6 +3909,7 @@ void MainWindow::init_ButtonStyle() {
   set_ToolButtonStyle(this);
   ui->btnMenu->setStyleSheet("border:none");
   ui->btnRemarks->setStyleSheet("border:none");
+  ui->btnMove->setStyleSheet("border:none");
   ui->btnPause->setStyleSheet("border:none");
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
@@ -4981,8 +4989,6 @@ void MainWindow::on_btnAdd_clicked() {
 }
 
 void MainWindow::on_btnDel_clicked() {
-  m_Reader->setPdfViewVisible(false);
-
   del_Data((QTreeWidget *)ui->tabWidget->currentWidget());
 }
 
@@ -5995,4 +6001,22 @@ void MainWindow::on_sliderPlayAudio_sliderReleased() {
   m_Method->seekTo(strPos);
   m_Method->startPlay();
   m_Todo->tmePlayProgress->start(m_Todo->nInterval);
+}
+
+void MainWindow::on_btnMove_clicked() {
+  if (del_Data((QTreeWidget *)ui->tabWidget->currentWidget())) {
+    ui->btnTabMoveDown->hide();
+    ui->btnTabMoveUp->hide();
+    on_btnSelTab_clicked();
+
+    while (ui->frameEditRecord->isHidden())
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
+    ui->editCategory->setText(strCategory);
+    ui->editDetails->setText(strDetails);
+    ui->editAmount->setText(strAmount);
+    ui->lblTime->setText(strTime.split(".").at(1));
+
+    ui->btnOkEditRecord->click();
+  }
 }

@@ -159,5 +159,7 @@
         <file>res/coin_l.svg</file>
         <file>res/count_l.svg</file>
         <file>res/count.svg</file>
+        <file>res/move.svg</file>
+        <file>res/move_l.svg</file>
     </qresource>
 </RCC>

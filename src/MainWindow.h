@@ -267,7 +267,7 @@ class MainWindow : public QMainWindow {
   void init_TotalData();
   void modify_Data();
   void add_Data(QTreeWidget *, QString, QString, QString);
-  void del_Data(QTreeWidget *);
+  bool del_Data(QTreeWidget *);
   static QTreeWidget *get_tw(int tabIndex);
 
   void sort_childItem(QTreeWidgetItem *);
@@ -795,6 +795,8 @@ class MainWindow : public QMainWindow {
 
   void on_sliderPlayAudio_sliderReleased();
 
+  void on_btnMove_clicked();
+
  private:
   QTimer *tmeFlash;
   int nFlashCount = 0;
@@ -832,6 +834,7 @@ class MainWindow : public QMainWindow {
   void getMainTabs();
   QObjectList getAllPushButton(QObjectList lstUIControls);
   void init_ButtonStyle();
+  QString strTime, strAmount, strCategory, strDetails;
 };
 
 class SaveThread : public QThread {
