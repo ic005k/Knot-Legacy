@@ -1101,8 +1101,7 @@ bool MainWindow::del_Data(QTreeWidget *tw) {
         ShowMessage *m_ShowMsg = new ShowMessage(this);
         if (!m_ShowMsg->showMsg(
                 str,
-                tr("The last record added today will be deleted!") + "\n\n" +
-                    str1,
+                tr("The last record will be deleted or moved.") + "\n\n" + str1,
                 2))
           return false;
 
@@ -1139,7 +1138,7 @@ bool MainWindow::del_Data(QTreeWidget *tw) {
 
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg(
-        str, tr("Only the reduction of the day's records is allowed."), 1);
+        str, tr("Only the current day's records can be deleted or moved."), 1);
     return false;
   }
 
