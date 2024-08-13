@@ -1786,11 +1786,6 @@ border-radius: 4px;</string>
                 <height>100</height>
                </size>
               </property>
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
               <property name="styleSheet">
                <string notr="true">/*border:none*/</string>
               </property>
@@ -1861,20 +1856,11 @@ border-radius: 4px;</string>
                 <height>100</height>
                </size>
               </property>
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
               <property name="styleSheet">
                <string notr="true">/*border:none*/</string>
               </property>
               <property name="text">
                <string>Find</string>
-              </property>
-              <property name="icon">
-               <iconset resource="../res.qrc">
-                <normaloff>:/res/find_l.png</normaloff>:/res/find_l.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -1888,7 +1874,7 @@ border-radius: 4px;</string>
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="btnRemarks">
+             <widget class="QToolButton" name="btnModifyRecord">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1901,16 +1887,11 @@ border-radius: 4px;</string>
                 <height>0</height>
                </size>
               </property>
-              <property name="font">
-               <font>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
               <property name="styleSheet">
                <string notr="true">border:none</string>
               </property>
               <property name="text">
-               <string>Edit</string>
+               <string>Modify</string>
               </property>
               <property name="icon">
                <iconset>

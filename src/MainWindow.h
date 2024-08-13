@@ -397,7 +397,7 @@ class MainWindow : public QMainWindow {
 
   void on_tabWidget_currentChanged(int index);
 
-  void on_btnRemarks_clicked();
+  void on_btnModifyRecord_clicked();
 
   void on_actionExport_Data_triggered();
 

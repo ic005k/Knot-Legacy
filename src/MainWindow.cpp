@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.1.98";
+QString ver = "1.1.99";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -2249,7 +2249,7 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   m_scatterSeries2_1->clear();
 
   isTabChanged = true;
-  // clickData();
+
   m_Method->clickMainDateData();
 }
 
@@ -2264,7 +2264,7 @@ void MainWindow::saveRemarks(int tabIndex) {
   Reg.setValue("/" + name + "/Note", tabData->tabToolTip(tabIndex));
 }
 
-void MainWindow::on_btnRemarks_clicked() {
+void MainWindow::on_btnModifyRecord_clicked() {
   m_Notes->m_TextSelector->close();
   m_Notes->m_TextSelector = new TextSelector(mw_one);
 
@@ -3597,7 +3597,7 @@ void MainWindow::init_Theme() {
     ui->btnAddTodo->setIcon(QIcon(":/res/plus_l.svg"));
     ui->btnClear->setIcon(QIcon(":/res/clear.png"));
 
-    ui->btnRemarks->setIcon(QIcon(":/res/edit.svg"));
+    ui->btnModifyRecord->setIcon(QIcon(":/res/edit.svg"));
     ui->btnMove->setIcon(QIcon(":/res/move.svg"));
 
     ui->btnReader->setIcon(QIcon(":/res/reader.svg"));
@@ -3628,7 +3628,7 @@ void MainWindow::init_Theme() {
 
     ui->btnReport->setIcon(QIcon(":/res/report_l.svg"));
     ui->btnFind->setIcon(QIcon(":/res/find_l.png"));
-    ui->btnRemarks->setIcon(QIcon(":/res/edit_l.svg"));
+    ui->btnModifyRecord->setIcon(QIcon(":/res/edit_l.svg"));
     ui->btnMove->setIcon(QIcon(":/res/move_l.svg"));
 
     ui->btnReader->setIcon(QIcon(":/res/reader_l.svg"));
@@ -3893,7 +3893,7 @@ void MainWindow::init_UIWidget() {
   ui->btnPause->setFont(f);
   ui->btnReport->setFont(f);
   ui->btnFind->setFont(f);
-  ui->btnRemarks->setFont(f);
+  ui->btnModifyRecord->setFont(f);
   ui->btnMove->setFont(f);
 
   QString lblStyle = ui->lblTitleEditRecord->styleSheet();
@@ -3907,7 +3907,7 @@ void MainWindow::init_UIWidget() {
 void MainWindow::init_ButtonStyle() {
   set_ToolButtonStyle(this);
   ui->btnMenu->setStyleSheet("border:none");
-  ui->btnRemarks->setStyleSheet("border:none");
+  ui->btnModifyRecord->setStyleSheet("border:none");
   ui->btnMove->setStyleSheet("border:none");
   ui->btnPause->setStyleSheet("border:none");
   ui->btnTodo->setStyleSheet("border:none");
@@ -5760,7 +5760,8 @@ void MainWindow::on_btnChart_clicked() {
 
     ui->btnReport->hide();
     ui->btnFind->hide();
-    ui->btnRemarks->hide();
+    ui->btnModifyRecord->hide();
+    ui->btnMove->hide();
   } else {
     ui->f_charts->setMaximumHeight(0);
     ui->f_charts->hide();
@@ -5774,7 +5775,8 @@ void MainWindow::on_btnChart_clicked() {
     ui->qwMainEvent->show();
     ui->btnReport->show();
     ui->btnFind->show();
-    ui->btnRemarks->show();
+    ui->btnModifyRecord->show();
+    ui->btnMove->show();
   }
 }
 

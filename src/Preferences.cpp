@@ -285,7 +285,7 @@ void Preferences::initOptions() {
     mw_one->ui->btnAdd->hide();
     mw_one->ui->btnDel->hide();
     mw_one->ui->btnFind->hide();
-    mw_one->ui->btnRemarks->hide();
+    mw_one->ui->btnModifyRecord->hide();
     mw_one->ui->btnReport->hide();
     mw_one->ui->f_cw->hide();
     mw_one->ui->qwMainTab->hide();
