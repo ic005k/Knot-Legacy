@@ -34,6 +34,8 @@ AboutThis::AboutThis(QWidget *parent) : QDialog(parent), ui(new Ui::AboutThis) {
   this->installEventFilter(this);
   ui->lblLogo->installEventFilter(this);
 
+  ui->btnDownloadUP->setEnabled(false);
+
   ui->lblAbout->adjustSize();
   ui->lblAbout->setWordWrap(true);
   ui->lblLogo->adjustSize();
@@ -238,7 +240,10 @@ void AboutThis::show_download() {
   }
 }
 
-void AboutThis::on_btnCheckUpdate_clicked() { CheckUpdate(); }
+void AboutThis::on_btnCheckUpdate_clicked() {
+  CheckUpdate();
+  ui->btnDownloadUP->setEnabled(true);
+}
 
 void AboutThis::on_btnDownloadUP_clicked() {
   mw_one->m_Reader->setPdfViewVisible(false);
