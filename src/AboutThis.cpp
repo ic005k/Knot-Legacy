@@ -34,7 +34,7 @@ AboutThis::AboutThis(QWidget *parent) : QDialog(parent), ui(new Ui::AboutThis) {
   this->installEventFilter(this);
   ui->lblLogo->installEventFilter(this);
 
-  ui->btnDownloadUP->setEnabled(false);
+  ui->btnDownloadUP->hide();
 
   ui->lblAbout->adjustSize();
   ui->lblAbout->setWordWrap(true);
@@ -176,6 +176,7 @@ int AboutThis::parse_UpdateJSON(QString str) {
       s_link = Url;
 
     qDebug() << "s_link = " << s_link << Url;
+    ui->btnDownloadUP->show();
 
     QString Verison = root_Obj.value("tag_name").toString();
     QString UpdateTime = root_Obj.value("published_at").toString();
@@ -240,10 +241,7 @@ void AboutThis::show_download() {
   }
 }
 
-void AboutThis::on_btnCheckUpdate_clicked() {
-  CheckUpdate();
-  ui->btnDownloadUP->setEnabled(true);
-}
+void AboutThis::on_btnCheckUpdate_clicked() { CheckUpdate(); }
 
 void AboutThis::on_btnDownloadUP_clicked() {
   mw_one->m_Reader->setPdfViewVisible(false);
