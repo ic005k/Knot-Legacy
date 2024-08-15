@@ -13,15 +13,33 @@
 * Notes(Markdown)
 * Data export and import
 * Backup data to OneDrive
-* **Clients(Win,Mac,Linux) can use [Syncthing](https://github.com/syncthing/syncthing) to seamlessly synchronize data.(KnotData folder)**
-
-### Android's instructions on applying for permission:
-
-1. Storage permission: Save data.
-
-2. Microphone permission: Voice memo in Todo. (In the Todo interface, long press the "Add" button to start voice recording)
-
+* **Clients(Win,Mac,Linux) can use [Syncthing](https://github.com/syncthing/syncthing) to seamlessly synchronize data.(KnotData folder)**
+
+
+
+### Android's instructions on applying for permission:
+
+
+
+1. Storage permission: Save data.
+
+
+
+2. Microphone permission: Voice memo in Todo. (In the Todo interface, long press the "Add" button to start voice recording)
+
+
+
 3. Camera permissions: Take photos and add them to your notes.
+
+
+### How to make Todo's scheduled tasks reminded in real time?
+
+
+1. Open "App Startup Management" in Android Settings.
+
+
+2. Set Knot to Allow Background activities.
+
 
 ### QR code for downloading:
 
