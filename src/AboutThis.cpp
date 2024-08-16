@@ -35,6 +35,7 @@ AboutThis::AboutThis(QWidget *parent) : QDialog(parent), ui(new Ui::AboutThis) {
   ui->lblLogo->installEventFilter(this);
 
   ui->btnDownloadUP->hide();
+  ui->lblTip->hide();
 
   ui->lblAbout->adjustSize();
   ui->lblAbout->setWordWrap(true);
@@ -64,6 +65,7 @@ bool AboutThis::eventFilter(QObject *obj, QEvent *evn) {
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);
   if (obj == ui->lblLogo) {
     if (event->type() == QEvent::MouseButtonDblClick) {
+      if (s_link == "") return true;
       QClipboard *pClip = QApplication::clipboard();
       pClip->setText(s_link);
       ShowMessage *msg = new ShowMessage(this);
@@ -177,6 +179,7 @@ int AboutThis::parse_UpdateJSON(QString str) {
 
     qDebug() << "s_link = " << s_link << Url;
     ui->btnDownloadUP->show();
+    ui->lblTip->show();
 
     QString Verison = root_Obj.value("tag_name").toString();
     QString UpdateTime = root_Obj.value("published_at").toString();
