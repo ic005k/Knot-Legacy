@@ -798,6 +798,7 @@ class MainWindow : public QMainWindow {
   void on_btnMove_clicked();
 
  private:
+  bool isMoveEntry;
   QTimer *tmeFlash;
   int nFlashCount = 0;
   QString keyType;
