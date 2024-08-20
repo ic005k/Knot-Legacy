@@ -60,7 +60,7 @@ public class ClockActivity
 
   private Button btn_cancel;
   private Button btn_play_voice;
-  private TextView text_info;
+  private TextView text_info, text_title;
   private static boolean zh_cn;
   private String voiceFile;
 
@@ -119,7 +119,10 @@ public class ClockActivity
     return 1;
   }
 
-  private void bindViews(String str) {
+  private void bindViews(String strTitle, String str) {
+    text_title = (TextView) findViewById(R.id.text_title);
+    text_title.setText(strTitle);
+
     text_info = (TextView) findViewById(R.id.text_info);
     text_info.setText(str);
 
@@ -270,7 +273,7 @@ public class ClockActivity
       strTodo = "Todo: \n";
 
     setContentView(R.layout.activity_clock);
-    bindViews(str1 + "\n\n" + strTodo + str2 + "\n\n\n" + strCurDT + "\n");
+    bindViews(str1, str2 + "\n\n\n" + strCurDT + "\n");
 
     if (isRefreshAlarm) {
       CallJavaNotify_3();

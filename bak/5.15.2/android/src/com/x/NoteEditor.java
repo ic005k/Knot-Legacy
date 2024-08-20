@@ -117,6 +117,7 @@ import java.lang.reflect.Field;
 import android.annotation.SuppressLint;
 import androidx.core.content.FileProvider;
 import android.widget.PopupMenu;
+import android.widget.ImageButton;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -136,6 +137,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private Button btnFind;
     private Button btnPrev;
     private Button btnNext;
+    private ImageButton btnStartFind;
 
     public static LineNumberedEditText editNote;
     public static EditText editFind;
@@ -248,6 +250,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         lblResult.setText("0");
         btnPrev = (Button) findViewById(R.id.btnPrev);
         btnNext = (Button) findViewById(R.id.btnNext);
+        btnStartFind = (ImageButton) findViewById(R.id.btnStartFind);
 
         if (zh_cn) {
             btn_cancel.setText("关闭");
@@ -273,6 +276,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         editFind.setVisibility(View.GONE);
         btnPrev.setVisibility(View.GONE);
         btnNext.setVisibility(View.GONE);
+        btnStartFind.setVisibility(View.GONE);
         lblResult.setVisibility(View.GONE);
 
         btn_cancel.setOnClickListener(this);
@@ -283,6 +287,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         btnFind.setOnClickListener(this);
         btnPrev.setOnClickListener(this);
         btnNext.setOnClickListener(this);
+        btnStartFind.setOnClickListener(this);
 
     }
 
@@ -332,12 +337,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     editFind.setVisibility(View.GONE);
                     btnPrev.setVisibility(View.GONE);
                     btnNext.setVisibility(View.GONE);
+                    btnStartFind.setVisibility(View.GONE);
                     lblResult.setVisibility(View.GONE);
 
                 } else {
                     editFind.setVisibility(View.VISIBLE);
                     btnPrev.setVisibility(View.VISIBLE);
                     btnNext.setVisibility(View.VISIBLE);
+                    btnStartFind.setVisibility(View.VISIBLE);
                     lblResult.setVisibility(View.VISIBLE);
                     editFind.requestFocus();
                 }
@@ -372,6 +379,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 }
 
                 btnNext.setBackgroundColor(getResources().getColor(R.color.normal));
+
+                break;
+
+            case R.id.btnStartFind:
+                btnStartFind.setBackgroundColor(getResources().getColor(R.color.red));
+                on_editFindTextChanged();
+                btnStartFind.setBackgroundColor(getResources().getColor(R.color.normal));
 
                 break;
         }
@@ -1000,23 +1014,27 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             @Override
             public void afterTextChanged(Editable editable) {
-                arrayFindResult.clear();
-
-                String desString = editNote.getText().toString();
-                String str = editFind.getText().toString();
-                System.out.println("afterTextChanged=" + str);
-                if (str.length() > 0) {
-
-                    arrayFindResult = findStr(desString, str);
-
-                    if (arrayFindResult.size() > 0) {
-                        goFindResult(0);
-                    }
-                }
-
-                lblResult.setText(String.valueOf(arrayFindResult.size()));
+                on_editFindTextChanged();
             }
         });
+    }
+
+    private void on_editFindTextChanged() {
+        arrayFindResult.clear();
+
+        String desString = editNote.getText().toString();
+        String str = editFind.getText().toString();
+        System.out.println("afterTextChanged=" + str);
+        if (str.length() > 0) {
+
+            arrayFindResult = findStr(desString, str);
+
+            if (arrayFindResult.size() > 0) {
+                goFindResult(0);
+            }
+        }
+
+        lblResult.setText(String.valueOf(arrayFindResult.size()));
     }
 
     private void showNormalDialog() {

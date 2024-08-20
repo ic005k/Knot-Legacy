@@ -109,6 +109,17 @@
             android:layout_weight="1"
         />
 
+        <ImageButton
+            android:id="@+id/btnStartFind"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/shape_blue_button"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/find_l"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+        />
+
         <TextView
             android:id="@+id/lblResult"
             android:layout_width="65dp"
