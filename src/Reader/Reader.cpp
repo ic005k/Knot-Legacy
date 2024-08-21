@@ -2223,17 +2223,14 @@ void Reader::readBookDone() {
   mw_one->on_DelayCloseProgressBar();
 
   if (!isInitReader) {
-  } else
-    isInitReader = false;
-
-  if (getDefaultOpen()) {
     if (!isPDF) {
       while (!mw_one->ui->btnReader->isEnabled())
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
       mw_one->ui->btnReader->click();
       setDefaultOpen("none");
     }
-  }
+  } else
+    isInitReader = false;
 
   qDebug() << "read book done...";
 }

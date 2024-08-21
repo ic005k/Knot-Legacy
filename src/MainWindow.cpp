@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.01";
+QString ver = "1.2.02";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -1099,16 +1099,12 @@ bool MainWindow::del_Data(QTreeWidget *tw) {
                        "\n";
 
         QString strTip;
-        if(isMoveEntry)
-            strTip = tr("The last record will be moved.");
+        if (isMoveEntry)
+          strTip = tr("The last record will be moved.");
         else
-            strTip = tr("The last record will be deleted.");
+          strTip = tr("The last record will be deleted.");
         ShowMessage *m_ShowMsg = new ShowMessage(this);
-        if (!m_ShowMsg->showMsg(
-                str,
-                strTip + "\n\n" + str1,
-                2))
-          return false;
+        if (!m_ShowMsg->showMsg(str, strTip + "\n\n" + str1, 2)) return false;
 
         isNeedAutoBackup = true;
         strLatestModify = tr("Del Item") + " ( " + getTabText() + " ) ";
@@ -1141,11 +1137,11 @@ bool MainWindow::del_Data(QTreeWidget *tw) {
   if (isNo) {
     QString str = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
 
-      QString strTip;
-      if(isMoveEntry)
-          strTip = tr("Only the current day's records can be moved.");
-      else
-          strTip = tr("Only the current day's records can be deleted.");
+    QString strTip;
+    if (isMoveEntry)
+      strTip = tr("Only the current day's records can be moved.");
+    else
+      strTip = tr("Only the current day's records can be deleted.");
     ShowMessage *m_ShowMsg = new ShowMessage(this);
     m_ShowMsg->showMsg(str, strTip, 1);
     return false;
@@ -4997,7 +4993,7 @@ void MainWindow::on_btnAdd_clicked() {
 }
 
 void MainWindow::on_btnDel_clicked() {
-    isMoveEntry = false;
+  isMoveEntry = false;
   del_Data((QTreeWidget *)ui->tabWidget->currentWidget());
 }
 
@@ -6015,7 +6011,7 @@ void MainWindow::on_sliderPlayAudio_sliderReleased() {
 }
 
 void MainWindow::on_btnMove_clicked() {
-    isMoveEntry = true;
+  isMoveEntry = true;
   if (del_Data((QTreeWidget *)ui->tabWidget->currentWidget())) {
     ui->btnTabMoveDown->hide();
     ui->btnTabMoveUp->hide();
