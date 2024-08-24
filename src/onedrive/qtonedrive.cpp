@@ -404,6 +404,7 @@ void QtOneDrive::downloadFile(const QUrl& url) {
                     "application/x-www-form-urlencoded");
   QString token_headerData = "bearer " + accessToken_;
   request.setRawHeader("Authorization", token_headerData.toLocal8Bit());
+  request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
 
   QNetworkReply* reply = networkManager_->get(request);
   connect(reply, &QNetworkReply::finished, [reply, this]() {
