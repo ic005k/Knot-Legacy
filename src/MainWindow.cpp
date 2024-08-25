@@ -4311,6 +4311,11 @@ static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
 
   if (mw_one->alertWindowsCount == 0) {
+    if (mw_one->ui->frameMain->isVisible()) {
+      mw_one->ui->btnSelTab->click();
+      mw_one->ui->btnBackSetTab->click();
+    }
+
     QSettings Reg("/storage/emulated/0/.Knot/alarm.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
