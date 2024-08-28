@@ -70,8 +70,7 @@ bool ShowMessage::eventFilter(QObject* watch, QEvent* evn) {
   }
 
   if (evn->type() == QEvent::MouseButtonPress) {
-    if (ui->btnCancel->isHidden() && ui->btnCopy->isHidden() &&
-        ui->btnOk->isHidden()) {
+    if (btn_count == 0) {
       on_btnCancel_clicked();
     }
 
@@ -111,11 +110,8 @@ void ShowMessage::init() {
 
   int nEditH = mw_one->m_Todo->getEditTextHeight(ui->editMsg);
   int nH = 0;
-  if (!ui->btnCancel->isHidden())
-    nH = nEditH + ui->btnCancel->height() + ui->lblTitle->height() +
-         ui->hframe->height() + 40;
-  else
-    nH = nEditH + ui->lblTitle->height() + ui->hframe->height() + 50;
+  nH = nEditH + ui->btnCancel->height() + ui->lblTitle->height() +
+       ui->hframe->height() + 50;
 
   if (nH > mw_one->height()) nH = mw_one->height() - 10;
   ui->frame->setFixedHeight(nH);
@@ -138,7 +134,7 @@ bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
   if (btnCount == 0) {
     ui->btnCancel->hide();
     ui->btnCopy->hide();
-    ui->btnOk->hide();
+    ui->btnOk->show();
     ui->btnDel->hide();
   }
   if (btnCount == 1) {
@@ -167,6 +163,8 @@ bool ShowMessage::showMsg(QString title, QString msgtxt, int btnCount) {
     ui->btnCopy->show();
     ui->btnDel->show();
   }
+
+  btn_count = btnCount;
 
   ui->lblTitle->setText(title);
   ui->editMsg->setText(msgtxt);
