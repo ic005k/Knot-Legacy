@@ -44,6 +44,7 @@ class ShowMessage : public QDialog {
 
  private:
   void init();
+  int btn_count = 0;
 };
 
 #endif  // SHOWMESSAGE_H
