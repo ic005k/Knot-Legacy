@@ -77,25 +77,25 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: maplibre-gl-native_Android_x86
           path: install-x86
       
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: maplibre-gl-native_Android_x86_64
           path: install-x86_64
       
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: maplibre-gl-native_Android_armeabi-v7a
           path: install-armeabi-v7a
 
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: maplibre-gl-native_Android_arm64-v8a
           path: install-arm64-v8a
@@ -145,7 +145,7 @@ jobs:
           key: Android-qt-geoservices-maplibre
 
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: maplibre-gl-native_Android
           path: install-gl
