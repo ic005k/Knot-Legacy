@@ -192,12 +192,46 @@ Rectangle {
             text: strText
 
             onLinkActivated: {
+
                 console.log("reader htmlPath=" + htmlPath)
                 console.log("reader Link=" + link)
                 document.setBackDir(link)
                 document.parsingLink(link, "reader")
             }
 
+
+            /*MouseArea {
+                id: mouse_area
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.LeftButton
+                propagateComposedEvents: true // 是否将事件传递给父元素
+
+                onClicked: {
+
+                    var my = mouseY - flickable.contentY
+                    console.log("clicked..." + mouseY + " " + my + myH)
+
+                    if (my < myH / 3) {
+                        m_Reader.setPageScroll0()
+                    }
+
+                    if (my > myH / 3 && my < (myH * 2) / 3) {
+                        m_Reader.setPanelVisible()
+                    }
+
+                    if (my > (myH * 2) / 3) {
+                        m_Reader.setPageScroll1()
+                    }
+                }
+                onDoubleClicked: {
+                    console.log("double...")
+                    m_Reader.selectText()
+                }
+                onPressAndHold: {
+                    console.log("press and hold...")
+                }
+            }*/
             PropertyAnimation on x {
                 easing.type: Easing.Linear
                 running: isAni
@@ -274,38 +308,5 @@ Rectangle {
             text: model.modelData
         }
         ScrollBar.vertical: ScrollBar {}
-
-        MouseArea {
-            id: mouse_area
-            anchors.fill: parent
-            hoverEnabled: true
-            acceptedButtons: Qt.LeftButton
-            propagateComposedEvents: false
-
-            onClicked: {
-
-                var my = mouseY - flickable.contentY
-                console.log("clicked..." + mouseY + " " + my + myH)
-
-                if (my < myH / 3) {
-                    m_Reader.setPageScroll0()
-                }
-
-                if (my > myH / 3 && my < (myH * 2) / 3) {
-                    m_Reader.setPanelVisible()
-                }
-
-                if (my > (myH * 2) / 3) {
-                    m_Reader.setPageScroll1()
-                }
-            }
-            onDoubleClicked: {
-                console.log("double...")
-                m_Reader.selectText()
-            }
-            onPressAndHold: {
-                console.log("press and hold...")
-            }
-        }
     }
 }
