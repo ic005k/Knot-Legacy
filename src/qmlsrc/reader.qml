@@ -172,6 +172,7 @@ Rectangle {
 
         TextArea.flickable: TextArea {
             id: textArea
+
             visible: isEPUBText
             font.pixelSize: FontSize
             font.family: FontName
@@ -260,7 +261,7 @@ Rectangle {
             id: vbar
             position: 0.2
             policy: ScrollBar.AsNeeded
-            width: 8
+            width: 15
             hoverEnabled: true
             active: hovered || pressed
             orientation: Qt.Vertical
