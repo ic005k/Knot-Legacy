@@ -12,6 +12,9 @@ extern QRegularExpression regxNumber;
 extern bool isBreak, isDark, isReport, isWholeMonth, isDateSection, isDark;
 extern int fontSize;
 
+extern QString loadText(QString textFile);
+extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
+
 bool del = false;
 
 QStringList c_list;
@@ -153,6 +156,8 @@ void EditRecord::on_btnOk_clicked() {
 
   del = false;
   mw_one->startSave("tab");
+
+  writeToLog(mw_one->strLatestModify);
 }
 
 void EditRecord::on_btn7_clicked() { set_Amount("7"); }
@@ -539,4 +544,19 @@ void EditRecord::monthSum() {
   btnMonthText = str2;
   isWholeMonth = b1;
   isDateSection = b2;
+}
+
+void EditRecord::writeToLog(QString str) {
+  QString logfile = privateDir + "log.txt";
+  QStringList list = mw_one->m_Reader->readText(logfile);
+  if (list.count() > 99) {
+    list.removeAt(list.count() - 1);
+  }
+  list.insert(0, QDateTime::currentDateTime().toString() + "  " + str);
+  QTextEdit *edit = new QTextEdit();
+  for (int i = 0; i < list.count(); i++) {
+    edit->append(list.at(i));
+  }
+
+  TextEditToFile(edit, logfile);
 }

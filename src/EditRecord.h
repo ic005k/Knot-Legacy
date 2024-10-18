@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <QListWidget>
 #include <QSet>
+#include <QTextEdit>
 #include <QWidgetAction>
 
 #include "src/CategoryList.h"
@@ -77,6 +78,8 @@ class EditRecord : public QDialog {
   void setCurrentValue();
 
   void monthSum();
+
+  void writeToLog(QString str);
 
  private:
   void set_Amount(QString Number);

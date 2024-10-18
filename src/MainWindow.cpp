@@ -1128,6 +1128,7 @@ bool MainWindow::del_Data(QTreeWidget *tw) {
 
         isDelItem = true;
         reloadMain();
+        m_EditRecord->writeToLog(strLatestModify);
 
         break;
       }
