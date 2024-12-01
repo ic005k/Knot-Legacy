@@ -3535,6 +3535,7 @@ void MainWindow::initQW() {
   ui->qwMainDate->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/maindate.qml")));
 
+  ui->qwMainEvent->rootContext()->setContextProperty("fontSize", fontSize);
   ui->qwMainEvent->rootContext()->setContextProperty(
       "isAniEffects", m_Preferences->ui->chkAniEffects->isChecked());
   ui->qwMainEvent->rootContext()->setContextProperty("maineventWidth",
