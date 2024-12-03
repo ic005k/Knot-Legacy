@@ -458,7 +458,7 @@ void Method::generateData(int count) {
   int line_count;
 
   for (int i = 0; i < count; i++) {
-    QStringList list = resultsList.at(i).split("=|=");
+    QStringList list = resultsList.at(count - 1 - i).split("=|=");
     QString str_tab, str0, str1, str2, str3;
     str_tab = list.at(0);
     str0 = list.at(1);
