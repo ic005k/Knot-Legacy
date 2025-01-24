@@ -28,10 +28,10 @@
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_37">
        <item>
@@ -62,10 +62,10 @@
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="spacing">
@@ -182,10 +182,10 @@
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Plain</enum>
+          <enum>QFrame::Plain</enum>
          </property>
          <property name="lineWidth">
           <number>0</number>
@@ -241,7 +241,7 @@
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -336,7 +336,7 @@
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -369,7 +369,7 @@
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
+               <enum>Qt::ToolButtonTextOnly</enum>
               </property>
              </widget>
             </item>
@@ -406,7 +406,7 @@
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -437,7 +437,7 @@
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -474,7 +474,7 @@
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -511,7 +511,7 @@
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -542,7 +542,7 @@
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -573,7 +573,7 @@
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -626,10 +626,10 @@
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
+          <enum>QFrame::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_35">
           <item>
@@ -653,7 +653,7 @@
                  <string>Reading Progress</string>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                 <set>Qt::AlignCenter</set>
                 </property>
                </widget>
               </item>
@@ -716,7 +716,7 @@ QSlider::handle:vertical
                  <bool>true</bool>
                 </property>
                 <property name="orientation">
-                 <enum>Qt::Orientation::Horizontal</enum>
+                 <enum>Qt::Horizontal</enum>
                 </property>
                 <property name="invertedAppearance">
                  <bool>false</bool>
@@ -725,7 +725,7 @@ QSlider::handle:vertical
                  <bool>false</bool>
                 </property>
                 <property name="tickPosition">
-                 <enum>QSlider::TickPosition::NoTicks</enum>
+                 <enum>QSlider::NoTicks</enum>
                 </property>
                 <property name="tickInterval">
                  <number>1</number>
@@ -836,7 +836,7 @@ border-radius: 4px;</string>
                    <string>Style1</string>
                   </property>
                   <property name="toolButtonStyle">
-                   <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
+                   <enum>Qt::ToolButtonTextOnly</enum>
                   </property>
                   <property name="autoRaise">
                    <bool>false</bool>
@@ -869,7 +869,7 @@ border-radius: 4px;
                    <string>Style2</string>
                   </property>
                   <property name="toolButtonStyle">
-                   <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
+                   <enum>Qt::ToolButtonTextOnly</enum>
                   </property>
                   <property name="autoRaise">
                    <bool>false</bool>
@@ -907,10 +907,10 @@ border-radius: 4px;</string>
               <item>
                <widget class="QFrame" name="f_CustomColor">
                 <property name="frameShape">
-                 <enum>QFrame::Shape::StyledPanel</enum>
+                 <enum>QFrame::StyledPanel</enum>
                 </property>
                 <property name="frameShadow">
-                 <enum>QFrame::Shadow::Raised</enum>
+                 <enum>QFrame::Raised</enum>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_4">
                  <item>
@@ -1001,7 +1001,7 @@ border-radius: 4px;</string>
           <item>
            <widget class="QLabel" name="lblInfo">
             <property name="frameShape">
-             <enum>QFrame::Shape::NoFrame</enum>
+             <enum>QFrame::NoFrame</enum>
             </property>
             <property name="text">
              <string>Info</string>
@@ -1090,7 +1090,7 @@ border-radius: 4px;</string>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -1128,7 +1128,7 @@ border-radius: 4px;</string>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -1152,7 +1152,7 @@ border-radius: 4px;</string>
           </size>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -1165,7 +1165,7 @@ border-radius: 4px;</string>
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -1178,7 +1178,7 @@ border-radius: 4px;</string>
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -1191,7 +1191,7 @@ border-radius: 4px;</string>
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -1226,10 +1226,10 @@ border-radius: 4px;</string>
     <item>
      <widget class="QFrame" name="frameMain">
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <property name="lineWidth">
        <number>0</number>
@@ -1250,10 +1250,10 @@ border-radius: 4px;</string>
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Plain</enum>
+          <enum>QFrame::Plain</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <property name="leftMargin">
@@ -1304,7 +1304,7 @@ border-radius: 4px;</string>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -1344,7 +1344,7 @@ border-radius: 4px;</string>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -1384,7 +1384,7 @@ border-radius: 4px;</string>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -1424,7 +1424,7 @@ border-radius: 4px;</string>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -1464,7 +1464,7 @@ border-radius: 4px;</string>
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -1492,7 +1492,7 @@ border-radius: 4px;</string>
           </size>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -1640,7 +1640,7 @@ border-radius: 4px;</string>
 </string>
          </property>
          <property name="tabShape">
-          <enum>QTabWidget::TabShape::Rounded</enum>
+          <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
           <number>-1</number>
@@ -1676,7 +1676,7 @@ border-radius: 4px;</string>
             </size>
            </property>
            <property name="resizeMode">
-            <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+            <enum>QQuickWidget::SizeRootObjectToView</enum>
            </property>
           </widget>
          </item>
@@ -1695,7 +1695,7 @@ border-radius: 4px;</string>
             </size>
            </property>
            <property name="resizeMode">
-            <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+            <enum>QQuickWidget::SizeRootObjectToView</enum>
            </property>
           </widget>
          </item>
@@ -1710,10 +1710,10 @@ border-radius: 4px;</string>
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Plain</enum>
+          <enum>QFrame::Plain</enum>
          </property>
          <property name="lineWidth">
           <number>0</number>
@@ -1756,7 +1756,7 @@ border-radius: 4px;</string>
             <item>
              <spacer name="horizontalSpacer">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1803,7 +1803,7 @@ border-radius: 4px;</string>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
               <property name="autoRaise">
                <bool>false</bool>
@@ -1832,7 +1832,7 @@ border-radius: 4px;</string>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -1869,7 +1869,7 @@ border-radius: 4px;</string>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -1904,7 +1904,7 @@ border-radius: 4px;</string>
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -1924,7 +1924,7 @@ border-radius: 4px;</string>
             <item>
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -2077,6 +2077,18 @@ QRadioButton::indicator:checked {
            <height>16777215</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel
+{
+border: 0px solid gray;
+border-radius: 0px;
+/*padding: 0 8px;*/
+/*background: red;*/
+ background-color:qlineargradient(spread:pad,x1:1,y1:0,x2:0,y2:0,stop:0 #FFAEB9,stop:1 #87CEFF);  
+color:black;
+selection-background-color: lightblue;
+}</string>
+         </property>
          <property name="text">
           <string>Stats</string>
          </property>
@@ -2091,10 +2103,10 @@ QRadioButton::indicator:checked {
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <property name="leftMargin">
@@ -2136,7 +2148,7 @@ QTabBar::scroller {width:0}
 </string>
             </property>
             <property name="tabShape">
-             <enum>QTabWidget::TabShape::Rounded</enum>
+             <enum>QTabWidget::Rounded</enum>
             </property>
             <property name="currentIndex">
              <number>0</number>
@@ -2213,10 +2225,10 @@ QTabBar::scroller {width:0}
        <item>
         <widget class="QFrame" name="f_Btn">
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_65">
           <item>
@@ -2253,7 +2265,7 @@ QTabBar::scroller {width:0}
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -2279,7 +2291,7 @@ QTabBar::scroller {width:0}
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -2311,7 +2323,7 @@ QTabBar::scroller {width:0}
              <string>Ctrl+T</string>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -2343,7 +2355,7 @@ QTabBar::scroller {width:0}
              <string>Ctrl+N</string>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -2369,7 +2381,7 @@ QTabBar::scroller {width:0}
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+             <enum>Qt::ToolButtonTextUnderIcon</enum>
             </property>
            </widget>
           </item>
@@ -2388,10 +2400,10 @@ QTabBar::scroller {width:0}
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>
@@ -2409,10 +2421,10 @@ QTabBar::scroller {width:0}
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <property name="spacing">
@@ -2617,7 +2629,7 @@ QTabBar::scroller {width:0}
        <item>
         <widget class="QQuickWidget" name="qwOneDriver">
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -2627,13 +2639,13 @@ QTabBar::scroller {width:0}
           <number>0</number>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
          <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
          <property name="textDirection">
-          <enum>QProgressBar::Direction::TopToBottom</enum>
+          <enum>QProgressBar::TopToBottom</enum>
          </property>
         </widget>
        </item>
@@ -2646,10 +2658,10 @@ QTabBar::scroller {width:0}
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <property name="leftMargin">
@@ -2700,10 +2712,10 @@ QTabBar::scroller {width:0}
                </size>
               </property>
               <property name="verticalScrollBarPolicy">
-               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+               <enum>Qt::ScrollBarAlwaysOff</enum>
               </property>
               <property name="horizontalScrollBarPolicy">
-               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+               <enum>Qt::ScrollBarAlwaysOff</enum>
               </property>
               <property name="placeholderText">
                <string>Url with authorization code</string>
@@ -2779,10 +2791,10 @@ QTabBar::scroller {width:0}
     <item>
      <widget class="QFrame" name="frameNotes">
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
@@ -2800,10 +2812,10 @@ QTabBar::scroller {width:0}
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
           <property name="leftMargin">
@@ -2931,7 +2943,7 @@ QTabBar::scroller {width:0}
           </size>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -3132,10 +3144,10 @@ QTabBar::scroller {width:0}
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
@@ -3163,7 +3175,7 @@ QTabBar::scroller {width:0}
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -3310,10 +3322,10 @@ QTabBar::scroller {width:0}
     <item>
      <widget class="QFrame" name="frameTodo">
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_39">
        <item>
@@ -3325,10 +3337,10 @@ QTabBar::scroller {width:0}
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
           <property name="leftMargin">
@@ -3382,7 +3394,7 @@ QTabBar::scroller {width:0}
                <string>Esc</string>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -3420,7 +3432,7 @@ QTabBar::scroller {width:0}
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -3458,7 +3470,7 @@ QTabBar::scroller {width:0}
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -3496,7 +3508,7 @@ QTabBar::scroller {width:0}
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -3534,7 +3546,7 @@ QTabBar::scroller {width:0}
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -3572,7 +3584,7 @@ QTabBar::scroller {width:0}
                </size>
               </property>
               <property name="toolButtonStyle">
-               <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+               <enum>Qt::ToolButtonIconOnly</enum>
               </property>
              </widget>
             </item>
@@ -3623,7 +3635,7 @@ QTabBar::scroller {width:0}
             <string>Ctrl+Return</string>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonIconOnly</enum>
            </property>
           </widget>
          </item>
@@ -3650,7 +3662,7 @@ QTabBar::scroller {width:0}
               <bool>false</bool>
              </property>
              <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
+              <enum>Qt::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -3754,7 +3766,7 @@ QSlider::handle:horizontal:disabled {
               <number>20</number>
              </property>
              <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
+              <enum>Qt::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -3829,7 +3841,7 @@ QSlider::handle:horizontal:disabled {
           </size>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -3839,10 +3851,10 @@ QSlider::handle:horizontal:disabled {
     <item>
      <widget class="QFrame" name="frameTodoRecycle">
       <property name="frameShape">
-       <enum>QFrame::Shape::NoFrame</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_13">
        <item>
@@ -3861,7 +3873,7 @@ QSlider::handle:horizontal:disabled {
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -4018,10 +4030,10 @@ QSlider::handle:horizontal:disabled {
     <item>
      <widget class="QFrame" name="frameSteps">
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_17">
        <item>
@@ -4039,17 +4051,17 @@ QSlider::handle:horizontal:disabled {
           </size>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QFrame" name="f_Debug">
          <property name="frameShape">
-          <enum>QFrame::Shape::NoFrame</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_12">
           <property name="leftMargin">
@@ -4210,7 +4222,7 @@ QRadioButton::indicator:checked {
          <item>
           <spacer name="horizontalSpacer_3">
            <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
+            <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -4265,10 +4277,10 @@ QRadioButton::indicator:checked {
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
+          <enum>QFrame::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Plain</enum>
+          <enum>QFrame::Plain</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_16">
           <item>
@@ -4298,7 +4310,7 @@ QRadioButton::indicator:checked {
                <string>to</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -4337,7 +4349,7 @@ QRadioButton::indicator:checked {
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -4353,7 +4365,7 @@ QRadioButton::indicator:checked {
                <string>0 KM</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -4501,10 +4513,10 @@ QRadioButton::indicator:checked {
     <item>
      <widget class="QFrame" name="frameReport">
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_18">
        <item>
@@ -4635,7 +4647,7 @@ QRadioButton::indicator:checked {
           <string>Total</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -4648,7 +4660,7 @@ QRadioButton::indicator:checked {
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -4664,14 +4676,14 @@ QRadioButton::indicator:checked {
           <string>Details</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QQuickWidget" name="qwReportSub">
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -4729,10 +4741,10 @@ QRadioButton::indicator:checked {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_20">
        <item>
@@ -4818,14 +4830,14 @@ QRadioButton::indicator:checked {
           <string>Results</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QQuickWidget" name="qwSearch">
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -4860,10 +4872,10 @@ QRadioButton::indicator:checked {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_21">
        <item>
@@ -4878,7 +4890,7 @@ QRadioButton::indicator:checked {
           <string>Backup File List</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -4891,7 +4903,7 @@ QRadioButton::indicator:checked {
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -4971,10 +4983,10 @@ QRadioButton::indicator:checked {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_22">
        <item>
@@ -5000,7 +5012,7 @@ QRadioButton::indicator:checked {
           <string>View1</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -5025,7 +5037,7 @@ QRadioButton::indicator:checked {
           <string>View2</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -5050,7 +5062,7 @@ QRadioButton::indicator:checked {
           <string>View3</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -5072,7 +5084,7 @@ QRadioButton::indicator:checked {
           </size>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -5107,10 +5119,10 @@ QRadioButton::indicator:checked {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_23">
        <item>
@@ -5135,7 +5147,7 @@ QRadioButton::indicator:checked {
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -5212,10 +5224,10 @@ QRadioButton::indicator:checked {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_26">
        <item>
@@ -5227,10 +5239,10 @@ QRadioButton::indicator:checked {
           </sizepolicy>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
+          <enum>QFrame::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Plain</enum>
+          <enum>QFrame::Plain</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_28">
           <item>
@@ -5341,7 +5353,7 @@ QRadioButton::indicator:checked {
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -5410,7 +5422,7 @@ QRadioButton::indicator:checked {
            <item>
             <widget class="QQuickWidget" name="qwNoteBook">
              <property name="resizeMode">
-              <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+              <enum>QQuickWidget::SizeRootObjectToView</enum>
              </property>
             </widget>
            </item>
@@ -5455,7 +5467,7 @@ QRadioButton::indicator:checked {
            <item>
             <widget class="QQuickWidget" name="qwNoteList">
              <property name="resizeMode">
-              <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+              <enum>QQuickWidget::SizeRootObjectToView</enum>
              </property>
             </widget>
            </item>
@@ -5717,10 +5729,10 @@ QRadioButton::indicator:checked {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_27">
        <item>
@@ -5745,7 +5757,7 @@ QRadioButton::indicator:checked {
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -5855,16 +5867,16 @@ QRadioButton::indicator:checked {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_29">
        <item>
         <widget class="QQuickWidget" name="qwCategory">
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -5974,10 +5986,10 @@ QRadioButton::indicator:checked {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_30">
        <property name="spacing">
@@ -6005,7 +6017,7 @@ QRadioButton::indicator:checked {
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -6083,10 +6095,10 @@ QRadioButton::indicator:checked {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_32">
        <item>
@@ -6124,7 +6136,7 @@ selection-background-color: lightblue;
           <string>Add</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -6450,10 +6462,10 @@ selection-background-color: lightblue;
        <item>
         <widget class="QFrame" name="f_Number">
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
+          <enum>QFrame::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="3" column="0">
@@ -6718,10 +6730,10 @@ selection-background-color: lightblue;
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
+          <enum>QFrame::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_31">
           <item>
@@ -6742,7 +6754,7 @@ selection-background-color: lightblue;
              <string>00:00:00</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -6832,7 +6844,7 @@ QSlider::handle:horizontal:disabled {
                <number>10</number>
               </property>
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -6865,7 +6877,7 @@ QSlider::handle:horizontal:disabled {
                <number>10</number>
               </property>
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -6886,10 +6898,10 @@ QSlider::handle:horizontal:disabled {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_33">
        <item>
@@ -6901,7 +6913,7 @@ QSlider::handle:horizontal:disabled {
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -7054,10 +7066,10 @@ QSlider::handle:horizontal:disabled {
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_36">
        <item>
@@ -7069,7 +7081,7 @@ QSlider::handle:horizontal:disabled {
           </sizepolicy>
          </property>
          <property name="resizeMode">
-          <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+          <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>
         </widget>
        </item>
@@ -7245,7 +7257,7 @@ QSlider::handle:horizontal:disabled {
          <string>20% </string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -7266,7 +7278,7 @@ QSlider::handle:horizontal:disabled {
      <x>0</x>
      <y>0</y>
      <width>687</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">

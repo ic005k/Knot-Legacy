@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.06";
+QString ver = "1.2.07";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -1176,7 +1176,7 @@ void MainWindow::on_AddRecord() {
   ui->frameMain->hide();
   ui->frameEditRecord->show();
 
-  tmeFlash->start(300);
+  // tmeFlash->start(300);
 }
 
 void MainWindow::on_tmeFlash() {
