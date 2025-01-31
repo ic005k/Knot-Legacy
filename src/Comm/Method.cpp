@@ -1451,6 +1451,12 @@ void Method::setDateTimePickerFlag(QString flag, int y, int m, int d, int h,
     Reg.setValue("/DateTime/flag", "hm");
   }
 
+  if (y == 0) y = 2022;
+  if (m == 0) m = 1;
+  if (d == 0) d = 1;
+  if (h == 0) h = 0;
+  if (mm == 0) mm = 0;
+
   Reg.setValue("/DateTime/y", y);
   Reg.setValue("/DateTime/m", m);
   Reg.setValue("/DateTime/d", d);

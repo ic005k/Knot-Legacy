@@ -45,6 +45,7 @@ import android.view.WindowManager;
 import android.view.Window;
 
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
@@ -82,6 +83,10 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.Spannable;
 import android.text.Spanned;
+
+import java.lang.reflect.Field;
+import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
 
 public class DateTimePicker extends Activity {
 
@@ -124,8 +129,48 @@ public class DateTimePicker extends Activity {
     private static boolean isDark;
     private String dateFlag = "";
 
+    /**
+     * hook反射方向检查
+     **/
+    private static void fixOrientation(Activity activity) {
+        try {
+            Class activityClass = Activity.class;
+            Field mActivityInfoField = activityClass.getDeclaredField("mActivityInfo");
+            mActivityInfoField.setAccessible(true);
+            ActivityInfo activityInfo = (ActivityInfo) mActivityInfoField.get(activity);
+            // 设置屏幕不固定
+            activityInfo.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+        } catch (Exception e) {
+        }
+    }
+
+    /**
+     * hook反射检查是否透明色或者悬浮
+     **/
+    private boolean isTranslucentOrFloating() {
+        boolean isTranslucentOrFloating = false;
+        try {
+            int[] styleableRes = (int[]) Class.forName("com.android.internal.R$styleable").getField("Window").get(null);
+            final TypedArray typedArray = obtainStyledAttributes(styleableRes);
+            Method method = ActivityInfo.class.getMethod("isTranslucentOrFloating", TypedArray.class);
+            method.setAccessible(true);
+            isTranslucentOrFloating = (boolean) method.invoke(null, typedArray);
+            method.setAccessible(false);
+        } catch (Exception e) {
+        }
+        return isTranslucentOrFloating;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 切记：在父类oncreate()方法调用前调用该方法修改配置
+        // 针对Android8.0出现的“java.lang.IllegalStateException: Only fullscreen opaque
+        // activities can request orientation”问题
+        // Android8.1之后已改变了这个现象
+        if (Build.VERSION.SDK_INT == 26 && isTranslucentOrFloating()) {
+            fixOrientation(this);
+        }
+
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         context = DateTimePicker.this;
