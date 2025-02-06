@@ -370,7 +370,7 @@ public class DateTimePicker extends Activity {
         else
             strTitle = "Set Year Month";
 
-        BasisTimesUtils.showDatePickerDialog(context, !isDark, strTitle, y, m + 1, d,
+        BasisTimesUtils.showDatePickerDialog(context, !isDark, strTitle, y, m, d,
                 new BasisTimesUtils.OnDatePickerListener() {
 
                     @Override
