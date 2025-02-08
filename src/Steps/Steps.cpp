@@ -451,11 +451,18 @@ void Steps::startRecordMotion() {
     connect(m_positionSource, &QGeoPositionInfoSource::positionUpdated, this,
             &Steps::positionUpdated);
     m_positionSource->setUpdateInterval(2000);
+  } else {
+    mw_one->ui->lblGpsInfo->setText(tr("Search the GPS..."));
+    mw_one->ui->btnGPS->setText(tr("Start"));
+    return;
   }
 
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, [this]() {
     m_time = m_time.addSecs(1);
+    strDistance = tr("Distance") + " : " + QString::number(m_distance) + " km";
+    strMotionTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
+    mw_one->ui->lblGpsInfo->setText(strDistance + "    " + strMotionTime);
     emit timeChanged();
   });
 
@@ -471,8 +478,9 @@ void Steps::startRecordMotion() {
 
 void Steps::positionUpdated(const QGeoPositionInfo& info) {
   if (lastPosition.isValid()) {
-    m_distance +=
-        lastPosition.distanceTo(info.coordinate()) / 1000.0;  // Convert to km
+    double b = 1000;
+    m_distance += (double)lastPosition.distanceTo(info.coordinate()) /
+                  b;  // Convert to km
     emit distanceChanged();
   }
   lastPosition = info.coordinate();
@@ -484,10 +492,8 @@ void Steps::stopRecordMotion() {
   }
   timer->stop();
 
-  QString str1 = "运动距离: " + QString::number(m_distance) + " km";
-  QString str2 = "运动时间: " + m_time.toString("hh:mm:ss");
   ShowMessage* msg = new ShowMessage(this);
-  msg->showMsg("Knot", str1 + "\n\n" + str2, 1);
+  msg->showMsg("Knot", strDistance + "\n\n" + strMotionTime, 1);
 
   delete m_positionSource;
 }

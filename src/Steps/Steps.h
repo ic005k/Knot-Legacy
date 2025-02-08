@@ -95,6 +95,8 @@ class Steps : public QDialog {
   QDateTime m_startTime;
   QTime m_time;
   QTimer *timer;
+  QString strDistance;
+  QString strMotionTime;
 
  signals:
   void distanceChanged();
