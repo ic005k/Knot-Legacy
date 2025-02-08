@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.09";
+QString ver = "1.2.10";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -6032,5 +6032,15 @@ void MainWindow::on_btnMove_clicked() {
     ui->editAmount->setText(strAmount);
 
     on_btnOkEditRecord_clicked();
+  }
+}
+
+void MainWindow::on_btnGPS_clicked() {
+  if (ui->btnGPS->text() == tr("Start")) {
+    m_Steps->startRecordMotion();
+    ui->btnGPS->setText(tr("Stop"));
+  } else if (ui->btnGPS->text() == tr("Stop")) {
+    m_Steps->stopRecordMotion();
+    ui->btnGPS->setText(tr("Start"));
   }
 }

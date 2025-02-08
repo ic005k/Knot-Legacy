@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http:// schemas.android.com/ tools" package="com.x" android:installLocation="auto"
-    android:versionCode="1" android:versionName="1.2.09">
+    android:versionCode="1" android:versionName="1.2.10">
     <!-- The following comment will be replaced upon deployment with default permissions based on
     the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -15,7 +15,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true" />
     <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true" />

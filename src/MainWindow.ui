@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>687</width>
+    <width>698</width>
     <height>8948</height>
    </rect>
   </property>
@@ -4505,6 +4505,19 @@ QRadioButton::indicator:checked {
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QToolButton" name="btnGPS">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Start</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
@@ -7277,7 +7290,7 @@ QSlider::handle:horizontal:disabled {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>687</width>
+     <width>698</width>
      <height>21</height>
     </rect>
    </property>

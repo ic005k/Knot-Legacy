@@ -444,3 +444,50 @@ void Steps::setScrollBarPos(double pos) {
   QMetaObject::invokeMethod((QObject*)root, "setScrollBarPos",
                             Q_ARG(QVariant, pos));
 }
+
+void Steps::startRecordMotion() {
+  m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
+  if (m_positionSource) {
+    connect(m_positionSource, &QGeoPositionInfoSource::positionUpdated, this,
+            &Steps::positionUpdated);
+    m_positionSource->setUpdateInterval(2000);
+  }
+
+  timer = new QTimer(this);
+  connect(timer, &QTimer::timeout, this, [this]() {
+    m_time = m_time.addSecs(1);
+    emit timeChanged();
+  });
+
+  if (m_positionSource) {
+    m_positionSource->startUpdates();
+  }
+  m_time = QTime(0, 0);
+  timer->start(1000);
+  m_distance = 0;
+  emit distanceChanged();
+  emit timeChanged();
+}
+
+void Steps::positionUpdated(const QGeoPositionInfo& info) {
+  if (lastPosition.isValid()) {
+    m_distance +=
+        lastPosition.distanceTo(info.coordinate()) / 1000.0;  // Convert to km
+    emit distanceChanged();
+  }
+  lastPosition = info.coordinate();
+}
+
+void Steps::stopRecordMotion() {
+  if (m_positionSource) {
+    m_positionSource->stopUpdates();
+  }
+  timer->stop();
+
+  QString str1 = "运动距离: " + QString::number(m_distance) + " km";
+  QString str2 = "运动时间: " + m_time.toString("hh:mm:ss");
+  ShowMessage* msg = new ShowMessage(this);
+  msg->showMsg("Knot", str1 + "\n\n" + str2, 1);
+
+  delete m_positionSource;
+}

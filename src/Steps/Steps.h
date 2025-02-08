@@ -3,6 +3,8 @@
 
 #include <QAccelerometer>
 #include <QDialog>
+#include <QGeoCoordinate>
+#include <QGeoPositionInfoSource>
 #include <QRegularExpressionValidator>
 
 #include "src/Steps/StepsOptions.h"
@@ -74,11 +76,29 @@ class Steps : public QDialog {
 
   void setTableData(int index, QString date, int steps, QString km);
 
+  void startRecordMotion();
+  void stopRecordMotion();
+
+ private slots:
+  void positionUpdated(const QGeoPositionInfo &info);
+
  private:
   QBrush brush1 = QBrush(QColor(255, 228, 225));
   QBrush brush2 = QBrush(QColor(245, 222, 179));
   QBrush brushMax = QBrush(QColor(245, 222, 79));
   int maxCount = 90;
+
+  double distance() const { return m_distance; }
+  QGeoPositionInfoSource *m_positionSource;
+  QGeoCoordinate lastPosition;
+  double m_distance;
+  QDateTime m_startTime;
+  QTime m_time;
+  QTimer *timer;
+
+ signals:
+  void distanceChanged();
+  void timeChanged();
 };
 
 #endif  // STEPS_H

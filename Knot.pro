@@ -1,6 +1,6 @@
 QT += core gui network printsupport core-private
 QT += charts sensors
-QT += qml quick quickwidgets webview
+QT += qml quick quickwidgets webview positioning
 QT += xml svg
 
 
