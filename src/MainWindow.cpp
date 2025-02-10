@@ -6038,7 +6038,7 @@ void MainWindow::on_btnMove_clicked() {
 void MainWindow::on_btnGPS_clicked() {
   if (ui->btnGPS->text() == tr("Start")) {
     m_Steps->startRecordMotion();
-    ui->btnGPS->setText(tr("Stop"));
+
   } else if (ui->btnGPS->text() == tr("Stop")) {
     m_Steps->stopRecordMotion();
     ui->btnGPS->setText(tr("Start"));

@@ -133,6 +133,10 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+
 //Qt5
 import org.qtproject.qt5.android.bindings.QtActivity;
 
@@ -204,6 +208,13 @@ public class MyActivity
   private InternalConfigure internalConfigure;
   public static boolean isReadShareData = false;
   public static boolean zh_cn;
+
+  private LocationManager locationManager;
+  private LocationListener locationListener;
+  private Location lastLocation;
+  private double totalDistance = 0;
+  private double latitude = 0;
+  private double longitude = 0;
 
   public MyActivity() {
   }
@@ -647,6 +658,82 @@ public class MyActivity
     addDeskShortcuts();
 
     mytts = TTSUtils.getInstance(this);
+
+    // 初始化LocationManager
+    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+    // 定义LocationListener
+    locationListener = new LocationListener() {
+      @Override
+      public void onLocationChanged(Location location) {
+        // 在这里处理获取到的位置信息，例如更新UI
+        if (lastLocation != null) {
+          totalDistance += lastLocation.distanceTo(location);
+          // 获取经纬度
+          latitude = location.getLatitude();
+          longitude = location.getLongitude();
+
+        }
+
+        lastLocation = location;
+
+      }
+
+      @Override
+      public void onStatusChanged(String provider, int status, Bundle extras) {
+      }
+
+      @Override
+      public void onProviderEnabled(String provider) {
+      }
+
+      @Override
+      public void onProviderDisabled(String provider) {
+      }
+    };
+  }
+
+  public double startGpsUpdates() {
+    totalDistance = 0;
+    latitude = 0;
+    longitude = 0;
+    if (locationManager != null) {
+      locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+          5000, // 更新间隔时间（毫秒）
+          1, // 最小距离变化（米）
+          locationListener);
+      return 1;
+    }
+    return 0;
+  }
+
+  public double getTotalDistance() {
+
+    return totalDistance;
+
+  }
+
+  public double getLatitude() {
+
+    return latitude;
+
+  }
+
+  public double getLongitude() {
+
+    return longitude;
+
+  }
+
+  // 停止 GPS 更新
+  public double stopGpsUpdates() {
+    if (locationManager != null && locationListener != null) {
+      try {
+        locationManager.removeUpdates(locationListener);
+      } catch (SecurityException e) {
+        e.printStackTrace();
+      }
+    }
+    return totalDistance;
   }
 
   private static ServiceConnection mCon = new ServiceConnection() {
@@ -752,10 +839,8 @@ public class MyActivity
       public void onReceive(Context context, Intent intent) {
         if (mSensorManager != null) { // 取消监听后重写监听，以保持后台运行
           mSensorManager.unregisterListener(PersistService.this);
-          mSensorManager.registerListener(
-              PersistService.this,
-              mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-              SensorManager.SENSOR_DELAY_NORMAL);
+          mSensorManager.registerListener(PersistService.this,
+              mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
         }
       }
     };
@@ -1601,13 +1686,8 @@ public class MyActivity
     public void handleMessage(Message msg) {
       switch (msg.what) {
         case 1:
-          Toast toast = Toast.makeText(
-              m_instance,
-              (String) msg.obj,
-              Toast.LENGTH_LONG);
-          TextView v = (TextView) toast
-              .getView()
-              .findViewById(android.R.id.message);
+          Toast toast = Toast.makeText(m_instance, (String) msg.obj, Toast.LENGTH_LONG);
+          TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
           // v.setTextColor(Color.RED);
           // v.setTextSize(20);
           toast.show();

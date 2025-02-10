@@ -79,6 +79,7 @@ class Steps : public QDialog {
   void startRecordMotion();
   void stopRecordMotion();
 
+  bool requestLocationPermissions();
  private slots:
   void positionUpdated(const QGeoPositionInfo &info);
 
@@ -92,15 +93,19 @@ class Steps : public QDialog {
   QGeoPositionInfoSource *m_positionSource;
   QGeoCoordinate lastPosition;
   double m_distance;
+  double m_speed;
   QDateTime m_startTime;
   QTime m_time;
   QTimer *timer;
   QString strDistance;
   QString strMotionTime;
+  double latitude;
+  double longitude;
 
  signals:
-  void distanceChanged();
+  void distanceChanged(double distance);
   void timeChanged();
+  void speedChanged();
 };
 
 #endif  // STEPS_H

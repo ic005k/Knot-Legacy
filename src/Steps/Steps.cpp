@@ -13,6 +13,11 @@ extern bool loading;
 extern QString iniFile, iniDir;
 extern void setTableNoItemFlags(QTableWidget* t, int row);
 
+#ifdef Q_OS_ANDROID
+QAndroidJniObject listenerWrapper;
+QAndroidJniObject m_activity;
+#endif
+
 Steps::Steps(QWidget* parent) : QDialog(parent) {
   this->installEventFilter(this);
 
@@ -32,6 +37,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblCurrent->setFont(font0);
   mw_one->ui->lblToNow->setFont(font0);
   mw_one->ui->lblNow->setFont(font0);
+  mw_one->ui->lblGpsInfo->setFont(font0);
 
   QFont font1 = m_Method->getNewFont(19);
   font1.setBold(true);
@@ -446,13 +452,17 @@ void Steps::setScrollBarPos(double pos) {
 }
 
 void Steps::startRecordMotion() {
+  requestLocationPermissions();
+
   m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
   if (m_positionSource) {
-    connect(m_positionSource, &QGeoPositionInfoSource::positionUpdated, this,
-            &Steps::positionUpdated);
+    // connect(m_positionSource, &QGeoPositionInfoSource::positionUpdated, this,
+    //         &Steps::positionUpdated);
+    connect(m_positionSource, SIGNAL(positionUpdated(QGeoPositionInfo)), this,
+            SLOT(positionUpdated(QGeoPositionInfo)));
     m_positionSource->setUpdateInterval(2000);
   } else {
-    mw_one->ui->lblGpsInfo->setText(tr("Search the GPS..."));
+    mw_one->ui->lblGpsInfo->setText(tr("No GPS signal..."));
     mw_one->ui->btnGPS->setText(tr("Start"));
     return;
   }
@@ -460,30 +470,80 @@ void Steps::startRecordMotion() {
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, [this]() {
     m_time = m_time.addSecs(1);
+
+#ifdef Q_OS_ANDROID
+    // 获取总运动距离
+    jdouble distance =
+        m_activity.callMethod<jdouble>("getTotalDistance", "()D");
+    m_distance = distance;
+    latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
+    longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
+#endif
+
+    if (m_time.second() != 0) {
+      m_speed = m_distance / m_time.second();
+      emit speedChanged();
+    }
     strDistance = tr("Distance") + " : " + QString::number(m_distance) + " km";
     strMotionTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
-    mw_one->ui->lblGpsInfo->setText(strDistance + "    " + strMotionTime);
+    mw_one->ui->lblGpsInfo->setText(strDistance + "    " + strMotionTime +
+                                    "\n" + QString::number(latitude) + " - " +
+                                    QString::number(longitude));
     emit timeChanged();
   });
 
   if (m_positionSource) {
+#ifdef Q_OS_ANDROID
+
+    m_activity = QtAndroid::androidActivity();
+    if (m_activity.isValid()) {
+      QAndroidJniObject locationService = m_activity.callObjectMethod(
+          "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;",
+          QAndroidJniObject::fromString("location").object<jstring>());
+      if (locationService.isValid()) {
+        // listenerWrapper = QAndroidJniObject("com/x/LocationListenerWrapper",
+        //                                     "(Landroid/content/Context;)V",
+        //                                     m_activity.object<jobject>());
+
+        if (listenerWrapper.isValid()) {
+        } else {
+        }
+
+        if (m_activity.callMethod<jdouble>("startGpsUpdates", "()D") == 0) {
+          qWarning() << "LocationManager is null";
+          mw_one->ui->lblGpsInfo->setText("LocationManager is null...");
+          mw_one->ui->btnGPS->setText(tr("Start"));
+          return;
+        }
+      }
+    }
+
+#else
     m_positionSource->startUpdates();
+#endif
+
+    m_time = QTime(0, 0);
+    timer->start(1000);
+    m_distance = 0;
+    m_speed = 0;
+    emit distanceChanged(m_distance);
+    emit timeChanged();
+
+    mw_one->ui->btnGPS->setText(tr("Stop"));
   }
-  m_time = QTime(0, 0);
-  timer->start(1000);
-  m_distance = 0;
-  emit distanceChanged();
-  emit timeChanged();
 }
 
 void Steps::positionUpdated(const QGeoPositionInfo& info) {
   if (lastPosition.isValid()) {
     double b = 1000;
-    m_distance += (double)lastPosition.distanceTo(info.coordinate()) /
-                  b;  // Convert to km
-    emit distanceChanged();
+    // Convert to km
+    m_distance += (double)lastPosition.distanceTo(info.coordinate()) / b;
+    emit distanceChanged(m_distance);
   }
   lastPosition = info.coordinate();
+
+  latitude = lastPosition.latitude();
+  longitude = lastPosition.longitude();
 }
 
 void Steps::stopRecordMotion() {
@@ -492,8 +552,37 @@ void Steps::stopRecordMotion() {
   }
   timer->stop();
 
+#ifdef Q_OS_ANDROID
+  m_distance = m_activity.callMethod<jdouble>("stopGpsUpdates", "()D");
+#endif
+
   ShowMessage* msg = new ShowMessage(this);
-  msg->showMsg("Knot", strDistance + "\n\n" + strMotionTime, 1);
+  const auto speed = m_speed * 3.6;
+  QString strSpeed =
+      tr("Speed") + " : " + QString::number(speed, 'g', 2) + " km/h";
+  msg->showMsg("Knot", strDistance + "\n\n" + strMotionTime + "\n\n" + strSpeed,
+               1);
 
   delete m_positionSource;
+}
+
+bool Steps::requestLocationPermissions() {
+#ifdef Q_OS_ANDROID
+  const QStringList permissions = {"android.permission.ACCESS_FINE_LOCATION",
+                                   "android.permission.ACCESS_COARSE_LOCATION"};
+
+  for (const QString& permission : permissions) {
+    auto result = QtAndroid::checkPermission(permission);
+    if (result == QtAndroid::PermissionResult::Denied) {
+      auto resultHash =
+          QtAndroid::requestPermissionsSync(QStringList() << permission);
+      if (resultHash[permission] != QtAndroid::PermissionResult::Granted) {
+        qDebug() << "Permission" << permission << "denied";
+        return false;
+      }
+    }
+  }
+  return true;
+#endif
+  return false;
 }
