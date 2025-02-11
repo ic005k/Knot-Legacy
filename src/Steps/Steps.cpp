@@ -503,25 +503,26 @@ void Steps::startRecordMotion() {
 
   m_activity = QtAndroid::androidActivity();
   if (m_activity.isValid()) {
-    QAndroidJniObject locationService = m_activity.callObjectMethod(
-        "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;",
-        QAndroidJniObject::fromString("location").object<jstring>());
-    if (locationService.isValid()) {
-      // listenerWrapper = QAndroidJniObject("com/x/LocationListenerWrapper",
-      //                                     "(Landroid/content/Context;)V",
-      //                                     m_activity.object<jobject>());
+    // QAndroidJniObject locationService = m_activity.callObjectMethod(
+    //     "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;",
+    //     QAndroidJniObject::fromString("location").object<jstring>());
+    // if (locationService.isValid()) {
 
-      if (listenerWrapper.isValid()) {
-      } else {
-      }
+    // listenerWrapper = QAndroidJniObject("com/x/LocationListenerWrapper",
+    //                                     "(Landroid/content/Context;)V",
+    //                                     m_activity.object<jobject>());
 
-      if (m_activity.callMethod<jdouble>("startGpsUpdates", "()D") == 0) {
-        qWarning() << "LocationManager is null";
-        mw_one->ui->lblGpsInfo->setText("LocationManager is null...");
-        mw_one->ui->btnGPS->setText(tr("Start"));
-        return;
-      }
+    if (listenerWrapper.isValid()) {
+    } else {
     }
+
+    if (m_activity.callMethod<jdouble>("startGpsUpdates", "()D") == 0) {
+      qWarning() << "LocationManager is null";
+      mw_one->ui->lblGpsInfo->setText("LocationManager is null...");
+      mw_one->ui->btnGPS->setText(tr("Start"));
+      return;
+    }
+    //}
   }
 
 #else

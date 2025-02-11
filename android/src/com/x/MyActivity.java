@@ -3,11 +3,7 @@ package com.x;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
-import android.app.AlertDialog;
 import android.app.Application;
-import android.app.Application;
-import android.app.PendingIntent;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -16,9 +12,7 @@ import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.ContentUris;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -52,7 +46,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
@@ -65,7 +58,6 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -76,7 +68,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodSession.EventCallback;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -133,11 +124,14 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import android.location.LocationProvider;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.provider.Settings;
+import androidx.appcompat.app.AlertDialog;
 
 //Qt5
 import org.qtproject.qt5.android.bindings.QtActivity;
@@ -213,7 +207,6 @@ public class MyActivity
   public static boolean zh_cn;
 
   private LocationManager locationManager;
-  private LocationListener locationListener;
   private Location lastLocation;
   private double totalDistance = 0;
   private double latitude = 0;
@@ -663,39 +656,75 @@ public class MyActivity
 
     mytts = TTSUtils.getInstance(this);
 
-    // 初始化LocationManager
-    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-    // 定义LocationListener
-    locationListener = new LocationListener() {
-      @Override
-      public void onLocationChanged(Location location) {
-        // 在这里处理获取到的位置信息，例如更新UI
-        if (lastLocation != null) {
-          totalDistance += lastLocation.distanceTo(location);
-          // 获取经纬度
-          latitude = location.getLatitude();
-          longitude = location.getLongitude();
-
-        }
-
-        lastLocation = location;
-
-      }
-
-      @Override
-      public void onStatusChanged(String provider, int status, Bundle extras) {
-      }
-
-      @Override
-      public void onProviderEnabled(String provider) {
-      }
-
-      @Override
-      public void onProviderDisabled(String provider) {
-      }
-    };
-
   }
+
+  // 定义LocationListener
+  private final LocationListener locationListener = new LocationListener() {
+    @Override
+    public void onLocationChanged(Location location) {
+      // 在这里处理获取到的位置信息，例如更新UI
+      lastLocation = location;
+      latitude = location.getLatitude();
+      longitude = location.getLongitude();
+      // 计算移动距离
+      if (lastLocation != null) {
+        if (lastLocation.hasAccuracy()) {
+          float accuracy = lastLocation.getAccuracy();
+          Log.i(TAG, "Accuracy: " + accuracy);
+        }
+        if (lastLocation.hasSpeed()) {
+          float speed = lastLocation.getSpeed();
+          Log.i(TAG, "Speed: " + speed);
+        }
+        if (lastLocation.hasBearing()) {
+          float bearing = lastLocation.getBearing();
+          Log.i(TAG, "Bearing: " + bearing);
+        }
+        if (lastLocation.hasAltitude()) {
+          double altitude = lastLocation.getAltitude();
+          Log.i(TAG, "Altitude: " + altitude);
+        }
+        if (lastLocation.hasAccuracy() && lastLocation.hasSpeed()) {
+          // 计算移动距离
+          if (lastLocation.getAccuracy() < 100 && lastLocation.getSpeed() > 0) {
+            if (lastLocation.hasAltitude()) {
+              totalDistance += lastLocation.distanceTo(lastLocation);
+            } else {
+              totalDistance += lastLocation.distanceTo(lastLocation);
+            }
+          }
+        }
+      }
+      Log.i(TAG, "Latitude: " + latitude + ", Longitude: " + longitude);
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+      switch (status) {
+        case LocationProvider.AVAILABLE:
+          strGpsStatus = "Available";
+          break;
+        case LocationProvider.OUT_OF_SERVICE:
+          strGpsStatus = "Out of Service";
+          break;
+        case LocationProvider.TEMPORARILY_UNAVAILABLE:
+          strGpsStatus = "Temporarily Unavailable";
+          break;
+      }
+      Log.i(TAG, "GPS Status: " + strGpsStatus);
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+      Log.d("LocationListener", "Provider enabled: " + provider);
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+      Log.d("LocationListener", "Provider disabled: " + provider);
+    }
+  };
 
   private final GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
     @Override
@@ -739,6 +768,24 @@ public class MyActivity
     totalDistance = 0;
     latitude = 0;
     longitude = 0;
+
+    // 初始化LocationManager
+    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+    // 检查位置服务是否开启
+    boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    if (!isGpsEnabled && !isNetworkEnabled) {
+      new AlertDialog.Builder(this)
+          .setMessage("位置服务未开启，请开启位置服务以获取位置信息。")
+          .setPositiveButton("去开启", (dialog, which) -> {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+          })
+          .setNegativeButton("取消", null)
+          .show();
+    }
+
     if (locationManager != null) {
       // 检测是否有定位权限
       int permission = ActivityCompat.checkSelfPermission(
@@ -753,6 +800,7 @@ public class MyActivity
 
       if (ActivityCompat.checkSelfPermission(this,
           "android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
+
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
             3000, // 更新间隔时间（毫秒）
             1, // 最小距离变化（米）
