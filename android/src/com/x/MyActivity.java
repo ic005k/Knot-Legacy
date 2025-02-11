@@ -133,6 +133,8 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -143,6 +145,7 @@ import org.qtproject.qt5.android.bindings.QtActivity;
 public class MyActivity
     extends QtActivity
     implements Application.ActivityLifecycleCallbacks {
+
   public static boolean isDark = false;
   private static MyActivity m_instance = null;
   private static SensorManager mSensorManager;
@@ -215,6 +218,7 @@ public class MyActivity
   private double totalDistance = 0;
   private double latitude = 0;
   private double longitude = 0;
+  private String strGpsStatus = "None";
 
   public MyActivity() {
   }
@@ -690,6 +694,45 @@ public class MyActivity
       public void onProviderDisabled(String provider) {
       }
     };
+
+  }
+
+  private final GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
+    @Override
+    public void onGpsStatusChanged(int event) {
+      if (locationManager != null) {
+        GpsStatus gpsStatus = locationManager.getGpsStatus(null);
+        switch (event) {
+          case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+            Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
+            Iterator<GpsSatellite> it = satellites.iterator();
+            int satelliteCount = 0;
+            StringBuilder statusText = new StringBuilder();
+            while (it.hasNext()) {
+              GpsSatellite satellite = it.next();
+              satelliteCount++;
+              statusText.append("卫星 ").append(satelliteCount).append(" 强度: ")
+                  .append(satellite.getSnr()).append("\n");
+            }
+            statusText.insert(0, "可见卫星数量: ").append(satelliteCount).append("\n");
+            strGpsStatus = statusText.toString();
+            break;
+          case GpsStatus.GPS_EVENT_FIRST_FIX:
+            // 首次定位成功
+            break;
+          case GpsStatus.GPS_EVENT_STARTED:
+            // GPS启动
+            break;
+          case GpsStatus.GPS_EVENT_STOPPED:
+            // GPS停止
+            break;
+        }
+      }
+    }
+  };
+
+  public String getGpsStatus() {
+    return strGpsStatus;
   }
 
   public double startGpsUpdates() {
@@ -697,11 +740,31 @@ public class MyActivity
     latitude = 0;
     longitude = 0;
     if (locationManager != null) {
-      locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-          5000, // 更新间隔时间（毫秒）
-          1, // 最小距离变化（米）
-          locationListener);
-      return 1;
+      // 检测是否有定位权限
+      int permission = ActivityCompat.checkSelfPermission(
+          this,
+          "android.permission.ACCESS_FINE_LOCATION");
+      if (permission != PackageManager.PERMISSION_GRANTED) {
+        // 没有定位权限，去申请定位权限，会弹出对话框
+        ActivityCompat.requestPermissions(this,
+            new String[] { "android.permission.ACCESS_FINE_LOCATION" },
+            1);
+      }
+
+      if (ActivityCompat.checkSelfPermission(this,
+          "android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+            3000, // 更新间隔时间（毫秒）
+            1, // 最小距离变化（米）
+            locationListener);
+
+        // 添加GPS状态侦听
+        if (locationManager != null) {
+          locationManager.addGpsStatusListener(gpsStatusListener);
+        }
+
+        return 1;
+      }
     }
     return 0;
   }
@@ -729,6 +792,11 @@ public class MyActivity
     if (locationManager != null && locationListener != null) {
       try {
         locationManager.removeUpdates(locationListener);
+
+        // 停止GPS状态侦听
+        if (locationManager != null) {
+          locationManager.removeGpsStatusListener(gpsStatusListener);
+        }
       } catch (SecurityException e) {
         e.printStackTrace();
       }
