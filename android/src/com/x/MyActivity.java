@@ -234,10 +234,10 @@ public class MyActivity
   private Location previousLocation;
   private double previousAltitude;
 
-  private String strGpsStatus = "None";
+  private String strGpsStatus = "GPS Status";
   private String strRunTime = "Run Time";
   private String strAltitude = "Altitude";
-  private String strTotalDistance = "Total Distance";
+  private String strTotalDistance = "Run Distance";
   private String strMaxSpeed = "Max Speed";
   private String strTotalClimb = "Total Climb";
   private String strAverageSpeed = "Average Speed";
@@ -760,8 +760,8 @@ public class MyActivity
   };
 
   public String getGpsStatus() {
-    return strTotalDistance + "  " + strRunTime + "\n" + strAverageSpeed + "  " + strMaxSpeed + "\n" + strAltitude
-        + "  " + strTotalClimb + "\n" + strGpsStatus;
+    return strTotalDistance + "\n" + strRunTime + "\n" + strAverageSpeed + "\n" + strMaxSpeed + "\n" + strAltitude
+        + "\n" + strTotalClimb + "\n" + strGpsStatus;
   }
 
   public double startGpsUpdates() {
@@ -912,24 +912,42 @@ public class MyActivity
 
   private void updateUI(Location location) {
     // 运动距离
-    strTotalDistance = String.format("距离: %.2f km", totalDistance);
+    if (zh_cn)
+      strTotalDistance = String.format("距离: %.2f km", totalDistance);
+    else
+      strTotalDistance = String.format("Distance: %.2f km", totalDistance);
 
     // 运动时间
     long seconds = movingTime / 1000;
-    strRunTime = String.format("时间: %02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
+    if (zh_cn)
+      strRunTime = String.format("运动时长: %02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
+    else
+      strRunTime = String.format("Run Time: %02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
 
     // 平均速度
     double avgSpeed = totalDistance / (movingTime / 3600000f);
-    strAverageSpeed = String.format("平均速度: %.2f km/h", avgSpeed);
+    if (zh_cn)
+      strAverageSpeed = String.format("平均速度: %.2f km/h", avgSpeed);
+    else
+      strAverageSpeed = String.format("Average Speed: %.2f km/h", avgSpeed);
 
     // 最大速度
-    strMaxSpeed = String.format("最大速度: %.2f km/h", maxSpeed);
+    if (zh_cn)
+      strMaxSpeed = String.format("最大速度: %.2f km/h", maxSpeed);
+    else
+      strMaxSpeed = String.format("Max Speed: %.2f km/h", maxSpeed);
 
     // 海拔
-    strAltitude = String.format("海拔: %.2f 米", location.getAltitude());
+    if (zh_cn)
+      strAltitude = String.format("海拔: %.2f 米", location.getAltitude());
+    else
+      strAltitude = String.format("Altitude: %.2f 米", location.getAltitude());
 
     // 爬升
-    strTotalClimb = String.format("爬升: %.2f 米", totalClimb);
+    if (zh_cn)
+      strTotalClimb = String.format("爬升: %.2f 米", totalClimb);
+    else
+      strTotalClimb = String.format("Total Climb: %.2f 米", totalClimb);
   }
 
   private static ServiceConnection mCon = new ServiceConnection() {

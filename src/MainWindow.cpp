@@ -399,12 +399,10 @@ void MainWindow::initHardStepSensor() {
     ui->btnPause->click();
     ui->btnPause->setHidden(true);
     ui->btnSteps->setHidden(true);
-    if (ui->rbAlg1->isChecked()) m_Steps->on_rbAlg1_clicked();
   }
   if (isHardStepSensor == 1) {
     ui->btnPause->click();
-    ui->gboxAlg->hide();
-    ui->lblAlg->hide();
+
     ui->lblSteps->hide();
     ui->btnPauseSteps->hide();
     ui->lblTotalRunTime->hide();
@@ -455,71 +453,6 @@ void MainWindow::initTodayInitSteps() {
   }
 }
 
-void MainWindow::newDatas() {
-  ax = ay = az = gx = gy = gz = 0;
-  az = accel_pedometer->reading()->z();
-
-  updateRunTime();
-
-  countOne++;
-  if (ui->rbAlg1->isChecked()) {
-    if (countOne >= 2) {
-      aoldZ = az;
-      countOne = 0;
-    }
-  }
-
-  if (qAbs(qAbs(az) - qAbs(aoldZ)) < 0.5) {
-    return;
-  }
-
-  if (ui->rbAlg1->isChecked()) {
-    accel_pedometer->runStepCountAlgorithm();
-    timeCount++;
-    ui->lblSteps->setText(tr("Number of Operations") + " : " +
-                          QString::number(timeCount));
-  }
-
-  showSensorValues();
-}
-
-void MainWindow::showSensorValues() {
-  if (m_Preferences->ui->chkDebug->isChecked()) {
-    ui->lblX->setText("AX:" + QString::number(ax) + "\n" +
-                      "GX:" + QString::number(gx));
-    ui->lblY->setText("AY:" + QString::number(ay) + "\n" +
-                      "GY:" + QString::number(gy));
-    ui->lblZ->setText("AZ:" + QString::number(az) + "\n" +
-                      "GZ:" + QString::number(gz));
-
-    if (ui->lblX->isHidden()) {
-      ui->lblX->show();
-      ui->lblY->show();
-      ui->lblZ->show();
-    }
-  } else {
-    if (!ui->lblX->isHidden()) {
-      ui->lblX->hide();
-      ui->lblY->hide();
-      ui->lblZ->hide();
-    }
-  }
-}
-
-void MainWindow::updateRunTime() {
-  smallCount++;
-  if (ui->rbAlg1->isChecked()) {
-    if (smallCount >= 5) {
-      timeTest++;
-      smallCount = 0;
-      pausePedometer();
-    }
-  }
-
-  ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
-                               secondsToTime(timeTest));
-}
-
 void MainWindow::pausePedometer() {
   if (QTime::currentTime().toString("hh-mm-ss") == "22-00-00") {
     if (ui->btnPauseSteps->text() == tr("Pause")) ui->btnPauseSteps->click();
@@ -528,12 +461,11 @@ void MainWindow::pausePedometer() {
 
 void MainWindow::updateSteps() {
   // CurrentSteps = accel_pedometer->stepCount();
-  if (ui->rbAlg1->isChecked()) {
-    CurrentSteps++;
-    CurTableCount = m_Steps->getCurrentSteps();
-    CurTableCount++;
-    m_Steps->toDayInitSteps++;
-  }
+
+  CurrentSteps++;
+  CurTableCount = m_Steps->getCurrentSteps();
+  CurTableCount++;
+  m_Steps->toDayInitSteps++;
 
   ui->lcdNumber->display(QString::number(CurTableCount));
   ui->lblSingle->setText(QString::number(CurrentSteps));
@@ -3424,16 +3356,9 @@ QString MainWindow::decMemos(QString strDec, QString file) {
 void MainWindow::init_Sensors() {
   accel_pedometer = new SpecialAccelerometerPedometer(this);
 
-  // connect(accel_pedometer, SIGNAL(readingChanged()), this,
-  // SLOT(newDatas()));
-
   connect(accel_pedometer, SIGNAL(stepCountChanged()), this,
           SLOT(updateSteps()));
 
-  accel_pedometer->setTangentLineIntercept(
-      ui->editTangentLineIntercept->text().toFloat());
-  accel_pedometer->setTangentLineSlope(
-      ui->editTangentLineSlope->text().toFloat());
   accel_pedometer->setDataRate(100);
   accel_pedometer->setAccelerationMode(QAccelerometer::User);
   accel_pedometer->setAlwaysOn(true);

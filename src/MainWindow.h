@@ -369,7 +369,7 @@ class MainWindow : public QMainWindow {
   void clickMainTab();
   void on_SetReaderFunVisible();
   void updateSteps();
-  void newDatas();
+
   void updateHardSensorSteps();
   void on_btnTodo_clicked();
   void readEBookDone();
@@ -823,8 +823,6 @@ class MainWindow : public QMainWindow {
   void init_UIWidget();
   void init_Menu(QMenu *);
 
-  void updateRunTime();
-  void showSensorValues();
   QString decMemos(QString strDec, QString file);
   void initHardStepSensor();
   void showNotes();

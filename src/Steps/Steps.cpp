@@ -27,9 +27,6 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblCurrent->setText(date + " " + QTime::currentTime().toString());
 
   QFont font0 = m_Method->getNewFont(15);
-  mw_one->ui->lblX->setFont(font0);
-  mw_one->ui->lblY->setFont(font0);
-  mw_one->ui->lblZ->setFont(font0);
   mw_one->ui->lblSteps->setFont(font0);
 
   font0.setBold(true);
@@ -37,21 +34,11 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblCurrent->setFont(font0);
   mw_one->ui->lblToNow->setFont(font0);
   mw_one->ui->lblNow->setFont(font0);
-  mw_one->ui->lblGpsInfo->setFont(font0);
 
   QFont font1 = m_Method->getNewFont(19);
   font1.setBold(true);
   mw_one->ui->lblKM->setFont(font1);
   mw_one->ui->lblSingle->setFont(font1);
-
-  lblStyleNormal = mw_one->ui->lblX->styleSheet();
-
-  QValidator* validator = new QRegularExpressionValidator(
-      regxNumber, mw_one->ui->editTangentLineIntercept);
-  mw_one->ui->editTangentLineIntercept->setValidator(validator);
-  mw_one->ui->editTangentLineSlope->setValidator(validator);
-  mw_one->m_StepsOptions->ui->editStepLength->setValidator(validator);
-  mw_one->m_StepsOptions->ui->editStepsThreshold->setValidator(validator);
 }
 
 Steps::~Steps() {}
@@ -93,8 +80,6 @@ void Steps::on_btnPause_clicked() {
 
     acquireWakeLock();
 
-    if (mw_one->ui->rbAlg1->isChecked()) on_rbAlg1_clicked();
-
     mw_one->ui->btnPause->setIcon(QIcon(":/res/run.png"));
   }
 }
@@ -120,11 +105,6 @@ void Steps::saveSteps() {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  Reg.setValue("/Steps/Intercept",
-               mw_one->ui->editTangentLineIntercept->text().trimmed());
-  Reg.setValue("/Steps/Slope",
-               mw_one->ui->editTangentLineSlope->text().trimmed());
-  Reg.setValue("/Steps/Alg1", mw_one->ui->rbAlg1->isChecked());
 
   if (getCount() > maxCount) {
     delItem(0);
@@ -162,15 +142,10 @@ void Steps::init_Steps() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  mw_one->ui->editTangentLineIntercept->setText(
-      Reg.value("/Steps/Intercept", dleInter).toString());
-  mw_one->ui->editTangentLineSlope->setText(
-      Reg.value("/Steps/Slope", dleSlope).toString());
   mw_one->m_StepsOptions->ui->editStepLength->setText(
       Reg.value("/Steps/Length", "35").toString());
   mw_one->m_StepsOptions->ui->editStepsThreshold->setText(
       Reg.value("/Steps/Threshold", "10000").toString());
-  mw_one->ui->rbAlg1->setChecked(Reg.value("Steps/Alg1", true).toBool());
 
   int count = Reg.value("/Steps/Count").toInt();
   int start = 0;
@@ -300,14 +275,6 @@ void Steps::setTableSteps(qlonglong steps) {
 
     Reg.setValue("/Steps/Count", count);
   }
-}
-
-void Steps::on_btnDefaultIntercept_clicked() {
-  mw_one->ui->editTangentLineIntercept->setText(QString::number(dleInter));
-}
-
-void Steps::on_btnDefaultSlope_clicked() {
-  mw_one->ui->editTangentLineSlope->setText(QString::number(dleSlope));
 }
 
 void Steps::on_rbAlg1_clicked() {
@@ -482,7 +449,8 @@ void Steps::startRecordMotion() {
     // 获取当前运动距离
     jdouble distance =
         m_activity.callMethod<jdouble>("getTotalDistance", "()D");
-    m_distance = distance;
+    QString str_distance = QString::number(distance, 'f', 2);
+    m_distance = str_distance.toDouble();
     latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
     longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
     QAndroidJniObject jstrGpsStatus =
@@ -497,8 +465,8 @@ void Steps::startRecordMotion() {
 
     strDistance =
         tr("Total Distance") + " : " + QString::number(m_TotalDistance) + " km";
-    strMotionTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
-    mw_one->ui->lblGpsInfo->setText(strDistance + "    " + strMotionTime +
+    strDurationTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
+    mw_one->ui->lblGpsInfo->setText(strDistance + "\n" + strDurationTime +
                                     "\n" + QString::number(latitude) + " - " +
                                     QString::number(longitude) + "\n" +
                                     strGpsStatus);
@@ -539,6 +507,7 @@ void Steps::startRecordMotion() {
   emit timeChanged();
 
   mw_one->ui->btnGPS->setText(tr("Stop"));
+  mw_one->ui->tabMotion->setCurrentIndex(1);
 }
 
 void Steps::positionUpdated(const QGeoPositionInfo& info) {
@@ -560,7 +529,7 @@ void Steps::stopRecordMotion() {
   strDistance =
       tr("Total Distance") + " : " + QString::number(m_TotalDistance) + " km";
   mw_one->ui->lblGpsInfo->setText(
-      strDistance + "    " + strMotionTime + "\n" + QString::number(latitude) +
+      strDistance + "\n" + strDurationTime + "\n" + QString::number(latitude) +
       " - " + QString::number(longitude) + "\n" + strGpsStatus);
 
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);

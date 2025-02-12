@@ -27,7 +27,7 @@ class Steps : public QDialog {
   void saveSteps();
   void init_Steps();
   QString lblStyleLight = "background-color: rgb(25, 239, 21);color:black";
-  QString lblStyleNormal;
+
   void addRecord(QString, qlonglong, QString);
 
   qlonglong getCurrentSteps();
@@ -70,10 +70,6 @@ class Steps : public QDialog {
 
   void on_editTangentLineSlope_textChanged(const QString &arg1);
 
-  void on_btnDefaultIntercept_clicked();
-
-  void on_btnDefaultSlope_clicked();
-
   void setTableData(int index, QString date, int steps, QString km);
 
   void startRecordMotion();
@@ -99,7 +95,7 @@ class Steps : public QDialog {
   QTime m_time;
   QTimer *timer;
   QString strDistance;
-  QString strMotionTime;
+  QString strDurationTime;
   double latitude;
   double longitude;
   QString strGpsStatus;
