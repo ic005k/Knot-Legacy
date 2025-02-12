@@ -117,6 +117,8 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -124,6 +126,14 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.location.LocationListenerCompat;
+import androidx.core.location.LocationManagerCompat;
+import androidx.core.location.LocationRequestCompat;
+import android.location.LocationRequest;
 import android.location.LocationProvider;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
@@ -132,6 +142,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.provider.Settings;
 import androidx.appcompat.app.AlertDialog;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 //Qt5
 import org.qtproject.qt5.android.bindings.QtActivity;
@@ -212,6 +224,7 @@ public class MyActivity
   private double latitude = 0;
   private double longitude = 0;
   private String strGpsStatus = "None";
+  private Executor executor;
 
   public MyActivity() {
   }
@@ -726,6 +739,74 @@ public class MyActivity
     }
   };
 
+  // 定义位置监听器
+  private final LocationListenerCompat locationListener1 = new LocationListenerCompat() {
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+      // 位置更新时触发
+      // 在这里处理获取到的位置信息，例如更新UI
+      lastLocation = location;
+      latitude = location.getLatitude();
+      longitude = location.getLongitude();
+      // 计算移动距离
+      if (lastLocation != null) {
+        if (lastLocation.hasAccuracy()) {
+          float accuracy = lastLocation.getAccuracy();
+          Log.i(TAG, "Accuracy: " + accuracy);
+        }
+        if (lastLocation.hasSpeed()) {
+          float speed = lastLocation.getSpeed();
+          Log.i(TAG, "Speed: " + speed);
+        }
+        if (lastLocation.hasBearing()) {
+          float bearing = lastLocation.getBearing();
+          Log.i(TAG, "Bearing: " + bearing);
+        }
+        if (lastLocation.hasAltitude()) {
+          double altitude = lastLocation.getAltitude();
+          Log.i(TAG, "Altitude: " + altitude);
+        }
+        if (lastLocation.hasAccuracy() && lastLocation.hasSpeed()) {
+          // 计算移动距离
+          if (lastLocation.getAccuracy() < 100 && lastLocation.getSpeed() > 0) {
+            if (lastLocation.hasAltitude()) {
+              totalDistance += lastLocation.distanceTo(lastLocation);
+            } else {
+              totalDistance += lastLocation.distanceTo(lastLocation);
+            }
+          }
+        }
+      }
+      Log.i(TAG, "Latitude: " + latitude + ", Longitude: " + longitude);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+      switch (status) {
+        case LocationProvider.AVAILABLE:
+          strGpsStatus = "Available";
+          break;
+        case LocationProvider.OUT_OF_SERVICE:
+          strGpsStatus = "Out of Service";
+          break;
+        case LocationProvider.TEMPORARILY_UNAVAILABLE:
+          strGpsStatus = "Temporarily Unavailable";
+          break;
+      }
+      Log.i(TAG, "GPS Status: " + strGpsStatus);
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+      Log.d(TAG, "Provider enabled: " + provider);
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+      Log.d(TAG, "Provider disabled: " + provider);
+    }
+  };
+
   private final GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
     @Override
     public void onGpsStatusChanged(int event) {
@@ -771,6 +852,7 @@ public class MyActivity
 
     // 初始化LocationManager
     locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    executor = Executors.newSingleThreadExecutor();
 
     // 检查位置服务是否开启
     boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -801,10 +883,23 @@ public class MyActivity
       if (ActivityCompat.checkSelfPermission(this,
           "android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-            3000, // 更新间隔时间（毫秒）
-            1, // 最小距离变化（米）
-            locationListener);
+        // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+        // 3000, // 更新间隔时间（毫秒）
+        // 1, // 最小距离变化（米）
+        // locationListener);
+
+        // 创建 LocationRequestCompat 对象
+        // .setPriority(LocationRequestCompat.PRIORITY_HIGH_ACCURACY) // 高精度模式
+        LocationRequestCompat locationRequest = new LocationRequestCompat.Builder(5000L) // 最小时间间隔
+            .setMinUpdateDistanceMeters(1.0f) // 最小距离间隔
+            .build();
+        // 使用 LocationManagerCompat 请求位置更新（兼容 Android 6.0+）
+        LocationManagerCompat.requestLocationUpdates(
+            locationManager,
+            LocationManager.GPS_PROVIDER, // 使用 GPS 提供者
+            locationRequest,
+            executor,
+            locationListener1);
 
         // 添加GPS状态侦听
         if (locationManager != null) {
@@ -837,9 +932,10 @@ public class MyActivity
 
   // 停止 GPS 更新
   public double stopGpsUpdates() {
-    if (locationManager != null && locationListener != null) {
+    if (locationManager != null && locationListener1 != null) {
       try {
-        locationManager.removeUpdates(locationListener);
+        // locationManager.removeUpdates(locationListener1);
+        LocationManagerCompat.removeUpdates(locationManager, locationListener1);
 
         // 停止GPS状态侦听
         if (locationManager != null) {

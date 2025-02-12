@@ -476,7 +476,9 @@ void Steps::startRecordMotion() {
     // 获取总运动距离
     jdouble distance =
         m_activity.callMethod<jdouble>("getTotalDistance", "()D");
-    m_distance = (double)distance / 1000.00;
+    double a = distance;
+    double b = 1000;
+    m_distance = (double)(a / b);
     latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
     longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
     QAndroidJniObject jstrGpsStatus =
