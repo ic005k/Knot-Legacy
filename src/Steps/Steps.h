@@ -101,6 +101,7 @@ class Steps : public QDialog {
   QString strMotionTime;
   double latitude;
   double longitude;
+  QString strGpsStatus;
 
  signals:
   void distanceChanged(double distance);

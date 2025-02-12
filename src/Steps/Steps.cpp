@@ -471,14 +471,12 @@ void Steps::startRecordMotion() {
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, [this]() {
     m_time = m_time.addSecs(1);
-    QString strGpsStatus;
+
 #ifdef Q_OS_ANDROID
     // 获取总运动距离
     jdouble distance =
         m_activity.callMethod<jdouble>("getTotalDistance", "()D");
-    double a = distance;
-    double b = 1000;
-    m_distance = (double)(a / b);
+    m_distance = distance;
     latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
     longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
     QAndroidJniObject jstrGpsStatus =
@@ -505,11 +503,6 @@ void Steps::startRecordMotion() {
 
   m_activity = QtAndroid::androidActivity();
   if (m_activity.isValid()) {
-    // QAndroidJniObject locationService = m_activity.callObjectMethod(
-    //     "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;",
-    //     QAndroidJniObject::fromString("location").object<jstring>());
-    // if (locationService.isValid()) {
-
     // listenerWrapper = QAndroidJniObject("com/x/LocationListenerWrapper",
     //                                     "(Landroid/content/Context;)V",
     //                                     m_activity.object<jobject>());
@@ -524,7 +517,6 @@ void Steps::startRecordMotion() {
       mw_one->ui->btnGPS->setText(tr("Start"));
       return;
     }
-    //}
   }
 
 #else
@@ -557,6 +549,7 @@ void Steps::positionUpdated(const QGeoPositionInfo& info) {
 }
 
 void Steps::stopRecordMotion() {
+  strGpsStatus = "Stop";
   timer->stop();
 
 #ifdef Q_OS_ANDROID

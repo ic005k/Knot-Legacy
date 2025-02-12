@@ -103,6 +103,7 @@ import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -144,6 +145,7 @@ import android.provider.Settings;
 import androidx.appcompat.app.AlertDialog;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import android.os.SystemClock;
 
 //Qt5
 import org.qtproject.qt5.android.bindings.QtActivity;
@@ -219,12 +221,24 @@ public class MyActivity
   public static boolean zh_cn;
 
   private LocationManager locationManager;
-  private Location lastLocation;
-  private double totalDistance = 0;
   private double latitude = 0;
   private double longitude = 0;
-  private String strGpsStatus = "None";
   private Executor executor;
+
+  private boolean isTracking = false;
+  private long startTime = 0L;
+  private float totalDistance = 0f;
+  private float maxSpeed = 0f;
+  private float totalClimb = 0f;
+  private Location lastLocation;
+
+  private String strGpsStatus = "None";
+  private String strRunTime = "Run Time";
+  private String strAltitude = "Altitude";
+  private String strTotalDistance = "Total Distance";
+  private String strMaxSpeed = "Max Speed";
+  private String strTotalClimb = "Total Climb";
+  private String strAverageSpeed = "Average Speed";
 
   public MyActivity() {
   }
@@ -671,113 +685,15 @@ public class MyActivity
 
   }
 
-  // 定义LocationListener
-  private final LocationListener locationListener = new LocationListener() {
-    @Override
-    public void onLocationChanged(Location location) {
-      // 在这里处理获取到的位置信息，例如更新UI
-      lastLocation = location;
-      latitude = location.getLatitude();
-      longitude = location.getLongitude();
-      // 计算移动距离
-      if (lastLocation != null) {
-        if (lastLocation.hasAccuracy()) {
-          float accuracy = lastLocation.getAccuracy();
-          Log.i(TAG, "Accuracy: " + accuracy);
-        }
-        if (lastLocation.hasSpeed()) {
-          float speed = lastLocation.getSpeed();
-          Log.i(TAG, "Speed: " + speed);
-        }
-        if (lastLocation.hasBearing()) {
-          float bearing = lastLocation.getBearing();
-          Log.i(TAG, "Bearing: " + bearing);
-        }
-        if (lastLocation.hasAltitude()) {
-          double altitude = lastLocation.getAltitude();
-          Log.i(TAG, "Altitude: " + altitude);
-        }
-        if (lastLocation.hasAccuracy() && lastLocation.hasSpeed()) {
-          // 计算移动距离
-          if (lastLocation.getAccuracy() < 100 && lastLocation.getSpeed() > 0) {
-            if (lastLocation.hasAltitude()) {
-              totalDistance += lastLocation.distanceTo(lastLocation);
-            } else {
-              totalDistance += lastLocation.distanceTo(lastLocation);
-            }
-          }
-        }
-      }
-      Log.i(TAG, "Latitude: " + latitude + ", Longitude: " + longitude);
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-      switch (status) {
-        case LocationProvider.AVAILABLE:
-          strGpsStatus = "Available";
-          break;
-        case LocationProvider.OUT_OF_SERVICE:
-          strGpsStatus = "Out of Service";
-          break;
-        case LocationProvider.TEMPORARILY_UNAVAILABLE:
-          strGpsStatus = "Temporarily Unavailable";
-          break;
-      }
-      Log.i(TAG, "GPS Status: " + strGpsStatus);
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-      Log.d("LocationListener", "Provider enabled: " + provider);
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-      Log.d("LocationListener", "Provider disabled: " + provider);
-    }
-  };
-
-  // 定义位置监听器
+  // 使用LocationListenerCompat定义位置监听器
   private final LocationListenerCompat locationListener1 = new LocationListenerCompat() {
     @Override
     public void onLocationChanged(@NonNull Location location) {
       // 位置更新时触发
-      // 在这里处理获取到的位置信息，例如更新UI
-      lastLocation = location;
       latitude = location.getLatitude();
       longitude = location.getLongitude();
-      // 计算移动距离
-      if (lastLocation != null) {
-        if (lastLocation.hasAccuracy()) {
-          float accuracy = lastLocation.getAccuracy();
-          Log.i(TAG, "Accuracy: " + accuracy);
-        }
-        if (lastLocation.hasSpeed()) {
-          float speed = lastLocation.getSpeed();
-          Log.i(TAG, "Speed: " + speed);
-        }
-        if (lastLocation.hasBearing()) {
-          float bearing = lastLocation.getBearing();
-          Log.i(TAG, "Bearing: " + bearing);
-        }
-        if (lastLocation.hasAltitude()) {
-          double altitude = lastLocation.getAltitude();
-          Log.i(TAG, "Altitude: " + altitude);
-        }
-        if (lastLocation.hasAccuracy() && lastLocation.hasSpeed()) {
-          // 计算移动距离
-          if (lastLocation.getAccuracy() < 100 && lastLocation.getSpeed() > 0) {
-            if (lastLocation.hasAltitude()) {
-              totalDistance += lastLocation.distanceTo(lastLocation);
-            } else {
-              totalDistance += lastLocation.distanceTo(lastLocation);
-            }
-          }
-        }
-      }
-      Log.i(TAG, "Latitude: " + latitude + ", Longitude: " + longitude);
+      updateTrackingData(location);
+
     }
 
     @Override
@@ -842,13 +758,18 @@ public class MyActivity
   };
 
   public String getGpsStatus() {
-    return strGpsStatus;
+    return strTotalDistance + "  " + strRunTime + "\n" + strAverageSpeed + "  " + strMaxSpeed + "\n" + strAltitude
+        + "  " + strTotalClimb + "\n" + strGpsStatus;
   }
 
   public double startGpsUpdates() {
-    totalDistance = 0;
     latitude = 0;
     longitude = 0;
+    startTime = SystemClock.elapsedRealtime();
+    totalDistance = 0f;
+    maxSpeed = 0f;
+    totalClimb = 0f;
+    lastLocation = null;
 
     // 初始化LocationManager
     locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -890,7 +811,7 @@ public class MyActivity
 
         // 创建 LocationRequestCompat 对象
         // .setPriority(LocationRequestCompat.PRIORITY_HIGH_ACCURACY) // 高精度模式
-        LocationRequestCompat locationRequest = new LocationRequestCompat.Builder(5000L) // 最小时间间隔
+        LocationRequestCompat locationRequest = new LocationRequestCompat.Builder(2000L) // 最小时间间隔
             .setMinUpdateDistanceMeters(1.0f) // 最小距离间隔
             .build();
         // 使用 LocationManagerCompat 请求位置更新（兼容 Android 6.0+）
@@ -946,6 +867,47 @@ public class MyActivity
       }
     }
     return totalDistance;
+  }
+
+  // 更新运动数据
+  private void updateTrackingData(Location currentLocation) {
+    // 更新运动时间
+    long elapsedTime = SystemClock.elapsedRealtime() - startTime;
+    int seconds = (int) (elapsedTime / 1000);
+    int minutes = seconds / 60;
+    int h = minutes / 60;
+    seconds = seconds % 60;
+    strRunTime = "运动时间: " + h + ":" + minutes + ":" + String.format("%02d", seconds);
+
+    // 更新海拔
+    double altitude = currentLocation.getAltitude();
+    strAltitude = "当前海拔: " + new DecimalFormat("#.00").format(altitude) + " m";
+
+    // 更新运动距离、最大速度和爬升高度
+    if (lastLocation != null) {
+      totalDistance += lastLocation.distanceTo(currentLocation) / 1000; // 转换为公里
+      strTotalDistance = "运动距离: " + new DecimalFormat("#.00").format(totalDistance) + " km";
+
+      float speed = currentLocation.getSpeed() * 3.6f; // 转换为 km/h
+      if (speed > maxSpeed) {
+        maxSpeed = speed;
+      }
+      strMaxSpeed = "最大速度: " + new DecimalFormat("#.00").format(maxSpeed) + " km/h";
+
+      float climb = (float) (currentLocation.getAltitude() - lastLocation.getAltitude());
+      if (climb > 0) {
+        totalClimb += climb;
+      }
+      strTotalClimb = "爬升高度: " + new DecimalFormat("#.00").format(totalClimb) + " m";
+    }
+
+    // 更新平均速度
+    if (elapsedTime > 0) {
+      float averageSpeed = totalDistance / (elapsedTime / 3600000f); // 计算平均速度
+      strAverageSpeed = "平均速度: " + new DecimalFormat("#.00").format(averageSpeed) + " km/h";
+    }
+
+    lastLocation = currentLocation;
   }
 
   private static ServiceConnection mCon = new ServiceConnection() {
