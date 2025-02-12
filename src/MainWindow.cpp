@@ -3235,6 +3235,16 @@ void MainWindow::on_btnSteps_clicked() {
       ui->lblSingle->text().toInt() / 100 / 1000;
   QString km = QString("%1").arg(d_km, 0, 'f', 2) + "  " + tr("KM");
   ui->lblKM->setText(km);
+
+  if (ui->lblGpsInfo->text() == tr("GPS Info")) {
+    QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    Reg.setIniCodec("utf-8");
+#endif
+    double m_td = Reg.value("/Steps/TotalDistance", 0).toDouble();
+    ui->lblGpsInfo->setText(tr("Total Distance") + " : " +
+                            QString::number(m_td) + " km");
+  }
 }
 
 void MainWindow::changeEvent(QEvent *event) {

@@ -454,6 +454,12 @@ void Steps::setScrollBarPos(double pos) {
 void Steps::startRecordMotion() {
   // requestLocationPermissions(); // 已在安卓中调用
 
+  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  m_TotalDistance = Reg.value("/Steps/TotalDistance", 0).toDouble();
+
 #ifdef Q_OS_ANDROID
 #else
   m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
@@ -473,7 +479,7 @@ void Steps::startRecordMotion() {
     m_time = m_time.addSecs(1);
 
 #ifdef Q_OS_ANDROID
-    // 获取总运动距离
+    // 获取当前运动距离
     jdouble distance =
         m_activity.callMethod<jdouble>("getTotalDistance", "()D");
     m_distance = distance;
@@ -483,14 +489,14 @@ void Steps::startRecordMotion() {
         m_activity.callObjectMethod<jstring>("getGpsStatus");
     if (jstrGpsStatus.isValid()) strGpsStatus = jstrGpsStatus.toString();
 #else
-
+    if (m_time.second() != 0) {
+        m_speed = m_distance / m_time.second();
+        emit speedChanged();
+    }
 #endif
 
-    if (m_time.second() != 0) {
-      m_speed = m_distance / m_time.second();
-      emit speedChanged();
-    }
-    strDistance = tr("Distance") + " : " + QString::number(m_distance) + " km";
+    strDistance =
+        tr("Total Distance") + " : " + QString::number(m_TotalDistance) + " km";
     strMotionTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
     mw_one->ui->lblGpsInfo->setText(strDistance + "    " + strMotionTime +
                                     "\n" + QString::number(latitude) + " - " +
@@ -549,8 +555,19 @@ void Steps::positionUpdated(const QGeoPositionInfo& info) {
 }
 
 void Steps::stopRecordMotion() {
-  strGpsStatus = "Stop";
   timer->stop();
+  m_TotalDistance = m_TotalDistance + m_distance;
+  strDistance =
+      tr("Total Distance") + " : " + QString::number(m_TotalDistance) + " km";
+  mw_one->ui->lblGpsInfo->setText(
+      strDistance + "    " + strMotionTime + "\n" + QString::number(latitude) +
+      " - " + QString::number(longitude) + "\n" + strGpsStatus);
+
+  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  Reg.setValue("/Steps/TotalDistance", m_TotalDistance);
 
 #ifdef Q_OS_ANDROID
   m_distance = m_activity.callMethod<jdouble>("stopGpsUpdates", "()D");
@@ -562,11 +579,7 @@ void Steps::stopRecordMotion() {
 #endif
 
   ShowMessage* msg = new ShowMessage(this);
-  const auto speed = m_speed * 3.6;
-  QString strSpeed =
-      tr("Speed") + " : " + QString::number(speed, 'g', 2) + " km/h";
-  msg->showMsg("Knot", strDistance + "\n\n" + strMotionTime + "\n\n" + strSpeed,
-               1);
+  msg->showMsg("Knot", mw_one->ui->lblGpsInfo->text(), 1);
 }
 
 bool Steps::requestLocationPermissions() {

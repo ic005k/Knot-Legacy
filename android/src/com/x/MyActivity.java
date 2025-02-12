@@ -227,10 +227,12 @@ public class MyActivity
 
   private boolean isTracking = false;
   private long startTime = 0L;
+  private long movingTime;
   private float totalDistance = 0f;
   private float maxSpeed = 0f;
   private float totalClimb = 0f;
-  private Location lastLocation;
+  private Location previousLocation;
+  private double previousAltitude;
 
   private String strGpsStatus = "None";
   private String strRunTime = "Run Time";
@@ -765,11 +767,13 @@ public class MyActivity
   public double startGpsUpdates() {
     latitude = 0;
     longitude = 0;
-    startTime = SystemClock.elapsedRealtime();
+    startTime = System.currentTimeMillis();
     totalDistance = 0f;
     maxSpeed = 0f;
     totalClimb = 0f;
-    lastLocation = null;
+    previousLocation = null;
+    movingTime = 0;
+    previousAltitude = 0f;
 
     // 初始化LocationManager
     locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -871,43 +875,61 @@ public class MyActivity
 
   // 更新运动数据
   private void updateTrackingData(Location currentLocation) {
-    // 更新运动时间
-    long elapsedTime = SystemClock.elapsedRealtime() - startTime;
-    int seconds = (int) (elapsedTime / 1000);
-    int minutes = seconds / 60;
-    int h = minutes / 60;
-    seconds = seconds % 60;
-    strRunTime = "运动时间: " + h + ":" + minutes + ":" + String.format("%02d", seconds);
+    if (previousLocation != null) {
+      if (currentLocation.getSpeed() > 0) {
+        // 运动状态
+        long currentTime = System.currentTimeMillis();
+        movingTime += currentTime - startTime;
+        startTime = currentTime;
 
-    // 更新海拔
-    double altitude = currentLocation.getAltitude();
-    strAltitude = "当前海拔: " + new DecimalFormat("#.00").format(altitude) + " m";
+        // 计算距离
+        totalDistance += previousLocation.distanceTo(currentLocation) / 1000; // 转换为公里
 
-    // 更新运动距离、最大速度和爬升高度
-    if (lastLocation != null) {
-      totalDistance += lastLocation.distanceTo(currentLocation) / 1000; // 转换为公里
-      strTotalDistance = "运动距离: " + new DecimalFormat("#.00").format(totalDistance) + " km";
+        // 计算最大速度
+        if (currentLocation.getSpeed() * 3.6f > maxSpeed) {
+          maxSpeed = currentLocation.getSpeed() * 3.6f; // 转换为 km/h
+        }
 
-      float speed = currentLocation.getSpeed() * 3.6f; // 转换为 km/h
-      if (speed > maxSpeed) {
-        maxSpeed = speed;
+        // 计算爬升
+        double currentAltitude = currentLocation.getAltitude();
+        if (currentAltitude > previousAltitude) {
+          totalClimb += currentAltitude - previousAltitude;
+        }
+        previousAltitude = currentAltitude;
+      } else {
+        // 静止状态，更新开始时间
+        startTime = System.currentTimeMillis();
       }
-      strMaxSpeed = "最大速度: " + new DecimalFormat("#.00").format(maxSpeed) + " km/h";
-
-      float climb = (float) (currentLocation.getAltitude() - lastLocation.getAltitude());
-      if (climb > 0) {
-        totalClimb += climb;
-      }
-      strTotalClimb = "爬升高度: " + new DecimalFormat("#.00").format(totalClimb) + " m";
+    } else {
+      previousAltitude = currentLocation.getAltitude();
     }
 
-    // 更新平均速度
-    if (elapsedTime > 0) {
-      float averageSpeed = totalDistance / (elapsedTime / 3600000f); // 计算平均速度
-      strAverageSpeed = "平均速度: " + new DecimalFormat("#.00").format(averageSpeed) + " km/h";
-    }
+    // 更新 UI
+    updateUI(currentLocation);
 
-    lastLocation = currentLocation;
+    previousLocation = currentLocation;
+  }
+
+  private void updateUI(Location location) {
+    // 运动距离
+    strTotalDistance = String.format("距离: %.2f km", totalDistance);
+
+    // 运动时间
+    long seconds = movingTime / 1000;
+    strRunTime = String.format("时间: %02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
+
+    // 平均速度
+    double avgSpeed = totalDistance / (movingTime / 3600000f);
+    strAverageSpeed = String.format("平均速度: %.2f km/h", avgSpeed);
+
+    // 最大速度
+    strMaxSpeed = String.format("最大速度: %.2f km/h", maxSpeed);
+
+    // 海拔
+    strAltitude = String.format("海拔: %.2f 米", location.getAltitude());
+
+    // 爬升
+    strTotalClimb = String.format("爬升: %.2f 米", totalClimb);
   }
 
   private static ServiceConnection mCon = new ServiceConnection() {

@@ -93,6 +93,7 @@ class Steps : public QDialog {
   QGeoPositionInfoSource *m_positionSource;
   QGeoCoordinate lastPosition;
   double m_distance;
+  double m_TotalDistance;
   double m_speed;
   QDateTime m_startTime;
   QTime m_time;
