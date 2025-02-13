@@ -397,12 +397,26 @@ void Steps::startRecordMotion() {
     longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
     QAndroidJniObject jstrGpsStatus =
         m_activity.callObjectMethod<jstring>("getGpsStatus");
-    if (jstrGpsStatus.isValid()) strGpsStatus = jstrGpsStatus.toString();
-#else
-    if (m_time.second() != 0) {
-        m_speed = m_distance / m_time.second();
-        emit speedChanged();
+    if (jstrGpsStatus.isValid()) {
+      strGpsStatus = jstrGpsStatus.toString();
+      QStringList list = strGpsStatus.split("\n");
+      if (list.count() > 2) {
+        QString str1, str2;
+        str1 = list.at(0);
+        str2 = list.at(1);
+        mw_one->ui->lblCurrentDistance->setText(str1);
+        mw_one->ui->lblRunTime->setText(str2);
+        strGpsStatus = strGpsStatus.replace(str1, "");
+        strGpsStatus = strGpsStatus.replace(str2, "");
+        strGpsStatus = strGpsStatus.trimmed();
+      }
     }
+
+#else
+        if (m_time.second() != 0) {
+          m_speed = m_distance / m_time.second();
+          emit speedChanged();
+        }
 #endif
 
     strDistance = QString::number(m_TotalDistance) + " km";

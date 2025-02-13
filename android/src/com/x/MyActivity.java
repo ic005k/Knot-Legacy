@@ -235,9 +235,9 @@ public class MyActivity
   private double previousAltitude;
 
   private String strGpsStatus = "GPS Status";
-  private String strRunTime = "Run Time";
+  private String strRunTime = "00:00:00";
   private String strAltitude = "Altitude";
-  private String strTotalDistance = "Run Distance";
+  private String strTotalDistance = "0 km";
   private String strMaxSpeed = "Max Speed";
   private String strTotalClimb = "Total Climb";
   private String strAverageSpeed = "Average Speed";
@@ -912,17 +912,11 @@ public class MyActivity
 
   private void updateUI(Location location) {
     // 运动距离
-    if (zh_cn)
-      strTotalDistance = String.format("距离: %.2f km", totalDistance);
-    else
-      strTotalDistance = String.format("Distance: %.2f km", totalDistance);
+    strTotalDistance = String.format("%.2f km", totalDistance);
 
     // 运动时间
     long seconds = movingTime / 1000;
-    if (zh_cn)
-      strRunTime = String.format("运动时长: %02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
-    else
-      strRunTime = String.format("Run Time: %02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
+    strRunTime = String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
 
     // 平均速度
     double avgSpeed = totalDistance / (movingTime / 3600000f);
