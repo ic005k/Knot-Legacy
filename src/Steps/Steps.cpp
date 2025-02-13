@@ -39,13 +39,12 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblTitle3->setFont(font0);
   mw_one->ui->lblTitle4->setFont(font0);
 
-  QFont font1 = m_Method->getNewFont(18);
+  QFont font1 = m_Method->getNewFont(17);
   font1.setBold(true);
   mw_one->ui->lblKM->setFont(font1);
   mw_one->ui->lblSingle->setFont(font1);
-  mw_one->ui->lblGpsInfo->setFont(font1);
 
-  QString lblStyle = mw_one->ui->lblTotalDistance->styleSheet();
+  lblStyle = mw_one->ui->lblTotalDistance->styleSheet();
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStyle);
   mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
   mw_one->ui->lblAverageSpeed->setStyleSheet(lblStyle);
@@ -479,6 +478,10 @@ void Steps::startRecordMotion() {
 
   mw_one->ui->btnGPS->setText(tr("Stop"));
   mw_one->ui->tabMotion->setCurrentIndex(1);
+
+  mw_one->ui->lblRunTime->setStyleSheet(lblStartStyle);
+  mw_one->ui->lblAverageSpeed->setStyleSheet(lblStartStyle);
+  mw_one->ui->lblCurrentDistance->setStyleSheet(lblStartStyle);
 }
 
 void Steps::positionUpdated(const QGeoPositionInfo& info) {
@@ -500,6 +503,10 @@ void Steps::stopRecordMotion() {
   strDistance = QString::number(m_TotalDistance) + " km";
   mw_one->ui->lblTotalDistance->setText(strDistance);
   mw_one->ui->lblGpsInfo->setText(strGpsInfoShow);
+
+  mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
+  mw_one->ui->lblAverageSpeed->setStyleSheet(lblStyle);
+  mw_one->ui->lblCurrentDistance->setStyleSheet(lblStyle);
 
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

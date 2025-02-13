@@ -404,7 +404,6 @@ void MainWindow::initHardStepSensor() {
   if (isHardStepSensor == 1) {
     ui->lblSteps->hide();
 
-    ui->lblTotalRunTime->hide();
     m_Preferences->ui->chkDebug->setChecked(false);
     m_Preferences->on_chkDebug_clicked();
     m_Preferences->ui->chkDebug->hide();
@@ -767,8 +766,6 @@ void MainWindow::readDataInThread(int ExceptIndex) {
 }
 
 void MainWindow::timerUpdate() {
-  ui->lblTotalRunTime->setText(tr("Total Working Hours") + " : " +
-                               secondsToTime(timeTest++));
   if (QTime::currentTime().toString("hh-mm-ss") == "00-30-00") {
     m_Preferences->isFontChange = true;
     this->close();
@@ -3229,8 +3226,6 @@ void MainWindow::updateHardSensorSteps() {
   qDebug() << "Started updating the hardware sensor steps...";
 
   timeTest = timeTest + 1;
-  ui->lblTotalRunTime->setText(tr("Number of Operations") + " : " +
-                               QString::number(timeTest));
 
   if (strDate != QDate::currentDate().toString("ddd MM dd yyyy")) {
     initTodayInitSteps();

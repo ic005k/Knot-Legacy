@@ -94,6 +94,12 @@ class Steps : public QDialog {
   double longitude;
   QString strGpsStatus;
   QString strGpsInfoShow;
+  QString lblStyle;
+  QString lblStartStyle =
+      "QLabel {background-color: #FF0000;color: #ECEFF4;font-family: 'Segoe "
+      "UI', sans-serif;font-weight: bold;border: 2px solid "
+      "#4C566A;border-radius: 10px;padding: 10px 20px;text-align: "
+      "center;box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);}";
 
  signals:
   void distanceChanged(double distance);
