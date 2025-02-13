@@ -240,7 +240,7 @@ public class MyActivity
   private String strTotalDistance = "0 km";
   private String strMaxSpeed = "Max Speed";
   private String strTotalClimb = "Total Climb";
-  private String strAverageSpeed = "Average Speed";
+  private String strAverageSpeed = "0 km/h";
 
   public MyActivity() {
   }
@@ -920,10 +920,7 @@ public class MyActivity
 
     // 平均速度
     double avgSpeed = totalDistance / (movingTime / 3600000f);
-    if (zh_cn)
-      strAverageSpeed = String.format("平均速度: %.2f km/h", avgSpeed);
-    else
-      strAverageSpeed = String.format("Average Speed: %.2f km/h", avgSpeed);
+    strAverageSpeed = String.format("%.2f km/h", avgSpeed);
 
     // 最大速度
     if (zh_cn)

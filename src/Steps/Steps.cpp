@@ -34,11 +34,22 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblCurrent->setFont(font0);
   mw_one->ui->lblToNow->setFont(font0);
   mw_one->ui->lblNow->setFont(font0);
+  mw_one->ui->lblTitle1->setFont(font0);
+  mw_one->ui->lblTitle2->setFont(font0);
+  mw_one->ui->lblTitle3->setFont(font0);
+  mw_one->ui->lblTitle4->setFont(font0);
 
-  QFont font1 = m_Method->getNewFont(19);
+  QFont font1 = m_Method->getNewFont(18);
   font1.setBold(true);
   mw_one->ui->lblKM->setFont(font1);
   mw_one->ui->lblSingle->setFont(font1);
+  mw_one->ui->lblGpsInfo->setFont(font1);
+
+  QString lblStyle = mw_one->ui->lblTotalDistance->styleSheet();
+  mw_one->ui->lblCurrentDistance->setStyleSheet(lblStyle);
+  mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
+  mw_one->ui->lblAverageSpeed->setStyleSheet(lblStyle);
+  mw_one->ui->lblGpsInfo->setStyleSheet(lblStyle);
 }
 
 Steps::~Steps() {}
@@ -401,14 +412,18 @@ void Steps::startRecordMotion() {
       strGpsStatus = jstrGpsStatus.toString();
       QStringList list = strGpsStatus.split("\n");
       if (list.count() > 2) {
-        QString str1, str2;
+        QString str1, str2, str3, str4, str5, str6, str7;
         str1 = list.at(0);
         str2 = list.at(1);
+        str3 = list.at(2);
         mw_one->ui->lblCurrentDistance->setText(str1);
         mw_one->ui->lblRunTime->setText(str2);
-        strGpsStatus = strGpsStatus.replace(str1, "");
-        strGpsStatus = strGpsStatus.replace(str2, "");
-        strGpsStatus = strGpsStatus.trimmed();
+        mw_one->ui->lblAverageSpeed->setText(str3);
+        str4 = list.at(3);
+        str5 = list.at(4);
+        str6 = list.at(5);
+        str7 = list.at(6);
+        strGpsStatus = str4 + "\n" + str5 + "\n" + str6 + "\n" + str7;
       }
     }
 

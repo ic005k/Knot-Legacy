@@ -4205,140 +4205,140 @@ QSlider::handle:horizontal:disabled {
           <attribute name="title">
            <string>GPS</string>
           </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_44">
+          <layout class="QVBoxLayout" name="verticalLayout_41">
            <item>
-            <widget class="QFrame" name="frame">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <widget class="QLabel" name="lblTitle1">
+             <property name="text">
+              <string>Total Distance</string>
              </property>
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_41">
-              <item>
-               <widget class="QLabel" name="label">
-                <property name="text">
-                 <string>Total Distance</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lblTotalDistance">
-                <property name="font">
-                 <font>
-                  <pointsize>26</pointsize>
-                  <bold>true</bold>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>100.00</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </widget>
            </item>
            <item>
-            <widget class="QFrame" name="frame_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <widget class="QLabel" name="lblTotalDistance">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>25</pointsize>
+               <bold>true</bold>
+               <strikeout>false</strikeout>
+              </font>
              </property>
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+             <property name="styleSheet">
+              <string notr="true">QLabel {
+    /* 背景颜色 */
+    background-color: #2E3440; /* 深色背景 */
+    
+    /* 文字颜色 */
+    color: #ECEFF4; /* 浅色文字 */
+    
+    /* 字体设置 */
+    font-family: 'Segoe UI', sans-serif; /* 现代字体 */
+    font-weight: bold; /* 加粗 */
+    
+    /* 边框设置 */
+    border: 2px solid #4C566A; /* 浅色边框 */
+    border-radius: 10px; /* 圆角 */
+    
+    /* 内边距 */
+    padding: 10px 20px; /* 上下左右的内边距 */
+    
+    /* 文字对齐 */
+    text-align: center; /* 文字居中 */
+    
+    /* 阴影效果 */
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* 轻微的阴影 */
+}</string>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+             <property name="text">
+              <string>100.00</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_42">
-              <item>
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>Current Distance</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lblCurrentDistance">
-                <property name="font">
-                 <font>
-                  <pointsize>22</pointsize>
-                  <bold>true</bold>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>0</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item>
-            <widget class="QFrame" name="frame_3">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <widget class="QLabel" name="lblTitle2">
+             <property name="text">
+              <string>Current Distance</string>
              </property>
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblCurrentDistance">
+             <property name="font">
+              <font>
+               <pointsize>20</pointsize>
+               <bold>true</bold>
+               <strikeout>false</strikeout>
+              </font>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_43">
-              <item>
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>Exercise Duration</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lblRunTime">
-                <property name="font">
-                 <font>
-                  <pointsize>22</pointsize>
-                  <bold>true</bold>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>00:00:00</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblTitle3">
+             <property name="text">
+              <string>Exercise Duration</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblRunTime">
+             <property name="font">
+              <font>
+               <pointsize>20</pointsize>
+               <bold>true</bold>
+               <strikeout>false</strikeout>
+              </font>
+             </property>
+             <property name="text">
+              <string>00:00:00</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblTitle4">
+             <property name="text">
+              <string>Average Speed</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblAverageSpeed">
+             <property name="font">
+              <font>
+               <pointsize>20</pointsize>
+               <bold>true</bold>
+               <strikeout>false</strikeout>
+              </font>
+             </property>
+             <property name="text">
+              <string>0 km/h</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item>
