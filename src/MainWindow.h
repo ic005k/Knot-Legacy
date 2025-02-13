@@ -443,8 +443,6 @@ class MainWindow : public QMainWindow {
 
   void on_btnMenu_clicked();
 
-  void on_btnPause_clicked();
-
   void on_btnReader_clicked();
 
   void on_btnBackReader_clicked();
@@ -559,8 +557,6 @@ class MainWindow : public QMainWindow {
   void on_editTodo_textChanged();
 
   void on_btnBackSteps_clicked();
-
-  void on_btnPauseSteps_clicked();
 
   void on_btnReset_clicked();
 

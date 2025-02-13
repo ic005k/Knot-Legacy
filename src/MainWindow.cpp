@@ -396,20 +396,19 @@ void MainWindow::initHardStepSensor() {
 #endif
 
   if (isHardStepSensor == 0) {
-    ui->btnPause->click();
-    ui->btnPause->setHidden(true);
-    ui->btnSteps->setHidden(true);
+    ui->btnStepsOptions->setHidden(true);
+    ui->btnReset->setHidden(true);
+    ui->tabMotion->setTabEnabled(0, false);
+    ui->tabMotion->setCurrentIndex(1);
   }
   if (isHardStepSensor == 1) {
-    ui->btnPause->click();
-
     ui->lblSteps->hide();
-    ui->btnPauseSteps->hide();
+
     ui->lblTotalRunTime->hide();
     m_Preferences->ui->chkDebug->setChecked(false);
     m_Preferences->on_chkDebug_clicked();
     m_Preferences->ui->chkDebug->hide();
-    ui->btnPause->hide();
+
     initTodayInitSteps();
     resetSteps = tc;
   }
@@ -453,11 +452,7 @@ void MainWindow::initTodayInitSteps() {
   }
 }
 
-void MainWindow::pausePedometer() {
-  if (QTime::currentTime().toString("hh-mm-ss") == "22-00-00") {
-    if (ui->btnPauseSteps->text() == tr("Pause")) ui->btnPauseSteps->click();
-  }
-}
+void MainWindow::pausePedometer() {}
 
 void MainWindow::updateSteps() {
   // CurrentSteps = accel_pedometer->stepCount();
@@ -3174,8 +3169,7 @@ void MainWindow::on_btnSteps_clicked() {
     Reg.setIniCodec("utf-8");
 #endif
     double m_td = Reg.value("/Steps/TotalDistance", 0).toDouble();
-    ui->lblGpsInfo->setText(tr("Total Distance") + " : " +
-                            QString::number(m_td) + " km");
+    ui->lblTotalDistance->setText(QString::number(m_td) + " km");
   }
 }
 
@@ -3801,7 +3795,7 @@ void MainWindow::init_UIWidget() {
 
 #ifdef Q_OS_ANDROID
 #else
-  ui->btnPause->hide();
+
 #endif
 
   // ui->tabCharts->setCornerWidget(ui->frame_cw);
@@ -3832,7 +3826,7 @@ void MainWindow::init_UIWidget() {
   ui->btnAdd->setFont(f);
   ui->btnDel->setFont(f);
   ui->btnSync->setFont(f);
-  ui->btnPause->setFont(f);
+
   ui->btnReport->setFont(f);
   ui->btnFind->setFont(f);
   ui->btnModifyRecord->setFont(f);
@@ -3851,7 +3845,7 @@ void MainWindow::init_ButtonStyle() {
   ui->btnMenu->setStyleSheet("border:none");
   ui->btnModifyRecord->setStyleSheet("border:none");
   ui->btnMove->setStyleSheet("border:none");
-  ui->btnPause->setStyleSheet("border:none");
+
   ui->btnTodo->setStyleSheet("border:none");
   ui->btnSteps->setStyleSheet("border:none");
   ui->btnChart->setStyleSheet("border:none");
@@ -4408,8 +4402,6 @@ void RegJni(const char *myClassName) {
 }
 
 #endif
-
-void MainWindow::on_btnPause_clicked() { ui->btnPauseSteps->click(); }
 
 QString MainWindow::getYMD(QString date) {
   QStringList list = date.split(" ");
@@ -5238,8 +5230,6 @@ bool MainWindow::setTWCurrentItem() {
 }
 
 void MainWindow::on_btnBackSteps_clicked() { m_Steps->on_btnBack_clicked(); }
-
-void MainWindow::on_btnPauseSteps_clicked() { m_Steps->on_btnPause_clicked(); }
 
 void MainWindow::on_btnReset_clicked() { m_Steps->on_btnReset_clicked(); }
 

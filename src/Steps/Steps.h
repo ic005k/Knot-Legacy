@@ -56,13 +56,7 @@ class Steps : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  public:
-  void on_rbAlg1_clicked();
-
-  void on_rbAlg2_clicked();
-
   void on_btnBack_clicked();
-
-  void on_btnPause_clicked();
 
   void on_btnReset_clicked();
 
@@ -99,6 +93,7 @@ class Steps : public QDialog {
   double latitude;
   double longitude;
   QString strGpsStatus;
+  QString strGpsInfoShow;
 
  signals:
   void distanceChanged(double distance);

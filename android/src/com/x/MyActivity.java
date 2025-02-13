@@ -702,13 +702,13 @@ public class MyActivity
     public void onStatusChanged(String provider, int status, Bundle extras) {
       switch (status) {
         case LocationProvider.AVAILABLE:
-          strGpsStatus = "Available";
+          strGpsStatus = "GPS: Available";
           break;
         case LocationProvider.OUT_OF_SERVICE:
-          strGpsStatus = "Out of Service";
+          strGpsStatus = "GPS: Out of Service";
           break;
         case LocationProvider.TEMPORARILY_UNAVAILABLE:
-          strGpsStatus = "Temporarily Unavailable";
+          strGpsStatus = "GPS: Temporarily Unavailable";
           break;
       }
       Log.i(TAG, "GPS Status: " + strGpsStatus);
@@ -945,7 +945,7 @@ public class MyActivity
 
     // 爬升
     if (zh_cn)
-      strTotalClimb = String.format("爬升: %.2f 米", totalClimb);
+      strTotalClimb = String.format("累计爬升: %.2f 米", totalClimb);
     else
       strTotalClimb = String.format("Total Climb: %.2f 米", totalClimb);
   }

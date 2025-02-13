@@ -63,27 +63,6 @@ void Steps::on_btnBack_clicked() {
   mw_one->ui->frameMain->show();
 }
 
-void Steps::on_btnPause_clicked() {
-  if (mw_one->ui->btnPauseSteps->text() == tr("Pause")) {
-    mw_one->ui->btnPauseSteps->setText(tr("Start"));
-    mw_one->stopJavaTimer();
-    mw_one->accel_pedometer->stop();
-    mw_one->accel_pedometer->setActive(false);
-    mw_one->gyroscope->stop();
-    mw_one->gyroscope->setActive(false);
-    mw_one->ui->btnPause->setIcon(QIcon(":/res/pause.png"));
-
-    releaseWakeLock();
-
-  } else if (mw_one->ui->btnPauseSteps->text() == tr("Start")) {
-    mw_one->ui->btnPauseSteps->setText(tr("Pause"));
-
-    acquireWakeLock();
-
-    mw_one->ui->btnPause->setIcon(QIcon(":/res/run.png"));
-  }
-}
-
 void Steps::on_btnReset_clicked() {
   mw_one->accel_pedometer->resetStepCount();
 
@@ -129,12 +108,6 @@ void Steps::saveSteps() {
 void Steps::init_Steps() {
   clearAll();
 
-  bool isRun = false;
-  if (mw_one->ui->btnPauseSteps->text() == tr("Pause")) {
-    mw_one->ui->btnPauseSteps->click();
-    isRun = true;
-  }
-
   QString ini_file;
   ini_file = iniDir + "steps.ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
@@ -175,11 +148,6 @@ void Steps::init_Steps() {
       toDayInitSteps = getSteps(i);
       break;
     }
-  }
-
-  if (isRun) {
-    if (mw_one->ui->btnPauseSteps->text() == tr("Start"))
-      mw_one->ui->btnPause->click();
   }
 }
 
@@ -276,32 +244,6 @@ void Steps::setTableSteps(qlonglong steps) {
     Reg.setValue("/Steps/Count", count);
   }
 }
-
-void Steps::on_rbAlg1_clicked() {
-  if (mw_one->ui->btnPauseSteps->text() == tr("Start")) return;
-  // if (mw_one->m_Preferences->ui->chkDebug->isChecked())
-  // ui->frameWay1->show();
-  mw_one->ui->lblSteps->setText("");
-
-  mw_one->accel_pedometer->start();
-  mw_one->accel_pedometer->setActive(true);
-  mw_one->gyroscope->stop();
-  mw_one->gyroscope->setActive(false);
-
-#ifdef Q_OS_ANDROID
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  QAndroidJniObject jo = QAndroidJniObject::fromString("Sleep1Win");
-  jo.callStaticMethod<int>("com.x/MyService", "setSleep1", "()I");
-#else
-  QJniObject jo = QJniObject::fromString("Sleep1Win");
-  jo.callStaticMethod<int>("com.x/MyService", "setSleep1", "()I");
-#endif
-
-#endif
-}
-
-void Steps::on_rbAlg2_clicked() {}
 
 void Steps::releaseWakeLock() {
 #ifdef Q_OS_ANDROID
@@ -463,13 +405,13 @@ void Steps::startRecordMotion() {
     }
 #endif
 
-    strDistance =
-        tr("Total Distance") + " : " + QString::number(m_TotalDistance) + " km";
+    strDistance = QString::number(m_TotalDistance) + " km";
+    mw_one->ui->lblTotalDistance->setText(strDistance);
     strDurationTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
-    mw_one->ui->lblGpsInfo->setText(strDistance + "\n" + strDurationTime +
-                                    "\n" + QString::number(latitude) + " - " +
-                                    QString::number(longitude) + "\n" +
-                                    strGpsStatus);
+    strGpsInfoShow = strDurationTime +
+                     "\nLon.-Lat.: " + QString::number(longitude) + " - " +
+                     QString::number(latitude) + "\n" + strGpsStatus;
+    mw_one->ui->lblGpsInfo->setText(strGpsInfoShow);
     emit timeChanged();
   });
 
@@ -526,11 +468,9 @@ void Steps::positionUpdated(const QGeoPositionInfo& info) {
 void Steps::stopRecordMotion() {
   timer->stop();
   m_TotalDistance = m_TotalDistance + m_distance;
-  strDistance =
-      tr("Total Distance") + " : " + QString::number(m_TotalDistance) + " km";
-  mw_one->ui->lblGpsInfo->setText(
-      strDistance + "\n" + strDurationTime + "\n" + QString::number(latitude) +
-      " - " + QString::number(longitude) + "\n" + strGpsStatus);
+  strDistance = QString::number(m_TotalDistance) + " km";
+  mw_one->ui->lblTotalDistance->setText(strDistance);
+  mw_one->ui->lblGpsInfo->setText(strGpsInfoShow);
 
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
