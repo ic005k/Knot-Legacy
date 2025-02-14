@@ -154,12 +154,16 @@ Rectangle {
             id: listItem
             width: ListView.view.width
             height: getItemHeight() + 16
-            color: ListView.isCurrentItem ? "lightblue" : getColor()
 
-            border.width: isDark ? 0 : 1
-            border.color: "lightgray" //"lightsteelblue"
+            // color: ListView.isCurrentItem ? "lightblue" : getColor()
+            // border.width: isDark ? 0 : 1
+            // border.color: "lightgray" //"lightsteelblue"
 
-            radius: 0
+            color: index % 2 === 0 ? "#f0f0f0" : "#e0e0e0"
+            border.color: "#ccc"
+            border.width: 1
+
+            radius: 3
 
             function getItemHeight() {
                 var item0H
@@ -230,7 +234,7 @@ Rectangle {
                         wrapMode: TextArea.NoWrap
                         font.bold: true
                         text: text0
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                         leftPadding: 5
                         rightPadding: 5
@@ -246,7 +250,7 @@ Rectangle {
 
                         width: parent.width
                         wrapMode: TextArea.WordWrap
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                       // color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         font.bold: false
                         text: text1
 
@@ -267,7 +271,7 @@ Rectangle {
                         wrapMode: TextArea.WordWrap
                         font.bold: false
                         text: text2
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                         leftPadding: 5
                         rightPadding: 5
@@ -285,7 +289,7 @@ Rectangle {
                         Layout.preferredWidth: listItem.width
                         font.bold: false
                         text: text3
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                         leftPadding: 5
                         rightPadding: 5
@@ -303,7 +307,7 @@ Rectangle {
                         Layout.preferredWidth: listItem.width
                         font.bold: false
                         text: text4
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                       // color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                         leftPadding: 5
                         rightPadding: 5
@@ -321,7 +325,7 @@ Rectangle {
                         Layout.preferredWidth: listItem.width
                         font.bold: false
                         text: text5
-                        color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
                         leftPadding: 5
                         rightPadding: 5
@@ -432,6 +436,7 @@ Rectangle {
             id: listmain
 
             // debug
+
 
             /*  ListElement {
                 text0: "1"

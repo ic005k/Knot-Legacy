@@ -4440,6 +4440,20 @@ QSlider::handle:horizontal:disabled {
             </widget>
            </item>
            <item>
+            <widget class="QToolButton" name="btnGetGpsListData">
+             <property name="text">
+              <string>getGpsListData</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblMonthTotal">
+             <property name="text">
+              <string>0</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QQuickWidget" name="qwGpsList">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">

@@ -49,6 +49,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
   mw_one->ui->lblAverageSpeed->setStyleSheet(lblStyle);
   mw_one->ui->lblGpsInfo->setStyleSheet(lblStyle);
+  mw_one->ui->btnGetGpsListData->hide();
 }
 
 Steps::~Steps() {}
@@ -523,25 +524,28 @@ void Steps::stopRecordMotion() {
   t4 = tr("Average Speed") + ": " + str3;
   t5 = str6;
 
-  // if (m_distance > 0) {
-  int nYear = QDate::currentDate().year();
-  int nMonth = QDate::currentDate().month();
-  QString strTitle = QString::number(nYear) + " - " + QString::number(nMonth);
-  if (mw_one->ui->btnSelGpsDate->text() != strTitle) {
-    clearAllGpsList();
-    loadGpsList(nYear, nMonth);
-    mw_one->ui->btnSelGpsDate->setText(strTitle);
+  if (m_distance > 0) {
+    int nYear = QDate::currentDate().year();
+    int nMonth = QDate::currentDate().month();
+    QString strTitle = QString::number(nYear) + " - " + QString::number(nMonth);
+    if (mw_one->ui->btnSelGpsDate->text() != strTitle) {
+      clearAllGpsList();
+      loadGpsList(nYear, nMonth);
+      mw_one->ui->btnSelGpsDate->setText(strTitle);
+    }
+
+    insertGpsList(0, t0, t1, t2, t3, t4, t5);
+
+    int count = getGpsListCount();
+    QString strYearMonth =
+        QString::number(nYear) + "-" + QString::number(nMonth);
+    Reg.setValue("/" + strYearMonth + "/Count", count);
+    Reg.setValue(
+        "/" + strYearMonth + "/" + QString::number(count),
+        t0 + "-=-" + t1 + "-=-" + t2 + "-=-" + t3 + "-=-" + t4 + "-=-" + t5);
+
+    curMonthTotal();
   }
-
-  insertGpsList(0, t0, t1, t2, t3, t4, t5);
-
-  int count = getGpsListCount();
-  QString strYearMonth = QString::number(nYear) + "-" + QString::number(nMonth);
-  Reg.setValue("/" + strYearMonth + "/Count", count);
-  Reg.setValue(
-      "/" + strYearMonth + "/" + QString::number(count),
-      t0 + "-=-" + t1 + "-=-" + t2 + "-=-" + t3 + "-=-" + t4 + "-=-" + t5);
-  //}
 
 #ifdef Q_OS_ANDROID
   m_distance = m_activity.callMethod<jdouble>("stopGpsUpdates", "()D");
@@ -603,8 +607,6 @@ void Steps::delGpsListItem(int index) {
 void Steps::clearAllGpsList() {
   int count = getGpsListCount();
   for (int i = 0; i < count; i++) {
-    ShowMessage* msg = new ShowMessage(this);
-    msg->showMsg("Knot", QString::number(i), 1);
     delGpsListItem(0);
   }
 }
@@ -658,4 +660,30 @@ void Steps::getGpsListDataFromYearMonth() {
   mw_one->ui->btnSelGpsDate->setText(QString::number(y) + " - " +
                                      QString::number(m));
   loadGpsList(y, m);
+  curMonthTotal();
+}
+
+QString Steps::getGpsListText2(int index) {
+  QQuickItem* root = mw_one->ui->qwGpsList->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject*)root, "getText2",
+                            Q_RETURN_ARG(QVariant, item),
+                            Q_ARG(QVariant, index));
+  return item.toString();
+}
+
+void Steps::curMonthTotal() {
+  double t = 0;
+  int count = getGpsListCount();
+  for (int i = 0; i < count; i++) {
+    QString str = getGpsListText2(i);
+    QStringList list = str.split(" ");
+    if (list.count() == 3) {
+      QString str1 = list.at(1);
+      double jl = str1.toDouble();
+      t = t + jl;
+    }
+  }
+  mw_one->ui->lblMonthTotal->setText(tr("Monthly Total") + " : " +
+                                     QString::number(t) + " km");
 }

@@ -75,6 +75,8 @@ class Steps : public QDialog {
   void selGpsListYearMonth();
   void getGpsListDataFromYearMonth();
   void delGpsListItem(int index);
+  void curMonthTotal();
+ public slots:
   void clearAllGpsList();
  private slots:
   void positionUpdated(const QGeoPositionInfo &info);
@@ -111,6 +113,8 @@ class Steps : public QDialog {
   void insertGpsList(int curIndex, QString t0, QString t1, QString t2,
                      QString t3, QString t4, QString t5);
   QString strStartTime, strEndTime;
+
+  QString getGpsListText2(int index);
 
  signals:
   void distanceChanged(double distance);

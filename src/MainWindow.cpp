@@ -3172,6 +3172,7 @@ void MainWindow::on_btnSteps_clicked() {
     int nYear = QDate::currentDate().year();
     int nMonth = QDate::currentDate().month();
     m_Steps->loadGpsList(nYear, nMonth);
+    m_Steps->curMonthTotal();
     ui->btnSelGpsDate->setText(QString::number(nYear) + " - " +
                                QString::number(nMonth));
   }
@@ -4342,7 +4343,7 @@ static void JavaNotify_14() {
   if (m_Method->getDateTimeFlag() == "todo") {
     mw_one->m_TodoAlarm->setDateTime();
   } else if (m_Method->getDateTimeFlag() == "gpslist") {
-    mw_one->m_Steps->getGpsListDataFromYearMonth();
+    mw_one->ui->btnGetGpsListData->click();
   } else {
     mw_one->m_Report->m_DateSelector->ui->btnOk->click();
   }
@@ -5982,3 +5983,7 @@ void MainWindow::on_btnGPS_clicked() {
 }
 
 void MainWindow::on_btnSelGpsDate_clicked() { m_Steps->selGpsListYearMonth(); }
+
+void MainWindow::on_btnGetGpsListData_clicked() {
+  m_Steps->getGpsListDataFromYearMonth();
+}

@@ -797,6 +797,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnSelGpsDate_clicked();
 
+  void on_btnGetGpsListData_clicked();
+
  private:
   bool isMoveEntry;
   QTimer *tmeFlash;
