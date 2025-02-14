@@ -410,7 +410,6 @@ void Steps::startRecordMotion() {
       strGpsStatus = jstrGpsStatus.toString();
       QStringList list = strGpsStatus.split("\n");
       if (list.count() > 2) {
-        QString str1, str2, str3, str4, str5, str6, str7;
         str1 = list.at(0);
         str2 = list.at(1);
         str3 = list.at(2);
@@ -481,6 +480,8 @@ void Steps::startRecordMotion() {
   mw_one->ui->lblRunTime->setStyleSheet(lblStartStyle);
   mw_one->ui->lblAverageSpeed->setStyleSheet(lblStartStyle);
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStartStyle);
+
+  strStartTime = QTime::currentTime().toString();
 }
 
 void Steps::positionUpdated(const QGeoPositionInfo& info) {
@@ -512,6 +513,13 @@ void Steps::stopRecordMotion() {
   Reg.setIniCodec("utf-8");
 #endif
   Reg.setValue("/Steps/TotalDistance", m_TotalDistance);
+
+  strEndTime = QTime::currentTime().toString();
+  insertGpsList(0, QDate::currentDate().toString(),
+                strStartTime + " - " + strEndTime,
+                tr("Distance") + ": " + strDistance,
+                tr("Exercise Duration") + ": " + str2,
+                tr("Average Speed") + ": " + str3, str5);
 
 #ifdef Q_OS_ANDROID
   m_distance = m_activity.callMethod<jdouble>("stopGpsUpdates", "()D");
@@ -545,4 +553,14 @@ bool Steps::requestLocationPermissions() {
   return true;
 #endif
   return false;
+}
+
+void Steps::insertGpsList(int curIndex, QString t0, QString t1, QString t2,
+                          QString t3, QString t4, QString t5) {
+  QQuickItem* root = mw_one->ui->qwGpsList->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "insertItem",
+                            Q_ARG(QVariant, curIndex), Q_ARG(QVariant, t0),
+                            Q_ARG(QVariant, t1), Q_ARG(QVariant, t2),
+                            Q_ARG(QVariant, t3), Q_ARG(QVariant, t4),
+                            Q_ARG(QVariant, t5), Q_ARG(QVariant, 0));
 }

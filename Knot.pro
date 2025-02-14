@@ -238,6 +238,7 @@ DISTFILES += \
     src/qmlsrc/bookmark.qml \
     src/qmlsrc/details.qml \
     src/qmlsrc/epub_cata.qml \
+    src/qmlsrc/gps_list.qml \
     src/qmlsrc/imgview.qml \
     src/qmlsrc/main.qml \
     src/qmlsrc/maindate.qml \

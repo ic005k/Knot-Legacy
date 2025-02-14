@@ -101,6 +101,10 @@ class Steps : public QDialog {
       "#4C566A;border-radius: 10px;padding: 10px 20px;text-align: "
       "center;box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);}";
 
+  QString str1, str2, str3, str4, str5, str6, str7;
+  void insertGpsList(int curIndex, QString t0, QString t1, QString t2,
+                     QString t3, QString t4, QString t5);
+  QString strStartTime, strEndTime;
  signals:
   void distanceChanged(double distance);
   void timeChanged();

@@ -33,5 +33,6 @@
         <file>src/qmlsrc/epub_cata.qml</file>
         <file>src/qmlsrc/bookmark.qml</file>
         <file>src/qmlsrc/noteeditor.qml</file>
+        <file>src/qmlsrc/gps_list.qml</file>
     </qresource>
 </RCC>

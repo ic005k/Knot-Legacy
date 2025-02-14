@@ -3407,6 +3407,10 @@ void MainWindow::initQW() {
   ui->qwSteps->rootContext()->setContextProperty("text2", "");
   ui->qwSteps->rootContext()->setContextProperty("text3", "");
 
+  ui->qwGpsList->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/gps_list.qml")));
+  ui->qwGpsList->rootContext()->setContextProperty("myW", this->width());
+
   ui->qwReport->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
   ui->qwReportSub->setSource(
@@ -3510,6 +3514,7 @@ void MainWindow::init_Theme() {
   ui->qwBookList->rootContext()->setContextProperty("isDark", isDark);
   ui->qwReportSub->rootContext()->setContextProperty("isDark", isDark);
   ui->qwSteps->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwGpsList->rootContext()->setContextProperty("isDark", isDark);
   ui->qwReport->rootContext()->setContextProperty("isDark", isDark);
   ui->qwOneDriver->rootContext()->setContextProperty("isDark", isDark);
   ui->qwCata->rootContext()->setContextProperty("isDark", isDark);
