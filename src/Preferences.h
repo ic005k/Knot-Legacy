@@ -48,7 +48,6 @@ class Preferences : public QDialog {
 
   bool eventFilter(QObject *watch, QEvent *evn) override;
  public slots:
-  void on_chkDebug_clicked();
 
  private slots:
   void on_btnBack_clicked();

@@ -99,15 +99,6 @@ void Preferences::saveOptions() {
                            ui->chkAniEffects->isChecked());
 }
 
-void Preferences::on_chkDebug_clicked() {
-  if (ui->chkDebug->isChecked()) {
-    mw_one->ui->f_Debug->show();
-
-  } else if (!ui->chkDebug->isChecked()) {
-    mw_one->ui->f_Debug->hide();
-  }
-}
-
 void Preferences::on_sliderFontSize_sliderMoved(int position) {
   if (isVisible()) {
     QFont font;
@@ -269,7 +260,6 @@ void Preferences::initOptions() {
       iniPreferences->value("/Options/chkAniEffects", true).toBool());
   bool debugmode = iniPreferences->value("/Options/Debug", false).toBool();
   ui->chkDebug->setChecked(debugmode);
-  on_chkDebug_clicked();
 
   devMode = iniPreferences->value("/Options/DevMode", false).toBool();
 #ifdef Q_OS_ANDROID

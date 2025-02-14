@@ -405,7 +405,6 @@ void MainWindow::initHardStepSensor() {
     ui->lblSteps->hide();
 
     m_Preferences->ui->chkDebug->setChecked(false);
-    m_Preferences->on_chkDebug_clicked();
     m_Preferences->ui->chkDebug->hide();
 
     initTodayInitSteps();
@@ -3660,7 +3659,6 @@ void MainWindow::init_UIWidget() {
   ui->frameTodo->hide();
   ui->frameTodoRecycle->hide();
   ui->frameSteps->hide();
-  ui->f_Debug->hide();
   ui->frameReport->hide();
   ui->frameSearch->hide();
   ui->frameBakList->hide();
@@ -3833,6 +3831,8 @@ void MainWindow::init_UIWidget() {
   ui->lblTitle->setStyleSheet(lblStyle);
   ui->lblTitle_Report->setStyleSheet(lblStyle);
   ui->lblStats->setStyleSheet(lblStyle);
+
+  ui->tabMotion->setCornerWidget(ui->btnBackSteps, Qt::TopRightCorner);
 }
 
 void MainWindow::init_ButtonStyle() {

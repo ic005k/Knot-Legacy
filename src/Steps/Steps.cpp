@@ -78,7 +78,6 @@ void Steps::on_btnReset_clicked() {
 
   mw_one->CurrentSteps = 0;
   mw_one->ui->lblSingle->setText("0");
-  mw_one->ui->btnSteps->setText(tr("Steps"));
   toDayInitSteps = getCurrentSteps();
   if (mw_one->isHardStepSensor == 1) mw_one->resetSteps = mw_one->tc;
 
