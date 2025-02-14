@@ -3167,6 +3167,14 @@ void MainWindow::on_btnSteps_clicked() {
     double m_td = Reg.value("/Steps/TotalDistance", 0).toDouble();
     ui->lblTotalDistance->setText(QString::number(m_td) + " km");
   }
+
+  if (m_Steps->getGpsListCount() == 0) {
+    int nYear = QDate::currentDate().year();
+    int nMonth = QDate::currentDate().month();
+    m_Steps->loadGpsList(nYear, nMonth);
+    ui->btnSelGpsDate->setText(QString::number(nYear) + " - " +
+                               QString::number(nMonth));
+  }
 }
 
 void MainWindow::changeEvent(QEvent *event) {
@@ -3838,6 +3846,7 @@ void MainWindow::init_UIWidget() {
   ui->lblStats->setStyleSheet(lblStyle);
 
   ui->tabMotion->setCornerWidget(ui->btnBackSteps, Qt::TopRightCorner);
+  ui->tabMotion->setCurrentIndex(1);
 }
 
 void MainWindow::init_ButtonStyle() {
@@ -4332,6 +4341,8 @@ static void JavaNotify_13() {
 static void JavaNotify_14() {
   if (m_Method->getDateTimeFlag() == "todo") {
     mw_one->m_TodoAlarm->setDateTime();
+  } else if (m_Method->getDateTimeFlag() == "gpslist") {
+    mw_one->m_Steps->getGpsListDataFromYearMonth();
   } else {
     mw_one->m_Report->m_DateSelector->ui->btnOk->click();
   }
@@ -5969,3 +5980,5 @@ void MainWindow::on_btnGPS_clicked() {
     ui->btnGPS->setText(tr("Start"));
   }
 }
+
+void MainWindow::on_btnSelGpsDate_clicked() { m_Steps->selGpsListYearMonth(); }

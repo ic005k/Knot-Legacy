@@ -9,7 +9,7 @@ extern Method* m_Method;
 extern QRegularExpression regxNumber;
 extern QList<float> rlistX, rlistY, rlistZ, glistX, glistY, glistZ;
 extern unsigned int num_steps_walk, num_steps_run, num_steps_hop;
-extern bool loading;
+extern bool loading, isAndroid;
 extern QString iniFile, iniDir;
 extern void setTableNoItemFlags(QTableWidget* t, int row);
 
@@ -431,8 +431,8 @@ void Steps::startRecordMotion() {
         }
 #endif
 
-    strDistance = QString::number(m_TotalDistance) + " km";
-    mw_one->ui->lblTotalDistance->setText(strDistance);
+    strTotalDistance = QString::number(m_TotalDistance) + " km";
+    mw_one->ui->lblTotalDistance->setText(strTotalDistance);
     strDurationTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
     strGpsInfoShow = strDurationTime +
                      "\nLon.-Lat.: " + QString::number(longitude) + " - " +
@@ -500,8 +500,8 @@ void Steps::positionUpdated(const QGeoPositionInfo& info) {
 void Steps::stopRecordMotion() {
   timer->stop();
   m_TotalDistance = m_TotalDistance + m_distance;
-  strDistance = QString::number(m_TotalDistance) + " km";
-  mw_one->ui->lblTotalDistance->setText(strDistance);
+  strTotalDistance = QString::number(m_TotalDistance) + " km";
+  mw_one->ui->lblTotalDistance->setText(strTotalDistance);
   mw_one->ui->lblGpsInfo->setText(strGpsInfoShow);
 
   mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
@@ -515,11 +515,33 @@ void Steps::stopRecordMotion() {
   Reg.setValue("/Steps/TotalDistance", m_TotalDistance);
 
   strEndTime = QTime::currentTime().toString();
-  insertGpsList(0, QDate::currentDate().toString(),
-                strStartTime + " - " + strEndTime,
-                tr("Distance") + ": " + strDistance,
-                tr("Exercise Duration") + ": " + str2,
-                tr("Average Speed") + ": " + str3, str5);
+  QString t0, t1, t2, t3, t4, t5;
+  t0 = QDate::currentDate().toString();
+  t1 = tr("Time") + ": " + strStartTime + " - " + strEndTime;
+  t2 = tr("Distance") + ": " + str1;
+  t3 = tr("Exercise Duration") + ": " + str2;
+  t4 = tr("Average Speed") + ": " + str3;
+  t5 = str6;
+
+  // if (m_distance > 0) {
+  int nYear = QDate::currentDate().year();
+  int nMonth = QDate::currentDate().month();
+  QString strTitle = QString::number(nYear) + " - " + QString::number(nMonth);
+  if (mw_one->ui->btnSelGpsDate->text() != strTitle) {
+    clearAllGpsList();
+    loadGpsList(nYear, nMonth);
+    mw_one->ui->btnSelGpsDate->setText(strTitle);
+  }
+
+  insertGpsList(0, t0, t1, t2, t3, t4, t5);
+
+  int count = getGpsListCount();
+  QString strYearMonth = QString::number(nYear) + "-" + QString::number(nMonth);
+  Reg.setValue("/" + strYearMonth + "/Count", count);
+  Reg.setValue(
+      "/" + strYearMonth + "/" + QString::number(count),
+      t0 + "-=-" + t1 + "-=-" + t2 + "-=-" + t3 + "-=-" + t4 + "-=-" + t5);
+  //}
 
 #ifdef Q_OS_ANDROID
   m_distance = m_activity.callMethod<jdouble>("stopGpsUpdates", "()D");
@@ -563,4 +585,77 @@ void Steps::insertGpsList(int curIndex, QString t0, QString t1, QString t2,
                             Q_ARG(QVariant, t1), Q_ARG(QVariant, t2),
                             Q_ARG(QVariant, t3), Q_ARG(QVariant, t4),
                             Q_ARG(QVariant, t5), Q_ARG(QVariant, 0));
+}
+
+int Steps::getGpsListCount() {
+  QQuickItem* root = mw_one->ui->qwGpsList->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getItemCount",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  return itemCount.toInt();
+}
+
+void Steps::delGpsListItem(int index) {
+  QQuickItem* root = mw_one->ui->qwGpsList->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "delItem", Q_ARG(QVariant, index));
+}
+
+void Steps::clearAllGpsList() {
+  int count = getGpsListCount();
+  for (int i = 0; i < count; i++) {
+    ShowMessage* msg = new ShowMessage(this);
+    msg->showMsg("Knot", QString::number(i), 1);
+    delGpsListItem(0);
+  }
+}
+
+void Steps::loadGpsList(int nYear, int nMonth) {
+  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  QString strYearMonth = QString::number(nYear) + "-" + QString::number(nMonth);
+  int count = Reg.value("/" + strYearMonth + "/Count", 0).toInt();
+  for (int i = 0; i < count; i++) {
+    QString str =
+        Reg.value("/" + strYearMonth + "/" + QString::number(i + 1), "")
+            .toString();
+    QStringList list = str.split("-=-");
+    QString t0, t1, t2, t3, t4, t5;
+    if (list.count() > 0) {
+      t0 = list.at(0);
+      t1 = list.at(1);
+      t2 = list.at(2);
+      t3 = list.at(3);
+      t4 = list.at(4);
+      t5 = list.at(5);
+    }
+
+    insertGpsList(0, t0, t1, t2, t3, t4, t5);
+  }
+}
+
+void Steps::selGpsListYearMonth() {
+  if (isAndroid) {
+    int y, m;
+    QString str = mw_one->ui->btnSelGpsDate->text();
+    QStringList list = str.split("-");
+    y = list.at(0).toInt();
+    m = list.at(1).toInt();
+    m_Method->setDateTimePickerFlag("ym", y, m, 0, 0, 0, "gpslist");
+    m_Method->openDateTimePicker();
+    return;
+  }
+}
+
+void Steps::getGpsListDataFromYearMonth() {
+  clearAllGpsList();
+
+  QStringList list = m_Method->getDateTimePickerValue();
+  int y = list.at(0).toInt();
+  int m = list.at(1).toInt();
+  mw_one->ui->btnSelGpsDate->setText(QString::number(y) + " - " +
+                                     QString::number(m));
+  loadGpsList(y, m);
 }

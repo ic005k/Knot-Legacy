@@ -92,7 +92,7 @@ Rectangle {
                           })
     }
 
-    function insertItem(curIndex,t0, t1, t2, t3, t4, t5, height) {
+    function insertItem(curIndex, t0, t1, t2, t3, t4, t5, height) {
         view.model.insert(curIndex, {
                               "text0": t0,
                               "text1": t1,
@@ -432,7 +432,8 @@ Rectangle {
             id: listmain
 
             // debug
-            ListElement {
+
+            /*  ListElement {
                 text0: "1"
                 text1: "2"
                 text2: "3"
@@ -440,7 +441,7 @@ Rectangle {
                 text4: "5"
                 text5: "6"
                 myh: 0
-            }
+            }*/
         }
         delegate: dragDelegate
 

@@ -70,6 +70,12 @@ class Steps : public QDialog {
   void stopRecordMotion();
 
   bool requestLocationPermissions();
+  void loadGpsList(int nYear, int nMonth);
+  int getGpsListCount();
+  void selGpsListYearMonth();
+  void getGpsListDataFromYearMonth();
+  void delGpsListItem(int index);
+  void clearAllGpsList();
  private slots:
   void positionUpdated(const QGeoPositionInfo &info);
 
@@ -88,7 +94,7 @@ class Steps : public QDialog {
   QDateTime m_startTime;
   QTime m_time;
   QTimer *timer;
-  QString strDistance;
+  QString strTotalDistance;
   QString strDurationTime;
   double latitude;
   double longitude;
@@ -105,6 +111,7 @@ class Steps : public QDialog {
   void insertGpsList(int curIndex, QString t0, QString t1, QString t2,
                      QString t3, QString t4, QString t5);
   QString strStartTime, strEndTime;
+
  signals:
   void distanceChanged(double distance);
   void timeChanged();
