@@ -49,6 +49,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
   mw_one->ui->lblAverageSpeed->setStyleSheet(lblStyle);
   mw_one->ui->lblGpsInfo->setStyleSheet(lblStyle);
+  mw_one->ui->lblMonthTotal->setStyleSheet(lblStyle);
   mw_one->ui->btnGetGpsListData->hide();
 }
 
@@ -612,6 +613,9 @@ void Steps::clearAllGpsList() {
 }
 
 void Steps::loadGpsList(int nYear, int nMonth) {
+  mw_one->ui->btnSelGpsDate->setText(QString::number(nYear) + " - " +
+                                     QString::number(nMonth));
+
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -657,8 +661,7 @@ void Steps::getGpsListDataFromYearMonth() {
   QStringList list = m_Method->getDateTimePickerValue();
   int y = list.at(0).toInt();
   int m = list.at(1).toInt();
-  mw_one->ui->btnSelGpsDate->setText(QString::number(y) + " - " +
-                                     QString::number(m));
+
   loadGpsList(y, m);
   curMonthTotal();
 }
@@ -684,6 +687,27 @@ void Steps::curMonthTotal() {
       t = t + jl;
     }
   }
-  mw_one->ui->lblMonthTotal->setText(tr("Monthly Total") + " : " +
+
+  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  QString stry, strm;
+  QStringList list = mw_one->ui->btnSelGpsDate->text().split("-");
+  stry = list.at(0);
+  strm = list.at(1);
+  stry = stry.trimmed();
+  strm = strm.trimmed();
+  Reg.setValue("/" + stry + "/" + strm, t);
+
+  double yt = 0;
+  for (int i = 0; i < 12; i++) {
+    double mt =
+        Reg.value("/" + stry + "/" + QString::number(i + 1), 0).toDouble();
+    yt = yt + mt;
+  }
+
+  mw_one->ui->lblMonthTotal->setText(stry + " : " + QString::number(yt) +
+                                     " km\n" + tr("Monthly Total") + " : " +
                                      QString::number(t) + " km");
 }

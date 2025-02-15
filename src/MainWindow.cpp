@@ -3173,8 +3173,6 @@ void MainWindow::on_btnSteps_clicked() {
     int nMonth = QDate::currentDate().month();
     m_Steps->loadGpsList(nYear, nMonth);
     m_Steps->curMonthTotal();
-    ui->btnSelGpsDate->setText(QString::number(nYear) + " - " +
-                               QString::number(nMonth));
   }
 }
 
