@@ -698,16 +698,32 @@ void Steps::curMonthTotal() {
   strm = list.at(1);
   stry = stry.trimmed();
   strm = strm.trimmed();
-  Reg.setValue("/" + stry + "/" + strm, t);
+  int curCount = Reg.value("/" + stry + "-" + strm + "/Count", 0).toInt();
+  Reg.setValue("/" + stry + "/" + strm,
+               QString::number(t) + "-=-" + QString::number(curCount));
 
   double yt = 0;
+  int ycount = 0;
   for (int i = 0; i < 12; i++) {
-    double mt =
-        Reg.value("/" + stry + "/" + QString::number(i + 1), 0).toDouble();
+    double mt;
+    int mcount;
+    QString str_mt =
+        Reg.value("/" + stry + "/" + QString::number(i + 1), 0).toString();
+    QStringList list = str_mt.split("-=-");
+    if (list.count() == 2) {
+      mt = list.at(0).toDouble();
+      mcount = list.at(1).toInt();
+
+    } else {
+      mt = str_mt.toDouble();
+      mcount = 0;
+    }
     yt = yt + mt;
+    ycount = ycount + mcount;
   }
 
-  mw_one->ui->lblMonthTotal->setText(stry + " : " + QString::number(yt) +
-                                     " km\n" + tr("Monthly Total") + " : " +
-                                     QString::number(t) + " km");
+  mw_one->ui->lblMonthTotal->setText(stry + ": " + QString::number(yt) +
+                                     " km  " + QString::number(ycount) + "\n" +
+                                     strm + ": " + QString::number(t) +
+                                     " km  " + QString::number(curCount));
 }
