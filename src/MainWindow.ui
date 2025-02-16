@@ -3998,11 +3998,14 @@ QSlider::handle:horizontal:disabled {
       <layout class="QVBoxLayout" name="verticalLayout_12">
        <item>
         <widget class="QTabWidget" name="tabMotion">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
          <property name="tabPosition">
           <enum>QTabWidget::South</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="tab_Steps">
           <attribute name="title">
@@ -4553,7 +4556,7 @@ QSlider::handle:horizontal:disabled {
        <item>
         <widget class="QToolButton" name="btnBackSteps">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>

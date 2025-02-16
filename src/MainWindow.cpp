@@ -136,6 +136,7 @@ void MainWindow::importDataDone() {
 
     on_tabWidget_currentChanged(tabData->currentIndex());
 
+    m_Steps->clearAllGpsList();
     m_Steps->loadGpsList(QDate::currentDate().year(),
                          QDate::currentDate().month());
     m_Steps->curMonthTotal();

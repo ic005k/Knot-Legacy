@@ -279,7 +279,7 @@ Rectangle {
                             wrapMode: TextArea.WordWrap
                             font.bold: false
                             text: text2
-                            color: "blue"
+                            color: "red"
 
                             //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                             leftPadding: 5
@@ -322,7 +322,7 @@ Rectangle {
                             font.bold: false
                             text: text4
 
-                            color: "red"
+                            color: "blue"
 
                             // color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                             leftPadding: 5
