@@ -158,7 +158,6 @@ Rectangle {
             // color: ListView.isCurrentItem ? "lightblue" : getColor()
             // border.width: isDark ? 0 : 1
             // border.color: "lightgray" //"lightsteelblue"
-
             color: index % 2 === 0 ? "#f0f0f0" : "#e0e0e0"
             border.color: "#ccc"
             border.width: 1
@@ -223,21 +222,26 @@ Rectangle {
                     anchors.leftMargin: 0
                     anchors.rightMargin: 0
 
-                    Text {
-                        id: item0
-
+                    Rectangle {
                         width: parent.width
-                        Layout.preferredWidth: listItem.width
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignLeft
-                        verticalAlignment: Text.AlignVCenter
-                        wrapMode: TextArea.NoWrap
-                        font.bold: true
-                        text: text0
-                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        height: item0.contentHeight
+                        color: "lightgray" // 设置背景色为浅灰色
+                        Text {
+                            id: item0
 
-                        leftPadding: 5
-                        rightPadding: 5
+                            width: parent.width
+                            Layout.preferredWidth: listItem.width
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: TextArea.NoWrap
+                            font.bold: true
+                            text: text0
+
+                            //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                            leftPadding: 5
+                            rightPadding: 5
+                        }
                     }
 
                     Text {
@@ -250,7 +254,7 @@ Rectangle {
 
                         width: parent.width
                         wrapMode: TextArea.WordWrap
-                       // color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        // color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         font.bold: false
                         text: text1
 
@@ -260,23 +264,29 @@ Rectangle {
                         visible: item1.text.length ? true : false
                     }
 
-                    Text {
-                        id: item2
-                        anchors.rightMargin: 0
-                        Layout.preferredWidth: listItem.width
-                        Layout.alignment: Qt.AlignHCenter
-
-                        horizontalAlignment: Text.AlignLeft
+                    Rectangle {
                         width: parent.width
-                        wrapMode: TextArea.WordWrap
-                        font.bold: false
-                        text: text2
-                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        height: item2.contentHeight
+                        color: "lightgray" // 设置背景色为浅灰色
+                        Text {
+                            id: item2
+                            anchors.rightMargin: 0
+                            Layout.preferredWidth: listItem.width
+                            Layout.alignment: Qt.AlignHCenter
 
-                        leftPadding: 5
-                        rightPadding: 5
+                            horizontalAlignment: Text.AlignLeft
+                            width: parent.width
+                            wrapMode: TextArea.WordWrap
+                            font.bold: false
+                            text: text2
+                            color: "blue"
 
-                        visible: item2.text.length ? true : false
+                            //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item2.text.length ? true : false
+                        }
                     }
 
                     Text {
@@ -289,30 +299,37 @@ Rectangle {
                         Layout.preferredWidth: listItem.width
                         font.bold: false
                         text: text3
-                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
+                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         leftPadding: 5
                         rightPadding: 5
 
                         visible: item3.text.length ? true : false
                     }
 
-                    Text {
-                        id: item4
-                        anchors.rightMargin: 0
+                    Rectangle {
                         width: parent.width
-                        wrapMode: Text.WrapAnywhere
-                        elide: Text.ElideRight
-                        //Layout.maximumWidth: listItem.width
-                        Layout.preferredWidth: listItem.width
-                        font.bold: false
-                        text: text4
-                       // color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                        height: item4.contentHeight
+                        color: "lightgray" // 设置背景色为浅灰色
+                        Text {
+                            id: item4
+                            anchors.rightMargin: 0
+                            width: parent.width
+                            wrapMode: Text.WrapAnywhere
+                            elide: Text.ElideRight
+                            //Layout.maximumWidth: listItem.width
+                            Layout.preferredWidth: listItem.width
+                            font.bold: false
+                            text: text4
 
-                        leftPadding: 5
-                        rightPadding: 5
+                            color: "red"
 
-                        visible: item4.text.length ? true : false
+                            // color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
+                            leftPadding: 5
+                            rightPadding: 5
+
+                            visible: item4.text.length ? true : false
+                        }
                     }
 
                     Text {
@@ -325,8 +342,8 @@ Rectangle {
                         Layout.preferredWidth: listItem.width
                         font.bold: false
                         text: text5
-                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
 
+                        //color: listItem.ListView.isCurrentItem ? "black" : getFontColor()
                         leftPadding: 5
                         rightPadding: 5
 
