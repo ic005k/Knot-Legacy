@@ -722,8 +722,11 @@ void Steps::curMonthTotal() {
     ycount = ycount + mcount;
   }
 
-  mw_one->ui->lblMonthTotal->setText(stry + ": " + QString::number(yt) +
-                                     " km  " + QString::number(ycount) + "\n" +
-                                     strm + ": " + QString::number(t) +
-                                     " km  " + QString::number(curCount));
+  double m_td = Reg.value("/Steps/TotalDistance", 0).toDouble();
+
+  mw_one->ui->lblMonthTotal->setText(
+      stry + ": " + QString::number(yt) + " km  " + QString::number(ycount) +
+      "\n" + strm + ": " + QString::number(t) + " km  " +
+      QString::number(curCount) + "\n" + tr("All Total") + ": " +
+      QString::number(m_td) + " km");
 }

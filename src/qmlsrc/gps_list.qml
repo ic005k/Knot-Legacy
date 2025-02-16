@@ -467,7 +467,7 @@ Rectangle {
         }
         delegate: dragDelegate
 
-        spacing: 4
+        spacing: 5
         cacheBuffer: 50
 
         ScrollBar.vertical: ScrollBar {

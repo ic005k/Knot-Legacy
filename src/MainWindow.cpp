@@ -135,6 +135,10 @@ void MainWindow::importDataDone() {
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     on_tabWidget_currentChanged(tabData->currentIndex());
+
+    m_Steps->loadGpsList(QDate::currentDate().year(),
+                         QDate::currentDate().month());
+    m_Steps->curMonthTotal();
   }
 
   closeProgress();
