@@ -3423,6 +3423,9 @@ void MainWindow::initQW() {
       QUrl(QStringLiteral("qrc:/src/qmlsrc/gps_list.qml")));
   ui->qwGpsList->rootContext()->setContextProperty("myW", this->width());
 
+  ui->qwMap->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/map.qml")));
+  ui->qwMap->rootContext()->setContextProperty("isGpsRun", false);
+
   ui->qwReport->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
   ui->qwReportSub->setSource(

@@ -484,6 +484,7 @@ void Steps::startRecordMotion() {
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStartStyle);
 
   strStartTime = QTime::currentTime().toString();
+  mw_one->ui->qwMap->rootContext()->setContextProperty("isGpsRun", true);
 }
 
 void Steps::positionUpdated(const QGeoPositionInfo& info) {
@@ -556,6 +557,8 @@ void Steps::stopRecordMotion() {
   }
   delete m_positionSource;
 #endif
+
+  mw_one->ui->qwMap->rootContext()->setContextProperty("isGpsRun", false);
 
   ShowMessage* msg = new ShowMessage(this);
   msg->showMsg("Knot", mw_one->ui->lblGpsInfo->text(), 1);

@@ -4005,7 +4005,7 @@ QSlider::handle:horizontal:disabled {
           <enum>QTabWidget::South</enum>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab_Steps">
           <attribute name="title">
@@ -4532,6 +4532,32 @@ QSlider::handle:horizontal:disabled {
            </item>
            <item>
             <widget class="QQuickWidget" name="qwGpsList">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>10</height>
+              </size>
+             </property>
+             <property name="resizeMode">
+              <enum>QQuickWidget::SizeRootObjectToView</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_map">
+          <attribute name="title">
+           <string>Map</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_42">
+           <item>
+            <widget class="QQuickWidget" name="qwMap">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                <horstretch>0</horstretch>

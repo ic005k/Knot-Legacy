@@ -1,6 +1,6 @@
 QT += core gui network printsupport core-private
 QT += charts sensors
-QT += qml quick quickwidgets webview positioning
+QT += qml quick quickwidgets webview positioning location
 QT += xml svg
 
 
@@ -244,6 +244,7 @@ DISTFILES += \
     src/qmlsrc/maindate.qml \
     src/qmlsrc/mainevent.qml \
     src/qmlsrc/maintab.qml \
+    src/qmlsrc/map.qml \
     src/qmlsrc/memo.qml \
     src/qmlsrc/notebook.qml \
     src/qmlsrc/noteeditor.qml \

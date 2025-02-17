@@ -34,5 +34,6 @@
         <file>src/qmlsrc/bookmark.qml</file>
         <file>src/qmlsrc/noteeditor.qml</file>
         <file>src/qmlsrc/gps_list.qml</file>
+        <file>src/qmlsrc/map.qml</file>
     </qresource>
 </RCC>
