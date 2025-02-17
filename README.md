@@ -6,7 +6,7 @@
 * Bookkeeping
 * Counters
 * Todo list
-* Pedometer
+* Exercise recording: pedometer and GPS record distance (e.g. cycling, running, etc.)
 * Statistical charts
 * Statistical reports
 * Reader(txt,epub,pdf)
