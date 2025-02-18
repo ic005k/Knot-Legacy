@@ -404,8 +404,10 @@ void Steps::startRecordMotion() {
         m_activity.callMethod<jdouble>("getTotalDistance", "()D");
     QString str_distance = QString::number(distance, 'f', 2);
     m_distance = str_distance.toDouble();
-    latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
-    longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
+    if (!isGpsTest) {
+      latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
+      longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
+    }
     QAndroidJniObject jstrGpsStatus =
         m_activity.callObjectMethod<jstring>("getGpsStatus");
     if (jstrGpsStatus.isValid()) {
@@ -425,13 +427,25 @@ void Steps::startRecordMotion() {
         strGpsStatus = str4 + "\n" + str5 + "\n" + str6 + "\n" + str7;
       }
 
-      if (m_time.second() % 3 && m_distance > 0) {
-        appendTrack(latitude, longitude);
-        nWriteGpsCount++;
-        writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+      if (m_time.second() % 3) {
+        if (!isGpsTest) {
+          if (m_distance > 0) {
+            appendTrack(latitude, longitude);
+            nWriteGpsCount++;
+            writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+          }
+        } else {
+          appendTrack(latitude, longitude);
+          latitude = latitude + 0.001;
+          longitude = longitude + 0.001;
+          nWriteGpsCount++;
+          writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+        }
+
+        mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance",
+                                                             str1);
+        mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", str3);
       }
-      mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance", str1);
-      mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", str3);
     }
 
 #else
@@ -439,6 +453,17 @@ void Steps::startRecordMotion() {
           m_speed = m_distance / m_time.second();
           emit speedChanged();
         }
+
+        if (isGpsTest) {
+            if (m_time.second() % 3) {
+                appendTrack(latitude, longitude);
+                latitude = latitude + 0.001;
+                longitude = longitude + 0.001;
+                nWriteGpsCount++;
+                writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+            }
+        }
+
 #endif
 
     strTotalDistance = QString::number(m_TotalDistance) + " km";
@@ -507,8 +532,10 @@ void Steps::positionUpdated(const QGeoPositionInfo& info) {
   }
   lastPosition = info.coordinate();
 
-  latitude = lastPosition.latitude();
-  longitude = lastPosition.longitude();
+  if (!isGpsTest) {
+    latitude = lastPosition.latitude();
+    longitude = lastPosition.longitude();
+  }
 }
 
 void Steps::stopRecordMotion() {
@@ -760,7 +787,7 @@ void Steps::writeGpsPos(double lat, double lon, int i, int count) {
   QString s0 = t0.replace(" ", "");
   QString s1 = strStartTime.replace(":", "");
 
-  QSettings Reg(iniDir + s0 + "-gps-" + s1, QSettings::IniFormat);
+  QSettings Reg(iniDir + s0 + "-gps-" + s1 + ".ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif

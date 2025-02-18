@@ -9,31 +9,27 @@ Rectangle {
     height: 600
 
     // 变量定义
-    property double gpsx: 51.5074
-    property double gpsy: -0.1278
+    property double gpsx: 59.91
+    property double gpsy: 10.75
 
-    //property string strSpeed: "0.00"
-    // property string strDistance: "0.00"
     function appendTrack(lat, lon) {
-
-        // trajectory.path.push({
-        //                          "latitude": lat,
-        //                          "longitude": lon
-        //                      })
-        var newPath = [{
-                           "latitude": lat,
-                           "longitude": lon
-                       } // London
-                       // Paris
-                ]
-        trajectory.path = newPath // 使用新的路径更新
         gpsx = lat
         gpsy = lon
-        map.center = QtPositioning.coordinate(gpsx, gpsy)
+
+        var newCoordinate = QtPositioning.coordinate(lat, lon)
+
+        //polyline.path.push([newCoordinate])
+
+
+        let pathArray = polyline.path
+
+        pathArray.push(newCoordinate); // 添加新的点
+        polyline.path = pathArray
+
+        map.center = newCoordinate
     }
 
-    function clearTrack() {
-        trajectory.path = []
+    function clearTrack() {polyline.path = []
     }
 
     Plugin {
@@ -46,18 +42,30 @@ Rectangle {
         anchors.fill: parent
         plugin: mapPlugin
         center: QtPositioning.coordinate(gpsx, gpsy) // 初始中心坐标（伦敦）
-        zoomLevel: 14
+        zoomLevel: 13
 
         MapPolyline {
-            id: trajectory
+            id: polyline
             line.color: "red"
             line.width: 3
-            path: [// 初始轨迹点
-                QtPositioning.coordinate(51.5074,
-                                         -0.1278), QtPositioning.coordinate(
-                    51.5080, -0.1280), QtPositioning.coordinate(
-                    51.507, -0.1279), QtPositioning.coordinate(51.5089,
-                                                               -0.1289)]
+            //path: [QtPositioning.coordinate(59.91,
+            //                                10.75),
+            //    QtPositioning.coordinate(
+           //         gpsx+0.0000, gpsy+0.0000)//QtPositioning.coordinate(59.912, 10.752)
+           // ]
+        }
+
+        // 可选：添加一个标记来表示当前位置
+        MapQuickItem {
+            coordinate: QtPositioning.coordinate(gpsx, gpsy)
+            anchorPoint.x: markerImage.width/2+6
+            anchorPoint.y: markerImage.height/2
+            sourceItem: Image {
+                id: markerImage
+                source: "/res/marker.png" // 替换为你的标记图标
+                width: 32
+                height: 32
+            }
         }
     }
 

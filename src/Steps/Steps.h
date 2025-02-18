@@ -99,8 +99,8 @@ class Steps : public QDialog {
   QTimer *timer;
   QString strTotalDistance;
   QString strDurationTime;
-  double latitude;
-  double longitude;
+  double latitude = 59.91;
+  double longitude = 10.75;
   QString strGpsStatus;
   QString strGpsInfoShow;
   QString lblStyle;
@@ -121,6 +121,7 @@ class Steps : public QDialog {
   void clearTrack();
   void writeGpsPos(double lat, double lon, int i, int count);
   int nWriteGpsCount;
+  bool isGpsTest = false;
  signals:
   void distanceChanged(double distance);
   void timeChanged();

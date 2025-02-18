@@ -3425,6 +3425,8 @@ void MainWindow::initQW() {
 
   ui->qwMap->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/map.qml")));
   ui->qwMap->rootContext()->setContextProperty("isGpsRun", false);
+  ui->qwMap->rootContext()->setContextProperty("strDistance", "0 km");
+  ui->qwMap->rootContext()->setContextProperty("strSpeed", "0 km/h");
 
   ui->qwReport->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));
