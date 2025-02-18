@@ -79,6 +79,7 @@ class Steps : public QDialog {
   void appendTrack(double lat, double lon);
  public slots:
   void clearAllGpsList();
+  void getGpsTrack();
  private slots:
   void positionUpdated(const QGeoPositionInfo &info);
 
@@ -101,6 +102,8 @@ class Steps : public QDialog {
   QString strDurationTime;
   double latitude = 59.91;
   double longitude = 10.75;
+  double oldLat;
+  double oldLon;
   QString strGpsStatus;
   QString strGpsInfoShow;
   QString lblStyle;
@@ -122,6 +125,7 @@ class Steps : public QDialog {
   void writeGpsPos(double lat, double lon, int i, int count);
   int nWriteGpsCount;
   bool isGpsTest = false;
+  double mySpeed;
  signals:
   void distanceChanged(double distance);
   void timeChanged();

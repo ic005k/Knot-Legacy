@@ -14,8 +14,13 @@ Rectangle {
 
     property int itemCount: 0
     property bool isHighPriority: false
+    property string strGpsTime: ""
 
     function setItemHeight(h) {}
+
+    function getTimeString() {
+        return strGpsTime
+    }
 
     function gotoEnd() {
         view.positionViewAtEnd()
@@ -153,7 +158,7 @@ Rectangle {
         Rectangle {
             id: listItem
             width: ListView.view.width
-            height: getItemHeight() + 16
+            height: getItemHeight() + 16 + btnViewGpsTrack.height
 
             // color: ListView.isCurrentItem ? "lightblue" : getColor()
             // border.width: isDark ? 0 : 1
@@ -349,10 +354,26 @@ Rectangle {
 
                         visible: item5.text.length ? true : false
                     }
+
+                    Button {
+                        id: btnViewGpsTrack
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: qsTr("View GPS Track")
+                        width: parent.width
+                        height: 35
+
+                        enabled: true
+
+                        onClicked: {
+                            strGpsTime = item0.text + "-=-" + item1.text
+                            m_Steps.getGpsTrack()
+                        }
+                    }
                 }
             }
 
-            MouseArea {
+
+            /*MouseArea {
 
                 property point clickPos: "0,0"
 
@@ -361,16 +382,7 @@ Rectangle {
                     clickPos = Qt.point(mouse.x, mouse.y)
                 }
                 onReleased: {
-                    var delta = Qt.point(mouse.x - clickPos.x,
-                                         mouse.y - clickPos.y)
-                    console.debug("delta.x: " + delta.x)
-                    if ((delta.x < 0) && (aBtnShow.running === false)
-                            && (delBtn.width == 0)) {
-                        aBtnShow.start()
-                    } else if (aBtnHide.running === false
-                               && (delBtn.width > 0)) {
-                        aBtnHide.start()
-                    }
+
                 }
 
                 onClicked: {
@@ -385,59 +397,7 @@ Rectangle {
                     //var data = view.model.get(view.currentIndex)
                     //console.log(data.text0 + "," + data.type + ", count=" + view.count)
                 }
-            }
-
-            Rectangle {
-                color: "#AAAAAA"
-                height: 0
-                width: parent.width
-                anchors.bottom: parent.bottom
-            }
-
-            Rectangle {
-                id: delBtn
-                visible: false
-                height: parent.height
-                width: 0
-                color: "#FF0000"
-
-                anchors.right: parent.right
-                anchors.rightMargin: -30
-                radius: 0
-
-                Text {
-                    width: 56
-                    anchors.centerIn: parent
-
-                    text: qsTr("Done")
-                    color: "#ffffff"
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        m_Todo.addToRecycle()
-                        view.model.remove(index)
-                    }
-                }
-            }
-
-            PropertyAnimation {
-                id: aBtnShow
-                target: delBtn
-                property: "width"
-                duration: 100
-                from: 0
-                to: 80
-            }
-            PropertyAnimation {
-                id: aBtnHide
-                target: delBtn
-                property: "width"
-                duration: 100
-                from: 80
-                to: 0
-            }
+            }*/
         }
     }
 

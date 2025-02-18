@@ -230,6 +230,7 @@ public class MyActivity
   private long movingTime;
   private float totalDistance = 0f;
   private float maxSpeed = 0f;
+  private float mySpeed = 0f;
   private float totalClimb = 0f;
   private Location previousLocation;
   private double previousAltitude;
@@ -770,6 +771,7 @@ public class MyActivity
     startTime = System.currentTimeMillis();
     totalDistance = 0f;
     maxSpeed = 0f;
+    mySpeed = 0f;
     totalClimb = 0f;
     previousLocation = null;
     movingTime = 0;
@@ -843,6 +845,12 @@ public class MyActivity
 
   }
 
+  public double getMySpeed() {
+
+    return mySpeed;
+
+  }
+
   public double getLatitude() {
 
     return latitude;
@@ -886,8 +894,9 @@ public class MyActivity
         totalDistance += previousLocation.distanceTo(currentLocation) / 1000; // 转换为公里
 
         // 计算最大速度
-        if (currentLocation.getSpeed() * 3.6f > maxSpeed) {
-          maxSpeed = currentLocation.getSpeed() * 3.6f; // 转换为 km/h
+        mySpeed = currentLocation.getSpeed() * 3.6f;// 转换为 km/h
+        if (mySpeed > maxSpeed) {
+          maxSpeed = mySpeed;
         }
 
         // 计算爬升

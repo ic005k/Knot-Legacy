@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtLocation 5.15
 import QtPositioning 5.15
@@ -19,17 +20,16 @@ Rectangle {
         var newCoordinate = QtPositioning.coordinate(lat, lon)
 
         //polyline.path.push([newCoordinate])
-
-
         let pathArray = polyline.path
 
-        pathArray.push(newCoordinate); // 添加新的点
+        pathArray.push(newCoordinate) // 添加新的点
         polyline.path = pathArray
 
         map.center = newCoordinate
     }
 
-    function clearTrack() {polyline.path = []
+    function clearTrack() {
+        polyline.path = []
     }
 
     Plugin {
@@ -48,18 +48,20 @@ Rectangle {
             id: polyline
             line.color: "red"
             line.width: 3
-            //path: [QtPositioning.coordinate(59.91,
+
+            // test
+            // path: [QtPositioning.coordinate(59.91,
             //                                10.75),
             //    QtPositioning.coordinate(
-           //         gpsx+0.0000, gpsy+0.0000)//QtPositioning.coordinate(59.912, 10.752)
-           // ]
+            //         gpsx+0.0000, gpsy+0.0000)//QtPositioning.coordinate(59.912, 10.752)
+            // ]
         }
 
         // 可选：添加一个标记来表示当前位置
         MapQuickItem {
             coordinate: QtPositioning.coordinate(gpsx, gpsy)
-            anchorPoint.x: markerImage.width/2+6
-            anchorPoint.y: markerImage.height/2
+            anchorPoint.x: markerImage.width / 2 + 6
+            anchorPoint.y: markerImage.height / 2
             sourceItem: Image {
                 id: markerImage
                 source: "/res/marker.png" // 替换为你的标记图标

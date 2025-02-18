@@ -3422,6 +3422,7 @@ void MainWindow::initQW() {
   ui->qwGpsList->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/gps_list.qml")));
   ui->qwGpsList->rootContext()->setContextProperty("myW", this->width());
+  ui->qwGpsList->rootContext()->setContextProperty("m_Steps", m_Steps);
 
   ui->qwMap->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/map.qml")));
   ui->qwMap->rootContext()->setContextProperty("isGpsRun", false);

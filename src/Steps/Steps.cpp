@@ -429,10 +429,16 @@ void Steps::startRecordMotion() {
 
       if (m_time.second() % 3) {
         if (!isGpsTest) {
-          if (m_distance > 0) {
-            appendTrack(latitude, longitude);
-            nWriteGpsCount++;
-            writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+          jdouble m_speed = m_activity.callMethod<jdouble>("getMySpeed", "()D");
+          mySpeed = m_speed;
+          if (m_distance > 0 & mySpeed > 0) {
+            if (latitude + longitude != oldLat + oldLon) {
+              appendTrack(latitude, longitude);
+              nWriteGpsCount++;
+              writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+              oldLat = latitude;
+              oldLon = longitude;
+            }
           }
         } else {
           appendTrack(latitude, longitude);
@@ -444,7 +450,8 @@ void Steps::startRecordMotion() {
 
         mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance",
                                                              str1);
-        mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", str3);
+        mw_one->ui->qwMap->rootContext()->setContextProperty(
+            "strSpeed", QString::number(mySpeed) + " km/h");
       }
     }
 
@@ -564,7 +571,7 @@ void Steps::stopRecordMotion() {
   t4 = tr("Average Speed") + ": " + str3;
   t5 = str6;
 
-  if (m_distance > 0) {
+  if (m_distance > 0 || isGpsTest) {
     int nYear = QDate::currentDate().year();
     int nMonth = QDate::currentDate().month();
     QString strTitle = QString::number(nYear) + " - " + QString::number(nMonth);
@@ -784,8 +791,10 @@ void Steps::clearTrack() {
 }
 
 void Steps::writeGpsPos(double lat, double lon, int i, int count) {
-  QString s0 = t0.replace(" ", "");
-  QString s1 = strStartTime.replace(":", "");
+  QString ss0 = t0;
+  QString s0 = ss0.replace(" ", "");
+  QString sst = strStartTime;
+  QString s1 = sst.replace(":", "");
 
   QSettings Reg(iniDir + s0 + "-gps-" + s1 + ".ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -794,4 +803,42 @@ void Steps::writeGpsPos(double lat, double lon, int i, int count) {
   Reg.setValue("/" + QString::number(i) + "/lat", lat);
   Reg.setValue("/" + QString::number(i) + "/lon", lon);
   Reg.setValue("/count", count);
+}
+
+void Steps::getGpsTrack() {
+  QQuickItem* root = mw_one->ui->qwGpsList->rootObject();
+  QVariant itemCount;
+  QMetaObject::invokeMethod((QObject*)root, "getTimeString",
+                            Q_RETURN_ARG(QVariant, itemCount));
+  QString mStr = itemCount.toString();
+  QStringList list = mStr.split("-=-");
+  QString st1 = list.at(0);
+  QString st2 = list.at(1);
+  st1 = st1.replace(" ", "");
+  st2 = st2.split("-").at(0);
+  QStringList list2 = st2.split(":");
+  st2 = list2.at(1) + list2.at(2) + list2.at(3);
+  st1 = st1.trimmed();
+  st2 = st2.trimmed();
+
+  QString gpsFile = iniDir + st1 + "-gps-" + st2 + ".ini";
+  if (QFile::exists(gpsFile)) {
+    QSettings Reg(gpsFile, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    Reg.setIniCodec("utf-8");
+#endif
+
+    clearTrack();
+    int count = Reg.value("/count", 0).toInt();
+    for (int i = 0; i < count; i++) {
+      double lat =
+          Reg.value("/" + QString::number(i + 1) + "/lat", 0).toDouble();
+      double lon =
+          Reg.value("/" + QString::number(i + 1) + "/lon", 0).toDouble();
+      appendTrack(lat, lon);
+    }
+    mw_one->ui->tabMotion->setCurrentIndex(3);
+  } else {
+    qDebug() << "gps file=" + gpsFile + " no exists.";
+  }
 }
