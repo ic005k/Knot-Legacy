@@ -424,6 +424,14 @@ void Steps::startRecordMotion() {
         str7 = list.at(6);
         strGpsStatus = str4 + "\n" + str5 + "\n" + str6 + "\n" + str7;
       }
+
+      if (m_time.second() % 3 && m_distance > 0) {
+        appendTrack(latitude, longitude);
+        nWriteGpsCount++;
+        writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+      }
+      mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance", str1);
+      mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", str3);
     }
 
 #else
@@ -469,6 +477,8 @@ void Steps::startRecordMotion() {
   }
 #endif
 
+  clearTrack();
+  nWriteGpsCount = 0;
   m_time = QTime(0, 0);
   timer->start(1000);
   m_distance = 0;
@@ -484,6 +494,7 @@ void Steps::startRecordMotion() {
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStartStyle);
 
   strStartTime = QTime::currentTime().toString();
+  t0 = QDate::currentDate().toString();
   mw_one->ui->qwMap->rootContext()->setContextProperty("isGpsRun", true);
 }
 
@@ -518,8 +529,8 @@ void Steps::stopRecordMotion() {
   Reg.setValue("/Steps/TotalDistance", m_TotalDistance);
 
   strEndTime = QTime::currentTime().toString();
-  QString t0, t1, t2, t3, t4, t5;
-  t0 = QDate::currentDate().toString();
+  QString t1, t2, t3, t4, t5;
+
   t1 = tr("Time") + ": " + strStartTime + " - " + strEndTime;
   t2 = tr("Distance") + ": " + str1;
   t3 = tr("Exercise Duration") + ": " + str2;
@@ -732,4 +743,28 @@ void Steps::curMonthTotal() {
       "\n" + strm + ": " + QString::number(t) + " km  " +
       QString::number(curCount) + "\n" + tr("All Total") + ": " +
       QString::number(m_td) + " km");
+}
+
+void Steps::appendTrack(double lat, double lon) {
+  QQuickItem* root = mw_one->ui->qwMap->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "appendTrack", Q_ARG(QVariant, lat),
+                            Q_ARG(QVariant, lon));
+}
+
+void Steps::clearTrack() {
+  QQuickItem* root = mw_one->ui->qwMap->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "clearTrack");
+}
+
+void Steps::writeGpsPos(double lat, double lon, int i, int count) {
+  QString s0 = t0.replace(" ", "");
+  QString s1 = strStartTime.replace(":", "");
+
+  QSettings Reg(iniDir + s0 + "-gps-" + s1, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  Reg.setValue("/" + QString::number(i) + "/lat", lat);
+  Reg.setValue("/" + QString::number(i) + "/lon", lon);
+  Reg.setValue("/count", count);
 }
