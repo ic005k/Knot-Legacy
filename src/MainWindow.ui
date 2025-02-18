@@ -4005,7 +4005,7 @@ QSlider::handle:horizontal:disabled {
           <enum>QTabWidget::South</enum>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab_Steps">
           <attribute name="title">
@@ -4556,6 +4556,16 @@ QSlider::handle:horizontal:disabled {
            <string>Map</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_42">
+           <item>
+            <widget class="QLabel" name="lblGpsDateTime">
+             <property name="text">
+              <string>GPS Date Time</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
            <item>
             <widget class="QQuickWidget" name="qwMap">
              <property name="sizePolicy">

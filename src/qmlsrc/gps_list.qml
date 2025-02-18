@@ -361,43 +361,34 @@ Rectangle {
                         text: qsTr("View GPS Track")
                         width: parent.width
                         height: 35
-
                         enabled: true
 
                         onClicked: {
-                            strGpsTime = item0.text + "-=-" + item1.text
+                            strGpsTime = item0.text + "-=-" + item1.text + "-=-"
+                                    + item2.text + "-=-" + item4.text
                             m_Steps.getGpsTrack()
+                        }
+
+                        // 设置按钮的背景颜色和边框
+                        background: Rectangle {
+                            width: parent.width
+                            color: btnViewGpsTrack.down ? "#4CAF50" : "#8BC34A" // 按下时颜色变深
+                            radius: 5 // 圆角
+                            border.color: "#4CAF50" // 边框颜色
+                            border.width: 2 // 边框宽度
+                        }
+
+                        // 设置按钮的文本样式
+                        contentItem: Text {
+                            text: btnViewGpsTrack.text
+                            font.pixelSize: 14
+                            color: "white"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                 }
             }
-
-
-            /*MouseArea {
-
-                property point clickPos: "0,0"
-
-                anchors.fill: parent
-                onPressed: {
-                    clickPos = Qt.point(mouse.x, mouse.y)
-                }
-                onReleased: {
-
-                }
-
-                onClicked: {
-
-                    view.currentIndex = index //实现item切换
-                    //mw_one.clickData()
-                }
-
-                onDoubleClicked: {
-
-                    //mw_one.reeditData()
-                    //var data = view.model.get(view.currentIndex)
-                    //console.log(data.text0 + "," + data.type + ", count=" + view.count)
-                }
-            }*/
         }
     }
 

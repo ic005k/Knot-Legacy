@@ -29,8 +29,9 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   QFont font0 = m_Method->getNewFont(15);
   mw_one->ui->lblSteps->setFont(font0);
 
-  font0.setBold(true);
   font0.setPointSize(13);
+  mw_one->ui->lblGpsDateTime->setFont(font0);
+  font0.setBold(true);
   mw_one->ui->lblCurrent->setFont(font0);
   mw_one->ui->lblToNow->setFont(font0);
   mw_one->ui->lblNow->setFont(font0);
@@ -51,6 +52,8 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblGpsInfo->setStyleSheet(lblStyle);
   mw_one->ui->lblMonthTotal->setStyleSheet(lblStyle);
   mw_one->ui->btnGetGpsListData->hide();
+
+  timer = new QTimer(this);
 }
 
 Steps::~Steps() {}
@@ -394,7 +397,6 @@ void Steps::startRecordMotion() {
   }
 #endif
 
-  timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, [this]() {
     m_time = m_time.addSecs(1);
 
@@ -407,6 +409,8 @@ void Steps::startRecordMotion() {
     if (!isGpsTest) {
       latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
       longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
+      latitude = QString::number(latitude, 'f', 6).toDouble();
+      longitude = QString::number(longitude, 'f', 6).toDouble();
     }
     QAndroidJniObject jstrGpsStatus =
         m_activity.callObjectMethod<jstring>("getGpsStatus");
@@ -450,8 +454,7 @@ void Steps::startRecordMotion() {
 
         mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance",
                                                              str1);
-        mw_one->ui->qwMap->rootContext()->setContextProperty(
-            "strSpeed", QString::number(mySpeed) + " km/h");
+        mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", str3);
       }
     }
 
@@ -527,6 +530,7 @@ void Steps::startRecordMotion() {
 
   strStartTime = QTime::currentTime().toString();
   t0 = QDate::currentDate().toString();
+  mw_one->ui->lblGpsDateTime->setText(t0 + " " + strStartTime);
   mw_one->ui->qwMap->rootContext()->setContextProperty("isGpsRun", true);
 }
 
@@ -806,6 +810,8 @@ void Steps::writeGpsPos(double lat, double lon, int i, int count) {
 }
 
 void Steps::getGpsTrack() {
+  if (timer->isActive()) return;
+
   QQuickItem* root = mw_one->ui->qwGpsList->rootObject();
   QVariant itemCount;
   QMetaObject::invokeMethod((QObject*)root, "getTimeString",
@@ -814,12 +820,21 @@ void Steps::getGpsTrack() {
   QStringList list = mStr.split("-=-");
   QString st1 = list.at(0);
   QString st2 = list.at(1);
+  mw_one->ui->lblGpsDateTime->setText(st1 + " " + st2);
+  QString st3 = list.at(2);
+  QString st4 = list.at(3);
   st1 = st1.replace(" ", "");
   st2 = st2.split("-").at(0);
   QStringList list2 = st2.split(":");
   st2 = list2.at(1) + list2.at(2) + list2.at(3);
   st1 = st1.trimmed();
   st2 = st2.trimmed();
+  st3 = st3.split(":").at(1);
+  st3 = st3.trimmed();
+  st4 = st4.split(":").at(1);
+  st4 = st4.trimmed();
+  mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance", st3);
+  mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", st4);
 
   QString gpsFile = iniDir + st1 + "-gps-" + st2 + ".ini";
   if (QFile::exists(gpsFile)) {
