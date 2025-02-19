@@ -19,13 +19,28 @@ Rectangle {
 
         var newCoordinate = QtPositioning.coordinate(lat, lon)
 
-        //polyline.path.push([newCoordinate])
-        let pathArray = polyline.path
+        //方法1
+        //let pathArray = polyline.path
+        //pathArray.push(newCoordinate) // 添加新的点
+        //polyline.path = pathArray
 
-        pathArray.push(newCoordinate) // 添加新的点
-        polyline.path = pathArray
+        //方法2（推荐）
+        polyline.addCoordinate(QtPositioning.coordinate(lat, lon))
 
         map.center = newCoordinate
+    }
+
+    function updateTrackData(lat, lon) {
+        gpsx = lat
+        gpsy = lon
+
+        polyline.addCoordinate(QtPositioning.coordinate(lat, lon))
+    }
+
+    function updateMapTrackUi(lastLat, lastLon) {
+
+        map.center = QtPositioning.coordinate(lastLat, lastLon)
+        console.log("update track...")
     }
 
     function clearTrack() {
@@ -82,7 +97,7 @@ Rectangle {
                 map.center = coord
 
                 // 添加新坐标到轨迹
-                trajectory.addCoordinate(coord)
+                polyline.addCoordinate(coord)
             }
         }
     }

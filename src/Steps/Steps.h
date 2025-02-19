@@ -79,6 +79,8 @@ class Steps : public QDialog {
   void appendTrack(double lat, double lon);
   void updateGpsMapUi();
   void updateGpsTrack();
+  void updateTrackData(double lat, double lon);
+  void updateMapTrackUi(double lat, double lon);
  public slots:
   void clearAllGpsList();
   void getGpsTrack();
@@ -130,6 +132,7 @@ class Steps : public QDialog {
   double mySpeed;
   QString strGpsMapDateTime, strGpsMapDistnce, strGpsMapSpeed, strGpsList;
   bool isGpsMapTrackFile;
+  double lastLat, lastLon;
  signals:
   void distanceChanged(double distance);
   void timeChanged();

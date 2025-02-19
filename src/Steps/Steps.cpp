@@ -789,6 +789,18 @@ void Steps::appendTrack(double lat, double lon) {
                             Q_ARG(QVariant, lon));
 }
 
+void Steps::updateTrackData(double lat, double lon) {
+  QQuickItem* root = mw_one->ui->qwMap->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "updateTrackData",
+                            Q_ARG(QVariant, lat), Q_ARG(QVariant, lon));
+}
+
+void Steps::updateMapTrackUi(double lat, double lon) {
+  QQuickItem* root = mw_one->ui->qwMap->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "updateMapTrackUi",
+                            Q_ARG(QVariant, lat), Q_ARG(QVariant, lon));
+}
+
 void Steps::clearTrack() {
   QQuickItem* root = mw_one->ui->qwMap->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "clearTrack");
@@ -850,15 +862,17 @@ void Steps::updateGpsTrack() {
 #endif
 
     clearTrack();
+    double lat;
+    double lon;
     int count = Reg.value("/count", 0).toInt();
     for (int i = 0; i < count; i++) {
-      double lat =
-          Reg.value("/" + QString::number(i + 1) + "/lat", 0).toDouble();
-      double lon =
-          Reg.value("/" + QString::number(i + 1) + "/lon", 0).toDouble();
-      appendTrack(lat, lon);
+      lat = Reg.value("/" + QString::number(i + 1) + "/lat", 0).toDouble();
+      lon = Reg.value("/" + QString::number(i + 1) + "/lon", 0).toDouble();
+      updateTrackData(lat, lon);
     }
     isGpsMapTrackFile = true;
+    lastLat = lat;
+    lastLon = lon;
 
   } else {
     isGpsMapTrackFile = false;
@@ -868,6 +882,7 @@ void Steps::updateGpsTrack() {
 
 void Steps::updateGpsMapUi() {
   if (isGpsMapTrackFile) {
+    updateMapTrackUi(lastLat, lastLon);
     mw_one->ui->lblGpsDateTime->setText(strGpsMapDateTime);
     mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance",
                                                          strGpsMapDistnce);
