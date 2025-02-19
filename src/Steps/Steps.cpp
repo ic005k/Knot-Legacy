@@ -812,15 +812,21 @@ void Steps::writeGpsPos(double lat, double lon, int i, int count) {
 void Steps::getGpsTrack() {
   if (timer->isActive()) return;
 
+  mw_one->showProgress();
   QQuickItem* root = mw_one->ui->qwGpsList->rootObject();
-  QVariant itemCount;
-  QMetaObject::invokeMethod((QObject*)root, "getTimeString",
-                            Q_RETURN_ARG(QVariant, itemCount));
-  QString mStr = itemCount.toString();
-  QStringList list = mStr.split("-=-");
+  QVariant item;
+  QMetaObject::invokeMethod((QObject*)root, "getGpsList",
+                            Q_RETURN_ARG(QVariant, item));
+  strGpsList = item.toString();
+  mw_one->myUpdateGpsMapThread->start();
+}
+
+void Steps::updateGpsTrack() {
+  QStringList list = strGpsList.split("-=-");
   QString st1 = list.at(0);
   QString st2 = list.at(1);
-  mw_one->ui->lblGpsDateTime->setText(st1 + " " + st2);
+  strGpsMapDateTime = st1 + " " + st2;
+
   QString st3 = list.at(2);
   QString st4 = list.at(3);
   st1 = st1.replace(" ", "");
@@ -833,8 +839,8 @@ void Steps::getGpsTrack() {
   st3 = st3.trimmed();
   st4 = st4.split(":").at(1);
   st4 = st4.trimmed();
-  mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance", st3);
-  mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", st4);
+  strGpsMapDistnce = st3;
+  strGpsMapSpeed = st4;
 
   QString gpsFile = iniDir + st1 + "-gps-" + st2 + ".ini";
   if (QFile::exists(gpsFile)) {
@@ -852,8 +858,21 @@ void Steps::getGpsTrack() {
           Reg.value("/" + QString::number(i + 1) + "/lon", 0).toDouble();
       appendTrack(lat, lon);
     }
-    mw_one->ui->tabMotion->setCurrentIndex(3);
+    isGpsMapTrackFile = true;
+
   } else {
+    isGpsMapTrackFile = false;
     qDebug() << "gps file=" + gpsFile + " no exists.";
+  }
+}
+
+void Steps::updateGpsMapUi() {
+  if (isGpsMapTrackFile) {
+    mw_one->ui->lblGpsDateTime->setText(strGpsMapDateTime);
+    mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance",
+                                                         strGpsMapDistnce);
+    mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed",
+                                                         strGpsMapSpeed);
+    mw_one->ui->tabMotion->setCurrentIndex(3);
   }
 }

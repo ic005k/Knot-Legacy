@@ -18,7 +18,7 @@ Rectangle {
 
     function setItemHeight(h) {}
 
-    function getTimeString() {
+    function getGpsList() {
         return strGpsTime
     }
 

@@ -120,6 +120,7 @@ class ReadEBookThread;
 class BakDataThread;
 class ImportDataThread;
 class SearchThread;
+class UpdateGpsMapThread;
 
 #include <QMetaType>
 
@@ -219,6 +220,7 @@ class MainWindow : public QMainWindow {
   BakDataThread *myBakDataThread;
   ImportDataThread *myImportDataThread;
   SearchThread *mySearchThread;
+  UpdateGpsMapThread *myUpdateGpsMapThread;
   static void ReadChartData();
   static int get_Day(QString date);
   static QString get_Year(QString date);
@@ -573,6 +575,7 @@ class MainWindow : public QMainWindow {
   void selTab();
   void stopTimerForPdf();
 
+  void updateGpsMapDone();
  private slots:
   void on_btnSync_clicked();
 
@@ -932,6 +935,21 @@ class SearchThread : public QThread {
   Q_OBJECT
  public:
   explicit SearchThread(QObject *parent = nullptr);
+
+ protected:
+  void run();
+ signals:
+  void isDone();
+
+ signals:
+
+ public slots:
+};
+
+class UpdateGpsMapThread : public QThread {
+  Q_OBJECT
+ public:
+  explicit UpdateGpsMapThread(QObject *parent = nullptr);
 
  protected:
   void run();

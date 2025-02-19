@@ -168,6 +168,18 @@ void MainWindow::searchDone() {
   closeProgress();
 }
 
+UpdateGpsMapThread::UpdateGpsMapThread(QObject *parent) : QThread{parent} {}
+void UpdateGpsMapThread::run() {
+  mw_one->m_Steps->updateGpsTrack();
+
+  emit isDone();
+}
+
+void MainWindow::updateGpsMapDone() {
+  mw_one->m_Steps->updateGpsMapUi();
+  closeProgress();
+}
+
 ReadEBookThread::ReadEBookThread(QObject *parent) : QThread{parent} {}
 void ReadEBookThread::run() {
   isReadEBookEnd = false;
@@ -3782,6 +3794,10 @@ void MainWindow::init_UIWidget() {
 
   mySearchThread = new SearchThread();
   connect(mySearchThread, &SearchThread::isDone, this, &MainWindow::searchDone);
+
+  myUpdateGpsMapThread = new UpdateGpsMapThread();
+  connect(myUpdateGpsMapThread, &UpdateGpsMapThread::isDone, this,
+          &MainWindow::updateGpsMapDone);
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &MainWindow::on_KVChanged);

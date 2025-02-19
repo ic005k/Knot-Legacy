@@ -77,6 +77,8 @@ class Steps : public QDialog {
   void delGpsListItem(int index);
   void curMonthTotal();
   void appendTrack(double lat, double lon);
+  void updateGpsMapUi();
+  void updateGpsTrack();
  public slots:
   void clearAllGpsList();
   void getGpsTrack();
@@ -126,6 +128,8 @@ class Steps : public QDialog {
   int nWriteGpsCount;
   bool isGpsTest = false;
   double mySpeed;
+  QString strGpsMapDateTime, strGpsMapDistnce, strGpsMapSpeed, strGpsList;
+  bool isGpsMapTrackFile;
  signals:
   void distanceChanged(double distance);
   void timeChanged();
