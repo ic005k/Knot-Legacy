@@ -3177,11 +3177,11 @@ void MainWindow::on_btnSteps_clicked() {
   ui->lblKM->setText(km);
 
   if (ui->lblGpsInfo->text() == tr("GPS Info")) {
-    QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+    QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
 #endif
-    double m_td = Reg.value("/Steps/TotalDistance", 0).toDouble();
+    double m_td = Reg.value("/GPS/TotalDistance", 0).toDouble();
     ui->lblTotalDistance->setText(QString::number(m_td) + " km");
   }
 

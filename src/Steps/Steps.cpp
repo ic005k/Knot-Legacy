@@ -387,11 +387,11 @@ void Steps::setScrollBarPos(double pos) {
 }
 
 void Steps::startRecordMotion() {
-  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+  QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  m_TotalDistance = Reg.value("/Steps/TotalDistance", 0).toDouble();
+  m_TotalDistance = Reg.value("/GPS/TotalDistance", 0).toDouble();
 
 #ifdef Q_OS_ANDROID
 #else
@@ -577,11 +577,11 @@ void Steps::stopRecordMotion() {
   mw_one->ui->lblAverageSpeed->setStyleSheet(lblStyle);
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStyle);
 
-  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+  QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-  Reg.setValue("/Steps/TotalDistance", m_TotalDistance);
+  Reg.setValue("/GPS/TotalDistance", m_TotalDistance);
 
   strEndTime = QTime::currentTime().toString();
   QString t1, t2, t3, t4, t5;
@@ -685,7 +685,7 @@ void Steps::loadGpsList(int nYear, int nMonth) {
   mw_one->ui->btnSelGpsDate->setText(QString::number(nYear) + " - " +
                                      QString::number(nMonth));
 
-  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+  QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -757,7 +757,7 @@ void Steps::curMonthTotal() {
     }
   }
 
-  QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
+  QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -791,7 +791,7 @@ void Steps::curMonthTotal() {
     ycount = ycount + mcount;
   }
 
-  double m_td = Reg.value("/Steps/TotalDistance", 0).toDouble();
+  double m_td = Reg.value("/GPS/TotalDistance", 0).toDouble();
 
   mw_one->ui->lblMonthTotal->setText(
       stry + ": " + QString::number(yt) + " km  " + QString::number(ycount) +
