@@ -7,8 +7,6 @@
 #include "ui_MainWindow.h"
 #include "ui_StepsOptions.h"
 
-bool isGpsTest = false;
-
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QRegularExpression regxNumber;
@@ -389,8 +387,6 @@ void Steps::setScrollBarPos(double pos) {
 }
 
 void Steps::startRecordMotion() {
-  // requestLocationPermissions(); // 已在安卓中调用
-
   QSettings Reg(iniDir + "steps.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -399,6 +395,8 @@ void Steps::startRecordMotion() {
 
 #ifdef Q_OS_ANDROID
 #else
+  isGpsTest = true;
+
   m_positionSource = QGeoPositionInfoSource::createDefaultSource(this);
   if (m_positionSource) {
     connect(m_positionSource, &QGeoPositionInfoSource::positionUpdated, this,
@@ -487,7 +485,7 @@ void Steps::startRecordMotion() {
                 nWriteGpsCount++;
                 writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
 
-                qDebug()<<"m_time%4="<<m_time.second();
+                qDebug()<<"m_time%3="<<m_time.second();
             }
 
             qDebug()<<"m_time="<< m_time.second();
