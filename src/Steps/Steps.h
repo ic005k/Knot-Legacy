@@ -128,7 +128,7 @@ class Steps : public QDialog {
   void clearTrack();
   void writeGpsPos(double lat, double lon, int i, int count);
   int nWriteGpsCount;
-  bool isGpsTest = false;
+
   double mySpeed;
   QString strGpsMapDateTime, strGpsMapDistnce, strGpsMapSpeed, strGpsList;
   bool isGpsMapTrackFile;

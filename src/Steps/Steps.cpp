@@ -7,6 +7,8 @@
 #include "ui_MainWindow.h"
 #include "ui_StepsOptions.h"
 
+bool isGpsTest = false;
+
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QRegularExpression regxNumber;
@@ -829,6 +831,9 @@ void Steps::writeGpsPos(double lat, double lon, int i, int count) {
   QString sst = strStartTime;
   QString s1 = sst.replace(":", "");
 
+  lat = QString::number(lat, 'f', 6).toDouble();
+  lon = QString::number(lon, 'f', 6).toDouble();
+
   QSettings Reg(iniDir + s0 + "-gps-" + s1 + ".ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -924,6 +929,8 @@ void Steps::updateGpsTrack() {
         lon = optimizedData.at(i).longitude;
         updateTrackData(lat, lon);
 
+        lat = QString::number(lat, 'f', 6).toDouble();
+        lon = QString::number(lon, 'f', 6).toDouble();
         Reg.setValue("/" + QString::number(i + 1) + "/lat", lat);
         Reg.setValue("/" + QString::number(i + 1) + "/lon", lon);
       }
