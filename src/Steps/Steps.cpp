@@ -1,5 +1,8 @@
 #include "Steps.h"
 
+#include <QVector>
+#include <cmath>
+
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
 #include "ui_StepsOptions.h"
@@ -12,6 +15,15 @@ extern unsigned int num_steps_walk, num_steps_run, num_steps_hop;
 extern bool loading, isAndroid;
 extern QString iniFile, iniDir;
 extern void setTableNoItemFlags(QTableWidget* t, int row);
+
+struct GPSCoordinate {
+  double latitude;
+  double longitude;
+};
+QVector<GPSCoordinate> gaussianFilter(const QVector<GPSCoordinate>& rawData,
+                                      int windowSize, double sigma);
+QVector<GPSCoordinate> detectAndCorrectOutliers(
+    const QVector<GPSCoordinate>& data, double threshold);
 
 #ifdef Q_OS_ANDROID
 QAndroidJniObject listenerWrapper;
@@ -431,7 +443,7 @@ void Steps::startRecordMotion() {
         strGpsStatus = str4 + "\n" + str5 + "\n" + str6 + "\n" + str7;
       }
 
-      if (m_time.second() % 3) {
+      if (m_time.second() % 3 == 0) {
         if (!isGpsTest) {
           jdouble m_speed = m_activity.callMethod<jdouble>("getMySpeed", "()D");
           mySpeed = m_speed;
@@ -465,13 +477,18 @@ void Steps::startRecordMotion() {
         }
 
         if (isGpsTest) {
-            if (m_time.second() % 3) {
+
+            if (m_time.second() % 3==0) {
                 appendTrack(latitude, longitude);
                 latitude = latitude + 0.001;
                 longitude = longitude + 0.001;
                 nWriteGpsCount++;
                 writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+
+                qDebug()<<"m_time%4="<<m_time.second();
             }
+
+            qDebug()<<"m_time="<< m_time.second();
         }
 
 #endif
@@ -861,6 +878,9 @@ void Steps::updateGpsTrack() {
     Reg.setIniCodec("utf-8");
 #endif
 
+    bool isOptimizedGps = Reg.value("/Optimized", false).toBool();
+    QVector<GPSCoordinate> rawGPSData;
+
     clearTrack();
     double lat;
     double lon;
@@ -868,8 +888,47 @@ void Steps::updateGpsTrack() {
     for (int i = 0; i < count; i++) {
       lat = Reg.value("/" + QString::number(i + 1) + "/lat", 0).toDouble();
       lon = Reg.value("/" + QString::number(i + 1) + "/lon", 0).toDouble();
-      updateTrackData(lat, lon);
+
+      if (!isOptimizedGps)
+        rawGPSData.append({lat, lon});
+      else
+        updateTrackData(lat, lon);
     }
+
+    if (!isOptimizedGps) {
+      int gaussianWindowSize = 3;
+      double gaussianSigma = 1.0;
+      double outlierThreshold = 0.001;  // 距离阈值，可根据实际情况调整
+
+      // 应用高斯滤波
+      QVector<GPSCoordinate> filteredData =
+          gaussianFilter(rawGPSData, gaussianWindowSize, gaussianSigma);
+
+      // 检测并修正异常点
+      QVector<GPSCoordinate> optimizedData =
+          detectAndCorrectOutliers(filteredData, outlierThreshold);
+
+      QFile file(gpsFile);
+      file.remove();
+
+      QSettings Reg(gpsFile, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+      Reg.setIniCodec("utf-8");
+#endif
+      int count = optimizedData.count();
+      Reg.setValue("/count", count);
+      Reg.setValue("/Optimized", true);
+
+      for (int i = 0; i < count; i++) {
+        lat = optimizedData.at(i).latitude;
+        lon = optimizedData.at(i).longitude;
+        updateTrackData(lat, lon);
+
+        Reg.setValue("/" + QString::number(i + 1) + "/lat", lat);
+        Reg.setValue("/" + QString::number(i + 1) + "/lon", lon);
+      }
+    }
+
     isGpsMapTrackFile = true;
     lastLat = lat;
     lastLon = lon;
@@ -890,4 +949,63 @@ void Steps::updateGpsMapUi() {
                                                          strGpsMapSpeed);
     mw_one->ui->tabMotion->setCurrentIndex(3);
   }
+}
+
+// 高斯滤波函数
+QVector<GPSCoordinate> gaussianFilter(const QVector<GPSCoordinate>& rawData,
+                                      int windowSize, double sigma) {
+  QVector<GPSCoordinate> filteredData;
+  int dataSize = rawData.size();
+
+  for (int i = 0; i < dataSize; ++i) {
+    double sumLatitude = 0.0;
+    double sumLongitude = 0.0;
+    double sumWeight = 0.0;
+
+    for (int j = qMax(0, i - windowSize / 2);
+         j < qMin(dataSize, i + windowSize / 2 + 1); ++j) {
+      double distance = std::abs(i - j);
+      double weight = std::exp(-(distance * distance) / (2 * sigma * sigma));
+      sumLatitude += rawData[j].latitude * weight;
+      sumLongitude += rawData[j].longitude * weight;
+      sumWeight += weight;
+    }
+
+    GPSCoordinate filteredCoord;
+    filteredCoord.latitude = sumLatitude / sumWeight;
+    filteredCoord.longitude = sumLongitude / sumWeight;
+
+    filteredData.append(filteredCoord);
+  }
+
+  return filteredData;
+}
+
+// 计算两点之间的距离（简化的平面距离计算，实际应用中可能需要更精确的地球表面距离计算）
+double calculateDistance(const GPSCoordinate& p1, const GPSCoordinate& p2) {
+  double dx = p2.longitude - p1.longitude;
+  double dy = p2.latitude - p1.latitude;
+  return std::sqrt(dx * dx + dy * dy);
+}
+
+// 异常点检测与修正函数
+QVector<GPSCoordinate> detectAndCorrectOutliers(
+    const QVector<GPSCoordinate>& data, double threshold) {
+  QVector<GPSCoordinate> correctedData = data;
+  int dataSize = data.size();
+
+  for (int i = 1; i < dataSize - 1; ++i) {
+    double dist1 = calculateDistance(data[i - 1], data[i]);
+    double dist2 = calculateDistance(data[i], data[i + 1]);
+
+    if (dist1 > threshold || dist2 > threshold) {
+      // 进行线性插值修正
+      double newLat = (data[i - 1].latitude + data[i + 1].latitude) / 2;
+      double newLon = (data[i - 1].longitude + data[i + 1].longitude) / 2;
+      correctedData[i].latitude = newLat;
+      correctedData[i].longitude = newLon;
+    }
+  }
+
+  return correctedData;
 }

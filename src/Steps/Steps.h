@@ -133,6 +133,7 @@ class Steps : public QDialog {
   QString strGpsMapDateTime, strGpsMapDistnce, strGpsMapSpeed, strGpsList;
   bool isGpsMapTrackFile;
   double lastLat, lastLon;
+
  signals:
   void distanceChanged(double distance);
   void timeChanged();

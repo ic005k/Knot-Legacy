@@ -19,7 +19,7 @@ Rectangle {
 
         var newCoordinate = QtPositioning.coordinate(lat, lon)
 
-        //方法1
+        //方法1（在线程中执行效率太低）
         //let pathArray = polyline.path
         //pathArray.push(newCoordinate) // 添加新的点
         //polyline.path = pathArray
@@ -50,26 +50,24 @@ Rectangle {
     Plugin {
         id: mapPlugin
         name: "osm"
+        PluginParameter {
+            name: "osm.mapping.highdpi_tiles"
+            value: true
+        }
     }
 
     Map {
         id: map
         anchors.fill: parent
         plugin: mapPlugin
-        center: QtPositioning.coordinate(gpsx, gpsy) // 初始中心坐标（伦敦）
+        center: QtPositioning.coordinate(gpsx, gpsy) // 初始中心坐标（奥斯陆）
         zoomLevel: 13
 
+        activeMapType: supportedMapTypes[1] // Cycle map provided by Thunderforest
         MapPolyline {
             id: polyline
             line.color: "red"
             line.width: 3
-
-            // test
-            // path: [QtPositioning.coordinate(59.91,
-            //                                10.75),
-            //    QtPositioning.coordinate(
-            //         gpsx+0.0000, gpsy+0.0000)//QtPositioning.coordinate(59.912, 10.752)
-            // ]
         }
 
         // 可选：添加一个标记来表示当前位置
@@ -79,7 +77,7 @@ Rectangle {
             anchorPoint.y: markerImage.height / 2
             sourceItem: Image {
                 id: markerImage
-                source: "/res/marker.png" // 替换为你的标记图标
+                source: "/res/marker.png"
                 width: 32
                 height: 32
             }
@@ -116,7 +114,6 @@ Rectangle {
         color: "blue"
         radius: 0
 
-        // Column {
         Row {
             anchors.centerIn: parent
             spacing: 5

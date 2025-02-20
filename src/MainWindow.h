@@ -6,6 +6,8 @@
 #include <QAbstractButton>
 #include <QAccelerometerReading>
 #include <QClipboard>
+#include <QGeoServiceProvider>
+#include <QGeoServiceProviderFactory>
 #include <QInputMethod>
 
 #ifdef Q_OS_ANDROID
