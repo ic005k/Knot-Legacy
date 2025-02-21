@@ -604,11 +604,16 @@ void Steps::stopRecordMotion() {
 
     insertGpsList(0, t0, t1, t2, t3, t4, t5);
 
+    QSettings Reg1(iniDir + QString::number(nYear) + "-gpslist.ini",
+                   QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    Reg1.setIniCodec("utf-8");
+#endif
     int count = getGpsListCount();
     QString strYearMonth =
         QString::number(nYear) + "-" + QString::number(nMonth);
-    Reg.setValue("/" + strYearMonth + "/Count", count);
-    Reg.setValue(
+    Reg1.setValue("/" + strYearMonth + "/Count", count);
+    Reg1.setValue(
         "/" + strYearMonth + "/" + QString::number(count),
         t0 + "-=-" + t1 + "-=-" + t2 + "-=-" + t3 + "-=-" + t4 + "-=-" + t5);
 
@@ -685,7 +690,8 @@ void Steps::loadGpsList(int nYear, int nMonth) {
   mw_one->ui->btnSelGpsDate->setText(QString::number(nYear) + " - " +
                                      QString::number(nMonth));
 
-  QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);
+  QSettings Reg(iniDir + QString::number(nYear) + "-gpslist.ini",
+                QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
@@ -757,16 +763,18 @@ void Steps::curMonthTotal() {
     }
   }
 
-  QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
   QString stry, strm;
   QStringList list = mw_one->ui->btnSelGpsDate->text().split("-");
   stry = list.at(0);
   strm = list.at(1);
   stry = stry.trimmed();
   strm = strm.trimmed();
+
+  QSettings Reg(iniDir + stry + "-gpslist.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
   int curCount = Reg.value("/" + stry + "-" + strm + "/Count", 0).toInt();
   Reg.setValue("/" + stry + "/" + strm,
                QString::number(t) + "-=-" + QString::number(curCount));
@@ -791,7 +799,11 @@ void Steps::curMonthTotal() {
     ycount = ycount + mcount;
   }
 
-  double m_td = Reg.value("/GPS/TotalDistance", 0).toDouble();
+  QSettings Reg1(iniDir + "gpslist.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg1.setIniCodec("utf-8");
+#endif
+  double m_td = Reg1.value("/GPS/TotalDistance", 0).toDouble();
 
   mw_one->ui->lblMonthTotal->setText(
       stry + ": " + QString::number(yt) + " km  " + QString::number(ycount) +
