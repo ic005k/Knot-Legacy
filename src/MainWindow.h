@@ -314,8 +314,6 @@ class MainWindow : public QMainWindow {
 
   QString getSelectedText();
 
-  void bakIniData(QString unredoFile, bool unre);
-
   void set_ToolButtonStyle(QObject *parent);
   int calcStringPixelWidth(QString s_str, QFont font, int n_font_size);
   int calcStringPixelHeight(QFont font, int n_font_size);

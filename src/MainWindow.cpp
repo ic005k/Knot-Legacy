@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.10";
+QString ver = "1.2.11";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -2640,27 +2640,6 @@ void MainWindow::on_actionExport_Data_triggered() {
   isUpData = false;
   showProgress();
   myBakDataThread->start();
-}
-
-void MainWindow::bakIniData(QString unredoFile, bool unre) {
-  QTextEdit *edit = new QTextEdit;
-  edit->append("[" + appName + "]");
-  edit->append("Ver: " + ver);
-  edit->append(loadText(iniDir + "tab.ini"));
-  edit->append(loadText(iniDir + "desc.ini"));
-  edit->append(loadText(iniDir + "ymd.ini"));
-  edit->append(loadText(iniDir + "notes.ini"));
-  edit->append(loadText(iniDir + "steps.ini"));
-
-  for (int i = 0; i < tabData->tabBar()->count(); i++) {
-    QString tabIniFile = iniDir + "tab" + QString::number(i + 1) + ".ini";
-    if (QFile(tabIniFile).exists()) edit->append(loadText(tabIniFile));
-  }
-
-  TextEditToFile(edit, iniDir + "memo/KnotSync.ini");
-  if (unre) {
-    TextEditToFile(edit, unredoFile);
-  }
 }
 
 QString MainWindow::bakData(QString fileName, bool msgbox) {

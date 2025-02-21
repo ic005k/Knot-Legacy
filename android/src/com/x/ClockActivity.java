@@ -312,7 +312,8 @@ public class ClockActivity
         btn_play_voice.setVisibility(View.VISIBLE);
       } else {
         String strVoice = internalConfigure.getIniKey("voice");
-        if (strVoice.equals("true")) {
+        String strValue = "true";
+        if (strVoice.equals(strValue)) {
           MyActivity.playMyText(str2);
         }
       }

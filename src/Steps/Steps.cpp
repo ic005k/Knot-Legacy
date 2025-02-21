@@ -413,19 +413,36 @@ void Steps::startRecordMotion() {
     m_time = m_time.addSecs(1);
 
 #ifdef Q_OS_ANDROID
+
     // 获取当前运动距离
-    jdouble distance =
-        m_activity.callMethod<jdouble>("getTotalDistance", "()D");
+    jdouble distance;
+    if (nGpsMethod == 1)
+      distance = m_activity.callMethod<jdouble>("getTotalDistance", "()D");
+    else
+      listenerWrapper.callMethod<jdouble>("getTotalDistance", "()D");
+
     QString str_distance = QString::number(distance, 'f', 2);
     m_distance = str_distance.toDouble();
+
     if (!isGpsTest) {
-      latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
-      longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
+      if (nGpsMethod == 1) {
+        latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
+        longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
+      } else {
+        latitude = listenerWrapper.callMethod<jdouble>("getLatitude", "()D");
+        longitude = listenerWrapper.callMethod<jdouble>("getLongitude", "()D");
+      }
+
       latitude = QString::number(latitude, 'f', 6).toDouble();
       longitude = QString::number(longitude, 'f', 6).toDouble();
     }
-    QAndroidJniObject jstrGpsStatus =
-        m_activity.callObjectMethod<jstring>("getGpsStatus");
+
+    QAndroidJniObject jstrGpsStatus;
+    if (nGpsMethod == 1)
+      jstrGpsStatus = m_activity.callObjectMethod<jstring>("getGpsStatus");
+    else
+      jstrGpsStatus = listenerWrapper.callObjectMethod<jstring>("getGpsStatus");
+
     if (jstrGpsStatus.isValid()) {
       strGpsStatus = jstrGpsStatus.toString();
       QStringList list = strGpsStatus.split("\n");
@@ -445,7 +462,12 @@ void Steps::startRecordMotion() {
 
       if (m_time.second() % 3 == 0) {
         if (!isGpsTest) {
-          jdouble m_speed = m_activity.callMethod<jdouble>("getMySpeed", "()D");
+          jdouble m_speed;
+          if (nGpsMethod == 1)
+            m_speed = m_activity.callMethod<jdouble>("getMySpeed", "()D");
+          else
+            m_speed = listenerWrapper.callMethod<jdouble>("getMySpeed", "()D");
+
           mySpeed = m_speed;
           if (m_distance > 0 & mySpeed > 0) {
             if (latitude + longitude != oldLat + oldLon) {
@@ -506,20 +528,30 @@ void Steps::startRecordMotion() {
 #ifdef Q_OS_ANDROID
 
   m_activity = QtAndroid::androidActivity();
-  if (m_activity.isValid()) {
-    // listenerWrapper = QAndroidJniObject("com/x/LocationListenerWrapper",
-    //                                     "(Landroid/content/Context;)V",
-    //                                     m_activity.object<jobject>());
 
-    if (listenerWrapper.isValid()) {
-    } else {
+  if (m_activity.isValid()) {
+    if (nGpsMethod == 1) {
+      if (m_activity.callMethod<jdouble>("startGpsUpdates", "()D") == 0) {
+        qWarning() << "LocationManager is null";
+        mw_one->ui->lblGpsInfo->setText("LocationManager is null...");
+        mw_one->ui->btnGPS->setText(tr("Start"));
+        return;
+      }
     }
 
-    if (m_activity.callMethod<jdouble>("startGpsUpdates", "()D") == 0) {
-      qWarning() << "LocationManager is null";
-      mw_one->ui->lblGpsInfo->setText("LocationManager is null...");
-      mw_one->ui->btnGPS->setText(tr("Start"));
-      return;
+    if (nGpsMethod == 2) {
+      listenerWrapper = QAndroidJniObject("com/x/LocationListenerWrapper",
+                                          "(Landroid/content/Context;)V",
+                                          m_activity.object<jobject>());
+      if (listenerWrapper.isValid()) {
+        if (listenerWrapper.callMethod<jdouble>("startGpsUpdates", "()D") ==
+            0) {
+          qWarning() << "LocationManager is null";
+          mw_one->ui->lblGpsInfo->setText("LocationManager is null...");
+          mw_one->ui->btnGPS->setText(tr("Start"));
+          return;
+        }
+      }
     }
   }
 
@@ -595,7 +627,10 @@ void Steps::stopRecordMotion() {
   if (m_distance > 0 || isGpsTest) {
     int nYear = QDate::currentDate().year();
     int nMonth = QDate::currentDate().month();
-    QString strTitle = QString::number(nYear) + " - " + QString::number(nMonth);
+    QString stry, strm;
+    stry = QString::number(nYear);
+    strm = QString::number(nMonth);
+    QString strTitle = stry + " - " + strm;
     if (mw_one->ui->btnSelGpsDate->text() != strTitle) {
       clearAllGpsList();
       loadGpsList(nYear, nMonth);
@@ -604,24 +639,39 @@ void Steps::stopRecordMotion() {
 
     insertGpsList(0, t0, t1, t2, t3, t4, t5);
 
-    QSettings Reg1(iniDir + QString::number(nYear) + "-gpslist.ini",
-                   QSettings::IniFormat);
+    QSettings Reg1(iniDir + stry + "-gpslist.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg1.setIniCodec("utf-8");
 #endif
     int count = getGpsListCount();
-    QString strYearMonth =
-        QString::number(nYear) + "-" + QString::number(nMonth);
+    QString strYearMonth = stry + "-" + strm;
     Reg1.setValue("/" + strYearMonth + "/Count", count);
     Reg1.setValue(
         "/" + strYearMonth + "/" + QString::number(count),
         t0 + "-=-" + t1 + "-=-" + t2 + "-=-" + t3 + "-=-" + t4 + "-=-" + t5);
 
+    double t = 0;
+    for (int i = 0; i < count; i++) {
+      QString str = getGpsListText2(i);
+      QStringList list = str.split(" ");
+      if (list.count() == 3) {
+        QString str1 = list.at(1);
+        double jl = str1.toDouble();
+        t = t + jl;
+      }
+    }
+
+    Reg1.setValue("/" + stry + "/" + strm,
+                  QString::number(t) + "-=-" + QString::number(count));
+
     curMonthTotal();
   }
 
 #ifdef Q_OS_ANDROID
-  m_distance = m_activity.callMethod<jdouble>("stopGpsUpdates", "()D");
+  if (nGpsMethod == 1)
+    m_distance = m_activity.callMethod<jdouble>("stopGpsUpdates", "()D");
+  else
+    m_distance = listenerWrapper.callMethod<jdouble>("stopGpsUpdates", "()D");
 #else
   if (m_positionSource) {
     m_positionSource->stopUpdates();
@@ -751,23 +801,11 @@ QString Steps::getGpsListText2(int index) {
 }
 
 void Steps::curMonthTotal() {
-  double t = 0;
-  int count = getGpsListCount();
-  for (int i = 0; i < count; i++) {
-    QString str = getGpsListText2(i);
-    QStringList list = str.split(" ");
-    if (list.count() == 3) {
-      QString str1 = list.at(1);
-      double jl = str1.toDouble();
-      t = t + jl;
-    }
-  }
-
-  QString stry, strm;
-  QStringList list = mw_one->ui->btnSelGpsDate->text().split("-");
-  stry = list.at(0);
-  strm = list.at(1);
+  QString title = mw_one->ui->btnSelGpsDate->text();
+  QStringList list = title.split("-");
+  QString stry = list.at(0);
   stry = stry.trimmed();
+  QString strm = list.at(1);
   strm = strm.trimmed();
 
   QSettings Reg(iniDir + stry + "-gpslist.ini", QSettings::IniFormat);
@@ -775,15 +813,13 @@ void Steps::curMonthTotal() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  int curCount = Reg.value("/" + stry + "-" + strm + "/Count", 0).toInt();
-  Reg.setValue("/" + stry + "/" + strm,
-               QString::number(t) + "-=-" + QString::number(curCount));
-
+  double currentMonthTotal;
+  int curCount;
   double yt = 0;
   int ycount = 0;
   for (int i = 0; i < 12; i++) {
-    double mt;
-    int mcount;
+    double mt = 0;
+    int mcount = 0;
     QString str_mt =
         Reg.value("/" + stry + "/" + QString::number(i + 1), 0).toString();
     QStringList list = str_mt.split("-=-");
@@ -797,6 +833,11 @@ void Steps::curMonthTotal() {
     }
     yt = yt + mt;
     ycount = ycount + mcount;
+
+    if (QString::number(i + 1) == strm) {
+      currentMonthTotal = mt;
+      curCount = mcount;
+    }
   }
 
   QSettings Reg1(iniDir + "gpslist.ini", QSettings::IniFormat);
@@ -807,7 +848,7 @@ void Steps::curMonthTotal() {
 
   mw_one->ui->lblMonthTotal->setText(
       stry + ": " + QString::number(yt) + " km  " + QString::number(ycount) +
-      "\n" + strm + ": " + QString::number(t) + " km  " +
+      "\n" + strm + ": " + QString::number(currentMonthTotal) + " km  " +
       QString::number(curCount) + "\n" + tr("All Total") + ": " +
       QString::number(m_td) + " km");
 }
