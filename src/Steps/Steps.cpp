@@ -64,6 +64,9 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblGpsInfo->setStyleSheet(lblStyle);
   mw_one->ui->lblMonthTotal->setStyleSheet(lblStyle);
   mw_one->ui->btnGetGpsListData->hide();
+
+  timer = new QTimer(this);
+  connect(timer, &QTimer::timeout, this, &Steps::updateGetGps);
 }
 
 Steps::~Steps() {}
@@ -407,123 +410,6 @@ void Steps::startRecordMotion() {
   }
 #endif
 
-  timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, this, [this]() {
-    m_time = m_time.addSecs(1);
-
-#ifdef Q_OS_ANDROID
-
-    // 获取当前运动距离
-    jdouble distance;
-    if (nGpsMethod == 1)
-      distance = m_activity.callMethod<jdouble>("getTotalDistance", "()D");
-    else
-      listenerWrapper.callMethod<jdouble>("getTotalDistance", "()D");
-
-    QString str_distance = QString::number(distance, 'f', 2);
-    m_distance = str_distance.toDouble();
-
-    if (!isGpsTest) {
-      if (nGpsMethod == 1) {
-        latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
-        longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
-      } else {
-        latitude = listenerWrapper.callMethod<jdouble>("getLatitude", "()D");
-        longitude = listenerWrapper.callMethod<jdouble>("getLongitude", "()D");
-      }
-
-      latitude = QString::number(latitude, 'f', 6).toDouble();
-      longitude = QString::number(longitude, 'f', 6).toDouble();
-    }
-
-    QAndroidJniObject jstrGpsStatus;
-    if (nGpsMethod == 1)
-      jstrGpsStatus = m_activity.callObjectMethod<jstring>("getGpsStatus");
-    else
-      jstrGpsStatus = listenerWrapper.callObjectMethod<jstring>("getGpsStatus");
-
-    if (jstrGpsStatus.isValid()) {
-      strGpsStatus = jstrGpsStatus.toString();
-      QStringList list = strGpsStatus.split("\n");
-      if (list.count() > 2) {
-        str1 = list.at(0);
-        str2 = list.at(1);
-        str3 = list.at(2);
-        mw_one->ui->lblCurrentDistance->setText(str1);
-        mw_one->ui->lblRunTime->setText(str2);
-        mw_one->ui->lblAverageSpeed->setText(str3);
-        str4 = list.at(3);
-        str5 = list.at(4);
-        str6 = list.at(5);
-        str7 = list.at(6);
-        strGpsStatus = str4 + "\n" + str5 + "\n" + str6 + "\n" + str7;
-      }
-
-      if (m_time.second() % 3 == 0) {
-        if (!isGpsTest) {
-          jdouble m_speed;
-          if (nGpsMethod == 1)
-            m_speed = m_activity.callMethod<jdouble>("getMySpeed", "()D");
-          else
-            m_speed = listenerWrapper.callMethod<jdouble>("getMySpeed", "()D");
-
-          mySpeed = m_speed;
-          if (m_distance > 0 & mySpeed > 0) {
-            if (latitude + longitude != oldLat + oldLon) {
-              appendTrack(latitude, longitude);
-              nWriteGpsCount++;
-              writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
-              oldLat = latitude;
-              oldLon = longitude;
-            }
-          }
-        } else {
-          appendTrack(latitude, longitude);
-          latitude = latitude + 0.001;
-          longitude = longitude + 0.001;
-          nWriteGpsCount++;
-          writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
-        }
-
-        mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance",
-                                                             str1);
-        mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", str3);
-      }
-    }
-
-#else
-        if (m_time.second() != 0) {
-          m_speed = m_distance / m_time.second();
-          emit speedChanged();
-        }
-
-        if (isGpsTest) {
-
-            if (m_time.second() % 3==0) {
-                appendTrack(latitude, longitude);
-                latitude = latitude + 0.001;
-                longitude = longitude + 0.001;
-                nWriteGpsCount++;
-                writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
-
-                qDebug()<<"m_time%3="<<m_time.second();
-            }
-
-            qDebug()<<"m_time="<< m_time.second();
-        }
-
-#endif
-
-    strTotalDistance = QString::number(m_TotalDistance) + " km";
-    mw_one->ui->lblTotalDistance->setText(strTotalDistance);
-    strDurationTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
-    strGpsInfoShow = strDurationTime +
-                     "\nLon.-Lat.: " + QString::number(longitude) + " - " +
-                     QString::number(latitude) + "\n" + strGpsStatus;
-    mw_one->ui->lblGpsInfo->setText(strGpsInfoShow);
-    emit timeChanged();
-  });
-
 #ifdef Q_OS_ANDROID
 
   m_activity = QtAndroid::androidActivity();
@@ -595,6 +481,120 @@ void Steps::positionUpdated(const QGeoPositionInfo& info) {
     latitude = lastPosition.latitude();
     longitude = lastPosition.longitude();
   }
+}
+
+void Steps::updateGetGps() {
+  m_time = m_time.addSecs(1);
+
+#ifdef Q_OS_ANDROID
+
+  // 获取当前运动距离
+  jdouble distance;
+  if (nGpsMethod == 1)
+    distance = m_activity.callMethod<jdouble>("getTotalDistance", "()D");
+  else
+    listenerWrapper.callMethod<jdouble>("getTotalDistance", "()D");
+
+  QString str_distance = QString::number(distance, 'f', 2);
+  m_distance = str_distance.toDouble();
+
+  if (!isGpsTest) {
+    if (nGpsMethod == 1) {
+      latitude = m_activity.callMethod<jdouble>("getLatitude", "()D");
+      longitude = m_activity.callMethod<jdouble>("getLongitude", "()D");
+    } else {
+      latitude = listenerWrapper.callMethod<jdouble>("getLatitude", "()D");
+      longitude = listenerWrapper.callMethod<jdouble>("getLongitude", "()D");
+    }
+
+    latitude = QString::number(latitude, 'f', 6).toDouble();
+    longitude = QString::number(longitude, 'f', 6).toDouble();
+  }
+
+  QAndroidJniObject jstrGpsStatus;
+  if (nGpsMethod == 1)
+    jstrGpsStatus = m_activity.callObjectMethod<jstring>("getGpsStatus");
+  else
+    jstrGpsStatus = listenerWrapper.callObjectMethod<jstring>("getGpsStatus");
+
+  if (jstrGpsStatus.isValid()) {
+    strGpsStatus = jstrGpsStatus.toString();
+    QStringList list = strGpsStatus.split("\n");
+    if (list.count() > 2) {
+      str1 = list.at(0);
+      str2 = list.at(1);
+      str3 = list.at(2);
+      mw_one->ui->lblCurrentDistance->setText(str1);
+      mw_one->ui->lblRunTime->setText(str2);
+      mw_one->ui->lblAverageSpeed->setText(str3);
+      str4 = list.at(3);
+      str5 = list.at(4);
+      str6 = list.at(5);
+      str7 = list.at(6);
+      strGpsStatus = str4 + "\n" + str5 + "\n" + str6 + "\n" + str7;
+    }
+
+    if (m_time.second() % 3 == 0) {
+      if (!isGpsTest) {
+        jdouble m_speed;
+        if (nGpsMethod == 1)
+          m_speed = m_activity.callMethod<jdouble>("getMySpeed", "()D");
+        else
+          m_speed = listenerWrapper.callMethod<jdouble>("getMySpeed", "()D");
+
+        mySpeed = m_speed;
+        if (m_distance > 0 & mySpeed > 0) {
+          if (latitude + longitude != oldLat + oldLon) {
+            appendTrack(latitude, longitude);
+            nWriteGpsCount++;
+            writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+            oldLat = latitude;
+            oldLon = longitude;
+          }
+        }
+      } else {
+        appendTrack(latitude, longitude);
+        latitude = latitude + 0.001;
+        longitude = longitude + 0.001;
+        nWriteGpsCount++;
+        writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+      }
+
+      mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance", str1);
+      mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", str3);
+    }
+  }
+
+#else
+  if (m_time.second() != 0) {
+    m_speed = m_distance / m_time.second();
+    emit speedChanged();
+  }
+
+  if (isGpsTest) {
+    if (m_time.second() % 3 == 0) {
+      appendTrack(latitude, longitude);
+      latitude = latitude + 0.001;
+      longitude = longitude + 0.001;
+      nWriteGpsCount++;
+      writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+
+      qDebug() << "m_time%3=" << m_time.second();
+    }
+
+    qDebug() << "m_time=" << m_time.second();
+  }
+
+#endif
+
+  strTotalDistance = QString::number(m_TotalDistance) + " km";
+  mw_one->ui->lblTotalDistance->setText(strTotalDistance);
+  strDurationTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
+  strGpsInfoShow = strDurationTime +
+                   "\nLon.-Lat.: " + QString::number(longitude) + " - " +
+                   QString::number(latitude) + "\n" + strGpsStatus;
+  mw_one->ui->lblGpsInfo->setText(strGpsInfoShow);
+  emit timeChanged();
 }
 
 void Steps::stopRecordMotion() {

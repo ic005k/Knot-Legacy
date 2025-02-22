@@ -87,6 +87,7 @@ class Steps : public QDialog {
  private slots:
   void positionUpdated(const QGeoPositionInfo &info);
 
+     void updateGetGps();
  private:
   QBrush brush1 = QBrush(QColor(255, 228, 225));
   QBrush brush2 = QBrush(QColor(245, 222, 179));
