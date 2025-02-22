@@ -50,6 +50,7 @@ Rectangle {
     Plugin {
         id: mapPlugin
         name: "osm"
+
         PluginParameter {
             name: "osm.mapping.highdpi_tiles"
             value: true
@@ -64,6 +65,7 @@ Rectangle {
         zoomLevel: 13
 
         activeMapType: supportedMapTypes[1] // Cycle map provided by Thunderforest
+
         MapPolyline {
             id: polyline
             line.color: "red"
