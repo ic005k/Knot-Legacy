@@ -59,10 +59,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
 
 #ifdef Q_OS_ANDROID
 #else
-  font1.setPointSize(8);
-  mw_one->ui->lblGpsInfo->setFont(font1);
-  mw_one->ui->lblTotalDistance->setFont(font1);
-  mw_one->ui->lblCurrentDistance->setFont(font1);
+
 #endif
 
   lblStyle = mw_one->ui->lblTotalDistance->styleSheet();
@@ -923,6 +920,9 @@ void Steps::updateGpsTrack() {
   QString st3 = list.at(2);
   QString st4 = list.at(3);
   st1 = st1.replace(" ", "");
+  st1 = st1.replace("Cycling", "");
+  st1 = st1.replace("Hiking", "");
+  st1 = st1.replace("Running", "");
   st1 = st1.replace(tr("Cycling"), "");
   st1 = st1.replace(tr("Hiking"), "");
   st1 = st1.replace(tr("Running"), "");
