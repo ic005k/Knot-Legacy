@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.11";
+QString ver = "1.2.12";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3416,7 +3416,6 @@ void MainWindow::initQW() {
   ui->qwGpsList->rootContext()->setContextProperty("m_Steps", m_Steps);
 
   ui->qwMap->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/map.qml")));
-  ui->qwMap->rootContext()->setContextProperty("isGpsRun", false);
   ui->qwMap->rootContext()->setContextProperty("strDistance", "0 km");
   ui->qwMap->rootContext()->setContextProperty("strSpeed", "0 km/h");
 
@@ -3852,6 +3851,16 @@ void MainWindow::init_UIWidget() {
 
   ui->tabMotion->setCornerWidget(ui->btnBackSteps, Qt::TopRightCorner);
   ui->tabMotion->setCurrentIndex(1);
+  QString rbStyle = ui->rbCycling->styleSheet();
+  ui->rbHiking->setStyleSheet(rbStyle);
+  ui->rbRunning->setStyleSheet(rbStyle);
+  QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+  ui->rbCycling->setChecked(Reg.value("/GPS/isCycling", 0).toBool());
+  ui->rbHiking->setChecked(Reg.value("/GPS/isHiking", 0).toBool());
+  ui->rbRunning->setChecked(Reg.value("/GPS/isRunning", 0).toBool());
 }
 
 void MainWindow::init_ButtonStyle() {
@@ -5990,4 +5999,22 @@ void MainWindow::on_btnSelGpsDate_clicked() { m_Steps->selGpsListYearMonth(); }
 
 void MainWindow::on_btnGetGpsListData_clicked() {
   m_Steps->getGpsListDataFromYearMonth();
+}
+
+void MainWindow::on_rbCycling_clicked() {
+  ui->rbHiking->setChecked(false);
+  ui->rbRunning->setChecked(false);
+  m_Steps->saveMovementType();
+}
+
+void MainWindow::on_rbHiking_clicked() {
+  ui->rbCycling->setChecked(false);
+  ui->rbRunning->setChecked(false);
+  m_Steps->saveMovementType();
+}
+
+void MainWindow::on_rbRunning_clicked() {
+  ui->rbHiking->setChecked(false);
+  ui->rbCycling->setChecked(false);
+  m_Steps->saveMovementType();
 }

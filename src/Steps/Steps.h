@@ -81,7 +81,8 @@ class Steps : public QDialog {
   void updateGpsTrack();
   void updateTrackData(double lat, double lon);
   void updateMapTrackUi(double lat, double lon);
- public slots:
+  void saveMovementType();
+  public slots:
   void clearAllGpsList();
   void getGpsTrack();
  private slots:

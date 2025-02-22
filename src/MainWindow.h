@@ -802,6 +802,12 @@ class MainWindow : public QMainWindow {
 
   void on_btnGetGpsListData_clicked();
 
+  void on_rbCycling_clicked();
+
+  void on_rbHiking_clicked();
+
+  void on_rbRunning_clicked();
+
  private:
   bool isMoveEntry;
   QTimer *tmeFlash;

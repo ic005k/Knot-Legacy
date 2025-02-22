@@ -57,6 +57,14 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblKM->setFont(font1);
   mw_one->ui->lblSingle->setFont(font1);
 
+#ifdef Q_OS_ANDROID
+#else
+  font1.setPointSize(8);
+  mw_one->ui->lblGpsInfo->setFont(font1);
+  mw_one->ui->lblTotalDistance->setFont(font1);
+  mw_one->ui->lblCurrentDistance->setFont(font1);
+#endif
+
   lblStyle = mw_one->ui->lblTotalDistance->styleSheet();
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStyle);
   mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
@@ -465,7 +473,6 @@ void Steps::startRecordMotion() {
   strStartTime = QTime::currentTime().toString();
   t0 = QDate::currentDate().toString();
   mw_one->ui->lblGpsDateTime->setText(t0 + " " + strStartTime);
-  mw_one->ui->qwMap->rootContext()->setContextProperty("isGpsRun", true);
 }
 
 void Steps::positionUpdated(const QGeoPositionInfo& info) {
@@ -617,6 +624,10 @@ void Steps::stopRecordMotion() {
   strEndTime = QTime::currentTime().toString();
   QString t1, t2, t3, t4, t5;
 
+  if (mw_one->ui->rbCycling->isChecked()) t0 = tr("Cycling") + " " + t0;
+  if (mw_one->ui->rbHiking->isChecked()) t0 = tr("Hiking") + " " + t0;
+  if (mw_one->ui->rbRunning->isChecked()) t0 = tr("Running") + " " + t0;
+
   t1 = tr("Time") + ": " + strStartTime + " - " + strEndTime;
   t2 = tr("Distance") + ": " + str1;
   t3 = tr("Exercise Duration") + ": " + str2;
@@ -677,8 +688,6 @@ void Steps::stopRecordMotion() {
   }
   delete m_positionSource;
 #endif
-
-  mw_one->ui->qwMap->rootContext()->setContextProperty("isGpsRun", false);
 
   ShowMessage* msg = new ShowMessage(this);
   msg->showMsg("Knot", mw_one->ui->lblGpsInfo->text(), 1);
@@ -914,6 +923,9 @@ void Steps::updateGpsTrack() {
   QString st3 = list.at(2);
   QString st4 = list.at(3);
   st1 = st1.replace(" ", "");
+  st1 = st1.replace(tr("Cycling"), "");
+  st1 = st1.replace(tr("Hiking"), "");
+  st1 = st1.replace(tr("Running"), "");
   st2 = st2.split("-").at(0);
   QStringList list2 = st2.split(":");
   st2 = list2.at(1) + list2.at(2) + list2.at(3);
@@ -1065,4 +1077,15 @@ QVector<GPSCoordinate> detectAndCorrectOutliers(
   }
 
   return correctedData;
+}
+
+void Steps::saveMovementType() {
+  QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  Reg.setValue("/GPS/isCycling", mw_one->ui->rbCycling->isChecked());
+  Reg.setValue("/GPS/isHiking", mw_one->ui->rbHiking->isChecked());
+  Reg.setValue("/GPS/isRunning", mw_one->ui->rbRunning->isChecked());
 }
