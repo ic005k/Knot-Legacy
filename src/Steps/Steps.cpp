@@ -64,8 +64,6 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblGpsInfo->setStyleSheet(lblStyle);
   mw_one->ui->lblMonthTotal->setStyleSheet(lblStyle);
   mw_one->ui->btnGetGpsListData->hide();
-
-  timer = new QTimer(this);
 }
 
 Steps::~Steps() {}
@@ -409,6 +407,7 @@ void Steps::startRecordMotion() {
   }
 #endif
 
+  timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, [this]() {
     m_time = m_time.addSecs(1);
 
@@ -563,7 +562,7 @@ void Steps::startRecordMotion() {
 
   clearTrack();
   nWriteGpsCount = 0;
-  m_time = QTime(0, 0);
+  m_time.setHMS(0, 0, 0, 0);
   timer->start(1000);
   m_distance = 0;
   m_speed = 0;

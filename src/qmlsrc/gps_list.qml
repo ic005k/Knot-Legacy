@@ -357,7 +357,7 @@ Rectangle {
 
                     Button {
                         id: btnViewGpsTrack
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter // 水平居中对齐
                         text: qsTr("View GPS Track")
                         width: parent.width
                         height: 35

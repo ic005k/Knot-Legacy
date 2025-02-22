@@ -243,16 +243,6 @@ public class MyActivity
   private String strTotalClimb = "Total Climb";
   private String strAverageSpeed = "0 km/h";
 
-  public MyActivity() {
-  }
-
-  // ------------------------------------------------------------------------
-  public void setStatusBarHide() {
-  }
-
-  public void setStatusBarShow() {
-  }
-
   // ------------------------------------------------------------------------
 
   public void setDark(String strDark) {
