@@ -21,6 +21,36 @@ class Steps : public QDialog {
   ~Steps();
   Ui::Steps *ui;
 
+  QString btnRoundStyle =
+      "QToolButton {"
+      "   border-radius: 40px;"        // 设置圆角半径为按钮宽度的一半
+      "   background-color: #00AF50;"  // 设置背景颜色
+      "   color: white;"               // 设置文字颜色
+      "   min-width: 80px;"            // 设置最小宽度
+      "   min-height: 80px;"           // 设置最小高度
+      "}"
+      "QToolButton:hover {"
+      "   background-color: #00AF50;"  // 设置鼠标悬停时的背景颜色
+      "}"
+      "QToolButton:pressed {"
+      "   background-color: #3d8b40;"  // 设置按钮按下时的背景颜色
+      "}";
+
+  QString btnRoundStyleRed =
+      "QToolButton {"
+      "   border-radius: 40px;"        // 设置圆角半径为按钮宽度的一半
+      "   background-color: #FF0000;"  // 设置背景颜色
+      "   color: white;"               // 设置文字颜色
+      "   min-width: 80px;"            // 设置最小宽度
+      "   min-height: 80px;"           // 设置最小高度
+      "}"
+      "QToolButton:hover {"
+      "   background-color: #FF0000;"  // 设置鼠标悬停时的背景颜色
+      "}"
+      "QToolButton:pressed {"
+      "   background-color: #3d8b40;"  // 设置按钮按下时的背景颜色
+      "}";
+
   int toDayInitSteps = 0;
   double dleInter = 5;
   double dleSlope = 5;
@@ -82,13 +112,14 @@ class Steps : public QDialog {
   void updateTrackData(double lat, double lon);
   void updateMapTrackUi(double lat, double lon);
   void saveMovementType();
-  public slots:
+ public slots:
   void clearAllGpsList();
   void getGpsTrack();
  private slots:
   void positionUpdated(const QGeoPositionInfo &info);
 
-     void updateGetGps();
+  void updateGetGps();
+
  private:
   QBrush brush1 = QBrush(QColor(255, 228, 225));
   QBrush brush2 = QBrush(QColor(245, 222, 179));

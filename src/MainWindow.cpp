@@ -1136,7 +1136,8 @@ void MainWindow::set_ToolButtonStyle(QObject *parent) {
   for (int i = 0; i < btnList.count(); i++) {
     QToolButton *btn = (QToolButton *)btnList.at(i);
 
-    if (btn != ui->btnStyle1 && btn != ui->btnStyle2 && btn != ui->btnStyle3)
+    if (btn != ui->btnStyle1 && btn != ui->btnStyle2 && btn != ui->btnStyle3 &&
+        btn != ui->btnGPS)
       m_Method->setToolButtonQss(btn, 5, 3, "#3498DB", "#FFFFFF", "#3498DB",
                                  "#FFFFFF", "#FF0000", "#FFFFFF");
   }
@@ -3861,6 +3862,19 @@ void MainWindow::init_UIWidget() {
   ui->rbCycling->setChecked(Reg.value("/GPS/isCycling", 0).toBool());
   ui->rbHiking->setChecked(Reg.value("/GPS/isHiking", 0).toBool());
   ui->rbRunning->setChecked(Reg.value("/GPS/isRunning", 0).toBool());
+
+  ui->btnGPS->setStyleSheet(m_Steps->btnRoundStyle);
+  ui->btnGPS->hide();
+  QWidget *centralWidget = new QWidget(this);
+  QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+
+  SliderButton *sliderButton = new SliderButton(centralWidget);
+  sliderButton->setTipText(tr("Slide Right to Start or Stop."));
+  layout->addWidget(sliderButton);
+
+  QObject::connect(sliderButton, &SliderButton::sliderMovedToEnd,
+                   [&]() { ui->btnGPS->click(); });
+  ui->frame_btnGps->layout()->addWidget(centralWidget);
 }
 
 void MainWindow::init_ButtonStyle() {

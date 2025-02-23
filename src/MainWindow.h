@@ -123,6 +123,7 @@ class BakDataThread;
 class ImportDataThread;
 class SearchThread;
 class UpdateGpsMapThread;
+class SliderButton;
 
 #include <QMetaType>
 
@@ -577,6 +578,7 @@ class MainWindow : public QMainWindow {
 
   void updateGpsMapDone();
  private slots:
+
   void on_btnSync_clicked();
 
   void on_btnPDF_clicked();
@@ -965,6 +967,115 @@ class UpdateGpsMapThread : public QThread {
  signals:
 
  public slots:
+};
+
+class SliderButton : public QWidget {
+  Q_OBJECT
+  Q_PROPERTY(int sliderPosition READ getSliderPosition WRITE setSliderPosition)
+ public:
+  explicit SliderButton(QWidget *parent = nullptr) : QWidget(parent) {
+    m_sliderPosition = 0;
+    m_isDragging = false;
+    m_animation = new QPropertyAnimation(this, "sliderPosition");
+    m_animation->setDuration(200);
+    m_animation->setEasingCurve(QEasingCurve::InOutQuad);
+    m_tipText = tr("Slide Right to Start.");
+  }
+
+  void setTipText(const QString &text) {
+    m_tipText = text;
+    update();
+  }
+
+ signals:
+  void sliderMovedToEnd();
+
+ protected:
+  void paintEvent(QPaintEvent *event) override {
+    Q_UNUSED(event);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    // 绘制背景
+    QRect backgroundRect(0, 0, width(), height());
+    QBrush backgroundBrush(QColor(200, 200, 200));
+    painter.setBrush(backgroundBrush);
+    painter.setPen(Qt::NoPen);
+    painter.drawRoundedRect(backgroundRect, height() / 2, height() / 2);
+
+    // 绘制滑块
+    int sliderWidth = height();
+    QRect sliderRect(m_sliderPosition, 0, sliderWidth, height());
+    QBrush sliderBrush(QColor(0, 128, 255));
+    painter.setBrush(sliderBrush);
+    painter.drawRoundedRect(sliderRect, height() / 2, height() / 2);
+
+    // 绘制提示文本
+    QFont font;
+    font.setPixelSize(height() / 3);
+    painter.setFont(font);
+    painter.setPen(Qt::black);
+    painter.drawText(backgroundRect, Qt::AlignCenter, m_tipText);
+  }
+
+  void mousePressEvent(QMouseEvent *event) override {
+    if (event->button() == Qt::LeftButton) {
+      int sliderWidth = height();
+      QRect sliderRect(m_sliderPosition, 0, sliderWidth, height());
+      if (sliderRect.contains(event->pos())) {
+        m_isDragging = true;
+        m_dragStartX = event->x();
+      }
+    }
+  }
+
+  void mouseMoveEvent(QMouseEvent *event) override {
+    if (m_isDragging) {
+      int deltaX = event->x() - m_dragStartX;
+      int newPosition = m_sliderPosition + deltaX;
+      int maxPosition = width() - height();
+      if (newPosition < 0) {
+        newPosition = 0;
+      } else if (newPosition > maxPosition) {
+        newPosition = maxPosition;
+      }
+      setSliderPosition(newPosition);
+      m_dragStartX = event->x();
+    }
+  }
+
+  void mouseReleaseEvent(QMouseEvent *event) override {
+    if (m_isDragging) {
+      m_isDragging = false;
+      int maxPosition = width() - height();
+      if (m_sliderPosition == maxPosition) {
+        emit sliderMovedToEnd();
+
+        m_animation->setStartValue(m_sliderPosition);
+        m_animation->setEndValue(0);
+        m_animation->start();
+      } else {
+        m_animation->setStartValue(m_sliderPosition);
+        m_animation->setEndValue(0);
+        m_animation->start();
+      }
+    }
+  }
+
+ public slots:
+  void setSliderPosition(int position) {
+    m_sliderPosition = position;
+    update();
+  }
+
+  int getSliderPosition() const { return m_sliderPosition; }
+
+ private:
+  int m_sliderPosition;
+  bool m_isDragging;
+  int m_dragStartX;
+  QPropertyAnimation *m_animation;
+  QString m_tipText;
 };
 
 #endif  // MAINWINDOW_H
