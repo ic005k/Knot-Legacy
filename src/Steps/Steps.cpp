@@ -860,8 +860,10 @@ void Steps::curMonthTotal() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  double currentMonthTotal;
-  int curCount;
+  // cm = Current Month
+  double cmTotal, cmTotal_Cycling, cmTotal_Hiking, cmTotal_Running;
+  int cmCount, cmCount_Cycling, cmCount_Hiking, cmCount_Running;
+
   double yt = 0;
   int ycount = 0;
   double monthCyclingKM = 0;
@@ -885,8 +887,10 @@ void Steps::curMonthTotal() {
     if (list.count() == 2) {
       mt = list.at(0).toDouble();
       mcount = list.at(1).toInt();
-    }
-    if (list.count() == 8) {
+    } else if (list.count() == 8) {
+      mt = list.at(0).toDouble();
+      mcount = list.at(1).toInt();
+
       monthCyclingKM = list.at(2).toDouble();
       monthCyclingCount = list.at(3).toInt();
 
@@ -895,7 +899,20 @@ void Steps::curMonthTotal() {
 
       monthRunningKM = list.at(6).toDouble();
       monthRunningCount = list.at(7).toInt();
+    } else {
+      mt = 0;
+      mcount = 0;
+
+      monthCyclingKM = 0;
+      monthCyclingCount = 0;
+
+      monthHikingKM = 0;
+      monthHikingCount = 0;
+
+      monthRunningKM = 0;
+      monthRunningCount = 0;
     }
+
     yt += mt;
     ycount += mcount;
 
@@ -909,8 +926,17 @@ void Steps::curMonthTotal() {
     yearRunningCount = monthRunningCount;
 
     if (QString::number(i + 1) == strm) {
-      currentMonthTotal = mt;
-      curCount = mcount;
+      cmTotal = mt;
+      cmCount = mcount;
+
+      cmTotal_Cycling = monthCyclingKM;
+      cmCount_Cycling = monthCyclingCount;
+
+      cmTotal_Hiking = monthHikingKM;
+      cmCount_Hiking = monthHikingCount;
+
+      cmTotal_Running = monthRunningKM;
+      cmCount_Running = monthRunningCount;
     }
   }
 
@@ -922,15 +948,14 @@ void Steps::curMonthTotal() {
   Q_UNUSED(m_td);
 
   QString s1_month, s2_month, s3_month, s4_month;
-  s1_month = strm + " " + tr("Month") + ": \n" +
-             QString::number(currentMonthTotal) + " km  " +
-             QString::number(curCount) + "\n";
-  s2_month = tr("Cycling") + ": " + QString::number(monthCyclingKM) + " km  " +
-             QString::number(monthCyclingCount) + "\n";
-  s3_month = tr("Hiking") + ": " + QString::number(monthHikingKM) + " km  " +
-             QString::number(monthHikingCount) + "\n";
-  s4_month = tr("Running") + ": " + QString::number(monthRunningKM) + " km  " +
-             QString::number(monthRunningCount);
+  s1_month = strm + " " + tr("Month") + ": \n" + QString::number(cmTotal) +
+             " km  " + QString::number(cmCount) + "\n";
+  s2_month = tr("Cycling") + ": " + QString::number(cmTotal_Cycling) + " km  " +
+             QString::number(cmCount_Cycling) + "\n";
+  s3_month = tr("Hiking") + ": " + QString::number(cmTotal_Hiking) + " km  " +
+             QString::number(cmCount_Hiking) + "\n";
+  s4_month = tr("Running") + ": " + QString::number(cmTotal_Running) + " km  " +
+             QString::number(cmCount_Running);
 
   QString s1_year, s2_year, s3_year, s4_year;
   s1_year = stry + " " + tr("Year") + ": \n" + QString::number(yt) + " km  " +
