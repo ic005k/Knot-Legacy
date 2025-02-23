@@ -170,7 +170,8 @@ class Steps : public QDialog {
   bool isGpsTest = false;
   int nGpsMethod = 1; /* 1：主类中 2:单独的类中 */
 
- signals:
+  QString getGpsListText0(int index);
+  signals:
   void distanceChanged(double distance);
   void timeChanged();
   void speedChanged();

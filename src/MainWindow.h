@@ -1041,16 +1041,24 @@ class SliderButton : public QWidget {
       }
       setSliderPosition(newPosition);
       m_dragStartX = event->x();
+
+      if (m_sliderPosition == maxPosition) {
+        if (!isOne) {
+          isOne = true;
+          emit sliderMovedToEnd();
+        }
+      }
     }
   }
 
   void mouseReleaseEvent(QMouseEvent *event) override {
     Q_UNUSED(event);
     if (m_isDragging) {
+      isOne = false;
       m_isDragging = false;
       int maxPosition = width() - height();
       if (m_sliderPosition == maxPosition) {
-        emit sliderMovedToEnd();
+        // emit sliderMovedToEnd();
 
         m_animation->setStartValue(m_sliderPosition);
         m_animation->setEndValue(0);
@@ -1077,6 +1085,7 @@ class SliderButton : public QWidget {
   int m_dragStartX;
   QPropertyAnimation *m_animation;
   QString m_tipText;
+  bool isOne = false;
 };
 
 #endif  // MAINWINDOW_H
