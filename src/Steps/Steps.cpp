@@ -604,6 +604,7 @@ void Steps::updateGetGps() {
 
 void Steps::stopRecordMotion() {
   timer->stop();
+
   m_TotalDistance = m_TotalDistance + m_distance;
   strTotalDistance = QString::number(m_TotalDistance) + " km";
   mw_one->ui->lblTotalDistance->setText(strTotalDistance);
@@ -688,8 +689,8 @@ void Steps::stopRecordMotion() {
   delete m_positionSource;
 #endif
 
-  ShowMessage* msg = new ShowMessage(this);
-  msg->showMsg("Knot", mw_one->ui->lblGpsInfo->text(), 1);
+  // ShowMessage* msg = new ShowMessage(this);
+  // msg->showMsg("Knot", mw_one->ui->lblGpsInfo->text(), 1);
 }
 
 bool Steps::requestLocationPermissions() {
@@ -1090,4 +1091,20 @@ void Steps::saveMovementType() {
   Reg.setValue("/GPS/isCycling", mw_one->ui->rbCycling->isChecked());
   Reg.setValue("/GPS/isHiking", mw_one->ui->rbHiking->isChecked());
   Reg.setValue("/GPS/isRunning", mw_one->ui->rbRunning->isChecked());
+}
+
+void Steps::setVibrate() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jo = QAndroidJniObject::fromString("Vibrate");
+  m_activity.callMethod<void>("setVibrate", "()V");
+
+#else
+  QJniObject jo = QJniObject::fromString("Vibrate");
+  jo.callMethod<void>("com.x/MyActivity", "setVibrate", "()V");
+
+#endif
+
+#endif
 }

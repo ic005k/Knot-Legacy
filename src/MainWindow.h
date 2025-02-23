@@ -1045,6 +1045,7 @@ class SliderButton : public QWidget {
   }
 
   void mouseReleaseEvent(QMouseEvent *event) override {
+    Q_UNUSED(event);
     if (m_isDragging) {
       m_isDragging = false;
       int maxPosition = width() - height();

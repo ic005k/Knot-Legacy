@@ -146,6 +146,7 @@ import androidx.appcompat.app.AlertDialog;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import android.os.SystemClock;
+import android.os.Vibrator;
 
 //Qt5
 import org.qtproject.qt5.android.bindings.QtActivity;
@@ -242,6 +243,31 @@ public class MyActivity
   private String strMaxSpeed = "Max Speed";
   private String strTotalClimb = "Total Climb";
   private String strAverageSpeed = "0 km/h";
+
+  public class VibrateUtils {
+    // 产生震动
+    public static void vibrate(Context context, long milliseconds) {
+      // 获取Vibrator实例
+      Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+      // 检查设备是否支持震动
+      if (vibrator != null && vibrator.hasVibrator()) {
+        // 震动
+        vibrator.vibrate(milliseconds);
+      }
+    }
+  }
+
+  public void setVibrate() {
+    // 方法1：
+    // 让设备震动100毫秒
+    // Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    // if (vibrator != null && vibrator.hasVibrator()) {
+    // vibrator.vibrate(100);
+    // }
+
+    // 方法2：
+    VibrateUtils.vibrate(this, 50);
+  }
 
   // ------------------------------------------------------------------------
 
@@ -756,6 +782,7 @@ public class MyActivity
   }
 
   public double startGpsUpdates() {
+    setVibrate();
     latitude = 0;
     longitude = 0;
     startTime = System.currentTimeMillis();
@@ -855,6 +882,7 @@ public class MyActivity
 
   // 停止 GPS 更新
   public double stopGpsUpdates() {
+    setVibrate();
     if (locationManager != null && locationListener1 != null) {
       try {
         // locationManager.removeUpdates(locationListener1);

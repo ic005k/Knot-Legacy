@@ -112,7 +112,8 @@ class Steps : public QDialog {
   void updateTrackData(double lat, double lon);
   void updateMapTrackUi(double lat, double lon);
   void saveMovementType();
- public slots:
+  void setVibrate();
+  public slots:
   void clearAllGpsList();
   void getGpsTrack();
  private slots:
