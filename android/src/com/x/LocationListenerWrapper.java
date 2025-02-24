@@ -42,9 +42,11 @@ import android.location.LocationManager;
 
 import android.os.Bundle;
 
-public final class LocationListenerWrapper implements LocationListenerCompat {
+public class LocationListenerWrapper implements LocationListenerCompat {
     private static final String TAG = "QtKnot";
     public static boolean zh_cn;
+    private Context myContext;
+    private LocationListenerCompat locationListener1;
 
     private LocationManager locationManager;
     private double latitude = 0;
@@ -81,6 +83,8 @@ public final class LocationListenerWrapper implements LocationListenerCompat {
     }
 
     public LocationListenerWrapper(Context context) {
+        myContext = context;
+        locationListener1 = this;
 
         // 初始化LocationManager
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -88,6 +92,9 @@ public final class LocationListenerWrapper implements LocationListenerCompat {
         isZh(context);
     }
 
+    // 使用LocationListenerCompat定义位置监听器
+    // private final LocationListenerCompat locationListener1 = new
+    // LocationListenerCompat() {
     @Override
     public void onLocationChanged(@NonNull Location location) {
         // 位置更新时触发
@@ -122,6 +129,7 @@ public final class LocationListenerWrapper implements LocationListenerCompat {
     public void onProviderDisabled(@NonNull String provider) {
         Log.d(TAG, "Provider disabled: " + provider);
     }
+    // };
 
     private final GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
         @Override
@@ -163,6 +171,7 @@ public final class LocationListenerWrapper implements LocationListenerCompat {
     }
 
     public double startGpsUpdates() {
+
         latitude = 0;
         longitude = 0;
         startTime = System.currentTimeMillis();
@@ -186,7 +195,7 @@ public final class LocationListenerWrapper implements LocationListenerCompat {
                     LocationManager.GPS_PROVIDER, // 使用 GPS 提供者
                     locationRequest,
                     executor,
-                    this);
+                    locationListener1);
 
             // 添加GPS状态侦听
             if (locationManager != null) {
@@ -225,10 +234,10 @@ public final class LocationListenerWrapper implements LocationListenerCompat {
 
     // 停止 GPS 更新
     public double stopGpsUpdates() {
-        if (locationManager != null && this != null) {
+        if (locationManager != null && locationListener1 != null) {
             try {
-                // locationManager.removeUpdates(this);
-                LocationManagerCompat.removeUpdates(locationManager, this);
+                // locationManager.removeUpdates(locationListener1);
+                LocationManagerCompat.removeUpdates(locationManager, locationListener1);
 
                 // 停止GPS状态侦听
                 if (locationManager != null) {
@@ -237,6 +246,7 @@ public final class LocationListenerWrapper implements LocationListenerCompat {
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
+
         }
         return totalDistance;
     }
