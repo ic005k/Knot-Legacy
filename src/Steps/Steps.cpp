@@ -706,7 +706,7 @@ void Steps::stopRecordMotion() {
     Reg1.setValue("/" + stry + "/" + strm,
                   s1 + "-=-" + s2 + "-=-" + s3 + "-=-" + s4);
 
-    curMonthTotal();
+    allGpsTotal();
   }
 
 #ifdef Q_OS_ANDROID
@@ -828,7 +828,7 @@ void Steps::getGpsListDataFromYearMonth() {
   int m = list.at(1).toInt();
 
   loadGpsList(y, m);
-  curMonthTotal();
+  allGpsTotal();
 }
 
 QString Steps::getGpsListText0(int index) {
@@ -849,7 +849,7 @@ QString Steps::getGpsListText2(int index) {
   return item.toString();
 }
 
-void Steps::curMonthTotal() {
+void Steps::allGpsTotal() {
   QString title = mw_one->ui->btnSelGpsDate->text();
   QStringList list = title.split("-");
   QString stry = list.at(0);
@@ -925,7 +925,7 @@ void Steps::curMonthTotal() {
     yearHikingCount += monthHikingCount;
 
     yearRunningKM += monthRunningKM;
-    yearRunningCount = monthRunningCount;
+    yearRunningCount += monthRunningCount;
 
     if (QString::number(i + 1) == strm) {
       cmTotal = mt;

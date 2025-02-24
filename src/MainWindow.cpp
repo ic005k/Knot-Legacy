@@ -139,7 +139,7 @@ void MainWindow::importDataDone() {
     m_Steps->clearAllGpsList();
     m_Steps->loadGpsList(QDate::currentDate().year(),
                          QDate::currentDate().month());
-    m_Steps->curMonthTotal();
+    m_Steps->allGpsTotal();
   }
 
   closeProgress();
@@ -3169,7 +3169,7 @@ void MainWindow::on_btnSteps_clicked() {
     int nYear = QDate::currentDate().year();
     int nMonth = QDate::currentDate().month();
     m_Steps->loadGpsList(nYear, nMonth);
-    m_Steps->curMonthTotal();
+    m_Steps->allGpsTotal();
   }
 }
 

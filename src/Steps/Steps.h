@@ -105,7 +105,7 @@ class Steps : public QDialog {
   void selGpsListYearMonth();
   void getGpsListDataFromYearMonth();
   void delGpsListItem(int index);
-  void curMonthTotal();
+  void allGpsTotal();
   void appendTrack(double lat, double lon);
   void updateGpsMapUi();
   void updateGpsTrack();
