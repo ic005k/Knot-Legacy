@@ -166,9 +166,9 @@ Rectangle {
             id: listItem
             width: ListView.view.width
             height: getItemHeight() + 28
-            //color: ListView.isCurrentItem ? "lightblue" : getColor()
-            color: ListView.isCurrentItem ? "lightblue" : (getText1(
-                                                               index) >= nStepsThreshold ? "#FFC1C1" : getColor())
+
+            //color: ListView.isCurrentItem ? "lightblue" : (getText1(index) >= nStepsThreshold ? "#FFC1C1" : getColor())
+            color: getText1(index) >= nStepsThreshold ? "#FFC1C1" : getColor()
 
             border.width: isDark ? 0 : 1
             border.color: "lightgray" //"lightsteelblue"
@@ -253,7 +253,9 @@ Rectangle {
                             wrapMode: TextArea.WordWrap
                             font.bold: true
                             text: text0
-                            color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
+                            //color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
+                            color: getText1(
+                                       index) >= nStepsThreshold ? "black" : getFontColor()
 
                             leftPadding: 5
                             rightPadding: 5
@@ -292,8 +294,9 @@ Rectangle {
 
                             width: parent.width
                             wrapMode: TextArea.WordWrap
-                            color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
-
+                            // color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
+                            color: getText1(
+                                       index) >= nStepsThreshold ? "black" : getFontColor()
                             font.bold: false
                             text: text1
 
@@ -337,8 +340,9 @@ Rectangle {
                             wrapMode: TextArea.WordWrap
                             font.bold: false
                             text: text2
-                            color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
-
+                            // color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
+                            color: getText1(
+                                       index) >= nStepsThreshold ? "black" : getFontColor()
                             leftPadding: 5
                             rightPadding: 5
 
@@ -378,8 +382,9 @@ Rectangle {
                             Layout.preferredWidth: listItem.width
                             font.bold: false
                             text: text3
-                            color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
-
+                            // color: listItem.ListView.isCurrentItem ? "black" : (getText1(index) >= nStepsThreshold ? "black" : getFontColor())
+                            color: getText1(
+                                       index) >= nStepsThreshold ? "black" : getFontColor()
                             leftPadding: 5
                             rightPadding: 5
 
