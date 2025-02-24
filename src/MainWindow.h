@@ -737,8 +737,6 @@ class MainWindow : public QMainWindow {
 
   void on_actionShareFile();
 
-  void on_btnHideKey_clicked();
-
   void on_btnDelImage_clicked();
 
   void on_btnSetBookmark_clicked();
@@ -829,6 +827,7 @@ class MainWindow : public QMainWindow {
   QTreeWidget *init_TreeWidget(QString);
   QObjectList getAllTreeWidget(QObjectList lstUIControls);
 
+  void on_btnHideKey_clicked();
   void init_ChartWidget();
   void init_Sensors();
   void init_UIWidget();
@@ -1058,8 +1057,6 @@ class SliderButton : public QWidget {
       m_isDragging = false;
       int maxPosition = width() - height();
       if (m_sliderPosition == maxPosition) {
-        // emit sliderMovedToEnd();
-
         m_animation->setStartValue(m_sliderPosition);
         m_animation->setEndValue(0);
         m_animation->start();

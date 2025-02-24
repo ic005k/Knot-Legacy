@@ -113,6 +113,7 @@ class Steps : public QDialog {
   void updateMapTrackUi(double lat, double lon);
   void saveMovementType();
   void setVibrate();
+  bool isCycling, isHiking, isRunning;
  public slots:
   void clearAllGpsList();
   void getGpsTrack();
@@ -149,7 +150,7 @@ class Steps : public QDialog {
       "QLabel {background-color: #FF0000;color: #ECEFF4;font-family: 'Segoe "
       "UI', sans-serif;font-weight: bold;border: 2px solid "
       "#4C566A;border-radius: 10px;padding: 10px 20px;text-align: "
-      "center;box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);}";
+      "center;}";
 
   QString t0, str1, str2, str3, str4, str5, str6, str7;
 

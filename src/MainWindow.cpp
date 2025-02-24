@@ -6018,17 +6018,23 @@ void MainWindow::on_btnGetGpsListData_clicked() {
 void MainWindow::on_rbCycling_clicked() {
   ui->rbHiking->setChecked(false);
   ui->rbRunning->setChecked(false);
-  m_Steps->saveMovementType();
+  m_Steps->isCycling = true;
+  m_Steps->isHiking = false;
+  m_Steps->isRunning = false;
 }
 
 void MainWindow::on_rbHiking_clicked() {
   ui->rbCycling->setChecked(false);
   ui->rbRunning->setChecked(false);
-  m_Steps->saveMovementType();
+  m_Steps->isCycling = false;
+  m_Steps->isHiking = true;
+  m_Steps->isRunning = false;
 }
 
 void MainWindow::on_rbRunning_clicked() {
   ui->rbHiking->setChecked(false);
   ui->rbCycling->setChecked(false);
-  m_Steps->saveMovementType();
+  m_Steps->isCycling = false;
+  m_Steps->isHiking = false;
+  m_Steps->isRunning = true;
 }

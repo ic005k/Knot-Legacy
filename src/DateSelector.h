@@ -37,14 +37,13 @@ class DateSelector : public QDialog {
 
   void on_btnOk_clicked();
 
+ private:
+  void initRBox(RollingBox *rbox, int w);
   void on_hsYear_valueChanged(int value);
 
   void on_hsMonth_valueChanged(int value);
 
   void on_hsDay_valueChanged(int value);
-
- private:
-  void initRBox(RollingBox *rbox, int w);
 };
 
 #endif  // DATESELECTOR_H

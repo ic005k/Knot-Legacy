@@ -93,6 +93,7 @@ bool Steps::eventFilter(QObject* watch, QEvent* evn) {
 
 void Steps::on_btnBack_clicked() {
   saveSteps();
+  saveMovementType();
   mw_one->ui->frameSteps->hide();
   mw_one->ui->frameMain->show();
 }
@@ -1200,9 +1201,9 @@ void Steps::saveMovementType() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  Reg.setValue("/GPS/isCycling", mw_one->ui->rbCycling->isChecked());
-  Reg.setValue("/GPS/isHiking", mw_one->ui->rbHiking->isChecked());
-  Reg.setValue("/GPS/isRunning", mw_one->ui->rbRunning->isChecked());
+  Reg.setValue("/GPS/isCycling", isCycling);
+  Reg.setValue("/GPS/isHiking", isHiking);
+  Reg.setValue("/GPS/isRunning", isRunning);
 }
 
 void Steps::setVibrate() {

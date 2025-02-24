@@ -119,6 +119,7 @@ Rectangle {
         Row {
             anchors.centerIn: parent
             spacing: 5
+
             Text {
                 text: qsTr("Distance") + ": " + strDistance
                 color: "white"

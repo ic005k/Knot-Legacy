@@ -4005,7 +4005,7 @@ QSlider::handle:horizontal:disabled {
           <enum>QTabWidget::South</enum>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab_Steps">
           <attribute name="title">
@@ -4312,7 +4312,7 @@ QSlider::handle:horizontal:disabled {
     text-align: center; /* 文字居中 */
     
     /* 阴影效果 */
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* 轻微的阴影 */
+    /* box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); */ /* 轻微的阴影 */
 }</string>
                   </property>
                   <property name="text">
@@ -4507,6 +4507,9 @@ QRadioButton::indicator:checked {
               </item>
               <item>
                <widget class="QRadioButton" name="rbHiking">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
                 <property name="text">
                  <string>Hiking</string>
                 </property>
@@ -4514,6 +4517,9 @@ QRadioButton::indicator:checked {
               </item>
               <item>
                <widget class="QRadioButton" name="rbRunning">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
                 <property name="text">
                  <string>Running</string>
                 </property>
