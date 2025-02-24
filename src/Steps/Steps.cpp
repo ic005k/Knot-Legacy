@@ -467,6 +467,7 @@ void Steps::startRecordMotion() {
   mw_one->ui->lblRunTime->setStyleSheet(lblStartStyle);
   mw_one->ui->lblAverageSpeed->setStyleSheet(lblStartStyle);
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStartStyle);
+  mw_one->ui->lblGpsInfo->setStyleSheet(lblStartStyle);
   mw_one->ui->btnGPS->setStyleSheet(btnRoundStyleRed);
 
   strStartTime = QTime::currentTime().toString();
@@ -499,7 +500,7 @@ void Steps::updateGetGps() {
   if (nGpsMethod == 1)
     distance = m_activity.callMethod<jdouble>("getTotalDistance", "()D");
   else
-    listenerWrapper.callMethod<jdouble>("getTotalDistance", "()D");
+    distance = listenerWrapper.callMethod<jdouble>("getTotalDistance", "()D");
 
   QString str_distance = QString::number(distance, 'f', 2);
   m_distance = str_distance.toDouble();
@@ -614,6 +615,7 @@ void Steps::stopRecordMotion() {
   mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
   mw_one->ui->lblAverageSpeed->setStyleSheet(lblStyle);
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStyle);
+  mw_one->ui->lblGpsInfo->setStyleSheet(lblStyle);
   mw_one->ui->btnGPS->setStyleSheet(btnRoundStyle);
 
   QSettings Reg(iniDir + "gpslist.ini", QSettings::IniFormat);

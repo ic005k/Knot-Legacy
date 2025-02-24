@@ -15,6 +15,7 @@ Rectangle {
     property int itemCount: 0
     property bool isHighPriority: false
     property string strGpsTime: ""
+    property string strTitleColor: "lightgray"
 
     function setItemHeight(h) {}
 
@@ -98,6 +99,18 @@ Rectangle {
     }
 
     function insertItem(curIndex, t0, t1, t2, t3, t4, t5, height) {
+
+
+        /*strTitleColor = "lightgray"
+        if (t0.indexOf(qsTr("Cycling")))
+            strTitleColor = "red"
+        else
+        if (t0.indexOf(qsTr("Hiking")))
+            strTitleColor = "green"
+        else
+        if (t0.indexOf(qsTr("Running")))
+            strTitleColor = "blue"
+        console.debug("t0="+t0 + "  " + strTitleColor)*/
         view.model.insert(curIndex, {
                               "text0": t0,
                               "text1": t1,
@@ -230,7 +243,10 @@ Rectangle {
                     Rectangle {
                         width: parent.width
                         height: item0.contentHeight
-                        color: "lightgray" // 设置背景色为浅灰色
+                        color: item0.text.indexOf(
+                                   qsTr("Cycling")) ? (item0.text.indexOf(
+                                                           qsTr("Hiking")) ? (item0.text.indexOf(qsTr("Running")) ? strTitleColor : "#87CEFA") : "#98FB98") : "#FF6347"
+
                         Text {
                             id: item0
 

@@ -113,7 +113,7 @@ class Steps : public QDialog {
   void updateMapTrackUi(double lat, double lon);
   void saveMovementType();
   void setVibrate();
-  public slots:
+ public slots:
   void clearAllGpsList();
   void getGpsTrack();
  private slots:
@@ -171,7 +171,7 @@ class Steps : public QDialog {
   int nGpsMethod = 1; /* 1：主类中 2:单独的类中 */
 
   QString getGpsListText0(int index);
-  signals:
+ signals:
   void distanceChanged(double distance);
   void timeChanged();
   void speedChanged();
