@@ -73,6 +73,10 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
 
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &Steps::updateGetGps);
+
+  QDir gpsdir;
+  QString gpspath = iniDir + "/memo/gps/";
+  if (!gpsdir.exists(gpspath)) gpsdir.mkpath(gpspath);
 }
 
 Steps::~Steps() {}
@@ -456,6 +460,17 @@ void Steps::startRecordMotion() {
   clearTrack();
   nWriteGpsCount = 0;
   m_time.setHMS(0, 0, 0, 0);
+
+  strStartTime = QTime::currentTime().toString();
+  t0 = QDate::currentDate().toString();
+  mw_one->ui->lblGpsDateTime->setText(t0 + " " + strStartTime);
+
+  QString ss0 = t0;
+  QString s0 = ss0.replace(" ", "");
+  QString sst = strStartTime;
+  QString s1 = sst.replace(":", "");
+  strCSVFile = iniDir + "/memo/gps/" + s0 + "-gps-" + s1 + ".csv";
+
   timer->start(1000);
   m_distance = 0;
   m_speed = 0;
@@ -470,10 +485,6 @@ void Steps::startRecordMotion() {
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStartStyle);
   mw_one->ui->lblGpsInfo->setStyleSheet(lblStartStyle);
   mw_one->ui->btnGPS->setStyleSheet(btnRoundStyleRed);
-
-  strStartTime = QTime::currentTime().toString();
-  t0 = QDate::currentDate().toString();
-  mw_one->ui->lblGpsDateTime->setText(t0 + " " + strStartTime);
 }
 
 void Steps::positionUpdated(const QGeoPositionInfo& info) {
@@ -554,8 +565,14 @@ void Steps::updateGetGps() {
         if (m_distance > 0 & mySpeed > 0) {
           if (latitude + longitude != oldLat + oldLon) {
             appendTrack(latitude, longitude);
-            nWriteGpsCount++;
-            writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+            // nWriteGpsCount++;
+            // writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+
+            QStringList data_list;
+            data_list.append(QString::number(latitude, 'f', 6));
+            data_list.append(QString::number(longitude, 'f', 6));
+            appendToCSV(strCSVFile, data_list);
+
             oldLat = latitude;
             oldLon = longitude;
           }
@@ -564,8 +581,13 @@ void Steps::updateGetGps() {
         appendTrack(latitude, longitude);
         latitude = latitude + 0.001;
         longitude = longitude + 0.001;
-        nWriteGpsCount++;
-        writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+        // nWriteGpsCount++;
+        // writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+
+        QStringList data_list;
+        data_list.append(QString::number(latitude, 'f', 6));
+        data_list.append(QString::number(longitude, 'f', 6));
+        appendToCSV(strCSVFile, data_list);
       }
 
       mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance", str1);
@@ -584,8 +606,14 @@ void Steps::updateGetGps() {
       appendTrack(latitude, longitude);
       latitude = latitude + 0.001;
       longitude = longitude + 0.001;
-      nWriteGpsCount++;
-      writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+
+      // nWriteGpsCount++;
+      // writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+
+      QStringList data_list;
+      data_list.append(QString::number(latitude, 'f', 6));
+      data_list.append(QString::number(longitude, 'f', 6));
+      appendToCSV(strCSVFile, data_list);
 
       qDebug() << "m_time%3=" << m_time.second();
     }
@@ -1054,73 +1082,100 @@ void Steps::updateGpsTrack() {
   strGpsMapDistnce = st3;
   strGpsMapSpeed = st4;
 
-  QString gpsFile = iniDir + st1 + "-gps-" + st2 + ".ini";
-  if (QFile::exists(gpsFile)) {
-    QSettings Reg(gpsFile, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    Reg.setIniCodec("utf-8");
-#endif
+  QString gpsFile = iniDir + "memo/gps/" + st1 + "-gps-" + st2 + ".csv";
+  QString gpsOptimizedFile =
+      iniDir + "memo/gps/" + st1 + "-gps-" + st2 + "-opt.csv";
 
-    bool isOptimizedGps = Reg.value("/Optimized", false).toBool();
+  if (QFile::exists(gpsFile)) {
     QVector<GPSCoordinate> rawGPSData;
 
     clearTrack();
     double lat;
     double lon;
-    int count = Reg.value("/count", 0).toInt();
-    for (int i = 0; i < count; i++) {
-      lat = Reg.value("/" + QString::number(i + 1) + "/lat", 0).toDouble();
-      lon = Reg.value("/" + QString::number(i + 1) + "/lon", 0).toDouble();
 
-      if (!isOptimizedGps)
-        rawGPSData.append({lat, lon});
-      else
-        updateTrackData(lat, lon);
+    QFile file(gpsFile);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      qWarning() << gpsFile;
+      return;
     }
 
-    if (!isOptimizedGps) {
-      int gaussianWindowSize = 3;
-      double gaussianSigma = 1.0;
-      double outlierThreshold = 0.001;  // 距离阈值，可根据实际情况调整
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+      QString line = in.readLine();
+      QStringList fields = line.split(",");
+      lat = fields.at(0).toDouble();
+      lon = fields.at(1).toDouble();
 
-      // 应用高斯滤波
-      QVector<GPSCoordinate> filteredData =
-          gaussianFilter(rawGPSData, gaussianWindowSize, gaussianSigma);
+      rawGPSData.append({lat, lon});
+    }
 
-      // 检测并修正异常点
-      QVector<GPSCoordinate> optimizedData =
-          detectAndCorrectOutliers(filteredData, outlierThreshold);
+    file.close();
 
-      QFile file(gpsFile);
-      file.remove();
+    int gaussianWindowSize = 3;
+    double gaussianSigma = 1.0;
+    double outlierThreshold = 0.001;  // 距离阈值，可根据实际情况调整
 
-      QSettings Reg(gpsFile, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      Reg.setIniCodec("utf-8");
-#endif
-      int count = optimizedData.count();
-      Reg.setValue("/count", count);
-      Reg.setValue("/Optimized", true);
+    // 应用高斯滤波
+    QVector<GPSCoordinate> filteredData =
+        gaussianFilter(rawGPSData, gaussianWindowSize, gaussianSigma);
 
-      for (int i = 0; i < count; i++) {
-        lat = optimizedData.at(i).latitude;
-        lon = optimizedData.at(i).longitude;
-        updateTrackData(lat, lon);
+    // 检测并修正异常点
+    QVector<GPSCoordinate> optimizedData =
+        detectAndCorrectOutliers(filteredData, outlierThreshold);
 
-        lat = QString::number(lat, 'f', 6).toDouble();
-        lon = QString::number(lon, 'f', 6).toDouble();
-        Reg.setValue("/" + QString::number(i + 1) + "/lat", lat);
-        Reg.setValue("/" + QString::number(i + 1) + "/lon", lon);
-      }
+    for (int i = 0; i < optimizedData.count(); i++) {
+      lat = optimizedData.at(i).latitude;
+      lon = optimizedData.at(i).longitude;
+      updateTrackData(lat, lon);
+
+      lat = QString::number(lat, 'f', 6).toDouble();
+      lon = QString::number(lon, 'f', 6).toDouble();
+
+      QStringList m_data;
+      m_data.append(QString::number(lat));
+      m_data.append(QString::number(lon));
+      appendToCSV(gpsOptimizedFile, m_data);
     }
 
     isGpsMapTrackFile = true;
     lastLat = lat;
     lastLon = lon;
 
+    QFile gfile(gpsFile);
+    gfile.remove();
+
   } else {
     isGpsMapTrackFile = false;
     qDebug() << "gps file=" + gpsFile + " no exists.";
+  }
+
+  if (QFile::exists(gpsOptimizedFile)) {
+    clearTrack();
+    double lat;
+    double lon;
+
+    QFile file1(gpsOptimizedFile);
+    if (!file1.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      qWarning() << gpsOptimizedFile;
+      return;
+    }
+
+    QTextStream in(&file1);
+    while (!in.atEnd()) {
+      QString line = in.readLine();
+      QStringList fields = line.split(",");
+      lat = fields.at(0).toDouble();
+      lon = fields.at(1).toDouble();
+      updateTrackData(lat, lon);
+    }
+
+    file1.close();
+
+    isGpsMapTrackFile = true;
+    lastLat = lat;
+    lastLon = lon;
+  } else {
+    isGpsMapTrackFile = false;
   }
 }
 
@@ -1220,4 +1275,35 @@ void Steps::setVibrate() {
 #endif
 
 #endif
+}
+
+void Steps::writeCSV(const QString& filePath, const QList<QStringList>& data) {
+  QFile file(filePath);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    qWarning() << filePath;
+    return;
+  }
+
+  QTextStream out(&file);
+  for (const QStringList& row : data) {
+    out << row.join(",") << "\n";
+  }
+
+  file.close();
+}
+
+void Steps::appendToCSV(const QString& filePath, const QStringList& data) {
+  QFile file(filePath);
+  if (!file.open(QIODevice::Append | QIODevice::Text))  // 以追加模式打开文件
+  {
+    return;
+  }
+
+  QTextStream out(&file);
+  out.setCodec("UTF-8");
+
+  // 将数据拼接为CSV格式并写入文件
+  out << data.join(",") << "\n";
+
+  file.close();
 }

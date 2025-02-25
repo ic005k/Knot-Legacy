@@ -114,6 +114,9 @@ class Steps : public QDialog {
   void saveMovementType();
   void setVibrate();
   bool isCycling, isHiking, isRunning;
+  void writeCSV(const QString &filePath, const QList<QStringList> &data);
+
+  void appendToCSV(const QString &filePath, const QStringList &data);
  public slots:
   void clearAllGpsList();
   void getGpsTrack();
@@ -123,6 +126,7 @@ class Steps : public QDialog {
   void updateGetGps();
 
  private:
+  QString strCSVFile;
   QBrush brush1 = QBrush(QColor(255, 228, 225));
   QBrush brush2 = QBrush(QColor(245, 222, 179));
   QBrush brushMax = QBrush(QColor(245, 222, 79));
