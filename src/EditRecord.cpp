@@ -437,24 +437,31 @@ void EditRecord::saveOne() {
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
 
   QString name = tw->objectName();
+  QString iniName = QString::number(QDate::currentDate().year()) + "-" + name;
 
-  QString ini_file = iniDir + name + ".ini";
+  QString ini_file = iniDir + iniName + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
 
+  qDebug() << "ini_file=" << ini_file;
+
   QString flag;
-  QString group = Reg.childGroups().at(0);
-  if (group.trimmed().length() == 0)
+  if (QFile::exists(ini_file)) {
+    QString group = Reg.childGroups().at(0);
+    if (group.trimmed().length() == 0)
+      flag = "/" + name + "/";
+    else
+      flag = "/" + group + "/";
+  } else
     flag = "/" + name + "/";
-  else
-    flag = "/" + group + "/";
 
   int count = tw->topLevelItemCount();
-  Reg.setValue(flag + "TopCount", count);
-
   if (count == 0) return;
+
+  count = Reg.value(flag + "TopCount", 0).toInt();
+  Reg.setValue(flag + "TopCount", count + 1);
 
   QTreeWidgetItem *item = tw->currentItem();
   int i = 0;
@@ -462,14 +469,15 @@ void EditRecord::saveOne() {
     i = tw->indexOfTopLevelItem(item);
   else
     i = tw->indexOfTopLevelItem(item->parent());
+  int Sn = count + 1;
 
-  Reg.setValue(flag + QString::number(i + 1) + "-topDate",
+  Reg.setValue(flag + QString::number(Sn) + "-topDate",
                tw->topLevelItem(i)->text(0));
-  Reg.setValue(flag + QString::number(i + 1) + "-topYear",
+  Reg.setValue(flag + QString::number(Sn) + "-topYear",
                tw->topLevelItem(i)->text(3));
-  Reg.setValue(flag + QString::number(i + 1) + "-topFreq",
+  Reg.setValue(flag + QString::number(Sn) + "-topFreq",
                tw->topLevelItem(i)->text(1));
-  Reg.setValue(flag + QString::number(i + 1) + "-topAmount",
+  Reg.setValue(flag + QString::number(Sn) + "-topAmount",
                tw->topLevelItem(i)->text(2));
 
   int childCount = tw->topLevelItem(i)->childCount();
@@ -479,22 +487,22 @@ void EditRecord::saveOne() {
       for (int j = 0; j < childCount; j++) {
         if (isBreak) return;
         Reg.setValue(
-            flag + QString::number(i + 1) + "-childTime" + QString::number(j),
+            flag + QString::number(Sn) + "-childTime" + QString::number(j),
             tw->topLevelItem(i)->child(j)->text(0));
         Reg.setValue(
-            flag + QString::number(i + 1) + "-childAmount" + QString::number(j),
+            flag + QString::number(Sn) + "-childAmount" + QString::number(j),
             tw->topLevelItem(i)->child(j)->text(1));
         Reg.setValue(
-            flag + QString::number(i + 1) + "-childDesc" + QString::number(j),
+            flag + QString::number(Sn) + "-childDesc" + QString::number(j),
             tw->topLevelItem(i)->child(j)->text(2));
-        Reg.setValue(flag + QString::number(i + 1) + "-childDetails" +
-                         QString::number(j),
-                     tw->topLevelItem(i)->child(j)->text(3));
+        Reg.setValue(
+            flag + QString::number(Sn) + "-childDetails" + QString::number(j),
+            tw->topLevelItem(i)->child(j)->text(3));
       }
     }
   }
 
-  Reg.setValue(flag + QString::number(i + 1) + "-childCount", childCount);
+  Reg.setValue(flag + QString::number(Sn) + "-childCount", childCount);
 }
 
 void EditRecord::saveCurrentValue() {

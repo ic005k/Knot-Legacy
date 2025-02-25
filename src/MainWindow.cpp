@@ -1251,11 +1251,14 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
   Q_UNUSED(tabIndex);
 
   QString name = tw->objectName();
+  name = QString::number(QDate::currentDate().year()) + "-" + name;
   QString ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
+
+  qDebug() << "ini_file=" << ini_file;
 
   if (!QFile::exists(ini_file)) {
     Reg.setValue("/" + name + "/" + "CreatedTime",
@@ -1406,76 +1409,87 @@ void MainWindow::drawDayChart() {
 
 void MainWindow::readData(QTreeWidget *tw) {
   tw->clear();
+  int iniFileCount = QDate::currentDate().year() - 2025 + 1 + 1;
   QString name = tw->objectName();
-  QString ini_file = iniDir + name + ".ini";
+  QString ini_file;
+  for (int p = 0; p < iniFileCount; p++) {
+    if (p == 0) {
+      ini_file = iniDir + name + ".ini";
+    } else {
+      QString strYear = QString::number(2025 + p - 1);
+      ini_file = iniDir + strYear + "-" + name + ".ini";
+    }
 
-  if (!QFile::exists(ini_file)) return;
+    qDebug() << "read ini_file=" << ini_file;
 
-  QSettings Reg(ini_file, QSettings::IniFormat);
+    if (QFile::exists(ini_file)) {
+      QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
+      Reg.setIniCodec("utf-8");
 #endif
 
-  QString group = Reg.childGroups().at(0);
+      QString group = Reg.childGroups().at(0);
 
-  int rowCount = Reg.value("/" + group + "/TopCount").toInt();
-  for (int i = 0; i < rowCount; i++) {
-    int childCount =
-        Reg.value("/" + group + "/" + QString::number(i + 1) + "-childCount")
-            .toInt();
+      int rowCount = Reg.value("/" + group + "/TopCount").toInt();
+      for (int i = 0; i < rowCount; i++) {
+        int childCount = Reg.value("/" + group + "/" + QString::number(i + 1) +
+                                   "-childCount")
+                             .toInt();
 
-    // 不显示子项为0的数据
-    if (childCount > 0) {
-      QTreeWidgetItem *topItem = new QTreeWidgetItem;
-      QString strD0 =
-          Reg.value("/" + group + "/" + QString::number(i + 1) + "-topDate")
-              .toString();
+        // 不显示子项为0的数据
+        if (childCount > 0) {
+          QTreeWidgetItem *topItem = new QTreeWidgetItem;
+          QString strD0 =
+              Reg.value("/" + group + "/" + QString::number(i + 1) + "-topDate")
+                  .toString();
 
-      QStringList lista = strD0.split(" ");
-      if (lista.count() == 4) {
-        QString a0 = lista.at(0) + " " + lista.at(1) + " " + lista.at(2);
-        topItem->setText(0, a0);
-        topItem->setText(3, lista.at(3));
-      } else {
-        topItem->setText(0, strD0);
-        QString year =
-            Reg.value("/" + group + "/" + QString::number(i + 1) + "-topYear")
-                .toString();
-        topItem->setText(3, year);
-      }
+          QStringList lista = strD0.split(" ");
+          if (lista.count() == 4) {
+            QString a0 = lista.at(0) + " " + lista.at(1) + " " + lista.at(2);
+            topItem->setText(0, a0);
+            topItem->setText(3, lista.at(3));
+          } else {
+            topItem->setText(0, strD0);
+            QString year = Reg.value("/" + group + "/" +
+                                     QString::number(i + 1) + "-topYear")
+                               .toString();
+            topItem->setText(3, year);
+          }
 
-      tw->addTopLevelItem(topItem);
+          tw->addTopLevelItem(topItem);
 
-      topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
-      topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
+          topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
+          topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
 
-      topItem->setText(
-          1, Reg.value("/" + group + "/" + QString::number(i + 1) + "-topFreq")
-                 .toString());
-      topItem->setText(2, Reg.value("/" + group + "/" + QString::number(i + 1) +
-                                    "-topAmount")
-                              .toString());
+          topItem->setText(1, Reg.value("/" + group + "/" +
+                                        QString::number(i + 1) + "-topFreq")
+                                  .toString());
+          topItem->setText(2, Reg.value("/" + group + "/" +
+                                        QString::number(i + 1) + "-topAmount")
+                                  .toString());
 
-      for (int j = 0; j < childCount; j++) {
-        QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
-        item11->setText(0,
-                        Reg.value("/" + group + "/" + QString::number(i + 1) +
-                                  "-childTime" + QString::number(j))
-                            .toString());
-        item11->setText(1,
-                        Reg.value("/" + group + "/" + QString::number(i + 1) +
-                                  "-childAmount" + QString::number(j))
-                            .toString());
-        item11->setText(2,
-                        Reg.value("/" + group + "/" + QString::number(i + 1) +
-                                  "-childDesc" + QString::number(j))
-                            .toString());
-        item11->setText(3,
-                        Reg.value("/" + group + "/" + QString::number(i + 1) +
-                                  "-childDetails" + QString::number(j))
-                            .toString());
+          for (int j = 0; j < childCount; j++) {
+            QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
+            item11->setText(
+                0, Reg.value("/" + group + "/" + QString::number(i + 1) +
+                             "-childTime" + QString::number(j))
+                       .toString());
+            item11->setText(
+                1, Reg.value("/" + group + "/" + QString::number(i + 1) +
+                             "-childAmount" + QString::number(j))
+                       .toString());
+            item11->setText(
+                2, Reg.value("/" + group + "/" + QString::number(i + 1) +
+                             "-childDesc" + QString::number(j))
+                       .toString());
+            item11->setText(
+                3, Reg.value("/" + group + "/" + QString::number(i + 1) +
+                             "-childDetails" + QString::number(j))
+                       .toString());
 
-        item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
+            item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
+          }
+        }
       }
     }
   }
