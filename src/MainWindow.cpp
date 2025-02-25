@@ -5451,8 +5451,20 @@ void MainWindow::on_btnDelTabRecycle_clicked() {
                           tr("Whether to remove") + "  " + tab_file + " ? ", 2))
     return;
 
-  QFile file(tab_file);
-  file.remove();
+  QStringList list = tab_file.split("\n");
+  QString rec_file;
+  if (list.count() > 1) {
+    for (int i = 0; i < list.count(); i++) {
+      rec_file = list.at(i);
+      QFile file(rec_file);
+      file.remove();
+    }
+  } else {
+    rec_file = tab_file;
+    QFile file(rec_file);
+    file.remove();
+  }
+
   m_Method->delItemFromQW(ui->qwTabRecycle, index);
 
   ui->lblTitleTabRecycle->setText(
@@ -5471,6 +5483,7 @@ void MainWindow::on_btnRestoreTab_clicked() {
 
   int index = m_Method->getCurrentIndexFromQW(ui->qwTabRecycle);
   QString recycle = m_Method->getText3(ui->qwTabRecycle, index);
+  QStringList recycleList = recycle.split("\n");
 
   QString ini_file;
   for (int i = 0; i < iniFileCount; i++) {
@@ -5481,8 +5494,12 @@ void MainWindow::on_btnRestoreTab_clicked() {
     }
 
     if (QFile(ini_file).exists()) QFile(ini_file).remove();
-
-    QFile::copy(recycle, ini_file);
+    QString recFile;
+    if (recycleList.count() > 1)
+      recFile = recycleList.at(i);
+    else
+      recFile = recycle;
+    QFile::copy(recFile, ini_file);
   }
 
   QString tab_name = m_Method->getText0(ui->qwTabRecycle, index);
@@ -5494,8 +5511,16 @@ void MainWindow::on_btnRestoreTab_clicked() {
 
   readData(tw);
 
-  QFile recycle_file(recycle);
-  recycle_file.remove();
+  if (recycleList.count() > 1) {
+    for (int i = 0; i < recycleList.count(); i++) {
+      QFile recycle_file(recycle.split("\n").at(i));
+      recycle_file.remove();
+    }
+  } else {
+    QFile recycle_file(recycle);
+    recycle_file.remove();
+  }
+
   on_btnBackTabRecycle_clicked();
 
   saveTab();
