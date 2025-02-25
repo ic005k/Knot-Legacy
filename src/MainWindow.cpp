@@ -1251,14 +1251,11 @@ void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
   Q_UNUSED(tabIndex);
 
   QString name = tw->objectName();
-  name = QString::number(QDate::currentDate().year()) + "-" + name;
   QString ini_file = iniDir + name + ".ini";
   QSettings Reg(ini_file, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
 #endif
-
-  qDebug() << "ini_file=" << ini_file;
 
   if (!QFile::exists(ini_file)) {
     Reg.setValue("/" + name + "/" + "CreatedTime",
@@ -1454,6 +1451,15 @@ void MainWindow::readData(QTreeWidget *tw) {
                                      QString::number(i + 1) + "-topYear")
                                .toString();
             topItem->setText(3, year);
+          }
+
+          int lastTopIndex = tw->topLevelItemCount() - 1;
+          if (lastTopIndex >= 0) {
+            QTreeWidgetItem *lastTopItem = new QTreeWidgetItem;
+            lastTopItem = tw->topLevelItem(lastTopIndex);
+            if (lastTopItem->text(0) == topItem->text(0)) {
+              tw->takeTopLevelItem(lastTopIndex);
+            }
           }
 
           tw->addTopLevelItem(topItem);
@@ -1861,15 +1867,29 @@ void MainWindow::on_actionDel_Tab_triggered() {
   isNeedAutoBackup = true;
   strLatestModify = tr("Del Tab") + " ( " + tab_name + " ) ";
 
-  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
-  QString twName = tw->objectName();
-  QString tab_file = iniDir + twName + ".ini";
   QString date_time = m_Notes->getDateTimeStr();
-  QFile::copy(tab_file, iniDir + "recycle_name" + "_" + date_time + ".ini");
   m_Method->saveRecycleTabName(date_time, tab_name);
 
-  QFile file(tab_file);
-  file.remove();
+  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
+  QString twName = tw->objectName();
+
+  int c_year = QDate::currentDate().year();
+  int iniFileCount = c_year - 2025 + 1 + 1;
+  for (int i = 0; i < iniFileCount; i++) {
+    QString tab_file;
+    if (i == 0)
+      tab_file = iniDir + twName + ".ini";
+    else {
+      tab_file = iniDir + QString::number(2025 + i - 1) + "-" + twName + ".ini";
+    }
+
+    if (QFile::exists(tab_file)) {
+      QFile::copy(tab_file, iniDir + "recycle_name" + "_" + date_time + "-" +
+                                QString::number(i) + ".ini");
+      QFile file(tab_file);
+      file.remove();
+    }
+  }
 
   int TabCount = ui->tabWidget->tabBar()->count();
   if (TabCount > 1) {
@@ -4162,6 +4182,8 @@ void MainWindow::on_actionTabRecycle() {
   fmt.append("ini");
   m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
 
+  QString iniTotal;
+  QStringList myList, nameList, iniList;
   for (int i = 0; i < iniFiles.count(); i++) {
     QString ini_file = iniFiles.at(i);
     if (ini_file.contains("recycle_name_")) {
@@ -4172,13 +4194,48 @@ void MainWindow::on_actionTabRecycle() {
       QString t1, t2;
       t1 = ini_filename.split("_").at(2);
       t2 = ini_filename.split("_").at(3);
+      QStringList list = t2.split("-");
+      if (list.count() == 2) {
+        t2 = list.at(0);
+      }
       tab_time = t1 + "  " + t2;
 
       tab_name = m_Method->getRecycleTabName(t1 + "_" + t2);
 
-      m_Method->addItemToQW(ui->qwTabRecycle, tab_name, tab_time, "", ini_file,
-                            0);
+      myList.append(tab_name + "-=-" + tab_time + "-=-" + ini_file);
+      nameList.append(tab_name + "-=-" + tab_time);
+      iniList.append(ini_file);
     }
+  }
+
+  int count = myList.count();
+  QStringList lastList;
+  for (int i = 0; i < count; i++) {
+    QString str1 = myList.at(i);
+    iniTotal = "";
+    QStringList list1 = str1.split("-=-");
+    tab_name = list1.at(0);
+    tab_time = list1.at(1);
+    for (int j = 0; j < count; j++) {
+      QString str2 = nameList.at(j);
+      if (str1.contains(str2)) {
+        iniTotal += iniList.at(j) + "\n";
+      }
+    }
+
+    lastList.append(tab_name + "-=-" + tab_time + "-=-" + iniTotal);
+  }
+
+  // 使用 QSet 去重
+  QSet<QString> set = QSet<QString>::fromList(lastList);
+  QStringList uniqueList = QStringList::fromSet(set);
+  for (int i = 0; i < uniqueList.count(); i++) {
+    QString str = uniqueList.at(i);
+    tab_name = str.split("-=-").at(0);
+    tab_time = str.split("-=-").at(1);
+    iniTotal = str.split("-=-").at(2);
+    m_Method->addItemToQW(ui->qwTabRecycle, tab_name, tab_time, "", iniTotal,
+                          0);
   }
 
   int t_count = m_Method->getCountFromQW(ui->qwTabRecycle);
@@ -5408,12 +5465,25 @@ void MainWindow::on_btnRestoreTab_clicked() {
 
   int count = ui->tabWidget->tabBar()->count();
   QString twName = m_Notes->getDateTimeStr() + "_" + QString::number(count + 1);
-  QString ini_file = iniDir + twName + ".ini";
-  if (QFile(ini_file).exists()) QFile(ini_file).remove();
+
+  int c_year = QDate::currentDate().year();
+  int iniFileCount = c_year - 2025 + 1 + 1;
 
   int index = m_Method->getCurrentIndexFromQW(ui->qwTabRecycle);
   QString recycle = m_Method->getText3(ui->qwTabRecycle, index);
-  QFile::copy(recycle, ini_file);
+
+  QString ini_file;
+  for (int i = 0; i < iniFileCount; i++) {
+    if (i == 0)
+      ini_file = iniDir + twName + ".ini";
+    else {
+      ini_file = iniDir + QString::number(2025 + i - 1) + "-" + twName + ".ini";
+    }
+
+    if (QFile(ini_file).exists()) QFile(ini_file).remove();
+
+    QFile::copy(recycle, ini_file);
+  }
 
   QString tab_name = m_Method->getText0(ui->qwTabRecycle, index);
   QTreeWidget *tw = init_TreeWidget(twName);

@@ -483,23 +483,23 @@ void EditRecord::saveOne() {
   int childCount = tw->topLevelItem(i)->childCount();
 
   if (childCount > 0) {
-    if (!del) {
-      for (int j = 0; j < childCount; j++) {
-        if (isBreak) return;
-        Reg.setValue(
-            flag + QString::number(Sn) + "-childTime" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(0));
-        Reg.setValue(
-            flag + QString::number(Sn) + "-childAmount" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(1));
-        Reg.setValue(
-            flag + QString::number(Sn) + "-childDesc" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(2));
-        Reg.setValue(
-            flag + QString::number(Sn) + "-childDetails" + QString::number(j),
-            tw->topLevelItem(i)->child(j)->text(3));
-      }
+    // if (!del) {
+    for (int j = 0; j < childCount; j++) {
+      if (isBreak) return;
+      Reg.setValue(
+          flag + QString::number(Sn) + "-childTime" + QString::number(j),
+          tw->topLevelItem(i)->child(j)->text(0));
+      Reg.setValue(
+          flag + QString::number(Sn) + "-childAmount" + QString::number(j),
+          tw->topLevelItem(i)->child(j)->text(1));
+      Reg.setValue(
+          flag + QString::number(Sn) + "-childDesc" + QString::number(j),
+          tw->topLevelItem(i)->child(j)->text(2));
+      Reg.setValue(
+          flag + QString::number(Sn) + "-childDetails" + QString::number(j),
+          tw->topLevelItem(i)->child(j)->text(3));
     }
+    //}
   }
 
   Reg.setValue(flag + QString::number(Sn) + "-childCount", childCount);
