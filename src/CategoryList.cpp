@@ -86,7 +86,7 @@ void CategoryList::on_btnDel_clicked() {
 
     m_Method->delItemFromQW(mw_one->ui->qwCategory, row);
   }
-  mw_one->m_EditRecord->saveCustomDesc();
+  mw_one->m_EditRecord->saveMyClassification();
   if (ui->listWidget->count() > 0)
     on_listWidget_itemClicked(ui->listWidget->currentItem());
   else
@@ -149,7 +149,7 @@ void CategoryList::on_btnRename_clicked() {
       ui->listWidget->addItem(item);
     }
     if (index >= 0) ui->listWidget->setCurrentRow(index);
-    mw_one->m_EditRecord->saveCustomDesc();
+    mw_one->m_EditRecord->saveMyClassification();
 
     for (int i = 0; i < tabData->tabBar()->count(); i++) {
       QTreeWidget* tw = (QTreeWidget*)tabData->widget(i);

@@ -32,12 +32,13 @@ bool isReadEBookEnd = true;
 bool isSaveEnd = true;
 bool isBreak = false;
 bool isDark = false;
+bool isDelData = false;
 
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 QSettings *iniPreferences;
 
-extern bool isAndroid, isIOS, zh_cn, isEpub, isEpubError, isText, isPDF, del,
+extern bool isAndroid, isIOS, zh_cn, isEpub, isEpubError, isText, isPDF,
     isWholeMonth, isDateSection;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
     fileName, strOpfPath, catalogueFile, strShowMsg;
@@ -306,7 +307,10 @@ void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
     EditRecord::saveOne();
     saveTab();
-    if (!del) EditRecord::saveCustomDesc();
+    if (!isDelData)
+      EditRecord::saveMyClassification();
+    else
+      isDelData = false;
   }
 
   if (SaveType == "alltab") {
@@ -323,7 +327,7 @@ void MainWindow::SaveFile(QString SaveType) {
     }
 
     saveTab();
-    EditRecord::saveCustomDesc();
+    EditRecord::saveMyClassification();
   }
 
   if (SaveType == "todo") {
@@ -1094,7 +1098,7 @@ bool MainWindow::del_Data(QTreeWidget *tw) {
     tw->setCurrentItem(topItem);
   }
 
-  del = true;
+  isDelData = true;
   startSave("tab");
   return true;
 }

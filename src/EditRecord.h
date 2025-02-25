@@ -22,7 +22,7 @@ class EditRecord : public QDialog {
   ~EditRecord();
   Ui::EditRecord *ui;
 
-  static void saveCustomDesc();
+  static void saveMyClassification();
   QString lblStyleHighLight =
       "QLabel{background: rgb(45,182,116); color:white;}";
   static int removeDuplicates(QStringList *that);

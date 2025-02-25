@@ -15,8 +15,6 @@ extern int fontSize;
 extern QString loadText(QString textFile);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 
-bool del = false;
-
 QStringList c_list;
 
 CategoryList *m_CategoryList;
@@ -154,7 +152,6 @@ void EditRecord::on_btnOk_clicked() {
     m_CategoryList->ui->listWidget->insertItem(0, item);
   }
 
-  del = false;
   mw_one->startSave("tab");
 
   writeToLog(mw_one->strLatestModify);
@@ -230,7 +227,7 @@ void EditRecord::on_btnCustom_clicked() {
   m_CategoryList->show();
 }
 
-void EditRecord::saveCustomDesc() {
+void EditRecord::saveMyClassification() {
   QSettings Reg(iniDir + "desc.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   Reg.setIniCodec("utf-8");
@@ -483,7 +480,6 @@ void EditRecord::saveOne() {
   int childCount = tw->topLevelItem(i)->childCount();
 
   if (childCount > 0) {
-    // if (!del) {
     for (int j = 0; j < childCount; j++) {
       if (isBreak) return;
       Reg.setValue(
@@ -499,7 +495,6 @@ void EditRecord::saveOne() {
           flag + QString::number(Sn) + "-childDetails" + QString::number(j),
           tw->topLevelItem(i)->child(j)->text(3));
     }
-    //}
   }
 
   Reg.setValue(flag + QString::number(Sn) + "-childCount", childCount);
