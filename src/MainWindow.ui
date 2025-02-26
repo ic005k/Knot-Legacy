@@ -4005,7 +4005,7 @@ QSlider::handle:horizontal:disabled {
           <enum>QTabWidget::South</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="tab_Steps">
           <attribute name="title">
@@ -4295,11 +4295,11 @@ QSlider::handle:horizontal:disabled {
     background-color: #2E3440; /* 深色背景 */
     
     /* 文字颜色 */
-    color: #ECEFF4; /* 浅色文字 */
+    color: #00FF00;
     
     /* 字体设置 */
-    font-family: 'Segoe UI', sans-serif; /* 现代字体 */
-    font-weight: bold; /* 加粗 */
+    font-family: 'Segoe UI', sans-serif;  /* 现代字体 */
+    font-weight: bold;   /* 加粗 */
     
     /* 边框设置 */
     border: 2px solid #4C566A; /* 浅色边框 */
@@ -4310,7 +4310,7 @@ QSlider::handle:horizontal:disabled {
     
     /* 文字对齐 */
     text-align: center; /* 文字居中 */
-    
+	    
     /* 阴影效果 */
     /* box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); */ /* 轻微的阴影 */
 }</string>
@@ -4349,10 +4349,37 @@ QSlider::handle:horizontal:disabled {
                  <widget class="QLabel" name="lblCurrentDistance">
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>20</pointsize>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
                    </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QLabel {
+    /* 背景颜色 */
+    background-color: #2E3440; /* 深色背景 */
+    
+    /* 文字颜色 */
+    color: #ECEFF4; /* 浅色文字 */
+    
+    /* 字体设置 */
+    font-family: 'Segoe UI', sans-serif;  /* 现代字体 */
+    font-weight: bold;   /* 加粗 */
+    
+    /* 边框设置 */
+    border: 2px solid #4C566A; /* 浅色边框 */
+    border-radius: 10px; /* 圆角 */
+    
+    /* 内边距 */
+    padding: 10px 20px; /* 上下左右的内边距 */
+    
+    /* 文字对齐 */
+    text-align: center; /* 文字居中 */
+	    
+    /* 阴影效果 */
+    /* box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); */ /* 轻微的阴影 */
+}</string>
                   </property>
                   <property name="text">
                    <string>0</string>

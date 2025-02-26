@@ -62,7 +62,7 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
 
 #endif
 
-  lblStyle = mw_one->ui->lblTotalDistance->styleSheet();
+  lblStyle = mw_one->ui->lblCurrentDistance->styleSheet();
   mw_one->ui->lblCurrentDistance->setStyleSheet(lblStyle);
   mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
   mw_one->ui->lblAverageSpeed->setStyleSheet(lblStyle);
@@ -458,7 +458,7 @@ void Steps::startRecordMotion() {
 #endif
 
   clearTrack();
-  nWriteGpsCount = 0;
+
   m_time.setHMS(0, 0, 0, 0);
 
   strStartTime = QTime::currentTime().toString();
@@ -565,8 +565,6 @@ void Steps::updateGetGps() {
         if (m_distance > 0 & mySpeed > 0) {
           if (latitude + longitude != oldLat + oldLon) {
             appendTrack(latitude, longitude);
-            // nWriteGpsCount++;
-            // writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
 
             QStringList data_list;
             data_list.append(QString::number(latitude, 'f', 6));
@@ -581,8 +579,6 @@ void Steps::updateGetGps() {
         appendTrack(latitude, longitude);
         latitude = latitude + 0.001;
         longitude = longitude + 0.001;
-        // nWriteGpsCount++;
-        // writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
 
         QStringList data_list;
         data_list.append(QString::number(latitude, 'f', 6));
@@ -604,11 +600,12 @@ void Steps::updateGetGps() {
   if (isGpsTest) {
     if (m_time.second() % 3 == 0) {
       appendTrack(latitude, longitude);
-      latitude = latitude + 0.001;
-      longitude = longitude + 0.001;
 
-      // nWriteGpsCount++;
-      // writeGpsPos(latitude, longitude, nWriteGpsCount, nWriteGpsCount);
+      quint64 randomInt =
+          QRandomGenerator::global()->generate64() % 10000000000ULL;
+      double randomDouble = static_cast<double>(randomInt) / 10000000000000.0;
+      latitude = latitude + randomDouble;
+      longitude = longitude + randomDouble;
 
       QStringList data_list;
       data_list.append(QString::number(latitude, 'f', 6));
@@ -1086,12 +1083,13 @@ void Steps::updateGpsTrack() {
   QString gpsOptimizedFile =
       iniDir + "memo/gps/" + st1 + "-gps-" + st2 + "-opt.csv";
 
+  double lat;
+  double lon;
+  QString strLat, strLon;
   if (QFile::exists(gpsFile)) {
     QVector<GPSCoordinate> rawGPSData;
 
     clearTrack();
-    double lat;
-    double lon;
 
     QFile file(gpsFile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -1103,8 +1101,12 @@ void Steps::updateGpsTrack() {
     while (!in.atEnd()) {
       QString line = in.readLine();
       QStringList fields = line.split(",");
-      lat = fields.at(0).toDouble();
-      lon = fields.at(1).toDouble();
+
+      strLat = fields.at(0);
+      strLon = fields.at(1);
+
+      lat = strLat.toDouble();
+      lon = strLon.toDouble();
 
       rawGPSData.append({lat, lon});
     }
@@ -1128,12 +1130,9 @@ void Steps::updateGpsTrack() {
       lon = optimizedData.at(i).longitude;
       updateTrackData(lat, lon);
 
-      lat = QString::number(lat, 'f', 6).toDouble();
-      lon = QString::number(lon, 'f', 6).toDouble();
-
       QStringList m_data;
-      m_data.append(QString::number(lat));
-      m_data.append(QString::number(lon));
+      m_data.append(QString::number(lat, 'f', 6));
+      m_data.append(QString::number(lon, 'f', 6));
       appendToCSV(gpsOptimizedFile, m_data);
     }
 
@@ -1151,8 +1150,6 @@ void Steps::updateGpsTrack() {
 
   if (QFile::exists(gpsOptimizedFile)) {
     clearTrack();
-    double lat;
-    double lon;
 
     QFile file1(gpsOptimizedFile);
     if (!file1.open(QIODevice::ReadOnly | QIODevice::Text)) {

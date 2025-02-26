@@ -6,6 +6,8 @@
 #include <QGeoCoordinate>
 #include <QGeoPositionInfoSource>
 #include <QRegularExpressionValidator>
+#include <iomanip>  // 包含 std::setprecision
+#include <iostream>
 
 #include "src/Steps/StepsOptions.h"
 
@@ -143,8 +145,8 @@ class Steps : public QDialog {
   QTimer *timer;
   QString strTotalDistance;
   QString strDurationTime;
-  double latitude = 59.91;
-  double longitude = 10.75;
+  double latitude = 59.919023461273;
+  double longitude = 10.752109237521;
   double oldLat;
   double oldLon;
   QString strGpsStatus;
@@ -166,7 +168,6 @@ class Steps : public QDialog {
 
   void clearTrack();
   void writeGpsPos(double lat, double lon, int i, int count);
-  int nWriteGpsCount;
 
   double mySpeed;
   QString strGpsMapDateTime, strGpsMapDistnce, strGpsMapSpeed, strGpsList;

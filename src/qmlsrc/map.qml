@@ -10,8 +10,8 @@ Rectangle {
     height: 600
 
     // 变量定义
-    property double gpsx: 59.91
-    property double gpsy: 10.75
+    property double gpsx: 59.91032691205
+    property double gpsy: 10.75763249129
 
     function appendTrack(lat, lon) {
         gpsx = lat
