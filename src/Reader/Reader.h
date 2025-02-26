@@ -142,7 +142,8 @@ class Reader : public QDialog {
   bool getDefaultOpen();
 
   void setDefaultOpen(QString value);
- public slots:
+  void setTextAreaCursorPos(int nCursorPos);
+  public slots:
   void setPageScroll0();
   void setPageScroll1();
   void setEpubPagePosition(int index, QString htmlFile);

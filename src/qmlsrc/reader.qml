@@ -114,6 +114,11 @@ Rectangle {
         return txt
     }
 
+    function setTextAreaCursorPos(nCursorPos)
+    {
+        textArea.cursorPosition = nCursorPos
+    }
+
     DocumentHandler {
         id: document
         objectName: "dochandler"
@@ -181,7 +186,7 @@ Rectangle {
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferVerticalHinting
             textFormat: Qt.AutoText
-            cursorPosition: nCursorPos
+            cursorPosition: 0
 
             wrapMode: TextArea.Wrap
             readOnly: true

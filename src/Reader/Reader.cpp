@@ -2017,8 +2017,8 @@ void Reader::setHtmlSkip(QString htmlFile, QString skipID) {
       qDebug() << "cursor pos=" << curpos << "s0=" << s0 << s0.trimmed();
 
       if (s0.trimmed().length() < 2) {
-        mw_one->ui->qwReader->rootContext()->setContextProperty("nCursorPos",
-                                                                curpos);
+        setTextAreaCursorPos(curpos);
+
         if (curpos > 50) {
           qreal scrollPos = getVPos();
           scrollPos = scrollPos + textBrowser->height() / 2;
@@ -2644,4 +2644,11 @@ void Reader::autoRun() {
 
   a = a + scrollValue;
   setVPos(a);
+}
+
+void Reader::setTextAreaCursorPos(int nCursorPos) {
+  QQuickItem *root;
+  root = mw_one->ui->qwReader->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setTextAreaCursorPos",
+                            Q_ARG(QVariant, nCursorPos));
 }

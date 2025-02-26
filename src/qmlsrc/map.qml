@@ -13,6 +13,11 @@ Rectangle {
     property double gpsx: 59.91032691205
     property double gpsy: 10.75763249129
 
+    function updateInfoText(strDistance, strSpeed) {
+        infoText1.text = qsTr("Distance") + ": " + strDistance
+        infoText2.text = qsTr("Speed") + ": " + strSpeed
+    }
+
     function appendTrack(lat, lon) {
         gpsx = lat
         gpsy = lon
@@ -121,11 +126,13 @@ Rectangle {
             spacing: 5
 
             Text {
-                text: qsTr("Distance") + ": " + strDistance
+                id: infoText1
+                text: qsTr("Distance") + ": 0 km"
                 color: "white"
             }
             Text {
-                text: qsTr("Speed") + ": " + strSpeed
+                id: infoText2
+                text: qsTr("Speed") + ": 0 km/h"
                 color: "white"
             }
         }

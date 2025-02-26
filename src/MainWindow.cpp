@@ -3412,7 +3412,6 @@ void MainWindow::initQW() {
   ui->qwReader->rootContext()->setContextProperty("myW", this->width());
   ui->qwReader->rootContext()->setContextProperty("myH", this->height());
   ui->qwReader->rootContext()->setContextProperty("m_Reader", m_Reader);
-  ui->qwReader->rootContext()->setContextProperty("nCursorPos", 0);
   ui->qwReader->rootContext()->setContextProperty("myBackgroundColor",
                                                   "#FFFFFF");
 
@@ -3455,8 +3454,6 @@ void MainWindow::initQW() {
   ui->qwGpsList->rootContext()->setContextProperty("m_Steps", m_Steps);
 
   ui->qwMap->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/map.qml")));
-  ui->qwMap->rootContext()->setContextProperty("strDistance", "0 km");
-  ui->qwMap->rootContext()->setContextProperty("strSpeed", "0 km/h");
 
   ui->qwReport->rootContext()->setContextProperty("m_Report", m_Report);
   ui->qwReport->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/report.qml")));

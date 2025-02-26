@@ -586,8 +586,7 @@ void Steps::updateGetGps() {
         appendToCSV(strCSVFile, data_list);
       }
 
-      mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance", str1);
-      mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed", str3);
+      updateInfoText(str1, str3);
     }
   }
 
@@ -1005,6 +1004,13 @@ void Steps::appendTrack(double lat, double lon) {
                             Q_ARG(QVariant, lon));
 }
 
+void Steps::updateInfoText(QString strDistance, QString strSpeed) {
+  QQuickItem* root = mw_one->ui->qwMap->rootObject();
+  QMetaObject::invokeMethod((QObject*)root, "updateInfoText",
+                            Q_ARG(QVariant, strDistance),
+                            Q_ARG(QVariant, strSpeed));
+}
+
 void Steps::updateTrackData(double lat, double lon) {
   QQuickItem* root = mw_one->ui->qwMap->rootObject();
   QMetaObject::invokeMethod((QObject*)root, "updateTrackData",
@@ -1180,10 +1186,8 @@ void Steps::updateGpsMapUi() {
   if (isGpsMapTrackFile) {
     updateMapTrackUi(lastLat, lastLon);
     mw_one->ui->lblGpsDateTime->setText(strGpsMapDateTime);
-    mw_one->ui->qwMap->rootContext()->setContextProperty("strDistance",
-                                                         strGpsMapDistnce);
-    mw_one->ui->qwMap->rootContext()->setContextProperty("strSpeed",
-                                                         strGpsMapSpeed);
+
+    updateInfoText(strGpsMapDistnce, strGpsMapSpeed);
     mw_one->ui->tabMotion->setCurrentIndex(3);
   }
 }
