@@ -806,6 +806,11 @@ void Notes::unzip(QString zipfile) {
 
 void Notes::loadNoteToQML() {
   QString htmlFileName = privateDir + "memo.html";
+
+  if (isAndroid) {
+    return;
+  }
+
   QTextEdit *edit = new QTextEdit;
   QPlainTextEdit *edit1 = new QPlainTextEdit;
   QString strhtml = loadText(htmlFileName);
@@ -852,15 +857,19 @@ void Notes::loadNoteToQML() {
     edit1->appendPlainText(str);
   }
 
-  QQuickItem *root = mw_one->ui->qwNotes->rootObject();
-
   mw_one->m_Reader->PlainTextEditToFile(edit1, htmlFileName);
-  // QMetaObject::invokeMethod((QObject *)root, "loadHtml",
-  //                           Q_ARG(QVariant, htmlFileName));
 
-  htmlBuffer = edit1->toPlainText();
-  QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
-                            Q_ARG(QVariant, htmlBuffer));
+  // QQuickItem *root = mw_one->ui->qwNotes->rootObject();
+  //   QMetaObject::invokeMethod((QObject *)root, "loadHtml",
+  //                             Q_ARG(QVariant, htmlFileName));
+
+  // old method
+  // htmlBuffer = edit1->toPlainText();
+  // QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
+  //                          Q_ARG(QVariant, htmlBuffer));
+
+  // new method
+  setWebViewFile(htmlFileName);
 }
 
 void Notes::refreshQMLVPos(qreal newPos) {
@@ -1616,6 +1625,20 @@ void Notes::openNoteEditor() {
 #endif
 }
 
+void Notes::openMDWindow() {
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("openMDWindow", "()V");
+#else
+  QJniObject activity = QJniObject::fromString("openMDWindow");
+  activity.callMethod<void>("openMDWindow", "()V");
+#endif
+
+#endif
+}
+
 void Notes::appendNote(QString str) {
   Q_UNUSED(str);
 #ifdef Q_OS_ANDROID
@@ -1803,4 +1826,11 @@ void Notes::loadEmptyNote() {
 void Notes::NewNote() {
   mw_one->ui->btnNotes->click();
   mw_one->ui->btnNotesList->click();
+}
+
+void Notes::setWebViewFile(QString htmlfile) {
+  QQuickItem *root;
+  root = mw_one->ui->qwNotes->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "setWebViewFile",
+                            Q_ARG(QVariant, htmlfile));
 }

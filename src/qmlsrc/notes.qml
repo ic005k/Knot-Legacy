@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import QtWebEngine 1.10
+
 import MyModel2 1.0
 
 Item {
@@ -47,6 +49,10 @@ Item {
         file.source = textArea.text
     }
 
+    function setWebViewFile(htmlfile) {
+        webView.url =  Qt.resolvedUrl("file:///" + htmlfile)
+    }
+
     DocumentHandler {
         id: document
         objectName: "dochandler"
@@ -66,12 +72,19 @@ Item {
         }
     }
 
+    WebEngineView {
+        id: webView
+        anchors.fill: parent
+        visible: true
+        url: "file:///C:/Users/Administrator/.Knot/memo.html" // 加载本地HTML文件
+    }
+
     Flickable {
         id: flickable
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
         clip: true
-        visible: true
+        visible: false
 
         states: State {
             name: "autoscroll"

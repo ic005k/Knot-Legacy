@@ -808,6 +808,12 @@ class MainWindow : public QMainWindow {
 
   void on_rbRunning_clicked();
 
+  void on_btnOpenNote_clicked();
+
+  void on_btnEditNote_clicked();
+
+  void on_btnToPDF_clicked();
+
  private:
   bool isMoveEntry;
   QTimer *tmeFlash;

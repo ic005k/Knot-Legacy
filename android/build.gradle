@@ -35,12 +35,18 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:29.0.0'
 
     // read and write inifile
-   implementation 'org.ini4j:ini4j:0.5.4'
-   // implementation "com.github.skydoves:powermenu:2.2.4"
+    implementation 'org.ini4j:ini4j:0.5.4'
+    // implementation "com.github.skydoves:powermenu:2.2.4"
 
-   implementation 'androidx.recyclerview:recyclerview:1.1.0'
-   implementation 'com.android.support:recyclerview-v7:29+'
-   implementation 'com.github.barteksc:pdfium-android:1.9.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.android.support:recyclerview-v7:29+'
+    implementation 'com.github.barteksc:pdfium-android:1.9.0'
+
+    // md
+    implementation 'io.noties.markwon:core:4.6.2' // Markwon核心库[^18^][^19^]
+    implementation 'io.noties.markwon:html:4.6.2'
+    implementation 'io.noties.markwon:image:4.6.2'
+    implementation 'io.noties.markwon:image-glide:4.6.2'
 
 }
 

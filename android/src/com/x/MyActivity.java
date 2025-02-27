@@ -1770,6 +1770,12 @@ public class MyActivity
     context.startActivity(i);
   }
 
+  public void openMDWindow() {
+    Intent i = new Intent(context, MDActivity.class);
+    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(i);
+  }
+
   public void openDateTimePicker() {
     Intent i = new Intent(context, DateTimePicker.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

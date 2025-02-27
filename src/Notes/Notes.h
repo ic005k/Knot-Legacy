@@ -5,6 +5,8 @@
 #include <QChar>
 #include <QClipboard>
 #include <QMimeData>
+#include <QVBoxLayout>
+#include <QWidget>
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QCharRef>
@@ -136,7 +138,10 @@ class Notes : public QDialog {
 
   void refreshQMLVPos(qreal newPos);
 
- protected:
+  void setWebViewFile(QString htmlfile);
+
+  void openMDWindow();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

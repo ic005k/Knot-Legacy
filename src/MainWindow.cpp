@@ -3366,6 +3366,8 @@ void MainWindow::showNotes() {
   ui->f_SetKey->hide();
   ui->frameNotes->show();
   m_Notes->setVPos();
+
+  ui->btnNotesList->click();
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -6148,3 +6150,19 @@ void MainWindow::on_rbRunning_clicked() {
   m_Steps->isHiking = false;
   m_Steps->isRunning = true;
 }
+
+void MainWindow::on_btnOpenNote_clicked() {
+  if (isAndroid) {
+    QFile::remove(privateDir + "mymd.md");
+    QFile::copy(currentMDFile, privateDir + "mymd.md");
+    m_Notes->openMDWindow();
+
+    return;
+  } else {
+    ui->btnBackNoteList->click();
+  }
+}
+
+void MainWindow::on_btnEditNote_clicked() { ui->btnEdit->click(); }
+
+void MainWindow::on_btnToPDF_clicked() { ui->btnPDF->click(); }
