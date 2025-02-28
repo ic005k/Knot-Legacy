@@ -1,13 +1,20 @@
 package com.x;
 
 import com.x.MyActivity;
+import com.x.NoteEditor;
 
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.noties.markwon.Markwon;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.ext.tables.TablePlugin;
+import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.image.ImagesPlugin;
+import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.image.glide.GlideImagesPlugin;
 
 import java.io.BufferedReader;
@@ -113,22 +120,67 @@ import androidx.core.content.FileProvider;
 import android.widget.PopupMenu;
 import android.widget.ImageButton;
 
-//public class MDActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
-public class MDActivity extends Activity {
+public class MDActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
     private TextView markdownView;
+    private Button btnEdit;
+
+    public native static void CallJavaNotify_0();
+
+    public native static void CallJavaNotify_1();
+
+    public native static void CallJavaNotify_2();
+
+    public native static void CallJavaNotify_3();
+
+    public native static void CallJavaNotify_4();
+
+    public native static void CallJavaNotify_5();
+
+    public native static void CallJavaNotify_6();
+
+    public native static void CallJavaNotify_7();
+
+    public native static void CallJavaNotify_8();
+
+    public native static void CallJavaNotify_9();
+
+    public native static void CallJavaNotify_10();
+
+    public native static void CallJavaNotify_11();
+
+    public native static void CallJavaNotify_12();
+
+    public native static void CallJavaNotify_13();
+
+    public native static void CallJavaNotify_14();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_md);
 
+        Application application = this.getApplication();
+        application.registerActivityLifecycleCallbacks(this);
+
+        // 去除title(App Name)
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        setContentView(R.layout.activity_md);
         markdownView = findViewById(R.id.markdownView);
         markdownView.setText("Hello");
 
+        btnEdit = (Button) findViewById(R.id.btnEdit);
+        btnEdit.setOnClickListener(this);
+
         // 初始化 Markwon
         final Markwon markwon = Markwon.builder(this)
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(TablePlugin.create(this))
+                .usePlugin(TaskListPlugin.create(this))
                 .usePlugin(HtmlPlugin.create())
+                .usePlugin(ImagesPlugin.create())
+                .usePlugin(LinkifyPlugin.create())
+                .usePlugin(SimpleExtPlugin.create())
                 .usePlugin(GlideImagesPlugin.create(this))
                 .build();
 
@@ -146,6 +198,124 @@ public class MDActivity extends Activity {
         }
         markwon.setMarkdown(markdownView, markdownContent.toString());
 
+        // HomeKey
+        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
+    }
+
+    private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
+        String SYSTEM_REASON = "reason";
+        String SYSTEM_HOME_KEY = "homekey";
+        String SYSTEM_HOME_KEY_LONG = "recentapps";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_REASON);
+                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
+                    // 表示按了home键,程序直接进入到后台
+                    System.out.println("NoteEditor HOME键被按下...");
+
+                    onBackPressed();
+
+                } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
+                    // 表示长按home键,显示最近使用的程序
+                    System.out.println("NoteEditor 长按HOME键...");
+
+                    onBackPressed();
+
+                }
+            }
+        }
+    };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnEdit:
+                MyActivity.isEdit = true;
+                Intent i = new Intent(this, NoteEditor.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.startActivity(i);
+                onBackPressed();
+                break;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        System.out.println("NoteEditor onPause...");
+        super.onPause();
+
+    }
+
+    @Override
+    public void onStop() {
+        System.out.println("NoteEditor onStop...");
+
+        super.onStop();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // AnimationWhenClosed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mHomeKeyEvent);
+        super.onDestroy();
+
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+        System.out.println("NoteEditor onActivityStopped...");
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+
+    }
+
+    private void AnimationWhenClosed() {
+        // 淡出效果
+        // overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        // 或者使用底部滑出效果(自定义文件exit_anim.xml)
+        overridePendingTransition(0, R.anim.exit_anim);
+    }
+
+    private void AnimationWhenOpen() {
+        overridePendingTransition(0, R.anim.enter_anim);
     }
 
 }

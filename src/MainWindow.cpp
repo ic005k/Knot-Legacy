@@ -5565,7 +5565,7 @@ void MainWindow::on_btnDelBakFile_clicked() {
 
 void MainWindow::on_btnBackNoteList_clicked() {
   ui->frameNoteList->hide();
-  ui->frameNotes->show();
+  ui->frameMain->show();
   m_NotesList->saveNoteBookVPos();
   m_NotesList->saveNotesList();
 }
@@ -6157,9 +6157,20 @@ void MainWindow::on_btnOpenNote_clicked() {
     QFile::copy(currentMDFile, privateDir + "mymd.md");
     m_Notes->openMDWindow();
 
+    m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",
+                                  QFileInfo(currentMDFile).baseName());
+    QFile file1(privateDir + "note_text.txt");
+    file1.remove();
+    QString mymd = privateDir + "mymd.txt";
+    QFile file2(mymd);
+    file2.remove();
+    file2.copy(currentMDFile, mymd);
+
     return;
   } else {
-    ui->btnBackNoteList->click();
+    QString filePath = privateDir + "memo.html";
+    QUrl url = QUrl::fromLocalFile(filePath);
+    QDesktopServices::openUrl(url);
   }
 }
 

@@ -1265,7 +1265,7 @@ bool Notes::androidCopyFile(QString src, QString des) {
 
 void Notes::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
-  mw_one->ui->frameNotes->show();
+
   if (!m_TextSelector->isHidden()) {
     m_TextSelector->close();
   }
@@ -1791,6 +1791,10 @@ void Notes::javaNoteToQMLNote() {
   StringToFile(mdString, currentMDFile);
   MD2Html(currentMDFile);
   loadNoteToQML();
+
+  QFile file(privateDir + "mymd.md");
+  file.remove();
+  QFile::copy(currentMDFile, privateDir + "mymd.md");
 }
 
 QString Notes::formatMDText(QString text) {

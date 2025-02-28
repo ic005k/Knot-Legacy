@@ -155,6 +155,8 @@ public class MyActivity
     extends QtActivity
     implements Application.ActivityLifecycleCallbacks {
 
+  public static boolean isEdit = false;
+
   public static boolean isDark = false;
   private static MyActivity m_instance = null;
   private static SensorManager mSensorManager;

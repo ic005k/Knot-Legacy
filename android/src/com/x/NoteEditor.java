@@ -1,6 +1,7 @@
 package com.x;
 
 import com.x.MyActivity;
+import com.x.MDActivity;
 import com.x.TextViewUndoRedo;
 import com.x.PopupMenuCustomLayout;
 import com.x.LineNumberedEditText;
@@ -517,6 +518,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public void onBackPressed() {
         super.onBackPressed();
         AnimationWhenClosed();
+
+        if (MyActivity.isEdit == true) {
+            MyActivity.isEdit = false;
+            Intent i = new Intent(this, MDActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.startActivity(i);
+        }
     }
 
     @Override
