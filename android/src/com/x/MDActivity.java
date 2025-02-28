@@ -190,7 +190,8 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
         StringBuilder markdownContent = new StringBuilder();
         try {
-            File file = new File("/storage/emulated/0/.Knot/mymd.md"); // 替换为实际文件路径
+            // "/storage/emulated/0/.Knot/mymd.md"
+            File file = new File(MyActivity.strMDFile); // 替换为实际文件路径
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -200,7 +201,9 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         } catch (IOException e) {
             e.printStackTrace();
         }
-        markwon.setMarkdown(markdownView, markdownContent.toString());
+        String strMD = markdownContent.toString();
+        strMD = strMD.replace("images/", "/storage/emulated/0/KnotData/memo/images/");
+        markwon.setMarkdown(markdownView, strMD);
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));

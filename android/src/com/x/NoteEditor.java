@@ -779,7 +779,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void saveNote() {
-        MyActivity.isEdit = true;
+        if (MyActivity.isEdit)
+            MyActivity.isEdit = true;
         // save current text
         String mContent = editNote.getText().toString();
         String mPath = "/storage/emulated/0/.Knot/";

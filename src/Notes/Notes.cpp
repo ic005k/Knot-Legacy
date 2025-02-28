@@ -225,14 +225,16 @@ void Notes::MD2Html(QString mdFile) {
     if (strmd.contains("===KnotData===")) {
       strmd.replace("===KnotData===", imgDir);
       StringToFile(strmd, currentMDFile);
-    }
+    } else
 
-    if (strmd.contains(imgDir)) {
+        if (strmd.contains(imgDir)) {
 #ifdef Q_OS_WIN
       strmd = strmd.replace(imgDir, "/" + iniDir);
 #else
       strmd = strmd.replace(imgDir, iniDir);
 #endif
+    } else {
+      strmd = strmd.replace("images/", "file://" + iniDir + "memo/images/");
     }
 
     edit->setPlainText(strmd);
@@ -645,6 +647,9 @@ QString Notes::insertImage(QString fileName, bool isToAndroidView) {
 
     strTar = strTar.replace(iniDir, imgDir);
     strImage = "\n\n![image](file://" + strTar + ")\n\n";
+
+    strTar = strTar.replace(imgDir + "memo/", "");
+    strImage = "\n\n![image](" + strTar + ")\n\n";
 
     if (!isAndroid) {
       m_EditSource->insertPlainText(strImage);

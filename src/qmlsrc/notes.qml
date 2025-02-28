@@ -76,7 +76,7 @@ Item {
         id: webView
         anchors.fill: parent
         visible: true
-        url: "file:///C:/Users/Administrator/.Knot/memo.html" // 加载本地HTML文件
+        url: "file:///C:/Users/Administrator/KnotData/memo/memo.html" // 加载本地HTML文件
     }
 
     Flickable {

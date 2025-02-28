@@ -6158,8 +6158,7 @@ void MainWindow::on_btnOpenNote_clicked() {
       m_Method->setMDTitle(m_NotesList->getNotesListText0(index));
     }
 
-    QFile::remove(privateDir + "mymd.md");
-    QFile::copy(currentMDFile, privateDir + "mymd.md");
+    m_Method->setMDFile(currentMDFile);
     m_Notes->openMDWindow();
 
     m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",

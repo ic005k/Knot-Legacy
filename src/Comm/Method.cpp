@@ -1618,6 +1618,31 @@ void Method::setMDTitle(QString strTitle) {
 #endif
 }
 
+void Method::setMDFile(QString strMDFile) {
+  Q_UNUSED(strMDFile);
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jFile = QAndroidJniObject::fromString(strMDFile);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("setMDFile", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#else
+  QJniObject jFile = QJniObject::fromString(strMDFile);
+  QJniObject activity =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
+  activity.callMethod<void>("setMDFile", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#endif
+
+#endif
+}
+
 void Method::delay_MSec(unsigned int msec) {
   QEventLoop loop;
   QTimer::singleShot(msec, &loop, SLOT(quit()));

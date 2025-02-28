@@ -261,6 +261,7 @@ class Method : public QDialog {
   int checkRecordAudio();
 
   void setMDTitle(QString strTitle);
+  void setMDFile(QString strMDFile);
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

@@ -157,6 +157,7 @@ public class MyActivity
 
   public static boolean isEdit = false;
   public static String strMDTitle = "MarkDown";
+  public static String strMDFile = "";
 
   public static boolean isDark = false;
   private static MyActivity m_instance = null;
@@ -2168,6 +2169,10 @@ public class MyActivity
 
   public void setMDTitle(String strTitle) {
     strMDTitle = strTitle;
+  }
+
+  public void setMDFile(String file) {
+    strMDFile = file;
   }
 
 }
