@@ -24,6 +24,10 @@ import com.skydoves.powermenu.PowerMenuItem;
 import com.skydoves.powermenu.MenuAnimation;
 */
 
+import io.noties.markwon.Markwon;
+import io.noties.markwon.editor.MarkwonEditor;
+import io.noties.markwon.editor.MarkwonEditorTextWatcher;
+
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
 import android.graphics.Typeface;
@@ -69,6 +73,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executors;
 import java.io.IOException;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -225,6 +230,18 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private void bindViews(String str) {
         editNote = (LineNumberedEditText) findViewById(R.id.editNote);
         editNote.setText(str);
+
+        // 初始化 Markwon
+        final Markwon markwon = Markwon.create(this);
+
+        // 初始化 MarkwonEditor
+        final MarkwonEditor editor = MarkwonEditor.create(markwon);
+
+        // 添加 MarkwonEditorTextWatcher 到 EditText
+        editNote.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
+                editor,
+                Executors.newCachedThreadPool(),
+                editNote));
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         btnFind = (Button) findViewById(R.id.btnFind);
@@ -460,7 +477,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         initColorValue();
-        initTextFormat();
+        // initTextFormat();
 
         // pass edittext object to TextViewUndoRedo class
         helper = new TextViewUndoRedo(editNote);
@@ -550,6 +567,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         if (isTextChanged) {
             saveNote();
 
+        } else {
+            if (MyActivity.isEdit) {
+                Intent i = new Intent(this, MDActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.startActivity(i);
+            }
         }
 
         unregisterReceiver(mHomeKeyEvent);
@@ -779,8 +802,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void saveNote() {
-        if (MyActivity.isEdit)
-            MyActivity.isEdit = true;
+
         // save current text
         String mContent = editNote.getText().toString();
         String mPath = "/storage/emulated/0/.Knot/";
@@ -999,7 +1021,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
                 if (isAddImage) {
                     isAddImage = false;
-                    initTextFormat();
+                    // initTextFormat();
                 }
 
             }
@@ -1207,7 +1229,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         // Format
         if (strTitle.equals(listMenuTitle.get(0))) {
-            initTextFormat();
+            // initTextFormat();
 
         }
 
@@ -1245,7 +1267,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             String str4 = "|        |        |        |\n";
 
             insertNote(str1 + str2 + str3 + str4);
-            initTextFormat();
+            // initTextFormat();
 
         }
 
@@ -1258,7 +1280,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("# ");
 
-            initTextFormat();
+            // initTextFormat();
         }
 
         // h2
@@ -1270,7 +1292,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("## ");
 
-            initTextFormat();
+            // initTextFormat();
         }
 
         // h3
@@ -1282,7 +1304,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("### ");
 
-            initTextFormat();
+            // initTextFormat();
         }
 
         // h4
@@ -1294,7 +1316,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("#### ");
 
-            initTextFormat();
+            // initTextFormat();
         }
 
         // h5
@@ -1306,7 +1328,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("##### ");
 
-            initTextFormat();
+            // initTextFormat();
         }
 
         // Font Color
@@ -1371,7 +1393,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                                 // old #E01B24
                                 insertNote("<font color=" + hexColor + ">Color</font>");
                             }
-                            initTextFormat();
+                            // initTextFormat();
                         }
                     })
                     .setNegativeButton(strCancel, new DialogInterface.OnClickListener() {
@@ -1393,7 +1415,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("**Bold**");
 
-            initTextFormat();
+            // initTextFormat();
         }
 
         // Italic
@@ -1405,7 +1427,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("_Italic_");
 
-            initTextFormat();
+            // initTextFormat();
 
         }
 
@@ -1418,7 +1440,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("~~Strickout~~");
 
-            initTextFormat();
+            // initTextFormat();
         }
 
         // Underline
@@ -1430,7 +1452,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("<u>Underline</u>");
 
-            initTextFormat();
+            // initTextFormat();
 
         }
 
@@ -1916,6 +1938,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void initTextFormat() {
+
         String strOrg = editNote.getText().toString();
         if (strOrg == null || strOrg.equals(""))
             return;

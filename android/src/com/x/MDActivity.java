@@ -6,16 +6,35 @@ import com.x.NoteEditor;
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.ext.tables.TablePlugin;
 import io.noties.markwon.ext.tasklist.TaskListPlugin;
 import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.image.ImagesPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.image.glide.GlideImagesPlugin;
+import io.noties.markwon.image.ImagesPlugin;
+
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.image.AsyncDrawable;
+import io.noties.markwon.image.ImageProps;
+import io.noties.markwon.image.ImageSize;
+import io.noties.markwon.image.ImageSizeResolver;
+import io.noties.markwon.image.destination.ImageDestinationProcessor;
+import io.noties.markwon.image.destination.ImageDestinationProcessorRelativeToAbsolute;
+import io.noties.markwon.image.gif.GifMediaDecoder;
+import io.noties.markwon.image.network.NetworkSchemeHandler;
+import io.noties.markwon.image.svg.SvgMediaDecoder;
+
+import org.commonmark.node.*;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+import java.util.Iterator;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -110,6 +129,7 @@ import android.view.KeyEvent;
 import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.InputMethodManager;
 import java.util.regex.*;
+
 import android.widget.LinearLayout;
 import android.view.LayoutInflater;
 import android.widget.PopupWindow;

@@ -36,6 +36,8 @@ dependencies {
 
     // read and write inifile
     implementation 'org.ini4j:ini4j:0.5.4'
+
+    // powermenu
     // implementation "com.github.skydoves:powermenu:2.2.4"
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
@@ -53,6 +55,8 @@ dependencies {
     implementation 'io.noties.markwon:linkify:4.6.2'
     implementation 'io.noties.markwon:simple-ext:4.6.2'
     implementation 'io.noties.markwon:image-glide:4.6.2'
+    implementation 'io.noties.markwon:editor:4.6.2'
+
 
 }
 
