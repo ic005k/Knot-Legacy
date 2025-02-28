@@ -1593,6 +1593,31 @@ void Method::seekTo(QString strPos) {
 #endif
 }
 
+void Method::setMDTitle(QString strTitle) {
+  Q_UNUSED(strTitle);
+
+#ifdef Q_OS_ANDROID
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  QAndroidJniObject jFile = QAndroidJniObject::fromString(strTitle);
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  activity.callMethod<void>("setMDTitle", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#else
+  QJniObject jFile = QJniObject::fromString(strTitle);
+  QJniObject activity =
+      QJniObject(QCoreApplication::instance()
+                     ->nativeInterface<QNativeInterface::QAndroidApplication>()
+                     ->context());
+  activity.callMethod<void>("setMDTitle", "(Ljava/lang/String;)V",
+                            jFile.object<jstring>());
+
+#endif
+
+#endif
+}
+
 void Method::delay_MSec(unsigned int msec) {
   QEventLoop loop;
   QTimer::singleShot(msec, &loop, SLOT(quit()));

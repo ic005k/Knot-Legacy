@@ -156,6 +156,7 @@ public class MyActivity
     implements Application.ActivityLifecycleCallbacks {
 
   public static boolean isEdit = false;
+  public static String strMDTitle = "MarkDown";
 
   public static boolean isDark = false;
   private static MyActivity m_instance = null;
@@ -2155,6 +2156,18 @@ public class MyActivity
       zh_cn = false;
 
     return zh_cn;
+  }
+
+  public double getEditStatus() {
+    if (isEdit == true) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  public void setMDTitle(String strTitle) {
+    strMDTitle = strTitle;
   }
 
 }

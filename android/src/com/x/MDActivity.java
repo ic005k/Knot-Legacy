@@ -123,6 +123,7 @@ import android.widget.ImageButton;
 public class MDActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
     private TextView markdownView;
+    private TextView titleView;
     private Button btnEdit;
 
     public native static void CallJavaNotify_0();
@@ -169,6 +170,9 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         markdownView = findViewById(R.id.markdownView);
         markdownView.setText("Hello");
 
+        titleView = findViewById(R.id.title);
+        titleView.setText(MyActivity.strMDTitle);
+
         btnEdit = (Button) findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(this);
 
@@ -200,6 +204,8 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
+        MyActivity.isEdit = false;
 
     }
 

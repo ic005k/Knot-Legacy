@@ -519,12 +519,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         super.onBackPressed();
         AnimationWhenClosed();
 
-        if (MyActivity.isEdit == true) {
-            MyActivity.isEdit = false;
-            Intent i = new Intent(this, MDActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            this.startActivity(i);
-        }
     }
 
     @Override
@@ -785,6 +779,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void saveNote() {
+        MyActivity.isEdit = true;
         // save current text
         String mContent = editNote.getText().toString();
         String mPath = "/storage/emulated/0/.Knot/";

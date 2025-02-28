@@ -1792,9 +1792,12 @@ void Notes::javaNoteToQMLNote() {
   MD2Html(currentMDFile);
   loadNoteToQML();
 
-  QFile file(privateDir + "mymd.md");
-  file.remove();
-  QFile::copy(currentMDFile, privateDir + "mymd.md");
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  if (m_activity.callMethod<jdouble>("getEditStatus", "()D") == 1) {
+    mw_one->ui->btnOpenNote->click();
+  }
+#endif
 }
 
 QString Notes::formatMDText(QString text) {

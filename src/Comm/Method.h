@@ -260,7 +260,8 @@ class Method : public QDialog {
 
   int checkRecordAudio();
 
- protected:
+  void setMDTitle(QString strTitle);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
