@@ -51,6 +51,8 @@ import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.image.ImagesPlugin;
 
+import io.noties.markwon.image.ImageSizeResolver;
+
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -169,6 +171,9 @@ import android.text.method.MovementMethod;
 import android.text.method.Touch;
 import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.util.DisplayMetrics;
+import android.view.ViewGroup;
 
 public class MDActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -249,7 +254,6 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                     builder.inlinesEnabled(true); // 启用行内公式
                     // builder.scale(1.2f); // 设置公式缩放比例
                 }))
-                .usePlugin(ImagesPlugin.create())
                 .build();
 
         StringBuilder markdownContent = new StringBuilder();
