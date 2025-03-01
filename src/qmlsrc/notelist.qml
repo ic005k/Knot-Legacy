@@ -314,6 +314,7 @@ Rectangle {
 
                 onDoubleClicked: {
 
+                    mw_one.on_btnOpenNote_clicked()
                     //mw_one.reeditData()
                     //var data = view.model.get(view.currentIndex)
                     //console.log(data.text0 + "," + data.type + ", count=" + view.count)

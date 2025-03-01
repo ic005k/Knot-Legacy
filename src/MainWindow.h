@@ -503,6 +503,7 @@ class MainWindow : public QMainWindow {
   void clickData();
 
  public slots:
+  void on_btnOpenNote_clicked();
   void on_btnStartDate_clicked();
   void on_btnEndDate_clicked();
   void on_ExecShortcut();
@@ -807,8 +808,6 @@ class MainWindow : public QMainWindow {
   void on_rbHiking_clicked();
 
   void on_rbRunning_clicked();
-
-  void on_btnOpenNote_clicked();
 
   void on_btnEditNote_clicked();
 

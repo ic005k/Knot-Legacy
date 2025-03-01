@@ -3488,6 +3488,7 @@ void MainWindow::initQW() {
   else
     ui->qwNoteList->rootContext()->setContextProperty("noteTimeFontSize", 8);
   ui->qwNoteList->rootContext()->setContextProperty("m_NotesList", m_NotesList);
+  ui->qwNoteList->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwNoteList->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notelist.qml")));
 
@@ -6166,13 +6167,6 @@ void MainWindow::on_btnOpenNote_clicked() {
 
     m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",
                                   QFileInfo(currentMDFile).baseName());
-
-    /*QFile file1(privateDir + "note_text.txt");
-    file1.remove();
-    QString mymd = privateDir + "mymd.txt";
-    QFile file2(mymd);
-    file2.remove();
-    file2.copy(currentMDFile, mymd);*/
 
     return;
   } else {

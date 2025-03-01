@@ -44,14 +44,16 @@ import io.noties.markwon.image.ImageSizeResolverDef;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.SchemeHandler;
 
-import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.image.AsyncDrawable;
-import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.image.ImagesPlugin;
 
 import io.noties.markwon.image.ImageSizeResolver;
+import io.noties.markwon.SpanFactory;
+
+import io.noties.markwon.core.spans.LinkSpan;
+import io.noties.markwon.LinkResolver;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
@@ -174,6 +176,9 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import android.text.util.Linkify;
 
 public class MDActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -254,6 +259,15 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                     builder.inlinesEnabled(true); // 启用行内公式
                     // builder.scale(1.2f); // 设置公式缩放比例
                 }))
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureSpansFactory(MarkwonSpansFactory.Builder builder) {
+                        builder.appendFactory(Image.class, (configuration, props) -> {
+                            String url = ImageProps.DESTINATION.require(props);
+                            return new LinkSpan(configuration.theme(), url, new ImageLinkResolver());
+                        });
+                    }
+                })
                 .build();
 
         StringBuilder markdownContent = new StringBuilder();
@@ -454,6 +468,19 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(imageUrl), "image/*");
         startActivity(intent);
+    }
+
+    private class ImageLinkResolver implements LinkResolver {
+        @Override
+        public void resolve(android.view.View view, String link) {
+            // 创建一个Intent，用于打开图片
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.parse(link), "image/*");
+            // 检查是否有应用可以处理该Intent
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+        }
     }
 
 }
