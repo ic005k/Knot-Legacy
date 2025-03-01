@@ -1790,10 +1790,11 @@ void Notes::delLink(QString link) {
 }
 
 void Notes::javaNoteToQMLNote() {
-  QString mdString;
+  /*QString mdString;
   mdString = loadText(privateDir + "note_text.txt");
   mdString = formatMDText(mdString);
-  StringToFile(mdString, currentMDFile);
+  StringToFile(mdString, currentMDFile);*/
+
   MD2Html(currentMDFile);
   loadNoteToQML();
 

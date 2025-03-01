@@ -436,7 +436,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        String filename = "/storage/emulated/0/.Knot/mymd.txt";
+        String filename = MyActivity.strMDFile;// "/storage/emulated/0/.Knot/mymd.txt";
         strInfo = readTextFile(filename);
 
         if (MyActivity.isDark) {
@@ -805,8 +805,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         // save current text
         String mContent = editNote.getText().toString();
-        String mPath = "/storage/emulated/0/.Knot/";
-        String filename = mPath + "note_text.txt";
+        // String mPath = "/storage/emulated/0/.Knot/";
+        String filename = MyActivity.strMDFile; // mPath + "note_text.txt";
         writeTextFile(mContent, filename);
 
         CallJavaNotify_6();

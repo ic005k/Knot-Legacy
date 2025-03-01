@@ -4819,14 +4819,17 @@ void MainWindow::on_btnEdit_clicked() {
   QString mdString = loadText(currentMDFile);
 
   if (isAndroid) {
+    m_Method->setMDFile(currentMDFile);
     m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",
                                   QFileInfo(currentMDFile).baseName());
-    QFile file1(privateDir + "note_text.txt");
+
+    /*QFile file1(privateDir + "note_text.txt");
     file1.remove();
     QString mymd = privateDir + "mymd.txt";
     QFile file2(mymd);
     file2.remove();
-    file2.copy(currentMDFile, mymd);
+    file2.copy(currentMDFile, mymd);*/
+
     m_Notes->openNoteEditor();
     return;
   }
@@ -6163,12 +6166,13 @@ void MainWindow::on_btnOpenNote_clicked() {
 
     m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",
                                   QFileInfo(currentMDFile).baseName());
-    QFile file1(privateDir + "note_text.txt");
+
+    /*QFile file1(privateDir + "note_text.txt");
     file1.remove();
     QString mymd = privateDir + "mymd.txt";
     QFile file2(mymd);
     file2.remove();
-    file2.copy(currentMDFile, mymd);
+    file2.copy(currentMDFile, mymd);*/
 
     return;
   } else {
