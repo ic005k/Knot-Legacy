@@ -30,6 +30,8 @@ import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.image.AsyncDrawable;
+import io.noties.markwon.image.AsyncDrawableLoader;
+import io.noties.markwon.image.AsyncDrawableSpan;
 import io.noties.markwon.image.ImageProps;
 import io.noties.markwon.image.ImageSize;
 import io.noties.markwon.image.ImageSizeResolver;
@@ -41,6 +43,13 @@ import io.noties.markwon.image.svg.SvgMediaDecoder;
 import io.noties.markwon.image.ImageSizeResolverDef;
 import io.noties.markwon.image.ImageItem;
 import io.noties.markwon.image.SchemeHandler;
+
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.image.AsyncDrawable;
+import io.noties.markwon.image.AsyncDrawableSpan;
+import io.noties.markwon.image.ImagesPlugin;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
@@ -156,12 +165,18 @@ import android.content.SharedPreferences;
 import android.widget.ScrollView;
 import android.text.method.LinkMovementMethod;
 
+import android.text.method.MovementMethod;
+import android.text.method.Touch;
+import android.view.MotionEvent;
+import android.view.ViewTreeObserver;
+
 public class MDActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
     private TextView markdownView;
     private TextView titleView;
     private Button btnEdit;
     private ScrollView scrollView;
+    private String strmdFileName;
 
     public native static void CallJavaNotify_0();
 
@@ -197,6 +212,10 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String filePath = MyActivity.strMDFile;
+        File md_file = new File(filePath);
+        strmdFileName = md_file.getName();
+
         Application application = this.getApplication();
         application.registerActivityLifecycleCallbacks(this);
 
@@ -230,7 +249,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                     builder.inlinesEnabled(true); // 启用行内公式
                     // builder.scale(1.2f); // 设置公式缩放比例
                 }))
-                .usePlugin(new CustomImageSchemeHandler(this))
+                .usePlugin(ImagesPlugin.create())
                 .build();
 
         StringBuilder markdownContent = new StringBuilder();
@@ -255,15 +274,24 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
         MyActivity.isEdit = false;
 
-        // 恢复滚动条位置
-        SharedPreferences sharedPreferences = getSharedPreferences("scroll_position",
-                MODE_PRIVATE);
-        int savedScrollX = sharedPreferences.getInt("scrollX", 0);
-        int savedScrollY = sharedPreferences.getInt("scrollY", 0);
-        // scrollView.scrollTo(savedScrollX, savedScrollY);
-        markdownView.scrollTo(savedScrollX, savedScrollY);
+        markdownView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
 
-        Toast.makeText(MDActivity.this, savedScrollX + "  " + savedScrollY, Toast.LENGTH_LONG).show();
+            public boolean onPreDraw() {
+                // 确保只执行一次
+                markdownView.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                // 恢复滚动条位置
+                SharedPreferences sharedPreferences = getSharedPreferences(strmdFileName + "scroll_position",
+                        MODE_PRIVATE);
+                int savedScrollX = sharedPreferences.getInt("scrollX", 0);
+                int savedScrollY = sharedPreferences.getInt("scrollY", 0);
+                scrollView.scrollTo(savedScrollX, savedScrollY);
+                // Toast.makeText(MDActivity.this, savedScrollX + " " + savedScrollY,
+                // Toast.LENGTH_LONG).show();
+
+                return true; // 返回 true 表示继续绘制
+            }
+        });
 
     }
 
@@ -308,6 +336,13 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     }
 
     @Override
+    public void onResume() {
+
+        super.onResume();
+
+    }
+
+    @Override
     public void onPause() {
         System.out.println("NoteEditor onPause...");
         super.onPause();
@@ -328,7 +363,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         int scrollX = scrollView.getScrollX();
         int scrollY = scrollView.getScrollY();
         // 可以将scrollX和scrollY存储起来，例如保存在SharedPreferences中
-        SharedPreferences sharedPreferences = getSharedPreferences("scroll_position",
+        SharedPreferences sharedPreferences = getSharedPreferences(strmdFileName + "scroll_position",
                 MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("scrollX", scrollX);
@@ -383,6 +418,21 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("scrollY", scrollView.getScrollY());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            int scrollY = savedInstanceState.getInt("scrollY");
+            scrollView.post(() -> scrollView.scrollTo(0, scrollY));
+        }
+    }
+
     private void AnimationWhenClosed() {
         // 淡出效果
         // overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -401,29 +451,5 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         intent.setDataAndType(Uri.parse(imageUrl), "image/*");
         startActivity(intent);
     }
-
-    public class CustomImageSchemeHandler extends AbstractMarkwonPlugin {
-
-        private final Context context;
-
-        public CustomImageSchemeHandler(Context context) {
-            this.context = context;
-        }
-
-        public ImageItem handle(String raw, Uri uri) {
-            // 这里可以处理图片的加载逻辑，返回一个ImageItem
-            // 如果你不需要自定义加载逻辑，可以直接返回null
-            return null;
-        }
-
-        public void onImageClick(Uri uri) {
-            // 当图片被点击时，使用系统默认的图片查看器打开
-            if (uri != null && !TextUtils.isEmpty(uri.toString())) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(uri, "image/*");
-                context.startActivity(intent);
-            }
-        }
-    };
 
 }
