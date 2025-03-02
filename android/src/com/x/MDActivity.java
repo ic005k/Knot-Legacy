@@ -55,6 +55,12 @@ import io.noties.markwon.SpanFactory;
 import io.noties.markwon.core.spans.LinkSpan;
 import io.noties.markwon.LinkResolver;
 
+//import io.noties.markwon.syntax.Prism4jSyntaxHighlight;
+//import io.noties.markwon.syntax.Prism4jTheme;
+//import io.noties.prism4j.Prism4j;
+//import io.noties.markwon.syntax.Prism4jThemeDarkula;
+//import io.noties.markwon.syntax.SyntaxHighlightPlugin;
+
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -273,7 +279,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         StringBuilder markdownContent = new StringBuilder();
         try {
             // "/storage/emulated/0/.Knot/mymd.md"
-            File file = new File(MyActivity.strMDFile); // 替换为实际文件路径
+            File file = new File(MyActivity.strMDFile);
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -473,9 +479,30 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     private class ImageLinkResolver implements LinkResolver {
         @Override
         public void resolve(android.view.View view, String link) {
+            // File imageFile = new File(link);
+            // Uri contentUri = FileProvider.getUriForFile(
+            // MDActivity.this,
+            // "com.x", // 与 AndroidManifest 中的 authorities 一致
+            // imageFile);
+
+            Uri photoUri;
+            if (Build.VERSION.SDK_INT >= 24) {
+                photoUri = FileProvider.getUriForFile(
+                        MyActivity.context,
+                        "com.x",
+                        new File(link));
+            } else {
+                photoUri = Uri.fromFile(new File(link));
+            }
+            
             // 创建一个Intent，用于打开图片
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(link), "image/*");
+            // intent.setDataAndType(Uri.parse(link), "image/*"); // Android 6.0
+
+            intent.setDataAndType(photoUri, "image/*");
+
+            Toast.makeText(MDActivity.this, link + "\n" + photoUri,
+                    Toast.LENGTH_LONG).show();
             // 检查是否有应用可以处理该Intent
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);

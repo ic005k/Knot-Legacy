@@ -477,7 +477,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         initColorValue();
-        // initTextFormat();
+        initTextFormat();
 
         // pass edittext object to TextViewUndoRedo class
         helper = new TextViewUndoRedo(editNote);
@@ -1021,7 +1021,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
                 if (isAddImage) {
                     isAddImage = false;
-                    // initTextFormat();
+                    initTextFormat();
                 }
 
             }
@@ -1229,7 +1229,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         // Format
         if (strTitle.equals(listMenuTitle.get(0))) {
-            // initTextFormat();
+            initTextFormat();
 
         }
 
@@ -1267,7 +1267,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             String str4 = "|        |        |        |\n";
 
             insertNote(str1 + str2 + str3 + str4);
-            // initTextFormat();
+            initTextFormat();
 
         }
 
@@ -1280,7 +1280,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("# ");
 
-            // initTextFormat();
+            initTextFormat();
         }
 
         // h2
@@ -1292,7 +1292,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("## ");
 
-            // initTextFormat();
+            initTextFormat();
         }
 
         // h3
@@ -1304,7 +1304,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("### ");
 
-            // initTextFormat();
+            initTextFormat();
         }
 
         // h4
@@ -1316,7 +1316,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("#### ");
 
-            // initTextFormat();
+            initTextFormat();
         }
 
         // h5
@@ -1328,7 +1328,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("##### ");
 
-            // initTextFormat();
+            initTextFormat();
         }
 
         // Font Color
@@ -1393,7 +1393,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                                 // old #E01B24
                                 insertNote("<font color=" + hexColor + ">Color</font>");
                             }
-                            // initTextFormat();
+                            initTextFormat();
                         }
                     })
                     .setNegativeButton(strCancel, new DialogInterface.OnClickListener() {
@@ -1415,7 +1415,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("**Bold**");
 
-            // initTextFormat();
+            initTextFormat();
         }
 
         // Italic
@@ -1427,7 +1427,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("_Italic_");
 
-            // initTextFormat();
+            initTextFormat();
 
         }
 
@@ -1440,7 +1440,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("~~Strickout~~");
 
-            // initTextFormat();
+            initTextFormat();
         }
 
         // Underline
@@ -1452,7 +1452,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             } else
                 insertNote("<u>Underline</u>");
 
-            // initTextFormat();
+            initTextFormat();
 
         }
 
@@ -1947,6 +1947,17 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         for (int i = 0; i < 10; i++)
             strOrg = strOrg.replace("\n\n\n", "\n\n");
+
+        // 在此处返回，目前只需要去除多余的空格即可
+        if (strOrg != null) {
+            editNote.setText(strOrg);
+            int nLength = editNote.getText().length();
+            if (curIndex > nLength)
+                curIndex = nLength;
+
+            editNote.setSelection(curIndex);
+            return;
+        }
 
         style = new SpannableStringBuilder(strOrg);
 

@@ -645,10 +645,12 @@ QString Notes::insertImage(QString fileName, bool isToAndroidView) {
         pix.scaled(new_w, new_h, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pix.save(strTar);
 
-    strTar = strTar.replace(iniDir, imgDir);
-    strImage = "\n\n![image](file://" + strTar + ")\n\n";
+    // strTar = strTar.replace(iniDir, imgDir);
+    // strImage = "\n\n![image](file://" + strTar + ")\n\n";
 
-    strTar = strTar.replace(imgDir + "memo/", "");
+    // strTar = strTar.replace(imgDir + "memo/", "");
+
+    strTar = strTar.replace(iniDir + "memo/", "");
     strImage = "\n\n![image](" + strTar + ")\n\n";
 
     if (!isAndroid) {

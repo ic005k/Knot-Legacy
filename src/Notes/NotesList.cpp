@@ -1101,7 +1101,7 @@ void NotesList::removePicFromMD(QString mdfile) {
 
   for (int i = 0; i < files.count(); i++) {
     QString str0 = files.at(i);
-    str0.replace(iniDir, "");
+    str0.replace(iniDir + "memo/", "");
 
     if (txt.contains(str0)) {
       files.removeAt(i);
@@ -2235,9 +2235,12 @@ void NotesList::genRecentOpenMenu() {
 
       connect(act, &QAction::triggered, this, [=]() {
         currentMDFile = file;
+
         mw_one->m_Notes->MD2Html(file);
         mw_one->m_Notes->loadNoteToQML();
         mw_one->ui->lblNoteName->setText(name);
+
+        mw_one->on_btnOpenNote_clicked();
 
         listRecentOpen.removeAt(i);
         listRecentOpen.insert(0, item);
@@ -2249,7 +2252,7 @@ void NotesList::genRecentOpenMenu() {
 
   int x = 0;
   x = mw_one->geometry().x() + 2;
-  int y = mw_one->geometry().y() + mw_one->ui->btnRecentOpen->height() + 4;
+  int y = mw_one->geometry().y() + mw_one->ui->btnRecentOpen0->height() + 4;
   QPoint pos(x, y);
   menuRecentOpen->exec(pos);
 }
