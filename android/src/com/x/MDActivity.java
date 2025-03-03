@@ -247,6 +247,10 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         titleView.setText(MyActivity.strMDTitle);
 
         btnEdit = (Button) findViewById(R.id.btnEdit);
+        if (MyActivity.zh_cn)
+            btnEdit.setText("编辑");
+        else
+            btnEdit.setText("Edit");
         btnEdit.setOnClickListener(this);
 
         scrollView = findViewById(R.id.scroll_view);
@@ -488,6 +492,8 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
             callImageView(link);
             // callThirdPartyImageViewer(link);
+
+            onBackPressed();
 
         }
     }

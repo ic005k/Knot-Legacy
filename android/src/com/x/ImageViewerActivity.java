@@ -185,6 +185,10 @@ public class ImageViewerActivity extends Activity
         imageView = findViewById(R.id.image_view);
         filePathTextView = findViewById(R.id.file_path_text_view);
         shareButton = findViewById(R.id.share_button);
+        if (MyActivity.zh_cn)
+            shareButton.setText("分享");
+        else
+            shareButton.setText("Share");
 
         imagePath = MyActivity.strImageFile;
         if (imagePath != null) {
@@ -270,6 +274,10 @@ public class ImageViewerActivity extends Activity
     @Override
     protected void onDestroy() {
         unregisterReceiver(mHomeKeyEvent);
+
+        Intent i = new Intent(this, MDActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.startActivity(i);
 
         super.onDestroy();
 

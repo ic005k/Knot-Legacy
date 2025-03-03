@@ -6157,10 +6157,12 @@ void MainWindow::on_rbRunning_clicked() {
 
 void MainWindow::on_btnOpenNote_clicked() {
   if (isAndroid) {
-    int index = m_NotesList->getNotesListCurrentIndex();
-    if (index >= 0) {
-      m_Method->setMDTitle(m_NotesList->getNotesListText0(index));
-    }
+    // int index = m_NotesList->getNotesListCurrentIndex();
+    // if (index >= 0) {
+    //   m_Method->setMDTitle(m_NotesList->getNotesListText0(index));
+    // }
+
+    m_Method->setMDTitle(ui->lblNoteName->text());
 
     m_Method->setMDFile(currentMDFile);
     m_Notes->openMDWindow();
