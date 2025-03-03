@@ -158,6 +158,7 @@ public class MyActivity
   public static boolean isEdit = false;
   public static String strMDTitle = "MarkDown";
   public static String strMDFile = "";
+  public static String strImageFile;
 
   public static boolean isDark = false;
   private static MyActivity m_instance = null;

@@ -133,6 +133,10 @@
             android:screenOrientation="portrait">
         </activity>
 
+         <activity android:name="com.x.ImageViewerActivity" android:label="Knot"
+            android:screenOrientation="portrait">
+        </activity>
+
         <activity android:name="com.x.DateTimePicker" android:label="Knot"
             android:theme="@android:style/Theme.Translucent"
             android:screenOrientation="portrait">

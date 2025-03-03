@@ -2,6 +2,7 @@ package com.x;
 
 import com.x.MyActivity;
 import com.x.NoteEditor;
+import com.x.ImageViewerActivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -350,6 +351,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnEdit:
+
                 MyActivity.isEdit = true;
                 Intent i = new Intent(this, NoteEditor.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -477,37 +479,49 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     }
 
     private class ImageLinkResolver implements LinkResolver {
+
         @Override
         public void resolve(android.view.View view, String link) {
-            // File imageFile = new File(link);
-            // Uri contentUri = FileProvider.getUriForFile(
-            // MDActivity.this,
-            // "com.x", // 与 AndroidManifest 中的 authorities 一致
-            // imageFile);
 
-            Uri photoUri;
-            if (Build.VERSION.SDK_INT >= 24) {
-                photoUri = FileProvider.getUriForFile(
-                        MyActivity.context,
-                        "com.x",
-                        new File(link));
-            } else {
-                photoUri = Uri.fromFile(new File(link));
-            }
-            
-            // 创建一个Intent，用于打开图片
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            // intent.setDataAndType(Uri.parse(link), "image/*"); // Android 6.0
+            // Toast.makeText(MDActivity.this, link,
+            // Toast.LENGTH_LONG).show();
 
-            intent.setDataAndType(photoUri, "image/*");
+            callImageView(link);
+            // callThirdPartyImageViewer(link);
 
-            Toast.makeText(MDActivity.this, link + "\n" + photoUri,
-                    Toast.LENGTH_LONG).show();
-            // 检查是否有应用可以处理该Intent
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            }
         }
+    }
+
+    private void callImageView(String link) {
+
+        MyActivity.strImageFile = link;
+        Intent i = new Intent(this, ImageViewerActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.startActivity(i);
+
+    }
+
+    private void callThirdPartyImageViewer(String link) {
+
+        Uri photoUri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            photoUri = FileProvider.getUriForFile(
+                    MyActivity.context,
+                    "com.x",
+                    new File(link));
+        } else {
+            photoUri = Uri.fromFile(new File(link));
+        }
+
+        // 用第三方的图片查看器打开， 创建一个Intent，用于打开图片
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(photoUri, "image/*");
+
+        // 检查是否有应用可以处理该Intent
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+
     }
 
 }
