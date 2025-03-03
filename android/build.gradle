@@ -1,20 +1,29 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-//apply plugin:'kotlin-kapt'                       // 启用 kapt
+apply plugin:'kotlin-kapt'                       // 启用 kapt
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.jetbrains:annotations:17.0.0' // Use the version you need
+    }
+
+    exclude group: 'org.jetbrains', module: 'annotations-java5'
+}
 
 buildscript {
     ext.kotlin_version = '1.8.20'
 
-   repositories {
+    repositories {
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
-        google()
+        maven { url "https://jitpack.io" }
+        google()  // 确保 Google 仓库在最后（避免镜像失效时回退）
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'com.android.tools.build:gradle:7.4.0'
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
      }
@@ -23,14 +32,16 @@ buildscript {
 repositories {
     maven { url 'https://maven.aliyun.com/repository/google' }
     maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
-    google()
-    mavenCentral()
     maven { url "https://jitpack.io" }
+    google()  // 确保 Google 仓库在最后（避免镜像失效时回退）
+    mavenCentral()
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation 'androidx.core:core:1.10.1'
+
+    //implementation 'org.jetbrains:annotations-java5:17.0.0'
 
     // 改为AndroidX版本：
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -42,8 +53,7 @@ dependencies {
     // powermenu
     // implementation "com.github.skydoves:powermenu:2.2.4"
 
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-
+    // PDF
     implementation 'com.github.barteksc:pdfium-android:1.9.0'
 
     // Markwon
@@ -58,11 +68,11 @@ dependencies {
     implementation 'io.noties.markwon:simple-ext:4.6.2'
     implementation 'io.noties.markwon:image-glide:4.6.2'
     implementation 'io.noties.markwon:editor:4.6.2'
+    implementation 'io.noties.markwon:syntax-highlight:4.6.2'
 
-    //implementation 'io.noties.markwon:syntax-highlight:4.6.2'
     // Prism4j 语法高亮引擎
-    //implementation "io.noties:prism4j:2.0.0"
-    //kapt "io.noties:prism4j-bundler:2.0.0"  // 关键：使用 kapt 处理注解
+    implementation "io.noties:prism4j:2.0.0"
+    kapt "io.noties:prism4j-bundler:2.0.0"  // 关键：使用 kapt 处理注解
 
 
 }
@@ -81,6 +91,8 @@ android {
      * updated by QtCreator and androiddeployqt tools.
      * Changing them manually might break the compilation!
      *******************************************************/
+
+    namespace 'com.x'
 
     // 启用增量编译选项
     compileOptions {
