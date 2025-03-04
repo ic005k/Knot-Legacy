@@ -268,22 +268,31 @@ void NotesList::on_btnRename_clicked() {
       mw_one->ui->editDetails->verticalScrollBar()->styleSheet());
   m_Method->setSCrollPro(edit);
 
+  if (edit->toPlainText().trimmed().length() == 0) {
+    edit->setPlainText(mw_one->m_Notes->new_title);
+  }
+
   QToolButton *btnCancel = new QToolButton(this);
+  QToolButton *btnPaste = new QToolButton(this);
   QToolButton *btnCopy = new QToolButton(this);
   QToolButton *btnOk = new QToolButton(this);
   btnCancel->setText(tr("Cancel"));
+  btnPaste->setText(tr("Paste"));
   btnCopy->setText(tr("Copy"));
   btnOk->setText(tr("OK"));
 
   btnOk->setFixedHeight(35);
   btnCancel->setFixedHeight(35);
   btnCopy->setFixedHeight(35);
+  btnPaste->setFixedHeight(35);
 
   QHBoxLayout *hbox = new QHBoxLayout;
   hbox->addWidget(btnCancel);
+  hbox->addWidget(btnPaste);
   hbox->addWidget(btnCopy);
   hbox->addWidget(btnOk);
   btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  btnPaste->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   btnCopy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   btnOk->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
@@ -298,33 +307,17 @@ void NotesList::on_btnRename_clicked() {
           [=]() mutable { m_Method->closeGrayWindows(); });
   connect(dlg, &QDialog::accepted,
           [=]() mutable { m_Method->closeGrayWindows(); });
+  connect(btnPaste, &QToolButton::clicked, [=]() mutable { edit->paste(); });
   connect(btnCopy, &QToolButton::clicked, [=]() mutable {
     edit->selectAll();
     edit->copy();
     dlg->close();
   });
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
-    item->setText(0, edit->toPlainText().trimmed());
-
-    if (item->parent() != NULL && !item->text(1).isEmpty()) {
-      setNoteName(item->text(0));
-
-      for (int i = 0; i < listRecentOpen.count(); i++) {
-        QString str = listRecentOpen.at(i);
-        if (str.split("===").at(1) == item->text(1)) {
-          QString newStr = item->text(0) + "===" + item->text(1);
-          listRecentOpen.removeAt(i);
-          listRecentOpen.insert(i, newStr);
-          saveRecentOpen();
-          break;
-        }
-      }
-    }
+    renameCurrentItem(edit->toPlainText().trimmed());
 
     isNeedSave = true;
     dlg->close();
-
-    resetQML_List();
   });
 
   int x, y, w, h;
@@ -350,6 +343,28 @@ void NotesList::on_btnRename_clicked() {
   m_Method->showGrayWindows();
 
   dlg->show();
+}
+
+void NotesList::renameCurrentItem(QString title) {
+  QTreeWidgetItem *item = ui->treeWidget->currentItem();
+  if (item == NULL) return;
+
+  item->setText(0, title.trimmed());
+  if (item->parent() != NULL && !item->text(1).isEmpty()) {
+    setNoteName(item->text(0));
+
+    for (int i = 0; i < listRecentOpen.count(); i++) {
+      QString str = listRecentOpen.at(i);
+      if (str.split("===").at(1) == item->text(1)) {
+        QString newStr = item->text(0) + "===" + item->text(1);
+        listRecentOpen.removeAt(i);
+        listRecentOpen.insert(i, newStr);
+        saveRecentOpen();
+        break;
+      }
+    }
+  }
+  resetQML_List();
 }
 
 void NotesList::setNoteName(QString name) {
@@ -1768,7 +1783,7 @@ void NotesList::on_actionAdd_Note_triggered() {
     return;
   }
 
-  if (ok && !text.isEmpty()) {
+  if (ok) {
     tw->setCurrentItem(pNoteBookItems.at(notebookIndex));
     ui->editNote->setText(text);
     on_btnNewNote_clicked();
@@ -1780,6 +1795,8 @@ void NotesList::on_actionAdd_Note_triggered() {
     int count = getNotesListCount();
     setNotesListCurrentIndex(count - 1);
     clickNoteList();
+
+    mw_one->on_btnEditNote_clicked();
   }
 
   setNoteLabel();

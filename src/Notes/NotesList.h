@@ -109,6 +109,7 @@ class NotesList : public QDialog {
   void setNoteBookVPos();
 
   void genCursorText();
+  void renameCurrentItem(QString title);
   protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 

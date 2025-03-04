@@ -52,6 +52,8 @@ class Notes : public QDialog {
   ~Notes();
   Ui::Notes *ui;
 
+  QString new_title;
+
   QTextEditHighlighter *m_EditSource;
   QTimer *timerEditNote;
   int px, py, mx, my;
@@ -141,7 +143,10 @@ class Notes : public QDialog {
   void setWebViewFile(QString htmlfile);
 
   void openMDWindow();
-  protected:
+
+  bool isSetNewNoteTitle();
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -255,7 +260,7 @@ class Notes : public QDialog {
 
  private:
   int x_left, x_right, y_left, y_right;
-
+  QString strNoteText;
   int y1;
   QString pdfFileName;
   bool isMouseRelease = false;

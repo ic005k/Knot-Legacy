@@ -1272,6 +1272,7 @@ bool Notes::androidCopyFile(QString src, QString des) {
 
 void Notes::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
+  strNoteText = m_EditSource->toPlainText().trimmed();
 
   if (!m_TextSelector->isHidden()) {
     m_TextSelector->close();
@@ -1298,7 +1299,26 @@ void Notes::closeEvent(QCloseEvent *event) {
         loadNoteToQML();
       }
     }
+
+    if (isSetNewNoteTitle()) {
+      if (strNoteText.length() > 20)
+        new_title = strNoteText.mid(0, 20).trimmed() + "...";
+      else
+        new_title = strNoteText;
+      mw_one->ui->btnRename->click();
+    }
   }
+}
+
+bool Notes::isSetNewNoteTitle() {
+  int index = mw_one->m_NotesList->getNotesListCurrentIndex();
+  if (index >= 0) {
+    QString title = mw_one->m_NotesList->getNotesListText0(index);
+    if (title.trimmed() == "") {
+      return true;
+    }
+  }
+  return false;
 }
 
 void Notes::on_editSource_textChanged() {
@@ -1792,10 +1812,14 @@ void Notes::delLink(QString link) {
 }
 
 void Notes::javaNoteToQMLNote() {
-  /*QString mdString;
-  mdString = loadText(privateDir + "note_text.txt");
-  mdString = formatMDText(mdString);
-  StringToFile(mdString, currentMDFile);*/
+  if (isSetNewNoteTitle()) {
+    QString mdString = loadText(currentMDFile).trimmed();
+    if (mdString.length() > 20)
+      new_title = mdString.mid(0, 20).trimmed() + "...";
+    else
+      new_title = mdString;
+    mw_one->ui->btnRename->click();
+  }
 
   MD2Html(currentMDFile);
   loadNoteToQML();

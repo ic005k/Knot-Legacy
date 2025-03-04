@@ -56,17 +56,22 @@ import io.noties.markwon.SpanFactory;
 import io.noties.markwon.core.spans.LinkSpan;
 import io.noties.markwon.LinkResolver;
 
-//import io.noties.markwon.syntax.Prism4jSyntaxHighlight;
-//import io.noties.markwon.syntax.Prism4jTheme;
-//import io.noties.prism4j.Prism4j;
-//import io.noties.markwon.syntax.Prism4jThemeDarkula;
-//import io.noties.markwon.syntax.SyntaxHighlightPlugin;
+import io.noties.markwon.syntax.Prism4jSyntaxHighlight;
+import io.noties.markwon.syntax.Prism4jTheme;
+import io.noties.prism4j.Prism4j;
+import io.noties.markwon.syntax.Prism4jThemeDefault;
+import io.noties.markwon.syntax.Prism4jThemeDarkula;
+import io.noties.markwon.syntax.SyntaxHighlightPlugin;
+
+import io.noties.prism4j.annotations.PrismBundle;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
-import java.util.Iterator;
+import org.w3c.dom.Node;
 
+import java.util.Iterator;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -187,6 +192,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import android.text.util.Linkify;
 
+import io.noties.markwon.syntax.Prism4jSyntaxHighlight;
+import io.noties.markwon.syntax.Prism4jTheme;
+import io.noties.markwon.syntax.Prism4jThemeBase;
+import io.noties.markwon.syntax.Prism4jThemeDarkula;
+import io.noties.markwon.syntax.Prism4jThemeDefault;
+import io.noties.markwon.syntax.SyntaxHighlightPlugin;
+import io.noties.prism4j.GrammarLocator;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static java.util.regex.Pattern.compile;
+import static io.noties.prism4j.Prism4j.grammar;
+import static io.noties.prism4j.Prism4j.pattern;
+import static io.noties.prism4j.Prism4j.token;
+
 public class MDActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
     private TextView markdownView;
@@ -279,6 +298,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                         });
                     }
                 })
+
                 .build();
 
         StringBuilder markdownContent = new StringBuilder();
