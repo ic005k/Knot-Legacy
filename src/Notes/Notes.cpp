@@ -1143,7 +1143,7 @@ bool Notes::eventFilterQwNote(QObject *watch, QEvent *event) {
     }
 
     if (event->type() == QEvent::MouseButtonDblClick) {
-      mw_one->on_btnEdit_clicked();
+      // mw_one->on_btnEdit_clicked();
     }
   }
 
@@ -1311,13 +1311,11 @@ void Notes::closeEvent(QCloseEvent *event) {
 }
 
 bool Notes::isSetNewNoteTitle() {
-  int index = mw_one->m_NotesList->getNotesListCurrentIndex();
-  if (index >= 0) {
-    QString title = mw_one->m_NotesList->getNotesListText0(index);
-    if (title.trimmed() == "") {
-      return true;
-    }
+  QString title = mw_one->ui->lblNoteName->text();
+  if (title.trimmed() == "") {
+    return true;
   }
+
   return false;
 }
 
@@ -1812,6 +1810,9 @@ void Notes::delLink(QString link) {
 }
 
 void Notes::javaNoteToQMLNote() {
+  MD2Html(currentMDFile);
+  loadNoteToQML();
+
   if (isSetNewNoteTitle()) {
     QString mdString = loadText(currentMDFile).trimmed();
     if (mdString.length() > 20)
@@ -1820,9 +1821,6 @@ void Notes::javaNoteToQMLNote() {
       new_title = mdString;
     mw_one->ui->btnRename->click();
   }
-
-  MD2Html(currentMDFile);
-  loadNoteToQML();
 
 #ifdef Q_OS_ANDROID
   QAndroidJniObject m_activity = QtAndroid::androidActivity();

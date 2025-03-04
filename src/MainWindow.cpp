@@ -3751,6 +3751,9 @@ void MainWindow::init_UIWidget() {
   ui->frameNotes->hide();
   ui->frameNotes->layout()->setContentsMargins(1, 1, 1, 1);
 
+  ui->btnSetKey->hide();
+  ui->btnNotesList->hide();
+
   ui->editPassword1->setEchoMode(QLineEdit::EchoMode::Password);
   ui->editPassword2->setEchoMode(QLineEdit::EchoMode::Password);
 
@@ -4751,7 +4754,7 @@ void MainWindow::on_btnBackNotes_clicked() {
   m_Notes->saveQMLVPos();
 
   ui->frameNotes->hide();
-  ui->frameMain->show();
+  ui->frameNoteList->show();
   isSelf = false;
   addFilesWatch();
 }
@@ -4824,13 +4827,6 @@ void MainWindow::on_btnEdit_clicked() {
     m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",
                                   QFileInfo(currentMDFile).baseName());
 
-    /*QFile file1(privateDir + "note_text.txt");
-    file1.remove();
-    QString mymd = privateDir + "mymd.txt";
-    QFile file2(mymd);
-    file2.remove();
-    file2.copy(currentMDFile, mymd);*/
-
     m_Notes->openNoteEditor();
     return;
   }
@@ -4847,7 +4843,6 @@ void MainWindow::on_btnEdit_clicked() {
   m_Notes->m_EditSource->setPlainText(mdString);
   new MarkdownHighlighter(m_Notes->m_EditSource->document());
 
-  ui->frameNotes->hide();
   m_Notes->show();
 
   QString a = currentMDFile;
@@ -6167,12 +6162,22 @@ void MainWindow::on_btnOpenNote_clicked() {
 
     return;
   } else {
-    QString filePath = privateDir + "memo.html";
-    QUrl url = QUrl::fromLocalFile(filePath);
-    QDesktopServices::openUrl(url);
+    // QString filePath = privateDir + "memo.html";
+    // QUrl url = QUrl::fromLocalFile(filePath);
+    // QDesktopServices::openUrl(url);
+
+    ui->frameNoteList->hide();
+    ui->frameNotes->show();
   }
 }
 
 void MainWindow::on_btnEditNote_clicked() { ui->btnEdit->click(); }
 
 void MainWindow::on_btnToPDF_clicked() { ui->btnPDF->click(); }
+
+void MainWindow::on_btnRecentOpen0_clicked() { on_btnRecentOpen_clicked(); }
+
+void MainWindow::on_btnWebBack_clicked() {
+  QQuickItem *root = mw_one->ui->qwNotes->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "goBack");
+}

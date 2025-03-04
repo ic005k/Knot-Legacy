@@ -812,6 +812,10 @@ class MainWindow : public QMainWindow {
 
   void on_btnToPDF_clicked();
 
+  void on_btnRecentOpen0_clicked();
+
+  void on_btnWebBack_clicked();
+
  private:
   bool isMoveEntry;
   QTimer *tmeFlash;
