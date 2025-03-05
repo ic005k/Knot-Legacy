@@ -107,6 +107,7 @@ int main(int argc, char* argv[]) {
   RegJni("com/x/NewNote");
   RegJni("com/x/AddRecord");
   RegJni("com/x/ContinueReading");
+  RegJni("com/x/Desk_Exercise");
   RegJni("com/x/FilePicker");
   RegJni("com/xhh/pdfui/PDFActivity");
   RegJni("com/x/DefaultOpen");

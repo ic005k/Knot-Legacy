@@ -803,9 +803,8 @@ void MainWindow::on_ExecShortcut() {
   if (keyType == "todo") m_Todo->NewTodo();
   if (keyType == "note") m_Notes->NewNote();
   if (keyType == "reader") m_Reader->ContinueReading();
-  if (keyType == "add") {
-    ui->btnAdd->click();
-  }
+  if (keyType == "add") ui->btnAdd->click();
+  if (keyType == "exercise") ui->btnSteps->click();
   if (keyType == "defaultopen") {
 #ifdef Q_OS_ANDROID
 

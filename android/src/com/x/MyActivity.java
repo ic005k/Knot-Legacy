@@ -75,16 +75,17 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-//import android.support.v4.app.ActivityCompat;
 import androidx.core.app.ActivityCompat;
-//import android.support.v4.content.FileProvider;
 import androidx.core.content.FileProvider;
+
 import com.x.FilePicker;
 import com.x.MyActivity.FileWatcher;
 import com.x.MyService;
 import com.x.ShareReceiveActivity;
 import com.x.TTSUtils;
+
 import com.xhh.pdfui.PDFActivity;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -1830,16 +1831,19 @@ public class MyActivity
       String lblNewTodo = null;
       String lblNewNote = null;
       String lblContinueReading = null;
+      String lblExercise = null;
       if (MyService.zh_cn) {
         lblAddRecoed = getString(R.string.addRecord_shortcut_short_label_zh);
         lblNewTodo = getString(R.string.newTodo_shortcut_short_label_zh);
         lblNewNote = getString(R.string.newNote_shortcut_short_label_zh);
         lblContinueReading = getString(R.string.continueReading_shortcut_short_label_zh);
+        lblExercise = getString(R.string.exercise_shortcut_short_label_zh);
       } else {
         lblAddRecoed = getString(R.string.addRecord_shortcut_short_label);
         lblNewTodo = getString(R.string.newTodo_shortcut_short_label);
         lblNewNote = getString(R.string.newNote_shortcut_short_label);
         lblContinueReading = getString(R.string.continueReading_shortcut_short_label);
+        lblExercise = getString(R.string.exercise_shortcut_short_label);
       }
 
       // ShortcutInfo.Builder构建快捷方式
@@ -1875,9 +1879,15 @@ public class MyActivity
               new Intent(Intent.ACTION_MAIN, null, this, ContinueReading.class))
           .build();
 
+      ShortcutInfo shortcut4 = new ShortcutInfo.Builder(this, "New_Exercise")
+          .setShortLabel(lblExercise)
+          .setIcon(Icon.createWithResource(this, R.drawable.exercise))
+          .setIntent(new Intent(Intent.ACTION_MAIN, null, this, Desk_Exercise.class))
+          .build();
+
       // setDynamicShortcuts()方法来设置快捷方式
       shortcutManager.setDynamicShortcuts(
-          Arrays.asList(shortcut0, shortcut1, shortcut2, shortcut3));
+          Arrays.asList(shortcut0, shortcut1, shortcut2, shortcut4, shortcut3));
       // Toast.makeText(MyActivity.this, "已添加", Toast.LENGTH_SHORT).show();
     }
   }

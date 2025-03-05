@@ -15,10 +15,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    
+
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true" />
     <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true" />
 
@@ -133,7 +133,7 @@
             android:screenOrientation="portrait">
         </activity>
 
-         <activity android:name="com.x.ImageViewerActivity" android:label="Knot"
+        <activity android:name="com.x.ImageViewerActivity" android:label="Knot"
             android:screenOrientation="portrait">
         </activity>
 
@@ -256,8 +256,19 @@
         </activity>
 
         <activity android:name="com.x.ContinueReading" android:exported="true"
-            android:label="ContinueReading" android:theme="@style/splashScreenTheme">
+            android:label="ContinueReading" 
+            android:theme="@style/splashScreenTheme">
+            <meta-data android:name="android.app.splash_screen_drawable"
+                android:resource="@drawable/splashscreen" />
+            <meta-data android:name="android.app.splash_screen_drawable_portrait"
+                android:resource="@drawable/splashscreen_port" />
+            <meta-data android:name="android.app.splash_screen_drawable_landscape"
+                android:resource="@drawable/splashscreen_land" />
+        </activity>
 
+        <activity android:name="com.x.Desk_Exercise" android:exported="true"
+            android:label="Exercise"
+            android:theme="@style/splashScreenTheme">
             <meta-data android:name="android.app.splash_screen_drawable"
                 android:resource="@drawable/splashscreen" />
             <meta-data android:name="android.app.splash_screen_drawable_portrait"
@@ -296,12 +307,12 @@
 
         <!-- android:name="androidx.core.content.FileProvider" -->
         <!-- android:name="android.support.v4.content.FileProvider"-->
-        <provider 
-        android:name="androidx.core.content.FileProvider" 
-        android:authorities="com.x"
-        android:exported="false" 
-        android:grantUriPermissions="true">
-        <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.x"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
 
