@@ -236,6 +236,7 @@ DISTFILES += \
     src/qmlsrc/baklist.qml \
     src/qmlsrc/booklist.qml \
     src/qmlsrc/bookmark.qml \
+    src/qmlsrc/bookview.qml \
     src/qmlsrc/details.qml \
     src/qmlsrc/epub_cata.qml \
     src/qmlsrc/gps_list.qml \

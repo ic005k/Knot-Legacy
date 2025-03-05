@@ -2178,7 +2178,7 @@ public class MyActivity
   }
 
   public void setFontSize(int nSize) {
-    myFontSize = nSize - 2;
+    myFontSize = nSize - 3;
   }
 
 }
