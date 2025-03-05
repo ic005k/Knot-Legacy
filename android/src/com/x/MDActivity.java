@@ -3,6 +3,7 @@ package com.x;
 import com.x.MyActivity;
 import com.x.NoteEditor;
 import com.x.ImageViewerActivity;
+import com.x.DefaultGrammars;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -274,6 +275,8 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
         scrollView = findViewById(R.id.scroll_view);
 
+        final Prism4j prism4j = new Prism4j(new MyGrammarLocator());
+
         // 初始化 Markwon
         // .usePlugin(ImagesPlugin.create())
         final Markwon markwon = Markwon.builder(this)
@@ -298,7 +301,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                         });
                     }
                 })
-
+                .usePlugin(SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create()))
                 .build();
 
         StringBuilder markdownContent = new StringBuilder();

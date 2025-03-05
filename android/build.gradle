@@ -17,9 +17,10 @@ buildscript {
     ext.kotlin_version = '1.8.20'
 
     repositories {
+        maven { url 'https://jitpack.io' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
-        maven { url "https://jitpack.io" }
+
         google()  // 确保 Google 仓库在最后（避免镜像失效时回退）
         mavenCentral()
     }
@@ -32,9 +33,10 @@ buildscript {
 }
 
 repositories {
+    maven { url 'https://jitpack.io' }
     maven { url 'https://maven.aliyun.com/repository/google' }
     maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
-    maven { url "https://jitpack.io" }
+
     google()  // 确保 Google 仓库在最后（避免镜像失效时回退）
     mavenCentral()
 }
@@ -74,8 +76,9 @@ dependencies {
 
     // Prism4j 语法高亮引擎
     implementation "io.noties:prism4j:2.0.0"
-    //kapt "io.noties:prism4j-bundler:2.0.0"  // 关键：使用 kapt 处理注解
-    annotationProcessor "io.noties:prism4j-bundler:2.0.0" // 确保使用 annotationProcessor
+    //implementation 'io.noties:prism4j-annotations:2.0.0'  // 新增 annotations 依赖
+    kapt "io.noties:prism4j-bundler:2.0.0"  // 关键：使用 kapt 处理注解
+   // annotationProcessor "io.noties:prism4j-bundler:2.0.0" // 确保使用 annotationProcessor
     //implementation "io.noties:prism4j-bundler:2.0.0"  // 支持多语言包
 
 
