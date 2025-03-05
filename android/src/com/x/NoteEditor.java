@@ -231,6 +231,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private void bindViews(String str) {
         editNote = (LineNumberedEditText) findViewById(R.id.editNote);
         editNote.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyActivity.myFontSize);
+
         editNote.setText(str);
 
         // 初始化 Markwon

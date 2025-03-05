@@ -8,9 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/light_gray">
-    >
-        <!-- 左侧文本 -->
+        android:background="@color/light_gray"> > <!-- 左侧文本 -->
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -49,7 +47,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="1dp"
-            android:textSize="16sp"
         />
     </ScrollView>
 </LinearLayout>

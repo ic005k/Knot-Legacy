@@ -263,6 +263,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         setContentView(R.layout.activity_md);
         markdownView = findViewById(R.id.markdownView);
         markdownView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyActivity.myFontSize);
+
         markdownView.setText("Hello");
 
         titleView = findViewById(R.id.title);
