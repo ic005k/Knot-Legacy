@@ -76,12 +76,8 @@ dependencies {
 
     // Prism4j 语法高亮引擎
     implementation "io.noties:prism4j:2.0.0"
-    //implementation 'io.noties:prism4j-annotations:2.0.0'  // 新增 annotations 依赖
     kapt "io.noties:prism4j-bundler:2.0.0"  // 关键：使用 kapt 处理注解
-   // annotationProcessor "io.noties:prism4j-bundler:2.0.0" // 确保使用 annotationProcessor
-    //implementation "io.noties:prism4j-bundler:2.0.0"  // 支持多语言包
-
-
+    //annotationProcessor "io.noties:prism4j-bundler:2.0.0" // 确保使用 annotationProcessor
 
 }
 

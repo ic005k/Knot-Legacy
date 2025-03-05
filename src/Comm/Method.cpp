@@ -1648,3 +1648,13 @@ void Method::delay_MSec(unsigned int msec) {
   QTimer::singleShot(msec, &loop, SLOT(quit()));
   loop.exec();
 }
+
+void Method::setAndroidFontSize(int nSize) {
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject activity = QtAndroid::androidActivity();
+  if (activity.isValid()) {
+    // 调用 setFontSize 方法
+    activity.callMethod<void>("setFontSize", "(I)V", nSize);
+  }
+#endif
+}

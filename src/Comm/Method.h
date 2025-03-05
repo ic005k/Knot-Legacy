@@ -262,6 +262,7 @@ class Method : public QDialog {
 
   void setMDTitle(QString strTitle);
   void setMDFile(QString strMDFile);
+  void setAndroidFontSize(int nSize);
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

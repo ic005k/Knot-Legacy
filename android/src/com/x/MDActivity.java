@@ -192,6 +192,7 @@ import android.view.ViewGroup;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import android.text.util.Linkify;
+import android.util.TypedValue;
 
 import io.noties.markwon.syntax.Prism4jSyntaxHighlight;
 import io.noties.markwon.syntax.Prism4jTheme;
@@ -261,6 +262,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
         setContentView(R.layout.activity_md);
         markdownView = findViewById(R.id.markdownView);
+        markdownView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyActivity.myFontSize);
         markdownView.setText("Hello");
 
         titleView = findViewById(R.id.title);

@@ -401,6 +401,7 @@ MainWindow::MainWindow(QWidget *parent)
   }
 
   init_ButtonStyle();
+  m_Method->setAndroidFontSize(fontSize);
 }
 
 void MainWindow::initHardStepSensor() {
