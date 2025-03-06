@@ -6159,6 +6159,7 @@ void MainWindow::on_btnOpenNote_clicked() {
 
     m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",
                                   QFileInfo(currentMDFile).baseName());
+    m_NotesList->setCurrentItemFromMDFile(currentMDFile);
 
     return;
   } else {
@@ -6168,9 +6169,8 @@ void MainWindow::on_btnOpenNote_clicked() {
 
     ui->frameNoteList->hide();
     ui->frameNotes->show();
+    m_NotesList->setCurrentItemFromMDFile(currentMDFile);
   }
-
-  m_NotesList->setCurrentItemFromMDFile(currentMDFile);
 }
 
 void MainWindow::on_btnEditNote_clicked() {

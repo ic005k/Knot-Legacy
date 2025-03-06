@@ -1,4 +1,6 @@
-# Knot--Record everything in the simplest way possible.
+# Knot--Record everything in the simplest way possible.
+
+### The origin of the name Knot: Ancient people used a knot to remember things, simple and efficient.
 
 ### The Knot is an Android gadget that integrates common modules such as Todo, Notes and Reader and supports various clients (Win, Mac, Linux) for editing Todo and Notes.
 
@@ -20,16 +22,16 @@
 ### Android's instructions on applying for permission:
 
 
-
 1. Storage permission: Save data.
-
 
 
 2. Microphone permission: Voice memo in Todo. (In the Todo interface, long press the "Add" button to start voice recording)
 
 
-
-3. Camera permissions: Take photos and add them to your notes.
+3. Camera permissions: Take photos and add them to your notes.
+
+
+4. GPS permissions: Record mileage and trajectory.
 
 
 ### How to make Todo's scheduled tasks reminded in real time?
