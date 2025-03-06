@@ -125,6 +125,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.io.IOException;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -208,6 +209,17 @@ import static io.noties.prism4j.Prism4j.grammar;
 import static io.noties.prism4j.Prism4j.pattern;
 import static io.noties.prism4j.Prism4j.token;
 
+import android.graphics.Color;
+import android.text.style.ForegroundColorSpan;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import org.commonmark.node.Emphasis;
+
+import io.noties.markwon.core.CoreProps;
+import io.noties.markwon.html.HtmlTag;
+import io.noties.markwon.html.tag.SimpleTagHandler;
+import io.noties.markwon.MarkwonConfiguration;
+
 public class MDActivity extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
     private TextView markdownView;
@@ -286,14 +298,12 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(TablePlugin.create(this))
                 .usePlugin(TaskListPlugin.create(this))
-                .usePlugin(HtmlPlugin.create())
                 .usePlugin(LinkifyPlugin.create())
                 .usePlugin(SimpleExtPlugin.create())
                 .usePlugin(GlideImagesPlugin.create(this))
                 .usePlugin(MarkwonInlineParserPlugin.create())
                 .usePlugin(JLatexMathPlugin.create(markdownView.getTextSize(), builder -> {
                     builder.inlinesEnabled(true); // 启用行内公式
-                    // builder.scale(1.2f); // 设置公式缩放比例
                 }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
@@ -305,6 +315,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                     }
                 })
                 .usePlugin(SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create()))
+                .usePlugin(HtmlPlugin.create())
                 .build();
 
         StringBuilder markdownContent = new StringBuilder();

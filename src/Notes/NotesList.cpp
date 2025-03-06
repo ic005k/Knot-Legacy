@@ -2263,6 +2263,8 @@ void NotesList::genRecentOpenMenu() {
         listRecentOpen.insert(0, item);
         saveRecentOpen();
         saveCurrentNoteInfo();
+
+        setCurrentItemFromMDFile(currentMDFile);
       });
     }
   }
@@ -2272,6 +2274,26 @@ void NotesList::genRecentOpenMenu() {
   int y = mw_one->geometry().y() + mw_one->ui->btnRecentOpen0->height() + 4;
   QPoint pos(x, y);
   menuRecentOpen->exec(pos);
+}
+
+void NotesList::setCurrentItemFromMDFile(QString mdFile) {
+  int count = getNoteBookCount();
+  bool isBreak = false;
+  for (int i = 0; i < count; i++) {
+    setNoteBookCurrentIndex(i);
+    clickNoteBook();
+    int count1 = getNotesListCount();
+    for (int j = 0; j < count1; j++) {
+      setNotesListCurrentIndex(j);
+      QString strMD = iniDir + m_Method->getText3(mw_one->ui->qwNoteList, j);
+      if (mdFile == strMD) {
+        isBreak = true;
+        break;
+      }
+    }
+
+    if (isBreak) break;
+  }
 }
 
 void NotesList::genCursorText() {

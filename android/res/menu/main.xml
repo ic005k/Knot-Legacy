@@ -33,7 +33,7 @@
         android:title="h5" />
 
     <item android:id="@+id/fontcolor"
-        android:title="Font Color" />
+        android:title="Separator" />
 
     <item android:id="@+id/bold"
         android:title="Bold" />

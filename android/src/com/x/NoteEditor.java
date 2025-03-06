@@ -1174,6 +1174,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // popupMenu.show(anchorView, Gravity.CENTER, 0, 0);
     }
 
+    // 当前正在使用 main.xml main_cn.xml
     private void showPopupMenu(View view) {
 
         // View当前PopupMenu显示的相对View的位置
@@ -1334,8 +1335,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             initTextFormat();
         }
 
-        // Font Color
+        // Font Color --> Separator
         if (strTitle.equals(listMenuTitle.get(9))) {
+            insertNote("\n\n---\n\n");
+            initTextFormat();
+            if (3 > 2) {
+                return;
+            }
 
             String strChoose = "Choose Color";
             String strOk = "Ok";
@@ -1494,7 +1500,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             listMenuTitle.add("h3 标题");
             listMenuTitle.add("h4 标题");
             listMenuTitle.add("h5 标题");
-            listMenuTitle.add("字色");
+            listMenuTitle.add("分隔线");
             listMenuTitle.add("粗体");
             listMenuTitle.add("斜体");
             listMenuTitle.add("删除线");
@@ -1512,7 +1518,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             listMenuTitle.add("h3");
             listMenuTitle.add("h4");
             listMenuTitle.add("h5");
-            listMenuTitle.add("Font Color");
+            listMenuTitle.add("Separator");
             listMenuTitle.add("Bold");
             listMenuTitle.add("Italic");
             listMenuTitle.add("Strickout");
@@ -1527,6 +1533,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     /*
+     * // PowerMenu插件，目前暂停使用，不是很轻量，但根据需要可随时启用
      * private void showPowerMenu(View view) {
      * 
      * ArrayList<PowerMenuItem> list = new ArrayList<>();

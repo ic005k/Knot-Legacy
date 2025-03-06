@@ -110,6 +110,7 @@ class NotesList : public QDialog {
 
   void genCursorText();
   void renameCurrentItem(QString title);
+  void setCurrentItemFromMDFile(QString mdFile);
   protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 

@@ -66,6 +66,7 @@
 * [PowerMenu](https://github.com/skydoves/PowerMenu)
 * [AndroidPdfViewerDemo](https://github.com/qxcwanxss/AndroidPdfViewerDemo)
 * [Markwon](https://github.com/noties/Markwon)
+* [Prism4j](https://github.com/noties/Prism4j)
 
 ---
 
