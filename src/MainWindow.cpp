@@ -4750,6 +4750,9 @@ void MainWindow::on_btnUserInfo_clicked() {
 void MainWindow::on_btnBackNotes_clicked() {
   m_Notes->saveQMLVPos();
 
+  QFileInfo fi(currentMDFile);
+  m_Notes->saveWebScrollPos(fi.baseName());
+
   ui->frameNotes->hide();
   ui->frameNoteList->show();
   isSelf = false;
@@ -6166,9 +6169,14 @@ void MainWindow::on_btnOpenNote_clicked() {
     ui->frameNoteList->hide();
     ui->frameNotes->show();
   }
+
+  m_NotesList->setCurrentItemFromMDFile(currentMDFile);
 }
 
-void MainWindow::on_btnEditNote_clicked() { ui->btnEdit->click(); }
+void MainWindow::on_btnEditNote_clicked() {
+  ui->btnEdit->click();
+  m_NotesList->setCurrentItemFromMDFile(currentMDFile);
+}
 
 void MainWindow::on_btnToPDF_clicked() { ui->btnPDF->click(); }
 

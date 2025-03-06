@@ -1,13 +1,15 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
+import QtWebChannel 1.0
 import QtWebEngine 1.10
-
+import Qt.labs.settings 1.1
 import MyModel2 1.0
 
 Item {
     id: textitem
     visible: true
+
+    property string strMDFileName: ""
 
     function loadHtml(htmlfile) {
         document.load("file://" + htmlfile)
@@ -49,13 +51,35 @@ Item {
         file.source = textArea.text
     }
 
-    function setWebViewFile(htmlfile) {
-        webView.url =  Qt.resolvedUrl("file:///" + htmlfile)
+    function getFileNameWithoutExtension(filePath) {
+        // 先找到最后一个斜杠的位置
+        const lastSlashIndex = filePath.lastIndexOf('/')
+        // 提取文件名部分
+        const fileName = lastSlashIndex !== -1 ? filePath.slice(
+                                                     lastSlashIndex + 1) : filePath
+        // 找到文件名中最后一个点的位置
+        const lastDotIndex = fileName.lastIndexOf('.')
+        // 提取不包含扩展名的文件名
+        return lastDotIndex !== -1 ? fileName.slice(0, lastDotIndex) : fileName
     }
 
-    function goBack()
-    {
+    function setWebViewFile(htmlfile, currentMDFile) {
+        webView.url = Qt.resolvedUrl("file:///" + htmlfile)
+        strMDFileName = getFileNameWithoutExtension(currentMDFile)
+        console.log("strMDFileName=" + strMDFileName)
+    }
+
+    function goBack() {
         webView.goBack()
+    }
+
+    function saveWebScrollPos(mdFileName) {
+        strMDFileName = mdFileName
+        webView.runJavaScript("window.scrollY;", function (result) {
+            appSettings.setValue(strMDFileName, result)
+        })
+
+        console.log("strMDFileName=" + strMDFileName)
     }
 
     DocumentHandler {
@@ -77,11 +101,43 @@ Item {
         }
     }
 
+    Settings {
+        id: appSettings
+        category: "WebViewScroll"
+    }
+
+    QtObject {
+        id: helper
+        WebChannel.id: "helper"
+        signal domUpdated
+        signal scrollChanged(double position)
+    }
+
     WebEngineView {
         id: webView
         anchors.fill: parent
-        visible: true
-        url: "" // "file:///C:/Users/Administrator/KnotData/memo/memo.html" // 加载本地HTML文件
+        url: "file:///C:/Users/Administrator/.Knot/memo.html"
+        webChannel: WebChannel {
+            registeredObjects: [helper]
+        }
+
+        // 恢复滚动位置
+        onLoadingChanged: {
+            if (loadRequest.status === WebEngineLoadRequest.LoadSucceededStatus) {
+                // 延迟 500ms 确保内容渲染完成
+                timer.restart()
+            }
+        }
+
+        Timer {
+            id: timer
+            interval: 200
+            onTriggered: {
+                var savedPosition = appSettings.value(strMDFileName, 0)
+                webView.runJavaScript(
+                            "window.scrollTo(0, " + savedPosition + ");")
+            }
+        }
     }
 
     Flickable {

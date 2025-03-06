@@ -146,7 +146,8 @@ class Notes : public QDialog {
 
   bool isSetNewNoteTitle();
 
- protected:
+  void saveWebScrollPos(QString mdfilename);
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

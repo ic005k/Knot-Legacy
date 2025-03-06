@@ -1869,5 +1869,12 @@ void Notes::setWebViewFile(QString htmlfile) {
   QQuickItem *root;
   root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "setWebViewFile",
-                            Q_ARG(QVariant, htmlfile));
+                            Q_ARG(QVariant, htmlfile),
+                            Q_ARG(QVariant, currentMDFile));
+}
+
+void Notes::saveWebScrollPos(QString mdfilename) {
+  QQuickItem *root = mw_one->ui->qwNotes->rootObject();
+  QMetaObject::invokeMethod((QObject *)root, "saveWebScrollPos",
+                            Q_ARG(QVariant, mdfilename));
 }

@@ -87,6 +87,11 @@ int main(int argc, char* argv[]) {
   // 禁用文本选择（针对所有的可输入的编辑框）
   qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
 
+  // 设置应用程序标识（为QML里面使用Settings做准备）
+  app.setOrganizationName("KnotCompany");
+  app.setOrganizationDomain("knotcompany.com");
+  app.setApplicationName("Knot");
+
   QDir dir;
   QString path;
   path = dir.currentPath();
