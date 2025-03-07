@@ -2,6 +2,7 @@
 
 #include "src/MainWindow.h"
 #include "src/Notes/MarkdownHighlighter.h"
+#include "src/md4c/md4c-html.h"
 #include "ui_MainWindow.h"
 #include "ui_Notes.h"
 
@@ -216,27 +217,28 @@ void Notes::on_btnDone_clicked() {
 
 void Notes::MD2Html(QString mdFile) {
   QString htmlFileName = privateDir + "memo.html";
+
+  QString strmd = loadText(mdFile);
+
+  if (strmd.contains("===KnotData===")) {
+    strmd.replace("===KnotData===", imgDir);
+    StringToFile(strmd, currentMDFile);
+  } else
+
+      if (strmd.contains(imgDir)) {
+#ifdef Q_OS_WIN
+    strmd = strmd.replace(imgDir, "/" + iniDir);
+#else
+    strmd = strmd.replace(imgDir, iniDir);
+#endif
+  } else {
+    strmd = strmd.replace("images/", "file://" + iniDir + "memo/images/");
+  }
+
   QFile memofile1(htmlFileName);
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     QTextStream stream(&memofile1);
     QTextEdit *edit = new QTextEdit();
-    QString strmd = loadText(mdFile);
-
-    if (strmd.contains("===KnotData===")) {
-      strmd.replace("===KnotData===", imgDir);
-      StringToFile(strmd, currentMDFile);
-    } else
-
-        if (strmd.contains(imgDir)) {
-#ifdef Q_OS_WIN
-      strmd = strmd.replace(imgDir, "/" + iniDir);
-#else
-      strmd = strmd.replace(imgDir, iniDir);
-#endif
-    } else {
-      strmd = strmd.replace("images/", "file://" + iniDir + "memo/images/");
-    }
-
     edit->setPlainText(strmd);
     edit->document()->setMarkdown(strmd, QTextDocument::MarkdownDialectGitHub);
     stream << edit->toHtml().toUtf8();

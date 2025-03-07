@@ -3753,6 +3753,7 @@ void MainWindow::init_UIWidget() {
 
   ui->btnSetKey->hide();
   ui->btnNotesList->hide();
+  ui->btnWebBack->hide();
 
   ui->editPassword1->setEchoMode(QLineEdit::EchoMode::Password);
   ui->editPassword2->setEchoMode(QLineEdit::EchoMode::Password);

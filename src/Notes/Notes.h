@@ -5,6 +5,8 @@
 #include <QChar>
 #include <QClipboard>
 #include <QMimeData>
+#include <QObject>
+#include <QUrl>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -147,7 +149,8 @@ class Notes : public QDialog {
   bool isSetNewNoteTitle();
 
   void saveWebScrollPos(QString mdfilename);
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;

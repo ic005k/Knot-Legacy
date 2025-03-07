@@ -65,12 +65,17 @@ Item {
 
     function setWebViewFile(htmlfile, currentMDFile) {
         webView.url = Qt.resolvedUrl("file:///" + htmlfile)
+
+        //webView.url = mdHandler.convertMarkdownToHtml(currentMDFile)
         strMDFileName = getFileNameWithoutExtension(currentMDFile)
         console.log("strMDFileName=" + strMDFileName)
+        console.log("url=" + webView.url)
     }
 
     function goBack() {
-        webView.goBack()
+        if (webView.canGoBack) {
+            webView.goBack()
+        }
     }
 
     function saveWebScrollPos(mdFileName) {
@@ -106,19 +111,29 @@ Item {
         category: "WebViewScroll"
     }
 
-    QtObject {
-        id: helper
-        WebChannel.id: "helper"
-        signal domUpdated
-        signal scrollChanged(double position)
-    }
-
     WebEngineView {
         id: webView
         anchors.fill: parent
         url: "file:///C:/Users/Administrator/.Knot/memo.html"
-        webChannel: WebChannel {
-            registeredObjects: [helper]
+
+        // 处理导航请求
+        onNavigationRequested: function (request) {
+            // 判断是否为用户点击链接
+            if (request.navigationType === WebEngineNavigationRequest.LinkClickedNavigation) {
+                console.log("拦截链接:", request.url)
+
+                // 阻止WebEngineView内部处理
+                request.action = WebEngineNavigationRequest.IgnoreRequest
+
+                // 使用第三方处理链接（例如用系统浏览器打开）
+                Qt.openUrlExternally(request.url)
+
+                // 或者调用自定义C++处理函数
+                // externalHandler.handleUrl(request.url);
+            } else {
+                // 允许其他导航（如页面加载、表单提交等）
+                request.action = WebEngineNavigationRequest.AcceptRequest
+            }
         }
 
         // 恢复滚动位置
