@@ -866,6 +866,28 @@ void Notes::loadNoteToQML() {
     edit1->appendPlainText(str);
   }
 
+  QString strEnd = edit1->toPlainText();
+  QString mathjax =
+      R"(<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>)";
+  strEnd = strEnd.replace("<head>", "<head>\n" + mathjax + "\n");
+  QString hljs1 =
+      R"( <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">)";
+  strEnd = strEnd.replace("<head>", "<head>\n" + hljs1 + "\n");
+  QString hljs2 = R"(
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+        });
+    </script>)";
+  strEnd = strEnd.replace("</body>", "\n" + hljs2 + "\n</body>\n");
+
+  edit1->clear();
+  edit1->setPlainText(strEnd);
+
   mw_one->m_Reader->PlainTextEditToFile(edit1, htmlFileName);
 
   // QQuickItem *root = mw_one->ui->qwNotes->rootObject();
