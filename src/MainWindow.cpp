@@ -3496,6 +3496,7 @@ void MainWindow::initQW() {
   ui->qwNoteRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/noterecycle.qml")));
 
+  ui->qwMainTab->setFixedHeight(50);
   ui->qwMainTab->rootContext()->setContextProperty("maintabHeight",
                                                    ui->qwMainTab->height());
   ui->qwMainTab->rootContext()->setContextProperty("mw_one", mw_one);

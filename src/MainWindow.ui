@@ -1434,7 +1434,7 @@ border-radius: 4px;</string>
        <item>
         <widget class="QQuickWidget" name="qwMainTab">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -1442,13 +1442,13 @@ border-radius: 4px;</string>
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>30</height>
+           <height>35</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>50</height>
+           <height>16777215</height>
           </size>
          </property>
          <property name="resizeMode">
@@ -1619,7 +1619,10 @@ border-radius: 4px;</string>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_35">
          <property name="topMargin">
-          <number>0</number>
+          <number>5</number>
+         </property>
+         <property name="bottomMargin">
+          <number>5</number>
          </property>
          <item>
           <widget class="QQuickWidget" name="qwMainDate">

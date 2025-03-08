@@ -1,4 +1,4 @@
-#include "src/Notes/Notes.h"
+﻿#include "src/Notes/Notes.h"
 
 #include "src/MainWindow.h"
 #include "src/Notes/MarkdownHighlighter.h"

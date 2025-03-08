@@ -1,4 +1,4 @@
-#ifndef NOTES_H
+﻿#ifndef NOTES_H
 #define NOTES_H
 
 #include <QApplication>
