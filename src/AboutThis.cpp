@@ -56,7 +56,8 @@ AboutThis::AboutThis(QWidget *parent) : QDialog(parent), ui(new Ui::AboutThis) {
 AboutThis::~AboutThis() { delete ui; }
 
 void AboutThis::on_btnBack_clicked() {
-  mw_one->m_Notes->m_TextSelector->close();
+  if (mw_one->m_Notes->m_TextSelector != NULL)
+    mw_one->m_Notes->m_TextSelector->close();
 
   close();
 }

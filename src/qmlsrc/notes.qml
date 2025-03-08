@@ -66,7 +66,6 @@ Item {
     function setWebViewFile(htmlfile, currentMDFile) {
         webView.url = Qt.resolvedUrl("file:///" + htmlfile)
 
-        //webView.url = mdHandler.convertMarkdownToHtml(currentMDFile)
         strMDFileName = getFileNameWithoutExtension(currentMDFile)
         console.log("strMDFileName=" + strMDFileName)
         console.log("url=" + webView.url)
