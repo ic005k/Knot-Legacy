@@ -27,6 +27,7 @@ android: {
 
 }
 
+
 INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 
 # 强制单线程链接
@@ -122,7 +123,6 @@ SOURCES += \
     src/cmark-gfm/src/iterator.c \
     src/cmark-gfm/src/latex.c \
     src/cmark-gfm/src/linked_list.c \
-    src/cmark-gfm/src/main.c \
     src/cmark-gfm/src/man.c \
     src/cmark-gfm/src/map.c \
     src/cmark-gfm/src/node.c \
@@ -196,33 +196,6 @@ HEADERS += \
     src/SyncInfo.h \
     src/Todo/Todo.h \
     src/Todo/TodoAlarm.h \
-    src/cmark-gfm/extensions/autolink.h \
-    src/cmark-gfm/extensions/cmark-gfm-core-extensions.h \
-    src/cmark-gfm/extensions/ext_scanners.h \
-    src/cmark-gfm/extensions/strikethrough.h \
-    src/cmark-gfm/extensions/table.h \
-    src/cmark-gfm/extensions/tagfilter.h \
-    src/cmark-gfm/extensions/tasklist.h \
-    src/cmark-gfm/src/buffer.h \
-    src/cmark-gfm/src/chunk.h \
-    src/cmark-gfm/src/cmark-gfm-extension_api.h \
-    src/cmark-gfm/src/cmark-gfm.h \
-    src/cmark-gfm/src/cmark_ctype.h \
-    src/cmark-gfm/src/footnotes.h \
-    src/cmark-gfm/src/houdini.h \
-    src/cmark-gfm/src/html.h \
-    src/cmark-gfm/src/inlines.h \
-    src/cmark-gfm/src/iterator.h \
-    src/cmark-gfm/src/map.h \
-    src/cmark-gfm/src/node.h \
-    src/cmark-gfm/src/parser.h \
-    src/cmark-gfm/src/plugin.h \
-    src/cmark-gfm/src/references.h \
-    src/cmark-gfm/src/registry.h \
-    src/cmark-gfm/src/render.h \
-    src/cmark-gfm/src/scanners.h \
-    src/cmark-gfm/src/syntax_extension.h \
-    src/cmark-gfm/src/utf8.h \
     src/components/lib/qtmaterialoverlaywidget.h \
     src/components/lib/qtmaterialripple.h \
     src/components/lib/qtmaterialrippleoverlay.h \
@@ -305,6 +278,8 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/res/xml/qtprovider_paths.xml \
     src/3rdparty/zlib.pri \
+    src/cmark-gfm/src/case_fold_switch.inc \
+    src/cmark-gfm/src/entities.inc \
     src/cn.qm \
     src/cn.ts \
     src/imgview.qml \
