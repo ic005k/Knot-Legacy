@@ -31,14 +31,13 @@ android: {
 INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 
 # 强制单线程链接
-QMAKE_CXXFLAGS += -pthread
-QMAKE_LFLAGS += -Wl,--no-as-needed -pthread
-
-QMAKE_CXXFLAGS_RELEASE += /MT
+#QMAKE_CXXFLAGS += -pthread
+#QMAKE_LFLAGS += -Wl,--no-as-needed -pthread
 
 win32:{
 # 静态库路径（Windows 示例）
 # Windows MSVC
+    #QMAKE_CXXFLAGS_RELEASE += /MT
     #LIBS += $$PWD/lib/cmark-gfm/cmark-gfm_static.lib
     #LIBS += $$PWD/lib/cmark-gfm/cmark-gfm-extensions_static.lib
     # 必须链接 Windows 系统库
