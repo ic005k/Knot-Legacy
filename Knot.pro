@@ -31,6 +31,30 @@ android: {
 
 }
 
+INCLUDEPATH += $$PWD/lib/cmark-gfm/include
+
+# 强制单线程链接
+QMAKE_CXXFLAGS += -pthread
+QMAKE_LFLAGS += -Wl,--no-as-needed -pthread
+
+QMAKE_CXXFLAGS_RELEASE += /MT
+
+win32:{
+# 静态库路径（Windows 示例）
+# Windows MSVC
+    LIBS += $$PWD/lib/cmark-gfm/cmark-gfm_static.lib
+    LIBS += $$PWD/lib/cmark-gfm/cmark-gfm-extensions_static.lib
+    # 必须链接 Windows 系统库
+    LIBS += -ladvapi32 -luserenv
+}
+# Linux/macOS 额外依赖
+unix:!macx: {
+    LIBS += $$PWD/lib/cmark-gfm/linux/libcmark-gfm.a
+    LIBS += -lpthread
+}
+
+
+
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

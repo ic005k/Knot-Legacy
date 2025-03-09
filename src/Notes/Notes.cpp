@@ -1,5 +1,6 @@
 ﻿#include "src/Notes/Notes.h"
 
+#include "cmark_wrapper.h"
 #include "src/MainWindow.h"
 #include "src/Notes/MarkdownHighlighter.h"
 #include "src/md4c/md4c-html.h"
@@ -18,6 +19,9 @@ extern QString loadText(QString textFile);
 extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 extern void StringToFile(QString buffers, QString fileName);
+
+QString markdownToHtml(const QString &markdown, int options);
+QString markdownToHtmlWithMath(const QString &md);
 
 Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
@@ -234,6 +238,12 @@ void Notes::MD2Html(QString mdFile) {
   } else {
     strmd = strmd.replace("images/", "file://" + iniDir + "memo/images/");
   }
+
+  QString htmlString;  // = markdownToHtml(strmd, CMARK_OPT_GITHUB_PRE_LANG);
+  htmlString = markdownToHtmlWithMath(strmd);
+  StringToFile(htmlString, htmlFileName);
+
+  return;
 
   QFile memofile1(htmlFileName);
   if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -1901,4 +1911,66 @@ void Notes::saveWebScrollPos(QString mdfilename) {
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "saveWebScrollPos",
                             Q_ARG(QVariant, mdfilename));
+}
+
+QString markdownToHtml(const QString &markdown, int options) {
+  // 处理空输入
+  if (markdown.isEmpty()) {
+    return QString();
+  }
+
+  // 转换为 UTF-8 字节数组（自动管理内存）
+  QByteArray mdUtf8 = markdown.toUtf8();
+
+  // 执行转换（使用字节数组的实际长度，避免 C 字符串截断问题）
+  char *html_cstr = cmark_markdown_to_html(
+      mdUtf8.constData(),  // 原始数据指针
+      mdUtf8.size(),       // 数据实际长度（重要！不用 strlen）
+      options);
+
+  // 检查转换结果
+  if (!html_cstr) {
+    return QString();  // 返回空表示失败
+  }
+
+  // 转换为 Qt 字符串
+  QString html = QString::fromUtf8(html_cstr);
+
+  // 释放 CMARK 分配的内存
+  free(html_cstr);
+
+  return html;
+}
+
+QString markdownToHtmlWithMath(const QString &md) {
+  QByteArray utf8 = md.toUtf8();
+  const char *text = utf8.constData();
+
+  // 启用 GFM 扩展（如表格）
+  cmark_node *root = cmark_parse_document(
+      text, utf8.size(), CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES);
+
+  // 生成原始 HTML（禁用转义，需检查 CMARK_OPT_ESCAPE 是否关闭）
+  char *html_cstr =
+      cmark_render_html(root, CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES, nullptr);
+  QString html = QString::fromUtf8(html_cstr);
+
+  // 在 HTML 头部插入 MathJax 脚本
+  QString mathjax_script = R"(
+        <script>
+            MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\$', '\$']]
+                }
+            };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    )";
+
+  html = "<html><head>" + mathjax_script + "</head><body>" + html +
+         "</body></html>";
+
+  free(html_cstr);
+  cmark_node_free(root);
+  return html;
 }
