@@ -5,6 +5,8 @@
 #include "src/MainWindow.h"
 #include "src/Notes/MarkdownHighlighter.h"
 #include "src/md4c/md4c-html.h"
+#include "subscript.h"
+#include "superscript.h"
 #include "ui_MainWindow.h"
 #include "ui_Notes.h"
 
@@ -880,11 +882,11 @@ void Notes::loadNoteToQML() {
   QString strEnd = edit1->toPlainText();
   QString mathjax =
       R"(<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>)";
-  strEnd = strEnd.replace("<head>", "<head>\n" + mathjax + "\n");
+  // strEnd = strEnd.replace("<head>", "<head>\n" + mathjax + "\n");
   QString hljs1 =
       R"( <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">)";
-  strEnd = strEnd.replace("<head>", "<head>\n" + hljs1 + "\n");
+  // strEnd = strEnd.replace("<head>", "<head>\n" + hljs1 + "\n");
   QString hljs2 = R"(
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
 
@@ -894,7 +896,7 @@ void Notes::loadNoteToQML() {
             hljs.highlightAll();
         });
     </script>)";
-  strEnd = strEnd.replace("</body>", "\n" + hljs2 + "\n</body>\n");
+  // strEnd = strEnd.replace("</body>", "\n" + hljs2 + "\n</body>\n");
 
   edit1->clear();
   edit1->setPlainText(strEnd);
@@ -1977,7 +1979,7 @@ src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   return html;
 }*/
 
-QString markdownToHtmlWithMath(const QString &md) {
+/*QString markdownToHtmlWithMath(const QString &md) {
   // 初始化扩展
   cmark_gfm_core_extensions_ensure_registered();
 
@@ -2005,7 +2007,8 @@ QString markdownToHtmlWithMath(const QString &md) {
   // 插入样式和脚本
   QString mathjax_script =
       R"(<script>MathJax = { tex: { inlineMath: [['$', '$'] } };</script>
-                              <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>)";
+                              <script
+src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>)";
 
   QString custom_style = R"(
       <style>
@@ -2017,13 +2020,157 @@ QString markdownToHtmlWithMath(const QString &md) {
     )";
 
   QString highlight_js = R"(
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+      <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+      <script
+src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
       <script>hljs.highlightAll();</script>
     )";
 
   html = "<html><head>" + mathjax_script + custom_style + highlight_js +
          "</head><body>" + html + "</body></html>";
+
+  // 清理资源
+  free(html_cstr);
+  cmark_node_free(doc);
+
+  return html;
+}*/
+
+QString markdownToHtmlWithMath(const QString &md) {
+  // 初始化所有 GitHub 扩展
+  cmark_gfm_core_extensions_ensure_registered();
+
+  // 创建解析器并启用关键选项
+  cmark_parser *parser = cmark_parser_new(
+      CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES |  // 表格样式优化
+      CMARK_OPT_UNSAFE                           // 保留原始字符（如 $）
+  );
+
+  // 附加所有需要的扩展
+  const char *extensions[] = {"table", "strikethrough", "tasklist", "autolink",
+                              "tagfilter"};
+  for (const char *ext_name : extensions) {
+    if (cmark_syntax_extension *ext = cmark_find_syntax_extension(ext_name)) {
+      cmark_parser_attach_syntax_extension(parser, ext);
+    }
+  }
+
+  // 解析 Markdown
+  QByteArray utf8 = md.toUtf8();
+  cmark_parser_feed(parser, utf8.constData(), utf8.size());
+  cmark_node *doc = cmark_parser_finish(parser);
+  cmark_parser_free(parser);
+
+  // 渲染 HTML（保留原始内容）
+  char *html_cstr = cmark_render_html(doc, CMARK_OPT_UNSAFE, nullptr);
+  QString html = QString::fromUtf8(html_cstr);
+
+  // 处理转义字符
+  html.replace("\\~", "~");
+  html.replace("\\^", "^");
+
+  // 处理下标（宽松匹配）
+  html.replace(QRegularExpression(R"((?<!\\)~((?:[^~]|\\~)+?)~(?=\S|$)"),
+               "<sub>\\1</sub>");
+  // 处理上标（宽松匹配）
+  html.replace(QRegularExpression(R"((?<!\\)\^((?:[^^]|\\\^)+?)\^(?=\S|$)"),
+               "<sup>\\1</sup>");
+
+  // 插入 MathJax 和语法高亮支持
+  QString mathjax_config = R"(
+        <script>
+            MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']],  // 支持 $...$ 和 \(...\)
+                    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                    processEscapes: true,                      // 允许反斜杠转义
+                    packages: {'[+]': ['base', 'ams', 'newcommand']}
+                },
+                options: {
+                    ignoreHtmlClass: 'tex-ignore',            // 跳过包含此类的元素
+                    processHtmlClass: 'tex-process'           // 指定需要处理的元素
+                },
+                startup: {
+                    typeset: false                            // 稍后手动触发渲染
+                }
+            };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>MathJax.startup.document.state(0); MathJax.startup.defaultReady();</script>
+    )";
+
+  QString highlight_js = R"(
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/vs.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', (event) => {
+                document.querySelectorAll('pre code').forEach((el) => {
+                    hljs.highlightElement(el);
+                });
+                if (typeof MathJax !== 'undefined') {
+                    MathJax.typesetPromise();
+                }
+            });
+        </script>
+    )";
+
+  // 添加 CSS 样式（表格边框、代码块背景等）
+  QString custom_css = R"(
+        <style>
+            table {
+                border-collapse: collapse;
+                margin: 1em 0;
+                border: 1px solid #dee2e6;
+            }
+            th, td {
+                padding: 0.75em;
+                border: 1px solid #dee2e6;
+            }
+            th {
+                background-color: #f8f9fa;
+                font-weight: 600;
+            }
+            pre code {
+                display: block;
+                padding: 1em;
+                background: #f8f9fa;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+            .tex-process {
+                color: #d63384; /* 数学公式预览颜色 */
+            }
+            code { /* 新增行内代码样式 */
+                background: #f8f9fa;
+                padding: 0.2em 0.4em;
+                border-radius: 3px;
+                font-family: monospace;
+            }
+            pre code { /* 保持代码块样式 */ }
+            code { /* 行内代码样式 */ }
+            /* 下标强制样式 */
+            sub {
+                vertical-align: sub !important;
+                font-size: 0.75em;
+                bottom: -0.25em;
+                position: relative;
+                line-height: 0;
+            }
+            /* 防止代码块样式干扰 */
+            pre code sub {
+                vertical-align: sub !important;
+                background: transparent !important;
+            }
+        </style>
+    )";
+
+  // 组合完整 HTML
+  html =
+      "<!DOCTYPE html><html><head>"
+      "<meta charset='utf-8'>" +
+      mathjax_config + highlight_js + custom_css + "</head><body>" + html +
+      "</body></html>";
 
   // 清理资源
   free(html_cstr);
