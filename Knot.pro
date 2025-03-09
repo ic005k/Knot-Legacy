@@ -22,10 +22,6 @@ RC_FILE +=win.rc
 
 include($$PWD/src/3rdparty/zlib.pri)
 
-unix:!macx:{
-
-}
-
 android: {
     lessThan(QT_MAJOR_VERSION, 6):QT += androidextras
 
@@ -42,15 +38,15 @@ QMAKE_CXXFLAGS_RELEASE += /MT
 win32:{
 # 静态库路径（Windows 示例）
 # Windows MSVC
-    LIBS += $$PWD/lib/cmark-gfm/cmark-gfm_static.lib
-    LIBS += $$PWD/lib/cmark-gfm/cmark-gfm-extensions_static.lib
+    #LIBS += $$PWD/lib/cmark-gfm/cmark-gfm_static.lib
+    #LIBS += $$PWD/lib/cmark-gfm/cmark-gfm-extensions_static.lib
     # 必须链接 Windows 系统库
-    LIBS += -ladvapi32 -luserenv
+    #LIBS += -ladvapi32 -luserenv
 }
-# Linux/macOS 额外依赖
+# Linux额外依赖
 unix:!macx: {
-    LIBS += $$PWD/lib/cmark-gfm/linux/libcmark-gfm.a
-    LIBS += -lpthread
+    #LIBS += $$PWD/lib/cmark-gfm/linux/libcmark-gfm.a
+    #LIBS += -lpthread
 }
 
 
@@ -104,6 +100,41 @@ SOURCES += \
     src/SyncInfo.cpp \
     src/Todo/Todo.cpp \
     src/Todo/TodoAlarm.cpp \
+    src/cmark-gfm/extensions/autolink.c \
+    src/cmark-gfm/extensions/core-extensions.c \
+    src/cmark-gfm/extensions/ext_scanners.c \
+    src/cmark-gfm/extensions/strikethrough.c \
+    src/cmark-gfm/extensions/table.c \
+    src/cmark-gfm/extensions/tagfilter.c \
+    src/cmark-gfm/extensions/tasklist.c \
+    src/cmark-gfm/src/arena.c \
+    src/cmark-gfm/src/blocks.c \
+    src/cmark-gfm/src/buffer.c \
+    src/cmark-gfm/src/cmark.c \
+    src/cmark-gfm/src/cmark_ctype.c \
+    src/cmark-gfm/src/commonmark.c \
+    src/cmark-gfm/src/footnotes.c \
+    src/cmark-gfm/src/houdini_href_e.c \
+    src/cmark-gfm/src/houdini_html_e.c \
+    src/cmark-gfm/src/houdini_html_u.c \
+    src/cmark-gfm/src/html.c \
+    src/cmark-gfm/src/inlines.c \
+    src/cmark-gfm/src/iterator.c \
+    src/cmark-gfm/src/latex.c \
+    src/cmark-gfm/src/linked_list.c \
+    src/cmark-gfm/src/main.c \
+    src/cmark-gfm/src/man.c \
+    src/cmark-gfm/src/map.c \
+    src/cmark-gfm/src/node.c \
+    src/cmark-gfm/src/plaintext.c \
+    src/cmark-gfm/src/plugin.c \
+    src/cmark-gfm/src/references.c \
+    src/cmark-gfm/src/registry.c \
+    src/cmark-gfm/src/render.c \
+    src/cmark-gfm/src/scanners.c \
+    src/cmark-gfm/src/syntax_extension.c \
+    src/cmark-gfm/src/utf8.c \
+    src/cmark-gfm/src/xml.c \
     src/components/lib/qtmaterialoverlaywidget.cpp \
     src/components/lib/qtmaterialripple.cpp \
     src/components/lib/qtmaterialrippleoverlay.cpp \
@@ -165,6 +196,33 @@ HEADERS += \
     src/SyncInfo.h \
     src/Todo/Todo.h \
     src/Todo/TodoAlarm.h \
+    src/cmark-gfm/extensions/autolink.h \
+    src/cmark-gfm/extensions/cmark-gfm-core-extensions.h \
+    src/cmark-gfm/extensions/ext_scanners.h \
+    src/cmark-gfm/extensions/strikethrough.h \
+    src/cmark-gfm/extensions/table.h \
+    src/cmark-gfm/extensions/tagfilter.h \
+    src/cmark-gfm/extensions/tasklist.h \
+    src/cmark-gfm/src/buffer.h \
+    src/cmark-gfm/src/chunk.h \
+    src/cmark-gfm/src/cmark-gfm-extension_api.h \
+    src/cmark-gfm/src/cmark-gfm.h \
+    src/cmark-gfm/src/cmark_ctype.h \
+    src/cmark-gfm/src/footnotes.h \
+    src/cmark-gfm/src/houdini.h \
+    src/cmark-gfm/src/html.h \
+    src/cmark-gfm/src/inlines.h \
+    src/cmark-gfm/src/iterator.h \
+    src/cmark-gfm/src/map.h \
+    src/cmark-gfm/src/node.h \
+    src/cmark-gfm/src/parser.h \
+    src/cmark-gfm/src/plugin.h \
+    src/cmark-gfm/src/references.h \
+    src/cmark-gfm/src/registry.h \
+    src/cmark-gfm/src/render.h \
+    src/cmark-gfm/src/scanners.h \
+    src/cmark-gfm/src/syntax_extension.h \
+    src/cmark-gfm/src/utf8.h \
     src/components/lib/qtmaterialoverlaywidget.h \
     src/components/lib/qtmaterialripple.h \
     src/components/lib/qtmaterialrippleoverlay.h \
