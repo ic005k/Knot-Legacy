@@ -1,4 +1,4 @@
-#include "NotesList.h"
+﻿#include "NotesList.h"
 
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
@@ -1769,9 +1769,9 @@ void NotesList::on_actionAdd_Note_triggered() {
   if (notebookIndex < 0) return;
 
   bool ok = false;
-  QString text;
+  QString text = "";
 
-  QInputDialog *idlg =
+  /*QInputDialog *idlg =
       m_Method->inputDialog(tr("New Note"), tr("New Note Name"), "");
 
   if (QDialog::Accepted == idlg->exec()) {
@@ -1781,11 +1781,13 @@ void NotesList::on_actionAdd_Note_triggered() {
   } else {
     idlg->close();
     return;
-  }
+  }*/
 
+  ok = true;
   if (ok) {
     tw->setCurrentItem(pNoteBookItems.at(notebookIndex));
     ui->editNote->setText(text);
+
     on_btnNewNote_clicked();
 
     QTreeWidgetItem *childItem = tw->currentItem();
@@ -1794,8 +1796,8 @@ void NotesList::on_actionAdd_Note_triggered() {
 
     int count = getNotesListCount();
     setNotesListCurrentIndex(count - 1);
-    clickNoteList();
 
+    clickNoteList();
     mw_one->on_btnEditNote_clicked();
   }
 

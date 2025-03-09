@@ -4822,9 +4822,6 @@ void MainWindow::on_btnEdit_clicked() {
     return;
   }
 
-  m_Notes->saveQMLVPos();
-  QString mdString = loadText(currentMDFile);
-
   if (isAndroid) {
     m_Method->setMDFile(currentMDFile);
     m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",
@@ -4835,6 +4832,9 @@ void MainWindow::on_btnEdit_clicked() {
   }
 
   isSelf = true;
+
+  m_Notes->saveQMLVPos();
+  QString mdString = loadText(currentMDFile);
 
   m_Notes->m_TextSelector->close();
   delete m_Notes->m_TextSelector;
@@ -6166,10 +6166,6 @@ void MainWindow::on_btnOpenNote_clicked() {
 
     return;
   } else {
-    // QString filePath = privateDir + "memo.html";
-    // QUrl url = QUrl::fromLocalFile(filePath);
-    // QDesktopServices::openUrl(url);
-
     ui->frameNoteList->hide();
     ui->frameNotes->show();
     m_NotesList->setCurrentItemFromMDFile(currentMDFile);

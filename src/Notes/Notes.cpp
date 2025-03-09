@@ -242,7 +242,7 @@ void Notes::MD2Html(QString mdFile) {
     strmd = strmd.replace("images/", "file://" + iniDir + "memo/images/");
   }
 
-  QString htmlString;  // = markdownToHtml(strmd, CMARK_OPT_GITHUB_PRE_LANG);
+  QString htmlString;
   htmlString = markdownToHtmlWithMath(strmd);
   StringToFile(htmlString, htmlFileName);
 
@@ -1945,98 +1945,6 @@ QString markdownToHtml(const QString &markdown, int options) {
   return html;
 }
 
-/*QString markdownToHtmlWithMath(const QString &md) {
-  QByteArray utf8 = md.toUtf8();
-  const char *text = utf8.constData();
-
-  // 启用 GFM 扩展（如表格）
-  cmark_node *root = cmark_parse_document(
-      text, utf8.size(), CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES);
-
-  // 生成原始 HTML（禁用转义，需检查 CMARK_OPT_ESCAPE 是否关闭）
-  char *html_cstr =
-      cmark_render_html(root, CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES, nullptr);
-  QString html = QString::fromUtf8(html_cstr);
-
-  // 在 HTML 头部插入 MathJax 脚本
-  QString mathjax_script = R"(
-        <script>
-            MathJax = {
-                tex: {
-                    inlineMath: [['$', '$'], ['\$', '\$']]
-                }
-            };
-        </script>
-        <script
-src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    )";
-
-  html = "<html><head>" + mathjax_script + "</head><body>" + html +
-         "</body></html>";
-
-  free(html_cstr);
-  cmark_node_free(root);
-  return html;
-}*/
-
-/*QString markdownToHtmlWithMath(const QString &md) {
-  // 初始化扩展
-  cmark_gfm_core_extensions_ensure_registered();
-
-  // 创建解析器并附加扩展
-  cmark_parser *parser = cmark_parser_new(
-      CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES | CMARK_OPT_UNSAFE);
-  const char *extensions[] = {"table", "strikethrough", "tasklist", "autolink",
-                              "tagfilter"};
-  for (const char *ext_name : extensions) {
-    cmark_syntax_extension *ext = cmark_find_syntax_extension(ext_name);
-    if (ext) cmark_parser_attach_syntax_extension(parser, ext);
-  }
-
-  // 解析内容
-  QByteArray utf8 = md.toUtf8();
-  cmark_parser_feed(parser, utf8.constData(), utf8.size());
-  cmark_node *doc = cmark_parser_finish(parser);
-  cmark_parser_free(parser);
-
-  // 渲染 HTML
-  char *html_cstr = cmark_render_html(
-      doc, CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES | CMARK_OPT_UNSAFE, nullptr);
-  QString html = QString::fromUtf8(html_cstr);
-
-  // 插入样式和脚本
-  QString mathjax_script =
-      R"(<script>MathJax = { tex: { inlineMath: [['$', '$'] } };</script>
-                              <script
-src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>)";
-
-  QString custom_style = R"(
-      <style>
-        table { border-collapse: collapse; margin: 1em 0; }
-        th, td { border: 1px solid #ddd; padding: 8px; }
-        th { background-color: #f2f2f2; }
-        pre code { background: #f8f8f8; padding: 1em; border-radius: 4px; }
-      </style>
-    )";
-
-  QString highlight_js = R"(
-      <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-      <script
-src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-      <script>hljs.highlightAll();</script>
-    )";
-
-  html = "<html><head>" + mathjax_script + custom_style + highlight_js +
-         "</head><body>" + html + "</body></html>";
-
-  // 清理资源
-  free(html_cstr);
-  cmark_node_free(doc);
-
-  return html;
-}*/
-
 QString markdownToHtmlWithMath(const QString &md) {
   // 初始化所有 GitHub 扩展
   cmark_gfm_core_extensions_ensure_registered();
@@ -2070,11 +1978,10 @@ QString markdownToHtmlWithMath(const QString &md) {
   html.replace("\\~", "~");
   html.replace("\\^", "^");
 
-  // 处理下标（宽松匹配）
-  html.replace(QRegularExpression(R"((?<!\\)~((?:[^~]|\\~)+?)~(?=\S|$)"),
-               "<sub>\\1</sub>");
-  // 处理上标（宽松匹配）
-  html.replace(QRegularExpression(R"((?<!\\)\^((?:[^^]|\\\^)+?)\^(?=\S|$)"),
+  // 处理下标
+  html.replace(QRegularExpression(R"((?<!\\)~([^~]|\\~)+~)"), "<sub>\\1</sub>");
+  // 处理上标
+  html.replace(QRegularExpression(R"((?<!\\)\^([^^]|\\\^)+\^)"),
                "<sup>\\1</sup>");
 
   // 插入 MathJax 和语法高亮支持
@@ -2149,18 +2056,13 @@ QString markdownToHtmlWithMath(const QString &md) {
             }
             pre code { /* 保持代码块样式 */ }
             code { /* 行内代码样式 */ }
-            /* 下标强制样式 */
-            sub {
-                vertical-align: sub !important;
-                font-size: 0.75em;
-                bottom: -0.25em;
-                position: relative;
-                line-height: 0;
+            sup {
+                vertical-align: super;
+                font-size: smaller;
             }
-            /* 防止代码块样式干扰 */
-            pre code sub {
-                vertical-align: sub !important;
-                background: transparent !important;
+            sub {
+                vertical-align: sub;
+                font-size: smaller;
             }
         </style>
     )";
