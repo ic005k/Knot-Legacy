@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>698</width>
-    <height>9113</height>
+    <height>9456</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -2400,6 +2400,43 @@ QTabBar::scroller {width:0}
            <number>0</number>
           </property>
           <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_73">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>OneDrive :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="chkOneDrive">
+              <property name="text">
+               <string>Default</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
              <widget class="QToolButton" name="btnSignIn">
@@ -2555,7 +2592,7 @@ QTabBar::scroller {width:0}
                </size>
               </property>
               <property name="text">
-               <string>Upload</string>
+               <string>Backup</string>
               </property>
              </widget>
             </item>
@@ -2580,7 +2617,7 @@ QTabBar::scroller {width:0}
                </size>
               </property>
               <property name="text">
-               <string>Download</string>
+               <string>Restore</string>
               </property>
              </widget>
             </item>
@@ -2593,22 +2630,6 @@ QTabBar::scroller {width:0}
         <widget class="QQuickWidget" name="qwOneDriver">
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>0</number>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="textDirection">
-          <enum>QProgressBar::TopToBottom</enum>
          </property>
         </widget>
        </item>
@@ -2724,6 +2745,163 @@ QTabBar::scroller {width:0}
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="f_WebDAV">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_47">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_72">
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>WebDAV :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="chkWebDAV">
+              <property name="text">
+               <string>Default</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_68">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>WebDAV</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="editWebDAV">
+              <property name="text">
+               <string>https://dav.jianguoyun.com/dav/</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_69">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>UserName</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="editWebDAVUsername"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_70">
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>password</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="editWebDAVPassword"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_71">
+            <item>
+             <widget class="QToolButton" name="btnWebDAVBackup">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Backup</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnWebDAVRestore">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Restore</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="textDirection">
+          <enum>QProgressBar::TopToBottom</enum>
+         </property>
         </widget>
        </item>
        <item>

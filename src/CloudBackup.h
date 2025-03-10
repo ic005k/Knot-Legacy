@@ -1,4 +1,4 @@
-#ifndef CLOUDBACKUP_H
+﻿#ifndef CLOUDBACKUP_H
 #define CLOUDBACKUP_H
 
 #include <QDialog>
@@ -28,7 +28,13 @@ class CloudBackup : public QDialog {
   void loadText(QString str);
 
   void uploadData();
- signals:
+
+  void uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
+                          QString remoteFileName);
+  void createDirectory(QString webdavUrl, QString remoteDirPath);
+  void startBakData();
+  void downloadFile(QString remoteFileName, QString localSavePath);
+  signals:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
@@ -58,9 +64,16 @@ class CloudBackup : public QDialog {
 
   void on_btnBack_clicked();
 
+ private slots:
+  void updateUploadProgress(qint64 bytesSent, qint64 bytesTotal);
+
  private:
   QtOneDrive *oneDrive = nullptr;
   QString initUserInfo(QString info);
+
+  QString WEBDAV_URL = "";
+  QString USERNAME = "";
+  QString APP_PASSWORD = "";
 };
 
 #endif  // CLOUDBACKUP_H

@@ -1,4 +1,4 @@
-#include "qtonedrive.h"
+﻿#include "qtonedrive.h"
 
 #include <QCoreApplication>
 #include <QCryptographicHash>

@@ -1,4 +1,4 @@
-#include "CloudBackup.h"
+﻿#include "CloudBackup.h"
 
 #include <QFile>
 #include <QFileDialog>
@@ -313,8 +313,18 @@ void CloudBackup::uploadData() {
           2))
     return;
 
-  oneDrive->uploadFile(zipfile, "memo.zip",
-                       ui->lineEdit_fileID->text().trimmed());
+  if (mw_one->ui->chkOneDrive->isChecked())
+    oneDrive->uploadFile(zipfile, "memo.zip",
+                         ui->lineEdit_fileID->text().trimmed());
+
+  if (mw_one->ui->chkWebDAV->isChecked()) {
+    QString url = mw_one->ui->editWebDAV->text().trimmed();
+    USERNAME = mw_one->ui->editWebDAVUsername->text().trimmed();
+    APP_PASSWORD = mw_one->ui->editWebDAVPassword->text().trimmed();
+    QString file = iniDir + "memo.zip";
+    createDirectory(url, "Knot/");
+    uploadFileToWebDAV(url, file, "Knot/memo.zip");
+  }
 }
 
 void CloudBackup::on_pushButton_storageInfo_clicked() {
@@ -358,4 +368,182 @@ int CloudBackup::getProg() {
   QMetaObject::invokeMethod((QObject *)root, "getPorg",
                             Q_RETURN_ARG(QVariant, itemCount));
   return itemCount.toInt();
+}
+
+void CloudBackup::startBakData() {
+  zipfile = iniDir + "memo.zip";
+
+  isUpData = true;
+  mw_one->showProgress();
+
+  mw_one->ui->progressBar->setValue(0);
+  mw_one->ui->progBar->show();
+  mw_one->ui->progBar->setMaximum(100);
+  mw_one->ui->progBar->setMinimum(0);
+  mw_one->ui->progBar->setValue(0);
+
+  mw_one->myBakDataThread->start();
+}
+
+// 上传文件到坚果云
+void CloudBackup::uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
+                                     QString remoteFileName) {
+  QNetworkAccessManager *manager = new QNetworkAccessManager();
+  QUrl url(webdavUrl + remoteFileName);
+  QNetworkRequest request(url);
+
+  // 认证头
+  QString auth = USERNAME + ":" + APP_PASSWORD;
+  request.setRawHeader("Authorization", "Basic " + auth.toUtf8().toBase64());
+
+  // 调试输出
+  qDebug() << "上传URL：" << url.toString();
+  qDebug() << "认证头：" << request.rawHeader("Authorization");
+
+  QFile *file = new QFile(localFilePath);
+  if (!file->open(QIODevice::ReadOnly)) {
+    qDebug() << "无法打开本地文件：" << localFilePath;
+    delete manager;
+    delete file;
+    return;
+  }
+
+  mw_one->ui->progBar->show();
+  mw_one->ui->progBar->setValue(0);
+  mw_one->ui->progressBar->setValue(0);
+
+  QNetworkReply *reply = manager->put(request, file);
+
+  connect(reply, &QNetworkReply::uploadProgress, this,
+          &CloudBackup::updateUploadProgress);
+
+  QObject::connect(reply, &QNetworkReply::finished, [=]() {
+    qDebug()
+        << "HTTP状态码："
+        << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if (reply->error() == QNetworkReply::NoError) {
+      qDebug() << "上传成功！";
+
+      ShowMessage *m_ShowMsg = new ShowMessage(this);
+      m_ShowMsg->showMsg(
+          "WebDAV",
+          QString(tr("Success Upload File:") + "\n\nPath: %1\n\nID: %2" +
+                  "\n\n" + QDateTime::currentDateTime().toString())
+              .arg(localFilePath, webdavUrl + remoteFileName),
+          1);
+      mw_one->ui->progBar->hide();
+
+    } else {
+      qDebug() << "上传失败：" << reply->errorString();
+      qDebug() << "服务器响应：" << reply->readAll();
+    }
+    file->close();
+    reply->deleteLater();
+    manager->deleteLater();
+  });
+}
+
+void CloudBackup::updateUploadProgress(qint64 bytesSent, qint64 bytesTotal) {
+  if (bytesTotal > 0) {
+    int percent = static_cast<int>((bytesSent * 100) / bytesTotal);
+    mw_one->ui->progBar->setValue(percent);
+    mw_one->ui->progressBar->setValue(percent);
+  }
+}
+
+void CloudBackup::createDirectory(QString webdavUrl, QString remoteDirPath) {
+  QNetworkAccessManager manager;
+  QEventLoop loop;
+  QUrl url(webdavUrl + remoteDirPath);
+  QNetworkRequest request(url);
+
+  // 认证头
+  QString auth = USERNAME + ":" + APP_PASSWORD;
+  request.setRawHeader("Authorization", "Basic " + auth.toUtf8().toBase64());
+  // request.setRawHeader("Authorization", getAuthHeader().toUtf8());
+
+  QNetworkReply *reply = manager.sendCustomRequest(request, "MKCOL");
+
+  QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+  loop.exec();  // 阻塞直到请求完成
+
+  int statusCode =
+      reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+  if (statusCode == 201 || statusCode == 405) {  // 405表示目录已存在
+    qDebug() << "目录已就绪:" << remoteDirPath;
+  } else {
+    qDebug() << "目录创建失败，状态码:" << statusCode;
+  }
+
+  delete reply;
+}
+
+void CloudBackup::downloadFile(QString remoteFileName, QString localSavePath) {
+  QNetworkAccessManager *manager = new QNetworkAccessManager();
+
+  // 构造完整WebDAV文件路径
+  QUrl url(WEBDAV_URL + remoteFileName);
+  QNetworkRequest request(url);
+
+  // 设置认证头
+  QString auth = USERNAME + ":" + APP_PASSWORD;
+  request.setRawHeader("Authorization", "Basic " + auth.toUtf8().toBase64());
+
+  // 创建本地文件
+  QFile *localFile = new QFile(localSavePath);
+  if (!localFile->open(QIODevice::WriteOnly)) {
+    qDebug() << "无法创建本地文件：" << localSavePath;
+    delete manager;
+    delete localFile;
+    return;
+  }
+
+  // 发送GET请求
+  QNetworkReply *reply = manager->get(request);
+
+  // 连接信号槽
+  QObject::connect(reply, &QNetworkReply::readyRead, [=]() {
+    // 实时写入数据（适合大文件分块传输）
+    if (reply->bytesAvailable() > 0) {
+      localFile->write(reply->readAll());
+    }
+  });
+
+  QObject::connect(reply, &QNetworkReply::downloadProgress,
+                   [](qint64 bytesReceived, qint64 bytesTotal) {
+                     qDebug()
+                         << "下载进度：" << bytesReceived << "/" << bytesTotal;
+                   });
+
+  QObject::connect(reply, &QNetworkReply::finished, [=]() {
+    // 检查HTTP状态码
+    const int statusCode =
+        reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    if (reply->error() == QNetworkReply::NoError && statusCode >= 200 &&
+        statusCode < 300) {
+      // 确保写入最后的数据块
+      if (reply->bytesAvailable() > 0) {
+        localFile->write(reply->readAll());
+      }
+      qDebug() << "下载完成，保存至：" << localSavePath;
+    } else {
+      qDebug() << "下载失败 - HTTP状态码：" << statusCode << "，错误信息："
+               << reply->errorString();
+      localFile->remove();  // 删除不完整的文件
+    }
+
+    // 清理资源
+    localFile->close();
+    reply->deleteLater();
+    manager->deleteLater();
+    delete localFile;
+  });
+
+  // 错误处理
+  QObject::connect(
+      reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+      [=](QNetworkReply::NetworkError code) {
+        qDebug() << "网络错误：" << code << "-" << reply->errorString();
+      });
 }

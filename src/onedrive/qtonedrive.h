@@ -1,4 +1,4 @@
-#ifndef QTONEDRIVE_H
+﻿#ifndef QTONEDRIVE_H
 #define QTONEDRIVE_H
 
 #include <QDateTime>

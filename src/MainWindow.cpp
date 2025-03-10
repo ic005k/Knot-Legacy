@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.12";
+QString ver = "1.2.13";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3757,8 +3757,12 @@ void MainWindow::init_UIWidget() {
   ui->btnWebBack->hide();
   ui->btnRecentOpen0->hide();
 
+  ui->chkOneDrive->setStyleSheet(m_Preferences->chkStyle);
+  ui->chkWebDAV->setStyleSheet(m_Preferences->chkStyle);
+
   ui->editPassword1->setEchoMode(QLineEdit::EchoMode::Password);
   ui->editPassword2->setEchoMode(QLineEdit::EchoMode::Password);
+  ui->editWebDAVPassword->setEchoMode(QLineEdit::EchoMode::Password);
 
   this->installEventFilter(this);
   ui->textBrowser->installEventFilter(this);
@@ -4171,6 +4175,19 @@ void MainWindow::on_openKnotBakDir() {
 
 void MainWindow::on_actionOneDriveBackupData() {
   floatfun = false;
+
+  ui->editWebDAV->setText(
+      iniPreferences->value("/webdav/url", "https://dav.jianguoyun.com/dav/")
+          .toString());
+  ui->editWebDAVUsername->setText(
+      iniPreferences->value("/webdav/username").toString());
+  ui->editWebDAVPassword->setText(
+      iniPreferences->value("/webdav/password").toString());
+
+  ui->chkOneDrive->setChecked(
+      iniPreferences->value("/cloudbak/onedrive", 0).toBool());
+  ui->chkWebDAV->setChecked(
+      iniPreferences->value("/cloudbak/webdav", 1).toBool());
 
   ui->frameMain->hide();
   ui->frameReader->hide();
@@ -4725,6 +4742,15 @@ void MainWindow::on_btnBack_One_clicked() {
       ui->frameMain->show();
     }
   }
+
+  iniPreferences->setValue("/webdav/url", ui->editWebDAV->text().trimmed());
+  iniPreferences->setValue("/webdav/username",
+                           ui->editWebDAVUsername->text().trimmed());
+  iniPreferences->setValue("/webdav/password",
+                           ui->editWebDAVPassword->text().trimmed());
+
+  iniPreferences->setValue("/cloudbak/onedrive", ui->chkOneDrive->isChecked());
+  iniPreferences->setValue("/cloudbak/webdav", ui->chkWebDAV->isChecked());
 }
 
 void MainWindow::on_btnRefreshToken_clicked() {
@@ -6184,4 +6210,22 @@ void MainWindow::on_btnRecentOpen0_clicked() { on_btnRecentOpen_clicked(); }
 void MainWindow::on_btnWebBack_clicked() {
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "goBack");
+}
+
+void MainWindow::on_btnWebDAVBackup_clicked() { m_CloudBackup->startBakData(); }
+
+void MainWindow::on_btnWebDAVRestore_clicked() {}
+
+void MainWindow::on_chkWebDAV_clicked() {
+  if (ui->chkWebDAV->isChecked())
+    ui->chkOneDrive->setChecked(false);
+  else
+    ui->chkOneDrive->setChecked(true);
+}
+
+void MainWindow::on_chkOneDrive_clicked() {
+  if (ui->chkOneDrive->isChecked())
+    ui->chkWebDAV->setChecked(false);
+  else
+    ui->chkWebDAV->setChecked(true);
 }

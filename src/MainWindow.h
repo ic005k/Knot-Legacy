@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <qmath.h>
@@ -815,6 +815,14 @@ class MainWindow : public QMainWindow {
   void on_btnRecentOpen0_clicked();
 
   void on_btnWebBack_clicked();
+
+  void on_btnWebDAVBackup_clicked();
+
+  void on_btnWebDAVRestore_clicked();
+
+  void on_chkWebDAV_clicked();
+
+  void on_chkOneDrive_clicked();
 
  private:
   bool isMoveEntry;
