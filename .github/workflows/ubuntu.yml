@@ -50,6 +50,7 @@ jobs:
          
          sudo add-apt-repository universe
          sudo apt install libfuse2
+         sudo apt-get install libsecret-1-dev
                                     
       - uses: actions/checkout@v2
         with:
