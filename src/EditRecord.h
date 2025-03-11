@@ -1,4 +1,4 @@
-#ifndef EDITRECORD_H
+﻿#ifndef EDITRECORD_H
 #define EDITRECORD_H
 
 #include <QCompleter>
@@ -27,7 +27,7 @@ class EditRecord : public QDialog {
       "QLabel{background: rgb(45,182,116); color:white;}";
   static int removeDuplicates(QStringList *that);
 
-  void init_Desc();
+  void init_MyCategory();
 
   void getTime(int h, int m);
 

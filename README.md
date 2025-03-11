@@ -69,8 +69,8 @@
 * [AndroidPdfViewerDemo](https://github.com/qxcwanxss/AndroidPdfViewerDemo)
 * [Markwon](https://github.com/noties/Markwon)
 * [Prism4j](https://github.com/noties/Prism4j)
-* [cmark-gfm](https://github.com/github/cmark-gfm)
-* [qtkeychain](https://github.com/frankosterfeld/qtkeychain)
+* [cmark-gfm](https://github.com/github/cmark-gfm)
+* [Qt-AES](https://github.com/bricke/Qt-AES)
 
 ---
 

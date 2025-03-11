@@ -1,4 +1,4 @@
-#include "EditRecord.h"
+﻿#include "EditRecord.h"
 
 #include <QKeyEvent>
 
@@ -199,7 +199,7 @@ void EditRecord::on_btnCustom_clicked() {
   this->hide();
   mw_one->ui->frameEditRecord->hide();
   mw_one->ui->frameCategory->show();
-  init_Desc();
+  init_MyCategory();
   m_CategoryList->ui->listWidget->setCurrentRow(0);
   m_Method->setCurrentIndexFromQW(mw_one->ui->qwCategory, 0);
   m_Method->setTypeRenameText();
@@ -218,7 +218,7 @@ void EditRecord::on_btnCustom_clicked() {
   m_CategoryList->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), w,
                               h);
 
-  init_Desc();
+  init_MyCategory();
   m_CategoryList->ui->listWidget->setFocus();
   if (m_CategoryList->ui->listWidget->count() > 0)
     m_CategoryList->ui->listWidget->setCurrentRow(0);
@@ -278,7 +278,7 @@ int EditRecord::removeDuplicates(QStringList *that) {
   return n - j;
 }
 
-void EditRecord::init_Desc() {
+void EditRecord::init_MyCategory() {
   // Custom Desc
   QString ini_file;
 

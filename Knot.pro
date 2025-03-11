@@ -3,6 +3,10 @@ QT += charts sensors
 QT += qml quick quickwidgets webview positioning location
 QT += xml svg
 
+win32 {
+    QMAKE_CFLAGS += /utf-8
+    QMAKE_CXXFLAGS += /utf-8
+}
 
 !android: {
     QT += webenginewidgets
@@ -334,4 +338,7 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 #Linux
 
 android: include(C:/Users/Administrator/Documents/android_openssl-master/openssl.pri)
-android: include(/home/zh/文档/android_openssl-master/openssl.pri)
+
+unix:!macx: {
+    android: include(/home/zh/文档/android_openssl-master/openssl.pri)
+}

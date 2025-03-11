@@ -20,7 +20,7 @@ extern Method *m_Method;
 extern QString iniFile, iniDir, zipfile;
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern bool isUpData;
-extern bool isZipOK, isMenuImport, isTimeMachine, isDownData;
+extern bool isZipOK, isMenuImport, isDownData;
 
 CloudBackup::CloudBackup(QWidget *parent)
     : QDialog(parent), ui(new Ui::CloudBackup) {
@@ -563,7 +563,7 @@ void CloudBackup::downloadFile(QString remoteFileName, QString localSavePath) {
               mw_one->showProgress();
 
               isMenuImport = false;
-              isTimeMachine = false;
+
               isDownData = true;
               mw_one->myImportDataThread->start();
 

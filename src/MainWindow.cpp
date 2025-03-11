@@ -10,8 +10,7 @@ QString ver = "1.2.13";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
-bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isTimeMachine,
-    isDownData;
+bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isDownData;
 
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
@@ -113,8 +112,6 @@ void ImportDataThread::run() {
   if (isMenuImport || isDownData)
     mw_one->importBakData(zipfile, true, false, false);
 
-  if (isTimeMachine) mw_one->importBakData(zipfile, true, false, true);
-
   emit isDone();
 }
 
@@ -144,9 +141,6 @@ void MainWindow::importDataDone() {
   }
 
   closeProgress();
-
-  if (isTimeMachine) {
-  }
 
   if (isMenuImport) {
     if (!isZipOK) {
@@ -752,7 +746,7 @@ void MainWindow::init_TotalData() {
     ui->tabWidget->setTabToolTip(0, "");
   }
 
-  m_EditRecord->init_Desc();
+  m_EditRecord->init_MyCategory();
 
   m_Steps->init_Steps();
   m_Steps->saveSteps();
@@ -2787,7 +2781,7 @@ void MainWindow::on_actionImport_Data_triggered() {
   showProgress();
 
   isMenuImport = true;
-  isTimeMachine = false;
+
   isDownData = false;
   myImportDataThread->start();
 }
@@ -5464,7 +5458,7 @@ void MainWindow::on_btnImportBakList_clicked() {
   showProgress();
 
   isMenuImport = false;
-  isTimeMachine = true;
+
   isDownData = false;
   myImportDataThread->start();
 }
@@ -6185,6 +6179,8 @@ void MainWindow::on_rbRunning_clicked() {
 }
 
 void MainWindow::on_btnOpenNote_clicked() {
+  if (!QFile::exists(currentMDFile)) return;
+
   if (isAndroid) {
     m_Method->setMDTitle(ui->lblNoteName->text());
 
@@ -6208,7 +6204,10 @@ void MainWindow::on_btnEditNote_clicked() {
   m_NotesList->setCurrentItemFromMDFile(currentMDFile);
 }
 
-void MainWindow::on_btnToPDF_clicked() { ui->btnPDF->click(); }
+void MainWindow::on_btnToPDF_clicked() {
+  if (!QFile::exists(currentMDFile)) return;
+  ui->btnPDF->click();
+}
 
 void MainWindow::on_btnRecentOpen0_clicked() { on_btnRecentOpen_clicked(); }
 

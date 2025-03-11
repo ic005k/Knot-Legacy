@@ -1,4 +1,4 @@
-/*https://github.com/agafon0ff/SimpleColorDialog*/
+﻿/* https://github.com/agafon0ff/SimpleColorDialog */
 
 #ifndef COLORDIALOG_H
 #define COLORDIALOG_H

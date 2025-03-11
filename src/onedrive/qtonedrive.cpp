@@ -18,7 +18,7 @@
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern QString iniFile, iniDir, zipfile, privateDir;
-extern bool isZipOK, isMenuImport, isTimeMachine, isDownData;
+extern bool isZipOK, isMenuImport, isDownData;
 
 QtOneDriveAuthorizationDialog* dialog_ = nullptr;
 
@@ -441,7 +441,7 @@ void QtOneDrive::downloadFile(const QUrl& url) {
           mw_one->showProgress();
 
           isMenuImport = false;
-          isTimeMachine = false;
+
           isDownData = true;
           mw_one->myImportDataThread->start();
 

@@ -2394,6 +2394,11 @@ QTabBar::scroller {width:0}
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="text">
                <string>OneDrive :</string>
               </property>
@@ -2796,6 +2801,11 @@ QTabBar::scroller {width:0}
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
               </property>
               <property name="text">
                <string>WebDAV :</string>
@@ -4223,7 +4233,7 @@ QSlider::handle:horizontal:disabled {
           <enum>QTabWidget::South</enum>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab_Steps">
           <attribute name="title">
@@ -4298,10 +4308,10 @@ QSlider::handle:horizontal:disabled {
                 <number>6</number>
                </property>
                <property name="value" stdset="0">
-                <double>888888.000000000000000</double>
+                <double>0.000000000000000</double>
                </property>
                <property name="intValue" stdset="0">
-                <number>888888</number>
+                <number>0</number>
                </property>
               </widget>
              </item>

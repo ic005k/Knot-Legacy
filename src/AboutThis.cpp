@@ -1,8 +1,9 @@
-#include "src/AboutThis.h".h "
+﻿#include "src/AboutThis.h".h "
 
 #include "MainWindow.h"
 #include "ui_AboutThis.h"
 #include "ui_MainWindow.h"
+
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern bool loading, zh_cn, isDark;
