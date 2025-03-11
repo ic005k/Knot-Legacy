@@ -27,6 +27,8 @@ android: {
 
 }
 
+############################ qtkeychain ########################################
+
 # 强制静态链接
 DEFINES += QTKEYCHAIN_STATIC
 # 添加 Qt Keychain 的源码路径
@@ -38,6 +40,14 @@ win32 {
     SOURCES += src/qtkeychain/qtkeychain/keychain_win.cpp
 }
 
+macx {
+    # 添加 macOS 安全框架
+    LIBS += -framework Security -framework CoreFoundation
+    # 包含 Qt Keychain 的 macOS 实现文件
+    SOURCES += src/qtkeychain/qtkeychain/keychain_unix.cpp
+
+}
+
 # Linux 依赖（需要 libsecret 或 kwallet）
 linux {
     # 使用 libsecret（推荐）
@@ -47,6 +57,8 @@ linux {
     # 或者使用 kwallet（旧版）
     # PKGCONFIG += kwallet
 }
+
+############################ cmark-gfm ########################################
 
 INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 
@@ -85,6 +97,7 @@ SOURCES += \
     src/CategoryList.cpp \
     src/CloudBackup.cpp \
     src/Comm/FileSystemWatcher.cpp \
+    src/Comm/KeychainManager.cpp \
     src/Comm/Method.cpp \
     src/Comm/ReceiveShare.cpp \
     src/Comm/RollingBox.cpp \
@@ -181,6 +194,7 @@ HEADERS += \
     src/CategoryList.h \
     src/CloudBackup.h \
     src/Comm/FileSystemWatcher.h \
+    src/Comm/KeychainManager.h \
     src/Comm/Method.h \
     src/Comm/ReceiveShare.h \
     src/Comm/RollingBox.h \

@@ -72,6 +72,7 @@
 #include <QTreeWidgetItem>
 #include <QValueAxis>
 
+#include "Comm/KeychainManager.h"
 #include "src/AboutThis.h"
 #include "src/CategoryList.h"
 #include "src/CloudBackup.h"
@@ -825,6 +826,7 @@ class MainWindow : public QMainWindow {
   void on_chkOneDrive_clicked();
 
  private:
+  KeychainManager m_keychainManager;
   bool isMoveEntry;
   QTimer *tmeFlash;
   int nFlashCount = 0;

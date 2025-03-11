@@ -4179,10 +4179,25 @@ void MainWindow::on_actionOneDriveBackupData() {
   ui->editWebDAV->setText(
       iniPreferences->value("/webdav/url", "https://dav.jianguoyun.com/dav/")
           .toString());
+
   ui->editWebDAVUsername->setText(
       iniPreferences->value("/webdav/username").toString());
-  ui->editWebDAVPassword->setText(
-      iniPreferences->value("/webdav/password").toString());
+  // ui->editWebDAVPassword->setText(
+  //   iniPreferences->value("/webdav/password").toString());
+
+  // 应用启动时读取密码
+  QString username = "Knot_" + ui->editWebDAVUsername->text().trimmed();
+
+  // 读取密码
+  m_keychainManager.readPassword(username);
+
+  // 接收密码
+  connect(&m_keychainManager, &KeychainManager::passwordRead,
+          [this](const QString &password) {
+            if (!password.isEmpty()) {
+              ui->editWebDAVPassword->setText(password);  // 自动填充到密码框
+            }
+          });
 
   ui->chkOneDrive->setChecked(
       iniPreferences->value("/cloudbak/onedrive", 0).toBool());
@@ -4744,10 +4759,27 @@ void MainWindow::on_btnBack_One_clicked() {
   }
 
   iniPreferences->setValue("/webdav/url", ui->editWebDAV->text().trimmed());
+
   iniPreferences->setValue("/webdav/username",
                            ui->editWebDAVUsername->text().trimmed());
-  iniPreferences->setValue("/webdav/password",
-                           ui->editWebDAVPassword->text().trimmed());
+  // iniPreferences->setValue("/webdav/password",
+  //                          ui->editWebDAVPassword->text().trimmed());
+
+  QString username = "Knot_" + ui->editWebDAVUsername->text().trimmed();
+  QString password = ui->editWebDAVPassword->text().trimmed();
+
+  // 保存密码
+  m_keychainManager.savePassword(username, password);
+
+  // 监听结果
+  connect(&m_keychainManager, &KeychainManager::operationCompleted,
+          [this](bool success, const QString &error) {
+            if (success) {
+              qDebug() << "Password saved successfully!";
+            } else {
+              qDebug() << "Password save failed:" << error;
+            }
+          });
 
   iniPreferences->setValue("/cloudbak/onedrive", ui->chkOneDrive->isChecked());
   iniPreferences->setValue("/cloudbak/webdav", ui->chkWebDAV->isChecked());

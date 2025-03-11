@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QTimer>
 
+#include "Comm/KeychainManager.h"
 #include "src/MainWindow.h"
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
