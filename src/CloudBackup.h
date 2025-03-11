@@ -39,6 +39,10 @@ class CloudBackup : public QDialog {
   void createDirectory(QString webdavUrl, QString remoteDirPath);
   void startBakData();
   void downloadFile(QString remoteFileName, QString localSavePath);
+
+  QString aesEncrypt(QString plainText, QByteArray key, QByteArray iv);
+  QString aesDecrypt(QString cipherText, QByteArray key, QByteArray iv);
+
  signals:
 
  protected:

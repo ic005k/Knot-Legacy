@@ -72,7 +72,6 @@
 #include <QTreeWidgetItem>
 #include <QValueAxis>
 
-#include "Comm/KeychainManager.h"
 #include "src/AboutThis.h"
 #include "src/CategoryList.h"
 #include "src/CloudBackup.h"
@@ -826,7 +825,6 @@ class MainWindow : public QMainWindow {
   void on_chkOneDrive_clicked();
 
  private:
-  KeychainManager m_keychainManager;
   bool isMoveEntry;
   QTimer *tmeFlash;
   int nFlashCount = 0;
@@ -864,6 +862,9 @@ class MainWindow : public QMainWindow {
   QObjectList getAllPushButton(QObjectList lstUIControls);
   void init_ButtonStyle();
   QString strTime, strAmount, strCategory, strDetails;
+
+  QByteArray aes_key = "MySuperSecretKey1234567890";  // 长度不足32会自动处理
+  QByteArray aes_iv = "InitializationVe";             // 16字节
 };
 
 class SaveThread : public QThread {

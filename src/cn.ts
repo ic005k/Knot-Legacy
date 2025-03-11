@@ -230,80 +230,80 @@ in skydrive folder</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="53"/>
+        <location filename="CloudBackup.cpp" line="52"/>
         <source>Success Sign In</source>
         <translation>登录成功</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="61"/>
+        <location filename="CloudBackup.cpp" line="60"/>
         <source>Success Sing Out</source>
         <translation>注销成功</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="69"/>
+        <location filename="CloudBackup.cpp" line="68"/>
         <source>Success Refresh Token</source>
         <translation>刷新令牌成功</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="73"/>
+        <location filename="CloudBackup.cpp" line="72"/>
         <source>Success DeleteItem: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="98"/>
+        <location filename="CloudBackup.cpp" line="97"/>
         <source>Success Get User Info</source>
         <translation>获取用户信息成功</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="119"/>
-        <location filename="CloudBackup.cpp" line="421"/>
+        <location filename="CloudBackup.cpp" line="118"/>
+        <location filename="CloudBackup.cpp" line="420"/>
         <source>Success Upload File:</source>
         <translation>上传文件成功</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="135"/>
+        <location filename="CloudBackup.cpp" line="134"/>
         <source>Success Download File: </source>
         <translation>下载文件成功</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="272"/>
+        <location filename="CloudBackup.cpp" line="271"/>
         <source>Downloading data?</source>
         <translation>下载数据？</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="273"/>
+        <location filename="CloudBackup.cpp" line="272"/>
         <source>This operation will overwrite the local data with the data on OneDrive.</source>
         <translation>此操作将使用 OneDrive 上的数据覆盖本地数据。</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="299"/>
+        <location filename="CloudBackup.cpp" line="298"/>
         <source>Uploading data?</source>
         <translation>上传数据？</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="300"/>
+        <location filename="CloudBackup.cpp" line="299"/>
         <source>This action updates the data in the cloud.</source>
         <translation>此操作将更新云端的数据</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="438"/>
-        <location filename="CloudBackup.cpp" line="578"/>
+        <location filename="CloudBackup.cpp" line="434"/>
+        <location filename="CloudBackup.cpp" line="574"/>
         <source>Authentication failed.</source>
         <translation>认证失败，请检查网址、用户名、密码。如果使用坚果云，请使用“应用密码”而不是主密码，“应用密码”可通过坚果云网页端登录后进行设置。</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="442"/>
-        <location filename="CloudBackup.cpp" line="582"/>
+        <location filename="CloudBackup.cpp" line="438"/>
+        <location filename="CloudBackup.cpp" line="578"/>
         <source>Download error</source>
         <translation>下载错误</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="546"/>
+        <location filename="CloudBackup.cpp" line="542"/>
         <source>Successfully downloaded file,File saved to</source>
         <translation>文件下载成功，已保存到</translation>
     </message>
     <message>
-        <location filename="CloudBackup.cpp" line="556"/>
+        <location filename="CloudBackup.cpp" line="552"/>
         <source>Import this data?</source>
         <translation>是否导入这个数据？</translation>
     </message>
@@ -1013,7 +1013,7 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="326"/>
-        <location filename="MainWindow.cpp" line="6178"/>
+        <location filename="MainWindow.cpp" line="6149"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
@@ -1316,13 +1316,13 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="5873"/>
-        <location filename="MainWindow.cpp" line="5046"/>
+        <location filename="MainWindow.cpp" line="5017"/>
         <source>Note Book</source>
         <translation>笔记本</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="5918"/>
-        <location filename="MainWindow.cpp" line="5047"/>
+        <location filename="MainWindow.cpp" line="5018"/>
         <source>Note List</source>
         <translation>笔记列表</translation>
     </message>
@@ -1671,10 +1671,10 @@ in skydrive folder</source>
         <location filename="MainWindow.cpp" line="1658"/>
         <location filename="MainWindow.cpp" line="4001"/>
         <location filename="MainWindow.cpp" line="4067"/>
-        <location filename="MainWindow.cpp" line="4288"/>
-        <location filename="MainWindow.cpp" line="4328"/>
-        <location filename="MainWindow.cpp" line="5534"/>
-        <location filename="MainWindow.cpp" line="5622"/>
+        <location filename="MainWindow.cpp" line="4275"/>
+        <location filename="MainWindow.cpp" line="4315"/>
+        <location filename="MainWindow.cpp" line="5505"/>
+        <location filename="MainWindow.cpp" line="5593"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
@@ -1713,8 +1713,8 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="1868"/>
-        <location filename="MainWindow.cpp" line="5514"/>
-        <location filename="MainWindow.cpp" line="5609"/>
+        <location filename="MainWindow.cpp" line="5485"/>
+        <location filename="MainWindow.cpp" line="5580"/>
         <source>Whether to remove</source>
         <translation>是否删除</translation>
     </message>
@@ -1770,8 +1770,8 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.ui" line="4782"/>
-        <location filename="MainWindow.cpp" line="6175"/>
-        <location filename="MainWindow.cpp" line="6180"/>
+        <location filename="MainWindow.cpp" line="6146"/>
+        <location filename="MainWindow.cpp" line="6151"/>
         <source>Start</source>
         <translation>启动</translation>
     </message>
@@ -1894,7 +1894,7 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="2779"/>
-        <location filename="MainWindow.cpp" line="5481"/>
+        <location filename="MainWindow.cpp" line="5452"/>
         <source>Import this data?</source>
         <translation>是否导入这个数据？</translation>
     </message>
@@ -1914,12 +1914,12 @@ in skydrive folder</source>
         <translation>云备份与恢复数据</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="6261"/>
+        <location filename="MainWindow.cpp" line="6232"/>
         <source>Downloading data?</source>
         <translation>下载数据？</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="6262"/>
+        <location filename="MainWindow.cpp" line="6233"/>
         <source>This action overwrites local files with files in the cloud.</source>
         <translation>此操作将会用云端的文件覆盖本地文件</translation>
     </message>
@@ -1934,24 +1934,24 @@ in skydrive folder</source>
         <translation>分享文件</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="6138"/>
+        <location filename="MainWindow.cpp" line="6109"/>
         <source>Please enable permission to record audio!</source>
         <translation>请开启录音权限！</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="653"/>
-        <location filename="MainWindow.cpp" line="4653"/>
+        <location filename="MainWindow.cpp" line="4640"/>
         <source>Reading Progress</source>
         <translation>阅读进度</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4876"/>
+        <location filename="MainWindow.cpp" line="4847"/>
         <source>The current note does not exist. Please select another note or create a new note.</source>
         <translation>当前笔记不存在。请选择其它笔记或新建笔记。</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="2758"/>
-        <location filename="MainWindow.cpp" line="6025"/>
+        <location filename="MainWindow.cpp" line="5996"/>
         <source>Share to</source>
         <translation>分享到</translation>
     </message>
@@ -1962,21 +1962,21 @@ in skydrive folder</source>
     <message>
         <location filename="MainWindow.ui" line="5347"/>
         <location filename="MainWindow.cpp" line="4092"/>
-        <location filename="MainWindow.cpp" line="4328"/>
-        <location filename="MainWindow.cpp" line="5622"/>
+        <location filename="MainWindow.cpp" line="4315"/>
+        <location filename="MainWindow.cpp" line="5593"/>
         <source>Backup File List</source>
         <translation>备份文件列表</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="5594"/>
         <location filename="MainWindow.cpp" line="4093"/>
-        <location filename="MainWindow.cpp" line="4288"/>
-        <location filename="MainWindow.cpp" line="5534"/>
+        <location filename="MainWindow.cpp" line="4275"/>
+        <location filename="MainWindow.cpp" line="5505"/>
         <source>Tab Recycle</source>
         <translation>标签页回收箱</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="5597"/>
+        <location filename="MainWindow.cpp" line="5568"/>
         <source>Restore Tab</source>
         <translation>恢复标签页</translation>
     </message>
@@ -2049,12 +2049,12 @@ in skydrive folder</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4846"/>
+        <location filename="MainWindow.cpp" line="4817"/>
         <source>The password is removed.</source>
         <translation>密码被删除</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="4858"/>
+        <location filename="MainWindow.cpp" line="4829"/>
         <source>The password is set successfully.</source>
         <translation>密码设置成功</translation>
     </message>
@@ -2083,7 +2083,7 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="3347"/>
-        <location filename="MainWindow.cpp" line="4867"/>
+        <location filename="MainWindow.cpp" line="4838"/>
         <source>The entered password does not match.</source>
         <translation>输入的密码不匹配</translation>
     </message>
@@ -2125,12 +2125,12 @@ in skydrive folder</source>
         <translation type="vanished">跳</translation>
     </message>
     <message>
-        <location filename="MainWindow.h" line="154"/>
+        <location filename="MainWindow.h" line="153"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="MainWindow.h" line="180"/>
+        <location filename="MainWindow.h" line="179"/>
         <source>Latest Time</source>
         <translation>最新的时间</translation>
     </message>
@@ -3231,285 +3231,62 @@ in skydrive folder</source>
 <context>
     <name>QKeychain::DeletePasswordJobPrivate</name>
     <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="186"/>
         <source>Could not open keystore</source>
-        <translation>无法打开密钥库。</translation>
+        <translation type="vanished">无法打开密钥库。</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="193"/>
         <source>Could not remove private key from keystore</source>
-        <translation>无法从密钥库中移除私钥。</translation>
+        <translation type="vanished">无法从密钥库中移除私钥。</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="602"/>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="611"/>
         <source>Unknown error</source>
-        <translation>未知错误</translation>
+        <translation type="vanished">未知错误</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="633"/>
         <source>Could not open wallet: %1; %2</source>
-        <translation>无法打开钱包：%1; %2</translation>
+        <translation type="vanished">无法打开钱包：%1; %2</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="222"/>
         <source>Password entry not found</source>
-        <translation>未找到密码输入项</translation>
+        <translation type="vanished">未找到密码输入项</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="226"/>
         <source>Could not decrypt data</source>
-        <translation>无法解密数据</translation>
+        <translation type="vanished">无法解密数据</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::JobPrivate</name>
     <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="301"/>
         <source>Unknown error</source>
-        <translation>未知错误</translation>
+        <translation type="vanished">未知错误</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="556"/>
         <source>Access to keychain denied</source>
-        <translation>拒绝访问钥匙串</translation>
+        <translation type="vanished">拒绝访问钥匙串</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::PlainTextStore</name>
     <message>
-        <location filename="qtkeychain/qtkeychain/plaintextstore.cpp" line="73"/>
         <source>Could not store data in settings: access error</source>
-        <translation>无法将数据存储到设置中：访问错误。</translation>
+        <translation type="vanished">无法将数据存储到设置中：访问错误。</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/plaintextstore.cpp" line="75"/>
         <source>Could not store data in settings: format error</source>
-        <translation>无法将数据存储在设置中：格式错误。</translation>
+        <translation type="vanished">无法将数据存储在设置中：格式错误。</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/plaintextstore.cpp" line="93"/>
         <source>Could not delete data from settings: access error</source>
-        <translation>无法从设置中删除数据：访问错误。</translation>
+        <translation type="vanished">无法从设置中删除数据：访问错误。</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/plaintextstore.cpp" line="95"/>
         <source>Could not delete data from settings: format error</source>
-        <translation>无法从设置中删除数据：格式错误。</translation>
+        <translation type="vanished">无法从设置中删除数据：格式错误。</translation>
     </message>
     <message>
-        <location filename="qtkeychain/qtkeychain/plaintextstore.cpp" line="112"/>
         <source>Entry not found</source>
-        <translation>未找到条目</translation>
-    </message>
-</context>
-<context>
-    <name>QKeychain::ReadPasswordJobPrivate</name>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="52"/>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="402"/>
-        <source>Entry not found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="60"/>
-        <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="69"/>
-        <source>Could not retrieve private key from keystore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="76"/>
-        <source>Could not create decryption cipher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="205"/>
-        <source>D-Bus is not running</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="215"/>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="225"/>
-        <source>Unknown error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="322"/>
-        <source>No keychain service available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="326"/>
-        <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="372"/>
-        <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="392"/>
-        <source>Could not determine data type: %1; %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="411"/>
-        <source>Unsupported entry type &apos;Map&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="414"/>
-        <source>Unknown kwallet entry type &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="99"/>
-        <source>Password entry not found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="103"/>
-        <source>Could not decrypt data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="125"/>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="247"/>
-        <source>Could not decrypt data: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QKeychain::WritePasswordJobPrivate</name>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="96"/>
-        <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="136"/>
-        <source>Could not create private key generator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="143"/>
-        <source>Could not generate new private key</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="152"/>
-        <source>Could not retrieve private key from keystore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="160"/>
-        <source>Could not create encryption cipher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_android.cpp" line="168"/>
-        <source>Could not encrypt data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="457"/>
-        <source>D-Bus is not running</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="467"/>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="493"/>
-        <source>Unknown error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="512"/>
-        <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="158"/>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="258"/>
-        <source>Encryption failed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="163"/>
-        <source>Credential size exceeds maximum size of %1: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="205"/>
-        <source>Credential key exceeds maximum size of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_win.cpp" line="211"/>
-        <source>Writing credentials failed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="260"/>
-        <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="262"/>
-        <source>No keyring daemon</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="264"/>
-        <source>Already unlocked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="266"/>
-        <source>No such keyring</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="268"/>
-        <source>Bad arguments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="270"/>
-        <source>I/O error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="272"/>
-        <source>Cancelled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="274"/>
-        <source>Keyring already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="276"/>
-        <source>No match</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/keychain_unix.cpp" line="281"/>
-        <source>Unknown error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qtkeychain/qtkeychain/libsecret.cpp" line="104"/>
-        <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">未找到条目</translation>
     </message>
 </context>
 <context>
@@ -3915,7 +3692,7 @@ in skydrive folder</source>
 <context>
     <name>SliderButton</name>
     <message>
-        <location filename="MainWindow.h" line="999"/>
+        <location filename="MainWindow.h" line="997"/>
         <source>Slide Right to Start.</source>
         <translation>滑动到右边启动</translation>
     </message>

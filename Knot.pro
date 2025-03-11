@@ -27,35 +27,6 @@ android: {
 
 }
 
-############################ qtkeychain ########################################
-
-# 强制静态链接
-DEFINES += QTKEYCHAIN_STATIC
-# 添加 Qt Keychain 的源码路径
-include(src/qtkeychain/qtkeychain.pri)
-INCLUDEPATH += $$PWD/src/qtkeychain
-
-win32 {
-    LIBS += -lCrypt32   # 添加 Crypt32 库的链接
-    SOURCES += src/qtkeychain/qtkeychain/keychain_win.cpp
-}
-
-macx {
-    # macOS（属于 Unix 家族，但需单独处理）
-    SOURCES += src/qtkeychain/qtkeychain/keychain_unix.cpp
-    LIBS += -framework Security -framework CoreFoundation
-}
-unix:!macx:!android {
-    # Linux 或其它 Unix
-    SOURCES += src/qtkeychain/qtkeychain/keychain_unix.cpp
-    CONFIG += link_pkgconfig
-    PKGCONFIG += libsecret-1
-}
-android {
-    # Android
-    SOURCES += src/qtkeychain/qtkeychain/keychain_android.cpp
-}
-
 ############################ cmark-gfm ########################################
 
 INCLUDEPATH += $$PWD/lib/cmark-gfm/include
@@ -95,11 +66,11 @@ SOURCES += \
     src/CategoryList.cpp \
     src/CloudBackup.cpp \
     src/Comm/FileSystemWatcher.cpp \
-    src/Comm/KeychainManager.cpp \
     src/Comm/Method.cpp \
     src/Comm/ReceiveShare.cpp \
     src/Comm/RollingBox.cpp \
     src/Comm/ShowMessage.cpp \
+    src/Comm/qaesencryption.cpp \
     src/Comm/qzipfile.cpp \
     src/Comm/qzipfileentry.cpp \
     src/DateSelector.cpp \
@@ -182,8 +153,7 @@ SOURCES += \
     src/md4c/md4c.c \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
-    src/onedrive/qtonedrivewebview.cpp \
-    src/qtkeychain/qtkeychain/keychain.cpp
+    src/onedrive/qtonedrivewebview.cpp
 
 
 HEADERS += \
@@ -192,11 +162,11 @@ HEADERS += \
     src/CategoryList.h \
     src/CloudBackup.h \
     src/Comm/FileSystemWatcher.h \
-    src/Comm/KeychainManager.h \
     src/Comm/Method.h \
     src/Comm/ReceiveShare.h \
     src/Comm/RollingBox.h \
     src/Comm/ShowMessage.h \
+    src/Comm/qaesencryption.h \
     src/Comm/qzipfile.h \
     src/Comm/qzipfileentry.h \
     src/DateSelector.h \
@@ -252,7 +222,6 @@ HEADERS += \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
     src/onedrive/qtonedrivewebview.h \
-    src/qtkeychain/qtkeychain/keychain.h \
     win.rc
 
 FORMS += \
@@ -354,7 +323,6 @@ DISTFILES += \
     src/qmlsrc/tree_main.qml \
     src/qmlsrc/type.qml \
     src/qmlsrc/viewcate.qml \
-    src/qtkeychain/qtkeychain.pri \
     src/qzip/zlib.pri \
     src/reader.qml \
     src/steps.qml

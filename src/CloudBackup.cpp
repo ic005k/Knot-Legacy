@@ -5,9 +5,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
+#include <QRandomGenerator>
 #include <QTimer>
 
-#include "Comm/KeychainManager.h"
+#include "Comm/qaesencryption.h"
 #include "src/MainWindow.h"
 #include "src/onedrive/qtonedrive.h"
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
@@ -585,4 +586,40 @@ void CloudBackup::downloadFile(QString remoteFileName, QString localSavePath) {
 
         reply->deleteLater();
       });
+}
+
+// 加密函数（返回Base64编码字符串）
+QString CloudBackup::aesEncrypt(QString plainText, QByteArray key,
+                                QByteArray iv) {
+  QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
+
+  // 处理密钥和IV长度（AES-256需要32字节，CBC模式需要16字节IV）
+  QByteArray adjustedKey =
+      key.leftJustified(32, '\0', true);  // 截断或填充到32字节
+  QByteArray adjustedIv = iv.leftJustified(16, '\0', true);  // 调整IV到16字节
+
+  // 加密
+  QByteArray encrypted =
+      encryption.encode(plainText.toUtf8(), adjustedKey, adjustedIv);
+
+  // 转换为Base64方便传输
+  return encrypted.toBase64();
+}
+
+// 解密函数
+QString CloudBackup::aesDecrypt(QString cipherText, QByteArray key,
+                                QByteArray iv) {
+  QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
+
+  QByteArray adjustedKey = key.leftJustified(32, '\0', true);
+  QByteArray adjustedIv = iv.leftJustified(16, '\0', true);
+
+  // 解码Base64并解密
+  QByteArray decoded = QByteArray::fromBase64(cipherText.toUtf8());
+  QByteArray decrypted = encryption.decode(decoded, adjustedKey, adjustedIv);
+
+  // 移除PKCS#7填充
+  decrypted = encryption.removePadding(decrypted);
+
+  return QString::fromUtf8(decrypted);
 }
