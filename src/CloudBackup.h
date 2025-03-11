@@ -19,6 +19,10 @@ class CloudBackup : public QDialog {
   QQuickWidget *quickWidget;
   void init();
 
+  QString WEBDAV_URL = "";
+  QString USERNAME = "";
+  QString APP_PASSWORD = "";
+
   void loadLogQML();
 
   void initQuick();
@@ -34,7 +38,7 @@ class CloudBackup : public QDialog {
   void createDirectory(QString webdavUrl, QString remoteDirPath);
   void startBakData();
   void downloadFile(QString remoteFileName, QString localSavePath);
-  signals:
+ signals:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
@@ -42,7 +46,6 @@ class CloudBackup : public QDialog {
   void on_pushButton_SignIn_clicked();
   void on_pushButton_SingOut_clicked();
   void on_pushButton_downloadFile_clicked();
-  void on_pushButton_upload2_clicked();
 
   void on_pushButton_GetUserInfo_clicked();
 
@@ -70,10 +73,6 @@ class CloudBackup : public QDialog {
  private:
   QtOneDrive *oneDrive = nullptr;
   QString initUserInfo(QString info);
-
-  QString WEBDAV_URL = "";
-  QString USERNAME = "";
-  QString APP_PASSWORD = "";
 };
 
 #endif  // CLOUDBACKUP_H

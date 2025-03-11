@@ -18,6 +18,7 @@ extern Method *m_Method;
 extern QString iniFile, iniDir, zipfile;
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern bool isUpData;
+extern bool isZipOK, isMenuImport, isTimeMachine, isDownData;
 
 CloudBackup::CloudBackup(QWidget *parent)
     : QDialog(parent), ui(new Ui::CloudBackup) {
@@ -260,7 +261,7 @@ void CloudBackup::on_pushButton_getFolders_clicked() {
 }
 
 void CloudBackup::on_pushButton_downloadFile_clicked() {
-  QString filePath;  // = QFileDialog::getSaveFileName(this, "Select File");
+  QString filePath;
   filePath = iniDir + "memo.zip";
   if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
@@ -285,37 +286,26 @@ void CloudBackup::on_pushButton_deleteFile_clicked() {
   oneDrive->deleteItem(ui->lineEdit_fileID->text().trimmed());
 }
 
-void CloudBackup::on_pushButton_upload2_clicked() {
-  // QFileDialog fdlg;
-  zipfile =
-      iniDir + "memo.zip";  // = fdlg.getOpenFileName(this, "Select File");
-
-  isUpData = true;
-  mw_one->showProgress();
-
-  mw_one->ui->progressBar->setValue(0);
-  mw_one->ui->progBar->show();
-  mw_one->ui->progBar->setMaximum(100);
-  mw_one->ui->progBar->setMinimum(0);
-  mw_one->ui->progBar->setValue(0);
-
-  mw_one->myBakDataThread->start();
-}
-
 void CloudBackup::uploadData() {
+  QString strFlag;
+  if (mw_one->ui->chkOneDrive->isChecked())
+    strFlag = "OneDrive";
+  else
+    strFlag = "WebDAV";
   ShowMessage *m_ShowMsg = new ShowMessage(this);
   if (!m_ShowMsg->showMsg(
-          "OneDrive",
+          strFlag,
           tr("Uploading data?") + "\n\n" +
-              tr("This action will update the data on OneDrive.") + "\n\n" +
+              tr("This action updates the data in the cloud.") + "\n\n" +
               mw_one->m_Reader->getUriRealPath(zipfile) +
               "\n\nSIZE: " + mw_one->getFileSize(QFile(zipfile).size(), 2),
           2))
     return;
 
-  if (mw_one->ui->chkOneDrive->isChecked())
+  if (mw_one->ui->chkOneDrive->isChecked()) {
     oneDrive->uploadFile(zipfile, "memo.zip",
                          ui->lineEdit_fileID->text().trimmed());
+  }
 
   if (mw_one->ui->chkWebDAV->isChecked()) {
     QString url = mw_one->ui->editWebDAV->text().trimmed();
@@ -436,6 +426,10 @@ void CloudBackup::uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
     } else {
       qDebug() << "上传失败：" << reply->errorString();
       qDebug() << "服务器响应：" << reply->readAll();
+      ShowMessage *m_ShowMsg = new ShowMessage(this);
+      m_ShowMsg->showMsg(
+          "WebDAV", tr("Upload failure") + " : \n" + reply->errorString(), 1);
+      mw_one->ui->progBar->hide();
     }
     file->close();
     reply->deleteLater();
@@ -509,11 +503,13 @@ void CloudBackup::downloadFile(QString remoteFileName, QString localSavePath) {
     }
   });
 
-  QObject::connect(reply, &QNetworkReply::downloadProgress,
-                   [](qint64 bytesReceived, qint64 bytesTotal) {
-                     qDebug()
-                         << "下载进度：" << bytesReceived << "/" << bytesTotal;
-                   });
+  QObject::connect(
+      reply, &QNetworkReply::downloadProgress,
+      [](qint64 bytesReceived, qint64 bytesTotal) {
+        qDebug() << "下载进度：" << bytesReceived << "/" << bytesTotal;
+        int percent = static_cast<int>((bytesReceived * 100) / bytesTotal);
+        mw_one->ui->progressBar->setValue(percent);
+      });
 
   QObject::connect(reply, &QNetworkReply::finished, [=]() {
     // 检查HTTP状态码
@@ -527,10 +523,45 @@ void CloudBackup::downloadFile(QString remoteFileName, QString localSavePath) {
         localFile->write(reply->readAll());
       }
       qDebug() << "下载完成，保存至：" << localSavePath;
+
+      ShowMessage *showbox = new ShowMessage(this);
+      showbox->showMsg("WebDAV",
+                       tr("Successfully downloaded file") + " : " +
+                           localSavePath + "\n\nSize: " +
+                           mw_one->getFileSize(QFile(localSavePath).size(), 2),
+                       1);
+
+      if (QFile(localSavePath).exists()) {
+        if (!localSavePath.isNull()) {
+          ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+          if (!m_ShowMsg->showMsg(
+                  "Kont",
+                  tr("Import this data?") + "\n" +
+                      mw_one->m_Reader->getUriRealPath(localSavePath),
+                  2)) {
+            isZipOK = false;
+            return;
+          }
+        }
+        isZipOK = true;
+
+        mw_one->showProgress();
+
+        isMenuImport = false;
+        isTimeMachine = false;
+        isDownData = true;
+        mw_one->myImportDataThread->start();
+
+        if (isZipOK) mw_one->on_btnBack_One_clicked();
+      }
     } else {
       qDebug() << "下载失败 - HTTP状态码：" << statusCode << "，错误信息："
                << reply->errorString();
       localFile->remove();  // 删除不完整的文件
+
+      ShowMessage *showbox = new ShowMessage(this);
+      showbox->showMsg(
+          "WebDAV", tr("Download failure") + " : " + reply->errorString(), 1);
     }
 
     // 清理资源

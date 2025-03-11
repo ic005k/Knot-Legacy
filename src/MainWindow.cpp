@@ -4723,7 +4723,7 @@ void MainWindow::on_btnSignOut_clicked() {
 
 void MainWindow::on_btnUpload_clicked() {
   if (!ui->btnReader->isEnabled()) return;
-  m_CloudBackup->on_pushButton_upload2_clicked();
+  m_CloudBackup->startBakData();
 }
 
 void MainWindow::on_btnDownload_clicked() {
@@ -6212,9 +6212,30 @@ void MainWindow::on_btnWebBack_clicked() {
   QMetaObject::invokeMethod((QObject *)root, "goBack");
 }
 
-void MainWindow::on_btnWebDAVBackup_clicked() { m_CloudBackup->startBakData(); }
+void MainWindow::on_btnWebDAVBackup_clicked() {
+  if (!ui->btnReader->isEnabled()) return;
+  m_CloudBackup->startBakData();
+}
 
-void MainWindow::on_btnWebDAVRestore_clicked() {}
+void MainWindow::on_btnWebDAVRestore_clicked() {
+  QString filePath;
+  filePath = iniDir + "memo.zip";
+  if (QFile(filePath).exists()) QFile(filePath).remove();
+  if (filePath.isEmpty()) return;
+
+  ShowMessage *m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg(
+          "WebDAV",
+          tr("Downloading data?") + "\n\n" +
+              tr("This action overwrites local files with files in the cloud."),
+          2))
+    return;
+  m_CloudBackup->WEBDAV_URL = ui->editWebDAV->text().trimmed();
+  m_CloudBackup->USERNAME = ui->editWebDAVUsername->text().trimmed();
+  m_CloudBackup->APP_PASSWORD = ui->editWebDAVPassword->text().trimmed();
+  m_CloudBackup->downloadFile("Knot/memo.zip", filePath);
+  mw_one->ui->progressBar->setValue(0);
+}
 
 void MainWindow::on_chkWebDAV_clicked() {
   if (ui->chkWebDAV->isChecked())

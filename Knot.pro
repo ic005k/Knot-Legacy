@@ -27,6 +27,26 @@ android: {
 
 }
 
+# 强制静态链接
+DEFINES += QTKEYCHAIN_STATIC
+# 添加 Qt Keychain 的源码路径
+include(src/qtkeychain/qtkeychain.pri)
+INCLUDEPATH += $$PWD/src/qtkeychain
+
+win32 {
+    LIBS += -lCrypt32   # 添加 Crypt32 库的链接
+    SOURCES += src/qtkeychain/qtkeychain/keychain_win.cpp
+}
+
+# Linux 依赖（需要 libsecret 或 kwallet）
+linux {
+    # 使用 libsecret（推荐）
+    CONFIG += link_pkgconfig
+    PKGCONFIG += libsecret-1
+
+    # 或者使用 kwallet（旧版）
+    # PKGCONFIG += kwallet
+}
 
 INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 
@@ -151,7 +171,8 @@ SOURCES += \
     src/md4c/md4c.c \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
-    src/onedrive/qtonedrivewebview.cpp
+    src/onedrive/qtonedrivewebview.cpp \
+    src/qtkeychain/qtkeychain/keychain.cpp
 
 
 HEADERS += \
@@ -219,6 +240,7 @@ HEADERS += \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
     src/onedrive/qtonedrivewebview.h \
+    src/qtkeychain/qtkeychain/keychain.h \
     win.rc
 
 FORMS += \
@@ -320,6 +342,7 @@ DISTFILES += \
     src/qmlsrc/tree_main.qml \
     src/qmlsrc/type.qml \
     src/qmlsrc/viewcate.qml \
+    src/qtkeychain/qtkeychain.pri \
     src/qzip/zlib.pri \
     src/reader.qml \
     src/steps.qml
