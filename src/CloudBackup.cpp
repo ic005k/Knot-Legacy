@@ -409,9 +409,9 @@ void CloudBackup::uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
           &CloudBackup::updateUploadProgress);
 
   QObject::connect(reply, &QNetworkReply::finished, [=]() {
-    qDebug()
-        << "HTTP状态码："
-        << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    const int statusCode =
+        reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    qDebug() << "HTTP状态码：" << statusCode;
     if (reply->error() == QNetworkReply::NoError) {
       qDebug() << "上传成功！";
 
@@ -427,10 +427,17 @@ void CloudBackup::uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
     } else {
       qDebug() << "上传失败：" << reply->errorString();
       qDebug() << "服务器响应：" << reply->readAll();
-      ShowMessage *m_ShowMsg = new ShowMessage(this);
-      m_ShowMsg->showMsg(
-          "WebDAV", tr("Upload failure") + " : \n" + reply->errorString(), 1);
+
       mw_one->ui->progBar->hide();
+
+      if (statusCode == 401) {
+        ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+        m_ShowMsg->showMsg("WebDAV", tr("Authentication failed."), 1);
+      } else {
+        ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+        m_ShowMsg->showMsg(
+            "WebDAV", tr("Download error") + " : " + reply->errorString(), 1);
+      }
     }
     file->close();
     reply->deleteLater();
@@ -455,7 +462,6 @@ void CloudBackup::createDirectory(QString webdavUrl, QString remoteDirPath) {
   // 认证头
   QString auth = USERNAME + ":" + APP_PASSWORD;
   request.setRawHeader("Authorization", "Basic " + auth.toUtf8().toBase64());
-  // request.setRawHeader("Authorization", getAuthHeader().toUtf8());
 
   QNetworkReply *reply = manager.sendCustomRequest(request, "MKCOL");
 
@@ -474,112 +480,109 @@ void CloudBackup::createDirectory(QString webdavUrl, QString remoteDirPath) {
 }
 
 void CloudBackup::downloadFile(QString remoteFileName, QString localSavePath) {
-  QNetworkAccessManager *manager = new QNetworkAccessManager();
+  m_manager = new QNetworkAccessManager();
 
-  // 构造完整WebDAV文件路径
   QUrl url(WEBDAV_URL + remoteFileName);
   QNetworkRequest request(url);
+  request.setTransferTimeout(30000);
 
   // 设置认证头
-  QString auth = USERNAME + ":" + APP_PASSWORD;
+  QString auth = QString("%1:%2").arg(USERNAME).arg(APP_PASSWORD);
   request.setRawHeader("Authorization", "Basic " + auth.toUtf8().toBase64());
 
-  // 创建本地文件
   QFile *localFile = new QFile(localSavePath);
   if (!localFile->open(QIODevice::WriteOnly)) {
     qDebug() << "无法创建本地文件：" << localSavePath;
-    delete manager;
     delete localFile;
+    // ShowMessage::showError("WebDAV", tr("Failed to create local file"));
     return;
   }
 
-  // 发送GET请求
-  QNetworkReply *reply = manager->get(request);
+  QNetworkReply *reply = m_manager->get(request);
+  m_activeDownloads.insert(reply, localFile);
 
-  // 连接信号槽
-  QObject::connect(reply, &QNetworkReply::readyRead, [=]() {
-    // 实时写入数据（适合大文件分块传输）
-    if (reply->bytesAvailable() > 0) {
-      localFile->write(reply->readAll());
-    }
-  });
-
+  // 进度更新
   QObject::connect(
       reply, &QNetworkReply::downloadProgress,
-      [](qint64 bytesReceived, qint64 bytesTotal) {
-        qDebug() << "下载进度：" << bytesReceived << "/" << bytesTotal;
-        int percent = static_cast<int>((bytesReceived * 100) / bytesTotal);
-        mw_one->ui->progressBar->setValue(percent);
+      [this](qint64 bytesReceived, qint64 bytesTotal) {  // 显式捕获this
+        QMetaObject::invokeMethod(this, [this, bytesReceived, bytesTotal]() {
+          int percent =
+              (bytesTotal > 0)
+                  ? static_cast<int>((bytesReceived * 100) / bytesTotal)
+                  : 0;
+          mw_one->ui->progressBar->setValue(percent);
+        });
       });
 
-  QObject::connect(reply, &QNetworkReply::finished, [=]() {
-    // 检查HTTP状态码
-    const int statusCode =
-        reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+  // 数据写入
+  QObject::connect(reply, &QNetworkReply::readyRead,
+                   [this, reply]() {  // 显式捕获this
+                     if (QFile *file = m_activeDownloads.value(reply)) {
+                       file->write(reply->readAll());
+                     }
+                   });
 
-    if (reply->error() == QNetworkReply::NoError && statusCode >= 200 &&
-        statusCode < 300) {
-      // 确保写入最后的数据块
-      if (reply->bytesAvailable() > 0) {
-        localFile->write(reply->readAll());
-      }
-      qDebug() << "下载完成，保存至：" << localSavePath;
-
-      ShowMessage *showbox = new ShowMessage(this);
-      showbox->showMsg("WebDAV",
-                       tr("Successfully downloaded file") + " : " +
-                           localSavePath + "\n\nSize: " +
-                           mw_one->getFileSize(QFile(localSavePath).size(), 2),
-                       1);
-
-      if (QFile(localSavePath).exists()) {
-        if (!localSavePath.isNull()) {
-          ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
-          if (!m_ShowMsg->showMsg(
-                  "Kont",
-                  tr("Import this data?") + "\n" +
-                      mw_one->m_Reader->getUriRealPath(localSavePath),
-                  2)) {
-            isZipOK = false;
-            return;
-          }
-        }
-        isZipOK = true;
-
-        mw_one->showProgress();
-
-        isMenuImport = false;
-        isTimeMachine = false;
-        isDownData = true;
-        mw_one->myImportDataThread->start();
-
-        if (isZipOK) mw_one->on_btnBack_One_clicked();
-      }
-    } else {
-      qDebug() << "下载失败 - HTTP状态码：" << statusCode << "，错误信息："
-               << reply->errorString();
-      localFile->remove();  // 删除不完整的文件
-
-      ShowMessage *showbox = new ShowMessage(this);
-      showbox->showMsg(
-          "WebDAV", tr("Download failure") + " : " + reply->errorString(), 1);
-    }
-
-    // 清理资源
-    localFile->close();
-    reply->deleteLater();
-    manager->deleteLater();
-    delete localFile;
-  });
-
-  // 错误处理
+  // 完成处理
   QObject::connect(
-      reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
-      [=](QNetworkReply::NetworkError code) {
-        qDebug() << "网络错误：" << code << "-" << reply->errorString();
+      reply, &QNetworkReply::finished,
+      [this, reply, localSavePath]() {  // 显式捕获this
+        QFile *file = m_activeDownloads.take(reply);
+        const int statusCode =
+            reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
-        ShowMessage *showbox = new ShowMessage(this);
-        showbox->showMsg(
-            "WebDAV", tr("Download failure") + " : " + reply->errorString(), 1);
+        if (file) {
+          if (reply->error() == QNetworkReply::NoError && statusCode >= 200 &&
+              statusCode < 300) {
+            file->write(reply->readAll());
+            file->close();
+
+            zipfile = localSavePath;
+            ShowMessage *showbox = new ShowMessage(this);
+            showbox->showMsg(
+                "WebDAV",
+                tr("Successfully downloaded file,File saved to") + " : " +
+                    localSavePath + "\n\nSize: " +
+                    mw_one->getFileSize(QFile(localSavePath).size(), 2),
+                1);
+
+            if (QFile(localSavePath).exists()) {
+              if (!localSavePath.isNull()) {
+                ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+                if (!m_ShowMsg->showMsg(
+                        "Kont",
+                        tr("Import this data?") + "\n" +
+                            mw_one->m_Reader->getUriRealPath(localSavePath),
+                        2)) {
+                  isZipOK = false;
+                  return;
+                }
+              }
+              isZipOK = true;
+
+              mw_one->showProgress();
+
+              isMenuImport = false;
+              isTimeMachine = false;
+              isDownData = true;
+              mw_one->myImportDataThread->start();
+
+              if (isZipOK) mw_one->on_btnBack_One_clicked();
+            }
+          } else {
+            file->remove();
+            if (statusCode == 401) {
+              ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+              m_ShowMsg->showMsg("WebDAV", tr("Authentication failed."), 1);
+            } else {
+              ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
+              m_ShowMsg->showMsg(
+                  "WebDAV", tr("Download error") + " : " + reply->errorString(),
+                  1);
+            }
+          }
+          delete file;
+        }
+
+        reply->deleteLater();
       });
 }

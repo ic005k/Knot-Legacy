@@ -2,6 +2,7 @@
 #define CLOUDBACKUP_H
 
 #include <QDialog>
+#include <QNetworkAccessManager>
 #include <QQuickWidget>
 
 namespace Ui {
@@ -73,6 +74,9 @@ class CloudBackup : public QDialog {
  private:
   QtOneDrive *oneDrive = nullptr;
   QString initUserInfo(QString info);
+
+  QNetworkAccessManager *m_manager = nullptr;
+  QHash<QNetworkReply *, QFile *> m_activeDownloads;  // 必须声明为类成员
 };
 
 #endif  // CLOUDBACKUP_H

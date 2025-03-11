@@ -41,21 +41,19 @@ win32 {
 }
 
 macx {
-    # 添加 macOS 安全框架
-    LIBS += -framework Security -framework CoreFoundation
-    # 包含 Qt Keychain 的 macOS 实现文件
+    # macOS（属于 Unix 家族，但需单独处理）
     SOURCES += src/qtkeychain/qtkeychain/keychain_unix.cpp
-
+    LIBS += -framework Security -framework CoreFoundation
 }
-
-# Linux 依赖（需要 libsecret 或 kwallet）
-linux {
-    # 使用 libsecret（推荐）
+unix:!macx:!android {
+    # Linux 或其它 Unix
+    SOURCES += src/qtkeychain/qtkeychain/keychain_unix.cpp
     CONFIG += link_pkgconfig
     PKGCONFIG += libsecret-1
-
-    # 或者使用 kwallet（旧版）
-    # PKGCONFIG += kwallet
+}
+android {
+    # Android
+    SOURCES += src/qtkeychain/qtkeychain/keychain_android.cpp
 }
 
 ############################ cmark-gfm ########################################
