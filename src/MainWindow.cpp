@@ -4087,7 +4087,7 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   QAction *actPreferences = new QAction(tr("Preferences"));
 
   QAction *actAbout = new QAction(tr("About") + " (" + ver + ")");
-  QAction *actOneDrive = new QAction(tr("OneDrive Backup Data"));
+  QAction *actOneDrive = new QAction(tr("Cloud Backup and Restore Data"));
 
   QAction *actBakFileList = new QAction(tr("Backup File List"));
   QAction *actTabRecycle = new QAction(tr("Tab Recycle"));

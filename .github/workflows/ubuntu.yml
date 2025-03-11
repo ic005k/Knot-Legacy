@@ -49,9 +49,7 @@ jobs:
          sudo apt-get install libxkbcommon-x11-0
          
          sudo add-apt-repository universe
-         sudo apt install libfuse2
-		  
-		 sudo apt-get install libsecret-1-dev
+         sudo apt install libfuse2
                                     
       - uses: actions/checkout@v2
         with:

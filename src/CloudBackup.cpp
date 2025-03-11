@@ -376,7 +376,7 @@ void CloudBackup::startBakData() {
   mw_one->myBakDataThread->start();
 }
 
-// 上传文件到坚果云
+// 上传文件到WebDAV,默认坚果云
 void CloudBackup::uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
                                      QString remoteFileName) {
   QNetworkAccessManager *manager = new QNetworkAccessManager();
@@ -577,5 +577,9 @@ void CloudBackup::downloadFile(QString remoteFileName, QString localSavePath) {
       reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
       [=](QNetworkReply::NetworkError code) {
         qDebug() << "网络错误：" << code << "-" << reply->errorString();
+
+        ShowMessage *showbox = new ShowMessage(this);
+        showbox->showMsg(
+            "WebDAV", tr("Download failure") + " : " + reply->errorString(), 1);
       });
 }
