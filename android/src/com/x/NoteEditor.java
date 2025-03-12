@@ -469,7 +469,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             }
 
             int cpos = 0;
-            if (s_cpos != "")
+            if (!s_cpos.equals(""))
                 cpos = Integer.parseInt(s_cpos);
             int nLength = editNote.getText().length();
             if (cpos > nLength)
