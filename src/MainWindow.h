@@ -865,6 +865,7 @@ class MainWindow : public QMainWindow {
 
   QByteArray aes_key = "MySuperSecretKey1234567890";  // 长度不足32会自动处理
   QByteArray aes_iv = "InitializationVe";             // 16字节
+  void init_CloudBacup();
 };
 
 class SaveThread : public QThread {

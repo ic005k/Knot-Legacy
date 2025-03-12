@@ -396,6 +396,8 @@ MainWindow::MainWindow(QWidget *parent)
 
   init_ButtonStyle();
   m_Method->setAndroidFontSize(fontSize);
+
+  init_CloudBacup();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -4167,9 +4169,7 @@ void MainWindow::on_openKnotBakDir() {
 #endif
 }
 
-void MainWindow::on_actionOneDriveBackupData() {
-  floatfun = false;
-
+void MainWindow::init_CloudBacup() {
   ui->editWebDAV->setText(
       iniPreferences->value("/webdav/url", "https://dav.jianguoyun.com/dav/")
           .toString());
@@ -4185,6 +4185,10 @@ void MainWindow::on_actionOneDriveBackupData() {
       iniPreferences->value("/cloudbak/onedrive", 0).toBool());
   ui->chkWebDAV->setChecked(
       iniPreferences->value("/cloudbak/webdav", 1).toBool());
+}
+
+void MainWindow::on_actionOneDriveBackupData() {
+  floatfun = false;
 
   ui->frameMain->hide();
   ui->frameReader->hide();
