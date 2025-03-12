@@ -1975,14 +1975,15 @@ QString markdownToHtmlWithMath(const QString &md) {
   QString html = QString::fromUtf8(html_cstr);
 
   // 处理转义字符
-  html.replace("\\~", "~");
-  html.replace("\\^", "^");
+  // html.replace("\\~", "~");
+  // html.replace("\\^", "^");
 
   // 处理下标
-  html.replace(QRegularExpression(R"((?<!\\)~([^~]|\\~)+~)"), "<sub>\\1</sub>");
+  // html.replace(QRegularExpression(R"((?<!\\)~([^~]|\\~)+~)"),
+  // "<sub>\\1</sub>");
   // 处理上标
-  html.replace(QRegularExpression(R"((?<!\\)\^([^^]|\\\^)+\^)"),
-               "<sup>\\1</sup>");
+  // html.replace(QRegularExpression(R"((?<!\\)\^([^^]|\\\^)+\^)"),
+  //             "<sup>\\1</sup>");
 
   // 插入 MathJax 和语法高亮支持
   QString mathjax_config = R"(
