@@ -154,7 +154,8 @@ Rectangle {
 
         Rectangle {
             id: listItem
-            width: item0.contentWidth + 16 < 60 ? 60 : item0.contentWidth + 16
+
+            width: item0.contentWidth + 32 < 60 ? 60 : item0.contentWidth + 32
             height: maintabHeight - 4
             color: ListView.isCurrentItem ? "lightblue" : getColor()
 
@@ -201,10 +202,17 @@ Rectangle {
                 Layout.fillWidth: true
 
                 Rectangle {
-                    height: parent.height
-                    width: 8
+                    id: spaceRect
+                    width: 3
+                    height: 0
+                }
+
+                Rectangle {
+                    id: flagRect
+                    height: 12
+                    width: 12
                     radius: 6
-                    anchors.leftMargin: 1
+                    anchors.leftMargin: 0
                     color: listItem.ListView.isCurrentItem ? "red" : "gray"
                     visible: true
                     Text {
@@ -415,6 +423,7 @@ Rectangle {
             id: listmain
 
             // debug
+
 
             /*ListElement {
                 text0: "Tab 1"
