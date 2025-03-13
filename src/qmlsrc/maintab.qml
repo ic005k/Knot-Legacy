@@ -202,7 +202,7 @@ Rectangle {
 
                 Rectangle {
                     height: parent.height
-                    width: 6
+                    width: 8
                     radius: 6
                     anchors.leftMargin: 1
                     color: listItem.ListView.isCurrentItem ? "red" : "gray"

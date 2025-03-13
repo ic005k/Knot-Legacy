@@ -67,8 +67,9 @@ Steps::Steps(QWidget* parent) : QDialog(parent) {
   mw_one->ui->lblRunTime->setStyleSheet(lblStyle);
   mw_one->ui->lblAverageSpeed->setStyleSheet(lblStyle);
   mw_one->ui->lblGpsInfo->setStyleSheet(lblStyle);
-  mw_one->ui->lblMonthTotal->setStyleSheet(lblStyle);
-  mw_one->ui->lblYearTotal->setStyleSheet(lblStyle);
+
+  mw_one->ui->lblYearTotal->setStyleSheet(
+      mw_one->ui->lblMonthTotal->styleSheet());
   mw_one->ui->btnGetGpsListData->hide();
 
   timer = new QTimer(this);
@@ -1066,13 +1067,9 @@ void Steps::updateGpsTrack() {
 
   QString st3 = list.at(2);
   QString st4 = list.at(3);
+  QString st1_0 = st1.split(" ").at(0);
+  st1 = st1.replace(st1_0, "");
   st1 = st1.replace(" ", "");
-  st1 = st1.replace("Cycling", "");
-  st1 = st1.replace("Hiking", "");
-  st1 = st1.replace("Running", "");
-  st1 = st1.replace(tr("Cycling"), "");
-  st1 = st1.replace(tr("Hiking"), "");
-  st1 = st1.replace(tr("Running"), "");
   st2 = st2.split("-").at(0);
   QStringList list2 = st2.split(":");
   st2 = list2.at(1) + list2.at(2) + list2.at(3);
@@ -1089,8 +1086,8 @@ void Steps::updateGpsTrack() {
   QString gpsOptimizedFile =
       iniDir + "memo/gps/" + st1 + "-gps-" + st2 + "-opt.csv";
 
-  double lat;
-  double lon;
+  double lat = 0;
+  double lon = 0;
   QString strLat, strLon;
   if (QFile::exists(gpsFile)) {
     QVector<GPSCoordinate> rawGPSData;
@@ -1179,6 +1176,7 @@ void Steps::updateGpsTrack() {
     lastLon = lon;
   } else {
     isGpsMapTrackFile = false;
+    qDebug() << "gps opt file=" + gpsOptimizedFile + " no exists.";
   }
 }
 
