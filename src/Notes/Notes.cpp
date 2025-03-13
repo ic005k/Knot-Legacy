@@ -1762,6 +1762,10 @@ void Notes::setAndroidNoteConfig(QString key, QString value) {
   Reg.setIniCodec("utf-8");
 #endif
 
+  QString mdFileName = QFileInfo(currentMDFile).baseName();
+  if (Reg.value("/cpos/" + mdFileName).toString() == "")
+    Reg.setValue("/cpos/" + mdFileName, "0");
+
   Reg.setValue(key, value);
 }
 
@@ -1952,7 +1956,7 @@ QString markdownToHtmlWithMath(const QString &md) {
   // 创建解析器并启用关键选项
   cmark_parser *parser = cmark_parser_new(
       CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES |  // 表格样式优化
-      CMARK_OPT_UNSAFE                           // 保留原始字符（如 $）
+      CMARK_OPT_UNSAFE  // 保留原始字符（如 $）
   );
 
   // 附加所有需要的扩展

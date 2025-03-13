@@ -461,8 +461,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             try {
                 Wini ini = new Wini(new File(filename));
-                currentMDFile = ini.get("cpos", "currentMDFile");
+                currentMDFile = ini.get("cpos", "currentMDFile", String.class);
                 s_cpos = ini.get("cpos", currentMDFile);
+                if (s_cpos == null || s_cpos.isEmpty()) {
+                    s_cpos = ""; // 设置默认值
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
