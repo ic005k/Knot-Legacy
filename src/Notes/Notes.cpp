@@ -1314,7 +1314,7 @@ void Notes::closeEvent(QCloseEvent *event) {
   if (!m_TextSelector->isHidden()) {
     m_TextSelector->close();
   }
-  if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
+
   m_Method->Sleep(100);
 
   if (isNeedSave) {
@@ -1330,10 +1330,6 @@ void Notes::closeEvent(QCloseEvent *event) {
           saveMainNotes();
           loadNoteToQML();
         }
-
-      } else {
-        saveMainNotes();
-        loadNoteToQML();
       }
     }
 

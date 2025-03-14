@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.14";
+QString ver = "1.2.15";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -2155,6 +2155,13 @@ void MainWindow::on_twItemDoubleClicked() {
   QTreeWidget *tw = (QTreeWidget *)ui->tabWidget->currentWidget();
   QTreeWidgetItem *item = tw->currentItem();
   if (item->childCount() == 0 && item->parent()->childCount() > 0) {
+    if (item->parent()->text(3).toInt() != QDate::currentDate().year()) {
+      ShowMessage *msg = new ShowMessage(this);
+      msg->showMsg("Knot",
+                   tr("Only the data of the current year can be modified."), 1);
+      return;
+    }
+
     QString t = item->text(0);
     QStringList l0 = t.split(".");
     if (l0.count() == 2) t = l0.at(1);
