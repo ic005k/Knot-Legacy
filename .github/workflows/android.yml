@@ -1,4 +1,4 @@
-name: Android Build with JDK17
+name: Android Build for Knot
 
 on:
   push:
@@ -9,54 +9,89 @@ on:
 env:
   QT_VERSION: 5.15.2
   ANDROID_API: 33
-  ANDROID_BUILD_TOOLS: 33.0.0
+  ANDROID_BUILD_TOOLS: 33.0.1
   ANDROID_NDK: 21.4.7075529
+  ANDROID_ABIS: arm64-v8a
 
 jobs:
   build-android:
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4  # 更新到最新版本
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v4  # 使用v4版本
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Install Android SDK
-      uses: android-actions/setup-android@v3  # 使用新版Android Action
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libgl1-mesa-dev \
+          libicu-dev \
+          git \
+          python3-pip \
+          unzip
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
       with:
         ndk-version: ${{ env.ANDROID_NDK }}
         build-tools-version: ${{ env.ANDROID_BUILD_TOOLS }}
         platform-version: android-${{ env.ANDROID_API }}
 
-    - name: Install Qt dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev libicu-dev  # 补充必要的依赖
+    - name: Cache Qt installation
+      uses: actions/cache@v3
+      id: qt-cache
+      with:
+        path: |
+          ${{ env.HOME }}/Qt
+          ${{ env.HOME }}/.aqt
+        key: ${{ runner.os }}-qt-${{ env.QT_VERSION }}-android-modules
 
-    - name: Install Qt 5.15.2
+    - name: Install Qt with modules
+      if: steps.qt-cache.outputs.cache-hit != 'true'
       run: |
-        pip3 install aqtinstall
-        aqt install-qt linux android ${{ env.QT_VERSION }} android_arm64_v8a \
-          -m qtcharts qtsvg qtquickcontrols2 qtgraphicaleffects \
-          --autodesktop
+        pip3 install aqtinstall --user
+        python3 -m aqt install-qt linux android ${{ env.QT_VERSION }} android_${{ env.ANDROID_ABIS }} \
+          -m "qtcharts qtsvg qtquickcontrols2 qtgraphicaleffects qtdeclarative" \
+          --autodesktop \
+          --archives \
+            qtbase \
+            qttools \
+            qtandroidextras \
+            qtshadertools
 
-    - name: Configure environment
+    - name: Verify Qt installation
+      run: |
+        echo "Qt路径: $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS"
+        ls -l $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS/qml
+        qmake --version
+
+    - name: Configure build environment
       run: |
         echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
         echo "ANDROID_NDK_HOME=$ANDROID_NDK_ROOT" >> $GITHUB_ENV
-        echo "QT_DIR=$HOME/Qt/$QT_VERSION/android_arm64_v8a" >> $GITHUB_ENV
+        echo "QT_DIR=$HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS" >> $GITHUB_ENV
         echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
+
+    - name: Fix file permissions
+      run: |
+        chmod +x gradlew
+        chmod -R 755 android-build/gradle
 
     - name: Build project
       run: |
         qmake Knot.pro -spec android-clang \
           CONFIG+=release \
-          ANDROID_ABIS=arm64-v8a \
-          "QMAKE_JAVAC=javac -J-Dfile.encoding=UTF-8"
+          ANDROID_ABIS=$ANDROID_ABIS \
+          "QMAKE_JAVAC=javac -J-Dfile.encoding=UTF-8" \
+          "QMAKE_JAVA_HOME=$JAVA_HOME"
         
         make -j$(nproc)
         make apk
@@ -66,8 +101,9 @@ jobs:
         sed -i 's/gradle:[0-9\.]\+/gradle:7.5.1/' android-build/build.gradle
         sed -i 's/jcenter()/mavenCentral()/g' android-build/build.gradle
         echo "org.gradle.java.home=$JAVA_HOME" > gradle.properties
+        echo "android.jetifier.ignorelist=bcprov-jdk15to18" >> gradle.properties
 
-    - name: Generate Signed APK
+    - name: Generate signed APK
       run: |
         cd android-build
         $QT_DIR/bin/androiddeployqt \
@@ -79,10 +115,16 @@ jobs:
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-    - name: Upload APK artifacts
-      uses: actions/upload-artifact@v4  # 修正为v4版本
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
       with:
         name: Knot-APK
         path: |
           android-build/build/outputs/apk/**/*.apk
         retention-days: 3
+
+    - name: Cleanup build files
+      if: always()
+      run: |
+        rm -rf $HOME/.gradle/caches
+        rm -rf $HOME/.aqt
