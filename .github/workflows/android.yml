@@ -1,9 +1,9 @@
-name: Qt Android CI
+name: Android CI
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-android:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,79 +16,46 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Install Qt with Charts support
+    - name: Install Qt (Android)
       run: |
         sudo pip install aqtinstall
-        # 显式安装 Qt Charts 及其依赖
-        aqt install-qt linux android 5.15.2 -O "$HOME/Qt" \
-          --archives \
-          qtbase \
-          qtcharts \
-          qtdeclarative \
-          qtsvg \
-          qtquickcontrols2 \
-          qtquickcontrols2-material \
-          qtgraphicaleffects \
-          qtmultimedia \
-          qttools \
-          qtandroidextras \
-          qtmacextras
-        
-        # 额外安装 Charts 的附加组件
-        aqt install-src linux android 5.15.2 -O "$HOME/Qt" qtcharts
-        aqt install-examples linux android 5.15.2 -O "$HOME/Qt" qtcharts
-        aqt install-doc linux android 5.15.2 -O "$HOME/Qt" qtcharts
+        aqt install-qt linux android 5.15.2 \
+          -O "$HOME/Qt" \
+          -m "qtcharts qtwebengine qtmultimedia qtsvg qtandroidextras" \
+          --autodesktop
 
         echo "$HOME/Qt/5.15.2/android/bin" >> $GITHUB_PATH
 
-    - name: Setup Android SDK
+    - name: Setup Android SDK/NDK
       run: |
-        export ANDROID_SDK_ROOT="$HOME/android-sdk"
-        mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
-        
+        # 安装 Android 命令行工具
+        mkdir -p "$HOME/android-sdk/cmdline-tools/latest"
         wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-        unzip commandlinetools-linux-*.zip -d temp
-        mv temp/cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
-        rm -rf temp
-        
-        echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
-        echo "$JAVA_HOME_17_X64/bin" >> $GITHUB_PATH
-        
-        yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses
-        "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+        unzip commandlinetools-linux-*.zip -d tmp
+        mv tmp/cmdline-tools/* "$HOME/android-sdk/cmdline-tools/latest/"
+        rm -rf tmp
 
-    - name: Install Android NDK
-      run: |
-        mkdir -p "$HOME/android-ndk"
+        # 设置环境变量
+        echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "ANDROID_NDK_ROOT=$HOME/android-ndk" >> $GITHUB_ENV
+
+        # 安装 NDK r25c
         wget https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
-        unzip android-ndk-r25c-linux.zip -d "$HOME/android-ndk"
-        
-        NDK_PATH="$HOME/android-ndk/android-ndk-r25c"
-        echo "ANDROID_NDK_ROOT=$NDK_PATH" >> $GITHUB_ENV
-        echo "$NDK_PATH" >> $GITHUB_PATH
+        unzip android-ndk-r25c-linux.zip -d "$HOME"
 
-    - name: Verify Qt Charts installation
-      run: |
-        echo "Checking Qt Charts installation:"
-        ls -l $HOME/Qt/5.15.2/android/include/QtCharts
-        ls -l $HOME/Qt/5.15.2/android/lib/libQt5Charts.so
-        ls -l $HOME/Qt/5.15.2/android/qml/QtCharts
-
-    - name: Build project
+    - name: Build Project
       run: |
         cd src
-        export QML2_IMPORT_PATH=$HOME/Qt/5.15.2/android/qml
-        export QT_PLUGIN_PATH=$HOME/Qt/5.15.2/android/plugins
-        
-        $HOME/Qt/5.15.2/android/bin/qmake -spec android-clang \
-          "ANDROID_ABIS=armeabi-v7a arm64-v8a" \
-          CONFIG+=release \
-          QT+=charts
+        qmake -spec android-clang \
+          "ANDROID_ABIS=arm64-v8a" \
+          "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" \
+          "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT" \
+          CONFIG+=release
         
         make -j$(nproc)
         make apk
 
-    - name: Upload APK
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: knot-android
