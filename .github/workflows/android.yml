@@ -10,58 +10,68 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Setup Qt Android
+    - name: Setup Python environment
+      run: |
+        # 使用 Python 3.10 避免兼容性问题
+        sudo apt-get install python3.10 python3.10-venv
+        python3.10 -m venv venv
+        source venv/bin/activate
+        echo "/home/runner/venv/bin" >> $GITHUB_PATH
+
+    - name: Install Qt Android
       timeout-minutes: 30
       run: |
-        # 安装必要依赖
-        sudo apt-get -qq update
-        sudo apt-get -qq install python3-pip libgl1-mesa-dev
+        source venv/bin/activate
+        # 安装稳定版 aqtinstall
+        python -m pip install aqtinstall==3.1.0
 
-        # 安装最新版 aqtinstall
-        python3 -m pip install --user --upgrade aqtinstall
-        export PATH="$HOME/.local/bin:$PATH"
+        # 列出可用版本（调试用）
+        aqt list-qt linux android --arch 5.15.2
 
-        # 列出可用版本验证
-        aqt list-qt linux android  # 移除 --output 参数
-        aqt list-qt linux android --arch 5.15.9
-
-        # 安装 Qt 5.15.9 (LTS 最终维护版)
-        aqt install-qt linux android 5.15.9 \
+        # 安装指定版本 Qt
+        aqt install-qt linux android 5.15.2 \
           -O "$HOME/Qt" \
           android_arm64_v8a \
-          -m "qtbase qtcharts qtdeclarative qtsvg qtquickcontrols2 qtmultimedia qtandroidextras"
+          -m "qtbase qtcharts qtdeclarative qtsvg qtquickcontrols2 qtmultimedia qtandroidextras" \
+          --mirror https://mirrors.ustc.edu.cn/qtproject
 
         # 设置环境变量
-        echo "$HOME/Qt/5.15.9/android_arm64_v8a/bin" >> $GITHUB_PATH
-        echo "QT_DIR=$HOME/Qt/5.15.9/android_arm64_v8a" >> $GITHUB_ENV
+        echo "$HOME/Qt/5.15.2/android_arm64_v8a/bin" >> $GITHUB_PATH
+        echo "QT_DIR=$HOME/Qt/5.15.2/android_arm64_v8a" >> $GITHUB_ENV
 
     - name: Setup Android SDK/NDK
       run: |
-        # 安装命令行工具
         mkdir -p "$HOME/android-sdk/cmdline-tools/latest"
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
         unzip -qq commandlinetools-linux-*.zip -d tmp
         mv tmp/cmdline-tools/* "$HOME/android-sdk/cmdline-tools/latest/"
         rm -rf tmp
 
-        # 接受许可协议
         yes | "$HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager" --licenses
-
-        # 安装必要组件
         "$HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager" \
           "platform-tools" \
           "platforms;android-33" \
           "build-tools;33.0.0"
 
-        # 安装 NDK r25c
         mkdir -p "$HOME/android-ndk"
         wget -q https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
         unzip -qq android-ndk-r25c-linux.zip -d "$HOME/android-ndk"
         echo "ANDROID_NDK_ROOT=$HOME/android-ndk/android-ndk-r25c" >> $GITHUB_ENV
 
-    - name: Build Project
+    - name: Verify environment
+      run: |
+        source venv/bin/activate
+        echo "=== Qt 版本验证 ==="
+        qmake --version
+        ls $QT_DIR/include/QtCharts
+
+        echo "=== Android 工具链验证 ==="
+        $ANDROID_NDK_ROOT/ndk-build --version
+
+    - name: Build project
       run: |
         cd src
+        source ../venv/bin/activate
         qmake -spec android-clang \
           "ANDROID_ABIS=arm64-v8a" \
           "ANDROID_SDK_ROOT=$HOME/android-sdk" \
