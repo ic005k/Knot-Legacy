@@ -1,99 +1,75 @@
-name: Android CI with Qt Fix
+name: Android Build
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 env:
   QT_VERSION: 5.15.2
-  ANDROID_NDK: 21.4.7075529
-  ANDROID_ABI: arm64_v8a
-  QT_INSTALL_DIR: ${{ github.workspace }}/Qt
+  ANDROID_API: 31
+  BUILD_TOOLS: 33.0.0
+  NDK_VERSION: 25.1.8937393
 
 jobs:
   build-android:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 40
+    name: Build Android APK
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 系统依赖安装
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y \
-          libgl1-mesa-dev \
-          unzip \
-          expect \
-          tcl \
-          python3-pip
-
-    # Qt 安装与缓存
-    - name: Install Qt with aqt
-      id: install-qt
-      run: |
-        pip3 install aqtinstall==3.1.9
-        
-        # 显式指定安装路径
-        aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI \
-          -O $QT_INSTALL_DIR \
-          -m qtcharts qtsvg qtquickcontrols2
-        
-        # 验证安装
-        echo "=== Qt验证 ==="
-        $QT_INSTALL_DIR/$QT_VERSION/android_$ANDROID_ABI/bin/qmake -v
-
-    - name: Cache Qt
-      uses: actions/cache@v3
+    - name: Setup JDK 17
+      uses: actions/setup-java@v3
       with:
-        path: $QT_INSTALL_DIR
-        key: ${{ runner.os }}-qt-$QT_VERSION-android
+        distribution: 'zulu'
+        java-version: '17'
 
-    # Android SDK 配置
-    - name: Setup Android SDK
+    - name: Install Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Accept Android Licenses
       run: |
-        mkdir -p $HOME/android-sdk/cmdline-tools/latest
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -P $RUNNER_TEMP
-        unzip -q $RUNNER_TEMP/commandlinetools-linux-*.zip -d $HOME/android-sdk/cmdline-tools
-        mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
+        yes | sdkmanager --licenses
 
-        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-        echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: ${{ env.QT_VERSION }}
+        target: android
+        arch: android_arm64_v8a
 
-    # 许可证自动接受
-    - name: Accept licenses
+    - name: Setup Android NDK
       run: |
-        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+        sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
+        echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
-    # 构建环境配置
-    - name: Configure build environment
+    - name: Configure Keystore
+      env:
+        KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
       run: |
-        echo "QT_DIR=$QT_INSTALL_DIR/$QT_VERSION/android_$ANDROID_ABI" >> $GITHUB_ENV
-        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
+        echo $KEYSTORE_B64 | base64 -d > android-release-key.keystore
 
-    # 验证步骤
-    - name: Verify Qt
+    - name: Build APK
       run: |
-        echo "=== qmake路径验证 ==="
-        which qmake
-        echo "=== qmake版本验证 ==="
-        qmake -v
-
-    # 构建步骤
-    - name: Build with QMake
-      run: |
-        qmake Knot.pro -spec android-clang \
-          ANDROID_ABIS=$ANDROID_ABI \
-          "QMAKE_CXXFLAGS+=-fexceptions"
+        export ANDROID_SDK_ROOT=$ANDROID_HOME
+        export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}
         
-        make -j$(nproc) apk
+        qmake -spec android-clang CONFIG+=release
+        make -j$(nproc)
+        make apk_install_target
+        
+        cd android-build
+        ./gradlew assembleRelease \
+          -Pandroid.injected.signing.store.file=../android-release-key.keystore \
+          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+          -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+          -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-    # 异常处理
-    - name: Debug on failure
-      if: ${{ failure() }}
-      run: |
-        echo "=== 环境诊断 ==="
-        env | grep -E 'PATH|QT'
-        ls -l $QT_DIR/bin/qmake
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: Knot-Android
+        path: android-build/build/outputs/apk/release/*.apk
