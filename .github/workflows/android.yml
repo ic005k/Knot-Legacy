@@ -6,8 +6,8 @@ on:
 
 env:
   QT_VERSION: 5.15.2
-  ANDROID_NDK_VERSION: 21.4.7075529
-  ANDROID_ABI: arm64_v8a  # 注意这里是下划线不是连字符
+  ANDROID_NDK: 21.4.7075529
+  ANDROID_ABI: arm64_v8a
 
 jobs:
   build-android:
@@ -18,51 +18,65 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Android SDK
+    - name: Setup Android SDK (fixed)
       run: |
-        # 手动安装命令行工具
-        mkdir -p $HOME/android-sdk/cmdline-tools
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-        unzip commandlinetools-linux-*.zip -d cmdline-tools
-        mv cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-        
-        # 设置环境变量
-        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-        echo "PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
-        
-        # 接受许可证
-        yes | sdkmanager --licenses || true
-        sdkmanager "platforms;android-33" "build-tools;33.0.0" "ndk;$ANDROID_NDK_VERSION"
+        # 创建Android SDK目录
+        mkdir -p $HOME/android-sdk
 
-    - name: Install Qt with correct modules
+        # 下载命令行工具
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+        unzip -q commandlinetools-linux-*.zip -d cmdline-tools
+
+        # 正确设置目录结构
+        mkdir -p $HOME/android-sdk/cmdline-tools/latest
+        mv cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
+        rm -rf cmdline-tools
+
+        # 验证目录结构
+        echo "=== 目录结构验证 ==="
+        ls -l $HOME/android-sdk/cmdline-tools/latest/bin
+
+        # 设置永久环境变量
+        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
+
+    - name: Accept licenses (fixed)
+      run: |
+        # 使用绝对路径
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+        # 使用expect处理交互
+        /usr/bin/expect -c '
+        set timeout 120
+        spawn $env:HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+        expect {
+            "y/N" { send "y\r"; exp_continue }
+            timeout { exit 1 }
+            eof
+        }'
+
+    - name: Install Android components (fixed)
+      run: |
+        # 使用绝对路径安装组件
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
+          "platform-tools" \
+          "platforms;android-33" \
+          "build-tools;33.0.0" \
+          "ndk;$ANDROID_NDK"
+
+        # 验证安装
+        echo "=== 已安装组件 ==="
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --list
+
+    - name: Install Qt
       run: |
         pip3 install aqtinstall==3.1.9
-        
-        # 安装基础Qt
-        aqt install-qt linux android 5.15.2 android_$ANDROID_ABI
-        
-        # 单独安装模块（使用完整模块路径）
-        modules=(
-          "qt.qt5.5152.qtcharts.android_$ANDROID_ABI"
-          "qt.qt5.5152.qtsvg.android_$ANDROID_ABI"
-          "qt.qt5.5152.qtquickcontrols2.android_$ANDROID_ABI"
-          "qt.qt5.5152.qtgraphicaleffects.android_$ANDROID_ABI"
-        )
-        
-        for module in "${modules[@]}"; do
-          aqt install-qt linux android 5.15.2 android_$ANDROID_ABI -m $module
-        done
-
-    - name: Verify installation
-      run: |
-        echo "=== 安装的Qt模块 ==="
-        ls $HOME/Qt/5.15.2/android_$ANDROID_ABI/qml
-        echo -e "\n=== 核心库验证 ==="
-        ls $HOME/Qt/5.15.2/android_$ANDROID_ABI/lib/libQt5*
+        aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI
+        aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI -m "qtcharts qtsvg qtquickcontrols2 qtgraphicaleffects"
 
     - name: Build project
       run: |
-        export PATH=$HOME/Qt/5.15.2/android_$ANDROID_ABI/bin:$PATH
+        export PATH="$HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/bin:$PATH"
         qmake Knot.pro -spec android-clang \
           ANDROID_ABIS=$ANDROID_ABI \
           "QMAKE_CXXFLAGS+=-fexceptions"
@@ -71,7 +85,7 @@ jobs:
 
     - name: Generate APK
       run: |
-        $HOME/Qt/5.15.2/android_$ANDROID_ABI/bin/androiddeployqt \
+        $HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/bin/androiddeployqt \
           --input android-libKnot.so-deployment-settings.json \
           --output android-build \
           --gradle --release
