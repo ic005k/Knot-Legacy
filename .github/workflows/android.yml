@@ -32,7 +32,7 @@ jobs:
 
     - name: Accept Android Licenses
       run: |
-        yes | sdkmanager --licenses
+        yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
@@ -43,14 +43,14 @@ jobs:
 
     - name: Setup Android NDK
       run: |
-        sdkmanager --install "ndk;${{ env.NDK_VERSION }}"
+        $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
     - name: Configure Keystore
       env:
         KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
       run: |
-        echo $KEYSTORE_B64 | base64 -d > android-release-key.keystore
+        echo "$KEYSTORE_B64" | base64 -d > android-release-key.keystore
 
     - name: Build APK
       run: |
@@ -68,8 +68,9 @@ jobs:
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
       with:
         name: Knot-Android
         path: android-build/build/outputs/apk/release/*.apk
+        retention-days: 5
