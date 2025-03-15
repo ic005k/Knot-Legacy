@@ -14,32 +14,26 @@ jobs:
       timeout-minutes: 30
       run: |
         # 安装必要依赖
-        sudo apt-get -qq install libgl1-mesa-dev python3-pip
+        sudo apt-get -qq update
+        sudo apt-get -qq install python3-pip libgl1-mesa-dev
 
-        # 安装最新版 aqt
-        python3 -m pip install --user aqtinstall
+        # 安装最新版 aqtinstall
+        python3 -m pip install --user --upgrade aqtinstall
         export PATH="$HOME/.local/bin:$PATH"
 
-        # 列出可用版本验证 (调试用)
-        aqt list-qt linux android --output json
-        aqt list-qt linux android --arch 5.15.2
+        # 列出可用版本验证
+        aqt list-qt linux android  # 移除 --output 参数
+        aqt list-qt linux android --arch 5.15.9
 
-        # 安装 Qt 5.15.2 (使用完整版本号)
-        aqt install-qt linux android 5.15.10 \
+        # 安装 Qt 5.15.9 (LTS 最终维护版)
+        aqt install-qt linux android 5.15.9 \
           -O "$HOME/Qt" \
-          --archives \
-          qtbase \
-          qtcharts \
-          qtdeclarative \
-          qtsvg \
-          qtquickcontrols2 \
-          qtmultimedia \
-          qtandroidextras \
-          --autodesktop
+          android_arm64_v8a \
+          -m "qtbase qtcharts qtdeclarative qtsvg qtquickcontrols2 qtmultimedia qtandroidextras"
 
         # 设置环境变量
-        echo "$HOME/Qt/5.15.10/android_arm64_v8a/bin" >> $GITHUB_PATH
-        echo "QT_DIR=$HOME/Qt/5.15.10/android_arm64_v8a" >> $GITHUB_ENV
+        echo "$HOME/Qt/5.15.9/android_arm64_v8a/bin" >> $GITHUB_PATH
+        echo "QT_DIR=$HOME/Qt/5.15.9/android_arm64_v8a" >> $GITHUB_ENV
 
     - name: Setup Android SDK/NDK
       run: |
