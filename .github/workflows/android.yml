@@ -12,25 +12,22 @@ jobs:
 
     - name: Setup Python 3.10
       run: |
-        # 添加 Python 官方 PPA
-        sudo add-apt-repository ppa:deadsnakes/ppa -y
-        sudo apt-get update
+        # 使用 Miniconda 管理 Python 环境
+        wget -q https://repo.anaconda.com/miniconda/Miniconda3-py310_23.11.0-2-Linux-x86_64.sh -O miniconda.sh
+        bash miniconda.sh -b -p $HOME/miniconda
+        echo "$HOME/miniconda/bin" >> $GITHUB_PATH
         
-        # 安装 Python 3.10 核心包
-        sudo apt-get install -y python3.10 python3.10-distutils
-        
-        # 创建虚拟环境（无需 venv 包）
-        python3.10 -m ensurepip
-        python3.10 -m pip install virtualenv
-        python3.10 -m virtualenv --python=python3.10 venv
-        
-        echo "/home/runner/venv/bin" >> $GITHUB_PATH
+        # 配置 conda 环境
+        conda create -n qt-env python=3.10 -y
+        echo "source activate qt-env" >> $HOME/.bashrc
+        source $HOME/miniconda/etc/profile.d/conda.sh
+        conda activate qt-env
 
     - name: Install Qt Android
       timeout-minutes: 30
       run: |
-        source venv/bin/activate
-        python -m pip install aqtinstall==3.1.0
+        # 安装 aqtinstall
+        pip install aqtinstall==3.1.0
         
         # 安装 Qt 5.15.2
         aqt install-qt linux android 5.15.2 \
@@ -39,6 +36,7 @@ jobs:
           -m "qtbase qtcharts qtdeclarative qtsvg qtquickcontrols2 qtmultimedia qtandroidextras" \
           --mirror https://mirrors.ustc.edu.cn/qtproject
         
+        # 设置环境变量
         echo "$HOME/Qt/5.15.2/android_arm64_v8a/bin" >> $GITHUB_PATH
         echo "QT_DIR=$HOME/Qt/5.15.2/android_arm64_v8a" >> $GITHUB_ENV
 
@@ -64,7 +62,9 @@ jobs:
     - name: Build project
       run: |
         cd src
-        source ../venv/bin/activate
+        source $HOME/miniconda/etc/profile.d/conda.sh
+        conda activate qt-env
+        
         qmake -spec android-clang \
           "ANDROID_ABIS=arm64-v8a" \
           "ANDROID_SDK_ROOT=$HOME/android-sdk" \
