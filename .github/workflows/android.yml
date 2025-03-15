@@ -16,7 +16,7 @@ env:
 jobs:
   build-android:
     runs-on: ubuntu-22.04
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     steps:
     - name: Checkout code
@@ -34,9 +34,9 @@ jobs:
         sudo apt-get install -y \
           libgl1-mesa-dev \
           libicu-dev \
-          git \
           python3-pip \
-          unzip
+          unzip \
+          ninja-build
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
@@ -45,86 +45,87 @@ jobs:
         build-tools-version: ${{ env.ANDROID_BUILD_TOOLS }}
         platform-version: android-${{ env.ANDROID_API }}
 
-    - name: Cache Qt installation
+    - name: Cache Qt installations
       uses: actions/cache@v3
       id: qt-cache
       with:
         path: |
           ${{ env.HOME }}/Qt
           ${{ env.HOME }}/.aqt
-        key: ${{ runner.os }}-qt-${{ env.QT_VERSION }}-android-modules
+        key: ${{ runner.os }}-qt-${{ env.QT_VERSION }}-android-modules-v3
 
-    - name: Install Qt with modules
+    - name: Install Qt with corrected modules
       if: steps.qt-cache.outputs.cache-hit != 'true'
       run: |
-        pip3 install aqtinstall --user
-        python3 -m aqt install-qt linux android ${{ env.QT_VERSION }} android_${{ env.ANDROID_ABIS }} \
-          -m "qtcharts qtsvg qtquickcontrols2 qtgraphicaleffects qtdeclarative" \
+        pip3 install --user aqtinstall==3.1.9
+        python3 -m aqt install-qt \
+          linux android ${{ env.QT_VERSION }} \
+          android_${{ env.ANDROID_ABIS }} \
           --autodesktop \
+          -m qtbase \
+          qttools \
+          qtandroidextras \
+          qtshadertools \
+          qtcharts \
+          qtsvg \
+          qtquickcontrols2 \
+          qtgraphicaleffects \
+          qtdeclarative \
           --archives \
-            qtbase \
-            qttools \
-            qtandroidextras \
-            qtshadertools
+          qtbase \
+          qttools \
+          qtandroidextras
 
     - name: Verify Qt installation
       run: |
-        echo "Qt路径: $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS"
-        ls -l $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS/qml
-        qmake --version
+        echo "=== Qt安装目录结构 ==="
+        ls -l $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS
+        echo -e "\n=== 核心模块验证 ==="
+        ls $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS/lib/*.so
+        echo -e "\n=== QML模块验证 ==="
+        ls $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS/qml/{QtCharts,QtSvg,QtQuick/Controls/2}
 
-    - name: Configure build environment
+    - name: Configure environment
       run: |
         echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
         echo "ANDROID_NDK_HOME=$ANDROID_NDK_ROOT" >> $GITHUB_ENV
         echo "QT_DIR=$HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS" >> $GITHUB_ENV
         echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Fix file permissions
+    - name: Build preparation
       run: |
-        chmod +x gradlew
-        chmod -R 755 android-build/gradle
+        qmake -query
+        qmake -r -spec android-clang CONFIG+=debug
+        find . -name "*.pro" -exec sed -i '/QT +=/ s/$/ charts svg quickcontrols2 graphicaleffects/' {} \;
 
     - name: Build project
       run: |
-        qmake Knot.pro -spec android-clang \
+        qmake Knot.pro \
+          -spec android-clang \
           CONFIG+=release \
           ANDROID_ABIS=$ANDROID_ABIS \
-          "QMAKE_JAVAC=javac -J-Dfile.encoding=UTF-8" \
-          "QMAKE_JAVA_HOME=$JAVA_HOME"
+          "QMAKE_CXXFLAGS += -fexceptions" \
+          "QMAKE_JAVAC=javac -J-Dfile.encoding=UTF-8"
         
-        make -j$(nproc)
+        make -j$(nproc) all
         make apk
 
-    - name: Update Gradle configuration
-      run: |
-        sed -i 's/gradle:[0-9\.]\+/gradle:7.5.1/' android-build/build.gradle
-        sed -i 's/jcenter()/mavenCentral()/g' android-build/build.gradle
-        echo "org.gradle.java.home=$JAVA_HOME" > gradle.properties
-        echo "android.jetifier.ignorelist=bcprov-jdk15to18" >> gradle.properties
-
-    - name: Generate signed APK
+    - name: Generate APK
       run: |
         cd android-build
         $QT_DIR/bin/androiddeployqt \
           --input android-libKnot.so-deployment-settings.json \
-          --output android-build \
-          --gradle -- --no-daemon \
-          -Pandroid.injected.signing.store.file=../android/release.keystore \
-          -Pandroid.injected.signing.store.password=${{ secrets.STORE_PASSWORD }} \
-          -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
-          -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+          --output . \
+          --gradle \
+          --release \
+          --sign ../android/release.keystore \
+          --storepass "${{ secrets.STORE_PASSWORD }}" \
+          --alias "${{ secrets.KEY_ALIAS }}"
 
-    - name: Upload APK artifact
+    - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: Knot-APK
         path: |
           android-build/build/outputs/apk/**/*.apk
         retention-days: 3
-
-    - name: Cleanup build files
-      if: always()
-      run: |
-        rm -rf $HOME/.gradle/caches
-        rm -rf $HOME/.aqt
