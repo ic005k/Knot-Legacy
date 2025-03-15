@@ -36,7 +36,7 @@ jobs:
         cache-dependency-path: 'src/requirements.txt'  # 显式指定依赖文件路径
 
     - name: Generate requirements.txt (fallback)
-      if: !exists('src/requirements.txt')
+     
       run: |
         echo "Generating minimal requirements..."
         cat << EOF > src/requirements.txt
