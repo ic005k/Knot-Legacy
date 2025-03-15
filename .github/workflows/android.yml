@@ -20,32 +20,34 @@ jobs:
 
     - name: Setup Android SDK (fixed)
       run: |
-        # 创建Android SDK目录
+        # 创建基础目录
         mkdir -p $HOME/android-sdk
-
-        # 下载命令行工具
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-        unzip -q commandlinetools-linux-*.zip -d cmdline-tools
-
-        # 正确设置目录结构
+        mkdir -p $HOME/android-sdk/cmdline-tools
         mkdir -p $HOME/android-sdk/cmdline-tools/latest
-        mv cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
-        rm -rf cmdline-tools
+
+        # 下载并解压命令行工具
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -P $RUNNER_TEMP
+        unzip -q $RUNNER_TEMP/commandlinetools-linux-*.zip -d $HOME/android-sdk/cmdline-tools
+
+        # 移动到标准位置
+        mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
+        rm -rf $HOME/android-sdk/cmdline-tools/cmdline-tools
 
         # 验证目录结构
-        echo "=== 目录结构验证 ==="
+        echo "=== 目录验证 ==="
         ls -l $HOME/android-sdk/cmdline-tools/latest/bin
+        which sdkmanager || true
 
-        # 设置永久环境变量
+        # 设置环境变量
         echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
         echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Accept licenses (fixed)
+    - name: License Acceptance (fixed)
       run: |
-        # 使用绝对路径
+        # 使用绝对路径调用
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-        # 使用expect处理交互
+        # Expect自动应答
         /usr/bin/expect -c '
         set timeout 120
         spawn $env:HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
@@ -55,9 +57,8 @@ jobs:
             eof
         }'
 
-    - name: Install Android components (fixed)
+    - name: Install SDK Components (fixed)
       run: |
-        # 使用绝对路径安装组件
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
           "platform-tools" \
           "platforms;android-33" \
@@ -65,16 +66,16 @@ jobs:
           "ndk;$ANDROID_NDK"
 
         # 验证安装
-        echo "=== 已安装组件 ==="
+        echo "=== 组件列表 ==="
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --list
 
-    - name: Install Qt
+    - name: Qt Installation
       run: |
         pip3 install aqtinstall==3.1.9
-        aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI
-        aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI -m "qtcharts qtsvg qtquickcontrols2 qtgraphicaleffects"
+        aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI \
+          -m qtcharts qtsvg qtquickcontrols2 qtgraphicaleffects
 
-    - name: Build project
+    - name: Build Project
       run: |
         export PATH="$HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/bin:$PATH"
         qmake Knot.pro -spec android-clang \
@@ -90,7 +91,7 @@ jobs:
           --output android-build \
           --gradle --release
 
-    - name: Upload artifact
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: Knot-APK
