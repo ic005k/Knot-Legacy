@@ -1,12 +1,14 @@
-name: Android Build with Expect Fix
+name: Full Android CI/CD Pipeline
 
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:  # 允许手动触发
 
 env:
-  ANDROID_NDK: 21.4.7075529
   QT_VERSION: 5.15.2
+  ANDROID_NDK: 21.4.7075529
+  ANDROID_ABI: arm64_v8a
 
 jobs:
   build-android:
@@ -14,40 +16,54 @@ jobs:
     timeout-minutes: 40
 
     steps:
+    # 代码检出
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        submodules: recursive  # 支持子模块[6,8](@ref)
 
-    - name: Install Dependencies
+    # 系统依赖安装
+    - name: Install system dependencies
       run: |
         sudo apt-get update -y
-        # 同时安装expect及其依赖库[1,2](@ref)
         sudo apt-get install -y \
+          libgl1-mesa-dev \
+          libicu-dev \
+          unzip \
           expect \
           tcl \
-          libgl1-mesa-dev \
-          unzip
+          ninja-build  # 新增构建工具[8](@ref)
 
-        # 验证关键工具链
-        echo "=== 环境验证 ==="
-        which expect && expect -v  # 使用标准参数检查版本[3](@ref)
-        ls -l /usr/bin/expect
+    # Qt环境配置
+    - name: Setup Qt
+      run: |
+        pip3 install aqtinstall==3.1.9
+        aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI \
+          -m qtcharts qtsvg qtquickcontrols2 qtgraphicaleffects \
+          --outputdir $HOME/Qt
+        
+        # 配置环境变量[4,7](@ref)
+        echo "QT_DIR=$HOME/Qt/$QT_VERSION/android_$ANDROID_ABI" >> $GITHUB_ENV
+        echo "PATH=$PATH:$HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/bin" >> $GITHUB_ENV
 
-    - name: Setup Android SDK
+    # Android SDK配置
+    - name: Android SDK Setup
       run: |
         mkdir -p $HOME/android-sdk/cmdline-tools/latest
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -P $RUNNER_TEMP
         unzip -q $RUNNER_TEMP/commandlinetools-linux-*.zip -d $HOME/android-sdk/cmdline-tools
         mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
 
+        # 环境变量配置[2,6](@ref)
         echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
         echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Accept Licenses (Expect Automation)
+    # 许可证自动化
+    - name: Accept Android Licenses
       run: |
-        # 使用绝对路径调用expect[1,3](@ref)
         /usr/bin/expect -c '
         set timeout 30
-        spawn $env:HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+        spawn $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
         expect {
             "y/N" { 
                 send "y\r"
@@ -57,6 +73,7 @@ jobs:
             timeout { exit 1 }
         }'
 
+    # Android组件安装
     - name: Install Android Components
       run: |
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
@@ -64,23 +81,40 @@ jobs:
           "build-tools;33.0.0" \
           "ndk;$ANDROID_NDK"
 
-    - name: Build APK
+    # 构建步骤
+    - name: Build Project
       run: |
-        export PATH="$HOME/Qt/$QT_VERSION/android_arm64_v8a/bin:$PATH"
-        qmake PROJECT_NAME.pro -spec android-clang
+        qmake YourProject.pro -spec android-clang \
+          ANDROID_ABIS=$ANDROID_ABI \
+          "QMAKE_CXXFLAGS+=-fexceptions" \
+          CONFIG+=release
+        
         make -j$(nproc) apk
 
+    # APK生成
+    - name: Generate Signed APK
+      run: |
+        $HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/bin/androiddeployqt \
+          --input android-libYourProject.so-deployment-settings.json \
+          --output android-build \
+          --gradle --release \
+          --sign keystore.jks yourkeyalias  # 需配置密钥[9](@ref)
+
+    # 产物上传
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: android-apk
-        path: android-build/build/outputs/apk/release/*.apk
+        name: Android-APK
+        path: |
+          android-build/build/outputs/apk/release/*.apk
+          android-build/build/outputs/mapping/release/*.txt  # 包含调试符号[8](@ref)
 
-    # 调试模块
+    # 失败诊断模块
     - name: Debug Info (On Failure)
       if: ${{ failure() }}
       run: |
-        echo "=== 故障诊断 ==="
-        dpkg -l expect tcl
-        ls -l $HOME/android-sdk/cmdline-tools/latest/
-        expect -c 'puts $env(PATH)'
+        echo "=== 环境诊断 ==="
+        qmake -v
+        which androiddeployqt
+        ls -l $HOME/android-sdk/ndk/$ANDROID_NDK
+        printenv | grep ANDROID
