@@ -9,112 +9,79 @@ on:
 env:
   QT_VERSION: 5.15.2
   ANDROID_API: 31
-  BUILD_TOOLS: 33.0.0
+  BUILD_TOOLS: "34.0.0"  # 使用新版构建工具
   NDK_VERSION: 25.1.8937393
-  GRADLE_VERSION: 7.6.1
+  GRADLE_VERSION: 8.0
   JDK_VERSION: 17
 
 jobs:
   build-android:
-    name: Build and Sign APK
+    name: Build Android APK
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
-    # 检出代码
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
-    # Java环境配置
-    - name: Set up JDK ${{ env.JDK_VERSION }}
+    - name: Setup JDK ${{ env.JDK_VERSION }}
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: ${{ env.JDK_VERSION }}
         cache: 'gradle'
 
-    # Android SDK安装
-    - name: Install Android SDK
-      uses: android-actions/setup-android@v3
-      with:
-        api-level: ${{ env.ANDROID_API }}
-        build-tools: ${{ env.BUILD_TOOLS }}
-
-    # 自动接受许可证
-    - name: Accept licenses
+    - name: Install Android SDK (with CLI tools)
       run: |
-        yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
-        $ANDROID_HOME/tools/bin/sdkmanager --update
+        # 下载最新版命令行工具
+        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
+        unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
+        mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+        echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
 
-    # Qt安装配置
-    - name: Install Qt ${{ env.QT_VERSION }}
+    - name: Update SDK tools
+      run: |
+        yes | sdkmanager --update --channel=0
+        sdkmanager "platform-tools" "platforms;android-${{ env.ANDROID_API }}" \
+          "build-tools;${{ env.BUILD_TOOLS }}" \
+          "cmdline-tools;latest" \
+          "ndk;${{ env.NDK_VERSION }}"
+
+    - name: Accept licenses (JAXB fix)
+      run: |
+        # 添加 JAXB 依赖
+        export JAVA_OPTS="--add-exports=java.base/sun.nio.ch=ALL-UNNAMED -Djavax.xml.accessExternalSchema=all"
+        yes | sdkmanager --licenses || true
+
+    - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
         version: ${{ env.QT_VERSION }}
         host: linux
         target: android
         arch: android_arm64_v8a
-        modules: qtbase qtandroidextras qtmqtt qtsvg
-        tools: tools_openssl tools_android
-        setup-python: true
+        modules: qtbase qtmqtt
 
-    # NDK安装
-    - name: Install Android NDK
-      run: |
-        $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
-        echo "NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
-        echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
-
-    # 签名证书配置
-    - name: Setup Keystore
-      env:
-        KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
-      run: |
-        echo "$KEYSTORE_B64" | base64 -d > android.keystore
-        echo "SIGNING_FILE=$(pwd)/android.keystore" >> $GITHUB_ENV
-
-    # 构建配置
-    - name: Configure build environment
-      run: |
-        echo "QT_ANDROID=$QT_ROOT/android_arm64_v8a" >> $GITHUB_ENV
-        echo "PATH=$QT_ROOT/Tools/Ninja:$QT_ROOT/Tools/CMake/bin:$PATH" >> $GITHUB_ENV
-
-    # 构建流程
     - name: Build APK
       run: |
-        # 生成Makefile
+        # 设置兼容性环境变量
+        export GRADLE_OPTS="-Dorg.gradle.java.home=$JAVA_HOME_17_X64 -Djavax.xml.accessExternalSchema=all"
+        
         qmake -spec android-clang CONFIG+=release
-        
-        # 编译原生代码
         make -j$(nproc)
-        
-        # 生成Gradle项目
         make apk_install_target
         
-        # 进入构建目录
         cd android-build
-
-        # 修复Gradle权限
-        chmod +x gradlew
-
-        # 执行签名构建
         ./gradlew assembleRelease \
-          -Pandroid.injected.signing.store.file=$SIGNING_FILE \
+          -Pandroid.injected.signing.store.file=../android.keystore \
           -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
           --no-daemon \
-          --stacktrace \
-          --info
+          --stacktrace
 
-    # 上传产物
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: release-apk
-        path: |
-          android-build/build/outputs/apk/**/*.apk
-          android-build/build/outputs/bundle/**/*.aab
-        retention-days: 7
+        name: app-release
+        path: android-build/build/outputs/apk/release/*.apk
