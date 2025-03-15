@@ -16,41 +16,43 @@ jobs:
   build-android:
     runs-on: ubuntu-22.04
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4  # 更新到最新版本
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4  # 使用v4版本
       with:
         java-version: '17'
         distribution: 'temurin'
 
     - name: Install Android SDK
-      uses: android-actions/setup-android@v2
+      uses: android-actions/setup-android@v3  # 使用新版Android Action
       with:
         ndk-version: ${{ env.ANDROID_NDK }}
         build-tools-version: ${{ env.ANDROID_BUILD_TOOLS }}
         platform-version: android-${{ env.ANDROID_API }}
 
-    - name: Install Qt with JDK17 workaround
+    - name: Install Qt dependencies
       run: |
-        sudo apt-get install -y libgl1-mesa-dev
+        sudo apt-get update
+        sudo apt-get install -y libgl1-mesa-dev libicu-dev  # 补充必要的依赖
+
+    - name: Install Qt 5.15.2
+      run: |
         pip3 install aqtinstall
         aqt install-qt linux android ${{ env.QT_VERSION }} android_arm64_v8a \
           -m qtcharts qtsvg qtquickcontrols2 qtgraphicaleffects \
           --autodesktop
 
-    - name: Configure Gradle for JDK17
+    - name: Configure environment
       run: |
-        echo "org.gradle.java.home=$JAVA_HOME" > gradle.properties
-        echo "android.builder.sdkDownload=true" >> gradle.properties
+        echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
+        echo "ANDROID_NDK_HOME=$ANDROID_NDK_ROOT" >> $GITHUB_ENV
+        echo "QT_DIR=$HOME/Qt/$QT_VERSION/android_arm64_v8a" >> $GITHUB_ENV
+        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
 
     - name: Build project
       run: |
-        export ANDROID_SDK_ROOT=$ANDROID_HOME
-        export ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
-        export PATH=$HOME/Qt/$QT_VERSION/android_arm64_v8a/bin:$PATH
-        
         qmake Knot.pro -spec android-clang \
           CONFIG+=release \
           ANDROID_ABIS=arm64-v8a \
@@ -59,26 +61,28 @@ jobs:
         make -j$(nproc)
         make apk
 
-    - name: Fix Gradle compatibility
+    - name: Update Gradle configuration
       run: |
-        sed -i 's/gradle:6.5.1/gradle:7.5.1/' android-build/build.gradle
+        sed -i 's/gradle:[0-9\.]\+/gradle:7.5.1/' android-build/build.gradle
         sed -i 's/jcenter()/mavenCentral()/g' android-build/build.gradle
+        echo "org.gradle.java.home=$JAVA_HOME" > gradle.properties
 
     - name: Generate Signed APK
       run: |
         cd android-build
-        $HOME/Qt/$QT_VERSION/android_arm64_v8a/bin/androiddeployqt \
+        $QT_DIR/bin/androiddeployqt \
           --input android-libKnot.so-deployment-settings.json \
           --output android-build \
-          --gradle -- --no-daemon -Pandroid.injected.signing.store.file=../android/release.keystore \
+          --gradle -- --no-daemon \
+          -Pandroid.injected.signing.store.file=../android/release.keystore \
           -Pandroid.injected.signing.store.password=${{ secrets.STORE_PASSWORD }} \
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
+    - name: Upload APK artifacts
+      uses: actions/upload-artifact@v4  # 修正为v4版本
       with:
-        name: Knot-Android-APK
+        name: Knot-APK
         path: |
-          android-build/build/outputs/apk/release/*-release.apk
-          android-build/build/outputs/apk/debug/*-debug.apk
+          android-build/build/outputs/apk/**/*.apk
+        retention-days: 3
