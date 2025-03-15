@@ -1,4 +1,4 @@
-name: Android Build
+name: Android CI
 
 on:
   push:
@@ -12,101 +12,109 @@ env:
   BUILD_TOOLS: 33.0.0
   NDK_VERSION: 25.1.8937393
   GRADLE_VERSION: 7.6.1
-  JDK_VERSION: '17'
-  PYTHON_VERSION: '3.9'
+  JDK_VERSION: 17
 
 jobs:
   build-android:
-    name: Build Android APK
+    name: Build and Sign APK
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
+    # 检出代码
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        path: src  # 指定检出目录
 
-    - name: Setup Python ${{ env.PYTHON_VERSION }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-        cache: 'pip'
-        cache-dependency-path: 'src/requirements.txt'  # 显式指定依赖文件路径
-
-    - name: Generate requirements.txt (fallback)
-     
-      run: |
-        echo "Generating minimal requirements..."
-        cat << EOF > src/requirements.txt
-        six>=1.16.0
-        pyyaml>=6.0
-        pyparsing>=3.0.9
-        packaging>=21.3
-        requests>=2.28.1
-        EOF
-
-    - name: Install Python dependencies
-      working-directory: ./src
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt --user
-
-    # 后续步骤保持不变，添加 working-directory 参数
-    - name: Setup JDK 17
+    # Java环境配置
+    - name: Set up JDK ${{ env.JDK_VERSION }}
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: ${{ env.JDK_VERSION }}
+        cache: 'gradle'
 
+    # Android SDK安装
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
       with:
         api-level: ${{ env.ANDROID_API }}
         build-tools: ${{ env.BUILD_TOOLS }}
 
-    - name: Install Qt
+    # 自动接受许可证
+    - name: Accept licenses
+      run: |
+        yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
+        $ANDROID_HOME/tools/bin/sdkmanager --update
+
+    # Qt安装配置
+    - name: Install Qt ${{ env.QT_VERSION }}
       uses: jurplel/install-qt-action@v3
       with:
         version: ${{ env.QT_VERSION }}
+        host: linux
         target: android
         arch: android_arm64_v8a
-        setup-python: false
-        working-directory: ./src  # 指定工作目录
+        modules: qtbase qtandroidextras qtmqtt qtsvg
+        tools: tools_openssl tools_android
+        setup-python: true
 
-    # 其余步骤需要添加 working-directory 参数
-    - name: Configure Gradle
-      working-directory: ./src
+    # NDK安装
+    - name: Install Android NDK
       run: |
-        sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
-        mkdir -p ~/.gradle
-        echo "org.gradle.java.home=$JAVA_HOME" >> ~/.gradle/gradle.properties
+        $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
+        echo "NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
+        echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
+    # 签名证书配置
+    - name: Setup Keystore
+      env:
+        KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+      run: |
+        echo "$KEYSTORE_B64" | base64 -d > android.keystore
+        echo "SIGNING_FILE=$(pwd)/android.keystore" >> $GITHUB_ENV
+
+    # 构建配置
+    - name: Configure build environment
+      run: |
+        echo "QT_ANDROID=$QT_ROOT/android_arm64_v8a" >> $GITHUB_ENV
+        echo "PATH=$QT_ROOT/Tools/Ninja:$QT_ROOT/Tools/CMake/bin:$PATH" >> $GITHUB_ENV
+
+    # 构建流程
     - name: Build APK
-      working-directory: ./src
       run: |
-        export ANDROID_SDK_ROOT=$ANDROID_HOME
-        export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}
-        export PATH="$HOME/.local/bin:$PATH"
-
+        # 生成Makefile
         qmake -spec android-clang CONFIG+=release
-        make -j$(nproc) || make
+        
+        # 编译原生代码
+        make -j$(nproc)
+        
+        # 生成Gradle项目
         make apk_install_target
-
+        
+        # 进入构建目录
         cd android-build
+
+        # 修复Gradle权限
         chmod +x gradlew
+
+        # 执行签名构建
         ./gradlew assembleRelease \
-          -Pandroid.injected.signing.store.file=../android-release-key.keystore \
+          -Pandroid.injected.signing.store.file=$SIGNING_FILE \
           -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
           --no-daemon \
-          --stacktrace
+          --stacktrace \
+          --info
 
+    # 上传产物
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Knot-Android
-        path: src/android-build/build/outputs/apk/release/*.apk
+        name: release-apk
+        path: |
+          android-build/build/outputs/apk/**/*.apk
+          android-build/build/outputs/bundle/**/*.aab
         retention-days: 7
