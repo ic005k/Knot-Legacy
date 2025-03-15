@@ -3,129 +3,73 @@ name: Android Build for Knot
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 env:
   QT_VERSION: 5.15.2
   ANDROID_API: 33
-  ANDROID_BUILD_TOOLS: 33.0.1
-  ANDROID_NDK: 21.4.7075529
-  ANDROID_ABIS: arm64-v8a
+  ANDROID_ABI: arm64-v8a
 
 jobs:
   build-android:
     runs-on: ubuntu-22.04
-    timeout-minutes: 40
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          libgl1-mesa-dev \
-          libicu-dev \
-          python3-pip \
-          unzip \
-          ninja-build
-
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       with:
-        ndk-version: ${{ env.ANDROID_NDK }}
-        build-tools-version: ${{ env.ANDROID_BUILD_TOOLS }}
-        platform-version: android-${{ env.ANDROID_API }}
+        ndk-version: 21.4.7075529
+        build-tools-version: 33.0.0
+        platform-version: android-33
 
-    - name: Cache Qt installations
-      uses: actions/cache@v3
-      id: qt-cache
-      with:
-        path: |
-          ${{ env.HOME }}/Qt
-          ${{ env.HOME }}/.aqt
-        key: ${{ runner.os }}-qt-${{ env.QT_VERSION }}-android-modules-v3
-
-    - name: Install Qt with corrected modules
-      if: steps.qt-cache.outputs.cache-hit != 'true'
+    - name: Install Qt with correct module syntax
       run: |
-        pip3 install --user aqtinstall==3.1.9
-        python3 -m aqt install-qt \
-          linux android ${{ env.QT_VERSION }} \
-          android_${{ env.ANDROID_ABIS }} \
-          --autodesktop \
-          -m qtbase \
-          qttools \
-          qtandroidextras \
-          qtshadertools \
-          qtcharts \
-          qtsvg \
-          qtquickcontrols2 \
-          qtgraphicaleffects \
-          qtdeclarative \
-          --archives \
-          qtbase \
-          qttools \
-          qtandroidextras
+        pip3 install aqtinstall==3.1.9
+        # 第一步：安装基础Qt
+        python3 -m aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI
+        
+        # 第二步：安装必需模块
+        modules=(
+          qt.tools.androidextras
+          qt.qt5.5152.qtcharts.android_$ANDROID_ABI
+          qt.qt5.5152.qtsvg.android_$ANDROID_ABI
+          qt.qt5.5152.qtquickcontrols2.android_$ANDROID_ABI
+          qt.qt5.5152.qtgraphicaleffects.android_$ANDROID_ABI
+        )
+        
+        for module in "${modules[@]}"; do
+          python3 -m aqt install-extra linux android $module
+        done
 
-    - name: Verify Qt installation
+    - name: Verify installation
       run: |
-        echo "=== Qt安装目录结构 ==="
-        ls -l $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS
-        echo -e "\n=== 核心模块验证 ==="
-        ls $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS/lib/*.so
-        echo -e "\n=== QML模块验证 ==="
-        ls $HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS/qml/{QtCharts,QtSvg,QtQuick/Controls/2}
-
-    - name: Configure environment
-      run: |
-        echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
-        echo "ANDROID_NDK_HOME=$ANDROID_NDK_ROOT" >> $GITHUB_ENV
-        echo "QT_DIR=$HOME/Qt/$QT_VERSION/android_$ANDROID_ABIS" >> $GITHUB_ENV
-        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
-
-    - name: Build preparation
-      run: |
-        qmake -query
-        qmake -r -spec android-clang CONFIG+=debug
-        find . -name "*.pro" -exec sed -i '/QT +=/ s/$/ charts svg quickcontrols2 graphicaleffects/' {} \;
+        echo "=== 安装的Qt模块 ==="
+        ls $HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/qml
+        echo -e "\n=== Android扩展 ==="
+        ls $HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/lib/libQt5AndroidExtras*
 
     - name: Build project
       run: |
-        qmake Knot.pro \
-          -spec android-clang \
-          CONFIG+=release \
-          ANDROID_ABIS=$ANDROID_ABIS \
-          "QMAKE_CXXFLAGS += -fexceptions" \
-          "QMAKE_JAVAC=javac -J-Dfile.encoding=UTF-8"
+        export ANDROID_SDK_ROOT=$ANDROID_HOME
+        export ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
+        export PATH=$HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/bin:$PATH
         
-        make -j$(nproc) all
-        make apk
+        qmake Knot.pro -spec android-clang \
+          "ANDROID_ABIS=$ANDROID_ABI" \
+          "QMAKE_CXXFLAGS += -fexceptions"
+        
+        make -j$(nproc) apk
 
-    - name: Generate APK
+    - name: Deploy APK
       run: |
-        cd android-build
-        $QT_DIR/bin/androiddeployqt \
+        $HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/bin/androiddeployqt \
           --input android-libKnot.so-deployment-settings.json \
-          --output . \
-          --gradle \
-          --release \
-          --sign ../android/release.keystore \
-          --storepass "${{ secrets.STORE_PASSWORD }}" \
-          --alias "${{ secrets.KEY_ALIAS }}"
+          --output android-build \
+          --gradle --release
 
-    - name: Upload artifacts
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: Knot-APK
-        path: |
-          android-build/build/outputs/apk/**/*.apk
-        retention-days: 3
+        path: android-build/build/outputs/apk/release/*.apk
