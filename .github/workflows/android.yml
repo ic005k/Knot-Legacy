@@ -27,26 +27,31 @@ jobs:
         export ANDROID_SDK_ROOT="$HOME/android-sdk"
         mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
         
-        # 下载命令行工具
         wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
         unzip commandlinetools-linux-*.zip -d temp
         mv temp/cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
         rm -rf temp
         
-        # 配置Java环境（关键修复）
         echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
         echo "$JAVA_HOME_17_X64/bin" >> $GITHUB_PATH
         
-        # 安装Android组件
         yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses
         "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-33" "build-tools;33.0.0"
 
     - name: Install Android NDK
       run: |
+        # 关键修改：安装到用户目录避免权限问题
+        mkdir -p "$HOME/android-ndk"
         wget https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
-        unzip android-ndk-r25c-linux.zip -d /usr/local
-        echo "ANDROID_NDK_ROOT=/usr/local/android-ndk-r25c" >> $GITHUB_ENV
-        echo "/usr/local/android-ndk-r25c" >> $GITHUB_PATH
+        unzip android-ndk-r25c-linux.zip -d "$HOME/android-ndk"
+        
+        # 设置环境变量指向新路径
+        NDK_PATH="$HOME/android-ndk/android-ndk-r25c"
+        echo "ANDROID_NDK_ROOT=$NDK_PATH" >> $GITHUB_ENV
+        echo "$NDK_PATH" >> $GITHUB_PATH
+        
+        # 验证安装
+        ls -l $NDK_PATH
 
     - name: Configure environment
       run: |
