@@ -16,7 +16,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Install Qt with required modules
+    - name: Install Qt with Android toolchain
       run: |
         sudo pip install aqtinstall
         aqt install-qt linux android 5.15.2 -O "$HOME/Qt" \
@@ -31,6 +31,9 @@ jobs:
           qtandroidextras \
           qtdeclarative \
           qttools
+
+        # 显式添加 Qt 工具链到 PATH
+        echo "$HOME/Qt/5.15.2/android/bin" >> $GITHUB_PATH
 
     - name: Setup Android SDK
       run: |
@@ -58,16 +61,22 @@ jobs:
         echo "ANDROID_NDK_ROOT=$NDK_PATH" >> $GITHUB_ENV
         echo "$NDK_PATH" >> $GITHUB_PATH
 
-    - name: Verify Qt installation
+    - name: Verify Qt environment
       run: |
-        echo "Installed Qt modules:"
-        ls $HOME/Qt/5.15.2/android
+        # 验证关键路径和命令
+        echo "PATH: $PATH"
+        echo "Qt目录内容:"
+        ls -l $HOME/Qt/5.15.2/android/bin
+        which qmake
+        qmake --version
 
     - name: Build project
       run: |
-        qmake -spec android-clang \
+        # 显式指定 qmake 完整路径
+        $HOME/Qt/5.15.2/android/bin/qmake -spec android-clang \
           "ANDROID_ABIS=armeabi-v7a arm64-v8a" \
           CONFIG+=release
+        
         make -j$(nproc)
         make apk
 
