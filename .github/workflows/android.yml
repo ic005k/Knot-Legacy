@@ -10,52 +10,65 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Install Qt (Android)
+    - name: Setup Qt Android environment
+      timeout-minutes: 25
       run: |
-        sudo pip install aqtinstall
-        aqt install-qt linux android 5.15.2 \
-          -O "$HOME/Qt" \
-          -m "qtcharts qtwebengine qtmultimedia qtsvg qtandroidextras" \
-          --autodesktop
+        # 安装必要依赖
+        sudo apt-get -qq install libgl1-mesa-dev
 
-        echo "$HOME/Qt/5.15.2/android/bin" >> $GITHUB_PATH
+        # 安装 aqt
+        python -m pip install aqtinstall
+        aqt list-qt linux android --modules 5.15.2 android_arm64_v8a  # 查看可用模块
+
+        # 安装 Qt 核心组件
+        aqt install-qt linux android 5.15.2 android_arm64_v8a -O "$HOME/Qt" \
+          --modules "qtbase qtcharts qtdeclarative qtsvg qtquickcontrols2 qtmultimedia"
+
+        # 安装 Android 额外组件
+        aqt install-qt linux android 5.15.2 android_arm64_v8a -O "$HOME/Qt" \
+          --modules "qtandroidextras"
+
+        # 设置环境变量
+        echo "$HOME/Qt/5.15.2/android_arm64_v8a/bin" >> $GITHUB_PATH
+        echo "QT_DIR=$HOME/Qt/5.15.2/android_arm64_v8a" >> $GITHUB_ENV
 
     - name: Setup Android SDK/NDK
       run: |
-        # 安装 Android 命令行工具
+        # 安装命令行工具
         mkdir -p "$HOME/android-sdk/cmdline-tools/latest"
-        wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-        unzip commandlinetools-linux-*.zip -d tmp
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+        unzip -qq commandlinetools-linux-*.zip -d tmp
         mv tmp/cmdline-tools/* "$HOME/android-sdk/cmdline-tools/latest/"
         rm -rf tmp
 
-        # 设置环境变量
-        echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
-        echo "ANDROID_NDK_ROOT=$HOME/android-ndk" >> $GITHUB_ENV
+        # 接受许可协议
+        yes | "$HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager" --licenses
+
+        # 安装必要组件
+        "$HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager" \
+          "platform-tools" \
+          "platforms;android-33" \
+          "build-tools;33.0.0"
 
         # 安装 NDK r25c
-        wget https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
-        unzip android-ndk-r25c-linux.zip -d "$HOME"
+        mkdir -p "$HOME/android-ndk"
+        wget -q https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
+        unzip -qq android-ndk-r25c-linux.zip -d "$HOME/android-ndk"
+        echo "ANDROID_NDK_ROOT=$HOME/android-ndk/android-ndk-r25c" >> $GITHUB_ENV
 
     - name: Build Project
       run: |
         cd src
         qmake -spec android-clang \
           "ANDROID_ABIS=arm64-v8a" \
-          "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" \
+          "ANDROID_SDK_ROOT=$HOME/android-sdk" \
           "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT" \
           CONFIG+=release
         
         make -j$(nproc)
         make apk
 
-    - name: Upload APK Artifact
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: knot-android
