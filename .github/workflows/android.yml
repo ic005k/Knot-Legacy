@@ -25,9 +25,14 @@ jobs:
           libgl1-mesa-dev \
           libicu-dev \
           unzip \
-          expect  # 新增expect安装
+          expect  # 确保expect已安装
 
-    - name: Setup Android SDK (fixed)
+    - name: Verify expect installation
+      run: |
+        which expect
+        expect --version  # 验证版本和路径
+
+    - name: Setup Android SDK
       run: |
         mkdir -p $HOME/android-sdk/cmdline-tools/latest
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -P $RUNNER_TEMP
@@ -38,27 +43,19 @@ jobs:
         echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
         echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Verify expect installation
+    - name: License Acceptance
       run: |
-        which expect
-        expect --version
-
-    - name: License Acceptance (fixed)
-      run: |
-        # 使用绝对路径调用
-        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-        # Expect自动应答
+        # 使用绝对路径调用expect
         /usr/bin/expect -c '
         set timeout 120
-        spawn $env:HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+        spawn $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
         expect {
             "y/N" { send "y\r"; exp_continue }
             timeout { exit 1 }
-            eof
+            eof { exit 0 }
         }'
 
-    - name: Install SDK Components (fixed)
+    - name: Install SDK Components
       run: |
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
           "platform-tools" \
@@ -66,11 +63,7 @@ jobs:
           "build-tools;33.0.0" \
           "ndk;$ANDROID_NDK"
 
-        # 验证安装
-        echo "=== 组件列表 ==="
-        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --list
-
-    - name: Qt Installation
+    - name: Install Qt
       run: |
         pip3 install aqtinstall==3.1.9
         aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI \
