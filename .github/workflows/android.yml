@@ -13,7 +13,7 @@ env:
   NDK_VERSION: 25.1.8937393
   GRADLE_VERSION: 7.6.1
   JDK_VERSION: '17'
-  PYTHON_VERSION: '3.9'  # 使用兼容性更好的 Python 版本
+  PYTHON_VERSION: '3.9'
 
 jobs:
   build-android:
@@ -26,40 +26,39 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        path: src  # 指定检出目录
 
     - name: Setup Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
-        cache: 'pip'  # 启用 pip 缓存
+        cache: 'pip'
+        cache-dependency-path: 'src/requirements.txt'  # 显式指定依赖文件路径
 
-    - name: Install system dependencies
+    - name: Generate requirements.txt (fallback)
+      if: !exists('src/requirements.txt')
       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          libssl-dev \
-          zlib1g-dev \
-          libncurses5-dev \
-          libsqlite3-dev \
-          libreadline-dev
+        echo "Generating minimal requirements..."
+        cat << EOF > src/requirements.txt
+        six>=1.16.0
+        pyyaml>=6.0
+        pyparsing>=3.0.9
+        packaging>=21.3
+        requests>=2.28.1
+        EOF
 
+    - name: Install Python dependencies
+      working-directory: ./src
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt --user
+
+    # 后续步骤保持不变，添加 working-directory 参数
     - name: Setup JDK 17
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: ${{ env.JDK_VERSION }}
-        check-latest: true
-
-    - name: Configure Python environment
-      run: |
-        python -m pip install --upgrade pip
-        pip install --user wheel setuptools
-        pip install --user \
-          six \
-          pyyaml \
-          pyparsing \
-          packaging \
-          requests
 
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
@@ -67,47 +66,32 @@ jobs:
         api-level: ${{ env.ANDROID_API }}
         build-tools: ${{ env.BUILD_TOOLS }}
 
-    - name: Accept Android Licenses (with retry)
-      run: |
-        for i in {1..5}; do
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses && break
-          sleep $((i*2))
-        done
-
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
         version: ${{ env.QT_VERSION }}
         target: android
         arch: android_arm64_v8a
-        setup-python: false  # 禁用自动 Python 配置
+        setup-python: false
+        working-directory: ./src  # 指定工作目录
 
-    - name: Setup Android NDK
-      run: |
-        $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
-        echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
-
+    # 其余步骤需要添加 working-directory 参数
     - name: Configure Gradle
+      working-directory: ./src
       run: |
         sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
         mkdir -p ~/.gradle
         echo "org.gradle.java.home=$JAVA_HOME" >> ~/.gradle/gradle.properties
-        echo "systemProp.http.proxyHost=mirrors.tencent.com" >> ~/.gradle/gradle.properties
-
-    - name: Configure Keystore
-      env:
-        KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
-      run: |
-        echo "$KEYSTORE_B64" | base64 -d > android-release-key.keystore
 
     - name: Build APK
+      working-directory: ./src
       run: |
         export ANDROID_SDK_ROOT=$ANDROID_HOME
         export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}
-        export PATH="$HOME/.local/bin:$PATH"  # 添加 Python 用户目录到 PATH
+        export PATH="$HOME/.local/bin:$PATH"
 
         qmake -spec android-clang CONFIG+=release
-        make -j$(nproc) || make  # 兼容性 fallback
+        make -j$(nproc) || make
         make apk_install_target
 
         cd android-build
@@ -118,14 +102,11 @@ jobs:
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
           --no-daemon \
-          --stacktrace \
-          --info
+          --stacktrace
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: Knot-Android
-        path: |
-          android-build/build/outputs/apk/release/*.apk
-          android-build/build/outputs/apk/debug/*.apk
+        path: src/android-build/build/outputs/apk/release/*.apk
         retention-days: 7
