@@ -16,11 +16,21 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Install Qt
+    - name: Install Qt with required modules
       run: |
         sudo pip install aqtinstall
         aqt install-qt linux android 5.15.2 -O "$HOME/Qt" \
-          --archives qtbase qttools qtdoc qtdeclarative
+          --archives \
+          qtbase \
+          qtcharts \
+          qtsensors \
+          qtwebview \
+          qtpositioning \
+          qtlocation \
+          qtsvg \
+          qtandroidextras \
+          qtdeclarative \
+          qttools
 
     - name: Setup Android SDK
       run: |
@@ -40,23 +50,18 @@ jobs:
 
     - name: Install Android NDK
       run: |
-        # 关键修改：安装到用户目录避免权限问题
         mkdir -p "$HOME/android-ndk"
         wget https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
         unzip android-ndk-r25c-linux.zip -d "$HOME/android-ndk"
         
-        # 设置环境变量指向新路径
         NDK_PATH="$HOME/android-ndk/android-ndk-r25c"
         echo "ANDROID_NDK_ROOT=$NDK_PATH" >> $GITHUB_ENV
         echo "$NDK_PATH" >> $GITHUB_PATH
-        
-        # 验证安装
-        ls -l $NDK_PATH
 
-    - name: Configure environment
+    - name: Verify Qt installation
       run: |
-        echo "$HOME/Qt/5.15.2/android/bin" >> $GITHUB_PATH
-        echo "QT_DIR=$HOME/Qt/5.15.2/android" >> $GITHUB_ENV
+        echo "Installed Qt modules:"
+        ls $HOME/Qt/5.15.2/android
 
     - name: Build project
       run: |
