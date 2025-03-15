@@ -1,14 +1,14 @@
-name: Full Android CI/CD Pipeline
+name: Android CI with Qt Fix
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # 允许手动触发
 
 env:
   QT_VERSION: 5.15.2
   ANDROID_NDK: 21.4.7075529
   ANDROID_ABI: arm64_v8a
+  QT_INSTALL_DIR: ${{ github.workspace }}/Qt
 
 jobs:
   build-android:
@@ -16,11 +16,8 @@ jobs:
     timeout-minutes: 40
 
     steps:
-    # 代码检出
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        submodules: recursive  # 支持子模块[6,8](@ref)
 
     # 系统依赖安装
     - name: Install system dependencies
@@ -28,93 +25,75 @@ jobs:
         sudo apt-get update -y
         sudo apt-get install -y \
           libgl1-mesa-dev \
-          libicu-dev \
           unzip \
           expect \
           tcl \
-          ninja-build  # 新增构建工具[8](@ref)
+          python3-pip
 
-    # Qt环境配置
-    - name: Setup Qt
+    # Qt 安装与缓存
+    - name: Install Qt with aqt
+      id: install-qt
       run: |
         pip3 install aqtinstall==3.1.9
-        aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI \
-          -m qtcharts qtsvg qtquickcontrols2 qtgraphicaleffects \
-          --outputdir $HOME/Qt
         
-        # 配置环境变量[4,7](@ref)
-        echo "QT_DIR=$HOME/Qt/$QT_VERSION/android_$ANDROID_ABI" >> $GITHUB_ENV
-        echo "PATH=$PATH:$HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/bin" >> $GITHUB_ENV
+        # 显式指定安装路径
+        aqt install-qt linux android $QT_VERSION android_$ANDROID_ABI \
+          -O $QT_INSTALL_DIR \
+          -m qtcharts qtsvg qtquickcontrols2
+        
+        # 验证安装
+        echo "=== Qt验证 ==="
+        $QT_INSTALL_DIR/$QT_VERSION/android_$ANDROID_ABI/bin/qmake -v
 
-    # Android SDK配置
-    - name: Android SDK Setup
+    - name: Cache Qt
+      uses: actions/cache@v3
+      with:
+        path: $QT_INSTALL_DIR
+        key: ${{ runner.os }}-qt-$QT_VERSION-android
+
+    # Android SDK 配置
+    - name: Setup Android SDK
       run: |
         mkdir -p $HOME/android-sdk/cmdline-tools/latest
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -P $RUNNER_TEMP
         unzip -q $RUNNER_TEMP/commandlinetools-linux-*.zip -d $HOME/android-sdk/cmdline-tools
         mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
 
-        # 环境变量配置[2,6](@ref)
         echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
         echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
 
-    # 许可证自动化
-    - name: Accept Android Licenses
+    # 许可证自动接受
+    - name: Accept licenses
       run: |
-        /usr/bin/expect -c '
-        set timeout 30
-        spawn $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
-        expect {
-            "y/N" { 
-                send "y\r"
-                exp_continue 
-            }
-            eof { exit 0 }
-            timeout { exit 1 }
-        }'
+        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
 
-    # Android组件安装
-    - name: Install Android Components
+    # 构建环境配置
+    - name: Configure build environment
       run: |
-        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
-          "platforms;android-33" \
-          "build-tools;33.0.0" \
-          "ndk;$ANDROID_NDK"
+        echo "QT_DIR=$QT_INSTALL_DIR/$QT_VERSION/android_$ANDROID_ABI" >> $GITHUB_ENV
+        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
+
+    # 验证步骤
+    - name: Verify Qt
+      run: |
+        echo "=== qmake路径验证 ==="
+        which qmake
+        echo "=== qmake版本验证 ==="
+        qmake -v
 
     # 构建步骤
-    - name: Build Project
+    - name: Build with QMake
       run: |
-        qmake YourProject.pro -spec android-clang \
+        qmake Knot.pro -spec android-clang \
           ANDROID_ABIS=$ANDROID_ABI \
-          "QMAKE_CXXFLAGS+=-fexceptions" \
-          CONFIG+=release
+          "QMAKE_CXXFLAGS+=-fexceptions"
         
         make -j$(nproc) apk
 
-    # APK生成
-    - name: Generate Signed APK
-      run: |
-        $HOME/Qt/$QT_VERSION/android_$ANDROID_ABI/bin/androiddeployqt \
-          --input android-libYourProject.so-deployment-settings.json \
-          --output android-build \
-          --gradle --release \
-          --sign keystore.jks yourkeyalias  # 需配置密钥[9](@ref)
-
-    # 产物上传
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Android-APK
-        path: |
-          android-build/build/outputs/apk/release/*.apk
-          android-build/build/outputs/mapping/release/*.txt  # 包含调试符号[8](@ref)
-
-    # 失败诊断模块
-    - name: Debug Info (On Failure)
+    # 异常处理
+    - name: Debug on failure
       if: ${{ failure() }}
       run: |
         echo "=== 环境诊断 ==="
-        qmake -v
-        which androiddeployqt
-        ls -l $HOME/android-sdk/ndk/$ANDROID_NDK
-        printenv | grep ANDROID
+        env | grep -E 'PATH|QT'
+        ls -l $QT_DIR/bin/qmake
