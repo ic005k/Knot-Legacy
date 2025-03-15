@@ -16,23 +16,21 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Install Qt with Android toolchain
+    - name: Install Qt with all required modules
       run: |
         sudo pip install aqtinstall
         aqt install-qt linux android 5.15.2 -O "$HOME/Qt" \
           --archives \
           qtbase \
           qtcharts \
-          qtsensors \
-          qtwebview \
-          qtpositioning \
-          qtlocation \
-          qtsvg \
-          qtandroidextras \
           qtdeclarative \
-          qttools
+          qtsvg \
+          qtquickcontrols2 \
+          qtquickcontrols2-material \
+          qtgraphicaleffects \
+          qttools \
+          qtandroidextras
 
-        # 显式添加 Qt 工具链到 PATH
         echo "$HOME/Qt/5.15.2/android/bin" >> $GITHUB_PATH
 
     - name: Setup Android SDK
@@ -61,18 +59,16 @@ jobs:
         echo "ANDROID_NDK_ROOT=$NDK_PATH" >> $GITHUB_ENV
         echo "$NDK_PATH" >> $GITHUB_PATH
 
-    - name: Verify Qt environment
+    - name: Verify Qt installation
       run: |
-        # 验证关键路径和命令
-        echo "PATH: $PATH"
-        echo "Qt目录内容:"
-        ls -l $HOME/Qt/5.15.2/android/bin
-        which qmake
-        qmake --version
+        echo "Installed Qt modules:"
+        ls $HOME/Qt/5.15.2/android
+        $HOME/Qt/5.15.2/android/bin/qmake --version
+        ls $HOME/Qt/5.15.2/android/include/QtCharts
 
     - name: Build project
       run: |
-        # 显式指定 qmake 完整路径
+        cd src
         $HOME/Qt/5.15.2/android/bin/qmake -spec android-clang \
           "ANDROID_ABIS=armeabi-v7a arm64-v8a" \
           CONFIG+=release
@@ -83,5 +79,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: android-build
-        path: android-build/*release.apk
+        name: knot-android
+        path: src/android-build/*release.apk
