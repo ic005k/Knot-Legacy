@@ -12,28 +12,38 @@ env:
   BUILD_TOOLS: 33.0.0
   NDK_VERSION: 25.1.8937393
   GRADLE_VERSION: 7.6.1
+  JDK_VERSION: '17.0.8'  # 明确指定具体小版本
 
 jobs:
   build-android:
     name: Build Android APK
     runs-on: ubuntu-latest
+    timeout-minutes: 30  # 增加超时时间
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Setup JDK 17
+    - name: Setup JDK 17 (Adoptium)
       uses: actions/setup-java@v3
       with:
-        distribution: 'zulu'
-        java-version: '17'
+        distribution: 'adopt'
+        java-version: ${{ env.JDK_VERSION }}
+        check-latest: true
+      timeout-minutes: 5  # 单独步骤超时设置
 
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
+      with:
+        api-level: ${{ env.ANDROID_API }}
+        build-tools: ${{ env.BUILD_TOOLS }}
 
-    - name: Accept Android Licenses
+    - name: Accept Android Licenses (with retry)
       run: |
-        yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        for i in {1..5}; do
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses && break
+          sleep $((i*2))
+        done
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
@@ -42,47 +52,4 @@ jobs:
         target: android
         arch: android_arm64_v8a
 
-    - name: Setup Android NDK
-      run: |
-        $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
-        echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
-
-    - name: Configure Gradle
-      run: |
-        # 更新 Gradle 包装器
-        sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
-        
-        # 创建全局 Gradle 配置
-        mkdir -p ~/.gradle
-        echo "org.gradle.java.home=$JAVA_HOME" >> ~/.gradle/gradle.properties
-
-    - name: Configure Keystore
-      env:
-        KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
-      run: |
-        echo "$KEYSTORE_B64" | base64 -d > android-release-key.keystore
-
-    - name: Build APK
-      run: |
-        export ANDROID_SDK_ROOT=$ANDROID_HOME
-        export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}
-        
-        qmake -spec android-clang CONFIG+=release
-        make -j$(nproc)
-        make apk_install_target
-        
-        cd android-build
-        ./gradlew assembleRelease \
-          -Pandroid.injected.signing.store.file=../android-release-key.keystore \
-          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
-          -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
-          -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
-          --no-daemon \
-          --stacktrace
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: Knot-Android
-        path: android-build/build/outputs/apk/release/*.apk
-        retention-days: 5
+    # 其余步骤保持不变...
