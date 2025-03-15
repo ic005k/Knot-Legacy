@@ -18,29 +18,30 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y \
+          libgl1-mesa-dev \
+          libicu-dev \
+          unzip \
+          expect  # 新增expect安装
+
     - name: Setup Android SDK (fixed)
       run: |
-        # 创建基础目录
-        mkdir -p $HOME/android-sdk
-        mkdir -p $HOME/android-sdk/cmdline-tools
         mkdir -p $HOME/android-sdk/cmdline-tools/latest
-
-        # 下载并解压命令行工具
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -P $RUNNER_TEMP
         unzip -q $RUNNER_TEMP/commandlinetools-linux-*.zip -d $HOME/android-sdk/cmdline-tools
-
-        # 移动到标准位置
         mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
         rm -rf $HOME/android-sdk/cmdline-tools/cmdline-tools
 
-        # 验证目录结构
-        echo "=== 目录验证 ==="
-        ls -l $HOME/android-sdk/cmdline-tools/latest/bin
-        which sdkmanager || true
-
-        # 设置环境变量
         echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
         echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
+
+    - name: Verify expect installation
+      run: |
+        which expect
+        expect --version
 
     - name: License Acceptance (fixed)
       run: |
