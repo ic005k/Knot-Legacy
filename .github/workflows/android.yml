@@ -10,10 +10,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up JDK 8
+    - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '8'
+        java-version: '17'
         distribution: 'temurin'
 
     - name: Install Qt
@@ -27,18 +27,17 @@ jobs:
         export ANDROID_SDK_ROOT="$HOME/android-sdk"
         mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
         
-        # 下载并处理命令行工具
+        # 下载命令行工具
         wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
         unzip commandlinetools-linux-*.zip -d temp
-        
-        # 修正目录结构（关键修复）
         mv temp/cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
         rm -rf temp
         
-        # 配置环境变量
-        echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+        # 配置Java环境（关键修复）
+        echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+        echo "$JAVA_HOME_17_X64/bin" >> $GITHUB_PATH
         
-        # 安装组件
+        # 安装Android组件
         yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses
         "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-33" "build-tools;33.0.0"
 
