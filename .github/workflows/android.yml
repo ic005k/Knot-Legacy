@@ -16,9 +16,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Install Qt with all required modules
+    - name: Install Qt with Charts support
       run: |
         sudo pip install aqtinstall
+        # 显式安装 Qt Charts 及其依赖
         aqt install-qt linux android 5.15.2 -O "$HOME/Qt" \
           --archives \
           qtbase \
@@ -28,8 +29,15 @@ jobs:
           qtquickcontrols2 \
           qtquickcontrols2-material \
           qtgraphicaleffects \
+          qtmultimedia \
           qttools \
-          qtandroidextras
+          qtandroidextras \
+          qtmacextras
+        
+        # 额外安装 Charts 的附加组件
+        aqt install-src linux android 5.15.2 -O "$HOME/Qt" qtcharts
+        aqt install-examples linux android 5.15.2 -O "$HOME/Qt" qtcharts
+        aqt install-doc linux android 5.15.2 -O "$HOME/Qt" qtcharts
 
         echo "$HOME/Qt/5.15.2/android/bin" >> $GITHUB_PATH
 
@@ -59,19 +67,23 @@ jobs:
         echo "ANDROID_NDK_ROOT=$NDK_PATH" >> $GITHUB_ENV
         echo "$NDK_PATH" >> $GITHUB_PATH
 
-    - name: Verify Qt installation
+    - name: Verify Qt Charts installation
       run: |
-        echo "Installed Qt modules:"
-        ls $HOME/Qt/5.15.2/android
-        $HOME/Qt/5.15.2/android/bin/qmake --version
-        ls $HOME/Qt/5.15.2/android/include/QtCharts
+        echo "Checking Qt Charts installation:"
+        ls -l $HOME/Qt/5.15.2/android/include/QtCharts
+        ls -l $HOME/Qt/5.15.2/android/lib/libQt5Charts.so
+        ls -l $HOME/Qt/5.15.2/android/qml/QtCharts
 
     - name: Build project
       run: |
         cd src
+        export QML2_IMPORT_PATH=$HOME/Qt/5.15.2/android/qml
+        export QT_PLUGIN_PATH=$HOME/Qt/5.15.2/android/plugins
+        
         $HOME/Qt/5.15.2/android/bin/qmake -spec android-clang \
           "ANDROID_ABIS=armeabi-v7a arm64-v8a" \
-          CONFIG+=release
+          CONFIG+=release \
+          QT+=charts
         
         make -j$(nproc)
         make apk
