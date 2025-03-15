@@ -24,21 +24,23 @@ jobs:
 
     - name: Setup Android SDK
       run: |
-        # 修复目录创建逻辑
-        export ANDROID_SDK_ROOT=$HOME/android-sdk
-        mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+        export ANDROID_SDK_ROOT="$HOME/android-sdk"
+        mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
         
-        # 下载并解压到正确路径
+        # 下载并处理命令行工具
         wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-        unzip commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools/latest
+        unzip commandlinetools-linux-*.zip -d temp
         
-        # 修复路径拼写错误 (重要!)
-        mv $ANDROID_SDK_ROOT/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools
+        # 修正目录结构（关键修复）
+        mv temp/cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
+        rm -rf temp
         
-        # 接受许可协议
-        yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-        $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+        # 配置环境变量
         echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+        
+        # 安装组件
+        yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses
+        "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-33" "build-tools;33.0.0"
 
     - name: Install Android NDK
       run: |
