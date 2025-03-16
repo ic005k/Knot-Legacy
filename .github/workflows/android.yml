@@ -40,7 +40,7 @@ jobs:
         host: windows
         target: android
         arch: win64_msvc2019_64
-        modules: qtcharts qtwebengine
+        #modules: qtcharts qtwebengine
 
     - name: Setup Build Environment
       shell: cmd
