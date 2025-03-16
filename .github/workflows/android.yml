@@ -49,9 +49,11 @@ jobs:
         python -m pip install --upgrade aqtinstall
 
         # 列出可用模块验证环境
-        aqt list-qt linux android --modules ${{ env.QT_VERSION }}
+        #aqt list-qt windows android --modules 6.2.4 android_armv7
+        aqt list-qt linux android --modules ${{ env.QT_VERSION }} android_arm64_v8a
 
         # 安装核心组件（官方文档推荐格式）
+        #aqt install-qt windows android 6.2.4 android_armv7 -m qtcharts qtnetworkauth
         aqt install-qt \
           linux android ${{ env.QT_VERSION }} \
           android_arm64_v8a \
