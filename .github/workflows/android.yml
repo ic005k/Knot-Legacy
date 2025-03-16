@@ -21,12 +21,12 @@ jobs:
     timeout-minutes: 60
 
     steps:
-    # ========== 保持原有正确配置 ==========
+    # ========== 代码检出 ==========
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # ========== 双JDK环境配置 ==========
-    - name: Setup Android JDK 11
+    # ========== 双JDK环境 ==========
+    - name: Setup JDK 11 (for Android tools)
       uses: actions/setup-java@v3
       id: jdk11
       with:
@@ -34,7 +34,7 @@ jobs:
         java-version: "11"
         cache: "gradle"
 
-    - name: Setup Project JDK 17
+    - name: Setup JDK 17 (for project)
       uses: actions/setup-java@v3
       id: jdk17
       with:
@@ -42,30 +42,40 @@ jobs:
         java-version: "17"
         cache: "gradle"
 
-    # ========== Android SDK配置 ==========
+    # ========== Android环境配置 ==========
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
       with:
         api-level: ${{ env.ANDROID_API }}
         build-tools: ${{ env.BUILD_TOOLS }}
 
-    # ========== 修复JAXB问题的核心配置 ==========
-    - name: Fix Android SDK JAXB Dependencies
+    - name: Fix JAXB dependencies
       run: |
-        # 临时切换到JDK11环境
+        # 强制使用JDK11
         echo "JAVA_HOME=${{ steps.jdk11.outputs.path }}" >> $GITHUB_ENV
-        
-        # 安装必要组件
-        yes | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" "emulator"
-        
-        # 修复NDK安装
-        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}" || true
+        echo "Using Java: $(java -version 2>&1 | head -n 1)"
+
+        # 下载JAXB依赖
+        mkdir -p $ANDROID_HOME/tools/lib/jaxb
+        wget -P $ANDROID_HOME/tools/lib/jaxb \
+          https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar \
+          https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-core/2.3.0.1/jaxb-core-2.3.0.1.jar \
+          https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-impl/2.3.3/jaxb-impl-2.3.3.jar
+
+        # 修改sdkmanager脚本
+        SDK_MANAGER="$ANDROID_HOME/tools/bin/sdkmanager"
+        sed -i '2i\JAVA_OPTS="$JAVA_OPTS -classpath $ANDROID_HOME/tools/lib/jaxb/*"' $SDK_MANAGER
+        chmod +x $SDK_MANAGER
+
+    - name: Install NDK
+      run: |
+        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
-        # 恢复项目JDK环境
+        # 恢复项目JDK
         echo "JAVA_HOME=${{ steps.jdk17.outputs.path }}" >> $GITHUB_ENV
 
-    # ========== Qt安装保持原有正确配置 ==========
+    # ========== Qt安装 ==========
     - name: Install Qt
       run: |
         sudo apt-get install -y libxcb-xinerama0
@@ -78,7 +88,7 @@ jobs:
         echo "QT_DIR=$GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}" >> $GITHUB_ENV
         echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
 
-    # ========== 保留原有构建配置 ==========
+    # ========== 构建配置 ==========
     - name: Configure build
       run: |
         ln -sf $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64 \
@@ -86,6 +96,7 @@ jobs:
         
         sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
 
+    # ========== 构建流程 ==========
     - name: Build APK
       run: |
         qmake -spec android-clang CONFIG+=release
@@ -102,6 +113,7 @@ jobs:
           --no-daemon \
           --stacktrace
 
+    # ========== 产物上传 ==========
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
