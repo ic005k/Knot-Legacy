@@ -91,12 +91,11 @@ jobs:
       shell: powershell
       run: |
         # 生成 qmake 配置
-        $qtConf = @"
-[Paths]
-Prefix = $env:QT_DIR
-HostPrefix = $env:QT_DIR\..\..\Tools\QtCreator
-Sysroot = $env:ANDROID_NDK_ROOT\toolchains\llvm\prebuilt\windows-x86_64\sysroot
-"@
+        $qtConf = @"[Paths]
+        Prefix = $env:QT_DIR
+        HostPrefix = $env:QT_DIR\..\..\Tools\QtCreator
+        Sysroot = $env:ANDROID_NDK_ROOT\toolchains\llvm\prebuilt\windows-x86_64\sysroot
+        "@
         Set-Content -Path "$env:QT_DIR\bin\qt.conf" -Value $qtConf
 
     # ========== 构建项目 ==========
