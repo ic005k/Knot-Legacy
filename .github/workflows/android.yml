@@ -1,4 +1,4 @@
-name: Qt Android CI
+name: Windows Android Build
 
 on:
   push:
@@ -7,111 +7,139 @@ on:
     branches: [ main ]
 
 env:
-  QT_VERSION: "5.15.2"
+  QT_VERSION: 5.15.2
+  QT_ARCH: android_arm64_v8a
   ANDROID_API: 31
-  NDK_VERSION: "25.1.8937393"
-  BUILD_TOOLS: "34.0.0"
+  NDK_VERSION: 25.1.8937393
+  BUILD_TOOLS: 34.0.0
 
 jobs:
-  android-build:
+  build:
     name: Build APK
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 60
 
     steps:
-    # ========== 基础环境 ==========
+    # ========== 检出代码 ==========
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # ========== 安装Python环境 ==========
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
-
-    # ========== 安装Android SDK ==========
-    - name: Install Android SDK
-      uses: android-actions/setup-android@v3
-      with:
-        api-level: ${{ env.ANDROID_API }}
-        build-tools: ${{ env.BUILD_TOOLS }}
-
-    # ========== 安装NDK（官方推荐方式）==========
-    - name: Install NDK
+    # ========== 安装必要依赖 ==========
+    - name: Install dependencies
+      shell: powershell
       run: |
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
-        echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
+        # 安装 Chocolatey 包管理器
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        
+        # 安装必要组件
+        choco install -y python --version=3.10.11
+        choco install -y jdk17
+        choco install -y 7zip
 
-    # ========== 安装Qt（严格遵循官方文档）==========
-    - name: Install Qt for Android
+    # ========== 配置 Android 环境 ==========
+    - name: Setup Android
+      shell: powershell
       run: |
-        # 安装最新版aqtinstall
-        python -m pip install --upgrade aqtinstall
+        # 下载 Android Command Line Tools
+        $url = "https://dl.google.com/android/repository/commandlinetools-win-9477386_latest.zip"
+        $output = "$env:RUNNER_TEMP\cmdline-tools.zip"
+        Invoke-WebRequest -Uri $url -OutFile $output
+        
+        # 解压到指定位置
+        Expand-Archive -Path $output -DestinationPath "$env:ANDROID_SDK_ROOT\cmdline-tools\latest"
+        
+        # 设置环境变量
+        echo "ANDROID_SDK_ROOT=$env:ANDROID_SDK_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "ANDROID_HOME=$env:ANDROID_SDK_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "PATH=$env:ANDROID_SDK_ROOT\cmdline-tools\latest\bin;$env:ANDROID_SDK_ROOT\platform-tools;$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-        # 列出可用模块验证环境
-        #aqt list-qt windows android --modules 6.2.4 android_armv7
-        aqt list-qt linux android --modules ${{ env.QT_VERSION }} android_arm64_v8a
+    # ========== 安装 Android 组件 ==========
+    - name: Install Android components
+      shell: powershell
+      run: |
+        # 接受许可证
+        echo y | sdkmanager --licenses
+        
+        # 安装必要组件
+        sdkmanager "platform-tools" "platforms;android-$env:ANDROID_API" "build-tools;$env:BUILD_TOOLS" "ndk;$env:NDK_VERSION"
+        
+        # 设置 NDK 路径
+        echo "ANDROID_NDK_ROOT=$env:ANDROID_SDK_ROOT\ndk\$env:NDK_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-        # 安装核心组件（官方文档推荐格式）
-        #aqt install-qt windows android 6.2.4 android_armv7 -m qtcharts qtnetworkauth
-        aqt install-qt \
-          linux android ${{ env.QT_VERSION }} \
-          android_arm64_v8a \
-          -m "qtcharts qtmqtt qtquick3d" \
-          --autodesktop \
+    # ========== 安装 Qt ==========
+    - name: Install Qt
+      shell: powershell
+      run: |
+        # 安装 aqtinstall
+        python -m pip install aqtinstall
+        
+        # 安装 Qt for Android
+        aqt install-qt windows android $env:QT_VERSION $env:QT_ARCH `
+          -m "qtcharts qtmqtt qtquick3d" `
+          --autodesktop `
           --outputdir Qt
+        
+        # 设置环境变量
+        $qtPath = "$pwd\Qt\$env:QT_VERSION\$env:QT_ARCH"
+        echo "QT_DIR=$qtPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "PATH=$qtPath\bin;$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-        # 验证安装结果
-        echo "QT_DIR=${GITHUB_WORKSPACE}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a" >> $GITHUB_ENV
-        echo "PATH=${QT_DIR}/bin:${PATH}" >> $GITHUB_ENV
-
-    # ========== 环境配置（关键修复）==========
-    - name: Configure Qt Android Toolchain
+    # ========== 配置构建环境 ==========
+    - name: Configure build
+      shell: powershell
       run: |
-        # 创建必要的符号链接（动态适配路径）
-        NDK_PREBUILT_DIR=$(find $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt -maxdepth 1 -type d -print -quit)
-        sudo ln -sf $NDK_PREBUILT_DIR $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
+        # 生成 qmake 配置
+        $qtConf = @"
+[Paths]
+Prefix = $env:QT_DIR
+HostPrefix = $env:QT_DIR\..\..\Tools\QtCreator
+Sysroot = $env:ANDROID_NDK_ROOT\toolchains\llvm\prebuilt\windows-x86_64\sysroot
+"@
+        Set-Content -Path "$env:QT_DIR\bin\qt.conf" -Value $qtConf
 
-        # 生成Qt配置文件（官方推荐方式）
-        cat > ${QT_DIR}/bin/qt.conf << EOF
-        [Paths]
-        Prefix = ${QT_DIR}
-        HostPrefix = ${QT_DIR}/../../Tools/QtCreator
-        Sysroot = ${NDK_PREBUILT_DIR}/sysroot
-        EOF
-
-    # ========== 构建流程 ==========
-    - name: Build Project
+    # ========== 构建项目 ==========
+    - name: Build project
+      shell: powershell
       run: |
-        # 设置构建规范（官方文档推荐参数）
-        qmake -spec android-clang \
-          ANDROID_ABIS="arm64-v8a" \
-          ANDROID_MIN_SDK_VERSION=23 \
-          ANDROID_TARGET_SDK_VERSION=${{ env.ANDROID_API }} \
+        # 生成 Makefile
+        qmake -spec android-clang `
+          "ANDROID_ABIS=arm64-v8a" `
+          "ANDROID_MIN_SDK_VERSION=23" `
+          "ANDROID_TARGET_SDK_VERSION=$env:ANDROID_API" `
           CONFIG+=release
+        
+        # 编译项目
+        jom /J 2 || nmake
+        
+        # 生成 APK 包
+        nmake apk_install_target
 
-        make -j$(nproc)
-        make apk_install_target
-
-    # ========== 生成APK ==========
-    - name: Generate APK
+    # ========== 生成签名 APK ==========
+    - name: Build APK
+      shell: powershell
       working-directory: android-build
       run: |
-        ${QT_DIR}/bin/androiddeployqt \
-          --input android-deployment-settings.json \
-          --output . \
-          --gradle \
+        # 生成 APK
+        & "$env:QT_DIR\bin\androiddeployqt" `
+          --input android-deployment-settings.json `
+          --output . `
+          --gradle `
           --verbose
-
-        ./gradlew assembleRelease \
-          -Pandroid.injected.signing.store.file=../android.keystore \
-          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
-          -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
-          -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+        
+        # 签名 APK
+        .\gradlew.bat assembleRelease `
+          -Pandroid.injected.signing.store.file=../android.keystore `
+          -Pandroid.injected.signing.store.password=$env:KEYSTORE_PASSWORD `
+          -Pandroid.injected.signing.key.alias=$env:KEY_ALIAS `
+          -Pandroid.injected.signing.key.password=$env:KEY_PASSWORD `
+          --no-daemon `
+          --stacktrace
 
     # ========== 上传产物 ==========
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: android-release
-        path: android-build/build/outputs/apk/release/*.apk
+        path: android-build\build\outputs\apk\release\*.apk
