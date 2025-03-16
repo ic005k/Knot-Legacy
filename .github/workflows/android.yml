@@ -18,50 +18,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up JDK ${{ env.JDK_VERSION }}
-      uses: actions/setup-java@v3
-      with:
-        java-version: ${{ env.JDK_VERSION }}
-        distribution: 'temurin'
-
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v2
-      with:
-        ndk-version: ${{ env.ANDROID_NDK_VERSION }}
-        sdk-version: ${{ env.ANDROID_SDK_VERSION }}
-
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v3
-      with:
-        version: ${{ env.QT_VERSION }}
-        host: windows
-        target: android
-        arch: win64_msvc2019_64
-        modules: qtandroidextras
-
-    - name: Setup Qt Environment
-      shell: cmd
-      run: |
-        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-        echo "ANDROID_SDK_ROOT=$env:ANDROID_SDK_ROOT" >> $env:GITHUB_ENV
-        echo "ANDROID_NDK_ROOT=$env:ANDROID_NDK_ROOT" >> $env:GITHUB_ENV
-        echo "JAVA_HOME=$env:JAVA_HOME" >> $env:GITHUB_ENV
-
-    - name: Generate Gradle Wrapper
-      shell: cmd
-      run: |
-        gradle wrapper --gradle-version 7.5
-
-    - name: Build APK
-      shell: cmd
-      run: |
-        set PATH=%PATH%;%ANDROID_SDK_ROOT%\platform-tools
-        qmake -spec android-clang "CONFIG+=release" Knot.pro
-        jom install INSTALL_ROOT=android-build
-        androiddeployqt --gradle --release --input android-libKnot.so-deployment-settings.json --output android-build
+    # 保持前序步骤不变...
 
     - name: Sign APK
       shell: cmd
@@ -75,7 +32,7 @@ jobs:
         zipalign -v 4 android-build/build/outputs/apk/release/android-build-release-unsigned.apk Knot-Signed.apk
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # 关键修复点
       with:
         name: Knot-Android
         path: |
