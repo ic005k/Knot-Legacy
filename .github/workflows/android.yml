@@ -78,15 +78,15 @@ jobs:
     - name: Fix NDK Symlinks
       run: |
         # 动态检测实际路径
-        NDK_PREBUILT_PATH=$(ls -d $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/* | head -n1)
+        #NDK_PREBUILT_PATH=$(ls -d $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/* | head -n1)
         
         # 创建符号链接
-        sudo mkdir -p $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt
-        sudo ln -sf $NDK_PREBUILT_PATH $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
+        #sudo mkdir -p $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt
+        #sudo ln -sf $NDK_PREBUILT_PATH $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
         
         # 验证链接
-        echo "符号链接状态："
-        ls -l $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
+        #echo "符号链接状态："
+        #ls -l $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
 
     # ========== 构建配置 ==========
     - name: Configure Qt Environment
