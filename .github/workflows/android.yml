@@ -7,15 +7,11 @@ on:
     branches: [ main ]
 
 env:
-  # 核心配置
   QT_VERSION: "5.15.2"
   QT_ARCH: "android_arm64_v8a"
   ANDROID_API: 31
   NDK_VERSION: "25.1.8937393"
-  
-  # 国内镜像加速
-  QT_MIRROR: "https://mirrors.ustc.edu.cn/qtproject"
-  OFFLINE_INSTALLER: "qt-unified-linux-x64-4.6.1-online.run"
+  QT_INSTALLER_URL: "https://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-4.6.2-online.run"
 
 jobs:
   android-build:
@@ -43,51 +39,42 @@ jobs:
         api-level: ${{ env.ANDROID_API }}
         build-tools: "34.0.0"
 
-    - name: Install NDK (JAXB Fix)
+    - name: Install NDK
       run: |
-        # 使用旧版sdkmanager兼容JDK17
-        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-        unzip commandlinetools-linux-8512546_latest.zip -d cmdline-tools
-        mv cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-        
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
+        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
-    # ==================== Qt 安装方案 ====================
+    # ==================== Qt 官方安装 ====================
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libxcb-xinerama0 libgl1
+
     - name: Download Qt Installer
       run: |
-        wget ${{ env.QT_MIRROR }}/online/qtsdkrepository/linux_x64/desktop/qt5_5152/${{ env.OFFLINE_INSTALLER }}
-        chmod +x ${{ env.OFFLINE_INSTALLER }}
+        wget ${{ env.QT_INSTALLER_URL }} -O qt-installer.run
+        chmod +x qt-installer.run
 
-    - name: Install Qt (Silent Mode)
+    - name: Install Qt with Android
       run: |
-        sudo apt-get install -y libxcb-xinerama0
-        ./${{ env.OFFLINE_INSTALLER }} \
-          --verbose \
+        ./qt-installer.run \
+          --script .github/qt-install.js \
+          --root "${{ github.workspace }}/Qt" \
           --accept-licenses \
           --accept-messages \
-          --confirm-command \
-          install \
-          --root "${{ github.workspace }}/Qt" \
-          qt.qt5.5152.android_arm64_v8a \
-          qt.qt5.5152.qtandroidextras \
-          qt.qt5.5152.qtmqtt \
-          qt.tools.openssl
-        
-        echo "QT_DIR=${{ github.workspace }}/Qt/5.15.2/android_arm64_v8a" >> $GITHUB_ENV
+          --confirm-command
+
+        echo "QT_DIR=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a" >> $GITHUB_ENV
+        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
 
     # ==================== 构建配置 ====================
     - name: Configure Environment
       run: |
-        # 修复符号链接
         ln -sf $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64 \
                $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
-        
-        # 配置Qt工具链
-        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
 
     # ==================== 构建流程 ====================
-    - name: Generate Project
+    - name: Build Project
       run: |
         qmake -spec android-clang CONFIG+=release
         make -j$(nproc)
@@ -107,10 +94,9 @@ jobs:
           --no-daemon \
           --stacktrace
 
-    # ==================== 产物处理 ====================
+    # ==================== 产物上传 ====================
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: android-release
         path: android-build/build/outputs/apk/release/*.apk
-        retention-days: 7
