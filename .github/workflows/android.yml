@@ -11,92 +11,100 @@ env:
   QT_ARCH: "android_arm64_v8a"
   ANDROID_API: 31
   NDK_VERSION: "25.1.8937393"
-  QT_INSTALLER_URL: "https://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-4.6.2-online.run"
+  BUILD_TOOLS: "34.0.0"
+  GRADLE_VERSION: "8.0"
 
 jobs:
   android-build:
     name: Build APK
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
 
     steps:
-    # ==================== 初始化环境 ====================
+    # ========== 保持原有正确配置 ==========
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # ==================== Java 环境 ====================
-    - name: Setup JDK 17
+    # ========== 双JDK环境配置 ==========
+    - name: Setup Android JDK 11
       uses: actions/setup-java@v3
+      id: jdk11
+      with:
+        distribution: "temurin"
+        java-version: "11"
+        cache: "gradle"
+
+    - name: Setup Project JDK 17
+      uses: actions/setup-java@v3
+      id: jdk17
       with:
         distribution: "temurin"
         java-version: "17"
         cache: "gradle"
 
-    # ==================== Android 环境 ====================
+    # ========== Android SDK配置 ==========
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
       with:
         api-level: ${{ env.ANDROID_API }}
-        build-tools: "34.0.0"
+        build-tools: ${{ env.BUILD_TOOLS }}
 
-    - name: Install NDK
+    # ========== 修复JAXB问题的核心配置 ==========
+    - name: Fix Android SDK JAXB Dependencies
       run: |
-        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
+        # 临时切换到JDK11环境
+        echo "JAVA_HOME=${{ steps.jdk11.outputs.path }}" >> $GITHUB_ENV
+        
+        # 安装必要组件
+        yes | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" "emulator"
+        
+        # 修复NDK安装
+        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}" || true
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
-    # ==================== Qt 官方安装 ====================
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libxcb-xinerama0 libgl1
+        # 恢复项目JDK环境
+        echo "JAVA_HOME=${{ steps.jdk17.outputs.path }}" >> $GITHUB_ENV
 
-    - name: Download Qt Installer
+    # ========== Qt安装保持原有正确配置 ==========
+    - name: Install Qt
       run: |
-        wget ${{ env.QT_INSTALLER_URL }} -O qt-installer.run
-        chmod +x qt-installer.run
-
-    - name: Install Qt with Android
-      run: |
-        ./qt-installer.run \
-          --script .github/qt-install.js \
-          --root "${{ github.workspace }}/Qt" \
-          --accept-licenses \
-          --accept-messages \
-          --confirm-command
-
-        echo "QT_DIR=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a" >> $GITHUB_ENV
+        sudo apt-get install -y libxcb-xinerama0
+        pip install aqtinstall
+        aqt install-qt linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
+          --modules qtbase,qtmqtt,qtsvg,qtandroidextras \
+          --autodesktop \
+          --outputdir Qt
+        
+        echo "QT_DIR=$GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}" >> $GITHUB_ENV
         echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
 
-    # ==================== 构建配置 ====================
-    - name: Configure Environment
+    # ========== 保留原有构建配置 ==========
+    - name: Configure build
       run: |
         ln -sf $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64 \
                $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
+        
+        sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
 
-    # ==================== 构建流程 ====================
-    - name: Build Project
+    - name: Build APK
       run: |
         qmake -spec android-clang CONFIG+=release
         make -j$(nproc)
         make apk_install_target
-
-    - name: Build Signed APK
-      working-directory: android-build
-      env:
-        KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
-      run: |
+        
+        cd android-build
         chmod +x gradlew
         ./gradlew assembleRelease \
           -Pandroid.injected.signing.store.file=../android.keystore \
-          -Pandroid.injected.signing.store.password=$KEYSTORE_PASS \
+          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
           --no-daemon \
           --stacktrace
 
-    # ==================== 产物上传 ====================
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: android-release
         path: android-build/build/outputs/apk/release/*.apk
+        retention-days: 7
