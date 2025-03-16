@@ -84,7 +84,6 @@ jobs:
       run: |
         pip install aqtinstall
         aqt install-qt linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-          --modules "qtbase qtmqtt qtsvg qtandroidextras" \
           --autodesktop \
           --outputdir Qt
         
