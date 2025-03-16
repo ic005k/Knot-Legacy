@@ -31,9 +31,24 @@ jobs:
         api-level: ${{ env.ANDROID_API }}
         build-tools: ${{ env.BUILD_TOOLS }}
 
-    - name: Install NDK
+    - name: Configure Android JAXB Fix
       run: |
-        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
+        # 设置Android工具使用JDK11
+        echo "JAVA_HOME=${{ steps.android_jdk.outputs.path }}" >> $GITHUB_ENV
+        
+        # 添加JAXB依赖到classpath
+        wget https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar
+        sudo mkdir -p $ANDROID_HOME/tools/lib/jaxb
+        sudo mv jaxb-api-2.3.1.jar $ANDROID_HOME/tools/lib/jaxb/
+
+    - name: Install NDK with JAXB Fix
+      run: |
+        # 修复sdkmanager的JVM参数
+        echo "export _JAVA_OPTIONS='--add-modules java.se.ee'" >> $ANDROID_HOME/tools/bin/sdkmanager
+        chmod +x $ANDROID_HOME/tools/bin/sdkmanager
+        
+        # 安装NDK
+        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}" || true
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
     # ========== Qt 安装强化步骤 ==========
