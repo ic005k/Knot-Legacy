@@ -44,7 +44,7 @@ jobs:
         modules: qtcharts  # 基础模块的特殊写法
         extra: "--autodesktop"  # 自动安装必要依赖
 
-    - name: List Installed Modules
+    #- name: List Installed Modules
       #shell: cmd
       #run: dir C:\Qt\${{ env.QT_FULL_VERSION }}\android_arm64_v8a
 
