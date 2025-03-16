@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  QT_VERSION: "5.15.2"
+  QT_VERSION: "5.12.2"
   QT_ARCH: "android_arm64_v8a"
   ANDROID_API: 31
   NDK_VERSION: "25.1.8937393"
@@ -63,10 +63,6 @@ jobs:
         # 完整安装命令（关键修改）
         aqt install-qt \
           linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-          -m "qt.qt5.5152.android_arm64_v8a" \
-          -m "qt.qt5.5152.qtandroidextras" \
-          -m "qt.qt5.5152.qtmqtt" \
-          -m "qt.qt5.5152.qtsvg" \
           --autodesktop \
           --outputdir Qt
         
