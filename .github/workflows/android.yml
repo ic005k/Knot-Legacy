@@ -4,78 +4,81 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches: main
 
 env:
+  # 核心版本配置
   QT_VERSION: "5.15.2"
   QT_ARCH: "android_arm64_v8a"
   ANDROID_API: 31
   NDK_VERSION: "25.1.8937393"
   BUILD_TOOLS: "34.0.0"
   GRADLE_VERSION: "8.0"
+  
+  # 双JDK配置
+  ANDROID_JDK_VERSION: "11"  # 用于Android工具链
+  PROJECT_JDK_VERSION: "17"  # 用于项目编译
+  
+  # 镜像加速
+  QT_MIRROR: "https://mirrors.tuna.tsinghua.edu.cn/qt"
+  PYPI_MIRROR: "https://pypi.tuna.tsinghua.edu.cn/simple"
 
 jobs:
   android-build:
-    name: Build APK
+    name: Build Android APK
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
-    # ========== 代码检出 ==========
+    # ========== 环境初始化 ==========
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # ========== 双JDK环境 ==========
-    - name: Setup JDK 11 (for Android tools)
+    # ========== 双JDK环境配置 ==========
+    - name: Setup Android JDK 11
       uses: actions/setup-java@v3
-      id: jdk11
+      id: android_jdk
       with:
         distribution: "temurin"
-        java-version: "11"
+        java-version: ${{ env.ANDROID_JDK_VERSION }}
         cache: "gradle"
 
-    - name: Setup JDK 17 (for project)
+    - name: Setup Project JDK 17
       uses: actions/setup-java@v3
-      id: jdk17
+      id: project_jdk
       with:
         distribution: "temurin"
-        java-version: "17"
+        java-version: ${{ env.PROJECT_JDK_VERSION }}
         cache: "gradle"
 
-    # ========== Android环境配置 ==========
+    # ========== Android SDK配置 ==========
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
       with:
         api-level: ${{ env.ANDROID_API }}
         build-tools: ${{ env.BUILD_TOOLS }}
 
-    - name: Fix JAXB dependencies
+    - name: Configure Android JAXB Fix
       run: |
-        # 强制使用JDK11
-        echo "JAVA_HOME=${{ steps.jdk11.outputs.path }}" >> $GITHUB_ENV
-        echo "Using Java: $(java -version 2>&1 | head -n 1)"
+        # 设置Android工具使用JDK11
+        echo "JAVA_HOME=${{ steps.android_jdk.outputs.path }}" >> $GITHUB_ENV
+        
+        # 添加JAXB依赖到classpath
+        wget https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar
+        sudo mkdir -p $ANDROID_HOME/tools/lib/jaxb
+        sudo mv jaxb-api-2.3.1.jar $ANDROID_HOME/tools/lib/jaxb/
 
-        # 下载JAXB依赖
-        mkdir -p $ANDROID_HOME/tools/lib/jaxb
-        wget -P $ANDROID_HOME/tools/lib/jaxb \
-          https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar \
-          https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-core/2.3.0.1/jaxb-core-2.3.0.1.jar \
-          https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-impl/2.3.3/jaxb-impl-2.3.3.jar
-
-        # 修改sdkmanager脚本
-        SDK_MANAGER="$ANDROID_HOME/tools/bin/sdkmanager"
-        sed -i '2i\JAVA_OPTS="$JAVA_OPTS -classpath $ANDROID_HOME/tools/lib/jaxb/*"' $SDK_MANAGER
-        chmod +x $SDK_MANAGER
-
-    - name: Install NDK
+    - name: Install NDK with JAXB Fix
       run: |
-        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
+        # 修复sdkmanager的JVM参数
+        echo "export _JAVA_OPTIONS='--add-modules java.se.ee'" >> $ANDROID_HOME/tools/bin/sdkmanager
+        chmod +x $ANDROID_HOME/tools/bin/sdkmanager
+        
+        # 安装NDK
+        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}" || true
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
-        # 恢复项目JDK
-        echo "JAVA_HOME=${{ steps.jdk17.outputs.path }}" >> $GITHUB_ENV
-
-    # ========== Qt安装 ==========
+    # ========== Qt环境配置 ==========
     - name: Install Qt
       run: |
         sudo apt-get install -y libxcb-xinerama0
@@ -89,17 +92,23 @@ jobs:
         echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
 
     # ========== 构建配置 ==========
-    - name: Configure build
+    - name: Gradle Configuration
       run: |
+        # 修复NDK符号链接
         ln -sf $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64 \
                $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
         
+        # 更新gradle-wrapper.properties
         sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
 
     # ========== 构建流程 ==========
     - name: Build APK
+      env:
+        ORG_GRADLE_PROJECT_androidJdkPath: ${{ steps.android_jdk.outputs.path }}
       run: |
+        export PATH="$QT_DIR/bin:$PATH"
         qmake -spec android-clang CONFIG+=release
+        
         make -j$(nproc)
         make apk_install_target
         
