@@ -3916,6 +3916,7 @@ void MainWindow::init_UIWidget() {
 
   ui->btnGPS->setStyleSheet(m_Steps->btnRoundStyle);
   ui->btnGPS->hide();
+  ui->frame_btnGps->setFixedHeight(80);
   QWidget *centralWidget = new QWidget(this);
   QVBoxLayout *layout = new QVBoxLayout(centralWidget);
 
