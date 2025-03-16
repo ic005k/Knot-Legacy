@@ -86,7 +86,6 @@ jobs:
         
         pip install aqtinstall -i ${{ env.PYPI_MIRROR }}
         aqt install-qt linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-         
           --autodesktop \
           --outputdir Qt
         
