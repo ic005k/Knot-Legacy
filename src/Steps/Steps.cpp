@@ -465,6 +465,7 @@ void Steps::startRecordMotion() {
   strStartTime = QTime::currentTime().toString();
   t0 = QDate::currentDate().toString();
   mw_one->ui->lblGpsDateTime->setText(t0 + " " + strStartTime);
+  startDT = QDateTime::currentDateTime();
 
   QString ss0 = t0;
   QString s0 = ss0.replace(" ", "");
@@ -622,7 +623,27 @@ void Steps::updateGetGps() {
 
   strTotalDistance = QString::number(m_TotalDistance) + " km";
   mw_one->ui->lblTotalDistance->setText(strTotalDistance);
-  strDurationTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
+
+  // strDurationTime = tr("Duration") + " : " + m_time.toString("hh:mm:ss");
+
+  endDT = QDateTime::currentDateTime();
+  qint64 secondsDiff = startDT.secsTo(endDT);
+  // 处理负数（可选）
+  bool isNegative = secondsDiff < 0;
+  secondsDiff = qAbs(secondsDiff);  // 若只需正值则取绝对值
+  // 分解为时、分、秒
+  qint64 hours = secondsDiff / 3600;
+  qint64 remainingSeconds = secondsDiff % 3600;
+  qint64 minutes = remainingSeconds / 60;
+  qint64 seconds = remainingSeconds % 60;
+  // 格式化为字符串（补零对齐）
+  QString timeStr = QString("%1%2:%3:%4")
+                        .arg(isNegative ? "-" : "")           // 保留负号
+                        .arg(hours, 2, 10, QLatin1Char('0'))  // 2位数字，补零
+                        .arg(minutes, 2, 10, QLatin1Char('0'))
+                        .arg(seconds, 2, 10, QLatin1Char('0'));
+  strDurationTime = tr("Duration") + " : " + timeStr;
+
   strGpsInfoShow = strDurationTime +
                    "\nLon.-Lat.: " + QString::number(longitude) + " - " +
                    QString::number(latitude) + "\n" + strGpsStatus;
@@ -651,6 +672,7 @@ void Steps::stopRecordMotion() {
   Reg.setValue("/GPS/TotalDistance", m_TotalDistance);
 
   strEndTime = QTime::currentTime().toString();
+
   QString t1, t2, t3, t4, t5, str_type;
 
   if (mw_one->ui->rbCycling->isChecked()) str_type = tr("Cycling");

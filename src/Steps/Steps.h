@@ -25,7 +25,7 @@ class Steps : public QDialog {
 
   QString btnRoundStyle =
       "QToolButton {"
-      "   border-radius: 40px;"        // 设置圆角半径为按钮宽度的一半
+      "   border-radius: 40px;"  // 设置圆角半径为按钮宽度的一半
       "   background-color: #00AF50;"  // 设置背景颜色
       "   color: white;"               // 设置文字颜色
       "   min-width: 80px;"            // 设置最小宽度
@@ -40,7 +40,7 @@ class Steps : public QDialog {
 
   QString btnRoundStyleRed =
       "QToolButton {"
-      "   border-radius: 40px;"        // 设置圆角半径为按钮宽度的一半
+      "   border-radius: 40px;"  // 设置圆角半径为按钮宽度的一半
       "   background-color: #FF0000;"  // 设置背景颜色
       "   color: white;"               // 设置文字颜色
       "   min-width: 80px;"            // 设置最小宽度
@@ -120,7 +120,7 @@ class Steps : public QDialog {
 
   void appendToCSV(const QString &filePath, const QStringList &data);
   void updateInfoText(QString strDistance, QString strSpeed);
-  public slots:
+ public slots:
   void clearAllGpsList();
   void getGpsTrack();
  private slots:
@@ -129,6 +129,8 @@ class Steps : public QDialog {
   void updateGetGps();
 
  private:
+  QDateTime startDT;
+  QDateTime endDT;
   QString strCSVFile;
   QBrush brush1 = QBrush(QColor(255, 228, 225));
   QBrush brush2 = QBrush(QColor(245, 222, 179));
