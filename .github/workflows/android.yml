@@ -8,7 +8,7 @@ on:
 
 env:
   # 核心版本配置
-  QT_VERSION: "5.15.2"
+  QT_VERSION: "5.13.2"
   QT_ARCH: "android_arm64_v8a"
   ANDROID_API: 31
   NDK_VERSION: "25.1.8937393"
