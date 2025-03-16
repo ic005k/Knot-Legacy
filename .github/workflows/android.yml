@@ -79,17 +79,23 @@ jobs:
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
     # ========== Qt环境配置 ==========
-    - name: Install Qt
+    - name: Install Qt (绕过元数据问题)
       run: |
-        sudo apt-get install -y libxcb-xinerama0
-        pip install aqtinstall
-        aqt install-qt linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-          --modules qtmqtt,qtsvg,qtandroidextras \
-          --autodesktop \
+        sudo apt-get install -y python3-pip
+        python3 -m pip install --upgrade aqtinstall
+
+        # 显式指定模块路径
+        aqt install-qt \
+          linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
+          -m "qt.qt5.5152.android_arm64_v8a" \
+          -m "qt.qt5.5152.qtandroidextras" \
+          -m "qt.qt5.5152.qtmqtt" \
+          -m "qt.qt5.5152.qtsvg" \
+          --archives \
           --outputdir Qt
-        
-        echo "QT_DIR=$GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}" >> $GITHUB_ENV
-        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
+
+        echo "QT_DIR=${GITHUB_WORKSPACE}/Qt/${ env.QT_VERSION }/${ env.QT_ARCH }}" >> $GITHUB_ENV
+        echo "PATH=${QT_DIR}/bin:$PATH" >> $GITHUB_ENV
 
     # ========== 构建配置 ==========
     - name: Gradle Configuration
