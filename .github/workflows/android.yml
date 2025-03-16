@@ -4,126 +4,110 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: main
+    branches: [ main ]
 
 env:
-  # 核心版本配置
+  # 核心配置
   QT_VERSION: "5.15.2"
   QT_ARCH: "android_arm64_v8a"
   ANDROID_API: 31
   NDK_VERSION: "25.1.8937393"
-  BUILD_TOOLS: "34.0.0"
-  GRADLE_VERSION: "8.0"
   
-  # 双JDK配置
-  ANDROID_JDK_VERSION: "11"  # 用于Android工具链
-  PROJECT_JDK_VERSION: "17"  # 用于项目编译
-  
-  # 镜像加速
-  QT_MIRROR: "https://mirrors.tuna.tsinghua.edu.cn/qt"
-  PYPI_MIRROR: "https://pypi.tuna.tsinghua.edu.cn/simple"
+  # 国内镜像加速
+  QT_MIRROR: "https://mirrors.ustc.edu.cn/qtproject"
+  OFFLINE_INSTALLER: "qt-unified-linux-x64-4.6.1-online.run"
 
 jobs:
   android-build:
-    name: Build Android APK
+    name: Build APK
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
-    # ========== 环境初始化 ==========
+    # ==================== 初始化环境 ====================
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # ========== 双JDK环境配置 ==========
-    - name: Setup Android JDK 11
+    # ==================== Java 环境 ====================
+    - name: Setup JDK 17
       uses: actions/setup-java@v3
-      id: android_jdk
       with:
         distribution: "temurin"
-        java-version: ${{ env.ANDROID_JDK_VERSION }}
+        java-version: "17"
         cache: "gradle"
 
-    - name: Setup Project JDK 17
-      uses: actions/setup-java@v3
-      id: project_jdk
-      with:
-        distribution: "temurin"
-        java-version: ${{ env.PROJECT_JDK_VERSION }}
-        cache: "gradle"
-
-    # ========== Android SDK配置 ==========
+    # ==================== Android 环境 ====================
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
       with:
         api-level: ${{ env.ANDROID_API }}
-        build-tools: ${{ env.BUILD_TOOLS }}
+        build-tools: "34.0.0"
 
-    - name: Configure Android JAXB Fix
+    - name: Install NDK (JAXB Fix)
       run: |
-        # 设置Android工具使用JDK11
-        echo "JAVA_HOME=${{ steps.android_jdk.outputs.path }}" >> $GITHUB_ENV
+        # 使用旧版sdkmanager兼容JDK17
+        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+        unzip commandlinetools-linux-8512546_latest.zip -d cmdline-tools
+        mv cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
         
-        # 添加JAXB依赖到classpath
-        wget https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar
-        sudo mkdir -p $ANDROID_HOME/tools/lib/jaxb
-        sudo mv jaxb-api-2.3.1.jar $ANDROID_HOME/tools/lib/jaxb/
-
-    - name: Install NDK with JAXB Fix
-      run: |
-        # 修复sdkmanager的JVM参数
-        echo "export _JAVA_OPTIONS='--add-modules java.se.ee'" >> $ANDROID_HOME/tools/bin/sdkmanager
-        chmod +x $ANDROID_HOME/tools/bin/sdkmanager
-        
-        # 安装NDK
-        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}" || true
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
-    # ========== Qt环境配置 ==========
-    - name: Install Qt
+    # ==================== Qt 安装方案 ====================
+    - name: Download Qt Installer
       run: |
-        # 切换回项目JDK
-        echo "JAVA_HOME=${{ steps.project_jdk.outputs.path }}" >> $GITHUB_ENV
-        
-        pip install aqtinstall -i ${{ env.PYPI_MIRROR }}
-        aqt install-qt linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-          --modules qtbase,qtmqtt,qtsvg,qtandroidextras \
-          --autodesktop \
-          --outputdir Qt
-        
-        echo "QT_DIR=$GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}" >> $GITHUB_ENV
+        wget ${{ env.QT_MIRROR }}/online/qtsdkrepository/linux_x64/desktop/qt5_5152/${{ env.OFFLINE_INSTALLER }}
+        chmod +x ${{ env.OFFLINE_INSTALLER }}
 
-    # ========== 构建配置 ==========
-    - name: Gradle Configuration
+    - name: Install Qt (Silent Mode)
       run: |
-        # 修复NDK符号链接
+        sudo apt-get install -y libxcb-xinerama0
+        ./${{ env.OFFLINE_INSTALLER }} \
+          --verbose \
+          --accept-licenses \
+          --accept-messages \
+          --confirm-command \
+          install \
+          --root "${{ github.workspace }}/Qt" \
+          qt.qt5.5152.android_arm64_v8a \
+          qt.qt5.5152.qtandroidextras \
+          qt.qt5.5152.qtmqtt \
+          qt.tools.openssl
+        
+        echo "QT_DIR=${{ github.workspace }}/Qt/5.15.2/android_arm64_v8a" >> $GITHUB_ENV
+
+    # ==================== 构建配置 ====================
+    - name: Configure Environment
+      run: |
+        # 修复符号链接
         ln -sf $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64 \
                $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
         
-        # 更新gradle-wrapper.properties
-        sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
+        # 配置Qt工具链
+        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
 
-    # ========== 构建流程 ==========
-    - name: Build APK
-      env:
-        ORG_GRADLE_PROJECT_androidJdkPath: ${{ steps.android_jdk.outputs.path }}
+    # ==================== 构建流程 ====================
+    - name: Generate Project
       run: |
-        export PATH="$QT_DIR/bin:$PATH"
         qmake -spec android-clang CONFIG+=release
-        
         make -j$(nproc)
         make apk_install_target
-        
-        cd android-build
+
+    - name: Build Signed APK
+      working-directory: android-build
+      env:
+        KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
+      run: |
         chmod +x gradlew
         ./gradlew assembleRelease \
           -Pandroid.injected.signing.store.file=../android.keystore \
-          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+          -Pandroid.injected.signing.store.password=$KEYSTORE_PASS \
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
           --no-daemon \
           --stacktrace
 
-    # ========== 产物上传 ==========
+    # ==================== 产物处理 ====================
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
