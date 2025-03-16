@@ -228,19 +228,23 @@ public class ClockActivity
 
     int maxVol = getMediaMaxVolume();
     strMute = internalConfigure.getIniKey("mute");
+    if (strMute == null || strMute.isEmpty())
+      strMute = "true";
     System.out.println("Mute: " + strMute);
     double vol = 0;
     mediaPlayer = new MediaPlayer();
-    if (strMute.equals("false")) {
-      vol = maxVol * 0.75;
-      setMediaVolume((int) Math.round(vol));
+    if (strMute != null) {
+      if (strMute.equals("false")) {
+        vol = maxVol * 0.75;
+        setMediaVolume((int) Math.round(vol));
 
-      try {
-        mediaPlayer.setDataSource("/data/data/com.x/files/msg.mp3");
-        mediaPlayer.prepare();
-        mediaPlayer.start();
-      } catch (Exception e) {
-        e.printStackTrace();
+        try {
+          mediaPlayer.setDataSource("/data/data/com.x/files/msg.mp3");
+          mediaPlayer.prepare();
+          mediaPlayer.start();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
     }
     System.out.println("maxVol:  " + maxVol + "    setvol:  " + vol);
@@ -262,7 +266,7 @@ public class ClockActivity
       }
     }
 
-    if (strEnInfo.equals(strInfo)) {
+    if (strEnInfo != null && strEnInfo.equals(strInfo)) {
       isRefreshAlarm = false;
       strInfo = internalConfigure.getIniKey("msg");
     }
@@ -301,7 +305,7 @@ public class ClockActivity
         String strNumber = "";
         for (int i = 0; i < mystr.length(); i++) {
           String subStr = mystr.substring(i, i + 1);
-          if (!subStr.equals(" ")) {
+          if (subStr != null && !subStr.equals(" ")) {
             if (isNumer(subStr)) {
               strNumber = strNumber + subStr;
             }
@@ -313,7 +317,7 @@ public class ClockActivity
       } else {
         String strVoice = internalConfigure.getIniKey("voice");
         String strValue = "true";
-        if (strVoice.equals(strValue)) {
+        if (strVoice != null && strVoice.equals(strValue)) {
           MyActivity.playMyText(str2);
         }
       }

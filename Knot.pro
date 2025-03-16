@@ -338,15 +338,16 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 ######################### OpenSSL #####################################################
 #Linux
 unix:!macx: {
-    # android: include(/home/zh/文档/android_openssl-master/openssl.pri)
+    android: include(/home/zh/文档/android_openssl-master/openssl.pri)
 }
 
-android: include($$PWD/android_openssl-master/openssl.pri)
-
-ANDROID_EXTRA_LIBS = $$PWD/android_openssl-master/ssl_1.1/arm64-v8a/libcrypto_1_1.so $$PWD/android_openssl-master/ssl_1.1/arm64-v8a/libssl_1_1.so
+# android: include($$PWD/android_openssl-master/openssl.pri)
+# ANDROID_EXTRA_LIBS = $$PWD/android_openssl-master/ssl_1.1/arm64-v8a/libcrypto_1_1.so $$PWD/android_openssl-master/ssl_1.1/arm64-v8a/libssl_1_1.so
 
 win32:{
-    android: include(C:/Users/Administrator/Documents/GitHub/Knot/android_openssl-master/openssl.pri)
+    android: include(C:/Users/Administrator/Documents/android_openssl-master/openssl.pri)
 }
 
-#######################################################################################
+ANDROID_EXTRA_LIBS = $$PWD/android-openssl/libcrypto_1_1.so $$PWD/android-openssl/libssl_1_1.so
+
+
