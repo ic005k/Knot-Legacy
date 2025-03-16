@@ -90,7 +90,7 @@ jobs:
           -m "qt.qt5.5152.android_arm64_v8a" \
           -m "qt.qt5.5152.qtandroidextras" \
           -m "qt.qt5.5152.qtmqtt" \
-          -m "qt.qt5.5152.qtsvg" \
+          
           --archives \
           --outputdir Qt
 
