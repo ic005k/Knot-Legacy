@@ -4,143 +4,115 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: main
+    branches: [ main ]
 
 env:
-  # 核心版本配置
   QT_VERSION: "5.15.2"
   QT_ARCH: "android_arm64_v8a"
   ANDROID_API: 31
   NDK_VERSION: "25.1.8937393"
   BUILD_TOOLS: "34.0.0"
-  GRADLE_VERSION: "8.0"
-  
-  # 双JDK配置
-  ANDROID_JDK_VERSION: "11"  # 用于Android工具链
-  PROJECT_JDK_VERSION: "17"  # 用于项目编译
-  
-  # 镜像加速
-  QT_MIRROR: "https://mirrors.tuna.tsinghua.edu.cn/qt"
-  PYPI_MIRROR: "https://pypi.tuna.tsinghua.edu.cn/simple"
 
 jobs:
   android-build:
-    name: Build Android APK
+    name: Build APK
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
-    # ========== 环境初始化 ==========
+    # ========== 基础环境配置 ==========
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # ========== 双JDK环境配置 ==========
-    - name: Setup Android JDK 11
-      uses: actions/setup-java@v3
-      id: android_jdk
-      with:
-        distribution: "temurin"
-        java-version: ${{ env.ANDROID_JDK_VERSION }}
-        cache: "gradle"
-
-    - name: Setup Project JDK 17
-      uses: actions/setup-java@v3
-      id: project_jdk
-      with:
-        distribution: "temurin"
-        java-version: ${{ env.PROJECT_JDK_VERSION }}
-        cache: "gradle"
-
-    # ========== Android SDK配置 ==========
+    # ========== Android SDK 配置 ==========
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
       with:
         api-level: ${{ env.ANDROID_API }}
         build-tools: ${{ env.BUILD_TOOLS }}
 
-    - name: Configure Android JAXB Fix
+    - name: Install NDK
       run: |
-        # 设置Android工具使用JDK11
-        echo "JAVA_HOME=${{ steps.android_jdk.outputs.path }}" >> $GITHUB_ENV
-        
-        # 添加JAXB依赖到classpath
-        wget https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar
-        sudo mkdir -p $ANDROID_HOME/tools/lib/jaxb
-        sudo mv jaxb-api-2.3.1.jar $ANDROID_HOME/tools/lib/jaxb/
-
-    - name: Install NDK with JAXB Fix
-      run: |
-        # 修复sdkmanager的JVM参数
-        echo "export _JAVA_OPTIONS='--add-modules java.se.ee'" >> $ANDROID_HOME/tools/bin/sdkmanager
-        chmod +x $ANDROID_HOME/tools/bin/sdkmanager
-        
-        # 安装NDK
-        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}" || true
+        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
-    
-    # ========== Qt 安装强化配置 ==========
+    # ========== Qt 安装强化步骤 ==========
     - name: Install Qt with Android toolchain
       run: |
-        pip install aqtinstall
-        aqt install-qt linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
+        # 安装必要依赖
+        sudo apt-get install -y python3-pip p7zip-full
+        
+        # 使用国内镜像加速安装
+        python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple aqtinstall
+        
+        # 完整安装命令（关键修改）
+        aqt install-qt \
+          linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
+          -m "qt.qt5.5152.android_arm64_v8a" \
+          -m "qt.qt5.5152.qtandroidextras" \
+          -m "qt.qt5.5152.qtmqtt" \
+          -m "qt.qt5.5152.qtsvg" \
           --autodesktop \
           --outputdir Qt
         
-        # 验证 Android 工具链安装
+        # 验证mkspecs安装
+        echo "Qt安装路径: $QT_DIR"
+        ls -l $QT_DIR/mkspecs/android-clang || echo "mkspecs验证失败！"
+        
+        # 设置环境变量
         echo "QT_DIR=${GITHUB_WORKSPACE}/Qt/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}" >> $GITHUB_ENV
         echo "PATH=${QT_DIR}/bin:${PATH}" >> $GITHUB_ENV
-        
-        # 检查 mkspecs 目录
-        ls -l ${QT_DIR}/mkspecs/android-clang
 
-    # ========== 环境配置强化 ==========
-    - name: Configure Qt Android Environment
+    # ========== 环境修复步骤 ==========
+    - name: Fix NDK Symlinks
       run: |
-        # 修复 NDK 符号链接
-        ln -sf ${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64 \
-               ${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux
+        # 动态检测实际路径
+        NDK_PREBUILT_PATH=$(ls -d $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/* | head -n1)
+        
+        # 创建符号链接
+        sudo mkdir -p $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt
+        sudo ln -sf $NDK_PREBUILT_PATH $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
+        
+        # 验证链接
+        echo "符号链接状态："
+        ls -l $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
 
-        # 生成必要的 Qt 配置文件
-        cat << EOF > ${QT_DIR}/bin/qt.conf
+    # ========== 构建配置 ==========
+    - name: Configure Qt Environment
+      run: |
+        # 生成qt.conf配置文件
+        cat << EOF > $QT_DIR/bin/qt.conf
         [Paths]
-        Prefix = ${QT_DIR}
-        HostPrefix = ${QT_DIR}/../gcc_64
-        Sysroot = ${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/sysroot
+        Prefix = $QT_DIR
+        HostPrefix = $QT_DIR/../../Tools/QtCreator
+        Sysroot = $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux/sysroot
         EOF
-
-        # 设置构建环境变量
-        echo "CLANG_PATH=${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" >> $GITHUB_ENV
+        
+        # 设置构建参数
+        echo "ANDROID_NDK_HOST=linux-x86_64" >> $GITHUB_ENV
         echo "QMAKE_SPEC=android-clang" >> $GITHUB_ENV
 
-    # ========== 构建流程优化 ==========
+    # ========== 构建流程 ==========
     - name: Build Project
       run: |
-        # 导出关键环境变量
+        # 导出必要变量
         export ANDROID_NDK_ROOT
-        export ANDROID_SDK_ROOT
-        export QMAKE_SPEC=android-clang
+        export ANDROID_SDK_ROOT=$ANDROID_HOME
         
-        # 生成 Makefile
+        # 生成Makefile
         qmake -spec $QMAKE_SPEC CONFIG+=release
         
         # 并行编译
         make -j$(nproc) || make
         
-        # 生成 APK 包
+        # 生成APK包
         make apk_install_target
 
-        # 使用 androiddeployqt 生成最终 APK
-        cd android-build
-        ${QT_DIR}/bin/androiddeployqt \
-          --input android-Knot-deployment-settings.json \
-          --output . \
-          --gradle
-
-    # ========== 后续步骤保持不变 ==========
-    - name: Sign and Upload APK
+    # ========== APK签名与上传 ==========
+    - name: Build Signed APK
+      working-directory: android-build
       run: |
-        cd android-build
+        chmod +x gradlew
         ./gradlew assembleRelease \
           -Pandroid.injected.signing.store.file=../android.keystore \
           -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
@@ -149,7 +121,6 @@ jobs:
           --no-daemon \
           --stacktrace
 
-    # ========== 产物上传 ==========
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
