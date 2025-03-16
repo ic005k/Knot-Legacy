@@ -94,8 +94,8 @@ jobs:
     - name: Gradle Configuration
       run: |
         # 修复NDK符号链接
-        ln -sf $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64 \
-               $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
+        #ln -sf $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64 \
+        #       $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
         
         # 更新gradle-wrapper.properties
         sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
