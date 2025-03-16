@@ -143,11 +143,11 @@ class Reader : public QDialog {
 
   void setDefaultOpen(QString value);
   void setTextAreaCursorPos(int nCursorPos);
-  public slots:
+ public slots:
   void setPageScroll0();
   void setPageScroll1();
   void setEpubPagePosition(int index, QString htmlFile);
-  void openBookListItem();
+
   void showCatalogue();
   void initLink(QString htmlFile);
   void selectText();
@@ -162,6 +162,10 @@ class Reader : public QDialog {
   void keyReleaseEvent(QKeyEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
   void paintEvent(QPaintEvent *event) override;
+
+ public slots:
+  void openBookListItem();
+
  private slots:
   void autoRun();
   void showEpubMsg();
