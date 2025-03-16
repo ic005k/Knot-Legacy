@@ -78,43 +78,72 @@ jobs:
         yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}" || true
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
-    # ========== Qt环境配置 ==========
-    - name: Install Qt
+    
+    # ========== Qt 安装强化配置 ==========
+    - name: Install Qt with Android toolchain
       run: |
-        # 切换回项目JDK
-        echo "JAVA_HOME=${{ steps.project_jdk.outputs.path }}" >> $GITHUB_ENV
-        
-        pip install aqtinstall -i ${{ env.PYPI_MIRROR }}
+        pip install aqtinstall
         aqt install-qt linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
+          --modules "qtbase qtmqtt qtsvg qtandroidextras" \
           --autodesktop \
           --outputdir Qt
         
-        echo "QT_DIR=$GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}" >> $GITHUB_ENV
-    # ========== 构建配置 ==========
-    - name: Gradle Configuration
-      run: |
-        # 修复NDK符号链接
-        #ln -sf $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64 \
-        #       $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
+        # 验证 Android 工具链安装
+        echo "QT_DIR=${GITHUB_WORKSPACE}/Qt/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}" >> $GITHUB_ENV
+        echo "PATH=${QT_DIR}/bin:${PATH}" >> $GITHUB_ENV
         
-        # 更新gradle-wrapper.properties
-        #sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
+        # 检查 mkspecs 目录
+        ls -l ${QT_DIR}/mkspecs/android-clang
 
-    # ========== 构建流程 ==========
-    - name: Build APK
-      env:
-        ORG_GRADLE_PROJECT_androidJdkPath: ${{ steps.android_jdk.outputs.path }}
+    # ========== 环境配置强化 ==========
+    - name: Configure Qt Android Environment
       run: |
-        export PATH="$QT_DIR/bin:$PATH"
-        qmake -spec android-clang CONFIG+=release
+        # 修复 NDK 符号链接
+        ln -sf ${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64 \
+               ${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux
+
+        # 生成必要的 Qt 配置文件
+        cat << EOF > ${QT_DIR}/bin/qt.conf
+        [Paths]
+        Prefix = ${QT_DIR}
+        HostPrefix = ${QT_DIR}/../gcc_64
+        Sysroot = ${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/sysroot
+        EOF
+
+        # 设置构建环境变量
+        echo "CLANG_PATH=${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" >> $GITHUB_ENV
+        echo "QMAKE_SPEC=android-clang" >> $GITHUB_ENV
+
+    # ========== 构建流程优化 ==========
+    - name: Build Project
+      run: |
+        # 导出关键环境变量
+        export ANDROID_NDK_ROOT
+        export ANDROID_SDK_ROOT
+        export QMAKE_SPEC=android-clang
         
-        make -j$(nproc)
+        # 生成 Makefile
+        qmake -spec $QMAKE_SPEC CONFIG+=release
+        
+        # 并行编译
+        make -j$(nproc) || make
+        
+        # 生成 APK 包
         make apk_install_target
-        
+
+        # 使用 androiddeployqt 生成最终 APK
         cd android-build
-        chmod +x gradlew
+        ${QT_DIR}/bin/androiddeployqt \
+          --input android-Knot-deployment-settings.json \
+          --output . \
+          --gradle
+
+    # ========== 后续步骤保持不变 ==========
+    - name: Sign and Upload APK
+      run: |
+        cd android-build
         ./gradlew assembleRelease \
-          -Pandroid.injected.signing.store.file=../android_release.keystore \
+          -Pandroid.injected.signing.store.file=../android.keystore \
           -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
