@@ -79,24 +79,20 @@ jobs:
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
     # ========== Qt环境配置 ==========
-    - name: Install Qt via official script
+    - name: Manual Qt Installation
       run: |
-        # 下载官方安装脚本
-        wget https://raw.githubusercontent.com/benlau/qtci/master/bin/extract-qt-installer
-        chmod +x extract-qt-installer
+        # 下载基础包
+        wget https://download.qt.io/online/qtsdkrepository/linux_x64/android/qt5_5152/qt.qt5.5152.android_arm64_v8a/5.15.2-0-202205032143qtbase-Android-ARMv8.7z
 
-        # 下载离线安装包
-        wget https://download.qt.io/archive/qt/5.15/5.15.2/qt-opensource-linux-x64-5.15.2.run
+        # 下载扩展模块
+        wget https://download.qt.io/online/qtsdkrepository/linux_x64/android/qt5_5152/qt.qt5.5152.qtandroidextras/5.15.2-0-202205032143qtandroidextras-Android-ARMv8.7z
+        wget https://download.qt.io/online/qtsdkrepository/linux_x64/android/qt5_5152/qt.qt5.5152.qtmqtt/5.15.2-0-202205032143qtmqtt-Android-ARMv8.7z
 
-        # 静默安装指定组件
-        ./extract-qt-installer \
-          --installer qt-opensource-linux-x64-5.15.2.run \
-          --target-dir Qt \
-          --packages "qt.qt5.5152.gcc_64,qt.qt5.5152.android_arm64_v8a,qt.qt5.5152.qtsvg,qt.qt5.5152.qtmqtt"
-
-        # 验证安装
-        echo "QT_DIR=${GITHUB_WORKSPACE}/Qt/5.15.2" >> $GITHUB_ENV
-        echo "PATH=${QT_DIR}/android_arm64_v8a/bin:${PATH}" >> $GITHUB_ENV        
+        # 解压到目标目录
+        7z x -oQt/5.15.2/android_arm64_v8a qt.qt5.5152.android_arm64_v8a/5.15.2-0-202205032143qtbase-Android-ARMv8.7z
+        7z x -oQt/5.15.2/android_arm64_v8a qt.qt5.5152.qtandroidextras/5.15.2-0-202205032143qtandroidextras-Android-ARMv8.7z
+        7z x -oQt/5.15.2/android_arm64_v8a qt.qt5.5152.qtmqtt/5.15.2-0-202205032143qtmqtt-Android-ARMv8.7z
+        echo "QT_DIR=${GITHUB_WORKSPACE}/Qt/5.15.2/android_arm64_v8a" >> $GITHUB_ENV    
     # ========== 构建配置 ==========
     - name: Gradle Configuration
       run: |
