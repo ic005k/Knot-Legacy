@@ -4,18 +4,22 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches: main
 
 env:
-  # 基础配置
+  # 核心版本配置
   QT_VERSION: "5.15.2"
   QT_ARCH: "android_arm64_v8a"
   ANDROID_API: 31
   NDK_VERSION: "25.1.8937393"
   BUILD_TOOLS: "34.0.0"
   GRADLE_VERSION: "8.0"
-
-  # 镜像加速配置
+  
+  # 双JDK配置
+  ANDROID_JDK_VERSION: "11"  # 用于Android工具链
+  PROJECT_JDK_VERSION: "17"  # 用于项目编译
+  
+  # 镜像加速
   QT_MIRROR: "https://mirrors.tuna.tsinghua.edu.cn/qt"
   PYPI_MIRROR: "https://pypi.tuna.tsinghua.edu.cn/simple"
 
@@ -26,118 +30,103 @@ jobs:
     timeout-minutes: 60
 
     steps:
-    # ---------- 初始化环境 ----------
+    # ========== 环境初始化 ==========
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
-    # ---------- Python 环境 ----------
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
-
-    # ---------- Java 环境 ----------
-    - name: Setup JDK 17
+    # ========== 双JDK环境配置 ==========
+    - name: Setup Android JDK 11
       uses: actions/setup-java@v3
+      id: android_jdk
       with:
         distribution: "temurin"
-        java-version: "17"
+        java-version: ${{ env.ANDROID_JDK_VERSION }}
         cache: "gradle"
 
-    # ---------- Android 环境 ----------
+    - name: Setup Project JDK 17
+      uses: actions/setup-java@v3
+      id: project_jdk
+      with:
+        distribution: "temurin"
+        java-version: ${{ env.PROJECT_JDK_VERSION }}
+        cache: "gradle"
+
+    # ========== Android SDK配置 ==========
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
       with:
         api-level: ${{ env.ANDROID_API }}
         build-tools: ${{ env.BUILD_TOOLS }}
 
-    - name: Install Android NDK
+    - name: Configure Android JAXB Fix
       run: |
-        $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}"
+        # 设置Android工具使用JDK11
+        echo "JAVA_HOME=${{ steps.android_jdk.outputs.path }}" >> $GITHUB_ENV
+        
+        # 添加JAXB依赖到classpath
+        wget https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar
+        sudo mkdir -p $ANDROID_HOME/tools/lib/jaxb
+        sudo mv jaxb-api-2.3.1.jar $ANDROID_HOME/tools/lib/jaxb/
+
+    - name: Install NDK with JAXB Fix
+      run: |
+        # 修复sdkmanager的JVM参数
+        echo "export _JAVA_OPTIONS='--add-modules java.se.ee'" >> $ANDROID_HOME/tools/bin/sdkmanager
+        chmod +x $ANDROID_HOME/tools/bin/sdkmanager
+        
+        # 安装NDK
+        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}" || true
         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
 
-    - name: Accept licenses (with retry)
+    # ========== Qt环境配置 ==========
+    - name: Install Qt
       run: |
-        for i in {1..5}; do
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses && break
-          sleep $((i*2))
-        done
-
-    # ---------- Qt 安装 ----------
-    - name: Install Qt dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0
-
-    - name: Install Qt with modules
-      run: |
-        pip install aqtinstall -i ${{ env.PYPI_MIRROR }}
+        # 切换回项目JDK
+        echo "JAVA_HOME=${{ steps.project_jdk.outputs.path }}" >> $GITHUB_ENV
         
-        # 安装核心组件
+        pip install aqtinstall -i ${{ env.PYPI_MIRROR }}
         aqt install-qt linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
           --modules qtbase,qtmqtt,qtsvg,qtandroidextras \
           --autodesktop \
-          --configfile ./qtmodules.conf \
           --outputdir Qt
         
-        # 安装构建工具
-        aqt install-tool linux android tools_openssl
-        aqt install-tool linux android tools_android
-
-        # 设置环境变量
         echo "QT_DIR=$GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}" >> $GITHUB_ENV
-        echo "PATH=$GITHUB_WORKSPACE/Qt/Tools/Ninja:$PATH" >> $GITHUB_ENV
 
-    # ---------- 构建配置 ----------
-    - name: Configure build environment
+    # ========== 构建配置 ==========
+    - name: Gradle Configuration
       run: |
-        # 修复 NDK 符号链接
+        # 修复NDK符号链接
         ln -sf $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64 \
                $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
         
-        # 配置 Gradle
+        # 更新gradle-wrapper.properties
         sed -i "s/gradle-[0-9\.]*-all.zip/gradle-${{ env.GRADLE_VERSION }}-all.zip/g" gradle/wrapper/gradle-wrapper.properties
 
-    # ---------- 签名配置 ----------
-    - name: Setup signing keystore
-      env:
-        KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
-      run: |
-        echo "$KEYSTORE_B64" | base64 -d > android.keystore
-        echo "SIGNING_FILE=$GITHUB_WORKSPACE/android.keystore" >> $GITHUB_ENV
-
-    # ---------- 构建流程 ----------
-    - name: Build project
-      run: |
-        # 生成 Makefile
-        $QT_DIR/bin/qmake -spec android-clang CONFIG+=release
-        
-        # 编译代码
-        make -j$(nproc) || make  # 兼容性回退
-        
-        # 准备 APK 包
-        make apk_install_target
-
+    # ========== 构建流程 ==========
     - name: Build APK
-      working-directory: android-build
+      env:
+        ORG_GRADLE_PROJECT_androidJdkPath: ${{ steps.android_jdk.outputs.path }}
       run: |
+        export PATH="$QT_DIR/bin:$PATH"
+        qmake -spec android-clang CONFIG+=release
+        
+        make -j$(nproc)
+        make apk_install_target
+        
+        cd android-build
         chmod +x gradlew
         ./gradlew assembleRelease \
-          -Pandroid.injected.signing.store.file=$SIGNING_FILE \
+          -Pandroid.injected.signing.store.file=../android.keystore \
           -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
           --no-daemon \
           --stacktrace
 
-    # ---------- 产物上传 ----------
+    # ========== 产物上传 ==========
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: android-release
-        path: |
-          android-build/build/outputs/apk/**/*.apk
-          android-build/build/outputs/native-debug-symbols/**/*.zip
+        path: android-build/build/outputs/apk/release/*.apk
         retention-days: 7
