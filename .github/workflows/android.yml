@@ -1,4 +1,4 @@
-name: Android Qt CI
+name: Qt Android Build
 
 on:
   push:
@@ -7,134 +7,79 @@ on:
     branches: [ main ]
 
 env:
-  QT_VERSION: "5.12.2"
-  QT_ARCH: "android_arm64_v8a"
-  ANDROID_API: 31
-  NDK_VERSION: "25.1.8937393"
-  BUILD_TOOLS: "34.0.0"
+  QT_VERSION: 5.15.2
+  QT_FULL_VERSION: 5.12.2  # 使用标准版本格式
+  JDK_VERSION: 17
+  ANDROID_NDK_VERSION: 21.3.6528147  # Qt官方验证的NDK版本
+  ANDROID_SDK_VERSION: 6858149
 
 jobs:
-  android-build:
-    name: Build APK
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+  build:
+    name: Build Android APK
+    runs-on: windows-2019
 
     steps:
-    # ========== 基础环境配置 ==========
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # ========== Android SDK 配置 ==========
-    - name: Install Android SDK
-      uses: android-actions/setup-android@v3
+    - name: Set up JDK ${{ env.JDK_VERSION }}
+      uses: actions/setup-java@v3
       with:
-        api-level: ${{ env.ANDROID_API }}
-        build-tools: ${{ env.BUILD_TOOLS }}
+        java-version: ${{ env.JDK_VERSION }}
+        distribution: 'temurin'
 
-    - name: Configure Android JAXB Fix
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+      with:
+        ndk-version: ${{ env.ANDROID_NDK_VERSION }}
+        sdk-version: ${{ env.ANDROID_SDK_VERSION }}
+
+    - name: Install Qt (Android)
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: ${{ env.QT_FULL_VERSION }}
+        host: windows
+        target: android
+        arch: android_arm64_v8a  # 正确架构名称
+        modules: qtcharts  # 基础模块的特殊写法
+        extra: "--autodesktop"  # 自动安装必要依赖
+
+    #- name: List Installed Modules
+      #shell: cmd
+      #run: dir C:\Qt\${{ env.QT_FULL_VERSION }}\android_arm64_v8a
+
+    - name: Setup Build Environment
+      shell: cmd
       run: |
-        # 设置Android工具使用JDK11
-        echo "JAVA_HOME=${{ steps.android_jdk.outputs.path }}" >> $GITHUB_ENV
-        
-        # 添加JAXB依赖到classpath
-        wget https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar
-        sudo mkdir -p $ANDROID_HOME/tools/lib/jaxb
-        sudo mv jaxb-api-2.3.1.jar $ANDROID_HOME/tools/lib/jaxb/
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"
+        echo "ANDROID_SDK_ROOT=$env:ANDROID_SDK_ROOT" >> $env:GITHUB_ENV
+        echo "ANDROID_NDK_ROOT=$env:ANDROID_NDK_ROOT" >> $env:GITHUB_ENV
+        echo "JAVA_HOME=$env:JAVA_HOME" >> $env:GITHUB_ENV
+        echo "QT_DIR=C:\Qt\${{ env.QT_FULL_VERSION }}\android_arm64_v8a" >> $env:GITHUB_ENV
+        echo "PATH=$env:QT_DIR\bin;$env:PATH" >> $env:GITHUB_ENV
 
-    - name: Install NDK with JAXB Fix
+    - name: Build APK
+      shell: cmd
       run: |
-        # 修复sdkmanager的JVM参数
-        echo "export _JAVA_OPTIONS='--add-modules java.se.ee'" >> $ANDROID_HOME/tools/bin/sdkmanager
-        chmod +x $ANDROID_HOME/tools/bin/sdkmanager
-        
-        # 安装NDK
-        yes | $ANDROID_HOME/tools/bin/sdkmanager "ndk;${{ env.NDK_VERSION }}" || true
-        echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
+        qmake -spec android-clang "CONFIG+=release" Knot.pro
+        jom -j 8 install INSTALL_ROOT=android-build
+        #jom install INSTALL_ROOT=android-build
+        #androiddeployqt --gradle --release --input android-libKnot.so-deployment-settings.json --output android-build
 
-    # ========== Qt 安装强化步骤 ==========
-    - name: Install Qt with Android toolchain
+    - name: Sign APK
+      shell: cmd
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
-        # 安装必要依赖
-        sudo apt-get install -y python3-pip p7zip-full
-        
-        # 使用国内镜像加速安装
-        python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple aqtinstall
-        
-        # 完整安装命令（关键修改）
-        aqt install-qt \
-          linux android ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-          --autodesktop \
-          --outputdir Qt
-        
-        # 验证mkspecs安装
-        echo "Qt安装路径: $QT_DIR"
-        ls -l $QT_DIR/mkspecs/android-clang || echo "mkspecs验证失败！"
-        
-        # 设置环境变量
-        echo "QT_DIR=${GITHUB_WORKSPACE}/Qt/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}" >> $GITHUB_ENV
-        echo "PATH=${QT_DIR}/bin:${PATH}" >> $GITHUB_ENV
+        jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore ${{ secrets.KEYSTORE_PATH }} -storepass %KEYSTORE_PASSWORD% -keypass %KEY_PASSWORD% android-build\build\outputs\apk\release\*.apk %KEY_ALIAS%
+        zipalign -v 4 android-build\build\outputs\apk\release\*.apk Knot-Signed.apk
 
-    # ========== 环境修复步骤 ==========
-    - name: Fix NDK Symlinks
-      run: |
-        # 动态检测实际路径
-        #NDK_PREBUILT_PATH=$(ls -d $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/* | head -n1)
-        
-        # 创建符号链接
-        #sudo mkdir -p $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt
-        #sudo ln -sf $NDK_PREBUILT_PATH $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
-        
-        # 验证链接
-        #echo "符号链接状态："
-        #ls -l $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux
-
-    # ========== 构建配置 ==========
-    - name: Configure Qt Environment
-      run: |
-        # 生成qt.conf配置文件
-        cat << EOF > $QT_DIR/bin/qt.conf
-        [Paths]
-        Prefix = $QT_DIR
-        HostPrefix = $QT_DIR/../../Tools/QtCreator
-        Sysroot = $ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux/sysroot
-        EOF
-        
-        # 设置构建参数
-        echo "ANDROID_NDK_HOST=linux-x86_64" >> $GITHUB_ENV
-        echo "QMAKE_SPEC=android-clang" >> $GITHUB_ENV
-
-    # ========== 构建流程 ==========
-    - name: Build Project
-      run: |
-        # 导出必要变量
-        export ANDROID_NDK_ROOT
-        export ANDROID_SDK_ROOT=$ANDROID_HOME
-        
-        # 生成Makefile
-        qmake -spec $QMAKE_SPEC CONFIG+=release
-        
-        # 并行编译
-        make -j$(nproc) || make
-        
-        # 生成APK包
-        make apk_install_target
-
-    # ========== APK签名与上传 ==========
-    - name: Build Signed APK
-      working-directory: android-build
-      run: |
-        chmod +x gradlew
-        ./gradlew assembleRelease \
-          -Pandroid.injected.signing.store.file=../android.keystore \
-          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
-          -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
-          -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
-          --no-daemon \
-          --stacktrace
-
-    - name: Upload APK
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: android-release
-        path: android-build/build/outputs/apk/release/*.apk
-        retention-days: 7
+        name: Android-APK
+        path: |
+          Knot-Signed.apk
+          android-build/build/outputs/apk/release/*.apk
