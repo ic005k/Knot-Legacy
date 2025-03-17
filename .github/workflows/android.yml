@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  QT_VERSION: 5.12.2
+  QT_VERSION: 5.15.13
   ANDROID_API: android-33
   NDK_VERSION: 25.2.9519653
   QT_HOST: linux
@@ -39,6 +39,7 @@ jobs:
     - name: Install Qt and Android components
       run: |
         aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
+          -m all \
           --autodesktop \
           --outputdir /opt/qt
 
