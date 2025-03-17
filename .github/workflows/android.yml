@@ -1,4 +1,4 @@
-name: Android CI
+name: Qt Android CI
 
 on:
   push:
@@ -9,44 +9,80 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      QT_VERSION: 6.7.0
+      ANDROID_API_LEVEL: 33
+      ANDROID_NDK_VERSION: 25b
+      ANDROID_SDK_TOOLS: 9477386
 
     steps:
-    - name: Checkout code
+    # 检出代码（包含子模块）
+    - name: Checkout repository
       uses: actions/checkout@v4
-      # 如果使用子模块需要添加这个配置
       with:
         submodules: recursive
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
+    # 安装Qt for Android
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
       with:
-        java-version: '17'
-        distribution: 'temurin'
+        version: ${{ env.QT_VERSION }}
+        host: linux
+        target: android
+        arch: arm64_v8a
+        modules: qtbase qtmqtt qtquick3d
 
-    - name: Setup Android SDK
+    # 配置Android环境
+    - name: Setup Android
       uses: android-actions/setup-android@v2
       with:
-        build-tools-version: '34.0.0'
-        ndk-version: '25.2.9519653'
+        ndk-version: ${{ env.ANDROID_NDK_VERSION }}
+        sdk-platform: android-${{ env.ANDROID_API_LEVEL }}
+        sdk-build-tools: 34.0.0
 
-    - name: Locate gradlew
+    # 配置环境变量
+    - name: Setup environment variables
+      shell: bash
       run: |
-        # 查找gradlew文件位置
-        find . -name gradlew -exec echo "Gradlew found at: {}" \; -exec dirname {} \;
-        # 验证目录结构
-        ls -la
+        echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
+        echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT" >> $GITHUB_ENV
+        echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+        echo "QT_DIR=${{ env.QT_DIR }}" >> $GITHUB_ENV
 
-    - name: Grant execute permission
-      # 根据实际路径调整，例如项目在android子目录
-      working-directory: ./android  # 修改为实际路径
-      run: chmod +x gradlew
+    # Qt项目编译
+    - name: Build Qt Project
+      shell: bash
+      run: |
+        # 创建构建目录
+        mkdir build && cd build
+        
+        # 生成qmake配置
+        ${{ env.QT_DIR }}/bin/qt-cmake \
+          -DCMAKE_SYSTEM_NAME=Android \
+          -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a \
+          -DCMAKE_ANDROID_NDK=$ANDROID_NDK_ROOT \
+          -DCMAKE_ANDROID_SDK=$ANDROID_SDK_ROOT \
+          ..
+        
+        # 执行编译
+        cmake --build . --parallel 4
 
-    - name: Build Debug APK
-      working-directory: ./android  # 保持与上一步一致
-      run: ./gradlew assembleDebug
+    # 生成APK
+    - name: Deploy Android Package
+      shell: bash
+      run: |
+        cd build
+        ${{ env.QT_DIR }}/bin/androiddeployqt \
+          --input android-Knot-deployment-settings.json \
+          --output android-build \
+          --gradle \
+          --verbose
 
+    # 上传产物
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: debug-apk
-        path: android/app/build/outputs/apk/debug/*.apk  # 根据实际路径调整
+        name: qt-android-apk
+        path: build/android-build/build/outputs/apk/debug/*.apk
