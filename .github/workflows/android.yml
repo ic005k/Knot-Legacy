@@ -1,76 +1,40 @@
-name: Android Qt CI Mirror Fix
+name: Android CI
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: windows-latest
-    timeout-minutes: 30
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v4
 
-    # 使用Python 3.10环境
-    - name: Setup Python
-      uses: actions/setup-python@v5
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
       with:
-        python-version: '3.10'
+        java-version: '17'
+        distribution: 'temurin'
 
-    # 配置镜像源和重试机制
-    - name: Install Qt with Mirror
-      shell: pwsh
-      run: |
-        # 升级pip并安装指定版本aqt
-        python -m pip install --upgrade pip
-        pip install "aqtinstall>=3.2.2"
-
-        # 设置清华镜像源
-        $env:AQT_MIRROR = "https://mirrors.tuna.tsinghua.edu.cn/qt"
-        
-        # 带重试的安装命令
-        $maxRetries = 3
-        $retryCount = 0
-        do {
-            try {
-                aqt install-qt windows android 6.7.0 android_arm64_v8a `
-                    --outputdir "C:\Qt" `
-                    --autodesktop `
-                    --archives http://mirrors.ustc.edu.cn/qtproject `
-                    -m qtcharts qtmqtt
-                break
-            } catch {
-                $retryCount++
-                if ($retryCount -ge $maxRetries) {
-                    Write-Error "安装失败，已达最大重试次数"
-                    exit 1
-                }
-                Start-Sleep -Seconds 30
-            }
-        } while ($true)
-
-    # 网络诊断步骤
-    - name: Network Diagnostics
-      shell: pwsh
-      run: |
-        # 测试镜像连通性
-        curl -Iv https://mirrors.tuna.tsinghua.edu.cn/qt/online/qtsdkrepository/windows_x86/android/desktop/qt6_670/
-        ping mirrors.tuna.tsinghua.edu.cn -n 4
-
-    # 构建配置
-    - name: Build Project
-      shell: pwsh
-      env:
-        QTDIR: C:\Qt\6.7.0\android_arm64_v8a
-        ANDROID_NDK_ROOT: ${{ env.ANDROID_NDK_ROOT }}
-      run: |
-        # 显式路径调用
-        & "$env:QTDIR\bin\qmake" -spec android-clang "CONFIG += release" Knot.pro
-        jom -j 8
-        & "$env:QTDIR\bin\androiddeployqt" --gradle --release --input android-deployment-settings.json
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
       with:
-        name: android-app
-        path: android-build/build/outputs/apk/release/*.apk
+        # 根据项目实际需要调整SDK版本
+        build-tools-version: '34.0.0'
+        ndk-version: '25.2.9519653'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-apk
+        path: app/build/outputs/apk/debug/*.apk
