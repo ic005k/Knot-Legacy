@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  QT_VERSION: 5.15.13
+  QT_VERSION: 5.12.12
   ANDROID_API: android-33
   NDK_VERSION: 25.2.9519653
   QT_HOST: linux
