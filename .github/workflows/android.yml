@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  QT_VERSION: 5.15.13
+  QT_VERSION: 5.15.12
   ANDROID_API: android-33
   NDK_VERSION: 25.2.9519653
   QT_HOST: linux
@@ -39,12 +39,12 @@ jobs:
     - name: Install Qt and Android components
       run: |
         aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-          -m all \
+          -m qt5-qtbase qt5-qtsvg qt5-qtdeclarative qt5-qtquickcontrols2 qt5-qtgraphicaleffects qt5-qtandroidextras qt5-qttools \
           --autodesktop \
           --outputdir /opt/qt
 
         aqt install-sdk --rootdir /opt/android-sdk ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
-          tools platform-tools platform:${{ env.ANDROID_API }} ndk:${{ env.NDK_VERSION }} build-tools:34.0.0
+          tools platform-tools platform:${{ env.ANDROID_API }} ndk:${{ env.NDK_VERSION }} build-tools:33.0.2
 
     - name: Setup environment
       run: |
@@ -86,7 +86,7 @@ jobs:
             android-build-release-unsigned.apk \
             "$KEY_ALIAS"
           
-          $ANDROID_SDK_ROOT/build-tools/34.0.0/zipalign -v 4 android-build-release-unsigned.apk Knot-signed.apk
+          $ANDROID_SDK_ROOT/build-tools/33.0.2/zipalign -v 4 android-build-release-unsigned.apk Knot-signed.apk
         else
           echo "Signing with debug keystore"
           cd build/android-build/build/outputs/apk/release/
