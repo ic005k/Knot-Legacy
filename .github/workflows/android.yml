@@ -62,7 +62,8 @@ jobs:
       shell: cmd
       run: |
         qmake -spec android-clang "CONFIG+=release" Knot.pro
-        jom -j 8 install INSTALL_ROOT=android-build
+        jom -j 8
+        #jom -j 8 install INSTALL_ROOT=android-build
         #jom install INSTALL_ROOT=android-build
         #androiddeployqt --gradle --release --input android-libKnot.so-deployment-settings.json --output android-build
 
