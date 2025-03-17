@@ -1,103 +1,79 @@
-name: Android CI with Signing
+name: Android CI with Secure Signing
 
-on: [push, pull_request]
+on: [push]
 
 env:
-  KEYSTORE_NAME: release.jks
-  APK_NAME: KnotApp
+  QT_VERSION: '6.7.0'
+  ANDROID_ARCH: 'android_arm64_v8a'
 
 jobs:
   build:
-    name: Qt Build & Sign
+    name: Build and Sign
     runs-on: windows-latest
     environment: production
 
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v4
 
-    # 密钥库解码（安全处理）
-    - name: Decode Keystore
-      id: sign_apk
+    # 密钥库解码 (安全处理)
+    - name: Prepare Keystore
       shell: pwsh
       run: |
-        $keystoreB64 = "${{ secrets.ANDROID_KEYSTORE }}"
-        $bytes = [Convert]::FromBase64String($keystoreB64)
-        [IO.File]::WriteAllBytes("$env:KEYSTORE_NAME", $bytes)
-        echo "KEYSTORE_PATH=$env:KEYSTORE_NAME" >> $env:GITHUB_ENV
+        $keystorePath = "release_${env:GITHUB_RUN_NUMBER}.jks"
+        [Convert]::FromBase64String("${{ secrets.ANDROID_KEYSTORE_B64 }}") | Set-Content $keystorePath -Encoding Byte
+        echo "KEYSTORE_PATH=$keystorePath" >> $env:GITHUB_ENV
       env:
-        ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+        ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE }}
 
-    # 基础环境配置
-    - name: Setup environments
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'zulu'
-        java-version: '11'
-
-    - name: Install Android
+    # 安卓环境
+    - name: Setup Android
       uses: android-actions/setup-android@v2
       with:
         ndk-version: '27.2.12479018'
         sdk-platform: 'android-34'
 
-    # Qt工具链安装
+    # Qt安装
     - name: Install Qt
       run: |
         python -m pip install aqtinstall
-        aqt install-qt windows android 6.7.0 android_arm64_v8a --autodesktop
+        aqt install-qt windows android ${{ env.QT_VERSION }} ${{ env.ANDROID_ARCH }}
         aqt install-tool windows desktop tools_mingw
 
-    # 路径配置
-    - name: Configure Paths
+    # 构建签名
+    - name: Build with Signing
       shell: pwsh
       run: |
-        $qtPath = "C:\Qt\6.7.0\android_arm64_v8a"
-        echo "QTDIR=$qtPath" >> $env:GITHUB_ENV
-        echo "PATH=$env:PATH;$qtPath\bin;C:\Qt\Tools\mingw1120_64\bin" >> $env:GITHUB_ENV
-
-    # 构建阶段
-    - name: Build APK
-      shell: pwsh
-      run: |
-        qmake -spec android-clang "CONFIG += release" Knot.pro
+        $qtBin = "C:\Qt\${{ env.QT_VERSION }}\${{ env.ANDROID_ARCH }}\bin"
+        
+        # 生成Makefile
+        & "$qtBin\qmake" -spec android-clang "CONFIG += release" Knot.pro
+        
+        # 编译
         jom -j 8 install INSTALL_ROOT=android-build
         
-        # 带签名参数的部署命令
-        $signParams = @(
-          "--sign",
-          "--keystore $env:KEYSTORE_PATH",
-          "--storepass ${{ secrets.KEYSTORE_PASSWORD }}",
-          "--alias ${{ secrets.KEY_ALIAS }}",
-          "--keypass ${{ secrets.KEY_PASSWORD }}"
-        ) -join ' '
-
-        C:\Qt\6.7.0\android_arm64_v8a\bin\androiddeployqt `
+        # 签名部署
+        & "$qtBin\androiddeployqt" `
           --gradle `
           --release `
           --input android-libKnot.so-deployment-settings.json `
           --output android-build `
-          $signParams
+          --sign "$env:KEYSTORE_PATH" `
+          --storepass "${{ secrets.KEYSTORE_PASSWORD }}" `
+          --alias "${{ secrets.KEY_ALIAS }}" `
+          --keypass "${{ secrets.KEY_PASSWORD }}"
 
-    # 重命名带版本号的APK
-    - name: Rename Artifact
-      shell: pwsh
-      run: |
-        $version = (Get-Content package.json | ConvertFrom-Json).version
-        $apk = Get-Item "android-build/build/outputs/apk/release/*.apk"
-        Rename-Item $apk.FullName -NewName "$env:APK_NAME-v$version.apk"
-
-    # 安全上传
-    - name: Upload Signed APK
-      uses: actions/upload-artifact@v3
+    # 上传产物 (修复v3到v4版本问题)
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
       with:
         name: signed-apk
         path: |
           android-build/build/outputs/apk/release/*.apk
-          $env:KEYSTORE_PATH
-        retention-days: 1
+        retention-days: 3
 
-    # 自动清理密钥库
-    - name: Cleanup Keystore
+    # 安全清理
+    - name: Clean Keystore
       if: always()
-      run: del $env:KEYSTORE_NAME
+      shell: pwsh
+      run: Remove-Item -Path $env:KEYSTORE_PATH -Force
