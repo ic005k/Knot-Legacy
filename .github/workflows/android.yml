@@ -3,57 +3,63 @@ name: Android Build
 on:
   push:
     branches:
-      - main  # 可以根据需要修改为你的目标分支
+      - main  # 根据实际情况修改分支名称
 
 jobs:
   build-android:
     runs-on: windows-latest
 
     steps:
-      # 拉取代码
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      # 设置 JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 设置 Qt 5.15.2
-      - name: Set up Qt
+      - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
           version: '5.15.2'
           target: 'android'
+          arch: 'android_armv7'  # 根据实际需求选择架构
 
-      # 配置 Android SDK
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
 
-      # 编译项目
-      - name: Compile project
+      - name: Configure Qt project
         run: |
           qmake -spec android-clang "CONFIG+=qtquickcompiler" Knot.pro
-          mingw32-make -j$(nproc)
+        shell: cmd
 
-      # 签名 APK
+      - name: Build project
+        run: |
+          nmake
+        shell: cmd
+
       - name: Sign APK
         env:
-          # 从 GitHub 仓库的 Secrets 中获取签名相关信息
-          KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_PATH: 'your_keystore.jks'  # 替换为你的密钥库路径
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}  # 在 GitHub 仓库的 Secrets 中设置
+          KEY_ALIAS: 'your_key_alias'  # 替换为你的密钥别名
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}  # 在 GitHub 仓库的 Secrets 中设置
+          APK_PATH: 'path/to/your/app-debug.apk'  # 替换为生成的 APK 路径
         run: |
-          # 假设生成的 APK 路径为 release/Knot-release-unsigned.apk
-          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore $KEYSTORE_PATH -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD release/Knot-release-unsigned.apk $KEY_ALIAS
-          zipalign -v 4 release/Knot-release-unsigned.apk release/Knot-release-signed.apk
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore %KEYSTORE_PATH% -storepass %KEYSTORE_PASSWORD% -keypass %KEY_PASSWORD% %APK_PATH% %KEY_ALIAS%
+        shell: cmd
 
-      # 上传签名后的 APK 作为构建产物
-      - name: Upload signed APK
+      - name: Align APK
+        env:
+          APK_PATH: 'path/to/your/app-debug.apk'  # 替换为生成的 APK 路径
+          ALIGNED_APK_PATH: 'path/to/your/app-debug-aligned.apk'  # 替换为对齐后的 APK 路径
+        run: |
+          zipalign -v 4 %APK_PATH% %ALIGNED_APK_PATH%
+        shell: cmd
+
+      - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: signed-apk
-          path: release/Knot-release-signed.apk
+          name: android-apk
+          path: path/to/your/app-debug-aligned.apk  # 替换为对齐后的 APK 路径
