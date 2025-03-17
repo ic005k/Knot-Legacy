@@ -13,6 +13,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      # 如果使用子模块需要添加这个配置
+      with:
+        submodules: recursive
 
     - name: Set up JDK 17
       uses: actions/setup-java@v3
@@ -26,14 +29,24 @@ jobs:
         build-tools-version: '34.0.0'
         ndk-version: '25.2.9519653'
 
+    - name: Locate gradlew
+      run: |
+        # 查找gradlew文件位置
+        find . -name gradlew -exec echo "Gradlew found at: {}" \; -exec dirname {} \;
+        # 验证目录结构
+        ls -la
+
     - name: Grant execute permission
+      # 根据实际路径调整，例如项目在android子目录
+      working-directory: ./android  # 修改为实际路径
       run: chmod +x gradlew
 
     - name: Build Debug APK
+      working-directory: ./android  # 保持与上一步一致
       run: ./gradlew assembleDebug
 
     - name: Upload APK
-      uses: actions/upload-artifact@v4  # 这里更新到v4版本
+      uses: actions/upload-artifact@v4
       with:
         name: debug-apk
-        path: app/build/outputs/apk/debug/*.apk
+        path: android/app/build/outputs/apk/debug/*.apk  # 根据实际路径调整
