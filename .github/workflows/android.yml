@@ -1,176 +1,59 @@
-name: Windows Android Build
+name: Android Build
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-env:
-  QT_VERSION: 5.15.2
-  QT_ARCH: android_arm64_v8a
-  ANDROID_API: 31
-  NDK_VERSION: 25.1.8937393
-  BUILD_TOOLS: 34.0.0
-  VS_VERSION: 2019
+    branches:
+      - main  # 可以根据需要修改为你的目标分支
 
 jobs:
-  build:
-    name: Build APK
+  build-android:
     runs-on: windows-latest
-    timeout-minutes: 60
 
     steps:
-    # ========== 检出代码 ==========
-    - name: Checkout code
-      uses: actions/checkout@v4
+      # 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # ========== 安装 VS2019 编译环境 ==========
-    - name: Setup MSVC 2019
-      uses: microsoft/setup-msbuild@v1
-      with:
-        vs-version: ${{ env.VS_VERSION }}
+      # 设置 JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    # ========== 安装必要依赖 ==========
-    - name: Install dependencies
-      shell: powershell
-      run: |
-        # 安装 Chocolatey 包管理器
-        Set-ExecutionPolicy Bypass -Scope Process -Force
-        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-        
-        # 安装必要组件（新增jom）
-        choco install -y python --version=3.10.11
-        choco install -y jdk17
-        choco install -y 7zip
-        choco install -y jom
+      # 设置 Qt 5.15.2
+      - name: Set up Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '5.15.2'
+          target: 'android'
 
-    # ========== 配置 Android 环境 ==========
-    - name: Setup Android
-      shell: powershell
-      run: |
-        # 设置 Android SDK 路径
-        $androidSdkPath = "C:\Android\sdk"
-        New-Item -Path $androidSdkPath -ItemType Directory -Force
-        
-        # 下载 Android Command Line Tools
-        $url = "https://dl.google.com/android/repository/commandlinetools-win-9477386_latest.zip"
-        $output = "$env:RUNNER_TEMP\cmdline-tools.zip"
-        Invoke-WebRequest -Uri $url -OutFile $output
-        
-        # 解压到指定位置
-        Expand-Archive -Path $output -DestinationPath "$androidSdkPath\cmdline-tools\latest"
-        
-        # 设置环境变量
-        echo "ANDROID_SDK_ROOT=$androidSdkPath" >> $env:GITHUB_ENV
-        echo "ANDROID_HOME=$androidSdkPath" >> $env:GITHUB_ENV
-        echo "PATH=$androidSdkPath\cmdline-tools\latest\bin;$androidSdkPath\platform-tools;$env:PATH" >> $env:GITHUB_ENV
+      # 配置 Android SDK
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
 
-    # ========== 安装 Android 组件 ==========
-    - name: Install Android components
-      shell: powershell
-      run: |
-        # 接受许可证
-        echo y | sdkmanager --licenses
-        
-        # 安装必要组件（修正NDK版本）
-        sdkmanager "platform-tools" "platforms;android-$env:ANDROID_API" "build-tools;$env:BUILD_TOOLS" "ndk;$env:NDK_VERSION"
-        
-        # 设置 NDK 路径（动态检测）
-        $ndkPath = "$env:ANDROID_SDK_ROOT\ndk\$env:NDK_VERSION"
-        echo "ANDROID_NDK_ROOT=$ndkPath" >> $env:GITHUB_ENV
-        echo "CLANG_PATH=$ndkPath\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe" >> $env:GITHUB_ENV
+      # 编译项目
+      - name: Compile project
+        run: |
+          qmake -spec android-clang "CONFIG+=qtquickcompiler" Knot.pro
+          mingw32-make -j$(nproc)
 
-    # ========== 安装 Qt (MSVC 版本) ==========
-    - name: Install Qt
-      shell: powershell
-      run: |
-        # 安装 aqtinstall
-        python -m pip install aqtinstall
-        
-        # 安装 Qt for Android (MSVC 2019)
-        aqt install-qt windows android $env:QT_VERSION $env:QT_ARCH `
-          -m "qtcharts qtmqtt qtquick3d" `
-          --autodesktop `
-          -c --archives qtbase_android_msvc2019_64 `
-          --outputdir Qt
-        
-        # 设置环境变量
-        $qtPath = "$pwd\Qt\$env:QT_VERSION\$env:QT_ARCH"
-        echo "QT_DIR=$qtPath" >> $env:GITHUB_ENV
-        echo "PATH=$qtPath\bin;$env:PATH" >> $env:GITHUB_ENV
+      # 签名 APK
+      - name: Sign APK
+        env:
+          # 从 GitHub 仓库的 Secrets 中获取签名相关信息
+          KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          # 假设生成的 APK 路径为 release/Knot-release-unsigned.apk
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore $KEYSTORE_PATH -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD release/Knot-release-unsigned.apk $KEY_ALIAS
+          zipalign -v 4 release/Knot-release-unsigned.apk release/Knot-release-signed.apk
 
-    # ========== 配置构建环境 ==========
-    - name: Configure build
-      shell: powershell
-      run: |
-        # 初始化 VS2019 环境
-        $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -version 16.0 -property installationPath
-        cmd /c "call `"$vsPath\VC\Auxiliary\Build\vcvarsall.bat`" x86_amd64 && set > %temp%\vcvars.txt"
-        Get-Content "$env:temp\vcvars.txt" | ForEach-Object {
-          if ($_ -match "^(.*?)=(.*)$") {
-            $name = $matches[1]
-            $value = $matches[2]
-            echo "$name=$value" >> $env:GITHUB_ENV
-          }
-        }
-
-        # 生成 qmake 配置（修正路径分隔符）
-        $qtConf = @"
-                  [Paths]
-                  Prefix = $env:QT_DIR
-                  HostPrefix = $env:QT_DIR\..\..\Tools\QtCreator
-                  Sysroot = $env:ANDROID_NDK_ROOT\toolchains\llvm\prebuilt\windows-x86_64\sysroot
-                  AndroidSdkPath = $env:ANDROID_SDK_ROOT
-                  AndroidNdkPath = $env:ANDROID_NDK_ROOT
-                  "@
-        Set-Content -Path "$env:QT_DIR\bin\qt.conf" -Value $qtConf
-
-    # ========== 构建项目（关键修复）==========
-    - name: Build project
-      shell: powershell
-      run: |
-        # 生成 Makefile（使用动态检测的CLANG路径）
-        qmake -spec win32-msvc `
-          "QMAKE_CC=$env:CLANG_PATH" `
-          "QMAKE_CXX=$env:CLANG_PATH" `
-          "ANDROID_ABIS=arm64-v8a" `
-          "ANDROID_MIN_SDK_VERSION=23" `
-          "ANDROID_TARGET_SDK_VERSION=$env:ANDROID_API" `
-          CONFIG+=release
-        
-        # 使用 jom 并行编译
-        jom /J 2
-        
-        # 生成 APK 包
-        jom apk_install_target
-
-    # ========== 生成签名 APK ==========
-    - name: Build APK
-      shell: powershell
-      working-directory: android-build
-      run: |
-        # 生成 APK（使用完整路径）
-        & "$env:QT_DIR\bin\androiddeployqt.exe" `
-          --input android-deployment-settings.json `
-          --output . `
-          --gradle `
-          --verbose `
-          --android-platform android-$env:ANDROID_API
-        
-        # 签名 APK
-        .\gradlew.bat assembleRelease `
-          -Pandroid.injected.signing.store.file=../android.keystore `
-          -Pandroid.injected.signing.store.password=$env:KEYSTORE_PASSWORD `
-          -Pandroid.injected.signing.key.alias=$env:KEY_ALIAS `
-          -Pandroid.injected.signing.key.password=$env:KEY_PASSWORD `
-          --no-daemon `
-          --stacktrace
-
-    # ========== 上传产物 ==========
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: android-release
-        path: android-build\build\outputs\apk\release\*.apk
+      # 上传签名后的 APK 作为构建产物
+      - name: Upload signed APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: signed-apk
+          path: release/Knot-release-signed.apk
